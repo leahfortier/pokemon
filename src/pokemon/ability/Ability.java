@@ -239,7 +239,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Overgrow() {
-            super(AbilityNamesies.OVERGROW, "Powers up Grass-type moves in a pinch.");
+            super(AbilityNamesies.OVERGROW, "Powers up Grass-type moves when the Pok\u00e9mon's HP is low.");
         }
 
         @Override
@@ -252,7 +252,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Chlorophyll() {
-            super(AbilityNamesies.CHLOROPHYLL, "Boosts the Pok\u00e9mon's Speed in sunshine.");
+            super(AbilityNamesies.CHLOROPHYLL, "Boosts the Pok\u00e9mon's Speed stat in sunshine.");
         }
 
         @Override
@@ -275,7 +275,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Blaze() {
-            super(AbilityNamesies.BLAZE, "Powers up Fire-type moves in a pinch.");
+            super(AbilityNamesies.BLAZE, "Powers up Fire-type moves when the Pok\u00e9mon's HP is low.");
         }
 
         @Override
@@ -288,7 +288,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SolarPower() {
-            super(AbilityNamesies.SOLAR_POWER, "Boosts Sp. Atk, but lowers HP in sunshine.");
+            super(AbilityNamesies.SOLAR_POWER, "Boosts the Sp. Atk stat in sunny weather, but HP decreases every turn.");
         }
 
         @Override
@@ -309,7 +309,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Torrent() {
-            super(AbilityNamesies.TORRENT, "Powers up Water-type moves in a pinch.");
+            super(AbilityNamesies.TORRENT, "Powers up Water-type moves when the Pok\u00e9mon's HP is low.");
         }
 
         @Override
@@ -322,7 +322,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         RainDish() {
-            super(AbilityNamesies.RAIN_DISH, "The Pok\u00e9mon gradually recovers HP in rain.");
+            super(AbilityNamesies.RAIN_DISH, "The Pok\u00e9mon gradually regains HP in rain.");
         }
 
         @Override
@@ -338,7 +338,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         ShieldDust() {
-            super(AbilityNamesies.SHIELD_DUST, "Blocks the added effects of attacks taken.");
+            super(AbilityNamesies.SHIELD_DUST, "This Pok\u00e9mon's dust blocks the additional effects of attacks taken.");
         }
 
         @Override
@@ -351,7 +351,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         ShedSkin() {
-            super(AbilityNamesies.SHED_SKIN, "The Pok\u00e9mon may heal its own status problems.");
+            super(AbilityNamesies.SHED_SKIN, "The Pok\u00e9mon may heal its own status conditions by shedding its skin.");
         }
 
         @Override
@@ -366,7 +366,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Compoundeyes() {
-            super(AbilityNamesies.COMPOUNDEYES, "The Pok\u00e9mon's accuracy is boosted.");
+            super(AbilityNamesies.COMPOUNDEYES, "The Pok\u00e9mon's compound eyes boost its accuracy.");
         }
 
         @Override
@@ -384,7 +384,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         TintedLens() {
-            super(AbilityNamesies.TINTED_LENS, "Powers up \"not very effective\" moves.");
+            super(AbilityNamesies.TINTED_LENS, "The Pok\u00e9mon can use ânot very effectiveâ moves to deal regular damage.");
         }
 
         @Override
@@ -398,7 +398,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Swarm() {
-            super(AbilityNamesies.SWARM, "Powers up Bug-type moves in a pinch.");
+            super(AbilityNamesies.SWARM, "Powers up Bug-type moves when the Pok\u00e9mon's HP is low.");
         }
 
         @Override
@@ -416,7 +416,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Sniper() {
-            super(AbilityNamesies.SNIPER, "Powers up moves if they become critical hits.");
+            super(AbilityNamesies.SNIPER, "Powers up moves if they become critical hits when attacking.");
         }
     }
 
@@ -424,7 +424,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         KeenEye() {
-            super(AbilityNamesies.KEEN_EYE, "Prevents the Pok\u00e9mon from losing accuracy.");
+            super(AbilityNamesies.KEEN_EYE, "Keen eyes prevent other Pok\u00e9mon from lowering this Pok\u00e9mon's accuracy.");
         }
 
         @Override
@@ -455,7 +455,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Guts() {
-            super(AbilityNamesies.GUTS, "Boosts Attack if there is a status problem.");
+            super(AbilityNamesies.GUTS, "It's so gutsy that having a status condition boosts the Pok\u00e9mon's Attack stat.");
         }
 
         @Override
@@ -478,7 +478,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Intimidate() {
-            super(AbilityNamesies.INTIMIDATE, "Lowers the foe's Attack stat.");
+            super(AbilityNamesies.INTIMIDATE, "The Pok\u00e9mon intimidates opposing Pok\u00e9mon upon entering battle, lowering their Attack stat.");
         }
 
         @Override
@@ -492,7 +492,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Static() {
-            super(AbilityNamesies.STATIC, "Contact with the Pok\u00e9mon may cause paralysis.");
+            super(AbilityNamesies.STATIC, "The Pok\u00e9mon is charged with static electricity, so contact with it may cause paralysis.");
         }
 
         @Override
@@ -512,7 +512,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Lightningrod() {
-            super(AbilityNamesies.LIGHTNINGROD, "The Pok\u00e9mon draws in all Electric-type moves.");
+            super(AbilityNamesies.LIGHTNINGROD, "The Pok\u00e9mon draws in all Electric-type moves. Instead of being hit by Electric-type moves, it boosts its Sp. Atk.");
         }
 
         @Override
@@ -535,7 +535,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SandVeil() {
-            super(AbilityNamesies.SAND_VEIL, "Raises the Pok\u00e9mon's evasion during a sandstorm by one level.");
+            super(AbilityNamesies.SAND_VEIL, "Boosts the Pok\u00e9mon's evasion in a sandstorm.");
         }
 
         @Override
@@ -553,7 +553,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SandRush() {
-            super(AbilityNamesies.SAND_RUSH, "Speed rises in a Sandstorm.");
+            super(AbilityNamesies.SAND_RUSH, "Boosts the Pok\u00e9mon's Speed stat in a sandstorm.");
         }
 
         @Override
@@ -576,7 +576,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SlushRush() {
-            super(AbilityNamesies.SLUSH_RUSH, "Boosts the Pokémon's Speed stat in a hailstorm.");
+            super(AbilityNamesies.SLUSH_RUSH, "Boosts the Pok\u00e9mon's Speed stat in a hailstorm.");
         }
 
         @Override
@@ -599,7 +599,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         PoisonPoint() {
-            super(AbilityNamesies.POISON_POINT, "Contact with the Pok\u00e9mon may poison the foe.");
+            super(AbilityNamesies.POISON_POINT, "Contact with the Pok\u00e9mon may poison the attacker.");
         }
 
         @Override
@@ -614,7 +614,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Rivalry() {
-            super(AbilityNamesies.RIVALRY, "Raises Attack if the foe is of the same gender.");
+            super(AbilityNamesies.RIVALRY, "Becomes competitive and deals more damage to Pok\u00e9mon of the same gender, but deals less to Pok\u00e9mon of the opposite gender.");
         }
 
         @Override
@@ -675,7 +675,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private boolean activated;
 
         FlashFire() {
-            super(AbilityNamesies.FLASH_FIRE, "Powers up Fire-type moves if hit by a fire move.");
+            super(AbilityNamesies.FLASH_FIRE, "Powers up the Pok\u00e9mon's Fire-type moves if it's hit by one.");
             this.activated = false;
         }
 
@@ -709,7 +709,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Drought() {
-            super(AbilityNamesies.DROUGHT, "The Pok\u00e9mon makes it sunny if it is in battle.");
+            super(AbilityNamesies.DROUGHT, "Turns the sunlight harsh when the Pok\u00e9mon enters a battle.");
         }
 
         @Override
@@ -723,7 +723,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Frisk() {
-            super(AbilityNamesies.FRISK, "The Pok\u00e9mon can check the foe's held item.");
+            super(AbilityNamesies.FRISK, "When it enters a battle, the Pok\u00e9mon can check an opposing Pok\u00e9mon's held item.");
         }
 
         @Override
@@ -739,7 +739,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         InnerFocus() {
-            super(AbilityNamesies.INNER_FOCUS, "The Pok\u00e9mon is protected from flinching.");
+            super(AbilityNamesies.INNER_FOCUS, "The Pok\u00e9mon's intensely focused, and that protects the Pok\u00e9mon from flinching.");
         }
     }
 
@@ -747,7 +747,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Infiltrator() {
-            super(AbilityNamesies.INFILTRATOR, "You slip through the opponents walls and attack.");
+            super(AbilityNamesies.INFILTRATOR, "Passes through the opposing Pok\u00e9mon's barrier, substitute, and the like and strikes.");
         }
     }
 
@@ -755,7 +755,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Stench() {
-            super(AbilityNamesies.STENCH, "The stench may cause the target to flinch.");
+            super(AbilityNamesies.STENCH, "By releasing stench when attacking, this Pok\u00e9mon may cause the target to flinch.");
         }
 
         @Override
@@ -783,7 +783,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         };
 
         EffectSpore() {
-            super(AbilityNamesies.EFFECT_SPORE, "Contact may paralyze, poison, or cause sleep.");
+            super(AbilityNamesies.EFFECT_SPORE, "Contact with the Pok\u00e9mon may inflict poison, sleep, or paralysis on its attacker.");
         }
 
         @Override
@@ -804,7 +804,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         DrySkin() {
-            super(AbilityNamesies.DRY_SKIN, "Reduces HP if it is hot. Water restores HP.");
+            super(AbilityNamesies.DRY_SKIN, "Restores HP in rain or when hit by Water-type moves. Reduces HP in sunshine, and increases the damage received from Fire-type moves.");
         }
 
         @Override
@@ -849,7 +849,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         ArenaTrap() {
-            super(AbilityNamesies.ARENA_TRAP, "Prevents the foe from fleeing.");
+            super(AbilityNamesies.ARENA_TRAP, "Prevents opposing Pok\u00e9mon from fleeing.");
         }
 
         @Override
@@ -891,7 +891,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         Limber() {
-            super(AbilityNamesies.LIMBER, "The Pok\u00e9mon is protected from paralysis.");
+            super(AbilityNamesies.LIMBER, "Its limber body protects the Pok\u00e9mon from paralysis.");
         }
 
         @Override
@@ -922,7 +922,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         Damp() {
-            super(AbilityNamesies.DAMP, "Prevents combatants from self destructing.");
+            super(AbilityNamesies.DAMP, "Prevents the use of explosive moves such as Self-Destruct by dampening its surroundings.");
         }
 
         @Override
@@ -969,7 +969,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         VitalSpirit() {
-            super(AbilityNamesies.VITAL_SPIRIT, "Prevents the Pok\u00e9mon from falling asleep.");
+            super(AbilityNamesies.VITAL_SPIRIT, "The Pok\u00e9mon is full of vitality, and that prevents it from falling asleep.");
         }
 
         @Override
@@ -998,7 +998,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         Insomnia() {
-            super(AbilityNamesies.INSOMNIA, "Prevents the Pok\u00e9mon from falling asleep.");
+            super(AbilityNamesies.INSOMNIA, "The Pok\u00e9mon is suffering from insomnia and cannot fall asleep.");
         }
 
         @Override
@@ -1021,7 +1021,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         AngerPoint() {
-            super(AbilityNamesies.ANGER_POINT, "Raises Attack upon taking a critical hit.");
+            super(AbilityNamesies.ANGER_POINT, "The Pok\u00e9mon is angered when it takes a critical hit, and that maxes its Attack stat.");
         }
     }
 
@@ -1036,7 +1036,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         );
 
         Synchronize() {
-            super(AbilityNamesies.SYNCHRONIZE, "Passes on a burn, poison, or paralysis to the foe.");
+            super(AbilityNamesies.SYNCHRONIZE, "The attacker will receive the same status condition if it inflicts a burn, poison, or paralysis to the Pok\u00e9mon.");
         }
 
         @Override
@@ -1067,7 +1067,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         NoGuard() {
-            super(AbilityNamesies.NO_GUARD, "Ensures the Pok\u00e9mon and its foe's attacks land.");
+            super(AbilityNamesies.NO_GUARD, "The Pok\u00e9mon employs no-guard tactics to ensure incoming and outgoing attacks always land.");
         }
 
         @Override
@@ -1092,7 +1092,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         OwnTempo() {
-            super(AbilityNamesies.OWN_TEMPO, "Prevents the Pok\u00e9mon from becoming confused.");
+            super(AbilityNamesies.OWN_TEMPO, "This Pok\u00e9mon has its own tempo, and that prevents it from becoming confused.");
         }
     }
 
@@ -1100,7 +1100,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         ClearBody() {
-            super(AbilityNamesies.CLEAR_BODY, "Prevents the Pok\u00e9mon's stats from being lowered.");
+            super(AbilityNamesies.CLEAR_BODY, "Prevents other Pok\u00e9mon's moves or Abilities from lowering the Pok\u00e9mon's stats.");
         }
 
         @Override
@@ -1113,7 +1113,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         FullMetalBody() {
-            super(AbilityNamesies.FULL_METAL_BODY, "Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats.");
+            super(AbilityNamesies.FULL_METAL_BODY, "Prevents other Pok\u00e9mon's moves or Abilities from lowering the Pok\u00e9mon's stats.");
         }
 
         @Override
@@ -1132,7 +1132,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         LiquidOoze() {
-            super(AbilityNamesies.LIQUID_OOZE, "Inflicts damage on foes using any draining move.");
+            super(AbilityNamesies.LIQUID_OOZE, "Oozed liquid has strong stench, which damages attackers using any draining move.");
         }
     }
 
@@ -1148,7 +1148,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Sturdy() {
-            super(AbilityNamesies.STURDY, "The Pok\u00e9mon is protected against 1-hit KO attacks.");
+            super(AbilityNamesies.STURDY, "It cannot be knocked out with one hit. One-hit KO moves cannot knock it out, either.");
         }
 
         @Override
@@ -1176,7 +1176,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Oblivious() {
-            super(AbilityNamesies.OBLIVIOUS, "Prevents the Pok\u00e9mon from becoming infatuated.");
+            super(AbilityNamesies.OBLIVIOUS, "The Pok\u00e9mon is oblivious, and that keeps it from being infatuated or falling for taunts.");
         }
 
         @Override
@@ -1194,7 +1194,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         MagnetPull() {
-            super(AbilityNamesies.MAGNET_PULL, "Prevents Steel-type Pok\u00e9mon from escaping.");
+            super(AbilityNamesies.MAGNET_PULL, "Prevents Steel-type Pok\u00e9mon from escaping using its magnetic force.");
         }
 
         @Override
@@ -1217,7 +1217,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Unaware() {
-            super(AbilityNamesies.UNAWARE, "Ignores any change in ability by the foe.");
+            super(AbilityNamesies.UNAWARE, "When attacking, the Pok\u00e9mon ignores the target Pok\u00e9mon's stat changes.");
         }
 
         @Override
@@ -1230,7 +1230,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Simple() {
-            super(AbilityNamesies.SIMPLE, "The Pok\u00e9mon is prone to wild stat changes.");
+            super(AbilityNamesies.SIMPLE, "The stat changes the Pok\u00e9mon receives are doubled.");
         }
 
         @Override
@@ -1243,7 +1243,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         EarlyBird() {
-            super(AbilityNamesies.EARLY_BIRD, "The Pok\u00e9mon awakens quickly from sleep.");
+            super(AbilityNamesies.EARLY_BIRD, "The Pok\u00e9mon awakens twice as fast as other Pok\u00e9mon from sleep.");
         }
     }
 
@@ -1251,7 +1251,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         ThickFat() {
-            super(AbilityNamesies.THICK_FAT, "Raises resistance to Fire-and Ice-type moves.");
+            super(AbilityNamesies.THICK_FAT, "The Pok\u00e9mon is protected by a layer of thick fat, which halves the damage taken from Fire- and Ice-type moves.");
         }
 
         @Override
@@ -1264,7 +1264,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Hydration() {
-            super(AbilityNamesies.HYDRATION, "Heals status problems if it is raining.");
+            super(AbilityNamesies.HYDRATION, "Heals status conditions if it's raining.");
         }
 
         @Override
@@ -1279,7 +1279,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         ShellArmor() {
-            super(AbilityNamesies.SHELL_ARMOR, "The Pok\u00e9mon is protected against critical hits.");
+            super(AbilityNamesies.SHELL_ARMOR, "A hard shell protects the Pok\u00e9mon from critical hits.");
         }
     }
 
@@ -1287,7 +1287,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         BattleArmor() {
-            super(AbilityNamesies.BATTLE_ARMOR, "The Pok\u00e9mon is protected against critical hits.");
+            super(AbilityNamesies.BATTLE_ARMOR, "Hard armor protects the Pok\u00e9mon from critical hits.");
         }
     }
 
@@ -1295,7 +1295,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SkillLink() {
-            super(AbilityNamesies.SKILL_LINK, "Increases the frequency of multi-strike moves.");
+            super(AbilityNamesies.SKILL_LINK, "Maximizes the number of times multi-strike moves hit.");
         }
     }
 
@@ -1303,7 +1303,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Levitate() {
-            super(AbilityNamesies.LEVITATE, "Gives full immunity to all Ground-type moves.");
+            super(AbilityNamesies.LEVITATE, "By floating in the air, the Pok\u00e9mon receives full immunity to all Ground-type moves.");
         }
     }
 
@@ -1311,7 +1311,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Forewarn() {
-            super(AbilityNamesies.FOREWARN, "Determines what moves the foe has.");
+            super(AbilityNamesies.FOREWARN, "When it enters a battle, the Pok\u00e9mon can tell one of the moves an opposing Pok\u00e9mon has.");
         }
 
         @Override
@@ -1352,7 +1352,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         HyperCutter() {
-            super(AbilityNamesies.HYPER_CUTTER, "Prevents the Attack stat from being lowered.");
+            super(AbilityNamesies.HYPER_CUTTER, "The Pok\u00e9mon's proud of its powerful pincers. They prevent other Pok\u00e9mon from lowering its Attack stat.");
         }
 
         @Override
@@ -1365,7 +1365,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Soundproof() {
-            super(AbilityNamesies.SOUNDPROOF, "Gives full immunity to all sound-based moves.");
+            super(AbilityNamesies.SOUNDPROOF, "Soundproofing of the Pok\u00e9mon itself gives full immunity to all sound-based moves.");
         }
 
         @Override
@@ -1396,7 +1396,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         IronFist() {
-            super(AbilityNamesies.IRON_FIST, "Boosts the power of punching moves.");
+            super(AbilityNamesies.IRON_FIST, "Powers up punching moves.");
         }
 
         @Override
@@ -1416,7 +1416,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         NaturalCure() {
-            super(AbilityNamesies.NATURAL_CURE, "All status problems are healed upon switching out.");
+            super(AbilityNamesies.NATURAL_CURE, "All status conditions heal when the Pok\u00e9mon switches out.");
         }
 
         @Override
@@ -1431,7 +1431,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SereneGrace() {
-            super(AbilityNamesies.SERENE_GRACE, "Boosts the likelihood of added effects appearing.");
+            super(AbilityNamesies.SERENE_GRACE, "Boosts the likelihood of additional effects occurring when attacking.");
         }
     }
 
@@ -1439,7 +1439,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         LeafGuard() {
-            super(AbilityNamesies.LEAF_GUARD, "Prevents status problems in sunny weather.");
+            super(AbilityNamesies.LEAF_GUARD, "Prevents status conditions in sunny weather.");
         }
 
         @Override
@@ -1457,7 +1457,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Scrappy() {
-            super(AbilityNamesies.SCRAPPY, "Enables moves to hit Ghost-type foes.");
+            super(AbilityNamesies.SCRAPPY, "The Pok\u00e9mon can hit Ghost-type Pok\u00e9mon with Normal- and Fighting-type moves.");
         }
 
         @Override
@@ -1470,7 +1470,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SwiftSwim() {
-            super(AbilityNamesies.SWIFT_SWIM, "Boosts the Pok\u00e9mon's Speed in rain.");
+            super(AbilityNamesies.SWIFT_SWIM, "Boosts the Pok\u00e9mon's Speed stat in rain.");
         }
 
         @Override
@@ -1499,7 +1499,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         WaterVeil() {
-            super(AbilityNamesies.WATER_VEIL, "Prevents the Pok\u00e9mon from getting a burn.");
+            super(AbilityNamesies.WATER_VEIL, "The Pok\u00e9mon is covered with a water veil, which prevents the Pok\u00e9mon from getting a burn.");
         }
 
         @Override
@@ -1522,7 +1522,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Filter() {
-            super(AbilityNamesies.FILTER, "Powers down super-effective moves.");
+            super(AbilityNamesies.FILTER, "Reduces the power of supereffective attacks taken.");
         }
 
         @Override
@@ -1554,7 +1554,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         FlameBody() {
-            super(AbilityNamesies.FLAME_BODY, "Contact with the Pok\u00e9mon may burn the foe.");
+            super(AbilityNamesies.FLAME_BODY, "Contact with the Pok\u00e9mon may burn the attacker.");
         }
 
         @Override
@@ -1569,7 +1569,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Rattled() {
-            super(AbilityNamesies.RATTLED, "Some move types scare it and boost its Speed.");
+            super(AbilityNamesies.RATTLED, "Dark-, Ghost-, and Bug-type moves scare the Pok\u00e9mon and boost its Speed stat.");
         }
 
         @Override
@@ -1585,7 +1585,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Moxie() {
-            super(AbilityNamesies.MOXIE, "Attack rises when you knock out an opponent.");
+            super(AbilityNamesies.MOXIE, "The Pok\u00e9mon shows moxie, and that boosts the Attack stat after knocking out any Pok\u00e9mon.");
         }
 
         @Override
@@ -1598,7 +1598,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         BeastBoost() {
-            super(AbilityNamesies.BEAST_BOOST, "The Pokémon boosts its most proficient stat each time it knocks out a Pokémon.");
+            super(AbilityNamesies.BEAST_BOOST, "The Pok\u00e9mon boosts its most proficient stat each time it knocks out a Pok\u00e9mon.");
         }
 
         @Override
@@ -1611,7 +1611,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SoulHeart() {
-            super(AbilityNamesies.SOUL_HEART, "Boosts its Sp. Atk stat every time a Pokémon faints.");
+            super(AbilityNamesies.SOUL_HEART, "Boosts its Sp. Atk stat every time a Pok\u00e9mon faints.");
         }
 
         @Override
@@ -1627,7 +1627,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Imposter() {
-            super(AbilityNamesies.IMPOSTER, "It transforms itself into the Pok\u00e9mon it is facing.");
+            super(AbilityNamesies.IMPOSTER, "The Pok\u00e9mon transforms itself into the Pok\u00e9mon it's facing.");
         }
 
         @Override
@@ -1645,7 +1645,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Adaptability() {
-            super(AbilityNamesies.ADAPTABILITY, "Powers up moves of the same type.");
+            super(AbilityNamesies.ADAPTABILITY, "Powers up moves of the same type as the Pok\u00e9mon.");
         }
     }
 
@@ -1653,7 +1653,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         WaterAbsorb() {
-            super(AbilityNamesies.WATER_ABSORB, "Restores HP if hit by a Water-type move.");
+            super(AbilityNamesies.WATER_ABSORB, "Restores HP if hit by a Water-type move, instead of taking damage.");
         }
 
         @Override
@@ -1682,7 +1682,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         VoltAbsorb() {
-            super(AbilityNamesies.VOLT_ABSORB, "Restores HP if hit by an Electric-type move.");
+            super(AbilityNamesies.VOLT_ABSORB, "Restores HP if hit by an Electric-type move, instead of taking damage.");
         }
 
         @Override
@@ -1711,7 +1711,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         QuickFeet() {
-            super(AbilityNamesies.QUICK_FEET, "Boosts Speed if there is a status problem.");
+            super(AbilityNamesies.QUICK_FEET, "Boosts the Speed stat if the Pok\u00e9mon has a status condition.");
         }
 
         @Override
@@ -1739,7 +1739,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Trace() {
-            super(AbilityNamesies.TRACE, "The Pok\u00e9mon copies the foe's ability.");
+            super(AbilityNamesies.TRACE, "When it enters a battle, the Pok\u00e9mon copies an opposing Pok\u00e9mon's Ability.");
         }
 
         @Override
@@ -1774,7 +1774,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Download() {
-            super(AbilityNamesies.DOWNLOAD, "Adjusts power according to a foe's defenses.");
+            super(AbilityNamesies.DOWNLOAD, "Compares an opposing Pok\u00e9mon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk statâwhichever will be more effective.");
         }
 
         @Override
@@ -1795,7 +1795,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Pressure() {
-            super(AbilityNamesies.PRESSURE, "The Pok\u00e9mon raises the foe's PP usage.");
+            super(AbilityNamesies.PRESSURE, "By putting pressure on the opposing Pok\u00e9mon, it raises their PP usage.");
         }
 
         @Override
@@ -1814,7 +1814,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         Immunity() {
-            super(AbilityNamesies.IMMUNITY, "Prevents the Pok\u00e9mon from getting poisoned.");
+            super(AbilityNamesies.IMMUNITY, "The immune system of the Pok\u00e9mon prevents it from getting poisoned.");
         }
 
         @Override
@@ -1837,7 +1837,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SnowCloak() {
-            super(AbilityNamesies.SNOW_CLOAK, "Raises the Pok\u00e9mon's evasion during a hailstorm by one level.");
+            super(AbilityNamesies.SNOW_CLOAK, "Boosts evasion in a hailstorm.");
         }
 
         @Override
@@ -1855,7 +1855,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         MarvelScale() {
-            super(AbilityNamesies.MARVEL_SCALE, "Boosts Defense if there is a status problem.");
+            super(AbilityNamesies.MARVEL_SCALE, "The Pok\u00e9mon's marvelous scales boost the Defense stat if it has a status condition.");
         }
 
         @Override
@@ -1878,7 +1878,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Multiscale() {
-            super(AbilityNamesies.MULTISCALE, "When this Pok\u00e9mon is at full HP, damage is lessened.");
+            super(AbilityNamesies.MULTISCALE, "Reduces the amount of damage the Pok\u00e9mon takes when its HP is full.");
         }
 
         @Override
@@ -1891,7 +1891,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         ShadowShield() {
-            super(AbilityNamesies.SHADOW_SHIELD, "Reduces the amount of damage the Pokémon takes while its HP is full.");
+            super(AbilityNamesies.SHADOW_SHIELD, "Reduces the amount of damage the Pok\u00e9mon takes while its HP is full.");
         }
 
         @Override
@@ -1910,7 +1910,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SheerForce() {
-            super(AbilityNamesies.SHEER_FORCE, "Attacks gain power, but lose their secondary effect.");
+            super(AbilityNamesies.SHEER_FORCE, "Removes additional effects to increase the power of moves when attacking.");
         }
 
         @Override
@@ -1942,7 +1942,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         HugePower() {
-            super(AbilityNamesies.HUGE_POWER, "Raises the Pok\u00e9mon's Attack stat.");
+            super(AbilityNamesies.HUGE_POWER, "Doubles the Pok\u00e9mon's Attack stat.");
         }
 
         @Override
@@ -1960,7 +1960,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SpeedBoost() {
-            super(AbilityNamesies.SPEED_BOOST, "The Pok\u00e9mon's Speed stat is gradually boosted.");
+            super(AbilityNamesies.SPEED_BOOST, "Its Speed stat is boosted every turn.");
         }
 
         @Override
@@ -1973,7 +1973,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         MagicBounce() {
-            super(AbilityNamesies.MAGIC_BOUNCE, "Reflects status-changing moves.");
+            super(AbilityNamesies.MAGIC_BOUNCE, "Reflects status moves, instead of getting hit by them.");
         }
 
         @Override
@@ -1992,7 +1992,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SuperLuck() {
-            super(AbilityNamesies.SUPER_LUCK, "Heightens the critical-hit ratios of moves.");
+            super(AbilityNamesies.SUPER_LUCK, "The Pok\u00e9mon is so lucky that the critical-hit ratios of its moves are boosted.");
         }
     }
 
@@ -2000,7 +2000,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         ShadowTag() {
-            super(AbilityNamesies.SHADOW_TAG, "Prevents the foe from escaping.");
+            super(AbilityNamesies.SHADOW_TAG, "This Pok\u00e9mon steps on the opposing Pok\u00e9mon's shadow to prevent it from escaping.");
         }
 
         @Override
@@ -2018,7 +2018,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Overcoat() {
-            super(AbilityNamesies.OVERCOAT, "Protects the Pok\u00e9mon from damage from weather.");
+            super(AbilityNamesies.OVERCOAT, "Protects the Pok\u00e9mon from things like sand, hail, and powder.");
         }
 
         @Override
@@ -2047,7 +2047,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         MagmaArmor() {
-            super(AbilityNamesies.MAGMA_ARMOR, "Prevents the Pok\u00e9mon from becoming frozen.");
+            super(AbilityNamesies.MAGMA_ARMOR, "The Pok\u00e9mon is covered with hot magma, which prevents the Pok\u00e9mon from becoming frozen.");
         }
 
         @Override
@@ -2070,7 +2070,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SuctionCups() {
-            super(AbilityNamesies.SUCTION_CUPS, "Negates all moves that force switching out.");
+            super(AbilityNamesies.SUCTION_CUPS, "This Pok\u00e9mon uses suction cups to stay in one spot to negate all moves and items that force switching out.");
         }
 
         @Override
@@ -2089,7 +2089,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Steadfast() {
-            super(AbilityNamesies.STEADFAST, "Raises Speed each time the Pok\u00e9mon flinches.");
+            super(AbilityNamesies.STEADFAST, "The Pok\u00e9mon's determination boosts the Speed stat each time the Pok\u00e9mon flinches.");
         }
     }
 
@@ -2097,7 +2097,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SandStream() {
-            super(AbilityNamesies.SAND_STREAM, "The Pok\u00e9mon summons a sandstorm in battle.");
+            super(AbilityNamesies.SAND_STREAM, "The Pok\u00e9mon summons a sandstorm when it enters a battle.");
         }
 
         @Override
@@ -2126,7 +2126,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         PoisonHeal() {
-            super(AbilityNamesies.POISON_HEAL, "Restores HP if the Pok\u00e9mon is poisoned.");
+            super(AbilityNamesies.POISON_HEAL, "Restores HP if the Pok\u00e9mon is poisoned, instead of losing HP.");
         }
     }
 
@@ -2136,7 +2136,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private boolean lazyface;
 
         Truant() {
-            super(AbilityNamesies.TRUANT, "Pok\u00e9mon can't attack on consecutive turns.");
+            super(AbilityNamesies.TRUANT, "The Pok\u00e9mon can't use a move the following turn if it uses one.");
             this.lazyface = false;
         }
 
@@ -2164,7 +2164,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         WonderGuard() {
-            super(AbilityNamesies.WONDER_GUARD, "Only supereffective moves will hit.");
+            super(AbilityNamesies.WONDER_GUARD, "Its mysterious power only lets supereffective moves hit the Pok\u00e9mon.");
         }
 
         @Override
@@ -2195,7 +2195,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private boolean activated;
 
         Normalize() {
-            super(AbilityNamesies.NORMALIZE, "All the Pok\u00e9mon's moves become the Normal type.");
+            super(AbilityNamesies.NORMALIZE, "All the Pok\u00e9mon's moves become Normal type. The power of those moves is boosted a little.");
             this.activated = false;
         }
 
@@ -2223,7 +2223,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Stall() {
-            super(AbilityNamesies.STALL, "The Pok\u00e9mon moves after even slower foes.");
+            super(AbilityNamesies.STALL, "The Pok\u00e9mon moves after all other Pok\u00e9mon do.");
         }
     }
 
@@ -2231,7 +2231,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         PurePower() {
-            super(AbilityNamesies.PURE_POWER, "Raises the Pok\u00e9mon's Attack stat.");
+            super(AbilityNamesies.PURE_POWER, "Using its pure power, the Pok\u00e9mon doubles its Attack stat.");
         }
 
         @Override
@@ -2249,7 +2249,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         RoughSkin() {
-            super(AbilityNamesies.ROUGH_SKIN, "Inflicts damage to the foe on contact.");
+            super(AbilityNamesies.ROUGH_SKIN, "This Pok\u00e9mon inflicts damage with its rough skin to the attacker on contact.");
         }
 
         @Override
@@ -2263,7 +2263,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SolidRock() {
-            super(AbilityNamesies.SOLID_ROCK, "Reduces damage from supereffective attacks.");
+            super(AbilityNamesies.SOLID_ROCK, "Reduces the power of supereffective attacks taken.");
         }
 
         @Override
@@ -2276,7 +2276,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         WhiteSmoke() {
-            super(AbilityNamesies.WHITE_SMOKE, "Prevents other Pok\u00e9mon from lowering its stats.");
+            super(AbilityNamesies.WHITE_SMOKE, "The Pok\u00e9mon is protected by its white smoke, which prevents other Pok\u00e9mon from lowering its stats.");
         }
 
         @Override
@@ -2294,7 +2294,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         ToxicBoost() {
-            super(AbilityNamesies.TOXIC_BOOST, "Powers up physical attacks when poisoned.");
+            super(AbilityNamesies.TOXIC_BOOST, "Powers up physical attacks when the Pok\u00e9mon is poisoned.");
         }
 
         @Override
@@ -2317,7 +2317,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Anticipation() {
-            super(AbilityNamesies.ANTICIPATION, "Senses a foe's dangerous moves.");
+            super(AbilityNamesies.ANTICIPATION, "The Pok\u00e9mon can sense an opposing Pok\u00e9mon's dangerous moves.");
         }
 
         @Override
@@ -2337,7 +2337,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         StormDrain() {
-            super(AbilityNamesies.STORM_DRAIN, "Draws in all Water-type moves to up Sp. Attack.");
+            super(AbilityNamesies.STORM_DRAIN, "Draws in all Water-type moves. Instead of being hit by Water-type moves, it boosts its Sp. Atk.");
         }
 
         @Override
@@ -2362,7 +2362,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private Type type;
 
         ColorChange() {
-            super(AbilityNamesies.COLOR_CHANGE, "Changes the Pok\u00e9mon's type to the foe's move.");
+            super(AbilityNamesies.COLOR_CHANGE, "The Pok\u00e9mon's type becomes the type of the move used on it.");
         }
 
         @Override
@@ -2418,7 +2418,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Drizzle() {
-            super(AbilityNamesies.DRIZZLE, "The Pok\u00e9mon makes it rain if it appears in battle.");
+            super(AbilityNamesies.DRIZZLE, "The Pok\u00e9mon makes it rain when it enters a battle.");
         }
 
         @Override
@@ -2445,7 +2445,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Defiant() {
-            super(AbilityNamesies.DEFIANT, "Boosts the Attack stat when a stat is lowered.");
+            super(AbilityNamesies.DEFIANT, "Boosts the Pok\u00e9mon's Attack stat sharply when its stats are lowered.");
         }
 
         @Override
@@ -2458,7 +2458,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Competitive() {
-            super(AbilityNamesies.COMPETITIVE, "Boosts the Sp. Atk stat when a stat is lowered.");
+            super(AbilityNamesies.COMPETITIVE, "Boosts the Sp. Atk stat sharply when a stat is lowered.");
         }
 
         @Override
@@ -2471,7 +2471,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         FlowerGift() {
-            super(AbilityNamesies.FLOWER_GIFT, "Powers up party Pok\u00e9mon when it is sunny.");
+            super(AbilityNamesies.FLOWER_GIFT, "Boosts the Attack and Sp. Def stats of itself and allies when it is sunny.");
         }
 
         @Override
@@ -2494,7 +2494,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Aftermath() {
-            super(AbilityNamesies.AFTERMATH, "Damages the attacker landing the finishing hit.");
+            super(AbilityNamesies.AFTERMATH, "Damages the attacker if it contacts the Pok\u00e9mon with a finishing hit.");
         }
 
         @Override
@@ -2510,7 +2510,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Heatproof() {
-            super(AbilityNamesies.HEATPROOF, "Weakens the power of Fire-type moves.");
+            super(AbilityNamesies.HEATPROOF, "The heatproof body of the Pok\u00e9mon halves the damage from Fire-type moves that hit it.");
         }
 
         @Override
@@ -2523,7 +2523,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SandForce() {
-            super(AbilityNamesies.SAND_FORCE, "Boosts certain moves' power in a sandstorm.");
+            super(AbilityNamesies.SAND_FORCE, "Boosts the power of Rock-, Ground-, and Steel-type moves in a sandstorm.");
         }
 
         @Override
@@ -2542,7 +2542,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SnowWarning() {
-            super(AbilityNamesies.SNOW_WARNING, "The Pok\u00e9mon summons a hailstorm in battle.");
+            super(AbilityNamesies.SNOW_WARNING, "The Pok\u00e9mon summons a hailstorm when it enters a battle.");
         }
 
         @Override
@@ -2556,7 +2556,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         MotorDrive() {
-            super(AbilityNamesies.MOTOR_DRIVE, "Raises Speed if hit by an Electric-type move.");
+            super(AbilityNamesies.MOTOR_DRIVE, "Boosts its Speed stat if hit by an Electric-type move, instead of taking damage.");
         }
 
         @Override
@@ -2579,7 +2579,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Justified() {
-            super(AbilityNamesies.JUSTIFIED, "Raises Attack when hit by a Dark-type move.");
+            super(AbilityNamesies.JUSTIFIED, "Being hit by a Dark-type move boosts the Attack stat of the Pok\u00e9mon, for justice.");
         }
 
         @Override
@@ -2614,7 +2614,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         int count;
 
         SlowStart() {
-            super(AbilityNamesies.SLOW_START, "Temporarily halves Attack and Speed.");
+            super(AbilityNamesies.SLOW_START, "For five turns, the Pok\u00e9mon's Attack and Speed stats are halved.");
             this.count = 0;
         }
 
@@ -2648,7 +2648,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         BadDreams() {
-            super(AbilityNamesies.BAD_DREAMS, "Reduces a sleeping foe's HP.");
+            super(AbilityNamesies.BAD_DREAMS, "Reduces the HP of sleeping opposing Pok\u00e9mon.");
         }
 
         @Override
@@ -2696,7 +2696,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         BigPecks() {
-            super(AbilityNamesies.BIG_PECKS, "Protects the Pok\u00e9mon from Defense-lowering attacks.");
+            super(AbilityNamesies.BIG_PECKS, "Protects the Pok\u00e9mon from Defense-lowering effects.");
         }
 
         @Override
@@ -2709,7 +2709,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         PoisonTouch() {
-            super(AbilityNamesies.POISON_TOUCH, "May poison targets when a Pok\u00e9mon makes contact.");
+            super(AbilityNamesies.POISON_TOUCH, "May poison a target when the Pok\u00e9mon makes contact.");
         }
 
         @Override
@@ -2737,7 +2737,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         WonderSkin() {
-            super(AbilityNamesies.WONDER_SKIN, "Makes status-changing moves more likely to miss.");
+            super(AbilityNamesies.WONDER_SKIN, "Makes status moves more likely to miss.");
         }
 
         @Override
@@ -2760,7 +2760,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Mummy() {
-            super(AbilityNamesies.MUMMY, "Contact with this Pok\u00e9mon spreads this Ability.");
+            super(AbilityNamesies.MUMMY, "Contact with the Pok\u00e9mon changes the attacker's Ability to Mummy.");
         }
 
         @Override
@@ -2788,7 +2788,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Defeatist() {
-            super(AbilityNamesies.DEFEATIST, "Lowers stats when HP becomes half or less.");
+            super(AbilityNamesies.DEFEATIST, "Halves the Pok\u00e9mon's Attack and Sp. Atk stats when its HP becomes half or less.");
         }
 
         @Override
@@ -2801,7 +2801,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         WeakArmor() {
-            super(AbilityNamesies.WEAK_ARMOR, "Physical attacks lower Defense and raise Speed.");
+            super(AbilityNamesies.WEAK_ARMOR, "Physical attacks to the Pok\u00e9mon lower its Defense stat but sharply raise its Speed stat.");
         }
 
         @Override
@@ -2836,7 +2836,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         Illusion() {
-            super(AbilityNamesies.ILLUSION, "Comes out disguised as the Pok\u00e9mon in back.");
+            super(AbilityNamesies.ILLUSION, "Comes out disguised as the Pok\u00e9mon in the party's last spot.");
             this.activated = false;
         }
 
@@ -2947,7 +2947,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SapSipper() {
-            super(AbilityNamesies.SAP_SIPPER, "Boosts Attack when hit by a Grass-type move.");
+            super(AbilityNamesies.SAP_SIPPER, "Boosts the Attack stat if hit by a Grass-type move, instead of taking damage.");
         }
 
         @Override
@@ -2970,7 +2970,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         IronBarbs() {
-            super(AbilityNamesies.IRON_BARBS, "Inflicts damage to the Pok\u00e9mon on contact.");
+            super(AbilityNamesies.IRON_BARBS, "Inflicts damage to the attacker on contact with iron barbs.");
         }
 
         @Override
@@ -2984,7 +2984,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         MoldBreaker() {
-            super(AbilityNamesies.MOLD_BREAKER, "Moves can be used regardless of Abilities.");
+            super(AbilityNamesies.MOLD_BREAKER, "Moves can be used on the target regardless of its Abilities.");
         }
 
         @Override
@@ -2997,7 +2997,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Teravolt() {
-            super(AbilityNamesies.TERAVOLT, "Moves can be used regardless of Abilities.");
+            super(AbilityNamesies.TERAVOLT, "Moves can be used on the target regardless of its Abilities.");
         }
 
         @Override
@@ -3010,7 +3010,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Turboblaze() {
-            super(AbilityNamesies.TURBOBLAZE, "Moves can be used regardless of Abilities.");
+            super(AbilityNamesies.TURBOBLAZE, "Moves can be used on the target regardless of its Abilities.");
         }
 
         @Override
@@ -3031,7 +3031,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         StickyHold() {
-            super(AbilityNamesies.STICKY_HOLD, "Protects the Pok\u00e9mon from item theft.");
+            super(AbilityNamesies.STICKY_HOLD, "Items held by the Pok\u00e9mon are stuck fast and cannot be removed by other Pok\u00e9mon.");
         }
     }
 
@@ -3047,7 +3047,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Unburden() {
-            super(AbilityNamesies.UNBURDEN, "Raises Speed if a held item is used.");
+            super(AbilityNamesies.UNBURDEN, "Boosts the Speed stat if the Pok\u00e9mon's held item is used or lost.");
         }
 
         @Override
@@ -3070,7 +3070,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Pickpocket() {
-            super(AbilityNamesies.PICKPOCKET, "Steals an item when hit by another Pok\u00e9mon.");
+            super(AbilityNamesies.PICKPOCKET, "Steals an item from an attacker that made direct contact.");
         }
 
         @Override
@@ -3164,7 +3164,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         Pickup() {
-            super(AbilityNamesies.PICKUP, "The Pok\u00e9mon may pick up items.");
+            super(AbilityNamesies.PICKUP, "The Pok\u00e9mon may pick up the item an opposing Pok\u00e9mon used during a battle. It may pick up items outside of battle, too.");
         }
 
         @Override
@@ -3181,7 +3181,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Unnerve() {
-            super(AbilityNamesies.UNNERVE, "Makes the foe nervous and unable to eat Berries.");
+            super(AbilityNamesies.UNNERVE, "Unnerves opposing Pok\u00e9mon and makes them unable to eat Berries.");
         }
 
         @Override
@@ -3194,7 +3194,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         HoneyGather() {
-            super(AbilityNamesies.HONEY_GATHER, "The Pok\u00e9mon may gather Honey from somewhere.");
+            super(AbilityNamesies.HONEY_GATHER, "The Pok\u00e9mon may gather Honey after a battle.");
         }
 
         @Override
@@ -3210,7 +3210,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Gluttony() {
-            super(AbilityNamesies.GLUTTONY, "Makes the Pok\u00e9mon use a held Berry earlier than usual.");
+            super(AbilityNamesies.GLUTTONY, "Makes the Pok\u00e9mon eat a held Berry when its HP drops to half or less, which is sooner than usual.");
         }
     }
 
@@ -3218,7 +3218,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Multitype() {
-            super(AbilityNamesies.MULTITYPE, "Changes type to match the held Plate.");
+            super(AbilityNamesies.MULTITYPE, "Changes the Pok\u00e9mon's type to match the Plate or Z-Crystal it holds.");
         }
 
         @Override
@@ -3246,7 +3246,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         RKSSystem() {
-            super(AbilityNamesies.RKSSYSTEM, "Changes the Pokémon's type to match the memory disc it holds.");
+            super(AbilityNamesies.RKSSYSTEM, "Changes the Pok\u00e9mon's type to match the memory disc it holds.");
         }
 
         @Override
@@ -3274,7 +3274,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Forecast() {
-            super(AbilityNamesies.FORECAST, "Changes with the weather.");
+            super(AbilityNamesies.FORECAST, "The Pok\u00e9mon transforms with the weather to change its type to Water, Fire, or Ice.");
         }
 
         @Override
@@ -3310,7 +3310,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         AuraBreak() {
-            super(AbilityNamesies.AURA_BREAK, "The effects of Aura Abilities are reversed.");
+            super(AbilityNamesies.AURA_BREAK, "The effects of âAuraâ Abilities are reversed to lower the power of affected moves.");
         }
     }
 
@@ -3381,7 +3381,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         StrongJaw() {
-            super(AbilityNamesies.STRONG_JAW, "The Pok\u00e9mon's strong jaw gives it tremendous biting power.");
+            super(AbilityNamesies.STRONG_JAW, "The Pok\u00e9mon's strong jaw boosts the power of its biting moves.");
         }
 
         @Override
@@ -3449,7 +3449,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         AromaVeil() {
-            super(AbilityNamesies.AROMA_VEIL, "Protects allies from attacks that effect their mental state.");
+            super(AbilityNamesies.AROMA_VEIL, "Protects itself and its allies from attacks that limit their move choices.");
         }
     }
 
@@ -3457,7 +3457,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Healer() {
-            super(AbilityNamesies.HEALER, "The Pok\u00e9mon may heal its own status problems.");
+            super(AbilityNamesies.HEALER, "Sometimes heals an ally's status condition.");
         }
 
         @Override
@@ -3474,7 +3474,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private boolean activated;
 
         Pixilate() {
-            super(AbilityNamesies.PIXILATE, "Normal-type moves become Fairy-type moves.");
+            super(AbilityNamesies.PIXILATE, "Normal-type moves become Fairy-type moves. The power of those moves is boosted a little.");
             this.activated = false;
         }
 
@@ -3505,7 +3505,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private boolean activated;
 
         Refrigerate() {
-            super(AbilityNamesies.REFRIGERATE, "Normal-type moves become Ice-type moves.");
+            super(AbilityNamesies.REFRIGERATE, "Normal-type moves become Ice-type moves. The power of those moves is boosted a little.");
             this.activated = false;
         }
 
@@ -3543,7 +3543,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         Schooling() {
-            super(AbilityNamesies.SCHOOLING, "When it has a lot of HP, the Pokémon forms a powerful school. It stops schooling when its HP is low.");
+            super(AbilityNamesies.SCHOOLING, "When it has a lot of HP, the Pok\u00e9mon forms a powerful school. It stops schooling when its HP is low.");
             this.schoolForm = false;
         }
 
@@ -3598,7 +3598,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         ShieldsDown() {
-            super(AbilityNamesies.SHIELDS_DOWN, "When its HP becomes half or less, the Pokémon's shell breaks and it becomes aggressive.");
+            super(AbilityNamesies.SHIELDS_DOWN, "When its HP becomes half or less, the Pok\u00e9mon's shell breaks and it becomes aggressive.");
             this.coreForm = false;
         }
 
@@ -3653,7 +3653,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         StanceChange() {
-            super(AbilityNamesies.STANCE_CHANGE, "The Pok\u00e9mon changes form depending on how it battles.");
+            super(AbilityNamesies.STANCE_CHANGE, "The Pok\u00e9mon changes its form to Blade Forme when it uses an attack move, and changes to Shield Forme when it uses King's Shield.");
             this.shieldForm = true;
         }
 
@@ -3699,7 +3699,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         FurCoat() {
-            super(AbilityNamesies.FUR_COAT, "Halves damage from physical moves.");
+            super(AbilityNamesies.FUR_COAT, "Halves the damage from physical moves onto this Pok\u00e9mon.");
         }
 
         @Override
@@ -3717,7 +3717,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         GrassPelt() {
-            super(AbilityNamesies.GRASS_PELT, "Boosts the Defense stat in Grassy Terrain.");
+            super(AbilityNamesies.GRASS_PELT, "Boosts the Pok\u00e9mon's Defense stat in Grassy Terrain.");
         }
 
         @Override
@@ -3740,7 +3740,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         SurgeSurfer() {
-            super(AbilityNamesies.SURGE_SURFER, "Doubles the Pokémon's Speed stat on Electric Terrain.");
+            super(AbilityNamesies.SURGE_SURFER, "Doubles the Pok\u00e9mon's Speed stat on Electric Terrain.");
         }
 
         @Override
@@ -3763,7 +3763,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         FlowerVeil() {
-            super(AbilityNamesies.FLOWER_VEIL, "Prevents lowering of Grass-type Pok\u00e9mon's stats.");
+            super(AbilityNamesies.FLOWER_VEIL, "Ally Grass-type Pok\u00e9mon are protected from status conditions and the lowering of their stats.");
         }
 
         @Override
@@ -3801,7 +3801,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private Type type;
 
         Protean() {
-            super(AbilityNamesies.PROTEAN, "Changes the Pok\u00e9mon's type to the type of the move it's using.");
+            super(AbilityNamesies.PROTEAN, "Changes the Pok\u00e9mon's type to the type of the move it's about to use.");
         }
 
         @Override
@@ -3838,7 +3838,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         WaterCompaction() {
-            super(AbilityNamesies.WATER_COMPACTION, "Boosts the Pokémon's Defense stat sharply when hit by a Water-type move.");
+            super(AbilityNamesies.WATER_COMPACTION, "Boosts the Pok\u00e9mon's Defense stat sharply when hit by a Water-type move.");
         }
 
         @Override
@@ -3853,7 +3853,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Merciless() {
-            super(AbilityNamesies.MERCILESS, "The Pokémon's attacks become critical hits if the target is poisoned.");
+            super(AbilityNamesies.MERCILESS, "The Pok\u00e9mon's attacks become critical hits if the target is poisoned.");
         }
 
         @Override
@@ -3872,7 +3872,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         WaterBubble() {
-            super(AbilityNamesies.WATER_BUBBLE, "Lowers the power of Fire-type moves done to the Pokémon and prevents the Pokémon from getting a burn.");
+            super(AbilityNamesies.WATER_BUBBLE, "Lowers the power of Fire-type moves done to the Pok\u00e9mon and prevents the Pok\u00e9mon from getting a burn.");
         }
 
         @Override
@@ -3918,7 +3918,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Berserk() {
-            super(AbilityNamesies.BERSERK, "Boosts the Pokémon's Sp. Atk stat when it takes a hit that causes its HP to become half or less.");
+            super(AbilityNamesies.BERSERK, "Boosts the Pok\u00e9mon's Sp. Atk stat when it takes a hit that causes its HP to become half or less.");
         }
 
         @Override
@@ -3933,7 +3933,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         WimpOut() {
-            super(AbilityNamesies.WIMP_OUT, "The Pokémon cowardly switches out when its HP becomes half or less.");
+            super(AbilityNamesies.WIMP_OUT, "The Pok\u00e9mon cowardly switches out when its HP becomes half or less.");
         }
 
         @Override
@@ -3948,7 +3948,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         EmergencyExit() {
-            super(AbilityNamesies.EMERGENCY_EXIT, "The Pokémon, sensing danger, switches out when its HP becomes half or less.");
+            super(AbilityNamesies.EMERGENCY_EXIT, "The Pok\u00e9mon, sensing danger, switches out when its HP becomes half or less.");
         }
 
         @Override
@@ -3963,7 +3963,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         LongReach() {
-            super(AbilityNamesies.LONG_REACH, "The Pokémon uses its moves without making contact with the target.");
+            super(AbilityNamesies.LONG_REACH, "The Pok\u00e9mon uses its moves without making contact with the target.");
         }
     }
 
@@ -4034,7 +4034,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private boolean activated;
 
         Disguise() {
-            super(AbilityNamesies.DISGUISE, "Once per battle, the shroud that covers the Pokémon can protect it from an attack.");
+            super(AbilityNamesies.DISGUISE, "Once per battle, the shroud that covers the Pok\u00e9mon can protect it from an attack.");
             this.activated = false;
         }
 
@@ -4084,7 +4084,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Corrosion() {
-            super(AbilityNamesies.CORROSION, "The Pokémon can poison the target even if it's a Steel or Poison type.");
+            super(AbilityNamesies.CORROSION, "The Pok\u00e9mon can poison the target even if it's a Steel or Poison type.");
         }
     }
 
@@ -4133,7 +4133,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         Dazzling() {
-            super(AbilityNamesies.DAZZLING, "Surprises the opposing Pokémon, making it unable to attack using priority moves.");
+            super(AbilityNamesies.DAZZLING, "Surprises the opposing Pok\u00e9mon, making it unable to attack using priority moves.");
         }
 
         @Override
@@ -4151,7 +4151,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         QueenlyMajesty() {
-            super(AbilityNamesies.QUEENLY_MAJESTY, "Its majesty pressures the opposing Pokémon, making it unable to attack using priority moves.");
+            super(AbilityNamesies.QUEENLY_MAJESTY, "Its majesty pressures the opposing Pok\u00e9mon, making it unable to attack using priority moves.");
         }
 
         @Override
@@ -4171,7 +4171,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private boolean activated;
 
         Dancer() {
-            super(AbilityNamesies.DANCER, "When another Pokémon uses a dance move, it can use a dance move following it regardless of its Speed.");
+            super(AbilityNamesies.DANCER, "When another Pok\u00e9mon uses a dance move, it can use a dance move following it regardless of its Speed.");
             activated = false;
         }
 
@@ -4244,7 +4244,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         TanglingHair() {
-            super(AbilityNamesies.TANGLING_HAIR, "Contact with the Pokémon lowers the attacker's Speed stat.");
+            super(AbilityNamesies.TANGLING_HAIR, "Contact with the Pok\u00e9mon lowers the attacker's Speed stat.");
         }
 
         @Override
@@ -4257,7 +4257,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         PsychicSurge() {
-            super(AbilityNamesies.PSYCHIC_SURGE, "Turns the ground into Psychic Terrain when the Pokémon enters a battle.");
+            super(AbilityNamesies.PSYCHIC_SURGE, "Turns the ground into Psychic Terrain when the Pok\u00e9mon enters a battle.");
         }
 
         @Override
@@ -4271,7 +4271,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         ElectricSurge() {
-            super(AbilityNamesies.ELECTRIC_SURGE, "Turns the ground into Electric Terrain when the Pokémon enters a battle.");
+            super(AbilityNamesies.ELECTRIC_SURGE, "Turns the ground into Electric Terrain when the Pok\u00e9mon enters a battle.");
         }
 
         @Override
@@ -4285,7 +4285,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         MistySurge() {
-            super(AbilityNamesies.MISTY_SURGE, "Turns the ground into Misty Terrain when the Pokémon enters a battle.");
+            super(AbilityNamesies.MISTY_SURGE, "Turns the ground into Misty Terrain when the Pok\u00e9mon enters a battle.");
         }
 
         @Override
@@ -4299,7 +4299,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         private static final long serialVersionUID = 1L;
 
         GrassySurge() {
-            super(AbilityNamesies.GRASSY_SURGE, "Turns the ground into Grassy Terrain when the Pokémon enters a battle.");
+            super(AbilityNamesies.GRASSY_SURGE, "Turns the ground into Grassy Terrain when the Pok\u00e9mon enters a battle.");
         }
 
         @Override

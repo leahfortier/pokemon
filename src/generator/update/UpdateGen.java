@@ -1,7 +1,6 @@
 package generator.update;
 
 import draw.ImageUtils;
-import generator.GeneratorType;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.evolution.EvolutionType;

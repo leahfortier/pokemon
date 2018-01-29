@@ -12,19 +12,19 @@ No Ability:
     Desc: None
 *
 Overgrow:
-    Desc: Powers up Grass-type moves in a pinch.
+    Desc: Powers up Grass-type moves when the Pok\u00e9mon's HP is low.
     PinchAbility: Grass
 *
 Chlorophyll:
-    Desc: Boosts the Pok\u00e9mon's Speed in sunshine.
+    Desc: Boosts the Pok\u00e9mon's Speed stat in sunshine.
     SpeedWeather: Sunny
 *
 Blaze:
-    Desc: Powers up Fire-type moves in a pinch.
+    Desc: Powers up Fire-type moves when the Pok\u00e9mon's HP is low.
     PinchAbility: Fire
 *
 Solar Power:
-    Desc: Boosts Sp. Atk, but lowers HP in sunshine.
+    Desc: Boosts the Sp. Atk stat in sunny weather, but HP decreases every turn.
     Int: EndTurnEffect
     PowerMultiplierCondition: 1.5 user.getAttack().getCategory() == MoveCategory.SPECIAL && b.getWeather().namesies() == EffectNamesies.SUNNY
     ApplyEndTurn:
@@ -35,11 +35,11 @@ Solar Power:
         ###
 *
 Torrent:
-    Desc: Powers up Water-type moves in a pinch.
+    Desc: Powers up Water-type moves when the Pok\u00e9mon's HP is low.
     PinchAbility: Water
 *
 Rain Dish:
-    Desc: The Pok\u00e9mon gradually recovers HP in rain.
+    Desc: The Pok\u00e9mon gradually regains HP in rain.
     Int: EndTurnEffect
     ApplyEndTurn:
         if (b.getWeather().namesies() == EffectNamesies.RAINING) {
@@ -49,36 +49,36 @@ Rain Dish:
         ###
 *
 Shield Dust:
-    Desc: Blocks the added effects of attacks taken.
+    Desc: This Pok\u00e9mon's dust blocks the additional effects of attacks taken.
     ValidMove:
         return !user.getAttack().hasSecondaryEffects();
         ###
     Int: EffectBlockerEffect
 *
 Shed Skin:
-    Desc: The Pok\u00e9mon may heal its own status problems.
+    Desc: The Pok\u00e9mon may heal its own status conditions by shedding its skin.
     EndTurnStatusCure: RandomUtils.chanceTest(1, 3)
 *
 Compoundeyes:
-    Desc: The Pok\u00e9mon's accuracy is boosted.
+    Desc: The Pok\u00e9mon's compound eyes boost its accuracy.
     SimpleModifier: 1.3
     ToModify: Accuracy
 *
 Tinted Lens:
-    Desc: Powers up \"not very effective\" moves.
+    Desc: The Pok\u00e9mon can use ânot very effectiveâ moves to deal regular damage.
     PowerMultiplierCondition: 2 TypeAdvantage.isNotVeryEffective(user, victim, b)
 *
 Swarm:
-    Desc: Powers up Bug-type moves in a pinch.
+    Desc: Powers up Bug-type moves when the Pok\u00e9mon's HP is low.
     PinchAbility: Bug
     EncounterRateMultiplier: 1.5
     Comments: // Guessed on the encounter rate multiplier
 *
 Sniper:
-    Desc: Powers up moves if they become critical hits.
+    Desc: Powers up moves if they become critical hits when attacking.
 *
 Keen Eye:
-    Desc: Prevents the Pok\u00e9mon from losing accuracy.
+    Desc: Keen eyes prevent other Pok\u00e9mon from lowering this Pok\u00e9mon's accuracy.
     Int: StatProtectingEffect, OpponentIgnoreStageEffect, RepelLowLevelEncounterEffect
     StatProtect:
         return stat == Stat.ACCURACY;
@@ -95,12 +95,12 @@ Tangled Feet:
         ###
 *
 Guts:
-    Desc: Boosts Attack if there is a status problem.
+    Desc: It's so gutsy that having a status condition boosts the Pok\u00e9mon's Attack stat.
     ToModify: Attack
     ModifyMultiplier: 1.5 p.hasStatus()
 *
 Intimidate:
-    Desc: Lowers the foe's Attack stat.
+    Desc: The Pok\u00e9mon intimidates opposing Pok\u00e9mon upon entering battle, lowering their Attack stat.
     Int: EntryEffect, RepelLowLevelEncounterEffect
     Enter:
         ActivePokemon other = b.getOtherPokemon(enterer);
@@ -108,33 +108,33 @@ Intimidate:
         ###
 *
 Static:
-    Desc: Contact with the Pok\u00e9mon may cause paralysis.
+    Desc: The Pok\u00e9mon is charged with static electricity, so contact with it may cause paralysis.
     StatusContact: Paralyzed
     TypedWildEncounterSelector: Electric
 *
 Lightningrod:
-    Desc: The Pok\u00e9mon draws in all Electric-type moves.
+    Desc: The Pok\u00e9mon draws in all Electric-type moves. Instead of being hit by Electric-type moves, it boosts its Sp. Atk.
     BlockType: Electric Sp_Attack
 *
 Sand Veil:
-    Desc: Raises the Pok\u00e9mon's evasion during a sandstorm by one level.
+    Desc: Boosts the Pok\u00e9mon's evasion in a sandstorm.
     WeatherEvasion: Sandstorm
     WeatherEncounterRateDecreaser: Sandstorm
 *
 Sand Rush:
-    Desc: Speed rises in a Sandstorm.
+    Desc: Boosts the Pok\u00e9mon's Speed stat in a sandstorm.
     SpeedWeather: Sandstorm
 *
 Slush Rush:
-    Desc: Boosts the Pokémon's Speed stat in a hailstorm.
+    Desc: Boosts the Pok\u00e9mon's Speed stat in a hailstorm.
     SpeedWeather: Hailing
 *
 Poison Point:
-    Desc: Contact with the Pok\u00e9mon may poison the foe.
+    Desc: Contact with the Pok\u00e9mon may poison the attacker.
     StatusContact: Poisoned
 *
 Rivalry:
-    Desc: Raises Attack if the foe is of the same gender.
+    Desc: Becomes competitive and deals more damage to Pok\u00e9mon of the same gender, but deals less to Pok\u00e9mon of the opposite gender.
     GetMultiplier:
         if (user.getGender() == Gender.GENDERLESS) {
             return 1;
@@ -172,7 +172,7 @@ Magic Guard:
         ###
 *
 Flash Fire:
-    Desc: Powers up Fire-type moves if hit by a fire move.
+    Desc: Powers up the Pok\u00e9mon's Fire-type moves if it's hit by one.
     Field:
         private boolean activated;
         ###
@@ -194,10 +194,10 @@ Flash Fire:
 *
 Drought:
     WeatherStarter: Sunny made the sunlight turn harsh
-    Desc: The Pok\u00e9mon makes it sunny if it is in battle.
+    Desc: Turns the sunlight harsh when the Pok\u00e9mon enters a battle.
 *
 Frisk:
-    Desc: The Pok\u00e9mon can check the foe's held item.
+    Desc: When it enters a battle, the Pok\u00e9mon can check an opposing Pok\u00e9mon's held item.
     Int: EntryEffect
     Enter:
         ActivePokemon other = b.getOtherPokemon(enterer);
@@ -207,13 +207,13 @@ Frisk:
         ###
 *
 Inner Focus:
-    Desc: The Pok\u00e9mon is protected from flinching.
+    Desc: The Pok\u00e9mon's intensely focused, and that protects the Pok\u00e9mon from flinching.
 *
 Infiltrator:
-    Desc: You slip through the opponents walls and attack.
+    Desc: Passes through the opposing Pok\u00e9mon's barrier, substitute, and the like and strikes.
 *
 Stench:
-    Desc: The stench may cause the target to flinch.
+    Desc: By releasing stench when attacking, this Pok\u00e9mon may cause the target to flinch.
     Int: OpponentTakeDamageEffect
     OpponentTakeDamage:
         if (RandomUtils.chanceTest(10)) {
@@ -225,7 +225,7 @@ Stench:
     EncounterRateMultiplier: .5
 *
 Effect Spore:
-    Desc: Contact may paralyze, poison, or cause sleep.
+    Desc: Contact with the Pok\u00e9mon may inflict poison, sleep, or paralysis on its attacker.
     Int: PhysicalContactEffect
     Field:
         private static final StatusCondition[] statuses = new StatusCondition[] {
@@ -247,7 +247,7 @@ Effect Spore:
         ###
 *
 Dry Skin:
-    Desc: Reduces HP if it is hot. Water restores HP.
+    Desc: Restores HP in rain or when hit by Water-type moves. Reduces HP in sunshine, and increases the damage received from Fire-type moves.
     Int: EndTurnEffect, OpponentPowerChangeEffect
     ApplyEndTurn:
         if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
@@ -264,7 +264,7 @@ Dry Skin:
         ###
 *
 Arena Trap:
-    Desc: Prevents the foe from fleeing.
+    Desc: Prevents opposing Pok\u00e9mon from fleeing.
     OpponentTrappingAbility: !escaper.isLevitating(b) && !escaper.isType(b, Type.GHOST)
     EncounterRateMultiplier: 2
 *
@@ -273,11 +273,11 @@ Technician:
     PowerMultiplierCondition: 1.5 user.getAttack().getPower(b, user, victim) <= 60
 *
 Limber:
-    Desc: The Pok\u00e9mon is protected from paralysis.
+    Desc: Its limber body protects the Pok\u00e9mon from paralysis.
     StatusPreventAbility: Paralyzed paralysis
 *
 Damp:
-    Desc: Prevents combatants from self destructing.
+    Desc: Prevents the use of explosive moves such as Self-Destruct by dampening its surroundings.
     Int: AttackBlocker, SelfAttackBlocker
     Field:
         private boolean checkeroo(ActivePokemon attacking) {
@@ -304,19 +304,19 @@ Cloud Nine:
     WeatherEliminate: True
 *
 Vital Spirit:
-    Desc: Prevents the Pok\u00e9mon from falling asleep.
+    Desc: The Pok\u00e9mon is full of vitality, and that prevents it from falling asleep.
     StatusPreventAbility: Asleep sleep
     Int: MaxLevelWildEncounterEffect
 *
 Insomnia:
-    Desc: Prevents the Pok\u00e9mon from falling asleep.
+    Desc: The Pok\u00e9mon is suffering from insomnia and cannot fall asleep.
     StatusPreventAbility: Asleep sleep
 *
 Anger Point:
-    Desc: Raises Attack upon taking a critical hit.
+    Desc: The Pok\u00e9mon is angered when it takes a critical hit, and that maxes its Attack stat.
 *
 Synchronize:
-    Desc: Passes on a burn, poison, or paralysis to the foe.
+    Desc: The attacker will receive the same status condition if it inflicts a burn, poison, or paralysis to the Pok\u00e9mon.
     Int: StatusReceivedEffect
     Field:
         private static final Set<StatusCondition> PASSABLE_STATUSES = EnumSet.of(
@@ -347,7 +347,7 @@ Synchronize:
         ###
 *
 No Guard:
-    Desc: Ensures the Pok\u00e9mon and its foe's attacks land.
+    Desc: The Pok\u00e9mon employs no-guard tactics to ensure incoming and outgoing attacks always land.
     SemiInvulnerableBypass:
         // Moves always hit
         return true;
@@ -359,17 +359,17 @@ No Guard:
     EncounterRateMultiplier: 1.5
 *
 Own Tempo:
-    Desc: Prevents the Pok\u00e9mon from becoming confused.
+    Desc: This Pok\u00e9mon has its own tempo, and that prevents it from becoming confused.
 *
 Clear Body:
-    Desc: Prevents the Pok\u00e9mon's stats from being lowered.
+    Desc: Prevents other Pok\u00e9mon's moves or Abilities from lowering the Pok\u00e9mon's stats.
     Int: StatProtectingEffect
     StatProtect:
         return true;
         ###
 *
 Full Metal Body:
-    Desc: Prevents other Pokémon's moves or Abilities from lowering the Pokémon's stats.
+    Desc: Prevents other Pok\u00e9mon's moves or Abilities from lowering the Pok\u00e9mon's stats.
     Int: StatProtectingEffect
     StatProtect:
         return true;
@@ -377,13 +377,13 @@ Full Metal Body:
     MoldBreakerBreaker: True
 *
 Liquid Ooze:
-    Desc: Inflicts damage on foes using any draining move.
+    Desc: Oozed liquid has strong stench, which damages attackers using any draining move.
 *
 Rock Head:
     Desc: Protects the Pok\u00e9mon from recoil damage.
 *
 Sturdy:
-    Desc: The Pok\u00e9mon is protected against 1-hit KO attacks.
+    Desc: It cannot be knocked out with one hit. One-hit KO moves cannot knock it out, either.
     Int: BracingEffect
     Bracing:
         return fullHealth;
@@ -392,7 +392,7 @@ Sturdy:
     MoveTypePrevent: ONE_HIT_KO OHKO moves
 *
 Oblivious:
-    Desc: Prevents the Pok\u00e9mon from becoming infatuated.
+    Desc: The Pok\u00e9mon is oblivious, and that keeps it from being infatuated or falling for taunts.
     Int: AttackBlocker
     Block:
         return user.getAttack().namesies() == AttackNamesies.CAPTIVATE;
@@ -401,54 +401,54 @@ Oblivious:
 *
 Magnet Pull:
     OpponentTrappingAbility: escaper.isType(b, Type.STEEL) && !escaper.isType(b, Type.GHOST)
-    Desc: Prevents Steel-type Pok\u00e9mon from escaping.
+    Desc: Prevents Steel-type Pok\u00e9mon from escaping using its magnetic force.
     TypedWildEncounterSelector: Steel
 *
 Unaware:
-    Desc: Ignores any change in ability by the foe.
+    Desc: When attacking, the Pok\u00e9mon ignores the target Pok\u00e9mon's stat changes.
     Int: OpponentIgnoreStageEffect
     IgnoreStage:
         return s != Stat.SPEED;
         ###
 *
 Simple:
-    Desc: The Pok\u00e9mon is prone to wild stat changes.
+    Desc: The stat changes the Pok\u00e9mon receives are doubled.
     Int: ModifyStageValueEffect
     ModifyStageValue:
         return modVal*2;
         ###
 *
 Early Bird:
-    Desc: The Pok\u00e9mon awakens quickly from sleep.
+    Desc: The Pok\u00e9mon awakens twice as fast as other Pok\u00e9mon from sleep.
 *
 Thick Fat:
-    Desc: Raises resistance to Fire-and Ice-type moves.
+    Desc: The Pok\u00e9mon is protected by a layer of thick fat, which halves the damage taken from Fire- and Ice-type moves.
     Int: OpponentPowerChangeEffect
     GetOppMultiplier:
         return user.isAttackType(Type.FIRE) || user.isAttackType(Type.ICE) ? .5 : 1;
         ###
 *
 Hydration:
-    Desc: Heals status problems if it is raining.
+    Desc: Heals status conditions if it's raining.
     EndTurnStatusCure: b.getWeather().namesies() == EffectNamesies.RAINING
 *
 Shell Armor:
-    Desc: The Pok\u00e9mon is protected against critical hits.
+    Desc: A hard shell protects the Pok\u00e9mon from critical hits.
     Int: CritBlockerEffect
 *
 Battle Armor:
-    Desc: The Pok\u00e9mon is protected against critical hits.
+    Desc: Hard armor protects the Pok\u00e9mon from critical hits.
     Int: CritBlockerEffect
 *
 Skill Link:
-    Desc: Increases the frequency of multi-strike moves.
+    Desc: Maximizes the number of times multi-strike moves hit.
 *
 Levitate:
-    Desc: Gives full immunity to all Ground-type moves.
+    Desc: By floating in the air, the Pok\u00e9mon receives full immunity to all Ground-type moves.
     Int: LevitationEffect
 *
 Forewarn:
-    Desc: Determines what moves the foe has.
+    Desc: When it enters a battle, the Pok\u00e9mon can tell one of the moves an opposing Pok\u00e9mon has.
     Int: EntryEffect
     Enter:
         ActivePokemon other = b.getOtherPokemon(enterer);
@@ -483,14 +483,14 @@ Forewarn:
         ###
 *
 Hyper Cutter:
-    Desc: Prevents the Attack stat from being lowered.
+    Desc: The Pok\u00e9mon's proud of its powerful pincers. They prevent other Pok\u00e9mon from lowering its Attack stat.
     Int: StatProtectingEffect
     StatProtect:
         return stat == Stat.ATTACK;
         ###
 *
 Soundproof:
-    Desc: Gives full immunity to all sound-based moves.
+    Desc: Soundproofing of the Pok\u00e9mon itself gives full immunity to all sound-based moves.
     MoveTypePrevent: Sound_Based sound-based moves
 *
 Reckless:
@@ -498,7 +498,7 @@ Reckless:
     PowerMultiplierCondition: 1.2 user.getAttack() instanceof RecoilMove || user.getAttack() instanceof CrashDamageMove
 *
 Iron Fist:
-    Desc: Boosts the power of punching moves.
+    Desc: Powers up punching moves.
     PowerMultiplierCondition: 1.2 user.getAttack().isMoveType(MoveType.PUNCHING)
     Int: EntryEffect
     Enter:
@@ -508,7 +508,7 @@ Iron Fist:
         ###
 *
 Natural Cure:
-    Desc: All status problems are healed upon switching out.
+    Desc: All status conditions heal when the Pok\u00e9mon switches out.
     Int: SwitchOutEffect
     SwitchOut:
         if (!switchee.hasStatus(StatusCondition.FAINTED)) {
@@ -517,10 +517,10 @@ Natural Cure:
         ###
 *
 Serene Grace:
-    Desc: Boosts the likelihood of added effects appearing.
+    Desc: Boosts the likelihood of additional effects occurring when attacking.
 *
 Leaf Guard:
-    Desc: Prevents status problems in sunny weather.
+    Desc: Prevents status conditions in sunny weather.
     Int: StatusPreventionEffect
     StatusPrevent:
         return b.getWeather().namesies() == EffectNamesies.SUNNY;
@@ -528,20 +528,20 @@ Leaf Guard:
     StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents status conditions!"
 *
 Scrappy:
-    Desc: Enables moves to hit Ghost-type foes.
+    Desc: The Pok\u00e9mon can hit Ghost-type Pok\u00e9mon with Normal- and Fighting-type moves.
     RemoveAdvantageType: Ghost attacking == Type.NORMAL || attacking == Type.FIGHTING
     Int: AttackingNoAdvantageChanger
 *
 Swift Swim:
-    Desc: Boosts the Pok\u00e9mon's Speed in rain.
+    Desc: Boosts the Pok\u00e9mon's Speed stat in rain.
     SpeedWeather: Raining
 *
 Water Veil:
-    Desc: Prevents the Pok\u00e9mon from getting a burn.
+    Desc: The Pok\u00e9mon is covered with a water veil, which prevents the Pok\u00e9mon from getting a burn.
     StatusPreventAbility: Burned burns
 *
 Filter:
-    Desc: Powers down super-effective moves.
+    Desc: Reduces the power of supereffective attacks taken.
     Int: OpponentPowerChangeEffect
     GetOppMultiplier:
         return TypeAdvantage.isSuperEffective(user, victim, b) ? .75 : 1;
@@ -556,11 +556,11 @@ Prism Armor:
     MoldBreakerBreaker: True
 *
 Flame Body:
-    Desc: Contact with the Pok\u00e9mon may burn the foe.
+    Desc: Contact with the Pok\u00e9mon may burn the attacker.
     StatusContact: Burned
 *
 Rattled:
-    Desc: Some move types scare it and boost its Speed.
+    Desc: Dark-, Ghost-, and Bug-type moves scare the Pok\u00e9mon and boost its Speed stat.
     Int: TakeDamageEffect
     OnTakeDamage:
         Type type = user.getAttackType();
@@ -570,21 +570,21 @@ Rattled:
         ###
 *
 Moxie:
-    Desc: Attack rises when you knock out an opponent.
+    Desc: The Pok\u00e9mon shows moxie, and that boosts the Attack stat after knocking out any Pok\u00e9mon.
     Int: MurderEffect
     KillWish:
         murderer.getStages().modifyStage(murderer, 1, Stat.ATTACK, b, CastSource.ABILITY);
         ###
 *
 Beast Boost:
-    Desc: The Pokémon boosts its most proficient stat each time it knocks out a Pokémon.
+    Desc: The Pok\u00e9mon boosts its most proficient stat each time it knocks out a Pok\u00e9mon.
     Int: MurderEffect
     KillWish:
         murderer.getStages().modifyStage(murderer, 1, murderer.getBestBattleStat(), b, CastSource.ABILITY);
         ###
 *
 Soul-Heart:
-    Desc: Boosts its Sp. Atk stat every time a Pokémon faints.
+    Desc: Boosts its Sp. Atk stat every time a Pok\u00e9mon faints.
     Int: OpponentStatusReceivedEffect
     OppStatusReceived:
         if (statusType == StatusCondition.FAINTED) {
@@ -594,7 +594,7 @@ Soul-Heart:
         ###
 *
 Imposter:
-    Desc: It transforms itself into the Pok\u00e9mon it is facing.
+    Desc: The Pok\u00e9mon transforms itself into the Pok\u00e9mon it's facing.
     Irrestealable: True
     Int: EntryEffect
     Enter:
@@ -602,24 +602,24 @@ Imposter:
         ###
 *
 Adaptability:
-    Desc: Powers up moves of the same type.
+    Desc: Powers up moves of the same type as the Pok\u00e9mon.
 *
 Water Absorb:
-    Desc: Restores HP if hit by a Water-type move.
+    Desc: Restores HP if hit by a Water-type move, instead of taking damage.
     AbsorbType: Water
 *
 Volt Absorb:
-    Desc: Restores HP if hit by an Electric-type move.
+    Desc: Restores HP if hit by an Electric-type move, instead of taking damage.
     AbsorbType: Electric
 *
 Quick Feet:
-    Desc: Boosts Speed if there is a status problem.
+    Desc: Boosts the Speed stat if the Pok\u00e9mon has a status condition.
     ToModify: Speed
     ModifyMultiplier: 1.5 p.hasStatus()
     EncounterRateMultiplier: .5
 *
 Trace:
-    Desc: The Pok\u00e9mon copies the foe's ability.
+    Desc: When it enters a battle, the Pok\u00e9mon copies an opposing Pok\u00e9mon's Ability.
     Irrestealable: True
     Int: EntryEffect, AbilityChanger
     Enter:
@@ -640,7 +640,7 @@ Trace:
         ###
 *
 Download:
-    Desc: Adjusts power according to a foe's defenses.
+    Desc: Compares an opposing Pok\u00e9mon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk statâwhichever will be more effective.
     Int: EntryEffect
     Enter:
         ActivePokemon other = b.getOtherPokemon(enterer);
@@ -655,35 +655,35 @@ Download:
         ###
 *
 Pressure:
-    Desc: The Pok\u00e9mon raises the foe's PP usage.
+    Desc: By putting pressure on the opposing Pok\u00e9mon, it raises their PP usage.
     Int: EntryEffect, MaxLevelWildEncounterEffect
     Enter:
         Messages.add(enterer.getName() + " is exerting pressure!");
         ###
 *
 Immunity:
-    Desc: Prevents the Pok\u00e9mon from getting poisoned.
+    Desc: The immune system of the Pok\u00e9mon prevents it from getting poisoned.
     StatusPreventAbility: Poisoned poison
 *
 Snow Cloak:
-    Desc: Raises the Pok\u00e9mon's evasion during a hailstorm by one level.
+    Desc: Boosts evasion in a hailstorm.
     WeatherEvasion: Hailing
     WeatherEncounterRateDecreaser: Snow
 *
 Marvel Scale:
-    Desc: Boosts Defense if there is a status problem.
+    Desc: The Pok\u00e9mon's marvelous scales boost the Defense stat if it has a status condition.
     ToModify: Defense
     ModifyMultiplier: 1.5 p.hasStatus()
 *
 Multiscale:
-    Desc: When this Pok\u00e9mon is at full HP, damage is lessened.
+    Desc: Reduces the amount of damage the Pok\u00e9mon takes when its HP is full.
     Int: OpponentPowerChangeEffect
     GetOppMultiplier:
         return victim.fullHealth() ? .5 : 1;
         ###
 *
 Shadow Shield:
-    Desc: Reduces the amount of damage the Pokémon takes while its HP is full.
+    Desc: Reduces the amount of damage the Pok\u00e9mon takes while its HP is full.
     Int: OpponentPowerChangeEffect
     GetOppMultiplier:
         return victim.fullHealth() ? .5 : 1;
@@ -691,7 +691,7 @@ Shadow Shield:
     MoldBreakerBreaker: True
 *
 Sheer Force:
-    Desc: Attacks gain power, but lose their secondary effect.
+    Desc: Removes additional effects to increase the power of moves when attacking.
     PowerMultiplierCondition: 1.3 user.getAttack().hasSecondaryEffects()
 *
 Hustle:
@@ -708,31 +708,31 @@ Hustle:
         ###
 *
 Huge Power:
-    Desc: Raises the Pok\u00e9mon's Attack stat.
+    Desc: Doubles the Pok\u00e9mon's Attack stat.
     ToModify: Attack
     SimpleModifier: 2
 *
 Speed Boost:
-    Desc: The Pok\u00e9mon's Speed stat is gradually boosted.
+    Desc: Its Speed stat is boosted every turn.
     Int: EndTurnEffect
     ApplyEndTurn:
         victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
         ###
 *
 Magic Bounce:
-    Desc: Reflects status-changing moves.
+    Desc: Reflects status moves, instead of getting hit by them.
     MagicReflection: this.getName()
 *
 Super Luck:
-    Desc: Heightens the critical-hit ratios of moves.
+    Desc: The Pok\u00e9mon is so lucky that the critical-hit ratios of its moves are boosted.
     Int: CritStageEffect
 *
 Shadow Tag:
-    Desc: Prevents the foe from escaping.
+    Desc: This Pok\u00e9mon steps on the opposing Pok\u00e9mon's shadow to prevent it from escaping.
     OpponentTrappingAbility: !escaper.hasAbility(this.namesies) && !escaper.isType(b, Type.GHOST)
 *
 Overcoat:
-    Desc: Protects the Pok\u00e9mon from damage from weather.
+    Desc: Protects the Pok\u00e9mon from things like sand, hail, and powder.
     Int: WeatherBlockerEffect
     WeatherBlock:
         return true;
@@ -740,11 +740,11 @@ Overcoat:
     PowderResist: True
 *
 Magma Armor:
-    Desc: Prevents the Pok\u00e9mon from becoming frozen.
+    Desc: The Pok\u00e9mon is covered with hot magma, which prevents the Pok\u00e9mon from becoming frozen.
     StatusPreventAbility: Frozen freezing
 *
 Suction Cups:
-    Desc: Negates all moves that force switching out.
+    Desc: This Pok\u00e9mon uses suction cups to stay in one spot to negate all moves and items that force switching out.
     Int: AttackBlocker
     Block:
         Attack attack = user.getAttack();
@@ -753,10 +753,10 @@ Suction Cups:
     BlockMessage: victim.getName() + "'s " + this.getName() + " prevents it from switching!"
 *
 Steadfast:
-    Desc: Raises Speed each time the Pok\u00e9mon flinches.
+    Desc: The Pok\u00e9mon's determination boosts the Speed stat each time the Pok\u00e9mon flinches.
 *
 Sand Stream:
-    Desc: The Pok\u00e9mon summons a sandstorm in battle.
+    Desc: The Pok\u00e9mon summons a sandstorm when it enters a battle.
     WeatherStarter: Sandstorm whipped up a sandstorm
 *
 Regenerator:
@@ -769,10 +769,10 @@ Regenerator:
         ###
 *
 Poison Heal:
-    Desc: Restores HP if the Pok\u00e9mon is poisoned.
+    Desc: Restores HP if the Pok\u00e9mon is poisoned, instead of losing HP.
 *
 Truant:
-    Desc: Pok\u00e9mon can't attack on consecutive turns.
+    Desc: The Pok\u00e9mon can't use a move the following turn if it uses one.
     Field:
         private boolean lazyface;
         ###
@@ -797,7 +797,7 @@ Truant:
         ###
 *
 Wonder Guard:
-    Desc: Only supereffective moves will hit.
+    Desc: Its mysterious power only lets supereffective moves hit the Pok\u00e9mon.
     Irreplaceable: True
     Irrestealable: True
     Int: AttackBlocker
@@ -808,7 +808,7 @@ Wonder Guard:
     BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to " + user.getAttack().getName() + "!"
 *
 Normalize:
-    Desc: All the Pok\u00e9mon's moves become the Normal type.
+    Desc: All the Pok\u00e9mon's moves become Normal type. The power of those moves is boosted a little.
     Int: ChangeAttackTypeEffect, EndTurnEffect
     ChangeAttackType:
         if (original != Type.NORMAL) {
@@ -829,16 +829,16 @@ Normalize:
     PowerMultiplierCondition: 1.2 activated
 *
 Stall:
-    Desc: The Pok\u00e9mon moves after even slower foes.
+    Desc: The Pok\u00e9mon moves after all other Pok\u00e9mon do.
     Int: StallingEffect
 *
 Pure Power:
-    Desc: Raises the Pok\u00e9mon's Attack stat.
+    Desc: Using its pure power, the Pok\u00e9mon doubles its Attack stat.
     ToModify: Attack
     SimpleModifier: 2
 *
 Rough Skin:
-    Desc: Inflicts damage to the foe on contact.
+    Desc: This Pok\u00e9mon inflicts damage with its rough skin to the attacker on contact.
     Int: PhysicalContactEffect
     Contact:
         Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
@@ -846,14 +846,14 @@ Rough Skin:
         ###
 *
 Solid Rock:
-    Desc: Reduces damage from supereffective attacks.
+    Desc: Reduces the power of supereffective attacks taken.
     Int: OpponentPowerChangeEffect
     GetOppMultiplier:
         return TypeAdvantage.isSuperEffective(user, victim, b) ? .75 : 1;
         ###
 *
 White Smoke:
-    Desc: Prevents other Pok\u00e9mon from lowering its stats.
+    Desc: The Pok\u00e9mon is protected by its white smoke, which prevents other Pok\u00e9mon from lowering its stats.
     Int: StatProtectingEffect
     StatProtect:
         return true;
@@ -861,12 +861,12 @@ White Smoke:
     EncounterRateMultiplier: .5
 *
 Toxic Boost:
-    Desc: Powers up physical attacks when poisoned.
+    Desc: Powers up physical attacks when the Pok\u00e9mon is poisoned.
     ToModify: Attack
     ModifyMultiplier: 1.5 p.hasStatus(StatusCondition.POISONED)
 *
 Anticipation:
-    Desc: Senses a foe's dangerous moves.
+    Desc: The Pok\u00e9mon can sense an opposing Pok\u00e9mon's dangerous moves.
     Int: EntryEffect
     Enter:
         ActivePokemon other = b.getOtherPokemon(enterer);
@@ -880,7 +880,7 @@ Anticipation:
         ###
 *
 Storm Drain:
-    Desc: Draws in all Water-type moves to up Sp. Attack.
+    Desc: Draws in all Water-type moves. Instead of being hit by Water-type moves, it boosts its Sp. Atk.
     BlockType: Water Sp_Attack
 *
 Color Change:
@@ -898,7 +898,7 @@ Color Change:
     ChangeType:
         return new Type[] { type, Type.NO_TYPE };
         ###
-    Desc: Changes the Pok\u00e9mon's type to the foe's move.
+    Desc: The Pok\u00e9mon's type becomes the type of the move used on it.
 *
 Ice Body:
     Desc: The Pok\u00e9mon gradually regains HP in a hailstorm.
@@ -919,7 +919,7 @@ Light Metal:
     HalfAmount: 1
 *
 Drizzle:
-    Desc: The Pok\u00e9mon makes it rain if it appears in battle.
+    Desc: The Pok\u00e9mon makes it rain when it enters a battle.
     WeatherStarter: Raining started a downpour
 *
 Air Lock:
@@ -927,22 +927,22 @@ Air Lock:
     WeatherEliminate: True
 *
 Defiant:
-    Desc: Boosts the Attack stat when a stat is lowered.
+    Desc: Boosts the Pok\u00e9mon's Attack stat sharply when its stats are lowered.
     Int: StatLoweredEffect
     NextLevel: Attack
 *
 Competitive:
-    Desc: Boosts the Sp. Atk stat when a stat is lowered.
+    Desc: Boosts the Sp. Atk stat sharply when a stat is lowered.
     Int: StatLoweredEffect
     NextLevel: Sp_Attack
 *
 Flower Gift:
-    Desc: Powers up party Pok\u00e9mon when it is sunny.
+    Desc: Boosts the Attack and Sp. Def stats of itself and allies when it is sunny.
     TwoModify: Attack Sp_Defense
     ModifyMultiplier: 1.5 b.getWeather().namesies() == EffectNamesies.SUNNY
 *
 Aftermath:
-    Desc: Damages the attacker landing the finishing hit.
+    Desc: Damages the attacker if it contacts the Pok\u00e9mon with a finishing hit.
     Int: PhysicalContactEffect
     Contact:
         if (victim.isFainted(b) && !user.hasAbility(AbilityNamesies.DAMP)) {
@@ -952,14 +952,14 @@ Aftermath:
         ###
 *
 Heatproof:
-    Desc: Weakens the power of Fire-type moves.
+    Desc: The heatproof body of the Pok\u00e9mon halves the damage from Fire-type moves that hit it.
     Int: OpponentPowerChangeEffect
     GetOppMultiplier:
         return user.isAttackType(Type.FIRE) ? .5 : 1;
         ###
 *
 Sand Force:
-    Desc: Boosts certain moves' power in a sandstorm.
+    Desc: Boosts the power of Rock-, Ground-, and Steel-type moves in a sandstorm.
     Int: WeatherBlockerEffect
     GetMultiplier:
         Type type = user.getAttackType();
@@ -970,12 +970,12 @@ Sand Force:
         ###
 *
 Snow Warning:
-    Desc: The Pok\u00e9mon summons a hailstorm in battle.
+    Desc: The Pok\u00e9mon summons a hailstorm when it enters a battle.
     WeatherStarter: Hailing caused it to hail
 *
 Motor Drive:
     BlockType: Electric Speed
-    Desc: Raises Speed if hit by an Electric-type move.
+    Desc: Boosts its Speed stat if hit by an Electric-type move, instead of taking damage.
 *
 Justified:
     Int: TakeDamageEffect
@@ -984,7 +984,7 @@ Justified:
             victim.getStages().modifyStage(victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
         }
         ###
-    Desc: Raises Attack when hit by a Dark-type move.
+    Desc: Being hit by a Dark-type move boosts the Attack stat of the Pok\u00e9mon, for justice.
 *
 Cursed Body:
     Desc: May disable a move used on the Pok\u00e9mon.
@@ -999,7 +999,7 @@ Cursed Body:
         ###
 *
 Slow Start:
-    Desc: Temporarily halves Attack and Speed.
+    Desc: For five turns, the Pok\u00e9mon's Attack and Speed stats are halved.
     Field:
         int count;
         ###
@@ -1017,7 +1017,7 @@ Slow Start:
     ModifyMultiplier: .5 count < 5
 *
 Bad Dreams:
-    Desc: Reduces a sleeping foe's HP.
+    Desc: Reduces the HP of sleeping opposing Pok\u00e9mon.
     Int: EndTurnEffect
     ApplyEndTurn:
         ActivePokemon other = b.getOtherPokemon(victim);
@@ -1040,14 +1040,14 @@ Contrary:
         ###
 *
 Big Pecks:
-    Desc: Protects the Pok\u00e9mon from Defense-lowering attacks.
+    Desc: Protects the Pok\u00e9mon from Defense-lowering effects.
     Int: StatProtectingEffect
     StatProtect:
         return stat == Stat.DEFENSE;
         ###
 *
 Poison Touch:
-    Desc: May poison targets when a Pok\u00e9mon makes contact.
+    Desc: May poison a target when the Pok\u00e9mon makes contact.
     Int: OpponentTakeDamageEffect
     OpponentTakeDamage:
         if (RandomUtils.chanceTest(30)) {
@@ -1060,12 +1060,12 @@ Prankster:
     ChangePriorityAbility: 1 user.getAttack().isStatusMove() && !b.getOtherPokemon(user).isType(b, Type.DARK)
 *
 Wonder Skin:
-    Desc: Makes status-changing moves more likely to miss.
+    Desc: Makes status moves more likely to miss.
     ToModify: Evasion
     ModifyMultiplier: 1.5 opp.getAttack().isStatusMove()
 *
 Mummy:
-    Desc: Contact with this Pok\u00e9mon spreads this Ability.
+    Desc: Contact with the Pok\u00e9mon changes the attacker's Ability to Mummy.
     Int: PhysicalContactEffect, AbilityChanger
     Contact:
         if (user.hasAbility(this.namesies) || !user.getAbility().isReplaceable()) {
@@ -1083,11 +1083,11 @@ Mummy:
         ###
 *
 Defeatist:
-    Desc: Lowers stats when HP becomes half or less.
+    Desc: Halves the Pok\u00e9mon's Attack and Sp. Atk stats when its HP becomes half or less.
     PowerMultiplierCondition: .5 user.getHPRatio() < .5
 *
 Weak Armor:
-    Desc: Physical attacks lower Defense and raise Speed.
+    Desc: Physical attacks to the Pok\u00e9mon lower its Defense stat but sharply raise its Speed stat.
     Int: TakeDamageEffect
     OnTakeDamage:
         if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
@@ -1097,7 +1097,7 @@ Weak Armor:
         ###
 *
 Illusion:
-    Desc: Comes out disguised as the Pok\u00e9mon in back.
+    Desc: Comes out disguised as the Pok\u00e9mon in the party's last spot.
     Irrestealable: True
     Field:
         private boolean activated;
@@ -1197,11 +1197,11 @@ Analytic:
     PowerMultiplierCondition: 1.3 !b.isFirstAttack()
 *
 Sap Sipper:
-    Desc: Boosts Attack when hit by a Grass-type move.
+    Desc: Boosts the Attack stat if hit by a Grass-type move, instead of taking damage.
     BlockType: Grass Attack
 *
 Iron Barbs:
-    Desc: Inflicts damage to the Pok\u00e9mon on contact.
+    Desc: Inflicts damage to the attacker on contact with iron barbs.
     Int: PhysicalContactEffect
     Contact:
         Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
@@ -1209,21 +1209,21 @@ Iron Barbs:
         ###
 *
 Mold Breaker:
-    Desc: Moves can be used regardless of Abilities.
+    Desc: Moves can be used on the target regardless of its Abilities.
     Int: EntryEffect
     Enter:
         Messages.add(enterer.getName() + " breaks the mold!");
         ###
 *
 Teravolt:
-    Desc: Moves can be used regardless of Abilities.
+    Desc: Moves can be used on the target regardless of its Abilities.
     Int: EntryEffect
     Enter:
         Messages.add(enterer.getName() + " is radiating a bursting aura!");
         ###
 *
 Turboblaze:
-    Desc: Moves can be used regardless of Abilities.
+    Desc: Moves can be used on the target regardless of its Abilities.
     Int: EntryEffect
     Enter:
         Messages.add(enterer.getName() + " is radiating a blazing aura!");
@@ -1234,13 +1234,13 @@ Run Away:
     Desc: Enables a sure getaway from wild Pok\u00e9mon.
 *
 Sticky Hold:
-    Desc: Protects the Pok\u00e9mon from item theft.
+    Desc: Items held by the Pok\u00e9mon are stuck fast and cannot be removed by other Pok\u00e9mon.
 *
 Klutz:
     Desc: The Pok\u00e9mon can't use any held items.
 *
 Unburden:
-    Desc: Raises Speed if a held item is used.
+    Desc: Boosts the Speed stat if the Pok\u00e9mon's held item is used or lost.
     ToModify: Speed
     ModifyMultiplier: 2 p.hasEffect(EffectNamesies.CONSUMED_ITEM)
 *
@@ -1253,7 +1253,7 @@ Pickpocket:
             victim.swapItems(b, user, this);
         }
         ###
-    Desc: Steals an item when hit by another Pok\u00e9mon.
+    Desc: Steals an item from an attacker that made direct contact.
 *
 Harvest:
     Desc: May create another Berry after one is used.
@@ -1272,7 +1272,7 @@ Harvest:
         ###
 *
 Pickup:
-    Desc: The Pok\u00e9mon may pick up items.
+    Desc: The Pok\u00e9mon may pick up the item an opposing Pok\u00e9mon used during a battle. It may pick up items outside of battle, too.
     Int: EndBattleEffect
     EndBattle:
         if (!p.isHoldingItem(b) && RandomUtils.chanceTest(10)) {
@@ -1335,7 +1335,7 @@ Pickup:
         ###
 *
 Unnerve:
-    Desc: Makes the foe nervous and unable to eat Berries.
+    Desc: Unnerves opposing Pok\u00e9mon and makes them unable to eat Berries.
     Int: EntryEffect
     Enter:
         Messages.add(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer).getName() + " too nervous to eat berries!");
@@ -1349,21 +1349,21 @@ Honey Gather:
             p.giveItem(ItemNamesies.LEFTOVERS);
         }
         ###
-    Desc: The Pok\u00e9mon may gather Honey from somewhere.
+    Desc: The Pok\u00e9mon may gather Honey after a battle.
 *
 Gluttony:
-    Desc: Makes the Pok\u00e9mon use a held Berry earlier than usual.
+    Desc: Makes the Pok\u00e9mon eat a held Berry when its HP drops to half or less, which is sooner than usual.
 *
 Multitype:
-    Desc: Changes type to match the held Plate.
+    Desc: Changes the Pok\u00e9mon's type to match the Plate or Z-Crystal it holds.
     SpecialItemAbility: PlateItem
 *
 RKS System:
-    Desc: Changes the Pokémon's type to match the memory disc it holds.
+    Desc: Changes the Pok\u00e9mon's type to match the memory disc it holds.
     SpecialItemAbility: MemoryItem
 *
 Forecast:
-    Desc: Changes with the weather.
+    Desc: The Pok\u00e9mon transforms with the weather to change its type to Water, Fire, or Ice.
     Irrestealable: True
     Int: ChangeTypeEffect
     GetChangeTypeEffect:
@@ -1375,7 +1375,7 @@ Bulletproof:
     MoveTypePrevent: Bomb_Ball bomb/ball moves
 *
 Aura Break:
-    Desc: The effects of Aura Abilities are reversed.
+    Desc: The effects of âAuraâ Abilities are reversed to lower the power of affected moves.
 *
 Fairy Aura:
     Desc: Powers up each Pok\u00e9mon's Fairy-type moves.
@@ -1400,7 +1400,7 @@ Cheek Pouch:
     Desc: Restores HP as well when the Pok\u00e9mon eats a Berry.
 *
 Strong Jaw:
-    Desc: The Pok\u00e9mon's strong jaw gives it tremendous biting power.
+    Desc: The Pok\u00e9mon's strong jaw boosts the power of its biting moves.
     PowerMultiplierCondition: 1.5 user.getAttack().isMoveType(MoveType.BITING)
 *
 Mega Launcher:
@@ -1416,30 +1416,30 @@ Sweet Veil:
     StatusPreventAbility: Asleep sleep
 *
 Aroma Veil:
-    Desc: Protects allies from attacks that effect their mental state.
+    Desc: Protects itself and its allies from attacks that limit their move choices.
 *
 Healer:
-    Desc: The Pok\u00e9mon may heal its own status problems.
+    Desc: Sometimes heals an ally's status condition.
     EndTurnStatusCure: RandomUtils.chanceTest(1, 3)
 *
 Pixilate:
-    Desc: Normal-type moves become Fairy-type moves.
+    Desc: Normal-type moves become Fairy-type moves. The power of those moves is boosted a little.
     NormalTypeChanger: Fairy
 *
 Refrigerate:
-    Desc: Normal-type moves become Ice-type moves.
+    Desc: Normal-type moves become Ice-type moves. The power of those moves is boosted a little.
     NormalTypeChanger: Ice
 *
 Schooling:
-    Desc: When it has a lot of HP, the Pokémon forms a powerful school. It stops schooling when its HP is low.
+    Desc: When it has a lot of HP, the Pok\u00e9mon forms a powerful school. It stops schooling when its HP is low.
     EndTurnFormChange: schoolForm false Solo 45 20 20 25 25 40 School 45 140 130 140 135 30 formsie.getHPRatio() >= .25 && formsie.getLevel() >= 20
 *
 Shields Down:
-    Desc: When its HP becomes half or less, the Pokémon's shell breaks and it becomes aggressive.
+    Desc: When its HP becomes half or less, the Pok\u00e9mon's shell breaks and it becomes aggressive.
     EndTurnFormChange: coreForm false Meteor 60 60 100 60 100 60 Core 60 100 60 100 60 120 formsie.getHPRatio() < .5
 *
 Stance Change:
-    Desc: The Pok\u00e9mon changes form depending on how it battles.
+    Desc: The Pok\u00e9mon changes its form to Blade Forme when it uses an attack move, and changes to Shield Forme when it uses King's Shield.
     FormChange: shieldForm true Blade 60 150 50 150 50 60 Shield 60 50 150 50 150 60
     Int: BeforeTurnEffect, EntryEffect
     CanAttack:
@@ -1460,22 +1460,22 @@ Stance Change:
         ###
 *
 Fur Coat:
-    Desc: Halves damage from physical moves.
+    Desc: Halves the damage from physical moves onto this Pok\u00e9mon.
     ToModify: Defense
     SimpleModifier: 2
 *
 Grass Pelt:
-    Desc: Boosts the Defense stat in Grassy Terrain.
+    Desc: Boosts the Pok\u00e9mon's Defense stat in Grassy Terrain.
     ToModify: Defense
     ModifyMultiplier: 1.5 b.hasEffect(EffectNamesies.GRASSY_TERRAIN)
 *
 Surge Surfer:
-    Desc: Doubles the Pokémon's Speed stat on Electric Terrain.
+    Desc: Doubles the Pok\u00e9mon's Speed stat on Electric Terrain.
     ToModify: Speed
     ModifyMultiplier: 2 b.hasEffect(EffectNamesies.ELECTRIC_TERRAIN)
 *
 Flower Veil:
-    Desc: Prevents lowering of Grass-type Pok\u00e9mon's stats.
+    Desc: Ally Grass-type Pok\u00e9mon are protected from status conditions and the lowering of their stats.
     Int: StatusPreventionEffect, StatProtectingEffect
     StatusPrevent:
         return victim.isType(b, Type.GRASS);
@@ -1490,7 +1490,7 @@ Gale Wings:
     ChangePriorityAbility: 1 user.fullHealth() && user.isAttackType(Type.FLYING)
 *
 Protean:
-    Desc: Changes the Pok\u00e9mon's type to the type of the move it's using.
+    Desc: Changes the Pok\u00e9mon's type to the type of the move it's about to use.
     Int: BeforeTurnEffect
     CanAttack:
         // Protean activates for all moves except for Struggle
@@ -1516,7 +1516,7 @@ Stamina:
         ###
 *
 Water Compaction:
-    Desc: Boosts the Pokémon's Defense stat sharply when hit by a Water-type move.
+    Desc: Boosts the Pok\u00e9mon's Defense stat sharply when hit by a Water-type move.
     Int: TakeDamageEffect
     OnTakeDamage:
         if (user.isAttackType(Type.WATER)) {
@@ -1525,14 +1525,14 @@ Water Compaction:
         ###
 *
 Merciless:
-    Desc: The Pokémon's attacks become critical hits if the target is poisoned.
+    Desc: The Pok\u00e9mon's attacks become critical hits if the target is poisoned.
     Int: AlwaysCritEffect
     ShouldCrit:
         return defending.hasStatus(StatusCondition.POISONED);
         ###
 *
 Water Bubble:
-    Desc: Lowers the power of Fire-type moves done to the Pokémon and prevents the Pokémon from getting a burn.
+    Desc: Lowers the power of Fire-type moves done to the Pok\u00e9mon and prevents the Pok\u00e9mon from getting a burn.
     Int: OpponentPowerChangeEffect
     StatusPreventAbility: Burned burns
     PowerMultiplierCondition: 2 user.isAttackType(Type.WATER)
@@ -1545,19 +1545,19 @@ Steelworker:
     PowerMultiplierCondition: 1.5 user.isAttackType(Type.STEEL)
 *
 Berserk:
-    Desc: Boosts the Pokémon's Sp. Atk stat when it takes a hit that causes its HP to become half or less.
+    Desc: Boosts the Pok\u00e9mon's Sp. Atk stat when it takes a hit that causes its HP to become half or less.
     DropBelowHalfHealth: victim.getStages().modifyStage(victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
 *
 Wimp Out:
-    Desc: The Pokémon cowardly switches out when its HP becomes half or less.
+    Desc: The Pok\u00e9mon cowardly switches out when its HP becomes half or less.
     DropBelowHalfHealth: victim.switcheroo(b, victim, CastSource.ABILITY, true);
 *
 Emergency Exit:
-    Desc: The Pokémon, sensing danger, switches out when its HP becomes half or less.
+    Desc: The Pok\u00e9mon, sensing danger, switches out when its HP becomes half or less.
     DropBelowHalfHealth: victim.switcheroo(b, victim, CastSource.ABILITY, true);
 *
 Long Reach:
-    Desc: The Pokémon uses its moves without making contact with the target.
+    Desc: The Pok\u00e9mon uses its moves without making contact with the target.
 *
 Liquid Voice:
     Desc: All sound-based moves become Water-type moves.
@@ -1579,7 +1579,7 @@ Galvanize:
     NormalTypeChanger: Electric
 *
 Disguise:
-    Desc: Once per battle, the shroud that covers the Pokémon can protect it from an attack.
+    Desc: Once per battle, the shroud that covers the Pok\u00e9mon can protect it from an attack.
     Irrestealable: True
     Irreplaceable: True
     Field:
@@ -1611,7 +1611,7 @@ Stakeout:
     PowerMultiplierCondition: 2 !user.isFirstTurn() && victim.isFirstTurn()
 *
 Corrosion:
-    Desc: The Pokémon can poison the target even if it's a Steel or Poison type.
+    Desc: The Pok\u00e9mon can poison the target even if it's a Steel or Poison type.
 *
 Comatose:
     Desc: It's always drowsing and will never wake up. It can attack without waking up.
@@ -1648,15 +1648,15 @@ Comatose:
         ###
 *
 Dazzling:
-    Desc: Surprises the opposing Pokémon, making it unable to attack using priority moves.
+    Desc: Surprises the opposing Pok\u00e9mon, making it unable to attack using priority moves.
     PriorityPrevention: True
 *
 Queenly Majesty:
-    Desc: Its majesty pressures the opposing Pokémon, making it unable to attack using priority moves.
+    Desc: Its majesty pressures the opposing Pok\u00e9mon, making it unable to attack using priority moves.
     PriorityPrevention: True
 *
 Dancer:
-    Desc: When another Pokémon uses a dance move, it can use a dance move following it regardless of its Speed.
+    Desc: When another Pok\u00e9mon uses a dance move, it can use a dance move following it regardless of its Speed.
     Int: OpponentEndAttackEffect
     OpponentEndAttack:
         Attack attack = attacking.getAttack();
@@ -1701,25 +1701,26 @@ Fluffy:
         ###
 *
 Tangling Hair:
-    Desc: Contact with the Pokémon lowers the attacker's Speed stat.
+    Desc: Contact with the Pok\u00e9mon lowers the attacker's Speed stat.
     Int: PhysicalContactEffect
     Contact:
         user.getStages().modifyStage(victim, -1, Stat.SPEED, b, CastSource.ABILITY);
         ###
 *
 Psychic Surge:
-    Desc: Turns the ground into Psychic Terrain when the Pokémon enters a battle.
+    Desc: Turns the ground into Psychic Terrain when the Pok\u00e9mon enters a battle.
     TerrainStarter: Psychic
 *
 Electric Surge:
-    Desc: Turns the ground into Electric Terrain when the Pokémon enters a battle.
+    Desc: Turns the ground into Electric Terrain when the Pok\u00e9mon enters a battle.
     TerrainStarter: Electric
 *
 Misty Surge:
-    Desc: Turns the ground into Misty Terrain when the Pokémon enters a battle.
+    Desc: Turns the ground into Misty Terrain when the Pok\u00e9mon enters a battle.
     TerrainStarter: Misty
 *
 Grassy Surge:
-    Desc: Turns the ground into Grassy Terrain when the Pokémon enters a battle.
+    Desc: Turns the ground into Grassy Terrain when the Pok\u00e9mon enters a battle.
     TerrainStarter: Grassy
 *
+
