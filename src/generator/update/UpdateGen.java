@@ -28,11 +28,9 @@ public class UpdateGen {
     }
 
     private UpdateGen() {
-        newPokemonInfoCompare();
-        MoveParser.writeMovesList();
-        AbilityParser.writeAbilitiesList();
-//        new MoveUpdater().updateDescription();
-//        new AbilityUpdater().updateDescription();
+        GeneratorUpdater.updateAll();
+
+//        newPokemonInfoCompare();
 //        pokemonInfoStuff();
 //        updateNum();
 //        resizeImages();

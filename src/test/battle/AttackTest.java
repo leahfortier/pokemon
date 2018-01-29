@@ -11,7 +11,8 @@ import battle.effect.generic.EffectInterfaces.SapHealthEffect;
 import battle.effect.generic.EffectInterfaces.SelfHealingMove;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.status.StatusCondition;
-import generator.update.MoveParser;
+import generator.update.MoveUpdater;
+import generator.update.MoveUpdater.MoveParser;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
@@ -72,7 +73,7 @@ public class AttackTest extends BaseTest {
         Set<AttackNamesies> toParse = EnumSet.allOf(AttackNamesies.class);
         toParse.remove(AttackNamesies.CONFUSION_DAMAGE);
 
-        for (MoveParser moveParser : MoveParser.getParseMoves()) {
+        for (MoveParser moveParser : new MoveUpdater().getParseMoves()) {
             AttackNamesies attackNamesies = moveParser.attackNamesies;
             Type type = moveParser.type;
             MoveCategory category = moveParser.category;
@@ -1077,7 +1078,7 @@ public class AttackTest extends BaseTest {
         battle.falseSwipePalooza(true);
         battle.attackingFight(AttackNamesies.FELL_STINGER);
         Assert.assertTrue(defending.isFainted(battle));
-        Assert.assertEquals(2, attacking.getStage(Stat.ATTACK));
+        Assert.assertEquals(3, attacking.getStage(Stat.ATTACK));
     }
 
     @Test

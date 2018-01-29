@@ -1,9 +1,7 @@
 package generator.update;
 
-import battle.attack.AttackNamesies;
 import generator.GeneratorType;
 import main.Global;
-import pokemon.ability.AbilityNamesies;
 import util.FileIO;
 import util.StringAppender;
 
@@ -17,9 +15,10 @@ public abstract class GeneratorUpdater {
         this.generatorType = generatorType;
     }
 
+    protected abstract void writeScriptInputList();
     protected abstract String getNewDescription(String name);
 
-    public void updateDescription() {
+    public final void updateDescription() {
         final String genFilePath = this.generatorType.getInputPath();
 
         Scanner in = FileIO.openFile(genFilePath);
@@ -112,37 +111,13 @@ public abstract class GeneratorUpdater {
         FileIO.overwriteFile(genFilePath, out.toString());
     }
 
-    public static class MoveUpdater extends GeneratorUpdater {
-        protected MoveUpdater() {
-            super(GeneratorType.ATTACK_GEN);
-        }
-
-        @Override
-        public String getNewDescription(String name) {
-            AttackNamesies attackNamesies = AttackNamesies.getValueOf(name);
-            MoveParser moveParser = MoveParser.getParseMove(attackNamesies);
-            if (moveParser != null) {
-                return moveParser.description;
-            } else {
-                return attackNamesies.getNewAttack().getDescription();
-            }
-        }
+    public void update() {
+        this.writeScriptInputList();
+//        this.updateDescription();
     }
 
-    public static class AbilityUpdater extends GeneratorUpdater {
-        protected AbilityUpdater() {
-            super(GeneratorType.ABILITY_GEN);
-        }
-
-        @Override
-        public String getNewDescription(String name) {
-            AbilityNamesies abilityNamesies = AbilityNamesies.getValueOf(name);
-            AbilityParser abilityParser = AbilityParser.getParseAbility(abilityNamesies);
-            if (abilityParser != null) {
-                return abilityParser.description;
-            } else {
-                return abilityNamesies.getNewAbility().getDescription();
-            }
-        }
+    public static void updateAll() {
+        new MoveUpdater().update();
+        new AbilityUpdater().update();
     }
 }
