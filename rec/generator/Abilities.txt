@@ -114,7 +114,7 @@ Static:
 *
 Lightningrod:
     Desc: The Pok\u00e9mon draws in all Electric-type moves. Instead of being hit by Electric-type moves, it boosts its Sp. Atk.
-    BlockType: Electric Sp_Attack
+    IncreaseBlockType: Electric Sp_Attack
 *
 Sand Veil:
     Desc: Boosts the Pok\u00e9mon's evasion in a sandstorm.
@@ -182,11 +182,7 @@ Flash Fire:
     AbilityIsActive:
         return activated;
         ###
-    Int: AttackBlocker
-    Block:
-        return user.isAttackType(Type.FIRE);
-        ###
-    BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!"
+    BlockType: Fire
     AlternateEffect:
         activated = true;
         ###
@@ -881,7 +877,7 @@ Anticipation:
 *
 Storm Drain:
     Desc: Draws in all Water-type moves. Instead of being hit by Water-type moves, it boosts its Sp. Atk.
-    BlockType: Water Sp_Attack
+    IncreaseBlockType: Water Sp_Attack
 *
 Color Change:
     Int: TakeDamageEffect
@@ -974,7 +970,7 @@ Snow Warning:
     WeatherStarter: Hailing caused it to hail
 *
 Motor Drive:
-    BlockType: Electric Speed
+    IncreaseBlockType: Electric Speed
     Desc: Boosts its Speed stat if hit by an Electric-type move, instead of taking damage.
 *
 Justified:
@@ -1198,7 +1194,7 @@ Analytic:
 *
 Sap Sipper:
     Desc: Boosts the Attack stat if hit by a Grass-type move, instead of taking damage.
-    BlockType: Grass Attack
+    IncreaseBlockType: Grass Attack
 *
 Iron Barbs:
     Desc: Inflicts damage to the attacker on contact with iron barbs.

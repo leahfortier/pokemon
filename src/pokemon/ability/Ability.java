@@ -516,18 +516,18 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isAttackType(Type.ELECTRIC);
-        }
-
-        @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             victim.getStages().modifyStage(victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
         }
 
         @Override
+        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isAttackType(Type.ELECTRIC);
+        }
+
+        @Override
         public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " type moves!";
+            return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + "-type moves!";
         }
     }
 
@@ -669,7 +669,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
     }
 
-    static class FlashFire extends Ability implements AttackBlocker, PowerChangeEffect {
+    static class FlashFire extends Ability implements PowerChangeEffect, AttackBlocker {
         private static final long serialVersionUID = 1L;
 
         private boolean activated;
@@ -690,18 +690,18 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isAttackType(Type.FIRE);
-        }
-
-        @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             activated = true;
         }
 
         @Override
+        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isAttackType(Type.FIRE);
+        }
+
+        @Override
         public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " makes it immune to Fire type moves!";
+            return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.FIRE.getName() + "-type moves!";
         }
     }
 
@@ -2341,18 +2341,18 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isAttackType(Type.WATER);
-        }
-
-        @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             victim.getStages().modifyStage(victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
         }
 
         @Override
+        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isAttackType(Type.WATER);
+        }
+
+        @Override
         public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " type moves!";
+            return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + "-type moves!";
         }
     }
 
@@ -2560,18 +2560,18 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isAttackType(Type.ELECTRIC);
-        }
-
-        @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
         }
 
         @Override
+        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isAttackType(Type.ELECTRIC);
+        }
+
+        @Override
         public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " type moves!";
+            return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + "-type moves!";
         }
     }
 
@@ -2951,18 +2951,18 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
 
         @Override
-        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isAttackType(Type.GRASS);
-        }
-
-        @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             victim.getStages().modifyStage(victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
         }
 
         @Override
+        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isAttackType(Type.GRASS);
+        }
+
+        @Override
         public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.GRASS.getName() + " type moves!";
+            return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.GRASS.getName() + "-type moves!";
         }
     }
 

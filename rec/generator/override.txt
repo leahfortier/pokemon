@@ -878,11 +878,14 @@ BlockMessage:
 		###
 *
 BlockType:
-	AddInterface: AttackBlocker
-	AddMapField: Block:
-		return user.isAttackType(Type.{11});
-		###
-	AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{11}.getName() + " type moves!"
+    AddInterface: AttackBlocker
+    AddMapField: Block:
+        return user.isAttackType(Type.{00});
+        ###
+    AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + "-type moves!"
+*
+IncreaseBlockType:
+    AddMapField: BlockType: {1}
 	AddMapField: AlternateEffect:
 		victim.getStages().modifyStage(victim, 1, Stat.{22}, b, CastSource.ABILITY);
 		###
