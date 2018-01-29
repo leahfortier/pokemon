@@ -214,7 +214,7 @@ Synthesis:
 *
 Recover:
     Desc: Restoring its own cells, the user restores its own HP by half of its max HP.
-    HealFraction: 2
+    HealFraction: .5
     PP: 10
     Type: Normal
     Cat: Status
@@ -2747,7 +2747,7 @@ Headbutt:
 *
 Slack Off:
     Desc: The user slacks off, restoring its own HP by up to half of its max HP.
-    HealFraction: 2
+    HealFraction: .5
     Type: Normal
     Cat: Status
     PP: 10
@@ -3631,7 +3631,7 @@ Soft-Boiled:
     PP: 10
     Type: Normal
     Cat: Status
-    HealFraction: 2
+    HealFraction: .5
 *
 Ancient Power:
     Desc: The user attacks with a prehistoric power. This may also raise all the user's stats at once.
@@ -4463,7 +4463,7 @@ Milk Drink:
     Cat: Status
     PP: 10
     Desc: The user restores its own HP by up to half of its max HP.
-    HealFraction: 2
+    HealFraction: .5
 *
 Heal Bell:
     PP: 5
@@ -4765,7 +4765,7 @@ Heal Order:
     Desc: The user calls out its underlings to heal it. The user regains up to half of its max HP.
     PP: 10
     Type: Bug
-    HealFraction: 2
+    HealFraction: .5
     Cat: Status
 *
 Attack Order:

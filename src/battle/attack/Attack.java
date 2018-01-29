@@ -784,7 +784,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
-            return 2;
+            return .5;
         }
 
         @Override
@@ -5029,7 +5029,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
-            return 2;
+            return .5;
         }
 
         @Override
@@ -6616,7 +6616,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
-            return 2;
+            return .5;
         }
 
         @Override
@@ -7870,7 +7870,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
-            return 2;
+            return .5;
         }
 
         @Override
@@ -8371,7 +8371,7 @@ public abstract class Attack implements Serializable {
 
         @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
-            return 2;
+            return .5;
         }
 
         @Override
