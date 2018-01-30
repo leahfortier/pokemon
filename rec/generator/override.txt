@@ -1237,7 +1237,7 @@ SpecialTypeItem:
 *
 GemType:
 	AddMapField: SpecialTypeItem: {0}
-	AddMapField: Price: 100
+	AddMapField: Price: 200
 *
 PlateType:
 	AddMapField: SpecialTypeItem: {0}

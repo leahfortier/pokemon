@@ -134,7 +134,7 @@ Bright Powder:
     Int: HoldItem
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. It casts a tricky glare that lowers the opponent's accuracy.
-    Price: 100
+    Price: 4000
     Fling: 10
     ToModify: Evasion
     SimpleModifier: 1.1
@@ -220,7 +220,7 @@ Flame Orb:
     Int: HoldItem, EndTurnEffect
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.
-    Price: 200
+    Price: 1000
     ApplyEndTurn:
         Status.giveStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.name + "!");
         ###
@@ -230,7 +230,7 @@ Toxic Orb:
     Int: HoldItem, EndTurnEffect
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.
-    Price: 200
+    Price: 1000
     ApplyEndTurn:
         // Badly poisons the holder at the end of the turn
         Status.giveStatus(
@@ -542,7 +542,7 @@ Safety Goggles:
     Int: HoldItem, WeatherBlockerEffect
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. These goggles protect the holder from both weather-related damage and powder.
-    Price: 200
+    Price: 4000
     WeatherBlock:
         return true;
         ###
@@ -591,7 +591,7 @@ Soul Dew:
     Int: HoldItem
     Cat: Misc
     Desc: If the Soul Dew is attached to Latios or Latias, the holder's Special Attack and Special Defence is increased by 50%.
-    Price: 10
+    Price: 200
     TwoModify: Sp_Attack Sp_Defense
     ModifyMultiplier: 1.5 p.isPokemon(PokemonNamesies.LATIOS) || p.isPokemon(PokemonNamesies.LATIAS)
 *
@@ -649,7 +649,7 @@ Weakness Policy:
     Int: HoldItem, TakeDamageEffect
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. Attack and Sp. Atk sharply increase if the holder is hit with a move it's weak to.
-    Price: 200
+    Price: 1000
     OnTakeDamage:
         if (TypeAdvantage.isSuperEffective(user, victim, b)) {
             victim.getStages().modifyStage(victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
@@ -985,96 +985,96 @@ Leftovers:
 *
 Black Belt:
     Desc: An item to be held by a Pok\u00e9mon. It is a belt that boosts determination and Fighting-type moves.
-    Price: 9800
+    Price: 1000
     TypeEnhance: Fighting
 *
 Black Glasses:
     Desc: An item to be held by a Pok\u00e9mon. It is a shady-looking pair of glasses that boosts Dark-type moves.
-    Price: 9800
+    Price: 1000
     TypeEnhance: Dark
 *
 Charcoal:
     Desc: An item to be held by a Pok\u00e9mon. It is a combustible fuel that boosts the power of Fire-type moves.
-    Price: 9800
+    Price: 1000
     TypeEnhance: Fire
 *
 Dragon Fang:
     Desc: An item to be held by a Pok\u00e9mon. It is a hard and sharp fang that ups the power of Dragon-type moves.
-    Price: 9800
+    Price: 1000
     Fling: 70
     TypeEnhance: Dragon
 *
 Hard Stone:
     Desc: An item to be held by a Pok\u00e9mon. It is an unbreakable stone that ups the power of Rock-type moves.
-    Price: 9800
+    Price: 1000
     Fling: 100
     TypeEnhance: Rock
 *
 Magnet:
     Desc: An item to be held by a Pok\u00e9mon. It is a powerful magnet that boosts the power of Electric-type moves.
-    Price: 9800
+    Price: 1000
     TypeEnhance: Electric
 *
 Metal Coat:
     Int: EvolutionItem
     Desc: A mysterious substance full of a special filmy metal. It allows certain kinds of Pok\u00e9mon to evolve.
-    Price: 9800
+    Price: 2000
     TypeEnhance: Steel
 *
 Miracle Seed:
     Desc: An item to be held by a Pok\u00e9mon. It is a seed imbued with life that ups the power of Grass-type moves.
-    Price: 9800
+    Price: 1000
     TypeEnhance: Grass
 *
 Mystic Water:
     Desc: An item to be held by a Pok\u00e9mon. It is a teardrop-shaped gem that ups the power of Water-type moves.
-    Price: 9800
+    Price: 1000
     TypeEnhance: Water
 *
 NeverMeltIce:
     Desc: An item to be held by a Pok\u00e9mon. It is a piece of ice that repels heat and boosts Ice-type moves.
-    Price: 9800
+    Price: 1000
     TypeEnhance: Ice
 *
 Poison Barb:
     Desc: An item to be held by a Pok\u00e9mon. It is a small, poisonous barb that ups the power of Poison-type moves.
-    Price: 9800
+    Price: 1000
     Fling: 70
     TypeEnhance: Poison
     StatusFling: poisoned
 *
 Sharp Beak:
     Desc: An item to be held by a Pok\u00e9mon. It is a long, sharp beak that boosts the power of Flying-type moves.
-    Price: 9800
+    Price: 1000
     Fling: 50
     TypeEnhance: Flying
 *
 Silk Scarf:
     Desc: An item to be held by a Pok\u00e9mon. It is a sumptuous scarf that boosts the power of Normal-type moves.
-    Price: 9800
+    Price: 1000
     Fling: 10
     TypeEnhance: Normal
 *
 Silver Powder:
     Desc: An item to be held by a Pok\u00e9mon. It is a shiny, silver powder that ups the power of Bug-type moves.
-    Price: 9800
+    Price: 1000
     Fling: 10
     TypeEnhance: Bug
 *
 Soft Sand:
     Desc: An item to be held by a Pok\u00e9mon. It is a loose, silky sand that boosts the power of Ground-type moves.
-    Price: 9800
+    Price: 1000
     Fling: 10
     TypeEnhance: Ground
 *
 Spell Tag:
     Desc: An item to be held by a Pok\u00e9mon. It is a sinister, eerie tag that boosts the power of Ghost-type moves.
-    Price: 9800
+    Price: 1000
     TypeEnhance: Ghost
 *
 Twisted Spoon:
     Desc: An item to be held by a Pok\u00e9mon. It is a spoon imbued with telekinetic power that boosts Psychic-type moves.
-    Price: 9800
+    Price: 1000
     TypeEnhance: Psychic
 *
 Dawn Stone:
@@ -1248,7 +1248,8 @@ Pretty Wing:
     Int: HoldItem, EvolutionItem
     Cat: Misc
     Desc: Though this feather is beautiful, it's just a regular feather and has no effect on Pok\u00e9mon.
-    Price: 200
+    Price: 1000
+    Fling: 20
 *
 Ruby:
     Int: HoldItem, EvolutionItem
@@ -1314,7 +1315,7 @@ Full Heal:
     Int: HoldItem
     Cat: Medicine
     Desc: A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.
-    Price: 250
+    Price: 400
     StatusHealAll: True
 *
 Full Restore:
@@ -1366,7 +1367,7 @@ Sweet Heart:
 *
 Potion:
     Desc: A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by just 20 points.
-    Price: 100
+    Price: 200
     HealAmt: 20
 *
 Energy Powder:
@@ -1439,7 +1440,7 @@ Sacred Ash:
     Cat: Medicine
     BattleCat: Status
     Desc: It revives all fainted Pok\u00e9mon. In doing so, it also fully restores their HP.
-    Price: 4000
+    Price: 50000
     Field:
         public boolean use(Trainer t) {
             boolean healed = false;

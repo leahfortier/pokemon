@@ -363,7 +363,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         BrightPowder() {
             super(ItemNamesies.BRIGHT_POWDER, "An item to be held by a Pok\u00e9mon. It casts a tricky glare that lowers the opponent's accuracy.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 4000;
         }
 
         @Override
@@ -647,7 +647,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         FlameOrb() {
             super(ItemNamesies.FLAME_ORB, "An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 1000;
         }
 
         @Override
@@ -666,7 +666,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         ToxicOrb() {
             super(ItemNamesies.TOXIC_ORB, "An item to be held by a Pok\u00e9mon. It is a bizarre orb that inflicts a burn on the holder in battle.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 1000;
         }
 
         @Override
@@ -1447,7 +1447,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         SafetyGoggles() {
             super(ItemNamesies.SAFETY_GOGGLES, "An item to be held by a Pok\u00e9mon. These goggles protect the holder from both weather-related damage and powder.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -1538,7 +1538,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         SoulDew() {
             super(ItemNamesies.SOUL_DEW, "If the Soul Dew is attached to Latios or Latias, the holder's Special Attack and Special Defence is increased by 50%.", BagCategory.MISC);
-            super.price = 10;
+            super.price = 200;
         }
 
         @Override
@@ -1655,7 +1655,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         WeaknessPolicy() {
             super(ItemNamesies.WEAKNESS_POLICY, "An item to be held by a Pok\u00e9mon. Attack and Sp. Atk sharply increase if the holder is hit with a move it's weak to.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 1000;
         }
 
         @Override
@@ -2251,7 +2251,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         FireGem() {
             super(ItemNamesies.FIRE_GEM, "A gem with an essence of fire. When held, it strengthens the power of a Fire-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2265,7 +2265,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         WaterGem() {
             super(ItemNamesies.WATER_GEM, "A gem with an essence of water. When held, it strengthens the power of a Water-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2279,7 +2279,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         ElectricGem() {
             super(ItemNamesies.ELECTRIC_GEM, "A gem with an essence of electricity. When held, it strengthens the power of an Electric-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2293,7 +2293,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         GrassGem() {
             super(ItemNamesies.GRASS_GEM, "A gem with an essence of nature. When held, it strengthens the power of a Grass-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2307,7 +2307,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         IceGem() {
             super(ItemNamesies.ICE_GEM, "A gem with an essence of ice. When held, it strengthens the power of an Ice-type move only once", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2321,7 +2321,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         FightingGem() {
             super(ItemNamesies.FIGHTING_GEM, "A gem with an essence of combat. When held, it strengthens the power of a Fighting-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2335,7 +2335,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         PoisonGem() {
             super(ItemNamesies.POISON_GEM, "A gem with an essence of poison. When held, it strengthens the power of a Poison-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2349,7 +2349,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         GroundGem() {
             super(ItemNamesies.GROUND_GEM, "A gem with an essence of land. When held, it strengthens the power of a Ground-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2363,7 +2363,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         FlyingGem() {
             super(ItemNamesies.FLYING_GEM, "A gem with an essence of air. When held, it strengthens the power of a Flying-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2377,7 +2377,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         PsychicGem() {
             super(ItemNamesies.PSYCHIC_GEM, "A gem with an essence of the mind. When held, it strengthens the power of a Psychic-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2391,7 +2391,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         BugGem() {
             super(ItemNamesies.BUG_GEM, "A gem with an insect-like essence. When held, it strengthens the power of a Bug-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2405,7 +2405,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         RockGem() {
             super(ItemNamesies.ROCK_GEM, "A gem with an essence of rock. When held, it strengthens the power of a Rock-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2419,7 +2419,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         GhostGem() {
             super(ItemNamesies.GHOST_GEM, "A gem with a spectral essence. When held, it strengthens the power of a Ghost-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2433,7 +2433,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         DragonGem() {
             super(ItemNamesies.DRAGON_GEM, "A gem with a draconic essence. When held, it strengthens the power of a Dragon-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2447,7 +2447,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         DarkGem() {
             super(ItemNamesies.DARK_GEM, "A gem with an essence of darkness. When held, it strengthens the power of a Dark-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2461,7 +2461,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         SteelGem() {
             super(ItemNamesies.STEEL_GEM, "A gem with an essence of steel. When held, it strengthens the power of a Steel-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2475,7 +2475,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         NormalGem() {
             super(ItemNamesies.NORMAL_GEM, "A gem with an ordinary essence. When held, it strengthens the power of a Normal-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2489,7 +2489,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         FairyGem() {
             super(ItemNamesies.FAIRY_GEM, "A gem with an ordinary essence. When held, it strengthens the power of a Fairy-type move only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 200;
         }
 
         @Override
@@ -2527,7 +2527,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         BlackBelt() {
             super(ItemNamesies.BLACK_BELT, "An item to be held by a Pok\u00e9mon. It is a belt that boosts determination and Fighting-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -2541,7 +2541,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         BlackGlasses() {
             super(ItemNamesies.BLACK_GLASSES, "An item to be held by a Pok\u00e9mon. It is a shady-looking pair of glasses that boosts Dark-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -2555,7 +2555,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         Charcoal() {
             super(ItemNamesies.CHARCOAL, "An item to be held by a Pok\u00e9mon. It is a combustible fuel that boosts the power of Fire-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -2569,7 +2569,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         DragonFang() {
             super(ItemNamesies.DRAGON_FANG, "An item to be held by a Pok\u00e9mon. It is a hard and sharp fang that ups the power of Dragon-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -2588,7 +2588,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         HardStone() {
             super(ItemNamesies.HARD_STONE, "An item to be held by a Pok\u00e9mon. It is an unbreakable stone that ups the power of Rock-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -2607,7 +2607,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         Magnet() {
             super(ItemNamesies.MAGNET, "An item to be held by a Pok\u00e9mon. It is a powerful magnet that boosts the power of Electric-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -2621,7 +2621,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         MetalCoat() {
             super(ItemNamesies.METAL_COAT, "A mysterious substance full of a special filmy metal. It allows certain kinds of Pok\u00e9mon to evolve.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 2000;
         }
 
         @Override
@@ -2635,7 +2635,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         MiracleSeed() {
             super(ItemNamesies.MIRACLE_SEED, "An item to be held by a Pok\u00e9mon. It is a seed imbued with life that ups the power of Grass-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -2649,7 +2649,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         MysticWater() {
             super(ItemNamesies.MYSTIC_WATER, "An item to be held by a Pok\u00e9mon. It is a teardrop-shaped gem that ups the power of Water-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -2663,7 +2663,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         NeverMeltIce() {
             super(ItemNamesies.NEVER_MELT_ICE, "An item to be held by a Pok\u00e9mon. It is a piece of ice that repels heat and boosts Ice-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -2677,7 +2677,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         PoisonBarb() {
             super(ItemNamesies.POISON_BARB, "An item to be held by a Pok\u00e9mon. It is a small, poisonous barb that ups the power of Poison-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -2701,7 +2701,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         SharpBeak() {
             super(ItemNamesies.SHARP_BEAK, "An item to be held by a Pok\u00e9mon. It is a long, sharp beak that boosts the power of Flying-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -2720,7 +2720,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         SilkScarf() {
             super(ItemNamesies.SILK_SCARF, "An item to be held by a Pok\u00e9mon. It is a sumptuous scarf that boosts the power of Normal-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -2739,7 +2739,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         SilverPowder() {
             super(ItemNamesies.SILVER_POWDER, "An item to be held by a Pok\u00e9mon. It is a shiny, silver powder that ups the power of Bug-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -2758,7 +2758,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         SoftSand() {
             super(ItemNamesies.SOFT_SAND, "An item to be held by a Pok\u00e9mon. It is a loose, silky sand that boosts the power of Ground-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -2777,7 +2777,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         SpellTag() {
             super(ItemNamesies.SPELL_TAG, "An item to be held by a Pok\u00e9mon. It is a sinister, eerie tag that boosts the power of Ghost-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -2791,7 +2791,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         TwistedSpoon() {
             super(ItemNamesies.TWISTED_SPOON, "An item to be held by a Pok\u00e9mon. It is a spoon imbued with telekinetic power that boosts Psychic-type moves.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 1000;
         }
 
         @Override
@@ -3147,7 +3147,12 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         PrettyWing() {
             super(ItemNamesies.PRETTY_WING, "Though this feather is beautiful, it's just a regular feather and has no effect on Pok\u00e9mon.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 1000;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 20;
         }
     }
 
@@ -3258,7 +3263,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         FullHeal() {
             super(ItemNamesies.FULL_HEAL, "A spray-type medicine. It heals all the status problems of a single Pok\u00e9mon.", BagCategory.MEDICINE);
-            super.price = 250;
+            super.price = 400;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
@@ -3383,7 +3388,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         Potion() {
             super(ItemNamesies.POTION, "A spray-type medicine for wounds. It restores the HP of one Pok\u00e9mon by just 20 points.", BagCategory.MEDICINE);
-            super.price = 100;
+            super.price = 200;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
@@ -3625,7 +3630,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         SacredAsh() {
             super(ItemNamesies.SACRED_ASH, "It revives all fainted Pok\u00e9mon. In doing so, it also fully restores their HP.", BagCategory.MEDICINE);
-            super.price = 4000;
+            super.price = 50000;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 

@@ -1,0 +1,2275 @@
+Bicycle
+Key Item
+0
+0
+No_Type
+0
+A folding Bike that enables a rider to get around much faster than with Running Shoes.
+Fishing Rod
+Key Item
+0
+0
+No_Type
+0
+A Fishing Rod made by Captain Lana. Cast a line over piles of underwater rocks to fish for wild aquatic Pokémon.
+Absorb Bulb
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by a Pokémon. It boosts Sp. Atk if hit with a Water-type attack. It can only be used once.
+Air Balloon
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. The holder will float in the air until hit. Once hit, this item will burst.
+Amulet Coin
+Hold Item
+30
+100
+No_Type
+0
+An item to be held by a Pokémon. It doubles any prize money received if the holding Pokémon joins a battle.
+Big Root
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. It boosts the amount of HP the holder recovers from HP-stealing moves.
+Binding Band
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by a Pokémon. A band that increases the power of binding moves used by the holder.
+Black Sludge
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by a Pokémon. It gradually restores HP to Poison-type Pokémon. It damages any other type.
+Bright Powder
+Hold Item
+10
+10
+No_Type
+0
+An item to be held by a Pokémon. It casts a tricky glare that lowers the opposing Pokémon's accuracy.
+Cell Battery
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by a Pokémon. It boosts Attack if hit with an Electric-type attack. It can only be used once.
+Choice Band
+Hold Item
+10
+100
+No_Type
+0
+An item to be held by a Pokémon. This curious headband boosts Attack but only allows the use of one move.
+Choice Scarf
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. This curious scarf boosts Speed but only allows the use of one move.
+Choice Specs
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. These curious glasses boost Sp. Atk but only allow the use of one move.
+Cleanse Tag
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by a Pokémon. It helps keep wild Pokémon away if the holder is the head of the party.
+Damp Rock
+Hold Item
+60
+200
+No_Type
+0
+An item to be held by a Pokémon. It extends the duration of the move Rain Dance when used by the holder.
+Heat Rock
+Hold Item
+60
+200
+No_Type
+0
+An item to be held by a Pokémon. It extends the duration of the move Sunny Day when used by the holder.
+Icy Rock
+Hold Item
+40
+200
+No_Type
+0
+An item to be held by a Pokémon. It extends the duration of the move Hail when used by the holder.
+Smooth Rock
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. It extends the duration of the move Sandstorm when used by the holder.
+Eject Button
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by a Pokémon. If the holder is hit by an attack, it will be switched out of battle.
+Destiny Knot
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. If the holder becomes infatuated, the opposing Pokémon will be, too.
+Expert Belt
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. It's a well-worn belt that slightly boosts the power of supereffective moves.
+Flame Orb
+Hold Item
+30
+100
+No_Type
+0
+An item to be held by a Pokémon. It's a bizarre orb that will afflict the holder with a burn during battle.
+Toxic Orb
+Hold Item
+30
+100
+No_Type
+0
+An item to be held by a Pokémon. It's a bizarre orb that will badly poison the holder during battle.
+Float Stone
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by a Pokémon. This very light stone reduces the weight of a Pokémon when held.
+Focus Band
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. The holder may endure a potential KO attack, leaving it with just 1 HP.
+Focus Sash
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. If the holder has full HP, it will endure a potential KO attack with 1 HP. The item then disappears.
+Grip Claw
+Hold Item
+90
+200
+No_Type
+0
+An item to be held by a Pokémon. It extends the duration of multi-turn attacks like Bind and Wrap.
+Adamant Orb
+Hold Item
+60
+10000
+No_Type
+0
+A brightly gleaming orb to be held by Dialga. It boosts the power of Dragon- and Steel-type moves when it is held.
+Lustrous Orb
+Hold Item
+60
+10000
+No_Type
+0
+A beautifully glowing orb to be held by Palkia. It boosts the power of Dragon- and Water-type moves when it is held.
+Griseous Orb
+Hold Item
+60
+10000
+No_Type
+0
+A glowing orb to be held by Giratina. It boosts the power of Dragon- and Ghost-type moves when it is held.
+Iron Ball
+Hold Item
+130
+200
+No_Type
+0
+An item to be held by a Pokémon. It lowers Speed and allows Ground-type moves to hit Flying-type and levitating holders.
+Lagging Tail
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. It is tremendously heavy and makes the holder move slower than usual.
+Life Orb
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by a Pokémon. It boosts the power of moves, but at the cost of some HP on each hit.
+Light Ball
+Hold Item
+30
+100
+No_Type
+0
+An item to be held by Pikachu. It's a puzzling orb that boosts its Attack and Sp. Atk stats.
+Light Clay
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by a Pokémon. Protective moves like Light Screen and Reflect will be effective longer.
+Lucky Egg
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by a Pokémon. It's an egg filled with happiness that earns extra Exp. Points in battle.
+Lucky Punch
+Hold Item
+40
+10
+No_Type
+0
+An item to be held by Chansey. This pair of lucky boxing gloves will boost Chansey's critical-hit ratio.
+Luminous Moss
+Hold Item
+0
+200
+No_Type
+0
+An item to be held by a Pokémon. It boosts Sp. Def if hit with a Water-type attack. It can only be used once.
+Macho Brace
+Hold Item
+60
+3000
+No_Type
+0
+An item to be held by a Pokémon. This stiff, heavy brace helps Pokémon grow strong but cuts Speed in battle.
+Mental Herb
+Hold Item
+10
+100
+No_Type
+0
+An item to be held by a Pokémon. The holder shakes off move-binding effects to move freely. It can be used only once.
+Metal Powder
+Hold Item
+10
+10
+No_Type
+0
+An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Defense stat.
+Metronome
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by a Pokémon. It boosts moves used consecutively, but only until a different move is used.
+Muscle Band
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. This headband exudes strength, slightly boosting the power of physical moves.
+Power Anklet
+Hold Item
+70
+3000
+No_Type
+0
+An item to be held by a Pokémon. It reduces Speed but allows the holder's Speed stat to grow more after battling.
+Power Band
+Hold Item
+70
+3000
+No_Type
+0
+An item to be held by a Pokémon. It reduces Speed but allows the holder's Sp. Def stat to grow more after battling.
+Power Belt
+Hold Item
+70
+3000
+No_Type
+0
+An item to be held by a Pokémon. It reduces Speed but allows the holder's Defense stat to grow more after battling.
+Power Bracer
+Hold Item
+70
+3000
+No_Type
+0
+An item to be held by a Pokémon. It reduces Speed but allows the holder's Attack stat to grow more after battling.
+Power Lens
+Hold Item
+70
+3000
+No_Type
+0
+An item to be held by a Pokémon. It reduces Speed but allows the holder's Sp. Atk stat to grow more after battling.
+Power Weight
+Hold Item
+70
+3000
+No_Type
+0
+An item to be held by a Pokémon. It reduces Speed but allows the holder's maximum HP to grow more after battling.
+Quick Claw
+Hold Item
+80
+100
+No_Type
+0
+An item to be held by a Pokémon. This light, sharp claw lets the bearer move first occasionally.
+Quick Powder
+Hold Item
+10
+10
+No_Type
+0
+An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Speed stat.
+Red Card
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. When the holder is hit by an attack, the attacker is removed from battle.
+Ring Target
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. Moves that normally have no effect will land on a Pokémon holding it.
+Rocky Helmet
+Hold Item
+60
+200
+No_Type
+0
+An item to be held by a Pokémon. If the holder is hit, the attacker will also be damaged upon contact.
+Safety Goggles
+Hold Item
+0
+1000
+No_Type
+0
+An item to be held by a Pokémon. These goggles protect the holder from both weather-related damage and powder.
+Scope Lens
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by a Pokémon. It's a lens for scoping out weak points. It boosts the holder's critical-hit ratio.
+Shed Shell
+Hold Item
+10
+100
+No_Type
+0
+An item to be held by a Pokémon. This discarded carapace enables the holder to switch out of battle without fail.
+Shell Bell
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by a Pokémon. The holder regains a little HP every time it inflicts damage on others.
+Smoke Ball
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by a Pokémon. It enables the holder to flee from any wild Pokémon encounter without fail.
+Snowball
+Hold Item
+0
+200
+No_Type
+0
+An item to be held by a Pokémon. It boosts Attack if hit with an Ice-type attack. It can only be used once.
+Soul Dew
+Hold Item
+30
+200
+No_Type
+0
+A wondrous orb to be held by either Latios or Latias. It raises the power of Psychic- and Dragon-type moves.
+Stick
+Hold Item
+60
+200
+No_Type
+0
+An item to be held by Farfetch'd. This very long and stiff stalk of leek boosts its critical-hit ratio.
+Sticky Barb
+Hold Item
+80
+200
+No_Type
+0
+An item to be held by a Pokémon. It damages the holder every turn and may latch on to Pokémon that touch the holder.
+Thick Club
+Hold Item
+90
+500
+No_Type
+0
+An item to be held by Cubone or Marowak. It's a hard bone of some sort that boosts the Attack stat.
+Weakness Policy
+Hold Item
+0
+1000
+No_Type
+0
+An item to be held by a Pokémon. Attack and Sp. Atk sharply increase if the holder is hit with a move it's weak to.
+White Herb
+Hold Item
+10
+100
+No_Type
+0
+An item to be held by a Pokémon. It will restore any lowered stat in battle. It can be used only once.
+Wide Lens
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. It's a magnifying lens that slightly boosts the accuracy of moves.
+Wise Glasses
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. This thick pair of glasses slightly boosts the power of special moves.
+Zoom Lens
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. If the holder moves after its target moves, its accuracy will be boosted.
+Full Incense
+Hold Item
+10
+9600
+No_Type
+0
+An item to be held by a Pokémon. This exotic-smelling incense makes the holder bloated and slow moving.
+Lax Incense
+Hold Item
+10
+9600
+No_Type
+0
+An item to be held by a Pokémon. The beguiling aroma of this incense may cause attacks to miss its holder.
+Luck Incense
+Hold Item
+10
+9600
+No_Type
+0
+An item to be held by a Pokémon. It doubles any prize money received if the holding Pokémon joins a battle.
+Odd Incense
+Hold Item
+10
+9600
+No_Type
+0
+An item to be held by a Pokémon. This exotic-smelling incense boosts the power of Psychic-type moves.
+Pure Incense
+Hold Item
+10
+9600
+No_Type
+0
+An item to be held by a Pokémon. It helps keep wild Pokémon away if the holder is the head of the party.
+Rock Incense
+Hold Item
+10
+9600
+No_Type
+0
+An item to be held by a Pokémon. This exotic-smelling incense boosts the power of Rock-type moves.
+Rose Incense
+Hold Item
+10
+9600
+No_Type
+0
+An item to be held by a Pokémon. This exotic-smelling incense boosts the power of Grass-type moves.
+Sea Incense
+Hold Item
+10
+9600
+No_Type
+0
+An item to be held by a Pokémon. This incense has a curious aroma that boosts the power of Water-type moves.
+Wave Incense
+Hold Item
+10
+9600
+No_Type
+0
+An item to be held by a Pokémon. This incense has a curious aroma that boosts the power of Water-type moves.
+Draco Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Dragon-type moves.
+Dread Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Dark-type moves.
+Earth Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Ground-type moves.
+Fist Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Fighting-type moves.
+Flame Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Fire-type moves.
+Icicle Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Ice-type moves.
+Insect Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Bug-type moves.
+Iron Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Steel-type moves.
+Meadow Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Grass-type moves.
+Mind Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Psychic-type moves.
+Pixie Plate
+Hold Item
+0
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Fairy-type moves.
+Sky Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Flying-type moves.
+Splash Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Water-type moves.
+Spooky Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Ghost-type moves.
+Stone Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Rock-type moves.
+Toxic Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Poison-type moves.
+Zap Plate
+Hold Item
+90
+1000
+No_Type
+0
+An item to be held by a Pokémon. It's a stone tablet that boosts the power of Electric-type moves.
+Burn Drive
+Hold Item
+70
+1000
+No_Type
+0
+A cassette to be held by Genesect. It changes Genesect's Techno Blast move so it becomes Fire type.
+Chill Drive
+Hold Item
+70
+1000
+No_Type
+0
+A cassette to be held by Genesect. It changes Genesect's Techno Blast move so it becomes Ice type.
+Douse Drive
+Hold Item
+70
+1000
+No_Type
+0
+A cassette to be held by Genesect. It changes Genesect's Techno Blast move so it becomes Water type.
+Shock Drive
+Hold Item
+70
+1000
+No_Type
+0
+A cassette to be held by Genesect. It changes Genesect's Techno Blast move so it becomes Electric type.
+Fire Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an essence of fire. When held, it strengthens the power of a Fire-type move one time.
+Water Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an essence of water. When held, it strengthens the power of a Water-type move one time.
+Electric Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an essence of electricity. When held, it strengthens the power of an Electric-type move one time.
+Grass Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an essence of nature. When held, it strengthens the power of a Grass-type move one time.
+Ice Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an essence of ice. When held, it strengthens the power of an Ice-type move one time.
+Fighting Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an essence of combat. When held, it strengthens the power of a Fighting-type move one time.
+Poison Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an essence of poison. When held, it strengthens the power of a Poison-type move one time.
+Ground Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an essence of land. When held, it strengthens the power of a Ground-type move one time.
+Flying Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an essence of air. When held, it strengthens the power of a Flying-type move one time.
+Psychic Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an essence of the mind. When held, it strengthens the power of a Psychic-type move one time.
+Bug Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an insect-like essence. When held, it strengthens the power of a Bug-type move one time.
+Rock Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an essence of rock. When held, it strengthens the power of a Rock-type move one time.
+Ghost Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with a spectral essence. When held, it strengthens the power of a Ghost-type move one time.
+Dragon Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with a draconic essence. When held, it strengthens the power of a Dragon-type move one time.
+Dark Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an essence of darkness. When held, it strengthens the power of a Dark-type move one time.
+Steel Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an essence of steel. When held, it strengthens the power of a Steel-type move one time.
+Normal Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an ordinary essence. When held, it strengthens the power of a Normal-type move one time.
+Fairy Gem
+Hold Item
+0
+200
+No_Type
+0
+A gem with an essence of the fey. When held, it strengthens the power of a Fairy-type move one time.
+Leftovers
+Hold Item
+10
+200
+No_Type
+0
+An item to be held by a Pokémon. The holder's HP is slowly but steadily restored throughout every battle.
+Black Belt
+Hold Item
+30
+100
+No_Type
+0
+An item to be held by a Pokémon. This belt helps the wearer to focus and boosts the power of Fighting-type moves.
+Black Glasses
+Hold Item
+30
+100
+No_Type
+0
+An item to be held by a Pokémon. A pair of shady-looking glasses that boost the power of Dark-type moves.
+Charcoal
+Hold Item
+30
+9800
+No_Type
+0
+An item to be held by a Pokémon. It's a combustible fuel that boosts the power of Fire-type moves.
+Dragon Fang
+Hold Item
+70
+100
+No_Type
+0
+An item to be held by a Pokémon. This hard and sharp fang boosts the power of Dragon-type moves.
+Hard Stone
+Hold Item
+100
+100
+No_Type
+0
+An item to be held by a Pokémon. It's a durable stone that boosts the power of Rock-type moves.
+Magnet
+Hold Item
+30
+100
+No_Type
+0
+An item to be held by a Pokémon. It's a powerful magnet that boosts the power of Electric-type moves.
+Metal Coat
+Hold Item
+30
+100
+No_Type
+0
+An item to be held by a Pokémon. It's a special metallic film that can boost the power of Steel-type moves.
+Miracle Seed
+Hold Item
+30
+100
+No_Type
+0
+An item to be held by a Pokémon. It's a seed imbued with life force that boosts the power of Grass-type moves.
+Mystic Water
+Hold Item
+30
+100
+No_Type
+0
+An item to be held by a Pokémon. This teardrop-shaped gem boosts the power of Water-type moves.
+NeverMeltIce
+Hold Item
+30
+100
+No_Type
+0
+An item to be held by a Pokémon. Itâs a piece of ice that repels heat effects and boosts Ice-type moves.
+Poison Barb
+Hold Item
+70
+100
+No_Type
+0
+An item to be held by a Pokémon. This small, poisonous barb boosts the power of Poison-type moves.
+Sharp Beak
+Hold Item
+50
+100
+No_Type
+0
+An item to be held by a Pokémon. It's a long, sharp beak that boosts the power of Flying-type moves.
+Silk Scarf
+Hold Item
+10
+100
+No_Type
+0
+An item to be held by a Pokémon. It's a sumptuous scarf that boosts the power of Normal-type moves.
+Silver Powder
+Hold Item
+10
+100
+No_Type
+0
+An item to be held by a Pokémon. It's a shiny, silver powder that will boost the power of Bug-type moves.
+Soft Sand
+Hold Item
+10
+100
+No_Type
+0
+An item to be held by a Pokémon. It's a loose, silky sand that boosts the power of Ground-type moves.
+Spell Tag
+Hold Item
+30
+100
+No_Type
+0
+An item to be held by a Pokémon. It's a sinister, eerie tag that boosts the power of Ghost-type moves.
+Twisted Spoon
+Hold Item
+30
+100
+No_Type
+0
+An item to be held by a Pokémon. This spoon is imbued with telekinetic power and boosts Psychic-type moves.
+Dawn Stone
+Evolutionary
+80
+2100
+No_Type
+0
+A peculiar stone that can make certain species of Pokémon evolve. It sparkles like a glittering eye.
+Deep Sea Scale
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by Clamperl. This scale shines with a faint pink and raises the holder's Sp. Def stat.
+Deep Sea Tooth
+Hold Item
+90
+200
+No_Type
+0
+An item to be held by Clamperl. This fang gleams a sharp silver and raises the holder's Sp. Atk stat.
+Dragon Scale
+Evolutionary
+30
+2100
+No_Type
+0
+A very tough and inflexible scale. Dragon-type Pokémon may be holding this item when caught.
+Dubious Disc
+Hold Item
+50
+2100
+No_Type
+0
+A transparent device overflowing with dubious data. Its producer is unknown.
+Dusk Stone
+Evolutionary
+80
+2100
+No_Type
+0
+A peculiar stone that can make certain species of Pokémon evolve. It holds shadows as dark as can be.
+Electirizer
+Hold Item
+80
+2100
+No_Type
+0
+A box packed with a tremendous amount of electric energy. It's loved by a certain Pokémon.
+Fire Stone
+Evolutionary
+30
+2100
+No_Type
+0
+A peculiar stone that can make certain species of Pokémon evolve. The stone has a fiery orange heart.
+King's Rock
+Hold Item
+30
+100
+No_Type
+0
+An item to be held by a Pokémon. When the holder successfully inflicts damage, the target may also flinch.
+Leaf Stone
+Evolutionary
+30
+2100
+No_Type
+0
+A peculiar stone that can make certain species of Pokémon evolve. It has an unmistakable leaf pattern.
+Magmarizer
+Hold Item
+80
+2100
+No_Type
+0
+A box packed with a tremendous amount of magma energy. It's loved by a certain Pokémon.
+Moon Stone
+Evolutionary
+30
+2100
+No_Type
+0
+A peculiar stone that can make certain species of Pokémon evolve. It is as black as the night sky.
+Oval Stone
+Evolutionary
+80
+2100
+No_Type
+0
+A peculiar stone that can make certain species of Pokémon evolve. It's as round as a Pokémon Egg.
+Everstone
+Hold Item
+30
+200
+No_Type
+0
+An item to be held by a Pokémon. A Pokémon holding this peculiar stone is prevented from evolving.
+Prism Scale
+Evolutionary
+30
+500
+No_Type
+0
+A mysterious scale that causes a certain Pokémon to evolve. It shines in rainbow colors.
+Protector
+Hold Item
+80
+2100
+No_Type
+0
+A protective item of some sort. It is extremely stiff and heavy. It's loved by a certain Pokémon.
+Razor Claw
+Hold Item
+80
+2100
+No_Type
+0
+An item to be held by a Pokémon. This sharply hooked claw increases the holder's critical-hit ratio.
+Razor Fang
+Hold Item
+30
+2100
+No_Type
+0
+An item to be held by a Pokémon. When the holder successfully inflicts damage, the target may also flinch.
+Reaper Cloth
+Hold Item
+10
+2100
+No_Type
+0
+A cloth imbued with horrifyingly strong spiritual energy. It's loved by a certain Pokémon.
+Sachet
+Evolutionary
+0
+2100
+No_Type
+0
+A sachet filled with fragrant perfumes that are just slightly too overwhelming. Yet it's loved by a certain Pokémon.
+Shiny Stone
+Evolutionary
+80
+2100
+No_Type
+0
+A peculiar stone that can make certain species of Pokémon evolve. It shines with a dazzling light.
+Sun Stone
+Evolutionary
+30
+2100
+No_Type
+0
+A peculiar stone that can make certain species of Pokémon evolve. It burns as red as the evening sun.
+Thunder Stone
+Evolutionary
+30
+2100
+No_Type
+0
+A peculiar stone that can make certain species of Pokémon evolve. It has a distinct thunderbolt pattern.
+Ice Stone
+Evolutionary
+0
+0
+No_Type
+0
+A peculiar stone that can make certain species of Pokémon evolve. It has an unmistakable snowflake pattern.
+Up-Grade
+Evolutionary
+30
+2100
+No_Type
+0
+A transparent device somehow filled with all sorts of data. It was produced by Silph Co.
+Pretty Wing
+Miscellaneous
+20
+200
+No_Type
+0
+Though this feather is beautiful, it's just a regular feather and has no effect on Pokémon.
+Water Stone
+Evolutionary
+30
+2100
+No_Type
+0
+A peculiar stone that can make certain species of Pokémon evolve. It is the blue of a pool of clear water.
+Whipped Dream
+Evolutionary
+0
+2100
+No_Type
+0
+A soft and sweet treat made of fluffy, puffy, whipped, and whirled cream. It's loved by a certain Pokémon.
+Antidote
+Recovery
+30
+100
+No_Type
+0
+A spray-type medicine for poisoning. It can be used once to lift the effects of being poisoned from a Pokémon.
+Awakening
+Recovery
+30
+250
+No_Type
+0
+A spray-type medicine used against sleep. It can be used once to rouse a Pokémon from the clutches of sleep.
+Burn Heal
+Recovery
+30
+250
+No_Type
+0
+A spray-type medicine for treating burns. It can be used once to heal a Pokémon suffering from a burn.
+Ice Heal
+Recovery
+30
+250
+No_Type
+0
+A spray-type medicine for freezing. It can be used once to defrost a Pokémon that has been frozen solid.
+Paralyze Heal
+Recovery
+30
+200
+No_Type
+0
+A spray-type medicine for paralysis. It can be used once to free a Pokémon that has been paralyzed.
+Full Heal
+Recovery
+30
+600
+No_Type
+0
+A spray-type medicine that is broadly effective. It can be used once to heal all the status conditions of a Pokémon.
+Full Restore
+Recovery
+30
+3000
+No_Type
+0
+A medicine that can be used to fully restore the HP of a single Pokémon and heal any status conditions it has.
+Elixir
+Recovery
+30
+3000
+No_Type
+0
+This medicine can restore 10 PP to each of the moves that have been learned by a Pokémon.
+Max Elixir
+Recovery
+30
+4500
+No_Type
+0
+This medicine can fully restore the PP of all of the moves that have been learned by a Pokémon.
+Ether
+Recovery
+30
+1200
+No_Type
+0
+This medicine can restore 10 PP to a single selected move that has been learned by a Pokémon.
+Max Ether
+Recovery
+30
+2000
+No_Type
+0
+This medicine can fully restore the PP of a single selected move that has been learned by a Pokémon.
+Berry Juice
+Recovery
+30
+100
+No_Type
+0
+A 100 percent pure juice made of Berries. When consumed, it restores 20 HP to an injured Pokémon.
+Sweet Heart
+Recovery
+30
+100
+No_Type
+0
+A piece of cloyingly sweet chocolate. When consumed, it restores 20 HP to an injured Pokémon.
+Potion
+Recovery
+30
+300
+No_Type
+0
+A spray-type medicine for treating wounds. It can be used to restore 20 HP to an injured Pokémon.
+Energy Powder
+Recovery
+30
+500
+No_Type
+0
+A very bitter medicinal powder. When consumed, it restores up to 60 HP to an injured Pokémon.
+Fresh Water
+Recovery
+30
+200
+No_Type
+0
+Water with a high mineral content. When consumed, it restores up to 30 HP to an injured Pokémon.
+Super Potion
+Recovery
+30
+700
+No_Type
+0
+A spray-type medicine for treating wounds. It can be used to restore 60 HP to an injured Pokémon.
+Soda Pop
+Recovery
+30
+300
+No_Type
+0
+A highly carbonated soda drink. When consumed, it restores up to 50 HP to an injured Pokémon.
+Lemonade
+Recovery
+30
+350
+No_Type
+0
+A very sweet and refreshing drink. When consumed, it restores up to 70 HP to an injured Pokémon.
+Moomoo Milk
+Recovery
+30
+500
+No_Type
+0
+A bottle of highly nutritious milk. When consumed, it restores up to 100 HP to an injured Pokémon.
+Energy Root
+Recovery
+30
+800
+No_Type
+0
+An extremely bitter medicinal root. When consumed, it restores up to 120 HP to an injured Pokémon.
+Hyper Potion
+Recovery
+30
+1200
+No_Type
+0
+A spray-type medicine for treating wounds. It can be used to restore 120 HP to an injured Pokémon.
+Max Potion
+Recovery
+30
+2500
+No_Type
+0
+A spray-type medicine for treating wounds. It will completely restore the max HP of a single Pokémon.
+Revive
+Recovery
+30
+1500
+No_Type
+0
+A medicine that can revive fainted Pokémon. It also restores half of a fainted Pokémon's maximum HP.
+Max Revive
+Recovery
+30
+4000
+No_Type
+0
+A medicine that can revive fainted Pokémon. It also fully restores a fainted Pokémon's maximum HP.
+Revival Herb
+Recovery
+30
+2800
+No_Type
+0
+A terribly bitter medicinal herb. It revives a fainted Pokémon and fully restores its maximum HP.
+Sacred Ash
+Recovery
+30
+200
+No_Type
+0
+This rare ash can revive all fainted Pokémon in a party. In doing so, it also fully restores their maximum HP.
+Dire Hit
+Battle Effect
+30
+650
+No_Type
+0
+An item that raises the critical-hit ratio greatly. It can be used only once and wears off if the Pokémon is withdrawn.
+Guard Spec.
+Battle Effect
+30
+700
+No_Type
+0
+An item that prevents stat reduction among the Trainer's party Pokémon for five turns after it is used in battle.
+X Accuracy
+Battle Effect
+30
+950
+No_Type
+0
+An item that sharply boosts the accuracy of a Pokémon during a battle. It wears off once the Pokémon is withdrawn.
+X Attack
+Battle Effect
+30
+500
+No_Type
+0
+An item that sharply boosts the Attack stat of a Pokémon during a battle. It wears off once the Pokémon is withdrawn.
+X Defend
+Battle Effect
+30
+550
+No_Type
+0
+An item that boosts the Defense stat of a Pokémon during a battle. It wears off once the Pokémon is withdrawn.
+X Special
+Battle Effect
+30
+350
+No_Type
+0
+An item that raises the Sp. Atk stat of a Pokémon in battle. It wears off if the Pokémon is withdrawn.
+X Sp. Def
+Battle Effect
+30
+350
+No_Type
+0
+An item that sharply boosts the Sp. Def stat of a Pokémon during a battle. It wears off once the Pokémon is withdrawn.
+X Speed
+Battle Effect
+30
+350
+No_Type
+0
+An item that sharply boosts the Speed stat of a Pokémon during a battle. It wears off once the Pokémon is withdrawn.
+HP Up
+Vitamins
+30
+9800
+No_Type
+0
+A nutritious drink for Pokémon. When consumed, it raises the base HP of a single Pokémon.
+Protein
+Vitamins
+30
+9800
+No_Type
+0
+A nutritious drink for Pokémon. When consumed, it raises the base Attack stat of a single Pokémon.
+Iron
+Vitamins
+30
+9800
+No_Type
+0
+A nutritious drink for Pokémon. When consumed, it raises the base Defense stat of a single Pokémon.
+Calcium
+Vitamins
+30
+9800
+No_Type
+0
+A nutritious drink for Pokémon. When consumed, it raises the base Sp. Atk stat of a single Pokémon.
+Zinc
+Vitamins
+30
+9800
+No_Type
+0
+A nutritious drink for Pokémon. When consumed, it raises the base Sp. Def stat of a single Pokémon.
+Carbos
+Vitamins
+30
+9800
+No_Type
+0
+A nutritious drink for Pokémon. When consumed, it raises the base Speed stat of a single Pokémon.
+Health Wing
+Vitamins
+20
+3000
+No_Type
+0
+An item for use on a Pokémon. It slightly increases the base HP of a single Pokémon.
+Muscle Wing
+Vitamins
+20
+3000
+No_Type
+0
+An item for use on a Pokémon. It slightly increases the base Attack stat of a single Pokémon.
+Resist Wing
+Vitamins
+20
+3000
+No_Type
+0
+An item for use on a Pokémon. It slightly increases the base Defense stat of a single Pokémon.
+Genius Wing
+Vitamins
+20
+3000
+No_Type
+0
+An item for use on a Pokémon. It slightly increases the base Sp. Atk stat of a single Pokémon.
+Clever Wing
+Vitamins
+20
+3000
+No_Type
+0
+An item for use on a Pokémon. It slightly increases the base Sp. Def stat of a single Pokémon.
+Swift Wing
+Vitamins
+20
+3000
+No_Type
+0
+An item for use on a Pokémon. It slightly increases the base Speed stat of a single Pokémon.
+PP Max
+Vitamins
+30
+9800
+No_Type
+0
+A medicine that can optimally raise the maximum PP of a single move that has been learned by the target Pokémon.
+PP Up
+Vitamins
+30
+9800
+No_Type
+0
+A medicine that can slightly raise the maximum PP of a single move that has been learned by the target Pokémon.
+Rare Candy
+Vitamins
+30
+4800
+No_Type
+0
+A candy that is packed with energy. When consumed, it will instantly raise the level of a single Pokémon by one.
+Cherish Ball
+Pokeball
+30
+200
+No_Type
+0
+A quite rare Poké Ball that has been crafted in order to commemorate a special occasion of some sort.
+Dive Ball
+Pokeball
+30
+1000
+No_Type
+0
+A somewhat different Poké Ball that works especially well when catching Pokémon that live underwater.
+Dusk Ball
+Pokeball
+30
+1000
+No_Type
+0
+A somewhat different Poké Ball that makes it easier to catch wild Pokémon at night or in dark places like caves.
+Fast Ball
+Pokeball
+0
+200
+No_Type
+0
+A Poké Ball that makes it easier to catch Pokémon that are usually very quick to run away.
+Great Ball
+Pokeball
+30
+600
+No_Type
+0
+A good, high-performance Poké Ball that provides a higher Pokémon catch rate than a standard Poké Ball.
+Heal Ball
+Pokeball
+30
+300
+No_Type
+0
+A remedial Poké Ball that restores the HP of a Pokémon caught with it and eliminates any status conditions.
+Heavy Ball
+Pokeball
+0
+200
+No_Type
+0
+A Poké Ball that is better than usual at catching very heavy Pokémon.
+Level Ball
+Pokeball
+0
+200
+No_Type
+0
+A Poké Ball that makes it easier to catch Pokémon that are at a lower level than your own Pokémon.
+Love Ball
+Pokeball
+0
+200
+No_Type
+0
+A Poké Ball that works best when catching a Pokémon that is of the opposite gender of your Pokémon.
+Lure Ball
+Pokeball
+0
+200
+No_Type
+0
+A Poké Ball that is good for catching Pokémon that you reel in with a Rod while out fishing.
+Luxury Ball
+Pokeball
+30
+1000
+No_Type
+0
+A particularly comfortable Poké Ball that makes a wild Pokémon quickly grow friendlier after being caught.
+Master Ball
+Pokeball
+30
+0
+No_Type
+0
+The best Poké Ball with the ultimate level of performance. With it, you will catch any wild Pokémon without fail.
+Moon Ball
+Pokeball
+0
+200
+No_Type
+0
+A Poké Ball that will make it easier to catch Pokémon that can evolve using a Moon Stone.
+Nest Ball
+Pokeball
+30
+1000
+No_Type
+0
+A somewhat different Poké Ball that becomes more effective the lower the level of the wild Pokémon.
+Net Ball
+Pokeball
+30
+1000
+No_Type
+0
+A somewhat different Poké Ball that is more effective when attempting to catch Water- or Bug-type Pokémon.
+Poké Ball
+Pokeball
+30
+200
+No_Type
+0
+A device for catching wild Pokémon. It's thrown like a ball at a Pokémon, comfortably encapsulating its target.
+Premier Ball
+Pokeball
+30
+200
+No_Type
+0
+A somewhat rare Poké Ball that was made as a commemorative item used to celebrate an event of some sort.
+Quick Ball
+Pokeball
+30
+1000
+No_Type
+0
+A somewhat different Poké Ball that has a more successful catch rate if used at the start of a wild encounter.
+Repeat Ball
+Pokeball
+30
+1000
+No_Type
+0
+A somewhat different Poké Ball that works especially well on a Pokémon species that has been caught before.
+Safari Ball
+Pokeball
+30
+0
+No_Type
+0
+A special Poké Ball that is used only in the Great Marsh. It is recognizable by the camouflage pattern decorating it.
+Timer Ball
+Pokeball
+30
+1000
+No_Type
+0
+A somewhat different Poké Ball that becomes progressively more effective the more turns that are taken in battle.
+Ultra Ball
+Pokeball
+30
+1200
+No_Type
+0
+An ultra-high-performance Poké Ball that provides a higher success rate for catching Pokémon than a Great Ball.
+Cheri Berry
+Berry
+10
+20
+Fire
+80
+A Berry to be consumed by Pokémon. If a Pokémon holds one, it can recover from paralysis on its own in battle.
+Chesto Berry
+Berry
+10
+20
+Water
+80
+A Berry to be consumed by Pokémon. If a Pokémon holds one, it can recover from sleep on its own in battle.
+Pecha Berry
+Berry
+10
+20
+Electric
+80
+A Berry to be consumed by Pokémon. If a Pokémon holds one, it can recover from poisoning on its own in battle.
+Rawst Berry
+Berry
+10
+20
+Grass
+80
+A Berry to be consumed by Pokémon. If a Pokémon holds one, it can recover from a burn on its own in battle.
+Aspear Berry
+Berry
+10
+20
+Ice
+80
+A Berry to be consumed by Pokémon. If a Pokémon holds one, it can recover from being frozen on its own in battle.
+Leppa Berry
+Berry
+10
+20
+Fighting
+80
+A Berry to be consumed by Pokémon. If a Pokémon holds one, it can restore 10 PP to a depleted move during battle.
+Oran Berry
+Berry
+10
+20
+Poison
+80
+A Berry to be consumed by Pokémon. If a Pokémon holds one, it can restore its own HP by 10 points during battle.
+Persim Berry
+Berry
+10
+20
+Ground
+80
+A Berry to be consumed by Pokémon. If a Pokémon holds one, it can recover from confusion on its own in battle.
+Lum Berry
+Berry
+10
+20
+Flying
+80
+A Berry to be consumed by Pokémon. If a Pokémon holds one, it can recover from any status condition during battle.
+Sitrus Berry
+Berry
+10
+20
+Psychic
+80
+A Berry to be consumed by Pokémon. If a Pokémon holds one, it can restore its own HP by a small amount during battle.
+Razz Berry
+Berry
+10
+20
+Steel
+80
+Used to make Pokéblocks that will enhance your Coolness. Its red flesh is spicy when eaten.
+Pomeg Berry
+Berry
+10
+20
+Ice
+90
+A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its base HP.
+Kelpsy Berry
+Berry
+10
+20
+Fighting
+90
+A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its base Attack.
+Qualot Berry
+Berry
+10
+20
+Poison
+90
+A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its base Defense.
+Hondew Berry
+Berry
+10
+20
+Ground
+90
+A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its base Sp. Atk.
+Grepa Berry
+Berry
+10
+20
+Flying
+90
+A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its base Sp. Def.
+Tamato Berry
+Berry
+10
+20
+Psychic
+90
+A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its base Speed.
+Occa Berry
+Berry
+10
+20
+Fire
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Fire-type attack.
+Passho Berry
+Berry
+10
+20
+Water
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Water-type attack.
+Wacan Berry
+Berry
+10
+20
+Electric
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Electric-type attack.
+Rindo Berry
+Berry
+10
+20
+Grass
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Grass-type attack.
+Yache Berry
+Berry
+10
+20
+Ice
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Ice-type attack.
+Chople Berry
+Berry
+10
+20
+Fighting
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Fighting-type attack.
+Kebia Berry
+Berry
+10
+20
+Poison
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Poison-type attack.
+Shuca Berry
+Berry
+10
+20
+Ground
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Ground-type attack.
+Coba Berry
+Berry
+10
+20
+Flying
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Flying-type attack.
+Payapa Berry
+Berry
+10
+20
+Psychic
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Psychic-type attack.
+Tanga Berry
+Berry
+10
+20
+Bug
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Bug-type attack.
+Charti Berry
+Berry
+10
+20
+Rock
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Rock-type attack.
+Kasib Berry
+Berry
+10
+20
+Ghost
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Ghost-type attack.
+Haban Berry
+Berry
+10
+20
+Dragon
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Dragon-type attack.
+Colbur Berry
+Berry
+10
+20
+Dark
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Dark-type attack.
+Babiri Berry
+Berry
+10
+20
+Steel
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Steel-type attack.
+Chilan Berry
+Berry
+10
+20
+Normal
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one Normal-type attack.
+Roseli Berry
+Berry
+0
+20
+Fairy
+80
+If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Fairy-type attack.
+Liechi Berry
+Berry
+10
+20
+Grass
+100
+A Berry to be consumed by Pokémon. If a Pokémon holds one, its Attack stat will increase when it's in a pinch.
+Ganlon Berry
+Berry
+10
+20
+Ice
+100
+A Berry to be consumed by Pokémon. If a Pokémon holds one, its Defense stat will increase when it's in a pinch.
+Salac Berry
+Berry
+10
+20
+Fighting
+100
+A Berry to be consumed by Pokémon. If a Pokémon holds one, its Speed stat will increase when it's in a pinch.
+Petaya Berry
+Berry
+10
+20
+Poison
+100
+A Berry to be consumed by Pokémon. If a Pokémon holds one, its Sp. Atk stat will increase when it's in a pinch.
+Apicot Berry
+Berry
+10
+20
+Ground
+100
+A Berry to be consumed by Pokémon. If a Pokémon holds one, its Sp. Def stat will increase when it's in a pinch.
+Micle Berry
+Berry
+10
+20
+Rock
+100
+A Berry to be consumed by Pokémon. If a Pokémon holds one, its accuracy will increase just once when it's in a pinch.
+Kee Berry
+Berry
+0
+20
+Fairy
+100
+If held by a Pokémon, this Berry will increase the holder's Defense if it's hit with a physical move.
+Maranga Berry
+Berry
+0
+20
+Dark
+100
+If held by a Pokémon, this Berry will increase the holder's Sp. Def if it's hit with a special move.
+Jaboca Berry
+Berry
+10
+20
+Dragon
+100
+A Berry to be consumed by Pokémon. If a physical attack hits the Pokémon holding it, the attacker will also be hurt.
+Rowap Berry
+Berry
+10
+20
+Dark
+100
+A Berry to be consumed by Pokémon. If a special attack hits the Pokémon holding it, the attacker will also be hurt.
+Custap Berry
+Berry
+10
+20
+Ghost
+100
+A Berry to be consumed by Pokémon. If a Pokémon holds one, it will be able to move first just once when it's in a pinch.
+Enigma Berry
+Berry
+10
+20
+Bug
+100
+A Berry to be consumed by Pokémon. If a Pokémon holds one, being hit by a supereffective attack will restore its HP.
+Lansat Berry
+Berry
+10
+20
+Flying
+100
+A Berry to be consumed by Pokémon. If a Pokémon holds one, its critical-hit ratio will increase when it's in a pinch.
+Starf Berry
+Berry
+10
+20
+Psychic
+100
+A Berry to be consumed by Pokémon. If a Pokémon holds one, one of its stats will sharply increase when it's in a pinch.
+Comet Shard
+Miscellaneous
+30
+0
+No_Type
+0
+A shard that fell to the ground when a comet approached. It can be sold at a high price to shops.
+Tiny Mushroom
+Miscellaneous
+30
+500
+No_Type
+0
+A very small and rare mushroom. It's popular with a certain class of collectors and sought out by them.
+Big Mushroom
+Miscellaneous
+30
+5000
+No_Type
+0
+A very large and rare mushroom. It's popular with a certain class of collectors and sought out by them.
+Balm Mushroom
+Miscellaneous
+30
+0
+No_Type
+0
+A rare mushroom that gives off a nice fragrance. It can be sold at a high price to shops.
+Nugget
+Miscellaneous
+30
+10000
+No_Type
+0
+A nugget of the purest gold that gives off a lustrous gleam in direct light. It can be sold at a high price to shops.
+Big Nugget
+Miscellaneous
+30
+0
+No_Type
+0
+A big nugget of pure gold that gives off a lustrous gleam. It can be sold at a high price to shops.
+Pearl
+Miscellaneous
+30
+1400
+No_Type
+0
+A rather small pearl that has a very nice silvery sheen to it. It can be sold cheaply to shops.
+Big Pearl
+Miscellaneous
+30
+7500
+No_Type
+0
+A rather large pearl that has a very nice silvery sheen. It can be sold to shops for a high price.
+Stardust
+Miscellaneous
+30
+2000
+No_Type
+0
+Lovely red sand that flows between the fingers with a loose, silky feel. It can be sold at a low price to shops.
+Star Piece
+Miscellaneous
+30
+9800
+No_Type
+0
+A small shard of a beautiful gem that demonstrates a distinctly red sparkle. It can be sold at a high price to shops.
+Rare Bone
+Miscellaneous
+100
+10000
+No_Type
+0
+A rare bone that is extremely valuable for the study of Pokémon archeology. It can be sold for a high price to shops.
+Honey
+Miscellaneous
+30
+100
+No_Type
+0
+A sweet honey with a lush aroma that attracts wild Pokémon when it is used in tall grass, in caves, or on special trees.
+Eviolite
+Hold Item
+40
+200
+No_Type
+0
+A mysterious Evolutionary lump. When held by a Pokémon that can still evolve, it raises both Defense and Sp. Def.
+Heart Scale
+Miscellaneous
+30
+100
+No_Type
+0
+A pretty, heart-shaped scale that is extremely rare. Some people are happy to receive one.
+Repel
+Miscellaneous
+30
+350
+No_Type
+0
+An item that prevents any low-level wild Pokémon from jumping out at you for a while.
+Super Repel
+Miscellaneous
+30
+500
+No_Type
+0
+An item that prevents any low-level wild Pokémon from jumping out at you for a while. It lasts longer than Repel.
+Max Repel
+Miscellaneous
+30
+700
+No_Type
+0
+An item that prevents any low-level wild Pokémon from jumping out at you for a while. It lasts longer than Super Repel.
+Ability Capsule
+Miscellaneous
+0
+1000
+No_Type
+0
+A capsule that allows a Pokémon with two Abilities to switch between these Abilities when it is used.
+Assault Vest
+Hold Item
+0
+1000
+No_Type
+0
+An item to be held by a Pokémon. This offensive vest raises Sp. Def but prevents the use of status moves.
+Power Herb
+Hold Item
+10
+100
+No_Type
+0
+A single-use item to be held by a Pokémon. It allows the holder to immediately use a move that normally requires a turn to charge.
+Fire Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Fire-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Water Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Water-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Electric Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Electric-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Grass Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Grass-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Ice Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Ice-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Fighting Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Fighting-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Poison Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Poison-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Ground Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Ground-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Flying Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Flying-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Psychic Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Psychic-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Bug Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Bug-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Rock Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Rock-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Ghost Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Ghost-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Dragon Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Dragon-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Dark Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Dark-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Steel Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Steel-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Fairy Memory
+Hold Item
+0
+0
+No_Type
+0
+A memory disc that contains Fairy-type data. It changes the type of the holder if held by a certain species of Pokémon.
+Electric Seed
+Hold Item
+0
+0
+No_Type
+0
+An item to be held by a Pokémon. It boosts Defense on Electric Terrain. It can only be used once.
+Grassy Seed
+Hold Item
+0
+0
+No_Type
+0
+An item to be held by a Pokémon. It boosts Defense on Grassy Terrain. It can only be used once.
+Misty Seed
+Hold Item
+0
+0
+No_Type
+0
+An item to be held by a Pokémon. It boosts Sp. Def on Misty Terrain. It can only be used once.
+Psychic Seed
+Hold Item
+0
+0
+No_Type
+0
+An item to be held by a Pokémon. It boosts Sp. Def on Psychic Terrain. It can only be used once.

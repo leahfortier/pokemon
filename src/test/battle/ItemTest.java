@@ -2,7 +2,17 @@ package test.battle;
 
 import battle.attack.AttackNamesies;
 import battle.effect.generic.EffectNamesies;
+import generator.update.ItemUpdater;
+import generator.update.ItemUpdater.ItemParser;
+import item.Item;
 import item.ItemNamesies;
+import item.bag.BagCategory;
+import item.berry.Berry;
+import item.hold.HoldItem;
+import item.use.BallItem;
+import item.use.BattleUseItem;
+import item.use.EvolutionItem;
+import item.use.TechnicalMachine;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.Gender;
@@ -10,8 +20,133 @@ import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import test.BaseTest;
 import test.TestPokemon;
+import type.Type;
+
+import java.util.EnumSet;
+import java.util.Set;
 
 public class ItemTest extends BaseTest {
+    @Test
+    public void parserTest() {
+        Set<ItemNamesies> toParse = EnumSet.allOf(ItemNamesies.class);
+        toParse.remove(ItemNamesies.NO_ITEM);
+        toParse.remove(ItemNamesies.SYRUP);
+        toParse.remove(ItemNamesies.SURFBOARD);
+        toParse.remove(ItemNamesies.RUBY);
+        toParse.removeIf(itemNamesies -> itemNamesies.getItem() instanceof TechnicalMachine);
+
+        // Serebii has the wrong values for these, and I manually looked up in Bulbapedia instead (which is more accurate but way harder to parse)
+        Set<ItemNamesies> skipPrice = EnumSet.of(
+                ItemNamesies.BRIGHT_POWDER,
+                ItemNamesies.FLAME_ORB,
+                ItemNamesies.TOXIC_ORB,
+                ItemNamesies.SAFETY_GOGGLES,
+                ItemNamesies.BLACK_BELT,
+                ItemNamesies.BLACK_GLASSES,
+                ItemNamesies.CHARCOAL,
+                ItemNamesies.DRAGON_FANG,
+                ItemNamesies.HARD_STONE,
+                ItemNamesies.MAGNET,
+                ItemNamesies.METAL_COAT,
+                ItemNamesies.MIRACLE_SEED,
+                ItemNamesies.MYSTIC_WATER,
+                ItemNamesies.NEVER_MELT_ICE,
+                ItemNamesies.POISON_BARB,
+                ItemNamesies.SHARP_BEAK,
+                ItemNamesies.SILK_SCARF,
+                ItemNamesies.SILVER_POWDER,
+                ItemNamesies.SOFT_SAND,
+                ItemNamesies.SPELL_TAG,
+                ItemNamesies.TWISTED_SPOON,
+                ItemNamesies.PRETTY_WING,
+                ItemNamesies.FULL_HEAL,
+                ItemNamesies.POTION,
+                ItemNamesies.SACRED_ASH,
+                ItemNamesies.RAZZ_BERRY // Except this one -- this is legit
+        );
+
+        for (ItemParser itemParser : new ItemUpdater().getParseItems()) {
+            ItemNamesies itemNamesies = itemParser.itemNamesies;
+            String itemType = itemParser.itemType;
+
+            int fling = itemParser.fling;
+            int price = itemParser.price;
+
+            Type naturalGiftType = itemParser.naturalGiftType;
+            int naturalGiftPower = itemParser.naturalGiftPower;
+
+            Item item = itemNamesies.getItem();
+            if (item.isHoldable() && fling != 0) {
+                HoldItem holdItem = (HoldItem)item;
+                Assert.assertEquals(item.getName(), fling, holdItem.flingDamage());
+            } else if (!(item instanceof BallItem)) {
+                // Ball items are not holdable in this game
+                Assert.assertEquals(item.getName(), 0, fling);
+            }
+
+            if (item.getBagCategory() != BagCategory.KEY_ITEM) {
+                if (skipPrice.contains(itemNamesies)) {
+                    Assert.assertNotEquals(item.getName(), 0, price);
+                    Assert.assertNotEquals(item.getName(), price, item.getPrice());
+                    skipPrice.remove(itemNamesies);
+                } else if (price != 0) {
+                    Assert.assertEquals(item.getName(), price, item.getPrice());
+                }
+            } else {
+                Assert.assertEquals(item.getName(), 0, price);
+            }
+
+            if (item instanceof Berry) {
+                Berry berry = (Berry)item;
+                Assert.assertEquals(item.getName(), naturalGiftType, berry.naturalGiftType());
+                Assert.assertEquals(item.getName(), naturalGiftPower, berry.naturalGiftPower());
+                Assert.assertNotEquals(item.getName(), Type.NO_TYPE, naturalGiftType);
+                Assert.assertNotEquals(item.getName(), 0, naturalGiftPower);
+            } else {
+                Assert.assertEquals(item.getName(), Type.NO_TYPE, naturalGiftType);
+                Assert.assertEquals(item.getName(), 0, naturalGiftPower);
+            }
+
+            switch (itemType) {
+                case "Battle Effect":
+                    Assert.assertTrue(item.getName(), item instanceof BattleUseItem);
+                    break;
+                case "Miscellaneous":
+                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.MISC);
+                    break;
+                case "Evolutionary":
+                    Assert.assertTrue(item.getName(), item instanceof EvolutionItem);
+                    break;
+                case "Berry":
+                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.BERRY);
+                    break;
+                case "Key Item":
+                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.KEY_ITEM);
+                    break;
+                case "Hold Item":
+                    Assert.assertTrue(item.getName(), item instanceof HoldItem);
+                    break;
+                case "Recovery":
+                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.MEDICINE);
+                    break;
+                case "Pokeball":
+                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.BALL);
+                    break;
+                case "Vitamins":
+                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.STAT);
+                    break;
+                default:
+                    Assert.fail(item.getName() + ": " + itemType);
+                    break;
+            }
+
+            toParse.remove(itemNamesies);
+        }
+
+        Assert.assertTrue(toParse.isEmpty());
+        Assert.assertTrue(skipPrice.isEmpty());
+    }
+
     @Test
     public void swapItemsTest() {
         // Swapping items works differently for wild battles vs trainer battles

@@ -119,5 +119,6 @@ public abstract class GeneratorUpdater {
     public static void updateAll() {
         new MoveUpdater().update();
         new AbilityUpdater().update();
+        new ItemUpdater().update();
     }
 }

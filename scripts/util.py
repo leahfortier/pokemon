@@ -56,14 +56,49 @@ def getTypes(typeImages):
 def normalizeForm(form):
     return re.sub(" Forme?$", "", form).strip()
 
+def replaceSpecial(s):
+    return s.replace(poke, "\u00e9").replace('  ', ' ').replace(rightTick, "'").replace(dashy, "--").replace(leftQuote, "\"").replace(rightQuote, "\"")
+
 # Column indices should be specified as 1-indexed
 def addRowValues(mainTable, rowIndex, values, *columnIndices):
     row = mainTable[rowIndex]
     for columnIndex in columnIndices:
         value = row.xpath('td')[columnIndex - 1].text.strip()
-        value = replaceSpecial(value)
-        values.append(value)
-        print(value)
-        
-def replaceSpecial(s):
-    return s.replace(poke, "\u00e9").replace('  ', ' ').replace(rightTick, "'").replace(dashy, "--").replace(leftQuote, "\"").replace(rightQuote, "\"")
+        addValue(values, value)
+
+def addValue(values, value):
+    value = value.strip()
+    value = replaceSpecial(value)
+    values.append(value)
+    print(value)
+    return value
+
+def getElementText(table, element):
+    text = element.text
+    if not text is None:
+        return text
+    return element.text_content()
+
+def getQueryText(table, query):
+    for querychild in query:
+        text = getElementText(table, querychild)
+        if not text is None:
+            return text
+        for child in querychild.getchildren():
+            text = getElementText(table, child)
+            if not text is None:
+                return text
+
+def checkQueries(table, *queries):
+    for queryString in queries:
+        query = table.xpath(queryString)
+        text = getQueryText(table, query)
+        if not text is None:
+            return text
+
+def checkHeader(table, header):
+    if table.tag == 'table':
+        text = checkQueries(table, 'tr[1]/td/b', 'tr[1]/td', 'thead/tr[1]/td')
+        if not text is None and text == header:
+            return True
+    return False

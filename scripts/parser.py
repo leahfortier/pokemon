@@ -3,6 +3,7 @@
 
 from lxml import html
 import requests
+from util import getQueryText
 
 class Parser:
     def __init__(self, lookupNum):
@@ -91,27 +92,11 @@ class Parser:
         for index, column in enumerate(schema.getchildren()):
             if column.text == columnName:
                 return index
-
-    def getElementText(self, element):
-        text = element.text
-        if not text is None:
-            return text
-        return element.text_content()
-    
-    def getQueryText(self, query):
-        for querychild in query:
-            text = self.getElementText(querychild)
-            if not text is None:
-                return text
-            for child in querychild.getchildren():
-                text = self.getElementText(child)
-                if not text is None:
-                    return text
     
     def checkQueries(self, *queries):
         for queryString in queries:
             query = self.infoTable.xpath(queryString)
-            text = self.getQueryText(query)
+            text = getQueryText(query)
             if not text is None:
                 return text
     
@@ -120,7 +105,6 @@ class Parser:
             text = self.checkQueries('tr[1]/td/b', 'tr[1]/td', 'thead/tr[1]/td')
             if not text is None and text[headerIndex:] == header:
                 return True
-    
         return False
     
     def backup(self):
