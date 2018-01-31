@@ -77,7 +77,7 @@ Absorb Bulb:
     TypeTakeDamageStatIncrease: Water Sp_Attack
 *
 Air Balloon:
-    Int: ConsumableItem, LevitationEffect, TakeDamageEffect, EntryEffect
+    Int: HoldItem, LevitationEffect, TakeDamageEffect, EntryEffect
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. The holder will float in the air until hit. Once hit, this item will burst.
     Price: 200
@@ -260,7 +260,7 @@ Focus Band:
     BraceMessage: bracer.getName() + " held on with its " + this.name + "!"
 *
 Focus Sash:
-    Int: ConsumableItem, BracingEffect
+    Int: HoldItem, BracingEffect
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. If the holder has full HP, it will endure a potential KO attack with 1 HP. The item then disappears.
     Price: 200
@@ -1730,7 +1730,7 @@ Timer Ball:
 *
 Ultra Ball:
     Desc: An ultra-high-performance Pok\u00e9 Ball that provides a higher success rate for catching Pok\u00e9mon than a Great Ball.
-    Price: 1200
+    Price: 800
     FixedCatchRate: 2
 *
 Cheri Berry:

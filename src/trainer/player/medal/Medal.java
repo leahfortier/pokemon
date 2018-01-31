@@ -186,7 +186,7 @@ public enum Medal {
     ELITE_MEDALIST(2, 100, "Elite Medalist", "A Medal commemorating the advance to the Elite Rank as the result of constant efforts in the Medal Rally."),
     MASTER_MEDALIST(3, 150, "Master Medalist", "A Medal commemorating the advance to the Master Rank as the result of constant efforts in the Medal Rally."),
     LEGEND_MEDALIST(4, 200, "Legend Medalist", "A Medal commemorating the advance to the Legend Rank as the result of constant efforts in the Medal Rally."),
-    TOP_MEDALIST(5, -1, "Top Medalist", "An honorable Medal for those who collected all the Medals.");
+    TOP_MEDALIST(5, "Top Medalist", "An honorable Medal for those who collected all the Medals.");
 
     static {
         TOP_MEDALIST.threshold = values().length - 1;

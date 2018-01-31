@@ -1025,7 +1025,7 @@ TypeTakeDamageStatIncrease:
 			victim.consumeItem(b);
 		}
 		###
-	AddInterface: ConsumableItem
+	AddInterface: HoldItem
 	AddInterface: TakeDamageEffect
 *
 ChoiceItem:
@@ -1274,7 +1274,6 @@ Revive:
 		p.healHealthFraction({1});
 
 		Messages.add(p.getName() + " was {2} revived!");
-
 		return true;
 		###
 *
@@ -1773,16 +1772,16 @@ NewTerrain:
 	Header: void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain)
 *
 TerrainSeed:
-	AddInterface: ConsumableItem
+	AddInterface: HoldItem
 	AddInterface: TerrainCastEffect
 	AddMapField: NewTerrain:
 		if (newTerrain == TerrainType.{11} && p.getStages().modifyStage(p, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
 			p.consumeItem(b);
 		}
 		###
-	AddMapField: Comments: // TODO: Still have not confirmed fling damage
 	AddMapField: Price: 4000
 	AddMapField: Cat: Misc
+    AddMapField: Fling: 10
 *
 FormChange:
 	AddMapField: Irrestealable: True
@@ -1839,7 +1838,7 @@ WeatherExtendingItem:
 		###
 	AddInterface: HoldItem
 	AddMapField: Cat: Misc
-	AddMapField: Price: 200
+	AddMapField: Price: 4000
 *
 WeatherExtendingEffect:
 	Header: int getExtensionTurns(EffectNamesies weatherType)

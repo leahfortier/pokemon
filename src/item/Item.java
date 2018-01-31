@@ -48,7 +48,6 @@ import item.berry.HealthTriggeredBerry;
 import item.berry.HealthTriggeredStageIncreaseBerry;
 import item.berry.StatusBerry;
 import item.berry.SuperEffectivePowerReduceBerry;
-import item.hold.ConsumableItem;
 import item.hold.EVItem;
 import item.hold.HoldItem;
 import item.hold.IncenseItem;
@@ -250,7 +249,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
     }
 
-    static class AbsorbBulb extends Item implements ConsumableItem, TakeDamageEffect {
+    static class AbsorbBulb extends Item implements HoldItem, TakeDamageEffect {
         private static final long serialVersionUID = 1L;
 
         AbsorbBulb() {
@@ -266,7 +265,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
     }
 
-    static class AirBalloon extends Item implements ConsumableItem, LevitationEffect, TakeDamageEffect, EntryEffect {
+    static class AirBalloon extends Item implements HoldItem, LevitationEffect, TakeDamageEffect, EntryEffect {
         private static final long serialVersionUID = 1L;
 
         AirBalloon() {
@@ -382,7 +381,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
     }
 
-    static class CellBattery extends Item implements ConsumableItem, TakeDamageEffect {
+    static class CellBattery extends Item implements HoldItem, TakeDamageEffect {
         private static final long serialVersionUID = 1L;
 
         CellBattery() {
@@ -522,7 +521,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         DampRock() {
             super(ItemNamesies.DAMP_ROCK, "An item to be held by a Pok\u00e9mon. It extends the duration of the move Rain Dance when used by the holder.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -541,7 +540,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         HeatRock() {
             super(ItemNamesies.HEAT_ROCK, "An item to be held by a Pok\u00e9mon. It extends the duration of the move Sunny Day when used by the holder.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -560,7 +559,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         IcyRock() {
             super(ItemNamesies.ICY_ROCK, "An item to be held by a Pok\u00e9mon. It extends the duration of the move Hail when used by the holder.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -579,7 +578,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         SmoothRock() {
             super(ItemNamesies.SMOOTH_ROCK, "An item to be held by a Pok\u00e9mon. It extends the duration of the move Sandstorm when used by the holder.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -723,7 +722,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
     }
 
-    static class FocusSash extends Item implements ConsumableItem, BracingEffect {
+    static class FocusSash extends Item implements HoldItem, BracingEffect {
         private static final long serialVersionUID = 1L;
 
         FocusSash() {
@@ -961,7 +960,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
     }
 
-    static class LuminousMoss extends Item implements ConsumableItem, TakeDamageEffect {
+    static class LuminousMoss extends Item implements HoldItem, TakeDamageEffect {
         private static final long serialVersionUID = 1L;
 
         LuminousMoss() {
@@ -1517,7 +1516,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
     }
 
-    static class Snowball extends Item implements ConsumableItem, TakeDamageEffect {
+    static class Snowball extends Item implements HoldItem, TakeDamageEffect {
         private static final long serialVersionUID = 1L;
 
         Snowball() {
@@ -3553,7 +3552,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             p.healHealthFraction(.5);
 
             Messages.add(p.getName() + " was partially revived!");
-
             return true;
         }
     }
@@ -3578,7 +3576,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             p.healHealthFraction(1);
 
             Messages.add(p.getName() + " was fully revived!");
-
             return true;
         }
     }
@@ -3603,7 +3600,6 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
             p.healHealthFraction(1);
 
             Messages.add(p.getName() + " was fully revived!");
-
             return true;
         }
     }
@@ -4314,7 +4310,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         UltraBall() {
             super(ItemNamesies.ULTRA_BALL, "An ultra-high-performance Pok\u00e9 Ball that provides a higher success rate for catching Pok\u00e9mon than a Great Ball.", BagCategory.BALL);
-            super.price = 1200;
+            super.price = 800;
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
@@ -5858,13 +5854,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
     }
 
-    // TODO: Still have not confirmed fling damage
-    static class ElectricSeed extends Item implements ConsumableItem, TerrainCastEffect {
+    static class ElectricSeed extends Item implements HoldItem, TerrainCastEffect {
         private static final long serialVersionUID = 1L;
 
         ElectricSeed() {
             super(ItemNamesies.ELECTRIC_SEED, "An item to be held by a Pok\u00e9mon. It boosts Defense on Electric Terrain. It can only be used once.", BagCategory.MISC);
             super.price = 4000;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 10;
         }
 
         @Override
@@ -5875,13 +5875,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
     }
 
-    // TODO: Still have not confirmed fling damage
-    static class GrassySeed extends Item implements ConsumableItem, TerrainCastEffect {
+    static class GrassySeed extends Item implements HoldItem, TerrainCastEffect {
         private static final long serialVersionUID = 1L;
 
         GrassySeed() {
             super(ItemNamesies.GRASSY_SEED, "An item to be held by a Pok\u00e9mon. It boosts Defense on Grassy Terrain. It can only be used once.", BagCategory.MISC);
             super.price = 4000;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 10;
         }
 
         @Override
@@ -5892,13 +5896,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
     }
 
-    // TODO: Still have not confirmed fling damage
-    static class MistySeed extends Item implements ConsumableItem, TerrainCastEffect {
+    static class MistySeed extends Item implements HoldItem, TerrainCastEffect {
         private static final long serialVersionUID = 1L;
 
         MistySeed() {
             super(ItemNamesies.MISTY_SEED, "An item to be held by a Pok\u00e9mon. It boosts Sp. Def on Misty Terrain. It can only be used once.", BagCategory.MISC);
             super.price = 4000;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 10;
         }
 
         @Override
@@ -5909,13 +5917,17 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
     }
 
-    // TODO: Still have not confirmed fling damage
-    static class PsychicSeed extends Item implements ConsumableItem, TerrainCastEffect {
+    static class PsychicSeed extends Item implements HoldItem, TerrainCastEffect {
         private static final long serialVersionUID = 1L;
 
         PsychicSeed() {
             super(ItemNamesies.PSYCHIC_SEED, "An item to be held by a Pok\u00e9mon. It boosts Sp. Def on Psychic Terrain. It can only be used once.", BagCategory.MISC);
             super.price = 4000;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 10;
         }
 
         @Override
