@@ -1307,7 +1307,7 @@ XStageIncrease:
 	AddInterface: HoldItem
 	AddInterface: BattleUseItem
 	AddMapField: BattleUse:
-		return p.getStages().modifyStage(p, 1, Stat.{00}, b, CastSource.USE_ITEM);
+		return p.getStages().modifyStage(p, 2, Stat.{00}, b, CastSource.USE_ITEM);
 		###
 *
 EVIncrease:
