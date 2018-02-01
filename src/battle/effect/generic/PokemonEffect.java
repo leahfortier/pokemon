@@ -30,6 +30,7 @@ import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
+import battle.effect.generic.EffectInterfaces.ItemBlockerEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
@@ -2831,7 +2832,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
     }
 
-    static class Embargo extends PokemonEffect implements PassableEffect {
+    static class Embargo extends PokemonEffect implements PassableEffect, ItemBlockerEffect {
         private static final long serialVersionUID = 1L;
 
         Embargo() {
@@ -2845,7 +2846,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return victim.getName() + " can't use items now!";
+            return victim.getName() + " can't use items!";
         }
 
         @Override

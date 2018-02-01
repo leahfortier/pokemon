@@ -1109,8 +1109,8 @@ PerishSong:
         ###
 *
 Embargo:
-    Int: PassableEffect
-    CastMessage: victim.getName() + " can't use items now!"
+    Int: PassableEffect, ItemBlockerEffect
+    CastMessage: victim.getName() + " can't use items!"
     NumTurns: 5
     SubsideMessage: victim.getName() + " can use items again!"
 *

@@ -31,6 +31,7 @@ import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.EntryEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
+import battle.effect.generic.EffectInterfaces.ItemBlockerEffect;
 import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MaxLevelWildEncounterEffect;
@@ -40,6 +41,7 @@ import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
+import battle.effect.generic.EffectInterfaces.OpponentItemBlockerEffect;
 import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.OpponentStatusReceivedEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTakeDamageEffect;
@@ -3035,7 +3037,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
     }
 
-    static class Klutz extends Ability {
+    static class Klutz extends Ability implements ItemBlockerEffect {
         private static final long serialVersionUID = 1L;
 
         Klutz() {
@@ -3177,7 +3179,7 @@ public abstract class Ability implements Serializable, AbilityHolder {
         }
     }
 
-    static class Unnerve extends Ability implements EntryEffect {
+    static class Unnerve extends Ability implements EntryEffect, OpponentItemBlockerEffect {
         private static final long serialVersionUID = 1L;
 
         Unnerve() {
@@ -3187,6 +3189,11 @@ public abstract class Ability implements Serializable, AbilityHolder {
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer).getName() + " too nervous to eat berries!");
+        }
+
+        @Override
+        public boolean blockItem(Battle b, ActivePokemon p, ItemNamesies item) {
+            return item.getItem() instanceof Berry;
         }
     }
 

@@ -1761,6 +1761,40 @@ public final class EffectInterfaces {
         }
     }
 
+    public interface ItemBlockerEffect {
+
+        static boolean containsItemBlockerEffect(Battle b, ActivePokemon p) {
+            List<Object> invokees = b.getEffectsList(p);
+            for (Object invokee : invokees) {
+                if (invokee instanceof ItemBlockerEffect && Effect.isActiveEffect(invokee)) {
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
+    public interface OpponentItemBlockerEffect {
+        boolean blockItem(Battle b, ActivePokemon opp, ItemNamesies item);
+
+        static boolean checkOpponentItemBlockerEffect(Battle b, ActivePokemon opp, ItemNamesies item) {
+            List<Object> invokees = b.getEffectsList(opp);
+            for (Object invokee : invokees) {
+                if (invokee instanceof OpponentItemBlockerEffect && Effect.isActiveEffect(invokee)) {
+
+                    OpponentItemBlockerEffect effect = (OpponentItemBlockerEffect)invokee;
+                    if (effect.blockItem(b, opp, item)) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
+
     public interface PassableEffect {
     }
 

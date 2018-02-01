@@ -1062,6 +1062,20 @@ PowerCountMove:
 			###
 	*
 ***
+ItemBlockerEffect:
+    Method:
+        Parameters: Battle b, ActivePokemon p
+        Invoke: Contains
+        EffectList: p
+    *
+***
+OpponentItemBlockerEffect:
+    Method:
+        Header: boolean blockItem(Battle b, ActivePokemon opp, ItemNamesies item)
+        Invoke: Check true
+        EffectList: opp
+    *
+***
 PassableEffect:
 ***
 DefiniteEscape:

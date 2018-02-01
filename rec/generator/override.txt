@@ -1783,6 +1783,10 @@ TerrainSeed:
 	AddMapField: Cat: Misc
     AddMapField: Fling: 10
 *
+BlockItem:
+    AddInterface: OpponentItemBlockerEffect
+    Header: boolean blockItem(Battle b, ActivePokemon p, ItemNamesies item)
+*
 FormChange:
 	AddMapField: Irrestealable: True
 	AddMapField: Irreplaceable: True

@@ -5,6 +5,8 @@ import battle.Battle;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
+import battle.effect.generic.EffectInterfaces.ItemBlockerEffect;
+import battle.effect.generic.EffectInterfaces.OpponentItemBlockerEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
@@ -206,7 +208,7 @@ public abstract class BattleEffect extends Effect {
         }
     }
 
-    static class MagicRoom extends BattleEffect {
+    static class MagicRoom extends BattleEffect implements ItemBlockerEffect {
         private static final long serialVersionUID = 1L;
 
         MagicRoom() {

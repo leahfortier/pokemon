@@ -1234,6 +1234,7 @@ Sticky Hold:
 *
 Klutz:
     Desc: The Pok\u00e9mon can't use any held items.
+    Int: ItemBlockerEffect
 *
 Unburden:
     Desc: Boosts the Speed stat if the Pok\u00e9mon's held item is used or lost.
@@ -1335,6 +1336,9 @@ Unnerve:
     Int: EntryEffect
     Enter:
         Messages.add(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer).getName() + " too nervous to eat berries!");
+        ###
+    BlockItem:
+        return item.getItem() instanceof Berry;
         ###
 *
 Honey Gather:

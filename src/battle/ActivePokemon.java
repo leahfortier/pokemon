@@ -15,10 +15,12 @@ import battle.effect.generic.EffectInterfaces.DamageTakenEffect;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
+import battle.effect.generic.EffectInterfaces.ItemBlockerEffect;
 import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
+import battle.effect.generic.EffectInterfaces.OpponentItemBlockerEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
 import battle.effect.generic.EffectInterfaces.StallingEffect;
 import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
@@ -728,8 +730,7 @@ public class ActivePokemon extends PartyPokemon {
             return getActualHeldItem();
         }
 
-        // TODO: Make effect interface for this
-        if (hasAbility(AbilityNamesies.KLUTZ) || b.hasEffect(EffectNamesies.MAGIC_ROOM) || hasEffect(EffectNamesies.EMBARGO)) {
+        if (ItemBlockerEffect.containsItemBlockerEffect(b, this)) {
             return ItemNamesies.NO_ITEM.getItem();
         }
 
@@ -737,7 +738,7 @@ public class ActivePokemon extends PartyPokemon {
         PokemonEffect changeItem = getEffect(EffectNamesies.CHANGE_ITEM);
         Item item = changeItem == null ? getActualHeldItem() : ((ItemHolder)changeItem).getItem();
 
-        if (item instanceof Berry && b.getOtherPokemon(this).hasAbility(AbilityNamesies.UNNERVE)) {
+        if (OpponentItemBlockerEffect.checkOpponentItemBlockerEffect(b, b.getOtherPokemon(this), item.namesies())) {
             return ItemNamesies.NO_ITEM.getItem();
         }
 

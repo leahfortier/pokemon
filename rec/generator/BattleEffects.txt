@@ -54,6 +54,7 @@ TrickRoom:
     SpecialRoom: trick switch speeds
 *
 MagicRoom:
+    Int: ItemBlockerEffect
     SpecialRoom: magic prevent using items
 *
 MistyTerrain:

@@ -2,6 +2,7 @@ package generator.interfaces;
 
 import generator.AccessModifier;
 import generator.format.MethodInfo;
+import util.GeneralUtils;
 import util.StringAppender;
 import util.StringUtils;
 
@@ -177,8 +178,7 @@ abstract class InvokeMethod {
 
         CheckInvoke(final Scanner invokeInput) {
             super();
-
-            this.check = invokeInput.nextBoolean();
+            this.check = GeneralUtils.parseBoolean(invokeInput.next());
         }
 
         @Override
