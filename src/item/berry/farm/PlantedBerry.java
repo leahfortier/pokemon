@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 public class PlantedBerry implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final Berry berry;
     private final long timestamp;
 

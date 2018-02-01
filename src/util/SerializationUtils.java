@@ -8,6 +8,7 @@ import main.Global;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -40,12 +41,12 @@ public class SerializationUtils {
                    .replaceAll("\\\\t", "\t");
     }
 
-    public static Object deserializeFromFile(String fileName) {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
+    public static Object deserializeFromFile(File file) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
             return in.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            Global.error("Error deserializing from file " + fileName + ": " + e.getMessage());
-            return fileName;
+            Global.error("Error deserializing from file " + file.getName() + ": " + e.getMessage());
+            return file;
         }
     }
 

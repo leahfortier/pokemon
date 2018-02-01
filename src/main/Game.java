@@ -15,7 +15,6 @@ import message.Messages;
 import pattern.map.MapTransitionMatcher;
 import pokemon.PokemonNamesies;
 import trainer.player.Player;
-import save.Save;
 
 import java.awt.Graphics;
 import java.util.ArrayDeque;
@@ -120,9 +119,10 @@ public class Game {
         currentViewMode = currentView.peek().getViewModel();
     }
 
-    public void loadSave(int index) {
-        player = Save.load(index);
-        setViews();
+    public void loadPlayer(Player loadedPlayer) {
+        player = loadedPlayer;
+        this.setViews();
+        this.setViewMode(ViewMode.MAP_VIEW);
     }
 
     public void newSave(int index) {

@@ -3,7 +3,7 @@ package util;
 public abstract class FileName {
     public static final String POKEMON_INFO = Folder.REC + "pokemoninfo.txt";
 
-    public static final String SAVE_SETTINGS = Folder.SAVES + "settings.txt";
+    public static final String SAVE_SETTINGS = Folder.SAVES + "settings.ser";
 
     public static final String BASE_EVOLUTIONS = Folder.GENERATOR + "BaseEvolutions.txt";
     public static final String FONT_METRICS = Folder.GENERATOR + "fontMetrics.txt";

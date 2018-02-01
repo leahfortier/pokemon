@@ -11,6 +11,8 @@ import trainer.player.Player;
 import java.io.Serializable;
 
 public class FlyLocation implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final MapName mapName;
     private final AreaData area;
 

@@ -31,12 +31,12 @@ class OptionsState implements VisualStateHandler {
 
         switch (pressed) {
             case 0: // theme
-                view.toggleTheme();
-                view.saveSettings();
+                view.getSettings().toggleTheme();
+                view.getSettings().save();
                 break;
             case 1: // mute
                 SoundPlayer.instance().toggleMusic();
-                view.saveSettings();
+                view.getSettings().save();
                 break;
             case 2: // credits
                 view.setVisualState(VisualState.CREDITS);

@@ -7,14 +7,15 @@ import gui.view.View;
 import gui.view.ViewMode;
 import input.ControlKey;
 import input.InputControl;
+import main.Game;
+import save.SaveInfo;
+import save.Settings;
 import sound.SoundPlayer;
 import util.FileIO;
 import util.Folder;
 import util.FontMetrics;
-import util.GeneralUtils;
+import util.PokeString;
 import util.TimeUtils;
-import save.Save;
-import save.SavePreviewInfo;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -29,9 +30,9 @@ public class MainMenuView extends View {
     private static final BufferedImage MAIN_LOGO = FileIO.readImage(Folder.IMAGES + "MainLogo.png");
 
     private VisualState state;
-    private Theme theme;
+    private Settings settings;
 
-    private SavePreviewInfo[] saveInfo;
+    private SaveInfo[] saveInfo;
 
     private int selectedButton;
     private boolean musicStarted = false;
@@ -45,18 +46,14 @@ public class MainMenuView extends View {
         bgTime = 0;
         bgIndex = 0;
 
-        theme = Save.loadSettings();
-        saveInfo = Save.updateSaveData();
+        settings = Settings.load();
+        saveInfo = SaveInfo.updateSaveData();
 
         state = VisualState.MAIN;
     }
 
-    void toggleTheme() {
-        theme = GeneralUtils.wrapIncrementValue(Theme.values(), theme.ordinal(), 1);
-    }
-
-    void saveSettings() {
-        Save.saveSettings(this.theme);
+    Settings getSettings() {
+        return this.settings;
     }
 
     int getPressed(Button[] buttons) {
@@ -87,8 +84,12 @@ public class MainMenuView extends View {
         return this.saveInfo[saveNum] != null;
     }
 
+    void loadSave(int index) {
+        Game.instance().loadPlayer(this.saveInfo[index].getPlayer());
+    }
+
     void reloadSaveInfo() {
-        this.saveInfo = Save.updateSaveData();
+        this.saveInfo = SaveInfo.updateSaveData();
     }
 
     @Override
@@ -115,6 +116,7 @@ public class MainMenuView extends View {
 
     @Override
     public void draw(Graphics g) {
+        Theme theme = settings.getTheme();
         theme.draw(g, bgTime, bgIndex);
 
         g.drawImage(MAIN_LOGO, 95, 54, null);
@@ -128,7 +130,7 @@ public class MainMenuView extends View {
 
     void drawSaveInformation(Graphics g, Button b, int index, String emptyText) {
         g.setColor(Color.BLACK);
-        SavePreviewInfo info = saveInfo[index];
+        SaveInfo info = saveInfo[index];
 
         if (info != null) {
             g.translate(b.x, b.y);
@@ -144,7 +146,7 @@ public class MainMenuView extends View {
             g.drawString("Badges:", 16, 58);
             TextUtils.drawRightAlignedString(g, "" + info.getBadges(), 189, 58);
 
-            g.drawString("Pokedex:", 210, 58);
+            g.drawString(PokeString.POKEDEX + ":", 210, 58);
             TextUtils.drawRightAlignedString(g, "" + info.getPokemonSeen(), 383, 58);
 
             g.translate(-b.x, -b.y);
@@ -161,7 +163,7 @@ public class MainMenuView extends View {
     @Override
     public void movedToFront() {
         setVisualState(VisualState.MAIN);
-        saveInfo = Save.updateSaveData();
+        saveInfo = SaveInfo.updateSaveData();
     }
 
     static Button createMenuButton(int index) {

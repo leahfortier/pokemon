@@ -2,9 +2,7 @@ package gui.view.mainmenu;
 
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
-import gui.view.ViewMode;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
-import main.Game;
 import map.Direction;
 import save.Save;
 
@@ -94,8 +92,7 @@ class LoadSaveState implements VisualStateHandler {
                     Save.deleteSave(pressed); // TODO: ask to delete first
                     view.reloadSaveInfo();
                 } else {
-                    Game.instance().loadSave(pressed);
-                    Game.instance().setViewMode(ViewMode.MAP_VIEW);
+                    view.loadSave(pressed);
                 }
             }
         }
