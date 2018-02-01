@@ -162,7 +162,7 @@ public class Player extends PlayerTrainer implements Serializable {
     }
 
     public void toggleBicycle() {
-        this.isBiking = !this.isBiking && this.hasTool(OverworldTool.BIKE);
+        this.isBiking = !this.isBiking && this.getBag().hasItem(ItemNamesies.BICYCLE);
 
         if (this.isBiking) {
             this.medalCase.increase(MedalTheme.BICYCLE_COUNT);

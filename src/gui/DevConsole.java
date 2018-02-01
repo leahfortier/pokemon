@@ -283,5 +283,8 @@ public class DevConsole {
         for (OverworldTool tool : OverworldTool.values()) {
             player.addGlobal(tool.getGlobalName());
         }
+        player.getBag().addItem(ItemNamesies.BICYCLE);
+        player.getBag().addItem(ItemNamesies.FISHING_ROD);
+        player.getBag().addItem(ItemNamesies.SURFBOARD);
     }
 }

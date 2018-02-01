@@ -33,41 +33,20 @@ No Item:
 *
 # KEY_ITEMs
 Syrup:
-    Int: PlayerUseItem
     Cat: Key_Item
     Desc: A mysterious bottle of syrup. Maybe it will be useful some day.
-    PlayerUse:
-        return false;
-        ###
 *
 Bicycle:
-    Int: PlayerUseItem
     Cat: Key_Item
     Desc: A folding Bike that enables a rider to get around much faster than with Running Shoes.
-    PlayerUse:
-        // TODO: if (Can ride bike) Set the bike as a 'currentlyUsing' item
-        // May need to make this take in info on the route
-        return false;
-        ###
 *
 Surfboard:
-    Int: PlayerUseItem
     Cat: Key_Item
     Desc: A fancy shmancy surfboard that lets you be RADICAL DUDE!
-    PlayerUse:
-        // TODO: DOESN'T DO SHIT
-        return false;
-        ###
 *
 Fishing Rod:
-    Int: PlayerUseItem
     Cat: Key_Item
     Desc: A multi-purpose, do-it-all kind of fishing rod. The kind you can use wherever you want. Except on land.
-    PlayerUse:
-        // TODO: if (spot in front of player is a fishing spot) Set as 'currentlyUsing'
-        // May need to make this take in info on the route
-        return false;
-        ###
 *
 # HoldItems
 Absorb Bulb:

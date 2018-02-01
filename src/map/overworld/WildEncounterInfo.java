@@ -1,6 +1,7 @@
 package map.overworld;
 
 import battle.ActivePokemon;
+import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
 import battle.effect.generic.EffectInterfaces.WildEncounterSelector;
 import main.Game;
 import pokemon.PokemonNamesies;
@@ -48,7 +49,15 @@ public class WildEncounterInfo {
         return this.probability;
     }
 
-    public static WildEncounterInfo getWildEncounterInfo(WildEncounterInfo[] wildEncounters) {
+    public static WildEncounter getWildEncounter(ActivePokemon playerFront, WildEncounterInfo[] wildEncounters) {
+        WildEncounterInfo encounterInfo = getWildEncounterInfo(wildEncounters);
+        WildEncounter encounter = new WildEncounter(encounterInfo);
+        WildEncounterAlterer.invokeWildEncounterAlterer(playerFront, encounterInfo, encounter);
+
+        return encounter;
+    }
+
+    private static WildEncounterInfo getWildEncounterInfo(WildEncounterInfo[] wildEncounters) {
         ActivePokemon front = Game.getPlayer().front();
         WildEncounterInfo forcedEncounter = WildEncounterSelector.getForcedWildEncounter(front, wildEncounters);
         if (forcedEncounter != null) {

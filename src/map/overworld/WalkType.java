@@ -1,5 +1,6 @@
 package map.overworld;
 
+import item.ItemNamesies;
 import main.Game;
 import map.Direction;
 import map.PathDirection;
@@ -13,7 +14,7 @@ public enum WalkType {
     NOT_WALKABLE(0x000000, false),
     WALKABLE(0xFFFFFF, true),
     // TODO: Might break NPCs walking from land to water...
-    WATER(0x0000FF, direction -> Game.getPlayer().hasTool(OverworldTool.SURF)),
+    WATER(0x0000FF, direction -> Game.getPlayer().getBag().hasItem(ItemNamesies.SURFBOARD)),
     DOWN_LEDGE(0x00FF00, Direction.DOWN),
     UP_LEDGE(0xFF0000, Direction.UP),
     LEFT_LEDGE(0xFFFF00, Direction.LEFT),

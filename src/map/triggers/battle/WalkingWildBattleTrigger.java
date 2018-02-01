@@ -3,7 +3,6 @@ package map.triggers.battle;
 import battle.ActivePokemon;
 import battle.effect.generic.EffectInterfaces.EncounterRateMultiplier;
 import battle.effect.generic.EffectInterfaces.RepellingEffect;
-import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
 import main.Game;
 import map.overworld.EncounterRate;
 import map.overworld.WildEncounter;
@@ -57,11 +56,7 @@ public class WalkingWildBattleTrigger extends Trigger {
             return legendaryEncounter;
         }
 
-        WildEncounterInfo encounterInfo = WildEncounterInfo.getWildEncounterInfo(this.wildEncounters);
-        WildEncounter encounter = new WildEncounter(encounterInfo);
-        WildEncounterAlterer.invokeWildEncounterAlterer(playerFront, encounterInfo, encounter);
-
-        return encounter;
+        return WildEncounterInfo.getWildEncounter(playerFront, this.wildEncounters);
     }
 
     // Returns a legendary encounter if applicable and null otherwise

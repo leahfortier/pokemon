@@ -192,60 +192,35 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
         }
     }
 
-    static class Syrup extends Item implements PlayerUseItem {
+    static class Syrup extends Item {
         private static final long serialVersionUID = 1L;
 
         Syrup() {
             super(ItemNamesies.SYRUP, "A mysterious bottle of syrup. Maybe it will be useful some day.", BagCategory.KEY_ITEM);
         }
-
-        @Override
-        public boolean use() {
-            return false;
-        }
     }
 
-    static class Bicycle extends Item implements PlayerUseItem {
+    static class Bicycle extends Item {
         private static final long serialVersionUID = 1L;
 
         Bicycle() {
             super(ItemNamesies.BICYCLE, "A folding Bike that enables a rider to get around much faster than with Running Shoes.", BagCategory.KEY_ITEM);
         }
-
-        @Override
-        public boolean use() {
-            // TODO: if (Can ride bike) Set the bike as a 'currentlyUsing' item
-            // May need to make this take in info on the route
-            return false;
-        }
     }
 
-    static class Surfboard extends Item implements PlayerUseItem {
+    static class Surfboard extends Item {
         private static final long serialVersionUID = 1L;
 
         Surfboard() {
             super(ItemNamesies.SURFBOARD, "A fancy shmancy surfboard that lets you be RADICAL DUDE!", BagCategory.KEY_ITEM);
         }
-
-        @Override
-        public boolean use() {
-            // TODO: DOESN'T DO SHIT
-            return false;
-        }
     }
 
-    static class FishingRod extends Item implements PlayerUseItem {
+    static class FishingRod extends Item {
         private static final long serialVersionUID = 1L;
 
         FishingRod() {
             super(ItemNamesies.FISHING_ROD, "A multi-purpose, do-it-all kind of fishing rod. The kind you can use wherever you want. Except on land.", BagCategory.KEY_ITEM);
-        }
-
-        @Override
-        public boolean use() {
-            // TODO: if (spot in front of player is a fishing spot) Set as 'currentlyUsing'
-            // May need to make this take in info on the route
-            return false;
         }
     }
 

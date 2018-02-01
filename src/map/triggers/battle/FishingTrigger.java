@@ -1,9 +1,9 @@
 package map.triggers.battle;
 
 import battle.ActivePokemon;
+import item.ItemNamesies;
 import main.Game;
-import map.condition.Condition;
-import map.overworld.OverworldTool;
+import map.overworld.WildEncounter;
 import map.overworld.WildEncounterInfo;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
@@ -23,7 +23,7 @@ public class FishingTrigger extends Trigger {
     private final WildEncounterInfo[] wildEncounters;
 
     public FishingTrigger(String matcherJson, String condition) {
-        super(TriggerType.FISHING, matcherJson, Condition.and(condition, OverworldTool.FISH.getGlobalName()));
+        super(TriggerType.FISHING, matcherJson, condition);
 
         FishingMatcher matcher = SerializationUtils.deserializeJson(matcherJson, FishingMatcher.class);
         this.wildEncounters = matcher.getWildEncounters();
@@ -33,13 +33,18 @@ public class FishingTrigger extends Trigger {
     protected void executeTrigger() {
         Player player = Game.getPlayer();
 
+        // TODO: This should be back in the condition in the constructor if that gets refactored or anything
+        if (!player.getBag().hasItem(ItemNamesies.FISHING_ROD)) {
+            return;
+        }
+
         ActivePokemon front = player.front();
         int chance = front.hasAbility(AbilityNamesies.SUCTION_CUPS) || front.hasAbility(AbilityNamesies.STICKY_HOLD)
                 ? 75 // I made up this number since I couldn't find it
                 : 50;
 
         if (RandomUtils.chanceTest(chance)) {
-            WildEncounterInfo wildPokemon = WildEncounterInfo.getWildEncounterInfo(this.wildEncounters);
+            WildEncounter wildPokemon = WildEncounterInfo.getWildEncounter(front, this.wildEncounters);
             String pokemonJson = SerializationUtils.getJson(wildPokemon);
 
             GroupTriggerMatcher matcher = new GroupTriggerMatcher(
