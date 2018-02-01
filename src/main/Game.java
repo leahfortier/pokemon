@@ -15,7 +15,7 @@ import message.Messages;
 import pattern.map.MapTransitionMatcher;
 import pokemon.PokemonNamesies;
 import trainer.player.Player;
-import util.save.Save;
+import save.Save;
 
 import java.awt.Graphics;
 import java.util.ArrayDeque;

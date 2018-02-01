@@ -1698,6 +1698,7 @@ Repeat Ball:
 Safari Ball:
     Desc: A special Pok\u00e9 Ball that is used only in the Safari Zone. It is recognizable by the camouflage pattern decorating it.
     FixedCatchRate: 1.5
+    Price: 0
 *
 Timer Ball:
     BallItem: True

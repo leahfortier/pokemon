@@ -35,36 +35,6 @@ public class ItemTest extends BaseTest {
         toParse.remove(ItemNamesies.RUBY);
         toParse.removeIf(itemNamesies -> itemNamesies.getItem() instanceof TechnicalMachine);
 
-        // Serebii has the wrong values for these, and I manually looked up in Bulbapedia instead (which is more accurate but way harder to parse)
-        Set<ItemNamesies> skipPrice = EnumSet.of(
-                ItemNamesies.BRIGHT_POWDER,
-                ItemNamesies.FLAME_ORB,
-                ItemNamesies.TOXIC_ORB,
-                ItemNamesies.SAFETY_GOGGLES,
-                ItemNamesies.BLACK_BELT,
-                ItemNamesies.BLACK_GLASSES,
-                ItemNamesies.CHARCOAL,
-                ItemNamesies.DRAGON_FANG,
-                ItemNamesies.HARD_STONE,
-                ItemNamesies.MAGNET,
-                ItemNamesies.METAL_COAT,
-                ItemNamesies.MIRACLE_SEED,
-                ItemNamesies.MYSTIC_WATER,
-                ItemNamesies.NEVER_MELT_ICE,
-                ItemNamesies.POISON_BARB,
-                ItemNamesies.SHARP_BEAK,
-                ItemNamesies.SILK_SCARF,
-                ItemNamesies.SILVER_POWDER,
-                ItemNamesies.SOFT_SAND,
-                ItemNamesies.SPELL_TAG,
-                ItemNamesies.TWISTED_SPOON,
-                ItemNamesies.PRETTY_WING,
-                ItemNamesies.FULL_HEAL,
-                ItemNamesies.POTION,
-                ItemNamesies.SACRED_ASH,
-                ItemNamesies.RAZZ_BERRY // Except this one -- this is legit
-        );
-
         for (ItemParser itemParser : new ItemUpdater().getParseItems()) {
             ItemNamesies itemNamesies = itemParser.itemNamesies;
             String itemType = itemParser.itemType;
@@ -85,15 +55,18 @@ public class ItemTest extends BaseTest {
             }
 
             if (item.getBagCategory() != BagCategory.KEY_ITEM) {
-                if (skipPrice.contains(itemNamesies)) {
-                    Assert.assertNotEquals(item.getName(), 0, price);
-                    Assert.assertNotEquals(item.getName(), price, item.getPrice());
-                    skipPrice.remove(itemNamesies);
-                } else if (price != 0) {
-                    Assert.assertEquals(item.getName(), price, item.getPrice());
+                // Serebii has the wrong values for these, and I manually looked up in Bulbapedia instead (which is more accurate but way harder to parse)
+                // Just gonna leave this commented out since it's annoying and who cares
+//                TestUtils.semiAssertTrue(StringUtils.spaceSeparated(item.getName(), price, item.getPrice()), price == item.getPrice());
+
+                if (itemNamesies == ItemNamesies.MASTER_BALL || itemNamesies == ItemNamesies.SAFARI_BALL) {
+                    Assert.assertEquals(item.getName(), 0, item.getPrice());
+                } else {
+                    Assert.assertTrue(item.getName(), item.getPrice() > 0);
                 }
             } else {
                 Assert.assertEquals(item.getName(), 0, price);
+                Assert.assertEquals(item.getName(), -1, item.getPrice());
             }
 
             if (item instanceof Berry) {
@@ -144,7 +117,6 @@ public class ItemTest extends BaseTest {
         }
 
         Assert.assertTrue(toParse.isEmpty());
-        Assert.assertTrue(skipPrice.isEmpty());
     }
 
     @Test

@@ -9,7 +9,7 @@ import pokemon.Stat;
 import trainer.player.Player;
 import trainer.player.medal.Medal;
 import trainer.player.medal.MedalCase;
-import util.save.Save;
+import save.Save;
 
 import java.util.EnumSet;
 import java.util.Set;

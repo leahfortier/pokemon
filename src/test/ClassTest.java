@@ -105,7 +105,7 @@ import trainer.Trainer;
 import trainer.WildPokemon;
 import type.Type;
 import util.GeneralUtils;
-import util.save.Save;
+import save.Save;
 
 import java.io.File;
 import java.io.IOException;

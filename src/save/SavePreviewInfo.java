@@ -1,4 +1,4 @@
-package util.save;
+package save;
 
 import java.util.Scanner;
 

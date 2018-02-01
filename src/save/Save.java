@@ -1,4 +1,4 @@
-package util.save;
+package save;
 
 import gui.view.mainmenu.Theme;
 import main.Game;
@@ -89,8 +89,8 @@ public final class Save {
                 SoundPlayer.instance().setMuted(true);
             }
         } else {
-            // Set to basic if no settings are currently saved
-            theme = Theme.BASIC;
+            // Set to scenic if no settings are currently saved
+            theme = Theme.SCENIC;
             Save.saveSettings(theme);
         }
 

@@ -5,7 +5,7 @@ import main.Game;
 import message.Messages;
 import message.Messages.MessageState;
 import util.PokeString;
-import util.save.Save;
+import save.Save;
 
 import java.util.function.Supplier;
 

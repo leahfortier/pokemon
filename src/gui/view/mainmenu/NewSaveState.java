@@ -4,7 +4,7 @@ import draw.button.Button;
 import gui.view.ViewMode;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
 import main.Game;
-import util.save.Save;
+import save.Save;
 
 import java.awt.Graphics;
 

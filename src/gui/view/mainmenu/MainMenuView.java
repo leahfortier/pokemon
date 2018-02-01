@@ -13,8 +13,8 @@ import util.Folder;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.TimeUtils;
-import util.save.Save;
-import util.save.SavePreviewInfo;
+import save.Save;
+import save.SavePreviewInfo;
 
 import java.awt.Color;
 import java.awt.Graphics;

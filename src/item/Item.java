@@ -4256,6 +4256,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         SafariBall() {
             super(ItemNamesies.SAFARI_BALL, "A special Pok\u00e9 Ball that is used only in the Safari Zone. It is recognizable by the camouflage pattern decorating it.", BagCategory.BALL);
+            super.price = 0;
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
