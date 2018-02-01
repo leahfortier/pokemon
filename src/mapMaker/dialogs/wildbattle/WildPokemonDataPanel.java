@@ -21,8 +21,6 @@ class WildPokemonDataPanel extends JPanel {
 
     private PokemonProbabilityListener probabilityListener;
 
-    private int minLevel;
-    private int maxLevel;
     private int probability;
 
     WildPokemonDataPanel(WildEncounterInfo wildEncounter) {
@@ -78,16 +76,11 @@ class WildPokemonDataPanel extends JPanel {
         this.probabilityListener = listener;
     }
 
-    public void setMinAndMaxLevel(int minLevel, int maxLevel) {
-        this.minLevel = minLevel;
-        this.maxLevel = maxLevel;
-    }
-
     public boolean isSelected() {
         return this.selectedCheckBox.isSelected();
     }
 
-    WildEncounterInfo getWildEncounter() {
+    WildEncounterInfo getWildEncounter(int minLevel, int maxLevel) {
         String pokemon = pokemonTextField.getText();
         String probability = probabilityFormattedTextField.getText();
 

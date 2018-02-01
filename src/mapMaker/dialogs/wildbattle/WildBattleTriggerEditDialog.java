@@ -164,18 +164,15 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
         EncounterRate encounterRate = (EncounterRate)encounterRateComboBox.getSelectedItem();
         int minLevel = Integer.parseInt(lowLevelFormattedTextField.getText());
         int maxLevel = Integer.parseInt(highLevelFormattedTextField.getText());
-        this.updatePokemonPanelsWithLevels(minLevel, maxLevel);
         List<WildEncounterInfo> wildEncounters = wildPokemonPanels
                 .stream()
-                .map(WildPokemonDataPanel::getWildEncounter)
+                .map(panel -> panel.getWildEncounter(minLevel, maxLevel))
                 .collect(Collectors.toList());
         String condition = Condition.and(timeOfDayPanel.getCondition(), conditionTextField.getText());
 
         WildBattleMatcher matcher = new WildBattleMatcher(
                 name,
                 encounterRate,
-                minLevel,
-                maxLevel,
                 wildEncounters
         );
         matcher.setCondition(condition);
@@ -191,21 +188,21 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
         nameTextField.setText(matcher.getName());
         encounterRateComboBox.setSelectedItem(matcher.getEncounterRate());
         conditionTextField.setText(matcher.getCondition());
-        lowLevelFormattedTextField.setValue(matcher.getMinLevel());
-        highLevelFormattedTextField.setValue(matcher.getMaxLevel());
 
+        int minLevel = PartyPokemon.MAX_LEVEL;
+        int maxLevel = 1;
         for (WildEncounterInfo wildEncounter : matcher.getWildEncounters()) {
             probabilitySum += wildEncounter.getProbability();
             addPokemonPanel(wildEncounter);
+
+            minLevel = Math.min(minLevel, wildEncounter.getMinLevel());
+            maxLevel = Math.max(maxLevel, wildEncounter.getMaxLevel());
         }
 
-        this.pokemonProbabilitySumLabel.setText(String.valueOf(probabilitySum));
-    }
+        lowLevelFormattedTextField.setValue(minLevel);
+        highLevelFormattedTextField.setValue(maxLevel);
 
-    private void updatePokemonPanelsWithLevels(int minLevel, int maxLevel) {
-        for (WildPokemonDataPanel wildPokemonDataPanel : this.wildPokemonPanels) {
-            wildPokemonDataPanel.setMinAndMaxLevel(minLevel, maxLevel);
-        }
+        pokemonProbabilitySumLabel.setText(String.valueOf(probabilitySum));
     }
 
     @Override

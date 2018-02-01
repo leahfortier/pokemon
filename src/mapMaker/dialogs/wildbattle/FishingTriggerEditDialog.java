@@ -96,13 +96,12 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
         String name = this.getNameField(nameTextField, this.getDefaultName());
         int minLevel = Integer.parseInt(lowLevelFormattedTextField.getText());
         int maxLevel = Integer.parseInt(highLevelFormattedTextField.getText());
-        this.updatePokemonPanelsWithLevels(minLevel, maxLevel);
         List<WildEncounterInfo> wildEncounters = wildPokemonPanels
                 .stream()
-                .map(WildPokemonDataPanel::getWildEncounter)
+                .map(panel -> panel.getWildEncounter(minLevel, maxLevel))
                 .collect(Collectors.toList());
 
-        return new FishingMatcher(name, minLevel, maxLevel, wildEncounters);
+        return new FishingMatcher(name, wildEncounters);
     }
 
     private void load(FishingMatcher matcher) {
@@ -111,16 +110,17 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
         }
 
         nameTextField.setText(matcher.getBasicName());
-        lowLevelFormattedTextField.setValue(matcher.getMinLevel());
-        highLevelFormattedTextField.setValue(matcher.getMaxLevel());
+
+        int minLevel = PartyPokemon.MAX_LEVEL;
+        int maxLevel = 1;
         for (WildEncounterInfo wildEncounter : matcher.getWildEncounters()) {
             addPokemonPanel(wildEncounter);
-        }
-    }
 
-    private void updatePokemonPanelsWithLevels(int minLevel, int maxLevel) {
-        for (WildPokemonDataPanel wildPokemonDataPanel : this.wildPokemonPanels) {
-            wildPokemonDataPanel.setMinAndMaxLevel(minLevel, maxLevel);
+            minLevel = Math.min(minLevel, wildEncounter.getMinLevel());
+            maxLevel = Math.max(maxLevel, wildEncounter.getMaxLevel());
         }
+
+        lowLevelFormattedTextField.setValue(minLevel);
+        highLevelFormattedTextField.setValue(maxLevel);
     }
 }

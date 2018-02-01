@@ -301,8 +301,6 @@
               "probability": 10
             }
           ],
-          "minLevel": 4,
-          "maxLevel": 6,
           "condition": ":time_of_day:DAWN:|:time_of_day:DAY:|:time_of_day:DUSK:"
         },
         {
@@ -370,8 +368,6 @@
               "probability": 5
             }
           ],
-          "minLevel": 4,
-          "maxLevel": 6,
           "condition": ":time_of_day:NIGHT:"
         }
       ],

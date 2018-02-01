@@ -327,8 +327,6 @@
   "fishingSpots": [
     {
       "name": "Fishing Spot 0",
-      "minLevel": 5,
-      "maxLevel": 10,
       "wildPokemon": [
         {
           "pokemon": "CHINCHOU",

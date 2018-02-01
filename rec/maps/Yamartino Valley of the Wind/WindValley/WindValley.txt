@@ -232,9 +232,7 @@
               "maxLevel": 10,
               "probability": 10
             }
-          ],
-          "minLevel": 6,
-          "maxLevel": 10
+          ]
         }
       ],
       "location": [
@@ -2606,9 +2604,7 @@
               "maxLevel": 11,
               "probability": 5
             }
-          ],
-          "minLevel": 7,
-          "maxLevel": 11
+          ]
         }
       ],
       "location": [

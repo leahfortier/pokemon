@@ -8,23 +8,15 @@ import java.util.List;
 
 public class FishingMatcher extends MultiPointTriggerMatcher {
     private String name;
-    private int minLevel;
-    private int maxLevel;
     private WildEncounterInfo[] wildPokemon;
 
-    public FishingMatcher(String name, int minLevel, int maxLevel, WildEncounterInfo[] wildEncounters) {
+    public FishingMatcher(String name, WildEncounterInfo[] wildEncounters) {
         this.name = name;
-        this.minLevel = minLevel;
-        this.maxLevel = maxLevel;
         this.wildPokemon = wildEncounters;
     }
 
-    public FishingMatcher(String name, int minLevel, int maxLevel, List<WildEncounterInfo> wildEncounters) {
-        this(name, minLevel, maxLevel, wildEncounters.toArray(new WildEncounterInfo[0]));
-    }
-
-    public FishingMatcher(String name, WildEncounterInfo[] wildEncounters) {
-        this(name, 0, 0, wildEncounters);
+    public FishingMatcher(String name, List<WildEncounterInfo> wildEncounters) {
+        this(name, wildEncounters.toArray(new WildEncounterInfo[0]));
     }
 
     public WildEncounterInfo[] getWildEncounters() {
@@ -39,13 +31,5 @@ public class FishingMatcher extends MultiPointTriggerMatcher {
     @Override
     public String getBasicName() {
         return name;
-    }
-
-    public int getMinLevel() {
-        return this.minLevel;
-    }
-
-    public int getMaxLevel() {
-        return this.maxLevel;
     }
 }
