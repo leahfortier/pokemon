@@ -487,6 +487,11 @@ public abstract class Attack implements InvokeEffect, Serializable {
     public void startTurn(Battle b, ActivePokemon me) {}
 
     @Override
+    public InvokeSource getSource() {
+        return InvokeSource.ATTACK;
+    }
+
+    @Override
     public String toString() {
         return this.getName();
     }

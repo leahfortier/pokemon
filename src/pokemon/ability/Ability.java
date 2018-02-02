@@ -122,13 +122,18 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
     }
 
     @Override
-    public String toString() {
-        return this.getName();
+    public Ability getAbility() {
+        return this;
     }
 
     @Override
-    public Ability getAbility() {
-        return this;
+    public InvokeSource getSource() {
+        return InvokeSource.ABILITY;
+    }
+
+    @Override
+    public String toString() {
+        return this.getName();
     }
 
     public AbilityNamesies namesies() {

@@ -366,6 +366,9 @@ WeatherBlockerEffect:
 TrappingEffect:
 	Comments: // Any effect that implements this will prevent a Pokemon with said effect from escaping battle
 	Method:
+		Header: String trappingMessage(ActivePokemon trapped)
+	*
+	Method:
 		Header: boolean trapped(Battle b, ActivePokemon escaper)
 		Default:
 			// Ghost-type Pokemon can always escape
@@ -374,9 +377,6 @@ TrappingEffect:
 		Invoke: CheckMessage true trappingMessage(escaper)
 		InvokeName: isTrapped
 		EffectList: escaper
-	*
-	Method:
-		Header: String trappingMessage(ActivePokemon trapped)
 	*
 ***
 OpponentTrappingEffect:
@@ -1082,11 +1082,38 @@ OpponentItemBlockerEffect:
 			###
     *
 ***
-PassableEffect:
+StallingEffect:
+    Method:
+        Invoke: Contains
+        Parameters: Battle b, ActivePokemon p
+        EffectList: p
+    *
 ***
 DefiniteEscape:
+    Extends: InvokeEffect
+    Method:
+        Header: String getEscapeMessage(Battle b, ActivePokemon sourcerer)
+        Default:
+            CastSource source = this.getSource().getCastSource();
+            if (source.hasSourceName()) {
+                return sourcerer.getName() + "'s " + source.getSourceName(b, sourcerer) + " allowed it to escape!";
+            }
+
+            return "Got away safely!";
+            ###
+    *
+    Method:
+        Header: boolean canEscape()
+        Default:
+            return true;
+            ###
+        Parameters: Battle b, ActivePokemon p
+        EffectList: p
+        Invoke: CheckMessage true getEscapeMessage(b, p)
+        InvokeName: canDefinitelyEscape
+    *
 ***
-StallingEffect:
+PassableEffect:
 ***
 TerrainEffect:
 ***

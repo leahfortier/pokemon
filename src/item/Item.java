@@ -114,13 +114,18 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
     }
 
     @Override
-    public String toString() {
-        return this.getName();
+    public InvokeSource getSource() {
+        return InvokeSource.ITEM;
     }
 
     @Override
     public int compareTo(Item o) {
         return this.name.compareTo(o.name);
+    }
+
+    @Override
+    public String toString() {
+        return this.getName();
     }
 
     public boolean isUsable() {

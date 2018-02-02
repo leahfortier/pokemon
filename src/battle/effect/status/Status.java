@@ -78,6 +78,11 @@ public abstract class Status implements InvokeEffect, Serializable {
 
     public void setTurns(int turns) {}
 
+    @Override
+    public InvokeSource getSource() {
+        return InvokeSource.EFFECT;
+    }
+
     public static void removeStatus(Battle b, ActivePokemon victim, CastSource source) {
         Status status = victim.getStatus();
         victim.removeStatus();

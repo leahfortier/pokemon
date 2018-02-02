@@ -419,7 +419,7 @@ public class Player extends PlayerTrainer implements Serializable {
             // I've decided that the next line of code is the best line in this entire codebase
             int datCash = opp.getDatCashMoney()*(hasEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE) ? 2 : 1);
             Messages.add(getName() + " received " + datCash + " pokedollars for winning! Woo!");
-            getDatCashMoney(datCash);
+            this.getDatCashMoney(datCash);
         } else {
             Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.WIN_BATTLE));
         }

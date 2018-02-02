@@ -9,6 +9,9 @@ import gui.view.battle.VisualState;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
+import message.MessageUpdate;
+import message.MessageUpdateType;
+import message.Messages;
 import trainer.TrainerAction;
 import trainer.player.Player;
 
@@ -65,7 +68,9 @@ public class MenuState implements VisualStateHandler {
         // Attempt escape
         else if (getButton(MenuChoice.RUN).checkConsumePress()) {
             view.setVisualState(VisualState.MESSAGE);
-            currentBattle.runAway();
+            if (currentBattle.runAway()) {
+                Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
+            }
             view.cycleMessage(false);
         }
         // Show Fight View TODO: Semi-invulnerable moves look awful and weird

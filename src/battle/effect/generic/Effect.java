@@ -113,6 +113,11 @@ public abstract class Effect implements InvokeEffect, Serializable {
     }
 
     @Override
+    public InvokeSource getSource() {
+        return InvokeSource.EFFECT;
+    }
+
+    @Override
     public String toString() {
         return this.getName() + " " + this.getTurns();
     }
@@ -134,9 +139,5 @@ public abstract class Effect implements InvokeEffect, Serializable {
 
     public static boolean removeEffect(List<? extends Effect> effects, EffectNamesies effectToRemove) {
         return effects.removeIf(effect -> effect.namesies() == effectToRemove);
-    }
-
-    public static boolean isActiveEffect(Object object) {
-        return !(object instanceof Effect) || ((Effect)object).isActive();
     }
 }

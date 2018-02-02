@@ -19,6 +19,7 @@ import battle.effect.generic.EffectInterfaces.OpponentPowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.SemiInvulnerableBypasser;
+import battle.effect.generic.EffectInterfaces.StallingEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
@@ -390,17 +391,19 @@ public class Battle implements Serializable {
     }
 
     public boolean runAway() {
-        escapeAttempts++;
-
         if (opponent instanceof Trainer) {
             Messages.add("There's no running from a trainer battle!");
             return false;
         }
 
+        escapeAttempts++;
+
         ActivePokemon plyr = player.front();
         ActivePokemon opp = opponent.front();
 
-        if (!plyr.canEscape(this)) {
+        if (DefiniteEscape.canDefinitelyEscape(this, plyr)) {
+            return true;
+        } else if (!plyr.canEscape(this)) {
             return false;
         }
 
@@ -408,11 +411,8 @@ public class Battle implements Serializable {
         int oSpeed = Stat.getStat(Stat.SPEED, opp, plyr, this);
 
         int val = (int)((pSpeed*32.0)/(oSpeed/4.0) + 30.0*escapeAttempts);
-        if (RandomUtils.chanceTest(val, 256) ||
-                plyr.getAbility() instanceof DefiniteEscape || // TODO: This is wrong and should be able to escape even with mean look and such
-                plyr.getHeldItem(this) instanceof DefiniteEscape) { // TODO: Why is this only checking ability and hold item
+        if (RandomUtils.chanceTest(val, 256)) {
             Messages.add("Got away safely!");
-            Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
             return true;
         }
 
@@ -771,8 +771,8 @@ public class Battle implements Serializable {
         boolean reverse = hasEffect(EffectNamesies.TRICK_ROOM);
 
         // Pokemon that are stalling go last, if both are stalling, the slower one goes first
-        boolean pStall = plyr.isStalling(this);
-        boolean oStall = opp.isStalling(this);
+        boolean pStall = StallingEffect.containsStallingEffect(this, plyr);
+        boolean oStall = StallingEffect.containsStallingEffect(this, opp);
 
         if (pStall && oStall) {
             reverse = true;

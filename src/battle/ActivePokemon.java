@@ -23,7 +23,6 @@ import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.OpponentItemBlockerEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
-import battle.effect.generic.EffectInterfaces.StallingEffect;
 import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.generic.EffectInterfaces.TrappingEffect;
 import battle.effect.generic.EffectNamesies;
@@ -411,12 +410,6 @@ public class ActivePokemon extends PartyPokemon {
     @Override
     public boolean canFight() {
         return !this.isActuallyDead();
-    }
-
-    // Returns if the Pokemon is stalling -- that is that it will move last within its priority bracket
-    public boolean isStalling(Battle b) {
-        // TODO: Why is this only checking ability and item?
-        return getAbility() instanceof StallingEffect || getHeldItem(b) instanceof StallingEffect;
     }
 
     public boolean hasAbility(AbilityNamesies a) {
