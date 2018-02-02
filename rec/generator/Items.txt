@@ -52,7 +52,7 @@ Fishing Rod:
 Absorb Bulb:
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. It boosts Sp. Atk if hit with a Water-type attack. It can only be used once.
-    Price: 200
+    Price: 4000
     TypeTakeDamageStatIncrease: Water Sp_Attack
 *
 Air Balloon:

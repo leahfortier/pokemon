@@ -2,6 +2,7 @@ package battle.effect.status;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.InvokeEffect;
 import battle.effect.MessageGetter;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
@@ -15,7 +16,7 @@ import pokemon.PartyPokemon;
 
 import java.io.Serializable;
 
-public abstract class Status implements Serializable {
+public abstract class Status implements InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;
 
     private final StatusCondition statusCondition;

@@ -7,6 +7,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
+import battle.effect.InvokeEffect;
 import battle.effect.attack.AbilityChanger;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.generic.CastSource;
@@ -109,7 +110,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class Ability implements Serializable, AbilityHolder {
+public abstract class Ability implements AbilityHolder, InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;
 
     protected final AbilityNamesies namesies;

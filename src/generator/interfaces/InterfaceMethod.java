@@ -149,7 +149,7 @@ class InterfaceMethod {
         final String effectListParameter = fields.getAndRemoveTrimmed(EFFECT_LIST);
         if (effectListParameter != null) {
             this.invokeeDeclaration = String.format(
-                    "List<Object> invokees = %s.getEffectsList(%s",
+                    "List<InvokeEffect> invokees = %s.getEffectsList(%s",
                     this.battleParameter, effectListParameter
             );
 
@@ -170,7 +170,7 @@ class InterfaceMethod {
         if (statInvokeAttack != null) {
             setInvokeeDeclaration(
                     "// Only add the attack when checking a defensive stat -- this means the other pokemon is the one currently attacking\n" +
-                            "List<Object> invokees = " + this.battleParameter + ".getEffectsList(" + statInvokeAttack + ");\n" +
+                            "List<InvokeEffect> invokees = " + this.battleParameter + ".getEffectsList(" + statInvokeAttack + ");\n" +
                             "if (!s.user()) {\n" +
                             "invokees.add(" + statInvokeAttack + ".getAttack());\n" +
                             "}\n"
@@ -180,7 +180,7 @@ class InterfaceMethod {
         final String nonBattleInvokees = fields.getAndRemoveTrimmed(NON_BATTLE_EFFECTS);
         if (nonBattleInvokees != null) {
             setInvokeeDeclaration(
-                    "List<Object> invokees = new ArrayList<>();\n" +
+                    "List<InvokeEffect> invokees = new ArrayList<>();\n" +
                             "invokees.add(" + nonBattleInvokees + ".getAbility());\n" +
                             "invokees.add(" + nonBattleInvokees + ".getActualHeldItem());\n"
             );
@@ -194,7 +194,7 @@ class InterfaceMethod {
         // TODO: Eventually would just like to remove the invokee loop for this case and just operate directly on the attack
         final String moveInvoke = fields.getAndRemoveTrimmed(MOVE);
         if (moveInvoke != null) {
-            setInvokeeDeclaration(String.format("List<Object> invokees = Collections.singletonList(%s.getAttack());", moveInvoke));
+            setInvokeeDeclaration(String.format("List<InvokeEffect> invokees = Collections.singletonList(%s.getAttack());", moveInvoke));
         }
 
         final String updateField = fields.getAndRemoveTrimmed(UPDATE);

@@ -2,6 +2,7 @@ package battle.attack;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.InvokeEffect;
 import battle.effect.attack.AbilityChanger;
 import battle.effect.attack.ChangeAttackTypeSource;
 import battle.effect.attack.ChangeTypeSource;
@@ -81,7 +82,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class Attack implements Serializable {
+public abstract class Attack implements InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;
 
     private AttackNamesies namesies;

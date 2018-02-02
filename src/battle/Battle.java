@@ -1,6 +1,7 @@
 package battle;
 
 import battle.attack.MoveType;
+import battle.effect.InvokeEffect;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
@@ -564,11 +565,15 @@ public class Battle implements Serializable {
         return isPlayer ? player.getEffects() : opponent.getEffects();
     }
 
-    public List<Object> getEffectsList(ActivePokemon p, Object... additionalItems) {
-        List<Object> list = new ArrayList<>();
+    public List<InvokeEffect> getEffectsList(ActivePokemon p, InvokeEffect... additionalItems) {
+        return this.getEffectsList(p, true, additionalItems);
+    }
+
+    public List<InvokeEffect> getEffectsList(ActivePokemon p, boolean includeItem, InvokeEffect... additionalItems) {
+        List<InvokeEffect> list = new ArrayList<>();
         Collections.addAll(list, additionalItems);
 
-        list.addAll(p.getAllEffects(this));
+        list.addAll(p.getAllEffects(this, includeItem));
         list.addAll(getEffects(p));
         list.addAll(getEffects());
         list.add(weather);

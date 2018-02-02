@@ -6,6 +6,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
+import battle.effect.InvokeEffect;
 import battle.effect.MessageGetter;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
@@ -92,7 +93,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Item implements Comparable<Item>, Serializable, ItemInterface {
+public abstract class Item implements ItemInterface, InvokeEffect, Comparable<Item>, Serializable {
     private static final long serialVersionUID = 1L;
 
     protected ItemNamesies namesies;
@@ -229,7 +230,7 @@ public abstract class Item implements Comparable<Item>, Serializable, ItemInterf
 
         AbsorbBulb() {
             super(ItemNamesies.ABSORB_BULB, "An item to be held by a Pok\u00e9mon. It boosts Sp. Atk if hit with a Water-type attack. It can only be used once.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override

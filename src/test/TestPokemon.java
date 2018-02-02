@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import item.ItemNamesies;
 import org.junit.Assert;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
@@ -15,6 +16,8 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class TestPokemon extends ActivePokemon {
+    private static final long serialVersionUID = 1L;
+
     public TestPokemon(final PokemonNamesies pokemon, final boolean isWild, final boolean isPlayer) {
         this(pokemon, 100, isWild, isPlayer);
     }
@@ -30,6 +33,11 @@ public class TestPokemon extends ActivePokemon {
 
     public TestPokemon withAbility(AbilityNamesies ability) {
         super.setAbility(ability);
+        return this;
+    }
+
+    public TestPokemon withItem(ItemNamesies item) {
+        super.giveItem(item);
         return this;
     }
 

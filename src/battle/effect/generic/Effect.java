@@ -2,6 +2,7 @@ package battle.effect.generic;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.InvokeEffect;
 import main.Global;
 import message.Messages;
 import util.RandomUtils;
@@ -10,7 +11,7 @@ import util.StringUtils;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class Effect implements Serializable {
+public abstract class Effect implements InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final String DEFAULT_FAIL_MESSAGE = "...but it failed!";

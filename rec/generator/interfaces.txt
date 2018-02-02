@@ -39,7 +39,7 @@ EndTurnEffect:
 		Deadsies: victim
 		SetInvokees:
 			// Weather is handled separately
-			List<Object> invokees = b.getEffectsList(victim);
+			List<InvokeEffect> invokees = b.getEffectsList(victim);
 			invokees.remove(b.getWeather());
 			###
 	*
@@ -218,7 +218,7 @@ NameChanger:
 		Header: String getNameChange()
 		Invoke: Get
 		InvokeParameters: ActivePokemon p
-		SetInvokees: List<Object> invokees = Collections.singletonList(p.getAbility());
+		SetInvokees: List<InvokeEffect> invokees = Collections.singletonList(p.getAbility());
 		InvokeName: getChangedName
 	*
 	Method:
@@ -985,7 +985,7 @@ SwitchOutEffect:
 		Header: void switchOut(ActivePokemon switchee)
 		Invoke: Void
 		SetInvokees:
-			List<Object> invokees = switchee.getAllEffects(null);
+			List<InvokeEffect> invokees = switchee.getAllEffects(null);
 			###
 	*
 ***
@@ -1066,14 +1066,20 @@ ItemBlockerEffect:
     Method:
         Parameters: Battle b, ActivePokemon p
         Invoke: Contains
-        EffectList: p
+        SetInvokees:
+			// Don't include the item because then it's all like ahhhhhh
+			List<InvokeEffect> invokees = b.getEffectsList(p, false);
+			###
     *
 ***
 OpponentItemBlockerEffect:
     Method:
         Header: boolean blockItem(Battle b, ActivePokemon opp, ItemNamesies item)
         Invoke: Check true
-        EffectList: opp
+        SetInvokees:
+			// Don't include the item because then it's all like ahhhhhh
+			List<InvokeEffect> invokees = b.getEffectsList(opp, false);
+			###
     *
 ***
 PassableEffect:

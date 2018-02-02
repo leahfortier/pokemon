@@ -17,6 +17,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
+import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import test.BaseTest;
 import test.TestPokemon;
@@ -259,5 +260,38 @@ public class ItemTest extends BaseTest {
         attacking.giveItem(ItemNamesies.MENTAL_HERB);
         battle.attackingFight(AttackNamesies.SPLASH);
         Assert.assertFalse(attacking.hasEffect(EffectNamesies.CONFUSION));
+    }
+
+    @Test
+    public void itemBlockerTest() {
+        itemBlockerTest(true, new TestInfo());
+
+        // Klutz only affects the user
+        itemBlockerTest(true, new TestInfo().attacking(AbilityNamesies.KLUTZ));
+        itemBlockerTest(false, new TestInfo().defending(AbilityNamesies.KLUTZ));
+
+        // Embargo only affects the victim
+        itemBlockerTest(false, new TestInfo().attackingFight(AttackNamesies.EMBARGO));
+        itemBlockerTest(true, new TestInfo().defendingFight(AttackNamesies.EMBARGO));
+
+        // Magic Room affects everyone
+        itemBlockerTest(false, new TestInfo().attackingFight(AttackNamesies.MAGIC_ROOM));
+        itemBlockerTest(false, new TestInfo().defendingFight(AttackNamesies.MAGIC_ROOM));
+    }
+
+    private void itemBlockerTest(boolean success, TestInfo testInfo) {
+        TestBattle battle = testInfo.defending(PokemonNamesies.SQUIRTLE).createBattle();
+        TestPokemon defending = battle.getDefending().withItem(ItemNamesies.ABSORB_BULB);
+
+        testInfo.manipulate(battle);
+
+        battle.fight(AttackNamesies.WATER_GUN, AttackNamesies.ENDURE);
+
+        TestStages stages = new TestStages();
+        if (success) {
+            stages.setStage(Stat.SP_ATTACK, 1);
+        }
+
+        stages.test(defending);
     }
 }

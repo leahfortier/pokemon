@@ -30,11 +30,11 @@ public class BreedingTest extends BaseTest {
 
     @Test
     public void testCanBreed() {
-        ActivePokemon maleRapidash = getParent(PokemonNamesies.RAPIDASH, Gender.MALE);
-        ActivePokemon femaleRapidash = getParent(PokemonNamesies.RAPIDASH, Gender.FEMALE);
-        ActivePokemon femaleNinetales = getParent(PokemonNamesies.NINETALES, Gender.FEMALE);
-        ActivePokemon ditto = getParent(PokemonNamesies.DITTO, Gender.GENDERLESS);
-        ActivePokemon magnemite = getParent(PokemonNamesies.MAGNEMITE, Gender.GENDERLESS);
+        TestPokemon maleRapidash = getParent(PokemonNamesies.RAPIDASH, Gender.MALE);
+        TestPokemon femaleRapidash = getParent(PokemonNamesies.RAPIDASH, Gender.FEMALE);
+        TestPokemon femaleNinetales = getParent(PokemonNamesies.NINETALES, Gender.FEMALE);
+        TestPokemon ditto = getParent(PokemonNamesies.DITTO, Gender.GENDERLESS);
+        TestPokemon magnemite = getParent(PokemonNamesies.MAGNEMITE, Gender.GENDERLESS);
 
         Assert.assertTrue(ditto.canBreed());
         Assert.assertTrue(magnemite.canBreed());
@@ -47,13 +47,13 @@ public class BreedingTest extends BaseTest {
 
     @Test
     public void testCannotBreed() {
-        ActivePokemon maleRapidash = getParent(PokemonNamesies.RAPIDASH, Gender.MALE);
-        ActivePokemon femaleDragonair = getParent(PokemonNamesies.DRAGONAIR, Gender.FEMALE);
-        ActivePokemon ditto = getParent(PokemonNamesies.DITTO, Gender.GENDERLESS);
-        ActivePokemon magnemite = getParent(PokemonNamesies.MAGNEMITE, Gender.GENDERLESS);
-        ActivePokemon mew = getParent(PokemonNamesies.MEW, Gender.GENDERLESS);
-        ActivePokemon togepi = getParent(PokemonNamesies.TOGEPI, Gender.MALE);
-        ActivePokemon togetic = getParent(PokemonNamesies.TOGETIC, Gender.FEMALE);
+        TestPokemon maleRapidash = getParent(PokemonNamesies.RAPIDASH, Gender.MALE);
+        TestPokemon femaleDragonair = getParent(PokemonNamesies.DRAGONAIR, Gender.FEMALE);
+        TestPokemon ditto = getParent(PokemonNamesies.DITTO, Gender.GENDERLESS);
+        TestPokemon magnemite = getParent(PokemonNamesies.MAGNEMITE, Gender.GENDERLESS);
+        TestPokemon mew = getParent(PokemonNamesies.MEW, Gender.GENDERLESS);
+        TestPokemon togepi = getParent(PokemonNamesies.TOGEPI, Gender.MALE);
+        TestPokemon togetic = getParent(PokemonNamesies.TOGETIC, Gender.FEMALE);
         Eggy eggy = new Eggy(PokemonNamesies.EXEGGCUTE);
 
         Assert.assertFalse(togepi.canBreed());
@@ -69,8 +69,8 @@ public class BreedingTest extends BaseTest {
 
     @Test
     public void testBaseEvolution() {
-        ActivePokemon mommy = getParent(PokemonNamesies.RAPIDASH, Gender.FEMALE);
-        ActivePokemon daddy = getParent(PokemonNamesies.RAPIDASH, Gender.MALE);
+        TestPokemon mommy = getParent(PokemonNamesies.RAPIDASH, Gender.FEMALE);
+        TestPokemon daddy = getParent(PokemonNamesies.RAPIDASH, Gender.MALE);
         Eggy baby = getBaby(mommy, daddy);
 
         // Mommy and daddy Rapidash -> baby Ponyta
@@ -93,8 +93,8 @@ public class BreedingTest extends BaseTest {
     // TODO: Add more cases -- make sure TM that is in level up moves is not learned
     @Test
     public void testEggMoves() {
-        ActivePokemon mommy = getParentWithMoves(PokemonNamesies.RAPIDASH, Gender.FEMALE, AttackNamesies.MORNING_SUN);
-        ActivePokemon daddy = getParentWithMoves(PokemonNamesies.NINETALES, Gender.MALE,
+        TestPokemon mommy = getParentWithMoves(PokemonNamesies.RAPIDASH, Gender.FEMALE, AttackNamesies.MORNING_SUN);
+        TestPokemon daddy = getParentWithMoves(PokemonNamesies.NINETALES, Gender.MALE,
                                                  AttackNamesies.HYPNOSIS,
                                                  AttackNamesies.SOLAR_BEAM,
                                                  AttackNamesies.FLAMETHROWER
@@ -112,8 +112,8 @@ public class BreedingTest extends BaseTest {
 
     @Test
     public void testIncense() {
-        ActivePokemon mommy = getParentWithItem(PokemonNamesies.WOBBUFFET, Gender.FEMALE, ItemNamesies.LAX_INCENSE);
-        ActivePokemon daddy = getParent(PokemonNamesies.WOBBUFFET, Gender.MALE);
+        TestPokemon mommy = getParent(PokemonNamesies.WOBBUFFET, Gender.FEMALE).withItem(ItemNamesies.LAX_INCENSE);
+        TestPokemon daddy = getParent(PokemonNamesies.WOBBUFFET, Gender.MALE);
         Eggy baby = getBaby(mommy, daddy);
 
         // Wobby mom with incense + daddy wobby = wynaut baby
@@ -125,14 +125,14 @@ public class BreedingTest extends BaseTest {
         // Without holding the incense should be a wobby baby
         Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.WOBBUFFET));
 
-        mommy.giveItem(ItemNamesies.SEA_INCENSE);
-        daddy.giveItem(ItemNamesies.ROSE_INCENSE);
+        mommy.withItem(ItemNamesies.SEA_INCENSE);
+        daddy.withItem(ItemNamesies.ROSE_INCENSE);
         baby = getBaby(mommy, daddy);
 
         // Holding incorrect incense should be a wobby baby
         Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.WOBBUFFET));
 
-        mommy = getParentWithItem(PokemonNamesies.DITTO, Gender.GENDERLESS, ItemNamesies.LAX_INCENSE);
+        mommy = getParent(PokemonNamesies.DITTO, Gender.GENDERLESS).withItem(ItemNamesies.LAX_INCENSE);
         baby = getBaby(mommy, daddy);
 
         // Ditto mom with incense + daddy wobby = wynaut baby
@@ -141,8 +141,8 @@ public class BreedingTest extends BaseTest {
 
     @Test
     public void testEverstone() {
-        final ActivePokemon mommy = getParent(PokemonNamesies.RAPIDASH, Gender.FEMALE);
-        final ActivePokemon daddy = getParentWithItem(PokemonNamesies.RAPIDASH, Gender.MALE, ItemNamesies.EVERSTONE);
+        final TestPokemon mommy = getParent(PokemonNamesies.RAPIDASH, Gender.FEMALE);
+        final TestPokemon daddy = getParent(PokemonNamesies.RAPIDASH, Gender.MALE).withItem(ItemNamesies.EVERSTONE);
         final Eggy baby = getBaby(mommy, daddy);
 
         Assert.assertEquals(getFailMessage(mommy, daddy, baby), daddy.getNature(), baby.getNature());
@@ -163,8 +163,8 @@ public class BreedingTest extends BaseTest {
         // Destiny knot passes down five IVs
         testIvInheritance(new InheritanceRules() {
             @Override
-            public void updateParents(ActivePokemon mommy, ActivePokemon daddy) {
-                mommy.giveItem(ItemNamesies.DESTINY_KNOT);
+            public void updateParents(TestPokemon mommy, TestPokemon daddy) {
+                mommy.withItem(ItemNamesies.DESTINY_KNOT);
             }
 
             @Override
@@ -176,13 +176,13 @@ public class BreedingTest extends BaseTest {
         // Power items pass down IV for a specific stat
         testIvInheritance(new InheritanceRules() {
             @Override
-            public void updateParents(ActivePokemon mommy, ActivePokemon daddy) {
-                mommy.giveItem(ItemNamesies.POWER_LENS);
-                daddy.giveItem(ItemNamesies.POWER_ANKLET);
+            public void updateParents(TestPokemon mommy, TestPokemon daddy) {
+                mommy.withItem(ItemNamesies.POWER_LENS);
+                daddy.withItem(ItemNamesies.POWER_ANKLET);
             }
 
             @Override
-            public boolean assertTrueCondition(ActivePokemon mommy, ActivePokemon daddy, Eggy baby) {
+            public boolean assertTrueCondition(TestPokemon mommy, TestPokemon daddy, Eggy baby) {
                 // Power lens passes down the Special attack stat
                 // Power anklet passes down the Speed stat
                 return hasEqualIVs(mommy, daddy, baby, Stat.SP_ATTACK) && hasEqualIVs(mommy, daddy, baby, Stat.SPEED);
@@ -203,8 +203,8 @@ public class BreedingTest extends BaseTest {
         boolean[][] hasParent = new boolean[MatchType.values().length][Stat.NUM_STATS];
 
         for (int i = 0; i < 1000; i++) {
-            ActivePokemon mommy = getParent(PokemonNamesies.RAPIDASH, Gender.FEMALE);
-            ActivePokemon daddy = getParent(PokemonNamesies.RAPIDASH, Gender.MALE);
+            TestPokemon mommy = getParent(PokemonNamesies.RAPIDASH, Gender.FEMALE);
+            TestPokemon daddy = getParent(PokemonNamesies.RAPIDASH, Gender.MALE);
             rules.updateParents(mommy, daddy);
 
             Eggy baby = getBaby(mommy, daddy);
@@ -250,18 +250,11 @@ public class BreedingTest extends BaseTest {
         return TestPokemon.newPlayerPokemon(pokemon).withGender(gender);
     }
 
-    private static TestPokemon getParentWithItem(final PokemonNamesies pokemon, final Gender gender, final ItemNamesies item) {
-        TestPokemon parent = getParent(pokemon, gender);
-        parent.giveItem(item);
-
-        return parent;
-    }
-
     private static TestPokemon getParentWithMoves(final PokemonNamesies pokemon, final Gender gender, final AttackNamesies... moves) {
         return getParent(pokemon, gender).withMoves(moves);
     }
 
-    private static Eggy getBaby(ActivePokemon mommy, ActivePokemon daddy) {
+    private static Eggy getBaby(TestPokemon mommy, TestPokemon daddy) {
         Eggy baby = breeding.breed(mommy, daddy);
 
         Assert.assertNotNull(getFailMessage(mommy, daddy, baby), baby);
@@ -337,35 +330,35 @@ public class BreedingTest extends BaseTest {
         return baby;
     }
 
-    private static boolean hasEqualIVs(ActivePokemon mommy, ActivePokemon daddy, Eggy baby, Stat stat) {
+    private static boolean hasEqualIVs(TestPokemon mommy, TestPokemon daddy, Eggy baby, Stat stat) {
         int index = stat.index();
         int babyIv = baby.getIV(index);
         return babyIv == mommy.getIV(index) || babyIv == daddy.getIV(index);
     }
 
-    private static String getFailMessage(String message, ActivePokemon mommy, ActivePokemon daddy, Eggy baby) {
+    private static String getFailMessage(String message, TestPokemon mommy, TestPokemon daddy, Eggy baby) {
         return message + "\n" + getFailMessage(mommy, daddy, baby);
     }
 
-    private static String getFailMessage(ActivePokemon mommy, ActivePokemon daddy, Eggy baby) {
+    private static String getFailMessage(TestPokemon mommy, TestPokemon daddy, Eggy baby) {
         return getFailMessage(mommy, false) + "\n" +
                 getFailMessage(daddy, false) + "\n" +
                 getFailMessage(baby, true);
     }
 
-    private static String getFailMessage(PartyPokemon activePokemon, boolean isBaby) {
-        if (activePokemon == null) {
+    private static String getFailMessage(PartyPokemon partyPokemon, boolean isBaby) {
+        if (partyPokemon == null) {
             return "null";
         }
 
         return String.format(
                 "%s %s IVs: %s Item: %s Nature: %s Moves: %s",
-                isBaby ? "Baby" : StringUtils.properCase(activePokemon.getGender().name().toLowerCase()),
-                activePokemon.getActualName(),
-                new StringAppender().appendJoin(" ", Stat.NUM_STATS, index -> activePokemon.getIV(index) + ""),
-                activePokemon.getActualHeldItem().getName(),
-                activePokemon.getNature().getName(),
-                activePokemon.getActualMoves()
+                isBaby ? "Baby" : StringUtils.properCase(partyPokemon.getGender().name().toLowerCase()),
+                partyPokemon.getActualName(),
+                new StringAppender().appendJoin(" ", Stat.NUM_STATS, index -> partyPokemon.getIV(index) + ""),
+                partyPokemon.getActualHeldItem().getName(),
+                partyPokemon.getNature().getName(),
+                partyPokemon.getActualMoves()
                              .stream()
                              .map(move -> move.getAttack().getName())
                              .collect(Collectors.joining(", "))
@@ -387,13 +380,13 @@ public class BreedingTest extends BaseTest {
     }
 
     private interface InheritanceRules {
-        default void updateParents(ActivePokemon mommy, ActivePokemon daddy) {}
+        default void updateParents(TestPokemon mommy, TestPokemon daddy) {}
 
         default int numStatsToInherit() {
             return 3;
         }
 
-        default boolean assertTrueCondition(ActivePokemon mommy, ActivePokemon daddy, Eggy baby) {
+        default boolean assertTrueCondition(TestPokemon mommy, TestPokemon daddy, Eggy baby) {
             return true;
         }
 

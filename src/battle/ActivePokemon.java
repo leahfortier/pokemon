@@ -4,6 +4,7 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveType;
+import battle.effect.InvokeEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
@@ -573,12 +574,19 @@ public class ActivePokemon extends PartyPokemon {
         return true;
     }
 
-    public List<Object> getAllEffects(final Battle b) {
-        List<Object> list = new ArrayList<>();
+    public List<InvokeEffect> getAllEffects(final Battle b) {
+        return this.getAllEffects(b, true);
+    }
+
+    public List<InvokeEffect> getAllEffects(final Battle b, final boolean includeItem) {
+        List<InvokeEffect> list = new ArrayList<>();
         list.addAll(this.getEffects());
         list.add(this.getStatus());
         list.add(this.getAbility());
-        list.add(this.getHeldItem(b));
+
+        if (includeItem) {
+            list.add(this.getHeldItem(b));
+        }
 
         return list;
     }

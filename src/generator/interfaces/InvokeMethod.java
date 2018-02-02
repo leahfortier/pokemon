@@ -43,7 +43,7 @@ abstract class InvokeMethod {
                 .appendPostDelimiter("\n", getDeadsies(interfaceMethod))
                 .appendPostDelimiter("\n", getMoldBreakerDeclaration(interfaceMethod))
                 .appendLine(getDeclaration(interfaceMethod))
-                .appendLine("for (Object invokee : invokees) {")
+                .appendLine("for (InvokeEffect invokee : invokees) {")
                 .appendLine("if (invokee instanceof " + interfaceMethod.getInterfaceName() + " && Effect.isActiveEffect(invokee)) {")
                 .appendPostDelimiter("\n\n", getMoldBreaker(interfaceMethod))
                 .appendLine(getInnerLoop(interfaceMethod))
@@ -63,7 +63,7 @@ abstract class InvokeMethod {
     private String getInvokeParameters(final InterfaceMethod interfaceMethod) {
         StringAppender invokeParameters = new StringAppender();
         if (passInvokees(interfaceMethod)) {
-            invokeParameters.appendDelimiter(", ", "List<?> invokees");
+            invokeParameters.appendDelimiter(", ", "List<? extends InvokeEffect> invokees");
         }
 
         invokeParameters.appendDelimiter(", ", this.getAdditionalInvokeParameters());
