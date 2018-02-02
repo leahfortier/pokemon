@@ -98,6 +98,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import pokemon.PokemonNamesies;
 import pokemon.ability.Ability;
+import save.Save;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
 import trainer.Team;
@@ -105,7 +106,6 @@ import trainer.Trainer;
 import trainer.WildPokemon;
 import type.Type;
 import util.GeneralUtils;
-import save.Save;
 
 import java.io.File;
 import java.io.IOException;

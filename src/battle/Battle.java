@@ -367,11 +367,6 @@ public class Battle implements Serializable {
         enterBattle(enterer, this.getTrainer(enterer).getEnterBattleMessage());
     }
 
-    @FunctionalInterface
-    public interface EnterBattleMessageGetter {
-        String enterBattleMessage(ActivePokemon enterer);
-    }
-
     // Need to use EnterBattleMessageGetter instead of String in case of NameChanger effect
     public void enterBattle(ActivePokemon enterer, EnterBattleMessageGetter enterMessage) {
         if (!enterer.canFight()) {
@@ -802,5 +797,10 @@ public class Battle implements Serializable {
 
     protected int getSpeedStat(ActivePokemon statPokemon, ActivePokemon otherPokemon) {
         return Stat.getStat(Stat.SPEED, statPokemon, otherPokemon, this);
+    }
+
+    @FunctionalInterface
+    public interface EnterBattleMessageGetter {
+        String enterBattleMessage(ActivePokemon enterer);
     }
 }

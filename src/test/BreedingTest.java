@@ -95,9 +95,9 @@ public class BreedingTest extends BaseTest {
     public void testEggMoves() {
         TestPokemon mommy = getParentWithMoves(PokemonNamesies.RAPIDASH, Gender.FEMALE, AttackNamesies.MORNING_SUN);
         TestPokemon daddy = getParentWithMoves(PokemonNamesies.NINETALES, Gender.MALE,
-                                                 AttackNamesies.HYPNOSIS,
-                                                 AttackNamesies.SOLAR_BEAM,
-                                                 AttackNamesies.FLAMETHROWER
+                                               AttackNamesies.HYPNOSIS,
+                                               AttackNamesies.SOLAR_BEAM,
+                                               AttackNamesies.FLAMETHROWER
         );
 
         Eggy baby = getBaby(mommy, daddy);
@@ -359,9 +359,9 @@ public class BreedingTest extends BaseTest {
                 partyPokemon.getActualHeldItem().getName(),
                 partyPokemon.getNature().getName(),
                 partyPokemon.getActualMoves()
-                             .stream()
-                             .map(move -> move.getAttack().getName())
-                             .collect(Collectors.joining(", "))
+                            .stream()
+                            .map(move -> move.getAttack().getName())
+                            .collect(Collectors.joining(", "))
         );
     }
 

@@ -4,8 +4,8 @@ import gui.view.ViewMode;
 import main.Game;
 import message.Messages;
 import message.Messages.MessageState;
-import util.PokeString;
 import save.Save;
+import util.PokeString;
 
 import java.util.function.Supplier;
 

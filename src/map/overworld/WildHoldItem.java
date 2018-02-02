@@ -32,6 +32,11 @@ public class WildHoldItem implements Serializable {
         return item.getItem().namesies();
     }
 
+    @Override
+    public String toString() {
+        return this.item.getName() + " " + this.chance;
+    }
+
     public static List<WildHoldItem> createList(Scanner in) {
         List<WildHoldItem> list = new ArrayList<>();
         int num = in.nextInt();
@@ -62,11 +67,6 @@ public class WildHoldItem implements Serializable {
         }
 
         return ItemNamesies.NO_ITEM;
-    }
-
-    @Override
-    public String toString() {
-        return this.item.getName() + " " + this.chance;
     }
 
     private enum Chance {

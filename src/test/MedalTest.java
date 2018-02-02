@@ -6,10 +6,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
+import save.Save;
 import trainer.player.Player;
 import trainer.player.medal.Medal;
 import trainer.player.medal.MedalCase;
-import save.Save;
 
 import java.util.EnumSet;
 import java.util.Set;

@@ -67,7 +67,7 @@ public class ItemUpdater extends GeneratorUpdater {
     public static class ItemParser {
         public final ItemNamesies itemNamesies;
         public final String itemType;
-        
+
         public final int fling;
         public final int price;
 
