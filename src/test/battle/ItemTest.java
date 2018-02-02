@@ -287,11 +287,15 @@ public class ItemTest extends BaseTest {
 
         battle.fight(AttackNamesies.WATER_GUN, AttackNamesies.ENDURE);
 
-        TestStages stages = new TestStages();
-        if (success) {
-            stages.setStage(Stat.SP_ATTACK, 1);
-        }
+        // Should not be holding an item (for battle purposes) for either case
+        // If success, item is consumed and is no longer holding anything
+        // If not success, item is suppressed but should not be consumed
+        Assert.assertFalse(defending.isHoldingItem(battle));
 
-        stages.test(defending);
+        Assert.assertEquals(success, defending.hasEffect(EffectNamesies.CONSUMED_ITEM));
+        Assert.assertEquals(success, defending.getActualHeldItem().namesies() == ItemNamesies.NO_ITEM);
+
+        // If successful, should increase Sp. Attack by one
+        new TestStages().set(Stat.SP_ATTACK, success ? 1 : 0).test(defending);
     }
 }

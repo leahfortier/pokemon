@@ -1039,6 +1039,8 @@ ChoiceItem:
 	AddMapField: UnusableMessage: p.getName() + "'s " + super.name + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!"
 	AddInterface: HoldItem
 	AddMapField: Fling: 10
+    AddMapField: Price: 4000
+    AddMapField: Cat: Misc
 *
 Wing:
 	AddMapField: EVIncreaseAmt: {0}
@@ -1047,7 +1049,7 @@ Wing:
 *
 Vitamin:
 	AddMapField: EVIncreaseAmt: {0}
-	AddMapField: Price: 9800
+	AddMapField: Price: 10000
 	AddInterface: Vitamin
 *
 RepelEffectItem:
@@ -1155,6 +1157,7 @@ PowerStat:
 	AddMapField: Fling: 70
 	AddMapField: Price: 3000
 	AddMapField: Cat: Misc
+    AddInterface: PowerItem
 *
 TypeEnhance:
 	AddMapField: PowerMultiplierCondition: 1.2 user.isAttackType(Type.{00})
@@ -1238,18 +1241,22 @@ SpecialTypeItem:
 GemType:
 	AddMapField: SpecialTypeItem: {0}
 	AddMapField: Price: 200
+    AddInterface: GemItem
 *
 PlateType:
 	AddMapField: SpecialTypeItem: {0}
 	AddMapField: Price: 1000
+    AddInterface: PlateItem
 *
 DriveType:
 	AddMapField: SpecialTypeItem: {0}
 	AddMapField: Price: 1000
+    AddInterface: DriveItem
 *
 MemoryType:
 	AddMapField: SpecialTypeItem: {0}
 	AddMapField: Price: 1000
+    AddInterface: MemoryItem
 *
 StatusHealAll:
 	AddMapField: BattleCat: Status
@@ -1282,23 +1289,26 @@ ShouldHealStatus:
 *
 StatusRemove:
 	AddInterface: StatusHealer
+    AddMapField: BattleCat: Status
 	AddMapField: ShouldHealStatus:
 		return statusCondition == StatusCondition.{00};
 		###
 *
 FixedHealAmount:
+    AddInterface: FixedHpHealer
 	Header: int getFixedHealAmount(ActivePokemon p)
+    AddMapField: BattleCat: HP_PP
 *
 GetAmountHealed:
 	Header: int getAmountHealed(ActivePokemon p)
+    AddMapField: BattleCat: HP_PP
+    AddInterface: HpHealer
 *
 HealAmt:
-	AddInterface: FixedHpHealer
 	AddMapField: FixedHealAmount:
 		return {0};
 		###
 	AddMapField: Cat: Medicine
-	AddMapField: BattleCat: HP_PP
 *
 XStageIncrease:
 	AddMapField: Cat: Stat
@@ -1526,6 +1536,7 @@ RepelSteps:
 	Header: int repelSteps()
 	Body: return {0};
 	AddMapField: Cat: Misc
+    AddInterface: Repelling
 *
 PowderResist:
 	AddInterface: AttackBlocker
@@ -1661,7 +1672,7 @@ StatusFling:
 TM:
 	Header: AttackNamesies getAttack()
 	Body:
-		return AttackNamesies.{0};
+		return AttackNamesies.{00};
 		###
 	AddMapField: Cat: TM
 *
@@ -1679,6 +1690,8 @@ Baby:
 	Body:
 		return PokemonNamesies.{00};
 		###
+    AddInterface: IncenseItem
+    AddMapField: Price: 5000
 *
 AbsorbDamage:
 	Header: boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount)

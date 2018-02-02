@@ -246,7 +246,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         AirBalloon() {
             super(ItemNamesies.AIR_BALLOON, "An item to be held by a Pok\u00e9mon. The holder will float in the air until hit. Once hit, this item will burst.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -271,7 +271,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         AmuletCoin() {
             super(ItemNamesies.AMULET_COIN, "An item to be held by a Pok\u00e9mon. It doubles any prize money received if the holding Pok\u00e9mon joins a battle.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 10000;
         }
 
         private void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice) {
@@ -290,7 +290,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         BigRoot() {
             super(ItemNamesies.BIG_ROOT, "An item to be held by a Pok\u00e9mon. It boosts the amount of HP the holder recovers from HP-stealing moves.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -304,7 +304,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         BindingBand() {
             super(ItemNamesies.BINDING_BAND, "An item to be held by a Pok\u00e9mon. A band that increases the power of binding moves used by the holder.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
     }
 
@@ -313,7 +313,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         BlackSludge() {
             super(ItemNamesies.BLACK_SLUDGE, "An item to be held by a Pok\u00e9mon. It gradually restores HP to Poison-type Pok\u00e9mon. It damages any other type.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -362,7 +362,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         CellBattery() {
             super(ItemNamesies.CELL_BATTERY, "An item to be held by a Pok\u00e9mon. It boosts Attack if hit with an Electric-type attack. It can only be used once.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -378,7 +378,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         ChoiceBand() {
             super(ItemNamesies.CHOICE_BAND, "An item to be held by a Pok\u00e9mon. This curious headband boosts Attack but only allows the use of one move.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 4000;
         }
 
         @Override
@@ -413,7 +413,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         ChoiceScarf() {
             super(ItemNamesies.CHOICE_SCARF, "An item to be held by a Pok\u00e9mon. This curious scarf boosts Speed but only allows the use of one move.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -448,7 +448,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         ChoiceSpecs() {
             super(ItemNamesies.CHOICE_SPECS, "An item to be held by a Pok\u00e9mon. These curious glasses boost Sp. Atk but only allow the use of one move.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -483,7 +483,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         CleanseTag() {
             super(ItemNamesies.CLEANSE_TAG, "An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the head of the party.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 5000;
         }
 
         @Override
@@ -573,7 +573,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         EjectButton() {
             super(ItemNamesies.EJECT_BUTTON, "An item to be held by a Pok\u00e9mon. If the holder is hit by an attack, it will be switched out of battle.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -589,7 +589,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         DestinyKnot() {
             super(ItemNamesies.DESTINY_KNOT, "An item to be held by a Pok\u00e9mon. If the holder becomes infatuated, the opposing Pok\u00e9mon will be, too.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -603,7 +603,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         ExpertBelt() {
             super(ItemNamesies.EXPERT_BELT, "An item to be held by a Pok\u00e9mon. It's a well-worn belt that slightly boosts the power of supereffective moves.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -665,7 +665,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         FloatStone() {
             super(ItemNamesies.FLOAT_STONE, "An item to be held by a Pok\u00e9mon. This very light stone reduces the weight of a Pok\u00e9mon when held.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -679,7 +679,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         FocusBand() {
             super(ItemNamesies.FOCUS_BAND, "An item to be held by a Pok\u00e9mon. The holder may endure a potential KO attack, leaving it with just 1 HP.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -703,7 +703,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         FocusSash() {
             super(ItemNamesies.FOCUS_SASH, "An item to be held by a Pok\u00e9mon. If the holder has full HP, it will endure a potential KO attack with 1 HP. The item then disappears.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -732,7 +732,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         GripClaw() {
             super(ItemNamesies.GRIP_CLAW, "An item to be held by a Pok\u00e9mon. It extends the duration of multi-turn attacks like Bind and Wrap.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -803,7 +803,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         IronBall() {
             super(ItemNamesies.IRON_BALL, "An item to be held by a Pok\u00e9mon. It lowers Speed and allows Ground-type moves to hit Flying-type and levitating holders.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -833,7 +833,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         LaggingTail() {
             super(ItemNamesies.LAGGING_TAIL, "An item to be held by a Pok\u00e9mon. It is tremendously heavy and makes the holder move slower than usual.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -847,7 +847,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         LifeOrb() {
             super(ItemNamesies.LIFE_ORB, "An item to be held by a Pok\u00e9mon. It boosts the power of moves, but at the cost of some HP on each hit.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -871,7 +871,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         LightBall() {
             super(ItemNamesies.LIGHT_BALL, "An item to be held by Pikachu. It's a puzzling orb that boosts its Attack and Sp. Atk stats.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 1000;
         }
 
         @Override
@@ -900,7 +900,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         LightClay() {
             super(ItemNamesies.LIGHT_CLAY, "An item to be held by a Pok\u00e9mon. Protective moves like Light Screen and Reflect will be effective longer.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
     }
 
@@ -909,7 +909,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         LuckyEgg() {
             super(ItemNamesies.LUCKY_EGG, "An item to be held by a Pok\u00e9mon. It's an egg filled with happiness that earns extra Exp. Points in battle.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 10000;
         }
     }
 
@@ -918,7 +918,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         LuckyPunch() {
             super(ItemNamesies.LUCKY_PUNCH, "An item to be held by Chansey. This pair of lucky boxing gloves will boost Chansey's critical-hit ratio.", BagCategory.MISC);
-            super.price = 10;
+            super.price = 1000;
         }
 
         @Override
@@ -941,7 +941,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         LuminousMoss() {
             super(ItemNamesies.LUMINOUS_MOSS, "An item to be held by a Pok\u00e9mon. It boosts Sp. Def if hit with a Water-type attack. It can only be used once.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -1021,7 +1021,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         MentalHerb() {
             super(ItemNamesies.MENTAL_HERB, "An item to be held by a Pok\u00e9mon. The holder shakes off move-binding effects to move freely. It can be used only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 4000;
         }
 
         @Override
@@ -1047,7 +1047,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         MetalPowder() {
             super(ItemNamesies.METAL_POWDER, "An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Defense stat.", BagCategory.MISC);
-            super.price = 10;
+            super.price = 1000;
         }
 
         @Override
@@ -1076,7 +1076,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Metronome() {
             super(ItemNamesies.METRONOME, "An item to be held by a Pok\u00e9mon. It boosts moves used consecutively, but only until a different move is used.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -1090,7 +1090,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         MuscleBand() {
             super(ItemNamesies.MUSCLE_BAND, "An item to be held by a Pok\u00e9mon. This headband exudes strength, slightly boosting the power of physical moves.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -1319,7 +1319,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         QuickClaw() {
             super(ItemNamesies.QUICK_CLAW, "An item to be held by a Pok\u00e9mon. This light, sharp claw lets the bearer move first occasionally.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 4000;
         }
 
         @Override
@@ -1333,7 +1333,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         QuickPowder() {
             super(ItemNamesies.QUICK_POWDER, "An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Speed stat.", BagCategory.MISC);
-            super.price = 10;
+            super.price = 1000;
         }
 
         @Override
@@ -1362,7 +1362,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         RedCard() {
             super(ItemNamesies.RED_CARD, "An item to be held by a Pok\u00e9mon. When the holder is hit by an attack, the attacker is removed from battle.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -1383,7 +1383,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         RingTarget() {
             super(ItemNamesies.RING_TARGET, "An item to be held by a Pok\u00e9mon. Moves that normally have no effect will land on a Pok\u00e9mon holding it.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -1402,7 +1402,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         RockyHelmet() {
             super(ItemNamesies.ROCKY_HELMET, "An item to be held by a Pok\u00e9mon. If the holder is hit, the attacker will also be damaged upon contact.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -1446,7 +1446,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         ScopeLens() {
             super(ItemNamesies.SCOPE_LENS, "An item to be held by a Pok\u00e9mon. It's a lens for scoping out weak points. It boosts the holder's critical-hit ratio.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
     }
 
@@ -1455,7 +1455,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         ShedShell() {
             super(ItemNamesies.SHED_SHELL, "An item to be held by a Pok\u00e9mon. This discarded carapace enables the holder to switch out of battle without fail.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 4000;
         }
 
         @Override
@@ -1469,7 +1469,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         ShellBell() {
             super(ItemNamesies.SHELL_BELL, "An item to be held by a Pok\u00e9mon. The holder regains a little HP every time it inflicts damage on others.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -1488,7 +1488,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         SmokeBall() {
             super(ItemNamesies.SMOKE_BALL, "An item to be held by a Pok\u00e9mon. It enables the holder to flee from any wild Pok\u00e9mon encounter without fail.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
     }
 
@@ -1497,7 +1497,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Snowball() {
             super(ItemNamesies.SNOWBALL, "An item to be held by a Pok\u00e9mon. It boosts Attack if hit with an Ice-type attack. It can only be used once.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -1508,12 +1508,13 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
+    // I changed the price on my own because everything else was increasing like that and this said N/A
     static class SoulDew extends Item implements HoldItem, SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
 
         SoulDew() {
             super(ItemNamesies.SOUL_DEW, "A wondrous orb to be held by either Latios or Latias. It raises the power of Psychic- and Dragon-type moves.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -1537,7 +1538,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Stick() {
             super(ItemNamesies.STICK, "An item to be held by Farfetch'd. This very long and stiff stalk of leek boosts its critical-hit ratio.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 1000;
         }
 
         @Override
@@ -1567,7 +1568,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         StickyBarb() {
             super(ItemNamesies.STICKY_BARB, "An item to be held by a Pok\u00e9mon. It damages the holder every turn and may latch on to Pok\u00e9mon that touch the holder.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -1601,7 +1602,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         ThickClub() {
             super(ItemNamesies.THICK_CLUB, "An item to be held by Cubone or Marowak. It's a hard bone of some sort that boosts the Attack stat.", BagCategory.MISC);
-            super.price = 500;
+            super.price = 1000;
         }
 
         @Override
@@ -1647,7 +1648,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         WhiteHerb() {
             super(ItemNamesies.WHITE_HERB, "An item to be held by a Pok\u00e9mon. It will restore any lowered stat in battle. It can be used only once.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 4000;
         }
 
         @Override
@@ -1679,7 +1680,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         WideLens() {
             super(ItemNamesies.WIDE_LENS, "An item to be held by a Pok\u00e9mon. It's a magnifying lens that slightly boosts the accuracy of moves.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -1703,7 +1704,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         WiseGlasses() {
             super(ItemNamesies.WISE_GLASSES, "An item to be held by a Pok\u00e9mon. This thick pair of glasses slightly boosts the power of special moves.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -1727,7 +1728,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         ZoomLens() {
             super(ItemNamesies.ZOOM_LENS, "An item to be held by a Pok\u00e9mon. If the holder moves after its target moves, its accuracy will be boosted.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -1756,7 +1757,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         FullIncense() {
             super(ItemNamesies.FULL_INCENSE, "An item to be held by a Pok\u00e9mon. This exotic-smelling incense makes the holder bloated and slow moving.", BagCategory.MISC);
-            super.price = 9600;
+            super.price = 5000;
         }
 
         @Override
@@ -1765,12 +1766,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class LaxIncense extends Item implements IncenseItem, SimpleStatModifyingEffect {
+    static class LaxIncense extends Item implements SimpleStatModifyingEffect, IncenseItem {
         private static final long serialVersionUID = 1L;
 
         LaxIncense() {
             super(ItemNamesies.LAX_INCENSE, "An item to be held by a Pok\u00e9mon. The beguiling aroma of this incense may cause attacks to miss its holder.", BagCategory.MISC);
-            super.price = 9600;
+            super.price = 5000;
         }
 
         @Override
@@ -1794,7 +1795,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         LuckIncense() {
             super(ItemNamesies.LUCK_INCENSE, "An item to be held by a Pok\u00e9mon. It doubles any prize money received if the holding Pok\u00e9mon joins a battle.", BagCategory.MISC);
-            super.price = 9600;
+            super.price = 5000;
         }
 
         @Override
@@ -1813,12 +1814,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class OddIncense extends Item implements IncenseItem, HoldItem, PowerChangeEffect {
+    static class OddIncense extends Item implements HoldItem, IncenseItem, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         OddIncense() {
             super(ItemNamesies.ODD_INCENSE, "An item to be held by a Pok\u00e9mon. This exotic-smelling incense boosts the power of Psychic-type moves.", BagCategory.MISC);
-            super.price = 9600;
+            super.price = 5000;
         }
 
         @Override
@@ -1832,12 +1833,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class PureIncense extends Item implements IncenseItem, RepellingEffect {
+    static class PureIncense extends Item implements RepellingEffect, IncenseItem {
         private static final long serialVersionUID = 1L;
 
         PureIncense() {
             super(ItemNamesies.PURE_INCENSE, "An item to be held by a Pok\u00e9mon. It helps keep wild Pok\u00e9mon away if the holder is the head of the party.", BagCategory.MISC);
-            super.price = 9600;
+            super.price = 5000;
         }
 
         @Override
@@ -1851,12 +1852,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class RockIncense extends Item implements IncenseItem, HoldItem, PowerChangeEffect {
+    static class RockIncense extends Item implements HoldItem, IncenseItem, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         RockIncense() {
             super(ItemNamesies.ROCK_INCENSE, "An item to be held by a Pok\u00e9mon. This exotic-smelling incense boosts the power of Rock-type moves.", BagCategory.MISC);
-            super.price = 9600;
+            super.price = 5000;
         }
 
         @Override
@@ -1870,12 +1871,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class RoseIncense extends Item implements IncenseItem, HoldItem, PowerChangeEffect {
+    static class RoseIncense extends Item implements HoldItem, IncenseItem, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         RoseIncense() {
             super(ItemNamesies.ROSE_INCENSE, "An item to be held by a Pok\u00e9mon. This exotic-smelling incense boosts the power of Grass-type moves.", BagCategory.MISC);
-            super.price = 9600;
+            super.price = 5000;
         }
 
         @Override
@@ -1889,12 +1890,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class SeaIncense extends Item implements IncenseItem, HoldItem, PowerChangeEffect {
+    static class SeaIncense extends Item implements HoldItem, IncenseItem, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         SeaIncense() {
             super(ItemNamesies.SEA_INCENSE, "An item to be held by a Pok\u00e9mon. This incense has a curious aroma that boosts the power of Water-type moves.", BagCategory.MISC);
-            super.price = 9600;
+            super.price = 5000;
         }
 
         @Override
@@ -1908,12 +1909,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class WaveIncense extends Item implements IncenseItem, HoldItem, PowerChangeEffect {
+    static class WaveIncense extends Item implements HoldItem, IncenseItem, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         WaveIncense() {
             super(ItemNamesies.WAVE_INCENSE, "An item to be held by a Pok\u00e9mon. This incense has a curious aroma that boosts the power of Water-type moves.", BagCategory.MISC);
-            super.price = 9600;
+            super.price = 5000;
         }
 
         @Override
@@ -2478,7 +2479,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Leftovers() {
             super(ItemNamesies.LEFTOVERS, "An item to be held by a Pok\u00e9mon. The holder's HP is slowly but steadily restored throughout every battle.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -2780,7 +2781,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         DawnStone() {
             super(ItemNamesies.DAWN_STONE, "A peculiar stone that can make certain species of Pok\u00e9mon evolve. It sparkles like a glittering eye.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 3000;
         }
 
         @Override
@@ -2794,7 +2795,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         DeepSeaScale() {
             super(ItemNamesies.DEEP_SEA_SCALE, "An item to be held by Clamperl, Chinchou, or Lanturn. This scale shines with a faint pink and raises the holder's Sp. Def stat.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 2000;
         }
 
         @Override
@@ -2818,7 +2819,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         DeepSeaTooth() {
             super(ItemNamesies.DEEP_SEA_TOOTH, "An item to be held by Clamperl. This fang gleams a sharp silver and raises the holder's Sp. Atk stat.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 2000;
         }
 
         @Override
@@ -2847,7 +2848,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         DragonScale() {
             super(ItemNamesies.DRAGON_SCALE, "A very tough and inflexible scale. Dragon-type Pok\u00e9mon may be holding this item when caught.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 2000;
         }
     }
 
@@ -2856,7 +2857,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         DubiousDisc() {
             super(ItemNamesies.DUBIOUS_DISC, "A transparent device overflowing with dubious data. Its producer is unknown.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 2000;
         }
 
         @Override
@@ -2870,7 +2871,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         DuskStone() {
             super(ItemNamesies.DUSK_STONE, "A peculiar stone that can make certain species of Pok\u00e9mon evolve. It holds shadows as dark as can be.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 3000;
         }
 
         @Override
@@ -2884,7 +2885,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Electirizer() {
             super(ItemNamesies.ELECTIRIZER, "A box packed with a tremendous amount of electric energy. It's loved by a certain Pok\u00e9mon.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 2000;
         }
 
         @Override
@@ -2898,7 +2899,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         FireStone() {
             super(ItemNamesies.FIRE_STONE, "A peculiar stone that can make certain species of Pok\u00e9mon evolve. The stone has a fiery orange heart.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 3000;
         }
     }
 
@@ -2907,7 +2908,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         KingsRock() {
             super(ItemNamesies.KINGS_ROCK, "An item to be held by a Pok\u00e9mon. When the holder successfully inflicts damage, the target may also flinch.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 5000;
         }
 
         @Override
@@ -2932,7 +2933,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         LeafStone() {
             super(ItemNamesies.LEAF_STONE, "A peculiar stone that can make certain species of Pok\u00e9mon evolve. It has an unmistakable leaf pattern.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 3000;
         }
     }
 
@@ -2941,7 +2942,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Magmarizer() {
             super(ItemNamesies.MAGMARIZER, "A box packed with a tremendous amount of magma energy. It's loved by a certain Pok\u00e9mon.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 2000;
         }
 
         @Override
@@ -2955,7 +2956,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         MoonStone() {
             super(ItemNamesies.MOON_STONE, "A peculiar stone that can make certain species of Pok\u00e9mon evolve. It is as black as the night sky.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 3000;
         }
     }
 
@@ -2964,7 +2965,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         OvalStone() {
             super(ItemNamesies.OVAL_STONE, "A peculiar stone that can make certain species of Pok\u00e9mon evolve. It's as round as a Pok\u00e9mon Egg.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 2000;
         }
 
         @Override
@@ -2978,7 +2979,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Everstone() {
             super(ItemNamesies.EVERSTONE, "An item to be held by a Pok\u00e9mon. A Pok\u00e9mon holding this peculiar stone is prevented from evolving.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 3000;
         }
     }
 
@@ -2987,7 +2988,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         PrismScale() {
             super(ItemNamesies.PRISM_SCALE, "A mysterious scale that causes a certain Pok\u00e9mon to evolve. It shines in rainbow colors.", BagCategory.MISC);
-            super.price = 500;
+            super.price = 2000;
         }
     }
 
@@ -2996,7 +2997,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Protector() {
             super(ItemNamesies.PROTECTOR, "A protective item of some sort. It is extremely stiff and heavy. It's loved by a certain Pok\u00e9mon.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 2000;
         }
 
         @Override
@@ -3010,7 +3011,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         RazorClaw() {
             super(ItemNamesies.RAZOR_CLAW, "An item to be held by a Pok\u00e9mon. This sharply hooked claw increases the holder's critical-hit ratio.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 5000;
         }
 
         @Override
@@ -3024,7 +3025,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         RazorFang() {
             super(ItemNamesies.RAZOR_FANG, "An item to be held by a Pok\u00e9mon. When the holder successfully inflicts damage, the target may also flinch.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 5000;
         }
 
         @Override
@@ -3049,7 +3050,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         ReaperCloth() {
             super(ItemNamesies.REAPER_CLOTH, "A cloth imbued with horrifyingly strong spiritual energy. It's loved by a certain Pok\u00e9mon.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 2000;
         }
 
         @Override
@@ -3063,7 +3064,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Sachet() {
             super(ItemNamesies.SACHET, "A sachet filled with fragrant perfumes that are just slightly too overwhelming. Yet it's loved by a certain Pok\u00e9mon.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 2000;
         }
     }
 
@@ -3072,7 +3073,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         ShinyStone() {
             super(ItemNamesies.SHINY_STONE, "A peculiar stone that can make certain species of Pok\u00e9mon evolve. It shines with a dazzling light.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 3000;
         }
 
         @Override
@@ -3086,7 +3087,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         SunStone() {
             super(ItemNamesies.SUN_STONE, "A peculiar stone that can make certain species of Pok\u00e9mon evolve. It burns as red as the evening sun.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 3000;
         }
     }
 
@@ -3095,7 +3096,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         ThunderStone() {
             super(ItemNamesies.THUNDER_STONE, "A peculiar stone that can make certain species of Pok\u00e9mon evolve. It has a distinct thunderbolt pattern.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 3000;
         }
     }
 
@@ -3104,7 +3105,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         IceStone() {
             super(ItemNamesies.ICE_STONE, "A peculiar stone that can make certain species of Pok\u00e9mon evolve. It has an unmistakable snowflake pattern.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 3000;
         }
     }
 
@@ -3113,7 +3114,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         UpGrade() {
             super(ItemNamesies.UP_GRADE, "A transparent device somehow filled with all sorts of data. It was produced by Silph Co.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 2000;
         }
     }
 
@@ -3136,7 +3137,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Ruby() {
             super(ItemNamesies.RUBY, "A peculiar jewel that makes certain species of Pok\u00e9mon evolve.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 2000;
         }
     }
 
@@ -3145,7 +3146,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         WaterStone() {
             super(ItemNamesies.WATER_STONE, "A peculiar stone that can make certain species of Pok\u00e9mon evolve. It is the blue of a pool of clear water.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 3000;
         }
     }
 
@@ -3154,7 +3155,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         WhippedDream() {
             super(ItemNamesies.WHIPPED_DREAM, "A soft and sweet treat made of fluffy, puffy, whipped, and whirled cream. It's loved by a certain Pok\u00e9mon.", BagCategory.MISC);
-            super.price = 2100;
+            super.price = 2000;
         }
     }
 
@@ -3163,7 +3164,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Antidote() {
             super(ItemNamesies.ANTIDOTE, "A spray-type medicine for poisoning. It can be used once to lift the effects of being poisoned from a Pok\u00e9mon.", BagCategory.MEDICINE);
-            super.price = 100;
+            super.price = 200;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
@@ -3178,7 +3179,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Awakening() {
             super(ItemNamesies.AWAKENING, "A spray-type medicine used against sleep. It can be used once to rouse a Pok\u00e9mon from the clutches of sleep.", BagCategory.MEDICINE);
-            super.price = 250;
+            super.price = 100;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
@@ -3193,7 +3194,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         BurnHeal() {
             super(ItemNamesies.BURN_HEAL, "A spray-type medicine for treating burns. It can be used once to heal a Pok\u00e9mon suffering from a burn.", BagCategory.MEDICINE);
-            super.price = 250;
+            super.price = 300;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
@@ -3208,7 +3209,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         IceHeal() {
             super(ItemNamesies.ICE_HEAL, "A spray-type medicine for freezing. It can be used once to defrost a Pok\u00e9mon that has been frozen solid.", BagCategory.MEDICINE);
-            super.price = 250;
+            super.price = 100;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
@@ -3223,7 +3224,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         ParalyzeHeal() {
             super(ItemNamesies.PARALYZE_HEAL, "A spray-type medicine for paralysis. It can be used once to free a Pok\u00e9mon that has been paralyzed.", BagCategory.MEDICINE);
-            super.price = 200;
+            super.price = 300;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
@@ -3348,7 +3349,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         SweetHeart() {
             super(ItemNamesies.SWEET_HEART, "A piece of cloyingly sweet chocolate. When consumed, it restores 20 HP to an injured Pok\u00e9mon.", BagCategory.MEDICINE);
-            super.price = 100;
+            super.price = 3000;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
@@ -3453,7 +3454,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         MoomooMilk() {
             super(ItemNamesies.MOOMOO_MILK, "A bottle of highly nutritious milk. When consumed, it restores up to 100 HP to an injured Pok\u00e9mon.", BagCategory.MEDICINE);
-            super.price = 500;
+            super.price = 600;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
@@ -3468,7 +3469,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         EnergyRoot() {
             super(ItemNamesies.ENERGY_ROOT, "An extremely bitter medicinal root. When consumed, it restores up to 120 HP to an injured Pok\u00e9mon.", BagCategory.MEDICINE);
-            super.price = 800;
+            super.price = 1200;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
@@ -3483,7 +3484,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         HyperPotion() {
             super(ItemNamesies.HYPER_POTION, "A spray-type medicine for treating wounds. It can be used to restore 120 HP to an injured Pok\u00e9mon.", BagCategory.MEDICINE);
-            super.price = 1200;
+            super.price = 1500;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
@@ -3513,7 +3514,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Revive() {
             super(ItemNamesies.REVIVE, "A medicine that can revive fainted Pok\u00e9mon. It also restores half of a fainted Pok\u00e9mon's maximum HP.", BagCategory.MEDICINE);
-            super.price = 1500;
+            super.price = 2000;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
 
@@ -3747,7 +3748,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         HPUp() {
             super(ItemNamesies.HPUP, "A nutritious drink for Pok\u00e9mon. When consumed, it raises the base HP of a single Pok\u00e9mon.", BagCategory.STAT);
-            super.price = 9800;
+            super.price = 10000;
         }
 
         @Override
@@ -3761,7 +3762,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Protein() {
             super(ItemNamesies.PROTEIN, "A nutritious drink for Pok\u00e9mon. When consumed, it raises the base Attack stat of a single Pok\u00e9mon.", BagCategory.STAT);
-            super.price = 9800;
+            super.price = 10000;
         }
 
         @Override
@@ -3775,7 +3776,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Iron() {
             super(ItemNamesies.IRON, "A nutritious drink for Pok\u00e9mon. When consumed, it raises the base Defense stat of a single Pok\u00e9mon.", BagCategory.STAT);
-            super.price = 9800;
+            super.price = 10000;
         }
 
         @Override
@@ -3789,7 +3790,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Calcium() {
             super(ItemNamesies.CALCIUM, "A nutritious drink for Pok\u00e9mon. When consumed, it raises the base Sp. Atk stat of a single Pok\u00e9mon.", BagCategory.STAT);
-            super.price = 9800;
+            super.price = 10000;
         }
 
         @Override
@@ -3803,7 +3804,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Zinc() {
             super(ItemNamesies.ZINC, "A nutritious drink for Pok\u00e9mon. When consumed, it raises the base Sp. Def stat of a single Pok\u00e9mon.", BagCategory.STAT);
-            super.price = 9800;
+            super.price = 10000;
         }
 
         @Override
@@ -3817,7 +3818,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Carbos() {
             super(ItemNamesies.CARBOS, "A nutritious drink for Pok\u00e9mon. When consumed, it raises the base Speed stat of a single Pok\u00e9mon.", BagCategory.STAT);
-            super.price = 9800;
+            super.price = 10000;
         }
 
         @Override
@@ -3910,12 +3911,13 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
+    // I manually increased the price because it makes sense to be higher than PP Up
     static class PPMax extends Item implements MoveUseItem, HoldItem {
         private static final long serialVersionUID = 1L;
 
         PPMax() {
             super(ItemNamesies.PPMAX, "A medicine that can optimally raise the maximum PP of a single move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT);
-            super.price = 9800;
+            super.price = 12000;
         }
 
         @Override
@@ -3934,7 +3936,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         PPUp() {
             super(ItemNamesies.PPUP, "A medicine that can slightly raise the maximum PP of a single move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT);
-            super.price = 9800;
+            super.price = 10000;
         }
 
         @Override
@@ -3953,7 +3955,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         RareCandy() {
             super(ItemNamesies.RARE_CANDY, "A candy that is packed with energy. When consumed, it will instantly raise the level of a single Pok\u00e9mon by one.", BagCategory.STAT);
-            super.price = 4800;
+            super.price = 10000;
         }
 
         @Override
@@ -3967,7 +3969,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         CherishBall() {
             super(ItemNamesies.CHERISH_BALL, "A quite rare Pok\u00e9 Ball that has been crafted in order to commemorate a special occasion of some sort.", BagCategory.BALL);
-            super.price = 200;
+            super.price = 1000;
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
     }
@@ -4008,7 +4010,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         FastBall() {
             super(ItemNamesies.FAST_BALL, "A Pok\u00e9 Ball that makes it easier to catch Pok\u00e9mon that are usually very quick to run away.", BagCategory.BALL);
-            super.price = 200;
+            super.price = 300;
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
@@ -4053,7 +4055,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         HeavyBall() {
             super(ItemNamesies.HEAVY_BALL, "A Pok\u00e9 Ball that is better than usual at catching very heavy Pok\u00e9mon.", BagCategory.BALL);
-            super.price = 200;
+            super.price = 300;
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
@@ -4077,7 +4079,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         LevelBall() {
             super(ItemNamesies.LEVEL_BALL, "A Pok\u00e9 Ball that makes it easier to catch Pok\u00e9mon that are at a lower level than your own Pok\u00e9mon.", BagCategory.BALL);
-            super.price = 200;
+            super.price = 300;
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
@@ -4100,7 +4102,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         LoveBall() {
             super(ItemNamesies.LOVE_BALL, "A Pok\u00e9 Ball that works best when catching a Pok\u00e9mon that is of the opposite gender of your Pok\u00e9mon.", BagCategory.BALL);
-            super.price = 200;
+            super.price = 300;
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
@@ -4115,7 +4117,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         LureBall() {
             super(ItemNamesies.LURE_BALL, "A Pok\u00e9 Ball that is good for catching Pok\u00e9mon that you reel in with a Rod while out fishing.", BagCategory.BALL);
-            super.price = 200;
+            super.price = 300;
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
@@ -4156,7 +4158,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         MoonBall() {
             super(ItemNamesies.MOON_BALL, "A Pok\u00e9 Ball that will make it easier to catch Pok\u00e9mon that can evolve using a Moon Stone.", BagCategory.BALL);
-            super.price = 200;
+            super.price = 300;
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
 
@@ -5335,7 +5337,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         CometShard() {
             super(ItemNamesies.COMET_SHARD, "A shard that fell to the ground when a comet approached. It can be sold at a high price to shops.", BagCategory.MISC);
-            super.price = 120000;
+            super.price = 60000;
         }
     }
 
@@ -5362,7 +5364,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         BalmMushroom() {
             super(ItemNamesies.BALM_MUSHROOM, "A rare mushroom that gives off a nice fragrance. It can be sold at a high price to shops.", BagCategory.MISC);
-            super.price = 50000;
+            super.price = 15000;
         }
     }
 
@@ -5380,7 +5382,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         BigNugget() {
             super(ItemNamesies.BIG_NUGGET, "A big nugget of pure gold that gives off a lustrous gleam. It can be sold at a high price to shops.", BagCategory.MISC);
-            super.price = 60000;
+            super.price = 40000;
         }
     }
 
@@ -5389,7 +5391,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Pearl() {
             super(ItemNamesies.PEARL, "A rather small pearl that has a very nice silvery sheen to it. It can be sold cheaply to shops.", BagCategory.MISC);
-            super.price = 1400;
+            super.price = 2000;
         }
     }
 
@@ -5398,7 +5400,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         BigPearl() {
             super(ItemNamesies.BIG_PEARL, "A rather large pearl that has a very nice silvery sheen. It can be sold to shops for a high price.", BagCategory.MISC);
-            super.price = 7500;
+            super.price = 8000;
         }
     }
 
@@ -5407,7 +5409,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Stardust() {
             super(ItemNamesies.STARDUST, "Lovely red sand that flows between the fingers with a loose, silky feel. It can be sold at a low price to shops.", BagCategory.MISC);
-            super.price = 2000;
+            super.price = 3000;
         }
     }
 
@@ -5416,7 +5418,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         StarPiece() {
             super(ItemNamesies.STAR_PIECE, "A small shard of a beautiful gem that demonstrates a distinctly red sparkle. It can be sold at a high price to shops.", BagCategory.MISC);
-            super.price = 9800;
+            super.price = 12000;
         }
     }
 
@@ -5425,7 +5427,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         RareBone() {
             super(ItemNamesies.RARE_BONE, "A rare bone that is extremely valuable for the study of Pok\u00e9mon archeology. It can be sold for a high price to shops.", BagCategory.MISC);
-            super.price = 10000;
+            super.price = 5000;
         }
 
         @Override
@@ -5449,7 +5451,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Eviolite() {
             super(ItemNamesies.EVIOLITE, "A mysterious Evolutionary lump. When held by a Pok\u00e9mon that can still evolve, it raises both Defense and Sp. Def.", BagCategory.MISC);
-            super.price = 200;
+            super.price = 4000;
         }
 
         @Override
@@ -5487,7 +5489,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         Repel() {
             super(ItemNamesies.REPEL, "An item that prevents any low-level wild Pok\u00e9mon from jumping out at you for a while.", BagCategory.MISC);
-            super.price = 350;
+            super.price = 400;
         }
 
         @Override
@@ -5501,7 +5503,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         SuperRepel() {
             super(ItemNamesies.SUPER_REPEL, "An item that prevents any low-level wild Pok\u00e9mon from jumping out at you for a while. It lasts longer than Repel.", BagCategory.MISC);
-            super.price = 500;
+            super.price = 700;
         }
 
         @Override
@@ -5515,7 +5517,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         MaxRepel() {
             super(ItemNamesies.MAX_REPEL, "An item that prevents any low-level wild Pok\u00e9mon from jumping out at you for a while. It lasts longer than Super Repel.", BagCategory.MISC);
-            super.price = 700;
+            super.price = 900;
         }
 
         @Override
@@ -5529,7 +5531,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         AbilityCapsule() {
             super(ItemNamesies.ABILITY_CAPSULE, "A capsule that allows a Pok\u00e9mon with two Abilities to switch between these Abilities when it is used.", BagCategory.MISC);
-            super.price = 1000;
+            super.price = 10000;
         }
 
         @Override
@@ -5584,7 +5586,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         PowerHerb() {
             super(ItemNamesies.POWER_HERB, "A single-use item to be held by a Pok\u00e9mon. It allows the holder to immediately use a move that normally requires a turn to charge.", BagCategory.MISC);
-            super.price = 100;
+            super.price = 4000;
         }
 
         @Override
