@@ -295,12 +295,12 @@ public class BagState implements VisualStateHandler {
                 else if (bag.battleUseItem(item, player.front(), currentBattle)) {
                     player.performAction(currentBattle, TrainerAction.ITEM);
                     view.setVisualState(VisualState.MENU);
-                    view.cycleMessage(false);
+                    view.cycleMessage();
                     break;
                 }
                 // If the item cannot be used, do not consume
                 else {
-                    view.cycleMessage(false);
+                    view.cycleMessage();
                     view.setVisualState(VisualState.INVALID_BAG);
                 }
             }
@@ -312,9 +312,9 @@ public class BagState implements VisualStateHandler {
             if (lastItemUsed != ItemNamesies.NO_ITEM && bag.battleUseItem(lastItemUsed, player.front(), currentBattle)) {
                 player.performAction(currentBattle, TrainerAction.ITEM);
                 view.setVisualState(VisualState.MENU);
-                view.cycleMessage(false);
+                view.cycleMessage();
             } else {
-                view.cycleMessage(false);
+                view.cycleMessage();
                 view.setVisualState(VisualState.INVALID_BAG);
             }
         }

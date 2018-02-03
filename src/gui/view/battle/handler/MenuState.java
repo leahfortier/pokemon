@@ -71,7 +71,7 @@ public class MenuState implements VisualStateHandler {
             if (currentBattle.runAway()) {
                 Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
             }
-            view.cycleMessage(false);
+            view.cycleMessage();
         }
         // Show Fight View TODO: Semi-invulnerable moves look awful and weird
         else if (getButton(MenuChoice.FIGHT).checkConsumePress() || player.front().isSemiInvulnerable()) {
@@ -81,7 +81,7 @@ public class MenuState implements VisualStateHandler {
             if (Move.forceMove(currentBattle, player.front())) {
                 player.performAction(currentBattle, TrainerAction.FIGHT);
                 view.setVisualState(VisualState.MESSAGE);
-                view.cycleMessage(false);
+                view.cycleMessage();
             }
         } else if (InputControl.instance().consumeIfDown(ControlKey.LOG)) {
             view.setVisualState(VisualState.LOG_VIEW);

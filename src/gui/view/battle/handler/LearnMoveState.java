@@ -22,7 +22,7 @@ public class LearnMoveState implements VisualStateHandler {
     public void update(BattleView view) {
         this.learnMovePanel.update();
         if (this.learnMovePanel.isFinished()) {
-            view.cycleMessage(false);
+            view.cycleMessage();
         }
     }
 }

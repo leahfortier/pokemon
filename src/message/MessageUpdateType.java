@@ -20,8 +20,8 @@ public enum MessageUpdateType {
     PROMPT_SWITCH(VisualState.POKEMON),
     LEARN_MOVE(VisualState.LEARN_MOVE),
     STAT_GAIN(VisualState.STAT_GAIN),
-    EXIT_BATTLE(battleView -> exitBattle(battleView, ViewMode.MAP_VIEW)),
-    CATCH_POKEMON(battleView -> exitBattle(battleView, ViewMode.NEW_POKEMON_VIEW)),
+    EXIT_BATTLE(ViewMode.MAP_VIEW),
+    CATCH_POKEMON(ViewMode.NEW_POKEMON_VIEW),
     FORCE_SWITCH(battleView -> {
         battleView.setVisualState(VisualState.POKEMON);
         battleView.setSwitchForced();
@@ -35,6 +35,7 @@ public enum MessageUpdateType {
     });
 
     private final PerformUpdate performUpdate;
+    private final boolean exitMessage;
 
     MessageUpdateType() {
         this(battleView -> {});
@@ -48,6 +49,26 @@ public enum MessageUpdateType {
     }
 
     MessageUpdateType(PerformUpdate performUpdate) {
+        this(false, performUpdate);
+    }
+
+    // Exit Battle Messages
+    MessageUpdateType(final ViewMode viewMode) {
+        this(true, battleView -> {
+            Game.instance().setViewMode(viewMode);
+            battleView.clearUpdate();
+            Messages.clearMessages(MessageState.FIGHTY_FIGHT);
+            Messages.setMessageState(MessageState.MAPPITY_MAP);
+
+            Player player = Game.getPlayer();
+            player.getEntity().resetCurrentInteractionEntity();
+            player.checkEvolution();
+            player.exitBattle();
+        });
+    }
+
+    MessageUpdateType(boolean exitMessage, PerformUpdate performUpdate) {
+        this.exitMessage = exitMessage;
         this.performUpdate = performUpdate;
     }
 
@@ -55,16 +76,8 @@ public enum MessageUpdateType {
         this.performUpdate.performUpdate(battleView);
     }
 
-    private static void exitBattle(BattleView battleView, ViewMode viewMode) {
-        Game.instance().setViewMode(viewMode);
-        battleView.clearUpdate();
-        Messages.clearMessages(MessageState.FIGHTY_FIGHT);
-        Messages.setMessageState(MessageState.MAPPITY_MAP);
-
-        Player player = Game.getPlayer();
-        player.getEntity().resetCurrentInteractionEntity();
-        player.checkEvolution();
-        player.exitBattle();
+    public boolean isExitMessage() {
+        return this.exitMessage;
     }
 
     @FunctionalInterface

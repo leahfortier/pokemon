@@ -224,7 +224,11 @@ public class BattleView extends View {
         state.set(this);
     }
 
-    public void cycleMessage(boolean updated) {
+    public void cycleMessage() {
+        this.cycleMessage(false);
+    }
+
+    private void cycleMessage(boolean updated) {
         if (!updated) {
             setVisualState(VisualState.MENU);
         }
@@ -321,6 +325,6 @@ public class BattleView extends View {
 
     @Override
     public void movedToFront() {
-        cycleMessage(false);
+        this.cycleMessage();
     }
 }

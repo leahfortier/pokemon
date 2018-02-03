@@ -49,7 +49,8 @@ public class Messages {
     }
 
     public static boolean nextMessageEmpty() {
-        return StringUtils.isNullOrEmpty(getQueue().peek().getMessage());
+        MessageUpdate nextMessage = getQueue().peek();
+        return StringUtils.isNullOrEmpty(nextMessage.getMessage()) && !nextMessage.getUpdateType().isExitMessage();
     }
 
     public static void add(String message) {

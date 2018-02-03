@@ -67,7 +67,7 @@ public class MessageState implements VisualStateHandler {
                 view.setVisualState(VisualState.MESSAGE);
             }
 
-            view.cycleMessage(false);
+            view.cycleMessage();
         }
     }
 

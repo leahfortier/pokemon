@@ -336,11 +336,11 @@ public class PokemonState implements VisualStateHandler {
                 if (player.getBag().battleUseItem(VisualState.getSelectedItem(), selectedPkm, currentBattle)) {
                     player.performAction(currentBattle, TrainerAction.ITEM);
                     view.setVisualState(VisualState.MENU);
-                    view.cycleMessage(false);
+                    view.cycleMessage();
                 }
                 // Invalid item
                 else {
-                    view.cycleMessage(false);
+                    view.cycleMessage();
                     view.setVisualState(VisualState.INVALID_BAG);
                 }
             }
@@ -355,11 +355,11 @@ public class PokemonState implements VisualStateHandler {
                         player.performAction(currentBattle, TrainerAction.SWITCH);
                     }
 
-                    view.cycleMessage(false);
+                    view.cycleMessage();
                     switchForced = false;
                     VisualState.resetLastMoveUsed();
                 } else {
-                    view.cycleMessage(false);
+                    view.cycleMessage();
                     view.setVisualState(VisualState.INVALID_POKEMON);
                 }
             }

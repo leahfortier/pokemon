@@ -91,11 +91,11 @@ public class FightState implements VisualStateHandler {
                 if (Move.validMove(currentBattle, front, selectedMoveList.get(i), true)) {
                     player.performAction(currentBattle, TrainerAction.FIGHT);
                     view.setVisualState(VisualState.MESSAGE);
-                    view.cycleMessage(false);
+                    view.cycleMessage();
                 }
                 // An invalid move -- Don't let them select it
                 else {
-                    view.cycleMessage(false);
+                    view.cycleMessage();
                     view.setVisualState(VisualState.INVALID_FIGHT);
                 }
             }
