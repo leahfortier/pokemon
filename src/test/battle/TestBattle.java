@@ -82,11 +82,15 @@ public class TestBattle extends Battle {
         this.addEffect((Weather)EffectNamesies.CLEAR_SKIES.getEffect());
     }
 
+    void splashFight() {
+        this.fight(AttackNamesies.SPLASH, AttackNamesies.SPLASH);
+    }
+
     void emptyHeal() {
         getAttacking().fullyHeal();
         getDefending().fullyHeal();
 
-        this.fight(AttackNamesies.SPLASH, AttackNamesies.SPLASH);
+        this.splashFight();
     }
 
     void fight(AttackNamesies attackingMove, AttackNamesies defendingMove) {

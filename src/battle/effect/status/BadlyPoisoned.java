@@ -1,6 +1,7 @@
 package battle.effect.status;
 
 import battle.ActivePokemon;
+import battle.Battle;
 
 public class BadlyPoisoned extends Poisoned {
     private int turns;
@@ -8,6 +9,12 @@ public class BadlyPoisoned extends Poisoned {
     // TODO: Confirm that it's okay that the type is POISONED instead of BADLY_POISONED
     public BadlyPoisoned() {
         this.turns = 1;
+    }
+
+    @Override
+    public void applyEndTurn(ActivePokemon victim, Battle b) {
+        super.applyEndTurn(victim, b);
+        this.turns++;
     }
 
     // TODO: Confirm that this works -- I don't see where it is getting incremented??

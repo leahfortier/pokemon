@@ -68,7 +68,19 @@ public class TestPokemon extends ActivePokemon {
     }
 
     public void assertHealthRatio(double fraction) {
-        Assert.assertEquals((int)(Math.ceil(fraction*this.getMaxHP())), this.getHP());
+        this.assertHealthRatio(fraction, 0);
+    }
+
+    public void assertHealthRatio(double fraction, int errorHp) {
+        int hpFraction = (int)(Math.ceil(fraction*this.getMaxHP()));
+        Assert.assertTrue(
+                StringUtils.spaceSeparated(hpFraction, this.getHP(), errorHp),
+                hpFraction >= this.getHP() - errorHp && hpFraction <= this.getHP() + errorHp
+        );
+    }
+
+    public void assertHealthRatioDiff(int prevHp, double fractionDiff) {
+        Assert.assertEquals(prevHp - (int)(fractionDiff*this.getMaxHP()), this.getHP());
     }
 
     public static TestPokemon newPlayerPokemon(final PokemonNamesies pokemon) {
