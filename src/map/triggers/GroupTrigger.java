@@ -3,7 +3,6 @@ package map.triggers;
 import main.Game;
 import map.condition.AndCondition;
 import map.condition.Condition;
-import map.condition.ShittyCondition;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.GroupTriggerMatcher;
