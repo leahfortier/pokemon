@@ -90,10 +90,8 @@
       "triggerName": "Bloom_Filter_Meadow_NPC_LittleGirl_01",
       "condition": {
         "condition": {
-          "className": "map.condition.Condition$TimeOfDayCondition",
-          "data": {
-            "dayCycle": "DAY"
-          }
+          "dayCycle": "DAY",
+          "className": "map.condition.Condition$TimeOfDayCondition"
         }
       }
     },
@@ -310,29 +308,21 @@
           ],
           "condition": {
             "condition": {
-              "className": "map.condition.OrCondition",
-              "data": {
-                "conditions": [
-                  {
-                    "className": "map.condition.Condition$TimeOfDayCondition",
-                    "data": {
-                      "dayCycle": "DAWN"
-                    }
-                  },
-                  {
-                    "className": "map.condition.Condition$TimeOfDayCondition",
-                    "data": {
-                      "dayCycle": "DAY"
-                    }
-                  },
-                  {
-                    "className": "map.condition.Condition$TimeOfDayCondition",
-                    "data": {
-                      "dayCycle": "DUSK"
-                    }
-                  }
-                ]
-              }
+              "conditions": [
+                {
+                  "dayCycle": "DAWN",
+                  "className": "map.condition.Condition$TimeOfDayCondition"
+                },
+                {
+                  "dayCycle": "DAY",
+                  "className": "map.condition.Condition$TimeOfDayCondition"
+                },
+                {
+                  "dayCycle": "DUSK",
+                  "className": "map.condition.Condition$TimeOfDayCondition"
+                }
+              ],
+              "className": "map.condition.OrCondition"
             }
           }
         },
@@ -403,10 +393,8 @@
           ],
           "condition": {
             "condition": {
-              "className": "map.condition.Condition$TimeOfDayCondition",
-              "data": {
-                "dayCycle": "NIGHT"
-              }
+              "dayCycle": "NIGHT",
+              "className": "map.condition.Condition$TimeOfDayCondition"
             }
           }
         }

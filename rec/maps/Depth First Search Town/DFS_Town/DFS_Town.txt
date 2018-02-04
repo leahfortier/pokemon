@@ -157,11 +157,9 @@
       "triggerName": "DFS_Town_NPC_Bitchface_01",
       "condition": {
         "condition": {
-          "className": "map.condition.Condition$NpcInteractionCondition",
-          "data": {
-            "npcEntityName": "MaplesLab_NPC_Prof_Mapes_01",
-            "interactionName": ""
-          }
+          "npcEntityName": "MaplesLab_NPC_Prof_Mapes_01",
+          "interactionName": "",
+          "className": "map.condition.Condition$NpcInteractionCondition"
         }
       }
     },
@@ -521,30 +519,22 @@
       "triggerName": "DFS_Town_NPC_Rivalchan_01",
       "condition": {
         "condition": {
-          "className": "map.condition.AndCondition",
-          "data": {
-            "conditions": [
-              {
-                "className": "map.condition.Condition$NpcInteractionCondition",
-                "data": {
-                  "npcEntityName": "DFS_Town_NPC_Rivalchan_01",
-                  "interactionName": ""
-                }
+          "conditions": [
+            {
+              "npcEntityName": "DFS_Town_NPC_Rivalchan_01",
+              "interactionName": "",
+              "className": "map.condition.Condition$NpcInteractionCondition"
+            },
+            {
+              "condition": {
+                "npcEntityName": "MaplesLab_NPC_Prof_Mapes_01",
+                "interactionName": "",
+                "className": "map.condition.Condition$NpcInteractionCondition"
               },
-              {
-                "className": "map.condition.NotCondition",
-                "data": {
-                  "condition": {
-                    "className": "map.condition.Condition$NpcInteractionCondition",
-                    "data": {
-                      "npcEntityName": "MaplesLab_NPC_Prof_Mapes_01",
-                      "interactionName": ""
-                    }
-                  }
-                }
-              }
-            ]
-          }
+              "className": "map.condition.NotCondition"
+            }
+          ],
+          "className": "map.condition.AndCondition"
         }
       }
     }
@@ -634,10 +624,8 @@
           ],
           "condition": {
             "condition": {
-              "className": "map.condition.Condition$TimeOfDayCondition",
-              "data": {
-                "dayCycle": "NIGHT"
-              }
+              "dayCycle": "NIGHT",
+              "className": "map.condition.Condition$TimeOfDayCondition"
             }
           }
         },
@@ -678,29 +666,21 @@
           ],
           "condition": {
             "condition": {
-              "className": "map.condition.OrCondition",
-              "data": {
-                "conditions": [
-                  {
-                    "className": "map.condition.Condition$TimeOfDayCondition",
-                    "data": {
-                      "dayCycle": "DAWN"
-                    }
-                  },
-                  {
-                    "className": "map.condition.Condition$TimeOfDayCondition",
-                    "data": {
-                      "dayCycle": "DAY"
-                    }
-                  },
-                  {
-                    "className": "map.condition.Condition$TimeOfDayCondition",
-                    "data": {
-                      "dayCycle": "DUSK"
-                    }
-                  }
-                ]
-              }
+              "conditions": [
+                {
+                  "dayCycle": "DAWN",
+                  "className": "map.condition.Condition$TimeOfDayCondition"
+                },
+                {
+                  "dayCycle": "DAY",
+                  "className": "map.condition.Condition$TimeOfDayCondition"
+                },
+                {
+                  "dayCycle": "DUSK",
+                  "className": "map.condition.Condition$TimeOfDayCondition"
+                }
+              ],
+              "className": "map.condition.OrCondition"
             }
           }
         }

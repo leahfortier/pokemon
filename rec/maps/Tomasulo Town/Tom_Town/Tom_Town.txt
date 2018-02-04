@@ -133,28 +133,20 @@
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Citizen_01_01",
       "condition": {
         "condition": {
-          "className": "map.condition.AndCondition",
-          "data": {
-            "conditions": [
-              {
-                "className": "map.condition.Condition$BadgeCondition",
-                "data": {
-                  "badge": "ROUND"
-                }
+          "conditions": [
+            {
+              "badge": "ROUND",
+              "className": "map.condition.Condition$BadgeCondition"
+            },
+            {
+              "condition": {
+                "globalName": "VisitedTomTownPowerPlant",
+                "className": "map.condition.Condition$GlobalCondition"
               },
-              {
-                "className": "map.condition.NotCondition",
-                "data": {
-                  "condition": {
-                    "className": "map.condition.Condition$GlobalCondition",
-                    "data": {
-                      "globalName": "VisitedTomTownPowerPlant"
-                    }
-                  }
-                }
-              }
-            ]
-          }
+              "className": "map.condition.NotCondition"
+            }
+          ],
+          "className": "map.condition.AndCondition"
         }
       }
     },
@@ -184,28 +176,20 @@
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Citizen_02_01",
       "condition": {
         "condition": {
-          "className": "map.condition.AndCondition",
-          "data": {
-            "conditions": [
-              {
-                "className": "map.condition.Condition$BadgeCondition",
-                "data": {
-                  "badge": "ROUND"
-                }
+          "conditions": [
+            {
+              "badge": "ROUND",
+              "className": "map.condition.Condition$BadgeCondition"
+            },
+            {
+              "condition": {
+                "globalName": "VisitedTomTownPowerPlant",
+                "className": "map.condition.Condition$GlobalCondition"
               },
-              {
-                "className": "map.condition.NotCondition",
-                "data": {
-                  "condition": {
-                    "className": "map.condition.Condition$GlobalCondition",
-                    "data": {
-                      "globalName": "VisitedTomTownPowerPlant"
-                    }
-                  }
-                }
-              }
-            ]
-          }
+              "className": "map.condition.NotCondition"
+            }
+          ],
+          "className": "map.condition.AndCondition"
         }
       }
     },
@@ -235,28 +219,20 @@
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_01_01",
       "condition": {
         "condition": {
-          "className": "map.condition.AndCondition",
-          "data": {
-            "conditions": [
-              {
-                "className": "map.condition.Condition$BadgeCondition",
-                "data": {
-                  "badge": "ROUND"
-                }
+          "conditions": [
+            {
+              "badge": "ROUND",
+              "className": "map.condition.Condition$BadgeCondition"
+            },
+            {
+              "condition": {
+                "globalName": "VisitedTomTownPowerPlant",
+                "className": "map.condition.Condition$GlobalCondition"
               },
-              {
-                "className": "map.condition.NotCondition",
-                "data": {
-                  "condition": {
-                    "className": "map.condition.Condition$GlobalCondition",
-                    "data": {
-                      "globalName": "VisitedTomTownPowerPlant"
-                    }
-                  }
-                }
-              }
-            ]
-          }
+              "className": "map.condition.NotCondition"
+            }
+          ],
+          "className": "map.condition.AndCondition"
         }
       }
     },
@@ -286,28 +262,20 @@
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_02_01",
       "condition": {
         "condition": {
-          "className": "map.condition.AndCondition",
-          "data": {
-            "conditions": [
-              {
-                "className": "map.condition.Condition$BadgeCondition",
-                "data": {
-                  "badge": "ROUND"
-                }
+          "conditions": [
+            {
+              "badge": "ROUND",
+              "className": "map.condition.Condition$BadgeCondition"
+            },
+            {
+              "condition": {
+                "globalName": "VisitedTomTownPowerPlant",
+                "className": "map.condition.Condition$GlobalCondition"
               },
-              {
-                "className": "map.condition.NotCondition",
-                "data": {
-                  "condition": {
-                    "className": "map.condition.Condition$GlobalCondition",
-                    "data": {
-                      "globalName": "VisitedTomTownPowerPlant"
-                    }
-                  }
-                }
-              }
-            ]
-          }
+              "className": "map.condition.NotCondition"
+            }
+          ],
+          "className": "map.condition.AndCondition"
         }
       }
     },
@@ -337,28 +305,20 @@
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_03_01",
       "condition": {
         "condition": {
-          "className": "map.condition.AndCondition",
-          "data": {
-            "conditions": [
-              {
-                "className": "map.condition.Condition$BadgeCondition",
-                "data": {
-                  "badge": "ROUND"
-                }
+          "conditions": [
+            {
+              "badge": "ROUND",
+              "className": "map.condition.Condition$BadgeCondition"
+            },
+            {
+              "condition": {
+                "globalName": "VisitedTomTownPowerPlant",
+                "className": "map.condition.Condition$GlobalCondition"
               },
-              {
-                "className": "map.condition.NotCondition",
-                "data": {
-                  "condition": {
-                    "className": "map.condition.Condition$GlobalCondition",
-                    "data": {
-                      "globalName": "VisitedTomTownPowerPlant"
-                    }
-                  }
-                }
-              }
-            ]
-          }
+              "className": "map.condition.NotCondition"
+            }
+          ],
+          "className": "map.condition.AndCondition"
         }
       }
     },
@@ -388,28 +348,20 @@
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_TomTownPoliceOfficer01_01_01",
       "condition": {
         "condition": {
-          "className": "map.condition.AndCondition",
-          "data": {
-            "conditions": [
-              {
-                "className": "map.condition.Condition$BadgeCondition",
-                "data": {
-                  "badge": "ROUND"
-                }
+          "conditions": [
+            {
+              "badge": "ROUND",
+              "className": "map.condition.Condition$BadgeCondition"
+            },
+            {
+              "condition": {
+                "globalName": "VisitedTomTownPowerPlant",
+                "className": "map.condition.Condition$GlobalCondition"
               },
-              {
-                "className": "map.condition.NotCondition",
-                "data": {
-                  "condition": {
-                    "className": "map.condition.Condition$GlobalCondition",
-                    "data": {
-                      "globalName": "VisitedTomTownPowerPlant"
-                    }
-                  }
-                }
-              }
-            ]
-          }
+              "className": "map.condition.NotCondition"
+            }
+          ],
+          "className": "map.condition.AndCondition"
         }
       }
     }
@@ -435,15 +387,11 @@
       "triggerName": "Tom_Town_MiscEntity_LockedDoor_01",
       "condition": {
         "condition": {
-          "className": "map.condition.NotCondition",
-          "data": {
-            "condition": {
-              "className": "map.condition.Condition$BadgeCondition",
-              "data": {
-                "badge": "ROUND"
-              }
-            }
-          }
+          "condition": {
+            "badge": "ROUND",
+            "className": "map.condition.Condition$BadgeCondition"
+          },
+          "className": "map.condition.NotCondition"
         }
       }
     }
@@ -479,28 +427,20 @@
       "triggerName": "Tom_Town_Event_Rumbles_01",
       "condition": {
         "condition": {
-          "className": "map.condition.AndCondition",
-          "data": {
-            "conditions": [
-              {
-                "className": "map.condition.Condition$BadgeCondition",
-                "data": {
-                  "badge": "ROUND"
-                }
+          "conditions": [
+            {
+              "badge": "ROUND",
+              "className": "map.condition.Condition$BadgeCondition"
+            },
+            {
+              "condition": {
+                "globalName": "TomTownPowerPlantExplosionTriggered",
+                "className": "map.condition.Condition$GlobalCondition"
               },
-              {
-                "className": "map.condition.NotCondition",
-                "data": {
-                  "condition": {
-                    "className": "map.condition.Condition$GlobalCondition",
-                    "data": {
-                      "globalName": "TomTownPowerPlantExplosionTriggered"
-                    }
-                  }
-                }
-              }
-            ]
-          }
+              "className": "map.condition.NotCondition"
+            }
+          ],
+          "className": "map.condition.AndCondition"
         }
       }
     }

@@ -86,15 +86,11 @@
       "triggerName": "Tom_Town_Power_Plant_F1_NPC_Officer_01",
       "condition": {
         "condition": {
-          "className": "map.condition.NotCondition",
-          "data": {
-            "condition": {
-              "className": "map.condition.Condition$GlobalCondition",
-              "data": {
-                "globalName": "VisitedTomTownPowerPlant"
-              }
-            }
-          }
+          "condition": {
+            "globalName": "VisitedTomTownPowerPlant",
+            "className": "map.condition.Condition$GlobalCondition"
+          },
+          "className": "map.condition.NotCondition"
         }
       }
     },
@@ -124,10 +120,8 @@
       "triggerName": "Tom_Town_Power_Plant_F1_NPC_Scientist_01",
       "condition": {
         "condition": {
-          "className": "map.condition.Condition$GlobalCondition",
-          "data": {
-            "globalName": "VisitedTomTownPowerPlant"
-          }
+          "globalName": "VisitedTomTownPowerPlant",
+          "className": "map.condition.Condition$GlobalCondition"
         }
       }
     }

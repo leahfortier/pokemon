@@ -8,12 +8,12 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import main.Global;
 
 import java.lang.reflect.Type;
 
 public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
     private static final String CLASSNAME = "className";
-    private static final String DATA = "data";
 
     @Override
     public Object deserialize(JsonElement jsonElement,
@@ -21,16 +21,21 @@ public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
                               JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         JsonObject jsonObject = jsonElement.getAsJsonObject();
         JsonPrimitive jsonPrimitive = (JsonPrimitive)jsonObject.get(CLASSNAME);
+        jsonObject.remove(CLASSNAME);
+
         String className = jsonPrimitive.getAsString();
         Class classy = getObjectClass(className);
-        return jsonDeserializationContext.deserialize(jsonObject.get(DATA), classy);
+
+        return jsonDeserializationContext.deserialize(jsonObject, classy);
     }
 
     @Override
-    public JsonElement serialize(Object jsonElement, Type type, JsonSerializationContext jsonSerializationContext) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(CLASSNAME, jsonElement.getClass().getName());
-        jsonObject.add(DATA, jsonSerializationContext.serialize(jsonElement));
+    public JsonElement serialize(Object toSerialize, Type type, JsonSerializationContext jsonSerializationContext) {
+        JsonObject jsonObject = jsonSerializationContext.serialize(toSerialize).getAsJsonObject();
+        if (jsonObject.has(CLASSNAME)) {
+            Global.error("Json Object already has class name element.");
+        }
+        jsonObject.addProperty(CLASSNAME, toSerialize.getClass().getName());
         return jsonObject;
     }
 

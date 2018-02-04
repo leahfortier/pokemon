@@ -8,15 +8,11 @@
         {
           "condition": {
             "condition": {
-              "className": "map.condition.NotCondition",
-              "data": {
-                "condition": {
-                  "className": "map.condition.Condition$GlobalCondition",
-                  "data": {
-                    "globalName": "VisitedTomTownPowerPlant"
-                  }
-                }
-              }
+              "condition": {
+                "globalName": "VisitedTomTownPowerPlant",
+                "className": "map.condition.Condition$GlobalCondition"
+              },
+              "className": "map.condition.NotCondition"
             }
           },
           "music": "DEADLOCK_THEME"
@@ -108,15 +104,11 @@
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01",
       "condition": {
         "condition": {
-          "className": "map.condition.NotCondition",
-          "data": {
-            "condition": {
-              "className": "map.condition.Condition$GlobalCondition",
-              "data": {
-                "globalName": "VisitedTomTownPowerPlant"
-              }
-            }
-          }
+          "condition": {
+            "globalName": "VisitedTomTownPowerPlant",
+            "className": "map.condition.Condition$GlobalCondition"
+          },
+          "className": "map.condition.NotCondition"
         }
       }
     },
@@ -183,15 +175,11 @@
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02",
       "condition": {
         "condition": {
-          "className": "map.condition.NotCondition",
-          "data": {
-            "condition": {
-              "className": "map.condition.Condition$GlobalCondition",
-              "data": {
-                "globalName": "VisitedTomTownPowerPlant"
-              }
-            }
-          }
+          "condition": {
+            "globalName": "VisitedTomTownPowerPlant",
+            "className": "map.condition.Condition$GlobalCondition"
+          },
+          "className": "map.condition.NotCondition"
         }
       }
     },
@@ -247,15 +235,11 @@
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03",
       "condition": {
         "condition": {
-          "className": "map.condition.NotCondition",
-          "data": {
-            "condition": {
-              "className": "map.condition.Condition$GlobalCondition",
-              "data": {
-                "globalName": "VisitedTomTownPowerPlant"
-              }
-            }
-          }
+          "condition": {
+            "globalName": "VisitedTomTownPowerPlant",
+            "className": "map.condition.Condition$GlobalCondition"
+          },
+          "className": "map.condition.NotCondition"
         }
       }
     },
@@ -288,24 +272,18 @@
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
       "condition": {
         "condition": {
-          "className": "map.condition.AndCondition",
-          "data": {
-            "conditions": [
-              {
-                "className": "map.condition.Condition$GlobalCondition",
-                "data": {
-                  "globalName": "VisitedTomTownPowerPlant"
-                }
-              },
-              {
-                "className": "map.condition.Condition$NpcInteractionCondition",
-                "data": {
-                  "npcEntityName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
-                  "interactionName": ""
-                }
-              }
-            ]
-          }
+          "conditions": [
+            {
+              "globalName": "VisitedTomTownPowerPlant",
+              "className": "map.condition.Condition$GlobalCondition"
+            },
+            {
+              "npcEntityName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+              "interactionName": "",
+              "className": "map.condition.Condition$NpcInteractionCondition"
+            }
+          ],
+          "className": "map.condition.AndCondition"
         }
       }
     },
@@ -335,29 +313,21 @@
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_Scientist_01",
       "condition": {
         "condition": {
-          "className": "map.condition.AndCondition",
-          "data": {
-            "conditions": [
-              {
-                "className": "map.condition.Condition$GlobalCondition",
-                "data": {
-                  "globalName": "VisitedTomTownPowerPlant"
-                }
+          "conditions": [
+            {
+              "globalName": "VisitedTomTownPowerPlant",
+              "className": "map.condition.Condition$GlobalCondition"
+            },
+            {
+              "condition": {
+                "npcEntityName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+                "interactionName": "",
+                "className": "map.condition.Condition$NpcInteractionCondition"
               },
-              {
-                "className": "map.condition.NotCondition",
-                "data": {
-                  "condition": {
-                    "className": "map.condition.Condition$NpcInteractionCondition",
-                    "data": {
-                      "npcEntityName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
-                      "interactionName": ""
-                    }
-                  }
-                }
-              }
-            ]
-          }
+              "className": "map.condition.NotCondition"
+            }
+          ],
+          "className": "map.condition.AndCondition"
         }
       }
     }

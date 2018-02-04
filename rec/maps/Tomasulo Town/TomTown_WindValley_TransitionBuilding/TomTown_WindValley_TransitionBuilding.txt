@@ -127,28 +127,20 @@
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_Boy_01_01",
       "condition": {
         "condition": {
-          "className": "map.condition.AndCondition",
-          "data": {
-            "conditions": [
-              {
-                "className": "map.condition.Condition$BadgeCondition",
-                "data": {
-                  "badge": "ROUND"
-                }
+          "conditions": [
+            {
+              "badge": "ROUND",
+              "className": "map.condition.Condition$BadgeCondition"
+            },
+            {
+              "condition": {
+                "globalName": "VisitedTomTownPowerPlant",
+                "className": "map.condition.Condition$GlobalCondition"
               },
-              {
-                "className": "map.condition.NotCondition",
-                "data": {
-                  "condition": {
-                    "className": "map.condition.Condition$GlobalCondition",
-                    "data": {
-                      "globalName": "VisitedTomTownPowerPlant"
-                    }
-                  }
-                }
-              }
-            ]
-          }
+              "className": "map.condition.NotCondition"
+            }
+          ],
+          "className": "map.condition.AndCondition"
         }
       }
     },
@@ -178,28 +170,20 @@
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01_01",
       "condition": {
         "condition": {
-          "className": "map.condition.AndCondition",
-          "data": {
-            "conditions": [
-              {
-                "className": "map.condition.Condition$BadgeCondition",
-                "data": {
-                  "badge": "ROUND"
-                }
+          "conditions": [
+            {
+              "badge": "ROUND",
+              "className": "map.condition.Condition$BadgeCondition"
+            },
+            {
+              "condition": {
+                "globalName": "VisitedTomTownPowerPlant",
+                "className": "map.condition.Condition$GlobalCondition"
               },
-              {
-                "className": "map.condition.NotCondition",
-                "data": {
-                  "condition": {
-                    "className": "map.condition.Condition$GlobalCondition",
-                    "data": {
-                      "globalName": "VisitedTomTownPowerPlant"
-                    }
-                  }
-                }
-              }
-            ]
-          }
+              "className": "map.condition.NotCondition"
+            }
+          ],
+          "className": "map.condition.AndCondition"
         }
       }
     },
@@ -229,15 +213,11 @@
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01_01",
       "condition": {
         "condition": {
-          "className": "map.condition.NotCondition",
-          "data": {
-            "condition": {
-              "className": "map.condition.Condition$BadgeCondition",
-              "data": {
-                "badge": "ROUND"
-              }
-            }
-          }
+          "condition": {
+            "badge": "ROUND",
+            "className": "map.condition.Condition$BadgeCondition"
+          },
+          "className": "map.condition.NotCondition"
         }
       }
     },
@@ -267,15 +247,11 @@
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Girl_01_01",
       "condition": {
         "condition": {
-          "className": "map.condition.NotCondition",
-          "data": {
-            "condition": {
-              "className": "map.condition.Condition$BadgeCondition",
-              "data": {
-                "badge": "ROUND"
-              }
-            }
-          }
+          "condition": {
+            "badge": "ROUND",
+            "className": "map.condition.Condition$BadgeCondition"
+          },
+          "className": "map.condition.NotCondition"
         }
       }
     },
@@ -311,28 +287,20 @@
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_PoliceOfficer_01_01",
       "condition": {
         "condition": {
-          "className": "map.condition.AndCondition",
-          "data": {
-            "conditions": [
-              {
-                "className": "map.condition.Condition$BadgeCondition",
-                "data": {
-                  "badge": "ROUND"
-                }
+          "conditions": [
+            {
+              "badge": "ROUND",
+              "className": "map.condition.Condition$BadgeCondition"
+            },
+            {
+              "condition": {
+                "globalName": "VisitedTomTownPowerPlant",
+                "className": "map.condition.Condition$GlobalCondition"
               },
-              {
-                "className": "map.condition.NotCondition",
-                "data": {
-                  "condition": {
-                    "className": "map.condition.Condition$GlobalCondition",
-                    "data": {
-                      "globalName": "VisitedTomTownPowerPlant"
-                    }
-                  }
-                }
-              }
-            ]
-          }
+              "className": "map.condition.NotCondition"
+            }
+          ],
+          "className": "map.condition.AndCondition"
         }
       }
     }

@@ -251,16 +251,12 @@
       "triggerName": "RSATown_NPC_Rival_01",
       "condition": {
         "condition": {
-          "className": "map.condition.NotCondition",
-          "data": {
-            "condition": {
-              "className": "map.condition.Condition$NpcInteractionCondition",
-              "data": {
-                "npcEntityName": "RSATown_NPC_Rival_01",
-                "interactionName": "won"
-              }
-            }
-          }
+          "condition": {
+            "npcEntityName": "RSATown_NPC_Rival_01",
+            "interactionName": "won",
+            "className": "map.condition.Condition$NpcInteractionCondition"
+          },
+          "className": "map.condition.NotCondition"
         }
       }
     },
@@ -335,16 +331,12 @@
       "triggerName": "RSATown_Event_Rival_Battle_01",
       "condition": {
         "condition": {
-          "className": "map.condition.NotCondition",
-          "data": {
-            "condition": {
-              "className": "map.condition.Condition$NpcInteractionCondition",
-              "data": {
-                "npcEntityName": "RSATown_NPC_Rival_01",
-                "interactionName": "won"
-              }
-            }
-          }
+          "condition": {
+            "npcEntityName": "RSATown_NPC_Rival_01",
+            "interactionName": "won",
+            "className": "map.condition.Condition$NpcInteractionCondition"
+          },
+          "className": "map.condition.NotCondition"
         }
       }
     }
