@@ -1,11 +1,8 @@
 package pattern.map;
 
-import com.google.gson.JsonObject;
-import main.Global;
 import map.area.AreaData;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.LocationTriggerMatcher;
-import util.FileIO;
 import util.GeneralUtils;
 import util.SerializationUtils;
 
@@ -20,7 +17,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class MapDataMatcher {
-
     private AreaMatcher[] areas = new AreaMatcher[0];
     private MapTransitionMatcher[] mapTransitions = new MapTransitionMatcher[0];
     private NPCMatcher[] NPCs = new NPCMatcher[0];
@@ -123,25 +119,6 @@ public class MapDataMatcher {
     }
 
     public static MapDataMatcher matchArea(String areaDescriptionFileName) {
-        String areaDescription = FileIO.readEntireFileWithReplacements(areaDescriptionFileName, false);
-
-        MapDataMatcher areaData = SerializationUtils.deserializeJson(areaDescription, MapDataMatcher.class);
-        JsonObject mappity = SerializationUtils.deserializeJson(areaDescription, JsonObject.class);
-
-        String areaDataJson = SerializationUtils.getJson(areaData);
-        String mapJson = SerializationUtils.getJson(mappity);
-
-//        FileIO.writeToFile("out.txt", areaDataJson);
-//        FileIO.writeToFile("out2.txt", mapJson);
-
-        if (!areaDataJson.equals(mapJson)) {
-            Global.error("No dice: " + areaDescriptionFileName);
-        }
-
-        areaDataJson = SerializationUtils.getJson(areaData);
-
-        FileIO.overwriteFile(areaDescriptionFileName, areaDataJson);
-
-        return areaData;
+        return SerializationUtils.deserializeJsonFile(areaDescriptionFileName, MapDataMatcher.class);
     }
 }

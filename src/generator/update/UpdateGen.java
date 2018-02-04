@@ -4,6 +4,7 @@ import draw.ImageUtils;
 import map.condition.AndCondition;
 import map.condition.Condition;
 import map.condition.ConditionSet;
+import pattern.map.ConditionMatcher;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.evolution.EvolutionType;
@@ -39,7 +40,7 @@ public class UpdateGen {
 //        resizeImages();
 //        trimImages();
 //        translateAlBhed();
-        ConditionCreator.getJson();
+        addCondition();
     }
 
     private static void trimImages() {
@@ -369,22 +370,17 @@ public class UpdateGen {
         System.out.println(shubs.toString());
     }
 
-    public static class ConditionCreator {
-        ConditionSet condition;
+    private static void addCondition() {
+        Condition condition;
 
-        public ConditionCreator() {
-            Condition condition;
+        // Fill this in when you want to use this
+        String name = "";
+        String description = "";
+        condition = new AndCondition();
 
-            // Fill this in when you want to use this
-            condition = new AndCondition();
+        ConditionMatcher matcher = new ConditionMatcher(name, description, new ConditionSet(condition));
 
-            this.condition = new ConditionSet(condition);
-        }
-
-        public static void getJson() {
-            ConditionCreator conditionSet = new ConditionCreator();
-            String json = SerializationUtils.getJson(conditionSet);
-            System.out.println(json);
-        }
+//        ConditionsMatcher.addCondition(matcher);
+        System.out.println(SerializationUtils.getJson(matcher));
     }
 }

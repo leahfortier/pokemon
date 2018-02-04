@@ -3,7 +3,9 @@ package gui;
 import main.Global;
 import map.MapData;
 import map.MapName;
+import map.condition.ConditionSet;
 import map.triggers.Trigger;
+import pattern.map.ConditionsMatcher;
 import util.FileIO;
 import util.Folder;
 
@@ -14,6 +16,7 @@ import java.util.Map;
 public class GameData {
     private Map<MapName, MapData> maps;
     private Map<String, Trigger> triggers;
+    private Map<String, ConditionSet> conditions;
 
     private IndexTileSet mapTiles;
     private IndexTileSet trainerTiles;
@@ -53,6 +56,8 @@ public class GameData {
     }
 
     private void loadMaps() {
+        conditions = ConditionsMatcher.getConditions();
+
         triggers = new HashMap<>();
         Trigger.createCommonTriggers();
 
@@ -70,6 +75,14 @@ public class GameData {
         }
 
         return maps.get(name);
+    }
+
+    public ConditionSet getCondition(String conditionName) {
+        if (!this.conditions.containsKey(conditionName)) {
+            Global.error("Invalid condition name: " + conditionName);
+        }
+
+        return this.conditions.get(conditionName);
     }
 
     public boolean hasTrigger(String triggerName) {

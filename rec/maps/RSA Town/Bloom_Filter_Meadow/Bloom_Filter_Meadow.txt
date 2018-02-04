@@ -88,12 +88,7 @@
         "y": 17
       },
       "triggerName": "Bloom_Filter_Meadow_NPC_LittleGirl_01",
-      "condition": {
-        "condition": {
-          "dayCycle": "DAY",
-          "className": "map.condition.Condition$TimeOfDayCondition"
-        }
-      }
+      "conditionName": "OnlyDay"
     },
     {
       "name": "Meadow_Trainer",
@@ -306,25 +301,7 @@
               "probability": 10
             }
           ],
-          "condition": {
-            "condition": {
-              "conditions": [
-                {
-                  "dayCycle": "DAWN",
-                  "className": "map.condition.Condition$TimeOfDayCondition"
-                },
-                {
-                  "dayCycle": "DAY",
-                  "className": "map.condition.Condition$TimeOfDayCondition"
-                },
-                {
-                  "dayCycle": "DUSK",
-                  "className": "map.condition.Condition$TimeOfDayCondition"
-                }
-              ],
-              "className": "map.condition.OrCondition"
-            }
-          }
+          "conditionName": "NotNight"
         },
         {
           "name": "night",
@@ -391,12 +368,7 @@
               "probability": 5
             }
           ],
-          "condition": {
-            "condition": {
-              "dayCycle": "NIGHT",
-              "className": "map.condition.Condition$TimeOfDayCondition"
-            }
-          }
+          "conditionName": "OnlyNight"
         }
       ],
       "location": [

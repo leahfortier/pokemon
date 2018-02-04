@@ -131,24 +131,7 @@
         "y": 23
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Citizen_01_01",
-      "condition": {
-        "condition": {
-          "conditions": [
-            {
-              "badge": "ROUND",
-              "className": "map.condition.Condition$BadgeCondition"
-            },
-            {
-              "condition": {
-                "globalName": "VisitedTomTownPowerPlant",
-                "className": "map.condition.Condition$GlobalCondition"
-              },
-              "className": "map.condition.NotCondition"
-            }
-          ],
-          "className": "map.condition.AndCondition"
-        }
-      }
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "Tom_Town_NPC_Citizen_02",
@@ -174,24 +157,7 @@
         "y": 22
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Citizen_02_01",
-      "condition": {
-        "condition": {
-          "conditions": [
-            {
-              "badge": "ROUND",
-              "className": "map.condition.Condition$BadgeCondition"
-            },
-            {
-              "condition": {
-                "globalName": "VisitedTomTownPowerPlant",
-                "className": "map.condition.Condition$GlobalCondition"
-              },
-              "className": "map.condition.NotCondition"
-            }
-          ],
-          "className": "map.condition.AndCondition"
-        }
-      }
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "Tom_Town_NPC_Scientist_01",
@@ -217,24 +183,7 @@
         "y": 16
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_01_01",
-      "condition": {
-        "condition": {
-          "conditions": [
-            {
-              "badge": "ROUND",
-              "className": "map.condition.Condition$BadgeCondition"
-            },
-            {
-              "condition": {
-                "globalName": "VisitedTomTownPowerPlant",
-                "className": "map.condition.Condition$GlobalCondition"
-              },
-              "className": "map.condition.NotCondition"
-            }
-          ],
-          "className": "map.condition.AndCondition"
-        }
-      }
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "Tom_Town_NPC_Scientist_02",
@@ -260,24 +209,7 @@
         "y": 14
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_02_01",
-      "condition": {
-        "condition": {
-          "conditions": [
-            {
-              "badge": "ROUND",
-              "className": "map.condition.Condition$BadgeCondition"
-            },
-            {
-              "condition": {
-                "globalName": "VisitedTomTownPowerPlant",
-                "className": "map.condition.Condition$GlobalCondition"
-              },
-              "className": "map.condition.NotCondition"
-            }
-          ],
-          "className": "map.condition.AndCondition"
-        }
-      }
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "Tom_Town_NPC_Scientist_03",
@@ -303,24 +235,7 @@
         "y": 15
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_03_01",
-      "condition": {
-        "condition": {
-          "conditions": [
-            {
-              "badge": "ROUND",
-              "className": "map.condition.Condition$BadgeCondition"
-            },
-            {
-              "condition": {
-                "globalName": "VisitedTomTownPowerPlant",
-                "className": "map.condition.Condition$GlobalCondition"
-              },
-              "className": "map.condition.NotCondition"
-            }
-          ],
-          "className": "map.condition.AndCondition"
-        }
-      }
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "Tom_Town_NPC_TomTownPoliceOfficer01_01",
@@ -346,24 +261,7 @@
         "y": 15
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_TomTownPoliceOfficer01_01_01",
-      "condition": {
-        "condition": {
-          "conditions": [
-            {
-              "badge": "ROUND",
-              "className": "map.condition.Condition$BadgeCondition"
-            },
-            {
-              "condition": {
-                "globalName": "VisitedTomTownPowerPlant",
-                "className": "map.condition.Condition$GlobalCondition"
-              },
-              "className": "map.condition.NotCondition"
-            }
-          ],
-          "className": "map.condition.AndCondition"
-        }
-      }
+      "conditionName": "TomTownDeadlockInvasion"
     }
   ],
   "items": [],
@@ -385,15 +283,7 @@
         }
       ],
       "triggerName": "Tom_Town_MiscEntity_LockedDoor_01",
-      "condition": {
-        "condition": {
-          "condition": {
-            "badge": "ROUND",
-            "className": "map.condition.Condition$BadgeCondition"
-          },
-          "className": "map.condition.NotCondition"
-        }
-      }
+      "conditionName": "NoRoundBadge"
     }
   ],
   "events": [

@@ -622,12 +622,7 @@
               "probability": 10
             }
           ],
-          "condition": {
-            "condition": {
-              "dayCycle": "NIGHT",
-              "className": "map.condition.Condition$TimeOfDayCondition"
-            }
-          }
+          "conditionName": "OnlyNight"
         },
         {
           "name": "day",
@@ -664,25 +659,7 @@
               "probability": 10
             }
           ],
-          "condition": {
-            "condition": {
-              "conditions": [
-                {
-                  "dayCycle": "DAWN",
-                  "className": "map.condition.Condition$TimeOfDayCondition"
-                },
-                {
-                  "dayCycle": "DAY",
-                  "className": "map.condition.Condition$TimeOfDayCondition"
-                },
-                {
-                  "dayCycle": "DUSK",
-                  "className": "map.condition.Condition$TimeOfDayCondition"
-                }
-              ],
-              "className": "map.condition.OrCondition"
-            }
-          }
+          "conditionName": "NotNight"
         }
       ],
       "location": [

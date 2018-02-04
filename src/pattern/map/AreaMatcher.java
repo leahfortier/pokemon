@@ -2,6 +2,7 @@ package pattern.map;
 
 import map.area.AreaData;
 import map.area.MusicCondition;
+import map.condition.Condition;
 import map.condition.ConditionSet;
 import map.overworld.TerrainType;
 import map.weather.WeatherState;
@@ -75,7 +76,7 @@ public class AreaMatcher {
         for (int i = 0; i < this.musicConditions.length; i++) {
             musicConditions[i] = new MusicCondition(
                     this.musicConditions[i].music,
-                    this.musicConditions[i].condition.getCondition()
+                    this.musicConditions[i].getCondition()
             );
         }
 
@@ -100,7 +101,12 @@ public class AreaMatcher {
     }
 
     private static class MusicConditionMatcher {
+        private String conditionName;
         private ConditionSet condition;
         private SoundTitle music;
+
+        public Condition getCondition() {
+            return ConditionMatcher.getCondition(conditionName, condition);
+        }
     }
 }

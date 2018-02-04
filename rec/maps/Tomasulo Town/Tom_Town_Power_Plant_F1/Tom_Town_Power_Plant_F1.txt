@@ -84,15 +84,7 @@
         "y": 9
       },
       "triggerName": "Tom_Town_Power_Plant_F1_NPC_Officer_01",
-      "condition": {
-        "condition": {
-          "condition": {
-            "globalName": "VisitedTomTownPowerPlant",
-            "className": "map.condition.Condition$GlobalCondition"
-          },
-          "className": "map.condition.NotCondition"
-        }
-      }
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "Scientist",
@@ -118,12 +110,7 @@
         "y": 6
       },
       "triggerName": "Tom_Town_Power_Plant_F1_NPC_Scientist_01",
-      "condition": {
-        "condition": {
-          "globalName": "VisitedTomTownPowerPlant",
-          "className": "map.condition.Condition$GlobalCondition"
-        }
-      }
+      "conditionName": "TomTownDeadlockDefeated"
     }
   ],
   "items": [],

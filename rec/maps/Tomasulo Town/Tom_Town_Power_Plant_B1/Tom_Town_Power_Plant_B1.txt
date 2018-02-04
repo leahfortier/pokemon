@@ -50,24 +50,7 @@
         "y": 4
       },
       "triggerName": "Tom_Town_Power_Plant_B1_NPC_Scientist_01",
-      "condition": {
-        "condition": {
-          "conditions": [
-            {
-              "badge": "ROUND",
-              "className": "map.condition.Condition$BadgeCondition"
-            },
-            {
-              "condition": {
-                "globalName": "VisitedTomTownPowerPlant",
-                "className": "map.condition.Condition$GlobalCondition"
-              },
-              "className": "map.condition.NotCondition"
-            }
-          ],
-          "className": "map.condition.AndCondition"
-        }
-      }
+      "conditionName": "TomTownDeadlockInvasion"
     }
   ],
   "items": [
