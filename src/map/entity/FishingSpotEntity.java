@@ -1,6 +1,9 @@
 package map.entity;
 
+import item.ItemNamesies;
+import map.condition.AndCondition;
 import map.condition.Condition;
+import map.condition.Condition.ItemCondition;
 import map.entity.EntityAction.TriggerAction;
 import map.overworld.WildEncounterInfo;
 import map.triggers.TriggerType;
@@ -15,7 +18,7 @@ public class FishingSpotEntity extends Entity {
     private boolean dataCreated;
 
     public FishingSpotEntity(Point location, String entityName, Condition condition, WildEncounterInfo[] wildEncounters) {
-        super(location, entityName, condition);
+        super(location, entityName, new AndCondition(condition, new ItemCondition(ItemNamesies.FISHING_ROD)));
 
         this.wildEncounters = wildEncounters;
         this.dataCreated = false;
@@ -37,9 +40,12 @@ public class FishingSpotEntity extends Entity {
             return;
         }
 
-        // TODO: condition -- need fishing rod
         FishingMatcher fishingMatcher = new FishingMatcher(this.getEntityName(), wildEncounters);
-        EntityAction entityAction = new TriggerAction(TriggerType.FISHING, SerializationUtils.getJson(fishingMatcher), null);
+        EntityAction entityAction = new TriggerAction(
+                TriggerType.FISHING,
+                SerializationUtils.getJson(fishingMatcher),
+                new ItemCondition(ItemNamesies.FISHING_ROD)
+        );
 
         EntityAction.addActionGroupTrigger(
                 this.getEntityName(),

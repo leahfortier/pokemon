@@ -3,7 +3,9 @@ package map.triggers.battle;
 import battle.ActivePokemon;
 import item.ItemNamesies;
 import main.Game;
+import map.condition.AndCondition;
 import map.condition.Condition;
+import map.condition.Condition.ItemCondition;
 import map.overworld.WildEncounter;
 import map.overworld.WildEncounterInfo;
 import map.triggers.Trigger;
@@ -24,7 +26,7 @@ public class FishingTrigger extends Trigger {
     private final WildEncounterInfo[] wildEncounters;
 
     public FishingTrigger(String matcherJson, Condition condition) {
-        super(TriggerType.FISHING, matcherJson, condition);
+        super(TriggerType.FISHING, matcherJson, new AndCondition(condition, new ItemCondition(ItemNamesies.FISHING_ROD)));
 
         FishingMatcher matcher = SerializationUtils.deserializeJson(matcherJson, FishingMatcher.class);
         this.wildEncounters = matcher.getWildEncounters();
@@ -33,11 +35,6 @@ public class FishingTrigger extends Trigger {
     @Override
     protected void executeTrigger() {
         Player player = Game.getPlayer();
-
-        // TODO: This should be back in the condition in the constructor if that gets refactored or anything
-        if (!player.getBag().hasItem(ItemNamesies.FISHING_ROD)) {
-            return;
-        }
 
         ActivePokemon front = player.front();
         int chance = front.hasAbility(AbilityNamesies.SUCTION_CUPS) || front.hasAbility(AbilityNamesies.STICKY_HOLD)
