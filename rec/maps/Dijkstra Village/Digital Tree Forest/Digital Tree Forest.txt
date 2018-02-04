@@ -146,7 +146,7 @@
           ],
           "condition": {
             "condition": {
-              "className": "map.condition.AndCondition",
+              "className": "map.condition.OrCondition",
               "data": {
                 "conditions": [
                   {

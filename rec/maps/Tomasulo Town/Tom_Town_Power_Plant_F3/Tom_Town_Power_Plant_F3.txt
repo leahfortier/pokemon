@@ -345,10 +345,15 @@
                 }
               },
               {
-                "className": "map.condition.Condition$NpcInteractionCondition",
+                "className": "map.condition.NotCondition",
                 "data": {
-                  "npcEntityName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
-                  "interactionName": ""
+                  "condition": {
+                    "className": "map.condition.Condition$NpcInteractionCondition",
+                    "data": {
+                      "npcEntityName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+                      "interactionName": ""
+                    }
+                  }
                 }
               }
             ]
