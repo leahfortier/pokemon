@@ -5,6 +5,7 @@ import gui.view.map.MapView;
 import map.Direction;
 import map.MapData;
 import map.condition.Condition;
+import map.condition.ConditionSet;
 import map.triggers.TriggerType;
 import util.Point;
 
@@ -12,18 +13,17 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public abstract class Entity {
-
     private final String entityName;
-    private final Condition condition;
+    private final ConditionSet condition;
 
     private Point location;
     private boolean visible;
 
-    protected Entity(Point location, String entityName, String condition) {
+    protected Entity(Point location, String entityName, Condition condition) {
         this.location = location;
 
         this.entityName = entityName;
-        this.condition = new Condition(condition);
+        this.condition = new ConditionSet(condition);
     }
 
     public boolean isHighPriorityEntity() {
@@ -39,7 +39,7 @@ public abstract class Entity {
     }
 
     private boolean isPresent() {
-        return this.condition.isTrue();
+        return this.condition.evaluate();
     }
 
     public boolean isPassable() {
@@ -55,8 +55,8 @@ public abstract class Entity {
         return this.visible;
     }
 
-    protected String getConditionString() {
-        return this.condition.getOriginalConditionString();
+    protected Condition getCondition() {
+        return this.condition.getCondition();
     }
 
     public final void draw(Graphics g, Point drawLocation, boolean drawOnlyInTransition) {

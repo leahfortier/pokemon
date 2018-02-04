@@ -1,5 +1,6 @@
 package mapMaker.dialogs;
 
+import map.condition.Condition.GlobalCondition;
 import mapMaker.dialogs.action.ActionListPanel;
 import pattern.action.ActionMatcher;
 import pattern.map.MiscEntityMatcher;
@@ -48,7 +49,8 @@ public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
 
         return new MiscEntityMatcher(
                 this.getNameField(nameTextField),
-                conditionTextArea.getText(),
+                // TODO: PLACEHOLDER
+                new GlobalCondition(conditionTextArea.getText()),
                 actions
         );
     }
@@ -59,7 +61,8 @@ public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
         }
 
         nameTextField.setText(matcher.getBasicName());
-        conditionTextArea.setText(matcher.getCondition());
+        // TODO: PLACEHOLDER
+        conditionTextArea.setText(matcher.getCondition().toString());
         actionListPanel.load(matcher.getActionMatcherList());
     }
 }

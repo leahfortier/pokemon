@@ -1,5 +1,6 @@
 package map.entity;
 
+import map.condition.Condition;
 import map.entity.EntityAction.TriggerAction;
 import map.overworld.WildEncounterInfo;
 import map.triggers.TriggerType;
@@ -10,11 +11,10 @@ import util.SerializationUtils;
 import java.util.Collections;
 
 public class FishingSpotEntity extends Entity {
-
     private final WildEncounterInfo[] wildEncounters;
     private boolean dataCreated;
 
-    public FishingSpotEntity(Point location, String entityName, String condition, WildEncounterInfo[] wildEncounters) {
+    public FishingSpotEntity(Point location, String entityName, Condition condition, WildEncounterInfo[] wildEncounters) {
         super(location, entityName, condition);
 
         this.wildEncounters = wildEncounters;
@@ -44,7 +44,7 @@ public class FishingSpotEntity extends Entity {
         EntityAction.addActionGroupTrigger(
                 this.getEntityName(),
                 this.getTriggerSuffix(),
-                this.getConditionString(),
+                this.getCondition(),
                 Collections.singletonList(entityAction)
         );
 

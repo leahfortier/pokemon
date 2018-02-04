@@ -2,6 +2,7 @@ package map.triggers;
 
 import gui.GameData;
 import main.Game;
+import map.condition.Condition;
 import map.triggers.battle.FishingTrigger;
 import map.triggers.battle.TrainerBattleTrigger;
 import map.triggers.battle.WalkingWildBattleTrigger;
@@ -64,7 +65,7 @@ public enum TriggerType {
         return this.createTrigger(contents, null);
     }
 
-    public Trigger createTrigger(final String contents, final String condition) {
+    public Trigger createTrigger(final String contents, final Condition condition) {
         GameData data = Game.getData();
         String triggerName = this.getTriggerName(contents);
 
@@ -85,6 +86,6 @@ public enum TriggerType {
 
     @FunctionalInterface
     private interface TriggerCreator {
-        Trigger createTrigger(final String contents, final String condition);
+        Trigger createTrigger(final String contents, final Condition condition);
     }
 }

@@ -3,6 +3,7 @@ package map.triggers.battle;
 import battle.ActivePokemon;
 import item.ItemNamesies;
 import main.Game;
+import map.condition.Condition;
 import map.overworld.WildEncounter;
 import map.overworld.WildEncounterInfo;
 import map.triggers.Trigger;
@@ -22,7 +23,7 @@ public class FishingTrigger extends Trigger {
 
     private final WildEncounterInfo[] wildEncounters;
 
-    public FishingTrigger(String matcherJson, String condition) {
+    public FishingTrigger(String matcherJson, Condition condition) {
         super(TriggerType.FISHING, matcherJson, condition);
 
         FishingMatcher matcher = SerializationUtils.deserializeJson(matcherJson, FishingMatcher.class);

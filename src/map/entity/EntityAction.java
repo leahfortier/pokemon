@@ -1,5 +1,7 @@
 package map.entity;
 
+import map.condition.Condition;
+import map.condition.ConditionSet;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.GroupTriggerMatcher;
@@ -15,7 +17,7 @@ public abstract class EntityAction {
 
     protected abstract TriggerType getTriggerType();
     protected abstract String getTriggerContents(String entityName);
-    protected String getCondition() { return null; }
+    protected Condition getCondition() { return null; }
 
     private Trigger getTrigger(String entityName) {
         return this.getTriggerType()
@@ -25,7 +27,7 @@ public abstract class EntityAction {
                    );
     }
 
-    public static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, String condition, List<EntityAction> actions) {
+    public static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, Condition condition, List<EntityAction> actions) {
         final String[] actionTriggerNames = new String[actions.size()];
         for (int i = 0; i < actions.size(); i++) {
             Trigger actionTrigger = actions.get(i).getTrigger(entityName);
@@ -41,12 +43,12 @@ public abstract class EntityAction {
     public static class TriggerAction extends EntityAction {
         private final TriggerType type;
         private final String contents;
-        private final String condition;
+        private final ConditionSet condition;
 
-        public TriggerAction(final TriggerType type, final String contents, final String condition) {
+        public TriggerAction(final TriggerType type, final String contents, final Condition condition) {
             this.type = type;
             this.contents = StringUtils.isNullOrEmpty(contents) ? StringUtils.empty() : contents;
-            this.condition = condition;
+            this.condition = new ConditionSet(condition);
         }
 
         @Override
@@ -60,8 +62,8 @@ public abstract class EntityAction {
         }
 
         @Override
-        protected String getCondition() {
-            return this.condition;
+        protected Condition getCondition() {
+            return this.condition.getCondition();
         }
     }
 

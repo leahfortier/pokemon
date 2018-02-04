@@ -146,7 +146,7 @@ public class Player extends PlayerTrainer implements Serializable {
     }
 
     public boolean hasTool(OverworldTool tool) {
-        return this.globalsContain(tool.getGlobalName());
+        return this.hasGlobal(tool.getGlobalName());
     }
 
     public DayCareCenter getDayCareCenter() {
@@ -266,7 +266,7 @@ public class Player extends PlayerTrainer implements Serializable {
     }
 
     public boolean isFishing() {
-        return this.globalsContain(FishingTrigger.FISHING_GLOBAL);
+        return this.hasGlobal(FishingTrigger.FISHING_GLOBAL);
     }
 
     public RepelInfo getRepelInfo() {
@@ -337,7 +337,7 @@ public class Player extends PlayerTrainer implements Serializable {
         }
     }
 
-    public boolean globalsContain(String s) {
+    public boolean hasGlobal(String s) {
         return definedGlobals.contains(s);
     }
 

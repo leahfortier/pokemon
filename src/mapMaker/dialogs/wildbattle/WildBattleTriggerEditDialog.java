@@ -1,6 +1,8 @@
 package mapMaker.dialogs.wildbattle;
 
+import map.condition.AndCondition;
 import map.condition.Condition;
+import map.condition.Condition.GlobalCondition;
 import map.overworld.EncounterRate;
 import map.overworld.WildEncounterInfo;
 import mapMaker.dialogs.TimeOfDayPanel;
@@ -168,7 +170,9 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
                 .stream()
                 .map(panel -> panel.getWildEncounter(minLevel, maxLevel))
                 .collect(Collectors.toList());
-        String condition = Condition.and(timeOfDayPanel.getCondition(), conditionTextField.getText());
+
+        // TODO: THIS SHOULD NOT BE A GLOBAL CONDITION -- NEED TO CREATE A NEW CONDITION PANEL THIS IS JUST A PLACEHOLDER
+        Condition condition = new AndCondition(timeOfDayPanel.getCondition(), new GlobalCondition(conditionTextField.getText()));
 
         WildBattleMatcher matcher = new WildBattleMatcher(
                 name,
@@ -187,7 +191,9 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 
         nameTextField.setText(matcher.getName());
         encounterRateComboBox.setSelectedItem(matcher.getEncounterRate());
-        conditionTextField.setText(matcher.getCondition());
+
+        // TODO: THIS IS A PLACEHOLDER IT DOESN'T EVEN HAVE A PROPER TOSTRING I LIED
+        conditionTextField.setText(matcher.getCondition().toString());
 
         int minLevel = PartyPokemon.MAX_LEVEL;
         int maxLevel = 1;

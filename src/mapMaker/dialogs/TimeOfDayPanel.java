@@ -1,9 +1,10 @@
 package mapMaker.dialogs;
 
-import map.condition.ConditionKey;
+import map.condition.Condition;
+import map.condition.Condition.TimeOfDayCondition;
+import map.condition.OrCondition;
 import map.daynight.DayCycle;
 import util.GUIUtils;
-import util.StringAppender;
 import util.StringUtils;
 
 import javax.swing.JCheckBox;
@@ -38,18 +39,17 @@ public class TimeOfDayPanel extends JPanel {
         );
     }
 
-    public String getCondition() {
+    public Condition getCondition() {
         if (this.allCheckBox.isSelected()) {
-            return StringUtils.empty();
+            return null;
         }
 
-        StringAppender condition = new StringAppender();
+        OrCondition orCondition = new OrCondition();
         for (int i = 0; i < timeCheckBoxes.length; i++) {
             if (timeCheckBoxes[i].isSelected()) {
-                condition.appendDelimiter("|", ConditionKey.TIME_OF_DAY.getConditionString(DayCycle.values()[i].name()));
+                orCondition.or(new TimeOfDayCondition(DayCycle.values()[i]));
             }
         }
-
-        return condition.toString();
+        return orCondition;
     }
 }

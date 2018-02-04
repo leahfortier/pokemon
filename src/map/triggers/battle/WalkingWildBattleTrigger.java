@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.effect.generic.EffectInterfaces.EncounterRateMultiplier;
 import battle.effect.generic.EffectInterfaces.RepellingEffect;
 import main.Game;
+import map.condition.Condition;
 import map.overworld.EncounterRate;
 import map.overworld.WildEncounter;
 import map.overworld.WildEncounterInfo;
@@ -21,7 +22,7 @@ public class WalkingWildBattleTrigger extends Trigger {
     private final WildEncounterInfo[] wildEncounters;
     private final EncounterRate encounterRate;
 
-    public WalkingWildBattleTrigger(String matcherJson, String condition) {
+    public WalkingWildBattleTrigger(String matcherJson, Condition condition) {
         super(TriggerType.WALKING_WILD_BATTLE, matcherJson, condition);
 
         WildBattleMatcher matcher = SerializationUtils.deserializeJson(matcherJson, WildBattleMatcher.class);

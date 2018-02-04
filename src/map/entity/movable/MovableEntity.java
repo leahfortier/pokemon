@@ -6,6 +6,7 @@ import main.Global;
 import map.Direction;
 import map.MapData;
 import map.PathDirection;
+import map.condition.Condition;
 import map.entity.Entity;
 import util.Point;
 import util.StringUtils;
@@ -22,7 +23,7 @@ public abstract class MovableEntity extends Entity {
     private boolean endedTempPath;
     private EndPathListener endPathListener;
 
-    MovableEntity(Point location, String triggerName, String condition) {
+    MovableEntity(Point location, String triggerName, Condition condition) {
         super(location, triggerName, condition);
 
         this.transitionTime = 0;

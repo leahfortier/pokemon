@@ -1,5 +1,6 @@
 package map.triggers;
 
+import map.condition.Condition;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.action.ChoiceActionMatcher;
@@ -10,7 +11,7 @@ class ChoiceTrigger extends Trigger {
     private final String question;
     private final ChoiceMatcher[] choices;
 
-    ChoiceTrigger(String choices, String condition) {
+    ChoiceTrigger(String choices, Condition condition) {
         super(TriggerType.CHOICE, choices, condition);
 
         ChoiceActionMatcher matcher = SerializationUtils.deserializeJson(choices, ChoiceActionMatcher.class);

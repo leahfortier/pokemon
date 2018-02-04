@@ -6,7 +6,19 @@
       "music": "TOM_TOWN",
       "musicConditions": [
         {
-          "condition": "!VisitedTomTownPowerPlant",
+          "condition": {
+            "condition": {
+              "className": "map.condition.NotCondition",
+              "data": {
+                "condition": {
+                  "className": "map.condition.Condition$GlobalCondition",
+                  "data": {
+                    "globalName": "VisitedTomTownPowerPlant"
+                  }
+                }
+              }
+            }
+          },
           "music": "DEADLOCK_THEME"
         }
       ]
@@ -94,7 +106,19 @@
         "y": 11
       },
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01",
-      "condition": "!VisitedTomTownPowerPlant"
+      "condition": {
+        "condition": {
+          "className": "map.condition.NotCondition",
+          "data": {
+            "condition": {
+              "className": "map.condition.Condition$GlobalCondition",
+              "data": {
+                "globalName": "VisitedTomTownPowerPlant"
+              }
+            }
+          }
+        }
+      }
     },
     {
       "name": "Deadlock_Grunt",
@@ -157,7 +181,19 @@
         "y": 10
       },
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02",
-      "condition": "!VisitedTomTownPowerPlant"
+      "condition": {
+        "condition": {
+          "className": "map.condition.NotCondition",
+          "data": {
+            "condition": {
+              "className": "map.condition.Condition$GlobalCondition",
+              "data": {
+                "globalName": "VisitedTomTownPowerPlant"
+              }
+            }
+          }
+        }
+      }
     },
     {
       "name": "Deadlock_Grunt",
@@ -209,7 +245,19 @@
         "y": 10
       },
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03",
-      "condition": "!VisitedTomTownPowerPlant"
+      "condition": {
+        "condition": {
+          "className": "map.condition.NotCondition",
+          "data": {
+            "condition": {
+              "className": "map.condition.Condition$GlobalCondition",
+              "data": {
+                "globalName": "VisitedTomTownPowerPlant"
+              }
+            }
+          }
+        }
+      }
     },
     {
       "name": "PoliceOfficer",
@@ -238,7 +286,28 @@
         "y": 10
       },
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
-      "condition": ":VisitedTomTownPowerPlant&Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01$:"
+      "condition": {
+        "condition": {
+          "className": "map.condition.AndCondition",
+          "data": {
+            "conditions": [
+              {
+                "className": "map.condition.Condition$GlobalCondition",
+                "data": {
+                  "globalName": "VisitedTomTownPowerPlant"
+                }
+              },
+              {
+                "className": "map.condition.Condition$NpcInteractionCondition",
+                "data": {
+                  "npcEntityName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+                  "interactionName": ""
+                }
+              }
+            ]
+          }
+        }
+      }
     },
     {
       "name": "Scientist",
@@ -264,7 +333,28 @@
         "y": 10
       },
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_Scientist_01",
-      "condition": ":npc_interaction:VisitedTomTownPowerPlant&!Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01$:"
+      "condition": {
+        "condition": {
+          "className": "map.condition.AndCondition",
+          "data": {
+            "conditions": [
+              {
+                "className": "map.condition.Condition$GlobalCondition",
+                "data": {
+                  "globalName": "VisitedTomTownPowerPlant"
+                }
+              },
+              {
+                "className": "map.condition.Condition$NpcInteractionCondition",
+                "data": {
+                  "npcEntityName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+                  "interactionName": ""
+                }
+              }
+            ]
+          }
+        }
+      }
     }
   ],
   "items": [

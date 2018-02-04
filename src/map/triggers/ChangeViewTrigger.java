@@ -2,13 +2,14 @@ package map.triggers;
 
 import gui.view.ViewMode;
 import main.Game;
+import map.condition.Condition;
 import message.MessageUpdate;
 import message.Messages;
 
 class ChangeViewTrigger extends Trigger {
     private final ViewMode view;
 
-    ChangeViewTrigger(String viewMode, String condition) {
+    ChangeViewTrigger(String viewMode, Condition condition) {
         super(TriggerType.CHANGE_VIEW, viewMode, condition);
 
         this.view = ViewMode.valueOf(viewMode);

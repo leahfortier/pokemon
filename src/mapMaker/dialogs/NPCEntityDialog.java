@@ -1,7 +1,8 @@
 package mapMaker.dialogs;
 
 import map.Direction;
-import map.condition.Condition;
+import map.condition.AndCondition;
+import map.condition.Condition.GlobalCondition;
 import map.entity.movable.MovableEntity;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
@@ -161,7 +162,8 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
     protected NPCMatcher getMatcher() {
         return new NPCMatcher(
                 getNameField(nameTextField),
-                Condition.and(conditionTextField.getText(), timeOfDayPanel.getCondition()),
+                // TODO: THIS IS A PLACEHOLDER SHOULD NOT BE GLOBAL CONDITION AND NEED NEW CONDITION PANEL
+                new AndCondition(new GlobalCondition(conditionTextField.getText()), timeOfDayPanel.getCondition()),
                 pathTextField.getText(),
                 spriteComboBox.getSelectedIndex(),
                 (Direction)directionComboBox.getSelectedItem(),
@@ -175,7 +177,8 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
         }
 
         nameTextField.setText(matcher.getBasicName());
-        conditionTextField.setText(matcher.getCondition());
+        // TODO: PLACEHOLDER DON'T LEAVE THIS
+        conditionTextField.setText(matcher.getCondition().toString());
         pathTextField.setText(matcher.getPath());
         spriteComboBox.setSelectedIndex(matcher.getSpriteIndex());
         directionComboBox.setSelectedItem(matcher.getDirection());

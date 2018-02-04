@@ -67,7 +67,14 @@
         "y": 4
       },
       "triggerName": "PlayersHouseDown_NPC_Madre_01",
-      "condition": "FirstMadreTalk"
+      "condition": {
+        "condition": {
+          "className": "map.condition.Condition$GlobalCondition",
+          "data": {
+            "globalName": "FirstMadreTalk"
+          }
+        }
+      }
     },
     {
       "name": "Madre",
@@ -108,7 +115,19 @@
         "y": 1
       },
       "triggerName": "PlayersHouseDown_NPC_Madre_02",
-      "condition": "!FirstMadreTalk"
+      "condition": {
+        "condition": {
+          "className": "map.condition.NotCondition",
+          "data": {
+            "condition": {
+              "className": "map.condition.Condition$GlobalCondition",
+              "data": {
+                "globalName": "FirstMadreTalk"
+              }
+            }
+          }
+        }
+      }
     }
   ],
   "items": [],

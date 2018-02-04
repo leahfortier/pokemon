@@ -1,6 +1,7 @@
 package pattern.action;
 
 import main.Global;
+import map.condition.Condition;
 import map.entity.EntityAction;
 import map.entity.EntityAction.BattleAction;
 import map.entity.EntityAction.ChoiceAction;
@@ -47,7 +48,7 @@ public class ActionMatcher {
         return null;
     }
 
-    public EntityAction getAction(final String condition) {
+    public EntityAction getAction(final Condition condition) {
         ActionType actionType = this.getActionType();
         switch (actionType) {
             case TRIGGER:

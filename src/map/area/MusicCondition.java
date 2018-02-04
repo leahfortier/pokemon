@@ -1,15 +1,16 @@
 package map.area;
 
 import map.condition.Condition;
+import map.condition.ConditionSet;
 import sound.SoundTitle;
 
 public class MusicCondition {
     private final SoundTitle music;
-    private final Condition condition;
+    private final ConditionSet condition;
 
-    public MusicCondition(SoundTitle music, String conditionString) {
+    public MusicCondition(SoundTitle music, Condition condition) {
         this.music = music;
-        this.condition = new Condition(conditionString);
+        this.condition = new ConditionSet(condition);
     }
 
     public SoundTitle getMusic() {
@@ -17,6 +18,6 @@ public class MusicCondition {
     }
 
     public boolean isTrue() {
-        return condition.isTrue();
+        return condition.evaluate();
     }
 }

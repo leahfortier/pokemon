@@ -2,6 +2,7 @@ package pattern.map;
 
 import map.Direction;
 import map.PathDirection;
+import map.condition.Condition;
 import map.entity.Entity;
 import map.entity.movable.MoveAxis;
 import map.entity.movable.NPCEntity;
@@ -29,7 +30,7 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
     private NPCInteractionMatcher[] interactions;
 
     public NPCMatcher(String name,
-                      String condition,
+                      Condition condition,
                       String path,
                       int spriteIndex,
                       Direction direction,

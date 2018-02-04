@@ -155,7 +155,15 @@
         "y": 18
       },
       "triggerName": "DFS_Town_NPC_Bitchface_01",
-      "condition": ":npc_interaction:MaplesLab_NPC_Prof_Mapes_01$:"
+      "condition": {
+        "condition": {
+          "className": "map.condition.Condition$NpcInteractionCondition",
+          "data": {
+            "npcEntityName": "MaplesLab_NPC_Prof_Mapes_01",
+            "interactionName": ""
+          }
+        }
+      }
     },
     {
       "name": "DFS_Town_NPC_Ball_Giver_01",
@@ -511,7 +519,34 @@
         "y": 19
       },
       "triggerName": "DFS_Town_NPC_Rivalchan_01",
-      "condition": ":npc_interaction:DFS_Town_NPC_Rivalchan_01$:&:npc_interaction:#MaplesLab_NPC_Prof_Mapes_01$:"
+      "condition": {
+        "condition": {
+          "className": "map.condition.AndCondition",
+          "data": {
+            "conditions": [
+              {
+                "className": "map.condition.Condition$NpcInteractionCondition",
+                "data": {
+                  "npcEntityName": "DFS_Town_NPC_Rivalchan_01",
+                  "interactionName": ""
+                }
+              },
+              {
+                "className": "map.condition.NotCondition",
+                "data": {
+                  "condition": {
+                    "className": "map.condition.Condition$NpcInteractionCondition",
+                    "data": {
+                      "npcEntityName": "MaplesLab_NPC_Prof_Mapes_01",
+                      "interactionName": ""
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
     }
   ],
   "items": [
@@ -597,7 +632,14 @@
               "probability": 10
             }
           ],
-          "condition": ":time_of_day:NIGHT:"
+          "condition": {
+            "condition": {
+              "className": "map.condition.Condition$TimeOfDayCondition",
+              "data": {
+                "dayCycle": "NIGHT"
+              }
+            }
+          }
         },
         {
           "name": "day",
@@ -634,7 +676,33 @@
               "probability": 10
             }
           ],
-          "condition": ":time_of_day:DAWN:|:time_of_day:DAY:|:time_of_day:DUSK:"
+          "condition": {
+            "condition": {
+              "className": "map.condition.AndCondition",
+              "data": {
+                "conditions": [
+                  {
+                    "className": "map.condition.Condition$TimeOfDayCondition",
+                    "data": {
+                      "dayCycle": "DAWN"
+                    }
+                  },
+                  {
+                    "className": "map.condition.Condition$TimeOfDayCondition",
+                    "data": {
+                      "dayCycle": "DAY"
+                    }
+                  },
+                  {
+                    "className": "map.condition.Condition$TimeOfDayCondition",
+                    "data": {
+                      "dayCycle": "DUSK"
+                    }
+                  }
+                ]
+              }
+            }
+          }
         }
       ],
       "location": [

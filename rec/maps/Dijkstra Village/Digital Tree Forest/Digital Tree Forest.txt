@@ -144,7 +144,33 @@
               "probability": 1
             }
           ],
-          "condition": ":time_of_day:DAWN:|:time_of_day:DAY:|:time_of_day:DUSK:"
+          "condition": {
+            "condition": {
+              "className": "map.condition.AndCondition",
+              "data": {
+                "conditions": [
+                  {
+                    "className": "map.condition.Condition$TimeOfDayCondition",
+                    "data": {
+                      "dayCycle": "DAWN"
+                    }
+                  },
+                  {
+                    "className": "map.condition.Condition$TimeOfDayCondition",
+                    "data": {
+                      "dayCycle": "DAY"
+                    }
+                  },
+                  {
+                    "className": "map.condition.Condition$TimeOfDayCondition",
+                    "data": {
+                      "dayCycle": "DUSK"
+                    }
+                  }
+                ]
+              }
+            }
+          }
         },
         {
           "name": "night",
@@ -253,7 +279,14 @@
               "probability": 10
             }
           ],
-          "condition": ":time_of_day:NIGHT:"
+          "condition": {
+            "condition": {
+              "className": "map.condition.Condition$TimeOfDayCondition",
+              "data": {
+                "dayCycle": "NIGHT"
+              }
+            }
+          }
         }
       ],
       "location": [

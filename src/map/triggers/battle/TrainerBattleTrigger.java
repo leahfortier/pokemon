@@ -2,6 +2,7 @@ package map.triggers.battle;
 
 import battle.Battle;
 import main.Game;
+import map.condition.Condition;
 import map.entity.EntityAction.BattleAction;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
@@ -17,7 +18,7 @@ public class TrainerBattleTrigger extends Trigger {
     private final EnemyTrainer trainer;
     private final UpdateMatcher npcUpdateInteraction;
 
-    public TrainerBattleTrigger(String contents, String condition) {
+    public TrainerBattleTrigger(String contents, Condition condition) {
         super(TriggerType.TRAINER_BATTLE, contents, condition);
 
         BattleAction battleAction = SerializationUtils.deserializeJson(contents, BattleAction.class);

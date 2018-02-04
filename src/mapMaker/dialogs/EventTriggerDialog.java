@@ -1,5 +1,6 @@
 package mapMaker.dialogs;
 
+import map.condition.Condition.GlobalCondition;
 import mapMaker.dialogs.action.ActionListPanel;
 import pattern.action.ActionMatcher;
 import pattern.map.EventMatcher;
@@ -49,7 +50,8 @@ public class EventTriggerDialog extends TriggerDialog<EventMatcher> {
 
         return new EventMatcher(
                 this.getNameField(nameTextField),
-                conditionTextArea.getText(),
+                // TODO: PLACEHOLDER THIS IS NOT RIGHT
+                new GlobalCondition(conditionTextArea.getText()),
                 actions
         );
     }
@@ -60,7 +62,8 @@ public class EventTriggerDialog extends TriggerDialog<EventMatcher> {
         }
 
         nameTextField.setText(matcher.getBasicName());
-        conditionTextArea.setText(matcher.getCondition());
+        // TODO: THIS IS WRONG AND A PLACEHOLDER
+        conditionTextArea.setText(matcher.getCondition().toString());
         actionListPanel.load(matcher.getActionMatcherList());
     }
 }

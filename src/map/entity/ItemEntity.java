@@ -6,6 +6,7 @@ import item.ItemNamesies;
 import item.use.TechnicalMachine;
 import main.Game;
 import map.Direction;
+import map.condition.Condition;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.GroupTriggerMatcher;
@@ -24,7 +25,7 @@ public class ItemEntity extends Entity {
     private boolean hasTriggered;
     private boolean dataCreated;
 
-    public ItemEntity(String name, Point location, String condition, ItemNamesies item, boolean isHidden) {
+    public ItemEntity(String name, Point location, Condition condition, ItemNamesies item, boolean isHidden) {
         super(location, name, condition);
         this.itemName = item;
         this.isHidden = isHidden;

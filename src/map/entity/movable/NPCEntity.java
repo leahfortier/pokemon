@@ -3,6 +3,7 @@ package map.entity.movable;
 import main.Game;
 import map.Direction;
 import map.PathDirection;
+import map.condition.Condition;
 import map.entity.EntityAction;
 import map.entity.EntityAction.BattleAction;
 import trainer.player.Player;
@@ -34,7 +35,7 @@ public class NPCEntity extends MovableEntity {
     public NPCEntity(
             String name,
             Point location,
-            String condition,
+            Condition condition,
             String path,
             Direction direction,
             MoveAxis moveAxis,
@@ -172,7 +173,7 @@ public class NPCEntity extends MovableEntity {
             final String interactionName = interaction.getKey();
             final List<EntityAction> actions = interaction.getValue().getActions();
 
-            EntityAction.addActionGroupTrigger(this.getEntityName(), this.getTriggerSuffix(interactionName), this.getConditionString(), actions);
+            EntityAction.addActionGroupTrigger(this.getEntityName(), this.getTriggerSuffix(interactionName), this.getCondition(), actions);
         }
 
         dataCreated = true;
