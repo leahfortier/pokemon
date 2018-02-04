@@ -206,7 +206,11 @@ public class MapMakerTriggerData {
             case ITEM:
                 return new ItemEntityDialog((ItemMatcher)oldTrigger).getMatcher(mapMaker);
             case HIDDEN_ITEM:
-                return new ItemEntityDialog((ItemMatcher)oldTrigger).getMatcher(mapMaker).setHidden();
+                ItemMatcher matcher = new ItemEntityDialog((ItemMatcher)oldTrigger).getMatcher(mapMaker);
+                if (matcher != null) {
+                    matcher.setHidden();
+                }
+                return matcher;
             case NPC:
                 return new NPCEntityDialog((NPCMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
             case MISC_ENTITY:
