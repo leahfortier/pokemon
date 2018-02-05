@@ -6,6 +6,7 @@ import item.ItemNamesies;
 import item.use.TechnicalMachine;
 import main.Game;
 import map.Direction;
+import map.condition.Condition;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.GroupTriggerMatcher;
@@ -24,7 +25,7 @@ public class ItemEntity extends Entity {
     private boolean hasTriggered;
     private boolean dataCreated;
 
-    public ItemEntity(String name, Point location, String condition, ItemNamesies item, boolean isHidden) {
+    public ItemEntity(String name, Point location, Condition condition, ItemNamesies item, boolean isHidden) {
         super(location, name, condition);
         this.itemName = item;
         this.isHidden = isHidden;
@@ -103,7 +104,7 @@ public class ItemEntity extends Entity {
 
         // This trigger will only call the item trigger when the conditions apply
         GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getTriggerSuffix(), itemTriggerName);
-        matcher.addGlobals("has" + this.getEntityName());
+        matcher.addGlobals(this.getEntityName());
 
         TriggerType.GROUP.createTrigger(SerializationUtils.getJson(matcher), null);
 

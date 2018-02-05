@@ -3,6 +3,7 @@ package map.triggers;
 import gui.view.ViewMode;
 import main.Game;
 import map.condition.Condition;
+import map.condition.ConditionSet;
 import pattern.GroupTriggerMatcher;
 import sound.SoundTitle;
 import trainer.player.medal.MedalTheme;
@@ -14,17 +15,17 @@ import java.util.List;
 
 public abstract class Trigger {
     private final String name;
-    private final Condition condition;
+    private final ConditionSet condition;
     private final List<String> globals;
 
-    protected Trigger(TriggerType type, String contents, String condition) {
+    protected Trigger(TriggerType type, String contents, Condition condition) {
         this(type, contents, condition, null);
     }
 
-    protected Trigger(TriggerType type, String contents, String condition, List<String> globals) {
+    protected Trigger(TriggerType type, String contents, Condition condition, List<String> globals) {
         this.name = type.getTriggerName(contents);
 
-        this.condition = new Condition(condition);
+        this.condition = new ConditionSet(condition);
 
         this.globals = new ArrayList<>();
         if (globals != null) {
@@ -37,7 +38,7 @@ public abstract class Trigger {
     // Evaluate the function, Should only be triggered when a player moves
     // into a map square that is defined to trigger this event
     public boolean isTriggered() {
-        return condition.isTrue();
+        return condition.evaluate();
     }
 
     public String getName() {

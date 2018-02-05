@@ -1,7 +1,10 @@
 package pattern.map;
 
 import item.ItemNamesies;
+import map.condition.ConditionHolder.AndCondition;
 import map.condition.Condition;
+import map.condition.Condition.GlobalCondition;
+import map.condition.ConditionHolder.NotCondition;
 import map.entity.Entity;
 import map.entity.ItemEntity;
 import mapMaker.model.TriggerModel.TriggerModelType;
@@ -32,8 +35,8 @@ public class ItemMatcher extends SinglePointTriggerMatcher implements EntityMatc
     }
 
     @Override
-    public String getCondition() {
-        return Condition.and(super.getCondition(), "!has" + this.getTriggerName());
+    public Condition getCondition() {
+        return new AndCondition(super.getCondition(), new NotCondition(new GlobalCondition(this.getTriggerName())));
     }
 
     public ItemNamesies getItem() {

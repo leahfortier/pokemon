@@ -17,7 +17,6 @@ public enum TriggerActionType {
     DIALOGUE(TriggerType.DIALOGUE, "Dialogue"),
     GIVE_ITEM(TriggerType.GIVE_ITEM, ItemTriggerPanel::new),
     GIVE_POKEMON(TriggerType.GIVE_POKEMON, PokemonTriggerPanel::new),
-    GLOBAL(TriggerType.GLOBAL, "Global Name"),
     GROUP(TriggerType.GROUP, "Group Trigger Name"),
     HEAL_PARTY(TriggerType.HEAL_PARTY, EmptyTriggerContentsPanel::new),
     MEDAL_COUNT(TriggerType.MEDAL_COUNT, "Medal", MedalTheme.values()),

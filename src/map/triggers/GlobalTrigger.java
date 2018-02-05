@@ -1,9 +1,11 @@
 package map.triggers;
 
+import map.condition.Condition;
+
 import java.util.Collections;
 
 class GlobalTrigger extends Trigger {
-    GlobalTrigger(String global, String condition) {
+    GlobalTrigger(String global, Condition condition) {
         super(TriggerType.GLOBAL, global, condition, Collections.singletonList(global));
     }
 

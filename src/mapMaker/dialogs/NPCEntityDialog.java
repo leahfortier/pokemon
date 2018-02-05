@@ -1,7 +1,6 @@
 package mapMaker.dialogs;
 
 import map.Direction;
-import map.condition.Condition;
 import map.entity.movable.MovableEntity;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
@@ -16,7 +15,6 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,8 +35,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
     private final JComboBox<Direction> directionComboBox;
 
     private final JTextField pathTextField;
-    private final JTextArea conditionTextField;
-    private final TimeOfDayPanel timeOfDayPanel;
+    private final ConditionPanel conditionPanel;
 
     private final List<NPCInteractionMatcher> interactions;
     private final JButton addInteractionButton;
@@ -70,8 +67,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 
         nameTextField = GUIUtils.createTextField();
         pathTextField = GUIUtils.createTextField("w");
-        conditionTextField = GUIUtils.createTextArea();
-        timeOfDayPanel = new TimeOfDayPanel();
+        conditionPanel = new ConditionPanel();
 
         interactions = new ArrayList<>();
         addInteractionButton = GUIUtils.createButton(
@@ -97,8 +93,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
                         tippityTopComponent,
                         GUIUtils.createTextFieldComponent("Name", nameTextField),
                         GUIUtils.createTextFieldComponent("Path", pathTextField),
-                        GUIUtils.createTextAreaComponent("Condition", conditionTextField),
-                        timeOfDayPanel
+                        conditionPanel
                 );
 
         this.load(npcMatcher);
@@ -161,7 +156,8 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
     protected NPCMatcher getMatcher() {
         return new NPCMatcher(
                 getNameField(nameTextField),
-                Condition.and(conditionTextField.getText(), timeOfDayPanel.getCondition()),
+                this.conditionPanel.getConditionName(),
+                this.conditionPanel.getConditionSet(),
                 pathTextField.getText(),
                 spriteComboBox.getSelectedIndex(),
                 (Direction)directionComboBox.getSelectedItem(),
@@ -175,10 +171,10 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
         }
 
         nameTextField.setText(matcher.getBasicName());
-        conditionTextField.setText(matcher.getCondition());
         pathTextField.setText(matcher.getPath());
         spriteComboBox.setSelectedIndex(matcher.getSpriteIndex());
         directionComboBox.setSelectedItem(matcher.getDirection());
         interactions.addAll(matcher.getInteractionMatcherList());
+        conditionPanel.load(matcher);
     }
 }

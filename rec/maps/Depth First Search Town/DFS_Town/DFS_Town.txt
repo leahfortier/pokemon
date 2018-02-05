@@ -155,7 +155,13 @@
         "y": 18
       },
       "triggerName": "DFS_Town_NPC_Bitchface_01",
-      "condition": ":npc_interaction:MaplesLab_NPC_Prof_Mapes_01$:"
+      "condition": {
+        "condition": {
+          "npcEntityName": "MaplesLab_NPC_Prof_Mapes_01",
+          "interactionName": "",
+          "className": "map.condition.Condition$NpcInteractionCondition"
+        }
+      }
     },
     {
       "name": "DFS_Town_NPC_Ball_Giver_01",
@@ -511,7 +517,26 @@
         "y": 19
       },
       "triggerName": "DFS_Town_NPC_Rivalchan_01",
-      "condition": ":npc_interaction:DFS_Town_NPC_Rivalchan_01$:&:npc_interaction:#MaplesLab_NPC_Prof_Mapes_01$:"
+      "condition": {
+        "condition": {
+          "conditions": [
+            {
+              "npcEntityName": "DFS_Town_NPC_Rivalchan_01",
+              "interactionName": "",
+              "className": "map.condition.Condition$NpcInteractionCondition"
+            },
+            {
+              "condition": {
+                "npcEntityName": "MaplesLab_NPC_Prof_Mapes_01",
+                "interactionName": "",
+                "className": "map.condition.Condition$NpcInteractionCondition"
+              },
+              "className": "map.condition.ConditionHolder$NotCondition"
+            }
+          ],
+          "className": "map.condition.ConditionHolder$AndCondition"
+        }
+      }
     }
   ],
   "items": [
@@ -597,7 +622,7 @@
               "probability": 10
             }
           ],
-          "condition": ":time_of_day:NIGHT:"
+          "conditionName": "OnlyNight"
         },
         {
           "name": "day",
@@ -634,7 +659,7 @@
               "probability": 10
             }
           ],
-          "condition": ":time_of_day:DAWN:|:time_of_day:DAY:|:time_of_day:DUSK:"
+          "conditionName": "NotNight"
         }
       ],
       "location": [

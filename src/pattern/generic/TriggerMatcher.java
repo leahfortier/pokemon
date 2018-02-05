@@ -1,10 +1,13 @@
 package pattern.generic;
 
-import util.StringUtils;
+import map.condition.Condition;
+import map.condition.ConditionSet;
+import pattern.map.ConditionMatcher;
 
 public abstract class TriggerMatcher {
     private String triggerName;
-    private String condition;
+    private String conditionName;
+    private ConditionSet condition;
 
     public String getTriggerName() {
         return this.triggerName;
@@ -14,11 +17,20 @@ public abstract class TriggerMatcher {
         this.triggerName = triggerName;
     }
 
-    public String getCondition() {
-        return this.condition;
+    public Condition getCondition() {
+        return ConditionMatcher.getCondition(conditionName, condition);
     }
 
-    public void setCondition(String condition) {
-        this.condition = StringUtils.nullWhiteSpace(condition);
+    public String getConditionName() {
+        return conditionName;
+    }
+
+    public ConditionSet getConditionSet() {
+        return condition;
+    }
+
+    public void setCondition(String conditionName, ConditionSet conditionSet) {
+        this.conditionName = conditionName;
+        this.condition = conditionSet;
     }
 }

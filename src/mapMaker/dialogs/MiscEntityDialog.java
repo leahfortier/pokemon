@@ -6,7 +6,6 @@ import pattern.map.MiscEntityMatcher;
 import util.GUIUtils;
 
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
@@ -14,20 +13,19 @@ public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
     private final JPanel topComponent;
 
     private final JTextField nameTextField;
-    private final JTextArea conditionTextArea;
+    private final ConditionPanel conditionPanel;
     private final ActionListPanel actionListPanel;
 
     public MiscEntityDialog(MiscEntityMatcher matcher) {
         super("Misc Trigger Editor");
 
         this.nameTextField = GUIUtils.createTextField();
-        this.conditionTextArea = GUIUtils.createTextArea();
+        this.conditionPanel = new ConditionPanel();
         this.actionListPanel = new ActionListPanel(this);
 
         JPanel nameComponent = GUIUtils.createTextFieldComponent("Name", nameTextField);
-        JPanel conditionComponent = GUIUtils.createTextAreaComponent("Condition", conditionTextArea);
 
-        this.topComponent = GUIUtils.createVerticalLayoutComponent(nameComponent, conditionComponent);
+        this.topComponent = GUIUtils.createVerticalLayoutComponent(nameComponent, conditionPanel);
 
         this.load(matcher);
     }
@@ -48,7 +46,8 @@ public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
 
         return new MiscEntityMatcher(
                 this.getNameField(nameTextField),
-                conditionTextArea.getText(),
+                conditionPanel.getConditionName(),
+                conditionPanel.getConditionSet(),
                 actions
         );
     }
@@ -59,7 +58,7 @@ public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
         }
 
         nameTextField.setText(matcher.getBasicName());
-        conditionTextArea.setText(matcher.getCondition());
+        conditionPanel.load(matcher);
         actionListPanel.load(matcher.getActionMatcherList());
     }
 }

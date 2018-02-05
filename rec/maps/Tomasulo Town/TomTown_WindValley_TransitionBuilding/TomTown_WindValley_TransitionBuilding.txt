@@ -125,7 +125,7 @@
         "y": 8
       },
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_Boy_01_01",
-      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01",
@@ -151,7 +151,7 @@
         "y": 7
       },
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_Girl_01_01",
-      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01",
@@ -177,7 +177,7 @@
         "y": 9
       },
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Boy_01_01",
-      "condition": "!:badge:ROUND:"
+      "conditionName": "NoRoundBadge"
     },
     {
       "name": "TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Girl_01",
@@ -203,7 +203,7 @@
         "y": 9
       },
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_NPC_TomTown_WindValley_StoryBlock_Girl_01_01",
-      "condition": "!:badge:ROUND:"
+      "conditionName": "NoRoundBadge"
     },
     {
       "name": "TransitionBuildingV_NPC_PoliceOfficer_01",
@@ -235,7 +235,7 @@
         "y": 9
       },
       "triggerName": "TomTown_WindValley_TransitionBuilding_NPC_TransitionBuildingV_NPC_PoliceOfficer_01_01",
-      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
+      "conditionName": "TomTownDeadlockInvasion"
     }
   ],
   "items": [],

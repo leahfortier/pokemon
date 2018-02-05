@@ -3,13 +3,14 @@ package map.triggers;
 import gui.view.TradeView;
 import gui.view.ViewMode;
 import main.Game;
+import map.condition.Condition;
 import pattern.TradePokemonMatcher;
 import util.SerializationUtils;
 
 public class TradePokemonTrigger extends Trigger {
     private final TradePokemonMatcher tradePokemonMatcher;
 
-    TradePokemonTrigger(String contents, String condition) {
+    TradePokemonTrigger(String contents, Condition condition) {
         super(TriggerType.TRADE_POKEMON, contents, condition);
 
         tradePokemonMatcher = SerializationUtils.deserializeJson(contents, TradePokemonMatcher.class);

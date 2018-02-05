@@ -67,7 +67,7 @@
         "y": 4
       },
       "triggerName": "Tom_Town_Power_Plant_F2_NPC_Scientist_01",
-      "condition": "VisitedTomTownPowerPlant"
+      "conditionName": "TomTownDeadlockDefeated"
     },
     {
       "name": "Tom_Town_Power_Plant_F2_NPC_Scientist_02",
@@ -93,7 +93,7 @@
         "y": 9
       },
       "triggerName": "Tom_Town_Power_Plant_F2_NPC_Tom_Town_Power_Plant_F2_NPC_Scientist_02_01",
-      "condition": "VisitedTomTownPowerPlant"
+      "conditionName": "TomTownDeadlockDefeated"
     }
   ],
   "items": [

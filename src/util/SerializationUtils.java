@@ -2,9 +2,11 @@ package util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
 import main.Global;
+import map.condition.Condition;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -19,6 +21,7 @@ import java.util.Base64;
 
 public class SerializationUtils {
     private static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Condition.class, new InterfaceAdapter())
             .registerTypeAdapter(Double.class, (JsonSerializer<Double>)(source, sourceType, context) -> {
                 if (source == source.longValue()) {
                     return new JsonPrimitive(source.longValue());
@@ -31,8 +34,8 @@ public class SerializationUtils {
             .setLenient()
             .create();
 
-    public static <T> T deserializeJson(String jsonString, Class<T> tClass) {
-        return gson.fromJson(jsonString, tClass);
+    public static <T> T deserializeJson(String jsonString, Class<T> classy) {
+        return gson.fromJson(jsonString, classy);
     }
 
     public static String getJson(final Object jsonObject) {
@@ -81,5 +84,26 @@ public class SerializationUtils {
 
     public static Object getSerializedCopy(Serializable serializable) {
         return deserialize(serialize(serializable));
+    }
+
+    public static <T> T deserializeJsonFile(String fileName, Class<T> classy) {
+        String jsonContents = FileIO.readEntireFileWithReplacements(fileName, false);
+
+        T deserialized = SerializationUtils.deserializeJson(jsonContents, classy);
+        JsonObject mappity = SerializationUtils.deserializeJson(jsonContents, JsonObject.class);
+
+        String formattedJson = SerializationUtils.getJson(deserialized);
+        String mapJson = SerializationUtils.getJson(mappity);
+
+//        FileIO.writeToFile("out.txt", formattedJson);
+//        FileIO.writeToFile("out2.txt", mapJson);
+
+        if (!formattedJson.equals(mapJson)) {
+            Global.error("No dice: " + fileName);
+        }
+
+        FileIO.overwriteFile(fileName, formattedJson);
+
+        return deserialized;
     }
 }

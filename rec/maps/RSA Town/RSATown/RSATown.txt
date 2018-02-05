@@ -249,7 +249,7 @@
         "y": 19
       },
       "triggerName": "RSATown_NPC_Rival_01",
-      "condition": ":npc_interaction:#RSATown_NPC_Rival_01$won:"
+      "conditionName": "RSATownRivalNotWon"
     },
     {
       "name": "Slowking",
@@ -320,7 +320,7 @@
         }
       ],
       "triggerName": "RSATown_Event_Rival_Battle_01",
-      "condition": ":npc_interaction:#RSATown_NPC_Rival_01$won:"
+      "conditionName": "RSATownRivalNotWon"
     }
   ],
   "wildBattles": [],

@@ -131,7 +131,7 @@
         "y": 23
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Citizen_01_01",
-      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "Tom_Town_NPC_Citizen_02",
@@ -157,7 +157,7 @@
         "y": 22
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Citizen_02_01",
-      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "Tom_Town_NPC_Scientist_01",
@@ -183,7 +183,7 @@
         "y": 16
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_01_01",
-      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "Tom_Town_NPC_Scientist_02",
@@ -209,7 +209,7 @@
         "y": 14
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_02_01",
-      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "Tom_Town_NPC_Scientist_03",
@@ -235,7 +235,7 @@
         "y": 15
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_Scientist_03_01",
-      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "Tom_Town_NPC_TomTownPoliceOfficer01_01",
@@ -261,7 +261,7 @@
         "y": 15
       },
       "triggerName": "Tom_Town_NPC_Tom_Town_NPC_TomTownPoliceOfficer01_01_01",
-      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
+      "conditionName": "TomTownDeadlockInvasion"
     }
   ],
   "items": [],
@@ -283,7 +283,7 @@
         }
       ],
       "triggerName": "Tom_Town_MiscEntity_LockedDoor_01",
-      "condition": "!:badge:ROUND:"
+      "conditionName": "NoRoundBadge"
     }
   ],
   "events": [
@@ -315,7 +315,24 @@
         }
       ],
       "triggerName": "Tom_Town_Event_Rumbles_01",
-      "condition": ":badge:ROUND:&!TomTownPowerPlantExplosionTriggered"
+      "condition": {
+        "condition": {
+          "conditions": [
+            {
+              "badge": "ROUND",
+              "className": "map.condition.Condition$BadgeCondition"
+            },
+            {
+              "condition": {
+                "globalName": "TomTownPowerPlantExplosionTriggered",
+                "className": "map.condition.Condition$GlobalCondition"
+              },
+              "className": "map.condition.ConditionHolder$NotCondition"
+            }
+          ],
+          "className": "map.condition.ConditionHolder$AndCondition"
+        }
+      }
     }
   ],
   "wildBattles": [],

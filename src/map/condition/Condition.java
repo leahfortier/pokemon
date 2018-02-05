@@ -1,175 +1,109 @@
 package map.condition;
 
+import item.ItemNamesies;
 import main.Game;
-import trainer.player.Player;
-import util.StringUtils;
+import map.daynight.DayCycle;
+import trainer.player.Badge;
+import util.TimeUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+public interface Condition {
+    boolean evaluate();
 
-public class Condition {
-    private static final Pattern functionPattern = Pattern.compile("([\\w$:#]+)|([()&|!])");
+    class GlobalCondition implements Condition {
+        private final String globalName;
 
-    /*
-     * postfixed boolean function
-     */
-    private List<String> condition;
-    private String originalConditionString;
+        public GlobalCondition(String globalName) {
+            this.globalName = globalName;
+        }
 
-    public Condition(String conditionString) {
+        public String getGlobalName() {
+            return this.globalName;
+        }
 
-        originalConditionString = StringUtils.empty();
-        condition = new ArrayList<>();
-
-        if (StringUtils.isNullOrEmpty(conditionString)) {
-            condition.add("true");
-        } else {
-            Matcher m = functionPattern.matcher(conditionString);
-            Stack<String> stack = new Stack<>();
-
-            while (m.find()) {
-                String s = m.group();
-                originalConditionString += s;
-
-                switch (s) {
-                    case "(":
-                        stack.push(s);
-                        break;
-                    case ")":
-                        while (!stack.peek().equals("(")) {
-                            condition.add(stack.pop());
-                        }
-
-                        stack.pop();
-                        break;
-                    case "&":
-                        while (!stack.isEmpty() && stack.peek().equals("!")) {
-                            condition.add(stack.pop());
-                        }
-
-                        stack.push(s);
-                        break;
-                    case "|":
-                        while (!stack.isEmpty() && (stack.peek().equals("&") || stack.peek().equals("!"))) {
-                            condition.add(stack.pop());
-                        }
-
-                        stack.push(s);
-                        break;
-                    case "!":
-                        stack.push(s);
-                        break;
-                    default:
-                        condition.add(s);
-                        break;
-                }
-            }
-
-            while (!stack.isEmpty()) {
-                condition.add(stack.pop());
-            }
+        @Override
+        public boolean evaluate() {
+            return Game.getPlayer().hasGlobal(this.globalName);
         }
     }
 
-    public boolean isTrue() {
-        Player player = Game.getPlayer();
+    class BadgeCondition implements Condition {
+        private final Badge badge;
 
-        Stack<Boolean> stack = new Stack<>();
-        for (String s : condition) {
-            switch (s) {
-                case "&": {
-                    boolean v1 = stack.pop();
-                    boolean v2 = stack.pop();
-
-                    stack.push(v1 && v2);
-                    break;
-                }
-                case "|": {
-                    boolean v1 = stack.pop();
-                    boolean v2 = stack.pop();
-
-                    stack.push(v1 || v2);
-                    break;
-                }
-                case "!":
-                    stack.push(!stack.pop());
-                    break;
-                case "true":
-                    stack.push(true);
-                    break;
-                case "false":
-                    stack.push(false);
-                    break;
-                default:
-                    if (ConditionKey.matches(s)) {
-                        stack.push(ConditionKey.getConditionValue(s));
-                    } else {
-                        stack.push(player.globalsContain(s));
-                    }
-                    break;
-            }
+        public BadgeCondition(String badgeName) {
+            this.badge = Badge.valueOf(badgeName);
         }
 
-        return stack.pop();
+        @Override
+        public boolean evaluate() {
+            return Game.getPlayer().hasBadge(badge);
+        }
     }
 
-    public boolean add(String global, char op) {
-        if (op != '&' && op != '|') {
-            return false;
+    class TimeOfDayCondition implements Condition {
+        private final DayCycle dayCycle;
+
+        public TimeOfDayCondition(DayCycle dayCycle) {
+            this.dayCycle = dayCycle;
         }
 
-        originalConditionString = (originalConditionString.isEmpty()
-                ? StringUtils.empty()
-                : ("(" + originalConditionString + ")" + op));
-        originalConditionString += global;
-
-        boolean negate = false;
-        if (global.charAt(0) == '!') {
-            global = global.substring(1, global.length());
-            negate = true;
+        public DayCycle getTimeOfDay() {
+            return this.dayCycle;
         }
 
-        boolean noOp = false;
-        if (condition.size() == 1 && condition.get(0).equals("true")) {
-            condition.clear();
-            noOp = true;
+        @Override
+        public boolean evaluate() {
+            return DayCycle.getTimeOfDay() == dayCycle;
         }
-
-        condition.add(global);
-        if (negate) {
-            condition.add("!");
-        }
-
-        if (!noOp) {
-            condition.add(op + "");
-        }
-
-        return true;
     }
 
-    @Override
-    public String toString() {
-        return condition.toString();
+    class HourOfDayCondition implements Condition {
+        private final int startHour;
+        private final int endHour;
+
+        public HourOfDayCondition(int startHour, int endHour) {
+            this.startHour = startHour;
+            this.endHour = endHour;
+        }
+
+        @Override
+        public boolean evaluate() {
+            return TimeUtils.currentHourWithinInterval(startHour, endHour);
+        }
     }
 
-    public String getOriginalConditionString() {
-        return this.originalConditionString;
+    class NpcInteractionCondition implements Condition {
+        private final String npcEntityName;
+        private final String interactionName;
+
+        public NpcInteractionCondition(String npcEntityName, String interactionName) {
+            this.npcEntityName = npcEntityName;
+            this.interactionName = interactionName;
+        }
+
+        public String getNpcEntityName() {
+            return this.npcEntityName;
+        }
+
+        public String getInteractionName() {
+            return this.interactionName;
+        }
+
+        @Override
+        public boolean evaluate() {
+            return Game.getPlayer().isNpcInteraction(npcEntityName, interactionName);
+        }
     }
 
-    public static String and(final String firstCondition, final String secondCondition) {
-        if (StringUtils.isNullOrEmpty(firstCondition)) {
-            if (StringUtils.isNullOrEmpty(secondCondition)) {
-                return StringUtils.empty();
-            }
+    class ItemCondition implements Condition {
+        private final ItemNamesies item;
 
-            return secondCondition;
-        } else if (StringUtils.isNullOrEmpty(secondCondition)) {
-            return firstCondition;
-        } else {
-            return String.format("(%s)&(%s)", firstCondition, secondCondition);
+        public ItemCondition(ItemNamesies item) {
+            this.item = item;
+        }
+
+        @Override
+        public boolean evaluate() {
+            return Game.getPlayer().getBag().hasItem(item);
         }
     }
 }

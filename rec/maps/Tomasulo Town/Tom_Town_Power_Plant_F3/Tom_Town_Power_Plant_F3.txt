@@ -6,7 +6,7 @@
       "music": "TOM_TOWN",
       "musicConditions": [
         {
-          "condition": "!VisitedTomTownPowerPlant",
+          "conditionName": "TomTownDeadlockInvasion",
           "music": "DEADLOCK_THEME"
         }
       ]
@@ -94,7 +94,7 @@
         "y": 11
       },
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_01",
-      "condition": "!VisitedTomTownPowerPlant"
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "Deadlock_Grunt",
@@ -157,7 +157,7 @@
         "y": 10
       },
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_02",
-      "condition": "!VisitedTomTownPowerPlant"
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "Deadlock_Grunt",
@@ -209,7 +209,7 @@
         "y": 10
       },
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_Deadlock_Grunt_03",
-      "condition": "!VisitedTomTownPowerPlant"
+      "conditionName": "TomTownDeadlockInvasion"
     },
     {
       "name": "PoliceOfficer",
@@ -238,7 +238,7 @@
         "y": 10
       },
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
-      "condition": ":VisitedTomTownPowerPlant&Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01$:"
+      "conditionName": "TomTownDeadlockJUSTDefeated"
     },
     {
       "name": "Scientist",
@@ -264,7 +264,7 @@
         "y": 10
       },
       "triggerName": "Tom_Town_Power_Plant_F3_NPC_Scientist_01",
-      "condition": ":npc_interaction:VisitedTomTownPowerPlant&!Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01$:"
+      "conditionName": "TomTownDeadlockJUSTDefeated"
     }
   ],
   "items": [

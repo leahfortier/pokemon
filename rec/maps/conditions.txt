@@ -1,0 +1,119 @@
+{
+  "conditions": [
+    {
+      "name": "OnlyNight",
+      "description": "Night time only.",
+      "condition": {
+        "condition": {
+          "dayCycle": "NIGHT",
+          "className": "map.condition.Condition$TimeOfDayCondition"
+        }
+      }
+    },
+    {
+      "name": "OnlyDay",
+      "description": "Day time only.",
+      "condition": {
+        "condition": {
+          "dayCycle": "DAY",
+          "className": "map.condition.Condition$TimeOfDayCondition"
+        }
+      }
+    },
+    {
+      "name": "NotNight",
+      "description": "Any time EXCEPT night.",
+      "condition": {
+        "condition": {
+          "condition": {
+            "dayCycle": "NIGHT",
+            "className": "map.condition.Condition$TimeOfDayCondition"
+          },
+          "className": "map.condition.ConditionHolder$NotCondition"
+        }
+      }
+    },
+    {
+      "name": "RSATownRivalNotWon",
+      "description": "First rival battle in RSA not yet defeated.",
+      "condition": {
+        "condition": {
+          "condition": {
+            "npcEntityName": "RSATown_NPC_Rival_01",
+            "interactionName": "won",
+            "className": "map.condition.Condition$NpcInteractionCondition"
+          },
+          "className": "map.condition.ConditionHolder$NotCondition"
+        }
+      }
+    },
+    {
+      "name": "TomTownDeadlockInvasion",
+      "description": "Team Deadlock currently invading Tom Town -- between getting the first badge and not beating the Power Plant.",
+      "condition": {
+        "condition": {
+          "conditions": [
+            {
+              "badge": "ROUND",
+              "className": "map.condition.Condition$BadgeCondition"
+            },
+            {
+              "condition": {
+                "globalName": "VisitedTomTownPowerPlant",
+                "className": "map.condition.Condition$GlobalCondition"
+              },
+              "className": "map.condition.ConditionHolder$NotCondition"
+            }
+          ],
+          "className": "map.condition.ConditionHolder$AndCondition"
+        }
+      }
+    },
+    {
+      "name": "NoRoundBadge",
+      "description": "Player does not yet have the first badge.",
+      "condition": {
+        "condition": {
+          "condition": {
+            "badge": "ROUND",
+            "className": "map.condition.Condition$BadgeCondition"
+          },
+          "className": "map.condition.ConditionHolder$NotCondition"
+        }
+      }
+    },
+    {
+      "name": "TomTownDeadlockDefeated",
+      "description": "Beat the last Team Deadlock guy in the Tom Town Power Plant and everything is all safe again.",
+      "condition": {
+        "condition": {
+          "globalName": "VisitedTomTownPowerPlant",
+          "className": "map.condition.Condition$GlobalCondition"
+        }
+      }
+    },
+    {
+      "name": "TomTownDeadlockJUSTDefeated",
+      "description": "JUST beat the last Team Deadlock guy in the Tom Town Power Plant and you haven't left the floor yet.",
+      "condition": {
+        "condition": {
+          "conditions": [
+            {
+              "globalName": "VisitedTomTownPowerPlant",
+              "className": "map.condition.Condition$GlobalCondition"
+            },
+            {
+              "condition": {
+                "npcEntityName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+                "interactionName": "",
+                "className": "map.condition.Condition$NpcInteractionCondition"
+              },
+              "className": "map.condition.ConditionHolder$NotCondition"
+            }
+          ],
+          "className": "map.condition.ConditionHolder$AndCondition"
+        }
+      }
+    }
+  ]
+}

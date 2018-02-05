@@ -50,7 +50,7 @@
         "y": 4
       },
       "triggerName": "Tom_Town_Power_Plant_B1_NPC_Scientist_01",
-      "condition": ":badge:ROUND:&!VisitedTomTownPowerPlant"
+      "conditionName": "TomTownDeadlockInvasion"
     }
   ],
   "items": [

@@ -1,9 +1,8 @@
 package mapMaker.dialogs.wildbattle;
 
-import map.condition.Condition;
 import map.overworld.EncounterRate;
 import map.overworld.WildEncounterInfo;
-import mapMaker.dialogs.TimeOfDayPanel;
+import mapMaker.dialogs.ConditionPanel;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.WildBattleMatcher;
 import pokemon.PartyPokemon;
@@ -34,8 +33,7 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
     private final JFormattedTextField lowLevelFormattedTextField;
     private final JFormattedTextField highLevelFormattedTextField;
 
-    private final TimeOfDayPanel timeOfDayPanel;
-    private final JTextField conditionTextField;
+    private final ConditionPanel conditionPanel;
 
     private final JLabel pokemonProbabilitySumLabel;
     private final List<WildPokemonDataPanel> wildPokemonPanels;
@@ -60,8 +58,7 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
         lowLevelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, PartyPokemon.MAX_LEVEL);
         highLevelFormattedTextField = GUIUtils.createIntegerTextField(PartyPokemon.MAX_LEVEL, 1, PartyPokemon.MAX_LEVEL);
 
-        timeOfDayPanel = new TimeOfDayPanel();
-        conditionTextField = GUIUtils.createTextField();
+        conditionPanel = new ConditionPanel();
 
         JButton addPokemonButton = GUIUtils.createButton("Add Pokemon", event -> addPokemonPanel(null));
         JButton removeSelectedButton = GUIUtils.createButton(
@@ -92,8 +89,7 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
                         highLevelFormattedTextField
                 ),
                 GUIUtils.createHorizontalLayoutComponent(
-                        timeOfDayPanel,
-                        GUIUtils.createTextFieldComponent("Condition", conditionTextField)
+                        conditionPanel
                 ),
                 GUIUtils.createHorizontalLayoutComponent(
                         GUIUtils.createLabel("Probability:"),
@@ -168,14 +164,14 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
                 .stream()
                 .map(panel -> panel.getWildEncounter(minLevel, maxLevel))
                 .collect(Collectors.toList());
-        String condition = Condition.and(timeOfDayPanel.getCondition(), conditionTextField.getText());
 
         WildBattleMatcher matcher = new WildBattleMatcher(
                 name,
+                conditionPanel.getConditionName(),
+                conditionPanel.getConditionSet(),
                 encounterRate,
                 wildEncounters
         );
-        matcher.setCondition(condition);
 
         return matcher;
     }
@@ -187,7 +183,8 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 
         nameTextField.setText(matcher.getName());
         encounterRateComboBox.setSelectedItem(matcher.getEncounterRate());
-        conditionTextField.setText(matcher.getCondition());
+
+        conditionPanel.load(matcher);
 
         int minLevel = PartyPokemon.MAX_LEVEL;
         int maxLevel = 1;

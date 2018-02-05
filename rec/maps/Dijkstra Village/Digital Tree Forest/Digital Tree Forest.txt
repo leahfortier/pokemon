@@ -144,7 +144,7 @@
               "probability": 1
             }
           ],
-          "condition": ":time_of_day:DAWN:|:time_of_day:DAY:|:time_of_day:DUSK:"
+          "conditionName": "NotNight"
         },
         {
           "name": "night",
@@ -253,7 +253,7 @@
               "probability": 10
             }
           ],
-          "condition": ":time_of_day:NIGHT:"
+          "conditionName": "OnlyNight"
         }
       ],
       "location": [

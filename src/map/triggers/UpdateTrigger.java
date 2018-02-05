@@ -1,6 +1,7 @@
 package map.triggers;
 
 import main.Game;
+import map.condition.Condition;
 import pattern.action.UpdateMatcher;
 import util.SerializationUtils;
 
@@ -9,7 +10,7 @@ class UpdateTrigger extends Trigger {
     private final String npcEntityName;
     private final String newInteractionName;
 
-    UpdateTrigger(String matcherJson, String condition) {
+    UpdateTrigger(String matcherJson, Condition condition) {
         super(TriggerType.UPDATE, matcherJson, condition);
 
         UpdateMatcher matcher = SerializationUtils.deserializeJson(matcherJson, UpdateMatcher.class);

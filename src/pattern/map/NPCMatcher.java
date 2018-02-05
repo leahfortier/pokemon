@@ -1,7 +1,9 @@
 package pattern.map;
 
+import main.Global;
 import map.Direction;
 import map.PathDirection;
+import map.condition.ConditionSet;
 import map.entity.Entity;
 import map.entity.movable.MoveAxis;
 import map.entity.movable.NPCEntity;
@@ -29,7 +31,8 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
     private NPCInteractionMatcher[] interactions;
 
     public NPCMatcher(String name,
-                      String condition,
+                      String conditionName,
+                      ConditionSet conditionSet,
                       String path,
                       int spriteIndex,
                       Direction direction,
@@ -40,7 +43,7 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
         this.direction = direction;
         this.interactions = interactions.toArray(new NPCInteractionMatcher[0]);
 
-        super.setCondition(condition);
+        super.setCondition(conditionName, conditionSet);
     }
 
     public List<NPCInteractionMatcher> getInteractionMatcherList() {
@@ -48,14 +51,18 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
     }
 
     public Map<String, NPCInteraction> getInteractionMap() {
-        Map<String, NPCInteraction> interactionMap = new HashMap<>();
-        for (NPCInteractionMatcher interaction : interactions) {
-            NPCInteraction npcInteraction = new NPCInteraction(interaction.shouldWalkToPlayer(), interaction.getActions());
-            interactionMap.put(interaction.getName(), npcInteraction);
+        if (interactions.length == 0) {
+            return Collections.singletonMap(NO_INTERACTIONS_KEY, new NPCInteraction(false, Collections.emptyList()));
         }
 
-        if (interactions.length == 0) {
-            interactionMap.put(NO_INTERACTIONS_KEY, new NPCInteraction(false, Collections.emptyList()));
+        Map<String, NPCInteraction> interactionMap = new HashMap<>();
+        for (NPCInteractionMatcher interaction : interactions) {
+            if (interactionMap.containsKey(interaction.getName())) {
+                Global.error("Duplicate interaction name for " + this.getTriggerName() + ": " + interaction.getName());
+            }
+
+            NPCInteraction npcInteraction = new NPCInteraction(interaction.shouldWalkToPlayer(), interaction.getActions());
+            interactionMap.put(interaction.getName(), npcInteraction);
         }
 
         return interactionMap;

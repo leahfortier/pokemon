@@ -1,6 +1,10 @@
 package generator.update;
 
 import draw.ImageUtils;
+import map.condition.ConditionHolder.AndCondition;
+import map.condition.Condition;
+import map.condition.ConditionSet;
+import pattern.map.ConditionMatcher;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.evolution.EvolutionType;
@@ -9,6 +13,7 @@ import util.FileIO.NullOutputStream;
 import util.FileName;
 import util.Folder;
 import util.GeneralUtils;
+import util.SerializationUtils;
 import util.StringAppender;
 import util.StringUtils;
 
@@ -28,13 +33,14 @@ public class UpdateGen {
     }
 
     private UpdateGen() {
-        GeneratorUpdater.updateAll();
-
+//        GeneratorUpdater.updateAll();
 //        newPokemonInfoCompare();
 //        pokemonInfoStuff();
 //        updateNum();
 //        resizeImages();
 //        trimImages();
+//        translateAlBhed();
+        addCondition();
     }
 
     private static void trimImages() {
@@ -337,5 +343,44 @@ public class UpdateGen {
         return new StringAppender(num + "\n")
                 .appendJoin(StringUtils.empty(), num, index -> in.nextLine().trim() + "\n")
                 .toString();
+    }
+
+    private static final char[] AL_BHED_PRIMER = {
+            'Y', 'P', 'L', 'T', 'A', 'V', 'K', 'R',
+            'E', 'Z', 'G', 'M', 'S', 'H', 'U', 'B',
+            'X', 'N', 'C', 'D', 'I', 'J', 'F', 'Q',
+            'O', 'W'
+    };
+
+    private static void translateAlBhed() {
+        // Fill this in when you want to translate
+        String nonShubby = "You're a shub!";
+
+        StringAppender shubs = new StringAppender();
+        for (char c : nonShubby.toCharArray()) {
+            if (StringUtils.isLower(c)) {
+                shubs.append((char)(AL_BHED_PRIMER[c - 'a'] - 'A' + 'a'));
+            } else if (StringUtils.isUpper(c)) {
+                shubs.append(AL_BHED_PRIMER[c - 'A']);
+            } else {
+                shubs.append(c);
+            }
+        }
+
+        System.out.println(shubs.toString());
+    }
+
+    private static void addCondition() {
+        Condition condition;
+
+        // Fill this in when you want to use this
+        String name = "";
+        String description = "";
+        condition = new AndCondition();
+
+        ConditionMatcher matcher = new ConditionMatcher(name, description, new ConditionSet(condition));
+
+//        ConditionsMatcher.addCondition(matcher);
+        System.out.println(SerializationUtils.getJson(matcher));
     }
 }
