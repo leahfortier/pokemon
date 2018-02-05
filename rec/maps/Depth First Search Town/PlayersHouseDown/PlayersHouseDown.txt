@@ -119,7 +119,7 @@
             "globalName": "FirstMadreTalk",
             "className": "map.condition.Condition$GlobalCondition"
           },
-          "className": "map.condition.NotCondition"
+          "className": "map.condition.ConditionHolder$NotCondition"
         }
       }
     }

@@ -1,5 +1,6 @@
 package pattern.map;
 
+import main.Global;
 import map.Direction;
 import map.PathDirection;
 import map.condition.ConditionSet;
@@ -50,14 +51,18 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
     }
 
     public Map<String, NPCInteraction> getInteractionMap() {
-        Map<String, NPCInteraction> interactionMap = new HashMap<>();
-        for (NPCInteractionMatcher interaction : interactions) {
-            NPCInteraction npcInteraction = new NPCInteraction(interaction.shouldWalkToPlayer(), interaction.getActions());
-            interactionMap.put(interaction.getName(), npcInteraction);
+        if (interactions.length == 0) {
+            return Collections.singletonMap(NO_INTERACTIONS_KEY, new NPCInteraction(false, Collections.emptyList()));
         }
 
-        if (interactions.length == 0) {
-            interactionMap.put(NO_INTERACTIONS_KEY, new NPCInteraction(false, Collections.emptyList()));
+        Map<String, NPCInteraction> interactionMap = new HashMap<>();
+        for (NPCInteractionMatcher interaction : interactions) {
+            if (interactionMap.containsKey(interaction.getName())) {
+                Global.error("Duplicate interaction name for " + this.getTriggerName() + ": " + interaction.getName());
+            }
+
+            NPCInteraction npcInteraction = new NPCInteraction(interaction.shouldWalkToPlayer(), interaction.getActions());
+            interactionMap.put(interaction.getName(), npcInteraction);
         }
 
         return interactionMap;

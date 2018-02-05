@@ -327,10 +327,10 @@
                 "globalName": "TomTownPowerPlantExplosionTriggered",
                 "className": "map.condition.Condition$GlobalCondition"
               },
-              "className": "map.condition.NotCondition"
+              "className": "map.condition.ConditionHolder$NotCondition"
             }
           ],
-          "className": "map.condition.AndCondition"
+          "className": "map.condition.ConditionHolder$AndCondition"
         }
       }
     }

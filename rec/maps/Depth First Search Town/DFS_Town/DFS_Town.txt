@@ -531,10 +531,10 @@
                 "interactionName": "",
                 "className": "map.condition.Condition$NpcInteractionCondition"
               },
-              "className": "map.condition.NotCondition"
+              "className": "map.condition.ConditionHolder$NotCondition"
             }
           ],
-          "className": "map.condition.AndCondition"
+          "className": "map.condition.ConditionHolder$AndCondition"
         }
       }
     }

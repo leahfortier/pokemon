@@ -104,7 +104,7 @@ public class ItemEntity extends Entity {
 
         // This trigger will only call the item trigger when the conditions apply
         GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getTriggerSuffix(), itemTriggerName);
-        matcher.addGlobals("has" + this.getEntityName());
+        matcher.addGlobals(this.getEntityName());
 
         TriggerType.GROUP.createTrigger(SerializationUtils.getJson(matcher), null);
 

@@ -83,6 +83,10 @@ public class AreaMatcher {
         return musicConditions;
     }
 
+    public MusicConditionMatcher[] getMusicConditionMatchers() {
+        return this.musicConditions;
+    }
+
     public AreaData getAreaData() {
         if (areaData != null) {
             return areaData;
@@ -100,7 +104,7 @@ public class AreaMatcher {
         return areaData;
     }
 
-    private static class MusicConditionMatcher {
+    public static class MusicConditionMatcher {
         private String conditionName;
         private ConditionSet condition;
         private SoundTitle music;

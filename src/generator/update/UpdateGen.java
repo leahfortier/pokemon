@@ -1,7 +1,7 @@
 package generator.update;
 
 import draw.ImageUtils;
-import map.condition.AndCondition;
+import map.condition.ConditionHolder.AndCondition;
 import map.condition.Condition;
 import map.condition.ConditionSet;
 import pattern.map.ConditionMatcher;

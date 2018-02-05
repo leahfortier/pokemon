@@ -1,7 +1,7 @@
 package map.triggers;
 
 import main.Game;
-import map.condition.AndCondition;
+import map.condition.ConditionHolder.AndCondition;
 import map.condition.Condition;
 import message.MessageUpdate;
 import message.Messages;

@@ -29,7 +29,7 @@
             "dayCycle": "NIGHT",
             "className": "map.condition.Condition$TimeOfDayCondition"
           },
-          "className": "map.condition.NotCondition"
+          "className": "map.condition.ConditionHolder$NotCondition"
         }
       }
     },
@@ -43,7 +43,7 @@
             "interactionName": "won",
             "className": "map.condition.Condition$NpcInteractionCondition"
           },
-          "className": "map.condition.NotCondition"
+          "className": "map.condition.ConditionHolder$NotCondition"
         }
       }
     },
@@ -62,10 +62,10 @@
                 "globalName": "VisitedTomTownPowerPlant",
                 "className": "map.condition.Condition$GlobalCondition"
               },
-              "className": "map.condition.NotCondition"
+              "className": "map.condition.ConditionHolder$NotCondition"
             }
           ],
-          "className": "map.condition.AndCondition"
+          "className": "map.condition.ConditionHolder$AndCondition"
         }
       }
     },
@@ -78,7 +78,7 @@
             "badge": "ROUND",
             "className": "map.condition.Condition$BadgeCondition"
           },
-          "className": "map.condition.NotCondition"
+          "className": "map.condition.ConditionHolder$NotCondition"
         }
       }
     },
@@ -108,10 +108,10 @@
                 "interactionName": "",
                 "className": "map.condition.Condition$NpcInteractionCondition"
               },
-              "className": "map.condition.NotCondition"
+              "className": "map.condition.ConditionHolder$NotCondition"
             }
           ],
-          "className": "map.condition.AndCondition"
+          "className": "map.condition.ConditionHolder$AndCondition"
         }
       }
     }

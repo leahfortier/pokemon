@@ -1,7 +1,7 @@
 package map.entity;
 
 import item.ItemNamesies;
-import map.condition.AndCondition;
+import map.condition.ConditionHolder.AndCondition;
 import map.condition.Condition;
 import map.condition.Condition.ItemCondition;
 import map.entity.EntityAction.TriggerAction;

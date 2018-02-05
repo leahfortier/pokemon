@@ -1,5 +1,7 @@
 package map.condition;
 
+import map.condition.ConditionHolder.AndCondition;
+
 public class ConditionSet {
     private Condition condition;
 

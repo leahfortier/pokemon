@@ -3,7 +3,7 @@ package map.triggers.battle;
 import battle.ActivePokemon;
 import item.ItemNamesies;
 import main.Game;
-import map.condition.AndCondition;
+import map.condition.ConditionHolder.AndCondition;
 import map.condition.Condition;
 import map.condition.Condition.ItemCondition;
 import map.overworld.WildEncounter;

@@ -16,6 +16,10 @@ public interface Condition {
             this.globalName = globalName;
         }
 
+        public String getGlobalName() {
+            return this.globalName;
+        }
+
         @Override
         public boolean evaluate() {
             return Game.getPlayer().hasGlobal(this.globalName);
@@ -40,6 +44,10 @@ public interface Condition {
 
         public TimeOfDayCondition(DayCycle dayCycle) {
             this.dayCycle = dayCycle;
+        }
+
+        public DayCycle getTimeOfDay() {
+            return this.dayCycle;
         }
 
         @Override
@@ -70,6 +78,14 @@ public interface Condition {
         public NpcInteractionCondition(String npcEntityName, String interactionName) {
             this.npcEntityName = npcEntityName;
             this.interactionName = interactionName;
+        }
+
+        public String getNpcEntityName() {
+            return this.npcEntityName;
+        }
+
+        public String getInteractionName() {
+            return this.interactionName;
         }
 
         @Override
