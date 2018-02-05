@@ -2,7 +2,7 @@ package pattern.map;
 
 import map.Direction;
 import map.PathDirection;
-import map.condition.Condition;
+import map.condition.ConditionSet;
 import map.entity.Entity;
 import map.entity.movable.MoveAxis;
 import map.entity.movable.NPCEntity;
@@ -30,7 +30,8 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
     private NPCInteractionMatcher[] interactions;
 
     public NPCMatcher(String name,
-                      Condition condition,
+                      String conditionName,
+                      ConditionSet conditionSet,
                       String path,
                       int spriteIndex,
                       Direction direction,
@@ -41,7 +42,7 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
         this.direction = direction;
         this.interactions = interactions.toArray(new NPCInteractionMatcher[0]);
 
-        super.setCondition(condition);
+        super.setCondition(conditionName, conditionSet);
     }
 
     public List<NPCInteractionMatcher> getInteractionMatcherList() {

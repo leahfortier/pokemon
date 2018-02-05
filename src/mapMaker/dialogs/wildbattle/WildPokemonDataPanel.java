@@ -33,7 +33,7 @@ class WildPokemonDataPanel extends JPanel {
         });
 
         probabilityFormattedTextField = GUIUtils.createIntegerTextField(
-                wildEncounter.getProbability(),
+                wildEncounter == null ? 0 : wildEncounter.getProbability(),
                 1,
                 100
         );

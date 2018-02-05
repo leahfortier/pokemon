@@ -1,6 +1,7 @@
 package pattern.map;
 
 import main.Global;
+import map.condition.Condition;
 import map.condition.ConditionSet;
 import util.FileIO;
 import util.FileName;
@@ -16,6 +17,10 @@ public class ConditionsMatcher {
 
     private static ConditionsMatcher readConditions() {
         return SerializationUtils.deserializeJsonFile(FileName.CONDITIONS, ConditionsMatcher.class);
+    }
+
+    public static List<ConditionMatcher> getConditionMatchers() {
+        return readConditions().conditions;
     }
 
     public static Map<String, ConditionSet> getConditions() {

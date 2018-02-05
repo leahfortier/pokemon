@@ -39,7 +39,7 @@ public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
                     if (this.wildBattleTriggers.size() > 0) {
                         oldMatcher = SerializationUtils.deserializeJson(SerializationUtils.getJson(this.wildBattleTriggers.get(0)), WildBattleMatcher.class);
                         oldMatcher.setName("Wild Trigger Matcher " + wildBattleTriggers.size());
-                        oldMatcher.setCondition(new AndCondition());
+                        oldMatcher.setCondition(null, null);
                     }
 
                     WildBattleMatcher matcher = editWildBattleTrigger(oldMatcher);

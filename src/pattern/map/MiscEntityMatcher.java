@@ -1,6 +1,7 @@
 package pattern.map;
 
 import map.condition.Condition;
+import map.condition.ConditionSet;
 import map.entity.EntityAction;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionMatcher;
@@ -14,11 +15,11 @@ public class MiscEntityMatcher extends MultiPointTriggerMatcher {
     private String name;
     private ActionMatcher[] actions;
 
-    public MiscEntityMatcher(String name, Condition condition, ActionMatcher[] actions) {
+    public MiscEntityMatcher(String name, String conditionName, ConditionSet conditionSet, ActionMatcher[] actions) {
         this.name = name;
         this.actions = actions;
 
-        super.setCondition(condition);
+        super.setCondition(conditionName, conditionSet);
     }
 
     @Override

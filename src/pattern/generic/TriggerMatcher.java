@@ -21,11 +21,16 @@ public abstract class TriggerMatcher {
         return ConditionMatcher.getCondition(conditionName, condition);
     }
 
-    public void setCondition(String conditionName) {
-        this.conditionName = conditionName;
+    public String getConditionName() {
+        return conditionName;
     }
 
-    public void setCondition(Condition condition) {
-        this.condition = new ConditionSet(condition);
+    public ConditionSet getConditionSet() {
+        return condition;
+    }
+
+    public void setCondition(String conditionName, ConditionSet conditionSet) {
+        this.conditionName = conditionName;
+        this.condition = conditionSet;
     }
 }

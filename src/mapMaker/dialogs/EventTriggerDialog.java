@@ -1,13 +1,11 @@
 package mapMaker.dialogs;
 
-import map.condition.Condition.GlobalCondition;
 import mapMaker.dialogs.action.ActionListPanel;
 import pattern.action.ActionMatcher;
 import pattern.map.EventMatcher;
 import util.GUIUtils;
 
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class EventTriggerDialog extends TriggerDialog<EventMatcher> {
@@ -16,20 +14,19 @@ public class EventTriggerDialog extends TriggerDialog<EventMatcher> {
     private final JPanel topComponent;
 
     private final JTextField nameTextField;
-    private final JTextArea conditionTextArea;
+    private final ConditionPanel conditionPanel;
     private final ActionListPanel actionListPanel;
 
     public EventTriggerDialog(EventMatcher eventMatcher) {
         super("Event Trigger Editor");
 
         this.nameTextField = GUIUtils.createTextField();
-        this.conditionTextArea = GUIUtils.createTextArea();
+        this.conditionPanel = new ConditionPanel();
         this.actionListPanel = new ActionListPanel(this);
 
         JPanel nameComponent = GUIUtils.createTextFieldComponent("Name", nameTextField);
-        JPanel conditionComponent = GUIUtils.createTextAreaComponent("Condition", conditionTextArea);
 
-        this.topComponent = GUIUtils.createVerticalLayoutComponent(nameComponent, conditionComponent);
+        this.topComponent = GUIUtils.createVerticalLayoutComponent(nameComponent, conditionPanel);
 
         this.load(eventMatcher);
     }
@@ -50,8 +47,8 @@ public class EventTriggerDialog extends TriggerDialog<EventMatcher> {
 
         return new EventMatcher(
                 this.getNameField(nameTextField),
-                // TODO: PLACEHOLDER THIS IS NOT RIGHT
-                new GlobalCondition(conditionTextArea.getText()),
+                conditionPanel.getConditionName(),
+                conditionPanel.getConditionSet(),
                 actions
         );
     }
@@ -62,8 +59,7 @@ public class EventTriggerDialog extends TriggerDialog<EventMatcher> {
         }
 
         nameTextField.setText(matcher.getBasicName());
-        // TODO: THIS IS WRONG AND A PLACEHOLDER
-        conditionTextArea.setText(matcher.getCondition().toString());
+        conditionPanel.load(matcher);
         actionListPanel.load(matcher.getActionMatcherList());
     }
 }
