@@ -343,7 +343,7 @@ public class EffectTest extends BaseTest {
 
         // TODO: Multi-turn moves are fucked why am I even testing this shit it's so fucked everything I do is trash
         // Smack Down will disrupt Fly, Grounding the Pokemon in the process
-//        testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.SMACK_DOWN, new TestInfo());
+        testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.SMACK_DOWN, new TestInfo());
 
         // If holding a Power Herb, will execute immediately in the first turn and be semi-invulnerable in the second
 //        testSemiInvulnerable(null, false, AttackNamesies.FLY, AttackNamesies.TACKLE, new TestInfo().attacking(ItemNamesies.POWER_HERB));
@@ -379,8 +379,7 @@ public class EffectTest extends BaseTest {
         battle.setExpectedDefendingAccuracyBypass(secondExpected);
         battle.fight();
 
-        // TODO: Fix this -- should only reduce once per multi-turn move
-//        Assert.assertEquals(attackingPP - 1, attacking.getMove().getPP());
+        Assert.assertEquals(attackingPP - 1, attacking.getMove().getPP());
         Assert.assertEquals(defendingPP - 2, defending.getMove().getPP());
     }
 }

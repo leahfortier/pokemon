@@ -5,7 +5,7 @@ UniqueEffects:
 	Header: void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 EndAttack:
-	Header: void endAttack(Battle b, ActivePokemon user, ActivePokemon victim)
+	Header: void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success)
 *
 AfterApplyCheck:
 	Header: void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -51,7 +51,6 @@ RecoilPercentage:
 *
 StatusFang:
 	AddMapField: EffChance: 20
-	AddMapField: Effect: Flinch
 	AddMapField: MoveType: Biting
 	AddMapField: BeginAttack:
 		super.status = StatusCondition.NO_STATUS;
@@ -113,12 +112,50 @@ RechargingMove:
 	AddMapField: MultiTurn: True
 *
 MultiTurn:
-	AddMapField: AfterApplyCheck:
-		if (this.isCharging(user)) {
-			Messages.add(this.getChargeMessage(user));
-		}
-		###
+    Header: boolean isCharging()
+    Body:
+        return this.isCharging;
+        ###
 	AddMapField: MoveType: Sleep_Talk_Fail
+    AddMapField: Field:
+        private boolean isCharging;
+        ###
+    AddMapField: ResetReady: True
+    AddMapField: SwitchReady: True
+    AddMapField: ShouldApplyDamage:
+        // Multi-turn moves default to no damage on the charging turn
+        return super.shouldApplyDamage(b, user) && !this.isCharging();
+        ###
+    AddMapField: ShouldApplyEffects:
+        // Multi-turn moves default to no effects on the charging turn
+        return super.shouldApplyEffects(b, user) && !this.isCharging();
+        ###
+    AddMapField: Activate: 
+        this.resetReady();
+        ###
+    AddMapField: BeginAttack:
+        this.switchReady();
+        this.checkOverrideCharge(b, attacking);
+        ###
+    AddMapField: EndAttack:
+        if (attackHit && !success) {
+            this.switchReady();
+        }
+        ###
+*
+# For Multi-Turn Moves
+ResetReady:
+    Header: void resetReady()
+    Body:
+        this.isCharging = !this.chargesFirst();
+        ###
+*
+# For Multi-Turn Moves
+SwitchReady:
+    Header: void switchReady()
+    Body:
+        this.isCharging = !this.isCharging;
+        ###
 *
 SemiInv:
 	Header: boolean semiInvulnerability()
@@ -126,8 +163,25 @@ SemiInv:
 		return {0};
 		###
 *
-IsMultiTurn:
-	Header: boolean isMultiTurn(Battle b, ActivePokemon user)
+RequiresCharge:
+	Header: boolean requiresCharge(Battle b)
+*
+SunlightCharger:
+    AddMapField: ChargingMove: user.getName() + " began taking in sunlight!"
+    AddMapField: GetMultiplier:
+        switch (b.getWeather().namesies()) {
+            case HAILING:
+            case RAINING:
+            case SANDSTORM:
+                return .5;
+            default:
+                return 1;
+        }
+        ###
+    AddMapField: RequiresCharge:
+        // Does not need to charge during harsh sunlight
+        return b.getWeather().namesies() != EffectNamesies.SUNNY;
+        ###
 *
 MultiStrike:
 	AddInterface: MultiStrikeMove
@@ -1720,7 +1774,7 @@ IgnoreAbilityMove:
 		EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
 		###
 	AddMapField: EndAttack:
-		user.removeEffect(EffectNamesies.BREAKS_THE_MOLD);
+		attacking.removeEffect(EffectNamesies.BREAKS_THE_MOLD);
 		###
 *
 StatusReceived:

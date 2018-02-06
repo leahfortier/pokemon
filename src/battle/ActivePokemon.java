@@ -438,8 +438,13 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean isSemiInvulnerable() {
-        final Move move = this.getMove();
-        return move != null && !move.isReady() && ((MultiTurnMove)getAttack()).semiInvulnerability();
+        final Attack attack = this.getAttack();
+        if (attack instanceof MultiTurnMove) {
+            MultiTurnMove multiTurnMove = (MultiTurnMove)attack;
+            return multiTurnMove.isCharging() && multiTurnMove.semiInvulnerability();
+        }
+
+        return false;
     }
 
     public boolean isSemiInvulnerableFlying() {
@@ -916,16 +921,15 @@ public class ActivePokemon extends PartyPokemon {
 
     public void startAttack(Battle b) {
         this.setAttacking(true);
-        this.getMove().switchReady(b, this); // TODO: I don't think this works right because this is happening before you check if they're able to attack and honestly they shouldn't really switch until the end of the turn
         this.getMove().setAttributes(b, this);
     }
 
     public void endAttack(ActivePokemon opp, boolean success) {
-        if (!success) {
+        if (success) {
+            this.setLastMoveUsed();
+        } else {
             this.removeEffect(EffectNamesies.SELF_CONFUSION);
             this.resetCount();
-        } else {
-            this.setLastMoveUsed();
         }
 
         if (this.reducePP) {

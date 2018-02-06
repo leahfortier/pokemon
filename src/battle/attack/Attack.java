@@ -7,7 +7,6 @@ import battle.effect.attack.AbilityChanger;
 import battle.effect.attack.ChangeAttackTypeSource;
 import battle.effect.attack.ChangeTypeSource;
 import battle.effect.attack.MultiStrikeMove;
-import battle.effect.attack.MultiTurnMove;
 import battle.effect.attack.MultiTurnMove.ChargingMove;
 import battle.effect.attack.MultiTurnMove.RechargingMove;
 import battle.effect.generic.CastSource;
@@ -223,22 +222,6 @@ public abstract class Attack implements InvokeEffect, Serializable {
         return this.moveTypes.contains(moveType);
     }
 
-    public boolean isMultiTurn(Battle b, ActivePokemon user) {
-        if (this instanceof MultiTurnMove) {
-            MultiTurnMove multiTurnMove = (MultiTurnMove)this;
-
-            // The Power Herb item allows multi-turn moves that charge first to skip the charge turn -- BUT ONLY ONCE
-            if (multiTurnMove.chargesFirst() && !multiTurnMove.semiInvulnerability() && user.isHoldingItem(b, ItemNamesies.POWER_HERB)) {
-                user.consumeItem(b);
-                return false;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
     public Type getActualType() {
         return this.type;
     }
@@ -270,32 +253,20 @@ public abstract class Attack implements InvokeEffect, Serializable {
             return false;
         }
 
-        // Multi-turn moves default to no damage on the charging turn
-        if (this.isMultiTurn(b, user)) {
-            return !((MultiTurnMove)this).isCharging(user);
-        }
-
         return true;
     }
 
     protected boolean shouldApplyEffects(Battle b, ActivePokemon user) {
-        // Multi-turn moves default to no effects on the charging turn
-        if (this.isMultiTurn(b, user)) {
-            return !((MultiTurnMove)this).isCharging(user);
-        }
-
         return true;
     }
 
     // To be overridden as necessary
-    protected void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
+    public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
+    public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {}
     protected void afterApplyCheck(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
     protected void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {}
-    protected void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {}
 
     public final boolean apply(ActivePokemon me, ActivePokemon o, Battle b) {
-        this.beginAttack(b, me, o);
-
         ActivePokemon target = getTarget(b, me, o);
 
         // Don't do anything for moves that are uneffective
@@ -321,7 +292,6 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         this.applyUniqueEffects(b, me, target);
-        this.endAttack(b, me, target);
 
         return true;
     }
@@ -699,8 +669,6 @@ public abstract class Attack implements InvokeEffect, Serializable {
         Growth() {
             super(AttackNamesies.GROWTH, Type.NORMAL, MoveCategory.STATUS, 20, "The user's body grows all at once, raising the Attack and Sp. Atk stats.");
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
         }
 
         @Override
@@ -835,7 +803,6 @@ public abstract class Attack implements InvokeEffect, Serializable {
             super(AttackNamesies.FIRE_FANG, Type.FIRE, MoveCategory.PHYSICAL, 15, "The user bites with flame-cloaked fangs. This may also make the target flinch or leave it with a burn.");
             super.power = 65;
             super.accuracy = 95;
-            super.effects.add(EffectNamesies.FLINCH);
             super.effectChance = 20;
             super.moveTypes.add(MoveType.BITING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -900,24 +867,17 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
     }
 
-    static class SolarBeam extends Attack implements ChargingMove, PowerChangeEffect {
+    static class SolarBeam extends Attack implements PowerChangeEffect, ChargingMove {
         private static final long serialVersionUID = 1L;
+
+        private boolean isCharging;
 
         SolarBeam() {
             super(AttackNamesies.SOLAR_BEAM, Type.GRASS, MoveCategory.SPECIAL, 10, "In this two-turn attack, the user gathers light, then blasts a bundled beam on the next turn.");
             super.power = 120;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
-        }
-
-        @Override
-        public String getChargeMessage(ActivePokemon user) {
-            return user.getName() + " began taking in sunlight!";
-        }
-
-        @Override
-        public boolean isMultiTurn(Battle b, ActivePokemon user) {
-            return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
+            this.resetReady();
         }
 
         @Override
@@ -933,15 +893,61 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public String getChargeMessage(ActivePokemon user) {
+            return user.getName() + " began taking in sunlight!";
+        }
+
+        @Override
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public boolean requiresCharge(Battle b) {
+            // Does not need to charge during harsh sunlight
+            return b.getWeather().namesies() != EffectNamesies.SUNNY;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
-    static class SolarBlade extends Attack implements ChargingMove {
+    static class SolarBlade extends Attack implements PowerChangeEffect, ChargingMove {
         private static final long serialVersionUID = 1L;
+
+        private boolean isCharging;
 
         SolarBlade() {
             super(AttackNamesies.SOLAR_BLADE, Type.GRASS, MoveCategory.PHYSICAL, 10, "In this two-turn attack, the user gathers light and fills a blade with the light's energy, attacking the target on the next turn.");
@@ -949,6 +955,19 @@ public abstract class Attack implements InvokeEffect, Serializable {
             super.accuracy = 100;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            this.resetReady();
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            switch (b.getWeather().namesies()) {
+                case HAILING:
+                case RAINING:
+                case SANDSTORM:
+                    return .5;
+                default:
+                    return 1;
+            }
         }
 
         @Override
@@ -957,15 +976,49 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
-        public boolean isMultiTurn(Battle b, ActivePokemon user) {
-            return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
+        public boolean isCharging() {
+            return this.isCharging;
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public boolean requiresCharge(Battle b) {
+            // Does not need to charge during harsh sunlight
+            return b.getWeather().namesies() != EffectNamesies.SUNNY;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -984,6 +1037,8 @@ public abstract class Attack implements InvokeEffect, Serializable {
     static class Fly extends Attack implements ChargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         Fly() {
             super(AttackNamesies.FLY, Type.FLYING, MoveCategory.PHYSICAL, 15, "The user soars and then strikes its target on the next turn.");
             super.power = 90;
@@ -991,6 +1046,7 @@ public abstract class Attack implements InvokeEffect, Serializable {
             super.moveTypes.add(MoveType.AIRBORNE);
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            this.resetReady();
         }
 
         @Override
@@ -999,15 +1055,48 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
         public boolean semiInvulnerability() {
             return true;
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -1343,8 +1432,11 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
     }
 
+    // TODO: ShouldApplyEffects should be this.isCharging()
     static class SkullBash extends Attack implements ChargingMove {
         private static final long serialVersionUID = 1L;
+
+        private boolean isCharging;
 
         SkullBash() {
             super(AttackNamesies.SKULL_BASH, Type.NORMAL, MoveCategory.PHYSICAL, 10, "The user tucks in its head to raise its Defense stat on the first turn, then rams the target on the next turn.");
@@ -1354,11 +1446,7 @@ public abstract class Attack implements InvokeEffect, Serializable {
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.statChanges[Stat.DEFENSE.index()] = 1;
-        }
-
-        @Override
-        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
-            return this.isCharging(user);
+            this.resetReady();
         }
 
         @Override
@@ -1367,10 +1455,43 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -1469,90 +1590,270 @@ public abstract class Attack implements InvokeEffect, Serializable {
     static class HyperBeam extends Attack implements RechargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         HyperBeam() {
             super(AttackNamesies.HYPER_BEAM, Type.NORMAL, MoveCategory.SPECIAL, 5, "The target is attacked with a powerful beam. The user can't move on the next turn.");
             super.power = 150;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            this.resetReady();
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
     static class FrenzyPlant extends Attack implements RechargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         FrenzyPlant() {
             super(AttackNamesies.FRENZY_PLANT, Type.GRASS, MoveCategory.SPECIAL, 5, "The user slams the target with an enormous tree. The user can't move on the next turn.");
             super.power = 150;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            this.resetReady();
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
     static class BlastBurn extends Attack implements RechargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         BlastBurn() {
             super(AttackNamesies.BLAST_BURN, Type.FIRE, MoveCategory.SPECIAL, 5, "The target is razed by a fiery explosion. The user can't move on the next turn.");
             super.power = 150;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            this.resetReady();
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
     static class HydroCannon extends Attack implements RechargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         HydroCannon() {
             super(AttackNamesies.HYDRO_CANNON, Type.WATER, MoveCategory.SPECIAL, 5, "The target is hit with a watery blast. The user can't move on the next turn.");
             super.power = 150;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            this.resetReady();
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
     static class PrismaticLaser extends Attack implements RechargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         PrismaticLaser() {
             super(AttackNamesies.PRISMATIC_LASER, Type.PSYCHIC, MoveCategory.SPECIAL, 10, "The user shoots powerful lasers using the power of a prism. The user can't move on the next turn.");
             super.power = 160;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            this.resetReady();
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -2478,7 +2779,7 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Stockpile ends after Spit up is used
             user.getEffect(EffectNamesies.STOCKPILE).deactivate();
         }
@@ -2516,7 +2817,9 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.heal(b, victim);
+
             // Stockpile ends after Swallow is used
             user.getEffect(EffectNamesies.STOCKPILE).deactivate();
         }
@@ -2537,11 +2840,6 @@ public abstract class Attack implements InvokeEffect, Serializable {
             } else {
                 return 1;
             }
-        }
-
-        @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            this.heal(b, victim);
         }
 
         @Override
@@ -2624,7 +2922,6 @@ public abstract class Attack implements InvokeEffect, Serializable {
             super(AttackNamesies.ICE_FANG, Type.ICE, MoveCategory.PHYSICAL, 15, "The user bites with cold-infused fangs. This may also make the target flinch or leave it frozen.");
             super.power = 65;
             super.accuracy = 95;
-            super.effects.add(EffectNamesies.FLINCH);
             super.effectChance = 20;
             super.moveTypes.add(MoveType.BITING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -2651,7 +2948,6 @@ public abstract class Attack implements InvokeEffect, Serializable {
             super(AttackNamesies.THUNDER_FANG, Type.ELECTRIC, MoveCategory.PHYSICAL, 15, "The user bites with electrified fangs. This may also make the target flinch or leave it with paralysis.");
             super.power = 65;
             super.accuracy = 95;
-            super.effects.add(EffectNamesies.FLINCH);
             super.effectChance = 20;
             super.moveTypes.add(MoveType.BITING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -3494,7 +3790,9 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.heal(b, victim);
+
             victim.getStatus().setTurns(2);
         }
 
@@ -3506,11 +3804,6 @@ public abstract class Attack implements InvokeEffect, Serializable {
         @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             return 1;
-        }
-
-        @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            this.heal(b, victim);
         }
 
         @Override
@@ -3890,12 +4183,15 @@ public abstract class Attack implements InvokeEffect, Serializable {
     static class Dig extends Attack implements ChargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         Dig() {
             super(AttackNamesies.DIG, Type.GROUND, MoveCategory.PHYSICAL, 10, "The user burrows, then attacks on the next turn.");
             super.power = 80;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            this.resetReady();
         }
 
         @Override
@@ -3904,15 +4200,48 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
         public boolean semiInvulnerability() {
             return true;
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -4944,6 +5273,8 @@ public abstract class Attack implements InvokeEffect, Serializable {
     static class Bounce extends Attack implements ChargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         Bounce() {
             super(AttackNamesies.BOUNCE, Type.FLYING, MoveCategory.PHYSICAL, 5, "The user bounces up high, then drops on the target on the second turn. This may also leave the target with paralysis.");
             super.power = 85;
@@ -4953,6 +5284,7 @@ public abstract class Attack implements InvokeEffect, Serializable {
             super.moveTypes.add(MoveType.AIRBORNE);
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            this.resetReady();
         }
 
         @Override
@@ -4961,15 +5293,48 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
         public boolean semiInvulnerability() {
             return true;
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -5291,12 +5656,15 @@ public abstract class Attack implements InvokeEffect, Serializable {
     static class Dive extends Attack implements ChargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         Dive() {
             super(AttackNamesies.DIVE, Type.WATER, MoveCategory.PHYSICAL, 10, "Diving on the first turn, the user floats up and attacks on the next turn.");
             super.power = 80;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            this.resetReady();
         }
 
         @Override
@@ -5305,15 +5673,48 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
         public boolean semiInvulnerability() {
             return true;
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -6508,8 +6909,8 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            attacking.removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
         }
 
         @Override
@@ -6881,11 +7282,14 @@ public abstract class Attack implements InvokeEffect, Serializable {
     static class RazorWind extends Attack implements CritStageEffect, ChargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         RazorWind() {
             super(AttackNamesies.RAZOR_WIND, Type.NORMAL, MoveCategory.SPECIAL, 10, "In this two-turn attack, blades of wind hit opposing Pok\u00e9mon on the second turn. Critical hits land more easily.");
             super.power = 80;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            this.resetReady();
         }
 
         @Override
@@ -6894,10 +7298,43 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -7016,19 +7453,55 @@ public abstract class Attack implements InvokeEffect, Serializable {
     static class GigaImpact extends Attack implements RechargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         GigaImpact() {
             super(AttackNamesies.GIGA_IMPACT, Type.NORMAL, MoveCategory.PHYSICAL, 5, "The user charges at the target using every bit of its power. The user can't move on the next turn.");
             super.power = 150;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            this.resetReady();
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -7317,6 +7790,8 @@ public abstract class Attack implements InvokeEffect, Serializable {
     static class SkyAttack extends Attack implements CritStageEffect, ChargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         SkyAttack() {
             super(AttackNamesies.SKY_ATTACK, Type.FLYING, MoveCategory.PHYSICAL, 5, "A second-turn attack move where critical hits land more easily. This may also make the target flinch.");
             super.power = 140;
@@ -7324,6 +7799,7 @@ public abstract class Attack implements InvokeEffect, Serializable {
             super.effects.add(EffectNamesies.FLINCH);
             super.effectChance = 30;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            this.resetReady();
         }
 
         @Override
@@ -7332,10 +7808,43 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -8458,19 +8967,55 @@ public abstract class Attack implements InvokeEffect, Serializable {
     static class RockWrecker extends Attack implements RechargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         RockWrecker() {
             super(AttackNamesies.ROCK_WRECKER, Type.ROCK, MoveCategory.PHYSICAL, 5, "The user launches a huge boulder at the target to attack. The user can't move on the next turn.");
             super.power = 150;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.BOMB_BALL);
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            this.resetReady();
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -8489,18 +9034,54 @@ public abstract class Attack implements InvokeEffect, Serializable {
     static class RoarOfTime extends Attack implements RechargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         RoarOfTime() {
             super(AttackNamesies.ROAR_OF_TIME, Type.DRAGON, MoveCategory.SPECIAL, 5, "The user blasts the target with power that distorts even time. The user can't move on the next turn.");
             super.power = 150;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            this.resetReady();
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -8543,6 +9124,8 @@ public abstract class Attack implements InvokeEffect, Serializable {
     static class ShadowForce extends Attack implements ChargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         ShadowForce() {
             super(AttackNamesies.SHADOW_FORCE, Type.GHOST, MoveCategory.PHYSICAL, 5, "The user disappears, then strikes the target on the next turn. This move hits even if the target protects itself.");
             super.power = 120;
@@ -8550,6 +9133,7 @@ public abstract class Attack implements InvokeEffect, Serializable {
             super.moveTypes.add(MoveType.PROTECT_PIERCING);
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            this.resetReady();
         }
 
         @Override
@@ -8558,15 +9142,48 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
         public boolean semiInvulnerability() {
             return true;
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -9153,11 +9770,8 @@ public abstract class Attack implements InvokeEffect, Serializable {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // TODO: Make sure this is still working -- consumeItem used to be in endAttack
             ((HoldItem)user.getHeldItem(b)).flingEffect(b, victim);
-        }
-
-        @Override
-        public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.consumeItem(b);
         }
 
@@ -9180,6 +9794,8 @@ public abstract class Attack implements InvokeEffect, Serializable {
     static class FreezeShock extends Attack implements ChargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         FreezeShock() {
             super(AttackNamesies.FREEZE_SHOCK, Type.ICE, MoveCategory.PHYSICAL, 5, "On the second turn, the user hits the target with electrically charged ice. This may also leave the target with paralysis.");
             super.power = 140;
@@ -9188,6 +9804,7 @@ public abstract class Attack implements InvokeEffect, Serializable {
             super.status = StatusCondition.PARALYZED;
             super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            this.resetReady();
         }
 
         @Override
@@ -9196,10 +9813,43 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -9972,6 +10622,8 @@ public abstract class Attack implements InvokeEffect, Serializable {
     static class IceBurn extends Attack implements ChargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         IceBurn() {
             super(AttackNamesies.ICE_BURN, Type.ICE, MoveCategory.SPECIAL, 5, "On the second turn, an ultracold, freezing wind surrounds the target. This may leave the target with a burn.");
             super.power = 140;
@@ -9980,6 +10632,7 @@ public abstract class Attack implements InvokeEffect, Serializable {
             super.status = StatusCondition.BURNED;
             super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            this.resetReady();
         }
 
         @Override
@@ -9988,10 +10641,43 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -10090,6 +10776,8 @@ public abstract class Attack implements InvokeEffect, Serializable {
     static class PhantomForce extends Attack implements ChargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         PhantomForce() {
             super(AttackNamesies.PHANTOM_FORCE, Type.GHOST, MoveCategory.PHYSICAL, 10, "The user vanishes somewhere, then strikes the target on the next turn. This move hits even if the target protects itself.");
             super.power = 90;
@@ -10098,6 +10786,7 @@ public abstract class Attack implements InvokeEffect, Serializable {
             super.moveTypes.add(MoveType.ASSISTLESS);
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            this.resetReady();
         }
 
         @Override
@@ -10106,15 +10795,48 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
         public boolean semiInvulnerability() {
             return true;
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -10137,6 +10859,8 @@ public abstract class Attack implements InvokeEffect, Serializable {
     static class Geomancy extends Attack implements ChargingMove {
         private static final long serialVersionUID = 1L;
 
+        private boolean isCharging;
+
         Geomancy() {
             super(AttackNamesies.GEOMANCY, Type.FAIRY, MoveCategory.STATUS, 10, "The user absorbs energy and sharply raises its Sp. Atk, Sp. Def, and Speed stats on the next turn.");
             super.moveTypes.add(MoveType.NON_SNATCHABLE);
@@ -10145,6 +10869,7 @@ public abstract class Attack implements InvokeEffect, Serializable {
             super.statChanges[Stat.SP_ATTACK.index()] = 2;
             super.statChanges[Stat.SP_DEFENSE.index()] = 2;
             super.statChanges[Stat.SPEED.index()] = 2;
+            this.resetReady();
         }
 
         @Override
@@ -10153,10 +10878,43 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (this.isCharging(user)) {
-                Messages.add(this.getChargeMessage(user));
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.switchReady();
+            this.checkOverrideCharge(b, attacking);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            if (attackHit && !success) {
+                this.switchReady();
             }
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no damage on the charging turn
+            return super.shouldApplyDamage(b, user) && !this.isCharging();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            // Multi-turn moves default to no effects on the charging turn
+            return super.shouldApplyEffects(b, user) && !this.isCharging();
         }
     }
 
@@ -10290,6 +11048,7 @@ public abstract class Attack implements InvokeEffect, Serializable {
             super(AttackNamesies.FLYING_PRESS, Type.FIGHTING, MoveCategory.PHYSICAL, 10, "The user dives down onto the target from the sky. This move is Fighting and Flying type simultaneously.");
             super.power = 100;
             super.accuracy = 95;
+            super.moveTypes.add(MoveType.AIRBORNE);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
@@ -11215,8 +11974,8 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.removeEffect(EffectNamesies.BREAKS_THE_MOLD);
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            attacking.removeEffect(EffectNamesies.BREAKS_THE_MOLD);
         }
     }
 
@@ -11235,8 +11994,8 @@ public abstract class Attack implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void endAttack(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.removeEffect(EffectNamesies.BREAKS_THE_MOLD);
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+            attacking.removeEffect(EffectNamesies.BREAKS_THE_MOLD);
         }
     }
 

@@ -6,6 +6,7 @@ import battle.attack.Attack;
 import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.InvokeEffect;
+import battle.effect.attack.MultiTurnMove;
 import battle.effect.status.StatusCondition;
 import item.Item;
 import item.ItemNamesies;
@@ -451,8 +452,9 @@ public final class EffectInterfaces {
 
         default void removeLevitation(Battle b, ActivePokemon p) {
             if (p.isSemiInvulnerableFlying()) {
-                p.getMove().switchReady(b, p);
+                ((MultiTurnMove)p.getAttack()).resetReady();
                 Messages.add(p.getName() + " fell to the ground!");
+                EffectNamesies.FLINCH.getEffect().cast(b, p, p, CastSource.EFFECT, false);
             }
 
             LevitationEffect.falllllllll(b, p);

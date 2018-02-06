@@ -296,8 +296,9 @@ GroundedEffect:
 		Header: void removeLevitation(Battle b, ActivePokemon p)
 		Default:
 			if (p.isSemiInvulnerableFlying()) {
-				p.getMove().switchReady(b, p);
+				((MultiTurnMove)p.getAttack()).resetReady();
 				Messages.add(p.getName() + " fell to the ground!");
+                EffectNamesies.FLINCH.getEffect().cast(b, p, p, CastSource.EFFECT, false);
 			}
 
 			LevitationEffect.falllllllll(b, p);
