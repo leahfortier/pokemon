@@ -127,7 +127,8 @@ public class ClassTest extends BaseTest {
             AlwaysCritEffect.class,
             SleepyFightsterEffect.class,
             SelfAttackBlocker.class,
-            CritStageEffect.class
+            CritStageEffect.class,
+            ForceMoveEffect.class
     );
 
     private static List<Class<?>> classes;
@@ -223,7 +224,6 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, StatusPreventionEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, BracingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, ChangeTypeEffect.class, effectListSourcesNoAttack);
-            checkInstance(classy, ForceMoveEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, DifferentStatEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, PriorityChangeEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, ChangeAttackTypeEffect.class, effectListSourcesNoAttack);

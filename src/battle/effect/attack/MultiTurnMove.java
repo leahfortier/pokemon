@@ -3,9 +3,11 @@ package battle.effect.attack;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackInterface;
+import battle.attack.Move;
+import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import item.ItemNamesies;
 
-public interface MultiTurnMove extends AttackInterface {
+public interface MultiTurnMove extends AttackInterface, ForceMoveEffect {
     boolean chargesFirst();
     String getChargeMessage(ActivePokemon user);
 
@@ -31,8 +33,13 @@ public interface MultiTurnMove extends AttackInterface {
         return false;
     }
 
-    default boolean forceMove() {
-        return this.chargesFirst() == this.isCharging();
+    @Override
+    default Move getForcedMove(ActivePokemon attacking) {
+        if (this.chargesFirst() == this.isCharging()) {
+            return attacking.getMove();
+        }
+
+        return null;
     }
 
     @Override

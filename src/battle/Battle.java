@@ -508,7 +508,7 @@ public class Battle implements Serializable {
     public void printAttacking(ActivePokemon p) {
         Attack attack = p.getAttack();
 
-        // Display the charge move instead
+        // Display the charge message instead
         if (attack instanceof MultiTurnMove) {
             MultiTurnMove multiTurnMove = (MultiTurnMove)attack;
             if (multiTurnMove.isCharging()) {
@@ -521,7 +521,7 @@ public class Battle implements Serializable {
         p.setReducePP(true);
     }
 
-    // Executes the attack including accuracy checks, returns if the move hit
+    // Executes the attack including accuracy checks, returns whether or not the move hit
     public boolean executeAttack(ActivePokemon me, ActivePokemon o) {
         Attack attack = me.getAttack();
         attack.beginAttack(this, me, o);
@@ -548,7 +548,7 @@ public class Battle implements Serializable {
             CrashDamageMove.invokeCrashDamageMove(this, me);
         }
 
-        if (!attackHit || !success) {
+        if (!success) {
             attack.totalAndCompleteFailure(this, me, o);
         }
 

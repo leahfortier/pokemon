@@ -707,7 +707,7 @@ ToModify:
 		###
 *
 GetForceMove:
-	Header: Move getForcedMove()
+	Header: Move getForcedMove(ActivePokemon attacking)
 *
 Subside:
 	Header: void subside(Battle b, ActivePokemon p)

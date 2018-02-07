@@ -3,7 +3,6 @@ package battle.attack;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.ai.DecisionTree;
-import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import message.Messages;
@@ -141,14 +140,6 @@ public class Move implements Serializable {
         if (forcedMove != null) {
             p.setMove(forcedMove);
             return true;
-        }
-
-        // Force second turn of a Multi-Turn Move
-        if (p.getAttack() instanceof MultiTurnMove) {
-            MultiTurnMove multiTurnMove = (MultiTurnMove)p.getAttack();
-            if (multiTurnMove.forceMove()) {
-                return true;
-            }
         }
 
         // TODO: Why just the player

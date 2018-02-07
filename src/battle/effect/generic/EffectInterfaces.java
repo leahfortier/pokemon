@@ -859,14 +859,14 @@ public final class EffectInterfaces {
     }
 
     public interface ForceMoveEffect {
-        Move getForcedMove();
+        Move getForcedMove(ActivePokemon attacking);
 
         static Move getForcedMove(Battle b, ActivePokemon attacking) {
-            List<InvokeEffect> invokees = b.getEffectsList(attacking);
+            List<InvokeEffect> invokees = b.getEffectsList(attacking, attacking.getAttack());
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof ForceMoveEffect && InvokeEffect.isActiveEffect(invokee)) {
                     ForceMoveEffect effect = (ForceMoveEffect)invokee;
-                    return effect.getForcedMove();
+                    return effect.getForcedMove(attacking);
                 }
             }
 

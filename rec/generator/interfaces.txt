@@ -500,11 +500,12 @@ ChangeTypeEffect:
 ***
 ForceMoveEffect:
 	Method:
-		Header: Move getForcedMove()
+		Header: Move getForcedMove(ActivePokemon attacking)
 		Invoke: Get
 		InvokeName: getForcedMove
-		InvokeParameters: Battle b, ActivePokemon attacking
+		InvokeParameters: Battle b
 		EffectList: attacking
+        InvokeAttack: attacking
 	*
 ***
 DifferentStatEffect
