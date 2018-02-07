@@ -136,7 +136,7 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface RecoilMove extends ApplyDamageEffect {
+    public interface RecoilMove extends AttackInterface, ApplyDamageEffect {
         void applyRecoil(Battle b, ActivePokemon user, int damage);
 
         @Override
@@ -159,7 +159,7 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface SelfHealingMove {
+    public interface SelfHealingMove extends AttackInterface {
         double getHealFraction(Battle b, ActivePokemon victim);
 
         default void heal(Battle b, ActivePokemon victim) {
@@ -239,7 +239,7 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface CrashDamageMove {
+    public interface CrashDamageMove extends AttackInterface {
         void crash(Battle b, ActivePokemon user);
 
         static void invokeCrashDamageMove(Battle b, ActivePokemon user) {
@@ -1196,7 +1196,7 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface AdvantageMultiplierMove {
+    public interface AdvantageMultiplierMove extends AttackInterface {
         double multiplyAdvantage(Type attackingType, Type[] defendingTypes);
 
         static double getModifier(ActivePokemon attacking, Type attackingType, Type[] defendingTypes) {
@@ -1429,7 +1429,7 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface PowderMove extends SelfAttackBlocker {
+    public interface PowderMove extends AttackInterface, SelfAttackBlocker {
 
         @Override
         default boolean block(Battle b, ActivePokemon user) {
@@ -1700,7 +1700,7 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface PowerCountMove extends PowerChangeEffect {
+    public interface PowerCountMove extends AttackInterface, PowerChangeEffect {
         boolean doubleDefenseCurled();
 
         @Override

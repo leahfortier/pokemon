@@ -1,16 +1,15 @@
 package test;
 
 import battle.attack.Attack;
+import battle.attack.AttackInterface;
 import battle.effect.attack.AbilityChanger;
 import battle.effect.attack.ChangeAttackTypeSource;
 import battle.effect.attack.ChangeTypeSource;
-import battle.effect.attack.MultiStrikeMove;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.attack.MultiTurnMove.ChargingMove;
 import battle.effect.attack.MultiTurnMove.RechargingMove;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
-import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
@@ -23,7 +22,6 @@ import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
 import battle.effect.generic.EffectInterfaces.ChangeMoveListEffect;
 import battle.effect.generic.EffectInterfaces.ChangeTypeEffect;
-import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DamageTakenEffect;
@@ -53,15 +51,11 @@ import battle.effect.generic.EffectInterfaces.OpponentStatusReceivedEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
 import battle.effect.generic.EffectInterfaces.PassableEffect;
-import battle.effect.generic.EffectInterfaces.PowderMove;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
-import battle.effect.generic.EffectInterfaces.PowerCountMove;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
-import battle.effect.generic.EffectInterfaces.RecoilMove;
 import battle.effect.generic.EffectInterfaces.RepellingEffect;
 import battle.effect.generic.EffectInterfaces.SelfAttackBlocker;
-import battle.effect.generic.EffectInterfaces.SelfHealingMove;
 import battle.effect.generic.EffectInterfaces.SemiInvulnerableBypasser;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import battle.effect.generic.EffectInterfaces.StageChangingEffect;
@@ -178,6 +172,7 @@ public class ClassTest extends BaseTest {
         Class<?>[] effectListSourcesWithAttack = GeneralUtils.append(effectListSourcesNoAttack, Attack.class);
         for (Class<?> classy : classes) {
             checkInstance(classy, ItemInterface.class, Item.class);
+            checkInstance(classy, AttackInterface.class, Attack.class);
             checkInstance(classy, NameChanger.class, Ability.class);
             checkInstance(classy, PassableEffect.class, PokemonEffect.class);
             checkInstance(classy, TerrainEffect.class, BattleEffect.class);
@@ -194,16 +189,6 @@ public class ClassTest extends BaseTest {
 
             // MultiTurnMove should not be directly inherited
             checkInstance(classy, MultiTurnMove.class, ChargingMove.class, RechargingMove.class);
-
-            // Must be attacks
-            checkInstance(classy, MultiStrikeMove.class, Attack.class);
-            checkInstance(classy, MultiTurnMove.class, Attack.class);
-            checkInstance(classy, RecoilMove.class, Attack.class);
-            checkInstance(classy, AdvantageMultiplierMove.class, Attack.class);
-            checkInstance(classy, CrashDamageMove.class, Attack.class);
-            checkInstance(classy, PowderMove.class, Attack.class);
-            checkInstance(classy, PowerCountMove.class, Attack.class);
-            checkInstance(classy, SelfHealingMove.class, Attack.class);
 
             // Casted from CastSource.getSource()
             checkInstance(classy, AbilityChanger.class, castSources);

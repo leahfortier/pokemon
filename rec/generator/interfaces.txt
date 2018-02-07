@@ -55,7 +55,7 @@ RecoilMove:
 	Method:
 		Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
 	*
-	Extends: ApplyDamageEffect
+	Extends: AttackInterface, ApplyDamageEffect
 	Method:
 		Override: True
 		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
@@ -83,6 +83,7 @@ RecoilPercentageMove:
 	*
 ***
 SelfHealingMove:
+    Extends: AttackInterface
 	Method:
 		Header: double getHealFraction(Battle b, ActivePokemon victim)
 	*
@@ -145,6 +146,7 @@ OpponentTakeDamageEffect:
 	*
 ***
 CrashDamageMove:
+    Extends: AttackInterface
 	Method:
 		Header: void crash(Battle b, ActivePokemon user)
 		Move: user
@@ -679,6 +681,7 @@ OpponentPowerChangeEffect:
 	*
 ***
 AdvantageMultiplierMove:
+    Extends: AttackInterface
 	Method:
 		Header: double multiplyAdvantage(Type attackingType, Type[] defendingTypes)
 		Invoke: Multiply
@@ -839,7 +842,7 @@ AttackSelectionSelfBlockerEffect:
 	*
 ***
 PowderMove:
-	Extends: SelfAttackBlocker
+	Extends: AttackInterface, SelfAttackBlocker
 	Method:
 		Override: True
 		Header: boolean block(Battle b, ActivePokemon user)
@@ -1051,7 +1054,7 @@ SapHealthEffect:
 	*
 ***
 PowerCountMove:
-	Extends: PowerChangeEffect
+	Extends: AttackInterface, PowerChangeEffect
 	Method:
 		Header: boolean doubleDefenseCurled()
 	*
