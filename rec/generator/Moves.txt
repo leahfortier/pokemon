@@ -556,7 +556,9 @@ Skull Bash:
     SelfTarget: True
     StatChange: 1 Defense 1
     ChargingMove: user.getName() + " lowered its head!"
-    Comments: // TODO: ShouldApplyEffects should be this.isCharging()
+    ShouldApplyEffects:
+        return this.isCharging();
+        ###
 *
 Iron Defense:
     Desc: The user hardens its body's surface like iron, sharply raising its Defense stat.

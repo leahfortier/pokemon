@@ -2,9 +2,10 @@ package battle.effect.attack;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.attack.AttackInterface;
 import item.ItemNamesies;
 
-public interface MultiTurnMove {
+public interface MultiTurnMove extends AttackInterface {
     boolean chargesFirst();
     String getChargeMessage(ActivePokemon user);
 
@@ -38,6 +39,31 @@ public interface MultiTurnMove {
 
     default boolean forceMove() {
         return this.chargesFirst() == this.isCharging();
+    }
+
+    @Override
+    default void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+        this.switchReady();
+        this.checkOverrideCharge(b, attacking);
+    }
+
+    @Override
+    default void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+        if (attackHit && !success) {
+            this.switchReady();
+        }
+    }
+
+    @Override
+    default boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+        // Multi-turn moves default to no damage on the charging turn
+        return AttackInterface.super.shouldApplyDamage(b, user) && !this.isCharging();
+    }
+
+    @Override
+    default boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+        // Multi-turn moves default to no effects on the charging turn
+        return AttackInterface.super.shouldApplyEffects(b, user) && !this.isCharging();
     }
 
     interface ChargingMove extends MultiTurnMove {

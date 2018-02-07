@@ -122,25 +122,8 @@ MultiTurn:
         ###
     AddMapField: ResetReady: True
     AddMapField: SwitchReady: True
-    AddMapField: ShouldApplyDamage:
-        // Multi-turn moves default to no damage on the charging turn
-        return super.shouldApplyDamage(b, user) && !this.isCharging();
-        ###
-    AddMapField: ShouldApplyEffects:
-        // Multi-turn moves default to no effects on the charging turn
-        return super.shouldApplyEffects(b, user) && !this.isCharging();
-        ###
     AddMapField: Activate: 
         this.resetReady();
-        ###
-    AddMapField: BeginAttack:
-        this.switchReady();
-        this.checkOverrideCharge(b, attacking);
-        ###
-    AddMapField: EndAttack:
-        if (attackHit && !success) {
-            this.switchReady();
-        }
         ###
 *
 # For Multi-Turn Moves
