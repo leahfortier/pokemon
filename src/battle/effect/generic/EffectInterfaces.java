@@ -3,6 +3,7 @@ package battle.effect.generic;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Attack;
+import battle.attack.AttackInterface;
 import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.InvokeEffect;

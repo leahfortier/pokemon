@@ -1,6 +1,8 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
+import battle.attack.Move;
+import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectNamesies;
 import generator.update.ItemUpdater;
 import generator.update.ItemUpdater.ItemParser;
@@ -297,5 +299,127 @@ public class ItemTest extends BaseTest {
 
         // If successful, should increase Sp. Attack by one
         new TestStages().set(Stat.SP_ATTACK, success ? 1 : 0).test(defending);
+    }
+
+    @Test
+    public void powerHerbTest() {
+        PokemonManipulator notFullHealth = (battle, attacking, defending) -> {
+            Assert.assertTrue(attacking.fullHealth());
+            Assert.assertFalse(defending.fullHealth());
+            new TestStages().test(attacking);
+            new TestStages().test(defending);
+
+            // Additionally fully heals the defending so this can be used in subsequent turns and still be meaningful
+            defending.fullyHeal();
+        };
+
+        PokemonManipulator charging = (battle, attacking, defending) -> {
+            MultiTurnMove multiTurnMove = (MultiTurnMove)attacking.getAttack();
+            Assert.assertTrue(multiTurnMove.isCharging());
+
+            Assert.assertTrue(attacking.fullHealth());
+            Assert.assertTrue(defending.fullHealth());
+
+            new TestStages().test(attacking);
+            new TestStages().test(defending);
+        };
+
+        // Power Herb is consumed and damage is dealt first turn, charges on the second
+        powerHerbTest(AttackNamesies.SOLAR_BEAM, true, notFullHealth, charging);
+
+        // Power Herb is consumed and damage is dealt first turn -- defense is NOT raised
+        // Charges on the second turn and defense is raised
+        powerHerbTest(AttackNamesies.SKULL_BASH, true, notFullHealth, (battle, attacking, defending) -> {
+            MultiTurnMove multiTurnMove = (MultiTurnMove)attacking.getAttack();
+            Assert.assertTrue(multiTurnMove.isCharging());
+            new TestStages().set(Stat.DEFENSE, 1)
+                            .test(attacking);
+            new TestStages().test(defending);
+        });
+
+        // Power Herb is consumed and stats are raised
+        powerHerbTest(AttackNamesies.GEOMANCY, true, (battle, attacking, defending) -> {
+            Assert.assertTrue(attacking.fullHealth());
+            Assert.assertTrue(defending.fullHealth());
+            new TestStages().set(Stat.SP_ATTACK, 2)
+                            .set(Stat.SP_DEFENSE, 2)
+                            .set(Stat.SPEED, 2)
+                            .test(attacking);
+            new TestStages().test(defending);
+
+            // Reset stages so next check can be more meaningful
+            attacking.getStages().reset();
+        }, charging);
+
+        // Power Herb does not work with semi-invulnerable moves
+        powerHerbTest(AttackNamesies.FLY, false, (battle, attacking, defending) -> {
+            Assert.assertTrue(attacking.isSemiInvulnerable());
+            Assert.assertTrue(attacking.isSemiInvulnerableFlying());
+            Assert.assertTrue(attacking.fullHealth());
+            Assert.assertTrue(defending.fullHealth());
+        }, notFullHealth);
+
+        // Don't consume item or anything for non-multiturn moves
+        powerHerbTest(AttackNamesies.TACKLE, false, notFullHealth, notFullHealth);
+
+        // Should not consume Power Herb when it is Sunny
+        powerHerbTest(
+                AttackNamesies.SOLAR_BEAM,
+                true, false,
+                PokemonManipulator.attackingAttack(AttackNamesies.SUNNY_DAY),
+                notFullHealth, notFullHealth
+        );
+    }
+
+    private void powerHerbTest(AttackNamesies attackingMove,
+                               boolean consumeItem,
+                               PokemonManipulator afterFirstTurn,
+                               PokemonManipulator afterSecondTurn) {
+        this.powerHerbTest(attackingMove, false, consumeItem, PokemonManipulator.empty(), afterFirstTurn, afterSecondTurn);
+    }
+
+    private void powerHerbTest(AttackNamesies attackingMove,
+                               boolean skipCharge,
+                               boolean consumeItem,
+                               PokemonManipulator beforeFirstTurn,
+                               PokemonManipulator afterFirstTurn,
+                               PokemonManipulator afterSecondTurn) {
+        Assert.assertFalse(skipCharge && consumeItem);
+
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking().withItem(ItemNamesies.POWER_HERB);
+        TestPokemon defending = battle.getDefending();
+
+        beforeFirstTurn.manipulate(battle, attacking, defending);
+
+        attacking.setMove(new Move(attackingMove));
+        defending.setMove(new Move(AttackNamesies.SPLASH));
+
+        int attackingPP = attacking.getMove().getPP();
+        int defendingPP = defending.getMove().getPP();
+
+        battle.fight();
+
+        Assert.assertNotEquals(consumeItem, attacking.isHoldingItem(battle));
+        Assert.assertEquals(consumeItem, attacking.hasEffect(EffectNamesies.CONSUMED_ITEM));
+
+        boolean isMultiTurn = attacking.getAttack() instanceof MultiTurnMove;
+        boolean fullyExecuted = !isMultiTurn || skipCharge || consumeItem;
+
+        // If it is a Multi-turn move and the item was not consumed, then it should still be charging
+        Assert.assertEquals(attackingPP - (fullyExecuted ? 1 : 0), attacking.getMove().getPP());
+        Assert.assertEquals(defendingPP - 1, defending.getMove().getPP());
+
+        afterFirstTurn.manipulate(battle, attacking, defending);
+
+        battle.fight();
+
+        Assert.assertNotEquals(consumeItem, attacking.isHoldingItem(battle));
+        Assert.assertEquals(consumeItem, attacking.hasEffect(EffectNamesies.CONSUMED_ITEM));
+
+        Assert.assertEquals(attackingPP - (!isMultiTurn || skipCharge ? 2 : 1), attacking.getMove().getPP());
+        Assert.assertEquals(defendingPP - 2, defending.getMove().getPP());
+
+        afterSecondTurn.manipulate(battle, attacking, defending);
     }
 }
