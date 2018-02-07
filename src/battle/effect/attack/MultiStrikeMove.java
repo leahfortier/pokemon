@@ -1,10 +1,11 @@
 package battle.effect.attack;
 
 import battle.ActivePokemon;
+import battle.attack.AttackInterface;
 import pokemon.ability.AbilityNamesies;
 import util.RandomUtils;
 
-public interface MultiStrikeMove {
+public interface MultiStrikeMove extends AttackInterface {
     int getMinHits();
     int getMaxHits();
 

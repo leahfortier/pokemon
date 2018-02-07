@@ -3,7 +3,6 @@ package battle.attack;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.ai.DecisionTree;
-import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import message.Messages;
@@ -23,7 +22,6 @@ public class Move implements Serializable {
     private int maxPP;
     private int pp;
 
-    private boolean ready;
     private boolean used;
 
     private Type type;
@@ -55,17 +53,6 @@ public class Move implements Serializable {
 
     public void resetAttack() {
         this.attack = this.getAttack().namesies().getNewAttack();
-        ready = !(attack instanceof MultiTurnMove) || ((MultiTurnMove)attack).chargesFirst();
-    }
-
-    public boolean isReady() {
-        return ready;
-    }
-
-    public void switchReady(Battle b, ActivePokemon user) {
-        if (this.getAttack().isMultiTurn(b, user)) {
-            ready = !ready;
-        }
     }
 
     public Type getType() {
@@ -155,16 +142,8 @@ public class Move implements Serializable {
             return true;
         }
 
-        // Force second turn of a Multi-Turn Move
-        if (p.getMove() != null && p.getAttack().isMultiTurn(b, p)) {
-            MultiTurnMove multiTurnMove = (MultiTurnMove)p.getAttack();
-            if (multiTurnMove.forceMove(p)) {
-                return true;
-            }
-        }
-
         // TODO: Why just the player
-        if (p.isPlayer() && getUsableMoves(b, p).size() == 0) {
+        if (p.isPlayer() && getUsableMoves(b, p).isEmpty()) {
             p.setMove(new Move(AttackNamesies.STRUGGLE));
             return true;
         }

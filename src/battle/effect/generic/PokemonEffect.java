@@ -967,7 +967,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public Move getForcedMove() {
+        public Move getForcedMove(ActivePokemon attacking) {
             return move;
         }
 
@@ -1089,7 +1089,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public Move getForcedMove() {
+        public Move getForcedMove(ActivePokemon attacking) {
             return move;
         }
 
@@ -2027,7 +2027,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public Move getForcedMove() {
+        public Move getForcedMove(ActivePokemon attacking) {
             return uproar;
         }
 
@@ -2476,7 +2476,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public Move getForcedMove() {
+        public Move getForcedMove(ActivePokemon attacking) {
             return move;
         }
 

@@ -170,7 +170,6 @@ Growth:
     Desc: The user's body grows all at once, raising the Attack and Sp. Atk stats.
     Cat: Status
     SelfTarget: True
-    StatChange: 2 Attack 1 Sp_Attack 1
     Type: Normal
     BeginAttack:
         super.statChanges = new int[Stat.NUM_BATTLE_STATS];
@@ -287,20 +286,7 @@ Solar Beam:
     Acc: 100
     Type: Grass
     Cat: Special
-    ChargingMove: user.getName() + " began taking in sunlight!"
-    GetMultiplier:
-        switch (b.getWeather().namesies()) {
-            case HAILING:
-            case RAINING:
-            case SANDSTORM:
-                return .5;
-            default:
-                return 1;
-        }
-        ###
-    IsMultiTurn:
-        return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
-        ###
+    SunlightCharger: True
 *
 Solar Blade:
     Desc: In this two-turn attack, the user gathers light and fills a blade with the light's energy, attacking the target on the next turn.
@@ -309,10 +295,7 @@ Solar Blade:
     PP: 10
     Type: Grass
     Cat: Physical
-    ChargingMove: user.getName() + " began taking in sunlight!"
-    IsMultiTurn:
-        return super.isMultiTurn(b, user) && b.getWeather().namesies() != EffectNamesies.SUNNY;
-        ###
+    SunlightCharger: True
 *
 Flamethrower:
     Desc: The target is scorched with an intense blast of fire. This may also leave the target with a burn.
@@ -574,7 +557,7 @@ Skull Bash:
     StatChange: 1 Defense 1
     ChargingMove: user.getName() + " lowered its head!"
     ShouldApplyEffects:
-        return this.isCharging(user);
+        return this.isCharging();
         ###
 *
 Iron Defense:
@@ -1220,7 +1203,7 @@ Spit Up:
     EmptyPowerString: True
     MoveType: Mirrorless
     Applies: user.hasEffect(EffectNamesies.STOCKPILE)
-    EndAttack:
+    UniqueEffects:
         // Stockpile ends after Spit up is used
         user.getEffect(EffectNamesies.STOCKPILE).deactivate();
         ###
@@ -1240,7 +1223,7 @@ Swallow:
     PP: 10
     Cat: Status
     ExtraApplies: user.hasEffect(EffectNamesies.STOCKPILE)
-    BasicHealing:
+    SelfHealing:
         PokemonEffect stockpile = victim.getEffect(EffectNamesies.STOCKPILE);
         int turns = stockpile.getTurns();
         if (turns <= 0) {
@@ -1256,7 +1239,9 @@ Swallow:
             return 1;
         }
         ###
-    EndAttack:
+    UniqueEffects:
+        this.heal(b, victim);
+    
         // Stockpile ends after Swallow is used
         user.getEffect(EffectNamesies.STOCKPILE).deactivate();
         ###
@@ -1794,13 +1779,17 @@ Rest:
     PP: 10
     Type: Psychic
     Cat: Status
-    HealFraction: 1
     Status: Asleep
     ExtraApplies: Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, user, user)
     AfterApplyCheck:
         victim.removeStatus();
         ###
-    EndAttack:
+    SelfHealing:
+        return 1;
+        ###
+    UniqueEffects:
+        this.heal(b, victim);
+
         victim.getStatus().setTurns(2);
         ###
 *
@@ -3563,7 +3552,7 @@ Me First:
         ###
     CallNewMove: victim.getAttack().namesies()
     EndAttack:
-        user.removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
+        attacking.removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
         ###
 *
 Refresh:
@@ -5217,9 +5206,8 @@ Fling:
         Messages.add(user.getName() + " flung its " + user.getHeldItem(b).getName() + "!");
         ###
     UniqueEffects:
+        // TODO: Make sure this is still working -- consumeItem used to be in endAttack
         ((HoldItem)user.getHeldItem(b)).flingEffect(b, victim);
-        ###
-    EndAttack:
         user.consumeItem(b);
         ###
 *
@@ -5877,6 +5865,7 @@ Flying Press:
     MultiplyAdvantage:
         return TypeAdvantage.FLYING.getAdvantage(defendingTypes);
         ###
+    MoveType: Airborne
 *
 Topsy-Turvy:
     Type: Dark

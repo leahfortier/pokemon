@@ -3,9 +3,11 @@ package battle.effect.generic;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Attack;
+import battle.attack.AttackInterface;
 import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.InvokeEffect;
+import battle.effect.attack.MultiTurnMove;
 import battle.effect.status.StatusCondition;
 import item.Item;
 import item.ItemNamesies;
@@ -135,7 +137,7 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface RecoilMove extends ApplyDamageEffect {
+    public interface RecoilMove extends AttackInterface, ApplyDamageEffect {
         void applyRecoil(Battle b, ActivePokemon user, int damage);
 
         @Override
@@ -158,7 +160,7 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface SelfHealingMove {
+    public interface SelfHealingMove extends AttackInterface {
         double getHealFraction(Battle b, ActivePokemon victim);
 
         default void heal(Battle b, ActivePokemon victim) {
@@ -238,7 +240,7 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface CrashDamageMove {
+    public interface CrashDamageMove extends AttackInterface {
         void crash(Battle b, ActivePokemon user);
 
         static void invokeCrashDamageMove(Battle b, ActivePokemon user) {
@@ -451,8 +453,9 @@ public final class EffectInterfaces {
 
         default void removeLevitation(Battle b, ActivePokemon p) {
             if (p.isSemiInvulnerableFlying()) {
-                p.getMove().switchReady(b, p);
+                ((MultiTurnMove)p.getAttack()).resetReady();
                 Messages.add(p.getName() + " fell to the ground!");
+                EffectNamesies.FLINCH.getEffect().cast(b, p, p, CastSource.EFFECT, false);
             }
 
             LevitationEffect.falllllllll(b, p);
@@ -856,14 +859,14 @@ public final class EffectInterfaces {
     }
 
     public interface ForceMoveEffect {
-        Move getForcedMove();
+        Move getForcedMove(ActivePokemon attacking);
 
         static Move getForcedMove(Battle b, ActivePokemon attacking) {
-            List<InvokeEffect> invokees = b.getEffectsList(attacking);
+            List<InvokeEffect> invokees = b.getEffectsList(attacking, attacking.getAttack());
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof ForceMoveEffect && InvokeEffect.isActiveEffect(invokee)) {
                     ForceMoveEffect effect = (ForceMoveEffect)invokee;
-                    return effect.getForcedMove();
+                    return effect.getForcedMove(attacking);
                 }
             }
 
@@ -1194,7 +1197,7 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface AdvantageMultiplierMove {
+    public interface AdvantageMultiplierMove extends AttackInterface {
         double multiplyAdvantage(Type attackingType, Type[] defendingTypes);
 
         static double getModifier(ActivePokemon attacking, Type attackingType, Type[] defendingTypes) {
@@ -1427,7 +1430,7 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface PowderMove extends SelfAttackBlocker {
+    public interface PowderMove extends AttackInterface, SelfAttackBlocker {
 
         @Override
         default boolean block(Battle b, ActivePokemon user) {
@@ -1698,7 +1701,7 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface PowerCountMove extends PowerChangeEffect {
+    public interface PowerCountMove extends AttackInterface, PowerChangeEffect {
         boolean doubleDefenseCurled();
 
         @Override

@@ -1,7 +1,9 @@
 package battle;
 
+import battle.attack.Attack;
 import battle.attack.MoveType;
 import battle.effect.InvokeEffect;
+import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.BattleEffect;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
@@ -492,6 +494,8 @@ public class Battle implements Serializable {
         if (ableToAttack(me, o)) {
             // Made it, suckah!
             success = executeAttack(me, o);
+        } else {
+            me.getAttack().totalAndCompleteFailure(this, me, o);
         }
 
         me.endAttack(o, success);
@@ -502,35 +506,54 @@ public class Battle implements Serializable {
     }
 
     public void printAttacking(ActivePokemon p) {
-        Messages.add((p.isPlayer() ? "" : "Enemy ") + p.getName() + " used " + p.getAttack().getName() + "!");
+        Attack attack = p.getAttack();
+
+        // Display the charge message instead
+        if (attack instanceof MultiTurnMove) {
+            MultiTurnMove multiTurnMove = (MultiTurnMove)attack;
+            if (multiTurnMove.isCharging()) {
+                Messages.add(multiTurnMove.getChargeMessage(p));
+                return;
+            }
+        }
+
+        Messages.add((p.isPlayer() ? "" : "Enemy ") + p.getName() + " used " + attack.getName() + "!");
         p.setReducePP(true);
     }
 
-    // Executes the attack including accuracy checks
+    // Executes the attack including accuracy checks, returns whether or not the move hit
     public boolean executeAttack(ActivePokemon me, ActivePokemon o) {
+        Attack attack = me.getAttack();
+        attack.beginAttack(this, me, o);
+
         printAttacking(me);
 
         // Check if the move actually hits!
-        if (accuracyCheck(me, o)) {
+        boolean attackHit = accuracyCheck(me, o);
+        boolean success = false;
+        if (attackHit) {
             if (me.isPlayer() && !this.isSimulating()) {
-                Game.getPlayer().getMedalCase().useMove(me.getAttack().namesies());
+                Game.getPlayer().getMedalCase().useMove(attack.namesies());
             }
 
             me.count();
 
-            boolean success = me.getAttack().apply(me, o, this);
+            success = attack.apply(me, o, this);
             me.setLastMoveSucceeded(success);
 
             me.getMove().setUsed();
             me.decay();
-
-            return true;
         } else {
             Messages.add(me.getName() + "'s attack missed!");
             CrashDamageMove.invokeCrashDamageMove(this, me);
-
-            return false;
         }
+
+        if (!success) {
+            attack.totalAndCompleteFailure(this, me, o);
+        }
+
+        attack.endAttack(this, me, o);
+        return attackHit;
     }
 
     public void addEffect(BattleEffect effect) {
@@ -668,13 +691,20 @@ public class Battle implements Serializable {
     }
 
     protected Boolean bypassAccuracy(ActivePokemon me, ActivePokemon o) {
+        Attack attack = me.getAttack();
+
         // Self-Target moves don't miss
-        if (me.getAttack().isSelfTargetStatusMove()) {
+        if (attack.isSelfTargetStatusMove()) {
             return true;
         }
 
         // Neither do field moves
-        if (me.getAttack().isMoveType(MoveType.FIELD)) {
+        if (attack.isMoveType(MoveType.FIELD)) {
+            return true;
+        }
+
+        // Cannot miss the charge
+        if (attack instanceof MultiTurnMove && ((MultiTurnMove)attack).isCharging()) {
             return true;
         }
 

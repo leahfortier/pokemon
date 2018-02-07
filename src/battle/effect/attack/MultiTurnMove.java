@@ -1,24 +1,72 @@
 package battle.effect.attack;
 
 import battle.ActivePokemon;
+import battle.Battle;
+import battle.attack.AttackInterface;
+import battle.attack.Move;
+import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
+import item.ItemNamesies;
 
-public interface MultiTurnMove {
+public interface MultiTurnMove extends AttackInterface, ForceMoveEffect {
     boolean chargesFirst();
     String getChargeMessage(ActivePokemon user);
+
+    boolean isCharging();
+    void resetReady();
+    void switchReady();
 
     default boolean semiInvulnerability() {
         return false;
     }
 
-    default boolean isCharging(ActivePokemon user) {
-        return !user.getMove().isReady();
+    default boolean requiresCharge(Battle b) {
+        return true;
     }
 
-    default boolean forceMove(ActivePokemon user) {
-        boolean chargesFirst = this.chargesFirst();
-        boolean isReady = user.getMove().isReady();
+    // The Power Herb item allows multi-turn moves that charge first to skip the charge turn -- BUT ONLY ONCE
+    default boolean checkPowerHerb(Battle b, ActivePokemon user) {
+        if (this.chargesFirst() && !this.semiInvulnerability() && user.isHoldingItem(b, ItemNamesies.POWER_HERB)) {
+            user.consumeItem(b);
+            return true;
+        }
 
-        return (chargesFirst && !isReady) || (!chargesFirst && isReady);
+        return false;
+    }
+
+    @Override
+    default Move getForcedMove(ActivePokemon attacking) {
+        if (this.chargesFirst() == this.isCharging()) {
+            return attacking.getMove();
+        }
+
+        return null;
+    }
+
+    @Override
+    default void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+        this.switchReady();
+        if (this.isCharging() && (!this.requiresCharge(b) || this.checkPowerHerb(b, attacking))) {
+            this.switchReady();
+        }
+    }
+
+    @Override
+    default void totalAndCompleteFailure(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+        if (this.isCharging()) {
+            this.switchReady();
+        }
+    }
+
+    @Override
+    default boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+        // Multi-turn moves default to no damage on the charging turn
+        return AttackInterface.super.shouldApplyDamage(b, user) && !this.isCharging();
+    }
+
+    @Override
+    default boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+        // Multi-turn moves default to no effects on the charging turn
+        return AttackInterface.super.shouldApplyEffects(b, user) && !this.isCharging();
     }
 
     interface ChargingMove extends MultiTurnMove {

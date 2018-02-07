@@ -55,7 +55,7 @@ RecoilMove:
 	Method:
 		Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
 	*
-	Extends: ApplyDamageEffect
+	Extends: AttackInterface, ApplyDamageEffect
 	Method:
 		Override: True
 		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
@@ -83,6 +83,7 @@ RecoilPercentageMove:
 	*
 ***
 SelfHealingMove:
+    Extends: AttackInterface
 	Method:
 		Header: double getHealFraction(Battle b, ActivePokemon victim)
 	*
@@ -145,6 +146,7 @@ OpponentTakeDamageEffect:
 	*
 ***
 CrashDamageMove:
+    Extends: AttackInterface
 	Method:
 		Header: void crash(Battle b, ActivePokemon user)
 		Move: user
@@ -296,8 +298,9 @@ GroundedEffect:
 		Header: void removeLevitation(Battle b, ActivePokemon p)
 		Default:
 			if (p.isSemiInvulnerableFlying()) {
-				p.getMove().switchReady(b, p);
+				((MultiTurnMove)p.getAttack()).resetReady();
 				Messages.add(p.getName() + " fell to the ground!");
+                EffectNamesies.FLINCH.getEffect().cast(b, p, p, CastSource.EFFECT, false);
 			}
 
 			LevitationEffect.falllllllll(b, p);
@@ -497,11 +500,12 @@ ChangeTypeEffect:
 ***
 ForceMoveEffect:
 	Method:
-		Header: Move getForcedMove()
+		Header: Move getForcedMove(ActivePokemon attacking)
 		Invoke: Get
 		InvokeName: getForcedMove
-		InvokeParameters: Battle b, ActivePokemon attacking
+		InvokeParameters: Battle b
 		EffectList: attacking
+        InvokeAttack: attacking
 	*
 ***
 DifferentStatEffect
@@ -678,6 +682,7 @@ OpponentPowerChangeEffect:
 	*
 ***
 AdvantageMultiplierMove:
+    Extends: AttackInterface
 	Method:
 		Header: double multiplyAdvantage(Type attackingType, Type[] defendingTypes)
 		Invoke: Multiply
@@ -838,7 +843,7 @@ AttackSelectionSelfBlockerEffect:
 	*
 ***
 PowderMove:
-	Extends: SelfAttackBlocker
+	Extends: AttackInterface, SelfAttackBlocker
 	Method:
 		Override: True
 		Header: boolean block(Battle b, ActivePokemon user)
@@ -1050,7 +1055,7 @@ SapHealthEffect:
 	*
 ***
 PowerCountMove:
-	Extends: PowerChangeEffect
+	Extends: AttackInterface, PowerChangeEffect
 	Method:
 		Header: boolean doubleDefenseCurled()
 	*
