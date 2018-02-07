@@ -5,7 +5,7 @@ UniqueEffects:
 	Header: void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 EndAttack:
-	Header: void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success)
+	Header: void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending)
 *
 AfterApplyCheck:
 	Header: void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim)

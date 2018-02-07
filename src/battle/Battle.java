@@ -494,6 +494,8 @@ public class Battle implements Serializable {
         if (ableToAttack(me, o)) {
             // Made it, suckah!
             success = executeAttack(me, o);
+        } else {
+            me.getAttack().totalAndCompleteFailure(this, me, o);
         }
 
         me.endAttack(o, success);
@@ -546,7 +548,11 @@ public class Battle implements Serializable {
             CrashDamageMove.invokeCrashDamageMove(this, me);
         }
 
-        attack.endAttack(this, me, o, attackHit, success);
+        if (!attackHit || !success) {
+            attack.totalAndCompleteFailure(this, me, o);
+        }
+
+        attack.endAttack(this, me, o);
         return attackHit;
     }
 

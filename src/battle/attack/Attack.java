@@ -6600,7 +6600,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             attacking.removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
         }
 
@@ -11415,7 +11415,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             attacking.removeEffect(EffectNamesies.BREAKS_THE_MOLD);
         }
     }
@@ -11435,7 +11435,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             attacking.removeEffect(EffectNamesies.BREAKS_THE_MOLD);
         }
     }

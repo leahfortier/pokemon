@@ -21,12 +21,6 @@ public interface MultiTurnMove extends AttackInterface {
         return true;
     }
 
-    default void checkOverrideCharge(Battle b, ActivePokemon attacking) {
-        if (this.isCharging() && (!this.requiresCharge(b) || this.checkPowerHerb(b, attacking))) {
-            this.switchReady();
-        }
-    }
-
     // The Power Herb item allows multi-turn moves that charge first to skip the charge turn -- BUT ONLY ONCE
     default boolean checkPowerHerb(Battle b, ActivePokemon user) {
         if (this.chargesFirst() && !this.semiInvulnerability() && user.isHoldingItem(b, ItemNamesies.POWER_HERB)) {
@@ -44,12 +38,14 @@ public interface MultiTurnMove extends AttackInterface {
     @Override
     default void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
         this.switchReady();
-        this.checkOverrideCharge(b, attacking);
+        if (this.isCharging() && (!this.requiresCharge(b) || this.checkPowerHerb(b, attacking))) {
+            this.switchReady();
+        }
     }
 
     @Override
-    default void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {
-        if (attackHit && !success) {
+    default void totalAndCompleteFailure(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+        if (this.isCharging()) {
             this.switchReady();
         }
     }

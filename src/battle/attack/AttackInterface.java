@@ -8,7 +8,8 @@ public interface AttackInterface {
     boolean isStatusMove();
 
     default void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
-    default void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending, boolean attackHit, boolean success) {}
+    default void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
+    default void totalAndCompleteFailure(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
 
     default boolean shouldApplyDamage(Battle b, ActivePokemon user) {
         // Status moves default to no damage

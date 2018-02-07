@@ -333,28 +333,23 @@ public class EffectTest extends BaseTest {
         testSemiInvulnerable(false, AttackNamesies.FLY, AttackNamesies.ROAR, new TestInfo());
 
         // No Guard will allow Tackle to Hit, regardless of which Pokemon has it
-        testSemiInvulnerable(true, true, AttackNamesies.FLY, AttackNamesies.TACKLE, new TestInfo().attacking(AbilityNamesies.NO_GUARD));
-        testSemiInvulnerable(true, true, AttackNamesies.FLY, AttackNamesies.TACKLE, new TestInfo().defending(AbilityNamesies.NO_GUARD));
+        testSemiInvulnerable(true, true, AttackNamesies.FLY, AttackNamesies.TACKLE, new TestInfo().attacking(AbilityNamesies.NO_GUARD), true);
+        testSemiInvulnerable(true, true, AttackNamesies.FLY, AttackNamesies.TACKLE, new TestInfo().defending(AbilityNamesies.NO_GUARD), true);
 
         // All of these moves will hit a Flying Pokemon
         testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.GUST, new TestInfo());
         testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.HURRICANE, new TestInfo());
         testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.WHIRLWIND, new TestInfo());
 
-        // TODO: Multi-turn moves are fucked why am I even testing this shit it's so fucked everything I do is trash
         // Smack Down will disrupt Fly, Grounding the Pokemon in the process
-        testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.SMACK_DOWN, new TestInfo());
-
-        // If holding a Power Herb, will execute immediately in the first turn and be semi-invulnerable in the second
-//        testSemiInvulnerable(null, false, AttackNamesies.FLY, AttackNamesies.TACKLE, new TestInfo().attacking(ItemNamesies.POWER_HERB));
-//        testSemiInvulnerable(null, true, AttackNamesies.FLY, AttackNamesies.GUST, new TestInfo().attacking(ItemNamesies.POWER_HERB));
+        testSemiInvulnerable(true, null, AttackNamesies.FLY, AttackNamesies.SMACK_DOWN, new TestInfo(), false);
     }
 
     private void testSemiInvulnerable(Boolean expected, AttackNamesies multiTurnMove, AttackNamesies defendingMove, TestInfo testInfo) {
-        testSemiInvulnerable(expected, null, multiTurnMove, defendingMove, testInfo);
+        testSemiInvulnerable(expected, null, multiTurnMove, defendingMove, testInfo, true);
     }
 
-    private void testSemiInvulnerable(Boolean firstExpected, Boolean secondExpected, AttackNamesies multiTurnMove, AttackNamesies defendingMove, TestInfo testInfo) {
+    private void testSemiInvulnerable(Boolean firstExpected, Boolean secondExpected, AttackNamesies multiTurnMove, AttackNamesies defendingMove, TestInfo testInfo, boolean fullyExecuted) {
         testInfo.attacking(PokemonNamesies.SHUCKLE).defending(PokemonNamesies.SHUCKLE);
 
         TestBattle battle = testInfo.createBattle();
@@ -379,7 +374,7 @@ public class EffectTest extends BaseTest {
         battle.setExpectedDefendingAccuracyBypass(secondExpected);
         battle.fight();
 
-        Assert.assertEquals(attackingPP - 1, attacking.getMove().getPP());
+        Assert.assertEquals(attackingPP - (fullyExecuted ? 1 : 0), attacking.getMove().getPP());
         Assert.assertEquals(defendingPP - 2, defending.getMove().getPP());
     }
 }
