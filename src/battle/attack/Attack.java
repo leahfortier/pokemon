@@ -13,7 +13,6 @@ import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
-import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.BasicAccuracyBypassEffect;
@@ -25,11 +24,9 @@ import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
 import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
-import battle.effect.generic.EffectInterfaces.OpponentApplyDamageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
 import battle.effect.generic.EffectInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.generic.EffectInterfaces.OpponentStatSwitchingEffect;
-import battle.effect.generic.EffectInterfaces.OpponentTakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.PassableEffect;
 import battle.effect.generic.EffectInterfaces.PowderMove;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
@@ -44,7 +41,6 @@ import battle.effect.generic.EffectInterfaces.SemiInvulnerableBypasser;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
-import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
@@ -59,7 +55,6 @@ import item.hold.SpecialTypeItem.DriveItem;
 import item.hold.SpecialTypeItem.GemItem;
 import item.hold.SpecialTypeItem.MemoryItem;
 import item.hold.SpecialTypeItem.PlateItem;
-import main.Game;
 import main.Global;
 import map.overworld.TerrainType;
 import message.MessageUpdate;
@@ -118,6 +113,10 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         this.printCast = true;
     }
 
+    public Iterable<EffectNamesies> getEffects() {
+        return this.effects;
+    }
+
     public int getActualPriority() {
         return this.priority;
     }
@@ -126,10 +125,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         return this.getActualPriority();
     }
 
-    public boolean isSelfTargetStatusMove() {
-        return this.isSelfTarget() && this.isStatusMove();
-    }
-
+    @Override
     public boolean isSelfTarget() {
         return this.selfTarget;
     }
@@ -195,10 +191,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
     }
 
     @Override
-    public boolean isStatusMove() {
-        return this.getCategory() == MoveCategory.STATUS;
-    }
-
     public MoveCategory getCategory() {
         return this.category;
     }
@@ -210,10 +202,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
     @Override
     public AttackNamesies namesies() {
         return this.namesies;
-    }
-
-    public String getName() {
-        return this.namesies.getName();
     }
 
     public String getDescription() {
@@ -303,7 +291,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         // Sheer Force prevents the user from having secondary effects for its moves
-        if (me.hasAbility(AbilityNamesies.SHEER_FORCE) && me.getAttack().hasSecondaryEffects()) {
+        if (me.hasAbility(AbilityNamesies.SHEER_FORCE) && this.hasSecondaryEffects()) {
             return false;
         }
 
@@ -329,7 +317,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         // Non-status moves (AND FUCKING THUNDER WAVE) -- need to check the type chart
-        if ((!isStatusMove() || this.namesies == AttackNamesies.THUNDER_WAVE) && this.zeroAdvantage(b, me, o)) {
+        if ((!isStatusMove() || this.namesies() == AttackNamesies.THUNDER_WAVE) && this.zeroAdvantage(b, me, o)) {
             return false;
         }
 
@@ -6826,7 +6814,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             for (Move move : user.getMoves(b)) {
-                if (move.getAttack().namesies() != super.namesies && !move.used()) {
+                if (move.getAttack().namesies() != this.namesies() && !move.used()) {
                     return false;
                 }
             }
@@ -7575,7 +7563,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             List<Move> moves = user.getMoves(b);
             for (int i = 0; i < moves.size(); i++) {
-                if (moves.get(i).getAttack().namesies() == super.namesies) {
+                if (moves.get(i).getAttack().namesies() == this.namesies()) {
                     moves.set(i, new Move(this.copy.getAttack()));
                     Messages.add(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
                     break;

@@ -42,9 +42,6 @@ class TestFormatter extends InputFormatter {
 
             // Min should be strictly less than max or else NumTurns should be used
             Assert.assertTrue(minTurns < maxTurns);
-
-            // Cannot use both NumTurns and Min/MaxTurns
-            Assert.assertFalse(fields.contains("NumTurns"));
         }
     }
 

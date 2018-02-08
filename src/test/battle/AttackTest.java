@@ -5,6 +5,8 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
+import battle.effect.generic.BattleEffect;
+import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.SapHealthEffect;
@@ -64,6 +66,15 @@ public class AttackTest extends BaseTest {
             // Crit stage moves cannot be status moves
             if (attack instanceof CritStageEffect || attack instanceof AlwaysCritEffect) {
                 Assert.assertNotEquals(attack.getName(), MoveCategory.STATUS, attack.getCategory());
+            }
+
+            // Moves that cast battle effects are field moves
+            for (EffectNamesies effectNamesies : attack.getEffects()) {
+                Effect effect = effectNamesies.getEffect();
+                if (effect instanceof BattleEffect) {
+                    Assert.assertTrue(attack.isMoveType(MoveType.NO_MAGIC_COAT));
+                    Assert.assertTrue(attack.isMoveType(MoveType.FIELD));
+                }
             }
         }
     }

@@ -3362,7 +3362,6 @@ Jump Kick:
     Acc: 95
     Type: Fighting
     Cat: Physical
-    Int: CrashDamageMove
     CrashDamage: 3
     MoveType: Airborne
 *
@@ -3393,7 +3392,6 @@ High Jump Kick:
     Pow: 130
     CrashDamage: 2
     MoveType: Airborne
-    Int: CrashDamageMove
 *
 Blaze Kick:
     Desc: The user launches a kick that lands a critical hit more easily. This may also leave the target with a burn.
@@ -3901,7 +3899,7 @@ Last Resort:
     Type: Normal
     FullApplies:
         for (Move move : user.getMoves(b)) {
-            if (move.getAttack().namesies() != super.namesies && !move.used()) {
+            if (move.getAttack().namesies() != this.namesies() && !move.used()) {
                 return false;
             }
         }
@@ -4430,7 +4428,7 @@ Sketch:
     UniqueEffects:
         List<Move> moves = user.getMoves(b);
         for (int i = 0; i < moves.size(); i++) {
-            if (moves.get(i).getAttack().namesies() == super.namesies) {
+            if (moves.get(i).getAttack().namesies() == this.namesies()) {
                 moves.set(i, new Move(this.copy.getAttack()));
                 Messages.add(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
                 break;

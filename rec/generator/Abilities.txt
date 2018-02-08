@@ -924,12 +924,10 @@ Air Lock:
 *
 Defiant:
     Desc: Boosts the Pok\u00e9mon's Attack stat sharply when its stats are lowered.
-    Int: StatLoweredEffect
     NextLevel: Attack
 *
 Competitive:
     Desc: Boosts the Sp. Atk stat sharply when a stat is lowered.
-    Int: StatLoweredEffect
     NextLevel: Sp_Attack
 *
 Flower Gift:

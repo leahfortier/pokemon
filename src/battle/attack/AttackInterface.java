@@ -14,7 +14,20 @@ import type.TypeAdvantage;
 
 public interface AttackInterface {
     AttackNamesies namesies();
-    boolean isStatusMove();
+    MoveCategory getCategory();
+    boolean isSelfTarget();
+
+    default String getName() {
+        return this.namesies().getName();
+    }
+
+    default boolean isStatusMove() {
+        return this.getCategory() == MoveCategory.STATUS;
+    }
+
+    default boolean isSelfTargetStatusMove() {
+        return this.isSelfTarget() && this.isStatusMove();
+    }
 
     default void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
     default void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
@@ -22,11 +35,7 @@ public interface AttackInterface {
 
     default boolean shouldApplyDamage(Battle b, ActivePokemon user) {
         // Status moves default to no damage
-        if (this.isStatusMove()) {
-            return false;
-        }
-
-        return true;
+        return !this.isStatusMove();
     }
 
     default boolean shouldApplyEffects(Battle b, ActivePokemon user) {

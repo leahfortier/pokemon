@@ -252,6 +252,7 @@ OppSwitchStat:
 	Header: Stat getSwitchStat(Stat s)
 *
 CrashDamage:
+    AddInterface: CrashDamageMove
 	Header: void crash(Battle b, ActivePokemon user)
 	Body:
 		Messages.add(user.getName() + " kept going and crashed!");
@@ -370,8 +371,7 @@ LightClay:
 			Effect.getEffect(b.getEffects(victim), this.namesies).setTurns(8);
 		}
 		###
-	AddMapField: MinTurns: 5
-	AddMapField: MaxTurns: 5
+	AddMapField: NumTurns: 5
 *
 BarrierBreaker:
     AddMapField: UniqueEffects:
@@ -491,8 +491,7 @@ ProtectingEffect:
 *
 ProtectingEffectNoDecay:
 	AddInterface: ProtectingEffect
-	AddMapField: MinTurns: 1
-	AddMapField: MaxTurns: 1
+	AddMapField: NumTurns: 1
 	AddMapField: CastMessage: victim.getName() + " protected itself!"
 *
 ProtectingCondition:
@@ -539,7 +538,7 @@ PartialTrap:
 	AddMapField: Cast:
 		super.cast(b, caster, victim, source, printCast);
 		if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-			setTurns(5);
+			this.setTurns(5);
 		}
 		###
 	AddInterface: EndTurnEffect
@@ -566,8 +565,7 @@ PartialTrap:
 SafeguardEffect:
 	AddMapField: CastMessage: user.getName() + " is covered by a veil!"
 	AddMapField: SubsideMessage: "The effects of " + victim.getName() + "'s {0} faded."
-	AddMapField: MinTurns: 5
-	AddMapField: MaxTurns: 5
+	AddMapField: NumTurns: 5
 	AddInterface: StatusPreventionEffect
 	AddMapField: StatusPrevent:
 		return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
@@ -763,13 +761,11 @@ StatProtectMessage:
 Sporty:
 	AddMapField: PowerMultiplierCondition: .33 user.isAttackType(Type.{11})
 	AddMapField: CastMessage: "{2}'s power was weakened!"
-	AddMapField: MinTurns: 5
-	AddMapField: MaxTurns: 5
+	AddMapField: NumTurns: 5
 	AddMapField: SubsideMessage: "The effects of {3} Sport wore off."
 *
 SpecialRoom:
-	AddMapField: MinTurns: 5
-	AddMapField: MaxTurns: 5
+	AddMapField: NumTurns: 5
 	AddMapField: SubsideMessage: "The dimensions of the {1} room returned to normal."
 	AddMapField: CastMessage: user.getName() + " twisted the dimensions to {2-}!"
 	AddMapField: CanHave: True
@@ -869,8 +865,7 @@ Terrain:
 		super.subside(b, p);
 		b.resetTerrain();
 		###
-	AddMapField: MinTurns: 5
-	AddMapField: MaxTurns: 5
+	AddMapField: NumTurns: 5
 *
 EndBattle:
 	Header: void afterBattle(Trainer player, Battle b, ActivePokemon p)
@@ -1055,7 +1050,7 @@ ChoiceItem:
 		Move last = p.getLastMoveUsed();
 		return last == null || m == last;
 		###
-	AddMapField: UnusableMessage: p.getName() + "'s " + super.name + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!"
+	AddMapField: UnusableMessage: p.getName() + "'s " + this.getName() + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!"
 	AddInterface: HoldItem
 	AddMapField: Fling: 10
     AddMapField: Price: 4000
@@ -1474,8 +1469,7 @@ FutureAttackMove:
     AddMapField: MoveType: Protect_Piercing, Mirrorless
 *
 FutureAttackEffect:
-	AddMapField: MinTurns: 2
-	AddMapField: MaxTurns: 2
+	AddMapField: NumTurns: 2
 	AddMapField: NextTurnSubside: True
 	AddMapField: Field:
 		private ActivePokemon theSeeer;
@@ -1553,7 +1547,9 @@ NaturalGiftType:
 *
 RepelSteps:
 	Header: int repelSteps()
-	Body: return {0};
+	Body: 
+        return {0};
+        ###
 	AddMapField: Cat: Misc
     AddInterface: Repelling
 *
@@ -1662,6 +1658,7 @@ NormalTypeChanger:
 	AddMapField: PowerMultiplierCondition: 1.2 activated
 *
 NextLevel:
+    AddInterface: StatLoweredEffect
 	Header: void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim)
 	Body:
 		victim.getStages().modifyStage(victim, 2, Stat.{00}, b, CastSource.@SuperClass);

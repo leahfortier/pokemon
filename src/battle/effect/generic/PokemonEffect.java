@@ -193,7 +193,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                setTurns(5);
+                this.setTurns(5);
             }
         }
 
@@ -247,7 +247,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                setTurns(5);
+                this.setTurns(5);
             }
         }
 
@@ -301,7 +301,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                setTurns(5);
+                this.setTurns(5);
             }
         }
 
@@ -355,7 +355,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                setTurns(5);
+                this.setTurns(5);
             }
         }
 
@@ -409,7 +409,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                setTurns(5);
+                this.setTurns(5);
             }
         }
 
@@ -463,7 +463,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                setTurns(5);
+                this.setTurns(5);
             }
         }
 
@@ -517,7 +517,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                setTurns(5);
+                this.setTurns(5);
             }
         }
 
@@ -571,7 +571,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                setTurns(5);
+                this.setTurns(5);
             }
         }
 

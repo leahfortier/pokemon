@@ -399,7 +399,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public String getUnusableMessage(Battle b, ActivePokemon p) {
-            return p.getName() + "'s " + super.name + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
+            return p.getName() + "'s " + this.getName() + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
         }
 
         @Override
@@ -434,7 +434,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public String getUnusableMessage(Battle b, ActivePokemon p) {
-            return p.getName() + "'s " + super.name + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
+            return p.getName() + "'s " + this.getName() + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
         }
 
         @Override
@@ -469,7 +469,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public String getUnusableMessage(Battle b, ActivePokemon p) {
-            return p.getName() + "'s " + super.name + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
+            return p.getName() + "'s " + this.getName() + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
         }
 
         @Override

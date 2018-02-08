@@ -65,6 +65,12 @@ public class ClassFields {
     }
 
     public void addNew(String fieldKey, String addFieldValue) {
+        if (fieldKey.equals("NumTurns")) {
+            this.addNew("MinTurns", addFieldValue);
+            this.addNew("MaxTurns", addFieldValue);
+            return;
+        }
+
         String mapField = fields.get(fieldKey);
         if (mapField == null) {
             mapField = addFieldValue;
