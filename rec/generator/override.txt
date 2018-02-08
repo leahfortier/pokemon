@@ -170,25 +170,6 @@ MultiStrike:
 	AddInterface: MultiStrikeMove
 	AddMapField: GetMinHits: {1}
 	AddMapField: GetMaxHits: {2}
-	AddMapField: ApplyDamage:
-		int hits = this.getNumHits(me);
-
-		int hit = 1;
-		for (; hit <= hits; hit++) {
-			// Stop attacking the dead
-			if (o.isFainted(b)) {
-				break;
-			}
-
-			Messages.add("Hit " + hit + "!");
-			super.applyDamage(me, o, b);
-		}
-
-		hit--;
-
-		// Print hits and gtfo
-		Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-		###
 *
 GetMinHits:
 	Header: int getMinHits()
@@ -202,6 +183,7 @@ ChangeType:
 	AddInterface: ChangeTypeSource
 	Header: Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 *
+# Special moves that use the opponent's Defense stat
 SpecialDefenseMove:
 	AddInterface: OpponentStatSwitchingEffect
 	AddMapField: OppSwitchStat:

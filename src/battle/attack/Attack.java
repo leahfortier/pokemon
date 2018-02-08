@@ -350,50 +350,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         return true;
     }
 
-    // Physical and Special moves -- do dat damage!
-    public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-
-        // Deal damage
-        int damage = b.calculateDamage(me, o);
-        boolean critYoPants = b.criticalHit(me, o);
-        if (critYoPants) {
-            damage *= me.hasAbility(AbilityNamesies.SNIPER) ? 3 : 2;
-        }
-
-        damage = o.reduceHealth(b, damage);
-        if (critYoPants) {
-            Messages.add("It's a critical hit!!");
-            if (o.hasAbility(AbilityNamesies.ANGER_POINT)) {
-                Messages.add(o.getName() + "'s " + AbilityNamesies.ANGER_POINT.getName() + " raised its attack to the max!");
-                o.getStages().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
-            }
-        }
-
-        // Print Advantage
-        double advantage = TypeAdvantage.getAdvantage(me, o, b);
-        if (TypeAdvantage.isNotVeryEffective(advantage)) {
-            Messages.add(TypeAdvantage.getNotVeryEffectiveMessage());
-        } else if (TypeAdvantage.isSuperEffective(advantage)) {
-            Messages.add(TypeAdvantage.getSuperEffectiveMessage());
-        }
-
-        if (me.isPlayer() && !b.isSimulating()) {
-            Game.getPlayer().getMedalCase().checkAdvantage(advantage);
-        }
-
-        // Deadsies check
-        o.isFainted(b);
-        me.isFainted(b);
-
-        // Apply a damage effect
-        ApplyDamageEffect.invokeApplyDamageEffect(b, me, o, damage);
-        OpponentApplyDamageEffect.invokeOpponentApplyDamageEffect(b, me, o, damage);
-
-        // Effects that apply to the opponent when they take damage
-        TakeDamageEffect.invokeTakeDamageEffect(b, me, o);
-        OpponentTakeDamageEffect.invokeOpponentTakeDamageEffect(b, me, o);
-    }
-
     private void applyUniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
         // Kill yourself!!
         if (isMoveType(MoveType.USER_FAINTS)) {
@@ -1883,27 +1839,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public int getMaxHits() {
             return 5;
         }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-        }
     }
 
     static class FalseSwipe extends Attack {
@@ -1964,27 +1899,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public int getMaxHits() {
             return 2;
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
         }
     }
 
@@ -2054,27 +1968,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public int getMaxHits() {
             return 5;
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
         }
     }
 
@@ -2905,27 +2798,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public int getMaxHits() {
             return 5;
         }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-        }
     }
 
     static class Rollout extends Attack implements PowerCountMove {
@@ -3018,27 +2890,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public int getMaxHits() {
             return 2;
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
         }
     }
 
@@ -3235,27 +3086,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public int getMaxHits() {
             return 5;
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
         }
     }
 
@@ -4860,27 +4690,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public int getMaxHits() {
             return 5;
         }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-        }
     }
 
     // Twice as strong when the opponent is flying
@@ -5287,27 +5096,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public int getMaxHits() {
             return 2;
         }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-        }
     }
 
     static class IcyWind extends Attack {
@@ -5511,27 +5299,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public int getMaxHits() {
             return 5;
         }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-        }
     }
 
     static class Clamp extends Attack {
@@ -5601,27 +5368,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public int getMaxHits() {
             return 5;
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
         }
     }
 
@@ -6042,27 +5788,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public int getMaxHits() {
             return 5;
         }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-        }
     }
 
     static class BulletSeed extends Attack implements MultiStrikeMove {
@@ -6083,27 +5808,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public int getMaxHits() {
             return 5;
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
         }
     }
 
@@ -6164,27 +5868,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public int getMaxHits() {
             return 2;
         }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-        }
     }
 
     static class BoneRush extends Attack implements MultiStrikeMove {
@@ -6204,27 +5887,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public int getMaxHits() {
             return 5;
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
         }
     }
 
@@ -6352,27 +6014,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public int getMaxHits() {
             return 5;
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
         }
     }
 
@@ -7967,27 +7608,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public int getMaxHits() {
             return 3;
         }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-        }
     }
 
     static class MilkDrink extends Attack implements SelfHealingMove {
@@ -8182,27 +7802,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public int getMaxHits() {
             return 5;
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
         }
     }
 
@@ -8556,27 +8155,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public int getMaxHits() {
             return 2;
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
         }
     }
 
@@ -8992,27 +8570,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public int getMaxHits() {
             return 5;
         }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
-        }
     }
 
     static class Defog extends Attack {
@@ -9070,27 +8627,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public int getMaxHits() {
             return 2;
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
         }
     }
 
@@ -10663,27 +10199,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public int getMaxHits() {
             return 5;
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            int hits = this.getNumHits(me);
-
-            int hit = 1;
-            for (; hit <= hits; hit++) {
-                // Stop attacking the dead
-                if (o.isFainted(b)) {
-                    break;
-                }
-
-                Messages.add("Hit " + hit + "!");
-                super.applyDamage(me, o, b);
-            }
-
-            hit--;
-
-            // Print hits and gtfo
-            Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
         }
     }
 

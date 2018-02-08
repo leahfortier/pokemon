@@ -1,7 +1,9 @@
 package battle.effect.attack;
 
 import battle.ActivePokemon;
+import battle.Battle;
 import battle.attack.AttackInterface;
+import message.Messages;
 import pokemon.ability.AbilityNamesies;
 import util.RandomUtils;
 
@@ -18,5 +20,26 @@ public interface MultiStrikeMove extends AttackInterface {
         }
 
         return RandomUtils.getRandomInt(minHits, maxHits);
+    }
+
+    @Override
+    default void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
+        int hits = this.getNumHits(me);
+
+        int hit = 1;
+        for (; hit <= hits; hit++) {
+            // Stop attacking the dead
+            if (o.isFainted(b)) {
+                break;
+            }
+
+            Messages.add("Hit " + hit + "!");
+            AttackInterface.super.applyDamage(me, o, b);
+        }
+
+        hit--;
+
+        // Print hits and gtfo
+        Messages.add("Hit " + hit + " time" + (hit == 1 ? "" : "s") + "!");
     }
 }

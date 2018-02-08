@@ -2,6 +2,15 @@ package battle.attack;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
+import battle.effect.generic.EffectInterfaces.OpponentApplyDamageEffect;
+import battle.effect.generic.EffectInterfaces.OpponentTakeDamageEffect;
+import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
+import main.Game;
+import message.Messages;
+import pokemon.Stat;
+import pokemon.ability.AbilityNamesies;
+import type.TypeAdvantage;
 
 public interface AttackInterface {
     AttackNamesies namesies();
@@ -22,5 +31,49 @@ public interface AttackInterface {
 
     default boolean shouldApplyEffects(Battle b, ActivePokemon user) {
         return true;
+    }
+
+    // Physical and Special moves -- do dat damage!
+    default void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
+
+        // Deal damage
+        int damage = b.calculateDamage(me, o);
+        boolean critYoPants = b.criticalHit(me, o);
+        if (critYoPants) {
+            damage *= me.hasAbility(AbilityNamesies.SNIPER) ? 3 : 2;
+        }
+
+        damage = o.reduceHealth(b, damage);
+        if (critYoPants) {
+            Messages.add("It's a critical hit!!");
+            if (o.hasAbility(AbilityNamesies.ANGER_POINT)) {
+                Messages.add(o.getName() + "'s " + AbilityNamesies.ANGER_POINT.getName() + " raised its attack to the max!");
+                o.getStages().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
+            }
+        }
+
+        // Print Advantage
+        double advantage = TypeAdvantage.getAdvantage(me, o, b);
+        if (TypeAdvantage.isNotVeryEffective(advantage)) {
+            Messages.add(TypeAdvantage.getNotVeryEffectiveMessage());
+        } else if (TypeAdvantage.isSuperEffective(advantage)) {
+            Messages.add(TypeAdvantage.getSuperEffectiveMessage());
+        }
+
+        if (me.isPlayer() && !b.isSimulating()) {
+            Game.getPlayer().getMedalCase().checkAdvantage(advantage);
+        }
+
+        // Deadsies check
+        o.isFainted(b);
+        me.isFainted(b);
+
+        // Apply a damage effect
+        ApplyDamageEffect.invokeApplyDamageEffect(b, me, o, damage);
+        OpponentApplyDamageEffect.invokeOpponentApplyDamageEffect(b, me, o, damage);
+
+        // Effects that apply to the opponent when they take damage
+        TakeDamageEffect.invokeTakeDamageEffect(b, me, o);
+        OpponentTakeDamageEffect.invokeOpponentTakeDamageEffect(b, me, o);
     }
 }
