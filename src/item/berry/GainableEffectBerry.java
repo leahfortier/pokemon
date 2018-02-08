@@ -2,7 +2,7 @@ package item.berry;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.generic.CastSource;
+import battle.effect.CastSource;
 
 public interface GainableEffectBerry extends Berry {
     boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source);

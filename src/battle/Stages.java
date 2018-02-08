@@ -1,6 +1,6 @@
 package battle;
 
-import battle.effect.generic.CastSource;
+import battle.effect.CastSource;
 import battle.effect.generic.EffectInterfaces.ModifyStageValueEffect;
 import battle.effect.generic.EffectInterfaces.StatLoweredEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;

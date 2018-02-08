@@ -1,6 +1,5 @@
 package pattern.map;
 
-import map.condition.Condition;
 import map.condition.ConditionSet;
 import map.entity.EntityAction;
 import mapMaker.model.TriggerModel.TriggerModelType;

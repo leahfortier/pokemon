@@ -1,7 +1,6 @@
 package pattern.map;
 
 import main.Global;
-import map.condition.Condition;
 import map.condition.ConditionSet;
 import util.FileIO;
 import util.FileName;

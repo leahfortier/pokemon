@@ -6,6 +6,7 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveType;
+import battle.effect.CastSource;
 import battle.effect.MessageGetter;
 import battle.effect.attack.AbilityChanger;
 import battle.effect.attack.ChangeAttackTypeSource;

@@ -1,7 +1,6 @@
 package mapMaker.dialogs.wildbattle;
 
 import main.Global;
-import map.condition.ConditionHolder.AndCondition;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;

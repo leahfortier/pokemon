@@ -1,7 +1,7 @@
 package item.medicine;
 
 import battle.ActivePokemon;
-import battle.effect.generic.CastSource;
+import battle.effect.CastSource;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.hold.HoldItem;

@@ -3,7 +3,7 @@ package battle.effect.status;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.MoveType;
-import battle.effect.generic.CastSource;
+import battle.effect.CastSource;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import message.Messages;

@@ -2,9 +2,9 @@ package battle.effect.status;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.CastSource;
 import battle.effect.InvokeEffect;
 import battle.effect.MessageGetter;
-import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.OpponentStatusReceivedEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;

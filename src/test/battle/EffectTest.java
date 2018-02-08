@@ -2,7 +2,7 @@ package test.battle;
 
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
-import battle.effect.generic.CastSource;
+import battle.effect.CastSource;
 import battle.effect.status.StatusCondition;
 import item.ItemNamesies;
 import org.junit.Assert;

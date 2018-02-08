@@ -2,8 +2,8 @@ package test.battle;
 
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import battle.effect.CastSource;
 import battle.effect.attack.ChangeTypeSource;
-import battle.effect.generic.CastSource;
 import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;

@@ -2,7 +2,7 @@ package item.berry;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.generic.CastSource;
+import battle.effect.CastSource;
 import battle.effect.generic.EffectInterfaces.DamageTakenEffect;
 import pokemon.ability.AbilityNamesies;
 

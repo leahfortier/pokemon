@@ -2,6 +2,7 @@ package battle.effect.generic;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.CastSource;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;

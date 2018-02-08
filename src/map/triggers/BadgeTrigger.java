@@ -1,9 +1,9 @@
 package map.triggers;
 
 import main.Game;
-import map.condition.ConditionHolder.AndCondition;
 import map.condition.Condition;
 import map.condition.Condition.BadgeCondition;
+import map.condition.ConditionHolder.AndCondition;
 import map.condition.ConditionHolder.NotCondition;
 import trainer.player.Badge;
 

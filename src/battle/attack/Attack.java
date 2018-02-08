@@ -2,6 +2,7 @@ package battle.attack;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.CastSource;
 import battle.effect.InvokeEffect;
 import battle.effect.attack.AbilityChanger;
 import battle.effect.attack.ChangeAttackTypeSource;
@@ -9,7 +10,6 @@ import battle.effect.attack.ChangeTypeSource;
 import battle.effect.attack.MultiStrikeMove;
 import battle.effect.attack.MultiTurnMove.ChargingMove;
 import battle.effect.attack.MultiTurnMove.RechargingMove;
-import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;

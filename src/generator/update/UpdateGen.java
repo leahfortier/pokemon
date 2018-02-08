@@ -1,8 +1,8 @@
 package generator.update;
 
 import draw.ImageUtils;
-import map.condition.ConditionHolder.AndCondition;
 import map.condition.Condition;
+import map.condition.ConditionHolder.AndCondition;
 import map.condition.ConditionSet;
 import pattern.map.ConditionMatcher;
 import pokemon.PokemonInfo;

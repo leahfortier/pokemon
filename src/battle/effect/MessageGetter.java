@@ -2,7 +2,6 @@ package battle.effect;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.generic.CastSource;
 import message.Messages;
 
 import java.io.Serializable;

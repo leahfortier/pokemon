@@ -3,7 +3,7 @@ package test.battle;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackNamesies;
-import battle.effect.generic.CastSource;
+import battle.effect.CastSource;
 import battle.effect.generic.EffectNamesies;
 import item.ItemNamesies;
 import item.bag.Bag;

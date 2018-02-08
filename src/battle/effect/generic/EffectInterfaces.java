@@ -6,6 +6,7 @@ import battle.attack.Attack;
 import battle.attack.AttackInterface;
 import battle.attack.Move;
 import battle.attack.MoveType;
+import battle.effect.CastSource;
 import battle.effect.InvokeEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.status.StatusCondition;

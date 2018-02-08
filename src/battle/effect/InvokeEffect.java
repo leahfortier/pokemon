@@ -1,6 +1,5 @@
 package battle.effect;
 
-import battle.effect.generic.CastSource;
 import battle.effect.generic.Effect;
 
 public interface InvokeEffect {

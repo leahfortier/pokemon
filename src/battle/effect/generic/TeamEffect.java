@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
+import battle.effect.CastSource;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;

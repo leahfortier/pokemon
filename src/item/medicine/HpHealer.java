@@ -1,8 +1,8 @@
 package item.medicine;
 
 import battle.ActivePokemon;
+import battle.effect.CastSource;
 import battle.effect.MessageGetter;
-import battle.effect.generic.CastSource;
 import item.hold.HoldItem;
 import item.use.PokemonUseItem;
 import message.MessageUpdate;
