@@ -13,6 +13,8 @@ import util.StringUtils;
 import java.io.Serializable;
 
 public class Stages implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private transient ActivePokemon attributesHolder;
 
     private int[] stages;
@@ -78,7 +80,7 @@ public class Stages implements Serializable {
             StatProtectingEffect prevent = StatProtectingEffect.getPreventEffect(b, caster, victim, stat);
             if (prevent != null) {
                 if (print) {
-                    Messages.add(prevent.preventionMessage(victim, stat));
+                    Messages.add(prevent.preventionMessage(b, victim, stat));
                 }
                 return false;
             }

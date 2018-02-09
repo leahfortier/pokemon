@@ -62,10 +62,10 @@ Air Balloon:
     Price: 4000
     Fling: 10
     Enter:
-        Messages.add(enterer.getName() + " floats with its " + this.name + "!");
+        Messages.add(enterer.getName() + " floats with its " + this.getName() + "!");
         ###
     OnTakeDamage:
-        Messages.add(victim.getName() + "'s " + this.name + " popped!");
+        Messages.add(victim.getName() + "'s " + this.getName() + " popped!");
         victim.consumeItem(b);
         ###
 *
@@ -102,9 +102,9 @@ Black Sludge:
             }
 
             victim.healHealthFraction(1/16.0);
-            Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.name + "!").updatePokemon(b, victim));
+            Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.getName() + "!").updatePokemon(b, victim));
         } else if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-            Messages.add(victim.getName() + " lost some of its HP due to its " + this.name + "!");
+            Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
             victim.reduceHealthFraction(b, 1/8.0);
         }
         ###
@@ -195,7 +195,7 @@ Flame Orb:
     Desc: An item to be held by a Pok\u00e9mon. It's a bizarre orb that will afflict the holder with a burn during battle.
     Price: 1000
     ApplyEndTurn:
-        Status.giveStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.name + "!");
+        Status.applyStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.getName() + "!");
         ###
     StatusFling: burned
 *
@@ -206,9 +206,9 @@ Toxic Orb:
     Price: 1000
     ApplyEndTurn:
         // Badly poisons the holder at the end of the turn
-        Status.giveStatus(
+        Status.applyStatus(
             b, victim, victim, StatusCondition.BADLY_POISONED,
-            victim.getName() + " was badly poisoned by its " + this.name + "!"
+            victim.getName() + " was badly poisoned by its " + this.getName() + "!"
         );
         ###
     FlingEffect:
@@ -230,7 +230,7 @@ Focus Band:
     Price: 4000
     Fling: 10
     Bracing: return RandomUtils.chanceTest(10);
-    BraceMessage: bracer.getName() + " held on with its " + this.name + "!"
+    BraceMessage: bracer.getName() + " held on with its " + this.getName() + "!"
 *
 Focus Sash:
     Int: HoldItem, BracingEffect
@@ -246,7 +246,7 @@ Focus Sash:
 
         return false;
         ###
-    BraceMessage: bracer.getName() + " held on with its " + this.name + "!"
+    BraceMessage: bracer.getName() + " held on with its " + this.getName() + "!"
 *
 Grip Claw:
     Int: HoldItem
@@ -300,7 +300,7 @@ Life Orb:
             return;
         }
 
-        Messages.add(user.getName() + " was hurt by its " + this.name + "!");
+        Messages.add(user.getName() + " was hurt by its " + this.getName() + "!");
         user.reduceHealthFraction(b, .1);
         ###
 *
@@ -392,7 +392,7 @@ Mental Herb:
                 if (user.hasEffect(removableEffect.effect)) {
                     used = true;
                     user.removeEffect(removableEffect.effect);
-                    Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.name + "!");
+                    Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.getName() + "!");
                 }
             }
 
@@ -501,7 +501,7 @@ Rocky Helmet:
     Price: 4000
     Fling: 60
     Contact:
-        Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+        Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
         user.reduceHealthFraction(b, 1/8.0);
         ###
 *
@@ -539,7 +539,7 @@ Shell Bell:
         }
 
         user.heal((int)Math.ceil(damage/8.0));
-        Messages.add(new MessageUpdate(user.getName() + " restored some HP due to its " + this.name + "!").updatePokemon(b, user));
+        Messages.add(new MessageUpdate(user.getName() + " restored some HP due to its " + this.getName() + "!").updatePokemon(b, user));
         ###
 *
 Smoke Ball:
@@ -643,7 +643,7 @@ White Herb:
             }
         }
 
-        Messages.add("The " + this.name + " restored " + pelted.getName() + "'s negative stat changes!");
+        Messages.add("The " + this.getName() + " restored " + pelted.getName() + "'s negative stat changes!");
         ###
 *
 Wide Lens:
@@ -889,7 +889,7 @@ Leftovers:
         }
 
         victim.healHealthFraction(1/16.0);
-        Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.name + "!").updatePokemon(b, victim));
+        Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.getName() + "!").updatePokemon(b, victim));
         ###
     Price: 4000
     Fling: 10
@@ -1933,7 +1933,7 @@ Enigma Berry:
     Int: Berry, TakeDamageEffect
     OnTakeDamage:
         if (!victim.fullHealth() && TypeAdvantage.isSuperEffective(user, victim, b)) {
-            Messages.add(victim.getName() + "'s " + this.name + " restored its health!");
+            Messages.add(victim.getName() + "'s " + this.getName() + " restored its health!");
             victim.healHealthFraction(.25);
             Messages.add(new MessageUpdate().updatePokemon(b, victim));
             victim.consumeItem(b);
@@ -2100,7 +2100,7 @@ Assault Vest:
     Usable:
         return !m.getAttack().isStatusMove();
         ###
-    UnusableMessage: p.getName() + "'s " + this.name + " prevents the use of status moves!"
+    UnusableMessage: p.getName() + "'s " + this.getName() + " prevents the use of status moves!"
     Fling: 80
 *
 Power Herb:

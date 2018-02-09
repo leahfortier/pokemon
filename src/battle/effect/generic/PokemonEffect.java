@@ -702,7 +702,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
             // Pokemon that make contact with the baneful bunker are become poisoned
             if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && Status.applies(StatusCondition.POISONED, b, opp, p)) {
-                Status.giveStatus(b, opp, p, StatusCondition.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
+                Status.applyStatus(b, opp, p, StatusCondition.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
             }
         }
 
@@ -1944,7 +1944,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public void subside(Battle b, ActivePokemon p) {
-            Status.giveStatus(b, b.getOtherPokemon(p), p, StatusCondition.ASLEEP);
+            Status.applyStatus(b, b.getOtherPokemon(p), p, StatusCondition.ASLEEP);
         }
     }
 
@@ -2199,7 +2199,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Status.giveStatus(b, victim, user, StatusCondition.BURNED);
+            Status.applyStatus(b, victim, user, StatusCondition.BURNED);
         }
     }
 
@@ -2382,7 +2382,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public String preventionMessage(ActivePokemon p, Stat s) {
+        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
             return "The mist prevents stat reductions!";
         }
 

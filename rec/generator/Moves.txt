@@ -4153,7 +4153,7 @@ Psycho Shift:
     Acc: 100
     Applies: user.hasStatus() && Status.applies(user.getStatus().getType(), b, user, victim)
     UniqueEffects:
-        Status.giveStatus(b, user, victim, user.getStatus().getType(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
+        Status.applyStatus(b, user, victim, user.getStatus().getType(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
         user.removeStatus();
         Messages.add(new MessageUpdate().updatePokemon(b, user));
         ###

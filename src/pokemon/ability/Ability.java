@@ -141,7 +141,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
     }
 
     public String getName() {
-        return namesies.getName();
+        return this.namesies().getName();
     }
 
     public String getDescription() {
@@ -511,7 +511,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
-                Status.giveStatus(b, victim, user, StatusCondition.PARALYZED, true);
+                Status.applyStatus(b, victim, user, StatusCondition.PARALYZED, true);
             }
         }
     }
@@ -613,7 +613,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
-                Status.giveStatus(b, victim, user, StatusCondition.POISONED, true);
+                Status.applyStatus(b, victim, user, StatusCondition.POISONED, true);
             }
         }
     }
@@ -803,7 +803,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
             // 30% chance to Paralyze, Poison, or induce Sleep
             if (RandomUtils.chanceTest(30)) {
-                Status.giveStatus(b, victim, user, RandomUtils.getRandomValue(statuses), true);
+                Status.applyStatus(b, victim, user, RandomUtils.getRandomValue(statuses), true);
             }
         }
     }
@@ -1060,7 +1060,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             }
 
             // Give status condition to the opponent
-            Status.giveStatus(b, victim, caster, statusType, true);
+            Status.applyStatus(b, victim, caster, statusType, true);
         }
 
         @Override
@@ -1568,7 +1568,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
-                Status.giveStatus(b, victim, user, StatusCondition.BURNED, true);
+                Status.applyStatus(b, victim, user, StatusCondition.BURNED, true);
             }
         }
     }
@@ -2723,7 +2723,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
-                Status.giveStatus(b, user, victim, StatusCondition.POISONED, true);
+                Status.applyStatus(b, user, victim, StatusCondition.POISONED, true);
             }
         }
     }
@@ -4120,7 +4120,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
             if (Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, sleepyHead, sleepyHead)) {
                 sleepyHead.removeStatus();
-                Status.giveStatus(b, sleepyHead, sleepyHead, StatusCondition.ASLEEP, true);
+                Status.applyStatus(b, sleepyHead, sleepyHead, StatusCondition.ASLEEP, true);
                 return true;
             }
 

@@ -43,7 +43,7 @@ public abstract class Effect implements InvokeEffect, Serializable {
 
     public void decrement(Battle b, ActivePokemon victim) {
         if (numTurns == 0) {
-            Global.error("Number of turns should never be zero before the decrement!! (Effect: " + getName() + ")");
+            Global.error("Number of turns should never be zero before the decrement!! (Effect: " + this.namesies() + ")");
         }
 
         // -1 indicates a permanent effect
@@ -96,10 +96,6 @@ public abstract class Effect implements InvokeEffect, Serializable {
         return this.namesies;
     }
 
-    public String getName() {
-        return namesies.getName();
-    }
-
     public boolean isActive() {
         return active;
     }
@@ -120,7 +116,7 @@ public abstract class Effect implements InvokeEffect, Serializable {
 
     @Override
     public String toString() {
-        return this.getName() + " " + this.getTurns();
+        return this.namesies() + " " + this.getTurns();
     }
 
     // Returns the effect if it is in the list, otherwise returns null

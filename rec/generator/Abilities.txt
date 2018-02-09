@@ -238,7 +238,7 @@ Effect Spore:
 
         // 30% chance to Paralyze, Poison, or induce Sleep
         if (RandomUtils.chanceTest(30)) {
-            Status.giveStatus(b, victim, user, RandomUtils.getRandomValue(statuses), true);
+            Status.applyStatus(b, victim, user, RandomUtils.getRandomValue(statuses), true);
         }
         ###
 *
@@ -334,7 +334,7 @@ Synchronize:
         }
 
         // Give status condition to the opponent
-        Status.giveStatus(b, victim, caster, statusType, true);
+        Status.applyStatus(b, victim, caster, statusType, true);
         ###
     WildPokemonAlterer:
         if (RandomUtils.chanceTest(50)) {
@@ -1045,7 +1045,7 @@ Poison Touch:
     Int: OpponentTakeDamageEffect
     OpponentTakeDamage:
         if (RandomUtils.chanceTest(30)) {
-            Status.giveStatus(b, user, victim, StatusCondition.POISONED, true);
+            Status.applyStatus(b, user, victim, StatusCondition.POISONED, true);
         }
         ###
 *
@@ -1637,7 +1637,7 @@ Comatose:
 
             if (Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, sleepyHead, sleepyHead)) {
                 sleepyHead.removeStatus();
-                Status.giveStatus(b, sleepyHead, sleepyHead, StatusCondition.ASLEEP, true);
+                Status.applyStatus(b, sleepyHead, sleepyHead, StatusCondition.ASLEEP, true);
                 return true;
             }
 

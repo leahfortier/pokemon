@@ -49,7 +49,7 @@ public class StatusTest extends BaseTest {
 
         int original = Stat.getStat(stat, uglyFace, mahBoi, battle);
 
-        Status.giveStatus(battle, uglyFace, uglyFace, statusCondition);
+        Status.applyStatus(battle, uglyFace, uglyFace, statusCondition);
         int afterStatus = Stat.getStat(stat, uglyFace, mahBoi, battle);
         Assert.assertTrue((int)(original*ratio) == afterStatus);
 

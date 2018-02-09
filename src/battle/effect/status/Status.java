@@ -111,16 +111,16 @@ public abstract class Status implements InvokeEffect, Serializable {
     }
 
     // Returns true if a status was successfully given, and false if it failed for any reason
-    public static boolean giveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-        return giveStatus(b, caster, victim, status, false);
+    public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+        return applyStatus(b, caster, victim, status, false);
     }
 
-    public static boolean giveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status, boolean abilityCast) {
+    public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status, boolean abilityCast) {
         Status s = getStatus(status, victim);
-        return giveStatus(b, caster, victim, status, abilityCast ? s.getAbilityCastMessage(caster, victim) : s.getCastMessage(victim));
+        return applyStatus(b, caster, victim, status, abilityCast ? s.getAbilityCastMessage(caster, victim) : s.getCastMessage(victim));
     }
 
-    public static boolean giveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status, String castMessage) {
+    public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status, String castMessage) {
         Status s = getStatus(status, victim);
         if (s.applies(b, caster, victim)) {
             victim.setStatus(s);
@@ -143,6 +143,6 @@ public abstract class Status implements InvokeEffect, Serializable {
             Global.error("Only dead Pokemon can die.");
         }
 
-        giveStatus(b, murderer, deady, StatusCondition.FAINTED);
+        applyStatus(b, murderer, deady, StatusCondition.FAINTED);
     }
 }

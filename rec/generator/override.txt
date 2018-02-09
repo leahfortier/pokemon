@@ -756,7 +756,7 @@ StatProtectingEffect:
 	Header: boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat)
 *
 StatProtectMessage:
-	Header: String preventionMessage(ActivePokemon p, Stat s)
+	Header: String preventionMessage(Battle b, ActivePokemon p, Stat s)
 *
 Sporty:
 	AddMapField: PowerMultiplierCondition: .33 user.isAttackType(Type.{11})
@@ -951,7 +951,7 @@ StatusPreventAbility:
 StatusContact:
 	AddMapField: Contact:
 		if (RandomUtils.chanceTest(30)) {
-			Status.giveStatus(b, victim, user, StatusCondition.{00}, true);
+			Status.applyStatus(b, victim, user, StatusCondition.{00}, true);
 		}
 		###
 	AddInterface: PhysicalContactEffect
@@ -1411,7 +1411,7 @@ CategoryDamagerBerry:
 	AddInterface: OpponentApplyDamageEffect
 	AddMapField: OpponentApplyDamage:
 		if (user.getAttack().getCategory() == MoveCategory.{00}) {
-			Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+			Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
 			user.reduceHealthFraction(b, 1/8.0);
 			victim.consumeItem(b);
 		}
@@ -1667,13 +1667,13 @@ NextLevel:
 FlinchItem:
 	AddMapField: FlingEffect:
 		if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
-			Messages.add("The " + this.name + " caused " + pelted.getName() + " to flinch!");
+			Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
 		}
 		###
 	AddMapField: OpponentTakeDamage:
 		if (RandomUtils.chanceTest(10)) {
 			if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
-				Messages.add(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
+				Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
 			}
 		}
 		###
@@ -1682,7 +1682,7 @@ FlinchItem:
 *
 StatusFling:
 	AddMapField: FlingEffect:
-		Status.giveStatus(b, pelted, pelted, StatusCondition.{00}, pelted.getName() + " was {0} by the " + this.name + "!");
+		Status.applyStatus(b, pelted, pelted, StatusCondition.{00}, pelted.getName() + " was {0} by the " + this.getName() + "!");
 		###
 *
 TM:

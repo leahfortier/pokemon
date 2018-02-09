@@ -97,7 +97,6 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
     private static final long serialVersionUID = 1L;
 
     protected ItemNamesies namesies;
-    protected String name;
     private String description;
     private BagCategory bagCategory;
     private List<BattleBagCategory> battleBagCategories;
@@ -105,7 +104,6 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
     public Item(ItemNamesies name, String description, BagCategory category) {
         this.namesies = name;
-        this.name = name.getName();
         this.description = description;
         this.bagCategory = category;
 
@@ -120,7 +118,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
     @Override
     public int compareTo(Item o) {
-        return this.name.compareTo(o.name);
+        return this.getName().compareTo(o.getName());
     }
 
     @Override
@@ -147,7 +145,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
     @Override
     public String getName() {
-        return this.name;
+        return this.namesies().getName();
     }
 
     public String getDescription() {
@@ -168,7 +166,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return this.getName().hashCode();
     }
 
     @Override
@@ -256,12 +254,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            Messages.add(enterer.getName() + " floats with its " + this.name + "!");
+            Messages.add(enterer.getName() + " floats with its " + this.getName() + "!");
         }
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Messages.add(victim.getName() + "'s " + this.name + " popped!");
+            Messages.add(victim.getName() + "'s " + this.getName() + " popped!");
             victim.consumeItem(b);
         }
 
@@ -330,9 +328,9 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
                 }
 
                 victim.healHealthFraction(1/16.0);
-                Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.name + "!").updatePokemon(b, victim));
+                Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.getName() + "!").updatePokemon(b, victim));
             } else if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                Messages.add(victim.getName() + " lost some of its HP due to its " + this.name + "!");
+                Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
                 victim.reduceHealthFraction(b, 1/8.0);
             }
         }
@@ -632,12 +630,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            Status.giveStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.name + "!");
+            Status.applyStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.getName() + "!");
         }
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            Status.giveStatus(b, pelted, pelted, StatusCondition.BURNED, pelted.getName() + " was burned by the " + this.name + "!");
+            Status.applyStatus(b, pelted, pelted, StatusCondition.BURNED, pelted.getName() + " was burned by the " + this.getName() + "!");
         }
     }
 
@@ -652,9 +650,9 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             // Badly poisons the holder at the end of the turn
-            Status.giveStatus(
+            Status.applyStatus(
                     b, victim, victim, StatusCondition.BADLY_POISONED,
-                    victim.getName() + " was badly poisoned by its " + this.name + "!"
+                    victim.getName() + " was badly poisoned by its " + this.getName() + "!"
             );
         }
 
@@ -694,7 +692,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public String braceMessage(ActivePokemon bracer) {
-            return bracer.getName() + " held on with its " + this.name + "!";
+            return bracer.getName() + " held on with its " + this.getName() + "!";
         }
 
         @Override
@@ -723,7 +721,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public String braceMessage(ActivePokemon bracer) {
-            return bracer.getName() + " held on with its " + this.name + "!";
+            return bracer.getName() + " held on with its " + this.getName() + "!";
         }
 
         @Override
@@ -866,7 +864,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
                 return;
             }
 
-            Messages.add(user.getName() + " was hurt by its " + this.name + "!");
+            Messages.add(user.getName() + " was hurt by its " + this.getName() + "!");
             user.reduceHealthFraction(b, .1);
         }
     }
@@ -891,7 +889,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            Status.giveStatus(b, pelted, pelted, StatusCondition.PARALYZED, pelted.getName() + " was paralyzed by the " + this.name + "!");
+            Status.applyStatus(b, pelted, pelted, StatusCondition.PARALYZED, pelted.getName() + " was paralyzed by the " + this.getName() + "!");
         }
 
         @Override
@@ -1017,7 +1015,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
                 if (user.hasEffect(removableEffect.effect)) {
                     used = true;
                     user.removeEffect(removableEffect.effect);
-                    Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.name + "!");
+                    Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.getName() + "!");
                 }
             }
 
@@ -1412,7 +1410,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+            Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
             user.reduceHealthFraction(b, 1/8.0);
         }
 
@@ -1484,7 +1482,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
             }
 
             user.heal((int)Math.ceil(damage/8.0));
-            Messages.add(new MessageUpdate(user.getName() + " restored some HP due to its " + this.name + "!").updatePokemon(b, user));
+            Messages.add(new MessageUpdate(user.getName() + " restored some HP due to its " + this.getName() + "!").updatePokemon(b, user));
         }
     }
 
@@ -1676,7 +1674,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
                 }
             }
 
-            Messages.add("The " + this.name + " restored " + pelted.getName() + "'s negative stat changes!");
+            Messages.add("The " + this.getName() + " restored " + pelted.getName() + "'s negative stat changes!");
         }
     }
 
@@ -2494,7 +2492,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
             }
 
             victim.healHealthFraction(1/16.0);
-            Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.name + "!").updatePokemon(b, victim));
+            Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.getName() + "!").updatePokemon(b, victim));
         }
 
         @Override
@@ -2673,7 +2671,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            Status.giveStatus(b, pelted, pelted, StatusCondition.POISONED, pelted.getName() + " was poisoned by the " + this.name + "!");
+            Status.applyStatus(b, pelted, pelted, StatusCondition.POISONED, pelted.getName() + " was poisoned by the " + this.getName() + "!");
         }
     }
 
@@ -2920,7 +2918,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
                 if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
-                    Messages.add(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
+                    Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
                 }
             }
         }
@@ -2928,7 +2926,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
             if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
-                Messages.add("The " + this.name + " caused " + pelted.getName() + " to flinch!");
+                Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
             }
         }
     }
@@ -3037,7 +3035,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
                 if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
-                    Messages.add(user.getName() + "'s " + this.name + " caused " + victim.getName() + " to flinch!");
+                    Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
                 }
             }
         }
@@ -3045,7 +3043,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
             if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
-                Messages.add("The " + this.name + " caused " + pelted.getName() + " to flinch!");
+                Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
             }
         }
     }
@@ -5175,7 +5173,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
             if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
-                Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+                Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
                 user.reduceHealthFraction(b, 1/8.0);
                 victim.consumeItem(b);
             }
@@ -5203,7 +5201,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
             if (user.getAttack().getCategory() == MoveCategory.SPECIAL) {
-                Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.name + "!");
+                Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
                 user.reduceHealthFraction(b, 1/8.0);
                 victim.consumeItem(b);
             }
@@ -5250,7 +5248,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (!victim.fullHealth() && TypeAdvantage.isSuperEffective(user, victim, b)) {
-                Messages.add(victim.getName() + "'s " + this.name + " restored its health!");
+                Messages.add(victim.getName() + "'s " + this.getName() + " restored its health!");
                 victim.healHealthFraction(.25);
                 Messages.add(new MessageUpdate().updatePokemon(b, victim));
                 victim.consumeItem(b);
@@ -5572,7 +5570,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public String getUnusableMessage(Battle b, ActivePokemon p) {
-            return p.getName() + "'s " + this.name + " prevents the use of status moves!";
+            return p.getName() + "'s " + this.getName() + " prevents the use of status moves!";
         }
 
         @Override

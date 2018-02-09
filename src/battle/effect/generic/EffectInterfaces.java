@@ -43,7 +43,7 @@ public final class EffectInterfaces {
     public interface ApplyDamageEffect {
 
         // b: The current battle
-        // user: The user of that attack, the one who is probably implementing this effect
+        // user: The user of that attack, the one who is implementing this effect
         // victim: The Pokemon that received the attack
         // damage: The amount of damage that was dealt to victim by the user
         void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage);
@@ -193,7 +193,7 @@ public final class EffectInterfaces {
 
         // b: The current battle
         // user: The user of the attack
-        // victim: The Pokemon who is taking damage, they are the one's probably implementing this
+        // victim: The one who is taking damage and is implementing this effect
         void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim);
 
         static void invokeTakeDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -731,12 +731,19 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface StatProtectingEffect {
+    public interface StatProtectingEffect extends InvokeEffect {
         boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat);
-        String getName();
 
-        default String preventionMessage(ActivePokemon p, Stat s) {
-            return p.getName() + "'s " + this.getName() + " prevents its " + s.getName().toLowerCase() + " from being lowered!";
+        default String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+            String statName = s.getName().toLowerCase();
+
+            CastSource source = this.getSource().getCastSource();
+            if (source.hasSourceName()) {
+                String sourceName = source.getSourceName(b, p);
+                return p.getName() + "'s " + sourceName + " prevents its " + statName + " from being lowered!";
+            }
+
+            return p.getName() + "'s " + statName + " cannot be lowered!";
         }
 
         static StatProtectingEffect getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {

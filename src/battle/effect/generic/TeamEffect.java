@@ -374,7 +374,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
             ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer);
             StatusCondition poisonCondition = layers >= 2 ? StatusCondition.BADLY_POISONED : StatusCondition.POISONED;
-            Status.giveStatus(b, theOtherPokemon, enterer, poisonCondition);
+            Status.applyStatus(b, theOtherPokemon, enterer, poisonCondition);
         }
 
         @Override
