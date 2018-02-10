@@ -115,6 +115,8 @@ public class FieldInfo {
 
         if (value != null) {
             fieldValue = value;
+        } else if (key.equals("Namesies")) {
+            fieldValue = fields.getName();
         } else if (StringUtils.isNullOrEmpty(fieldValue)) {
             Global.error("Missing required constructor field " + key + " for " + fields.getClassName());
         }

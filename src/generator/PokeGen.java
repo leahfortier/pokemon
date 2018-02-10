@@ -49,24 +49,10 @@ class PokeGen {
         namesiesMap.values().forEach(NamesiesGen::writeNamesies);
     }
 
-    private ClassFields readFields(Scanner in, String name, String className) {
-        ClassFields fields = new ClassFields(in);
-        inputFormatter.validate(fields);
+    private String createClass(ClassFields fields) {
+        String name = fields.getName();
+        String className = fields.getClassName();
 
-        fields.setClassName(className);
-
-        fields.addNew("Namesies", name);
-
-        // NumTurns matches to both MinTurns and MaxTurns
-        fields.getPerformAndRemove("NumTurns", numTurns -> {
-            fields.addNew("MinTurns", numTurns);
-            fields.addNew("MaxTurns", numTurns);
-        });
-
-        return fields;
-    }
-
-    private String createClass(String name, String className, ClassFields fields) {
         this.namesiesGen.createNamesies(name, className);
 
         List<String> interfaces = new ArrayList<>();
@@ -107,13 +93,13 @@ class PokeGen {
 
             // Get the class name
             String name = line.replace(":", "");
-            String className = StringUtils.getClassName(name);
 
             // Read in all of the fields
-            ClassFields fields = readFields(in, name, className);
+            ClassFields fields = new ClassFields(in, name);
+            inputFormatter.validate(fields);
 
             // Create class and append
-            out.append(createClass(name, className, fields));
+            out.append(createClass(fields));
         }
 
         if (this.currentGen == GeneratorType.ITEM_GEN) {
@@ -176,15 +162,13 @@ class PokeGen {
             String itemName = attackName + " TM";
             className += "TM";
 
-            ClassFields fields = new ClassFields();
-            fields.setClassName(className);
-            fields.addNew("Namesies", attackName + "_TM");
-            fields.addNew("Desc", attack.getDescription());
+            ClassFields fields = new ClassFields(itemName);
 
+            fields.addNew("Desc", attack.getDescription());
             fields.addNew("Int", TechnicalMachine.class.getSimpleName());
             fields.addNew("TM", namesies.name());
 
-            tmClasses.append(createClass(itemName, className, fields));
+            tmClasses.append(createClass(fields));
         }
     }
 

@@ -71,8 +71,8 @@ class InterfaceMethod {
     private String comments;
     private InvokeMethod invokeMethod;
 
-    InterfaceMethod(final String interfaceName, ClassFields fields) {
-        this.interfaceName = interfaceName;
+    InterfaceMethod(ClassFields fields) {
+        this.interfaceName = fields.getName();
 
         this.parameters = StringUtils.empty();
         this.typelessParameters = StringUtils.empty();

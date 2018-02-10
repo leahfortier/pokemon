@@ -40,9 +40,12 @@ class TestFormatter extends InputFormatter {
             int minTurns = Integer.parseInt(minTurnsString);
             int maxTurns = Integer.parseInt(maxTurnsString);
 
-            // Min should be strictly less than max or else NumTurns should be used
-            Assert.assertTrue(minTurns < maxTurns);
+            // Min should be less than max
+            Assert.assertTrue(minTurns <= maxTurns);
         }
+
+        // Reserved field name and should not be manually set
+        Assert.assertFalse(fields.contains("Namesies"));
     }
 
     @Override

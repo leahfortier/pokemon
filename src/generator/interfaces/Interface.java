@@ -48,8 +48,8 @@ class Interface {
                     this.headerComments = getSingleLineInput(COMMENTS, split);
                     break;
                 case METHOD:
-                    final ClassFields fields = new ClassFields(in);
-                    this.methods.add(new InterfaceMethod(this.interfaceName, fields));
+                    final ClassFields fields = new ClassFields(in, this.interfaceName);
+                    this.methods.add(new InterfaceMethod(fields));
                     break;
                 case EXTENDS:
                     this.extendsInterfaces = getSingleLineInput(EXTENDS, split);

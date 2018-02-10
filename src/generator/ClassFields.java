@@ -10,14 +10,19 @@ import java.util.Scanner;
 
 public class ClassFields {
     private final Map<String, String> fields;
-    private String className;
 
-    ClassFields() {
+    private final String name;
+    private final String className;
+
+    ClassFields(String name) {
         this.fields = new HashMap<>();
+
+        this.name = name;
+        this.className = StringUtils.getClassName(name);
     }
 
-    public ClassFields(Scanner in) {
-        this();
+    public ClassFields(Scanner in, String name) {
+        this(name);
         while (in.hasNextLine()) {
             String line = in.nextLine().trim();
             if (line.equals("*")) {
@@ -28,20 +33,12 @@ public class ClassFields {
         }
     }
 
-    public String getClassName() {
-        if (StringUtils.isNullOrEmpty(this.className)) {
-            Global.error("Class name not set yet -- cannot retrieve.");
-        }
-
-        return this.className;
+    public String getName() {
+        return this.name;
     }
 
-    void setClassName(String className) {
-        if (!StringUtils.isNullOrEmpty(this.className) && !this.className.equals(className)) {
-            Global.error("Class name already set to " + this.className + ", New value: " + className + ")");
-        }
-
-        this.className = className;
+    public String getClassName() {
+        return this.className;
     }
 
     public boolean contains(String fieldName) {
@@ -65,6 +62,7 @@ public class ClassFields {
     }
 
     public void addNew(String fieldKey, String addFieldValue) {
+        // NumTurns matches to both MinTurns and MaxTurns
         if (fieldKey.equals("NumTurns")) {
             this.addNew("MinTurns", addFieldValue);
             this.addNew("MaxTurns", addFieldValue);
