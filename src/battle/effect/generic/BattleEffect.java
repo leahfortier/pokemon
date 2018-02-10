@@ -52,7 +52,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(), this.namesies));
+            return !(b.getEffects().hasEffect(this.namesies));
         }
 
         @Override
@@ -87,7 +87,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(), this.namesies));
+            return !(b.getEffects().hasEffect(this.namesies));
         }
 
         @Override
@@ -115,7 +115,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(), this.namesies));
+            return !(b.getEffects().hasEffect(this.namesies));
         }
 
         @Override
@@ -155,7 +155,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
+            BattleEffect roomsies = b.getEffects().get(this.namesies);
             if (roomsies == null) {
                 super.cast(b, caster, victim, source, printCast);
                 return;
@@ -163,7 +163,7 @@ public abstract class BattleEffect extends Effect {
 
             // Remove the effect if it's already in play
             Messages.add(roomsies.getSubsideMessage(caster));
-            Effect.removeEffect(b.getEffects(), this.namesies);
+            b.getEffects().remove(roomsies);
         }
 
         @Override
@@ -186,7 +186,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
+            BattleEffect roomsies = b.getEffects().get(this.namesies);
             if (roomsies == null) {
                 super.cast(b, caster, victim, source, printCast);
                 return;
@@ -194,7 +194,7 @@ public abstract class BattleEffect extends Effect {
 
             // Remove the effect if it's already in play
             Messages.add(roomsies.getSubsideMessage(caster));
-            Effect.removeEffect(b.getEffects(), this.namesies);
+            b.getEffects().remove(roomsies);
         }
 
         @Override
@@ -217,7 +217,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
+            BattleEffect roomsies = b.getEffects().get(this.namesies);
             if (roomsies == null) {
                 super.cast(b, caster, victim, source, printCast);
                 return;
@@ -225,7 +225,7 @@ public abstract class BattleEffect extends Effect {
 
             // Remove the effect if it's already in play
             Messages.add(roomsies.getSubsideMessage(caster));
-            Effect.removeEffect(b.getEffects(), this.namesies);
+            b.getEffects().remove(roomsies);
         }
 
         @Override
@@ -249,7 +249,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(), this.namesies));
+            return !(b.getEffects().hasEffect(this.namesies));
         }
 
         @Override
@@ -304,7 +304,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(), this.namesies));
+            return !(b.getEffects().hasEffect(this.namesies));
         }
 
         @Override
@@ -356,7 +356,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(), this.namesies));
+            return !(b.getEffects().hasEffect(this.namesies));
         }
 
         @Override
@@ -410,7 +410,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(), this.namesies));
+            return !(b.getEffects().hasEffect(this.namesies));
         }
 
         @Override
@@ -459,7 +459,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(), this.namesies));
+            return !(b.getEffects().hasEffect(this.namesies));
         }
 
         @Override

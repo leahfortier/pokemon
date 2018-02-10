@@ -3,20 +3,19 @@ package trainer;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.Battle.EnterBattleMessageGetter;
-import battle.effect.generic.Effect;
+import battle.effect.EffectList;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
 import main.Global;
 import pokemon.PartyPokemon;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class WildPokemon implements Opponent, Serializable {
     private final ActivePokemon wildPokemon;
-    private List<TeamEffect> effects;
+    private EffectList<TeamEffect> effects;
 
     public WildPokemon(ActivePokemon wildPokemon) {
         if (wildPokemon.isPlayer()) {
@@ -24,7 +23,7 @@ public class WildPokemon implements Opponent, Serializable {
         }
 
         this.wildPokemon = wildPokemon;
-        this.effects = new ArrayList<>();
+        this.effects = new EffectList<>();
     }
 
     @Override
@@ -42,13 +41,8 @@ public class WildPokemon implements Opponent, Serializable {
     }
 
     @Override
-    public List<TeamEffect> getEffects() {
+    public EffectList<TeamEffect> getEffects() {
         return effects;
-    }
-
-    @Override
-    public void resetEffects() {
-        effects = new ArrayList<>();
     }
 
     @Override
@@ -63,12 +57,7 @@ public class WildPokemon implements Opponent, Serializable {
 
     @Override
     public boolean hasEffect(EffectNamesies effect) {
-        return Effect.hasEffect(effects, effect);
-    }
-
-    @Override
-    public void addEffect(TeamEffect e) {
-        effects.add(e);
+        return effects.hasEffect(effect);
     }
 
     @Override
@@ -96,7 +85,7 @@ public class WildPokemon implements Opponent, Serializable {
     public void enterBattle() {
         // Just in case
         this.wildPokemon.resetAttributes();
-        this.resetEffects();
+        this.effects.reset();
     }
 
     @Override

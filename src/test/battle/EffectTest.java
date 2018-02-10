@@ -182,7 +182,7 @@ public class EffectTest extends BaseTest {
         // Partial trapping moves trap
         battle.defendingFight(AttackNamesies.WHIRLPOOL);
         Assert.assertFalse(attacking.canEscape(battle));
-        attacking.getEffects().clear();
+        attacking.getEffects().reset();
         Assert.assertTrue(attacking.canEscape(battle));
 
         // Ingrain prevents escaping
@@ -190,13 +190,13 @@ public class EffectTest extends BaseTest {
         Assert.assertTrue(attacking.canEscape(battle));
         battle.attackingFight(AttackNamesies.INGRAIN);
         Assert.assertFalse(attacking.canEscape(battle));
-        attacking.getEffects().clear();
+        attacking.getEffects().reset();
         Assert.assertTrue(attacking.canEscape(battle));
 
         // Straight up trap
         battle.defendingFight(AttackNamesies.MEAN_LOOK);
         Assert.assertFalse(attacking.canEscape(battle));
-        attacking.getEffects().clear();
+        attacking.getEffects().reset();
         Assert.assertTrue(attacking.canEscape(battle));
 
         // TODO: This is not supposed to block Ghosts from escaping

@@ -5,9 +5,9 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.CastSource;
+import battle.effect.EffectList;
 import battle.effect.InvokeEffect;
 import battle.effect.attack.MultiTurnMove;
-import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.ChangeMoveListEffect;
@@ -68,7 +68,7 @@ import java.util.List;
 public class ActivePokemon extends PartyPokemon {
     private static final long serialVersionUID = 1L;
 
-    private List<PokemonEffect> effects;
+    private EffectList<PokemonEffect> effects;
     private Stages stages;
     private Move selected;
     private Move lastMoveUsed;
@@ -492,7 +492,7 @@ public class ActivePokemon extends PartyPokemon {
         this.setAbility(this.getActualAbility().namesies());
         this.getActualMoves().forEach(Move::resetAttack);
 
-        effects = new ArrayList<>();
+        effects = new EffectList<>();
         stages = new Stages(this);
 
         selected = null;
@@ -578,7 +578,7 @@ public class ActivePokemon extends PartyPokemon {
 
     public List<InvokeEffect> getAllEffects(final Battle b, final boolean includeItem) {
         List<InvokeEffect> list = new ArrayList<>();
-        list.addAll(this.getEffects());
+        list.addAll(this.getEffects().listEffects());
         list.add(this.getStatus());
         list.add(this.getAbility());
 
@@ -866,7 +866,7 @@ public class ActivePokemon extends PartyPokemon {
         return counter;
     }
 
-    public List<PokemonEffect> getEffects() {
+    public EffectList<PokemonEffect> getEffects() {
         return effects;
     }
 
@@ -894,25 +894,13 @@ public class ActivePokemon extends PartyPokemon {
         this.selected = move;
     }
 
-    public void addEffect(PokemonEffect e) {
-        effects.add(e);
-    }
-
-    public boolean removeEffect(PokemonEffect effect) {
-        return effects.remove(effect);
-    }
-
-    public boolean removeEffect(EffectNamesies effect) {
-        return Effect.removeEffect(effects, effect);
-    }
-
     // Returns null if the Pokemon is not under the effects of the input effect, otherwise returns the Effect
     public PokemonEffect getEffect(EffectNamesies effect) {
-        return (PokemonEffect)(Effect.getEffect(effects, effect));
+        return effects.get(effect);
     }
 
     public boolean hasEffect(EffectNamesies effect) {
-        return Effect.hasEffect(effects, effect);
+        return effects.hasEffect(effect);
     }
 
     public Stages getStages() {
@@ -928,7 +916,7 @@ public class ActivePokemon extends PartyPokemon {
         if (success) {
             this.setLastMoveUsed();
         } else {
-            this.removeEffect(EffectNamesies.SELF_CONFUSION);
+            this.effects.remove(EffectNamesies.SELF_CONFUSION);
             this.resetCount();
         }
 

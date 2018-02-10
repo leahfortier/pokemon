@@ -261,9 +261,9 @@ public final class EffectInterfaces {
             Messages.add(releaseMessage);
 
             if (this instanceof PokemonEffect) {
-                released.removeEffect((PokemonEffect)this);
+                released.getEffects().remove((PokemonEffect)this);
             } else if (this instanceof TeamEffect) {
-                b.getTrainer(released).removeEffect((TeamEffect)this);
+                b.getTrainer(released).getEffects().remove((TeamEffect)this);
             } else {
                 Global.error("Invalid release object " + this.getClass().getSimpleName());
             }

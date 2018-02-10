@@ -1014,7 +1014,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
             for (RemovableEffect removableEffect : RemovableEffect.values()) {
                 if (user.hasEffect(removableEffect.effect)) {
                     used = true;
-                    user.removeEffect(removableEffect.effect);
+                    user.getEffects().remove(removableEffect.effect);
                     Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.getName() + "!");
                 }
             }
@@ -4500,7 +4500,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         private boolean use(ActivePokemon p, CastSource source) {
             if (p.hasEffect(EffectNamesies.CONFUSION)) {
-                p.removeEffect(EffectNamesies.CONFUSION);
+                p.getEffects().remove(EffectNamesies.CONFUSION);
                 this.addMessage(p, source);
                 return true;
             }

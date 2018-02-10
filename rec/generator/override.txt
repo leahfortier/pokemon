@@ -368,7 +368,7 @@ LightClay:
 	AddMapField: Cast:
 		super.cast(b, caster, victim, source, printCast);
 		if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-			Effect.getEffect(b.getEffects(victim), this.namesies).setTurns(8);
+			b.getEffects(victim).get(this.namesies).setTurns(8);
 		}
 		###
 	AddMapField: NumTurns: 5
@@ -770,7 +770,7 @@ SpecialRoom:
 	AddMapField: CastMessage: user.getName() + " twisted the dimensions to {2-}!"
 	AddMapField: CanHave: True
 	AddMapField: Cast:
-		Effect roomsies = Effect.getEffect(b.getEffects(), this.namesies);
+		BattleEffect roomsies = b.getEffects().get(this.namesies);
 		if (roomsies == null) {
 			super.cast(b, caster, victim, source, printCast);
 			return;
@@ -778,7 +778,7 @@ SpecialRoom:
 
 		// Remove the effect if it's already in play
 		Messages.add(roomsies.getSubsideMessage(caster));
-		Effect.removeEffect(b.getEffects(), this.namesies);
+		b.getEffects().remove(roomsies);
 		###
 *
 MoveTypePrevent:
@@ -850,7 +850,7 @@ FallMessage:
 	Body:
 		Messages.add({0});
 
-		fallen.removeEffect(this.namesies());
+		fallen.getEffects().remove(this.namesies());
 		###
 *
 Terrain:
@@ -1731,13 +1731,17 @@ SapMessage:
 ShouldCrit:
 	Header: boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending)
 *
+TempEffectMove:
+    AddMapField: BeginAttack:
+        EffectNamesies.{00}.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
+        ###
+    AddMapField: EndAttack:
+        // TODO: I don't like this -- it should def remove the same exact effect it casted at the beginning -- what if there are other ways to apply the effect??
+        attacking.getEffects().remove(EffectNamesies.{00});
+        ###
+*
 IgnoreAbilityMove:
-	AddMapField: BeginAttack:
-		EffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
-		###
-	AddMapField: EndAttack:
-		attacking.removeEffect(EffectNamesies.BREAKS_THE_MOLD);
-		###
+    AddMapField: TempEffectMove: BREAKS_THE_MOLD
 *
 StatusReceived:
 	Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType)

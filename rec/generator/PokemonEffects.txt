@@ -193,7 +193,7 @@ Confusion:
         super.cast(b, caster, victim, source, printCast);
         if (victim.isHoldingItem(b, ItemNamesies.PERSIM_BERRY)) {
             Messages.add(victim.getName() + "'s " + ItemNamesies.PERSIM_BERRY.getName() + " snapped it out of confusion!");
-            victim.removeEffect(this.namesies);
+            victim.getEffects().remove(this.namesies);
             victim.consumeItem(b);
         }
         ###
@@ -364,7 +364,7 @@ ChangeItem:
     Int: ItemHolder
     Cast:
         item = ((ItemHolder)source.getSource(b, caster)).getItem();
-        victim.removeEffect(this.namesies);
+        victim.getEffects().remove(this.namesies);
         super.cast(b, caster, victim, source, printCast);
         ###
     Field:
@@ -421,7 +421,7 @@ ChangeType:
         type = typeSource.getType(b, caster, victim);
 
         // Remove any other ChangeType effects that the victim may have
-        while (victim.removeEffect(this.namesies)) {}
+        victim.getEffects().remove(this.namesies);
 
         super.cast(b, caster, victim, source, printCast);
         ###
@@ -449,7 +449,7 @@ ChangeAbility:
         message = changey.getMessage(b, caster, victim);
 
         // Remove any other ChangeAbility effects that the victim may have
-        while (victim.removeEffect(this.namesies)) {}
+        victim.getEffects().remove(this.namesies);
         super.cast(b, caster, victim, source, printCast);
         ###
     GetAbility:
@@ -773,8 +773,8 @@ Focusing:
     Int: DamageTakenEffect
     DamageTaken:
         Messages.add(damageTaker.getName() + " lost its focus and couldn't move!");
-        damageTaker.removeEffect(this.namesies);
-        damageTaker.addEffect((PokemonEffect)EffectNamesies.FLINCH.getEffect());
+        damageTaker.getEffects().remove(this.namesies);
+        damageTaker.getEffects().add((PokemonEffect)EffectNamesies.FLINCH.getEffect());
         ###
 *
 ShellTrap:
@@ -783,7 +783,7 @@ ShellTrap:
     Int: PhysicalContactEffect
     Contact:
         Messages.add(user.getName() + " set off " + victim.getName() + "'s trap!!");
-        victim.removeEffect(this.namesies);
+        victim.getEffects().remove(this.namesies);
         ###
 *
 BeakBlast:
@@ -886,7 +886,7 @@ Substitute:
         this.hp -= damageAmount;
         if (this.hp <= 0) {
             Messages.add(new MessageUpdate("The substitute broke!").withNewPokemon(damageTaker.namesies(), damageTaker.isShiny(), true, damageTaker.isPlayer()));
-            damageTaker.removeEffect(this.namesies());
+            damageTaker.getEffects().remove(this.namesies());
         } else {
             Messages.add("The substitute absorbed the hit!");
         }
@@ -959,7 +959,7 @@ Bide:
         }
 
         // Bye Bye Bidesies
-        victim.removeEffect(this.namesies);
+        victim.getEffects().remove(this.namesies);
         ###
     CanHave: True
     ApplyEndTurn:
@@ -1006,7 +1006,7 @@ PowerTrick:
         }
 
         Messages.add(getCastMessage(b, caster, victim, source));
-        victim.removeEffect(this.namesies);
+        victim.getEffects().remove(this.namesies);
         ###
 *
 PowerSplit:
@@ -1083,7 +1083,8 @@ DestinyBond:
     CastMessage: victim.getName() + " is trying to take " + b.getOtherPokemon(victim).getName() + " down with it!"
     Int: BeforeTurnEffect
     CanAttack:
-        p.removeEffect(this);
+        // TODO: What is happening
+        p.getEffects().remove(this);
         return true;
         ###
     DeathWish:
@@ -1121,7 +1122,7 @@ ConsumedItem:
     Cast:
         consumed = victim.getHeldItem(b);
         victim.removeItem();
-        victim.removeEffect(this.namesies);
+        victim.getEffects().remove(this.namesies);
         super.cast(b, caster, victim, source, printCast);
         ###
     Int: ItemHolder
@@ -1166,7 +1167,7 @@ Raging:
     OnTakeDamage:
         Move lastMoveUsed = victim.getLastMoveUsed();
         if (lastMoveUsed == null || lastMoveUsed.getAttack().namesies() != AttackNamesies.RAGE) {
-            victim.removeEffect(this);
+            victim.getEffects().remove(this);
             return;
         }
 

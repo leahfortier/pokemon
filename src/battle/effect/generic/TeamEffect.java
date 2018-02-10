@@ -38,7 +38,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
             Messages.add(getCastMessage(b, caster, victim, source));
         }
 
-        b.getTrainer(victim.isPlayer()).addEffect(this);
+        b.getTrainer(victim).getEffects().add(this);
 
         Messages.add(new MessageUpdate().updatePokemon(b, caster));
         Messages.add(new MessageUpdate().updatePokemon(b, victim));
@@ -57,7 +57,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
+            return !(b.getEffects(victim).hasEffect(this.namesies));
         }
 
         @Override
@@ -94,7 +94,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-                Effect.getEffect(b.getEffects(victim), this.namesies).setTurns(8);
+                b.getEffects(victim).get(this.namesies).setTurns(8);
             }
         }
 
@@ -113,7 +113,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
+            return !(b.getEffects(victim).hasEffect(this.namesies));
         }
 
         @Override
@@ -150,7 +150,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-                Effect.getEffect(b.getEffects(victim), this.namesies).setTurns(8);
+                b.getEffects(victim).get(this.namesies).setTurns(8);
             }
         }
 
@@ -169,7 +169,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
+            return !(b.getEffects(victim).hasEffect(this.namesies));
         }
 
         @Override
@@ -202,7 +202,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
+            return !(b.getEffects(victim).hasEffect(this.namesies));
         }
 
         @Override
@@ -239,7 +239,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             super.cast(b, caster, victim, source, printCast);
             if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-                Effect.getEffect(b.getEffects(victim), this.namesies).setTurns(8);
+                b.getEffects(victim).get(this.namesies).setTurns(8);
             }
         }
 
@@ -258,7 +258,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
+            return !(b.getEffects(victim).hasEffect(this.namesies));
         }
 
         @Override
@@ -299,7 +299,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
+            return !(b.getEffects(victim).hasEffect(this.namesies));
         }
 
         @Override
@@ -340,7 +340,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Effect spikesies = Effect.getEffect(b.getEffects(victim), this.namesies);
+            Effect spikesies = b.getEffects(victim).get(this.namesies);
             if (spikesies == null) {
                 super.cast(b, caster, victim, source, printCast);
                 return;
@@ -395,7 +395,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Effect spikesies = Effect.getEffect(b.getEffects(victim), this.namesies);
+            Effect spikesies = b.getEffects(victim).get(this.namesies);
             if (spikesies == null) {
                 super.cast(b, caster, victim, source, printCast);
                 return;
@@ -448,7 +448,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
+            return !(b.getEffects(victim).hasEffect(this.namesies));
         }
 
         @Override
@@ -477,7 +477,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
+            return !(b.getEffects(victim).hasEffect(this.namesies));
         }
 
         @Override
@@ -502,7 +502,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
+            return !(b.getEffects(victim).hasEffect(this.namesies));
         }
 
         @Override
@@ -542,7 +542,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
+            return !(b.getEffects(victim).hasEffect(this.namesies));
         }
 
         @Override
@@ -582,7 +582,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
+            return !(b.getEffects(victim).hasEffect(this.namesies));
         }
 
         @Override
@@ -610,7 +610,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
+            return !(b.getEffects(victim).hasEffect(this.namesies));
         }
     }
 
@@ -625,11 +625,11 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            PayDay payday = (PayDay)Effect.getEffect(b.getEffects(true), this.namesies);
+            PayDay payday = (PayDay)b.getEffects(true).get(this.namesies);
             Messages.add(getCastMessage(b, caster, victim, source));
             coins = 5*caster.getLevel();
             if (payday == null) {
-                b.getPlayer().addEffect(this);
+                b.getPlayer().getEffects().add(this);
             } else {
                 payday.coins += coins;
             }
@@ -656,7 +656,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(Effect.hasEffect(b.getEffects(victim), this.namesies));
+            return !(b.getEffects(victim).hasEffect(this.namesies));
         }
     }
 }

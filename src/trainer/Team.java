@@ -3,6 +3,7 @@ package trainer;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.Battle.EnterBattleMessageGetter;
+import battle.effect.EffectList;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
 import pokemon.PartyPokemon;
@@ -16,10 +17,7 @@ public interface Team {
     ActivePokemon front();
     int getTeamIndex(ActivePokemon teamMember);
 
-    List<TeamEffect> getEffects();
-    void addEffect(TeamEffect e);
-    boolean hasEffect(EffectNamesies effect);
-    void resetEffects();
+    EffectList<TeamEffect> getEffects();
 
     EnterBattleMessageGetter getEnterBattleMessage();
     void enterBattle();
@@ -28,8 +26,8 @@ public interface Team {
     boolean blackout(Battle b);
     void resetUsed();
 
-    default boolean removeEffect(TeamEffect effect) {
-        return this.getEffects().remove(effect);
+    default boolean hasEffect(EffectNamesies effect) {
+        return this.getEffects().hasEffect(effect);
     }
 
     // Returns ONLY the active pokemon on the team (AKA NOT EGGS)

@@ -62,7 +62,8 @@ public class MethodFormatter {
 
         // Add the tabs
         if (!line.isEmpty()) {
-            method.appendRepeat("\t", tabs);
+            // Add an extra tab if the line starts with a '.' indicating a chained method call
+            method.appendRepeat("\t", tabs + (line.startsWith(".") ? 1 : 0));
         }
 
         // Actually write the line

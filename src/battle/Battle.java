@@ -2,10 +2,10 @@ package battle;
 
 import battle.attack.Attack;
 import battle.attack.MoveType;
+import battle.effect.EffectList;
 import battle.effect.InvokeEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.BattleEffect;
-import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.BasicAccuracyBypassEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
@@ -67,7 +67,7 @@ public class Battle implements Serializable {
     private final Opponent opponent; // SO OBJECT-ORIENTED
     private PlayerTrainer player;
 
-    private List<BattleEffect> effects;
+    private EffectList<BattleEffect> effects;
 
     private WeatherState baseWeather;
     private Weather weather;
@@ -100,7 +100,7 @@ public class Battle implements Serializable {
         this.player.enterBattle();
         this.opponent.enterBattle();
 
-        this.effects = new ArrayList<>();
+        this.effects = new EffectList<>();
 
         turn = 0;
         escapeAttempts = 0;
@@ -179,7 +179,7 @@ public class Battle implements Serializable {
     }
 
     public boolean hasEffect(EffectNamesies effect) {
-        return Effect.hasEffect(effects, effect);
+        return effects.hasEffect(effect);
     }
 
     public void fight() {
@@ -220,7 +220,7 @@ public class Battle implements Serializable {
 
         if (!this.getEffects().isEmpty()) {
             System.out.println("Battle:");
-            for (BattleEffect effect : getEffects()) {
+            for (BattleEffect effect : getEffects().listEffects()) {
                 System.out.println("\t" + effect);
             }
         }
@@ -242,9 +242,9 @@ public class Battle implements Serializable {
                 .append(" " + p.getHeldItem(this).getName() + " ")
                 .appendJoin(" ", Arrays.asList(Stat.STATS), stat -> String.valueOf(p.getStat(this, stat)))
                 .appendLine()
-                .appendJoin("\n", p.getEffects())
+                .appendJoin("\n", p.getEffects().listEffects())
                 .appendIf(!p.getEffects().isEmpty(), "\n")
-                .appendJoin("\n", team.getEffects())
+                .appendJoin("\n", team.getEffects().listEffects())
                 .toString()
                 .replaceAll("\n", "\n\t")
                 .trim();
@@ -291,15 +291,15 @@ public class Battle implements Serializable {
         endTurnPokemonEffects(opponent.front());
 
         // Decrement Pokemon effects
-        decrementEffects(player.front().getEffects(), player.front());
-        decrementEffects(opponent.front().getEffects(), opponent.front());
+        player.front().getEffects().decrement(this, player.front());
+        opponent.front().getEffects().decrement(this, opponent.front());
 
         // Decrement Team effects
-        decrementEffects(player.getEffects(), player.front());
-        decrementEffects(opponent.getEffects(), opponent.front());
+        player.getEffects().decrement(this, player.front());
+        opponent.getEffects().decrement(this, opponent.front());
 
         // Decrement Battle effects
-        decrementEffects(effects, null);
+        effects.decrement(this, null);
         decrementWeather();
 
         // The very, very end
@@ -421,28 +421,6 @@ public class Battle implements Serializable {
         Messages.add("Can't escape!");
         ((Player)player).performAction(this, TrainerAction.RUN);
         return false;
-    }
-
-    private void decrementEffects(List<? extends Effect> effects, ActivePokemon p) {
-        List<Effect> toRemove = new ArrayList<>();
-        for (Effect effect : new ArrayList<>(effects)) {
-            boolean inactive = !effect.isActive();
-            if (!inactive) {
-                effect.decrement(this, p);
-                inactive = !effect.isActive() && !effect.nextTurnSubside();
-            }
-
-            if (inactive) {
-                toRemove.add(effect);
-                effect.subside(this, p);
-
-                // I think this is pretty much just for Future Sight...
-                if (p != null && p.isFainted(this)) {
-                    return;
-                }
-            }
-        }
-        effects.removeIf(toRemove::contains);
     }
 
     private void decrementWeather() {
@@ -571,15 +549,15 @@ public class Battle implements Serializable {
         }
     }
 
-    public List<BattleEffect> getEffects() {
+    public EffectList<BattleEffect> getEffects() {
         return effects;
     }
 
-    public List<TeamEffect> getEffects(ActivePokemon teamMember) {
+    public EffectList<TeamEffect> getEffects(ActivePokemon teamMember) {
         return getEffects(teamMember.isPlayer());
     }
 
-    public List<TeamEffect> getEffects(boolean isPlayer) {
+    public EffectList<TeamEffect> getEffects(boolean isPlayer) {
         return isPlayer ? player.getEffects() : opponent.getEffects();
     }
 
@@ -592,8 +570,8 @@ public class Battle implements Serializable {
         Collections.addAll(list, additionalItems);
 
         list.addAll(p.getAllEffects(this, includeItem));
-        list.addAll(getEffects(p));
-        list.addAll(getEffects());
+        list.addAll(getEffects(p).listEffects());
+        list.addAll(getEffects().listEffects());
         list.add(weather);
 
         return list;

@@ -1841,9 +1841,9 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            o.addEffect((PokemonEffect)EffectNamesies.BRACING.getEffect());
+            o.getEffects().add((PokemonEffect)EffectNamesies.BRACING.getEffect());
             super.applyDamage(me, o, b);
-            o.removeEffect(EffectNamesies.BRACING);
+            o.getEffects().remove(EffectNamesies.BRACING);
         }
     }
 
@@ -6210,6 +6210,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
+    // TODO: Test
     static class MeFirst extends Attack {
         private static final long serialVersionUID = 1L;
 
@@ -6223,25 +6224,25 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // TODO: Test
-            attacking.addEffect((PokemonEffect)EffectNamesies.FIDDY_PERCENT_STRONGER.getEffect());
-        }
-
-        @Override
-        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            attacking.removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
-        }
-
-        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Fails if it is the second turn or the opponent is using a status move
             return b.isFirstAttack() && victim.getMove() != null && !victim.getAttack().isStatusMove();
         }
 
         @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            EffectNamesies.FIDDY_PERCENT_STRONGER.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
+        }
+
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.callNewMove(b, victim, victim.getAttack().namesies());
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // TODO: I don't like this -- it should def remove the same exact effect it casted at the beginning -- what if there are other ways to apply the effect??
+            attacking.getEffects().remove(EffectNamesies.FIDDY_PERCENT_STRONGER);
         }
     }
 
@@ -9032,7 +9033,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return Effect.hasEffect(b.getEffects(user), EffectNamesies.DEAD_ALLY) ? 2 : 1;
+            return b.getEffects(user).hasEffect(EffectNamesies.DEAD_ALLY) ? 2 : 1;
         }
     }
 
@@ -9376,7 +9377,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
                 next.getStages().setStage(stat, user.getStage(stat));
             }
 
-            user.getEffects().stream().filter(effect -> effect instanceof PassableEffect).forEach(next::addEffect);
+            user.getEffects()
+                .listEffects()
+                .stream()
+                .filter(effect -> effect instanceof PassableEffect)
+                .forEach(effect -> next.getEffects().add(effect));
         }
 
         @Override
@@ -10919,7 +10924,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            attacking.removeEffect(EffectNamesies.BREAKS_THE_MOLD);
+            // TODO: I don't like this -- it should def remove the same exact effect it casted at the beginning -- what if there are other ways to apply the effect??
+            attacking.getEffects().remove(EffectNamesies.BREAKS_THE_MOLD);
         }
     }
 
@@ -10939,7 +10945,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            attacking.removeEffect(EffectNamesies.BREAKS_THE_MOLD);
+            // TODO: I don't like this -- it should def remove the same exact effect it casted at the beginning -- what if there are other ways to apply the effect??
+            attacking.getEffects().remove(EffectNamesies.BREAKS_THE_MOLD);
         }
     }
 

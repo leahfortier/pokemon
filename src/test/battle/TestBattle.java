@@ -75,10 +75,10 @@ public class TestBattle extends Battle {
         this.getAttacking().resetAttributes();
         this.getDefending().resetAttributes();
 
-        this.getTrainer(true).resetEffects();
-        this.getTrainer(false).resetEffects();
+        this.getTrainer(true).getEffects().reset();
+        this.getTrainer(false).getEffects().reset();
 
-        this.getEffects().clear();
+        this.getEffects().reset();
         this.addEffect((Weather)EffectNamesies.CLEAR_SKIES.getEffect());
     }
 

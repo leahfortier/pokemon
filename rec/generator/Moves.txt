@@ -844,9 +844,9 @@ False Swipe:
     Acc: 100
     Type: Normal
     ApplyDamage:
-        o.addEffect((PokemonEffect)EffectNamesies.BRACING.getEffect());
+        o.getEffects().add((PokemonEffect)EffectNamesies.BRACING.getEffect());
         super.applyDamage(me, o, b);
-        o.removeEffect(EffectNamesies.BRACING);
+        o.getEffects().remove(EffectNamesies.BRACING);
         ###
 *
 Disable:
@@ -3534,14 +3534,9 @@ Me First:
         // Fails if it is the second turn or the opponent is using a status move
         return b.isFirstAttack() && victim.getMove() != null && !victim.getAttack().isStatusMove();
         ###
-    BeginAttack:
-        // TODO: Test
-        attacking.addEffect((PokemonEffect)EffectNamesies.FIDDY_PERCENT_STRONGER.getEffect());
-        ###
+    TempEffectMove: FIDDY_PERCENT_STRONGER
+    Comments: // TODO: Test
     CallNewMove: victim.getAttack().namesies()
-    EndAttack:
-        attacking.removeEffect(EffectNamesies.FIDDY_PERCENT_STRONGER);
-        ###
 *
 Refresh:
     Desc: The user rests to cure itself of poisoning, a burn, or paralysis.
@@ -5293,7 +5288,7 @@ Retaliate:
     Acc: 100
     Cat: Physical
     Pow: 70
-    PowerMultiplierCondition: 2 Effect.hasEffect(b.getEffects(user), EffectNamesies.DEAD_ALLY)
+    PowerMultiplierCondition: 2 b.getEffects(user).hasEffect(EffectNamesies.DEAD_ALLY)
 *
 Circle Throw:
     Desc: The target is thrown, and a different Pok\u00e9mon is dragged out. In the wild, this ends a battle against a single Pok\u00e9mon.
@@ -5491,7 +5486,11 @@ Baton Pass:
             next.getStages().setStage(stat, user.getStage(stat));
         }
 
-        user.getEffects().stream().filter(effect -> effect instanceof PassableEffect).forEach(next::addEffect);
+        user.getEffects()
+            .listEffects()
+            .stream()
+            .filter(effect -> effect instanceof PassableEffect)
+            .forEach(effect -> next.getEffects().add(effect));
         ###
     SelfTarget: True
     MoveType: Non_Snatchable

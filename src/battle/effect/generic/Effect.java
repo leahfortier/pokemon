@@ -10,7 +10,6 @@ import util.RandomUtils;
 import util.StringUtils;
 
 import java.io.Serializable;
-import java.util.List;
 
 public abstract class Effect implements InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;
@@ -117,24 +116,5 @@ public abstract class Effect implements InvokeEffect, Serializable {
     @Override
     public String toString() {
         return this.namesies() + " " + this.getTurns();
-    }
-
-    // Returns the effect if it is in the list, otherwise returns null
-    public static Effect getEffect(List<? extends Effect> effects, EffectNamesies effectNamesies) {
-        for (Effect effect : effects) {
-            if (effect.namesies() == effectNamesies) {
-                return effect;
-            }
-        }
-
-        return null;
-    }
-
-    public static boolean hasEffect(List<? extends Effect> effects, EffectNamesies effect) {
-        return getEffect(effects, effect) != null;
-    }
-
-    public static boolean removeEffect(List<? extends Effect> effects, EffectNamesies effectToRemove) {
-        return effects.removeIf(effect -> effect.namesies() == effectToRemove);
     }
 }

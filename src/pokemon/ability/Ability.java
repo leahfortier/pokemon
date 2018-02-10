@@ -3564,7 +3564,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             if (this.schoolForm != formsie.getHPRatio() >= .25 && formsie.getLevel() >= 20) {
                 this.schoolForm = !schoolForm;
                 Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (schoolForm ? "School" : "Solo") + " Forme!")
-                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), schoolForm), formsie.isPlayer())
+                            .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), schoolForm), formsie.isPlayer())
                 );
             }
         }
@@ -3619,7 +3619,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             if (this.coreForm != formsie.getHPRatio() < .5) {
                 this.coreForm = !coreForm;
                 Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (coreForm ? "Core" : "Meteor") + " Forme!")
-                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), coreForm), formsie.isPlayer())
+                            .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), coreForm), formsie.isPlayer())
                 );
             }
         }
@@ -4059,7 +4059,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
                 boolean front = !isPlayer;
 
                 Messages.add(new MessageUpdate(damageTaker.getName() + "'s disguise was busted!!")
-                        .withImageName(damageTaker.getPokemonInfo().getImageName(shiny, front, true), isPlayer)
+                            .withImageName(damageTaker.getPokemonInfo().getImageName(shiny, front, true), isPlayer)
                 );
 
                 activated = true;

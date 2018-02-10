@@ -2,7 +2,7 @@ package trainer;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.generic.Effect;
+import battle.effect.EffectList;
 import battle.effect.generic.EffectInterfaces.SwitchOutEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
@@ -25,7 +25,7 @@ public abstract class Trainer implements Team, Serializable {
     private int cashMoney;
 
     private TrainerAction action;
-    private List<TeamEffect> effects;
+    private EffectList<TeamEffect> effects;
     private Bag bag;
 
     private int frontIndex;
@@ -41,7 +41,7 @@ public abstract class Trainer implements Team, Serializable {
         this.cashMoney = cashMoney;
 
         team = new ArrayList<>();
-        effects = new ArrayList<>();
+        effects = new EffectList<>();
         frontIndex = 0;
 
         bag = new Bag();
@@ -75,13 +75,8 @@ public abstract class Trainer implements Team, Serializable {
     }
 
     @Override
-    public List<TeamEffect> getEffects() {
+    public EffectList<TeamEffect> getEffects() {
         return effects;
-    }
-
-    @Override
-    public void resetEffects() {
-        effects = new ArrayList<>();
     }
 
     public String getName() {
@@ -123,7 +118,7 @@ public abstract class Trainer implements Team, Serializable {
         team.forEach(PartyPokemon::resetAttributes);
         this.setAction(TrainerAction.FIGHT);
         this.setFront();
-        this.resetEffects();
+        this.getEffects().reset();
         inBattle = true;
     }
 
@@ -164,12 +159,7 @@ public abstract class Trainer implements Team, Serializable {
 
     @Override
     public boolean hasEffect(EffectNamesies effect) {
-        return Effect.hasEffect(effects, effect);
-    }
-
-    @Override
-    public void addEffect(TeamEffect e) {
-        effects.add(e);
+        return effects.hasEffect(effect);
     }
 
     @Override
