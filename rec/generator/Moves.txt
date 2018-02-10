@@ -1670,26 +1670,16 @@ Moonlight:
     Cat: Status
 *
 Stored Power:
-    Pow: 20
     Desc: The user attacks the target with stored power. The more the user's stats are raised, the greater the move's power.
     Type: Psychic
     Cat: Special
-    Acc: 100
-    PP: 10
-    GetMultiplier:
-        return user.getStages().totalStatIncreases();
-        ###
+    StoredPowerMove: True
 *
 Power Trip:
-    Pow: 20
     Desc: The user boasts its strength and attacks the target. The more the user's stats are raised, the greater the move's power.
     Type: Dark
     Cat: Physical
-    Acc: 100
-    PP: 10
-    GetMultiplier:
-        return user.getStages().totalStatIncreases();
-        ###
+    StoredPowerMove: True
 *
 Mimic:
     Desc: The user copies the target's last move. The move can be used during battle until the Pok\u00e9mon is switched out.

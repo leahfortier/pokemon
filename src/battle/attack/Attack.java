@@ -3232,7 +3232,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getStages().totalStatIncreases();
+            return 1 + user.getStages().totalStatIncreases();
         }
     }
 
@@ -3248,7 +3248,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getStages().totalStatIncreases();
+            return 1 + user.getStages().totalStatIncreases();
         }
     }
 

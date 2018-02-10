@@ -425,7 +425,7 @@ public class Battle implements Serializable {
 
     private void decrementEffects(List<? extends Effect> effects, ActivePokemon p) {
         List<Effect> toRemove = new ArrayList<>();
-        for (Effect effect : effects) {
+        for (Effect effect : new ArrayList<>(effects)) {
             boolean inactive = !effect.isActive();
             if (!inactive) {
                 effect.decrement(this, p);

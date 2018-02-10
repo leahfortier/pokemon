@@ -39,7 +39,7 @@ public class TestBattle extends Battle {
     public double getDamageModifier(ActivePokemon attacking, ActivePokemon defending) {
         double modifier = super.getDamageModifier(attacking, defending);
 
-        Assert.assertTrue(modifier > 0);
+        Assert.assertTrue(attacking.getAttack().getName(), modifier > 0);
         if (expectedDamageModifier != null) {
             TestUtils.assertEquals(
                     StringUtils.spaceSeparated(attacking.getAttack(), attacking.getCount()),

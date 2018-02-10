@@ -1904,6 +1904,14 @@ FocusMove:
         return false;
         ###
 *
+StoredPowerMove:
+    AddMapField: Pow: 20
+    AddMapField: Acc: 100
+    AddMapField: PP: 10
+    AddMapField: GetMultiplier:
+        return 1 + user.getStages().totalStatIncreases();
+        ###
+*        
 GET_DAT_CASH_MONEY_TWICE_ITEM:
 	Header: void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice)
 	AccessModifier: Private

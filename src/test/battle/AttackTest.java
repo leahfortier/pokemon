@@ -301,6 +301,17 @@ public class AttackTest extends BaseTest {
     }
 
     @Test
+    public void tryEverythingTest() {
+        for (AttackNamesies attackNamesies : AttackNamesies.values()) {
+            // Just try every attack and make sure it doesn't crash or anything
+            TestBattle battle = TestBattle.create();
+            for (int i = 0; i < 10; i++) {
+                battle.attackingFight(attackNamesies);
+            }
+        }
+    }
+
+    @Test
     public void recoilTest() {
         TestBattle battle = TestBattle.create();
         TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.ROCK_HEAD);
@@ -1325,5 +1336,30 @@ public class AttackTest extends BaseTest {
                         .test(defending);
 
         // TODO: Test Substitute
+    }
+
+    @Test
+    public void storedPowerTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        battle.setExpectedDamageModifier(1.0);
+        battle.attackingFight(AttackNamesies.STORED_POWER);
+
+        battle.emptyHeal();
+        battle.attackingFight(AttackNamesies.MINIMIZE);
+        new TestStages().set(Stat.EVASION, 2).test(attacking);
+
+        battle.setExpectedDamageModifier(3.0);
+        battle.attackingFight(AttackNamesies.STORED_POWER);
+
+        battle.emptyHeal();
+        battle.defendingFight(AttackNamesies.SCREECH);
+        new TestStages().set(Stat.EVASION, 2).set(Stat.DEFENSE, -2).test(attacking);
+
+        // Stored power ignores negative stat gains
+        battle.setExpectedDamageModifier(3.0);
+        battle.attackingFight(AttackNamesies.STORED_POWER);
     }
 }
