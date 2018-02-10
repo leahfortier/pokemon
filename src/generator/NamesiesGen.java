@@ -2,33 +2,35 @@ package generator;
 
 import main.Global;
 import pokemon.PokemonInfo;
-import pokemon.PokemonNamesies;
 import util.FileIO;
 import util.StringAppender;
 import util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 class NamesiesGen {
+    private final NamesiesType namesiesType;
 
-    private final String namesiesFolder;
-    private final String namesiesClassName;
     private final StringAppender namesies;
 
-    NamesiesGen(final String namesiesFolder, final Class namesiesClass) {
-        this.namesiesFolder = namesiesFolder;
-        this.namesiesClassName = namesiesClass.getSimpleName();
+    NamesiesGen(final NamesiesType namesiesType) {
+        this.namesiesType = namesiesType;
 
         this.namesies = new StringAppender();
 
-        if (namesiesClass.equals(PokemonNamesies.class)) {
-            pokemonNamesies();
-            writeNamesies();
+        if (namesiesType == NamesiesType.POKEMON_NAMESIES) {
+            // Create namesies for each Pokemon
+            for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
+                PokemonInfo info = PokemonInfo.getPokemonInfo(i);
+                this.createNamesies(info.getName(), null);
+            }
         }
     }
 
     void writeNamesies() {
-        final String fileName = this.namesiesFolder + this.namesiesClassName + ".java";
+        final String fileName = this.namesiesType.getFileName();
 
         Scanner original = FileIO.openFile(fileName);
         StringAppender out = new StringAppender();
@@ -68,19 +70,22 @@ class NamesiesGen {
 
     void createNamesies(String name, String className) {
         String enumName = StringUtils.getNamesiesString(name);
-        namesies.appendDelimiter(",\n", String.format(
-                "\t%s(\"%s\"%s)",
-                enumName,
-                name,
-                StringUtils.isNullOrEmpty(className) ? "" : ", " + className + "::new"
-        ));
+        String parameters = this.getParameters(name, className);
+
+        namesies.appendDelimiter(",\n", String.format("\t%s(%s)", enumName, parameters));
     }
 
-    private void pokemonNamesies() {
-        // Add the Pokemon to namesies
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo info = PokemonInfo.getPokemonInfo(i);
-            createNamesies(info.getName(), null);
+    // Returns the parameters inside the enum constructor: "name" and/or className::new
+    private String getParameters(String name, String className) {
+        List<String> parametersList = new ArrayList<>();
+        if (this.namesiesType.includeName()) {
+            parametersList.add("\"" + name + "\"");
         }
+
+        if (!StringUtils.isNullOrEmpty(className)) {
+            parametersList.add(className + "::new");
+        }
+
+        return String.join(", ", parametersList);
     }
 }

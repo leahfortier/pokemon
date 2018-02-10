@@ -6,7 +6,6 @@ import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import util.FileIO;
 import util.FileName;
-import util.Folder;
 import util.StringAppender;
 import util.StringUtils;
 
@@ -30,11 +29,11 @@ public class StuffGen {
 
     public StuffGen(InputFormatter inputFormatter) {
         new PokeGen(inputFormatter);
-        new NamesiesGen(Folder.POKEMON, PokemonNamesies.class);
-        baseEvolutionGenerator();
-
         new InterfaceGen();
 
+        new NamesiesGen(NamesiesType.POKEMON_NAMESIES).writeNamesies();
+
+        baseEvolutionGenerator();
         FontMetricsGen.writeFontMetrics();
     }
 

@@ -12,7 +12,6 @@ import util.FileIO;
 import util.FileName;
 import util.GeneralUtils;
 import util.StringAppender;
-import util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,18 +28,18 @@ class PokeGen {
     PokeGen(InputFormatter inputFormatter) {
         this.inputFormatter = inputFormatter;
 
-        final Map<Class, NamesiesGen> namesiesMap = new HashMap<>();
+        final Map<NamesiesType, NamesiesGen> namesiesMap = new HashMap<>();
 
         // Go through each PokeGen and generate
         for (GeneratorType generatorType : GeneratorType.values()) {
             this.currentGen = generatorType;
 
-            final Class namesiesClass = generatorType.getNamesiesClass();
-            if (!namesiesMap.containsKey(namesiesClass)) {
-                namesiesMap.put(namesiesClass, new NamesiesGen(generatorType.getOutputFolder(), namesiesClass));
+            final NamesiesType namesiesType = generatorType.getNamesiesType();
+            if (!namesiesMap.containsKey(namesiesType)) {
+                namesiesMap.put(namesiesType, new NamesiesGen(namesiesType));
             }
 
-            this.namesiesGen = namesiesMap.get(namesiesClass);
+            this.namesiesGen = namesiesMap.get(namesiesType);
             this.superGen();
         }
 
@@ -154,13 +153,11 @@ class PokeGen {
         Scanner in = FileIO.openFile(FileName.TM_LIST);
         while (in.hasNext()) {
             String attackName = in.nextLine().trim();
-            String className = StringUtils.getClassName(attackName);
 
             AttackNamesies namesies = AttackNamesies.getValueOf(attackName);
             Attack attack = namesies.getNewAttack();
 
             String itemName = attackName + " TM";
-            className += "TM";
 
             ClassFields fields = new ClassFields(itemName);
 

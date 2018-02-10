@@ -1,39 +1,35 @@
 package generator;
 
 import battle.attack.Attack;
-import battle.attack.AttackNamesies;
 import battle.effect.generic.BattleEffect;
-import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
 import battle.effect.generic.TeamEffect;
 import battle.effect.generic.Weather;
 import item.Item;
-import item.ItemNamesies;
 import pokemon.ability.Ability;
-import pokemon.ability.AbilityNamesies;
 import util.Folder;
 
 public enum GeneratorType {
-    ATTACK_GEN("Moves.txt", Folder.ATTACK, Attack.class, AttackNamesies.class),
-    POKEMON_EFFECT_GEN("PokemonEffects.txt", Folder.GENERIC_EFFECT, PokemonEffect.class, EffectNamesies.class),
-    TEAM_EFFECT_GEN("TeamEffects.txt", Folder.GENERIC_EFFECT, TeamEffect.class, EffectNamesies.class),
-    BATTLE_EFFECT_GEN("BattleEffects.txt", Folder.GENERIC_EFFECT, BattleEffect.class, EffectNamesies.class),
-    WEATHER_GEN("Weather.txt", Folder.GENERIC_EFFECT, Weather.class, EffectNamesies.class),
-    ABILITY_GEN("Abilities.txt", Folder.ABILITY, Ability.class, AbilityNamesies.class),
-    ITEM_GEN("Items.txt", Folder.ITEMS, Item.class, ItemNamesies.class);
+    ATTACK_GEN("Moves.txt", Folder.ATTACK, Attack.class, NamesiesType.ATTACK_NAMESIES),
+    POKEMON_EFFECT_GEN("PokemonEffects.txt", Folder.GENERIC_EFFECT, PokemonEffect.class, NamesiesType.EFFECT_NAMESIES),
+    TEAM_EFFECT_GEN("TeamEffects.txt", Folder.GENERIC_EFFECT, TeamEffect.class, NamesiesType.EFFECT_NAMESIES),
+    BATTLE_EFFECT_GEN("BattleEffects.txt", Folder.GENERIC_EFFECT, BattleEffect.class, NamesiesType.EFFECT_NAMESIES),
+    WEATHER_GEN("Weather.txt", Folder.GENERIC_EFFECT, Weather.class, NamesiesType.EFFECT_NAMESIES),
+    ABILITY_GEN("Abilities.txt", Folder.ABILITY, Ability.class, NamesiesType.ABILITY_NAMESIES),
+    ITEM_GEN("Items.txt", Folder.ITEMS, Item.class, NamesiesType.ITEM_NAMESIES);
 
     private final String inputPath;
     private final String outputPath;
     private final String outputFolder;
     private final String superClassName;
-    private final Class namesiesClass;
+    private final NamesiesType namesiesType;
 
-    GeneratorType(String inputFileName, String outputFolder, Class superClass, Class namesiesClass) {
+    GeneratorType(String inputFileName, String outputFolder, Class<?> superClass, NamesiesType namesiesType) {
         this.inputPath = Folder.GENERATOR + inputFileName;
         this.outputPath = outputFolder + superClass.getSimpleName() + ".java";
         this.outputFolder = outputFolder;
         this.superClassName = superClass.getSimpleName();
-        this.namesiesClass = namesiesClass;
+        this.namesiesType = namesiesType;
     }
 
     public String getInputPath() {
@@ -52,7 +48,7 @@ public enum GeneratorType {
         return this.superClassName;
     }
 
-    public Class getNamesiesClass() {
-        return this.namesiesClass;
+    public NamesiesType getNamesiesType() {
+        return this.namesiesType;
     }
 }
