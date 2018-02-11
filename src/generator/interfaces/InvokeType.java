@@ -10,6 +10,7 @@ import generator.interfaces.InvokeMethod.MultiplyInvoke;
 import generator.interfaces.InvokeMethod.UpdateInvoke;
 import generator.interfaces.InvokeMethod.VoidInvoke;
 import main.Global;
+import util.StringUtils;
 
 import java.util.Scanner;
 
@@ -17,8 +18,8 @@ enum InvokeType {
     VOID(input -> new VoidInvoke()),
     CONTAINS(input -> new ContainsInvoke()),
     CHECK(CheckInvoke::new),
-    CHECKGET(CheckGetInvoke::new),
-    CHECKMESSAGE(CheckMessageInvoke::new),
+    CHECK_GET(CheckGetInvoke::new),
+    CHECK_MESSAGE(CheckMessageInvoke::new),
     GET(input -> new GetInvoke()),
     UPDATE(input -> new UpdateInvoke()),
     MULTIPLY(input -> new MultiplyInvoke()),
@@ -37,6 +38,15 @@ enum InvokeType {
         }
 
         return invokeMethod;
+    }
+
+    public static InvokeMethod getInvokeMethod(String name, Scanner in) {
+        try {
+            return InvokeType.valueOf(StringUtils.getNamesiesString(name)).getInvokeMethod(in);
+        } catch (IllegalArgumentException exception) {
+            Global.error("Invalid invoke type value: " + name);
+            return null;
+        }
     }
 
     @FunctionalInterface

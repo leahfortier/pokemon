@@ -336,7 +336,10 @@ public final class EffectInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof NameChanger && InvokeEffect.isActiveEffect(invokee)) {
                     NameChanger effect = (NameChanger)invokee;
-                    return effect.getNameChange();
+                    String value = effect.getNameChange();
+                    if (value != null) {
+                        return value;
+                    }
                 }
             }
 
@@ -858,7 +861,10 @@ public final class EffectInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof ChangeTypeEffect && InvokeEffect.isActiveEffect(invokee)) {
                     ChangeTypeEffect effect = (ChangeTypeEffect)invokee;
-                    return effect.getType(b, p, display);
+                    Type[] value = effect.getType(b, p, display);
+                    if (value != null) {
+                        return value;
+                    }
                 }
             }
 
@@ -874,7 +880,10 @@ public final class EffectInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof ForceMoveEffect && InvokeEffect.isActiveEffect(invokee)) {
                     ForceMoveEffect effect = (ForceMoveEffect)invokee;
-                    return effect.getForcedMove(attacking);
+                    Move value = effect.getForcedMove(attacking);
+                    if (value != null) {
+                        return value;
+                    }
                 }
             }
 
@@ -890,7 +899,10 @@ public final class EffectInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof DifferentStatEffect && InvokeEffect.isActiveEffect(invokee)) {
                     DifferentStatEffect effect = (DifferentStatEffect)invokee;
-                    return effect.getStat(user, stat);
+                    Integer value = effect.getStat(user, stat);
+                    if (value != null) {
+                        return value;
+                    }
                 }
             }
 
@@ -995,7 +1007,10 @@ public final class EffectInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof ChangeMoveListEffect && InvokeEffect.isActiveEffect(invokee)) {
                     ChangeMoveListEffect effect = (ChangeMoveListEffect)invokee;
-                    return effect.getMoveList(actualMoves);
+                    List<Move> value = effect.getMoveList(actualMoves);
+                    if (value != null) {
+                        return value;
+                    }
                 }
             }
 
@@ -1532,7 +1547,10 @@ public final class EffectInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof WildEncounterSelector && InvokeEffect.isActiveEffect(invokee)) {
                     WildEncounterSelector effect = (WildEncounterSelector)invokee;
-                    return effect.getWildEncounter(playerFront, wildEncounters);
+                    WildEncounterInfo value = effect.getWildEncounter(playerFront, wildEncounters);
+                    if (value != null) {
+                        return value;
+                    }
                 }
             }
 

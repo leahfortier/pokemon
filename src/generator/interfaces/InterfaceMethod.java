@@ -133,7 +133,7 @@ class InterfaceMethod {
         final String invoke = fields.getAndRemoveTrimmed(INVOKE);
         if (invoke != null) {
             Scanner in = new Scanner(invoke);
-            this.invokeMethod = InvokeType.valueOf(in.next().toUpperCase()).getInvokeMethod(in);
+            this.invokeMethod = InvokeType.getInvokeMethod(in.next(), in);
         }
 
         final String invokeName = fields.getAndRemoveTrimmed(INVOKE_NAME);
