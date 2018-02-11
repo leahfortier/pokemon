@@ -76,6 +76,11 @@ public class AttackTest extends BaseTest {
                     Assert.assertTrue(attack.isMoveType(MoveType.FIELD));
                 }
             }
+
+            // Status moves must apply their effects 100% of the time
+            if (attack.isStatusMove()) {
+                Assert.assertEquals(attack.getName(), 100, attack.getEffectChance());
+            }
         }
     }
 
@@ -1089,14 +1094,15 @@ public class AttackTest extends BaseTest {
         Assert.assertEquals(0, defending.getStage(Stat.ATTACK));
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.FELL_STINGER);
         Assert.assertFalse(attacking.isFainted(battle));
-        Assert.assertEquals(0, defending.getStage(Stat.ATTACK));
+        new TestStages().test(defending);
 
         // Kill kill kill MURDER MURDER MURDER
-        Assert.assertEquals(0, attacking.getStage(Stat.ATTACK));
+        new TestStages().test(attacking);
         battle.falseSwipePalooza(true);
+        Assert.assertFalse(defending.isFainted(battle));
         battle.attackingFight(AttackNamesies.FELL_STINGER);
         Assert.assertTrue(defending.isFainted(battle));
-        Assert.assertEquals(3, attacking.getStage(Stat.ATTACK));
+        new TestStages().set(Stat.ATTACK, 3).test(attacking);
     }
 
     @Test

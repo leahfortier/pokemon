@@ -441,6 +441,13 @@ MirrorMove:
 	AddMapField: Applies: mirror != null && !mirror.getNewAttack().isMoveType(MoveType.MIRRORLESS)
 	AddMapField: CallNewMove: this.mirror
 *
+EffectChanceMultiplier:
+    AddInterface: EffectChanceMultiplierEffect
+	Header: double getEffectChanceMultiplier(ActivePokemon user)
+    Body:
+        return {0};
+        ###
+*
 Countering:
 	AddMapField: Priority: -5
 	AddMapField: MoveType: Assistless, Metronomeless, Mirrorless

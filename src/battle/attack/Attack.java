@@ -22,6 +22,7 @@ import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
+import battle.effect.generic.EffectInterfaces.EffectChanceMultiplierEffect;
 import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.OpponentEndAttackEffect;
@@ -135,7 +136,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
     public boolean hasSecondaryEffects() {
 
         // Effects are primary for status moves
-        if (category == MoveCategory.STATUS) {
+        if (this.isStatusMove()) {
             return false;
         }
 
@@ -158,15 +159,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         // Stat changes are considered to be secondary effects unless they are negative for the user
         for (int val : this.statChanges) {
-            if (val < 0) {
-                if (this.selfTarget) {
-                    continue;
-                }
-
-                return true;
-            }
-
-            if (val > 0) {
+            if (val > 0 || (val < 0 && !this.isSelfTarget())) {
                 return true;
             }
         }
@@ -280,18 +273,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
     }
 
     private boolean canApplyEffects(Battle b, ActivePokemon me, ActivePokemon o) {
-        int chance = effectChance*(me.hasAbility(AbilityNamesies.SERENE_GRACE) ? 2 : 1);
+        int chance = (int)(effectChance*EffectChanceMultiplierEffect.getModifier(b, me));
         if (!RandomUtils.chanceTest(chance)) {
             return false;
         }
 
         // Check the opponents effects and see if it will prevent effects from occurring
         if (EffectBlockerEffect.checkBlocked(b, me, o)) {
-            return false;
-        }
-
-        // Sheer Force prevents the user from having secondary effects for its moves
-        if (me.hasAbility(AbilityNamesies.SHEER_FORCE) && this.hasSecondaryEffects()) {
             return false;
         }
 
@@ -1842,7 +1830,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             // TODO: We really just want this for the actual damage reduce -- will this affect Apply/TakeDamageEffects?
-            EffectNamesies.BRACING.getEffect().cast(b, me, o, CastSource.ATTACK, false);
+            // Don't use the cast method here since we don't want it to be affected by successive decay
+            o.getEffects().add((PokemonEffect)EffectNamesies.BRACING.getEffect());
             super.applyDamage(me, o, b);
             o.getEffects().remove(EffectNamesies.BRACING);
         }

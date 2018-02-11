@@ -329,27 +329,30 @@ public class EffectTest extends BaseTest {
     @Test
     public void bypassAccuracyTest() {
         // Attacker will fly in the air, making it semi-invulverable to Tackle which should be a forced miss
-        testSemiInvulnerable(false, AttackNamesies.FLY, AttackNamesies.TACKLE, new TestInfo());
-        testSemiInvulnerable(false, AttackNamesies.FLY, AttackNamesies.ROAR, new TestInfo());
+        testSemiInvulnerable(false, AttackNamesies.FLY, AttackNamesies.TACKLE);
+        testSemiInvulnerable(false, AttackNamesies.FLY, AttackNamesies.ROAR);
 
         // No Guard will allow Tackle to Hit, regardless of which Pokemon has it
-        testSemiInvulnerable(true, true, AttackNamesies.FLY, AttackNamesies.TACKLE, new TestInfo().attacking(AbilityNamesies.NO_GUARD), true);
-        testSemiInvulnerable(true, true, AttackNamesies.FLY, AttackNamesies.TACKLE, new TestInfo().defending(AbilityNamesies.NO_GUARD), true);
+        testSemiInvulnerable(true, true, AttackNamesies.FLY, AttackNamesies.TACKLE, true, new TestInfo().attacking(AbilityNamesies.NO_GUARD));
+        testSemiInvulnerable(true, true, AttackNamesies.FLY, AttackNamesies.TACKLE, true, new TestInfo().defending(AbilityNamesies.NO_GUARD));
 
         // All of these moves will hit a Flying Pokemon
-        testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.GUST, new TestInfo());
-        testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.HURRICANE, new TestInfo());
-        testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.WHIRLWIND, new TestInfo());
+        testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.GUST);
+        testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.WHIRLWIND);
+
+        // Give the attacker berries because confusion/paralysis fucks with the test
+        testSemiInvulnerable(true, null, AttackNamesies.FLY, AttackNamesies.HURRICANE, true, new TestInfo().attacking(ItemNamesies.PERSIM_BERRY));
+        testSemiInvulnerable(true, null, AttackNamesies.FLY, AttackNamesies.THUNDER, true, new TestInfo().attacking(ItemNamesies.CHERI_BERRY));
 
         // Smack Down will disrupt Fly, Grounding the Pokemon in the process
-        testSemiInvulnerable(true, null, AttackNamesies.FLY, AttackNamesies.SMACK_DOWN, new TestInfo(), false);
+        testSemiInvulnerable(true, null, AttackNamesies.FLY, AttackNamesies.SMACK_DOWN, false, new TestInfo());
     }
 
-    private void testSemiInvulnerable(Boolean expected, AttackNamesies multiTurnMove, AttackNamesies defendingMove, TestInfo testInfo) {
-        testSemiInvulnerable(expected, null, multiTurnMove, defendingMove, testInfo, true);
+    private void testSemiInvulnerable(Boolean expected, AttackNamesies multiTurnMove, AttackNamesies defendingMove) {
+        testSemiInvulnerable(expected, null, multiTurnMove, defendingMove, true, new TestInfo());
     }
 
-    private void testSemiInvulnerable(Boolean firstExpected, Boolean secondExpected, AttackNamesies multiTurnMove, AttackNamesies defendingMove, TestInfo testInfo, boolean fullyExecuted) {
+    private void testSemiInvulnerable(Boolean firstExpected, Boolean secondExpected, AttackNamesies multiTurnMove, AttackNamesies defendingMove, boolean fullyExecuted, TestInfo testInfo) {
         testInfo.attacking(PokemonNamesies.SHUCKLE).defending(PokemonNamesies.SHUCKLE);
 
         TestBattle battle = testInfo.createBattle();

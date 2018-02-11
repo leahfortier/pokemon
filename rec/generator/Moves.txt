@@ -845,7 +845,8 @@ False Swipe:
     Type: Normal
     ApplyDamage:
         // TODO: We really just want this for the actual damage reduce -- will this affect Apply/TakeDamageEffects?
-        EffectNamesies.BRACING.getEffect().cast(b, me, o, CastSource.ATTACK, false);
+        // Don't use the cast method here since we don't want it to be affected by successive decay
+        o.getEffects().add((PokemonEffect)EffectNamesies.BRACING.getEffect());
         super.applyDamage(me, o, b);
         o.getEffects().remove(EffectNamesies.BRACING);
         ###

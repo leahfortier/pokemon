@@ -1163,6 +1163,24 @@ public final class EffectInterfaces {
         }
     }
 
+    public interface EffectChanceMultiplierEffect {
+        double getEffectChanceMultiplier(ActivePokemon user);
+
+        static double getModifier(Battle b, ActivePokemon user) {
+            double modifier = 1;
+
+            List<InvokeEffect> invokees = b.getEffectsList(user);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof EffectChanceMultiplierEffect && InvokeEffect.isActiveEffect(invokee)) {
+                    EffectChanceMultiplierEffect effect = (EffectChanceMultiplierEffect)invokee;
+                    modifier *= effect.getEffectChanceMultiplier(user);
+                }
+            }
+
+            return modifier;
+        }
+    }
+
     public interface PowerChangeEffect {
         double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim);
 

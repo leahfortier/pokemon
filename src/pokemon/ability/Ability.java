@@ -26,6 +26,7 @@ import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DefiniteEscape;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
+import battle.effect.generic.EffectInterfaces.EffectChanceMultiplierEffect;
 import battle.effect.generic.EffectInterfaces.EncounterRateMultiplier;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
@@ -1435,11 +1436,16 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class SereneGrace extends Ability {
+    static class SereneGrace extends Ability implements EffectChanceMultiplierEffect {
         private static final long serialVersionUID = 1L;
 
         SereneGrace() {
             super(AbilityNamesies.SERENE_GRACE, "Boosts the likelihood of additional effects occurring when attacking.");
+        }
+
+        @Override
+        public double getEffectChanceMultiplier(ActivePokemon user) {
+            return 2;
         }
     }
 
@@ -1914,11 +1920,16 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class SheerForce extends Ability implements PowerChangeEffect {
+    static class SheerForce extends Ability implements EffectChanceMultiplierEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         SheerForce() {
             super(AbilityNamesies.SHEER_FORCE, "Removes additional effects to increase the power of moves when attacking.");
+        }
+
+        @Override
+        public double getEffectChanceMultiplier(ActivePokemon user) {
+            return user.getAttack().hasSecondaryEffects() ? 0 : 1;
         }
 
         @Override

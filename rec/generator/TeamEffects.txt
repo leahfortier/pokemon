@@ -190,6 +190,7 @@ HealSwitch:
 *
 DeadAlly:
     NumTurns: 2
+    CanHave: True
 *
 PayDay:
     Int: EndBattleEffect

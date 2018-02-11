@@ -2,6 +2,7 @@ package test.battle;
 
 import battle.attack.AttackNamesies;
 import battle.effect.generic.EffectNamesies;
+import battle.effect.status.StatusCondition;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +16,7 @@ import type.TypeAdvantage;
 
 public class AbilityTest extends BaseTest {
     @Test
-    public void testLevitate() {
+    public void levitateTest() {
         TestBattle battle = TestBattle.create();
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.LEVITATE);
@@ -297,5 +298,92 @@ public class AbilityTest extends BaseTest {
         Assert.assertFalse(defending.hasAbility(AbilityNamesies.CONTRARY));
         new TestStages().set(Stat.ATTACK, 2).set(Stat.SP_ATTACK, -2).test(attacking);
         new TestStages().set(Stat.ATTACK, -2).set(Stat.SP_ATTACK, 2).test(defending);
+    }
+
+    @Test
+    public void sheerForceTest() {
+        // Mystical Fire has a 100% chance to reduce target's Sp. Attack
+        sheerForceSuccessTest(
+                AttackNamesies.MYSTICAL_FIRE,
+                (battle, attacking, defending) -> new TestStages().test(defending),
+                (battle, attacking, defending) -> new TestStages().set(Stat.SP_ATTACK, -1).test(defending)
+        );
+
+        // Power-Up Punch has a 100% chance to raise the user's Attack
+        sheerForceSuccessTest(
+                AttackNamesies.POWER_UP_PUNCH,
+                (battle, attacking, defending) -> new TestStages().test(attacking),
+                (battle, attacking, defending) -> new TestStages().set(Stat.ATTACK, 1).test(attacking)
+        );
+
+        // Dynamic Punch has a 100% chance to confuse the target
+        sheerForceSuccessTest(
+                AttackNamesies.DYNAMIC_PUNCH,
+                (battle, attacking, defending) -> Assert.assertFalse(defending.hasEffect(EffectNamesies.CONFUSION)),
+                (battle, attacking, defending) -> Assert.assertTrue(defending.hasEffect(EffectNamesies.CONFUSION))
+        );
+
+        // Inferno has a 100% chance to burn the target
+        sheerForceSuccessTest(
+                AttackNamesies.INFERNO,
+                (battle, attacking, defending) -> Assert.assertFalse(defending.hasStatus()),
+                (battle, attacking, defending) -> Assert.assertTrue(defending.hasStatus(StatusCondition.BURNED))
+        );
+
+        // Flare Blitz has a chance to Burn, so gets increase from Sheer Force, but should still take recoil damage regardless
+        sheerForceSuccessTest(
+                AttackNamesies.FLARE_BLITZ,
+                (battle, attacking, defending) -> {
+                    Assert.assertFalse(attacking.fullHealth());
+                    Assert.assertFalse(defending.hasStatus());
+                },
+                (battle, attacking, defending) -> Assert.assertFalse(attacking.fullHealth())
+        );
+
+        // Sheer Force does not effect standard recoil moves
+        sheerForceFailureTest(
+                AttackNamesies.TAKE_DOWN,
+                (battle, attacking, defending) -> Assert.assertFalse(attacking.fullHealth())
+        );
+
+        // Sheer Force does not effect crit-raising moves
+        sheerForceFailureTest(AttackNamesies.NIGHT_SLASH, PokemonManipulator.empty());
+
+        // Sheer Force does not apply to secondary effects that are negative to the user
+        sheerForceFailureTest(AttackNamesies.OUTRAGE, PokemonManipulator.empty());
+        sheerForceFailureTest(
+                AttackNamesies.OVERHEAT,
+                (battle, attacking, defending) -> new TestStages().set(Stat.SP_ATTACK, -2).test(attacking)
+        );
+    }
+
+    private void sheerForceSuccessTest(AttackNamesies attackNamesies, PokemonManipulator withSheerForceChecks, PokemonManipulator withoutSheerForceChecks) {
+        sheerForceTest(true, attackNamesies, withSheerForceChecks, withoutSheerForceChecks);
+    }
+
+    // Checks will be the same if it doesn't apply
+    private void sheerForceFailureTest(AttackNamesies attackNamesies, PokemonManipulator checks) {
+        sheerForceTest(false, attackNamesies, checks, checks);
+    }
+
+    private void sheerForceTest(boolean applies, AttackNamesies attackNamesies, PokemonManipulator withSheerForceChecks, PokemonManipulator withoutSheerForceChecks) {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        attacking.withAbility(AbilityNamesies.SHEER_FORCE);
+        battle.setExpectedDamageModifier(applies ? 1.3 : 1.0);
+        battle.attackingFight(attackNamesies);
+        withSheerForceChecks.manipulate(battle, attacking, defending);
+
+        battle.emptyHeal();
+        battle.clearAllEffects();
+
+        // Make sure it applies effects without Sheer Force
+        attacking.withAbility(AbilityNamesies.NO_ABILITY);
+        defending.withAbility(AbilityNamesies.SHEER_FORCE);
+        battle.setExpectedDamageModifier(1.0);
+        battle.attackingFight(attackNamesies);
+        withoutSheerForceChecks.manipulate(battle, attacking, defending);
     }
 }

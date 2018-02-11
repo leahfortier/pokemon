@@ -607,11 +607,6 @@ public abstract class TeamEffect extends Effect implements Serializable {
         DeadAlly() {
             super(EffectNamesies.DEAD_ALLY, 2, 2, false);
         }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies));
-        }
     }
 
     static class PayDay extends TeamEffect implements EndBattleEffect {

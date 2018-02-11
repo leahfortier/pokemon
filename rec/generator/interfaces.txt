@@ -671,6 +671,14 @@ StatChangingEffect:
 		MoldBreakerNullCheck: s.user() ? null : opp
 	*
 ***
+EffectChanceMultiplierEffect:
+	Method:
+		Header: double getEffectChanceMultiplier(ActivePokemon user)
+        InvokeParameters: Battle b
+		Invoke: Multiply
+		EffectList: user
+	*
+***
 PowerChangeEffect:
 	Method:
 		Header: double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
