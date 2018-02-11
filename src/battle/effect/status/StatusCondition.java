@@ -1,6 +1,7 @@
 package battle.effect.status;
 
 import java.io.Serializable;
+import java.util.function.Supplier;
 
 public enum StatusCondition implements Serializable {
     NO_STATUS("", 1, NoStatus::new),
@@ -14,12 +15,12 @@ public enum StatusCondition implements Serializable {
 
     private final String name;
     private final double catchModifier;
-    private final GetStatus getStatus;
+    private final Supplier<Status> statusGetter;
 
-    StatusCondition(String name, double catchModifier, GetStatus getStatus) {
+    StatusCondition(String name, double catchModifier, Supplier<Status> statusGetter) {
         this.name = name;
         this.catchModifier = catchModifier;
-        this.getStatus = getStatus;
+        this.statusGetter = statusGetter;
     }
 
     public String getName() {
@@ -31,11 +32,6 @@ public enum StatusCondition implements Serializable {
     }
 
     public Status getStatus() {
-        return this.getStatus.getStatus();
-    }
-
-    @FunctionalInterface
-    private interface GetStatus {
-        Status getStatus();
+        return this.statusGetter.get();
     }
 }

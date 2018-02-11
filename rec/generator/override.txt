@@ -959,7 +959,7 @@ StatusPreventAbility:
 StatusContact:
 	AddMapField: Contact:
 		if (RandomUtils.chanceTest(30)) {
-			Status.applyStatus(b, victim, user, StatusCondition.{00}, true);
+			Status.applyStatus(b, victim, user, StatusCondition.{00}, CastSource.ABILITY);
 		}
 		###
 	AddInterface: PhysicalContactEffect

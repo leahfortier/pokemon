@@ -34,13 +34,13 @@ class Paralyzed extends Status implements BeforeTurnEffect, StatModifyingEffect 
     }
 
     @Override
-    public String getCastMessage(ActivePokemon p) {
+    public String getGenericCastMessage(ActivePokemon p) {
         return p.getName() + " was paralyzed!";
     }
 
     @Override
-    public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim) {
-        return abilify.getName() + "'s " + abilify.getAbility().getName() + " paralyzed " + victim.getName() + "!";
+    public String getSourceCastMessage(ActivePokemon sourcerer, ActivePokemon victim, String sourceName) {
+        return sourcerer.getName() + "'s " + sourceName + " paralyzed " + victim.getName() + "!";
     }
 
     @Override

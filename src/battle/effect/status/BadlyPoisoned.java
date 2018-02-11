@@ -17,19 +17,18 @@ public class BadlyPoisoned extends Poisoned {
         this.turns++;
     }
 
-    // TODO: Confirm that this works -- I don't see where it is getting incremented??
     @Override
     protected int getTurns() {
         return this.turns;
     }
 
     @Override
-    public String getCastMessage(ActivePokemon p) {
+    public String getGenericCastMessage(ActivePokemon p) {
         return p.getName() + " was badly poisoned!";
     }
 
     @Override
-    public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim) {
-        return abilify.getName() + "'s " + abilify.getAbility().getName() + " badly poisoned " + victim.getName() + "!";
+    public String getSourceCastMessage(ActivePokemon sourcerer, ActivePokemon victim, String sourceName) {
+        return sourcerer.getName() + "'s " + sourceName + " badly poisoned " + victim.getName() + "!";
     }
 }

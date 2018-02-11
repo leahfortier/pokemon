@@ -4,7 +4,6 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.CastSource;
 import battle.effect.InvokeEffect;
-import battle.effect.MessageGetter;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.OpponentStatusReceivedEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
@@ -20,35 +19,37 @@ public abstract class Status implements InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;
 
     private final StatusCondition statusCondition;
-    private final MessageGetter removeMessageGetter;
 
     protected Status(StatusCondition statusCondition) {
         this.statusCondition = statusCondition;
-        this.removeMessageGetter = new MessageGetter() {
-            @Override
-            public String getGenericMessage(ActivePokemon p) {
-                return getGenericRemoveMessage(p);
-            }
-
-            @Override
-            public String getSourceMessage(ActivePokemon p, String sourceName) {
-                return getSourceRemoveMessage(p, sourceName);
-            }
-        };
     }
 
     protected abstract boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim);
 
+    protected abstract String getGenericCastMessage(ActivePokemon p);
+    protected abstract String getSourceCastMessage(ActivePokemon sourcerer, ActivePokemon victim, String sourceName);
+
     protected abstract String getGenericRemoveMessage(ActivePokemon victim);
-
     protected abstract String getSourceRemoveMessage(ActivePokemon victim, String sourceName);
-
-    protected abstract String getCastMessage(ActivePokemon p);
-
-    protected abstract String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim);
 
     // A method to be overridden if anything related to conflicted victim is necessary to create this status
     protected void postCreateEffect(ActivePokemon victim) {}
+
+    private String getCastMessage(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+        if (source.hasSourceName()) {
+            return this.getSourceCastMessage(caster, victim, source.getSourceName(b, caster));
+        } else {
+            return this.getGenericCastMessage(victim);
+        }
+    }
+
+    private String getRemoveMessage(Battle b, ActivePokemon victim, CastSource source) {
+        if (source.hasSourceName()) {
+            return this.getSourceRemoveMessage(victim, source.getSourceName(b, victim));
+        } else {
+            return this.getGenericRemoveMessage(victim);
+        }
+    }
 
     private String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
         StatusPreventionEffect statusPrevent = StatusPreventionEffect.getPreventEffect(b, user, victim, this.statusCondition);
@@ -87,7 +88,7 @@ public abstract class Status implements InvokeEffect, Serializable {
         Status status = victim.getStatus();
         victim.removeStatus();
 
-        Messages.add(new MessageUpdate(status.removeMessageGetter.getMessage(b, victim, source)).updatePokemon(b, victim));
+        Messages.add(new MessageUpdate(status.getRemoveMessage(b, victim, source)).updatePokemon(b, victim));
     }
 
     public static String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, StatusCondition status) {
@@ -112,12 +113,12 @@ public abstract class Status implements InvokeEffect, Serializable {
 
     // Returns true if a status was successfully given, and false if it failed for any reason
     public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-        return applyStatus(b, caster, victim, status, false);
+        return applyStatus(b, caster, victim, status, CastSource.EFFECT);
     }
 
-    public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status, boolean abilityCast) {
+    public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status, CastSource source) {
         Status s = getStatus(status, victim);
-        return applyStatus(b, caster, victim, status, abilityCast ? s.getAbilityCastMessage(caster, victim) : s.getCastMessage(victim));
+        return applyStatus(b, caster, victim, status, s.getCastMessage(b, caster, victim, source));
     }
 
     public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status, String castMessage) {

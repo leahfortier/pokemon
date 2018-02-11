@@ -23,13 +23,13 @@ class Fainted extends Status {
     }
 
     @Override
-    public String getCastMessage(ActivePokemon p) {
+    public String getGenericCastMessage(ActivePokemon p) {
         return p.getName() + " fainted!";
     }
 
     @Override
-    public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim) {
-        return abilify.getName() + "'s " + abilify.getAbility().getName() + " caused " + victim.getName() + " to faint!";
+    public String getSourceCastMessage(ActivePokemon sourcerer, ActivePokemon victim, String sourceName) {
+        return sourcerer.getName() + "'s " + sourceName + " caused " + victim.getName() + " to faint!";
     }
 
     @Override

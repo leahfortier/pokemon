@@ -37,13 +37,13 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
     }
 
     @Override
-    public String getCastMessage(ActivePokemon p) {
+    public String getGenericCastMessage(ActivePokemon p) {
         return p.getName() + " was frozen!";
     }
 
     @Override
-    public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim) {
-        return abilify.getName() + "'s " + abilify.getAbility().getName() + " froze " + victim.getName() + "!";
+    public String getSourceCastMessage(ActivePokemon sourcerer, ActivePokemon victim, String sourceName) {
+        return sourcerer.getName() + "'s " + sourceName + " froze " + victim.getName() + "!";
     }
 
     @Override

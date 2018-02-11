@@ -224,7 +224,7 @@ Effect Spore:
     Desc: Contact with the Pok\u00e9mon may inflict poison, sleep, or paralysis on its attacker.
     Int: PhysicalContactEffect
     Field:
-        private static final StatusCondition[] statuses = new StatusCondition[] {
+        private static final StatusCondition[] STATUSES = new StatusCondition[] {
             StatusCondition.PARALYZED,
             StatusCondition.POISONED,
             StatusCondition.ASLEEP
@@ -238,7 +238,7 @@ Effect Spore:
 
         // 30% chance to Paralyze, Poison, or induce Sleep
         if (RandomUtils.chanceTest(30)) {
-            Status.applyStatus(b, victim, user, RandomUtils.getRandomValue(statuses), true);
+            Status.applyStatus(b, victim, user, RandomUtils.getRandomValue(STATUSES), CastSource.ABILITY);
         }
         ###
 *
@@ -334,7 +334,7 @@ Synchronize:
         }
 
         // Give status condition to the opponent
-        Status.applyStatus(b, victim, caster, statusType, true);
+        Status.applyStatus(b, victim, caster, statusType, CastSource.ABILITY);
         ###
     WildPokemonAlterer:
         if (RandomUtils.chanceTest(50)) {
@@ -1047,7 +1047,7 @@ Poison Touch:
     Int: OpponentTakeDamageEffect
     OpponentTakeDamage:
         if (RandomUtils.chanceTest(30)) {
-            Status.applyStatus(b, user, victim, StatusCondition.POISONED, true);
+            Status.applyStatus(b, user, victim, StatusCondition.POISONED, CastSource.ABILITY);
         }
         ###
 *
@@ -1639,7 +1639,7 @@ Comatose:
 
             if (Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, sleepyHead, sleepyHead)) {
                 sleepyHead.removeStatus();
-                Status.applyStatus(b, sleepyHead, sleepyHead, StatusCondition.ASLEEP, true);
+                Status.applyStatus(b, sleepyHead, sleepyHead, StatusCondition.ASLEEP, CastSource.ABILITY);
                 return true;
             }
 

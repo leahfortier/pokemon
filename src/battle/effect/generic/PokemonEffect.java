@@ -1114,27 +1114,18 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
     }
 
-    static class Disable extends PokemonEffect implements AttackSelectionSelfBlockerEffect, BeforeTurnEffect {
+    static class Disable extends PokemonEffect implements AttackSelectionSelfBlockerEffect {
         private static final long serialVersionUID = 1L;
 
         private Move disabled;
-        private int turns;
 
         Disable() {
-            super(EffectNamesies.DISABLE, -1, -1, false);
-            this.turns = RandomUtils.getRandomInt(4, 7); // Between 4 and 7 turns
+            super(EffectNamesies.DISABLE, 4, 4, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.hasEffect(this.namesies));
-        }
-
-        @Override
-        public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-            // TODO: What is happening here?
-            turns--;
-            return true;
         }
 
         @Override
@@ -1161,11 +1152,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         @Override
         public String getUnusableMessage(Battle b, ActivePokemon p) {
             return disabled.getAttack().getName() + " is disabled!";
-        }
-
-        @Override
-        public boolean shouldSubside(Battle b, ActivePokemon victim) {
-            return turns == 0;
         }
 
         @Override

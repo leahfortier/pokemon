@@ -47,13 +47,13 @@ class Asleep extends Status implements BeforeTurnEffect {
     }
 
     @Override
-    public String getCastMessage(ActivePokemon p) {
+    public String getGenericCastMessage(ActivePokemon p) {
         return p.getName() + " fell asleep!";
     }
 
     @Override
-    public String getAbilityCastMessage(ActivePokemon abilify, ActivePokemon victim) {
-        return abilify.getName() + "'s " + abilify.getAbility().getName() + " caused " + victim.getName() + " to fall asleep!";
+    public String getSourceCastMessage(ActivePokemon sourcerer, ActivePokemon victim, String sourceName) {
+        return sourcerer.getName() + "'s " + sourceName + " caused " + victim.getName() + " to fall asleep!";
     }
 
     @Override

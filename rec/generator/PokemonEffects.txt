@@ -260,27 +260,16 @@ Encore:
 *
 Disable:
     FailAbility: Aroma Veil
-    Int: AttackSelectionSelfBlockerEffect, BeforeTurnEffect
+    Int: AttackSelectionSelfBlockerEffect
     Field:
         private Move disabled;
-        private int turns;
         ###
-    Activate:
-        this.turns = RandomUtils.getRandomInt(4, 7); // Between 4 and 7 turns
-        ###
+    NumTurns: 4
     Usable:
         return disabled.getAttack().namesies() != m.getAttack().namesies();
         ###
     UnusableMessage: disabled.getAttack().getName() + " is disabled!"
     FailCondition: victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0
-    CanAttack:
-        // TODO: What is happening here?
-        turns--;
-        return true;
-        ###
-    ShouldSubside:
-        return turns == 0;
-        ###
     SubsideMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " is no longer disabled!"
     CastMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " was disabled!"
     Cast:
