@@ -432,13 +432,14 @@ AbilityMessage:
 MirrorMove:
 	AddMapField: MoveType: Sleep_Talk_Fail, Encoreless, Metronomeless, Assistless, No_Magic_Coat, Mirrorless, Protect_Piercing
 	AddMapField: Field:
-		private Move mirror;
+		private AttackNamesies mirror;
 		###
 	AddMapField: BeginAttack:
-		this.mirror = defending.getLastMoveUsed();
+        Move lastMoveUsed = defending.getLastMoveUsed();
+        this.mirror = lastMoveUsed == null ? null : lastMoveUsed.getAttack().namesies();
 		###
-	AddMapField: Applies: mirror != null && !mirror.getAttack().isMoveType(MoveType.MIRRORLESS)
-	AddMapField: CallNewMove: mirror.getAttack().namesies()
+	AddMapField: Applies: mirror != null && !mirror.getNewAttack().isMoveType(MoveType.MIRRORLESS)
+	AddMapField: CallNewMove: this.mirror
 *
 Countering:
 	AddMapField: Priority: -5

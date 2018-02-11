@@ -2,8 +2,10 @@ package test.battle;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.MoveType;
+import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.Weather;
 import org.junit.Assert;
@@ -133,11 +135,14 @@ public class TestBattle extends Battle {
     protected boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
         Boolean bypass = bypassAccuracy(me, o);
         if (bypass != null) {
-            // Self-Target moves don't miss
-            if (me.getAttack().isSelfTargetStatusMove() || me.getAttack().isMoveType(MoveType.FIELD)) {
+            Attack attack = me.getAttack();
+
+            // Self-Target, field, and charging moves can't miss
+            if (attack.isSelfTargetStatusMove()
+                    || attack.isMoveType(MoveType.FIELD)
+                    || (attack instanceof MultiTurnMove && ((MultiTurnMove)attack).isCharging())) {
                 Assert.assertTrue(bypass);
             } else if (!me.isPlayer()) {
-                Assert.assertNotNull(this.expectedDefendingAccuracyBypass);
                 Assert.assertEquals(this.expectedDefendingAccuracyBypass, bypass);
             }
             return bypass;

@@ -301,17 +301,6 @@ public class AttackTest extends BaseTest {
     }
 
     @Test
-    public void tryEverythingTest() {
-        for (AttackNamesies attackNamesies : AttackNamesies.values()) {
-            // Just try every attack and make sure it doesn't crash or anything
-            TestBattle battle = TestBattle.create();
-            for (int i = 0; i < 10; i++) {
-                battle.attackingFight(attackNamesies);
-            }
-        }
-    }
-
-    @Test
     public void recoilTest() {
         TestBattle battle = TestBattle.create();
         TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.ROCK_HEAD);
@@ -1081,6 +1070,13 @@ public class AttackTest extends BaseTest {
         Assert.assertFalse(attacking.hasActualMove(AttackNamesies.SKETCH));
         Assert.assertFalse(attacking.hasActualMove(AttackNamesies.SWORDS_DANCE));
         Assert.assertTrue(attacking.hasActualMove(AttackNamesies.SPLASH));
+
+        // Should fail if the user already knows the sketchy moves
+        attacking.withMoves(AttackNamesies.SKETCH, AttackNamesies.GROWL);
+        battle.defendingFight(AttackNamesies.GROWL);
+        attacking.apply(false, AttackNamesies.SKETCH, battle);
+        Assert.assertTrue(attacking.hasActualMove(AttackNamesies.SKETCH));
+        Assert.assertTrue(attacking.hasActualMove(AttackNamesies.GROWL));
     }
 
     @Test

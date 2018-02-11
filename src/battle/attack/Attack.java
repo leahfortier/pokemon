@@ -1841,7 +1841,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            o.getEffects().add((PokemonEffect)EffectNamesies.BRACING.getEffect());
+            // TODO: We really just want this for the actual damage reduce -- will this affect Apply/TakeDamageEffects?
+            EffectNamesies.BRACING.getEffect().cast(b, me, o, CastSource.ATTACK, false);
             super.applyDamage(me, o, b);
             o.getEffects().remove(EffectNamesies.BRACING);
         }
@@ -2136,7 +2137,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
     static class MirrorMove extends Attack {
         private static final long serialVersionUID = 1L;
 
-        private Move mirror;
+        private AttackNamesies mirror;
 
         MirrorMove() {
             super(AttackNamesies.MIRROR_MOVE, Type.FLYING, MoveCategory.STATUS, 20, "The user counters the target by mimicking the target's last move.");
@@ -2151,17 +2152,18 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            this.mirror = defending.getLastMoveUsed();
+            Move lastMoveUsed = defending.getLastMoveUsed();
+            this.mirror = lastMoveUsed == null ? null : lastMoveUsed.getAttack().namesies();
         }
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.callNewMove(b, victim, mirror.getAttack().namesies());
+            user.callNewMove(b, victim, this.mirror);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return mirror != null && !mirror.getAttack().isMoveType(MoveType.MIRRORLESS);
+            return mirror != null && !mirror.getNewAttack().isMoveType(MoveType.MIRRORLESS);
         }
     }
 
@@ -6547,7 +6549,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
     static class Copycat extends Attack {
         private static final long serialVersionUID = 1L;
 
-        private Move mirror;
+        private AttackNamesies mirror;
 
         Copycat() {
             super(AttackNamesies.COPYCAT, Type.NORMAL, MoveCategory.STATUS, 20, "The user mimics the move used immediately before it. The move fails if no other move has been used yet.");
@@ -6562,17 +6564,18 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            this.mirror = defending.getLastMoveUsed();
+            Move lastMoveUsed = defending.getLastMoveUsed();
+            this.mirror = lastMoveUsed == null ? null : lastMoveUsed.getAttack().namesies();
         }
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.callNewMove(b, victim, mirror.getAttack().namesies());
+            user.callNewMove(b, victim, this.mirror);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return mirror != null && !mirror.getAttack().isMoveType(MoveType.MIRRORLESS);
+            return mirror != null && !mirror.getNewAttack().isMoveType(MoveType.MIRRORLESS);
         }
     }
 
@@ -7538,10 +7541,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
+    // Fails if trying to copy Sketch, Struggle, or a move you already know or if used by a Transformed Pokemon or you don't actually know Sketch
     static class Sketch extends Attack {
         private static final long serialVersionUID = 1L;
 
-        private Move copy;
+        private AttackNamesies copy;
 
         Sketch() {
             super(AttackNamesies.SKETCH, Type.NORMAL, MoveCategory.STATUS, 1, "It enables the user to permanently learn the move last used by the target. Once used, Sketch disappears.");
@@ -7557,7 +7561,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            this.copy = b.getOtherPokemon(attacking).getLastMoveUsed();
+            Move lastMoveUsed = defending.getLastMoveUsed();
+            this.copy = lastMoveUsed == null ? null : lastMoveUsed.getAttack().namesies();
         }
 
         @Override
@@ -7565,7 +7570,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             List<Move> moves = user.getMoves(b);
             for (int i = 0; i < moves.size(); i++) {
                 if (moves.get(i).getAttack().namesies() == this.namesies()) {
-                    moves.set(i, new Move(this.copy.getAttack()));
+                    moves.set(i, new Move(this.copy));
                     Messages.add(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
                     break;
                 }
@@ -7574,7 +7579,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return copy != null && copy.getAttack().namesies() != AttackNamesies.STRUGGLE && user.hasActualMove(this.namesies()) && !user.hasEffect(EffectNamesies.TRANSFORMED);
+            return copy != null && copy != this.namesies() && copy != AttackNamesies.STRUGGLE && !user.hasActualMove(copy) && user.hasActualMove(this.namesies()) && !user.hasEffect(EffectNamesies.TRANSFORMED);
         }
     }
 
@@ -9377,6 +9382,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
                 next.getStages().setStage(stat, user.getStage(stat));
             }
 
+            // Add each passable effect to the new Pokemon out front
             user.getEffects()
                 .listEffects()
                 .stream()

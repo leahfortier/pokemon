@@ -844,7 +844,8 @@ False Swipe:
     Acc: 100
     Type: Normal
     ApplyDamage:
-        o.getEffects().add((PokemonEffect)EffectNamesies.BRACING.getEffect());
+        // TODO: We really just want this for the actual damage reduce -- will this affect Apply/TakeDamageEffects?
+        EffectNamesies.BRACING.getEffect().cast(b, me, o, CastSource.ATTACK, false);
         super.applyDamage(me, o, b);
         o.getEffects().remove(EffectNamesies.BRACING);
         ###
@@ -4404,17 +4405,19 @@ Sketch:
     MoveType: Sleep_Talk_Fail, Encoreless, Mimicless, Assistless, Metronomeless, Protect_Piercing, No_Magic_Coat, Mirrorless
     Cat: Status
     Field:
-        private Move copy;
+        private AttackNamesies copy;
         ###
     BeginAttack:
-        this.copy = b.getOtherPokemon(attacking).getLastMoveUsed();
+        Move lastMoveUsed = defending.getLastMoveUsed();
+        this.copy = lastMoveUsed == null ? null : lastMoveUsed.getAttack().namesies();
         ###
-    Applies: copy != null && copy.getAttack().namesies() != AttackNamesies.STRUGGLE && user.hasActualMove(this.namesies()) && !user.hasEffect(EffectNamesies.TRANSFORMED)
+    Comments: // Fails if trying to copy Sketch, Struggle, or a move you already know or if used by a Transformed Pokemon or you don't actually know Sketch
+    Applies: copy != null && copy != this.namesies() && copy != AttackNamesies.STRUGGLE && !user.hasActualMove(copy) && user.hasActualMove(this.namesies()) && !user.hasEffect(EffectNamesies.TRANSFORMED)
     UniqueEffects:
         List<Move> moves = user.getMoves(b);
         for (int i = 0; i < moves.size(); i++) {
             if (moves.get(i).getAttack().namesies() == this.namesies()) {
-                moves.set(i, new Move(this.copy.getAttack()));
+                moves.set(i, new Move(this.copy));
                 Messages.add(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
                 break;
             }
@@ -5486,6 +5489,7 @@ Baton Pass:
             next.getStages().setStage(stat, user.getStage(stat));
         }
 
+        // Add each passable effect to the new Pokemon out front
         user.getEffects()
             .listEffects()
             .stream()

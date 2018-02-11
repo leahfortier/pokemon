@@ -76,7 +76,7 @@ public class EffectList<EffectType extends Effect> implements Serializable {
 
                 // I think this is pretty much just for Future Sight...
                 if (p != null && p.isFainted(b)) {
-                    return;
+                    break;
                 }
             }
         }

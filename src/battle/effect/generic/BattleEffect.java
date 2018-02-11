@@ -52,7 +52,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getEffects().hasEffect(this.namesies));
+            return !(b.hasEffect(this.namesies));
         }
 
         @Override
@@ -87,7 +87,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getEffects().hasEffect(this.namesies));
+            return !(b.hasEffect(this.namesies));
         }
 
         @Override
@@ -115,7 +115,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getEffects().hasEffect(this.namesies));
+            return !(b.hasEffect(this.namesies));
         }
 
         @Override
@@ -249,7 +249,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getEffects().hasEffect(this.namesies));
+            return !(b.hasEffect(this.namesies));
         }
 
         @Override
@@ -304,7 +304,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getEffects().hasEffect(this.namesies));
+            return !(b.hasEffect(this.namesies));
         }
 
         @Override
@@ -356,7 +356,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getEffects().hasEffect(this.namesies));
+            return !(b.hasEffect(this.namesies));
         }
 
         @Override
@@ -410,7 +410,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getEffects().hasEffect(this.namesies));
+            return !(b.hasEffect(this.namesies));
         }
 
         @Override
@@ -459,7 +459,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getEffects().hasEffect(this.namesies));
+            return !(b.hasEffect(this.namesies));
         }
 
         @Override

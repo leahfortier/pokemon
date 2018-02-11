@@ -27,7 +27,6 @@ import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.generic.EffectInterfaces.TrappingEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
-import battle.effect.generic.TeamEffect;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
@@ -537,7 +536,7 @@ public class ActivePokemon extends PartyPokemon {
                 MurderEffect.killKillKillMurderMurderMurder(b, this, murderer);
             }
 
-            b.getEffects(this.isPlayer()).add((TeamEffect)EffectNamesies.DEAD_ALLY.getEffect());
+            EffectNamesies.DEAD_ALLY.getEffect().cast(b, this, this, CastSource.EFFECT, false);
 
             // If the player slayed a Dark or Ghost type Pokemon, then they are on their way to becoming the Chosen One
             if (!isPlayer() && (isType(b, Type.DARK) || isType(b, Type.GHOST))) {
