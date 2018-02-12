@@ -959,10 +959,9 @@ ModifyStageValueEffect:
 StrikeFirstEffect:
     Method:
         Comments: // Returns if the Pokemon should go first within its priority bracket
-        Header: boolean strikeFirst()
+        Header: boolean strikeFirst(Battle b, ActivePokemon striker)
         Invoke: CheckMessage true getStrikeFirstMessage(striker)
         InvokeName: checkStrikeFirst
-        InvokeParameters: Battle b, ActivePokemon striker
         EffectList: striker
     *
     Method:

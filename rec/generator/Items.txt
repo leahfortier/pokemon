@@ -1924,15 +1924,16 @@ Custap Berry:
     NGType: Ghost
     NGPow: 100
     HarvestHours: 72
-    Int: Berry, PriorityChangeEffect
-    ChangePriority:
-        if (user.getHPRatio() < 1/3.0) {
-            user.consumeItem(b);
-            return 1;
+    Int: Berry
+    StrikeFirstEffect:
+        if (striker.getHPRatio() < 1/3.0) {
+            striker.consumeItem(b);
+            return true;
         }
 
-        return 0;
+        return false;
         ###
+    StrikeFirstMessage: striker.getName() + "'s " + this.getName() + " allowed it to strike first!"
 *
 Enigma Berry:
     Desc: A Berry to be consumed by Pok\u00e9mon. If a Pok\u00e9mon holds one, being hit by a supereffective attack will restore its HP.

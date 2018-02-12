@@ -1629,7 +1629,7 @@ public final class EffectInterfaces {
     public interface StrikeFirstEffect {
 
         // Returns if the Pokemon should go first within its priority bracket
-        boolean strikeFirst();
+        boolean strikeFirst(Battle b, ActivePokemon striker);
         String getStrikeFirstMessage(ActivePokemon striker);
 
         static boolean checkStrikeFirst(Battle b, ActivePokemon striker) {
@@ -1637,7 +1637,7 @@ public final class EffectInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof StrikeFirstEffect && InvokeEffect.isActiveEffect(invokee)) {
                     StrikeFirstEffect effect = (StrikeFirstEffect)invokee;
-                    if (effect.strikeFirst()) {
+                    if (effect.strikeFirst(b, striker)) {
                         Messages.add(effect.getStrikeFirstMessage(striker));
                         return true;
                     }

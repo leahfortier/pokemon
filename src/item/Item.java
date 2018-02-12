@@ -28,7 +28,6 @@ import battle.effect.generic.EffectInterfaces.OpponentTakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.generic.EffectInterfaces.PowderMove;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
-import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.RepellingEffect;
 import battle.effect.generic.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.generic.EffectInterfaces.StallingEffect;
@@ -1335,7 +1334,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean strikeFirst() {
+        public boolean strikeFirst(Battle b, ActivePokemon striker) {
             // Quick Claw gives holder a 20% chance of striking first within its priority bracket
             return RandomUtils.chanceTest(20);
         }
@@ -5211,7 +5210,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class CustapBerry extends Item implements Berry, PriorityChangeEffect {
+    static class CustapBerry extends Item implements Berry, StrikeFirstEffect {
         private static final long serialVersionUID = 1L;
 
         CustapBerry() {
@@ -5235,13 +5234,18 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public int changePriority(Battle b, ActivePokemon user) {
-            if (user.getHPRatio() < 1/3.0) {
-                user.consumeItem(b);
-                return 1;
+        public boolean strikeFirst(Battle b, ActivePokemon striker) {
+            if (striker.getHPRatio() < 1/3.0) {
+                striker.consumeItem(b);
+                return true;
             }
 
-            return 0;
+            return false;
+        }
+
+        @Override
+        public String getStrikeFirstMessage(ActivePokemon striker) {
+            return striker.getName() + "'s " + this.getName() + " allowed it to strike first!";
         }
     }
 

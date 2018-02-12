@@ -1926,7 +1926,7 @@ StoredPowerMove:
 *
 StrikeFirstEffect:
     AddInterface: StrikeFirstEffect
-    Header: boolean strikeFirst()
+    Header: boolean strikeFirst(Battle b, ActivePokemon striker)
 *
 StrikeFirstMessage:
     Header: String getStrikeFirstMessage(ActivePokemon striker)
