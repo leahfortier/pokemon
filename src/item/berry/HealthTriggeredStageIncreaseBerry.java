@@ -22,4 +22,9 @@ public interface HealthTriggeredStageIncreaseBerry extends HealthTriggeredBerry 
     default int naturalGiftPower() {
         return 100;
     }
+
+    @Override
+    default int getHarvestHours() {
+        return 72;
+    }
 }

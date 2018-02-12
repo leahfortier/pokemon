@@ -34,4 +34,9 @@ public interface EvDecreaseBerry extends Berry, PokemonUseItem {
     default int naturalGiftPower() {
         return 90;
     }
+
+    @Override
+    default int getHarvestHours() {
+        return 48;
+    }
 }

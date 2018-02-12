@@ -30,4 +30,9 @@ public interface SuperEffectivePowerReduceBerry extends Berry, OpponentPowerChan
     default Type naturalGiftType() {
         return this.getType();
     }
+
+    @Override
+    default int getHarvestHours() {
+        return 48;
+    }
 }

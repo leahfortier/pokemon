@@ -1395,36 +1395,30 @@ SuperEffectivePowerReduceBerry:
 	AddMapField: Berry: True
 	AddInterface: SuperEffectivePowerReduceBerry
 *
-HealthTriggeredStageIncreaseBerryField:
-	Header: Stat getStat()
-*
 HealthTriggeredStageIncreaseBerry:
 	AddInterface: HealthTriggeredStageIncreaseBerry
-	AddMapField: HealthTriggeredStageIncreaseBerryField:
+    Header: Stat getStat()
+    Body:
 		return Stat.{00};
 		###
 *
+CategoryBerry:
+    Header: MoveCategory getCategory()
+    Body:
+        return MoveCategory.{00};
+        ###
+*
 CategoryIncreaseBerry:
-	AddMapField: NGPow: 100
-	AddInterface: Berry
-	AddInterface: TakeDamageEffect
-	AddMapField: OnTakeDamage:
-		if (user.getAttack().getCategory() == MoveCategory.{11} && victim.getStages().modifyStage(victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
-			victim.consumeItem(b);
-		}
-		###
+    Header: Stat getStat()
+    Body:
+        return Stat.{22};
+        ###
+    AddMapField: CategoryBerry: {1}
+    AddInterface: CategoryIncreaseBerry
 *
 CategoryDamagerBerry:
-	AddMapField: NGPow: 100
-	AddInterface: Berry
-	AddInterface: OpponentApplyDamageEffect
-	AddMapField: OpponentApplyDamage:
-		if (user.getAttack().getCategory() == MoveCategory.{00}) {
-			Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
-			user.reduceHealthFraction(b, 1/8.0);
-			victim.consumeItem(b);
-		}
-		###
+	AddInterface: CategoryDamageBerry
+    AddMapField: CategoryBerry: {0}
 *
 HealPartyStatus:
 	AddMapField: UniqueEffects:
@@ -1533,26 +1527,28 @@ FixedBerryHealthTrigger:
 HealthTriggerRatio:
 	Header: double healthTriggerRatio()
 *
-NGPow:
-	AddMapField: NaturalGiftPower:
-		return {0};
-		###
-*
-NGType:
-	AddMapField: Berry: True
-	AddMapField: NaturalGiftType:
-		return Type.{00};
-		###
-*
 Berry:
 	AddMapField: Cat: Berry
 	AddMapField: Price: 20
 *
-NaturalGiftPower:
+NGPow:
 	Header: int naturalGiftPower()
+    Body:
+        return {0};
+        ###
 *
-NaturalGiftType:
+NGType:
+    AddMapField: Berry: True
 	Header: Type naturalGiftType()
+    Body:
+        return Type.{00};
+        ###
+*
+HarvestHours:
+    Header: int getHarvestHours()
+    Body:
+        return {0};
+        ###
 *
 RepelSteps:
 	Header: int repelSteps()

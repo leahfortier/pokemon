@@ -44,6 +44,8 @@ import battle.effect.status.StatusCondition;
 import item.bag.BagCategory;
 import item.bag.BattleBagCategory;
 import item.berry.Berry;
+import item.berry.CategoryBerry.CategoryDamageBerry;
+import item.berry.CategoryBerry.CategoryIncreaseBerry;
 import item.berry.EvDecreaseBerry;
 import item.berry.GainableEffectBerry;
 import item.berry.HealthTriggeredBerry;
@@ -4575,6 +4577,11 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         public Type naturalGiftType() {
             return Type.FLYING;
         }
+
+        @Override
+        public int getHarvestHours() {
+            return 48;
+        }
     }
 
     static class SitrusBerry extends Item implements HpHealer, HealthTriggeredBerry {
@@ -4609,6 +4616,11 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public Type naturalGiftType() {
             return Type.PSYCHIC;
+        }
+
+        @Override
+        public int getHarvestHours() {
+            return 48;
         }
     }
 
@@ -5006,13 +5018,13 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.GRASS;
+        public Stat getStat() {
+            return Stat.ATTACK;
         }
 
         @Override
-        public Stat getStat() {
-            return Stat.ATTACK;
+        public Type naturalGiftType() {
+            return Type.GRASS;
         }
     }
 
@@ -5025,13 +5037,13 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.ICE;
+        public Stat getStat() {
+            return Stat.DEFENSE;
         }
 
         @Override
-        public Stat getStat() {
-            return Stat.DEFENSE;
+        public Type naturalGiftType() {
+            return Type.ICE;
         }
     }
 
@@ -5044,13 +5056,13 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.FIGHTING;
+        public Stat getStat() {
+            return Stat.SPEED;
         }
 
         @Override
-        public Stat getStat() {
-            return Stat.SPEED;
+        public Type naturalGiftType() {
+            return Type.FIGHTING;
         }
     }
 
@@ -5063,13 +5075,13 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.POISON;
+        public Stat getStat() {
+            return Stat.SP_ATTACK;
         }
 
         @Override
-        public Stat getStat() {
-            return Stat.SP_ATTACK;
+        public Type naturalGiftType() {
+            return Type.POISON;
         }
     }
 
@@ -5082,13 +5094,13 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.GROUND;
+        public Stat getStat() {
+            return Stat.SP_DEFENSE;
         }
 
         @Override
-        public Stat getStat() {
-            return Stat.SP_DEFENSE;
+        public Type naturalGiftType() {
+            return Type.GROUND;
         }
     }
 
@@ -5101,17 +5113,17 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.ROCK;
-        }
-
-        @Override
         public Stat getStat() {
             return Stat.ACCURACY;
         }
+
+        @Override
+        public Type naturalGiftType() {
+            return Type.ROCK;
+        }
     }
 
-    static class KeeBerry extends Item implements Berry, TakeDamageEffect {
+    static class KeeBerry extends Item implements CategoryIncreaseBerry {
         private static final long serialVersionUID = 1L;
 
         KeeBerry() {
@@ -5120,8 +5132,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public int naturalGiftPower() {
-            return 100;
+        public Stat getStat() {
+            return Stat.DEFENSE;
         }
 
         @Override
@@ -5130,14 +5142,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.getAttack().getCategory() == MoveCategory.PHYSICAL && victim.getStages().modifyStage(victim, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
-                victim.consumeItem(b);
-            }
+        public MoveCategory getCategory() {
+            return MoveCategory.PHYSICAL;
         }
     }
 
-    static class MarangaBerry extends Item implements Berry, TakeDamageEffect {
+    static class MarangaBerry extends Item implements CategoryIncreaseBerry {
         private static final long serialVersionUID = 1L;
 
         MarangaBerry() {
@@ -5146,8 +5156,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public int naturalGiftPower() {
-            return 100;
+        public Stat getStat() {
+            return Stat.SP_DEFENSE;
         }
 
         @Override
@@ -5156,14 +5166,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.getAttack().getCategory() == MoveCategory.SPECIAL && victim.getStages().modifyStage(victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
-                victim.consumeItem(b);
-            }
+        public MoveCategory getCategory() {
+            return MoveCategory.SPECIAL;
         }
     }
 
-    static class JabocaBerry extends Item implements Berry, OpponentApplyDamageEffect {
+    static class JabocaBerry extends Item implements CategoryDamageBerry {
         private static final long serialVersionUID = 1L;
 
         JabocaBerry() {
@@ -5172,26 +5180,17 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public int naturalGiftPower() {
-            return 100;
-        }
-
-        @Override
         public Type naturalGiftType() {
             return Type.DRAGON;
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-            if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
-                Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
-                user.reduceHealthFraction(b, 1/8.0);
-                victim.consumeItem(b);
-            }
+        public MoveCategory getCategory() {
+            return MoveCategory.PHYSICAL;
         }
     }
 
-    static class RowapBerry extends Item implements Berry, OpponentApplyDamageEffect {
+    static class RowapBerry extends Item implements CategoryDamageBerry {
         private static final long serialVersionUID = 1L;
 
         RowapBerry() {
@@ -5200,22 +5199,13 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public int naturalGiftPower() {
-            return 100;
-        }
-
-        @Override
         public Type naturalGiftType() {
             return Type.DARK;
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-            if (user.getAttack().getCategory() == MoveCategory.SPECIAL) {
-                Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
-                user.reduceHealthFraction(b, 1/8.0);
-                victim.consumeItem(b);
-            }
+        public MoveCategory getCategory() {
+            return MoveCategory.SPECIAL;
         }
     }
 
@@ -5235,6 +5225,11 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public Type naturalGiftType() {
             return Type.GHOST;
+        }
+
+        @Override
+        public int getHarvestHours() {
+            return 72;
         }
 
         @Override
@@ -5275,6 +5270,11 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         public Type naturalGiftType() {
             return Type.BUG;
         }
+
+        @Override
+        public int getHarvestHours() {
+            return 72;
+        }
     }
 
     static class LansatBerry extends Item implements HealthTriggeredBerry {
@@ -5304,6 +5304,11 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public Type naturalGiftType() {
             return Type.FLYING;
+        }
+
+        @Override
+        public int getHarvestHours() {
+            return 72;
         }
     }
 
@@ -5343,6 +5348,11 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public Type naturalGiftType() {
             return Type.PSYCHIC;
+        }
+
+        @Override
+        public int getHarvestHours() {
+            return 72;
         }
     }
 
