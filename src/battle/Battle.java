@@ -22,13 +22,13 @@ import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.SemiInvulnerableBypasser;
 import battle.effect.generic.EffectInterfaces.StallingEffect;
+import battle.effect.generic.EffectInterfaces.StrikeFirstEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
 import battle.effect.generic.Weather;
-import item.ItemNamesies;
 import main.Game;
 import main.Global;
 import map.area.AreaData;
@@ -762,16 +762,10 @@ public class Battle implements Serializable {
             return pPriority > oPriority;
         }
 
-        // TODO: Rewrite this shit it looks like ass
-        // Quick Claw gives holder a 20% chance of striking first within its priority bracket
-        boolean pQuick = plyr.isHoldingItem(this, ItemNamesies.QUICK_CLAW);
-        boolean oQuick = opp.isHoldingItem(this, ItemNamesies.QUICK_CLAW);
-        if (pQuick && !oQuick && RandomUtils.chanceTest(20)) {
-            Messages.add(plyr.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!");
+        // Slight bias towards the player here
+        if (StrikeFirstEffect.checkStrikeFirst(this, plyr)) {
             return true;
-        }
-        if (oQuick && !pQuick && RandomUtils.chanceTest(20)) {
-            Messages.add(opp.getName() + "'s " + ItemNamesies.QUICK_CLAW.getName() + " allowed it to strike first!");
+        } else if (StrikeFirstEffect.checkStrikeFirst(this, opp)) {
             return false;
         }
 

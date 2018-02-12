@@ -33,6 +33,7 @@ import battle.effect.generic.EffectInterfaces.RepellingEffect;
 import battle.effect.generic.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.generic.EffectInterfaces.StallingEffect;
 import battle.effect.generic.EffectInterfaces.StatProtectingEffect;
+import battle.effect.generic.EffectInterfaces.StrikeFirstEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
@@ -1317,7 +1318,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class QuickClaw extends Item implements HoldItem {
+    static class QuickClaw extends Item implements HoldItem, StrikeFirstEffect {
         private static final long serialVersionUID = 1L;
 
         QuickClaw() {
@@ -1328,6 +1329,17 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public int flingDamage() {
             return 80;
+        }
+
+        @Override
+        public boolean strikeFirst() {
+            // Quick Claw gives holder a 20% chance of striking first within its priority bracket
+            return RandomUtils.chanceTest(20);
+        }
+
+        @Override
+        public String getStrikeFirstMessage(ActivePokemon striker) {
+            return striker.getName() + "'s " + this.getName() + " allowed it to strike first!";
         }
     }
 

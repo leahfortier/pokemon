@@ -1924,7 +1924,17 @@ StoredPowerMove:
     AddMapField: GetMultiplier:
         return 1 + user.getStages().totalStatIncreases();
         ###
-*        
+*
+StrikeFirstEffect:
+    AddInterface: StrikeFirstEffect
+    Header: boolean strikeFirst()
+*
+StrikeFirstMessage:
+    Header: String getStrikeFirstMessage(ActivePokemon striker)
+    Body:
+        return {0};
+        ###
+*
 GET_DAT_CASH_MONEY_TWICE_ITEM:
 	Header: void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice)
 	AccessModifier: Private

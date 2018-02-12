@@ -463,6 +463,11 @@ Quick Claw:
     Desc: An item to be held by a Pok\u00e9mon. This light, sharp claw lets the bearer move first occasionally.
     Price: 4000
     Fling: 80
+    StrikeFirstEffect:
+        // Quick Claw gives holder a 20% chance of striking first within its priority bracket
+        return RandomUtils.chanceTest(20);
+        ###
+    StrikeFirstMessage: striker.getName() + "'s " + this.getName() + " allowed it to strike first!"
 *
 Quick Powder:
     Int: HoldItem

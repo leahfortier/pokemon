@@ -1626,6 +1626,28 @@ public final class EffectInterfaces {
         }
     }
 
+    public interface StrikeFirstEffect {
+
+        // Returns if the Pokemon should go first within its priority bracket
+        boolean strikeFirst();
+        String getStrikeFirstMessage(ActivePokemon striker);
+
+        static boolean checkStrikeFirst(Battle b, ActivePokemon striker) {
+            List<InvokeEffect> invokees = b.getEffectsList(striker);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof StrikeFirstEffect && InvokeEffect.isActiveEffect(invokee)) {
+                    StrikeFirstEffect effect = (StrikeFirstEffect)invokee;
+                    if (effect.strikeFirst()) {
+                        Messages.add(effect.getStrikeFirstMessage(striker));
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
+
     public interface WeatherEliminatingEffect extends EntryEndTurnEffect {
         String getEliminateMessage(ActivePokemon eliminator);
 

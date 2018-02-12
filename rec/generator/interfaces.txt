@@ -956,6 +956,19 @@ ModifyStageValueEffect:
 		EffectList: victim
 	*
 ***
+StrikeFirstEffect:
+    Method:
+        Comments: // Returns if the Pokemon should go first within its priority bracket
+        Header: boolean strikeFirst()
+        Invoke: CheckMessage true getStrikeFirstMessage(striker)
+        InvokeName: checkStrikeFirst
+        InvokeParameters: Battle b, ActivePokemon striker
+        EffectList: striker
+    *
+    Method:
+        Header: String getStrikeFirstMessage(ActivePokemon striker)
+    *
+***
 WeatherEliminatingEffect:
 	Method:
 		Header: String getEliminateMessage(ActivePokemon eliminator)
