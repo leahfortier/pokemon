@@ -1861,7 +1861,9 @@ Babiri Berry:
 *
 Chilan Berry:
     Desc: If held by a Pok\u00e9mon, this Berry will lessen the damage taken from one Normal-type attack.
-    SuperEffectivePowerReduceBerry: Normal
+    TypedPowerReduceBerry: Normal
+    Int: TypedPowerReduceBerry
+    Comments: // Unlike the other typed power-reduce berries, the Chilan Berry does not require the attack to be super-effective.
 *
 Roseli Berry:
     Desc: If held by a Pok\u00e9mon, this Berry will lessen the damage taken from one supereffective Fairy-type attack.

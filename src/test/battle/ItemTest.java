@@ -2,6 +2,7 @@ package test.battle;
 
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import battle.attack.MoveCategory;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.status.StatusCondition;
@@ -11,6 +12,7 @@ import item.Item;
 import item.ItemNamesies;
 import item.bag.BagCategory;
 import item.berry.Berry;
+import item.berry.CategoryBerry;
 import item.hold.HoldItem;
 import item.use.BallItem;
 import item.use.BattleUseItem;
@@ -41,6 +43,13 @@ public class ItemTest extends BaseTest {
                     item instanceof BattleUseItem || item instanceof BallItem,
                     item.getBattleBagCategories().iterator().hasNext()
             );
+
+            // Category berries can't be for status moves
+            if (item instanceof CategoryBerry) {
+                MoveCategory category = ((CategoryBerry)item).getCategory();
+                Assert.assertNotNull(item.getName(), category);
+                Assert.assertNotEquals(item.getName(), MoveCategory.STATUS, category);
+            }
         }
     }
 

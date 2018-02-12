@@ -7,12 +7,16 @@ import message.Messages;
 import type.Type;
 import type.TypeAdvantage;
 
-public interface SuperEffectivePowerReduceBerry extends Berry, OpponentPowerChangeEffect {
+public interface TypedPowerReduceBerry extends Berry, OpponentPowerChangeEffect {
     Type getType();
+
+    default boolean shouldReducePower(Battle b, ActivePokemon user, ActivePokemon victim) {
+        return true;
+    }
 
     @Override
     default double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-        if (user.isAttackType(this.getType()) && TypeAdvantage.isSuperEffective(user, victim, b)) {
+        if (user.isAttackType(this.getType()) && this.shouldReducePower(b, user, victim)) {
             Messages.add(victim.getName() + "'s " + this.getName() + " decreased " + user.getName() + "'s attack!");
             victim.consumeItem(b);
             return .5;
@@ -34,5 +38,13 @@ public interface SuperEffectivePowerReduceBerry extends Berry, OpponentPowerChan
     @Override
     default int getHarvestHours() {
         return 48;
+    }
+
+    // Only reduce if the move is super-effective
+    interface SuperEffectiveTypedPowerReduceBerry extends TypedPowerReduceBerry {
+        @Override
+        default boolean shouldReducePower(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return TypeAdvantage.isSuperEffective(user, victim, b);
+        }
     }
 }

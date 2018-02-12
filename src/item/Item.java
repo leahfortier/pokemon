@@ -51,7 +51,8 @@ import item.berry.GainableEffectBerry;
 import item.berry.HealthTriggeredBerry;
 import item.berry.HealthTriggeredStageIncreaseBerry;
 import item.berry.StatusBerry;
-import item.berry.SuperEffectivePowerReduceBerry;
+import item.berry.TypedPowerReduceBerry;
+import item.berry.TypedPowerReduceBerry.SuperEffectiveTypedPowerReduceBerry;
 import item.hold.EVItem;
 import item.hold.HoldItem;
 import item.hold.IncenseItem;
@@ -4757,7 +4758,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class OccaBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class OccaBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         OccaBerry() {
@@ -4771,7 +4772,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class PasshoBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class PasshoBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         PasshoBerry() {
@@ -4785,7 +4786,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class WacanBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class WacanBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         WacanBerry() {
@@ -4799,7 +4800,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class RindoBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class RindoBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         RindoBerry() {
@@ -4813,7 +4814,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class YacheBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class YacheBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         YacheBerry() {
@@ -4827,7 +4828,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class ChopleBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class ChopleBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         ChopleBerry() {
@@ -4841,7 +4842,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class KebiaBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class KebiaBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         KebiaBerry() {
@@ -4855,7 +4856,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class ShucaBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class ShucaBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         ShucaBerry() {
@@ -4869,7 +4870,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class CobaBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class CobaBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         CobaBerry() {
@@ -4883,7 +4884,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class PayapaBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class PayapaBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         PayapaBerry() {
@@ -4897,7 +4898,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class TangaBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class TangaBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         TangaBerry() {
@@ -4911,7 +4912,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class ChartiBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class ChartiBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         ChartiBerry() {
@@ -4925,7 +4926,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class KasibBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class KasibBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         KasibBerry() {
@@ -4939,7 +4940,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class HabanBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class HabanBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         HabanBerry() {
@@ -4953,7 +4954,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class ColburBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class ColburBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         ColburBerry() {
@@ -4967,7 +4968,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class BabiriBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class BabiriBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         BabiriBerry() {
@@ -4981,7 +4982,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class ChilanBerry extends Item implements SuperEffectivePowerReduceBerry {
+    // Unlike the other typed power-reduce berries, the Chilan Berry does not require the attack to be super-effective.
+    static class ChilanBerry extends Item implements TypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         ChilanBerry() {
@@ -4995,7 +4997,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class RoseliBerry extends Item implements SuperEffectivePowerReduceBerry {
+    static class RoseliBerry extends Item implements SuperEffectiveTypedPowerReduceBerry {
         private static final long serialVersionUID = 1L;
 
         RoseliBerry() {
