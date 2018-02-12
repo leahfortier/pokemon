@@ -4,6 +4,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectNamesies;
+import battle.effect.status.StatusCondition;
 import generator.update.ItemUpdater;
 import generator.update.ItemUpdater.ItemParser;
 import item.Item;
@@ -29,6 +30,20 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public class ItemTest extends BaseTest {
+    @Test
+    public void categoryTest() {
+        for (ItemNamesies itemNamesies : ItemNamesies.values()) {
+            Item item = itemNamesies.getItem();
+
+            // If it has battle catagories, then it must be a BattleUseItem
+            Assert.assertEquals(
+                    item.getName(),
+                    item instanceof BattleUseItem || item instanceof BallItem,
+                    item.getBattleBagCategories().iterator().hasNext()
+            );
+        }
+    }
+
     @Test
     public void parserTest() {
         Set<ItemNamesies> toParse = EnumSet.allOf(ItemNamesies.class);
@@ -126,10 +141,7 @@ public class ItemTest extends BaseTest {
     public void swapItemsTest() {
         // Swapping items works differently for wild battles vs trainer battles
         swapItemsTest(false);
-        stickyBarbTest(false);
-
         swapItemsTest(true);
-        stickyBarbTest(true);
     }
 
     private void swapItemsTest(boolean trainerBattle) {
@@ -196,6 +208,13 @@ public class ItemTest extends BaseTest {
         battle.emptyHeal();
         Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.WATER_STONE));
         Assert.assertFalse(defending.isHoldingItem(battle));
+    }
+
+    @Test
+    public void stickyBarbTest() {
+        // Swapping items works differently for wild battles vs trainer battles
+        stickyBarbTest(false);
+        stickyBarbTest(true);
     }
 
     private void stickyBarbTest(boolean trainerBattle) {
@@ -421,5 +440,41 @@ public class ItemTest extends BaseTest {
         Assert.assertEquals(defendingPP - 2, defending.getMove().getPP());
 
         afterSecondTurn.manipulate(battle, attacking, defending);
+    }
+
+    @Test
+    public void swapConsumeItemTest() {
+        // Swapping items works differently for wild battles vs trainer battles
+        swapConsumeItemTest(false);
+        swapConsumeItemTest(true);
+    }
+
+    private void swapConsumeItemTest(boolean trainerBattle) {
+        PokemonNamesies attackingPokemon = PokemonNamesies.BULBASAUR;
+        PokemonNamesies defendingPokemon = PokemonNamesies.CHARMANDER;
+        TestBattle battle = trainerBattle
+                ? TestBattle.createTrainerBattle(attackingPokemon, defendingPokemon)
+                : TestBattle.create(attackingPokemon, defendingPokemon);
+        TestPokemon attacking = battle.getAttacking().withItem(ItemNamesies.LUM_BERRY);
+        TestPokemon defending = battle.getDefending().withItem(ItemNamesies.RAWST_BERRY);
+
+        // Lum Berry should activate to remove the burn
+        battle.defendingFight(AttackNamesies.WILL_O_WISP);
+        Assert.assertTrue(defending.lastMoveSucceeded());
+        Assert.assertFalse(attacking.hasStatus());
+
+        // Lum Berry has already been consumed, so the burn should remain
+        battle.defendingFight(AttackNamesies.WILL_O_WISP);
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.BURNED));
+
+        // Swap items to retrieve the Rawst Berry, which should activate to remove the burn
+        battle.attackingFight(AttackNamesies.TRICK);
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertFalse(attacking.isHoldingItem(battle));
+        Assert.assertFalse(defending.isHoldingItem(battle));
+
+        // Rawst Berry has already been consumed, so the burn should remain
+        battle.defendingFight(AttackNamesies.WILL_O_WISP);
+        Assert.assertTrue(attacking.hasStatus(StatusCondition.BURNED));
     }
 }

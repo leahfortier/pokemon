@@ -1199,8 +1199,9 @@ PPIncrease:
 	AddInterface: HoldItem
 	AddMapField: Cat: Stat
 *
+# Need to add this back in once these can be used in battle: BattleCat: HP_PP
 Ether:
-	AddMapField: BattleCat: HP_PP
+    AddMapField: Comments: // TODO: These currently cannot be used in battle :(
 	AddInterface: PPHealer
 	AddMapField: PPRestoreAmount:
 		return {0};
@@ -1289,11 +1290,11 @@ StatusHealAll:
 		###
 *
 Revive:
-	AddInterface: PokemonUseItem
+	AddInterface: BattlePokemonUseItem
 	AddInterface: HoldItem
 	AddMapField: Cat: Medicine
 	AddMapField: BattleCat: Status
-	AddMapField: PokemonUse:
+	AddMapField: BattleUse:
 		// Only applies to the dead
 		if (!p.isActuallyDead()) {
 			return false;

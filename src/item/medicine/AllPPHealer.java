@@ -4,16 +4,18 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
 import item.hold.HoldItem;
-import item.use.BattleUseItem;
-import item.use.PokemonUseItem;
+import item.use.BattlePokemonUseItem;
 import message.Messages;
 
 import java.util.List;
 
-public interface AllPPHealer extends PokemonUseItem, BattleUseItem, HoldItem {
+public interface AllPPHealer extends BattlePokemonUseItem, HoldItem {
     int restoreAmount(Move toRestore);
 
-    default boolean use(ActivePokemon p, List<Move> moves) {
+    @Override
+    default boolean use(ActivePokemon p, Battle b) {
+        List<Move> moves = p.getMoves(b);
+
         boolean changed = false;
         for (Move m : moves) {
             changed |= m.increasePP(this.restoreAmount(m));
@@ -24,20 +26,5 @@ public interface AllPPHealer extends PokemonUseItem, BattleUseItem, HoldItem {
         }
 
         return changed;
-    }
-
-    @Override
-    default boolean use(ActivePokemon p) {
-        return use(p, p.getActualMoves());
-    }
-
-    @Override
-    default boolean use(ActivePokemon p, Battle b) {
-        return use(p, p.getMoves(b));
-    }
-
-    @Override
-    default boolean use(Battle b, ActivePokemon p, Move m) {
-        return b == null ? use(p) : use(p, b);
     }
 }

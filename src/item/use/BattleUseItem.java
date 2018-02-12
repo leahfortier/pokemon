@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
 
+// Can be used on a Pokemon inside of battle
 public interface BattleUseItem extends UseItem {
     boolean use(ActivePokemon p, Battle b);
 

@@ -389,9 +389,8 @@ Mental Herb:
         private boolean usesies(ActivePokemon user) {
             boolean used = false;
             for (RemovableEffect removableEffect : RemovableEffect.values()) {
-                if (user.hasEffect(removableEffect.effect)) {
+                if (user.getEffects().remove(removableEffect.effect)) {
                     used = true;
-                    user.getEffects().remove(removableEffect.effect);
                     Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.getName() + "!");
                 }
             }
@@ -1225,15 +1224,15 @@ Full Heal:
     StatusHealAll: True
 *
 Full Restore:
-    Int: PokemonUseItem, HoldItem
+    Int: BattlePokemonUseItem, HoldItem
     Cat: Medicine
     BattleCat: HP_PP, Status
     Desc: A medicine that can be used to fully restore the HP of a single Pok\u00e9mon and heal any status conditions it has.
     Price: 3000
-    PokemonUse:
+    BattleUse:
         // Essentially Full Restore is just a combined Max Potion and Full Heal
-        boolean maxPotion = new MaxPotion().use(p);
-        boolean fullHeal = new FullHeal().use(p);
+        boolean maxPotion = new MaxPotion().use(p, b);
+        boolean fullHeal = new FullHeal().use(p, b);
         return maxPotion || fullHeal;
         ###
 *
@@ -1710,7 +1709,7 @@ Oran Berry:
     NGType: Poison
     NGPow: 80
     FixedBerryHealthTrigger: 3
-    GainEffect: return use(user, source);
+    GainEffect: return use(b, user, source);
     FixedHealAmount:
         return 10;
         ###
@@ -1722,18 +1721,17 @@ Persim Berry:
     NGType: Ground
     NGPow: 80
     Field:
-        private boolean use(ActivePokemon p, CastSource source) {
-            if (p.hasEffect(EffectNamesies.CONFUSION)) {
-                p.getEffects().remove(EffectNamesies.CONFUSION);
-                this.addMessage(p, source);
+        private boolean use(Battle b, ActivePokemon p, CastSource source) {
+            if (p.getEffects().remove(EffectNamesies.CONFUSION)) {
+                Messages.add(this.getMessage(b, p, source));
                 return true;
             }
 
             return false;
         }
         ###
-    BattleUse: return use(p, CastSource.USE_ITEM);
-    GainEffect: return use(user, source);
+    BattleUse: return use(b, p, CastSource.USE_ITEM);
+    GainEffect: return use(b, user, source);
     GenericMessage: p.getName() + " snapped out of its confusion!"
     SourceMessage: p.getName() + "'s " + this.getName() + " snapped it out of confusion!"
 *
@@ -1748,7 +1746,7 @@ Sitrus Berry:
     NGType: Psychic
     NGPow: 80
     FixedBerryHealthTrigger: 2
-    GainEffect: return use(user, source);
+    GainEffect: return use(b, user, source);
     GetAmountHealed:
         return p.healHealthFraction(1/4.0);
         ###

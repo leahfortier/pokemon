@@ -127,12 +127,17 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public List<Move> getMoves(Battle b) {
-        List<Move> changedMoveList = ChangeMoveListEffect.getMoveList(b, this, this.getActualMoves());
+        List<Move> actualMoves = this.getActualMoves();
+        if (b == null) {
+            return actualMoves;
+        }
+
+        List<Move> changedMoveList = ChangeMoveListEffect.getMoveList(b, this, actualMoves);
         if (changedMoveList != null) {
             return changedMoveList;
         }
 
-        return this.getActualMoves();
+        return actualMoves;
     }
 
     public void gainEXP(Battle b, int gain, PartyPokemon dead) {
@@ -728,6 +733,12 @@ public class ActivePokemon extends PartyPokemon {
             other.giveItem((HoldItem)consumed);
             Messages.add(other.getName() + " picked up " + getName() + "'s " + consumed.getName() + "!");
         }
+    }
+
+    @Override
+    public void removeItem() {
+        super.removeItem();
+        this.effects.remove(EffectNamesies.CHANGE_ITEM);
     }
 
     public Item getHeldItem(Battle b) {

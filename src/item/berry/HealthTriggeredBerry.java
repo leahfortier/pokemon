@@ -12,7 +12,7 @@ public interface HealthTriggeredBerry extends GainableEffectBerry, DamageTakenEf
     @Override
     default void damageTaken(Battle b, ActivePokemon damageTaker) {
         double healthRatio = damageTaker.getHPRatio();
-        if ((healthRatio <= this.healthTriggerRatio() || (healthRatio <= .5 && damageTaker.hasAbility(AbilityNamesies.GLUTTONY)))) {
+        if (healthRatio <= this.healthTriggerRatio() || (healthRatio <= .5 && damageTaker.hasAbility(AbilityNamesies.GLUTTONY))) {
             if (this.gainBerryEffect(b, damageTaker, CastSource.HELD_ITEM)) {
                 damageTaker.consumeItem(b);
             }

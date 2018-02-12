@@ -66,6 +66,7 @@ import item.medicine.PPHealer;
 import item.medicine.Repelling;
 import item.medicine.StatusHealer;
 import item.use.BallItem;
+import item.use.BattlePokemonUseItem;
 import item.use.BattleUseItem;
 import item.use.EvolutionItem;
 import item.use.MoveUseItem;
@@ -1012,9 +1013,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         private boolean usesies(ActivePokemon user) {
             boolean used = false;
             for (RemovableEffect removableEffect : RemovableEffect.values()) {
-                if (user.hasEffect(removableEffect.effect)) {
+                if (user.getEffects().remove(removableEffect.effect)) {
                     used = true;
-                    user.getEffects().remove(removableEffect.effect);
                     Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.getName() + "!");
                 }
             }
@@ -3253,7 +3253,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class FullRestore extends Item implements PokemonUseItem, HoldItem {
+    static class FullRestore extends Item implements BattlePokemonUseItem, HoldItem {
         private static final long serialVersionUID = 1L;
 
         FullRestore() {
@@ -3264,10 +3264,10 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean use(ActivePokemon p) {
+        public boolean use(ActivePokemon p, Battle b) {
             // Essentially Full Restore is just a combined Max Potion and Full Heal
-            boolean maxPotion = new MaxPotion().use(p);
-            boolean fullHeal = new FullHeal().use(p);
+            boolean maxPotion = new MaxPotion().use(p, b);
+            boolean fullHeal = new FullHeal().use(p, b);
             return maxPotion || fullHeal;
         }
     }
@@ -3302,13 +3302,13 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
+    // TODO: These currently cannot be used in battle :(
     static class Ether extends Item implements HoldItem, PPHealer {
         private static final long serialVersionUID = 1L;
 
         Ether() {
             super(ItemNamesies.ETHER, "This medicine can restore 10 PP to a single selected move that has been learned by a Pok\u00e9mon.", BagCategory.MEDICINE);
             super.price = 1200;
-            super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
         @Override
@@ -3317,13 +3317,13 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
+    // TODO: These currently cannot be used in battle :(
     static class MaxEther extends Item implements HoldItem, PPHealer {
         private static final long serialVersionUID = 1L;
 
         MaxEther() {
             super(ItemNamesies.MAX_ETHER, "This medicine can fully restore the PP of a single selected move that has been learned by a Pok\u00e9mon.", BagCategory.MEDICINE);
             super.price = 2000;
-            super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
         @Override
@@ -3512,7 +3512,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class Revive extends Item implements PokemonUseItem, HoldItem {
+    static class Revive extends Item implements BattlePokemonUseItem, HoldItem {
         private static final long serialVersionUID = 1L;
 
         Revive() {
@@ -3522,7 +3522,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean use(ActivePokemon p) {
+        public boolean use(ActivePokemon p, Battle b) {
             // Only applies to the dead
             if (!p.isActuallyDead()) {
                 return false;
@@ -3536,7 +3536,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class MaxRevive extends Item implements PokemonUseItem, HoldItem {
+    static class MaxRevive extends Item implements BattlePokemonUseItem, HoldItem {
         private static final long serialVersionUID = 1L;
 
         MaxRevive() {
@@ -3546,7 +3546,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean use(ActivePokemon p) {
+        public boolean use(ActivePokemon p, Battle b) {
             // Only applies to the dead
             if (!p.isActuallyDead()) {
                 return false;
@@ -3560,7 +3560,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class RevivalHerb extends Item implements PokemonUseItem, HoldItem {
+    static class RevivalHerb extends Item implements BattlePokemonUseItem, HoldItem {
         private static final long serialVersionUID = 1L;
 
         RevivalHerb() {
@@ -3570,7 +3570,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean use(ActivePokemon p) {
+        public boolean use(ActivePokemon p, Battle b) {
             // Only applies to the dead
             if (!p.isActuallyDead()) {
                 return false;
@@ -4402,13 +4402,13 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
+    // TODO: These currently cannot be used in battle :(
     static class LeppaBerry extends Item implements EndTurnEffect, GainableEffectBerry, PPHealer {
         private static final long serialVersionUID = 1L;
 
         LeppaBerry() {
             super(ItemNamesies.LEPPA_BERRY, "A Berry to be consumed by Pok\u00e9mon. If a Pok\u00e9mon holds one, it can restore 10 PP to a depleted move during battle.", BagCategory.BERRY);
             super.price = 20;
-            super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
 
         @Override
@@ -4476,7 +4476,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-            return use(user, source);
+            return use(b, user, source);
         }
 
         @Override
@@ -4498,10 +4498,9 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
     static class PersimBerry extends Item implements BattleUseItem, MessageGetter, GainableEffectBerry {
         private static final long serialVersionUID = 1L;
 
-        private boolean use(ActivePokemon p, CastSource source) {
-            if (p.hasEffect(EffectNamesies.CONFUSION)) {
-                p.getEffects().remove(EffectNamesies.CONFUSION);
-                this.addMessage(p, source);
+        private boolean use(Battle b, ActivePokemon p, CastSource source) {
+            if (p.getEffects().remove(EffectNamesies.CONFUSION)) {
+                Messages.add(this.getMessage(b, p, source));
                 return true;
             }
 
@@ -4516,12 +4515,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return use(p, CastSource.USE_ITEM);
+            return use(b, p, CastSource.USE_ITEM);
         }
 
         @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-            return use(user, source);
+            return use(b, user, source);
         }
 
         @Override
@@ -4582,7 +4581,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-            return use(user, source);
+            return use(b, user, source);
         }
 
         @Override

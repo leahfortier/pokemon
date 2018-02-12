@@ -1,14 +1,15 @@
 package item.medicine;
 
 import battle.ActivePokemon;
+import battle.Battle;
 import battle.effect.CastSource;
 import battle.effect.MessageGetter;
 import item.hold.HoldItem;
-import item.use.PokemonUseItem;
+import item.use.BattlePokemonUseItem;
 import message.MessageUpdate;
 import message.Messages;
 
-public interface HpHealer extends MessageGetter, PokemonUseItem, HoldItem {
+public interface HpHealer extends MessageGetter, BattlePokemonUseItem, HoldItem {
     int getAmountHealed(ActivePokemon p);
 
     @Override
@@ -18,15 +19,15 @@ public interface HpHealer extends MessageGetter, PokemonUseItem, HoldItem {
 
     @Override
     default String getSourceMessage(ActivePokemon p, String sourceName) {
-        return p.getName() + " was healed by its " + this.getName() + "!";
+        return p.getName() + " was healed by its " + sourceName + "!";
     }
 
     @Override
-    default boolean use(ActivePokemon p) {
-        return this.use(p, CastSource.USE_ITEM);
+    default boolean use(ActivePokemon p, Battle b) {
+        return this.use(b, p, CastSource.USE_ITEM);
     }
 
-    default boolean use(ActivePokemon p, CastSource source) {
+    default boolean use(Battle b, ActivePokemon p, CastSource source) {
         if (p.isActuallyDead() || p.fullHealth()) {
             return false;
         }
@@ -36,8 +37,7 @@ public interface HpHealer extends MessageGetter, PokemonUseItem, HoldItem {
             return false;
         }
 
-        Messages.add(new MessageUpdate(this.getMessage(p, source)).withPokemon(p));
-
+        Messages.add(new MessageUpdate(this.getMessage(b, p, source)).withPokemon(p));
         return true;
     }
 }
