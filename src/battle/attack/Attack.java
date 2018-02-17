@@ -3354,6 +3354,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
+    // Need the sleep check in case called from Sleep Talk, Comatose, etc.
     static class Rest extends Attack implements SelfHealingMove {
         private static final long serialVersionUID = 1L;
 
@@ -3383,7 +3384,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, user, user) && !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
+            return !user.hasStatus(StatusCondition.ASLEEP) && Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, user, user) && !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK);
         }
     }
 

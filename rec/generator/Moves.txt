@@ -1772,7 +1772,8 @@ Rest:
     Type: Psychic
     Cat: Status
     Status: Asleep
-    ExtraApplies: Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, user, user)
+    Comments: // Need the sleep check in case called from Sleep Talk, Comatose, etc.
+    ExtraApplies: !user.hasStatus(StatusCondition.ASLEEP) && Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, user, user)
     AfterApplyCheck:
         victim.removeStatus();
         ###

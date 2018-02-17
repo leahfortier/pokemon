@@ -38,6 +38,7 @@ class InterfaceMethod {
     private static final String DEFAULT = "Default";
     private static final String DEADSIES = "Deadsies";
     private static final String OVERRIDE = "Override";
+    private static final String BEGIN = "Begin";
 
     private static final Pattern HEADER_PATTERN = Pattern.compile(
             "^" + MatchType.VARIABLE_TYPE.group() + // Group 1: return type
@@ -67,6 +68,8 @@ class InterfaceMethod {
     private List<String> deadsies;
 
     private boolean isOverride;
+
+    private String begin;
 
     private String comments;
     private InvokeMethod invokeMethod;
@@ -238,6 +241,11 @@ class InterfaceMethod {
             this.isOverride = true;
         }
 
+        final String begin = fields.getAndRemoveTrimmed(BEGIN);
+        if (begin != null) {
+            this.begin = begin;
+        }
+
         fields.confirmEmpty();
 
         if ((this.returnType == null || this.methodName == null) && this.invokeMethod == null) {
@@ -365,5 +373,9 @@ class InterfaceMethod {
 
     Iterable<String> getDeadsies() {
         return this.deadsies;
+    }
+
+    String getBegin() {
+        return this.begin;
     }
 }

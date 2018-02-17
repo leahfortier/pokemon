@@ -12,6 +12,7 @@ import battle.effect.attack.MultiTurnMove;
 import battle.effect.status.StatusCondition;
 import item.Item;
 import item.ItemNamesies;
+import main.Game;
 import main.Global;
 import map.overworld.TerrainType;
 import map.overworld.WildEncounter;
@@ -1511,6 +1512,10 @@ public final class EffectInterfaces {
         boolean shouldRepel(ActivePokemon playerFront, WildEncounter wildPokemon);
 
         static boolean checkRepellingEffect(ActivePokemon playerFront, WildEncounter wildPokemon) {
+            if (wildPokemon.getLevel() <= playerFront.getLevel() && Game.getPlayer().getRepelInfo().isUsingRepel()) {
+                return true;
+            }
+
             List<InvokeEffect> invokees = new ArrayList<>();
             invokees.add(playerFront.getAbility());
             invokees.add(playerFront.getActualHeldItem());

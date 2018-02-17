@@ -1559,7 +1559,7 @@ RepelSteps:
         return {0};
         ###
 	AddMapField: Cat: Misc
-    AddInterface: Repelling
+    AddInterface: RepelItem
 *
 PowderResist:
 	AddInterface: AttackBlocker

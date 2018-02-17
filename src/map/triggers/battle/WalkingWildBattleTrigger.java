@@ -14,7 +14,6 @@ import message.MessageUpdate;
 import message.Messages;
 import pattern.map.WildBattleMatcher;
 import pokemon.PokemonNamesies;
-import trainer.player.Player;
 import util.RandomUtils;
 import util.SerializationUtils;
 
@@ -32,8 +31,7 @@ public class WalkingWildBattleTrigger extends Trigger {
 
     @Override
     protected void executeTrigger() {
-        Player player = Game.getPlayer();
-        ActivePokemon front = player.front();
+        ActivePokemon front = Game.getPlayer().front();
 
         // TODO: What's going on with this random stuff also maybe this formula should be in the EncounterRate class
         double rand = Math.random()*187.5/encounterRate.getRate()*EncounterRateMultiplier.getModifier(front);
@@ -41,8 +39,7 @@ public class WalkingWildBattleTrigger extends Trigger {
             WildEncounter wildPokemon = getWildEncounter(front);
 
             // Maybe you won't actually fight this Pokemon after all (due to repel, cleanse tag, etc.)
-            if ((wildPokemon.getLevel() <= front.getLevel() && player.getRepelInfo().isUsingRepel())
-                    || RepellingEffect.checkRepellingEffect(front, wildPokemon)) {
+            if (RepellingEffect.checkRepellingEffect(front, wildPokemon)) {
                 return;
             }
 

@@ -6,7 +6,7 @@ import main.Game;
 import message.Messages;
 import trainer.player.RepelInfo;
 
-public interface Repelling extends HoldItem, PlayerUseItem {
+public interface RepelItem extends HoldItem, PlayerUseItem {
     int repelSteps();
 
     @Override

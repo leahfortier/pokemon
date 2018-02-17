@@ -39,6 +39,7 @@ abstract class InvokeMethod {
         );
 
         String body = new StringAppender()
+                .appendPostDelimiter("\n", interfaceMethod.getBegin())
                 .appendPostDelimiter("\n", getPreLoop())
                 .appendPostDelimiter("\n", getDeadsies(interfaceMethod))
                 .appendPostDelimiter("\n", getMoldBreakerDeclaration(interfaceMethod))

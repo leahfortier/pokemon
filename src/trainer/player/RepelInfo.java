@@ -34,8 +34,6 @@ public class RepelInfo implements Serializable {
         if (repelSteps > 0) {
             repelSteps--;
             if (repelSteps == 0) {
-                // TODO: Give choice if you want to use another.
-                // Game variable needed
                 Messages.add("The effects of repel have worn off.");
 
                 Player player = Game.getPlayer();

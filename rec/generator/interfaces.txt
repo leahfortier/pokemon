@@ -891,6 +891,11 @@ RepellingEffect:
 		Header: boolean shouldRepel(ActivePokemon playerFront, WildEncounter wildPokemon)
 		Invoke: Check true
 		NonBattleEffects: playerFront
+        Begin:
+            if (wildPokemon.getLevel() <= playerFront.getLevel() && Game.getPlayer().getRepelInfo().isUsingRepel()) {
+                return true;
+            }
+            ###
 	*
 ***
 RepelLowLevelEncounterEffect:

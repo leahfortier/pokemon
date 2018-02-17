@@ -66,7 +66,7 @@ import item.medicine.EvIncreaser.Wing;
 import item.medicine.FixedHpHealer;
 import item.medicine.HpHealer;
 import item.medicine.PPHealer;
-import item.medicine.Repelling;
+import item.medicine.RepelItem;
 import item.medicine.StatusHealer;
 import item.use.BallItem;
 import item.use.BattlePokemonUseItem;
@@ -5514,7 +5514,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class Repel extends Item implements Repelling {
+    static class Repel extends Item implements RepelItem {
         private static final long serialVersionUID = 1L;
 
         Repel() {
@@ -5528,7 +5528,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class SuperRepel extends Item implements Repelling {
+    static class SuperRepel extends Item implements RepelItem {
         private static final long serialVersionUID = 1L;
 
         SuperRepel() {
@@ -5542,7 +5542,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class MaxRepel extends Item implements Repelling {
+    static class MaxRepel extends Item implements RepelItem {
         private static final long serialVersionUID = 1L;
 
         MaxRepel() {
