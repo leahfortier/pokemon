@@ -176,4 +176,8 @@ public final class GeneralUtils {
         System.arraycopy(extraArgs, 0, array, base.length, array.length - base.length);
         return array;
     }
+
+    public static int getTotalPages(int totalItems, int itemsPerPage) {
+        return (int)Math.ceil((double)totalItems/itemsPerPage);
+    }
 }

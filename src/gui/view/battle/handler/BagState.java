@@ -273,13 +273,9 @@ public class BagState implements VisualStateHandler {
         Battle currentBattle = view.getCurrentBattle();
         Player player = Game.getPlayer();
         Bag bag = player.getBag();
-        Set<ItemNamesies> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]);
-        Iterator<ItemNamesies> iter = toDraw.iterator();
 
-        // Skip ahead to the current page
-        for (int i = 0; i < bagPage*ITEMS_PER_PAGE; i++) {
-            iter.next();
-        }
+        Set<ItemNamesies> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]);
+        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(toDraw, bagPage, ITEMS_PER_PAGE);
 
         // Go through each item on the page
         for (int i = ITEMS; i < ITEMS + ITEMS_PER_PAGE && iter.hasNext(); i++) {
@@ -319,26 +315,18 @@ public class BagState implements VisualStateHandler {
             }
         }
 
-        // Next page
+        int increment = 0;
         if (bagRightButton.checkConsumePress()) {
-            // TODO: Should have a method to get the max pages also this should just use mod right?
-            if (bagPage == ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE) - 1)) {
-                bagPage = 0;
-            } else {
-                bagPage++;
-            }
-
-            view.setVisualState(); // To update active buttons
+            // Next page
+            increment = 1;
+        }
+        if (bagLeftButton.checkConsumePress()) {
+            // Previous Page
+            increment = -1;
         }
 
-        // Previous Page
-        if (bagLeftButton.checkConsumePress()) {
-            if (bagPage == 0) {
-                bagPage = ((int)Math.ceil(toDraw.size()/(double)ITEMS_PER_PAGE) - 1);
-            } else {
-                bagPage--;
-            }
-
+        if (increment != 0) {
+            bagPage = GeneralUtils.wrapIncrement(bagPage, increment, totalPages(toDraw));
             view.setVisualState(); // To update active buttons
         }
 
@@ -348,5 +336,9 @@ public class BagState implements VisualStateHandler {
 
     public ItemNamesies getSelectedItem() {
         return this.selectedItem;
+    }
+
+    private int totalPages(Set<ItemNamesies> items) {
+        return GeneralUtils.getTotalPages(items.size(), ITEMS_PER_PAGE);
     }
 }

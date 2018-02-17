@@ -6,9 +6,11 @@ import gui.view.battle.BattleView;
 import main.Game;
 import map.Direction;
 import util.FontMetrics;
+import util.GeneralUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Iterator;
 import java.util.List;
 
 public class LogState implements VisualStateHandler {
@@ -40,30 +42,18 @@ public class LogState implements VisualStateHandler {
     public void set(BattleView view) {
         logPage = 0;
         logMessages = Game.getPlayer().getLogMessages();
-
-        if (logMessages.size()/LOGS_PER_PAGE > 0) {
-            view.setSelectedButton(LOG_RIGHT_BUTTON);
-            logButtons[LOG_RIGHT_BUTTON].setActive(true);
-            view.setSelectedButton(logButtons);
-        } else {
-            logButtons[LOG_RIGHT_BUTTON].setActive(false);
-        }
-
-        logButtons[LOG_LEFT_BUTTON].setActive(false);
     }
 
     @Override
     public void draw(BattleView view, Graphics g) {
         view.drawLargeMenuPanel(g);
 
-        int start = logMessages.size() - 1 - logPage*LOGS_PER_PAGE;
-        start = Math.max(0, start);
-
-        int y = 200;
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, 12);
-        for (int i = start; i >= 0 && start - i < LOGS_PER_PAGE; i--, y += 15) {
-            g.drawString(logMessages.get(i), 25, y);
+
+        Iterator<String> logIter = GeneralUtils.pageIterator(logMessages, logPage, LOGS_PER_PAGE);
+        for (int i = 0; i < LOGS_PER_PAGE && logIter.hasNext(); i++) {
+            g.drawString(logIter.next(), 25, 200 + i*15);
         }
 
         logButtons[LOG_LEFT_BUTTON].drawArrow(g, Direction.LEFT);
@@ -83,29 +73,23 @@ public class LogState implements VisualStateHandler {
     public void update(BattleView view) {
         view.setSelectedButton(logButtons);
 
-        int maxLogPage = logMessages.size()/LOGS_PER_PAGE;
-
+        int increment = 0;
         if (logButtons[LOG_LEFT_BUTTON].checkConsumePress()) {
-            view.setSelectedButton(LOG_LEFT_BUTTON);
-            logButtons[LOG_RIGHT_BUTTON].setForceHover(false);
-            logPage = Math.max(0, logPage - 1);
+            increment = -1;
         }
-
         if (logButtons[LOG_RIGHT_BUTTON].checkConsumePress()) {
-            view.setSelectedButton(LOG_RIGHT_BUTTON);
-            logButtons[LOG_LEFT_BUTTON].setForceHover(false);
-            logPage = Math.min(maxLogPage, logPage + 1);
+            increment = 1;
         }
 
-        logButtons[LOG_LEFT_BUTTON].setActive(logPage > 0);
-        logButtons[LOG_RIGHT_BUTTON].setActive(logPage < maxLogPage);
-
-        if (logPage == 0 && maxLogPage > 0) {
-            view.setSelectedButton(LOG_RIGHT_BUTTON);
-        } else if (logPage == maxLogPage) {
-            view.setSelectedButton(LOG_LEFT_BUTTON);
+        int totalPages = totalPages();
+        if (increment != 0) {
+            logPage = GeneralUtils.wrapIncrement(logPage, increment, totalPages);
         }
 
         view.updateBackButton();
+    }
+
+    private int totalPages() {
+        return GeneralUtils.getTotalPages(logMessages.size(), LOGS_PER_PAGE);
     }
 }

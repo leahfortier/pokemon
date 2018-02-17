@@ -39,4 +39,24 @@ public class FlyLocation implements Serializable {
 
         Game.instance().setViewMode(ViewMode.MAP_VIEW);
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof FlyLocation)) {
+            return false;
+        }
+
+        FlyLocation that = (FlyLocation)other;
+        return this.mapName.equals(that.mapName) && this.area.getAreaName().equals(that.area.getAreaName());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return mapName + " -- " +  this.area.getAreaName();
+    }
 }

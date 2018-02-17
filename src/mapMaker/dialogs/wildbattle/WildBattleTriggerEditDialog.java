@@ -110,7 +110,7 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
     }
 
     private int getTotalPokemonPanelPages() {
-        return (int)(Math.ceil(this.wildPokemonPanels.size()/(double)POKES_PER_PAGE));
+        return GeneralUtils.getTotalPages(this.wildPokemonPanels.size(), POKES_PER_PAGE);
     }
 
     private void addPokemonPanel(WildEncounterInfo wildEncounter) {

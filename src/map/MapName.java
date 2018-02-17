@@ -26,8 +26,7 @@ public class MapName implements Serializable {
         }
 
         MapName that = (MapName)other;
-        return this.getMapName().equals(that.getMapName())
-                && this.getRegionName().equals(that.getRegionName());
+        return this.mapName.equals(that.mapName) && this.region.equals(that.region);
     }
 
     @Override

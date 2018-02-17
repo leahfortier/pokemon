@@ -486,8 +486,7 @@ class MartView extends View {
     }
 
     private int totalPages() {
-        int size = forSaleItems.size();
-        return size/ITEMS_PER_PAGE + (size == 0 || size%ITEMS_PER_PAGE != 0 ? 1 : 0);
+        return GeneralUtils.getTotalPages(forSaleItems.size(), ITEMS_PER_PAGE);
     }
 
     private void updateActiveButtons() {

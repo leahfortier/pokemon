@@ -151,6 +151,6 @@ class FlyState implements VisualStateHandler {
     }
 
     private int totalPages() {
-        return this.flyLocations.size()/NUM_AREA_BUTTONS + 1;
+        return GeneralUtils.getTotalPages(this.flyLocations.size(), NUM_AREA_BUTTONS);
     }
 }

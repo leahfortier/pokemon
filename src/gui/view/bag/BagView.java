@@ -570,7 +570,7 @@ public class BagView extends View {
 
     private int totalPages() {
         int size = Game.getPlayer().getBag().getCategory(selectedTab).size();
-        return size/ITEMS_PER_PAGE + (size == 0 || size%ITEMS_PER_PAGE != 0 ? 1 : 0);
+        return GeneralUtils.getTotalPages(size, ITEMS_PER_PAGE);
     }
 
     void updateActiveButtons() {

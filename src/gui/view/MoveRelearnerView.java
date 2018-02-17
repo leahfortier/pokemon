@@ -321,7 +321,7 @@ public class MoveRelearnerView extends View {
     }
 
     private int totalPages() {
-        return (int)Math.ceil(1.0*this.learnableMoves.size()/MOVES_PER_PAGE);
+        return GeneralUtils.getTotalPages(this.learnableMoves.size(), MOVES_PER_PAGE);
     }
 
     private int numHeartScales() {
