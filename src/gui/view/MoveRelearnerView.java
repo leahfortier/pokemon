@@ -7,6 +7,7 @@ import battle.attack.Move;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.LearnMovePanel;
@@ -44,7 +45,7 @@ public class MoveRelearnerView extends View {
     private final DrawPanel descriptionPanel;
     private final DrawPanel partyPanel;
 
-    private final Button[] buttons;
+    private final ButtonList buttons;
     private final Button[] moveButtons;
     private final Button[] pokemonButtons;
     private final Button learnMoveButton;
@@ -169,13 +170,14 @@ public class MoveRelearnerView extends View {
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
 
-        buttons = new Button[NUM_BUTTONS];
+        Button[] buttons = new Button[NUM_BUTTONS];
         System.arraycopy(moveButtons, 0, buttons, 0, moveButtons.length);
         System.arraycopy(pokemonButtons, 0, buttons, MOVES_PER_PAGE, pokemonButtons.length);
         buttons[LEARN_MOVE] = learnMoveButton;
         buttons[RETURN] = returnButton;
         buttons[MOVES_LEFT_ARROW] = movesLeftButton;
         buttons[MOVES_RIGHT_ARROW] = movesRightButton;
+        this.buttons = new ButtonList(buttons);
     }
 
     @Override
@@ -195,8 +197,8 @@ public class MoveRelearnerView extends View {
             }
         }
 
-        selectedButton = Button.update(buttons, selectedButton);
-        if (buttons[selectedButton].checkConsumePress()) {
+        selectedButton = buttons.update(selectedButton);
+        if (buttons.get(selectedButton).checkConsumePress()) {
             updateActiveButtons();
         }
 
@@ -285,16 +287,12 @@ public class MoveRelearnerView extends View {
             learnMovePanel.draw(g);
         }
 
-        for (Button button : buttons) {
-            button.draw(g);
-        }
+        buttons.draw(g);
     }
 
     private void updateActiveButtons() {
         if (learnMovePanel != null) {
-            for (Button button : buttons) {
-                button.setActive(false);
-            }
+            buttons.setInactive();
         } else {
             for (int i = 0; i < pokemonButtons.length; i++) {
                 pokemonButtons[i].setActive(i < team.size());

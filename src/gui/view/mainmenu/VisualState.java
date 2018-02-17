@@ -1,6 +1,6 @@
 package gui.view.mainmenu;
 
-import draw.button.Button;
+import draw.button.ButtonList;
 import sound.SoundTitle;
 
 import java.awt.Graphics;
@@ -30,7 +30,7 @@ enum VisualState {
         this.visualStateHandler.draw(g, view);
     }
 
-    public Button[] getButtons() {
+    public ButtonList getButtons() {
         return this.visualStateHandler.getButtons();
     }
 
@@ -41,7 +41,7 @@ enum VisualState {
     interface VisualStateHandler {
         void draw(Graphics g, MainMenuView view);
         void update(MainMenuView view);
-        Button[] getButtons();
+        ButtonList getButtons();
 
         default void set() {}
 

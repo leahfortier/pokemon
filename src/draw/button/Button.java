@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Button {
-    private static final int NO_TRANSITION = -1;
-
     public final int x;
     public final int y;
     public final int width;
@@ -29,7 +27,7 @@ public class Button {
 
     private final ButtonHoverAction hoverAction;
     private final ButtonPressAction pressAction;
-    private final int[] transition;
+    private final ButtonTransitions transitions;
 
     private boolean hover;
     private boolean press;
@@ -40,11 +38,11 @@ public class Button {
         this(x, y, width, height, null, null, null);
     }
 
-    public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transition) {
-        this(x, y, width, height, hoverAction, transition, null);
+    public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transitions) {
+        this(x, y, width, height, hoverAction, transitions, null);
     }
 
-    public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transition, ButtonPressAction pressAction) {
+    public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, int[] transitions, ButtonPressAction pressAction) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -53,11 +51,7 @@ public class Button {
         this.hoverAction = hoverAction;
         this.pressAction = pressAction == null ? () -> {} : pressAction;
 
-        if (transition == null) {
-            this.transition = new int[] { NO_TRANSITION, NO_TRANSITION, NO_TRANSITION, NO_TRANSITION };
-        } else {
-            this.transition = transition;
-        }
+        this.transitions = new ButtonTransitions(transitions);
 
         this.hover = false;
         this.press = false;
@@ -133,6 +127,22 @@ public class Button {
 
     public void setForceHover(boolean set) {
         forceHover = set;
+    }
+
+    public boolean isHover() {
+        return this.hover;
+    }
+
+    public boolean isForceHover() {
+        return this.forceHover;
+    }
+
+    public boolean isPress() {
+        return this.press;
+    }
+
+    public ButtonTransitions getTransitions() {
+        return this.transitions;
     }
 
     public void greyOut(Graphics g, boolean totesBlacks) {
@@ -328,54 +338,5 @@ public class Button {
 
         // Convert back to single dimension index
         return location.getIndex(numCols);
-    }
-
-    public static int update(Button[] buttons, int selected) {
-        Direction inputDirection = Direction.consumeInputDirection();
-        if (inputDirection != null) {
-            selected = Button.transition(buttons, selected, inputDirection);
-        }
-
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].update(i == selected);
-
-            if (buttons[i].hover) {
-                selected = i;
-            }
-        }
-
-        // Press overrides hover
-        for (int i = 0; i < buttons.length; i++) {
-            if (buttons[i].press) {
-                selected = i;
-            }
-        }
-
-        if (!buttons[selected].forceHover) {
-            setForceHover(buttons, selected);
-        }
-
-        return selected;
-    }
-
-    private static void setForceHover(Button[] buttons, int selected) {
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].setForceHover(selected == i && buttons[i].isActive());
-        }
-    }
-
-    private static int transition(Button[] buttons, int index, Direction direction) {
-        int next = index;
-        do {
-            next = buttons[next].transition[direction.ordinal()];
-        } while (next != NO_TRANSITION && !buttons[next].isActive());
-
-        if (next == NO_TRANSITION) {
-            return index;
-        }
-
-        setForceHover(buttons, next);
-
-        return next;
     }
 }

@@ -4,6 +4,7 @@ import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.TileSet;
@@ -38,7 +39,7 @@ public class MedalCaseState implements VisualStateHandler {
 
     private final DrawPanel[] medalPanels;
 
-    private final Button[] buttons;
+    private final ButtonList buttons;
     private final Button leftButton;
     private final Button rightButton;
 
@@ -69,7 +70,7 @@ public class MedalCaseState implements VisualStateHandler {
         int arrowHeight = 20;
         int arrowSpacing = 70;
 
-        buttons = new Button[NUM_BUTTONS];
+        Button[] buttons = new Button[NUM_BUTTONS];
         buttons[LEFT_ARROW] = leftButton = new Button(
                 medalPanels[0].centerX() - arrowSpacing - arrowWidth,
                 medalPanels[medalPanels.length - 1].centerY() + spacing + medalPanels[0].height,
@@ -90,6 +91,7 @@ public class MedalCaseState implements VisualStateHandler {
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, NUM_PAGES)
         );
 
+        this.buttons = new ButtonList(buttons);
         this.medalTiles = Game.getData().getMedalTiles();
     }
 
@@ -140,15 +142,13 @@ public class MedalCaseState implements VisualStateHandler {
         leftButton.drawArrow(g, Direction.LEFT);
         rightButton.drawArrow(g, Direction.RIGHT);
 
-        for (Button button : buttons) {
-            button.draw(g);
-        }
+        buttons.draw(g);
     }
 
     @Override
     public void update(int dt, MapView mapView) {
-        selectedButton = Button.update(buttons, selectedButton);
-        buttons[selectedButton].checkConsumePress();
+        selectedButton = buttons.update(selectedButton);
+        buttons.get(selectedButton).checkConsumePress();
 
         InputControl input = InputControl.instance();
         if (input.consumeIfDown(ControlKey.ESC) || input.consumeIfDown(ControlKey.MEDAL_CASE)) {

@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.attack.Attack;
 import battle.attack.Move;
 import draw.button.Button;
+import draw.button.ButtonList;
 import input.ControlKey;
 import input.InputControl;
 import message.MessageUpdate;
@@ -20,7 +21,10 @@ public class LearnMovePanel {
     private static final int NUM_COLS = 4;
 
     private final DrawPanel moveDetailsPanel;
-    private final Button[] buttons;
+    private final ButtonList buttons;
+    private final Button yesButton;
+    private final Button noButton;
+    private final Button newMoveButton;
 
     private final ArrayDeque<MessageUpdate> messages;
 
@@ -39,7 +43,15 @@ public class LearnMovePanel {
         moveDetailsPanel = new DrawPanel(0, 440 - 161, 385, 161).withBorderPercentage(8).withBlackOutline().withTransparentCount(2);
 
         // Create a button for each known move and then one for the new move and one for not learning
-        buttons = BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS);
+        buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS));
+
+        // Bottom center left
+        yesButton = buttons.get(NUM_COLS + 1);
+
+        // Bottom center right
+        noButton = buttons.get(NUM_COLS + 2);
+
+        newMoveButton = this.buttons.get(buttons.size() - 2);
 
         learnedMove = false;
         state = State.MESSAGE;
@@ -57,17 +69,17 @@ public class LearnMovePanel {
         }
 
         InputControl input = InputControl.instance();
-        selectedButton = Button.update(buttons, selectedButton);
+        selectedButton = buttons.update(selectedButton);
 
         if (state == State.QUESTION) {
-            if (noButton().checkConsumePress()) {
+            if (noButton.checkConsumePress()) {
                 messages.pop();
                 messages.add(new MessageUpdate(learning.getActualName() + " did not learn " + toLearn.getAttack().getName() + "."));
                 state = State.END;
                 updateActiveButtons();
             }
 
-            if (yesButton().checkConsumePress()) {
+            if (yesButton.checkConsumePress()) {
                 messages.pop();
                 state = State.DELETE;
                 updateActiveButtons();
@@ -76,7 +88,7 @@ public class LearnMovePanel {
             for (int y = 0, moveIndex = 0; y < 2; y++) {
                 for (int x = 0; x < Move.MAX_MOVES/2; x++, moveIndex++) {
                     int index = Point.getIndex(x, y, NUM_COLS);
-                    if (buttons[index].checkConsumePress()) {
+                    if (buttons.get(index).checkConsumePress()) {
                         state = State.END;
 
                         String learnerName = learning.getActualName();
@@ -94,7 +106,7 @@ public class LearnMovePanel {
                 }
             }
 
-            if (newMoveButton().checkConsumePress()) {
+            if (newMoveButton.checkConsumePress()) {
                 state = State.END;
 
                 messages.addFirst(new MessageUpdate(learning.getActualName() + " did not learn " + toLearn.getAttack().getName() + "."));
@@ -112,15 +124,13 @@ public class LearnMovePanel {
     }
 
     private void updateActiveButtons() {
-        for (Button button : buttons) {
-            button.setActive(false);
-        }
+        buttons.setInactive();
 
         if (state == State.QUESTION) {
-            for (int i = 0; i < buttons.length; i++) {
-                Button button = buttons[i];
-                button.setActive(button == yesButton() || button == noButton());
-                if (button == yesButton()) {
+            for (int i = 0; i < buttons.size(); i++) {
+                Button button = buttons.get(i);
+                button.setActive(button == yesButton || button == noButton);
+                if (button == yesButton) {
                     selectedButton = i;
                 }
             }
@@ -128,8 +138,9 @@ public class LearnMovePanel {
             for (int y = 0; y < 2; y++) {
                 for (int x = 0; x < NUM_COLS; x++) {
                     int index = Point.getIndex(x, y, NUM_COLS);
-                    buttons[index].setActive(x < Move.MAX_MOVES/2 || buttons[index] == newMoveButton());
-                    if (buttons[index] == newMoveButton()) {
+                    Button button = buttons.get(index);
+                    button.setActive(x < Move.MAX_MOVES/2 || button == newMoveButton);
+                    if (button == newMoveButton) {
                         selectedButton = index;
                     }
                 }
@@ -146,8 +157,8 @@ public class LearnMovePanel {
         );
 
         if (state == State.QUESTION) {
-            drawButton(g, yesButton(), new Color(120, 200, 80), "Yes");
-            drawButton(g, noButton(), new Color(220, 20, 20), "No");
+            drawButton(g, yesButton, new Color(120, 200, 80), "Yes");
+            drawButton(g, noButton, new Color(220, 20, 20), "No");
         } else if (state == State.DELETE) {
             List<Move> moves = learning.getActualMoves();
             Attack selected = null;
@@ -156,7 +167,7 @@ public class LearnMovePanel {
                     int index = Point.getIndex(x, y, NUM_COLS);
                     Move move = moves.get(moveIndex);
 
-                    buttons[index].drawMoveButton(g, move);
+                    buttons.get(index).drawMoveButton(g, move);
                     if (index == selectedButton) {
                         selected = move.getAttack();
                     }
@@ -164,12 +175,10 @@ public class LearnMovePanel {
             }
 
             moveDetailsPanel.drawMovePanel(g, selected == null ? toLearn.getAttack() : selected);
-            newMoveButton().drawMoveButton(g, toLearn);
+            newMoveButton.drawMoveButton(g, toLearn);
         }
 
-        for (Button button : buttons) {
-            button.draw(g);
-        }
+        buttons.draw(g);
     }
 
     private void drawButton(Graphics g, Button button, Color color, String label) {
@@ -184,20 +193,6 @@ public class LearnMovePanel {
 
     public boolean isFinished() {
         return state == State.END && messages.isEmpty();
-    }
-
-    // Bottom center left
-    private Button yesButton() {
-        return buttons[NUM_COLS + 1];
-    }
-
-    // Bottom center right
-    private Button noButton() {
-        return buttons[NUM_COLS + 2];
-    }
-
-    private Button newMoveButton() {
-        return this.buttons[buttons.length - 2];
     }
 
     private enum State {

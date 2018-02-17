@@ -6,6 +6,7 @@ import draw.PolygonUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.GameData;
@@ -56,7 +57,7 @@ class MartView extends View {
     private final DrawPanel inBagPanel;
     private final DrawPanel itemAmountPanel;
 
-    private final Button[] buttons;
+    private final ButtonList buttons;
     private final Button[] itemButtons;
     private final Button amountLeftButton;
     private final Button amountRightButton;
@@ -200,7 +201,7 @@ class MartView extends View {
         selectedButton = 0;
         itemAmount = 1;
 
-        buttons = new Button[NUM_BUTTONS];
+        Button[] buttons = new Button[NUM_BUTTONS];
 
         itemButtons = itemsPanel.getButtons(
                 5,
@@ -240,6 +241,8 @@ class MartView extends View {
         buttons[AMOUNT_RIGHT_ARROW] = amountRightButton;
         buttons[RETURN] = returnButton;
 
+        this.buttons = new ButtonList(buttons);
+
         resetForSaleItems();
         setSelectedItem(forSaleItems.get(0));
         updateActiveButtons();
@@ -247,8 +250,8 @@ class MartView extends View {
 
     @Override
     public void update(int dt) {
-        selectedButton = Button.update(buttons, selectedButton);
-        if (buttons[selectedButton].checkConsumePress()) {
+        selectedButton = buttons.update(selectedButton);
+        if (buttons.get(selectedButton).checkConsumePress()) {
             updateActiveButtons();
         }
 
@@ -377,9 +380,7 @@ class MartView extends View {
         tabPanel.drawBackground(g);
         tabPanel.label(g, 16, PokeString.POKE + " Mart");
 
-        for (Button button : buttons) {
-            button.draw(g);
-        }
+        buttons.draw(g);
     }
 
     @Override

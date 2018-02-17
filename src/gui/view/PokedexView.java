@@ -6,6 +6,7 @@ import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.GameData;
@@ -62,7 +63,7 @@ class PokedexView extends View {
     private final DrawPanel basicInfoPanel;
     private final DrawPanel moveDescriptionPanel;
 
-    private final Button[] buttons;
+    private final ButtonList buttons;
     private final Button[][] pokemonButtons;
     private final Button leftButton;
     private final Button rightButton;
@@ -134,7 +135,7 @@ class PokedexView extends View {
         selectedButton = 0;
         pageNum = 0;
 
-        buttons = new Button[NUM_BUTTONS];
+        Button[] buttons = new Button[NUM_BUTTONS];
         pokemonButtons = new Button[NUM_ROWS][NUM_COLS];
         for (int i = 0, k = 0; i < NUM_ROWS; i++) {
             for (int j = 0; j < NUM_COLS; j++, k++) {
@@ -232,14 +233,16 @@ class PokedexView extends View {
                 new int[] { 0, PER_PAGE, RIGHT_ARROW, PER_PAGE }
         );
 
+        this.buttons = new ButtonList(buttons);
+
         selected = PokemonInfo.getPokemonInfo(1);
         changeTab(TabInfo.MAIN);
     }
 
     @Override
     public void update(int dt) {
-        selectedButton = Button.update(buttons, selectedButton);
-        if (buttons[selectedButton].checkConsumePress()) {
+        selectedButton = buttons.update(selectedButton);
+        if (buttons.get(selectedButton).checkConsumePress()) {
             updateActiveButtons();
         }
 
@@ -582,9 +585,7 @@ class PokedexView extends View {
         returnButton.blackOutline(g);
         returnButton.label(g, 20, "Return");
 
-        for (Button button : buttons) {
-            button.draw(g);
-        }
+        buttons.draw(g);
     }
 
     private int getIndex(int i, int j) {

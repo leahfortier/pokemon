@@ -8,6 +8,7 @@ import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.GameData;
@@ -46,7 +47,7 @@ class DayCareView extends View {
     private final DrawPanel[] movePanels;
     private final DrawPanel statsPanel;
 
-    private final Button[] buttons;
+    private final ButtonList buttons;
     private final Button firstDayCarePokemonButton;
     private final Button secondDayCarePokemonButton;
     private final Button[] partyButtons;
@@ -147,7 +148,7 @@ class DayCareView extends View {
 
         selectedButton = DEPOSIT_WITHDRAW;
 
-        buttons = new Button[NUM_BUTTONS];
+        Button[] buttons = new Button[NUM_BUTTONS];
 
         int buttonSpacing = 10;
         int pokemonButtonHeight = (dayCarePanel.height - 4*buttonSpacing)/3;
@@ -222,6 +223,8 @@ class DayCareView extends View {
                 ButtonHoverAction.BOX,
                 new int[] { 0, -1, DEPOSIT_WITHDRAW, -1 }
         );
+
+        this.buttons = new ButtonList(buttons);
     }
 
     @Override
@@ -239,8 +242,8 @@ class DayCareView extends View {
             return;
         }
 
-        selectedButton = Button.update(buttons, selectedButton);
-        if (buttons[selectedButton].checkConsumePress()) {
+        selectedButton = buttons.update(selectedButton);
+        if (buttons.get(selectedButton).checkConsumePress()) {
             updateActiveButtons();
         }
 
@@ -377,9 +380,7 @@ class DayCareView extends View {
         drawTextButton(g, depositWithdrawButton, party ? "Deposit" : "Withdraw", new Color(123, 213, 74));
         drawTextButton(g, returnButton, "Return", Color.YELLOW);
 
-        for (Button b : buttons) {
-            b.draw(g);
-        }
+        buttons.draw(g);
 
         if (message != null) {
             BasicPanels.drawFullMessagePanel(g, message);

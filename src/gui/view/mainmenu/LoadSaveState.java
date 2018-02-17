@@ -2,6 +2,7 @@ package gui.view.mainmenu;
 
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonList;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
 import map.Direction;
 import save.Save;
@@ -12,14 +13,16 @@ class LoadSaveState implements VisualStateHandler {
     private static final int RETURN = Save.NUM_SAVES;
     private static final int DELETE = RETURN + 1;
 
-    private final Button[] buttons;
+    private final ButtonList buttons;
+    private final Button returnButton;
+    private final Button deleteButton;
 
     private boolean deletePressed;
 
     LoadSaveState() {
-        this.buttons = new Button[Save.NUM_SAVES + 2];
+        Button[] buttons = new Button[Save.NUM_SAVES + 2];
         for (int i = 0; i < Save.NUM_SAVES; i++) {
-            this.buttons[i] = MainMenuView.createMenuButton(
+            buttons[i] = MainMenuView.createMenuButton(
                     i,
                     new int[] {
                             i, // Right
@@ -32,7 +35,7 @@ class LoadSaveState implements VisualStateHandler {
 
         Button referenceButton = MainMenuView.createMenuButton(MainMenuView.NUM_MAIN_BUTTONS - 1);
 
-        this.buttons[RETURN] = new Button(
+        returnButton = buttons[RETURN] = new Button(
                 referenceButton.x,
                 referenceButton.y,
                 referenceButton.width/2 - 5,
@@ -46,9 +49,7 @@ class LoadSaveState implements VisualStateHandler {
                 }
         );
 
-        Button returnButton = this.buttons[RETURN];
-
-        buttons[DELETE] = new Button(
+        deleteButton = buttons[DELETE] = new Button(
                 referenceButton.x + referenceButton.width/2 + 5,
                 returnButton.y,
                 returnButton.width,
@@ -61,6 +62,8 @@ class LoadSaveState implements VisualStateHandler {
                         0                   // Down -- to the first save file
                 }
         );
+
+        this.buttons = new ButtonList(buttons);
     }
 
     @Override
@@ -72,12 +75,12 @@ class LoadSaveState implements VisualStateHandler {
     public void draw(Graphics g, MainMenuView view) {
         // Draw each save information button
         for (int i = 0; i < Save.NUM_SAVES; i++) {
-            view.drawSaveInformation(g, this.buttons[i], i, "Empty");
+            view.drawSaveInformation(g, this.buttons.get(i), i, "Empty");
         }
 
         // Return and Delete
-        buttons[RETURN].label(g, 30, "Return");
-        buttons[DELETE].label(g, 30, "Delete");
+        returnButton.label(g, 30, "Return");
+        deleteButton.label(g, 30, "Delete");
     }
 
     @Override
@@ -107,7 +110,7 @@ class LoadSaveState implements VisualStateHandler {
     }
 
     @Override
-    public Button[] getButtons() {
+    public ButtonList getButtons() {
         return this.buttons;
     }
 }

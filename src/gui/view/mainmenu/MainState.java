@@ -1,6 +1,7 @@
 package gui.view.mainmenu;
 
 import draw.button.Button;
+import draw.button.ButtonList;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
 
 import java.awt.Graphics;
@@ -8,19 +9,21 @@ import java.awt.Graphics;
 class MainState implements VisualStateHandler {
     private static final String[] MAIN_HEADERS = { "Load Game", "New Game", "Options", "Quit" };
 
-    private final Button[] buttons;
+    private final ButtonList buttons;
 
     MainState() {
-        this.buttons = new Button[MainMenuView.NUM_MAIN_BUTTONS];
+        Button[] buttons = new Button[MainMenuView.NUM_MAIN_BUTTONS];
         for (int i = 0; i < buttons.length; i++) {
-            this.buttons[i] = MainMenuView.createMenuButton(i);
+            buttons[i] = MainMenuView.createMenuButton(i);
         }
+
+        this.buttons = new ButtonList(buttons);
     }
 
     @Override
     public void draw(Graphics g, MainMenuView view) {
-        for (int i = 0; i < this.buttons.length; i++) {
-            this.buttons[i].label(g, 40, MAIN_HEADERS[i]);
+        for (int i = 0; i < this.buttons.size(); i++) {
+            this.buttons.get(i).label(g, 40, MAIN_HEADERS[i]);
         }
     }
 
@@ -44,7 +47,7 @@ class MainState implements VisualStateHandler {
     }
 
     @Override
-    public Button[] getButtons() {
+    public ButtonList getButtons() {
         return this.buttons;
     }
 }

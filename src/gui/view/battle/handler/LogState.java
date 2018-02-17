@@ -2,6 +2,7 @@ package gui.view.battle.handler;
 
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonList;
 import gui.view.battle.BattleView;
 import main.Game;
 import map.Direction;
@@ -14,18 +15,17 @@ import java.util.Iterator;
 import java.util.List;
 
 public class LogState implements VisualStateHandler {
-    private static final int LOG_LEFT_BUTTON = 0;
-    private static final int LOG_RIGHT_BUTTON = 1;
-
     private static final int LOGS_PER_PAGE = 23;
 
-    private final Button[] logButtons;
+    private final ButtonList logButtons;
+    private final Button leftArrow;
+    private final Button rightArrow;
 
     private int logPage;
     private List<String> logMessages;
 
     public LogState() {
-        logButtons = new Button[2];
+        Button[] logButtons = new Button[2];
         for (int i = 0; i < logButtons.length; i++) {
             logButtons[i] = new Button(
                     150 + 50*i,
@@ -36,6 +36,10 @@ public class LogState implements VisualStateHandler {
                     Button.getBasicTransitions(i, 1, 2)
             );
         }
+
+        this.logButtons = new ButtonList(logButtons);
+        this.leftArrow = logButtons[0];
+        this.rightArrow = logButtons[1];
     }
 
     @Override
@@ -56,11 +60,10 @@ public class LogState implements VisualStateHandler {
             g.drawString(logIter.next(), 25, 200 + i*15);
         }
 
-        logButtons[LOG_LEFT_BUTTON].drawArrow(g, Direction.LEFT);
-        logButtons[LOG_RIGHT_BUTTON].drawArrow(g, Direction.RIGHT);
+        leftArrow.drawArrow(g, Direction.LEFT);
+        rightArrow.drawArrow(g, Direction.RIGHT);
 
-        logButtons[LOG_LEFT_BUTTON].draw(g);
-        logButtons[LOG_RIGHT_BUTTON].draw(g);
+        logButtons.draw(g);
 
         // Draw Messages Box
         view.drawMenuMessagePanel(g, "Bob Loblaw's Log Blog");
@@ -74,10 +77,10 @@ public class LogState implements VisualStateHandler {
         view.setSelectedButton(logButtons);
 
         int increment = 0;
-        if (logButtons[LOG_LEFT_BUTTON].checkConsumePress()) {
+        if (leftArrow.checkConsumePress()) {
             increment = -1;
         }
-        if (logButtons[LOG_RIGHT_BUTTON].checkConsumePress()) {
+        if (rightArrow.checkConsumePress()) {
             increment = 1;
         }
 

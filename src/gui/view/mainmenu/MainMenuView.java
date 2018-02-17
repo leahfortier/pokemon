@@ -3,6 +3,7 @@ package gui.view.mainmenu;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonList;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.ControlKey;
@@ -56,11 +57,11 @@ public class MainMenuView extends View {
         return this.settings;
     }
 
-    int getPressed(Button[] buttons) {
+    int getPressed(ButtonList buttons) {
         int pressed = -1;
 
-        selectedButton = Button.update(buttons, selectedButton);
-        if (buttons[selectedButton].checkConsumePress()) {
+        selectedButton = buttons.update(selectedButton);
+        if (buttons.get(selectedButton).checkConsumePress()) {
             pressed = selectedButton;
         }
 
@@ -71,10 +72,7 @@ public class MainMenuView extends View {
         state = newState;
         selectedButton = 0;
 
-        for (Button button : state.getButtons()) {
-            button.setForceHover(false);
-        }
-
+        state.getButtons().setFalseHover();
         state.set();
 
         SoundPlayer.instance().playMusic(state.getTunes());
@@ -120,10 +118,12 @@ public class MainMenuView extends View {
         theme.draw(g, bgTime, bgIndex);
 
         g.drawImage(MAIN_LOGO, 95, 54, null);
-        for (Button button : state.getButtons()) {
-            button.fillBordered(g, theme.getButtonColor());
-            button.draw(g);
+
+        ButtonList buttons = state.getButtons();
+        for (int i = 0; i < buttons.size(); i++) {
+            buttons.get(i).fillBordered(g, theme.getButtonColor());
         }
+        buttons.draw(g);
 
         this.state.draw(g, this);
     }

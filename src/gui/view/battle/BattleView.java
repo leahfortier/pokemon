@@ -7,6 +7,7 @@ import battle.effect.generic.Weather;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.button.Button;
+import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.view.View;
@@ -137,8 +138,8 @@ public class BattleView extends View {
         VisualState.setSwitchForced();
     }
 
-    public void setSelectedButton(Button[] buttons) {
-        int buttonIndex = Button.update(buttons, this.selectedButton);
+    public void setSelectedButton(ButtonList buttons) {
+        int buttonIndex = buttons.update(this.selectedButton);
         this.setSelectedButton(buttonIndex);
     }
 

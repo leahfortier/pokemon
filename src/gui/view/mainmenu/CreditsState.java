@@ -2,6 +2,7 @@ package gui.view.mainmenu;
 
 import draw.TextUtils;
 import draw.button.Button;
+import draw.button.ButtonList;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
 import main.Global;
 import sound.SoundTitle;
@@ -72,8 +73,8 @@ class CreditsState implements VisualStateHandler {
     }
 
     @Override
-    public Button[] getButtons() {
-        return new Button[0];
+    public ButtonList getButtons() {
+        return new ButtonList(new Button[0]);
     }
 
     @Override

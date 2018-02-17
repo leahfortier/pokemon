@@ -6,6 +6,7 @@ import draw.DrawUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.GameData;
@@ -46,7 +47,7 @@ class PCView extends View {
     private final DrawPanel movesPanel;
     private final DrawPanel statsPanel;
 
-    private final Button[] buttons;
+    private final ButtonList buttons;
     private final Button[][] boxButtons;
     private final Button[] partyButtons;
     private final Button leftButton;
@@ -119,7 +120,7 @@ class PCView extends View {
 
         selectedButton = PARTY;
 
-        buttons = new Button[NUM_BUTTONS];
+        Button[] buttons = new Button[NUM_BUTTONS];
         boxButtons = new Button[PC.BOX_HEIGHT][PC.BOX_WIDTH];
         for (int i = 0, k = 0; i < PC.BOX_HEIGHT; i++) {
             for (int j = 0; j < PC.BOX_WIDTH; j++, k++) {
@@ -249,14 +250,16 @@ class PCView extends View {
                 }
         );
 
+        this.buttons = new ButtonList(buttons);
+
         party = true;
         selected = Game.getPlayer().front();
     }
 
     @Override
     public void update(int dt) {
-        selectedButton = Button.update(buttons, selectedButton);
-        if (buttons[selectedButton].checkConsumePress()) {
+        selectedButton = buttons.update(selectedButton);
+        if (buttons.get(selectedButton).checkConsumePress()) {
             updateActiveButtons();
         }
 
@@ -425,9 +428,7 @@ class PCView extends View {
         drawTextButton(g, releaseButton, "Release");
         drawTextButton(g, depositWithdrawButton, party ? "Deposit" : "Withdraw");
 
-        for (Button b : buttons) {
-            b.draw(g);
-        }
+        buttons.draw(g);
     }
 
     private void drawTextButton(Graphics g, Button button, String text) {

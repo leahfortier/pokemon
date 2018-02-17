@@ -3,6 +3,7 @@ package gui.view.map;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.view.map.VisualState.VisualStateHandler;
@@ -26,7 +27,9 @@ class FlyState implements VisualStateHandler {
     private static final int BUTTON_PADDING = 20;
 
     private final DrawPanel titlePanel;
-    private final Button[] buttons;
+    private final ButtonList buttons;
+    private final Button leftButton;
+    private final Button rightButton;
 
     private List<FlyLocation> flyLocations;
 
@@ -39,11 +42,11 @@ class FlyState implements VisualStateHandler {
                 .withBlackOutline();
 
         // Arrows and area buttons
-        this.buttons = new Button[NUM_AREA_BUTTONS + 2];
+        Button[] buttons = new Button[NUM_AREA_BUTTONS + 2];
 
         int buttonHeight = (Global.GAME_SIZE.height - titlePanel.height - (NUM_AREA_BUTTONS + 2)*BUTTON_PADDING)/(NUM_AREA_BUTTONS + 1);
         for (int i = 0; i < NUM_AREA_BUTTONS; i++) {
-            this.buttons[i] = new Button(
+            buttons[i] = new Button(
                     2*BUTTON_PADDING,
                     i*buttonHeight + (i + 2)*BUTTON_PADDING + this.titlePanel.height,
                     400,
@@ -58,7 +61,7 @@ class FlyState implements VisualStateHandler {
             );
         }
 
-        this.buttons[LEFT_BUTTON] = new Button(
+        buttons[LEFT_BUTTON] = new Button(
                 500,
                 BUTTON_PADDING,
                 75,
@@ -67,7 +70,7 @@ class FlyState implements VisualStateHandler {
                 new int[] { RIGHT_BUTTON, NUM_AREA_BUTTONS - 1, 0, 0 }
         );
 
-        this.buttons[RIGHT_BUTTON] = new Button(
+        buttons[RIGHT_BUTTON] = new Button(
                 650,
                 BUTTON_PADDING,
                 75,
@@ -76,6 +79,9 @@ class FlyState implements VisualStateHandler {
                 new int[] { 0, NUM_AREA_BUTTONS - 1, LEFT_BUTTON, 0 }
         );
 
+        this.buttons = new ButtonList(buttons);
+        this.leftButton = this.buttons.get(LEFT_BUTTON);
+        this.rightButton = this.buttons.get(RIGHT_BUTTON);
         this.pageNum = 0;
     }
 
@@ -90,14 +96,12 @@ class FlyState implements VisualStateHandler {
         for (int i = 0; i < NUM_AREA_BUTTONS && iter.hasNext(); i++) {
             FlyLocation flyLocation = iter.next();
 
-            Button locationButton = this.buttons[i];
+            Button locationButton = this.buttons.get(i);
             locationButton.fillTransparent(g);
             locationButton.blackOutline(g);
             locationButton.label(g, 30, flyLocation.getAreaName());
         }
 
-        Button leftButton = this.buttons[LEFT_BUTTON];
-        Button rightButton = this.buttons[RIGHT_BUTTON];
         leftButton.drawArrow(g, Direction.LEFT);
         rightButton.drawArrow(g, Direction.RIGHT);
         TextUtils.drawCenteredString(
@@ -107,18 +111,16 @@ class FlyState implements VisualStateHandler {
                 (leftButton.centerY() + rightButton.centerY())/2
         );
 
-        for (Button button : buttons) {
-            button.draw(g);
-        }
+        buttons.draw(g);
     }
 
     @Override
     public void update(int dt, MapView mapView) {
         InputControl input = InputControl.instance();
 
-        selectedButton = Button.update(this.buttons, selectedButton);
+        selectedButton = this.buttons.update(selectedButton);
 
-        if (this.buttons[selectedButton].checkConsumePress()) {
+        if (this.buttons.get(selectedButton).checkConsumePress()) {
             if (selectedButton < NUM_AREA_BUTTONS) {
                 FlyLocation flyLocation = this.flyLocations.get(selectedButton + pageNum*NUM_AREA_BUTTONS);
 
@@ -146,7 +148,7 @@ class FlyState implements VisualStateHandler {
 
     private void updateActiveButtons() {
         for (int i = 0; i < NUM_AREA_BUTTONS; i++) {
-            buttons[i].setActive(i + pageNum*NUM_AREA_BUTTONS < this.flyLocations.size());
+            buttons.get(i).setActive(i + pageNum*NUM_AREA_BUTTONS < this.flyLocations.size());
         }
     }
 
