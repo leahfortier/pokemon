@@ -34,7 +34,6 @@ public class LearnMovePanel {
     private boolean learnedMove;
 
     private State state;
-    private int selectedButton;
 
     public LearnMovePanel(ActivePokemon learning, Move toLearn) {
         this.learning = learning;
@@ -69,7 +68,7 @@ public class LearnMovePanel {
         }
 
         InputControl input = InputControl.instance();
-        selectedButton = buttons.update(selectedButton);
+        buttons.update();
 
         if (state == State.QUESTION) {
             if (noButton.checkConsumePress()) {
@@ -131,7 +130,7 @@ public class LearnMovePanel {
                 Button button = buttons.get(i);
                 button.setActive(button == yesButton || button == noButton);
                 if (button == yesButton) {
-                    selectedButton = i;
+                    buttons.setSelected(i);
                 }
             }
         } else if (state == State.DELETE) {
@@ -141,7 +140,7 @@ public class LearnMovePanel {
                     Button button = buttons.get(index);
                     button.setActive(x < Move.MAX_MOVES/2 || button == newMoveButton);
                     if (button == newMoveButton) {
-                        selectedButton = index;
+                        buttons.setSelected(index);
                     }
                 }
             }
@@ -168,7 +167,7 @@ public class LearnMovePanel {
                     Move move = moves.get(moveIndex);
 
                     buttons.get(index).drawMoveButton(g, move);
-                    if (index == selectedButton) {
+                    if (index == buttons.getSelected()) {
                         selected = move.getAttack();
                     }
                 }

@@ -17,15 +17,11 @@ class MenuState implements VisualStateHandler {
     private final DrawPanel menuPanel;
     private final ButtonList menuButtons;
 
-    private int selectedButton;
-
     MenuState() {
         int width = 273;
         menuPanel = new DrawPanel(Global.GAME_SIZE.width - width, 0, width, Global.GAME_SIZE.height)
                 .withBorderColor(new Color(53, 53, 129))
                 .withBorderPercentage(5);
-
-        selectedButton = 0;
 
         Button[] menuButtons = new Button[MenuChoice.values().length];
         for (int i = 0; i < menuButtons.length; i++) {
@@ -57,7 +53,7 @@ class MenuState implements VisualStateHandler {
     @Override
     public void update(int dt, MapView mapView) {
         InputControl input = InputControl.instance();
-        selectedButton = menuButtons.update(selectedButton);
+        menuButtons.update();
 
         int clicked = -1;
         for (int i = 0; i < menuButtons.size(); i++) {

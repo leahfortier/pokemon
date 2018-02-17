@@ -75,7 +75,6 @@ class PokedexView extends View {
 
     private final Pokedex pokedex;
 
-    private int selectedButton;
     private PokemonInfo selected;
     private TabInfo selectedTab;
 
@@ -132,7 +131,6 @@ class PokedexView extends View {
                 .withBlackOutline();
 
         this.pokedex = Game.getPlayer().getPokedex();
-        selectedButton = 0;
         pageNum = 0;
 
         Button[] buttons = new Button[NUM_BUTTONS];
@@ -241,8 +239,8 @@ class PokedexView extends View {
 
     @Override
     public void update(int dt) {
-        selectedButton = buttons.update(selectedButton);
-        if (buttons.get(selectedButton).checkConsumePress()) {
+        buttons.update();
+        if (buttons.consumeSelectedPress()) {
             updateActiveButtons();
         }
 
@@ -483,6 +481,7 @@ class PokedexView extends View {
                         levelString = String.format("%3d", level);
                     }
 
+                    int selectedButton = buttons.getSelected();
                     if (i == 0 || selectedButton == MOVE_START + i) {
                         moveDescriptionPanel.withTransparentBackground(attack.getActualType().getColor())
                                             .drawBackground(g);

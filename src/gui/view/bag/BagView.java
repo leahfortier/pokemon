@@ -80,7 +80,6 @@ public class BagView extends View {
     PartyPokemon selectedPokemon;
 
     private int pageNum;
-    private int selectedButton;
 
     private BagCategory selectedTab;
     private MessageUpdate message;
@@ -145,7 +144,6 @@ public class BagView extends View {
                 .withBlackOutline();
 
         selectedTab = CATEGORIES[0];
-        selectedButton = 0;
         selectedItem = ItemNamesies.NO_ITEM;
 
         tabButtons = new Button[CATEGORIES.length];
@@ -291,8 +289,8 @@ public class BagView extends View {
                 }
             }
 
-            selectedButton = buttons.update(selectedButton);
-            if (buttons.get(selectedButton).checkConsumePress()) {
+            buttons.update();
+            if (buttons.consumeSelectedPress()) {
                 updateActiveButtons();
             }
 
@@ -540,7 +538,7 @@ public class BagView extends View {
     }
 
     void setSelectedButton(UseState useState) {
-        selectedButton = useState.buttonIndex;
+        this.buttons.setSelected(useState.buttonIndex);
     }
 
     void updateCategory() {

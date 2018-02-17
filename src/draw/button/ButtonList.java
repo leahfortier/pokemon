@@ -7,8 +7,11 @@ import java.awt.Graphics;
 public class ButtonList {
     private final Button[] buttons;
 
+    private int selected;
+
     public ButtonList(Button[] buttons) {
         this.buttons = buttons;
+        this.selected = 0;
     }
 
     public int size() {
@@ -17,6 +20,18 @@ public class ButtonList {
 
     public Button get(int index) {
         return this.buttons[index];
+    }
+
+    public int getSelected() {
+        return this.selected;
+    }
+
+    public void setSelected(int index) {
+        this.selected = index;
+    }
+
+    public boolean consumeSelectedPress() {
+        return this.buttons[selected].checkConsumePress();
     }
 
     public void draw(Graphics g) {
@@ -37,7 +52,7 @@ public class ButtonList {
         }
     }
 
-    public int update(int selected) {
+    public int update() {
         Direction inputDirection = Direction.consumeInputDirection();
         if (inputDirection != null) {
             selected = this.transition(selected, inputDirection);

@@ -28,12 +28,12 @@ class FlyState implements VisualStateHandler {
 
     private final DrawPanel titlePanel;
     private final ButtonList buttons;
+    private final Button[] areaButtons;
     private final Button leftButton;
     private final Button rightButton;
 
     private List<FlyLocation> flyLocations;
 
-    private int selectedButton;
     private int pageNum;
 
     FlyState() {
@@ -45,8 +45,10 @@ class FlyState implements VisualStateHandler {
         Button[] buttons = new Button[NUM_AREA_BUTTONS + 2];
 
         int buttonHeight = (Global.GAME_SIZE.height - titlePanel.height - (NUM_AREA_BUTTONS + 2)*BUTTON_PADDING)/(NUM_AREA_BUTTONS + 1);
+        areaButtons = new Button[NUM_AREA_BUTTONS];
         for (int i = 0; i < NUM_AREA_BUTTONS; i++) {
-            buttons[i] = new Button(
+            final int index = i;
+            areaButtons[i] = buttons[i] = new Button(
                     2*BUTTON_PADDING,
                     i*buttonHeight + (i + 2)*BUTTON_PADDING + this.titlePanel.height,
                     400,
@@ -57,31 +59,37 @@ class FlyState implements VisualStateHandler {
                             LEFT_BUTTON,
                             RIGHT_BUTTON,
                             -1
-                    })
+                    }),
+                    () -> {
+                        FlyLocation flyLocation = this.flyLocations.get(index + pageNum*NUM_AREA_BUTTONS);
+
+                        // Note: Changes view mode to map view
+                        flyLocation.fly();
+                    }
             );
         }
 
-        buttons[LEFT_BUTTON] = new Button(
+        leftButton = buttons[LEFT_BUTTON] = new Button(
                 500,
                 BUTTON_PADDING,
                 75,
                 50,
                 ButtonHoverAction.BOX,
-                new int[] { RIGHT_BUTTON, NUM_AREA_BUTTONS - 1, 0, 0 }
+                new int[] { RIGHT_BUTTON, NUM_AREA_BUTTONS - 1, 0, 0 },
+                () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         );
 
-        buttons[RIGHT_BUTTON] = new Button(
+        rightButton = buttons[RIGHT_BUTTON] = new Button(
                 650,
                 BUTTON_PADDING,
                 75,
                 50,
                 ButtonHoverAction.BOX,
-                new int[] { 0, NUM_AREA_BUTTONS - 1, LEFT_BUTTON, 0 }
+                new int[] { 0, NUM_AREA_BUTTONS - 1, LEFT_BUTTON, 0 },
+                () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
 
         this.buttons = new ButtonList(buttons);
-        this.leftButton = this.buttons.get(LEFT_BUTTON);
-        this.rightButton = this.buttons.get(RIGHT_BUTTON);
         this.pageNum = 0;
     }
 
@@ -95,8 +103,8 @@ class FlyState implements VisualStateHandler {
         Iterator<FlyLocation> iter = GeneralUtils.pageIterator(flyLocations, pageNum, NUM_AREA_BUTTONS);
         for (int i = 0; i < NUM_AREA_BUTTONS && iter.hasNext(); i++) {
             FlyLocation flyLocation = iter.next();
+            Button locationButton = this.areaButtons[i];
 
-            Button locationButton = this.buttons.get(i);
             locationButton.fillTransparent(g);
             locationButton.blackOutline(g);
             locationButton.label(g, 30, flyLocation.getAreaName());
@@ -118,20 +126,8 @@ class FlyState implements VisualStateHandler {
     public void update(int dt, MapView mapView) {
         InputControl input = InputControl.instance();
 
-        selectedButton = this.buttons.update(selectedButton);
-
-        if (this.buttons.get(selectedButton).checkConsumePress()) {
-            if (selectedButton < NUM_AREA_BUTTONS) {
-                FlyLocation flyLocation = this.flyLocations.get(selectedButton + pageNum*NUM_AREA_BUTTONS);
-
-                // Note: Changes view mode to map view
-                flyLocation.fly();
-            } else if (selectedButton == LEFT_BUTTON) {
-                pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages());
-            } else if (selectedButton == RIGHT_BUTTON) {
-                pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages());
-            }
-
+        this.buttons.update();
+        if (this.buttons.consumeSelectedPress()) {
             updateActiveButtons();
         }
 
@@ -148,7 +144,7 @@ class FlyState implements VisualStateHandler {
 
     private void updateActiveButtons() {
         for (int i = 0; i < NUM_AREA_BUTTONS; i++) {
-            buttons.get(i).setActive(i + pageNum*NUM_AREA_BUTTONS < this.flyLocations.size());
+            areaButtons[i].setActive(i + pageNum*NUM_AREA_BUTTONS < this.flyLocations.size());
         }
     }
 

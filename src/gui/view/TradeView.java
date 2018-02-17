@@ -48,7 +48,6 @@ public class TradeView extends View {
     private final TileSet partyTiles;
     private final TileSet pokemonTiles;
 
-    private int selectedIndex;
     private int tradeAnimationTime;
 
     private PokemonInfo offering;
@@ -111,7 +110,7 @@ public class TradeView extends View {
             tradeAnimationTime -= dt;
             exit = tradeAnimationTime <= 0;
         } else {
-            this.selectedIndex = this.buttons.update(this.selectedIndex);
+            this.buttons.update();
 
             InputControl input = InputControl.instance();
             exit = cancelButton.checkConsumePress() || input.consumeIfDown(ControlKey.ESC);
@@ -259,7 +258,7 @@ public class TradeView extends View {
     public void movedToFront() {
         Player player = Game.getPlayer();
         this.team = player.getTeam();
-        this.selectedIndex = 0;
+        this.buttons.setSelected(0);
 
         updateActiveButtons();
     }

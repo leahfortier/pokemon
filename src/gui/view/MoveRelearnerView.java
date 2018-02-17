@@ -59,7 +59,6 @@ public class MoveRelearnerView extends View {
     private List<AttackNamesies> learnableMoves;
     private Bag bag;
 
-    private int selectedButton;
     private int selectedPokemon;
     private Attack selectedMove;
     private int pageNum;
@@ -197,8 +196,8 @@ public class MoveRelearnerView extends View {
             }
         }
 
-        selectedButton = buttons.update(selectedButton);
-        if (buttons.get(selectedButton).checkConsumePress()) {
+        buttons.update();
+        if (buttons.consumeSelectedPress()) {
             updateActiveButtons();
         }
 

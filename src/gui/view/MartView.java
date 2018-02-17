@@ -67,7 +67,6 @@ class MartView extends View {
     private final Button returnButton;
 
     private int pageNum;
-    private int selectedButton;
     private int itemAmount;
 
     private List<ItemNamesies> forSaleItems;
@@ -198,7 +197,6 @@ class MartView extends View {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        selectedButton = 0;
         itemAmount = 1;
 
         Button[] buttons = new Button[NUM_BUTTONS];
@@ -250,8 +248,8 @@ class MartView extends View {
 
     @Override
     public void update(int dt) {
-        selectedButton = buttons.update(selectedButton);
-        if (buttons.get(selectedButton).checkConsumePress()) {
+        buttons.update();
+        if (buttons.consumeSelectedPress()) {
             updateActiveButtons();
         }
 

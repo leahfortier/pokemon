@@ -61,7 +61,6 @@ class PCView extends View {
 
     private PartyPokemon selected;
     private boolean party;
-    private int selectedButton;
     private boolean depositClicked;
     private boolean switchClicked;
 
@@ -117,8 +116,6 @@ class PCView extends View {
          .withBlackOutline();
 
         pc = Game.getPlayer().getPC();
-
-        selectedButton = PARTY;
 
         Button[] buttons = new Button[NUM_BUTTONS];
         boxButtons = new Button[PC.BOX_HEIGHT][PC.BOX_WIDTH];
@@ -251,6 +248,7 @@ class PCView extends View {
         );
 
         this.buttons = new ButtonList(buttons);
+        this.buttons.setSelected(PARTY);
 
         party = true;
         selected = Game.getPlayer().front();
@@ -258,8 +256,8 @@ class PCView extends View {
 
     @Override
     public void update(int dt) {
-        selectedButton = buttons.update(selectedButton);
-        if (buttons.get(selectedButton).checkConsumePress()) {
+        buttons.update();
+        if (buttons.consumeSelectedPress()) {
             updateActiveButtons();
         }
 

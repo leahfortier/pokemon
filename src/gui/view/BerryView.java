@@ -63,7 +63,6 @@ public class BerryView extends View {
     private final Button rightButton;
 
     private int pageNum;
-    private int selectedButton;
     private String message;
     private ItemNamesies selectedItem;
 
@@ -143,7 +142,6 @@ public class BerryView extends View {
             berryPanels[i] = new DrawPanel(berryButtons[i]).withBlackOutline().withFullTransparency();
         }
 
-        selectedButton = 0;
         selectedItem = ItemNamesies.NO_ITEM;
 
         itemButtons = itemsPanel.getButtons(
@@ -205,8 +203,8 @@ public class BerryView extends View {
             return;
         }
 
-        selectedButton = buttons.update(selectedButton);
-        if (buttons.get(selectedButton).checkConsumePress()) {
+        buttons.update();
+        if (buttons.consumeSelectedPress()) {
             updateActiveButtons();
         }
 

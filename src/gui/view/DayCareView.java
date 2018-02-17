@@ -59,7 +59,6 @@ class DayCareView extends View {
 
     private PartyPokemon selected;
     private boolean party;
-    private int selectedButton;
     private String message;
 
     DayCareView() {
@@ -146,8 +145,6 @@ class DayCareView extends View {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        selectedButton = DEPOSIT_WITHDRAW;
-
         Button[] buttons = new Button[NUM_BUTTONS];
 
         int buttonSpacing = 10;
@@ -225,6 +222,7 @@ class DayCareView extends View {
         );
 
         this.buttons = new ButtonList(buttons);
+        this.buttons.setSelected(DEPOSIT_WITHDRAW);
     }
 
     @Override
@@ -242,8 +240,8 @@ class DayCareView extends View {
             return;
         }
 
-        selectedButton = buttons.update(selectedButton);
-        if (buttons.get(selectedButton).checkConsumePress()) {
+        buttons.update();
+        if (buttons.consumeSelectedPress()) {
             updateActiveButtons();
         }
 

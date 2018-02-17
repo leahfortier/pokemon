@@ -51,7 +51,6 @@ class NewPokemonView extends View {
 
     private State state;
     private String message;
-    private int selectedButton;
     private boolean displayInfo;
 
     NewPokemonView() {
@@ -84,7 +83,7 @@ class NewPokemonView extends View {
             return;
         }
 
-        selectedButton = buttons.update(selectedButton);
+        buttons.update();
         InputControl input = InputControl.instance();
 
         switch (state) {
@@ -307,7 +306,7 @@ class NewPokemonView extends View {
                     Button button = buttons.get(i);
                     button.setActive(button == leftButton || button == rightButton);
                     if (button == rightButton) {
-                        this.selectedButton = i;
+                        this.buttons.setSelected(i);
                     }
                 }
 
@@ -322,7 +321,7 @@ class NewPokemonView extends View {
                         Button button = buttons.get(i);
                         button.setActive(button == leftButton || button == rightButton);
                         if (button == rightButton) {
-                            selectedButton = i;
+                            this.buttons.setSelected(i);
                         }
                     }
 
@@ -333,7 +332,7 @@ class NewPokemonView extends View {
                 break;
             case PARTY_SELECTION:
                 message = null;
-                selectedButton = 0;
+                this.buttons.setSelected(0);
 
                 for (int row = 0; row < 2; row++) {
                     for (int col = 0; col < NUM_COLS; col++) {
@@ -356,7 +355,7 @@ class NewPokemonView extends View {
         this.newPokemon = newPokemonInfo.getNewPokemon();
         this.boxNum = newPokemonInfo.getNewPokemonBox();
 
-        this.selectedButton = 0;
+        this.buttons.setSelected(0);
 
         this.canvasPanel.withBackgroundColors(Type.getColors(this.newPokemon));
 

@@ -48,7 +48,6 @@ public class MedalCaseState implements VisualStateHandler {
     private MedalCase medalCase;
 
     private int pageNum;
-    private int selectedButton;
 
     MedalCaseState() {
         int spacing = 20;
@@ -147,8 +146,8 @@ public class MedalCaseState implements VisualStateHandler {
 
     @Override
     public void update(int dt, MapView mapView) {
-        selectedButton = buttons.update(selectedButton);
-        buttons.get(selectedButton).checkConsumePress();
+        buttons.update();
+        buttons.consumeSelectedPress();
 
         InputControl input = InputControl.instance();
         if (input.consumeIfDown(ControlKey.ESC) || input.consumeIfDown(ControlKey.MEDAL_CASE)) {

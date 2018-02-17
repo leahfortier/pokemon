@@ -60,13 +60,11 @@ class PartyView extends View {
     private final Button returnButton;
 
     private int selectedTab;
-    private int selectedButton;
     private int switchTabIndex;
     private boolean nicknameView;
 
     PartyView() {
         selectedTab = 0;
-        selectedButton = 0;
         switchTabIndex = -1;
 
         int tabHeight = 55;
@@ -232,7 +230,7 @@ class PartyView extends View {
         Player player = Game.getPlayer();
         InputControl input = InputControl.instance();
 
-        selectedButton = buttons.update(selectedButton);
+        buttons.update();
 
         if (nicknameView) {
             if (!input.isCapturingText()) {
@@ -247,7 +245,7 @@ class PartyView extends View {
                 updateActiveButtons();
             }
         } else {
-            if (buttons.get(selectedButton).checkConsumePress()) {
+            if (buttons.consumeSelectedPress()) {
                 updateActiveButtons();
             }
 
@@ -444,6 +442,7 @@ class PartyView extends View {
             List<Move> moves = selectedPkm.getActualMoves();
 
             // Stats Box or Move description
+            int selectedButton = buttons.getSelected();
             if (selectedButton >= MOVES && selectedButton < MOVES + Move.MAX_MOVES) {
                 drawMoveDescriptionPanel(g, statsPanel, moves.get(selectedButton - MOVES).getAttack());
             } else {
@@ -577,9 +576,9 @@ class PartyView extends View {
     @Override
     public void movedToFront() {
         selectedTab = 0;
-        selectedButton = 0;
         switchTabIndex = -1;
         nicknameView = false;
+        buttons.setSelected(0);
         updateActiveButtons();
     }
 }
