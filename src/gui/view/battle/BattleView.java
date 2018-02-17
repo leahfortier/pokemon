@@ -7,7 +7,6 @@ import battle.effect.generic.Weather;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.button.Button;
-import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.view.View;
@@ -46,7 +45,6 @@ public class BattleView extends View {
     // The current battle in view, the current message being displayed, and the current selected button
     private Battle currentBattle;
     private String message;
-    private int selectedButton;
 
     // The current state that the battle is in and current update type
     private VisualState state;
@@ -100,7 +98,6 @@ public class BattleView extends View {
 
     public void setBattle(Battle b) {
         currentBattle = b;
-        selectedButton = 0;
 
         playerAnimation.resetBattle(b.getPlayer().front());
         enemyAnimation.resetBattle(b.getOpponent().front());
@@ -136,19 +133,6 @@ public class BattleView extends View {
 
     public void setSwitchForced() {
         VisualState.setSwitchForced();
-    }
-
-    public void setSelectedButton(ButtonList buttons) {
-        int buttonIndex = buttons.update(this.selectedButton);
-        this.setSelectedButton(buttonIndex);
-    }
-
-    public int getSelectedButton() {
-        return this.selectedButton;
-    }
-
-    public void setSelectedButton(int buttonIndex) {
-        this.selectedButton = buttonIndex;
     }
 
     public boolean hasMessage() {
@@ -216,7 +200,7 @@ public class BattleView extends View {
 
     public void setVisualState(VisualState newState) {
         if (state != newState) {
-            selectedButton = 0;
+            state.getButtons().setSelected(0);
         }
 
         state = newState;

@@ -74,7 +74,7 @@ public class LogState implements VisualStateHandler {
 
     @Override
     public void update(BattleView view) {
-        view.setSelectedButton(logButtons);
+        logButtons.update();
 
         int increment = 0;
         if (leftArrow.checkConsumePress()) {
@@ -94,5 +94,10 @@ public class LogState implements VisualStateHandler {
 
     private int totalPages() {
         return GeneralUtils.getTotalPages(logMessages.size(), LOGS_PER_PAGE);
+    }
+
+    @Override
+    public ButtonList getButtons() {
+        return logButtons;
     }
 }

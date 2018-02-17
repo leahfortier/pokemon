@@ -1,6 +1,7 @@
 package gui.view.mainmenu;
 
 import draw.button.ButtonList;
+import sound.SoundPlayer;
 import sound.SoundTitle;
 
 import java.awt.Graphics;
@@ -19,7 +20,13 @@ enum VisualState {
     }
 
     public void set() {
+        ButtonList buttons = this.visualStateHandler.getButtons();
+        buttons.setSelected(0);
+        buttons.setFalseHover();
+
         this.visualStateHandler.set();
+
+        SoundPlayer.instance().playMusic(this.getTunes());
     }
 
     public void update(MainMenuView view) {
@@ -27,11 +34,13 @@ enum VisualState {
     }
 
     public void draw(Graphics g, MainMenuView view) {
-        this.visualStateHandler.draw(g, view);
-    }
+        ButtonList buttons = this.visualStateHandler.getButtons();
+        for (int i = 0; i < buttons.size(); i++) {
+            buttons.get(i).fillBordered(g, view.getSettings().getTheme().getButtonColor());
+        }
+        buttons.draw(g);
 
-    public ButtonList getButtons() {
-        return this.visualStateHandler.getButtons();
+        this.visualStateHandler.draw(g, view);
     }
 
     public SoundTitle getTunes() {

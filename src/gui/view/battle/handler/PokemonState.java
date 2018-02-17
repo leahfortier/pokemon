@@ -312,7 +312,7 @@ public class PokemonState implements VisualStateHandler {
     @Override
     public void update(BattleView view) {
         // Update the buttons
-        view.setSelectedButton(pokemonButtons);
+        pokemonButtons.update();
 
         Battle currentBattle = view.getCurrentBattle();
         Player player = Game.getPlayer();
@@ -369,5 +369,10 @@ public class PokemonState implements VisualStateHandler {
 
     public void setSwitchForced() {
         this.switchForced = true;
+    }
+
+    @Override
+    public ButtonList getButtons() {
+        return this.pokemonButtons;
     }
 }

@@ -35,15 +35,12 @@ public class MainMenuView extends View {
 
     private SaveInfo[] saveInfo;
 
-    private int selectedButton;
     private boolean musicStarted = false;
 
     private int bgTime;
     private int bgIndex;
 
     public MainMenuView() {
-        selectedButton = 0;
-
         bgTime = 0;
         bgIndex = 0;
 
@@ -60,9 +57,9 @@ public class MainMenuView extends View {
     int getPressed(ButtonList buttons) {
         int pressed = -1;
 
-        selectedButton = buttons.update(selectedButton);
-        if (buttons.get(selectedButton).checkConsumePress()) {
-            pressed = selectedButton;
+        buttons.update();
+        if (buttons.consumeSelectedPress()) {
+            pressed = buttons.getSelected();
         }
 
         return pressed;
@@ -70,12 +67,7 @@ public class MainMenuView extends View {
 
     void setVisualState(VisualState newState) {
         state = newState;
-        selectedButton = 0;
-
-        state.getButtons().setFalseHover();
         state.set();
-
-        SoundPlayer.instance().playMusic(state.getTunes());
     }
 
     boolean hasSavedInfo(int saveNum) {
@@ -118,12 +110,6 @@ public class MainMenuView extends View {
         theme.draw(g, bgTime, bgIndex);
 
         g.drawImage(MAIN_LOGO, 95, 54, null);
-
-        ButtonList buttons = state.getButtons();
-        for (int i = 0; i < buttons.size(); i++) {
-            buttons.get(i).fillBordered(g, theme.getButtonColor());
-        }
-        buttons.draw(g);
 
         this.state.draw(g, this);
     }

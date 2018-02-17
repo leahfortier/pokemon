@@ -1,6 +1,8 @@
 package gui.view.battle.handler;
 
 import draw.TextUtils;
+import draw.button.Button;
+import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.view.battle.BattleView;
@@ -17,7 +19,6 @@ import java.awt.Graphics;
 import java.util.EnumSet;
 
 public class MessageState implements VisualStateHandler {
-
     private final DrawPanel statsPanel;
 
     // Stat gains and corresponding new stat upgrades for leveling up/evolving
@@ -77,5 +78,10 @@ public class MessageState implements VisualStateHandler {
             newStats = newMessage.getNewStats();
             statGains = newMessage.getGain();
         }
+    }
+
+    @Override
+    public ButtonList getButtons() {
+        return new ButtonList(new Button[0]);
     }
 }

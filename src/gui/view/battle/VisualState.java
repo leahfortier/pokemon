@@ -1,5 +1,6 @@
 package gui.view.battle;
 
+import draw.button.ButtonList;
 import gui.view.battle.handler.BagState;
 import gui.view.battle.handler.FightState;
 import gui.view.battle.handler.LearnMoveState;
@@ -52,6 +53,10 @@ public enum VisualState {
 
     public void checkMessage(MessageUpdate newMessage) {
         this.visualStateHandler.checkMessage(newMessage);
+    }
+
+    public ButtonList getButtons() {
+        return this.visualStateHandler.getButtons();
     }
 
     public static ItemNamesies getSelectedItem() {

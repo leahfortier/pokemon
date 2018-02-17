@@ -188,7 +188,7 @@ public class BagState implements VisualStateHandler {
         Set<ItemNamesies> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]);
         TileSet itemTiles = Game.getData().getItemTiles();
 
-        int selectedButton = view.getSelectedButton();
+        int selectedButton = bagButtons.getSelected();
         ItemNamesies selected = null;
 
         g.setColor(Color.BLACK);
@@ -259,7 +259,7 @@ public class BagState implements VisualStateHandler {
     @Override
     public void update(BattleView view) {
         // Update all bag buttons and the back button
-        view.setSelectedButton(bagButtons);
+        bagButtons.update();
 
         // Check tabs
         for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
@@ -340,5 +340,10 @@ public class BagState implements VisualStateHandler {
 
     private int totalPages(Set<ItemNamesies> items) {
         return GeneralUtils.getTotalPages(items.size(), ITEMS_PER_PAGE);
+    }
+
+    @Override
+    public ButtonList getButtons() {
+        return this.bagButtons;
     }
 }

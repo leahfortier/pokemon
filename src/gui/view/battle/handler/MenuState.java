@@ -51,7 +51,7 @@ public class MenuState implements VisualStateHandler {
         Player player = Game.getPlayer();
 
         // Update menu buttons
-        view.setSelectedButton(menuButtons);
+        menuButtons.update();
 
         // Show Bag View
         if (getButton(MenuChoice.BAG).checkConsumePress()) {
@@ -86,6 +86,11 @@ public class MenuState implements VisualStateHandler {
 
     private Button getButton(MenuChoice menuChoice) {
         return this.menuButtons.get(menuChoice.ordinal());
+    }
+
+    @Override
+    public ButtonList getButtons() {
+        return menuButtons;
     }
 
     private enum MenuChoice {
