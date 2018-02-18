@@ -59,7 +59,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I think my friend's in Bloom Filter Meadow, but I'm not 100% sure.",

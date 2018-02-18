@@ -73,7 +73,7 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I'm not allowed out after dark.",
@@ -98,7 +98,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I like shorts!!!!",
@@ -126,7 +126,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "SHORRRRTTTTTSSSSSS",
@@ -150,7 +150,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I'm a meadow lady in a meadow!!!",
@@ -178,7 +178,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Yayyy I'm in a meadow and I'm a lady lalalala!",

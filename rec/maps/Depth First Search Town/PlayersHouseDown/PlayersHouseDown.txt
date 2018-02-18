@@ -52,7 +52,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "It's nice when you come to visit, but please get a job.",
@@ -82,7 +82,7 @@
         {
           "name": "talk",
           "walkToPlayer": true,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "It’s great that you’re here and all and imma let you finish, but get a job and make the greatest hits of all time. ALL TIME!!! ",

@@ -55,7 +55,7 @@
         {
           "name": "battle",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I'm gonna be the very best like no one ever was.",
@@ -79,7 +79,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Just get out. You're not welcome here.",

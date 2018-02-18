@@ -79,7 +79,7 @@
         {
           "name": "default",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Tom Town generates most of the power for all of Hash Map.",
@@ -108,7 +108,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Team Deadlock is a big bug in our society.",
@@ -133,7 +133,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "What happened at the power plant? Who is this Team Deadlock?",
@@ -158,7 +158,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "The Tom Town gym sounds really tough.",
@@ -183,7 +183,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I'm amazed how fast Leader Moore defeated my Pidgey!",
@@ -208,7 +208,7 @@
         {
           "name": "default",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "There power plant has been taken over by Team Deadlock!",

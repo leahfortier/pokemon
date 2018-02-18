@@ -35,7 +35,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I'm trying my best to stall the reactor meltdown.",

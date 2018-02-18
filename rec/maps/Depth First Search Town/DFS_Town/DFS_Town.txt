@@ -128,7 +128,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": true,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Hey! Are you leaving town? You sure you're ready for that?",
@@ -169,7 +169,7 @@
         {
           "name": "give_item",
           "walkToPlayer": true,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Here, take these Pokéballs. You'll need them to capture Poké!",
@@ -209,7 +209,7 @@
         {
           "name": "done",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "You can use Pokéballs to capture Poké!",
@@ -233,7 +233,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Rattata!",
@@ -259,7 +259,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Rattata...",
@@ -283,7 +283,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Someone freed the pointer to my Rattata! Was it you?",
@@ -309,7 +309,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I would have won with my Rattata!",
@@ -333,7 +333,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "My Rattata is in the top percentage of Rattata!",
@@ -359,7 +359,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I thought Rattata was the very best...",
@@ -383,7 +383,7 @@
         {
           "name": "give_item",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Here, take this potion. You are going to need it!",
@@ -403,7 +403,7 @@
         {
           "name": "done",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "You can use potions to heal your Pokémon!",
@@ -427,7 +427,7 @@
         {
           "name": "bumpity_leave",
           "walkToPlayer": true,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Hey there, loser!",

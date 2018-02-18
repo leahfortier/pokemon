@@ -41,7 +41,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "What is a process like you doing here?",
@@ -70,7 +70,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "How could you have won?",
@@ -100,7 +100,7 @@
         {
           "name": "battle",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "You can't stop us. This town's main thread will be terminated!",
@@ -141,7 +141,7 @@
         {
           "name": "deadlock_defeat",
           "walkToPlayer": false,
-          "npcActions2": []
+          "npcActions": []
         }
       ],
       "location": {
@@ -160,7 +160,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I'm going to kill your process.",
@@ -184,7 +184,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I can't beleive you managed to killed my process.",
@@ -209,7 +209,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": true,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Wow, you did it! You saved the power plant!",
@@ -238,7 +238,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I'll be here for days trying to get the plant fully operational again.",

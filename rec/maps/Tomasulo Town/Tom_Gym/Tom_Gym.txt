@@ -35,7 +35,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Watch out, I'm gonna fry your motherboard!",
@@ -59,7 +59,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Hey! You fried my motherboard!",
@@ -83,7 +83,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "My Pokémon and I communicate over PCI express!",
@@ -107,7 +107,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I need more bandwidth!",
@@ -131,7 +131,7 @@
         {
           "name": "battle",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "My Pokémon pack enough electricity to power the Cray Titan!",
@@ -169,7 +169,7 @@
         {
           "name": "badge",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "My data BUS just wasn't large enough! Take this, the Round Badge!",
@@ -189,7 +189,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "jo,loo6jm[nphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh             bo",

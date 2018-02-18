@@ -70,7 +70,7 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Yo yo yo, I'm so hip and happenin' yo!!",
@@ -102,7 +102,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Guess you're too hip for me, hahahahahahaha :(",

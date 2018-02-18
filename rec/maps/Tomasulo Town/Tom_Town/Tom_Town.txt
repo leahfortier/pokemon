@@ -116,7 +116,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Team Deadlock has taken over the Power Plant. I hope the ground shaking doesn't mean anything that bad.",
@@ -141,7 +141,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I've never felt a shock like that before! Did it come from the Power Plant?!??",
@@ -166,7 +166,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I need to get back in there. The reactor is going to explode!",
@@ -191,7 +191,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I was just researching new electricity harvesting techniques when everyone was forced out by Team Deadlock.",
@@ -216,7 +216,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Team Deadlock better not harm the Magnemites!",
@@ -241,7 +241,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I wish he would just calm down and try to explain what happened.",

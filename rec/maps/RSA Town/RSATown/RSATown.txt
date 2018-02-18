@@ -78,7 +78,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "E's cu mucd.",
@@ -102,7 +102,7 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Famlusa du NCY Dufh! Dryd’c ed vnus sa.",
@@ -126,7 +126,7 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Drec dufh ec geht uv bnadahdeuic, pacd hud pudran dnoehk du ihtancdyht dra limdina.",
@@ -150,7 +150,7 @@
         {
           "name": "battle",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "You actually had the balls to leave town? What are you up to then?",
@@ -226,7 +226,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions2": []
+          "npcActions": []
         }
       ],
       "location": {
@@ -245,7 +245,7 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "TECDINP HUD DRA RYNSUHO UV VENA, ELA, YHT MEKRDHEHK.",

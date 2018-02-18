@@ -35,7 +35,7 @@
         {
           "name": "intro",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "'Ey there {playerName}!",
@@ -97,7 +97,7 @@
         {
           "name": "stone_choice",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "question": "wudya wan",
               "choices": [
@@ -146,7 +146,7 @@
         {
           "name": "heal",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "How's it goin'? Need to rest up your Pokémon a bit?",
@@ -174,7 +174,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Don't disturb me! I'm doing syrup science!",
@@ -198,7 +198,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions2": [
+          "npcActions": [
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "This syrup soda is amazing!",

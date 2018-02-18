@@ -138,6 +138,9 @@ public class MapDataMatcher {
 //                }
 //                interaction.npcActions2 = npcActions2;
 //                interaction.npcActions = null;
+                
+//                interaction.npcActions = interaction.npcActions2;
+//                interaction.npcActions2 = null;
             }
         }
 
