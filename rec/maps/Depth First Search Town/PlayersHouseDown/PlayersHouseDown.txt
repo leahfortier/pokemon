@@ -56,7 +56,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "It's nice when you come to visit, but please get a job.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -86,21 +86,21 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "It’s great that you’re here and all and imma let you finish, but get a job and make the greatest hits of all time. ALL TIME!!! ",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "global": "FirstMadreTalk",
-              "className": "pattern.action.ActionMatcher2$GlobalActionMatcher"
+              "className": "pattern.action.ActionMatcher$GlobalActionMatcher"
             },
             {
               "triggerType": "MOVE_PLAYER",
               "triggerContents": "ddd",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "*pure rage*",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -129,7 +129,7 @@
         {
           "triggerType": "DIALOGUE",
           "triggerContents": "The power's not out...?",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         }
       ],
       "location": [
@@ -158,7 +158,7 @@
         {
           "triggerType": "DIALOGUE",
           "triggerContents": "Nothing good to eat. As usual.",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         }
       ],
       "location": [

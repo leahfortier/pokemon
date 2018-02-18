@@ -39,58 +39,58 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "'Ey there {playerName}!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I was just gonna make some breakfast and smother it with my homemade Canadian maple syrup™! You want any?",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "No? I have lots of this syrup™ lying around, have some anyway!! I'm sure it will come in handy one day.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "GIVE_ITEM",
               "triggerContents": "Syrup",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Alright, what brings you here?",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "You got kicked out, eh?",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "How about becoming a Pokémon master? It's the main fad these days... Everyone does it!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "C'mon... It'll be cool!!!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I'll even give you this egg to start with!!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "GIVE_POKEMON",
               "triggerContents": "{
   \"isStarterEgg\": true
 }",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "update": "heal",
-              "className": "pattern.action.ActionMatcher2$UpdateActionMatcher"
+              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
             }
           ]
         },
@@ -107,7 +107,7 @@
                     {
                       "triggerType": "GIVE_ITEM",
                       "triggerContents": "Water Stone",
-                      "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+                      "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
                     }
                   ]
                 },
@@ -117,7 +117,7 @@
                     {
                       "triggerType": "GIVE_ITEM",
                       "triggerContents": "Sun Stone",
-                      "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+                      "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
                     }
                   ]
                 },
@@ -127,16 +127,16 @@
                     {
                       "triggerType": "GIVE_ITEM",
                       "triggerContents": "THUNDER_STONE",
-                      "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+                      "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
                     }
                   ]
                 }
               ],
-              "className": "pattern.action.ActionMatcher2$ChoiceActionMatcher2"
+              "className": "pattern.action.ActionMatcher$ChoiceActionMatcher"
             },
             {
               "update": "heal",
-              "className": "pattern.action.ActionMatcher2$UpdateActionMatcher"
+              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
             }
           ]
         },
@@ -147,11 +147,11 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "How's it goin'? Need to rest up your Pokémon a bit?",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "HEAL_PARTY",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -175,7 +175,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Don't disturb me! I'm doing syrup science!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -199,7 +199,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "This syrup soda is amazing!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -218,7 +218,7 @@
       "actions": [
         {
           "groupTrigger": "LoadPC",
-          "className": "pattern.action.ActionMatcher2$GroupTriggerActionMatcher"
+          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [

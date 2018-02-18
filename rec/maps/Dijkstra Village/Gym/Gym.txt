@@ -53,7 +53,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "...",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "name": "Leader Rhododendron",
@@ -86,12 +86,12 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
+              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
             },
             {
               "triggerType": "BADGE",
               "triggerContents": "SECOND",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         },
@@ -102,7 +102,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "...",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }

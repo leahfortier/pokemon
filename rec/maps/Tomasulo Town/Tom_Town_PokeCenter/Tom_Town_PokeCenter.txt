@@ -60,7 +60,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Hi, I'm Tom!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -79,7 +79,7 @@
       "actions": [
         {
           "groupTrigger": "PokeCenterHeal",
-          "className": "pattern.action.ActionMatcher2$GroupTriggerActionMatcher"
+          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [
@@ -95,7 +95,7 @@
       "actions": [
         {
           "groupTrigger": "LoadMart",
-          "className": "pattern.action.ActionMatcher2$GroupTriggerActionMatcher"
+          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [
@@ -111,7 +111,7 @@
       "actions": [
         {
           "groupTrigger": "LoadPC",
-          "className": "pattern.action.ActionMatcher2$GroupTriggerActionMatcher"
+          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [

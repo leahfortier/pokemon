@@ -59,7 +59,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I'm gonna be the very best like no one ever was.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "name": "Mom",
@@ -72,7 +72,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
+              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -83,7 +83,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Just get out. You're not welcome here.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -112,7 +112,7 @@
       "actions": [
         {
           "groupTrigger": "LoadPC",
-          "className": "pattern.action.ActionMatcher2$GroupTriggerActionMatcher"
+          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [
@@ -132,7 +132,7 @@
                 namesies: EXEGGUTOR,
                 level: 4
             }",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         }
       ],
       "location": [
@@ -149,7 +149,7 @@
         {
           "triggerType": "DIALOGUE",
           "triggerContents": "The power's out...",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         }
       ],
       "location": [

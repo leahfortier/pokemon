@@ -120,7 +120,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Team Deadlock has taken over the Power Plant. I hope the ground shaking doesn't mean anything that bad.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -145,7 +145,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I've never felt a shock like that before! Did it come from the Power Plant?!??",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -170,7 +170,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I need to get back in there. The reactor is going to explode!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -195,7 +195,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I was just researching new electricity harvesting techniques when everyone was forced out by Team Deadlock.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -220,7 +220,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Team Deadlock better not harm the Magnemites!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -245,7 +245,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I wish he would just calm down and try to explain what happened.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -266,7 +266,7 @@
         {
           "triggerType": "DIALOGUE",
           "triggerContents": "The door is locked.",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         }
       ],
       "location": [
@@ -286,11 +286,11 @@
         {
           "triggerType": "DIALOGUE",
           "triggerContents": "Rumble Rumble Rumble",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         },
         {
           "global": "TomTownPowerPlantExplosionTriggered",
-          "className": "pattern.action.ActionMatcher2$GlobalActionMatcher"
+          "className": "pattern.action.ActionMatcher$GlobalActionMatcher"
         }
       ],
       "location": [

@@ -39,7 +39,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I'm trying my best to stall the reactor meltdown.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }

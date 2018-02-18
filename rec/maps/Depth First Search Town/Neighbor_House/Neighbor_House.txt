@@ -39,12 +39,12 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "R U A WIZARD 'ARRY",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "MOVE_PLAYER",
               "triggerContents": "RULDRULD",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -64,11 +64,11 @@
         {
           "triggerType": "DIALOGUE",
           "triggerContents": "*hack hack hack*",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         },
         {
           "groupTrigger": "LoadPC",
-          "className": "pattern.action.ActionMatcher2$GroupTriggerActionMatcher"
+          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [

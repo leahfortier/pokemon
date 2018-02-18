@@ -58,12 +58,12 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Berry time! Fuck yeah!!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "CHANGE_VIEW",
               "triggerContents": "BERRY_VIEW",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -87,7 +87,7 @@
             {
               "triggerType": "DAY_CARE",
               "triggerContents": "",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -111,12 +111,12 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Heart scales sure are tasty treats...",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "CHANGE_VIEW",
               "triggerContents": "MOVE_RELEARNER_VIEW",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -143,7 +143,7 @@
   \"requested\": \"VULPIX\",
   \"tradePokemon\": \"YUKIKON\"
 }",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }

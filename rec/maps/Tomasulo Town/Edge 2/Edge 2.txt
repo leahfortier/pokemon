@@ -74,7 +74,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Yo yo yo, I'm so hip and happenin' yo!!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "name": "Hip and Happening Youngster",
@@ -95,7 +95,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
+              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -106,7 +106,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Guess you're too hip for me, hahahahahahaha :(",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }

@@ -45,12 +45,12 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "What is a process like you doing here?",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "That doesn't matter. You can't interfere with our threads!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "name": "Team Deadlock Grunt",
@@ -63,7 +63,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
+              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -74,12 +74,12 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "How could you have won?",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "The others will stop your thread!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -104,7 +104,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "You can't stop us. This town's main thread will be terminated!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "name": "Team Deadlock Grunt",
@@ -121,20 +121,20 @@
                 }
               ],
               "update": "deadlock_defeat",
-              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
+              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "You may have halted us now, but our loop is infinite!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "global": "VisitedTomTownPowerPlant",
-              "className": "pattern.action.ActionMatcher2$GlobalActionMatcher"
+              "className": "pattern.action.ActionMatcher$GlobalActionMatcher"
             },
             {
               "triggerType": "RELOAD_MAP",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         },
@@ -164,7 +164,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I'm going to kill your process.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "name": "Team Deadlock Grunt",
@@ -177,7 +177,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
+              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -188,7 +188,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I can't beleive you managed to killed my process.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -213,11 +213,11 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Wow, you did it! You saved the power plant!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "update": "dialogue",
-              "className": "pattern.action.ActionMatcher2$UpdateActionMatcher"
+              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
             }
           ]
         }
@@ -242,7 +242,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I'll be here for days trying to get the plant fully operational again.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }

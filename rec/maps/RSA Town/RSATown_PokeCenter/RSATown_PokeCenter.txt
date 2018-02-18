@@ -57,42 +57,42 @@
         {
           "triggerType": "DIALOGUE",
           "triggerContents": "Famlusa du dra Bugésuh Lahdan!",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         },
         {
           "triggerType": "DIALOGUE",
           "triggerContents": "Mad sa raym ouin Bugésuh vun oui!",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         },
         {
           "triggerType": "SOUND",
           "triggerContents": "POKE_CENTER_HEAL",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         },
         {
           "triggerType": "DIALOGUE",
           "triggerContents": "Tih Tih Tih-Tih Tih!",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         },
         {
           "triggerType": "HEAL_PARTY",
           "triggerContents": "",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         },
         {
           "triggerType": "DIALOGUE",
           "triggerContents": "Ouin Bugésuh ryja paah raymat!",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         },
         {
           "triggerType": "DIALOGUE",
           "triggerContents": "E ruba du caa oui ykyeh cuuh!",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         },
         {
           "triggerType": "MEDAL_COUNT",
           "triggerContents": "POKE_CENTER_HEALS",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         }
       ],
       "location": [
@@ -109,12 +109,12 @@
         {
           "triggerType": "DIALOGUE",
           "triggerContents": "Famlusa du dra BugéSynd!",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         },
         {
           "triggerType": "CHANGE_VIEW",
           "triggerContents": "MART_VIEW",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         }
       ],
       "location": [
@@ -130,7 +130,7 @@
       "actions": [
         {
           "groupTrigger": "LoadPC",
-          "className": "pattern.action.ActionMatcher2$GroupTriggerActionMatcher"
+          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [

@@ -82,7 +82,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "E's cu mucd.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -106,7 +106,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Famlusa du NCY Dufh! Dryd’c ed vnus sa.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -130,7 +130,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Drec dufh ec geht uv bnadahdeuic, pacd hud pudran dnoehk du ihtancdyht dra limdina.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -154,22 +154,22 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "You actually had the balls to leave town? What are you up to then?",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Huh?",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "You're actually trying to become a Pokémon master??",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Let's battle then!!!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "name": "Blue",
@@ -182,32 +182,32 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
+              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "You just got lucky, noob!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "What? Of course you get money for winning battles. That's how it works.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Becoming a Pokémon master comes with a lot of perks and royalties -- it has money written all over it!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "I don't care about any of that though.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "Might as well make use of that Eevee you've had all your life... Smell ya later!!",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "MOVE_NPC",
@@ -215,11 +215,11 @@
                     npcEntityName: RSATown_NPC_Rival_01,
                     endEntranceName: PokeCenter
                 }",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
               "triggerType": "RELOAD_MAP",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         },
@@ -249,7 +249,7 @@
             {
               "triggerType": "DIALOGUE",
               "triggerContents": "TECDINP HUD DRA RYNSUHO UV VENA, ELA, YHT MEKRDHEHK.",
-              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -273,7 +273,7 @@
                 npcEntityName: RSATown_NPC_Rival_01,
                 endLocationIsPlayer: true
             }",
-          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         }
       ],
       "location": [
