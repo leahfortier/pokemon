@@ -264,10 +264,9 @@
       "name": "LockedDoor",
       "actions": [
         {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "The door is locked."
-          }
+          "triggerType": "DIALOGUE",
+          "triggerContents": "The door is locked.",
+          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
         }
       ],
       "location": [
@@ -285,13 +284,13 @@
       "name": "Rumbles",
       "actions": [
         {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "Rumble Rumble Rumble"
-          }
+          "triggerType": "DIALOGUE",
+          "triggerContents": "Rumble Rumble Rumble",
+          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
         },
         {
-          "global": "TomTownPowerPlantExplosionTriggered"
+          "global": "TomTownPowerPlantExplosionTriggered",
+          "className": "pattern.action.ActionMatcher2$GlobalActionMatcher"
         }
       ],
       "location": [

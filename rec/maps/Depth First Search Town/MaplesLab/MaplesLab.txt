@@ -217,7 +217,8 @@
       "name": "PC",
       "actions": [
         {
-          "groupTrigger": "LoadPC"
+          "groupTrigger": "LoadPC",
+          "className": "pattern.action.ActionMatcher2$GroupTriggerActionMatcher"
         }
       ],
       "location": [

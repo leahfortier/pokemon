@@ -236,7 +236,8 @@
       "name": "Info_Guy_Dialogue",
       "actions": [
         {
-          "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
+          "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk",
+          "className": "pattern.action.ActionMatcher2$GroupTriggerActionMatcher"
         }
       ],
       "location": [

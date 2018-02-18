@@ -268,13 +268,12 @@
       "name": "Rival_Battle",
       "actions": [
         {
-          "trigger": {
-            "triggerType": "MOVE_NPC",
-            "triggerContents": "{
+          "triggerType": "MOVE_NPC",
+          "triggerContents": "{
                 npcEntityName: RSATown_NPC_Rival_01,
                 endLocationIsPlayer: true
-            }"
-          }
+            }",
+          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
         }
       ],
       "location": [

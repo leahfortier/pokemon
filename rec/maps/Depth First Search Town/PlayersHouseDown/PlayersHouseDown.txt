@@ -127,10 +127,9 @@
       "name": "TV",
       "actions": [
         {
-          "trigger": {
-            "triggerType": "DIALOGUE",
-            "triggerContents": "The power's not out...?"
-          }
+          "triggerType": "DIALOGUE",
+          "triggerContents": "The power's not out...?",
+          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
         }
       ],
       "location": [
@@ -157,10 +156,9 @@
       "name": "fridge",
       "actions": [
         {
-          "trigger": {
-            "triggerType": "Dialogue",
-            "triggerContents": "Nothing good to eat. As usual."
-          }
+          "triggerType": "DIALOGUE",
+          "triggerContents": "Nothing good to eat. As usual.",
+          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
         }
       ],
       "location": [

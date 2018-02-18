@@ -166,6 +166,32 @@ public class MapDataMatcher {
             }
         }
 
+        for (EventMatcher event : deserialized.getEvents()) {
+//            ActionMatcher[] actions = event.actions;
+//            ActionMatcher2[] actions2 = new ActionMatcher2[actions.length];
+//            for (int i = 0; i < actions.length; i++) {
+//                actions2[i] = actions[i].getNewMatcher();
+//            }
+//            event.actions2 = actions2;
+//            event.actions = null;
+
+//            event.actions = event.actions2;
+//            event.actions2 = null;
+        }
+
+        for (MiscEntityMatcher event : deserialized.getMiscEntities()) {
+//            ActionMatcher[] actions = event.actions;
+//            ActionMatcher2[] actions2 = new ActionMatcher2[actions.length];
+//            for (int i = 0; i < actions.length; i++) {
+//                actions2[i] = actions[i].getNewMatcher();
+//            }
+//            event.actions2 = actions2;
+//            event.actions = null;
+
+//            event.actions = event.actions2;
+//            event.actions2 = null;
+        }
+
         String formattedJson = SerializationUtils.getJson(deserialized);
         String mapJson = SerializationUtils.getJson(mappity);
 

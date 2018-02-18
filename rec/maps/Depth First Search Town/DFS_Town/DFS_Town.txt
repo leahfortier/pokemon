@@ -545,10 +545,9 @@
       "name": "Flag",
       "actions": [
         {
-          "trigger": {
-            "triggerType": "DIALOGUE",
-            "triggerContents": "Praise Canada!"
-          }
+          "triggerType": "DIALOGUE",
+          "triggerContents": "Praise Canada!",
+          "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
         }
       ],
       "location": [
