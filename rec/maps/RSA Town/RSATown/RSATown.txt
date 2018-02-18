@@ -78,12 +78,11 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "E's cu mucd."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "E's cu mucd.",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -103,12 +102,11 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "Famlusa du NCY Dufh! Dryd’c ed vnus sa."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Famlusa du NCY Dufh! Dryd’c ed vnus sa.",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -128,12 +126,11 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "Drec dufh ec geht uv bnadahdeuic, pacd hud pudran dnoehk du ihtancdyht dra limdina."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Drec dufh ec geht uv bnadahdeuic, pacd hud pudran dnoehk du ihtancdyht dra limdina.",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -153,95 +150,83 @@
         {
           "name": "battle",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "You actually had the balls to leave town? What are you up to then?"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "You actually had the balls to leave town? What are you up to then?",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Huh?"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Huh?",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "You're actually trying to become a Pokémon master??"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "You're actually trying to become a Pokémon master??",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Let's battle then!!!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Let's battle then!!!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "battle": {
-                "name": "Blue",
-                "cashMoney": 230,
-                "maxPokemonLimit": false,
-                "pokemon": [
-                  {
-                    "namesies": "RIOLU",
-                    "level": 5
-                  }
-                ],
-                "update": "won"
-              }
+              "name": "Blue",
+              "cashMoney": 230,
+              "maxPokemonLimit": false,
+              "pokemon": [
+                {
+                  "namesies": "RIOLU",
+                  "level": 5
+                }
+              ],
+              "update": "won",
+              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "You just got lucky, noob!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "You just got lucky, noob!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "What? Of course you get money for winning battles. That's how it works."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "What? Of course you get money for winning battles. That's how it works.",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Becoming a Pokémon master comes with a lot of perks and royalties -- it has money written all over it!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Becoming a Pokémon master comes with a lot of perks and royalties -- it has money written all over it!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I don't care about any of that though."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I don't care about any of that though.",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Might as well make use of that Eevee you've had all your life... Smell ya later!!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Might as well make use of that Eevee you've had all your life... Smell ya later!!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "MOVE_NPC",
-                "triggerContents": "{
+              "triggerType": "MOVE_NPC",
+              "triggerContents": "{
                     npcEntityName: RSATown_NPC_Rival_01,
                     endEntranceName: PokeCenter
-                }"
-              }
+                }",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "RELOAD_MAP"
-              }
+              "triggerType": "RELOAD_MAP",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         },
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": []
+          "npcActions2": []
         }
       ],
       "location": {
@@ -260,12 +245,11 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "TECDINP HUD DRA RYNSUHO UV VENA, ELA, YHT MEKRDHEHK."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "TECDINP HUD DRA RYNSUHO UV VENA, ELA, YHT MEKRDHEHK.",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }

@@ -35,12 +35,11 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I'm trying my best to stall the reactor meltdown."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I'm trying my best to stall the reactor meltdown.",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }

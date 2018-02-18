@@ -7,8 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ChoiceActionMatcher {
-    private String question;
-    private ChoiceMatcher[] choices;
+    public String question;
+    public ChoiceMatcher[] choices;
 
     public ChoiceActionMatcher(String question, ChoiceMatcher[] choices) {
         this.question = question;

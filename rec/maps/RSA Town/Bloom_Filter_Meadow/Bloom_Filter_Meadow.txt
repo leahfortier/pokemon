@@ -73,12 +73,11 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "I'm not allowed out after dark."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I'm not allowed out after dark.",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -99,42 +98,39 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I like shorts!!!!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I like shorts!!!!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "battle": {
-                "name": "Bug Catcher",
-                "cashMoney": 100,
-                "maxPokemonLimit": false,
-                "pokemon": [
-                  {
-                    "namesies": "CATERPIE",
-                    "level": 6
-                  },
-                  {
-                    "namesies": "KRICKETOT",
-                    "level": 6
-                  }
-                ],
-                "update": "won"
-              }
+              "name": "Bug Catcher",
+              "cashMoney": 100,
+              "maxPokemonLimit": false,
+              "pokemon": [
+                {
+                  "namesies": "CATERPIE",
+                  "level": 6
+                },
+                {
+                  "namesies": "KRICKETOT",
+                  "level": 6
+                }
+              ],
+              "update": "won",
+              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
             }
           ]
         },
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "SHORRRRTTTTTSSSSSS"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "SHORRRRTTTTTSSSSSS",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -154,42 +150,39 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I'm a meadow lady in a meadow!!!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I'm a meadow lady in a meadow!!!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "battle": {
-                "name": "Meadow Lady",
-                "cashMoney": 100,
-                "maxPokemonLimit": false,
-                "pokemon": [
-                  {
-                    "namesies": "BUDEW",
-                    "level": 6
-                  },
-                  {
-                    "namesies": "ODDISH",
-                    "level": 6
-                  }
-                ],
-                "update": "won"
-              }
+              "name": "Meadow Lady",
+              "cashMoney": 100,
+              "maxPokemonLimit": false,
+              "pokemon": [
+                {
+                  "namesies": "BUDEW",
+                  "level": 6
+                },
+                {
+                  "namesies": "ODDISH",
+                  "level": 6
+                }
+              ],
+              "update": "won",
+              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
             }
           ]
         },
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Yayyy I'm in a meadow and I'm a lady lalalala!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Yayyy I'm in a meadow and I'm a lady lalalala!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }

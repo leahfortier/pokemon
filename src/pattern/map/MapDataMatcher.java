@@ -1,8 +1,11 @@
 package pattern.map;
 
+import com.google.gson.JsonObject;
 import map.area.AreaData;
 import mapMaker.model.TriggerModel.TriggerModelType;
+import pattern.action.NPCInteractionMatcher;
 import pattern.generic.LocationTriggerMatcher;
+import util.FileIO;
 import util.GeneralUtils;
 import util.SerializationUtils;
 
@@ -119,6 +122,37 @@ public class MapDataMatcher {
     }
 
     public static MapDataMatcher matchArea(String areaDescriptionFileName) {
-        return SerializationUtils.deserializeJsonFile(areaDescriptionFileName, MapDataMatcher.class);
+//        return SerializationUtils.deserializeJsonFile(areaDescriptionFileName, MapDataMatcher.class);
+
+        String jsonContents = FileIO.readEntireFileWithReplacements(areaDescriptionFileName, false);
+
+        MapDataMatcher deserialized = SerializationUtils.deserializeJson(jsonContents, MapDataMatcher.class);
+        JsonObject mappity = SerializationUtils.deserializeJson(jsonContents, JsonObject.class);
+
+        for (NPCMatcher npc : deserialized.getNPCs()) {
+            for (NPCInteractionMatcher interaction : npc.getInteractionMatcherList()) {
+//                ActionMatcher[] npcActions = interaction.npcActions;
+//                ActionMatcher2[] npcActions2 = new ActionMatcher2[npcActions.length];
+//                for (int i = 0; i < npcActions.length; i++) {
+//                    npcActions2[i] = npcActions[i].getNewMatcher();
+//                }
+//                interaction.npcActions2 = npcActions2;
+//                interaction.npcActions = null;
+            }
+        }
+
+        String formattedJson = SerializationUtils.getJson(deserialized);
+        String mapJson = SerializationUtils.getJson(mappity);
+
+//        FileIO.writeToFile("out.txt", formattedJson);
+//        FileIO.writeToFile("out2.txt", mapJson);
+
+        if (!formattedJson.equals(mapJson)) {
+//            Global.error("No dice: " + areaDescriptionFileName);
+        }
+
+        FileIO.overwriteFile(areaDescriptionFileName, formattedJson);
+
+        return deserialized;
     }
 }

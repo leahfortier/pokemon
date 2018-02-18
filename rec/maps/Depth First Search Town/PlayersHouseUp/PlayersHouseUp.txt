@@ -55,38 +55,35 @@
         {
           "name": "battle",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I'm gonna be the very best like no one ever was."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I'm gonna be the very best like no one ever was.",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "battle": {
-                "name": "Mom",
-                "cashMoney": 500,
-                "maxPokemonLimit": false,
-                "pokemon": [
-                  {
-                    "namesies": "CHARMANDER",
-                    "level": 5
-                  }
-                ],
-                "update": "won"
-              }
+              "name": "Mom",
+              "cashMoney": 500,
+              "maxPokemonLimit": false,
+              "pokemon": [
+                {
+                  "namesies": "CHARMANDER",
+                  "level": 5
+                }
+              ],
+              "update": "won",
+              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
             }
           ]
         },
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Just get out. You're not welcome here."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Just get out. You're not welcome here.",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }

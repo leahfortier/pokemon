@@ -49,64 +49,60 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "..."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "...",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "battle": {
-                "name": "Leader Rhododendron",
-                "cashMoney": 1000,
-                "maxPokemonLimit": true,
-                "pokemon": [
-                  {
-                    "namesies": "BULBASAUR",
-                    "nickname": "Bulby",
-                    "level": 15,
-                    "isShiny": true
-                  },
-                  {
-                    "namesies": "EXEGGCUTE",
-                    "nickname": "",
-                    "level": 14,
-                    "isShiny": false
-                  },
-                  {
-                    "namesies": "FERROSEED",
-                    "nickname": "",
-                    "level": 14,
-                    "isShiny": false
-                  },
-                  {
-                    "namesies": "PARASECT",
-                    "nickname": "",
-                    "level": 18,
-                    "isShiny": false
-                  }
-                ],
-                "update": "won"
-              }
+              "name": "Leader Rhododendron",
+              "cashMoney": 1000,
+              "maxPokemonLimit": true,
+              "pokemon": [
+                {
+                  "namesies": "BULBASAUR",
+                  "nickname": "Bulby",
+                  "level": 15,
+                  "isShiny": true
+                },
+                {
+                  "namesies": "EXEGGCUTE",
+                  "nickname": "",
+                  "level": 14,
+                  "isShiny": false
+                },
+                {
+                  "namesies": "FERROSEED",
+                  "nickname": "",
+                  "level": 14,
+                  "isShiny": false
+                },
+                {
+                  "namesies": "PARASECT",
+                  "nickname": "",
+                  "level": 18,
+                  "isShiny": false
+                }
+              ],
+              "update": "won",
+              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
             },
             {
-              "trigger": {
-                "triggerType": "BADGE",
-                "triggerContents": "SECOND"
-              }
+              "triggerType": "BADGE",
+              "triggerContents": "SECOND",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         },
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "..."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "...",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }

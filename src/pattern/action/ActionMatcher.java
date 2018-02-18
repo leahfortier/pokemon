@@ -10,6 +10,12 @@ import map.entity.EntityAction.GroupTriggerAction;
 import map.entity.EntityAction.TriggerAction;
 import map.entity.EntityAction.UpdateAction;
 import mapMaker.dialogs.action.ActionType;
+import pattern.action.ActionMatcher2.BattleActionMatcher;
+import pattern.action.ActionMatcher2.ChoiceActionMatcher2;
+import pattern.action.ActionMatcher2.GlobalActionMatcher;
+import pattern.action.ActionMatcher2.GroupTriggerActionMatcher;
+import pattern.action.ActionMatcher2.TriggerActionMatcher2;
+import pattern.action.ActionMatcher2.UpdateActionMatcher;
 import util.GeneralUtils;
 import util.StringUtils;
 
@@ -20,6 +26,36 @@ public class ActionMatcher {
     private String update;
     private String groupTrigger;
     private String global;
+
+    public ActionMatcher2 getNewMatcher() {
+        this.confirmFormat();
+
+        if (trigger != null) {
+            TriggerActionMatcher2 a = new TriggerActionMatcher2();
+            a.triggerContents = trigger.getTriggerContents();
+            a.triggerType = trigger.getTriggerType();
+            return a;
+        } else if (battle != null) {
+            return new BattleActionMatcher(battle.name, battle.cashMoney, battle.maxPokemonLimit, battle.pokemon, battle.update);
+        } else if (update != null) {
+            UpdateActionMatcher a = new UpdateActionMatcher();
+            a.update = update;
+            return a;
+        } else if (groupTrigger != null) {
+            GroupTriggerActionMatcher a = new GroupTriggerActionMatcher();
+            a.groupTrigger = groupTrigger;
+            return a;
+        } else if (choice != null) {
+            return new ChoiceActionMatcher2(choice.question, choice.choices);
+        } else if (global != null) {
+            GlobalActionMatcher a = new GlobalActionMatcher();
+            a.global = global;
+            return a;
+        }
+
+        Global.error("No action found.");
+        return null;
+    }
 
     private void confirmFormat() {
         if (!GeneralUtils.hasOnlyOneNonEmpty(trigger, battle, choice, update, groupTrigger, global)) {

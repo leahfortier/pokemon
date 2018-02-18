@@ -56,12 +56,11 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Hi, I'm Tom!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Hi, I'm Tom!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }

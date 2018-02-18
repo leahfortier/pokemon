@@ -59,12 +59,11 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "I think my friend's in Bloom Filter Meadow, but I'm not 100% sure."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I think my friend's in Bloom Filter Meadow, but I'm not 100% sure.",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }

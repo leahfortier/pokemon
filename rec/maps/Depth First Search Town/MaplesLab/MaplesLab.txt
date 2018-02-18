@@ -35,137 +35,126 @@
         {
           "name": "intro",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "'Ey there {playerName}!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "'Ey there {playerName}!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I was just gonna make some breakfast and smother it with my homemade Canadian maple syrup™! You want any?"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I was just gonna make some breakfast and smother it with my homemade Canadian maple syrup™! You want any?",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "No? I have lots of this syrup™ lying around, have some anyway!! I'm sure it will come in handy one day."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "No? I have lots of this syrup™ lying around, have some anyway!! I'm sure it will come in handy one day.",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "GiveItem",
-                "triggerContents": "Syrup"
-              }
+              "triggerType": "GIVE_ITEM",
+              "triggerContents": "Syrup",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Alright, what brings you here?"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Alright, what brings you here?",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "You got kicked out, eh?"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "You got kicked out, eh?",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "How about becoming a Pokémon master? It's the main fad these days... Everyone does it!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "How about becoming a Pokémon master? It's the main fad these days... Everyone does it!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "C'mon... It'll be cool!!!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "C'mon... It'll be cool!!!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I'll even give you this egg to start with!!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I'll even give you this egg to start with!!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "GivePokemon",
-                "triggerContents": "{
+              "triggerType": "GIVE_POKEMON",
+              "triggerContents": "{
   \"isStarterEgg\": true
-}"
-              }
+}",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "update": "heal"
+              "update": "heal",
+              "className": "pattern.action.ActionMatcher2$UpdateActionMatcher"
             }
           ]
         },
         {
           "name": "stone_choice",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "choice": {
-                "question": "wudya wan",
-                "choices": [
-                  {
-                    "text": "wawa",
-                    "actions": [
-                      {
-                        "trigger": {
-                          "triggerType": "GiveItem",
-                          "triggerContents": "Water Stone"
-                        }
+              "question": "wudya wan",
+              "choices": [
+                {
+                  "text": "wawa",
+                  "actions": [
+                    {
+                      "trigger": {
+                        "triggerType": "GiveItem",
+                        "triggerContents": "Water Stone"
                       }
-                    ]
-                  },
-                  {
-                    "text": "sunsunsunherewecome",
-                    "actions": [
-                      {
-                        "trigger": {
-                          "triggerType": "GiveItem",
-                          "triggerContents": "Sun Stone"
-                        }
+                    }
+                  ]
+                },
+                {
+                  "text": "sunsunsunherewecome",
+                  "actions": [
+                    {
+                      "trigger": {
+                        "triggerType": "GiveItem",
+                        "triggerContents": "Sun Stone"
                       }
-                    ]
-                  },
-                  {
-                    "text": "thunda",
-                    "actions": [
-                      {
-                        "trigger": {
-                          "triggerType": "GIVE_ITEM",
-                          "triggerContents": "THUNDER_STONE"
-                        }
+                    }
+                  ]
+                },
+                {
+                  "text": "thunda",
+                  "actions": [
+                    {
+                      "trigger": {
+                        "triggerType": "GIVE_ITEM",
+                        "triggerContents": "THUNDER_STONE"
                       }
-                    ]
-                  }
-                ]
-              }
+                    }
+                  ]
+                }
+              ],
+              "className": "pattern.action.ActionMatcher2$ChoiceActionMatcher2"
             },
             {
-              "update": "heal"
+              "update": "heal",
+              "className": "pattern.action.ActionMatcher2$UpdateActionMatcher"
             }
           ]
         },
         {
           "name": "heal",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "How's it goin'? Need to rest up your Pokémon a bit?"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "How's it goin'? Need to rest up your Pokémon a bit?",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "HealParty"
-              }
+              "triggerType": "HEAL_PARTY",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -185,12 +174,11 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Don't disturb me! I'm doing syrup science!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Don't disturb me! I'm doing syrup science!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -210,12 +198,11 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "This syrup soda is amazing!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "This syrup soda is amazing!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }

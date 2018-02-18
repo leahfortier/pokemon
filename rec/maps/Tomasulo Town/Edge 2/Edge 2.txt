@@ -70,46 +70,43 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "Yo yo yo, I'm so hip and happenin' yo!!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Yo yo yo, I'm so hip and happenin' yo!!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "battle": {
-                "name": "Hip and Happening Youngster",
-                "cashMoney": 100,
-                "maxPokemonLimit": false,
-                "pokemon": [
-                  {
-                    "namesies": "PIKACHU",
-                    "nickname": "",
-                    "level": 10,
-                    "isShiny": false
-                  },
-                  {
-                    "namesies": "MAREEP",
-                    "nickname": "",
-                    "level": 10,
-                    "isShiny": false
-                  }
-                ],
-                "update": "won"
-              }
+              "name": "Hip and Happening Youngster",
+              "cashMoney": 100,
+              "maxPokemonLimit": false,
+              "pokemon": [
+                {
+                  "namesies": "PIKACHU",
+                  "nickname": "",
+                  "level": 10,
+                  "isShiny": false
+                },
+                {
+                  "namesies": "MAREEP",
+                  "nickname": "",
+                  "level": 10,
+                  "isShiny": false
+                }
+              ],
+              "update": "won",
+              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
             }
           ]
         },
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "Guess you're too hip for me, hahahahahahaha :("
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Guess you're too hip for me, hahahahahahaha :(",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }

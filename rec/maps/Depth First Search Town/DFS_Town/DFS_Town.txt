@@ -128,24 +128,21 @@
         {
           "name": "dialogue",
           "walkToPlayer": true,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Hey! Are you leaving town? You sure you're ready for that?"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Hey! Are you leaving town? You sure you're ready for that?",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "How about going to Professor Maple's Lab and asking for some life advice first?"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "How about going to Professor Maple's Lab and asking for some life advice first?",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "MOVE_PLAYER",
-                "triggerContents": "rrr"
-              }
+              "triggerType": "MOVE_PLAYER",
+              "triggerContents": "rrr",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -172,57 +169,51 @@
         {
           "name": "give_item",
           "walkToPlayer": true,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Here, take these Pokéballs. You'll need them to capture Poké!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Here, take these Pokéballs. You'll need them to capture Poké!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "GiveItem",
-                "triggerContents": "Poké Ball"
-              }
+              "triggerType": "GIVE_ITEM",
+              "triggerContents": "Poké Ball",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "GiveItem",
-                "triggerContents": "Poké Ball"
-              }
+              "triggerType": "GIVE_ITEM",
+              "triggerContents": "Poké Ball",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "GiveItem",
-                "triggerContents": "Poké Ball"
-              }
+              "triggerType": "GIVE_ITEM",
+              "triggerContents": "Poké Ball",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "GiveItem",
-                "triggerContents": "Poké Ball"
-              }
+              "triggerType": "GIVE_ITEM",
+              "triggerContents": "Poké Ball",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "GiveItem",
-                "triggerContents": "Poké Ball"
-              }
+              "triggerType": "GIVE_ITEM",
+              "triggerContents": "Poké Ball",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "update": "done"
+              "update": "done",
+              "className": "pattern.action.ActionMatcher2$UpdateActionMatcher"
             }
           ]
         },
         {
           "name": "done",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "You can use Pokéballs to capture Poké!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "You can use Pokéballs to capture Poké!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -242,40 +233,37 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Rattata!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Rattata!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "battle": {
-                "name": "Youngster Joey",
-                "cashMoney": 100,
-                "maxPokemonLimit": false,
-                "pokemon": [
-                  {
-                    "namesies": "SENTRET",
-                    "nickname": "Rattata",
-                    "level": 4,
-                    "isShiny": false
-                  }
-                ],
-                "update": "won"
-              }
+              "name": "Youngster Joey",
+              "cashMoney": 100,
+              "maxPokemonLimit": false,
+              "pokemon": [
+                {
+                  "namesies": "SENTRET",
+                  "nickname": "Rattata",
+                  "level": 4,
+                  "isShiny": false
+                }
+              ],
+              "update": "won",
+              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
             }
           ]
         },
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Rattata..."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Rattata...",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -295,40 +283,37 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "Someone freed the pointer to my Rattata! Was it you?"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Someone freed the pointer to my Rattata! Was it you?",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "battle": {
-                "name": "Youngster Joey",
-                "cashMoney": 100,
-                "maxPokemonLimit": false,
-                "pokemon": [
-                  {
-                    "namesies": "BIDOOF",
-                    "nickname": "Rattata",
-                    "level": 4,
-                    "isShiny": false
-                  }
-                ],
-                "update": "won"
-              }
+              "name": "Youngster Joey",
+              "cashMoney": 100,
+              "maxPokemonLimit": false,
+              "pokemon": [
+                {
+                  "namesies": "BIDOOF",
+                  "nickname": "Rattata",
+                  "level": 4,
+                  "isShiny": false
+                }
+              ],
+              "update": "won",
+              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
             }
           ]
         },
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I would have won with my Rattata!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I would have won with my Rattata!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -348,40 +333,37 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "My Rattata is in the top percentage of Rattata!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "My Rattata is in the top percentage of Rattata!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "battle": {
-                "name": "Youngster Joey",
-                "cashMoney": 100,
-                "maxPokemonLimit": false,
-                "pokemon": [
-                  {
-                    "namesies": "PIDGEY",
-                    "nickname": "Rattata",
-                    "level": 4,
-                    "isShiny": false
-                  }
-                ],
-                "update": "won"
-              }
+              "name": "Youngster Joey",
+              "cashMoney": 100,
+              "maxPokemonLimit": false,
+              "pokemon": [
+                {
+                  "namesies": "PIDGEY",
+                  "nickname": "Rattata",
+                  "level": 4,
+                  "isShiny": false
+                }
+              ],
+              "update": "won",
+              "className": "pattern.action.ActionMatcher2$BattleActionMatcher"
             }
           ]
         },
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I thought Rattata was the very best..."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I thought Rattata was the very best...",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -401,33 +383,31 @@
         {
           "name": "give_item",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Here, take this potion. You are going to need it!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Here, take this potion. You are going to need it!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "GiveItem",
-                "triggerContents": "Potion"
-              }
+              "triggerType": "GIVE_ITEM",
+              "triggerContents": "Potion",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "update": "done"
+              "update": "done",
+              "className": "pattern.action.ActionMatcher2$UpdateActionMatcher"
             }
           ]
         },
         {
           "name": "done",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "You can use potions to heal your Pokémon!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "You can use potions to heal your Pokémon!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -447,67 +427,59 @@
         {
           "name": "bumpity_leave",
           "walkToPlayer": true,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "Hey there, loser!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Hey there, loser!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "What're you still doing dawdling in these parts?"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "What're you still doing dawdling in these parts?",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "You're 22 for god's sake!!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "You're 22 for god's sake!!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "Me? I'm heading to the next town to get my first gym badge!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Me? I'm heading to the next town to get my first gym badge!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "I’m in the Pokémon Master business now baby, I’ll take the world by storm."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I’m in the Pokémon Master business now baby, I’ll take the world by storm.",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "What are you going to do? Be a bum all your life?"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "What are you going to do? Be a bum all your life?",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "Anyway, smell ya later!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Anyway, smell ya later!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "MOVE_NPC",
-                "triggerContents": "{
+              "triggerType": "MOVE_NPC",
+              "triggerContents": "{
   \"npcEntityName\": \"DFS_Town_NPC_Rivalchan_01\",
   \"endEntranceName\": \"rival_exit\",
   \"endLocationIsPlayer\": false
-}"
-              }
+}",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "update": "heal"
+              "update": "heal",
+              "className": "pattern.action.ActionMatcher2$UpdateActionMatcher"
             },
             {
-              "trigger": {
-                "triggerType": "RELOAD_MAP",
-                "triggerContents": ""
-              }
+              "triggerType": "RELOAD_MAP",
+              "triggerContents": "",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }

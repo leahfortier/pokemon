@@ -4,11 +4,11 @@ import pattern.PokemonMatcher;
 import trainer.Trainer;
 
 public class BattleMatcher {
-    private String name;
-    private int cashMoney;
-    private boolean maxPokemonLimit;
-    private PokemonMatcher[] pokemon;
-    private String update;
+    public String name;
+    public int cashMoney;
+    public boolean maxPokemonLimit;
+    public PokemonMatcher[] pokemon;
+    public String update;
 
     public BattleMatcher(String name, int cashMoney, boolean maxPokemonLimit, PokemonMatcher[] pokemon, String update) {
         this.name = name;

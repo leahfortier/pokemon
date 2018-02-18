@@ -35,18 +35,16 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "R U A WIZARD 'ARRY"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "R U A WIZARD 'ARRY",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "MOVE_PLAYER",
-                "triggerContents": "RULDRULD"
-              }
+              "triggerType": "MOVE_PLAYER",
+              "triggerContents": "RULDRULD",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }

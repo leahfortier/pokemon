@@ -54,18 +54,16 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "Berry time! Fuck yeah!!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Berry time! Fuck yeah!!",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "CHANGE_VIEW",
-                "triggerContents": "BERRY_VIEW"
-              }
+              "triggerType": "CHANGE_VIEW",
+              "triggerContents": "BERRY_VIEW",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -85,12 +83,11 @@
         {
           "name": "DayCare",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DAY_CARE",
-                "triggerContents": ""
-              }
+              "triggerType": "DAY_CARE",
+              "triggerContents": "",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -110,18 +107,16 @@
         {
           "name": "Learn Move View",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "Heart scales sure are tasty treats..."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Heart scales sure are tasty treats...",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "CHANGE_VIEW",
-                "triggerContents": "MOVE_RELEARNER_VIEW"
-              }
+              "triggerType": "CHANGE_VIEW",
+              "triggerContents": "MOVE_RELEARNER_VIEW",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -141,15 +136,14 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "TRADE_POKEMON",
-                "triggerContents": "{
+              "triggerType": "TRADE_POKEMON",
+              "triggerContents": "{
   \"requested\": \"VULPIX\",
   \"tradePokemon\": \"YUKIKON\"
-}"
-              }
+}",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }

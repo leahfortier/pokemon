@@ -3,10 +3,9 @@ package util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializer;
 import main.Global;
 import map.condition.Condition;
+import pattern.action.ActionMatcher2;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -22,13 +21,7 @@ import java.util.Base64;
 public class SerializationUtils {
     private static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Condition.class, new InterfaceAdapter())
-            .registerTypeAdapter(Double.class, (JsonSerializer<Double>)(source, sourceType, context) -> {
-                if (source == source.longValue()) {
-                    return new JsonPrimitive(source.longValue());
-                } else {
-                    return new JsonPrimitive(source);
-                }
-            })
+            .registerTypeAdapter(ActionMatcher2.class, new InterfaceAdapter())
             .setPrettyPrinting()
             .disableHtmlEscaping()
             .setLenient()

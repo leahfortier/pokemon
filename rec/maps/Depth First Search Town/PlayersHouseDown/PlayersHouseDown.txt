@@ -52,12 +52,11 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "It's nice when you come to visit, but please get a job."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "It's nice when you come to visit, but please get a job.",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
@@ -83,27 +82,25 @@
         {
           "name": "talk",
           "walkToPlayer": true,
-          "npcActions": [
+          "npcActions2": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "It’s great that you’re here and all and imma let you finish, but get a job and make the greatest hits of all time. ALL TIME!!! "
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "It’s great that you’re here and all and imma let you finish, but get a job and make the greatest hits of all time. ALL TIME!!! ",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "global": "FirstMadreTalk"
+              "global": "FirstMadreTalk",
+              "className": "pattern.action.ActionMatcher2$GlobalActionMatcher"
             },
             {
-              "trigger": {
-                "triggerType": "MOVE_PLAYER",
-                "triggerContents": "ddd"
-              }
+              "triggerType": "MOVE_PLAYER",
+              "triggerContents": "ddd",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             },
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "*pure rage*"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "*pure rage*",
+              "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
             }
           ]
         }
