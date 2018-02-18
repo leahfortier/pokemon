@@ -1,8 +1,8 @@
 package mapMaker.dialogs.action;
 
 import pattern.PokemonMatcher;
-import pattern.action.ActionMatcher;
-import pattern.action.BattleMatcher;
+import pattern.action.ActionMatcher2;
+import pattern.action.ActionMatcher2.BattleActionMatcher;
 import trainer.Trainer;
 import util.GUIUtils;
 import util.PokeString;
@@ -128,12 +128,12 @@ class BattleActionPanel extends ActionPanel {
     }
 
     @Override
-    protected void load(ActionMatcher matcher) {
+    protected void load(ActionMatcher2 matcher) {
         if (matcher == null) {
             return;
         }
 
-        BattleMatcher battleMatcher = matcher.getBattle();
+        BattleActionMatcher battleMatcher = (BattleActionMatcher)matcher;
 
         nameTextField.setText(battleMatcher.getName());
         cashFormattedTextField.setValue(battleMatcher.getDatCashMoney());
@@ -147,7 +147,7 @@ class BattleActionPanel extends ActionPanel {
     }
 
     @Override
-    public ActionMatcher getActionMatcher(ActionType actionType) {
+    public ActionMatcher2 getActionMatcher(ActionType actionType) {
         String name = nameTextField.getText().trim();
         int cashMoney = Integer.parseInt(cashFormattedTextField.getValue().toString());
         boolean isMaxLimit = maxPokemonLimitCheckBox.isSelected();
@@ -161,10 +161,6 @@ class BattleActionPanel extends ActionPanel {
 
         String update = updateInteractionTextField.getText().trim();
 
-        BattleMatcher battleMatcher = new BattleMatcher(name, cashMoney, isMaxLimit, pokemon, update);
-        ActionMatcher actionMatcher = new ActionMatcher();
-        actionMatcher.setBattle(battleMatcher);
-
-        return actionMatcher;
+        return new BattleActionMatcher(name, cashMoney, isMaxLimit, pokemon, update);
     }
 }

@@ -5,7 +5,7 @@ import map.area.AreaData;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionMatcher2;
 import pattern.action.ActionMatcher2.ChoiceActionMatcher2;
-import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
+import pattern.action.ChoiceMatcher;
 import pattern.action.NPCInteractionMatcher;
 import pattern.generic.LocationTriggerMatcher;
 import util.FileIO;

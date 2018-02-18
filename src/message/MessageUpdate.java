@@ -7,7 +7,7 @@ import battle.effect.generic.Weather;
 import gui.view.ViewMode;
 import main.Game;
 import map.overworld.TerrainType;
-import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
+import pattern.action.ChoiceMatcher;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import sound.SoundTitle;

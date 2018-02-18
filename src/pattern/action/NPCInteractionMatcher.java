@@ -4,6 +4,7 @@ import map.entity.EntityAction;
 import util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class NPCInteractionMatcher {
@@ -11,10 +12,10 @@ public class NPCInteractionMatcher {
     private boolean walkToPlayer;
     public ActionMatcher2[] npcActions;
 
-    public NPCInteractionMatcher(String name, boolean walkToPlayer, ActionMatcher[] npcActions) {
+    public NPCInteractionMatcher(String name, boolean walkToPlayer, ActionMatcher2[] npcActions) {
         this.name = StringUtils.nullWhiteSpace(name);
         this.walkToPlayer = walkToPlayer;
-//        this.npcActions = npcActions;
+        this.npcActions = npcActions;
     }
 
     public String getName() {
@@ -25,16 +26,15 @@ public class NPCInteractionMatcher {
         return this.walkToPlayer;
     }
 
-    public List<ActionMatcher> getActionMatcherList() {
-        return new ArrayList<>();
-//        return Arrays.asList(this.npcActions);
+    public List<ActionMatcher2> getActionMatcherList() {
+        return Arrays.asList(this.npcActions);
     }
 
     public List<EntityAction> getActions() {
         List<EntityAction> actions = new ArrayList<>();
-//        for (ActionMatcher action : this.npcActions) {
-//            actions.add(action.getAction(null));
-//        }
+        for (ActionMatcher2 action : this.npcActions) {
+            actions.add(action.getAction(null));
+        }
 
         return actions;
     }

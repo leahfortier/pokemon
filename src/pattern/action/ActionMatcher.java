@@ -1,14 +1,6 @@
 package pattern.action;
 
 import main.Global;
-import map.condition.Condition;
-import map.entity.EntityAction;
-import map.entity.EntityAction.BattleAction;
-import map.entity.EntityAction.ChoiceAction;
-import map.entity.EntityAction.GlobalAction;
-import map.entity.EntityAction.GroupTriggerAction;
-import map.entity.EntityAction.TriggerAction;
-import map.entity.EntityAction.UpdateAction;
 import mapMaker.dialogs.action.ActionType;
 import pattern.action.ActionMatcher2.BattleActionMatcher;
 import pattern.action.ActionMatcher2.ChoiceActionMatcher2;
@@ -31,26 +23,17 @@ public class ActionMatcher {
         this.confirmFormat();
 
         if (trigger != null) {
-            TriggerActionMatcher2 a = new TriggerActionMatcher2();
-            a.triggerContents = trigger.getTriggerContents();
-            a.triggerType = trigger.getTriggerType();
-            return a;
+            return new TriggerActionMatcher2(trigger.getTriggerType(), trigger.getTriggerContents());
         } else if (battle != null) {
             return new BattleActionMatcher(battle.name, battle.cashMoney, battle.maxPokemonLimit, battle.pokemon, battle.update);
         } else if (update != null) {
-            UpdateActionMatcher a = new UpdateActionMatcher();
-            a.update = update;
-            return a;
+            return new UpdateActionMatcher(update);
         } else if (groupTrigger != null) {
-            GroupTriggerActionMatcher a = new GroupTriggerActionMatcher();
-            a.groupTrigger = groupTrigger;
-            return a;
+            return new GroupTriggerActionMatcher(groupTrigger);
         } else if (choice != null) {
             return new ChoiceActionMatcher2(choice.question, choice.choices);
         } else if (global != null) {
-            GlobalActionMatcher a = new GlobalActionMatcher();
-            a.global = global;
-            return a;
+            return new GlobalActionMatcher(global);
         }
 
         Global.error("No action found.");
@@ -82,27 +65,6 @@ public class ActionMatcher {
 
         Global.error("No action found.");
         return null;
-    }
-
-    public EntityAction getAction(final Condition condition) {
-        ActionType actionType = this.getActionType();
-        switch (actionType) {
-            case TRIGGER:
-                return new TriggerAction(trigger.getTriggerType(), trigger.getTriggerContents(), condition);
-            case BATTLE:
-                return new BattleAction(battle);
-            case UPDATE:
-                return new UpdateAction(update);
-            case GROUP_TRIGGER:
-                return new GroupTriggerAction(groupTrigger);
-            case CHOICE:
-                return new ChoiceAction(choice);
-            case GLOBAL:
-                return new GlobalAction(global);
-            default:
-                Global.error("No action found.");
-                return null;
-        }
     }
 
     public TriggerActionMatcher getTrigger() {

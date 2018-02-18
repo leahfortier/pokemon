@@ -5,8 +5,8 @@ import map.condition.ConditionSet;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.GroupTriggerMatcher;
-import pattern.action.BattleMatcher;
-import pattern.action.ChoiceActionMatcher;
+import pattern.action.ActionMatcher2.BattleActionMatcher;
+import pattern.action.ActionMatcher2.ChoiceActionMatcher2;
 import pattern.action.UpdateMatcher;
 import util.SerializationUtils;
 import util.StringUtils;
@@ -68,10 +68,10 @@ public abstract class EntityAction {
     }
 
     public static class BattleAction extends EntityAction {
-        private final BattleMatcher battleMatcher;
+        private final BattleActionMatcher battleMatcher;
         private String entityName;
 
-        public BattleAction(BattleMatcher matcher) {
+        public BattleAction(BattleActionMatcher matcher) {
             this.battleMatcher = matcher;
         }
 
@@ -86,7 +86,7 @@ public abstract class EntityAction {
             return SerializationUtils.getJson(this);
         }
 
-        public BattleMatcher getBattleMatcher() {
+        public BattleActionMatcher getBattleMatcher() {
             return this.battleMatcher;
         }
 
@@ -152,9 +152,9 @@ public abstract class EntityAction {
     }
 
     public static class ChoiceAction extends EntityAction {
-        private final ChoiceActionMatcher matcher;
+        private final ChoiceActionMatcher2 matcher;
 
-        public ChoiceAction(final ChoiceActionMatcher matcher) {
+        public ChoiceAction(final ChoiceActionMatcher2 matcher) {
             this.matcher = matcher;
         }
 

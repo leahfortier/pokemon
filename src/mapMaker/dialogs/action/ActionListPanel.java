@@ -1,7 +1,7 @@
 package mapMaker.dialogs.action;
 
 import mapMaker.dialogs.TriggerDialog;
-import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher2;
 import util.GUIUtils;
 
 import javax.swing.JButton;
@@ -13,7 +13,7 @@ import java.util.List;
 public class ActionListPanel extends JPanel {
     private final TriggerDialog parent;
 
-    private final List<ActionMatcher> actionList;
+    private final List<ActionMatcher2> actionList;
     private final JButton newActionButton;
 
     public ActionListPanel(TriggerDialog parent) {
@@ -32,7 +32,7 @@ public class ActionListPanel extends JPanel {
         render();
     }
 
-    public void load(List<ActionMatcher> actions) {
+    public void load(List<ActionMatcher2> actions) {
         actionList.addAll(actions);
         render();
     }
@@ -44,12 +44,12 @@ public class ActionListPanel extends JPanel {
 
         for (int i = 0; i < actionList.size(); i++) {
             final int index = i;
-            final ActionMatcher actionMatcher = actionList.get(index);
+            final ActionMatcher2 actionMatcher = actionList.get(index);
 
             JButton actionButton = GUIUtils.createButton(
                     actionMatcher == null ? "EMPTY" : actionMatcher.getActionType().name(),
                     event -> {
-                        ActionMatcher newActionMatcher = new ActionDialog(actionMatcher).getMatcher(parent);
+                        ActionMatcher2 newActionMatcher = new ActionDialog(actionMatcher).getMatcher(parent);
                         if (newActionMatcher != null) {
                             actionList.set(index, newActionMatcher);
                             render();
@@ -75,7 +75,7 @@ public class ActionListPanel extends JPanel {
         parent.render();
     }
 
-    public ActionMatcher[] getActions() {
-        return this.actionList.toArray(new ActionMatcher[0]);
+    public ActionMatcher2[] getActions() {
+        return this.actionList.toArray(new ActionMatcher2[0]);
     }
 }

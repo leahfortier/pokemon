@@ -7,7 +7,7 @@ import map.entity.EntityAction.BattleAction;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.PokemonMatcher;
-import pattern.action.BattleMatcher;
+import pattern.action.ActionMatcher2.BattleActionMatcher;
 import pattern.action.UpdateMatcher;
 import pokemon.PartyPokemon;
 import trainer.EnemyTrainer;
@@ -22,7 +22,7 @@ public class TrainerBattleTrigger extends Trigger {
         super(TriggerType.TRAINER_BATTLE, contents, condition);
 
         BattleAction battleAction = SerializationUtils.deserializeJson(contents, BattleAction.class);
-        BattleMatcher battleMatcher = battleAction.getBattleMatcher();
+        BattleActionMatcher battleMatcher = battleAction.getBattleMatcher();
 
         String trainerName = battleMatcher.getName();
         int cash = battleMatcher.getDatCashMoney();

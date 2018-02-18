@@ -17,9 +17,9 @@ import mapMaker.dialogs.action.trigger.TriggerActionType;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher2;
+import pattern.action.ActionMatcher2.TriggerActionMatcher2;
 import pattern.action.NPCInteractionMatcher;
-import pattern.action.TriggerActionMatcher;
 import pattern.generic.TriggerMatcher;
 import pattern.map.AreaMatcher;
 import pattern.map.AreaMatcher.MusicConditionMatcher;
@@ -62,7 +62,7 @@ public class MapTest extends BaseTest {
             TestMap map = new TestMap(mapFolder);
             maps.add(map);
 
-            for (ActionMatcher action : getAllActionMatchers(map)) {
+            for (ActionMatcher2 action : getAllActionMatchers(map)) {
                 ActionType actionType = action.getActionType();
                 if (actionType == ActionType.GLOBAL) {
                     String globalName = action.getActionString();
@@ -184,9 +184,9 @@ public class MapTest extends BaseTest {
     public void dialogueTest() {
         // Make sure all input dialogue triggers don't include the string 'Poke' instead of 'Poké'
         for (TestMap map : maps) {
-            for (ActionMatcher action : getAllActionMatchers(map)) {
-                if (action.getActionType() == ActionType.TRIGGER) {
-                    TriggerActionMatcher trigger = action.getTrigger();
+            for (ActionMatcher2 action : getAllActionMatchers(map)) {
+                if (action instanceof TriggerActionMatcher2) {
+                    TriggerActionMatcher2 trigger = (TriggerActionMatcher2)action;
                     if (trigger.getTriggerActionType() == TriggerActionType.DIALOGUE) {
                         String dialogue = trigger.getTriggerContents();
                         Assert.assertFalse(map.getName() + " " + dialogue, dialogue.contains("Poke"));
@@ -196,8 +196,8 @@ public class MapTest extends BaseTest {
         }
     }
 
-    private static List<ActionMatcher> getAllActionMatchers(TestMap map) {
-        List<ActionMatcher> actionMatchers = new ArrayList<>();
+    private static List<ActionMatcher2> getAllActionMatchers(TestMap map) {
+        List<ActionMatcher2> actionMatchers = new ArrayList<>();
 
         for (NPCMatcher npc : map.getMatcher().getNPCs()) {
             for (NPCInteractionMatcher interaction : npc.getInteractionMatcherList()) {

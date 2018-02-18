@@ -1,7 +1,7 @@
 package mapMaker.dialogs;
 
 import mapMaker.dialogs.action.ActionListPanel;
-import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher2;
 import pattern.action.NPCInteractionMatcher;
 import util.GUIUtils;
 import util.StringUtils;
@@ -54,7 +54,7 @@ class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
     protected NPCInteractionMatcher getMatcher() {
         String interactionName = interactionNameTextField.getText();
         boolean walkToPlayer = walkToPlayerCheckBox.isSelected();
-        ActionMatcher[] actions = actionListPanel.getActions();
+        ActionMatcher2[] actions = actionListPanel.getActions();
 
         if (StringUtils.isNullOrEmpty(interactionName)) {
             interactionName = this.getDefaultName();

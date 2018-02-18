@@ -3,8 +3,8 @@ package map.triggers;
 import map.condition.Condition;
 import message.MessageUpdate;
 import message.Messages;
-import pattern.action.ChoiceActionMatcher;
-import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
+import pattern.action.ActionMatcher2.ChoiceActionMatcher2;
+import pattern.action.ChoiceMatcher;
 import util.SerializationUtils;
 
 class ChoiceTrigger extends Trigger {
@@ -14,7 +14,7 @@ class ChoiceTrigger extends Trigger {
     ChoiceTrigger(String choices, Condition condition) {
         super(TriggerType.CHOICE, choices, condition);
 
-        ChoiceActionMatcher matcher = SerializationUtils.deserializeJson(choices, ChoiceActionMatcher.class);
+        ChoiceActionMatcher2 matcher = SerializationUtils.deserializeJson(choices, ChoiceActionMatcher2.class);
         this.question = matcher.getQuestion();
         this.choices = matcher.getChoices();
     }

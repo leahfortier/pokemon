@@ -5,13 +5,12 @@ import item.bag.Bag;
 import main.Game;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
-import mapMaker.dialogs.action.trigger.TriggerActionType;
 import message.MessageUpdate;
 import message.Messages;
-import pattern.action.ActionMatcher;
-import pattern.action.ChoiceActionMatcher;
-import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
-import pattern.action.TriggerActionMatcher;
+import pattern.action.ActionMatcher2;
+import pattern.action.ActionMatcher2.ChoiceActionMatcher2;
+import pattern.action.ActionMatcher2.TriggerActionMatcher2;
+import pattern.action.ChoiceMatcher;
 import util.SerializationUtils;
 
 import java.io.Serializable;
@@ -39,15 +38,13 @@ public class RepelInfo implements Serializable {
                 Player player = Game.getPlayer();
                 Bag bag = player.getBag();
                 if (bag.hasItem(this.repelItem)) {
-                    ActionMatcher useAnotherAction = new ActionMatcher();
-                    useAnotherAction.setTrigger(new TriggerActionMatcher(TriggerActionType.USE_ITEM, repelItem.name()));
-                    ChoiceMatcher useAnother = new ChoiceMatcher("Sure!", new ActionMatcher[] { useAnotherAction });
+                    TriggerActionMatcher2 useAnotherAction = new TriggerActionMatcher2(TriggerType.USE_ITEM, repelItem.name());
+                    ChoiceMatcher useAnother = new ChoiceMatcher("Sure!", new ActionMatcher2[] { useAnotherAction });
 
-                    ActionMatcher doNotUseAction = new ActionMatcher();
-                    doNotUseAction.setTrigger(new TriggerActionMatcher(TriggerActionType.DIALOGUE, "They're coming for you. Worry."));
-                    ChoiceMatcher doNotUse = new ChoiceMatcher("Nah...", new ActionMatcher[] { doNotUseAction });
+                    TriggerActionMatcher2 doNotUseAction = new TriggerActionMatcher2(TriggerType.DIALOGUE, "They're coming for you. Worry.");
+                    ChoiceMatcher doNotUse = new ChoiceMatcher("Nah...", new ActionMatcher2[] { doNotUseAction });
 
-                    ChoiceActionMatcher choice = new ChoiceActionMatcher(
+                    ChoiceActionMatcher2 choice = new ChoiceActionMatcher2(
                             "Would you like to use another " + repelItem.getName() + "?",
                             new ChoiceMatcher[] { useAnother, doNotUse }
                     );

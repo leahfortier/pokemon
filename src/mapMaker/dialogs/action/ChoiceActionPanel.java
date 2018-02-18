@@ -1,8 +1,8 @@
 package mapMaker.dialogs.action;
 
-import pattern.action.ActionMatcher;
-import pattern.action.ChoiceActionMatcher;
-import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
+import pattern.action.ActionMatcher2;
+import pattern.action.ActionMatcher2.ChoiceActionMatcher2;
+import pattern.action.ChoiceMatcher;
 import util.GUIUtils;
 
 import javax.swing.JButton;
@@ -37,33 +37,28 @@ class ChoiceActionPanel extends ActionPanel {
     }
 
     @Override
-    public ActionMatcher getActionMatcher(ActionType actionType) {
+    public ActionMatcher2 getActionMatcher(ActionType actionType) {
         ChoiceMatcher[] choiceMatchers = new ChoiceMatcher[this.choices.size()];
         for (int i = 0; i < choiceMatchers.length; i++) {
             choiceMatchers[i] = new ChoiceMatcher(
                     this.choices.get(i).textField.getText(),
-                    this.choices.get(i).actions.toArray(new ActionMatcher[0])
+                    this.choices.get(i).actions.toArray(new ActionMatcher2[0])
             );
         }
 
-        ChoiceActionMatcher choiceActionMatcher = new ChoiceActionMatcher(
+        return new ChoiceActionMatcher2(
                 this.questionField.getText(),
                 choiceMatchers
         );
-
-        ActionMatcher actionMatcher = new ActionMatcher();
-        actionMatcher.setChoice(choiceActionMatcher);
-
-        return actionMatcher;
     }
 
     @Override
-    protected void load(ActionMatcher matcher) {
+    protected void load(ActionMatcher2 matcher) {
         if (matcher == null) {
             return;
         }
 
-        ChoiceActionMatcher choiceActionMatcher = matcher.getChoice();
+        ChoiceActionMatcher2 choiceActionMatcher = (ChoiceActionMatcher2)matcher;
         this.questionField.setText(choiceActionMatcher.getQuestion());
 
         ChoiceMatcher[] choiceMatchers = choiceActionMatcher.getChoices();
@@ -92,11 +87,11 @@ class ChoiceActionPanel extends ActionPanel {
 
             for (int j = 0; j < actionButtons.length; j++) {
                 final int actionIndex = j;
-                ActionMatcher actionMatcher = choice.actions.get(j);
+                ActionMatcher2 actionMatcher = choice.actions.get(j);
                 actionButtons[j] = GUIUtils.createButton(
                         actionMatcher == null ? "EMPTY" : actionMatcher.getActionType().name(),
                         event -> {
-                            ActionMatcher newActionMatcher = new ActionDialog(actionMatcher).getMatcher(parent);
+                            ActionMatcher2 newActionMatcher = new ActionDialog(actionMatcher).getMatcher(parent);
                             if (newActionMatcher != null) {
                                 choices.get(choiceIndex).actions.set(actionIndex, newActionMatcher);
                                 render();
@@ -121,7 +116,7 @@ class ChoiceActionPanel extends ActionPanel {
 
     private class Choice {
         private final JTextField textField;
-        private final List<ActionMatcher> actions;
+        private final List<ActionMatcher2> actions;
         private final JButton newActionButton;
 
         public Choice() {

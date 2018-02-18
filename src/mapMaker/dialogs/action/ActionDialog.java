@@ -1,7 +1,7 @@
 package mapMaker.dialogs.action;
 
 import mapMaker.dialogs.TriggerDialog;
-import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher2;
 import util.GUIUtils;
 
 import javax.swing.JComboBox;
@@ -9,14 +9,14 @@ import javax.swing.JPanel;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class ActionDialog extends TriggerDialog<ActionMatcher> {
+public class ActionDialog extends TriggerDialog<ActionMatcher2> {
     private final JPanel topComponent;
 
     private final Map<ActionType, ActionPanel> map;
 
     private final JComboBox<ActionType> actionComboBox;
 
-    ActionDialog(ActionMatcher actionMatcher) {
+    ActionDialog(ActionMatcher2 actionMatcher) {
         super("New Action Dialog");
 
         this.actionComboBox = GUIUtils.createComboBox(ActionType.values(), event -> render());
@@ -32,12 +32,12 @@ public class ActionDialog extends TriggerDialog<ActionMatcher> {
     }
 
     @Override
-    protected ActionMatcher getMatcher() {
+    protected ActionMatcher2 getMatcher() {
         ActionType actionType = (ActionType)actionComboBox.getSelectedItem();
         return this.map.get(actionType).getActionMatcher(actionType);
     }
 
-    private void load(ActionMatcher matcher) {
+    private void load(ActionMatcher2 matcher) {
         if (matcher == null) {
             return;
         }
