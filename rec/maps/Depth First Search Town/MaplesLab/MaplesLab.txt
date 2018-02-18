@@ -105,10 +105,9 @@
                   "text": "wawa",
                   "actions": [
                     {
-                      "trigger": {
-                        "triggerType": "GiveItem",
-                        "triggerContents": "Water Stone"
-                      }
+                      "triggerType": "GIVE_ITEM",
+                      "triggerContents": "Water Stone",
+                      "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
                     }
                   ]
                 },
@@ -116,10 +115,9 @@
                   "text": "sunsunsunherewecome",
                   "actions": [
                     {
-                      "trigger": {
-                        "triggerType": "GiveItem",
-                        "triggerContents": "Sun Stone"
-                      }
+                      "triggerType": "GIVE_ITEM",
+                      "triggerContents": "Sun Stone",
+                      "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
                     }
                   ]
                 },
@@ -127,10 +125,9 @@
                   "text": "thunda",
                   "actions": [
                     {
-                      "trigger": {
-                        "triggerType": "GIVE_ITEM",
-                        "triggerContents": "THUNDER_STONE"
-                      }
+                      "triggerType": "GIVE_ITEM",
+                      "triggerContents": "THUNDER_STONE",
+                      "className": "pattern.action.ActionMatcher2$TriggerActionMatcher2"
                     }
                   ]
                 }

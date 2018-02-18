@@ -3,7 +3,6 @@ package pattern.action;
 import map.entity.EntityAction;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ChoiceActionMatcher {
@@ -25,11 +24,11 @@ public class ChoiceActionMatcher {
 
     public static class ChoiceMatcher {
         private String text;
-        private ActionMatcher[] actions;
+        public ActionMatcher2[] actions;
 
         public ChoiceMatcher(String text, ActionMatcher[] actions) {
             this.text = text;
-            this.actions = actions;
+//            this.actions = actions;
         }
 
         public String getText() {
@@ -37,14 +36,15 @@ public class ChoiceActionMatcher {
         }
 
         public List<ActionMatcher> getActionMatchers() {
-            return Arrays.asList(this.actions);
+            return new ArrayList<>();
+//            return Arrays.asList(this.actions);
         }
 
         public List<EntityAction> getActions() {
             List<EntityAction> actions = new ArrayList<>();
-            for (ActionMatcher action : this.actions) {
-                actions.add(action.getAction(null));
-            }
+//            for (ActionMatcher action : this.actions) {
+//                actions.add(action.getAction(null));
+//            }
 
             return actions;
         }
