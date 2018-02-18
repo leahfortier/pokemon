@@ -53,7 +53,6 @@ enum VisualState {
         ButtonList getButtons();
 
         default void set() {}
-
         default SoundTitle getTunes() {
             return SoundTitle.MAIN_MENU_TUNE;
         }

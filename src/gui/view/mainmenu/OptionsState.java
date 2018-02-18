@@ -30,8 +30,9 @@ class OptionsState implements VisualStateHandler {
 
     @Override
     public void update(MainMenuView view) {
-        int pressed = view.getPressed(buttons);
+        buttons.update();
 
+        int pressed = buttons.consumeSelectedPress() ? buttons.getSelected() : -1;
         switch (pressed) {
             case 0: // theme
                 view.getSettings().toggleTheme();

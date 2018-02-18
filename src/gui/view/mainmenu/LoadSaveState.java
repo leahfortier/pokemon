@@ -85,7 +85,9 @@ class LoadSaveState implements VisualStateHandler {
 
     @Override
     public void update(MainMenuView view) {
-        int pressed = view.getPressed(buttons);
+        buttons.update();
+
+        int pressed = buttons.consumeSelectedPress() ? buttons.getSelected() : -1;
 
         // Load Save File
         if (pressed >= 0 && pressed < Save.NUM_SAVES) {

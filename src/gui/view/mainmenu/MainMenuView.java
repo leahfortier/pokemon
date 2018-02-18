@@ -3,7 +3,6 @@ package gui.view.mainmenu;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
-import draw.button.ButtonList;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.ControlKey;
@@ -52,17 +51,6 @@ public class MainMenuView extends View {
 
     Settings getSettings() {
         return this.settings;
-    }
-
-    int getPressed(ButtonList buttons) {
-        int pressed = -1;
-
-        buttons.update();
-        if (buttons.consumeSelectedPress()) {
-            pressed = buttons.getSelected();
-        }
-
-        return pressed;
     }
 
     void setVisualState(VisualState newState) {
