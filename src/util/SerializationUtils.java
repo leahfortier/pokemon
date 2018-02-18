@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import main.Global;
 import map.condition.Condition;
-import pattern.action.ActionMatcher2;
+import pattern.action.ActionMatcher;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -21,7 +21,7 @@ import java.util.Base64;
 public class SerializationUtils {
     private static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Condition.class, new InterfaceAdapter())
-            .registerTypeAdapter(ActionMatcher2.class, new InterfaceAdapter())
+            .registerTypeAdapter(ActionMatcher.class, new InterfaceAdapter())
             .setPrettyPrinting()
             .disableHtmlEscaping()
             .setLenient()

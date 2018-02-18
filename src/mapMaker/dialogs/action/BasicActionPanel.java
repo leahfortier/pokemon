@@ -1,10 +1,10 @@
 package mapMaker.dialogs.action;
 
 import main.Global;
-import pattern.action.ActionMatcher2;
-import pattern.action.ActionMatcher2.GlobalActionMatcher;
-import pattern.action.ActionMatcher2.GroupTriggerActionMatcher;
-import pattern.action.ActionMatcher2.UpdateActionMatcher;
+import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher.GlobalActionMatcher;
+import pattern.action.ActionMatcher.GroupTriggerActionMatcher;
+import pattern.action.ActionMatcher.UpdateActionMatcher;
 import util.GUIUtils;
 
 import javax.swing.JTextField;
@@ -23,12 +23,12 @@ class BasicActionPanel extends ActionPanel {
     }
 
     @Override
-    protected void load(ActionMatcher2 matcher) {
+    protected void load(ActionMatcher matcher) {
         textField.setText(matcher.getActionString());
     }
 
     @Override
-    public ActionMatcher2 getActionMatcher(ActionType actionType) {
+    public ActionMatcher getActionMatcher(ActionType actionType) {
         String text = textField.getText().trim();
 
         switch (actionType) {

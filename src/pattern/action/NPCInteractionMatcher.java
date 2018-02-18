@@ -10,9 +10,9 @@ import java.util.List;
 public class NPCInteractionMatcher {
     private String name;
     private boolean walkToPlayer;
-    public ActionMatcher2[] npcActions;
+    public ActionMatcher[] npcActions;
 
-    public NPCInteractionMatcher(String name, boolean walkToPlayer, ActionMatcher2[] npcActions) {
+    public NPCInteractionMatcher(String name, boolean walkToPlayer, ActionMatcher[] npcActions) {
         this.name = StringUtils.nullWhiteSpace(name);
         this.walkToPlayer = walkToPlayer;
         this.npcActions = npcActions;
@@ -26,13 +26,13 @@ public class NPCInteractionMatcher {
         return this.walkToPlayer;
     }
 
-    public List<ActionMatcher2> getActionMatcherList() {
+    public List<ActionMatcher> getActionMatcherList() {
         return Arrays.asList(this.npcActions);
     }
 
     public List<EntityAction> getActions() {
         List<EntityAction> actions = new ArrayList<>();
-        for (ActionMatcher2 action : this.npcActions) {
+        for (ActionMatcher action : this.npcActions) {
             actions.add(action.getAction(null));
         }
 

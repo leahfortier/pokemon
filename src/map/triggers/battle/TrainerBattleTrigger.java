@@ -7,7 +7,7 @@ import map.entity.EntityAction.BattleAction;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.PokemonMatcher;
-import pattern.action.ActionMatcher2.BattleActionMatcher;
+import pattern.action.ActionMatcher.BattleActionMatcher;
 import pattern.action.UpdateMatcher;
 import pokemon.PartyPokemon;
 import trainer.EnemyTrainer;

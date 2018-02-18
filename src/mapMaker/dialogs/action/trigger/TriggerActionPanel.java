@@ -3,8 +3,8 @@ package mapMaker.dialogs.action.trigger;
 import mapMaker.dialogs.action.ActionDialog;
 import mapMaker.dialogs.action.ActionPanel;
 import mapMaker.dialogs.action.ActionType;
-import pattern.action.ActionMatcher2;
-import pattern.action.ActionMatcher2.TriggerActionMatcher2;
+import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher.TriggerActionMatcher;
 import util.GUIUtils;
 
 import javax.swing.JComboBox;
@@ -35,18 +35,18 @@ public class TriggerActionPanel extends ActionPanel {
     }
 
     @Override
-    protected void load(ActionMatcher2 matcher) {
-        TriggerActionMatcher2 actionMatcher = (TriggerActionMatcher2)matcher;
+    protected void load(ActionMatcher matcher) {
+        TriggerActionMatcher actionMatcher = (TriggerActionMatcher)matcher;
         TriggerActionType triggerActionType = actionMatcher.getTriggerActionType();
         triggerTypeCombobBox.setSelectedItem(triggerActionType);
         this.map.get(triggerActionType).load(actionMatcher.getTriggerContents());
     }
 
     @Override
-    public ActionMatcher2 getActionMatcher(ActionType actionType) {
+    public ActionMatcher getActionMatcher(ActionType actionType) {
         TriggerActionType triggerType = (TriggerActionType)triggerTypeCombobBox.getSelectedItem();
         String triggerContents = this.map.get(triggerType).getTriggerContents();
-        return new TriggerActionMatcher2(triggerType.getTriggerType(), triggerContents);
+        return new TriggerActionMatcher(triggerType.getTriggerType(), triggerContents);
     }
 
     private void renderDialog() {

@@ -8,9 +8,9 @@ import java.util.List;
 
 public class ChoiceMatcher {
     private String text;
-    public ActionMatcher2[] actions;
+    public ActionMatcher[] actions;
 
-    public ChoiceMatcher(String text, ActionMatcher2[] actions) {
+    public ChoiceMatcher(String text, ActionMatcher[] actions) {
         this.text = text;
         this.actions = actions;
     }
@@ -19,13 +19,13 @@ public class ChoiceMatcher {
         return this.text;
     }
 
-    public List<ActionMatcher2> getActionMatchers() {
+    public List<ActionMatcher> getActionMatchers() {
         return Arrays.asList(this.actions);
     }
 
     public List<EntityAction> getActions() {
         List<EntityAction> actions = new ArrayList<>();
-        for (ActionMatcher2 action : this.actions) {
+        for (ActionMatcher action : this.actions) {
             actions.add(action.getAction(null));
         }
 

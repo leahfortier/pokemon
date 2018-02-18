@@ -5,8 +5,8 @@ import map.condition.ConditionSet;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.GroupTriggerMatcher;
-import pattern.action.ActionMatcher2.BattleActionMatcher;
-import pattern.action.ActionMatcher2.ChoiceActionMatcher2;
+import pattern.action.ActionMatcher.BattleActionMatcher;
+import pattern.action.ActionMatcher.ChoiceActionMatcher;
 import pattern.action.UpdateMatcher;
 import util.SerializationUtils;
 import util.StringUtils;
@@ -152,9 +152,9 @@ public abstract class EntityAction {
     }
 
     public static class ChoiceAction extends EntityAction {
-        private final ChoiceActionMatcher2 matcher;
+        private final ChoiceActionMatcher matcher;
 
-        public ChoiceAction(final ChoiceActionMatcher2 matcher) {
+        public ChoiceAction(final ChoiceActionMatcher matcher) {
             this.matcher = matcher;
         }
 

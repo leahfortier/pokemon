@@ -7,9 +7,9 @@ import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
-import pattern.action.ActionMatcher2;
-import pattern.action.ActionMatcher2.ChoiceActionMatcher2;
-import pattern.action.ActionMatcher2.TriggerActionMatcher2;
+import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher.ChoiceActionMatcher;
+import pattern.action.ActionMatcher.TriggerActionMatcher;
 import pattern.action.ChoiceMatcher;
 import util.SerializationUtils;
 
@@ -38,13 +38,13 @@ public class RepelInfo implements Serializable {
                 Player player = Game.getPlayer();
                 Bag bag = player.getBag();
                 if (bag.hasItem(this.repelItem)) {
-                    TriggerActionMatcher2 useAnotherAction = new TriggerActionMatcher2(TriggerType.USE_ITEM, repelItem.name());
-                    ChoiceMatcher useAnother = new ChoiceMatcher("Sure!", new ActionMatcher2[] { useAnotherAction });
+                    TriggerActionMatcher useAnotherAction = new TriggerActionMatcher(TriggerType.USE_ITEM, repelItem.name());
+                    ChoiceMatcher useAnother = new ChoiceMatcher("Sure!", new ActionMatcher[] { useAnotherAction });
 
-                    TriggerActionMatcher2 doNotUseAction = new TriggerActionMatcher2(TriggerType.DIALOGUE, "They're coming for you. Worry.");
-                    ChoiceMatcher doNotUse = new ChoiceMatcher("Nah...", new ActionMatcher2[] { doNotUseAction });
+                    TriggerActionMatcher doNotUseAction = new TriggerActionMatcher(TriggerType.DIALOGUE, "They're coming for you. Worry.");
+                    ChoiceMatcher doNotUse = new ChoiceMatcher("Nah...", new ActionMatcher[] { doNotUseAction });
 
-                    ChoiceActionMatcher2 choice = new ChoiceActionMatcher2(
+                    ChoiceActionMatcher choice = new ChoiceActionMatcher(
                             "Would you like to use another " + repelItem.getName() + "?",
                             new ChoiceMatcher[] { useAnother, doNotUse }
                     );

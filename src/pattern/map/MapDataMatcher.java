@@ -3,8 +3,8 @@ package pattern.map;
 import com.google.gson.JsonObject;
 import map.area.AreaData;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import pattern.action.ActionMatcher2;
-import pattern.action.ActionMatcher2.ChoiceActionMatcher2;
+import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher.ChoiceActionMatcher;
 import pattern.action.ChoiceMatcher;
 import pattern.action.NPCInteractionMatcher;
 import pattern.generic.LocationTriggerMatcher;
@@ -145,10 +145,10 @@ public class MapDataMatcher {
 //                interaction.npcActions = interaction.npcActions2;
 //                interaction.npcActions2 = null;
 
-                ActionMatcher2[] npcActions = interaction.npcActions;
-                for (ActionMatcher2 npcAction : npcActions) {
-                    if (npcAction instanceof ChoiceActionMatcher2) {
-                        ChoiceActionMatcher2 c = (ChoiceActionMatcher2)npcAction;
+                ActionMatcher[] npcActions = interaction.npcActions;
+                for (ActionMatcher npcAction : npcActions) {
+                    if (npcAction instanceof ChoiceActionMatcher) {
+                        ChoiceActionMatcher c = (ChoiceActionMatcher)npcAction;
                         for (ChoiceMatcher choice : c.choices) {
 //                            ActionMatcher[] choiceActions = choice.actions;
 //                            ActionMatcher2[] choiceActions2 = new ActionMatcher2[choiceActions.length];

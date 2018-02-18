@@ -1,7 +1,7 @@
 package mapMaker.dialogs;
 
 import mapMaker.dialogs.action.ActionListPanel;
-import pattern.action.ActionMatcher2;
+import pattern.action.ActionMatcher;
 import pattern.map.EventMatcher;
 import util.GUIUtils;
 
@@ -39,7 +39,7 @@ public class EventTriggerDialog extends TriggerDialog<EventMatcher> {
 
     @Override
     protected EventMatcher getMatcher() {
-        ActionMatcher2[] actions = actionListPanel.getActions();
+        ActionMatcher[] actions = actionListPanel.getActions();
         if (actions == null || actions.length == 0) {
             System.err.println("Need at least one action for a valid event trigger.");
             return null;

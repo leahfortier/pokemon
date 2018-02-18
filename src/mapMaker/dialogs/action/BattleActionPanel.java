@@ -1,8 +1,8 @@
 package mapMaker.dialogs.action;
 
 import pattern.PokemonMatcher;
-import pattern.action.ActionMatcher2;
-import pattern.action.ActionMatcher2.BattleActionMatcher;
+import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher.BattleActionMatcher;
 import trainer.Trainer;
 import util.GUIUtils;
 import util.PokeString;
@@ -128,7 +128,7 @@ class BattleActionPanel extends ActionPanel {
     }
 
     @Override
-    protected void load(ActionMatcher2 matcher) {
+    protected void load(ActionMatcher matcher) {
         if (matcher == null) {
             return;
         }
@@ -147,7 +147,7 @@ class BattleActionPanel extends ActionPanel {
     }
 
     @Override
-    public ActionMatcher2 getActionMatcher(ActionType actionType) {
+    public ActionMatcher getActionMatcher(ActionType actionType) {
         String name = nameTextField.getText().trim();
         int cashMoney = Integer.parseInt(cashFormattedTextField.getValue().toString());
         boolean isMaxLimit = maxPokemonLimitCheckBox.isSelected();
