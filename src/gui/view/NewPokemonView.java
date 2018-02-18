@@ -27,6 +27,9 @@ import java.util.List;
 
 class NewPokemonView extends View {
     private static final int NUM_COLS = 4;
+    private static final int LEFT_BUTTON = NUM_COLS + 1; // Bottom center left
+    private static final int RIGHT_BUTTON = NUM_COLS + 2; // Bottom center right
+
     private static final int TEXT_SPACING = 15;
 
     private static final int BOX_SPACING = (BasicPanels.getMessagePanelY()
@@ -71,10 +74,10 @@ class NewPokemonView extends View {
         this.buttons.setInactive();
 
         // Bottom center left
-        this.leftButton = buttons.get(NUM_COLS + 1);
+        this.leftButton = buttons.get(LEFT_BUTTON);
 
         // Bottom center right
-        this.rightButton = buttons.get(NUM_COLS + 2);
+        this.rightButton = buttons.get(RIGHT_BUTTON);
     }
 
     @Override
@@ -302,14 +305,9 @@ class NewPokemonView extends View {
                 }
                 break;
             case NICKNAME_QUESTION:
-                for (int i = 0; i < buttons.size(); i++) {
-                    Button button = buttons.get(i);
-                    button.setActive(button == leftButton || button == rightButton);
-                    if (button == rightButton) {
-                        this.buttons.setSelected(i);
-                    }
-                }
-
+                leftButton.setActive(true);
+                rightButton.setActive(true);
+                buttons.setSelected(RIGHT_BUTTON);
                 message = "Would you like to give " + pokemonName + " a nickname?";
                 break;
             case NICKNAME:
@@ -317,14 +315,9 @@ class NewPokemonView extends View {
                 break;
             case LOCATION:
                 if (player.fullParty() && !player.getTeam().contains(newPokemon)) {
-                    for (int i = 0; i < buttons.size(); i++) {
-                        Button button = buttons.get(i);
-                        button.setActive(button == leftButton || button == rightButton);
-                        if (button == rightButton) {
-                            this.buttons.setSelected(i);
-                        }
-                    }
-
+                    leftButton.setActive(true);
+                    rightButton.setActive(true);
+                    buttons.setSelected(RIGHT_BUTTON);
                     message = "Where would you like to send " + pokemonName + "?";
                 } else {
                     setState(State.END);

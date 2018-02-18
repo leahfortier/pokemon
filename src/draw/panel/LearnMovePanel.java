@@ -20,6 +20,9 @@ import java.util.List;
 public class LearnMovePanel {
     private static final int NUM_COLS = 4;
 
+    private static final int YES_BUTTON = NUM_COLS + 1; // Bottom center left
+    private static final int NO_BUTTON = NUM_COLS + 2; // Bottom center right
+
     private final DrawPanel moveDetailsPanel;
     private final ButtonList buttons;
     private final Button yesButton;
@@ -44,13 +47,9 @@ public class LearnMovePanel {
         // Create a button for each known move and then one for the new move and one for not learning
         buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS));
 
-        // Bottom center left
-        yesButton = buttons.get(NUM_COLS + 1);
-
-        // Bottom center right
-        noButton = buttons.get(NUM_COLS + 2);
-
-        newMoveButton = this.buttons.get(buttons.size() - 2);
+        yesButton = buttons.get(YES_BUTTON);
+        noButton = buttons.get(NO_BUTTON);
+        newMoveButton = buttons.get(buttons.size() - 2);
 
         learnedMove = false;
         state = State.MESSAGE;
@@ -126,13 +125,9 @@ public class LearnMovePanel {
         buttons.setInactive();
 
         if (state == State.QUESTION) {
-            for (int i = 0; i < buttons.size(); i++) {
-                Button button = buttons.get(i);
-                button.setActive(button == yesButton || button == noButton);
-                if (button == yesButton) {
-                    buttons.setSelected(i);
-                }
-            }
+            yesButton.setActive(true);
+            noButton.setActive(true);
+            buttons.setSelected(YES_BUTTON);
         } else if (state == State.DELETE) {
             for (int y = 0; y < 2; y++) {
                 for (int x = 0; x < NUM_COLS; x++) {

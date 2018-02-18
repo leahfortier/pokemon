@@ -60,8 +60,8 @@ public class BerryView extends View {
     private final Button[] itemButtons;
     private final Button harvestButton;
     private final Button returnButton;
-    private final Button leftButton;
-    private final Button rightButton;
+    private final Button leftArrow;
+    private final Button rightArrow;
 
     private int pageNum;
     private String message;
@@ -167,7 +167,7 @@ public class BerryView extends View {
         );
 
         int arrowHeight = 20;
-        leftButton = new Button(
+        leftArrow = new Button(
                 itemsPanel.x + itemsPanel.width/4,
                 itemButtons[itemButtons.length - 1].centerY() + (itemButtons[2].y - itemButtons[0].y) - arrowHeight/2,
                 35,
@@ -181,11 +181,11 @@ public class BerryView extends View {
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         );
 
-        rightButton = new Button(
-                itemsPanel.rightX() - (leftButton.x - itemsPanel.x) - leftButton.width,
-                leftButton.y,
-                leftButton.width,
-                leftButton.height,
+        rightArrow = new Button(
+                itemsPanel.rightX() - (leftArrow.x - itemsPanel.x) - leftArrow.width,
+                leftArrow.y,
+                leftArrow.width,
+                leftArrow.height,
                 ButtonHoverAction.BOX,
                 new ButtonTransitions()
                         .right(LEFT_ARROW)
@@ -198,8 +198,8 @@ public class BerryView extends View {
         Button[] buttons = new Button[NUM_BUTTONS];
         System.arraycopy(itemButtons, 0, buttons, 0, ITEMS_PER_PAGE);
         buttons[HARVEST] = harvestButton;
-        buttons[LEFT_ARROW] = leftButton;
-        buttons[RIGHT_ARROW] = rightButton;
+        buttons[LEFT_ARROW] = leftArrow;
+        buttons[RIGHT_ARROW] = rightArrow;
         buttons[RETURN] = returnButton;
         this.buttons = new ButtonList(buttons);
     }
@@ -301,11 +301,11 @@ public class BerryView extends View {
 
         // Draw page numbers
         FontMetrics.setFont(g, 16);
-        TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(), itemsPanel.centerX(), rightButton.centerY());
+        TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(), itemsPanel.centerX(), rightArrow.centerY());
 
         // Left and Right arrows
-        leftButton.drawArrow(g, Direction.LEFT);
-        rightButton.drawArrow(g, Direction.RIGHT);
+        leftArrow.drawArrow(g, Direction.LEFT);
+        rightArrow.drawArrow(g, Direction.RIGHT);
 
         // Berry Panel
         berryPanel.drawBackground(g);
