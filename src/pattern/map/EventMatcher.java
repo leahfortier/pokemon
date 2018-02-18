@@ -12,7 +12,7 @@ import java.util.List;
 
 public class EventMatcher extends MultiPointTriggerMatcher {
     private String name;
-    private ActionMatcher[] actions;
+    public ActionMatcher[] actions;
 
     public EventMatcher(String name, String conditionName, ConditionSet conditionSet, ActionMatcher[] actions) {
         this.name = name;

@@ -71,10 +71,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "It's not safe here."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "It's not safe here.",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -97,10 +96,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Time to get back to my research."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Time to get back to my research.",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }

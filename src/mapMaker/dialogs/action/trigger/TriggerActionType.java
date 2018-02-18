@@ -1,6 +1,7 @@
 package mapMaker.dialogs.action.trigger;
 
 import gui.view.ViewMode;
+import main.Global;
 import map.triggers.TriggerType;
 import mapMaker.dialogs.action.trigger.StringTriggerPanel.ItemTriggerPanel;
 import mapMaker.dialogs.action.trigger.TriggerContentsPanel.EmptyTriggerContentsPanel;
@@ -49,5 +50,16 @@ public enum TriggerActionType {
 
     public TriggerType getTriggerType() {
         return this.triggerType;
+    }
+
+    public static TriggerActionType getTriggerActionType(TriggerType triggerType) {
+        for (TriggerActionType triggerActionType : TriggerActionType.values()) {
+            if (triggerActionType.getTriggerType() == triggerType) {
+                return triggerActionType;
+            }
+        }
+
+        Global.error("Unknown trigger type " + triggerType + ".");
+        return null;
     }
 }

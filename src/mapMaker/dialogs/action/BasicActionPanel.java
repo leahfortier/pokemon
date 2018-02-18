@@ -1,6 +1,11 @@
 package mapMaker.dialogs.action;
 
+import main.Global;
 import pattern.action.ActionMatcher;
+import pattern.action.StringActionMatcher;
+import pattern.action.StringActionMatcher.GlobalActionMatcher;
+import pattern.action.StringActionMatcher.GroupTriggerActionMatcher;
+import pattern.action.StringActionMatcher.UpdateActionMatcher;
 import util.GUIUtils;
 
 import javax.swing.JTextField;
@@ -20,16 +25,24 @@ class BasicActionPanel extends ActionPanel {
 
     @Override
     protected void load(ActionMatcher matcher) {
-        textField.setText(matcher.getActionString());
+        StringActionMatcher stringActionMatcher = (StringActionMatcher)matcher;
+        textField.setText(stringActionMatcher.getActionString());
     }
 
     @Override
     public ActionMatcher getActionMatcher(ActionType actionType) {
         String text = textField.getText().trim();
 
-        ActionMatcher actionMatcher = new ActionMatcher();
-        actionMatcher.setActionString(text, actionType);
-
-        return actionMatcher;
+        switch (actionType) {
+            case UPDATE:
+                return new UpdateActionMatcher(text);
+            case GROUP_TRIGGER:
+                return new GroupTriggerActionMatcher(text);
+            case GLOBAL:
+                return new GlobalActionMatcher(text);
+            default:
+                Global.info("Invalid action type for basic panel... :(");
+                return null;
+        }
     }
 }

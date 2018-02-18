@@ -81,16 +81,14 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Tom Town generates most of the power for all of Hash Map."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Tom Town generates most of the power for all of Hash Map.",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "It's all thanks to the Magnemite Power Plant!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "It's all thanks to the Magnemite Power Plant!",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -112,10 +110,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Team Deadlock is a big bug in our society."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Team Deadlock is a big bug in our society.",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -138,10 +135,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "What happened at the power plant? Who is this Team Deadlock?"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "What happened at the power plant? Who is this Team Deadlock?",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -164,10 +160,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "The Tom Town gym sounds really tough."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "The Tom Town gym sounds really tough.",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -190,10 +185,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I'm amazed how fast Leader Moore defeated my Pidgey!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I'm amazed how fast Leader Moore defeated my Pidgey!",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -216,16 +210,14 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "There power plant has been taken over by Team Deadlock!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "There power plant has been taken over by Team Deadlock!",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Wind Valley is closed off until this matter has been resolved."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Wind Valley is closed off until this matter has been resolved.",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -244,7 +236,8 @@
       "name": "Info_Guy_Dialogue",
       "actions": [
         {
-          "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk"
+          "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk",
+          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [

@@ -7,7 +7,7 @@ import map.condition.ConditionHolder.AndCondition;
 import map.condition.ConditionHolder.NotCondition;
 import trainer.player.Badge;
 
-class BadgeTrigger extends Trigger {
+public class BadgeTrigger extends Trigger {
     private final Badge badge;
 
     BadgeTrigger(String badgeName, Condition condition) {

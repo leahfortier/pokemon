@@ -2,7 +2,7 @@ package mapMaker.dialogs.action;
 
 import pattern.PokemonMatcher;
 import pattern.action.ActionMatcher;
-import pattern.action.BattleMatcher;
+import pattern.action.ActionMatcher.BattleActionMatcher;
 import trainer.Trainer;
 import util.GUIUtils;
 import util.PokeString;
@@ -133,7 +133,7 @@ class BattleActionPanel extends ActionPanel {
             return;
         }
 
-        BattleMatcher battleMatcher = matcher.getBattle();
+        BattleActionMatcher battleMatcher = (BattleActionMatcher)matcher;
 
         nameTextField.setText(battleMatcher.getName());
         cashFormattedTextField.setValue(battleMatcher.getDatCashMoney());
@@ -161,10 +161,6 @@ class BattleActionPanel extends ActionPanel {
 
         String update = updateInteractionTextField.getText().trim();
 
-        BattleMatcher battleMatcher = new BattleMatcher(name, cashMoney, isMaxLimit, pokemon, update);
-        ActionMatcher actionMatcher = new ActionMatcher();
-        actionMatcher.setBattle(battleMatcher);
-
-        return actionMatcher;
+        return new BattleActionMatcher(name, cashMoney, isMaxLimit, pokemon, update);
     }
 }

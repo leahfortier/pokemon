@@ -37,24 +37,22 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Watch out, I'm gonna fry your motherboard!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Watch out, I'm gonna fry your motherboard!",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "battle": {
-                "name": "Gym Trainer",
-                "cashMoney": 100,
-                "maxPokemonLimit": false,
-                "pokemon": [
-                  {
-                    "namesies": "BLITZLE",
-                    "level": 9
-                  }
-                ],
-                "update": "won"
-              }
+              "name": "Gym Trainer",
+              "cashMoney": 100,
+              "maxPokemonLimit": false,
+              "pokemon": [
+                {
+                  "namesies": "BLITZLE",
+                  "level": 9
+                }
+              ],
+              "update": "won",
+              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -63,10 +61,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Hey! You fried my motherboard!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Hey! You fried my motherboard!",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -88,24 +85,22 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "My Pokémon and I communicate over PCI express!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "My Pokémon and I communicate over PCI express!",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "battle": {
-                "name": "Gym Trainer",
-                "cashMoney": 100,
-                "maxPokemonLimit": false,
-                "pokemon": [
-                  {
-                    "namesies": "JOLTIK",
-                    "level": 9
-                  }
-                ],
-                "update": "won"
-              }
+              "name": "Gym Trainer",
+              "cashMoney": 100,
+              "maxPokemonLimit": false,
+              "pokemon": [
+                {
+                  "namesies": "JOLTIK",
+                  "level": 9
+                }
+              ],
+              "update": "won",
+              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -114,10 +109,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I need more bandwidth!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I need more bandwidth!",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -139,38 +133,36 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "My Pokémon pack enough electricity to power the Cray Titan!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "My Pokémon pack enough electricity to power the Cray Titan!",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "battle": {
-                "name": "Leader Moore",
-                "cashMoney": 1000,
-                "maxPokemonLimit": true,
-                "pokemon": [
-                  {
-                    "namesies": "MAGNEMITE",
-                    "nickname": "",
-                    "level": 11,
-                    "isShiny": false
-                  },
-                  {
-                    "namesies": "ELEKID",
-                    "nickname": "",
-                    "level": 11,
-                    "isShiny": false
-                  },
-                  {
-                    "namesies": "PIKACHU",
-                    "nickname": "",
-                    "level": 14,
-                    "isShiny": false
-                  }
-                ],
-                "update": "badge"
-              }
+              "name": "Leader Moore",
+              "cashMoney": 1000,
+              "maxPokemonLimit": true,
+              "pokemon": [
+                {
+                  "namesies": "MAGNEMITE",
+                  "nickname": "",
+                  "level": 11,
+                  "isShiny": false
+                },
+                {
+                  "namesies": "ELEKID",
+                  "nickname": "",
+                  "level": 11,
+                  "isShiny": false
+                },
+                {
+                  "namesies": "PIKACHU",
+                  "nickname": "",
+                  "level": 14,
+                  "isShiny": false
+                }
+              ],
+              "update": "badge",
+              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -179,19 +171,18 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "My data BUS just wasn't large enough! Take this, the Round Badge!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "My data BUS just wasn't large enough! Take this, the Round Badge!",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "trigger": {
-                "triggerType": "Badge",
-                "triggerContents": "ROUND"
-              }
+              "triggerType": "BADGE",
+              "triggerContents": "ROUND",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "update": "won"
+              "update": "won",
+              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
             }
           ]
         },
@@ -200,10 +191,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "jo,loo6jm[nphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh             bo"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "jo,loo6jm[nphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh             bo",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }

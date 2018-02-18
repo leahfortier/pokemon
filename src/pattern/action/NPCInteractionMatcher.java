@@ -10,7 +10,7 @@ import java.util.List;
 public class NPCInteractionMatcher {
     private String name;
     private boolean walkToPlayer;
-    private ActionMatcher[] npcActions;
+    public ActionMatcher[] npcActions;
 
     public NPCInteractionMatcher(String name, boolean walkToPlayer, ActionMatcher[] npcActions) {
         this.name = StringUtils.nullWhiteSpace(name);

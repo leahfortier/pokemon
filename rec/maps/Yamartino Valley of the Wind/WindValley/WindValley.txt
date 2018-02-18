@@ -56,16 +56,14 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "Berry time! Fuck yeah!!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Berry time! Fuck yeah!!",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "trigger": {
-                "triggerType": "CHANGE_VIEW",
-                "triggerContents": "BERRY_VIEW"
-              }
+              "triggerType": "CHANGE_VIEW",
+              "triggerContents": "BERRY_VIEW",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -87,10 +85,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "DAY_CARE",
-                "triggerContents": ""
-              }
+              "triggerType": "DAY_CARE",
+              "triggerContents": "",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -112,16 +109,14 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "DIALOGUE",
-                "triggerContents": "Heart scales sure are tasty treats..."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Heart scales sure are tasty treats...",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "trigger": {
-                "triggerType": "CHANGE_VIEW",
-                "triggerContents": "MOVE_RELEARNER_VIEW"
-              }
+              "triggerType": "CHANGE_VIEW",
+              "triggerContents": "MOVE_RELEARNER_VIEW",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -143,13 +138,12 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "TRADE_POKEMON",
-                "triggerContents": "{
+              "triggerType": "TRADE_POKEMON",
+              "triggerContents": "{
   \"requested\": \"VULPIX\",
   \"tradePokemon\": \"YUKIKON\"
-}"
-              }
+}",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }

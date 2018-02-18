@@ -11,7 +11,7 @@ import map.triggers.HaltTrigger;
 import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.Messages;
-import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
+import pattern.action.ChoiceMatcher;
 import sound.SoundPlayer;
 import util.FontMetrics;
 import util.StringUtils;

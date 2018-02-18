@@ -54,10 +54,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Thank you for your help! Things are back to normal now."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Thank you for your help! Things are back to normal now.",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -80,10 +79,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Thankfully the Magnemites weren't harmed. Although, I'm still angry at Team Deadlock."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Thankfully the Magnemites weren't harmed. Although, I'm still angry at Team Deadlock.",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }

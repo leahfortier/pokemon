@@ -12,14 +12,14 @@ import map.condition.ConditionHolder.OrCondition;
 import map.daynight.DayCycle;
 import map.overworld.WalkType;
 import map.overworld.WildEncounterInfo;
-import mapMaker.dialogs.action.ActionType;
-import mapMaker.dialogs.action.trigger.TriggerActionType;
+import map.triggers.TriggerType;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher.TriggerActionMatcher;
 import pattern.action.NPCInteractionMatcher;
-import pattern.action.TriggerActionMatcher;
+import pattern.action.StringActionMatcher.GlobalActionMatcher;
 import pattern.generic.TriggerMatcher;
 import pattern.map.AreaMatcher;
 import pattern.map.AreaMatcher.MusicConditionMatcher;
@@ -63,9 +63,9 @@ public class MapTest extends BaseTest {
             maps.add(map);
 
             for (ActionMatcher action : getAllActionMatchers(map)) {
-                ActionType actionType = action.getActionType();
-                if (actionType == ActionType.GLOBAL) {
-                    String globalName = action.getActionString();
+                if (action instanceof GlobalActionMatcher) {
+                    GlobalActionMatcher globalActionMatcher = (GlobalActionMatcher)action;
+                    String globalName = globalActionMatcher.getActionString();
                     Assert.assertFalse(addedGlobals.contains(globalName));
                     addedGlobals.add(globalName);
                 }
@@ -185,9 +185,9 @@ public class MapTest extends BaseTest {
         // Make sure all input dialogue triggers don't include the string 'Poke' instead of 'Poké'
         for (TestMap map : maps) {
             for (ActionMatcher action : getAllActionMatchers(map)) {
-                if (action.getActionType() == ActionType.TRIGGER) {
-                    TriggerActionMatcher trigger = action.getTrigger();
-                    if (trigger.getTriggerActionType() == TriggerActionType.DIALOGUE) {
+                if (action instanceof TriggerActionMatcher) {
+                    TriggerActionMatcher trigger = (TriggerActionMatcher)action;
+                    if (trigger.getTriggerType() == TriggerType.DIALOGUE) {
                         String dialogue = trigger.getTriggerContents();
                         Assert.assertFalse(map.getName() + " " + dialogue, dialogue.contains("Poke"));
                     }

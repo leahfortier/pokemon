@@ -1,8 +1,14 @@
 package pattern.map;
 
+import com.google.gson.JsonObject;
 import map.area.AreaData;
 import mapMaker.model.TriggerModel.TriggerModelType;
+import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher.ChoiceActionMatcher;
+import pattern.action.ChoiceMatcher;
+import pattern.action.NPCInteractionMatcher;
 import pattern.generic.LocationTriggerMatcher;
+import util.FileIO;
 import util.GeneralUtils;
 import util.SerializationUtils;
 
@@ -119,6 +125,85 @@ public class MapDataMatcher {
     }
 
     public static MapDataMatcher matchArea(String areaDescriptionFileName) {
-        return SerializationUtils.deserializeJsonFile(areaDescriptionFileName, MapDataMatcher.class);
+//        return SerializationUtils.deserializeJsonFile(areaDescriptionFileName, MapDataMatcher.class);
+
+        String jsonContents = FileIO.readEntireFileWithReplacements(areaDescriptionFileName, false);
+
+        MapDataMatcher deserialized = SerializationUtils.deserializeJson(jsonContents, MapDataMatcher.class);
+        JsonObject mappity = SerializationUtils.deserializeJson(jsonContents, JsonObject.class);
+
+        for (NPCMatcher npc : deserialized.getNPCs()) {
+            for (NPCInteractionMatcher interaction : npc.getInteractionMatcherList()) {
+//                ActionMatcher[] npcActions = interaction.npcActions;
+//                ActionMatcher2[] npcActions2 = new ActionMatcher2[npcActions.length];
+//                for (int i = 0; i < npcActions.length; i++) {
+//                    npcActions2[i] = npcActions[i].getNewMatcher();
+//                }
+//                interaction.npcActions2 = npcActions2;
+//                interaction.npcActions = null;
+
+//                interaction.npcActions = interaction.npcActions2;
+//                interaction.npcActions2 = null;
+
+                ActionMatcher[] npcActions = interaction.npcActions;
+                for (ActionMatcher npcAction : npcActions) {
+                    if (npcAction instanceof ChoiceActionMatcher) {
+                        ChoiceActionMatcher c = (ChoiceActionMatcher)npcAction;
+                        for (ChoiceMatcher choice : c.choices) {
+//                            ActionMatcher[] choiceActions = choice.actions;
+//                            ActionMatcher2[] choiceActions2 = new ActionMatcher2[choiceActions.length];
+//                            for (int i = 0; i < choiceActions.length; i++) {
+//                                choiceActions2[i] = choiceActions[i].getNewMatcher();
+//                            }
+//                            choice.actions2 = choiceActions2;
+//                            choice.actions = null;
+
+//                            choice.actions = choice.actions2;
+//                            choice.actions2 = null;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (EventMatcher event : deserialized.getEvents()) {
+//            ActionMatcher[] actions = event.actions;
+//            ActionMatcher2[] actions2 = new ActionMatcher2[actions.length];
+//            for (int i = 0; i < actions.length; i++) {
+//                actions2[i] = actions[i].getNewMatcher();
+//            }
+//            event.actions2 = actions2;
+//            event.actions = null;
+
+//            event.actions = event.actions2;
+//            event.actions2 = null;
+        }
+
+        for (MiscEntityMatcher event : deserialized.getMiscEntities()) {
+//            ActionMatcher[] actions = event.actions;
+//            ActionMatcher2[] actions2 = new ActionMatcher2[actions.length];
+//            for (int i = 0; i < actions.length; i++) {
+//                actions2[i] = actions[i].getNewMatcher();
+//            }
+//            event.actions2 = actions2;
+//            event.actions = null;
+
+//            event.actions = event.actions2;
+//            event.actions2 = null;
+        }
+
+        String formattedJson = SerializationUtils.getJson(deserialized);
+        String mapJson = SerializationUtils.getJson(mappity);
+
+//        FileIO.writeToFile("out.txt", formattedJson);
+//        FileIO.writeToFile("out2.txt", mapJson);
+
+        if (!formattedJson.equals(mapJson)) {
+//            Global.error("No dice: " + areaDescriptionFileName);
+        }
+
+        FileIO.overwriteFile(areaDescriptionFileName, formattedJson);
+
+        return deserialized;
     }
 }

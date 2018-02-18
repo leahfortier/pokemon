@@ -12,7 +12,7 @@ import java.util.List;
 
 public class MiscEntityMatcher extends MultiPointTriggerMatcher {
     private String name;
-    private ActionMatcher[] actions;
+    public ActionMatcher[] actions;
 
     public MiscEntityMatcher(String name, String conditionName, ConditionSet conditionSet, ActionMatcher[] actions) {
         this.name = name;

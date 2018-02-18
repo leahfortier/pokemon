@@ -3,8 +3,8 @@ package map.triggers;
 import map.condition.Condition;
 import message.MessageUpdate;
 import message.Messages;
-import pattern.action.ChoiceActionMatcher;
-import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
+import pattern.action.ActionMatcher.ChoiceActionMatcher;
+import pattern.action.ChoiceMatcher;
 import util.SerializationUtils;
 
 class ChoiceTrigger extends Trigger {

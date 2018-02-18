@@ -1,8 +1,8 @@
 package mapMaker.dialogs.action;
 
 import pattern.action.ActionMatcher;
-import pattern.action.ChoiceActionMatcher;
-import pattern.action.ChoiceActionMatcher.ChoiceMatcher;
+import pattern.action.ActionMatcher.ChoiceActionMatcher;
+import pattern.action.ChoiceMatcher;
 import util.GUIUtils;
 
 import javax.swing.JButton;
@@ -46,15 +46,10 @@ class ChoiceActionPanel extends ActionPanel {
             );
         }
 
-        ChoiceActionMatcher choiceActionMatcher = new ChoiceActionMatcher(
+        return new ChoiceActionMatcher(
                 this.questionField.getText(),
                 choiceMatchers
         );
-
-        ActionMatcher actionMatcher = new ActionMatcher();
-        actionMatcher.setChoice(choiceActionMatcher);
-
-        return actionMatcher;
     }
 
     @Override
@@ -63,7 +58,7 @@ class ChoiceActionPanel extends ActionPanel {
             return;
         }
 
-        ChoiceActionMatcher choiceActionMatcher = matcher.getChoice();
+        ChoiceActionMatcher choiceActionMatcher = (ChoiceActionMatcher)matcher;
         this.questionField.setText(choiceActionMatcher.getQuestion());
 
         ChoiceMatcher[] choiceMatchers = choiceActionMatcher.getChoices();

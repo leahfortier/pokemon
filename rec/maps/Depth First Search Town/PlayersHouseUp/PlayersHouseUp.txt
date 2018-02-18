@@ -57,24 +57,22 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I'm gonna be the very best like no one ever was."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I'm gonna be the very best like no one ever was.",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "battle": {
-                "name": "Mom",
-                "cashMoney": 500,
-                "maxPokemonLimit": false,
-                "pokemon": [
-                  {
-                    "namesies": "CHARMANDER",
-                    "level": 5
-                  }
-                ],
-                "update": "won"
-              }
+              "name": "Mom",
+              "cashMoney": 500,
+              "maxPokemonLimit": false,
+              "pokemon": [
+                {
+                  "namesies": "CHARMANDER",
+                  "level": 5
+                }
+              ],
+              "update": "won",
+              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -83,10 +81,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Just get out. You're not welcome here."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Just get out. You're not welcome here.",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -114,7 +111,8 @@
       "name": "PC",
       "actions": [
         {
-          "groupTrigger": "LoadPC"
+          "groupTrigger": "LoadPC",
+          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [
@@ -129,13 +127,12 @@
       "name": "PokePalooza",
       "actions": [
         {
-          "trigger": {
-            "triggerType": "GIVE_POKEMON",
-            "triggerContents": "{
+          "triggerType": "GIVE_POKEMON",
+          "triggerContents": "{
                 namesies: EXEGGUTOR,
                 level: 4
-            }"
-          }
+            }",
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         }
       ],
       "location": [
@@ -150,10 +147,9 @@
       "name": "TV",
       "actions": [
         {
-          "trigger": {
-            "triggerType": "DIALOGUE",
-            "triggerContents": "The power's out..."
-          }
+          "triggerType": "DIALOGUE",
+          "triggerContents": "The power's out...",
+          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
         }
       ],
       "location": [

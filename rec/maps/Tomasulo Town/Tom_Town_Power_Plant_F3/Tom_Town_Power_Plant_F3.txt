@@ -43,30 +43,27 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "What is a process like you doing here?"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "What is a process like you doing here?",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "That doesn't matter. You can't interfere with our threads!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "That doesn't matter. You can't interfere with our threads!",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "battle": {
-                "name": "Team Deadlock Grunt",
-                "cashMoney": 100,
-                "maxPokemonLimit": false,
-                "pokemon": [
-                  {
-                    "namesies": "VENONAT",
-                    "level": 12
-                  }
-                ],
-                "update": "won"
-              }
+              "name": "Team Deadlock Grunt",
+              "cashMoney": 100,
+              "maxPokemonLimit": false,
+              "pokemon": [
+                {
+                  "namesies": "VENONAT",
+                  "level": 12
+                }
+              ],
+              "update": "won",
+              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -75,16 +72,14 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "How could you have won?"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "How could you have won?",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "The others will stop your thread!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "The others will stop your thread!",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -107,42 +102,39 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "You can't stop us. This town's main thread will be terminated!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "You can't stop us. This town's main thread will be terminated!",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "battle": {
-                "name": "Team Deadlock Grunt",
-                "cashMoney": 100,
-                "maxPokemonLimit": false,
-                "pokemon": [
-                  {
-                    "namesies": "BUTTERFREE",
-                    "level": 14
-                  },
-                  {
-                    "namesies": "BEEDRILL",
-                    "level": 15
-                  }
-                ],
-                "update": "deadlock_defeat"
-              }
+              "name": "Team Deadlock Grunt",
+              "cashMoney": 100,
+              "maxPokemonLimit": false,
+              "pokemon": [
+                {
+                  "namesies": "BUTTERFREE",
+                  "level": 14
+                },
+                {
+                  "namesies": "BEEDRILL",
+                  "level": 15
+                }
+              ],
+              "update": "deadlock_defeat",
+              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
             },
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "You may have halted us now, but our loop is infinite!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "You may have halted us now, but our loop is infinite!",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "global": "VisitedTomTownPowerPlant"
+              "global": "VisitedTomTownPowerPlant",
+              "className": "pattern.action.ActionMatcher$GlobalActionMatcher"
             },
             {
-              "trigger": {
-                "triggerType": "RELOAD_MAP"
-              }
+              "triggerType": "RELOAD_MAP",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         },
@@ -170,24 +162,22 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I'm going to kill your process."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I'm going to kill your process.",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "battle": {
-                "name": "Team Deadlock Grunt",
-                "cashMoney": 100,
-                "maxPokemonLimit": false,
-                "pokemon": [
-                  {
-                    "namesies": "VENIPEDE",
-                    "level": 14
-                  }
-                ],
-                "update": "won"
-              }
+              "name": "Team Deadlock Grunt",
+              "cashMoney": 100,
+              "maxPokemonLimit": false,
+              "pokemon": [
+                {
+                  "namesies": "VENIPEDE",
+                  "level": 14
+                }
+              ],
+              "update": "won",
+              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -196,10 +186,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I can't beleive you managed to killed my process."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I can't beleive you managed to killed my process.",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }
@@ -222,13 +211,13 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "Wow, you did it! You saved the power plant!"
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "Wow, you did it! You saved the power plant!",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             },
             {
-              "update": "dialogue"
+              "update": "dialogue",
+              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
             }
           ]
         }
@@ -251,10 +240,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I'll be here for days trying to get the plant fully operational again."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I'll be here for days trying to get the plant fully operational again.",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }

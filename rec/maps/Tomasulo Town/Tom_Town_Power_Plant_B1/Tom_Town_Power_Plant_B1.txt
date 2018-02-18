@@ -37,10 +37,9 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "trigger": {
-                "triggerType": "Dialogue",
-                "triggerContents": "I'm trying my best to stall the reactor meltdown."
-              }
+              "triggerType": "DIALOGUE",
+              "triggerContents": "I'm trying my best to stall the reactor meltdown.",
+              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
             }
           ]
         }

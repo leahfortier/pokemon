@@ -1,134 +1,127 @@
 package pattern.action;
 
-import main.Global;
 import map.condition.Condition;
 import map.entity.EntityAction;
 import map.entity.EntityAction.BattleAction;
 import map.entity.EntityAction.ChoiceAction;
-import map.entity.EntityAction.GlobalAction;
-import map.entity.EntityAction.GroupTriggerAction;
 import map.entity.EntityAction.TriggerAction;
-import map.entity.EntityAction.UpdateAction;
+import map.triggers.TriggerType;
 import mapMaker.dialogs.action.ActionType;
-import util.GeneralUtils;
-import util.StringUtils;
+import mapMaker.dialogs.action.trigger.TriggerActionType;
+import pattern.PokemonMatcher;
+import trainer.Trainer;
 
-public class ActionMatcher {
-    private TriggerActionMatcher trigger;
-    private BattleMatcher battle;
-    private ChoiceActionMatcher choice;
-    private String update;
-    private String groupTrigger;
-    private String global;
+public abstract class ActionMatcher {
+    public abstract ActionType getActionType();
+    public abstract EntityAction getAction(final Condition condition);
 
-    private void confirmFormat() {
-        if (!GeneralUtils.hasOnlyOneNonEmpty(trigger, battle, choice, update, groupTrigger, global)) {
-            Global.error("Can only have one nonempty field for ActionMatcher");
+    public static class TriggerActionMatcher extends ActionMatcher {
+        public TriggerType triggerType;
+        public String triggerContents;
+
+        public TriggerActionMatcher(TriggerType triggerType, String triggerContents) {
+            this.triggerType = triggerType;
+            this.triggerContents = triggerContents;
         }
-    }
 
-    public ActionType getActionType() {
-        this.confirmFormat();
+        public TriggerType getTriggerType() {
+            return this.getTriggerActionType().getTriggerType();
+        }
 
-        if (trigger != null) {
+        public TriggerActionType getTriggerActionType() {
+            return TriggerActionType.getTriggerActionType(triggerType);
+        }
+
+        public String getTriggerContents() {
+            return this.triggerContents;
+        }
+
+        @Override
+        public ActionType getActionType() {
             return ActionType.TRIGGER;
-        } else if (battle != null) {
+        }
+
+        @Override
+        public EntityAction getAction(Condition condition) {
+            return new TriggerAction(triggerType, triggerContents, condition);
+        }
+    }
+
+    public static class BattleActionMatcher extends ActionMatcher {
+        public String name;
+        public int cashMoney;
+        public boolean maxPokemonLimit;
+        public PokemonMatcher[] pokemon;
+        public String update;
+
+        public BattleActionMatcher(String name, int cashMoney, boolean maxPokemonLimit, PokemonMatcher[] pokemon, String update) {
+            this.name = name;
+            this.cashMoney = cashMoney;
+            this.maxPokemonLimit = maxPokemonLimit;
+            this.pokemon = pokemon;
+            this.update = update;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public int getDatCashMoney() {
+            return this.cashMoney;
+        }
+
+        public PokemonMatcher[] getPokemon() {
+            return this.pokemon;
+        }
+
+        public String getUpdateInteraction() {
+            return this.update;
+        }
+
+        public boolean isMaxPokemonLimit() {
+            return this.maxPokemonLimit;
+        }
+
+        public int getMaxPokemonAllowed() {
+            return this.maxPokemonLimit ? this.pokemon.length : Trainer.MAX_POKEMON;
+        }
+
+        @Override
+        public ActionType getActionType() {
             return ActionType.BATTLE;
-        } else if (update != null) {
-            return ActionType.UPDATE;
-        } else if (groupTrigger != null) {
-            return ActionType.GROUP_TRIGGER;
-        } else if (choice != null) {
+        }
+
+        @Override
+        public EntityAction getAction(Condition condition) {
+            return new BattleAction(this);
+        }
+    }
+
+    public static class ChoiceActionMatcher extends ActionMatcher {
+        public String question;
+        public ChoiceMatcher[] choices;
+
+        public ChoiceActionMatcher(String question, ChoiceMatcher[] choices) {
+            this.question = question;
+            this.choices = choices;
+        }
+
+        public String getQuestion() {
+            return this.question;
+        }
+
+        public ChoiceMatcher[] getChoices() {
+            return this.choices;
+        }
+
+        @Override
+        public ActionType getActionType() {
             return ActionType.CHOICE;
-        } else if (global != null) {
-            return ActionType.GLOBAL;
         }
 
-        Global.error("No action found.");
-        return null;
-    }
-
-    public EntityAction getAction(final Condition condition) {
-        ActionType actionType = this.getActionType();
-        switch (actionType) {
-            case TRIGGER:
-                return new TriggerAction(trigger.getTriggerType(), trigger.getTriggerContents(), condition);
-            case BATTLE:
-                return new BattleAction(battle);
-            case UPDATE:
-                return new UpdateAction(update);
-            case GROUP_TRIGGER:
-                return new GroupTriggerAction(groupTrigger);
-            case CHOICE:
-                return new ChoiceAction(choice);
-            case GLOBAL:
-                return new GlobalAction(global);
-            default:
-                Global.error("No action found.");
-                return null;
+        @Override
+        public EntityAction getAction(Condition condition) {
+            return new ChoiceAction(this);
         }
-    }
-
-    public TriggerActionMatcher getTrigger() {
-        return this.trigger;
-    }
-
-    public void setTrigger(TriggerActionMatcher matcher) {
-        this.trigger = matcher;
-
-        this.confirmFormat();
-    }
-
-    public BattleMatcher getBattle() {
-        return this.battle;
-    }
-
-    public void setBattle(BattleMatcher matcher) {
-        this.battle = matcher;
-
-        this.confirmFormat();
-    }
-
-    public String getActionString() {
-        switch (this.getActionType()) {
-            case UPDATE:
-                return this.update;
-            case GLOBAL:
-                return this.global;
-            case GROUP_TRIGGER:
-                return this.groupTrigger;
-            default:
-                Global.error("Invalid string action type " + this.getActionType());
-                return StringUtils.empty();
-        }
-    }
-
-    public void setActionString(String contents, ActionType actionType) {
-        switch (actionType) {
-            case UPDATE:
-                this.update = contents;
-                break;
-            case GLOBAL:
-                this.global = contents;
-                break;
-            case GROUP_TRIGGER:
-                this.groupTrigger = contents;
-                break;
-            default:
-                Global.error("Invalid string action type " + actionType);
-                break;
-        }
-
-        this.confirmFormat();
-    }
-
-    public ChoiceActionMatcher getChoice() {
-        return this.choice;
-    }
-
-    public void setChoice(ChoiceActionMatcher choice) {
-        this.choice = choice;
-
-        this.confirmFormat();
     }
 }
