@@ -55,7 +55,7 @@ class FlyState implements VisualStateHandler {
                     400,
                     buttonHeight,
                     ButtonHoverAction.BOX,
-                    Button.getBasicTransitions(
+                    ButtonTransitions.getBasicTransitions(
                             i, NUM_AREA_BUTTONS, 1, 0,
                             new ButtonTransitions()
                                     .right(LEFT_BUTTON)

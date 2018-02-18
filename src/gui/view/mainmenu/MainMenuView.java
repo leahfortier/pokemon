@@ -142,7 +142,7 @@ public class MainMenuView extends View {
     }
 
     static Button createMenuButton(int index) {
-        return createMenuButton(index, Button.getBasicTransitions(index, NUM_MAIN_BUTTONS, 1));
+        return createMenuButton(index, ButtonTransitions.getBasicTransitions(index, NUM_MAIN_BUTTONS, 1));
     }
 
     static Button createMenuButton(int index, ButtonTransitions transitions) {

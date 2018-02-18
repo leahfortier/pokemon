@@ -3,6 +3,7 @@ package gui.view.map;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.DrawPanel;
 import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
@@ -29,7 +30,7 @@ class MenuState implements VisualStateHandler {
                     558, 72*i + 10,
                     240, 70,
                     ButtonHoverAction.ARROW,
-                    Button.getBasicTransitions(i, menuButtons.length, 1)
+                    ButtonTransitions.getBasicTransitions(i, menuButtons.length, 1)
             );
         }
 

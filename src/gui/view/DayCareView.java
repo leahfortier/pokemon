@@ -188,7 +188,7 @@ class DayCareView extends View {
                     firstDayCarePokemonButton.width,
                     pokemonButtonHeight,
                     ButtonHoverAction.BOX,
-                    Button.getBasicTransitions(
+                    ButtonTransitions.getBasicTransitions(
                             i, Trainer.MAX_POKEMON, 1, 0,
                             new ButtonTransitions()
                                     .right(DEPOSIT_WITHDRAW)

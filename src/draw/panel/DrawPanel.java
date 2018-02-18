@@ -255,7 +255,7 @@ public class DrawPanel {
                         buttonWidth,
                         buttonHeight,
                         ButtonHoverAction.BOX,
-                        Button.getBasicTransitions(index, numButtonRows, numButtonCols, startValue, defaultTransitions),
+                        ButtonTransitions.getBasicTransitions(index, numButtonRows, numButtonCols, startValue, defaultTransitions),
                         indexAction == null ? () -> {} : () -> indexAction.pressButton(finalIndex)
                 );
             }

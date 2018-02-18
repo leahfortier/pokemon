@@ -147,7 +147,7 @@ class PokedexView extends View {
                         40,
                         40,
                         ButtonHoverAction.BOX,
-                        Button.getBasicTransitions(
+                        ButtonTransitions.getBasicTransitions(
                                 k, NUM_ROWS, NUM_COLS, 0,
                                 new ButtonTransitions().right(RETURN).up(RIGHT_ARROW).down(RIGHT_ARROW)
                         ),
@@ -167,7 +167,7 @@ class PokedexView extends View {
                     infoPanel.width,
                     buttonHeight,
                     NUM_TAB_BUTTONS,
-                    Button.getBasicTransitions(
+                    ButtonTransitions.getBasicTransitions(
                             i, 1, tabButtons.length, TAB_START,
                             new ButtonTransitions().right(LEFT_ARROW).up(MOVES_RIGHT_ARROW).left(RIGHT_ARROW).down(RETURN)
                     ),
@@ -183,7 +183,7 @@ class PokedexView extends View {
                     moveDescriptionPanel.width,
                     moveButtonHeight,
                     ButtonHoverAction.BOX,
-                    Button.getBasicTransitions(
+                    ButtonTransitions.getBasicTransitions(
                             i, MOVES_PER_PAGE, 1, MOVE_START,
                             new ButtonTransitions()
                                     .right(MOVES_RIGHT_ARROW)

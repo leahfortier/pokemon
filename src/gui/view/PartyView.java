@@ -191,7 +191,7 @@ class PartyView extends View {
                     pokemonPanel.width,
                     tabHeight,
                     tabButtons.length,
-                    Button.getBasicTransitions(
+                    ButtonTransitions.getBasicTransitions(
                             i, 1, Trainer.MAX_POKEMON, 0,
                             new ButtonTransitions().up(RETURN).down(MOVES)
                     ),

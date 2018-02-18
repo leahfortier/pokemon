@@ -1,6 +1,7 @@
 package draw.button;
 
 import map.Direction;
+import util.Point;
 
 import java.util.Arrays;
 
@@ -14,11 +15,11 @@ public class ButtonTransitions {
         Arrays.fill(this.transitions, NO_TRANSITION);
     }
 
-    public boolean hasTransition(Direction direction) {
+    private boolean hasTransition(Direction direction) {
         return this.getTransition(direction) != NO_TRANSITION;
     }
 
-    public int getTransition(Direction direction) {
+    private int getTransition(Direction direction) {
         return this.transitions[direction.ordinal()];
     }
 
@@ -48,10 +49,57 @@ public class ButtonTransitions {
     }
 
     public ButtonTransitions basic(Direction direction, int currentIndex, int numRows, int numCols, int startValue) {
-        return this.with(direction, startValue + Button.basicTransition(currentIndex, numRows, numCols, direction));
+        return this.with(direction, startValue + basicTransition(currentIndex, numRows, numCols, direction));
     }
 
     int[] getTransitions() {
         return this.transitions;
+    }
+
+    // Works for all grid buttons
+    public static ButtonTransitions getBasicTransitions(int currentIndex, int numRows, int numCols) {
+        ButtonTransitions transitions = new ButtonTransitions();
+        for (Direction direction : Direction.values()) {
+            transitions.basic(direction, currentIndex, numRows, numCols);
+        }
+
+        return transitions;
+    }
+
+    // Works for all grid buttons
+    public static ButtonTransitions getBasicTransitions(int currentIndex, int numRows, int numCols, int startValue, ButtonTransitions defaultTransitions) {
+        // Get the corresponding grid index
+        Point location = Point.getPointAtIndex(currentIndex, numCols);
+
+        ButtonTransitions transitions = new ButtonTransitions();
+        for (Direction direction : Direction.values()) {
+            Point newLocation = Point.add(location, direction.getDeltaPoint());
+            boolean inBounds = newLocation.inBounds(numCols, numRows);
+
+            // Default value specified and out of bounds -- use default value instead of wrapping
+            if (defaultTransitions != null
+                    && defaultTransitions.hasTransition(direction)
+                    && !inBounds) {
+                transitions.with(direction, defaultTransitions.getTransition(direction));
+            } else {
+                transitions.basic(direction, currentIndex, numRows, numCols, startValue);
+            }
+        }
+
+        return transitions;
+    }
+
+    private static int basicTransition(int currentIndex, int numRows, int numCols, Direction direction) {
+        // Get the corresponding grid index
+        Point location = Point.getPointAtIndex(currentIndex, numCols);
+
+        // Move in the given direction
+        location = Point.move(location, direction);
+
+        // Keep in bounds of the grid
+        location = Point.modInBounds(location, numRows, numCols);
+
+        // Convert back to single dimension index
+        return location.getIndex(numCols);
     }
 }

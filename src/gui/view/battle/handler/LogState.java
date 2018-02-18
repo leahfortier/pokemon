@@ -3,6 +3,7 @@ package gui.view.battle.handler;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import gui.view.battle.BattleView;
 import main.Game;
 import map.Direction;
@@ -33,7 +34,7 @@ public class LogState implements VisualStateHandler {
                     35,
                     20,
                     ButtonHoverAction.BOX,
-                    Button.getBasicTransitions(i, 1, 2)
+                    ButtonTransitions.getBasicTransitions(i, 1, 2)
             );
         }
 
