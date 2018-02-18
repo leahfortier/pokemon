@@ -7,6 +7,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.GameData;
@@ -134,7 +135,7 @@ class MartView extends View {
                 fakeButtons[5].width,
                 fakeButtons[5].height,
                 ButtonHoverAction.BOX,
-                new int[] { RETURN, BUY, RETURN, BUY },
+                new ButtonTransitions().right(RETURN).up(BUY).left(RETURN).down(BUY),
                 () -> {
                     Player player = Game.getPlayer();
                     player.sucksToSuck(itemAmount*selectedItem.getItem().getPrice());
@@ -156,7 +157,7 @@ class MartView extends View {
                 selectedPanel.width/3,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { AMOUNT_RIGHT_ARROW, RETURN, BUY, 0 },
+                new ButtonTransitions().right(AMOUNT_RIGHT_ARROW).up(RETURN).left(BUY).down(0),
                 () -> this.updateItemAmount(-1)
         );
 
@@ -166,7 +167,7 @@ class MartView extends View {
                 amountLeftButton.width,
                 amountLeftButton.height,
                 ButtonHoverAction.BOX,
-                new int[] { AMOUNT_LEFT_ARROW, RETURN, AMOUNT_LEFT_ARROW, 1 },
+                new ButtonTransitions().right(AMOUNT_LEFT_ARROW).up(RETURN).left(AMOUNT_LEFT_ARROW).down(1),
                 () -> this.updateItemAmount(1)
         );
 
@@ -185,7 +186,7 @@ class MartView extends View {
                 halfPanelWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { BUY, SHOP_LEFT_ARROW, BUY, AMOUNT_LEFT_ARROW }
+                new ButtonTransitions().right(BUY).up(SHOP_LEFT_ARROW).left(BUY).down(AMOUNT_LEFT_ARROW)
         );
 
         itemsPanel = new DrawPanel(
@@ -208,7 +209,7 @@ class MartView extends View {
                 ITEMS_PER_PAGE/2,
                 2,
                 0,
-                new int[] { -1, AMOUNT_RIGHT_ARROW, -1, SHOP_RIGHT_ARROW },
+                new ButtonTransitions().up(AMOUNT_RIGHT_ARROW).down(SHOP_RIGHT_ARROW),
                 index -> setSelectedItem(GeneralUtils.getPageValue(forSaleItems, pageNum, ITEMS_PER_PAGE, index))
         );
         System.arraycopy(itemButtons, 0, buttons, 0, ITEMS_PER_PAGE);
@@ -219,7 +220,7 @@ class MartView extends View {
                 35,
                 20,
                 ButtonHoverAction.BOX,
-                new int[] { SHOP_RIGHT_ARROW, ITEMS_PER_PAGE - 2, SHOP_RIGHT_ARROW, RETURN },
+                new ButtonTransitions().right(SHOP_RIGHT_ARROW).up(ITEMS_PER_PAGE - 2).left(SHOP_RIGHT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         );
 
@@ -229,7 +230,7 @@ class MartView extends View {
                 35,
                 20,
                 ButtonHoverAction.BOX,
-                new int[] { SHOP_LEFT_ARROW, ITEMS_PER_PAGE - 1, SHOP_LEFT_ARROW, RETURN },
+                new ButtonTransitions().right(SHOP_LEFT_ARROW).up(ITEMS_PER_PAGE - 1).left(SHOP_LEFT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
 

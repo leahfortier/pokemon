@@ -9,6 +9,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.GameData;
@@ -155,12 +156,11 @@ class DayCareView extends View {
                 dayCarePanel.width - 2*buttonSpacing,
                 pokemonButtonHeight,
                 ButtonHoverAction.BOX,
-                new int[] {
-                        DEPOSIT_WITHDRAW,
-                        Trainer.MAX_POKEMON - 1,
-                        DEPOSIT_WITHDRAW,
-                        SECOND_DAY_CARE_POKEMON_BUTTON
-                },
+                new ButtonTransitions()
+                        .right(DEPOSIT_WITHDRAW)
+                        .up(Trainer.MAX_POKEMON - 1)
+                        .left(DEPOSIT_WITHDRAW)
+                        .down(SECOND_DAY_CARE_POKEMON_BUTTON),
                 () -> selected = dayCareCenter.getFirstPokemon()
         );
 
@@ -170,7 +170,11 @@ class DayCareView extends View {
                 firstDayCarePokemonButton.width,
                 firstDayCarePokemonButton.height,
                 ButtonHoverAction.BOX,
-                new int[] { DEPOSIT_WITHDRAW, FIRST_DAY_CARE_POKEMON_BUTTON, DEPOSIT_WITHDRAW, 0 },
+                new ButtonTransitions()
+                        .right(DEPOSIT_WITHDRAW)
+                        .up(FIRST_DAY_CARE_POKEMON_BUTTON)
+                        .left(DEPOSIT_WITHDRAW)
+                        .down(0),
                 () -> selected = dayCareCenter.getSecondPokemon()
         );
 
@@ -184,13 +188,13 @@ class DayCareView extends View {
                     firstDayCarePokemonButton.width,
                     pokemonButtonHeight,
                     ButtonHoverAction.BOX,
-                    Button.getBasicTransitions(i, Trainer.MAX_POKEMON, 1, 0,
-                                               new int[] {
-                                                       DEPOSIT_WITHDRAW,
-                                                       SECOND_DAY_CARE_POKEMON_BUTTON,
-                                                       DEPOSIT_WITHDRAW,
-                                                       FIRST_DAY_CARE_POKEMON_BUTTON
-                                               }
+                    Button.getBasicTransitions(
+                            i, Trainer.MAX_POKEMON, 1, 0,
+                            new ButtonTransitions()
+                                    .right(DEPOSIT_WITHDRAW)
+                                    .up(SECOND_DAY_CARE_POKEMON_BUTTON)
+                                    .left(DEPOSIT_WITHDRAW)
+                                    .down(FIRST_DAY_CARE_POKEMON_BUTTON)
                     ),
                     () -> selected = team.get(index)
             );
@@ -202,7 +206,7 @@ class DayCareView extends View {
                 (infoPanel.width - spacing/2)/2,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { RETURN, -1, 0, -1 },
+                new ButtonTransitions().right(RETURN).left(0),
                 () -> {
                     if (party) {
                         message = dayCareCenter.deposit((ActivePokemon)selected);
@@ -218,7 +222,7 @@ class DayCareView extends View {
                 depositWithdrawButton.width,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { 0, -1, DEPOSIT_WITHDRAW, -1 }
+                new ButtonTransitions().right(0).left(DEPOSIT_WITHDRAW)
         );
 
         this.buttons = new ButtonList(buttons);

@@ -7,6 +7,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.DrawPanel;
 import gui.TileSet;
 import gui.view.battle.BattleView;
@@ -85,7 +86,7 @@ public class PokemonState implements VisualStateHandler {
                 sidePanelWidth,
                 switchButtonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { POKEMON_SWITCH_BUTTON, 0, POKEMON_SWITCH_BUTTON, 0 }
+                new ButtonTransitions().right(POKEMON_SWITCH_BUTTON).up(0).left(POKEMON_SWITCH_BUTTON).down(0)
         );
 
         int barHeight = 15;
@@ -118,12 +119,11 @@ public class PokemonState implements VisualStateHandler {
         for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
             pokemonButtons[i] = pokemonTabButtons[i] = Button.createTabButton(
                     i, pokemonPanel.x, pokemonPanel.y, pokemonPanel.width, 34, pokemonTabButtons.length,
-                    new int[] {
-                            Button.basicTransition(i, 1, pokemonTabButtons.length, Direction.RIGHT),
-                            POKEMON_SWITCH_BUTTON, // Up
-                            Button.basicTransition(i, 1, pokemonTabButtons.length, Direction.LEFT),
-                            POKEMON_SWITCH_BUTTON // Down
-                    }
+                    new ButtonTransitions()
+                            .up(POKEMON_SWITCH_BUTTON)
+                            .down(POKEMON_SWITCH_BUTTON)
+                            .basic(Direction.RIGHT, i, 1, pokemonTabButtons.length)
+                            .basic(Direction.LEFT, i, 1, pokemonTabButtons.length)
             );
         }
 

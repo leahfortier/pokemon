@@ -9,6 +9,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.GameData;
@@ -157,7 +158,7 @@ class PartyView extends View {
                 buttonWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { SWITCH, 0, RETURN, 0 },
+                new ButtonTransitions().right(SWITCH).up(0).left(RETURN).down(0),
                 () -> nicknameView = true
         );
 
@@ -167,7 +168,7 @@ class PartyView extends View {
                 buttonWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { RETURN, 0, NICKNAME, 0 },
+                new ButtonTransitions().right(RETURN).up(0).left(NICKNAME).down(0),
                 () -> switchTabIndex = switchTabIndex == -1 ? selectedTab : -1
         );
 
@@ -177,7 +178,7 @@ class PartyView extends View {
                 buttonWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { NICKNAME, MOVES + Move.MAX_MOVES - 1, SWITCH, 0 }
+                new ButtonTransitions().right(NICKNAME).up(MOVES + Move.MAX_MOVES - 1).left(SWITCH).down(0)
         );
 
         tabButtons = new Button[Trainer.MAX_POKEMON];
@@ -190,7 +191,10 @@ class PartyView extends View {
                     pokemonPanel.width,
                     tabHeight,
                     tabButtons.length,
-                    Button.getBasicTransitions(i, 1, Trainer.MAX_POKEMON, 0, new int[] { -1, RETURN, -1, MOVES }),
+                    Button.getBasicTransitions(
+                            i, 1, Trainer.MAX_POKEMON, 0,
+                            new ButtonTransitions().up(RETURN).down(MOVES)
+                    ),
                     () -> {
                         if (switchTabIndex != -1) {
                             Game.getPlayer().swapPokemon(index, switchTabIndex);
@@ -212,7 +216,10 @@ class PartyView extends View {
                 .withBorderPercentage(0)
                 .withBlackOutline();
 
-        moveButtons = movesPanel.getButtons(10, Move.MAX_MOVES, 1, MOVES, new int[] { -1, 0, -1, RETURN });
+        moveButtons = movesPanel.getButtons(
+                10, Move.MAX_MOVES, 1, MOVES,
+                new ButtonTransitions().up(0).down(RETURN)
+        );
 
         Button[] buttons = new Button[NUM_BUTTONS];
         System.arraycopy(tabButtons, 0, buttons, 0, tabButtons.length);

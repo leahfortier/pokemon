@@ -9,6 +9,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.LearnMovePanel;
@@ -130,7 +131,7 @@ public class BagView extends View {
                 halfPanelWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { PARTY, RIGHT_ARROW, PARTY, 0 },
+                new ButtonTransitions().right(PARTY).up(RIGHT_ARROW).left(PARTY).down(0),
                 this::returnToMap
         );
 
@@ -156,12 +157,11 @@ public class BagView extends View {
                     bagPanel.width,
                     tabHeight,
                     tabButtons.length,
-                    new int[] {
-                            Button.basicTransition(i, 1, CATEGORIES.length, Direction.RIGHT),
-                            RETURN, // Up
-                            Button.basicTransition(i, 1, CATEGORIES.length, Direction.LEFT),
-                            USE // Down
-                    },
+                    new ButtonTransitions()
+                            .up(RETURN)
+                            .down(USE)
+                            .basic(Direction.RIGHT, i, 1, CATEGORIES.length)
+                            .basic(Direction.LEFT, i, 1, CATEGORIES.length),
                     () -> changeCategory(index)
             );
         }
@@ -171,7 +171,7 @@ public class BagView extends View {
                 Trainer.MAX_POKEMON,
                 1,
                 PARTY,
-                new int[] { GIVE, 0, MOVES, 0 },
+                new ButtonTransitions().right(GIVE).up(0).left(MOVES).down(0),
                 index -> {
                     for (UseState useState : UseState.values()) {
                         useState.use(this, Game.getPlayer().getTeam().get(index));
@@ -184,7 +184,7 @@ public class BagView extends View {
                 Trainer.MAX_POKEMON,
                 1,
                 MOVES,
-                new int[] { PARTY, 0, GIVE, 0 },
+                new ButtonTransitions().right(PARTY).up(0).left(GIVE).down(0),
                 index -> Game.getPlayer().getBag().useMoveItem(selectedItem, selectedPokemon, selectedPokemon.getActualMoves().get(index))
         );
 
@@ -195,7 +195,7 @@ public class BagView extends View {
                 ITEMS_PER_PAGE/2,
                 2,
                 ITEMS,
-                new int[] { -1, USE, -1, RIGHT_ARROW },
+                new ButtonTransitions().up(USE).down(RIGHT_ARROW),
                 index -> selectedItem = GeneralUtils.getPageValue(Game.getPlayer().getBag().getCategory(selectedTab), pageNum, ITEMS_PER_PAGE, index)
         );
 
@@ -216,12 +216,11 @@ public class BagView extends View {
                     selectedPanel.width,
                     buttonHeight,
                     useStates.length,
-                    new int[] {
-                            tabIndex == lastIndex ? PARTY : useStates[tabIndex + 1].buttonIndex, // Right
-                            selectedTab.ordinal(), // Up
-                            tabIndex == 0 ? PARTY : useStates[tabIndex - 1].buttonIndex, // Left
-                            tabIndex <= useStates.length/2 ? ITEMS : ITEMS + 1 // Down
-                    },
+                    new ButtonTransitions()
+                            .right(tabIndex == lastIndex ? PARTY : useStates[tabIndex + 1].buttonIndex)
+                            .up(selectedTab.ordinal())
+                            .left(tabIndex == 0 ? PARTY : useStates[tabIndex - 1].buttonIndex)
+                            .down(tabIndex <= useStates.length/2 ? ITEMS : ITEMS + 1),
                     () -> useState.update(this)
             );
         }
@@ -233,7 +232,7 @@ public class BagView extends View {
                 35,
                 arrowHeight,
                 ButtonHoverAction.BOX,
-                new int[] { RIGHT_ARROW, ITEMS + ITEMS_PER_PAGE - 2, RIGHT_ARROW, RETURN },
+                new ButtonTransitions().right(RIGHT_ARROW).up(ITEMS + ITEMS_PER_PAGE - 2).left(RIGHT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         );
 
@@ -243,7 +242,7 @@ public class BagView extends View {
                 leftArrow.width,
                 leftArrow.height,
                 ButtonHoverAction.BOX,
-                new int[] { LEFT_ARROW, ITEMS + ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN },
+                new ButtonTransitions().right(LEFT_ARROW).up(ITEMS + ITEMS_PER_PAGE - 1).left(LEFT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
 

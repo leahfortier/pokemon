@@ -4,6 +4,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.view.map.VisualState.VisualStateHandler;
@@ -54,12 +55,14 @@ class FlyState implements VisualStateHandler {
                     400,
                     buttonHeight,
                     ButtonHoverAction.BOX,
-                    Button.getBasicTransitions(i, NUM_AREA_BUTTONS, 1, 0, new int[] {
-                            LEFT_BUTTON,
-                            LEFT_BUTTON,
-                            RIGHT_BUTTON,
-                            -1
-                    }),
+                    Button.getBasicTransitions(
+                            i, NUM_AREA_BUTTONS, 1, 0,
+                            new ButtonTransitions()
+                                    .right(LEFT_BUTTON)
+                                    .up(LEFT_BUTTON)
+                                    .left(RIGHT_BUTTON)
+                                    .down(LEFT_BUTTON)
+                    ),
                     () -> {
                         FlyLocation flyLocation = this.flyLocations.get(index + pageNum*NUM_AREA_BUTTONS);
 
@@ -75,7 +78,7 @@ class FlyState implements VisualStateHandler {
                 75,
                 50,
                 ButtonHoverAction.BOX,
-                new int[] { RIGHT_BUTTON, NUM_AREA_BUTTONS - 1, 0, 0 },
+                new ButtonTransitions().right(RIGHT_BUTTON).up(NUM_AREA_BUTTONS - 1).left(0).down(0),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         );
 
@@ -85,7 +88,7 @@ class FlyState implements VisualStateHandler {
                 75,
                 50,
                 ButtonHoverAction.BOX,
-                new int[] { 0, NUM_AREA_BUTTONS - 1, LEFT_BUTTON, 0 },
+                new ButtonTransitions().right(0).up(NUM_AREA_BUTTONS - 1).left(LEFT_BUTTON).down(0),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
 

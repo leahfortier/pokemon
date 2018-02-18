@@ -6,6 +6,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.GameData;
@@ -124,7 +125,7 @@ public class BerryView extends View {
                 halfPanelWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { -1, RIGHT_ARROW, -1, RIGHT_ARROW }
+                new ButtonTransitions().up(RIGHT_ARROW).down(RIGHT_ARROW)
         );
 
         itemsPanel = new DrawPanel(
@@ -151,7 +152,7 @@ public class BerryView extends View {
                 ITEMS_PER_PAGE/2,
                 2,
                 0,
-                new int[] { -1, HARVEST, -1, RIGHT_ARROW },
+                new ButtonTransitions().up(HARVEST).down(RIGHT_ARROW),
                 index -> selectedItem = GeneralUtils.getPageValue(Game.getPlayer().getBag().getCategory(BagCategory.BERRY), pageNum, ITEMS_PER_PAGE, index)
         );
 
@@ -161,7 +162,7 @@ public class BerryView extends View {
                 selectedPanel.width,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { -1, RETURN, -1, 0 },
+                new ButtonTransitions().up(RETURN).down(0),
                 () -> message = berryFarm.harvest(selectedItem)
         );
 
@@ -172,7 +173,11 @@ public class BerryView extends View {
                 35,
                 arrowHeight,
                 ButtonHoverAction.BOX,
-                new int[] { RIGHT_ARROW, ITEMS_PER_PAGE - 2, RIGHT_ARROW, RETURN },
+                new ButtonTransitions()
+                        .right(RIGHT_ARROW)
+                        .up(ITEMS_PER_PAGE - 2)
+                        .left(RIGHT_ARROW)
+                        .down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         );
 
@@ -182,7 +187,11 @@ public class BerryView extends View {
                 leftButton.width,
                 leftButton.height,
                 ButtonHoverAction.BOX,
-                new int[] { LEFT_ARROW, ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN },
+                new ButtonTransitions()
+                        .right(LEFT_ARROW)
+                        .up(ITEMS_PER_PAGE - 1)
+                        .left(LEFT_ARROW)
+                        .down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
 

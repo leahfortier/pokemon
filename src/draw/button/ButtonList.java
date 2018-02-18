@@ -89,7 +89,7 @@ public class ButtonList {
     private int transition(int index, Direction direction) {
         int next = index;
         do {
-            next = buttons[next].getTransitions().next(direction);
+            next = buttons[next].nextTransition(direction);
         } while (next != ButtonTransitions.NO_TRANSITION && !buttons[next].isActive());
 
         if (next == ButtonTransitions.NO_TRANSITION) {

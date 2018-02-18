@@ -7,6 +7,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.DrawPanel;
 import gui.TileSet;
 import gui.view.battle.BattleView;
@@ -77,33 +78,28 @@ public class BagState implements VisualStateHandler {
                     bagCategoryPanel.width,
                     28,
                     bagTabButtons.length,
-                    new int[] {
-                            Button.basicTransition(i, 1, BATTLE_BAG_CATEGORIES.length, Direction.RIGHT), // Right
-                            LAST_ITEM_BUTTON, // Up
-                            Button.basicTransition(i, 1, BATTLE_BAG_CATEGORIES.length, Direction.LEFT), // Left
-                            ITEMS  // Down
-                    }
+                    new ButtonTransitions()
+                            .up(LAST_ITEM_BUTTON)
+                            .down(ITEMS)
+                            .basic(Direction.RIGHT, i, 1, BATTLE_BAG_CATEGORIES.length)
+                            .basic(Direction.LEFT, i, 1, BATTLE_BAG_CATEGORIES.length)
             );
         }
 
-        bagButtons[BAG_LEFT_BUTTON] = bagLeftButton = new Button(135, 435, 35, 20, ButtonHoverAction.BOX, new int[] {
-                BAG_RIGHT_BUTTON,
-                ITEMS + ITEMS_PER_PAGE - 2,
-                -1,
-                LAST_ITEM_BUTTON
-        });
-        bagButtons[BAG_RIGHT_BUTTON] = bagRightButton = new Button(250, 435, 35, 20, ButtonHoverAction.BOX, new int[] {
-                -1,
-                ITEMS + ITEMS_PER_PAGE - 1,
-                BAG_LEFT_BUTTON,
-                LAST_ITEM_BUTTON
-        });
-        bagButtons[LAST_ITEM_BUTTON] = bagLastUsedBtn = new Button(214, 517, 148, 28, ButtonHoverAction.BOX, new int[] {
-                -1,
-                BAG_LEFT_BUTTON,
-                -1,
-                selectedBagTab
-        });
+        bagButtons[BAG_LEFT_BUTTON] = bagLeftButton = new Button(
+                135, 435, 35, 20, ButtonHoverAction.BOX,
+                new ButtonTransitions().right(BAG_RIGHT_BUTTON).up(ITEMS + ITEMS_PER_PAGE - 2).down(LAST_ITEM_BUTTON)
+        );
+
+        bagButtons[BAG_RIGHT_BUTTON] = bagRightButton = new Button(
+                250, 435, 35, 20, ButtonHoverAction.BOX,
+                new ButtonTransitions().up(ITEMS + ITEMS_PER_PAGE - 1).left(BAG_LEFT_BUTTON).down(LAST_ITEM_BUTTON)
+        );
+
+        bagButtons[LAST_ITEM_BUTTON] = bagLastUsedBtn = new Button(
+                214, 517, 148, 28, ButtonHoverAction.BOX,
+                new ButtonTransitions().up(BAG_LEFT_BUTTON).down(selectedBagTab)
+        );
 
         bagItemButtons = new Button[ITEMS_PER_PAGE];
         for (int y = 0, i = 0; y < ITEMS_PER_PAGE/2; y++) {
@@ -114,12 +110,11 @@ public class BagState implements VisualStateHandler {
                         148,
                         28,
                         ButtonHoverAction.BOX,
-                        new int[] {
-                                (i + 1)%ITEMS_PER_PAGE + ITEMS,
-                                y == 0 ? selectedBagTab : i + ITEMS - 2,
-                                (i - 1 + ITEMS_PER_PAGE)%ITEMS_PER_PAGE + ITEMS,
-                                y == ITEMS_PER_PAGE/2 - 1 ? (x == 0 ? BAG_LEFT_BUTTON : BAG_RIGHT_BUTTON) : i + ITEMS + 2
-                        }
+                        new ButtonTransitions()
+                                .right((i + 1)%ITEMS_PER_PAGE + ITEMS)
+                                .up(y == 0 ? selectedBagTab : i + ITEMS - 2)
+                                .left((i - 1 + ITEMS_PER_PAGE)%ITEMS_PER_PAGE + ITEMS)
+                                .down(y == ITEMS_PER_PAGE/2 - 1 ? (x == 0 ? BAG_LEFT_BUTTON : BAG_RIGHT_BUTTON) : i + ITEMS + 2)
                 );
             }
         }

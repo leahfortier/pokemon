@@ -3,6 +3,7 @@ package gui.view.mainmenu;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonTransitions;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.ControlKey;
@@ -144,7 +145,7 @@ public class MainMenuView extends View {
         return createMenuButton(index, Button.getBasicTransitions(index, NUM_MAIN_BUTTONS, 1));
     }
 
-    static Button createMenuButton(int index, int[] transitions) {
+    static Button createMenuButton(int index, ButtonTransitions transitions) {
         return new Button(
                 200,
                 240 + index*85,

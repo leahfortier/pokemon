@@ -3,6 +3,7 @@ package gui.view.mainmenu;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
 import map.Direction;
 import save.Save;
@@ -24,12 +25,11 @@ class LoadSaveState implements VisualStateHandler {
         for (int i = 0; i < Save.NUM_SAVES; i++) {
             buttons[i] = MainMenuView.createMenuButton(
                     i,
-                    new int[] {
-                            i, // Right
-                            Button.basicTransition(i, buttons.length, 1, Direction.UP), // Up
-                            i, // Left
-                            i + 1 // Down
-                    }
+                    new ButtonTransitions()
+                            .right(i)
+                            .left(i)
+                            .down(i + 1)
+                            .basic(Direction.UP, i, buttons.length, 1)
             );
         }
 
@@ -41,12 +41,7 @@ class LoadSaveState implements VisualStateHandler {
                 referenceButton.width/2 - 5,
                 referenceButton.height,
                 ButtonHoverAction.BOX,
-                new int[] {
-                        Save.NUM_SAVES + 1, // Right -- to the delete button
-                        Save.NUM_SAVES - 1, // Up -- to the last save file
-                        Save.NUM_SAVES + 1, // Left -- to the delete button
-                        0                   // Down -- to the first save file
-                }
+                new ButtonTransitions().right(DELETE).up(Save.NUM_SAVES - 1).left(DELETE).down(0)
         );
 
         deleteButton = buttons[DELETE] = new Button(
@@ -55,12 +50,7 @@ class LoadSaveState implements VisualStateHandler {
                 returnButton.width,
                 returnButton.height,
                 ButtonHoverAction.BOX,
-                new int[] {
-                        Save.NUM_SAVES,     // Right -- to the return button
-                        Save.NUM_SAVES - 1, // Up -- to the last save file
-                        Save.NUM_SAVES,     // Left -- to the return button
-                        0                   // Down -- to the first save file
-                }
+                new ButtonTransitions().right(RETURN).up(Save.NUM_SAVES - 1).left(RETURN).down(0)
         );
 
         this.buttons = new ButtonList(buttons);

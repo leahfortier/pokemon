@@ -5,6 +5,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.TileSet;
@@ -76,7 +77,7 @@ public class MedalCaseState implements VisualStateHandler {
                 arrowWidth,
                 arrowHeight,
                 ButtonHoverAction.BOX,
-                new int[] { RIGHT_ARROW, -1, RIGHT_ARROW, -1 },
+                new ButtonTransitions().left(RIGHT_ARROW).right(RIGHT_ARROW),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, NUM_PAGES)
         );
 
@@ -86,7 +87,7 @@ public class MedalCaseState implements VisualStateHandler {
                 arrowWidth,
                 arrowHeight,
                 ButtonHoverAction.BOX,
-                new int[] { LEFT_ARROW, -1, LEFT_ARROW, -1 },
+                new ButtonTransitions().left(LEFT_ARROW).right(LEFT_ARROW),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, NUM_PAGES)
         );
 

@@ -8,6 +8,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.LearnMovePanel;
@@ -114,7 +115,7 @@ public class MoveRelearnerView extends View {
                 MOVES_PER_PAGE + 1, 1,
                 MOVES_PER_PAGE, 1,
                 0,
-                new int[] { MOVES_PER_PAGE, MOVES_LEFT_ARROW, MOVES_PER_PAGE, MOVES_RIGHT_ARROW },
+                new ButtonTransitions().right(MOVES_PER_PAGE).up(MOVES_LEFT_ARROW).left(MOVES_PER_PAGE).down(MOVES_RIGHT_ARROW),
                 index -> selectedMove = learnableMoves.isEmpty() ? null : GeneralUtils.getPageValue(learnableMoves, pageNum, MOVES_PER_PAGE, index).getNewAttack()
         );
 
@@ -123,7 +124,7 @@ public class MoveRelearnerView extends View {
                 Trainer.MAX_POKEMON,
                 1,
                 MOVES_PER_PAGE,
-                new int[] { 0, RETURN, 0, RETURN },
+                new ButtonTransitions().right(0).up(RETURN).left(0).down(RETURN),
                 this::setSelectedPokemon
         );
 
@@ -133,7 +134,7 @@ public class MoveRelearnerView extends View {
                 (partyPanel.width - spacing)/2,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { RETURN, MOVES_PER_PAGE + Trainer.MAX_POKEMON - 1, RETURN, MOVES_PER_PAGE },
+                new ButtonTransitions().right(RETURN).up(MOVES_PER_PAGE + Trainer.MAX_POKEMON - 1).left(RETURN).down(MOVES_PER_PAGE),
                 () -> learnMovePanel = new LearnMovePanel((ActivePokemon)team.get(selectedPokemon), new Move(selectedMove))
         );
 
@@ -143,7 +144,7 @@ public class MoveRelearnerView extends View {
                 learnMoveButton.width,
                 learnMoveButton.height,
                 ButtonHoverAction.BOX,
-                new int[] { LEARN_MOVE, MOVES_PER_PAGE + Trainer.MAX_POKEMON - 1, LEARN_MOVE, MOVES_PER_PAGE }
+                new ButtonTransitions().right(LEARN_MOVE).up(MOVES_PER_PAGE + Trainer.MAX_POKEMON - 1).left(LEARN_MOVE).down(MOVES_PER_PAGE)
         );
 
         int arrowWidth = 35;
@@ -155,7 +156,7 @@ public class MoveRelearnerView extends View {
                 arrowWidth,
                 arrowHeight,
                 ButtonHoverAction.BOX,
-                new int[] { MOVES_RIGHT_ARROW, MOVES_PER_PAGE - 1, MOVES_PER_PAGE, RETURN },
+                new ButtonTransitions().right(MOVES_RIGHT_ARROW).up(MOVES_PER_PAGE - 1).left(MOVES_PER_PAGE).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         );
 
@@ -165,7 +166,7 @@ public class MoveRelearnerView extends View {
                 arrowWidth,
                 arrowHeight,
                 ButtonHoverAction.BOX,
-                new int[] { MOVES_PER_PAGE, MOVES_PER_PAGE - 1, MOVES_LEFT_ARROW, RETURN },
+                new ButtonTransitions().right(MOVES_PER_PAGE).up(MOVES_PER_PAGE - 1).left(MOVES_LEFT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
 

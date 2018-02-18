@@ -8,6 +8,7 @@ import draw.PolygonUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonTransitions;
 import input.ControlKey;
 import input.InputControl;
 import main.Global;
@@ -205,15 +206,15 @@ public class DrawPanel {
         return this.getButtons(spacing, numRows, numCols, 0, null, null);
     }
 
-    public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex, int[] defaultTransitions) {
+    public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex, ButtonTransitions defaultTransitions) {
         return this.getButtons(spacing, numRows, numCols, numRows, numCols, startIndex, defaultTransitions, null);
     }
 
-    public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex, int[] defaultTransitions, ButtonIndexAction indexAction) {
+    public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex, ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
         return this.getButtons(spacing, numRows, numCols, numRows, numCols, startIndex, defaultTransitions, indexAction);
     }
 
-    public Button[] getButtons(int spacing, int numSpaceRows, int numSpaceCols, int numButtonRows, int numButtonCols, int startIndex, int[] defaultTransitions, ButtonIndexAction indexAction) {
+    public Button[] getButtons(int spacing, int numSpaceRows, int numSpaceCols, int numButtonRows, int numButtonCols, int startIndex, ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
         int buttonWidth = (this.width - (numSpaceCols + 1)*spacing)/numSpaceCols;
         int buttonHeight = (this.height - (numSpaceRows + 1)*spacing)/numSpaceRows;
 
@@ -233,7 +234,7 @@ public class DrawPanel {
             int numSpaceRows, int numSpaceCols,
             int numButtonRows, int numButtonCols,
             int startValue,
-            int[] defaultTransitions,
+            ButtonTransitions defaultTransitions,
             ButtonIndexAction indexAction) {
         int borderSize = this.getBorderSize();
 
