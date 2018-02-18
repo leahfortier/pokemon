@@ -2,6 +2,7 @@ package gui.view;
 
 import draw.ImageUtils;
 import draw.button.Button;
+import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.TileSet;
@@ -26,6 +27,9 @@ import java.util.List;
 
 class NewPokemonView extends View {
     private static final int NUM_COLS = 4;
+    private static final int LEFT_BUTTON = NUM_COLS + 1; // Bottom center left
+    private static final int RIGHT_BUTTON = NUM_COLS + 2; // Bottom center right
+
     private static final int TEXT_SPACING = 15;
 
     private static final int BOX_SPACING = (BasicPanels.getMessagePanelY()
@@ -41,14 +45,15 @@ class NewPokemonView extends View {
     private final DrawPanel canvasPanel;
     private final DrawPanel imagePanel;
 
-    private final Button[] buttons;
+    private final ButtonList buttons;
+    private final Button leftButton;
+    private final Button rightButton;
 
     private PartyPokemon newPokemon;
     private Integer boxNum;
 
     private State state;
     private String message;
-    private int selectedButton;
     private boolean displayInfo;
 
     NewPokemonView() {
@@ -65,20 +70,14 @@ class NewPokemonView extends View {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        this.buttons = BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS);
-        for (Button button : buttons) {
-            button.setActive(false);
-        }
-    }
+        this.buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS));
+        this.buttons.setInactive();
 
-    // Bottom center left
-    private Button leftButton() {
-        return buttons[NUM_COLS + 1];
-    }
+        // Bottom center left
+        this.leftButton = buttons.get(LEFT_BUTTON);
 
-    // Bottom center right
-    private Button rightButton() {
-        return buttons[NUM_COLS + 2];
+        // Bottom center right
+        this.rightButton = buttons.get(RIGHT_BUTTON);
     }
 
     @Override
@@ -87,7 +86,7 @@ class NewPokemonView extends View {
             return;
         }
 
-        selectedButton = Button.update(buttons, selectedButton);
+        buttons.update();
         InputControl input = InputControl.instance();
 
         switch (state) {
@@ -105,11 +104,11 @@ class NewPokemonView extends View {
                 }
                 break;
             case NICKNAME_QUESTION:
-                if (rightButton().checkConsumePress()) {
+                if (rightButton.checkConsumePress()) {
                     setState(State.LOCATION);
                 }
 
-                if (leftButton().checkConsumePress()) {
+                if (leftButton.checkConsumePress()) {
                     setState(State.NICKNAME);
                 }
                 break;
@@ -126,11 +125,11 @@ class NewPokemonView extends View {
                 }
                 break;
             case LOCATION:
-                if (rightButton().checkConsumePress()) {
+                if (rightButton.checkConsumePress()) {
                     setState(State.END);
                 }
 
-                if (leftButton().checkConsumePress()) {
+                if (leftButton.checkConsumePress()) {
                     setState(State.PARTY_SELECTION);
                 }
                 break;
@@ -146,7 +145,7 @@ class NewPokemonView extends View {
                         int buttonIndex = Point.getIndex(col, row, NUM_COLS);
                         int partyIndex = Point.getIndex(col, row, Trainer.MAX_POKEMON/2);
 
-                        Button pokemonButton = buttons[buttonIndex];
+                        Button pokemonButton = buttons.get(buttonIndex);
                         if (pokemonButton.checkConsumePress()) {
                             PartyPokemon newPokemon = this.newPokemon;
                             this.newPokemon = party.get(partyIndex);
@@ -241,8 +240,8 @@ class NewPokemonView extends View {
 
         switch (state) {
             case NICKNAME_QUESTION:
-                drawButton(g, leftButton(), new Color(120, 200, 80), "Yes");
-                drawButton(g, rightButton(), new Color(220, 20, 20), "No");
+                drawButton(g, leftButton, new Color(120, 200, 80), "Yes");
+                drawButton(g, rightButton, new Color(220, 20, 20), "No");
                 break;
             case NICKNAME:
                 BufferedImage spriteImage = Game.getData().getPokemonTilesSmall().getTile(newPokemon.getImageName());
@@ -251,8 +250,8 @@ class NewPokemonView extends View {
                 ImageUtils.drawCenteredImageLabel(g, spriteImage, nickname, BasicPanels.canvasMessageCenter);
                 break;
             case LOCATION:
-                drawButton(g, leftButton(), new Color(35, 120, 220), "Party");
-                drawButton(g, rightButton(), new Color(255, 215, 0), "PC");
+                drawButton(g, leftButton, new Color(35, 120, 220), "Party");
+                drawButton(g, rightButton, new Color(255, 215, 0), "PC");
                 break;
             case PARTY_SELECTION:
                 BasicPanels.drawFullMessagePanel(g, StringUtils.empty());
@@ -265,7 +264,7 @@ class NewPokemonView extends View {
                         int buttonIndex = Point.getIndex(col, row, NUM_COLS);
                         int partyIndex = Point.getIndex(col, row, Trainer.MAX_POKEMON/2);
 
-                        Button pokemonButton = buttons[buttonIndex];
+                        Button pokemonButton = buttons.get(buttonIndex);
                         PartyPokemon partyPokemon = party.get(partyIndex);
                         BufferedImage partyPokemonImage = partyTiles.getTile(partyPokemon.getTinyImageName());
 
@@ -279,9 +278,7 @@ class NewPokemonView extends View {
                 }
         }
 
-        for (Button button : buttons) {
-            button.draw(g);
-        }
+        buttons.draw(g);
     }
 
     @Override
@@ -292,9 +289,7 @@ class NewPokemonView extends View {
     private void setState(State state) {
         this.displayInfo = false;
         message = null;
-        for (Button button : buttons) {
-            button.setActive(false);
-        }
+        buttons.setInactive();
 
         Player player = Game.getPlayer();
         NewPokemonInfo newPokemonInfo = player.getNewPokemonInfo();
@@ -310,14 +305,9 @@ class NewPokemonView extends View {
                 }
                 break;
             case NICKNAME_QUESTION:
-                for (int i = 0; i < buttons.length; i++) {
-                    Button button = buttons[i];
-                    button.setActive(button == leftButton() || button == rightButton());
-                    if (button == rightButton()) {
-                        this.selectedButton = i;
-                    }
-                }
-
+                leftButton.setActive(true);
+                rightButton.setActive(true);
+                buttons.setSelected(RIGHT_BUTTON);
                 message = "Would you like to give " + pokemonName + " a nickname?";
                 break;
             case NICKNAME:
@@ -325,14 +315,9 @@ class NewPokemonView extends View {
                 break;
             case LOCATION:
                 if (player.fullParty() && !player.getTeam().contains(newPokemon)) {
-                    for (int i = 0; i < buttons.length; i++) {
-                        Button button = buttons[i];
-                        button.setActive(button == leftButton() || button == rightButton());
-                        if (button == rightButton()) {
-                            selectedButton = i;
-                        }
-                    }
-
+                    leftButton.setActive(true);
+                    rightButton.setActive(true);
+                    buttons.setSelected(RIGHT_BUTTON);
                     message = "Where would you like to send " + pokemonName + "?";
                 } else {
                     setState(State.END);
@@ -340,12 +325,12 @@ class NewPokemonView extends View {
                 break;
             case PARTY_SELECTION:
                 message = null;
-                selectedButton = 0;
+                this.buttons.setSelected(0);
 
                 for (int row = 0; row < 2; row++) {
                     for (int col = 0; col < NUM_COLS; col++) {
                         int index = Point.getIndex(col, row, NUM_COLS);
-                        buttons[index].setActive(col < Trainer.MAX_POKEMON/2);
+                        buttons.get(index).setActive(col < Trainer.MAX_POKEMON/2);
                     }
                 }
                 break;
@@ -363,7 +348,7 @@ class NewPokemonView extends View {
         this.newPokemon = newPokemonInfo.getNewPokemon();
         this.boxNum = newPokemonInfo.getNewPokemonBox();
 
-        this.selectedButton = 0;
+        this.buttons.setSelected(0);
 
         this.canvasPanel.withBackgroundColors(Type.getColors(this.newPokemon));
 

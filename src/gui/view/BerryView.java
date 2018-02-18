@@ -5,6 +5,8 @@ import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.GameData;
@@ -54,11 +56,14 @@ public class BerryView extends View {
     private final DrawPanel selectedPanel;
     private final DrawPanel[] berryPanels;
 
-    private final Button[] buttons;
+    private final ButtonList buttons;
     private final Button[] itemButtons;
+    private final Button harvestButton;
+    private final Button returnButton;
+    private final Button leftArrow;
+    private final Button rightArrow;
 
     private int pageNum;
-    private int selectedButton;
     private String message;
     private ItemNamesies selectedItem;
 
@@ -114,13 +119,13 @@ public class BerryView extends View {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        Button returnButton = Button.createExitButton(
+        returnButton = Button.createExitButton(
                 selectedPanel.x,
                 farmPanel.bottomY() - spacing - buttonHeight,
                 halfPanelWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { -1, RIGHT_ARROW, -1, RIGHT_ARROW }
+                new ButtonTransitions().up(RIGHT_ARROW).down(RIGHT_ARROW)
         );
 
         itemsPanel = new DrawPanel(
@@ -138,7 +143,6 @@ public class BerryView extends View {
             berryPanels[i] = new DrawPanel(berryButtons[i]).withBlackOutline().withFullTransparency();
         }
 
-        selectedButton = 0;
         selectedItem = ItemNamesies.NO_ITEM;
 
         itemButtons = itemsPanel.getButtons(
@@ -148,47 +152,56 @@ public class BerryView extends View {
                 ITEMS_PER_PAGE/2,
                 2,
                 0,
-                new int[] { -1, HARVEST, -1, RIGHT_ARROW },
+                new ButtonTransitions().up(HARVEST).down(RIGHT_ARROW),
                 index -> selectedItem = GeneralUtils.getPageValue(Game.getPlayer().getBag().getCategory(BagCategory.BERRY), pageNum, ITEMS_PER_PAGE, index)
         );
 
-        Button harvestButton = new Button(
+        harvestButton = new Button(
                 selectedPanel.x,
                 selectedPanel.bottomY() - DrawUtils.OUTLINE_SIZE,
                 selectedPanel.width,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { -1, RETURN, -1, 0 },
+                new ButtonTransitions().up(RETURN).down(0),
                 () -> message = berryFarm.harvest(selectedItem)
         );
 
         int arrowHeight = 20;
-        Button leftArrow = new Button(
+        leftArrow = new Button(
                 itemsPanel.x + itemsPanel.width/4,
                 itemButtons[itemButtons.length - 1].centerY() + (itemButtons[2].y - itemButtons[0].y) - arrowHeight/2,
                 35,
                 arrowHeight,
                 ButtonHoverAction.BOX,
-                new int[] { RIGHT_ARROW, ITEMS_PER_PAGE - 2, RIGHT_ARROW, RETURN },
+                new ButtonTransitions()
+                        .right(RIGHT_ARROW)
+                        .up(ITEMS_PER_PAGE - 2)
+                        .left(RIGHT_ARROW)
+                        .down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         );
 
-        Button rightArrow = new Button(
+        rightArrow = new Button(
                 itemsPanel.rightX() - (leftArrow.x - itemsPanel.x) - leftArrow.width,
                 leftArrow.y,
                 leftArrow.width,
                 leftArrow.height,
                 ButtonHoverAction.BOX,
-                new int[] { LEFT_ARROW, ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN },
+                new ButtonTransitions()
+                        .right(LEFT_ARROW)
+                        .up(ITEMS_PER_PAGE - 1)
+                        .left(LEFT_ARROW)
+                        .down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
 
-        buttons = new Button[NUM_BUTTONS];
+        Button[] buttons = new Button[NUM_BUTTONS];
         System.arraycopy(itemButtons, 0, buttons, 0, ITEMS_PER_PAGE);
         buttons[HARVEST] = harvestButton;
         buttons[LEFT_ARROW] = leftArrow;
         buttons[RIGHT_ARROW] = rightArrow;
         buttons[RETURN] = returnButton;
+        this.buttons = new ButtonList(buttons);
     }
 
     @Override
@@ -199,8 +212,8 @@ public class BerryView extends View {
             return;
         }
 
-        selectedButton = Button.update(buttons, selectedButton);
-        if (buttons[selectedButton].checkConsumePress()) {
+        buttons.update();
+        if (buttons.consumeSelectedPress()) {
             updateActiveButtons();
         }
 
@@ -288,11 +301,11 @@ public class BerryView extends View {
 
         // Draw page numbers
         FontMetrics.setFont(g, 16);
-        TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(), itemsPanel.centerX(), buttons[RIGHT_ARROW].centerY());
+        TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(), itemsPanel.centerX(), rightArrow.centerY());
 
         // Left and Right arrows
-        buttons[LEFT_ARROW].drawArrow(g, Direction.LEFT);
-        buttons[RIGHT_ARROW].drawArrow(g, Direction.RIGHT);
+        leftArrow.drawArrow(g, Direction.LEFT);
+        rightArrow.drawArrow(g, Direction.RIGHT);
 
         // Berry Panel
         berryPanel.drawBackground(g);
@@ -319,12 +332,10 @@ public class BerryView extends View {
         }
 
         // Welcome to the Hellmouth
-        Button harvestButton = buttons[HARVEST];
         harvestButton.fillTransparent(g);
         harvestButton.blackOutline(g);
         harvestButton.label(g, 20, "Harvest!");
 
-        Button returnButton = buttons[RETURN];
         returnButton.fillTransparent(g);
         returnButton.blackOutline(g);
         returnButton.label(g, 20, "Return");
@@ -336,9 +347,7 @@ public class BerryView extends View {
         if (!StringUtils.isNullOrWhiteSpace(message)) {
             BasicPanels.drawFullMessagePanel(g, message);
         } else {
-            for (Button button : buttons) {
-                button.draw(g);
-            }
+            buttons.draw(g);
         }
     }
 

@@ -6,6 +6,8 @@ import draw.DrawUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.DrawPanel;
 import gui.TileSet;
 import gui.view.battle.BattleView;
@@ -41,7 +43,7 @@ public class PokemonState implements VisualStateHandler {
     private final DrawPanel expBar;
     private final DrawPanel hpBar;
 
-    private final Button[] pokemonButtons;
+    private final ButtonList pokemonButtons;
     private final Button[] pokemonTabButtons;
     private final Button pokemonSwitchButton;
 
@@ -84,7 +86,7 @@ public class PokemonState implements VisualStateHandler {
                 sidePanelWidth,
                 switchButtonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { POKEMON_SWITCH_BUTTON, 0, POKEMON_SWITCH_BUTTON, 0 }
+                new ButtonTransitions().right(POKEMON_SWITCH_BUTTON).up(0).left(POKEMON_SWITCH_BUTTON).down(0)
         );
 
         int barHeight = 15;
@@ -111,22 +113,22 @@ public class PokemonState implements VisualStateHandler {
                 .withBlackOutline();
 
         // Pokemon Switch View Buttons
-        pokemonButtons = new Button[Trainer.MAX_POKEMON + 1];
+        Button[] pokemonButtons = new Button[Trainer.MAX_POKEMON + 1];
 
         pokemonTabButtons = new Button[Trainer.MAX_POKEMON];
         for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
             pokemonButtons[i] = pokemonTabButtons[i] = Button.createTabButton(
                     i, pokemonPanel.x, pokemonPanel.y, pokemonPanel.width, 34, pokemonTabButtons.length,
-                    new int[] {
-                            Button.basicTransition(i, 1, pokemonTabButtons.length, Direction.RIGHT),
-                            POKEMON_SWITCH_BUTTON, // Up
-                            Button.basicTransition(i, 1, pokemonTabButtons.length, Direction.LEFT),
-                            POKEMON_SWITCH_BUTTON // Down
-                    }
+                    new ButtonTransitions()
+                            .up(POKEMON_SWITCH_BUTTON)
+                            .down(POKEMON_SWITCH_BUTTON)
+                            .basic(Direction.RIGHT, i, 1, pokemonTabButtons.length)
+                            .basic(Direction.LEFT, i, 1, pokemonTabButtons.length)
             );
         }
 
         pokemonButtons[POKEMON_SWITCH_BUTTON] = pokemonSwitchButton;
+        this.pokemonButtons = new ButtonList(pokemonButtons);
     }
 
     @Override
@@ -144,9 +146,7 @@ public class PokemonState implements VisualStateHandler {
 
         pokemonSwitchButton.setActive(view.isState(VisualState.USE_ITEM) || list.get(selectedPokemonTab).canFight());
 
-        for (Button button : pokemonButtons) {
-            button.setForceHover(false);
-        }
+        pokemonButtons.setFalseHover();
 
         for (Button button : fakeMoveButtons) {
             button.setActive(false);
@@ -303,9 +303,7 @@ public class PokemonState implements VisualStateHandler {
             pokemonSwitchButton.greyOut(g);
         }
 
-        for (Button button : pokemonButtons) {
-            button.draw(g);
-        }
+        pokemonButtons.draw(g);
 
         // Draw back arrow when applicable
         view.drawBackButton(g, !switchForced);
@@ -314,7 +312,7 @@ public class PokemonState implements VisualStateHandler {
     @Override
     public void update(BattleView view) {
         // Update the buttons
-        view.setSelectedButton(pokemonButtons);
+        pokemonButtons.update();
 
         Battle currentBattle = view.getCurrentBattle();
         Player player = Game.getPlayer();
@@ -371,5 +369,10 @@ public class PokemonState implements VisualStateHandler {
 
     public void setSwitchForced() {
         this.switchForced = true;
+    }
+
+    @Override
+    public ButtonList getButtons() {
+        return this.pokemonButtons;
     }
 }

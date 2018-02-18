@@ -3,6 +3,7 @@ package gui.view.mainmenu;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonTransitions;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.ControlKey;
@@ -34,15 +35,12 @@ public class MainMenuView extends View {
 
     private SaveInfo[] saveInfo;
 
-    private int selectedButton;
     private boolean musicStarted = false;
 
     private int bgTime;
     private int bgIndex;
 
     public MainMenuView() {
-        selectedButton = 0;
-
         bgTime = 0;
         bgIndex = 0;
 
@@ -56,28 +54,9 @@ public class MainMenuView extends View {
         return this.settings;
     }
 
-    int getPressed(Button[] buttons) {
-        int pressed = -1;
-
-        selectedButton = Button.update(buttons, selectedButton);
-        if (buttons[selectedButton].checkConsumePress()) {
-            pressed = selectedButton;
-        }
-
-        return pressed;
-    }
-
     void setVisualState(VisualState newState) {
         state = newState;
-        selectedButton = 0;
-
-        for (Button button : state.getButtons()) {
-            button.setForceHover(false);
-        }
-
         state.set();
-
-        SoundPlayer.instance().playMusic(state.getTunes());
     }
 
     boolean hasSavedInfo(int saveNum) {
@@ -120,10 +99,6 @@ public class MainMenuView extends View {
         theme.draw(g, bgTime, bgIndex);
 
         g.drawImage(MAIN_LOGO, 95, 54, null);
-        for (Button button : state.getButtons()) {
-            button.fillBordered(g, theme.getButtonColor());
-            button.draw(g);
-        }
 
         this.state.draw(g, this);
     }
@@ -167,10 +142,10 @@ public class MainMenuView extends View {
     }
 
     static Button createMenuButton(int index) {
-        return createMenuButton(index, Button.getBasicTransitions(index, NUM_MAIN_BUTTONS, 1));
+        return createMenuButton(index, ButtonTransitions.getBasicTransitions(index, NUM_MAIN_BUTTONS, 1));
     }
 
-    static Button createMenuButton(int index, int[] transitions) {
+    static Button createMenuButton(int index, ButtonTransitions transitions) {
         return new Button(
                 200,
                 240 + index*85,

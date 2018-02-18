@@ -1,6 +1,7 @@
 package gui.view.mainmenu;
 
 import draw.button.Button;
+import draw.button.ButtonList;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
 import sound.SoundPlayer;
 
@@ -9,26 +10,29 @@ import java.awt.Graphics;
 class OptionsState implements VisualStateHandler {
     private static final String[] OPTIONS_HEADERS = { "Theme", "Mute", "Credits", "Return" };
 
-    private final Button[] buttons;
+    private final ButtonList buttons;
 
     OptionsState() {
-        this.buttons = new Button[MainMenuView.NUM_MAIN_BUTTONS];
+        Button[] buttons = new Button[MainMenuView.NUM_MAIN_BUTTONS];
         for (int i = 0; i < buttons.length; i++) {
-            this.buttons[i] = MainMenuView.createMenuButton(i);
+            buttons[i] = MainMenuView.createMenuButton(i);
         }
+
+        this.buttons = new ButtonList(buttons);
     }
 
     @Override
     public void draw(Graphics g, MainMenuView view) {
-        for (int i = 0; i < this.buttons.length; i++) {
-            this.buttons[i].label(g, 40, OPTIONS_HEADERS[i]);
+        for (int i = 0; i < this.buttons.size(); i++) {
+            this.buttons.get(i).label(g, 40, OPTIONS_HEADERS[i]);
         }
     }
 
     @Override
     public void update(MainMenuView view) {
-        int pressed = view.getPressed(buttons);
+        buttons.update();
 
+        int pressed = buttons.consumeSelectedPress() ? buttons.getSelected() : -1;
         switch (pressed) {
             case 0: // theme
                 view.getSettings().toggleTheme();
@@ -50,7 +54,7 @@ class OptionsState implements VisualStateHandler {
     }
 
     @Override
-    public Button[] getButtons() {
+    public ButtonList getButtons() {
         return this.buttons;
     }
 }

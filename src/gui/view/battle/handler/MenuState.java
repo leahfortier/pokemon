@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
 import draw.button.Button;
+import draw.button.ButtonList;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import input.ControlKey;
@@ -20,15 +21,12 @@ import java.awt.Graphics;
 
 public class MenuState implements VisualStateHandler {
 
-    private Button[] menuButtons;
+    private ButtonList menuButtons;
 
     @Override
     public void set(BattleView view) {
-        this.menuButtons = view.createPanelButtons();
-
-        for (Button button : menuButtons) {
-            button.setForceHover(false);
-        }
+        menuButtons = new ButtonList(view.createPanelButtons());
+        menuButtons.setFalseHover();
     }
 
     @Override
@@ -44,9 +42,7 @@ public class MenuState implements VisualStateHandler {
             menuButton.label(g, 30, menuChoice.getButtonLabel());
         }
 
-        for (Button button : menuButtons) {
-            button.draw(g);
-        }
+        menuButtons.draw(g);
     }
 
     @Override
@@ -55,7 +51,7 @@ public class MenuState implements VisualStateHandler {
         Player player = Game.getPlayer();
 
         // Update menu buttons
-        view.setSelectedButton(menuButtons);
+        menuButtons.update();
 
         // Show Bag View
         if (getButton(MenuChoice.BAG).checkConsumePress()) {
@@ -89,7 +85,12 @@ public class MenuState implements VisualStateHandler {
     }
 
     private Button getButton(MenuChoice menuChoice) {
-        return this.menuButtons[menuChoice.ordinal()];
+        return this.menuButtons.get(menuChoice.ordinal());
+    }
+
+    @Override
+    public ButtonList getButtons() {
+        return menuButtons;
     }
 
     private enum MenuChoice {

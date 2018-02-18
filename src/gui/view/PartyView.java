@@ -8,6 +8,8 @@ import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.GameData;
@@ -50,7 +52,7 @@ class PartyView extends View {
     private final DrawPanel hpBar;
     private final DrawPanel expBar;
 
-    private final Button[] buttons;
+    private final ButtonList buttons;
     private final Button[] tabButtons;
     private final Button[] moveButtons;
 
@@ -59,13 +61,11 @@ class PartyView extends View {
     private final Button returnButton;
 
     private int selectedTab;
-    private int selectedButton;
     private int switchTabIndex;
     private boolean nicknameView;
 
     PartyView() {
         selectedTab = 0;
-        selectedButton = 0;
         switchTabIndex = -1;
 
         int tabHeight = 55;
@@ -158,7 +158,7 @@ class PartyView extends View {
                 buttonWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { SWITCH, 0, RETURN, 0 },
+                new ButtonTransitions().right(SWITCH).up(0).left(RETURN).down(0),
                 () -> nicknameView = true
         );
 
@@ -168,7 +168,7 @@ class PartyView extends View {
                 buttonWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { RETURN, 0, NICKNAME, 0 },
+                new ButtonTransitions().right(RETURN).up(0).left(NICKNAME).down(0),
                 () -> switchTabIndex = switchTabIndex == -1 ? selectedTab : -1
         );
 
@@ -178,7 +178,7 @@ class PartyView extends View {
                 buttonWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { NICKNAME, MOVES + Move.MAX_MOVES - 1, SWITCH, 0 }
+                new ButtonTransitions().right(NICKNAME).up(MOVES + Move.MAX_MOVES - 1).left(SWITCH).down(0)
         );
 
         tabButtons = new Button[Trainer.MAX_POKEMON];
@@ -191,7 +191,10 @@ class PartyView extends View {
                     pokemonPanel.width,
                     tabHeight,
                     tabButtons.length,
-                    Button.getBasicTransitions(i, 1, Trainer.MAX_POKEMON, 0, new int[] { -1, RETURN, -1, MOVES }),
+                    ButtonTransitions.getBasicTransitions(
+                            i, 1, Trainer.MAX_POKEMON, 0,
+                            new ButtonTransitions().up(RETURN).down(MOVES)
+                    ),
                     () -> {
                         if (switchTabIndex != -1) {
                             Game.getPlayer().swapPokemon(index, switchTabIndex);
@@ -213,14 +216,18 @@ class PartyView extends View {
                 .withBorderPercentage(0)
                 .withBlackOutline();
 
-        moveButtons = movesPanel.getButtons(10, Move.MAX_MOVES, 1, MOVES, new int[] { -1, 0, -1, RETURN });
+        moveButtons = movesPanel.getButtons(
+                10, Move.MAX_MOVES, 1, MOVES,
+                new ButtonTransitions().up(0).down(RETURN)
+        );
 
-        buttons = new Button[NUM_BUTTONS];
+        Button[] buttons = new Button[NUM_BUTTONS];
         System.arraycopy(tabButtons, 0, buttons, 0, tabButtons.length);
         System.arraycopy(moveButtons, 0, buttons, MOVES, moveButtons.length);
         buttons[NICKNAME] = nicknameButton;
         buttons[SWITCH] = switchButton;
         buttons[RETURN] = returnButton;
+        this.buttons = new ButtonList(buttons);
 
         updateActiveButtons();
     }
@@ -230,7 +237,7 @@ class PartyView extends View {
         Player player = Game.getPlayer();
         InputControl input = InputControl.instance();
 
-        selectedButton = Button.update(buttons, selectedButton);
+        buttons.update();
 
         if (nicknameView) {
             if (!input.isCapturingText()) {
@@ -245,7 +252,7 @@ class PartyView extends View {
                 updateActiveButtons();
             }
         } else {
-            if (buttons[selectedButton].checkConsumePress()) {
+            if (buttons.consumeSelectedPress()) {
                 updateActiveButtons();
             }
 
@@ -308,9 +315,7 @@ class PartyView extends View {
             returnButton.label(g, 20, "Return");
         }
 
-        for (Button button : buttons) {
-            button.draw(g);
-        }
+        buttons.draw(g);
     }
 
     private void drawTabs(Graphics g, GameData data, List<PartyPokemon> list) {
@@ -444,6 +449,7 @@ class PartyView extends View {
             List<Move> moves = selectedPkm.getActualMoves();
 
             // Stats Box or Move description
+            int selectedButton = buttons.getSelected();
             if (selectedButton >= MOVES && selectedButton < MOVES + Move.MAX_MOVES) {
                 drawMoveDescriptionPanel(g, statsPanel, moves.get(selectedButton - MOVES).getAttack());
             } else {
@@ -549,17 +555,16 @@ class PartyView extends View {
 
     private void updateActiveButtons() {
         if (nicknameView) {
-            for (Button button : buttons) {
-                button.setActive(false);
-            }
+            buttons.setInactive();
         } else {
             List<PartyPokemon> team = Game.getPlayer().getTeam();
+            PartyPokemon pkm = team.get(selectedTab);
+            List<Move> moves = pkm.getActualMoves();
+
             for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
                 tabButtons[i].setActive(i < team.size());
             }
 
-            PartyPokemon pkm = team.get(selectedTab);
-            List<Move> moves = pkm.getActualMoves();
             for (int i = 0; i < Move.MAX_MOVES; i++) {
                 moveButtons[i].setActive(!pkm.isEgg() && i < moves.size());
             }
@@ -578,9 +583,9 @@ class PartyView extends View {
     @Override
     public void movedToFront() {
         selectedTab = 0;
-        selectedButton = 0;
         switchTabIndex = -1;
         nicknameView = false;
+        buttons.setSelected(0);
         updateActiveButtons();
     }
 }

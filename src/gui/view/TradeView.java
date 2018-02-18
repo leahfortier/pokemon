@@ -5,6 +5,7 @@ import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
+import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.GameData;
@@ -41,13 +42,12 @@ public class TradeView extends View {
     private final DrawPanel messagePanel;
     private final DrawPanel cancelPanel;
 
-    private final Button[] buttons;
+    private final ButtonList buttons;
     private final Button cancelButton;
 
     private final TileSet partyTiles;
     private final TileSet pokemonTiles;
 
-    private int selectedIndex;
     private int tradeAnimationTime;
 
     private PokemonInfo offering;
@@ -90,8 +90,8 @@ public class TradeView extends View {
         )
                 .withBlackOutline();
 
-        this.buttons = BasicPanels.getFullMessagePanelButtons(panelWidth, 55, 2, NUM_COLS);
-        this.cancelButton = buttons[buttons.length - 1];
+        this.buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(panelWidth, 55, 2, NUM_COLS));
+        this.cancelButton = buttons.get(buttons.size() - 1);
 
         this.cancelPanel = new DrawPanel(cancelButton)
                 .withBackgroundColor(Type.NORMAL.getColor())
@@ -110,7 +110,7 @@ public class TradeView extends View {
             tradeAnimationTime -= dt;
             exit = tradeAnimationTime <= 0;
         } else {
-            this.selectedIndex = Button.update(this.buttons, this.selectedIndex);
+            this.buttons.update();
 
             InputControl input = InputControl.instance();
             exit = cancelButton.checkConsumePress() || input.consumeIfDown(ControlKey.ESC);
@@ -152,7 +152,7 @@ public class TradeView extends View {
     }
 
     private Button getTeamButton(int teamIndex) {
-        return buttons[teamIndex + teamIndex/NUM_TEAM_COLS];
+        return buttons.get(teamIndex + teamIndex/NUM_TEAM_COLS);
     }
 
     private void drawPanel(Graphics g, String label, DrawPanel panel, PokemonInfo pokemon) {
@@ -235,9 +235,7 @@ public class TradeView extends View {
             cancelPanel.drawBackground(g);
             cancelPanel.label(g, 22, "Cancel");
 
-            for (Button button : buttons) {
-                button.draw(g);
-            }
+            buttons.draw(g);
         }
     }
 
@@ -246,7 +244,8 @@ public class TradeView extends View {
             getTeamButton(i).setActive(i < team.size());
         }
 
-        buttons[NUM_TEAM_COLS].setActive(false);
+        // TODO: Which button is this??
+        buttons.get(NUM_TEAM_COLS).setActive(false);
         cancelButton.setActive(true);
     }
 
@@ -259,7 +258,7 @@ public class TradeView extends View {
     public void movedToFront() {
         Player player = Game.getPlayer();
         this.team = player.getTeam();
-        this.selectedIndex = 0;
+        this.buttons.setSelected(0);
 
         updateActiveButtons();
     }

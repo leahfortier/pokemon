@@ -8,6 +8,8 @@ import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.LearnMovePanel;
@@ -65,18 +67,20 @@ public class BagView extends View {
     private final DrawPanel itemsPanel;
     private final DrawPanel selectedPanel;
 
-    private final Button[] buttons;
+    private final ButtonList buttons;
     private final Button[] tabButtons;
     private final Button[] partyButtons;
     private final Button[] moveButtons;
     private final Button[] itemButtons;
+    private final Button rightArrow;
+    private final Button leftArrow;
+    private final Button returnButton;
 
     BagState state;
     ItemNamesies selectedItem;
     PartyPokemon selectedPokemon;
 
     private int pageNum;
-    private int selectedButton;
 
     private BagCategory selectedTab;
     private MessageUpdate message;
@@ -121,13 +125,13 @@ public class BagView extends View {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        Button returnButton = new Button(
+        returnButton = new Button(
                 selectedPanel.x,
                 bagPanel.bottomY() - spacing - buttonHeight,
                 halfPanelWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new int[] { PARTY, RIGHT_ARROW, PARTY, 0 },
+                new ButtonTransitions().right(PARTY).up(RIGHT_ARROW).left(PARTY).down(0),
                 this::returnToMap
         );
 
@@ -141,7 +145,6 @@ public class BagView extends View {
                 .withBlackOutline();
 
         selectedTab = CATEGORIES[0];
-        selectedButton = 0;
         selectedItem = ItemNamesies.NO_ITEM;
 
         tabButtons = new Button[CATEGORIES.length];
@@ -154,12 +157,11 @@ public class BagView extends View {
                     bagPanel.width,
                     tabHeight,
                     tabButtons.length,
-                    new int[] {
-                            Button.basicTransition(i, 1, CATEGORIES.length, Direction.RIGHT),
-                            RETURN, // Up
-                            Button.basicTransition(i, 1, CATEGORIES.length, Direction.LEFT),
-                            USE // Down
-                    },
+                    new ButtonTransitions()
+                            .up(RETURN)
+                            .down(USE)
+                            .basic(Direction.RIGHT, i, 1, CATEGORIES.length)
+                            .basic(Direction.LEFT, i, 1, CATEGORIES.length),
                     () -> changeCategory(index)
             );
         }
@@ -169,7 +171,7 @@ public class BagView extends View {
                 Trainer.MAX_POKEMON,
                 1,
                 PARTY,
-                new int[] { GIVE, 0, MOVES, 0 },
+                new ButtonTransitions().right(GIVE).up(0).left(MOVES).down(0),
                 index -> {
                     for (UseState useState : UseState.values()) {
                         useState.use(this, Game.getPlayer().getTeam().get(index));
@@ -182,7 +184,7 @@ public class BagView extends View {
                 Trainer.MAX_POKEMON,
                 1,
                 MOVES,
-                new int[] { PARTY, 0, GIVE, 0 },
+                new ButtonTransitions().right(PARTY).up(0).left(GIVE).down(0),
                 index -> Game.getPlayer().getBag().useMoveItem(selectedItem, selectedPokemon, selectedPokemon.getActualMoves().get(index))
         );
 
@@ -193,11 +195,11 @@ public class BagView extends View {
                 ITEMS_PER_PAGE/2,
                 2,
                 ITEMS,
-                new int[] { -1, USE, -1, RIGHT_ARROW },
+                new ButtonTransitions().up(USE).down(RIGHT_ARROW),
                 index -> selectedItem = GeneralUtils.getPageValue(Game.getPlayer().getBag().getCategory(selectedTab), pageNum, ITEMS_PER_PAGE, index)
         );
 
-        buttons = new Button[NUM_BUTTONS];
+        Button[] buttons = new Button[NUM_BUTTONS];
         System.arraycopy(tabButtons, 0, buttons, 0, CATEGORIES.length);
         System.arraycopy(partyButtons, 0, buttons, PARTY, Trainer.MAX_POKEMON);
         System.arraycopy(moveButtons, 0, buttons, MOVES, Move.MAX_MOVES);
@@ -214,34 +216,33 @@ public class BagView extends View {
                     selectedPanel.width,
                     buttonHeight,
                     useStates.length,
-                    new int[] {
-                            tabIndex == lastIndex ? PARTY : useStates[tabIndex + 1].buttonIndex, // Right
-                            selectedTab.ordinal(), // Up
-                            tabIndex == 0 ? PARTY : useStates[tabIndex - 1].buttonIndex, // Left
-                            tabIndex <= useStates.length/2 ? ITEMS : ITEMS + 1 // Down
-                    },
+                    new ButtonTransitions()
+                            .right(tabIndex == lastIndex ? PARTY : useStates[tabIndex + 1].buttonIndex)
+                            .up(selectedTab.ordinal())
+                            .left(tabIndex == 0 ? PARTY : useStates[tabIndex - 1].buttonIndex)
+                            .down(tabIndex <= useStates.length/2 ? ITEMS : ITEMS + 1),
                     () -> useState.update(this)
             );
         }
 
         int arrowHeight = 20;
-        Button leftArrow = new Button(
+        leftArrow = new Button(
                 itemsPanel.x + itemsPanel.width/4,
                 itemButtons[itemButtons.length - 1].centerY() + (itemButtons[2].y - itemButtons[0].y) - arrowHeight/2,
                 35,
                 arrowHeight,
                 ButtonHoverAction.BOX,
-                new int[] { RIGHT_ARROW, ITEMS + ITEMS_PER_PAGE - 2, RIGHT_ARROW, RETURN },
+                new ButtonTransitions().right(RIGHT_ARROW).up(ITEMS + ITEMS_PER_PAGE - 2).left(RIGHT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         );
 
-        Button rightArrow = new Button(
+        rightArrow = new Button(
                 itemsPanel.rightX() - (leftArrow.x - itemsPanel.x) - leftArrow.width,
                 leftArrow.y,
                 leftArrow.width,
                 leftArrow.height,
                 ButtonHoverAction.BOX,
-                new int[] { LEFT_ARROW, ITEMS + ITEMS_PER_PAGE - 1, LEFT_ARROW, RETURN },
+                new ButtonTransitions().right(LEFT_ARROW).up(ITEMS + ITEMS_PER_PAGE - 1).left(LEFT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
 
@@ -249,6 +250,8 @@ public class BagView extends View {
         buttons[RIGHT_ARROW] = rightArrow;
 
         buttons[RETURN] = returnButton;
+
+        this.buttons = new ButtonList(buttons);
 
         movedToFront();
     }
@@ -285,8 +288,8 @@ public class BagView extends View {
                 }
             }
 
-            selectedButton = Button.update(buttons, selectedButton);
-            if (buttons[selectedButton].checkConsumePress()) {
+            buttons.update();
+            if (buttons.consumeSelectedPress()) {
                 updateActiveButtons();
             }
 
@@ -322,7 +325,7 @@ public class BagView extends View {
 
         // Draw Use State buttons
         for (UseState useState : UseState.values()) {
-            useState.draw(g, buttons[useState.buttonIndex]);
+            useState.draw(g, buttons.get(useState.buttonIndex));
         }
 
         // Selected item Display
@@ -391,11 +394,11 @@ public class BagView extends View {
 
         // Draw page numbers
         FontMetrics.setFont(g, 16);
-        TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(), itemsPanel.centerX(), buttons[RIGHT_ARROW].centerY());
+        TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages(), itemsPanel.centerX(), rightArrow.centerY());
 
         // Left and Right arrows
-        buttons[LEFT_ARROW].drawArrow(g, Direction.LEFT);
-        buttons[RIGHT_ARROW].drawArrow(g, Direction.RIGHT);
+        leftArrow.drawArrow(g, Direction.LEFT);
+        rightArrow.drawArrow(g, Direction.RIGHT);
 
         // Draw moves
         pokemonPanel.drawBackground(g);
@@ -499,7 +502,6 @@ public class BagView extends View {
             }
         }
 
-        Button returnButton = buttons[RETURN];
         returnButton.fillTransparent(g);
         returnButton.blackOutline(g);
         returnButton.label(g, 20, "Return");
@@ -525,9 +527,7 @@ public class BagView extends View {
         } else if (message != null && !StringUtils.isNullOrWhiteSpace(message.getMessage())) {
             BasicPanels.drawFullMessagePanel(g, message.getMessage());
         } else {
-            for (Button button : buttons) {
-                button.draw(g);
-            }
+            buttons.draw(g);
         }
     }
 
@@ -537,7 +537,7 @@ public class BagView extends View {
     }
 
     void setSelectedButton(UseState useState) {
-        selectedButton = useState.buttonIndex;
+        this.buttons.setSelected(useState.buttonIndex);
     }
 
     void updateCategory() {
@@ -590,17 +590,17 @@ public class BagView extends View {
             moveButtons[i].setActive(state == BagState.MOVE_SELECT && i < selectedPokemon.getActualMoves().size());
         }
 
-        buttons[LEFT_ARROW].setActive(state == BagState.ITEM_SELECT);
-        buttons[RIGHT_ARROW].setActive(state == BagState.ITEM_SELECT);
+        leftArrow.setActive(state == BagState.ITEM_SELECT);
+        rightArrow.setActive(state == BagState.ITEM_SELECT);
 
         if (selectedItem == ItemNamesies.NO_ITEM || !player.getBag().hasItem(selectedItem)) {
             selectedItem = ItemNamesies.NO_ITEM;
-            buttons[GIVE].setActive(false);
-            buttons[USE].setActive(false);
+            buttons.get(GIVE).setActive(false);
+            buttons.get(USE).setActive(false);
         } else {
             Item selectedItemValue = selectedItem.getItem();
-            buttons[GIVE].setActive(selectedItemValue.isHoldable());
-            buttons[USE].setActive(selectedItemValue.isUsable());
+            buttons.get(GIVE).setActive(selectedItemValue.isHoldable());
+            buttons.get(USE).setActive(selectedItemValue.isUsable());
         }
     }
 }

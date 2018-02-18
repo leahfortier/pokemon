@@ -1,5 +1,7 @@
 package gui.view.battle.handler;
 
+import draw.button.Button;
+import draw.button.ButtonList;
 import draw.panel.LearnMovePanel;
 import gui.view.battle.BattleView;
 
@@ -24,5 +26,10 @@ public class LearnMoveState implements VisualStateHandler {
         if (this.learnMovePanel.isFinished()) {
             view.cycleMessage();
         }
+    }
+
+    @Override
+    public ButtonList getButtons() {
+        return new ButtonList(new Button[0]);
     }
 }

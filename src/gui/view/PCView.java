@@ -6,6 +6,8 @@ import draw.DrawUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonList;
+import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.GameData;
@@ -46,7 +48,7 @@ class PCView extends View {
     private final DrawPanel movesPanel;
     private final DrawPanel statsPanel;
 
-    private final Button[] buttons;
+    private final ButtonList buttons;
     private final Button[][] boxButtons;
     private final Button[] partyButtons;
     private final Button leftButton;
@@ -60,7 +62,6 @@ class PCView extends View {
 
     private PartyPokemon selected;
     private boolean party;
-    private int selectedButton;
     private boolean depositClicked;
     private boolean switchClicked;
 
@@ -117,9 +118,7 @@ class PCView extends View {
 
         pc = Game.getPlayer().getPC();
 
-        selectedButton = PARTY;
-
-        buttons = new Button[NUM_BUTTONS];
+        Button[] buttons = new Button[NUM_BUTTONS];
         boxButtons = new Button[PC.BOX_HEIGHT][PC.BOX_WIDTH];
         for (int i = 0, k = 0; i < PC.BOX_HEIGHT; i++) {
             for (int j = 0; j < PC.BOX_WIDTH; j++, k++) {
@@ -128,12 +127,11 @@ class PCView extends View {
 
                 buttons[k] = boxButtons[i][j] = new Button(
                         60 + 54*j, 96 + 54*i, 40, 40, ButtonHoverAction.BOX,
-                        new int[] {
-                                j == PC.BOX_WIDTH - 1 ? SWITCH : k + 1,
-                                i == 0 ? PARTY + j : k - PC.BOX_WIDTH,
-                                j == 0 ? RELEASE : k - 1,
-                                i == PC.BOX_HEIGHT - 1 ? (j < PC.BOX_WIDTH/2 ? LEFT_ARROW : RIGHT_ARROW) : k + PC.BOX_WIDTH
-                        },
+                        new ButtonTransitions()
+                                .right(j == PC.BOX_WIDTH - 1 ? SWITCH : k + 1)
+                                .up(i == 0 ? PARTY + j : k - PC.BOX_WIDTH)
+                                .left(j == 0 ? RELEASE : k - 1)
+                                .down(i == PC.BOX_HEIGHT - 1 ? (j < PC.BOX_WIDTH/2 ? LEFT_ARROW : RIGHT_ARROW) : k + PC.BOX_WIDTH),
                         () -> {
                             if (party && depositClicked) {
                                 pc.depositPokemonFromPlayer(selected, row, col);
@@ -155,12 +153,11 @@ class PCView extends View {
             final int index = i;
             buttons[PARTY + i] = partyButtons[i] = new Button(
                     60 + 54*i, 499, 40, 40, ButtonHoverAction.BOX,
-                    new int[] {
-                            i == Trainer.MAX_POKEMON - 1 ? RETURN : PARTY + i + 1,
-                            i < PC.BOX_WIDTH/2 ? LEFT_ARROW : RIGHT_ARROW,
-                            i == 0 ? RETURN : PARTY + i - 1,
-                            i
-                    },
+                    new ButtonTransitions()
+                            .right(i == Trainer.MAX_POKEMON - 1 ? RETURN : PARTY + i + 1)
+                            .up(i < PC.BOX_WIDTH/2 ? LEFT_ARROW : RIGHT_ARROW)
+                            .left(i == 0 ? RETURN : PARTY + i - 1)
+                            .down(i),
                     () -> {
                         if (party && depositClicked) {
                             depositClicked = false;
@@ -178,12 +175,10 @@ class PCView extends View {
         buttons[LEFT_ARROW] = leftButton = new Button(
                 140, 418, 35, 20,
                 ButtonHoverAction.BOX,
-                new int[] {
-                        RIGHT_ARROW,
-                        PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2 - 1,
-                        -1,
-                        PARTY
-                },
+                new ButtonTransitions()
+                        .right(RIGHT_ARROW)
+                        .up(PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2 - 1)
+                        .down(PARTY),
                 () -> {
                     pc.incrementBox(-1);
                     movedToFront();
@@ -193,12 +188,11 @@ class PCView extends View {
         buttons[RIGHT_ARROW] = rightButton = new Button(
                 255, 418, 35, 20,
                 ButtonHoverAction.BOX,
-                new int[] {
-                        SWITCH,
-                        PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2,
-                        LEFT_ARROW,
-                        PARTY
-                },
+                new ButtonTransitions()
+                        .right(SWITCH)
+                        .up(PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2)
+                        .left(LEFT_ARROW)
+                        .down(PARTY),
                 () -> {
                     pc.incrementBox(1);
                     movedToFront();
@@ -208,14 +202,14 @@ class PCView extends View {
         buttons[SWITCH] = switchButton = new Button(
                 410, 464, 118, 38,
                 ButtonHoverAction.BOX,
-                new int[] { DEPOSIT_WITHDRAW, -1, RIGHT_ARROW, RETURN },
+                new ButtonTransitions().right(DEPOSIT_WITHDRAW).left(RIGHT_ARROW).down(RETURN),
                 () -> switchClicked = !switchClicked
         );
 
         buttons[DEPOSIT_WITHDRAW] = depositWithdrawButton = new Button(
                 526, 464, 118, 38,
                 ButtonHoverAction.BOX,
-                new int[] { RELEASE, -1, SWITCH, RETURN },
+                new ButtonTransitions().right(RELEASE).left(SWITCH).down(RETURN),
                 () -> {
                     if (party) { // Deposit
                         if (depositClicked) {
@@ -232,7 +226,7 @@ class PCView extends View {
         buttons[RELEASE] = releaseButton = new Button(
                 642, 464, 118, 38,
                 ButtonHoverAction.BOX,
-                new int[] { 0, -1, DEPOSIT_WITHDRAW, RETURN },
+                new ButtonTransitions().right(0).left(DEPOSIT_WITHDRAW).down(RETURN),
                 () -> {
                     pc.releasePokemon(selected);
                     movedToFront();
@@ -241,13 +235,14 @@ class PCView extends View {
 
         buttons[RETURN] = returnButton = Button.createExitButton(
                 410, 522, 350, 38, ButtonHoverAction.BOX,
-                new int[] {
-                        0,
-                        SWITCH,
-                        PARTY + Trainer.MAX_POKEMON - 1,
-                        -1
-                }
+                new ButtonTransitions()
+                        .right(0)
+                        .up(SWITCH)
+                        .left(PARTY + Trainer.MAX_POKEMON - 1)
         );
+
+        this.buttons = new ButtonList(buttons);
+        this.buttons.setSelected(PARTY);
 
         party = true;
         selected = Game.getPlayer().front();
@@ -255,8 +250,8 @@ class PCView extends View {
 
     @Override
     public void update(int dt) {
-        selectedButton = Button.update(buttons, selectedButton);
-        if (buttons[selectedButton].checkConsumePress()) {
+        buttons.update();
+        if (buttons.consumeSelectedPress()) {
             updateActiveButtons();
         }
 
@@ -425,9 +420,7 @@ class PCView extends View {
         drawTextButton(g, releaseButton, "Release");
         drawTextButton(g, depositWithdrawButton, party ? "Deposit" : "Withdraw");
 
-        for (Button b : buttons) {
-            b.draw(g);
-        }
+        buttons.draw(g);
     }
 
     private void drawTextButton(Graphics g, Button button, String text) {
