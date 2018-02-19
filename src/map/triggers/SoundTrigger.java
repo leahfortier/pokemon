@@ -7,10 +7,6 @@ import sound.SoundTitle;
 public class SoundTrigger extends Trigger {
     private final SoundTitle soundTitle;
 
-    SoundTrigger(String contents, Condition condition) {
-        this(SoundTitle.valueOf(contents), condition);
-    }
-
     public SoundTrigger(SoundTitle soundTitle, Condition condition) {
         super(soundTitle.name(), condition);
         this.soundTitle = soundTitle;

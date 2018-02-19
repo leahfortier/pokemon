@@ -15,6 +15,10 @@ public class GroupTriggerMatcher extends TriggerMatcher {
     private String suffix;
     private List<String> globals;
 
+    public GroupTriggerMatcher(final String suffix, final List<Trigger> triggers) {
+        this(suffix, triggers.toArray(new Trigger[0]));
+    }
+
     public GroupTriggerMatcher(final String suffix, final Trigger... triggers) {
         this.suffix = suffix;
         this.triggers = Arrays.stream(triggers)

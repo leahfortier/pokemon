@@ -7,7 +7,7 @@ import trainer.player.medal.MedalTheme;
 public class MedalCountTrigger extends Trigger {
     private final MedalTheme medalTheme;
 
-    MedalCountTrigger(String contents, Condition condition) {
+    public MedalCountTrigger(String contents, Condition condition) {
         this(MedalTheme.valueOf(contents), condition);
     }
 

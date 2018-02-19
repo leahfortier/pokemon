@@ -2,7 +2,8 @@ package trainer.player;
 
 import battle.ActivePokemon;
 import gui.view.ViewMode;
-import map.triggers.TriggerType;
+import map.triggers.GroupTrigger;
+import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.evolution.BaseEvolution;
@@ -25,7 +26,8 @@ public class EvolutionInfo implements Serializable {
         evolvingPokemon = hatched;
         evolution = null;
 
-        Messages.add(new MessageUpdate().withTrigger(TriggerType.GROUP.getTriggerNameFromSuffix("EggHatching")));
+        String triggerName = Trigger.createName(GroupTrigger.class, "EggHatching");
+        Messages.add(new MessageUpdate().withTrigger(triggerName));
     }
 
     public void setEvolution(ActivePokemon pokemon, BaseEvolution evolution) {

@@ -24,7 +24,7 @@ public abstract class Trigger {
     }
 
     protected Trigger(String suffix, Condition condition, List<String> globals) {
-        this.name = this.getClass().getSimpleName() + (StringUtils.isNullOrEmpty(suffix) ? "" : "_" + suffix);
+        this.name = createName(this.getClass(), suffix);
 
         this.condition = new ConditionSet(condition);
 
@@ -34,6 +34,10 @@ public abstract class Trigger {
         }
 
         Game.getData().addTrigger(this);
+    }
+
+    public static String createName(Class<? extends Trigger> classy, String triggerSuffix) {
+        return classy.getSimpleName() + (StringUtils.isNullOrEmpty(triggerSuffix) ? "" : "_" + triggerSuffix);
     }
 
     protected abstract void executeTrigger();

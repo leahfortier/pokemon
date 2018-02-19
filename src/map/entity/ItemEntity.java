@@ -1,6 +1,5 @@
 package map.entity;
 
-import gui.GameData;
 import gui.TileSet;
 import item.ItemNamesies;
 import item.use.TechnicalMachine;
@@ -12,13 +11,14 @@ import map.triggers.GiveItemTrigger;
 import map.triggers.GroupTrigger;
 import map.triggers.MedalCountTrigger;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import pattern.GroupTriggerMatcher;
 import trainer.player.medal.MedalTheme;
 import util.Point;
 import util.StringUtils;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemEntity extends Entity {
     private final ItemNamesies itemName;
@@ -78,40 +78,31 @@ public class ItemEntity extends Entity {
             return;
         }
 
-        GameData data = Game.getData();
-        final String itemTriggerSuffix = "ItemEntity_" + TriggerType.GIVE_ITEM.getTriggerName(this.itemName.getName());
-        final String itemTriggerName = TriggerType.GROUP.getTriggerNameFromSuffix(itemTriggerSuffix);
-
         // Create a universal trigger for this item
-        if (!data.hasTrigger(itemTriggerName)) {
-            String itemDialogue =
-                    "You found " +
-                            (isTM
-                                    ? "the " + this.itemName.getName()
-                                    : StringUtils.articleString(this.itemName.getName())
-                            ) +
-                            "!";
+        String itemDialogue =
+                "You found " +
+                        (isTM
+                                ? "the " + this.itemName.getName()
+                                : StringUtils.articleString(this.itemName.getName())
+                        ) +
+                        "!";
 
-            Trigger dialogue = new DialogueTrigger(itemDialogue, null);
-            Trigger giveItem = new GiveItemTrigger(this.itemName, 1, null);
-
-            // TODO: Rewrite this it looks like ass
-            GroupTriggerMatcher groupTriggerMatcher;
-            if (this.isHidden) {
-                Trigger medalTrigger = new MedalCountTrigger(MedalTheme.HIDDEN_ITEMS_FOUND, null);
-                groupTriggerMatcher = new GroupTriggerMatcher(itemTriggerSuffix, dialogue, giveItem, medalTrigger);
-            } else {
-                groupTriggerMatcher = new GroupTriggerMatcher(itemTriggerSuffix, dialogue, giveItem);
-            }
-
-            new GroupTrigger(groupTriggerMatcher, null);
+        List<Trigger> triggers = new ArrayList<>();
+        triggers.add(new DialogueTrigger(itemDialogue, null));
+        triggers.add(new GiveItemTrigger(this.itemName, 1, null));
+        if (this.isHidden) {
+            triggers.add(new MedalCountTrigger(MedalTheme.HIDDEN_ITEMS_FOUND, null));
         }
 
+        GroupTriggerMatcher groupTriggerMatcher = new GroupTriggerMatcher("ItemEntity_" + this.getTriggerName(), triggers);
+
+        Trigger trigger = new GroupTrigger(groupTriggerMatcher, null);
+
         // This trigger will only call the item trigger when the conditions apply
-        GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getTriggerSuffix(), data.getTrigger(itemTriggerName));
+        GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getTriggerSuffix(), trigger);
         matcher.addGlobals(this.getEntityName());
 
-        new GroupTrigger(matcher, null);
+        Game.getData().addTrigger(new GroupTrigger(matcher, null));
 
         dataCreated = true;
     }

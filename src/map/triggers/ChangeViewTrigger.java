@@ -9,10 +9,6 @@ import message.Messages;
 public class ChangeViewTrigger extends Trigger {
     private final ViewMode view;
 
-    ChangeViewTrigger(String viewMode, Condition condition) {
-        this(ViewMode.valueOf(viewMode), condition);
-    }
-
     public ChangeViewTrigger(ViewMode viewMode, Condition condition) {
         super(viewMode.name(), condition);
         this.view = viewMode;

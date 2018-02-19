@@ -9,10 +9,6 @@ import trainer.player.Player;
 import util.PokeString;
 
 public class DayCareTrigger extends Trigger {
-    public DayCareTrigger(String contents, Condition condition) {
-        this(condition);
-    }
-
     public DayCareTrigger(Condition condition) {
         super(null, condition);
     }

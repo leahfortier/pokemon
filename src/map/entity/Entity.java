@@ -6,7 +6,8 @@ import map.Direction;
 import map.MapData;
 import map.condition.Condition;
 import map.condition.ConditionSet;
-import map.triggers.TriggerType;
+import map.triggers.GroupTrigger;
+import map.triggers.Trigger;
 import util.Point;
 
 import java.awt.Graphics;
@@ -99,6 +100,7 @@ public abstract class Entity {
     }
 
     public String getTriggerName() {
-        return TriggerType.GROUP.getTriggerNameFromSuffix(this.getTriggerSuffix());
+        // TODO: I don't like Group Trigger here
+        return Trigger.createName(GroupTrigger.class, this.getTriggerSuffix());
     }
 }

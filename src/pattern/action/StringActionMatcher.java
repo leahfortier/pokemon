@@ -1,5 +1,7 @@
 package pattern.action;
 
+import gui.GameData;
+import main.Game;
 import map.condition.Condition;
 import map.triggers.DialogueTrigger;
 import map.triggers.GlobalTrigger;
@@ -55,6 +57,13 @@ public abstract class StringActionMatcher extends ActionMatcher {
 
         @Override
         protected Trigger getTrigger(String entityName, Condition condition) {
+            GameData data = Game.getData();
+
+            String triggerName = Trigger.createName(GroupTrigger.class, this.groupTrigger);
+            if (data.hasTrigger(triggerName)) {
+                return data.getTrigger(triggerName);
+            }
+
             return new GroupTrigger(new GroupTriggerMatcher(this.groupTrigger), null);
         }
     }

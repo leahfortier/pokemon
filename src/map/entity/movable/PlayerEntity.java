@@ -10,7 +10,6 @@ import map.MapData;
 import map.entity.Entity;
 import map.overworld.WalkType;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.player.Player;
@@ -186,7 +185,7 @@ public class PlayerEntity extends MovableEntity {
             if (currentInteractionEntity.isVisible()) {
                 currentInteractionEntity.getAttention(entityDirection.getOpposite());
 
-                Trigger trigger = Game.getData().getTrigger(TriggerType.GROUP.getTriggerNameFromSuffix(currentInteractionEntity.getTriggerSuffix()));
+                Trigger trigger = Game.getData().getTrigger(currentInteractionEntity.getTriggerName());
                 if (trigger != null) {
                     trigger.execute();
                 }

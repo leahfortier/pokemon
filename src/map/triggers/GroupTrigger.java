@@ -6,17 +6,12 @@ import map.condition.ConditionHolder.AndCondition;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.GroupTriggerMatcher;
-import util.SerializationUtils;
 import util.StringUtils;
 
 import java.util.List;
 
 public class GroupTrigger extends Trigger {
     private final List<String> triggers;
-
-    GroupTrigger(String contents, Condition condition) {
-        this(SerializationUtils.deserializeJson(contents, GroupTriggerMatcher.class), condition);
-    }
 
     public GroupTrigger(GroupTriggerMatcher matcher, Condition condition) {
         super(getTriggerSuffix(matcher), new AndCondition(condition, matcher.getCondition()), matcher.getGlobals());
