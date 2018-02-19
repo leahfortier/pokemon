@@ -201,16 +201,16 @@ public class MapTest extends BaseTest {
 
         for (NPCMatcher npc : map.getMatcher().getNPCs()) {
             for (NPCInteractionMatcher interaction : npc.getInteractionMatcherList()) {
-                actionMatchers.addAll(interaction.getActionMatcherList());
+                actionMatchers.addAll(interaction.getActions());
             }
         }
 
         for (MiscEntityMatcher miscEntity : map.getMatcher().getMiscEntities()) {
-            actionMatchers.addAll(miscEntity.getActionMatcherList());
+            actionMatchers.addAll(miscEntity.getActions());
         }
 
         for (EventMatcher event : map.getMatcher().getEvents()) {
-            actionMatchers.addAll(event.getActionMatcherList());
+            actionMatchers.addAll(event.getActions());
         }
 
         return actionMatchers;

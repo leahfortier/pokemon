@@ -1,8 +1,5 @@
 package pattern.action;
 
-import map.entity.EntityAction;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,16 +16,7 @@ public class ChoiceMatcher {
         return this.text;
     }
 
-    public List<ActionMatcher> getActionMatchers() {
+    public List<ActionMatcher> getActions() {
         return Arrays.asList(this.actions);
-    }
-
-    public List<EntityAction> getActions() {
-        List<EntityAction> actions = new ArrayList<>();
-        for (ActionMatcher action : this.actions) {
-            actions.add(action.getAction(null));
-        }
-
-        return actions;
     }
 }

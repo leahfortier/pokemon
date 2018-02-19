@@ -5,7 +5,7 @@ import map.condition.Condition;
 import pattern.action.UpdateMatcher;
 import util.SerializationUtils;
 
-class UpdateTrigger extends Trigger {
+public class UpdateTrigger extends Trigger {
     private final String npcEntityName;
     private final String newInteractionName;
 
@@ -13,7 +13,7 @@ class UpdateTrigger extends Trigger {
         this(SerializationUtils.deserializeJson(matcherJson, UpdateMatcher.class), condition);
     }
 
-    UpdateTrigger(UpdateMatcher matcher, Condition condition) {
+    public UpdateTrigger(UpdateMatcher matcher, Condition condition) {
         super(matcher.getJson(), condition);
 
         this.npcEntityName = matcher.getNpcEntityName();

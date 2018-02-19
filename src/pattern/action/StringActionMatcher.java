@@ -1,11 +1,13 @@
 package pattern.action;
 
 import map.condition.Condition;
-import map.entity.EntityAction;
-import map.entity.EntityAction.GlobalAction;
-import map.entity.EntityAction.GroupTriggerAction;
-import map.entity.EntityAction.UpdateAction;
+import map.triggers.DialogueTrigger;
+import map.triggers.GlobalTrigger;
+import map.triggers.GroupTrigger;
+import map.triggers.Trigger;
+import map.triggers.UpdateTrigger;
 import mapMaker.dialogs.action.ActionType;
+import pattern.GroupTriggerMatcher;
 
 public abstract class StringActionMatcher extends ActionMatcher {
     public abstract String getActionString();
@@ -28,8 +30,8 @@ public abstract class StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public EntityAction getAction(Condition condition) {
-            return new UpdateAction(update);
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new UpdateTrigger(new UpdateMatcher(entityName, update), null);
         }
     }
 
@@ -51,8 +53,8 @@ public abstract class StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public EntityAction getAction(Condition condition) {
-            return new GroupTriggerAction(groupTrigger);
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new GroupTrigger(new GroupTriggerMatcher(this.groupTrigger), null);
         }
     }
 
@@ -74,8 +76,31 @@ public abstract class StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public EntityAction getAction(Condition condition) {
-            return new GlobalAction(global);
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new GlobalTrigger(global, null);
+        }
+    }
+
+    public static class DialogueActionMatcher extends StringActionMatcher {
+        private String dialogue;
+
+        public DialogueActionMatcher(String dialogue) {
+            this.dialogue = dialogue;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.DIALOGUE;
+        }
+
+        @Override
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new DialogueTrigger(this.dialogue, condition);
+        }
+
+        @Override
+        public String getActionString() {
+            return dialogue;
         }
     }
 }

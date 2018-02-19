@@ -2,7 +2,7 @@ package map.triggers;
 
 import map.condition.Condition;
 import map.condition.ConditionSet;
-import map.entity.EntityAction;
+import pattern.action.ActionMatcher;
 import pattern.map.EventMatcher;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 public class TriggerData {
     private String name;
     private ConditionSet condition;
-    private List<EntityAction> actions;
+    private List<ActionMatcher> actions;
 
     public TriggerData(EventMatcher matcher) {
         this.name = matcher.getTriggerName();
@@ -26,7 +26,7 @@ public class TriggerData {
         return this.condition.getCondition();
     }
 
-    public List<EntityAction> getActions() {
+    public List<ActionMatcher> getActions() {
         return this.actions;
     }
 }

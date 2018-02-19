@@ -6,7 +6,6 @@ import main.Game;
 import main.Global;
 import map.area.AreaData;
 import map.entity.Entity;
-import map.entity.EntityAction;
 import map.entity.FishingSpotEntity;
 import map.entity.ItemEntity;
 import map.entity.MiscEntity;
@@ -17,6 +16,7 @@ import map.triggers.TriggerData;
 import map.triggers.battle.WalkingWildBattleTrigger;
 import map.triggers.map.MapTransitionTrigger;
 import pattern.SimpleMapTransition;
+import pattern.action.ActionMatcher;
 import pattern.generic.EntityMatcher;
 import pattern.map.EventMatcher;
 import pattern.map.FishingMatcher;
@@ -105,7 +105,7 @@ public class MapData {
 
         for (EventMatcher matcher : mapDataMatcher.getEvents()) {
             TriggerData triggerData = new TriggerData(matcher);
-            Trigger trigger = EntityAction.addActionGroupTrigger(
+            Trigger trigger = ActionMatcher.addActionGroupTrigger(
                     triggerData.getName(),
                     triggerData.getName(),
                     triggerData.getCondition(),

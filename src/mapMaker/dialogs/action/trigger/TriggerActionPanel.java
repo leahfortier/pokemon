@@ -46,7 +46,7 @@ public class TriggerActionPanel extends ActionPanel {
     public ActionMatcher getActionMatcher(ActionType actionType) {
         TriggerActionType triggerType = (TriggerActionType)triggerTypeCombobBox.getSelectedItem();
         String triggerContents = this.map.get(triggerType).getTriggerContents();
-        return new TriggerActionMatcher(triggerType.getTriggerType(), triggerContents);
+        return new TriggerActionMatcher(triggerType.getTriggerType(), triggerContents, null);
     }
 
     private void renderDialog() {

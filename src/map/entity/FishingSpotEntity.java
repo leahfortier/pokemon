@@ -4,9 +4,10 @@ import item.ItemNamesies;
 import map.condition.Condition;
 import map.condition.Condition.ItemCondition;
 import map.condition.ConditionHolder.AndCondition;
-import map.entity.EntityAction.TriggerAction;
 import map.overworld.WildEncounterInfo;
 import map.triggers.TriggerType;
+import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher.TriggerActionMatcher;
 import pattern.map.FishingMatcher;
 import util.Point;
 
@@ -40,13 +41,13 @@ public class FishingSpotEntity extends Entity {
         }
 
         FishingMatcher fishingMatcher = new FishingMatcher(this.getEntityName(), wildEncounters);
-        EntityAction entityAction = new TriggerAction(
+        ActionMatcher entityAction = new TriggerActionMatcher(
                 TriggerType.FISHING,
                 fishingMatcher.getJson(),
                 new ItemCondition(ItemNamesies.FISHING_ROD)
         );
 
-        EntityAction.addActionGroupTrigger(
+        ActionMatcher.addActionGroupTrigger(
                 this.getEntityName(),
                 this.getTriggerSuffix(),
                 this.getCondition(),

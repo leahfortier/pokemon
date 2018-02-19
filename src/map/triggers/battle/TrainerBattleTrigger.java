@@ -18,27 +18,25 @@ public class TrainerBattleTrigger extends Trigger {
     private final UpdateMatcher npcUpdateInteraction;
 
     public TrainerBattleTrigger(String contents, Condition condition) {
-        this(SerializationUtils.deserializeJson(contents, BattleAction.class), condition);
+        this(SerializationUtils.deserializeJson(contents, BattleActionMatcher.class), condition);
     }
 
-    public TrainerBattleTrigger(BattleAction battleAction, Condition condition) {
-        super(battleAction.getJson(), condition);
+    public TrainerBattleTrigger(BattleActionMatcher matcher, Condition condition) {
+        super(matcher.getJson(), condition);
 
-        BattleActionMatcher battleMatcher = battleAction.getBattleMatcher();
-
-        String trainerName = battleMatcher.getName();
-        int cash = battleMatcher.getDatCashMoney();
-        int maxPokemonAllowed = battleMatcher.getMaxPokemonAllowed();
+        String trainerName = matcher.getName();
+        int cash = matcher.getDatCashMoney();
+        int maxPokemonAllowed = matcher.getMaxPokemonAllowed();
 
         this.trainer = new EnemyTrainer(trainerName, cash, maxPokemonAllowed);
 
-        RandomUtils.setTempRandomSeed(battleAction.getJson().hashCode());
-        for (PokemonMatcher matcher : battleMatcher.getPokemon()) {
-            trainer.addPokemon(PartyPokemon.createActivePokemon(matcher, false));
+        RandomUtils.setTempRandomSeed(matcher.getJson().hashCode());
+        for (PokemonMatcher pokemonMatcher : matcher.getPokemon()) {
+            trainer.addPokemon(PartyPokemon.createActivePokemon(pokemonMatcher, false));
         }
         RandomUtils.resetRandomSeedToInitial();
 
-        this.npcUpdateInteraction = new UpdateMatcher(battleAction.getEntityName(), battleMatcher.getUpdateInteraction());
+        this.npcUpdateInteraction = new UpdateMatcher(matcher.getEntityName(), matcher.getUpdateInteraction());
     }
 
     @Override

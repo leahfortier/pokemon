@@ -1,28 +1,66 @@
 package pattern.action;
 
+import item.ItemNamesies;
 import map.condition.Condition;
-import map.entity.EntityAction;
-import map.entity.EntityAction.BattleAction;
-import map.entity.EntityAction.ChoiceAction;
-import map.entity.EntityAction.TriggerAction;
+import map.condition.ConditionSet;
+import map.triggers.ChoiceTrigger;
+import map.triggers.GroupTrigger;
+import map.triggers.Trigger;
 import map.triggers.TriggerType;
+import map.triggers.UseItemTrigger;
+import map.triggers.battle.TrainerBattleTrigger;
 import mapMaker.dialogs.action.ActionType;
 import mapMaker.dialogs.action.trigger.TriggerActionType;
+import pattern.GroupTriggerMatcher;
 import pattern.JsonMatcher;
 import pattern.PokemonMatcher;
 import trainer.Trainer;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public abstract class ActionMatcher implements JsonMatcher {
     public abstract ActionType getActionType();
-    public abstract EntityAction getAction(final Condition condition);
+
+    protected abstract Trigger getTrigger(String entityName, Condition condition);
+
+    public static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, Condition condition, List<ActionMatcher> actions) {
+        final Trigger[] actionTriggers = actions.stream()
+                                                .map(action -> action.getTrigger(entityName, condition))
+                                                .collect(Collectors.toList())
+                                                .toArray(new Trigger[0]);
+
+        GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerSuffix, actionTriggers);
+        return new GroupTrigger(matcher, condition);
+    }
+
+    public static class UseItemActionMatcher extends ActionMatcher {
+        private ItemNamesies useItem;
+
+        public UseItemActionMatcher(ItemNamesies useItem) {
+            this.useItem = useItem;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.USE_ITEM;
+        }
+
+        @Override
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new UseItemTrigger(this.useItem, condition);
+        }
+    }
 
     public static class TriggerActionMatcher extends ActionMatcher {
         public TriggerType triggerType;
         public String triggerContents;
+        private ConditionSet condition;
 
-        public TriggerActionMatcher(TriggerType triggerType, String triggerContents) {
+        public TriggerActionMatcher(TriggerType triggerType, String triggerContents, Condition condition) {
             this.triggerType = triggerType;
             this.triggerContents = triggerContents;
+            this.condition = new ConditionSet(condition);
         }
 
         public TriggerType getTriggerType() {
@@ -43,8 +81,12 @@ public abstract class ActionMatcher implements JsonMatcher {
         }
 
         @Override
-        public EntityAction getAction(Condition condition) {
-            return new TriggerAction(triggerType, triggerContents, condition);
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return this.getTriggerType()
+                       .createTrigger2(
+                               this.getTriggerContents(),
+                               condition
+                       );
         }
     }
 
@@ -54,6 +96,7 @@ public abstract class ActionMatcher implements JsonMatcher {
         public boolean maxPokemonLimit;
         public PokemonMatcher[] pokemon;
         public String update;
+        private String entityName;
 
         public BattleActionMatcher(String name, int cashMoney, boolean maxPokemonLimit, PokemonMatcher[] pokemon, String update) {
             this.name = name;
@@ -87,14 +130,19 @@ public abstract class ActionMatcher implements JsonMatcher {
             return this.maxPokemonLimit ? this.pokemon.length : Trainer.MAX_POKEMON;
         }
 
+        public String getEntityName() {
+            return this.entityName;
+        }
+
         @Override
         public ActionType getActionType() {
             return ActionType.BATTLE;
         }
 
         @Override
-        public EntityAction getAction(Condition condition) {
-            return new BattleAction(this);
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            this.entityName = entityName;
+            return new TrainerBattleTrigger(this, condition);
         }
     }
 
@@ -121,8 +169,8 @@ public abstract class ActionMatcher implements JsonMatcher {
         }
 
         @Override
-        public EntityAction getAction(Condition condition) {
-            return new ChoiceAction(this);
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new ChoiceTrigger(this, condition);
         }
     }
 }

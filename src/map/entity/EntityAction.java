@@ -2,7 +2,6 @@ package map.entity;
 
 import map.condition.Condition;
 import map.condition.ConditionSet;
-import map.triggers.GroupTrigger;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.GroupTriggerMatcher;
@@ -12,14 +11,9 @@ import pattern.action.ActionMatcher.ChoiceActionMatcher;
 import pattern.action.UpdateMatcher;
 import util.StringUtils;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 public abstract class EntityAction {
-
     protected abstract TriggerType getTriggerType();
     protected abstract String getTriggerContents(String entityName);
-
     protected Condition getCondition() { return null; }
 
     private Trigger getTrigger(String entityName) {
@@ -28,16 +22,6 @@ public abstract class EntityAction {
                            this.getTriggerContents(entityName),
                            this.getCondition()
                    );
-    }
-
-    public static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, Condition condition, List<EntityAction> actions) {
-        final Trigger[] actionTriggers = actions.stream()
-                                                .map(action -> action.getTrigger(entityName))
-                                                .collect(Collectors.toList())
-                                                .toArray(new Trigger[0]);
-
-        GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerSuffix, actionTriggers);
-        return new GroupTrigger(matcher, condition);
     }
 
     public static class TriggerAction extends EntityAction {

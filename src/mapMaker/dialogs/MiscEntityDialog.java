@@ -59,6 +59,6 @@ public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
 
         nameTextField.setText(matcher.getBasicName());
         conditionPanel.load(matcher);
-        actionListPanel.load(matcher.getActionMatcherList());
+        actionListPanel.load(matcher.getActions());
     }
 }

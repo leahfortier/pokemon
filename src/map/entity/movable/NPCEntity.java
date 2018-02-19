@@ -4,8 +4,8 @@ import main.Game;
 import map.Direction;
 import map.PathDirection;
 import map.condition.Condition;
-import map.entity.EntityAction;
-import map.entity.EntityAction.BattleAction;
+import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher.BattleActionMatcher;
 import trainer.player.Player;
 import util.Point;
 import util.StringUtils;
@@ -142,9 +142,9 @@ public class NPCEntity extends MovableEntity {
 
     public boolean isTrainer() {
         NPCInteraction interaction = interactions.get(this.getCurrentInteractionKey());
-        List<EntityAction> actions = interaction.getActions();
-        for (EntityAction action : actions) {
-            if (action instanceof BattleAction) {
+        List<ActionMatcher> actions = interaction.getActions();
+        for (ActionMatcher action : actions) {
+            if (action instanceof BattleActionMatcher) {
                 return true;
             }
         }
@@ -171,9 +171,9 @@ public class NPCEntity extends MovableEntity {
 
         for (Entry<String, NPCInteraction> interaction : this.interactions.entrySet()) {
             final String interactionName = interaction.getKey();
-            final List<EntityAction> actions = interaction.getValue().getActions();
+            final List<ActionMatcher> actions = interaction.getValue().getActions();
 
-            EntityAction.addActionGroupTrigger(this.getEntityName(), this.getTriggerSuffix(interactionName), this.getCondition(), actions);
+            ActionMatcher.addActionGroupTrigger(this.getEntityName(), this.getTriggerSuffix(interactionName), this.getCondition(), actions);
         }
 
         dataCreated = true;

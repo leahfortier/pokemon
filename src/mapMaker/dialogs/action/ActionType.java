@@ -6,6 +6,8 @@ public enum ActionType {
     TRIGGER(TriggerActionPanel::new),
     BATTLE(BattleActionPanel::new),
     CHOICE(ChoiceActionPanel::new),
+    USE_ITEM(dialog -> new BasicActionPanel("Item Name")), // TODO: New item thingy
+    DIALOGUE(dialog -> new BasicActionPanel("Dialogue")),
     UPDATE(dialog -> new BasicActionPanel("Update Name")),
     GROUP_TRIGGER(dialog -> new BasicActionPanel("Trigger Name")),
     GLOBAL(dialog -> new BasicActionPanel("Global Name"));

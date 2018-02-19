@@ -65,7 +65,7 @@ class ChoiceActionPanel extends ActionPanel {
         for (ChoiceMatcher choiceMatcher : choiceMatchers) {
             Choice choice = new Choice();
             choice.textField.setText(choiceMatcher.getText());
-            choice.actions.addAll(choiceMatcher.getActionMatchers());
+            choice.actions.addAll(choiceMatcher.getActions());
 
             choices.add(choice);
         }

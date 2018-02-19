@@ -1,12 +1,10 @@
 package pattern.map;
 
 import map.condition.ConditionSet;
-import map.entity.EntityAction;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionMatcher;
 import pattern.generic.MultiPointTriggerMatcher;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,16 +29,7 @@ public class EventMatcher extends MultiPointTriggerMatcher {
         return name;
     }
 
-    public List<ActionMatcher> getActionMatcherList() {
+    public List<ActionMatcher> getActions() {
         return Arrays.asList(this.actions);
-    }
-
-    public List<EntityAction> getActions() {
-        List<EntityAction> entityActions = new ArrayList<>();
-        for (ActionMatcher matcher : this.actions) {
-            entityActions.add(matcher.getAction(this.getCondition()));
-        }
-
-        return entityActions;
     }
 }
