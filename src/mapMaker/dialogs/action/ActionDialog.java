@@ -34,7 +34,7 @@ public class ActionDialog extends TriggerDialog<ActionMatcher> {
     @Override
     protected ActionMatcher getMatcher() {
         ActionType actionType = (ActionType)actionComboBox.getSelectedItem();
-        return this.map.get(actionType).getActionMatcher(actionType);
+        return this.map.get(actionType).getActionMatcher();
     }
 
     private void load(ActionMatcher matcher) {

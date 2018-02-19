@@ -1,15 +1,13 @@
 package mapMaker.dialogs.action.panel;
 
 import mapMaker.dialogs.action.ActionPanel;
-import mapMaker.dialogs.action.ActionType;
-import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.MoveNpcActionMatcher;
 import util.GUIUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JTextField;
 
-public class MoveNpcActionPanel extends ActionPanel {
+public class MoveNpcActionPanel extends ActionPanel<MoveNpcActionMatcher> {
     private final JTextField entityNameField; // TODO: Change to combo box with NPCs
     private final JCheckBox endPlayerCheckbox;
     private final JTextField endEntranceField; // TODO: Change to combo box with entrances
@@ -32,7 +30,7 @@ public class MoveNpcActionPanel extends ActionPanel {
     }
 
     @Override
-    public ActionMatcher getActionMatcher(ActionType actionType) {
+    public MoveNpcActionMatcher getActionMatcher() {
         return new MoveNpcActionMatcher(
                 this.entityNameField.getText().trim(),
                 this.endEntranceField.getText().trim(),
@@ -41,12 +39,10 @@ public class MoveNpcActionPanel extends ActionPanel {
     }
 
     @Override
-    protected void load(ActionMatcher matcher) {
-        MoveNpcActionMatcher npcMatcher = (MoveNpcActionMatcher)matcher;
-
-        this.entityNameField.setText(npcMatcher.getNpcEntityName());
-        this.endEntranceField.setText(npcMatcher.getEndEntranceName());
-        this.endPlayerCheckbox.setSelected(npcMatcher.endLocationIsPlayer());
+    protected void load(MoveNpcActionMatcher matcher) {
+        this.entityNameField.setText(matcher.getNpcEntityName());
+        this.endEntranceField.setText(matcher.getEndEntranceName());
+        this.endPlayerCheckbox.setSelected(matcher.endLocationIsPlayer());
 
         setEnabled();
     }

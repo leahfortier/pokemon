@@ -120,7 +120,7 @@ public class MapData {
         for (WildBattleAreaMatcher matcher : mapDataMatcher.getWildBattles()) {
             for (Point point : matcher.getLocation()) {
                 for (WildBattleMatcher wildBattleMatcher : matcher.getWildBattles()) {
-                    Trigger trigger = new WalkingWildBattleTrigger(wildBattleMatcher);
+                    Trigger trigger = new WalkingWildBattleTrigger(wildBattleMatcher).addData();
                     triggers.put(getMapIndex(point), trigger.getName());
                     for (WildEncounterInfo wildEncounter : wildBattleMatcher.getWildEncounters()) {
                         this.getArea(point).addPokemon(wildEncounter.getPokemonName());

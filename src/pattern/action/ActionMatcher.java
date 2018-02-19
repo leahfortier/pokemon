@@ -3,18 +3,15 @@ package pattern.action;
 import item.ItemNamesies;
 import map.condition.Condition;
 import map.triggers.ChoiceTrigger;
-import map.triggers.DayCareTrigger;
 import map.triggers.GiveItemTrigger;
 import map.triggers.GivePokemonTrigger;
 import map.triggers.GroupTrigger;
-import map.triggers.HealPartyTrigger;
 import map.triggers.TradePokemonTrigger;
 import map.triggers.Trigger;
 import map.triggers.UseItemTrigger;
 import map.triggers.battle.FishingTrigger;
 import map.triggers.battle.TrainerBattleTrigger;
 import map.triggers.map.MoveNPCTrigger;
-import map.triggers.map.ReloadMapTrigger;
 import mapMaker.dialogs.action.ActionType;
 import pattern.GroupTriggerMatcher;
 import pattern.JsonMatcher;
@@ -32,48 +29,11 @@ public interface ActionMatcher extends JsonMatcher {
     static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, Condition condition, List<ActionMatcher> actions) {
         final Trigger[] actionTriggers = new Trigger[actions.size()];
         for (int i = 0; i < actions.size(); i++) {
-            System.out.println(entityName + " " + triggerSuffix + " " + actions.get(i).getActionType());
             actionTriggers[i] = actions.get(i).createNewTrigger(entityName).addData();
         }
 
         GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerSuffix, actionTriggers);
         return new GroupTrigger(matcher, condition).addData();
-    }
-
-    class HealPartyActionMatcher implements ActionMatcher {
-        @Override
-        public ActionType getActionType() {
-            return ActionType.HEAL_PARTY;
-        }
-
-        @Override
-        public Trigger createNewTrigger(String entityName) {
-            return new HealPartyTrigger();
-        }
-    }
-
-    class DayCareActionMatcher implements ActionMatcher {
-        @Override
-        public ActionType getActionType() {
-            return ActionType.DAY_CARE;
-        }
-
-        @Override
-        public Trigger createNewTrigger(String entityName) {
-            return new DayCareTrigger();
-        }
-    }
-
-    class ReloadMapActionMatcher implements ActionMatcher {
-        @Override
-        public ActionType getActionType() {
-            return ActionType.RELOAD_MAP;
-        }
-
-        @Override
-        public Trigger createNewTrigger(String entityName) {
-            return new ReloadMapTrigger();
-        }
     }
 
     class GivePokemonActionMatcher implements ActionMatcher {
@@ -139,7 +99,8 @@ public interface ActionMatcher extends JsonMatcher {
 
         @Override
         public ActionType getActionType() {
-            return ActionType.USE_ITEM;
+            // Not available in map maker since it makes no sense there
+            return null;
         }
 
         @Override
@@ -307,7 +268,8 @@ public interface ActionMatcher extends JsonMatcher {
 
         @Override
         public ActionType getActionType() {
-            return ActionType.FISHING;
+            // Not available in map maker since it makes no sense there
+            return null;
         }
 
         @Override

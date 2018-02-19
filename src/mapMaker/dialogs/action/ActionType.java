@@ -9,44 +9,61 @@ import mapMaker.dialogs.action.panel.GiveItemActionPanel;
 import mapMaker.dialogs.action.panel.MoveNpcActionPanel;
 import mapMaker.dialogs.action.panel.PokemonActionPanel;
 import mapMaker.dialogs.action.panel.StringActionPanel;
-import mapMaker.dialogs.action.panel.StringActionPanel.ItemActionPanel;
 import mapMaker.dialogs.action.panel.TradePokemonActionPanel;
+import pattern.action.EmptyActionMatcher;
+import pattern.action.EmptyActionMatcher.DayCareActionMatcher;
+import pattern.action.EmptyActionMatcher.HealPartyActionMatcher;
+import pattern.action.EmptyActionMatcher.ReloadMapActionMatcher;
+import pattern.action.EnumActionMatcher;
+import pattern.action.EnumActionMatcher.BadgeActionMatcher;
+import pattern.action.EnumActionMatcher.ChangeViewActionMatcher;
+import pattern.action.EnumActionMatcher.MedalCountActionMatcher;
+import pattern.action.EnumActionMatcher.SoundActionMatcher;
+import pattern.action.StringActionMatcher;
+import pattern.action.StringActionMatcher.DialogueActionMatcher;
+import pattern.action.StringActionMatcher.GlobalActionMatcher;
+import pattern.action.StringActionMatcher.GroupTriggerActionMatcher;
+import pattern.action.StringActionMatcher.MovePlayerActionMatcher;
+import pattern.action.StringActionMatcher.UpdateActionMatcher;
 import sound.SoundTitle;
 import trainer.player.Badge;
 import trainer.player.medal.MedalTheme;
 
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 public enum ActionType {
-    BADGE("Badge", Badge.values()),
+    BADGE("Badge", Badge.values(), BadgeActionMatcher::new),
     BATTLE(BattleActionPanel::new),
-    CHANGE_VIEW("View Mode", ViewMode.values()),
+    CHANGE_VIEW("View Mode", ViewMode.values(), ChangeViewActionMatcher::new),
     CHOICE(ChoiceActionPanel::new),
-    DAY_CARE(dialog -> new EmptyActionPanel()),
-    DIALOGUE("Dialogue"),
+    DAY_CARE(DayCareActionMatcher::new),
+    DIALOGUE("Dialogue", DialogueActionMatcher::new),
     GIVE_ITEM(dialog -> new GiveItemActionPanel()),
     GIVE_POKEMON(dialog -> new PokemonActionPanel()),
-    GLOBAL("Global Name"),
-    GROUP_TRIGGER("Trigger Name"),
-    HEAL_PARTY(dialog -> new EmptyActionPanel()),
-    MEDAL_COUNT("Medal", MedalTheme.values()),
+    GLOBAL("Global Name", GlobalActionMatcher::new),
+    GROUP_TRIGGER("Trigger Name", GroupTriggerActionMatcher::new),
+    HEAL_PARTY(HealPartyActionMatcher::new),
+    MEDAL_COUNT("Medal", MedalTheme.values(), MedalCountActionMatcher::new),
     MOVE_NPC(dialog -> new MoveNpcActionPanel()),
-    MOVE_PLAYER("Player Path"),
-    RELOAD_MAP(dialog -> new EmptyActionPanel()),
-    SOUND("Sound Title", SoundTitle.values()),
+    MOVE_PLAYER("Player Path", MovePlayerActionMatcher::new),
+    RELOAD_MAP(ReloadMapActionMatcher::new),
+    SOUND("Sound Title", SoundTitle.values(), SoundActionMatcher::new),
     TRADE_POKEMON(dialog -> new TradePokemonActionPanel()),
-    UPDATE("Update Name"),
-    USE_ITEM(dialog -> new ItemActionPanel()),
-
-    // TODO: This should be removed and so should the FishingActionMatcher
-    FISHING(dialog -> new EmptyActionPanel());
+    UPDATE("Update Name", UpdateActionMatcher::new);
 
     private final ActionDataCreator actionDataCreator;
 
-    ActionType(String stringActionPanelLabel) {
-        this(dialog -> new StringActionPanel(stringActionPanelLabel));
+    ActionType(Supplier<EmptyActionMatcher> actionMatcherGetter) {
+        this(dialog -> new EmptyActionPanel(actionMatcherGetter));
     }
 
-    <T extends Enum> ActionType(String enumTriggerPanelLabel, T[] enumValues) {
-        this(dialog -> new EnumActionPanel<>(enumTriggerPanelLabel, enumValues));
+    ActionType(String stringActionPanelLabel, Function<String, StringActionMatcher> actionMatcherGetter) {
+        this(dialog -> new StringActionPanel(stringActionPanelLabel, actionMatcherGetter));
+    }
+
+    <T extends Enum> ActionType(String enumTriggerPanelLabel, T[] enumValues, Function<T, EnumActionMatcher<T>> actionMatcherGetter) {
+        this(dialog -> new EnumActionPanel<>(enumTriggerPanelLabel, enumValues, actionMatcherGetter));
     }
 
     ActionType(ActionDataCreator actionDataCreator) {

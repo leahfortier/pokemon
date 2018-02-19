@@ -2,8 +2,6 @@ package mapMaker.dialogs.action.panel;
 
 import item.ItemNamesies;
 import mapMaker.dialogs.action.ActionPanel;
-import mapMaker.dialogs.action.ActionType;
-import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.GiveItemActionMatcher;
 import util.ColorDocumentListener;
 import util.ColorDocumentListener.ColorCondition;
@@ -13,7 +11,7 @@ import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 
-public class GiveItemActionPanel extends ActionPanel {
+public class GiveItemActionPanel extends ActionPanel<GiveItemActionMatcher> {
     private final JTextField itemField;
     private final JFormattedTextField quantityTextField;
 
@@ -39,15 +37,13 @@ public class GiveItemActionPanel extends ActionPanel {
     }
 
     @Override
-    protected void load(ActionMatcher matcher) {
-        GiveItemActionMatcher itemMatcher = (GiveItemActionMatcher)matcher;
-
-        itemField.setText(itemMatcher.getItem().getName());
-        quantityTextField.setValue(itemMatcher.getQuantity());
+    protected void load(GiveItemActionMatcher matcher) {
+        itemField.setText(matcher.getItem().getName());
+        quantityTextField.setValue(matcher.getQuantity());
     }
 
     @Override
-    public ActionMatcher getActionMatcher(ActionType actionType) {
+    public GiveItemActionMatcher getActionMatcher() {
         ItemNamesies item = ItemNamesies.getValueOf(itemField.getText().trim());
         int quantity = Integer.parseInt(quantityTextField.getValue().toString());
 

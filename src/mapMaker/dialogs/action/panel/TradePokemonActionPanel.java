@@ -1,8 +1,6 @@
 package mapMaker.dialogs.action.panel;
 
 import mapMaker.dialogs.action.ActionPanel;
-import mapMaker.dialogs.action.ActionType;
-import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.TradePokemonActionMatcher;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
@@ -10,7 +8,7 @@ import util.GUIUtils;
 
 import javax.swing.JTextField;
 
-public class TradePokemonActionPanel extends ActionPanel {
+public class TradePokemonActionPanel extends ActionPanel<TradePokemonActionMatcher> {
     private final JTextField requestedNameField;
     private final JTextField tradeNameField;
 
@@ -37,7 +35,7 @@ public class TradePokemonActionPanel extends ActionPanel {
     }
 
     @Override
-    public ActionMatcher getActionMatcher(ActionType actionType) {
+    public TradePokemonActionMatcher getActionMatcher() {
         PokemonNamesies requested = PokemonNamesies.tryValueOf(requestedNameField.getText());
         PokemonNamesies tradePokemon = PokemonNamesies.tryValueOf(tradeNameField.getText());
 
@@ -45,9 +43,8 @@ public class TradePokemonActionPanel extends ActionPanel {
     }
 
     @Override
-    protected void load(ActionMatcher matcher) {
-        TradePokemonActionMatcher tradeMatcher = (TradePokemonActionMatcher)matcher;
-        requestedNameField.setText(tradeMatcher.getRequested().getName());
-        tradeNameField.setText(tradeMatcher.getTradePokemon().getName());
+    protected void load(TradePokemonActionMatcher matcher) {
+        requestedNameField.setText(matcher.getRequested().getName());
+        tradeNameField.setText(matcher.getTradePokemon().getName());
     }
 }

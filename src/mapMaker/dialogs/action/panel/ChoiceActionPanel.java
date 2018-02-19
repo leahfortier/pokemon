@@ -2,7 +2,6 @@ package mapMaker.dialogs.action.panel;
 
 import mapMaker.dialogs.action.ActionDialog;
 import mapMaker.dialogs.action.ActionPanel;
-import mapMaker.dialogs.action.ActionType;
 import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.ChoiceActionMatcher;
 import pattern.action.ChoiceMatcher;
@@ -14,7 +13,7 @@ import javax.swing.JTextField;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChoiceActionPanel extends ActionPanel {
+public class ChoiceActionPanel extends ActionPanel<ChoiceActionMatcher> {
     private final JTextField questionField;
 
     private final List<Choice> choices;
@@ -39,7 +38,7 @@ public class ChoiceActionPanel extends ActionPanel {
     }
 
     @Override
-    public ActionMatcher getActionMatcher(ActionType actionType) {
+    public ChoiceActionMatcher getActionMatcher() {
         ChoiceMatcher[] choiceMatchers = new ChoiceMatcher[this.choices.size()];
         for (int i = 0; i < choiceMatchers.length; i++) {
             choiceMatchers[i] = new ChoiceMatcher(
@@ -55,15 +54,14 @@ public class ChoiceActionPanel extends ActionPanel {
     }
 
     @Override
-    protected void load(ActionMatcher matcher) {
+    protected void load(ChoiceActionMatcher matcher) {
         if (matcher == null) {
             return;
         }
 
-        ChoiceActionMatcher choiceActionMatcher = (ChoiceActionMatcher)matcher;
-        this.questionField.setText(choiceActionMatcher.getQuestion());
+        this.questionField.setText(matcher.getQuestion());
 
-        ChoiceMatcher[] choiceMatchers = choiceActionMatcher.getChoices();
+        ChoiceMatcher[] choiceMatchers = matcher.getChoices();
         for (ChoiceMatcher choiceMatcher : choiceMatchers) {
             Choice choice = new Choice();
             choice.textField.setText(choiceMatcher.getText());

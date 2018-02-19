@@ -434,7 +434,7 @@
               "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
             },
             {
-              "className": "pattern.action.ActionMatcher$ReloadMapActionMatcher"
+              "className": "pattern.action.EmptyActionMatcher$ReloadMapActionMatcher"
             }
           ]
         }

@@ -2,10 +2,8 @@ package mapMaker.dialogs.action.panel;
 
 import mapMaker.dialogs.action.ActionDialog;
 import mapMaker.dialogs.action.ActionPanel;
-import mapMaker.dialogs.action.ActionType;
 import mapMaker.dialogs.action.PokemonDataPanel;
 import pattern.PokemonMatcher;
-import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.BattleActionMatcher;
 import trainer.Trainer;
 import util.GUIUtils;
@@ -21,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class BattleActionPanel extends ActionPanel {
+public class BattleActionPanel extends ActionPanel<BattleActionMatcher> {
     private static final long serialVersionUID = 4995985841899035558L;
 
     private final JPanel topComponent;
@@ -132,26 +130,24 @@ public class BattleActionPanel extends ActionPanel {
     }
 
     @Override
-    protected void load(ActionMatcher matcher) {
+    protected void load(BattleActionMatcher matcher) {
         if (matcher == null) {
             return;
         }
 
-        BattleActionMatcher battleMatcher = (BattleActionMatcher)matcher;
-
-        nameTextField.setText(battleMatcher.getName());
-        cashFormattedTextField.setValue(battleMatcher.getDatCashMoney());
-        maxPokemonLimitCheckBox.setSelected(battleMatcher.isMaxPokemonLimit());
-        updateInteractionTextField.setText(battleMatcher.getUpdateInteraction());
+        nameTextField.setText(matcher.getName());
+        cashFormattedTextField.setValue(matcher.getDatCashMoney());
+        maxPokemonLimitCheckBox.setSelected(matcher.isMaxPokemonLimit());
+        updateInteractionTextField.setText(matcher.getUpdateInteraction());
 
         pokemonPanels.clear();
-        for (PokemonMatcher pokemonMatcher : battleMatcher.getPokemon()) {
+        for (PokemonMatcher pokemonMatcher : matcher.getPokemon()) {
             addPokemonPanel(pokemonMatcher);
         }
     }
 
     @Override
-    public ActionMatcher getActionMatcher(ActionType actionType) {
+    public BattleActionMatcher getActionMatcher() {
         String name = nameTextField.getText().trim();
         int cashMoney = Integer.parseInt(cashFormattedTextField.getValue().toString());
         boolean isMaxLimit = maxPokemonLimitCheckBox.isSelected();

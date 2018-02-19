@@ -2,9 +2,7 @@ package mapMaker.dialogs.action.panel;
 
 import item.ItemNamesies;
 import mapMaker.dialogs.action.ActionPanel;
-import mapMaker.dialogs.action.ActionType;
 import pattern.PokemonMatcher;
-import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.GivePokemonActionMatcher;
 import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
@@ -16,7 +14,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class PokemonActionPanel extends ActionPanel {
+public class PokemonActionPanel extends ActionPanel<GivePokemonActionMatcher> {
     private final JTextField pokemonNameField;
     private final JFormattedTextField levelField;
     private final JCheckBox isEggCheckBox;
@@ -64,7 +62,7 @@ public class PokemonActionPanel extends ActionPanel {
     }
 
     @Override
-    public ActionMatcher getActionMatcher(ActionType actionType) {
+    public GivePokemonActionMatcher getActionMatcher() {
         final PokemonMatcher matcher;
         if (isEggCheckBox.isSelected()) {
             matcher = PokemonMatcher.createEggMatcher(PokemonNamesies.getValueOf(pokemonNameField.getText()));
@@ -83,10 +81,8 @@ public class PokemonActionPanel extends ActionPanel {
     }
 
     @Override
-    protected void load(ActionMatcher matcher) {
-        GivePokemonActionMatcher givePokemonActionMatcher = (GivePokemonActionMatcher)matcher;
-
-        PokemonMatcher pokemonMatcher = givePokemonActionMatcher.getPokemonMatcher();
+    protected void load(GivePokemonActionMatcher matcher) {
+        PokemonMatcher pokemonMatcher = matcher.getPokemonMatcher();
         if (!pokemonMatcher.isStarterEgg()) {
             this.pokemonNameField.setText(pokemonMatcher.getNamesies().getName());
 

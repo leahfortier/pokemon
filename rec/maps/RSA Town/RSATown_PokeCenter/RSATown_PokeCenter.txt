@@ -71,7 +71,7 @@
           "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
         },
         {
-          "className": "pattern.action.ActionMatcher$HealPartyActionMatcher"
+          "className": "pattern.action.EmptyActionMatcher$HealPartyActionMatcher"
         },
         {
           "dialogue": "Ouin Bugésuh ryja paah raymat!",

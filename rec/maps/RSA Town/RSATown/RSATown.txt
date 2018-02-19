@@ -204,7 +204,7 @@
               "className": "pattern.action.ActionMatcher$MoveNpcActionMatcher"
             },
             {
-              "className": "pattern.action.ActionMatcher$ReloadMapActionMatcher"
+              "className": "pattern.action.EmptyActionMatcher$ReloadMapActionMatcher"
             }
           ]
         },

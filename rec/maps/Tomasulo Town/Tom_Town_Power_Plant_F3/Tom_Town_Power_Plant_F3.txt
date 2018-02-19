@@ -127,7 +127,7 @@
               "className": "pattern.action.StringActionMatcher$GlobalActionMatcher"
             },
             {
-              "className": "pattern.action.ActionMatcher$ReloadMapActionMatcher"
+              "className": "pattern.action.EmptyActionMatcher$ReloadMapActionMatcher"
             }
           ]
         },

@@ -83,7 +83,7 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "className": "pattern.action.ActionMatcher$DayCareActionMatcher"
+              "className": "pattern.action.EmptyActionMatcher$DayCareActionMatcher"
             }
           ]
         }
