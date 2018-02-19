@@ -12,7 +12,7 @@ public class UseItemTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Game.getPlayer().getBag().useItem(this.useItem);
     }
 }

@@ -26,7 +26,7 @@ public class WalkingWildBattleTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         ActivePokemon front = Game.getPlayer().front();
 
         // TODO: What's going on with this random stuff also maybe this formula should be in the EncounterRate class

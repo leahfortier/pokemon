@@ -12,7 +12,7 @@ public class HaltTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         if (halted) {
             addHaltTrigger();
         } else {

@@ -8,7 +8,7 @@ public class HealPartyTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Game.getPlayer().healAll();
     }
 }

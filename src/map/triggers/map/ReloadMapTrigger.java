@@ -11,7 +11,7 @@ public class ReloadMapTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Player player = Game.getPlayer();
         MapData currentMap = Game.getData().getMap(player.getMapName());
 

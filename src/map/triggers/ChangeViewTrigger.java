@@ -14,7 +14,7 @@ public class ChangeViewTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Game.instance().setViewMode(this.view);
     }
 

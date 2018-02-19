@@ -14,7 +14,7 @@ public class MovePlayerTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         PlayerEntity playerEntity = Game.getPlayer().getEntity();
         playerEntity.setPath(this.path, playerEntity::unstall);
     }

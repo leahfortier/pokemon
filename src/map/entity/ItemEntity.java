@@ -7,6 +7,7 @@ import map.Direction;
 import map.condition.Condition;
 import map.triggers.DialogueTrigger;
 import map.triggers.GiveItemTrigger;
+import map.triggers.GlobalTrigger;
 import map.triggers.GroupTrigger;
 import map.triggers.MedalCountTrigger;
 import map.triggers.Trigger;
@@ -87,20 +88,15 @@ public class ItemEntity extends Entity {
                         "!";
 
         List<Trigger> triggers = new ArrayList<>();
+        triggers.add(new GlobalTrigger(this.getEntityName()));
         triggers.add(new DialogueTrigger(itemDialogue));
         triggers.add(new GiveItemTrigger(this.itemName, 1));
         if (this.isHidden) {
             triggers.add(new MedalCountTrigger(MedalTheme.HIDDEN_ITEMS_FOUND));
         }
 
-        GroupTriggerMatcher groupTriggerMatcher = new GroupTriggerMatcher("ItemEntity_" + this.getTriggerName(), triggers);
-
-        Trigger trigger = new GroupTrigger(groupTriggerMatcher, null);
-
         // This trigger will only call the item trigger when the conditions apply
-        GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getTriggerSuffix(), trigger);
-        matcher.addGlobals(this.getEntityName());
-
+        GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getTriggerSuffix(), triggers);
         new GroupTrigger(matcher, null).addData();
 
         dataCreated = true;

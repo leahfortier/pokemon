@@ -14,12 +14,12 @@ public class GroupTrigger extends Trigger {
     private final List<String> triggers;
 
     public GroupTrigger(GroupTriggerMatcher matcher, Condition condition) {
-        super(getTriggerSuffix(matcher), new AndCondition(condition, matcher.getCondition()), matcher.getGlobals());
+        super(getTriggerSuffix(matcher), new AndCondition(condition, matcher.getCondition()));
         this.triggers = matcher.getTriggers();
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         // Add all triggers in the group to the beginning of the message queue
         for (int i = triggers.size() - 1; i >= 0; i--) {
             String triggerName = triggers.get(i);

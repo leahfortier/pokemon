@@ -12,7 +12,7 @@ public class SoundTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         SoundPlayer.instance().playSound(soundTitle);
     }
 }

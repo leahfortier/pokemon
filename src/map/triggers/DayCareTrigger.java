@@ -13,7 +13,7 @@ public class DayCareTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Player player = Game.getPlayer();
         DayCareCenter dayCare = player.getDayCareCenter();
 

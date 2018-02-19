@@ -27,7 +27,7 @@ public class MoveNPCTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Player player = Game.getPlayer();
         PlayerEntity playerEntity = player.getEntity();
         playerEntity.stall();

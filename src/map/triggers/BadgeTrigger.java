@@ -15,7 +15,7 @@ public class BadgeTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Game.getPlayer().giveBadge(this.badge);
     }
 }

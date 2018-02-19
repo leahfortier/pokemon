@@ -16,7 +16,7 @@ public class ChoiceTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Messages.addToFront(new MessageUpdate(this.question).withChoices(this.choices));
     }
 }

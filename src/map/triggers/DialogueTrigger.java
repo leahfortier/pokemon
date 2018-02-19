@@ -12,7 +12,7 @@ public class DialogueTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Messages.addToFront(this.dialogue);
     }
 }

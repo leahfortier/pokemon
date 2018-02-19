@@ -16,7 +16,7 @@ public class WildBattleTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         WildPokemon wildPokemon = this.wildEncounter.getWildPokemon();
 
         Player player = Game.getPlayer();

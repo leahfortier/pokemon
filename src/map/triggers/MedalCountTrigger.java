@@ -12,7 +12,7 @@ public class MedalCountTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Game.getPlayer().getMedalCase().increase(medalTheme);
     }
 }

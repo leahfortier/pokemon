@@ -15,7 +15,7 @@ public class MapTransitionTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Player player = Game.getPlayer();
         player.setMap(mapTransitionMatcher);
         mapTransitionMatcher.setTransitionIndex();

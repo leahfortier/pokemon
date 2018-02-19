@@ -10,38 +10,20 @@ import trainer.player.medal.MedalTheme;
 import util.PokeString;
 import util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class Trigger {
     private final String name;
     private final ConditionSet condition;
-    private final List<String> globals;
 
     protected Trigger(String suffix) {
         this(suffix, null);
     }
 
     protected Trigger(String suffix, Condition condition) {
-        this(suffix, condition, null);
-    }
-
-    protected Trigger(String suffix, Condition condition, List<String> globals) {
         this.name = createName(this.getClass(), suffix);
-
         this.condition = new ConditionSet(condition);
-
-        this.globals = new ArrayList<>();
-        if (globals != null) {
-            this.globals.addAll(globals);
-        }
     }
 
-    public static String createName(Class<? extends Trigger> classy, String triggerSuffix) {
-        return classy.getSimpleName() + (StringUtils.isNullOrEmpty(triggerSuffix) ? "" : "_" + triggerSuffix);
-    }
-
-    protected abstract void executeTrigger();
+    public abstract void execute();
 
     // Evaluate the function, Should only be triggered when a player moves
     // into a map square that is defined to trigger this event
@@ -53,21 +35,13 @@ public abstract class Trigger {
         return this.name;
     }
 
-    public final void execute() {
-        for (String global : globals) {
-            if (global.startsWith("!")) {
-                Game.getPlayer().removeGlobal(global.substring(1));
-            } else {
-                Game.getPlayer().addGlobal(global);
-            }
-        }
-
-        this.executeTrigger();
-    }
-
     public Trigger addData() {
         Game.getData().addTrigger(this);
         return this;
+    }
+
+    public static String createName(Class<? extends Trigger> classy, String triggerSuffix) {
+        return classy.getSimpleName() + (StringUtils.isNullOrEmpty(triggerSuffix) ? "" : "_" + triggerSuffix);
     }
 
     public static void createCommonTriggers() {

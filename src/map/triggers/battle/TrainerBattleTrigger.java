@@ -33,7 +33,7 @@ public class TrainerBattleTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         trainer.healAll();
 
         Battle b = new Battle(trainer, this.npcUpdateInteraction);

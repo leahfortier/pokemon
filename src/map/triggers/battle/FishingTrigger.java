@@ -31,7 +31,7 @@ public class FishingTrigger extends Trigger {
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Player player = Game.getPlayer();
 
         ActivePokemon front = player.front();
