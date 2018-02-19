@@ -1,5 +1,9 @@
-package mapMaker.dialogs.action;
+package mapMaker.dialogs.action.panel;
 
+import mapMaker.dialogs.action.ActionDialog;
+import mapMaker.dialogs.action.ActionPanel;
+import mapMaker.dialogs.action.ActionType;
+import mapMaker.dialogs.action.PokemonDataPanel;
 import pattern.PokemonMatcher;
 import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.BattleActionMatcher;
@@ -17,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-class BattleActionPanel extends ActionPanel {
+public class BattleActionPanel extends ActionPanel {
     private static final long serialVersionUID = 4995985841899035558L;
 
     private final JPanel topComponent;
@@ -33,7 +37,7 @@ class BattleActionPanel extends ActionPanel {
 
     private final ActionDialog parentDialog;
 
-    BattleActionPanel(ActionDialog actionDialog) {
+    public BattleActionPanel(ActionDialog actionDialog) {
         this.parentDialog = actionDialog;
 
         pokemonPanels = new ArrayList<>();
@@ -151,6 +155,8 @@ class BattleActionPanel extends ActionPanel {
         String name = nameTextField.getText().trim();
         int cashMoney = Integer.parseInt(cashFormattedTextField.getValue().toString());
         boolean isMaxLimit = maxPokemonLimitCheckBox.isSelected();
+        String update = updateInteractionTextField.getText().trim();
+
         PokemonMatcher[] pokemon = new PokemonMatcher[pokemonPanels.size()];
         for (int i = 0; i < pokemon.length; i++) {
             PokemonMatcher pokemonData = pokemonPanels.get(i).getMatcher();
@@ -158,8 +164,6 @@ class BattleActionPanel extends ActionPanel {
                 pokemon[i] = pokemonData;
             }
         }
-
-        String update = updateInteractionTextField.getText().trim();
 
         return new BattleActionMatcher(name, cashMoney, isMaxLimit, pokemon, update);
     }

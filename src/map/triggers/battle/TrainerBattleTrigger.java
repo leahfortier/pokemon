@@ -10,15 +10,10 @@ import pattern.action.UpdateMatcher;
 import pokemon.PartyPokemon;
 import trainer.EnemyTrainer;
 import util.RandomUtils;
-import util.SerializationUtils;
 
 public class TrainerBattleTrigger extends Trigger {
     private final EnemyTrainer trainer;
     private final UpdateMatcher npcUpdateInteraction;
-
-    public TrainerBattleTrigger(String contents, Condition condition) {
-        this(SerializationUtils.deserializeJson(contents, BattleActionMatcher.class), condition);
-    }
 
     public TrainerBattleTrigger(BattleActionMatcher matcher, Condition condition) {
         super(matcher.getJson(), condition);

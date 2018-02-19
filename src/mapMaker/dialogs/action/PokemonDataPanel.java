@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.util.List;
 
-class PokemonDataPanel extends JPanel {
+public class PokemonDataPanel extends JPanel {
     private static final long serialVersionUID = 2679616277402077123L;
 
     private final JTextField nameTextField;
@@ -33,7 +33,7 @@ class PokemonDataPanel extends JPanel {
     // Fucking Java won't let this be final
     private JComboBox<String> moveComboBox;
 
-    PokemonDataPanel(PokemonMatcher pokemonMatcher) {
+    public PokemonDataPanel(PokemonMatcher pokemonMatcher) {
 
         selectedCheckBox = GUIUtils.createCheckBox();
         nameTextField = GUIUtils.createColorConditionTextField(new ColorCondition() {
@@ -90,7 +90,7 @@ class PokemonDataPanel extends JPanel {
         load(pokemonMatcher);
     }
 
-    PokemonMatcher getMatcher() {
+    public PokemonMatcher getMatcher() {
         PokemonNamesies namesies = PokemonNamesies.tryValueOf(nameTextField.getText().trim());
         if (namesies == null) {
             return null;

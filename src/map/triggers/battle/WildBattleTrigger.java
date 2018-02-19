@@ -7,14 +7,9 @@ import map.overworld.WildEncounter;
 import map.triggers.Trigger;
 import trainer.WildPokemon;
 import trainer.player.Player;
-import util.SerializationUtils;
 
 public class WildBattleTrigger extends Trigger {
     private final WildEncounter wildEncounter;
-
-    public WildBattleTrigger(String matcherJson, Condition condition) {
-        this(SerializationUtils.deserializeJson(matcherJson, WildEncounter.class), condition);
-    }
 
     public WildBattleTrigger(WildEncounter wildEncounter, Condition condition) {
         super(wildEncounter.getJson(), condition);

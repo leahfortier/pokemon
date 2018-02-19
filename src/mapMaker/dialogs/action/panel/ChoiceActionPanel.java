@@ -1,5 +1,8 @@
-package mapMaker.dialogs.action;
+package mapMaker.dialogs.action.panel;
 
+import mapMaker.dialogs.action.ActionDialog;
+import mapMaker.dialogs.action.ActionPanel;
+import mapMaker.dialogs.action.ActionType;
 import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.ChoiceActionMatcher;
 import pattern.action.ChoiceMatcher;
@@ -11,16 +14,15 @@ import javax.swing.JTextField;
 import java.util.ArrayList;
 import java.util.List;
 
-class ChoiceActionPanel extends ActionPanel {
-
-    private final ActionDialog parent;
-
+public class ChoiceActionPanel extends ActionPanel {
     private final JTextField questionField;
 
     private final List<Choice> choices;
     private final JButton newChoiceButton;
 
-    ChoiceActionPanel(ActionDialog parent) {
+    private final ActionDialog parent;
+
+    public ChoiceActionPanel(ActionDialog parent) {
         this.parent = parent;
 
         questionField = GUIUtils.createTextField();

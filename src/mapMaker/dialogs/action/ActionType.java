@@ -1,42 +1,53 @@
 package mapMaker.dialogs.action;
 
-import mapMaker.dialogs.action.trigger.TriggerActionPanel;
+import gui.view.ViewMode;
+import mapMaker.dialogs.action.panel.BattleActionPanel;
+import mapMaker.dialogs.action.panel.ChoiceActionPanel;
+import mapMaker.dialogs.action.panel.EmptyActionPanel;
+import mapMaker.dialogs.action.panel.EnumActionPanel;
+import mapMaker.dialogs.action.panel.GiveItemActionPanel;
+import mapMaker.dialogs.action.panel.MoveNpcActionPanel;
+import mapMaker.dialogs.action.panel.PokemonActionPanel;
+import mapMaker.dialogs.action.panel.StringActionPanel;
+import mapMaker.dialogs.action.panel.StringActionPanel.ItemActionPanel;
+import mapMaker.dialogs.action.panel.TradePokemonActionPanel;
+import sound.SoundTitle;
+import trainer.player.Badge;
+import trainer.player.medal.MedalTheme;
 
 public enum ActionType {
-    // Custom Panels
-    TRIGGER(TriggerActionPanel::new),
+    BADGE("Badge", Badge.values()),
     BATTLE(BattleActionPanel::new),
+    CHANGE_VIEW("View Mode", ViewMode.values()),
     CHOICE(ChoiceActionPanel::new),
-
-    // TODO: Custom
-    GIVE_POKEMON(dialog -> new EmptyActionPanel()),
-    TRADE_POKEMON(dialog -> new EmptyActionPanel()),
-    MOVE_NPC(dialog -> new EmptyActionPanel()),
-    FISHING(dialog -> new EmptyActionPanel()),
-
-    // Empty Panels
-    HEAL_PARTY(dialog -> new EmptyActionPanel()),
     DAY_CARE(dialog -> new EmptyActionPanel()),
+    DIALOGUE("Dialogue"),
+    GIVE_ITEM(dialog -> new GiveItemActionPanel()),
+    GIVE_POKEMON(dialog -> new PokemonActionPanel()),
+    GLOBAL("Global Name"),
+    GROUP_TRIGGER("Trigger Name"),
+    HEAL_PARTY(dialog -> new EmptyActionPanel()),
+    MEDAL_COUNT("Medal", MedalTheme.values()),
+    MOVE_NPC(dialog -> new MoveNpcActionPanel()),
+    MOVE_PLAYER("Player Path"),
     RELOAD_MAP(dialog -> new EmptyActionPanel()),
+    SOUND("Sound Title", SoundTitle.values()),
+    TRADE_POKEMON(dialog -> new TradePokemonActionPanel()),
+    UPDATE("Update Name"),
+    USE_ITEM(dialog -> new ItemActionPanel()),
 
-    // TODO: Item Panels
-    USE_ITEM(dialog -> new StringActionPanel("Item Name")),
-    GIVE_ITEM(dialog -> new StringActionPanel("Item Name")),
-
-    // TODO: Enum Panels
-    BADGE(dialog -> new StringActionPanel("Badge Name")),
-    CHANGE_VIEW(dialog -> new StringActionPanel("Change View")),
-    SOUND(dialog -> new StringActionPanel("Sound Title")),
-    MEDAL_COUNT(dialog -> new StringActionPanel("Medal Count")),
-
-    // String Panels
-    DIALOGUE(dialog -> new StringActionPanel("Dialogue")),
-    UPDATE(dialog -> new StringActionPanel("Update Name")),
-    GROUP_TRIGGER(dialog -> new StringActionPanel("Trigger Name")),
-    GLOBAL(dialog -> new StringActionPanel("Global Name")),
-    MOVE_PLAYER(dialog -> new StringActionPanel("Player Path"));
+    // TODO: This should be removed and so should the FishingActionMatcher
+    FISHING(dialog -> new EmptyActionPanel());
 
     private final ActionDataCreator actionDataCreator;
+
+    ActionType(String stringActionPanelLabel) {
+        this(dialog -> new StringActionPanel(stringActionPanelLabel));
+    }
+
+    <T extends Enum> ActionType(String enumTriggerPanelLabel, T[] enumValues) {
+        this(dialog -> new EnumActionPanel<>(enumTriggerPanelLabel, enumValues));
+    }
 
     ActionType(ActionDataCreator actionDataCreator) {
         this.actionDataCreator = actionDataCreator;

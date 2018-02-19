@@ -64,7 +64,7 @@ public class MapTest extends BaseTest {
             for (ActionMatcher action : getAllActions(map)) {
                 if (action instanceof GlobalActionMatcher) {
                     GlobalActionMatcher globalActionMatcher = (GlobalActionMatcher)action;
-                    String globalName = globalActionMatcher.getActionString();
+                    String globalName = globalActionMatcher.getStringValue();
                     Assert.assertFalse(addedGlobals.contains(globalName));
                     addedGlobals.add(globalName);
                 }
@@ -185,7 +185,7 @@ public class MapTest extends BaseTest {
         for (TestMap map : maps) {
             for (ActionMatcher action : getAllActions(map)) {
                 if (action instanceof DialogueActionMatcher) {
-                    String dialogue = ((DialogueActionMatcher)action).getActionString();
+                    String dialogue = ((DialogueActionMatcher)action).getStringValue();
                     Assert.assertFalse(map.getName() + " " + dialogue, dialogue.contains("Poke"));
                 }
             }

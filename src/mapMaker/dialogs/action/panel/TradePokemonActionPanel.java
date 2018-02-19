@@ -1,18 +1,20 @@
-package mapMaker.dialogs.action.trigger;
+package mapMaker.dialogs.action.panel;
 
-import pattern.TradePokemonMatcher;
+import mapMaker.dialogs.action.ActionPanel;
+import mapMaker.dialogs.action.ActionType;
+import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher.TradePokemonActionMatcher;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
 import util.GUIUtils;
-import util.SerializationUtils;
 
 import javax.swing.JTextField;
 
-public class TradePokemonTriggerPanel extends TriggerContentsPanel {
+public class TradePokemonActionPanel extends ActionPanel {
     private final JTextField requestedNameField;
     private final JTextField tradeNameField;
 
-    public TradePokemonTriggerPanel() {
+    public TradePokemonActionPanel() {
         this.requestedNameField = GUIUtils.createColorConditionTextField(new ColorCondition() {
             @Override
             public boolean greenCondition() {
@@ -35,17 +37,17 @@ public class TradePokemonTriggerPanel extends TriggerContentsPanel {
     }
 
     @Override
-    protected void load(String triggerContents) {
-        TradePokemonMatcher matcher = SerializationUtils.deserializeJson(triggerContents, TradePokemonMatcher.class);
-        requestedNameField.setText(matcher.getRequested().getName());
-        tradeNameField.setText(matcher.getTradePokemon().getName());
-    }
-
-    @Override
-    protected String getTriggerContents() {
+    public ActionMatcher getActionMatcher(ActionType actionType) {
         PokemonNamesies requested = PokemonNamesies.tryValueOf(requestedNameField.getText());
         PokemonNamesies tradePokemon = PokemonNamesies.tryValueOf(tradeNameField.getText());
 
-        return new TradePokemonMatcher(requested, tradePokemon).getJson();
+        return new TradePokemonActionMatcher(requested, tradePokemon);
+    }
+
+    @Override
+    protected void load(ActionMatcher matcher) {
+        TradePokemonActionMatcher tradeMatcher = (TradePokemonActionMatcher)matcher;
+        requestedNameField.setText(tradeMatcher.getRequested().getName());
+        tradeNameField.setText(tradeMatcher.getTradePokemon().getName());
     }
 }

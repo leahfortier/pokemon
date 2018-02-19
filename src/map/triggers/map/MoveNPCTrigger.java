@@ -13,7 +13,6 @@ import map.triggers.Trigger;
 import pattern.action.ActionMatcher.MoveNpcActionMatcher;
 import trainer.player.Player;
 import util.Point;
-import util.SerializationUtils;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
@@ -22,10 +21,6 @@ import java.util.Set;
 
 public class MoveNPCTrigger extends Trigger {
     private final MoveNpcActionMatcher matcher;
-
-    public MoveNPCTrigger(String contents, Condition condition) {
-        this(SerializationUtils.deserializeJson(contents, MoveNpcActionMatcher.class), condition);
-    }
 
     public MoveNPCTrigger(MoveNpcActionMatcher matcher, Condition condition) {
         super(matcher.getJson(), condition);

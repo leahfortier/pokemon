@@ -6,14 +6,9 @@ import map.condition.Condition;
 import map.triggers.Trigger;
 import pattern.map.MapTransitionMatcher;
 import trainer.player.Player;
-import util.SerializationUtils;
 
 public class MapTransitionTrigger extends Trigger {
     private final MapTransitionMatcher mapTransitionMatcher;
-
-    public MapTransitionTrigger(String contents, Condition condition) {
-        this(SerializationUtils.deserializeJson(contents, MapTransitionMatcher.class), condition);
-    }
 
     public MapTransitionTrigger(MapTransitionMatcher matcher, Condition condition) {
         super(matcher.getPreviousMap() + "_" + matcher.getNextMap() + "_" + matcher.getNextEntranceName(), condition);

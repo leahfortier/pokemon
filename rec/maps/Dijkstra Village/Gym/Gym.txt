@@ -89,7 +89,7 @@
             },
             {
               "badge": "SECOND",
-              "className": "pattern.action.ActionMatcher$BadgeActionMatcher"
+              "className": "pattern.action.EnumActionMatcher$BadgeActionMatcher"
             }
           ]
         },

@@ -64,7 +64,7 @@
         },
         {
           "soundTitle": "POKE_CENTER_HEAL",
-          "className": "pattern.action.ActionMatcher$SoundActionMatcher"
+          "className": "pattern.action.EnumActionMatcher$SoundActionMatcher"
         },
         {
           "dialogue": "Tih Tih Tih-Tih Tih!",
@@ -83,7 +83,7 @@
         },
         {
           "medalTheme": "POKE_CENTER_HEALS",
-          "className": "pattern.action.ActionMatcher$MedalCountActionMatcher"
+          "className": "pattern.action.EnumActionMatcher$MedalCountActionMatcher"
         }
       ],
       "location": [
@@ -103,7 +103,7 @@
         },
         {
           "viewMode": "MART_VIEW",
-          "className": "pattern.action.ActionMatcher$ChangeViewActionMatcher"
+          "className": "pattern.action.EnumActionMatcher$ChangeViewActionMatcher"
         }
       ],
       "location": [

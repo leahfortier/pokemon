@@ -13,17 +13,17 @@ import mapMaker.dialogs.action.ActionType;
 import pattern.GroupTriggerMatcher;
 
 public abstract class StringActionMatcher extends ActionMatcher {
-    public abstract String getActionString();
+    public abstract String getStringValue();
 
     public static class UpdateActionMatcher extends StringActionMatcher {
-        public String update;
+        private String update;
 
         public UpdateActionMatcher(String update) {
             this.update = update;
         }
 
         @Override
-        public String getActionString() {
+        public String getStringValue() {
             return this.update;
         }
 
@@ -34,7 +34,7 @@ public abstract class StringActionMatcher extends ActionMatcher {
 
         @Override
         protected Trigger getTrigger(String entityName, Condition condition) {
-            return new UpdateTrigger(new UpdateMatcher(entityName, update), null);
+            return new UpdateTrigger(new UpdateMatcher(entityName, update), condition);
         }
     }
 
@@ -46,7 +46,7 @@ public abstract class StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public String getActionString() {
+        public String getStringValue() {
             return this.groupTrigger;
         }
 
@@ -64,7 +64,7 @@ public abstract class StringActionMatcher extends ActionMatcher {
                 return data.getTrigger(triggerName);
             }
 
-            return new GroupTrigger(new GroupTriggerMatcher(this.groupTrigger), null);
+            return new GroupTrigger(new GroupTriggerMatcher(this.groupTrigger), condition);
         }
     }
 
@@ -76,7 +76,7 @@ public abstract class StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public String getActionString() {
+        public String getStringValue() {
             return this.global;
         }
 
@@ -87,7 +87,7 @@ public abstract class StringActionMatcher extends ActionMatcher {
 
         @Override
         protected Trigger getTrigger(String entityName, Condition condition) {
-            return new GlobalTrigger(global, null);
+            return new GlobalTrigger(global, condition);
         }
     }
 
@@ -109,7 +109,7 @@ public abstract class StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public String getActionString() {
+        public String getStringValue() {
             return dialogue;
         }
     }
@@ -132,7 +132,7 @@ public abstract class StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public String getActionString() {
+        public String getStringValue() {
             return path;
         }
     }

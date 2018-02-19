@@ -16,7 +16,7 @@ public class ActionDialog extends TriggerDialog<ActionMatcher> {
 
     private final JComboBox<ActionType> actionComboBox;
 
-    ActionDialog(ActionMatcher actionMatcher) {
+    public ActionDialog(ActionMatcher actionMatcher) {
         super("New Action Dialog");
 
         this.actionComboBox = GUIUtils.createComboBox(ActionType.values(), event -> render());

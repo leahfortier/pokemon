@@ -61,7 +61,7 @@
             },
             {
               "viewMode": "BERRY_VIEW",
-              "className": "pattern.action.ActionMatcher$ChangeViewActionMatcher"
+              "className": "pattern.action.EnumActionMatcher$ChangeViewActionMatcher"
             }
           ]
         }
@@ -110,7 +110,7 @@
             },
             {
               "viewMode": "MOVE_RELEARNER_VIEW",
-              "className": "pattern.action.ActionMatcher$ChangeViewActionMatcher"
+              "className": "pattern.action.EnumActionMatcher$ChangeViewActionMatcher"
             }
           ]
         }

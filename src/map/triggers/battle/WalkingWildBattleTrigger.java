@@ -15,15 +15,10 @@ import message.Messages;
 import pattern.map.WildBattleMatcher;
 import pokemon.PokemonNamesies;
 import util.RandomUtils;
-import util.SerializationUtils;
 
 public class WalkingWildBattleTrigger extends Trigger {
     private final WildEncounterInfo[] wildEncounters;
     private final EncounterRate encounterRate;
-
-    public WalkingWildBattleTrigger(String matcherJson, Condition condition) {
-        this(SerializationUtils.deserializeJson(matcherJson, WildBattleMatcher.class), condition);
-    }
 
     public WalkingWildBattleTrigger(WildBattleMatcher matcher, Condition condition) {
         super(matcher.getJson(), new AndCondition(condition, matcher.getCondition()));

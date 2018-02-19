@@ -1,18 +1,13 @@
 package pattern.action;
 
-import gui.view.ViewMode;
 import item.ItemNamesies;
 import map.condition.Condition;
-import map.triggers.BadgeTrigger;
-import map.triggers.ChangeViewTrigger;
 import map.triggers.ChoiceTrigger;
 import map.triggers.DayCareTrigger;
 import map.triggers.GiveItemTrigger;
 import map.triggers.GivePokemonTrigger;
 import map.triggers.GroupTrigger;
 import map.triggers.HealPartyTrigger;
-import map.triggers.MedalCountTrigger;
-import map.triggers.SoundTrigger;
 import map.triggers.TradePokemonTrigger;
 import map.triggers.Trigger;
 import map.triggers.UseItemTrigger;
@@ -26,10 +21,7 @@ import pattern.JsonMatcher;
 import pattern.PokemonMatcher;
 import pattern.map.FishingMatcher;
 import pokemon.PokemonNamesies;
-import sound.SoundTitle;
 import trainer.Trainer;
-import trainer.player.Badge;
-import trainer.player.medal.MedalTheme;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,47 +77,15 @@ public abstract class ActionMatcher implements JsonMatcher {
         }
     }
 
-    public static class BadgeActionMatcher extends ActionMatcher {
-        private Badge badge;
-
-        public BadgeActionMatcher(Badge badge) {
-            this.badge = badge;
-        }
-
-        @Override
-        public ActionType getActionType() {
-            return ActionType.BADGE;
-        }
-
-        @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
-            return new BadgeTrigger(this.badge, condition);
-        }
-    }
-
-    public static class ChangeViewActionMatcher extends ActionMatcher {
-        private ViewMode viewMode;
-
-        public ChangeViewActionMatcher(ViewMode viewMode) {
-            this.viewMode = viewMode;
-        }
-
-        @Override
-        public ActionType getActionType() {
-            return ActionType.CHANGE_VIEW;
-        }
-
-        @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
-            return new ChangeViewTrigger(this.viewMode, condition);
-        }
-    }
-
     public static class GivePokemonActionMatcher extends ActionMatcher {
         private PokemonMatcher pokemonMatcher;
 
         public GivePokemonActionMatcher(PokemonMatcher pokemonMatcher) {
             this.pokemonMatcher = pokemonMatcher;
+        }
+
+        public PokemonMatcher getPokemonMatcher() {
+            return this.pokemonMatcher;
         }
 
         @Override
@@ -149,6 +109,14 @@ public abstract class ActionMatcher implements JsonMatcher {
             this.quantity = quantity;
         }
 
+        public ItemNamesies getItem() {
+            return this.giveItem;
+        }
+
+        public int getQuantity() {
+            return this.quantity;
+        }
+
         @Override
         public ActionType getActionType() {
             return ActionType.GIVE_ITEM;
@@ -165,6 +133,10 @@ public abstract class ActionMatcher implements JsonMatcher {
 
         public UseItemActionMatcher(ItemNamesies useItem) {
             this.useItem = useItem;
+        }
+
+        public ItemNamesies getItem() {
+            return this.useItem;
         }
 
         @Override
@@ -343,42 +315,6 @@ public abstract class ActionMatcher implements JsonMatcher {
         @Override
         protected Trigger getTrigger(String entityName, Condition condition) {
             return new FishingTrigger(matcher, condition);
-        }
-    }
-
-    public static class SoundActionMatcher extends ActionMatcher {
-        private SoundTitle soundTitle;
-
-        public SoundActionMatcher(SoundTitle soundTitle) {
-            this.soundTitle = soundTitle;
-        }
-
-        @Override
-        public ActionType getActionType() {
-            return ActionType.SOUND;
-        }
-
-        @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
-            return new SoundTrigger(soundTitle, condition);
-        }
-    }
-
-    public static class MedalCountActionMatcher extends ActionMatcher {
-        private MedalTheme medalTheme;
-
-        public MedalCountActionMatcher(MedalTheme medalTheme) {
-            this.medalTheme = medalTheme;
-        }
-
-        @Override
-        public ActionType getActionType() {
-            return ActionType.MEDAL_COUNT;
-        }
-
-        @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
-            return new MedalCountTrigger(medalTheme, condition);
         }
     }
 }

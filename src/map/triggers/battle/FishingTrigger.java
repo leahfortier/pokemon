@@ -20,16 +20,11 @@ import pokemon.ability.AbilityNamesies;
 import trainer.player.Player;
 import trainer.player.medal.MedalTheme;
 import util.RandomUtils;
-import util.SerializationUtils;
 
 public class FishingTrigger extends Trigger {
     public static final String FISHING_GLOBAL = "isFishing";
 
     private final WildEncounterInfo[] wildEncounters;
-
-    public FishingTrigger(String matcherJson, Condition condition) {
-        this(SerializationUtils.deserializeJson(matcherJson, FishingMatcher.class), condition);
-    }
 
     public FishingTrigger(FishingMatcher matcher, Condition condition) {
         super(matcher.getJson(), new AndCondition(condition, new ItemCondition(ItemNamesies.FISHING_ROD)));
