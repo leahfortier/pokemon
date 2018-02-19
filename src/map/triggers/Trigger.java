@@ -61,8 +61,9 @@ public abstract class Trigger {
         this.executeTrigger();
     }
 
-    public void addData() {
+    public Trigger addData() {
         Game.getData().addTrigger(this);
+        return this;
     }
 
     public static void createCommonTriggers() {

@@ -1,6 +1,5 @@
 package pattern.action;
 
-import gui.GameData;
 import main.Game;
 import map.condition.Condition;
 import map.triggers.DialogueTrigger;
@@ -10,7 +9,6 @@ import map.triggers.Trigger;
 import map.triggers.UpdateTrigger;
 import map.triggers.map.MovePlayerTrigger;
 import mapMaker.dialogs.action.ActionType;
-import pattern.GroupTriggerMatcher;
 
 public interface StringActionMatcher extends ActionMatcher {
     String getStringValue();
@@ -57,14 +55,8 @@ public interface StringActionMatcher extends ActionMatcher {
 
         @Override
         public Trigger createNewTrigger(String entityName, Condition condition) {
-            GameData data = Game.getData();
-
             String triggerName = Trigger.createName(GroupTrigger.class, this.groupTrigger);
-            if (data.hasTrigger(triggerName)) {
-                return data.getTrigger(triggerName);
-            }
-
-            return new GroupTrigger(new GroupTriggerMatcher(this.groupTrigger), condition);
+            return Game.getData().getTrigger(triggerName);
         }
     }
 

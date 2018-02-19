@@ -98,7 +98,7 @@ public class MapData {
 
             List<Point> exits = matcher.getExitLocations();
             if (exits != null) {
-                Trigger trigger = new MapTransitionTrigger(matcher, null);
+                Trigger trigger = new MapTransitionTrigger(matcher, null).addData();
                 exits.forEach(exit -> triggers.put(getMapIndex(exit), trigger.getName()));
             }
         }

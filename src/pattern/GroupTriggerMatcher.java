@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GroupTriggerMatcher extends TriggerMatcher {
     private String[] triggers;
@@ -21,10 +20,11 @@ public class GroupTriggerMatcher extends TriggerMatcher {
 
     public GroupTriggerMatcher(final String suffix, final Trigger... triggers) {
         this.suffix = suffix;
-        this.triggers = Arrays.stream(triggers)
-                              .map(Trigger::getName)
-                              .collect(Collectors.toList())
-                              .toArray(new String[0]);
+        this.triggers = new String[triggers.length];
+        for (int i = 0; i < triggers.length; i++) {
+            this.triggers[i] = triggers[i].getName();
+            triggers[i].addData();
+        }
     }
 
     public String getSuffix() {
