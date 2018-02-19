@@ -12,10 +12,10 @@ import map.triggers.map.MovePlayerTrigger;
 import mapMaker.dialogs.action.ActionType;
 import pattern.GroupTriggerMatcher;
 
-public abstract class StringActionMatcher extends ActionMatcher {
-    public abstract String getStringValue();
+public interface StringActionMatcher extends ActionMatcher {
+    String getStringValue();
 
-    public static class UpdateActionMatcher extends StringActionMatcher {
+    class UpdateActionMatcher implements StringActionMatcher {
         private String update;
 
         public UpdateActionMatcher(String update) {
@@ -33,12 +33,12 @@ public abstract class StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new UpdateTrigger(new UpdateMatcher(entityName, update), condition);
         }
     }
 
-    public static class GroupTriggerActionMatcher extends StringActionMatcher {
+    class GroupTriggerActionMatcher implements StringActionMatcher {
         public String groupTrigger;
 
         public GroupTriggerActionMatcher(String groupTrigger) {
@@ -56,7 +56,7 @@ public abstract class StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             GameData data = Game.getData();
 
             String triggerName = Trigger.createName(GroupTrigger.class, this.groupTrigger);
@@ -68,7 +68,7 @@ public abstract class StringActionMatcher extends ActionMatcher {
         }
     }
 
-    public static class GlobalActionMatcher extends StringActionMatcher {
+    class GlobalActionMatcher implements StringActionMatcher {
         public String global;
 
         public GlobalActionMatcher(String global) {
@@ -86,12 +86,12 @@ public abstract class StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new GlobalTrigger(global, condition);
         }
     }
 
-    public static class DialogueActionMatcher extends StringActionMatcher {
+    class DialogueActionMatcher implements StringActionMatcher {
         private String dialogue;
 
         public DialogueActionMatcher(String dialogue) {
@@ -104,7 +104,7 @@ public abstract class StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new DialogueTrigger(this.dialogue, condition);
         }
 
@@ -114,7 +114,7 @@ public abstract class StringActionMatcher extends ActionMatcher {
         }
     }
 
-    public static class MovePlayerActionMatcher extends StringActionMatcher {
+    class MovePlayerActionMatcher implements StringActionMatcher {
         private String path;
 
         public MovePlayerActionMatcher(String path) {
@@ -127,7 +127,7 @@ public abstract class StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new MovePlayerTrigger(path, condition);
         }
 

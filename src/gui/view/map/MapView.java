@@ -292,7 +292,7 @@ public class MapView extends View {
 
         // Check if the next message is a trigger and execute if it is
         if (currentMessage.trigger()) {
-            Trigger trigger = Game.getData().getTrigger(currentMessage.getTriggerName());
+            Trigger trigger = currentMessage.getTrigger();
             if (trigger.isTriggered()) {
                 trigger.execute();
                 if (!this.isState(VisualState.MESSAGE)) {

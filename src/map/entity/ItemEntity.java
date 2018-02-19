@@ -3,7 +3,6 @@ package map.entity;
 import gui.TileSet;
 import item.ItemNamesies;
 import item.use.TechnicalMachine;
-import main.Game;
 import map.Direction;
 import map.condition.Condition;
 import map.triggers.DialogueTrigger;
@@ -102,7 +101,7 @@ public class ItemEntity extends Entity {
         GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getTriggerSuffix(), trigger);
         matcher.addGlobals(this.getEntityName());
 
-        Game.getData().addTrigger(new GroupTrigger(matcher, null));
+        new GroupTrigger(matcher, null).addData();
 
         dataCreated = true;
     }

@@ -24,7 +24,7 @@ public class HaltTrigger extends Trigger {
     public static void addHaltTrigger() {
         halted = true;
         Trigger trigger = new HaltTrigger(null);
-        Messages.addToFront(new MessageUpdate().withTrigger(trigger.getName()));
+        Messages.addToFront(new MessageUpdate().withTrigger(trigger));
     }
 
     public static void resume() {

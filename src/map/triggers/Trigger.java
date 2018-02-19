@@ -1,6 +1,5 @@
 package map.triggers;
 
-import gui.GameData;
 import gui.view.ViewMode;
 import main.Game;
 import map.condition.Condition;
@@ -32,8 +31,6 @@ public abstract class Trigger {
         if (globals != null) {
             this.globals.addAll(globals);
         }
-
-        Game.getData().addTrigger(this);
     }
 
     public static String createName(Class<? extends Trigger> classy, String triggerSuffix) {
@@ -64,17 +61,18 @@ public abstract class Trigger {
         this.executeTrigger();
     }
 
-    public static void createCommonTriggers() {
-        // Explicitly add trigger even though it happens in the constructor since it looks weird and just in case it changes
-        GameData data = Game.getData();
+    public void addData() {
+        Game.getData().addTrigger(this);
+    }
 
+    public static void createCommonTriggers() {
         // PC Start Up
         GroupTriggerMatcher loadPC = new GroupTriggerMatcher(
                 "LoadPC",
                 new DialogueTrigger("Starting up PC...", null),
                 new ChangeViewTrigger(ViewMode.PC_VIEW, null)
         );
-        data.addTrigger(new GroupTrigger(loadPC, null));
+        new GroupTrigger(loadPC, null).addData();
 
         // Mart Bro
         GroupTriggerMatcher loadMart = new GroupTriggerMatcher(
@@ -82,7 +80,7 @@ public abstract class Trigger {
                 new DialogueTrigger("Welcome to the " + PokeString.POKE + "Mart!", null),
                 new ChangeViewTrigger(ViewMode.MART_VIEW, null)
         );
-        data.addTrigger(new GroupTrigger(loadMart, null));
+        new GroupTrigger(loadMart, null).addData();
 
         // PokeCenter Healing
         // NOTE: If this is changed in any way, please also change the RSA Town Pokecenter trigger manually
@@ -97,7 +95,7 @@ public abstract class Trigger {
                 new DialogueTrigger("I hope to see you again soon!", null),
                 new MedalCountTrigger(MedalTheme.POKE_CENTER_HEALS.name(), null)
         );
-        data.addTrigger(new GroupTrigger(pokeCenterHeal, null));
+        new GroupTrigger(pokeCenterHeal, null).addData();
 
         // Egg hatching
         GroupTriggerMatcher eggHatching = new GroupTriggerMatcher(
@@ -105,6 +103,6 @@ public abstract class Trigger {
                 new DialogueTrigger("Huh?", null),
                 new ChangeViewTrigger(ViewMode.EVOLUTION_VIEW, null)
         );
-        data.addTrigger(new GroupTrigger(eggHatching, null));
+        new GroupTrigger(eggHatching, null).addData();
     }
 }

@@ -50,7 +50,7 @@ public class RepelInfo implements Serializable {
                     );
 
                     Trigger choiceTrigger = new ChoiceTrigger(choice, null);
-                    Messages.add(new MessageUpdate().withTrigger(choiceTrigger.getName()));
+                    Messages.add(new MessageUpdate().withTrigger(choiceTrigger));
                 }
             }
         } else {

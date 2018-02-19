@@ -42,7 +42,7 @@ public class WalkingWildBattleTrigger extends Trigger {
             }
 
             Trigger wildBattle = new WildBattleTrigger(wildPokemon, null);
-            Messages.add(new MessageUpdate().withTrigger(wildBattle.getName()));
+            Messages.add(new MessageUpdate().withTrigger(wildBattle));
         }
     }
 

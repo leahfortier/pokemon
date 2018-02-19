@@ -20,6 +20,6 @@ public class ChangeViewTrigger extends Trigger {
     }
 
     public static void addChangeViewTriggerMessage(ViewMode viewMode) {
-        Messages.add(new MessageUpdate().withTrigger(new ChangeViewTrigger(viewMode, null).getName()));
+        Messages.add(new MessageUpdate().withTrigger(new ChangeViewTrigger(viewMode, null)));
     }
 }

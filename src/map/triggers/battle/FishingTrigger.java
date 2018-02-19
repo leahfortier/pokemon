@@ -54,11 +54,11 @@ public class FishingTrigger extends Trigger {
             );
 
             Trigger group = new GroupTrigger(matcher, null);
-            Messages.add(new MessageUpdate().withTrigger(group.getName()));
+            Messages.add(new MessageUpdate().withTrigger(group));
 
             player.getMedalCase().increase(MedalTheme.FISH_REELED_IN);
         } else {
-            Messages.add(new MessageUpdate().withTrigger(new DialogueTrigger("No dice.", null).getName()));
+            Messages.add(new MessageUpdate().withTrigger(new DialogueTrigger("No dice.", null)));
         }
     }
 }

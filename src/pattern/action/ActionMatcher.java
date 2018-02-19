@@ -24,60 +24,62 @@ import pokemon.PokemonNamesies;
 import trainer.Trainer;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-public abstract class ActionMatcher implements JsonMatcher {
-    public abstract ActionType getActionType();
+public interface ActionMatcher extends JsonMatcher {
+    ActionType getActionType();
+    Trigger createNewTrigger(String entityName, Condition condition);
 
-    protected abstract Trigger getTrigger(String entityName, Condition condition);
-
-    public static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, Condition condition, List<ActionMatcher> actions) {
-        final Trigger[] actionTriggers = actions.stream()
-                                                .map(action -> action.getTrigger(entityName, condition))
-                                                .collect(Collectors.toList())
-                                                .toArray(new Trigger[0]);
+    static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, Condition condition, List<ActionMatcher> actions) {
+        final Trigger[] actionTriggers = new Trigger[actions.size()];
+        for (int i = 0; i < actions.size(); i++) {
+            actionTriggers[i] = actions.get(i).createNewTrigger(entityName, condition);
+            actionTriggers[i].addData();
+        }
 
         GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerSuffix, actionTriggers);
-        return new GroupTrigger(matcher, condition);
+        Trigger trigger = new GroupTrigger(matcher, condition);
+        trigger.addData();
+
+        return trigger;
     }
 
-    public static class HealPartyActionMatcher extends ActionMatcher {
+    class HealPartyActionMatcher implements ActionMatcher {
         @Override
         public ActionType getActionType() {
             return ActionType.HEAL_PARTY;
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new HealPartyTrigger(condition);
         }
     }
 
-    public static class DayCareActionMatcher extends ActionMatcher {
+    class DayCareActionMatcher implements ActionMatcher {
         @Override
         public ActionType getActionType() {
             return ActionType.DAY_CARE;
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new DayCareTrigger(condition);
         }
     }
 
-    public static class ReloadMapActionMatcher extends ActionMatcher {
+    class ReloadMapActionMatcher implements ActionMatcher {
         @Override
         public ActionType getActionType() {
             return ActionType.RELOAD_MAP;
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new ReloadMapTrigger(condition);
         }
     }
 
-    public static class GivePokemonActionMatcher extends ActionMatcher {
+    class GivePokemonActionMatcher implements ActionMatcher {
         private PokemonMatcher pokemonMatcher;
 
         public GivePokemonActionMatcher(PokemonMatcher pokemonMatcher) {
@@ -94,12 +96,12 @@ public abstract class ActionMatcher implements JsonMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new GivePokemonTrigger(pokemonMatcher, condition);
         }
     }
 
-    public static class GiveItemActionMatcher extends ActionMatcher {
+    class GiveItemActionMatcher implements ActionMatcher {
         private ItemNamesies giveItem;
         private int quantity;
 
@@ -122,12 +124,12 @@ public abstract class ActionMatcher implements JsonMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new GiveItemTrigger(this.giveItem, this.quantity, condition);
         }
     }
 
-    public static class UseItemActionMatcher extends ActionMatcher {
+    class UseItemActionMatcher implements ActionMatcher {
         private ItemNamesies useItem;
 
         public UseItemActionMatcher(ItemNamesies useItem) {
@@ -144,12 +146,12 @@ public abstract class ActionMatcher implements JsonMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new UseItemTrigger(this.useItem, condition);
         }
     }
 
-    public static class MoveNpcActionMatcher extends ActionMatcher {
+    class MoveNpcActionMatcher implements ActionMatcher {
         private String npcEntityName;
         private String endEntranceName;
         private boolean endLocationIsPlayer;
@@ -182,12 +184,12 @@ public abstract class ActionMatcher implements JsonMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new MoveNPCTrigger(this, condition);
         }
     }
 
-    public static class BattleActionMatcher extends ActionMatcher {
+    class BattleActionMatcher implements ActionMatcher {
         public String name;
         public int cashMoney;
         public boolean maxPokemonLimit;
@@ -237,13 +239,13 @@ public abstract class ActionMatcher implements JsonMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             this.entityName = entityName;
             return new TrainerBattleTrigger(this, condition);
         }
     }
 
-    public static class ChoiceActionMatcher extends ActionMatcher {
+    class ChoiceActionMatcher implements ActionMatcher {
         public String question;
         public ChoiceMatcher[] choices;
 
@@ -266,12 +268,12 @@ public abstract class ActionMatcher implements JsonMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new ChoiceTrigger(this, condition);
         }
     }
 
-    public static class TradePokemonActionMatcher extends ActionMatcher {
+    class TradePokemonActionMatcher implements ActionMatcher {
         private PokemonNamesies tradePokemon;
         private PokemonNamesies requested;
 
@@ -294,12 +296,12 @@ public abstract class ActionMatcher implements JsonMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new TradePokemonTrigger(tradePokemon, requested, condition);
         }
     }
 
-    public static class FishingActionMatcher extends ActionMatcher {
+    class FishingActionMatcher implements ActionMatcher {
         private FishingMatcher matcher;
 
         public FishingActionMatcher(FishingMatcher matcher) {
@@ -312,7 +314,7 @@ public abstract class ActionMatcher implements JsonMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new FishingTrigger(matcher, condition);
         }
     }

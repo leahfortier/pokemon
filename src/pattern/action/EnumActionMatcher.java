@@ -12,10 +12,10 @@ import sound.SoundTitle;
 import trainer.player.Badge;
 import trainer.player.medal.MedalTheme;
 
-public abstract class EnumActionMatcher<T extends Enum> extends ActionMatcher {
-    public abstract T getEnumValue();
+public interface EnumActionMatcher<T extends Enum> extends ActionMatcher {
+    T getEnumValue();
 
-    public static class BadgeActionMatcher extends EnumActionMatcher<Badge> {
+    class BadgeActionMatcher implements EnumActionMatcher<Badge> {
         private Badge badge;
 
         public BadgeActionMatcher(Badge badge) {
@@ -28,7 +28,7 @@ public abstract class EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new BadgeTrigger(this.badge, condition);
         }
 
@@ -38,7 +38,7 @@ public abstract class EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
     }
 
-    public static class ChangeViewActionMatcher extends EnumActionMatcher<ViewMode> {
+    class ChangeViewActionMatcher implements EnumActionMatcher<ViewMode> {
         private ViewMode viewMode;
 
         public ChangeViewActionMatcher(ViewMode viewMode) {
@@ -51,7 +51,7 @@ public abstract class EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new ChangeViewTrigger(this.viewMode, condition);
         }
 
@@ -61,7 +61,7 @@ public abstract class EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
     }
 
-    public static class SoundActionMatcher extends EnumActionMatcher<SoundTitle> {
+    class SoundActionMatcher implements EnumActionMatcher<SoundTitle> {
         private SoundTitle soundTitle;
 
         public SoundActionMatcher(SoundTitle soundTitle) {
@@ -74,7 +74,7 @@ public abstract class EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new SoundTrigger(soundTitle, condition);
         }
 
@@ -84,7 +84,7 @@ public abstract class EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
     }
 
-    public static class MedalCountActionMatcher extends EnumActionMatcher<MedalTheme> {
+    class MedalCountActionMatcher implements EnumActionMatcher<MedalTheme> {
         private MedalTheme medalTheme;
 
         public MedalCountActionMatcher(MedalTheme medalTheme) {
@@ -97,7 +97,7 @@ public abstract class EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
 
         @Override
-        protected Trigger getTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName, Condition condition) {
             return new MedalCountTrigger(medalTheme, condition);
         }
 
