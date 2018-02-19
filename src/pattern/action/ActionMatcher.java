@@ -99,7 +99,6 @@ public abstract class ActionMatcher implements JsonMatcher {
         }
     }
 
-    // TODO: Add test that quantity is always greater than zero
     public static class GiveItemActionMatcher extends ActionMatcher {
         private ItemNamesies giveItem;
         private int quantity;

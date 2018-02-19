@@ -16,6 +16,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher.GiveItemActionMatcher;
 import pattern.action.NPCInteractionMatcher;
 import pattern.action.StringActionMatcher.DialogueActionMatcher;
 import pattern.action.StringActionMatcher.GlobalActionMatcher;
@@ -302,6 +303,19 @@ public class MapTest extends BaseTest {
             GlobalCondition globalCondition = (GlobalCondition)condition;
             String globalName = globalCondition.getGlobalName();
             Assert.assertTrue(globalName, addedGlobals.contains(globalName));
+        }
+    }
+
+    @Test
+    public void giveItemTest() {
+        // Make sure all give items triggers give a positive quantity
+        for (TestMap map : maps) {
+            for (ActionMatcher action : getAllActions(map)) {
+                if (action instanceof GiveItemActionMatcher) {
+                    int quantity = ((GiveItemActionMatcher)action).getQuantity();
+                    Assert.assertTrue(map.getName() + " " + action.getJson(), quantity > 0);
+                }
+            }
         }
     }
 }

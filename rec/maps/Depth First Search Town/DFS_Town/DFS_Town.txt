@@ -173,27 +173,7 @@
             },
             {
               "giveItem": "POKE_BALL",
-              "quantity": 1,
-              "className": "pattern.action.ActionMatcher$GiveItemActionMatcher"
-            },
-            {
-              "giveItem": "POKE_BALL",
-              "quantity": 1,
-              "className": "pattern.action.ActionMatcher$GiveItemActionMatcher"
-            },
-            {
-              "giveItem": "POKE_BALL",
-              "quantity": 1,
-              "className": "pattern.action.ActionMatcher$GiveItemActionMatcher"
-            },
-            {
-              "giveItem": "POKE_BALL",
-              "quantity": 1,
-              "className": "pattern.action.ActionMatcher$GiveItemActionMatcher"
-            },
-            {
-              "giveItem": "POKE_BALL",
-              "quantity": 1,
+              "quantity": 5,
               "className": "pattern.action.ActionMatcher$GiveItemActionMatcher"
             },
             {

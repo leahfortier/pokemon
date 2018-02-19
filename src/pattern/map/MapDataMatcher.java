@@ -1,6 +1,7 @@
 package pattern.map;
 
 import com.google.gson.JsonObject;
+import main.Global;
 import map.area.AreaData;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.JsonMatcher;
@@ -187,7 +188,7 @@ public class MapDataMatcher implements JsonMatcher {
 //        FileIO.writeToFile("out2.txt", mapJson);
 
         if (!formattedJson.equals(mapJson)) {
-//            Global.error("No dice: " + areaDescriptionFileName);
+            Global.error("No dice: " + areaDescriptionFileName);
         }
 
         FileIO.overwriteFile(areaDescriptionFileName, formattedJson);

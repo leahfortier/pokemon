@@ -6,7 +6,7 @@ import map.condition.Condition;
 
 public class GiveItemTrigger extends Trigger {
     private final ItemNamesies item;
-    private final int quantity; // TODO: Quantity
+    private final int quantity;
 
     public GiveItemTrigger(ItemNamesies itemNamesies, int quantity, Condition condition) {
         super(itemNamesies.name() + " " + quantity, condition);
