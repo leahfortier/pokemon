@@ -330,9 +330,11 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
             } else if (event.getSource() == saveMenuItem) {
                 saveMap();
             } else if (event.getSource() == newMenuItem || event.getSource() == loadMenuItem) {
-                boolean exit = checkSaveOnExit();
-                if (!exit) {
-                    return;
+                if (this.mapData.hasMap()) {
+                    boolean exit = checkSaveOnExit();
+                    if (!exit) {
+                        return;
+                    }
                 }
 
                 this.setTool(ToolType.MOVE);
