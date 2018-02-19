@@ -5,7 +5,6 @@ import main.Global;
 import map.Direction;
 import map.MapData;
 import map.PathDirection;
-import map.condition.Condition;
 import map.entity.movable.NPCEntity;
 import map.entity.movable.PlayerEntity;
 import map.triggers.HaltTrigger;
@@ -22,8 +21,8 @@ import java.util.Set;
 public class MoveNPCTrigger extends Trigger {
     private final MoveNpcActionMatcher matcher;
 
-    public MoveNPCTrigger(MoveNpcActionMatcher matcher, Condition condition) {
-        super(matcher.getJson(), condition);
+    public MoveNPCTrigger(MoveNpcActionMatcher matcher) {
+        super(matcher.getJson());
         this.matcher = matcher;
     }
 

@@ -223,24 +223,7 @@
     }
   ],
   "items": [],
-  "miscEntities": [
-    {
-      "name": "Info_Guy_Dialogue",
-      "actions": [
-        {
-          "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk",
-          "className": "pattern.action.StringActionMatcher$GroupTriggerActionMatcher"
-        }
-      ],
-      "location": [
-        {
-          "x": 8,
-          "y": 6
-        }
-      ],
-      "triggerName": "TomTown_WindValley_TransitionBuilding_MiscEntity_Info_Guy_Dialogue_01"
-    }
-  ],
+  "miscEntities": [],
   "events": [],
   "wildBattles": [],
   "fishingSpots": []

@@ -27,12 +27,13 @@ import java.util.List;
 
 public interface ActionMatcher extends JsonMatcher {
     ActionType getActionType();
-    Trigger createNewTrigger(String entityName, Condition condition);
+    Trigger createNewTrigger(String entityName);
 
     static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, Condition condition, List<ActionMatcher> actions) {
         final Trigger[] actionTriggers = new Trigger[actions.size()];
         for (int i = 0; i < actions.size(); i++) {
-            actionTriggers[i] = actions.get(i).createNewTrigger(entityName, null).addData();
+            System.out.println(entityName + " " + triggerSuffix + " " + actions.get(i).getActionType());
+            actionTriggers[i] = actions.get(i).createNewTrigger(entityName).addData();
         }
 
         GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerSuffix, actionTriggers);
@@ -46,8 +47,8 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new HealPartyTrigger(condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new HealPartyTrigger();
         }
     }
 
@@ -58,8 +59,8 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new DayCareTrigger(condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new DayCareTrigger();
         }
     }
 
@@ -70,8 +71,8 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new ReloadMapTrigger(condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new ReloadMapTrigger();
         }
     }
 
@@ -92,8 +93,8 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new GivePokemonTrigger(pokemonMatcher, condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new GivePokemonTrigger(pokemonMatcher);
         }
     }
 
@@ -120,8 +121,8 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new GiveItemTrigger(this.giveItem, this.quantity, condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new GiveItemTrigger(this.giveItem, this.quantity);
         }
     }
 
@@ -142,8 +143,8 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new UseItemTrigger(this.useItem, condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new UseItemTrigger(this.useItem);
         }
     }
 
@@ -180,8 +181,8 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new MoveNPCTrigger(this, condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new MoveNPCTrigger(this);
         }
     }
 
@@ -235,9 +236,9 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName) {
             this.entityName = entityName;
-            return new TrainerBattleTrigger(this, condition);
+            return new TrainerBattleTrigger(this);
         }
     }
 
@@ -264,8 +265,8 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new ChoiceTrigger(this, condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new ChoiceTrigger(this);
         }
     }
 
@@ -292,8 +293,8 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new TradePokemonTrigger(tradePokemon, requested, condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new TradePokemonTrigger(tradePokemon, requested);
         }
     }
 
@@ -310,8 +311,8 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new FishingTrigger(matcher, condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new FishingTrigger(matcher);
         }
     }
 }

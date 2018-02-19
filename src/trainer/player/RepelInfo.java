@@ -49,7 +49,7 @@ public class RepelInfo implements Serializable {
                             new ChoiceMatcher[] { useAnother, doNotUse }
                     );
 
-                    Trigger choiceTrigger = new ChoiceTrigger(choice, null);
+                    Trigger choiceTrigger = new ChoiceTrigger(choice);
                     Messages.add(new MessageUpdate().withTrigger(choiceTrigger));
                 }
             }

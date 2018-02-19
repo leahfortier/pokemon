@@ -1,7 +1,6 @@
 package pattern.action;
 
 import gui.view.ViewMode;
-import map.condition.Condition;
 import map.triggers.BadgeTrigger;
 import map.triggers.ChangeViewTrigger;
 import map.triggers.MedalCountTrigger;
@@ -28,8 +27,8 @@ public interface EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new BadgeTrigger(this.badge, condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new BadgeTrigger(this.badge);
         }
 
         @Override
@@ -51,8 +50,8 @@ public interface EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new ChangeViewTrigger(this.viewMode, condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new ChangeViewTrigger(this.viewMode);
         }
 
         @Override
@@ -74,8 +73,8 @@ public interface EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new SoundTrigger(soundTitle, condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new SoundTrigger(soundTitle);
         }
 
         @Override
@@ -97,8 +96,8 @@ public interface EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new MedalCountTrigger(medalTheme, condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new MedalCountTrigger(medalTheme);
         }
 
         @Override

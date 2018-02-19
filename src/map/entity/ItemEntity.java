@@ -87,10 +87,10 @@ public class ItemEntity extends Entity {
                         "!";
 
         List<Trigger> triggers = new ArrayList<>();
-        triggers.add(new DialogueTrigger(itemDialogue, null));
-        triggers.add(new GiveItemTrigger(this.itemName, 1, null));
+        triggers.add(new DialogueTrigger(itemDialogue));
+        triggers.add(new GiveItemTrigger(this.itemName, 1));
         if (this.isHidden) {
-            triggers.add(new MedalCountTrigger(MedalTheme.HIDDEN_ITEMS_FOUND, null));
+            triggers.add(new MedalCountTrigger(MedalTheme.HIDDEN_ITEMS_FOUND));
         }
 
         GroupTriggerMatcher groupTriggerMatcher = new GroupTriggerMatcher("ItemEntity_" + this.getTriggerName(), triggers);

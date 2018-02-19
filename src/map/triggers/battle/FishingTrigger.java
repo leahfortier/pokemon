@@ -3,9 +3,7 @@ package map.triggers.battle;
 import battle.ActivePokemon;
 import item.ItemNamesies;
 import main.Game;
-import map.condition.Condition;
 import map.condition.Condition.ItemCondition;
-import map.condition.ConditionHolder.AndCondition;
 import map.overworld.WildEncounter;
 import map.overworld.WildEncounterInfo;
 import map.triggers.DialogueTrigger;
@@ -26,8 +24,8 @@ public class FishingTrigger extends Trigger {
 
     private final WildEncounterInfo[] wildEncounters;
 
-    public FishingTrigger(FishingMatcher matcher, Condition condition) {
-        super(matcher.getJson(), new AndCondition(condition, new ItemCondition(ItemNamesies.FISHING_ROD)));
+    public FishingTrigger(FishingMatcher matcher) {
+        super(matcher.getJson(), new ItemCondition(ItemNamesies.FISHING_ROD));
 
         this.wildEncounters = matcher.getWildEncounters();
     }
@@ -47,10 +45,10 @@ public class FishingTrigger extends Trigger {
 
             GroupTriggerMatcher matcher = new GroupTriggerMatcher(
                     "FishingBite_" + pokemonJson,
-                    new DialogueTrigger("Oh! A bite!", null),
-                    new GlobalTrigger(FISHING_GLOBAL, null),
-                    new WildBattleTrigger(wildPokemon, null),
-                    new GlobalTrigger("!" + FISHING_GLOBAL, null)
+                    new DialogueTrigger("Oh! A bite!"),
+                    new GlobalTrigger(FISHING_GLOBAL),
+                    new WildBattleTrigger(wildPokemon),
+                    new GlobalTrigger("!" + FISHING_GLOBAL)
             );
 
             Trigger group = new GroupTrigger(matcher, null);
@@ -58,7 +56,7 @@ public class FishingTrigger extends Trigger {
 
             player.getMedalCase().increase(MedalTheme.FISH_REELED_IN);
         } else {
-            Messages.add(new MessageUpdate().withTrigger(new DialogueTrigger("No dice.", null)));
+            Messages.add(new MessageUpdate().withTrigger(new DialogueTrigger("No dice.")));
         }
     }
 }

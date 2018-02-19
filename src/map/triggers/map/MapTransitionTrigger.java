@@ -2,7 +2,6 @@ package map.triggers.map;
 
 import main.Game;
 import map.PathDirection;
-import map.condition.Condition;
 import map.triggers.Trigger;
 import pattern.map.MapTransitionMatcher;
 import trainer.player.Player;
@@ -10,8 +9,8 @@ import trainer.player.Player;
 public class MapTransitionTrigger extends Trigger {
     private final MapTransitionMatcher mapTransitionMatcher;
 
-    public MapTransitionTrigger(MapTransitionMatcher matcher, Condition condition) {
-        super(matcher.getPreviousMap() + "_" + matcher.getNextMap() + "_" + matcher.getNextEntranceName(), condition);
+    public MapTransitionTrigger(MapTransitionMatcher matcher) {
+        super(matcher.getPreviousMap() + "_" + matcher.getNextMap() + "_" + matcher.getNextEntranceName());
         this.mapTransitionMatcher = matcher;
     }
 

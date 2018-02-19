@@ -2,15 +2,14 @@ package map.triggers;
 
 import gui.view.ViewMode;
 import main.Game;
-import map.condition.Condition;
 import message.MessageUpdate;
 import message.Messages;
 
 public class ChangeViewTrigger extends Trigger {
     private final ViewMode view;
 
-    public ChangeViewTrigger(ViewMode viewMode, Condition condition) {
-        super(viewMode.name(), condition);
+    public ChangeViewTrigger(ViewMode viewMode) {
+        super(viewMode.name());
         this.view = viewMode;
     }
 
@@ -20,6 +19,6 @@ public class ChangeViewTrigger extends Trigger {
     }
 
     public static void addChangeViewTriggerMessage(ViewMode viewMode) {
-        Messages.add(new MessageUpdate().withTrigger(new ChangeViewTrigger(viewMode, null)));
+        Messages.add(new MessageUpdate().withTrigger(new ChangeViewTrigger(viewMode)));
     }
 }

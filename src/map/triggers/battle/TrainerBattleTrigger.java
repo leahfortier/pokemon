@@ -2,7 +2,6 @@ package map.triggers.battle;
 
 import battle.Battle;
 import main.Game;
-import map.condition.Condition;
 import map.triggers.Trigger;
 import pattern.PokemonMatcher;
 import pattern.action.ActionMatcher.BattleActionMatcher;
@@ -15,8 +14,8 @@ public class TrainerBattleTrigger extends Trigger {
     private final EnemyTrainer trainer;
     private final UpdateMatcher npcUpdateInteraction;
 
-    public TrainerBattleTrigger(BattleActionMatcher matcher, Condition condition) {
-        super(matcher.getJson(), condition);
+    public TrainerBattleTrigger(BattleActionMatcher matcher) {
+        super(matcher.getJson());
 
         String trainerName = matcher.getName();
         int cash = matcher.getDatCashMoney();

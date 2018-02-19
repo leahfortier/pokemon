@@ -1,6 +1,5 @@
 package map.triggers;
 
-import map.condition.Condition;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.action.ActionMatcher.ChoiceActionMatcher;
@@ -10,8 +9,8 @@ public class ChoiceTrigger extends Trigger {
     private final String question;
     private final ChoiceMatcher[] choices;
 
-    public ChoiceTrigger(ChoiceActionMatcher matcher, Condition condition) {
-        super(matcher.getJson(), condition);
+    public ChoiceTrigger(ChoiceActionMatcher matcher) {
+        super(matcher.getJson());
         this.question = matcher.getQuestion();
         this.choices = matcher.getChoices();
     }

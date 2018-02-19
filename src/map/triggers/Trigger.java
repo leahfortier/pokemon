@@ -18,6 +18,10 @@ public abstract class Trigger {
     private final ConditionSet condition;
     private final List<String> globals;
 
+    protected Trigger(String suffix) {
+        this(suffix, null);
+    }
+
     protected Trigger(String suffix, Condition condition) {
         this(suffix, condition, null);
     }
@@ -70,16 +74,16 @@ public abstract class Trigger {
         // PC Start Up
         GroupTriggerMatcher loadPC = new GroupTriggerMatcher(
                 "LoadPC",
-                new DialogueTrigger("Starting up PC...", null),
-                new ChangeViewTrigger(ViewMode.PC_VIEW, null)
+                new DialogueTrigger("Starting up PC..."),
+                new ChangeViewTrigger(ViewMode.PC_VIEW)
         );
         new GroupTrigger(loadPC, null).addData();
 
         // Mart Bro
         GroupTriggerMatcher loadMart = new GroupTriggerMatcher(
                 "LoadMart",
-                new DialogueTrigger("Welcome to the " + PokeString.POKE + "Mart!", null),
-                new ChangeViewTrigger(ViewMode.MART_VIEW, null)
+                new DialogueTrigger("Welcome to the " + PokeString.POKE + "Mart!"),
+                new ChangeViewTrigger(ViewMode.MART_VIEW)
         );
         new GroupTrigger(loadMart, null).addData();
 
@@ -87,22 +91,22 @@ public abstract class Trigger {
         // NOTE: If this is changed in any way, please also change the RSA Town Pokecenter trigger manually
         GroupTriggerMatcher pokeCenterHeal = new GroupTriggerMatcher(
                 "PokeCenterHeal",
-                new DialogueTrigger("Welcome to the " + PokeString.POKEMON + " Center!", null),
-                new DialogueTrigger("Let me heal your " + PokeString.POKEMON + " for you!", null),
-                new SoundTrigger(SoundTitle.POKE_CENTER_HEAL, null),
-                new DialogueTrigger("Dun Dun Dun-Dun Dun!", null),
-                new HealPartyTrigger(null),
-                new DialogueTrigger("Your " + PokeString.POKEMON + " have been healed!", null),
-                new DialogueTrigger("I hope to see you again soon!", null),
-                new MedalCountTrigger(MedalTheme.POKE_CENTER_HEALS.name(), null)
+                new DialogueTrigger("Welcome to the " + PokeString.POKEMON + " Center!"),
+                new DialogueTrigger("Let me heal your " + PokeString.POKEMON + " for you!"),
+                new SoundTrigger(SoundTitle.POKE_CENTER_HEAL),
+                new DialogueTrigger("Dun Dun Dun-Dun Dun!"),
+                new HealPartyTrigger(),
+                new DialogueTrigger("Your " + PokeString.POKEMON + " have been healed!"),
+                new DialogueTrigger("I hope to see you again soon!"),
+                new MedalCountTrigger(MedalTheme.POKE_CENTER_HEALS)
         );
         new GroupTrigger(pokeCenterHeal, null).addData();
 
         // Egg hatching
         GroupTriggerMatcher eggHatching = new GroupTriggerMatcher(
                 "EggHatching",
-                new DialogueTrigger("Huh?", null),
-                new ChangeViewTrigger(ViewMode.EVOLUTION_VIEW, null)
+                new DialogueTrigger("Huh?"),
+                new ChangeViewTrigger(ViewMode.EVOLUTION_VIEW)
         );
         new GroupTrigger(eggHatching, null).addData();
     }

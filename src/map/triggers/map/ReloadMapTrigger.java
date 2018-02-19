@@ -2,13 +2,12 @@ package map.triggers.map;
 
 import main.Game;
 import map.MapData;
-import map.condition.Condition;
 import map.triggers.Trigger;
 import trainer.player.Player;
 
 public class ReloadMapTrigger extends Trigger {
-    public ReloadMapTrigger(Condition condition) {
-        super(null, condition);
+    public ReloadMapTrigger() {
+        super(null);
     }
 
     @Override

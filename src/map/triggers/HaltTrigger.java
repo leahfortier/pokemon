@@ -1,6 +1,5 @@
 package map.triggers;
 
-import map.condition.Condition;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
@@ -8,8 +7,8 @@ import message.Messages;
 public class HaltTrigger extends Trigger {
     private static boolean halted = false;
 
-    public HaltTrigger(Condition condition) {
-        super(null, condition);
+    private HaltTrigger() {
+        super(null);
     }
 
     @Override
@@ -23,7 +22,7 @@ public class HaltTrigger extends Trigger {
 
     public static void addHaltTrigger() {
         halted = true;
-        Trigger trigger = new HaltTrigger(null);
+        Trigger trigger = new HaltTrigger();
         Messages.addToFront(new MessageUpdate().withTrigger(trigger));
     }
 

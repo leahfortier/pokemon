@@ -1,7 +1,6 @@
 package pattern.action;
 
 import main.Game;
-import map.condition.Condition;
 import map.triggers.DialogueTrigger;
 import map.triggers.GlobalTrigger;
 import map.triggers.GroupTrigger;
@@ -31,8 +30,8 @@ public interface StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new UpdateTrigger(new UpdateMatcher(entityName, update), condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new UpdateTrigger(new UpdateMatcher(entityName, update));
         }
     }
 
@@ -54,7 +53,7 @@ public interface StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
+        public Trigger createNewTrigger(String entityName) {
             String triggerName = Trigger.createName(GroupTrigger.class, this.groupTrigger);
             return Game.getData().getTrigger(triggerName);
         }
@@ -78,8 +77,8 @@ public interface StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new GlobalTrigger(global, condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new GlobalTrigger(global);
         }
     }
 
@@ -96,8 +95,8 @@ public interface StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new DialogueTrigger(this.dialogue, condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new DialogueTrigger(this.dialogue);
         }
 
         @Override
@@ -119,8 +118,8 @@ public interface StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName, Condition condition) {
-            return new MovePlayerTrigger(path, condition);
+        public Trigger createNewTrigger(String entityName) {
+            return new MovePlayerTrigger(path);
         }
 
         @Override

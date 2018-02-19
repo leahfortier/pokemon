@@ -2,15 +2,14 @@ package map.triggers;
 
 import gui.view.ViewMode;
 import main.Game;
-import map.condition.Condition;
 import message.Messages;
 import pokemon.breeding.DayCareCenter;
 import trainer.player.Player;
 import util.PokeString;
 
 public class DayCareTrigger extends Trigger {
-    public DayCareTrigger(Condition condition) {
-        super(null, condition);
+    public DayCareTrigger() {
+        super(null);
     }
 
     @Override

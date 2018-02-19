@@ -98,7 +98,7 @@ public class MapData {
 
             List<Point> exits = matcher.getExitLocations();
             if (exits != null) {
-                Trigger trigger = new MapTransitionTrigger(matcher, null).addData();
+                Trigger trigger = new MapTransitionTrigger(matcher).addData();
                 exits.forEach(exit -> triggers.put(getMapIndex(exit), trigger.getName()));
             }
         }
@@ -120,7 +120,7 @@ public class MapData {
         for (WildBattleAreaMatcher matcher : mapDataMatcher.getWildBattles()) {
             for (Point point : matcher.getLocation()) {
                 for (WildBattleMatcher wildBattleMatcher : matcher.getWildBattles()) {
-                    Trigger trigger = new WalkingWildBattleTrigger(wildBattleMatcher, null);
+                    Trigger trigger = new WalkingWildBattleTrigger(wildBattleMatcher);
                     triggers.put(getMapIndex(point), trigger.getName());
                     for (WildEncounterInfo wildEncounter : wildBattleMatcher.getWildEncounters()) {
                         this.getArea(point).addPokemon(wildEncounter.getPokemonName());

@@ -2,13 +2,12 @@ package map.triggers;
 
 import item.ItemNamesies;
 import main.Game;
-import map.condition.Condition;
 
 public class UseItemTrigger extends Trigger {
     private final ItemNamesies useItem;
 
-    public UseItemTrigger(ItemNamesies itemNamesies, Condition condition) {
-        super(itemNamesies.name(), condition);
+    public UseItemTrigger(ItemNamesies itemNamesies) {
+        super(itemNamesies.name());
         this.useItem = itemNamesies;
     }
 
