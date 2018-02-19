@@ -3,7 +3,6 @@ package map.triggers.battle;
 import battle.Battle;
 import main.Game;
 import map.condition.Condition;
-import map.entity.EntityAction.BattleAction;
 import map.triggers.Trigger;
 import pattern.PokemonMatcher;
 import pattern.action.ActionMatcher.BattleActionMatcher;
