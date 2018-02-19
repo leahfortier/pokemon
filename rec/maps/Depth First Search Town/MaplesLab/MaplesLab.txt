@@ -90,7 +90,7 @@
             },
             {
               "update": "heal",
-              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
+              "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
             }
           ]
         },
@@ -136,7 +136,7 @@
             },
             {
               "update": "heal",
-              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
+              "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
             }
           ]
         },
@@ -218,7 +218,7 @@
       "actions": [
         {
           "groupTrigger": "LoadPC",
-          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
+          "className": "pattern.action.StringActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [

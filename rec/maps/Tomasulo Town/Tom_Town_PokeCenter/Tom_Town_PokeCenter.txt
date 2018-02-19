@@ -79,7 +79,7 @@
       "actions": [
         {
           "groupTrigger": "PokeCenterHeal",
-          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
+          "className": "pattern.action.StringActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [
@@ -95,7 +95,7 @@
       "actions": [
         {
           "groupTrigger": "LoadMart",
-          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
+          "className": "pattern.action.StringActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [
@@ -111,7 +111,7 @@
       "actions": [
         {
           "groupTrigger": "LoadPC",
-          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
+          "className": "pattern.action.StringActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [

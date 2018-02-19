@@ -48,6 +48,6 @@ class MoveNPCTriggerPanel extends TriggerContentsPanel {
                 this.endPlayerCheckbox.isSelected()
         );
 
-        return SerializationUtils.getJson(matcher);
+        return matcher.getJson();
     }
 }

@@ -5,17 +5,19 @@ import main.Global;
 import map.MapData;
 import map.condition.Condition;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import trainer.player.Player;
 import util.StringUtils;
 
 public class ReloadMapTrigger extends Trigger {
     public ReloadMapTrigger(String contents, Condition condition) {
-        super(TriggerType.RELOAD_MAP, contents, condition);
-
+        this(condition);
         if (!StringUtils.isNullOrEmpty(contents)) {
             Global.error("Contents should be empty for " + this.getClass().getSimpleName());
         }
+    }
+
+    public ReloadMapTrigger(Condition condition) {
+        super(null, condition);
     }
 
     @Override

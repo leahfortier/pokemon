@@ -23,10 +23,10 @@ public enum TriggerType {
     GIVE_ITEM(GiveItemTrigger.class, GiveItemTrigger::new),
     GIVE_POKEMON(GivePokemonTrigger.class, GivePokemonTrigger::new),
     GLOBAL(GlobalTrigger.class, GlobalTrigger::new),
-    GROUP(GroupTrigger.class, GroupTrigger::new, GroupTrigger::getTriggerSuffix),
+    GROUP(GroupTrigger.class, GroupTrigger::new),
     HALT(HaltTrigger.class, HaltTrigger::new),
     HEAL_PARTY(HealPartyTrigger.class, HealPartyTrigger::new),
-    MAP_TRANSITION(MapTransitionTrigger.class, MapTransitionTrigger::new, MapTransitionTrigger::getTriggerSuffix),
+    MAP_TRANSITION(MapTransitionTrigger.class, MapTransitionTrigger::new),
     MEDAL_COUNT(MedalCountTrigger.class, MedalCountTrigger::new),
     MOVE_NPC(MoveNPCTrigger.class, MoveNPCTrigger::new),
     MOVE_PLAYER(MovePlayerTrigger.class, MovePlayerTrigger::new),
@@ -61,11 +61,11 @@ public enum TriggerType {
         return this.triggerPrefix + (StringUtils.isNullOrEmpty(suffix) ? StringUtils.empty() : "_" + suffix);
     }
 
-    public Trigger createTrigger(final String contents) {
-        return this.createTrigger(contents, null);
+    public Trigger createTrigger2(final String contents) {
+        return this.createTrigger2(contents, null);
     }
 
-    public Trigger createTrigger(final String contents, final Condition condition) {
+    public Trigger createTrigger2(final String contents, final Condition condition) {
         GameData data = Game.getData();
         String triggerName = this.getTriggerName(contents);
 

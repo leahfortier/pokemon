@@ -4,15 +4,18 @@ import item.ItemNamesies;
 import main.Game;
 import map.condition.Condition;
 
-class GiveItemTrigger extends Trigger {
+public class GiveItemTrigger extends Trigger {
     private final ItemNamesies item;
     private final int quantity; // TODO: Quantity
 
     GiveItemTrigger(String itemName, Condition condition) {
-        super(TriggerType.GIVE_ITEM, itemName, condition);
+        this(ItemNamesies.getValueOf(itemName), 1, condition);
+    }
 
-        this.item = ItemNamesies.getValueOf(itemName);
-        this.quantity = 1;
+    public GiveItemTrigger(ItemNamesies itemNamesies, int quantity, Condition condition) {
+        super(itemNamesies.name() + " " + quantity, condition);
+        this.item = itemNamesies;
+        this.quantity = quantity;
     }
 
     @Override

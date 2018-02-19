@@ -46,6 +46,6 @@ public class TradePokemonTriggerPanel extends TriggerContentsPanel {
         PokemonNamesies requested = PokemonNamesies.tryValueOf(requestedNameField.getText());
         PokemonNamesies tradePokemon = PokemonNamesies.tryValueOf(tradeNameField.getText());
 
-        return SerializationUtils.getJson(new TradePokemonMatcher(requested, tradePokemon));
+        return new TradePokemonMatcher(requested, tradePokemon).getJson();
     }
 }

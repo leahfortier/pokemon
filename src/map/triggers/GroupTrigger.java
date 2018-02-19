@@ -11,15 +11,15 @@ import util.StringUtils;
 
 import java.util.List;
 
-class GroupTrigger extends Trigger {
+public class GroupTrigger extends Trigger {
     private final List<String> triggers;
 
     GroupTrigger(String contents, Condition condition) {
-        this(contents, condition, SerializationUtils.deserializeJson(contents, GroupTriggerMatcher.class));
+        this(SerializationUtils.deserializeJson(contents, GroupTriggerMatcher.class), condition);
     }
 
-    private GroupTrigger(String contents, Condition condition, GroupTriggerMatcher matcher) {
-        super(TriggerType.GROUP, contents, new AndCondition(condition, matcher.getCondition()), matcher.getGlobals());
+    public GroupTrigger(GroupTriggerMatcher matcher, Condition condition) {
+        super(getTriggerSuffix(matcher), new AndCondition(condition, matcher.getCondition()), matcher.getGlobals());
         this.triggers = matcher.getTriggers();
     }
 
@@ -35,12 +35,11 @@ class GroupTrigger extends Trigger {
         }
     }
 
-    static String getTriggerSuffix(String contents) {
-        GroupTriggerMatcher matcher = SerializationUtils.deserializeJson(contents, GroupTriggerMatcher.class);
+    private static String getTriggerSuffix(GroupTriggerMatcher matcher) {
         if (!StringUtils.isNullOrEmpty(matcher.getSuffix())) {
             return matcher.getSuffix();
         }
 
-        return contents;
+        return matcher.getJson();
     }
 }

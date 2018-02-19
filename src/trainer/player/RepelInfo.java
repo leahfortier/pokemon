@@ -3,15 +3,15 @@ package trainer.player;
 import item.ItemNamesies;
 import item.bag.Bag;
 import main.Game;
+import map.triggers.ChoiceTrigger;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.ChoiceActionMatcher;
-import pattern.action.ActionMatcher.TriggerActionMatcher;
 import pattern.action.ChoiceMatcher;
-import util.SerializationUtils;
+import pattern.action.ActionMatcher.TriggerActionMatcher;
 
 import java.io.Serializable;
 
@@ -49,7 +49,7 @@ public class RepelInfo implements Serializable {
                             new ChoiceMatcher[] { useAnother, doNotUse }
                     );
 
-                    Trigger choiceTrigger = TriggerType.CHOICE.createTrigger(SerializationUtils.getJson(choice));
+                    Trigger choiceTrigger = new ChoiceTrigger(choice, null);
                     Messages.add(new MessageUpdate().withTrigger(choiceTrigger.getName()));
                 }
             }

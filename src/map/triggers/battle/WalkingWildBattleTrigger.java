@@ -5,11 +5,11 @@ import battle.effect.generic.EffectInterfaces.EncounterRateMultiplier;
 import battle.effect.generic.EffectInterfaces.RepellingEffect;
 import main.Game;
 import map.condition.Condition;
+import map.condition.ConditionHolder.AndCondition;
 import map.overworld.EncounterRate;
 import map.overworld.WildEncounter;
 import map.overworld.WildEncounterInfo;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.map.WildBattleMatcher;
@@ -22,9 +22,12 @@ public class WalkingWildBattleTrigger extends Trigger {
     private final EncounterRate encounterRate;
 
     public WalkingWildBattleTrigger(String matcherJson, Condition condition) {
-        super(TriggerType.WALKING_WILD_BATTLE, matcherJson, condition);
+        this(SerializationUtils.deserializeJson(matcherJson, WildBattleMatcher.class), condition);
+    }
 
-        WildBattleMatcher matcher = SerializationUtils.deserializeJson(matcherJson, WildBattleMatcher.class);
+    public WalkingWildBattleTrigger(WildBattleMatcher matcher, Condition condition) {
+        super(matcher.getJson(), new AndCondition(condition, matcher.getCondition()));
+
         this.wildEncounters = matcher.getWildEncounters();
         this.encounterRate = matcher.getEncounterRate();
     }
@@ -43,7 +46,7 @@ public class WalkingWildBattleTrigger extends Trigger {
                 return;
             }
 
-            Trigger wildBattle = TriggerType.WILD_BATTLE.createTrigger(SerializationUtils.getJson(wildPokemon), null);
+            Trigger wildBattle = new WildBattleTrigger(wildPokemon, null);
             Messages.add(new MessageUpdate().withTrigger(wildBattle.getName()));
         }
     }

@@ -10,7 +10,11 @@ import util.PokeString;
 
 public class DayCareTrigger extends Trigger {
     public DayCareTrigger(String contents, Condition condition) {
-        super(TriggerType.DAY_CARE, contents, condition);
+        this(condition);
+    }
+
+    public DayCareTrigger(Condition condition) {
+        super(null, condition);
     }
 
     @Override

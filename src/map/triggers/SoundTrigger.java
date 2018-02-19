@@ -4,13 +4,16 @@ import map.condition.Condition;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 
-class SoundTrigger extends Trigger {
+public class SoundTrigger extends Trigger {
     private final SoundTitle soundTitle;
 
     SoundTrigger(String contents, Condition condition) {
-        super(TriggerType.SOUND, contents, condition);
+        this(SoundTitle.valueOf(contents), condition);
+    }
 
-        this.soundTitle = SoundTitle.valueOf(contents);
+    public SoundTrigger(SoundTitle soundTitle, Condition condition) {
+        super(soundTitle.name(), condition);
+        this.soundTitle = soundTitle;
     }
 
     @Override

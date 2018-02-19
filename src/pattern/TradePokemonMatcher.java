@@ -2,7 +2,7 @@ package pattern;
 
 import pokemon.PokemonNamesies;
 
-public class TradePokemonMatcher {
+public class TradePokemonMatcher implements JsonMatcher {
     private PokemonNamesies requested;
     private PokemonNamesies tradePokemon;
     private Integer teamIndex;

@@ -5,7 +5,6 @@ import main.Game;
 import map.condition.Condition;
 import map.entity.EntityAction.BattleAction;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import pattern.PokemonMatcher;
 import pattern.action.ActionMatcher.BattleActionMatcher;
 import pattern.action.UpdateMatcher;
@@ -19,9 +18,12 @@ public class TrainerBattleTrigger extends Trigger {
     private final UpdateMatcher npcUpdateInteraction;
 
     public TrainerBattleTrigger(String contents, Condition condition) {
-        super(TriggerType.TRAINER_BATTLE, contents, condition);
+        this(SerializationUtils.deserializeJson(contents, BattleAction.class), condition);
+    }
 
-        BattleAction battleAction = SerializationUtils.deserializeJson(contents, BattleAction.class);
+    public TrainerBattleTrigger(BattleAction battleAction, Condition condition) {
+        super(battleAction.getJson(), condition);
+
         BattleActionMatcher battleMatcher = battleAction.getBattleMatcher();
 
         String trainerName = battleMatcher.getName();
@@ -30,7 +32,7 @@ public class TrainerBattleTrigger extends Trigger {
 
         this.trainer = new EnemyTrainer(trainerName, cash, maxPokemonAllowed);
 
-        RandomUtils.setTempRandomSeed(contents.hashCode());
+        RandomUtils.setTempRandomSeed(battleAction.getJson().hashCode());
         for (PokemonMatcher matcher : battleMatcher.getPokemon()) {
             trainer.addPokemon(PartyPokemon.createActivePokemon(matcher, false));
         }

@@ -8,9 +8,12 @@ public class UseItemTrigger extends Trigger {
     private final ItemNamesies useItem;
 
     protected UseItemTrigger(String contents, Condition condition) {
-        super(TriggerType.USE_ITEM, contents, condition);
+        this(ItemNamesies.valueOf(contents), condition);
+    }
 
-        this.useItem = ItemNamesies.valueOf(contents);
+    public UseItemTrigger(ItemNamesies itemNamesies, Condition condition) {
+        super(itemNamesies.name(), condition);
+        this.useItem = itemNamesies;
     }
 
     @Override

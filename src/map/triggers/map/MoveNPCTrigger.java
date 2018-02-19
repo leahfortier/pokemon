@@ -10,7 +10,6 @@ import map.entity.movable.NPCEntity;
 import map.entity.movable.PlayerEntity;
 import map.triggers.HaltTrigger;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import pattern.MoveNPCTriggerMatcher;
 import trainer.player.Player;
 import util.Point;
@@ -25,8 +24,12 @@ public class MoveNPCTrigger extends Trigger {
     private final MoveNPCTriggerMatcher matcher;
 
     public MoveNPCTrigger(String contents, Condition condition) {
-        super(TriggerType.MOVE_NPC, contents, condition);
-        this.matcher = SerializationUtils.deserializeJson(contents, MoveNPCTriggerMatcher.class);
+        this(SerializationUtils.deserializeJson(contents, MoveNPCTriggerMatcher.class), condition);
+    }
+
+    public MoveNPCTrigger(MoveNPCTriggerMatcher matcher, Condition condition) {
+        super(matcher.getJson(), condition);
+        this.matcher = matcher;
     }
 
     @Override

@@ -11,9 +11,12 @@ public class TradePokemonTrigger extends Trigger {
     private final TradePokemonMatcher tradePokemonMatcher;
 
     TradePokemonTrigger(String contents, Condition condition) {
-        super(TriggerType.TRADE_POKEMON, contents, condition);
+        this(SerializationUtils.deserializeJson(contents, TradePokemonMatcher.class), condition);
+    }
 
-        tradePokemonMatcher = SerializationUtils.deserializeJson(contents, TradePokemonMatcher.class);
+    public TradePokemonTrigger(TradePokemonMatcher matcher, Condition condition) {
+        super(matcher.getJson(), condition);
+        this.tradePokemonMatcher = matcher;
     }
 
     @Override

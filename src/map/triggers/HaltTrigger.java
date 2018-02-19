@@ -11,11 +11,14 @@ public class HaltTrigger extends Trigger {
     private static boolean halted = false;
 
     HaltTrigger(String contents, Condition condition) {
-        super(TriggerType.HALT, contents, condition);
-
+        this(condition);
         if (!StringUtils.isNullOrEmpty(contents)) {
             Global.error("Contents should be empty for " + this.getClass().getSimpleName());
         }
+    }
+
+    public HaltTrigger(Condition condition) {
+        super(null, condition);
     }
 
     @Override
@@ -29,7 +32,7 @@ public class HaltTrigger extends Trigger {
 
     public static void addHaltTrigger() {
         halted = true;
-        Trigger trigger = TriggerType.HALT.createTrigger(null, null);
+        Trigger trigger = new HaltTrigger(null);
         Messages.addToFront(new MessageUpdate().withTrigger(trigger.getName()));
     }
 

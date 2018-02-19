@@ -1,5 +1,6 @@
 package map.triggers;
 
+import gui.GameData;
 import gui.view.ViewMode;
 import main.Game;
 import map.condition.Condition;
@@ -8,7 +9,7 @@ import pattern.GroupTriggerMatcher;
 import sound.SoundTitle;
 import trainer.player.medal.MedalTheme;
 import util.PokeString;
-import util.SerializationUtils;
+import util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +19,12 @@ public abstract class Trigger {
     private final ConditionSet condition;
     private final List<String> globals;
 
-    protected Trigger(TriggerType type, String contents, Condition condition) {
-        this(type, contents, condition, null);
+    protected Trigger(String suffix, Condition condition) {
+        this(suffix, condition, null);
     }
 
-    protected Trigger(TriggerType type, String contents, Condition condition, List<String> globals) {
-        this.name = type.getTriggerName(contents);
+    protected Trigger(String suffix, Condition condition, List<String> globals) {
+        this.name = this.getClass().getSimpleName() + (StringUtils.isNullOrEmpty(suffix) ? "" : "_" + suffix);
 
         this.condition = new ConditionSet(condition);
 
@@ -31,6 +32,8 @@ public abstract class Trigger {
         if (globals != null) {
             this.globals.addAll(globals);
         }
+
+        Game.getData().addTrigger(this);
     }
 
     protected abstract void executeTrigger();
@@ -58,44 +61,46 @@ public abstract class Trigger {
     }
 
     public static void createCommonTriggers() {
+        // Explicitly add trigger even though it happens in the constructor since it looks weird and just in case it changes
+        GameData data = Game.getData();
 
         // PC Start Up
         GroupTriggerMatcher loadPC = new GroupTriggerMatcher(
                 "LoadPC",
-                TriggerType.DIALOGUE.createTrigger("Starting up PC...", null).getName(),
-                TriggerType.CHANGE_VIEW.createTrigger(ViewMode.PC_VIEW.name(), null).getName()
+                new DialogueTrigger("Starting up PC...", null),
+                new ChangeViewTrigger(ViewMode.PC_VIEW, null)
         );
-        TriggerType.GROUP.createTrigger(SerializationUtils.getJson(loadPC), null);
+        data.addTrigger(new GroupTrigger(loadPC, null));
 
         // Mart Bro
         GroupTriggerMatcher loadMart = new GroupTriggerMatcher(
                 "LoadMart",
-                TriggerType.DIALOGUE.createTrigger("Welcome to the " + PokeString.POKE + "Mart!", null).getName(),
-                TriggerType.CHANGE_VIEW.createTrigger(ViewMode.MART_VIEW.name(), null).getName()
+                new DialogueTrigger("Welcome to the " + PokeString.POKE + "Mart!", null),
+                new ChangeViewTrigger(ViewMode.MART_VIEW, null)
         );
-        TriggerType.GROUP.createTrigger(SerializationUtils.getJson(loadMart), null);
+        data.addTrigger(new GroupTrigger(loadMart, null));
 
         // PokeCenter Healing
         // NOTE: If this is changed in any way, please also change the RSA Town Pokecenter trigger manually
         GroupTriggerMatcher pokeCenterHeal = new GroupTriggerMatcher(
                 "PokeCenterHeal",
-                TriggerType.DIALOGUE.createTrigger("Welcome to the " + PokeString.POKEMON + " Center!", null).getName(),
-                TriggerType.DIALOGUE.createTrigger("Let me heal your " + PokeString.POKEMON + " for you!", null).getName(),
-                TriggerType.SOUND.createTrigger(SoundTitle.POKE_CENTER_HEAL.name(), null).getName(),
-                TriggerType.DIALOGUE.createTrigger("Dun Dun Dun-Dun Dun!", null).getName(),
-                TriggerType.HEAL_PARTY.createTrigger(null, null).getName(),
-                TriggerType.DIALOGUE.createTrigger("Your " + PokeString.POKEMON + " have been healed!", null).getName(),
-                TriggerType.DIALOGUE.createTrigger("I hope to see you again soon!", null).getName(),
-                TriggerType.MEDAL_COUNT.createTrigger(MedalTheme.POKE_CENTER_HEALS.name(), null).getName()
+                new DialogueTrigger("Welcome to the " + PokeString.POKEMON + " Center!", null),
+                new DialogueTrigger("Let me heal your " + PokeString.POKEMON + " for you!", null),
+                new SoundTrigger(SoundTitle.POKE_CENTER_HEAL, null),
+                new DialogueTrigger("Dun Dun Dun-Dun Dun!", null),
+                new HealPartyTrigger(null),
+                new DialogueTrigger("Your " + PokeString.POKEMON + " have been healed!", null),
+                new DialogueTrigger("I hope to see you again soon!", null),
+                new MedalCountTrigger(MedalTheme.POKE_CENTER_HEALS.name(), null)
         );
-        TriggerType.GROUP.createTrigger(SerializationUtils.getJson(pokeCenterHeal), null);
+        data.addTrigger(new GroupTrigger(pokeCenterHeal, null));
 
         // Egg hatching
         GroupTriggerMatcher eggHatching = new GroupTriggerMatcher(
                 "EggHatching",
-                TriggerType.DIALOGUE.createTrigger("Huh?", null).getName(),
-                TriggerType.CHANGE_VIEW.createTrigger(ViewMode.EVOLUTION_VIEW.name(), null).getName()
+                new DialogueTrigger("Huh?", null),
+                new ChangeViewTrigger(ViewMode.EVOLUTION_VIEW, null)
         );
-        TriggerType.GROUP.createTrigger(SerializationUtils.getJson(eggHatching), null);
+        data.addTrigger(new GroupTrigger(eggHatching, null));
     }
 }

@@ -6,14 +6,16 @@ import pattern.action.UpdateMatcher;
 import util.SerializationUtils;
 
 class UpdateTrigger extends Trigger {
-
     private final String npcEntityName;
     private final String newInteractionName;
 
     UpdateTrigger(String matcherJson, Condition condition) {
-        super(TriggerType.UPDATE, matcherJson, condition);
+        this(SerializationUtils.deserializeJson(matcherJson, UpdateMatcher.class), condition);
+    }
 
-        UpdateMatcher matcher = SerializationUtils.deserializeJson(matcherJson, UpdateMatcher.class);
+    UpdateTrigger(UpdateMatcher matcher, Condition condition) {
+        super(matcher.getJson(), condition);
+
         this.npcEntityName = matcher.getNpcEntityName();
         this.newInteractionName = matcher.getInteractionName();
     }

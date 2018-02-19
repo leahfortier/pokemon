@@ -4,9 +4,9 @@ import map.condition.Condition;
 
 import java.util.Collections;
 
-class GlobalTrigger extends Trigger {
-    GlobalTrigger(String global, Condition condition) {
-        super(TriggerType.GLOBAL, global, condition, Collections.singletonList(global));
+public class GlobalTrigger extends Trigger {
+    public GlobalTrigger(String global, Condition condition) {
+        super(global, condition, Collections.singletonList(global));
     }
 
     // Only purpose is to add a global, which is passed into the constructor and handled by the superclass

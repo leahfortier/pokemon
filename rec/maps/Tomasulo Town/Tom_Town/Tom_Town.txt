@@ -290,7 +290,7 @@
         },
         {
           "global": "TomTownPowerPlantExplosionTriggered",
-          "className": "pattern.action.ActionMatcher$GlobalActionMatcher"
+          "className": "pattern.action.StringActionMatcher$GlobalActionMatcher"
         }
       ],
       "location": [

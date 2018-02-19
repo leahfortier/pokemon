@@ -2,6 +2,7 @@ package pattern.map;
 
 import main.Global;
 import map.condition.ConditionSet;
+import pattern.JsonMatcher;
 import util.FileIO;
 import util.FileName;
 import util.SerializationUtils;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ConditionsMatcher {
+public class ConditionsMatcher implements JsonMatcher {
     private List<ConditionMatcher> conditions = new ArrayList<>();
 
     private static ConditionsMatcher readConditions() {
@@ -41,7 +42,6 @@ public class ConditionsMatcher {
         ConditionsMatcher matcher = readConditions();
         matcher.conditions.add(condition);
 
-        String formattedJson = SerializationUtils.getJson(matcher);
-        FileIO.overwriteFile(FileName.CONDITIONS, formattedJson);
+        FileIO.overwriteFile(FileName.CONDITIONS, matcher.getJson());
     }
 }

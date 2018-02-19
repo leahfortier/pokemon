@@ -10,9 +10,12 @@ class GivePokemonTrigger extends Trigger {
     private final PokemonMatcher pokemonMatcher;
 
     GivePokemonTrigger(String pokemonDescription, Condition condition) {
-        super(TriggerType.GIVE_POKEMON, pokemonDescription, condition);
+        this(SerializationUtils.deserializeJson(pokemonDescription, PokemonMatcher.class), condition);
+    }
 
-        this.pokemonMatcher = SerializationUtils.deserializeJson(pokemonDescription, PokemonMatcher.class);
+    public GivePokemonTrigger(PokemonMatcher matcher, Condition condition) {
+        super(matcher.getJson(), condition);
+        this.pokemonMatcher = matcher;
     }
 
     @Override

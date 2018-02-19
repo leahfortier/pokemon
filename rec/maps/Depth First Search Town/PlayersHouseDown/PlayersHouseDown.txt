@@ -90,7 +90,7 @@
             },
             {
               "global": "FirstMadreTalk",
-              "className": "pattern.action.ActionMatcher$GlobalActionMatcher"
+              "className": "pattern.action.StringActionMatcher$GlobalActionMatcher"
             },
             {
               "triggerType": "MOVE_PLAYER",

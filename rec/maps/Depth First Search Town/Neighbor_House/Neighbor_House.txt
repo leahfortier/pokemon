@@ -68,7 +68,7 @@
         },
         {
           "groupTrigger": "LoadPC",
-          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
+          "className": "pattern.action.StringActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [

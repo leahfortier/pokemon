@@ -10,9 +10,12 @@ class ChangeViewTrigger extends Trigger {
     private final ViewMode view;
 
     ChangeViewTrigger(String viewMode, Condition condition) {
-        super(TriggerType.CHANGE_VIEW, viewMode, condition);
+        this(ViewMode.valueOf(viewMode), condition);
+    }
 
-        this.view = ViewMode.valueOf(viewMode);
+    ChangeViewTrigger(ViewMode viewMode, Condition condition) {
+        super(viewMode.name(), condition);
+        this.view = viewMode;
     }
 
     @Override
@@ -21,6 +24,6 @@ class ChangeViewTrigger extends Trigger {
     }
 
     public static void addChangeViewTriggerMessage(ViewMode viewMode) {
-        Messages.add(new MessageUpdate().withTrigger(TriggerType.CHANGE_VIEW.createTrigger(viewMode.name()).getName()));
+        Messages.add(new MessageUpdate().withTrigger(new ChangeViewTrigger(viewMode, null).getName()));
     }
 }

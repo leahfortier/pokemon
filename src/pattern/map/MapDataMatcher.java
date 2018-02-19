@@ -3,6 +3,7 @@ package pattern.map;
 import com.google.gson.JsonObject;
 import map.area.AreaData;
 import mapMaker.model.TriggerModel.TriggerModelType;
+import pattern.JsonMatcher;
 import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.ChoiceActionMatcher;
 import pattern.action.ChoiceMatcher;
@@ -22,7 +23,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class MapDataMatcher {
+public class MapDataMatcher implements JsonMatcher {
     private AreaMatcher[] areas = new AreaMatcher[0];
     private MapTransitionMatcher[] mapTransitions = new MapTransitionMatcher[0];
     private NPCMatcher[] NPCs = new NPCMatcher[0];

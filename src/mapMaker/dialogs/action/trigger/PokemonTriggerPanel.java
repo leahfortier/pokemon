@@ -98,6 +98,6 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
             );
         }
 
-        return SerializationUtils.getJson(matcher);
+        return matcher.getJson();
     }
 }

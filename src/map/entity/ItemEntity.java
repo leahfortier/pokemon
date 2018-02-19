@@ -7,12 +7,15 @@ import item.use.TechnicalMachine;
 import main.Game;
 import map.Direction;
 import map.condition.Condition;
+import map.triggers.DialogueTrigger;
+import map.triggers.GiveItemTrigger;
+import map.triggers.GroupTrigger;
+import map.triggers.MedalCountTrigger;
 import map.triggers.Trigger;
 import map.triggers.TriggerType;
 import pattern.GroupTriggerMatcher;
 import trainer.player.medal.MedalTheme;
 import util.Point;
-import util.SerializationUtils;
 import util.StringUtils;
 
 import java.awt.image.BufferedImage;
@@ -89,24 +92,26 @@ public class ItemEntity extends Entity {
                             ) +
                             "!";
 
-            Trigger dialogue = TriggerType.DIALOGUE.createTrigger(itemDialogue, null);
-            Trigger giveItem = TriggerType.GIVE_ITEM.createTrigger(this.itemName.getName(), null);
+            Trigger dialogue = new DialogueTrigger(itemDialogue, null);
+            Trigger giveItem = new GiveItemTrigger(this.itemName, 1, null);
 
+            // TODO: Rewrite this it looks like ass
             GroupTriggerMatcher groupTriggerMatcher;
             if (this.isHidden) {
-                Trigger medalTrigger = TriggerType.MEDAL_COUNT.createTrigger(MedalTheme.HIDDEN_ITEMS_FOUND.name(), null);
-                groupTriggerMatcher = new GroupTriggerMatcher(itemTriggerSuffix, dialogue.getName(), giveItem.getName(), medalTrigger.getName());
+                Trigger medalTrigger = new MedalCountTrigger(MedalTheme.HIDDEN_ITEMS_FOUND, null);
+                groupTriggerMatcher = new GroupTriggerMatcher(itemTriggerSuffix, dialogue, giveItem, medalTrigger);
             } else {
-                groupTriggerMatcher = new GroupTriggerMatcher(itemTriggerSuffix, dialogue.getName(), giveItem.getName());
+                groupTriggerMatcher = new GroupTriggerMatcher(itemTriggerSuffix, dialogue, giveItem);
             }
-            TriggerType.GROUP.createTrigger(SerializationUtils.getJson(groupTriggerMatcher), null);
+
+            new GroupTrigger(groupTriggerMatcher, null);
         }
 
         // This trigger will only call the item trigger when the conditions apply
-        GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getTriggerSuffix(), itemTriggerName);
+        GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getTriggerSuffix(), data.getTrigger(itemTriggerName));
         matcher.addGlobals(this.getEntityName());
 
-        TriggerType.GROUP.createTrigger(SerializationUtils.getJson(matcher), null);
+        new GroupTrigger(matcher, null);
 
         dataCreated = true;
     }

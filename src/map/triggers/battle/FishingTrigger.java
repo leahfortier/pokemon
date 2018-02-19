@@ -8,8 +8,10 @@ import map.condition.Condition.ItemCondition;
 import map.condition.ConditionHolder.AndCondition;
 import map.overworld.WildEncounter;
 import map.overworld.WildEncounterInfo;
+import map.triggers.DialogueTrigger;
+import map.triggers.GlobalTrigger;
+import map.triggers.GroupTrigger;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.GroupTriggerMatcher;
@@ -26,9 +28,12 @@ public class FishingTrigger extends Trigger {
     private final WildEncounterInfo[] wildEncounters;
 
     public FishingTrigger(String matcherJson, Condition condition) {
-        super(TriggerType.FISHING, matcherJson, new AndCondition(condition, new ItemCondition(ItemNamesies.FISHING_ROD)));
+        this(SerializationUtils.deserializeJson(matcherJson, FishingMatcher.class), condition);
+    }
 
-        FishingMatcher matcher = SerializationUtils.deserializeJson(matcherJson, FishingMatcher.class);
+    public FishingTrigger(FishingMatcher matcher, Condition condition) {
+        super(matcher.getJson(), new AndCondition(condition, new ItemCondition(ItemNamesies.FISHING_ROD)));
+
         this.wildEncounters = matcher.getWildEncounters();
     }
 
@@ -43,22 +48,22 @@ public class FishingTrigger extends Trigger {
 
         if (RandomUtils.chanceTest(chance)) {
             WildEncounter wildPokemon = WildEncounterInfo.getWildEncounter(front, this.wildEncounters);
-            String pokemonJson = SerializationUtils.getJson(wildPokemon);
+            String pokemonJson = wildPokemon.getJson();
 
             GroupTriggerMatcher matcher = new GroupTriggerMatcher(
                     "FishingBite_" + pokemonJson,
-                    TriggerType.DIALOGUE.createTrigger("Oh! A bite!", null).getName(),
-                    TriggerType.GLOBAL.createTrigger(FISHING_GLOBAL, null).getName(),
-                    TriggerType.WILD_BATTLE.createTrigger(pokemonJson, null).getName(),
-                    TriggerType.GLOBAL.createTrigger("!" + FISHING_GLOBAL, null).getName()
+                    new DialogueTrigger("Oh! A bite!", null),
+                    new GlobalTrigger(FISHING_GLOBAL, null),
+                    new WildBattleTrigger(wildPokemon, null),
+                    new GlobalTrigger("!" + FISHING_GLOBAL, null)
             );
 
-            Trigger group = TriggerType.GROUP.createTrigger(SerializationUtils.getJson(matcher), null);
+            Trigger group = new GroupTrigger(matcher, null);
             Messages.add(new MessageUpdate().withTrigger(group.getName()));
 
             player.getMedalCase().increase(MedalTheme.FISH_REELED_IN);
         } else {
-            Messages.add(new MessageUpdate().withTrigger(TriggerType.DIALOGUE.createTrigger("No dice.", null).getName()));
+            Messages.add(new MessageUpdate().withTrigger(new DialogueTrigger("No dice.", null).getName()));
         }
     }
 }

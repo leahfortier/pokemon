@@ -1,11 +1,13 @@
 package pattern;
 
+import map.triggers.Trigger;
 import pattern.generic.TriggerMatcher;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GroupTriggerMatcher extends TriggerMatcher {
     private String[] triggers;
@@ -13,9 +15,12 @@ public class GroupTriggerMatcher extends TriggerMatcher {
     private String suffix;
     private List<String> globals;
 
-    public GroupTriggerMatcher(final String suffix, final String... triggers) {
-        this.triggers = triggers;
+    public GroupTriggerMatcher(final String suffix, final Trigger... triggers) {
         this.suffix = suffix;
+        this.triggers = Arrays.stream(triggers)
+                              .map(Trigger::getName)
+                              .collect(Collectors.toList())
+                              .toArray(new String[0]);
     }
 
     public String getSuffix() {

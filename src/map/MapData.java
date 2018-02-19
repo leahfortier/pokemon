@@ -14,7 +14,8 @@ import map.overworld.WalkType;
 import map.overworld.WildEncounterInfo;
 import map.triggers.Trigger;
 import map.triggers.TriggerData;
-import map.triggers.TriggerType;
+import map.triggers.battle.WalkingWildBattleTrigger;
+import map.triggers.map.MapTransitionTrigger;
 import pattern.SimpleMapTransition;
 import pattern.generic.EntityMatcher;
 import pattern.map.EventMatcher;
@@ -28,7 +29,6 @@ import trainer.player.Player;
 import util.FileIO;
 import util.MultiMap;
 import util.Point;
-import util.SerializationUtils;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -98,7 +98,7 @@ public class MapData {
 
             List<Point> exits = matcher.getExitLocations();
             if (exits != null) {
-                Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(SerializationUtils.getJson(matcher), null);
+                Trigger trigger = new MapTransitionTrigger(matcher, null);
                 exits.forEach(exit -> triggers.put(getMapIndex(exit), trigger.getName()));
             }
         }
@@ -120,7 +120,7 @@ public class MapData {
         for (WildBattleAreaMatcher matcher : mapDataMatcher.getWildBattles()) {
             for (Point point : matcher.getLocation()) {
                 for (WildBattleMatcher wildBattleMatcher : matcher.getWildBattles()) {
-                    Trigger trigger = TriggerType.WALKING_WILD_BATTLE.createTrigger(SerializationUtils.getJson(wildBattleMatcher), wildBattleMatcher.getCondition());
+                    Trigger trigger = new WalkingWildBattleTrigger(wildBattleMatcher, null);
                     triggers.put(getMapIndex(point), trigger.getName());
                     for (WildEncounterInfo wildEncounter : wildBattleMatcher.getWildEncounters()) {
                         this.getArea(point).addPokemon(wildEncounter.getPokemonName());

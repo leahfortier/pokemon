@@ -8,9 +8,12 @@ public class MedalCountTrigger extends Trigger {
     private final MedalTheme medalTheme;
 
     MedalCountTrigger(String contents, Condition condition) {
-        super(TriggerType.MEDAL_COUNT, contents, condition);
+        this(MedalTheme.valueOf(contents), condition);
+    }
 
-        this.medalTheme = MedalTheme.valueOf(contents);
+    public MedalCountTrigger(MedalTheme medalTheme, Condition condition) {
+        super(medalTheme.name(), condition);
+        this.medalTheme = medalTheme;
     }
 
     @Override

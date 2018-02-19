@@ -2,6 +2,7 @@ package map.overworld;
 
 import battle.ActivePokemon;
 import main.Game;
+import pattern.JsonMatcher;
 import pattern.PokemonMatcher;
 import pokemon.Gender;
 import pokemon.Nature;
@@ -10,7 +11,7 @@ import pokemon.PokemonNamesies;
 import trainer.WildPokemon;
 import util.RandomUtils;
 
-public class WildEncounter {
+public class WildEncounter implements JsonMatcher {
     private PokemonMatcher pokemonMatcher;
 
     public WildEncounter(WildEncounterInfo wildEncounterInfo) {

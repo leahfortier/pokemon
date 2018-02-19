@@ -182,7 +182,7 @@
             },
             {
               "update": "won",
-              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
+              "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
             }
           ]
         },

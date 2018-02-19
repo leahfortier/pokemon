@@ -237,7 +237,7 @@
       "actions": [
         {
           "groupTrigger": "GroupTrigger_TransitionBuilding_InformationDesk",
-          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
+          "className": "pattern.action.StringActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [

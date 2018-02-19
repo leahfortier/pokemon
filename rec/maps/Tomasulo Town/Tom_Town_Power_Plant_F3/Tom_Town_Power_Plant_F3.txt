@@ -130,7 +130,7 @@
             },
             {
               "global": "VisitedTomTownPowerPlant",
-              "className": "pattern.action.ActionMatcher$GlobalActionMatcher"
+              "className": "pattern.action.StringActionMatcher$GlobalActionMatcher"
             },
             {
               "triggerType": "RELOAD_MAP",
@@ -217,7 +217,7 @@
             },
             {
               "update": "dialogue",
-              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
+              "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
             }
           ]
         }

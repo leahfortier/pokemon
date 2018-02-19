@@ -2,9 +2,10 @@ package pattern.generic;
 
 import map.condition.Condition;
 import map.condition.ConditionSet;
+import pattern.JsonMatcher;
 import pattern.map.ConditionMatcher;
 
-public abstract class TriggerMatcher {
+public abstract class TriggerMatcher implements JsonMatcher {
     private String triggerName;
     private String conditionName;
     private ConditionSet condition;

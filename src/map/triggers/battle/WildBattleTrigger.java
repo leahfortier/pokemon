@@ -5,7 +5,6 @@ import main.Game;
 import map.condition.Condition;
 import map.overworld.WildEncounter;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import trainer.WildPokemon;
 import trainer.player.Player;
 import util.SerializationUtils;
@@ -14,9 +13,12 @@ public class WildBattleTrigger extends Trigger {
     private final WildEncounter wildEncounter;
 
     public WildBattleTrigger(String matcherJson, Condition condition) {
-        super(TriggerType.WILD_BATTLE, matcherJson, condition);
+        this(SerializationUtils.deserializeJson(matcherJson, WildEncounter.class), condition);
+    }
 
-        this.wildEncounter = SerializationUtils.deserializeJson(matcherJson, WildEncounter.class);
+    public WildBattleTrigger(WildEncounter wildEncounter, Condition condition) {
+        super(wildEncounter.getJson(), condition);
+        this.wildEncounter = wildEncounter;
     }
 
     @Override

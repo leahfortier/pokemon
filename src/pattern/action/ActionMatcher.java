@@ -8,10 +8,11 @@ import map.entity.EntityAction.TriggerAction;
 import map.triggers.TriggerType;
 import mapMaker.dialogs.action.ActionType;
 import mapMaker.dialogs.action.trigger.TriggerActionType;
+import pattern.JsonMatcher;
 import pattern.PokemonMatcher;
 import trainer.Trainer;
 
-public abstract class ActionMatcher {
+public abstract class ActionMatcher implements JsonMatcher {
     public abstract ActionType getActionType();
     public abstract EntityAction getAction(final Condition condition);
 

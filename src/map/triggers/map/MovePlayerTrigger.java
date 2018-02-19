@@ -5,15 +5,13 @@ import map.PathDirection;
 import map.condition.Condition;
 import map.entity.movable.PlayerEntity;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 
 public class MovePlayerTrigger extends Trigger {
     private final String path;
 
-    public MovePlayerTrigger(String contents, Condition condition) {
-        super(TriggerType.MOVE_PLAYER, contents, condition);
-
-        this.path = PathDirection.defaultPath() + contents;
+    public MovePlayerTrigger(String path, Condition condition) {
+        super(path, condition);
+        this.path = PathDirection.defaultPath() + path;
     }
 
     @Override
