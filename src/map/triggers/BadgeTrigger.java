@@ -14,7 +14,7 @@ public class BadgeTrigger extends Trigger {
         this(Badge.valueOf(badgeName), condition);
     }
 
-    BadgeTrigger(Badge badge, Condition condition) {
+    public BadgeTrigger(Badge badge, Condition condition) {
         // Can't get the same badge twice
         super(badge.name(), new AndCondition(condition, new NotCondition(new BadgeCondition(badge))));
         this.badge = badge;

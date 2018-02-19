@@ -51,9 +51,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "...",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "...",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "name": "Leader Rhododendron",
@@ -89,9 +88,8 @@
               "className": "pattern.action.ActionMatcher$BattleActionMatcher"
             },
             {
-              "triggerType": "BADGE",
-              "triggerContents": "SECOND",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "badge": "SECOND",
+              "className": "pattern.action.ActionMatcher$BadgeActionMatcher"
             }
           ]
         },
@@ -100,9 +98,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "...",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "...",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }

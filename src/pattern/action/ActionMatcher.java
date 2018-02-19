@@ -1,20 +1,35 @@
 package pattern.action;
 
+import gui.view.ViewMode;
 import item.ItemNamesies;
 import map.condition.Condition;
-import map.condition.ConditionSet;
+import map.triggers.BadgeTrigger;
+import map.triggers.ChangeViewTrigger;
 import map.triggers.ChoiceTrigger;
+import map.triggers.DayCareTrigger;
+import map.triggers.GiveItemTrigger;
+import map.triggers.GivePokemonTrigger;
 import map.triggers.GroupTrigger;
+import map.triggers.HealPartyTrigger;
+import map.triggers.MedalCountTrigger;
+import map.triggers.SoundTrigger;
+import map.triggers.TradePokemonTrigger;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import map.triggers.UseItemTrigger;
+import map.triggers.battle.FishingTrigger;
 import map.triggers.battle.TrainerBattleTrigger;
+import map.triggers.map.MoveNPCTrigger;
+import map.triggers.map.ReloadMapTrigger;
 import mapMaker.dialogs.action.ActionType;
-import mapMaker.dialogs.action.trigger.TriggerActionType;
 import pattern.GroupTriggerMatcher;
 import pattern.JsonMatcher;
 import pattern.PokemonMatcher;
+import pattern.map.FishingMatcher;
+import pokemon.PokemonNamesies;
+import sound.SoundTitle;
 import trainer.Trainer;
+import trainer.player.Badge;
+import trainer.player.medal.MedalTheme;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +47,117 @@ public abstract class ActionMatcher implements JsonMatcher {
 
         GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerSuffix, actionTriggers);
         return new GroupTrigger(matcher, condition);
+    }
+
+    public static class HealPartyActionMatcher extends ActionMatcher {
+        @Override
+        public ActionType getActionType() {
+            return ActionType.HEAL_PARTY;
+        }
+
+        @Override
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new HealPartyTrigger(condition);
+        }
+    }
+
+    public static class DayCareActionMatcher extends ActionMatcher {
+        @Override
+        public ActionType getActionType() {
+            return ActionType.DAY_CARE;
+        }
+
+        @Override
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new DayCareTrigger(condition);
+        }
+    }
+
+    public static class ReloadMapActionMatcher extends ActionMatcher {
+        @Override
+        public ActionType getActionType() {
+            return ActionType.RELOAD_MAP;
+        }
+
+        @Override
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new ReloadMapTrigger(condition);
+        }
+    }
+
+    public static class BadgeActionMatcher extends ActionMatcher {
+        private Badge badge;
+
+        public BadgeActionMatcher(Badge badge) {
+            this.badge = badge;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.BADGE;
+        }
+
+        @Override
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new BadgeTrigger(this.badge, condition);
+        }
+    }
+
+    public static class ChangeViewActionMatcher extends ActionMatcher {
+        private ViewMode viewMode;
+
+        public ChangeViewActionMatcher(ViewMode viewMode) {
+            this.viewMode = viewMode;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.CHANGE_VIEW;
+        }
+
+        @Override
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new ChangeViewTrigger(this.viewMode, condition);
+        }
+    }
+
+    public static class GivePokemonActionMatcher extends ActionMatcher {
+        private PokemonMatcher pokemonMatcher;
+
+        public GivePokemonActionMatcher(PokemonMatcher pokemonMatcher) {
+            this.pokemonMatcher = pokemonMatcher;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.GIVE_POKEMON;
+        }
+
+        @Override
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new GivePokemonTrigger(pokemonMatcher, condition);
+        }
+    }
+
+    // TODO: Add test that quantity is always greater than zero
+    public static class GiveItemActionMatcher extends ActionMatcher {
+        private ItemNamesies giveItem;
+        private int quantity;
+
+        public GiveItemActionMatcher(ItemNamesies giveItem, int quantity) {
+            this.giveItem = giveItem;
+            this.quantity = quantity;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.GIVE_ITEM;
+        }
+
+        @Override
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new GiveItemTrigger(this.giveItem, this.quantity, condition);
+        }
     }
 
     public static class UseItemActionMatcher extends ActionMatcher {
@@ -52,41 +178,41 @@ public abstract class ActionMatcher implements JsonMatcher {
         }
     }
 
-    public static class TriggerActionMatcher extends ActionMatcher {
-        public TriggerType triggerType;
-        public String triggerContents;
-        private ConditionSet condition;
+    public static class MoveNpcActionMatcher extends ActionMatcher {
+        private String npcEntityName;
+        private String endEntranceName;
+        private boolean endLocationIsPlayer;
 
-        public TriggerActionMatcher(TriggerType triggerType, String triggerContents, Condition condition) {
-            this.triggerType = triggerType;
-            this.triggerContents = triggerContents;
-            this.condition = new ConditionSet(condition);
+        public MoveNpcActionMatcher(String npcEntityName, String endEntranceName, boolean endLocationIsPlayer) {
+            this.npcEntityName = npcEntityName;
+            this.endLocationIsPlayer = endLocationIsPlayer;
+
+            // Ending at the player and another entrance are mutually exclusive
+            if (!endLocationIsPlayer) {
+                this.endEntranceName = endEntranceName;
+            }
         }
 
-        public TriggerType getTriggerType() {
-            return this.getTriggerActionType().getTriggerType();
+        public String getNpcEntityName() {
+            return this.npcEntityName;
         }
 
-        public TriggerActionType getTriggerActionType() {
-            return TriggerActionType.getTriggerActionType(triggerType);
+        public String getEndEntranceName() {
+            return this.endEntranceName;
         }
 
-        public String getTriggerContents() {
-            return this.triggerContents;
+        public boolean endLocationIsPlayer() {
+            return this.endLocationIsPlayer;
         }
 
         @Override
         public ActionType getActionType() {
-            return ActionType.TRIGGER;
+            return ActionType.MOVE_NPC;
         }
 
         @Override
         protected Trigger getTrigger(String entityName, Condition condition) {
-            return this.getTriggerType()
-                       .createTrigger2(
-                               this.getTriggerContents(),
-                               condition
-                       );
+            return new MoveNPCTrigger(this, condition);
         }
     }
 
@@ -171,6 +297,88 @@ public abstract class ActionMatcher implements JsonMatcher {
         @Override
         protected Trigger getTrigger(String entityName, Condition condition) {
             return new ChoiceTrigger(this, condition);
+        }
+    }
+
+    public static class TradePokemonActionMatcher extends ActionMatcher {
+        private PokemonNamesies tradePokemon;
+        private PokemonNamesies requested;
+
+        public TradePokemonActionMatcher(PokemonNamesies tradePokemon, PokemonNamesies requested) {
+            this.tradePokemon = tradePokemon;
+            this.requested = requested;
+        }
+
+        public PokemonNamesies getRequested() {
+            return this.requested;
+        }
+
+        public PokemonNamesies getTradePokemon() {
+            return this.tradePokemon;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.TRADE_POKEMON;
+        }
+
+        @Override
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new TradePokemonTrigger(tradePokemon, requested, condition);
+        }
+    }
+
+    public static class FishingActionMatcher extends ActionMatcher {
+        private FishingMatcher matcher;
+
+        public FishingActionMatcher(FishingMatcher matcher) {
+            this.matcher = matcher;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.FISHING;
+        }
+
+        @Override
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new FishingTrigger(matcher, condition);
+        }
+    }
+
+    public static class SoundActionMatcher extends ActionMatcher {
+        private SoundTitle soundTitle;
+
+        public SoundActionMatcher(SoundTitle soundTitle) {
+            this.soundTitle = soundTitle;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.SOUND;
+        }
+
+        @Override
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new SoundTrigger(soundTitle, condition);
+        }
+    }
+
+    public static class MedalCountActionMatcher extends ActionMatcher {
+        private MedalTheme medalTheme;
+
+        public MedalCountActionMatcher(MedalTheme medalTheme) {
+            this.medalTheme = medalTheme;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.MEDAL_COUNT;
+        }
+
+        @Override
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new MedalCountTrigger(medalTheme, condition);
         }
     }
 }

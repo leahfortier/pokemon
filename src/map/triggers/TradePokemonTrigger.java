@@ -5,24 +5,31 @@ import gui.view.ViewMode;
 import main.Game;
 import map.condition.Condition;
 import pattern.TradePokemonMatcher;
+import pokemon.PokemonNamesies;
 import util.SerializationUtils;
 
 public class TradePokemonTrigger extends Trigger {
-    private final TradePokemonMatcher tradePokemonMatcher;
+    private final PokemonNamesies tradePokemon;
+    private final PokemonNamesies requested;
 
     TradePokemonTrigger(String contents, Condition condition) {
         this(SerializationUtils.deserializeJson(contents, TradePokemonMatcher.class), condition);
     }
 
     public TradePokemonTrigger(TradePokemonMatcher matcher, Condition condition) {
-        super(matcher.getJson(), condition);
-        this.tradePokemonMatcher = matcher;
+        this(matcher.getTradePokemon(), matcher.getRequested(), condition);
+    }
+
+    public TradePokemonTrigger(PokemonNamesies tradePokemon, PokemonNamesies requestedPokemon, Condition condition) {
+        super(tradePokemon.name() + "/" + requestedPokemon.name(), condition);
+        this.tradePokemon = tradePokemon;
+        this.requested = requestedPokemon;
     }
 
     @Override
     protected void executeTrigger() {
         TradeView tradeView = Game.instance().getTradeView();
-        tradeView.setTrade(this.tradePokemonMatcher);
+        tradeView.setTrade(this.tradePokemon, this.requested);
 
         ChangeViewTrigger.addChangeViewTriggerMessage(ViewMode.TRADE_VIEW);
     }

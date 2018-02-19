@@ -72,9 +72,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Yo yo yo, I'm so hip and happenin' yo!!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Yo yo yo, I'm so hip and happenin' yo!!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "name": "Hip and Happening Youngster",
@@ -104,9 +103,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Guess you're too hip for me, hahahahahahaha :(",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Guess you're too hip for me, hahahahahahaha :(",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }

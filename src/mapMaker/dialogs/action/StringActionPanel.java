@@ -11,10 +11,10 @@ import util.GUIUtils;
 import javax.swing.JTextField;
 
 // For actions which only have a string field
-class BasicActionPanel extends ActionPanel {
+class StringActionPanel extends ActionPanel {
     private final JTextField textField;
 
-    BasicActionPanel(String actionName) {
+    StringActionPanel(String actionName) {
         textField = new JTextField();
 
         GUIUtils.setHorizontalLayout(

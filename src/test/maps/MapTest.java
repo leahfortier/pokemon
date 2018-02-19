@@ -12,13 +12,12 @@ import map.condition.ConditionHolder.OrCondition;
 import map.daynight.DayCycle;
 import map.overworld.WalkType;
 import map.overworld.WildEncounterInfo;
-import map.triggers.TriggerType;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import pattern.action.ActionMatcher;
-import pattern.action.ActionMatcher.TriggerActionMatcher;
 import pattern.action.NPCInteractionMatcher;
+import pattern.action.StringActionMatcher.DialogueActionMatcher;
 import pattern.action.StringActionMatcher.GlobalActionMatcher;
 import pattern.generic.TriggerMatcher;
 import pattern.map.AreaMatcher;
@@ -62,7 +61,7 @@ public class MapTest extends BaseTest {
             TestMap map = new TestMap(mapFolder);
             maps.add(map);
 
-            for (ActionMatcher action : getAllActionMatchers(map)) {
+            for (ActionMatcher action : getAllActions(map)) {
                 if (action instanceof GlobalActionMatcher) {
                     GlobalActionMatcher globalActionMatcher = (GlobalActionMatcher)action;
                     String globalName = globalActionMatcher.getActionString();
@@ -184,19 +183,16 @@ public class MapTest extends BaseTest {
     public void dialogueTest() {
         // Make sure all input dialogue triggers don't include the string 'Poke' instead of 'Poké'
         for (TestMap map : maps) {
-            for (ActionMatcher action : getAllActionMatchers(map)) {
-                if (action instanceof TriggerActionMatcher) {
-                    TriggerActionMatcher trigger = (TriggerActionMatcher)action;
-                    if (trigger.getTriggerType() == TriggerType.DIALOGUE) {
-                        String dialogue = trigger.getTriggerContents();
-                        Assert.assertFalse(map.getName() + " " + dialogue, dialogue.contains("Poke"));
-                    }
+            for (ActionMatcher action : getAllActions(map)) {
+                if (action instanceof DialogueActionMatcher) {
+                    String dialogue = ((DialogueActionMatcher)action).getActionString();
+                    Assert.assertFalse(map.getName() + " " + dialogue, dialogue.contains("Poke"));
                 }
             }
         }
     }
 
-    private static List<ActionMatcher> getAllActionMatchers(TestMap map) {
+    private static List<ActionMatcher> getAllActions(TestMap map) {
         List<ActionMatcher> actionMatchers = new ArrayList<>();
 
         for (NPCMatcher npc : map.getMatcher().getNPCs()) {

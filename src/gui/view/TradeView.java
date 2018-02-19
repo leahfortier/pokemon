@@ -15,9 +15,9 @@ import input.InputControl;
 import main.Game;
 import main.Global;
 import message.Messages;
-import pattern.TradePokemonMatcher;
 import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;
+import pokemon.PokemonNamesies;
 import trainer.Trainer;
 import trainer.player.Player;
 import type.Type;
@@ -263,9 +263,9 @@ public class TradeView extends View {
         updateActiveButtons();
     }
 
-    public void setTrade(TradePokemonMatcher tradePokemonMatcher) {
-        offering = tradePokemonMatcher.getTradePokemon().getInfo();
-        requested = tradePokemonMatcher.getRequested().getInfo();
+    public void setTrade(PokemonNamesies tradePokemon, PokemonNamesies requestedPokemon) {
+        this.offering = tradePokemon.getInfo();
+        this.requested = requestedPokemon.getInfo();
 
         this.canvasPanel.withBackgroundColors(new Color[] {
                 requested.getType()[0].getColor(),

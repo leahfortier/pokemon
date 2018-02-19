@@ -147,23 +147,7 @@ public class MapDataMatcher implements JsonMatcher {
 //                interaction.npcActions2 = null;
 
                 ActionMatcher[] npcActions = interaction.npcActions;
-                for (ActionMatcher npcAction : npcActions) {
-                    if (npcAction instanceof ChoiceActionMatcher) {
-                        ChoiceActionMatcher c = (ChoiceActionMatcher)npcAction;
-                        for (ChoiceMatcher choice : c.choices) {
-//                            ActionMatcher[] choiceActions = choice.actions;
-//                            ActionMatcher2[] choiceActions2 = new ActionMatcher2[choiceActions.length];
-//                            for (int i = 0; i < choiceActions.length; i++) {
-//                                choiceActions2[i] = choiceActions[i].getNewMatcher();
-//                            }
-//                            choice.actions2 = choiceActions2;
-//                            choice.actions = null;
-
-//                            choice.actions = choice.actions2;
-//                            choice.actions2 = null;
-                        }
-                    }
-                }
+                updateActions(npcActions);
             }
         }
 
@@ -178,6 +162,7 @@ public class MapDataMatcher implements JsonMatcher {
 
 //            event.actions = event.actions2;
 //            event.actions2 = null;
+            updateActions(event.actions);
         }
 
         for (MiscEntityMatcher event : deserialized.getMiscEntities()) {
@@ -191,6 +176,8 @@ public class MapDataMatcher implements JsonMatcher {
 
 //            event.actions = event.actions2;
 //            event.actions2 = null;
+
+            updateActions(event.actions);
         }
 
         String formattedJson = SerializationUtils.getJson(deserialized);
@@ -206,5 +193,78 @@ public class MapDataMatcher implements JsonMatcher {
         FileIO.overwriteFile(areaDescriptionFileName, formattedJson);
 
         return deserialized;
+    }
+
+    private static void updateActions(ActionMatcher[] actions) {
+        for (int i = 0; i < actions.length; i++) {
+//            if (actions[i] instanceof TriggerActionMatcher) {
+//                TriggerActionMatcher triggerActionMatcher = (TriggerActionMatcher)actions[i];
+//                String contents = triggerActionMatcher.triggerContents;
+//                switch (triggerActionMatcher.getTriggerType()) {
+//                    case DIALOGUE:
+//                        actions[i] = new DialogueActionMatcher(contents);
+//                        break;
+//                    case MOVE_PLAYER:
+//                        actions[i] = new MovePlayerActionMatcher(contents);
+//                        break;
+//                    case HEAL_PARTY:
+//                        actions[i] = new HealPartyActionMatcher();
+//                        break;
+//                    case CHANGE_VIEW:
+//                        actions[i] = new ChangeViewActionMatcher(ViewMode.valueOf(contents));
+//                        break;
+//                    case GIVE_ITEM:
+//                        actions[i] = new GiveItemActionMatcher(ItemNamesies.getValueOf(contents), 1);
+//                        break;
+//                    case RELOAD_MAP:
+//                        actions[i] = new ReloadMapActionMatcher();
+//                        break;
+//                    case BADGE:
+//                        actions[i] = new BadgeActionMatcher(Badge.valueOf(contents));
+//                        break;
+//                    case MOVE_NPC:
+//                        MoveNPCTriggerMatcher moveNPCTriggerMatcher = SerializationUtils.deserializeJson(contents, MoveNPCTriggerMatcher.class);
+//                        actions[i] = new MoveNpcActionMatcher(moveNPCTriggerMatcher.getNpcEntityName(), moveNPCTriggerMatcher.getEndEntranceName(), moveNPCTriggerMatcher.endLocationIsPlayer());
+//                        break;
+//                    case GIVE_POKEMON:
+//                        PokemonMatcher pokemonMatcher = SerializationUtils.deserializeJson(contents, PokemonMatcher.class);
+//                        actions[i] = new GivePokemonActionMatcher(pokemonMatcher);
+//                        break;
+//                    case TRADE_POKEMON:
+//                        TradePokemonMatcher tradePokemonMatcher = SerializationUtils.deserializeJson(contents, TradePokemonMatcher.class);
+//                        actions[i] = new TradePokemonActionMatcher(tradePokemonMatcher.getTradePokemon(), tradePokemonMatcher.getRequested());
+//                        break;
+//                    case DAY_CARE:
+//                        actions[i] = new DayCareActionMatcher();
+//                        break;
+//                    case SOUND:
+//                        actions[i] = new SoundActionMatcher(SoundTitle.valueOf(contents));
+//                        break;
+//                    case MEDAL_COUNT:
+//                        actions[i] = new MedalCountActionMatcher(MedalTheme.valueOf(contents));
+//                        break;
+//                    default:
+//                        System.err.println(triggerActionMatcher.getTriggerType());
+//                        break;
+//                }
+//            }
+
+            if (actions[i] instanceof ChoiceActionMatcher) {
+                ChoiceActionMatcher c = (ChoiceActionMatcher)actions[i];
+                for (ChoiceMatcher choice : c.choices) {
+//                            ActionMatcher[] choiceActions = choice.actions;
+//                            ActionMatcher2[] choiceActions2 = new ActionMatcher2[choiceActions.length];
+//                            for (int i = 0; i < choiceActions.length; i++) {
+//                                choiceActions2[i] = choiceActions[i].getNewMatcher();
+//                            }
+//                            choice.actions2 = choiceActions2;
+//                            choice.actions = null;
+
+//                            choice.actions = choice.actions2;
+//                            choice.actions2 = null;
+                    updateActions(choice.actions);
+                }
+            }
+        }
     }
 }

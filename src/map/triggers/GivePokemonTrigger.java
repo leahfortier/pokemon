@@ -6,7 +6,7 @@ import pattern.PokemonMatcher;
 import pokemon.PartyPokemon;
 import util.SerializationUtils;
 
-class GivePokemonTrigger extends Trigger {
+public class GivePokemonTrigger extends Trigger {
     private final PokemonMatcher pokemonMatcher;
 
     GivePokemonTrigger(String pokemonDescription, Condition condition) {

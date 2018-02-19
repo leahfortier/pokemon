@@ -75,9 +75,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I'm not allowed out after dark.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I'm not allowed out after dark.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -100,9 +99,8 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I like shorts!!!!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I like shorts!!!!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "name": "Bug Catcher",
@@ -128,9 +126,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "SHORRRRTTTTTSSSSSS",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "SHORRRRTTTTTSSSSSS",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -152,9 +149,8 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I'm a meadow lady in a meadow!!!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I'm a meadow lady in a meadow!!!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "name": "Meadow Lady",
@@ -180,9 +176,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Yayyy I'm in a meadow and I'm a lady lalalala!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Yayyy I'm in a meadow and I'm a lady lalalala!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }

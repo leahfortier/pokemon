@@ -6,6 +6,7 @@ import map.triggers.GlobalTrigger;
 import map.triggers.GroupTrigger;
 import map.triggers.Trigger;
 import map.triggers.UpdateTrigger;
+import map.triggers.map.MovePlayerTrigger;
 import mapMaker.dialogs.action.ActionType;
 import pattern.GroupTriggerMatcher;
 
@@ -101,6 +102,29 @@ public abstract class StringActionMatcher extends ActionMatcher {
         @Override
         public String getActionString() {
             return dialogue;
+        }
+    }
+
+    public static class MovePlayerActionMatcher extends StringActionMatcher {
+        private String path;
+
+        public MovePlayerActionMatcher(String path) {
+            this.path = path;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.MOVE_PLAYER;
+        }
+
+        @Override
+        protected Trigger getTrigger(String entityName, Condition condition) {
+            return new MovePlayerTrigger(path, condition);
+        }
+
+        @Override
+        public String getActionString() {
+            return path;
         }
     }
 }

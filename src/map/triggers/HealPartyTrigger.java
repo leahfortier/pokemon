@@ -5,7 +5,7 @@ import main.Global;
 import map.condition.Condition;
 import util.StringUtils;
 
-class HealPartyTrigger extends Trigger {
+public class HealPartyTrigger extends Trigger {
 
     HealPartyTrigger(String contents, Condition condition) {
         this(condition);

@@ -58,9 +58,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Hi, I'm Tom!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Hi, I'm Tom!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }

@@ -6,14 +6,14 @@ import map.condition.Condition;
 import message.MessageUpdate;
 import message.Messages;
 
-class ChangeViewTrigger extends Trigger {
+public class ChangeViewTrigger extends Trigger {
     private final ViewMode view;
 
     ChangeViewTrigger(String viewMode, Condition condition) {
         this(ViewMode.valueOf(viewMode), condition);
     }
 
-    ChangeViewTrigger(ViewMode viewMode, Condition condition) {
+    public ChangeViewTrigger(ViewMode viewMode, Condition condition) {
         super(viewMode.name(), condition);
         this.view = viewMode;
     }
