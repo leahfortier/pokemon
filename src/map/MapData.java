@@ -12,7 +12,6 @@ import map.entity.MiscEntity;
 import map.overworld.WalkType;
 import map.overworld.WildEncounterInfo;
 import map.triggers.Trigger;
-import map.triggers.TriggerData;
 import map.triggers.battle.WalkingWildBattleTrigger;
 import map.triggers.map.MapTransitionTrigger;
 import pattern.SimpleMapTransition;
@@ -104,12 +103,11 @@ public class MapData {
         }
 
         for (EventMatcher matcher : mapDataMatcher.getEvents()) {
-            TriggerData triggerData = new TriggerData(matcher);
             Trigger trigger = ActionMatcher.addActionGroupTrigger(
-                    triggerData.getName(),
-                    triggerData.getName(),
-                    triggerData.getCondition(),
-                    triggerData.getActions()
+                    matcher.getTriggerName(),
+                    matcher.getTriggerName(),
+                    matcher.getCondition(),
+                    matcher.getActions()
             );
 
             for (Point point : matcher.getLocation()) {

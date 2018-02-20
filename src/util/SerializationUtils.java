@@ -80,7 +80,7 @@ public class SerializationUtils {
         return deserialize(serialize(serializable));
     }
 
-    public static <T> T getSerializedJsonCopy(JsonMatcher jsonMatcher, Class<T> classy) {
+    public static <T> T getJsonCopy(JsonMatcher jsonMatcher, Class<T> classy) {
         return deserializeJson(jsonMatcher.getJson(), classy);
     }
 

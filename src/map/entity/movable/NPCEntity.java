@@ -8,7 +8,6 @@ import map.triggers.Trigger;
 import pattern.action.ActionMatcher;
 import trainer.player.Player;
 import util.Point;
-import util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -122,7 +121,7 @@ public class NPCEntity extends MovableEntity {
         return this.isWalkToPlayer()
                 && !this.walkingToPlayer
                 && this.moveAxis.checkAxis(this.getLocation(), this.getDirection(), Game.getPlayer().getLocation())
-                && Game.getData().getTrigger(this.getWalkTrigger()).isTriggered();
+                && this.getWalkTrigger().isTriggered();
     }
 
     public boolean isWalkToPlayer() {
@@ -130,8 +129,8 @@ public class NPCEntity extends MovableEntity {
         return this.interactions.get(interaction).shouldWalkToPlayer();
     }
 
-    private String getWalkTrigger() {
-        return isWalkToPlayer() ? this.getTrigger().getName() : StringUtils.empty();
+    private Trigger getWalkTrigger() {
+        return isWalkToPlayer() ? this.getTrigger() : null;
     }
 
     public boolean isTrainer() {
@@ -155,7 +154,7 @@ public class NPCEntity extends MovableEntity {
 
         if (!this.triggerInteractionMap.containsKey(currentInteraction)) {
             NPCInteraction interaction = this.interactions.get(currentInteraction);
-            final List<ActionMatcher> actions = interaction.getActions();
+            List<ActionMatcher> actions = interaction.getActions();
 
             Trigger trigger = ActionMatcher.addActionGroupTrigger(
                     this.getEntityName(),
@@ -163,7 +162,6 @@ public class NPCEntity extends MovableEntity {
                     this.getCondition(),
                     actions
             );
-            trigger.addData();
 
             this.triggerInteractionMap.put(currentInteraction, trigger);
         }

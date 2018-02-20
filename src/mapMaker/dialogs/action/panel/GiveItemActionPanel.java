@@ -16,9 +16,9 @@ public class GiveItemActionPanel extends ActionPanel<GiveItemActionMatcher> {
     private final JFormattedTextField quantityTextField;
 
     public GiveItemActionPanel() {
-        super();
+        itemField = GUIUtils.createTextField();
+        quantityTextField = GUIUtils.createIntegerTextField(1, 1, 99);
 
-        itemField = new JTextField();
         ColorCondition colorCondition = () -> ItemNamesies.tryValueOf(itemField.getText().trim()) != null;
         itemField.getDocument().addDocumentListener(new ColorDocumentListener(colorCondition) {
             @Override
@@ -27,7 +27,6 @@ public class GiveItemActionPanel extends ActionPanel<GiveItemActionMatcher> {
             }
         });
 
-        quantityTextField = GUIUtils.createIntegerTextField(1, 1, 99);
 
         GUIUtils.setVerticalLayout(
                 this,

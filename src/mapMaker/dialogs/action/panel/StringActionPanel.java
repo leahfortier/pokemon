@@ -16,7 +16,7 @@ public class StringActionPanel extends ActionPanel<StringActionMatcher> {
     public StringActionPanel(String actionName, Function<String, StringActionMatcher> actionMatcherGetter) {
         this.actionMatcherGetter = actionMatcherGetter;
 
-        textField = new JTextField();
+        textField = GUIUtils.createTextField();
         GUIUtils.setHorizontalLayout(
                 this,
                 GUIUtils.createTextFieldComponent(actionName, textField)

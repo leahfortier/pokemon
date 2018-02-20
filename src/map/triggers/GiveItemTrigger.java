@@ -8,7 +8,7 @@ public class GiveItemTrigger extends Trigger {
     private final int quantity;
 
     public GiveItemTrigger(ItemNamesies itemNamesies, int quantity) {
-        super(itemNamesies.name() + " " + quantity);
+        super(itemNamesies.name() + "_" + quantity);
         this.item = itemNamesies;
         this.quantity = quantity;
     }
