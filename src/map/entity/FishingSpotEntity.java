@@ -5,12 +5,11 @@ import map.condition.Condition;
 import map.condition.Condition.ItemCondition;
 import map.condition.ConditionHolder.AndCondition;
 import map.overworld.WildEncounterInfo;
-import pattern.action.ActionMatcher;
-import pattern.action.ActionMatcher.FishingActionMatcher;
+import map.triggers.GroupTrigger;
+import map.triggers.battle.FishingTrigger;
+import pattern.GroupTriggerMatcher;
 import pattern.map.FishingMatcher;
 import util.Point;
-
-import java.util.Collections;
 
 public class FishingSpotEntity extends Entity {
     private final WildEncounterInfo[] wildEncounters;
@@ -40,14 +39,8 @@ public class FishingSpotEntity extends Entity {
         }
 
         FishingMatcher fishingMatcher = new FishingMatcher(this.getEntityName(), wildEncounters);
-        ActionMatcher entityAction = new FishingActionMatcher(fishingMatcher);
-
-        ActionMatcher.addActionGroupTrigger(
-                this.getEntityName(),
-                this.getTriggerSuffix(),
-                this.getCondition(),
-                Collections.singletonList(entityAction)
-        );
+        GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getTriggerSuffix(), new FishingTrigger(fishingMatcher));
+        new GroupTrigger(matcher, null).addData();
 
         dataCreated = true;
     }

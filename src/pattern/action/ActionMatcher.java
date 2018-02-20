@@ -9,14 +9,12 @@ import map.triggers.GroupTrigger;
 import map.triggers.TradePokemonTrigger;
 import map.triggers.Trigger;
 import map.triggers.UseItemTrigger;
-import map.triggers.battle.FishingTrigger;
 import map.triggers.battle.TrainerBattleTrigger;
 import map.triggers.map.MoveNPCTrigger;
 import mapMaker.dialogs.action.ActionType;
 import pattern.GroupTriggerMatcher;
 import pattern.JsonMatcher;
 import pattern.PokemonMatcher;
-import pattern.map.FishingMatcher;
 import pokemon.PokemonNamesies;
 import trainer.Trainer;
 
@@ -256,25 +254,6 @@ public interface ActionMatcher extends JsonMatcher {
         @Override
         public Trigger createNewTrigger(String entityName) {
             return new TradePokemonTrigger(tradePokemon, requested);
-        }
-    }
-
-    class FishingActionMatcher implements ActionMatcher {
-        private FishingMatcher matcher;
-
-        public FishingActionMatcher(FishingMatcher matcher) {
-            this.matcher = matcher;
-        }
-
-        @Override
-        public ActionType getActionType() {
-            // Not available in map maker since it makes no sense there
-            return null;
-        }
-
-        @Override
-        public Trigger createNewTrigger(String entityName) {
-            return new FishingTrigger(matcher);
         }
     }
 }
