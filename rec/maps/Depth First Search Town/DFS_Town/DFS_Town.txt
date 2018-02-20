@@ -177,7 +177,7 @@
               "className": "pattern.action.ActionMatcher$GiveItemActionMatcher"
             },
             {
-              "update": "done",
+              "interactionName": "done",
               "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
             }
           ]
@@ -363,7 +363,7 @@
               "className": "pattern.action.ActionMatcher$GiveItemActionMatcher"
             },
             {
-              "update": "done",
+              "interactionName": "done",
               "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
             }
           ]
@@ -430,7 +430,7 @@
               "className": "pattern.action.ActionMatcher$MoveNpcActionMatcher"
             },
             {
-              "update": "heal",
+              "interactionName": "heal",
               "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
             },
             {

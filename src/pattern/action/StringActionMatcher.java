@@ -13,15 +13,15 @@ public interface StringActionMatcher extends ActionMatcher {
     String getStringValue();
 
     class UpdateActionMatcher implements StringActionMatcher {
-        private String update;
+        private String interactionName;
 
-        public UpdateActionMatcher(String update) {
-            this.update = update;
+        public UpdateActionMatcher(String interactionName) {
+            this.interactionName = interactionName;
         }
 
         @Override
         public String getStringValue() {
-            return this.update;
+            return this.interactionName;
         }
 
         @Override
@@ -31,7 +31,7 @@ public interface StringActionMatcher extends ActionMatcher {
 
         @Override
         public Trigger createNewTrigger(String entityName) {
-            return new UpdateTrigger(new UpdateMatcher(entityName, update));
+            return new UpdateTrigger(new UpdateMatcher(entityName, interactionName));
         }
     }
 

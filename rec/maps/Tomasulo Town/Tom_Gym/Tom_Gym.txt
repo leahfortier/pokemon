@@ -174,7 +174,7 @@
               "className": "pattern.action.EnumActionMatcher$BadgeActionMatcher"
             },
             {
-              "update": "won",
+              "interactionName": "won",
               "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
             }
           ]

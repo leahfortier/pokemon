@@ -198,6 +198,12 @@ public class MapDataMatcher implements JsonMatcher {
 
     private static void updateActions(ActionMatcher[] actions) {
         for (int i = 0; i < actions.length; i++) {
+//            if (actions[i] instanceof UpdateActionMatcher) {
+//                UpdateActionMatcher updateActionMatcher = (UpdateActionMatcher)actions[i];
+//                updateActionMatcher.interactionName = updateActionMatcher.update;
+//                updateActionMatcher.update = null;
+//            }
+
 //            if (actions[i] instanceof TriggerActionMatcher) {
 //                TriggerActionMatcher triggerActionMatcher = (TriggerActionMatcher)actions[i];
 //                String contents = triggerActionMatcher.triggerContents;

@@ -80,7 +80,7 @@
               "className": "pattern.action.ActionMatcher$GivePokemonActionMatcher"
             },
             {
-              "update": "heal",
+              "interactionName": "heal",
               "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
             }
           ]
@@ -126,7 +126,7 @@
               "className": "pattern.action.ActionMatcher$ChoiceActionMatcher"
             },
             {
-              "update": "heal",
+              "interactionName": "heal",
               "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
             }
           ]

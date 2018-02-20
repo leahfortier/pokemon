@@ -206,7 +206,7 @@
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "update": "dialogue",
+              "interactionName": "dialogue",
               "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
             }
           ]
