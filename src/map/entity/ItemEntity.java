@@ -26,7 +26,7 @@ public class ItemEntity extends Entity {
     private final boolean isTM;
 
     private boolean hasTriggered;
-    private boolean dataCreated;
+    private Trigger trigger;
 
     public ItemEntity(String name, Point location, Condition condition, ItemNamesies item, boolean isHidden) {
         super(location, name, condition);
@@ -35,7 +35,6 @@ public class ItemEntity extends Entity {
         this.isTM = this.itemName.getItem() instanceof TechnicalMachine;
 
         this.hasTriggered = false;
-        this.dataCreated = false;
     }
 
     public boolean isHiddenItem() {
@@ -73,32 +72,28 @@ public class ItemEntity extends Entity {
     }
 
     @Override
-    public void addData() {
-        if (dataCreated) {
-            return;
+    public Trigger getTrigger() {
+        if (trigger == null) {
+            String itemDialogue =
+                    "You found " +
+                            (isTM
+                                    ? "the " + this.itemName.getName()
+                                    : StringUtils.articleString(this.itemName.getName())
+                            ) +
+                            "!";
+
+            List<Trigger> triggers = new ArrayList<>();
+            triggers.add(new GlobalTrigger(this.getEntityName()));
+            triggers.add(new DialogueTrigger(itemDialogue));
+            triggers.add(new GiveItemTrigger(this.itemName, 1));
+            if (this.isHidden) {
+                triggers.add(new MedalCountTrigger(MedalTheme.HIDDEN_ITEMS_FOUND));
+            }
+
+            GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getEntityName(), triggers);
+            this.trigger = new GroupTrigger(matcher, this.getCondition()).addData();
         }
 
-        // Create a universal trigger for this item
-        String itemDialogue =
-                "You found " +
-                        (isTM
-                                ? "the " + this.itemName.getName()
-                                : StringUtils.articleString(this.itemName.getName())
-                        ) +
-                        "!";
-
-        List<Trigger> triggers = new ArrayList<>();
-        triggers.add(new GlobalTrigger(this.getEntityName()));
-        triggers.add(new DialogueTrigger(itemDialogue));
-        triggers.add(new GiveItemTrigger(this.itemName, 1));
-        if (this.isHidden) {
-            triggers.add(new MedalCountTrigger(MedalTheme.HIDDEN_ITEMS_FOUND));
-        }
-
-        // This trigger will only call the item trigger when the conditions apply
-        GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getTriggerSuffix(), triggers);
-        new GroupTrigger(matcher, null).addData();
-
-        dataCreated = true;
+        return trigger;
     }
 }

@@ -185,7 +185,7 @@ public class PlayerEntity extends MovableEntity {
             if (currentInteractionEntity.isVisible()) {
                 currentInteractionEntity.getAttention(entityDirection.getOpposite());
 
-                Trigger trigger = Game.getData().getTrigger(currentInteractionEntity.getTriggerName());
+                Trigger trigger = currentInteractionEntity.getTrigger();
                 if (trigger != null) {
                     trigger.execute();
                 }
@@ -230,7 +230,7 @@ public class PlayerEntity extends MovableEntity {
     }
 
     @Override
-    public String getTriggerSuffix() {
+    public Trigger getTrigger() {
         return null;
     }
 

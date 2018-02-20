@@ -329,7 +329,7 @@ public class MapData {
                 .filter(Entity::setVisible)
                 .forEach(entity -> {
                     entity.reset();
-                    entity.addData();
+                    entity.getTrigger();
                 });
     }
 }

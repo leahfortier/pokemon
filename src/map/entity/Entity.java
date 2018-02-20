@@ -6,7 +6,6 @@ import map.Direction;
 import map.MapData;
 import map.condition.Condition;
 import map.condition.ConditionSet;
-import map.triggers.GroupTrigger;
 import map.triggers.Trigger;
 import util.Point;
 
@@ -26,6 +25,8 @@ public abstract class Entity {
         this.entityName = entityName;
         this.condition = new ConditionSet(condition);
     }
+
+    public abstract Trigger getTrigger();
 
     public boolean isHighPriorityEntity() {
         return true;
@@ -81,8 +82,6 @@ public abstract class Entity {
 
     public void reset() {}
 
-    public void addData() {}
-
     protected BufferedImage getFrame() {
         return null;
     }
@@ -93,14 +92,5 @@ public abstract class Entity {
 
     public String getEntityName() {
         return this.entityName;
-    }
-
-    public String getTriggerSuffix() {
-        return this.getEntityName();
-    }
-
-    public String getTriggerName() {
-        // TODO: I don't like Group Trigger here
-        return Trigger.createName(GroupTrigger.class, this.getTriggerSuffix());
     }
 }

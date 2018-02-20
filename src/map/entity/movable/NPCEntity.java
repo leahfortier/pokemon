@@ -4,15 +4,15 @@ import main.Game;
 import map.Direction;
 import map.PathDirection;
 import map.condition.Condition;
+import map.triggers.Trigger;
 import pattern.action.ActionMatcher;
-import pattern.action.ActionMatcher.BattleActionMatcher;
 import trainer.player.Player;
 import util.Point;
 import util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class NPCEntity extends MovableEntity {
     static final int NPC_SIGHT_DISTANCE = 5;
@@ -30,7 +30,7 @@ public class NPCEntity extends MovableEntity {
     private boolean hasAttention;
     private boolean walkingToPlayer;
 
-    private boolean dataCreated;
+    private Map<String, Trigger> triggerInteractionMap;
 
     public NPCEntity(
             String name,
@@ -40,22 +40,21 @@ public class NPCEntity extends MovableEntity {
             Direction direction,
             MoveAxis moveAxis,
             int spriteIndex,
-            Map<String, NPCInteraction> interactions,
-            String startKey) {
+            String startKey,
+            Map<String, NPCInteraction> interactions) {
         super(location, name, condition);
 
         this.path = path;
-
         this.defaultLocation = location;
         this.defaultDirection = direction;
         this.moveAxis = moveAxis;
         this.spriteIndex = spriteIndex;
-
-        this.interactions = interactions;
         this.startKey = startKey;
+        this.interactions = interactions;
+
+        this.triggerInteractionMap = new HashMap<>();
 
         this.reset();
-        this.addData();
     }
 
     void walkTowards(int steps, PathDirection direction) {
@@ -72,13 +71,8 @@ public class NPCEntity extends MovableEntity {
         return this.startKey;
     }
 
-    @Override
-    public String getTriggerSuffix() {
-        return this.getTriggerSuffix(this.getCurrentInteractionKey());
-    }
-
     private String getTriggerSuffix(final String interactionName) {
-        return super.getTriggerSuffix() + "_" + interactionName;
+        return this.getEntityName() + "_" + interactionName;
     }
 
     @Override
@@ -137,19 +131,11 @@ public class NPCEntity extends MovableEntity {
     }
 
     private String getWalkTrigger() {
-        return isWalkToPlayer() ? this.getTriggerName() : StringUtils.empty();
+        return isWalkToPlayer() ? this.getTrigger().getName() : StringUtils.empty();
     }
 
     public boolean isTrainer() {
-        NPCInteraction interaction = interactions.get(this.getCurrentInteractionKey());
-        List<ActionMatcher> actions = interaction.getActions();
-        for (ActionMatcher action : actions) {
-            if (action instanceof BattleActionMatcher) {
-                return true;
-            }
-        }
-
-        return false;
+        return interactions.get(this.getCurrentInteractionKey()).isBattleInteraction();
     }
 
     @Override
@@ -164,19 +150,25 @@ public class NPCEntity extends MovableEntity {
     }
 
     @Override
-    public void addData() {
-        if (dataCreated) {
-            return;
+    public Trigger getTrigger() {
+        String currentInteraction = this.getCurrentInteractionKey();
+
+        if (!this.triggerInteractionMap.containsKey(currentInteraction)) {
+            NPCInteraction interaction = this.interactions.get(currentInteraction);
+            final List<ActionMatcher> actions = interaction.getActions();
+
+            Trigger trigger = ActionMatcher.addActionGroupTrigger(
+                    this.getEntityName(),
+                    this.getTriggerSuffix(currentInteraction),
+                    this.getCondition(),
+                    actions
+            );
+            trigger.addData();
+
+            this.triggerInteractionMap.put(currentInteraction, trigger);
         }
 
-        for (Entry<String, NPCInteraction> interaction : this.interactions.entrySet()) {
-            final String interactionName = interaction.getKey();
-            final List<ActionMatcher> actions = interaction.getValue().getActions();
-
-            ActionMatcher.addActionGroupTrigger(this.getEntityName(), this.getTriggerSuffix(interactionName), this.getCondition(), actions);
-        }
-
-        dataCreated = true;
+        return this.triggerInteractionMap.get(currentInteraction);
     }
 
     @Override
