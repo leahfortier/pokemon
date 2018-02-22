@@ -1,6 +1,7 @@
 package mapMaker.dialogs.action;
 
 import gui.view.ViewMode;
+import map.triggers.CommonTrigger;
 import mapMaker.dialogs.action.panel.BattleActionPanel;
 import mapMaker.dialogs.action.panel.ChoiceActionPanel;
 import mapMaker.dialogs.action.panel.EmptyActionPanel;
@@ -17,12 +18,12 @@ import pattern.action.EmptyActionMatcher.ReloadMapActionMatcher;
 import pattern.action.EnumActionMatcher;
 import pattern.action.EnumActionMatcher.BadgeActionMatcher;
 import pattern.action.EnumActionMatcher.ChangeViewActionMatcher;
+import pattern.action.EnumActionMatcher.GroupTriggerActionMatcher;
 import pattern.action.EnumActionMatcher.MedalCountActionMatcher;
 import pattern.action.EnumActionMatcher.SoundActionMatcher;
 import pattern.action.StringActionMatcher;
 import pattern.action.StringActionMatcher.DialogueActionMatcher;
 import pattern.action.StringActionMatcher.GlobalActionMatcher;
-import pattern.action.StringActionMatcher.GroupTriggerActionMatcher;
 import pattern.action.StringActionMatcher.MovePlayerActionMatcher;
 import pattern.action.StringActionMatcher.UpdateActionMatcher;
 import sound.SoundTitle;
@@ -42,7 +43,7 @@ public enum ActionType {
     GIVE_ITEM(dialog -> new GiveItemActionPanel()),
     GIVE_POKEMON(dialog -> new PokemonActionPanel()),
     GLOBAL("Global Name", GlobalActionMatcher::new),
-    GROUP_TRIGGER("Trigger Name", GroupTriggerActionMatcher::new),
+    GROUP_TRIGGER("Trigger Name", CommonTrigger.values(), GroupTriggerActionMatcher::new),
     HEAL_PARTY(HealPartyActionMatcher::new),
     MEDAL_COUNT("Medal", MedalTheme.values(), MedalCountActionMatcher::new),
     MOVE_NPC(dialog -> new MoveNpcActionPanel()),

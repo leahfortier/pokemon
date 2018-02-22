@@ -105,7 +105,6 @@ public class MapData {
         for (EventMatcher matcher : mapDataMatcher.getEvents()) {
             Trigger trigger = ActionMatcher.addActionGroupTrigger(
                     matcher.getTriggerName(),
-                    matcher.getTriggerName(),
                     matcher.getCondition(),
                     matcher.getActions()
             );

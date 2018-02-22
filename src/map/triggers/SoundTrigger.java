@@ -7,7 +7,6 @@ public class SoundTrigger extends Trigger {
     private final SoundTitle soundTitle;
 
     public SoundTrigger(SoundTitle soundTitle) {
-        super(soundTitle.name());
         this.soundTitle = soundTitle;
     }
 

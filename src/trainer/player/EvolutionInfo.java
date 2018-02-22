@@ -2,10 +2,10 @@ package trainer.player;
 
 import battle.ActivePokemon;
 import gui.view.ViewMode;
+import map.triggers.CommonTrigger;
 import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.Messages;
-import pattern.action.StringActionMatcher.GroupTriggerActionMatcher;
 import pokemon.evolution.BaseEvolution;
 
 import java.io.Serializable;
@@ -26,7 +26,7 @@ public class EvolutionInfo implements Serializable {
         evolvingPokemon = hatched;
         evolution = null;
 
-        Trigger trigger = new GroupTriggerActionMatcher("EggHatching").createNewTrigger(null);
+        Trigger trigger = CommonTrigger.EGGY_HATCH.getTrigger();
         Messages.add(new MessageUpdate().withTrigger(trigger));
     }
 

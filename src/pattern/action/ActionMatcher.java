@@ -12,26 +12,23 @@ import map.triggers.UseItemTrigger;
 import map.triggers.battle.TrainerBattleTrigger;
 import map.triggers.map.MoveNPCTrigger;
 import mapMaker.dialogs.action.ActionType;
-import pattern.GroupTriggerMatcher;
 import pattern.JsonMatcher;
 import pattern.PokemonMatcher;
 import pokemon.PokemonNamesies;
 import trainer.Trainer;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public interface ActionMatcher extends JsonMatcher {
     ActionType getActionType();
     Trigger createNewTrigger(String entityName);
 
-    static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, Condition condition, List<ActionMatcher> actions) {
-        final Trigger[] actionTriggers = new Trigger[actions.size()];
-        for (int i = 0; i < actions.size(); i++) {
-            actionTriggers[i] = actions.get(i).createNewTrigger(entityName);
-        }
-
-        GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerSuffix, actionTriggers);
-        return new GroupTrigger(matcher, condition);
+    static Trigger addActionGroupTrigger(String entityName, Condition condition, List<ActionMatcher> actions) {
+        final List<Trigger> actionTriggers = actions.stream()
+                                                    .map(action -> action.createNewTrigger(entityName))
+                                                    .collect(Collectors.toList());
+        return new GroupTrigger(condition, actionTriggers);
     }
 
     class GivePokemonActionMatcher implements ActionMatcher {

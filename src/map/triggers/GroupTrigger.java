@@ -1,20 +1,26 @@
 package map.triggers;
 
 import map.condition.Condition;
-import map.condition.ConditionHolder.AndCondition;
 import message.MessageUpdate;
 import message.Messages;
-import pattern.GroupTriggerMatcher;
-import util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class GroupTrigger extends Trigger {
     private final List<Trigger> triggers;
 
-    public GroupTrigger(GroupTriggerMatcher matcher, Condition condition) {
-        super(getTriggerSuffix(matcher), new AndCondition(condition, matcher.getCondition()));
-        this.triggers = matcher.getTriggers();
+    public GroupTrigger(Trigger... triggers) {
+        this(null, triggers);
+    }
+
+    public GroupTrigger(Condition condition, Trigger... triggers) {
+        this(condition, Arrays.asList(triggers));
+    }
+
+    public GroupTrigger(Condition condition, List<Trigger> triggers) {
+        super(condition);
+        this.triggers = triggers;
     }
 
     @Override
@@ -26,13 +32,5 @@ public class GroupTrigger extends Trigger {
                 Messages.addToFront(new MessageUpdate().withTrigger(trigger));
             }
         }
-    }
-
-    private static String getTriggerSuffix(GroupTriggerMatcher matcher) {
-        if (!StringUtils.isNullOrEmpty(matcher.getSuffix())) {
-            return matcher.getSuffix();
-        }
-
-        return matcher.getJson();
     }
 }

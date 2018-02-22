@@ -12,7 +12,6 @@ import map.triggers.GroupTrigger;
 import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.Messages;
-import pattern.GroupTriggerMatcher;
 import pattern.map.FishingMatcher;
 import pokemon.ability.AbilityNamesies;
 import trainer.player.Player;
@@ -25,7 +24,7 @@ public class FishingTrigger extends Trigger {
     private final WildEncounterInfo[] wildEncounters;
 
     public FishingTrigger(FishingMatcher matcher) {
-        super(matcher.getJson(), new ItemCondition(ItemNamesies.FISHING_ROD));
+        super(new ItemCondition(ItemNamesies.FISHING_ROD));
 
         this.wildEncounters = matcher.getWildEncounters();
     }
@@ -41,18 +40,15 @@ public class FishingTrigger extends Trigger {
 
         if (RandomUtils.chanceTest(chance)) {
             WildEncounter wildPokemon = WildEncounterInfo.getWildEncounter(front, this.wildEncounters);
-            String pokemonJson = wildPokemon.getJson();
 
-            GroupTriggerMatcher matcher = new GroupTriggerMatcher(
-                    "FishingBite_" + pokemonJson,
+            Trigger trigger = new GroupTrigger(
                     new DialogueTrigger("Oh! A bite!"),
                     new GlobalTrigger(FISHING_GLOBAL),
                     new WildBattleTrigger(wildPokemon),
                     new GlobalTrigger("!" + FISHING_GLOBAL)
             );
 
-            Trigger group = new GroupTrigger(matcher, null);
-            Messages.add(new MessageUpdate().withTrigger(group));
+            Messages.add(new MessageUpdate().withTrigger(trigger));
 
             player.getMedalCase().increase(MedalTheme.FISH_REELED_IN);
         } else {

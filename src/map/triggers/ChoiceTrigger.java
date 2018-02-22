@@ -10,7 +10,6 @@ public class ChoiceTrigger extends Trigger {
     private final ChoiceMatcher[] choices;
 
     public ChoiceTrigger(ChoiceActionMatcher matcher) {
-        super(matcher.getJson());
         this.question = matcher.getQuestion();
         this.choices = matcher.getChoices();
     }

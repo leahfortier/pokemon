@@ -7,7 +7,6 @@ public class MedalCountTrigger extends Trigger {
     private final MedalTheme medalTheme;
 
     public MedalCountTrigger(MedalTheme medalTheme) {
-        super(medalTheme.name());
         this.medalTheme = medalTheme;
     }
 

@@ -9,7 +9,6 @@ public class MovePlayerTrigger extends Trigger {
     private final String path;
 
     public MovePlayerTrigger(String path) {
-        super(path);
         this.path = PathDirection.defaultPath() + path;
     }
 

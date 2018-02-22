@@ -8,7 +8,6 @@ import map.overworld.WildEncounterInfo;
 import map.triggers.GroupTrigger;
 import map.triggers.Trigger;
 import map.triggers.battle.FishingTrigger;
-import pattern.GroupTriggerMatcher;
 import pattern.map.FishingMatcher;
 import util.Point;
 
@@ -36,8 +35,7 @@ public class FishingSpotEntity extends Entity {
     public Trigger getTrigger() {
         if (trigger == null) {
             FishingMatcher fishingMatcher = new FishingMatcher(this.getEntityName(), wildEncounters);
-            GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getEntityName(), new FishingTrigger(fishingMatcher));
-            this.trigger = new GroupTrigger(matcher, this.getCondition());
+            this.trigger = new GroupTrigger(this.getCondition(), new FishingTrigger(fishingMatcher));
         }
 
         return trigger;

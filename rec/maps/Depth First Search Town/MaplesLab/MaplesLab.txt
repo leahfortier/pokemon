@@ -204,8 +204,8 @@
       "name": "PC",
       "actions": [
         {
-          "groupTrigger": "LoadPC",
-          "className": "pattern.action.StringActionMatcher$GroupTriggerActionMatcher"
+          "triggerName": "LOAD_PC",
+          "className": "pattern.action.EnumActionMatcher$GroupTriggerActionMatcher"
         }
       ],
       "location": [

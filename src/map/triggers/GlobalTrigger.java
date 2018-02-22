@@ -6,7 +6,6 @@ public class GlobalTrigger extends Trigger {
     private final String global;
 
     public GlobalTrigger(String global) {
-        super(global);
         this.global = global;
     }
 

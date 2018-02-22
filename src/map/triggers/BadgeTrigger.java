@@ -10,7 +10,7 @@ public class BadgeTrigger extends Trigger {
 
     public BadgeTrigger(Badge badge) {
         // Can't get the same badge twice
-        super(badge.name(), new NotCondition(new BadgeCondition(badge)));
+        super(new NotCondition(new BadgeCondition(badge)));
         this.badge = badge;
     }
 

@@ -10,7 +10,6 @@ public class TradePokemonTrigger extends Trigger {
     private final PokemonNamesies requested;
 
     public TradePokemonTrigger(PokemonNamesies tradePokemon, PokemonNamesies requestedPokemon) {
-        super(tradePokemon.name() + "_" + requestedPokemon.name());
         this.tradePokemon = tradePokemon;
         this.requested = requestedPokemon;
     }

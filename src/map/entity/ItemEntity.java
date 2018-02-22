@@ -11,7 +11,6 @@ import map.triggers.GlobalTrigger;
 import map.triggers.GroupTrigger;
 import map.triggers.MedalCountTrigger;
 import map.triggers.Trigger;
-import pattern.GroupTriggerMatcher;
 import trainer.player.medal.MedalTheme;
 import util.Point;
 import util.StringUtils;
@@ -90,8 +89,7 @@ public class ItemEntity extends Entity {
                 triggers.add(new MedalCountTrigger(MedalTheme.HIDDEN_ITEMS_FOUND));
             }
 
-            GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getEntityName(), triggers);
-            this.trigger = new GroupTrigger(matcher, this.getCondition());
+            this.trigger = new GroupTrigger(this.getCondition(), triggers);
         }
 
         return trigger;

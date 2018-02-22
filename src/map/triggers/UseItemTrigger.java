@@ -7,7 +7,6 @@ public class UseItemTrigger extends Trigger {
     private final ItemNamesies useItem;
 
     public UseItemTrigger(ItemNamesies itemNamesies) {
-        super(itemNamesies.name());
         this.useItem = itemNamesies;
     }
 

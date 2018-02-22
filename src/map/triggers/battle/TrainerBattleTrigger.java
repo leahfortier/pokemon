@@ -15,8 +15,6 @@ public class TrainerBattleTrigger extends Trigger {
     private final UpdateMatcher npcUpdateInteraction;
 
     public TrainerBattleTrigger(BattleActionMatcher matcher) {
-        super(matcher.getJson());
-
         String trainerName = matcher.getName();
         int cash = matcher.getDatCashMoney();
         int maxPokemonAllowed = matcher.getMaxPokemonAllowed();

@@ -198,6 +198,26 @@ public class MapDataMatcher implements JsonMatcher {
 
     private static void updateActions(ActionMatcher[] actions) {
         for (int i = 0; i < actions.length; i++) {
+//            if (actions[i] instanceof GroupTriggerActionMatcher) {
+//                GroupTriggerActionMatcher groupTriggerActionMatcher = (GroupTriggerActionMatcher)actions[i];
+//                CommonTrigger commonTrigger = null;
+//                switch (groupTriggerActionMatcher.groupTrigger) {
+//                    case "LoadPC":
+//                        commonTrigger = CommonTrigger.LOAD_PC;
+//                        break;
+//                    case "LoadMart":
+//                        commonTrigger = CommonTrigger.LOAD_MART;
+//                        break;
+//                    case "PokeCenterHeal":
+//                        commonTrigger = CommonTrigger.POKE_CENTER;
+//                        break;
+//                    default:
+//                        Global.error("Unknown common trigger " + groupTriggerActionMatcher.groupTrigger);
+//                }
+//                groupTriggerActionMatcher.triggerName = commonTrigger;
+//                groupTriggerActionMatcher.groupTrigger = null;
+//            }
+
 //            if (actions[i] instanceof UpdateActionMatcher) {
 //                UpdateActionMatcher updateActionMatcher = (UpdateActionMatcher)actions[i];
 //                updateActionMatcher.interactionName = updateActionMatcher.update;

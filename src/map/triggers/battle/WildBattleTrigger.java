@@ -11,7 +11,6 @@ public class WildBattleTrigger extends Trigger {
     private final WildEncounter wildEncounter;
 
     public WildBattleTrigger(WildEncounter wildEncounter) {
-        super(wildEncounter.getJson());
         this.wildEncounter = wildEncounter;
     }
 

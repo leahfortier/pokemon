@@ -3,6 +3,7 @@ package pattern.action;
 import gui.view.ViewMode;
 import map.triggers.BadgeTrigger;
 import map.triggers.ChangeViewTrigger;
+import map.triggers.CommonTrigger;
 import map.triggers.MedalCountTrigger;
 import map.triggers.SoundTrigger;
 import map.triggers.Trigger;
@@ -103,6 +104,29 @@ public interface EnumActionMatcher<T extends Enum> extends ActionMatcher {
         @Override
         public MedalTheme getEnumValue() {
             return medalTheme;
+        }
+    }
+
+    class GroupTriggerActionMatcher implements EnumActionMatcher<CommonTrigger> {
+        public CommonTrigger triggerName;
+
+        public GroupTriggerActionMatcher(CommonTrigger triggerName) {
+            this.triggerName = triggerName;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.GROUP_TRIGGER;
+        }
+
+        @Override
+        public Trigger createNewTrigger(String entityName) {
+            return triggerName.getTrigger();
+        }
+
+        @Override
+        public CommonTrigger getEnumValue() {
+            return triggerName;
         }
     }
 }

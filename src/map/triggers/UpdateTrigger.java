@@ -8,8 +8,6 @@ public class UpdateTrigger extends Trigger {
     private final String newInteractionName;
 
     public UpdateTrigger(UpdateMatcher matcher) {
-        super(matcher.getJson());
-
         this.npcEntityName = matcher.getNpcEntityName();
         this.newInteractionName = matcher.getInteractionName();
     }

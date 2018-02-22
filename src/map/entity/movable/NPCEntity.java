@@ -70,10 +70,6 @@ public class NPCEntity extends MovableEntity {
         return this.startKey;
     }
 
-    private String getTriggerSuffix(final String interactionName) {
-        return this.getEntityName() + "_" + interactionName;
-    }
-
     @Override
     protected int getSpriteIndex() {
         return this.spriteIndex;
@@ -158,7 +154,6 @@ public class NPCEntity extends MovableEntity {
 
             Trigger trigger = ActionMatcher.addActionGroupTrigger(
                     this.getEntityName(),
-                    this.getTriggerSuffix(currentInteraction),
                     this.getCondition(),
                     actions
             );

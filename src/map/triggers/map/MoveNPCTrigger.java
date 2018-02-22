@@ -22,7 +22,6 @@ public class MoveNPCTrigger extends Trigger {
     private final MoveNpcActionMatcher matcher;
 
     public MoveNPCTrigger(MoveNpcActionMatcher matcher) {
-        super(matcher.getJson());
         this.matcher = matcher;
     }
 

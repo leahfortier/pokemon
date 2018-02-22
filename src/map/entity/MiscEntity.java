@@ -22,7 +22,6 @@ public class MiscEntity extends Entity {
         if (trigger == null) {
             this.trigger = ActionMatcher.addActionGroupTrigger(
                     this.getEntityName(),
-                    this.getEntityName(),
                     this.getCondition(),
                     this.actions
             );

@@ -1,9 +1,8 @@
 package pattern.action;
 
-import main.Game;
+import map.triggers.CommonTrigger;
 import map.triggers.DialogueTrigger;
 import map.triggers.GlobalTrigger;
-import map.triggers.GroupTrigger;
 import map.triggers.Trigger;
 import map.triggers.UpdateTrigger;
 import map.triggers.map.MovePlayerTrigger;
@@ -32,30 +31,6 @@ public interface StringActionMatcher extends ActionMatcher {
         @Override
         public Trigger createNewTrigger(String entityName) {
             return new UpdateTrigger(new UpdateMatcher(entityName, interactionName));
-        }
-    }
-
-    class GroupTriggerActionMatcher implements StringActionMatcher {
-        public String groupTrigger;
-
-        public GroupTriggerActionMatcher(String groupTrigger) {
-            this.groupTrigger = groupTrigger;
-        }
-
-        @Override
-        public String getStringValue() {
-            return this.groupTrigger;
-        }
-
-        @Override
-        public ActionType getActionType() {
-            return ActionType.GROUP_TRIGGER;
-        }
-
-        @Override
-        public Trigger createNewTrigger(String entityName) {
-            String triggerName = Trigger.createName(GroupTrigger.class, this.groupTrigger);
-            return Game.getData().getTrigger(triggerName);
         }
     }
 

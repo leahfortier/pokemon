@@ -19,7 +19,7 @@ public class WalkingWildBattleTrigger extends Trigger {
     private final EncounterRate encounterRate;
 
     public WalkingWildBattleTrigger(WildBattleMatcher matcher) {
-        super(matcher.getJson(), matcher.getCondition());
+        super(matcher.getCondition());
 
         this.wildEncounters = matcher.getWildEncounters();
         this.encounterRate = matcher.getEncounterRate();

@@ -8,7 +8,6 @@ public class GivePokemonTrigger extends Trigger {
     private final PokemonMatcher pokemonMatcher;
 
     public GivePokemonTrigger(PokemonMatcher matcher) {
-        super(matcher.getJson());
         this.pokemonMatcher = matcher;
     }
 

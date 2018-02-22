@@ -9,7 +9,6 @@ public class ChangeViewTrigger extends Trigger {
     private final ViewMode view;
 
     public ChangeViewTrigger(ViewMode viewMode) {
-        super(viewMode.name());
         this.view = viewMode;
     }
 
