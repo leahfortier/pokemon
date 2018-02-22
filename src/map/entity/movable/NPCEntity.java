@@ -152,11 +152,7 @@ public class NPCEntity extends MovableEntity {
             NPCInteraction interaction = this.interactions.get(currentInteraction);
             List<ActionMatcher> actions = interaction.getActions();
 
-            Trigger trigger = ActionMatcher.addActionGroupTrigger(
-                    this.getEntityName(),
-                    this.getCondition(),
-                    actions
-            );
+            Trigger trigger = ActionMatcher.addActionGroupTrigger(this.getEntityName(), this.getCondition(), actions);
 
             this.triggerInteractionMap.put(currentInteraction, trigger);
         }

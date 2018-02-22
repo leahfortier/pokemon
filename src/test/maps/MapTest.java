@@ -17,6 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.GiveItemActionMatcher;
+import pattern.action.ActionMatcher.MoveNpcActionMatcher;
 import pattern.action.NPCInteractionMatcher;
 import pattern.action.StringActionMatcher.DialogueActionMatcher;
 import pattern.action.StringActionMatcher.GlobalActionMatcher;
@@ -35,6 +36,7 @@ import test.BaseTest;
 import util.FileIO;
 import util.Folder;
 import util.Point;
+import util.StringUtils;
 
 import java.awt.Dimension;
 import java.io.File;
@@ -181,14 +183,31 @@ public class MapTest extends BaseTest {
     }
 
     @Test
-    public void dialogueTest() {
-        // Make sure all input dialogue triggers don't include the string 'Poke' instead of 'Poké'
+    public void actionTest() {
         for (TestMap map : maps) {
             for (ActionMatcher action : getAllActions(map)) {
+                String message = map.getName() + " " + action.getJson();
+
                 if (action instanceof DialogueActionMatcher) {
+                    // Make sure all input dialogue triggers don't include the string 'Poke' instead of 'Poké'
                     String dialogue = ((DialogueActionMatcher)action).getStringValue();
-                    Assert.assertFalse(map.getName() + " " + dialogue, dialogue.contains("Poke"));
+                    Assert.assertFalse(message, dialogue.contains("Poke"));
+                } else if (action instanceof GiveItemActionMatcher) {
+                    // Make sure all give items triggers give a positive quantity
+                    int quantity = ((GiveItemActionMatcher)action).getQuantity();
+                    Assert.assertTrue(message, quantity > 0);
+                } else if (action instanceof MoveNpcActionMatcher) {
+                    // Either an end entrance name must be specified or the end location is player (they are mutually exclusive)
+                    MoveNpcActionMatcher moveNpcActionMatcher = (MoveNpcActionMatcher)action;
+                    Assert.assertEquals(
+                            message,
+                            StringUtils.isNullOrEmpty(moveNpcActionMatcher.getEndEntranceName()),
+                            moveNpcActionMatcher.endLocationIsPlayer()
+                    );
                 }
+
+                // It is okay for action type to be null, but not from map file input (since it is used for map maker)
+                Assert.assertNotNull(message, action.getActionType());
             }
         }
     }
@@ -303,19 +322,6 @@ public class MapTest extends BaseTest {
             GlobalCondition globalCondition = (GlobalCondition)condition;
             String globalName = globalCondition.getGlobalName();
             Assert.assertTrue(globalName, addedGlobals.contains(globalName));
-        }
-    }
-
-    @Test
-    public void giveItemTest() {
-        // Make sure all give items triggers give a positive quantity
-        for (TestMap map : maps) {
-            for (ActionMatcher action : getAllActions(map)) {
-                if (action instanceof GiveItemActionMatcher) {
-                    int quantity = ((GiveItemActionMatcher)action).getQuantity();
-                    Assert.assertTrue(map.getName() + " " + action.getJson(), quantity > 0);
-                }
-            }
         }
     }
 }

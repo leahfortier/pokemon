@@ -18,7 +18,7 @@ import pattern.action.EmptyActionMatcher.ReloadMapActionMatcher;
 import pattern.action.EnumActionMatcher;
 import pattern.action.EnumActionMatcher.BadgeActionMatcher;
 import pattern.action.EnumActionMatcher.ChangeViewActionMatcher;
-import pattern.action.EnumActionMatcher.GroupTriggerActionMatcher;
+import pattern.action.EnumActionMatcher.CommonTriggerActionMatcher;
 import pattern.action.EnumActionMatcher.MedalCountActionMatcher;
 import pattern.action.EnumActionMatcher.SoundActionMatcher;
 import pattern.action.StringActionMatcher;
@@ -38,12 +38,12 @@ public enum ActionType {
     BATTLE(BattleActionPanel::new),
     CHANGE_VIEW("View Mode", ViewMode.values(), ChangeViewActionMatcher::new),
     CHOICE(ChoiceActionPanel::new),
+    COMMON_TRIGGER("Trigger Name", CommonTrigger.values(), CommonTriggerActionMatcher::new),
     DAY_CARE(DayCareActionMatcher::new),
     DIALOGUE("Dialogue", DialogueActionMatcher::new),
     GIVE_ITEM(dialog -> new GiveItemActionPanel()),
     GIVE_POKEMON(dialog -> new PokemonActionPanel()),
     GLOBAL("Global Name", GlobalActionMatcher::new),
-    GROUP_TRIGGER("Trigger Name", CommonTrigger.values(), GroupTriggerActionMatcher::new),
     HEAL_PARTY(HealPartyActionMatcher::new),
     MEDAL_COUNT("Medal", MedalTheme.values(), MedalCountActionMatcher::new),
     MOVE_NPC(dialog -> new MoveNpcActionPanel()),

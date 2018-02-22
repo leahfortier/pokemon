@@ -8,10 +8,6 @@ import trainer.player.Player;
 import util.PokeString;
 
 public class DayCareTrigger extends Trigger {
-    public DayCareTrigger() {
-        super(null);
-    }
-
     @Override
     public void execute() {
         Player player = Game.getPlayer();

@@ -194,10 +194,10 @@ public class PlayerEntity extends MovableEntity {
         }
         // Trigger
         else if (justMoved) {
-            List<Trigger> currentTriggerNames = map.getCurrentTriggers();
-            if (currentTriggerNames != null) {
+            List<Trigger> currentTriggers = map.getCurrentTriggers();
+            if (currentTriggers != null) {
                 // Execute all valid triggers
-                for (Trigger trigger : currentTriggerNames) {
+                for (Trigger trigger : currentTriggers) {
                     if (trigger != null && trigger.isTriggered()) {
                         trigger.execute();
                     }

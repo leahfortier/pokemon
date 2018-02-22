@@ -107,16 +107,16 @@ public interface EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
     }
 
-    class GroupTriggerActionMatcher implements EnumActionMatcher<CommonTrigger> {
-        public CommonTrigger triggerName;
+    class CommonTriggerActionMatcher implements EnumActionMatcher<CommonTrigger> {
+        private CommonTrigger triggerName;
 
-        public GroupTriggerActionMatcher(CommonTrigger triggerName) {
+        public CommonTriggerActionMatcher(CommonTrigger triggerName) {
             this.triggerName = triggerName;
         }
 
         @Override
         public ActionType getActionType() {
-            return ActionType.GROUP_TRIGGER;
+            return ActionType.COMMON_TRIGGER;
         }
 
         @Override

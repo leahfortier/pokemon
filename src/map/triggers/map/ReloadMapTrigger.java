@@ -6,10 +6,6 @@ import map.triggers.Trigger;
 import trainer.player.Player;
 
 public class ReloadMapTrigger extends Trigger {
-    public ReloadMapTrigger() {
-        super(null);
-    }
-
     @Override
     public void execute() {
         Player player = Game.getPlayer();

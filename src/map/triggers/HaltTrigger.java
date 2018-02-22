@@ -7,9 +7,7 @@ import message.Messages;
 public class HaltTrigger extends Trigger {
     private static boolean halted = false;
 
-    private HaltTrigger() {
-        super(null);
-    }
+    private HaltTrigger() {}
 
     @Override
     public void execute() {
@@ -22,8 +20,7 @@ public class HaltTrigger extends Trigger {
 
     public static void addHaltTrigger() {
         halted = true;
-        Trigger trigger = new HaltTrigger();
-        Messages.addToFront(new MessageUpdate().withTrigger(trigger));
+        Messages.addToFront(new MessageUpdate().withTrigger(new HaltTrigger()));
     }
 
     public static void resume() {

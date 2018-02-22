@@ -1,6 +1,5 @@
 package pattern.action;
 
-import map.triggers.CommonTrigger;
 import map.triggers.DialogueTrigger;
 import map.triggers.GlobalTrigger;
 import map.triggers.Trigger;
@@ -35,7 +34,7 @@ public interface StringActionMatcher extends ActionMatcher {
     }
 
     class GlobalActionMatcher implements StringActionMatcher {
-        public String global;
+        private String global;
 
         public GlobalActionMatcher(String global) {
             this.global = global;

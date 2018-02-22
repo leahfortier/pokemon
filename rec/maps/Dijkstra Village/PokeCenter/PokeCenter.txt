@@ -56,7 +56,7 @@
       "actions": [
         {
           "triggerName": "POKE_CENTER",
-          "className": "pattern.action.EnumActionMatcher$GroupTriggerActionMatcher"
+          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
         }
       ],
       "location": [
@@ -72,7 +72,7 @@
       "actions": [
         {
           "triggerName": "LOAD_MART",
-          "className": "pattern.action.EnumActionMatcher$GroupTriggerActionMatcher"
+          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
         }
       ],
       "location": [
@@ -88,7 +88,7 @@
       "actions": [
         {
           "triggerName": "LOAD_PC",
-          "className": "pattern.action.EnumActionMatcher$GroupTriggerActionMatcher"
+          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
         }
       ],
       "location": [

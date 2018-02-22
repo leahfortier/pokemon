@@ -119,7 +119,7 @@
       "actions": [
         {
           "triggerName": "LOAD_PC",
-          "className": "pattern.action.EnumActionMatcher$GroupTriggerActionMatcher"
+          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
         }
       ],
       "location": [

@@ -143,12 +143,13 @@ public interface ActionMatcher extends JsonMatcher {
     }
 
     class BattleActionMatcher implements ActionMatcher {
-        public String name;
-        public int cashMoney;
-        public boolean maxPokemonLimit;
-        public PokemonMatcher[] pokemon;
-        public String update;
-        private String entityName;
+        private String name;
+        private int cashMoney;
+        private boolean maxPokemonLimit;
+        private PokemonMatcher[] pokemon;
+        private String update;
+
+        private transient String entityName;
 
         public BattleActionMatcher(String name, int cashMoney, boolean maxPokemonLimit, PokemonMatcher[] pokemon, String update) {
             this.name = name;
@@ -199,8 +200,8 @@ public interface ActionMatcher extends JsonMatcher {
     }
 
     class ChoiceActionMatcher implements ActionMatcher {
-        public String question;
-        public ChoiceMatcher[] choices;
+        private String question;
+        private ChoiceMatcher[] choices;
 
         public ChoiceActionMatcher(String question, ChoiceMatcher[] choices) {
             this.question = question;
