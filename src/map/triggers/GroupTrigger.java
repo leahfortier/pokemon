@@ -1,6 +1,5 @@
 package map.triggers;
 
-import main.Game;
 import map.condition.Condition;
 import map.condition.ConditionHolder.AndCondition;
 import message.MessageUpdate;
@@ -11,7 +10,7 @@ import util.StringUtils;
 import java.util.List;
 
 public class GroupTrigger extends Trigger {
-    private final List<String> triggers;
+    private final List<Trigger> triggers;
 
     public GroupTrigger(GroupTriggerMatcher matcher, Condition condition) {
         super(getTriggerSuffix(matcher), new AndCondition(condition, matcher.getCondition()));
@@ -22,8 +21,7 @@ public class GroupTrigger extends Trigger {
     public void execute() {
         // Add all triggers in the group to the beginning of the message queue
         for (int i = triggers.size() - 1; i >= 0; i--) {
-            String triggerName = triggers.get(i);
-            Trigger trigger = Game.getData().getTrigger(triggerName);
+            Trigger trigger = triggers.get(i);
             if (trigger != null && trigger.isTriggered()) {
                 Messages.addToFront(new MessageUpdate().withTrigger(trigger));
             }

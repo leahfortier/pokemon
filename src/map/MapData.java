@@ -49,7 +49,7 @@ public class MapData {
     private final AreaData[] areaData;
 
     private final List<Entity> entities;
-    private final MultiMap<Integer, String> triggers;
+    private final MultiMap<Integer, Trigger> triggers;
     private final Map<String, MapTransitionMatcher> mapEntrances;
 
     public MapData(File mapFile) {
@@ -97,8 +97,8 @@ public class MapData {
 
             List<Point> exits = matcher.getExitLocations();
             if (exits != null) {
-                Trigger trigger = new MapTransitionTrigger(matcher).addData();
-                exits.forEach(exit -> triggers.put(getMapIndex(exit), trigger.getName()));
+                Trigger trigger = new MapTransitionTrigger(matcher);
+                exits.forEach(exit -> triggers.put(getMapIndex(exit), trigger));
             }
         }
 
@@ -111,15 +111,15 @@ public class MapData {
             );
 
             for (Point point : matcher.getLocation()) {
-                triggers.put(getMapIndex(point), trigger.getName());
+                triggers.put(getMapIndex(point), trigger);
             }
         }
 
         for (WildBattleAreaMatcher matcher : mapDataMatcher.getWildBattles()) {
             for (Point point : matcher.getLocation()) {
                 for (WildBattleMatcher wildBattleMatcher : matcher.getWildBattles()) {
-                    Trigger trigger = new WalkingWildBattleTrigger(wildBattleMatcher).addData();
-                    triggers.put(getMapIndex(point), trigger.getName());
+                    Trigger trigger = new WalkingWildBattleTrigger(wildBattleMatcher);
+                    triggers.put(getMapIndex(point), trigger);
                     for (WildEncounterInfo wildEncounter : wildBattleMatcher.getWildEncounters()) {
                         this.getArea(point).addPokemon(wildEncounter.getPokemonName());
                     }
@@ -240,7 +240,7 @@ public class MapData {
         return AreaData.VOID;
     }
 
-    public List<String> getCurrentTriggers() {
+    public List<Trigger> getCurrentTriggers() {
         int val = Game.getPlayer().getLocation().getIndex(dimension.width);
         if (triggers.containsKey(val)) {
             return triggers.get(val);

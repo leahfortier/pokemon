@@ -91,7 +91,7 @@ public class ItemEntity extends Entity {
             }
 
             GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getEntityName(), triggers);
-            this.trigger = new GroupTrigger(matcher, this.getCondition()).addData();
+            this.trigger = new GroupTrigger(matcher, this.getCondition());
         }
 
         return trigger;

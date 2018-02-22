@@ -35,9 +35,8 @@ public abstract class Trigger {
         return this.name;
     }
 
-    public Trigger addData() {
+    public void addData() {
         Game.getData().addTrigger(this);
-        return this;
     }
 
     public static String createName(Class<? extends Trigger> classy, String triggerSuffix) {

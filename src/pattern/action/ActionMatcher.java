@@ -27,11 +27,11 @@ public interface ActionMatcher extends JsonMatcher {
     static Trigger addActionGroupTrigger(String entityName, String triggerSuffix, Condition condition, List<ActionMatcher> actions) {
         final Trigger[] actionTriggers = new Trigger[actions.size()];
         for (int i = 0; i < actions.size(); i++) {
-            actionTriggers[i] = actions.get(i).createNewTrigger(entityName).addData();
+            actionTriggers[i] = actions.get(i).createNewTrigger(entityName);
         }
 
         GroupTriggerMatcher matcher = new GroupTriggerMatcher(triggerSuffix, actionTriggers);
-        return new GroupTrigger(matcher, condition).addData();
+        return new GroupTrigger(matcher, condition);
     }
 
     class GivePokemonActionMatcher implements ActionMatcher {

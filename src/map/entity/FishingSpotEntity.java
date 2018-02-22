@@ -37,7 +37,7 @@ public class FishingSpotEntity extends Entity {
         if (trigger == null) {
             FishingMatcher fishingMatcher = new FishingMatcher(this.getEntityName(), wildEncounters);
             GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getEntityName(), new FishingTrigger(fishingMatcher));
-            this.trigger = new GroupTrigger(matcher, this.getCondition()).addData();
+            this.trigger = new GroupTrigger(matcher, this.getCondition());
         }
 
         return trigger;
