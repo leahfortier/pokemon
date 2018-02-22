@@ -87,11 +87,11 @@ public class SerializationUtils {
     public static <T extends JsonMatcher> T deserializeJsonFile(String fileName, Class<T> classy) {
         String jsonContents = FileIO.readEntireFileWithReplacements(fileName, false);
 
-        T deserialized = SerializationUtils.deserializeJson(jsonContents, classy);
-        JsonObject mappity = SerializationUtils.deserializeJson(jsonContents, JsonObject.class);
+        T deserialized = deserializeJson(jsonContents, classy);
+        JsonObject mappity = deserializeJson(jsonContents, JsonObject.class);
 
-        String formattedJson = SerializationUtils.getJson(deserialized);
-        String mapJson = SerializationUtils.getJson(mappity);
+        String formattedJson = getJson(deserialized);
+        String mapJson = getJson(mappity);
 
 //        FileIO.writeToFile("out.txt", formattedJson);
 //        FileIO.writeToFile("out2.txt", mapJson);
