@@ -20,7 +20,7 @@ public class MiscEntity extends Entity {
     @Override
     public Trigger getTrigger() {
         if (trigger == null) {
-            this.trigger = ActionMatcher.addActionGroupTrigger(
+            this.trigger = ActionMatcher.getActionGroupTrigger(
                     this.getEntityName(),
                     this.getCondition(),
                     this.actions

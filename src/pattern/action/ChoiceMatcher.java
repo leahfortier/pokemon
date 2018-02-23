@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ChoiceMatcher {
     private String text;
-    public ActionMatcher[] actions;
+    private ActionMatcher[] actions;
 
     public ChoiceMatcher(String text, ActionMatcher[] actions) {
         this.text = text;

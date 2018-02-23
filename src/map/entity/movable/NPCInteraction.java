@@ -1,7 +1,7 @@
 package map.entity.movable;
 
 import pattern.action.ActionMatcher;
-import pattern.action.ActionMatcher.BattleActionMatcher;
+import pattern.action.EntityActionMatcher.BattleActionMatcher;
 
 import java.util.List;
 

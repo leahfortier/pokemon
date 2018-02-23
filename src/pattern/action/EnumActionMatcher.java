@@ -28,7 +28,7 @@ public interface EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new BadgeTrigger(this.badge);
         }
 
@@ -51,7 +51,7 @@ public interface EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new ChangeViewTrigger(this.viewMode);
         }
 
@@ -74,7 +74,7 @@ public interface EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new SoundTrigger(soundTitle);
         }
 
@@ -97,7 +97,7 @@ public interface EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new MedalCountTrigger(medalTheme);
         }
 
@@ -120,7 +120,7 @@ public interface EnumActionMatcher<T extends Enum> extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return triggerName.getTrigger();
         }
 

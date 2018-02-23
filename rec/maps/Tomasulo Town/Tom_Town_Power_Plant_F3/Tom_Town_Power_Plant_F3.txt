@@ -61,7 +61,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -116,7 +116,7 @@
                 }
               ],
               "update": "deadlock_defeat",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             },
             {
               "dialogue": "You may have halted us now, but our loop is infinite!",
@@ -169,7 +169,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -207,7 +207,7 @@
             },
             {
               "interactionName": "dialogue",
-              "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             }
           ]
         }

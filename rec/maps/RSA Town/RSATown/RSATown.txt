@@ -175,7 +175,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             },
             {
               "dialogue": "You just got lucky, noob!",

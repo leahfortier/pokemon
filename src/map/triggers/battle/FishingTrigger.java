@@ -9,10 +9,10 @@ import map.overworld.WildEncounterInfo;
 import map.triggers.DialogueTrigger;
 import map.triggers.GlobalTrigger;
 import map.triggers.GroupTrigger;
+import map.triggers.MedalCountTrigger;
 import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.Messages;
-import pattern.map.FishingMatcher;
 import pokemon.ability.AbilityNamesies;
 import trainer.player.Player;
 import trainer.player.medal.MedalTheme;
@@ -23,10 +23,10 @@ public class FishingTrigger extends Trigger {
 
     private final WildEncounterInfo[] wildEncounters;
 
-    public FishingTrigger(FishingMatcher matcher) {
+    public FishingTrigger(WildEncounterInfo[] wildEncounters) {
         super(new ItemCondition(ItemNamesies.FISHING_ROD));
 
-        this.wildEncounters = matcher.getWildEncounters();
+        this.wildEncounters = wildEncounters;
     }
 
     @Override
@@ -45,12 +45,11 @@ public class FishingTrigger extends Trigger {
                     new DialogueTrigger("Oh! A bite!"),
                     new GlobalTrigger(FISHING_GLOBAL),
                     new WildBattleTrigger(wildPokemon),
-                    new GlobalTrigger("!" + FISHING_GLOBAL)
+                    new GlobalTrigger("!" + FISHING_GLOBAL),
+                    new MedalCountTrigger(MedalTheme.FISH_REELED_IN)
             );
 
             Messages.add(new MessageUpdate().withTrigger(trigger));
-
-            player.getMedalCase().increase(MedalTheme.FISH_REELED_IN);
         } else {
             Messages.add(new MessageUpdate().withTrigger(new DialogueTrigger("No dice.")));
         }

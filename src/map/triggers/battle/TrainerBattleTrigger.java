@@ -4,7 +4,7 @@ import battle.Battle;
 import main.Game;
 import map.triggers.Trigger;
 import pattern.PokemonMatcher;
-import pattern.action.ActionMatcher.BattleActionMatcher;
+import pattern.action.EntityActionMatcher.BattleActionMatcher;
 import pattern.action.UpdateMatcher;
 import pokemon.PartyPokemon;
 import trainer.EnemyTrainer;

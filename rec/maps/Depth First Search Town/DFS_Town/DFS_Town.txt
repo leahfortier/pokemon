@@ -178,7 +178,7 @@
             },
             {
               "interactionName": "done",
-              "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             }
           ]
         },
@@ -226,7 +226,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -274,7 +274,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -322,7 +322,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -364,7 +364,7 @@
             },
             {
               "interactionName": "done",
-              "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             }
           ]
         },
@@ -431,7 +431,7 @@
             },
             {
               "interactionName": "heal",
-              "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             },
             {
               "className": "pattern.action.EmptyActionMatcher$ReloadMapActionMatcher"

@@ -103,7 +103,7 @@ public class MapData {
         }
 
         for (EventMatcher matcher : mapDataMatcher.getEvents()) {
-            Trigger trigger = ActionMatcher.addActionGroupTrigger(
+            Trigger trigger = ActionMatcher.getActionGroupTrigger(
                     matcher.getTriggerName(),
                     matcher.getCondition(),
                     matcher.getActions()

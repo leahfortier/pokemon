@@ -9,25 +9,29 @@ import map.triggers.GroupTrigger;
 import map.triggers.TradePokemonTrigger;
 import map.triggers.Trigger;
 import map.triggers.UseItemTrigger;
-import map.triggers.battle.TrainerBattleTrigger;
 import map.triggers.map.MoveNPCTrigger;
 import mapMaker.dialogs.action.ActionType;
 import pattern.JsonMatcher;
 import pattern.PokemonMatcher;
 import pokemon.PokemonNamesies;
-import trainer.Trainer;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public interface ActionMatcher extends JsonMatcher {
     ActionType getActionType();
-    Trigger createNewTrigger(String entityName);
+    Trigger createNewTrigger();
 
-    static Trigger addActionGroupTrigger(String entityName, Condition condition, List<ActionMatcher> actions) {
-        final List<Trigger> actionTriggers = actions.stream()
-                                                    .map(action -> action.createNewTrigger(entityName))
-                                                    .collect(Collectors.toList());
+    static Trigger getActionGroupTrigger(String entityName, Condition condition, List<ActionMatcher> actions) {
+        final List<Trigger> actionTriggers = actions
+                .stream()
+                .map(action -> {
+                    if (action instanceof EntityActionMatcher) {
+                        ((EntityActionMatcher)action).setEntity(entityName);
+                    }
+                    return action.createNewTrigger();
+                })
+                .collect(Collectors.toList());
         return new GroupTrigger(condition, actionTriggers);
     }
 
@@ -48,7 +52,7 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new GivePokemonTrigger(pokemonMatcher);
         }
     }
@@ -76,7 +80,7 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new GiveItemTrigger(this.giveItem, this.quantity);
         }
     }
@@ -99,7 +103,7 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new UseItemTrigger(this.useItem);
         }
     }
@@ -137,65 +141,8 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new MoveNPCTrigger(this);
-        }
-    }
-
-    class BattleActionMatcher implements ActionMatcher {
-        private String name;
-        private int cashMoney;
-        private boolean maxPokemonLimit;
-        private PokemonMatcher[] pokemon;
-        private String update;
-
-        private transient String entityName;
-
-        public BattleActionMatcher(String name, int cashMoney, boolean maxPokemonLimit, PokemonMatcher[] pokemon, String update) {
-            this.name = name;
-            this.cashMoney = cashMoney;
-            this.maxPokemonLimit = maxPokemonLimit;
-            this.pokemon = pokemon;
-            this.update = update;
-        }
-
-        public String getName() {
-            return this.name;
-        }
-
-        public int getDatCashMoney() {
-            return this.cashMoney;
-        }
-
-        public PokemonMatcher[] getPokemon() {
-            return this.pokemon;
-        }
-
-        public String getUpdateInteraction() {
-            return this.update;
-        }
-
-        public boolean isMaxPokemonLimit() {
-            return this.maxPokemonLimit;
-        }
-
-        public int getMaxPokemonAllowed() {
-            return this.maxPokemonLimit ? this.pokemon.length : Trainer.MAX_POKEMON;
-        }
-
-        public String getEntityName() {
-            return this.entityName;
-        }
-
-        @Override
-        public ActionType getActionType() {
-            return ActionType.BATTLE;
-        }
-
-        @Override
-        public Trigger createNewTrigger(String entityName) {
-            this.entityName = entityName;
-            return new TrainerBattleTrigger(this);
         }
     }
 
@@ -222,7 +169,7 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new ChoiceTrigger(this);
         }
     }
@@ -250,7 +197,7 @@ public interface ActionMatcher extends JsonMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new TradePokemonTrigger(tradePokemon, requested);
         }
     }

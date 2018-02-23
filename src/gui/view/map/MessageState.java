@@ -87,7 +87,7 @@ class MessageState implements VisualStateHandler {
         if (!SoundPlayer.instance().soundEffectIsPlaying() && input.consumeIfMouseDown(ControlKey.SPACE)) {
             if (currentMessage.isChoice()) {
                 ChoiceMatcher choice = currentMessage.getChoices()[dialogueSelection];
-                Trigger trigger = ActionMatcher.addActionGroupTrigger(null, null, choice.getActions());
+                Trigger trigger = ActionMatcher.getActionGroupTrigger(null, null, choice.getActions());
                 Messages.addToFront(new MessageUpdate().withTrigger(trigger));
             }
 

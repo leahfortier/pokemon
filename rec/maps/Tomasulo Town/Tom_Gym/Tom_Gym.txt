@@ -51,7 +51,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -97,7 +97,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -157,7 +157,7 @@
                 }
               ],
               "update": "badge",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -175,7 +175,7 @@
             },
             {
               "interactionName": "won",
-              "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             }
           ]
         },

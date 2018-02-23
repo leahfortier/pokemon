@@ -16,8 +16,11 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import pattern.action.ActionMatcher;
+import pattern.action.ActionMatcher.ChoiceActionMatcher;
 import pattern.action.ActionMatcher.GiveItemActionMatcher;
 import pattern.action.ActionMatcher.MoveNpcActionMatcher;
+import pattern.action.ChoiceMatcher;
+import pattern.action.EntityActionMatcher;
 import pattern.action.NPCInteractionMatcher;
 import pattern.action.StringActionMatcher.DialogueActionMatcher;
 import pattern.action.StringActionMatcher.GlobalActionMatcher;
@@ -204,6 +207,14 @@ public class MapTest extends BaseTest {
                             StringUtils.isNullOrEmpty(moveNpcActionMatcher.getEndEntranceName()),
                             moveNpcActionMatcher.endLocationIsPlayer()
                     );
+                } else if (action instanceof ChoiceActionMatcher) {
+                    // Choices cannot have entity actions as choices since they're not necessarily executed on an entity
+                    ChoiceActionMatcher choiceActionMatcher = (ChoiceActionMatcher)action;
+                    for (ChoiceMatcher choice : choiceActionMatcher.getChoices()) {
+                        for (ActionMatcher choiceAction : choice.getActions()) {
+                            Assert.assertFalse(message, choiceAction instanceof EntityActionMatcher);
+                        }
+                    }
                 }
 
                 // It is okay for action type to be null, but not from map file input (since it is used for map maker)
@@ -217,19 +228,31 @@ public class MapTest extends BaseTest {
 
         for (NPCMatcher npc : map.getMatcher().getNPCs()) {
             for (NPCInteractionMatcher interaction : npc.getInteractionMatcherList()) {
-                actionMatchers.addAll(interaction.getActions());
+                addActions(actionMatchers, interaction.getActions());
             }
         }
 
         for (MiscEntityMatcher miscEntity : map.getMatcher().getMiscEntities()) {
-            actionMatchers.addAll(miscEntity.getActions());
+            addActions(actionMatchers, miscEntity.getActions());
         }
 
         for (EventMatcher event : map.getMatcher().getEvents()) {
-            actionMatchers.addAll(event.getActions());
+            addActions(actionMatchers, event.getActions());
         }
 
         return actionMatchers;
+    }
+
+    private static void addActions(List<ActionMatcher> fullList, List<ActionMatcher> toAdd) {
+        for (ActionMatcher actionMatcher : toAdd) {
+            fullList.add(actionMatcher);
+            if (actionMatcher instanceof ChoiceActionMatcher) {
+                ChoiceActionMatcher choiceActionMatcher = (ChoiceActionMatcher)actionMatcher;
+                for (ChoiceMatcher choiceMatcher : choiceActionMatcher.getChoices()) {
+                    addActions(fullList, choiceMatcher.getActions());
+                }
+            }
+        }
     }
 
     @Test

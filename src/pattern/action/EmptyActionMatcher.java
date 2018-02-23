@@ -14,7 +14,7 @@ public interface EmptyActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new HealPartyTrigger();
         }
     }
@@ -26,7 +26,7 @@ public interface EmptyActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new DayCareTrigger();
         }
     }
@@ -38,7 +38,7 @@ public interface EmptyActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new ReloadMapTrigger();
         }
     }

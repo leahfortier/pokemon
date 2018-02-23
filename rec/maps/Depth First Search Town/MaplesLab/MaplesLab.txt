@@ -81,7 +81,7 @@
             },
             {
               "interactionName": "heal",
-              "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             }
           ]
         },
@@ -127,7 +127,7 @@
             },
             {
               "interactionName": "heal",
-              "className": "pattern.action.StringActionMatcher$UpdateActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             }
           ]
         },

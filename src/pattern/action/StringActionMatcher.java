@@ -10,29 +10,6 @@ import mapMaker.dialogs.action.ActionType;
 public interface StringActionMatcher extends ActionMatcher {
     String getStringValue();
 
-    class UpdateActionMatcher implements StringActionMatcher {
-        private String interactionName;
-
-        public UpdateActionMatcher(String interactionName) {
-            this.interactionName = interactionName;
-        }
-
-        @Override
-        public String getStringValue() {
-            return this.interactionName;
-        }
-
-        @Override
-        public ActionType getActionType() {
-            return ActionType.UPDATE;
-        }
-
-        @Override
-        public Trigger createNewTrigger(String entityName) {
-            return new UpdateTrigger(new UpdateMatcher(entityName, interactionName));
-        }
-    }
-
     class GlobalActionMatcher implements StringActionMatcher {
         private String global;
 
@@ -51,7 +28,7 @@ public interface StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new GlobalTrigger(global);
         }
     }
@@ -69,7 +46,7 @@ public interface StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new DialogueTrigger(this.dialogue);
         }
 
@@ -92,7 +69,7 @@ public interface StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public Trigger createNewTrigger(String entityName) {
+        public Trigger createNewTrigger() {
             return new MovePlayerTrigger(path);
         }
 

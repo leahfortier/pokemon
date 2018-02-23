@@ -57,7 +57,13 @@ public class ItemEntity extends Entity {
 
     @Override
     protected BufferedImage getFrame() {
-        return this.isHidden ? null : (isTM ? TileSet.TM_ITEM_POKEBALL : TileSet.ITEM_POKEBALL);
+        if (this.isHidden) {
+            return null;
+        } else if (this.isTM) {
+            return TileSet.TM_ITEM_POKEBALL;
+        } else {
+            return TileSet.ITEM_POKEBALL;
+        }
     }
 
     @Override
@@ -70,20 +76,18 @@ public class ItemEntity extends Entity {
         hasTriggered = false;
     }
 
+    private String getItemNameWithArticle() {
+        return isTM
+                ? "the " + this.itemName.getName()
+                : StringUtils.articleString(this.itemName.getName());
+    }
+
     @Override
     public Trigger getTrigger() {
         if (trigger == null) {
-            String itemDialogue =
-                    "You found " +
-                            (isTM
-                                    ? "the " + this.itemName.getName()
-                                    : StringUtils.articleString(this.itemName.getName())
-                            ) +
-                            "!";
-
             List<Trigger> triggers = new ArrayList<>();
             triggers.add(new GlobalTrigger(this.getEntityName()));
-            triggers.add(new DialogueTrigger(itemDialogue));
+            triggers.add(new DialogueTrigger("You found " + this.getItemNameWithArticle() + "!"));
             triggers.add(new GiveItemTrigger(this.itemName, 1));
             if (this.isHidden) {
                 triggers.add(new MedalCountTrigger(MedalTheme.HIDDEN_ITEMS_FOUND));

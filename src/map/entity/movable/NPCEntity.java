@@ -117,16 +117,12 @@ public class NPCEntity extends MovableEntity {
         return this.isWalkToPlayer()
                 && !this.walkingToPlayer
                 && this.moveAxis.checkAxis(this.getLocation(), this.getDirection(), Game.getPlayer().getLocation())
-                && this.getWalkTrigger().isTriggered();
+                && this.getTrigger().isTriggered();
     }
 
     public boolean isWalkToPlayer() {
         final String interaction = this.getCurrentInteractionKey();
         return this.interactions.get(interaction).shouldWalkToPlayer();
-    }
-
-    private Trigger getWalkTrigger() {
-        return isWalkToPlayer() ? this.getTrigger() : null;
     }
 
     public boolean isTrainer() {
@@ -152,7 +148,7 @@ public class NPCEntity extends MovableEntity {
             NPCInteraction interaction = this.interactions.get(currentInteraction);
             List<ActionMatcher> actions = interaction.getActions();
 
-            Trigger trigger = ActionMatcher.addActionGroupTrigger(this.getEntityName(), this.getCondition(), actions);
+            Trigger trigger = ActionMatcher.getActionGroupTrigger(this.getEntityName(), this.getCondition(), actions);
 
             this.triggerInteractionMap.put(currentInteraction, trigger);
         }

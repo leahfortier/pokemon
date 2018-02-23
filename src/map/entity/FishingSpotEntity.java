@@ -5,10 +5,8 @@ import map.condition.Condition;
 import map.condition.Condition.ItemCondition;
 import map.condition.ConditionHolder.AndCondition;
 import map.overworld.WildEncounterInfo;
-import map.triggers.GroupTrigger;
 import map.triggers.Trigger;
 import map.triggers.battle.FishingTrigger;
-import pattern.map.FishingMatcher;
 import util.Point;
 
 public class FishingSpotEntity extends Entity {
@@ -34,8 +32,7 @@ public class FishingSpotEntity extends Entity {
     @Override
     public Trigger getTrigger() {
         if (trigger == null) {
-            FishingMatcher fishingMatcher = new FishingMatcher(this.getEntityName(), wildEncounters);
-            this.trigger = new GroupTrigger(this.getCondition(), new FishingTrigger(fishingMatcher));
+            this.trigger = new FishingTrigger(wildEncounters);
         }
 
         return trigger;

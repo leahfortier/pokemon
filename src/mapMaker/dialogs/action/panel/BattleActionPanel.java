@@ -4,7 +4,7 @@ import mapMaker.dialogs.action.ActionDialog;
 import mapMaker.dialogs.action.ActionPanel;
 import mapMaker.dialogs.action.PokemonDataPanel;
 import pattern.PokemonMatcher;
-import pattern.action.ActionMatcher.BattleActionMatcher;
+import pattern.action.EntityActionMatcher.BattleActionMatcher;
 import trainer.Trainer;
 import util.GUIUtils;
 import util.PokeString;
