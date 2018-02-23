@@ -94,7 +94,7 @@
   ],
   "items": [
     {
-      "item": "Oran Berry",
+      "item": "ORAN_BERRY",
       "isHidden": true,
       "location": {
         "x": 2,

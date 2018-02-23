@@ -191,7 +191,7 @@
   ],
   "items": [
     {
-      "item": "Meadow_Plate",
+      "item": "MEADOW_PLATE",
       "isHidden": false,
       "location": {
         "x": 44,
@@ -200,7 +200,7 @@
       "triggerName": "Bloom_Filter_Meadow_Item_Meadow_Plate_01"
     },
     {
-      "item": "Pecha_Berry",
+      "item": "PECHA_BERRY",
       "isHidden": false,
       "location": {
         "x": 21,
@@ -209,7 +209,7 @@
       "triggerName": "Bloom_Filter_Meadow_Item_Pecha_Berry_01"
     },
     {
-      "item": "Sitrus Berry",
+      "item": "SITRUS_BERRY",
       "isHidden": true,
       "location": {
         "x": 34,

@@ -95,7 +95,7 @@
   ],
   "items": [
     {
-      "item": "Water Stone",
+      "item": "WATER_STONE",
       "isHidden": true,
       "location": {
         "x": 3,

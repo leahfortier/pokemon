@@ -53,7 +53,7 @@
   ],
   "items": [
     {
-      "item": "Potion",
+      "item": "POTION",
       "isHidden": true,
       "location": {
         "x": 11,

@@ -12,16 +12,15 @@ import pattern.generic.EntityMatcher;
 import pattern.generic.SinglePointTriggerMatcher;
 
 public class ItemMatcher extends SinglePointTriggerMatcher implements EntityMatcher {
-    private String item;
+    private ItemNamesies item;
     private boolean isHidden;
 
     public ItemMatcher(ItemNamesies itemName) {
-        this.item = itemName.getName();
+        this.item = itemName;
     }
 
-    public ItemMatcher setHidden() {
+    public void setHidden() {
         this.isHidden = true;
-        return this;
     }
 
     @Override
@@ -31,7 +30,7 @@ public class ItemMatcher extends SinglePointTriggerMatcher implements EntityMatc
 
     @Override
     public String getBasicName() {
-        return item;
+        return item.name();
     }
 
     @Override
@@ -40,7 +39,7 @@ public class ItemMatcher extends SinglePointTriggerMatcher implements EntityMatc
     }
 
     public ItemNamesies getItem() {
-        return ItemNamesies.getValueOf(this.item);
+        return this.item;
     }
 
     public boolean isHidden() {

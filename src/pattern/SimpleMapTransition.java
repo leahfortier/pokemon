@@ -25,7 +25,7 @@ public class SimpleMapTransition extends MultiPointTriggerMatcher implements Ser
         return this.transitionIndex;
     }
 
-    public void setTransitionIndex(int transitionIndex) {
+    protected void setTransitionIndex(int transitionIndex) {
         this.transitionIndex = transitionIndex;
     }
 

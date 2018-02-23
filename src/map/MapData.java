@@ -91,8 +91,6 @@ public class MapData {
         }
 
         for (MapTransitionMatcher matcher : mapDataMatcher.getMapTransitions()) {
-            matcher.setMapName(this.name);
-
             mapEntrances.put(matcher.getExitName(), matcher);
 
             List<Point> exits = matcher.getExitLocations();

@@ -14,8 +14,6 @@ public class MapTransitionMatcher extends SimpleMapTransition {
     private PathDirection direction;
     private boolean deathPortal;
 
-    private MapName previousMap;
-
     public MapTransitionMatcher(String exitName, MapName nextMap, String nextEntrance, PathDirection direction, boolean deathPortal) {
         super(nextMap, nextEntrance);
 
@@ -24,20 +22,12 @@ public class MapTransitionMatcher extends SimpleMapTransition {
         this.deathPortal = deathPortal;
     }
 
-    public void setMapName(final MapName mapName) {
-        this.previousMap = mapName;
-    }
-
     public String getExitName() {
         return this.exitName;
     }
 
     public PathDirection getDirection() {
         return this.direction;
-    }
-
-    public MapName getPreviousMap() {
-        return this.previousMap;
     }
 
     @Override

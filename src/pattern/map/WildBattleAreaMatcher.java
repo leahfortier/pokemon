@@ -6,7 +6,6 @@ import pattern.generic.MultiPointTriggerMatcher;
 import java.util.List;
 
 public class WildBattleAreaMatcher extends MultiPointTriggerMatcher {
-
     private String name;
     private List<WildBattleMatcher> wildBattles;
 

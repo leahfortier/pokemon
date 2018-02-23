@@ -246,7 +246,7 @@
   ],
   "items": [
     {
-      "item": "Repel",
+      "item": "REPEL",
       "isHidden": true,
       "location": {
         "x": 15,

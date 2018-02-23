@@ -468,7 +468,7 @@
   ],
   "items": [
     {
-      "item": "Paralyze_Heal",
+      "item": "PARALYZE_HEAL",
       "isHidden": false,
       "location": {
         "x": 31,
@@ -477,7 +477,7 @@
       "triggerName": "DFS_Town_Item_Paralyze_Heal_01"
     },
     {
-      "item": "Cheri Berry",
+      "item": "CHERI_BERRY",
       "isHidden": true,
       "location": {
         "x": 28,
@@ -486,7 +486,7 @@
       "triggerName": "DFS_Town_HiddenItem_CheriBerry_01"
     },
     {
-      "item": "Oran Berry",
+      "item": "ORAN_BERRY",
       "isHidden": true,
       "location": {
         "x": 38,

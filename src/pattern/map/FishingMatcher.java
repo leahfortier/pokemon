@@ -10,13 +10,9 @@ public class FishingMatcher extends MultiPointTriggerMatcher {
     private String name;
     private WildEncounterInfo[] wildPokemon;
 
-    public FishingMatcher(String name, WildEncounterInfo[] wildEncounters) {
-        this.name = name;
-        this.wildPokemon = wildEncounters;
-    }
-
     public FishingMatcher(String name, List<WildEncounterInfo> wildEncounters) {
-        this(name, wildEncounters.toArray(new WildEncounterInfo[0]));
+        this.name = name;
+        this.wildPokemon = wildEncounters.toArray(new WildEncounterInfo[0]);
     }
 
     public WildEncounterInfo[] getWildEncounters() {
