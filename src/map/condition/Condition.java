@@ -29,8 +29,8 @@ public interface Condition {
     class BadgeCondition implements Condition {
         private final Badge badge;
 
-        public BadgeCondition(String badgeName) {
-            this.badge = Badge.valueOf(badgeName);
+        public BadgeCondition(Badge badge) {
+            this.badge = badge;
         }
 
         @Override

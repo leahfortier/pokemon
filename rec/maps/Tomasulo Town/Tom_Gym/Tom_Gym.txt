@@ -37,9 +37,8 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Watch out, I'm gonna fry your motherboard!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Watch out, I'm gonna fry your motherboard!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "name": "Gym Trainer",
@@ -52,7 +51,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -61,9 +60,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Hey! You fried my motherboard!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Hey! You fried my motherboard!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -85,9 +83,8 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "My Pokémon and I communicate over PCI express!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "My Pokémon and I communicate over PCI express!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "name": "Gym Trainer",
@@ -100,7 +97,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -109,9 +106,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I need more bandwidth!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I need more bandwidth!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -133,9 +129,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "My Pokémon pack enough electricity to power the Cray Titan!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "My Pokémon pack enough electricity to power the Cray Titan!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "name": "Leader Moore",
@@ -162,7 +157,7 @@
                 }
               ],
               "update": "badge",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -171,18 +166,16 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "My data BUS just wasn't large enough! Take this, the Round Badge!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "My data BUS just wasn't large enough! Take this, the Round Badge!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "BADGE",
-              "triggerContents": "ROUND",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "badge": "ROUND",
+              "className": "pattern.action.EnumActionMatcher$BadgeActionMatcher"
             },
             {
-              "update": "won",
-              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
+              "interactionName": "won",
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             }
           ]
         },
@@ -191,9 +184,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "jo,loo6jm[nphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh             bo",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "jo,loo6jm[nphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh             bo",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }

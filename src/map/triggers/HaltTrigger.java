@@ -1,25 +1,16 @@
 package map.triggers;
 
-import main.Global;
-import map.condition.Condition;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
-import util.StringUtils;
 
 public class HaltTrigger extends Trigger {
     private static boolean halted = false;
 
-    HaltTrigger(String contents, Condition condition) {
-        super(TriggerType.HALT, contents, condition);
-
-        if (!StringUtils.isNullOrEmpty(contents)) {
-            Global.error("Contents should be empty for " + this.getClass().getSimpleName());
-        }
-    }
+    private HaltTrigger() {}
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         if (halted) {
             addHaltTrigger();
         } else {
@@ -29,8 +20,7 @@ public class HaltTrigger extends Trigger {
 
     public static void addHaltTrigger() {
         halted = true;
-        Trigger trigger = TriggerType.HALT.createTrigger(null, null);
-        Messages.addToFront(new MessageUpdate().withTrigger(trigger.getName()));
+        Messages.addToFront(new MessageUpdate().withTrigger(new HaltTrigger()));
     }
 
     public static void resume() {

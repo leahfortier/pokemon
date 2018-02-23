@@ -1,21 +1,23 @@
 package map.entity;
 
-import gui.GameData;
 import gui.TileSet;
 import item.ItemNamesies;
 import item.use.TechnicalMachine;
-import main.Game;
 import map.Direction;
 import map.condition.Condition;
+import map.triggers.DialogueTrigger;
+import map.triggers.GiveItemTrigger;
+import map.triggers.GlobalTrigger;
+import map.triggers.GroupTrigger;
+import map.triggers.MedalCountTrigger;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
-import pattern.GroupTriggerMatcher;
 import trainer.player.medal.MedalTheme;
 import util.Point;
-import util.SerializationUtils;
 import util.StringUtils;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemEntity extends Entity {
     private final ItemNamesies itemName;
@@ -23,7 +25,7 @@ public class ItemEntity extends Entity {
     private final boolean isTM;
 
     private boolean hasTriggered;
-    private boolean dataCreated;
+    private Trigger trigger;
 
     public ItemEntity(String name, Point location, Condition condition, ItemNamesies item, boolean isHidden) {
         super(location, name, condition);
@@ -32,7 +34,6 @@ public class ItemEntity extends Entity {
         this.isTM = this.itemName.getItem() instanceof TechnicalMachine;
 
         this.hasTriggered = false;
-        this.dataCreated = false;
     }
 
     public boolean isHiddenItem() {
@@ -56,7 +57,13 @@ public class ItemEntity extends Entity {
 
     @Override
     protected BufferedImage getFrame() {
-        return this.isHidden ? null : (isTM ? TileSet.TM_ITEM_POKEBALL : TileSet.ITEM_POKEBALL);
+        if (this.isHidden) {
+            return null;
+        } else if (this.isTM) {
+            return TileSet.TM_ITEM_POKEBALL;
+        } else {
+            return TileSet.ITEM_POKEBALL;
+        }
     }
 
     @Override
@@ -69,45 +76,26 @@ public class ItemEntity extends Entity {
         hasTriggered = false;
     }
 
+    private String getItemNameWithArticle() {
+        return isTM
+                ? "the " + this.itemName.getName()
+                : StringUtils.articleString(this.itemName.getName());
+    }
+
     @Override
-    public void addData() {
-        if (dataCreated) {
-            return;
-        }
-
-        GameData data = Game.getData();
-        final String itemTriggerSuffix = "ItemEntity_" + TriggerType.GIVE_ITEM.getTriggerName(this.itemName.getName());
-        final String itemTriggerName = TriggerType.GROUP.getTriggerNameFromSuffix(itemTriggerSuffix);
-
-        // Create a universal trigger for this item
-        if (!data.hasTrigger(itemTriggerName)) {
-            String itemDialogue =
-                    "You found " +
-                            (isTM
-                                    ? "the " + this.itemName.getName()
-                                    : StringUtils.articleString(this.itemName.getName())
-                            ) +
-                            "!";
-
-            Trigger dialogue = TriggerType.DIALOGUE.createTrigger(itemDialogue, null);
-            Trigger giveItem = TriggerType.GIVE_ITEM.createTrigger(this.itemName.getName(), null);
-
-            GroupTriggerMatcher groupTriggerMatcher;
+    public Trigger getTrigger() {
+        if (trigger == null) {
+            List<Trigger> triggers = new ArrayList<>();
+            triggers.add(new GlobalTrigger(this.getEntityName()));
+            triggers.add(new DialogueTrigger("You found " + this.getItemNameWithArticle() + "!"));
+            triggers.add(new GiveItemTrigger(this.itemName, 1));
             if (this.isHidden) {
-                Trigger medalTrigger = TriggerType.MEDAL_COUNT.createTrigger(MedalTheme.HIDDEN_ITEMS_FOUND.name(), null);
-                groupTriggerMatcher = new GroupTriggerMatcher(itemTriggerSuffix, dialogue.getName(), giveItem.getName(), medalTrigger.getName());
-            } else {
-                groupTriggerMatcher = new GroupTriggerMatcher(itemTriggerSuffix, dialogue.getName(), giveItem.getName());
+                triggers.add(new MedalCountTrigger(MedalTheme.HIDDEN_ITEMS_FOUND));
             }
-            TriggerType.GROUP.createTrigger(SerializationUtils.getJson(groupTriggerMatcher), null);
+
+            this.trigger = new GroupTrigger(this.getCondition(), triggers);
         }
 
-        // This trigger will only call the item trigger when the conditions apply
-        GroupTriggerMatcher matcher = new GroupTriggerMatcher(this.getTriggerSuffix(), itemTriggerName);
-        matcher.addGlobals(this.getEntityName());
-
-        TriggerType.GROUP.createTrigger(SerializationUtils.getJson(matcher), null);
-
-        dataCreated = true;
+        return trigger;
     }
 }

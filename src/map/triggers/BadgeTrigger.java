@@ -1,23 +1,21 @@
 package map.triggers;
 
 import main.Game;
-import map.condition.Condition;
 import map.condition.Condition.BadgeCondition;
-import map.condition.ConditionHolder.AndCondition;
 import map.condition.ConditionHolder.NotCondition;
 import trainer.player.Badge;
 
 public class BadgeTrigger extends Trigger {
     private final Badge badge;
 
-    BadgeTrigger(String badgeName, Condition condition) {
+    public BadgeTrigger(Badge badge) {
         // Can't get the same badge twice
-        super(TriggerType.BADGE, badgeName, new AndCondition(condition, new NotCondition(new BadgeCondition(badgeName))));
-        this.badge = Badge.valueOf(badgeName);
+        super(new NotCondition(new BadgeCondition(badge)));
+        this.badge = badge;
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Game.getPlayer().giveBadge(this.badge);
     }
 }

@@ -1,26 +1,27 @@
-package mapMaker.dialogs.action.trigger;
+package mapMaker.dialogs.action.panel;
 
 import item.ItemNamesies;
+import mapMaker.dialogs.action.ActionPanel;
 import pattern.PokemonMatcher;
+import pattern.action.ActionMatcher.GivePokemonActionMatcher;
 import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
 import util.GUIUtils;
-import util.SerializationUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-class PokemonTriggerPanel extends TriggerContentsPanel {
+public class PokemonActionPanel extends ActionPanel<GivePokemonActionMatcher> {
     private final JTextField pokemonNameField;
     private final JFormattedTextField levelField;
     private final JCheckBox isEggCheckBox;
     private final JCheckBox shinyCheckBox;
     private final JTextField itemNameField;
 
-    PokemonTriggerPanel() {
+    public PokemonActionPanel() {
         this.pokemonNameField = GUIUtils.createColorConditionTextField(new ColorCondition() {
             @Override
             public boolean greenCondition() {
@@ -61,29 +62,7 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
     }
 
     @Override
-    protected void load(String triggerContents) {
-        PokemonMatcher matcher = SerializationUtils.deserializeJson(triggerContents, PokemonMatcher.class);
-
-        if (!matcher.isStarterEgg()) {
-            this.pokemonNameField.setText(matcher.getNamesies().getName());
-
-            if (!matcher.isEgg()) {
-                if (matcher.hasHoldItem()) {
-                    this.itemNameField.setText(matcher.getHoldItem().getName());
-                }
-
-                this.levelField.setValue(Integer.parseInt(matcher.getLevel() + ""));
-                this.shinyCheckBox.setSelected(matcher.isShiny());
-            }
-        }
-
-        this.isEggCheckBox.setSelected(matcher.isEgg());
-
-        setEnabled();
-    }
-
-    @Override
-    protected String getTriggerContents() {
+    public GivePokemonActionMatcher getActionMatcher() {
         final PokemonMatcher matcher;
         if (isEggCheckBox.isSelected()) {
             matcher = PokemonMatcher.createEggMatcher(PokemonNamesies.getValueOf(pokemonNameField.getText()));
@@ -98,6 +77,27 @@ class PokemonTriggerPanel extends TriggerContentsPanel {
             );
         }
 
-        return SerializationUtils.getJson(matcher);
+        return new GivePokemonActionMatcher(matcher);
+    }
+
+    @Override
+    protected void load(GivePokemonActionMatcher matcher) {
+        PokemonMatcher pokemonMatcher = matcher.getPokemonMatcher();
+        if (!pokemonMatcher.isStarterEgg()) {
+            this.pokemonNameField.setText(pokemonMatcher.getNamesies().getName());
+
+            if (!pokemonMatcher.isEgg()) {
+                if (pokemonMatcher.hasHoldItem()) {
+                    this.itemNameField.setText(pokemonMatcher.getHoldItem().getName());
+                }
+
+                this.levelField.setValue(Integer.parseInt(pokemonMatcher.getLevel() + ""));
+                this.shinyCheckBox.setSelected(pokemonMatcher.isShiny());
+            }
+        }
+
+        this.isEggCheckBox.setSelected(pokemonMatcher.isEgg());
+
+        setEnabled();
     }
 }

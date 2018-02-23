@@ -3,15 +3,15 @@ package trainer.player;
 import item.ItemNamesies;
 import item.bag.Bag;
 import main.Game;
+import map.triggers.ChoiceTrigger;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.ChoiceActionMatcher;
-import pattern.action.ActionMatcher.TriggerActionMatcher;
+import pattern.action.ActionMatcher.UseItemActionMatcher;
 import pattern.action.ChoiceMatcher;
-import util.SerializationUtils;
+import pattern.action.StringActionMatcher.DialogueActionMatcher;
 
 import java.io.Serializable;
 
@@ -38,10 +38,10 @@ public class RepelInfo implements Serializable {
                 Player player = Game.getPlayer();
                 Bag bag = player.getBag();
                 if (bag.hasItem(this.repelItem)) {
-                    TriggerActionMatcher useAnotherAction = new TriggerActionMatcher(TriggerType.USE_ITEM, repelItem.name());
+                    ActionMatcher useAnotherAction = new UseItemActionMatcher(repelItem);
                     ChoiceMatcher useAnother = new ChoiceMatcher("Sure!", new ActionMatcher[] { useAnotherAction });
 
-                    TriggerActionMatcher doNotUseAction = new TriggerActionMatcher(TriggerType.DIALOGUE, "They're coming for you. Worry.");
+                    ActionMatcher doNotUseAction = new DialogueActionMatcher("They're coming for you. Worry.");
                     ChoiceMatcher doNotUse = new ChoiceMatcher("Nah...", new ActionMatcher[] { doNotUseAction });
 
                     ChoiceActionMatcher choice = new ChoiceActionMatcher(
@@ -49,8 +49,8 @@ public class RepelInfo implements Serializable {
                             new ChoiceMatcher[] { useAnother, doNotUse }
                     );
 
-                    Trigger choiceTrigger = TriggerType.CHOICE.createTrigger(SerializationUtils.getJson(choice));
-                    Messages.add(new MessageUpdate().withTrigger(choiceTrigger.getName()));
+                    Trigger choiceTrigger = new ChoiceTrigger(choice);
+                    Messages.add(new MessageUpdate().withTrigger(choiceTrigger));
                 }
             }
         } else {

@@ -55,44 +55,35 @@
       "name": "Heal",
       "actions": [
         {
-          "triggerType": "DIALOGUE",
-          "triggerContents": "Famlusa du dra Bugésuh Lahdan!",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "dialogue": "Famlusa du dra Bugésuh Lahdan!",
+          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
         },
         {
-          "triggerType": "DIALOGUE",
-          "triggerContents": "Mad sa raym ouin Bugésuh vun oui!",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "dialogue": "Mad sa raym ouin Bugésuh vun oui!",
+          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
         },
         {
-          "triggerType": "SOUND",
-          "triggerContents": "POKE_CENTER_HEAL",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "soundTitle": "POKE_CENTER_HEAL",
+          "className": "pattern.action.EnumActionMatcher$SoundActionMatcher"
         },
         {
-          "triggerType": "DIALOGUE",
-          "triggerContents": "Tih Tih Tih-Tih Tih!",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "dialogue": "Tih Tih Tih-Tih Tih!",
+          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
         },
         {
-          "triggerType": "HEAL_PARTY",
-          "triggerContents": "",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "className": "pattern.action.EmptyActionMatcher$HealPartyActionMatcher"
         },
         {
-          "triggerType": "DIALOGUE",
-          "triggerContents": "Ouin Bugésuh ryja paah raymat!",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "dialogue": "Ouin Bugésuh ryja paah raymat!",
+          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
         },
         {
-          "triggerType": "DIALOGUE",
-          "triggerContents": "E ruba du caa oui ykyeh cuuh!",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "dialogue": "E ruba du caa oui ykyeh cuuh!",
+          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
         },
         {
-          "triggerType": "MEDAL_COUNT",
-          "triggerContents": "POKE_CENTER_HEALS",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "medalTheme": "POKE_CENTER_HEALS",
+          "className": "pattern.action.EnumActionMatcher$MedalCountActionMatcher"
         }
       ],
       "location": [
@@ -107,14 +98,12 @@
       "name": "Mart",
       "actions": [
         {
-          "triggerType": "DIALOGUE",
-          "triggerContents": "Famlusa du dra BugéSynd!",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "dialogue": "Famlusa du dra BugéSynd!",
+          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
         },
         {
-          "triggerType": "CHANGE_VIEW",
-          "triggerContents": "MART_VIEW",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "viewMode": "MART_VIEW",
+          "className": "pattern.action.EnumActionMatcher$ChangeViewActionMatcher"
         }
       ],
       "location": [
@@ -129,8 +118,8 @@
       "name": "PC_View",
       "actions": [
         {
-          "groupTrigger": "LoadPC",
-          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
+          "triggerName": "LOAD_PC",
+          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
         }
       ],
       "location": [

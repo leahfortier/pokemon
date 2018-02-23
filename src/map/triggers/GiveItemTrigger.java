@@ -2,21 +2,18 @@ package map.triggers;
 
 import item.ItemNamesies;
 import main.Game;
-import map.condition.Condition;
 
-class GiveItemTrigger extends Trigger {
+public class GiveItemTrigger extends Trigger {
     private final ItemNamesies item;
-    private final int quantity; // TODO: Quantity
+    private final int quantity;
 
-    GiveItemTrigger(String itemName, Condition condition) {
-        super(TriggerType.GIVE_ITEM, itemName, condition);
-
-        this.item = ItemNamesies.getValueOf(itemName);
-        this.quantity = 1;
+    public GiveItemTrigger(ItemNamesies itemNamesies, int quantity) {
+        this.item = itemNamesies;
+        this.quantity = quantity;
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Game.getPlayer().getBag().addItem(this.item, quantity);
     }
 }

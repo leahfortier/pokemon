@@ -10,7 +10,6 @@ import map.MapData;
 import map.entity.Entity;
 import map.overworld.WalkType;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.player.Player;
@@ -186,7 +185,7 @@ public class PlayerEntity extends MovableEntity {
             if (currentInteractionEntity.isVisible()) {
                 currentInteractionEntity.getAttention(entityDirection.getOpposite());
 
-                Trigger trigger = Game.getData().getTrigger(TriggerType.GROUP.getTriggerNameFromSuffix(currentInteractionEntity.getTriggerSuffix()));
+                Trigger trigger = currentInteractionEntity.getTrigger();
                 if (trigger != null) {
                     trigger.execute();
                 }
@@ -195,11 +194,10 @@ public class PlayerEntity extends MovableEntity {
         }
         // Trigger
         else if (justMoved) {
-            List<String> currentTriggerNames = map.getCurrentTriggers();
-            if (currentTriggerNames != null) {
+            List<Trigger> currentTriggers = map.getCurrentTriggers();
+            if (currentTriggers != null) {
                 // Execute all valid triggers
-                for (String triggerName : currentTriggerNames) {
-                    Trigger trigger = Game.getData().getTrigger(triggerName);
+                for (Trigger trigger : currentTriggers) {
                     if (trigger != null && trigger.isTriggered()) {
                         trigger.execute();
                     }
@@ -231,7 +229,7 @@ public class PlayerEntity extends MovableEntity {
     }
 
     @Override
-    public String getTriggerSuffix() {
+    public Trigger getTrigger() {
         return null;
     }
 

@@ -118,9 +118,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Team Deadlock has taken over the Power Plant. I hope the ground shaking doesn't mean anything that bad.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Team Deadlock has taken over the Power Plant. I hope the ground shaking doesn't mean anything that bad.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -143,9 +142,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I've never felt a shock like that before! Did it come from the Power Plant?!??",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I've never felt a shock like that before! Did it come from the Power Plant?!??",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -168,9 +166,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I need to get back in there. The reactor is going to explode!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I need to get back in there. The reactor is going to explode!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -193,9 +190,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I was just researching new electricity harvesting techniques when everyone was forced out by Team Deadlock.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I was just researching new electricity harvesting techniques when everyone was forced out by Team Deadlock.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -218,9 +214,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Team Deadlock better not harm the Magnemites!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Team Deadlock better not harm the Magnemites!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -243,9 +238,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I wish he would just calm down and try to explain what happened.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I wish he would just calm down and try to explain what happened.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -264,9 +258,8 @@
       "name": "LockedDoor",
       "actions": [
         {
-          "triggerType": "DIALOGUE",
-          "triggerContents": "The door is locked.",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "dialogue": "The door is locked.",
+          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
         }
       ],
       "location": [
@@ -284,13 +277,12 @@
       "name": "Rumbles",
       "actions": [
         {
-          "triggerType": "DIALOGUE",
-          "triggerContents": "Rumble Rumble Rumble",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "dialogue": "Rumble Rumble Rumble",
+          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
         },
         {
           "global": "TomTownPowerPlantExplosionTriggered",
-          "className": "pattern.action.ActionMatcher$GlobalActionMatcher"
+          "className": "pattern.action.StringActionMatcher$GlobalActionMatcher"
         }
       ],
       "location": [

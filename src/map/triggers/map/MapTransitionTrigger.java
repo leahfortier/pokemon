@@ -2,24 +2,19 @@ package map.triggers.map;
 
 import main.Game;
 import map.PathDirection;
-import map.condition.Condition;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import pattern.map.MapTransitionMatcher;
 import trainer.player.Player;
-import util.SerializationUtils;
 
 public class MapTransitionTrigger extends Trigger {
     private final MapTransitionMatcher mapTransitionMatcher;
 
-    public MapTransitionTrigger(String contents, Condition condition) {
-        super(TriggerType.MAP_TRANSITION, contents, condition);
-
-        this.mapTransitionMatcher = SerializationUtils.deserializeJson(contents, MapTransitionMatcher.class);
+    public MapTransitionTrigger(MapTransitionMatcher matcher) {
+        this.mapTransitionMatcher = matcher;
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Player player = Game.getPlayer();
         player.setMap(mapTransitionMatcher);
         mapTransitionMatcher.setTransitionIndex();
@@ -34,10 +29,5 @@ public class MapTransitionTrigger extends Trigger {
         }
 
         player.setMapReset(true);
-    }
-
-    public static String getTriggerSuffix(String contents) {
-        MapTransitionMatcher matcher = SerializationUtils.deserializeJson(contents, MapTransitionMatcher.class);
-        return matcher.getPreviousMap() + "_" + matcher.getNextMap() + "_" + matcher.getNextEntranceName();
     }
 }

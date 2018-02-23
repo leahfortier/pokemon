@@ -1,6 +1,8 @@
 package pattern.action;
 
-public class UpdateMatcher {
+import pattern.JsonMatcher;
+
+public class UpdateMatcher implements JsonMatcher {
     private String npcEntityName;
     private String interactionName;
 

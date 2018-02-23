@@ -13,7 +13,6 @@ import util.FileIO.NullOutputStream;
 import util.FileName;
 import util.Folder;
 import util.GeneralUtils;
-import util.SerializationUtils;
 import util.StringAppender;
 import util.StringUtils;
 
@@ -381,6 +380,6 @@ public class UpdateGen {
         ConditionMatcher matcher = new ConditionMatcher(name, description, new ConditionSet(condition));
 
 //        ConditionsMatcher.addCondition(matcher);
-        System.out.println(SerializationUtils.getJson(matcher));
+        System.out.println(matcher.getJson());
     }
 }

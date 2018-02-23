@@ -1,18 +1,18 @@
-package mapMaker.dialogs.action.trigger;
+package mapMaker.dialogs.action.panel;
 
-import pattern.TradePokemonMatcher;
+import mapMaker.dialogs.action.ActionPanel;
+import pattern.action.ActionMatcher.TradePokemonActionMatcher;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
 import util.GUIUtils;
-import util.SerializationUtils;
 
 import javax.swing.JTextField;
 
-public class TradePokemonTriggerPanel extends TriggerContentsPanel {
+public class TradePokemonActionPanel extends ActionPanel<TradePokemonActionMatcher> {
     private final JTextField requestedNameField;
     private final JTextField tradeNameField;
 
-    public TradePokemonTriggerPanel() {
+    public TradePokemonActionPanel() {
         this.requestedNameField = GUIUtils.createColorConditionTextField(new ColorCondition() {
             @Override
             public boolean greenCondition() {
@@ -35,17 +35,16 @@ public class TradePokemonTriggerPanel extends TriggerContentsPanel {
     }
 
     @Override
-    protected void load(String triggerContents) {
-        TradePokemonMatcher matcher = SerializationUtils.deserializeJson(triggerContents, TradePokemonMatcher.class);
-        requestedNameField.setText(matcher.getRequested().getName());
-        tradeNameField.setText(matcher.getTradePokemon().getName());
-    }
-
-    @Override
-    protected String getTriggerContents() {
+    public TradePokemonActionMatcher getActionMatcher() {
         PokemonNamesies requested = PokemonNamesies.tryValueOf(requestedNameField.getText());
         PokemonNamesies tradePokemon = PokemonNamesies.tryValueOf(tradeNameField.getText());
 
-        return SerializationUtils.getJson(new TradePokemonMatcher(requested, tradePokemon));
+        return new TradePokemonActionMatcher(requested, tradePokemon);
+    }
+
+    @Override
+    protected void load(TradePokemonActionMatcher matcher) {
+        requestedNameField.setText(matcher.getRequested().getName());
+        tradeNameField.setText(matcher.getTradePokemon().getName());
     }
 }

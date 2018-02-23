@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class PokemonMatcher {
+public class PokemonMatcher implements JsonMatcher {
     private PokemonNamesies namesies;
     private String nickname;
     private Integer level;

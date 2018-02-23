@@ -7,6 +7,7 @@ import battle.effect.generic.Weather;
 import gui.view.ViewMode;
 import main.Game;
 import map.overworld.TerrainType;
+import map.triggers.Trigger;
 import pattern.action.ChoiceMatcher;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
@@ -37,7 +38,7 @@ public class MessageUpdate {
     private Integer teamIndex;
     private Move move;
     private Integer duration;
-    private String triggerName;
+    private Trigger trigger;
     private ChoiceMatcher[] choices;
     private ViewMode viewMode;
     private Weather weather;
@@ -144,8 +145,8 @@ public class MessageUpdate {
         return this;
     }
 
-    public MessageUpdate withTrigger(String triggerName) {
-        this.triggerName = triggerName;
+    public MessageUpdate withTrigger(Trigger trigger) {
+        this.trigger = trigger;
         this.updateType = MessageUpdateType.TRIGGER;
 
         return this;
@@ -323,8 +324,8 @@ public class MessageUpdate {
         return updateType == MessageUpdateType.RESET_STATE;
     }
 
-    public String getTriggerName() {
-        return this.triggerName;
+    public Trigger getTrigger() {
+        return this.trigger;
     }
 
     public boolean isChoice() {

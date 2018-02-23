@@ -32,13 +32,12 @@
       "name": "PC",
       "actions": [
         {
-          "triggerType": "DIALOGUE",
-          "triggerContents": "*hack hack hack*",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "dialogue": "*hack hack hack*",
+          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
         },
         {
-          "groupTrigger": "LoadPC",
-          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
+          "triggerName": "LOAD_PC",
+          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
         }
       ],
       "location": [

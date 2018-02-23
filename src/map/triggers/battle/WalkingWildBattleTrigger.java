@@ -4,33 +4,29 @@ import battle.ActivePokemon;
 import battle.effect.generic.EffectInterfaces.EncounterRateMultiplier;
 import battle.effect.generic.EffectInterfaces.RepellingEffect;
 import main.Game;
-import map.condition.Condition;
 import map.overworld.EncounterRate;
 import map.overworld.WildEncounter;
 import map.overworld.WildEncounterInfo;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.map.WildBattleMatcher;
 import pokemon.PokemonNamesies;
 import util.RandomUtils;
-import util.SerializationUtils;
 
 public class WalkingWildBattleTrigger extends Trigger {
     private final WildEncounterInfo[] wildEncounters;
     private final EncounterRate encounterRate;
 
-    public WalkingWildBattleTrigger(String matcherJson, Condition condition) {
-        super(TriggerType.WALKING_WILD_BATTLE, matcherJson, condition);
+    public WalkingWildBattleTrigger(WildBattleMatcher matcher) {
+        super(matcher.getCondition());
 
-        WildBattleMatcher matcher = SerializationUtils.deserializeJson(matcherJson, WildBattleMatcher.class);
         this.wildEncounters = matcher.getWildEncounters();
         this.encounterRate = matcher.getEncounterRate();
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         ActivePokemon front = Game.getPlayer().front();
 
         // TODO: What's going on with this random stuff also maybe this formula should be in the EncounterRate class
@@ -43,8 +39,8 @@ public class WalkingWildBattleTrigger extends Trigger {
                 return;
             }
 
-            Trigger wildBattle = TriggerType.WILD_BATTLE.createTrigger(SerializationUtils.getJson(wildPokemon), null);
-            Messages.add(new MessageUpdate().withTrigger(wildBattle.getName()));
+            Trigger wildBattle = new WildBattleTrigger(wildPokemon);
+            Messages.add(new MessageUpdate().withTrigger(wildBattle));
         }
     }
 

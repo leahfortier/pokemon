@@ -84,7 +84,7 @@ public class MapMakerTriggerData {
         MapDataMatcher mapDataMatcher = new MapDataMatcher(areaData, entityList);
 
         FileIO.createFile(mapFileName);
-        FileIO.overwriteFile(mapFileName, SerializationUtils.getJson(mapDataMatcher));
+        FileIO.overwriteFile(mapFileName, mapDataMatcher.getJson());
     }
 
     private String getUniqueEntityName(LocationTriggerMatcher matcher, Set<String> entityNames) {

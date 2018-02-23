@@ -43,14 +43,12 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "What is a process like you doing here?",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "What is a process like you doing here?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "That doesn't matter. You can't interfere with our threads!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "That doesn't matter. You can't interfere with our threads!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "name": "Team Deadlock Grunt",
@@ -63,7 +61,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -72,14 +70,12 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "How could you have won?",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "How could you have won?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "The others will stop your thread!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "The others will stop your thread!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -102,9 +98,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "You can't stop us. This town's main thread will be terminated!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "You can't stop us. This town's main thread will be terminated!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "name": "Team Deadlock Grunt",
@@ -121,20 +116,18 @@
                 }
               ],
               "update": "deadlock_defeat",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "You may have halted us now, but our loop is infinite!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "You may have halted us now, but our loop is infinite!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "global": "VisitedTomTownPowerPlant",
-              "className": "pattern.action.ActionMatcher$GlobalActionMatcher"
+              "className": "pattern.action.StringActionMatcher$GlobalActionMatcher"
             },
             {
-              "triggerType": "RELOAD_MAP",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "className": "pattern.action.EmptyActionMatcher$ReloadMapActionMatcher"
             }
           ]
         },
@@ -162,9 +155,8 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I'm going to kill your process.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I'm going to kill your process.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "name": "Team Deadlock Grunt",
@@ -177,7 +169,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -186,9 +178,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I can't beleive you managed to killed my process.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I can't beleive you managed to killed my process.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -211,13 +202,12 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Wow, you did it! You saved the power plant!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Wow, you did it! You saved the power plant!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "update": "dialogue",
-              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
+              "interactionName": "dialogue",
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             }
           ]
         }
@@ -240,9 +230,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I'll be here for days trying to get the plant fully operational again.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I'll be here for days trying to get the plant fully operational again.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }

@@ -4,10 +4,9 @@ import pattern.action.ActionMatcher;
 
 import javax.swing.JPanel;
 
-// TODO: Make this ActionPanel<T extends ActionMatcher2>
-public abstract class ActionPanel extends JPanel {
-    public abstract ActionMatcher getActionMatcher(ActionType actionType);
-    protected abstract void load(ActionMatcher matcher);
+public abstract class ActionPanel<T extends ActionMatcher> extends JPanel {
+    public abstract T getActionMatcher();
+    protected abstract void load(T matcher);
 
     public void render() {}
 }

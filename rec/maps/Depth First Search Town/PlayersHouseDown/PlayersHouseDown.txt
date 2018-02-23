@@ -54,9 +54,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "It's nice when you come to visit, but please get a job.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "It's nice when you come to visit, but please get a job.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -84,23 +83,20 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "It’s great that you’re here and all and imma let you finish, but get a job and make the greatest hits of all time. ALL TIME!!! ",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "It’s great that you’re here and all and imma let you finish, but get a job and make the greatest hits of all time. ALL TIME!!! ",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "global": "FirstMadreTalk",
-              "className": "pattern.action.ActionMatcher$GlobalActionMatcher"
+              "className": "pattern.action.StringActionMatcher$GlobalActionMatcher"
             },
             {
-              "triggerType": "MOVE_PLAYER",
-              "triggerContents": "ddd",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "path": "ddd",
+              "className": "pattern.action.StringActionMatcher$MovePlayerActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "*pure rage*",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "*pure rage*",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -127,9 +123,8 @@
       "name": "TV",
       "actions": [
         {
-          "triggerType": "DIALOGUE",
-          "triggerContents": "The power's not out...?",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "dialogue": "The power's not out...?",
+          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
         }
       ],
       "location": [
@@ -156,9 +151,8 @@
       "name": "fridge",
       "actions": [
         {
-          "triggerType": "DIALOGUE",
-          "triggerContents": "Nothing good to eat. As usual.",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "dialogue": "Nothing good to eat. As usual.",
+          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
         }
       ],
       "location": [

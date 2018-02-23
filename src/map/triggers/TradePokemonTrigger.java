@@ -3,23 +3,21 @@ package map.triggers;
 import gui.view.TradeView;
 import gui.view.ViewMode;
 import main.Game;
-import map.condition.Condition;
-import pattern.TradePokemonMatcher;
-import util.SerializationUtils;
+import pokemon.PokemonNamesies;
 
 public class TradePokemonTrigger extends Trigger {
-    private final TradePokemonMatcher tradePokemonMatcher;
+    private final PokemonNamesies tradePokemon;
+    private final PokemonNamesies requested;
 
-    TradePokemonTrigger(String contents, Condition condition) {
-        super(TriggerType.TRADE_POKEMON, contents, condition);
-
-        tradePokemonMatcher = SerializationUtils.deserializeJson(contents, TradePokemonMatcher.class);
+    public TradePokemonTrigger(PokemonNamesies tradePokemon, PokemonNamesies requestedPokemon) {
+        this.tradePokemon = tradePokemon;
+        this.requested = requestedPokemon;
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         TradeView tradeView = Game.instance().getTradeView();
-        tradeView.setTrade(this.tradePokemonMatcher);
+        tradeView.setTrade(this.tradePokemon, this.requested);
 
         ChangeViewTrigger.addChangeViewTriggerMessage(ViewMode.TRADE_VIEW);
     }

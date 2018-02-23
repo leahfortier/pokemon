@@ -1,70 +1,24 @@
 package pattern.action;
 
-import map.condition.Condition;
-import map.entity.EntityAction;
-import map.entity.EntityAction.GlobalAction;
-import map.entity.EntityAction.GroupTriggerAction;
-import map.entity.EntityAction.UpdateAction;
+import map.triggers.DialogueTrigger;
+import map.triggers.GlobalTrigger;
+import map.triggers.Trigger;
+import map.triggers.UpdateTrigger;
+import map.triggers.map.MovePlayerTrigger;
 import mapMaker.dialogs.action.ActionType;
 
-public abstract class StringActionMatcher extends ActionMatcher {
-    public abstract String getActionString();
+public interface StringActionMatcher extends ActionMatcher {
+    String getStringValue();
 
-    public static class UpdateActionMatcher extends StringActionMatcher {
-        public String update;
-
-        public UpdateActionMatcher(String update) {
-            this.update = update;
-        }
-
-        @Override
-        public String getActionString() {
-            return this.update;
-        }
-
-        @Override
-        public ActionType getActionType() {
-            return ActionType.UPDATE;
-        }
-
-        @Override
-        public EntityAction getAction(Condition condition) {
-            return new UpdateAction(update);
-        }
-    }
-
-    public static class GroupTriggerActionMatcher extends StringActionMatcher {
-        public String groupTrigger;
-
-        public GroupTriggerActionMatcher(String groupTrigger) {
-            this.groupTrigger = groupTrigger;
-        }
-
-        @Override
-        public String getActionString() {
-            return this.groupTrigger;
-        }
-
-        @Override
-        public ActionType getActionType() {
-            return ActionType.GROUP_TRIGGER;
-        }
-
-        @Override
-        public EntityAction getAction(Condition condition) {
-            return new GroupTriggerAction(groupTrigger);
-        }
-    }
-
-    public static class GlobalActionMatcher extends StringActionMatcher {
-        public String global;
+    class GlobalActionMatcher implements StringActionMatcher {
+        private String global;
 
         public GlobalActionMatcher(String global) {
             this.global = global;
         }
 
         @Override
-        public String getActionString() {
+        public String getStringValue() {
             return this.global;
         }
 
@@ -74,8 +28,54 @@ public abstract class StringActionMatcher extends ActionMatcher {
         }
 
         @Override
-        public EntityAction getAction(Condition condition) {
-            return new GlobalAction(global);
+        public Trigger createNewTrigger() {
+            return new GlobalTrigger(global);
+        }
+    }
+
+    class DialogueActionMatcher implements StringActionMatcher {
+        private String dialogue;
+
+        public DialogueActionMatcher(String dialogue) {
+            this.dialogue = dialogue;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.DIALOGUE;
+        }
+
+        @Override
+        public Trigger createNewTrigger() {
+            return new DialogueTrigger(this.dialogue);
+        }
+
+        @Override
+        public String getStringValue() {
+            return dialogue;
+        }
+    }
+
+    class MovePlayerActionMatcher implements StringActionMatcher {
+        private String path;
+
+        public MovePlayerActionMatcher(String path) {
+            this.path = path;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.MOVE_PLAYER;
+        }
+
+        @Override
+        public Trigger createNewTrigger() {
+            return new MovePlayerTrigger(path);
+        }
+
+        @Override
+        public String getStringValue() {
+            return path;
         }
     }
 }

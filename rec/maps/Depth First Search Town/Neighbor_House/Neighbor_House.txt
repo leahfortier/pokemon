@@ -37,14 +37,12 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "R U A WIZARD 'ARRY",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "R U A WIZARD 'ARRY",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "MOVE_PLAYER",
-              "triggerContents": "RULDRULD",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "path": "RULDRULD",
+              "className": "pattern.action.StringActionMatcher$MovePlayerActionMatcher"
             }
           ]
         }
@@ -62,13 +60,12 @@
       "name": "PC",
       "actions": [
         {
-          "triggerType": "DIALOGUE",
-          "triggerContents": "*hack hack hack*",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "dialogue": "*hack hack hack*",
+          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
         },
         {
-          "groupTrigger": "LoadPC",
-          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
+          "triggerName": "LOAD_PC",
+          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
         }
       ],
       "location": [

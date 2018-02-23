@@ -1,20 +1,16 @@
 package map.triggers;
 
-import map.condition.Condition;
 import message.Messages;
 
-class DialogueTrigger extends Trigger {
-    // TODO: This should likely be an array of dialogue and contents should be json of an array of Strings
+public class DialogueTrigger extends Trigger {
     private final String dialogue;
 
-    DialogueTrigger(String dialogue, Condition condition) {
-        super(TriggerType.DIALOGUE, dialogue, condition);
-
+    public DialogueTrigger(String dialogue) {
         this.dialogue = dialogue;
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Messages.addToFront(this.dialogue);
     }
 }

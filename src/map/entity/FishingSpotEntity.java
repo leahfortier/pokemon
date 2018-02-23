@@ -4,24 +4,19 @@ import item.ItemNamesies;
 import map.condition.Condition;
 import map.condition.Condition.ItemCondition;
 import map.condition.ConditionHolder.AndCondition;
-import map.entity.EntityAction.TriggerAction;
 import map.overworld.WildEncounterInfo;
-import map.triggers.TriggerType;
-import pattern.map.FishingMatcher;
+import map.triggers.Trigger;
+import map.triggers.battle.FishingTrigger;
 import util.Point;
-import util.SerializationUtils;
-
-import java.util.Collections;
 
 public class FishingSpotEntity extends Entity {
     private final WildEncounterInfo[] wildEncounters;
-    private boolean dataCreated;
+    private Trigger trigger;
 
     public FishingSpotEntity(Point location, String entityName, Condition condition, WildEncounterInfo[] wildEncounters) {
         super(location, entityName, new AndCondition(condition, new ItemCondition(ItemNamesies.FISHING_ROD)));
 
         this.wildEncounters = wildEncounters;
-        this.dataCreated = false;
     }
 
     @Override
@@ -35,25 +30,11 @@ public class FishingSpotEntity extends Entity {
     }
 
     @Override
-    public void addData() {
-        if (dataCreated) {
-            return;
+    public Trigger getTrigger() {
+        if (trigger == null) {
+            this.trigger = new FishingTrigger(wildEncounters);
         }
 
-        FishingMatcher fishingMatcher = new FishingMatcher(this.getEntityName(), wildEncounters);
-        EntityAction entityAction = new TriggerAction(
-                TriggerType.FISHING,
-                SerializationUtils.getJson(fishingMatcher),
-                new ItemCondition(ItemNamesies.FISHING_ROD)
-        );
-
-        EntityAction.addActionGroupTrigger(
-                this.getEntityName(),
-                this.getTriggerSuffix(),
-                this.getCondition(),
-                Collections.singletonList(entityAction)
-        );
-
-        dataCreated = true;
+        return trigger;
     }
 }

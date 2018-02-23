@@ -47,7 +47,7 @@ class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
 
         interactionNameTextField.setText(matcher.getName());
         walkToPlayerCheckBox.setSelected(matcher.shouldWalkToPlayer());
-        actionListPanel.load(matcher.getActionMatcherList());
+        actionListPanel.load(matcher.getActions());
     }
 
     @Override

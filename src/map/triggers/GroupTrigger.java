@@ -1,46 +1,36 @@
 package map.triggers;
 
-import main.Game;
 import map.condition.Condition;
-import map.condition.ConditionHolder.AndCondition;
 import message.MessageUpdate;
 import message.Messages;
-import pattern.GroupTriggerMatcher;
-import util.SerializationUtils;
-import util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
-class GroupTrigger extends Trigger {
-    private final List<String> triggers;
+public class GroupTrigger extends Trigger {
+    private final List<Trigger> triggers;
 
-    GroupTrigger(String contents, Condition condition) {
-        this(contents, condition, SerializationUtils.deserializeJson(contents, GroupTriggerMatcher.class));
+    public GroupTrigger(Trigger... triggers) {
+        this(null, triggers);
     }
 
-    private GroupTrigger(String contents, Condition condition, GroupTriggerMatcher matcher) {
-        super(TriggerType.GROUP, contents, new AndCondition(condition, matcher.getCondition()), matcher.getGlobals());
-        this.triggers = matcher.getTriggers();
+    public GroupTrigger(Condition condition, Trigger... triggers) {
+        this(condition, Arrays.asList(triggers));
+    }
+
+    public GroupTrigger(Condition condition, List<Trigger> triggers) {
+        super(condition);
+        this.triggers = triggers;
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         // Add all triggers in the group to the beginning of the message queue
         for (int i = triggers.size() - 1; i >= 0; i--) {
-            String triggerName = triggers.get(i);
-            Trigger trigger = Game.getData().getTrigger(triggerName);
+            Trigger trigger = triggers.get(i);
             if (trigger != null && trigger.isTriggered()) {
-                Messages.addToFront(new MessageUpdate().withTrigger(triggerName));
+                Messages.addToFront(new MessageUpdate().withTrigger(trigger));
             }
         }
-    }
-
-    static String getTriggerSuffix(String contents) {
-        GroupTriggerMatcher matcher = SerializationUtils.deserializeJson(contents, GroupTriggerMatcher.class);
-        if (!StringUtils.isNullOrEmpty(matcher.getSuffix())) {
-            return matcher.getSuffix();
-        }
-
-        return contents;
     }
 }

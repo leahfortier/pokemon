@@ -60,6 +60,6 @@ public class EventTriggerDialog extends TriggerDialog<EventMatcher> {
 
         nameTextField.setText(matcher.getBasicName());
         conditionPanel.load(matcher);
-        actionListPanel.load(matcher.getActionMatcherList());
+        actionListPanel.load(matcher.getActions());
     }
 }

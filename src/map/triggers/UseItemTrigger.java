@@ -2,19 +2,16 @@ package map.triggers;
 
 import item.ItemNamesies;
 import main.Game;
-import map.condition.Condition;
 
 public class UseItemTrigger extends Trigger {
     private final ItemNamesies useItem;
 
-    protected UseItemTrigger(String contents, Condition condition) {
-        super(TriggerType.USE_ITEM, contents, condition);
-
-        this.useItem = ItemNamesies.valueOf(contents);
+    public UseItemTrigger(ItemNamesies itemNamesies) {
+        this.useItem = itemNamesies;
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Game.getPlayer().getBag().useItem(this.useItem);
     }
 }

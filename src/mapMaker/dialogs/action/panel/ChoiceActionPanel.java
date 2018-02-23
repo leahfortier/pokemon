@@ -1,5 +1,7 @@
-package mapMaker.dialogs.action;
+package mapMaker.dialogs.action.panel;
 
+import mapMaker.dialogs.action.ActionDialog;
+import mapMaker.dialogs.action.ActionPanel;
 import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.ChoiceActionMatcher;
 import pattern.action.ChoiceMatcher;
@@ -11,16 +13,15 @@ import javax.swing.JTextField;
 import java.util.ArrayList;
 import java.util.List;
 
-class ChoiceActionPanel extends ActionPanel {
-
-    private final ActionDialog parent;
-
+public class ChoiceActionPanel extends ActionPanel<ChoiceActionMatcher> {
     private final JTextField questionField;
 
     private final List<Choice> choices;
     private final JButton newChoiceButton;
 
-    ChoiceActionPanel(ActionDialog parent) {
+    private final ActionDialog parent;
+
+    public ChoiceActionPanel(ActionDialog parent) {
         this.parent = parent;
 
         questionField = GUIUtils.createTextField();
@@ -37,7 +38,7 @@ class ChoiceActionPanel extends ActionPanel {
     }
 
     @Override
-    public ActionMatcher getActionMatcher(ActionType actionType) {
+    public ChoiceActionMatcher getActionMatcher() {
         ChoiceMatcher[] choiceMatchers = new ChoiceMatcher[this.choices.size()];
         for (int i = 0; i < choiceMatchers.length; i++) {
             choiceMatchers[i] = new ChoiceMatcher(
@@ -53,19 +54,18 @@ class ChoiceActionPanel extends ActionPanel {
     }
 
     @Override
-    protected void load(ActionMatcher matcher) {
+    protected void load(ChoiceActionMatcher matcher) {
         if (matcher == null) {
             return;
         }
 
-        ChoiceActionMatcher choiceActionMatcher = (ChoiceActionMatcher)matcher;
-        this.questionField.setText(choiceActionMatcher.getQuestion());
+        this.questionField.setText(matcher.getQuestion());
 
-        ChoiceMatcher[] choiceMatchers = choiceActionMatcher.getChoices();
+        ChoiceMatcher[] choiceMatchers = matcher.getChoices();
         for (ChoiceMatcher choiceMatcher : choiceMatchers) {
             Choice choice = new Choice();
             choice.textField.setText(choiceMatcher.getText());
-            choice.actions.addAll(choiceMatcher.getActionMatchers());
+            choice.actions.addAll(choiceMatcher.getActions());
 
             choices.add(choice);
         }

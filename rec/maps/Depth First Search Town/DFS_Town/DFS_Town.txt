@@ -130,19 +130,16 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Hey! Are you leaving town? You sure you're ready for that?",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Hey! Are you leaving town? You sure you're ready for that?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "How about going to Professor Maple's Lab and asking for some life advice first?",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "How about going to Professor Maple's Lab and asking for some life advice first?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "MOVE_PLAYER",
-              "triggerContents": "rrr",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "path": "rrr",
+              "className": "pattern.action.StringActionMatcher$MovePlayerActionMatcher"
             }
           ]
         }
@@ -171,38 +168,17 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Here, take these Pokéballs. You'll need them to capture Poké!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Here, take these Pokéballs. You'll need them to capture Poké!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "GIVE_ITEM",
-              "triggerContents": "Poké Ball",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "giveItem": "POKE_BALL",
+              "quantity": 5,
+              "className": "pattern.action.ActionMatcher$GiveItemActionMatcher"
             },
             {
-              "triggerType": "GIVE_ITEM",
-              "triggerContents": "Poké Ball",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
-            },
-            {
-              "triggerType": "GIVE_ITEM",
-              "triggerContents": "Poké Ball",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
-            },
-            {
-              "triggerType": "GIVE_ITEM",
-              "triggerContents": "Poké Ball",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
-            },
-            {
-              "triggerType": "GIVE_ITEM",
-              "triggerContents": "Poké Ball",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
-            },
-            {
-              "update": "done",
-              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
+              "interactionName": "done",
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             }
           ]
         },
@@ -211,9 +187,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "You can use Pokéballs to capture Poké!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "You can use Pokéballs to capture Poké!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -235,9 +210,8 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Rattata!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Rattata!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "name": "Youngster Joey",
@@ -252,7 +226,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -261,9 +235,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Rattata...",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Rattata...",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -285,9 +258,8 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Someone freed the pointer to my Rattata! Was it you?",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Someone freed the pointer to my Rattata! Was it you?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "name": "Youngster Joey",
@@ -302,7 +274,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -311,9 +283,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I would have won with my Rattata!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I would have won with my Rattata!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -335,9 +306,8 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "My Rattata is in the top percentage of Rattata!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "My Rattata is in the top percentage of Rattata!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "name": "Youngster Joey",
@@ -352,7 +322,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -361,9 +331,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I thought Rattata was the very best...",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I thought Rattata was the very best...",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -385,18 +354,17 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Here, take this potion. You are going to need it!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Here, take this potion. You are going to need it!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "GIVE_ITEM",
-              "triggerContents": "Potion",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "giveItem": "POTION",
+              "quantity": 1,
+              "className": "pattern.action.ActionMatcher$GiveItemActionMatcher"
             },
             {
-              "update": "done",
-              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
+              "interactionName": "done",
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             }
           ]
         },
@@ -405,9 +373,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "You can use potions to heal your Pokémon!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "You can use potions to heal your Pokémon!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -429,57 +396,45 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Hey there, loser!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Hey there, loser!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "What're you still doing dawdling in these parts?",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "What're you still doing dawdling in these parts?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "You're 22 for god's sake!!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "You're 22 for god's sake!!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Me? I'm heading to the next town to get my first gym badge!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Me? I'm heading to the next town to get my first gym badge!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I’m in the Pokémon Master business now baby, I’ll take the world by storm.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I’m in the Pokémon Master business now baby, I’ll take the world by storm.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "What are you going to do? Be a bum all your life?",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "What are you going to do? Be a bum all your life?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Anyway, smell ya later!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Anyway, smell ya later!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "MOVE_NPC",
-              "triggerContents": "{
-  \"npcEntityName\": \"DFS_Town_NPC_Rivalchan_01\",
-  \"endEntranceName\": \"rival_exit\",
-  \"endLocationIsPlayer\": false
-}",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "npcEntityName": "DFS_Town_NPC_Rivalchan_01",
+              "endEntranceName": "rival_exit",
+              "endLocationIsPlayer": false,
+              "className": "pattern.action.ActionMatcher$MoveNpcActionMatcher"
             },
             {
-              "update": "heal",
-              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
+              "interactionName": "heal",
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             },
             {
-              "triggerType": "RELOAD_MAP",
-              "triggerContents": "",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "className": "pattern.action.EmptyActionMatcher$ReloadMapActionMatcher"
             }
           ]
         }
@@ -545,9 +500,8 @@
       "name": "Flag",
       "actions": [
         {
-          "triggerType": "DIALOGUE",
-          "triggerContents": "Praise Canada!",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "dialogue": "Praise Canada!",
+          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
         }
       ],
       "location": [

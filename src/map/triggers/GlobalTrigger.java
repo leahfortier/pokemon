@@ -1,15 +1,20 @@
 package map.triggers;
 
-import map.condition.Condition;
+import main.Game;
 
-import java.util.Collections;
+public class GlobalTrigger extends Trigger {
+    private final String global;
 
-class GlobalTrigger extends Trigger {
-    GlobalTrigger(String global, Condition condition) {
-        super(TriggerType.GLOBAL, global, condition, Collections.singletonList(global));
+    public GlobalTrigger(String global) {
+        this.global = global;
     }
 
-    // Only purpose is to add a global, which is passed into the constructor and handled by the superclass
     @Override
-    protected void executeTrigger() {}
+    public void execute() {
+        if (global.startsWith("!")) {
+            Game.getPlayer().removeGlobal(global.substring(1));
+        } else {
+            Game.getPlayer().addGlobal(global);
+        }
+    }
 }

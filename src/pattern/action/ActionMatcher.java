@@ -1,105 +1,154 @@
 package pattern.action;
 
+import item.ItemNamesies;
 import map.condition.Condition;
-import map.entity.EntityAction;
-import map.entity.EntityAction.BattleAction;
-import map.entity.EntityAction.ChoiceAction;
-import map.entity.EntityAction.TriggerAction;
-import map.triggers.TriggerType;
+import map.triggers.ChoiceTrigger;
+import map.triggers.GiveItemTrigger;
+import map.triggers.GivePokemonTrigger;
+import map.triggers.GroupTrigger;
+import map.triggers.TradePokemonTrigger;
+import map.triggers.Trigger;
+import map.triggers.UseItemTrigger;
+import map.triggers.map.MoveNPCTrigger;
 import mapMaker.dialogs.action.ActionType;
-import mapMaker.dialogs.action.trigger.TriggerActionType;
+import pattern.JsonMatcher;
 import pattern.PokemonMatcher;
-import trainer.Trainer;
+import pokemon.PokemonNamesies;
 
-public abstract class ActionMatcher {
-    public abstract ActionType getActionType();
-    public abstract EntityAction getAction(final Condition condition);
+import java.util.List;
+import java.util.stream.Collectors;
 
-    public static class TriggerActionMatcher extends ActionMatcher {
-        public TriggerType triggerType;
-        public String triggerContents;
+public interface ActionMatcher extends JsonMatcher {
+    ActionType getActionType();
+    Trigger createNewTrigger();
 
-        public TriggerActionMatcher(TriggerType triggerType, String triggerContents) {
-            this.triggerType = triggerType;
-            this.triggerContents = triggerContents;
+    static Trigger getActionGroupTrigger(String entityName, Condition condition, List<ActionMatcher> actions) {
+        final List<Trigger> actionTriggers = actions
+                .stream()
+                .map(action -> {
+                    if (action instanceof EntityActionMatcher) {
+                        ((EntityActionMatcher)action).setEntity(entityName);
+                    }
+                    return action.createNewTrigger();
+                })
+                .collect(Collectors.toList());
+        return new GroupTrigger(condition, actionTriggers);
+    }
+
+    class GivePokemonActionMatcher implements ActionMatcher {
+        private PokemonMatcher pokemonMatcher;
+
+        public GivePokemonActionMatcher(PokemonMatcher pokemonMatcher) {
+            this.pokemonMatcher = pokemonMatcher;
         }
 
-        public TriggerType getTriggerType() {
-            return this.getTriggerActionType().getTriggerType();
-        }
-
-        public TriggerActionType getTriggerActionType() {
-            return TriggerActionType.getTriggerActionType(triggerType);
-        }
-
-        public String getTriggerContents() {
-            return this.triggerContents;
+        public PokemonMatcher getPokemonMatcher() {
+            return this.pokemonMatcher;
         }
 
         @Override
         public ActionType getActionType() {
-            return ActionType.TRIGGER;
+            return ActionType.GIVE_POKEMON;
         }
 
         @Override
-        public EntityAction getAction(Condition condition) {
-            return new TriggerAction(triggerType, triggerContents, condition);
+        public Trigger createNewTrigger() {
+            return new GivePokemonTrigger(pokemonMatcher);
         }
     }
 
-    public static class BattleActionMatcher extends ActionMatcher {
-        public String name;
-        public int cashMoney;
-        public boolean maxPokemonLimit;
-        public PokemonMatcher[] pokemon;
-        public String update;
+    class GiveItemActionMatcher implements ActionMatcher {
+        private ItemNamesies giveItem;
+        private int quantity;
 
-        public BattleActionMatcher(String name, int cashMoney, boolean maxPokemonLimit, PokemonMatcher[] pokemon, String update) {
-            this.name = name;
-            this.cashMoney = cashMoney;
-            this.maxPokemonLimit = maxPokemonLimit;
-            this.pokemon = pokemon;
-            this.update = update;
+        public GiveItemActionMatcher(ItemNamesies giveItem, int quantity) {
+            this.giveItem = giveItem;
+            this.quantity = quantity;
         }
 
-        public String getName() {
-            return this.name;
+        public ItemNamesies getItem() {
+            return this.giveItem;
         }
 
-        public int getDatCashMoney() {
-            return this.cashMoney;
-        }
-
-        public PokemonMatcher[] getPokemon() {
-            return this.pokemon;
-        }
-
-        public String getUpdateInteraction() {
-            return this.update;
-        }
-
-        public boolean isMaxPokemonLimit() {
-            return this.maxPokemonLimit;
-        }
-
-        public int getMaxPokemonAllowed() {
-            return this.maxPokemonLimit ? this.pokemon.length : Trainer.MAX_POKEMON;
+        public int getQuantity() {
+            return this.quantity;
         }
 
         @Override
         public ActionType getActionType() {
-            return ActionType.BATTLE;
+            return ActionType.GIVE_ITEM;
         }
 
         @Override
-        public EntityAction getAction(Condition condition) {
-            return new BattleAction(this);
+        public Trigger createNewTrigger() {
+            return new GiveItemTrigger(this.giveItem, this.quantity);
         }
     }
 
-    public static class ChoiceActionMatcher extends ActionMatcher {
-        public String question;
-        public ChoiceMatcher[] choices;
+    class UseItemActionMatcher implements ActionMatcher {
+        private ItemNamesies useItem;
+
+        public UseItemActionMatcher(ItemNamesies useItem) {
+            this.useItem = useItem;
+        }
+
+        public ItemNamesies getItem() {
+            return this.useItem;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            // Not available in map maker since it makes no sense there
+            return null;
+        }
+
+        @Override
+        public Trigger createNewTrigger() {
+            return new UseItemTrigger(this.useItem);
+        }
+    }
+
+    class MoveNpcActionMatcher implements ActionMatcher {
+        private String npcEntityName;
+        private String endEntranceName;
+        private boolean endLocationIsPlayer;
+
+        public MoveNpcActionMatcher(String npcEntityName, String endEntranceName, boolean endLocationIsPlayer) {
+            this.npcEntityName = npcEntityName;
+            this.endLocationIsPlayer = endLocationIsPlayer;
+
+            // Ending at the player and another entrance are mutually exclusive
+            if (!endLocationIsPlayer) {
+                this.endEntranceName = endEntranceName;
+            }
+        }
+
+        public String getNpcEntityName() {
+            return this.npcEntityName;
+        }
+
+        public String getEndEntranceName() {
+            return this.endEntranceName;
+        }
+
+        public boolean endLocationIsPlayer() {
+            return this.endLocationIsPlayer;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.MOVE_NPC;
+        }
+
+        @Override
+        public Trigger createNewTrigger() {
+            return new MoveNPCTrigger(this);
+        }
+    }
+
+    class ChoiceActionMatcher implements ActionMatcher {
+        private String question;
+        private ChoiceMatcher[] choices;
 
         public ChoiceActionMatcher(String question, ChoiceMatcher[] choices) {
             this.question = question;
@@ -120,8 +169,36 @@ public abstract class ActionMatcher {
         }
 
         @Override
-        public EntityAction getAction(Condition condition) {
-            return new ChoiceAction(this);
+        public Trigger createNewTrigger() {
+            return new ChoiceTrigger(this);
+        }
+    }
+
+    class TradePokemonActionMatcher implements ActionMatcher {
+        private PokemonNamesies tradePokemon;
+        private PokemonNamesies requested;
+
+        public TradePokemonActionMatcher(PokemonNamesies tradePokemon, PokemonNamesies requested) {
+            this.tradePokemon = tradePokemon;
+            this.requested = requested;
+        }
+
+        public PokemonNamesies getRequested() {
+            return this.requested;
+        }
+
+        public PokemonNamesies getTradePokemon() {
+            return this.tradePokemon;
+        }
+
+        @Override
+        public ActionType getActionType() {
+            return ActionType.TRADE_POKEMON;
+        }
+
+        @Override
+        public Trigger createNewTrigger() {
+            return new TradePokemonTrigger(tradePokemon, requested);
         }
     }
 }

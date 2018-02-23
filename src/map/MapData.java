@@ -6,16 +6,16 @@ import main.Game;
 import main.Global;
 import map.area.AreaData;
 import map.entity.Entity;
-import map.entity.EntityAction;
 import map.entity.FishingSpotEntity;
 import map.entity.ItemEntity;
 import map.entity.MiscEntity;
 import map.overworld.WalkType;
 import map.overworld.WildEncounterInfo;
 import map.triggers.Trigger;
-import map.triggers.TriggerData;
-import map.triggers.TriggerType;
+import map.triggers.battle.WalkingWildBattleTrigger;
+import map.triggers.map.MapTransitionTrigger;
 import pattern.SimpleMapTransition;
+import pattern.action.ActionMatcher;
 import pattern.generic.EntityMatcher;
 import pattern.map.EventMatcher;
 import pattern.map.FishingMatcher;
@@ -28,7 +28,6 @@ import trainer.player.Player;
 import util.FileIO;
 import util.MultiMap;
 import util.Point;
-import util.SerializationUtils;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -50,7 +49,7 @@ public class MapData {
     private final AreaData[] areaData;
 
     private final List<Entity> entities;
-    private final MultiMap<Integer, String> triggers;
+    private final MultiMap<Integer, Trigger> triggers;
     private final Map<String, MapTransitionMatcher> mapEntrances;
 
     public MapData(File mapFile) {
@@ -98,30 +97,28 @@ public class MapData {
 
             List<Point> exits = matcher.getExitLocations();
             if (exits != null) {
-                Trigger trigger = TriggerType.MAP_TRANSITION.createTrigger(SerializationUtils.getJson(matcher), null);
-                exits.forEach(exit -> triggers.put(getMapIndex(exit), trigger.getName()));
+                Trigger trigger = new MapTransitionTrigger(matcher);
+                exits.forEach(exit -> triggers.put(getMapIndex(exit), trigger));
             }
         }
 
         for (EventMatcher matcher : mapDataMatcher.getEvents()) {
-            TriggerData triggerData = new TriggerData(matcher);
-            Trigger trigger = EntityAction.addActionGroupTrigger(
-                    triggerData.getName(),
-                    triggerData.getName(),
-                    triggerData.getCondition(),
-                    triggerData.getActions()
+            Trigger trigger = ActionMatcher.getActionGroupTrigger(
+                    matcher.getTriggerName(),
+                    matcher.getCondition(),
+                    matcher.getActions()
             );
 
             for (Point point : matcher.getLocation()) {
-                triggers.put(getMapIndex(point), trigger.getName());
+                triggers.put(getMapIndex(point), trigger);
             }
         }
 
         for (WildBattleAreaMatcher matcher : mapDataMatcher.getWildBattles()) {
             for (Point point : matcher.getLocation()) {
                 for (WildBattleMatcher wildBattleMatcher : matcher.getWildBattles()) {
-                    Trigger trigger = TriggerType.WALKING_WILD_BATTLE.createTrigger(SerializationUtils.getJson(wildBattleMatcher), wildBattleMatcher.getCondition());
-                    triggers.put(getMapIndex(point), trigger.getName());
+                    Trigger trigger = new WalkingWildBattleTrigger(wildBattleMatcher);
+                    triggers.put(getMapIndex(point), trigger);
                     for (WildEncounterInfo wildEncounter : wildBattleMatcher.getWildEncounters()) {
                         this.getArea(point).addPokemon(wildEncounter.getPokemonName());
                     }
@@ -242,7 +239,7 @@ public class MapData {
         return AreaData.VOID;
     }
 
-    public List<String> getCurrentTriggers() {
+    public List<Trigger> getCurrentTriggers() {
         int val = Game.getPlayer().getLocation().getIndex(dimension.width);
         if (triggers.containsKey(val)) {
             return triggers.get(val);
@@ -329,7 +326,7 @@ public class MapData {
                 .filter(Entity::setVisible)
                 .forEach(entity -> {
                     entity.reset();
-                    entity.addData();
+                    entity.getTrigger();
                 });
     }
 }

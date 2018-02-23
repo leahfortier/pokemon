@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import main.Global;
 import map.condition.Condition;
+import pattern.JsonMatcher;
 import pattern.action.ActionMatcher;
 
 import java.io.ByteArrayInputStream;
@@ -79,14 +80,18 @@ public class SerializationUtils {
         return deserialize(serialize(serializable));
     }
 
-    public static <T> T deserializeJsonFile(String fileName, Class<T> classy) {
+    public static <T> T getJsonCopy(JsonMatcher jsonMatcher, Class<T> classy) {
+        return deserializeJson(jsonMatcher.getJson(), classy);
+    }
+
+    public static <T extends JsonMatcher> T deserializeJsonFile(String fileName, Class<T> classy) {
         String jsonContents = FileIO.readEntireFileWithReplacements(fileName, false);
 
-        T deserialized = SerializationUtils.deserializeJson(jsonContents, classy);
-        JsonObject mappity = SerializationUtils.deserializeJson(jsonContents, JsonObject.class);
+        T deserialized = deserializeJson(jsonContents, classy);
+        JsonObject mappity = deserializeJson(jsonContents, JsonObject.class);
 
-        String formattedJson = SerializationUtils.getJson(deserialized);
-        String mapJson = SerializationUtils.getJson(mappity);
+        String formattedJson = getJson(deserialized);
+        String mapJson = getJson(mappity);
 
 //        FileIO.writeToFile("out.txt", formattedJson);
 //        FileIO.writeToFile("out2.txt", mapJson);

@@ -1,20 +1,17 @@
 package map.triggers;
 
-import map.condition.Condition;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 
-class SoundTrigger extends Trigger {
+public class SoundTrigger extends Trigger {
     private final SoundTitle soundTitle;
 
-    SoundTrigger(String contents, Condition condition) {
-        super(TriggerType.SOUND, contents, condition);
-
-        this.soundTitle = SoundTitle.valueOf(contents);
+    public SoundTrigger(SoundTitle soundTitle) {
+        this.soundTitle = soundTitle;
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         SoundPlayer.instance().playSound(soundTitle);
     }
 }

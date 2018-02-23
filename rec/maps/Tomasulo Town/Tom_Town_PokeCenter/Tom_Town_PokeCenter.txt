@@ -58,9 +58,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Hi, I'm Tom!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Hi, I'm Tom!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -78,8 +77,8 @@
       "name": "Heal",
       "actions": [
         {
-          "groupTrigger": "PokeCenterHeal",
-          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
+          "triggerName": "POKE_CENTER",
+          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
         }
       ],
       "location": [
@@ -94,8 +93,8 @@
       "name": "Mart",
       "actions": [
         {
-          "groupTrigger": "LoadMart",
-          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
+          "triggerName": "LOAD_MART",
+          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
         }
       ],
       "location": [
@@ -110,8 +109,8 @@
       "name": "PC_View",
       "actions": [
         {
-          "groupTrigger": "LoadPC",
-          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
+          "triggerName": "LOAD_PC",
+          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
         }
       ],
       "location": [

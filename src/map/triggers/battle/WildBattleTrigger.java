@@ -2,25 +2,20 @@ package map.triggers.battle;
 
 import battle.Battle;
 import main.Game;
-import map.condition.Condition;
 import map.overworld.WildEncounter;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import trainer.WildPokemon;
 import trainer.player.Player;
-import util.SerializationUtils;
 
 public class WildBattleTrigger extends Trigger {
     private final WildEncounter wildEncounter;
 
-    public WildBattleTrigger(String matcherJson, Condition condition) {
-        super(TriggerType.WILD_BATTLE, matcherJson, condition);
-
-        this.wildEncounter = SerializationUtils.deserializeJson(matcherJson, WildEncounter.class);
+    public WildBattleTrigger(WildEncounter wildEncounter) {
+        this.wildEncounter = wildEncounter;
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         WildPokemon wildPokemon = this.wildEncounter.getWildPokemon();
 
         Player player = Game.getPlayer();

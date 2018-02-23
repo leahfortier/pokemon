@@ -1,9 +1,7 @@
 package pattern.action;
 
-import map.entity.EntityAction;
 import util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,16 +24,7 @@ public class NPCInteractionMatcher {
         return this.walkToPlayer;
     }
 
-    public List<ActionMatcher> getActionMatcherList() {
+    public List<ActionMatcher> getActions() {
         return Arrays.asList(this.npcActions);
-    }
-
-    public List<EntityAction> getActions() {
-        List<EntityAction> actions = new ArrayList<>();
-        for (ActionMatcher action : this.npcActions) {
-            actions.add(action.getAction(null));
-        }
-
-        return actions;
     }
 }

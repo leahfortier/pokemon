@@ -3,37 +3,34 @@ package map.triggers.battle;
 import battle.ActivePokemon;
 import item.ItemNamesies;
 import main.Game;
-import map.condition.Condition;
 import map.condition.Condition.ItemCondition;
-import map.condition.ConditionHolder.AndCondition;
 import map.overworld.WildEncounter;
 import map.overworld.WildEncounterInfo;
+import map.triggers.DialogueTrigger;
+import map.triggers.GlobalTrigger;
+import map.triggers.GroupTrigger;
+import map.triggers.MedalCountTrigger;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import message.MessageUpdate;
 import message.Messages;
-import pattern.GroupTriggerMatcher;
-import pattern.map.FishingMatcher;
 import pokemon.ability.AbilityNamesies;
 import trainer.player.Player;
 import trainer.player.medal.MedalTheme;
 import util.RandomUtils;
-import util.SerializationUtils;
 
 public class FishingTrigger extends Trigger {
     public static final String FISHING_GLOBAL = "isFishing";
 
     private final WildEncounterInfo[] wildEncounters;
 
-    public FishingTrigger(String matcherJson, Condition condition) {
-        super(TriggerType.FISHING, matcherJson, new AndCondition(condition, new ItemCondition(ItemNamesies.FISHING_ROD)));
+    public FishingTrigger(WildEncounterInfo[] wildEncounters) {
+        super(new ItemCondition(ItemNamesies.FISHING_ROD));
 
-        FishingMatcher matcher = SerializationUtils.deserializeJson(matcherJson, FishingMatcher.class);
-        this.wildEncounters = matcher.getWildEncounters();
+        this.wildEncounters = wildEncounters;
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Player player = Game.getPlayer();
 
         ActivePokemon front = player.front();
@@ -43,22 +40,18 @@ public class FishingTrigger extends Trigger {
 
         if (RandomUtils.chanceTest(chance)) {
             WildEncounter wildPokemon = WildEncounterInfo.getWildEncounter(front, this.wildEncounters);
-            String pokemonJson = SerializationUtils.getJson(wildPokemon);
 
-            GroupTriggerMatcher matcher = new GroupTriggerMatcher(
-                    "FishingBite_" + pokemonJson,
-                    TriggerType.DIALOGUE.createTrigger("Oh! A bite!", null).getName(),
-                    TriggerType.GLOBAL.createTrigger(FISHING_GLOBAL, null).getName(),
-                    TriggerType.WILD_BATTLE.createTrigger(pokemonJson, null).getName(),
-                    TriggerType.GLOBAL.createTrigger("!" + FISHING_GLOBAL, null).getName()
+            Trigger trigger = new GroupTrigger(
+                    new DialogueTrigger("Oh! A bite!"),
+                    new GlobalTrigger(FISHING_GLOBAL),
+                    new WildBattleTrigger(wildPokemon),
+                    new GlobalTrigger("!" + FISHING_GLOBAL),
+                    new MedalCountTrigger(MedalTheme.FISH_REELED_IN)
             );
 
-            Trigger group = TriggerType.GROUP.createTrigger(SerializationUtils.getJson(matcher), null);
-            Messages.add(new MessageUpdate().withTrigger(group.getName()));
-
-            player.getMedalCase().increase(MedalTheme.FISH_REELED_IN);
+            Messages.add(new MessageUpdate().withTrigger(trigger));
         } else {
-            Messages.add(new MessageUpdate().withTrigger(TriggerType.DIALOGUE.createTrigger("No dice.", null).getName()));
+            Messages.add(new MessageUpdate().withTrigger(new DialogueTrigger("No dice.")));
         }
     }
 }

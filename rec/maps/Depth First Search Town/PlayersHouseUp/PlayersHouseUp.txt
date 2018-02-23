@@ -57,9 +57,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I'm gonna be the very best like no one ever was.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I'm gonna be the very best like no one ever was.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "name": "Mom",
@@ -72,7 +71,7 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             }
           ]
         },
@@ -81,9 +80,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Just get out. You're not welcome here.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Just get out. You're not welcome here.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -111,8 +109,8 @@
       "name": "PC",
       "actions": [
         {
-          "groupTrigger": "LoadPC",
-          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
+          "triggerName": "LOAD_PC",
+          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
         }
       ],
       "location": [
@@ -127,12 +125,11 @@
       "name": "PokePalooza",
       "actions": [
         {
-          "triggerType": "GIVE_POKEMON",
-          "triggerContents": "{
-                namesies: EXEGGUTOR,
-                level: 4
-            }",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "pokemonMatcher": {
+            "namesies": "EXEGGUTOR",
+            "level": 4
+          },
+          "className": "pattern.action.ActionMatcher$GivePokemonActionMatcher"
         }
       ],
       "location": [
@@ -147,9 +144,8 @@
       "name": "TV",
       "actions": [
         {
-          "triggerType": "DIALOGUE",
-          "triggerContents": "The power's out...",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "dialogue": "The power's out...",
+          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
         }
       ],
       "location": [

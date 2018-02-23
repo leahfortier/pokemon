@@ -1,25 +1,19 @@
 package map.triggers;
 
 import main.Game;
-import map.condition.Condition;
 import pattern.action.UpdateMatcher;
-import util.SerializationUtils;
 
-class UpdateTrigger extends Trigger {
-
+public class UpdateTrigger extends Trigger {
     private final String npcEntityName;
     private final String newInteractionName;
 
-    UpdateTrigger(String matcherJson, Condition condition) {
-        super(TriggerType.UPDATE, matcherJson, condition);
-
-        UpdateMatcher matcher = SerializationUtils.deserializeJson(matcherJson, UpdateMatcher.class);
+    public UpdateTrigger(UpdateMatcher matcher) {
         this.npcEntityName = matcher.getNpcEntityName();
         this.newInteractionName = matcher.getInteractionName();
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         Game.getPlayer().setNpcInteraction(npcEntityName, newInteractionName);
     }
 }

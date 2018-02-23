@@ -68,7 +68,7 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
         return interactionMap;
     }
 
-    public String getStartKey() {
+    private String getStartKey() {
         if (interactions.length == 0) {
             return NO_INTERACTIONS_KEY;
         } else {
@@ -92,7 +92,7 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
         return this.direction;
     }
 
-    public MoveAxis getMoveAxis() {
+    private MoveAxis getMoveAxis() {
         if (this.moveAxis != null) {
             return this.moveAxis;
         }
@@ -120,8 +120,8 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
                 this.getDirection(),
                 this.getMoveAxis(),
                 this.getSpriteIndex(),
-                this.getInteractionMap(),
-                this.getStartKey()
+                this.getStartKey(),
+                this.getInteractionMap()
         );
     }
 }

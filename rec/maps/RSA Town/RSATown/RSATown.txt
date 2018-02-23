@@ -80,9 +80,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "E's cu mucd.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "E's cu mucd.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -104,9 +103,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Famlusa du NCY Dufh! Dryd’c ed vnus sa.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Famlusa du NCY Dufh! Dryd’c ed vnus sa.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -128,9 +126,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Drec dufh ec geht uv bnadahdeuic, pacd hud pudran dnoehk du ihtancdyht dra limdina.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Drec dufh ec geht uv bnadahdeuic, pacd hud pudran dnoehk du ihtancdyht dra limdina.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -152,24 +149,20 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "You actually had the balls to leave town? What are you up to then?",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "You actually had the balls to leave town? What are you up to then?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Huh?",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Huh?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "You're actually trying to become a Pokémon master??",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "You're actually trying to become a Pokémon master??",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Let's battle then!!!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Let's battle then!!!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
               "name": "Blue",
@@ -182,44 +175,36 @@
                 }
               ],
               "update": "won",
-              "className": "pattern.action.ActionMatcher$BattleActionMatcher"
+              "className": "pattern.action.EntityActionMatcher$BattleActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "You just got lucky, noob!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "You just got lucky, noob!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "What? Of course you get money for winning battles. That's how it works.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "What? Of course you get money for winning battles. That's how it works.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Becoming a Pokémon master comes with a lot of perks and royalties -- it has money written all over it!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Becoming a Pokémon master comes with a lot of perks and royalties -- it has money written all over it!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I don't care about any of that though.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I don't care about any of that though.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Might as well make use of that Eevee you've had all your life... Smell ya later!!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Might as well make use of that Eevee you've had all your life... Smell ya later!!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "MOVE_NPC",
-              "triggerContents": "{
-                    npcEntityName: RSATown_NPC_Rival_01,
-                    endEntranceName: PokeCenter
-                }",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "npcEntityName": "RSATown_NPC_Rival_01",
+              "endEntranceName": "PokeCenter",
+              "endLocationIsPlayer": false,
+              "className": "pattern.action.ActionMatcher$MoveNpcActionMatcher"
             },
             {
-              "triggerType": "RELOAD_MAP",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "className": "pattern.action.EmptyActionMatcher$ReloadMapActionMatcher"
             }
           ]
         },
@@ -247,9 +232,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "TECDINP HUD DRA RYNSUHO UV VENA, ELA, YHT MEKRDHEHK.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "TECDINP HUD DRA RYNSUHO UV VENA, ELA, YHT MEKRDHEHK.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -268,12 +252,9 @@
       "name": "Rival_Battle",
       "actions": [
         {
-          "triggerType": "MOVE_NPC",
-          "triggerContents": "{
-                npcEntityName: RSATown_NPC_Rival_01,
-                endLocationIsPlayer: true
-            }",
-          "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+          "npcEntityName": "RSATown_NPC_Rival_01",
+          "endLocationIsPlayer": true,
+          "className": "pattern.action.ActionMatcher$MoveNpcActionMatcher"
         }
       ],
       "location": [

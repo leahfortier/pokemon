@@ -37,60 +37,51 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "'Ey there {playerName}!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "'Ey there {playerName}!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I was just gonna make some breakfast and smother it with my homemade Canadian maple syrup™! You want any?",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I was just gonna make some breakfast and smother it with my homemade Canadian maple syrup™! You want any?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "No? I have lots of this syrup™ lying around, have some anyway!! I'm sure it will come in handy one day.",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "No? I have lots of this syrup™ lying around, have some anyway!! I'm sure it will come in handy one day.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "GIVE_ITEM",
-              "triggerContents": "Syrup",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "giveItem": "SYRUP",
+              "quantity": 1,
+              "className": "pattern.action.ActionMatcher$GiveItemActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Alright, what brings you here?",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Alright, what brings you here?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "You got kicked out, eh?",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "You got kicked out, eh?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "How about becoming a Pokémon master? It's the main fad these days... Everyone does it!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "How about becoming a Pokémon master? It's the main fad these days... Everyone does it!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "C'mon... It'll be cool!!!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "C'mon... It'll be cool!!!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "I'll even give you this egg to start with!!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "I'll even give you this egg to start with!!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "GIVE_POKEMON",
-              "triggerContents": "{
-  \"isStarterEgg\": true
-}",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "pokemonMatcher": {
+                "isStarterEgg": true
+              },
+              "className": "pattern.action.ActionMatcher$GivePokemonActionMatcher"
             },
             {
-              "update": "heal",
-              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
+              "interactionName": "heal",
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             }
           ]
         },
@@ -105,9 +96,9 @@
                   "text": "wawa",
                   "actions": [
                     {
-                      "triggerType": "GIVE_ITEM",
-                      "triggerContents": "Water Stone",
-                      "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+                      "giveItem": "WATER_STONE",
+                      "quantity": 1,
+                      "className": "pattern.action.ActionMatcher$GiveItemActionMatcher"
                     }
                   ]
                 },
@@ -115,9 +106,9 @@
                   "text": "sunsunsunherewecome",
                   "actions": [
                     {
-                      "triggerType": "GIVE_ITEM",
-                      "triggerContents": "Sun Stone",
-                      "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+                      "giveItem": "SUN_STONE",
+                      "quantity": 1,
+                      "className": "pattern.action.ActionMatcher$GiveItemActionMatcher"
                     }
                   ]
                 },
@@ -125,9 +116,9 @@
                   "text": "thunda",
                   "actions": [
                     {
-                      "triggerType": "GIVE_ITEM",
-                      "triggerContents": "THUNDER_STONE",
-                      "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+                      "giveItem": "THUNDER_STONE",
+                      "quantity": 1,
+                      "className": "pattern.action.ActionMatcher$GiveItemActionMatcher"
                     }
                   ]
                 }
@@ -135,8 +126,8 @@
               "className": "pattern.action.ActionMatcher$ChoiceActionMatcher"
             },
             {
-              "update": "heal",
-              "className": "pattern.action.ActionMatcher$UpdateActionMatcher"
+              "interactionName": "heal",
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             }
           ]
         },
@@ -145,13 +136,11 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "How's it goin'? Need to rest up your Pokémon a bit?",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "How's it goin'? Need to rest up your Pokémon a bit?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "triggerType": "HEAL_PARTY",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "className": "pattern.action.EmptyActionMatcher$HealPartyActionMatcher"
             }
           ]
         }
@@ -173,9 +162,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "Don't disturb me! I'm doing syrup science!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "Don't disturb me! I'm doing syrup science!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -197,9 +185,8 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "triggerType": "DIALOGUE",
-              "triggerContents": "This syrup soda is amazing!",
-              "className": "pattern.action.ActionMatcher$TriggerActionMatcher"
+              "dialogue": "This syrup soda is amazing!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }
@@ -217,8 +204,8 @@
       "name": "PC",
       "actions": [
         {
-          "groupTrigger": "LoadPC",
-          "className": "pattern.action.ActionMatcher$GroupTriggerActionMatcher"
+          "triggerName": "LOAD_PC",
+          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
         }
       ],
       "location": [

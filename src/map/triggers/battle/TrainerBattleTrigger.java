@@ -2,45 +2,36 @@ package map.triggers.battle;
 
 import battle.Battle;
 import main.Game;
-import map.condition.Condition;
-import map.entity.EntityAction.BattleAction;
 import map.triggers.Trigger;
-import map.triggers.TriggerType;
 import pattern.PokemonMatcher;
-import pattern.action.ActionMatcher.BattleActionMatcher;
+import pattern.action.EntityActionMatcher.BattleActionMatcher;
 import pattern.action.UpdateMatcher;
 import pokemon.PartyPokemon;
 import trainer.EnemyTrainer;
 import util.RandomUtils;
-import util.SerializationUtils;
 
 public class TrainerBattleTrigger extends Trigger {
     private final EnemyTrainer trainer;
     private final UpdateMatcher npcUpdateInteraction;
 
-    public TrainerBattleTrigger(String contents, Condition condition) {
-        super(TriggerType.TRAINER_BATTLE, contents, condition);
-
-        BattleAction battleAction = SerializationUtils.deserializeJson(contents, BattleAction.class);
-        BattleActionMatcher battleMatcher = battleAction.getBattleMatcher();
-
-        String trainerName = battleMatcher.getName();
-        int cash = battleMatcher.getDatCashMoney();
-        int maxPokemonAllowed = battleMatcher.getMaxPokemonAllowed();
+    public TrainerBattleTrigger(BattleActionMatcher matcher) {
+        String trainerName = matcher.getName();
+        int cash = matcher.getDatCashMoney();
+        int maxPokemonAllowed = matcher.getMaxPokemonAllowed();
 
         this.trainer = new EnemyTrainer(trainerName, cash, maxPokemonAllowed);
 
-        RandomUtils.setTempRandomSeed(contents.hashCode());
-        for (PokemonMatcher matcher : battleMatcher.getPokemon()) {
-            trainer.addPokemon(PartyPokemon.createActivePokemon(matcher, false));
+        RandomUtils.setTempRandomSeed(matcher.getJson().hashCode());
+        for (PokemonMatcher pokemonMatcher : matcher.getPokemon()) {
+            trainer.addPokemon(PartyPokemon.createActivePokemon(pokemonMatcher, false));
         }
         RandomUtils.resetRandomSeedToInitial();
 
-        this.npcUpdateInteraction = new UpdateMatcher(battleAction.getEntityName(), battleMatcher.getUpdateInteraction());
+        this.npcUpdateInteraction = new UpdateMatcher(matcher.getEntityName(), matcher.getUpdateInteraction());
     }
 
     @Override
-    protected void executeTrigger() {
+    public void execute() {
         trainer.healAll();
 
         Battle b = new Battle(trainer, this.npcUpdateInteraction);

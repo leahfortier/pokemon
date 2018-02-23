@@ -1,28 +1,32 @@
 package map.entity;
 
 import map.condition.Condition;
+import map.triggers.Trigger;
+import pattern.action.ActionMatcher;
 import util.Point;
 
 import java.util.List;
 
 public class MiscEntity extends Entity {
-    private final List<EntityAction> actions;
+    private final List<ActionMatcher> actions;
 
-    private boolean dataCreated;
+    private Trigger trigger;
 
-    public MiscEntity(String name, Point location, Condition condition, List<EntityAction> actions) {
+    public MiscEntity(String name, Point location, Condition condition, List<ActionMatcher> actions) {
         super(location, name, condition);
         this.actions = actions;
-        this.dataCreated = false;
     }
 
     @Override
-    public void addData() {
-        if (dataCreated) {
-            return;
+    public Trigger getTrigger() {
+        if (trigger == null) {
+            this.trigger = ActionMatcher.getActionGroupTrigger(
+                    this.getEntityName(),
+                    this.getCondition(),
+                    this.actions
+            );
         }
 
-        EntityAction.addActionGroupTrigger(this.getEntityName(), this.getTriggerSuffix(), this.getCondition(), this.actions);
-        dataCreated = true;
+        return trigger;
     }
 }
