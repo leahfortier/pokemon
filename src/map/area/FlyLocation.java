@@ -57,6 +57,6 @@ public class FlyLocation implements Serializable {
 
     @Override
     public String toString() {
-        return mapName + " -- " +  this.area.getAreaName();
+        return mapName + " -- " + this.area.getAreaName();
     }
 }

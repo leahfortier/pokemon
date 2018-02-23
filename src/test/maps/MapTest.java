@@ -223,38 +223,6 @@ public class MapTest extends BaseTest {
         }
     }
 
-    private static List<ActionMatcher> getAllActions(TestMap map) {
-        List<ActionMatcher> actionMatchers = new ArrayList<>();
-
-        for (NPCMatcher npc : map.getMatcher().getNPCs()) {
-            for (NPCInteractionMatcher interaction : npc.getInteractionMatcherList()) {
-                addActions(actionMatchers, interaction.getActions());
-            }
-        }
-
-        for (MiscEntityMatcher miscEntity : map.getMatcher().getMiscEntities()) {
-            addActions(actionMatchers, miscEntity.getActions());
-        }
-
-        for (EventMatcher event : map.getMatcher().getEvents()) {
-            addActions(actionMatchers, event.getActions());
-        }
-
-        return actionMatchers;
-    }
-
-    private static void addActions(List<ActionMatcher> fullList, List<ActionMatcher> toAdd) {
-        for (ActionMatcher actionMatcher : toAdd) {
-            fullList.add(actionMatcher);
-            if (actionMatcher instanceof ChoiceActionMatcher) {
-                ChoiceActionMatcher choiceActionMatcher = (ChoiceActionMatcher)actionMatcher;
-                for (ChoiceMatcher choiceMatcher : choiceActionMatcher.getChoices()) {
-                    addActions(fullList, choiceMatcher.getActions());
-                }
-            }
-        }
-    }
-
     @Test
     public void conditionsTest() {
         for (TestMap map : maps) {
@@ -345,6 +313,38 @@ public class MapTest extends BaseTest {
             GlobalCondition globalCondition = (GlobalCondition)condition;
             String globalName = globalCondition.getGlobalName();
             Assert.assertTrue(globalName, addedGlobals.contains(globalName));
+        }
+    }
+
+    private static List<ActionMatcher> getAllActions(TestMap map) {
+        List<ActionMatcher> actionMatchers = new ArrayList<>();
+
+        for (NPCMatcher npc : map.getMatcher().getNPCs()) {
+            for (NPCInteractionMatcher interaction : npc.getInteractionMatcherList()) {
+                addActions(actionMatchers, interaction.getActions());
+            }
+        }
+
+        for (MiscEntityMatcher miscEntity : map.getMatcher().getMiscEntities()) {
+            addActions(actionMatchers, miscEntity.getActions());
+        }
+
+        for (EventMatcher event : map.getMatcher().getEvents()) {
+            addActions(actionMatchers, event.getActions());
+        }
+
+        return actionMatchers;
+    }
+
+    private static void addActions(List<ActionMatcher> fullList, List<ActionMatcher> toAdd) {
+        for (ActionMatcher actionMatcher : toAdd) {
+            fullList.add(actionMatcher);
+            if (actionMatcher instanceof ChoiceActionMatcher) {
+                ChoiceActionMatcher choiceActionMatcher = (ChoiceActionMatcher)actionMatcher;
+                for (ChoiceMatcher choiceMatcher : choiceActionMatcher.getChoices()) {
+                    addActions(fullList, choiceMatcher.getActions());
+                }
+            }
         }
     }
 }

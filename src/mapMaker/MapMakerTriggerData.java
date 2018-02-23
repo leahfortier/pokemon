@@ -30,7 +30,6 @@ import pattern.map.NPCMatcher;
 import pattern.map.WildBattleAreaMatcher;
 import util.FileIO;
 import util.Point;
-import util.SerializationUtils;
 import util.SpecialCharacter;
 import util.StringUtils;
 

@@ -3,7 +3,6 @@ package pattern.action;
 import map.triggers.DialogueTrigger;
 import map.triggers.GlobalTrigger;
 import map.triggers.Trigger;
-import map.triggers.UpdateTrigger;
 import map.triggers.map.MovePlayerTrigger;
 import mapMaker.dialogs.action.ActionType;
 

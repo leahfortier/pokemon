@@ -1,14 +1,15 @@
 package pattern.action;
 
+import pattern.JsonMatcher;
 import util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class NPCInteractionMatcher {
+public class NPCInteractionMatcher implements JsonMatcher {
     private String name;
     private boolean walkToPlayer;
-    public ActionMatcher[] npcActions;
+    private ActionMatcher[] npcActions;
 
     public NPCInteractionMatcher(String name, boolean walkToPlayer, ActionMatcher[] npcActions) {
         this.name = StringUtils.nullWhiteSpace(name);

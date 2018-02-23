@@ -27,7 +27,6 @@ public class GiveItemActionPanel extends ActionPanel<GiveItemActionMatcher> {
             }
         });
 
-
         GUIUtils.setVerticalLayout(
                 this,
                 GUIUtils.createTextFieldComponent("Item Name", itemField),
