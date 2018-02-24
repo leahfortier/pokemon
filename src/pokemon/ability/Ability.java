@@ -103,6 +103,7 @@ import trainer.Trainer;
 import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
+import util.ReverseIterable;
 import util.StringUtils;
 
 import java.io.Serializable;
@@ -2891,8 +2892,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             ActivePokemon illusion = null;
 
             // Starting from the back of the party, locate the first conscious Pokemon that is of a different species to be the illusion
-            for (int i = team.size() - 1; i > 0; i--) {
-                ActivePokemon temp = team.get(i);
+            for (ActivePokemon temp : new ReverseIterable<>(team)) {
 
                 // If the Pokemon in back cannot fight for any reason -- do nothing
                 if (!temp.canFight()) {

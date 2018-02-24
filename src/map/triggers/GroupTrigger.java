@@ -3,6 +3,7 @@ package map.triggers;
 import map.condition.Condition;
 import message.MessageUpdate;
 import message.Messages;
+import util.ReverseIterable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,8 +27,8 @@ public class GroupTrigger extends Trigger {
     @Override
     public void execute() {
         // Add all triggers in the group to the beginning of the message queue
-        for (int i = triggers.size() - 1; i >= 0; i--) {
-            Trigger trigger = triggers.get(i);
+        // Need to add in the reverse order
+        for (Trigger trigger : new ReverseIterable<>(triggers)) {
             if (trigger != null && trigger.isTriggered()) {
                 Messages.addToFront(new MessageUpdate().withTrigger(trigger));
             }

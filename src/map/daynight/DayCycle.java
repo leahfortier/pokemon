@@ -1,6 +1,7 @@
 package map.daynight;
 
 import draw.DrawUtils;
+import util.ReverseIterable;
 import util.TimeUtils;
 
 import java.awt.Color;
@@ -29,9 +30,10 @@ public enum DayCycle {
     public static DayCycle getTimeOfDay() {
         int hour = TimeUtils.getHourOfDay();
         DayCycle[] values = DayCycle.values();
-        for (int i = values.length - 1; i >= 0; i--) {
-            if (hour >= values[i].startHour) {
-                return values[i];
+
+        for (DayCycle dayCycle : new ReverseIterable<>(values)) {
+            if (hour >= dayCycle.startHour) {
+                return dayCycle;
             }
         }
 
