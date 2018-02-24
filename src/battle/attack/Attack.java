@@ -4084,7 +4084,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.canStealItem(b, victim)) {
-                user.swapItems(b, victim, this);
+                this.swapItems(b, user, victim);
             }
         }
 
@@ -7734,7 +7734,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.canStealItem(b, victim)) {
-                user.swapItems(b, victim, this);
+                this.swapItems(b, user, victim);
             }
         }
 
@@ -9184,7 +9184,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.swapItems(b, victim, this);
+            this.swapItems(b, user, victim);
         }
 
         @Override
@@ -9211,7 +9211,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.swapItems(b, victim, this);
+            this.swapItems(b, user, victim);
         }
 
         @Override
@@ -9238,7 +9238,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.swapItems(b, victim, this);
+            this.swapItems(b, user, victim);
         }
 
         @Override

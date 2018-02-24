@@ -11,6 +11,10 @@ import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import main.Global;
 import util.RandomUtils;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public enum Stat {
     HP(0, "HP", "HP", "HP", -1, InBattle.NEVER, true),
     ATTACK(1, "Attack", "Attack", "Atk", 2, InBattle.BOTH, true),
@@ -28,28 +32,31 @@ public enum Stat {
     public static final int MAX_STAT_EVS = 255;
     public static final int MAX_IV = 31;
 
-    public static final Stat[] STATS;
-    public static final Stat[] BATTLE_STATS;
+    public static final List<Stat> STATS;
+    public static final List<Stat> BATTLE_STATS;
     static {
-        STATS = new Stat[NUM_STATS];
-        BATTLE_STATS = new Stat[NUM_BATTLE_STATS];
+        Stat[] stats = new Stat[NUM_STATS];
+        Stat[] battleStats = new Stat[NUM_BATTLE_STATS];
         int statIndex = 0;
         int battleStatIndex = 0;
 
         for (Stat stat : Stat.values()) {
             switch (stat.onlyBattle) {
                 case BOTH:
-                    STATS[statIndex++] = stat;
-                    BATTLE_STATS[battleStatIndex++] = stat;
+                    stats[statIndex++] = stat;
+                    battleStats[battleStatIndex++] = stat;
                     break;
                 case ONLY:
-                    BATTLE_STATS[battleStatIndex++] = stat;
+                    battleStats[battleStatIndex++] = stat;
                     break;
                 case NEVER:
-                    STATS[statIndex++] = stat;
+                    stats[statIndex++] = stat;
                     break;
             }
         }
+
+        STATS = Collections.unmodifiableList(Arrays.asList(stats));
+        BATTLE_STATS = Collections.unmodifiableList(Arrays.asList(battleStats));
     }
 
     private final int index;

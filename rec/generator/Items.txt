@@ -582,7 +582,7 @@ Stick:
         ###
 *
 Sticky Barb:
-    Int: HoldItem, EndTurnEffect, PhysicalContactEffect, ItemSwapperEffect
+    Int: HoldItem, EndTurnEffect, PhysicalContactEffect
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. It damages the holder every turn and may latch on to Pok\u00e9mon that touch the holder.
     Price: 4000
@@ -604,7 +604,7 @@ Sticky Barb:
             return;
         }
 
-        victim.swapItems(b, user, this);
+        this.swapItems(b, victim, user);
         ###
     SwitchItemMessage: victim.getName() + "s " + this.getName() + " latched onto " + user.getName() + "!"
 *

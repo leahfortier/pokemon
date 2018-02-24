@@ -3101,7 +3101,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Steal from the Pokemon who made physical contact with you
             if (!victim.isFainted(b) && victim.canStealItem(b, user)) {
-                victim.swapItems(b, user, this);
+                this.swapItems(b, victim, user);
             }
         }
     }
@@ -3388,7 +3388,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
             // Steal the victim's item when damage is dealt
             if (!user.isFainted(b) && user.canStealItem(b, victim)) {
-                user.swapItems(b, victim, this);
+                this.swapItems(b, user, victim);
             }
         }
     }

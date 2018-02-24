@@ -17,7 +17,6 @@ import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.HalfWeightEffect;
 import battle.effect.generic.EffectInterfaces.ItemBlockerEffect;
-import battle.effect.generic.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.generic.EffectInterfaces.LevitationEffect;
 import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
@@ -290,25 +289,6 @@ public class ActivePokemon extends PartyPokemon {
         return (this.isHoldingItem(b) || swapster.isHoldingItem(b))
                 && !this.isWildPokemon(b)
                 && !(swapster.hasAbility(AbilityNamesies.STICKY_HOLD) && !this.breaksTheMold());
-    }
-
-    public void swapItems(Battle b, ActivePokemon swapster, ItemSwapperEffect swapsicles) {
-        Item userItem = this.getHeldItem(b);
-        Item victimItem = swapster.getHeldItem(b);
-
-        Messages.add(swapsicles.getSwitchMessage(this, userItem, swapster, victimItem));
-
-        // For wild battles, an actual switch occurs
-        if (b.isWildBattle()) {
-            this.giveItem((HoldItem)victimItem);
-            swapster.giveItem((HoldItem)userItem);
-        } else {
-            this.setCastSource(victimItem);
-            EffectNamesies.CHANGE_ITEM.getEffect().apply(b, this, this, CastSource.CAST_SOURCE, false);
-
-            this.setCastSource(userItem);
-            EffectNamesies.CHANGE_ITEM.getEffect().apply(b, this, swapster, CastSource.CAST_SOURCE, false);
-        }
     }
 
     public boolean canSwapOpponent(Battle b, ActivePokemon victim) {

@@ -2216,13 +2216,7 @@ Covet:
     Type: Normal
     Cat: Physical
     Desc: The user endearingly approaches the target, then steals the target's held item.
-    Int: ItemSwapperEffect
-    UniqueEffects:
-        if (user.canStealItem(b, victim)) {
-            user.swapItems(b, victim, this);
-        }
-        ###
-    SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
+    ItemStealerMove: True
 *
 Low Kick:
     Desc: A powerful low kick that makes the target fall over. The heavier the target, the greater the move's power.
@@ -4519,13 +4513,7 @@ Thief:
     Pow: 60
     Cat: Physical
     Acc: 100
-    Int: ItemSwapperEffect
-    UniqueEffects:
-        if (user.canStealItem(b, victim)) {
-            user.swapItems(b, victim, this);
-        }
-        ###
-    SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
+    ItemStealerMove: True
 *
 Attract:
     Desc: If it is the opposite gender of the user, the target becomes infatuated and less likely to attack.
@@ -5374,10 +5362,9 @@ Bestow:
     Type: Normal
     Cat: Status
     MoveType: Metronomeless, No_Magic_Coat
-    Int: ItemSwapperEffect
     Applies: user.canGiftItem(b, victim)
     UniqueEffects:
-        user.swapItems(b, victim, this);
+        this.swapItems(b, user, victim);
         ###
     SwitchItemMessage: user.getName() + " gave " + victim.getName() + " its " + userItem.getName() + "!"
 *
@@ -5387,13 +5374,7 @@ Switcheroo:
     Type: Dark
     Cat: Status
     Acc: 100
-    Int: ItemSwapperEffect
-    Applies: user.canSwapItems(b, victim)
-    UniqueEffects:
-        user.swapItems(b, victim, this);
-        ###
-    SwitchItemMessage: user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!"
-    MoveType: Assistless, Metronomeless, No_Magic_Coat
+    SwapItemsMove: True
 *
 Trick:
     Desc: The user catches the target off guard and swaps its held item with its own.
@@ -5401,13 +5382,7 @@ Trick:
     Type: Psychic
     Acc: 100
     Cat: Status
-    Int: ItemSwapperEffect
-    Applies: user.canSwapItems(b, victim)
-    UniqueEffects:
-        user.swapItems(b, victim, this);
-        ###
-    SwitchItemMessage: user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!"
-    MoveType: Assistless, Metronomeless, No_Magic_Coat
+    SwapItemsMove: True
 *
 Memento:
     Desc: The user faints when using this move. In return, this harshly lowers the target's Attack and Sp. Atk stats.

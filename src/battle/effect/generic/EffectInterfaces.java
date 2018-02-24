@@ -12,6 +12,7 @@ import battle.effect.attack.MultiTurnMove;
 import battle.effect.status.StatusCondition;
 import item.Item;
 import item.ItemNamesies;
+import item.hold.HoldItem;
 import main.Game;
 import main.Global;
 import map.overworld.TerrainType;
@@ -1433,6 +1434,25 @@ public final class EffectInterfaces {
 
     public interface ItemSwapperEffect {
         String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem);
+
+        default void swapItems(Battle b, ActivePokemon user, ActivePokemon victim) {
+            Item userItem = user.getHeldItem(b);
+            Item victimItem = victim.getHeldItem(b);
+
+            Messages.add(this.getSwitchMessage(user, userItem, victim, victimItem));
+
+            // For wild battles, an actual switch occurs
+            if (b.isWildBattle()) {
+                user.giveItem((HoldItem)victimItem);
+                victim.giveItem((HoldItem)userItem);
+            } else {
+                user.setCastSource(victimItem);
+                EffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, user, CastSource.CAST_SOURCE, false);
+
+                user.setCastSource(userItem);
+                EffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
+            }
+        }
     }
 
     public interface SwapOpponentEffect {

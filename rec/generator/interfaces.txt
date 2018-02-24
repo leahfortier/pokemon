@@ -804,6 +804,27 @@ ItemSwapperEffect:
 	Method:
 		Header: String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
 	*
+    Method:
+        Header: void swapItems(Battle b, ActivePokemon user, ActivePokemon victim)
+        Default:
+            Item userItem = user.getHeldItem(b);
+            Item victimItem = victim.getHeldItem(b);
+
+            Messages.add(this.getSwitchMessage(user, userItem, victim, victimItem));
+
+            // For wild battles, an actual switch occurs
+            if (b.isWildBattle()) {
+                user.giveItem((HoldItem)victimItem);
+                victim.giveItem((HoldItem)userItem);
+            } else {
+                user.setCastSource(victimItem);
+                EffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, user, CastSource.CAST_SOURCE, false);
+
+                user.setCastSource(userItem);
+                EffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
+            }
+            ###
+    *
 ***
 SwapOpponentEffect:
 	Method:

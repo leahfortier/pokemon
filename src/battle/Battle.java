@@ -56,7 +56,6 @@ import util.StringAppender;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -237,10 +236,10 @@ public class Battle implements Serializable {
         return new StringAppender(prefix)
                 .appendLine()
                 .append(p.getActualName() + " ")
-                .appendJoin(" ", Arrays.asList(Stat.BATTLE_STATS), stat -> String.valueOf(p.getStage(stat)))
+                .appendJoin(" ", Stat.BATTLE_STATS, stat -> String.valueOf(p.getStage(stat)))
                 .append(" " + p.getAbility().getName())
                 .append(" " + p.getHeldItem(this).getName() + " ")
-                .appendJoin(" ", Arrays.asList(Stat.STATS), stat -> String.valueOf(p.getStat(this, stat)))
+                .appendJoin(" ", Stat.STATS, stat -> String.valueOf(p.getStat(this, stat)))
                 .appendLine()
                 .appendJoin("\n", p.getEffects().asList())
                 .appendIf(!p.getEffects().isEmpty(), "\n")

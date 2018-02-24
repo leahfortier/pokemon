@@ -16,7 +16,6 @@ import util.RandomUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Breeding {
@@ -77,7 +76,7 @@ public class Breeding {
 
     public int[] getBabyIVs(ActivePokemon daddy, ActivePokemon mommy) {
         List<Stat> remainingStats = new ArrayList<>();
-        Collections.addAll(remainingStats, Stat.STATS);
+        remainingStats.addAll(Stat.STATS);
 
         List<Item> parentItems = Arrays.asList(
                 daddy.getActualHeldItem(),

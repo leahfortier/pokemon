@@ -1242,12 +1242,12 @@ Unburden:
     ModifyMultiplier: 2 p.hasEffect(EffectNamesies.CONSUMED_ITEM)
 *
 Pickpocket:
-    Int: PhysicalContactEffect, ItemSwapperEffect
+    Int: PhysicalContactEffect
     SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
     Contact:
         // Steal from the Pokemon who made physical contact with you
         if (!victim.isFainted(b) && victim.canStealItem(b, user)) {
-            victim.swapItems(b, user, this);
+            this.swapItems(b, victim, user);
         }
         ###
     Desc: Steals an item from an attacker that made direct contact.
@@ -1387,12 +1387,12 @@ Dark Aura:
 *
 Magician:
     Desc: The Pok\u00e9mon steals the held item of a Pok\u00e9mon it hits with a move.
-    Int: ApplyDamageEffect, ItemSwapperEffect
+    Int: ApplyDamageEffect
     SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
     OnApplyDamage:
         // Steal the victim's item when damage is dealt
         if (!user.isFainted(b) && user.canStealItem(b, victim)) {
-            user.swapItems(b, victim, this);
+            this.swapItems(b, user, victim);
         }
         ###
 *

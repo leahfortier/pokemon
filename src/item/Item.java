@@ -1605,7 +1605,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
                 return;
             }
 
-            victim.swapItems(b, user, this);
+            this.swapItems(b, victim, user);
         }
 
         @Override
