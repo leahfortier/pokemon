@@ -19,7 +19,7 @@ public class EffectList<EffectType extends Effect> implements Serializable {
         this.effects = new ArrayList<>();
     }
 
-    public List<EffectType> listEffects() {
+    public List<EffectType> asList() {
         return new ArrayList<>(this.effects);
     }
 
@@ -63,7 +63,8 @@ public class EffectList<EffectType extends Effect> implements Serializable {
     }
 
     public void decrement(Battle b, ActivePokemon p) {
-        for (EffectType effect : this.listEffects()) {
+        // Important to use this.asList() to avoid ConcurrentModificationExceptions since decrement/subside can remove effects
+        for (EffectType effect : this.asList()) {
             boolean inactive = !effect.isActive();
             if (!inactive) {
                 effect.decrement(b, p);

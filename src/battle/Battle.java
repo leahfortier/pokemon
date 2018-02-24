@@ -220,7 +220,7 @@ public class Battle implements Serializable {
 
         if (!this.getEffects().isEmpty()) {
             System.out.println("Battle:");
-            for (BattleEffect effect : getEffects().listEffects()) {
+            for (BattleEffect effect : getEffects().asList()) {
                 System.out.println("\t" + effect);
             }
         }
@@ -242,9 +242,9 @@ public class Battle implements Serializable {
                 .append(" " + p.getHeldItem(this).getName() + " ")
                 .appendJoin(" ", Arrays.asList(Stat.STATS), stat -> String.valueOf(p.getStat(this, stat)))
                 .appendLine()
-                .appendJoin("\n", p.getEffects().listEffects())
+                .appendJoin("\n", p.getEffects().asList())
                 .appendIf(!p.getEffects().isEmpty(), "\n")
-                .appendJoin("\n", team.getEffects().listEffects())
+                .appendJoin("\n", team.getEffects().asList())
                 .toString()
                 .replaceAll("\n", "\n\t")
                 .trim();
@@ -570,8 +570,8 @@ public class Battle implements Serializable {
         Collections.addAll(list, additionalItems);
 
         list.addAll(p.getAllEffects(this, includeItem));
-        list.addAll(getEffects(p).listEffects());
-        list.addAll(getEffects().listEffects());
+        list.addAll(getEffects(p).asList());
+        list.addAll(getEffects().asList());
         list.add(weather);
 
         return list;

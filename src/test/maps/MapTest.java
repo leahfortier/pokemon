@@ -15,6 +15,7 @@ import map.overworld.WildEncounterInfo;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import pattern.action.ActionList;
 import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.ChoiceActionMatcher;
 import pattern.action.ActionMatcher.GiveItemActionMatcher;
@@ -336,7 +337,7 @@ public class MapTest extends BaseTest {
         return actionMatchers;
     }
 
-    private static void addActions(List<ActionMatcher> fullList, List<ActionMatcher> toAdd) {
+    private static void addActions(List<ActionMatcher> fullList, ActionList toAdd) {
         for (ActionMatcher actionMatcher : toAdd) {
             fullList.add(actionMatcher);
             if (actionMatcher instanceof ChoiceActionMatcher) {

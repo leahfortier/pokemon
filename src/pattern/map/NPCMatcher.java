@@ -9,6 +9,7 @@ import map.entity.movable.MoveAxis;
 import map.entity.movable.NPCEntity;
 import map.entity.movable.NPCInteraction;
 import mapMaker.model.TriggerModel.TriggerModelType;
+import pattern.action.ActionList;
 import pattern.action.NPCInteractionMatcher;
 import pattern.generic.EntityMatcher;
 import pattern.generic.SinglePointTriggerMatcher;
@@ -52,7 +53,7 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatch
 
     public Map<String, NPCInteraction> getInteractionMap() {
         if (interactions.length == 0) {
-            return Collections.singletonMap(NO_INTERACTIONS_KEY, new NPCInteraction(false, Collections.emptyList()));
+            return Collections.singletonMap(NO_INTERACTIONS_KEY, new NPCInteraction(false, new ActionList()));
         }
 
         Map<String, NPCInteraction> interactionMap = new HashMap<>();

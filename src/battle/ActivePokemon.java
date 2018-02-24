@@ -582,7 +582,7 @@ public class ActivePokemon extends PartyPokemon {
 
     public List<InvokeEffect> getAllEffects(final Battle b, final boolean includeItem) {
         List<InvokeEffect> list = new ArrayList<>();
-        list.addAll(this.getEffects().listEffects());
+        list.addAll(this.getEffects().asList());
         list.add(this.getStatus());
         list.add(this.getAbility());
 

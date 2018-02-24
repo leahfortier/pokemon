@@ -1,5 +1,6 @@
 package mapMaker.dialogs;
 
+import main.Global;
 import mapMaker.dialogs.action.ActionListPanel;
 import pattern.action.ActionMatcher;
 import pattern.map.MiscEntityMatcher;
@@ -40,7 +41,7 @@ public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
     protected MiscEntityMatcher getMatcher() {
         ActionMatcher[] actions = actionListPanel.getActions();
         if (actions == null || actions.length == 0) {
-            System.err.println("Need at least one action for a valid misc entity.");
+            Global.info("Need at least one action for a valid misc entity.");
             return null;
         }
 

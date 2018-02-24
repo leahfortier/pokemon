@@ -424,7 +424,7 @@ public class Player extends PlayerTrainer implements Serializable {
             Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.WIN_BATTLE));
         }
 
-        EndBattleEffect.invokeEndBattleEffect(this.getEffects().listEffects(), this, b, front());
+        EndBattleEffect.invokeEndBattleEffect(this.getEffects().asList(), this, b, front());
         for (ActivePokemon p : this.getActiveTeam()) {
             EndBattleEffect.invokeEndBattleEffect(p.getAllEffects(b), this, b, p);
         }

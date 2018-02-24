@@ -3,9 +3,6 @@ package pattern.action;
 import pattern.JsonMatcher;
 import util.StringUtils;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class NPCInteractionMatcher implements JsonMatcher {
     private String name;
     private boolean walkToPlayer;
@@ -25,7 +22,7 @@ public class NPCInteractionMatcher implements JsonMatcher {
         return this.walkToPlayer;
     }
 
-    public List<ActionMatcher> getActions() {
-        return Arrays.asList(this.npcActions);
+    public ActionList getActions() {
+        return new ActionList(npcActions);
     }
 }

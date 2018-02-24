@@ -9374,7 +9374,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
             // Add each passable effect to the new Pokemon out front
             user.getEffects()
-                .listEffects()
+                .asList()
                 .stream()
                 .filter(effect -> effect instanceof PassableEffect)
                 .forEach(effect -> next.getEffects().add(effect));

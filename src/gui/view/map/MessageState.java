@@ -10,7 +10,6 @@ import map.triggers.HaltTrigger;
 import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.Messages;
-import pattern.action.ActionMatcher;
 import pattern.action.ChoiceMatcher;
 import sound.SoundPlayer;
 import util.FontMetrics;
@@ -87,7 +86,7 @@ class MessageState implements VisualStateHandler {
         if (!SoundPlayer.instance().soundEffectIsPlaying() && input.consumeIfMouseDown(ControlKey.SPACE)) {
             if (currentMessage.isChoice()) {
                 ChoiceMatcher choice = currentMessage.getChoices()[dialogueSelection];
-                Trigger trigger = ActionMatcher.getActionGroupTrigger(null, null, choice.getActions());
+                Trigger trigger = choice.getActions().getGroupTrigger(null, null);
                 Messages.addToFront(new MessageUpdate().withTrigger(trigger));
             }
 

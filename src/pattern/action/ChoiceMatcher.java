@@ -1,8 +1,5 @@
 package pattern.action;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class ChoiceMatcher {
     private String text;
     private ActionMatcher[] actions;
@@ -16,7 +13,7 @@ public class ChoiceMatcher {
         return this.text;
     }
 
-    public List<ActionMatcher> getActions() {
-        return Arrays.asList(this.actions);
+    public ActionList getActions() {
+        return new ActionList(actions);
     }
 }

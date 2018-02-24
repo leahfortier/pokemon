@@ -15,7 +15,6 @@ import map.triggers.Trigger;
 import map.triggers.battle.WalkingWildBattleTrigger;
 import map.triggers.map.MapTransitionTrigger;
 import pattern.SimpleMapTransition;
-import pattern.action.ActionMatcher;
 import pattern.generic.EntityMatcher;
 import pattern.map.EventMatcher;
 import pattern.map.FishingMatcher;
@@ -101,10 +100,9 @@ public class MapData {
         }
 
         for (EventMatcher matcher : mapDataMatcher.getEvents()) {
-            Trigger trigger = ActionMatcher.getActionGroupTrigger(
+            Trigger trigger = matcher.getActions().getGroupTrigger(
                     matcher.getTriggerName(),
-                    matcher.getCondition(),
-                    matcher.getActions()
+                    matcher.getCondition()
             );
 
             for (Point point : matcher.getLocation()) {

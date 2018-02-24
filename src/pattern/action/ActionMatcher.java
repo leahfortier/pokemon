@@ -1,11 +1,9 @@
 package pattern.action;
 
 import item.ItemNamesies;
-import map.condition.Condition;
 import map.triggers.ChoiceTrigger;
 import map.triggers.GiveItemTrigger;
 import map.triggers.GivePokemonTrigger;
-import map.triggers.GroupTrigger;
 import map.triggers.TradePokemonTrigger;
 import map.triggers.Trigger;
 import map.triggers.UseItemTrigger;
@@ -15,25 +13,9 @@ import pattern.JsonMatcher;
 import pattern.PokemonMatcher;
 import pokemon.PokemonNamesies;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 public interface ActionMatcher extends JsonMatcher {
     ActionType getActionType();
     Trigger createNewTrigger();
-
-    static Trigger getActionGroupTrigger(String entityName, Condition condition, List<ActionMatcher> actions) {
-        final List<Trigger> actionTriggers = actions
-                .stream()
-                .map(action -> {
-                    if (action instanceof EntityActionMatcher) {
-                        ((EntityActionMatcher)action).setEntity(entityName);
-                    }
-                    return action.createNewTrigger();
-                })
-                .collect(Collectors.toList());
-        return new GroupTrigger(condition, actionTriggers);
-    }
 
     class GivePokemonActionMatcher implements ActionMatcher {
         private PokemonMatcher pokemonMatcher;

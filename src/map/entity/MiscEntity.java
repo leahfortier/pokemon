@@ -2,17 +2,15 @@ package map.entity;
 
 import map.condition.Condition;
 import map.triggers.Trigger;
-import pattern.action.ActionMatcher;
+import pattern.action.ActionList;
 import util.Point;
 
-import java.util.List;
-
 public class MiscEntity extends Entity {
-    private final List<ActionMatcher> actions;
+    private final ActionList actions;
 
     private Trigger trigger;
 
-    public MiscEntity(String name, Point location, Condition condition, List<ActionMatcher> actions) {
+    public MiscEntity(String name, Point location, Condition condition, ActionList actions) {
         super(location, name, condition);
         this.actions = actions;
     }
@@ -20,10 +18,9 @@ public class MiscEntity extends Entity {
     @Override
     public Trigger getTrigger() {
         if (trigger == null) {
-            this.trigger = ActionMatcher.getActionGroupTrigger(
+            this.trigger = this.actions.getGroupTrigger(
                     this.getEntityName(),
-                    this.getCondition(),
-                    this.actions
+                    this.getCondition()
             );
         }
 

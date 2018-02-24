@@ -2,11 +2,9 @@ package pattern.map;
 
 import map.condition.ConditionSet;
 import mapMaker.model.TriggerModel.TriggerModelType;
+import pattern.action.ActionList;
 import pattern.action.ActionMatcher;
 import pattern.generic.MultiPointTriggerMatcher;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class MiscEntityMatcher extends MultiPointTriggerMatcher {
     private String name;
@@ -29,7 +27,7 @@ public class MiscEntityMatcher extends MultiPointTriggerMatcher {
         return this.name;
     }
 
-    public List<ActionMatcher> getActions() {
-        return Arrays.asList(this.actions);
+    public ActionList getActions() {
+        return new ActionList(actions);
     }
 }

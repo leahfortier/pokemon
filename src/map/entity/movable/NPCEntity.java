@@ -5,12 +5,10 @@ import map.Direction;
 import map.PathDirection;
 import map.condition.Condition;
 import map.triggers.Trigger;
-import pattern.action.ActionMatcher;
 import trainer.player.Player;
 import util.Point;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class NPCEntity extends MovableEntity {
@@ -146,9 +144,11 @@ public class NPCEntity extends MovableEntity {
 
         if (!this.triggerInteractionMap.containsKey(currentInteraction)) {
             NPCInteraction interaction = this.interactions.get(currentInteraction);
-            List<ActionMatcher> actions = interaction.getActions();
 
-            Trigger trigger = ActionMatcher.getActionGroupTrigger(this.getEntityName(), this.getCondition(), actions);
+            Trigger trigger = interaction.getActions().getGroupTrigger(
+                    this.getEntityName(),
+                    this.getCondition()
+            );
 
             this.triggerInteractionMap.put(currentInteraction, trigger);
         }

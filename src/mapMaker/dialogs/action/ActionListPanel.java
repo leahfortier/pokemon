@@ -1,6 +1,7 @@
 package mapMaker.dialogs.action;
 
 import mapMaker.dialogs.TriggerDialog;
+import pattern.action.ActionList;
 import pattern.action.ActionMatcher;
 import util.GUIUtils;
 
@@ -9,6 +10,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ActionListPanel extends JPanel {
     private final TriggerDialog parent;
@@ -32,8 +34,8 @@ public class ActionListPanel extends JPanel {
         render();
     }
 
-    public void load(List<ActionMatcher> actions) {
-        actionList.addAll(actions);
+    public void load(ActionList actions) {
+        actionList.addAll(actions.asList());
         render();
     }
 
@@ -76,6 +78,7 @@ public class ActionListPanel extends JPanel {
     }
 
     public ActionMatcher[] getActions() {
+        this.actionList.removeIf(Objects::isNull);
         return this.actionList.toArray(new ActionMatcher[0]);
     }
 }

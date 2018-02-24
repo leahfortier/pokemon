@@ -1,15 +1,14 @@
 package map.entity.movable;
 
+import pattern.action.ActionList;
 import pattern.action.ActionMatcher;
 import pattern.action.EntityActionMatcher.BattleActionMatcher;
 
-import java.util.List;
-
 public class NPCInteraction {
     private boolean walkToPlayer;
-    private List<ActionMatcher> actions;
+    private ActionList actions;
 
-    public NPCInteraction(boolean walkToPlayer, List<ActionMatcher> actions) {
+    public NPCInteraction(boolean walkToPlayer, ActionList actions) {
         this.walkToPlayer = walkToPlayer;
         this.actions = actions;
     }
@@ -18,7 +17,7 @@ public class NPCInteraction {
         return this.walkToPlayer;
     }
 
-    public List<ActionMatcher> getActions() {
+    public ActionList getActions() {
         return this.actions;
     }
 
