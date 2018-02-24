@@ -20,6 +20,7 @@ import pokemon.Stat;
 import pokemon.breeding.Eggy;
 import pokemon.evolution.BaseEvolution;
 import trainer.player.EvolutionInfo;
+import type.PokeType;
 import type.Type;
 import util.FontMetrics;
 import util.Point;
@@ -148,13 +149,13 @@ class EvolutionView extends View {
             if (isEgg) {
                 canvasPanel.withBackgroundColors(new Color[] { Type.NORMAL.getColor(), Type.NORMAL.getColor() });
             } else {
-                canvasPanel.withBackgroundColors(Type.getColors(preEvolution));
+                canvasPanel.withBackgroundColors(PokeType.getColors(preEvolution));
             }
         } else {
             if (isEgg) {
-                canvasPanel.withBackgroundColors(Type.getColors(preEvolution));
+                canvasPanel.withBackgroundColors(PokeType.getColors(preEvolution));
             } else {
-                canvasPanel.withBackgroundColors(Type.getColors(evolvingPokemon));
+                canvasPanel.withBackgroundColors(PokeType.getColors(evolvingPokemon));
             }
         }
 

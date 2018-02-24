@@ -28,6 +28,7 @@ import pokemon.ability.AbilityNamesies;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.WildPokemon;
+import type.PokeType;
 import type.Type;
 import util.RandomUtils;
 
@@ -859,14 +860,14 @@ public final class EffectInterfaces {
     public interface ChangeTypeEffect {
 
         // Guarantee the change-type effect to be first
-        Type[] getType(Battle b, ActivePokemon p, boolean display);
+        PokeType getType(Battle b, ActivePokemon p, boolean display);
 
-        static Type[] getChangedType(Battle b, ActivePokemon p, boolean display) {
+        static PokeType getChangedType(Battle b, ActivePokemon p, boolean display) {
             List<InvokeEffect> invokees = b.getEffectsList(p, p.getEffect(EffectNamesies.CHANGE_TYPE));
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof ChangeTypeEffect && InvokeEffect.isActiveEffect(invokee)) {
                     ChangeTypeEffect effect = (ChangeTypeEffect)invokee;
-                    Type[] value = effect.getType(b, p, display);
+                    PokeType value = effect.getType(b, p, display);
                     if (value != null) {
                         return value;
                     }
@@ -1244,9 +1245,9 @@ public final class EffectInterfaces {
     }
 
     public interface AdvantageMultiplierMove extends AttackInterface {
-        double multiplyAdvantage(Type attackingType, Type[] defendingTypes);
+        double multiplyAdvantage(Type attackingType, PokeType defendingTypes);
 
-        static double getModifier(ActivePokemon attacking, Type attackingType, Type[] defendingTypes) {
+        static double getModifier(ActivePokemon attacking, Type attackingType, PokeType defendingTypes) {
             double modifier = 1;
 
             List<InvokeEffect> invokees = Collections.singletonList(attacking.getAttack());

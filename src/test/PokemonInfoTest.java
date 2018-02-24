@@ -9,6 +9,7 @@ import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import type.PokeType;
 import type.Type;
 import util.MultiMap;
 import util.StringUtils;
@@ -246,17 +247,14 @@ public class PokemonInfoTest extends BaseTest {
     public void typeTest() {
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
             PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
-            Type[] types = pokemonInfo.getType();
-
-            // Must be size 2
-            Assert.assertEquals(2, types.length);
+            PokeType pokeType = pokemonInfo.getType();
 
             // No-Type can only be the second type
-            Assert.assertNotEquals(Type.NO_TYPE, types[0]);
+            Assert.assertNotEquals(Type.NO_TYPE, pokeType.getFirstType());
 
             // Make sure no duplicate types
             Set<Type> seen = EnumSet.noneOf(Type.class);
-            for (Type type : types) {
+            for (Type type : pokeType) {
                 Assert.assertFalse(seen.contains(type));
                 seen.add(type);
             }

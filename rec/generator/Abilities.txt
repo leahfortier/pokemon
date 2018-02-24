@@ -894,7 +894,7 @@ Color Change:
         private Type type;
         ###
     ChangeType:
-        return new Type[] { type, Type.NO_TYPE };
+        return new PokeType(type);
         ###
     Desc: The Pok\u00e9mon's type becomes the type of the move used on it.
 *
@@ -1098,7 +1098,7 @@ Illusion:
     Field:
         private boolean activated;
         private String illusionName;
-        private Type[] illusionType;
+        private PokeType illusionType;
         private PokemonNamesies illusionSpecies;
         private boolean illusionShiny;
 
@@ -1366,7 +1366,7 @@ Forecast:
     Irrestealable: True
     Int: ChangeTypeEffect
     GetChangeTypeEffect:
-        return new Type[] { b.getWeather().getElement(), Type.NO_TYPE };
+        return new PokeType(b.getWeather().getElement());
         ###
 *
 Bulletproof:
@@ -1504,7 +1504,7 @@ Protean:
         private Type type;
         ###
     ChangeType:
-        return new Type[] { type, Type.NO_TYPE };
+        return new PokeType(type);
         ###
 *
 Stamina:

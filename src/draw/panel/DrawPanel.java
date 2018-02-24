@@ -14,7 +14,7 @@ import input.InputControl;
 import main.Global;
 import map.Direction;
 import pokemon.PartyPokemon;
-import type.Type;
+import type.PokeType;
 import util.FontMetrics;
 import util.Point;
 
@@ -99,7 +99,7 @@ public class DrawPanel {
     }
 
     public DrawPanel withTypeColors(PartyPokemon pokemon) {
-        return this.withBackgroundColors(Type.getColors(pokemon));
+        return this.withBackgroundColors(PokeType.getColors(pokemon));
     }
 
     public DrawPanel withTransparentCount(int transparentCount) {

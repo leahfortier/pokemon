@@ -20,6 +20,7 @@ import pokemon.Stat;
 import sound.SoundPlayer;
 import trainer.Trainer;
 import trainer.player.Player;
+import type.PokeType;
 import type.Type;
 import util.FontMetrics;
 import util.Point;
@@ -123,7 +124,7 @@ class PokemonAnimationState {
     // Resets all the values in a state
     private void resetVals(
             int hp,
-            Type[] type,
+            PokeType type,
             boolean shiny,
             PokemonNamesies pokemon,
             String name,
@@ -156,7 +157,7 @@ class PokemonAnimationState {
         animationHP = Math.abs(oldState.hp - state.hp)*FRAMES_PER_HP_LOSS;
     }
 
-    public void setType(Type[] newType) {
+    public void setType(PokeType newType) {
         state.type = newType;
     }
 
@@ -367,7 +368,7 @@ class PokemonAnimationState {
         drawPokemon(g);
 
         // Draw the colored type polygons
-        this.statusBox.withBackgroundColors(Type.getColors(state.type)).drawBackground(g);
+        this.statusBox.withBackgroundColors(state.type.getColors()).drawBackground(g);
 
         // Draw health bar and player's EXP Bar
         drawHealthBar(g);
@@ -527,7 +528,7 @@ class PokemonAnimationState {
         private int hp;
         private String imageName;
         private String name;
-        private Type[] type;
+        private PokeType type;
         private float expRatio;
         private boolean caught;
         private Gender gender;
@@ -535,7 +536,7 @@ class PokemonAnimationState {
         private int teamIndex;
 
         PokemonState() {
-            type = new Type[2];
+            type = new PokeType(Type.NO_TYPE);
         }
 
         public StatusCondition getStatus() {

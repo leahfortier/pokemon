@@ -33,7 +33,7 @@ import message.Messages.MessageState;
 import pokemon.PartyPokemon;
 import trainer.Trainer;
 import trainer.player.Player;
-import type.Type;
+import type.PokeType;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.Point;
@@ -442,7 +442,7 @@ public class BagView extends View {
                 g.translate(pokemonButton.x, pokemonButton.y);
 
                 DrawPanel pokemonPanel = new DrawPanel(0, 0, pokemonButton.width, pokemonButton.height)
-                        .withBackgroundColors(Type.getColors(p))
+                        .withBackgroundColors(PokeType.getColors(p))
                         .withTransparentCount(2)
                         .withBorderPercentage(15)
                         .withBlackOutline();
@@ -553,7 +553,7 @@ public class BagView extends View {
         state = BagState.ITEM_SELECT;
 
         Set<ItemNamesies> list = Game.getPlayer().getBag().getCategory(selectedTab);
-        selectedItem = list.size() > 0 ? list.iterator().next() : ItemNamesies.NO_ITEM;
+        selectedItem = list.isEmpty() ? ItemNamesies.NO_ITEM : list.iterator().next();
 
         // No more items on the current page
         if (list.size() < (pageNum + 1)*ITEMS_PER_PAGE) {

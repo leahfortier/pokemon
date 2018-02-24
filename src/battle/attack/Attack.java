@@ -67,6 +67,7 @@ import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import trainer.Team;
 import trainer.Trainer;
+import type.PokeType;
 import type.Type;
 import type.TypeAdvantage;
 import util.GeneralUtils;
@@ -2092,14 +2093,14 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            Type[] type = victim.getType(b);
-            if (type[0] == Type.FLYING) {
-                return new Type[] { type[1], Type.NO_TYPE };
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            PokeType type = victim.getType(b);
+            if (type.getFirstType() == Type.FLYING) {
+                return new PokeType(type.getSecondType());
             }
 
-            if (type[1] == Type.FLYING) {
-                return new Type[] { type[0], Type.NO_TYPE };
+            if (type.getSecondType() == Type.FLYING) {
+                return new PokeType(type.getFirstType());
             }
 
             return null;
@@ -3977,8 +3978,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return new Type[] { Type.WATER, Type.NO_TYPE };
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return new PokeType(Type.WATER);
         }
     }
 
@@ -3992,10 +3993,9 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            Type primary = victim.getType(b)[0];
-
-            return new Type[] { primary, primary == Type.GHOST ? Type.NO_TYPE : Type.GHOST };
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            Type primary = victim.getType(b).getFirstType();
+            return new PokeType(primary, primary == Type.GHOST ? Type.NO_TYPE : Type.GHOST);
         }
     }
 
@@ -4009,10 +4009,9 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            Type primary = victim.getType(b)[0];
-
-            return new Type[] { primary, primary == Type.GRASS ? Type.NO_TYPE : Type.GRASS };
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            Type primary = victim.getType(b).getFirstType();
+            return new PokeType(primary, primary == Type.GRASS ? Type.NO_TYPE : Type.GRASS);
         }
     }
 
@@ -5562,8 +5561,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Like this is literally the stupidest move ever like srsly what is wrong with the creators
-            Type[] type = user.getType(b);
-            return victim.isType(b, type[0]) || (type[1] != Type.NO_TYPE && victim.isType(b, type[1]));
+            PokeType type = user.getType(b);
+            return victim.isType(b, type.getFirstType()) || (!type.isSingleTyped() && victim.isType(b, type.getSecondType()));
         }
     }
 
@@ -6466,8 +6465,9 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return b.getOtherPokemon(caster).getType(b).clone();
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            PokeType type = b.getOtherPokemon(caster).getType(b);
+            return new PokeType(type.getFirstType(), type.getSecondType());
         }
     }
 
@@ -6879,13 +6879,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return new Type[] { RandomUtils.getRandomValue(this.types), Type.NO_TYPE };
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return new PokeType(RandomUtils.getRandomValue(this.types));
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return this.types.size() > 0;
+            return !this.types.isEmpty();
         }
     }
 
@@ -6917,13 +6917,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return new Type[] { RandomUtils.getRandomValue(this.types), Type.NO_TYPE };
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return new PokeType(RandomUtils.getRandomValue(this.types));
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return this.types.size() > 0;
+            return !this.types.isEmpty();
         }
     }
 
@@ -9289,8 +9289,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return new Type[] { b.getTerrainType().getType(), Type.NO_TYPE };
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return new PokeType(b.getTerrainType().getType());
         }
     }
 
@@ -9995,7 +9995,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public double multiplyAdvantage(Type attackingType, Type[] defendingTypes) {
+        public double multiplyAdvantage(Type attackingType, PokeType defendingTypes) {
             double multiplier = 1;
             for (Type defendingType : defendingTypes) {
                 if (defendingType == Type.WATER) {
@@ -10019,7 +10019,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public double multiplyAdvantage(Type attackingType, Type[] defendingTypes) {
+        public double multiplyAdvantage(Type attackingType, PokeType defendingTypes) {
             return TypeAdvantage.FLYING.getAdvantage(defendingTypes);
         }
     }
@@ -10699,14 +10699,14 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            Type[] type = victim.getType(b);
-            if (type[0] == Type.FIRE) {
-                return new Type[] { type[1], Type.NO_TYPE };
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            PokeType type = victim.getType(b);
+            if (type.getFirstType() == Type.FIRE) {
+                return new PokeType(type.getSecondType());
             }
 
-            if (type[1] == Type.FIRE) {
-                return new Type[] { type[0], Type.NO_TYPE };
+            if (type.getSecondType() == Type.FIRE) {
+                return new PokeType(type.getFirstType());
             }
 
             return null;
@@ -10763,7 +10763,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public Type getType(Battle b, ActivePokemon user) {
-            return user.getType(b)[0];
+            return user.getType(b).getFirstType();
         }
     }
 

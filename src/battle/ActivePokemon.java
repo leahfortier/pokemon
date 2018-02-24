@@ -54,6 +54,7 @@ import trainer.Team;
 import trainer.Trainer;
 import trainer.WildPokemon;
 import trainer.player.medal.MedalTheme;
+import type.PokeType;
 import type.Type;
 import util.Action;
 import util.StringUtils;
@@ -418,16 +419,16 @@ public class ActivePokemon extends PartyPokemon {
         return isSemiInvulnerable() && getAttack().namesies() == AttackNamesies.DIG;
     }
 
-    public Type[] getDisplayType(Battle b) {
+    public PokeType getDisplayType(Battle b) {
         return getType(b, true);
     }
 
-    public Type[] getType(Battle b) {
+    public PokeType getType(Battle b) {
         return getType(b, false);
     }
 
-    private Type[] getType(Battle b, boolean displayOnly) {
-        Type[] changeType = ChangeTypeEffect.getChangedType(b, this, displayOnly);
+    private PokeType getType(Battle b, boolean displayOnly) {
+        PokeType changeType = ChangeTypeEffect.getChangedType(b, this, displayOnly);
         if (changeType != null) {
             return changeType;
         }
@@ -436,8 +437,7 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean isType(Battle b, Type type) {
-        Type[] types = getType(b);
-        return types[0] == type || types[1] == type;
+        return this.getType(b).isType(type);
     }
 
     public String getName() {

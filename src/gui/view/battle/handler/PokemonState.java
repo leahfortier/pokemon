@@ -20,7 +20,7 @@ import pokemon.breeding.Eggy;
 import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.player.Player;
-import type.Type;
+import type.PokeType;
 import util.FontMetrics;
 import util.PokeString;
 
@@ -167,7 +167,7 @@ public class PokemonState implements VisualStateHandler {
         PartyPokemon selectedPkm = list.get(selectedPokemonTab);
 
         // Draw type color polygons
-        pokemonPanel.withBackgroundColors(Type.getColors(selectedPkm), true);
+        pokemonPanel.withBackgroundColors(PokeType.getColors(selectedPkm), true);
 
         if (!selectedPkm.canFight()) {
             pokemonPanel.greyOut();
@@ -182,7 +182,7 @@ public class PokemonState implements VisualStateHandler {
             Button tabButton = pokemonTabButtons[i];
 
             // Color tab
-            tabButton.fill(g, Type.getColors(pkm)[0]);
+            tabButton.fill(g, PokeType.getColors(pkm)[0]);
 
             // Fade out fainted Pokemon
             if (!pkm.canFight()) {
@@ -223,12 +223,13 @@ public class PokemonState implements VisualStateHandler {
             g.drawString(levelStr, 220, 269);
 
             // Draw type tiles
-            Type[] type = selectedPkm.getActualType();
-            if (type[1] == Type.NO_TYPE) {
-                g.drawImage(type[0].getImage(), 322, 255, null);
+            // TODO: Use ImageUtils.drawTypeTiles()
+            PokeType type = selectedPkm.getActualType();
+            if (type.isSingleTyped()) {
+                g.drawImage(type.getFirstType().getImage(), 322, 255, null);
             } else {
-                g.drawImage(type[0].getImage(), 285, 255, null);
-                g.drawImage(type[1].getImage(), 322, 255, null);
+                g.drawImage(type.getFirstType().getImage(), 285, 255, null);
+                g.drawImage(type.getSecondType().getImage(), 322, 255, null);
             }
 
             // Ability

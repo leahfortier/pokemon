@@ -2151,7 +2151,7 @@ Soak:
     Cat: Status
     Effect: ChangeType
     ChangeType:
-        return new Type[] { Type.WATER, Type.NO_TYPE };
+        return new PokeType(Type.WATER);
         ###
 *
 Trick-or-Treat:
@@ -3168,8 +3168,8 @@ Synchronoise:
     Pow: 120
     FullApplies:
         // Like this is literally the stupidest move ever like srsly what is wrong with the creators
-        Type[] type = user.getType(b);
-        return victim.isType(b, type[0]) || (type[1] != Type.NO_TYPE && victim.isType(b, type[1]));
+        PokeType type = user.getType(b);
+        return victim.isType(b, type.getFirstType()) || (!type.isSingleTyped() && victim.isType(b, type.getSecondType()));
         ###
 *
 Psyshock:
@@ -3688,7 +3688,8 @@ Reflect Type:
     SelfTarget: True
     Effect: ChangeType
     ChangeType:
-        return b.getOtherPokemon(caster).getType(b).clone();
+        PokeType type = b.getOtherPokemon(caster).getType(b);
+        return new PokeType(type.getFirstType(), type.getSecondType());
         ###
     MoveType: Non_Snatchable
 *
@@ -3928,7 +3929,7 @@ Conversion:
     Type: Normal
     Cat: Status
     SelfTarget: True
-    Applies: this.types.size() > 0
+    Applies: !this.types.isEmpty()
     Field:
         private List<Type> types;
         ###
@@ -3942,7 +3943,7 @@ Conversion:
         }
         ###
     ChangeType:
-        return new Type[] { RandomUtils.getRandomValue(this.types), Type.NO_TYPE };
+        return new PokeType(RandomUtils.getRandomValue(this.types));
         ###
     Effect: ChangeType
 *
@@ -3969,10 +3970,10 @@ Conversion 2:
             }
         }
         ###
-    Applies: this.types.size() > 0
+    Applies: !this.types.isEmpty()
     Effect: ChangeType
     ChangeType:
-        return new Type[] { RandomUtils.getRandomValue(this.types), Type.NO_TYPE };
+        return new PokeType(RandomUtils.getRandomValue(this.types));
         ###
 *
 Sharpen:
@@ -5406,7 +5407,7 @@ Camouflage:
     SelfTarget: True
     Effect: ChangeType
     ChangeType:
-        return new Type[] { b.getTerrainType().getType(), Type.NO_TYPE };
+        return new PokeType(b.getTerrainType().getType());
         ###
 *
 Recycle:
@@ -6329,7 +6330,7 @@ Revelation Dance:
     Pow: 90
     PP: 15
     GetType:
-        return user.getType(b)[0];
+        return user.getType(b).getFirstType();
         ###
     MoveType: Dance
 *

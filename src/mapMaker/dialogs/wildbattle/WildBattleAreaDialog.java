@@ -35,7 +35,7 @@ public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
                 "Create New",
                 event -> {
                     WildBattleMatcher oldMatcher = null;
-                    if (this.wildBattleTriggers.size() > 0) {
+                    if (!this.wildBattleTriggers.isEmpty()) {
                         oldMatcher = SerializationUtils.getJsonCopy(wildBattleTriggers.get(0), WildBattleMatcher.class);
                         oldMatcher.setName("Wild Trigger Matcher " + wildBattleTriggers.size());
                         oldMatcher.setCondition(null, null);

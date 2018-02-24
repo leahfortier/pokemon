@@ -497,7 +497,7 @@ OpponentIgnoreStageEffect:
 ChangeTypeEffect:
 	Method:
 		Comments: // Guarantee the change-type effect to be first
-		Header: Type[] getType(Battle b, ActivePokemon p, boolean display)
+		Header: PokeType getType(Battle b, ActivePokemon p, boolean display)
 		Invoke: Get
 		InvokeName: getChangedType
 		EffectList: p
@@ -698,7 +698,7 @@ OpponentPowerChangeEffect:
 AdvantageMultiplierMove:
     Extends: AttackInterface
 	Method:
-		Header: double multiplyAdvantage(Type attackingType, Type[] defendingTypes)
+		Header: double multiplyAdvantage(Type attackingType, PokeType defendingTypes)
 		Invoke: Multiply
 		InvokeParameters: ActivePokemon attacking
 		Move: attacking

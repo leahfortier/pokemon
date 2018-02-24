@@ -21,7 +21,7 @@ import pokemon.breeding.Eggy;
 import trainer.Trainer;
 import trainer.player.PC;
 import trainer.player.Player;
-import type.Type;
+import type.PokeType;
 import util.FontMetrics;
 
 import java.awt.Color;
@@ -308,8 +308,8 @@ class PCView extends View {
         }
 
         // Description
-        Type[] type = selected.getActualType();
-        infoPanel.withBackgroundColors(Type.getColors(selected))
+        PokeType type = selected.getActualType();
+        infoPanel.withBackgroundColors(PokeType.getColors(selected))
                  .drawBackground(g);
 
         if (switchClicked) {
@@ -345,13 +345,13 @@ class PCView extends View {
             TextUtils.drawRightAlignedString(g, "Lv" + selected.getLevel(), 740, 82);
             g.drawString("#" + String.format("%03d", selected.getPokemonInfo().getNumber()), 541, 110);
 
-            int index = 0;
-            if (type[1] != Type.NO_TYPE) {
-                g.drawImage(type[0].getImage(), 669, 97, null);
-                index = 1;
+            // TODO: Use ImageUtils.drawTypeImages()
+            if (type.isSingleTyped()) {
+                g.drawImage(type.getFirstType().getImage(), 707, 97, null);
+            } else {
+                g.drawImage(type.getFirstType().getImage(), 669, 97, null);
+                g.drawImage(type.getSecondType().getImage(), 707, 97, null);
             }
-
-            g.drawImage(type[index].getImage(), 707, 97, null);
 
             FontMetrics.setFont(g, 16);
 

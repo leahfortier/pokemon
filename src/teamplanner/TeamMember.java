@@ -5,6 +5,7 @@ import battle.attack.AttackNamesies;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
+import type.PokeType;
 import type.Type;
 import util.FileIO;
 import util.StringAppender;
@@ -98,9 +99,8 @@ class TeamMember {
 
         out.append(pokemonSpecies.getName() + ":");
 
-        Type[] type = pokemonSpecies.getType();
-        out.append("\n\tType: " + type[0].getName())
-           .appendIf(type[1] != Type.NO_TYPE, "/" + type[1].getName());
+        PokeType type = pokemonSpecies.getType();
+        out.append("\n\tType: " + type.toString());
 
         out.append("\n\tStats: ")
            .appendJoin(" ", Stat.NUM_STATS, i -> pokemonSpecies.getStat(i) + "");

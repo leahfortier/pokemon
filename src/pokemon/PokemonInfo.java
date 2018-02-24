@@ -9,6 +9,7 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.EggGroup;
 import pokemon.evolution.Evolution;
 import pokemon.evolution.EvolutionType;
+import type.PokeType;
 import type.Type;
 import util.FileIO;
 import util.FileName;
@@ -104,7 +105,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     private final int[] baseStats;
     private final int baseExp;
     private final GrowthRate growthRate;
-    private final Type[] type;
+    private final PokeType type;
     private final List<LevelUpMove> levelUpMoves;
     private final Set<AttackNamesies> learnableMoves;
     private final int catchRate;
@@ -125,7 +126,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
                         int[] baseStats,
                         int baseExp,
                         String growthRate,
-                        List<Type> type,
+                        Type firstType,
+                        Type secondType,
                         int catchRate,
                         int[] givenEVs,
                         Evolution evolution,
@@ -145,7 +147,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         this.baseStats = baseStats;
         this.baseExp = baseExp;
         this.growthRate = GrowthRate.valueOf(growthRate);
-        this.type = type.toArray(new Type[0]);
+        this.type = new PokeType(firstType, secondType);
         this.levelUpMoves = levelUpMoves;
         this.learnableMoves = EnumSet.copyOf(learnableMoves);
         this.catchRate = catchRate;
@@ -163,10 +165,10 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     }
 
     public boolean isType(Type type) {
-        return this.type[0] == type || this.type[1] == type;
+        return this.type.isType(type);
     }
 
-    public Type[] getType() {
+    public PokeType getType() {
         return type;
     }
 
@@ -367,26 +369,27 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(FileName.POKEMON_INFO, false));
         while (in.hasNext()) {
             PokemonInfo pokemonInfo = new PokemonInfo(
-                    in.nextInt(),                                    // Num
+                    in.nextInt(),                                   // Num
                     in.nextLine().trim() + in.nextLine().trim(),    // Name
-                    GeneralUtils.sixIntArray(in),                    // Base Stats
-                    in.nextInt(),                                    // Base EXP
+                    GeneralUtils.sixIntArray(in),                   // Base Stats
+                    in.nextInt(),                                   // Base EXP
                     in.nextLine().trim() + in.nextLine().trim(),    // Growth Rate
-                    createEnumList(in, Type.class),                  // Type
-                    in.nextInt(),                                    // Catch Rate
-                    GeneralUtils.sixIntArray(in),                    // EVs
-                    EvolutionType.getEvolution(in),                    // Evolution
+                    Type.valueOf(in.next().trim()),                 // First Type
+                    Type.valueOf(in.nextLine().trim()),             // Second Type
+                    in.nextInt(),                                   // Catch Rate
+                    GeneralUtils.sixIntArray(in),                   // EVs
+                    EvolutionType.getEvolution(in),                 // Evolution
                     WildHoldItem.createList(in),                    // Wild Items
                     Integer.parseInt(in.nextLine()),                // Male Ratio
-                    createEnumList(in, AbilityNamesies.class),         // Abilities
-                    in.nextLine().trim(),                            // Classification
-                    in.nextInt(),                                    // Height
+                    createEnumList(in, AbilityNamesies.class),      // Abilities
+                    in.nextLine().trim(),                           // Classification
+                    in.nextInt(),                                   // Height
                     in.nextDouble(),                                // Weight
-                    in.nextLine().trim(),                            // Flavor Text
+                    in.nextLine().trim(),                           // Flavor Text
                     Integer.parseInt(in.nextLine()),                // Egg Steps
-                    createEnumList(in, EggGroup.class),              // Egg Groups
-                    createLevelUpMoves(in),                            // Level Up Moves
-                    createMovesSet(in)                                // Learnable Moves
+                    createEnumList(in, EggGroup.class),             // Egg Groups
+                    createLevelUpMoves(in),                         // Level Up Moves
+                    createMovesSet(in)                              // Learnable Moves
             );
 
             map.put(pokemonInfo.getNumber(), pokemonInfo);

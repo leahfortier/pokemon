@@ -84,8 +84,8 @@ public enum TypeAdvantage {
         return advantageMap.get(defending);
     }
 
-    public double getAdvantage(Type[] defending) {
-        return this.getAdvantage(defending[0], defending[1]);
+    public double getAdvantage(PokeType defending) {
+        return this.getAdvantage(defending.getFirstType(), defending.getSecondType());
     }
 
     public double getAdvantage(Type firstType, Type secondType) {
@@ -128,7 +128,7 @@ public enum TypeAdvantage {
         Type attackingType = attacking.getAttackType();
         TypeAdvantage typeAdvantage = attackingType.getAdvantage();
 
-        Type[] defendingTypes = defending.getType(b);
+        PokeType defendingTypes = defending.getType(b);
 
         // Do special case check stupid things for fucking levitation which fucks everything up
         // Pokemon that are levitating cannot be hit by ground type moves

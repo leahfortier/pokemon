@@ -1,8 +1,6 @@
 package type;
 
 import main.Global;
-import pokemon.PartyPokemon;
-import pokemon.PokemonInfo;
 import util.FileIO;
 import util.Folder;
 
@@ -67,18 +65,6 @@ public enum Type implements Serializable {
 
     public BufferedImage getImage() {
         return this.image;
-    }
-
-    public static Color[] getColors(Type[] t) {
-        return new Color[] { t[0].getColor(), t[t[1] == Type.NO_TYPE ? 0 : 1].getColor() };
-    }
-
-    public static Color[] getColors(PokemonInfo p) {
-        return getColors(p.getType());
-    }
-
-    public static Color[] getColors(PartyPokemon p) {
-        return getColors(p.isEgg() ? new Type[] { Type.NORMAL, Type.NO_TYPE } : p.getActualType());
     }
 
     public static Type getHiddenType(int hiddenIndex) {

@@ -192,7 +192,7 @@ public class MonteCarlo {
         }
 
         boolean hasChildren() {
-            return this.children.size() > 0;
+            return !this.children.isEmpty();
         }
     }
 }

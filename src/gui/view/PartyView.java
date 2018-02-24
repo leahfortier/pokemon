@@ -24,7 +24,7 @@ import pokemon.ability.Ability;
 import pokemon.breeding.Eggy;
 import trainer.Trainer;
 import trainer.player.Player;
-import type.Type;
+import type.PokeType;
 import util.FontMetrics;
 import util.Point;
 
@@ -275,7 +275,7 @@ class PartyView extends View {
         BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.getImageName());
 
         if (nicknameView) {
-            nicknamePanel.withBackgroundColors(Type.getColors(selectedPkm), true);
+            nicknamePanel.withBackgroundColors(PokeType.getColors(selectedPkm), true);
             nicknamePanel.drawBackground(g);
 
             FontMetrics.setFont(g, 30);
@@ -327,7 +327,7 @@ class PartyView extends View {
             Button tabButton = tabButtons[i];
 
             // Color tab
-            tabButton.fill(g, Type.getColors(pkm)[0]);
+            tabButton.fill(g, PokeType.getColors(pkm)[0]);
 
             // Fade out fainted Pokemon
             if (!pkm.canFight()) {
@@ -354,7 +354,7 @@ class PartyView extends View {
 
     private void drawPokemonInfo(Graphics g, BufferedImage pkmImg, PartyPokemon selectedPkm) {
         // Draw type color polygons
-        pokemonPanel.withBackgroundColors(Type.getColors(selectedPkm), true);
+        pokemonPanel.withBackgroundColors(PokeType.getColors(selectedPkm), true);
         if (!selectedPkm.canFight()) {
             pokemonPanel.greyOut();
         }

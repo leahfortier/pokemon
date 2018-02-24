@@ -19,7 +19,7 @@ import pokemon.evolution.BaseEvolution;
 import trainer.player.medal.Medal;
 import trainer.player.medal.MedalCase;
 import trainer.player.medal.MedalTheme;
-import type.Type;
+import type.PokeType;
 import util.RandomUtils;
 import util.StringUtils;
 
@@ -556,7 +556,7 @@ public abstract class PartyPokemon implements Serializable {
         return added;
     }
 
-    public Type[] getActualType() {
+    public PokeType getActualType() {
         return this.getPokemonInfo().getType();
     }
 

@@ -71,7 +71,7 @@ public class SerializationUtils {
             out.writeObject(serializable);
             return Base64.getEncoder().encodeToString(sout.toByteArray());
         } catch (IOException exception) {
-            Global.error("IOException occurred while serializing object" + serializable.toString());
+            Global.error("IOException occurred while serializing object" + serializable + ": " + exception.getMessage());
             return StringUtils.empty();
         }
     }

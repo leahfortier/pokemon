@@ -12,6 +12,7 @@ import pattern.action.ChoiceMatcher;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import sound.SoundTitle;
+import type.PokeType;
 import type.Type;
 import util.SerializationUtils;
 import util.StringUtils;
@@ -25,7 +26,7 @@ public class MessageUpdate {
     private PokemonNamesies pokemon;
     private boolean shiny;
     private boolean animation;
-    private Type[] type;
+    private PokeType type;
     private boolean isPlayer; // SO YOU KNOW WHO TO GIVE THE HP/STATUS UPDATE TO
     private boolean switchPokemon;
     private Float expRatio;
@@ -111,7 +112,7 @@ public class MessageUpdate {
     }
 
     // Type Update!
-    public MessageUpdate withType(Type[] typesies, boolean isPlayer) {
+    public MessageUpdate withType(PokeType typesies, boolean isPlayer) {
         this.type = typesies;
         this.isPlayer = isPlayer;
         return this;
@@ -252,7 +253,7 @@ public class MessageUpdate {
         return type != null;
     }
 
-    public Type[] getType() {
+    public PokeType getType() {
         return type;
     }
 

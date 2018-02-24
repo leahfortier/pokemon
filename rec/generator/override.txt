@@ -181,7 +181,7 @@ GetMaxHits:
 *
 ChangeType:
 	AddInterface: ChangeTypeSource
-	Header: Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim)
+	Header: PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim)
 *
 # Special moves that use the opponent's Defense stat
 SpecialDefenseMove:
@@ -202,14 +202,14 @@ FusionMove:
 *
 RemoveType:
 	AddMapField: ChangeType:
-		Type[] type = victim.getType(b);
-		if (type[0] == Type.{00}) {
-			return new Type[] { type[1], Type.NO_TYPE };
-		}
+        PokeType type = victim.getType(b);
+        if (type.getFirstType() == Type.{00}) {
+            return new PokeType(type.getSecondType());
+        }
 
-		if (type[1] == Type.{00}) {
-			return new Type[] { type[0], Type.NO_TYPE };
-		}
+        if (type.getSecondType() == Type.{00}) {
+            return new PokeType(type.getFirstType());
+        }
 
 		return null;
 		###
@@ -738,7 +738,7 @@ Enter:
 	Header: void enter(Battle b, ActivePokemon enterer)
 *
 GetChangeTypeEffect:
-	Header: Type[] getType(Battle b, ActivePokemon p, boolean display)
+	Header: PokeType getType(Battle b, ActivePokemon p, boolean display)
 *
 GetNameChange:
 	Header: String getNameChange()
@@ -1256,7 +1256,7 @@ SpecialItemAbility:
 	AddMapField: GetChangeTypeEffect:
 		Item item = p.getHeldItem(b);
 		if (item instanceof {0}) {
-			return new Type[] { (({0})item).getType(), Type.NO_TYPE };
+			return new PokeType((({0})item).getType());
 		}
 
 		return p.getActualType();
@@ -1476,9 +1476,8 @@ ForesightMove:
 AddTypeMove:
 	AddMapField: Effect: ChangeType
 	AddMapField: ChangeType:
-		Type primary = victim.getType(b)[0];
-
-		return new Type[] { primary, primary == Type.{00} ? Type.NO_TYPE : Type.{00} };
+		Type primary = victim.getType(b).getFirstType();
+		return new PokeType(primary, primary == Type.{00} ? Type.NO_TYPE : Type.{00});
 		###
 *
 PrintFail:
@@ -1597,7 +1596,7 @@ NegateNoAdvantage:
 		###
 *
 MultiplyAdvantage:
-	Header: double multiplyAdvantage(Type attackingType, Type[] defendingTypes)
+	Header: double multiplyAdvantage(Type attackingType, PokeType defendingTypes)
 *
 SuperEffectiveAdvantageType:
 	AddInterface: AdvantageMultiplierMove

@@ -20,6 +20,7 @@ import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import trainer.Trainer;
 import trainer.player.Player;
+import type.PokeType;
 import type.Type;
 import util.FontMetrics;
 import util.PokeString;
@@ -224,7 +225,7 @@ public class TradeView extends View {
                 PartyPokemon pokemon = team.get(i);
 
                 DrawPanel buttonPanel = new DrawPanel(button)
-                        .withBackgroundColors(Type.getColors(pokemon))
+                        .withBackgroundColors(PokeType.getColors(pokemon))
                         .withTransparentCount(2)
                         .withBlackOutline();
 
@@ -268,11 +269,11 @@ public class TradeView extends View {
         this.requested = requestedPokemon.getInfo();
 
         this.canvasPanel.withBackgroundColors(new Color[] {
-                requested.getType()[0].getColor(),
-                offering.getType()[0].getColor()
+                requested.getType().getFirstType().getColor(),
+                offering.getType().getFirstType().getColor()
         });
 
-        this.offeringPanel.withBackgroundColors(Type.getColors(offering));
-        this.requestedPanel.withBackgroundColors(Type.getColors(requested));
+        this.offeringPanel.withBackgroundColors(PokeType.getColors(offering));
+        this.requestedPanel.withBackgroundColors(PokeType.getColors(requested));
     }
 }

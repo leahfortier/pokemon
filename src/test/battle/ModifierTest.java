@@ -14,6 +14,7 @@ import pokemon.ability.AbilityNamesies;
 import test.BaseTest;
 import test.TestPokemon;
 import test.TestUtils;
+import type.PokeType;
 import type.Type;
 import util.StringUtils;
 
@@ -391,7 +392,7 @@ public class ModifierTest extends BaseTest {
 
         // Unless the opponent is dark type
         Assert.assertFalse(defending.isType(battle, Type.DARK));
-        defending.setCastSource((ChangeTypeSource)(b, caster, victim) -> new Type[] { Type.DARK, Type.NO_TYPE });
+        defending.setCastSource((ChangeTypeSource)(b, caster, victim) -> new PokeType(Type.DARK));
         Assert.assertFalse(defending.isType(battle, Type.DARK));
         EffectNamesies.CHANGE_TYPE.getEffect().cast(battle, defending, defending, CastSource.CAST_SOURCE, false);
         Assert.assertTrue(defending.isType(battle, Type.DARK));

@@ -23,7 +23,7 @@ import pokemon.evolution.Evolution;
 import pokemon.evolution.MultipleEvolution;
 import pokemon.evolution.NoEvolution;
 import trainer.player.pokedex.Pokedex;
-import type.Type;
+import type.PokeType;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.PokeString;
@@ -330,8 +330,8 @@ class PokedexView extends View {
         countPanel.label(g, 20, "Seen: " + numSeen + "     Caught: " + numCaught);
 
         // Description
-        Type[] type = selected.getType();
-        Color[] typeColors = Type.getColors(type);
+        PokeType type = selected.getType();
+        Color[] typeColors = type.getColors();
 
         boolean notSeen = pokedex.isNotSeen(selected);
         boolean caught = pokedex.isCaught(selected);

@@ -100,6 +100,7 @@ import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import trainer.Trainer;
+import type.PokeType;
 import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
@@ -2386,8 +2387,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return new Type[] { type, Type.NO_TYPE };
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return new PokeType(type);
         }
 
         @Override
@@ -2838,7 +2839,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         private boolean activated;
         private String illusionName;
-        private Type[] illusionType;
+        private PokeType illusionType;
         private PokemonNamesies illusionSpecies;
         private boolean illusionShiny;
 
@@ -2873,7 +2874,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon p, boolean display) {
+        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
             if (display && activated) {
                 return illusionType;
             }
@@ -3256,10 +3257,10 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon p, boolean display) {
+        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
             Item item = p.getHeldItem(b);
             if (item instanceof PlateItem) {
-                return new Type[] { ((PlateItem)item).getType(), Type.NO_TYPE };
+                return new PokeType(((PlateItem)item).getType());
             }
 
             return p.getActualType();
@@ -3284,10 +3285,10 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon p, boolean display) {
+        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
             Item item = p.getHeldItem(b);
             if (item instanceof MemoryItem) {
-                return new Type[] { ((MemoryItem)item).getType(), Type.NO_TYPE };
+                return new PokeType(((MemoryItem)item).getType());
             }
 
             return p.getActualType();
@@ -3302,8 +3303,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon p, boolean display) {
-            return new Type[] { b.getWeather().getElement(), Type.NO_TYPE };
+        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
+            return new PokeType(b.getWeather().getElement());
         }
 
         @Override
@@ -3829,8 +3830,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return new Type[] { type, Type.NO_TYPE };
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return new PokeType(type);
         }
 
         @Override

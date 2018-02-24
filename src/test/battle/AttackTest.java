@@ -28,7 +28,6 @@ import test.TestUtils;
 import trainer.Team;
 import type.Type;
 
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
@@ -669,7 +668,7 @@ public class AttackTest extends BaseTest {
 
         Assert.assertTrue(attacking.hasAbility(AbilityNamesies.PROTEAN));
         battle.attackingFight(AttackNamesies.DRAGON_DANCE);
-        Assert.assertTrue(Arrays.toString(attacking.getType(battle)), attacking.isType(battle, Type.DRAGON));
+        Assert.assertTrue(attacking.getType(battle).toString(), attacking.isType(battle, Type.DRAGON));
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
         Assert.assertTrue(attacking.hasStatus(StatusCondition.POISONED));
 
@@ -1344,7 +1343,6 @@ public class AttackTest extends BaseTest {
     public void storedPowerTest() {
         TestBattle battle = TestBattle.create();
         TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
 
         battle.setExpectedDamageModifier(1.0);
         battle.attackingFight(AttackNamesies.STORED_POWER);

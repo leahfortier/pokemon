@@ -15,7 +15,7 @@ import pokemon.PokemonInfo;
 import trainer.Trainer;
 import trainer.player.NewPokemonInfo;
 import trainer.player.Player;
-import type.Type;
+import type.PokeType;
 import util.Point;
 import util.PokeString;
 import util.StringUtils;
@@ -269,7 +269,7 @@ class NewPokemonView extends View {
                         BufferedImage partyPokemonImage = partyTiles.getTile(partyPokemon.getTinyImageName());
 
                         DrawPanel pokemonPanel = new DrawPanel(pokemonButton)
-                                .withBackgroundColors(Type.getColors(partyPokemon))
+                                .withBackgroundColors(PokeType.getColors(partyPokemon))
                                 .withTransparentCount(2)
                                 .withBlackOutline();
                         pokemonPanel.drawBackground(g);
@@ -350,7 +350,7 @@ class NewPokemonView extends View {
 
         this.buttons.setSelected(0);
 
-        this.canvasPanel.withBackgroundColors(Type.getColors(this.newPokemon));
+        this.canvasPanel.withBackgroundColors(PokeType.getColors(this.newPokemon));
 
         if (newPokemon.isEgg()) {
             setState(State.LOCATION);

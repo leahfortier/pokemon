@@ -7,6 +7,7 @@ import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import type.PokeType;
 import type.Type;
 import util.FileIO;
 
@@ -136,9 +137,9 @@ public class TeamPlanner {
 
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
             PokemonInfo p = PokemonInfo.getPokemonInfo(i);
-            Type[] types = p.getType();
+            PokeType types = p.getType();
 
-            if (p.canLearnMove(firstMove) && (types[0] == type || types[1] == type)) {
+            if (p.canLearnMove(firstMove) && types.isType(type)) {
                 System.out.println("\t" + p.getName());
             }
         }

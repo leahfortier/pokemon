@@ -65,6 +65,7 @@ import pokemon.Gender;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
+import type.PokeType;
 import type.Type;
 import util.RandomUtils;
 
@@ -1303,21 +1304,19 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     static class ChangeType extends PokemonEffect implements ChangeTypeEffect {
         private static final long serialVersionUID = 1L;
 
-        private Type[] type;
+        private PokeType type;
         private ChangeTypeSource typeSource;
         private CastSource castSource;
 
         private String castMessage(ActivePokemon victim) {
-            String changeType = type[0].getName() + (type[1] == Type.NO_TYPE ? "" : "/" + type[1].getName());
-
+            // TODO: This is ugly
             switch (castSource) {
                 case ATTACK:
-                    return victim.getName() + " was changed to " + changeType + " type!!";
+                    return victim.getName() + " was changed to " + type + " type!!";
                 case ABILITY:
-                    return victim.getName() + "'s " + ((Ability)typeSource).getName() + " changed it to the " + changeType + " type!!";
+                    return victim.getName() + "'s " + ((Ability)typeSource).getName() + " changed it to the " + type + " type!!";
                 case HELD_ITEM:
-                    return victim.getName() + "'s " + ((Item)typeSource).getName() + " changed it to the " + changeType + " type!!";
-
+                    return victim.getName() + "'s " + ((Item)typeSource).getName() + " changed it to the " + type + " type!!";
                 default:
                     Global.error("Invalid cast source for ChangeType " + castSource);
                     return null;
@@ -1351,7 +1350,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon p, boolean display) {
+        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
             return type;
         }
     }
@@ -2212,7 +2211,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         private Move[] moveList; // TODO: Check if I can change this to a list -- not sure about the activate method in particular
         private int[] stats;
-        private Type[] type;
+        private PokeType type;
 
         Transformed() {
             super(EffectNamesies.TRANSFORMED, -1, -1, false);
@@ -2262,7 +2261,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public Type[] getType(Battle b, ActivePokemon p, boolean display) {
+        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
             return type;
         }
 

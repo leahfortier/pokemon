@@ -1,7 +1,7 @@
 package draw;
 
 import main.Global;
-import type.Type;
+import type.PokeType;
 import util.FontMetrics;
 import util.Point;
 
@@ -16,16 +16,16 @@ public final class ImageUtils {
     private static final float[] SILHOUETTE_SCALE = new float[] { 0, 0, 0, 255 };
     private static final float[] SILHOUETTE_OFFSET = new float[] { 0, 0, 0, 0 };
 
-    public static void drawTypeTiles(Graphics g, Type[] type, int rightX, int textY) {
-        BufferedImage firstType = type[0].getImage();
+    public static void drawTypeTiles(Graphics g, PokeType type, int rightX, int textY) {
+        BufferedImage firstType = type.getFirstType().getImage();
 
         int drawX = rightX - firstType.getWidth();
         int drawY = textY - firstType.getHeight();
 
-        if (type[1] == Type.NO_TYPE) {
+        if (type.isSingleTyped()) {
             g.drawImage(firstType, drawX, drawY, null);
         } else {
-            BufferedImage secondType = type[1].getImage();
+            BufferedImage secondType = type.getSecondType().getImage();
             int leftDrawX = drawX - firstType.getWidth() - 8;
 
             g.drawImage(firstType, leftDrawX, drawY, null);
