@@ -22,14 +22,14 @@ public final class ImageUtils {
         int drawX = rightX - firstType.getWidth();
         int drawY = textY - firstType.getHeight();
 
-        if (type.isSingleTyped()) {
-            g.drawImage(firstType, drawX, drawY, null);
-        } else {
+        if (type.isDualTyped()) {
             BufferedImage secondType = type.getSecondType().getImage();
             int leftDrawX = drawX - firstType.getWidth() - 8;
 
             g.drawImage(firstType, leftDrawX, drawY, null);
             g.drawImage(secondType, drawX, drawY, null);
+        } else {
+            g.drawImage(firstType, drawX, drawY, null);
         }
     }
 

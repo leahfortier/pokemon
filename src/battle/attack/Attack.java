@@ -5562,7 +5562,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Like this is literally the stupidest move ever like srsly what is wrong with the creators
             PokeType type = user.getType(b);
-            return victim.isType(b, type.getFirstType()) || (!type.isSingleTyped() && victim.isType(b, type.getSecondType()));
+            return victim.isType(b, type.getFirstType()) || (type.isDualTyped() && victim.isType(b, type.getSecondType()));
         }
     }
 

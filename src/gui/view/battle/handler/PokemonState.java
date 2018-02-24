@@ -3,6 +3,7 @@ package gui.view.battle.handler;
 import battle.Battle;
 import battle.attack.Move;
 import draw.DrawUtils;
+import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
@@ -223,14 +224,8 @@ public class PokemonState implements VisualStateHandler {
             g.drawString(levelStr, 220, 269);
 
             // Draw type tiles
-            // TODO: Use ImageUtils.drawTypeTiles()
             PokeType type = selectedPkm.getActualType();
-            if (type.isSingleTyped()) {
-                g.drawImage(type.getFirstType().getImage(), 322, 255, null);
-            } else {
-                g.drawImage(type.getFirstType().getImage(), 285, 255, null);
-                g.drawImage(type.getSecondType().getImage(), 322, 255, null);
-            }
+            ImageUtils.drawTypeTiles(g, type, 352, 269);
 
             // Ability
             FontMetrics.setFont(g, 14);

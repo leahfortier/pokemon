@@ -36,14 +36,14 @@ public class PokeType implements Iterable<Type>, Serializable {
         return secondType;
     }
 
-    public boolean isSingleTyped() {
-        return this.getSecondType() == Type.NO_TYPE;
+    public boolean isDualTyped() {
+        return this.getSecondType() != Type.NO_TYPE;
     }
 
     public Color[] getColors() {
         return new Color[] {
                 firstType.getColor(),
-                (this.isSingleTyped() ? firstType : secondType).getColor()
+                (this.isDualTyped() ? secondType : firstType).getColor()
         };
     }
 
@@ -51,7 +51,7 @@ public class PokeType implements Iterable<Type>, Serializable {
     // If dual typed, return both names separated by a '/', Ex: Fire/Flying
     @Override
     public String toString() {
-        return firstType.getName() + (this.isSingleTyped() ? "" : this.secondType.getName());
+        return firstType.getName() + (this.isDualTyped() ? "/" + this.secondType.getName() : "");
     }
 
     @NotNull

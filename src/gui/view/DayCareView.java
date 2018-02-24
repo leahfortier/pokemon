@@ -314,15 +314,9 @@ class DayCareView extends View {
             TextUtils.drawWrappedText(g, ((Eggy)selected).getEggMessage(), 427, 179, 740 - 427);
         } else {
             TextUtils.drawRightAlignedString(g, "Lv" + selected.getLevel(), 740, 82);
-            g.drawString("#" + String.format("%03d", selected.getPokemonInfo().getNumber()), 541, 110);
+            g.drawString("#" + String.format("%03d", selected.getPokemonInfo().getNumber()), 540, 110);
 
-            // TODO: Use ImageUtils.drawTypeImages()
-            if (type.isSingleTyped()) {
-                g.drawImage(type.getFirstType().getImage(), 707, 97, null);
-            } else {
-                g.drawImage(type.getFirstType().getImage(), 669, 97, null);
-                g.drawImage(type.getSecondType().getImage(), 707, 97, null);
-            }
+            ImageUtils.drawTypeTiles(g, type, 740, 110);
 
             FontMetrics.setFont(g, 16);
 
