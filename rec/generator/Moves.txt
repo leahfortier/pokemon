@@ -5261,9 +5261,8 @@ Roar:
     PP: 20
     Type: Normal
     Cat: Status
-    MoveType: Substitute_Piercing, Sound_Based, Protect_Piercing
-    Int: SwapOpponentEffect
-    SwapOpponent: victim.getName() + " fled in fear!"
+    MoveType: Sound_Based
+    SwapOpponentOnly: victim.getName() + " fled in fear!"
 *
 Grudge:
     Desc: If the user faints, the user's grudge fully depletes the PP of the opponent's move that knocked it out.
@@ -5291,7 +5290,6 @@ Circle Throw:
     Acc: 90
     Pow: 60
     SwapOpponent: victim.getName() + " was thrown away!"
-    Int: SwapOpponentEffect
 *
 Teleport:
     Type: Psychic
@@ -5350,9 +5348,7 @@ Whirlwind:
     PP: 20
     Type: Normal
     Cat: Status
-    SwapOpponent: victim.getName() + " blew away!"
-    Int: SwapOpponentEffect
-    MoveType: Substitute_Piercing, Protect_Piercing
+    SwapOpponentOnly: victim.getName() + " blew away!"
     HitFly: True
     Comments: // Apparently this isn't supposed to hit fly anymore, but that's stupid
 *
@@ -5497,7 +5493,6 @@ Dragon Tail:
     Cat: Physical
     Acc: 90
     Pow: 60
-    Int: SwapOpponentEffect
     SwapOpponent: victim.getName() + " was slapped away!"
 *
 Foul Play:

@@ -8981,8 +8981,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         Roar() {
             super(AttackNamesies.ROAR, Type.NORMAL, MoveCategory.STATUS, 20, "The target is scared off, and a different Pok\u00e9mon is dragged out. In the wild, this ends a battle against a single Pok\u00e9mon.");
-            super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
             super.moveTypes.add(MoveType.SOUND_BASED);
+            super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
             super.moveTypes.add(MoveType.PROTECT_PIERCING);
             super.moveTypes.add(MoveType.ASSISTLESS);
             super.priority = -6;
@@ -8995,7 +8995,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.swapOpponent(b, victim, this);
+            this.swapOpponent(b, user, victim);
         }
 
         @Override
@@ -9051,7 +9051,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.swapOpponent(b, victim, this);
+            this.swapOpponent(b, user, victim);
         }
 
         @Override
@@ -9140,7 +9140,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
     }
 
     // Apparently this isn't supposed to hit fly anymore, but that's stupid
-    static class Whirlwind extends Attack implements SwapOpponentEffect, SemiInvulnerableBypasser {
+    static class Whirlwind extends Attack implements SemiInvulnerableBypasser, SwapOpponentEffect {
         private static final long serialVersionUID = 1L;
 
         Whirlwind() {
@@ -9164,7 +9164,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.swapOpponent(b, victim, this);
+            this.swapOpponent(b, user, victim);
         }
 
         @Override
@@ -9428,7 +9428,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.swapOpponent(b, victim, this);
+            this.swapOpponent(b, user, victim);
         }
 
         @Override

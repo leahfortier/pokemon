@@ -22,7 +22,6 @@ import battle.effect.generic.EffectInterfaces.MurderEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.OpponentItemBlockerEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
-import battle.effect.generic.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.generic.EffectInterfaces.TrappingEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
@@ -308,26 +307,6 @@ public class ActivePokemon extends PartyPokemon {
             // Fails against trainers on their last Pokemon
             Trainer trainer = (Trainer)opponent;
             return trainer.hasRemainingPokemon(b);
-        }
-    }
-
-    public void swapOpponent(Battle b, ActivePokemon victim, SwapOpponentEffect swapster) {
-        if (!canSwapOpponent(b, victim)) {
-            return;
-        }
-
-        Messages.add(swapster.getSwapMessage(this, victim));
-
-        Team opponent = b.getTrainer(victim);
-        if (opponent instanceof WildPokemon) {
-            // End the battle against a wild Pokemon
-            Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
-        } else {
-            Trainer trainer = (Trainer)opponent;
-
-            // Swap to a random Pokemon!
-            trainer.switchToRandom(b);
-            b.enterBattle(trainer.front(), enterer -> "...and " + enterer.getName() + " was dragged out!");
         }
     }
 

@@ -830,6 +830,28 @@ SwapOpponentEffect:
 	Method:
 		Header: String getSwapMessage(ActivePokemon user, ActivePokemon victim)
 	*
+    Method:
+        Header: void swapOpponent(Battle b, ActivePokemon user, ActivePokemon victim)
+        Default:
+            if (!user.canSwapOpponent(b, victim)) {
+                return;
+            }
+
+            Messages.add(this.getSwapMessage(user, victim));
+
+            Team opponent = b.getTrainer(victim);
+            if (opponent instanceof WildPokemon) {
+                // End the battle against a wild Pokemon
+                Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
+            } else {
+                Trainer trainer = (Trainer)opponent;
+
+                // Swap to a random Pokemon!
+                trainer.switchToRandom(b);
+                b.enterBattle(trainer.front(), enterer -> "...and " + enterer.getName() + " was dragged out!");
+            }
+            ###
+    *
 ***
 ProtectingEffect:
 	Extends: AttackBlocker

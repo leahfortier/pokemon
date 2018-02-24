@@ -19,12 +19,15 @@ import map.overworld.TerrainType;
 import map.overworld.WildEncounter;
 import map.overworld.WildEncounterInfo;
 import message.MessageUpdate;
+import message.MessageUpdateType;
 import message.Messages;
 import pokemon.PokemonInfo;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
+import trainer.Team;
 import trainer.Trainer;
+import trainer.WildPokemon;
 import type.Type;
 import util.RandomUtils;
 
@@ -1457,6 +1460,26 @@ public final class EffectInterfaces {
 
     public interface SwapOpponentEffect {
         String getSwapMessage(ActivePokemon user, ActivePokemon victim);
+
+        default void swapOpponent(Battle b, ActivePokemon user, ActivePokemon victim) {
+            if (!user.canSwapOpponent(b, victim)) {
+                return;
+            }
+
+            Messages.add(this.getSwapMessage(user, victim));
+
+            Team opponent = b.getTrainer(victim);
+            if (opponent instanceof WildPokemon) {
+                // End the battle against a wild Pokemon
+                Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
+            } else {
+                Trainer trainer = (Trainer)opponent;
+
+                // Swap to a random Pokemon!
+                trainer.switchToRandom(b);
+                b.enterBattle(trainer.front(), enterer -> "...and " + enterer.getName() + " was dragged out!");
+            }
+        }
     }
 
     public interface ProtectingEffect extends AttackBlocker {
