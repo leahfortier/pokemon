@@ -24,8 +24,8 @@ public enum EvolutionMethod {
             Global.error("Only player Pokemon can evolve.");
         }
 
-        // Eggs don't evolve, they hatch
-        if (p.isEgg()) {
+        // Eggys and deadies can't evolve
+        if (!p.canFight()) {
             return false;
         }
 

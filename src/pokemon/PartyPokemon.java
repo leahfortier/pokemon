@@ -524,7 +524,7 @@ public abstract class PartyPokemon implements Serializable {
 
     // Adds Effort Values to a Pokemon, returns true if they were successfully added
     public boolean addEVs(int[] vals) {
-        if (totalEVs() == Stat.MAX_EVS) {
+        if (totalEVs() == Stat.MAX_EVS || !this.canFight()) {
             return false;
         }
 

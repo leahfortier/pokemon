@@ -164,7 +164,7 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean levelUp(Battle b) {
-        if (this.getLevel() == MAX_LEVEL) {
+        if (this.getLevel() == MAX_LEVEL || !this.canFight()) {
             return false;
         }
 
