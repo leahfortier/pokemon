@@ -356,7 +356,7 @@ class PokedexView extends View {
             }
 
             Button tab = tabButtons[i];
-            DrawUtils.blackOutline(g, tab.x, tab.y, tab.width, tab.height, toOutline.toArray(new Direction[0]));
+            tab.blackOutline(g, toOutline.toArray(new Direction[0]));
             tab.label(g, 12, TabInfo.values()[i].label);
         }
 

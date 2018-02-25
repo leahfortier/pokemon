@@ -31,11 +31,12 @@ public final class DrawUtils {
         g.fillRect(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
     }
 
-    public static void blackOutline(Graphics g, int x, int y, int width, int height) {
-        blackOutline(g, x, y, width, height, Direction.values());
-    }
-
     public static void blackOutline(Graphics g, int x, int y, int width, int height, Direction... directions) {
+        // Default to all sides if none specified
+        if (directions == null || directions.length == 0) {
+            directions = Direction.values();
+        }
+
         drawBorder(g, Color.BLACK, x, y, width, height, OUTLINE_SIZE, directions);
     }
 

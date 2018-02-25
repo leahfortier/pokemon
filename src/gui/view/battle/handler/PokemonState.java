@@ -178,27 +178,31 @@ public class PokemonState implements VisualStateHandler {
 
         // Draw tabs
         TileSet partyTiles = Game.getData().getPartyTiles();
-        for (int i = 0; i < list.size(); i++) {
-            PartyPokemon pkm = list.get(i);
+        for (int i = 0; i < pokemonTabButtons.length; i++) {
             Button tabButton = pokemonTabButtons[i];
+            if (i < list.size()) {
+                PartyPokemon pkm = list.get(i);
 
-            // Color tab
-            tabButton.fill(g, PokeType.getColors(pkm)[0]);
+                // Color tab
+                tabButton.fill(g, PokeType.getColors(pkm)[0]);
 
-            // Fade out fainted Pokemon
-            if (!pkm.canFight()) {
-                tabButton.greyOut(g);
+                // Fade out fainted Pokemon
+                if (!pkm.canFight()) {
+                    tabButton.greyOut(g);
+                }
+
+                // Transparenty
+                tabButton.fillTransparent(g);
+
+                // Outline in black
+                tabButton.outlineTab(g, i, selectedPokemonTab);
+
+                // Draw Pokemon Image
+                BufferedImage img = partyTiles.getTile(pkm.getTinyImageName());
+                tabButton.imageLabel(g, img);
+            } else {
+                tabButton.blackOutline(g, Direction.DOWN);
             }
-
-            // Transparenty
-            tabButton.fillTransparent(g);
-
-            // Outline in black
-            tabButton.outlineTab(g, i, selectedPokemonTab);
-
-            // Draw Pokemon Image
-            BufferedImage img = partyTiles.getTile(pkm.getTinyImageName());
-            tabButton.imageLabel(g, img);
         }
 
         // Top Box with basic information

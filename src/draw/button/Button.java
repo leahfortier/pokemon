@@ -195,8 +195,8 @@ public class Button {
         DrawUtils.fillTransparent(g, x, y, width, height);
     }
 
-    public void blackOutline(Graphics g) {
-        DrawUtils.blackOutline(g, x, y, width, height);
+    public void blackOutline(Graphics g, Direction... directions) {
+        DrawUtils.blackOutline(g, x, y, width, height, directions);
     }
 
     public void outlineTab(Graphics g, int index, int selectedIndex) {
@@ -212,7 +212,7 @@ public class Button {
             toOutline.add(Direction.DOWN);
         }
 
-        DrawUtils.blackOutline(g, x, y, width, height, toOutline.toArray(new Direction[0]));
+        this.blackOutline(g, toOutline.toArray(new Direction[0]));
     }
 
     public void label(Graphics g, int fontSize, String text) {
