@@ -1772,6 +1772,18 @@ TempEffectMove:
 IgnoreAbilityMove:
     AddMapField: TempEffectMove: BREAKS_THE_MOLD
 *
+GetCurableEffects:
+    Header: Set<EffectNamesies> getCurableEffects()
+    Body:
+        return {0};
+        ###
+*
+CureEffectRemoveMessage:
+    Header: String getRemoveMessage(ActivePokemon victim, EffectNamesies effectType)
+    Body:
+        return {0};
+        ###
+*
 StatusReceived:
 	Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType)
 *

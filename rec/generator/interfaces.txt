@@ -730,6 +730,56 @@ AlwaysCritEffect:
 		InvokeName: defCritsies
 	*
 ***
+EffectCurerEffect:
+    Extends: EffectReceivedEffect, EndTurnEffect
+    Method:
+        Header: Set<EffectNamesies> getCurableEffects()
+    *
+    Method:
+        Header: String getRemoveMessage(ActivePokemon victim, EffectNamesies effectType)
+    *
+    Method:
+        Header: boolean usesies(ActivePokemon user)
+        Default:
+            boolean used = false;
+            for (EffectNamesies removableEffect : this.getCurableEffects()) {
+                if (user.getEffects().remove(removableEffect)) {
+                    used = true;
+                    Messages.add(this.getRemoveMessage(user, removableEffect));
+                }
+            }
+
+            return used;
+            ###
+    *
+    Method:
+        Header: void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType)
+        Override: True
+        Default:
+        if (this.getCurableEffects().contains(effectType)) {
+            Messages.add(this.getRemoveMessage(victim, effectType));
+            victim.getEffects().remove(effectType);
+            victim.consumeItem(b);
+        }
+        ###
+    *
+    Method:
+        Header: void applyEndTurn(ActivePokemon victim, Battle b)
+        Override: True
+        Default:
+            if (usesies(victim)) {
+                victim.consumeItem(b);
+            }
+            ###
+    *
+***
+EffectReceivedEffect:
+	Method:
+		Header: void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType)
+		Invoke: Void
+		EffectList: victim
+	*
+***
 StatusReceivedEffect:
 	Method:
 		Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType)

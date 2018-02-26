@@ -189,14 +189,6 @@ Confusion:
         this.turns = RandomUtils.getRandomInt(1, 4); // Between 1 and 4 turns
         ###
     CastMessage: victim.getName() + " became confused!"
-    Cast:
-        super.cast(b, caster, victim, source, printCast);
-        if (victim.isHoldingItem(b, ItemNamesies.PERSIM_BERRY)) {
-            Messages.add(victim.getName() + "'s " + ItemNamesies.PERSIM_BERRY.getName() + " snapped it out of confusion!");
-            victim.getEffects().remove(this.namesies);
-            victim.consumeItem(b);
-        }
-        ###
 *
 SelfConfusion:
     Int: ForceMoveEffect

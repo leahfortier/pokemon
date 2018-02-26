@@ -27,6 +27,7 @@ import battle.effect.generic.EffectInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
+import battle.effect.generic.EffectInterfaces.EffectReceivedEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
@@ -89,6 +90,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         victim.getEffects().add(this);
+        EffectReceivedEffect.invokeEffectReceivedEffect(b, caster, victim, this.namesies());
 
         Messages.add(new MessageUpdate().updatePokemon(b, caster));
         Messages.add(new MessageUpdate().updatePokemon(b, victim));
@@ -919,16 +921,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             }
 
             return true;
-        }
-
-        @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
-            if (victim.isHoldingItem(b, ItemNamesies.PERSIM_BERRY)) {
-                Messages.add(victim.getName() + "'s " + ItemNamesies.PERSIM_BERRY.getName() + " snapped it out of confusion!");
-                victim.getEffects().remove(this.namesies);
-                victim.consumeItem(b);
-            }
         }
 
         @Override

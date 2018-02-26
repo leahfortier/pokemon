@@ -362,47 +362,25 @@ Macho Brace:
     SimpleModifier: .5
 *
 Mental Herb:
-    Int: HoldItem, EndTurnEffect
+    Int: HoldItem, EffectCurerEffect
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. The holder shakes off move-binding effects to move freely. It can be used only once.
     Price: 4000
     Fling: 10
     Field:
-        private enum RemovableEffect {
-            INFATUATED(EffectNamesies.INFATUATED, "infatuated"),
-            DISABLE(EffectNamesies.DISABLE, "disabled"),
-            TAUNT(EffectNamesies.TAUNT, "under the effects of taunt"),
-            ENCORE(EffectNamesies.ENCORE, "under the effects of encore"),
-            TORMENT(EffectNamesies.TORMENT, "under the effects of torment"),
-            CONFUSION(EffectNamesies.CONFUSION, "confused"),
-            HEAL_BLOCK(EffectNamesies.HEAL_BLOCK, "under the effects of heal block");
-
-            private final EffectNamesies effect;
-            private final String message;
-
-            RemovableEffect(EffectNamesies effect, String message) {
-                this.effect = effect;
-                this.message = message;
-            }
-        }
-
-        private boolean usesies(ActivePokemon user) {
-            boolean used = false;
-            for (RemovableEffect removableEffect : RemovableEffect.values()) {
-                if (user.getEffects().remove(removableEffect.effect)) {
-                    used = true;
-                    Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.getName() + "!");
-                }
-            }
-
-            return used;
+        private static final Map<EffectNamesies, String> REMOVEABLE_EFFECTS = new EnumMap<>(EffectNamesies.class);
+        static {
+            REMOVEABLE_EFFECTS.put(EffectNamesies.INFATUATED, "infatuated");
+            REMOVEABLE_EFFECTS.put(EffectNamesies.DISABLE, "disabled");
+            REMOVEABLE_EFFECTS.put(EffectNamesies.TAUNT, "under the effects of taunt");
+            REMOVEABLE_EFFECTS.put(EffectNamesies.ENCORE, "under the effects of encore");
+            REMOVEABLE_EFFECTS.put(EffectNamesies.TORMENT, "under the effects of torment");
+            REMOVEABLE_EFFECTS.put(EffectNamesies.CONFUSION, "confused");
+            REMOVEABLE_EFFECTS.put(EffectNamesies.HEAL_BLOCK, "under the effects of heal block");
         }
         ###
-    ApplyEndTurn:
-        if (usesies(victim)) {
-            victim.consumeItem(b);
-        }
-        ###
+    GetCurableEffects: REMOVEABLE_EFFECTS.keySet()
+    CureEffectRemoveMessage: victim.getName() + " is no longer " + REMOVEABLE_EFFECTS.get(effectType) + " due to its " + this.getName() + "!"
     FlingEffect:
         usesies(pelted);
         ###
@@ -1720,7 +1698,7 @@ Oran Berry:
         ###
 *
 Persim Berry:
-    Int: BattleUseItem, MessageGetter, GainableEffectBerry
+    Int: BattleUseItem, MessageGetter, GainableEffectBerry, EffectCurerEffect
     BattleCat: HP_PP
     Desc: A Berry to be consumed by Pok\u00e9mon. If a Pok\u00e9mon holds one, it can recover from confusion on its own in battle.
     NGType: Ground
@@ -1739,6 +1717,8 @@ Persim Berry:
     GainEffect: return use(b, user, source);
     GenericMessage: p.getName() + " snapped out of its confusion!"
     SourceMessage: p.getName() + "'s " + this.getName() + " snapped it out of confusion!"
+    CureEffectRemoveMessage: this.getSourceMessage(victim, this.getName())
+    GetCurableEffects: EnumSet.of(EffectNamesies.CONFUSION)
 *
 Lum Berry:
     Int: StatusBerry

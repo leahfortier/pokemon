@@ -16,6 +16,7 @@ import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.DefiniteEscape;
+import battle.effect.generic.EffectInterfaces.EffectCurerEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.EntryEndTurnEffect;
@@ -95,7 +96,11 @@ import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class Item implements ItemInterface, InvokeEffect, Comparable<Item>, Serializable {
     private static final long serialVersionUID = 1L;
@@ -992,49 +997,23 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class MentalHerb extends Item implements HoldItem, EndTurnEffect {
+    static class MentalHerb extends Item implements HoldItem, EffectCurerEffect {
         private static final long serialVersionUID = 1L;
 
-        private enum RemovableEffect {
-            INFATUATED(EffectNamesies.INFATUATED, "infatuated"),
-            DISABLE(EffectNamesies.DISABLE, "disabled"),
-            TAUNT(EffectNamesies.TAUNT, "under the effects of taunt"),
-            ENCORE(EffectNamesies.ENCORE, "under the effects of encore"),
-            TORMENT(EffectNamesies.TORMENT, "under the effects of torment"),
-            CONFUSION(EffectNamesies.CONFUSION, "confused"),
-            HEAL_BLOCK(EffectNamesies.HEAL_BLOCK, "under the effects of heal block");
-
-            private final EffectNamesies effect;
-            private final String message;
-
-            RemovableEffect(EffectNamesies effect, String message) {
-                this.effect = effect;
-                this.message = message;
-            }
-        }
-
-        private boolean usesies(ActivePokemon user) {
-            boolean used = false;
-            for (RemovableEffect removableEffect : RemovableEffect.values()) {
-                if (user.getEffects().remove(removableEffect.effect)) {
-                    used = true;
-                    Messages.add(user.getName() + " is no longer " + removableEffect.message + " due to its " + this.getName() + "!");
-                }
-            }
-
-            return used;
+        private static final Map<EffectNamesies, String> REMOVEABLE_EFFECTS = new EnumMap<>(EffectNamesies.class);
+        static {
+            REMOVEABLE_EFFECTS.put(EffectNamesies.INFATUATED, "infatuated");
+            REMOVEABLE_EFFECTS.put(EffectNamesies.DISABLE, "disabled");
+            REMOVEABLE_EFFECTS.put(EffectNamesies.TAUNT, "under the effects of taunt");
+            REMOVEABLE_EFFECTS.put(EffectNamesies.ENCORE, "under the effects of encore");
+            REMOVEABLE_EFFECTS.put(EffectNamesies.TORMENT, "under the effects of torment");
+            REMOVEABLE_EFFECTS.put(EffectNamesies.CONFUSION, "confused");
+            REMOVEABLE_EFFECTS.put(EffectNamesies.HEAL_BLOCK, "under the effects of heal block");
         }
 
         MentalHerb() {
             super(ItemNamesies.MENTAL_HERB, "An item to be held by a Pok\u00e9mon. The holder shakes off move-binding effects to move freely. It can be used only once.", BagCategory.MISC);
             super.price = 4000;
-        }
-
-        @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (usesies(victim)) {
-                victim.consumeItem(b);
-            }
         }
 
         @Override
@@ -1045,6 +1024,16 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
             usesies(pelted);
+        }
+
+        @Override
+        public Set<EffectNamesies> getCurableEffects() {
+            return REMOVEABLE_EFFECTS.keySet();
+        }
+
+        @Override
+        public String getRemoveMessage(ActivePokemon victim, EffectNamesies effectType) {
+            return victim.getName() + " is no longer " + REMOVEABLE_EFFECTS.get(effectType) + " due to its " + this.getName() + "!";
         }
     }
 
@@ -4509,7 +4498,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class PersimBerry extends Item implements BattleUseItem, MessageGetter, GainableEffectBerry {
+    static class PersimBerry extends Item implements BattleUseItem, MessageGetter, GainableEffectBerry, EffectCurerEffect {
         private static final long serialVersionUID = 1L;
 
         private boolean use(Battle b, ActivePokemon p, CastSource source) {
@@ -4555,6 +4544,16 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public String getSourceMessage(ActivePokemon p, String sourceName) {
             return p.getName() + "'s " + this.getName() + " snapped it out of confusion!";
+        }
+
+        @Override
+        public Set<EffectNamesies> getCurableEffects() {
+            return EnumSet.of(EffectNamesies.CONFUSION);
+        }
+
+        @Override
+        public String getRemoveMessage(ActivePokemon victim, EffectNamesies effectType) {
+            return this.getSourceMessage(victim, this.getName());
         }
     }
 

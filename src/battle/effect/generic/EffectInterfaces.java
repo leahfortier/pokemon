@@ -35,6 +35,7 @@ import util.RandomUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public final class EffectInterfaces {
 
@@ -1312,6 +1313,53 @@ public final class EffectInterfaces {
             }
 
             return false;
+        }
+    }
+
+    public interface EffectCurerEffect extends EffectReceivedEffect, EndTurnEffect {
+        Set<EffectNamesies> getCurableEffects();
+        String getRemoveMessage(ActivePokemon victim, EffectNamesies effectType);
+
+        default boolean usesies(ActivePokemon user) {
+            boolean used = false;
+            for (EffectNamesies removableEffect : this.getCurableEffects()) {
+                if (user.getEffects().remove(removableEffect)) {
+                    used = true;
+                    Messages.add(this.getRemoveMessage(user, removableEffect));
+                }
+            }
+
+            return used;
+        }
+
+        @Override
+        default void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
+            if (this.getCurableEffects().contains(effectType)) {
+                Messages.add(this.getRemoveMessage(victim, effectType));
+                victim.getEffects().remove(effectType);
+                victim.consumeItem(b);
+            }
+        }
+
+        @Override
+        default void applyEndTurn(ActivePokemon victim, Battle b) {
+            if (usesies(victim)) {
+                victim.consumeItem(b);
+            }
+        }
+    }
+
+    public interface EffectReceivedEffect {
+        void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType);
+
+        static void invokeEffectReceivedEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
+            List<InvokeEffect> invokees = b.getEffectsList(victim);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof EffectReceivedEffect && InvokeEffect.isActiveEffect(invokee)) {
+                    EffectReceivedEffect effect = (EffectReceivedEffect)invokee;
+                    effect.receiveEffect(b, caster, victim, effectType);
+                }
+            }
         }
     }
 
