@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.CastSource;
 import battle.effect.InvokeEffect;
+import battle.effect.generic.EffectInterfaces.EffectReceivedEffect;
 import main.Global;
 import message.Messages;
 import util.RandomUtils;
@@ -30,7 +31,36 @@ public abstract class Effect implements InvokeEffect, Serializable {
         this.active = true;
     }
 
-    public abstract void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast);
+    protected abstract void addEffect(Battle b, ActivePokemon victim);
+
+    public final void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        if (!this.shouldCast(b, caster, victim, source)) {
+            this.alternateCast(b, caster, victim, source, printCast);
+            return;
+        }
+
+        this.beforeCast(b, caster, victim, source);
+        Messages.update(b);
+
+        if (printCast) {
+            Messages.add(getCastMessage(b, caster, victim, source));
+        }
+
+        this.addEffect(b, victim);
+        EffectReceivedEffect.invokeEffectReceivedEffect(b, caster, victim, this.namesies());
+        Messages.update(b);
+
+        this.afterCast(b, caster, victim, source);
+        Messages.update(b);
+    }
+
+    protected void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {}
+    protected void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {}
+    protected void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {}
+
+    protected boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+        return true;
+    }
 
     public boolean nextTurnSubside() {
         return nextTurnSubside;

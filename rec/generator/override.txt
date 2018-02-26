@@ -382,8 +382,8 @@ Flailing:
 		###
 *
 LightClay:
-	AddMapField: Cast:
-		super.cast(b, caster, victim, source, printCast);
+	AddMapField: AfterCast:
+        // TODO: Why can't we use this.setTurns()?
 		if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
 			b.getEffects(victim).get(this.namesies).setTurns(8);
 		}
@@ -531,14 +531,13 @@ OnProtectingSuccess:
 	Header: void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp)
 *
 SuccessiveDecay:
-	AddMapField: Cast:
-		if (!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))) {
-			Messages.add(this.getFailMessage(b, caster, victim));
-			return;
-		}
-
-		super.cast(b, caster, victim, source, printCast);
-		###
+    AddMapField: ShouldCast:
+        // TODO: Shouldn't this just be applies???
+        return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
+        ###
+    AddMapField: AlternateCast:
+        Messages.add(this.getFailMessage(b, caster, victim));
+        ###
 *
 Trapped:
 	Header: boolean trapped(Battle b, ActivePokemon escaper)
@@ -565,8 +564,7 @@ OppTrappingMessage:
 	Header: String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper)
 *
 PartialTrap:
-	AddMapField: Cast:
-		super.cast(b, caster, victim, source, printCast);
+	AddMapField: AfterCast:
 		if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
 			this.setTurns(5);
 		}
@@ -604,16 +602,24 @@ SafeguardEffect:
 *
 UsedProof:
 	AddMapField: CanHave: True
-	AddMapField: Cast:
-		if (!victim.hasEffect(this.namesies)) {
-			super.cast(b, caster, victim, source, printCast);
-		} else {
-			Messages.add(getCastMessage(b, caster, victim, source));
-		}
-		###
+    AddMapField: ShouldCast: 
+        return !victim.hasEffect(this.namesies);
+        ###
+    AddMapField: AlternateCast:
+        Messages.add(getCastMessage(b, caster, victim, source));
+        ###
 *
-Cast:
-	Header: void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
+ShouldCast:
+    Header: boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
+*
+AlternateCast:
+    Header: void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
+*
+BeforeCast:
+    Header: void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
+*
+AfterCast:
+    Header: void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 *
 CastMessage:
 	Header: String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source)
@@ -799,17 +805,17 @@ SpecialRoom:
 	AddMapField: SubsideMessage: "The dimensions of the {1} room returned to normal."
 	AddMapField: CastMessage: user.getName() + " twisted the dimensions to {2-}!"
 	AddMapField: CanHave: True
-	AddMapField: Cast:
-		BattleEffect roomsies = b.getEffects().get(this.namesies);
-		if (roomsies == null) {
-			super.cast(b, caster, victim, source, printCast);
-			return;
-		}
-
-		// Remove the effect if it's already in play
+    AddMapField: ShouldCast:
+        return !b.hasEffect(this.namesies);
+        ###
+    AddMapField: AlternateCast:
+        // Remove the effect if it's already in play
+        BattleEffect roomsies = b.getEffects().get(this.namesies);
+        
+        // TODO: Why can't we use this.subside()?
 		Messages.add(roomsies.getSubsideMessage(caster));
 		b.getEffects().remove(roomsies);
-		###
+        ###
 *
 MoveTypePrevent:
 	AddInterface: AttackBlocker
@@ -884,13 +890,13 @@ FallMessage:
 		###
 *
 Terrain:
-	AddMapField: Cast:
-		// Remove all other Terrain Effects
-		b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
-
-		super.cast(b, caster, victim, source, printCast);
-		b.setTerrainType(TerrainType.{00}, false);
-		###
+    AddMapField: BeforeCast:
+        // Remove all other Terrain Effects
+        b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
+        ###
+    AddMapField: AfterCast:
+        b.setTerrainType(TerrainType.{00}, false);
+        ###
 	AddMapField: Subside:
 		super.subside(b, p);
 		b.resetTerrain();
@@ -1513,10 +1519,9 @@ FutureAttackEffect:
 
 		theSeeer.callTempMove(attack.namesies(), () -> theSeeer.getAttack().applyDamage(theSeeer, p, b));
 		###
-	AddMapField: Cast:
-		theSeeer = caster;
-		super.cast(b, caster, victim, source, printCast);
-		###
+    AddMapField: BeforeCast:
+        theSeeer = caster;
+        ###
 	AddMapField: CastMessage: theSeeer.getName() + " foresaw an attack!"
 *
 EliminateStatChanges:

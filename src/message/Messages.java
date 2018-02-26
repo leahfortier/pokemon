@@ -1,5 +1,6 @@
 package message;
 
+import battle.Battle;
 import util.StringUtils;
 
 import java.util.ArrayDeque;
@@ -51,6 +52,11 @@ public class Messages {
     public static boolean nextMessageEmpty() {
         MessageUpdate nextMessage = getQueue().peek();
         return StringUtils.isNullOrEmpty(nextMessage.getMessage()) && !nextMessage.getUpdateType().isExitMessage();
+    }
+
+    public static void update(Battle b) {
+        add(new MessageUpdate().updatePokemon(b, b.getPlayer().front()));
+        add(new MessageUpdate().updatePokemon(b, b.getOpponent().front()));
     }
 
     public static void add(String message) {

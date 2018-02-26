@@ -23,8 +23,7 @@ Gravity:
         return s == Stat.EVASION ? -2 : 0;
         ###
     CastMessage: "Gravity intensified!"
-    Cast:
-        super.cast(b, caster, victim, source, printCast);
+    AfterCast:
         removeLevitation(b, caster);
         removeLevitation(b, victim);
         ###

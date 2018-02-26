@@ -27,7 +27,6 @@ import battle.effect.generic.EffectInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
-import battle.effect.generic.EffectInterfaces.EffectReceivedEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
@@ -84,16 +83,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
     }
 
     @Override
-    public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-        if (printCast) {
-            Messages.add(getCastMessage(b, caster, victim, source));
-        }
-
+    protected void addEffect(Battle b, ActivePokemon victim) {
         victim.getEffects().add(this);
-        EffectReceivedEffect.invokeEffectReceivedEffect(b, caster, victim, this.namesies());
-
-        Messages.add(new MessageUpdate().updatePokemon(b, caster));
-        Messages.add(new MessageUpdate().updatePokemon(b, victim));
     }
 
     // EVERYTHING BELOW IS GENERATED ###
@@ -168,8 +159,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             if (victim.hasAbility(AbilityNamesies.STEADFAST)) {
                 victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
             }
@@ -194,8 +184,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
                 this.setTurns(5);
             }
@@ -248,8 +237,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
                 this.setTurns(5);
             }
@@ -302,8 +290,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
                 this.setTurns(5);
             }
@@ -356,8 +343,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
                 this.setTurns(5);
             }
@@ -410,8 +396,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
                 this.setTurns(5);
             }
@@ -464,8 +449,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
                 this.setTurns(5);
             }
@@ -518,8 +502,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
                 this.setTurns(5);
             }
@@ -572,8 +555,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
                 this.setTurns(5);
             }
@@ -637,13 +619,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            if (!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))) {
-                Messages.add(this.getFailMessage(b, caster, victim));
-                return;
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            // TODO: Shouldn't this just be applies???
+            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
+        }
 
-            super.cast(b, caster, victim, source, printCast);
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            Messages.add(this.getFailMessage(b, caster, victim));
         }
 
         @Override
@@ -674,13 +657,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            if (!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))) {
-                Messages.add(this.getFailMessage(b, caster, victim));
-                return;
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            // TODO: Shouldn't this just be applies???
+            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
+        }
 
-            super.cast(b, caster, victim, source, printCast);
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            Messages.add(this.getFailMessage(b, caster, victim));
         }
 
         @Override
@@ -710,13 +694,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            if (!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))) {
-                Messages.add(this.getFailMessage(b, caster, victim));
-                return;
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            // TODO: Shouldn't this just be applies???
+            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
+        }
 
-            super.cast(b, caster, victim, source, printCast);
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            Messages.add(this.getFailMessage(b, caster, victim));
         }
 
         @Override
@@ -738,13 +723,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            if (!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))) {
-                Messages.add(this.getFailMessage(b, caster, victim));
-                return;
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            // TODO: Shouldn't this just be applies???
+            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
+        }
 
-            super.cast(b, caster, victim, source, printCast);
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            Messages.add(this.getFailMessage(b, caster, victim));
         }
 
         @Override
@@ -771,13 +757,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            if (!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))) {
-                Messages.add(this.getFailMessage(b, caster, victim));
-                return;
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            // TODO: Shouldn't this just be applies???
+            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
+        }
 
-            super.cast(b, caster, victim, source, printCast);
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            Messages.add(this.getFailMessage(b, caster, victim));
         }
 
         @Override
@@ -804,13 +791,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            if (!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))) {
-                Messages.add(this.getFailMessage(b, caster, victim));
-                return;
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            // TODO: Shouldn't this just be applies???
+            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
+        }
 
-            super.cast(b, caster, victim, source, printCast);
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            Messages.add(this.getFailMessage(b, caster, victim));
         }
 
         @Override
@@ -856,13 +844,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            if (!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))) {
-                Messages.add(this.getFailMessage(b, caster, victim));
-                return;
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            // TODO: Shouldn't this just be applies???
+            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
+        }
 
-            super.cast(b, caster, victim, source, printCast);
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            Messages.add(this.getFailMessage(b, caster, victim));
         }
 
         @Override
@@ -955,9 +944,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             move = caster.getMove();
-            super.cast(b, caster, victim, source, printCast);
         }
 
         @Override
@@ -1067,9 +1055,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             move = victim.getLastMoveUsed();
-            super.cast(b, caster, victim, source, printCast);
         }
 
         @Override
@@ -1122,9 +1109,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             disabled = victim.getLastMoveUsed();
-            super.cast(b, caster, victim, source, printCast);
         }
 
         @Override
@@ -1166,28 +1152,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private boolean direHit;
         private boolean berrylicious;
 
-        RaiseCrits() {
-            super(EffectNamesies.RAISE_CRITS, -1, -1, false);
-            this.focusEnergy = false;
-            this.direHit = false;
-            this.berrylicious = false;
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(source == CastSource.USE_ITEM && victim.hasEffect(this.namesies) && ((RaiseCrits)victim.getEffect(this.namesies)).direHit);
-        }
-
-        @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            if (!victim.hasEffect(this.namesies)) {
-                super.cast(b, caster, victim, source, printCast);
-            }
-            // Doesn't 'fail' if they already have the effect -- just display the message again
-            else if (printCast) {
-                Messages.add(getCastMessage(b, caster, victim, source));
-            }
-
+        private void casty(ActivePokemon victim, CastSource source) {
             RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies);
             switch (source) {
                 case ATTACK:
@@ -1203,6 +1168,38 @@ public abstract class PokemonEffect extends Effect implements Serializable {
                     Global.error("Unknown source for RaiseCrits effect.");
                     break;
             }
+        }
+
+        RaiseCrits() {
+            super(EffectNamesies.RAISE_CRITS, -1, -1, false);
+            this.focusEnergy = false;
+            this.direHit = false;
+            this.berrylicious = false;
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !(source == CastSource.USE_ITEM && victim.hasEffect(this.namesies) && ((RaiseCrits)victim.getEffect(this.namesies)).direHit);
+        }
+
+        @Override
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !victim.hasEffect(this.namesies);
+        }
+
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            // Doesn't 'fail' if they already have the effect -- just display the message again
+            if (printCast) {
+                Messages.add(getCastMessage(b, caster, victim, source));
+            }
+
+            casty(victim, source);
+        }
+
+        @Override
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            casty(victim, source);
         }
 
         @Override
@@ -1255,10 +1252,9 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             item = ((ItemHolder)source.getSource(b, caster)).getItem();
             victim.getEffects().remove(this.namesies);
-            super.cast(b, caster, victim, source, printCast);
         }
 
         @Override
@@ -1277,9 +1273,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             typeSource = (ChangeAttackTypeSource)source.getSource(b, caster);
-            super.cast(b, caster, victim, source, printCast);
         }
 
         @Override
@@ -1320,15 +1315,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             castSource = source;
             typeSource = (ChangeTypeSource)source.getSource(b, caster);
             type = typeSource.getType(b, caster, victim);
 
             // Remove any other ChangeType effects that the victim may have
             victim.getEffects().remove(this.namesies);
-
-            super.cast(b, caster, victim, source, printCast);
         }
 
         @Override
@@ -1358,7 +1351,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             Ability oldAbility = victim.getAbility();
             oldAbility.deactivate(b, victim);
 
@@ -1368,7 +1361,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
             // Remove any other ChangeAbility effects that the victim may have
             victim.getEffects().remove(this.namesies);
-            super.cast(b, caster, victim, source, printCast);
         }
 
         @Override
@@ -1387,6 +1379,17 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         private int turns;
 
+        private void casty(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies);
+            if (stockpile.turns < 3) {
+                Messages.add(victim.getName() + " Defense and Special Defense were raised!");
+                stockpile.turns++;
+                return;
+            }
+
+            Messages.add(this.getFailMessage(b, caster, victim));
+        }
+
         Stockpile() {
             super(EffectNamesies.STOCKPILE, -1, -1, false);
             this.turns = 0;
@@ -1398,19 +1401,18 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            if (!victim.hasEffect(this.namesies)) {
-                super.cast(b, caster, victim, source, printCast);
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !victim.hasEffect(this.namesies);
+        }
 
-            Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies);
-            if (stockpile.turns < 3) {
-                Messages.add(victim.getName() + " Defense and Special Defense were raised!");
-                stockpile.turns++;
-                return;
-            }
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            casty(b, caster, victim);
+        }
 
-            Messages.add(this.getFailMessage(b, caster, victim));
+        @Override
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            casty(b, caster, victim);
         }
 
         @Override
@@ -1433,12 +1435,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            if (!victim.hasEffect(this.namesies)) {
-                super.cast(b, caster, victim, source, printCast);
-            } else {
-                Messages.add(getCastMessage(b, caster, victim, source));
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !victim.hasEffect(this.namesies);
+        }
+
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            Messages.add(getCastMessage(b, caster, victim, source));
         }
     }
 
@@ -1450,12 +1453,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            if (!victim.hasEffect(this.namesies)) {
-                super.cast(b, caster, victim, source, printCast);
-            } else {
-                Messages.add(getCastMessage(b, caster, victim, source));
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !victim.hasEffect(this.namesies);
+        }
+
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            Messages.add(getCastMessage(b, caster, victim, source));
         }
     }
 
@@ -1474,7 +1478,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             ActivePokemon other = b.getOtherPokemon(victim);
             final Move lastMoveUsed = other.getLastMoveUsed();
             Attack lastAttack = lastMoveUsed == null ? null : lastMoveUsed.getAttack();
@@ -1485,7 +1489,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             }
 
             mimicMove = new Move(lastAttack);
-            super.cast(b, caster, victim, source, printCast);
         }
 
         @Override
@@ -1523,13 +1526,11 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             unableMoves = new ArrayList<>();
             for (Move m : caster.getMoves(b)) {
                 unableMoves.add(m.getAttack().namesies());
             }
-
-            super.cast(b, caster, victim, source, printCast);
         }
 
         @Override
@@ -1579,12 +1580,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            if (!victim.hasEffect(this.namesies)) {
-                super.cast(b, caster, victim, source, printCast);
-            } else {
-                Messages.add(getCastMessage(b, caster, victim, source));
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !victim.hasEffect(this.namesies);
+        }
+
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            Messages.add(getCastMessage(b, caster, victim, source));
         }
 
         @Override
@@ -1606,12 +1608,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            if (!victim.hasEffect(this.namesies)) {
-                super.cast(b, caster, victim, source, printCast);
-            } else {
-                Messages.add(getCastMessage(b, caster, victim, source));
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !victim.hasEffect(this.namesies);
+        }
+
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            Messages.add(getCastMessage(b, caster, victim, source));
         }
 
         @Override
@@ -1838,8 +1841,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             removeLevitation(b, victim);
         }
 
@@ -1862,8 +1864,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             removeLevitation(b, victim);
         }
     }
@@ -1891,8 +1892,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             caster.reduceHealthFraction(b, 1/2.0);
         }
 
@@ -1985,9 +1985,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             uproar = victim.getMove();
-            super.cast(b, caster, victim, source, printCast);
+        }
+
+        @Override
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             b.addEffect(new FieldUproar());
 
             wakeUp(b, victim);
@@ -2215,7 +2218,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             // Pokemon to transform into
             ActivePokemon transformee = b.getOtherPokemon(victim);
 
@@ -2240,9 +2243,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
             // Copy the type
             type = transformee.getPokemonInfo().getType();
+        }
 
+        @Override
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             // Castaway
-            super.cast(b, caster, victim, source, printCast);
+            // TODO: This can almost certainly be in the same method as the other stuff
+            ActivePokemon transformee = b.getOtherPokemon(victim);
             Messages.add(new MessageUpdate().withNewPokemon(transformee.namesies(), transformee.isShiny(), true, victim.isPlayer()));
             Messages.add(new MessageUpdate().updatePokemon(b, victim));
         }
@@ -2283,10 +2290,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             hp = victim.reduceHealthFraction(b, .25) + 1;
-            super.cast(b, caster, victim, source, printCast);
+        }
 
+        @Override
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             String imageName = "substitute" + (victim.isPlayer() ? "-back" : "");
             Messages.add(new MessageUpdate().updatePokemon(b, victim).withImageName(imageName, victim.isPlayer()));
         }
@@ -2417,15 +2426,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Bide bidesies = (Bide)victim.getEffect(this.namesies);
-
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             // If the victim is not already under the effects of Bide, cast it upon them
-            if (bidesies == null) {
-                move = caster.getMove();
-                super.cast(b, caster, victim, source, printCast);
-                return;
-            }
+            return !victim.hasEffect(this.namesies);
+        }
+
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            Bide bidesies = (Bide)victim.getEffect(this.namesies);
 
             // Already has the effect, but not ready for it to end yet -- store dat energy
             if (bidesies.turns > 0) {
@@ -2446,6 +2454,11 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
             // Bye Bye Bidesies
             victim.getEffects().remove(this.namesies);
+        }
+
+        @Override
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            move = caster.getMove();
         }
 
         @Override
@@ -2475,13 +2488,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !victim.hasEffect(this.namesies);
+        }
+
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             HalfWeight halfWeight = (HalfWeight)victim.getEffect(this.namesies);
-            if (halfWeight == null) {
-                super.cast(b, caster, victim, source, printCast);
-            } else {
-                halfWeight.layers++;
-            }
+            halfWeight.layers++;
         }
 
         @Override
@@ -2509,13 +2523,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            PokemonEffect thaPowah = victim.getEffect(this.namesies);
-            if (thaPowah == null) {
-                super.cast(b, caster, victim, source, printCast);
-                return;
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !victim.hasEffect(this.namesies);
+        }
 
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             Messages.add(getCastMessage(b, caster, victim, source));
             victim.getEffects().remove(this.namesies);
         }
@@ -2646,8 +2659,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             if (victim.isHoldingItem(b, ItemNamesies.DESTINY_KNOT) && this.namesies.getEffect().apply(b, victim, caster, CastSource.HELD_ITEM, false)) {
                 Messages.add(victim.getName() + "'s " + ItemNamesies.DESTINY_KNOT.getName() + " caused " + caster.getName() + " to fall in love!");
             }
@@ -2748,13 +2760,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            if (!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))) {
-                Messages.add(this.getFailMessage(b, caster, victim));
-                return;
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            // TODO: Shouldn't this just be applies???
+            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
+        }
 
-            super.cast(b, caster, victim, source, printCast);
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            Messages.add(this.getFailMessage(b, caster, victim));
         }
 
         @Override
@@ -2844,11 +2857,10 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             consumed = victim.getHeldItem(b);
             victim.removeItem();
             victim.getEffects().remove(this.namesies);
-            super.cast(b, caster, victim, source, printCast);
         }
 
         @Override
@@ -2920,12 +2932,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            if (!victim.hasEffect(this.namesies)) {
-                super.cast(b, caster, victim, source, printCast);
-            } else {
-                Messages.add(getCastMessage(b, caster, victim, source));
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !victim.hasEffect(this.namesies);
+        }
+
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            Messages.add(getCastMessage(b, caster, victim, source));
         }
     }
 

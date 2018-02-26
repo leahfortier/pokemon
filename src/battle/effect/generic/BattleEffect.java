@@ -28,15 +28,8 @@ public abstract class BattleEffect extends Effect {
     }
 
     @Override
-    public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-        if (printCast) {
-            Messages.add(getCastMessage(b, caster, victim, source));
-        }
-
+    protected void addEffect(Battle b, ActivePokemon victim) {
         b.addEffect(this);
-
-        Messages.add(new MessageUpdate().updatePokemon(b, caster));
-        Messages.add(new MessageUpdate().updatePokemon(b, victim));
     }
 
     // EVERYTHING BELOW IS GENERATED ###
@@ -61,8 +54,7 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             removeLevitation(b, caster);
             removeLevitation(b, victim);
         }
@@ -154,14 +146,16 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            BattleEffect roomsies = b.getEffects().get(this.namesies);
-            if (roomsies == null) {
-                super.cast(b, caster, victim, source, printCast);
-                return;
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !b.hasEffect(this.namesies);
+        }
 
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
+            BattleEffect roomsies = b.getEffects().get(this.namesies);
+
+            // TODO: Why can't we use this.subside()?
             Messages.add(roomsies.getSubsideMessage(caster));
             b.getEffects().remove(roomsies);
         }
@@ -185,14 +179,16 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            BattleEffect roomsies = b.getEffects().get(this.namesies);
-            if (roomsies == null) {
-                super.cast(b, caster, victim, source, printCast);
-                return;
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !b.hasEffect(this.namesies);
+        }
 
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
+            BattleEffect roomsies = b.getEffects().get(this.namesies);
+
+            // TODO: Why can't we use this.subside()?
             Messages.add(roomsies.getSubsideMessage(caster));
             b.getEffects().remove(roomsies);
         }
@@ -216,14 +212,16 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            BattleEffect roomsies = b.getEffects().get(this.namesies);
-            if (roomsies == null) {
-                super.cast(b, caster, victim, source, printCast);
-                return;
-            }
+        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !b.hasEffect(this.namesies);
+        }
 
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
+            BattleEffect roomsies = b.getEffects().get(this.namesies);
+
+            // TODO: Why can't we use this.subside()?
             Messages.add(roomsies.getSubsideMessage(caster));
             b.getEffects().remove(roomsies);
         }
@@ -279,11 +277,13 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             // Remove all other Terrain Effects
             b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
+        }
 
-            super.cast(b, caster, victim, source, printCast);
+        @Override
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             b.setTerrainType(TerrainType.MISTY, false);
         }
 
@@ -331,11 +331,13 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             // Remove all other Terrain Effects
             b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
+        }
 
-            super.cast(b, caster, victim, source, printCast);
+        @Override
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             b.setTerrainType(TerrainType.GRASS, false);
         }
 
@@ -385,11 +387,13 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             // Remove all other Terrain Effects
             b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
+        }
 
-            super.cast(b, caster, victim, source, printCast);
+        @Override
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             b.setTerrainType(TerrainType.ELECTRIC, false);
         }
 
@@ -435,11 +439,13 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             // Remove all other Terrain Effects
             b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
+        }
 
-            super.cast(b, caster, victim, source, printCast);
+        @Override
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             b.setTerrainType(TerrainType.PSYCHIC, false);
         }
 
