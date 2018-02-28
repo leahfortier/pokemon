@@ -382,13 +382,12 @@ Flailing:
 		###
 *
 LightClay:
+    AddMapField: NumTurns: 5
 	AddMapField: AfterCast:
-        // TODO: Why can't we use this.setTurns()?
-		if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-			b.getEffects(victim).get(this.namesies).setTurns(8);
+        if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
+			this.setTurns(8);
 		}
 		###
-	AddMapField: NumTurns: 5
 *
 BarrierBreaker:
     AddMapField: UniqueEffects:

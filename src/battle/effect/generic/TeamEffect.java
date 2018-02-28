@@ -85,9 +85,8 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // TODO: Why can't we use this.setTurns()?
             if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-                b.getEffects(victim).get(this.namesies).setTurns(8);
+                this.setTurns(8);
             }
         }
 
@@ -141,9 +140,8 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // TODO: Why can't we use this.setTurns()?
             if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-                b.getEffects(victim).get(this.namesies).setTurns(8);
+                this.setTurns(8);
             }
         }
 
@@ -230,9 +228,8 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // TODO: Why can't we use this.setTurns()?
             if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-                b.getEffects(victim).get(this.namesies).setTurns(8);
+                this.setTurns(8);
             }
         }
 
