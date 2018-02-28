@@ -26,7 +26,9 @@ public final class RandomUtils {
         RANDOM.setSeed(tempRandomSeed);
     }
 
-    public static void resetRandomSeedToInitial() { RANDOM.setSeed(SEED); }
+    public static void resetRandomSeedToInitial() {
+        RANDOM.setSeed(SEED);
+    }
 
     public static boolean chanceTest(final int chance) {
         return chanceTest(chance, 100);

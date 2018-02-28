@@ -604,7 +604,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
         }
 
         @Override
@@ -616,17 +616,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
                         (victimName, statName, changed) -> "The King's Shield " + changed + " " + p.getName() + "'s " + statName + "!"
                 );
             }
-        }
-
-        @Override
-        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // TODO: Shouldn't this just be applies???
-            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
-        }
-
-        @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Messages.add(this.getFailMessage(b, caster, victim));
         }
 
         @Override
@@ -644,7 +633,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
         }
 
         @Override
@@ -654,17 +643,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
                 Messages.add(p.getName() + " was hurt by " + opp.getName() + "'s Spiky Shield!");
                 p.reduceHealthFraction(b, 1/8.0);
             }
-        }
-
-        @Override
-        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // TODO: Shouldn't this just be applies???
-            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
-        }
-
-        @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Messages.add(this.getFailMessage(b, caster, victim));
         }
 
         @Override
@@ -682,7 +660,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
         }
 
         @Override
@@ -691,17 +669,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && Status.applies(StatusCondition.POISONED, b, opp, p)) {
                 Status.applyStatus(b, opp, p, StatusCondition.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
             }
-        }
-
-        @Override
-        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // TODO: Shouldn't this just be applies???
-            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
-        }
-
-        @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Messages.add(this.getFailMessage(b, caster, victim));
         }
 
         @Override
@@ -719,18 +686,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
-        }
-
-        @Override
-        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // TODO: Shouldn't this just be applies???
-            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
-        }
-
-        @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Messages.add(this.getFailMessage(b, caster, victim));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
         }
 
         @Override
@@ -748,23 +704,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
         }
 
         @Override
         public boolean protectingCondition(Battle b, ActivePokemon attacking) {
             return b.getAttackPriority(attacking) > 0;
-        }
-
-        @Override
-        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // TODO: Shouldn't this just be applies???
-            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
-        }
-
-        @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Messages.add(this.getFailMessage(b, caster, victim));
         }
 
         @Override
@@ -782,23 +727,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
         }
 
         @Override
         public boolean protectingCondition(Battle b, ActivePokemon attacking) {
             return attacking.getAttack().isStatusMove();
-        }
-
-        @Override
-        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // TODO: Shouldn't this just be applies???
-            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
-        }
-
-        @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Messages.add(this.getFailMessage(b, caster, victim));
         }
 
         @Override
@@ -840,18 +774,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
-        }
-
-        @Override
-        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // TODO: Shouldn't this just be applies???
-            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
-        }
-
-        @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Messages.add(this.getFailMessage(b, caster, victim));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
         }
 
         @Override
@@ -2749,7 +2672,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
         }
 
         @Override
@@ -2757,17 +2680,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             // TODO: What is happening
             p.getEffects().remove(this);
             return true;
-        }
-
-        @Override
-        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // TODO: Shouldn't this just be applies???
-            return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
-        }
-
-        @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Messages.add(this.getFailMessage(b, caster, victim));
         }
 
         @Override

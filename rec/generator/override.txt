@@ -531,13 +531,7 @@ OnProtectingSuccess:
 	Header: void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp)
 *
 SuccessiveDecay:
-    AddMapField: ShouldCast:
-        // TODO: Shouldn't this just be applies???
-        return RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()));
-        ###
-    AddMapField: AlternateCast:
-        Messages.add(this.getFailMessage(b, caster, victim));
-        ###
+    AddMapField: FailCondition: !RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))
 *
 Trapped:
 	Header: boolean trapped(Battle b, ActivePokemon escaper)
