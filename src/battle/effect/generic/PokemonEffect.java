@@ -2141,7 +2141,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             // Pokemon to transform into
             ActivePokemon transformee = b.getOtherPokemon(victim);
 
@@ -2166,13 +2166,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
             // Copy the type
             type = transformee.getPokemonInfo().getType();
-        }
 
-        @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             // Castaway
-            // TODO: This can almost certainly be in the same method as the other stuff
-            ActivePokemon transformee = b.getOtherPokemon(victim);
             Messages.add(new MessageUpdate().withNewPokemon(transformee.namesies(), transformee.isShiny(), true, victim.isPlayer()));
             Messages.add(new MessageUpdate().updatePokemon(b, victim));
         }

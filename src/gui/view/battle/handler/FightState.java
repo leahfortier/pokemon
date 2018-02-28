@@ -39,10 +39,13 @@ public class FightState implements VisualStateHandler {
 
     @Override
     public void set(BattleView view) {
+        selectedMoveList = Game.getPlayer().front().getMoves(view.getCurrentBattle());
+        if (lastMoveUsed >= selectedMoveList.size()) {
+            this.resetLastMoveUsed();
+        }
+
         moveButtons = new ButtonList(view.createPanelButtons());
         moveButtons.setSelected(lastMoveUsed);
-
-        selectedMoveList = Game.getPlayer().front().getMoves(view.getCurrentBattle());
 
         for (int i = 0; i < Move.MAX_MOVES; i++) {
             moveButtons.get(i).setActive(i < selectedMoveList.size());
