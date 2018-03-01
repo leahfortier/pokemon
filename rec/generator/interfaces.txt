@@ -1242,7 +1242,10 @@ DefiniteEscape:
         InvokeName: canDefinitelyEscape
     *
 ***
-PassableEffect:
-***
 TerrainEffect:
+    Method:
+        Header: TerrainType getTerrainType()
+    *
+***
+PassableEffect:
 ***

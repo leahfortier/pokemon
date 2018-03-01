@@ -277,14 +277,8 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // Remove all other Terrain Effects
-            b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
-        }
-
-        @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            b.setTerrainType(TerrainType.MISTY, false);
+        public TerrainType getTerrainType() {
+            return TerrainType.MISTY;
         }
 
         @Override
@@ -331,14 +325,8 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // Remove all other Terrain Effects
-            b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
-        }
-
-        @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            b.setTerrainType(TerrainType.GRASS, false);
+        public TerrainType getTerrainType() {
+            return TerrainType.GRASS;
         }
 
         @Override
@@ -387,14 +375,8 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // Remove all other Terrain Effects
-            b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
-        }
-
-        @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            b.setTerrainType(TerrainType.ELECTRIC, false);
+        public TerrainType getTerrainType() {
+            return TerrainType.ELECTRIC;
         }
 
         @Override
@@ -433,20 +415,14 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
+        public TerrainType getTerrainType() {
+            return TerrainType.PSYCHIC;
+        }
+
+        @Override
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Psychic terrain prevents increased priority moves from hitting
             return b.getAttackPriority(user) > 0 && !victim.isLevitating(b);
-        }
-
-        @Override
-        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // Remove all other Terrain Effects
-            b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
-        }
-
-        @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            b.setTerrainType(TerrainType.PSYCHIC, false);
         }
 
         @Override

@@ -883,14 +883,11 @@ FallMessage:
 		###
 *
 Terrain:
-    AddMapField: BeforeCast:
-        // Remove all other Terrain Effects
-        b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
+    Header: TerrainType getTerrainType()
+    Body:
+        return TerrainType.{00};
         ###
-    AddMapField: AfterCast:
-        b.setTerrainType(TerrainType.{00}, false);
-        ###
-	AddMapField: Subside:
+    AddMapField: Subside:
 		super.subside(b, p);
 		b.resetTerrain();
 		###

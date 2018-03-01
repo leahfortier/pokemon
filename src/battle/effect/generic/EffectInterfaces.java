@@ -1954,9 +1954,10 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface PassableEffect {
+    public interface TerrainEffect {
+        TerrainType getTerrainType();
     }
 
-    public interface TerrainEffect {
+    public interface PassableEffect {
     }
 }

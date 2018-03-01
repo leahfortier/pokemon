@@ -25,6 +25,7 @@ import battle.effect.generic.EffectInterfaces.StallingEffect;
 import battle.effect.generic.EffectInterfaces.StrikeFirstEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
+import battle.effect.generic.EffectInterfaces.TerrainEffect;
 import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
@@ -159,7 +160,7 @@ public class Battle implements Serializable {
         this.addEffect((Weather)weatherState.getWeatherEffect().getEffect());
     }
 
-    public void setTerrainType(TerrainType terrainType, boolean base) {
+    private void setTerrainType(TerrainType terrainType, boolean base) {
         if (base) {
             this.baseTerrain = terrainType;
         }
@@ -306,6 +307,26 @@ public class Battle implements Serializable {
                 || SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, opponent.front())) {}
     }
 
+    private void decrementWeather() {
+        if (!weather.isActive()) {
+            Messages.add(weather.getSubsideMessage(player.front()));
+            this.setBaseWeather(this.baseWeather);
+            return;
+        }
+
+        weather.applyEndTurn(player.front(), this);
+        weather.decrement(this, player.front());
+    }
+
+    private void endTurnPokemonEffects(ActivePokemon me) {
+        EndTurnEffect.invokeEndTurnEffect(me, this);
+
+        me.isFainted(this);
+
+        // No longer the first turn anymore
+        me.setFirstTurn(false);
+    }
+
     private boolean deadUser() {
         // Front Pokemon is still functioning
         if (!player.front().isFainted(this)) {
@@ -422,26 +443,6 @@ public class Battle implements Serializable {
         return false;
     }
 
-    private void decrementWeather() {
-        if (!weather.isActive()) {
-            Messages.add(weather.getSubsideMessage(player.front()));
-            this.setBaseWeather(this.baseWeather);
-            return;
-        }
-
-        weather.applyEndTurn(player.front(), this);
-        weather.decrement(this, player.front());
-    }
-
-    private void endTurnPokemonEffects(ActivePokemon me) {
-        EndTurnEffect.invokeEndTurnEffect(me, this);
-
-        me.isFainted(this);
-
-        // No longer the first turn anymore
-        me.setFirstTurn(false);
-    }
-
     private boolean isFront(ActivePokemon p) {
         return p == getTrainer(p).front();
     }
@@ -544,6 +545,14 @@ public class Battle implements Serializable {
                 Messages.add(new MessageUpdate().withWeather(weather));
             }
         } else {
+            if (effect instanceof TerrainEffect) {
+                // Remove all other Terrain Effects
+                this.getEffects().removeIf(battleEffect -> battleEffect instanceof TerrainEffect);
+
+                TerrainEffect terrain = (TerrainEffect)effect;
+                this.setTerrainType(terrain.getTerrainType(), false);
+            }
+
             effects.add(effect);
         }
     }
