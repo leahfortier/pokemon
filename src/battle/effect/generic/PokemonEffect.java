@@ -1068,24 +1068,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private boolean direHit;
         private boolean berrylicious;
 
-        private void casty(ActivePokemon victim, CastSource source) {
-            RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies);
-            switch (source) {
-                case ATTACK:
-                    critsies.focusEnergy = true;
-                    break;
-                case USE_ITEM:
-                    critsies.direHit = true;
-                    break;
-                case HELD_ITEM:
-                    critsies.berrylicious = true;
-                    break;
-                default:
-                    Global.error("Unknown source for RaiseCrits effect.");
-                    break;
-            }
-        }
-
         RaiseCrits() {
             super(EffectNamesies.RAISE_CRITS, -1, -1, false);
             this.focusEnergy = false;
@@ -1110,12 +1092,26 @@ public abstract class PokemonEffect extends Effect implements Serializable {
                 Messages.add(getCastMessage(b, caster, victim, source));
             }
 
-            casty(victim, source);
+            RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies);
+            critsies.afterCast(b, caster, victim, source);
         }
 
         @Override
         public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            casty(victim, source);
+            switch (source) {
+                case ATTACK:
+                    this.focusEnergy = true;
+                    break;
+                case USE_ITEM:
+                    this.direHit = true;
+                    break;
+                case HELD_ITEM:
+                    this.berrylicious = true;
+                    break;
+                default:
+                    Global.error("Unknown source for RaiseCrits effect.");
+                    break;
+            }
         }
 
         @Override
@@ -1295,17 +1291,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         private int turns;
 
-        private void casty(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies);
-            if (stockpile.turns < 3) {
-                Messages.add(victim.getName() + " Defense and Special Defense were raised!");
-                stockpile.turns++;
-                return;
-            }
-
-            Messages.add(this.getFailMessage(b, caster, victim));
-        }
-
         Stockpile() {
             super(EffectNamesies.STOCKPILE, -1, -1, false);
             this.turns = 0;
@@ -1323,12 +1308,19 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            casty(b, caster, victim);
+            Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies);
+            stockpile.afterCast(b, caster, victim, source);
         }
 
         @Override
         public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            casty(b, caster, victim);
+            if (this.turns < 3) {
+                Messages.add(victim.getName() + " Defense and Special Defense were raised!");
+                this.turns++;
+                return;
+            }
+
+            Messages.add(this.getFailMessage(b, caster, victim));
         }
 
         @Override

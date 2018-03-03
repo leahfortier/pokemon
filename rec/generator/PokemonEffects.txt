@@ -272,24 +272,6 @@ RaiseCrits:
         private boolean focusEnergy;
         private boolean direHit;
         private boolean berrylicious;
-        
-        private void casty(ActivePokemon victim, CastSource source) {
-            RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies);
-            switch (source) {
-                case ATTACK:
-                    critsies.focusEnergy = true;
-                    break;
-                case USE_ITEM:
-                    critsies.direHit = true;
-                    break;
-                case HELD_ITEM:
-                    critsies.berrylicious = true;
-                    break;
-                default:
-                    Global.error("Unknown source for RaiseCrits effect.");
-                    break;
-            }
-        }
         ###
     Activate:
         this.focusEnergy = false;
@@ -333,10 +315,24 @@ RaiseCrits:
             Messages.add(getCastMessage(b, caster, victim, source));
         }
         
-        casty(victim, source);
+        RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies);
+        critsies.afterCast(b, caster, victim, source);
         ###
     AfterCast:
-        casty(victim, source);
+        switch (source) {
+            case ATTACK:
+                this.focusEnergy = true;
+                break;
+            case USE_ITEM:
+                this.direHit = true;
+                break;
+            case HELD_ITEM:
+                this.berrylicious = true;
+                break;
+            default:
+                Global.error("Unknown source for RaiseCrits effect.");
+                break;
+        }
         ###
 *
 ChangeItem:
@@ -433,17 +429,6 @@ ChangeAbility:
 Stockpile:
     Field:
         private int turns;
-        
-        private void casty(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies);
-            if (stockpile.turns < 3) {
-                Messages.add(victim.getName() + " Defense and Special Defense were raised!");
-                stockpile.turns++;
-                return;
-            }
-
-            Messages.add(this.getFailMessage(b, caster, victim));
-        }
         ###
     Activate:
         this.turns = 0;
@@ -457,10 +442,17 @@ Stockpile:
         return !victim.hasEffect(this.namesies);
         ###
     AlternateCast:
-        casty(b, caster, victim);
+        Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies);
+        stockpile.afterCast(b, caster, victim, source);
         ###
     AfterCast:
-        casty(b, caster, victim);
+        if (this.turns < 3) {
+            Messages.add(victim.getName() + " Defense and Special Defense were raised!");
+            this.turns++;
+            return;
+        }
+
+        Messages.add(this.getFailMessage(b, caster, victim));
         ###
     StageChange:
         return s == Stat.DEFENSE || s == Stat.SP_DEFENSE ? turns : 0;
