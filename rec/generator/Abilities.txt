@@ -416,6 +416,13 @@ Simple:
 *
 Early Bird:
     Desc: The Pok\u00e9mon awakens twice as fast as other Pok\u00e9mon from sleep.
+    Int: StatusReceivedEffect
+	StatusReceived:
+        if (statusType == StatusCondition.ASLEEP) {
+            Status sleepyTime = victim.getStatus();
+            sleepyTime.setTurns(sleepyTime.getTurns()/2);
+        }
+        ###
 *
 Thick Fat:
     Desc: The Pok\u00e9mon is protected by a layer of thick fat, which halves the damage taken from Fire- and Ice-type moves.
@@ -1640,10 +1647,16 @@ Comatose:
             if (sleepyHead.hasStatus(StatusCondition.ASLEEP)) {
                 return false;
             }
+            
+            // Deadsies can't sleep
+            if (sleepyHead.isActuallyDead()) {
+                return false;
+            }
 
             if (Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, sleepyHead, sleepyHead)) {
                 sleepyHead.removeStatus();
                 Status.applyStatus(b, sleepyHead, sleepyHead, StatusCondition.ASLEEP, CastSource.ABILITY);
+                sleepyHead.getStatus().setTurns(-1);
                 return true;
             }
 

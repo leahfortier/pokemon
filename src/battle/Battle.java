@@ -242,6 +242,7 @@ public class Battle implements Serializable {
                 .append(" " + p.getHeldItem(this).getName() + " ")
                 .appendJoin(" ", Stat.STATS, stat -> String.valueOf(p.getStat(this, stat)))
                 .appendLine()
+                .appendIf(p.hasStatus(), p.getStatus() + "\n")
                 .appendJoin("\n", p.getEffects().asList())
                 .appendIf(!p.getEffects().isEmpty(), "\n")
                 .appendJoin("\n", team.getEffects().asList())

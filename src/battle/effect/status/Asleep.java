@@ -6,7 +6,6 @@ import battle.effect.CastSource;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
 import message.Messages;
-import pokemon.ability.AbilityNamesies;
 import util.RandomUtils;
 
 class Asleep extends Status implements BeforeTurnEffect {
@@ -16,13 +15,6 @@ class Asleep extends Status implements BeforeTurnEffect {
     public Asleep() {
         super(StatusCondition.ASLEEP);
         this.numTurns = RandomUtils.getRandomInt(1, 3);
-    }
-
-    @Override
-    protected void postCreateEffect(ActivePokemon victim) {
-        if (victim.hasAbility(AbilityNamesies.EARLY_BIRD)) {
-            this.numTurns /= 2;
-        }
     }
 
     // All Pokemon can get sleepy
@@ -38,9 +30,7 @@ class Asleep extends Status implements BeforeTurnEffect {
             return true;
         }
 
-        if (!p.hasAbility(AbilityNamesies.COMATOSE)) {
-            numTurns--;
-        }
+        numTurns--;
 
         Messages.add(p.getName() + " is fast asleep...");
         return SleepyFightsterEffect.containsSleepyFightsterEffect(b, p);
@@ -54,6 +44,11 @@ class Asleep extends Status implements BeforeTurnEffect {
     @Override
     public String getSourceCastMessage(ActivePokemon sourcerer, ActivePokemon victim, String sourceName) {
         return sourcerer.getName() + "'s " + sourceName + " caused " + victim.getName() + " to fall asleep!";
+    }
+
+    @Override
+    public int getTurns() {
+        return this.numTurns;
     }
 
     @Override

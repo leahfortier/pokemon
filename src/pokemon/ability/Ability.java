@@ -1251,11 +1251,19 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class EarlyBird extends Ability {
+    static class EarlyBird extends Ability implements StatusReceivedEffect {
         private static final long serialVersionUID = 1L;
 
         EarlyBird() {
             super(AbilityNamesies.EARLY_BIRD, "The Pok\u00e9mon awakens twice as fast as other Pok\u00e9mon from sleep.");
+        }
+
+        @Override
+        public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
+            if (statusType == StatusCondition.ASLEEP) {
+                Status sleepyTime = victim.getStatus();
+                sleepyTime.setTurns(sleepyTime.getTurns()/2);
+            }
         }
     }
 
@@ -4138,9 +4146,15 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
                 return false;
             }
 
+            // Deadsies can't sleep
+            if (sleepyHead.isActuallyDead()) {
+                return false;
+            }
+
             if (Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, sleepyHead, sleepyHead)) {
                 sleepyHead.removeStatus();
                 Status.applyStatus(b, sleepyHead, sleepyHead, StatusCondition.ASLEEP, CastSource.ABILITY);
+                sleepyHead.getStatus().setTurns(-1);
                 return true;
             }
 

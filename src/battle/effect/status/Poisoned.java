@@ -42,7 +42,8 @@ class Poisoned extends Status implements EndTurnEffect {
     }
 
     // Regular poison reduces 2/16 = 1/8 hp
-    protected int getTurns() {
+    @Override
+    public int getTurns() {
         return 2;
     }
 

@@ -18,7 +18,7 @@ public class BadlyPoisoned extends Poisoned {
     }
 
     @Override
-    protected int getTurns() {
+    public int getTurns() {
         return this.turns;
     }
 
