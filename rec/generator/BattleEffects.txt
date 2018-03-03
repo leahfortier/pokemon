@@ -8,6 +8,7 @@ Constructor:
     MinTurns Default -1 Int
     MaxTurns Default -1 Int
     NextTurnSubside Default False Boolean
+    HasAlternateCast Default False Boolean
 *
 Failure:
     Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
@@ -23,8 +24,7 @@ Gravity:
         return s == Stat.EVASION ? -2 : 0;
         ###
     CastMessage: "Gravity intensified!"
-    Cast:
-        super.cast(b, caster, victim, source, printCast);
+    AfterCast:
         removeLevitation(b, caster);
         removeLevitation(b, victim);
         ###

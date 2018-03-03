@@ -730,8 +730,8 @@ AlwaysCritEffect:
 		InvokeName: defCritsies
 	*
 ***
-EffectCurerEffect:
-    Extends: EffectReceivedEffect, EndTurnEffect
+EffectCurerItem:
+    Extends: HoldItem, EffectReceivedEffect, EndTurnEffect
     Method:
         Header: Set<EffectNamesies> getCurableEffects()
     *
@@ -1242,7 +1242,10 @@ DefiniteEscape:
         InvokeName: canDefinitelyEscape
     *
 ***
-PassableEffect:
-***
 TerrainEffect:
+    Method:
+        Header: TerrainType getTerrainType()
+    *
+***
+PassableEffect:
 ***

@@ -142,14 +142,14 @@ public class StatusTest extends BaseTest {
 
         // After 1 turn -- 15/16 health ratio
         Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
-        Assert.assertTrue(attacking.fullHealth());
+        attacking.assertFullHealth();
         defending.assertHealthRatio(15/16f);
 
         // After 2 turns -- 13/16 health ratio
         int prevHp = defending.getHP();
         battle.splashFight();
         Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
-        Assert.assertTrue(attacking.fullHealth());
+        attacking.assertFullHealth();
         defending.assertHealthRatioDiff(prevHp, 2/16f);
         defending.assertHealthRatio(13/16f, 1);
 
@@ -157,7 +157,7 @@ public class StatusTest extends BaseTest {
         prevHp = defending.getHP();
         battle.splashFight();
         Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
-        Assert.assertTrue(attacking.fullHealth());
+        attacking.assertFullHealth();
         defending.assertHealthRatioDiff(prevHp, 3/16f);
         defending.assertHealthRatio(10/16f, 2);
 
@@ -165,7 +165,7 @@ public class StatusTest extends BaseTest {
         prevHp = defending.getHP();
         battle.splashFight();
         Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
-        Assert.assertTrue(attacking.fullHealth());
+        attacking.assertFullHealth();
         defending.assertHealthRatioDiff(prevHp, 4/16f);
         defending.assertHealthRatio(6/16f, 3);
 
@@ -173,14 +173,14 @@ public class StatusTest extends BaseTest {
         prevHp = defending.getHP();
         battle.splashFight();
         Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
-        Assert.assertTrue(attacking.fullHealth());
+        attacking.assertFullHealth();
         defending.assertHealthRatioDiff(prevHp, 5/16f);
         defending.assertHealthRatio(1/16f, 4);
 
         // After 6 turns -- DEAD
         battle.splashFight();
         Assert.assertTrue(defending.isActuallyDead());
-        Assert.assertTrue(attacking.fullHealth());
+        attacking.assertFullHealth();
         defending.assertHealthRatio(0);
     }
 }

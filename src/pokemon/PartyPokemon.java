@@ -364,6 +364,10 @@ public abstract class PartyPokemon implements Serializable {
         return this.getPokemonInfo().canBreed();
     }
 
+    public String getHpString() {
+        return this.getHP() + "/" + this.getMaxHP();
+    }
+
     public int getMaxHP() {
         return stats[Stat.HP.index()];
     }

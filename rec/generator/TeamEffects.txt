@@ -8,6 +8,7 @@ Constructor:
     MinTurns Default -1 Int
     MaxTurns Default -1 Int
     NextTurnSubside Default False Boolean
+    HasAlternateCast Default False Boolean
 *
 Failure:
     Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
@@ -90,14 +91,10 @@ ToxicSpikes:
         ###
     CastMessage: "Toxic spikes were scattered all around!"
     CanHave: True
-    Cast: 
-        Effect spikesies = b.getEffects(victim).get(this.namesies);
-        if (spikesies == null) {
-            super.cast(b, caster, victim, source, printCast);
-            return;
-        }
+    AlternateCast:
+        ToxicSpikes spikesies = (ToxicSpikes)b.getEffects(victim).get(this.namesies);        
+        spikesies.layers++;
         
-        ((ToxicSpikes)spikesies).layers++;
         Messages.add(getCastMessage(b, caster, victim, source));
         ###
     RapidSpin: "The toxic spikes dispersed!"
@@ -127,14 +124,10 @@ Spikes:
         ###
     CastMessage: "Spikes were scattered all around!"
     CanHave: True
-    Cast: 
-        Effect spikesies = b.getEffects(victim).get(this.namesies);
-        if (spikesies == null) {
-            super.cast(b, caster, victim, source, printCast);
-            return;
-        }
+    AlternateCast:
+        Spikes spikesies = (Spikes)b.getEffects(victim).get(this.namesies);
+        spikesies.layers++;
         
-        ((Spikes)spikesies).layers++;
         Messages.add(getCastMessage(b, caster, victim, source));
         ###
     RapidSpin: "The spikes dispersed!"
@@ -154,9 +147,8 @@ Wish:
         p.healHealthFraction(1/2.0);
         Messages.add(new MessageUpdate(casterName + "'s wish came true!").updatePokemon(b, p));
         ###
-    Cast: 
+    BeforeCast: 
         casterName = caster.getName();
-        super.cast(b, caster, victim, source, printCast);
         ###
 *
 LuckyChant:
@@ -183,9 +175,8 @@ HealSwitch:
         Messages.add(new MessageUpdate(enterer.getName() + " health was restored due to the " + wish + "!").updatePokemon(b, enterer));
         super.active = false;
         ###
-    Cast: 
+    BeforeCast: 
         wish = caster.getAttack().namesies() == AttackNamesies.LUNAR_DANCE ? "lunar dance" : "healing wish";
-        super.cast(b, caster, victim, source, printCast);
         ###
 *
 DeadAlly:
@@ -197,15 +188,14 @@ PayDay:
     Field: 
         private int coins;
         ###
-    Cast: 
+    AlternateCast:
         PayDay payday = (PayDay)b.getEffects(true).get(this.namesies);
+        payday.coins += 5*caster.getLevel();
+        
         Messages.add(getCastMessage(b, caster, victim, source));
+        ###
+    BeforeCast:
         coins = 5*caster.getLevel();
-        if (payday == null) {
-            b.getPlayer().getEffects().add(this);
-        } else {
-            payday.coins += coins;
-        }
         ###
     CastMessage: "Coins scattered everywhere!"
     CanHave: True

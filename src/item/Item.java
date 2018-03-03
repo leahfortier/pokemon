@@ -16,7 +16,8 @@ import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.DefiniteEscape;
-import battle.effect.generic.EffectInterfaces.EffectCurerEffect;
+import battle.effect.generic.EffectInterfaces.EffectCurerItem;
+import battle.effect.generic.EffectInterfaces.EffectReceivedEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.EntryEndTurnEffect;
@@ -596,7 +597,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class DestinyKnot extends Item implements HoldItem {
+    static class DestinyKnot extends Item implements HoldItem, EffectReceivedEffect {
         private static final long serialVersionUID = 1L;
 
         DestinyKnot() {
@@ -607,6 +608,13 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public int flingDamage() {
             return 10;
+        }
+
+        @Override
+        public void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
+            if (effectType == EffectNamesies.INFATUATED && EffectNamesies.INFATUATED.getEffect().apply(b, victim, caster, CastSource.HELD_ITEM, false)) {
+                Messages.add(victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!");
+            }
         }
     }
 
@@ -997,7 +1005,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class MentalHerb extends Item implements HoldItem, EffectCurerEffect {
+    static class MentalHerb extends Item implements HoldItem, EffectCurerItem {
         private static final long serialVersionUID = 1L;
 
         private static final Map<EffectNamesies, String> REMOVEABLE_EFFECTS = new EnumMap<>(EffectNamesies.class);
@@ -4498,7 +4506,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
     }
 
-    static class PersimBerry extends Item implements BattleUseItem, MessageGetter, GainableEffectBerry, EffectCurerEffect {
+    static class PersimBerry extends Item implements BattleUseItem, MessageGetter, GainableEffectBerry, EffectCurerItem {
         private static final long serialVersionUID = 1L;
 
         private boolean use(Battle b, ActivePokemon p, CastSource source) {

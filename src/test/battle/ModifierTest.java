@@ -299,9 +299,9 @@ public class ModifierTest extends BaseTest {
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     Assert.assertTrue(defending.hasEffect(EffectNamesies.STOCKPILE));
-                    Assert.assertFalse(defending.fullHealth());
+                    defending.assertNotFullHealth();
                     battle.defendingFight(AttackNamesies.SWALLOW);
-                    Assert.assertTrue(defending.fullHealth());
+                    defending.assertFullHealth();
                     Assert.assertFalse(defending.hasEffect(EffectNamesies.STOCKPILE));
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
@@ -414,7 +414,7 @@ public class ModifierTest extends BaseTest {
 
         // Gale Wings only works when the user has full health
         battle.attackingFight(AttackNamesies.BELLY_DRUM);
-        Assert.assertFalse(attacking.fullHealth());
+        attacking.assertNotFullHealth();
         checkPriority(0, battle, AttackNamesies.PECK);
 
         // Triage increases the priority of healing moves by 3

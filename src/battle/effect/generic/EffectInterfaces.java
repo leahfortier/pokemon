@@ -1316,7 +1316,7 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface EffectCurerEffect extends EffectReceivedEffect, EndTurnEffect {
+    public interface EffectCurerItem extends HoldItem, EffectReceivedEffect, EndTurnEffect {
         Set<EffectNamesies> getCurableEffects();
         String getRemoveMessage(ActivePokemon victim, EffectNamesies effectType);
 
@@ -1954,9 +1954,10 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface PassableEffect {
+    public interface TerrainEffect {
+        TerrainType getTerrainType();
     }
 
-    public interface TerrainEffect {
+    public interface PassableEffect {
     }
 }

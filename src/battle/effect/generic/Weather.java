@@ -10,7 +10,6 @@ import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.generic.EffectInterfaces.WeatherExtendingEffect;
 import battle.effect.status.StatusCondition;
-import message.MessageUpdate;
 import message.Messages;
 import pokemon.Stat;
 import type.Type;
@@ -24,7 +23,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
     private final String imageName;
 
     public Weather(EffectNamesies namesies, Type weatherElement) {
-        super(namesies, -1, -1, true);
+        super(namesies, -1, -1, true, false);
         this.weatherElement = weatherElement;
         this.imageName = this.getClass().getSimpleName().toLowerCase();
     }
@@ -38,12 +37,8 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
     }
 
     @Override
-    public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-        super.cast(b, caster, victim, source, printCast);
+    protected void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
         b.getWeather().setTurns(getTurns(b, caster));
-
-        Messages.add(new MessageUpdate().updatePokemon(b, caster));
-        Messages.add(new MessageUpdate().updatePokemon(b, victim));
     }
 
     private int getTurns(Battle b, ActivePokemon caster) {

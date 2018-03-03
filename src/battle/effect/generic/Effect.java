@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.CastSource;
 import battle.effect.InvokeEffect;
+import battle.effect.generic.EffectInterfaces.EffectReceivedEffect;
 import main.Global;
 import message.Messages;
 import util.RandomUtils;
@@ -18,22 +19,54 @@ public abstract class Effect implements InvokeEffect, Serializable {
 
     protected final EffectNamesies namesies;
     private final boolean nextTurnSubside;
+    private final boolean hasAlternateCast;
 
     protected boolean active;
     protected int numTurns;
 
-    protected Effect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
+    protected Effect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
         this.namesies = name;
         this.nextTurnSubside = nextTurnSubside;
+        this.hasAlternateCast = hasAlternateCast;
 
         this.numTurns = minTurns == -1 ? -1 : RandomUtils.getRandomInt(minTurns, maxTurns);
         this.active = true;
     }
 
-    public abstract void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast);
+    protected abstract void addEffect(Battle b, ActivePokemon victim);
+    protected abstract boolean hasEffect(Battle b, ActivePokemon victim);
+
+    public final void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        if (this.hasAlternateCast && this.hasEffect(b, victim)) {
+            this.alternateCast(b, caster, victim, source, printCast);
+        } else {
+            this.beforeCast(b, caster, victim, source);
+            Messages.update(b);
+
+            if (printCast) {
+                Messages.add(getCastMessage(b, caster, victim, source));
+            }
+
+            this.addEffect(b, victim);
+
+            this.afterCast(b, caster, victim, source);
+            Messages.update(b);
+
+            EffectReceivedEffect.invokeEffectReceivedEffect(b, caster, victim, this.namesies());
+            Messages.update(b);
+        }
+    }
+
+    protected void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {}
+    protected void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {}
+    protected void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {}
 
     public boolean nextTurnSubside() {
         return nextTurnSubside;
+    }
+
+    public boolean hasAlternateCast() {
+        return this.hasAlternateCast;
     }
 
     public void deactivate() {

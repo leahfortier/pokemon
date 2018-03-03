@@ -23,20 +23,18 @@ import type.Type;
 public abstract class BattleEffect extends Effect {
     private static final long serialVersionUID = 1L;
 
-    public BattleEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
-        super(name, minTurns, maxTurns, nextTurnSubside);
+    public BattleEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
+        super(name, minTurns, maxTurns, nextTurnSubside, hasAlternateCast);
     }
 
     @Override
-    public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-        if (printCast) {
-            Messages.add(getCastMessage(b, caster, victim, source));
-        }
-
+    protected void addEffect(Battle b, ActivePokemon victim) {
         b.addEffect(this);
+    }
 
-        Messages.add(new MessageUpdate().updatePokemon(b, caster));
-        Messages.add(new MessageUpdate().updatePokemon(b, victim));
+    @Override
+    protected boolean hasEffect(Battle b, ActivePokemon victim) {
+        return b.hasEffect(this.namesies);
     }
 
     // EVERYTHING BELOW IS GENERATED ###
@@ -47,7 +45,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         Gravity() {
-            super(EffectNamesies.GRAVITY, 5, 5, false);
+            super(EffectNamesies.GRAVITY, 5, 5, false, false);
         }
 
         @Override
@@ -61,8 +59,7 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            super.cast(b, caster, victim, source, printCast);
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             removeLevitation(b, caster);
             removeLevitation(b, victim);
         }
@@ -82,7 +79,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         WaterSport() {
-            super(EffectNamesies.WATER_SPORT, 5, 5, false);
+            super(EffectNamesies.WATER_SPORT, 5, 5, false, false);
         }
 
         @Override
@@ -110,7 +107,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         MudSport() {
-            super(EffectNamesies.MUD_SPORT, 5, 5, false);
+            super(EffectNamesies.MUD_SPORT, 5, 5, false, false);
         }
 
         @Override
@@ -138,7 +135,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         WonderRoom() {
-            super(EffectNamesies.WONDER_ROOM, 5, 5, false);
+            super(EffectNamesies.WONDER_ROOM, 5, 5, false, true);
         }
 
         @Override
@@ -154,14 +151,10 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            BattleEffect roomsies = b.getEffects().get(this.namesies);
-            if (roomsies == null) {
-                super.cast(b, caster, victim, source, printCast);
-                return;
-            }
-
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
+            BattleEffect roomsies = b.getEffects().get(this.namesies);
+
             Messages.add(roomsies.getSubsideMessage(caster));
             b.getEffects().remove(roomsies);
         }
@@ -181,18 +174,14 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         TrickRoom() {
-            super(EffectNamesies.TRICK_ROOM, 5, 5, false);
+            super(EffectNamesies.TRICK_ROOM, 5, 5, false, true);
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            BattleEffect roomsies = b.getEffects().get(this.namesies);
-            if (roomsies == null) {
-                super.cast(b, caster, victim, source, printCast);
-                return;
-            }
-
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
+            BattleEffect roomsies = b.getEffects().get(this.namesies);
+
             Messages.add(roomsies.getSubsideMessage(caster));
             b.getEffects().remove(roomsies);
         }
@@ -212,18 +201,14 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         MagicRoom() {
-            super(EffectNamesies.MAGIC_ROOM, 5, 5, false);
+            super(EffectNamesies.MAGIC_ROOM, 5, 5, false, true);
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            BattleEffect roomsies = b.getEffects().get(this.namesies);
-            if (roomsies == null) {
-                super.cast(b, caster, victim, source, printCast);
-                return;
-            }
-
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
+            BattleEffect roomsies = b.getEffects().get(this.namesies);
+
             Messages.add(roomsies.getSubsideMessage(caster));
             b.getEffects().remove(roomsies);
         }
@@ -244,7 +229,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         MistyTerrain() {
-            super(EffectNamesies.MISTY_TERRAIN, 5, 5, false);
+            super(EffectNamesies.MISTY_TERRAIN, 5, 5, false, false);
         }
 
         @Override
@@ -279,12 +264,8 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            // Remove all other Terrain Effects
-            b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
-
-            super.cast(b, caster, victim, source, printCast);
-            b.setTerrainType(TerrainType.MISTY, false);
+        public TerrainType getTerrainType() {
+            return TerrainType.MISTY;
         }
 
         @Override
@@ -299,7 +280,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         GrassyTerrain() {
-            super(EffectNamesies.GRASSY_TERRAIN, 5, 5, false);
+            super(EffectNamesies.GRASSY_TERRAIN, 5, 5, false, false);
         }
 
         @Override
@@ -331,12 +312,8 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            // Remove all other Terrain Effects
-            b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
-
-            super.cast(b, caster, victim, source, printCast);
-            b.setTerrainType(TerrainType.GRASS, false);
+        public TerrainType getTerrainType() {
+            return TerrainType.GRASS;
         }
 
         @Override
@@ -351,7 +328,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         ElectricTerrain() {
-            super(EffectNamesies.ELECTRIC_TERRAIN, 5, 5, false);
+            super(EffectNamesies.ELECTRIC_TERRAIN, 5, 5, false, false);
         }
 
         @Override
@@ -385,12 +362,8 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            // Remove all other Terrain Effects
-            b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
-
-            super.cast(b, caster, victim, source, printCast);
-            b.setTerrainType(TerrainType.ELECTRIC, false);
+        public TerrainType getTerrainType() {
+            return TerrainType.ELECTRIC;
         }
 
         @Override
@@ -405,7 +378,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         PsychicTerrain() {
-            super(EffectNamesies.PSYCHIC_TERRAIN, 5, 5, false);
+            super(EffectNamesies.PSYCHIC_TERRAIN, 5, 5, false, false);
         }
 
         @Override
@@ -429,18 +402,14 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            // Psychic terrain prevents increased priority moves from hitting
-            return b.getAttackPriority(user) > 0 && !victim.isLevitating(b);
+        public TerrainType getTerrainType() {
+            return TerrainType.PSYCHIC;
         }
 
         @Override
-        public void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            // Remove all other Terrain Effects
-            b.getEffects().removeIf(effect -> effect instanceof TerrainEffect);
-
-            super.cast(b, caster, victim, source, printCast);
-            b.setTerrainType(TerrainType.PSYCHIC, false);
+        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Psychic terrain prevents increased priority moves from hitting
+            return b.getAttackPriority(user) > 0 && !victim.isLevitating(b);
         }
 
         @Override
@@ -454,7 +423,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         FieldUproar() {
-            super(EffectNamesies.FIELD_UPROAR, -1, -1, false);
+            super(EffectNamesies.FIELD_UPROAR, -1, -1, false, false);
         }
 
         @Override

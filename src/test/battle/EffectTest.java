@@ -1,8 +1,12 @@
 package test.battle;
 
+import battle.ActivePokemon;
+import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.CastSource;
+import battle.effect.generic.Effect;
+import battle.effect.generic.EffectNamesies;
 import battle.effect.status.StatusCondition;
 import item.ItemNamesies;
 import org.junit.Assert;
@@ -15,6 +19,30 @@ import test.TestPokemon;
 import type.Type;
 
 public class EffectTest extends BaseTest {
+    @Test
+    public void alternateCastTest() {
+        for (EffectNamesies effectNamesies : EffectNamesies.values()) {
+            Effect effect = effectNamesies.getEffect();
+            try {
+                // This will throw a NoSuchMethodException if the effect does not override the alternateCast method
+                effect.getClass().getDeclaredMethod(
+                        "alternateCast",
+                        Battle.class,
+                        ActivePokemon.class,
+                        ActivePokemon.class,
+                        CastSource.class,
+                        boolean.class
+                );
+
+                // If it didn't throw an exception, then hasAlternateCast MUST be true
+                Assert.assertTrue(effect.hasAlternateCast());
+            } catch (NoSuchMethodException e) {
+                // Method was not overridden, hasAlternateCast must be false
+                Assert.assertFalse(effect.hasAlternateCast());
+            }
+        }
+    }
+
     @Test
     public void protectTest() {
         // Block moves
@@ -117,7 +145,7 @@ public class EffectTest extends BaseTest {
             battle.emptyHeal();
             battle.fight(protectMove, attack);
 
-            Assert.assertTrue(attacking.fullHealth());
+            attacking.assertFullHealth();
             Assert.assertFalse(attacking.hasStatus());
             Assert.assertTrue(attacking.getEffects().isEmpty());
             for (Stat stat : Stat.BATTLE_STATS) {
@@ -379,5 +407,42 @@ public class EffectTest extends BaseTest {
 
         Assert.assertEquals(attackingPP - (fullyExecuted ? 1 : 0), attacking.getMove().getPP());
         Assert.assertEquals(defendingPP - 2, defending.getMove().getPP());
+    }
+
+    @Test
+    public void substituteTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.HAPPINY, PokemonNamesies.KARTANA);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        battle.attackingFight(AttackNamesies.SUBSTITUTE);
+        attacking.assertHealthRatio(.75);
+
+        battle.emptyHeal();
+        attacking.assertFullHealth();
+        Assert.assertTrue(attacking.hasEffect(EffectNamesies.SUBSTITUTE));
+
+        // Status moves won't work against the substitute
+        battle.defendingFight(AttackNamesies.THUNDER_WAVE);
+        Assert.assertFalse(attacking.hasStatus());
+
+        battle.defendingFight(AttackNamesies.TAIL_WHIP);
+        new TestStages().test(attacking);
+
+        // Unless it is sound-based
+        battle.defendingFight(AttackNamesies.GROWL);
+        new TestStages().set(Stat.ATTACK, -1).test(attacking);
+
+        attacking.assertFullHealth();
+        Assert.assertTrue(attacking.hasEffect(EffectNamesies.SUBSTITUTE));
+
+        // Break the substitute -- user should still have full health
+        battle.defendingFight(AttackNamesies.EARTHQUAKE);
+        attacking.assertFullHealth();
+        Assert.assertFalse(attacking.hasEffect(EffectNamesies.SUBSTITUTE));
+
+        // No more substitute -- murder is fair game (except don't actualllly murder because it will heal the player)
+        battle.fight(AttackNamesies.ENDURE, AttackNamesies.EARTHQUAKE);
+        attacking.assertNotFullHealth();
     }
 }
