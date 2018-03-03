@@ -65,6 +65,10 @@ public abstract class Effect implements InvokeEffect, Serializable {
         return nextTurnSubside;
     }
 
+    public boolean hasAlternateCast() {
+        return this.hasAlternateCast;
+    }
+
     public void deactivate() {
         active = false;
     }
