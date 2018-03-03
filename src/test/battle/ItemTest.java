@@ -486,4 +486,25 @@ public class ItemTest extends BaseTest {
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
         Assert.assertTrue(attacking.hasStatus(StatusCondition.BURNED));
     }
+
+    @Test
+    public void destinyKnotTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking().withGender(Gender.FEMALE);
+        TestPokemon defending = battle.getDefending().withGender(Gender.MALE);
+
+        battle.attackingFight(AttackNamesies.ATTRACT);
+        Assert.assertFalse(attacking.hasEffect(EffectNamesies.INFATUATED));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.INFATUATED));
+
+        battle.clearAllEffects();
+        Assert.assertFalse(attacking.hasEffect(EffectNamesies.INFATUATED));
+        Assert.assertFalse(defending.hasEffect(EffectNamesies.INFATUATED));
+
+        // Destiny Knot causes the caster to be infatuated as well
+        defending.withItem(ItemNamesies.DESTINY_KNOT);
+        battle.attackingFight(AttackNamesies.ATTRACT);
+        Assert.assertTrue(attacking.hasEffect(EffectNamesies.INFATUATED));
+        Assert.assertTrue(defending.hasEffect(EffectNamesies.INFATUATED));
+    }
 }

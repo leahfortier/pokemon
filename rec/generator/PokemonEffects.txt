@@ -1012,11 +1012,6 @@ Infatuated:
         return false;
         ###
     CastMessage: victim.getName() + " fell in love!"
-    AfterCast:
-        if (victim.isHoldingItem(b, ItemNamesies.DESTINY_KNOT) && this.namesies.getEffect().apply(b, victim, caster, CastSource.HELD_ITEM, false)) {
-            Messages.add(victim.getName() + "'s " + ItemNamesies.DESTINY_KNOT.getName() + " caused " + caster.getName() + " to fall in love!");
-        }
-        ###
 *
 Snatch:
     NumTurns: 1

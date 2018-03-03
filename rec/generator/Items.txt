@@ -180,6 +180,11 @@ Destiny Knot:
     Desc: An item to be held by a Pok\u00e9mon. If the holder becomes infatuated, the opposing Pok\u00e9mon will be, too.
     Price: 4000
     Fling: 10
+    ReceiveEffect:
+        if (effectType == EffectNamesies.INFATUATED && EffectNamesies.INFATUATED.getEffect().apply(b, victim, caster, CastSource.HELD_ITEM, false)) {
+            Messages.add(victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!");
+        }
+        ###
 *
 Expert Belt:
     Int: HoldItem
