@@ -159,13 +159,6 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            if (victim.hasAbility(AbilityNamesies.STEADFAST)) {
-                victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
-            }
-        }
-
-        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return victim.getName() + " flinched!";
         }

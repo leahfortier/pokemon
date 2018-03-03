@@ -11,6 +11,7 @@ import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import test.BaseTest;
 import test.TestPokemon;
+import trainer.EnemyTrainer;
 import type.Type;
 import type.TypeAdvantage;
 
@@ -70,17 +71,17 @@ public class AbilityTest extends BaseTest {
         TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.VOLT_ABSORB);
 
         battle.attackingFight(AttackNamesies.CONSTRICT);
-        Assert.assertFalse(defending.fullHealth());
+        defending.assertNotFullHealth();
 
         // Thunderbolt should heal
         attacking.apply(false, AttackNamesies.THUNDERBOLT, battle);
-        Assert.assertTrue(defending.fullHealth());
+        defending.assertFullHealth();
 
         battle.attackingFight(AttackNamesies.CONSTRICT);
-        Assert.assertFalse(defending.fullHealth());
+        defending.assertNotFullHealth();
 
         battle.attackingFight(AttackNamesies.WATER_GUN);
-        Assert.assertFalse(defending.fullHealth());
+        defending.assertNotFullHealth();
     }
 
     @Test
@@ -334,16 +335,16 @@ public class AbilityTest extends BaseTest {
         sheerForceSuccessTest(
                 AttackNamesies.FLARE_BLITZ,
                 (battle, attacking, defending) -> {
-                    Assert.assertFalse(attacking.fullHealth());
+                    attacking.assertNotFullHealth();
                     Assert.assertFalse(defending.hasStatus());
                 },
-                (battle, attacking, defending) -> Assert.assertFalse(attacking.fullHealth())
+                (battle, attacking, defending) -> attacking.assertNotFullHealth()
         );
 
         // Sheer Force does not effect standard recoil moves
         sheerForceFailureTest(
                 AttackNamesies.TAKE_DOWN,
-                (battle, attacking, defending) -> Assert.assertFalse(attacking.fullHealth())
+                (battle, attacking, defending) -> attacking.assertNotFullHealth()
         );
 
         // Sheer Force does not effect crit-raising moves
@@ -385,5 +386,75 @@ public class AbilityTest extends BaseTest {
         battle.setExpectedDamageModifier(1.0);
         battle.attackingFight(attackNamesies);
         withoutSheerForceChecks.manipulate(battle, attacking, defending);
+    }
+
+    @Test
+    public void steadfastTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.MOLD_BREAKER);
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.STEADFAST);
+
+        // Fake out will cause the defending to flinch, speed will raise and its attack will not execute
+        // Steadfast is not affected by mold breaker
+        battle.fight(AttackNamesies.FAKE_OUT, AttackNamesies.TACKLE);
+        new TestStages().test(attacking);
+        new TestStages().set(Stat.SPEED, 1).test(defending);
+        attacking.assertFullHealth();
+        defending.assertNotFullHealth();
+
+        defending.fullyHeal();
+
+        // Fake out will fail the second time
+        battle.fight(AttackNamesies.FAKE_OUT, AttackNamesies.TACKLE);
+        new TestStages().test(attacking);
+        new TestStages().set(Stat.SPEED, 1).test(defending);
+        attacking.assertNotFullHealth();
+        defending.assertFullHealth();
+
+        // Make sure speed doesn't raise from other effects
+        battle.attackingFight(AttackNamesies.CONFUSE_RAY);
+        new TestStages().test(attacking);
+        new TestStages().set(Stat.SPEED, 1).test(defending);
+    }
+
+    @Test
+    public void innerFocusTest() {
+        TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.INNER_FOCUS);
+        TestPokemon defending1 = battle.getDefending().withAbility(AbilityNamesies.NO_ABILITY); // Not fucking Sturdy
+        TestPokemon defending2 = TestPokemon.newTrainerPokemon(PokemonNamesies.SHUCKLE).withAbility(AbilityNamesies.MOLD_BREAKER);
+        ((EnemyTrainer)battle.getOpponent()).addPokemon(defending2);
+        Assert.assertTrue(battle.getDefending() == defending1);
+
+        // Fake out will not cause the defending to flinch and it will successfully use Tackle
+        // (Fake Out will still strike first even though it is listed second since it has priority)
+        battle.fight(AttackNamesies.TACKLE, AttackNamesies.FAKE_OUT);
+        new TestStages().test(attacking);
+        new TestStages().test(defending1);
+        attacking.assertNotFullHealth();
+        defending1.assertNotFullHealth();
+
+        battle.emptyHeal();
+
+        // Make sure other effects can still work
+        attacking.withItem(ItemNamesies.PERSIM_BERRY);
+        battle.defendingFight(AttackNamesies.CONFUSE_RAY);
+        Assert.assertFalse(attacking.isHoldingItem(battle));
+        Assert.assertTrue(attacking.hasEffect(EffectNamesies.CONSUMED_ITEM));
+
+        // Switch opponent Pokemon so I can use Fake Out again
+        // NOTE: We need to kill the defending instead of something like whirlwind otherwise Fake Out won't work
+        // ANOTHER NOTE: Everything feels a little backwards with attacking and defending in this test
+        // because this does not appropriately swap if the player is killed
+        battle.attackingFight(AttackNamesies.FISSURE);
+        Assert.assertTrue(battle.getDefending() == defending2);
+        Assert.assertTrue(defending2.isFirstTurn());
+
+        // Defending2 has Mold Breaker, so attacking will still flinch with Inner Focus
+        battle.fight(AttackNamesies.TACKLE, AttackNamesies.FAKE_OUT);
+        new TestStages().test(attacking);
+        new TestStages().test(defending2);
+        attacking.assertNotFullHealth();
+        defending2.assertFullHealth();
     }
 }

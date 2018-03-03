@@ -362,7 +362,7 @@ Macho Brace:
     SimpleModifier: .5
 *
 Mental Herb:
-    Int: HoldItem, EffectCurerEffect
+    Int: HoldItem, EffectCurerItem
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. The holder shakes off move-binding effects to move freely. It can be used only once.
     Price: 4000
@@ -1698,7 +1698,7 @@ Oran Berry:
         ###
 *
 Persim Berry:
-    Int: BattleUseItem, MessageGetter, GainableEffectBerry, EffectCurerEffect
+    Int: BattleUseItem, MessageGetter, GainableEffectBerry, EffectCurerItem
     BattleCat: HP_PP
     Desc: A Berry to be consumed by Pok\u00e9mon. If a Pok\u00e9mon holds one, it can recover from confusion on its own in battle.
     NGType: Ground

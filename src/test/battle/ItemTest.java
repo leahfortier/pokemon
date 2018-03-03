@@ -332,8 +332,8 @@ public class ItemTest extends BaseTest {
     @Test
     public void powerHerbTest() {
         PokemonManipulator notFullHealth = (battle, attacking, defending) -> {
-            Assert.assertTrue(attacking.fullHealth());
-            Assert.assertFalse(defending.fullHealth());
+            attacking.assertFullHealth();
+            defending.assertNotFullHealth();
             new TestStages().test(attacking);
             new TestStages().test(defending);
 
@@ -345,8 +345,8 @@ public class ItemTest extends BaseTest {
             MultiTurnMove multiTurnMove = (MultiTurnMove)attacking.getAttack();
             Assert.assertTrue(multiTurnMove.isCharging());
 
-            Assert.assertTrue(attacking.fullHealth());
-            Assert.assertTrue(defending.fullHealth());
+            attacking.assertFullHealth();
+            defending.assertFullHealth();
 
             new TestStages().test(attacking);
             new TestStages().test(defending);
@@ -367,8 +367,8 @@ public class ItemTest extends BaseTest {
 
         // Power Herb is consumed and stats are raised
         powerHerbTest(AttackNamesies.GEOMANCY, true, (battle, attacking, defending) -> {
-            Assert.assertTrue(attacking.fullHealth());
-            Assert.assertTrue(defending.fullHealth());
+            attacking.assertFullHealth();
+            defending.assertFullHealth();
             new TestStages().set(Stat.SP_ATTACK, 2)
                             .set(Stat.SP_DEFENSE, 2)
                             .set(Stat.SPEED, 2)
@@ -383,8 +383,8 @@ public class ItemTest extends BaseTest {
         powerHerbTest(AttackNamesies.FLY, false, (battle, attacking, defending) -> {
             Assert.assertTrue(attacking.isSemiInvulnerable());
             Assert.assertTrue(attacking.isSemiInvulnerableFlying());
-            Assert.assertTrue(attacking.fullHealth());
-            Assert.assertTrue(defending.fullHealth());
+            attacking.assertFullHealth();
+            defending.assertFullHealth();
         }, notFullHealth);
 
         // Don't consume item or anything for non-multiturn moves

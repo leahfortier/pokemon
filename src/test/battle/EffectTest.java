@@ -117,7 +117,7 @@ public class EffectTest extends BaseTest {
             battle.emptyHeal();
             battle.fight(protectMove, attack);
 
-            Assert.assertTrue(attacking.fullHealth());
+            attacking.assertFullHealth();
             Assert.assertFalse(attacking.hasStatus());
             Assert.assertTrue(attacking.getEffects().isEmpty());
             for (Stat stat : Stat.BATTLE_STATS) {

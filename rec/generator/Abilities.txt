@@ -752,6 +752,11 @@ Suction Cups:
 *
 Steadfast:
     Desc: The Pok\u00e9mon's determination boosts the Speed stat each time the Pok\u00e9mon flinches.
+    ReceiveEffect:
+        if (effectType == EffectNamesies.FLINCH) {
+            victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+        }
+        ###
 *
 Sand Stream:
     Desc: The Pok\u00e9mon summons a sandstorm when it enters a battle.

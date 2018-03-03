@@ -34,24 +34,24 @@ public abstract class Effect implements InvokeEffect, Serializable {
     protected abstract void addEffect(Battle b, ActivePokemon victim);
 
     public final void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-        if (!this.shouldCast(b, caster, victim, source)) {
+        if (this.shouldCast(b, caster, victim, source)) {
+            this.beforeCast(b, caster, victim, source);
+            Messages.update(b);
+
+            if (printCast) {
+                Messages.add(getCastMessage(b, caster, victim, source));
+            }
+
+            this.addEffect(b, victim);
+
+            this.afterCast(b, caster, victim, source);
+            Messages.update(b);
+
+            EffectReceivedEffect.invokeEffectReceivedEffect(b, caster, victim, this.namesies());
+            Messages.update(b);
+        } else {
             this.alternateCast(b, caster, victim, source, printCast);
-            return;
         }
-
-        this.beforeCast(b, caster, victim, source);
-        Messages.update(b);
-
-        if (printCast) {
-            Messages.add(getCastMessage(b, caster, victim, source));
-        }
-
-        this.addEffect(b, victim);
-        EffectReceivedEffect.invokeEffectReceivedEffect(b, caster, victim, this.namesies());
-        Messages.update(b);
-
-        this.afterCast(b, caster, victim, source);
-        Messages.update(b);
     }
 
     protected void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {}

@@ -311,15 +311,15 @@ public class AttackTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         battle.attackingFight(AttackNamesies.TAKE_DOWN);
-        Assert.assertTrue(attacking.fullHealth());
-        Assert.assertFalse(defending.fullHealth());
+        attacking.assertFullHealth();
+        defending.assertNotFullHealth();
 
         defending.fullyHeal();
-        Assert.assertTrue(defending.fullHealth());
+        defending.assertFullHealth();
 
         battle.defendingFight(AttackNamesies.WOOD_HAMMER);
-        Assert.assertFalse(attacking.fullHealth());
-        Assert.assertFalse(defending.fullHealth());
+        attacking.assertNotFullHealth();
+        defending.assertNotFullHealth();
 
         int damage = attacking.getMaxHP() - attacking.getHP();
         Assert.assertTrue(defending.getMaxHP() - defending.getHP() == (int)(Math.ceil(damage/3.0)));
@@ -328,7 +328,7 @@ public class AttackTest extends BaseTest {
         defending.fullyHeal();
         defending.withAbility(AbilityNamesies.MAGIC_GUARD);
         battle.defendingFight(AttackNamesies.WOOD_HAMMER);
-        Assert.assertTrue(defending.fullHealth());
+        defending.assertFullHealth();
 
         // Struggle should still cause recoil damage even if they have Rock Head/Magic Guard
         attacking.fullyHeal();
@@ -364,7 +364,7 @@ public class AttackTest extends BaseTest {
 
         // Ground type should not effect Flying type
         battle.attackingFight(AttackNamesies.FISSURE);
-        Assert.assertTrue(defending.fullHealth());
+        defending.assertFullHealth();
 
         // OHKO,MF
         battle.attackingFight(AttackNamesies.HORN_DRILL);
@@ -374,7 +374,7 @@ public class AttackTest extends BaseTest {
         defending.fullyHeal();
         defending.withAbility(AbilityNamesies.STURDY);
         battle.attackingFight(AttackNamesies.SHEER_COLD);
-        Assert.assertTrue(defending.fullHealth());
+        defending.assertFullHealth();
 
         defending.withAbility(AbilityNamesies.NO_ABILITY);
         battle.attackingFight(AttackNamesies.SHEER_COLD);
@@ -386,7 +386,7 @@ public class AttackTest extends BaseTest {
         battle.defendingFight(AttackNamesies.HAZE);
         Assert.assertTrue(defending.isType(battle, Type.ICE));
         battle.attackingFight(AttackNamesies.SHEER_COLD);
-        Assert.assertTrue(defending.fullHealth());
+        defending.assertFullHealth();
     }
 
     @Test
@@ -454,8 +454,8 @@ public class AttackTest extends BaseTest {
         // Add Ghost Type
         battle.defendingFight(AttackNamesies.TRICK_OR_TREAT);
         Assert.assertTrue(attacking.isType(battle, Type.GHOST));
-        Assert.assertTrue(attacking.fullHealth());
-        Assert.assertTrue(defending.fullHealth());
+        attacking.assertFullHealth();
+        defending.assertFullHealth();
 
         // Make sure stat changes remain the same and target gets curse effect
         battle.attackingFight(AttackNamesies.CURSE);
@@ -558,14 +558,14 @@ public class AttackTest extends BaseTest {
 
         // Reduce health and apply again
         battle.attackingFight(AttackNamesies.BELLY_DRUM);
-        Assert.assertFalse(attacking.fullHealth());
+        attacking.assertNotFullHealth();
         attacking.apply(true, AttackNamesies.ROOST, battle);
         Assert.assertFalse(attacking.isType(battle, Type.FLYING));
-        Assert.assertTrue(attacking.fullHealth());
+        attacking.assertFullHealth();
 
         // Should fail because attack is already maxed -- flying type should come back at the end of the turn
         battle.attackingFight(AttackNamesies.BELLY_DRUM);
-        Assert.assertTrue(attacking.fullHealth());
+        attacking.assertFullHealth();
         Assert.assertTrue(attacking.isType(battle, Type.FLYING));
 
         // Clear stat changes and reduce again
@@ -576,18 +576,18 @@ public class AttackTest extends BaseTest {
         Assert.assertTrue(attacking.getStage(Stat.ATTACK) == Stat.MAX_STAT_CHANGES);
 
         // Using a full turn should bring the flying type back at the end
-        Assert.assertFalse(attacking.fullHealth());
+        attacking.assertNotFullHealth();
         battle.attackingFight(AttackNamesies.ROOST);
         Assert.assertTrue(attacking.isType(battle, Type.FLYING));
-        Assert.assertTrue(attacking.fullHealth());
+        attacking.assertFullHealth();
 
         defending.apply(false, AttackNamesies.MUD_SLAP, battle);
         defending.apply(true, AttackNamesies.TACKLE, battle);
-        Assert.assertFalse(attacking.fullHealth());
+        attacking.assertNotFullHealth();
         attacking.apply(true, AttackNamesies.ROOST, battle);
-        Assert.assertTrue(attacking.fullHealth());
+        attacking.assertFullHealth();
         defending.apply(true, AttackNamesies.MUD_SLAP, battle);
-        Assert.assertFalse(attacking.fullHealth());
+        attacking.assertNotFullHealth();
     }
 
     @Test
@@ -1007,28 +1007,28 @@ public class AttackTest extends BaseTest {
         battle.defendingFight(AttackNamesies.FALSE_SWIPE);
         battle.defendingFight(AttackNamesies.TOXIC);
 
-        Assert.assertFalse(attacking.fullHealth());
+        attacking.assertNotFullHealth();
         Assert.assertTrue(attacking.hasStatus(StatusCondition.BADLY_POISONED));
 
         battle.attackingFight(AttackNamesies.REST);
-        Assert.assertTrue(attacking.fullHealth());
+        attacking.assertFullHealth();
         Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
 
         // Resting Pokemon should be asleep for exactly two turns -- False Swipe should fail here and the next turn
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);
-        Assert.assertTrue(defending.fullHealth());
-        Assert.assertTrue(attacking.fullHealth());
+        defending.assertFullHealth();
+        attacking.assertFullHealth();
         Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
 
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);
-        Assert.assertTrue(defending.fullHealth());
-        Assert.assertTrue(attacking.fullHealth());
+        defending.assertFullHealth();
+        attacking.assertFullHealth();
         Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
 
         // Should wake up on this turn
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);
-        Assert.assertFalse(defending.fullHealth());
-        Assert.assertTrue(attacking.fullHealth());
+        defending.assertNotFullHealth();
+        attacking.assertFullHealth();
         Assert.assertFalse(attacking.hasStatus());
     }
 
@@ -1039,15 +1039,15 @@ public class AttackTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         battle.attackingFight(AttackNamesies.MIND_BLOWN);
-        Assert.assertFalse(defending.fullHealth());
+        defending.assertNotFullHealth();
         attacking.assertHealthRatio(.5);
 
         battle.emptyHeal();
 
         attacking.withAbility(AbilityNamesies.MAGIC_GUARD);
         battle.attackingFight(AttackNamesies.MIND_BLOWN);
-        Assert.assertFalse(defending.fullHealth());
-        Assert.assertTrue(attacking.fullHealth());
+        defending.assertNotFullHealth();
+        attacking.assertFullHealth();
     }
 
     @Test

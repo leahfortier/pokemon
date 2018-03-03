@@ -730,8 +730,8 @@ AlwaysCritEffect:
 		InvokeName: defCritsies
 	*
 ***
-EffectCurerEffect:
-    Extends: EffectReceivedEffect, EndTurnEffect
+EffectCurerItem:
+    Extends: HoldItem, EffectReceivedEffect, EndTurnEffect
     Method:
         Header: Set<EffectNamesies> getCurableEffects()
     *

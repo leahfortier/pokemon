@@ -53,11 +53,6 @@ Flinch:
         return false;
         ###
     NumTurns: 1
-    AfterCast:
-        if (victim.hasAbility(AbilityNamesies.STEADFAST)) {
-            victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
-        }
-        ###
 *
 FireSpin:
     PartialTrap: fire_spin victim.getName() + " was trapped in the fiery vortex!"

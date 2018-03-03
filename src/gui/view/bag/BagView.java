@@ -489,7 +489,7 @@ public class BagView extends View {
                         FontMetrics.setFont(g, 12);
 
                         g.drawString(p.getActualHeldItem().getName(), 50, 47);
-                        TextUtils.drawRightAlignedString(g, p.getHP() + "/" + p.getMaxHP(), 293, 47);
+                        TextUtils.drawRightAlignedString(g, p.getHpString(), 293, 47);
 
                         if (!p.canFight()) {
                             // TODO: Look if this color appears in multiple place and see if it should be a constant

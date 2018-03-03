@@ -27,6 +27,7 @@ import battle.effect.generic.EffectInterfaces.DefiniteEscape;
 import battle.effect.generic.EffectInterfaces.DifferentStatEffect;
 import battle.effect.generic.EffectInterfaces.EffectBlockerEffect;
 import battle.effect.generic.EffectInterfaces.EffectChanceMultiplierEffect;
+import battle.effect.generic.EffectInterfaces.EffectReceivedEffect;
 import battle.effect.generic.EffectInterfaces.EncounterRateMultiplier;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
@@ -2106,11 +2107,18 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class Steadfast extends Ability {
+    static class Steadfast extends Ability implements EffectReceivedEffect {
         private static final long serialVersionUID = 1L;
 
         Steadfast() {
             super(AbilityNamesies.STEADFAST, "The Pok\u00e9mon's determination boosts the Speed stat each time the Pok\u00e9mon flinches.");
+        }
+
+        @Override
+        public void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
+            if (effectType == EffectNamesies.FLINCH) {
+                victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+            }
         }
     }
 

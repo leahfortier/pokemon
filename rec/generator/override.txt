@@ -1779,6 +1779,10 @@ CureEffectRemoveMessage:
         return {0};
         ###
 *
+ReceiveEffect:
+    AddInterface: EffectReceivedEffect
+    Header: void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType)
+*
 StatusReceived:
 	Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType)
 *
