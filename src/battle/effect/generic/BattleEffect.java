@@ -155,7 +155,6 @@ public abstract class BattleEffect extends Effect {
             // Remove the effect if it's already in play
             BattleEffect roomsies = b.getEffects().get(this.namesies);
 
-            // TODO: Why can't we use this.subside()?
             Messages.add(roomsies.getSubsideMessage(caster));
             b.getEffects().remove(roomsies);
         }
@@ -183,7 +182,6 @@ public abstract class BattleEffect extends Effect {
             // Remove the effect if it's already in play
             BattleEffect roomsies = b.getEffects().get(this.namesies);
 
-            // TODO: Why can't we use this.subside()?
             Messages.add(roomsies.getSubsideMessage(caster));
             b.getEffects().remove(roomsies);
         }
@@ -211,7 +209,6 @@ public abstract class BattleEffect extends Effect {
             // Remove the effect if it's already in play
             BattleEffect roomsies = b.getEffects().get(this.namesies);
 
-            // TODO: Why can't we use this.subside()?
             Messages.add(roomsies.getSubsideMessage(caster));
             b.getEffects().remove(roomsies);
         }

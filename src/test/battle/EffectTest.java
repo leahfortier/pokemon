@@ -408,4 +408,41 @@ public class EffectTest extends BaseTest {
         Assert.assertEquals(attackingPP - (fullyExecuted ? 1 : 0), attacking.getMove().getPP());
         Assert.assertEquals(defendingPP - 2, defending.getMove().getPP());
     }
+
+    @Test
+    public void substituteTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.HAPPINY, PokemonNamesies.KARTANA);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        battle.attackingFight(AttackNamesies.SUBSTITUTE);
+        attacking.assertHealthRatio(.75);
+
+        battle.emptyHeal();
+        attacking.assertFullHealth();
+        Assert.assertTrue(attacking.hasEffect(EffectNamesies.SUBSTITUTE));
+
+        // Status moves won't work against the substitute
+        battle.defendingFight(AttackNamesies.THUNDER_WAVE);
+        Assert.assertFalse(attacking.hasStatus());
+
+        battle.defendingFight(AttackNamesies.TAIL_WHIP);
+        new TestStages().test(attacking);
+
+        // Unless it is sound-based
+        battle.defendingFight(AttackNamesies.GROWL);
+        new TestStages().set(Stat.ATTACK, -1).test(attacking);
+
+        attacking.assertFullHealth();
+        Assert.assertTrue(attacking.hasEffect(EffectNamesies.SUBSTITUTE));
+
+        // Break the substitute -- user should still have full health
+        battle.defendingFight(AttackNamesies.EARTHQUAKE);
+        attacking.assertFullHealth();
+        Assert.assertFalse(attacking.hasEffect(EffectNamesies.SUBSTITUTE));
+
+        // No more substitute -- murder is fair game (except don't actualllly murder because it will heal the player)
+        battle.fight(AttackNamesies.ENDURE, AttackNamesies.EARTHQUAKE);
+        attacking.assertNotFullHealth();
+    }
 }
