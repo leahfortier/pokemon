@@ -95,7 +95,7 @@ ToxicSpikes:
         ToxicSpikes spikesies = (ToxicSpikes)b.getEffects(victim).get(this.namesies);        
         spikesies.layers++;
         
-        Messages.add(getCastMessage(b, caster, victim, source));
+        this.addCastMessage(b, caster, victim, source, printCast);
         ###
     RapidSpin: "The toxic spikes dispersed!"
     Defog: "The toxic spikes dispersed!"
@@ -128,7 +128,7 @@ Spikes:
         Spikes spikesies = (Spikes)b.getEffects(victim).get(this.namesies);
         spikesies.layers++;
         
-        Messages.add(getCastMessage(b, caster, victim, source));
+        this.addCastMessage(b, caster, victim, source, printCast);
         ###
     RapidSpin: "The spikes dispersed!"
     Defog: "The spikes dispersed!"
@@ -192,7 +192,7 @@ PayDay:
         PayDay payday = (PayDay)b.getEffects(true).get(this.namesies);
         payday.coins += 5*caster.getLevel();
         
-        Messages.add(getCastMessage(b, caster, victim, source));
+        this.addCastMessage(b, caster, victim, source, printCast);
         ###
     BeforeCast:
         coins = 5*caster.getLevel();

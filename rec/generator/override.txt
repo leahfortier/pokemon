@@ -596,7 +596,7 @@ SafeguardEffect:
 UsedProof:
 	AddMapField: CanHave: True
     AddMapField: AlternateCast:
-        Messages.add(getCastMessage(b, caster, victim, source));
+        this.addCastMessage(b, caster, victim, source, printCast);
         ###
 *
 AlternateCast:

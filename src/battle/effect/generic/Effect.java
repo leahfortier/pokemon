@@ -43,10 +43,7 @@ public abstract class Effect implements InvokeEffect, Serializable {
             this.beforeCast(b, caster, victim, source);
             Messages.update(b);
 
-            if (printCast) {
-                Messages.add(getCastMessage(b, caster, victim, source));
-            }
-
+            this.addCastMessage(b, caster, victim, source, printCast);
             this.addEffect(b, victim);
 
             this.afterCast(b, caster, victim, source);
@@ -110,6 +107,12 @@ public abstract class Effect implements InvokeEffect, Serializable {
     public void subside(Battle b, ActivePokemon p) {
         Messages.add(getSubsideMessage(p));
         active = false; // Unnecessary, but just to be safe
+    }
+
+    protected void addCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source, boolean printCast) {
+        if (printCast) {
+            Messages.add(this.getCastMessage(b, user, victim, source));
+        }
     }
 
     protected String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {

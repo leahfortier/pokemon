@@ -1088,9 +1088,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Doesn't 'fail' if they already have the effect -- just display the message again
-            if (printCast) {
-                Messages.add(getCastMessage(b, caster, victim, source));
-            }
+            this.addCastMessage(b, caster, victim, source, printCast);
 
             RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies);
             critsies.afterCast(b, caster, victim, source);
@@ -1339,7 +1337,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Messages.add(getCastMessage(b, caster, victim, source));
+            this.addCastMessage(b, caster, victim, source, printCast);
         }
     }
 
@@ -1352,7 +1350,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Messages.add(getCastMessage(b, caster, victim, source));
+            this.addCastMessage(b, caster, victim, source, printCast);
         }
     }
 
@@ -1474,7 +1472,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Messages.add(getCastMessage(b, caster, victim, source));
+            this.addCastMessage(b, caster, victim, source, printCast);
         }
 
         @Override
@@ -1497,7 +1495,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Messages.add(getCastMessage(b, caster, victim, source));
+            this.addCastMessage(b, caster, victim, source, printCast);
         }
 
         @Override
@@ -2310,7 +2308,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             // Already has the effect, but not ready for it to end yet -- store dat energy
             if (bidesies.turns > 0) {
                 bidesies.turns--;
-                Messages.add(getCastMessage(b, caster, victim, source));
+                this.addCastMessage(b, caster, victim, source, printCast);
                 return;
             }
 
@@ -2391,7 +2389,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Messages.add(getCastMessage(b, caster, victim, source));
+            this.addCastMessage(b, caster, victim, source, printCast);
             victim.getEffects().remove(this.namesies);
         }
 
@@ -2777,7 +2775,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Messages.add(getCastMessage(b, caster, victim, source));
+            this.addCastMessage(b, caster, victim, source, printCast);
         }
     }
 

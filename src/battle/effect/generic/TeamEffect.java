@@ -338,7 +338,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
             ToxicSpikes spikesies = (ToxicSpikes)b.getEffects(victim).get(this.namesies);
             spikesies.layers++;
 
-            Messages.add(getCastMessage(b, caster, victim, source));
+            this.addCastMessage(b, caster, victim, source, printCast);
         }
 
         @Override
@@ -389,7 +389,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
             Spikes spikesies = (Spikes)b.getEffects(victim).get(this.namesies);
             spikesies.layers++;
 
-            Messages.add(getCastMessage(b, caster, victim, source));
+            this.addCastMessage(b, caster, victim, source, printCast);
         }
 
         @Override
@@ -606,7 +606,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
             PayDay payday = (PayDay)b.getEffects(true).get(this.namesies);
             payday.coins += 5*caster.getLevel();
 
-            Messages.add(getCastMessage(b, caster, victim, source));
+            this.addCastMessage(b, caster, victim, source, printCast);
         }
 
         @Override

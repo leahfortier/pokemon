@@ -309,9 +309,7 @@ RaiseCrits:
     CanHave: True
     AlternateCast:
         // Doesn't 'fail' if they already have the effect -- just display the message again
-        if (printCast) {
-            Messages.add(getCastMessage(b, caster, victim, source));
-        }
+        this.addCastMessage(b, caster, victim, source, printCast);
         
         RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies);
         critsies.afterCast(b, caster, victim, source);
@@ -899,7 +897,7 @@ Bide:
         // Already has the effect, but not ready for it to end yet -- store dat energy
         if (bidesies.turns > 0) {
             bidesies.turns--;
-            Messages.add(getCastMessage(b, caster, victim, source));
+            this.addCastMessage(b, caster, victim, source, printCast);
             return;
         }
 
@@ -950,7 +948,7 @@ PowerTrick:
     Int: PassableEffect, StatSwitchingEffect
     CastMessage: user.getName() + "'s attack and defense were swapped!"
     AlternateCast:
-        Messages.add(getCastMessage(b, caster, victim, source));
+        this.addCastMessage(b, caster, victim, source, printCast);
         victim.getEffects().remove(this.namesies);
         ###
 *
