@@ -1,6 +1,9 @@
 package test;
 
 import battle.attack.AttackNamesies;
+import item.ItemNamesies;
+import item.bag.Bag;
+import main.Game;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.LevelUpMove;
@@ -290,6 +293,56 @@ public class PokemonInfoTest extends BaseTest {
         }
     }
 
+    @Test
+    public void shedinjaTest() {
+        int[] levels = new int[] { 1, 50, 100 };
+        for (int level : levels) {
+            TestPokemon shedinja = new TestPokemon(PokemonNamesies.SHEDINJA, level, false, true);
+            Assert.assertEquals(1, shedinja.getHP());
+            Assert.assertEquals(1, shedinja.getMaxHP());
+
+            int baseAttack = shedinja.getStat(Stat.ATTACK);
+            String levelString = Integer.toString(level);
+
+            Bag bag = Game.getPlayer().getBag();
+            for (int i = 0; i < 26; i++) {
+                bag.addItem(ItemNamesies.HPUP);
+                Assert.assertTrue(bag.useItem(ItemNamesies.HPUP, shedinja));
+                TestUtils.assertGreater(levelString, shedinja.getEV(Stat.HP), 0);
+                Assert.assertEquals(1, shedinja.getHP());
+                Assert.assertEquals(1, shedinja.getMaxHP());
+
+                bag.addItem(ItemNamesies.PROTEIN);
+                Assert.assertTrue(bag.useItem(ItemNamesies.PROTEIN, shedinja));
+                TestUtils.assertGreater(levelString, shedinja.getEV(Stat.ATTACK), 0);
+            }
+
+            // HP EVs are now maxed, but max HP should not increase still
+            Assert.assertEquals(Stat.MAX_STAT_EVS, shedinja.getEV(Stat.HP));
+            Assert.assertFalse(bag.useItem(ItemNamesies.HPUP, shedinja));
+            Assert.assertEquals(Stat.MAX_STAT_EVS, shedinja.getEV(Stat.HP));
+            Assert.assertEquals(1, shedinja.getHP());
+            Assert.assertEquals(1, shedinja.getMaxHP());
+
+            // Make sure other EVs contribute
+            Assert.assertEquals(Stat.MAX_STAT_EVS, shedinja.getEV(Stat.ATTACK));
+            if (level > 1) { // Don't check at level one since it's generally too small for change
+                TestUtils.assertGreater(levelString, shedinja.getStat(Stat.ATTACK), baseAttack);
+            }
+
+            // Make sure level up doesn't increase HP either
+            bag.addItem(ItemNamesies.RARE_CANDY);
+            if (level == 100) {
+                Assert.assertFalse(bag.useItem(ItemNamesies.RARE_CANDY, shedinja));
+            } else {
+                Assert.assertTrue(bag.useItem(ItemNamesies.RARE_CANDY, shedinja));
+                Assert.assertEquals(level + 1, shedinja.getLevel());
+            }
+            Assert.assertEquals(1, shedinja.getHP());
+            Assert.assertEquals(1, shedinja.getMaxHP());
+        }
+    }
+
     private static class PokemonMovePair {
         private final PokemonNamesies pokemon;
         private final AttackNamesies attack;
@@ -302,8 +355,8 @@ public class PokemonInfoTest extends BaseTest {
         @Override
         public boolean equals(Object other) {
             if (other instanceof PokemonMovePair) {
-                PokemonMovePair otherPair = (PokemonMovePair)other;
-                return this.pokemon == otherPair.pokemon && this.attack == otherPair.attack;
+                PokemonMovePair that = (PokemonMovePair)other;
+                return this.pokemon == that.pokemon && this.attack == that.attack;
             } else {
                 return false;
             }

@@ -559,7 +559,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void applyRecoil(Battle b, ActivePokemon user, int damage) {
             Messages.add(user.getName() + " was hurt by recoil!");
-            user.reduceHealth(b, user.getMaxHP()/4, false);
+            user.reduceHealthFraction(b, 1/4.0);
         }
     }
 

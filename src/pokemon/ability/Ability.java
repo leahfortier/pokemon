@@ -4249,7 +4249,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         private void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
             Messages.add(murderer.getName() + " was hurt by " + dead.getName() + "'s " + this.getName() + "!");
-            murderer.reduceHealth(b, dead.getDamageTaken());
+            murderer.reduceHealth(b, dead.getDamageTaken(), false);
         }
 
         @Override

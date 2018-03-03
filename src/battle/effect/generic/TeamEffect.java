@@ -313,8 +313,14 @@ public abstract class TeamEffect extends Effect implements Serializable {
                 return;
             }
 
+            double advantage = Type.ROCK.getAdvantage().getAdvantage(enterer, b);
+            if (advantage == 0) {
+                // Technically not totally necessary since Rock is not ineffective against any type but just in case anything changes we don't want to print
+                return;
+            }
+
             Messages.add(enterer.getName() + " was hurt by stealth rock!");
-            enterer.reduceHealthFraction(b, Type.ROCK.getAdvantage().getAdvantage(enterer, b)/8.0);
+            enterer.reduceHealthFraction(b, advantage/8.0);
         }
 
         @Override

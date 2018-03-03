@@ -1699,7 +1699,7 @@ Innards Out:
     Desc: Damages the attacker landing the finishing hit by the amount equal to its last HP.
     DeathWish:
         Messages.add(murderer.getName() + " was hurt by " + dead.getName() + "'s " + this.getName() + "!");
-        murderer.reduceHealth(b, dead.getDamageTaken());
+        murderer.reduceHealth(b, dead.getDamageTaken(), false);
         ###
 *
 Fluffy:

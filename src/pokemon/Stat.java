@@ -100,7 +100,12 @@ public enum Stat {
     // Generates a new stat
     public static int getStat(int statIndex, int level, int baseStat, int IV, int EV, double natureVal) {
         if (statIndex == HP.index) {
-            return (int)(((IV + 2*baseStat + (EV/4.0))*level/100.0) + 10 + level);
+            // Shedinja...
+            if (baseStat == 1) {
+                return 1;
+            } else {
+                return (int)(((IV + 2*baseStat + (EV/4.0))*level/100.0) + 10 + level);
+            }
         }
 
         return (int)((((IV + 2*baseStat + (EV/4.0))*level/100.0) + 5)*natureVal);

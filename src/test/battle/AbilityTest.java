@@ -45,23 +45,63 @@ public class AbilityTest extends BaseTest {
 
     @Test
     public void wonderGuardTest() {
-        TestBattle battle = TestBattle.create(PokemonNamesies.BULBASAUR, PokemonNamesies.SHEDINJA);
-        TestPokemon attacking = battle.getAttacking();
-        battle.getDefending().withAbility(AbilityNamesies.WONDER_GUARD);
+        TestInfo emptyInfo = new TestInfo();
 
         // Status move should work
-        attacking.apply(true, AttackNamesies.DRAGON_DANCE, battle);
-        attacking.apply(true, AttackNamesies.THUNDER_WAVE, battle);
+        wonderGuardTest(AttackNamesies.DRAGON_DANCE, emptyInfo, (battle, attacking, defending) -> {
+            new TestStages().set(Stat.ATTACK, 1).set(Stat.SPEED, 1).test(attacking);
+            new TestStages().test(defending);
+            defending.assertFullHealth();
+        });
+        wonderGuardTest(AttackNamesies.THUNDER_WAVE, emptyInfo, (battle, attacking, defending) -> {
+            Assert.assertTrue(defending.hasStatus(StatusCondition.PARALYZED));
+            defending.assertFullHealth();
+            new TestStages().test(defending);
+        });
+
+        PokemonManipulator murder = (battle, attacking, defending) -> Assert.assertTrue(defending.isActuallyDead());
 
         // Super-effective moves and moves without type work
-        attacking.apply(true, AttackNamesies.SHADOW_BALL, battle);
-        battle.emptyHeal();
-        attacking.apply(true, AttackNamesies.STRUGGLE, battle);
+        wonderGuardTest(AttackNamesies.SHADOW_BALL, emptyInfo, murder);
+        wonderGuardTest(AttackNamesies.STRUGGLE, emptyInfo, murder);
+
+        PokemonManipulator allClear = (battle, attacking, defending) -> {
+            attacking.assertFullHealth();
+            defending.assertFullHealth();
+            new TestStages().test(attacking);
+            new TestStages().test(defending);
+            Assert.assertFalse(attacking.hasStatus());
+            Assert.assertFalse(defending.hasStatus());
+        };
 
         // Attacking non-super effective moves should not work
-        attacking.apply(false, AttackNamesies.SURF, battle);
-        attacking.apply(false, AttackNamesies.VINE_WHIP, battle);
-        attacking.apply(false, AttackNamesies.TACKLE, battle);
+        wonderGuardTest(AttackNamesies.SURF, emptyInfo, allClear);
+        wonderGuardTest(AttackNamesies.VINE_WHIP, emptyInfo, allClear);
+        wonderGuardTest(AttackNamesies.TACKLE, emptyInfo, allClear);
+        wonderGuardTest(AttackNamesies.FLASH_CANNON, emptyInfo, allClear);
+
+        // Unless the attacker breaks the mold
+        wonderGuardTest(AttackNamesies.SUNSTEEL_STRIKE, emptyInfo, murder);
+
+        TestInfo moldBreaker = new TestInfo().attacking(AbilityNamesies.MOLD_BREAKER);
+        wonderGuardTest(AttackNamesies.SURF, moldBreaker, murder);
+        wonderGuardTest(AttackNamesies.VINE_WHIP, moldBreaker, murder);
+
+        // Tackle will still fail since Shedinja is Ghost-type
+        wonderGuardTest(AttackNamesies.TACKLE, moldBreaker, allClear);
+    }
+
+    private void wonderGuardTest(AttackNamesies attackNamesies, TestInfo testInfo, PokemonManipulator testSuccess) {
+        testInfo.defending(PokemonNamesies.SHEDINJA);
+
+        TestBattle battle = testInfo.createBattle();
+        testInfo.manipulate(battle);
+
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.WONDER_GUARD);
+
+        battle.attackingFight(attackNamesies);
+        testSuccess.manipulate(battle, attacking, defending);
     }
 
     @Test

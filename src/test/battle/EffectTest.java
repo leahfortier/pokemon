@@ -16,6 +16,7 @@ import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import test.BaseTest;
 import test.TestPokemon;
+import trainer.EnemyTrainer;
 import type.Type;
 
 public class EffectTest extends BaseTest {
@@ -413,7 +414,6 @@ public class EffectTest extends BaseTest {
     public void substituteTest() {
         TestBattle battle = TestBattle.create(PokemonNamesies.HAPPINY, PokemonNamesies.KARTANA);
         TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
 
         battle.attackingFight(AttackNamesies.SUBSTITUTE);
         attacking.assertHealthRatio(.75);
@@ -444,5 +444,63 @@ public class EffectTest extends BaseTest {
         // No more substitute -- murder is fair game (except don't actualllly murder because it will heal the player)
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.EARTHQUAKE);
         attacking.assertNotFullHealth();
+        Assert.assertEquals(1, attacking.getHP());
+    }
+
+    @Test
+    public void stealthRockTest() {
+        // Dual-type both resistant
+        stealthRockTest(31/32.0, PokemonNamesies.LUCARIO, PokemonNamesies.EXCADRILL);
+
+        // Single-type resistant
+        stealthRockTest(15/16.0, PokemonNamesies.HITMONLEE, PokemonNamesies.SANDSHREW, PokemonNamesies.MAWILE);
+
+        // Dual-type one resistant one neutral
+        stealthRockTest(15/16.0, PokemonNamesies.MEDICHAM, PokemonNamesies.QUAGSIRE, PokemonNamesies.MAGNEMITE);
+
+        // Single-type neutral
+        stealthRockTest(7/8.0, PokemonNamesies.SQUIRTLE, PokemonNamesies.SUDOWOODO, PokemonNamesies.ESPEON);
+
+        // Dual-type both neutral
+        stealthRockTest(7/8.0, PokemonNamesies.BULBASAUR, PokemonNamesies.SPIRITOMB, PokemonNamesies.LANTURN);
+
+        // Dual-type one weak, one resistant
+        stealthRockTest(7/8.0, PokemonNamesies.INFERNAPE, PokemonNamesies.SWINUB, PokemonNamesies.SCIZOR, PokemonNamesies.SKARMORY);
+
+        // Single-type weak
+        stealthRockTest(3/4.0, PokemonNamesies.CHARMANDER, PokemonNamesies.GLACEON, PokemonNamesies.TORNADUS, PokemonNamesies.CATERPIE);
+
+        // Dual-type one weak one neutral
+        stealthRockTest(3/4.0, PokemonNamesies.CHANDELURE, PokemonNamesies.SNOVER, PokemonNamesies.SHUCKLE, PokemonNamesies.PIDGEOT);
+
+        // Dual-type both weak
+        stealthRockTest(1/2.0, PokemonNamesies.CHARIZARD, PokemonNamesies.ARTICUNO, PokemonNamesies.YANMEGA, PokemonNamesies.VOLCARONA);
+    }
+
+    private void stealthRockTest(double expectedHealthFraction, PokemonNamesies... notSoStealthy) {
+        for (PokemonNamesies defendingPokemon : notSoStealthy) {
+            stealthRockTest(expectedHealthFraction, defendingPokemon, AbilityNamesies.NO_ABILITY);
+            stealthRockTest(1, defendingPokemon, AbilityNamesies.MAGIC_GUARD);
+        }
+    }
+
+    private void stealthRockTest(double expectedHealthFraction, PokemonNamesies notSoStealthy, AbilityNamesies abilityNamesies) {
+        TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending1 = battle.getDefending();
+        TestPokemon defending2 = TestPokemon.newTrainerPokemon(notSoStealthy).withAbility(abilityNamesies);
+
+        ((EnemyTrainer)battle.getOpponent()).addPokemon(defending2);
+        Assert.assertTrue(battle.getDefending() == defending1);
+
+        // Use Stealth Rock -- nothing should really happen
+        battle.attackingFight(AttackNamesies.STEALTH_ROCK);
+        attacking.assertFullHealth();
+        defending1.assertFullHealth();
+
+        // Send out the other Pokemon -- it won't be as stealthy as it thought
+        battle.attackingFight(AttackNamesies.WHIRLWIND);
+        Assert.assertTrue(battle.getDefending() == defending2);
+        defending2.assertHealthRatio(expectedHealthFraction);
     }
 }

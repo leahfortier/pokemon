@@ -1845,7 +1845,7 @@ public final class EffectInterfaces {
 
             if (victim.hasAbility(AbilityNamesies.LIQUID_OOZE)) {
                 Messages.add(victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName() + " caused " + user.getName() + " to lose health instead!");
-                user.reduceHealth(b, sapAmount);
+                user.reduceHealth(b, sapAmount, false);
                 return;
             }
 

@@ -554,7 +554,13 @@ public class ActivePokemon extends PartyPokemon {
 
     // Don't think you'll make it out alive
     public void killKillKillMurderMurderMurder(Battle b) {
-        reduceHealth(b, this.getHP(), false);
+        this.reduceHealthFraction(b, 1);
+    }
+
+    // Reduces the amount of health that corresponds to fraction of the pokemon's total health and returns this amount
+    // In general, when reducing a fraction instead of a given amount, it is indirect damage
+    public int reduceHealthFraction(Battle b, double fraction) {
+        return reduceHealth(b, (int)Math.max(this.getMaxHP()*fraction, 1), false);
     }
 
     public int reduceHealth(Battle b, int amount) {
@@ -562,7 +568,8 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     // Reduces hp by amount, returns the actual amount of hp that was reduced
-    public int reduceHealth(Battle b, int amount, boolean checkEffects) {
+    // Only checks effects like bracing and absorb damage is isDirectDamage is true
+    public int reduceHealth(Battle b, int amount, boolean isDirectDamage) {
 
         // Not actually reducing health...
         if (amount == 0) {
@@ -570,7 +577,7 @@ public class ActivePokemon extends PartyPokemon {
         }
 
         // Check if the damage will be absorbed by an effect
-        if (checkEffects && AbsorbDamageEffect.checkAbsorbDamageEffect(b, this, amount)) {
+        if (isDirectDamage && AbsorbDamageEffect.checkAbsorbDamageEffect(b, this, amount)) {
             return 0;
         }
 
@@ -583,7 +590,7 @@ public class ActivePokemon extends PartyPokemon {
         this.takeDamage(taken);
 
         // Enduring the hit
-        if (this.getHP() == 0 && checkEffects) {
+        if (this.getHP() == 0 && isDirectDamage) {
             BracingEffect brace = BracingEffect.getBracingEffect(b, this, fullHealth);
             if (brace != null) {
                 taken -= heal(1);
@@ -599,11 +606,6 @@ public class ActivePokemon extends PartyPokemon {
         }
 
         return taken;
-    }
-
-    // Reduces the amount of health that corresponds to fraction of the pokemon's total health and returns this amount
-    public int reduceHealthFraction(Battle b, double fraction) {
-        return reduceHealth(b, (int)Math.max(this.getMaxHP()*fraction, 1));
     }
 
     public Stat getBestBattleStat() {

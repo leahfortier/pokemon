@@ -26,4 +26,11 @@ public class TestUtils {
             }
         }
     }
+
+    public static void assertGreater(String message, double greater, double lesser) {
+        Assert.assertTrue(
+                message + " " + greater + " !> " + lesser,
+                greater > lesser
+        );
+    }
 }
