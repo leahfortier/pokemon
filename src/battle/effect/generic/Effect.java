@@ -19,22 +19,27 @@ public abstract class Effect implements InvokeEffect, Serializable {
 
     protected final EffectNamesies namesies;
     private final boolean nextTurnSubside;
+    private final boolean hasAlternateCast;
 
     protected boolean active;
     protected int numTurns;
 
-    protected Effect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
+    protected Effect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
         this.namesies = name;
         this.nextTurnSubside = nextTurnSubside;
+        this.hasAlternateCast = hasAlternateCast;
 
         this.numTurns = minTurns == -1 ? -1 : RandomUtils.getRandomInt(minTurns, maxTurns);
         this.active = true;
     }
 
     protected abstract void addEffect(Battle b, ActivePokemon victim);
+    protected abstract boolean hasEffect(Battle b, ActivePokemon victim);
 
     public final void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-        if (this.shouldCast(b, caster, victim, source)) {
+        if (this.hasAlternateCast && this.hasEffect(b, victim)) {
+            this.alternateCast(b, caster, victim, source, printCast);
+        } else {
             this.beforeCast(b, caster, victim, source);
             Messages.update(b);
 
@@ -49,18 +54,12 @@ public abstract class Effect implements InvokeEffect, Serializable {
 
             EffectReceivedEffect.invokeEffectReceivedEffect(b, caster, victim, this.namesies());
             Messages.update(b);
-        } else {
-            this.alternateCast(b, caster, victim, source, printCast);
         }
     }
 
     protected void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {}
     protected void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {}
     protected void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {}
-
-    protected boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-        return true;
-    }
 
     public boolean nextTurnSubside() {
         return nextTurnSubside;

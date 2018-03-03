@@ -23,13 +23,18 @@ import type.Type;
 public abstract class BattleEffect extends Effect {
     private static final long serialVersionUID = 1L;
 
-    public BattleEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside) {
-        super(name, minTurns, maxTurns, nextTurnSubside);
+    public BattleEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
+        super(name, minTurns, maxTurns, nextTurnSubside, hasAlternateCast);
     }
 
     @Override
     protected void addEffect(Battle b, ActivePokemon victim) {
         b.addEffect(this);
+    }
+
+    @Override
+    protected boolean hasEffect(Battle b, ActivePokemon victim) {
+        return b.hasEffect(this.namesies);
     }
 
     // EVERYTHING BELOW IS GENERATED ###
@@ -40,7 +45,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         Gravity() {
-            super(EffectNamesies.GRAVITY, 5, 5, false);
+            super(EffectNamesies.GRAVITY, 5, 5, false, false);
         }
 
         @Override
@@ -74,7 +79,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         WaterSport() {
-            super(EffectNamesies.WATER_SPORT, 5, 5, false);
+            super(EffectNamesies.WATER_SPORT, 5, 5, false, false);
         }
 
         @Override
@@ -102,7 +107,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         MudSport() {
-            super(EffectNamesies.MUD_SPORT, 5, 5, false);
+            super(EffectNamesies.MUD_SPORT, 5, 5, false, false);
         }
 
         @Override
@@ -130,7 +135,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         WonderRoom() {
-            super(EffectNamesies.WONDER_ROOM, 5, 5, false);
+            super(EffectNamesies.WONDER_ROOM, 5, 5, false, true);
         }
 
         @Override
@@ -143,11 +148,6 @@ public abstract class BattleEffect extends Effect {
             } else {
                 return s;
             }
-        }
-
-        @Override
-        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !b.hasEffect(this.namesies);
         }
 
         @Override
@@ -175,12 +175,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         TrickRoom() {
-            super(EffectNamesies.TRICK_ROOM, 5, 5, false);
-        }
-
-        @Override
-        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !b.hasEffect(this.namesies);
+            super(EffectNamesies.TRICK_ROOM, 5, 5, false, true);
         }
 
         @Override
@@ -208,12 +203,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         MagicRoom() {
-            super(EffectNamesies.MAGIC_ROOM, 5, 5, false);
-        }
-
-        @Override
-        public boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !b.hasEffect(this.namesies);
+            super(EffectNamesies.MAGIC_ROOM, 5, 5, false, true);
         }
 
         @Override
@@ -242,7 +232,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         MistyTerrain() {
-            super(EffectNamesies.MISTY_TERRAIN, 5, 5, false);
+            super(EffectNamesies.MISTY_TERRAIN, 5, 5, false, false);
         }
 
         @Override
@@ -293,7 +283,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         GrassyTerrain() {
-            super(EffectNamesies.GRASSY_TERRAIN, 5, 5, false);
+            super(EffectNamesies.GRASSY_TERRAIN, 5, 5, false, false);
         }
 
         @Override
@@ -341,7 +331,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         ElectricTerrain() {
-            super(EffectNamesies.ELECTRIC_TERRAIN, 5, 5, false);
+            super(EffectNamesies.ELECTRIC_TERRAIN, 5, 5, false, false);
         }
 
         @Override
@@ -391,7 +381,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         PsychicTerrain() {
-            super(EffectNamesies.PSYCHIC_TERRAIN, 5, 5, false);
+            super(EffectNamesies.PSYCHIC_TERRAIN, 5, 5, false, false);
         }
 
         @Override
@@ -436,7 +426,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         FieldUproar() {
-            super(EffectNamesies.FIELD_UPROAR, -1, -1, false);
+            super(EffectNamesies.FIELD_UPROAR, -1, -1, false, false);
         }
 
         @Override

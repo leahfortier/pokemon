@@ -23,7 +23,7 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
     private final String imageName;
 
     public Weather(EffectNamesies namesies, Type weatherElement) {
-        super(namesies, -1, -1, true);
+        super(namesies, -1, -1, true, false);
         this.weatherElement = weatherElement;
         this.imageName = this.getClass().getSimpleName().toLowerCase();
     }

@@ -8,6 +8,7 @@ Constructor:
     MinTurns Default -1 Int
     MaxTurns Default -1 Int
     NextTurnSubside Default False Boolean
+    HasAlternateCast Default False Boolean
 *
 Failure:
     Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
@@ -306,9 +307,6 @@ RaiseCrits:
     GenericMessage: p.getName() + " is getting pumped!"
     SourceMessage: p.getName() + " is getting pumped due to its " + sourceName + "!"
     CanHave: True
-    ShouldCast:
-        return !victim.hasEffect(this.namesies);
-        ###
     AlternateCast:
         // Doesn't 'fail' if they already have the effect -- just display the message again
         if (printCast) {
@@ -438,9 +436,6 @@ Stockpile:
         ###
     Int: StageChangingEffect
     CanHave: True
-    ShouldCast:
-        return !victim.hasEffect(this.namesies);
-        ###
     AlternateCast:
         Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies);
         stockpile.afterCast(b, caster, victim, source);
@@ -898,10 +893,6 @@ Bide:
     BeforeCast:
         move = caster.getMove();
         ###
-    ShouldCast: 
-        // If the victim is not already under the effects of Bide, cast it upon them
-        return !victim.hasEffect(this.namesies);
-        ###
     AlternateCast:
         Bide bidesies = (Bide)victim.getEffect(this.namesies);
 
@@ -935,9 +926,6 @@ HalfWeight:
         private int layers;
         ###
     CanHave: True
-    ShouldCast:
-        return !victim.hasEffect(this.namesies);
-        ###
     AlternateCast:
         HalfWeight halfWeight = (HalfWeight)victim.getEffect(this.namesies);
         halfWeight.layers++;
@@ -961,9 +949,6 @@ PowerTrick:
         ###
     Int: PassableEffect, StatSwitchingEffect
     CastMessage: user.getName() + "'s attack and defense were swapped!"
-    ShouldCast:
-        return !victim.hasEffect(this.namesies);
-        ###
     AlternateCast:
         Messages.add(getCastMessage(b, caster, victim, source));
         victim.getEffects().remove(this.namesies);

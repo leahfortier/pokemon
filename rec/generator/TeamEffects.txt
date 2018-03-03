@@ -8,6 +8,7 @@ Constructor:
     MinTurns Default -1 Int
     MaxTurns Default -1 Int
     NextTurnSubside Default False Boolean
+    HasAlternateCast Default False Boolean
 *
 Failure:
     Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
@@ -90,9 +91,6 @@ ToxicSpikes:
         ###
     CastMessage: "Toxic spikes were scattered all around!"
     CanHave: True
-    ShouldCast:
-        return !b.getTrainer(victim).hasEffect(this.namesies);
-        ###
     AlternateCast:
         ToxicSpikes spikesies = (ToxicSpikes)b.getEffects(victim).get(this.namesies);        
         spikesies.layers++;
@@ -126,9 +124,6 @@ Spikes:
         ###
     CastMessage: "Spikes were scattered all around!"
     CanHave: True
-    ShouldCast:
-        return !b.getTrainer(victim).hasEffect(this.namesies);
-        ###
     AlternateCast:
         Spikes spikesies = (Spikes)b.getEffects(victim).get(this.namesies);
         spikesies.layers++;
@@ -192,9 +187,6 @@ PayDay:
     Int: EndBattleEffect
     Field: 
         private int coins;
-        ###
-    ShouldCast:
-        return !b.getTrainer(victim).hasEffect(this.namesies);
         ###
     AlternateCast:
         PayDay payday = (PayDay)b.getEffects(true).get(this.namesies);

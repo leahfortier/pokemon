@@ -595,17 +595,12 @@ SafeguardEffect:
 *
 UsedProof:
 	AddMapField: CanHave: True
-    AddMapField: ShouldCast: 
-        return !victim.hasEffect(this.namesies);
-        ###
     AddMapField: AlternateCast:
         Messages.add(getCastMessage(b, caster, victim, source));
         ###
 *
-ShouldCast:
-    Header: boolean shouldCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-*
 AlternateCast:
+    AddMapField: HasAlternateCast: True
     Header: void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
 *
 BeforeCast:
@@ -798,9 +793,6 @@ SpecialRoom:
 	AddMapField: SubsideMessage: "The dimensions of the {1} room returned to normal."
 	AddMapField: CastMessage: user.getName() + " twisted the dimensions to {2-}!"
 	AddMapField: CanHave: True
-    AddMapField: ShouldCast:
-        return !b.hasEffect(this.namesies);
-        ###
     AddMapField: AlternateCast:
         // Remove the effect if it's already in play
         BattleEffect roomsies = b.getEffects().get(this.namesies);
