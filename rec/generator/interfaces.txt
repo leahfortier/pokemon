@@ -37,12 +37,39 @@ EndTurnEffect:
 		Header: void applyEndTurn(ActivePokemon victim, Battle b)
 		Invoke: Void
 		Deadsies: victim
-		SetInvokees:
-			// Weather is handled separately
-			List<InvokeEffect> invokees = b.getEffectsList(victim);
-			invokees.remove(b.getWeather());
-			###
+        EffectList: victim
 	*
+***
+BattleEndTurnEffect:
+    Comments: // EndTurnEffect for BattleEffects -- those should only use this and not the standard EndTurnEffect!!!
+	Method:
+		Header: void singleEndTurnEffect(Battle b, ActivePokemon victim)
+        Default: Empty
+	*
+    Method:
+        Header: String getEndTurnMessage(Battle b)
+        Default:
+            // Definitely not required to have a message here
+            return StringUtils.empty();
+            ###
+    *
+    Method:
+        Header: void applyEndTurn(Battle b)
+        Invoke: Void
+        Default:
+            Messages.add(this.getEndTurnMessage(b));
+            
+            ActivePokemon playerFront = b.getPlayer().front();
+            if (!playerFront.isFainted(b)) {
+                this.singleEndTurnEffect(b, playerFront);
+            }
+            
+            ActivePokemon oppFront = b.getOpponent().front();
+            if (!oppFront.isFainted(b)) {
+                this.singleEndTurnEffect(b, oppFront);
+            }
+            ###
+    *
 ***
 SuperDuperEndTurnEffect:
 	Method:

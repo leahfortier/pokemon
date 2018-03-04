@@ -503,4 +503,67 @@ public class EffectTest extends BaseTest {
         Assert.assertTrue(battle.getDefending() == defending2);
         defending2.assertHealthRatio(expectedHealthFraction);
     }
+
+    @Test
+    public void grassyTerrainTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Reduce healthsies -- writing .75 and .5 this way for clarity later
+        battle.fight(AttackNamesies.SUBSTITUTE, AttackNamesies.BELLY_DRUM);
+        attacking.assertHealthRatio(12/16.0);
+        defending.assertHealthRatio(8/16.0);
+
+        // Grassy Terrain heals grounded Pokemon by 1/16 at the end of the turn
+        battle.defendingFight(AttackNamesies.GRASSY_TERRAIN); // Terrain count: 5
+        attacking.assertHealthRatio(13/16.0, 1);
+        defending.assertHealthRatio(9/16.0, 1);
+
+        // Fails because Bulby is behind a substitute
+        battle.defendingFight(AttackNamesies.TELEKINESIS); // Terrain count: 4
+        Assert.assertFalse(attacking.isLevitating(battle));
+        Assert.assertFalse(attacking.hasEffect(EffectNamesies.TELEKINESIS));
+        Assert.assertFalse(defending.hasEffect(EffectNamesies.TELEKINESIS));
+        attacking.assertHealthRatio(14/16.0, 2);
+        defending.assertHealthRatio(10/16.0, 2);
+
+        // Bulby levitates with Magnet Rise -- should no longer heal from Grassy Terrain
+        battle.attackingFight(AttackNamesies.MAGNET_RISE); // Terrain count: 3
+        Assert.assertTrue(attacking.isLevitating(battle));
+        Assert.assertTrue(attacking.hasEffect(EffectNamesies.MAGNET_RISE));
+        Assert.assertFalse(defending.hasEffect(EffectNamesies.MAGNET_RISE));
+        attacking.assertHealthRatio(14/16.0, 2);
+        defending.assertHealthRatio(11/16.0, 3);
+
+        // Grass Whistle will work against Substitute since it is sound-based
+        // Note: If this seems random as shit it's because I thought Grassy Terrain only healed Grass-Pokemon
+        // at first and I originally had Protean Charmander here but then left this because whatever
+        attacking.withItem(ItemNamesies.CHESTO_BERRY);
+        battle.defendingFight(AttackNamesies.GRASS_WHISTLE); // Terrain count: 2
+        Assert.assertTrue(attacking.hasEffect(EffectNamesies.SUBSTITUTE));
+        Assert.assertTrue(attacking.isLevitating(battle));
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertFalse(attacking.isHoldingItem(battle)); // Chesto Berry consumed
+        attacking.assertHealthRatio(14/16.0, 2);
+        defending.assertHealthRatio(12/16.0, 4);
+
+        // Break the substitute
+        battle.defendingFight(AttackNamesies.SHEER_COLD); // Terrain count: 1
+        Assert.assertFalse(attacking.hasEffect(EffectNamesies.SUBSTITUTE));
+        Assert.assertTrue(attacking.isLevitating(battle));
+        attacking.assertHealthRatio(14/16.0, 2);
+        defending.assertHealthRatio(13/16.0, 5);
+
+        // Terrain should be cleared at the end of that last turn (after successfully healing Grass-type Charmander)
+        Assert.assertFalse(battle.hasEffect(EffectNamesies.GRASSY_TERRAIN));
+
+        // Make sure we don't heal at the end of this turn
+        // Telekinesis should succeed since Substitute was broken
+        battle.defendingFight(AttackNamesies.TELEKINESIS);
+        Assert.assertTrue(attacking.hasEffect(EffectNamesies.TELEKINESIS));
+        Assert.assertTrue(attacking.isLevitating(battle));
+        attacking.assertHealthRatio(14/16.0, 2);
+        defending.assertHealthRatio(13/16.0, 5);
+    }
 }

@@ -13,7 +13,6 @@ import battle.effect.generic.EffectInterfaces.CrashDamageMove;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.CritStageEffect;
 import battle.effect.generic.EffectInterfaces.DefiniteEscape;
-import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.OpponentAccuracyBypassEffect;
@@ -23,10 +22,6 @@ import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.SemiInvulnerableBypasser;
 import battle.effect.generic.EffectInterfaces.StallingEffect;
 import battle.effect.generic.EffectInterfaces.StrikeFirstEffect;
-import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
-import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
-import battle.effect.generic.EffectInterfaces.TerrainEffect;
-import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
 import battle.effect.generic.Weather;
@@ -34,7 +29,6 @@ import main.Game;
 import main.Global;
 import map.area.AreaData;
 import map.overworld.TerrainType;
-import map.weather.WeatherState;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
@@ -44,6 +38,7 @@ import pokemon.Stat;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
 import trainer.PlayerTrainer;
+import trainer.SimulatedPlayer;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.TrainerAction;
@@ -53,6 +48,7 @@ import trainer.player.medal.MedalTheme;
 import type.TypeAdvantage;
 import util.PokeString;
 import util.RandomUtils;
+import util.SerializationUtils;
 import util.StringAppender;
 
 import java.io.Serializable;
@@ -67,13 +63,7 @@ public class Battle implements Serializable {
     private final Opponent opponent; // SO OBJECT-ORIENTED
     private PlayerTrainer player;
 
-    private EffectList<BattleEffect> effects;
-
-    private WeatherState baseWeather;
-    private Weather weather;
-
-    private TerrainType baseTerrain;
-    private TerrainType currentTerrain;
+    private BattleEffectList effects;
 
     private int turn;
     private boolean firstAttacking;
@@ -100,15 +90,17 @@ public class Battle implements Serializable {
         this.player.enterBattle();
         this.opponent.enterBattle();
 
-        this.effects = new EffectList<>();
+        this.effects = new BattleEffectList(this);
+
+        // Would ideally want these in the BattleEffectsList constructor but that causes NPEs since it will
+        // reference this.effects before it is officially set at the end of the constructor
+        AreaData area = Game.getPlayer().getArea();
+        effects.setBaseWeather(area.getWeather());
+        effects.setBaseTerrain(area.getBattleTerrain());
 
         turn = 0;
         escapeAttempts = 0;
         firstAttacking = false;
-
-        AreaData area = Game.getData().getMap(player.getMapName()).getArea(player.getLocation());
-        this.setBaseWeather(area.getWeather());
-        this.setTerrainType(area.getBattleTerrain(), true);
 
         int maxPokemonAllowed = opponent.maxPokemonAllowed();
         if (maxPokemonAllowed < Trainer.MAX_POKEMON) {
@@ -131,8 +123,12 @@ public class Battle implements Serializable {
         return player;
     }
 
-    public void setPlayer(PlayerTrainer player) {
-        this.player = player;
+    public Battle getSimulated() {
+        Battle simulated = (Battle)SerializationUtils.getSerializedCopy(this);
+        simulated.player = new SimulatedPlayer(this.getPlayer());
+        simulated.effects.setBattle(simulated);
+
+        return simulated;
     }
 
     public Opponent getOpponent() {
@@ -140,7 +136,7 @@ public class Battle implements Serializable {
     }
 
     public Weather getWeather() {
-        return weather;
+        return effects.getWeather();
     }
 
     public int getTurn() {
@@ -152,30 +148,7 @@ public class Battle implements Serializable {
     }
 
     public TerrainType getTerrainType() {
-        return currentTerrain;
-    }
-
-    private void setBaseWeather(WeatherState weatherState) {
-        this.baseWeather = weatherState;
-        this.addEffect((Weather)weatherState.getWeatherEffect().getEffect());
-    }
-
-    private void setTerrainType(TerrainType terrainType, boolean base) {
-        if (base) {
-            this.baseTerrain = terrainType;
-        }
-
-        this.currentTerrain = terrainType;
-
-        TerrainCastEffect.invokeTerrainCastEffect(this, player.front(), terrainType);
-        TerrainCastEffect.invokeTerrainCastEffect(this, opponent.front(), terrainType);
-
-        Messages.add(new MessageUpdate().withTerrain(currentTerrain));
-    }
-
-    public void resetTerrain() {
-        this.currentTerrain = baseTerrain;
-        Messages.add(new MessageUpdate().withTerrain(currentTerrain));
+        return effects.getTerrainType();
     }
 
     public boolean hasEffect(EffectNamesies effect) {
@@ -196,7 +169,7 @@ public class Battle implements Serializable {
         // Second turn
         executionSolution(false, playerFirst);
 
-        endTurn();
+        effects.endTurn();
 
         if (!isSimulating()) {
             deadUser();
@@ -225,8 +198,8 @@ public class Battle implements Serializable {
             }
         }
 
-        if (weather.namesies() != baseWeather.getWeatherEffect()) {
-            System.out.println("Weather: " + weather);
+        if (this.getWeather().namesies() != effects.getBaseWeather().getWeatherEffect()) {
+            System.out.println("Weather: " + this.getWeather());
         }
 
         System.out.println();
@@ -284,48 +257,6 @@ public class Battle implements Serializable {
     // It will return false if the trainer tried to run, use an attack, or use an item
     public boolean isSwitching(boolean isPlayer) {
         return this.getTrainer(isPlayer).getAction() == TrainerAction.SWITCH;
-    }
-
-    private void endTurn() {
-        // Apply Effects
-        endTurnPokemonEffects(player.front());
-        endTurnPokemonEffects(opponent.front());
-
-        // Decrement Pokemon effects
-        player.front().getEffects().decrement(this, player.front());
-        opponent.front().getEffects().decrement(this, opponent.front());
-
-        // Decrement Team effects
-        player.getEffects().decrement(this, player.front());
-        opponent.getEffects().decrement(this, opponent.front());
-
-        // Decrement Battle effects
-        effects.decrement(this, null);
-        decrementWeather();
-
-        // The very, very end
-        while (SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, player.front())
-                || SuperDuperEndTurnEffect.checkSuperDuperEndTurnEffect(this, opponent.front())) {}
-    }
-
-    private void decrementWeather() {
-        if (!weather.isActive()) {
-            Messages.add(weather.getSubsideMessage(player.front()));
-            this.setBaseWeather(this.baseWeather);
-            return;
-        }
-
-        weather.applyEndTurn(player.front(), this);
-        weather.decrement(this, player.front());
-    }
-
-    private void endTurnPokemonEffects(ActivePokemon me) {
-        EndTurnEffect.invokeEndTurnEffect(me, this);
-
-        me.isFainted(this);
-
-        // No longer the first turn anymore
-        me.setFirstTurn(false);
     }
 
     private boolean deadUser() {
@@ -536,26 +467,7 @@ public class Battle implements Serializable {
     }
 
     public void addEffect(BattleEffect effect) {
-        if (effect instanceof Weather) {
-            weather = (Weather)effect;
-            Messages.add(new MessageUpdate().withWeather(weather));
-
-            if (WeatherEliminatingEffect.shouldEliminateWeather(this, player.front(), weather)
-                    || WeatherEliminatingEffect.shouldEliminateWeather(this, opponent.front(), weather)) {
-                weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
-                Messages.add(new MessageUpdate().withWeather(weather));
-            }
-        } else {
-            if (effect instanceof TerrainEffect) {
-                // Remove all other Terrain Effects
-                this.getEffects().removeIf(battleEffect -> battleEffect instanceof TerrainEffect);
-
-                TerrainEffect terrain = (TerrainEffect)effect;
-                this.setTerrainType(terrain.getTerrainType(), false);
-            }
-
-            effects.add(effect);
-        }
+        this.effects.add(effect);
     }
 
     public EffectList<BattleEffect> getEffects() {
@@ -579,9 +491,8 @@ public class Battle implements Serializable {
         Collections.addAll(list, additionalItems);
 
         list.addAll(p.getAllEffects(this, includeItem));
-        list.addAll(getEffects(p).asList());
-        list.addAll(getEffects().asList());
-        list.add(weather);
+        list.addAll(this.getEffects(p).asList());
+        list.addAll(this.getEffects().asList());
 
         return list;
     }

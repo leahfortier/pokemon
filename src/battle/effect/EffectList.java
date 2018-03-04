@@ -7,10 +7,10 @@ import battle.effect.generic.EffectNamesies;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.function.Predicate;
 
-public class EffectList<EffectType extends Effect> implements Serializable {
+public class EffectList<EffectType extends Effect> implements Iterable<EffectType>, Serializable {
     private static final long serialVersionUID = 1L;
 
     private final List<EffectType> effects;
@@ -37,7 +37,7 @@ public class EffectList<EffectType extends Effect> implements Serializable {
 
     // Returns the effect if it is in the list, otherwise returns null
     public EffectType get(EffectNamesies effectNamesies) {
-        for (EffectType effect : effects) {
+        for (EffectType effect : this) {
             if (effect.namesies() == effectNamesies) {
                 return effect;
             }
@@ -55,16 +55,11 @@ public class EffectList<EffectType extends Effect> implements Serializable {
     }
 
     public boolean remove(EffectNamesies effectToRemove) {
-        return this.removeIf(effect -> effect.namesies() == effectToRemove);
-    }
-
-    public boolean removeIf(Predicate<EffectType> filter) {
-        return this.effects.removeIf(filter);
+        return this.effects.removeIf(effect -> effect.namesies() == effectToRemove);
     }
 
     public void decrement(Battle b, ActivePokemon p) {
-        // Important to use this.asList() to avoid ConcurrentModificationExceptions since decrement/subside can remove effects
-        for (EffectType effect : this.asList()) {
+        for (EffectType effect : this) {
             boolean inactive = !effect.isActive();
             if (!inactive) {
                 effect.decrement(b, p);
@@ -72,8 +67,8 @@ public class EffectList<EffectType extends Effect> implements Serializable {
             }
 
             if (inactive) {
-                this.remove(effect);
                 effect.subside(b, p);
+                this.remove(effect);
 
                 // I think this is pretty much just for Future Sight...
                 if (p != null && p.isFainted(b)) {
@@ -81,5 +76,11 @@ public class EffectList<EffectType extends Effect> implements Serializable {
                 }
             }
         }
+    }
+
+    @Override
+    public Iterator<EffectType> iterator() {
+        // Important to use this.asList() to avoid ConcurrentModificationExceptions since decrement/subside can remove effects
+        return this.asList().iterator();
     }
 }

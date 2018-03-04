@@ -5,8 +5,6 @@ import battle.Battle;
 import battle.attack.Move;
 import message.Messages;
 import message.Messages.MessageState;
-import trainer.PlayerTrainer;
-import trainer.SimulatedPlayer;
 import trainer.Trainer;
 import trainer.TrainerAction;
 import util.SerializationUtils;
@@ -78,12 +76,7 @@ public class DecisionTree {
     }
 
     private Battle simulateTurn(Battle b, Move opponentMove, Move playerMove) {
-        // TODO: Why can't we just do simulated.setPlayer(new SimulatedPlayer(b.getPlayer())??
-        // Mock the player object for serialization and set back afterwards
-        PlayerTrainer playerTrainer = b.getPlayer();
-        b.setPlayer(new SimulatedPlayer(b.getPlayer()));
-        Battle simulated = (Battle)SerializationUtils.getSerializedCopy(b);
-        b.setPlayer(playerTrainer);
+        Battle simulated = b.getSimulated();
 
         setupTrainer(simulated.getPlayer(), playerMove);
         setupTrainer((Trainer)simulated.getOpponent(), opponentMove);

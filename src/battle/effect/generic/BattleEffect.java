@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.CastSource;
 import battle.effect.generic.EffectInterfaces.AttackBlocker;
-import battle.effect.generic.EffectInterfaces.EndTurnEffect;
+import battle.effect.generic.EffectInterfaces.BattleEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.ItemBlockerEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
@@ -267,16 +267,10 @@ public abstract class BattleEffect extends Effect {
         public TerrainType getTerrainType() {
             return TerrainType.MISTY;
         }
-
-        @Override
-        public void subside(Battle b, ActivePokemon p) {
-            super.subside(b, p);
-            b.resetTerrain();
-        }
     }
 
     // Grass-type moves are 50% stronger with the grassy terrain
-    static class GrassyTerrain extends BattleEffect implements EndTurnEffect, TerrainEffect, PowerChangeEffect {
+    static class GrassyTerrain extends BattleEffect implements BattleEndTurnEffect, TerrainEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         GrassyTerrain() {
@@ -289,7 +283,7 @@ public abstract class BattleEffect extends Effect {
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
+        public void singleEndTurnEffect(Battle b, ActivePokemon victim) {
             if (!victim.fullHealth() && !victim.isLevitating(b)) {
                 victim.healHealthFraction(1/16.0);
                 Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to the Grassy Terrain!").updatePokemon(b, victim));
@@ -314,12 +308,6 @@ public abstract class BattleEffect extends Effect {
         @Override
         public TerrainType getTerrainType() {
             return TerrainType.GRASS;
-        }
-
-        @Override
-        public void subside(Battle b, ActivePokemon p) {
-            super.subside(b, p);
-            b.resetTerrain();
         }
     }
 
@@ -365,12 +353,6 @@ public abstract class BattleEffect extends Effect {
         public TerrainType getTerrainType() {
             return TerrainType.ELECTRIC;
         }
-
-        @Override
-        public void subside(Battle b, ActivePokemon p) {
-            super.subside(b, p);
-            b.resetTerrain();
-        }
     }
 
     // Psychic-type moves are 50% stronger with the psychic terrain
@@ -410,12 +392,6 @@ public abstract class BattleEffect extends Effect {
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Psychic terrain prevents increased priority moves from hitting
             return b.getAttackPriority(user) > 0 && !victim.isLevitating(b);
-        }
-
-        @Override
-        public void subside(Battle b, ActivePokemon p) {
-            super.subside(b, p);
-            b.resetTerrain();
         }
     }
 

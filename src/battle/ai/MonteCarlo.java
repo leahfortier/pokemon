@@ -59,11 +59,10 @@ public class MonteCarlo {
                 traversed.add(current);
             }
 
-            Battle simulated = (Battle)SerializationUtils.getSerializedCopy(battle);
+            Battle simulated = battle.getSimulated();
 
             ActivePokemon playerPokemon = (ActivePokemon)SerializationUtils.getSerializedCopy(battle.getPlayer().front());
             player.replaceFront(playerPokemon);
-            simulated.setPlayer(player);
 
             Opponent opponent = simulated.getOpponent();
             ActivePokemon opponentPokemon = opponent.front();

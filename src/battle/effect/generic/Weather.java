@@ -3,7 +3,7 @@ package battle.effect.generic;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.CastSource;
-import battle.effect.generic.EffectInterfaces.EndTurnEffect;
+import battle.effect.generic.EffectInterfaces.BattleEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
@@ -14,7 +14,7 @@ import message.Messages;
 import pokemon.Stat;
 import type.Type;
 
-public abstract class Weather extends BattleEffect implements EndTurnEffect {
+public abstract class Weather extends BattleEffect implements BattleEndTurnEffect {
     private static final long serialVersionUID = 1L;
 
     private static final int DEFAULT_TURNS = 5;
@@ -55,10 +55,6 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
         ClearSkies() {
             super(EffectNamesies.CLEAR_SKIES, Type.NORMAL);
         }
-
-        @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-        }
     }
 
     static class Raining extends Weather implements PowerChangeEffect {
@@ -74,8 +70,8 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            Messages.add("The rain continues to pour.");
+        public String getEndTurnMessage(Battle b) {
+            return "The rain continues to pour.";
         }
 
         @Override
@@ -115,8 +111,8 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            Messages.add("The sunlight is strong.");
+        public String getEndTurnMessage(Battle b) {
+            return "The sunlight is strong.";
         }
 
         @Override
@@ -158,24 +154,6 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 
         private static final Type[] immunees = new Type[] { Type.ROCK, Type.GROUND, Type.STEEL };
 
-        private void buffet(Battle b, ActivePokemon p) {
-            // Don't buffet the immune!
-            for (Type type : immunees) {
-                if (p.isType(b, type)) {
-                    return;
-                }
-            }
-
-            // Srsly don't buffet the immune!!
-            if (WeatherBlockerEffect.checkBlocked(b, p, this.namesies)) {
-                return;
-            }
-
-            // Buffety buffety buffet
-            Messages.add(p.getName() + " is buffeted by the sandstorm!");
-            p.reduceHealthFraction(b, 1/16.0);
-        }
-
         Sandstorm() {
             super(EffectNamesies.SANDSTORM, Type.ROCK);
         }
@@ -183,6 +161,11 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(b.getWeather().namesies() == this.namesies);
+        }
+
+        @Override
+        public String getEndTurnMessage(Battle b) {
+            return "The sandstorm rages.";
         }
 
         @Override
@@ -206,12 +189,22 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            Messages.add("The sandstorm rages.");
+        public void singleEndTurnEffect(Battle b, ActivePokemon victim) {
+            // Don't buffet the immune!
+            for (Type type : immunees) {
+                if (victim.isType(b, type)) {
+                    return;
+                }
+            }
 
-            ActivePokemon other = b.getOtherPokemon(victim);
-            buffet(b, victim);
-            buffet(b, other);
+            // Srsly don't buffet the immune!!
+            if (WeatherBlockerEffect.checkBlocked(b, victim, this.namesies)) {
+                return;
+            }
+
+            // Buffety buffety buffet
+            Messages.add(victim.getName() + " is buffeted by the sandstorm!");
+            victim.reduceHealthFraction(b, 1/16.0);
         }
 
         @Override
@@ -225,24 +218,6 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
 
         private static final Type[] immunees = new Type[] { Type.ICE };
 
-        private void buffet(Battle b, ActivePokemon p) {
-            // Don't buffet the immune!
-            for (Type type : immunees) {
-                if (p.isType(b, type)) {
-                    return;
-                }
-            }
-
-            // Srsly don't buffet the immune!!
-            if (WeatherBlockerEffect.checkBlocked(b, p, this.namesies)) {
-                return;
-            }
-
-            // Buffety buffety buffet
-            Messages.add(p.getName() + " is buffeted by the hail!");
-            p.reduceHealthFraction(b, 1/16.0);
-        }
-
         Hailing() {
             super(EffectNamesies.HAILING, Type.ICE);
         }
@@ -250,6 +225,11 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(b.getWeather().namesies() == this.namesies);
+        }
+
+        @Override
+        public String getEndTurnMessage(Battle b) {
+            return "The hail continues to fall.";
         }
 
         @Override
@@ -263,12 +243,22 @@ public abstract class Weather extends BattleEffect implements EndTurnEffect {
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            Messages.add("The hail continues to fall.");
+        public void singleEndTurnEffect(Battle b, ActivePokemon victim) {
+            // Don't buffet the immune!
+            for (Type type : immunees) {
+                if (victim.isType(b, type)) {
+                    return;
+                }
+            }
 
-            ActivePokemon other = b.getOtherPokemon(victim);
-            buffet(b, victim);
-            buffet(b, other);
+            // Srsly don't buffet the immune!!
+            if (WeatherBlockerEffect.checkBlocked(b, victim, this.namesies)) {
+                return;
+            }
+
+            // Buffety buffety buffet
+            Messages.add(victim.getName() + " is buffeted by the hail!");
+            victim.reduceHealthFraction(b, 1/16.0);
         }
     }
 }

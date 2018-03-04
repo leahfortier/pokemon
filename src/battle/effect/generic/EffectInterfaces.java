@@ -31,6 +31,7 @@ import trainer.WildPokemon;
 import type.PokeType;
 import type.Type;
 import util.RandomUtils;
+import util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -110,10 +111,7 @@ public final class EffectInterfaces {
                 return;
             }
 
-            // Weather is handled separately
             List<InvokeEffect> invokees = b.getEffectsList(victim);
-            invokees.remove(b.getWeather());
-
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof EndTurnEffect && InvokeEffect.isActiveEffect(invokee)) {
                     EndTurnEffect effect = (EndTurnEffect)invokee;
@@ -122,6 +120,39 @@ public final class EffectInterfaces {
                     if (victim.isFainted(b)) {
                         return;
                     }
+                }
+            }
+        }
+    }
+
+    // EndTurnEffect for BattleEffects -- those should only use this and not the standard EndTurnEffect!!!
+    public interface BattleEndTurnEffect {
+        default void singleEndTurnEffect(Battle b, ActivePokemon victim) {}
+
+        default String getEndTurnMessage(Battle b) {
+            // Definitely not required to have a message here
+            return StringUtils.empty();
+        }
+
+        default void applyEndTurn(Battle b) {
+            Messages.add(this.getEndTurnMessage(b));
+
+            ActivePokemon playerFront = b.getPlayer().front();
+            if (!playerFront.isFainted(b)) {
+                this.singleEndTurnEffect(b, playerFront);
+            }
+
+            ActivePokemon oppFront = b.getOpponent().front();
+            if (!oppFront.isFainted(b)) {
+                this.singleEndTurnEffect(b, oppFront);
+            }
+        }
+
+        static void invokeBattleEndTurnEffect(List<? extends InvokeEffect> invokees, Battle b) {
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof BattleEndTurnEffect && InvokeEffect.isActiveEffect(invokee)) {
+                    BattleEndTurnEffect effect = (BattleEndTurnEffect)invokee;
+                    effect.applyEndTurn(b);
                 }
             }
         }

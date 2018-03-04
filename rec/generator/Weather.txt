@@ -17,14 +17,10 @@ Failure:
 ClearSkies:
     WeatherElement: Normal
     CanHave: True
-    ApplyEndTurn:
-        ###
 *
 Raining:
     WeatherElement: Water
-    ApplyEndTurn:
-        Messages.add("The rain continues to pour.");
-        ###
+    BattleEndTurnMessage: "The rain continues to pour."
     CastMessage: "It started to rain!"
     SubsideMessage: "The rain stopped."
     WeatherStatChange: Water Fire
@@ -32,9 +28,7 @@ Raining:
 Sunny:
     WeatherElement: Fire
     Int: StatusPreventionEffect
-    ApplyEndTurn:
-        Messages.add("The sunlight is strong.");
-        ###
+    BattleEndTurnMessage: "The sunlight is strong."
     CastMessage: "The sunlight turned harsh!"
     SubsideMessage: "The sunlight faded."
     WeatherStatChange: Fire Water
@@ -44,8 +38,8 @@ Sunny:
 Sandstorm:
     WeatherElement: Rock
     BuffetImmune: Type.ROCK, Type.GROUND, Type.STEEL
-    BuffetMessage: p.getName() + " is buffeted by the sandstorm!"
-    PreBuffetMessage: "The sandstorm rages."
+    BuffetMessage: victim.getName() + " is buffeted by the sandstorm!"
+    BattleEndTurnMessage: "The sandstorm rages."
     CastMessage: "A sandstorm kicked up!"
     SubsideMessage: "The sandstorm subsided."
     ToModify: Sp_Defense
@@ -56,6 +50,6 @@ Hailing:
     CastMessage: "It started to hail!"
     SubsideMessage: "The hail stopped."
     BuffetImmune: Type.ICE
-    BuffetMessage: p.getName() + " is buffeted by the hail!"
-    PreBuffetMessage: "The hail continues to fall."
+    BuffetMessage: victim.getName() + " is buffeted by the hail!"
+    BattleEndTurnMessage: "The hail continues to fall."
 *

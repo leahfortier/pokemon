@@ -511,6 +511,16 @@ SelfSwitching:
 ApplyEndTurn:
 	Header: void applyEndTurn(ActivePokemon victim, Battle b)
 *
+# For BattleEndTurnEffects
+BattleEndTurn:
+    Header: void singleEndTurnEffect(Battle b, ActivePokemon victim)
+*
+BattleEndTurnMessage:
+    Header: String getEndTurnMessage(Battle b)
+    Body:
+        return {0};
+        ###
+*
 CanAttack:
 	Header: boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
 *
@@ -878,11 +888,7 @@ Terrain:
     Body:
         return TerrainType.{00};
         ###
-    AddMapField: Subside:
-		super.subside(b, p);
-		b.resetTerrain();
-		###
-	AddMapField: NumTurns: 5
+    AddMapField: NumTurns: 5
 *
 EndBattle:
 	Header: void afterBattle(Trainer player, Battle b, ActivePokemon p)
@@ -1110,37 +1116,25 @@ WeatherEncounterRateDecreaser:
 BuffetImmune:
 	AddMapField: Field:
 		private static final Type[] immunees = new Type[] { {0} };
-		
 		###
 *
 BuffetMessage:
-	AddMapField: Field:
-		private void buffet(Battle b, ActivePokemon p) {
-			// Don't buffet the immune!
-			for (Type type : immunees) {
-				if (p.isType(b, type)) {
-					return;
-				}
-			}
+	AddMapField: BattleEndTurn:
+        // Don't buffet the immune!
+        for (Type type : immunees) {
+            if (victim.isType(b, type)) {
+                return;
+            }
+        }
 
-			// Srsly don't buffet the immune!!
-			if (WeatherBlockerEffect.checkBlocked(b, p, this.namesies)) {
-				return;
-			}
+        // Srsly don't buffet the immune!!
+        if (WeatherBlockerEffect.checkBlocked(b, victim, this.namesies)) {
+            return;
+        }
 
-			// Buffety buffety buffet
-			Messages.add({0});
-			p.reduceHealthFraction(b, 1/16.0);
-		}
-		###
-*
-PreBuffetMessage:
-	AddMapField: ApplyEndTurn:
-		Messages.add({0});
-
-		ActivePokemon other = b.getOtherPokemon(victim);
-		buffet(b, victim);
-		buffet(b, other);
+        // Buffety buffety buffet
+        Messages.add({0});
+        victim.reduceHealthFraction(b, 1/16.0);
 		###
 *
 WeatherStatChange:

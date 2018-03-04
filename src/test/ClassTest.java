@@ -17,6 +17,7 @@ import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
 import battle.effect.generic.EffectInterfaces.AttackingNoAdvantageChanger;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.BasicAccuracyBypassEffect;
+import battle.effect.generic.EffectInterfaces.BattleEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
 import battle.effect.generic.EffectInterfaces.BracingEffect;
 import battle.effect.generic.EffectInterfaces.ChangeAttackTypeEffect;
@@ -169,7 +170,8 @@ public class ClassTest extends BaseTest {
         Class<?>[] castSources = { Attack.class, Ability.class, HoldItem.class };
         Class<?>[] pokemonEffectNoBattleList = { Ability.class, HoldItem.class };
         Class<?>[] pokemonEffectList = GeneralUtils.append(pokemonEffectNoBattleList, Status.class, PokemonEffect.class);
-        Class<?>[] effectListSourcesNoAttack = GeneralUtils.append(pokemonEffectList, TeamEffect.class, BattleEffect.class);
+        Class<?>[] teamEffectList = GeneralUtils.append(pokemonEffectList, TeamEffect.class);
+        Class<?>[] effectListSourcesNoAttack = GeneralUtils.append(teamEffectList, BattleEffect.class);
         Class<?>[] effectListSourcesWithAttack = GeneralUtils.append(effectListSourcesNoAttack, Attack.class);
         for (Class<?> classy : classes) {
             checkInstance(classy, ItemInterface.class, Item.class);
@@ -177,8 +179,10 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, NameChanger.class, Ability.class);
             checkInstance(classy, PassableEffect.class, PokemonEffect.class);
             checkInstance(classy, TerrainEffect.class, BattleEffect.class);
+            checkInstance(classy, BattleEndTurnEffect.class, BattleEffect.class);
+            checkInstance(classy, EndTurnEffect.class, teamEffectList);
             checkInstance(classy, SwitchOutEffect.class, pokemonEffectList);
-            checkInstance(classy, EndBattleEffect.class, GeneralUtils.append(pokemonEffectList, TeamEffect.class));
+            checkInstance(classy, EndBattleEffect.class, teamEffectList);
 
             // Teams and Opponent things
             checkInstance(classy, Team.class, Trainer.class, WildPokemon.class);
@@ -204,7 +208,6 @@ public class ClassTest extends BaseTest {
 
             // Invoked from battle.getEffectsList() without attack
             checkInstance(classy, OpponentApplyDamageEffect.class, effectListSourcesNoAttack);
-            checkInstance(classy, EndTurnEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, SuperDuperEndTurnEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, TakeDamageEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, OpponentTakeDamageEffect.class, effectListSourcesNoAttack);
