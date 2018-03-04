@@ -1,7 +1,7 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
-import battle.effect.generic.EffectNamesies;
+import battle.effect.generic.PokemonEffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
@@ -64,12 +64,12 @@ public class TypeTest extends BaseTest {
     @Test
     public void changeEffectivenessTest() {
         // Foresight
-        PokemonManipulator foresight = PokemonManipulator.giveDefendingEffect(EffectNamesies.FORESIGHT);
+        PokemonManipulator foresight = PokemonManipulator.giveDefendingEffect(PokemonEffectNamesies.FORESIGHT);
         changeEffectivenessTest(PokemonNamesies.GASTLY, AttackNamesies.TACKLE, foresight);
         changeEffectivenessTest(PokemonNamesies.GASTLY, AttackNamesies.KARATE_CHOP, foresight);
 
         // Miracle Eye
-        PokemonManipulator miracleEye = PokemonManipulator.giveDefendingEffect(EffectNamesies.MIRACLE_EYE);
+        PokemonManipulator miracleEye = PokemonManipulator.giveDefendingEffect(PokemonEffectNamesies.MIRACLE_EYE);
         changeEffectivenessTest(PokemonNamesies.UMBREON, AttackNamesies.PSYCHIC, miracleEye);
 
         // Ring Target

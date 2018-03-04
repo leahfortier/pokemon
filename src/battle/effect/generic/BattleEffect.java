@@ -10,6 +10,7 @@ import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
+import battle.effect.generic.EffectNamesies.BattleEffectNamesies;
 import battle.effect.status.StatusCondition;
 import message.Messages;
 import pokemon.Stat;
@@ -18,8 +19,13 @@ import type.Type;
 public abstract class BattleEffect extends Effect {
     private static final long serialVersionUID = 1L;
 
-    public BattleEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
+    public BattleEffect(BattleEffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
         super(name, minTurns, maxTurns, nextTurnSubside, hasAlternateCast);
+    }
+
+    @Override
+    public BattleEffectNamesies namesies() {
+        return (BattleEffectNamesies)super.namesies();
     }
 
     @Override
@@ -40,7 +46,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         Gravity() {
-            super(EffectNamesies.GRAVITY, 5, 5, false, false);
+            super(StandardBattleEffectNamesies.GRAVITY, 5, 5, false, false);
         }
 
         @Override
@@ -74,7 +80,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         WaterSport() {
-            super(EffectNamesies.WATER_SPORT, 5, 5, false, false);
+            super(StandardBattleEffectNamesies.WATER_SPORT, 5, 5, false, false);
         }
 
         @Override
@@ -102,7 +108,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         MudSport() {
-            super(EffectNamesies.MUD_SPORT, 5, 5, false, false);
+            super(StandardBattleEffectNamesies.MUD_SPORT, 5, 5, false, false);
         }
 
         @Override
@@ -130,7 +136,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         WonderRoom() {
-            super(EffectNamesies.WONDER_ROOM, 5, 5, false, true);
+            super(StandardBattleEffectNamesies.WONDER_ROOM, 5, 5, false, true);
         }
 
         @Override
@@ -169,7 +175,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         TrickRoom() {
-            super(EffectNamesies.TRICK_ROOM, 5, 5, false, true);
+            super(StandardBattleEffectNamesies.TRICK_ROOM, 5, 5, false, true);
         }
 
         @Override
@@ -196,7 +202,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         MagicRoom() {
-            super(EffectNamesies.MAGIC_ROOM, 5, 5, false, true);
+            super(StandardBattleEffectNamesies.MAGIC_ROOM, 5, 5, false, true);
         }
 
         @Override
@@ -223,7 +229,7 @@ public abstract class BattleEffect extends Effect {
         private static final long serialVersionUID = 1L;
 
         FieldUproar() {
-            super(EffectNamesies.FIELD_UPROAR, -1, -1, false, false);
+            super(StandardBattleEffectNamesies.FIELD_UPROAR, -1, -1, false, false);
         }
 
         @Override
@@ -243,7 +249,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean theVeryVeryEnd(Battle b, ActivePokemon p) {
-            if (b.getTrainer(true).front().hasEffect(EffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(EffectNamesies.UPROAR)) {
+            if (b.getTrainer(true).front().hasEffect(PokemonEffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(PokemonEffectNamesies.UPROAR)) {
                 return false;
             }
 

@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
-import battle.effect.generic.EffectNamesies;
+import battle.effect.generic.TeamEffectNamesies;
 import gui.view.ViewMode;
 import item.ItemNamesies;
 import item.berry.farm.BerryFarm;
@@ -417,7 +417,7 @@ public class Player extends PlayerTrainer implements Serializable {
             this.setNpcInteraction(b.getNpcUpdateInteraction());
 
             // I've decided that the next line of code is the best line in this entire codebase
-            int datCash = opp.getDatCashMoney()*(hasEffect(EffectNamesies.GET_DAT_CASH_MONEY_TWICE) ? 2 : 1);
+            int datCash = opp.getDatCashMoney()*(hasEffect(TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE) ? 2 : 1);
             Messages.add(getName() + " received " + datCash + " pokedollars for winning! Woo!");
             this.getDatCashMoney(datCash);
         } else {

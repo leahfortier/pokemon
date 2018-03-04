@@ -1,7 +1,7 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
-import battle.effect.generic.EffectNamesies;
+import battle.effect.generic.PokemonEffectNamesies;
 import battle.effect.status.StatusCondition;
 import item.ItemNamesies;
 import org.junit.Assert;
@@ -285,9 +285,9 @@ public class AbilityTest extends BaseTest {
         battle.attackingFight(AttackNamesies.SWAGGER);
         new TestStages().test(attacking);
         new TestStages().set(Stat.SPEED, 2).test(defending);
-        Assert.assertFalse(defending.hasEffect(EffectNamesies.CONFUSION));
+        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONFUSION));
         Assert.assertFalse(defending.isHoldingItem(battle));
-        Assert.assertTrue(defending.hasEffect(EffectNamesies.CONSUMED_ITEM));
+        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
 
         // Simple doubles stat modifications to itself -- shouldn't affect contrary pokemon
         battle.fight(AttackNamesies.HAZE, AttackNamesies.SIMPLE_BEAM);
@@ -360,8 +360,8 @@ public class AbilityTest extends BaseTest {
         // Dynamic Punch has a 100% chance to confuse the target
         sheerForceSuccessTest(
                 AttackNamesies.DYNAMIC_PUNCH,
-                (battle, attacking, defending) -> Assert.assertFalse(defending.hasEffect(EffectNamesies.CONFUSION)),
-                (battle, attacking, defending) -> Assert.assertTrue(defending.hasEffect(EffectNamesies.CONFUSION))
+                (battle, attacking, defending) -> Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONFUSION)),
+                (battle, attacking, defending) -> Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CONFUSION))
         );
 
         // Inferno has a 100% chance to burn the target
@@ -480,7 +480,7 @@ public class AbilityTest extends BaseTest {
         attacking.withItem(ItemNamesies.PERSIM_BERRY);
         battle.defendingFight(AttackNamesies.CONFUSE_RAY);
         Assert.assertFalse(attacking.isHoldingItem(battle));
-        Assert.assertTrue(attacking.hasEffect(EffectNamesies.CONSUMED_ITEM));
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
 
         // Switch opponent Pokemon so I can use Fake Out again
         // NOTE: We need to kill the defending instead of something like whirlwind otherwise Fake Out won't work

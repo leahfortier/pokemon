@@ -22,10 +22,15 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
     private final Type weatherElement;
     private final String imageName;
 
-    public WeatherEffect(EffectNamesies namesies, Type weatherElement) {
+    public WeatherEffect(WeatherNamesies namesies, Type weatherElement) {
         super(namesies, -1, -1, true, false);
         this.weatherElement = weatherElement;
         this.imageName = this.getClass().getSimpleName().toLowerCase();
+    }
+
+    @Override
+    public WeatherNamesies namesies() {
+        return (WeatherNamesies)super.namesies();
     }
 
     public String getImageName() {
@@ -42,7 +47,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
     }
 
     private int getTurns(Battle b, ActivePokemon caster) {
-        return DEFAULT_TURNS + WeatherExtendingEffect.getModifier(b, caster, this.namesies);
+        return DEFAULT_TURNS + WeatherExtendingEffect.getModifier(b, caster, this.namesies());
     }
 
     // EVERYTHING BELOW IS GENERATED ###
@@ -53,7 +58,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
         private static final long serialVersionUID = 1L;
 
         ClearSkies() {
-            super(EffectNamesies.CLEAR_SKIES, Type.NORMAL);
+            super(WeatherNamesies.CLEAR_SKIES, Type.NORMAL);
         }
     }
 
@@ -61,7 +66,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
         private static final long serialVersionUID = 1L;
 
         Raining() {
-            super(EffectNamesies.RAINING, Type.WATER);
+            super(WeatherNamesies.RAINING, Type.WATER);
         }
 
         @Override
@@ -102,7 +107,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
         private static final long serialVersionUID = 1L;
 
         Sunny() {
-            super(EffectNamesies.SUNNY, Type.FIRE);
+            super(WeatherNamesies.SUNNY, Type.FIRE);
         }
 
         @Override
@@ -155,7 +160,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
         private static final Type[] immunees = new Type[] { Type.ROCK, Type.GROUND, Type.STEEL };
 
         Sandstorm() {
-            super(EffectNamesies.SANDSTORM, Type.ROCK);
+            super(WeatherNamesies.SANDSTORM, Type.ROCK);
         }
 
         @Override
@@ -198,7 +203,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
             }
 
             // Srsly don't buffet the immune!!
-            if (WeatherBlockerEffect.checkBlocked(b, victim, this.namesies)) {
+            if (WeatherBlockerEffect.checkBlocked(b, victim, this.namesies())) {
                 return;
             }
 
@@ -219,7 +224,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
         private static final Type[] immunees = new Type[] { Type.ICE };
 
         Hailing() {
-            super(EffectNamesies.HAILING, Type.ICE);
+            super(WeatherNamesies.HAILING, Type.ICE);
         }
 
         @Override
@@ -252,7 +257,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
             }
 
             // Srsly don't buffet the immune!!
-            if (WeatherBlockerEffect.checkBlocked(b, victim, this.namesies)) {
+            if (WeatherBlockerEffect.checkBlocked(b, victim, this.namesies())) {
                 return;
             }
 

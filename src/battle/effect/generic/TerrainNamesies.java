@@ -1,5 +1,6 @@
 package battle.effect.generic;
 
+import battle.effect.generic.EffectNamesies.BattleEffectNamesies;
 import battle.effect.generic.TerrainEffect.ElectricTerrain;
 import battle.effect.generic.TerrainEffect.GrassyTerrain;
 import battle.effect.generic.TerrainEffect.MistyTerrain;
@@ -7,7 +8,7 @@ import battle.effect.generic.TerrainEffect.PsychicTerrain;
 
 import java.util.function.Supplier;
 
-public enum TerrainNamesies implements EffectNamesies2 {
+public enum TerrainNamesies implements BattleEffectNamesies {
     // EVERYTHING BELOW IS GENERATED ###
     MISTY_TERRAIN(MistyTerrain::new),
     GRASSY_TERRAIN(GrassyTerrain::new),

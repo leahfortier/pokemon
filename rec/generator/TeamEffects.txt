@@ -4,7 +4,7 @@
 # Fields can be specified in any order
 
 Constructor:
-    Namesies Enum EffectNamesies
+    Namesies Enum TeamEffectNamesies
     MinTurns Default -1 Int
     MaxTurns Default -1 Int
     NextTurnSubside Default False Boolean
@@ -12,7 +12,7 @@ Constructor:
 *
 Failure:
     Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-    CanHave Not Default True Boolean b.getTrainer(victim).hasEffect(this.namesies)
+    CanHave Not Default True Boolean b.getTrainer(victim).hasEffect(this.namesies())
 *
 
 ***
@@ -146,7 +146,7 @@ Wish:
         private String casterName;
         ###
     Subside: 
-        if (p.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+        if (p.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
             return;
         }
         

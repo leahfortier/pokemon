@@ -78,8 +78,13 @@ import java.util.List;
 public abstract class PokemonEffect extends Effect implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public PokemonEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
+    public PokemonEffect(PokemonEffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
         super(name, minTurns, maxTurns, nextTurnSubside, hasAlternateCast);
+    }
+
+    @Override
+    public PokemonEffectNamesies namesies() {
+        return (PokemonEffectNamesies)super.namesies();
     }
 
     @Override
@@ -89,7 +94,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
     @Override
     protected boolean hasEffect(Battle b, ActivePokemon victim) {
-        return victim.hasEffect(this.namesies);
+        return victim.hasEffect(this.namesies());
     }
 
     // EVERYTHING BELOW IS GENERATED ###
@@ -100,12 +105,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         LeechSeed() {
-            super(EffectNamesies.LEECH_SEED, -1, -1, false, false);
+            super(PokemonEffectNamesies.LEECH_SEED, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.isType(b, Type.GRASS) || victim.hasEffect(this.namesies));
+            return !(victim.isType(b, Type.GRASS) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -133,7 +138,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.isType(b, Type.GRASS)) {
                 return "It doesn't affect " + victim.getName() + "!";
-            } else if (victim.hasEffect(this.namesies)) {
+            } else if (victim.hasEffect(this.namesies())) {
                 return victim.getName() + " is already seeded!";
             }
 
@@ -150,12 +155,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Flinch() {
-            super(EffectNamesies.FLINCH, 1, 1, false, false);
+            super(PokemonEffectNamesies.FLINCH, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.INNER_FOCUS) && !caster.breaksTheMold()) || !b.isFirstAttack() || victim.hasEffect(this.namesies));
+            return !((victim.hasAbility(AbilityNamesies.INNER_FOCUS) && !caster.breaksTheMold()) || !b.isFirstAttack() || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -173,12 +178,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         FireSpin() {
-            super(EffectNamesies.FIRE_SPIN, 4, 5, true, false);
+            super(PokemonEffectNamesies.FIRE_SPIN, 4, 5, true, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -226,12 +231,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Infestation() {
-            super(EffectNamesies.INFESTATION, 4, 5, true, false);
+            super(PokemonEffectNamesies.INFESTATION, 4, 5, true, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -279,12 +284,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         MagmaStorm() {
-            super(EffectNamesies.MAGMA_STORM, 4, 5, true, false);
+            super(PokemonEffectNamesies.MAGMA_STORM, 4, 5, true, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -332,12 +337,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Clamped() {
-            super(EffectNamesies.CLAMPED, 4, 5, true, false);
+            super(PokemonEffectNamesies.CLAMPED, 4, 5, true, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -385,12 +390,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Whirlpooled() {
-            super(EffectNamesies.WHIRLPOOLED, 4, 5, true, false);
+            super(PokemonEffectNamesies.WHIRLPOOLED, 4, 5, true, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -438,12 +443,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Wrapped() {
-            super(EffectNamesies.WRAPPED, 4, 5, true, false);
+            super(PokemonEffectNamesies.WRAPPED, 4, 5, true, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -491,12 +496,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Binded() {
-            super(EffectNamesies.BINDED, 4, 5, true, false);
+            super(PokemonEffectNamesies.BINDED, 4, 5, true, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -544,12 +549,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         SandTomb() {
-            super(EffectNamesies.SAND_TOMB, 4, 5, true, false);
+            super(PokemonEffectNamesies.SAND_TOMB, 4, 5, true, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -597,12 +602,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         KingsShield() {
-            super(EffectNamesies.KINGS_SHIELD, 1, 1, false, false);
+            super(PokemonEffectNamesies.KINGS_SHIELD, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -626,12 +631,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         SpikyShield() {
-            super(EffectNamesies.SPIKY_SHIELD, 1, 1, false, false);
+            super(PokemonEffectNamesies.SPIKY_SHIELD, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -653,12 +658,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         BanefulBunker() {
-            super(EffectNamesies.BANEFUL_BUNKER, 1, 1, false, false);
+            super(PokemonEffectNamesies.BANEFUL_BUNKER, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -679,12 +684,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Protecting() {
-            super(EffectNamesies.PROTECTING, 1, 1, false, false);
+            super(PokemonEffectNamesies.PROTECTING, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -697,12 +702,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         QuickGuard() {
-            super(EffectNamesies.QUICK_GUARD, 1, 1, false, false);
+            super(PokemonEffectNamesies.QUICK_GUARD, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -720,12 +725,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         CraftyShield() {
-            super(EffectNamesies.CRAFTY_SHIELD, 1, 1, false, false);
+            super(PokemonEffectNamesies.CRAFTY_SHIELD, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -744,12 +749,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         MatBlock() {
-            super(EffectNamesies.MAT_BLOCK, 1, 1, false, false);
+            super(PokemonEffectNamesies.MAT_BLOCK, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -767,12 +772,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Bracing() {
-            super(EffectNamesies.BRACING, 1, 1, false, false);
+            super(PokemonEffectNamesies.BRACING, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -797,13 +802,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private int turns;
 
         Confusion() {
-            super(EffectNamesies.CONFUSION, -1, -1, false, false);
+            super(PokemonEffectNamesies.CONFUSION, -1, -1, false, false);
             this.turns = RandomUtils.getRandomInt(1, 4); // Between 1 and 4 turns
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.OWN_TEMPO) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies));
+            return !((victim.hasAbility(AbilityNamesies.OWN_TEMPO) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -840,7 +845,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.hasEffect(this.namesies)) {
+            if (victim.hasEffect(this.namesies())) {
                 return victim.getName() + " is already confused!";
             } else if (victim.hasAbility(AbilityNamesies.OWN_TEMPO)) {
                 return victim.getName() + "'s " + victim.getAbility().getName() + " prevents confusion!";
@@ -856,12 +861,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private Move move;
 
         SelfConfusion() {
-            super(EffectNamesies.SELF_CONFUSION, 2, 3, false, false);
+            super(PokemonEffectNamesies.SELF_CONFUSION, 2, 3, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -876,7 +881,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public void subside(Battle b, ActivePokemon p) {
-            if (EffectNamesies.CONFUSION.getEffect().apply(b, p, p, CastSource.EFFECT, false)) {
+            if (PokemonEffectNamesies.CONFUSION.getEffect().apply(b, p, p, CastSource.EFFECT, false)) {
                 Messages.add(p.getName() + " became confused due to fatigue!");
             }
         }
@@ -886,12 +891,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Safeguard() {
-            super(EffectNamesies.SAFEGUARD, 5, 5, false, false);
+            super(PokemonEffectNamesies.SAFEGUARD, 5, 5, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -924,12 +929,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         GuardSpecial() {
-            super(EffectNamesies.GUARD_SPECIAL, 5, 5, false, false);
+            super(PokemonEffectNamesies.GUARD_SPECIAL, 5, 5, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -959,12 +964,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private Move move;
 
         Encore() {
-            super(EffectNamesies.ENCORE, 3, 3, false, false);
+            super(PokemonEffectNamesies.ENCORE, 3, 3, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.getLastMoveUsed().getAttack().isMoveType(MoveType.ENCORELESS) || victim.hasEffect(this.namesies));
+            return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.getLastMoveUsed().getAttack().isMoveType(MoveType.ENCORELESS) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1021,12 +1026,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private Move disabled;
 
         Disable() {
-            super(EffectNamesies.DISABLE, 4, 4, false, false);
+            super(PokemonEffectNamesies.DISABLE, 4, 4, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.hasEffect(this.namesies));
+            return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1056,7 +1061,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.hasEffect(this.namesies)) {
+            if (victim.hasEffect(this.namesies())) {
                 return victim.getName() + " is already disabled!";
             } else if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
                 return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being disabled!";
@@ -1074,7 +1079,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private boolean berrylicious;
 
         RaiseCrits() {
-            super(EffectNamesies.RAISE_CRITS, -1, -1, false, true);
+            super(PokemonEffectNamesies.RAISE_CRITS, -1, -1, false, true);
             this.focusEnergy = false;
             this.direHit = false;
             this.berrylicious = false;
@@ -1082,7 +1087,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(source == CastSource.USE_ITEM && victim.hasEffect(this.namesies) && ((RaiseCrits)victim.getEffect(this.namesies)).direHit);
+            return !(source == CastSource.USE_ITEM && victim.hasEffect(this.namesies()) && ((RaiseCrits)victim.getEffect(this.namesies())).direHit);
         }
 
         @Override
@@ -1090,7 +1095,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             // Doesn't 'fail' if they already have the effect -- just display the message again
             this.addCastMessage(b, caster, victim, source, printCast);
 
-            RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies);
+            RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies());
             critsies.afterCast(b, caster, victim, source);
         }
 
@@ -1158,13 +1163,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private Item item;
 
         ChangeItem() {
-            super(EffectNamesies.CHANGE_ITEM, -1, -1, false, false);
+            super(PokemonEffectNamesies.CHANGE_ITEM, -1, -1, false, false);
         }
 
         @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             item = ((ItemHolder)source.getSource(b, caster)).getItem();
-            victim.getEffects().remove(this.namesies);
+            victim.getEffects().remove(this.namesies());
         }
 
         @Override
@@ -1179,7 +1184,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private ChangeAttackTypeSource typeSource;
 
         ChangeAttackType() {
-            super(EffectNamesies.CHANGE_ATTACK_TYPE, 1, 1, false, false);
+            super(PokemonEffectNamesies.CHANGE_ATTACK_TYPE, 1, 1, false, false);
         }
 
         @Override
@@ -1221,7 +1226,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         ChangeType() {
-            super(EffectNamesies.CHANGE_TYPE, -1, -1, false, false);
+            super(PokemonEffectNamesies.CHANGE_TYPE, -1, -1, false, false);
         }
 
         @Override
@@ -1231,7 +1236,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             type = typeSource.getType(b, caster, victim);
 
             // Remove any other ChangeType effects that the victim may have
-            victim.getEffects().remove(this.namesies);
+            victim.getEffects().remove(this.namesies());
         }
 
         @Override
@@ -1257,7 +1262,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private String message;
 
         ChangeAbility() {
-            super(EffectNamesies.CHANGE_ABILITY, -1, -1, false, false);
+            super(PokemonEffectNamesies.CHANGE_ABILITY, -1, -1, false, false);
         }
 
         @Override
@@ -1270,7 +1275,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             message = changey.getMessage(b, caster, victim);
 
             // Remove any other ChangeAbility effects that the victim may have
-            victim.getEffects().remove(this.namesies);
+            victim.getEffects().remove(this.namesies());
         }
 
         @Override
@@ -1290,7 +1295,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private int turns;
 
         Stockpile() {
-            super(EffectNamesies.STOCKPILE, -1, -1, false, true);
+            super(PokemonEffectNamesies.STOCKPILE, -1, -1, false, true);
             this.turns = 0;
         }
 
@@ -1301,7 +1306,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies);
+            Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies());
             stockpile.afterCast(b, caster, victim, source);
         }
 
@@ -1332,7 +1337,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         UsedDefenseCurl() {
-            super(EffectNamesies.USED_DEFENSE_CURL, -1, -1, false, true);
+            super(PokemonEffectNamesies.USED_DEFENSE_CURL, -1, -1, false, true);
         }
 
         @Override
@@ -1345,7 +1350,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         UsedMinimize() {
-            super(EffectNamesies.USED_MINIMIZE, -1, -1, false, true);
+            super(PokemonEffectNamesies.USED_MINIMIZE, -1, -1, false, true);
         }
 
         @Override
@@ -1360,12 +1365,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private Move mimicMove;
 
         Mimic() {
-            super(EffectNamesies.MIMIC, -1, -1, false, false);
+            super(PokemonEffectNamesies.MIMIC, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1408,12 +1413,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private List<AttackNamesies> unableMoves;
 
         Imprison() {
-            super(EffectNamesies.IMPRISON, -1, -1, false, false);
+            super(PokemonEffectNamesies.IMPRISON, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1444,12 +1449,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Trapped() {
-            super(EffectNamesies.TRAPPED, -1, -1, false, false);
+            super(PokemonEffectNamesies.TRAPPED, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1467,7 +1472,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Foresight() {
-            super(EffectNamesies.FORESIGHT, -1, -1, false, true);
+            super(PokemonEffectNamesies.FORESIGHT, -1, -1, false, true);
         }
 
         @Override
@@ -1490,7 +1495,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         MiracleEye() {
-            super(EffectNamesies.MIRACLE_EYE, -1, -1, false, true);
+            super(PokemonEffectNamesies.MIRACLE_EYE, -1, -1, false, true);
         }
 
         @Override
@@ -1513,12 +1518,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Torment() {
-            super(EffectNamesies.TORMENT, -1, -1, false, false);
+            super(PokemonEffectNamesies.TORMENT, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies));
+            return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1551,7 +1556,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         SoundBlock() {
-            super(EffectNamesies.SOUND_BLOCK, 3, 3, false, false);
+            super(PokemonEffectNamesies.SOUND_BLOCK, 3, 3, false, false);
         }
 
         @Override
@@ -1569,12 +1574,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Taunt() {
-            super(EffectNamesies.TAUNT, 3, 3, false, false);
+            super(PokemonEffectNamesies.TAUNT, 3, 3, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || (victim.hasAbility(AbilityNamesies.OBLIVIOUS) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies));
+            return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || (victim.hasAbility(AbilityNamesies.OBLIVIOUS) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1611,12 +1616,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         LaserFocus() {
-            super(EffectNamesies.LASER_FOCUS, 2, 2, false, false);
+            super(PokemonEffectNamesies.LASER_FOCUS, 2, 2, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1629,12 +1634,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         LockOn() {
-            super(EffectNamesies.LOCK_ON, 2, 2, false, false);
+            super(PokemonEffectNamesies.LOCK_ON, 2, 2, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1653,12 +1658,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Telekinesis() {
-            super(EffectNamesies.TELEKINESIS, 4, 4, false, false);
+            super(PokemonEffectNamesies.TELEKINESIS, 4, 4, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.isGrounded(b) || victim.hasEffect(this.namesies));
+            return !(victim.isGrounded(b) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1689,17 +1694,17 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Ingrain() {
-            super(EffectNamesies.INGRAIN, -1, -1, false, false);
+            super(PokemonEffectNamesies.INGRAIN, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+            if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
                 return;
             }
 
@@ -1736,12 +1741,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Grounded() {
-            super(EffectNamesies.GROUNDED, -1, -1, false, false);
+            super(PokemonEffectNamesies.GROUNDED, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1754,12 +1759,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Curse() {
-            super(EffectNamesies.CURSE, -1, -1, false, false);
+            super(PokemonEffectNamesies.CURSE, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1787,12 +1792,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Yawn() {
-            super(EffectNamesies.YAWN, 2, 2, false, false);
+            super(PokemonEffectNamesies.YAWN, 2, 2, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!Status.applies(StatusCondition.ASLEEP, b, caster, victim) || victim.hasEffect(this.namesies));
+            return !(!Status.applies(StatusCondition.ASLEEP, b, caster, victim) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1810,12 +1815,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         MagnetRise() {
-            super(EffectNamesies.MAGNET_RISE, 5, 5, false, false);
+            super(PokemonEffectNamesies.MAGNET_RISE, 5, 5, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.isGrounded(b) || victim.hasEffect(this.namesies));
+            return !(victim.isGrounded(b) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1849,12 +1854,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         }
 
         Uproar() {
-            super(EffectNamesies.UPROAR, 3, 3, false, false);
+            super(PokemonEffectNamesies.UPROAR, 3, 3, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1908,17 +1913,17 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         AquaRing() {
-            super(EffectNamesies.AQUA_RING, -1, -1, false, false);
+            super(PokemonEffectNamesies.AQUA_RING, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+            if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
                 return;
             }
 
@@ -1940,12 +1945,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Nightmare() {
-            super(EffectNamesies.NIGHTMARE, -1, -1, false, false);
+            super(PokemonEffectNamesies.NIGHTMARE, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!victim.hasStatus(StatusCondition.ASLEEP) || victim.hasEffect(this.namesies));
+            return !(!victim.hasStatus(StatusCondition.ASLEEP) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1978,12 +1983,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Charge() {
-            super(EffectNamesies.CHARGE, 2, 2, false, false);
+            super(PokemonEffectNamesies.CHARGE, 2, 2, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1996,12 +2001,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Focusing() {
-            super(EffectNamesies.FOCUSING, 1, 1, false, false);
+            super(PokemonEffectNamesies.FOCUSING, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2012,8 +2017,8 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         @Override
         public void damageTaken(Battle b, ActivePokemon damageTaker) {
             Messages.add(damageTaker.getName() + " lost its focus and couldn't move!");
-            damageTaker.getEffects().remove(this.namesies);
-            damageTaker.getEffects().add((PokemonEffect)EffectNamesies.FLINCH.getEffect());
+            damageTaker.getEffects().remove(this.namesies());
+            damageTaker.getEffects().add((PokemonEffect)PokemonEffectNamesies.FLINCH.getEffect());
         }
     }
 
@@ -2021,12 +2026,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         ShellTrap() {
-            super(EffectNamesies.SHELL_TRAP, 1, 1, false, false);
+            super(PokemonEffectNamesies.SHELL_TRAP, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2037,7 +2042,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add(user.getName() + " set off " + victim.getName() + "'s trap!!");
-            victim.getEffects().remove(this.namesies);
+            victim.getEffects().remove(this.namesies());
         }
     }
 
@@ -2045,12 +2050,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         BeakBlast() {
-            super(EffectNamesies.BEAK_BLAST, 1, 1, false, false);
+            super(PokemonEffectNamesies.BEAK_BLAST, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2068,12 +2073,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         FiddyPercentStronger() {
-            super(EffectNamesies.FIDDY_PERCENT_STRONGER, 1, 1, false, false);
+            super(PokemonEffectNamesies.FIDDY_PERCENT_STRONGER, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2090,12 +2095,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private PokeType type;
 
         Transformed() {
-            super(EffectNamesies.TRANSFORMED, -1, -1, false, false);
+            super(PokemonEffectNamesies.TRANSFORMED, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getOtherPokemon(victim).hasEffect(this.namesies) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive())) || victim.hasEffect(this.namesies));
+            return !(b.getOtherPokemon(victim).hasEffect(this.namesies()) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive())) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2157,12 +2162,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private int hp;
 
         Substitute() {
-            super(EffectNamesies.SUBSTITUTE, -1, -1, false, false);
+            super(PokemonEffectNamesies.SUBSTITUTE, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3 || victim.hasEffect(this.namesies));
+            return !(victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3 || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2220,12 +2225,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Mist() {
-            super(EffectNamesies.MIST, 5, 5, false, false);
+            super(PokemonEffectNamesies.MIST, 5, 5, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2258,12 +2263,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         MagicCoat() {
-            super(EffectNamesies.MAGIC_COAT, 1, 1, false, false);
+            super(PokemonEffectNamesies.MAGIC_COAT, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2291,7 +2296,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private int damage;
 
         Bide() {
-            super(EffectNamesies.BIDE, -1, -1, false, true);
+            super(PokemonEffectNamesies.BIDE, -1, -1, false, true);
             this.turns = 1;
             this.damage = 0;
         }
@@ -2303,7 +2308,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Bide bidesies = (Bide)victim.getEffect(this.namesies);
+            Bide bidesies = (Bide)victim.getEffect(this.namesies());
 
             // Already has the effect, but not ready for it to end yet -- store dat energy
             if (bidesies.turns > 0) {
@@ -2323,7 +2328,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
             }
 
             // Bye Bye Bidesies
-            victim.getEffects().remove(this.namesies);
+            victim.getEffects().remove(this.namesies());
         }
 
         @Override
@@ -2353,13 +2358,13 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private int layers;
 
         HalfWeight() {
-            super(EffectNamesies.HALF_WEIGHT, -1, -1, false, true);
+            super(PokemonEffectNamesies.HALF_WEIGHT, -1, -1, false, true);
             this.layers = 1;
         }
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            HalfWeight halfWeight = (HalfWeight)victim.getEffect(this.namesies);
+            HalfWeight halfWeight = (HalfWeight)victim.getEffect(this.namesies());
             halfWeight.layers++;
         }
 
@@ -2373,7 +2378,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         PowerTrick() {
-            super(EffectNamesies.POWER_TRICK, -1, -1, false, true);
+            super(PokemonEffectNamesies.POWER_TRICK, -1, -1, false, true);
         }
 
         @Override
@@ -2390,7 +2395,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             this.addCastMessage(b, caster, victim, source, printCast);
-            victim.getEffects().remove(this.namesies);
+            victim.getEffects().remove(this.namesies());
         }
 
         @Override
@@ -2403,12 +2408,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         PowerSplit() {
-            super(EffectNamesies.POWER_SPLIT, -1, -1, false, false);
+            super(PokemonEffectNamesies.POWER_SPLIT, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2432,12 +2437,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         GuardSplit() {
-            super(EffectNamesies.GUARD_SPLIT, -1, -1, false, false);
+            super(PokemonEffectNamesies.GUARD_SPLIT, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2461,12 +2466,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         HealBlock() {
-            super(EffectNamesies.HEAL_BLOCK, 5, 5, false, false);
+            super(PokemonEffectNamesies.HEAL_BLOCK, 5, 5, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies));
+            return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2499,12 +2504,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Infatuated() {
-            super(EffectNamesies.INFATUATED, -1, -1, false, false);
+            super(PokemonEffectNamesies.INFATUATED, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.OBLIVIOUS) && !caster.breaksTheMold()) || (victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || !Gender.oppositeGenders(caster, victim) || victim.hasEffect(this.namesies));
+            return !((victim.hasAbility(AbilityNamesies.OBLIVIOUS) && !caster.breaksTheMold()) || (victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || !Gender.oppositeGenders(caster, victim) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2537,12 +2542,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Snatch() {
-            super(EffectNamesies.SNATCH, 1, 1, false, false);
+            super(PokemonEffectNamesies.SNATCH, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2561,12 +2566,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Grudge() {
-            super(EffectNamesies.GRUDGE, -1, -1, false, false);
+            super(PokemonEffectNamesies.GRUDGE, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2597,12 +2602,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         DestinyBond() {
-            super(EffectNamesies.DESTINY_BOND, -1, -1, false, false);
+            super(PokemonEffectNamesies.DESTINY_BOND, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2640,12 +2645,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         PerishSong() {
-            super(EffectNamesies.PERISH_SONG, 3, 3, false, false);
+            super(PokemonEffectNamesies.PERISH_SONG, 3, 3, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.SOUNDPROOF) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies));
+            return !((victim.hasAbility(AbilityNamesies.SOUNDPROOF) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2670,12 +2675,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Embargo() {
-            super(EffectNamesies.EMBARGO, 5, 5, false, false);
+            super(PokemonEffectNamesies.EMBARGO, 5, 5, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2695,14 +2700,14 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private Item consumed;
 
         ConsumedItem() {
-            super(EffectNamesies.CONSUMED_ITEM, -1, -1, false, false);
+            super(PokemonEffectNamesies.CONSUMED_ITEM, -1, -1, false, false);
         }
 
         @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             consumed = victim.getHeldItem(b);
             victim.removeItem();
-            victim.getEffects().remove(this.namesies);
+            victim.getEffects().remove(this.namesies());
         }
 
         @Override
@@ -2715,12 +2720,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         FairyLock() {
-            super(EffectNamesies.FAIRY_LOCK, -1, -1, false, false);
+            super(PokemonEffectNamesies.FAIRY_LOCK, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2739,12 +2744,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Powder() {
-            super(EffectNamesies.POWDER, 1, 1, false, false);
+            super(PokemonEffectNamesies.POWDER, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2770,7 +2775,7 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         EatenBerry() {
-            super(EffectNamesies.EATEN_BERRY, -1, -1, false, true);
+            super(PokemonEffectNamesies.EATEN_BERRY, -1, -1, false, true);
         }
 
         @Override
@@ -2783,12 +2788,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         BreaksTheMold() {
-            super(EffectNamesies.BREAKS_THE_MOLD, 1, 1, false, false);
+            super(PokemonEffectNamesies.BREAKS_THE_MOLD, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
     }
 
@@ -2796,12 +2801,12 @@ public abstract class PokemonEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Raging() {
-            super(EffectNamesies.RAGING, -1, -1, false, false);
+            super(PokemonEffectNamesies.RAGING, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override

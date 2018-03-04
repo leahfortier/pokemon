@@ -26,9 +26,9 @@ Blaze:
 Solar Power:
     Desc: Boosts the Sp. Atk stat in sunny weather, but HP decreases every turn.
     Int: EndTurnEffect
-    PowerMultiplierCondition: 1.5 user.getAttack().getCategory() == MoveCategory.SPECIAL && b.getWeather().namesies() == EffectNamesies.SUNNY
+    PowerMultiplierCondition: 1.5 user.getAttack().getCategory() == MoveCategory.SPECIAL && b.getWeather().namesies() == WeatherNamesies.SUNNY
     ApplyEndTurn:
-        if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
+        if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
             Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
             victim.reduceHealthFraction(b, 1/8.0);
         }
@@ -42,7 +42,7 @@ Rain Dish:
     Desc: The Pok\u00e9mon gradually regains HP in rain.
     Int: EndTurnEffect
     ApplyEndTurn:
-        if (b.getWeather().namesies() == EffectNamesies.RAINING) {
+        if (b.getWeather().namesies() == WeatherNamesies.RAINING) {
             victim.healHealthFraction(1/16.0);
             Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
         }
@@ -91,7 +91,7 @@ Tangled Feet:
     Desc: Raises evasion if the Pok\u00e9mon is confused.
     Int: StageChangingEffect
     StageChange:
-        return s == Stat.EVASION && p.hasEffect(EffectNamesies.CONFUSION) ? 1 : 0;
+        return s == Stat.EVASION && p.hasEffect(PokemonEffectNamesies.CONFUSION) ? 1 : 0;
         ###
 *
 Guts:
@@ -151,7 +151,7 @@ Cute Charm:
     Desc: Contact with the Pok\u00e9mon may cause infatuation.
     Int: PhysicalContactEffect
     Contact:
-        if (RandomUtils.chanceTest(30) && EffectNamesies.INFATUATED.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
+        if (RandomUtils.chanceTest(30) && PokemonEffectNamesies.INFATUATED.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
             Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
         }
         ###
@@ -213,7 +213,7 @@ Stench:
     Int: OpponentTakeDamageEffect
     OpponentTakeDamage:
         if (RandomUtils.chanceTest(10)) {
-            if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.ABILITY, false)) {
+            if (PokemonEffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.ABILITY, false)) {
                 Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
             }
         }
@@ -246,10 +246,10 @@ Dry Skin:
     Desc: Restores HP in rain or when hit by Water-type moves. Reduces HP in sunshine, and increases the damage received from Fire-type moves.
     Int: EndTurnEffect, OpponentPowerChangeEffect
     ApplyEndTurn:
-        if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
+        if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
             Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
             victim.reduceHealthFraction(b, 1/8.0);
-        } else if (b.getWeather().namesies() == EffectNamesies.RAINING && !victim.fullHealth()) {
+        } else if (b.getWeather().namesies() == WeatherNamesies.RAINING && !victim.fullHealth()) {
             victim.healHealthFraction(1/8.0);
             Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
         }
@@ -433,7 +433,7 @@ Thick Fat:
 *
 Hydration:
     Desc: Heals status conditions if it's raining.
-    EndTurnStatusCure: b.getWeather().namesies() == EffectNamesies.RAINING
+    EndTurnStatusCure: b.getWeather().namesies() == WeatherNamesies.RAINING
 *
 Shell Armor:
     Desc: A hard shell protects the Pok\u00e9mon from critical hits.
@@ -527,7 +527,7 @@ Leaf Guard:
     Desc: Prevents status conditions in sunny weather.
     Int: StatusPreventionEffect
     StatusPrevent:
-        return b.getWeather().namesies() == EffectNamesies.SUNNY;
+        return b.getWeather().namesies() == WeatherNamesies.SUNNY;
         ###
     StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents status conditions!"
 *
@@ -602,7 +602,7 @@ Imposter:
     Irrestealable: True
     Int: EntryEffect
     Enter:
-        EffectNamesies.TRANSFORMED.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+        PokemonEffectNamesies.TRANSFORMED.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
         ###
 *
 Adaptability:
@@ -632,7 +632,7 @@ Trace:
             return;
         }
 
-        EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, true);
+        PokemonEffectNamesies.CHANGE_ABILITY.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, true);
         ###
     AbilityChange:
         Ability otherAbility = b.getOtherPokemon(victim).getAbility();
@@ -760,7 +760,7 @@ Suction Cups:
 Steadfast:
     Desc: The Pok\u00e9mon's determination boosts the Speed stat each time the Pok\u00e9mon flinches.
     ReceiveEffect:
-        if (effectType == EffectNamesies.FLINCH) {
+        if (effectType == PokemonEffectNamesies.FLINCH) {
             victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
         }
         ###
@@ -899,7 +899,7 @@ Color Change:
         Type t = user.getAttackType();
         if (!victim.isType(b, t)) {
             type = t;
-            EffectNamesies.CHANGE_TYPE.getEffect().cast(b, victim, victim, CastSource.ABILITY, true);
+            PokemonEffectNamesies.CHANGE_TYPE.getEffect().cast(b, victim, victim, CastSource.ABILITY, true);
         }
         ###
     Field:
@@ -914,13 +914,13 @@ Ice Body:
     Desc: The Pok\u00e9mon gradually regains HP in a hailstorm.
     Int: EndTurnEffect, WeatherBlockerEffect
     ApplyEndTurn:
-        if (b.getWeather().namesies() == EffectNamesies.HAILING) {
+        if (b.getWeather().namesies() == WeatherNamesies.HAILING) {
             victim.healHealthFraction(1/16.0);
             Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
         }
         ###
     WeatherBlock:
-        return weather == EffectNamesies.HAILING;
+        return weather == WeatherNamesies.HAILING;
         ###
 *
 Light Metal:
@@ -947,7 +947,7 @@ Competitive:
 Flower Gift:
     Desc: Boosts the Attack and Sp. Def stats of itself and allies when it is sunny.
     TwoModify: Attack Sp_Defense
-    ModifyMultiplier: 1.5 b.getWeather().namesies() == EffectNamesies.SUNNY
+    ModifyMultiplier: 1.5 b.getWeather().namesies() == WeatherNamesies.SUNNY
 *
 Aftermath:
     Desc: Damages the attacker if it contacts the Pok\u00e9mon with a finishing hit.
@@ -971,10 +971,10 @@ Sand Force:
     Int: WeatherBlockerEffect
     GetMultiplier:
         Type type = user.getAttackType();
-        return (type == Type.ROCK || type == Type.STEEL || type == Type.GROUND) && b.getWeather().namesies() == EffectNamesies.SANDSTORM ? 1.3 : 1;
+        return (type == Type.ROCK || type == Type.STEEL || type == Type.GROUND) && b.getWeather().namesies() == WeatherNamesies.SANDSTORM ? 1.3 : 1;
         ###
     WeatherBlock:
-        return weather == EffectNamesies.SANDSTORM;
+        return weather == WeatherNamesies.SANDSTORM;
         ###
 *
 Snow Warning:
@@ -1000,7 +1000,7 @@ Cursed Body:
     Contact:
         if (RandomUtils.chanceTest(30)) {
             user.setLastMoveUsed();
-            if (EffectNamesies.DISABLE.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
+            if (PokemonEffectNamesies.DISABLE.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
                 Messages.add(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
             }
         }
@@ -1081,7 +1081,7 @@ Mummy:
         }
 
         // Cast the change ability effect onto the user
-        EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, victim, user, CastSource.ABILITY, true);
+        PokemonEffectNamesies.CHANGE_ABILITY.getEffect().cast(b, victim, user, CastSource.ABILITY, true);
         ###
     AbilityChange:
         return AbilityNamesies.MUMMY.getNewAbility();
@@ -1250,7 +1250,7 @@ Klutz:
 Unburden:
     Desc: Boosts the Speed stat if the Pok\u00e9mon's held item is used or lost.
     ToModify: Speed
-    ModifyMultiplier: 2 p.hasEffect(EffectNamesies.CONSUMED_ITEM)
+    ModifyMultiplier: 2 p.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM)
 *
 Pickpocket:
     Int: PhysicalContactEffect
@@ -1267,13 +1267,13 @@ Harvest:
     Desc: May create another Berry after one is used.
     Int: EndTurnEffect
     ApplyEndTurn:
-        PokemonEffect consumed = victim.getEffect(EffectNamesies.CONSUMED_ITEM);
+        PokemonEffect consumed = victim.getEffect(PokemonEffectNamesies.CONSUMED_ITEM);
         if (consumed == null || victim.isHoldingItem(b)) {
             return;
         }
 
         Item restored = ((ItemHolder)consumed).getItem();
-        if (restored instanceof Berry && (b.getWeather().namesies() == EffectNamesies.SUNNY || RandomUtils.chanceTest(50))) {
+        if (restored instanceof Berry && (b.getWeather().namesies() == WeatherNamesies.SUNNY || RandomUtils.chanceTest(50))) {
             victim.giveItem((HoldItem)restored);
             Messages.add(victim.getName() + "'s " + this.getName() + " restored its " + restored.getName() + "!");
         }
@@ -1478,12 +1478,12 @@ Fur Coat:
 Grass Pelt:
     Desc: Boosts the Pok\u00e9mon's Defense stat in Grassy Terrain.
     ToModify: Defense
-    ModifyMultiplier: 1.5 b.hasEffect(EffectNamesies.GRASSY_TERRAIN)
+    ModifyMultiplier: 1.5 b.hasEffect(TerrainNamesies.GRASSY_TERRAIN)
 *
 Surge Surfer:
     Desc: Doubles the Pok\u00e9mon's Speed stat on Electric Terrain.
     ToModify: Speed
-    ModifyMultiplier: 2 b.hasEffect(EffectNamesies.ELECTRIC_TERRAIN)
+    ModifyMultiplier: 2 b.hasEffect(TerrainNamesies.ELECTRIC_TERRAIN)
 *
 Flower Veil:
     Desc: Grass-type Pok\u00e9mon are protected from status conditions and the lowering of their stats.
@@ -1507,7 +1507,7 @@ Protean:
         // Protean activates for all moves except for Struggle
         if (p.getAttack().namesies() != AttackNamesies.STRUGGLE) {
             type = p.getAttackType();
-            EffectNamesies.CHANGE_TYPE.getEffect().cast(b, p, p, CastSource.ABILITY, true);
+            PokemonEffectNamesies.CHANGE_TYPE.getEffect().cast(b, p, p, CastSource.ABILITY, true);
         }
 
         return true;

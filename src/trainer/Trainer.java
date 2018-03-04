@@ -4,8 +4,8 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.EffectList;
 import battle.effect.generic.EffectInterfaces.SwitchOutEffect;
-import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
+import battle.effect.generic.TeamEffectNamesies;
 import item.bag.Bag;
 import main.Global;
 import pokemon.PartyPokemon;
@@ -158,7 +158,7 @@ public abstract class Trainer implements Team, Serializable {
     }
 
     @Override
-    public boolean hasEffect(EffectNamesies effect) {
+    public boolean hasEffect(TeamEffectNamesies effect) {
         return effects.hasEffect(effect);
     }
 

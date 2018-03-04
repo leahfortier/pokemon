@@ -1,5 +1,6 @@
 package battle.effect.generic;
 
+import battle.effect.generic.EffectNamesies.BattleEffectNamesies;
 import battle.effect.generic.WeatherEffect.ClearSkies;
 import battle.effect.generic.WeatherEffect.Hailing;
 import battle.effect.generic.WeatherEffect.Raining;
@@ -8,7 +9,7 @@ import battle.effect.generic.WeatherEffect.Sunny;
 
 import java.util.function.Supplier;
 
-public enum WeatherNamesies implements EffectNamesies2 {
+public enum WeatherNamesies implements BattleEffectNamesies {
     // EVERYTHING BELOW IS GENERATED ###
     CLEAR_SKIES(ClearSkies::new),
     RAINING(Raining::new),

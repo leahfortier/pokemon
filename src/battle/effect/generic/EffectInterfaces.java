@@ -497,7 +497,7 @@ public final class EffectInterfaces {
             if (p.isSemiInvulnerableFlying()) {
                 ((MultiTurnMove)p.getAttack()).resetReady();
                 Messages.add(p.getName() + " fell to the ground!");
-                EffectNamesies.FLINCH.getEffect().cast(b, p, p, CastSource.EFFECT, false);
+                PokemonEffectNamesies.FLINCH.getEffect().cast(b, p, p, CastSource.EFFECT, false);
             }
 
             LevitationEffect.falllllllll(b, p);
@@ -599,9 +599,9 @@ public final class EffectInterfaces {
     }
 
     public interface WeatherBlockerEffect {
-        boolean block(EffectNamesies weather);
+        boolean block(WeatherNamesies weather);
 
-        static boolean checkBlocked(Battle b, ActivePokemon p, EffectNamesies weather) {
+        static boolean checkBlocked(Battle b, ActivePokemon p, WeatherNamesies weather) {
             List<InvokeEffect> invokees = b.getEffectsList(p);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof WeatherBlockerEffect && InvokeEffect.isActiveEffect(invokee)) {
@@ -895,7 +895,7 @@ public final class EffectInterfaces {
         PokeType getType(Battle b, ActivePokemon p, boolean display);
 
         static PokeType getChangedType(Battle b, ActivePokemon p, boolean display) {
-            List<InvokeEffect> invokees = b.getEffectsList(p, p.getEffect(EffectNamesies.CHANGE_TYPE));
+            List<InvokeEffect> invokees = b.getEffectsList(p, p.getEffect(PokemonEffectNamesies.CHANGE_TYPE));
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof ChangeTypeEffect && InvokeEffect.isActiveEffect(invokee)) {
                     ChangeTypeEffect effect = (ChangeTypeEffect)invokee;
@@ -1348,7 +1348,7 @@ public final class EffectInterfaces {
     }
 
     public interface EffectCurerItem extends HoldItem, EffectReceivedEffect, EndTurnEffect {
-        Set<EffectNamesies> getCurableEffects();
+        Set<? extends EffectNamesies> getCurableEffects();
         String getRemoveMessage(ActivePokemon victim, EffectNamesies effectType);
 
         default boolean usesies(ActivePokemon user) {
@@ -1530,10 +1530,10 @@ public final class EffectInterfaces {
                 victim.giveItem((HoldItem)userItem);
             } else {
                 user.setCastSource(victimItem);
-                EffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, user, CastSource.CAST_SOURCE, false);
+                PokemonEffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, user, CastSource.CAST_SOURCE, false);
 
                 user.setCastSource(userItem);
-                EffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
+                PokemonEffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
             }
         }
     }
@@ -1780,7 +1780,7 @@ public final class EffectInterfaces {
         String getEliminateMessage(ActivePokemon eliminator);
 
         default boolean eliminateWeather(WeatherEffect weather) {
-            return weather.namesies() != EffectNamesies.CLEAR_SKIES;
+            return weather.namesies() != WeatherNamesies.CLEAR_SKIES;
         }
 
         @Override
@@ -1833,9 +1833,9 @@ public final class EffectInterfaces {
     }
 
     public interface WeatherExtendingEffect {
-        int getExtensionTurns(EffectNamesies weatherType);
+        int getExtensionTurns(WeatherNamesies weatherType);
 
-        static int getModifier(Battle b, ActivePokemon p, EffectNamesies weatherType) {
+        static int getModifier(Battle b, ActivePokemon p, WeatherNamesies weatherType) {
             int modifier = 0;
 
             List<InvokeEffect> invokees = b.getEffectsList(p);
@@ -1880,7 +1880,7 @@ public final class EffectInterfaces {
             }
 
             // Healers gon' heal
-            if (!user.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+            if (!user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
                 user.heal(sapAmount);
             }
 
@@ -1899,7 +1899,7 @@ public final class EffectInterfaces {
 
         @Override
         default double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return Math.min(user.getCount(), 5)*(this.doubleDefenseCurled() && user.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
+            return Math.min(user.getCount(), 5)*(this.doubleDefenseCurled() && user.hasEffect(PokemonEffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
         }
     }
 

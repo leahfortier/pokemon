@@ -1,7 +1,7 @@
 package generator;
 
 import battle.attack.AttackNamesies;
-import battle.effect.generic.BattleEffectNamesies;
+import battle.effect.generic.StandardBattleEffectNamesies;
 import battle.effect.generic.PokemonEffectNamesies;
 import battle.effect.generic.TeamEffectNamesies;
 import battle.effect.generic.TerrainNamesies;
@@ -15,7 +15,7 @@ public enum NamesiesType {
     ATTACK_NAMESIES(AttackNamesies.class, Folder.ATTACK, true),
     POKEMON_EFFECT_NAMESIES(PokemonEffectNamesies.class, Folder.GENERIC_EFFECT, false),
     TEAM_EFFECT_NAMESIES(TeamEffectNamesies.class, Folder.GENERIC_EFFECT, false),
-    BATTLE_EFFECT_NAMESIES(BattleEffectNamesies.class, Folder.GENERIC_EFFECT, false),
+    BATTLE_EFFECT_NAMESIES(StandardBattleEffectNamesies.class, Folder.GENERIC_EFFECT, false),
     WEATHER_NAMESIES(WeatherNamesies.class, Folder.GENERIC_EFFECT, false),
     TERRAIN_NAMESIES(TerrainNamesies.class, Folder.GENERIC_EFFECT, false),
     ABILITY_NAMESIES(AbilityNamesies.class, Folder.ABILITY, true),

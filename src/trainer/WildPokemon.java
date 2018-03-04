@@ -4,8 +4,8 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.Battle.EnterBattleMessageGetter;
 import battle.effect.EffectList;
-import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
+import battle.effect.generic.TeamEffectNamesies;
 import main.Global;
 import pokemon.PartyPokemon;
 
@@ -56,7 +56,7 @@ public class WildPokemon implements Opponent, Serializable {
     }
 
     @Override
-    public boolean hasEffect(EffectNamesies effect) {
+    public boolean hasEffect(TeamEffectNamesies effect) {
         return effects.hasEffect(effect);
     }
 

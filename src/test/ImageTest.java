@@ -1,9 +1,8 @@
 package test;
 
 import battle.attack.MoveCategory;
-import battle.effect.generic.Effect;
-import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.WeatherEffect;
+import battle.effect.generic.WeatherNamesies;
 import generator.update.UpdateGen;
 import item.Item;
 import item.ItemNamesies;
@@ -70,12 +69,9 @@ public class ImageTest extends BaseTest {
             checkExists(Folder.TYPE_TILES, "Type" + type.getName(), true);
         }
 
-        for (EffectNamesies effectNamesies : EffectNamesies.values()) {
-            Effect effect = effectNamesies.getEffect();
-            if (effect instanceof WeatherEffect) {
-                WeatherEffect weather = (WeatherEffect)effect;
-                checkExists(Folder.WEATHER_TILES, weather.getImageName(), true);
-            }
+        for (WeatherNamesies effectNamesies : WeatherNamesies.values()) {
+            WeatherEffect weather = effectNamesies.getEffect();
+            checkExists(Folder.WEATHER_TILES, weather.getImageName(), true);
         }
     }
 

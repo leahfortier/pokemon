@@ -7,10 +7,11 @@ import battle.effect.generic.BattleEffect.MudSport;
 import battle.effect.generic.BattleEffect.TrickRoom;
 import battle.effect.generic.BattleEffect.WaterSport;
 import battle.effect.generic.BattleEffect.WonderRoom;
+import battle.effect.generic.EffectNamesies.BattleEffectNamesies;
 
 import java.util.function.Supplier;
 
-public enum BattleEffectNamesies implements EffectNamesies2 {
+public enum StandardBattleEffectNamesies implements BattleEffectNamesies {
     // EVERYTHING BELOW IS GENERATED ###
     GRAVITY(Gravity::new),
     WATER_SPORT(WaterSport::new),
@@ -24,7 +25,7 @@ public enum BattleEffectNamesies implements EffectNamesies2 {
 
     private final Supplier<BattleEffect> effectCreator;
 
-    BattleEffectNamesies(Supplier<BattleEffect> effectCreator) {
+    StandardBattleEffectNamesies(Supplier<BattleEffect> effectCreator) {
         this.effectCreator = effectCreator;
     }
 

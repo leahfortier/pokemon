@@ -60,7 +60,7 @@ StatusFang:
 		if (RandomUtils.chanceTest(50)) {
 			super.status = StatusCondition.{00};
 		} else {
-			super.effects.add(EffectNamesies.FLINCH);
+			super.effects.add(PokemonEffectNamesies.FLINCH);
 		}
 		###
 *
@@ -91,7 +91,7 @@ BasicHealing:
 *
 SelfHealing:
 	AddMapField: RawSelfHealing: {0}
-	AddMapField: Applies: !user.fullHealth() && !user.hasEffect(EffectNamesies.HEAL_BLOCK)
+	AddMapField: Applies: !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)
 *
 RawSelfHealing:
 	AddInterface: SelfHealingMove
@@ -163,7 +163,7 @@ SunlightCharger:
         ###
     AddMapField: RequiresCharge:
         // Does not need to charge during harsh sunlight
-        return b.getWeather().namesies() != EffectNamesies.SUNNY;
+        return b.getWeather().namesies() != WeatherNamesies.SUNNY;
         ###
 *
 MultiStrike:
@@ -240,12 +240,13 @@ ItemStealerMove:
         ###
     AddMapField: SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 *
-BattleEffect:
-	AddMapField: Effect: {0}
+# TODO: FIX THIS
+BattleEffect2:
+	AddMapField: BattleEffect: {0}
 	AddMapField: MoveType: No_Magic_Coat, Field
 *
 ProtectingAttack:
-	AddMapField: Effect: {0}
+	AddMapField: PokemonEffect: {0}
 	AddMapField: Priority: 4
 	AddMapField: SelfTarget: True
 	AddMapField: MoveType: Successive_Decay, Assistless, Metronomeless, Non_Snatchable
@@ -305,7 +306,7 @@ StatusCureMove:
 StormyMove:
 	AddMapField: GetAccuracy:
 		// Accuracy is only 50% when sunny
-		if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
+		if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
 			return 50;
 		}
 
@@ -313,7 +314,7 @@ StormyMove:
 		###
 	AddMapField: BasicBypassAccuracy:
 		// Always hits in the rain
-		return b.getWeather().namesies() == EffectNamesies.RAINING;
+		return b.getWeather().namesies() == WeatherNamesies.RAINING;
 		###
 	AddMapField: DoubleFly: True
 *
@@ -334,7 +335,7 @@ DoubleDig:
 		double multiplier = 1;
 
 		// Power is halved during Grassy Terrain
-		if (b.hasEffect(EffectNamesies.GRASSY_TERRAIN)) {
+		if (b.hasEffect(TerrainNamesies.GRASSY_TERRAIN)) {
 			multiplier *= .5;
 		}
 
@@ -413,7 +414,7 @@ Barrier:
 SpecificAbilityChange:
 	AddInterface: AbilityChanger
 	AddMapField: Applies: victim.getAbility().isReplaceable()
-	AddMapField: Effect: ChangeAbility
+	AddMapField: PokemonEffect: ChangeAbility
 	AddMapField: AbilityChange:
 		return AbilityNamesies.{00}.getNewAbility();
 		###
@@ -423,9 +424,9 @@ SpecificAbilityChange:
 *
 HitMinimize:
 	AddMapField: BasicBypassAccuracy:
-		return defending.hasEffect(EffectNamesies.USED_MINIMIZE);
+		return defending.hasEffect(PokemonEffectNamesies.USED_MINIMIZE);
 		###
-	AddMapField: PowerMultiplierCondition: 2 victim.hasEffect(EffectNamesies.USED_MINIMIZE)
+	AddMapField: PowerMultiplierCondition: 2 victim.hasEffect(PokemonEffectNamesies.USED_MINIMIZE)
 *
 SemiInvulnerableBypass:
 	AddInterface: SemiInvulnerableBypasser
@@ -928,7 +929,7 @@ AbsorbType:
 	AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " moves!"
 	AddMapField: AlternateEffect:
 		// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
-		if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+		if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
 			return;
 		}
 
@@ -974,19 +975,19 @@ StatusContact:
 *
 SpeedWeather:
 	AddMapField: ToModify: Speed
-	AddMapField: ModifyMultiplier: 2 b.getWeather().namesies() == EffectNamesies.{00}
+	AddMapField: ModifyMultiplier: 2 b.getWeather().namesies() == WeatherNamesies.{00}
 *
 WeatherStarter:
 	AddInterface: EntryEffect
 	AddMapField: Enter:
 		Messages.add(enterer.getName() + "'s " + this.getName() + " {2-}!");
-		b.addEffect((WeatherEffect)EffectNamesies.{11}.getEffect());
+		b.addEffect(WeatherNamesies.{11}.getEffect());
 		###
 *
 WeatherEvasion:
 	AddInterface: StageChangingEffect
 	AddMapField: StageChange:
-		return s == Stat.EVASION && b.getWeather().namesies() == EffectNamesies.{00} ? 1 : 0;
+		return s == Stat.EVASION && b.getWeather().namesies() == WeatherNamesies.{00} ? 1 : 0;
 		###
 *
 WeatherEliminate:
@@ -1003,7 +1004,7 @@ HalfAmount:
 		###
 *
 WeatherBlock:
-	Header: boolean block(EffectNamesies weather)
+	Header: boolean block(WeatherNamesies weather)
 *
 OnApplyDamage:
 	Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
@@ -1121,7 +1122,7 @@ BuffetMessage:
         }
 
         // Srsly don't buffet the immune!!
-        if (WeatherBlockerEffect.checkBlocked(b, victim, this.namesies)) {
+        if (WeatherBlockerEffect.checkBlocked(b, victim, this.namesies())) {
             return;
         }
 
@@ -1441,14 +1442,14 @@ ForesightEffect:
 	AddMapField: RemoveAdvantageType: {0}
 *
 ForesightMove:
-	AddMapField: Effect: {0}
+	AddMapField: PokemonEffect: {0}
 	AddMapField: UniqueEffects:
 		victim.getStages().resetStage(Stat.EVASION);
 		###
 	AddMapField: MoveType: Substitute_Piercing
 *
 AddTypeMove:
-	AddMapField: Effect: ChangeType
+	AddMapField: PokemonEffect: ChangeType
 	AddMapField: ChangeType:
 		Type primary = victim.getType(b).getFirstType();
 		return new PokeType(primary, primary == Type.{00} ? Type.NO_TYPE : Type.{00});
@@ -1461,7 +1462,7 @@ PrintFail:
 		###
 *
 FutureAttackMove:
-	AddMapField: Effect: {0}
+	AddMapField: TeamEffect: {0}
 	AddMapField: ShouldApplyDamage:
 		// Don't apply damage just yet!!
 		return false;
@@ -1668,13 +1669,13 @@ NextLevel:
 *
 FlinchItem:
 	AddMapField: FlingEffect:
-		if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
+		if (PokemonEffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
 			Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
 		}
 		###
 	AddMapField: OpponentTakeDamage:
 		if (RandomUtils.chanceTest(10)) {
-			if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
+			if (PokemonEffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
 				Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
 			}
 		}
@@ -1735,18 +1736,18 @@ ShouldCrit:
 *
 TempEffectMove:
     AddMapField: BeginAttack:
-        EffectNamesies.{00}.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
+        PokemonEffectNamesies.{00}.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
         ###
     AddMapField: EndAttack:
         // TODO: I don't like this -- it should def remove the same exact effect it casted at the beginning -- what if there are other ways to apply the effect??
-        attacking.getEffects().remove(EffectNamesies.{00});
+        attacking.getEffects().remove(PokemonEffectNamesies.{00});
         ###
 *
 IgnoreAbilityMove:
     AddMapField: TempEffectMove: BREAKS_THE_MOLD
 *
 GetCurableEffects:
-    Header: Set<EffectNamesies> getCurableEffects()
+    Header: Set<? extends EffectNamesies> getCurableEffects()
     Body:
         return {0};
         ###
@@ -1785,7 +1786,7 @@ TerrainStarter:
 	AddInterface: EntryEffect
 	AddMapField: Enter:
 		Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to {0} Terrain!");
-		EffectNamesies.{00}_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+		TerrainNamesies.{00}_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
 		###
 *
 MoldBreakerBreaker:
@@ -1889,14 +1890,14 @@ EntryEndTurn:
 *
 WeatherExtendingItem:
 	AddMapField: WeatherExtendingEffect:
-		return weatherType == EffectNamesies.{00} ? 3 : 0;
+		return weatherType == WeatherNamesies.{00} ? 3 : 0;
 		###
 	AddInterface: HoldItem
 	AddMapField: Cat: Misc
 	AddMapField: Price: 4000
 *
 WeatherExtendingEffect:
-	Header: int getExtensionTurns(EffectNamesies weatherType)
+	Header: int getExtensionTurns(WeatherNamesies weatherType)
 	AddInterface: WeatherExtendingEffect
 *
 PowerCountMove:
@@ -1909,14 +1910,14 @@ PowerCountMove:
 # Heal Switch and Lunar Dance
 HealSwitcher:
 	AddMapField: Cat: Status
-	AddMapField: Effect: HealSwitch
+	AddMapField: TeamEffect: HealSwitch
 	AddMapField: SelfTarget: True
 	AddMapField: MoveType: User_Faints, Healing
 *
 FocusMove:
     AddMapField: MoveType: Assistless, Sleep_Talk_Fail, Metronomeless, Mirrorless
     AddMapField: Priority: -3
-    AddMapField: Effect: {0}
+    AddMapField: PokemonEffect: {0}
     AddMapField: SelfTarget: True
     AddMapField: StartTurn:
         super.applyBasicEffects(b, me, me);
@@ -1948,7 +1949,7 @@ GET_DAT_CASH_MONEY_TWICE_ITEM:
 	Header: void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice)
 	AccessModifier: Private
 	Body:
-		EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
+		TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
 		###
 	AddMapField: EntryEndTurn:
 		// This is named too fantastically to just be applyEffect

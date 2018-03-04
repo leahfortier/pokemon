@@ -4,7 +4,7 @@
 # Fields can be specified in any order
 
 Constructor:
-    Namesies Enum EffectNamesies
+    Namesies Enum StandardBattleEffectNamesies
     MinTurns Default -1 Int
     MaxTurns Default -1 Int
     NextTurnSubside Default False Boolean
@@ -62,7 +62,7 @@ FieldUproar:
     StatusPrevent: return status == StatusCondition.ASLEEP;
     StatusPreventMessage: "The uproar prevents sleep!!"
     TheVeryEnd:
-        if (b.getTrainer(true).front().hasEffect(EffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(EffectNamesies.UPROAR)) {
+        if (b.getTrainer(true).front().hasEffect(PokemonEffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(PokemonEffectNamesies.UPROAR)) {
             return false;
         }
 

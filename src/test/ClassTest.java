@@ -78,8 +78,8 @@ import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectInterfaces.WeatherExtendingEffect;
 import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
 import battle.effect.generic.EffectInterfaces.WildEncounterSelector;
-import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
+import battle.effect.generic.PokemonEffectNamesies;
 import battle.effect.generic.TeamEffect;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
@@ -151,7 +151,7 @@ public class ClassTest extends BaseTest {
                 StatusCondition.class,
                 Type.class,
                 RapidSpinRelease.class,
-                EffectNamesies.AQUA_RING.getEffect().getClass(),
+                PokemonEffectNamesies.AQUA_RING.getEffect().getClass(),
                 ItemNamesies.CELL_BATTERY.getItem().getClass(),
                 Type.BUG.getDeclaringClass(),
                 PokemonNamesies.class

@@ -4,7 +4,7 @@
 # Fields can be specified in any order
 
 Constructor:
-    Namesies Enum EffectNamesies
+    Namesies Enum PokemonEffectNamesies
     MinTurns Default -1 Int
     MaxTurns Default -1 Int
     NextTurnSubside Default False Boolean
@@ -15,7 +15,7 @@ Failure:
     FailType Multiple Enum Type victim.isType(b, {0})
     FailAbility Multiple Enum AbilityNamesies (victim.hasAbility({0}) && !caster.breaksTheMold())
     FailCondition StraightUp {0}
-    CanHave Not Default True Boolean victim.hasEffect(this.namesies)
+    CanHave Not Default True Boolean victim.hasEffect(this.namesies())
 *
 
 ***
@@ -26,7 +26,7 @@ LeechSeed:
     FailMessage:
         if (victim.isType(b, Type.GRASS)) {
             return "It doesn't affect " + victim.getName() + "!";
-        } else if (victim.hasEffect(this.namesies)) {
+        } else if (victim.hasEffect(this.namesies())) {
             return victim.getName() + " is already seeded!";
         }
         ###
@@ -146,7 +146,7 @@ Confusion:
     Int: PassableEffect, BeforeTurnEffect
     FailAbility: Own Tempo
     FailMessage:
-        if (victim.hasEffect(this.namesies)) {
+        if (victim.hasEffect(this.namesies())) {
             return victim.getName() + " is already confused!";
         } else if (victim.hasAbility(AbilityNamesies.OWN_TEMPO)) {
             return victim.getName() + "'s " + victim.getAbility().getName() + " prevents confusion!";
@@ -193,7 +193,7 @@ SelfConfusion:
     MinTurns: 2
     MaxTurns: 3
     Subside:
-        if (EffectNamesies.CONFUSION.getEffect().apply(b, p, p, CastSource.EFFECT, false)) {
+        if (PokemonEffectNamesies.CONFUSION.getEffect().apply(b, p, p, CastSource.EFFECT, false)) {
             Messages.add(p.getName() + " became confused due to fatigue!");
         }
         ###
@@ -261,7 +261,7 @@ Disable:
         disabled = victim.getLastMoveUsed();
         ###
     FailMessage:
-        if (victim.hasEffect(this.namesies)) {
+        if (victim.hasEffect(this.namesies())) {
             return victim.getName() + " is already disabled!";
         } else if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
             return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being disabled!";
@@ -302,7 +302,7 @@ RaiseCrits:
 
         return critStage + stage;
         ###
-    FailCondition: source == CastSource.USE_ITEM && victim.hasEffect(this.namesies) && ((RaiseCrits)victim.getEffect(this.namesies)).direHit
+    FailCondition: source == CastSource.USE_ITEM && victim.hasEffect(this.namesies()) && ((RaiseCrits)victim.getEffect(this.namesies())).direHit
     CastMessage: this.getMessage(b, victim, source)
     GenericMessage: p.getName() + " is getting pumped!"
     SourceMessage: p.getName() + " is getting pumped due to its " + sourceName + "!"
@@ -311,7 +311,7 @@ RaiseCrits:
         // Doesn't 'fail' if they already have the effect -- just display the message again
         this.addCastMessage(b, caster, victim, source, printCast);
         
-        RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies);
+        RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies());
         critsies.afterCast(b, caster, victim, source);
         ###
     AfterCast:
@@ -335,7 +335,7 @@ ChangeItem:
     Int: ItemHolder
     BeforeCast:
         item = ((ItemHolder)source.getSource(b, caster)).getItem();
-        victim.getEffects().remove(this.namesies);
+        victim.getEffects().remove(this.namesies());
         ###
     Field:
         private Item item;
@@ -388,7 +388,7 @@ ChangeType:
         type = typeSource.getType(b, caster, victim);
 
         // Remove any other ChangeType effects that the victim may have
-        victim.getEffects().remove(this.namesies);
+        victim.getEffects().remove(this.namesies());
         ###
     GetChangeTypeEffect:
         return type;
@@ -414,7 +414,7 @@ ChangeAbility:
         message = changey.getMessage(b, caster, victim);
 
         // Remove any other ChangeAbility effects that the victim may have
-        victim.getEffects().remove(this.namesies);
+        victim.getEffects().remove(this.namesies());
         ###
     GetAbility:
         return ability;
@@ -435,7 +435,7 @@ Stockpile:
     Int: StageChangingEffect
     CanHave: True
     AlternateCast:
-        Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies);
+        Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies());
         stockpile.afterCast(b, caster, victim, source);
         ###
     AfterCast:
@@ -593,7 +593,7 @@ Ingrain:
         ###
     TrappingMessage: trapped.getName() + " cannot be recalled due to ingrain!"
     ApplyEndTurn:
-        if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+        if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
             return;
         }
 
@@ -687,7 +687,7 @@ Uproar:
 AquaRing:
     Int: PassableEffect, EndTurnEffect
     ApplyEndTurn:
-        if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+        if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
             return;
         }
         
@@ -731,8 +731,8 @@ Focusing:
     Int: DamageTakenEffect
     DamageTaken:
         Messages.add(damageTaker.getName() + " lost its focus and couldn't move!");
-        damageTaker.getEffects().remove(this.namesies);
-        damageTaker.getEffects().add((PokemonEffect)EffectNamesies.FLINCH.getEffect());
+        damageTaker.getEffects().remove(this.namesies());
+        damageTaker.getEffects().add((PokemonEffect)PokemonEffectNamesies.FLINCH.getEffect());
         ###
 *
 ShellTrap:
@@ -741,7 +741,7 @@ ShellTrap:
     Int: PhysicalContactEffect
     Contact:
         Messages.add(user.getName() + " set off " + victim.getName() + "'s trap!!");
-        victim.getEffects().remove(this.namesies);
+        victim.getEffects().remove(this.namesies());
         ###
 *
 BeakBlast:
@@ -795,7 +795,7 @@ Transformed:
         Messages.add(new MessageUpdate().withNewPokemon(transformee.namesies(), transformee.isShiny(), true, victim.isPlayer()));
         Messages.add(new MessageUpdate().updatePokemon(b, victim));
         ###
-    FailCondition: b.getOtherPokemon(victim).hasEffect(this.namesies) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive()))
+    FailCondition: b.getOtherPokemon(victim).hasEffect(this.namesies()) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive()))
     Int: ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect
     GetMoveList:
         return Arrays.asList(moveList);
@@ -892,7 +892,7 @@ Bide:
         move = caster.getMove();
         ###
     AlternateCast:
-        Bide bidesies = (Bide)victim.getEffect(this.namesies);
+        Bide bidesies = (Bide)victim.getEffect(this.namesies());
 
         // Already has the effect, but not ready for it to end yet -- store dat energy
         if (bidesies.turns > 0) {
@@ -912,7 +912,7 @@ Bide:
         }
 
         // Bye Bye Bidesies
-        victim.getEffects().remove(this.namesies);
+        victim.getEffects().remove(this.namesies());
         ###
     CanHave: True
     ApplyEndTurn:
@@ -925,7 +925,7 @@ HalfWeight:
         ###
     CanHave: True
     AlternateCast:
-        HalfWeight halfWeight = (HalfWeight)victim.getEffect(this.namesies);
+        HalfWeight halfWeight = (HalfWeight)victim.getEffect(this.namesies());
         halfWeight.layers++;
         ###
     Activate:
@@ -949,7 +949,7 @@ PowerTrick:
     CastMessage: user.getName() + "'s attack and defense were swapped!"
     AlternateCast:
         this.addCastMessage(b, caster, victim, source, printCast);
-        victim.getEffects().remove(this.namesies);
+        victim.getEffects().remove(this.namesies());
         ###
 *
 PowerSplit:
@@ -1059,7 +1059,7 @@ ConsumedItem:
     BeforeCast:
         consumed = victim.getHeldItem(b);
         victim.removeItem();
-        victim.getEffects().remove(this.namesies);
+        victim.getEffects().remove(this.namesies());
         ###
     Int: ItemHolder
     GetItem:

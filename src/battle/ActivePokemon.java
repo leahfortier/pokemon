@@ -23,8 +23,9 @@ import battle.effect.generic.EffectInterfaces.NameChanger;
 import battle.effect.generic.EffectInterfaces.OpponentItemBlockerEffect;
 import battle.effect.generic.EffectInterfaces.OpponentTrappingEffect;
 import battle.effect.generic.EffectInterfaces.TrappingEffect;
-import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
+import battle.effect.generic.PokemonEffectNamesies;
+import battle.effect.generic.TeamEffectNamesies;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
@@ -104,7 +105,7 @@ public class ActivePokemon extends PartyPokemon {
     public Ability getAbility() {
 
         // Check if the Pokemon has had its ability changed during the battle
-        PokemonEffect effect = getEffect(EffectNamesies.CHANGE_ABILITY);
+        PokemonEffect effect = getEffect(PokemonEffectNamesies.CHANGE_ABILITY);
         if (effect != null) {
             return ((AbilityHolder)effect).getAbility();
         }
@@ -292,7 +293,7 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean canSwapOpponent(Battle b, ActivePokemon victim) {
-        if (b.isFirstAttack() || victim.hasEffect(EffectNamesies.INGRAIN)) {
+        if (b.isFirstAttack() || victim.hasEffect(PokemonEffectNamesies.INGRAIN)) {
             return false;
         }
 
@@ -368,7 +369,7 @@ public class ActivePokemon extends PartyPokemon {
                 return true;
         }
 
-        return this.hasEffect(EffectNamesies.BREAKS_THE_MOLD);
+        return this.hasEffect(PokemonEffectNamesies.BREAKS_THE_MOLD);
     }
 
     @Override
@@ -500,7 +501,7 @@ public class ActivePokemon extends PartyPokemon {
                 MurderEffect.killKillKillMurderMurderMurder(b, this, murderer);
             }
 
-            EffectNamesies.DEAD_ALLY.getEffect().cast(b, this, this, CastSource.EFFECT, false);
+            TeamEffectNamesies.DEAD_ALLY.getEffect().cast(b, this, this, CastSource.EFFECT, false);
 
             // If the player slayed a Dark or Ghost type Pokemon, then they are on their way to becoming the Chosen One
             if (!isPlayer() && (isType(b, Type.DARK) || isType(b, Type.GHOST))) {
@@ -664,7 +665,7 @@ public class ActivePokemon extends PartyPokemon {
 
     private void consumeBerry(Berry consumed, Battle b) {
         // Eat dat berry!!
-        EffectNamesies.EATEN_BERRY.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
+        PokemonEffectNamesies.EATEN_BERRY.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
 
         if (consumed instanceof GainableEffectBerry
                 && this.hasAbility(AbilityNamesies.CHEEK_POUCH)
@@ -677,7 +678,7 @@ public class ActivePokemon extends PartyPokemon {
 
     private Item consumeItemWithoutEffects(Battle b) {
         Item consumed = getHeldItem(b);
-        EffectNamesies.CONSUMED_ITEM.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
+        PokemonEffectNamesies.CONSUMED_ITEM.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
 
         return consumed;
     }
@@ -699,7 +700,7 @@ public class ActivePokemon extends PartyPokemon {
     @Override
     public void removeItem() {
         super.removeItem();
-        this.effects.remove(EffectNamesies.CHANGE_ITEM);
+        this.effects.remove(PokemonEffectNamesies.CHANGE_ITEM);
     }
 
     public Item getHeldItem(Battle b) {
@@ -712,7 +713,7 @@ public class ActivePokemon extends PartyPokemon {
         }
 
         // Check if the Pokemon has had its item changed during the battle
-        PokemonEffect changeItem = getEffect(EffectNamesies.CHANGE_ITEM);
+        PokemonEffect changeItem = getEffect(PokemonEffectNamesies.CHANGE_ITEM);
         Item item = changeItem == null ? getActualHeldItem() : ((ItemHolder)changeItem).getItem();
 
         if (OpponentItemBlockerEffect.checkOpponentItemBlockerEffect(b, b.getOtherPokemon(this), item.namesies())) {
@@ -866,11 +867,11 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     // Returns null if the Pokemon is not under the effects of the input effect, otherwise returns the Effect
-    public PokemonEffect getEffect(EffectNamesies effect) {
+    public PokemonEffect getEffect(PokemonEffectNamesies effect) {
         return effects.get(effect);
     }
 
-    public boolean hasEffect(EffectNamesies effect) {
+    public boolean hasEffect(PokemonEffectNamesies effect) {
         return effects.hasEffect(effect);
     }
 
@@ -887,7 +888,7 @@ public class ActivePokemon extends PartyPokemon {
         if (success) {
             this.setLastMoveUsed();
         } else {
-            this.effects.remove(EffectNamesies.SELF_CONFUSION);
+            this.effects.remove(PokemonEffectNamesies.SELF_CONFUSION);
             this.resetCount();
         }
 

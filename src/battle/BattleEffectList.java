@@ -10,6 +10,7 @@ import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TerrainEffect;
 import battle.effect.generic.WeatherEffect;
+import battle.effect.generic.WeatherNamesies;
 import main.Game;
 import map.area.AreaData;
 import map.overworld.TerrainType;
@@ -71,7 +72,7 @@ class BattleEffectList extends EffectList<BattleEffect> {
 
             if (WeatherEliminatingEffect.shouldEliminateWeather(battle, battle.getPlayer().front(), weather)
                     || WeatherEliminatingEffect.shouldEliminateWeather(battle, battle.getOpponent().front(), weather)) {
-                weather = (WeatherEffect)EffectNamesies.CLEAR_SKIES.getEffect();
+                weather = (WeatherEffect)WeatherNamesies.CLEAR_SKIES.getEffect();
                 Messages.add(new MessageUpdate().withWeather(weather));
             }
         } else if (effect instanceof TerrainEffect) {

@@ -4,7 +4,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.effect.attack.MultiTurnMove;
-import battle.effect.generic.EffectNamesies;
+import battle.effect.generic.PokemonEffectNamesies;
 import battle.effect.status.StatusCondition;
 import generator.update.ItemUpdater;
 import generator.update.ItemUpdater.ItemParser;
@@ -276,20 +276,20 @@ public class ItemTest extends BaseTest {
         TestPokemon defending = battle.getDefending().withGender(Gender.MALE);
 
         battle.attackingFight(AttackNamesies.ATTRACT);
-        Assert.assertTrue(defending.hasEffect(EffectNamesies.INFATUATED));
+        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
 
         attacking.giveItem(ItemNamesies.MENTAL_HERB);
         battle.attackingFight(AttackNamesies.FLING);
-        Assert.assertFalse(defending.hasEffect(EffectNamesies.INFATUATED));
+        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
         Assert.assertFalse(attacking.isHoldingItem(battle));
 
         battle.defendingFight(AttackNamesies.CONFUSE_RAY);
-        Assert.assertTrue(attacking.hasEffect(EffectNamesies.CONFUSION));
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONFUSION));
 
         // Mental Herb cures at the end of the turn
         attacking.giveItem(ItemNamesies.MENTAL_HERB);
         battle.attackingFight(AttackNamesies.SPLASH);
-        Assert.assertFalse(attacking.hasEffect(EffectNamesies.CONFUSION));
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONFUSION));
     }
 
     @Test
@@ -322,7 +322,7 @@ public class ItemTest extends BaseTest {
         // If not success, item is suppressed but should not be consumed
         Assert.assertFalse(defending.isHoldingItem(battle));
 
-        Assert.assertEquals(success, defending.hasEffect(EffectNamesies.CONSUMED_ITEM));
+        Assert.assertEquals(success, defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
         Assert.assertEquals(success, defending.getActualHeldItem().namesies() == ItemNamesies.NO_ITEM);
 
         // If successful, should increase Sp. Attack by one
@@ -429,7 +429,7 @@ public class ItemTest extends BaseTest {
         battle.fight();
 
         Assert.assertNotEquals(consumeItem, attacking.isHoldingItem(battle));
-        Assert.assertEquals(consumeItem, attacking.hasEffect(EffectNamesies.CONSUMED_ITEM));
+        Assert.assertEquals(consumeItem, attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
 
         boolean isMultiTurn = attacking.getAttack() instanceof MultiTurnMove;
         boolean fullyExecuted = !isMultiTurn || skipCharge || consumeItem;
@@ -443,7 +443,7 @@ public class ItemTest extends BaseTest {
         battle.fight();
 
         Assert.assertNotEquals(consumeItem, attacking.isHoldingItem(battle));
-        Assert.assertEquals(consumeItem, attacking.hasEffect(EffectNamesies.CONSUMED_ITEM));
+        Assert.assertEquals(consumeItem, attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
 
         Assert.assertEquals(attackingPP - (!isMultiTurn || skipCharge ? 2 : 1), attacking.getMove().getPP());
         Assert.assertEquals(defendingPP - 2, defending.getMove().getPP());
@@ -494,17 +494,17 @@ public class ItemTest extends BaseTest {
         TestPokemon defending = battle.getDefending().withGender(Gender.MALE);
 
         battle.attackingFight(AttackNamesies.ATTRACT);
-        Assert.assertFalse(attacking.hasEffect(EffectNamesies.INFATUATED));
-        Assert.assertTrue(defending.hasEffect(EffectNamesies.INFATUATED));
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.INFATUATED));
+        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
 
         battle.clearAllEffects();
-        Assert.assertFalse(attacking.hasEffect(EffectNamesies.INFATUATED));
-        Assert.assertFalse(defending.hasEffect(EffectNamesies.INFATUATED));
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.INFATUATED));
+        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
 
         // Destiny Knot causes the caster to be infatuated as well
         defending.withItem(ItemNamesies.DESTINY_KNOT);
         battle.attackingFight(AttackNamesies.ATTRACT);
-        Assert.assertTrue(attacking.hasEffect(EffectNamesies.INFATUATED));
-        Assert.assertTrue(defending.hasEffect(EffectNamesies.INFATUATED));
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.INFATUATED));
+        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
     }
 }

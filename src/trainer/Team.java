@@ -4,8 +4,8 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.Battle.EnterBattleMessageGetter;
 import battle.effect.EffectList;
-import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
+import battle.effect.generic.TeamEffectNamesies;
 import pokemon.PartyPokemon;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public interface Team {
     boolean blackout(Battle b);
     void resetUsed();
 
-    default boolean hasEffect(EffectNamesies effect) {
+    default boolean hasEffect(TeamEffectNamesies effect) {
         return this.getEffects().hasEffect(effect);
     }
 

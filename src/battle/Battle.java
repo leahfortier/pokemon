@@ -23,6 +23,7 @@ import battle.effect.generic.EffectInterfaces.SemiInvulnerableBypasser;
 import battle.effect.generic.EffectInterfaces.StallingEffect;
 import battle.effect.generic.EffectInterfaces.StrikeFirstEffect;
 import battle.effect.generic.EffectNamesies;
+import battle.effect.generic.StandardBattleEffectNamesies;
 import battle.effect.generic.TeamEffect;
 import battle.effect.generic.WeatherEffect;
 import main.Game;
@@ -675,7 +676,7 @@ public class Battle implements Serializable {
         }
 
         // Trick Room makes the slower Pokemon go first
-        boolean reverse = hasEffect(EffectNamesies.TRICK_ROOM);
+        boolean reverse = hasEffect(StandardBattleEffectNamesies.TRICK_ROOM);
 
         // Pokemon that are stalling go last, if both are stalling, the slower one goes first
         boolean pStall = StallingEffect.containsStallingEffect(this, plyr);

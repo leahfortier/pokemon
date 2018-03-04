@@ -2,6 +2,7 @@ package map.overworld;
 
 import battle.attack.AttackNamesies;
 import battle.effect.generic.EffectNamesies;
+import battle.effect.generic.PokemonEffectNamesies;
 import battle.effect.status.StatusCondition;
 import main.Game;
 import pokemon.Stat;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public enum TerrainType {
     BUILDING(Type.NORMAL, new Color(232, 243, 248), AttackNamesies.TRI_ATTACK, StatusCondition.PARALYZED),
-    CAVE(Type.ROCK, new Color(192, 169, 104), AttackNamesies.POWER_GEM, EffectNamesies.FLINCH),
+    CAVE(Type.ROCK, new Color(192, 169, 104), AttackNamesies.POWER_GEM, PokemonEffectNamesies.FLINCH),
     SAND(Type.GROUND, new Color(248, 234, 204), AttackNamesies.EARTH_POWER, Stat.ACCURACY),
     WATER(Type.WATER, new Color(221, 240, 248), AttackNamesies.HYDRO_PUMP, Stat.ATTACK),
     SNOW(Type.ICE, new Color(245, 239, 246), AttackNamesies.FROST_BREATH, StatusCondition.FROZEN),
