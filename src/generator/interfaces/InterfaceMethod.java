@@ -191,7 +191,7 @@ class InterfaceMethod {
 
         final String setInvokees = fields.getAndRemoveTrimmed(SET_INVOKEES);
         if (setInvokees != null) {
-            setInvokeeDeclaration(setInvokees + "\n");
+            setInvokeeDeclaration(setInvokees);
         }
 
         // TODO: Eventually would just like to remove the invokee loop for this case and just operate directly on the attack

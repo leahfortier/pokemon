@@ -3,11 +3,13 @@ package util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class StringAppender {
     private final StringBuilder stringBuilder;
+    private boolean lastEmpty;
 
     public StringAppender() {
         this.stringBuilder = new StringBuilder();
@@ -24,6 +26,9 @@ public class StringAppender {
     public StringAppender append(String s) {
         if (!StringUtils.isNullOrEmpty(s)) {
             this.stringBuilder.append(s);
+            lastEmpty = false;
+        } else {
+            lastEmpty = true;
         }
 
         return this;
@@ -71,6 +76,10 @@ public class StringAppender {
         return this.appendIf(condition && s != null, s + "\n");
     }
 
+    public StringAppender appendIfLastNonempty(String s) {
+        return this.appendIf(!this.lastEmpty, s);
+    }
+
     // Appends s and then a new line
     // Does nothing is s is null
     public StringAppender appendLine(String s) {
@@ -106,7 +115,7 @@ public class StringAppender {
 
     // Joins the objects by the delimiter and appends
     public StringAppender appendJoin(String delimiter, Collection<?> joinees) {
-        return this.appendJoin(delimiter, joinees, o -> o == null ? "null" : o.toString());
+        return this.appendJoin(delimiter, joinees, Objects::toString);
     }
 
     // Applies the mapper to the joinees, joins by the delimiter, and appends

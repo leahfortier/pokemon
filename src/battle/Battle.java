@@ -27,7 +27,6 @@ import battle.effect.generic.TeamEffect;
 import battle.effect.generic.Weather;
 import main.Game;
 import main.Global;
-import map.area.AreaData;
 import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdateType;
@@ -90,13 +89,8 @@ public class Battle implements Serializable {
         this.player.enterBattle();
         this.opponent.enterBattle();
 
-        this.effects = new BattleEffectList(this);
-
-        // Would ideally want these in the BattleEffectsList constructor but that causes NPEs since it will
-        // reference this.effects before it is officially set at the end of the constructor
-        AreaData area = Game.getPlayer().getArea();
-        effects.setBaseWeather(area.getWeather());
-        effects.setBaseTerrain(area.getBattleTerrain());
+        this.effects = new BattleEffectList();
+        this.effects.initialize(this);
 
         turn = 0;
         escapeAttempts = 0;
@@ -191,16 +185,7 @@ public class Battle implements Serializable {
         System.out.println(getTeamEffectsString("Player:", player));
         System.out.println(getTeamEffectsString("Opponent:", opponent));
 
-        if (!this.getEffects().isEmpty()) {
-            System.out.println("Battle:");
-            for (BattleEffect effect : getEffects().asList()) {
-                System.out.println("\t" + effect);
-            }
-        }
-
-        if (this.getWeather().namesies() != effects.getBaseWeather().getWeatherEffect()) {
-            System.out.println("Weather: " + this.getWeather());
-        }
+        this.effects.printShit();
 
         System.out.println();
     }
@@ -217,7 +202,7 @@ public class Battle implements Serializable {
                 .appendLine()
                 .appendIf(p.hasStatus(), p.getStatus() + "\n")
                 .appendJoin("\n", p.getEffects().asList())
-                .appendIf(!p.getEffects().isEmpty(), "\n")
+                .appendIfLastNonempty("\n")
                 .appendJoin("\n", team.getEffects().asList())
                 .toString()
                 .replaceAll("\n", "\n\t")

@@ -56,6 +56,9 @@ BattleEndTurnEffect:
     Method:
         Header: void applyEndTurn(Battle b)
         Invoke: Void
+        SetInvokees:
+            List<BattleEffect> invokees = b.getEffects().asList();
+            ###
         Default:
             Messages.add(this.getEndTurnMessage(b));
             

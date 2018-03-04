@@ -10,6 +10,8 @@ import battle.effect.generic.EffectInterfaces.TerrainEffect;
 import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.Weather;
+import main.Game;
+import map.area.AreaData;
 import map.overworld.TerrainType;
 import map.weather.WeatherState;
 import message.MessageUpdate;
@@ -17,10 +19,9 @@ import message.Messages;
 import trainer.Opponent;
 import trainer.PlayerTrainer;
 
-import java.io.Serializable;
 import java.util.List;
 
-class BattleEffectList extends EffectList<BattleEffect> implements Serializable {
+class BattleEffectList extends EffectList<BattleEffect> {
     private static final long serialVersionUID = 1L;
 
     private transient Battle battle;
@@ -31,8 +32,14 @@ class BattleEffectList extends EffectList<BattleEffect> implements Serializable 
     private TerrainType baseTerrain;
     private TerrainEffect currentTerrain;
 
-    public BattleEffectList(Battle battle) {
-        this.battle = battle;
+    void initialize(Battle battle) {
+        this.setBattle(battle);
+
+        // Would ideally want these in the constructor but that causes NPEs since battle will
+        // reference this.effects before it is officially set at the end of the constructor
+        AreaData area = Game.getPlayer().getArea();
+        this.setBaseWeather(area.getWeather());
+        this.setBaseTerrain(area.getBattleTerrain());
     }
 
     void setBattle(Battle battle) {
@@ -47,6 +54,13 @@ class BattleEffectList extends EffectList<BattleEffect> implements Serializable 
             list.add((BattleEffect)currentTerrain);
         }
         return list;
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        this.setBaseWeather(this.baseWeather);
+        this.setBaseTerrain(this.baseTerrain);
     }
 
     @Override
@@ -75,12 +89,43 @@ class BattleEffectList extends EffectList<BattleEffect> implements Serializable 
 
     @Override
     public void remove(BattleEffect effect) {
-        if (effect instanceof Weather) {
+        if (effect == weather) {
             this.setBaseWeather(this.baseWeather);
-        } else if (effect instanceof TerrainEffect) {
+        } else if (effect == currentTerrain) {
             this.setBaseTerrain(this.baseTerrain);
         } else {
             super.remove(effect);
+        }
+    }
+
+    @Override
+    public boolean remove(EffectNamesies effectToRemove) {
+        if (weather.namesies() == effectToRemove) {
+            this.remove(weather);
+            return true;
+        } else if (currentTerrain != null && ((BattleEffect)currentTerrain).namesies() == effectToRemove) {
+            this.remove((BattleEffect)currentTerrain);
+            return true;
+        } else {
+            return super.remove(effectToRemove);
+        }
+    }
+
+    void printShit() {
+        List<BattleEffect> effects = super.asList();
+        if (!effects.isEmpty()) {
+            System.out.println("Battle:");
+            for (BattleEffect effect : effects) {
+                System.out.println("\t" + effect);
+            }
+        }
+
+        if (weather.namesies() != baseWeather.getWeatherEffect()) {
+            System.out.println("Weather: " + this.weather);
+        }
+
+        if (currentTerrain != null) {
+            System.out.println("Terrain: " + this.currentTerrain);
         }
     }
 
@@ -88,20 +133,16 @@ class BattleEffectList extends EffectList<BattleEffect> implements Serializable 
         return weather;
     }
 
-    public WeatherState getBaseWeather() {
-        return this.baseWeather;
-    }
-
     public TerrainType getTerrainType() {
         return this.currentTerrain == null ? this.baseTerrain : this.currentTerrain.getTerrainType();
     }
 
-    void setBaseWeather(WeatherState weatherState) {
+    private void setBaseWeather(WeatherState weatherState) {
         this.baseWeather = weatherState;
         this.add((Weather)weatherState.getWeatherEffect().getEffect());
     }
 
-    void setBaseTerrain(TerrainType terrainType) {
+    private void setBaseTerrain(TerrainType terrainType) {
         this.baseTerrain = terrainType;
         this.currentTerrain = null;
         Messages.add(new MessageUpdate().withTerrain(terrainType));
@@ -114,7 +155,7 @@ class BattleEffectList extends EffectList<BattleEffect> implements Serializable 
         // Apply End Turn Effects
         endTurnPokemonEffects(player.front());
         endTurnPokemonEffects(opponent.front());
-        BattleEndTurnEffect.invokeBattleEndTurnEffect(this.asList(), battle);
+        BattleEndTurnEffect.invokeBattleEndTurnEffect(battle);
 
         // Decrement Pokemon effects
         player.front().getEffects().decrement(battle, player.front());

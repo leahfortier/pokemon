@@ -27,10 +27,6 @@ public class EffectList<EffectType extends Effect> implements Iterable<EffectTyp
         effects.clear();
     }
 
-    public boolean isEmpty() {
-        return this.effects.isEmpty();
-    }
-
     public void add(EffectType effect) {
         this.effects.add(effect);
     }

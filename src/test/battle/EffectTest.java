@@ -148,7 +148,7 @@ public class EffectTest extends BaseTest {
 
             attacking.assertFullHealth();
             Assert.assertFalse(attacking.hasStatus());
-            Assert.assertTrue(attacking.getEffects().isEmpty());
+            Assert.assertTrue(attacking.getEffects().asList().isEmpty());
             for (Stat stat : Stat.BATTLE_STATS) {
                 Assert.assertEquals(0, attacking.getStage(stat));
             }

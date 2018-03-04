@@ -148,7 +148,8 @@ public final class EffectInterfaces {
             }
         }
 
-        static void invokeBattleEndTurnEffect(List<? extends InvokeEffect> invokees, Battle b) {
+        static void invokeBattleEndTurnEffect(Battle b) {
+            List<BattleEffect> invokees = b.getEffects().asList();
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof BattleEndTurnEffect && InvokeEffect.isActiveEffect(invokee)) {
                     BattleEndTurnEffect effect = (BattleEndTurnEffect)invokee;
@@ -370,7 +371,6 @@ public final class EffectInterfaces {
 
         static String getChangedName(ActivePokemon p) {
             List<InvokeEffect> invokees = Collections.singletonList(p.getAbility());
-
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof NameChanger && InvokeEffect.isActiveEffect(invokee)) {
                     NameChanger effect = (NameChanger)invokee;
@@ -1823,7 +1823,6 @@ public final class EffectInterfaces {
 
         static void invokeSwitchOutEffect(ActivePokemon switchee) {
             List<InvokeEffect> invokees = switchee.getAllEffects(null);
-
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof SwitchOutEffect && InvokeEffect.isActiveEffect(invokee)) {
                     SwitchOutEffect effect = (SwitchOutEffect)invokee;
@@ -1909,7 +1908,6 @@ public final class EffectInterfaces {
         static boolean containsItemBlockerEffect(Battle b, ActivePokemon p) {
             // Don't include the item because then it's all like ahhhhhh
             List<InvokeEffect> invokees = b.getEffectsList(p, false);
-
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof ItemBlockerEffect && InvokeEffect.isActiveEffect(invokee)) {
                     return true;
@@ -1926,7 +1924,6 @@ public final class EffectInterfaces {
         static boolean checkOpponentItemBlockerEffect(Battle b, ActivePokemon opp, ItemNamesies item) {
             // Don't include the item because then it's all like ahhhhhh
             List<InvokeEffect> invokees = b.getEffectsList(opp, false);
-
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof OpponentItemBlockerEffect && InvokeEffect.isActiveEffect(invokee)) {
                     OpponentItemBlockerEffect effect = (OpponentItemBlockerEffect)invokee;
