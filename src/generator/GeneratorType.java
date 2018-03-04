@@ -12,11 +12,11 @@ import util.Folder;
 
 public enum GeneratorType {
     ATTACK_GEN("Moves.txt", Folder.ATTACK, Attack.class, NamesiesType.ATTACK_NAMESIES),
-    POKEMON_EFFECT_GEN("PokemonEffects.txt", Folder.GENERIC_EFFECT, PokemonEffect.class, NamesiesType.EFFECT_NAMESIES),
-    TEAM_EFFECT_GEN("TeamEffects.txt", Folder.GENERIC_EFFECT, TeamEffect.class, NamesiesType.EFFECT_NAMESIES),
-    BATTLE_EFFECT_GEN("BattleEffects.txt", Folder.GENERIC_EFFECT, BattleEffect.class, NamesiesType.EFFECT_NAMESIES),
-    WEATHER_GEN("Weather.txt", Folder.GENERIC_EFFECT, WeatherEffect.class, NamesiesType.EFFECT_NAMESIES),
-    TERRAIN_GEN("Terrain.txt", Folder.GENERIC_EFFECT, TerrainEffect.class, NamesiesType.EFFECT_NAMESIES),
+    POKEMON_EFFECT_GEN("PokemonEffects.txt", Folder.GENERIC_EFFECT, PokemonEffect.class, NamesiesType.POKEMON_EFFECT_NAMESIES),
+    TEAM_EFFECT_GEN("TeamEffects.txt", Folder.GENERIC_EFFECT, TeamEffect.class, NamesiesType.TEAM_EFFECT_NAMESIES),
+    BATTLE_EFFECT_GEN("BattleEffects.txt", Folder.GENERIC_EFFECT, BattleEffect.class, NamesiesType.BATTLE_EFFECT_NAMESIES),
+    WEATHER_GEN("Weather.txt", Folder.GENERIC_EFFECT, WeatherEffect.class, NamesiesType.WEATHER_NAMESIES),
+    TERRAIN_GEN("Terrain.txt", Folder.GENERIC_EFFECT, TerrainEffect.class, NamesiesType.TERRAIN_NAMESIES),
     ABILITY_GEN("Abilities.txt", Folder.ABILITY, Ability.class, NamesiesType.ABILITY_NAMESIES),
     ITEM_GEN("Items.txt", Folder.ITEMS, Item.class, NamesiesType.ITEM_NAMESIES);
 

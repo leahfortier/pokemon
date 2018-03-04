@@ -1,6 +1,5 @@
 package pokemon;
 
-import main.Global;
 import util.StringUtils;
 
 public enum PokemonNamesies {
@@ -847,20 +846,11 @@ public enum PokemonNamesies {
     }
 
     public static PokemonNamesies tryValueOf(String name) {
-        try {
-            return PokemonNamesies.valueOf(StringUtils.getNamesiesString(name));
-        } catch (IllegalArgumentException exception) {
-            return null;
-        }
+        return StringUtils.enumTryValueOf(PokemonNamesies.class, name);
     }
 
     public static PokemonNamesies getValueOf(String name) {
-        PokemonNamesies namesies = tryValueOf(name);
-        if (namesies == null) {
-            Global.error(name + " does not have a valid PokemonNamesies value");
-        }
-
-        return namesies;
+        return StringUtils.enumValueOf(PokemonNamesies.class, name);
     }
 }
 
