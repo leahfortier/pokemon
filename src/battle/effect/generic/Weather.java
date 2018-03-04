@@ -66,7 +66,7 @@ public abstract class Weather extends BattleEffect implements BattleEndTurnEffec
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getWeather().namesies() == this.namesies);
+            return !(b.hasEffect(this.namesies));
         }
 
         @Override
@@ -107,7 +107,7 @@ public abstract class Weather extends BattleEffect implements BattleEndTurnEffec
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getWeather().namesies() == this.namesies);
+            return !(b.hasEffect(this.namesies));
         }
 
         @Override
@@ -160,7 +160,7 @@ public abstract class Weather extends BattleEffect implements BattleEndTurnEffec
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getWeather().namesies() == this.namesies);
+            return !(b.hasEffect(this.namesies));
         }
 
         @Override
@@ -224,7 +224,7 @@ public abstract class Weather extends BattleEffect implements BattleEndTurnEffec
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getWeather().namesies() == this.namesies);
+            return !(b.hasEffect(this.namesies));
         }
 
         @Override

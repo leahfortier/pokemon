@@ -883,13 +883,6 @@ FallMessage:
 		fallen.getEffects().remove(this.namesies());
 		###
 *
-Terrain:
-    Header: TerrainType getTerrainType()
-    Body:
-        return TerrainType.{00};
-        ###
-    AddMapField: NumTurns: 5
-*
 EndBattle:
 	Header: void afterBattle(Trainer player, Battle b, ActivePokemon p)
 *

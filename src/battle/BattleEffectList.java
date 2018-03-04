@@ -6,9 +6,9 @@ import battle.effect.generic.EffectInterfaces.BattleEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
-import battle.effect.generic.EffectInterfaces.TerrainEffect;
 import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectNamesies;
+import battle.effect.generic.Terrain;
 import battle.effect.generic.Weather;
 import main.Game;
 import map.area.AreaData;
@@ -30,7 +30,7 @@ class BattleEffectList extends EffectList<BattleEffect> {
     private Weather weather;
 
     private TerrainType baseTerrain;
-    private TerrainEffect currentTerrain;
+    private Terrain currentTerrain;
 
     void initialize(Battle battle) {
         this.setBattle(battle);
@@ -51,7 +51,7 @@ class BattleEffectList extends EffectList<BattleEffect> {
         List<BattleEffect> list = super.asList();
         list.add(weather);
         if (currentTerrain != null) {
-            list.add((BattleEffect)currentTerrain);
+            list.add(currentTerrain);
         }
         return list;
     }
@@ -74,8 +74,8 @@ class BattleEffectList extends EffectList<BattleEffect> {
                 weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
                 Messages.add(new MessageUpdate().withWeather(weather));
             }
-        } else if (effect instanceof TerrainEffect) {
-            currentTerrain = (TerrainEffect)effect;
+        } else if (effect instanceof Terrain) {
+            currentTerrain = (Terrain)effect;
 
             TerrainType terrainType = currentTerrain.getTerrainType();
             Messages.add(new MessageUpdate().withTerrain(terrainType));
@@ -103,8 +103,8 @@ class BattleEffectList extends EffectList<BattleEffect> {
         if (weather.namesies() == effectToRemove) {
             this.remove(weather);
             return true;
-        } else if (currentTerrain != null && ((BattleEffect)currentTerrain).namesies() == effectToRemove) {
-            this.remove((BattleEffect)currentTerrain);
+        } else if (currentTerrain != null && currentTerrain.namesies() == effectToRemove) {
+            this.remove(currentTerrain);
             return true;
         } else {
             return super.remove(effectToRemove);

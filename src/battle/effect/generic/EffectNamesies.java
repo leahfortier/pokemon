@@ -1,13 +1,9 @@
 package battle.effect.generic;
 
-import battle.effect.generic.BattleEffect.ElectricTerrain;
 import battle.effect.generic.BattleEffect.FieldUproar;
-import battle.effect.generic.BattleEffect.GrassyTerrain;
 import battle.effect.generic.BattleEffect.Gravity;
 import battle.effect.generic.BattleEffect.MagicRoom;
-import battle.effect.generic.BattleEffect.MistyTerrain;
 import battle.effect.generic.BattleEffect.MudSport;
-import battle.effect.generic.BattleEffect.PsychicTerrain;
 import battle.effect.generic.BattleEffect.TrickRoom;
 import battle.effect.generic.BattleEffect.WaterSport;
 import battle.effect.generic.BattleEffect.WonderRoom;
@@ -105,6 +101,10 @@ import battle.effect.generic.TeamEffect.StickyWeb;
 import battle.effect.generic.TeamEffect.Tailwind;
 import battle.effect.generic.TeamEffect.ToxicSpikes;
 import battle.effect.generic.TeamEffect.Wish;
+import battle.effect.generic.Terrain.ElectricTerrain;
+import battle.effect.generic.Terrain.GrassyTerrain;
+import battle.effect.generic.Terrain.MistyTerrain;
+import battle.effect.generic.Terrain.PsychicTerrain;
 import battle.effect.generic.Weather.ClearSkies;
 import battle.effect.generic.Weather.Hailing;
 import battle.effect.generic.Weather.Raining;
@@ -217,16 +217,16 @@ public enum EffectNamesies {
     WONDER_ROOM(WonderRoom::new),
     TRICK_ROOM(TrickRoom::new),
     MAGIC_ROOM(MagicRoom::new),
-    MISTY_TERRAIN(MistyTerrain::new),
-    GRASSY_TERRAIN(GrassyTerrain::new),
-    ELECTRIC_TERRAIN(ElectricTerrain::new),
-    PSYCHIC_TERRAIN(PsychicTerrain::new),
     FIELD_UPROAR(FieldUproar::new),
     CLEAR_SKIES(ClearSkies::new),
     RAINING(Raining::new),
     SUNNY(Sunny::new),
     SANDSTORM(Sandstorm::new),
-    HAILING(Hailing::new);
+    HAILING(Hailing::new),
+    MISTY_TERRAIN(MistyTerrain::new),
+    GRASSY_TERRAIN(GrassyTerrain::new),
+    ELECTRIC_TERRAIN(ElectricTerrain::new),
+    PSYCHIC_TERRAIN(PsychicTerrain::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

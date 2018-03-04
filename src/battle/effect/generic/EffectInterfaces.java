@@ -1982,10 +1982,6 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface TerrainEffect {
-        TerrainType getTerrainType();
-    }
-
     public interface PassableEffect {
     }
 }

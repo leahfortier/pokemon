@@ -72,7 +72,6 @@ import battle.effect.generic.EffectInterfaces.SwitchOutEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
-import battle.effect.generic.EffectInterfaces.TerrainEffect;
 import battle.effect.generic.EffectInterfaces.TrappingEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
@@ -178,7 +177,6 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, AttackInterface.class, Attack.class);
             checkInstance(classy, NameChanger.class, Ability.class);
             checkInstance(classy, PassableEffect.class, PokemonEffect.class);
-            checkInstance(classy, TerrainEffect.class, BattleEffect.class);
             checkInstance(classy, BattleEndTurnEffect.class, BattleEffect.class);
             checkInstance(classy, EndTurnEffect.class, teamEffectList);
             checkInstance(classy, SwitchOutEffect.class, pokemonEffectList);
