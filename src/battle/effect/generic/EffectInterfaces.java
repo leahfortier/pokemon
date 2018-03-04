@@ -1779,7 +1779,7 @@ public final class EffectInterfaces {
     public interface WeatherEliminatingEffect extends EntryEndTurnEffect {
         String getEliminateMessage(ActivePokemon eliminator);
 
-        default boolean eliminateWeather(Weather weather) {
+        default boolean eliminateWeather(WeatherEffect weather) {
             return weather.namesies() != EffectNamesies.CLEAR_SKIES;
         }
 
@@ -1788,7 +1788,7 @@ public final class EffectInterfaces {
             b.addEffect(b.getWeather());
         }
 
-        static boolean shouldEliminateWeather(Battle b, ActivePokemon eliminator, Weather weather) {
+        static boolean shouldEliminateWeather(Battle b, ActivePokemon eliminator, WeatherEffect weather) {
             List<InvokeEffect> invokees = b.getEffectsList(eliminator);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof WeatherEliminatingEffect && InvokeEffect.isActiveEffect(invokee)) {

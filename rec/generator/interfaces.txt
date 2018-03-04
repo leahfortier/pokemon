@@ -1101,7 +1101,7 @@ WeatherEliminatingEffect:
 		Header: String getEliminateMessage(ActivePokemon eliminator)
 	*
 	Method:
-		Header: boolean eliminateWeather(Weather weather)
+		Header: boolean eliminateWeather(WeatherEffect weather)
 		Default:
 			return weather.namesies() != EffectNamesies.CLEAR_SKIES;
 			###

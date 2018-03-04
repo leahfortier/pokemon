@@ -77,7 +77,7 @@ import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.PokemonEffect;
-import battle.effect.generic.Weather;
+import battle.effect.generic.WeatherEffect;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
@@ -727,7 +727,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " made the sunlight turn harsh!");
-            b.addEffect((Weather)EffectNamesies.SUNNY.getEffect());
+            b.addEffect((WeatherEffect)EffectNamesies.SUNNY.getEffect());
         }
     }
 
@@ -2140,7 +2140,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " whipped up a sandstorm!");
-            b.addEffect((Weather)EffectNamesies.SANDSTORM.getEffect());
+            b.addEffect((WeatherEffect)EffectNamesies.SANDSTORM.getEffect());
         }
     }
 
@@ -2461,7 +2461,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " started a downpour!");
-            b.addEffect((Weather)EffectNamesies.RAINING.getEffect());
+            b.addEffect((WeatherEffect)EffectNamesies.RAINING.getEffect());
         }
     }
 
@@ -2585,7 +2585,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " caused it to hail!");
-            b.addEffect((Weather)EffectNamesies.HAILING.getEffect());
+            b.addEffect((WeatherEffect)EffectNamesies.HAILING.getEffect());
         }
     }
 

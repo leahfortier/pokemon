@@ -980,7 +980,7 @@ WeatherStarter:
 	AddInterface: EntryEffect
 	AddMapField: Enter:
 		Messages.add(enterer.getName() + "'s " + this.getName() + " {2-}!");
-		b.addEffect((Weather)EffectNamesies.{11}.getEffect());
+		b.addEffect((WeatherEffect)EffectNamesies.{11}.getEffect());
 		###
 *
 WeatherEvasion:

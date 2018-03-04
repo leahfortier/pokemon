@@ -14,7 +14,7 @@ import message.Messages;
 import pokemon.Stat;
 import type.Type;
 
-public abstract class Weather extends BattleEffect implements BattleEndTurnEffect {
+public abstract class WeatherEffect extends BattleEffect implements BattleEndTurnEffect {
     private static final long serialVersionUID = 1L;
 
     private static final int DEFAULT_TURNS = 5;
@@ -22,7 +22,7 @@ public abstract class Weather extends BattleEffect implements BattleEndTurnEffec
     private final Type weatherElement;
     private final String imageName;
 
-    public Weather(EffectNamesies namesies, Type weatherElement) {
+    public WeatherEffect(EffectNamesies namesies, Type weatherElement) {
         super(namesies, -1, -1, true, false);
         this.weatherElement = weatherElement;
         this.imageName = this.getClass().getSimpleName().toLowerCase();
@@ -49,7 +49,7 @@ public abstract class Weather extends BattleEffect implements BattleEndTurnEffec
 
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-    static class ClearSkies extends Weather {
+    static class ClearSkies extends WeatherEffect {
         private static final long serialVersionUID = 1L;
 
         ClearSkies() {
@@ -57,7 +57,7 @@ public abstract class Weather extends BattleEffect implements BattleEndTurnEffec
         }
     }
 
-    static class Raining extends Weather implements PowerChangeEffect {
+    static class Raining extends WeatherEffect implements PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         Raining() {
@@ -98,7 +98,7 @@ public abstract class Weather extends BattleEffect implements BattleEndTurnEffec
         }
     }
 
-    static class Sunny extends Weather implements StatusPreventionEffect, PowerChangeEffect {
+    static class Sunny extends WeatherEffect implements StatusPreventionEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         Sunny() {
@@ -149,7 +149,7 @@ public abstract class Weather extends BattleEffect implements BattleEndTurnEffec
         }
     }
 
-    static class Sandstorm extends Weather implements SimpleStatModifyingEffect {
+    static class Sandstorm extends WeatherEffect implements SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
 
         private static final Type[] immunees = new Type[] { Type.ROCK, Type.GROUND, Type.STEEL };
@@ -213,7 +213,7 @@ public abstract class Weather extends BattleEffect implements BattleEndTurnEffec
         }
     }
 
-    static class Hailing extends Weather {
+    static class Hailing extends WeatherEffect {
         private static final long serialVersionUID = 1L;
 
         private static final Type[] immunees = new Type[] { Type.ICE };

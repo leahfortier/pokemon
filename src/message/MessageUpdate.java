@@ -3,7 +3,7 @@ package message;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
-import battle.effect.generic.Weather;
+import battle.effect.generic.WeatherEffect;
 import gui.view.ViewMode;
 import main.Game;
 import map.overworld.TerrainType;
@@ -13,7 +13,6 @@ import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import sound.SoundTitle;
 import type.PokeType;
-import type.Type;
 import util.SerializationUtils;
 import util.StringUtils;
 
@@ -42,7 +41,7 @@ public class MessageUpdate {
     private Trigger trigger;
     private ChoiceMatcher[] choices;
     private ViewMode viewMode;
-    private Weather weather;
+    private WeatherEffect weather;
     private TerrainType terrain;
     private SoundTitle soundEffect;
     private String imageName;
@@ -130,7 +129,7 @@ public class MessageUpdate {
         return this.withFrontPokemon(battle, active);
     }
 
-    public MessageUpdate withWeather(Weather weather) {
+    public MessageUpdate withWeather(WeatherEffect weather) {
         this.weather = weather;
         return this;
     }
@@ -353,7 +352,7 @@ public class MessageUpdate {
         return this.weather != null;
     }
 
-    public Weather getWeather() {
+    public WeatherEffect getWeather() {
         return this.weather;
     }
 

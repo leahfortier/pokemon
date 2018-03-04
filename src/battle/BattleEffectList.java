@@ -8,8 +8,8 @@ import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectNamesies;
-import battle.effect.generic.Terrain;
-import battle.effect.generic.Weather;
+import battle.effect.generic.TerrainEffect;
+import battle.effect.generic.WeatherEffect;
 import main.Game;
 import map.area.AreaData;
 import map.overworld.TerrainType;
@@ -27,10 +27,10 @@ class BattleEffectList extends EffectList<BattleEffect> {
     private transient Battle battle;
 
     private WeatherState baseWeather;
-    private Weather weather;
+    private WeatherEffect weather;
 
     private TerrainType baseTerrain;
-    private Terrain currentTerrain;
+    private TerrainEffect currentTerrain;
 
     void initialize(Battle battle) {
         this.setBattle(battle);
@@ -65,17 +65,17 @@ class BattleEffectList extends EffectList<BattleEffect> {
 
     @Override
     public void add(BattleEffect effect) {
-        if (effect instanceof Weather) {
-            weather = (Weather)effect;
+        if (effect instanceof WeatherEffect) {
+            weather = (WeatherEffect)effect;
             Messages.add(new MessageUpdate().withWeather(weather));
 
             if (WeatherEliminatingEffect.shouldEliminateWeather(battle, battle.getPlayer().front(), weather)
                     || WeatherEliminatingEffect.shouldEliminateWeather(battle, battle.getOpponent().front(), weather)) {
-                weather = (Weather)EffectNamesies.CLEAR_SKIES.getEffect();
+                weather = (WeatherEffect)EffectNamesies.CLEAR_SKIES.getEffect();
                 Messages.add(new MessageUpdate().withWeather(weather));
             }
-        } else if (effect instanceof Terrain) {
-            currentTerrain = (Terrain)effect;
+        } else if (effect instanceof TerrainEffect) {
+            currentTerrain = (TerrainEffect)effect;
 
             TerrainType terrainType = currentTerrain.getTerrainType();
             Messages.add(new MessageUpdate().withTerrain(terrainType));
@@ -129,7 +129,7 @@ class BattleEffectList extends EffectList<BattleEffect> {
         }
     }
 
-    public Weather getWeather() {
+    public WeatherEffect getWeather() {
         return weather;
     }
 
@@ -139,7 +139,7 @@ class BattleEffectList extends EffectList<BattleEffect> {
 
     private void setBaseWeather(WeatherState weatherState) {
         this.baseWeather = weatherState;
-        this.add((Weather)weatherState.getWeatherEffect().getEffect());
+        this.add((WeatherEffect)weatherState.getWeatherEffect().getEffect());
     }
 
     private void setBaseTerrain(TerrainType terrainType) {

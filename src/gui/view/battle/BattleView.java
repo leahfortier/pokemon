@@ -3,7 +3,7 @@ package gui.view.battle;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
-import battle.effect.generic.Weather;
+import battle.effect.generic.WeatherEffect;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.button.Button;
@@ -51,7 +51,7 @@ public class BattleView extends View {
     private MessageUpdateType updateType;
 
     // Displayable current weather and terrain
-    private Weather weather;
+    private WeatherEffect weather;
     private TerrainType terrain;
     private Boolean isInterior;
 

@@ -7,7 +7,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.MoveType;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.EffectNamesies;
-import battle.effect.generic.Weather;
+import battle.effect.generic.WeatherEffect;
 import org.junit.Assert;
 import pokemon.PokemonNamesies;
 import test.TestCharacter;
@@ -81,7 +81,7 @@ public class TestBattle extends Battle {
         this.getTrainer(false).getEffects().reset();
 
         this.getEffects().reset();
-        this.addEffect((Weather)EffectNamesies.CLEAR_SKIES.getEffect());
+        this.addEffect((WeatherEffect)EffectNamesies.CLEAR_SKIES.getEffect());
     }
 
     void splashFight() {

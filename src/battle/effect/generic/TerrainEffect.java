@@ -13,10 +13,10 @@ import message.MessageUpdate;
 import message.Messages;
 import type.Type;
 
-public abstract class Terrain extends BattleEffect {
+public abstract class TerrainEffect extends BattleEffect {
     private final TerrainType terrainType;
 
-    public Terrain(EffectNamesies name, TerrainType terrainType) {
+    public TerrainEffect(EffectNamesies name, TerrainType terrainType) {
         super(name, 5, 5, false, false);
         this.terrainType = terrainType;
     }
@@ -30,7 +30,7 @@ public abstract class Terrain extends BattleEffect {
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
     // Dragon type moves have halved power during the misty terrain
-    static class MistyTerrain extends Terrain implements StatusPreventionEffect, PowerChangeEffect {
+    static class MistyTerrain extends TerrainEffect implements StatusPreventionEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         MistyTerrain() {
@@ -70,7 +70,7 @@ public abstract class Terrain extends BattleEffect {
     }
 
     // Grass-type moves are 50% stronger with the grassy terrain
-    static class GrassyTerrain extends Terrain implements BattleEndTurnEffect, PowerChangeEffect {
+    static class GrassyTerrain extends TerrainEffect implements BattleEndTurnEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         GrassyTerrain() {
@@ -107,7 +107,7 @@ public abstract class Terrain extends BattleEffect {
     }
 
     // Electric-type moves are 50% stronger with the electric terrain
-    static class ElectricTerrain extends Terrain implements StatusPreventionEffect, PowerChangeEffect {
+    static class ElectricTerrain extends TerrainEffect implements StatusPreventionEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         ElectricTerrain() {
@@ -146,7 +146,7 @@ public abstract class Terrain extends BattleEffect {
     }
 
     // Psychic-type moves are 50% stronger with the psychic terrain
-    static class PsychicTerrain extends Terrain implements AttackBlocker, PowerChangeEffect {
+    static class PsychicTerrain extends TerrainEffect implements AttackBlocker, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         PsychicTerrain() {

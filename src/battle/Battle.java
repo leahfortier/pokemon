@@ -24,7 +24,7 @@ import battle.effect.generic.EffectInterfaces.StallingEffect;
 import battle.effect.generic.EffectInterfaces.StrikeFirstEffect;
 import battle.effect.generic.EffectNamesies;
 import battle.effect.generic.TeamEffect;
-import battle.effect.generic.Weather;
+import battle.effect.generic.WeatherEffect;
 import main.Game;
 import main.Global;
 import map.overworld.TerrainType;
@@ -129,7 +129,7 @@ public class Battle implements Serializable {
         return opponent;
     }
 
-    public Weather getWeather() {
+    public WeatherEffect getWeather() {
         return effects.getWeather();
     }
 
