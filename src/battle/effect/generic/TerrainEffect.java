@@ -13,7 +13,7 @@ import message.MessageUpdate;
 import message.Messages;
 import type.Type;
 
-public abstract class TerrainEffect extends BattleEffect {
+public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> {
     private final TerrainType terrainType;
 
     public TerrainEffect(TerrainNamesies name, TerrainType terrainType) {

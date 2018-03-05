@@ -16,16 +16,11 @@ import message.Messages;
 import pokemon.Stat;
 import type.Type;
 
-public abstract class BattleEffect extends Effect {
+public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> extends Effect<NamesiesType> {
     private static final long serialVersionUID = 1L;
 
-    public BattleEffect(BattleEffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
+    public BattleEffect(NamesiesType name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
         super(name, minTurns, maxTurns, nextTurnSubside, hasAlternateCast);
-    }
-
-    @Override
-    public BattleEffectNamesies namesies() {
-        return (BattleEffectNamesies)super.namesies();
     }
 
     @Override
@@ -42,7 +37,7 @@ public abstract class BattleEffect extends Effect {
 
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-    static class Gravity extends BattleEffect implements GroundedEffect, StageChangingEffect {
+    static class Gravity extends BattleEffect<StandardBattleEffectNamesies> implements GroundedEffect, StageChangingEffect {
         private static final long serialVersionUID = 1L;
 
         Gravity() {
@@ -76,7 +71,7 @@ public abstract class BattleEffect extends Effect {
         }
     }
 
-    static class WaterSport extends BattleEffect implements PowerChangeEffect {
+    static class WaterSport extends BattleEffect<StandardBattleEffectNamesies> implements PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         WaterSport() {
@@ -104,7 +99,7 @@ public abstract class BattleEffect extends Effect {
         }
     }
 
-    static class MudSport extends BattleEffect implements PowerChangeEffect {
+    static class MudSport extends BattleEffect<StandardBattleEffectNamesies> implements PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         MudSport() {
@@ -132,7 +127,7 @@ public abstract class BattleEffect extends Effect {
         }
     }
 
-    static class WonderRoom extends BattleEffect implements StatSwitchingEffect {
+    static class WonderRoom extends BattleEffect<StandardBattleEffectNamesies> implements StatSwitchingEffect {
         private static final long serialVersionUID = 1L;
 
         WonderRoom() {
@@ -171,7 +166,7 @@ public abstract class BattleEffect extends Effect {
         }
     }
 
-    static class TrickRoom extends BattleEffect {
+    static class TrickRoom extends BattleEffect<StandardBattleEffectNamesies> {
         private static final long serialVersionUID = 1L;
 
         TrickRoom() {
@@ -198,7 +193,7 @@ public abstract class BattleEffect extends Effect {
         }
     }
 
-    static class MagicRoom extends BattleEffect implements ItemBlockerEffect {
+    static class MagicRoom extends BattleEffect<StandardBattleEffectNamesies> implements ItemBlockerEffect {
         private static final long serialVersionUID = 1L;
 
         MagicRoom() {
@@ -225,7 +220,7 @@ public abstract class BattleEffect extends Effect {
         }
     }
 
-    static class FieldUproar extends BattleEffect implements StatusPreventionEffect, SuperDuperEndTurnEffect {
+    static class FieldUproar extends BattleEffect<StandardBattleEffectNamesies> implements StatusPreventionEffect, SuperDuperEndTurnEffect {
         private static final long serialVersionUID = 1L;
 
         FieldUproar() {

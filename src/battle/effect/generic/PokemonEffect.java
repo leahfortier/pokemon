@@ -75,16 +75,11 @@ import java.util.Arrays;
 import java.util.List;
 
 // Class to handle effects that are on a single Pokemon
-public abstract class PokemonEffect extends Effect implements Serializable {
+public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public PokemonEffect(PokemonEffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
         super(name, minTurns, maxTurns, nextTurnSubside, hasAlternateCast);
-    }
-
-    @Override
-    public PokemonEffectNamesies namesies() {
-        return (PokemonEffectNamesies)super.namesies();
     }
 
     @Override

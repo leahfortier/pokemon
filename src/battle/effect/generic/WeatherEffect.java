@@ -14,7 +14,7 @@ import message.Messages;
 import pokemon.Stat;
 import type.Type;
 
-public abstract class WeatherEffect extends BattleEffect implements BattleEndTurnEffect {
+public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implements BattleEndTurnEffect {
     private static final long serialVersionUID = 1L;
 
     private static final int DEFAULT_TURNS = 5;
@@ -26,11 +26,6 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
         super(namesies, -1, -1, true, false);
         this.weatherElement = weatherElement;
         this.imageName = this.getClass().getSimpleName().toLowerCase();
-    }
-
-    @Override
-    public WeatherNamesies namesies() {
-        return (WeatherNamesies)super.namesies();
     }
 
     public String getImageName() {

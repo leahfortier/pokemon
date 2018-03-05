@@ -12,19 +12,19 @@ import util.StringUtils;
 
 import java.io.Serializable;
 
-public abstract class Effect implements InvokeEffect, Serializable {
+public abstract class Effect<NamesiesType extends EffectNamesies> implements InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final String DEFAULT_FAIL_MESSAGE = "...but it failed!";
 
-    protected final EffectNamesies namesies;
+    protected final NamesiesType namesies;
     private final boolean nextTurnSubside;
     private final boolean hasAlternateCast;
 
     protected boolean active;
     protected int numTurns;
 
-    protected Effect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
+    protected Effect(NamesiesType name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
         this.namesies = name;
         this.nextTurnSubside = nextTurnSubside;
         this.hasAlternateCast = hasAlternateCast;
@@ -64,6 +64,10 @@ public abstract class Effect implements InvokeEffect, Serializable {
 
     public boolean hasAlternateCast() {
         return this.hasAlternateCast;
+    }
+
+    public final NamesiesType namesies() {
+        return this.namesies;
     }
 
     public void deactivate() {
@@ -125,10 +129,6 @@ public abstract class Effect implements InvokeEffect, Serializable {
 
     public String getSubsideMessage(ActivePokemon p) {
         return StringUtils.empty();
-    }
-
-    public EffectNamesies namesies() {
-        return this.namesies;
     }
 
     public boolean isActive() {

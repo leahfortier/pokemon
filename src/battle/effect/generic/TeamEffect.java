@@ -25,16 +25,11 @@ import type.Type;
 import java.io.Serializable;
 
 // Class to handle effects that are specific to one side of the battle
-public abstract class TeamEffect extends Effect implements Serializable {
+public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public TeamEffect(TeamEffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
         super(name, minTurns, maxTurns, nextTurnSubside, hasAlternateCast);
-    }
-
-    @Override
-    public TeamEffectNamesies namesies() {
-        return (TeamEffectNamesies)super.namesies();
     }
 
     @Override
