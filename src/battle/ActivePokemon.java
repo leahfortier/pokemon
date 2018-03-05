@@ -67,7 +67,7 @@ import java.util.List;
 public class ActivePokemon extends PartyPokemon {
     private static final long serialVersionUID = 1L;
 
-    private EffectList<PokemonEffect> effects;
+    private PokemonEffectList effects;
     private Stages stages;
     private Move selected;
     private Move lastMoveUsed;
@@ -456,7 +456,7 @@ public class ActivePokemon extends PartyPokemon {
         this.setAbility(this.getActualAbility().namesies());
         this.getActualMoves().forEach(Move::resetAttack);
 
-        effects = new EffectList<>();
+        effects = new PokemonEffectList();
         stages = new Stages(this);
 
         selected = null;
@@ -838,7 +838,7 @@ public class ActivePokemon extends PartyPokemon {
         return counter;
     }
 
-    public EffectList<PokemonEffect> getEffects() {
+    public PokemonEffectList getEffects() {
         return effects;
     }
 
@@ -898,4 +898,6 @@ public class ActivePokemon extends PartyPokemon {
 
         this.setAttacking(false);
     }
+
+    public static class PokemonEffectList extends EffectList<PokemonEffectNamesies, PokemonEffect> {}
 }

@@ -100,8 +100,8 @@ import util.RandomUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1011,7 +1011,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
     static class MentalHerb extends Item implements HoldItem, EffectCurerItem {
         private static final long serialVersionUID = 1L;
 
-        private static final Map<EffectNamesies, String> REMOVEABLE_EFFECTS = new HashMap<>();
+        private static final Map<PokemonEffectNamesies, String> REMOVEABLE_EFFECTS = new EnumMap<>(PokemonEffectNamesies.class);
         static {
             REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.INFATUATED, "infatuated");
             REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.DISABLE, "disabled");
@@ -1038,12 +1038,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public Set<? extends EffectNamesies> getCurableEffects() {
+        public Set<PokemonEffectNamesies> getCurableEffects() {
             return REMOVEABLE_EFFECTS.keySet();
         }
 
         @Override
-        public String getRemoveMessage(ActivePokemon victim, EffectNamesies effectType) {
+        public String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType) {
             return victim.getName() + " is no longer " + REMOVEABLE_EFFECTS.get(effectType) + " due to its " + this.getName() + "!";
         }
     }
@@ -4558,12 +4558,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public Set<? extends EffectNamesies> getCurableEffects() {
+        public Set<PokemonEffectNamesies> getCurableEffects() {
             return EnumSet.of(PokemonEffectNamesies.CONFUSION);
         }
 
         @Override
-        public String getRemoveMessage(ActivePokemon victim, EffectNamesies effectType) {
+        public String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType) {
             return this.getSourceMessage(victim, this.getName());
         }
     }

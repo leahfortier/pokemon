@@ -19,7 +19,7 @@ import battle.effect.generic.TeamEffect.Wish;
 
 import java.util.function.Supplier;
 
-public enum TeamEffectNamesies implements EffectNamesies<TeamEffect> {
+public enum TeamEffectNamesies implements EffectNamesies {
     // EVERYTHING BELOW IS GENERATED ###
     REFLECT(Reflect::new),
     LIGHT_SCREEN(LightScreen::new),

@@ -9,6 +9,7 @@ import battle.attack.MoveType;
 import battle.effect.CastSource;
 import battle.effect.InvokeEffect;
 import battle.effect.attack.MultiTurnMove;
+import battle.effect.generic.EffectNamesies.BattleEffectNamesies;
 import battle.effect.status.StatusCondition;
 import item.Item;
 import item.ItemNamesies;
@@ -149,7 +150,7 @@ public final class EffectInterfaces {
         }
 
         static void invokeBattleEndTurnEffect(Battle b) {
-            List<BattleEffect> invokees = b.getEffects().asList();
+            List<BattleEffect<? extends BattleEffectNamesies>> invokees = b.getEffects().asList();
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof BattleEndTurnEffect && InvokeEffect.isActiveEffect(invokee)) {
                     BattleEndTurnEffect effect = (BattleEndTurnEffect)invokee;
@@ -1348,12 +1349,12 @@ public final class EffectInterfaces {
     }
 
     public interface EffectCurerItem extends HoldItem, EffectReceivedEffect, EndTurnEffect {
-        Set<? extends EffectNamesies> getCurableEffects();
-        String getRemoveMessage(ActivePokemon victim, EffectNamesies effectType);
+        Set<PokemonEffectNamesies> getCurableEffects();
+        String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType);
 
         default boolean usesies(ActivePokemon user) {
             boolean used = false;
-            for (EffectNamesies removableEffect : this.getCurableEffects()) {
+            for (PokemonEffectNamesies removableEffect : this.getCurableEffects()) {
                 if (user.getEffects().remove(removableEffect)) {
                     used = true;
                     Messages.add(this.getRemoveMessage(user, removableEffect));
@@ -1365,9 +1366,10 @@ public final class EffectInterfaces {
 
         @Override
         default void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
-            if (this.getCurableEffects().contains(effectType)) {
-                Messages.add(this.getRemoveMessage(victim, effectType));
-                victim.getEffects().remove(effectType);
+            if (effectType instanceof PokemonEffectNamesies && this.getCurableEffects().contains(effectType)) {
+                PokemonEffectNamesies pokemonEffectType = (PokemonEffectNamesies)effectType;
+                Messages.add(this.getRemoveMessage(victim, pokemonEffectType));
+                victim.getEffects().remove(pokemonEffectType);
                 victim.consumeItem(b);
             }
         }

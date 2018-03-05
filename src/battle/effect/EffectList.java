@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class EffectList<EffectType extends Effect> implements Iterable<EffectType>, Serializable {
+public class EffectList<NamesiesType extends EffectNamesies, EffectType extends Effect<? extends NamesiesType>>
+        implements Iterable<EffectType>, Serializable {
     private static final long serialVersionUID = 1L;
 
     private final List<EffectType> effects;
@@ -32,7 +33,7 @@ public class EffectList<EffectType extends Effect> implements Iterable<EffectTyp
     }
 
     // Returns the effect if it is in the list, otherwise returns null
-    public EffectType get(EffectNamesies effectNamesies) {
+    public EffectType get(NamesiesType effectNamesies) {
         for (EffectType effect : this) {
             if (effect.namesies() == effectNamesies) {
                 return effect;
@@ -42,7 +43,7 @@ public class EffectList<EffectType extends Effect> implements Iterable<EffectTyp
         return null;
     }
 
-    public boolean hasEffect(EffectNamesies effect) {
+    public boolean hasEffect(NamesiesType effect) {
         return get(effect) != null;
     }
 
@@ -50,7 +51,7 @@ public class EffectList<EffectType extends Effect> implements Iterable<EffectTyp
         this.effects.remove(effect);
     }
 
-    public boolean remove(EffectNamesies effectToRemove) {
+    public boolean remove(NamesiesType effectToRemove) {
         return this.effects.removeIf(effect -> effect.namesies() == effectToRemove);
     }
 

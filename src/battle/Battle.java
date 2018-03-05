@@ -2,7 +2,6 @@ package battle;
 
 import battle.attack.Attack;
 import battle.attack.MoveType;
-import battle.effect.EffectList;
 import battle.effect.InvokeEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.generic.BattleEffect;
@@ -22,9 +21,8 @@ import battle.effect.generic.EffectInterfaces.PriorityChangeEffect;
 import battle.effect.generic.EffectInterfaces.SemiInvulnerableBypasser;
 import battle.effect.generic.EffectInterfaces.StallingEffect;
 import battle.effect.generic.EffectInterfaces.StrikeFirstEffect;
-import battle.effect.generic.EffectNamesies;
+import battle.effect.generic.EffectNamesies.BattleEffectNamesies;
 import battle.effect.generic.StandardBattleEffectNamesies;
-import battle.effect.generic.TeamEffect;
 import battle.effect.generic.WeatherEffect;
 import main.Game;
 import main.Global;
@@ -40,6 +38,7 @@ import trainer.Opponent;
 import trainer.PlayerTrainer;
 import trainer.SimulatedPlayer;
 import trainer.Team;
+import trainer.Team.TeamEffectList;
 import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.WildPokemon;
@@ -146,7 +145,7 @@ public class Battle implements Serializable {
         return effects.getTerrainType();
     }
 
-    public boolean hasEffect(EffectNamesies effect) {
+    public boolean hasEffect(BattleEffectNamesies effect) {
         return effects.hasEffect(effect);
     }
 
@@ -452,19 +451,19 @@ public class Battle implements Serializable {
         return attackHit;
     }
 
-    public void addEffect(BattleEffect effect) {
+    public void addEffect(BattleEffect<? extends BattleEffectNamesies> effect) {
         this.effects.add(effect);
     }
 
-    public EffectList<BattleEffect> getEffects() {
+    public BattleEffectList getEffects() {
         return effects;
     }
 
-    public EffectList<TeamEffect> getEffects(ActivePokemon teamMember) {
+    public TeamEffectList getEffects(ActivePokemon teamMember) {
         return getEffects(teamMember.isPlayer());
     }
 
-    public EffectList<TeamEffect> getEffects(boolean isPlayer) {
+    public TeamEffectList getEffects(boolean isPlayer) {
         return isPlayer ? player.getEffects() : opponent.getEffects();
     }
 

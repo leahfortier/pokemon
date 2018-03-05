@@ -81,7 +81,7 @@ import battle.effect.generic.PokemonEffect.Yawn;
 
 import java.util.function.Supplier;
 
-public enum PokemonEffectNamesies implements EffectNamesies<PokemonEffect> {
+public enum PokemonEffectNamesies implements EffectNamesies {
     // EVERYTHING BELOW IS GENERATED ###
     LEECH_SEED(LeechSeed::new),
     FLINCH(Flinch::new),

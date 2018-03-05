@@ -1746,13 +1746,13 @@ IgnoreAbilityMove:
     AddMapField: TempEffectMove: BREAKS_THE_MOLD
 *
 GetCurableEffects:
-    Header: Set<? extends EffectNamesies> getCurableEffects()
+    Header: Set<PokemonEffectNamesies> getCurableEffects()
     Body:
         return {0};
         ###
 *
 CureEffectRemoveMessage:
-    Header: String getRemoveMessage(ActivePokemon victim, EffectNamesies effectType)
+    Header: String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType)
     Body:
         return {0};
         ###

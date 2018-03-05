@@ -373,7 +373,7 @@ Mental Herb:
     Price: 4000
     Fling: 10
     Field:
-        private static final Map<EffectNamesies, String> REMOVEABLE_EFFECTS = new HashMap<>();
+        private static final Map<PokemonEffectNamesies, String> REMOVEABLE_EFFECTS = new EnumMap<>(PokemonEffectNamesies.class);
         static {
             REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.INFATUATED, "infatuated");
             REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.DISABLE, "disabled");

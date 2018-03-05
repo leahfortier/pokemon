@@ -7,7 +7,7 @@ import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
-import battle.effect.generic.EffectNamesies;
+import battle.effect.generic.EffectNamesies.BattleEffectNamesies;
 import battle.effect.generic.TerrainEffect;
 import battle.effect.generic.WeatherEffect;
 import battle.effect.generic.WeatherNamesies;
@@ -22,7 +22,7 @@ import trainer.PlayerTrainer;
 
 import java.util.List;
 
-class BattleEffectList extends EffectList<BattleEffect> {
+public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEffect<? extends BattleEffectNamesies>> {
     private static final long serialVersionUID = 1L;
 
     private transient Battle battle;
@@ -48,8 +48,8 @@ class BattleEffectList extends EffectList<BattleEffect> {
     }
 
     @Override
-    public List<BattleEffect> asList() {
-        List<BattleEffect> list = super.asList();
+    public List<BattleEffect<? extends BattleEffectNamesies>> asList() {
+        List<BattleEffect<? extends BattleEffectNamesies>> list = super.asList();
         list.add(weather);
         if (currentTerrain != null) {
             list.add(currentTerrain);
@@ -65,7 +65,7 @@ class BattleEffectList extends EffectList<BattleEffect> {
     }
 
     @Override
-    public void add(BattleEffect effect) {
+    public void add(BattleEffect<? extends BattleEffectNamesies> effect) {
         if (effect instanceof WeatherEffect) {
             weather = (WeatherEffect)effect;
             Messages.add(new MessageUpdate().withWeather(weather));
@@ -100,7 +100,7 @@ class BattleEffectList extends EffectList<BattleEffect> {
     }
 
     @Override
-    public boolean remove(EffectNamesies effectToRemove) {
+    public boolean remove(BattleEffectNamesies effectToRemove) {
         if (weather.namesies() == effectToRemove) {
             this.remove(weather);
             return true;
@@ -113,7 +113,7 @@ class BattleEffectList extends EffectList<BattleEffect> {
     }
 
     void printShit() {
-        List<BattleEffect> effects = super.asList();
+        List<BattleEffect<? extends BattleEffectNamesies>> effects = super.asList();
         if (!effects.isEmpty()) {
             System.out.println("Battle:");
             for (BattleEffect effect : effects) {

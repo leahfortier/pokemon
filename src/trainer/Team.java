@@ -17,7 +17,7 @@ public interface Team {
     ActivePokemon front();
     int getTeamIndex(ActivePokemon teamMember);
 
-    EffectList<TeamEffect> getEffects();
+    TeamEffectList getEffects();
 
     EnterBattleMessageGetter getEnterBattleMessage();
     void enterBattle();
@@ -39,4 +39,6 @@ public interface Team {
                    .map(p -> (ActivePokemon)p)
                    .collect(Collectors.toList());
     }
+
+    class TeamEffectList extends EffectList<TeamEffectNamesies, TeamEffect> {}
 }

@@ -57,7 +57,7 @@ BattleEndTurnEffect:
         Header: void applyEndTurn(Battle b)
         Invoke: Void
         SetInvokees:
-            List<BattleEffect> invokees = b.getEffects().asList();
+            List<BattleEffect<? extends BattleEffectNamesies>> invokees = b.getEffects().asList();
             ###
         Default:
             Messages.add(this.getEndTurnMessage(b));
@@ -763,16 +763,16 @@ AlwaysCritEffect:
 EffectCurerItem:
     Extends: HoldItem, EffectReceivedEffect, EndTurnEffect
     Method:
-        Header: Set<? extends EffectNamesies> getCurableEffects()
+        Header: Set<PokemonEffectNamesies> getCurableEffects()
     *
     Method:
-        Header: String getRemoveMessage(ActivePokemon victim, EffectNamesies effectType)
+        Header: String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType)
     *
     Method:
         Header: boolean usesies(ActivePokemon user)
         Default:
             boolean used = false;
-            for (EffectNamesies removableEffect : this.getCurableEffects()) {
+            for (PokemonEffectNamesies removableEffect : this.getCurableEffects()) {
                 if (user.getEffects().remove(removableEffect)) {
                     used = true;
                     Messages.add(this.getRemoveMessage(user, removableEffect));
@@ -786,9 +786,10 @@ EffectCurerItem:
         Header: void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType)
         Override: True
         Default:
-        if (this.getCurableEffects().contains(effectType)) {
-            Messages.add(this.getRemoveMessage(victim, effectType));
-            victim.getEffects().remove(effectType);
+        if (effectType instanceof PokemonEffectNamesies && this.getCurableEffects().contains(effectType)) {
+            PokemonEffectNamesies pokemonEffectType = (PokemonEffectNamesies)effectType;
+            Messages.add(this.getRemoveMessage(victim, pokemonEffectType));
+            victim.getEffects().remove(pokemonEffectType);
             victim.consumeItem(b);
         }
         ###
