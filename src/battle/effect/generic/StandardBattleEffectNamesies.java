@@ -11,7 +11,7 @@ import battle.effect.generic.EffectNamesies.BattleEffectNamesies;
 
 import java.util.function.Supplier;
 
-public enum StandardBattleEffectNamesies implements BattleEffectNamesies {
+public enum StandardBattleEffectNamesies implements BattleEffectNamesies<BattleEffect> {
     // EVERYTHING BELOW IS GENERATED ###
     GRAVITY(Gravity::new),
     WATER_SPORT(WaterSport::new),

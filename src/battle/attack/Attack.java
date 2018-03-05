@@ -1351,6 +1351,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super(AttackNamesies.RAIN_DANCE, Type.WATER, MoveCategory.STATUS, 5, "The user summons a heavy rain that falls for five turns, powering up Water-type moves. It lowers the power of Fire-type moves.");
             super.effects.add(WeatherNamesies.RAINING);
             super.moveTypes.add(MoveType.DANCE);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
         }
     }
 
@@ -1360,6 +1362,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         SunnyDay() {
             super(AttackNamesies.SUNNY_DAY, Type.FIRE, MoveCategory.STATUS, 5, "The user intensifies the sun for five turns, powering up Fire-type moves. It lowers the power of Water-type moves.");
             super.effects.add(WeatherNamesies.SUNNY);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
         }
     }
 
@@ -1369,6 +1373,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         Sandstorm() {
             super(AttackNamesies.SANDSTORM, Type.ROCK, MoveCategory.STATUS, 10, "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types. It raises the Sp. Def stat of Rock types.");
             super.effects.add(WeatherNamesies.SANDSTORM);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
         }
     }
 
@@ -1378,6 +1384,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         Hail() {
             super(AttackNamesies.HAIL, Type.ICE, MoveCategory.STATUS, 10, "The user summons a hailstorm lasting five turns. It damages all Pok\u00e9mon except the Ice type.");
             super.effects.add(WeatherNamesies.HAILING);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
         }
     }
 
@@ -3171,6 +3179,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         Gravity() {
             super(AttackNamesies.GRAVITY, Type.PSYCHIC, MoveCategory.STATUS, 5, "Enables Flying-type Pok\u00e9mon or Pok\u00e9mon with the Levitate Ability to be hit by Ground-type moves. Flying moves can't be used.");
             super.effects.add(StandardBattleEffectNamesies.GRAVITY);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
         }
     }
 
@@ -3958,6 +3968,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         WaterSport() {
             super(AttackNamesies.WATER_SPORT, Type.WATER, MoveCategory.STATUS, 15, "The user soaks the battlefield with water. This weakens Fire-type moves for five turns.");
             super.effects.add(StandardBattleEffectNamesies.WATER_SPORT);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
         }
     }
 
@@ -4044,6 +4056,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         WonderRoom() {
             super(AttackNamesies.WONDER_ROOM, Type.PSYCHIC, MoveCategory.STATUS, 10, "The user creates a bizarre area in which Pok\u00e9mon's Defense and Sp. Def stats are swapped for five turns.");
             super.effects.add(StandardBattleEffectNamesies.WONDER_ROOM);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
         }
     }
 
@@ -4617,6 +4631,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         MudSport() {
             super(AttackNamesies.MUD_SPORT, Type.GROUND, MoveCategory.STATUS, 15, "The user kicks up mud on the battlefield. This weakens Electric-type moves for five turns.");
             super.effects.add(StandardBattleEffectNamesies.MUD_SPORT);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
         }
     }
 
@@ -8167,6 +8183,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         TrickRoom() {
             super(AttackNamesies.TRICK_ROOM, Type.PSYCHIC, MoveCategory.STATUS, 5, "The user creates a bizarre area in which slower Pok\u00e9mon get to move first for five turns.");
             super.effects.add(StandardBattleEffectNamesies.TRICK_ROOM);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
             super.priority = -7;
         }
     }
@@ -9507,6 +9525,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         MagicRoom() {
             super(AttackNamesies.MAGIC_ROOM, Type.PSYCHIC, MoveCategory.STATUS, 10, "The user creates a bizarre area in which Pok\u00e9mon's held items lose their effects for five turns.");
             super.effects.add(StandardBattleEffectNamesies.MAGIC_ROOM);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
         }
     }
 
@@ -10053,6 +10073,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         MistyTerrain() {
             super(AttackNamesies.MISTY_TERRAIN, Type.FAIRY, MoveCategory.STATUS, 10, "This protects Pok\u00e9mon on the ground from status conditions and halves damage from Dragon-type moves for five turns.");
             super.effects.add(TerrainNamesies.MISTY_TERRAIN);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
         }
     }
 
@@ -10104,6 +10126,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         GrassyTerrain() {
             super(AttackNamesies.GRASSY_TERRAIN, Type.GRASS, MoveCategory.STATUS, 10, "The user turns the ground to grass for five turns. This restores the HP of Pok\u00e9mon on the ground a little every turn and powers up Grass type-moves.");
             super.effects.add(TerrainNamesies.GRASSY_TERRAIN);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
         }
     }
 
@@ -10309,6 +10333,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         ElectricTerrain() {
             super(AttackNamesies.ELECTRIC_TERRAIN, Type.ELECTRIC, MoveCategory.STATUS, 10, "The user electrifies the ground for five turns, powering up Electric-type moves. Pok\u00e9mon on the ground no longer fall asleep.");
             super.effects.add(TerrainNamesies.ELECTRIC_TERRAIN);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
         }
     }
 
@@ -10318,6 +10344,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         PsychicTerrain() {
             super(AttackNamesies.PSYCHIC_TERRAIN, Type.PSYCHIC, MoveCategory.STATUS, 10, "This protects Pok\u00e9mon on the ground from priority moves and powers up Psychic-type moves for five turns.");
             super.effects.add(TerrainNamesies.PSYCHIC_TERRAIN);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
         }
     }
 

@@ -13,7 +13,7 @@ Fields:
     Acc Int accuracy
     PokemonEffect Multiple Enum PokemonEffectNamesies effects
     TeamEffect Multiple Enum TeamEffectNamesies effects
-    BattleEffect Multiple Enum StandardBattleEffectNamesies effects
+    StandardBattleEffect Multiple Enum StandardBattleEffectNamesies effects
     Weather Multiple Enum WeatherNamesies effects
     Terrain Multiple Enum TerrainNamesies effects
     EffChance Int effectChance
@@ -585,7 +585,7 @@ Rain Dance:
     Type: Water
     Cat: Status
     PP: 5
-    Weather: Raining
+    BattleEffect: Weather Raining
     MoveType: Dance
 *
 Sunny Day:
@@ -593,21 +593,21 @@ Sunny Day:
     PP: 5
     Type: Fire
     Cat: Status
-    Weather: Sunny
+    BattleEffect: Weather Sunny
 *
 Sandstorm:
     Desc: A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types. It raises the Sp. Def stat of Rock types.
     PP: 10
     Type: Rock
     Cat: Status
-    Weather: Sandstorm
+    BattleEffect: Weather Sandstorm
 *
 Hail:
     Desc: The user summons a hailstorm lasting five turns. It damages all Pok\u00e9mon except the Ice type.
     PP: 10
     Type: Ice
     Cat: Status
-    Weather: Hailing
+    BattleEffect: Weather Hailing
 *
 Petal Dance:
     Desc: The user attacks the target by scattering petals for two to three turns. The user then becomes confused.
@@ -1666,7 +1666,7 @@ Gravity:
     PP: 5
     Type: Psychic
     Cat: Status
-    BattleEffect: Gravity
+    BattleEffect: StandardBattleEffect Gravity
 *
 Moonlight:
     WeatherHeal: True
@@ -2142,7 +2142,7 @@ Power Gem:
 *
 Water Sport:
     Desc: The user soaks the battlefield with water. This weakens Fire-type moves for five turns.
-    BattleEffect: WaterSport
+    BattleEffect: StandardBattleEffect WaterSport
     PP: 15
     Type: Water
     Cat: Status
@@ -2200,7 +2200,7 @@ Wonder Room:
     Desc: The user creates a bizarre area in which Pok\u00e9mon's Defense and Sp. Def stats are swapped for five turns.
     PP: 10
     Cat: Status
-    BattleEffect: WonderRoom
+    BattleEffect: StandardBattleEffect WonderRoom
     Type: Psychic
 *
 Aqua Jet:
@@ -2575,7 +2575,7 @@ Mud Sport:
     PP: 15
     Type: Ground
     Cat: Status
-    BattleEffect: MudSport
+    BattleEffect: StandardBattleEffect MudSport
 *
 Rock Polish:
     Desc: The user polishes its body to reduce drag. This can sharply raise the Speed stat.
@@ -4784,7 +4784,7 @@ Trick Room:
     Type: Psychic
     Priority: -7
     Cat: Status
-    BattleEffect: TrickRoom
+    BattleEffect: StandardBattleEffect TrickRoom
 *
 Roar Of Time:
     Desc: The user blasts the target with power that distorts even time. The user can't move on the next turn.
@@ -5545,7 +5545,7 @@ Magic Room:
     PP: 10
     Type: Psychic
     Cat: Status
-    BattleEffect: MagicRoom
+    BattleEffect: StandardBattleEffect MagicRoom
 *
 Worry Seed:
     Desc: A seed that causes worry is planted on the target. It prevents sleep by making the target's Ability Insomnia.
@@ -5869,7 +5869,7 @@ Misty Terrain:
     PP: 10
     Type: Fairy
     Cat: Status
-    Terrain: MistyTerrain
+    BattleEffect: Terrain MistyTerrain
 *
 Fairy Lock:
     Type: Fairy
@@ -5911,7 +5911,7 @@ Grassy Terrain:
     Desc: The user turns the ground to grass for five turns. This restores the HP of Pok\u00e9mon on the ground a little every turn and powers up Grass type-moves.
     PP: 10
     Cat: Status
-    Terrain: GrassyTerrain
+    BattleEffect: Terrain GrassyTerrain
 *
 Flower Shield:
     Desc: The user raises its Defense stat with a mysterious power.
@@ -6055,14 +6055,14 @@ Electric Terrain:
     Type: Electric
     PP: 10
     Cat: Status
-    Terrain: ElectricTerrain
+    BattleEffect: Terrain ElectricTerrain
 *
 Psychic Terrain:
     Desc: This protects Pok\u00e9mon on the ground from priority moves and powers up Psychic-type moves for five turns.
     Type: Psychic
     PP: 10
     Cat: Status
-    Terrain: PsychicTerrain
+    BattleEffect: Terrain PsychicTerrain
 *
 Power-Up Punch:
     Desc: Striking opponents over and over makes the user's fists harder. Hitting a target raises the Attack stat.

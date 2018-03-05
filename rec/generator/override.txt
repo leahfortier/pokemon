@@ -240,9 +240,8 @@ ItemStealerMove:
         ###
     AddMapField: SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
 *
-# TODO: FIX THIS
-BattleEffect2:
-	AddMapField: BattleEffect: {0}
+BattleEffect:
+	AddMapField: {1}: {2}
 	AddMapField: MoveType: No_Magic_Coat, Field
 *
 ProtectingAttack:

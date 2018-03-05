@@ -8,7 +8,7 @@ import battle.effect.generic.TerrainEffect.PsychicTerrain;
 
 import java.util.function.Supplier;
 
-public enum TerrainNamesies implements BattleEffectNamesies {
+public enum TerrainNamesies implements BattleEffectNamesies<TerrainEffect> {
     // EVERYTHING BELOW IS GENERATED ###
     MISTY_TERRAIN(MistyTerrain::new),
     GRASSY_TERRAIN(GrassyTerrain::new),

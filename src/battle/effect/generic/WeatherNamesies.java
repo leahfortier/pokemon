@@ -9,7 +9,7 @@ import battle.effect.generic.WeatherEffect.Sunny;
 
 import java.util.function.Supplier;
 
-public enum WeatherNamesies implements BattleEffectNamesies {
+public enum WeatherNamesies implements BattleEffectNamesies<WeatherEffect> {
     // EVERYTHING BELOW IS GENERATED ###
     CLEAR_SKIES(ClearSkies::new),
     RAINING(Raining::new),

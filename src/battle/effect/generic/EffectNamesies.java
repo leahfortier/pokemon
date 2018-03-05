@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public interface EffectNamesies {
-    Effect getEffect();
+public interface EffectNamesies<EffectType extends Effect> {
+    EffectType getEffect();
 
     // TODO: Test that this is all of them
     static List<EffectNamesies> values() {
@@ -18,8 +18,5 @@ public interface EffectNamesies {
         return values;
     }
 
-    interface BattleEffectNamesies extends EffectNamesies {
-        @Override
-        BattleEffect getEffect();
-    }
+    interface BattleEffectNamesies<EffectType extends BattleEffect> extends EffectNamesies<EffectType> {}
 }
