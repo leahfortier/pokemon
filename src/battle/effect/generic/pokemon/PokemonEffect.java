@@ -1,4 +1,4 @@
-package battle.effect.generic;
+package battle.effect.generic.pokemon;
 
 import battle.ActivePokemon;
 import battle.Battle;
@@ -11,7 +11,7 @@ import battle.effect.MessageGetter;
 import battle.effect.attack.AbilityChanger;
 import battle.effect.attack.ChangeAttackTypeSource;
 import battle.effect.attack.ChangeTypeSource;
-import battle.effect.generic.BattleEffect.FieldUproar;
+import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.AttackSelectionEffect;
@@ -52,6 +52,7 @@ import battle.effect.generic.EffectInterfaces.StatusReceivedEffect;
 import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
 import battle.effect.generic.EffectInterfaces.TargetSwapperEffect;
 import battle.effect.generic.EffectInterfaces.TrappingEffect;
+import battle.effect.generic.battle.StandardBattleEffectNamesies;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
@@ -1872,7 +1873,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            b.addEffect(new FieldUproar());
+            b.addEffect(StandardBattleEffectNamesies.FIELD_UPROAR.getEffect());
 
             wakeUp(b, victim);
             wakeUp(b, b.getOtherPokemon(victim));

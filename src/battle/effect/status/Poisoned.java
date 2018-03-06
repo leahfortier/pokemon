@@ -3,7 +3,7 @@ package battle.effect.status;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
-import battle.effect.generic.PokemonEffectNamesies;
+import battle.effect.generic.pokemon.PokemonEffectNamesies;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ability.AbilityNamesies;

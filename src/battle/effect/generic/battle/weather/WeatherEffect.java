@@ -1,8 +1,9 @@
-package battle.effect.generic;
+package battle.effect.generic.battle.weather;
 
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.CastSource;
+import battle.effect.generic.battle.BattleEffect;
 import battle.effect.generic.EffectInterfaces.BattleEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.SimpleStatModifyingEffect;

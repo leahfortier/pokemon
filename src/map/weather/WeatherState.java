@@ -1,6 +1,6 @@
 package map.weather;
 
-import battle.effect.generic.WeatherNamesies;
+import battle.effect.generic.battle.weather.WeatherNamesies;
 import draw.DrawUtils;
 
 import java.awt.Color;

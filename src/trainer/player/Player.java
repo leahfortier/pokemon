@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
 import battle.effect.generic.EffectInterfaces.EndBattleEffect;
-import battle.effect.generic.TeamEffectNamesies;
+import battle.effect.generic.team.TeamEffectNamesies;
 import gui.view.ViewMode;
 import item.ItemNamesies;
 import item.berry.farm.BerryFarm;

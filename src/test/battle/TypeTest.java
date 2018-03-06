@@ -1,7 +1,7 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
-import battle.effect.generic.PokemonEffectNamesies;
+import battle.effect.generic.pokemon.PokemonEffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;

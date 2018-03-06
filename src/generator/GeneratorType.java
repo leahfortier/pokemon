@@ -1,23 +1,23 @@
 package generator;
 
 import battle.attack.Attack;
-import battle.effect.generic.BattleEffect;
-import battle.effect.generic.PokemonEffect;
-import battle.effect.generic.StandardBattleEffectNamesies;
-import battle.effect.generic.TeamEffect;
-import battle.effect.generic.TerrainEffect;
-import battle.effect.generic.WeatherEffect;
+import battle.effect.generic.battle.BattleEffect;
+import battle.effect.generic.pokemon.PokemonEffect;
+import battle.effect.generic.battle.StandardBattleEffectNamesies;
+import battle.effect.generic.team.TeamEffect;
+import battle.effect.generic.battle.terrain.TerrainEffect;
+import battle.effect.generic.battle.weather.WeatherEffect;
 import item.Item;
 import pokemon.ability.Ability;
 import util.Folder;
 
 public enum GeneratorType {
     ATTACK_GEN("Moves.txt", Folder.ATTACK, Attack.class, NamesiesType.ATTACK_NAMESIES),
-    POKEMON_EFFECT_GEN("PokemonEffects.txt", Folder.GENERIC_EFFECT, PokemonEffect.class, NamesiesType.POKEMON_EFFECT_NAMESIES),
-    TEAM_EFFECT_GEN("TeamEffects.txt", Folder.GENERIC_EFFECT, TeamEffect.class, NamesiesType.TEAM_EFFECT_NAMESIES),
-    BATTLE_EFFECT_GEN("BattleEffects.txt", Folder.GENERIC_EFFECT, new ClassNameCreator(BattleEffect.class, StandardBattleEffectNamesies.class), NamesiesType.BATTLE_EFFECT_NAMESIES),
-    WEATHER_GEN("Weather.txt", Folder.GENERIC_EFFECT, WeatherEffect.class, NamesiesType.WEATHER_NAMESIES),
-    TERRAIN_GEN("Terrain.txt", Folder.GENERIC_EFFECT, TerrainEffect.class, NamesiesType.TERRAIN_NAMESIES),
+    POKEMON_EFFECT_GEN("PokemonEffects.txt", Folder.POKEMON_EFFECT, PokemonEffect.class, NamesiesType.POKEMON_EFFECT_NAMESIES),
+    TEAM_EFFECT_GEN("TeamEffects.txt", Folder.TEAM_EFFECT, TeamEffect.class, NamesiesType.TEAM_EFFECT_NAMESIES),
+    BATTLE_EFFECT_GEN("BattleEffects.txt", Folder.BATTLE_EFFECT, new ClassNameCreator(BattleEffect.class, StandardBattleEffectNamesies.class), NamesiesType.BATTLE_EFFECT_NAMESIES),
+    WEATHER_GEN("Weather.txt", Folder.WEATHER_EFFECT, WeatherEffect.class, NamesiesType.WEATHER_NAMESIES),
+    TERRAIN_GEN("Terrain.txt", Folder.TERRAIN_EFFECT, TerrainEffect.class, NamesiesType.TERRAIN_NAMESIES),
     ABILITY_GEN("Abilities.txt", Folder.ABILITY, Ability.class, NamesiesType.ABILITY_NAMESIES),
     ITEM_GEN("Items.txt", Folder.ITEMS, Item.class, NamesiesType.ITEM_NAMESIES);
 

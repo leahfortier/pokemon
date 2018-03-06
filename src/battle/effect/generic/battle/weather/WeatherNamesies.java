@@ -1,11 +1,11 @@
-package battle.effect.generic;
+package battle.effect.generic.battle.weather;
 
+import battle.effect.generic.battle.weather.WeatherEffect.ClearSkies;
+import battle.effect.generic.battle.weather.WeatherEffect.Hailing;
+import battle.effect.generic.battle.weather.WeatherEffect.Raining;
+import battle.effect.generic.battle.weather.WeatherEffect.Sandstorm;
+import battle.effect.generic.battle.weather.WeatherEffect.Sunny;
 import battle.effect.generic.EffectNamesies.BattleEffectNamesies;
-import battle.effect.generic.WeatherEffect.ClearSkies;
-import battle.effect.generic.WeatherEffect.Hailing;
-import battle.effect.generic.WeatherEffect.Raining;
-import battle.effect.generic.WeatherEffect.Sandstorm;
-import battle.effect.generic.WeatherEffect.Sunny;
 
 import java.util.function.Supplier;
 

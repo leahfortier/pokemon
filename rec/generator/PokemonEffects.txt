@@ -653,7 +653,7 @@ Uproar:
         uproar = victim.getMove();
         ###
     AfterCast:
-        b.addEffect(new FieldUproar());
+        b.addEffect(StandardBattleEffectNamesies.FIELD_UPROAR.getEffect());
 
         wakeUp(b, victim);
         wakeUp(b, b.getOtherPokemon(victim));

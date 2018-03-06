@@ -1,10 +1,11 @@
-package battle.effect.generic;
+package battle.effect.generic.team;
 
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.effect.CastSource;
+import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
@@ -12,6 +13,7 @@ import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.SimpleStatModifyingEffect;
+import battle.effect.generic.pokemon.PokemonEffectNamesies;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.ItemNamesies;

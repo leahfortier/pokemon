@@ -1,8 +1,9 @@
-package battle.effect.generic;
+package battle.effect.generic.battle;
 
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.CastSource;
+import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.ItemBlockerEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
@@ -11,6 +12,7 @@ import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectNamesies.BattleEffectNamesies;
+import battle.effect.generic.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusCondition;
 import message.Messages;
 import pokemon.Stat;

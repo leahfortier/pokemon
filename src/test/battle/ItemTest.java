@@ -4,7 +4,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.effect.attack.MultiTurnMove;
-import battle.effect.generic.PokemonEffectNamesies;
+import battle.effect.generic.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusCondition;
 import generator.update.ItemUpdater;
 import generator.update.ItemUpdater.ItemParser;
