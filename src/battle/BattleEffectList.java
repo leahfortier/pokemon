@@ -1,13 +1,13 @@
 package battle;
 
 import battle.effect.EffectList;
-import battle.effect.generic.battle.BattleEffect;
 import battle.effect.generic.EffectInterfaces.BattleEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectNamesies.BattleEffectNamesies;
+import battle.effect.generic.battle.BattleEffect;
 import battle.effect.generic.battle.terrain.TerrainEffect;
 import battle.effect.generic.battle.weather.WeatherEffect;
 import battle.effect.generic.battle.weather.WeatherNamesies;

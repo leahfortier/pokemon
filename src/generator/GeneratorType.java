@@ -2,11 +2,11 @@ package generator;
 
 import battle.attack.Attack;
 import battle.effect.generic.battle.BattleEffect;
-import battle.effect.generic.pokemon.PokemonEffect;
 import battle.effect.generic.battle.StandardBattleEffectNamesies;
-import battle.effect.generic.team.TeamEffect;
 import battle.effect.generic.battle.terrain.TerrainEffect;
 import battle.effect.generic.battle.weather.WeatherEffect;
+import battle.effect.generic.pokemon.PokemonEffect;
+import battle.effect.generic.team.TeamEffect;
 import item.Item;
 import pokemon.ability.Ability;
 import util.Folder;

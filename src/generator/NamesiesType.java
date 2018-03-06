@@ -2,10 +2,10 @@ package generator;
 
 import battle.attack.AttackNamesies;
 import battle.effect.generic.battle.StandardBattleEffectNamesies;
-import battle.effect.generic.pokemon.PokemonEffectNamesies;
-import battle.effect.generic.team.TeamEffectNamesies;
 import battle.effect.generic.battle.terrain.TerrainNamesies;
 import battle.effect.generic.battle.weather.WeatherNamesies;
+import battle.effect.generic.pokemon.PokemonEffectNamesies;
+import battle.effect.generic.team.TeamEffectNamesies;
 import item.ItemNamesies;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;

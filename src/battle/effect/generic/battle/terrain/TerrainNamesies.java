@@ -1,10 +1,10 @@
 package battle.effect.generic.battle.terrain;
 
+import battle.effect.generic.EffectNamesies.BattleEffectNamesies;
 import battle.effect.generic.battle.terrain.TerrainEffect.ElectricTerrain;
 import battle.effect.generic.battle.terrain.TerrainEffect.GrassyTerrain;
 import battle.effect.generic.battle.terrain.TerrainEffect.MistyTerrain;
 import battle.effect.generic.battle.terrain.TerrainEffect.PsychicTerrain;
-import battle.effect.generic.EffectNamesies.BattleEffectNamesies;
 
 import java.util.function.Supplier;
 
