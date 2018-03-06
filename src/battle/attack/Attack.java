@@ -1837,7 +1837,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
             // TODO: We really just want this for the actual damage reduce -- will this affect Apply/TakeDamageEffects?
             // Don't use the cast method here since we don't want it to be affected by successive decay
-            o.getEffects().add((PokemonEffect)PokemonEffectNamesies.BRACING.getEffect());
+            o.getEffects().add(PokemonEffectNamesies.BRACING.getEffect());
             super.applyDamage(me, o, b);
             o.getEffects().remove(PokemonEffectNamesies.BRACING);
         }

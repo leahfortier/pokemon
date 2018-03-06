@@ -2013,7 +2013,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         public void damageTaken(Battle b, ActivePokemon damageTaker) {
             Messages.add(damageTaker.getName() + " lost its focus and couldn't move!");
             damageTaker.getEffects().remove(this.namesies());
-            damageTaker.getEffects().add((PokemonEffect)PokemonEffectNamesies.FLINCH.getEffect());
+            damageTaker.getEffects().add(PokemonEffectNamesies.FLINCH.getEffect());
         }
     }
 

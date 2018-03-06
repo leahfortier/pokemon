@@ -72,7 +72,7 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
 
             if (WeatherEliminatingEffect.shouldEliminateWeather(battle, battle.getPlayer().front(), weather)
                     || WeatherEliminatingEffect.shouldEliminateWeather(battle, battle.getOpponent().front(), weather)) {
-                weather = (WeatherEffect)WeatherNamesies.CLEAR_SKIES.getEffect();
+                weather = WeatherNamesies.CLEAR_SKIES.getEffect();
                 Messages.add(new MessageUpdate().withWeather(weather));
             }
         } else if (effect instanceof TerrainEffect) {
@@ -89,7 +89,7 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
     }
 
     @Override
-    public void remove(BattleEffect effect) {
+    public void remove(BattleEffect<? extends BattleEffectNamesies> effect) {
         if (effect == weather) {
             this.setBaseWeather(this.baseWeather);
         } else if (effect == currentTerrain) {
@@ -140,7 +140,7 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
 
     private void setBaseWeather(WeatherState weatherState) {
         this.baseWeather = weatherState;
-        this.add((WeatherEffect)weatherState.getWeatherEffect().getEffect());
+        this.add(weatherState.getWeatherEffect().getEffect());
     }
 
     private void setBaseTerrain(TerrainType terrainType) {
