@@ -178,8 +178,6 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
         EndTurnEffect.invokeEndTurnEffect(me, battle);
 
         me.isFainted(battle);
-
-        // No longer the first turn anymore
-        me.setFirstTurn(false);
+        me.endTurn();
     }
 }

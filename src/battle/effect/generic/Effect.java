@@ -127,7 +127,7 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Inv
         return DEFAULT_FAIL_MESSAGE;
     }
 
-    public String getSubsideMessage(ActivePokemon p) {
+    protected String getSubsideMessage(ActivePokemon p) {
         return StringUtils.empty();
     }
 

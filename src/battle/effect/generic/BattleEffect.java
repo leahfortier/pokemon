@@ -149,7 +149,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
-            BattleEffect roomsies = b.getEffects().get(this.namesies);
+            WonderRoom roomsies = (WonderRoom)b.getEffects().get(this.namesies);
 
             Messages.add(roomsies.getSubsideMessage(caster));
             b.getEffects().remove(roomsies);
@@ -176,7 +176,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
-            BattleEffect roomsies = b.getEffects().get(this.namesies);
+            TrickRoom roomsies = (TrickRoom)b.getEffects().get(this.namesies);
 
             Messages.add(roomsies.getSubsideMessage(caster));
             b.getEffects().remove(roomsies);
@@ -203,7 +203,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
-            BattleEffect roomsies = b.getEffects().get(this.namesies);
+            MagicRoom roomsies = (MagicRoom)b.getEffects().get(this.namesies);
 
             Messages.add(roomsies.getSubsideMessage(caster));
             b.getEffects().remove(roomsies);

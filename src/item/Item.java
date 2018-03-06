@@ -109,7 +109,7 @@ import java.util.Set;
 public abstract class Item implements ItemInterface, InvokeEffect, Comparable<Item>, Serializable {
     private static final long serialVersionUID = 1L;
 
-    protected ItemNamesies namesies;
+    protected final ItemNamesies namesies;
     private String description;
     private BagCategory bagCategory;
     private List<BattleBagCategory> battleBagCategories;

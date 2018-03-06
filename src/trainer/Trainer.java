@@ -84,7 +84,7 @@ public abstract class Trainer implements Team, Serializable {
         return this.frontIndex;
     }
 
-    public void setFront(int index) {
+    protected void setFront(int index) {
         if (frontIndex == index) {
             return;
         }

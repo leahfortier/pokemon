@@ -118,7 +118,7 @@ public class NPCEntity extends MovableEntity {
                 && this.getTrigger().isTriggered();
     }
 
-    public boolean isWalkToPlayer() {
+    private boolean isWalkToPlayer() {
         final String interaction = this.getCurrentInteractionKey();
         return this.interactions.get(interaction).shouldWalkToPlayer();
     }

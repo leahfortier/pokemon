@@ -10,12 +10,12 @@ import util.GeneralUtils;
 import java.util.Arrays;
 
 public class WildEncounterInfo {
-    private PokemonNamesies pokemon;
+    private final PokemonNamesies pokemon;
 
-    private int minLevel;
-    private int maxLevel;
+    private final int minLevel;
+    private final int maxLevel;
 
-    private int probability;
+    private final int probability;
 
     public WildEncounterInfo(String pokemon, int minLevel, int maxLevel, String probability) {
         this(

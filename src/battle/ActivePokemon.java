@@ -788,8 +788,9 @@ public class ActivePokemon extends PartyPokemon {
         return firstTurn;
     }
 
-    void setFirstTurn(boolean isFirstTurn) {
-        firstTurn = isFirstTurn;
+    void endTurn() {
+        // No longer the first turn anymore
+        firstTurn = false;
     }
 
     public void takeDamage(int damage) {

@@ -52,7 +52,7 @@ public class ButtonList {
         }
     }
 
-    public int update() {
+    public void update() {
         Direction inputDirection = Direction.consumeInputDirection();
         if (inputDirection != null) {
             selected = this.transition(selected, inputDirection);
@@ -76,8 +76,6 @@ public class ButtonList {
         if (!buttons[selected].isForceHover()) {
             setForceHover(selected);
         }
-
-        return selected;
     }
 
     private void setForceHover(int selected) {
