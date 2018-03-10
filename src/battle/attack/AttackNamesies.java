@@ -656,7 +656,6 @@ import battle.attack.Attack.Yawn;
 import battle.attack.Attack.ZapCannon;
 import battle.attack.Attack.ZenHeadbutt;
 import battle.attack.Attack.ZingZap;
-import main.Global;
 import util.StringUtils;
 
 import java.util.function.Supplier;
@@ -1339,20 +1338,11 @@ public enum AttackNamesies {
     }
 
     public static AttackNamesies tryValueOf(String name) {
-        try {
-            return AttackNamesies.valueOf(StringUtils.getNamesiesString(name));
-        } catch (IllegalArgumentException exception) {
-            return null;
-        }
+        return StringUtils.enumTryValueOf(AttackNamesies.class, name);
     }
 
     public static AttackNamesies getValueOf(String name) {
-        AttackNamesies namesies = tryValueOf(name);
-        if (namesies == null) {
-            Global.error(name + " does not have a valid AttackNamesies value");
-        }
-
-        return namesies;
+        return StringUtils.enumValueOf(AttackNamesies.class, name);
     }
 }
 

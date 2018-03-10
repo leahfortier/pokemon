@@ -1,4 +1,4 @@
-package battle.effect.generic;
+package battle.effect.generic.battle.terrain;
 
 import battle.ActivePokemon;
 import battle.Battle;
@@ -7,16 +7,17 @@ import battle.effect.generic.EffectInterfaces.AttackBlocker;
 import battle.effect.generic.EffectInterfaces.BattleEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
+import battle.effect.generic.battle.BattleEffect;
 import battle.effect.status.StatusCondition;
 import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.Messages;
 import type.Type;
 
-public abstract class TerrainEffect extends BattleEffect {
+public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> {
     private final TerrainType terrainType;
 
-    public TerrainEffect(EffectNamesies name, TerrainType terrainType) {
+    public TerrainEffect(TerrainNamesies name, TerrainType terrainType) {
         super(name, 5, 5, false, false);
         this.terrainType = terrainType;
     }
@@ -34,7 +35,7 @@ public abstract class TerrainEffect extends BattleEffect {
         private static final long serialVersionUID = 1L;
 
         MistyTerrain() {
-            super(EffectNamesies.MISTY_TERRAIN, TerrainType.MISTY);
+            super(TerrainNamesies.MISTY_TERRAIN, TerrainType.MISTY);
         }
 
         @Override
@@ -74,7 +75,7 @@ public abstract class TerrainEffect extends BattleEffect {
         private static final long serialVersionUID = 1L;
 
         GrassyTerrain() {
-            super(EffectNamesies.GRASSY_TERRAIN, TerrainType.GRASS);
+            super(TerrainNamesies.GRASSY_TERRAIN, TerrainType.GRASS);
         }
 
         @Override
@@ -111,7 +112,7 @@ public abstract class TerrainEffect extends BattleEffect {
         private static final long serialVersionUID = 1L;
 
         ElectricTerrain() {
-            super(EffectNamesies.ELECTRIC_TERRAIN, TerrainType.ELECTRIC);
+            super(TerrainNamesies.ELECTRIC_TERRAIN, TerrainType.ELECTRIC);
         }
 
         @Override
@@ -150,7 +151,7 @@ public abstract class TerrainEffect extends BattleEffect {
         private static final long serialVersionUID = 1L;
 
         PsychicTerrain() {
-            super(EffectNamesies.PSYCHIC_TERRAIN, TerrainType.PSYCHIC);
+            super(TerrainNamesies.PSYCHIC_TERRAIN, TerrainType.PSYCHIC);
         }
 
         @Override

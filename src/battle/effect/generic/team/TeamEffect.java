@@ -1,10 +1,11 @@
-package battle.effect.generic;
+package battle.effect.generic.team;
 
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.effect.CastSource;
+import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.BarrierEffect;
 import battle.effect.generic.EffectInterfaces.CritBlockerEffect;
 import battle.effect.generic.EffectInterfaces.DefogRelease;
@@ -12,6 +13,7 @@ import battle.effect.generic.EffectInterfaces.EndBattleEffect;
 import battle.effect.generic.EffectInterfaces.EntryEffect;
 import battle.effect.generic.EffectInterfaces.RapidSpinRelease;
 import battle.effect.generic.EffectInterfaces.SimpleStatModifyingEffect;
+import battle.effect.generic.pokemon.PokemonEffectNamesies;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.ItemNamesies;
@@ -25,10 +27,10 @@ import type.Type;
 import java.io.Serializable;
 
 // Class to handle effects that are specific to one side of the battle
-public abstract class TeamEffect extends Effect implements Serializable {
+public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public TeamEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
+    public TeamEffect(TeamEffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
         super(name, minTurns, maxTurns, nextTurnSubside, hasAlternateCast);
     }
 
@@ -39,7 +41,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
     @Override
     protected boolean hasEffect(Battle b, ActivePokemon victim) {
-        return b.getTrainer(victim).hasEffect(this.namesies);
+        return b.getTrainer(victim).hasEffect(this.namesies());
     }
 
     // EVERYTHING BELOW IS GENERATED ###
@@ -50,12 +52,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Reflect() {
-            super(EffectNamesies.REFLECT, 5, 5, false, false);
+            super(TeamEffectNamesies.REFLECT, 5, 5, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies));
+            return !(b.getTrainer(victim).hasEffect(this.namesies()));
         }
 
         @Override
@@ -105,12 +107,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         LightScreen() {
-            super(EffectNamesies.LIGHT_SCREEN, 5, 5, false, false);
+            super(TeamEffectNamesies.LIGHT_SCREEN, 5, 5, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies));
+            return !(b.getTrainer(victim).hasEffect(this.namesies()));
         }
 
         @Override
@@ -160,12 +162,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         Tailwind() {
-            super(EffectNamesies.TAILWIND, 4, 4, false, false);
+            super(TeamEffectNamesies.TAILWIND, 4, 4, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies));
+            return !(b.getTrainer(victim).hasEffect(this.namesies()));
         }
 
         @Override
@@ -193,12 +195,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         AuroraVeil() {
-            super(EffectNamesies.AURORA_VEIL, 5, 5, false, false);
+            super(TeamEffectNamesies.AURORA_VEIL, 5, 5, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies));
+            return !(b.getTrainer(victim).hasEffect(this.namesies()));
         }
 
         @Override
@@ -248,12 +250,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         StickyWeb() {
-            super(EffectNamesies.STICKY_WEB, -1, -1, false, false);
+            super(TeamEffectNamesies.STICKY_WEB, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies));
+            return !(b.getTrainer(victim).hasEffect(this.namesies()));
         }
 
         @Override
@@ -289,12 +291,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         StealthRock() {
-            super(EffectNamesies.STEALTH_ROCK, -1, -1, false, false);
+            super(TeamEffectNamesies.STEALTH_ROCK, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies));
+            return !(b.getTrainer(victim).hasEffect(this.namesies()));
         }
 
         @Override
@@ -335,7 +337,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private int layers;
 
         ToxicSpikes() {
-            super(EffectNamesies.TOXIC_SPIKES, -1, -1, false, true);
+            super(TeamEffectNamesies.TOXIC_SPIKES, -1, -1, false, true);
             this.layers = 1;
         }
 
@@ -386,7 +388,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private int layers;
 
         Spikes() {
-            super(EffectNamesies.SPIKES, -1, -1, false, true);
+            super(TeamEffectNamesies.SPIKES, -1, -1, false, true);
             this.layers = 1;
         }
 
@@ -436,12 +438,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private String casterName;
 
         Wish() {
-            super(EffectNamesies.WISH, 1, 1, true, false);
+            super(TeamEffectNamesies.WISH, 1, 1, true, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies));
+            return !(b.getTrainer(victim).hasEffect(this.namesies()));
         }
 
         @Override
@@ -451,7 +453,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
 
         @Override
         public void subside(Battle b, ActivePokemon p) {
-            if (p.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+            if (p.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
                 return;
             }
 
@@ -464,12 +466,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         LuckyChant() {
-            super(EffectNamesies.LUCKY_CHANT, 5, 5, false, false);
+            super(TeamEffectNamesies.LUCKY_CHANT, 5, 5, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies));
+            return !(b.getTrainer(victim).hasEffect(this.namesies()));
         }
 
         @Override
@@ -489,12 +491,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private ActivePokemon theSeeer;
 
         FutureSight() {
-            super(EffectNamesies.FUTURE_SIGHT, 2, 2, true, false);
+            super(TeamEffectNamesies.FUTURE_SIGHT, 2, 2, true, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies));
+            return !(b.getTrainer(victim).hasEffect(this.namesies()));
         }
 
         @Override
@@ -528,12 +530,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private ActivePokemon theSeeer;
 
         DoomDesire() {
-            super(EffectNamesies.DOOM_DESIRE, 2, 2, true, false);
+            super(TeamEffectNamesies.DOOM_DESIRE, 2, 2, true, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies));
+            return !(b.getTrainer(victim).hasEffect(this.namesies()));
         }
 
         @Override
@@ -567,12 +569,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private String wish;
 
         HealSwitch() {
-            super(EffectNamesies.HEAL_SWITCH, -1, -1, false, false);
+            super(TeamEffectNamesies.HEAL_SWITCH, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies));
+            return !(b.getTrainer(victim).hasEffect(this.namesies()));
         }
 
         @Override
@@ -594,7 +596,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         DeadAlly() {
-            super(EffectNamesies.DEAD_ALLY, 2, 2, false, false);
+            super(TeamEffectNamesies.DEAD_ALLY, 2, 2, false, false);
         }
     }
 
@@ -604,7 +606,7 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private int coins;
 
         PayDay() {
-            super(EffectNamesies.PAY_DAY, -1, -1, false, true);
+            super(TeamEffectNamesies.PAY_DAY, -1, -1, false, true);
         }
 
         @Override
@@ -636,12 +638,12 @@ public abstract class TeamEffect extends Effect implements Serializable {
         private static final long serialVersionUID = 1L;
 
         GetDatCashMoneyTwice() {
-            super(EffectNamesies.GET_DAT_CASH_MONEY_TWICE, -1, -1, false, false);
+            super(TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies));
+            return !(b.getTrainer(victim).hasEffect(this.namesies()));
         }
     }
 }

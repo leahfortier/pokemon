@@ -1,15 +1,17 @@
 package battle;
 
 import battle.effect.EffectList;
-import battle.effect.generic.BattleEffect;
+import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.BattleEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
-import battle.effect.generic.EffectNamesies;
-import battle.effect.generic.TerrainEffect;
-import battle.effect.generic.WeatherEffect;
+import battle.effect.generic.EffectNamesies.BattleEffectNamesies;
+import battle.effect.generic.battle.BattleEffect;
+import battle.effect.generic.battle.terrain.TerrainEffect;
+import battle.effect.generic.battle.weather.WeatherEffect;
+import battle.effect.generic.battle.weather.WeatherNamesies;
 import main.Game;
 import map.area.AreaData;
 import map.overworld.TerrainType;
@@ -21,7 +23,7 @@ import trainer.PlayerTrainer;
 
 import java.util.List;
 
-class BattleEffectList extends EffectList<BattleEffect> {
+public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEffect<? extends BattleEffectNamesies>> {
     private static final long serialVersionUID = 1L;
 
     private transient Battle battle;
@@ -47,8 +49,8 @@ class BattleEffectList extends EffectList<BattleEffect> {
     }
 
     @Override
-    public List<BattleEffect> asList() {
-        List<BattleEffect> list = super.asList();
+    public List<BattleEffect<? extends BattleEffectNamesies>> asList() {
+        List<BattleEffect<? extends BattleEffectNamesies>> list = super.asList();
         list.add(weather);
         if (currentTerrain != null) {
             list.add(currentTerrain);
@@ -64,14 +66,14 @@ class BattleEffectList extends EffectList<BattleEffect> {
     }
 
     @Override
-    public void add(BattleEffect effect) {
+    public void add(BattleEffect<? extends BattleEffectNamesies> effect) {
         if (effect instanceof WeatherEffect) {
             weather = (WeatherEffect)effect;
             Messages.add(new MessageUpdate().withWeather(weather));
 
             if (WeatherEliminatingEffect.shouldEliminateWeather(battle, battle.getPlayer().front(), weather)
                     || WeatherEliminatingEffect.shouldEliminateWeather(battle, battle.getOpponent().front(), weather)) {
-                weather = (WeatherEffect)EffectNamesies.CLEAR_SKIES.getEffect();
+                weather = WeatherNamesies.CLEAR_SKIES.getEffect();
                 Messages.add(new MessageUpdate().withWeather(weather));
             }
         } else if (effect instanceof TerrainEffect) {
@@ -88,7 +90,7 @@ class BattleEffectList extends EffectList<BattleEffect> {
     }
 
     @Override
-    public void remove(BattleEffect effect) {
+    public void remove(BattleEffect<? extends BattleEffectNamesies> effect) {
         if (effect == weather) {
             this.setBaseWeather(this.baseWeather);
         } else if (effect == currentTerrain) {
@@ -99,7 +101,7 @@ class BattleEffectList extends EffectList<BattleEffect> {
     }
 
     @Override
-    public boolean remove(EffectNamesies effectToRemove) {
+    public boolean remove(BattleEffectNamesies effectToRemove) {
         if (weather.namesies() == effectToRemove) {
             this.remove(weather);
             return true;
@@ -112,10 +114,10 @@ class BattleEffectList extends EffectList<BattleEffect> {
     }
 
     void printShit() {
-        List<BattleEffect> effects = super.asList();
+        List<BattleEffect<? extends BattleEffectNamesies>> effects = super.asList();
         if (!effects.isEmpty()) {
             System.out.println("Battle:");
-            for (BattleEffect effect : effects) {
+            for (Effect effect : effects) {
                 System.out.println("\t" + effect);
             }
         }
@@ -139,7 +141,7 @@ class BattleEffectList extends EffectList<BattleEffect> {
 
     private void setBaseWeather(WeatherState weatherState) {
         this.baseWeather = weatherState;
-        this.add((WeatherEffect)weatherState.getWeatherEffect().getEffect());
+        this.add(weatherState.getWeatherEffect().getEffect());
     }
 
     private void setBaseTerrain(TerrainType terrainType) {
@@ -177,8 +179,6 @@ class BattleEffectList extends EffectList<BattleEffect> {
         EndTurnEffect.invokeEndTurnEffect(me, battle);
 
         me.isFainted(battle);
-
-        // No longer the first turn anymore
-        me.setFirstTurn(false);
+        me.endTurn();
     }
 }

@@ -8,7 +8,6 @@ import battle.effect.attack.ChangeTypeSource;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.attack.MultiTurnMove.ChargingMove;
 import battle.effect.attack.MultiTurnMove.RechargingMove;
-import battle.effect.generic.BattleEffect;
 import battle.effect.generic.EffectInterfaces.AbsorbDamageEffect;
 import battle.effect.generic.EffectInterfaces.AlwaysCritEffect;
 import battle.effect.generic.EffectInterfaces.ApplyDamageEffect;
@@ -78,9 +77,10 @@ import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectInterfaces.WeatherExtendingEffect;
 import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
 import battle.effect.generic.EffectInterfaces.WildEncounterSelector;
-import battle.effect.generic.EffectNamesies;
-import battle.effect.generic.PokemonEffect;
-import battle.effect.generic.TeamEffect;
+import battle.effect.generic.battle.BattleEffect;
+import battle.effect.generic.pokemon.PokemonEffect;
+import battle.effect.generic.pokemon.PokemonEffectNamesies;
+import battle.effect.generic.team.TeamEffect;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.Item;
@@ -151,7 +151,7 @@ public class ClassTest extends BaseTest {
                 StatusCondition.class,
                 Type.class,
                 RapidSpinRelease.class,
-                EffectNamesies.AQUA_RING.getEffect().getClass(),
+                PokemonEffectNamesies.AQUA_RING.getEffect().getClass(),
                 ItemNamesies.CELL_BATTERY.getItem().getClass(),
                 Type.BUG.getDeclaringClass(),
                 PokemonNamesies.class

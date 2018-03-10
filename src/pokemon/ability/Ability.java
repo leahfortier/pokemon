@@ -76,8 +76,10 @@ import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.generic.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.generic.EffectInterfaces.WildEncounterAlterer;
 import battle.effect.generic.EffectNamesies;
-import battle.effect.generic.PokemonEffect;
-import battle.effect.generic.WeatherEffect;
+import battle.effect.generic.battle.terrain.TerrainNamesies;
+import battle.effect.generic.battle.weather.WeatherNamesies;
+import battle.effect.generic.pokemon.PokemonEffect;
+import battle.effect.generic.pokemon.PokemonEffectNamesies;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.status.Status;
@@ -269,7 +271,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.getWeather().namesies() == EffectNamesies.SUNNY;
+            return b.getWeather().namesies() == WeatherNamesies.SUNNY;
         }
 
         @Override
@@ -305,7 +307,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
+            if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
                 Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
                 victim.reduceHealthFraction(b, 1/8.0);
             }
@@ -313,7 +315,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttack().getCategory() == MoveCategory.SPECIAL && b.getWeather().namesies() == EffectNamesies.SUNNY ? 1.5 : 1;
+            return user.getAttack().getCategory() == MoveCategory.SPECIAL && b.getWeather().namesies() == WeatherNamesies.SUNNY ? 1.5 : 1;
         }
     }
 
@@ -339,7 +341,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (b.getWeather().namesies() == EffectNamesies.RAINING) {
+            if (b.getWeather().namesies() == WeatherNamesies.RAINING) {
                 victim.healHealthFraction(1/16.0);
                 Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
             }
@@ -459,7 +461,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
-            return s == Stat.EVASION && p.hasEffect(EffectNamesies.CONFUSION) ? 1 : 0;
+            return s == Stat.EVASION && p.hasEffect(PokemonEffectNamesies.CONFUSION) ? 1 : 0;
         }
     }
 
@@ -552,7 +554,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
-            return s == Stat.EVASION && b.getWeather().namesies() == EffectNamesies.SANDSTORM ? 1 : 0;
+            return s == Stat.EVASION && b.getWeather().namesies() == WeatherNamesies.SANDSTORM ? 1 : 0;
         }
 
         @Override
@@ -570,7 +572,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.getWeather().namesies() == EffectNamesies.SANDSTORM;
+            return b.getWeather().namesies() == WeatherNamesies.SANDSTORM;
         }
 
         @Override
@@ -593,7 +595,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.getWeather().namesies() == EffectNamesies.HAILING;
+            return b.getWeather().namesies() == WeatherNamesies.HAILING;
         }
 
         @Override
@@ -652,7 +654,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (RandomUtils.chanceTest(30) && EffectNamesies.INFATUATED.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
+            if (RandomUtils.chanceTest(30) && PokemonEffectNamesies.INFATUATED.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
                 Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
             }
         }
@@ -676,7 +678,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean block(EffectNamesies weather) {
+        public boolean block(WeatherNamesies weather) {
             return true;
         }
     }
@@ -727,7 +729,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " made the sunlight turn harsh!");
-            b.addEffect((WeatherEffect)EffectNamesies.SUNNY.getEffect());
+            b.addEffect(WeatherNamesies.SUNNY.getEffect());
         }
     }
 
@@ -773,7 +775,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
-                if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.ABILITY, false)) {
+                if (PokemonEffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.ABILITY, false)) {
                     Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
                 }
             }
@@ -821,10 +823,10 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (b.getWeather().namesies() == EffectNamesies.SUNNY) {
+            if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
                 Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
                 victim.reduceHealthFraction(b, 1/8.0);
-            } else if (b.getWeather().namesies() == EffectNamesies.RAINING && !victim.fullHealth()) {
+            } else if (b.getWeather().namesies() == WeatherNamesies.RAINING && !victim.fullHealth()) {
                 victim.healHealthFraction(1/8.0);
                 Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
             }
@@ -843,7 +845,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
-            if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+            if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
                 return;
             }
 
@@ -1289,7 +1291,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasStatus() && b.getWeather().namesies() == EffectNamesies.RAINING) {
+            if (victim.hasStatus() && b.getWeather().namesies() == WeatherNamesies.RAINING) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
             }
         }
@@ -1469,7 +1471,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-            return b.getWeather().namesies() == EffectNamesies.SUNNY;
+            return b.getWeather().namesies() == WeatherNamesies.SUNNY;
         }
 
         @Override
@@ -1500,7 +1502,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.getWeather().namesies() == EffectNamesies.RAINING;
+            return b.getWeather().namesies() == WeatherNamesies.RAINING;
         }
 
         @Override
@@ -1657,7 +1659,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            EffectNamesies.TRANSFORMED.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+            PokemonEffectNamesies.TRANSFORMED.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
         }
 
         @Override
@@ -1689,7 +1691,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
-            if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+            if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
                 return;
             }
 
@@ -1718,7 +1720,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
-            if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+            if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
                 return;
             }
 
@@ -1786,7 +1788,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
                 return;
             }
 
-            EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, true);
+            PokemonEffectNamesies.CHANGE_ABILITY.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, true);
         }
 
         @Override
@@ -1867,7 +1869,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
-            return s == Stat.EVASION && b.getWeather().namesies() == EffectNamesies.HAILING ? 1 : 0;
+            return s == Stat.EVASION && b.getWeather().namesies() == WeatherNamesies.HAILING ? 1 : 0;
         }
 
         @Override
@@ -2052,7 +2054,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean block(EffectNamesies weather) {
+        public boolean block(WeatherNamesies weather) {
             return true;
         }
 
@@ -2124,7 +2126,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
-            if (effectType == EffectNamesies.FLINCH) {
+            if (effectType == PokemonEffectNamesies.FLINCH) {
                 victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
             }
         }
@@ -2140,7 +2142,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " whipped up a sandstorm!");
-            b.addEffect((WeatherEffect)EffectNamesies.SANDSTORM.getEffect());
+            b.addEffect(WeatherNamesies.SANDSTORM.getEffect());
         }
     }
 
@@ -2412,7 +2414,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             Type t = user.getAttackType();
             if (!victim.isType(b, t)) {
                 type = t;
-                EffectNamesies.CHANGE_TYPE.getEffect().cast(b, victim, victim, CastSource.ABILITY, true);
+                PokemonEffectNamesies.CHANGE_TYPE.getEffect().cast(b, victim, victim, CastSource.ABILITY, true);
             }
         }
     }
@@ -2426,15 +2428,15 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (b.getWeather().namesies() == EffectNamesies.HAILING) {
+            if (b.getWeather().namesies() == WeatherNamesies.HAILING) {
                 victim.healHealthFraction(1/16.0);
                 Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
             }
         }
 
         @Override
-        public boolean block(EffectNamesies weather) {
-            return weather == EffectNamesies.HAILING;
+        public boolean block(WeatherNamesies weather) {
+            return weather == WeatherNamesies.HAILING;
         }
     }
 
@@ -2461,7 +2463,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " started a downpour!");
-            b.addEffect((WeatherEffect)EffectNamesies.RAINING.getEffect());
+            b.addEffect(WeatherNamesies.RAINING.getEffect());
         }
     }
 
@@ -2513,7 +2515,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.getWeather().namesies() == EffectNamesies.SUNNY;
+            return b.getWeather().namesies() == WeatherNamesies.SUNNY;
         }
 
         @Override
@@ -2566,12 +2568,12 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             Type type = user.getAttackType();
-            return (type == Type.ROCK || type == Type.STEEL || type == Type.GROUND) && b.getWeather().namesies() == EffectNamesies.SANDSTORM ? 1.3 : 1;
+            return (type == Type.ROCK || type == Type.STEEL || type == Type.GROUND) && b.getWeather().namesies() == WeatherNamesies.SANDSTORM ? 1.3 : 1;
         }
 
         @Override
-        public boolean block(EffectNamesies weather) {
-            return weather == EffectNamesies.SANDSTORM;
+        public boolean block(WeatherNamesies weather) {
+            return weather == WeatherNamesies.SANDSTORM;
         }
     }
 
@@ -2585,7 +2587,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " caused it to hail!");
-            b.addEffect((WeatherEffect)EffectNamesies.HAILING.getEffect());
+            b.addEffect(WeatherNamesies.HAILING.getEffect());
         }
     }
 
@@ -2638,7 +2640,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
                 user.setLastMoveUsed();
-                if (EffectNamesies.DISABLE.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
+                if (PokemonEffectNamesies.DISABLE.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
                     Messages.add(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
                 }
             }
@@ -2817,7 +2819,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             }
 
             // Cast the change ability effect onto the user
-            EffectNamesies.CHANGE_ABILITY.getEffect().cast(b, victim, user, CastSource.ABILITY, true);
+            PokemonEffectNamesies.CHANGE_ABILITY.getEffect().cast(b, victim, user, CastSource.ABILITY, true);
         }
     }
 
@@ -3088,7 +3090,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.hasEffect(EffectNamesies.CONSUMED_ITEM);
+            return p.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
         }
 
         @Override
@@ -3132,13 +3134,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            PokemonEffect consumed = victim.getEffect(EffectNamesies.CONSUMED_ITEM);
+            PokemonEffect consumed = victim.getEffect(PokemonEffectNamesies.CONSUMED_ITEM);
             if (consumed == null || victim.isHoldingItem(b)) {
                 return;
             }
 
             Item restored = ((ItemHolder)consumed).getItem();
-            if (restored instanceof Berry && (b.getWeather().namesies() == EffectNamesies.SUNNY || RandomUtils.chanceTest(50))) {
+            if (restored instanceof Berry && (b.getWeather().namesies() == WeatherNamesies.SUNNY || RandomUtils.chanceTest(50))) {
                 victim.giveItem((HoldItem)restored);
                 Messages.add(victim.getName() + "'s " + this.getName() + " restored its " + restored.getName() + "!");
             }
@@ -3763,7 +3765,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.hasEffect(EffectNamesies.GRASSY_TERRAIN);
+            return b.hasEffect(TerrainNamesies.GRASSY_TERRAIN);
         }
 
         @Override
@@ -3786,7 +3788,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.hasEffect(EffectNamesies.ELECTRIC_TERRAIN);
+            return b.hasEffect(TerrainNamesies.ELECTRIC_TERRAIN);
         }
 
         @Override
@@ -3855,7 +3857,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             // Protean activates for all moves except for Struggle
             if (p.getAttack().namesies() != AttackNamesies.STRUGGLE) {
                 type = p.getAttackType();
-                EffectNamesies.CHANGE_TYPE.getEffect().cast(b, p, p, CastSource.ABILITY, true);
+                PokemonEffectNamesies.CHANGE_TYPE.getEffect().cast(b, p, p, CastSource.ABILITY, true);
             }
 
             return true;
@@ -4310,7 +4312,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to Psychic Terrain!");
-            EffectNamesies.PSYCHIC_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+            TerrainNamesies.PSYCHIC_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
         }
     }
 
@@ -4324,7 +4326,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to Electric Terrain!");
-            EffectNamesies.ELECTRIC_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+            TerrainNamesies.ELECTRIC_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
         }
     }
 
@@ -4338,7 +4340,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to Misty Terrain!");
-            EffectNamesies.MISTY_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+            TerrainNamesies.MISTY_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
         }
     }
 
@@ -4352,7 +4354,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to Grassy Terrain!");
-            EffectNamesies.GRASSY_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+            TerrainNamesies.GRASSY_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
         }
     }
 }

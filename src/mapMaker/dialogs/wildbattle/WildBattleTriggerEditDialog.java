@@ -165,15 +165,13 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
                 .map(panel -> panel.getWildEncounter(minLevel, maxLevel))
                 .collect(Collectors.toList());
 
-        WildBattleMatcher matcher = new WildBattleMatcher(
+        return new WildBattleMatcher(
                 name,
                 conditionPanel.getConditionName(),
                 conditionPanel.getConditionSet(),
                 encounterRate,
                 wildEncounters
         );
-
-        return matcher;
     }
 
     private void load(WildBattleMatcher matcher) {

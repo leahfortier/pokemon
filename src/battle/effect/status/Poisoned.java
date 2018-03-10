@@ -3,7 +3,7 @@ package battle.effect.status;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
-import battle.effect.generic.EffectNamesies;
+import battle.effect.generic.pokemon.PokemonEffectNamesies;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ability.AbilityNamesies;
@@ -28,7 +28,7 @@ class Poisoned extends Status implements EndTurnEffect {
         }
 
         if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
-            if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+            if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
                 return;
             }
 

@@ -7,6 +7,8 @@ import battle.attack.Move;
 import battle.effect.CastSource;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectNamesies;
+import battle.effect.generic.battle.terrain.TerrainNamesies;
+import battle.effect.generic.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusCondition;
 import item.ItemNamesies;
 import org.junit.Assert;
@@ -420,7 +422,7 @@ public class EffectTest extends BaseTest {
 
         battle.emptyHeal();
         attacking.assertFullHealth();
-        Assert.assertTrue(attacking.hasEffect(EffectNamesies.SUBSTITUTE));
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
 
         // Status moves won't work against the substitute
         battle.defendingFight(AttackNamesies.THUNDER_WAVE);
@@ -434,12 +436,12 @@ public class EffectTest extends BaseTest {
         new TestStages().set(Stat.ATTACK, -1).test(attacking);
 
         attacking.assertFullHealth();
-        Assert.assertTrue(attacking.hasEffect(EffectNamesies.SUBSTITUTE));
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
 
         // Break the substitute -- user should still have full health
         battle.defendingFight(AttackNamesies.EARTHQUAKE);
         attacking.assertFullHealth();
-        Assert.assertFalse(attacking.hasEffect(EffectNamesies.SUBSTITUTE));
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
 
         // No more substitute -- murder is fair game (except don't actualllly murder because it will heal the player)
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.EARTHQUAKE);
@@ -523,16 +525,16 @@ public class EffectTest extends BaseTest {
         // Fails because Bulby is behind a substitute
         battle.defendingFight(AttackNamesies.TELEKINESIS); // Terrain count: 4
         Assert.assertFalse(attacking.isLevitating(battle));
-        Assert.assertFalse(attacking.hasEffect(EffectNamesies.TELEKINESIS));
-        Assert.assertFalse(defending.hasEffect(EffectNamesies.TELEKINESIS));
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.TELEKINESIS));
+        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.TELEKINESIS));
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(10/16.0, 2);
 
         // Bulby levitates with Magnet Rise -- should no longer heal from Grassy Terrain
         battle.attackingFight(AttackNamesies.MAGNET_RISE); // Terrain count: 3
         Assert.assertTrue(attacking.isLevitating(battle));
-        Assert.assertTrue(attacking.hasEffect(EffectNamesies.MAGNET_RISE));
-        Assert.assertFalse(defending.hasEffect(EffectNamesies.MAGNET_RISE));
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.MAGNET_RISE));
+        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.MAGNET_RISE));
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(11/16.0, 3);
 
@@ -541,7 +543,7 @@ public class EffectTest extends BaseTest {
         // at first and I originally had Protean Charmander here but then left this because whatever
         attacking.withItem(ItemNamesies.CHESTO_BERRY);
         battle.defendingFight(AttackNamesies.GRASS_WHISTLE); // Terrain count: 2
-        Assert.assertTrue(attacking.hasEffect(EffectNamesies.SUBSTITUTE));
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
         Assert.assertTrue(attacking.isLevitating(battle));
         Assert.assertFalse(attacking.hasStatus());
         Assert.assertFalse(attacking.isHoldingItem(battle)); // Chesto Berry consumed
@@ -550,18 +552,18 @@ public class EffectTest extends BaseTest {
 
         // Break the substitute
         battle.defendingFight(AttackNamesies.SHEER_COLD); // Terrain count: 1
-        Assert.assertFalse(attacking.hasEffect(EffectNamesies.SUBSTITUTE));
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
         Assert.assertTrue(attacking.isLevitating(battle));
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(13/16.0, 5);
 
         // Terrain should be cleared at the end of that last turn (after successfully healing Grass-type Charmander)
-        Assert.assertFalse(battle.hasEffect(EffectNamesies.GRASSY_TERRAIN));
+        Assert.assertFalse(battle.hasEffect(TerrainNamesies.GRASSY_TERRAIN));
 
         // Make sure we don't heal at the end of this turn
         // Telekinesis should succeed since Substitute was broken
         battle.defendingFight(AttackNamesies.TELEKINESIS);
-        Assert.assertTrue(attacking.hasEffect(EffectNamesies.TELEKINESIS));
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.TELEKINESIS));
         Assert.assertTrue(attacking.isLevitating(battle));
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(13/16.0, 5);

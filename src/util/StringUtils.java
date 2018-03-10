@@ -169,4 +169,21 @@ public class StringUtils {
 
         return className.toString();
     }
+
+    public static <T extends Enum<T>> T enumValueOf(Class<T> enumClass, String name) {
+        T namesies = enumTryValueOf(enumClass, name);
+        if (namesies == null) {
+            Global.error(name + " does not have a valid " + enumClass.getSimpleName() + " value");
+        }
+
+        return namesies;
+    }
+
+    public static <T extends Enum<T>> T enumTryValueOf(Class<T> enumClass, String name) {
+        try {
+            return Enum.valueOf(enumClass, getNamesiesString(name));
+        } catch (IllegalArgumentException exception) {
+            return null;
+        }
+    }
 }

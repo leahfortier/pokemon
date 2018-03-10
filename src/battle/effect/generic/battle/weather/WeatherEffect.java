@@ -1,4 +1,4 @@
-package battle.effect.generic;
+package battle.effect.generic.battle.weather;
 
 import battle.ActivePokemon;
 import battle.Battle;
@@ -9,12 +9,13 @@ import battle.effect.generic.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.generic.EffectInterfaces.WeatherExtendingEffect;
+import battle.effect.generic.battle.BattleEffect;
 import battle.effect.status.StatusCondition;
 import message.Messages;
 import pokemon.Stat;
 import type.Type;
 
-public abstract class WeatherEffect extends BattleEffect implements BattleEndTurnEffect {
+public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implements BattleEndTurnEffect {
     private static final long serialVersionUID = 1L;
 
     private static final int DEFAULT_TURNS = 5;
@@ -22,7 +23,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
     private final Type weatherElement;
     private final String imageName;
 
-    public WeatherEffect(EffectNamesies namesies, Type weatherElement) {
+    public WeatherEffect(WeatherNamesies namesies, Type weatherElement) {
         super(namesies, -1, -1, true, false);
         this.weatherElement = weatherElement;
         this.imageName = this.getClass().getSimpleName().toLowerCase();
@@ -42,7 +43,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
     }
 
     private int getTurns(Battle b, ActivePokemon caster) {
-        return DEFAULT_TURNS + WeatherExtendingEffect.getModifier(b, caster, this.namesies);
+        return DEFAULT_TURNS + WeatherExtendingEffect.getModifier(b, caster, this.namesies());
     }
 
     // EVERYTHING BELOW IS GENERATED ###
@@ -53,7 +54,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
         private static final long serialVersionUID = 1L;
 
         ClearSkies() {
-            super(EffectNamesies.CLEAR_SKIES, Type.NORMAL);
+            super(WeatherNamesies.CLEAR_SKIES, Type.NORMAL);
         }
     }
 
@@ -61,7 +62,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
         private static final long serialVersionUID = 1L;
 
         Raining() {
-            super(EffectNamesies.RAINING, Type.WATER);
+            super(WeatherNamesies.RAINING, Type.WATER);
         }
 
         @Override
@@ -102,7 +103,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
         private static final long serialVersionUID = 1L;
 
         Sunny() {
-            super(EffectNamesies.SUNNY, Type.FIRE);
+            super(WeatherNamesies.SUNNY, Type.FIRE);
         }
 
         @Override
@@ -155,7 +156,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
         private static final Type[] immunees = new Type[] { Type.ROCK, Type.GROUND, Type.STEEL };
 
         Sandstorm() {
-            super(EffectNamesies.SANDSTORM, Type.ROCK);
+            super(WeatherNamesies.SANDSTORM, Type.ROCK);
         }
 
         @Override
@@ -198,7 +199,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
             }
 
             // Srsly don't buffet the immune!!
-            if (WeatherBlockerEffect.checkBlocked(b, victim, this.namesies)) {
+            if (WeatherBlockerEffect.checkBlocked(b, victim, this.namesies())) {
                 return;
             }
 
@@ -219,7 +220,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
         private static final Type[] immunees = new Type[] { Type.ICE };
 
         Hailing() {
-            super(EffectNamesies.HAILING, Type.ICE);
+            super(WeatherNamesies.HAILING, Type.ICE);
         }
 
         @Override
@@ -252,7 +253,7 @@ public abstract class WeatherEffect extends BattleEffect implements BattleEndTur
             }
 
             // Srsly don't buffet the immune!!
-            if (WeatherBlockerEffect.checkBlocked(b, victim, this.namesies)) {
+            if (WeatherBlockerEffect.checkBlocked(b, victim, this.namesies())) {
                 return;
             }
 

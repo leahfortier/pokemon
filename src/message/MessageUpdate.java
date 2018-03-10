@@ -3,7 +3,7 @@ package message;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
-import battle.effect.generic.WeatherEffect;
+import battle.effect.generic.battle.weather.WeatherEffect;
 import gui.view.ViewMode;
 import main.Game;
 import map.overworld.TerrainType;

@@ -167,8 +167,9 @@ public class MethodInfo {
             interfaces.addAll(methodInfo.addInterfaces);
 
             for (MapField addField : methodInfo.addMapFields) {
+                String addFieldName = inputFormatter.replaceBody(addField.fieldName, fieldValue, className, superClass);
                 String addFieldValue = inputFormatter.replaceBody(addField.fieldValue, fieldValue, className, superClass);
-                fields.addNew(addField.fieldName, addFieldValue);
+                fields.addNew(addFieldName, addFieldValue);
             }
 
             fields.remove(fieldName);

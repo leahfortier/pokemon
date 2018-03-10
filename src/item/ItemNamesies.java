@@ -431,7 +431,6 @@ import item.Item.YacheBerry;
 import item.Item.ZapPlate;
 import item.Item.Zinc;
 import item.Item.ZoomLens;
-import main.Global;
 import util.StringUtils;
 
 import java.util.EnumMap;
@@ -896,19 +895,11 @@ public enum ItemNamesies {
     }
 
     public static ItemNamesies tryValueOf(String name) {
-        try {
-            return ItemNamesies.valueOf(StringUtils.getNamesiesString(name));
-        } catch (IllegalArgumentException exception) {
-            return null;
-        }
+        return StringUtils.enumTryValueOf(ItemNamesies.class, name);
     }
 
     public static ItemNamesies getValueOf(String name) {
-        ItemNamesies itemNamesies = tryValueOf(name);
-        if (itemNamesies == null) {
-            Global.error(name + " does not have a valid ItemNamesies value");
-        }
-        return itemNamesies;
+        return StringUtils.enumValueOf(ItemNamesies.class, name);
     }
 }
 

@@ -57,7 +57,7 @@ BattleEndTurnEffect:
         Header: void applyEndTurn(Battle b)
         Invoke: Void
         SetInvokees:
-            List<BattleEffect> invokees = b.getEffects().asList();
+            List<BattleEffect<? extends BattleEffectNamesies>> invokees = b.getEffects().asList();
             ###
         Default:
             Messages.add(this.getEndTurnMessage(b));
@@ -330,7 +330,7 @@ GroundedEffect:
 			if (p.isSemiInvulnerableFlying()) {
 				((MultiTurnMove)p.getAttack()).resetReady();
 				Messages.add(p.getName() + " fell to the ground!");
-                EffectNamesies.FLINCH.getEffect().cast(b, p, p, CastSource.EFFECT, false);
+                PokemonEffectNamesies.FLINCH.getEffect().cast(b, p, p, CastSource.EFFECT, false);
 			}
 
 			LevitationEffect.falllllllll(b, p);
@@ -389,7 +389,7 @@ AttackSelectionEffect:
 ***
 WeatherBlockerEffect:
 	Method:
-		Header: boolean block(EffectNamesies weather)
+		Header: boolean block(WeatherNamesies weather)
 		Invoke: Check true
 		InvokeName: checkBlocked
 		InvokeParameters: Battle b, ActivePokemon p
@@ -531,7 +531,7 @@ ChangeTypeEffect:
 		Invoke: Get
 		InvokeName: getChangedType
 		EffectList: p
-		EffectPriority: p.getEffect(EffectNamesies.CHANGE_TYPE)
+		EffectPriority: p.getEffect(PokemonEffectNamesies.CHANGE_TYPE)
 	*
 ***
 ForceMoveEffect:
@@ -763,16 +763,16 @@ AlwaysCritEffect:
 EffectCurerItem:
     Extends: HoldItem, EffectReceivedEffect, EndTurnEffect
     Method:
-        Header: Set<EffectNamesies> getCurableEffects()
+        Header: Set<PokemonEffectNamesies> getCurableEffects()
     *
     Method:
-        Header: String getRemoveMessage(ActivePokemon victim, EffectNamesies effectType)
+        Header: String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType)
     *
     Method:
         Header: boolean usesies(ActivePokemon user)
         Default:
             boolean used = false;
-            for (EffectNamesies removableEffect : this.getCurableEffects()) {
+            for (PokemonEffectNamesies removableEffect : this.getCurableEffects()) {
                 if (user.getEffects().remove(removableEffect)) {
                     used = true;
                     Messages.add(this.getRemoveMessage(user, removableEffect));
@@ -786,9 +786,10 @@ EffectCurerItem:
         Header: void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType)
         Override: True
         Default:
-        if (this.getCurableEffects().contains(effectType)) {
-            Messages.add(this.getRemoveMessage(victim, effectType));
-            victim.getEffects().remove(effectType);
+        if (effectType instanceof PokemonEffectNamesies && this.getCurableEffects().contains(effectType)) {
+            PokemonEffectNamesies pokemonEffectType = (PokemonEffectNamesies)effectType;
+            Messages.add(this.getRemoveMessage(victim, pokemonEffectType));
+            victim.getEffects().remove(pokemonEffectType);
             victim.consumeItem(b);
         }
         ###
@@ -898,10 +899,10 @@ ItemSwapperEffect:
                 victim.giveItem((HoldItem)userItem);
             } else {
                 user.setCastSource(victimItem);
-                EffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, user, CastSource.CAST_SOURCE, false);
+                PokemonEffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, user, CastSource.CAST_SOURCE, false);
 
                 user.setCastSource(userItem);
-                EffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
+                PokemonEffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
             }
             ###
     *
@@ -1103,7 +1104,7 @@ WeatherEliminatingEffect:
 	Method:
 		Header: boolean eliminateWeather(WeatherEffect weather)
 		Default:
-			return weather.namesies() != EffectNamesies.CLEAR_SKIES;
+			return weather.namesies() != WeatherNamesies.CLEAR_SKIES;
 			###
 		InvokeParameters: Battle b, ActivePokemon eliminator
 		Invoke: CheckMessage true getEliminateMessage(eliminator)
@@ -1150,7 +1151,7 @@ SwitchOutEffect:
 ***
 WeatherExtendingEffect:
 	Method:
-		Header: int getExtensionTurns(EffectNamesies weatherType)
+		Header: int getExtensionTurns(WeatherNamesies weatherType)
 		Invoke: Add
 		InvokeParameters: Battle b, ActivePokemon p
 		EffectList: p
@@ -1192,7 +1193,7 @@ SapHealthEffect:
 			}
 
 			// Healers gon' heal
-			if (!user.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+			if (!user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
 					user.heal(sapAmount);
 			}
 
@@ -1217,7 +1218,7 @@ PowerCountMove:
 		Override: True
 		Header: double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 		Default:
-			return Math.min(user.getCount(), 5)*(this.doubleDefenseCurled() && user.hasEffect(EffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
+			return Math.min(user.getCount(), 5)*(this.doubleDefenseCurled() && user.hasEffect(PokemonEffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
 			###
 	*
 ***

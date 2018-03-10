@@ -1,8 +1,9 @@
-package battle.effect.generic;
+package battle.effect.generic.battle;
 
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.CastSource;
+import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.GroundedEffect;
 import battle.effect.generic.EffectInterfaces.ItemBlockerEffect;
 import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
@@ -10,15 +11,17 @@ import battle.effect.generic.EffectInterfaces.StageChangingEffect;
 import battle.effect.generic.EffectInterfaces.StatSwitchingEffect;
 import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
+import battle.effect.generic.EffectNamesies.BattleEffectNamesies;
+import battle.effect.generic.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusCondition;
 import message.Messages;
 import pokemon.Stat;
 import type.Type;
 
-public abstract class BattleEffect extends Effect {
+public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> extends Effect<NamesiesType> {
     private static final long serialVersionUID = 1L;
 
-    public BattleEffect(EffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
+    public BattleEffect(NamesiesType name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
         super(name, minTurns, maxTurns, nextTurnSubside, hasAlternateCast);
     }
 
@@ -36,11 +39,11 @@ public abstract class BattleEffect extends Effect {
 
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-    static class Gravity extends BattleEffect implements GroundedEffect, StageChangingEffect {
+    static class Gravity extends BattleEffect<StandardBattleEffectNamesies> implements GroundedEffect, StageChangingEffect {
         private static final long serialVersionUID = 1L;
 
         Gravity() {
-            super(EffectNamesies.GRAVITY, 5, 5, false, false);
+            super(StandardBattleEffectNamesies.GRAVITY, 5, 5, false, false);
         }
 
         @Override
@@ -70,11 +73,11 @@ public abstract class BattleEffect extends Effect {
         }
     }
 
-    static class WaterSport extends BattleEffect implements PowerChangeEffect {
+    static class WaterSport extends BattleEffect<StandardBattleEffectNamesies> implements PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         WaterSport() {
-            super(EffectNamesies.WATER_SPORT, 5, 5, false, false);
+            super(StandardBattleEffectNamesies.WATER_SPORT, 5, 5, false, false);
         }
 
         @Override
@@ -98,11 +101,11 @@ public abstract class BattleEffect extends Effect {
         }
     }
 
-    static class MudSport extends BattleEffect implements PowerChangeEffect {
+    static class MudSport extends BattleEffect<StandardBattleEffectNamesies> implements PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         MudSport() {
-            super(EffectNamesies.MUD_SPORT, 5, 5, false, false);
+            super(StandardBattleEffectNamesies.MUD_SPORT, 5, 5, false, false);
         }
 
         @Override
@@ -126,11 +129,11 @@ public abstract class BattleEffect extends Effect {
         }
     }
 
-    static class WonderRoom extends BattleEffect implements StatSwitchingEffect {
+    static class WonderRoom extends BattleEffect<StandardBattleEffectNamesies> implements StatSwitchingEffect {
         private static final long serialVersionUID = 1L;
 
         WonderRoom() {
-            super(EffectNamesies.WONDER_ROOM, 5, 5, false, true);
+            super(StandardBattleEffectNamesies.WONDER_ROOM, 5, 5, false, true);
         }
 
         @Override
@@ -148,7 +151,7 @@ public abstract class BattleEffect extends Effect {
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
-            BattleEffect roomsies = b.getEffects().get(this.namesies);
+            WonderRoom roomsies = (WonderRoom)b.getEffects().get(this.namesies);
 
             Messages.add(roomsies.getSubsideMessage(caster));
             b.getEffects().remove(roomsies);
@@ -165,17 +168,17 @@ public abstract class BattleEffect extends Effect {
         }
     }
 
-    static class TrickRoom extends BattleEffect {
+    static class TrickRoom extends BattleEffect<StandardBattleEffectNamesies> {
         private static final long serialVersionUID = 1L;
 
         TrickRoom() {
-            super(EffectNamesies.TRICK_ROOM, 5, 5, false, true);
+            super(StandardBattleEffectNamesies.TRICK_ROOM, 5, 5, false, true);
         }
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
-            BattleEffect roomsies = b.getEffects().get(this.namesies);
+            TrickRoom roomsies = (TrickRoom)b.getEffects().get(this.namesies);
 
             Messages.add(roomsies.getSubsideMessage(caster));
             b.getEffects().remove(roomsies);
@@ -192,17 +195,17 @@ public abstract class BattleEffect extends Effect {
         }
     }
 
-    static class MagicRoom extends BattleEffect implements ItemBlockerEffect {
+    static class MagicRoom extends BattleEffect<StandardBattleEffectNamesies> implements ItemBlockerEffect {
         private static final long serialVersionUID = 1L;
 
         MagicRoom() {
-            super(EffectNamesies.MAGIC_ROOM, 5, 5, false, true);
+            super(StandardBattleEffectNamesies.MAGIC_ROOM, 5, 5, false, true);
         }
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
-            BattleEffect roomsies = b.getEffects().get(this.namesies);
+            MagicRoom roomsies = (MagicRoom)b.getEffects().get(this.namesies);
 
             Messages.add(roomsies.getSubsideMessage(caster));
             b.getEffects().remove(roomsies);
@@ -219,11 +222,11 @@ public abstract class BattleEffect extends Effect {
         }
     }
 
-    static class FieldUproar extends BattleEffect implements StatusPreventionEffect, SuperDuperEndTurnEffect {
+    static class FieldUproar extends BattleEffect<StandardBattleEffectNamesies> implements StatusPreventionEffect, SuperDuperEndTurnEffect {
         private static final long serialVersionUID = 1L;
 
         FieldUproar() {
-            super(EffectNamesies.FIELD_UPROAR, -1, -1, false, false);
+            super(StandardBattleEffectNamesies.FIELD_UPROAR, -1, -1, false, false);
         }
 
         @Override
@@ -243,7 +246,7 @@ public abstract class BattleEffect extends Effect {
 
         @Override
         public boolean theVeryVeryEnd(Battle b, ActivePokemon p) {
-            if (b.getTrainer(true).front().hasEffect(EffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(EffectNamesies.UPROAR)) {
+            if (b.getTrainer(true).front().hasEffect(PokemonEffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(PokemonEffectNamesies.UPROAR)) {
                 return false;
             }
 

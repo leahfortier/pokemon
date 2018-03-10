@@ -4,7 +4,11 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.CastSource;
 import battle.effect.attack.ChangeTypeSource;
-import battle.effect.generic.EffectNamesies;
+import battle.effect.generic.battle.StandardBattleEffectNamesies;
+import battle.effect.generic.battle.terrain.TerrainNamesies;
+import battle.effect.generic.battle.weather.WeatherNamesies;
+import battle.effect.generic.pokemon.PokemonEffectNamesies;
+import battle.effect.generic.team.TeamEffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,13 +29,13 @@ public class ModifierTest extends BaseTest {
         statModifierTest(.8, Stat.ACCURACY, new TestInfo().attacking(AbilityNamesies.HUSTLE));
         statModifierTest(1, Stat.SP_ATTACK, new TestInfo().attacking(AbilityNamesies.HUSTLE));
 
-        statModifierTest(2, Stat.SP_DEFENSE, new TestInfo().defending(EffectNamesies.LIGHT_SCREEN));
-        statModifierTest(1, Stat.DEFENSE, new TestInfo().defending(EffectNamesies.LIGHT_SCREEN));
+        statModifierTest(2, Stat.SP_DEFENSE, new TestInfo().defending(TeamEffectNamesies.LIGHT_SCREEN));
+        statModifierTest(1, Stat.DEFENSE, new TestInfo().defending(TeamEffectNamesies.LIGHT_SCREEN));
 
-        statModifierTest(1.5, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.LILEEP).defending(EffectNamesies.SANDSTORM));
-        statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.MAWILE).defending(EffectNamesies.SANDSTORM));
-        statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.SANDYGAST).defending(EffectNamesies.SANDSTORM));
-        statModifierTest(1, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.GEODUDE).defending(EffectNamesies.SANDSTORM));
+        statModifierTest(1.5, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.LILEEP).defending(WeatherNamesies.SANDSTORM));
+        statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.MAWILE).defending(WeatherNamesies.SANDSTORM));
+        statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.SANDYGAST).defending(WeatherNamesies.SANDSTORM));
+        statModifierTest(1, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.GEODUDE).defending(WeatherNamesies.SANDSTORM));
 
         statModifierTest(2, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.LANTURN).defending(ItemNamesies.DEEP_SEA_SCALE));
         statModifierTest(2, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.CHINCHOU).defending(ItemNamesies.DEEP_SEA_SCALE));
@@ -45,13 +49,13 @@ public class ModifierTest extends BaseTest {
         statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.HUNTAIL).defending(ItemNamesies.EVIOLITE));
         statModifierTest(1, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.RAICHU).defending(ItemNamesies.EVIOLITE));
 
-        statModifierTest(2, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.CHLOROPHYLL).attacking(EffectNamesies.SUNNY));
-        statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().attacking(AbilityNamesies.CHLOROPHYLL).attacking(EffectNamesies.SUNNY));
+        statModifierTest(2, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.CHLOROPHYLL).attacking(WeatherNamesies.SUNNY));
+        statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().attacking(AbilityNamesies.CHLOROPHYLL).attacking(WeatherNamesies.SUNNY));
 
-        statModifierTest(1.5, Stat.ATTACK, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(EffectNamesies.SUNNY));
-        statModifierTest(1.5, Stat.SP_DEFENSE, new TestInfo().defending(AbilityNamesies.FLOWER_GIFT).attacking(EffectNamesies.SUNNY));
-        statModifierTest(1, 1.5, Stat.SP_DEFENSE, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(EffectNamesies.SUNNY));
-        statModifierTest(1, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(EffectNamesies.SUNNY));
+        statModifierTest(1.5, Stat.ATTACK, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
+        statModifierTest(1.5, Stat.SP_DEFENSE, new TestInfo().defending(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
+        statModifierTest(1, 1.5, Stat.SP_DEFENSE, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
+        statModifierTest(1, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
 
         statModifierTest(2, Stat.DEFENSE, new TestInfo().with(AttackNamesies.TACKLE).defending(AbilityNamesies.FUR_COAT));
         statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().with(AttackNamesies.SURF).defending(AbilityNamesies.FUR_COAT));
@@ -147,13 +151,13 @@ public class ModifierTest extends BaseTest {
     @Test
     public void weatherTest() {
         // Weather effects boost/lower the power of certain types of moves
-        powerModifierTest(1.5, new TestInfo().with(AttackNamesies.SURF).attacking(EffectNamesies.RAINING));
-        powerModifierTest(.5, new TestInfo().with(AttackNamesies.FLAMETHROWER).attacking(EffectNamesies.RAINING));
-        powerModifierTest(1, new TestInfo().with(AttackNamesies.THUNDERBOLT).attacking(EffectNamesies.RAINING));
+        powerModifierTest(1.5, new TestInfo().with(AttackNamesies.SURF).attacking(WeatherNamesies.RAINING));
+        powerModifierTest(.5, new TestInfo().with(AttackNamesies.FLAMETHROWER).attacking(WeatherNamesies.RAINING));
+        powerModifierTest(1, new TestInfo().with(AttackNamesies.THUNDERBOLT).attacking(WeatherNamesies.RAINING));
 
-        powerModifierTest(1.5, new TestInfo().with(AttackNamesies.FLAMETHROWER).attacking(EffectNamesies.SUNNY));
-        powerModifierTest(.5, new TestInfo().with(AttackNamesies.SURF).attacking(EffectNamesies.SUNNY));
-        powerModifierTest(1, new TestInfo().with(AttackNamesies.THUNDERBOLT).attacking(EffectNamesies.SUNNY));
+        powerModifierTest(1.5, new TestInfo().with(AttackNamesies.FLAMETHROWER).attacking(WeatherNamesies.SUNNY));
+        powerModifierTest(.5, new TestInfo().with(AttackNamesies.SURF).attacking(WeatherNamesies.SUNNY));
+        powerModifierTest(1, new TestInfo().with(AttackNamesies.THUNDERBOLT).attacking(WeatherNamesies.SUNNY));
     }
 
     @Test
@@ -191,22 +195,22 @@ public class ModifierTest extends BaseTest {
     @Test
     public void terrainTest() {
         // Terrain effects boost/lower the power of certain types of moves
-        powerModifierTest(1.5, new TestInfo().with(AttackNamesies.THUNDER).attacking(EffectNamesies.ELECTRIC_TERRAIN));
-        powerModifierTest(1.5, new TestInfo().with(AttackNamesies.PSYCHIC).attacking(EffectNamesies.PSYCHIC_TERRAIN));
-        powerModifierTest(1.5, new TestInfo().with(AttackNamesies.SOLAR_BEAM).attacking(EffectNamesies.GRASSY_TERRAIN));
-        powerModifierTest(.5, new TestInfo().with(AttackNamesies.OUTRAGE).attacking(EffectNamesies.MISTY_TERRAIN));
+        powerModifierTest(1.5, new TestInfo().with(AttackNamesies.THUNDER).attacking(TerrainNamesies.ELECTRIC_TERRAIN));
+        powerModifierTest(1.5, new TestInfo().with(AttackNamesies.PSYCHIC).attacking(TerrainNamesies.PSYCHIC_TERRAIN));
+        powerModifierTest(1.5, new TestInfo().with(AttackNamesies.SOLAR_BEAM).attacking(TerrainNamesies.GRASSY_TERRAIN));
+        powerModifierTest(.5, new TestInfo().with(AttackNamesies.OUTRAGE).attacking(TerrainNamesies.MISTY_TERRAIN));
 
         // Different move type -- no change
-        powerModifierTest(1, new TestInfo().with(AttackNamesies.DAZZLING_GLEAM).attacking(EffectNamesies.MISTY_TERRAIN));
+        powerModifierTest(1, new TestInfo().with(AttackNamesies.DAZZLING_GLEAM).attacking(TerrainNamesies.MISTY_TERRAIN));
 
         // Float with Flying -- no change
-        powerModifierTest(1, new TestInfo().with(AttackNamesies.PSYBEAM).attacking(PokemonNamesies.PIDGEOT, EffectNamesies.PSYCHIC_TERRAIN));
+        powerModifierTest(1, new TestInfo().with(AttackNamesies.PSYBEAM).attacking(PokemonNamesies.PIDGEOT, TerrainNamesies.PSYCHIC_TERRAIN));
 
         // Float with Levitate -- no change
-        powerModifierTest(1, new TestInfo().with(AttackNamesies.THUNDER).attacking(AbilityNamesies.LEVITATE).attacking(EffectNamesies.ELECTRIC_TERRAIN));
+        powerModifierTest(1, new TestInfo().with(AttackNamesies.THUNDER).attacking(AbilityNamesies.LEVITATE).attacking(TerrainNamesies.ELECTRIC_TERRAIN));
 
         // Float with telekinesis -- no change
-        powerModifierTest(1, new TestInfo().with(AttackNamesies.VINE_WHIP).attacking(EffectNamesies.TELEKINESIS).attacking(EffectNamesies.GRASSY_TERRAIN));
+        powerModifierTest(1, new TestInfo().with(AttackNamesies.VINE_WHIP).attacking(PokemonEffectNamesies.TELEKINESIS).attacking(TerrainNamesies.GRASSY_TERRAIN));
     }
 
     private void powerModifierTest(double expectedChange, TestInfo testInfo) {
@@ -242,17 +246,17 @@ public class ModifierTest extends BaseTest {
         stageChangeTest(-2, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.SIMPLE).attackingFight(AttackNamesies.HAMMER_ARM));
         stageChangeTest(1, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.CONTRARY).attackingFight(AttackNamesies.HAMMER_ARM));
 
-        stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.TANGLED_FEET, EffectNamesies.CONFUSION));
+        stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.TANGLED_FEET, PokemonEffectNamesies.CONFUSION));
         stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.TANGLED_FEET).attackingFight(AttackNamesies.CONFUSE_RAY));
-        stageChangeTest(0, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.TANGLED_FEET, EffectNamesies.CONFUSION));
+        stageChangeTest(0, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.TANGLED_FEET, PokemonEffectNamesies.CONFUSION));
 
-        stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.SAND_VEIL, EffectNamesies.SANDSTORM));
-        stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.SNOW_CLOAK, EffectNamesies.HAILING));
-        stageChangeTest(0, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.SNOW_CLOAK, EffectNamesies.HAILING));
-        stageChangeTest(0, Stat.EVASION, new TestInfo().defending(AbilityNamesies.SNOW_CLOAK, EffectNamesies.SANDSTORM));
-        stageChangeTest(0, Stat.EVASION, new TestInfo().defending(AbilityNamesies.SAND_VEIL, EffectNamesies.SUNNY));
+        stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.SAND_VEIL, WeatherNamesies.SANDSTORM));
+        stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.SNOW_CLOAK, WeatherNamesies.HAILING));
+        stageChangeTest(0, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.SNOW_CLOAK, WeatherNamesies.HAILING));
+        stageChangeTest(0, Stat.EVASION, new TestInfo().defending(AbilityNamesies.SNOW_CLOAK, WeatherNamesies.SANDSTORM));
+        stageChangeTest(0, Stat.EVASION, new TestInfo().defending(AbilityNamesies.SAND_VEIL, WeatherNamesies.SUNNY));
 
-        stageChangeTest(-2, Stat.EVASION, new TestInfo().attacking(EffectNamesies.GRAVITY));
+        stageChangeTest(-2, Stat.EVASION, new TestInfo().attacking(StandardBattleEffectNamesies.GRAVITY));
 
         stageChangeTest(-2, Stat.DEFENSE, new TestInfo().attackingFight(AttackNamesies.SCREECH));
         stageChangeTest(-4, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.SIMPLE).attackingFight(AttackNamesies.SCREECH));
@@ -272,7 +276,7 @@ public class ModifierTest extends BaseTest {
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
-                    Assert.assertTrue(defending.hasEffect(EffectNamesies.STOCKPILE));
+                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.STOCKPILE));
                 })
         );
 
@@ -286,7 +290,7 @@ public class ModifierTest extends BaseTest {
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.fight(AttackNamesies.ENDURE, AttackNamesies.SPIT_UP);
-                    Assert.assertFalse(defending.hasEffect(EffectNamesies.STOCKPILE));
+                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.STOCKPILE));
                 })
         );
 
@@ -298,14 +302,14 @@ public class ModifierTest extends BaseTest {
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
-                    Assert.assertTrue(defending.hasEffect(EffectNamesies.STOCKPILE));
+                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.STOCKPILE));
                     defending.assertNotFullHealth();
                     battle.defendingFight(AttackNamesies.SWALLOW);
                     defending.assertFullHealth();
-                    Assert.assertFalse(defending.hasEffect(EffectNamesies.STOCKPILE));
+                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.STOCKPILE));
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
-                    Assert.assertTrue(defending.hasEffect(EffectNamesies.STOCKPILE));
+                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.STOCKPILE));
                 })
         );
     }
@@ -394,7 +398,7 @@ public class ModifierTest extends BaseTest {
         Assert.assertFalse(defending.isType(battle, Type.DARK));
         defending.setCastSource((ChangeTypeSource)(b, caster, victim) -> new PokeType(Type.DARK));
         Assert.assertFalse(defending.isType(battle, Type.DARK));
-        EffectNamesies.CHANGE_TYPE.getEffect().cast(battle, defending, defending, CastSource.CAST_SOURCE, false);
+        PokemonEffectNamesies.CHANGE_TYPE.getEffect().cast(battle, defending, defending, CastSource.CAST_SOURCE, false);
         Assert.assertTrue(defending.isType(battle, Type.DARK));
         checkPriority(0, battle, AttackNamesies.NASTY_PLOT);
         checkPriority(0, battle, AttackNamesies.THUNDER_WAVE);

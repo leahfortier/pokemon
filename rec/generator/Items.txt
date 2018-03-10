@@ -181,7 +181,7 @@ Destiny Knot:
     Price: 4000
     Fling: 10
     ReceiveEffect:
-        if (effectType == EffectNamesies.INFATUATED && EffectNamesies.INFATUATED.getEffect().apply(b, victim, caster, CastSource.HELD_ITEM, false)) {
+        if (effectType == PokemonEffectNamesies.INFATUATED && PokemonEffectNamesies.INFATUATED.getEffect().apply(b, victim, caster, CastSource.HELD_ITEM, false)) {
             Messages.add(victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!");
         }
         ###
@@ -373,15 +373,15 @@ Mental Herb:
     Price: 4000
     Fling: 10
     Field:
-        private static final Map<EffectNamesies, String> REMOVEABLE_EFFECTS = new EnumMap<>(EffectNamesies.class);
+        private static final Map<PokemonEffectNamesies, String> REMOVEABLE_EFFECTS = new EnumMap<>(PokemonEffectNamesies.class);
         static {
-            REMOVEABLE_EFFECTS.put(EffectNamesies.INFATUATED, "infatuated");
-            REMOVEABLE_EFFECTS.put(EffectNamesies.DISABLE, "disabled");
-            REMOVEABLE_EFFECTS.put(EffectNamesies.TAUNT, "under the effects of taunt");
-            REMOVEABLE_EFFECTS.put(EffectNamesies.ENCORE, "under the effects of encore");
-            REMOVEABLE_EFFECTS.put(EffectNamesies.TORMENT, "under the effects of torment");
-            REMOVEABLE_EFFECTS.put(EffectNamesies.CONFUSION, "confused");
-            REMOVEABLE_EFFECTS.put(EffectNamesies.HEAL_BLOCK, "under the effects of heal block");
+            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.INFATUATED, "infatuated");
+            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.DISABLE, "disabled");
+            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.TAUNT, "under the effects of taunt");
+            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.ENCORE, "under the effects of encore");
+            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.TORMENT, "under the effects of torment");
+            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.CONFUSION, "confused");
+            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.HEAL_BLOCK, "under the effects of heal block");
         }
         ###
     GetCurableEffects: REMOVEABLE_EFFECTS.keySet()
@@ -871,7 +871,7 @@ Leftovers:
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. The holder's HP is slowly but steadily restored throughout every battle.
     ApplyEndTurn:
-        if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+        if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
             return;
         }
 
@@ -1365,7 +1365,7 @@ Dire Hit:
     Desc: An item that raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.
     Price: 650
     BattleUse:
-        return EffectNamesies.RAISE_CRITS.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
+        return PokemonEffectNamesies.RAISE_CRITS.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
         ###
 *
 Guard Spec.:
@@ -1375,7 +1375,7 @@ Guard Spec.:
     Desc: An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after it is used in battle.
     Price: 700
     BattleUse:
-        return EffectNamesies.GUARD_SPECIAL.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
+        return PokemonEffectNamesies.GUARD_SPECIAL.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
         ###
 *
 X Accuracy:
@@ -1710,7 +1710,7 @@ Persim Berry:
     NGPow: 80
     Field:
         private boolean use(Battle b, ActivePokemon p, CastSource source) {
-            if (p.getEffects().remove(EffectNamesies.CONFUSION)) {
+            if (p.getEffects().remove(PokemonEffectNamesies.CONFUSION)) {
                 Messages.add(this.getMessage(b, p, source));
                 return true;
             }
@@ -1723,7 +1723,7 @@ Persim Berry:
     GenericMessage: p.getName() + " snapped out of its confusion!"
     SourceMessage: p.getName() + "'s " + this.getName() + " snapped it out of confusion!"
     CureEffectRemoveMessage: this.getSourceMessage(victim, this.getName())
-    GetCurableEffects: EnumSet.of(EffectNamesies.CONFUSION)
+    GetCurableEffects: EnumSet.of(PokemonEffectNamesies.CONFUSION)
 *
 Lum Berry:
     Int: StatusBerry
@@ -1942,7 +1942,7 @@ Lansat Berry:
     HarvestHours: 72
     FixedBerryHealthTrigger: 4
     GainEffect:
-        EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
+        PokemonEffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
         return true;
         ###
 *
@@ -1957,7 +1957,7 @@ Starf Berry:
 
         // Raise crit
         if (rand == Stat.NUM_BATTLE_STATS) {
-            EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
+            PokemonEffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
             return true;
         }
 

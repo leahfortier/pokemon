@@ -2,10 +2,7 @@ package trainer;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.EffectList;
 import battle.effect.generic.EffectInterfaces.SwitchOutEffect;
-import battle.effect.generic.EffectNamesies;
-import battle.effect.generic.TeamEffect;
 import item.bag.Bag;
 import main.Global;
 import pokemon.PartyPokemon;
@@ -25,7 +22,7 @@ public abstract class Trainer implements Team, Serializable {
     private int cashMoney;
 
     private TrainerAction action;
-    private EffectList<TeamEffect> effects;
+    private TeamEffectList effects;
     private Bag bag;
 
     private int frontIndex;
@@ -41,7 +38,7 @@ public abstract class Trainer implements Team, Serializable {
         this.cashMoney = cashMoney;
 
         team = new ArrayList<>();
-        effects = new EffectList<>();
+        effects = new TeamEffectList();
         frontIndex = 0;
 
         bag = new Bag();
@@ -75,7 +72,7 @@ public abstract class Trainer implements Team, Serializable {
     }
 
     @Override
-    public EffectList<TeamEffect> getEffects() {
+    public TeamEffectList getEffects() {
         return effects;
     }
 
@@ -87,7 +84,7 @@ public abstract class Trainer implements Team, Serializable {
         return this.frontIndex;
     }
 
-    public void setFront(int index) {
+    protected void setFront(int index) {
         if (frontIndex == index) {
             return;
         }
@@ -155,11 +152,6 @@ public abstract class Trainer implements Team, Serializable {
         int prev = cashMoney;
         cashMoney = Math.max(0, cashMoney - datCash);
         return prev - cashMoney;
-    }
-
-    @Override
-    public boolean hasEffect(EffectNamesies effect) {
-        return effects.hasEffect(effect);
     }
 
     @Override

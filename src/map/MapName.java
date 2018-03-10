@@ -3,8 +3,8 @@ package map;
 import java.io.Serializable;
 
 public class MapName implements Serializable {
-    private String region;
-    private String mapName;
+    private final String region;
+    private final String mapName;
 
     public MapName(String region, String mapName) {
         this.region = region;

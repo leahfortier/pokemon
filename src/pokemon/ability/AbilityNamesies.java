@@ -1,6 +1,5 @@
 package pokemon.ability;
 
-import main.Global;
 import pokemon.ability.Ability.Adaptability;
 import pokemon.ability.Ability.Aftermath;
 import pokemon.ability.Ability.AirLock;
@@ -451,12 +450,7 @@ public enum AbilityNamesies {
     }
 
     public static AbilityNamesies getValueOf(String name) {
-        try {
-            return AbilityNamesies.valueOf(StringUtils.getNamesiesString(name));
-        } catch (IllegalArgumentException exception) {
-            Global.error(name + " does not have a valid AbilityNamesies value");
-            return NO_ABILITY;
-        }
+        return StringUtils.enumValueOf(AbilityNamesies.class, name);
     }
 }
 

@@ -16,7 +16,7 @@ public enum MatchType {
     ATTACK_NAME(MULTI_WORD.regex),
     ITEM_NAME("[\\w \\-'.]+"),
     ENTITY_NAME("[\\w\\_]+"),
-    VARIABLE_TYPE("[\\w\\[\\]\\<\\>\\d]+");
+    VARIABLE_TYPE("[\\w\\[\\]\\<\\>\\d\\? ]+");
 
     private static final Pattern VARIABLE_DECLARATION = Pattern.compile(VARIABLE_TYPE.group() + " " + WORD.group());
 

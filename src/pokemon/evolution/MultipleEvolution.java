@@ -11,10 +11,10 @@ import java.util.List;
 public class MultipleEvolution extends Evolution {
     private static final long serialVersionUID = 1L;
 
-    private Evolution[] evolutions;
+    private final Evolution[] evolutions;
 
     MultipleEvolution(Evolution[] list) {
-        evolutions = list;
+        this.evolutions = list;
     }
 
     @Override

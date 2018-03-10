@@ -40,6 +40,9 @@ import battle.effect.generic.EffectInterfaces.TerrainCastEffect;
 import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.generic.EffectInterfaces.WeatherExtendingEffect;
 import battle.effect.generic.EffectNamesies;
+import battle.effect.generic.battle.weather.WeatherNamesies;
+import battle.effect.generic.pokemon.PokemonEffectNamesies;
+import battle.effect.generic.team.TeamEffectNamesies;
 import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
 import item.bag.BagCategory;
@@ -106,7 +109,7 @@ import java.util.Set;
 public abstract class Item implements ItemInterface, InvokeEffect, Comparable<Item>, Serializable {
     private static final long serialVersionUID = 1L;
 
-    protected ItemNamesies namesies;
+    protected final ItemNamesies namesies;
     private String description;
     private BagCategory bagCategory;
     private List<BattleBagCategory> battleBagCategories;
@@ -288,7 +291,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         private void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice) {
-            EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
+            TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
         }
 
         @Override
@@ -519,8 +522,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public int getExtensionTurns(EffectNamesies weatherType) {
-            return weatherType == EffectNamesies.RAINING ? 3 : 0;
+        public int getExtensionTurns(WeatherNamesies weatherType) {
+            return weatherType == WeatherNamesies.RAINING ? 3 : 0;
         }
     }
 
@@ -538,8 +541,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public int getExtensionTurns(EffectNamesies weatherType) {
-            return weatherType == EffectNamesies.SUNNY ? 3 : 0;
+        public int getExtensionTurns(WeatherNamesies weatherType) {
+            return weatherType == WeatherNamesies.SUNNY ? 3 : 0;
         }
     }
 
@@ -557,8 +560,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public int getExtensionTurns(EffectNamesies weatherType) {
-            return weatherType == EffectNamesies.HAILING ? 3 : 0;
+        public int getExtensionTurns(WeatherNamesies weatherType) {
+            return weatherType == WeatherNamesies.HAILING ? 3 : 0;
         }
     }
 
@@ -576,8 +579,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public int getExtensionTurns(EffectNamesies weatherType) {
-            return weatherType == EffectNamesies.SANDSTORM ? 3 : 0;
+        public int getExtensionTurns(WeatherNamesies weatherType) {
+            return weatherType == WeatherNamesies.SANDSTORM ? 3 : 0;
         }
     }
 
@@ -612,7 +615,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
-            if (effectType == EffectNamesies.INFATUATED && EffectNamesies.INFATUATED.getEffect().apply(b, victim, caster, CastSource.HELD_ITEM, false)) {
+            if (effectType == PokemonEffectNamesies.INFATUATED && PokemonEffectNamesies.INFATUATED.getEffect().apply(b, victim, caster, CastSource.HELD_ITEM, false)) {
                 Messages.add(victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!");
             }
         }
@@ -1008,15 +1011,15 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
     static class MentalHerb extends Item implements HoldItem, EffectCurerItem {
         private static final long serialVersionUID = 1L;
 
-        private static final Map<EffectNamesies, String> REMOVEABLE_EFFECTS = new EnumMap<>(EffectNamesies.class);
+        private static final Map<PokemonEffectNamesies, String> REMOVEABLE_EFFECTS = new EnumMap<>(PokemonEffectNamesies.class);
         static {
-            REMOVEABLE_EFFECTS.put(EffectNamesies.INFATUATED, "infatuated");
-            REMOVEABLE_EFFECTS.put(EffectNamesies.DISABLE, "disabled");
-            REMOVEABLE_EFFECTS.put(EffectNamesies.TAUNT, "under the effects of taunt");
-            REMOVEABLE_EFFECTS.put(EffectNamesies.ENCORE, "under the effects of encore");
-            REMOVEABLE_EFFECTS.put(EffectNamesies.TORMENT, "under the effects of torment");
-            REMOVEABLE_EFFECTS.put(EffectNamesies.CONFUSION, "confused");
-            REMOVEABLE_EFFECTS.put(EffectNamesies.HEAL_BLOCK, "under the effects of heal block");
+            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.INFATUATED, "infatuated");
+            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.DISABLE, "disabled");
+            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.TAUNT, "under the effects of taunt");
+            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.ENCORE, "under the effects of encore");
+            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.TORMENT, "under the effects of torment");
+            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.CONFUSION, "confused");
+            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.HEAL_BLOCK, "under the effects of heal block");
         }
 
         MentalHerb() {
@@ -1035,12 +1038,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public Set<EffectNamesies> getCurableEffects() {
+        public Set<PokemonEffectNamesies> getCurableEffects() {
             return REMOVEABLE_EFFECTS.keySet();
         }
 
         @Override
-        public String getRemoveMessage(ActivePokemon victim, EffectNamesies effectType) {
+        public String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType) {
             return victim.getName() + " is no longer " + REMOVEABLE_EFFECTS.get(effectType) + " due to its " + this.getName() + "!";
         }
     }
@@ -1440,7 +1443,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean block(EffectNamesies weather) {
+        public boolean block(WeatherNamesies weather) {
             return true;
         }
 
@@ -1818,7 +1821,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         private void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice) {
-            EffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
+            TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
         }
 
         @Override
@@ -2498,7 +2501,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.fullHealth() || victim.hasEffect(EffectNamesies.HEAL_BLOCK)) {
+            if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
                 return;
             }
 
@@ -2928,7 +2931,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
-                if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
+                if (PokemonEffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
                     Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
                 }
             }
@@ -2936,7 +2939,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
+            if (PokemonEffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
                 Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
             }
         }
@@ -3045,7 +3048,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
-                if (EffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
+                if (PokemonEffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
                     Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
                 }
             }
@@ -3053,7 +3056,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            if (EffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
+            if (PokemonEffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
                 Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
             }
         }
@@ -3648,7 +3651,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return EffectNamesies.RAISE_CRITS.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
+            return PokemonEffectNamesies.RAISE_CRITS.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
         }
     }
 
@@ -3663,7 +3666,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return EffectNamesies.GUARD_SPECIAL.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
+            return PokemonEffectNamesies.GUARD_SPECIAL.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
         }
     }
 
@@ -4510,7 +4513,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         private static final long serialVersionUID = 1L;
 
         private boolean use(Battle b, ActivePokemon p, CastSource source) {
-            if (p.getEffects().remove(EffectNamesies.CONFUSION)) {
+            if (p.getEffects().remove(PokemonEffectNamesies.CONFUSION)) {
                 Messages.add(this.getMessage(b, p, source));
                 return true;
             }
@@ -4555,12 +4558,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public Set<EffectNamesies> getCurableEffects() {
-            return EnumSet.of(EffectNamesies.CONFUSION);
+        public Set<PokemonEffectNamesies> getCurableEffects() {
+            return EnumSet.of(PokemonEffectNamesies.CONFUSION);
         }
 
         @Override
-        public String getRemoveMessage(ActivePokemon victim, EffectNamesies effectType) {
+        public String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType) {
             return this.getSourceMessage(victim, this.getName());
         }
     }
@@ -5300,7 +5303,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-            EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
+            PokemonEffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
             return true;
         }
 
@@ -5339,7 +5342,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
             // Raise crit
             if (rand == Stat.NUM_BATTLE_STATS) {
-                EffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
+                PokemonEffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
                 return true;
             }
 
