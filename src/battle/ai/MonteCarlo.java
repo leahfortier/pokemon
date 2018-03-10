@@ -25,7 +25,7 @@ public class MonteCarlo {
         Messages.clearMessages(MessageState.SIMULATION_STATION);
         Messages.setMessageState(MessageState.SIMULATION_STATION);
 
-        Player player = (Player)battle.getPlayer().getSerializedCopy();
+        Player player = battle.getPlayer().getSerializedCopy(Player.class);
 
         Node root = new Node(new ArrayList<>(), true);
         for (int i = 0; i < BUDGET; i++) {
@@ -60,7 +60,7 @@ public class MonteCarlo {
 
             Battle simulated = battle.getSimulated();
 
-            ActivePokemon playerPokemon = (ActivePokemon)battle.getPlayer().front().getSerializedCopy();
+            ActivePokemon playerPokemon = battle.getPlayer().front().getSerializedCopy(ActivePokemon.class);
             player.replaceFront(playerPokemon);
 
             Opponent opponent = simulated.getOpponent();

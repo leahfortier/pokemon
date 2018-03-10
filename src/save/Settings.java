@@ -42,7 +42,7 @@ public class Settings implements Serializable {
 
         File file = new File(FileName.SAVE_SETTINGS);
         if (file.exists()) {
-            settings = (Settings)Serializable.fromFile(file);
+            settings = Serializable.fromFile(file, Settings.class);
         } else {
             settings = new Settings();
         }

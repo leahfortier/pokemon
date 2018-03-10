@@ -341,7 +341,7 @@ public class MessageUpdate {
     }
 
     public ActivePokemon getFrontPokemon() {
-        return (ActivePokemon)Serializable.deserialize(this.frontPokemonSerialized);
+        return Serializable.deserialize(this.frontPokemonSerialized, ActivePokemon.class);
     }
 
     public int getTeamIndex() {

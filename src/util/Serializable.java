@@ -27,8 +27,8 @@ public interface Serializable extends java.io.Serializable {
     }
 
     // Returns a new serialized copy of the current object
-    default Serializable getSerializedCopy() {
-        return deserialize(this.serialize());
+    default <T extends Serializable> T getSerializedCopy(Class<T> classy) {
+        return deserialize(this.serialize(), classy);
     }
 
     // Serializes an object to the specified file
@@ -41,9 +41,9 @@ public interface Serializable extends java.io.Serializable {
     }
 
     // Deserialize data from a file to a serializable object
-    static Serializable fromFile(File file) {
+    static <T extends Serializable> T fromFile(File file, Class<T> classy) {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
-            return (Serializable)in.readObject();
+            return classy.cast(in.readObject());
         } catch (IOException | ClassNotFoundException e) {
             Global.error("Error deserializing from file " + file.getName() + ": " + e.getMessage());
             return null;
@@ -51,10 +51,10 @@ public interface Serializable extends java.io.Serializable {
     }
 
     // Deserializes the input string into a serializable object
-    static Serializable deserialize(String serialized) {
+    static <T extends Serializable> T deserialize(String serialized, Class<T> classy) {
         byte[] data = Base64.getDecoder().decode(serialized);
         try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(data))) {
-            return (Serializable)in.readObject();
+            return classy.cast(in.readObject());
         } catch (IOException | ClassNotFoundException e) {
             Global.error("Error deserializing from string " + serialized + ": " + e.getMessage());
             return null;

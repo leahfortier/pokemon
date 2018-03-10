@@ -14,7 +14,7 @@ public class SaveInfo {
     private final int pokemonSeen;
 
     private SaveInfo(File saveFile) {
-        player = (Player)Serializable.fromFile(saveFile);
+        player = Serializable.fromFile(saveFile, Player.class);
         player.initialize();
 
         this.name = player.getName();

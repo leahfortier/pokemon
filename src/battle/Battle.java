@@ -117,7 +117,7 @@ public class Battle implements Serializable {
     }
 
     public Battle getSimulated() {
-        Battle simulated = (Battle)this.getSerializedCopy();
+        Battle simulated = this.getSerializedCopy(Battle.class);
         simulated.player = new SimulatedPlayer(this.getPlayer());
         simulated.effects.setBattle(simulated);
 

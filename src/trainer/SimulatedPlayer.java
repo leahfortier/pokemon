@@ -7,7 +7,7 @@ public class SimulatedPlayer extends PlayerTrainer {
         super(player.getName(), player.getDatCashMoney());
 
         for (PartyPokemon poke : player.getTeam()) {
-            this.addPokemon((PartyPokemon)poke.getSerializedCopy());
+            this.addPokemon(poke.getSerializedCopy(PartyPokemon.class));
         }
 
         this.setFront(player.getFrontIndex());

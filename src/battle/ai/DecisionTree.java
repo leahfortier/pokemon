@@ -64,7 +64,7 @@ public class DecisionTree {
     }
 
     private void setupTrainer(Trainer trainer, Move move) {
-        ActivePokemon front = (ActivePokemon)trainer.front().getSerializedCopy();
+        ActivePokemon front = trainer.front().getSerializedCopy(ActivePokemon.class);
         trainer.replaceFront(front);
 
         // Need to set these manually since this field has to be transient because ActivePokemon and BattleAttributes store each other
