@@ -20,7 +20,7 @@ import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;

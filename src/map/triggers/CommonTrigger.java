@@ -3,7 +3,7 @@ package map.triggers;
 import gui.view.ViewMode;
 import sound.SoundTitle;
 import trainer.player.medal.MedalTheme;
-import util.PokeString;
+import util.string.PokeString;
 
 public enum CommonTrigger {
     LOAD_PC(new GroupTrigger(

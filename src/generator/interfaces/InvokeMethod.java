@@ -3,8 +3,8 @@ package generator.interfaces;
 import generator.AccessModifier;
 import generator.format.MethodInfo;
 import util.GeneralUtils;
-import util.StringAppender;
-import util.StringUtils;
+import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.util.Scanner;
 

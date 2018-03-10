@@ -3,7 +3,7 @@ package teamplanner;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import type.Type;
-import util.StringAppender;
+import util.string.StringAppender;
 
 import java.util.ArrayList;
 import java.util.List;

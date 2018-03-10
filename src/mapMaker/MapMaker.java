@@ -18,7 +18,7 @@ import util.Folder;
 import util.FontMetrics;
 import util.GUIUtils;
 import util.Point;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;

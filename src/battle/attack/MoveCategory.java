@@ -2,7 +2,7 @@ package battle.attack;
 
 import util.FileIO;
 import util.Folder;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.awt.image.BufferedImage;
 

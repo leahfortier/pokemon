@@ -13,8 +13,8 @@ import util.FileIO.NullOutputStream;
 import util.FileName;
 import util.Folder;
 import util.GeneralUtils;
-import util.StringAppender;
-import util.StringUtils;
+import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

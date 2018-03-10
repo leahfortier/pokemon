@@ -13,7 +13,7 @@ import pattern.action.ActionList;
 import pattern.action.NPCInteractionMatcher;
 import pattern.generic.EntityMatcher;
 import pattern.generic.SinglePointTriggerMatcher;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.util.Arrays;
 import java.util.Collections;

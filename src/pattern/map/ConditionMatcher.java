@@ -4,8 +4,8 @@ import main.Game;
 import main.Global;
 import map.condition.Condition;
 import map.condition.ConditionSet;
-import util.StringUtils;
 import util.serialization.JsonMatcher;
+import util.string.StringUtils;
 
 public class ConditionMatcher implements JsonMatcher {
     private String name;

@@ -4,7 +4,7 @@ import main.Global;
 import util.FileIO;
 import util.FileName;
 import util.FontMetrics;
-import util.StringAppender;
+import util.string.StringAppender;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

@@ -1,6 +1,7 @@
 package util;
 
 import util.ColorDocumentListener.ColorCondition;
+import util.string.StringUtils;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;

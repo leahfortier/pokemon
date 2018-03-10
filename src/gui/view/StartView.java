@@ -14,7 +14,7 @@ import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.player.Player;
 import util.FontMetrics;
-import util.PokeString;
+import util.string.PokeString;
 
 import java.awt.Color;
 import java.awt.Graphics;

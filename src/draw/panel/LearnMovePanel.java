@@ -10,7 +10,7 @@ import input.InputControl;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import util.Point;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;

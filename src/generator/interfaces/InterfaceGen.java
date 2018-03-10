@@ -5,7 +5,7 @@ import generator.StuffGen;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
-import util.StringAppender;
+import util.string.StringAppender;
 
 import java.util.Scanner;
 

@@ -1,7 +1,7 @@
 package generator.format;
 
 import main.Global;
-import util.StringUtils;
+import util.string.StringUtils;
 
 public class SplitScanner {
     private final String[] split;

@@ -3,7 +3,7 @@ package generator.fieldinfo;
 import generator.AccessModifier;
 import generator.ClassFields;
 import generator.format.MethodInfo;
-import util.StringAppender;
+import util.string.StringAppender;
 
 public class ConstructorInfo {
     private final InfoList superInfo;

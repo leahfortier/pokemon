@@ -24,7 +24,7 @@ import type.PokeType;
 import type.Type;
 import util.FontMetrics;
 import util.Point;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;

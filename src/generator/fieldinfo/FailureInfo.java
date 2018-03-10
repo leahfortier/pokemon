@@ -5,8 +5,8 @@ import generator.format.InputFormatter;
 import generator.format.MethodInfo;
 import generator.format.SplitScanner;
 import main.Global;
-import util.StringAppender;
-import util.StringUtils;
+import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.util.Scanner;
 

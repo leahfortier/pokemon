@@ -5,7 +5,7 @@ import main.Game;
 import message.Messages;
 import pokemon.breeding.DayCareCenter;
 import trainer.player.Player;
-import util.PokeString;
+import util.string.PokeString;
 
 public class DayCareTrigger extends Trigger {
     @Override

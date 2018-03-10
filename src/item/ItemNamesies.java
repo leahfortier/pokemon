@@ -431,7 +431,7 @@ import item.Item.YacheBerry;
 import item.Item.ZapPlate;
 import item.Item.Zinc;
 import item.Item.ZoomLens;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.util.EnumMap;
 import java.util.Map;

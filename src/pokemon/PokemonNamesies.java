@@ -1,6 +1,6 @@
 package pokemon;
 
-import util.StringUtils;
+import util.string.StringUtils;
 
 public enum PokemonNamesies {
     NONE(""), // Mostly so the index matches up

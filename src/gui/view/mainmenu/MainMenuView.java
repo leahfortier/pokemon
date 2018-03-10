@@ -15,8 +15,8 @@ import sound.SoundPlayer;
 import util.FileIO;
 import util.Folder;
 import util.FontMetrics;
-import util.PokeString;
 import util.TimeUtils;
+import util.string.PokeString;
 
 import java.awt.Color;
 import java.awt.Graphics;

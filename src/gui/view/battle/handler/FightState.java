@@ -10,7 +10,7 @@ import gui.view.battle.VisualState;
 import main.Game;
 import trainer.TrainerAction;
 import trainer.player.Player;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.awt.Graphics;
 import java.util.List;

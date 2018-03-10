@@ -1,7 +1,7 @@
 package teamplanner;
 
 import type.Type;
-import util.StringUtils;
+import util.string.StringUtils;
 
 class OffensiveCoverage {
     private static final Type[] types = Type.values();

@@ -1,6 +1,6 @@
 package mapMaker.dialogs;
 
-import util.StringUtils;
+import util.string.StringUtils;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;

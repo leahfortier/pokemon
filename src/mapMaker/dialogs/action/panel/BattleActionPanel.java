@@ -7,7 +7,7 @@ import pattern.PokemonMatcher;
 import pattern.action.EntityActionMatcher.BattleActionMatcher;
 import trainer.Trainer;
 import util.GUIUtils;
-import util.PokeString;
+import util.string.PokeString;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;

@@ -10,7 +10,7 @@ import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import test.battle.TestBattle;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;

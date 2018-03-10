@@ -3,7 +3,7 @@ package trainer.player.medal;
 import main.Global;
 import pokemon.PokemonInfo;
 import type.Type;
-import util.PokeString;
+import util.string.PokeString;
 
 public enum Medal {
     // Steps Taken

@@ -25,7 +25,7 @@ import trainer.player.medal.MedalTheme;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.Point;
-import util.PokeString;
+import util.string.PokeString;
 
 import java.awt.Color;
 import java.awt.Graphics;

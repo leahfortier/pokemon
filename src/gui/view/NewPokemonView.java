@@ -17,8 +17,8 @@ import trainer.player.NewPokemonInfo;
 import trainer.player.Player;
 import type.PokeType;
 import util.Point;
-import util.PokeString;
-import util.StringUtils;
+import util.string.PokeString;
+import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;

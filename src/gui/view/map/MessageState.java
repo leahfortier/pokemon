@@ -13,7 +13,7 @@ import message.Messages;
 import pattern.action.ChoiceMatcher;
 import sound.SoundPlayer;
 import util.FontMetrics;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;

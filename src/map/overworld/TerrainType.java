@@ -7,7 +7,7 @@ import battle.effect.status.StatusCondition;
 import main.Game;
 import pokemon.Stat;
 import type.Type;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

@@ -6,7 +6,7 @@ import mapMaker.MapMaker;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
 import util.GUIUtils;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;

@@ -7,7 +7,7 @@ import generator.fieldinfo.InfoList;
 import main.Global;
 import util.FileIO;
 import util.FileName;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

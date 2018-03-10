@@ -3,8 +3,8 @@ package input;
 import main.Game;
 import util.Point;
 import util.RandomUtils;
-import util.StringAppender;
-import util.StringUtils;
+import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

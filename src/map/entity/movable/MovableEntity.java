@@ -9,7 +9,7 @@ import map.PathDirection;
 import map.condition.Condition;
 import map.entity.Entity;
 import util.Point;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.awt.image.BufferedImage;
 

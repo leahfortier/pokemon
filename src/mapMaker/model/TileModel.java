@@ -8,7 +8,7 @@ import mapMaker.TileCategory;
 import util.FileIO;
 import util.FileName;
 import util.Folder;
-import util.StringAppender;
+import util.string.StringAppender;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;

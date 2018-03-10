@@ -8,9 +8,9 @@ import org.junit.Test;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import util.FileIO;
-import util.StringAppender;
-import util.StringUtils;
 import util.TimeUtils;
+import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.io.File;
 import java.util.Arrays;

@@ -1,7 +1,7 @@
 package message;
 
 import battle.Battle;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.util.ArrayDeque;
 import java.util.EnumMap;

@@ -23,8 +23,8 @@ import trainer.player.Player;
 import type.PokeType;
 import type.Type;
 import util.FontMetrics;
-import util.PokeString;
-import util.StringUtils;
+import util.string.PokeString;
+import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;

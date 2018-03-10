@@ -10,7 +10,7 @@ import generator.interfaces.InvokeMethod.MultiplyInvoke;
 import generator.interfaces.InvokeMethod.UpdateInvoke;
 import generator.interfaces.InvokeMethod.VoidInvoke;
 import main.Global;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.util.Scanner;
 

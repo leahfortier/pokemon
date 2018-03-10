@@ -7,8 +7,8 @@ import type.Type;
 import util.FileIO;
 import util.Folder;
 import util.GeneralUtils;
-import util.StringAppender;
-import util.StringUtils;
+import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.util.EnumMap;
 import java.util.EnumSet;

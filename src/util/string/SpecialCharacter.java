@@ -1,4 +1,4 @@
-package util;
+package util.string;
 
 public enum SpecialCharacter {
     POKE_E("\\\\u00e9", "\u00e9", "e"),

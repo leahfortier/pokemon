@@ -4,8 +4,8 @@ import generator.ClassFields;
 import generator.format.SplitScanner;
 import main.Global;
 import util.GeneralUtils;
-import util.StringAppender;
-import util.StringUtils;
+import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;

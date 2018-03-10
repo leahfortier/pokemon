@@ -656,7 +656,7 @@ import battle.attack.Attack.Yawn;
 import battle.attack.Attack.ZapCannon;
 import battle.attack.Attack.ZenHeadbutt;
 import battle.attack.Attack.ZingZap;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.util.function.Supplier;
 

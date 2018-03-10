@@ -1,7 +1,7 @@
 package map;
 
 import util.Point;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;

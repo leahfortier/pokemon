@@ -45,10 +45,10 @@ import trainer.WildPokemon;
 import trainer.player.Player;
 import trainer.player.medal.MedalTheme;
 import type.TypeAdvantage;
-import util.PokeString;
 import util.RandomUtils;
-import util.StringAppender;
 import util.serialization.Serializable;
+import util.string.PokeString;
+import util.string.StringAppender;
 
 import java.util.ArrayList;
 import java.util.Collections;

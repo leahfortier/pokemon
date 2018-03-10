@@ -3,8 +3,8 @@ package generator.interfaces;
 import generator.ClassFields;
 import generator.StuffGen;
 import main.Global;
-import util.StringAppender;
-import util.StringUtils;
+import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.util.LinkedList;
 import java.util.List;

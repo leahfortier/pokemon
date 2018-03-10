@@ -2,7 +2,7 @@ package generator;
 
 import generator.fieldinfo.MapField;
 import main.Global;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;

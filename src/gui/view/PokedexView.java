@@ -26,8 +26,8 @@ import trainer.player.pokedex.Pokedex;
 import type.PokeType;
 import util.FontMetrics;
 import util.GeneralUtils;
-import util.PokeString;
-import util.StringUtils;
+import util.string.PokeString;
+import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;

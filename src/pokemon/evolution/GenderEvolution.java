@@ -5,7 +5,7 @@ import item.ItemNamesies;
 import main.Global;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
-import util.StringUtils;
+import util.string.StringUtils;
 
 class GenderEvolution extends Evolution {
     private static final long serialVersionUID = 1L;

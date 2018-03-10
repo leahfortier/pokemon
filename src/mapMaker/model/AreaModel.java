@@ -9,7 +9,7 @@ import mapMaker.dialogs.AreaDialog;
 import pattern.map.AreaMatcher;
 import util.FontMetrics;
 import util.Point;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;

@@ -13,7 +13,7 @@ import map.triggers.MedalCountTrigger;
 import map.triggers.Trigger;
 import trainer.player.medal.MedalTheme;
 import util.Point;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

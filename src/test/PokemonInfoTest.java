@@ -15,7 +15,7 @@ import pokemon.ability.AbilityNamesies;
 import type.PokeType;
 import type.Type;
 import util.MultiMap;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.util.Arrays;
 import java.util.EnumSet;

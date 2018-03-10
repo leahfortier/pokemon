@@ -40,7 +40,7 @@ import test.BaseTest;
 import util.FileIO;
 import util.Folder;
 import util.Point;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.awt.Dimension;
 import java.io.File;

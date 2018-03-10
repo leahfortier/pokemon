@@ -14,8 +14,8 @@ import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.breeding.Breeding;
 import pokemon.breeding.Eggy;
-import util.StringAppender;
-import util.StringUtils;
+import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;

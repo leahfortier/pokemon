@@ -7,7 +7,7 @@ import mapMaker.model.TileModel.TileType;
 import pattern.action.NPCInteractionMatcher;
 import pattern.map.NPCMatcher;
 import util.GUIUtils;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;

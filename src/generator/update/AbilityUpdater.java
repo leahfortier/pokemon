@@ -4,8 +4,8 @@ import generator.GeneratorType;
 import pokemon.ability.AbilityNamesies;
 import util.FileIO;
 import util.Folder;
-import util.StringAppender;
-import util.StringUtils;
+import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.util.EnumMap;
 import java.util.EnumSet;

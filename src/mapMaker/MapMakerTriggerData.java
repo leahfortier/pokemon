@@ -30,8 +30,8 @@ import pattern.map.NPCMatcher;
 import pattern.map.WildBattleAreaMatcher;
 import util.FileIO;
 import util.Point;
-import util.SpecialCharacter;
-import util.StringUtils;
+import util.string.SpecialCharacter;
+import util.string.StringUtils;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

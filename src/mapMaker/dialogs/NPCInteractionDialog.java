@@ -4,7 +4,7 @@ import mapMaker.dialogs.action.ActionListPanel;
 import pattern.action.ActionMatcher;
 import pattern.action.NPCInteractionMatcher;
 import util.GUIUtils;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;

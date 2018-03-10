@@ -1,4 +1,4 @@
-package util;
+package util.string;
 
 import java.util.ArrayList;
 import java.util.Collection;

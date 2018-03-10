@@ -1,6 +1,9 @@
 package util;
 
 import main.Global;
+import util.string.SpecialCharacter;
+import util.string.StringAppender;
+import util.string.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;

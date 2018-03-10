@@ -1,6 +1,6 @@
 package generator.format;
 
-import util.StringAppender;
+import util.string.StringAppender;
 
 public class MethodFormatter {
 

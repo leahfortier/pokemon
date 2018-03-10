@@ -212,7 +212,7 @@ import pokemon.ability.Ability.WhiteSmoke;
 import pokemon.ability.Ability.WimpOut;
 import pokemon.ability.Ability.WonderGuard;
 import pokemon.ability.Ability.WonderSkin;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.util.function.Supplier;
 

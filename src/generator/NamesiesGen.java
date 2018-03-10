@@ -3,8 +3,8 @@ package generator;
 import main.Global;
 import pokemon.PokemonInfo;
 import util.FileIO;
-import util.StringAppender;
-import util.StringUtils;
+import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

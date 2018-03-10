@@ -3,7 +3,7 @@ package draw;
 import main.Global;
 import map.Direction;
 import util.FontMetrics;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;

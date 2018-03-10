@@ -30,7 +30,7 @@ import sound.SoundTitle;
 import trainer.player.Player;
 import trainer.player.medal.Medal;
 import util.Point;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;

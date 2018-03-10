@@ -20,7 +20,7 @@ import test.TestPokemon;
 import test.TestUtils;
 import type.PokeType;
 import type.Type;
-import util.StringUtils;
+import util.string.StringUtils;
 
 public class ModifierTest extends BaseTest {
     @Test

@@ -17,7 +17,7 @@ import trainer.Opponent;
 import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.WildPokemon;
-import util.StringUtils;
+import util.string.StringUtils;
 
 public class TestBattle extends Battle {
     private static final long serialVersionUID = 1L;

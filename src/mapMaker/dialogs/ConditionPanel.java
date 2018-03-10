@@ -5,7 +5,7 @@ import pattern.generic.TriggerMatcher;
 import pattern.map.ConditionMatcher;
 import pattern.map.ConditionsMatcher;
 import util.GUIUtils;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import javax.swing.JComboBox;
 import javax.swing.JPanel;

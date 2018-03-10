@@ -38,7 +38,7 @@ import trainer.WildPokemon;
 import type.PokeType;
 import type.Type;
 import util.RandomUtils;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;

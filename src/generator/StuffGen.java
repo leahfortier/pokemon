@@ -6,8 +6,8 @@ import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import util.FileIO;
 import util.FileName;
-import util.StringAppender;
-import util.StringUtils;
+import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.util.HashSet;
 import java.util.List;

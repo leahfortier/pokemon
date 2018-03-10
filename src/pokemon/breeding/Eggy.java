@@ -3,7 +3,7 @@ package pokemon.breeding;
 import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
-import util.StringUtils;
+import util.string.StringUtils;
 
 public class Eggy extends PartyPokemon {
     private static final long serialVersionUID = 1L;

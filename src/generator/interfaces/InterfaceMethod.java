@@ -6,8 +6,8 @@ import generator.ClassFields;
 import generator.format.MethodInfo;
 import main.Global;
 import pattern.MatchType;
-import util.StringAppender;
-import util.StringUtils;
+import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

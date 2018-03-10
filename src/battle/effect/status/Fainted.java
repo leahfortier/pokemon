@@ -2,7 +2,7 @@ package battle.effect.status;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import util.StringUtils;
+import util.string.StringUtils;
 
 class Fainted extends Status {
     private static final long serialVersionUID = 1L;

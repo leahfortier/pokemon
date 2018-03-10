@@ -8,9 +8,9 @@ import main.Game;
 import main.Global;
 import pokemon.PokemonInfo;
 import util.FontMetrics;
-import util.PokeString;
 import util.RandomUtils;
 import util.TimeUtils;
+import util.string.PokeString;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;

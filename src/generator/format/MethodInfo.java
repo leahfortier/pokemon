@@ -4,8 +4,8 @@ import generator.AccessModifier;
 import generator.ClassFields;
 import generator.fieldinfo.MapField;
 import main.Global;
-import util.StringAppender;
-import util.StringUtils;
+import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

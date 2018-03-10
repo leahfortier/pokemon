@@ -1,4 +1,4 @@
-package util;
+package util.string;
 
 public class PokeString {
     public static final String POKE = "Pok" + SpecialCharacter.POKE_E.getSpecialCharacter();

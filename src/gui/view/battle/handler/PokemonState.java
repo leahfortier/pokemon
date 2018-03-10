@@ -23,7 +23,7 @@ import trainer.TrainerAction;
 import trainer.player.Player;
 import type.PokeType;
 import util.FontMetrics;
-import util.PokeString;
+import util.string.PokeString;
 
 import java.awt.Color;
 import java.awt.Graphics;

@@ -1,7 +1,7 @@
 package draw;
 
 import util.FontMetrics;
-import util.StringAppender;
+import util.string.StringAppender;
 
 import java.awt.Color;
 import java.awt.Graphics;

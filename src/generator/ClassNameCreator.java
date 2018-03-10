@@ -1,6 +1,6 @@
 package generator;
 
-import util.StringAppender;
+import util.string.StringAppender;
 
 import java.util.Arrays;
 

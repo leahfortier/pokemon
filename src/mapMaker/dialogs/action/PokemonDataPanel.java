@@ -8,7 +8,7 @@ import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
 import util.GUIUtils;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;

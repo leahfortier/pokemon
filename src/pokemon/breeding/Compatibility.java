@@ -1,9 +1,9 @@
 package pokemon.breeding;
 
 import battle.ActivePokemon;
-import util.PokeString;
 import util.RandomUtils;
-import util.StringUtils;
+import util.string.PokeString;
+import util.string.StringUtils;
 
 enum Compatibility {
     SINGLE(0, StringUtils.empty()),

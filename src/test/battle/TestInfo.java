@@ -6,7 +6,7 @@ import item.ItemNamesies;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import test.TestPokemon;
-import util.StringUtils;
+import util.string.StringUtils;
 
 class TestInfo {
     PokemonNamesies attackingName;

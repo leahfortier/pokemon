@@ -6,7 +6,7 @@ import item.use.TechnicalMachine;
 import type.Type;
 import util.FileIO;
 import util.Folder;
-import util.StringAppender;
+import util.string.StringAppender;
 
 import java.util.EnumMap;
 import java.util.EnumSet;

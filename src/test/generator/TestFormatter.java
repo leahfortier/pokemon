@@ -5,7 +5,7 @@ import generator.format.InputFormatter;
 import generator.format.MethodInfo;
 import generator.format.ReplaceType;
 import org.junit.Assert;
-import util.StringUtils;
+import util.string.StringUtils;
 
 import java.util.HashSet;
 import java.util.Set;

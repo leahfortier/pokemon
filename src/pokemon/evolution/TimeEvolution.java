@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import item.ItemNamesies;
 import map.daynight.DayCycle;
 import pokemon.PokemonNamesies;
-import util.StringUtils;
+import util.string.StringUtils;
 
 public class TimeEvolution extends Evolution {
     private static final long serialVersionUID = 1L;

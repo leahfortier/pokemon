@@ -12,7 +12,7 @@ import test.TestPokemon;
 import test.TestUtils;
 import type.Type;
 import type.TypeAdvantage;
-import util.StringUtils;
+import util.string.StringUtils;
 
 public class TypeTest extends BaseTest {
     private static final double typeAdvantage[][] = {

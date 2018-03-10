@@ -2,7 +2,7 @@ package generator.fieldinfo;
 
 import generator.format.MethodFormatter;
 import main.Global;
-import util.StringAppender;
+import util.string.StringAppender;
 
 import java.util.Scanner;
 
