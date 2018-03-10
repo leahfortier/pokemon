@@ -1,6 +1,7 @@
 package battle;
 
 import battle.effect.EffectList;
+import battle.effect.generic.Effect;
 import battle.effect.generic.EffectInterfaces.BattleEndTurnEffect;
 import battle.effect.generic.EffectInterfaces.EndTurnEffect;
 import battle.effect.generic.EffectInterfaces.SuperDuperEndTurnEffect;
@@ -116,7 +117,7 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
         List<BattleEffect<? extends BattleEffectNamesies>> effects = super.asList();
         if (!effects.isEmpty()) {
             System.out.println("Battle:");
-            for (BattleEffect effect : effects) {
+            for (Effect effect : effects) {
                 System.out.println("\t" + effect);
             }
         }

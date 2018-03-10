@@ -27,6 +27,6 @@ public interface EffectNamesies {
 
     interface BattleEffectNamesies extends EffectNamesies {
         @Override
-        BattleEffect getEffect();
+        BattleEffect<? extends BattleEffectNamesies> getEffect();
     }
 }
