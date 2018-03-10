@@ -2,10 +2,10 @@ package battle.attack;
 
 import util.FileIO;
 import util.Folder;
+import util.Serializable;
 import util.StringUtils;
 
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
 
 public enum MoveCategory implements Serializable {
     PHYSICAL,

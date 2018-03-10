@@ -21,10 +21,10 @@ import trainer.player.medal.MedalCase;
 import trainer.player.medal.MedalTheme;
 import type.PokeType;
 import util.RandomUtils;
+import util.Serializable;
 import util.StringUtils;
 
 import java.awt.Color;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

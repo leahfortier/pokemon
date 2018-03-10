@@ -3,7 +3,6 @@ package util;
 import map.Direction;
 
 import java.awt.Dimension;
-import java.io.Serializable;
 
 // Immutable point class
 public class Point implements Serializable {

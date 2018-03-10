@@ -12,8 +12,7 @@ import main.Global;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.PartyPokemon;
-
-import java.io.Serializable;
+import util.Serializable;
 
 public abstract class Status implements InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;

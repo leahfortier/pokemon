@@ -8,8 +8,8 @@ import pokemon.Stat;
 import trainer.player.pokedex.Pokedex;
 import type.Type;
 import type.TypeAdvantage;
+import util.Serializable;
 
-import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.EnumMap;
 import java.util.EnumSet;

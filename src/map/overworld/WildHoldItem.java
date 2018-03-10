@@ -6,8 +6,8 @@ import main.Global;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import util.RandomUtils;
+import util.Serializable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

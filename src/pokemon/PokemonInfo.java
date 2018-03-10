@@ -15,9 +15,9 @@ import util.FileIO;
 import util.FileName;
 import util.GeneralUtils;
 import util.RandomUtils;
+import util.Serializable;
 import util.StringUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;

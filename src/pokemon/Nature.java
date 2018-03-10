@@ -1,9 +1,9 @@
 package pokemon;
 
 import util.RandomUtils;
+import util.Serializable;
 
 import java.awt.Color;
-import java.io.Serializable;
 
 public class Nature implements Serializable {
     private static final long serialVersionUID = 1L;

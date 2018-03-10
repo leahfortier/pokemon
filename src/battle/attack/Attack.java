@@ -77,8 +77,8 @@ import type.Type;
 import type.TypeAdvantage;
 import util.GeneralUtils;
 import util.RandomUtils;
+import util.Serializable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

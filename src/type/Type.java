@@ -3,10 +3,10 @@ package type;
 import main.Global;
 import util.FileIO;
 import util.Folder;
+import util.Serializable;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
 
 public enum Type implements Serializable {
     NORMAL(0, "Normal", () -> TypeAdvantage.NORMAL, new Color(179, 170, 151), -1),

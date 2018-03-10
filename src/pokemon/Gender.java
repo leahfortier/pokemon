@@ -2,9 +2,9 @@ package pokemon;
 
 import battle.ActivePokemon;
 import util.RandomUtils;
+import util.Serializable;
 
 import java.awt.Color;
-import java.io.Serializable;
 
 public enum Gender implements Serializable {
     MALE("\u2642", new Color(55, 125, 220), ratio -> ratio != Gender.GENDERLESS_CONSTANT && ratio != 0),

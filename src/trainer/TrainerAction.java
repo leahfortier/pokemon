@@ -2,8 +2,7 @@ package trainer;
 
 import battle.ActivePokemon;
 import battle.Battle;
-
-import java.io.Serializable;
+import util.Serializable;
 
 public enum TrainerAction implements Serializable {
     FIGHT(Battle::getAttackPriority),

@@ -2,10 +2,10 @@ package item.bag;
 
 import util.FileIO;
 import util.Folder;
+import util.Serializable;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
 
 public enum BagCategory implements Serializable {
     MEDICINE("Medicine", new Color(248, 120, 64)),

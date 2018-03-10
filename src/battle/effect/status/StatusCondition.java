@@ -1,6 +1,7 @@
 package battle.effect.status;
 
-import java.io.Serializable;
+import util.Serializable;
+
 import java.util.function.Supplier;
 
 public enum StatusCondition implements Serializable {

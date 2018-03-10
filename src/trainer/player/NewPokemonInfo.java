@@ -1,8 +1,7 @@
 package trainer.player;
 
 import pokemon.PartyPokemon;
-
-import java.io.Serializable;
+import util.Serializable;
 
 public class NewPokemonInfo implements Serializable {
     private PartyPokemon newPokemon;

@@ -36,10 +36,10 @@ import trainer.player.medal.MedalTheme;
 import trainer.player.pokedex.Pokedex;
 import util.Point;
 import util.RandomUtils;
+import util.Serializable;
 import util.StringUtils;
 import util.TimeUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;

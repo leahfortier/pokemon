@@ -3,8 +3,7 @@ package pokemon.evolution;
 import battle.ActivePokemon;
 import item.ItemNamesies;
 import pokemon.PokemonNamesies;
-
-import java.io.Serializable;
+import util.Serializable;
 
 public abstract class Evolution implements Serializable {
     private static final long serialVersionUID = 1L;

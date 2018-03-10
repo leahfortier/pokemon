@@ -58,9 +58,9 @@ import trainer.player.medal.MedalTheme;
 import type.PokeType;
 import type.Type;
 import util.Action;
+import util.Serializable;
 import util.StringUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

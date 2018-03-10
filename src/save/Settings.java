@@ -6,10 +6,10 @@ import util.FileIO;
 import util.FileName;
 import util.Folder;
 import util.GeneralUtils;
+import util.Serializable;
 import util.SerializationUtils;
 
 import java.io.File;
-import java.io.Serializable;
 
 public class Settings implements Serializable {
     private static final long serialVersionUID = 1L;
