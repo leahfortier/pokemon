@@ -5,7 +5,7 @@ import mapMaker.dialogs.action.ActionPanel;
 import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.ChoiceActionMatcher;
 import pattern.action.ChoiceMatcher;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -24,9 +24,9 @@ public class ChoiceActionPanel extends ActionPanel<ChoiceActionMatcher> {
     public ChoiceActionPanel(ActionDialog parent) {
         this.parent = parent;
 
-        questionField = GUIUtils.createTextField();
+        questionField = GuiUtils.createTextField();
         choices = new ArrayList<>();
-        newChoiceButton = GUIUtils.createButton(
+        newChoiceButton = GuiUtils.createButton(
                 "New Choice",
                 event -> {
                     choices.add(new Choice());
@@ -88,7 +88,7 @@ public class ChoiceActionPanel extends ActionPanel<ChoiceActionMatcher> {
             for (int j = 0; j < actionButtons.length; j++) {
                 final int actionIndex = j;
                 ActionMatcher actionMatcher = choice.actions.get(j);
-                actionButtons[j] = GUIUtils.createButton(
+                actionButtons[j] = GuiUtils.createButton(
                         actionMatcher == null ? "EMPTY" : actionMatcher.getActionType().name(),
                         event -> {
                             ActionMatcher newActionMatcher = new ActionDialog(actionMatcher).getMatcher(parent);
@@ -100,16 +100,16 @@ public class ChoiceActionPanel extends ActionPanel<ChoiceActionMatcher> {
                 );
             }
 
-            components.add(GUIUtils.createHorizontalLayoutComponent(
+            components.add(GuiUtils.createHorizontalLayoutComponent(
                     choice.textField,
-                    GUIUtils.createHorizontalLayoutComponent(actionButtons),
+                    GuiUtils.createHorizontalLayoutComponent(actionButtons),
                     choice.newActionButton
             ));
         }
 
         components.add(newChoiceButton);
 
-        GUIUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
+        GuiUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
 
         parent.render();
     }
@@ -120,9 +120,9 @@ public class ChoiceActionPanel extends ActionPanel<ChoiceActionMatcher> {
         private final JButton newActionButton;
 
         public Choice() {
-            this.textField = GUIUtils.createTextField();
+            this.textField = GuiUtils.createTextField();
             this.actions = new ArrayList<>();
-            this.newActionButton = GUIUtils.createButton(
+            this.newActionButton = GuiUtils.createButton(
                     "New Action",
                     event -> {
                         this.actions.add(null);

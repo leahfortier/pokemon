@@ -2,7 +2,7 @@ package mapMaker.dialogs.action;
 
 import mapMaker.dialogs.TriggerDialog;
 import pattern.action.ActionMatcher;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -19,8 +19,8 @@ public class ActionDialog extends TriggerDialog<ActionMatcher> {
     public ActionDialog(ActionMatcher actionMatcher) {
         super("New Action Dialog");
 
-        this.actionComboBox = GUIUtils.createComboBox(ActionType.values(), event -> render());
-        this.topComponent = GUIUtils.createHorizontalLayoutComponent(GUIUtils.createComboBoxComponent("Action Name", actionComboBox));
+        this.actionComboBox = GuiUtils.createComboBox(ActionType.values(), event -> render());
+        this.topComponent = GuiUtils.createHorizontalLayoutComponent(GuiUtils.createComboBoxComponent("Action Name", actionComboBox));
 
         this.map = new EnumMap<>(ActionType.class);
         for (ActionType action : ActionType.values()) {
@@ -52,6 +52,6 @@ public class ActionDialog extends TriggerDialog<ActionMatcher> {
         removeAll();
 
         ActionType selectedAction = (ActionType)actionComboBox.getSelectedItem();
-        GUIUtils.setVerticalLayout(this, topComponent, map.get(selectedAction));
+        GuiUtils.setVerticalLayout(this, topComponent, map.get(selectedAction));
     }
 }

@@ -6,7 +6,7 @@ import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
 import pattern.action.NPCInteractionMatcher;
 import pattern.map.NPCMatcher;
-import util.GUIUtils;
+import util.GuiUtils;
 import util.string.StringUtils;
 
 import javax.swing.ImageIcon;
@@ -59,16 +59,16 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 
         mapMaker = givenMapMaker;
 
-        trainerIcon = GUIUtils.createLabel(StringUtils.empty());
-        spriteComboBox = GUIUtils.createComboBox(getTrainerSprites(), spriteActionListener);
-        directionComboBox = GUIUtils.createComboBox(Direction.values(), spriteActionListener);
+        trainerIcon = GuiUtils.createLabel(StringUtils.empty());
+        spriteComboBox = GuiUtils.createComboBox(getTrainerSprites(), spriteActionListener);
+        directionComboBox = GuiUtils.createComboBox(Direction.values(), spriteActionListener);
 
-        nameTextField = GUIUtils.createTextField();
-        pathTextField = GUIUtils.createTextField("w");
+        nameTextField = GuiUtils.createTextField();
+        pathTextField = GuiUtils.createTextField("w");
         conditionPanel = new ConditionPanel();
 
         interactions = new ArrayList<>();
-        addInteractionButton = GUIUtils.createButton(
+        addInteractionButton = GuiUtils.createButton(
                 "Add Interaction",
                 event -> {
                     interactions.add(null);
@@ -80,17 +80,17 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
         directionComboBox.setSelectedItem(Direction.DOWN);
 
         JPanel tippityTopComponent =
-                GUIUtils.createHorizontalLayoutComponent(
+                GuiUtils.createHorizontalLayoutComponent(
                         trainerIcon,
                         spriteComboBox,
                         directionComboBox
                 );
 
         this.topComponent =
-                GUIUtils.createVerticalLayoutComponent(
+                GuiUtils.createVerticalLayoutComponent(
                         tippityTopComponent,
-                        GUIUtils.createTextFieldComponent("Name", nameTextField),
-                        GUIUtils.createTextFieldComponent("Path", pathTextField),
+                        GuiUtils.createTextFieldComponent("Name", nameTextField),
+                        GuiUtils.createTextFieldComponent("Path", pathTextField),
                         conditionPanel
                 );
 
@@ -107,7 +107,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
             NPCInteractionMatcher matcher = interactions.get(index);
 
             JButton interactionButton =
-                    GUIUtils.createButton(
+                    GuiUtils.createButton(
                             matcher == null ? "Empty" : matcher.getName(),
                             event -> {
                                 NPCInteractionMatcher newMatcher = new NPCInteractionDialog(matcher, index).getMatcher(mapMaker);
@@ -118,7 +118,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
                             }
                     );
 
-            JButton deleteButton = GUIUtils.createButton(
+            JButton deleteButton = GuiUtils.createButton(
                     "Delete",
                     event -> {
                         interactions.remove(index);
@@ -126,11 +126,11 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
                     }
             );
 
-            interactionComponents.add(GUIUtils.createHorizontalLayoutComponent(interactionButton, deleteButton));
+            interactionComponents.add(GuiUtils.createHorizontalLayoutComponent(interactionButton, deleteButton));
         }
 
-        JPanel interactionComponent = GUIUtils.createVerticalLayoutComponent(interactionComponents.toArray(new JComponent[0]));
-        GUIUtils.setVerticalLayout(this, topComponent, interactionComponent, addInteractionButton);
+        JPanel interactionComponent = GuiUtils.createVerticalLayoutComponent(interactionComponents.toArray(new JComponent[0]));
+        GuiUtils.setVerticalLayout(this, topComponent, interactionComponent, addInteractionButton);
     }
 
     private ImageIcon[] getTrainerSprites() {

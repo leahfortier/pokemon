@@ -3,7 +3,7 @@ package mapMaker.dialogs.action;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.action.ActionList;
 import pattern.action.ActionMatcher;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -23,7 +23,7 @@ public class ActionListPanel extends JPanel {
 
         actionList = new ArrayList<>();
 
-        newActionButton = GUIUtils.createButton(
+        newActionButton = GuiUtils.createButton(
                 "New Action",
                 event -> {
                     actionList.add(null);
@@ -48,7 +48,7 @@ public class ActionListPanel extends JPanel {
             final int index = i;
             final ActionMatcher actionMatcher = actionList.get(index);
 
-            JButton actionButton = GUIUtils.createButton(
+            JButton actionButton = GuiUtils.createButton(
                     actionMatcher == null ? "EMPTY" : actionMatcher.getActionType().name(),
                     event -> {
                         ActionMatcher newActionMatcher = new ActionDialog(actionMatcher).getMatcher(parent);
@@ -59,7 +59,7 @@ public class ActionListPanel extends JPanel {
                     }
             );
 
-            JButton deleteButton = GUIUtils.createButton(
+            JButton deleteButton = GuiUtils.createButton(
                     "Delete",
                     event -> {
                         actionList.remove(index);
@@ -67,12 +67,12 @@ public class ActionListPanel extends JPanel {
                     }
             );
 
-            components.add(GUIUtils.createHorizontalLayoutComponent(actionButton, deleteButton));
+            components.add(GuiUtils.createHorizontalLayoutComponent(actionButton, deleteButton));
         }
 
         components.add(newActionButton);
 
-        GUIUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
+        GuiUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
 
         parent.render();
     }

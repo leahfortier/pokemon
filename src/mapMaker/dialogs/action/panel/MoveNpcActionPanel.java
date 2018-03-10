@@ -2,7 +2,7 @@ package mapMaker.dialogs.action.panel;
 
 import mapMaker.dialogs.action.ActionPanel;
 import pattern.action.ActionMatcher.MoveNpcActionMatcher;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JTextField;
@@ -13,15 +13,15 @@ public class MoveNpcActionPanel extends ActionPanel<MoveNpcActionMatcher> {
     private final JTextField endEntranceField; // TODO: Change to combo box with entrances
 
     public MoveNpcActionPanel() {
-        this.entityNameField = GUIUtils.createTextField();
-        this.endPlayerCheckbox = GUIUtils.createCheckBox("End at Player", action -> setEnabled());
-        this.endEntranceField = GUIUtils.createTextField();
+        this.entityNameField = GuiUtils.createTextField();
+        this.endPlayerCheckbox = GuiUtils.createCheckBox("End at Player", action -> setEnabled());
+        this.endEntranceField = GuiUtils.createTextField();
 
-        GUIUtils.setVerticalLayout(
+        GuiUtils.setVerticalLayout(
                 this,
-                GUIUtils.createTextFieldComponent("NPC Entity Name", entityNameField),
+                GuiUtils.createTextFieldComponent("NPC Entity Name", entityNameField),
                 endPlayerCheckbox,
-                GUIUtils.createTextFieldComponent("End Entrance Name", endEntranceField)
+                GuiUtils.createTextFieldComponent("End Entrance Name", endEntranceField)
         );
     }
 

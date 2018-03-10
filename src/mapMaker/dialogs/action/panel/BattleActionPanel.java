@@ -6,7 +6,7 @@ import mapMaker.dialogs.action.PokemonDataPanel;
 import pattern.PokemonMatcher;
 import pattern.action.EntityActionMatcher.BattleActionMatcher;
 import trainer.Trainer;
-import util.GUIUtils;
+import util.GuiUtils;
 import util.string.PokeString;
 
 import javax.swing.JButton;
@@ -39,12 +39,12 @@ public class BattleActionPanel extends ActionPanel<BattleActionMatcher> {
         pokemonPanels = new ArrayList<>();
 
         nameTextField = new JTextField();
-        cashFormattedTextField = GUIUtils.createIntegerTextField(100, 0, Integer.MAX_VALUE);
-        maxPokemonLimitCheckBox = GUIUtils.createCheckBox("Limit Max " + PokeString.POKEMON);
+        cashFormattedTextField = GuiUtils.createIntegerTextField(100, 0, Integer.MAX_VALUE);
+        maxPokemonLimitCheckBox = GuiUtils.createCheckBox("Limit Max " + PokeString.POKEMON);
         updateInteractionTextField = new JTextField("won");
-        addPokemonButton = GUIUtils.createButton("Add Pokemon", event -> addPokemonPanel(null));
+        addPokemonButton = GuiUtils.createButton("Add Pokemon", event -> addPokemonPanel(null));
 
-        JButton removeSelectedButton = GUIUtils.createButton(
+        JButton removeSelectedButton = GuiUtils.createButton(
                 "Remove Selected",
                 event -> {
                     pokemonPanels.removeIf(PokemonDataPanel::isSelected);
@@ -52,7 +52,7 @@ public class BattleActionPanel extends ActionPanel<BattleActionMatcher> {
                 }
         );
 
-        JButton moveUpButton = GUIUtils.createButton(
+        JButton moveUpButton = GuiUtils.createButton(
                 "Move Up",
                 event -> {
                     for (int i = 1; i < pokemonPanels.size(); i++) {
@@ -76,16 +76,16 @@ public class BattleActionPanel extends ActionPanel<BattleActionMatcher> {
             render();
         });
 
-        JPanel tippityTop = GUIUtils.createHorizontalLayoutComponent(
-                GUIUtils.createTextFieldComponent("Trainer Name", nameTextField),
-                GUIUtils.createTextFieldComponent("Cash Money", cashFormattedTextField),
+        JPanel tippityTop = GuiUtils.createHorizontalLayoutComponent(
+                GuiUtils.createTextFieldComponent("Trainer Name", nameTextField),
+                GuiUtils.createTextFieldComponent("Cash Money", cashFormattedTextField),
                 maxPokemonLimitCheckBox,
-                GUIUtils.createTextFieldComponent("Update Interaction", updateInteractionTextField)
+                GuiUtils.createTextFieldComponent("Update Interaction", updateInteractionTextField)
         );
 
-        this.topComponent = GUIUtils.createVerticalLayoutComponent(
+        this.topComponent = GuiUtils.createVerticalLayoutComponent(
                 tippityTop,
-                GUIUtils.createLabel(
+                GuiUtils.createLabel(
                         "            " +
                                 "Pokemon Name                      " +
                                 "Nickname                      " +
@@ -96,7 +96,7 @@ public class BattleActionPanel extends ActionPanel<BattleActionMatcher> {
                 )
         );
 
-        this.bottomComponent = GUIUtils.createHorizontalLayoutComponent(
+        this.bottomComponent = GuiUtils.createHorizontalLayoutComponent(
                 addPokemonButton,
                 removeSelectedButton,
                 moveUpButton,
@@ -117,7 +117,7 @@ public class BattleActionPanel extends ActionPanel<BattleActionMatcher> {
         components.addAll(pokemonPanels);
         components.add(bottomComponent);
 
-        GUIUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
+        GuiUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
 
         parentDialog.render();
     }

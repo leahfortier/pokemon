@@ -3,7 +3,7 @@ package mapMaker.dialogs.wildbattle;
 import main.Global;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.FishingMatcher;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -22,9 +22,9 @@ public class FishingTriggerOptionsDialog extends TriggerDialog<FishingMatcher> {
 
         this.fishingTriggers = new ArrayList<>();
 
-        comboBox = GUIUtils.createComboBox(new String[0], null);
+        comboBox = GuiUtils.createComboBox(new String[0], null);
 
-        createButton = GUIUtils.createButton(
+        createButton = GuiUtils.createButton(
                 "Create New",
                 event -> {
                     FishingMatcher matcher = editWildBattleTrigger(null);
@@ -37,7 +37,7 @@ public class FishingTriggerOptionsDialog extends TriggerDialog<FishingMatcher> {
                 }
         );
 
-        editButton = GUIUtils.createButton(
+        editButton = GuiUtils.createButton(
                 "Edit",
                 event -> {
                     FishingMatcher oldMatcher = this.getSelectedTriggerMatcher();
@@ -81,10 +81,10 @@ public class FishingTriggerOptionsDialog extends TriggerDialog<FishingMatcher> {
 
         editButton.setEnabled(!fishingTriggers.isEmpty());
 
-        GUIUtils.setVerticalLayout(
+        GuiUtils.setVerticalLayout(
                 this,
                 comboBox,
-                GUIUtils.createHorizontalLayoutComponent(createButton, editButton)
+                GuiUtils.createHorizontalLayoutComponent(createButton, editButton)
         );
     }
 

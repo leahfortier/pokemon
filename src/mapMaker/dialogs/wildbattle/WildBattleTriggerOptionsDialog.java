@@ -3,7 +3,7 @@ package mapMaker.dialogs.wildbattle;
 import main.Global;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.WildBattleAreaMatcher;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -22,9 +22,9 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<WildBattleArea
 
         this.wildBattleAreas = new ArrayList<>();
 
-        comboBox = GUIUtils.createComboBox(new String[0], null);
+        comboBox = GuiUtils.createComboBox(new String[0], null);
 
-        createButton = GUIUtils.createButton(
+        createButton = GuiUtils.createButton(
                 "Create New",
                 event -> {
                     WildBattleAreaMatcher matcher = editWildBattleArea(null);
@@ -37,7 +37,7 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<WildBattleArea
                 }
         );
 
-        editButton = GUIUtils.createButton(
+        editButton = GuiUtils.createButton(
                 "Edit",
                 event -> {
                     WildBattleAreaMatcher oldMatcher = this.getSelectedTriggerMatcher();
@@ -81,10 +81,10 @@ public class WildBattleTriggerOptionsDialog extends TriggerDialog<WildBattleArea
 
         editButton.setEnabled(!wildBattleAreas.isEmpty());
 
-        GUIUtils.setVerticalLayout(
+        GuiUtils.setVerticalLayout(
                 this,
                 comboBox,
-                GUIUtils.createHorizontalLayoutComponent(createButton, editButton)
+                GuiUtils.createHorizontalLayoutComponent(createButton, editButton)
         );
     }
 

@@ -5,7 +5,7 @@ import map.PathDirection;
 import mapMaker.MapMaker;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
-import util.GUIUtils;
+import util.GuiUtils;
 import util.string.StringUtils;
 
 import javax.swing.JCheckBox;
@@ -29,8 +29,8 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
     public MapTransitionDialog(MapTransitionMatcher mapTransitionMatcher, MapMaker givenMapMaker) {
         super("Map Transition Editor");
 
-        deathPortalCheckBox = GUIUtils.createCheckBox("Death Portal");
-        entranceNameTextField = GUIUtils.createTextField();
+        deathPortalCheckBox = GuiUtils.createCheckBox("Death Portal");
+        entranceNameTextField = GuiUtils.createTextField();
 
         // Fill combo boxes with available maps.
         String[] regionList = givenMapMaker.getAvailableRegions();
@@ -46,10 +46,10 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
             updatedMapList[i + 1] = mapList.get(i);
         }
 
-        entranceComboBox = GUIUtils.createComboBox(new String[0]);
+        entranceComboBox = GuiUtils.createComboBox(new String[0]);
         entranceComboBox.setEnabled(false);
 
-        destinationComboBox = GUIUtils.createComboBox(
+        destinationComboBox = GuiUtils.createComboBox(
                 updatedMapList,
                 actionEvent -> {
                     entranceComboBox.setEnabled(destinationComboBox.getSelectedIndex() != 0);
@@ -64,14 +64,14 @@ public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
                 }
         );
 
-        directionComboBox = GUIUtils.createComboBox(PathDirection.values());
+        directionComboBox = GuiUtils.createComboBox(PathDirection.values());
 
-        GUIUtils.setVerticalLayout(
+        GuiUtils.setVerticalLayout(
                 this,
-                GUIUtils.createTextFieldComponent("Entrance Name", entranceNameTextField),
-                GUIUtils.createComboBoxComponent("Destination", destinationComboBox),
-                GUIUtils.createComboBoxComponent("Destination Entrance", entranceComboBox),
-                GUIUtils.createComboBoxComponent("Direction", directionComboBox),
+                GuiUtils.createTextFieldComponent("Entrance Name", entranceNameTextField),
+                GuiUtils.createComboBoxComponent("Destination", destinationComboBox),
+                GuiUtils.createComboBoxComponent("Destination Entrance", entranceComboBox),
+                GuiUtils.createComboBoxComponent("Direction", directionComboBox),
                 deathPortalCheckBox
         );
 

@@ -2,7 +2,7 @@ package mapMaker.dialogs.action.panel;
 
 import mapMaker.dialogs.action.ActionPanel;
 import pattern.action.EnumActionMatcher;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JComboBox;
 import java.util.function.Function;
@@ -15,10 +15,10 @@ public class EnumActionPanel<T extends Enum> extends ActionPanel<EnumActionMatch
     public EnumActionPanel(String label, T[] values, Function<T, EnumActionMatcher<T>> actionMatcherGetter) {
         this.actionMatcherGetter = actionMatcherGetter;
 
-        this.combobBox = GUIUtils.createComboBox(values);
-        GUIUtils.setVerticalLayout(
+        this.combobBox = GuiUtils.createComboBox(values);
+        GuiUtils.setVerticalLayout(
                 this,
-                GUIUtils.createComboBoxComponent(label, this.combobBox)
+                GuiUtils.createComboBoxComponent(label, this.combobBox)
         );
     }
 

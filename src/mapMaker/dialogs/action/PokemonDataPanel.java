@@ -7,7 +7,7 @@ import pattern.PokemonMatcher;
 import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
-import util.GUIUtils;
+import util.GuiUtils;
 import util.string.StringUtils;
 
 import javax.swing.JCheckBox;
@@ -33,18 +33,18 @@ public class PokemonDataPanel extends JPanel {
 
     public PokemonDataPanel(PokemonMatcher pokemonMatcher) {
 
-        selectedCheckBox = GUIUtils.createCheckBox();
-        nameTextField = GUIUtils.createColorConditionTextField(new ColorCondition() {
+        selectedCheckBox = GuiUtils.createCheckBox();
+        nameTextField = GuiUtils.createColorConditionTextField(new ColorCondition() {
             @Override
             public boolean greenCondition() {
                 return PokemonNamesies.tryValueOf(nameTextField.getText().trim()) != null;
             }
         });
-        nicknameTextField = GUIUtils.createTextField(); // Restrict to max length characters
-        levelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, PartyPokemon.MAX_LEVEL);
-        shinyCheckBox = GUIUtils.createCheckBox();
-        moveCheckBox = GUIUtils.createCheckBox();
-        moveTextField = GUIUtils.createColorConditionTextField(new ColorCondition() {
+        nicknameTextField = GuiUtils.createTextField(); // Restrict to max length characters
+        levelFormattedTextField = GuiUtils.createIntegerTextField(1, 1, PartyPokemon.MAX_LEVEL);
+        shinyCheckBox = GuiUtils.createCheckBox();
+        moveCheckBox = GuiUtils.createCheckBox();
+        moveTextField = GuiUtils.createColorConditionTextField(new ColorCondition() {
             @Override
             public boolean greenCondition() {
                 return customMoves[moveComboBox.getSelectedIndex()] != null;
@@ -58,7 +58,7 @@ public class PokemonDataPanel extends JPanel {
 
         moveTextField.setEnabled(false);
 
-        moveComboBox = GUIUtils.createComboBox(
+        moveComboBox = GuiUtils.createComboBox(
                 new String[] { "Move 1", "Move 2", "Move 3", "Move 4" }, // TODO: Fuck this shit
                 event -> {
                     AttackNamesies selectedMove = customMoves[moveComboBox.getSelectedIndex()];
@@ -73,7 +73,7 @@ public class PokemonDataPanel extends JPanel {
             moveTextField.setEnabled(moveCheckBox.isSelected());
         });
 
-        GUIUtils.setHorizontalLayout(
+        GuiUtils.setHorizontalLayout(
                 this,
                 selectedCheckBox,
                 nameTextField,

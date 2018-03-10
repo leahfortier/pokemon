@@ -4,7 +4,7 @@ import item.ItemNamesies;
 import main.Global;
 import pattern.map.ItemMatcher;
 import util.ColorDocumentListener.ColorCondition;
-import util.GUIUtils;
+import util.GuiUtils;
 import util.file.FileIO;
 import util.file.Folder;
 
@@ -25,7 +25,7 @@ public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
     public ItemEntityDialog(ItemMatcher itemMatcher) {
         super("Item Editor");
 
-        itemTextField = GUIUtils.createColorConditionTextField(new ColorCondition() {
+        itemTextField = GuiUtils.createColorConditionTextField(new ColorCondition() {
             @Override
             public boolean greenCondition() {
                 return getItemName() != null;
@@ -49,16 +49,16 @@ public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
         itemImageLabel.setMinimumSize(new Dimension(3*Global.TILE_SIZE/2, 3*Global.TILE_SIZE/2));
 
         JTextArea conditionTextArea = new JTextArea();
-        JPanel itemImageAndNameComponent = GUIUtils.createHorizontalLayoutComponent(
+        JPanel itemImageAndNameComponent = GuiUtils.createHorizontalLayoutComponent(
                 itemImageLabel,
-                GUIUtils.createTextFieldComponent("Item Name", itemTextField)
+                GuiUtils.createTextFieldComponent("Item Name", itemTextField)
         );
 
         // TODO: Not currently saving the condition I believe
-        GUIUtils.setVerticalLayout(
+        GuiUtils.setVerticalLayout(
                 this,
                 itemImageAndNameComponent,
-                GUIUtils.createTextAreaComponent("Condition", conditionTextArea)
+                GuiUtils.createTextAreaComponent("Condition", conditionTextArea)
         );
 
         this.load(itemMatcher);

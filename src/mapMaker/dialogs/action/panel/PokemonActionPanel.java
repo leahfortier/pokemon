@@ -7,7 +7,7 @@ import pattern.action.ActionMatcher.GivePokemonActionMatcher;
 import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
@@ -22,35 +22,35 @@ public class PokemonActionPanel extends ActionPanel<GivePokemonActionMatcher> {
     private final JTextField itemNameField;
 
     public PokemonActionPanel() {
-        this.pokemonNameField = GUIUtils.createColorConditionTextField(new ColorCondition() {
+        this.pokemonNameField = GuiUtils.createColorConditionTextField(new ColorCondition() {
             @Override
             public boolean greenCondition() {
                 return PokemonNamesies.tryValueOf(pokemonNameField.getText().trim()) != null;
             }
         });
 
-        this.levelField = GUIUtils.createIntegerTextField(1, 1, PartyPokemon.MAX_LEVEL);
-        this.isEggCheckBox = GUIUtils.createCheckBox("Is Egg", action -> setEnabled());
-        this.shinyCheckBox = GUIUtils.createCheckBox("Shiny");
+        this.levelField = GuiUtils.createIntegerTextField(1, 1, PartyPokemon.MAX_LEVEL);
+        this.isEggCheckBox = GuiUtils.createCheckBox("Is Egg", action -> setEnabled());
+        this.shinyCheckBox = GuiUtils.createCheckBox("Shiny");
 
-        this.itemNameField = GUIUtils.createColorConditionTextField(new ColorCondition() {
+        this.itemNameField = GuiUtils.createColorConditionTextField(new ColorCondition() {
             @Override
             public boolean greenCondition() {
                 return ItemNamesies.tryValueOf(itemNameField.getText().trim()) != null;
             }
         });
 
-        JPanel checkBoxComponent = GUIUtils.createHorizontalLayoutComponent(
+        JPanel checkBoxComponent = GuiUtils.createHorizontalLayoutComponent(
                 this.isEggCheckBox,
                 this.shinyCheckBox
         );
 
-        GUIUtils.setVerticalLayout(
+        GuiUtils.setVerticalLayout(
                 this,
-                GUIUtils.createTextFieldComponent("Pokemon", this.pokemonNameField),
-                GUIUtils.createTextFieldComponent("Level", this.levelField),
+                GuiUtils.createTextFieldComponent("Pokemon", this.pokemonNameField),
+                GuiUtils.createTextFieldComponent("Level", this.levelField),
                 checkBoxComponent,
-                GUIUtils.createTextFieldComponent("Hold Item", this.itemNameField)
+                GuiUtils.createTextFieldComponent("Hold Item", this.itemNameField)
         );
     }
 

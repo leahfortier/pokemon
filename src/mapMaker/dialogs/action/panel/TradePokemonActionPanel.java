@@ -4,7 +4,7 @@ import mapMaker.dialogs.action.ActionPanel;
 import pattern.action.ActionMatcher.TradePokemonActionMatcher;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JTextField;
 
@@ -13,24 +13,24 @@ public class TradePokemonActionPanel extends ActionPanel<TradePokemonActionMatch
     private final JTextField tradeNameField;
 
     public TradePokemonActionPanel() {
-        this.requestedNameField = GUIUtils.createColorConditionTextField(new ColorCondition() {
+        this.requestedNameField = GuiUtils.createColorConditionTextField(new ColorCondition() {
             @Override
             public boolean greenCondition() {
                 return PokemonNamesies.tryValueOf(requestedNameField.getText().trim()) != null;
             }
         });
 
-        this.tradeNameField = GUIUtils.createColorConditionTextField(new ColorCondition() {
+        this.tradeNameField = GuiUtils.createColorConditionTextField(new ColorCondition() {
             @Override
             public boolean greenCondition() {
                 return PokemonNamesies.tryValueOf(tradeNameField.getText().trim()) != null;
             }
         });
 
-        GUIUtils.setVerticalLayout(
+        GuiUtils.setVerticalLayout(
                 this,
-                GUIUtils.createTextFieldComponent("Requested Pokemon", this.requestedNameField),
-                GUIUtils.createTextFieldComponent("Trade Pokemon", this.tradeNameField)
+                GuiUtils.createTextFieldComponent("Requested Pokemon", this.requestedNameField),
+                GuiUtils.createTextFieldComponent("Trade Pokemon", this.tradeNameField)
         );
     }
 

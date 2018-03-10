@@ -2,7 +2,7 @@ package mapMaker.dialogs.action.panel;
 
 import mapMaker.dialogs.action.ActionPanel;
 import pattern.action.StringActionMatcher;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JTextField;
 import java.util.function.Function;
@@ -16,10 +16,10 @@ public class StringActionPanel extends ActionPanel<StringActionMatcher> {
     public StringActionPanel(String actionName, Function<String, StringActionMatcher> actionMatcherGetter) {
         this.actionMatcherGetter = actionMatcherGetter;
 
-        textField = GUIUtils.createTextField();
-        GUIUtils.setHorizontalLayout(
+        textField = GuiUtils.createTextField();
+        GuiUtils.setHorizontalLayout(
                 this,
-                GUIUtils.createTextFieldComponent(actionName, textField)
+                GuiUtils.createTextFieldComponent(actionName, textField)
         );
     }
 

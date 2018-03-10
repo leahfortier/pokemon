@@ -14,7 +14,7 @@ import mapMaker.tools.Tool.ToolType;
 import mapMaker.tools.ToolRenderer;
 import pattern.generic.LocationTriggerMatcher;
 import util.FontMetrics;
-import util.GUIUtils;
+import util.GuiUtils;
 import util.Point;
 import util.file.FileIO;
 import util.file.Folder;
@@ -136,19 +136,19 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     }
 
     private JMenuItem createEditMenuItem(String text, int keyEvent) {
-        JMenuItem menuItem = GUIUtils.createMenuItem(text, keyEvent, this);
+        JMenuItem menuItem = GuiUtils.createMenuItem(text, keyEvent, this);
         menuItem.setEnabled(false);
 
         return menuItem;
     }
 
     private JMenu createFileMenu() {
-        this.newMenuItem = GUIUtils.createMenuItem("New", KeyEvent.VK_N, this);
-        this.saveMenuItem = GUIUtils.createMenuItem("Save", KeyEvent.VK_S, this);
-        this.loadMenuItem = GUIUtils.createMenuItem("Load", KeyEvent.VK_L, this);
-        this.setRootMenuItem = GUIUtils.createMenuItem("Set Root", this);
+        this.newMenuItem = GuiUtils.createMenuItem("New", KeyEvent.VK_N, this);
+        this.saveMenuItem = GuiUtils.createMenuItem("Save", KeyEvent.VK_S, this);
+        this.loadMenuItem = GuiUtils.createMenuItem("Load", KeyEvent.VK_L, this);
+        this.setRootMenuItem = GuiUtils.createMenuItem("Set Root", this);
 
-        return GUIUtils.createMenu("File", newMenuItem, saveMenuItem, loadMenuItem, setRootMenuItem);
+        return GuiUtils.createMenu("File", newMenuItem, saveMenuItem, loadMenuItem, setRootMenuItem);
     }
 
     private JMenu createEditMenu() {
@@ -157,16 +157,16 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         this.pasteMenuItem = this.createEditMenuItem("Paste", KeyEvent.VK_V);
         this.undoMenuItem = this.createEditMenuItem("Undo", KeyEvent.VK_Z);
         undoMenuItem.setEnabled(true);
-        return GUIUtils.createMenu("Edit", cutMenuItem, copyMenuItem, pasteMenuItem, undoMenuItem);
+        return GuiUtils.createMenu("Edit", cutMenuItem, copyMenuItem, pasteMenuItem, undoMenuItem);
     }
 
     private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
-        GUIUtils.setStyle(menuBar);
+        GuiUtils.setStyle(menuBar);
 
-        mapNameLabel = GUIUtils.createLabel("MapMaker");
+        mapNameLabel = GuiUtils.createLabel("MapMaker");
 
-        rootLabel = GUIUtils.createLabel("Root Location:");
+        rootLabel = GuiUtils.createLabel("Root Location:");
         rootLabel.setForeground(Color.RED);
 
         menuBar.add(this.createFileMenu());
@@ -182,7 +182,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     }
 
     private JComboBox<EditType> createEditTypeComboBox() {
-        editTypeComboBox = GUIUtils.createComboBox(
+        editTypeComboBox = GuiUtils.createComboBox(
                 EditType.values(),
                 event -> {
                     this.editType = (EditType)editTypeComboBox.getSelectedItem();
@@ -214,10 +214,10 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
-        newTileButton = GUIUtils.createButton("New Tile", this);
+        newTileButton = GuiUtils.createButton("New Tile", this);
         panel.add(newTileButton, BorderLayout.NORTH);
 
-        tileCategoriesComboBox = GUIUtils.createComboBox(
+        tileCategoriesComboBox = GuiUtils.createComboBox(
                 TileCategory.values(),
                 event -> {
                     if (!tileCategoriesComboBox.isEnabled()) {

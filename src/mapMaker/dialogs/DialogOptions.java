@@ -1,6 +1,6 @@
 package mapMaker.dialogs;
 
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -24,12 +24,12 @@ class DialogOptions extends JDialog implements ActionListener {
         super((Frame)null, true);
 
         panel = new JPanel();
-        GUIUtils.setStyle(panel);
+        GuiUtils.setStyle(panel);
 
-        this.saveButton = GUIUtils.createButton("Save or Whatever", this);
-        JButton cancelButton = GUIUtils.createButton("Cancel", this);
+        this.saveButton = GuiUtils.createButton("Save or Whatever", this);
+        JButton cancelButton = GuiUtils.createButton("Cancel", this);
 
-        this.buttonsComponent = GUIUtils.createHorizontalLayoutComponent(saveButton, cancelButton);
+        this.buttonsComponent = GuiUtils.createHorizontalLayoutComponent(saveButton, cancelButton);
 
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(parent);
@@ -39,7 +39,7 @@ class DialogOptions extends JDialog implements ActionListener {
 
     public void render(JPanel dialogPanel) {
         this.remove(this.panel);
-        GUIUtils.setVerticalLayout(this.panel, dialogPanel, this.buttonsComponent);
+        GuiUtils.setVerticalLayout(this.panel, dialogPanel, this.buttonsComponent);
         this.add(this.panel);
         this.pack();
     }

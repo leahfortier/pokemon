@@ -3,7 +3,7 @@ package mapMaker.dialogs.wildbattle;
 import map.overworld.WildEncounterInfo;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
@@ -22,15 +22,15 @@ class WildPokemonDataPanel extends JPanel {
     private int probability;
 
     WildPokemonDataPanel(WildEncounterInfo wildEncounter) {
-        selectedCheckBox = GUIUtils.createCheckBox();
-        pokemonTextField = GUIUtils.createColorConditionTextField(new ColorCondition() {
+        selectedCheckBox = GuiUtils.createCheckBox();
+        pokemonTextField = GuiUtils.createColorConditionTextField(new ColorCondition() {
             @Override
             public boolean greenCondition() {
                 return PokemonNamesies.tryValueOf(pokemonTextField.getText().trim()) != null;
             }
         });
 
-        probabilityFormattedTextField = GUIUtils.createIntegerTextField(
+        probabilityFormattedTextField = GuiUtils.createIntegerTextField(
                 wildEncounter == null ? 0 : wildEncounter.getProbability(),
                 1,
                 100
@@ -52,7 +52,7 @@ class WildPokemonDataPanel extends JPanel {
             }
         });
 
-        GUIUtils.setHorizontalLayout(
+        GuiUtils.setHorizontalLayout(
                 this,
                 selectedCheckBox,
                 pokemonTextField,

@@ -6,7 +6,7 @@ import mapMaker.dialogs.ConditionPanel;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.WildBattleMatcher;
 import pokemon.PartyPokemon;
-import util.GUIUtils;
+import util.GuiUtils;
 import util.GeneralUtils;
 
 import javax.swing.JButton;
@@ -52,16 +52,16 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 
         wildPokemonPanels = new ArrayList<>();
 
-        nameTextField = GUIUtils.createTextField(this.getDefaultName());
-        encounterRateComboBox = GUIUtils.createComboBox(EncounterRate.values());
+        nameTextField = GuiUtils.createTextField(this.getDefaultName());
+        encounterRateComboBox = GuiUtils.createComboBox(EncounterRate.values());
 
-        lowLevelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, PartyPokemon.MAX_LEVEL);
-        highLevelFormattedTextField = GUIUtils.createIntegerTextField(PartyPokemon.MAX_LEVEL, 1, PartyPokemon.MAX_LEVEL);
+        lowLevelFormattedTextField = GuiUtils.createIntegerTextField(1, 1, PartyPokemon.MAX_LEVEL);
+        highLevelFormattedTextField = GuiUtils.createIntegerTextField(PartyPokemon.MAX_LEVEL, 1, PartyPokemon.MAX_LEVEL);
 
         conditionPanel = new ConditionPanel();
 
-        JButton addPokemonButton = GUIUtils.createButton("Add Pokemon", event -> addPokemonPanel(null));
-        JButton removeSelectedButton = GUIUtils.createButton(
+        JButton addPokemonButton = GuiUtils.createButton("Add Pokemon", event -> addPokemonPanel(null));
+        JButton removeSelectedButton = GuiUtils.createButton(
                 "Remove Selected",
                 event -> {
                     wildPokemonPanels.removeIf(WildPokemonDataPanel::isSelected);
@@ -69,36 +69,36 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
                 }
         );
 
-        JButton lefty = GUIUtils.createButton("<", event -> {
+        JButton lefty = GuiUtils.createButton("<", event -> {
             pageNum = GeneralUtils.wrapIncrement(pageNum, -1, getTotalPokemonPanelPages());
             renderDialog();
         });
 
-        JButton righty = GUIUtils.createButton(">", event -> {
+        JButton righty = GuiUtils.createButton(">", event -> {
             pageNum = GeneralUtils.wrapIncrement(pageNum, 1, getTotalPokemonPanelPages());
             renderDialog();
         });
 
-        pokemonProbabilitySumLabel = GUIUtils.createLabel("0");
+        pokemonProbabilitySumLabel = GuiUtils.createLabel("0");
 
-        this.topComponent = GUIUtils.createVerticalLayoutComponent(
-                GUIUtils.createHorizontalLayoutComponent(
-                        GUIUtils.createTextFieldComponent("Name", nameTextField),
-                        GUIUtils.createComboBoxComponent("Encounter Rate", encounterRateComboBox),
+        this.topComponent = GuiUtils.createVerticalLayoutComponent(
+                GuiUtils.createHorizontalLayoutComponent(
+                        GuiUtils.createTextFieldComponent("Name", nameTextField),
+                        GuiUtils.createComboBoxComponent("Encounter Rate", encounterRateComboBox),
                         lowLevelFormattedTextField,
                         highLevelFormattedTextField
                 ),
-                GUIUtils.createHorizontalLayoutComponent(
+                GuiUtils.createHorizontalLayoutComponent(
                         conditionPanel
                 ),
-                GUIUtils.createHorizontalLayoutComponent(
-                        GUIUtils.createLabel("Probability:"),
+                GuiUtils.createHorizontalLayoutComponent(
+                        GuiUtils.createLabel("Probability:"),
                         pokemonProbabilitySumLabel
                 )
         );
 
-        pageNumLabel = GUIUtils.createLabel("");
-        this.bottomComponent = GUIUtils.createHorizontalLayoutComponent(
+        pageNumLabel = GuiUtils.createLabel("");
+        this.bottomComponent = GuiUtils.createHorizontalLayoutComponent(
                 addPokemonButton,
                 removeSelectedButton,
                 lefty,
@@ -128,7 +128,7 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
         components.add(topComponent);
 
         if (!wildPokemonPanels.isEmpty()) {
-            components.add(GUIUtils.createLabel("     Pokemon Name                       Probability"));
+            components.add(GuiUtils.createLabel("     Pokemon Name                       Probability"));
         }
 
         Iterator<WildPokemonDataPanel> displayPokes = GeneralUtils.pageIterator(
@@ -143,7 +143,7 @@ public class WildBattleTriggerEditDialog extends TriggerDialog<WildBattleMatcher
 
         this.pageNumLabel.setText((pageNum + 1) + "/" + getTotalPokemonPanelPages());
 
-        GUIUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
+        GuiUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
     }
 
     private String getDefaultName() {

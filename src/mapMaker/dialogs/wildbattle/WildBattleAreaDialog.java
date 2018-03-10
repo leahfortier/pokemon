@@ -4,7 +4,7 @@ import main.Global;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -27,10 +27,10 @@ public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
 
         wildBattleTriggers = new ArrayList<>();
 
-        nameTextField = GUIUtils.createTextField();
-        encountersComboBox = GUIUtils.createComboBox(new String[0]);
+        nameTextField = GuiUtils.createTextField();
+        encountersComboBox = GuiUtils.createComboBox(new String[0]);
 
-        JButton createButton = GUIUtils.createButton(
+        JButton createButton = GuiUtils.createButton(
                 "Create New",
                 event -> {
                     WildBattleMatcher oldMatcher = null;
@@ -50,7 +50,7 @@ public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
                 }
         );
 
-        JButton editButton = GUIUtils.createButton(
+        JButton editButton = GuiUtils.createButton(
                 "Edit",
                 event -> {
                     WildBattleMatcher oldMatcher = this.getSelectedTriggerMatcher();
@@ -67,13 +67,13 @@ public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
                 }
         );
 
-        JComponent encountersPanel = GUIUtils.createHorizontalLayoutComponent(
-                GUIUtils.createComboBoxComponent("Encounters", encountersComboBox),
+        JComponent encountersPanel = GuiUtils.createHorizontalLayoutComponent(
+                GuiUtils.createComboBoxComponent("Encounters", encountersComboBox),
                 editButton
         );
 
-        panel = GUIUtils.createVerticalLayoutComponent(
-                GUIUtils.createTextFieldComponent("Name", nameTextField),
+        panel = GuiUtils.createVerticalLayoutComponent(
+                GuiUtils.createTextFieldComponent("Name", nameTextField),
                 encountersPanel,
                 createButton
         );
@@ -113,7 +113,7 @@ public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
 
     @Override
     protected void renderDialog() {
-        GUIUtils.setVerticalLayout(this, panel);
+        GuiUtils.setVerticalLayout(this, panel);
     }
 
     @Override

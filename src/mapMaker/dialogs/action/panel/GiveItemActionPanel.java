@@ -5,7 +5,7 @@ import mapMaker.dialogs.action.ActionPanel;
 import pattern.action.ActionMatcher.GiveItemActionMatcher;
 import util.ColorDocumentListener;
 import util.ColorDocumentListener.ColorCondition;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
@@ -16,8 +16,8 @@ public class GiveItemActionPanel extends ActionPanel<GiveItemActionMatcher> {
     private final JFormattedTextField quantityTextField;
 
     public GiveItemActionPanel() {
-        itemField = GUIUtils.createTextField();
-        quantityTextField = GUIUtils.createIntegerTextField(1, 1, 99);
+        itemField = GuiUtils.createTextField();
+        quantityTextField = GuiUtils.createIntegerTextField(1, 1, 99);
 
         ColorCondition colorCondition = () -> ItemNamesies.tryValueOf(itemField.getText().trim()) != null;
         itemField.getDocument().addDocumentListener(new ColorDocumentListener(colorCondition) {
@@ -27,10 +27,10 @@ public class GiveItemActionPanel extends ActionPanel<GiveItemActionMatcher> {
             }
         });
 
-        GUIUtils.setVerticalLayout(
+        GuiUtils.setVerticalLayout(
                 this,
-                GUIUtils.createTextFieldComponent("Item Name", itemField),
-                GUIUtils.createTextFieldComponent("Quantity", quantityTextField)
+                GuiUtils.createTextFieldComponent("Item Name", itemField),
+                GuiUtils.createTextFieldComponent("Quantity", quantityTextField)
         );
     }
 

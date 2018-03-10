@@ -4,7 +4,7 @@ import main.Global;
 import mapMaker.dialogs.action.ActionListPanel;
 import pattern.action.ActionMatcher;
 import pattern.map.MiscEntityMatcher;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -20,13 +20,13 @@ public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
     public MiscEntityDialog(MiscEntityMatcher matcher) {
         super("Misc Trigger Editor");
 
-        this.nameTextField = GUIUtils.createTextField();
+        this.nameTextField = GuiUtils.createTextField();
         this.conditionPanel = new ConditionPanel();
         this.actionListPanel = new ActionListPanel(this);
 
-        JPanel nameComponent = GUIUtils.createTextFieldComponent("Name", nameTextField);
+        JPanel nameComponent = GuiUtils.createTextFieldComponent("Name", nameTextField);
 
-        this.topComponent = GUIUtils.createVerticalLayoutComponent(nameComponent, conditionPanel);
+        this.topComponent = GuiUtils.createVerticalLayoutComponent(nameComponent, conditionPanel);
 
         this.load(matcher);
     }
@@ -34,7 +34,7 @@ public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
     @Override
     public void renderDialog() {
         removeAll();
-        GUIUtils.setVerticalLayout(this, topComponent, actionListPanel);
+        GuiUtils.setVerticalLayout(this, topComponent, actionListPanel);
     }
 
     @Override

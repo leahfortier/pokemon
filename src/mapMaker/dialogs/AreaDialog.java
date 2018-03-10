@@ -4,7 +4,7 @@ import map.overworld.TerrainType;
 import map.weather.WeatherState;
 import pattern.map.AreaMatcher;
 import sound.SoundTitle;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -20,25 +20,25 @@ public class AreaDialog extends TriggerDialog<AreaMatcher> {
     public AreaDialog(AreaMatcher areaMatcher) {
         super("Area Editor");
 
-        displayNameTextField = GUIUtils.createTextField();
-        flyLocationTextField = GUIUtils.createTextField();
+        displayNameTextField = GuiUtils.createTextField();
+        flyLocationTextField = GuiUtils.createTextField();
 
-        terrainComboBox = GUIUtils.createComboBox(TerrainType.values());
+        terrainComboBox = GuiUtils.createComboBox(TerrainType.values());
         terrainComboBox.setSelectedItem(TerrainType.BUILDING);
 
-        weatherComboBox = GUIUtils.createComboBox(WeatherState.values());
+        weatherComboBox = GuiUtils.createComboBox(WeatherState.values());
         weatherComboBox.setSelectedItem(WeatherState.NORMAL);
 
-        musicComboBox = GUIUtils.createComboBox(SoundTitle.values());
+        musicComboBox = GuiUtils.createComboBox(SoundTitle.values());
         musicComboBox.setSelectedItem(SoundTitle.DEFAULT_TUNE);
 
-        GUIUtils.setVerticalLayout(
+        GuiUtils.setVerticalLayout(
                 this,
-                GUIUtils.createTextFieldComponent("Display Name", displayNameTextField),
-                GUIUtils.createTextFieldComponent("Fly Location", flyLocationTextField),
-                GUIUtils.createComboBoxComponent("Terrain", terrainComboBox),
-                GUIUtils.createComboBoxComponent("Weather", weatherComboBox),
-                GUIUtils.createComboBoxComponent("Music", musicComboBox)
+                GuiUtils.createTextFieldComponent("Display Name", displayNameTextField),
+                GuiUtils.createTextFieldComponent("Fly Location", flyLocationTextField),
+                GuiUtils.createComboBoxComponent("Terrain", terrainComboBox),
+                GuiUtils.createComboBoxComponent("Weather", weatherComboBox),
+                GuiUtils.createComboBoxComponent("Music", musicComboBox)
         );
 
         this.load(areaMatcher);

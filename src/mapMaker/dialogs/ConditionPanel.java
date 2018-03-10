@@ -4,7 +4,7 @@ import map.condition.ConditionSet;
 import pattern.generic.TriggerMatcher;
 import pattern.map.ConditionMatcher;
 import pattern.map.ConditionsMatcher;
-import util.GUIUtils;
+import util.GuiUtils;
 import util.string.StringUtils;
 
 import javax.swing.JComboBox;
@@ -23,10 +23,10 @@ public class ConditionPanel extends JPanel {
         List<ConditionMatcher> conditionMatchers = ConditionsMatcher.getConditionMatchers();
         List<String> matcherNames = conditionMatchers.stream().map(ConditionMatcher::getName).collect(Collectors.toList());
         matcherNames.add(0, NONE);
-        this.combobBox = GUIUtils.createComboBox(matcherNames.toArray(new String[0]));
+        this.combobBox = GuiUtils.createComboBox(matcherNames.toArray(new String[0]));
 
-        JPanel panel = GUIUtils.createComboBoxComponent("Condition", this.combobBox);
-        GUIUtils.setVerticalLayout(this, panel);
+        JPanel panel = GuiUtils.createComboBoxComponent("Condition", this.combobBox);
+        GuiUtils.setVerticalLayout(this, panel);
     }
 
     public String getConditionName() {

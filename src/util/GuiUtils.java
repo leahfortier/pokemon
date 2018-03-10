@@ -28,7 +28,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 
-public class GUIUtils {
+public class GuiUtils {
 
     // I can't help it I like a nice white background
     public static void setStyle(JComponent component) {
@@ -39,7 +39,7 @@ public class GUIUtils {
     public static JMenuItem createMenuItem(String text, ActionListener actionListener) {
         JMenuItem menuItem = new JMenuItem(text);
         menuItem.addActionListener(actionListener);
-        GUIUtils.setStyle(menuItem);
+        setStyle(menuItem);
 
         return menuItem;
     }

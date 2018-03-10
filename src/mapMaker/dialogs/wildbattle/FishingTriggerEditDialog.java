@@ -4,7 +4,7 @@ import map.overworld.WildEncounterInfo;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.FishingMatcher;
 import pokemon.PartyPokemon;
-import util.GUIUtils;
+import util.GuiUtils;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -33,13 +33,13 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
 
         wildPokemonPanels = new ArrayList<>();
 
-        nameTextField = GUIUtils.createTextField(this.getDefaultName());
+        nameTextField = GuiUtils.createTextField(this.getDefaultName());
 
-        lowLevelFormattedTextField = GUIUtils.createIntegerTextField(1, 1, PartyPokemon.MAX_LEVEL);
-        highLevelFormattedTextField = GUIUtils.createIntegerTextField(PartyPokemon.MAX_LEVEL, 1, PartyPokemon.MAX_LEVEL);
+        lowLevelFormattedTextField = GuiUtils.createIntegerTextField(1, 1, PartyPokemon.MAX_LEVEL);
+        highLevelFormattedTextField = GuiUtils.createIntegerTextField(PartyPokemon.MAX_LEVEL, 1, PartyPokemon.MAX_LEVEL);
 
-        JButton addPokemonButton = GUIUtils.createButton("Add Pokemon", event -> addPokemonPanel(null));
-        JButton removeSelectedButton = GUIUtils.createButton(
+        JButton addPokemonButton = GuiUtils.createButton("Add Pokemon", event -> addPokemonPanel(null));
+        JButton removeSelectedButton = GuiUtils.createButton(
                 "Remove Selected",
                 event -> {
                     wildPokemonPanels.removeIf(WildPokemonDataPanel::isSelected);
@@ -47,13 +47,13 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
                 }
         );
 
-        this.topComponent = GUIUtils.createHorizontalLayoutComponent(
-                GUIUtils.createTextFieldComponent("Name", nameTextField),
+        this.topComponent = GuiUtils.createHorizontalLayoutComponent(
+                GuiUtils.createTextFieldComponent("Name", nameTextField),
                 lowLevelFormattedTextField,
                 highLevelFormattedTextField
         );
 
-        this.bottomComponent = GUIUtils.createHorizontalLayoutComponent(
+        this.bottomComponent = GuiUtils.createHorizontalLayoutComponent(
                 addPokemonButton,
                 removeSelectedButton
         );
@@ -73,12 +73,12 @@ public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
         List<JComponent> components = new ArrayList<>();
         components.add(topComponent);
         if (!wildPokemonPanels.isEmpty()) {
-            components.add(GUIUtils.createLabel("     Pokemon Name                   Probability"));
+            components.add(GuiUtils.createLabel("     Pokemon Name                   Probability"));
         }
         components.addAll(wildPokemonPanels);
         components.add(bottomComponent);
 
-        GUIUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
+        GuiUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
     }
 
     private String getDefaultName() {

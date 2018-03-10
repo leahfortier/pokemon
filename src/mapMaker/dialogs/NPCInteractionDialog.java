@@ -3,7 +3,7 @@ package mapMaker.dialogs;
 import mapMaker.dialogs.action.ActionListPanel;
 import pattern.action.ActionMatcher;
 import pattern.action.NPCInteractionMatcher;
-import util.GUIUtils;
+import util.GuiUtils;
 import util.string.StringUtils;
 
 import javax.swing.JCheckBox;
@@ -24,12 +24,12 @@ class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
 
         this.interactionIndex = index;
 
-        interactionNameTextField = GUIUtils.createTextField(this.getDefaultName());
-        walkToPlayerCheckBox = GUIUtils.createCheckBox("Walk to playa");
+        interactionNameTextField = GuiUtils.createTextField(this.getDefaultName());
+        walkToPlayerCheckBox = GuiUtils.createCheckBox("Walk to playa");
         this.actionListPanel = new ActionListPanel(this);
 
-        this.topComponent = GUIUtils.createHorizontalLayoutComponent(
-                GUIUtils.createTextFieldComponent("Interaction Name", interactionNameTextField),
+        this.topComponent = GuiUtils.createHorizontalLayoutComponent(
+                GuiUtils.createTextFieldComponent("Interaction Name", interactionNameTextField),
                 walkToPlayerCheckBox
         );
 
@@ -66,6 +66,6 @@ class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
     @Override
     protected void renderDialog() {
         removeAll();
-        GUIUtils.setVerticalLayout(this, topComponent, actionListPanel);
+        GuiUtils.setVerticalLayout(this, topComponent, actionListPanel);
     }
 }
