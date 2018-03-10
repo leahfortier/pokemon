@@ -1,6 +1,6 @@
 package map;
 
-import util.Serializable;
+import util.serialization.Serializable;
 
 public class MapName implements Serializable {
     private final String region;

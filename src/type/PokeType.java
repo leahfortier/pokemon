@@ -3,7 +3,7 @@ package type;
 import org.jetbrains.annotations.NotNull;
 import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;
-import util.Serializable;
+import util.serialization.Serializable;
 
 import java.awt.Color;
 import java.util.Arrays;

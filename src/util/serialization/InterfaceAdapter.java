@@ -1,4 +1,4 @@
-package util;
+package util.serialization;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -12,7 +12,7 @@ import main.Global;
 
 import java.lang.reflect.Type;
 
-public class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
+class InterfaceAdapter implements JsonSerializer, JsonDeserializer {
     private static final String CLASSNAME = "className";
 
     @Override

@@ -2,7 +2,7 @@ package pattern.generic;
 
 import map.condition.Condition;
 import map.condition.ConditionSet;
-import pattern.JsonMatcher;
+import util.serialization.JsonMatcher;
 import pattern.map.ConditionMatcher;
 
 public abstract class TriggerMatcher implements JsonMatcher {

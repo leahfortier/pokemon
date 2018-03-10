@@ -12,7 +12,7 @@ import main.Global;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.PartyPokemon;
-import util.Serializable;
+import util.serialization.Serializable;
 
 public abstract class Status implements InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;

@@ -3,7 +3,7 @@ package item.berry.farm;
 import item.ItemNamesies;
 import item.bag.Bag;
 import main.Game;
-import util.Serializable;
+import util.serialization.Serializable;
 
 import java.util.ArrayList;
 import java.util.List;

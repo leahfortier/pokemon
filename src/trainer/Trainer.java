@@ -7,7 +7,7 @@ import item.bag.Bag;
 import main.Global;
 import pokemon.PartyPokemon;
 import util.RandomUtils;
-import util.Serializable;
+import util.serialization.Serializable;
 
 import java.util.ArrayList;
 import java.util.List;

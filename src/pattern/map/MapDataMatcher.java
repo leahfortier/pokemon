@@ -2,7 +2,7 @@ package pattern.map;
 
 import map.area.AreaData;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import pattern.JsonMatcher;
+import util.serialization.JsonMatcher;
 import pattern.generic.LocationTriggerMatcher;
 import util.GeneralUtils;
 

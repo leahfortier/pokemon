@@ -7,7 +7,7 @@ import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.evolution.BaseEvolution;
-import util.Serializable;
+import util.serialization.Serializable;
 
 public class EvolutionInfo implements Serializable {
     private ActivePokemon evolvingPokemon;

@@ -1,6 +1,7 @@
 package util;
 
 import map.Direction;
+import util.serialization.Serializable;
 
 import java.awt.Dimension;
 

@@ -1,6 +1,6 @@
 package pattern.action;
 
-import pattern.JsonMatcher;
+import util.serialization.JsonMatcher;
 import util.StringUtils;
 
 public class NPCInteractionMatcher implements JsonMatcher {

@@ -1,6 +1,6 @@
 package trainer.player.pokedex;
 
-import util.Serializable;
+import util.serialization.Serializable;
 
 enum PokedexStatus implements Serializable {
     NOT_SEEN(0),

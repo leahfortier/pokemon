@@ -2,7 +2,7 @@ package pattern.map;
 
 import main.Global;
 import map.condition.ConditionSet;
-import pattern.JsonMatcher;
+import util.serialization.JsonMatcher;
 import util.FileIO;
 import util.FileName;
 

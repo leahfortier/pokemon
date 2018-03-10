@@ -1,6 +1,6 @@
 package item.bag;
 
-import util.Serializable;
+import util.serialization.Serializable;
 
 import java.awt.Color;
 

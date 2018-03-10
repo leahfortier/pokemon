@@ -1,7 +1,7 @@
 package pokemon;
 
 import util.RandomUtils;
-import util.Serializable;
+import util.serialization.Serializable;
 
 import java.awt.Color;
 

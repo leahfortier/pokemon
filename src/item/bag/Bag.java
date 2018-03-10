@@ -16,7 +16,7 @@ import message.MessageUpdate;
 import message.Messages;
 import pokemon.PartyPokemon;
 import trainer.player.Player;
-import util.Serializable;
+import util.serialization.Serializable;
 
 import java.util.EnumMap;
 import java.util.EnumSet;

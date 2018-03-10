@@ -69,7 +69,7 @@ import pokemon.ability.AbilityNamesies;
 import type.PokeType;
 import type.Type;
 import util.RandomUtils;
-import util.Serializable;
+import util.serialization.Serializable;
 
 import java.util.ArrayList;
 import java.util.Arrays;

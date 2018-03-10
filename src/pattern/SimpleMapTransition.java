@@ -3,7 +3,7 @@ package pattern;
 import map.MapName;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.MultiPointTriggerMatcher;
-import util.Serializable;
+import util.serialization.Serializable;
 
 public class SimpleMapTransition extends MultiPointTriggerMatcher implements Serializable {
     private MapName nextMap;

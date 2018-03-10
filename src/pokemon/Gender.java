@@ -2,7 +2,7 @@ package pokemon;
 
 import battle.ActivePokemon;
 import util.RandomUtils;
-import util.Serializable;
+import util.serialization.Serializable;
 
 import java.awt.Color;
 

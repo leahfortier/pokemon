@@ -1,6 +1,6 @@
 package battle.effect.status;
 
-import util.Serializable;
+import util.serialization.Serializable;
 
 import java.util.function.Supplier;
 

@@ -4,7 +4,7 @@ import main.Game;
 import main.Global;
 import map.condition.Condition;
 import map.condition.ConditionSet;
-import pattern.JsonMatcher;
+import util.serialization.JsonMatcher;
 import util.StringUtils;
 
 public class ConditionMatcher implements JsonMatcher {

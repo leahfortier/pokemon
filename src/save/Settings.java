@@ -6,7 +6,7 @@ import util.FileIO;
 import util.FileName;
 import util.Folder;
 import util.GeneralUtils;
-import util.Serializable;
+import util.serialization.Serializable;
 
 import java.io.File;
 

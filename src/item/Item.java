@@ -97,7 +97,7 @@ import trainer.Trainer;
 import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
-import util.Serializable;
+import util.serialization.Serializable;
 
 import java.util.ArrayList;
 import java.util.EnumMap;

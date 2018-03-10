@@ -47,7 +47,7 @@ import trainer.player.medal.MedalTheme;
 import type.TypeAdvantage;
 import util.PokeString;
 import util.RandomUtils;
-import util.Serializable;
+import util.serialization.Serializable;
 import util.StringAppender;
 
 import java.util.ArrayList;

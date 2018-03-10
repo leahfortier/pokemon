@@ -2,7 +2,7 @@ package map.overworld;
 
 import battle.ActivePokemon;
 import main.Game;
-import pattern.JsonMatcher;
+import util.serialization.JsonMatcher;
 import pattern.PokemonMatcher;
 import pokemon.Gender;
 import pokemon.Nature;

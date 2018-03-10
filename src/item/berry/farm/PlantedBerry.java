@@ -2,7 +2,7 @@ package item.berry.farm;
 
 import item.ItemNamesies;
 import item.berry.Berry;
-import util.Serializable;
+import util.serialization.Serializable;
 import util.TimeUtils;
 
 import java.util.concurrent.TimeUnit;

@@ -2,7 +2,7 @@ package item.bag;
 
 import util.FileIO;
 import util.Folder;
-import util.Serializable;
+import util.serialization.Serializable;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

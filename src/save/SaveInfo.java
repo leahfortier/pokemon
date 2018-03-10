@@ -1,7 +1,7 @@
 package save;
 
 import trainer.player.Player;
-import util.Serializable;
+import util.serialization.Serializable;
 
 import java.io.File;
 

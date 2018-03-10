@@ -5,7 +5,7 @@ import pokemon.PartyPokemon;
 import trainer.Trainer;
 import util.GeneralUtils;
 import util.RandomUtils;
-import util.Serializable;
+import util.serialization.Serializable;
 
 import java.awt.Color;
 import java.util.ArrayList;

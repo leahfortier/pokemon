@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import main.Game;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
-import util.Serializable;
+import util.serialization.Serializable;
 import util.StringUtils;
 
 import java.util.EnumMap;

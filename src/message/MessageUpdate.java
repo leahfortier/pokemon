@@ -13,7 +13,7 @@ import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import sound.SoundTitle;
 import type.PokeType;
-import util.Serializable;
+import util.serialization.Serializable;
 import util.StringUtils;
 
 public class MessageUpdate {

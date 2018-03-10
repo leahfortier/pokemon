@@ -1,6 +1,7 @@
-package util;
+package util.serialization;
 
 import main.Global;
+import util.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

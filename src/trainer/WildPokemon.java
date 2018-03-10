@@ -5,7 +5,7 @@ import battle.Battle;
 import battle.Battle.EnterBattleMessageGetter;
 import main.Global;
 import pokemon.PartyPokemon;
-import util.Serializable;
+import util.serialization.Serializable;
 
 import java.util.Collections;
 import java.util.List;

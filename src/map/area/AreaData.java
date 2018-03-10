@@ -5,7 +5,7 @@ import map.overworld.TerrainType;
 import map.weather.WeatherState;
 import pokemon.PokemonNamesies;
 import sound.SoundTitle;
-import util.Serializable;
+import util.serialization.Serializable;
 import util.StringUtils;
 
 import java.awt.Color;

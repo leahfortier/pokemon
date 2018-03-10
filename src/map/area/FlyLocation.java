@@ -7,7 +7,7 @@ import map.Direction;
 import map.MapName;
 import pattern.SimpleMapTransition;
 import trainer.player.Player;
-import util.Serializable;
+import util.serialization.Serializable;
 
 public class FlyLocation implements Serializable {
     private static final long serialVersionUID = 1L;

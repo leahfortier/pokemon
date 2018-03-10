@@ -1,4 +1,4 @@
-package pattern;
+package util.serialization;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -7,7 +7,6 @@ import main.Global;
 import map.condition.Condition;
 import pattern.action.ActionMatcher;
 import util.FileIO;
-import util.InterfaceAdapter;
 
 public interface JsonMatcher {
     Gson gson = new GsonBuilder()

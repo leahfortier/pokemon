@@ -8,7 +8,7 @@ import pokemon.PartyPokemon;
 import trainer.player.Player;
 import trainer.player.medal.MedalTheme;
 import util.PokeString;
-import util.Serializable;
+import util.serialization.Serializable;
 import util.StringUtils;
 
 public class DayCareCenter implements Serializable {

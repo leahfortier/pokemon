@@ -8,7 +8,7 @@ import main.Global;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.Stat;
-import util.Serializable;
+import util.serialization.Serializable;
 import util.StringUtils;
 
 public class Stages implements Serializable {

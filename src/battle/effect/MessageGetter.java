@@ -2,7 +2,7 @@ package battle.effect;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import util.Serializable;
+import util.serialization.Serializable;
 
 public interface MessageGetter extends Serializable {
     String getGenericMessage(ActivePokemon p);

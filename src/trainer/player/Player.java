@@ -36,7 +36,7 @@ import trainer.player.medal.MedalTheme;
 import trainer.player.pokedex.Pokedex;
 import util.Point;
 import util.RandomUtils;
-import util.Serializable;
+import util.serialization.Serializable;
 import util.StringUtils;
 import util.TimeUtils;
 
