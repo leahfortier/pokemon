@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.status.Status;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import draw.DrawUtils;
 import item.Item;
 import item.ItemNamesies;
@@ -332,10 +332,10 @@ public abstract class PartyPokemon implements Serializable {
 
     // Returns whether or not the Pokemon is afflicted with a status condition
     public boolean hasStatus() {
-        return !this.hasStatus(StatusCondition.NO_STATUS);
+        return !this.hasStatus(StatusNamesies.NO_STATUS);
     }
 
-    public boolean hasStatus(StatusCondition type) {
+    public boolean hasStatus(StatusNamesies type) {
         return status.isType(type);
     }
 
@@ -396,7 +396,7 @@ public abstract class PartyPokemon implements Serializable {
     public int heal(int amount) {
 
         // Dead Pokemon can't heal
-        if (hasStatus(StatusCondition.FAINTED)) {
+        if (hasStatus(StatusNamesies.FAINTED)) {
             return 0;
         }
 

@@ -8,7 +8,7 @@ import battle.effect.EffectInterfaces.BattleEndTurnEffect;
 import battle.effect.EffectInterfaces.PowerChangeEffect;
 import battle.effect.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.battle.BattleEffect;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.Messages;
@@ -56,7 +56,7 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> {
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             // Levitating Pokemon are immune to the mist
             return !victim.isLevitating(b);
         }
@@ -133,8 +133,8 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> {
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-            return status == StatusCondition.ASLEEP && !victim.isLevitating(b);
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            return status == StatusNamesies.ASLEEP && !victim.isLevitating(b);
         }
 
         @Override

@@ -28,7 +28,7 @@ import battle.effect.holder.ItemHolder;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.Status;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
 import item.Item;
 import item.ItemNamesies;
@@ -476,7 +476,7 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean isActuallyDead() {
-        return this.hasStatus(StatusCondition.FAINTED);
+        return this.hasStatus(StatusNamesies.FAINTED);
     }
 
     public boolean isFainted(Battle b) {

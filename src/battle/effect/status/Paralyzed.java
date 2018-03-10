@@ -14,7 +14,7 @@ class Paralyzed extends Status implements BeforeTurnEffect, StatModifyingEffect 
     private static final long serialVersionUID = 1L;
 
     public Paralyzed() {
-        super(StatusCondition.PARALYZED);
+        super(StatusNamesies.PARALYZED);
     }
 
     // Electric-type Pokemon cannot be paralyzed

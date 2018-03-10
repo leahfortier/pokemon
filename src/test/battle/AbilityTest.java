@@ -2,7 +2,7 @@ package test.battle;
 
 import battle.attack.AttackNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
@@ -54,7 +54,7 @@ public class AbilityTest extends BaseTest {
             defending.assertFullHealth();
         });
         wonderGuardTest(AttackNamesies.THUNDER_WAVE, emptyInfo, (battle, attacking, defending) -> {
-            Assert.assertTrue(defending.hasStatus(StatusCondition.PARALYZED));
+            Assert.assertTrue(defending.hasStatus(StatusNamesies.PARALYZED));
             defending.assertFullHealth();
             new TestStages().test(defending);
         });
@@ -368,7 +368,7 @@ public class AbilityTest extends BaseTest {
         sheerForceSuccessTest(
                 AttackNamesies.INFERNO,
                 (battle, attacking, defending) -> Assert.assertFalse(defending.hasStatus()),
-                (battle, attacking, defending) -> Assert.assertTrue(defending.hasStatus(StatusCondition.BURNED))
+                (battle, attacking, defending) -> Assert.assertTrue(defending.hasStatus(StatusNamesies.BURNED))
         );
 
         // Flare Blitz has a chance to Burn, so gets increase from Sheer Force, but should still take recoil damage regardless

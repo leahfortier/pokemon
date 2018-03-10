@@ -81,7 +81,7 @@ import battle.effect.battle.BattleEffect;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.Status;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffect;
 import item.Item;
 import item.ItemInterface;
@@ -149,7 +149,7 @@ public class ClassTest extends BaseTest {
                 Attack.class,
                 ClassTest.class,
                 Save.class,
-                StatusCondition.class,
+                StatusNamesies.class,
                 Type.class,
                 RapidSpinRelease.class,
                 PokemonEffectNamesies.AQUA_RING.getEffect().getClass(),

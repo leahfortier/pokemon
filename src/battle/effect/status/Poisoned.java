@@ -13,12 +13,12 @@ class Poisoned extends Status implements EndTurnEffect {
     private static final long serialVersionUID = 1L;
 
     public Poisoned() {
-        super(StatusCondition.POISONED);
+        super(StatusNamesies.POISONED);
     }
 
     @Override
-    public boolean isType(StatusCondition statusCondition) {
-        return statusCondition == StatusCondition.POISONED || statusCondition == StatusCondition.BADLY_POISONED;
+    public boolean isType(StatusNamesies statusCondition) {
+        return statusCondition == StatusNamesies.POISONED || statusCondition == StatusNamesies.BADLY_POISONED;
     }
 
     @Override

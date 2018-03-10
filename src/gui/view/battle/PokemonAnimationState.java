@@ -2,7 +2,7 @@ package gui.view.battle;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import draw.Alignment;
 import draw.DrawUtils;
 import draw.ImageUtils;
@@ -451,7 +451,7 @@ class PokemonAnimationState {
             PartyPokemon pokemon = team.get(index);
 
             boolean silhouette = index == state.teamIndex
-                    ? state.getStatus() == StatusCondition.FAINTED
+                    ? state.getStatus() == StatusNamesies.FAINTED
                     : !pokemon.canFight() || (usedMaxPokemon && !pokemon.isBattleUsed());
 
             BufferedImage pokeball = TileSet.TINY_POKEBALL;
@@ -539,8 +539,8 @@ class PokemonAnimationState {
             type = new PokeType(Type.NO_TYPE);
         }
 
-        public StatusCondition getStatus() {
-            return this.frontPokemon == null ? StatusCondition.NO_STATUS : this.frontPokemon.getStatus().getType();
+        public StatusNamesies getStatus() {
+            return this.frontPokemon == null ? StatusNamesies.NO_STATUS : this.frontPokemon.getStatus().getType();
         }
 
         public int getStage(int index) {

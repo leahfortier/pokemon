@@ -83,7 +83,7 @@ import battle.effect.holder.ItemHolder;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.Status;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;
@@ -517,7 +517,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
-                Status.applyStatus(b, victim, user, StatusCondition.PARALYZED, CastSource.ABILITY);
+                Status.applyStatus(b, victim, user, StatusNamesies.PARALYZED, CastSource.ABILITY);
             }
         }
     }
@@ -619,7 +619,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
-                Status.applyStatus(b, victim, user, StatusCondition.POISONED, CastSource.ABILITY);
+                Status.applyStatus(b, victim, user, StatusNamesies.POISONED, CastSource.ABILITY);
             }
         }
     }
@@ -790,10 +790,10 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
     static class EffectSpore extends Ability implements PhysicalContactEffect {
         private static final long serialVersionUID = 1L;
 
-        private static final StatusCondition[] STATUSES = new StatusCondition[] {
-                StatusCondition.PARALYZED,
-                StatusCondition.POISONED,
-                StatusCondition.ASLEEP
+        private static final StatusNamesies[] STATUSES = new StatusNamesies[] {
+                StatusNamesies.PARALYZED,
+                StatusNamesies.POISONED,
+                StatusNamesies.ASLEEP
         };
 
         EffectSpore() {
@@ -899,7 +899,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         private static final long serialVersionUID = 1L;
 
         private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusCondition.PARALYZED)) {
+            if (victim.hasStatus(StatusNamesies.PARALYZED)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
             }
         }
@@ -914,8 +914,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-            return status == StatusCondition.PARALYZED;
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            return status == StatusNamesies.PARALYZED;
         }
 
         @Override
@@ -977,7 +977,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         private static final long serialVersionUID = 1L;
 
         private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusCondition.ASLEEP)) {
+            if (victim.hasStatus(StatusNamesies.ASLEEP)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
             }
         }
@@ -992,8 +992,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-            return status == StatusCondition.ASLEEP;
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            return status == StatusNamesies.ASLEEP;
         }
 
         @Override
@@ -1006,7 +1006,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         private static final long serialVersionUID = 1L;
 
         private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusCondition.ASLEEP)) {
+            if (victim.hasStatus(StatusNamesies.ASLEEP)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
             }
         }
@@ -1021,8 +1021,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-            return status == StatusCondition.ASLEEP;
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            return status == StatusNamesies.ASLEEP;
         }
 
         @Override
@@ -1042,11 +1042,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
     static class Synchronize extends Ability implements StatusReceivedEffect, WildEncounterAlterer {
         private static final long serialVersionUID = 1L;
 
-        private static final Set<StatusCondition> PASSABLE_STATUSES = EnumSet.of(
-                StatusCondition.BURNED,
-                StatusCondition.PARALYZED,
-                StatusCondition.POISONED,
-                StatusCondition.BADLY_POISONED
+        private static final Set<StatusNamesies> PASSABLE_STATUSES = EnumSet.of(
+                StatusNamesies.BURNED,
+                StatusNamesies.PARALYZED,
+                StatusNamesies.POISONED,
+                StatusNamesies.BADLY_POISONED
         );
 
         Synchronize() {
@@ -1054,7 +1054,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
+        public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType) {
             // Only applies when the opponent gives the victim the condition
             if (caster == victim) {
                 return;
@@ -1261,8 +1261,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
-            if (statusType == StatusCondition.ASLEEP) {
+        public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType) {
+            if (statusType == StatusNamesies.ASLEEP) {
                 Status sleepyTime = victim.getStatus();
                 sleepyTime.setTurns(sleepyTime.getTurns()/2);
             }
@@ -1443,7 +1443,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void switchOut(ActivePokemon switchee) {
-            if (!switchee.hasStatus(StatusCondition.FAINTED)) {
+            if (!switchee.hasStatus(StatusNamesies.FAINTED)) {
                 switchee.removeStatus();
             }
         }
@@ -1470,7 +1470,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             return b.getWeather().namesies() == WeatherNamesies.SUNNY;
         }
 
@@ -1520,7 +1520,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         private static final long serialVersionUID = 1L;
 
         private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusCondition.BURNED)) {
+            if (victim.hasStatus(StatusNamesies.BURNED)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
             }
         }
@@ -1535,8 +1535,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-            return status == StatusCondition.BURNED;
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            return status == StatusNamesies.BURNED;
         }
 
         @Override
@@ -1587,7 +1587,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
-                Status.applyStatus(b, victim, user, StatusCondition.BURNED, CastSource.ABILITY);
+                Status.applyStatus(b, victim, user, StatusNamesies.BURNED, CastSource.ABILITY);
             }
         }
     }
@@ -1642,8 +1642,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void receiveStatus(Battle b, ActivePokemon victim, StatusCondition statusType) {
-            if (statusType == StatusCondition.FAINTED) {
+        public void receiveStatus(Battle b, ActivePokemon victim, StatusNamesies statusType) {
+            if (statusType == StatusNamesies.FAINTED) {
                 ActivePokemon abilify = this.getOtherPokemon(b, victim);
                 abilify.getStages().modifyStage(abilify, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
             }
@@ -1835,7 +1835,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         private static final long serialVersionUID = 1L;
 
         private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusCondition.POISONED)) {
+            if (victim.hasStatus(StatusNamesies.POISONED)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
             }
         }
@@ -1850,8 +1850,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-            return status == StatusCondition.POISONED;
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            return status == StatusNamesies.POISONED;
         }
 
         @Override
@@ -2073,7 +2073,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         private static final long serialVersionUID = 1L;
 
         private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusCondition.FROZEN)) {
+            if (victim.hasStatus(StatusNamesies.FROZEN)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
             }
         }
@@ -2088,8 +2088,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-            return status == StatusCondition.FROZEN;
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            return status == StatusNamesies.FROZEN;
         }
 
         @Override
@@ -2155,7 +2155,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void switchOut(ActivePokemon switchee) {
-            if (!switchee.hasStatus(StatusCondition.FAINTED)) {
+            if (!switchee.hasStatus(StatusNamesies.FAINTED)) {
                 switchee.healHealthFraction(1/3.0);
             }
         }
@@ -2181,7 +2181,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasStatus(StatusCondition.ASLEEP)) {
+            if (victim.hasStatus(StatusNamesies.ASLEEP)) {
                 lazyface = false;
             } else {
                 lazyface = !lazyface;
@@ -2338,7 +2338,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.hasStatus(StatusCondition.POISONED);
+            return p.hasStatus(StatusNamesies.POISONED);
         }
 
         @Override
@@ -2693,7 +2693,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             ActivePokemon other = b.getOtherPokemon(victim);
-            if (other.hasStatus(StatusCondition.ASLEEP)) {
+            if (other.hasStatus(StatusNamesies.ASLEEP)) {
                 Messages.add(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
                 other.reduceHealthFraction(b, 1/8.0);
             }
@@ -2754,7 +2754,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
-                Status.applyStatus(b, user, victim, StatusCondition.POISONED, CastSource.ABILITY);
+                Status.applyStatus(b, user, victim, StatusNamesies.POISONED, CastSource.ABILITY);
             }
         }
     }
@@ -3463,7 +3463,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         private static final long serialVersionUID = 1L;
 
         private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusCondition.ASLEEP)) {
+            if (victim.hasStatus(StatusNamesies.ASLEEP)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
             }
         }
@@ -3478,8 +3478,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-            return status == StatusCondition.ASLEEP;
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            return status == StatusNamesies.ASLEEP;
         }
 
         @Override
@@ -3810,7 +3810,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             return victim.isType(b, Type.GRASS);
         }
 
@@ -3901,7 +3901,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            return defending.hasStatus(StatusCondition.POISONED);
+            return defending.hasStatus(StatusNamesies.POISONED);
         }
     }
 
@@ -3909,7 +3909,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         private static final long serialVersionUID = 1L;
 
         private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusCondition.BURNED)) {
+            if (victim.hasStatus(StatusNamesies.BURNED)) {
                 Status.removeStatus(b, victim, CastSource.ABILITY);
             }
         }
@@ -3934,8 +3934,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-            return status == StatusCondition.BURNED;
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            return status == StatusNamesies.BURNED;
         }
 
         @Override
@@ -4144,7 +4144,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         private boolean nightyNight(Battle b, ActivePokemon sleepyHead) {
 
             // Sleepy head is already a sleepster nighty night
-            if (sleepyHead.hasStatus(StatusCondition.ASLEEP)) {
+            if (sleepyHead.hasStatus(StatusNamesies.ASLEEP)) {
                 return false;
             }
 
@@ -4153,9 +4153,9 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
                 return false;
             }
 
-            if (Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, sleepyHead, sleepyHead)) {
+            if (Status.appliesWithoutStatusCheck(StatusNamesies.ASLEEP, b, sleepyHead, sleepyHead)) {
                 sleepyHead.removeStatus();
-                Status.applyStatus(b, sleepyHead, sleepyHead, StatusCondition.ASLEEP, CastSource.ABILITY);
+                Status.applyStatus(b, sleepyHead, sleepyHead, StatusNamesies.ASLEEP, CastSource.ABILITY);
                 sleepyHead.getStatus().setTurns(-1);
                 return true;
             }
@@ -4255,8 +4255,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
-            if (statusType == StatusCondition.FAINTED) {
+        public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType) {
+            if (statusType == StatusNamesies.FAINTED) {
                 ActivePokemon murderer = b.getOtherPokemon(victim);
 
                 // Only grant death wish if murdered through direct damage

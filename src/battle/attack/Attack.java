@@ -51,7 +51,7 @@ import battle.effect.holder.ItemHolder;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.Status;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
 import item.Item;
 import item.ItemNamesies;
@@ -95,7 +95,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
     private MoveCategory category;
     private List<EffectNamesies> effects;
     private int effectChance;
-    private StatusCondition status;
+    private StatusNamesies status;
     private List<MoveType> moveTypes;
     private boolean selfTarget;
     private int priority;
@@ -114,7 +114,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         this.accuracy = 10000;
         this.selfTarget = false;
         this.priority = 0;
-        this.status = StatusCondition.NO_STATUS;
+        this.status = StatusNamesies.NO_STATUS;
         this.statChanges = new int[Stat.NUM_BATTLE_STATS];
         this.effectChance = 100;
         this.printCast = true;
@@ -152,7 +152,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         // Giving the target a status condition is a secondary effect
-        if (status != StatusCondition.NO_STATUS) {
+        if (status != StatusNamesies.NO_STATUS) {
             return true;
         }
 
@@ -350,7 +350,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         // Give Status Condition
-        if (status != StatusCondition.NO_STATUS) {
+        if (status != StatusNamesies.NO_STATUS) {
             boolean success = Status.applyStatus(b, user, victim, status);
             if (!success && canPrintFail()) {
                 Messages.add(Status.getFailMessage(b, user, victim, status));
@@ -422,7 +422,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         ThunderWave() {
             super(AttackNamesies.THUNDER_WAVE, Type.ELECTRIC, MoveCategory.STATUS, 20, "The user launches a weak jolt of electricity that paralyzes the target.");
             super.accuracy = 90;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
         }
     }
 
@@ -432,7 +432,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         PoisonPowder() {
             super(AttackNamesies.POISON_POWDER, Type.POISON, MoveCategory.STATUS, 35, "The user scatters a cloud of poisonous dust that poisons the target.");
             super.accuracy = 75;
-            super.status = StatusCondition.POISONED;
+            super.status = StatusNamesies.POISONED;
         }
     }
 
@@ -442,7 +442,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         SleepPowder() {
             super(AttackNamesies.SLEEP_POWDER, Type.GRASS, MoveCategory.STATUS, 15, "The user scatters a big cloud of sleep-inducing dust around the target.");
             super.accuracy = 75;
-            super.status = StatusCondition.ASLEEP;
+            super.status = StatusNamesies.ASLEEP;
         }
     }
 
@@ -452,7 +452,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         Toxic() {
             super(AttackNamesies.TOXIC, Type.POISON, MoveCategory.STATUS, 10, "A move that leaves the target badly poisoned. Its poison damage worsens every turn.");
             super.accuracy = 90;
-            super.status = StatusCondition.BADLY_POISONED;
+            super.status = StatusNamesies.BADLY_POISONED;
         }
 
         @Override
@@ -470,7 +470,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 40;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
         }
     }
 
@@ -735,12 +735,12 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            super.status = StatusCondition.NO_STATUS;
+            super.status = StatusNamesies.NO_STATUS;
             super.effects.clear();
 
             // If the effect is being applied, 50/50 chance to give a status condition vs. flinching
             if (RandomUtils.chanceTest(50)) {
-                super.status = StatusCondition.BURNED;
+                super.status = StatusNamesies.BURNED;
             } else {
                 super.effects.add(PokemonEffectNamesies.FLINCH);
             }
@@ -905,7 +905,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 90;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
         }
     }
 
@@ -968,7 +968,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super(AttackNamesies.INFERNO, Type.FIRE, MoveCategory.SPECIAL, 5, "The user attacks by engulfing the target in an intense fire. This leaves the target with a burn.");
             super.power = 100;
             super.accuracy = 50;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
         }
     }
 
@@ -1025,7 +1025,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 95;
             super.accuracy = 90;
             super.effectChance = 10;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
         }
     }
 
@@ -1037,7 +1037,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 120;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
             super.moveTypes.add(MoveType.DEFROST);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
@@ -1615,7 +1615,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         StunSpore() {
             super(AttackNamesies.STUN_SPORE, Type.GRASS, MoveCategory.STATUS, 30, "The user scatters a cloud of numbing powder that paralyzes the target.");
             super.accuracy = 75;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
         }
     }
 
@@ -1798,7 +1798,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 15;
             super.accuracy = 100;
             super.effectChance = 30;
-            super.status = StatusCondition.POISONED;
+            super.status = StatusNamesies.POISONED;
         }
     }
 
@@ -1872,7 +1872,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 25;
             super.accuracy = 100;
             super.effectChance = 20;
-            super.status = StatusCondition.POISONED;
+            super.status = StatusNamesies.POISONED;
         }
 
         @Override
@@ -1989,7 +1989,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 80;
             super.accuracy = 100;
             super.effectChance = 30;
-            super.status = StatusCondition.POISONED;
+            super.status = StatusNamesies.POISONED;
             super.moveTypes.add(MoveType.PUNCHING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
@@ -2125,7 +2125,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 40;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
         }
     }
 
@@ -2375,7 +2375,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         Glare() {
             super(AttackNamesies.GLARE, Type.NORMAL, MoveCategory.STATUS, 30, "The user intimidates the target with the pattern on its belly to cause paralysis.");
             super.accuracy = 100;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
         }
     }
 
@@ -2555,7 +2555,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 120;
             super.accuracy = 80;
             super.effectChance = 30;
-            super.status = StatusCondition.POISONED;
+            super.status = StatusNamesies.POISONED;
         }
     }
 
@@ -2573,12 +2573,12 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            super.status = StatusCondition.NO_STATUS;
+            super.status = StatusNamesies.NO_STATUS;
             super.effects.clear();
 
             // If the effect is being applied, 50/50 chance to give a status condition vs. flinching
             if (RandomUtils.chanceTest(50)) {
-                super.status = StatusCondition.FROZEN;
+                super.status = StatusNamesies.FROZEN;
             } else {
                 super.effects.add(PokemonEffectNamesies.FLINCH);
             }
@@ -2599,12 +2599,12 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            super.status = StatusCondition.NO_STATUS;
+            super.status = StatusNamesies.NO_STATUS;
             super.effects.clear();
 
             // If the effect is being applied, 50/50 chance to give a status condition vs. flinching
             if (RandomUtils.chanceTest(50)) {
-                super.status = StatusCondition.PARALYZED;
+                super.status = StatusNamesies.PARALYZED;
             } else {
                 super.effects.add(PokemonEffectNamesies.FLINCH);
             }
@@ -2664,7 +2664,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 90;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
         }
     }
 
@@ -2690,7 +2690,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 80;
             super.accuracy = 100;
             super.effectChance = 30;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
         }
     }
 
@@ -2713,7 +2713,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 110;
             super.accuracy = 70;
             super.effectChance = 30;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
         }
 
         @Override
@@ -2886,7 +2886,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 50;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.POISONED;
+            super.status = StatusNamesies.POISONED;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
@@ -2910,7 +2910,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 50;
             super.accuracy = 100;
             super.effectChance = 50;
-            super.status = StatusCondition.BADLY_POISONED;
+            super.status = StatusNamesies.BADLY_POISONED;
             super.moveTypes.add(MoveType.BITING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
@@ -2940,7 +2940,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 85;
             super.accuracy = 100;
             super.effectChance = 30;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
@@ -3048,7 +3048,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         Sing() {
             super(AttackNamesies.SING, Type.NORMAL, MoveCategory.STATUS, 15, "A soothing lullaby is sung in a calming voice that puts the target into a deep slumber.");
             super.accuracy = 55;
-            super.status = StatusCondition.ASLEEP;
+            super.status = StatusNamesies.ASLEEP;
             super.moveTypes.add(MoveType.SOUND_BASED);
         }
     }
@@ -3108,12 +3108,12 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.hasStatus(StatusCondition.ASLEEP) ? 2 : 1;
+            return victim.hasStatus(StatusNamesies.ASLEEP) ? 2 : 1;
         }
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.hasStatus(StatusCondition.ASLEEP)) {
+            if (victim.hasStatus(StatusNamesies.ASLEEP)) {
                 Status.removeStatus(b, victim, CastSource.ATTACK);
             }
         }
@@ -3295,7 +3295,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         WillOWisp() {
             super(AttackNamesies.WILL_O_WISP, Type.FIRE, MoveCategory.STATUS, 15, "The user shoots a sinister, bluish-white flame at the target to inflict a burn.");
             super.accuracy = 85;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
         }
     }
 
@@ -3335,7 +3335,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 110;
             super.accuracy = 85;
             super.effectChance = 10;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
         }
     }
 
@@ -3366,7 +3366,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         Rest() {
             super(AttackNamesies.REST, Type.PSYCHIC, MoveCategory.STATUS, 10, "The user goes to sleep for two turns. This fully restores the user's HP and heals any status conditions.");
-            super.status = StatusCondition.ASLEEP;
+            super.status = StatusNamesies.ASLEEP;
             super.moveTypes.add(MoveType.HEALING);
             super.selfTarget = true;
         }
@@ -3390,7 +3390,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.hasStatus(StatusCondition.ASLEEP) && Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, user, user) && !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return !user.hasStatus(StatusNamesies.ASLEEP) && Status.appliesWithoutStatusCheck(StatusNamesies.ASLEEP, b, user, user) && !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
         }
     }
 
@@ -3562,7 +3562,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         Spore() {
             super(AttackNamesies.SPORE, Type.GRASS, MoveCategory.STATUS, 15, "The user scatters bursts of spores that induce sleep.");
             super.accuracy = 100;
-            super.status = StatusCondition.ASLEEP;
+            super.status = StatusNamesies.ASLEEP;
         }
     }
 
@@ -3574,7 +3574,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 70;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.POISONED;
+            super.status = StatusNamesies.POISONED;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
@@ -3882,10 +3882,10 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
     static class TriAttack extends Attack {
         private static final long serialVersionUID = 1L;
 
-        private static final StatusCondition[] statusConditions = {
-                StatusCondition.PARALYZED,
-                StatusCondition.BURNED,
-                StatusCondition.FROZEN
+        private static final StatusNamesies[] statusConditions = {
+                StatusNamesies.PARALYZED,
+                StatusNamesies.BURNED,
+                StatusNamesies.FROZEN
         };
 
         TriAttack() {
@@ -4231,7 +4231,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 60;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
             super.moveTypes.add(MoveType.DEFROST);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
@@ -4283,7 +4283,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         Hypnosis() {
             super(AttackNamesies.HYPNOSIS, Type.PSYCHIC, MoveCategory.STATUS, 20, "The user employs hypnotic suggestion to make the target fall into a deep sleep.");
             super.accuracy = 60;
-            super.status = StatusCondition.ASLEEP;
+            super.status = StatusNamesies.ASLEEP;
         }
     }
 
@@ -4621,7 +4621,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 95;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.POISONED;
+            super.status = StatusNamesies.POISONED;
         }
     }
 
@@ -4814,7 +4814,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 85;
             super.accuracy = 85;
             super.effectChance = 30;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
             super.moveTypes.add(MoveType.AIRBORNE);
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -4966,7 +4966,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 65;
             super.accuracy = 100;
             super.effectChance = 30;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
@@ -5011,7 +5011,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super(AttackNamesies.ZAP_CANNON, Type.ELECTRIC, MoveCategory.SPECIAL, 5, "The user fires an electric blast like a cannon to inflict damage and cause paralysis.");
             super.power = 120;
             super.accuracy = 50;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
             super.moveTypes.add(MoveType.BOMB_BALL);
         }
     }
@@ -5189,7 +5189,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 90;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.FROZEN;
+            super.status = StatusNamesies.FROZEN;
         }
     }
 
@@ -5226,7 +5226,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         PoisonGas() {
             super(AttackNamesies.POISON_GAS, Type.POISON, MoveCategory.STATUS, 40, "A cloud of poison gas is sprayed in the face of opposing Pok\u00e9mon, poisoning those hit.");
             super.accuracy = 90;
-            super.status = StatusCondition.POISONED;
+            super.status = StatusNamesies.POISONED;
         }
     }
 
@@ -5238,7 +5238,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 65;
             super.accuracy = 100;
             super.effectChance = 30;
-            super.status = StatusCondition.POISONED;
+            super.status = StatusNamesies.POISONED;
         }
     }
 
@@ -5250,7 +5250,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 90;
             super.accuracy = 100;
             super.effectChance = 30;
-            super.status = StatusCondition.POISONED;
+            super.status = StatusNamesies.POISONED;
             super.moveTypes.add(MoveType.BOMB_BALL);
         }
     }
@@ -5385,7 +5385,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 30;
             super.accuracy = 100;
             super.effectChance = 30;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
@@ -5457,7 +5457,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.hasStatus(StatusCondition.ASLEEP);
+            return victim.hasStatus(StatusNamesies.ASLEEP);
         }
     }
 
@@ -5527,7 +5527,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 60;
             super.accuracy = 100;
             super.effectChance = 30;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
         }
     }
 
@@ -5963,7 +5963,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 85;
             super.accuracy = 90;
             super.effectChance = 10;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
@@ -6046,7 +6046,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 75;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
             super.moveTypes.add(MoveType.PUNCHING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
@@ -6060,7 +6060,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 75;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.FROZEN;
+            super.status = StatusNamesies.FROZEN;
             super.moveTypes.add(MoveType.PUNCHING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
@@ -6074,7 +6074,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 75;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
             super.moveTypes.add(MoveType.PUNCHING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
@@ -6281,7 +6281,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 30;
             super.accuracy = 70;
             super.effectChance = 40;
-            super.status = StatusCondition.POISONED;
+            super.status = StatusNamesies.POISONED;
         }
     }
 
@@ -6638,7 +6638,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         LovelyKiss() {
             super(AttackNamesies.LOVELY_KISS, Type.NORMAL, MoveCategory.STATUS, 10, "With a scary face, the user tries to force a kiss on the target. If it succeeds, the target falls asleep.");
             super.accuracy = 75;
-            super.status = StatusCondition.ASLEEP;
+            super.status = StatusNamesies.ASLEEP;
         }
     }
 
@@ -6650,7 +6650,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 40;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.FROZEN;
+            super.status = StatusNamesies.FROZEN;
         }
     }
 
@@ -6702,7 +6702,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 110;
             super.accuracy = 70;
             super.effectChance = 10;
-            super.status = StatusCondition.FROZEN;
+            super.status = StatusNamesies.FROZEN;
         }
 
         @Override
@@ -6729,7 +6729,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 80;
             super.accuracy = 100;
             super.effectChance = 30;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
         }
     }
 
@@ -7011,7 +7011,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasStatus(StatusCondition.ASLEEP);
+            return user.hasStatus(StatusNamesies.ASLEEP);
         }
     }
 
@@ -7043,7 +7043,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasStatus(StatusCondition.ASLEEP) && !this.moves.isEmpty();
+            return user.hasStatus(StatusNamesies.ASLEEP) && !this.moves.isEmpty();
         }
     }
 
@@ -7280,7 +7280,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         GrassWhistle() {
             super(AttackNamesies.GRASS_WHISTLE, Type.GRASS, MoveCategory.STATUS, 15, "The user plays a pleasant melody that lulls the target into a deep sleep.");
             super.accuracy = 55;
-            super.status = StatusCondition.ASLEEP;
+            super.status = StatusNamesies.ASLEEP;
             super.moveTypes.add(MoveType.SOUND_BASED);
         }
     }
@@ -7685,7 +7685,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 100;
             super.accuracy = 95;
             super.effectChance = 50;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
             super.moveTypes.add(MoveType.DEFROST);
         }
     }
@@ -7768,7 +7768,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 60;
             super.accuracy = 100;
             super.effectChance = 30;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
@@ -7806,12 +7806,12 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.hasStatus(StatusCondition.PARALYZED) ? 2 : 1;
+            return victim.hasStatus(StatusNamesies.PARALYZED) ? 2 : 1;
         }
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.hasStatus(StatusCondition.PARALYZED)) {
+            if (victim.hasStatus(StatusNamesies.PARALYZED)) {
                 Status.removeStatus(b, victim, CastSource.ATTACK);
             }
         }
@@ -7964,7 +7964,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.hasStatus(StatusCondition.POISONED) ? 2 : 1;
+            return victim.hasStatus(StatusNamesies.POISONED) ? 2 : 1;
         }
     }
 
@@ -8320,7 +8320,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         DarkVoid() {
             super(AttackNamesies.DARK_VOID, Type.DARK, MoveCategory.STATUS, 10, "Opposing Pok\u00e9mon are dragged into a world of total darkness that makes them sleep.");
             super.accuracy = 50;
-            super.status = StatusCondition.ASLEEP;
+            super.status = StatusNamesies.ASLEEP;
         }
     }
 
@@ -8365,7 +8365,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 100;
             super.accuracy = 100;
             super.effectChance = 30;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
             super.moveTypes.add(MoveType.BOMB_BALL);
         }
     }
@@ -8463,7 +8463,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 80;
             super.accuracy = 100;
             super.effectChance = 30;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
             super.moveTypes.add(MoveType.DEFROST);
         }
     }
@@ -8731,7 +8731,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 130;
             super.accuracy = 85;
             super.effectChance = 20;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
         }
     }
 
@@ -8743,7 +8743,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 130;
             super.accuracy = 85;
             super.effectChance = 20;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
@@ -8867,7 +8867,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 140;
             super.accuracy = 90;
             super.effectChance = 30;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
             super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             this.resetReady();
@@ -9646,7 +9646,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 75;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.ASLEEP;
+            super.status = StatusNamesies.ASLEEP;
             super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.SOUND_BASED);
         }
@@ -9675,7 +9675,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 140;
             super.accuracy = 90;
             super.effectChance = 30;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
             super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             this.resetReady();
@@ -9736,7 +9736,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 120;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
@@ -9935,7 +9935,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super(AttackNamesies.NUZZLE, Type.ELECTRIC, MoveCategory.PHYSICAL, 20, "The user attacks by nuzzling its electrified cheeks against the target. This also leaves the target with paralysis.");
             super.power = 20;
             super.accuracy = 100;
-            super.status = StatusCondition.PARALYZED;
+            super.status = StatusNamesies.PARALYZED;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
@@ -9996,7 +9996,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 70;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.status = StatusCondition.FROZEN;
+            super.status = StatusNamesies.FROZEN;
         }
 
         @Override
@@ -10323,7 +10323,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.hasStatus(StatusCondition.POISONED);
+            return victim.hasStatus(StatusNamesies.POISONED);
         }
     }
 
@@ -10546,12 +10546,12 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.hasStatus(StatusCondition.BURNED) ? 2 : 1;
+            return victim.hasStatus(StatusNamesies.BURNED) ? 2 : 1;
         }
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.hasStatus(StatusCondition.BURNED)) {
+            if (victim.hasStatus(StatusNamesies.BURNED)) {
                 Status.removeStatus(b, victim, CastSource.ATTACK);
             }
         }
@@ -10613,7 +10613,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         ToxicThread() {
             super(AttackNamesies.TOXIC_THREAD, Type.POISON, MoveCategory.STATUS, 20, "The user shoots poisonous threads to poison the target and lower the target's Speed stat.");
             super.accuracy = 100;
-            super.status = StatusCondition.POISONED;
+            super.status = StatusNamesies.POISONED;
             super.statChanges[Stat.SPEED.index()] = -1;
         }
     }
@@ -11040,7 +11040,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 110;
             super.accuracy = 95;
             super.effectChance = 30;
-            super.status = StatusCondition.BURNED;
+            super.status = StatusNamesies.BURNED;
             super.moveTypes.add(MoveType.DEFROST);
         }
     }

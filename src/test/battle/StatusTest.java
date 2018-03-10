@@ -2,7 +2,7 @@ package test.battle;
 
 import battle.attack.AttackNamesies;
 import battle.effect.status.Status;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.PokemonNamesies;
@@ -36,13 +36,13 @@ public class StatusTest extends BaseTest {
 
     @Test
     public void testStatChanges() {
-        testStatChange(StatusCondition.PARALYZED, Stat.SPEED, .25);
-        testStatChange(StatusCondition.BURNED, Stat.ATTACK, .5);
+        testStatChange(StatusNamesies.PARALYZED, Stat.SPEED, .25);
+        testStatChange(StatusNamesies.BURNED, Stat.ATTACK, .5);
 
         // TODO: Test Guts
     }
 
-    private void testStatChange(StatusCondition statusCondition, Stat stat, double ratio) {
+    private void testStatChange(StatusNamesies statusCondition, Stat stat, double ratio) {
         TestBattle battle = TestBattle.create(PokemonNamesies.RAPIDASH, PokemonNamesies.WATCHOG);
         TestPokemon mahBoi = battle.getAttacking();
         TestPokemon uglyFace = battle.getDefending();
@@ -65,10 +65,10 @@ public class StatusTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         Assert.assertFalse(defending.hasStatus());
-        Assert.assertFalse(defending.hasStatus(StatusCondition.POISONED));
+        Assert.assertFalse(defending.hasStatus(StatusNamesies.POISONED));
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
-        Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
 
         battle.defendingFight(AttackNamesies.PURIFY);
         Assert.assertFalse(defending.hasStatus());
@@ -81,7 +81,7 @@ public class StatusTest extends BaseTest {
         // Unless you have Mold Breaker
         attacking.withAbility(AbilityNamesies.MOLD_BREAKER);
         attacking.apply(true, AttackNamesies.TOXIC, battle);
-        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
 
         battle.defendingFight(AttackNamesies.REFRESH);
         Assert.assertFalse(defending.hasStatus());
@@ -94,7 +94,7 @@ public class StatusTest extends BaseTest {
         // Suppressed ability -- should poison regardless of mold breaker
         battle.attackingFight(AttackNamesies.GASTRO_ACID);
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
 
         battle.emptyHeal();
         Assert.assertFalse(defending.hasStatus());
@@ -108,11 +108,11 @@ public class StatusTest extends BaseTest {
         // Unless you have Corrosion
         attacking.withAbility(AbilityNamesies.CORROSION);
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
 
         // Type should not heal at end of turn
         battle.attackingFight(AttackNamesies.SPLASH);
-        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
 
         battle.emptyHeal();
         Assert.assertFalse(defending.hasStatus());
@@ -141,14 +141,14 @@ public class StatusTest extends BaseTest {
         battle.attackingFight(AttackNamesies.TOXIC);
 
         // After 1 turn -- 15/16 health ratio
-        Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
         attacking.assertFullHealth();
         defending.assertHealthRatio(15/16f);
 
         // After 2 turns -- 13/16 health ratio
         int prevHp = defending.getHP();
         battle.splashFight();
-        Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
         attacking.assertFullHealth();
         defending.assertHealthRatioDiff(prevHp, 2/16f);
         defending.assertHealthRatio(13/16f, 1);
@@ -156,7 +156,7 @@ public class StatusTest extends BaseTest {
         // After 3 turns -- 10/16 health ratio
         prevHp = defending.getHP();
         battle.splashFight();
-        Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
         attacking.assertFullHealth();
         defending.assertHealthRatioDiff(prevHp, 3/16f);
         defending.assertHealthRatio(10/16f, 2);
@@ -164,7 +164,7 @@ public class StatusTest extends BaseTest {
         // After 4 turns -- 6/16 health ratio
         prevHp = defending.getHP();
         battle.splashFight();
-        Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
         attacking.assertFullHealth();
         defending.assertHealthRatioDiff(prevHp, 4/16f);
         defending.assertHealthRatio(6/16f, 3);
@@ -172,7 +172,7 @@ public class StatusTest extends BaseTest {
         // After 5 turns -- 1/16 health ratio
         prevHp = defending.getHP();
         battle.splashFight();
-        Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
         attacking.assertFullHealth();
         defending.assertHealthRatioDiff(prevHp, 5/16f);
         defending.assertHealthRatio(1/16f, 4);

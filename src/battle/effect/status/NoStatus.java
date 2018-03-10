@@ -8,7 +8,7 @@ class NoStatus extends Status {
     private static final long serialVersionUID = 1L;
 
     NoStatus() {
-        super(StatusCondition.NO_STATUS);
+        super(StatusNamesies.NO_STATUS);
     }
 
     @Override

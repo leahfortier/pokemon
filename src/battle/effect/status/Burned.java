@@ -14,7 +14,7 @@ class Burned extends Status implements EndTurnEffect, StatModifyingEffect {
     private static final long serialVersionUID = 1L;
 
     public Burned() {
-        super(StatusCondition.BURNED);
+        super(StatusNamesies.BURNED);
     }
 
     @Override

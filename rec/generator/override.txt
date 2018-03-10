@@ -53,12 +53,12 @@ StatusFang:
 	AddMapField: EffChance: 20
 	AddMapField: MoveType: Biting
 	AddMapField: BeginAttack:
-		super.status = StatusCondition.NO_STATUS;
+		super.status = StatusNamesies.NO_STATUS;
 		super.effects.clear();
 
 		// If the effect is being applied, 50/50 chance to give a status condition vs. flinching
 		if (RandomUtils.chanceTest(50)) {
-			super.status = StatusCondition.{00};
+			super.status = StatusNamesies.{00};
 		} else {
 			super.effects.add(PokemonEffectNamesies.FLINCH);
 		}
@@ -295,9 +295,9 @@ IgnoreStage:
 	Header: boolean ignoreStage(Stat s)
 *
 StatusCureMove:
-	AddMapField: PowerMultiplierCondition: 2 victim.hasStatus(StatusCondition.{00})
+	AddMapField: PowerMultiplierCondition: 2 victim.hasStatus(StatusNamesies.{00})
 	AddMapField: UniqueEffects:
-		if (victim.hasStatus(StatusCondition.{00})) {
+		if (victim.hasStatus(StatusNamesies.{00})) {
 			Status.removeStatus(b, victim, CastSource.ATTACK);
 		}
 		###
@@ -760,7 +760,7 @@ GetTurns:
 	Header: int getTurns()
 *
 StatusPrevent:
-	Header: boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status)
+	Header: boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status)
 *
 StatusPreventMessage:
 	Header: String statusPreventionMessage(ActivePokemon victim)
@@ -823,7 +823,7 @@ DeathWish:
 	AccessModifier: Private
 	AddInterface: StatusReceivedEffect
 	AddMapField: StatusReceived:
-		if (statusType == StatusCondition.FAINTED) {
+		if (statusType == StatusNamesies.FAINTED) {
 			ActivePokemon murderer = b.getOtherPokemon(victim);
 
 			// Only grant death wish if murdered through direct damage
@@ -950,12 +950,12 @@ PinchAbility:
 StatusPreventAbility:
 	AddInterface: StatusPreventionEffect
 	AddMapField: StatusPrevent:
-		return status == StatusCondition.{11};
+		return status == StatusNamesies.{11};
 		###
 	AddMapField: StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents {2}!"
 	AddMapField: Field:
 		private void removeStatus(Battle b, ActivePokemon victim) {
-			if (victim.hasStatus(StatusCondition.{11})) {
+			if (victim.hasStatus(StatusNamesies.{11})) {
 				Status.removeStatus(b, victim, CastSource.ABILITY);
 			}
 		}
@@ -967,7 +967,7 @@ StatusPreventAbility:
 StatusContact:
 	AddMapField: Contact:
 		if (RandomUtils.chanceTest(30)) {
-			Status.applyStatus(b, victim, user, StatusCondition.{00}, CastSource.ABILITY);
+			Status.applyStatus(b, victim, user, StatusNamesies.{00}, CastSource.ABILITY);
 		}
 		###
 	AddInterface: PhysicalContactEffect
@@ -1282,7 +1282,7 @@ StatusHealAll:
 	AddInterface: StatusHealer
 	AddMapField: ShouldHealStatus:
 		// Does not apply to the healthy and the dead
-		return statusCondition != StatusCondition.NO_STATUS && statusCondition != StatusCondition.FAINTED;
+		return statusCondition != StatusNamesies.NO_STATUS && statusCondition != StatusNamesies.FAINTED;
 		###
 *
 Revive:
@@ -1304,13 +1304,13 @@ Revive:
 		###
 *
 ShouldHealStatus:
-	Header: boolean shouldHeal(StatusCondition statusCondition)
+	Header: boolean shouldHeal(StatusNamesies statusCondition)
 *
 StatusRemove:
 	AddInterface: StatusHealer
     AddMapField: BattleCat: Status
 	AddMapField: ShouldHealStatus:
-		return statusCondition == StatusCondition.{00};
+		return statusCondition == StatusNamesies.{00};
 		###
 *
 FixedHealAmount:
@@ -1684,7 +1684,7 @@ FlinchItem:
 *
 StatusFling:
 	AddMapField: FlingEffect:
-		Status.applyStatus(b, pelted, pelted, StatusCondition.{00}, pelted.getName() + " was {0} by the " + this.getName() + "!");
+		Status.applyStatus(b, pelted, pelted, StatusNamesies.{00}, pelted.getName() + " was {0} by the " + this.getName() + "!");
 		###
 *
 TM:
@@ -1762,10 +1762,10 @@ ReceiveEffect:
     Header: void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType)
 *
 StatusReceived:
-	Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType)
+	Header: void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType)
 *
 OppStatusReceived:
-	Header: void receiveStatus(Battle b, ActivePokemon victim, StatusCondition statusType)
+	Header: void receiveStatus(Battle b, ActivePokemon victim, StatusNamesies statusType)
 *
 TheVeryEnd:
 	AddInterface: SuperDuperEndTurnEffect

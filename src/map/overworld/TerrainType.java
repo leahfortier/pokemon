@@ -3,7 +3,7 @@ package map.overworld;
 import battle.attack.AttackNamesies;
 import battle.effect.EffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import main.Game;
 import pokemon.Stat;
 import type.Type;
@@ -15,15 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum TerrainType {
-    BUILDING(Type.NORMAL, new Color(232, 243, 248), AttackNamesies.TRI_ATTACK, StatusCondition.PARALYZED),
+    BUILDING(Type.NORMAL, new Color(232, 243, 248), AttackNamesies.TRI_ATTACK, StatusNamesies.PARALYZED),
     CAVE(Type.ROCK, new Color(192, 169, 104), AttackNamesies.POWER_GEM, PokemonEffectNamesies.FLINCH),
     SAND(Type.GROUND, new Color(248, 234, 204), AttackNamesies.EARTH_POWER, Stat.ACCURACY),
     WATER(Type.WATER, new Color(221, 240, 248), AttackNamesies.HYDRO_PUMP, Stat.ATTACK),
-    SNOW(Type.ICE, new Color(245, 239, 246), AttackNamesies.FROST_BREATH, StatusCondition.FROZEN),
-    ICE(Type.ICE, new Color(228, 249, 240), AttackNamesies.ICE_BEAM, StatusCondition.FROZEN),
-    GRASS(Type.GRASS, new Color(224, 247, 224), AttackNamesies.ENERGY_BALL, StatusCondition.ASLEEP),
+    SNOW(Type.ICE, new Color(245, 239, 246), AttackNamesies.FROST_BREATH, StatusNamesies.FROZEN),
+    ICE(Type.ICE, new Color(228, 249, 240), AttackNamesies.ICE_BEAM, StatusNamesies.FROZEN),
+    GRASS(Type.GRASS, new Color(224, 247, 224), AttackNamesies.ENERGY_BALL, StatusNamesies.ASLEEP),
     MISTY(Type.FAIRY, new Color(255, 231, 233), AttackNamesies.MOONBLAST, Stat.SP_ATTACK),
-    ELECTRIC(Type.ELECTRIC, new Color(250, 250, 210), AttackNamesies.THUNDERBOLT, StatusCondition.PARALYZED),
+    ELECTRIC(Type.ELECTRIC, new Color(250, 250, 210), AttackNamesies.THUNDERBOLT, StatusNamesies.PARALYZED),
     PSYCHIC(Type.PSYCHIC, new Color(216, 191, 216), AttackNamesies.PSYCHIC, Stat.SPEED);
 
     private final Type type;
@@ -31,23 +31,23 @@ public enum TerrainType {
     private final String imageName;
 
     private final AttackNamesies attack;
-    private final StatusCondition status;
+    private final StatusNamesies status;
     private final int[] statChanges;
     private final List<EffectNamesies> effects;
 
-    TerrainType(Type type, Color color, AttackNamesies attack, StatusCondition statusCondition) {
+    TerrainType(Type type, Color color, AttackNamesies attack, StatusNamesies statusCondition) {
         this(type, color, attack, statusCondition, null, null);
     }
 
     TerrainType(Type type, Color color, AttackNamesies attack, Stat toLower) {
-        this(type, color, attack, StatusCondition.NO_STATUS, toLower, null);
+        this(type, color, attack, StatusNamesies.NO_STATUS, toLower, null);
     }
 
     TerrainType(Type type, Color color, AttackNamesies attack, EffectNamesies effect) {
-        this(type, color, attack, StatusCondition.NO_STATUS, null, effect);
+        this(type, color, attack, StatusNamesies.NO_STATUS, null, effect);
     }
 
-    TerrainType(Type type, Color color, AttackNamesies attack, StatusCondition statusCondition, Stat toLower, EffectNamesies effect) {
+    TerrainType(Type type, Color color, AttackNamesies attack, StatusNamesies statusCondition, Stat toLower, EffectNamesies effect) {
         this.type = type;
         this.color = color;
         this.imageName = StringUtils.properCase(this.name().toLowerCase()) + "Circle";
@@ -79,7 +79,7 @@ public enum TerrainType {
         return attack;
     }
 
-    public StatusCondition getStatusCondition() {
+    public StatusNamesies getStatusCondition() {
         return status;
     }
 

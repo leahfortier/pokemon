@@ -14,7 +14,7 @@ class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
     private static final long serialVersionUID = 1L;
 
     public Frozen() {
-        super(StatusCondition.FROZEN);
+        super(StatusNamesies.FROZEN);
     }
 
     // Ice-type Pokemon cannot be frozen

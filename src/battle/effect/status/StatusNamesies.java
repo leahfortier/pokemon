@@ -2,7 +2,7 @@ package battle.effect.status;
 
 import java.util.function.Supplier;
 
-public enum StatusCondition {
+public enum StatusNamesies {
     NO_STATUS("", 1, NoStatus::new),
     FAINTED("FNT", 1, Fainted::new),
     PARALYZED("PRZ", 1.5, Paralyzed::new),
@@ -16,7 +16,7 @@ public enum StatusCondition {
     private final double catchModifier;
     private final Supplier<Status> statusGetter;
 
-    StatusCondition(String name, double catchModifier, Supplier<Status> statusGetter) {
+    StatusNamesies(String name, double catchModifier, Supplier<Status> statusGetter) {
         this.name = name;
         this.catchModifier = catchModifier;
         this.statusGetter = statusGetter;

@@ -13,7 +13,7 @@ import battle.effect.battle.weather.WeatherEffect;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffect;
 import item.Item;
 import item.ItemNamesies;
@@ -816,10 +816,10 @@ public final class EffectInterfaces {
     public interface StatusPreventionEffect {
 
         // TODO: Would be nice in the future if I am able to implement multiple invoke methods for the same interface method since this could also use a basic check invoke as well
-        boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status);
+        boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status);
         String statusPreventionMessage(ActivePokemon victim);
 
-        static StatusPreventionEffect getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+        static StatusPreventionEffect getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof StatusPreventionEffect && InvokeEffect.isActiveEffect(invokee)) {
@@ -1401,9 +1401,9 @@ public final class EffectInterfaces {
     }
 
     public interface StatusReceivedEffect {
-        void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType);
+        void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType);
 
-        static void invokeStatusReceivedEffect(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
+        static void invokeStatusReceivedEffect(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof StatusReceivedEffect && InvokeEffect.isActiveEffect(invokee)) {
@@ -1415,9 +1415,9 @@ public final class EffectInterfaces {
     }
 
     public interface OpponentStatusReceivedEffect {
-        void receiveStatus(Battle b, ActivePokemon victim, StatusCondition statusType);
+        void receiveStatus(Battle b, ActivePokemon victim, StatusNamesies statusType);
 
-        static void invokeOpponentStatusReceivedEffect(Battle b, ActivePokemon victim, StatusCondition statusType) {
+        static void invokeOpponentStatusReceivedEffect(Battle b, ActivePokemon victim, StatusNamesies statusType) {
             List<InvokeEffect> invokees = b.getEffectsList(b.getOtherPokemon(victim));
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof OpponentStatusReceivedEffect && InvokeEffect.isActiveEffect(invokee)) {

@@ -13,7 +13,7 @@ import battle.effect.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.EffectInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import message.Messages;
 import pokemon.Stat;
 import type.Type;
@@ -235,8 +235,8 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-            return status == StatusCondition.ASLEEP;
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            return status == StatusNamesies.ASLEEP;
         }
 
         @Override

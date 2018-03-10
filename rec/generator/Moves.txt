@@ -17,7 +17,7 @@ Fields:
     Weather Multiple Enum WeatherNamesies effects
     Terrain Multiple Enum TerrainNamesies effects
     EffChance Int effectChance
-    Status Enum StatusCondition status
+    Status Enum StatusNamesies status
     MoveType Multiple Enum MoveType moveTypes
     SelfTarget Boolean selfTarget
     Priority Int priority
@@ -1777,7 +1777,7 @@ Rest:
     Cat: Status
     Status: Asleep
     Comments: // Need the sleep check in case called from Sleep Talk, Comatose, etc.
-    ExtraApplies: !user.hasStatus(StatusCondition.ASLEEP) && Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, user, user)
+    ExtraApplies: !user.hasStatus(StatusNamesies.ASLEEP) && Status.appliesWithoutStatusCheck(StatusNamesies.ASLEEP, b, user, user)
     AfterApplyCheck:
         victim.removeStatus();
         ###
@@ -2087,10 +2087,10 @@ Tri Attack:
         ###
     Type: Normal
     Field:
-        private static final StatusCondition[] statusConditions = {
-                StatusCondition.PARALYZED,
-                StatusCondition.BURNED,
-                StatusCondition.FROZEN
+        private static final StatusNamesies[] statusConditions = {
+                StatusNamesies.PARALYZED,
+                StatusNamesies.BURNED,
+                StatusNamesies.FROZEN
         };
         ###
 *
@@ -3086,7 +3086,7 @@ Dream Eater:
     Type: Psychic
     SapHealthMove: True
     SapMessage: return victim.getName() + "'s dream was eaten!";
-    Applies: victim.hasStatus(StatusCondition.ASLEEP)
+    Applies: victim.hasStatus(StatusNamesies.ASLEEP)
 *
 Dark Pulse:
     Desc: The user releases a horrible aura imbued with dark thoughts. This may also make the target flinch.
@@ -4040,7 +4040,7 @@ Snore:
     MoveType: Sound_Based, Metronomeless
     PokemonEffect: Flinch
     EffChance: 30
-    Applies: user.hasStatus(StatusCondition.ASLEEP)
+    Applies: user.hasStatus(StatusNamesies.ASLEEP)
 *
 Sleep Talk:
     Desc: While it is asleep, the user randomly uses one of the moves it knows.
@@ -4056,7 +4056,7 @@ Sleep Talk:
         // TODO: Test
         this.moves = attacking.getMoves(b).stream().filter(move -> !move.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL)).collect(Collectors.toList());
         ###
-    Applies: user.hasStatus(StatusCondition.ASLEEP) && !this.moves.isEmpty()
+    Applies: user.hasStatus(StatusNamesies.ASLEEP) && !this.moves.isEmpty()
     CallFullNewMove: RandomUtils.getRandomValue(this.moves)
 *
 Block:
@@ -4652,7 +4652,7 @@ Venoshock:
     Cat: Special
     Acc: 100
     Pow: 65
-    PowerMultiplierCondition: 2 victim.hasStatus(StatusCondition.POISONED)
+    PowerMultiplierCondition: 2 victim.hasStatus(StatusNamesies.POISONED)
 *
 Snatch:
     Priority: 4
@@ -6047,7 +6047,7 @@ Venom Drench:
     Cat: Status
     Acc: 100
     StatChange: 3 Attack -1 Sp_Attack -1 Speed -1
-    Applies: victim.hasStatus(StatusCondition.POISONED)
+    Applies: victim.hasStatus(StatusNamesies.POISONED)
     PP: 20
 *
 Electric Terrain:

@@ -5,7 +5,7 @@ import battle.Battle;
 import battle.effect.CastSource;
 import battle.effect.EffectInterfaces.EndTurnEffect;
 import battle.effect.EffectInterfaces.StatusReceivedEffect;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import item.medicine.StatusHealer;
 
 public interface StatusBerry extends StatusHealer, GainableEffectBerry, StatusReceivedEffect, EndTurnEffect {
@@ -16,7 +16,7 @@ public interface StatusBerry extends StatusHealer, GainableEffectBerry, StatusRe
     }
 
     @Override
-    default void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
+    default void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType) {
         this.consumeBerry(b, victim);
     }
 

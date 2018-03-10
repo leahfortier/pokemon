@@ -13,7 +13,7 @@ class Asleep extends Status implements BeforeTurnEffect {
     private int numTurns;
 
     public Asleep() {
-        super(StatusCondition.ASLEEP);
+        super(StatusNamesies.ASLEEP);
         this.numTurns = RandomUtils.getRandomInt(1, 3);
     }
 

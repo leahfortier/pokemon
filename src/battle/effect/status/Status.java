@@ -17,9 +17,9 @@ import util.serialization.Serializable;
 public abstract class Status implements InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final StatusCondition statusCondition;
+    private final StatusNamesies statusCondition;
 
-    protected Status(StatusCondition statusCondition) {
+    protected Status(StatusNamesies statusCondition) {
         this.statusCondition = statusCondition;
     }
 
@@ -65,11 +65,11 @@ public abstract class Status implements InvokeEffect, Serializable {
         return !victim.hasStatus() && this.appliesWithoutStatusCheck(b, caster, victim);
     }
 
-    public StatusCondition getType() {
+    public StatusNamesies getType() {
         return statusCondition;
     }
 
-    public boolean isType(StatusCondition statusCondition) {
+    public boolean isType(StatusNamesies statusCondition) {
         return this.getType() == statusCondition;
     }
 
@@ -96,29 +96,29 @@ public abstract class Status implements InvokeEffect, Serializable {
         Messages.add(new MessageUpdate(status.getRemoveMessage(b, victim, source)).updatePokemon(b, victim));
     }
 
-    public static String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, StatusCondition status) {
+    public static String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, StatusNamesies status) {
         return status.getStatus().getFailMessage(b, user, victim);
     }
 
-    public static boolean appliesWithoutStatusCheck(StatusCondition status, Battle b, ActivePokemon caster, ActivePokemon victim) {
+    public static boolean appliesWithoutStatusCheck(StatusNamesies status, Battle b, ActivePokemon caster, ActivePokemon victim) {
         return status.getStatus().appliesWithoutStatusCheck(b, caster, victim);
     }
 
-    public static boolean applies(StatusCondition status, Battle b, ActivePokemon caster, ActivePokemon victim) {
+    public static boolean applies(StatusNamesies status, Battle b, ActivePokemon caster, ActivePokemon victim) {
         return status.getStatus().applies(b, caster, victim);
     }
 
     // Returns true if a status was successfully given, and false if it failed for any reason
-    public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+    public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
         return applyStatus(b, caster, victim, status, CastSource.EFFECT);
     }
 
-    public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status, CastSource source) {
+    public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status, CastSource source) {
         Status s = status.getStatus();
         return applyStatus(b, caster, victim, status, s.getCastMessage(b, caster, victim, source));
     }
 
-    public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status, String castMessage) {
+    public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status, String castMessage) {
         Status s = status.getStatus();
         if (s.applies(b, caster, victim)) {
             victim.setStatus(s);
@@ -141,6 +141,6 @@ public abstract class Status implements InvokeEffect, Serializable {
             Global.error("Only dead Pokemon can die.");
         }
 
-        applyStatus(b, murderer, deady, StatusCondition.FAINTED);
+        applyStatus(b, murderer, deady, StatusNamesies.FAINTED);
     }
 }

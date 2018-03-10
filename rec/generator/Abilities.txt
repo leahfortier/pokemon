@@ -224,10 +224,10 @@ Effect Spore:
     Desc: Contact with the Pok\u00e9mon may inflict poison, sleep, or paralysis on its attacker.
     Int: PhysicalContactEffect
     Field:
-        private static final StatusCondition[] STATUSES = new StatusCondition[] {
-            StatusCondition.PARALYZED,
-            StatusCondition.POISONED,
-            StatusCondition.ASLEEP
+        private static final StatusNamesies[] STATUSES = new StatusNamesies[] {
+            StatusNamesies.PARALYZED,
+            StatusNamesies.POISONED,
+            StatusNamesies.ASLEEP
         };
         ###
     Contact:
@@ -315,11 +315,11 @@ Synchronize:
     Desc: The attacker will receive the same status condition if it inflicts a burn, poison, or paralysis to the Pok\u00e9mon.
     Int: StatusReceivedEffect
     Field:
-        private static final Set<StatusCondition> PASSABLE_STATUSES = EnumSet.of(
-                StatusCondition.BURNED,
-                StatusCondition.PARALYZED,
-                StatusCondition.POISONED,
-                StatusCondition.BADLY_POISONED
+        private static final Set<StatusNamesies> PASSABLE_STATUSES = EnumSet.of(
+                StatusNamesies.BURNED,
+                StatusNamesies.PARALYZED,
+                StatusNamesies.POISONED,
+                StatusNamesies.BADLY_POISONED
         );
         ###
     StatusReceived:
@@ -418,7 +418,7 @@ Early Bird:
     Desc: The Pok\u00e9mon awakens twice as fast as other Pok\u00e9mon from sleep.
     Int: StatusReceivedEffect
 	StatusReceived:
-        if (statusType == StatusCondition.ASLEEP) {
+        if (statusType == StatusNamesies.ASLEEP) {
             Status sleepyTime = victim.getStatus();
             sleepyTime.setTurns(sleepyTime.getTurns()/2);
         }
@@ -514,7 +514,7 @@ Natural Cure:
     Desc: All status conditions heal when the Pok\u00e9mon switches out.
     Int: SwitchOutEffect
     SwitchOut:
-        if (!switchee.hasStatus(StatusCondition.FAINTED)) {
+        if (!switchee.hasStatus(StatusNamesies.FAINTED)) {
             switchee.removeStatus();
         }
         ###
@@ -591,7 +591,7 @@ Soul-Heart:
     Desc: Boosts its Sp. Atk stat every time a Pok\u00e9mon faints.
     Int: OpponentStatusReceivedEffect
     OppStatusReceived:
-        if (statusType == StatusCondition.FAINTED) {
+        if (statusType == StatusNamesies.FAINTED) {
             ActivePokemon abilify = this.getOtherPokemon(b, victim);
             abilify.getStages().modifyStage(abilify, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
         }
@@ -773,7 +773,7 @@ Regenerator:
     Desc: Restores a little HP when withdrawn from battle.
     Int: SwitchOutEffect
     SwitchOut:
-        if (!switchee.hasStatus(StatusCondition.FAINTED)) {
+        if (!switchee.hasStatus(StatusNamesies.FAINTED)) {
             switchee.healHealthFraction(1/3.0);
         }
         ###
@@ -791,7 +791,7 @@ Truant:
         ###
     Int: EndTurnEffect, BeforeTurnEffect
     ApplyEndTurn:
-        if (victim.hasStatus(StatusCondition.ASLEEP)) {
+        if (victim.hasStatus(StatusNamesies.ASLEEP)) {
             lazyface = false;
         } else {
             lazyface = !lazyface;
@@ -873,7 +873,7 @@ White Smoke:
 Toxic Boost:
     Desc: Powers up physical attacks when the Pok\u00e9mon is poisoned.
     ToModify: Attack
-    ModifyMultiplier: 1.5 p.hasStatus(StatusCondition.POISONED)
+    ModifyMultiplier: 1.5 p.hasStatus(StatusNamesies.POISONED)
 *
 Anticipation:
     Desc: The Pok\u00e9mon can sense an opposing Pok\u00e9mon's dangerous moves.
@@ -1029,7 +1029,7 @@ Bad Dreams:
     Int: EndTurnEffect
     ApplyEndTurn:
         ActivePokemon other = b.getOtherPokemon(victim);
-        if (other.hasStatus(StatusCondition.ASLEEP)) {
+        if (other.hasStatus(StatusNamesies.ASLEEP)) {
             Messages.add(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
             other.reduceHealthFraction(b, 1/8.0);
         }
@@ -1059,7 +1059,7 @@ Poison Touch:
     Int: OpponentTakeDamageEffect
     OpponentTakeDamage:
         if (RandomUtils.chanceTest(30)) {
-            Status.applyStatus(b, user, victim, StatusCondition.POISONED, CastSource.ABILITY);
+            Status.applyStatus(b, user, victim, StatusNamesies.POISONED, CastSource.ABILITY);
         }
         ###
 *
@@ -1539,7 +1539,7 @@ Merciless:
     Desc: The Pok\u00e9mon's attacks become critical hits if the target is poisoned.
     Int: AlwaysCritEffect
     ShouldCrit:
-        return defending.hasStatus(StatusCondition.POISONED);
+        return defending.hasStatus(StatusNamesies.POISONED);
         ###
 *
 Water Bubble:
@@ -1644,7 +1644,7 @@ Comatose:
         private boolean nightyNight(Battle b, ActivePokemon sleepyHead) {
 
             // Sleepy head is already a sleepster nighty night
-            if (sleepyHead.hasStatus(StatusCondition.ASLEEP)) {
+            if (sleepyHead.hasStatus(StatusNamesies.ASLEEP)) {
                 return false;
             }
             
@@ -1653,9 +1653,9 @@ Comatose:
                 return false;
             }
 
-            if (Status.appliesWithoutStatusCheck(StatusCondition.ASLEEP, b, sleepyHead, sleepyHead)) {
+            if (Status.appliesWithoutStatusCheck(StatusNamesies.ASLEEP, b, sleepyHead, sleepyHead)) {
                 sleepyHead.removeStatus();
-                Status.applyStatus(b, sleepyHead, sleepyHead, StatusCondition.ASLEEP, CastSource.ABILITY);
+                Status.applyStatus(b, sleepyHead, sleepyHead, StatusNamesies.ASLEEP, CastSource.ABILITY);
                 sleepyHead.getStatus().setTurns(-1);
                 return true;
             }

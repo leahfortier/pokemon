@@ -8,7 +8,7 @@ class Fainted extends Status {
     private static final long serialVersionUID = 1L;
 
     public Fainted() {
-        super(StatusCondition.FAINTED);
+        super(StatusNamesies.FAINTED);
     }
 
     // Fainted status condition applies regardless of other status conditions
