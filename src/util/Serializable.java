@@ -21,7 +21,7 @@ public interface Serializable extends java.io.Serializable {
             out.writeObject(this);
             return Base64.getEncoder().encodeToString(sout.toByteArray());
         } catch (IOException exception) {
-            Global.error("IOException occurred while serializing object " + this + ": " + exception.getMessage());
+            Global.error("IOException occurred while serializing object " + this + ": " + exception);
             return StringUtils.empty();
         }
     }
@@ -36,7 +36,7 @@ public interface Serializable extends java.io.Serializable {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
             out.writeObject(this);
         } catch (IOException exception) {
-            Global.error("IOException occurred while writing object to " + fileName + ": " + exception.getMessage());
+            Global.error("IOException occurred while writing object to " + fileName + ": " + exception);
         }
     }
 
@@ -44,8 +44,8 @@ public interface Serializable extends java.io.Serializable {
     static <T extends Serializable> T fromFile(File file, Class<T> classy) {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
             return classy.cast(in.readObject());
-        } catch (IOException | ClassNotFoundException e) {
-            Global.error("Error deserializing from file " + file.getName() + ": " + e.getMessage());
+        } catch (IOException | ClassNotFoundException | ClassCastException exception) {
+            Global.error("Error deserializing from file " + file.getName() + ": " + exception);
             return null;
         }
     }
@@ -55,8 +55,8 @@ public interface Serializable extends java.io.Serializable {
         byte[] data = Base64.getDecoder().decode(serialized);
         try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(data))) {
             return classy.cast(in.readObject());
-        } catch (IOException | ClassNotFoundException e) {
-            Global.error("Error deserializing from string " + serialized + ": " + e.getMessage());
+        } catch (IOException | ClassNotFoundException | ClassCastException exception) {
+            Global.error("Error deserializing from string " + serialized + ": " + exception);
             return null;
         }
     }
