@@ -2,9 +2,9 @@ package pattern.map;
 
 import map.area.AreaData;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import util.serialization.JsonMatcher;
 import pattern.generic.LocationTriggerMatcher;
 import util.GeneralUtils;
+import util.serialization.JsonMatcher;
 
 import java.util.ArrayList;
 import java.util.Arrays;

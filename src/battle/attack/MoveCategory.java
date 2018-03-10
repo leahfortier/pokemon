@@ -2,8 +2,8 @@ package battle.attack;
 
 import util.FileIO;
 import util.Folder;
-import util.serialization.Serializable;
 import util.StringUtils;
+import util.serialization.Serializable;
 
 import java.awt.image.BufferedImage;
 

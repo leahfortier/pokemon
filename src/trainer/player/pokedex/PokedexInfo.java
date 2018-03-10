@@ -1,7 +1,7 @@
 package trainer.player.pokedex;
 
-import util.serialization.Serializable;
 import util.StringUtils;
+import util.serialization.Serializable;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -13,8 +13,8 @@ import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import sound.SoundTitle;
 import type.PokeType;
-import util.serialization.Serializable;
 import util.StringUtils;
+import util.serialization.Serializable;
 
 public class MessageUpdate {
     private static final String PLAYER_NAME = "{playerName}";

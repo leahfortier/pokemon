@@ -2,9 +2,9 @@ package pattern.map;
 
 import main.Global;
 import map.condition.ConditionSet;
-import util.serialization.JsonMatcher;
 import util.FileIO;
 import util.FileName;
+import util.serialization.JsonMatcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;

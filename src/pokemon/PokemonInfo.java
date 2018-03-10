@@ -15,8 +15,8 @@ import util.FileIO;
 import util.FileName;
 import util.GeneralUtils;
 import util.RandomUtils;
-import util.serialization.Serializable;
 import util.StringUtils;
+import util.serialization.Serializable;
 
 import java.util.ArrayList;
 import java.util.Arrays;

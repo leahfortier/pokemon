@@ -2,8 +2,8 @@ package pattern.generic;
 
 import map.condition.Condition;
 import map.condition.ConditionSet;
-import util.serialization.JsonMatcher;
 import pattern.map.ConditionMatcher;
+import util.serialization.JsonMatcher;
 
 public abstract class TriggerMatcher implements JsonMatcher {
     private String triggerName;

@@ -21,8 +21,8 @@ import trainer.player.medal.MedalCase;
 import trainer.player.medal.MedalTheme;
 import type.PokeType;
 import util.RandomUtils;
-import util.serialization.Serializable;
 import util.StringUtils;
+import util.serialization.Serializable;
 
 import java.awt.Color;
 import java.util.ArrayList;

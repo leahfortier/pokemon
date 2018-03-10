@@ -108,8 +108,8 @@ import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
 import util.ReverseIterable;
-import util.serialization.Serializable;
 import util.StringUtils;
+import util.serialization.Serializable;
 
 import java.util.ArrayList;
 import java.util.EnumSet;

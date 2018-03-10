@@ -8,8 +8,8 @@ import battle.effect.generic.EffectInterfaces.EffectReceivedEffect;
 import main.Global;
 import message.Messages;
 import util.RandomUtils;
-import util.serialization.Serializable;
 import util.StringUtils;
+import util.serialization.Serializable;
 
 public abstract class Effect<NamesiesType extends EffectNamesies> implements InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;

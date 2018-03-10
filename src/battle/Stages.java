@@ -8,8 +8,8 @@ import main.Global;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.Stat;
-import util.serialization.Serializable;
 import util.StringUtils;
+import util.serialization.Serializable;
 
 public class Stages implements Serializable {
     private static final long serialVersionUID = 1L;
