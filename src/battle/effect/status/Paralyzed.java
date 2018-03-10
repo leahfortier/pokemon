@@ -2,8 +2,8 @@ package battle.effect.status;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
-import battle.effect.generic.EffectInterfaces.StatModifyingEffect;
+import battle.effect.EffectInterfaces.BeforeTurnEffect;
+import battle.effect.EffectInterfaces.StatModifyingEffect;
 import message.Messages;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;

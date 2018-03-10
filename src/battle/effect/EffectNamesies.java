@@ -1,11 +1,11 @@
-package battle.effect.generic;
+package battle.effect;
 
-import battle.effect.generic.battle.BattleEffect;
-import battle.effect.generic.battle.StandardBattleEffectNamesies;
-import battle.effect.generic.battle.terrain.TerrainNamesies;
-import battle.effect.generic.battle.weather.WeatherNamesies;
-import battle.effect.generic.pokemon.PokemonEffectNamesies;
-import battle.effect.generic.team.TeamEffectNamesies;
+import battle.effect.battle.BattleEffect;
+import battle.effect.battle.StandardBattleEffectNamesies;
+import battle.effect.battle.terrain.TerrainNamesies;
+import battle.effect.battle.weather.WeatherNamesies;
+import battle.effect.pokemon.PokemonEffectNamesies;
+import battle.effect.team.TeamEffectNamesies;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,15 +1,15 @@
-package battle.effect.generic.battle.weather;
+package battle.effect.battle.weather;
 
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.CastSource;
-import battle.effect.generic.EffectInterfaces.BattleEndTurnEffect;
-import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
-import battle.effect.generic.EffectInterfaces.SimpleStatModifyingEffect;
-import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
-import battle.effect.generic.EffectInterfaces.WeatherBlockerEffect;
-import battle.effect.generic.EffectInterfaces.WeatherExtendingEffect;
-import battle.effect.generic.battle.BattleEffect;
+import battle.effect.EffectInterfaces.BattleEndTurnEffect;
+import battle.effect.EffectInterfaces.PowerChangeEffect;
+import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
+import battle.effect.EffectInterfaces.StatusPreventionEffect;
+import battle.effect.EffectInterfaces.WeatherBlockerEffect;
+import battle.effect.EffectInterfaces.WeatherExtendingEffect;
+import battle.effect.battle.BattleEffect;
 import battle.effect.status.StatusCondition;
 import message.Messages;
 import pokemon.Stat;

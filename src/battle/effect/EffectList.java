@@ -2,8 +2,6 @@ package battle.effect;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.generic.Effect;
-import battle.effect.generic.EffectNamesies;
 import util.serialization.Serializable;
 
 import java.util.ArrayList;

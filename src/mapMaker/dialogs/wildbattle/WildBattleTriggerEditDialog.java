@@ -6,8 +6,8 @@ import mapMaker.dialogs.ConditionPanel;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.WildBattleMatcher;
 import pokemon.PartyPokemon;
-import util.GuiUtils;
 import util.GeneralUtils;
+import util.GuiUtils;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;

@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.effect.CastSource;
-import battle.effect.generic.EffectNamesies;
+import battle.effect.EffectNamesies;
 import item.ItemNamesies;
 import item.bag.Bag;
 import main.Game;

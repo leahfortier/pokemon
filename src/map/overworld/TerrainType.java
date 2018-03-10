@@ -1,8 +1,8 @@
 package map.overworld;
 
 import battle.attack.AttackNamesies;
-import battle.effect.generic.EffectNamesies;
-import battle.effect.generic.pokemon.PokemonEffectNamesies;
+import battle.effect.EffectNamesies;
+import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusCondition;
 import main.Game;
 import pokemon.Stat;

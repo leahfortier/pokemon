@@ -3,8 +3,8 @@ package battle.effect.status;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.CastSource;
-import battle.effect.generic.EffectInterfaces.BeforeTurnEffect;
-import battle.effect.generic.EffectInterfaces.SleepyFightsterEffect;
+import battle.effect.EffectInterfaces.BeforeTurnEffect;
+import battle.effect.EffectInterfaces.SleepyFightsterEffect;
 import message.Messages;
 import util.RandomUtils;
 

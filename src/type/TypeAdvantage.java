@@ -2,9 +2,9 @@ package type;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.generic.EffectInterfaces.AdvantageMultiplierMove;
-import battle.effect.generic.EffectInterfaces.AttackingNoAdvantageChanger;
-import battle.effect.generic.EffectInterfaces.DefendingNoAdvantageChanger;
+import battle.effect.EffectInterfaces.AdvantageMultiplierMove;
+import battle.effect.EffectInterfaces.AttackingNoAdvantageChanger;
+import battle.effect.EffectInterfaces.DefendingNoAdvantageChanger;
 import pokemon.ability.AbilityNamesies;
 
 import java.util.EnumMap;

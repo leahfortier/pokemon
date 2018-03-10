@@ -1,13 +1,13 @@
-package battle.effect.generic.battle.terrain;
+package battle.effect.battle.terrain;
 
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.CastSource;
-import battle.effect.generic.EffectInterfaces.AttackBlocker;
-import battle.effect.generic.EffectInterfaces.BattleEndTurnEffect;
-import battle.effect.generic.EffectInterfaces.PowerChangeEffect;
-import battle.effect.generic.EffectInterfaces.StatusPreventionEffect;
-import battle.effect.generic.battle.BattleEffect;
+import battle.effect.EffectInterfaces.AttackBlocker;
+import battle.effect.EffectInterfaces.BattleEndTurnEffect;
+import battle.effect.EffectInterfaces.PowerChangeEffect;
+import battle.effect.EffectInterfaces.StatusPreventionEffect;
+import battle.effect.battle.BattleEffect;
 import battle.effect.status.StatusCondition;
 import map.overworld.TerrainType;
 import message.MessageUpdate;

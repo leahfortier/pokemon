@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackInterface;
 import battle.attack.Move;
-import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
+import battle.effect.EffectInterfaces.ForceMoveEffect;
 import item.ItemNamesies;
 
 public interface MultiTurnMove extends AttackInterface, ForceMoveEffect {

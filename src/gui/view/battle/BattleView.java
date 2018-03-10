@@ -3,7 +3,7 @@ package gui.view.battle;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
-import battle.effect.generic.battle.weather.WeatherEffect;
+import battle.effect.battle.weather.WeatherEffect;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.button.Button;

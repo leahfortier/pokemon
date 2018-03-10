@@ -4,8 +4,8 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.Battle.EnterBattleMessageGetter;
 import battle.effect.EffectList;
-import battle.effect.generic.team.TeamEffect;
-import battle.effect.generic.team.TeamEffectNamesies;
+import battle.effect.team.TeamEffect;
+import battle.effect.team.TeamEffectNamesies;
 import pokemon.PartyPokemon;
 
 import java.util.List;

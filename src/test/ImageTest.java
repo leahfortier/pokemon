@@ -1,8 +1,8 @@
 package test;
 
 import battle.attack.MoveCategory;
-import battle.effect.generic.battle.weather.WeatherEffect;
-import battle.effect.generic.battle.weather.WeatherNamesies;
+import battle.effect.battle.weather.WeatherEffect;
+import battle.effect.battle.weather.WeatherNamesies;
 import generator.update.UpdateGen;
 import item.Item;
 import item.ItemNamesies;

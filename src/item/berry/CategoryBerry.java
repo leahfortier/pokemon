@@ -4,8 +4,8 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.MoveCategory;
 import battle.effect.CastSource;
-import battle.effect.generic.EffectInterfaces.OpponentApplyDamageEffect;
-import battle.effect.generic.EffectInterfaces.TakeDamageEffect;
+import battle.effect.EffectInterfaces.OpponentApplyDamageEffect;
+import battle.effect.EffectInterfaces.TakeDamageEffect;
 import message.Messages;
 import pokemon.Stat;
 

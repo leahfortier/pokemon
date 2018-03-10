@@ -1,6 +1,6 @@
 package generator.interfaces;
 
-import battle.effect.generic.EffectInterfaces;
+import battle.effect.EffectInterfaces;
 import generator.StuffGen;
 import util.file.FileIO;
 import util.file.FileName;

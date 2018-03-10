@@ -1,7 +1,7 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
-import battle.effect.generic.EffectNamesies;
+import battle.effect.EffectNamesies;
 import item.ItemNamesies;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
