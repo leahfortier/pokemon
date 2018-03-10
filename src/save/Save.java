@@ -4,8 +4,8 @@ import main.Game;
 import main.Global;
 import trainer.player.Player;
 import trainer.player.medal.MedalTheme;
-import util.FileIO;
-import util.Folder;
+import util.file.FileIO;
+import util.file.Folder;
 
 public final class Save {
     public static final int NUM_SAVES = 3;

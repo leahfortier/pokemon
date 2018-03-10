@@ -3,7 +3,7 @@ package sound;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 import main.Global;
-import util.Folder;
+import util.file.Folder;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;

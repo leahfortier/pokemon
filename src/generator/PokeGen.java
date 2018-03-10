@@ -8,9 +8,9 @@ import generator.format.InputFormatter;
 import generator.format.MethodInfo;
 import item.use.TechnicalMachine;
 import main.Global;
-import util.FileIO;
-import util.FileName;
 import util.GeneralUtils;
+import util.file.FileIO;
+import util.file.FileName;
 import util.string.StringAppender;
 
 import java.util.ArrayList;

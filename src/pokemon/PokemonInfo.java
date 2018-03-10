@@ -11,10 +11,10 @@ import pokemon.evolution.Evolution;
 import pokemon.evolution.EvolutionType;
 import type.PokeType;
 import type.Type;
-import util.FileIO;
-import util.FileName;
 import util.GeneralUtils;
 import util.RandomUtils;
+import util.file.FileIO;
+import util.file.FileName;
 import util.serialization.Serializable;
 import util.string.StringUtils;
 

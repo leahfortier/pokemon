@@ -1,4 +1,4 @@
-package util;
+package util.file;
 
 import main.Global;
 import util.string.SpecialCharacter;

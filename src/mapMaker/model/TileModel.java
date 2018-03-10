@@ -5,9 +5,9 @@ import draw.TileUtils;
 import main.Global;
 import mapMaker.MapMaker;
 import mapMaker.TileCategory;
-import util.FileIO;
-import util.FileName;
-import util.Folder;
+import util.file.FileIO;
+import util.file.FileName;
+import util.file.Folder;
 import util.string.StringAppender;
 
 import javax.swing.DefaultListModel;

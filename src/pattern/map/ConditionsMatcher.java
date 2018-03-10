@@ -2,8 +2,8 @@ package pattern.map;
 
 import main.Global;
 import map.condition.ConditionSet;
-import util.FileIO;
-import util.FileName;
+import util.file.FileIO;
+import util.file.FileName;
 import util.serialization.JsonMatcher;
 
 import java.util.ArrayList;

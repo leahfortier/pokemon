@@ -1,8 +1,8 @@
 package type;
 
 import main.Global;
-import util.FileIO;
-import util.Folder;
+import util.file.FileIO;
+import util.file.Folder;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

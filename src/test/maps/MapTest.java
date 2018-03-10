@@ -37,9 +37,9 @@ import pattern.map.NPCMatcher;
 import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
 import test.BaseTest;
-import util.FileIO;
-import util.Folder;
 import util.Point;
+import util.file.FileIO;
+import util.file.Folder;
 import util.string.StringUtils;
 
 import java.awt.Dimension;

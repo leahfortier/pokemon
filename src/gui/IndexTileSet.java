@@ -1,7 +1,7 @@
 package gui;
 
-import util.FileIO;
-import util.FileName;
+import util.file.FileIO;
+import util.file.FileName;
 
 import java.awt.image.BufferedImage;
 import java.util.HashMap;

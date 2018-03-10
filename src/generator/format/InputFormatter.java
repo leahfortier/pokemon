@@ -5,8 +5,8 @@ import generator.fieldinfo.ConstructorInfo;
 import generator.fieldinfo.FailureInfo;
 import generator.fieldinfo.InfoList;
 import main.Global;
-import util.FileIO;
-import util.FileName;
+import util.file.FileIO;
+import util.file.FileName;
 import util.string.StringUtils;
 
 import java.util.ArrayList;

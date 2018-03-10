@@ -9,7 +9,7 @@ import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import type.PokeType;
 import type.Type;
-import util.FileIO;
+import util.file.FileIO;
 
 import java.util.ArrayList;
 import java.util.Arrays;

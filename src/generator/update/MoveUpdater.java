@@ -4,9 +4,9 @@ import battle.attack.AttackNamesies;
 import battle.attack.MoveCategory;
 import generator.GeneratorType;
 import type.Type;
-import util.FileIO;
-import util.Folder;
 import util.GeneralUtils;
+import util.file.FileIO;
+import util.file.Folder;
 import util.string.StringAppender;
 import util.string.StringUtils;
 

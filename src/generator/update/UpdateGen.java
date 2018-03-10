@@ -8,11 +8,11 @@ import pattern.map.ConditionMatcher;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.evolution.EvolutionType;
-import util.FileIO;
-import util.FileIO.NullOutputStream;
-import util.FileName;
-import util.Folder;
 import util.GeneralUtils;
+import util.file.FileIO;
+import util.file.FileIO.NullOutputStream;
+import util.file.FileName;
+import util.file.Folder;
 import util.string.StringAppender;
 import util.string.StringUtils;
 

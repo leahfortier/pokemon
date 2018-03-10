@@ -2,9 +2,9 @@ package generator.interfaces;
 
 import battle.effect.generic.EffectInterfaces;
 import generator.StuffGen;
-import util.FileIO;
-import util.FileName;
-import util.Folder;
+import util.file.FileIO;
+import util.file.FileName;
+import util.file.Folder;
 import util.string.StringAppender;
 
 import java.util.Scanner;

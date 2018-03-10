@@ -1,6 +1,6 @@
 package map;
 
-import util.FileIO;
+import util.file.FileIO;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

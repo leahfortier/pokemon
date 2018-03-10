@@ -9,7 +9,7 @@ import battle.effect.generic.team.TeamEffectNamesies;
 import item.ItemNamesies;
 import pokemon.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
-import util.Folder;
+import util.file.Folder;
 
 public enum NamesiesType {
     ATTACK_NAMESIES(AttackNamesies.class, Folder.ATTACK, true),

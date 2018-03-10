@@ -14,8 +14,8 @@ import pokemon.PokemonInfo;
 import pokemon.breeding.Eggy;
 import trainer.player.medal.Medal;
 import type.Type;
-import util.FileIO;
-import util.Folder;
+import util.file.FileIO;
+import util.file.Folder;
 import util.string.StringUtils;
 
 import java.awt.image.BufferedImage;

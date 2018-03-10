@@ -4,8 +4,8 @@ import generator.GeneratorType;
 import item.ItemNamesies;
 import item.use.TechnicalMachine;
 import type.Type;
-import util.FileIO;
-import util.Folder;
+import util.file.FileIO;
+import util.file.Folder;
 import util.string.StringAppender;
 
 import java.util.EnumMap;

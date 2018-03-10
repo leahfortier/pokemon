@@ -2,7 +2,7 @@ package generator.update;
 
 import generator.GeneratorType;
 import main.Global;
-import util.FileIO;
+import util.file.FileIO;
 import util.string.StringAppender;
 
 import java.util.Scanner;

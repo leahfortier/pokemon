@@ -1,8 +1,8 @@
 package gui.view.mainmenu;
 
 import draw.panel.BasicPanels;
-import util.FileIO;
-import util.Folder;
+import util.file.FileIO;
+import util.file.Folder;
 
 import java.awt.Color;
 import java.awt.Graphics;

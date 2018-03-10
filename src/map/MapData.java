@@ -24,9 +24,9 @@ import pattern.map.MiscEntityMatcher;
 import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
 import trainer.player.Player;
-import util.FileIO;
 import util.MultiMap;
 import util.Point;
+import util.file.FileIO;
 
 import java.awt.Color;
 import java.awt.Dimension;

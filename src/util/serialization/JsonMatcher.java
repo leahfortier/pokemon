@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import main.Global;
 import map.condition.Condition;
 import pattern.action.ActionMatcher;
-import util.FileIO;
+import util.file.FileIO;
 
 public interface JsonMatcher {
     Gson gson = new GsonBuilder()

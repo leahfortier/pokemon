@@ -7,7 +7,7 @@ import pokemon.PokemonNamesies;
 import pokemon.Stat;
 import type.PokeType;
 import type.Type;
-import util.FileIO;
+import util.file.FileIO;
 import util.string.StringAppender;
 import util.string.StringUtils;
 

@@ -2,8 +2,8 @@ package generator.update;
 
 import generator.GeneratorType;
 import pokemon.ability.AbilityNamesies;
-import util.FileIO;
-import util.Folder;
+import util.file.FileIO;
+import util.file.Folder;
 import util.string.StringAppender;
 import util.string.StringUtils;
 

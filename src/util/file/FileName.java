@@ -1,4 +1,4 @@
-package util;
+package util.file;
 
 public abstract class FileName {
     public static final String POKEMON_INFO = Folder.REC + "pokemoninfo.txt";

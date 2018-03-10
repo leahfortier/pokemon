@@ -3,7 +3,7 @@ package test.maps;
 import map.MapData;
 import map.area.AreaData;
 import pattern.map.MapDataMatcher;
-import util.FileIO;
+import util.file.FileIO;
 
 import java.io.File;
 

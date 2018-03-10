@@ -5,8 +5,8 @@ import map.MapData;
 import map.MapName;
 import map.condition.ConditionSet;
 import pattern.map.ConditionsMatcher;
-import util.FileIO;
-import util.Folder;
+import util.file.FileIO;
+import util.file.Folder;
 
 import java.io.File;
 import java.util.HashMap;

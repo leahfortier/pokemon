@@ -15,9 +15,9 @@ import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
 import test.maps.TestMap;
 import trainer.player.Player;
-import util.FileIO;
-import util.Folder;
 import util.FontMetrics;
+import util.file.FileIO;
+import util.file.Folder;
 
 import java.awt.Color;
 import java.awt.Graphics;

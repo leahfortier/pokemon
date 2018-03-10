@@ -10,8 +10,8 @@ import mapMaker.model.MapMakerModel;
 import mapMaker.model.TileModel;
 import mapMaker.model.TileModel.TileType;
 import pattern.map.AreaMatcher;
-import util.FileIO;
 import util.Point;
+import util.file.FileIO;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;

@@ -4,9 +4,9 @@ import item.ItemNamesies;
 import main.Global;
 import pattern.map.ItemMatcher;
 import util.ColorDocumentListener.ColorCondition;
-import util.FileIO;
-import util.Folder;
 import util.GUIUtils;
+import util.file.FileIO;
+import util.file.Folder;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;

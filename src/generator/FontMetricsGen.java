@@ -1,9 +1,9 @@
 package generator;
 
 import main.Global;
-import util.FileIO;
-import util.FileName;
 import util.FontMetrics;
+import util.file.FileIO;
+import util.file.FileName;
 import util.string.StringAppender;
 
 import javax.swing.JFrame;

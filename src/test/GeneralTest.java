@@ -7,8 +7,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
-import util.FileIO;
 import util.TimeUtils;
+import util.file.FileIO;
 import util.string.StringAppender;
 import util.string.StringUtils;
 

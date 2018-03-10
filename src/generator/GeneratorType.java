@@ -9,7 +9,7 @@ import battle.effect.generic.pokemon.PokemonEffect;
 import battle.effect.generic.team.TeamEffect;
 import item.Item;
 import pokemon.ability.Ability;
-import util.Folder;
+import util.file.Folder;
 
 public enum GeneratorType {
     ATTACK_GEN("Moves.txt", Folder.ATTACK, Attack.class, NamesiesType.ATTACK_NAMESIES),
