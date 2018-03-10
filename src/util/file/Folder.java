@@ -15,10 +15,10 @@ public abstract class Folder {
 
     // Battle code
     public static final String ATTACK = FileIO.makeFolderPath(BATTLE, "attack");
-    public static final String GENERIC_EFFECT = FileIO.makeFolderPath(BATTLE, "effect", "generic");
-    public static final String POKEMON_EFFECT = FileIO.makeFolderPath(GENERIC_EFFECT, "pokemon");
-    public static final String TEAM_EFFECT = FileIO.makeFolderPath(GENERIC_EFFECT, "team");
-    public static final String BATTLE_EFFECT = FileIO.makeFolderPath(GENERIC_EFFECT, "battle");
+    public static final String EFFECT = FileIO.makeFolderPath(BATTLE, "effect");
+    public static final String POKEMON_EFFECT = FileIO.makeFolderPath(EFFECT, "pokemon");
+    public static final String TEAM_EFFECT = FileIO.makeFolderPath(EFFECT, "team");
+    public static final String BATTLE_EFFECT = FileIO.makeFolderPath(EFFECT, "battle");
     public static final String WEATHER_EFFECT = FileIO.makeFolderPath(BATTLE_EFFECT, "weather");
     public static final String TERRAIN_EFFECT = FileIO.makeFolderPath(BATTLE_EFFECT, "terrain");
 

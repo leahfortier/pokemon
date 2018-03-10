@@ -10,7 +10,7 @@ import util.string.StringAppender;
 import java.util.Scanner;
 
 public class InterfaceGen {
-    private static final String INTERFACE_PATH = Folder.GENERIC_EFFECT + EffectInterfaces.class.getSimpleName() + ".java";
+    private static final String INTERFACE_PATH = Folder.EFFECT + EffectInterfaces.class.getSimpleName() + ".java";
 
     public InterfaceGen() {
         gen();
