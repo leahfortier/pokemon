@@ -5,9 +5,8 @@ import util.Folder;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
 
-public enum BagCategory implements Serializable {
+public enum BagCategory {
     MEDICINE("Medicine", new Color(248, 120, 64)),
     BALL("Balls", new Color(232, 184, 40)),
     STAT("Stat", new Color(80, 128, 232)),

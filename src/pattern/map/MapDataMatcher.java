@@ -2,10 +2,9 @@ package pattern.map;
 
 import map.area.AreaData;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import pattern.JsonMatcher;
 import pattern.generic.LocationTriggerMatcher;
 import util.GeneralUtils;
-import util.SerializationUtils;
+import util.serialization.JsonMatcher;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,6 +119,6 @@ public class MapDataMatcher implements JsonMatcher {
     }
 
     public static MapDataMatcher matchArea(String areaDescriptionFileName) {
-        return SerializationUtils.deserializeJsonFile(areaDescriptionFileName, MapDataMatcher.class);
+        return JsonMatcher.fromFile(areaDescriptionFileName, MapDataMatcher.class);
     }
 }

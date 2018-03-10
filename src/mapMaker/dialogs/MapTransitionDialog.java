@@ -18,8 +18,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
-    private static final long serialVersionUID = 6937677302812347311L;
-
     private static final MapName EMPTY_MAP = new MapName("No Destination", StringUtils.empty());
 
     private final JComboBox<String> entranceComboBox;

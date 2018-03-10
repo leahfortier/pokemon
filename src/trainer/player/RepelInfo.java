@@ -12,10 +12,11 @@ import pattern.action.ActionMatcher.ChoiceActionMatcher;
 import pattern.action.ActionMatcher.UseItemActionMatcher;
 import pattern.action.ChoiceMatcher;
 import pattern.action.StringActionMatcher.DialogueActionMatcher;
-
-import java.io.Serializable;
+import util.serialization.Serializable;
 
 public class RepelInfo implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private int repelSteps;
     private ItemNamesies repelItem;
 

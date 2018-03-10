@@ -9,6 +9,8 @@ import type.Type;
 import java.util.List;
 
 public class TypePartyEvolution extends Evolution {
+    private static final long serialVersionUID = 1L;
+
     private final BaseEvolution evolution;
     private final Type type;
 

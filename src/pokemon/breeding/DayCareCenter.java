@@ -9,10 +9,11 @@ import trainer.player.Player;
 import trainer.player.medal.MedalTheme;
 import util.PokeString;
 import util.StringUtils;
-
-import java.io.Serializable;
+import util.serialization.Serializable;
 
 public class DayCareCenter implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private ActivePokemon first;
     private ActivePokemon second;
 

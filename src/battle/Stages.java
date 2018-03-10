@@ -9,8 +9,7 @@ import message.MessageUpdate;
 import message.Messages;
 import pokemon.Stat;
 import util.StringUtils;
-
-import java.io.Serializable;
+import util.serialization.Serializable;
 
 public class Stages implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -18,8 +18,6 @@ import javax.swing.JTextField;
 import java.util.List;
 
 public class PokemonDataPanel extends JPanel {
-    private static final long serialVersionUID = 2679616277402077123L;
-
     private final JTextField nameTextField;
     private final JTextField nicknameTextField;
     private final JTextField moveTextField;

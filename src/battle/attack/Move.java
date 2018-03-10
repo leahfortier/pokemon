@@ -8,8 +8,8 @@ import battle.effect.generic.EffectInterfaces.ForceMoveEffect;
 import message.Messages;
 import type.Type;
 import util.RandomUtils;
+import util.serialization.Serializable;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 

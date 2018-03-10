@@ -3,10 +3,11 @@ package pattern;
 import map.MapName;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.MultiPointTriggerMatcher;
-
-import java.io.Serializable;
+import util.serialization.Serializable;
 
 public class SimpleMapTransition extends MultiPointTriggerMatcher implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private MapName nextMap;
     private String nextEntrance;
 

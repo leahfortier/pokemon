@@ -4,8 +4,8 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.generic.Effect;
 import battle.effect.generic.EffectNamesies;
+import util.serialization.Serializable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

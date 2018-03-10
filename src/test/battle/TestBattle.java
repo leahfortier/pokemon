@@ -20,6 +20,8 @@ import trainer.WildPokemon;
 import util.StringUtils;
 
 public class TestBattle extends Battle {
+    private static final long serialVersionUID = 1L;
+
     private Double expectedDamageModifier;
     private Boolean expectedDefendingAccuracyBypass;
 

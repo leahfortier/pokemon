@@ -8,8 +8,8 @@ import pokemon.Stat;
 import trainer.player.pokedex.Pokedex;
 import type.Type;
 import type.TypeAdvantage;
+import util.serialization.Serializable;
 
-import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -25,6 +25,8 @@ import java.util.Set;
         trades
  */
 public class MedalCase implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final Set<Medal> medalsEarned;
     private final Map<MedalTheme, Integer> themeCounters;
     private final Map<Type, Set<PokemonNamesies>> uncaughtPokemonTypeMap;

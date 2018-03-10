@@ -19,8 +19,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
-    private static final long serialVersionUID = 7469923865936465388L;
-
     private JTextField itemTextField;
     private JLabel itemImageLabel;
 

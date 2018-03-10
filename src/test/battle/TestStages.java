@@ -7,6 +7,8 @@ import pokemon.Stat;
 import test.TestPokemon;
 
 public class TestStages extends Stages {
+    private static final long serialVersionUID = 1L;
+
     public TestStages() {
         super(TestPokemon.newPlayerPokemon(PokemonNamesies.BULBASAUR));
     }

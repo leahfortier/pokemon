@@ -5,9 +5,8 @@ import util.Folder;
 import util.StringUtils;
 
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
 
-public enum MoveCategory implements Serializable {
+public enum MoveCategory {
     PHYSICAL,
     SPECIAL,
     STATUS;

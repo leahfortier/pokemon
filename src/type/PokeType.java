@@ -3,9 +3,9 @@ package type;
 import org.jetbrains.annotations.NotNull;
 import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;
+import util.serialization.Serializable;
 
 import java.awt.Color;
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 

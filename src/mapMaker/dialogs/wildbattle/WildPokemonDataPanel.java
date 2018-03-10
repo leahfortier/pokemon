@@ -13,8 +13,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 class WildPokemonDataPanel extends JPanel {
-    private static final long serialVersionUID = -7408589859784929623L;
-
     private final JTextField pokemonTextField;
     private final JFormattedTextField probabilityFormattedTextField;
     private final JCheckBox selectedCheckBox;

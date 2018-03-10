@@ -47,15 +47,16 @@ import trainer.player.medal.MedalTheme;
 import type.TypeAdvantage;
 import util.PokeString;
 import util.RandomUtils;
-import util.SerializationUtils;
 import util.StringAppender;
+import util.serialization.Serializable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Battle implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     // Crit yo pants
     private static final int[] CRITSICLES = { 16, 8, 4, 3, 2 };
 
@@ -118,7 +119,7 @@ public class Battle implements Serializable {
     }
 
     public Battle getSimulated() {
-        Battle simulated = (Battle)SerializationUtils.getSerializedCopy(this);
+        Battle simulated = this.getSerializedCopy(Battle.class);
         simulated.player = new SimulatedPlayer(this.getPlayer());
         simulated.effects.setBattle(simulated);
 

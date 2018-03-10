@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
-    private static final long serialVersionUID = -8061888140387296525L;
-
     private final JPanel topComponent;
 
     private final JLabel trainerIcon;

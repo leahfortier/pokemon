@@ -6,10 +6,9 @@ import util.FileIO;
 import util.FileName;
 import util.Folder;
 import util.GeneralUtils;
-import util.SerializationUtils;
+import util.serialization.Serializable;
 
 import java.io.File;
-import java.io.Serializable;
 
 public class Settings implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -33,7 +32,7 @@ public class Settings implements Serializable {
 
     public void save() {
         this.isMuted = SoundPlayer.instance().isMuted();
-        SerializationUtils.serializeToFile(FileName.SAVE_SETTINGS, this);
+        this.serializeToFile(FileName.SAVE_SETTINGS);
     }
 
     public static Settings load() {
@@ -43,7 +42,7 @@ public class Settings implements Serializable {
 
         File file = new File(FileName.SAVE_SETTINGS);
         if (file.exists()) {
-            settings = (Settings)SerializationUtils.deserializeFromFile(file);
+            settings = Serializable.fromFile(file, Settings.class);
         } else {
             settings = new Settings();
         }

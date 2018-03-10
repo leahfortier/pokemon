@@ -6,15 +6,17 @@ import map.weather.WeatherState;
 import pokemon.PokemonNamesies;
 import sound.SoundTitle;
 import util.StringUtils;
+import util.serialization.Serializable;
 
 import java.awt.Color;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class AreaData implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public static final AreaData VOID = new AreaData(
             "Void",
             Color.BLACK,

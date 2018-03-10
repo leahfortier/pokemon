@@ -59,8 +59,6 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class MapMaker extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener, ListSelectionListener {
-    private static final long serialVersionUID = -1323397946555510794L;
-
     public final Canvas canvas;
 
     private JButton newTileButton;

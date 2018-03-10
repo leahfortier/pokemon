@@ -1,10 +1,11 @@
 package trainer.player;
 
 import pokemon.PartyPokemon;
-
-import java.io.Serializable;
+import util.serialization.Serializable;
 
 public class NewPokemonInfo implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private PartyPokemon newPokemon;
     private Integer newPokemonBox;
     private boolean isFirstNewPokemon;

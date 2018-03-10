@@ -6,6 +6,8 @@ import pokemon.PokemonNamesies;
 import util.StringUtils;
 
 public class Eggy extends PartyPokemon {
+    private static final long serialVersionUID = 1L;
+
     public static final String TINY_EGG_IMAGE_NAME = "egg-small";
     public static final String BASE_EGG_IMAGE_NAME = "egg";
     public static final String SPRITE_EGG_IMAGE_NAME = "EggSprite";

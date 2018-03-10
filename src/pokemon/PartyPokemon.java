@@ -22,9 +22,9 @@ import trainer.player.medal.MedalTheme;
 import type.PokeType;
 import util.RandomUtils;
 import util.StringUtils;
+import util.serialization.Serializable;
 
 import java.awt.Color;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

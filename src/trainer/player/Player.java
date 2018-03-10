@@ -38,8 +38,8 @@ import util.Point;
 import util.RandomUtils;
 import util.StringUtils;
 import util.TimeUtils;
+import util.serialization.Serializable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;

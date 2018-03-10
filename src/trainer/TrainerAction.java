@@ -3,9 +3,7 @@ package trainer;
 import battle.ActivePokemon;
 import battle.Battle;
 
-import java.io.Serializable;
-
-public enum TrainerAction implements Serializable {
+public enum TrainerAction {
     FIGHT(Battle::getAttackPriority),
     SWITCH(6),
     ITEM(6),

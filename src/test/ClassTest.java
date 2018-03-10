@@ -101,6 +101,7 @@ import trainer.Trainer;
 import trainer.WildPokemon;
 import type.Type;
 import util.GeneralUtils;
+import util.serialization.Serializable;
 
 import java.io.File;
 import java.io.IOException;
@@ -281,6 +282,27 @@ public class ClassTest extends BaseTest {
             if (classy.isInterface() && !hasAnnotation(classy, FunctionalInterface.class)) {
                 containsInstance(classy, Object.class);
             }
+        }
+    }
+
+    @Test
+    public void serializableTest() {
+        for (Class<?> classy : classes) {
+            // Classes must have a serialVersionUID if and only if it is serializable
+            if (!classy.isInterface()) {
+                boolean isSerializable = Serializable.class.isAssignableFrom(classy);
+                boolean hasSerialId = hasDeclaredField(classy, "serialVersionUID");
+                Assert.assertEquals(classy.getName(), isSerializable, hasSerialId);
+            }
+        }
+    }
+
+    private boolean hasDeclaredField(Class<?> classy, String fieldName) {
+        try {
+            classy.getDeclaredField(fieldName);
+            return true;
+        } catch (NoSuchFieldException e) {
+            return false;
         }
     }
 

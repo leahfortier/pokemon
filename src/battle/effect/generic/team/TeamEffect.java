@@ -23,8 +23,7 @@ import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import trainer.Trainer;
 import type.Type;
-
-import java.io.Serializable;
+import util.serialization.Serializable;
 
 // Class to handle effects that are specific to one side of the battle
 public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements Serializable {

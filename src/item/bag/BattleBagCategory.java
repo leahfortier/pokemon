@@ -1,9 +1,8 @@
 package item.bag;
 
 import java.awt.Color;
-import java.io.Serializable;
 
-public enum BattleBagCategory implements Serializable {
+public enum BattleBagCategory {
     HP_PP("HP/PP", new Color(245, 144, 146)),
     STATUS("Status", new Color(246, 238, 146)),
     BALL("Balls", new Color(134, 212, 141)),

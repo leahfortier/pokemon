@@ -5,7 +5,6 @@ import mapMaker.dialogs.TriggerDialog;
 import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
 import util.GUIUtils;
-import util.SerializationUtils;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -36,7 +35,7 @@ public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
                 event -> {
                     WildBattleMatcher oldMatcher = null;
                     if (!this.wildBattleTriggers.isEmpty()) {
-                        oldMatcher = SerializationUtils.getJsonCopy(wildBattleTriggers.get(0), WildBattleMatcher.class);
+                        oldMatcher = wildBattleTriggers.get(0).getJsonCopy(WildBattleMatcher.class);
                         oldMatcher.setName("Wild Trigger Matcher " + wildBattleTriggers.size());
                         oldMatcher.setCondition(null, null);
                     }

@@ -6,9 +6,8 @@ import util.Folder;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
 
-public enum Type implements Serializable {
+public enum Type {
     NORMAL(0, "Normal", () -> TypeAdvantage.NORMAL, new Color(179, 170, 151), -1),
     FIRE(1, "Fire", () -> TypeAdvantage.FIRE, new Color(250, 81, 37), 8),
     WATER(2, "Water", () -> TypeAdvantage.WATER, new Color(48, 158, 255), 9),

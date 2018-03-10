@@ -15,6 +15,8 @@ import message.Messages;
 import type.Type;
 
 public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> {
+    private static final long serialVersionUID = 1L;
+
     private final TerrainType terrainType;
 
     public TerrainEffect(TerrainNamesies name, TerrainType terrainType) {

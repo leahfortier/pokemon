@@ -6,7 +6,6 @@ import trainer.player.Player;
 import trainer.player.medal.MedalTheme;
 import util.FileIO;
 import util.Folder;
-import util.SerializationUtils;
 
 public final class Save {
     public static final int NUM_SAVES = 3;
@@ -26,7 +25,7 @@ public final class Save {
         player.getMedalCase().increase(MedalTheme.TIMES_SAVED);
 
         FileIO.createFolder(Folder.SAVES);
-        SerializationUtils.serializeToFile(getSavePath(player.getFileNum()), player);
+        player.serializeToFile(getSavePath(player.getFileNum()));
     }
 
     public static void deleteSave(int index) {

@@ -10,8 +10,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class EventTriggerDialog extends TriggerDialog<EventMatcher> {
-    private static final long serialVersionUID = -1493772382824925408L;
-
     private final JPanel topComponent;
 
     private final JTextField nameTextField;

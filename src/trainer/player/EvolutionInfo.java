@@ -7,10 +7,11 @@ import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.evolution.BaseEvolution;
-
-import java.io.Serializable;
+import util.serialization.Serializable;
 
 public class EvolutionInfo implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private ActivePokemon evolvingPokemon;
     private BaseEvolution evolution;
 

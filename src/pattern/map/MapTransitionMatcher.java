@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MapTransitionMatcher extends SimpleMapTransition {
+    private static final long serialVersionUID = 1L;
+
     private String exitName;
     private PathDirection direction;
     private boolean deathPortal;
