@@ -3,6 +3,8 @@ package trainer;
 import pokemon.PartyPokemon;
 
 public class SimulatedPlayer extends PlayerTrainer {
+    private static final long serialVersionUID = 1L;
+
     public SimulatedPlayer(PlayerTrainer player) {
         super(player.getName(), player.getDatCashMoney());
 

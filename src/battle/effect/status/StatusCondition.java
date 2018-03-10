@@ -1,10 +1,8 @@
 package battle.effect.status;
 
-import util.serialization.Serializable;
-
 import java.util.function.Supplier;
 
-public enum StatusCondition implements Serializable {
+public enum StatusCondition {
     NO_STATUS("", 1, NoStatus::new),
     FAINTED("FNT", 1, Fainted::new),
     PARALYZED("PRZ", 1.5, Paralyzed::new),

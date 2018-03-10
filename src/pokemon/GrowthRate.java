@@ -1,8 +1,6 @@
 package pokemon;
 
-import util.serialization.Serializable;
-
-public enum GrowthRate implements Serializable {
+public enum GrowthRate {
     FAST("Fast", level -> (int)(.8*Math.pow(level, 3))),
     MEDIUM_FAST("Medium Fast", level -> (int)Math.pow(level, 3)),
     MEDIUM_SLOW("Medium Slow", level -> (int)(1.2*Math.pow(level, 3) - 15*level*level + 100*level - 140)),

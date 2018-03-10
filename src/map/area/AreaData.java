@@ -15,6 +15,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class AreaData implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public static final AreaData VOID = new AreaData(
             "Void",
             Color.BLACK,

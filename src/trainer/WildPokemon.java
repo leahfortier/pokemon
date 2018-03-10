@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class WildPokemon implements Opponent, Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final ActivePokemon wildPokemon;
     private TeamEffectList effects;
 

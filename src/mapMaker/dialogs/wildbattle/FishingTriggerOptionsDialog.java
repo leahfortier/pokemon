@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FishingTriggerOptionsDialog extends TriggerDialog<FishingMatcher> {
-    private static final long serialVersionUID = -7378035463487486331L;
-
     private JComboBox<String> comboBox;
 
     private JButton createButton;

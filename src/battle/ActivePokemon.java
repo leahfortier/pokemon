@@ -900,5 +900,7 @@ public class ActivePokemon extends PartyPokemon {
         this.setAttacking(false);
     }
 
-    public static class PokemonEffectList extends EffectList<PokemonEffectNamesies, PokemonEffect> {}
+    public static class PokemonEffectList extends EffectList<PokemonEffectNamesies, PokemonEffect> {
+        private static final long serialVersionUID = 1L;
+    }
 }

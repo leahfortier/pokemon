@@ -15,6 +15,8 @@ import pattern.action.StringActionMatcher.DialogueActionMatcher;
 import util.serialization.Serializable;
 
 public class RepelInfo implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private int repelSteps;
     private ItemNamesies repelItem;
 

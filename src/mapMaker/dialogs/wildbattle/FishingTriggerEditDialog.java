@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FishingTriggerEditDialog extends TriggerDialog<FishingMatcher> {
-    private static final long serialVersionUID = -3454589908432207758L;
-
     private final JPanel topComponent;
     private final JPanel bottomComponent;
 

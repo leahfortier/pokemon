@@ -55,6 +55,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class Battle implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     // Crit yo pants
     private static final int[] CRITSICLES = { 16, 8, 4, 3, 2 };
 

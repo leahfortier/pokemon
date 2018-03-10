@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BerryFarm implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public static final int MAX_BERRIES = 24;
 
     private final List<PlantedBerry> berries;

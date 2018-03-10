@@ -4,6 +4,8 @@ import battle.ActivePokemon;
 import battle.Battle;
 
 public class BadlyPoisoned extends Poisoned {
+    private static final long serialVersionUID = 1L;
+
     private int turns;
 
     // TODO: Confirm that it's okay that the type is POISONED instead of BADLY_POISONED

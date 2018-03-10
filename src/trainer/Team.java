@@ -40,5 +40,7 @@ public interface Team {
                    .collect(Collectors.toList());
     }
 
-    class TeamEffectList extends EffectList<TeamEffectNamesies, TeamEffect> {}
+    class TeamEffectList extends EffectList<TeamEffectNamesies, TeamEffect> {
+        private static final long serialVersionUID = 1L;
+    }
 }

@@ -6,6 +6,8 @@ import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 
 public abstract class BaseEvolution extends Evolution {
+    private static final long serialVersionUID = 1L;
+
     private final EvolutionMethod evolutionMethod;
     private final PokemonNamesies evolutionNamesies;
 

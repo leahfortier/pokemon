@@ -12,6 +12,8 @@ import util.StringUtils;
 import util.serialization.Serializable;
 
 public class DayCareCenter implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private ActivePokemon first;
     private ActivePokemon second;
 

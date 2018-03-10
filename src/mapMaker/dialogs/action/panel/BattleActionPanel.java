@@ -20,8 +20,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class BattleActionPanel extends ActionPanel<BattleActionMatcher> {
-    private static final long serialVersionUID = 4995985841899035558L;
-
     private final JPanel topComponent;
     private final JPanel bottomComponent;
 

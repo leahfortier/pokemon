@@ -7,6 +7,8 @@ import pokemon.PokemonNamesies;
 import util.StringUtils;
 
 public class TimeEvolution extends Evolution {
+    private static final long serialVersionUID = 1L;
+
     private final BaseEvolution evolution;
     private final DayCycle timeOfDay;
 

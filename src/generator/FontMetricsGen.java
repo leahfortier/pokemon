@@ -15,8 +15,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 class FontMetricsGen extends JPanel {
-    private static final long serialVersionUID = 1L;
-
     private static final String s = "WWWWWWWWWWWWWWWWWWWWWW";
     private static final int SMALLEST_FONT_SIZE = 1;
     private static final int LARGEST_FONT_SIZE = 150;

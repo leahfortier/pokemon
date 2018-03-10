@@ -3,6 +3,8 @@ package map;
 import util.serialization.Serializable;
 
 public class MapName implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final String region;
     private final String mapName;
 
