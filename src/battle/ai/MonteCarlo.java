@@ -11,7 +11,6 @@ import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.player.Player;
 import util.RandomUtils;
-import util.SerializationUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ public class MonteCarlo {
         Messages.clearMessages(MessageState.SIMULATION_STATION);
         Messages.setMessageState(MessageState.SIMULATION_STATION);
 
-        Player player = (Player)SerializationUtils.getSerializedCopy(battle.getPlayer());
+        Player player = (Player)battle.getPlayer().getSerializedCopy();
 
         Node root = new Node(new ArrayList<>(), true);
         for (int i = 0; i < BUDGET; i++) {
@@ -61,7 +60,7 @@ public class MonteCarlo {
 
             Battle simulated = battle.getSimulated();
 
-            ActivePokemon playerPokemon = (ActivePokemon)SerializationUtils.getSerializedCopy(battle.getPlayer().front());
+            ActivePokemon playerPokemon = (ActivePokemon)battle.getPlayer().front().getSerializedCopy();
             player.replaceFront(playerPokemon);
 
             Opponent opponent = simulated.getOpponent();

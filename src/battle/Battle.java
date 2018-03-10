@@ -48,7 +48,6 @@ import type.TypeAdvantage;
 import util.PokeString;
 import util.RandomUtils;
 import util.Serializable;
-import util.SerializationUtils;
 import util.StringAppender;
 
 import java.util.ArrayList;
@@ -118,7 +117,7 @@ public class Battle implements Serializable {
     }
 
     public Battle getSimulated() {
-        Battle simulated = (Battle)SerializationUtils.getSerializedCopy(this);
+        Battle simulated = (Battle)this.getSerializedCopy();
         simulated.player = new SimulatedPlayer(this.getPlayer());
         simulated.effects.setBattle(simulated);
 

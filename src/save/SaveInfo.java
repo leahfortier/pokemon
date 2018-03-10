@@ -1,7 +1,7 @@
 package save;
 
 import trainer.player.Player;
-import util.SerializationUtils;
+import util.Serializable;
 
 import java.io.File;
 
@@ -14,7 +14,7 @@ public class SaveInfo {
     private final int pokemonSeen;
 
     private SaveInfo(File saveFile) {
-        player = (Player)SerializationUtils.deserializeFromFile(saveFile);
+        player = (Player)Serializable.fromFile(saveFile);
         player.initialize();
 
         this.name = player.getName();

@@ -7,7 +7,6 @@ import message.Messages;
 import message.Messages.MessageState;
 import trainer.Trainer;
 import trainer.TrainerAction;
-import util.SerializationUtils;
 
 import java.util.List;
 
@@ -65,7 +64,7 @@ public class DecisionTree {
     }
 
     private void setupTrainer(Trainer trainer, Move move) {
-        ActivePokemon front = (ActivePokemon)SerializationUtils.getSerializedCopy(trainer.front());
+        ActivePokemon front = (ActivePokemon)trainer.front().getSerializedCopy();
         trainer.replaceFront(front);
 
         // Need to set these manually since this field has to be transient because ActivePokemon and BattleAttributes store each other

@@ -13,7 +13,7 @@ import pokemon.Gender;
 import pokemon.PokemonNamesies;
 import sound.SoundTitle;
 import type.PokeType;
-import util.SerializationUtils;
+import util.Serializable;
 import util.StringUtils;
 
 public class MessageUpdate {
@@ -65,7 +65,7 @@ public class MessageUpdate {
     }
 
     public MessageUpdate withPokemon(ActivePokemon frontPokemon) {
-        this.frontPokemonSerialized = SerializationUtils.serialize(frontPokemon);
+        this.frontPokemonSerialized = frontPokemon.serialize();
         this.isPlayer = frontPokemon.isPlayer();
         return this;
     }
@@ -341,7 +341,7 @@ public class MessageUpdate {
     }
 
     public ActivePokemon getFrontPokemon() {
-        return (ActivePokemon)SerializationUtils.deserialize(this.frontPokemonSerialized);
+        return (ActivePokemon)Serializable.deserialize(this.frontPokemonSerialized);
     }
 
     public int getTeamIndex() {

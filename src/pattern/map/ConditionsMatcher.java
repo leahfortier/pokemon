@@ -5,7 +5,6 @@ import map.condition.ConditionSet;
 import pattern.JsonMatcher;
 import util.FileIO;
 import util.FileName;
-import util.SerializationUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +15,7 @@ public class ConditionsMatcher implements JsonMatcher {
     private List<ConditionMatcher> conditions = new ArrayList<>();
 
     private static ConditionsMatcher readConditions() {
-        return SerializationUtils.deserializeJsonFile(FileName.CONDITIONS, ConditionsMatcher.class);
+        return JsonMatcher.fromFile(FileName.CONDITIONS, ConditionsMatcher.class);
     }
 
     public static List<ConditionMatcher> getConditionMatchers() {

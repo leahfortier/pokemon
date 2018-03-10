@@ -7,7 +7,6 @@ import util.FileName;
 import util.Folder;
 import util.GeneralUtils;
 import util.Serializable;
-import util.SerializationUtils;
 
 import java.io.File;
 
@@ -33,7 +32,7 @@ public class Settings implements Serializable {
 
     public void save() {
         this.isMuted = SoundPlayer.instance().isMuted();
-        SerializationUtils.serializeToFile(FileName.SAVE_SETTINGS, this);
+        this.serializeToFile(FileName.SAVE_SETTINGS);
     }
 
     public static Settings load() {
@@ -43,7 +42,7 @@ public class Settings implements Serializable {
 
         File file = new File(FileName.SAVE_SETTINGS);
         if (file.exists()) {
-            settings = (Settings)SerializationUtils.deserializeFromFile(file);
+            settings = (Settings)Serializable.fromFile(file);
         } else {
             settings = new Settings();
         }
