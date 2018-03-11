@@ -160,4 +160,6 @@ public abstract class Status implements InvokeEffect, Serializable {
 
         applyStatus(b, murderer, deady, StatusNamesies.FAINTED);
     }
+
+    // EVERYTHING BELOW IS GENERATED ###
 }

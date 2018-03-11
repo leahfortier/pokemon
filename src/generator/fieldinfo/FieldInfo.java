@@ -91,6 +91,8 @@ public class FieldInfo {
                 return "\"" + fieldValue + "\"";
             case "Int":
                 return Integer.parseInt(fieldValue) + "";
+            case "Double":
+                return Double.parseDouble(fieldValue) + "";
             case "Boolean":
                 return GeneralUtils.parseBoolean(fieldValue) + "";
             case "Enum":

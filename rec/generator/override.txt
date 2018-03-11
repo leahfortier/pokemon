@@ -38,6 +38,66 @@ Applies:
 ExtraApplies:
 	AddMapField: Applies: {0}
 *
+StatusApplies:
+    Header: boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim)
+    Body:
+        return {0};
+        ###
+*
+GenericCastMessage:
+    Header: String getGenericCastMessage(ActivePokemon p)
+    Body:
+        return {0};
+        ###
+*
+SourceCastMessage:
+    Header: String getSourceCastMessage(ActivePokemon sourcerer, ActivePokemon victim, String sourceName)
+    Body:
+        return {0};
+        ###
+*
+GenericRemoveMessage:
+    Header: String getGenericRemoveMessage(ActivePokemon victim)
+    Body:
+        return {0};
+        ###
+*
+SourceRemoveMessage:
+    Header: String getSourceRemoveMessage(ActivePokemon victim, String sourceName)
+    Body:
+        return {0};
+        ###
+*
+IsStatusType:
+    Header: boolean isType(StatusNamesies statusCondition)
+*
+PoisonCondition:
+    AddMapField: ShortName: PSN
+    AddMapField: CatchMod: 1.5
+    AddMapField: Comments: // Poison-type and Steel-type Pokemon cannot be poisoned unless the caster has the Corrosion ability
+    AddMapField: StatusApplies: (!victim.isType(b, Type.POISON) && !victim.isType(b, Type.STEEL) || caster.hasAbility(AbilityNamesies.CORROSION))
+    AddMapField: GenericRemoveMessage: victim.getName() + " is no longer poisoned!"
+    AddMapField: SourceRemoveMessage: victim.getName() + "'s " + sourceName + " cured it of its poison!"
+    AddInterface: EndTurnEffect
+    AddMapField: ApplyEndTurn:
+        if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+            return;
+        }
+
+        if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
+            if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
+                return;
+            }
+
+            victim.healHealthFraction(1/8.0);
+            Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.POISON_HEAL + " restored its health!").updatePokemon(b, victim));
+            return;
+        }
+
+        Messages.add(victim.getName() + " was hurt by its poison!");
+        victim.reduceHealthFraction(b, {0});
+        ###
+*
 Recoil:
 	Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
 	AddInterface: RecoilMove
@@ -758,6 +818,9 @@ Deactivate:
 *
 GetTurns:
 	Header: int getTurns()
+*
+SetTurns:
+    Header: void setTurns(int turns)
 *
 StatusPrevent:
 	Header: boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status)
