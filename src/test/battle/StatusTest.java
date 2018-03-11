@@ -30,32 +30,42 @@ TODO:
  */
 public class StatusTest extends BaseTest {
     @Test
-    public void testGiveStatus() {
-        // TODO: this
+    public void statChangeTest() {
+        // Paralysis reduces speed by 75%
+        statChangeTest(.25, StatusNamesies.PARALYZED, Stat.SPEED, new TestInfo());
+
+        // Unless the victim has Quick Feet -- increases by 50%
+        statChangeTest(1.5, StatusNamesies.PARALYZED, Stat.SPEED, new TestInfo().defending(AbilityNamesies.QUICK_FEET));
+
+        // Burn reduces attack by 50%
+        statChangeTest(.5, StatusNamesies.BURNED, Stat.ATTACK, new TestInfo());
+
+        // Unless the victim has Guts -- increases by 50%
+        statChangeTest(1.5, StatusNamesies.BURNED, Stat.ATTACK, new TestInfo().defending(AbilityNamesies.GUTS));
+
+        // Or the victim is using the move Facade -- power is increased
+        statChangeTest(1, StatusNamesies.BURNED, Stat.ATTACK, new TestInfo().with((battle, attacking, defending) -> defending.setupMove(AttackNamesies.FACADE, battle)));
     }
 
-    @Test
-    public void testStatChanges() {
-        testStatChange(StatusNamesies.PARALYZED, Stat.SPEED, .25);
-        testStatChange(StatusNamesies.BURNED, Stat.ATTACK, .5);
+    private void statChangeTest(double ratio, StatusNamesies statusCondition, Stat stat, TestInfo testInfo) {
+        // Uglyface can receive all status conditions
+        testInfo.defending(PokemonNamesies.WATCHOG);
 
-        // TODO: Test Guts
-    }
-
-    private void testStatChange(StatusNamesies statusCondition, Stat stat, double ratio) {
-        TestBattle battle = TestBattle.create(PokemonNamesies.RAPIDASH, PokemonNamesies.WATCHOG);
+        TestBattle battle = testInfo.createBattle();
         TestPokemon mahBoi = battle.getAttacking();
         TestPokemon uglyFace = battle.getDefending();
+
+        testInfo.manipulate(battle);
 
         int original = Stat.getStat(stat, uglyFace, mahBoi, battle);
 
         StatusCondition.applyStatus(battle, uglyFace, uglyFace, statusCondition);
         int afterStatus = Stat.getStat(stat, uglyFace, mahBoi, battle);
-        Assert.assertTrue((int)(original*ratio) == afterStatus);
+        Assert.assertEquals((int)(original*ratio), afterStatus);
 
         uglyFace.removeStatus();
         int afterRemoved = Stat.getStat(stat, uglyFace, mahBoi, battle);
-        Assert.assertTrue(original == afterRemoved);
+        Assert.assertEquals(original, afterRemoved);
     }
 
     @Test
@@ -65,7 +75,6 @@ public class StatusTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         Assert.assertFalse(defending.hasStatus());
-        Assert.assertFalse(defending.hasStatus(StatusNamesies.POISONED));
         battle.attackingFight(AttackNamesies.TOXIC);
         Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
         Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
