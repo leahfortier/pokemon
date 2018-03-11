@@ -491,8 +491,8 @@ public class AttackTest extends BaseTest {
             // Tri-Attack
             battle.fight(AttackNamesies.TRI_ATTACK, AttackNamesies.TRI_ATTACK);
 
-            StatusNamesies attackingCondition = attacking.getStatus().getType();
-            StatusNamesies defendingCondition = defending.getStatus().getType();
+            StatusNamesies attackingCondition = attacking.getStatus().namesies();
+            StatusNamesies defendingCondition = defending.getStatus().namesies();
 
             Assert.assertTrue(triAttackStatusMap.containsKey(attackingCondition));
             Assert.assertTrue(triAttackStatusMap.containsKey(defendingCondition));

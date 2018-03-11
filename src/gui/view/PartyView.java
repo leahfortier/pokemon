@@ -403,7 +403,7 @@ class PartyView extends View {
             }
 
             // Status Condition
-            g.drawString(selectedPkm.getStatus().getType().getName(), 459, topLineY);
+            g.drawString(selectedPkm.getStatus().namesies().getName(), 459, topLineY);
 
             // Level
             int levelX = 525;

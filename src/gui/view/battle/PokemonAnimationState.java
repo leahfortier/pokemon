@@ -540,7 +540,7 @@ class PokemonAnimationState {
         }
 
         public StatusNamesies getStatus() {
-            return this.frontPokemon == null ? StatusNamesies.NO_STATUS : this.frontPokemon.getStatus().getType();
+            return this.frontPokemon == null ? StatusNamesies.NO_STATUS : this.frontPokemon.getStatus().namesies();
         }
 
         public int getStage(int index) {

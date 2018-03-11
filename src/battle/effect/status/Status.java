@@ -17,10 +17,31 @@ import util.serialization.Serializable;
 public abstract class Status implements InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final StatusNamesies statusCondition;
+    private final StatusNamesies namesies;
+    private final String shortName;
+    private final double catchModifier;
 
+    // TODO: Delete this
     protected Status(StatusNamesies statusCondition) {
-        this.statusCondition = statusCondition;
+        this(statusCondition, statusCondition.getName(), statusCondition.getCatchModifier());
+    }
+
+    protected Status(StatusNamesies namesies, String shortName, double catchModifier) {
+        this.namesies = namesies;
+        this.shortName = shortName;
+        this.catchModifier = catchModifier;
+    }
+
+    public StatusNamesies namesies() {
+        return this.namesies;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public double getCatchModifier() {
+        return catchModifier;
     }
 
     protected abstract boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim);
@@ -48,7 +69,7 @@ public abstract class Status implements InvokeEffect, Serializable {
     }
 
     private String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-        StatusPreventionEffect statusPrevent = StatusPreventionEffect.getPreventEffect(b, user, victim, this.statusCondition);
+        StatusPreventionEffect statusPrevent = StatusPreventionEffect.getPreventEffect(b, user, victim, this.namesies);
         if (statusPrevent != null) {
             return statusPrevent.statusPreventionMessage(victim);
         }
@@ -58,19 +79,15 @@ public abstract class Status implements InvokeEffect, Serializable {
 
     private boolean appliesWithoutStatusCheck(Battle b, ActivePokemon caster, ActivePokemon victim) {
         return this.statusApplies(b, caster, victim) &&
-                StatusPreventionEffect.getPreventEffect(b, caster, victim, this.statusCondition) == null;
+                StatusPreventionEffect.getPreventEffect(b, caster, victim, this.namesies) == null;
     }
 
     protected boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
         return !victim.hasStatus() && this.appliesWithoutStatusCheck(b, caster, victim);
     }
 
-    public StatusNamesies getType() {
-        return statusCondition;
-    }
-
     public boolean isType(StatusNamesies statusCondition) {
-        return this.getType() == statusCondition;
+        return this.namesies() == statusCondition;
     }
 
     public int getTurns() {
@@ -86,7 +103,7 @@ public abstract class Status implements InvokeEffect, Serializable {
 
     @Override
     public String toString() {
-        return this.statusCondition + " " + this.getTurns();
+        return this.namesies + " " + this.getTurns();
     }
 
     public static void removeStatus(Battle b, ActivePokemon victim, CastSource source) {

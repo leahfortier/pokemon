@@ -220,7 +220,7 @@ public class PokemonState implements VisualStateHandler {
             TextUtils.drawWrappedText(g, ((Eggy)selectedPkm).getEggMessage(), 62, 288, 306);
         } else {
             // Status Condition
-            String statusStr = selectedPkm.getStatus().getType().getName();
+            String statusStr = selectedPkm.getStatus().namesies().getName();
             g.drawString(statusStr, 179, 269);
 
             // Level

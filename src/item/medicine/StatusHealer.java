@@ -12,7 +12,7 @@ public interface StatusHealer extends HoldItem, BattlePokemonUseItem {
     boolean shouldHeal(StatusNamesies statusCondition);
 
     default boolean use(Battle b, ActivePokemon p, CastSource source) {
-        if (!shouldHeal(p.getStatus().getType())) {
+        if (!shouldHeal(p.getStatus().namesies())) {
             return false;
         }
 

@@ -7193,14 +7193,14 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Status.applyStatus(b, user, victim, user.getStatus().getType(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
+            Status.applyStatus(b, user, victim, user.getStatus().namesies(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
             user.removeStatus();
             Messages.add(new MessageUpdate().updatePokemon(b, user));
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasStatus() && Status.applies(user.getStatus().getType(), b, user, victim);
+            return user.hasStatus() && Status.applies(user.getStatus().namesies(), b, user, victim);
         }
     }
 
