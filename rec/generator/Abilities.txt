@@ -329,7 +329,7 @@ Synchronize:
         }
 
         // Synchronize doesn't apply to every condition
-        if (PASSABLE_STATUSES.contains(statusType)) {
+        if (!PASSABLE_STATUSES.contains(statusType)) {
             return;
         }
 
@@ -419,7 +419,7 @@ Early Bird:
     Int: StatusReceivedEffect
 	StatusReceived:
         if (statusType == StatusNamesies.ASLEEP) {
-            Status sleepyTime = victim.getStatus();
+            StatusCondition sleepyTime = victim.getStatus();
             sleepyTime.setTurns(sleepyTime.getTurns()/2);
         }
         ###

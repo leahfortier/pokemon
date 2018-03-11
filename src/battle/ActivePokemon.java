@@ -676,7 +676,7 @@ public class ActivePokemon extends PartyPokemon {
         }
     }
 
-    private Item consumeItemWithoutEffects(Battle b) {
+    public Item consumeItemWithoutEffects(Battle b) {
         Item consumed = getHeldItem(b);
         PokemonEffectNamesies.CONSUMED_ITEM.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
 

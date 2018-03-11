@@ -497,4 +497,85 @@ public class AbilityTest extends BaseTest {
         attacking.assertNotFullHealth();
         defending2.assertFullHealth();
     }
+
+    @Test
+    public void synchronizeTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.EEVEE, PokemonNamesies.HAPPINY);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.SYNCHRONIZE);
+
+        // Thunder Wave will paralyze the target and then Synchronize with paralyze the attacker
+        battle.attackingFight(AttackNamesies.THUNDER_WAVE);
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.PARALYZED));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.PARALYZED));
+
+        attacking.giveItem(ItemNamesies.LUM_BERRY);
+        defending.giveItem(ItemNamesies.CHERI_BERRY);
+        battle.splashFight();
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertFalse(defending.hasStatus());
+        Assert.assertFalse(attacking.isHoldingItem(battle));
+        Assert.assertFalse(defending.isHoldingItem(battle));
+
+        // Synchronize does not work on Sleep
+        battle.attackingFight(AttackNamesies.SPORE);
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.ASLEEP));
+        Assert.assertFalse(attacking.hasStatus());
+
+        defending.withMoves(AttackNamesies.SLEEP_TALK, AttackNamesies.REFRESH);
+        battle.defendingFight(AttackNamesies.SLEEP_TALK);
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertFalse(defending.hasStatus());
+
+        // Make sure it works with bad poison
+        battle.attackingFight(AttackNamesies.TOXIC);
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
+
+        battle.clearAllEffects();
+        battle.emptyHeal();
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertFalse(defending.hasStatus());
+
+        // Both Pokemon with Synchronize and status healing berries
+        // Attacking uses Thunder Wave and defending is paralyzed
+        // Synchronize activates and attacker is paralyzed
+        // Attacking heals by consuming berry
+        // Defending heals by consuming berry
+        attacking.withAbility(AbilityNamesies.SYNCHRONIZE);
+        attacking.giveItem(ItemNamesies.LUM_BERRY);
+        defending.giveItem(ItemNamesies.CHERI_BERRY);
+        battle.attackingFight(AttackNamesies.THUNDER_WAVE);
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertFalse(defending.hasStatus());
+        Assert.assertFalse(attacking.isHoldingItem(battle));
+        Assert.assertFalse(defending.isHoldingItem(battle));
+
+        battle.clearAllEffects();
+        battle.emptyHeal();
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertFalse(defending.hasStatus());
+        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+
+        // Synchronize will not activate for self-inflicted status conditions
+        defending.giveItem(ItemNamesies.TOXIC_ORB);
+        attacking.giveItem(ItemNamesies.LUM_BERRY); // TODO: Change back to pecha berry
+        battle.splashFight();
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+        Assert.assertFalse(attacking.hasStatus());
+
+        // Attacking will fling Pecha Berry at defending, curing its Poison by consuming the berry
+        // Defending will fling Toxic Orb at attacking, inflicting Poison on it
+        battle.fight(AttackNamesies.FLING, AttackNamesies.FLING);
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
+        Assert.assertFalse(defending.hasStatus());
+        Assert.assertFalse(attacking.isHoldingItem(battle));
+        Assert.assertFalse(defending.isHoldingItem(battle));
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+//        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY)); // TODO: Fling isn't working for this
+
+        battle.attackingFight(AttackNamesies.REFRESH);
+        Assert.assertFalse(attacking.hasStatus());
+        Assert.assertFalse(defending.hasStatus());
+    }
 }

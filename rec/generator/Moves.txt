@@ -5189,7 +5189,7 @@ Fling:
     UniqueEffects:
         // TODO: Make sure this is still working -- consumeItem used to be in endAttack
         ((HoldItem)user.getHeldItem(b)).flingEffect(b, victim);
-        user.consumeItem(b);
+        user.consumeItemWithoutEffects(b);
         ###
 *
 Freeze Shock:

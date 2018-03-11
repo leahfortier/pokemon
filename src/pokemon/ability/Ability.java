@@ -1061,7 +1061,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             }
 
             // Synchronize doesn't apply to every condition
-            if (PASSABLE_STATUSES.contains(statusType)) {
+            if (!PASSABLE_STATUSES.contains(statusType)) {
                 return;
             }
 
@@ -1263,7 +1263,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType) {
             if (statusType == StatusNamesies.ASLEEP) {
-                Status sleepyTime = victim.getStatus();
+                StatusCondition sleepyTime = victim.getStatus();
                 sleepyTime.setTurns(sleepyTime.getTurns()/2);
             }
         }
