@@ -3186,8 +3186,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusNamesies statusCondition) {
-            return statusCondition == StatusNamesies.POISONED;
+        public boolean shouldHeal(ActivePokemon p) {
+            return p.hasStatus(StatusNamesies.POISONED);
         }
     }
 
@@ -3201,8 +3201,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusNamesies statusCondition) {
-            return statusCondition == StatusNamesies.ASLEEP;
+        public boolean shouldHeal(ActivePokemon p) {
+            return p.hasStatus(StatusNamesies.ASLEEP);
         }
     }
 
@@ -3216,8 +3216,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusNamesies statusCondition) {
-            return statusCondition == StatusNamesies.BURNED;
+        public boolean shouldHeal(ActivePokemon p) {
+            return p.hasStatus(StatusNamesies.BURNED);
         }
     }
 
@@ -3231,8 +3231,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusNamesies statusCondition) {
-            return statusCondition == StatusNamesies.FROZEN;
+        public boolean shouldHeal(ActivePokemon p) {
+            return p.hasStatus(StatusNamesies.FROZEN);
         }
     }
 
@@ -3246,8 +3246,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusNamesies statusCondition) {
-            return statusCondition == StatusNamesies.PARALYZED;
+        public boolean shouldHeal(ActivePokemon p) {
+            return p.hasStatus(StatusNamesies.PARALYZED);
         }
     }
 
@@ -3261,9 +3261,9 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusNamesies statusCondition) {
+        public boolean shouldHeal(ActivePokemon p) {
             // Does not apply to the healthy and the dead
-            return statusCondition != StatusNamesies.NO_STATUS && statusCondition != StatusNamesies.FAINTED;
+            return p.hasStatus() && !p.isActuallyDead();
         }
     }
 
@@ -4331,8 +4331,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusNamesies statusCondition) {
-            return statusCondition == StatusNamesies.PARALYZED;
+        public boolean shouldHeal(ActivePokemon p) {
+            return p.hasStatus(StatusNamesies.PARALYZED);
         }
     }
 
@@ -4351,8 +4351,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusNamesies statusCondition) {
-            return statusCondition == StatusNamesies.ASLEEP;
+        public boolean shouldHeal(ActivePokemon p) {
+            return p.hasStatus(StatusNamesies.ASLEEP);
         }
     }
 
@@ -4371,8 +4371,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusNamesies statusCondition) {
-            return statusCondition == StatusNamesies.POISONED;
+        public boolean shouldHeal(ActivePokemon p) {
+            return p.hasStatus(StatusNamesies.POISONED);
         }
     }
 
@@ -4391,8 +4391,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusNamesies statusCondition) {
-            return statusCondition == StatusNamesies.BURNED;
+        public boolean shouldHeal(ActivePokemon p) {
+            return p.hasStatus(StatusNamesies.BURNED);
         }
     }
 
@@ -4411,8 +4411,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusNamesies statusCondition) {
-            return statusCondition == StatusNamesies.FROZEN;
+        public boolean shouldHeal(ActivePokemon p) {
+            return p.hasStatus(StatusNamesies.FROZEN);
         }
     }
 
@@ -4578,9 +4578,9 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusNamesies statusCondition) {
+        public boolean shouldHeal(ActivePokemon p) {
             // Does not apply to the healthy and the dead
-            return statusCondition != StatusNamesies.NO_STATUS && statusCondition != StatusNamesies.FAINTED;
+            return p.hasStatus() && !p.isActuallyDead();
         }
 
         @Override

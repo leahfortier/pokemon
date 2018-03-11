@@ -3,6 +3,7 @@ package test.battle;
 import battle.attack.AttackNamesies;
 import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
+import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.PokemonNamesies;
@@ -10,6 +11,7 @@ import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import test.BaseTest;
 import test.TestPokemon;
+import trainer.EnemyTrainer;
 import type.Type;
 
 /*
@@ -191,5 +193,63 @@ public class StatusTest extends BaseTest {
         Assert.assertTrue(defending.isActuallyDead());
         attacking.assertFullHealth();
         defending.assertHealthRatio(0);
+    }
+
+    @Test
+    public void healStatusTest() {
+        TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.EEVEE, PokemonNamesies.VAPOREON);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending1 = battle.getDefending();
+        TestPokemon defending2 = TestPokemon.newTrainerPokemon(PokemonNamesies.ESPEON);
+        ((EnemyTrainer)battle.getOpponent()).addPokemon(defending2);
+        Assert.assertTrue(battle.getDefending() == defending1);
+
+        // Basic Burn Heal, make sure Antidote fails for burns
+        battle.defendingFight(AttackNamesies.WILL_O_WISP);
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED));
+        PokemonManipulator.useItem(ItemNamesies.ANTIDOTE, true, false).manipulate(battle, attacking, defending1);
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED));
+        PokemonManipulator.useItem(ItemNamesies.BURN_HEAL).manipulate(battle, attacking, defending1);
+        Assert.assertFalse(attacking.hasStatus());
+
+        // Make sure Antidote works for both bad poison and regular poison
+        battle.defendingFight(AttackNamesies.TOXIC);
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
+
+        // Make sure burn heal doesn't heal poison
+        PokemonManipulator.useItem(ItemNamesies.BURN_HEAL, true, false).manipulate(battle, attacking, defending1);
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
+
+        PokemonManipulator.useItem(ItemNamesies.ANTIDOTE).manipulate(battle, attacking, defending1);
+        Assert.assertFalse(attacking.hasStatus());
+
+        battle.defendingFight(AttackNamesies.POISON_POWDER);
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
+        Assert.assertFalse(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
+
+        PokemonManipulator.useItem(ItemNamesies.ANTIDOTE).manipulate(battle, attacking, defending1);
+        Assert.assertFalse(attacking.hasStatus());
+
+        // Full Heal can't heal a status you don't have
+        PokemonManipulator.useItem(ItemNamesies.FULL_HEAL, true, false).manipulate(battle, attacking, defending1);
+        Assert.assertFalse(attacking.hasStatus());
+
+        battle.attackingFight(AttackNamesies.SHEER_COLD);
+        Assert.assertTrue(defending1.isActuallyDead());
+        Assert.assertTrue(battle.getDefending() == defending2);
+
+        // Full Heal doesn't work on fainted Pokemon
+        PokemonManipulator.useItem(ItemNamesies.FULL_HEAL, false, false).manipulate(battle, defending1, attacking);
+        Assert.assertTrue(defending1.isActuallyDead());
+        Assert.assertTrue(battle.getDefending() == defending2);
+
+        // But revive does!
+        PokemonManipulator.useItem(ItemNamesies.REVIVE, false, true).manipulate(battle, defending1, attacking);
+        Assert.assertFalse(defending1.isActuallyDead());
+        Assert.assertFalse(defending1.hasStatus());
+        defending1.assertHealthRatio(.5, 1);
+        Assert.assertTrue(battle.getDefending() == defending2);
     }
 }

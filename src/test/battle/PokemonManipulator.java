@@ -7,10 +7,10 @@ import battle.effect.CastSource;
 import battle.effect.EffectNamesies;
 import item.ItemNamesies;
 import item.bag.Bag;
-import main.Game;
 import org.junit.Assert;
 import pokemon.ability.AbilityNamesies;
 import test.TestPokemon;
+import trainer.Trainer;
 
 @FunctionalInterface
 interface PokemonManipulator {
@@ -74,16 +74,24 @@ interface PokemonManipulator {
         return (battle, attacking, defending) -> defending.giveItem(itemNamesies);
     }
 
+    // Defaults to player using the item successfully
     static PokemonManipulator useItem(ItemNamesies itemNamesies) {
-        return useItem(itemNamesies, true);
+        return useItem(itemNamesies, true, true);
     }
 
-    static PokemonManipulator useItem(ItemNamesies itemNamesies, boolean assertion) {
+    // isPlayer can only be false in a trainer battle
+    static PokemonManipulator useItem(ItemNamesies itemNamesies, boolean isPlayer, boolean assertion) {
         return (battle, attacking, defending) -> {
-            Bag bag = Game.getPlayer().getBag();
+            Trainer trainer = (Trainer)battle.getTrainer(isPlayer);
+            Bag bag = trainer.getBag();
             bag.addItem(itemNamesies);
 
-            Assert.assertTrue(bag.battleUseItem(itemNamesies, attacking, battle) == assertion);
+            Assert.assertEquals(assertion, bag.battleUseItem(itemNamesies, attacking, battle));
+            Assert.assertNotEquals(assertion, bag.hasItem(itemNamesies));
+
+            if (bag.hasItem(itemNamesies)) {
+                bag.removeItem(itemNamesies);
+            }
         };
     }
 }

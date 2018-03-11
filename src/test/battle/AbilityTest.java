@@ -559,7 +559,7 @@ public class AbilityTest extends BaseTest {
 
         // Synchronize will not activate for self-inflicted status conditions
         defending.giveItem(ItemNamesies.TOXIC_ORB);
-        attacking.giveItem(ItemNamesies.LUM_BERRY); // TODO: Change back to pecha berry
+        attacking.giveItem(ItemNamesies.PECHA_BERRY);
         battle.splashFight();
         Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
         Assert.assertFalse(attacking.hasStatus());

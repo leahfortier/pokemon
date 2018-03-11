@@ -250,8 +250,8 @@ public class EffectTest extends BaseTest {
         // +1 after using Dire Hit (can only use once -- should fail if used again)
         checkCritStage(2, new TestInfo().with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT)));
         checkCritStage(2, new TestInfo()
-                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true))
-                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, false))
+                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, true))
+                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, false))
         );
 
         // +1 from Lansat Berry when health is below 1/4

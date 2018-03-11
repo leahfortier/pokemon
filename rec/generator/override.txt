@@ -1345,7 +1345,7 @@ StatusHealAll:
 	AddInterface: StatusHealer
 	AddMapField: ShouldHealStatus:
 		// Does not apply to the healthy and the dead
-		return statusCondition != StatusNamesies.NO_STATUS && statusCondition != StatusNamesies.FAINTED;
+        return p.hasStatus() && !p.isActuallyDead();
 		###
 *
 Revive:
@@ -1367,13 +1367,13 @@ Revive:
 		###
 *
 ShouldHealStatus:
-	Header: boolean shouldHeal(StatusNamesies statusCondition)
+	Header: boolean shouldHeal(ActivePokemon p)
 *
 StatusRemove:
 	AddInterface: StatusHealer
     AddMapField: BattleCat: Status
 	AddMapField: ShouldHealStatus:
-		return statusCondition == StatusNamesies.{00};
+		return p.hasStatus(StatusNamesies.{00});
 		###
 *
 FixedHealAmount:
