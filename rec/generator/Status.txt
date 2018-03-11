@@ -15,10 +15,10 @@ NoStatus:
     ShortName: <Empty>
     CatchMod: 1
     StatusApplies: victim.getHP() > 0
-    GenericCastMessage: <Empty>
-    SourceCastMessage: <Empty>
-    GenericRemoveMessage: <Empty>
-    SourceRemoveMessage: <Empty>
+    GenericCastMessage: ""
+    SourceCastMessage: ""
+    GenericRemoveMessage: ""
+    SourceRemoveMessage: ""
 *
 Fainted:
     ShortName: FNT
@@ -30,8 +30,8 @@ Fainted:
     StatusApplies: victim.getHP() == 0
     GenericCastMessage: p.getName() + " fainted!"
     SourceCastMessage: sourcerer.getName() + "'s " + sourceName + " caused " + victim.getName() + " to faint!"
-    GenericRemoveMessage: <Empty>
-    SourceRemoveMessage: <Empty>
+    GenericRemoveMessage: ""
+    SourceRemoveMessage: ""
 *
 Paralyzed:
     ShortName: PRZ

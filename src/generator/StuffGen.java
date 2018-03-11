@@ -64,7 +64,7 @@ public class StuffGen {
                                      String additional,
                                      boolean isInterface) {
         return new StringAppender("\n")
-                .appendLineIf(!StringUtils.isNullOrEmpty(classComments), "\t" + classComments)
+                .append(StringUtils.isNullOrEmpty(classComments) ? "" : "\t" + classComments.trim().replaceAll("\n\t", "\n") + "\n")
                 .append("\t" + defineClass(className, isInterface))
                 .appendDelimiter(" extends ", superClass)
                 .appendDelimiter(" ", interfaces)

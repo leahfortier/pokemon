@@ -476,7 +476,7 @@ public class BagView extends View {
                         g.drawString("Lv" + p.getLevel(), 153, 22);
 
                         // Status condition
-                        TextUtils.drawRightAlignedString(g, p.getStatus().namesies().getName(), 293, 22);
+                        TextUtils.drawRightAlignedString(g, p.getStatus().getShortName(), 293, 22);
 
                         // Draw HP Box
                         g.fillRect(50, 26, 244, 11);
