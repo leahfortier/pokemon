@@ -10,7 +10,7 @@ import battle.effect.EffectInterfaces.StatusPreventionEffect;
 import battle.effect.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.EffectInterfaces.WeatherExtendingEffect;
 import battle.effect.battle.BattleEffect;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import message.Messages;
 import pokemon.Stat;
 import type.Type;
@@ -127,8 +127,8 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
-            return status == StatusCondition.FROZEN;
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            return status == StatusNamesies.FROZEN;
         }
 
         @Override

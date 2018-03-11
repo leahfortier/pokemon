@@ -200,7 +200,7 @@ Flame Orb:
     Desc: An item to be held by a Pok\u00e9mon. It's a bizarre orb that will afflict the holder with a burn during battle.
     Price: 1000
     ApplyEndTurn:
-        Status.applyStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.getName() + "!");
+        StatusCondition.applyStatus(b, victim, victim, StatusNamesies.BURNED, victim.getName() + " was burned by its " + this.getName() + "!");
         ###
     StatusFling: burned
 *
@@ -211,8 +211,8 @@ Toxic Orb:
     Price: 1000
     ApplyEndTurn:
         // Badly poisons the holder at the end of the turn
-        Status.applyStatus(
-            b, victim, victim, StatusCondition.BADLY_POISONED,
+        StatusCondition.applyStatus(
+            b, victim, victim, StatusNamesies.BADLY_POISONED,
             victim.getName() + " was badly poisoned by its " + this.getName() + "!"
         );
         ###

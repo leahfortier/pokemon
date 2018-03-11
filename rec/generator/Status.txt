@@ -1,0 +1,164 @@
+# The name of each effect and its contents.
+# Blocks are separated by '*'
+# Any function must be terminated by ### on a line by itself
+# Fields can be specified in any order
+
+Constructor:
+    Namesies Enum StatusNamesies
+    ShortName String
+    CatchMod Double
+*
+
+***
+
+NoStatus:
+    ShortName: <Empty>
+    CatchMod: 1
+    StatusApplies: victim.getHP() > 0
+    GenericCastMessage: ""
+    SourceCastMessage: ""
+    GenericRemoveMessage: ""
+    SourceRemoveMessage: ""
+*
+Fainted:
+    ShortName: FNT
+    CatchMod: 1
+    FullApplies:
+        // Fainted status condition applies regardless of other status conditions
+        return this.statusApplies(b, user, victim);
+        ###
+    StatusApplies: victim.getHP() == 0
+    GenericCastMessage: p.getName() + " fainted!"
+    SourceCastMessage: sourcerer.getName() + "'s " + sourceName + " caused " + victim.getName() + " to faint!"
+    GenericRemoveMessage: ""
+    SourceRemoveMessage: ""
+*
+Paralyzed:
+    ShortName: PRZ
+    CatchMod: 1.5
+    Comments: 
+        // Electric-type Pokemon cannot be paralyzed
+        // Paralysis reduces speed by 75%
+        ###
+    StatusApplies: !victim.isType(b, Type.ELECTRIC)
+    Int: BeforeTurnEffect
+    CanAttack:
+        if (RandomUtils.chanceTest(25)) {
+            Messages.add(p.getName() + " is fully paralyzed!");
+            return false;
+        }
+
+        return true;
+        ###
+    GenericCastMessage: p.getName() + " was paralyzed!"
+    SourceCastMessage: sourcerer.getName() + "'s " + sourceName + " paralyzed " + victim.getName() + "!"
+    GenericRemoveMessage: victim.getName() + " is no longer paralyzed!"
+    SourceRemoveMessage: victim.getName() + "'s " + sourceName + " cured it of its paralysis!"
+    ToModify: Speed
+    ModifyMultiplier: .25 !p.hasAbility(AbilityNamesies.QUICK_FEET)
+*
+Poisoned:
+    PoisonCondition: 1/8.0
+    GenericCastMessage: p.getName() + " was poisoned!"
+    SourceCastMessage: sourcerer.getName() + "'s " + sourceName + " poisoned " + victim.getName() + "!"
+*
+BadlyPoisoned:
+    PoisonCondition: this.turns++/16.0
+    Field:
+        // TODO: Confirm that it's okay that the type is BADLY_POISONED instead of POISONED
+        private int turns;
+        ###
+    Activate:
+        this.turns = 1;
+        ###
+    GenericCastMessage: p.getName() + " was badly poisoned!"
+    SourceCastMessage: sourcerer.getName() + "'s " + sourceName + " badly poisoned " + victim.getName() + "!"
+    IsStatusType:
+        return statusCondition == StatusNamesies.POISONED || statusCondition == StatusNamesies.BADLY_POISONED;
+        ###
+*
+Burned:
+    ShortName: BRN
+    CatchMod: 1.5
+    Int: EndTurnEffect
+    ApplyEndTurn:
+        if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+            return;
+        }
+
+        Messages.add(victim.getName() + " was hurt by its burn!");
+        victim.reduceHealthFraction(b, victim.hasAbility(AbilityNamesies.HEATPROOF) ? 1/16.0 : 1/8.0);
+        ###
+    Comments: 
+        // Fire-type Pokemon cannot be burned
+        // Burn decreases attack by 50%
+        ###
+    StatusApplies: !victim.isType(b, Type.FIRE)
+    GenericCastMessage: p.getName() + " was burned!"
+    SourceCastMessage: sourcerer.getName() + "'s " + sourceName + " burned " + victim.getName() + "!"
+    GenericRemoveMessage: victim.getName() + " is no longer burned!"
+    SourceRemoveMessage: victim.getName() + "'s " + sourceName + " cured it of its burn!"
+    ToModify: Attack
+    ModifyMultiplier: .5 !p.hasAbility(AbilityNamesies.GUTS) && p.getAttack().namesies() != AttackNamesies.FACADE
+*
+Asleep:
+    ShortName: SLP
+    CatchMod: 2.5
+    Field:
+        private int numTurns;
+        ###
+    Activate:
+        this.numTurns = RandomUtils.getRandomInt(1, 3);
+        ###
+    Comments: // All Pokemon can get sleepy
+    StatusApplies: true
+    Int: BeforeTurnEffect
+    CanAttack:
+        if (numTurns == 0) {
+            StatusCondition.removeStatus(b, p, CastSource.EFFECT);
+            return true;
+        }
+
+        numTurns--;
+
+        Messages.add(p.getName() + " is fast asleep...");
+        return SleepyFightsterEffect.containsSleepyFightsterEffect(b, p);
+        ###
+    GenericCastMessage: p.getName() + " fell asleep!"
+    SourceCastMessage: sourcerer.getName() + "'s " + sourceName + " caused " + victim.getName() + " to fall asleep!"
+    GetTurns:
+        return this.numTurns;
+        ###
+    SetTurns:
+        this.numTurns = turns;
+        ###
+    GenericRemoveMessage: victim.getName() + " woke up!"
+    SourceRemoveMessage: victim.getName() + "'s " + sourceName + " caused it to wake up!"
+*
+Frozen:
+    ShortName: FRZ
+    CatchMod: 2.5
+    Comments: // Ice-type Pokemon cannot be frozen
+    StatusApplies: !victim.isType(b, Type.ICE)
+    Int: BeforeTurnEffect, TakeDamageEffect
+    CanAttack:
+        // 20% chance to thaw out each turn
+        if (RandomUtils.chanceTest(20) || p.getAttack().isMoveType(MoveType.DEFROST)) {
+            StatusCondition.removeStatus(b, p, CastSource.EFFECT);
+            return true;
+        }
+
+        Messages.add(p.getName() + " is frozen solid!");
+        return false;
+        ###
+    GenericCastMessage: p.getName() + " was frozen!"
+    SourceCastMessage: sourcerer.getName() + "'s " + sourceName + " froze " + victim.getName() + "!"
+    OnTakeDamage:
+        // Fire-type moves defrost the user
+        if (user.isAttackType(Type.FIRE)) {
+            StatusCondition.removeStatus(b, victim, CastSource.EFFECT);
+        }
+        ###
+    GenericRemoveMessage: victim.getName() + " thawed out!"
+    SourceRemoveMessage: victim.getName() + "'s " + sourceName + " thawed it out!"
+*

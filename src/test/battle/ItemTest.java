@@ -5,7 +5,7 @@ import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import generator.update.ItemUpdater;
 import generator.update.ItemUpdater.ItemParser;
 import item.Item;
@@ -474,7 +474,7 @@ public class ItemTest extends BaseTest {
 
         // Lum Berry has already been consumed, so the burn should remain
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.BURNED));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED));
 
         // Swap items to retrieve the Rawst Berry, which should activate to remove the burn
         battle.attackingFight(AttackNamesies.TRICK);
@@ -484,7 +484,7 @@ public class ItemTest extends BaseTest {
 
         // Rawst Berry has already been consumed, so the burn should remain
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.BURNED));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED));
     }
 
     @Test

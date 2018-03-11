@@ -6,6 +6,7 @@ import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.battle.terrain.TerrainEffect;
 import battle.effect.battle.weather.WeatherEffect;
 import battle.effect.pokemon.PokemonEffect;
+import battle.effect.status.StatusCondition;
 import battle.effect.team.TeamEffect;
 import item.Item;
 import pokemon.ability.Ability;
@@ -13,6 +14,7 @@ import util.file.Folder;
 
 public enum GeneratorType {
     ATTACK_GEN("Moves.txt", Folder.ATTACK, Attack.class, NamesiesType.ATTACK_NAMESIES),
+    STATUS_GEN("Status.txt", Folder.STATUS, StatusCondition.class, NamesiesType.STATUS_NAMESIES),
     POKEMON_EFFECT_GEN("PokemonEffects.txt", Folder.POKEMON_EFFECT, PokemonEffect.class, NamesiesType.POKEMON_EFFECT_NAMESIES),
     TEAM_EFFECT_GEN("TeamEffects.txt", Folder.TEAM_EFFECT, TeamEffect.class, NamesiesType.TEAM_EFFECT_NAMESIES),
     BATTLE_EFFECT_GEN("BattleEffects.txt", Folder.BATTLE_EFFECT, new ClassNameCreator(BattleEffect.class, StandardBattleEffectNamesies.class), NamesiesType.BATTLE_EFFECT_NAMESIES),

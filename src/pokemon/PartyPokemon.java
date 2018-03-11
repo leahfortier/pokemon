@@ -3,8 +3,8 @@ package pokemon;
 import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
-import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import draw.DrawUtils;
 import item.Item;
 import item.ItemNamesies;
@@ -49,7 +49,7 @@ public abstract class PartyPokemon implements Serializable {
     private int hp;
     private int level;
     private boolean isPlayer;
-    private Status status;
+    private StatusCondition status;
     private int totalEXP;
     private int[] EVs;
     private HoldItem heldItem;
@@ -332,24 +332,24 @@ public abstract class PartyPokemon implements Serializable {
 
     // Returns whether or not the Pokemon is afflicted with a status condition
     public boolean hasStatus() {
-        return !this.hasStatus(StatusCondition.NO_STATUS);
+        return !this.hasStatus(StatusNamesies.NO_STATUS);
     }
 
-    public boolean hasStatus(StatusCondition type) {
+    public boolean hasStatus(StatusNamesies type) {
         return status.isType(type);
     }
 
-    public Status getStatus() {
+    public StatusCondition getStatus() {
         return status;
     }
 
-    public void setStatus(Status s) {
+    public void setStatus(StatusCondition s) {
         status = s;
     }
 
     // Sets the Pokemon's status condition to be None
     public void removeStatus() {
-        Status.removeStatus(this);
+        StatusCondition.removeStatus(this);
     }
 
     public Ability getActualAbility() {
@@ -396,7 +396,7 @@ public abstract class PartyPokemon implements Serializable {
     public int heal(int amount) {
 
         // Dead Pokemon can't heal
-        if (hasStatus(StatusCondition.FAINTED)) {
+        if (hasStatus(StatusNamesies.FAINTED)) {
             return 0;
         }
 

@@ -42,8 +42,8 @@ import battle.effect.InvokeEffect;
 import battle.effect.MessageGetter;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
 import item.bag.BagCategory;
 import item.bag.BattleBagCategory;
@@ -650,12 +650,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            Status.applyStatus(b, victim, victim, StatusCondition.BURNED, victim.getName() + " was burned by its " + this.getName() + "!");
+            StatusCondition.applyStatus(b, victim, victim, StatusNamesies.BURNED, victim.getName() + " was burned by its " + this.getName() + "!");
         }
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            Status.applyStatus(b, pelted, pelted, StatusCondition.BURNED, pelted.getName() + " was burned by the " + this.getName() + "!");
+            StatusCondition.applyStatus(b, pelted, pelted, StatusNamesies.BURNED, pelted.getName() + " was burned by the " + this.getName() + "!");
         }
     }
 
@@ -670,8 +670,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             // Badly poisons the holder at the end of the turn
-            Status.applyStatus(
-                    b, victim, victim, StatusCondition.BADLY_POISONED,
+            StatusCondition.applyStatus(
+                    b, victim, victim, StatusNamesies.BADLY_POISONED,
                     victim.getName() + " was badly poisoned by its " + this.getName() + "!"
             );
         }
@@ -909,7 +909,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            Status.applyStatus(b, pelted, pelted, StatusCondition.PARALYZED, pelted.getName() + " was paralyzed by the " + this.getName() + "!");
+            StatusCondition.applyStatus(b, pelted, pelted, StatusNamesies.PARALYZED, pelted.getName() + " was paralyzed by the " + this.getName() + "!");
         }
 
         @Override
@@ -2685,7 +2685,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            Status.applyStatus(b, pelted, pelted, StatusCondition.POISONED, pelted.getName() + " was poisoned by the " + this.getName() + "!");
+            StatusCondition.applyStatus(b, pelted, pelted, StatusNamesies.POISONED, pelted.getName() + " was poisoned by the " + this.getName() + "!");
         }
     }
 
@@ -3186,8 +3186,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusCondition statusCondition) {
-            return statusCondition == StatusCondition.POISONED;
+        public boolean shouldHeal(StatusNamesies statusCondition) {
+            return statusCondition == StatusNamesies.POISONED;
         }
     }
 
@@ -3201,8 +3201,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusCondition statusCondition) {
-            return statusCondition == StatusCondition.ASLEEP;
+        public boolean shouldHeal(StatusNamesies statusCondition) {
+            return statusCondition == StatusNamesies.ASLEEP;
         }
     }
 
@@ -3216,8 +3216,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusCondition statusCondition) {
-            return statusCondition == StatusCondition.BURNED;
+        public boolean shouldHeal(StatusNamesies statusCondition) {
+            return statusCondition == StatusNamesies.BURNED;
         }
     }
 
@@ -3231,8 +3231,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusCondition statusCondition) {
-            return statusCondition == StatusCondition.FROZEN;
+        public boolean shouldHeal(StatusNamesies statusCondition) {
+            return statusCondition == StatusNamesies.FROZEN;
         }
     }
 
@@ -3246,8 +3246,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusCondition statusCondition) {
-            return statusCondition == StatusCondition.PARALYZED;
+        public boolean shouldHeal(StatusNamesies statusCondition) {
+            return statusCondition == StatusNamesies.PARALYZED;
         }
     }
 
@@ -3261,9 +3261,9 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusCondition statusCondition) {
+        public boolean shouldHeal(StatusNamesies statusCondition) {
             // Does not apply to the healthy and the dead
-            return statusCondition != StatusCondition.NO_STATUS && statusCondition != StatusCondition.FAINTED;
+            return statusCondition != StatusNamesies.NO_STATUS && statusCondition != StatusNamesies.FAINTED;
         }
     }
 
@@ -4331,8 +4331,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusCondition statusCondition) {
-            return statusCondition == StatusCondition.PARALYZED;
+        public boolean shouldHeal(StatusNamesies statusCondition) {
+            return statusCondition == StatusNamesies.PARALYZED;
         }
     }
 
@@ -4351,8 +4351,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusCondition statusCondition) {
-            return statusCondition == StatusCondition.ASLEEP;
+        public boolean shouldHeal(StatusNamesies statusCondition) {
+            return statusCondition == StatusNamesies.ASLEEP;
         }
     }
 
@@ -4371,8 +4371,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusCondition statusCondition) {
-            return statusCondition == StatusCondition.POISONED;
+        public boolean shouldHeal(StatusNamesies statusCondition) {
+            return statusCondition == StatusNamesies.POISONED;
         }
     }
 
@@ -4391,8 +4391,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusCondition statusCondition) {
-            return statusCondition == StatusCondition.BURNED;
+        public boolean shouldHeal(StatusNamesies statusCondition) {
+            return statusCondition == StatusNamesies.BURNED;
         }
     }
 
@@ -4411,8 +4411,8 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusCondition statusCondition) {
-            return statusCondition == StatusCondition.FROZEN;
+        public boolean shouldHeal(StatusNamesies statusCondition) {
+            return statusCondition == StatusNamesies.FROZEN;
         }
     }
 
@@ -4578,9 +4578,9 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public boolean shouldHeal(StatusCondition statusCondition) {
+        public boolean shouldHeal(StatusNamesies statusCondition) {
             // Does not apply to the healthy and the dead
-            return statusCondition != StatusCondition.NO_STATUS && statusCondition != StatusCondition.FAINTED;
+            return statusCondition != StatusNamesies.NO_STATUS && statusCondition != StatusNamesies.FAINTED;
         }
 
         @Override

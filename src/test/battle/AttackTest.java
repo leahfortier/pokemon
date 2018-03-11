@@ -13,7 +13,7 @@ import battle.effect.EffectInterfaces.SelfHealingMove;
 import battle.effect.EffectNamesies;
 import battle.effect.battle.BattleEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
 import generator.update.MoveUpdater;
 import generator.update.MoveUpdater.MoveParser;
@@ -474,11 +474,11 @@ public class AttackTest extends BaseTest {
     @Test
     public void randomEffectsTest() {
         boolean triAttackAlwaysSame = true;
-        Map<StatusCondition, Boolean> triAttackStatusMap = new EnumMap<>(StatusCondition.class);
-        triAttackStatusMap.put(StatusCondition.NO_STATUS, false);
-        triAttackStatusMap.put(StatusCondition.PARALYZED, false);
-        triAttackStatusMap.put(StatusCondition.BURNED, false);
-        triAttackStatusMap.put(StatusCondition.FROZEN, false);
+        Map<StatusNamesies, Boolean> triAttackStatusMap = new EnumMap<>(StatusNamesies.class);
+        triAttackStatusMap.put(StatusNamesies.NO_STATUS, false);
+        triAttackStatusMap.put(StatusNamesies.PARALYZED, false);
+        triAttackStatusMap.put(StatusNamesies.BURNED, false);
+        triAttackStatusMap.put(StatusNamesies.FROZEN, false);
 
         boolean acupressureAlwaysSame = true;
         boolean[] acupressureStats = new boolean[Stat.NUM_BATTLE_STATS];
@@ -491,8 +491,8 @@ public class AttackTest extends BaseTest {
             // Tri-Attack
             battle.fight(AttackNamesies.TRI_ATTACK, AttackNamesies.TRI_ATTACK);
 
-            StatusCondition attackingCondition = attacking.getStatus().getType();
-            StatusCondition defendingCondition = defending.getStatus().getType();
+            StatusNamesies attackingCondition = attacking.getStatus().namesies();
+            StatusNamesies defendingCondition = defending.getStatus().namesies();
 
             Assert.assertTrue(triAttackStatusMap.containsKey(attackingCondition));
             Assert.assertTrue(triAttackStatusMap.containsKey(defendingCondition));
@@ -536,10 +536,10 @@ public class AttackTest extends BaseTest {
         }
 
         Assert.assertFalse(triAttackAlwaysSame);
-        Assert.assertTrue(triAttackStatusMap.get(StatusCondition.NO_STATUS));
-        Assert.assertTrue(triAttackStatusMap.get(StatusCondition.PARALYZED));
-        Assert.assertTrue(triAttackStatusMap.get(StatusCondition.BURNED));
-        Assert.assertTrue(triAttackStatusMap.get(StatusCondition.FROZEN));
+        Assert.assertTrue(triAttackStatusMap.get(StatusNamesies.NO_STATUS));
+        Assert.assertTrue(triAttackStatusMap.get(StatusNamesies.PARALYZED));
+        Assert.assertTrue(triAttackStatusMap.get(StatusNamesies.BURNED));
+        Assert.assertTrue(triAttackStatusMap.get(StatusNamesies.FROZEN));
 
         Assert.assertFalse(acupressureAlwaysSame);
         for (int j = 0; j < acupressureStats.length; j++) {
@@ -628,41 +628,41 @@ public class AttackTest extends BaseTest {
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         battle.attackingFight(AttackNamesies.WILL_O_WISP);
         Assert.assertFalse(attacking.hasStatus());
-        Assert.assertTrue(defending.hasStatus(StatusCondition.BURNED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.BURNED));
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.BURNED));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED));
         Assert.assertFalse(defending.hasStatus());
 
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
-        Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
 
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         defending.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.BURNED));
-        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
 
         battle.attackingFight(AttackNamesies.REFRESH);
         Assert.assertFalse(attacking.hasStatus());
-        Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
 
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.POISONED));
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.BADLY_POISONED));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
         Assert.assertFalse(defending.hasStatus());
 
         attacking.withAbility(AbilityNamesies.PROTEAN);
         Assert.assertTrue(attacking.isType(battle, Type.WATER));
         battle.attackingFight(AttackNamesies.CLEAR_SMOG);
         Assert.assertTrue(attacking.isType(battle, Type.POISON));
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.POISONED));
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.BADLY_POISONED));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
         battle.attackingFight(AttackNamesies.PSYCHO_SHIFT);
         Assert.assertFalse(attacking.hasStatus());
-        Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED));
-        Assert.assertTrue(defending.hasStatus(StatusCondition.BADLY_POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
         Assert.assertTrue(attacking.isType(battle, Type.PSYCHIC));
         battle.attackingFight(AttackNamesies.ACID_ARMOR);
         Assert.assertTrue(attacking.isType(battle, Type.POISON));
@@ -672,11 +672,11 @@ public class AttackTest extends BaseTest {
         battle.attackingFight(AttackNamesies.DRAGON_DANCE);
         Assert.assertTrue(attacking.getType(battle).toString(), attacking.isType(battle, Type.DRAGON));
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.POISONED));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
 
         defending.withAbility(AbilityNamesies.IMMUNITY);
         defending.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.POISONED));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
         Assert.assertFalse(defending.hasStatus());
 
         battle.emptyHeal();
@@ -684,19 +684,19 @@ public class AttackTest extends BaseTest {
         Assert.assertFalse(attacking.hasStatus());
         Assert.assertFalse(defending.hasStatus());
         battle.defendingFight(AttackNamesies.SPORE);
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.ASLEEP));
         Assert.assertFalse(defending.hasStatus());
         battle.attackingFight(AttackNamesies.SLEEP_TALK);
         Assert.assertFalse(attacking.hasStatus());
-        Assert.assertTrue(defending.hasStatus(StatusCondition.ASLEEP));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.ASLEEP));
 
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.ASLEEP));
         Assert.assertFalse(defending.hasStatus());
 
         defending.withAbility(AbilityNamesies.INSOMNIA);
         battle.attackingFight(AttackNamesies.SLEEP_TALK);
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.ASLEEP));
         Assert.assertFalse(defending.hasStatus());
     }
 
@@ -742,7 +742,7 @@ public class AttackTest extends BaseTest {
         attacking.giveItem(ItemNamesies.RAWST_BERRY);
         battle.attackingFight(AttackNamesies.WILL_O_WISP);
         Assert.assertTrue(attacking.isHoldingItem(battle));
-        Assert.assertTrue(defending.hasStatus(StatusCondition.BURNED));
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.BURNED));
 
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.BUG_BITE);
         Assert.assertFalse(attacking.isHoldingItem(battle));
@@ -1010,22 +1010,22 @@ public class AttackTest extends BaseTest {
         battle.defendingFight(AttackNamesies.TOXIC);
 
         attacking.assertNotFullHealth();
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.BADLY_POISONED));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
 
         battle.attackingFight(AttackNamesies.REST);
         attacking.assertFullHealth();
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.ASLEEP));
 
         // Resting Pokemon should be asleep for exactly two turns -- False Swipe should fail here and the next turn
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);
         defending.assertFullHealth();
         attacking.assertFullHealth();
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.ASLEEP));
 
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);
         defending.assertFullHealth();
         attacking.assertFullHealth();
-        Assert.assertTrue(attacking.hasStatus(StatusCondition.ASLEEP));
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.ASLEEP));
 
         // Should wake up on this turn
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);

@@ -105,8 +105,8 @@ BanefulBunker:
     ProtectingEffect: True
     OnProtectingSuccess:
         // Pokemon that make contact with the baneful bunker are become poisoned
-        if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && Status.applies(StatusCondition.POISONED, b, opp, p)) {
-            Status.applyStatus(b, opp, p, StatusCondition.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
+        if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && StatusCondition.applies(StatusNamesies.POISONED, b, opp, p)) {
+            StatusCondition.applyStatus(b, opp, p, StatusNamesies.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
         }
         ###
 *
@@ -632,9 +632,9 @@ Curse:
 *
 Yawn:
     NumTurns: 2
-    FailCondition: !Status.applies(StatusCondition.ASLEEP, b, caster, victim)
+    FailCondition: !StatusCondition.applies(StatusNamesies.ASLEEP, b, caster, victim)
     Subside:
-        Status.applyStatus(b, b.getOtherPokemon(p), p, StatusCondition.ASLEEP);
+        StatusCondition.applyStatus(b, b.getOtherPokemon(p), p, StatusNamesies.ASLEEP);
         ###
     CastMessage: victim.getName() + " grew drowsy!"
 *
@@ -662,7 +662,7 @@ Uproar:
         private Move uproar;
 
         private static void wakeUp(Battle b, ActivePokemon wakey) {
-            if (wakey.hasStatus(StatusCondition.ASLEEP)) {
+            if (wakey.hasStatus(StatusNamesies.ASLEEP)) {
                 wakey.removeStatus();
                 Messages.add(new MessageUpdate("The uproar woke up " + wakey.getName() + "!").updatePokemon(b, wakey));
             }
@@ -701,10 +701,10 @@ AquaRing:
     CastMessage: user.getName() + " surrounded itself with a veil of water!"
 *
 Nightmare:
-    FailCondition: !victim.hasStatus(StatusCondition.ASLEEP)
+    FailCondition: !victim.hasStatus(StatusNamesies.ASLEEP)
     Int: EndTurnEffect
     ApplyEndTurn:
-        if (!victim.hasStatus(StatusCondition.ASLEEP)) {
+        if (!victim.hasStatus(StatusNamesies.ASLEEP)) {
             this.active = false;
             return;
         }
@@ -717,7 +717,7 @@ Nightmare:
         victim.reduceHealthFraction(b, 1/4.0);
         ###
     ShouldSubside:
-        return !victim.hasStatus(StatusCondition.ASLEEP);
+        return !victim.hasStatus(StatusNamesies.ASLEEP);
         ###
     CastMessage: victim.getName() + " began having a nightmare!"
 *
@@ -749,7 +749,7 @@ BeakBlast:
     NumTurns: 1
     Int: PhysicalContactEffect
     Contact:
-        Status.applyStatus(b, victim, user, StatusCondition.BURNED);
+        StatusCondition.applyStatus(b, victim, user, StatusNamesies.BURNED);
         ###
 *
 FiddyPercentStronger:

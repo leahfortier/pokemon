@@ -27,8 +27,8 @@ import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
 import item.Item;
 import item.ItemNamesies;
@@ -476,7 +476,7 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean isActuallyDead() {
-        return this.hasStatus(StatusCondition.FAINTED);
+        return this.hasStatus(StatusNamesies.FAINTED);
     }
 
     public boolean isFainted(Battle b) {
@@ -494,7 +494,7 @@ public class ActivePokemon extends PartyPokemon {
             Messages.add(new MessageUpdate().updatePokemon(b, this));
 
             ActivePokemon murderer = b.getOtherPokemon(this);
-            Status.die(b, murderer, this);
+            StatusCondition.die(b, murderer, this);
 
             // If the pokemon fainted via murder (by direct result of an attack) -- apply kill wishes
             if (murderer.isAttacking()) {
@@ -676,7 +676,7 @@ public class ActivePokemon extends PartyPokemon {
         }
     }
 
-    private Item consumeItemWithoutEffects(Battle b) {
+    public Item consumeItemWithoutEffects(Battle b) {
         Item consumed = getHeldItem(b);
         PokemonEffectNamesies.CONSUMED_ITEM.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
 

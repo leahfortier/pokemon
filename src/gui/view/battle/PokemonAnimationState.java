@@ -3,6 +3,7 @@ package gui.view.battle;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import draw.Alignment;
 import draw.DrawUtils;
 import draw.ImageUtils;
@@ -399,7 +400,7 @@ class PokemonAnimationState {
         FontMetrics.setFont(g, 24);
         TextUtils.drawShadowText(
                 g,
-                state.getStatus().getName(),
+                state.getStatus().getShortName(),
                 statusBox.x + STATUS_BOX_SPACING,
                 hpBar.centerY(),
                 Alignment.CENTER_Y
@@ -451,7 +452,7 @@ class PokemonAnimationState {
             PartyPokemon pokemon = team.get(index);
 
             boolean silhouette = index == state.teamIndex
-                    ? state.getStatus() == StatusCondition.FAINTED
+                    ? state.getStatus().namesies() == StatusNamesies.FAINTED
                     : !pokemon.canFight() || (usedMaxPokemon && !pokemon.isBattleUsed());
 
             BufferedImage pokeball = TileSet.TINY_POKEBALL;
@@ -540,7 +541,7 @@ class PokemonAnimationState {
         }
 
         public StatusCondition getStatus() {
-            return this.frontPokemon == null ? StatusCondition.NO_STATUS : this.frontPokemon.getStatus().getType();
+            return this.frontPokemon == null ? StatusNamesies.NO_STATUS.getStatus() : this.frontPokemon.getStatus();
         }
 
         public int getStage(int index) {

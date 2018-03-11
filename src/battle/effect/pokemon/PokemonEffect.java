@@ -55,8 +55,8 @@ import battle.effect.attack.ChangeTypeSource;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
-import battle.effect.status.Status;
 import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import item.Item;
 import item.ItemNamesies;
 import main.Global;
@@ -665,8 +665,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
             // Pokemon that make contact with the baneful bunker are become poisoned
-            if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && Status.applies(StatusCondition.POISONED, b, opp, p)) {
-                Status.applyStatus(b, opp, p, StatusCondition.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
+            if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && StatusCondition.applies(StatusNamesies.POISONED, b, opp, p)) {
+                StatusCondition.applyStatus(b, opp, p, StatusNamesies.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
             }
         }
 
@@ -906,7 +906,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
         }
 
@@ -944,7 +944,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition status) {
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
         }
 
@@ -1793,7 +1793,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!Status.applies(StatusCondition.ASLEEP, b, caster, victim) || victim.hasEffect(this.namesies()));
+            return !(!StatusCondition.applies(StatusNamesies.ASLEEP, b, caster, victim) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1803,7 +1803,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void subside(Battle b, ActivePokemon p) {
-            Status.applyStatus(b, b.getOtherPokemon(p), p, StatusCondition.ASLEEP);
+            StatusCondition.applyStatus(b, b.getOtherPokemon(p), p, StatusNamesies.ASLEEP);
         }
     }
 
@@ -1843,7 +1843,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private Move uproar;
 
         private static void wakeUp(Battle b, ActivePokemon wakey) {
-            if (wakey.hasStatus(StatusCondition.ASLEEP)) {
+            if (wakey.hasStatus(StatusNamesies.ASLEEP)) {
                 wakey.removeStatus();
                 Messages.add(new MessageUpdate("The uproar woke up " + wakey.getName() + "!").updatePokemon(b, wakey));
             }
@@ -1946,12 +1946,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!victim.hasStatus(StatusCondition.ASLEEP) || victim.hasEffect(this.namesies()));
+            return !(!victim.hasStatus(StatusNamesies.ASLEEP) || victim.hasEffect(this.namesies()));
         }
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (!victim.hasStatus(StatusCondition.ASLEEP)) {
+            if (!victim.hasStatus(StatusNamesies.ASLEEP)) {
                 this.active = false;
                 return;
             }
@@ -1971,7 +1971,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean shouldSubside(Battle b, ActivePokemon victim) {
-            return !victim.hasStatus(StatusCondition.ASLEEP);
+            return !victim.hasStatus(StatusNamesies.ASLEEP);
         }
     }
 
@@ -2061,7 +2061,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Status.applyStatus(b, victim, user, StatusCondition.BURNED);
+            StatusCondition.applyStatus(b, victim, user, StatusNamesies.BURNED);
         }
     }
 
@@ -2581,8 +2581,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
-            if (statusType == StatusCondition.FAINTED) {
+        public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType) {
+            if (statusType == StatusNamesies.FAINTED) {
                 ActivePokemon murderer = b.getOtherPokemon(victim);
 
                 // Only grant death wish if murdered through direct damage
@@ -2624,8 +2624,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusCondition statusType) {
-            if (statusType == StatusCondition.FAINTED) {
+        public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType) {
+            if (statusType == StatusNamesies.FAINTED) {
                 ActivePokemon murderer = b.getOtherPokemon(victim);
 
                 // Only grant death wish if murdered through direct damage

@@ -9,7 +9,7 @@ import battle.effect.Effect;
 import battle.effect.EffectNamesies;
 import battle.effect.battle.terrain.TerrainNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
@@ -92,10 +92,10 @@ public class EffectTest extends BaseTest {
 
         // Baneful Bunker poisons when contact is made
         checkProtect(true, AttackNamesies.BANEFUL_BUNKER, AttackNamesies.TACKLE,
-                     (battle, attacking, defending) -> Assert.assertTrue(defending.hasStatus(StatusCondition.POISONED))
+                     (battle, attacking, defending) -> Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED))
         );
         checkProtect(true, AttackNamesies.BANEFUL_BUNKER, AttackNamesies.WATER_GUN,
-                     (battle, attacking, defending) -> Assert.assertFalse(defending.hasStatus(StatusCondition.POISONED))
+                     (battle, attacking, defending) -> Assert.assertFalse(defending.hasStatus(StatusNamesies.POISONED))
         );
 
         // King's Shield lowers attack when contact was made

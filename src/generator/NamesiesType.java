@@ -5,6 +5,7 @@ import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.battle.terrain.TerrainNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
+import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
 import pokemon.PokemonNamesies;
@@ -13,6 +14,7 @@ import util.file.Folder;
 
 public enum NamesiesType {
     ATTACK_NAMESIES(AttackNamesies.class, Folder.ATTACK, true),
+    STATUS_NAMESIES(StatusNamesies.class, Folder.STATUS, false),
     POKEMON_EFFECT_NAMESIES(PokemonEffectNamesies.class, Folder.POKEMON_EFFECT, false),
     TEAM_EFFECT_NAMESIES(TeamEffectNamesies.class, Folder.TEAM_EFFECT, false),
     BATTLE_EFFECT_NAMESIES(StandardBattleEffectNamesies.class, Folder.BATTLE_EFFECT, false),

@@ -563,7 +563,7 @@ public class Player extends PlayerTrainer implements Serializable {
         int hp = catchPokemon.getHP();
 
         int catchRate = catchPokemon.getPokemonInfo().getCatchRate();
-        double statusMod = catchPokemon.getStatus().getType().getCatchModifier();
+        double statusMod = catchPokemon.getStatus().getCatchModifier();
 
         double ballMod = ball.getModifier(front(), catchPokemon, b);
         int ballAdd = ball.getAdditive(front(), catchPokemon, b);
