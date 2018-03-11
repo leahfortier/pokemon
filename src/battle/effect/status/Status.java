@@ -33,11 +33,6 @@ public abstract class Status implements InvokeEffect, Serializable {
     private final String shortName;
     private final double catchModifier;
 
-    // TODO: Delete this
-    protected Status(StatusNamesies statusCondition) {
-        this(statusCondition, "", 1);
-    }
-
     protected Status(StatusNamesies namesies, String shortName, double catchModifier) {
         this.namesies = namesies;
         this.shortName = shortName;
@@ -328,11 +323,6 @@ public abstract class Status implements InvokeEffect, Serializable {
         }
 
         @Override
-        public boolean isType(StatusNamesies statusCondition) {
-            return statusCondition == StatusNamesies.POISONED || statusCondition == StatusNamesies.BADLY_POISONED;
-        }
-
-        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
                 return;
@@ -388,6 +378,11 @@ public abstract class Status implements InvokeEffect, Serializable {
         @Override
         public String getSourceCastMessage(ActivePokemon sourcerer, ActivePokemon victim, String sourceName) {
             return sourcerer.getName() + "'s " + sourceName + " badly poisoned " + victim.getName() + "!";
+        }
+
+        @Override
+        public boolean isType(StatusNamesies statusCondition) {
+            return statusCondition == StatusNamesies.POISONED || statusCondition == StatusNamesies.BADLY_POISONED;
         }
 
         @Override

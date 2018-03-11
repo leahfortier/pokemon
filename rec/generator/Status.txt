@@ -59,9 +59,6 @@ Paralyzed:
 *
 Poisoned:
     PoisonCondition: 1/8.0
-    IsStatusType:
-        return statusCondition == StatusNamesies.POISONED || statusCondition == StatusNamesies.BADLY_POISONED;
-        ###
     GenericCastMessage: p.getName() + " was poisoned!"
     SourceCastMessage: sourcerer.getName() + "'s " + sourceName + " poisoned " + victim.getName() + "!"
 *
@@ -76,6 +73,9 @@ BadlyPoisoned:
         ###
     GenericCastMessage: p.getName() + " was badly poisoned!"
     SourceCastMessage: sourcerer.getName() + "'s " + sourceName + " badly poisoned " + victim.getName() + "!"
+    IsStatusType:
+        return statusCondition == StatusNamesies.POISONED || statusCondition == StatusNamesies.BADLY_POISONED;
+        ###
 *
 Burned:
     ShortName: BRN

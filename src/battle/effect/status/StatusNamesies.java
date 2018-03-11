@@ -1,5 +1,14 @@
 package battle.effect.status;
 
+import battle.effect.status.Status.Asleep;
+import battle.effect.status.Status.BadlyPoisoned;
+import battle.effect.status.Status.Burned;
+import battle.effect.status.Status.Fainted;
+import battle.effect.status.Status.Frozen;
+import battle.effect.status.Status.NoStatus;
+import battle.effect.status.Status.Paralyzed;
+import battle.effect.status.Status.Poisoned;
+
 import java.util.function.Supplier;
 
 public enum StatusNamesies {
