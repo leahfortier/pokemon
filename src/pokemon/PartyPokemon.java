@@ -3,7 +3,7 @@ package pokemon;
 import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
-import battle.effect.status.Status;
+import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import draw.DrawUtils;
 import item.Item;
@@ -49,7 +49,7 @@ public abstract class PartyPokemon implements Serializable {
     private int hp;
     private int level;
     private boolean isPlayer;
-    private Status status;
+    private StatusCondition status;
     private int totalEXP;
     private int[] EVs;
     private HoldItem heldItem;
@@ -339,17 +339,17 @@ public abstract class PartyPokemon implements Serializable {
         return status.isType(type);
     }
 
-    public Status getStatus() {
+    public StatusCondition getStatus() {
         return status;
     }
 
-    public void setStatus(Status s) {
+    public void setStatus(StatusCondition s) {
         status = s;
     }
 
     // Sets the Pokemon's status condition to be None
     public void removeStatus() {
-        Status.removeStatus(this);
+        StatusCondition.removeStatus(this);
     }
 
     public Ability getActualAbility() {

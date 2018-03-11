@@ -26,14 +26,14 @@ import type.Type;
 import util.RandomUtils;
 import util.serialization.Serializable;
 
-public abstract class Status implements InvokeEffect, Serializable {
+public abstract class StatusCondition implements InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;
 
     private final StatusNamesies namesies;
     private final String shortName;
     private final double catchModifier;
 
-    protected Status(StatusNamesies namesies, String shortName, double catchModifier) {
+    protected StatusCondition(StatusNamesies namesies, String shortName, double catchModifier) {
         this.namesies = namesies;
         this.shortName = shortName;
         this.catchModifier = catchModifier;
@@ -114,7 +114,7 @@ public abstract class Status implements InvokeEffect, Serializable {
     }
 
     public static void removeStatus(Battle b, ActivePokemon victim, CastSource source) {
-        Status status = victim.getStatus();
+        StatusCondition status = victim.getStatus();
         victim.removeStatus();
 
         Messages.add(new MessageUpdate(status.getRemoveMessage(b, victim, source)).updatePokemon(b, victim));
@@ -138,12 +138,12 @@ public abstract class Status implements InvokeEffect, Serializable {
     }
 
     public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status, CastSource source) {
-        Status s = status.getStatus();
+        StatusCondition s = status.getStatus();
         return applyStatus(b, caster, victim, status, s.getCastMessage(b, caster, victim, source));
     }
 
     public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status, String castMessage) {
-        Status s = status.getStatus();
+        StatusCondition s = status.getStatus();
         if (s.applies(b, caster, victim)) {
             victim.setStatus(s);
             Messages.add(new MessageUpdate(castMessage).updatePokemon(b, victim));
@@ -172,7 +172,7 @@ public abstract class Status implements InvokeEffect, Serializable {
 
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-    static class NoStatus extends Status {
+    static class NoStatus extends StatusCondition {
         private static final long serialVersionUID = 1L;
 
         NoStatus() {
@@ -205,7 +205,7 @@ public abstract class Status implements InvokeEffect, Serializable {
         }
     }
 
-    static class Fainted extends Status {
+    static class Fainted extends StatusCondition {
         private static final long serialVersionUID = 1L;
 
         Fainted() {
@@ -246,7 +246,7 @@ public abstract class Status implements InvokeEffect, Serializable {
 
     // Electric-type Pokemon cannot be paralyzed
     // Paralysis reduces speed by 75%
-    static class Paralyzed extends Status implements BeforeTurnEffect, SimpleStatModifyingEffect {
+    static class Paralyzed extends StatusCondition implements BeforeTurnEffect, SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
 
         Paralyzed() {
@@ -305,7 +305,7 @@ public abstract class Status implements InvokeEffect, Serializable {
     }
 
     // Poison-type and Steel-type Pokemon cannot be poisoned unless the caster has the Corrosion ability
-    static class Poisoned extends Status implements EndTurnEffect {
+    static class Poisoned extends StatusCondition implements EndTurnEffect {
         private static final long serialVersionUID = 1L;
 
         Poisoned() {
@@ -359,7 +359,7 @@ public abstract class Status implements InvokeEffect, Serializable {
     }
 
     // Poison-type and Steel-type Pokemon cannot be poisoned unless the caster has the Corrosion ability
-    static class BadlyPoisoned extends Status implements EndTurnEffect {
+    static class BadlyPoisoned extends StatusCondition implements EndTurnEffect {
         private static final long serialVersionUID = 1L;
 
         // TODO: Confirm that it's okay that the type is BADLY_POISONED instead of POISONED
@@ -423,7 +423,7 @@ public abstract class Status implements InvokeEffect, Serializable {
 
     // Fire-type Pokemon cannot be burned
     // Burn decreases attack by 50%
-    static class Burned extends Status implements EndTurnEffect, SimpleStatModifyingEffect {
+    static class Burned extends StatusCondition implements EndTurnEffect, SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
 
         Burned() {
@@ -482,7 +482,7 @@ public abstract class Status implements InvokeEffect, Serializable {
     }
 
     // All Pokemon can get sleepy
-    static class Asleep extends Status implements BeforeTurnEffect {
+    static class Asleep extends StatusCondition implements BeforeTurnEffect {
         private static final long serialVersionUID = 1L;
 
         private int numTurns;
@@ -520,7 +520,7 @@ public abstract class Status implements InvokeEffect, Serializable {
         @Override
         public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
             if (numTurns == 0) {
-                Status.removeStatus(b, p, CastSource.EFFECT);
+                StatusCondition.removeStatus(b, p, CastSource.EFFECT);
                 return true;
             }
 
@@ -542,7 +542,7 @@ public abstract class Status implements InvokeEffect, Serializable {
     }
 
     // Ice-type Pokemon cannot be frozen
-    static class Frozen extends Status implements BeforeTurnEffect, TakeDamageEffect {
+    static class Frozen extends StatusCondition implements BeforeTurnEffect, TakeDamageEffect {
         private static final long serialVersionUID = 1L;
 
         Frozen() {
@@ -578,8 +578,7 @@ public abstract class Status implements InvokeEffect, Serializable {
         public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
             // 20% chance to thaw out each turn
             if (RandomUtils.chanceTest(20) || p.getAttack().isMoveType(MoveType.DEFROST)) {
-                Status.removeStatus(b, p, CastSource.EFFECT);
-
+                StatusCondition.removeStatus(b, p, CastSource.EFFECT);
                 return true;
             }
 
@@ -591,7 +590,7 @@ public abstract class Status implements InvokeEffect, Serializable {
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Fire-type moves defrost the user
             if (user.isAttackType(Type.FIRE)) {
-                Status.removeStatus(b, victim, CastSource.EFFECT);
+                StatusCondition.removeStatus(b, victim, CastSource.EFFECT);
             }
         }
     }

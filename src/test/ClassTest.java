@@ -80,7 +80,7 @@ import battle.effect.attack.MultiTurnMove.RechargingMove;
 import battle.effect.battle.BattleEffect;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.status.Status;
+import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffect;
 import item.Item;
@@ -169,7 +169,7 @@ public class ClassTest extends BaseTest {
     public void instanceOfTest() {
         Class<?>[] castSources = { Attack.class, Ability.class, HoldItem.class };
         Class<?>[] pokemonEffectNoBattleList = { Ability.class, HoldItem.class };
-        Class<?>[] pokemonEffectList = GeneralUtils.append(pokemonEffectNoBattleList, Status.class, PokemonEffect.class);
+        Class<?>[] pokemonEffectList = GeneralUtils.append(pokemonEffectNoBattleList, StatusCondition.class, PokemonEffect.class);
         Class<?>[] teamEffectList = GeneralUtils.append(pokemonEffectList, TeamEffect.class);
         Class<?>[] effectListSourcesNoAttack = GeneralUtils.append(teamEffectList, BattleEffect.class);
         Class<?>[] effectListSourcesWithAttack = GeneralUtils.append(effectListSourcesNoAttack, Attack.class);

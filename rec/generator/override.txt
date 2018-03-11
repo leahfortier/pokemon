@@ -358,7 +358,7 @@ StatusCureMove:
 	AddMapField: PowerMultiplierCondition: 2 victim.hasStatus(StatusNamesies.{00})
 	AddMapField: UniqueEffects:
 		if (victim.hasStatus(StatusNamesies.{00})) {
-			Status.removeStatus(b, victim, CastSource.ATTACK);
+			StatusCondition.removeStatus(b, victim, CastSource.ATTACK);
 		}
 		###
 *
@@ -1003,7 +1003,7 @@ EndTurnStatusCure:
 	AddInterface: EndTurnEffect
 	AddMapField: ApplyEndTurn:
 		if (victim.hasStatus() && {0}) {
-			Status.removeStatus(b, victim, CastSource.ABILITY);
+			StatusCondition.removeStatus(b, victim, CastSource.ABILITY);
 		}
 		###
 *
@@ -1019,7 +1019,7 @@ StatusPreventAbility:
 	AddMapField: Field:
 		private void removeStatus(Battle b, ActivePokemon victim) {
 			if (victim.hasStatus(StatusNamesies.{11})) {
-				Status.removeStatus(b, victim, CastSource.ABILITY);
+				StatusCondition.removeStatus(b, victim, CastSource.ABILITY);
 			}
 		}
 		###
@@ -1030,7 +1030,7 @@ StatusPreventAbility:
 StatusContact:
 	AddMapField: Contact:
 		if (RandomUtils.chanceTest(30)) {
-			Status.applyStatus(b, victim, user, StatusNamesies.{00}, CastSource.ABILITY);
+			StatusCondition.applyStatus(b, victim, user, StatusNamesies.{00}, CastSource.ABILITY);
 		}
 		###
 	AddInterface: PhysicalContactEffect
@@ -1747,7 +1747,7 @@ FlinchItem:
 *
 StatusFling:
 	AddMapField: FlingEffect:
-		Status.applyStatus(b, pelted, pelted, StatusNamesies.{00}, pelted.getName() + " was {0} by the " + this.getName() + "!");
+		StatusCondition.applyStatus(b, pelted, pelted, StatusNamesies.{00}, pelted.getName() + " was {0} by the " + this.getName() + "!");
 		###
 *
 TM:

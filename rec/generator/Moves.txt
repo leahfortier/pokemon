@@ -1777,7 +1777,7 @@ Rest:
     Cat: Status
     Status: Asleep
     Comments: // Need the sleep check in case called from Sleep Talk, Comatose, etc.
-    ExtraApplies: !user.hasStatus(StatusNamesies.ASLEEP) && Status.appliesWithoutStatusCheck(StatusNamesies.ASLEEP, b, user, user)
+    ExtraApplies: !user.hasStatus(StatusNamesies.ASLEEP) && StatusCondition.appliesWithoutStatusCheck(StatusNamesies.ASLEEP, b, user, user)
     AfterApplyCheck:
         victim.removeStatus();
         ###
@@ -3548,7 +3548,7 @@ Refresh:
     MoveType: Healing
     Applies: user.hasStatus()
     UniqueEffects:
-        Status.removeStatus(b, user, CastSource.ATTACK);
+        StatusCondition.removeStatus(b, user, CastSource.ATTACK);
         ###
 *
 Power Whip:
@@ -4138,9 +4138,9 @@ Psycho Shift:
     Type: Psychic
     Cat: Status
     Acc: 100
-    Applies: user.hasStatus() && Status.applies(user.getStatus().namesies(), b, user, victim)
+    Applies: user.hasStatus() && StatusCondition.applies(user.getStatus().namesies(), b, user, victim)
     UniqueEffects:
-        Status.applyStatus(b, user, victim, user.getStatus().namesies(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
+        StatusCondition.applyStatus(b, user, victim, user.getStatus().namesies(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
         user.removeStatus();
         Messages.add(new MessageUpdate().updatePokemon(b, user));
         ###
@@ -6320,7 +6320,7 @@ Purify:
         ###
     ExtraApplies: user.hasStatus()
     UniqueEffects:
-        Status.removeStatus(b, user, CastSource.ATTACK);
+        StatusCondition.removeStatus(b, user, CastSource.ATTACK);
         if (!user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
             this.heal(b, user);
         }

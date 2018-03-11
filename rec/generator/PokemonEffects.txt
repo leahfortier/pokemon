@@ -105,8 +105,8 @@ BanefulBunker:
     ProtectingEffect: True
     OnProtectingSuccess:
         // Pokemon that make contact with the baneful bunker are become poisoned
-        if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && Status.applies(StatusNamesies.POISONED, b, opp, p)) {
-            Status.applyStatus(b, opp, p, StatusNamesies.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
+        if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && StatusCondition.applies(StatusNamesies.POISONED, b, opp, p)) {
+            StatusCondition.applyStatus(b, opp, p, StatusNamesies.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
         }
         ###
 *
@@ -632,9 +632,9 @@ Curse:
 *
 Yawn:
     NumTurns: 2
-    FailCondition: !Status.applies(StatusNamesies.ASLEEP, b, caster, victim)
+    FailCondition: !StatusCondition.applies(StatusNamesies.ASLEEP, b, caster, victim)
     Subside:
-        Status.applyStatus(b, b.getOtherPokemon(p), p, StatusNamesies.ASLEEP);
+        StatusCondition.applyStatus(b, b.getOtherPokemon(p), p, StatusNamesies.ASLEEP);
         ###
     CastMessage: victim.getName() + " grew drowsy!"
 *
@@ -749,7 +749,7 @@ BeakBlast:
     NumTurns: 1
     Int: PhysicalContactEffect
     Contact:
-        Status.applyStatus(b, victim, user, StatusNamesies.BURNED);
+        StatusCondition.applyStatus(b, victim, user, StatusNamesies.BURNED);
         ###
 *
 FiddyPercentStronger:

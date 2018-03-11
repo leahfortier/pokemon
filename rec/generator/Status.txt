@@ -115,7 +115,7 @@ Asleep:
     Int: BeforeTurnEffect
     CanAttack:
         if (numTurns == 0) {
-            Status.removeStatus(b, p, CastSource.EFFECT);
+            StatusCondition.removeStatus(b, p, CastSource.EFFECT);
             return true;
         }
 
@@ -144,8 +144,7 @@ Frozen:
     CanAttack:
         // 20% chance to thaw out each turn
         if (RandomUtils.chanceTest(20) || p.getAttack().isMoveType(MoveType.DEFROST)) {
-            Status.removeStatus(b, p, CastSource.EFFECT);
-
+            StatusCondition.removeStatus(b, p, CastSource.EFFECT);
             return true;
         }
 
@@ -157,7 +156,7 @@ Frozen:
     OnTakeDamage:
         // Fire-type moves defrost the user
         if (user.isAttackType(Type.FIRE)) {
-            Status.removeStatus(b, victim, CastSource.EFFECT);
+            StatusCondition.removeStatus(b, victim, CastSource.EFFECT);
         }
         ###
     GenericRemoveMessage: victim.getName() + " thawed out!"

@@ -1,13 +1,13 @@
 package battle.effect.status;
 
-import battle.effect.status.Status.Asleep;
-import battle.effect.status.Status.BadlyPoisoned;
-import battle.effect.status.Status.Burned;
-import battle.effect.status.Status.Fainted;
-import battle.effect.status.Status.Frozen;
-import battle.effect.status.Status.NoStatus;
-import battle.effect.status.Status.Paralyzed;
-import battle.effect.status.Status.Poisoned;
+import battle.effect.status.StatusCondition.Asleep;
+import battle.effect.status.StatusCondition.BadlyPoisoned;
+import battle.effect.status.StatusCondition.Burned;
+import battle.effect.status.StatusCondition.Fainted;
+import battle.effect.status.StatusCondition.Frozen;
+import battle.effect.status.StatusCondition.NoStatus;
+import battle.effect.status.StatusCondition.Paralyzed;
+import battle.effect.status.StatusCondition.Poisoned;
 
 import java.util.function.Supplier;
 
@@ -24,13 +24,13 @@ public enum StatusNamesies {
 
     // EVERYTHING ABOVE IS GENERATED ###
 
-    private final Supplier<Status> statusGetter;
+    private final Supplier<StatusCondition> statusGetter;
 
-    StatusNamesies(Supplier<Status> statusGetter) {
+    StatusNamesies(Supplier<StatusCondition> statusGetter) {
         this.statusGetter = statusGetter;
     }
 
-    public Status getStatus() {
+    public StatusCondition getStatus() {
         return this.statusGetter.get();
     }
 }

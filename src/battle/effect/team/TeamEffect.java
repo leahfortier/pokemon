@@ -14,7 +14,7 @@ import battle.effect.EffectInterfaces.EntryEffect;
 import battle.effect.EffectInterfaces.RapidSpinRelease;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.status.Status;
+import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
 import message.MessageUpdate;
@@ -372,7 +372,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
             ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer);
             StatusNamesies poisonCondition = layers >= 2 ? StatusNamesies.BADLY_POISONED : StatusNamesies.POISONED;
-            Status.applyStatus(b, theOtherPokemon, enterer, poisonCondition);
+            StatusCondition.applyStatus(b, theOtherPokemon, enterer, poisonCondition);
         }
 
         @Override

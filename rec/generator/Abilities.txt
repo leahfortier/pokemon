@@ -238,7 +238,7 @@ Effect Spore:
 
         // 30% chance to Paralyze, Poison, or induce Sleep
         if (RandomUtils.chanceTest(30)) {
-            Status.applyStatus(b, victim, user, RandomUtils.getRandomValue(STATUSES), CastSource.ABILITY);
+            StatusCondition.applyStatus(b, victim, user, RandomUtils.getRandomValue(STATUSES), CastSource.ABILITY);
         }
         ###
 *
@@ -334,7 +334,7 @@ Synchronize:
         }
 
         // Give status condition to the opponent
-        Status.applyStatus(b, victim, caster, statusType, CastSource.ABILITY);
+        StatusCondition.applyStatus(b, victim, caster, statusType, CastSource.ABILITY);
         ###
     WildPokemonAlterer:
         if (RandomUtils.chanceTest(50)) {
@@ -1059,7 +1059,7 @@ Poison Touch:
     Int: OpponentTakeDamageEffect
     OpponentTakeDamage:
         if (RandomUtils.chanceTest(30)) {
-            Status.applyStatus(b, user, victim, StatusNamesies.POISONED, CastSource.ABILITY);
+            StatusCondition.applyStatus(b, user, victim, StatusNamesies.POISONED, CastSource.ABILITY);
         }
         ###
 *
@@ -1653,9 +1653,9 @@ Comatose:
                 return false;
             }
 
-            if (Status.appliesWithoutStatusCheck(StatusNamesies.ASLEEP, b, sleepyHead, sleepyHead)) {
+            if (StatusCondition.appliesWithoutStatusCheck(StatusNamesies.ASLEEP, b, sleepyHead, sleepyHead)) {
                 sleepyHead.removeStatus();
-                Status.applyStatus(b, sleepyHead, sleepyHead, StatusNamesies.ASLEEP, CastSource.ABILITY);
+                StatusCondition.applyStatus(b, sleepyHead, sleepyHead, StatusNamesies.ASLEEP, CastSource.ABILITY);
                 sleepyHead.getStatus().setTurns(-1);
                 return true;
             }

@@ -1,7 +1,7 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
-import battle.effect.status.Status;
+import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import org.junit.Assert;
 import org.junit.Test;
@@ -49,7 +49,7 @@ public class StatusTest extends BaseTest {
 
         int original = Stat.getStat(stat, uglyFace, mahBoi, battle);
 
-        Status.applyStatus(battle, uglyFace, uglyFace, statusCondition);
+        StatusCondition.applyStatus(battle, uglyFace, uglyFace, statusCondition);
         int afterStatus = Stat.getStat(stat, uglyFace, mahBoi, battle);
         Assert.assertTrue((int)(original*ratio) == afterStatus);
 

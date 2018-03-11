@@ -2,7 +2,7 @@ package gui.view.battle;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.status.Status;
+import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import draw.Alignment;
 import draw.DrawUtils;
@@ -540,7 +540,7 @@ class PokemonAnimationState {
             type = new PokeType(Type.NO_TYPE);
         }
 
-        public Status getStatus() {
+        public StatusCondition getStatus() {
             return this.frontPokemon == null ? StatusNamesies.NO_STATUS.getStatus() : this.frontPokemon.getStatus();
         }
 

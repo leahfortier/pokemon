@@ -55,7 +55,7 @@ import battle.effect.attack.ChangeTypeSource;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
-import battle.effect.status.Status;
+import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import item.Item;
 import item.ItemNamesies;
@@ -665,8 +665,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
             // Pokemon that make contact with the baneful bunker are become poisoned
-            if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && Status.applies(StatusNamesies.POISONED, b, opp, p)) {
-                Status.applyStatus(b, opp, p, StatusNamesies.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
+            if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && StatusCondition.applies(StatusNamesies.POISONED, b, opp, p)) {
+                StatusCondition.applyStatus(b, opp, p, StatusNamesies.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
             }
         }
 
@@ -1793,7 +1793,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!Status.applies(StatusNamesies.ASLEEP, b, caster, victim) || victim.hasEffect(this.namesies()));
+            return !(!StatusCondition.applies(StatusNamesies.ASLEEP, b, caster, victim) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1803,7 +1803,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void subside(Battle b, ActivePokemon p) {
-            Status.applyStatus(b, b.getOtherPokemon(p), p, StatusNamesies.ASLEEP);
+            StatusCondition.applyStatus(b, b.getOtherPokemon(p), p, StatusNamesies.ASLEEP);
         }
     }
 
@@ -2061,7 +2061,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Status.applyStatus(b, victim, user, StatusNamesies.BURNED);
+            StatusCondition.applyStatus(b, victim, user, StatusNamesies.BURNED);
         }
     }
 

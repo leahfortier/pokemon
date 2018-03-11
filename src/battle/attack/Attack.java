@@ -50,7 +50,7 @@ import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.holder.ItemHolder;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.status.Status;
+import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
 import item.Item;
@@ -351,9 +351,9 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         // Give Status Condition
         if (status != StatusNamesies.NO_STATUS) {
-            boolean success = Status.applyStatus(b, user, victim, status);
+            boolean success = StatusCondition.applyStatus(b, user, victim, status);
             if (!success && canPrintFail()) {
-                Messages.add(Status.getFailMessage(b, user, victim, status));
+                Messages.add(StatusCondition.getFailMessage(b, user, victim, status));
             }
         }
 
@@ -3114,7 +3114,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.ASLEEP)) {
-                Status.removeStatus(b, victim, CastSource.ATTACK);
+                StatusCondition.removeStatus(b, victim, CastSource.ATTACK);
             }
         }
     }
@@ -3390,7 +3390,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.hasStatus(StatusNamesies.ASLEEP) && Status.appliesWithoutStatusCheck(StatusNamesies.ASLEEP, b, user, user) && !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return !user.hasStatus(StatusNamesies.ASLEEP) && StatusCondition.appliesWithoutStatusCheck(StatusNamesies.ASLEEP, b, user, user) && !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
         }
     }
 
@@ -6253,7 +6253,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Status.removeStatus(b, user, CastSource.ATTACK);
+            StatusCondition.removeStatus(b, user, CastSource.ATTACK);
         }
 
         @Override
@@ -7193,14 +7193,14 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Status.applyStatus(b, user, victim, user.getStatus().namesies(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
+            StatusCondition.applyStatus(b, user, victim, user.getStatus().namesies(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
             user.removeStatus();
             Messages.add(new MessageUpdate().updatePokemon(b, user));
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasStatus() && Status.applies(user.getStatus().namesies(), b, user, victim);
+            return user.hasStatus() && StatusCondition.applies(user.getStatus().namesies(), b, user, victim);
         }
     }
 
@@ -7812,7 +7812,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.PARALYZED)) {
-                Status.removeStatus(b, victim, CastSource.ATTACK);
+                StatusCondition.removeStatus(b, victim, CastSource.ATTACK);
             }
         }
     }
@@ -10552,7 +10552,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.BURNED)) {
-                Status.removeStatus(b, victim, CastSource.ATTACK);
+                StatusCondition.removeStatus(b, victim, CastSource.ATTACK);
             }
         }
     }
@@ -10739,7 +10739,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Status.removeStatus(b, user, CastSource.ATTACK);
+            StatusCondition.removeStatus(b, user, CastSource.ATTACK);
             if (!user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
                 this.heal(b, user);
             }
