@@ -65,7 +65,7 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         }
     }
 
-    private String getRemoveMessage(Battle b, ActivePokemon victim, CastSource source) {
+    public String getRemoveMessage(Battle b, ActivePokemon victim, CastSource source) {
         if (source.hasSourceName()) {
             return this.getSourceRemoveMessage(victim, source.getSourceName(b, victim));
         } else {
@@ -127,13 +127,6 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
     @Override
     public String toString() {
         return this.namesies + " " + this.getTurns();
-    }
-
-    public static void removeStatus(Battle b, ActivePokemon victim, CastSource source) {
-        StatusCondition status = victim.getStatus();
-        victim.removeStatus();
-
-        Messages.add(new MessageUpdate(status.getRemoveMessage(b, victim, source)).updatePokemon(b, victim));
     }
 
     public static boolean appliesWithoutStatusCheck(StatusNamesies status, Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -496,7 +489,7 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         @Override
         public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
             if (numTurns == 0) {
-                StatusCondition.removeStatus(b, p, CastSource.EFFECT);
+                p.removeStatus(b, CastSource.EFFECT);
                 return true;
             }
 
@@ -554,7 +547,7 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
             // 20% chance to thaw out each turn
             if (RandomUtils.chanceTest(20) || p.getAttack().isMoveType(MoveType.DEFROST)) {
-                StatusCondition.removeStatus(b, p, CastSource.EFFECT);
+                p.removeStatus(b, CastSource.EFFECT);
                 return true;
             }
 
@@ -566,7 +559,7 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Fire-type moves defrost the user
             if (user.isAttackType(Type.FIRE)) {
-                StatusCondition.removeStatus(b, victim, CastSource.EFFECT);
+                victim.removeStatus(b, CastSource.EFFECT);
             }
         }
     }

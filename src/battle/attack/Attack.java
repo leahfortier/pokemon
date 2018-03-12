@@ -3115,7 +3115,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.ASLEEP)) {
-                StatusCondition.removeStatus(b, victim, CastSource.ATTACK);
+                victim.removeStatus(b, CastSource.ATTACK);
             }
         }
     }
@@ -6254,7 +6254,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            StatusCondition.removeStatus(b, user, CastSource.ATTACK);
+            user.removeStatus(b, CastSource.ATTACK);
         }
 
         @Override
@@ -7815,7 +7815,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.PARALYZED)) {
-                StatusCondition.removeStatus(b, victim, CastSource.ATTACK);
+                victim.removeStatus(b, CastSource.ATTACK);
             }
         }
     }
@@ -10555,7 +10555,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.BURNED)) {
-                StatusCondition.removeStatus(b, victim, CastSource.ATTACK);
+                victim.removeStatus(b, CastSource.ATTACK);
             }
         }
     }
@@ -10742,7 +10742,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            StatusCondition.removeStatus(b, user, CastSource.ATTACK);
+            user.removeStatus(b, CastSource.ATTACK);
             if (!user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
                 this.heal(b, user);
             }

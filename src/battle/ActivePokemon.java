@@ -27,6 +27,7 @@ import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
+import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
 import item.Item;
@@ -472,6 +473,15 @@ public class ActivePokemon extends PartyPokemon {
         attacking = false;
         reducePP = false;
         lastMoveSucceeded = true;
+    }
+
+    // Removes status and adds the remove message
+    // For no message -- just use removeStatus()
+    public void removeStatus(Battle b, CastSource source) {
+        StatusCondition status = this.getStatus();
+        this.removeStatus();
+
+        Messages.add(new MessageUpdate(status.getRemoveMessage(b, this, source)).updatePokemon(b, this));
     }
 
     public boolean isActuallyDead() {

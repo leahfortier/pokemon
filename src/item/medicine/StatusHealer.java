@@ -3,7 +3,6 @@ package item.medicine;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.CastSource;
-import battle.effect.status.StatusCondition;
 import item.hold.HoldItem;
 import item.use.BattlePokemonUseItem;
 
@@ -15,7 +14,7 @@ public interface StatusHealer extends HoldItem, BattlePokemonUseItem {
             return false;
         }
 
-        StatusCondition.removeStatus(b, p, source);
+        p.removeStatus(b, source);
         return true;
     }
 

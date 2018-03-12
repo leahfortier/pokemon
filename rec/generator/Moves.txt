@@ -3548,7 +3548,7 @@ Refresh:
     MoveType: Healing
     Applies: user.hasStatus()
     UniqueEffects:
-        StatusCondition.removeStatus(b, user, CastSource.ATTACK);
+        user.removeStatus(b, CastSource.ATTACK);
         ###
 *
 Power Whip:
@@ -6322,7 +6322,7 @@ Purify:
         ###
     ExtraApplies: user.hasStatus()
     UniqueEffects:
-        StatusCondition.removeStatus(b, user, CastSource.ATTACK);
+        user.removeStatus(b, CastSource.ATTACK);
         if (!user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
             this.heal(b, user);
         }

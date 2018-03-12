@@ -371,7 +371,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (victim.hasStatus() && RandomUtils.chanceTest(1, 3)) {
-                StatusCondition.removeStatus(b, victim, CastSource.ABILITY);
+                victim.removeStatus(b, CastSource.ABILITY);
             }
         }
     }
@@ -900,7 +900,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.PARALYZED)) {
-                StatusCondition.removeStatus(b, victim, CastSource.ABILITY);
+                victim.removeStatus(b, CastSource.ABILITY);
             }
         }
 
@@ -978,7 +978,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.ASLEEP)) {
-                StatusCondition.removeStatus(b, victim, CastSource.ABILITY);
+                victim.removeStatus(b, CastSource.ABILITY);
             }
         }
 
@@ -1007,7 +1007,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.ASLEEP)) {
-                StatusCondition.removeStatus(b, victim, CastSource.ABILITY);
+                victim.removeStatus(b, CastSource.ABILITY);
             }
         }
 
@@ -1292,7 +1292,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (victim.hasStatus() && b.getWeather().namesies() == WeatherNamesies.RAINING) {
-                StatusCondition.removeStatus(b, victim, CastSource.ABILITY);
+                victim.removeStatus(b, CastSource.ABILITY);
             }
         }
     }
@@ -1521,7 +1521,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.BURNED)) {
-                StatusCondition.removeStatus(b, victim, CastSource.ABILITY);
+                victim.removeStatus(b, CastSource.ABILITY);
             }
         }
 
@@ -1836,7 +1836,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.POISONED)) {
-                StatusCondition.removeStatus(b, victim, CastSource.ABILITY);
+                victim.removeStatus(b, CastSource.ABILITY);
             }
         }
 
@@ -2074,7 +2074,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.FROZEN)) {
-                StatusCondition.removeStatus(b, victim, CastSource.ABILITY);
+                victim.removeStatus(b, CastSource.ABILITY);
             }
         }
 
@@ -3464,7 +3464,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.ASLEEP)) {
-                StatusCondition.removeStatus(b, victim, CastSource.ABILITY);
+                victim.removeStatus(b, CastSource.ABILITY);
             }
         }
 
@@ -3506,7 +3506,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (victim.hasStatus() && RandomUtils.chanceTest(1, 3)) {
-                StatusCondition.removeStatus(b, victim, CastSource.ABILITY);
+                victim.removeStatus(b, CastSource.ABILITY);
             }
         }
     }
@@ -3910,7 +3910,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         private void removeStatus(Battle b, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.BURNED)) {
-                StatusCondition.removeStatus(b, victim, CastSource.ABILITY);
+                victim.removeStatus(b, CastSource.ABILITY);
             }
         }
 
