@@ -3391,7 +3391,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.hasStatus(StatusNamesies.ASLEEP) && StatusCondition.appliesWithoutStatusCheck(StatusNamesies.ASLEEP, b, user, user) && !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return !user.hasStatus(StatusNamesies.ASLEEP) && StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, user, user) && !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
         }
     }
 
@@ -7203,7 +7203,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasStatus() && StatusCondition.applies(user.getStatus().namesies(), b, user, victim);
+            return user.hasStatus() && user.getStatus().namesies().getStatus().applies(b, user, victim);
         }
     }
 

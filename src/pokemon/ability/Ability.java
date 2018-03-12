@@ -4153,7 +4153,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
                 return false;
             }
 
-            if (StatusCondition.appliesWithoutStatusCheck(StatusNamesies.ASLEEP, b, sleepyHead, sleepyHead)) {
+            if (StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, sleepyHead, sleepyHead)) {
                 sleepyHead.removeStatus();
                 StatusNamesies.ASLEEP.getStatus().apply(b, sleepyHead, sleepyHead, CastSource.ABILITY);
                 sleepyHead.getStatus().setTurns(-1);

@@ -1777,7 +1777,7 @@ Rest:
     Cat: Status
     Status: Asleep
     Comments: // Need the sleep check in case called from Sleep Talk, Comatose, etc.
-    ExtraApplies: !user.hasStatus(StatusNamesies.ASLEEP) && StatusCondition.appliesWithoutStatusCheck(StatusNamesies.ASLEEP, b, user, user)
+    ExtraApplies: !user.hasStatus(StatusNamesies.ASLEEP) && StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, user, user)
     AfterApplyCheck:
         victim.removeStatus();
         ###
@@ -4138,7 +4138,7 @@ Psycho Shift:
     Type: Psychic
     Cat: Status
     Acc: 100
-    Applies: user.hasStatus() && StatusCondition.applies(user.getStatus().namesies(), b, user, victim)
+    Applies: user.hasStatus() && user.getStatus().namesies().getStatus().applies(b, user, victim)
     UniqueEffects:
         StatusNamesies toTransfer = user.getStatus().namesies();
         String transferMessage = user.getName() + " transferred its status condition to " + victim.getName() + "!";

@@ -632,7 +632,7 @@ Curse:
 *
 Yawn:
     NumTurns: 2
-    FailCondition: !StatusCondition.applies(StatusNamesies.ASLEEP, b, caster, victim)
+    FailCondition: !StatusNamesies.ASLEEP.getStatus().applies(b, caster, victim)
     Subside:
         StatusNamesies.ASLEEP.getStatus().apply(b, b.getOtherPokemon(p), p, CastSource.EFFECT);
         ###

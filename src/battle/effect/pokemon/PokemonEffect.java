@@ -55,7 +55,6 @@ import battle.effect.attack.ChangeTypeSource;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
-import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import item.Item;
 import item.ItemNamesies;
@@ -1793,7 +1792,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!StatusCondition.applies(StatusNamesies.ASLEEP, b, caster, victim) || victim.hasEffect(this.namesies()));
+            return !(!StatusNamesies.ASLEEP.getStatus().applies(b, caster, victim) || victim.hasEffect(this.namesies()));
         }
 
         @Override

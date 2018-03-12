@@ -82,12 +82,12 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         return Effect.DEFAULT_FAIL_MESSAGE;
     }
 
-    private boolean appliesWithoutStatusCheck(Battle b, ActivePokemon caster, ActivePokemon victim) {
+    public boolean appliesWithoutStatusCheck(Battle b, ActivePokemon caster, ActivePokemon victim) {
         return this.statusApplies(b, caster, victim) &&
                 StatusPreventionEffect.getPreventEffect(b, caster, victim, this.namesies) == null;
     }
 
-    protected boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+    public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
         return !victim.hasStatus() && this.appliesWithoutStatusCheck(b, caster, victim);
     }
 
@@ -127,14 +127,6 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
     @Override
     public String toString() {
         return this.namesies + " " + this.getTurns();
-    }
-
-    public static boolean appliesWithoutStatusCheck(StatusNamesies status, Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return status.getStatus().appliesWithoutStatusCheck(b, caster, victim);
-    }
-
-    public static boolean applies(StatusNamesies status, Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return status.getStatus().applies(b, caster, victim);
     }
 
     // EVERYTHING BELOW IS GENERATED ###
