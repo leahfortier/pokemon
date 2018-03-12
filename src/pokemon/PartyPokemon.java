@@ -349,7 +349,7 @@ public abstract class PartyPokemon implements Serializable {
 
     // Sets the Pokemon's status condition to be None
     public void removeStatus() {
-        StatusCondition.removeStatus(this);
+        this.setStatus(StatusNamesies.NO_STATUS.getStatus());
     }
 
     public Ability getActualAbility() {

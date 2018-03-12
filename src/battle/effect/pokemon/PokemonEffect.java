@@ -665,8 +665,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
             // Pokemon that make contact with the baneful bunker are become poisoned
-            if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && StatusCondition.applies(StatusNamesies.POISONED, b, opp, p)) {
-                StatusCondition.applyStatus(b, opp, p, StatusNamesies.POISONED, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
+            if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
+                StatusNamesies.POISONED.getStatus().apply(b, opp, p, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
             }
         }
 
@@ -1803,7 +1803,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void subside(Battle b, ActivePokemon p) {
-            StatusCondition.applyStatus(b, b.getOtherPokemon(p), p, StatusNamesies.ASLEEP);
+            StatusNamesies.ASLEEP.getStatus().apply(b, b.getOtherPokemon(p), p, CastSource.EFFECT);
         }
     }
 
@@ -2061,7 +2061,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            StatusCondition.applyStatus(b, victim, user, StatusNamesies.BURNED);
+            StatusNamesies.BURNED.getStatus().apply(b, victim, user, CastSource.EFFECT);
         }
     }
 

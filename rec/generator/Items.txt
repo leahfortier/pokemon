@@ -195,31 +195,12 @@ Expert Belt:
     PowerMultiplierCondition: 1.2 TypeAdvantage.isSuperEffective(user, victim, b)
 *
 Flame Orb:
-    Int: HoldItem, EndTurnEffect
-    Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. It's a bizarre orb that will afflict the holder with a burn during battle.
-    Price: 1000
-    ApplyEndTurn:
-        StatusCondition.applyStatus(b, victim, victim, StatusNamesies.BURNED, victim.getName() + " was burned by its " + this.getName() + "!");
-        ###
-    StatusFling: burned
+    StatusSelfInflictor: burned
 *
 Toxic Orb:
-    Int: HoldItem, EndTurnEffect
-    Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. It's a bizarre orb that will badly poison the holder during battle.
-    Price: 1000
-    ApplyEndTurn:
-        // Badly poisons the holder at the end of the turn
-        StatusCondition.applyStatus(
-            b, victim, victim, StatusNamesies.BADLY_POISONED,
-            victim.getName() + " was badly poisoned by its " + this.getName() + "!"
-        );
-        ###
-    FlingEffect:
-        // Badly poisons the pelted
-        applyEndTurn(pelted, b);
-        ###
+    StatusSelfInflictor: badly_poisoned
 *
 Float Stone:
     Int: HoldItem, HalfWeightEffect

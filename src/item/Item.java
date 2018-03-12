@@ -42,7 +42,6 @@ import battle.effect.InvokeEffect;
 import battle.effect.MessageGetter;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
 import item.bag.BagCategory;
@@ -650,12 +649,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            StatusCondition.applyStatus(b, victim, victim, StatusNamesies.BURNED, victim.getName() + " was burned by its " + this.getName() + "!");
+            StatusNamesies.BURNED.getStatus().apply(b, victim, victim, victim.getName() + " was burned by its " + this.getName() + "!");
         }
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            StatusCondition.applyStatus(b, pelted, pelted, StatusNamesies.BURNED, pelted.getName() + " was burned by the " + this.getName() + "!");
+            StatusNamesies.BURNED.getStatus().apply(b, pelted, pelted, pelted.getName() + " was burned by the " + this.getName() + "!");
         }
     }
 
@@ -669,17 +668,12 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            // Badly poisons the holder at the end of the turn
-            StatusCondition.applyStatus(
-                    b, victim, victim, StatusNamesies.BADLY_POISONED,
-                    victim.getName() + " was badly poisoned by its " + this.getName() + "!"
-            );
+            StatusNamesies.BADLY_POISONED.getStatus().apply(b, victim, victim, victim.getName() + " was badly poisoned by its " + this.getName() + "!");
         }
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            // Badly poisons the pelted
-            applyEndTurn(pelted, b);
+            StatusNamesies.BADLY_POISONED.getStatus().apply(b, pelted, pelted, pelted.getName() + " was badly poisoned by the " + this.getName() + "!");
         }
     }
 
@@ -909,7 +903,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            StatusCondition.applyStatus(b, pelted, pelted, StatusNamesies.PARALYZED, pelted.getName() + " was paralyzed by the " + this.getName() + "!");
+            StatusNamesies.PARALYZED.getStatus().apply(b, pelted, pelted, pelted.getName() + " was paralyzed by the " + this.getName() + "!");
         }
 
         @Override
@@ -2685,7 +2679,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            StatusCondition.applyStatus(b, pelted, pelted, StatusNamesies.POISONED, pelted.getName() + " was poisoned by the " + this.getName() + "!");
+            StatusNamesies.POISONED.getStatus().apply(b, pelted, pelted, pelted.getName() + " was poisoned by the " + this.getName() + "!");
         }
     }
 

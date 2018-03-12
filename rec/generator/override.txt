@@ -1030,7 +1030,7 @@ StatusPreventAbility:
 StatusContact:
 	AddMapField: Contact:
 		if (RandomUtils.chanceTest(30)) {
-			StatusCondition.applyStatus(b, victim, user, StatusNamesies.{00}, CastSource.ABILITY);
+            StatusNamesies.{00}.getStatus().apply(b, victim, user, CastSource.ABILITY);
 		}
 		###
 	AddInterface: PhysicalContactEffect
@@ -1747,8 +1747,18 @@ FlinchItem:
 *
 StatusFling:
 	AddMapField: FlingEffect:
-		StatusCondition.applyStatus(b, pelted, pelted, StatusNamesies.{00}, pelted.getName() + " was {0} by the " + this.getName() + "!");
+        StatusNamesies.{00}.getStatus().apply(b, pelted, pelted, pelted.getName() + " was {0_} by the " + this.getName() + "!");
 		###
+*
+# Like Flame Orb and Toxic Orb
+StatusSelfInflictor:
+    AddInterface: HoldItem, EndTurnEffect
+    AddMapField: Price: 1000
+    AddMapField: Cat: Misc
+    AddMapField: StatusFling: {0}
+    AddMapField: ApplyEndTurn:
+        StatusNamesies.{00}.getStatus().apply(b, victim, victim, victim.getName() + " was {0_} by its " + this.getName() + "!");
+        ###
 *
 TM:
 	Header: AttackNamesies getAttack()

@@ -351,9 +351,10 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         // Give Status Condition
         if (status != StatusNamesies.NO_STATUS) {
-            boolean success = StatusCondition.applyStatus(b, user, victim, status);
-            if (!success && canPrintFail()) {
-                Messages.add(StatusCondition.getFailMessage(b, user, victim, status));
+            StatusCondition statusCondition = status.getStatus();
+            boolean applies = statusCondition.apply(b, user, victim, CastSource.ATTACK);
+            if (!applies && this.canPrintFail()) {
+                Messages.add(statusCondition.getFailMessage(b, user, victim));
             }
         }
 
@@ -7193,7 +7194,9 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            StatusCondition.applyStatus(b, user, victim, user.getStatus().namesies(), user.getName() + " transferred its status condition to " + victim.getName() + "!");
+            StatusNamesies toTransfer = user.getStatus().namesies();
+            String transferMessage = user.getName() + " transferred its status condition to " + victim.getName() + "!";
+            toTransfer.getStatus().apply(b, user, victim, transferMessage);
             user.removeStatus();
             Messages.add(new MessageUpdate().updatePokemon(b, user));
         }

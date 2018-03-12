@@ -517,7 +517,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
-                StatusCondition.applyStatus(b, victim, user, StatusNamesies.PARALYZED, CastSource.ABILITY);
+                StatusNamesies.PARALYZED.getStatus().apply(b, victim, user, CastSource.ABILITY);
             }
         }
     }
@@ -619,7 +619,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
-                StatusCondition.applyStatus(b, victim, user, StatusNamesies.POISONED, CastSource.ABILITY);
+                StatusNamesies.POISONED.getStatus().apply(b, victim, user, CastSource.ABILITY);
             }
         }
     }
@@ -809,7 +809,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
             // 30% chance to Paralyze, Poison, or induce Sleep
             if (RandomUtils.chanceTest(30)) {
-                StatusCondition.applyStatus(b, victim, user, RandomUtils.getRandomValue(STATUSES), CastSource.ABILITY);
+                RandomUtils.getRandomValue(STATUSES).getStatus().apply(b, victim, user, CastSource.ABILITY);
             }
         }
     }
@@ -1066,7 +1066,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             }
 
             // Give status condition to the opponent
-            StatusCondition.applyStatus(b, victim, caster, statusType, CastSource.ABILITY);
+            statusType.getStatus().apply(b, victim, caster, CastSource.ABILITY);
         }
 
         @Override
@@ -1587,7 +1587,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
-                StatusCondition.applyStatus(b, victim, user, StatusNamesies.BURNED, CastSource.ABILITY);
+                StatusNamesies.BURNED.getStatus().apply(b, victim, user, CastSource.ABILITY);
             }
         }
     }
@@ -2754,7 +2754,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
-                StatusCondition.applyStatus(b, user, victim, StatusNamesies.POISONED, CastSource.ABILITY);
+                StatusNamesies.POISONED.getStatus().apply(b, user, victim, CastSource.ABILITY);
             }
         }
     }
@@ -4155,7 +4155,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
             if (StatusCondition.appliesWithoutStatusCheck(StatusNamesies.ASLEEP, b, sleepyHead, sleepyHead)) {
                 sleepyHead.removeStatus();
-                StatusCondition.applyStatus(b, sleepyHead, sleepyHead, StatusNamesies.ASLEEP, CastSource.ABILITY);
+                StatusNamesies.ASLEEP.getStatus().apply(b, sleepyHead, sleepyHead, CastSource.ABILITY);
                 sleepyHead.getStatus().setTurns(-1);
                 return true;
             }

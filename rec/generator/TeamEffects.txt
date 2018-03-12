@@ -93,7 +93,7 @@ ToxicSpikes:
         
         ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer);
         StatusNamesies poisonCondition = layers >= 2 ? StatusNamesies.BADLY_POISONED : StatusNamesies.POISONED;
-        StatusCondition.applyStatus(b, theOtherPokemon, enterer, poisonCondition);
+        poisonCondition.getStatus().apply(b, theOtherPokemon, enterer, CastSource.EFFECT);
         ###
     CastMessage: "Toxic spikes were scattered all around!"
     CanHave: True

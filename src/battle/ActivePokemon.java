@@ -27,7 +27,6 @@ import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
 import item.Item;
@@ -494,7 +493,7 @@ public class ActivePokemon extends PartyPokemon {
             Messages.add(new MessageUpdate().updatePokemon(b, this));
 
             ActivePokemon murderer = b.getOtherPokemon(this);
-            StatusCondition.die(b, murderer, this);
+            StatusNamesies.FAINTED.getStatus().apply(b, murderer, this, CastSource.EFFECT);
 
             // If the pokemon fainted via murder (by direct result of an attack) -- apply kill wishes
             if (murderer.isAttacking()) {

@@ -1,7 +1,6 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
-import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
@@ -34,22 +33,22 @@ public class StatusTest extends BaseTest {
     @Test
     public void statChangeTest() {
         // Paralysis reduces speed by 75%
-        statChangeTest(.25, StatusNamesies.PARALYZED, Stat.SPEED, new TestInfo());
+        statChangeTest(.25, AttackNamesies.THUNDER_WAVE, Stat.SPEED, new TestInfo());
 
         // Unless the victim has Quick Feet -- increases by 50%
-        statChangeTest(1.5, StatusNamesies.PARALYZED, Stat.SPEED, new TestInfo().defending(AbilityNamesies.QUICK_FEET));
+        statChangeTest(1.5, AttackNamesies.THUNDER_WAVE, Stat.SPEED, new TestInfo().defending(AbilityNamesies.QUICK_FEET));
 
         // Burn reduces attack by 50%
-        statChangeTest(.5, StatusNamesies.BURNED, Stat.ATTACK, new TestInfo());
+        statChangeTest(.5, AttackNamesies.WILL_O_WISP, Stat.ATTACK, new TestInfo());
 
         // Unless the victim has Guts -- increases by 50%
-        statChangeTest(1.5, StatusNamesies.BURNED, Stat.ATTACK, new TestInfo().defending(AbilityNamesies.GUTS));
+        statChangeTest(1.5, AttackNamesies.WILL_O_WISP, Stat.ATTACK, new TestInfo().defending(AbilityNamesies.GUTS));
 
         // Or the victim is using the move Facade -- power is increased
-        statChangeTest(1, StatusNamesies.BURNED, Stat.ATTACK, new TestInfo().with((battle, attacking, defending) -> defending.setupMove(AttackNamesies.FACADE, battle)));
+        statChangeTest(1, AttackNamesies.WILL_O_WISP, Stat.ATTACK, new TestInfo().with((battle, attacking, defending) -> defending.setupMove(AttackNamesies.FACADE, battle)));
     }
 
-    private void statChangeTest(double ratio, StatusNamesies statusCondition, Stat stat, TestInfo testInfo) {
+    private void statChangeTest(double ratio, AttackNamesies statusAttack, Stat stat, TestInfo testInfo) {
         // Uglyface can receive all status conditions
         testInfo.defending(PokemonNamesies.WATCHOG);
 
@@ -58,10 +57,11 @@ public class StatusTest extends BaseTest {
         TestPokemon uglyFace = battle.getDefending();
 
         testInfo.manipulate(battle);
-
         int original = Stat.getStat(stat, uglyFace, mahBoi, battle);
 
-        StatusCondition.applyStatus(battle, uglyFace, uglyFace, statusCondition);
+        battle.attackingFight(statusAttack);
+        Assert.assertTrue(uglyFace.hasStatus());
+        testInfo.manipulate(battle);
         int afterStatus = Stat.getStat(stat, uglyFace, mahBoi, battle);
         Assert.assertEquals((int)(original*ratio), afterStatus);
 

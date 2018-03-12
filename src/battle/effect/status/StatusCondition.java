@@ -16,10 +16,8 @@ import battle.effect.EffectInterfaces.StatusReceivedEffect;
 import battle.effect.EffectInterfaces.TakeDamageEffect;
 import battle.effect.InvokeEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import main.Global;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.PartyPokemon;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import type.Type;
@@ -75,7 +73,7 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         }
     }
 
-    private String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+    public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
         StatusPreventionEffect statusPrevent = StatusPreventionEffect.getPreventEffect(b, user, victim, this.namesies);
         if (statusPrevent != null) {
             return statusPrevent.statusPreventionMessage(victim);
@@ -91,6 +89,24 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
 
     protected boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
         return !victim.hasStatus() && this.appliesWithoutStatusCheck(b, caster, victim);
+    }
+
+    // Returns true if a status was successfully given, and false if it failed for any reason
+    public boolean apply(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+        return apply(b, caster, victim, this.getCastMessage(b, caster, victim, source));
+    }
+
+    public boolean apply(Battle b, ActivePokemon caster, ActivePokemon victim, String castMessage) {
+        if (this.applies(b, caster, victim)) {
+            victim.setStatus(this);
+            Messages.add(new MessageUpdate(castMessage).updatePokemon(b, victim));
+
+            StatusReceivedEffect.invokeStatusReceivedEffect(b, caster, victim, this.namesies);
+            OpponentStatusReceivedEffect.invokeOpponentStatusReceivedEffect(b, victim, this.namesies);
+            return true;
+        }
+
+        return false;
     }
 
     public boolean isType(StatusNamesies statusCondition) {
@@ -120,52 +136,12 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         Messages.add(new MessageUpdate(status.getRemoveMessage(b, victim, source)).updatePokemon(b, victim));
     }
 
-    public static String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim, StatusNamesies status) {
-        return status.getStatus().getFailMessage(b, user, victim);
-    }
-
     public static boolean appliesWithoutStatusCheck(StatusNamesies status, Battle b, ActivePokemon caster, ActivePokemon victim) {
         return status.getStatus().appliesWithoutStatusCheck(b, caster, victim);
     }
 
     public static boolean applies(StatusNamesies status, Battle b, ActivePokemon caster, ActivePokemon victim) {
         return status.getStatus().applies(b, caster, victim);
-    }
-
-    // Returns true if a status was successfully given, and false if it failed for any reason
-    public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-        return applyStatus(b, caster, victim, status, CastSource.EFFECT);
-    }
-
-    public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status, CastSource source) {
-        StatusCondition s = status.getStatus();
-        return applyStatus(b, caster, victim, status, s.getCastMessage(b, caster, victim, source));
-    }
-
-    public static boolean applyStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status, String castMessage) {
-        StatusCondition s = status.getStatus();
-        if (s.applies(b, caster, victim)) {
-            victim.setStatus(s);
-            Messages.add(new MessageUpdate(castMessage).updatePokemon(b, victim));
-
-            StatusReceivedEffect.invokeStatusReceivedEffect(b, caster, victim, status);
-            OpponentStatusReceivedEffect.invokeOpponentStatusReceivedEffect(b, victim, status);
-            return true;
-        }
-
-        return false;
-    }
-
-    public static void removeStatus(PartyPokemon p) {
-        p.setStatus(new NoStatus());
-    }
-
-    public static void die(Battle b, ActivePokemon murderer, ActivePokemon deady) {
-        if (deady.getHP() > 0) {
-            Global.error("Only dead Pokemon can die.");
-        }
-
-        applyStatus(b, murderer, deady, StatusNamesies.FAINTED);
     }
 
     // EVERYTHING BELOW IS GENERATED ###
