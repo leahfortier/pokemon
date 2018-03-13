@@ -14,7 +14,7 @@ public interface HealthTriggeredBerry extends GainableEffectBerry, DamageTakenEf
         double healthRatio = damageTaker.getHPRatio();
         if (healthRatio <= this.healthTriggerRatio() || (healthRatio <= .5 && damageTaker.hasAbility(AbilityNamesies.GLUTTONY))) {
             if (this.gainBerryEffect(b, damageTaker, CastSource.HELD_ITEM)) {
-                damageTaker.consumeItem(b);
+                this.consumeItem(b, damageTaker);
             }
         }
     }

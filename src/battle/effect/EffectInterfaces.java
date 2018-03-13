@@ -1373,14 +1373,14 @@ public final class EffectInterfaces {
                 PokemonEffectNamesies pokemonEffectType = (PokemonEffectNamesies)effectType;
                 Messages.add(this.getRemoveMessage(victim, pokemonEffectType));
                 victim.getEffects().remove(pokemonEffectType);
-                victim.consumeItem(b);
+                this.consumeItem(b, victim);
             }
         }
 
         @Override
         default void applyEndTurn(ActivePokemon victim, Battle b) {
             if (usesies(victim)) {
-                victim.consumeItem(b);
+                this.consumeItem(b, victim);
             }
         }
     }

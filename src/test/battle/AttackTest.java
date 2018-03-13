@@ -1417,12 +1417,17 @@ public class AttackTest extends BaseTest {
         incinerateTest(ItemNamesies.ORAN_BERRY, true);
         incinerateTest(ItemNamesies.FIRE_GEM, true);
 
-        TestBattle battle = TestBattle.create();
+        // Will be incinerated if the Fire-type incinerate is not super-effective
+        incinerateTest(ItemNamesies.OCCA_BERRY, true);
+
+        // Special case for Occa Berry which will be consumed once hit with the super-effective Fire-type incinerate
+        // Should have the Eaten Berry effect in this case
+        TestBattle battle = TestBattle.create(PokemonNamesies.CHARMANDER, PokemonNamesies.BULBASAUR);
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
-        // Special case for Occa Berry which will be consumed once hit with the Fire-type incinerate (has Eaten Berry effect)
         defending.withItem(ItemNamesies.OCCA_BERRY);
+        battle.setExpectedDamageModifier(.5);
         battle.fight(AttackNamesies.INCINERATE, AttackNamesies.ENDURE);
         Assert.assertFalse(defending.isHoldingItem(battle));
         Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
@@ -1437,18 +1442,19 @@ public class AttackTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         // Make sure victim does not consume the effects of the berry when eaten (in this example Oran Berry)
-        battle.falseSwipePalooza(true);
-        Assert.assertEquals(1, defending.getHP());
+        // Use Substitute so Incinerate damage will be absorbed and Oran Berry will not be able to activate naturally before incinerate to death
+        battle.defendingFight(AttackNamesies.SUBSTITUTE);
+        defending.assertHealthRatio(.75);
 
         defending.withItem(victimItem);
-        battle.fight(AttackNamesies.INCINERATE, AttackNamesies.ENDURE);
+        battle.attackingFight(AttackNamesies.INCINERATE);
 
         Assert.assertNotEquals(incinerated, defending.isHoldingItem(battle));
         Assert.assertEquals(incinerated, defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
         Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
         Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
         Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-        Assert.assertEquals(1, defending.getHP());
+        defending.assertHealthRatio(.75);
         attacking.assertFullHealth();
     }
 }

@@ -684,21 +684,6 @@ public class ActivePokemon extends PartyPokemon {
         }
     }
 
-    public void consumeItem(Battle b) {
-        HoldItem consumed = this.getHeldItem(b);
-        consumed.consumeItemWithoutEffects(b, this);
-
-        if (consumed instanceof Berry) {
-            this.consumeBerry((Berry)consumed, b);
-        }
-
-        ActivePokemon other = b.getOtherPokemon(this);
-        if (other.hasAbility(AbilityNamesies.PICKUP) && !other.isHoldingItem(b)) {
-            other.giveItem(consumed);
-            Messages.add(other.getName() + " picked up " + getName() + "'s " + consumed.getName() + "!");
-        }
-    }
-
     @Override
     public void removeItem() {
         super.removeItem();

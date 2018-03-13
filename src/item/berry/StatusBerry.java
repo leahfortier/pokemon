@@ -11,7 +11,7 @@ import item.medicine.StatusHealer;
 public interface StatusBerry extends StatusHealer, GainableEffectBerry, StatusReceivedEffect, EndTurnEffect {
     default void consumeBerry(Battle b, ActivePokemon victim) {
         if (this.gainBerryEffect(b, victim, CastSource.HELD_ITEM)) {
-            victim.consumeItem(b);
+            this.consumeItem(b, victim);
         }
     }
 

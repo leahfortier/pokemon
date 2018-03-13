@@ -23,13 +23,13 @@ public interface SpecialTypeItem extends HoldItem {
         }
     }
 
-    interface GemItem extends SpecialTypeItem, PowerChangeEffect, HoldItem {
+    interface GemItem extends SpecialTypeItem, PowerChangeEffect {
         @Override
         default double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(getType())) {
                 // Consume the item
                 Messages.add(user.getName() + "'s " + this.getName() + " enhanced " + user.getAttack().getName() + "'s power!");
-                user.consumeItem(b);
+                this.consumeItem(b, user);
 
                 // Gems increase the power of the move by 50% -- technically 30% in Gen 6 but they suck enough as is being a consumed item and all
                 return 1.5;

@@ -30,7 +30,7 @@ public interface CategoryBerry extends Berry {
             // Increases stat by 1 when hit by a move a specified category
             if (user.getAttack().getCategory() == this.getCategory()
                     && victim.getStages().modifyStage(victim, 1, this.getStat(), b, CastSource.HELD_ITEM)) {
-                victim.consumeItem(b);
+                this.consumeItem(b, victim);
             }
         }
     }
@@ -42,7 +42,7 @@ public interface CategoryBerry extends Berry {
             if (user.getAttack().getCategory() == this.getCategory()) {
                 Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
                 user.reduceHealthFraction(b, 1/8.0);
-                victim.consumeItem(b);
+                this.consumeItem(b, victim);
             }
         }
     }

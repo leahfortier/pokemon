@@ -1115,7 +1115,7 @@ MoveUse:
 TypeTakeDamageStatIncrease:
 	AddMapField: OnTakeDamage:
 		if (user.isAttackType(Type.{11}) && victim.getStages().modifyStage(victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
-			victim.consumeItem(b);
+			this.consumeItem(b, victim);
 		}
 		###
 	AddInterface: HoldItem
@@ -1900,7 +1900,7 @@ TerrainSeed:
 	AddInterface: TerrainCastEffect
 	AddMapField: NewTerrain:
 		if (newTerrain == TerrainType.{11} && p.getStages().modifyStage(p, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
-			p.consumeItem(b);
+			this.consumeItem(b, p);
 		}
 		###
 	AddMapField: Price: 4000
