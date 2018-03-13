@@ -8840,8 +8840,9 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // TODO: Make sure this is still working -- consumeItem used to be in endAttack
-            ((HoldItem)user.getHeldItem(b)).flingEffect(b, victim);
-            user.consumeItemWithoutEffects(b);
+            HoldItem item = (HoldItem)user.getHeldItem(b);
+            item.flingEffect(b, victim);
+            item.consumeItemWithoutEffects(b, user);
         }
 
         @Override

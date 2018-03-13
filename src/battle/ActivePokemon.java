@@ -660,10 +660,10 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public void stealBerry(Battle b, ActivePokemon victim) {
-        Item item = victim.getHeldItem(b);
+        HoldItem item = (HoldItem)victim.getHeldItem(b);
         if (item instanceof Berry && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
             Messages.add(this.getName() + " ate " + victim.getName() + "'s " + item.getName() + "!");
-            victim.consumeItemWithoutEffects(b);
+            item.consumeItemWithoutEffects(b, victim);
 
             if (item instanceof GainableEffectBerry) {
                 ((GainableEffectBerry)item).gainBerryEffect(b, this, CastSource.USE_ITEM);
@@ -672,7 +672,7 @@ public class ActivePokemon extends PartyPokemon {
         }
     }
 
-    private void consumeBerry(Berry consumed, Battle b) {
+    public void consumeBerry(Berry consumed, Battle b) {
         // Eat dat berry!!
         PokemonEffectNamesies.EATEN_BERRY.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
 
@@ -685,15 +685,9 @@ public class ActivePokemon extends PartyPokemon {
         }
     }
 
-    public Item consumeItemWithoutEffects(Battle b) {
-        Item consumed = getHeldItem(b);
-        PokemonEffectNamesies.CONSUMED_ITEM.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
-
-        return consumed;
-    }
-
     public void consumeItem(Battle b) {
-        Item consumed = this.consumeItemWithoutEffects(b);
+        HoldItem consumed = (HoldItem)this.getHeldItem(b);
+        consumed.consumeItemWithoutEffects(b, this);
 
         if (consumed instanceof Berry) {
             this.consumeBerry((Berry)consumed, b);
