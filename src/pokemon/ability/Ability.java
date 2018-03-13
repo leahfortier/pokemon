@@ -80,11 +80,9 @@ import battle.effect.battle.terrain.TerrainNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
-import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
-import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;
 import item.hold.HoldItem;
@@ -3112,7 +3110,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
             return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
         }
 
@@ -3134,14 +3132,21 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            PokemonEffect consumed = victim.getEffect(PokemonEffectNamesies.CONSUMED_ITEM);
-            if (consumed == null || victim.isHoldingItem(b)) {
+            // Does nothing if victim is holding something
+            if (victim.isHoldingItem(b)) {
                 return;
             }
 
-            Item restored = ((ItemHolder)consumed).getItem();
+            // Does nothing if victim never consumed an item
+            ItemHolder consumed = (ItemHolder)victim.getEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+            if (consumed == null) {
+                return;
+            }
+
+            // Restore the item if applicable
+            HoldItem restored = consumed.getItem();
             if (restored instanceof Berry && (b.getWeather().namesies() == WeatherNamesies.SUNNY || RandomUtils.chanceTest(50))) {
-                victim.giveItem((HoldItem)restored);
+                victim.giveItem(restored);
                 Messages.add(victim.getName() + "'s " + this.getName() + " restored its " + restored.getName() + "!");
             }
         }
@@ -3276,7 +3281,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public PokeType getType(Battle b, ActivePokemon p, boolean display) {
-            Item item = p.getHeldItem(b);
+            HoldItem item = p.getHeldItem(b);
             if (item instanceof PlateItem) {
                 return new PokeType(((PlateItem)item).getType());
             }
@@ -3304,7 +3309,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public PokeType getType(Battle b, ActivePokemon p, boolean display) {
-            Item item = p.getHeldItem(b);
+            HoldItem item = p.getHeldItem(b);
             if (item instanceof MemoryItem) {
                 return new PokeType(((MemoryItem)item).getType());
             }
@@ -3399,7 +3404,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
             return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
         }
 

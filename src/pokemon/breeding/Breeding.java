@@ -3,8 +3,8 @@ package pokemon.breeding;
 import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
-import item.Item;
 import item.ItemNamesies;
+import item.hold.HoldItem;
 import item.hold.IncenseItem;
 import item.hold.PowerItem;
 import pokemon.Gender;
@@ -55,8 +55,8 @@ public class Breeding {
         PokemonInfo babyInfo = mommy.getPokemonInfo().getBaseEvolution().getInfo();
         if (babyInfo.isIncenseBaby()) {
             boolean incenseItemHeld = false;
-            Item[] holdItems = { daddy.getActualHeldItem(), mommy.getActualHeldItem() };
-            for (Item holdItem : holdItems) {
+            HoldItem[] holdItems = { daddy.getActualHeldItem(), mommy.getActualHeldItem() };
+            for (HoldItem holdItem : holdItems) {
                 if (holdItem instanceof IncenseItem) {
                     IncenseItem incenseItem = (IncenseItem)holdItem;
                     if (babyInfo.namesies() == incenseItem.getBaby()) {
@@ -78,7 +78,7 @@ public class Breeding {
         List<Stat> remainingStats = new ArrayList<>();
         remainingStats.addAll(Stat.STATS);
 
-        List<Item> parentItems = Arrays.asList(
+        List<HoldItem> parentItems = Arrays.asList(
                 daddy.getActualHeldItem(),
                 mommy.getActualHeldItem()
         );
@@ -94,7 +94,7 @@ public class Breeding {
         int[] IVs = new int[Stat.NUM_STATS];
         Arrays.fill(IVs, -1);
 
-        for (Item item : parentItems) {
+        for (HoldItem item : parentItems) {
             if (item instanceof PowerItem) {
                 Stat stat = ((PowerItem)item).powerStat();
                 IVs[stat.index()] = getRandomParent(daddy, mommy).getIV(stat.index());
@@ -159,8 +159,8 @@ public class Breeding {
     }
 
     public Nature getBabyNature(ActivePokemon daddy, ActivePokemon mommy) {
-        Item daddysItem = daddy.getActualHeldItem();
-        Item mommysItem = mommy.getActualHeldItem();
+        HoldItem daddysItem = daddy.getActualHeldItem();
+        HoldItem mommysItem = mommy.getActualHeldItem();
 
         if (daddysItem.namesies() == ItemNamesies.EVERSTONE && mommysItem.namesies() == ItemNamesies.EVERSTONE) {
             return getRandomParent(daddy, mommy).getNature();

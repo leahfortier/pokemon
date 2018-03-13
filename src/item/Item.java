@@ -38,7 +38,6 @@ import battle.effect.EffectInterfaces.TerrainCastEffect;
 import battle.effect.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.EffectInterfaces.WeatherExtendingEffect;
 import battle.effect.EffectNamesies;
-import battle.effect.InvokeEffect;
 import battle.effect.MessageGetter;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
@@ -96,7 +95,6 @@ import trainer.Trainer;
 import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
-import util.serialization.Serializable;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -105,7 +103,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Item implements ItemInterface, InvokeEffect, Comparable<Item>, Serializable {
+public abstract class Item implements ItemInterface, Comparable<Item> {
     private static final long serialVersionUID = 1L;
 
     protected final ItemNamesies namesies;
@@ -179,11 +177,6 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
     @Override
     public int hashCode() {
         return this.getName().hashCode();
-    }
-
-    @Override
-    public Item getItem() {
-        return this;
     }
 
     public static boolean isItem(String itemName) {
@@ -1583,7 +1576,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
             return victim.getName() + "s " + this.getName() + " latched onto " + user.getName() + "!";
         }
 

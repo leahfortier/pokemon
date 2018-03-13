@@ -3,13 +3,19 @@ package item.hold;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.CastSource;
+import battle.effect.holder.ItemHolder;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import item.ItemInterface;
 import item.berry.Berry;
 import message.Messages;
 import pokemon.ability.AbilityNamesies;
 
-public interface HoldItem extends ItemInterface {
+public interface HoldItem extends ItemInterface, ItemHolder {
+    @Override
+    default HoldItem getItem() {
+        return this;
+    }
+
     default void consumeItemWithoutEffects(Battle b, ActivePokemon holder) {
         PokemonEffectNamesies.CONSUMED_ITEM.getEffect().cast(b, holder, holder, CastSource.HELD_ITEM, false);
     }

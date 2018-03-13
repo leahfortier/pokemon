@@ -53,7 +53,6 @@ import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
-import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;
 import item.hold.HoldItem;
@@ -3499,16 +3498,17 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // This is so fucking stupid that it consumes the Berry upon use, like srsly what the fuck is the fucking point of this move
-            if (user.getHeldItem(b) instanceof Berry) {
-                user.consumeItem(b);
+            HoldItem item = user.getHeldItem(b);
+            if (item instanceof Berry) {
+                item.consumeItemWithoutEffects(b, user);
             }
         }
 
         @Override
         public Type getType(Battle b, ActivePokemon user) {
-            Item i = user.getHeldItem(b);
-            if (i instanceof Berry) {
-                return ((Berry)i).naturalGiftType();
+            HoldItem item = user.getHeldItem(b);
+            if (item instanceof Berry) {
+                return ((Berry)item).naturalGiftType();
             }
 
             return super.type;
@@ -4094,7 +4094,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
             return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
         }
     }
@@ -7747,7 +7747,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
             return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
         }
     }
@@ -8351,7 +8351,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public Type getType(Battle b, ActivePokemon user) {
-            Item item = user.getHeldItem(b);
+            HoldItem item = user.getHeldItem(b);
             if (item instanceof PlateItem) {
                 return ((PlateItem)item).getType();
             }
@@ -8384,10 +8384,10 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Item heldItem = victim.getHeldItem(b);
+            HoldItem heldItem = victim.getHeldItem(b);
             if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
                 Messages.add(victim.getName() + "'s " + heldItem.getName() + " was burned!");
-                victim.consumeItem(b);
+                heldItem.consumeItemWithoutEffects(b, victim);
             }
         }
     }
@@ -8774,7 +8774,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public Type getType(Battle b, ActivePokemon user) {
-            Item item = user.getHeldItem(b);
+            HoldItem item = user.getHeldItem(b);
             if (item instanceof DriveItem) {
                 return ((DriveItem)item).getType();
             }
@@ -8796,7 +8796,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public Type getType(Battle b, ActivePokemon user) {
-            Item item = user.getHeldItem(b);
+            HoldItem item = user.getHeldItem(b);
             if (item instanceof MemoryItem) {
                 return ((MemoryItem)item).getType();
             }
@@ -8840,7 +8840,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // TODO: Make sure this is still working -- consumeItem used to be in endAttack
-            HoldItem item = (HoldItem)user.getHeldItem(b);
+            HoldItem item = user.getHeldItem(b);
             item.flingEffect(b, victim);
             item.consumeItemWithoutEffects(b, user);
         }
@@ -8852,7 +8852,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
-            return ((HoldItem)me.getHeldItem(b)).flingDamage();
+            return me.getHeldItem(b).flingDamage();
         }
 
         @Override
@@ -9197,7 +9197,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
             return user.getName() + " gave " + victim.getName() + " its " + userItem.getName() + "!";
         }
 
@@ -9224,7 +9224,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
             return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!";
         }
 
@@ -9251,7 +9251,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
             return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!";
         }
 
@@ -9313,8 +9313,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Item restored = ((ItemHolder)victim.getEffect(PokemonEffectNamesies.CONSUMED_ITEM)).getItem();
-            victim.giveItem((HoldItem)restored);
+            HoldItem restored = ((ItemHolder)victim.getEffect(PokemonEffectNamesies.CONSUMED_ITEM)).getItem();
+            victim.giveItem(restored);
             Messages.add(victim.getName() + "'s " + restored.getName() + " was restored!");
         }
 

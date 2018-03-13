@@ -58,6 +58,7 @@ import battle.effect.holder.ItemHolder;
 import battle.effect.status.StatusNamesies;
 import item.Item;
 import item.ItemNamesies;
+import item.hold.HoldItem;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
@@ -1155,7 +1156,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
     static class ChangeItem extends PokemonEffect implements ItemHolder {
         private static final long serialVersionUID = 1L;
 
-        private Item item;
+        private HoldItem item;
 
         ChangeItem() {
             super(PokemonEffectNamesies.CHANGE_ITEM, -1, -1, false, false);
@@ -1168,7 +1169,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public Item getItem() {
+        public HoldItem getItem() {
             return item;
         }
     }
@@ -2692,7 +2693,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
     static class ConsumedItem extends PokemonEffect implements ItemHolder {
         private static final long serialVersionUID = 1L;
 
-        private Item consumed;
+        private HoldItem consumed;
 
         ConsumedItem() {
             super(PokemonEffectNamesies.CONSUMED_ITEM, -1, -1, false, false);
@@ -2706,7 +2707,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public Item getItem() {
+        public HoldItem getItem() {
             return consumed;
         }
     }

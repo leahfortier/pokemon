@@ -578,4 +578,34 @@ public class AbilityTest extends BaseTest {
         Assert.assertFalse(attacking.hasStatus());
         Assert.assertFalse(defending.hasStatus());
     }
+
+    @Test
+    public void harvestTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.HARVEST);
+
+        // Cell Battery increases attack when hit by an electric type move and is then consumed
+        // Make sure it does not reappear even in harsh sunlight
+        defending.withItem(ItemNamesies.CELL_BATTERY);
+        battle.fight(AttackNamesies.NUZZLE, AttackNamesies.SUNNY_DAY);
+        new TestStages().test(attacking);
+        new TestStages().set(Stat.ATTACK, 1).test(defending);
+        Assert.assertFalse(defending.isHoldingItem(battle));
+        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+
+        battle.emptyHeal();
+        battle.clearAllEffects();
+
+        // Give a Rawst Berry and then burn the target
+        // Rawst Berry will heal its burn and then be consumed
+        // Harvest will then restore the berry since the sunlight is strong
+        defending.giveItem(ItemNamesies.RAWST_BERRY);
+        battle.fight(AttackNamesies.WILL_O_WISP, AttackNamesies.SUNNY_DAY);
+        Assert.assertFalse(defending.hasStatus());
+        Assert.assertTrue(defending.isHoldingItem(battle, ItemNamesies.RAWST_BERRY));
+        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+    }
 }

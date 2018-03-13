@@ -30,7 +30,6 @@ import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
-import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;
 import item.berry.GainableEffectBerry;
@@ -151,7 +150,7 @@ public class ActivePokemon extends PartyPokemon {
         }
 
         // Add EVs
-        Item item = this.getHeldItem(b);
+        HoldItem item = this.getHeldItem(b);
         int[] vals = dead.getPokemonInfo().getGivenEVs();
         if (item instanceof EVItem) {
             vals = ((EVItem)item).getEVs(vals);
@@ -660,7 +659,7 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public void stealBerry(Battle b, ActivePokemon victim) {
-        HoldItem item = (HoldItem)victim.getHeldItem(b);
+        HoldItem item = victim.getHeldItem(b);
         if (item instanceof Berry && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
             Messages.add(this.getName() + " ate " + victim.getName() + "'s " + item.getName() + "!");
             item.consumeItemWithoutEffects(b, victim);
@@ -686,7 +685,7 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public void consumeItem(Battle b) {
-        HoldItem consumed = (HoldItem)this.getHeldItem(b);
+        HoldItem consumed = this.getHeldItem(b);
         consumed.consumeItemWithoutEffects(b, this);
 
         if (consumed instanceof Berry) {
@@ -695,7 +694,7 @@ public class ActivePokemon extends PartyPokemon {
 
         ActivePokemon other = b.getOtherPokemon(this);
         if (other.hasAbility(AbilityNamesies.PICKUP) && !other.isHoldingItem(b)) {
-            other.giveItem((HoldItem)consumed);
+            other.giveItem(consumed);
             Messages.add(other.getName() + " picked up " + getName() + "'s " + consumed.getName() + "!");
         }
     }
@@ -706,21 +705,21 @@ public class ActivePokemon extends PartyPokemon {
         this.effects.remove(PokemonEffectNamesies.CHANGE_ITEM);
     }
 
-    public Item getHeldItem(Battle b) {
+    public HoldItem getHeldItem(Battle b) {
         if (b == null) {
             return getActualHeldItem();
         }
 
         if (ItemBlockerEffect.containsItemBlockerEffect(b, this)) {
-            return ItemNamesies.NO_ITEM.getItem();
+            return (HoldItem)ItemNamesies.NO_ITEM.getItem();
         }
 
         // Check if the Pokemon has had its item changed during the battle
         PokemonEffect changeItem = getEffect(PokemonEffectNamesies.CHANGE_ITEM);
-        Item item = changeItem == null ? getActualHeldItem() : ((ItemHolder)changeItem).getItem();
+        HoldItem item = changeItem == null ? getActualHeldItem() : ((ItemHolder)changeItem).getItem();
 
         if (OpponentItemBlockerEffect.checkOpponentItemBlockerEffect(b, b.getOtherPokemon(this), item.namesies())) {
-            return ItemNamesies.NO_ITEM.getItem();
+            return (HoldItem)ItemNamesies.NO_ITEM.getItem();
         }
 
         return item;
