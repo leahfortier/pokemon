@@ -3,7 +3,7 @@ package pokemon.evolution;
 import battle.ActivePokemon;
 import item.ItemNamesies;
 import map.daynight.DayCycle;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import util.string.StringUtils;
 
 public class TimeEvolution extends Evolution {

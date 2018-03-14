@@ -20,7 +20,7 @@ import item.bag.Bag;
 import main.Game;
 import main.Global;
 import map.Direction;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 import trainer.Trainer;
 import trainer.player.Player;
 import type.Type;

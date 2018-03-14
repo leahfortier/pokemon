@@ -3,7 +3,7 @@ package map.overworld;
 import battle.ActivePokemon;
 import item.ItemNamesies;
 import main.Global;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import util.RandomUtils;
 import util.serialization.Serializable;

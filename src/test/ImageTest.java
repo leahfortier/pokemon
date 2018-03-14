@@ -10,7 +10,7 @@ import item.bag.BagCategory;
 import map.overworld.TerrainType;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.PokemonInfo;
+import pokemon.species.PokemonInfo;
 import pokemon.breeding.Eggy;
 import trainer.player.medal.Medal;
 import type.Type;

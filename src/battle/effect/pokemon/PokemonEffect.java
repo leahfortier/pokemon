@@ -62,7 +62,7 @@ import item.hold.HoldItem;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.Gender;
+import pokemon.active.Gender;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;

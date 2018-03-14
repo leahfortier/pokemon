@@ -3,7 +3,7 @@ package test.battle;
 import battle.attack.AttackNamesies;
 import battle.effect.EffectNamesies;
 import item.ItemNamesies;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import test.TestPokemon;
 import util.string.StringUtils;

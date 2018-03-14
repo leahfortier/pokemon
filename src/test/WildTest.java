@@ -7,7 +7,7 @@ import map.overworld.WildEncounter;
 import map.overworld.WildHoldItem;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import trainer.player.Player;
 

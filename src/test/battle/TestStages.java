@@ -2,7 +2,7 @@ package test.battle;
 
 import battle.Stages;
 import org.junit.Assert;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import pokemon.Stat;
 import test.TestPokemon;
 

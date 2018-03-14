@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import battle.effect.EffectInterfaces.WildEncounterAlterer;
 import battle.effect.EffectInterfaces.WildEncounterSelector;
 import main.Game;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import util.GeneralUtils;
 
 import java.util.Arrays;

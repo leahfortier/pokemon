@@ -5,7 +5,7 @@ import battle.Battle;
 import battle.effect.EffectInterfaces.SwitchOutEffect;
 import item.bag.Bag;
 import main.Global;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 import util.RandomUtils;
 import util.serialization.Serializable;
 

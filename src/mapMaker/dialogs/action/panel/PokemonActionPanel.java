@@ -4,8 +4,8 @@ import item.ItemNamesies;
 import mapMaker.dialogs.action.ActionPanel;
 import pattern.PokemonMatcher;
 import pattern.action.ActionMatcher.GivePokemonActionMatcher;
-import pokemon.PartyPokemon;
-import pokemon.PokemonNamesies;
+import pokemon.active.PartyPokemon;
+import pokemon.species.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
 import util.GuiUtils;
 

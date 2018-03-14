@@ -4,8 +4,8 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import main.Global;
 import pattern.PokemonMatcher;
-import pokemon.PartyPokemon;
-import pokemon.PokemonNamesies;
+import pokemon.active.PartyPokemon;
+import pokemon.species.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
 import util.GuiUtils;
 

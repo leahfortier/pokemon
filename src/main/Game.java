@@ -13,7 +13,7 @@ import item.ItemNamesies;
 import map.MapName;
 import message.Messages;
 import pattern.map.MapTransitionMatcher;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import trainer.player.Player;
 
 import java.awt.Graphics;

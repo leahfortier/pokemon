@@ -2,8 +2,8 @@ package teamplanner;
 
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
-import pokemon.PokemonInfo;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonNamesies;
 import pokemon.Stat;
 import type.PokeType;
 import type.Type;

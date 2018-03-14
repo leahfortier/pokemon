@@ -1,4 +1,4 @@
-package pokemon;
+package pokemon.species;
 
 public enum GrowthRate {
     FAST("Fast", level -> (int)(.8*Math.pow(level, 3))),

@@ -3,8 +3,8 @@ package pokemon.evolution;
 import battle.ActivePokemon;
 import item.ItemNamesies;
 import main.Global;
-import pokemon.Gender;
-import pokemon.PokemonNamesies;
+import pokemon.active.Gender;
+import pokemon.species.PokemonNamesies;
 import util.string.StringUtils;
 
 class GenderEvolution extends Evolution {

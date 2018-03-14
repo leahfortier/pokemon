@@ -4,7 +4,7 @@ import draw.button.Button;
 import item.use.MoveUseItem;
 import item.use.PlayerUseItem;
 import main.Game;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 
 import java.awt.Graphics;
 

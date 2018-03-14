@@ -1,6 +1,6 @@
 package trainer;
 
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 
 public class SimulatedPlayer extends PlayerTrainer {
     private static final long serialVersionUID = 1L;

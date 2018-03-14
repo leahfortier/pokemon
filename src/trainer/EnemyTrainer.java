@@ -3,7 +3,7 @@ package trainer;
 import battle.ActivePokemon;
 import battle.Battle.EnterBattleMessageGetter;
 import main.Global;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 
 public class EnemyTrainer extends Trainer implements Opponent {
     private static final long serialVersionUID = 1L;

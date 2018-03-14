@@ -2,8 +2,8 @@ package trainer.player.pokedex;
 
 import battle.ActivePokemon;
 import main.Game;
-import pokemon.PokemonInfo;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonNamesies;
 import util.serialization.Serializable;
 
 import java.util.EnumMap;

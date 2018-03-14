@@ -2,8 +2,8 @@ package pokemon.evolution;
 
 import battle.ActivePokemon;
 import item.ItemNamesies;
-import pokemon.PokemonInfo;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonNamesies;
 
 public abstract class BaseEvolution extends Evolution {
     private static final long serialVersionUID = 1L;

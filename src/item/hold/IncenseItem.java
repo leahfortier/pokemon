@@ -1,6 +1,6 @@
 package item.hold;
 
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 
 public interface IncenseItem extends HoldItem {
     // Huggies and kissies for mommy and daddy

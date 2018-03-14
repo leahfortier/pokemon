@@ -8,7 +8,7 @@ import battle.attack.MoveType;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.battle.weather.WeatherNamesies;
 import org.junit.Assert;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import test.TestCharacter;
 import test.TestPokemon;
 import test.TestUtils;

@@ -6,7 +6,7 @@ import battle.Battle.EnterBattleMessageGetter;
 import battle.effect.EffectList;
 import battle.effect.team.TeamEffect;
 import battle.effect.team.TeamEffectNamesies;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 
 import java.util.List;
 import java.util.stream.Collectors;

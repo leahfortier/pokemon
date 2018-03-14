@@ -6,7 +6,7 @@ import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import test.BaseTest;

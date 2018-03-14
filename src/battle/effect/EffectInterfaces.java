@@ -25,7 +25,7 @@ import map.overworld.WildEncounterInfo;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
-import pokemon.PokemonInfo;
+import pokemon.species.PokemonInfo;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;

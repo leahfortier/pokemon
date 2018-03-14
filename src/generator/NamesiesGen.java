@@ -1,7 +1,7 @@
 package generator;
 
 import main.Global;
-import pokemon.PokemonInfo;
+import pokemon.species.PokemonInfo;
 import util.file.FileIO;
 import util.string.StringAppender;
 import util.string.StringUtils;

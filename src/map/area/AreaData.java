@@ -3,7 +3,7 @@ package map.area;
 import main.Game;
 import map.overworld.TerrainType;
 import map.weather.WeatherState;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import sound.SoundTitle;
 import util.serialization.Serializable;
 import util.string.StringUtils;

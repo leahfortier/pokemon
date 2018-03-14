@@ -2,7 +2,7 @@ package mapMaker.dialogs.action.panel;
 
 import mapMaker.dialogs.action.ActionPanel;
 import pattern.action.ActionMatcher.TradePokemonActionMatcher;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
 import util.GuiUtils;
 

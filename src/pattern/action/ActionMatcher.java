@@ -10,7 +10,7 @@ import map.triggers.UseItemTrigger;
 import map.triggers.map.MoveNPCTrigger;
 import mapMaker.dialogs.action.ActionType;
 import pattern.PokemonMatcher;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import util.serialization.JsonMatcher;
 
 public interface ActionMatcher extends JsonMatcher {

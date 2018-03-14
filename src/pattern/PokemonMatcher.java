@@ -4,11 +4,11 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import item.ItemNamesies;
 import main.Global;
-import pokemon.Gender;
-import pokemon.Nature;
-import pokemon.PartyPokemon;
-import pokemon.PokemonInfo;
-import pokemon.PokemonNamesies;
+import pokemon.active.Gender;
+import pokemon.active.Nature;
+import pokemon.active.PartyPokemon;
+import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonNamesies;
 import util.GeneralUtils;
 import util.serialization.JsonMatcher;
 

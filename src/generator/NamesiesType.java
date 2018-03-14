@@ -8,7 +8,7 @@ import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
 import util.file.Folder;
 

@@ -14,7 +14,7 @@ import main.Game;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 import trainer.player.Player;
 import util.serialization.Serializable;
 

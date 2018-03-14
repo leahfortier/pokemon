@@ -1,6 +1,7 @@
-package pokemon;
+package pokemon.active;
 
 import battle.ActivePokemon;
+import pokemon.species.PokemonInfo;
 import util.RandomUtils;
 
 import java.awt.Color;

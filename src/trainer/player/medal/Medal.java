@@ -1,7 +1,7 @@
 package trainer.player.medal;
 
 import main.Global;
-import pokemon.PokemonInfo;
+import pokemon.species.PokemonInfo;
 import type.Type;
 import util.string.PokeString;
 

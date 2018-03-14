@@ -2,7 +2,7 @@ package map.triggers;
 
 import main.Game;
 import pattern.PokemonMatcher;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 
 public class GivePokemonTrigger extends Trigger {
     private final PokemonMatcher pokemonMatcher;

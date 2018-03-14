@@ -3,7 +3,7 @@ package pokemon.evolution;
 import battle.ActivePokemon;
 import item.ItemNamesies;
 import main.Game;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 
 // SHEDDDIIINNNJJJAAAAAA
 public class ExtraEvolution extends Evolution {

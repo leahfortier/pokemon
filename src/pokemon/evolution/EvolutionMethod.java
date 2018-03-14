@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import item.ItemNamesies;
 import main.Game;
 import main.Global;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 
 public enum EvolutionMethod {
     LEVEL,

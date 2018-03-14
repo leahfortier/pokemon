@@ -22,7 +22,7 @@ import message.MessageUpdateType;
 import message.Messages;
 import pattern.SimpleMapTransition;
 import pattern.action.UpdateMatcher;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.DayCareCenter;
 import pokemon.breeding.Eggy;

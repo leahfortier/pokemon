@@ -1,4 +1,4 @@
-package pokemon;
+package pokemon.active;
 
 import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
@@ -12,10 +12,14 @@ import item.hold.HoldItem;
 import main.Game;
 import main.Global;
 import pattern.PokemonMatcher;
+import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonNamesies;
+import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.Eggy;
 import pokemon.evolution.BaseEvolution;
+import pokemon.species.LevelUpMove;
 import trainer.player.medal.Medal;
 import trainer.player.medal.MedalCase;
 import trainer.player.medal.MedalTheme;

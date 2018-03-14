@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import main.Game;
 import main.Global;
 import message.Messages;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 import trainer.player.Player;
 import trainer.player.medal.MedalTheme;
 import util.serialization.Serializable;

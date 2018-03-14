@@ -1,4 +1,4 @@
-package pokemon;
+package pokemon.species;
 
 import util.string.StringUtils;
 

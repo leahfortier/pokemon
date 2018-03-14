@@ -2,7 +2,7 @@ package pokemon.evolution;
 
 import battle.ActivePokemon;
 import item.ItemNamesies;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import pokemon.Stat;
 
 class StatEvolution extends Evolution {

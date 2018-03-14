@@ -15,7 +15,7 @@ import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
 import map.Direction;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 import pokemon.Stat;
 import pokemon.breeding.Eggy;
 import trainer.Trainer;

@@ -2,8 +2,8 @@ package generator;
 
 import generator.format.InputFormatter;
 import generator.interfaces.InterfaceGen;
-import pokemon.PokemonInfo;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonNamesies;
 import util.file.FileIO;
 import util.file.FileName;
 import util.string.StringAppender;

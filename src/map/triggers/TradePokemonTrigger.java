@@ -3,7 +3,7 @@ package map.triggers;
 import gui.view.TradeView;
 import gui.view.ViewMode;
 import main.Game;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 
 public class TradePokemonTrigger extends Trigger {
     private final PokemonNamesies tradePokemon;

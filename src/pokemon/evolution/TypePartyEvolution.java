@@ -3,7 +3,7 @@ package pokemon.evolution;
 import battle.ActivePokemon;
 import item.ItemNamesies;
 import main.Game;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import type.Type;
 
 import java.util.List;

@@ -7,11 +7,11 @@ import item.ItemNamesies;
 import item.hold.HoldItem;
 import item.hold.IncenseItem;
 import item.hold.PowerItem;
-import pokemon.Gender;
-import pokemon.IndividualValues;
-import pokemon.Nature;
-import pokemon.PokemonInfo;
-import pokemon.PokemonNamesies;
+import pokemon.active.Gender;
+import pokemon.active.IndividualValues;
+import pokemon.active.Nature;
+import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonNamesies;
 import pokemon.Stat;
 import util.RandomUtils;
 

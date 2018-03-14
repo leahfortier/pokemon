@@ -9,7 +9,7 @@ import input.InputControl;
 import main.Game;
 import message.MessageUpdate;
 import message.MessageUpdateType;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.player.Player;

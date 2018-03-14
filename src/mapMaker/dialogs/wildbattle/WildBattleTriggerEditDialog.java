@@ -5,7 +5,7 @@ import map.overworld.WildEncounterInfo;
 import mapMaker.dialogs.ConditionPanel;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.WildBattleMatcher;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 import util.GeneralUtils;
 import util.GuiUtils;
 

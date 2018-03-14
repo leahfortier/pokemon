@@ -16,7 +16,7 @@ import gui.TileSet;
 import input.InputControl;
 import main.Game;
 import map.Direction;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 import pokemon.Stat;
 import pokemon.breeding.Eggy;
 import trainer.Trainer;

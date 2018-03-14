@@ -15,7 +15,7 @@ import main.Global;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
-import pokemon.PokemonInfo;
+import pokemon.species.PokemonInfo;
 import pokemon.Stat;
 import pokemon.breeding.Eggy;
 import pokemon.evolution.BaseEvolution;

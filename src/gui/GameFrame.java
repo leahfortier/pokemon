@@ -6,7 +6,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
-import pokemon.PokemonInfo;
+import pokemon.species.PokemonInfo;
 import util.FontMetrics;
 import util.RandomUtils;
 import util.TimeUtils;

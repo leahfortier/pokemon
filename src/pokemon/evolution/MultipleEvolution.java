@@ -2,7 +2,7 @@ package pokemon.evolution;
 
 import battle.ActivePokemon;
 import item.ItemNamesies;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import util.RandomUtils;
 
 import java.util.ArrayList;

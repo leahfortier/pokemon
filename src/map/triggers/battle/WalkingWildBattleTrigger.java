@@ -11,7 +11,7 @@ import map.triggers.Trigger;
 import message.MessageUpdate;
 import message.Messages;
 import pattern.map.WildBattleMatcher;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import util.RandomUtils;
 
 public class WalkingWildBattleTrigger extends Trigger {

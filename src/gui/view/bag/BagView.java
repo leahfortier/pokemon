@@ -30,7 +30,7 @@ import map.Direction;
 import message.MessageUpdate;
 import message.Messages;
 import message.Messages.MessageState;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 import trainer.Trainer;
 import trainer.player.Player;
 import type.PokeType;

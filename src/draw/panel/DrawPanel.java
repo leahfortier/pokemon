@@ -13,7 +13,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Global;
 import map.Direction;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 import type.PokeType;
 import util.FontMetrics;
 import util.Point;

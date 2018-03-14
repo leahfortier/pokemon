@@ -2,7 +2,7 @@ package pokemon.evolution;
 
 import battle.ActivePokemon;
 import item.ItemNamesies;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 
 public class NoEvolution extends Evolution {
     private static final long serialVersionUID = 1L;

@@ -1,5 +1,6 @@
-package pokemon;
+package pokemon.active;
 
+import pokemon.Stat;
 import util.RandomUtils;
 import util.serialization.Serializable;
 

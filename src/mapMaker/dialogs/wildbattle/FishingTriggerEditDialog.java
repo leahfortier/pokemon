@@ -3,7 +3,7 @@ package mapMaker.dialogs.wildbattle;
 import map.overworld.WildEncounterInfo;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.FishingMatcher;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 import util.GuiUtils;
 
 import javax.swing.JButton;

@@ -6,7 +6,7 @@ import map.triggers.Trigger;
 import pattern.PokemonMatcher;
 import pattern.action.EntityActionMatcher.BattleActionMatcher;
 import pattern.action.UpdateMatcher;
-import pokemon.PartyPokemon;
+import pokemon.active.PartyPokemon;
 import trainer.EnemyTrainer;
 import util.RandomUtils;
 

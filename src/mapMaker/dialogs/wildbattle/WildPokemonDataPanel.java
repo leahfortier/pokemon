@@ -1,7 +1,7 @@
 package mapMaker.dialogs.wildbattle;
 
 import map.overworld.WildEncounterInfo;
-import pokemon.PokemonNamesies;
+import pokemon.species.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
 import util.GuiUtils;
 

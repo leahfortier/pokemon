@@ -1,8 +1,8 @@
 package type;
 
 import org.jetbrains.annotations.NotNull;
-import pokemon.PartyPokemon;
-import pokemon.PokemonInfo;
+import pokemon.active.PartyPokemon;
+import pokemon.species.PokemonInfo;
 import util.serialization.Serializable;
 
 import java.awt.Color;
