@@ -14,7 +14,6 @@ import util.file.FileIO.NullOutputStream;
 import util.file.FileName;
 import util.file.Folder;
 import util.string.StringAppender;
-import util.string.StringUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -326,7 +325,7 @@ public class UpdateGen {
             int numEvolutions = in.nextInt(); in.nextLine();
             return new StringAppender(type + " " + numEvolutions)
                     .appendLine()
-                    .appendJoin(StringUtils.empty(), numEvolutions, index -> readEvolution(in))
+                    .appendJoin("", numEvolutions, index -> readEvolution(in))
                     .toString();
         } else {
             return type + in.nextLine() + "\n";
@@ -340,7 +339,7 @@ public class UpdateGen {
     private static String readHoldItems(Scanner in) {
         int num = in.nextInt(); in.nextLine();
         return new StringAppender(num + "\n")
-                .appendJoin(StringUtils.empty(), num, index -> in.nextLine().trim() + "\n")
+                .appendJoin("", num, index -> in.nextLine().trim() + "\n")
                 .toString();
     }
 
@@ -357,9 +356,9 @@ public class UpdateGen {
 
         StringAppender shubs = new StringAppender();
         for (char c : nonShubby.toCharArray()) {
-            if (StringUtils.isLower(c)) {
+            if (Character.isLowerCase(c)) {
                 shubs.append((char)(AL_BHED_PRIMER[c - 'a'] - 'A' + 'a'));
-            } else if (StringUtils.isUpper(c)) {
+            } else if (Character.isUpperCase(c)) {
                 shubs.append(AL_BHED_PRIMER[c - 'A']);
             } else {
                 shubs.append(c);

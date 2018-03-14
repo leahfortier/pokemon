@@ -77,8 +77,8 @@ class InterfaceMethod {
     InterfaceMethod(ClassFields fields) {
         this.interfaceName = fields.getName();
 
-        this.parameters = StringUtils.empty();
-        this.typelessParameters = StringUtils.empty();
+        this.parameters = "";
+        this.typelessParameters = "";
         this.deadsies = new ArrayList<>();
 
         this.readFields(fields);
@@ -286,7 +286,7 @@ class InterfaceMethod {
 
     String writeInterfaceMethod() {
         if (StringUtils.isNullOrEmpty(this.returnType) || StringUtils.isNullOrEmpty(this.methodName)) {
-            return StringUtils.empty();
+            return "";
         }
 
         final StringAppender interfaceMethod = new StringAppender();
@@ -313,7 +313,7 @@ class InterfaceMethod {
 
     String writeInvokeMethod() {
         if (this.invokeMethod == null) {
-            return StringUtils.empty();
+            return "";
         }
 
         return this.invokeMethod.writeInvokeMethod(this);

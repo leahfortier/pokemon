@@ -24,26 +24,6 @@ public class StringUtils {
         return isNullOrWhiteSpace(s) ? null : s;
     }
 
-    public static String empty() {
-        return "";
-    }
-
-    public static boolean isSpecial(char c) {
-        return !isLower(c) && !isUpper(c) && !isNumber(c) && c != '_';
-    }
-
-    public static boolean isUpper(char c) {
-        return c >= 'A' && c <= 'Z';
-    }
-
-    public static boolean isLower(char c) {
-        return c >= 'a' && c <= 'z';
-    }
-
-    public static boolean isNumber(char c) {
-        return c >= '0' && c <= '9';
-    }
-
     public static String trimSuffix(String s, String suffix) {
         if (s.endsWith(suffix)) {
             return s.substring(0, s.length() - suffix.length());
@@ -54,7 +34,7 @@ public class StringUtils {
 
     public static String articleString(final String s) {
         if (isNullOrEmpty(s)) {
-            return empty();
+            return "";
         }
 
         boolean vowelStart = (s.charAt(0) + "").matches("[AEIOU]");
@@ -80,10 +60,11 @@ public class StringUtils {
     //   x-scissor -> X-Scissor
     // For all upper-case words first do toLowercase
     public static String properCase(String string) {
-        string = string.trim();
-        if (isNullOrEmpty(string)) {
-            return empty();
+        if (isNullOrWhiteSpace(string)) {
+            return "";
         }
+
+        string = string.trim();
 
         // Split by each delimiter and rejoin in proper case
         // "water stone" -> ["water", "stone"] -> ["Water", "Stone"] -> "Water Stone"
@@ -104,20 +85,20 @@ public class StringUtils {
     // Ex: King's Rock -> KINGS_ROCK
     public static String getNamesiesString(String name) {
         if (isNullOrWhiteSpace(name)) {
-            return empty();
+            return "";
         }
 
         // Convert special characters to their safer version (poke e -> e)
         // Replace delimiters with underscores
         // Remove special characters
-        name = SpecialCharacter.removeSpecialCharacters(name)
+        name = SpecialCharacter.replaceSpecialCharacters(name.trim())
                                .replaceAll("[\\s-]", "_")
                                .replaceAll("['.:]", "");
 
         // Insert an underscore whenever a capital letter comes after a lower-case one
         StringAppender appender = new StringAppender(name);
         for (int i = name.length() - 1; i > 1; i--) {
-            if (isUpper(name.charAt(i)) && isLower(name.charAt(i - 1))) {
+            if (Character.isUpperCase(name.charAt(i)) && Character.isLowerCase(name.charAt(i - 1))) {
                 appender.insert(i, "_");
             }
         }
@@ -132,7 +113,7 @@ public class StringUtils {
         // Convert to proper case (just in CASE)
         // Convert special characters to their safer version (poke e -> e)
         // Remove all non-alphanumeric characters
-        return SpecialCharacter.removeSpecialCharacters(properCase(name))
+        return SpecialCharacter.replaceSpecialCharacters(properCase(name))
                                .replaceAll("[^0-9a-zA-Z]", "");
     }
 

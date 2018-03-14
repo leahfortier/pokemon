@@ -4,7 +4,6 @@ import generator.ClassFields;
 import generator.StuffGen;
 import main.Global;
 import util.string.StringAppender;
-import util.string.StringUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,8 +23,8 @@ class Interface {
     Interface(final Scanner in, final String interfaceName) {
         this.interfaceName = interfaceName;
 
-        this.headerComments = StringUtils.empty();
-        this.extendsInterfaces = StringUtils.empty();
+        this.headerComments = "";
+        this.extendsInterfaces = "";
         this.methods = new LinkedList<>();
 
         readInterface(in);
@@ -78,11 +77,11 @@ class Interface {
         final String superClass = this.extendsInterfaces;
         final String interfaces = null;
         final String extraFields = new StringAppender()
-                .appendJoin(StringUtils.empty(), this.methods, InterfaceMethod::writeInterfaceMethod)
+                .appendJoin("", this.methods, InterfaceMethod::writeInterfaceMethod)
                 .toString();
         final String constructor = null;
         final String additional = new StringAppender()
-                .appendJoin(StringUtils.empty(), this.methods, InterfaceMethod::writeInvokeMethod)
+                .appendJoin("", this.methods, InterfaceMethod::writeInvokeMethod)
                 .toString();
         final boolean isInterface = true;
 

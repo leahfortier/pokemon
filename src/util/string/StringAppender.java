@@ -20,7 +20,7 @@ public class StringAppender {
     }
 
     public StringAppender append(char c) {
-        return this.append(String.valueOf(c));
+        return this.append(Character.toString(c));
     }
 
     public StringAppender append(String s) {
@@ -42,7 +42,7 @@ public class StringAppender {
         }
 
         if (delimiter == null) {
-            delimiter = StringUtils.empty();
+            delimiter = "";
         }
 
         if (!this.isEmpty()) {
@@ -59,7 +59,7 @@ public class StringAppender {
         }
 
         if (delimiter == null) {
-            delimiter = StringUtils.empty();
+            delimiter = "";
         }
 
         return this.append(s + delimiter);
@@ -87,7 +87,7 @@ public class StringAppender {
     }
 
     public StringAppender appendLine() {
-        return this.appendLine(StringUtils.empty());
+        return this.appendLine("");
     }
 
     public StringAppender appendFormat(String format, Object... args) {
@@ -96,7 +96,7 @@ public class StringAppender {
 
     // Appends the repeat string numTimes times
     public StringAppender appendRepeat(String repeat, int numTimes) {
-        return this.appendJoin(StringUtils.empty(), numTimes, index -> repeat);
+        return this.appendJoin("", numTimes, index -> repeat);
     }
 
     // Applies the index mapper method numTimes and joins the results by the delimiter and appends
@@ -121,7 +121,7 @@ public class StringAppender {
     // Applies the mapper to the joinees, joins by the delimiter, and appends
     public <T> StringAppender appendJoin(String delimiter, Collection<T> joinees, Function<T, String> mapper) {
         if (delimiter == null) {
-            delimiter = StringUtils.empty();
+            delimiter = "";
         }
 
         return this.append(String.join(delimiter, joinees.stream().map(mapper).collect(Collectors.toList())));

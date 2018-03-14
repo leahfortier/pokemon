@@ -7,7 +7,6 @@ import main.Global;
 import message.Messages;
 import util.RandomUtils;
 import util.serialization.Serializable;
-import util.string.StringUtils;
 
 public abstract class Effect<NamesiesType extends EffectNamesies> implements InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;
@@ -117,7 +116,7 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Inv
     }
 
     protected String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-        return StringUtils.empty();
+        return "";
     }
 
     public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
@@ -125,7 +124,7 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Inv
     }
 
     protected String getSubsideMessage(ActivePokemon p) {
-        return StringUtils.empty();
+        return "";
     }
 
     public boolean isActive() {

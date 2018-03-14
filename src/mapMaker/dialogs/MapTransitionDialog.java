@@ -6,7 +6,6 @@ import mapMaker.MapMaker;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
 import util.GuiUtils;
-import util.string.StringUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -18,7 +17,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MapTransitionDialog extends TriggerDialog<MapTransitionMatcher> {
-    private static final MapName EMPTY_MAP = new MapName("No Destination", StringUtils.empty());
+    private static final MapName EMPTY_MAP = new MapName("No Destination", "");
 
     private final JComboBox<String> entranceComboBox;
     private final JComboBox<PathDirection> directionComboBox;

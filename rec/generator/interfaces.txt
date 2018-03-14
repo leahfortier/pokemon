@@ -50,7 +50,7 @@ BattleEndTurnEffect:
         Header: String getEndTurnMessage(Battle b)
         Default:
             // Definitely not required to have a message here
-            return StringUtils.empty();
+            return "";
             ###
     *
     Method:

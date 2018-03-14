@@ -1,7 +1,6 @@
 package util.serialization;
 
 import main.Global;
-import util.string.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,7 +22,7 @@ public interface Serializable extends java.io.Serializable {
             return Base64.getEncoder().encodeToString(sout.toByteArray());
         } catch (IOException exception) {
             Global.error("IOException occurred while serializing object " + this + ": " + exception);
-            return StringUtils.empty();
+            return "";
         }
     }
 

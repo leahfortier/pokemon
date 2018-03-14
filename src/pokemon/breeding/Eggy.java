@@ -3,7 +3,6 @@ package pokemon.breeding;
 import battle.ActivePokemon;
 import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
-import util.string.StringUtils;
 
 public class Eggy extends PartyPokemon {
     private static final long serialVersionUID = 1L;
@@ -83,7 +82,7 @@ public class Eggy extends PartyPokemon {
 
     @Override
     public String getGenderString() {
-        return StringUtils.empty();
+        return "";
     }
 
     public ActivePokemon hatch(boolean doubleHatch) {

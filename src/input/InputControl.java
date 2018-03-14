@@ -4,7 +4,6 @@ import main.Game;
 import util.Point;
 import util.RandomUtils;
 import util.string.StringAppender;
-import util.string.StringUtils;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -153,7 +152,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
     }
 
     public String getCapturedText() {
-        return capturedText == null ? StringUtils.empty() : capturedText.toString();
+        return capturedText == null ? "" : capturedText.toString();
     }
 
     public String getCapturedText(int maxLength) {

@@ -174,7 +174,7 @@ public class GeneralTest extends BaseTest {
     public void stringAppenderTest() {
         StringAppender stringAppender = new StringAppender();
         Assert.assertTrue(stringAppender.isEmpty());
-        Assert.assertEquals(StringUtils.empty(), stringAppender.toString());
+        Assert.assertEquals("", stringAppender.toString());
         Assert.assertEquals(0, stringAppender.length());
         checkStringAppender("", stringAppender);
         checkStringAppender("a", stringAppender.append("a"));

@@ -18,7 +18,6 @@ import trainer.player.Player;
 import type.PokeType;
 import util.Point;
 import util.string.PokeString;
-import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -33,14 +32,14 @@ class NewPokemonView extends View {
     private static final int TEXT_SPACING = 15;
 
     private static final int BOX_SPACING = (BasicPanels.getMessagePanelY()
-            - BasicPanels.getLabelPanel(0, 0, 30, TEXT_SPACING, StringUtils.empty()).height
-            - BasicPanels.getLabelPanel(0, 0, 24, TEXT_SPACING, StringUtils.empty()).height
-            - 5*BasicPanels.getLabelPanel(0, 0, 22, TEXT_SPACING, StringUtils.empty()).height)/6;
+            - BasicPanels.getLabelPanel(0, 0, 30, TEXT_SPACING, "").height
+            - BasicPanels.getLabelPanel(0, 0, 24, TEXT_SPACING, "").height
+            - 5*BasicPanels.getLabelPanel(0, 0, 22, TEXT_SPACING, "").height)/6;
 
     private static final int IMAGE_PANEL_LENGTH = 3*BOX_SPACING
-            + BasicPanels.getLabelPanel(0, 0, 30, TEXT_SPACING, StringUtils.empty()).height
-            + BasicPanels.getLabelPanel(0, 0, 24, TEXT_SPACING, StringUtils.empty()).height
-            + 2*BasicPanels.getLabelPanel(0, 0, 22, TEXT_SPACING, StringUtils.empty()).height;
+            + BasicPanels.getLabelPanel(0, 0, 30, TEXT_SPACING, "").height
+            + BasicPanels.getLabelPanel(0, 0, 24, TEXT_SPACING, "").height
+            + 2*BasicPanels.getLabelPanel(0, 0, 22, TEXT_SPACING, "").height;
 
     private final DrawPanel canvasPanel;
     private final DrawPanel imagePanel;
@@ -254,7 +253,7 @@ class NewPokemonView extends View {
                 drawButton(g, rightButton, new Color(255, 215, 0), "PC");
                 break;
             case PARTY_SELECTION:
-                BasicPanels.drawFullMessagePanel(g, StringUtils.empty());
+                BasicPanels.drawFullMessagePanel(g, "");
 
                 List<PartyPokemon> party = Game.getPlayer().getTeam();
                 TileSet partyTiles = Game.getData().getPartyTiles();

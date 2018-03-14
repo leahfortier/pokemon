@@ -52,7 +52,7 @@ public class MessageUpdate {
     }
 
     public MessageUpdate() {
-        this(StringUtils.empty());
+        this("");
     }
 
     // Show stat gains

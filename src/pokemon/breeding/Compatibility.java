@@ -3,10 +3,9 @@ package pokemon.breeding;
 import battle.ActivePokemon;
 import util.RandomUtils;
 import util.string.PokeString;
-import util.string.StringUtils;
 
 enum Compatibility {
-    SINGLE(0, StringUtils.empty()),
+    SINGLE(0, ""),
     NO_DICE(0, "They prefer to play with other " + PokeString.POKEMON + " rather than each other."),
     OKAY_I_GUESS(35, "I guess they're okay with each other I guess."),
     HOUSE_ON_FIRE(60, "Those two seem to get along like a house on fire!!!!!");

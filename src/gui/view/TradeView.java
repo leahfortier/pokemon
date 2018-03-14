@@ -24,7 +24,6 @@ import type.PokeType;
 import type.Type;
 import util.FontMetrics;
 import util.string.PokeString;
-import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -219,7 +218,7 @@ public class TradeView extends View {
             this.messagePanel.drawBackground(g);
             this.messagePanel.drawMessage(g, 22, "Which " + PokeString.POKEMON + " would you like to trade?");
 
-            BasicPanels.drawFullMessagePanel(g, StringUtils.empty());
+            BasicPanels.drawFullMessagePanel(g, "");
             for (int i = 0; i < team.size(); i++) {
                 Button button = getTeamButton(i);
                 PartyPokemon pokemon = team.get(i);

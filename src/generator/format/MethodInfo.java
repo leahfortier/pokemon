@@ -107,7 +107,7 @@ public class MethodInfo {
 
     private String writeFunction(String fieldValue, String className, String superClass, InputFormatter inputFormatter) {
         if (this.header == null) {
-            return StringUtils.empty();
+            return "";
         }
 
         if (this.body.isEmpty()) {

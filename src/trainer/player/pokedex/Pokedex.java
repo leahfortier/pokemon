@@ -5,7 +5,6 @@ import main.Game;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import util.serialization.Serializable;
-import util.string.StringUtils;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -59,7 +58,7 @@ public class Pokedex implements Serializable {
         this.setStatus(
                 pokemon.namesies(),
                 PokedexStatus.SEEN,
-                isWildBattle ? Game.getPlayer().getAreaName() : StringUtils.empty()
+                isWildBattle ? Game.getPlayer().getAreaName() : ""
         );
     }
 

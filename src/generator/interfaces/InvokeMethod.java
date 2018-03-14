@@ -17,7 +17,7 @@ abstract class InvokeMethod {
     protected abstract String getDefaultMethodName(InterfaceMethod interfaceMethod);
     protected abstract String getInnerLoop(InterfaceMethod interfaceMethod);
     protected abstract String getPostLoop(InterfaceMethod interfaceMethod);
-    protected String getPreLoop() { return StringUtils.empty(); }
+    protected String getPreLoop() { return ""; }
 
     private String getMethodName(final InterfaceMethod interfaceMethod) {
         if (StringUtils.isNullOrEmpty(this.methodName)) {
@@ -58,7 +58,7 @@ abstract class InvokeMethod {
     }
 
     private String getAdditionalInvokeParameters() {
-        return StringUtils.empty();
+        return "";
     }
 
     private String getInvokeParameters(final InterfaceMethod interfaceMethod) {
@@ -76,7 +76,7 @@ abstract class InvokeMethod {
 
     private String getDeclaration(final InterfaceMethod interfaceMethod) {
         if (passInvokees(interfaceMethod)) {
-            return StringUtils.empty();
+            return "";
         }
 
         return "\n" + interfaceMethod.getInvokeeDeclaration();
@@ -88,7 +88,7 @@ abstract class InvokeMethod {
 
     private String getMoldBreakerDeclaration(final InterfaceMethod interfaceMethod) {
         if (!interfaceMethod.isMoldBreakNullCheck()) {
-            return StringUtils.empty();
+            return "";
         }
 
         return "\n" + interfaceMethod.getMoldBreaker();
@@ -96,7 +96,7 @@ abstract class InvokeMethod {
 
     private String getMoldBreaker(final InterfaceMethod interfaceMethod) {
         if (StringUtils.isNullOrEmpty(interfaceMethod.getMoldBreaker())) {
-            return StringUtils.empty();
+            return "";
         }
 
         return "\n// If this is an ability that is being affected by mold breaker, we don't want to do anything with it\n" +
@@ -145,7 +145,7 @@ abstract class InvokeMethod {
 
         @Override
         protected String getPostLoop(InterfaceMethod interfaceMethod) {
-            return StringUtils.empty();
+            return "";
         }
     }
 

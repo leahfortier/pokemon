@@ -3,7 +3,6 @@ package generator.fieldinfo;
 import generator.format.MethodFormatter;
 import main.Global;
 import util.string.StringAppender;
-import util.string.StringUtils;
 
 import java.util.Scanner;
 
@@ -22,7 +21,7 @@ public class MapField {
         if (value.isEmpty()) {
             value = readMethod(in);
         } else if (value.equals("<Empty>")) {
-            value = StringUtils.empty();
+            value = "";
         }
 
         this.fieldName = key;

@@ -35,7 +35,6 @@ import trainer.WildPokemon;
 import type.PokeType;
 import type.Type;
 import util.RandomUtils;
-import util.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -135,7 +134,7 @@ public final class EffectInterfaces {
 
         default String getEndTurnMessage(Battle b) {
             // Definitely not required to have a message here
-            return StringUtils.empty();
+            return "";
         }
 
         default void applyEndTurn(Battle b) {

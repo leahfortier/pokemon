@@ -9,7 +9,6 @@ import trainer.player.Player;
 import trainer.player.medal.MedalTheme;
 import util.serialization.Serializable;
 import util.string.PokeString;
-import util.string.StringUtils;
 
 public class DayCareCenter implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -44,7 +43,7 @@ public class DayCareCenter implements Serializable {
 
     public String getPokemonPresentMessage() {
         if (first == null && second == null) {
-            return StringUtils.empty();
+            return "";
         }
 
         if (first != null && second != null) {

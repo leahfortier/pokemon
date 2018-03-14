@@ -37,13 +37,13 @@ public class FieldInfo {
             fieldType = split.next();
         }
 
-        String defaultValue = StringUtils.empty();
+        String defaultValue = "";
         if (fieldType.equals("Default")) {
             defaultValue = split.next();
             fieldType = split.next();
         }
 
-        String enumType = StringUtils.empty();
+        String enumType = "";
         if (fieldType.equals("Enum")) {
             enumType = split.next();
         }
@@ -105,7 +105,7 @@ public class FieldInfo {
                 return enumType + "." + enumValue;
             default:
                 Global.error("Invalid variable type " + fieldType);
-                return StringUtils.empty();
+                return "";
         }
     }
 

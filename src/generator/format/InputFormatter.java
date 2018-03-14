@@ -7,7 +7,6 @@ import generator.fieldinfo.InfoList;
 import main.Global;
 import util.file.FileIO;
 import util.file.FileName;
-import util.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -36,7 +35,7 @@ public class InputFormatter {
         body = body.replace("@ClassName", className);
         body = body.replace("@SuperClass", superClass.toUpperCase());
 
-        body = replaceBody(body, fieldValue, StringUtils.empty(), 0, -1);
+        body = replaceBody(body, fieldValue, "", 0, -1);
 
         int index = 0;
         String[] mcSplit = fieldValue.split(" ");
@@ -89,7 +88,7 @@ public class InputFormatter {
 
     public String getImplementsString(List<String> interfaces) {
         if (interfaces.isEmpty()) {
-            return StringUtils.empty();
+            return "";
         }
 
         return "implements " + String.join(", ", interfaces);
@@ -101,7 +100,7 @@ public class InputFormatter {
 
     public String getFailure(ClassFields fields, String superClass) {
         if (failureInfo == null) {
-            return StringUtils.empty();
+            return "";
         }
 
         return failureInfo.writeFailure(fields, superClass, this);

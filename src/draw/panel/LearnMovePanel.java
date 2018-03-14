@@ -10,7 +10,6 @@ import input.InputControl;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import util.Point;
-import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -145,9 +144,7 @@ public class LearnMovePanel {
     public void draw(Graphics g) {
         BasicPanels.drawFullMessagePanel(
                 g,
-                messages.isEmpty() || state == State.DELETE
-                        ? StringUtils.empty()
-                        : messages.peek().getMessage()
+                messages.isEmpty() || state == State.DELETE ? "" : messages.peek().getMessage()
         );
 
         if (state == State.QUESTION) {

@@ -11,7 +11,6 @@ import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import util.GeneralUtils;
 import util.serialization.JsonMatcher;
-import util.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,7 +72,7 @@ public class PokemonMatcher implements JsonMatcher {
     }
 
     public String getNickname() {
-        return this.nickname == null ? StringUtils.empty() : this.nickname;
+        return this.nickname == null ? "" : this.nickname;
     }
 
     public void setLevel(int level) {

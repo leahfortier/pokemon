@@ -1,7 +1,6 @@
 package teamplanner;
 
 import type.Type;
-import util.string.StringUtils;
 
 class OffensiveCoverage {
     private static final Type[] types = Type.values();
@@ -53,7 +52,7 @@ class OffensiveCoverage {
         if (coverageFrequencyList == null) {
             coverageFrequencyList = new String[maxCoverage + 1];
             for (int i = 0; i < coverageFrequencyList.length; i++) {
-                coverageFrequencyList[i] = StringUtils.empty();
+                coverageFrequencyList[i] = "";
             }
         }
 

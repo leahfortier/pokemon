@@ -7,7 +7,6 @@ import mapMaker.model.TileModel.TileType;
 import pattern.action.NPCInteractionMatcher;
 import pattern.map.NPCMatcher;
 import util.GuiUtils;
-import util.string.StringUtils;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -59,7 +58,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 
         mapMaker = givenMapMaker;
 
-        trainerIcon = GuiUtils.createLabel(StringUtils.empty());
+        trainerIcon = GuiUtils.createLabel("");
         spriteComboBox = GuiUtils.createComboBox(getTrainerSprites(), spriteActionListener);
         directionComboBox = GuiUtils.createComboBox(Direction.values(), spriteActionListener);
 

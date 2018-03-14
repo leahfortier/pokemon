@@ -1,7 +1,6 @@
 package generator.format;
 
 import main.Global;
-import util.string.StringUtils;
 
 public class SplitScanner {
     private final String[] split;
@@ -31,7 +30,7 @@ public class SplitScanner {
 
     public String getRemaining() {
         if (!this.hasNext()) {
-            return StringUtils.empty();
+            return "";
         }
 
         String[] newSplit = this.original.split(delimiter, this.index + 1);

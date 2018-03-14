@@ -16,7 +16,6 @@ import util.RandomUtils;
 import util.file.FileIO;
 import util.file.FileName;
 import util.serialization.Serializable;
-import util.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -190,10 +189,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 
     public String getAbilitiesString() {
         return abilities[0].getName() +
-                (abilities[1] == AbilityNamesies.NO_ABILITY
-                        ? StringUtils.empty()
-                        : ", " + abilities[1].getName()
-                );
+                (abilities[1] == AbilityNamesies.NO_ABILITY ? "" : ", " + abilities[1].getName());
     }
 
     public AbilityNamesies[] getAbilities() {

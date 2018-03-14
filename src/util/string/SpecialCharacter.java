@@ -20,7 +20,7 @@ public enum SpecialCharacter {
     }
 
     // Converts special characters to a simple version (example: poke e -> e)
-    public static String removeSpecialCharacters(String input) {
+    public static String replaceSpecialCharacters(String input) {
         for (SpecialCharacter specialCharacter : values()) {
             input = input.replaceAll(specialCharacter.unicodeLiteral, specialCharacter.replaceCharacter);
             input = input.replaceAll(specialCharacter.specialCharacter, specialCharacter.replaceCharacter);
@@ -40,7 +40,7 @@ public enum SpecialCharacter {
 
     // Removes the special characters as well as some symbols
     public static String removeSpecialSymbols(String input) {
-        return removeSpecialCharacters(input).replaceAll("[.'-]", "");
+        return replaceSpecialCharacters(input).replaceAll("[.'-]", "");
     }
 
     // Takes the unicode literals and replaces them with their special character value

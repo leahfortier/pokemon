@@ -199,7 +199,7 @@ public class FileIO {
             return new Scanner(new FileReader(file));
         } catch (FileNotFoundException e) {
             Global.error(file.getName() + " not found.");
-            return new Scanner(StringUtils.empty());
+            return new Scanner("");
         }
     }
 

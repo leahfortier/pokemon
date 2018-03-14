@@ -1,7 +1,6 @@
 package util;
 
 import util.ColorDocumentListener.ColorCondition;
-import util.string.StringUtils;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -73,7 +72,7 @@ public class GuiUtils {
     }
 
     public static JCheckBox createCheckBox() {
-        return createCheckBox(StringUtils.empty());
+        return createCheckBox("");
     }
 
     public static JCheckBox createCheckBox(String text) {
@@ -148,7 +147,7 @@ public class GuiUtils {
     }
 
     public static JTextField createTextField() {
-        return createTextField(StringUtils.empty());
+        return createTextField("");
     }
 
     public static JTextField createTextField(String text) {

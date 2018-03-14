@@ -8,7 +8,6 @@ import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
 import util.GuiUtils;
-import util.string.StringUtils;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -62,7 +61,7 @@ public class PokemonDataPanel extends JPanel {
                 new String[] { "Move 1", "Move 2", "Move 3", "Move 4" }, // TODO: Fuck this shit
                 event -> {
                     AttackNamesies selectedMove = customMoves[moveComboBox.getSelectedIndex()];
-                    String moveText = selectedMove == null ? StringUtils.empty() : selectedMove.getName();
+                    String moveText = selectedMove == null ? "" : selectedMove.getName();
                     moveTextField.setText(moveText);
                 }
         );

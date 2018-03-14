@@ -110,7 +110,7 @@ public class Player extends PlayerTrainer implements Serializable {
         seconds = 0;
 
         direction = Direction.DOWN;
-        areaName = StringUtils.empty();
+        areaName = "";
         mapReset = false;
         flyLocations = new HashSet<>();
 

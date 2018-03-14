@@ -9,7 +9,6 @@ import type.PokeType;
 import type.Type;
 import util.file.FileIO;
 import util.string.StringAppender;
-import util.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -148,7 +147,7 @@ class TeamMember {
         }
 
         StringAppender out = new StringAppender()
-                .appendJoin(StringUtils.empty(), team);
+                .appendJoin("", team);
 
         FileIO.overwriteFile("teamPlanner.out", out.toString());
     }

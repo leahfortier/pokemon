@@ -9,7 +9,6 @@ import message.MessageUpdate;
 import message.Messages;
 import pokemon.Stat;
 import util.serialization.Serializable;
-import util.string.StringUtils;
 
 public class Stages implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -185,7 +184,7 @@ public class Stages implements Serializable {
                 break;
         }
 
-        return (victimName, statName, changed) -> StringUtils.empty();
+        return (victimName, statName, changed) -> "";
     }
 
     @FunctionalInterface

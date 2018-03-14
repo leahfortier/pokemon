@@ -6,7 +6,6 @@ import generator.format.MethodInfo;
 import generator.format.SplitScanner;
 import main.Global;
 import util.string.StringAppender;
-import util.string.StringUtils;
 
 import java.util.Scanner;
 
@@ -74,7 +73,7 @@ public class FailureInfo extends InfoList {
         }
 
         if (failure.isEmpty()) {
-            return StringUtils.empty();
+            return "";
         }
 
         failure.appendPrefix("return !(").append(");");
