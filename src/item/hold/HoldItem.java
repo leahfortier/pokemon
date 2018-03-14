@@ -24,7 +24,7 @@ public interface HoldItem extends ItemInterface, ItemHolder {
         this.consumeItemWithoutEffects(b, holder);
 
         if (this instanceof Berry) {
-            holder.consumeBerry((Berry)this, b);
+            ((Berry)this).consumeBerry(holder, b);
         }
 
         ActivePokemon other = b.getOtherPokemon(holder);

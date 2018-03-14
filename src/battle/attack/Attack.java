@@ -1583,7 +1583,10 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.stealBerry(b, victim);
+            HoldItem item = victim.getHeldItem(b);
+            if (item instanceof Berry) {
+                ((Berry)item).stealBerry(b, user, victim);
+            }
         }
     }
 
@@ -2342,7 +2345,10 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.stealBerry(b, victim);
+            HoldItem item = victim.getHeldItem(b);
+            if (item instanceof Berry) {
+                ((Berry)item).stealBerry(b, user, victim);
+            }
         }
     }
 

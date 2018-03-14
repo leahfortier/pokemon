@@ -31,8 +31,6 @@ import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
-import item.berry.Berry;
-import item.berry.GainableEffectBerry;
 import item.hold.EVItem;
 import item.hold.HoldItem;
 import main.Game;
@@ -656,32 +654,6 @@ public class ActivePokemon extends PartyPokemon {
     // Stupid motherfucking Mold Breaker not allowing me to make Levitate a Levitation effect, fuck you Mold Breaker. -- NOT ANYMORE NOW WE HAVE Battle.hasInvoke FUCK YES YOU GO GLENN COCO
     public boolean isLevitatingWithoutTypeCheck(Battle b, ActivePokemon moldBreaker) {
         return !isGrounded(b) && LevitationEffect.containsLevitationEffect(b, this, moldBreaker);
-    }
-
-    public void stealBerry(Battle b, ActivePokemon victim) {
-        HoldItem item = victim.getHeldItem(b);
-        if (item instanceof Berry && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-            Messages.add(this.getName() + " ate " + victim.getName() + "'s " + item.getName() + "!");
-            item.consumeItemWithoutEffects(b, victim);
-
-            if (item instanceof GainableEffectBerry) {
-                ((GainableEffectBerry)item).gainBerryEffect(b, this, CastSource.USE_ITEM);
-                this.consumeBerry((Berry)item, b);
-            }
-        }
-    }
-
-    public void consumeBerry(Berry consumed, Battle b) {
-        // Eat dat berry!!
-        PokemonEffectNamesies.EATEN_BERRY.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
-
-        if (consumed instanceof GainableEffectBerry
-                && this.hasAbility(AbilityNamesies.CHEEK_POUCH)
-                && !this.fullHealth()) {
-            Messages.add(this.getName() + "'s " + this.getAbility().getName() + " restored its health!");
-            this.healHealthFraction(1/3.0);
-            Messages.add(new MessageUpdate().updatePokemon(b, this));
-        }
     }
 
     @Override

@@ -1676,7 +1676,10 @@ RaiseAllStats:
 *
 ConsumeBerry:
 	AddMapField: UniqueEffects:
-		user.stealBerry(b, victim);
+        HoldItem item = victim.getHeldItem(b);
+        if (item instanceof Berry) {
+            ((Berry)item).stealBerry(b, user, victim);
+        }
 		###
 *
 GenericMessage:
