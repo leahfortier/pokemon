@@ -9,7 +9,7 @@ public class StringUtils {
 
     // Utility class -- should not be instantiated
     private StringUtils() {
-        Global.error("Save class cannot be instantiated.");
+        Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
     }
 
     public static boolean isNullOrEmpty(String s) {

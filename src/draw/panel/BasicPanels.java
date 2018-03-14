@@ -21,7 +21,9 @@ public class BasicPanels {
             BasicPanels.getMessagePanelY()/2
     );
 
-    private BasicPanels() { Global.error("BasicPanels cannot be instantiated"); }
+    private BasicPanels() {
+        Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
+    }
 
     public static DrawPanel newFullGamePanel() {
         return new DrawPanel(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);

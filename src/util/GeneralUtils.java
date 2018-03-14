@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
 public final class GeneralUtils {
 
     // Util class -- cannot be instantiated
-    private GeneralUtils() {}
+    private GeneralUtils() {
+        Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
+    }
 
     public static <T> T getPercentageValue(List<T> values, Function<T, Integer> chanceMapper) {
         int[] chances = new int[values.size()];

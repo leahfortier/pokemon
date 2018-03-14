@@ -11,7 +11,7 @@ import java.util.Scanner;
 abstract class InvokeMethod {
     private String methodName;
 
-    private InvokeMethod() {}
+    protected InvokeMethod() {}
 
     protected abstract String getReturnType(InterfaceMethod interfaceMethod);
     protected abstract String getDefaultMethodName(InterfaceMethod interfaceMethod);

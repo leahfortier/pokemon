@@ -45,7 +45,7 @@ public final class EffectInterfaces {
 
     // Class to hold interfaces -- should not be instantiated
     private EffectInterfaces() {
-        Global.error("EffectInterfaces class cannot be instantiated.");
+        Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
     }
 
     // EVERYTHING BELOW IS GENERATED ###

@@ -30,7 +30,9 @@ public final class Global {
     public static final String MONEY_SYMBOL = "\u00A5";
 
     // Cannot be instantiated
-    private Global() {}
+    private Global() {
+        Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
+    }
 
     public static void info(String infoMessage) {
         JOptionPane.showMessageDialog(null, infoMessage, "INFO", JOptionPane.INFORMATION_MESSAGE);

@@ -21,8 +21,11 @@ import java.util.Set;
  * Then release the lock. Easy peasy.
  */
 public class InputControl implements MouseListener, KeyListener, MouseMotionListener {
-    private static final InputControl instance = new InputControl();
+    private static InputControl instance;
     public static InputControl instance() {
+        if (instance == null) {
+            instance = new InputControl();
+        }
         return instance;
     }
 

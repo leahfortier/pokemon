@@ -16,7 +16,9 @@ public final class RandomUtils {
     }
 
     // Util class -- cannot be instantiated
-    private RandomUtils() {}
+    private RandomUtils() {
+        Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
+    }
 
     public static long getSeed() {
         return SEED;

@@ -12,7 +12,7 @@ public final class Save {
 
     // Utility class -- should not be instantiated
     private Save() {
-        Global.error("Save class cannot be instantiated.");
+        Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
     }
 
     static String getSavePath(int fileNum) {
