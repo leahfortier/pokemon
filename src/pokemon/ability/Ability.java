@@ -3186,12 +3186,12 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             addItem(ItemNamesies.PRISM_SCALE, 5);
             addItem(ItemNamesies.DESTINY_KNOT, 5);
             addItem(ItemNamesies.FULL_RESTORE, 5);
-            addItem(ItemNamesies.PPUP, 5);
+            addItem(ItemNamesies.PP_UP, 5);
             addItem(ItemNamesies.LEFTOVERS, 5);
             addItem(ItemNamesies.MAX_ELIXIR, 5);
             addItem(ItemNamesies.BIG_NUGGET, 1);
             addItem(ItemNamesies.BALM_MUSHROOM, 1);
-            addItem(ItemNamesies.HPUP, 1);
+            addItem(ItemNamesies.HP_UP, 1);
             addItem(ItemNamesies.PROTEIN, 1);
             addItem(ItemNamesies.IRON, 1);
             addItem(ItemNamesies.CALCIUM, 1);
@@ -3294,7 +3294,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         private static final long serialVersionUID = 1L;
 
         RKSSystem() {
-            super(AbilityNamesies.RKSSYSTEM, "Changes the Pok\u00e9mon's type to match the memory disc it holds.");
+            super(AbilityNamesies.RKS_SYSTEM, "Changes the Pok\u00e9mon's type to match the memory disc it holds.");
         }
 
         @Override

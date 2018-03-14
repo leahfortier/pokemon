@@ -379,7 +379,7 @@ public enum AbilityNamesies {
     HONEY_GATHER("Honey Gather", HoneyGather::new),
     GLUTTONY("Gluttony", Gluttony::new),
     MULTITYPE("Multitype", Multitype::new),
-    RKSSYSTEM("RKS System", RKSSystem::new),
+    RKS_SYSTEM("RKS System", RKSSystem::new),
     FORECAST("Forecast", Forecast::new),
     BULLETPROOF("Bulletproof", Bulletproof::new),
     AURA_BREAK("Aura Break", AuraBreak::new),

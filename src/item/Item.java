@@ -3657,7 +3657,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         XAccuracy() {
-            super(ItemNamesies.XACCURACY, "An item that sharply boosts the accuracy of a Pok\u00e9mon during a battle. It wears off once the Pok\u00e9mon is withdrawn.", BagCategory.STAT);
+            super(ItemNamesies.X_ACCURACY, "An item that sharply boosts the accuracy of a Pok\u00e9mon during a battle. It wears off once the Pok\u00e9mon is withdrawn.", BagCategory.STAT);
             super.price = 950;
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
@@ -3672,7 +3672,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         XAttack() {
-            super(ItemNamesies.XATTACK, "An item that sharply boosts the Attack stat of a Pok\u00e9mon during a battle. It wears off once the Pok\u00e9mon is withdrawn.", BagCategory.STAT);
+            super(ItemNamesies.X_ATTACK, "An item that sharply boosts the Attack stat of a Pok\u00e9mon during a battle. It wears off once the Pok\u00e9mon is withdrawn.", BagCategory.STAT);
             super.price = 500;
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
@@ -3687,7 +3687,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         XDefend() {
-            super(ItemNamesies.XDEFEND, "An item that boosts the Defense stat of a Pok\u00e9mon during a battle. It wears off once the Pok\u00e9mon is withdrawn.", BagCategory.STAT);
+            super(ItemNamesies.X_DEFEND, "An item that boosts the Defense stat of a Pok\u00e9mon during a battle. It wears off once the Pok\u00e9mon is withdrawn.", BagCategory.STAT);
             super.price = 550;
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
@@ -3702,7 +3702,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         XSpecial() {
-            super(ItemNamesies.XSPECIAL, "An item that raises the Sp. Atk stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT);
+            super(ItemNamesies.X_SPECIAL, "An item that raises the Sp. Atk stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT);
             super.price = 350;
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
@@ -3717,7 +3717,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         XSpDef() {
-            super(ItemNamesies.XSP_DEF, "An item that sharply boosts the Sp. Def stat of a Pok\u00e9mon during a battle. It wears off once the Pok\u00e9mon is withdrawn.", BagCategory.STAT);
+            super(ItemNamesies.X_SP_DEF, "An item that sharply boosts the Sp. Def stat of a Pok\u00e9mon during a battle. It wears off once the Pok\u00e9mon is withdrawn.", BagCategory.STAT);
             super.price = 350;
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
@@ -3732,7 +3732,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         XSpeed() {
-            super(ItemNamesies.XSPEED, "An item that sharply boosts the Speed stat of a Pok\u00e9mon during a battle. It wears off once the Pok\u00e9mon is withdrawn.", BagCategory.STAT);
+            super(ItemNamesies.X_SPEED, "An item that sharply boosts the Speed stat of a Pok\u00e9mon during a battle. It wears off once the Pok\u00e9mon is withdrawn.", BagCategory.STAT);
             super.price = 350;
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
@@ -3747,7 +3747,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         HPUp() {
-            super(ItemNamesies.HPUP, "A nutritious drink for Pok\u00e9mon. When consumed, it raises the base HP of a single Pok\u00e9mon.", BagCategory.STAT);
+            super(ItemNamesies.HP_UP, "A nutritious drink for Pok\u00e9mon. When consumed, it raises the base HP of a single Pok\u00e9mon.", BagCategory.STAT);
             super.price = 10000;
         }
 
@@ -3916,7 +3916,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         PPMax() {
-            super(ItemNamesies.PPMAX, "A medicine that can optimally raise the maximum PP of a single move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT);
+            super(ItemNamesies.PP_MAX, "A medicine that can optimally raise the maximum PP of a single move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT);
             super.price = 12000;
         }
 
@@ -3935,7 +3935,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         PPUp() {
-            super(ItemNamesies.PPUP, "A medicine that can slightly raise the maximum PP of a single move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT);
+            super(ItemNamesies.PP_UP, "A medicine that can slightly raise the maximum PP of a single move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT);
             super.price = 10000;
         }
 

@@ -1,5 +1,6 @@
 package test;
 
+import battle.attack.AttackNamesies;
 import generator.format.SplitScanner;
 import item.ItemNamesies;
 import item.berry.farm.PlantedBerry;
@@ -7,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.Gender;
 import pokemon.PokemonNamesies;
+import pokemon.ability.AbilityNamesies;
 import util.TimeUtils;
 import util.file.FileIO;
 import util.string.StringAppender;
@@ -15,15 +17,49 @@ import util.string.StringUtils;
 import java.io.File;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 public class GeneralTest extends BaseTest {
 
     @Test
     public void properCaseTest() {
-        Assert.assertEquals(StringUtils.properCase("red"), "Red");
-        Assert.assertEquals(StringUtils.properCase("water stone"), "Water Stone");
-        Assert.assertEquals(StringUtils.properCase("x-scissor"), "X-Scissor");
-        Assert.assertEquals(StringUtils.properCase("DFS town"), "DFS Town");
+        Assert.assertEquals("Red", StringUtils.properCase("red"));
+        Assert.assertEquals("Water Stone", StringUtils.properCase("water stone"));
+        Assert.assertEquals("X-Scissor", StringUtils.properCase("x-scissor"));
+        Assert.assertEquals("DFS Town", StringUtils.properCase("DFS town"));
+        Assert.assertEquals("King's Rock", StringUtils.properCase("king's rock"));
+        Assert.assertEquals("DFS Town X-Scissor", StringUtils.properCase("DFS town x-scissor"));
+        Assert.assertEquals("LeechSeed", StringUtils.properCase("LeechSeed"));
+        Assert.assertEquals("Leech_Seed", StringUtils.properCase("leech_seed"));
+        Assert.assertEquals("Pok\u00e9 Ball", StringUtils.properCase("pok\u00e9 ball"));
+    }
+
+    @Test
+    public void namesiesStringTest() {
+        Assert.assertEquals("RED", StringUtils.getNamesiesString("red"));
+        Assert.assertEquals("WATER_STONE", StringUtils.getNamesiesString("water stone"));
+        Assert.assertEquals("X_SCISSOR", StringUtils.getNamesiesString("x-scissor"));
+        Assert.assertEquals("DFS_TOWN", StringUtils.getNamesiesString("DFS town"));
+        Assert.assertEquals("KINGS_ROCK", StringUtils.getNamesiesString("king's rock"));
+        Assert.assertEquals("LEECH_SEED", StringUtils.getNamesiesString("LeechSeed"));
+        Assert.assertEquals("POKE_BALL", StringUtils.getNamesiesString("Pok\u00e9 Ball"));
+
+        // Make sure the namesies string of each name returns the enum name
+        // FARFETCHD -> getName() -> Farfetch'd -> namesiesString() -> FARFETCHD
+        namesiesStringTest(PokemonNamesies.values(), PokemonNamesies::getName);
+        namesiesStringTest(AttackNamesies.values(), AttackNamesies::getName);
+        namesiesStringTest(ItemNamesies.values(), ItemNamesies::getName);
+        namesiesStringTest(AbilityNamesies.values(), AbilityNamesies::getName);
+    }
+
+    private <T extends Enum> void namesiesStringTest(T[] values, Function<T, String> nameMapper) {
+        for (T namesies : values) {
+            if (namesies == PokemonNamesies.NONE) {
+                continue;
+            }
+
+            Assert.assertEquals(namesies.name(), StringUtils.getNamesiesString(nameMapper.apply(namesies)));
+        }
     }
 
     @Test

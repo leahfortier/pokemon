@@ -306,8 +306,8 @@ public class PokemonInfoTest extends BaseTest {
 
             Bag bag = Game.getPlayer().getBag();
             for (int i = 0; i < 26; i++) {
-                bag.addItem(ItemNamesies.HPUP);
-                Assert.assertTrue(bag.useItem(ItemNamesies.HPUP, shedinja));
+                bag.addItem(ItemNamesies.HP_UP);
+                Assert.assertTrue(bag.useItem(ItemNamesies.HP_UP, shedinja));
                 TestUtils.assertGreater(levelString, shedinja.getEV(Stat.HP), 0);
                 Assert.assertEquals(1, shedinja.getHP());
                 Assert.assertEquals(1, shedinja.getMaxHP());
@@ -319,7 +319,7 @@ public class PokemonInfoTest extends BaseTest {
 
             // HP EVs are now maxed, but max HP should not increase still
             Assert.assertEquals(Stat.MAX_STAT_EVS, shedinja.getEV(Stat.HP));
-            Assert.assertFalse(bag.useItem(ItemNamesies.HPUP, shedinja));
+            Assert.assertFalse(bag.useItem(ItemNamesies.HP_UP, shedinja));
             Assert.assertEquals(Stat.MAX_STAT_EVS, shedinja.getEV(Stat.HP));
             Assert.assertEquals(1, shedinja.getHP());
             Assert.assertEquals(1, shedinja.getMaxHP());

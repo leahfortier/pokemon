@@ -5,6 +5,7 @@ import main.Global;
 import java.util.Arrays;
 
 public class StringUtils {
+    private static final String[] PROPER_CASE_DELIMITERS = { " ", "-", "_" };
 
     // Utility class -- should not be instantiated
     private StringUtils() {
@@ -84,90 +85,55 @@ public class StringUtils {
             return empty();
         }
 
-        StringAppender s = new StringAppender();
-        while (!string.isEmpty()) {
-            s.append(string.substring(0, 1).toUpperCase());
-            string = string.substring(1, string.length());
-
-            if (string.isEmpty()) {
-                break;
-            }
-
-            char c = ' ';
-            int index = string.indexOf(c);
-            int indexOther = string.indexOf('-');
-            if (indexOther != -1 && (indexOther < index || index == -1)) {
-                c = '-';
-                index = indexOther;
-            }
-
-            if (index == -1) {
-                s.append(string.substring(0, string.length()));
-                string = "";
-            } else {
-                s.append(string.substring(0, index)).append(c);
-                string = string.substring(index + 1, string.length());
-            }
+        // Split by each delimiter and rejoin in proper case
+        // "water stone" -> ["water", "stone"] -> ["Water", "Stone"] -> "Water Stone"
+        for (String delimiter : PROPER_CASE_DELIMITERS) {
+            string = new StringAppender()
+                    .appendJoin(
+                            delimiter,
+                            Arrays.asList(string.split(delimiter)),
+                            s -> s.substring(0, 1).toUpperCase() + s.substring(1)
+                    )
+                    .toString();
         }
 
-        return s.toString();
+        return string;
     }
 
+    // Gets an enum-like name from the input name
+    // Ex: King's Rock -> KINGS_ROCK
     public static String getNamesiesString(String name) {
         if (isNullOrWhiteSpace(name)) {
             return empty();
         }
 
-        // TODO: Look at this again -- why are we removing spaces?
-        // Remove special characters and spaces
-        name = SpecialCharacter.removeSpecialCharacters(name).replace(" ", "");
+        // Convert special characters to their safer version (poke e -> e)
+        // Replace delimiters with underscores
+        // Remove special characters
+        name = SpecialCharacter.removeSpecialCharacters(name)
+                               .replaceAll("[\\s-]", "_")
+                               .replaceAll("['.:]", "");
 
-        char[] nameChar = name.toCharArray();
-        StringAppender enumName = new StringAppender(nameChar[0] + "");
-
-        for (int i = 1; i < nameChar.length; i++) {
-            if (((isUpper(nameChar[i]) &&
-                    !isUpper(nameChar[i - 1])) || nameChar[i] == '-') &&
-                    nameChar[i - 1] != '_' &&
-                    enumName.charAt(enumName.length() - 1) != '_') {
-                enumName.append("_");
+        // Insert an underscore whenever a capital letter comes after a lower-case one
+        StringAppender appender = new StringAppender(name);
+        for (int i = name.length() - 1; i > 1; i--) {
+            if (isUpper(name.charAt(i)) && isLower(name.charAt(i - 1))) {
+                appender.insert(i, "_");
             }
-
-            if (isSpecial(nameChar[i])) {
-                continue;
-            }
-
-            enumName.append(nameChar[i]);
         }
 
-        return enumName.toString().toUpperCase();
+        // Convert to upper case
+        return appender.toString().toUpperCase();
     }
 
     // Creates the className from the name
+    // Ex: "King's Rock" -> "KingsRock"
     public static String getClassName(String name) {
-        name = SpecialCharacter.removeSpecialCharacters(name);
-
-        StringAppender className = new StringAppender();
-        for (int i = 0; i < name.length(); i++) {
-            if (name.charAt(i) == '-') {
-                if (isLower(name.charAt(i + 1))) {
-                    char c = (char)(name.charAt(i + 1) - 'a' + 'A');
-                    className.append(c);
-                    i++;
-                    continue;
-                }
-
-                continue;
-            }
-
-            if (isSpecial(name.charAt(i))) {
-                continue;
-            }
-
-            className.append(name.charAt(i));
-        }
-
-        return className.toString();
+        // Convert to proper case (just in CASE)
+        // Convert special characters to their safer version (poke e -> e)
+        // Remove all non-alphanumeric characters
+        return SpecialCharacter.removeSpecialCharacters(properCase(name))
+                               .replaceAll("[^0-9a-zA-Z]", "");
     }
 
     public static <T extends Enum<T>> T enumValueOf(Class<T> enumClass, String name) {

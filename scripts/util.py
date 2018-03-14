@@ -10,12 +10,7 @@ leftQuote = u'\u201c'
 rightQuote = u'\u201d'
 
 def namesies(stringsies):
-    stringsies = stringsies.strip().replace(' ', '_').replace('-', '_').replace('\'', '').upper()
-    if stringsies == 'CONVERSION_2':
-        stringsies = 'CONVERSION2'
-    elif stringsies == 'RKS_SYSTEM':
-        stringsies = 'RKSSYSTEM'
-    return stringsies
+    return stringsies.strip().replace(' ', '_').replace('-', '_').replace('\'', '').upper()
 
 def removePrefix(string, prefix):
     assert string.startswith(prefix)

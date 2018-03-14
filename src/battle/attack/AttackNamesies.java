@@ -1066,7 +1066,7 @@ public enum AttackNamesies {
     TRUMP_CARD("Trump Card", TrumpCard::new),
     MUDDY_WATER("Muddy Water", MuddyWater::new),
     CONVERSION("Conversion", Conversion::new),
-    CONVERSION2("Conversion 2", Conversion2::new),
+    CONVERSION_2("Conversion 2", Conversion2::new),
     SHARPEN("Sharpen", Sharpen::new),
     MAGIC_COAT("Magic Coat", MagicCoat::new),
     SKY_DROP("Sky Drop", SkyDrop::new),

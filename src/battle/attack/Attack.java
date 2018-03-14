@@ -6907,7 +6907,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         private List<Type> types;
 
         Conversion2() {
-            super(AttackNamesies.CONVERSION2, Type.NORMAL, MoveCategory.STATUS, 30, "The user changes its type to make itself resistant to the type of the attack the opponent used last.");
+            super(AttackNamesies.CONVERSION_2, Type.NORMAL, MoveCategory.STATUS, 30, "The user changes its type to make itself resistant to the type of the attack the opponent used last.");
             super.effects.add(PokemonEffectNamesies.CHANGE_TYPE);
             super.moveTypes.add(MoveType.NON_SNATCHABLE);
             super.selfTarget = true;
