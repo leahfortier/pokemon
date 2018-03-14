@@ -1,7 +1,7 @@
 package battle.effect.holder;
 
-import item.Item;
+import item.hold.HoldItem;
 
 public interface ItemHolder {
-    Item getItem();
+    HoldItem getItem();
 }

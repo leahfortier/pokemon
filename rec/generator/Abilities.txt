@@ -1267,14 +1267,21 @@ Harvest:
     Desc: May create another Berry after one is used.
     Int: EndTurnEffect
     ApplyEndTurn:
-        PokemonEffect consumed = victim.getEffect(PokemonEffectNamesies.CONSUMED_ITEM);
-        if (consumed == null || victim.isHoldingItem(b)) {
+        // Does nothing if victim is holding something
+        if (victim.isHoldingItem(b)) {
             return;
         }
 
-        Item restored = ((ItemHolder)consumed).getItem();
+        // Does nothing if victim never consumed an item
+        ItemHolder consumed = (ItemHolder)victim.getEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+        if (consumed == null) {
+            return;
+        }
+
+        // Restore the item if applicable
+        HoldItem restored = consumed.getItem();
         if (restored instanceof Berry && (b.getWeather().namesies() == WeatherNamesies.SUNNY || RandomUtils.chanceTest(50))) {
-            victim.giveItem((HoldItem)restored);
+            victim.giveItem(restored);
             Messages.add(victim.getName() + "'s " + this.getName() + " restored its " + restored.getName() + "!");
         }
         ###

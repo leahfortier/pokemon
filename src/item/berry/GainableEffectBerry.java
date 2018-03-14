@@ -9,6 +9,8 @@ public interface GainableEffectBerry extends Berry {
 
     @Override
     default void flingEffect(Battle b, ActivePokemon pelted) {
-        gainBerryEffect(b, pelted, CastSource.USE_ITEM);
+        if (gainBerryEffect(b, pelted, CastSource.USE_ITEM)) {
+            this.consumeBerry(pelted, b);
+        }
     }
 }

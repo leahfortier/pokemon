@@ -18,7 +18,7 @@ public interface TypedPowerReduceBerry extends Berry, OpponentPowerChangeEffect 
     default double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
         if (user.isAttackType(this.getType()) && this.shouldReducePower(b, user, victim)) {
             Messages.add(victim.getName() + "'s " + this.getName() + " decreased " + user.getName() + "'s attack!");
-            victim.consumeItem(b);
+            this.consumeItem(b, victim);
             return .5;
         }
 

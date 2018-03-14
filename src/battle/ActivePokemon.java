@@ -30,10 +30,7 @@ import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
-import item.Item;
 import item.ItemNamesies;
-import item.berry.Berry;
-import item.berry.GainableEffectBerry;
 import item.hold.EVItem;
 import item.hold.HoldItem;
 import main.Game;
@@ -151,7 +148,7 @@ public class ActivePokemon extends PartyPokemon {
         }
 
         // Add EVs
-        Item item = this.getHeldItem(b);
+        HoldItem item = this.getHeldItem(b);
         int[] vals = dead.getPokemonInfo().getGivenEVs();
         if (item instanceof EVItem) {
             vals = ((EVItem)item).getEVs(vals);
@@ -659,74 +656,27 @@ public class ActivePokemon extends PartyPokemon {
         return !isGrounded(b) && LevitationEffect.containsLevitationEffect(b, this, moldBreaker);
     }
 
-    public void stealBerry(Battle b, ActivePokemon victim) {
-        Item item = victim.getHeldItem(b);
-        if (item instanceof Berry && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
-            Messages.add(this.getName() + " ate " + victim.getName() + "'s " + item.getName() + "!");
-            victim.consumeItemWithoutEffects(b);
-
-            if (item instanceof GainableEffectBerry) {
-                ((GainableEffectBerry)item).gainBerryEffect(b, this, CastSource.USE_ITEM);
-                this.consumeBerry((Berry)item, b);
-            }
-        }
-    }
-
-    private void consumeBerry(Berry consumed, Battle b) {
-        // Eat dat berry!!
-        PokemonEffectNamesies.EATEN_BERRY.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
-
-        if (consumed instanceof GainableEffectBerry
-                && this.hasAbility(AbilityNamesies.CHEEK_POUCH)
-                && !this.fullHealth()) {
-            Messages.add(this.getName() + "'s " + this.getAbility().getName() + " restored its health!");
-            this.healHealthFraction(1/3.0);
-            Messages.add(new MessageUpdate().updatePokemon(b, this));
-        }
-    }
-
-    public Item consumeItemWithoutEffects(Battle b) {
-        Item consumed = getHeldItem(b);
-        PokemonEffectNamesies.CONSUMED_ITEM.getEffect().cast(b, this, this, CastSource.HELD_ITEM, false);
-
-        return consumed;
-    }
-
-    public void consumeItem(Battle b) {
-        Item consumed = this.consumeItemWithoutEffects(b);
-
-        if (consumed instanceof Berry) {
-            this.consumeBerry((Berry)consumed, b);
-        }
-
-        ActivePokemon other = b.getOtherPokemon(this);
-        if (other.hasAbility(AbilityNamesies.PICKUP) && !other.isHoldingItem(b)) {
-            other.giveItem((HoldItem)consumed);
-            Messages.add(other.getName() + " picked up " + getName() + "'s " + consumed.getName() + "!");
-        }
-    }
-
     @Override
     public void removeItem() {
         super.removeItem();
         this.effects.remove(PokemonEffectNamesies.CHANGE_ITEM);
     }
 
-    public Item getHeldItem(Battle b) {
+    public HoldItem getHeldItem(Battle b) {
         if (b == null) {
             return getActualHeldItem();
         }
 
         if (ItemBlockerEffect.containsItemBlockerEffect(b, this)) {
-            return ItemNamesies.NO_ITEM.getItem();
+            return (HoldItem)ItemNamesies.NO_ITEM.getItem();
         }
 
         // Check if the Pokemon has had its item changed during the battle
         PokemonEffect changeItem = getEffect(PokemonEffectNamesies.CHANGE_ITEM);
-        Item item = changeItem == null ? getActualHeldItem() : ((ItemHolder)changeItem).getItem();
+        HoldItem item = changeItem == null ? getActualHeldItem() : ((ItemHolder)changeItem).getItem();
 
         if (OpponentItemBlockerEffect.checkOpponentItemBlockerEffect(b, b.getOtherPokemon(this), item.namesies())) {
-            return ItemNamesies.NO_ITEM.getItem();
+            return (HoldItem)ItemNamesies.NO_ITEM.getItem();
         }
 
         return item;

@@ -279,7 +279,7 @@ StartTurn:
 *
 SwitchItemMessage:
     AddInterface: ItemSwapperEffect
-	Header: String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem)
+	Header: String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem)
 	Body:
 		return {0};
 		###
@@ -918,7 +918,7 @@ GetAbility:
 	Header: Ability getAbility()
 *
 GetItem:
-	Header: Item getItem()
+	Header: HoldItem getItem()
 *
 Bracing:
 	Header: boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth)
@@ -1115,7 +1115,7 @@ MoveUse:
 TypeTakeDamageStatIncrease:
 	AddMapField: OnTakeDamage:
 		if (user.isAttackType(Type.{11}) && victim.getStages().modifyStage(victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
-			victim.consumeItem(b);
+			this.consumeItem(b, victim);
 		}
 		###
 	AddInterface: HoldItem
@@ -1291,7 +1291,7 @@ TimeSpaceOrb:
 SpecialItemAbility:
 	AddInterface: ChangeTypeEffect
 	AddMapField: GetChangeTypeEffect:
-		Item item = p.getHeldItem(b);
+		HoldItem item = p.getHeldItem(b);
 		if (item instanceof {0}) {
 			return new PokeType((({0})item).getType());
 		}
@@ -1305,7 +1305,7 @@ SpecialItemMove:
 	AddMapField: Type: Normal
 	AddMapField: MoveType: Metronomeless
 	AddMapField: GetType:
-		Item item = user.getHeldItem(b);
+		HoldItem item = user.getHeldItem(b);
 		if (item instanceof {0}) {
 			return (({0})item).getType();
 		}
@@ -1676,7 +1676,10 @@ RaiseAllStats:
 *
 ConsumeBerry:
 	AddMapField: UniqueEffects:
-		user.stealBerry(b, victim);
+        HoldItem item = victim.getHeldItem(b);
+        if (item instanceof Berry) {
+            ((Berry)item).stealBerry(b, user, victim);
+        }
 		###
 *
 GenericMessage:
@@ -1900,7 +1903,7 @@ TerrainSeed:
 	AddInterface: TerrainCastEffect
 	AddMapField: NewTerrain:
 		if (newTerrain == TerrainType.{11} && p.getStages().modifyStage(p, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
-			p.consumeItem(b);
+			this.consumeItem(b, p);
 		}
 		###
 	AddMapField: Price: 4000

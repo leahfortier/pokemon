@@ -38,7 +38,6 @@ import battle.effect.EffectInterfaces.TerrainCastEffect;
 import battle.effect.EffectInterfaces.WeatherBlockerEffect;
 import battle.effect.EffectInterfaces.WeatherExtendingEffect;
 import battle.effect.EffectNamesies;
-import battle.effect.InvokeEffect;
 import battle.effect.MessageGetter;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
@@ -96,7 +95,6 @@ import trainer.Trainer;
 import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
-import util.serialization.Serializable;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -105,7 +103,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Item implements ItemInterface, InvokeEffect, Comparable<Item>, Serializable {
+public abstract class Item implements ItemInterface, Comparable<Item> {
     private static final long serialVersionUID = 1L;
 
     protected final ItemNamesies namesies;
@@ -181,11 +179,6 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         return this.getName().hashCode();
     }
 
-    @Override
-    public Item getItem() {
-        return this;
-    }
-
     public static boolean isItem(String itemName) {
         return ItemNamesies.tryValueOf(itemName) != null;
     }
@@ -251,7 +244,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.WATER) && victim.getStages().modifyStage(victim, 1, Stat.SP_ATTACK, b, CastSource.HELD_ITEM)) {
-                victim.consumeItem(b);
+                this.consumeItem(b, victim);
             }
         }
     }
@@ -272,7 +265,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add(victim.getName() + "'s " + this.getName() + " popped!");
-            victim.consumeItem(b);
+            this.consumeItem(b, victim);
         }
 
         @Override
@@ -383,7 +376,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.ELECTRIC) && victim.getStages().modifyStage(victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
-                victim.consumeItem(b);
+                this.consumeItem(b, victim);
             }
         }
     }
@@ -594,7 +587,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
-                victim.consumeItem(b);
+                this.consumeItem(b, victim);
             }
         }
     }
@@ -726,7 +719,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth) {
             if (fullHealth) {
-                bracer.consumeItem(b);
+                this.consumeItem(b, bracer);
                 return true;
             }
 
@@ -964,7 +957,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.WATER) && victim.getStages().modifyStage(victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
-                victim.consumeItem(b);
+                this.consumeItem(b, victim);
             }
         }
     }
@@ -1379,7 +1372,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
             if (user.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
-                victim.consumeItem(b);
+                this.consumeItem(b, victim);
             }
         }
 
@@ -1514,7 +1507,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.ICE) && victim.getStages().modifyStage(victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
-                victim.consumeItem(b);
+                this.consumeItem(b, victim);
             }
         }
     }
@@ -1583,7 +1576,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         }
 
         @Override
-        public String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem) {
+        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
             return victim.getName() + "s " + this.getName() + " latched onto " + user.getName() + "!";
         }
 
@@ -4424,7 +4417,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
             for (Move m : victim.getMoves(b)) {
                 if (m.getPP() == 0) {
                     use(victim, m, CastSource.HELD_ITEM);
-                    victim.consumeItem(b);
+                    this.consumeItem(b, victim);
                     break;
                 }
             }
@@ -5240,7 +5233,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public boolean strikeFirst(Battle b, ActivePokemon striker) {
             if (striker.getHPRatio() < 1/3.0) {
-                striker.consumeItem(b);
+                this.consumeItem(b, striker);
                 return true;
             }
 
@@ -5267,7 +5260,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
                 Messages.add(victim.getName() + "'s " + this.getName() + " restored its health!");
                 victim.healHealthFraction(.25);
                 Messages.add(new MessageUpdate().updatePokemon(b, victim));
-                victim.consumeItem(b);
+                this.consumeItem(b, victim);
             }
         }
 
@@ -5883,7 +5876,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
             if (newTerrain == TerrainType.ELECTRIC && p.getStages().modifyStage(p, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
-                p.consumeItem(b);
+                this.consumeItem(b, p);
             }
         }
     }
@@ -5904,7 +5897,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
             if (newTerrain == TerrainType.GRASS && p.getStages().modifyStage(p, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
-                p.consumeItem(b);
+                this.consumeItem(b, p);
             }
         }
     }
@@ -5925,7 +5918,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
             if (newTerrain == TerrainType.MISTY && p.getStages().modifyStage(p, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
-                p.consumeItem(b);
+                this.consumeItem(b, p);
             }
         }
     }
@@ -5946,7 +5939,7 @@ public abstract class Item implements ItemInterface, InvokeEffect, Comparable<It
         @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
             if (newTerrain == TerrainType.PSYCHIC && p.getStages().modifyStage(p, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
-                p.consumeItem(b);
+                this.consumeItem(b, p);
             }
         }
     }

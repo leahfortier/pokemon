@@ -583,8 +583,8 @@ public abstract class PartyPokemon implements Serializable {
         heldItem = (HoldItem)ItemNamesies.NO_ITEM.getItem();
     }
 
-    public Item getActualHeldItem() {
-        return (Item)heldItem;
+    public HoldItem getActualHeldItem() {
+        return heldItem;
     }
 
     // Constructor for triggers

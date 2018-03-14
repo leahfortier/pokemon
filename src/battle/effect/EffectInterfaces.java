@@ -15,7 +15,6 @@ import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffect;
-import item.Item;
 import item.ItemNamesies;
 import item.hold.HoldItem;
 import main.Game;
@@ -1374,14 +1373,14 @@ public final class EffectInterfaces {
                 PokemonEffectNamesies pokemonEffectType = (PokemonEffectNamesies)effectType;
                 Messages.add(this.getRemoveMessage(victim, pokemonEffectType));
                 victim.getEffects().remove(pokemonEffectType);
-                victim.consumeItem(b);
+                this.consumeItem(b, victim);
             }
         }
 
         @Override
         default void applyEndTurn(ActivePokemon victim, Battle b) {
             if (usesies(victim)) {
-                victim.consumeItem(b);
+                this.consumeItem(b, victim);
             }
         }
     }
@@ -1522,18 +1521,18 @@ public final class EffectInterfaces {
     }
 
     public interface ItemSwapperEffect {
-        String getSwitchMessage(ActivePokemon user, Item userItem, ActivePokemon victim, Item victimItem);
+        String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem);
 
         default void swapItems(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Item userItem = user.getHeldItem(b);
-            Item victimItem = victim.getHeldItem(b);
+            HoldItem userItem = user.getHeldItem(b);
+            HoldItem victimItem = victim.getHeldItem(b);
 
             Messages.add(this.getSwitchMessage(user, userItem, victim, victimItem));
 
             // For wild battles, an actual switch occurs
             if (b.isWildBattle()) {
-                user.giveItem((HoldItem)victimItem);
-                victim.giveItem((HoldItem)userItem);
+                user.giveItem(victimItem);
+                victim.giveItem(userItem);
             } else {
                 user.setCastSource(victimItem);
                 PokemonEffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, user, CastSource.CAST_SOURCE, false);

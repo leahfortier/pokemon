@@ -338,7 +338,7 @@ ChangeItem:
         victim.getEffects().remove(this.namesies());
         ###
     Field:
-        private Item item;
+        private HoldItem item;
         ###
     GetItem:
         return item;
@@ -1054,7 +1054,7 @@ Embargo:
 *
 ConsumedItem:
     Field:
-        private Item consumed;
+        private HoldItem consumed;
         ###
     BeforeCast:
         consumed = victim.getHeldItem(b);

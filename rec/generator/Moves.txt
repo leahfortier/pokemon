@@ -1867,9 +1867,9 @@ Natural Gift:
         return ((Berry)me.getHeldItem(b)).naturalGiftPower();
         ###
     GetType:
-        Item i = user.getHeldItem(b);
-        if (i instanceof Berry) {
-            return ((Berry)i).naturalGiftType();
+        HoldItem item = user.getHeldItem(b);
+        if (item instanceof Berry) {
+            return ((Berry)item).naturalGiftType();
         }
 
         return super.type;
@@ -1881,8 +1881,9 @@ Natural Gift:
     Acc: 100
     UniqueEffects:
         // This is so fucking stupid that it consumes the Berry upon use, like srsly what the fuck is the fucking point of this move
-        if (user.getHeldItem(b) instanceof Berry) {
-            user.consumeItem(b);
+        HoldItem item = user.getHeldItem(b);
+        if (item instanceof Berry) {
+            item.consumeItemWithoutEffects(b, user);
         }
         ###
     Applies: user.getHeldItem(b) instanceof Berry
@@ -4893,10 +4894,10 @@ Incinerate:
     Acc: 100
     Pow: 60
     UniqueEffects:
-        Item heldItem = victim.getHeldItem(b);
+        HoldItem heldItem = victim.getHeldItem(b);
         if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
             Messages.add(victim.getName() + "'s " + heldItem.getName() + " was burned!");
-            victim.consumeItem(b);
+            heldItem.consumeItemWithoutEffects(b, victim);
         }
         ###
 *
@@ -5182,7 +5183,7 @@ Fling:
     Acc: 100
     Cat: Physical
     GetPow:
-        return ((HoldItem)me.getHeldItem(b)).flingDamage();
+        return me.getHeldItem(b).flingDamage();
         ###
     Applies: user.isHoldingItem(b)
     AfterApplyCheck:
@@ -5190,8 +5191,9 @@ Fling:
         ###
     UniqueEffects:
         // TODO: Make sure this is still working -- consumeItem used to be in endAttack
-        ((HoldItem)user.getHeldItem(b)).flingEffect(b, victim);
-        user.consumeItemWithoutEffects(b);
+        HoldItem item = user.getHeldItem(b);
+        item.flingEffect(b, victim);
+        item.consumeItemWithoutEffects(b, user);
         ###
 *
 Freeze Shock:
@@ -5424,8 +5426,8 @@ Recycle:
     SelfTarget: True
     Applies: user.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM) && !user.isHoldingItem(b)
     UniqueEffects:
-        Item restored = ((ItemHolder)victim.getEffect(PokemonEffectNamesies.CONSUMED_ITEM)).getItem();
-        victim.giveItem((HoldItem)restored);
+        HoldItem restored = ((ItemHolder)victim.getEffect(PokemonEffectNamesies.CONSUMED_ITEM)).getItem();
+        victim.giveItem(restored);
         Messages.add(victim.getName() + "'s " + restored.getName() + " was restored!");
         ###
 *
