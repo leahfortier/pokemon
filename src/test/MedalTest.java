@@ -4,8 +4,8 @@ import battle.ActivePokemon;
 import main.Game;
 import org.junit.Assert;
 import org.junit.Test;
+import pokemon.EffortValues;
 import pokemon.PokemonNamesies;
-import pokemon.Stat;
 import save.Save;
 import trainer.player.Player;
 import trainer.player.medal.Medal;
@@ -41,10 +41,10 @@ public class MedalTest extends BaseTest {
         bulby.addEVs(new int[] { 1, 1, 1, 1, 1, 1 });
         Assert.assertFalse(player.getMedalCase().hasMedal(Medal.TRAINED_TO_MAX_POTENTIAL));
 
-        bulby.addEVs(new int[] { 1, 1, Stat.MAX_EVS, 1, 1, 1 });
+        bulby.addEVs(new int[] { 1, 1, EffortValues.MAX_EVS, 1, 1, 1 });
         Assert.assertFalse(player.getMedalCase().hasMedal(Medal.TRAINED_TO_MAX_POTENTIAL));
 
-        bulby.addEVs(new int[] { Stat.MAX_EVS, Stat.MAX_EVS, Stat.MAX_EVS, Stat.MAX_EVS, Stat.MAX_EVS, Stat.MAX_EVS });
+        bulby.addEVs(new int[] { EffortValues.MAX_EVS, EffortValues.MAX_EVS, EffortValues.MAX_EVS, EffortValues.MAX_EVS, EffortValues.MAX_EVS, EffortValues.MAX_EVS });
         Assert.assertTrue(player.getMedalCase().hasMedal(Medal.TRAINED_TO_MAX_POTENTIAL));
     }
 

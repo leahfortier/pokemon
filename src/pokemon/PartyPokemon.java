@@ -45,7 +45,7 @@ public abstract class PartyPokemon implements Serializable {
     private boolean isPlayer;
     private StatusCondition status;
     private int totalEXP;
-    private int[] EVs;
+    private EffortValues EVs;
     private HoldItem heldItem;
     private Ability ability;
     private Gender gender;
@@ -61,9 +61,9 @@ public abstract class PartyPokemon implements Serializable {
         this.level = level;
 
         this.nature = new Nature();
-        this.EVs = new int[Stat.NUM_STATS];
         this.stats = new int[Stat.NUM_STATS];
         this.IVs = new IndividualValues();
+        this.EVs = new EffortValues();
 
         this.isPlayer = isPlayer;
         this.shiny = (isPlayer || isWild) && RandomUtils.chanceTest(1, 8192);
@@ -90,9 +90,9 @@ public abstract class PartyPokemon implements Serializable {
         this.level = 1;
 
         this.nature = eggy.getNature();
-        this.EVs = new int[Stat.NUM_STATS];
         this.stats = new int[Stat.NUM_STATS];
         this.IVs = new IndividualValues(((PartyPokemon)eggy).IVs);
+        this.EVs = new EffortValues();
 
         this.isPlayer = true;
         this.shiny = eggy.isShiny();
@@ -112,8 +112,6 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public abstract boolean canFight();
-
-    // TODO: Deal with this later
     public abstract void resetAttributes();
     public abstract void setUsed(boolean used);
     public abstract boolean isUsed();
@@ -134,7 +132,6 @@ public abstract class PartyPokemon implements Serializable {
         return pokemon.getInfo();
     }
 
-    // Values between 0 and 31
     protected void setIVs(int[] IVs) {
         this.IVs.setIVs(IVs);
         this.setStats();
@@ -290,7 +287,7 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public int getEV(int index) {
-        return EVs[index];
+        return this.EVs.getEV(index);
     }
 
     public int getEV(Stat stat) {
@@ -493,41 +490,17 @@ public abstract class PartyPokemon implements Serializable {
         return level;
     }
 
-    private int totalEVs() {
-        int sum = 0;
-        for (int EV : EVs) {
-            sum += EV;
-        }
-
-        return sum;
-    }
-
     // Adds Effort Values to a Pokemon, returns true if they were successfully added
     public boolean addEVs(int[] vals) {
-        if (totalEVs() == Stat.MAX_EVS || !this.canFight()) {
+        if (!this.canFight()) {
             return false;
         }
 
-        boolean added = false;
-        for (int i = 0; i < EVs.length; i++) {
-            if (vals[i] > 0 && EVs[i] < Stat.MAX_STAT_EVS) {
-                added = true;
-                EVs[i] = Math.min(Stat.MAX_STAT_EVS, EVs[i] + vals[i]); // Don't exceed stat EV amount
-
-                // Don't exceed total EV amount
-                if (totalEVs() > Stat.MAX_EVS) {
-                    EVs[i] -= (totalEVs() - Stat.MAX_EVS);
-                    break;
-                }
-            } else if (vals[i] < 0 && EVs[i] > 0) {
-                added = true;
-                EVs[i] = Math.max(0, EVs[i] + vals[i]); // Don't drop below zero
-            }
-        }
+        boolean added = this.EVs.addEVs(vals);
 
         if (added) {
             this.setStats();
-            if (totalEVs() == Stat.MAX_EVS) {
+            if (this.EVs.totalEVs() == EffortValues.MAX_EVS) {
                 MedalCase medalCase = Game.getPlayer().getMedalCase();
                 medalCase.earnMedal(Medal.TRAINED_TO_MAX_POTENTIAL);
             }

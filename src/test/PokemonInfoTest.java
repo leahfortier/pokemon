@@ -6,6 +6,7 @@ import item.bag.Bag;
 import main.Game;
 import org.junit.Assert;
 import org.junit.Test;
+import pokemon.EffortValues;
 import pokemon.IndividualValues;
 import pokemon.LevelUpMove;
 import pokemon.PartyPokemon;
@@ -319,14 +320,14 @@ public class PokemonInfoTest extends BaseTest {
             }
 
             // HP EVs are now maxed, but max HP should not increase still
-            Assert.assertEquals(Stat.MAX_STAT_EVS, shedinja.getEV(Stat.HP));
+            Assert.assertEquals(EffortValues.MAX_STAT_EVS, shedinja.getEV(Stat.HP));
             Assert.assertFalse(bag.useItem(ItemNamesies.HP_UP, shedinja));
-            Assert.assertEquals(Stat.MAX_STAT_EVS, shedinja.getEV(Stat.HP));
+            Assert.assertEquals(EffortValues.MAX_STAT_EVS, shedinja.getEV(Stat.HP));
             Assert.assertEquals(1, shedinja.getHP());
             Assert.assertEquals(1, shedinja.getMaxHP());
 
             // Make sure other EVs contribute
-            Assert.assertEquals(Stat.MAX_STAT_EVS, shedinja.getEV(Stat.ATTACK));
+            Assert.assertEquals(EffortValues.MAX_STAT_EVS, shedinja.getEV(Stat.ATTACK));
             if (level > 1) { // Don't check at level one since it's generally too small for change
                 TestUtils.assertGreater(levelString, shedinja.getStat(Stat.ATTACK), baseAttack);
             }

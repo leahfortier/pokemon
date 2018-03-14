@@ -28,8 +28,6 @@ public enum Stat {
     public static final int NUM_STATS = 6;
     public static final int NUM_BATTLE_STATS = 7;
     public static final int MAX_STAT_CHANGES = 6;
-    public static final int MAX_EVS = 510;
-    public static final int MAX_STAT_EVS = 255;
 
     public static final List<Stat> STATS;
     public static final List<Stat> BATTLE_STATS;
