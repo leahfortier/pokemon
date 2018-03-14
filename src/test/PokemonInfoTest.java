@@ -6,6 +6,7 @@ import item.bag.Bag;
 import main.Game;
 import org.junit.Assert;
 import org.junit.Test;
+import pokemon.IndividualValues;
 import pokemon.LevelUpMove;
 import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;
@@ -266,7 +267,7 @@ public class PokemonInfoTest extends BaseTest {
 
     @Test
     public void ivsTest() {
-        boolean[] hasIv = new boolean[Stat.MAX_IV + 1];
+        boolean[] hasIv = new boolean[IndividualValues.MAX_IV + 1];
         boolean diffIvs = false;
         for (int i = 0; i < 1000; i++) {
             TestPokemon pokemon = TestPokemon.newWildPokemon(PokemonNamesies.BULBASAUR);
@@ -277,7 +278,7 @@ public class PokemonInfoTest extends BaseTest {
                 String message = stat.getName() + " " + iv;
 
                 // Make sure all IVs are in range
-                Assert.assertTrue(message, iv >= 0 && iv <= Stat.MAX_IV);
+                Assert.assertTrue(message, iv >= 0 && iv <= IndividualValues.MAX_IV);
                 hasIv[iv] = true;
 
                 // Make sure not every IV is the same

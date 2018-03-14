@@ -2,6 +2,7 @@ package trainer.player.medal;
 
 import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
+import pokemon.IndividualValues;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import pokemon.Stat;
@@ -99,7 +100,7 @@ public class MedalCase implements Serializable {
 
         int perfectIVs = 0;
         for (Stat stat : Stat.STATS) {
-            if (hatched.getIV(stat.index()) == Stat.MAX_IV) {
+            if (hatched.getIV(stat.index()) == IndividualValues.MAX_IV) {
                 perfectIVs++;
             }
         }

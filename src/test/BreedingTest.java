@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import pokemon.Gender;
+import pokemon.IndividualValues;
 import pokemon.PartyPokemon;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
@@ -267,7 +268,7 @@ public class BreedingTest extends BaseTest {
             int ev = baby.getEV(stat);
 
             // Make sure IVs are all in range
-            Assert.assertTrue(getFailMessage(mommy, daddy, baby), iv >= 0 && iv <= Stat.MAX_IV);
+            Assert.assertTrue(getFailMessage(mommy, daddy, baby), iv >= 0 && iv <= IndividualValues.MAX_IV);
 
             // EVs should all be zero
             Assert.assertEquals(getFailMessage(mommy, daddy, baby), 0, ev);

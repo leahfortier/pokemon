@@ -30,7 +30,6 @@ public enum Stat {
     public static final int MAX_STAT_CHANGES = 6;
     public static final int MAX_EVS = 510;
     public static final int MAX_STAT_EVS = 255;
-    public static final int MAX_IV = 31;
 
     public static final List<Stat> STATS;
     public static final List<Stat> BATTLE_STATS;
@@ -173,10 +172,6 @@ public enum Stat {
 
         Global.error("Incorrect stat index " + index);
         return HP; // Because I'm sick of NPE warnings and the above line does a system exit
-    }
-
-    public static int getRandomIv() {
-        return RandomUtils.getRandomInt(MAX_IV + 1);
     }
 
     // Never -- The stat is not used in battle (HP)

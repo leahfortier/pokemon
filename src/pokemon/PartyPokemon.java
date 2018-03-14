@@ -35,17 +35,10 @@ public abstract class PartyPokemon implements Serializable {
     public static final int MAX_LEVEL = 100;
     public static final int MAX_NAME_LENGTH = 10;
 
-    private static final String[][] characteristics =
-        {{"Loves to eat",            "Proud of its power",      "Sturdy body",            "Highly curious",        "Strong willed",     "Likes to run"},
-         {"Takes plenty of siestas", "Likes to thrash about",   "Capable of taking hits", "Mischievous",           "Somewhat vain",     "Alert to sounds"},
-         {"Nods off a lot",          "A little quick tempered", "Highly persistent",      "Thoroughly cunning",    "Strongly defiant",  "Impetuous and silly"},
-         {"Scatters things often",   "Likes to fight",          "Good endurance",         "Often lost in thought", "Hates to lose",     "Somewhat of a clown"},
-         {"Likes to relax",          "Quick tempered",          "Good perseverance",      "Very finicky",          "Somewhat stubborn", "Quick to flee"}};
-
     private PokemonNamesies pokemon;
     private String nickname;
     private int[] stats;
-    private int[] IVs;
+    private IndividualValues IVs;
     private List<Move> moves;
     private int hp;
     private int level;
@@ -57,7 +50,6 @@ public abstract class PartyPokemon implements Serializable {
     private Ability ability;
     private Gender gender;
     private Nature nature;
-    private String characteristic;
     private boolean shiny;
 
     // General constructor for an active Pokemon (isPlayer is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
@@ -71,7 +63,7 @@ public abstract class PartyPokemon implements Serializable {
         this.nature = new Nature();
         this.EVs = new int[Stat.NUM_STATS];
         this.stats = new int[Stat.NUM_STATS];
-        this.setIVs();
+        this.IVs = new IndividualValues();
 
         this.isPlayer = isPlayer;
         this.shiny = (isPlayer || isWild) && RandomUtils.chanceTest(1, 8192);
@@ -85,6 +77,7 @@ public abstract class PartyPokemon implements Serializable {
         this.totalEXP = pokemon.getGrowthRate().getEXP(this.level);
         this.totalEXP += RandomUtils.getRandomInt(expToNextLevel());
 
+        this.setStats();
         this.fullyHeal();
         this.resetAttributes();
     }
@@ -99,7 +92,7 @@ public abstract class PartyPokemon implements Serializable {
         this.nature = eggy.getNature();
         this.EVs = new int[Stat.NUM_STATS];
         this.stats = new int[Stat.NUM_STATS];
-        this.setIVs(((PartyPokemon)eggy).IVs);
+        this.IVs = new IndividualValues(((PartyPokemon)eggy).IVs);
 
         this.isPlayer = true;
         this.shiny = eggy.isShiny();
@@ -113,6 +106,7 @@ public abstract class PartyPokemon implements Serializable {
         // Don't add randomness for eggs
         this.totalEXP = pokemonInfo.getGrowthRate().getEXP(this.level);
 
+        this.setStats();
         this.fullyHeal();
         this.resetAttributes();
     }
@@ -140,28 +134,9 @@ public abstract class PartyPokemon implements Serializable {
         return pokemon.getInfo();
     }
 
-    // Random value between 0 and 31
-    private void setIVs() {
-        int[] IVs = new int[Stat.NUM_STATS];
-        for (int i = 0; i < IVs.length; i++) {
-            IVs[i] = Stat.getRandomIv();
-        }
-
-        this.setIVs(IVs);
-    }
-
     // Values between 0 and 31
     protected void setIVs(int[] IVs) {
-        this.IVs = IVs;
-
-        int maxIndex = 0;
-        for (int i = 0; i < this.IVs.length; i++) {
-            if (this.IVs[i] > this.IVs[maxIndex]) {
-                maxIndex = i;
-            }
-        }
-
-        this.characteristic = characteristics[this.IVs[maxIndex]%5][maxIndex];
+        this.IVs.setIVs(IVs);
         this.setStats();
     }
 
@@ -173,7 +148,7 @@ public abstract class PartyPokemon implements Serializable {
         stats = new int[Stat.NUM_STATS];
         int[] gain = new int[Stat.NUM_STATS];
         for (int i = 0; i < stats.length; i++) {
-            stats[i] = Stat.getStat(i, level, pokemon.getStat(i), IVs[i], EVs[i], nature.getNatureVal(i));
+            stats[i] = Stat.getStat(i, level, pokemon.getStat(i), this.getIV(i), this.getEV(i), nature.getNatureVal(i));
             gain[i] = stats[i] - prevStats[i];
         }
 
@@ -291,7 +266,7 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public String getCharacteristic() {
-        return characteristic;
+        return this.IVs.getCharacteristic();
     }
 
     public int[] getClonedStats() {
@@ -307,7 +282,7 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public int getIV(int index) {
-        return IVs[index];
+        return this.IVs.getIV(index);
     }
 
     public int getIV(Stat stat) {

@@ -8,6 +8,7 @@ import item.hold.HoldItem;
 import item.hold.IncenseItem;
 import item.hold.PowerItem;
 import pokemon.Gender;
+import pokemon.IndividualValues;
 import pokemon.Nature;
 import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
@@ -113,7 +114,7 @@ public class Breeding {
 
         for (int i = 0; i < IVs.length; i++) {
             if (IVs[i] == -1) {
-                IVs[i] = Stat.getRandomIv();
+                IVs[i] = IndividualValues.getRandomIv();
             }
         }
 
