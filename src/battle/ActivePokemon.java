@@ -88,17 +88,6 @@ public class ActivePokemon extends PartyPokemon {
         super(eggy);
     }
 
-    public Type computeHiddenPowerType() {
-        return Type.getHiddenType(((
-                this.getIV(Stat.HP)%2 +
-                        2*(this.getIV(Stat.ATTACK)%2) +
-                        4*(this.getIV(Stat.DEFENSE)%2) +
-                        8*(this.getIV(Stat.SPEED)%2) +
-                        16*(this.getIV(Stat.SP_ATTACK)%2) +
-                        32*(this.getIV(Stat.SP_DEFENSE)%2)
-        )*15)/63);
-    }
-
     public Ability getAbility() {
 
         // Check if the Pokemon has had its ability changed during the battle

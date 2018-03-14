@@ -75,7 +75,8 @@
             },
             {
               "pokemonMatcher": {
-                "isStarterEgg": true
+                "isStarter": true,
+                "isEgg": true
               },
               "className": "pattern.action.ActionMatcher$GivePokemonActionMatcher"
             },

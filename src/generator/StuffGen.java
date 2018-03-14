@@ -24,11 +24,7 @@ public class StuffGen {
     }
 
     private StuffGen() {
-        this(new InputFormatter());
-    }
-
-    public StuffGen(InputFormatter inputFormatter) {
-        new PokeGen(inputFormatter);
+        new PokeGen(new InputFormatter());
         new InterfaceGen();
 
         new NamesiesGen(NamesiesType.POKEMON_NAMESIES).writeNamesies();

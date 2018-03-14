@@ -20,12 +20,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-class PokeGen {
+public class PokeGen {
     private final InputFormatter inputFormatter;
     private NamesiesGen namesiesGen;
     private GeneratorType currentGen;
 
-    PokeGen(InputFormatter inputFormatter) {
+    public PokeGen(InputFormatter inputFormatter) {
         this.inputFormatter = inputFormatter;
 
         final Map<NamesiesType, NamesiesGen> namesiesMap = new HashMap<>();

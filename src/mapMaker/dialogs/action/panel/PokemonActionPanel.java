@@ -83,20 +83,18 @@ public class PokemonActionPanel extends ActionPanel<GivePokemonActionMatcher> {
     @Override
     protected void load(GivePokemonActionMatcher matcher) {
         PokemonMatcher pokemonMatcher = matcher.getPokemonMatcher();
-        if (!pokemonMatcher.isStarterEgg()) {
-            this.pokemonNameField.setText(pokemonMatcher.getNamesies().getName());
 
-            if (!pokemonMatcher.isEgg()) {
-                if (pokemonMatcher.hasHoldItem()) {
-                    this.itemNameField.setText(pokemonMatcher.getHoldItem().getName());
-                }
-
-                this.levelField.setValue(Integer.parseInt(pokemonMatcher.getLevel() + ""));
-                this.shinyCheckBox.setSelected(pokemonMatcher.isShiny());
-            }
-        }
-
+        this.pokemonNameField.setText(pokemonMatcher.getNamesies().getName());
         this.isEggCheckBox.setSelected(pokemonMatcher.isEgg());
+
+        if (!pokemonMatcher.isEgg()) {
+            if (pokemonMatcher.hasHoldItem()) {
+                this.itemNameField.setText(pokemonMatcher.getHoldItem().getName());
+            }
+
+            this.levelField.setValue(Integer.parseInt(pokemonMatcher.getLevel() + ""));
+            this.shinyCheckBox.setSelected(pokemonMatcher.isShiny());
+        }
 
         setEnabled();
     }

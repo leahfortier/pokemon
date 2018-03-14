@@ -179,10 +179,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         return this.getName().hashCode();
     }
 
-    public static boolean isItem(String itemName) {
-        return ItemNamesies.tryValueOf(itemName) != null;
-    }
-
     // EVERYTHING BELOW IS GENERATED ###
 
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/

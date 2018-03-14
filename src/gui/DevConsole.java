@@ -1,16 +1,15 @@
 package gui;
 
-import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import input.ControlKey;
 import input.InputControl;
-import item.Item;
 import item.ItemNamesies;
 import main.Game;
 import main.Global;
 import map.area.AreaData;
 import map.overworld.OverworldTool;
+import pattern.PokemonMatcher;
 import pokemon.PartyPokemon;
 import pokemon.PokemonNamesies;
 import test.maps.TestMap;
@@ -22,8 +21,6 @@ import util.file.Folder;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -186,17 +183,22 @@ public class DevConsole {
     }
 
     private void givePokemon(Scanner in, Player player) {
-        PokemonNamesies namesies = PokemonNamesies.getValueOf(in.next());
+        String pokemonName = in.next();
+        PokemonNamesies namesies = PokemonNamesies.tryValueOf(pokemonName);
+        if (namesies == null) {
+            Global.info("Invalid Pokemon name " + pokemonName);
+            return;
+        }
 
         // Default values
         int level = PartyPokemon.MAX_LEVEL;
-        List<Move> moves = null;
+        AttackNamesies[] moves = null;
         boolean shiny = false;
 
         while (in.hasNext()) {
             String token = in.next();
             switch (token.toLowerCase()) {
-                case "level:":
+                case "level":
                     String levelInput = in.next();
                     try {
                         level = Integer.parseInt(levelInput);
@@ -208,18 +210,18 @@ public class DevConsole {
                 case "shiny":
                     shiny = true;
                     break;
-                case "moves:":
-                    moves = new ArrayList<>();
+                case "moves":
+                    moves = new AttackNamesies[Move.MAX_MOVES];
                     Pattern oldDelimiter = in.delimiter();
                     in.useDelimiter(",");
-                    for (int i = 0; i < Move.MAX_MOVES; ++i) {
+                    for (int i = 0; i < moves.length; i++) {
                         String s = in.next().trim();
                         AttackNamesies attack = AttackNamesies.tryValueOf(s);
                         if (attack == null) {
                             Global.info("Invalid move: " + s);
                             return;
                         } else {
-                            moves.add(new Move(attack));
+                            moves[i] = attack;
                         }
                     }
                     in.useDelimiter(oldDelimiter);
@@ -230,24 +232,14 @@ public class DevConsole {
             }
         }
 
-        System.out.println("adding " + namesies.getName() + " "
-                                   + (shiny ? " shiny " : "")
-                                   + (moves == null ? " " : moves.toString()));
+        System.out.println("adding " + namesies.getName());
 
-        ActivePokemon pokemon = new ActivePokemon(namesies, level, false, true);
-        if (moves != null) {
-            pokemon.setMoves(moves);
-        }
-
-        if (shiny) {
-            pokemon.setShiny();
-        }
-
-        player.addPokemon(pokemon);
+        PokemonMatcher pokemonMatcher = new PokemonMatcher(namesies, null, level, shiny, moves, null);
+        player.addPokemon(PartyPokemon.createActivePokemon(pokemonMatcher, true));
     }
 
     private void giveItem(Scanner in, Player player) {
-        String itemName = in.next().replaceAll("_", " ");
+        String itemName = in.next();
         int amount = 1;
         if (in.hasNext()) {
             String amountToken = in.next();
@@ -259,12 +251,13 @@ public class DevConsole {
             }
         }
 
-        if (!Item.isItem(itemName)) {
+        ItemNamesies namesies = ItemNamesies.tryValueOf(itemName);
+        if (namesies == null) {
             Global.info("Invalid item name " + itemName);
             return;
         }
 
-        player.getBag().addItem(ItemNamesies.getValueOf(itemName), amount);
+        player.getBag().addItem(namesies, amount);
     }
 
     public static void giveFlyLocations(Player player) {

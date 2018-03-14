@@ -20,6 +20,7 @@ import trainer.player.medal.Medal;
 import trainer.player.medal.MedalCase;
 import trainer.player.medal.MedalTheme;
 import type.PokeType;
+import type.Type;
 import util.RandomUtils;
 import util.serialization.Serializable;
 import util.string.StringUtils;
@@ -218,7 +219,7 @@ public abstract class PartyPokemon implements Serializable {
         return false;
     }
 
-    public void setMoves(List<Move> list) {
+    protected void setMoves(List<Move> list) {
         if (list.isEmpty() || list.size() > Move.MAX_MOVES) {
             Global.error("Invalid move list: " + list);
         }
@@ -273,7 +274,7 @@ public abstract class PartyPokemon implements Serializable {
         return this.moves.size();
     }
 
-    public void setShiny() {
+    private void setShiny() {
         shiny = true;
     }
 
@@ -587,29 +588,30 @@ public abstract class PartyPokemon implements Serializable {
         return heldItem;
     }
 
-    // Constructor for triggers
-    public static PartyPokemon createActivePokemon(PokemonMatcher pokemonMatcher, boolean user) {
+    public Type computeHiddenPowerType() {
+        return Type.getHiddenType(((
+                this.getIV(Stat.HP)%2 +
+                        2*(this.getIV(Stat.ATTACK)%2) +
+                        4*(this.getIV(Stat.DEFENSE)%2) +
+                        8*(this.getIV(Stat.SPEED)%2) +
+                        16*(this.getIV(Stat.SP_ATTACK)%2) +
+                        32*(this.getIV(Stat.SP_DEFENSE)%2)
+        )*15)/63);
+    }
 
-        // Random Starter Egg
-        if (pokemonMatcher.isStarterEgg()) {
-            if (!user) {
-                Global.error("Trainers cannot have eggs.");
-            }
-
-            return new Eggy(PokemonInfo.getRandomStarterPokemon());
-        }
-
+    // Constructor for matchers
+    public static PartyPokemon createActivePokemon(PokemonMatcher pokemonMatcher, boolean isPlayer) {
         final PokemonNamesies namesies = pokemonMatcher.getNamesies();
 
         PartyPokemon pokemon;
         if (pokemonMatcher.isEgg()) {
-            if (!user) {
+            if (!isPlayer) {
                 Global.error("Trainers cannot have eggs.");
             }
 
             pokemon = new Eggy(namesies);
         } else {
-            pokemon = new ActivePokemon(namesies, pokemonMatcher.getLevel(), false, user);
+            pokemon = new ActivePokemon(namesies, pokemonMatcher.getLevel(), false, isPlayer);
             String nickname = pokemonMatcher.getNickname();
             if (!StringUtils.isNullOrEmpty(nickname)) {
                 pokemon.setNickname(nickname);

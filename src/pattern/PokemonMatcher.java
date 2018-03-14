@@ -7,6 +7,7 @@ import main.Global;
 import pokemon.Gender;
 import pokemon.Nature;
 import pokemon.PartyPokemon;
+import pokemon.PokemonInfo;
 import pokemon.PokemonNamesies;
 import util.GeneralUtils;
 import util.serialization.JsonMatcher;
@@ -22,7 +23,7 @@ public class PokemonMatcher implements JsonMatcher {
     private PokemonNamesies namesies;
     private String nickname;
     private Integer level;
-    private Boolean isStarterEgg;
+    private Boolean isStarter;
     private Boolean isShiny;
     private List<AttackNamesies> moves;
     private Boolean isEgg;
@@ -60,6 +61,14 @@ public class PokemonMatcher implements JsonMatcher {
     private PokemonMatcher() {}
 
     public PokemonNamesies getNamesies() {
+        if (GeneralUtils.getBooleanValue(this.isStarter)) {
+            if (this.namesies != null) {
+                Global.error("Cannot set namesies for random starter pokemon.");
+            }
+
+            return PokemonInfo.getRandomStarterPokemon();
+        }
+
         return this.namesies;
     }
 
@@ -79,16 +88,12 @@ public class PokemonMatcher implements JsonMatcher {
         return GeneralUtils.getBooleanValue(this.isEgg);
     }
 
-    public boolean isStarterEgg() {
-        return GeneralUtils.getBooleanValue(this.isStarterEgg);
-    }
-
     public boolean isShiny() {
         return GeneralUtils.getBooleanValue(this.isShiny);
     }
 
     public boolean hasMoves() {
-        return this.moves != null;
+        return this.moves != null && !this.moves.isEmpty();
     }
 
     public List<Move> getMoves() {
