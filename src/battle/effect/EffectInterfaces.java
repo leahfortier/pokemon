@@ -25,10 +25,10 @@ import map.overworld.WildEncounterInfo;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
-import pokemon.species.PokemonInfo;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
+import pokemon.species.PokemonInfo;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.WildPokemon;
@@ -989,18 +989,23 @@ public final class EffectInterfaces {
     }
 
     public interface ChangeAttackTypeEffect {
+
+        // Guarantee the change-attack-type effect to be first
         Type changeAttackType(Attack attack, Type original);
 
-        static Type updateAttackType(Battle b, ActivePokemon attacking, Attack attack, Type original) {
-            List<InvokeEffect> invokees = b.getEffectsList(attacking);
+        static Type getAttackType(Battle b, ActivePokemon attacking, Attack attack, Type original) {
+            List<InvokeEffect> invokees = b.getEffectsList(attacking, attacking.getEffect(PokemonEffectNamesies.CHANGE_ATTACK_TYPE));
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof ChangeAttackTypeEffect && InvokeEffect.isActiveEffect(invokee)) {
                     ChangeAttackTypeEffect effect = (ChangeAttackTypeEffect)invokee;
-                    original = effect.changeAttackType(attack, original);
+                    Type value = effect.changeAttackType(attack, original);
+                    if (value != null) {
+                        return value;
+                    }
                 }
             }
 
-            return original;
+            return null;
         }
     }
 

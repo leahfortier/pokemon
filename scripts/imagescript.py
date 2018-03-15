@@ -1,4 +1,5 @@
 import urllib
+
 from forms import AddedPokes, FormConfig
 
 for num in range(1, list(AddedPokes)[-1].value + 1):

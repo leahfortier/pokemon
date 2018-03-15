@@ -9,7 +9,6 @@ import battle.effect.EffectInterfaces.StatChangingEffect;
 import battle.effect.EffectInterfaces.StatModifyingEffect;
 import battle.effect.EffectInterfaces.StatSwitchingEffect;
 import main.Global;
-import util.RandomUtils;
 
 import java.util.Arrays;
 import java.util.Collections;

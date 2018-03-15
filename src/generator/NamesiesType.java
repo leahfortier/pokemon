@@ -8,8 +8,8 @@ import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
-import pokemon.species.PokemonNamesies;
 import pokemon.ability.AbilityNamesies;
+import pokemon.species.PokemonNamesies;
 import util.file.Folder;
 
 public enum NamesiesType {
@@ -18,11 +18,11 @@ public enum NamesiesType {
     POKEMON_EFFECT_NAMESIES(PokemonEffectNamesies.class, Folder.POKEMON_EFFECT, false),
     TEAM_EFFECT_NAMESIES(TeamEffectNamesies.class, Folder.TEAM_EFFECT, false),
     BATTLE_EFFECT_NAMESIES(StandardBattleEffectNamesies.class, Folder.BATTLE_EFFECT, false),
-    WEATHER_NAMESIES(WeatherNamesies.class, Folder.WEATHER_EFFECT, false),
-    TERRAIN_NAMESIES(TerrainNamesies.class, Folder.TERRAIN_EFFECT, false),
+    WEATHER_NAMESIES(WeatherNamesies.class, Folder.WEATHER, false),
+    TERRAIN_NAMESIES(TerrainNamesies.class, Folder.TERRAIN, false),
     ABILITY_NAMESIES(AbilityNamesies.class, Folder.ABILITY, true),
     ITEM_NAMESIES(ItemNamesies.class, Folder.ITEMS, true),
-    POKEMON_NAMESIES(PokemonNamesies.class, Folder.POKEMON, true);
+    POKEMON_NAMESIES(PokemonNamesies.class, Folder.SPECIES, true);
 
     private final Class<? extends Enum> namesiesClass;
     private final String folder;

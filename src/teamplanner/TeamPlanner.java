@@ -2,11 +2,11 @@ package teamplanner;
 
 import battle.attack.AttackNamesies;
 import main.Global;
+import pokemon.Stat;
+import pokemon.ability.AbilityNamesies;
 import pokemon.active.Nature;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
-import pokemon.Stat;
-import pokemon.ability.AbilityNamesies;
 import type.PokeType;
 import type.Type;
 import util.file.FileIO;

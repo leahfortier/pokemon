@@ -65,10 +65,10 @@ import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
-import pokemon.active.Gender;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
+import pokemon.active.Gender;
 import trainer.Team;
 import trainer.Trainer;
 import type.PokeType;
@@ -215,8 +215,15 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
     }
 
     public Type getBattleType(Battle b, ActivePokemon user) {
-        // Check if there is an effect that changes the type of the user -- if not just returns the actual type (I promise)
-        return ChangeAttackTypeEffect.updateAttackType(b, user, this, this.getType(b, user));
+        Type type = this.getType(b, user);
+
+        // Check if there is an effect that changes the type of the user
+        Type changeType = ChangeAttackTypeEffect.getAttackType(b, user, this, type);
+        if (changeType != null) {
+            return changeType;
+        }
+
+        return type;
     }
 
     protected Type getType(Battle b, ActivePokemon user) {

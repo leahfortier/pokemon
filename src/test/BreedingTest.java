@@ -7,14 +7,14 @@ import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import pokemon.Stat;
 import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
 import pokemon.active.PartyPokemon;
-import pokemon.species.PokemonInfo;
-import pokemon.species.PokemonNamesies;
-import pokemon.Stat;
 import pokemon.breeding.Breeding;
 import pokemon.breeding.Eggy;
+import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonNamesies;
 import util.string.StringAppender;
 import util.string.StringUtils;
 

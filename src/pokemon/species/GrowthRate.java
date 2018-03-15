@@ -34,6 +34,10 @@ public enum GrowthRate {
         this.expGetter = expGetter;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     public int getEXP(int level) {
         return Math.max(1, this.expGetter.getEXP(level));
     }

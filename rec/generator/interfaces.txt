@@ -578,11 +578,12 @@ PriorityChangeEffect:
 ChangeAttackTypeEffect:
 	Method:
 		Header: Type changeAttackType(Attack attack, Type original)
-		Invoke: Update
-		Update: original
 		InvokeParameters: Battle b, ActivePokemon attacking
 		EffectList: attacking
-		InvokeName: updateAttackType
+		InvokeName: getAttackType
+        Comments: // Guarantee the change-attack-type effect to be first
+		Invoke: Get
+		EffectPriority: attacking.getEffect(PokemonEffectNamesies.CHANGE_ATTACK_TYPE)
 	*
 ***
 AttackingNoAdvantageChanger:

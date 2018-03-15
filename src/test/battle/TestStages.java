@@ -2,8 +2,8 @@ package test.battle;
 
 import battle.Stages;
 import org.junit.Assert;
-import pokemon.species.PokemonNamesies;
 import pokemon.Stat;
+import pokemon.species.PokemonNamesies;
 import test.TestPokemon;
 
 public class TestStages extends Stages {

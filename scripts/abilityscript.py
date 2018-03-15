@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from lxml import html
 import requests
+from lxml import html
+
 from util import addRowValues
 
 f = open("abilities.in", "r")

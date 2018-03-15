@@ -20,16 +20,18 @@ import generator.update.MoveUpdater.MoveParser;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.active.Gender;
-import pokemon.species.PokemonNamesies;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import pokemon.active.Gender;
+import pokemon.active.IndividualValues;
+import pokemon.species.PokemonNamesies;
 import test.BaseTest;
 import test.TestPokemon;
 import test.TestUtils;
 import trainer.Team;
 import type.Type;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
@@ -1456,5 +1458,85 @@ public class AttackTest extends BaseTest {
         Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
         defending.assertHealthRatio(.75);
         attacking.assertFullHealth();
+    }
+
+    @Test
+    public void hiddenPowerTest() {
+        hiddenPowerTest(new int[]{ 30, 31, 31, 30, 31, 31 }, Type.GRASS);
+        hiddenPowerTest(new int[]{ 30, 30, 30, 30, 30, 30 }, Type.FIGHTING);
+        hiddenPowerTest(new int[]{ 31, 31, 31, 31, 31, 31 }, Type.DARK);
+        hiddenPowerTest(new int[]{ 31, 31, 31, 30, 31, 31 }, Type.ELECTRIC);
+
+        checkHiddenPower(new int[]{ 14, 11, 13, 12, 19, 15 }, Type.GRASS);
+        checkHiddenPower(new int[]{ 31, 31, 30, 30, 30, 30 }, Type.FIGHTING);
+
+        // All even IVs is Fighting-type Hidden Power
+        // All odd IVs is Dark-type Hidden Power
+        int[] evenIVs = new int[Stat.NUM_STATS];
+        int[] oddIVs = new int[Stat.NUM_STATS];
+        Arrays.fill(oddIVs, 1);
+        for (int i = 0; i < Stat.NUM_STATS; i++) {
+            while (oddIVs[i] < IndividualValues.MAX_IV) {
+                evenIVs[i] += 2;
+                checkHiddenPower(evenIVs, Type.FIGHTING);
+
+                oddIVs[i] += 2;
+                checkHiddenPower(oddIVs, Type.DARK);
+            }
+        }
+    }
+
+    private void checkHiddenPower(int[] IVs, Type hiddenType) {
+        TestPokemon pokemon = TestPokemon.newPlayerPokemon(PokemonNamesies.BULBASAUR).withIVs(IVs);
+        Assert.assertEquals(hiddenType, pokemon.computeHiddenPowerType());
+    }
+
+    private void hiddenPowerTest(int[] IVs, Type hiddenType) {
+        TestBattle battle = TestBattle.create(PokemonNamesies.BULBASAUR, PokemonNamesies.SANDSHREW);
+        TestPokemon attacking = battle.getAttacking().withIVs(IVs);
+        TestPokemon defending = battle.getDefending();
+
+        battle.fight(AttackNamesies.HIDDEN_POWER, AttackNamesies.ENDURE);
+        Assert.assertTrue(Arrays.toString(IVs) + " " + attacking.getAttackType(), attacking.isAttackType(hiddenType));
+        Assert.assertEquals(hiddenType == Type.ELECTRIC, defending.fullHealth());
+
+        battle.emptyHeal();
+
+        // Electrify has priority so it will go first and will change Hidden Power's type to be electric
+        // Will then fail against Sandshrew
+        battle.fight(AttackNamesies.HIDDEN_POWER, AttackNamesies.ELECTRIFY);
+        Assert.assertTrue(attacking.isAttackType(Type.ELECTRIC));
+        defending.assertFullHealth();
+
+        // Using again will be back to hidden type
+        battle.fight(AttackNamesies.HIDDEN_POWER, AttackNamesies.ENDURE);
+        Assert.assertTrue(attacking.isAttackType(hiddenType));
+        Assert.assertEquals(hiddenType == Type.ELECTRIC, defending.fullHealth());
+
+        battle.emptyHeal();
+
+        // Normalize makes Hidden Power Normal-type
+        attacking.withAbility(AbilityNamesies.NORMALIZE);
+        battle.setExpectedDamageModifier(1.2);
+        battle.fight(AttackNamesies.HIDDEN_POWER, AttackNamesies.ENDURE);
+        Assert.assertTrue(attacking.isAttackType(Type.NORMAL));
+        defending.assertNotFullHealth();
+
+        battle.emptyHeal();
+
+        // Electrify overrides Normalize
+        battle.fight(AttackNamesies.HIDDEN_POWER, AttackNamesies.ELECTRIFY);
+        Assert.assertTrue(attacking.isAttackType(Type.ELECTRIC));
+        defending.assertFullHealth();
+
+        // Double check this override when it is actually effective to make sure Normalize isn't being activated for the 20% boost
+        // Yes I realize this here doesn't have much to do with Hidden Power fucking sue me
+        battle.attackingFight(AttackNamesies.SOAK);
+        Assert.assertTrue(defending.isType(battle, Type.WATER));
+        Assert.assertFalse(defending.isType(battle, Type.ELECTRIC));
+        battle.setExpectedDamageModifier(1.0);
+        battle.fight(AttackNamesies.HIDDEN_POWER, AttackNamesies.ELECTRIFY);
+        Assert.assertTrue(attacking.isAttackType(Type.ELECTRIC));
+        defending.assertNotFullHealth();
     }
 }

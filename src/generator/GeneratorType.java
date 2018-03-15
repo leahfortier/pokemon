@@ -18,8 +18,8 @@ public enum GeneratorType {
     POKEMON_EFFECT_GEN("PokemonEffects.txt", Folder.POKEMON_EFFECT, PokemonEffect.class, NamesiesType.POKEMON_EFFECT_NAMESIES),
     TEAM_EFFECT_GEN("TeamEffects.txt", Folder.TEAM_EFFECT, TeamEffect.class, NamesiesType.TEAM_EFFECT_NAMESIES),
     BATTLE_EFFECT_GEN("BattleEffects.txt", Folder.BATTLE_EFFECT, new ClassNameCreator(BattleEffect.class, StandardBattleEffectNamesies.class), NamesiesType.BATTLE_EFFECT_NAMESIES),
-    WEATHER_GEN("Weather.txt", Folder.WEATHER_EFFECT, WeatherEffect.class, NamesiesType.WEATHER_NAMESIES),
-    TERRAIN_GEN("Terrain.txt", Folder.TERRAIN_EFFECT, TerrainEffect.class, NamesiesType.TERRAIN_NAMESIES),
+    WEATHER_GEN("Weather.txt", Folder.WEATHER, WeatherEffect.class, NamesiesType.WEATHER_NAMESIES),
+    TERRAIN_GEN("Terrain.txt", Folder.TERRAIN, TerrainEffect.class, NamesiesType.TERRAIN_NAMESIES),
     ABILITY_GEN("Abilities.txt", Folder.ABILITY, Ability.class, NamesiesType.ABILITY_NAMESIES),
     ITEM_GEN("Items.txt", Folder.ITEMS, Item.class, NamesiesType.ITEM_NAMESIES);
 

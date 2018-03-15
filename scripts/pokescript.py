@@ -1,14 +1,16 @@
 # -*- coding: latin-1 -*-
 
-from lxml import html
-import requests
 import math
 import re
+import requests
 import time
-from substitutions import attackSubstitution, abilitySubstitution, typeSubstitution
+from lxml import html
+
 from forms import Stat, AddedPokes, FormConfig
 from parser import Parser
+from substitutions import attackSubstitution, abilitySubstitution, typeSubstitution
 from util import namesies, removePrefix, removeEmpty, indexSwap, getTypes, normalizeForm, replaceSpecial, dashy
+
 
 def getBaseExpMap():
     page = requests.get('https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield')

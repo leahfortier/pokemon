@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
+import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.battle.weather.WeatherNamesies;
@@ -102,8 +103,8 @@ public class TestBattle extends Battle {
         TestPokemon attacking = this.getAttacking();
         TestPokemon defending = this.getDefending();
 
-        attacking.setupMove(attackingMove, this);
-        defending.setupMove(defendingMove, this);
+        attacking.setMove(new Move(attackingMove));
+        defending.setMove(new Move(defendingMove));
 
         // Player always goes first in tests
         super.fight();

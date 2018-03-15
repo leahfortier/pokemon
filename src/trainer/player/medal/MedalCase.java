@@ -2,10 +2,10 @@ package trainer.player.medal;
 
 import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
+import pokemon.Stat;
 import pokemon.active.IndividualValues;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
-import pokemon.Stat;
 import trainer.player.pokedex.Pokedex;
 import type.Type;
 import type.TypeAdvantage;

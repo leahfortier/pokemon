@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from lxml import html
 import requests
+from lxml import html
+
 from util import poke, getImageName, checkHeader, addValue
+
 
 def updateTable(table, header):
     while True:

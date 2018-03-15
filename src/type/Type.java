@@ -6,6 +6,7 @@ import util.file.Folder;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.function.Supplier;
 
 public enum Type {
     NORMAL(0, "Normal", () -> TypeAdvantage.NORMAL, new Color(179, 170, 151), -1),
@@ -30,12 +31,12 @@ public enum Type {
 
     private final int index;
     private final String name;
-    private final AdvantageGetter advantageGetter;
+    private final Supplier<TypeAdvantage> advantageGetter;
     private final Color color;
     private final int hiddenIndex;
     private final BufferedImage image;
 
-    Type(int index, String name, AdvantageGetter advantageGetter, Color color, int hiddenIndex) {
+    Type(int index, String name, Supplier<TypeAdvantage> advantageGetter, Color color, int hiddenIndex) {
         this.index = index;
         this.name = name;
         this.advantageGetter = advantageGetter;
@@ -55,7 +56,7 @@ public enum Type {
     }
 
     public TypeAdvantage getAdvantage() {
-        return this.advantageGetter.getAdvantage();
+        return this.advantageGetter.get();
     }
 
     public Color getColor() {
@@ -75,10 +76,5 @@ public enum Type {
 
         Global.error("Invalid hidden type index " + hiddenIndex);
         return null;
-    }
-
-    @FunctionalInterface
-    private interface AdvantageGetter {
-        TypeAdvantage getAdvantage();
     }
 }

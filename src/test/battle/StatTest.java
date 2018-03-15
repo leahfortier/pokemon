@@ -3,8 +3,8 @@ package test.battle;
 import battle.attack.AttackNamesies;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.species.PokemonNamesies;
 import pokemon.Stat;
+import pokemon.species.PokemonNamesies;
 import test.BaseTest;
 import test.TestPokemon;
 

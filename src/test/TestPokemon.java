@@ -6,9 +6,9 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import item.ItemNamesies;
 import org.junit.Assert;
+import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.species.PokemonNamesies;
-import pokemon.ability.AbilityNamesies;
 import test.battle.TestBattle;
 import util.string.StringUtils;
 
@@ -24,6 +24,11 @@ public class TestPokemon extends ActivePokemon {
 
     public TestPokemon(final PokemonNamesies pokemon, final int level, final boolean isWild, final boolean isPlayer) {
         super(pokemon, level, isWild, isPlayer);
+    }
+
+    public TestPokemon withIVs(int[] IVs) {
+        super.setIVs(IVs);
+        return this;
     }
 
     public TestPokemon withGender(Gender gender) {

@@ -20,10 +20,11 @@ public abstract class Folder {
     public static final String POKEMON_EFFECT = FileIO.makeFolderPath(EFFECT, "pokemon");
     public static final String TEAM_EFFECT = FileIO.makeFolderPath(EFFECT, "team");
     public static final String BATTLE_EFFECT = FileIO.makeFolderPath(EFFECT, "battle");
-    public static final String WEATHER_EFFECT = FileIO.makeFolderPath(BATTLE_EFFECT, "weather");
-    public static final String TERRAIN_EFFECT = FileIO.makeFolderPath(BATTLE_EFFECT, "terrain");
+    public static final String WEATHER = FileIO.makeFolderPath(BATTLE_EFFECT, "weather");
+    public static final String TERRAIN = FileIO.makeFolderPath(BATTLE_EFFECT, "terrain");
 
     // Pokemon code
+    public static final String SPECIES = FileIO.makeFolderPath(POKEMON, "species");
     public static final String ABILITY = FileIO.makeFolderPath(POKEMON, "ability");
 
     // Resources
