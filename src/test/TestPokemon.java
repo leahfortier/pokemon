@@ -8,6 +8,7 @@ import item.ItemNamesies;
 import org.junit.Assert;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
+import pokemon.active.IndividualValues;
 import pokemon.species.PokemonNamesies;
 import test.battle.TestBattle;
 import util.string.StringUtils;
@@ -27,7 +28,7 @@ public class TestPokemon extends ActivePokemon {
     }
 
     public TestPokemon withIVs(int[] IVs) {
-        super.setIVs(IVs);
+        super.setIVs(new IndividualValues(IVs));
         return this;
     }
 

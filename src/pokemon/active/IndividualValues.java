@@ -27,6 +27,10 @@ public class IndividualValues implements Serializable {
         this.setIVs(other.IVs);
     }
 
+    public IndividualValues(int[] IVs) {
+        this.setIVs(IVs);
+    }
+
     // Random value between 0 and 31
     private void setIVs() {
         int[] IVs = new int[Stat.NUM_STATS];
@@ -38,7 +42,7 @@ public class IndividualValues implements Serializable {
     }
 
     // Values between 0 and 31
-    void setIVs(int[] IVs) {
+    private void setIVs(int[] IVs) {
         this.IVs = IVs;
 
         int maxIndex = 0;
@@ -49,6 +53,10 @@ public class IndividualValues implements Serializable {
         }
 
         this.characteristic = characteristics[this.IVs[maxIndex]%5][maxIndex];
+    }
+
+    void setIVs(IndividualValues IVs) {
+        this.setIVs(IVs.IVs);
     }
 
     public int get(int index) {

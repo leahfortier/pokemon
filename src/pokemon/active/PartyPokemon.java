@@ -136,7 +136,7 @@ public abstract class PartyPokemon implements Serializable {
         return pokemon.getInfo();
     }
 
-    protected void setIVs(int[] IVs) {
+    protected void setIVs(IndividualValues IVs) {
         this.IVs.setIVs(IVs);
         this.setStats();
     }

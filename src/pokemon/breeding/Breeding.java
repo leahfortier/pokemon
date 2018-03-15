@@ -75,9 +75,8 @@ public class Breeding {
         return babyInfo;
     }
 
-    public int[] getBabyIVs(ActivePokemon daddy, ActivePokemon mommy) {
-        List<Stat> remainingStats = new ArrayList<>();
-        remainingStats.addAll(Stat.STATS);
+    public IndividualValues getBabyIVs(ActivePokemon daddy, ActivePokemon mommy) {
+        List<Stat> remainingStats = new ArrayList<>(Stat.STATS);
 
         List<HoldItem> parentItems = Arrays.asList(
                 daddy.getActualHeldItem(),
@@ -86,9 +85,7 @@ public class Breeding {
 
         // Inherit 5 stats instead of 3 when a parent holds Destiny Knot
         int remainingIVsToInherit =
-                parentItems.stream()
-                           .filter(item -> item.namesies() == ItemNamesies.DESTINY_KNOT)
-                           .count() > 0
+                parentItems.stream().anyMatch(item -> item.namesies() == ItemNamesies.DESTINY_KNOT)
                         ? 5
                         : 3;
 
@@ -118,7 +115,7 @@ public class Breeding {
             }
         }
 
-        return IVs;
+        return new IndividualValues(IVs);
     }
 
     public boolean canBreed(ActivePokemon aPokes, ActivePokemon bPokes) {
