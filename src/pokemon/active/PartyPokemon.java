@@ -20,8 +20,6 @@ import pokemon.evolution.BaseEvolution;
 import pokemon.species.LevelUpMove;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
-import trainer.player.medal.Medal;
-import trainer.player.medal.MedalCase;
 import trainer.player.medal.MedalTheme;
 import type.PokeType;
 import type.Type;
@@ -41,19 +39,16 @@ public abstract class PartyPokemon implements Serializable {
 
     private PokemonNamesies pokemon;
     private String nickname;
-    private int[] stats;
-    private IndividualValues IVs;
+    private StatValues stats;
     private List<Move> moves;
     private int hp;
     private int level;
     private boolean isPlayer;
     private StatusCondition status;
     private int totalEXP;
-    private EffortValues EVs;
     private HoldItem heldItem;
     private Ability ability;
     private Gender gender;
-    private Nature nature;
     private boolean shiny;
 
     // General constructor for an active Pokemon (isPlayer is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
@@ -64,10 +59,7 @@ public abstract class PartyPokemon implements Serializable {
         this.nickname = this.pokemon.getName();
         this.level = level;
 
-        this.nature = new Nature();
-        this.stats = new int[Stat.NUM_STATS];
-        this.IVs = new IndividualValues();
-        this.EVs = new EffortValues();
+        this.stats = new StatValues(this);
 
         this.isPlayer = isPlayer;
         this.shiny = (isPlayer || isWild) && RandomUtils.chanceTest(1, 8192);
@@ -81,7 +73,7 @@ public abstract class PartyPokemon implements Serializable {
         this.totalEXP = pokemon.getGrowthRate().getEXP(this.level);
         this.totalEXP += RandomUtils.getRandomInt(expToNextLevel());
 
-        this.setStats();
+        this.stats.setStats();
         this.fullyHeal();
         this.resetAttributes();
     }
@@ -92,15 +84,13 @@ public abstract class PartyPokemon implements Serializable {
 
         this.nickname = pokemon.getName();
         this.level = 1;
-
-        this.nature = eggy.getNature();
-        this.stats = new int[Stat.NUM_STATS];
-        this.IVs = new IndividualValues(((PartyPokemon)eggy).IVs);
-        this.EVs = new EffortValues();
-
         this.isPlayer = true;
-        this.shiny = eggy.isShiny();
 
+        this.shiny = eggy.isShiny();
+        this.stats = new StatValues(this);
+
+        this.setNature(eggy.getNature());
+        this.setIVs(eggy.getIVs());
         this.setMoves(eggy.getActualMoves());
         this.setGender(eggy.getGender());
         this.setAbility(eggy.getActualAbility().namesies());
@@ -110,7 +100,7 @@ public abstract class PartyPokemon implements Serializable {
         // Don't add randomness for eggs
         this.totalEXP = pokemonInfo.getGrowthRate().getEXP(this.level);
 
-        this.setStats();
+        this.stats.setStats();
         this.fullyHeal();
         this.resetAttributes();
     }
@@ -137,25 +127,11 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     protected void setIVs(IndividualValues IVs) {
-        this.IVs.setIVs(IVs);
-        this.setStats();
+        this.stats.setIVs(IVs);
     }
 
-    private int[] setStats() {
-        int[] prevStats = stats.clone();
-
-        PokemonInfo pokemon = this.getPokemonInfo();
-
-        stats = new int[Stat.NUM_STATS];
-        int[] gain = new int[Stat.NUM_STATS];
-        for (int i = 0; i < stats.length; i++) {
-            stats[i] = Stat.getStat(i, level, pokemon.getStat(i), IVs.get(i), EVs.get(i), nature.getNatureVal(i));
-            gain[i] = stats[i] - prevStats[i];
-        }
-
-        setHP(hp + stats[Stat.HP.index()] - prevStats[Stat.HP.index()]);
-
-        return gain;
+    public StatValues getStats() {
+        return stats;
     }
 
     private void setMoves() {
@@ -212,7 +188,7 @@ public abstract class PartyPokemon implements Serializable {
         }
 
         // Update stats and return gain
-        return this.setStats();
+        return this.stats.setStats();
     }
 
     // Handles actual evolution, but doesn't set any messages or anything or try to learn new moves or shit like that
@@ -233,7 +209,7 @@ public abstract class PartyPokemon implements Serializable {
         }
 
         // Update stats and return gain
-        return this.setStats();
+        return this.stats.setStats();
     }
 
     // Adds the move at the specified index if full and to the end othwerwise
@@ -267,15 +243,11 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public String getCharacteristic() {
-        return this.IVs.getCharacteristic();
-    }
-
-    public int[] getClonedStats() {
-        return this.stats.clone();
+        return this.getIVs().getCharacteristic();
     }
 
     public int getStat(int index) {
-        return stats[index];
+        return this.stats.get(index);
     }
 
     public int getStat(Stat stat) {
@@ -283,20 +255,19 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public IndividualValues getIVs() {
-        return this.IVs;
+        return this.stats.getIVs();
     }
 
     public EffortValues getEVs() {
-        return this.EVs;
+        return this.stats.getEVs();
     }
 
     public Nature getNature() {
-        return nature;
+        return stats.getNature();
     }
 
     protected void setNature(Nature nature) {
-        this.nature = nature;
-        this.setStats();
+        this.stats.setNature(nature);
     }
 
     // Returns whether or not the Pokemon is afflicted with a status condition
@@ -338,7 +309,7 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public int getMaxHP() {
-        return stats[Stat.HP.index()];
+        return stats.get(Stat.HP);
     }
 
     public int getHP() {
@@ -486,25 +457,6 @@ public abstract class PartyPokemon implements Serializable {
         return level;
     }
 
-    // Adds Effort Values to a Pokemon, returns true if they were successfully added
-    public boolean addEVs(int[] vals) {
-        if (!this.canFight()) {
-            return false;
-        }
-
-        boolean added = this.EVs.addEVs(vals);
-
-        if (added) {
-            this.setStats();
-            if (this.EVs.totalEVs() == EffortValues.MAX_EVS) {
-                MedalCase medalCase = Game.getPlayer().getMedalCase();
-                medalCase.earnMedal(Medal.TRAINED_TO_MAX_POTENTIAL);
-            }
-        }
-
-        return added;
-    }
-
     public PokeType getActualType() {
         return this.getPokemonInfo().getType();
     }
@@ -533,6 +485,7 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public Type computeHiddenPowerType() {
+        IndividualValues IVs = this.getIVs();
         return Type.getHiddenType(((
                 IVs.get(Stat.HP)%2 +
                         2*(IVs.get(Stat.ATTACK)%2) +

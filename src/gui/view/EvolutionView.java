@@ -90,7 +90,7 @@ class EvolutionView extends View {
                     Game.getPlayer().getMedalCase().hatch(evolvingPokemon);
                 } else {
                     int[] gains = evolvingPokemon.evolve(Game.getPlayer().getEvolutionInfo().getEvolution());
-                    int[] stats = evolvingPokemon.getClonedStats();
+                    int[] stats = evolvingPokemon.getStats().getClonedStats();
 
                     messages.add(new MessageUpdate(
                             "Your " + preEvolution.getName() + " evolved into " + StringUtils.articleString(postEvolution.getName()) + "!")

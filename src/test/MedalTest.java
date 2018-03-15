@@ -5,6 +5,7 @@ import main.Game;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.active.EffortValues;
+import pokemon.active.StatValues;
 import pokemon.species.PokemonNamesies;
 import save.Save;
 import trainer.player.Player;
@@ -38,13 +39,14 @@ public class MedalTest extends BaseTest {
         ActivePokemon bulby = new ActivePokemon(PokemonNamesies.BULBASAUR, 5, false, true);
         Assert.assertFalse(player.getMedalCase().hasMedal(Medal.TRAINED_TO_MAX_POTENTIAL));
 
-        bulby.addEVs(new int[] { 1, 1, 1, 1, 1, 1 });
+        StatValues stats = bulby.getStats();
+        stats.addEVs(new int[] { 1, 1, 1, 1, 1, 1 });
         Assert.assertFalse(player.getMedalCase().hasMedal(Medal.TRAINED_TO_MAX_POTENTIAL));
 
-        bulby.addEVs(new int[] { 1, 1, EffortValues.MAX_EVS, 1, 1, 1 });
+        stats.addEVs(new int[] { 1, 1, EffortValues.MAX_EVS, 1, 1, 1 });
         Assert.assertFalse(player.getMedalCase().hasMedal(Medal.TRAINED_TO_MAX_POTENTIAL));
 
-        bulby.addEVs(new int[] { EffortValues.MAX_EVS, EffortValues.MAX_EVS, EffortValues.MAX_EVS, EffortValues.MAX_EVS, EffortValues.MAX_EVS, EffortValues.MAX_EVS });
+        stats.addEVs(new int[] { EffortValues.MAX_EVS, EffortValues.MAX_EVS, EffortValues.MAX_EVS, EffortValues.MAX_EVS, EffortValues.MAX_EVS, EffortValues.MAX_EVS });
         Assert.assertTrue(player.getMedalCase().hasMedal(Medal.TRAINED_TO_MAX_POTENTIAL));
     }
 
