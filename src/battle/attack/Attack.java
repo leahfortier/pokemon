@@ -69,6 +69,7 @@ import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
+import pokemon.active.MoveList;
 import trainer.Team;
 import trainer.Trainer;
 import type.PokeType;
@@ -80,7 +81,6 @@ import util.serialization.Serializable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class Attack implements AttackInterface, InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;
@@ -7047,7 +7047,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // TODO: Test
-            this.moves = attacking.getMoves(b).stream().filter(move -> !move.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL)).collect(Collectors.toList());
+            this.moves = attacking.getMoves(b).filter(move -> !move.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL));
         }
 
         @Override
@@ -7578,10 +7578,10 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            List<Move> moves = user.getMoves(b);
+            MoveList moves = user.getMoves(b);
             for (int i = 0; i < moves.size(); i++) {
                 if (moves.get(i).getAttack().namesies() == this.namesies()) {
-                    moves.set(i, new Move(this.copy));
+                    moves.set(new Move(this.copy), i);
                     Messages.add(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
                     break;
                 }

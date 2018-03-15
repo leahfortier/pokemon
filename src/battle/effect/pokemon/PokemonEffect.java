@@ -66,13 +66,13 @@ import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
+import pokemon.active.MoveList;
 import type.PokeType;
 import type.Type;
 import util.RandomUtils;
 import util.serialization.Serializable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 // Class to handle effects that are on a single Pokemon
@@ -1389,7 +1389,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public List<Move> getMoveList(List<Move> actualMoves) {
+        public MoveList getMoveList(MoveList actualMoves) {
             List<Move> list = new ArrayList<>();
             for (Move move : actualMoves) {
                 if (move.getAttack().namesies() == AttackNamesies.MIMIC) {
@@ -1399,7 +1399,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
                 }
             }
 
-            return list;
+            return new MoveList(list);
         }
     }
 
@@ -2086,7 +2086,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
     static class Transformed extends PokemonEffect implements ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect {
         private static final long serialVersionUID = 1L;
 
-        private Move[] moveList; // TODO: Check if I can change this to a list -- not sure about the activate method in particular
+        private MoveList moveList;
         private int[] stats;
         private PokeType type;
 
@@ -2119,11 +2119,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             stats[Stat.HP.index()] = victim.getMaxHP();
 
             // Copy the move list
-            List<Move> transformeeMoves = transformee.getMoves(b);
-            moveList = new Move[transformeeMoves.size()];
-            for (int i = 0; i < transformeeMoves.size(); i++) {
-                moveList[i] = new Move(transformeeMoves.get(i).getAttack(), 5);
+            MoveList transformeeMoves = transformee.getMoves(b);
+            List<Move> moves = new ArrayList<>();
+            for (Move move : transformeeMoves) {
+                moves.add(new Move(move.getAttack(), 5));
             }
+            this.moveList = new MoveList(moves);
 
             // Copy all stages
             for (Stat stat : Stat.BATTLE_STATS) {
@@ -2149,8 +2150,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public List<Move> getMoveList(List<Move> actualMoves) {
-            return Arrays.asList(moveList);
+        public MoveList getMoveList(MoveList actualMoves) {
+            return moveList;
         }
 
         @Override

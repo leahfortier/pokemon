@@ -18,6 +18,7 @@ import util.RandomUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Breeding {
     private static Breeding instance;
@@ -180,8 +181,8 @@ public class Breeding {
         babyMovesNamesies.addAll(babyInfo.getMoves(1));
 
         List<Move> parentMoves = new ArrayList<>();
-        parentMoves.addAll(daddy.getActualMoves());
-        parentMoves.addAll(mommy.getActualMoves());
+        parentMoves.addAll(daddy.getActualMoves().stream().collect(Collectors.toList()));
+        parentMoves.addAll(mommy.getActualMoves().stream().collect(Collectors.toList()));
 
         // Egg moves
         for (final Move parentMove : parentMoves) {

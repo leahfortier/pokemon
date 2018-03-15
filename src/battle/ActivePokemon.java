@@ -41,6 +41,7 @@ import message.Messages;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
+import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import pokemon.breeding.Eggy;
 import pokemon.evolution.BaseEvolution;
@@ -112,13 +113,13 @@ public class ActivePokemon extends PartyPokemon {
         return this.getStat(s);
     }
 
-    public List<Move> getMoves(Battle b) {
-        List<Move> actualMoves = this.getActualMoves();
+    public MoveList getMoves(Battle b) {
+        MoveList actualMoves = this.getActualMoves();
         if (b == null) {
             return actualMoves;
         }
 
-        List<Move> changedMoveList = ChangeMoveListEffect.getMoveList(b, this, actualMoves);
+        MoveList changedMoveList = ChangeMoveListEffect.getMoveList(b, this, actualMoves);
         if (changedMoveList != null) {
             return changedMoveList;
         }
@@ -197,14 +198,16 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     private void learnMove(AttackNamesies attackName, boolean inBattle) {
+        MoveList actualMoves = this.getActualMoves();
+
         // Don't want to learn a move you already know!
-        if (hasActualMove(attackName)) {
+        if (actualMoves.hasMove(attackName)) {
             return;
         }
 
         Move move = new Move(attackName);
-        if (this.numMoves() < Move.MAX_MOVES) {
-            addMove(move, this.numMoves() - 1, inBattle);
+        if (actualMoves.size() < Move.MAX_MOVES) {
+            addMove(move, actualMoves.size() - 1, inBattle);
         } else {
             // Need a non-empty message so that it doesn't get absorbed
             Messages.add(new MessageUpdate(" ").withLearnMove(this, move));
@@ -213,7 +216,7 @@ public class ActivePokemon extends PartyPokemon {
 
     public void addMove(Move m, int index, boolean inBattle) {
         Messages.add(getActualName() + " learned " + m.getAttack().getName() + "!");
-        super.addMove(m, index);
+        this.getActualMoves().add(m, index);
 
         if (!inBattle) {
             EvolutionMethod.MOVE.checkEvolution(this);
@@ -385,7 +388,7 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean hasMove(Battle b, AttackNamesies name) {
-        return hasMove(getMoves(b), name);
+        return this.getMoves(b).hasMove(name);
     }
 
     public boolean isSemiInvulnerable() {
@@ -440,7 +443,7 @@ public class ActivePokemon extends PartyPokemon {
     public void resetAttributes() {
         // Reset ability and each move
         this.setAbility(this.getActualAbility().namesies());
-        this.getActualMoves().forEach(Move::resetAttack);
+        this.getActualMoves().resetAttacks();
 
         effects = new PokemonEffectList();
         stages = new Stages(this);

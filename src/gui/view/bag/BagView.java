@@ -30,6 +30,7 @@ import map.Direction;
 import message.MessageUpdate;
 import message.Messages;
 import message.Messages.MessageState;
+import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import trainer.Trainer;
 import trainer.player.Player;
@@ -403,7 +404,7 @@ public class BagView extends View {
         // Draw moves
         pokemonPanel.drawBackground(g);
         if (state == BagState.MOVE_SELECT) {
-            List<Move> moveList = selectedPokemon.getActualMoves();
+            MoveList moveList = selectedPokemon.getActualMoves();
 
             for (int i = 0; i < moveList.size(); i++) {
                 Move move = moveList.get(i);

@@ -97,6 +97,7 @@ import message.MessageUpdate;
 import message.Messages;
 import pokemon.Stat;
 import pokemon.active.Gender;
+import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
@@ -1337,7 +1338,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             ActivePokemon other = b.getOtherPokemon(enterer);
-            List<Move> otherMoves = other.getMoves(b);
+            MoveList otherMoves = other.getMoves(b);
 
             List<AttackNamesies> besties = new ArrayList<>();
             int highestPower = -1;
@@ -1359,7 +1360,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
             AttackNamesies warn;
             if (highestPower == -1) {
-                warn = RandomUtils.getRandomValue(otherMoves).getAttack().namesies();
+                warn = otherMoves.getRandomMove().getAttack().namesies();
             } else {
                 warn = RandomUtils.getRandomValue(besties);
             }

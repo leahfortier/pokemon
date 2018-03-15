@@ -6,6 +6,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import message.Messages;
 import message.Messages.MessageState;
+import pokemon.active.MoveList;
 import trainer.Opponent;
 import trainer.Trainer;
 import trainer.TrainerAction;
@@ -83,7 +84,8 @@ public class MonteCarlo {
             boolean isOpp = !current.isOpp;
             for (int j = 0; j < ROLLOUT_TURNS || rolloutMoves.size()%2 != 0; j++) {
                 // TODO: This should really be only the usable moves
-                rolloutMoves.add(RandomUtils.getRandomValue(simulated.getTrainer(!isOpp).front().getMoves(simulated)));
+                MoveList moves = simulated.getTrainer(!isOpp).front().getMoves(simulated);
+                rolloutMoves.add(moves.getRandomMove());
                 isOpp = !isOpp;
             }
 

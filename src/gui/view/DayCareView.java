@@ -19,6 +19,7 @@ import input.InputControl;
 import main.Game;
 import main.Global;
 import pokemon.Stat;
+import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import pokemon.breeding.DayCareCenter;
 import pokemon.breeding.Eggy;
@@ -340,7 +341,7 @@ class DayCareView extends View {
             // Characteristic
             g.drawString(selected.getCharacteristic(), 427, 217);
 
-            List<Move> moves = selected.getActualMoves();
+            MoveList moves = selected.getActualMoves();
             for (int i = 0; i < moves.size(); i++) {
                 Attack attack = moves.get(i).getAttack();
 

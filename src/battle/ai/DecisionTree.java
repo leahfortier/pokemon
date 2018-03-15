@@ -5,6 +5,7 @@ import battle.Battle;
 import battle.attack.Move;
 import message.Messages;
 import message.Messages.MessageState;
+import pokemon.active.MoveList;
 import trainer.Trainer;
 import trainer.TrainerAction;
 
@@ -31,7 +32,7 @@ public class DecisionTree {
         Messages.clearMessages(MessageState.SIMULATION_STATION);
         Messages.setMessageState(MessageState.SIMULATION_STATION);
 
-        List<Move> playerMoves = battle.getPlayer().front().getMoves(battle);
+        MoveList playerMoves = battle.getPlayer().front().getMoves(battle);
         BestMove best = go(0, battle, usable, playerMoves);
 
         Messages.setMessageState(MessageState.FIGHTY_FIGHT);
@@ -85,7 +86,7 @@ public class DecisionTree {
         return simulated;
     }
 
-    private BestMove go(int level, Battle b, List<Move> opponentUsable, List<Move> playerUsable) {
+    private BestMove go(int level, Battle b, List<Move> opponentUsable, MoveList playerUsable) {
         if (level == TREE_DEPTH || isBattleDone(b)) {
             return new BestMove(null, evaluate(b));
         }

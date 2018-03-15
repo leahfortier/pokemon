@@ -604,7 +604,7 @@ DefendingNoAdvantageChanger:
 ***
 ChangeMoveListEffect:
 	Method:
-		Header: List<Move> getMoveList(List<Move> actualMoves)
+		Header: MoveList getMoveList(MoveList actualMoves)
 		Invoke: Get
 		InvokeParameters: Battle b, ActivePokemon p
 		EffectList: p

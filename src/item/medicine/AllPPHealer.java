@@ -6,15 +6,14 @@ import battle.attack.Move;
 import item.hold.HoldItem;
 import item.use.BattlePokemonUseItem;
 import message.Messages;
-
-import java.util.List;
+import pokemon.active.MoveList;
 
 public interface AllPPHealer extends BattlePokemonUseItem, HoldItem {
     int restoreAmount(Move toRestore);
 
     @Override
     default boolean use(ActivePokemon p, Battle b) {
-        List<Move> moves = p.getMoves(b);
+        MoveList moves = p.getMoves(b);
 
         boolean changed = false;
         for (Move m : moves) {

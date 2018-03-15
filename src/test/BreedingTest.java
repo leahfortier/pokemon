@@ -10,6 +10,7 @@ import org.junit.Test;
 import pokemon.Stat;
 import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
+import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import pokemon.breeding.Breeding;
 import pokemon.breeding.Eggy;
@@ -18,7 +19,6 @@ import pokemon.species.PokemonNamesies;
 import util.string.StringAppender;
 import util.string.StringUtils;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class BreedingTest extends BaseTest {
@@ -274,10 +274,10 @@ public class BreedingTest extends BaseTest {
             Assert.assertEquals(getFailMessage(mommy, daddy, baby), 0, ev);
         }
 
-        final List<Move> babyMoves = baby.getActualMoves();
-        Assert.assertFalse(
+        final MoveList babyMoves = baby.getActualMoves();
+        Assert.assertTrue(
                 getFailMessage("Invalid move list size " + babyMoves.size(), mommy, daddy, baby),
-                babyMoves.isEmpty() || babyMoves.size() > Move.MAX_MOVES
+                babyMoves.size() > 0 && babyMoves.size() <= Move.MAX_MOVES
         );
 
         for (Move move : babyMoves) {
@@ -314,7 +314,7 @@ public class BreedingTest extends BaseTest {
             Assert.assertEquals(baby.getEVs().get(stat), hatched.getEVs().get(stat));
         }
 
-        List<Move> hatchedMoves = hatched.getActualMoves();
+        MoveList hatchedMoves = hatched.getActualMoves();
         Assert.assertEquals(babyMoves.size(), hatchedMoves.size());
         for (int i = 0; i < babyMoves.size(); i++) {
             Assert.assertEquals(babyMoves.get(i).getAttack().namesies(), hatchedMoves.get(i).getAttack().namesies());

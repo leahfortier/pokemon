@@ -930,7 +930,7 @@ BraceMessage:
 		###
 *
 GetMoveList:
-	Header: List<Move> getMoveList(List<Move> actualMoves)
+	Header: MoveList getMoveList(MoveList actualMoves)
 *
 GetStat:
 	Header: Integer getStat(ActivePokemon user, Stat stat)

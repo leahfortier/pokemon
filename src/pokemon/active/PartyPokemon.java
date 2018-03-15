@@ -40,7 +40,7 @@ public abstract class PartyPokemon implements Serializable {
     private PokemonNamesies pokemon;
     private String nickname;
     private StatValues stats;
-    private List<Move> moves;
+    private MoveList moves;
     private int hp;
     private int level;
     private boolean isPlayer;
@@ -54,17 +54,16 @@ public abstract class PartyPokemon implements Serializable {
     // General constructor for an active Pokemon (isPlayer is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
     protected PartyPokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean isPlayer) {
         this.pokemon = pokemonNamesies;
-        PokemonInfo pokemon = this.getPokemonInfo();
 
         this.nickname = this.pokemon.getName();
         this.level = level;
-
-        this.stats = new StatValues(this);
-
         this.isPlayer = isPlayer;
         this.shiny = (isPlayer || isWild) && RandomUtils.chanceTest(1, 8192);
 
-        this.setMoves();
+        this.stats = new StatValues(this);
+        this.moves = new MoveList(this);
+
+        PokemonInfo pokemon = this.getPokemonInfo();
         this.setGender(Gender.getGender(pokemon.getMaleRatio()));
         this.setAbility(Ability.assign(pokemon));
 
@@ -88,10 +87,10 @@ public abstract class PartyPokemon implements Serializable {
 
         this.shiny = eggy.isShiny();
         this.stats = new StatValues(this);
+        this.moves = new MoveList(eggy.getActualMoves());
 
         this.setNature(eggy.getNature());
         this.setIVs(eggy.getIVs());
-        this.setMoves(eggy.getActualMoves());
         this.setGender(eggy.getGender());
         this.setAbility(eggy.getActualAbility().namesies());
 
@@ -114,7 +113,7 @@ public abstract class PartyPokemon implements Serializable {
     // Removes status, restores PP for all moves, restores to full health
     public void fullyHeal() {
         removeStatus();
-        getActualMoves().forEach(Move::resetPP);
+        getActualMoves().restoreAllPP();
         healHealthFraction(1);
     }
 
@@ -134,49 +133,13 @@ public abstract class PartyPokemon implements Serializable {
         return stats;
     }
 
-    private void setMoves() {
-        moves = new ArrayList<>();
-        List<LevelUpMove> levelUpMoves = this.getPokemonInfo().getLevelUpMoves();
-        for (LevelUpMove levelUpMove : levelUpMoves) {
-            AttackNamesies attackNamesies = levelUpMove.getMove();
-            if (levelUpMove.getLevel() > level) {
-                break;
-            }
-
-            if (this.hasActualMove(attackNamesies)) {
-                continue;
-            }
-
-            moves.add(new Move(attackNamesies));
-
-            // This can be an 'if' statement, but just to be safe...
-            while (moves.size() > Move.MAX_MOVES) {
-                moves.remove(0);
-            }
-        }
-    }
-
     // Returns whether or not this Pokemon knows this move already
     public boolean hasActualMove(AttackNamesies name) {
-        return hasMove(getActualMoves(), name);
-    }
-
-    protected boolean hasMove(List<Move> moveList, AttackNamesies name) {
-        for (Move m : moveList) {
-            if (m.getAttack().namesies() == name) {
-                return true;
-            }
-        }
-
-        return false;
+        return this.moves.hasMove(name);
     }
 
     protected void setMoves(List<Move> list) {
-        if (list.isEmpty() || list.size() > Move.MAX_MOVES) {
-            Global.error("Invalid move list: " + list);
-        }
-
-        moves = list;
+        moves.setMoves(list);
     }
 
     // Handles actual level up, but does not handle messages or evolution or anything else like that
@@ -210,20 +173,6 @@ public abstract class PartyPokemon implements Serializable {
 
         // Update stats and return gain
         return this.stats.setStats();
-    }
-
-    // Adds the move at the specified index if full and to the end othwerwise
-    // Does not handle evolution or anything else like that -- should be handled in subclasses
-    protected void addMove(Move m, int index) {
-        if (moves.size() < Move.MAX_MOVES) {
-            moves.add(m);
-        } else {
-            moves.set(index, m);
-        }
-    }
-
-    protected int numMoves() {
-        return this.moves.size();
     }
 
     private void setShiny() {
@@ -367,8 +316,7 @@ public abstract class PartyPokemon implements Serializable {
         return this.isPlayer;
     }
 
-    // TODO: This should really be immutable
-    public List<Move> getActualMoves() {
+    public MoveList getActualMoves() {
         return moves;
     }
 

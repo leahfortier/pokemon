@@ -8,19 +8,19 @@ import draw.panel.DrawPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
+import pokemon.active.MoveList;
 import trainer.TrainerAction;
 import trainer.player.Player;
 import util.string.StringUtils;
 
 import java.awt.Graphics;
-import java.util.List;
 
 public class FightState implements VisualStateHandler {
     private final DrawPanel moveDetailsPanel;
 
     private ButtonList moveButtons;
 
-    private List<Move> selectedMoveList;
+    private MoveList selectedMoveList;
 
     // The last move that a Pokemon used
     private int lastMoveUsed;
@@ -59,7 +59,7 @@ public class FightState implements VisualStateHandler {
         view.drawButtonsPanel(g);
 
         ActivePokemon playerPokemon = Game.getPlayer().front();
-        List<Move> moves = playerPokemon.getMoves(view.getCurrentBattle());
+        MoveList moves = playerPokemon.getMoves(view.getCurrentBattle());
         for (int i = 0; i < moves.size(); i++) {
             this.moveButtons.get(i).drawMoveButton(g, moves.get(i));
         }

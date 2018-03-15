@@ -4,8 +4,7 @@ import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import main.Global;
-
-import java.util.List;
+import pokemon.active.MoveList;
 
 public interface TechnicalMachine extends MoveUseItem {
     AttackNamesies getAttack();
@@ -25,7 +24,7 @@ public interface TechnicalMachine extends MoveUseItem {
         }
 
         Move tmMove = new Move(attack);
-        List<Move> moveList = p.getActualMoves();
+        MoveList moveList = p.getActualMoves();
 
         // If they don't have a full move list, append to the end
         if (moveList.size() < Move.MAX_MOVES) {

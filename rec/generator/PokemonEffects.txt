@@ -476,7 +476,7 @@ Mimic:
             }
         }
 
-        return list;
+        return new MoveList(list);
         ###
     BeforeCast:
         ActivePokemon other = b.getOtherPokemon(victim);
@@ -760,7 +760,7 @@ FiddyPercentStronger:
 *
 Transformed:
     Field:
-        private Move[] moveList; // TODO: Check if I can change this to a list -- not sure about the activate method in particular
+        private MoveList moveList;
         private int[] stats;
         private PokeType type;
         ###
@@ -784,11 +784,12 @@ Transformed:
         stats[Stat.HP.index()] = victim.getMaxHP();
 
         // Copy the move list
-        List<Move> transformeeMoves = transformee.getMoves(b);
-        moveList = new Move[transformeeMoves.size()];
-        for (int i = 0; i < transformeeMoves.size(); i++) {
-            moveList[i] = new Move(transformeeMoves.get(i).getAttack(), 5);
+        MoveList transformeeMoves = transformee.getMoves(b);
+        List<Move> moves = new ArrayList<>();
+        for (Move move : transformeeMoves) {
+            moves.add(new Move(move.getAttack(), 5));
         }
+        this.moveList = new MoveList(moves);
 
         // Copy all stages
         for (Stat stat : Stat.BATTLE_STATS) {
@@ -805,7 +806,7 @@ Transformed:
     FailCondition: b.getOtherPokemon(victim).hasEffect(this.namesies()) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive()))
     Int: ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect
     GetMoveList:
-        return Arrays.asList(moveList);
+        return moveList;
         ###
     GetStat:
         return stats[stat.index()];

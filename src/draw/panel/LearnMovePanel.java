@@ -9,12 +9,12 @@ import input.ControlKey;
 import input.InputControl;
 import message.MessageUpdate;
 import message.MessageUpdateType;
+import pokemon.active.MoveList;
 import util.Point;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayDeque;
-import java.util.List;
 
 public class LearnMovePanel {
     private static final int NUM_COLS = 4;
@@ -151,7 +151,7 @@ public class LearnMovePanel {
             drawButton(g, yesButton, new Color(120, 200, 80), "Yes");
             drawButton(g, noButton, new Color(220, 20, 20), "No");
         } else if (state == State.DELETE) {
-            List<Move> moves = learning.getActualMoves();
+            MoveList moves = learning.getActualMoves();
             Attack selected = null;
             for (int y = 0, moveIndex = 0; y < 2; y++) {
                 for (int x = 0; x < Move.MAX_MOVES/2; x++, moveIndex++) {

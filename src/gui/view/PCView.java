@@ -1,7 +1,6 @@
 package gui.view;
 
 import battle.attack.Attack;
-import battle.attack.Move;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
@@ -17,6 +16,7 @@ import input.InputControl;
 import main.Game;
 import map.Direction;
 import pokemon.Stat;
+import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import pokemon.breeding.Eggy;
 import trainer.Trainer;
@@ -370,7 +370,7 @@ class PCView extends View {
             // Characteristic
             g.drawString(selected.getCharacteristic(), 427, 217);
 
-            List<Move> moves = selected.getActualMoves();
+            MoveList moves = selected.getActualMoves();
             for (int i = 0; i < moves.size(); i++) {
                 int x = i%2 == 0 ? 421 : 590;
                 int y = i/2 == 0 ? 238 : 277;

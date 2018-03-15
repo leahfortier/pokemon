@@ -28,6 +28,7 @@ import message.Messages;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
+import pokemon.active.MoveList;
 import pokemon.species.PokemonInfo;
 import trainer.Team;
 import trainer.Trainer;
@@ -1046,14 +1047,14 @@ public final class EffectInterfaces {
     }
 
     public interface ChangeMoveListEffect {
-        List<Move> getMoveList(List<Move> actualMoves);
+        MoveList getMoveList(MoveList actualMoves);
 
-        static List<Move> getMoveList(Battle b, ActivePokemon p, List<Move> actualMoves) {
+        static MoveList getMoveList(Battle b, ActivePokemon p, MoveList actualMoves) {
             List<InvokeEffect> invokees = b.getEffectsList(p);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof ChangeMoveListEffect && InvokeEffect.isActiveEffect(invokee)) {
                     ChangeMoveListEffect effect = (ChangeMoveListEffect)invokee;
-                    List<Move> value = effect.getMoveList(actualMoves);
+                    MoveList value = effect.getMoveList(actualMoves);
                     if (value != null) {
                         return value;
                     }

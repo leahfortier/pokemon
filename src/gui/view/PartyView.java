@@ -20,6 +20,7 @@ import main.Game;
 import main.Global;
 import pokemon.Stat;
 import pokemon.ability.Ability;
+import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import pokemon.breeding.Eggy;
 import trainer.Trainer;
@@ -446,7 +447,7 @@ class PartyView extends View {
             FontMetrics.setFont(g, 16);
             g.setColor(Color.BLACK);
 
-            List<Move> moves = selectedPkm.getActualMoves();
+            MoveList moves = selectedPkm.getActualMoves();
 
             // Stats Box or Move description
             int selectedButton = buttons.getSelected();
@@ -559,7 +560,7 @@ class PartyView extends View {
         } else {
             List<PartyPokemon> team = Game.getPlayer().getTeam();
             PartyPokemon pkm = team.get(selectedTab);
-            List<Move> moves = pkm.getActualMoves();
+            MoveList moves = pkm.getActualMoves();
 
             for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
                 tabButtons[i].setActive(i < team.size());

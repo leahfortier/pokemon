@@ -4055,7 +4055,7 @@ Sleep Talk:
         ###
     BeginAttack:
         // TODO: Test
-        this.moves = attacking.getMoves(b).stream().filter(move -> !move.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL)).collect(Collectors.toList());
+        this.moves = attacking.getMoves(b).filter(move -> !move.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL));
         ###
     Applies: user.hasStatus(StatusNamesies.ASLEEP) && !this.moves.isEmpty()
     CallFullNewMove: RandomUtils.getRandomValue(this.moves)
@@ -4418,10 +4418,10 @@ Sketch:
     Comments: // Fails if trying to copy Sketch, Struggle, or a move you already know or if used by a Transformed Pokemon or you don't actually know Sketch
     Applies: copy != null && copy != this.namesies() && copy != AttackNamesies.STRUGGLE && !user.hasActualMove(copy) && user.hasActualMove(this.namesies()) && !user.hasEffect(PokemonEffectNamesies.TRANSFORMED)
     UniqueEffects:
-        List<Move> moves = user.getMoves(b);
+        MoveList moves = user.getMoves(b);
         for (int i = 0; i < moves.size(); i++) {
             if (moves.get(i).getAttack().namesies() == this.namesies()) {
-                moves.set(i, new Move(this.copy));
+                moves.set(new Move(this.copy), i);
                 Messages.add(user.getName() + " learned " + moves.get(i).getAttack().getName() + "!");
                 break;
             }

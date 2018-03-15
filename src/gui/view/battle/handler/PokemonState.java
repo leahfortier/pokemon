@@ -16,6 +16,7 @@ import gui.view.battle.VisualState;
 import main.Game;
 import map.Direction;
 import pokemon.Stat;
+import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import pokemon.breeding.Eggy;
 import trainer.Trainer;
@@ -267,7 +268,7 @@ public class PokemonState implements VisualStateHandler {
 
             // Draw Move List
             movesPanel.drawBackground(g);
-            List<Move> movesList = selectedPkm.getActualMoves();
+            MoveList movesList = selectedPkm.getActualMoves();
             for (int i = 0; i < movesList.size(); i++) {
                 Button moveButton = fakeMoveButtons[i];
                 Move move = movesList.get(i);

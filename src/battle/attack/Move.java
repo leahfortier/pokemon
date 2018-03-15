@@ -11,7 +11,6 @@ import util.RandomUtils;
 import util.serialization.Serializable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Move implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -153,9 +152,7 @@ public class Move implements Serializable {
 
     // Returns a list of the moves that are valid for the pokemon to use
     private static List<Move> getUsableMoves(Battle b, ActivePokemon p) {
-        return p.getMoves(b).stream()
-                .filter(m -> validMove(b, p, m, false))
-                .collect(Collectors.toList());
+        return p.getMoves(b).filter(m -> validMove(b, p, m, false));
     }
 
     // Will return whether or not p can execute m
