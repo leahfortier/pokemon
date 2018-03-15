@@ -98,7 +98,7 @@ public class Breeding {
         for (HoldItem item : parentItems) {
             if (item instanceof PowerItem) {
                 Stat stat = ((PowerItem)item).powerStat();
-                IVs[stat.index()] = getRandomParent(daddy, mommy).getIV(stat.index());
+                IVs[stat.index()] = getRandomParent(daddy, mommy).getIVs().get(stat);
 
                 remainingStats.remove(stat);
                 remainingIVsToInherit--;
@@ -109,7 +109,7 @@ public class Breeding {
             Stat stat = RandomUtils.getRandomValue(remainingStats);
             remainingStats.remove(stat);
 
-            IVs[stat.index()] = getRandomParent(daddy, mommy).getIV(stat.index());
+            IVs[stat.index()] = getRandomParent(daddy, mommy).getIVs().get(stat);
         }
 
         for (int i = 0; i < IVs.length; i++) {

@@ -275,7 +275,7 @@ public class PokemonInfoTest extends BaseTest {
 
             for (int j = 0; j < Stat.NUM_STATS; j++) {
                 Stat stat = Stat.getStat(j, false);
-                int iv = pokemon.getIV(j);
+                int iv = pokemon.getIVs().get(j);
                 String message = stat.getName() + " " + iv;
 
                 // Make sure all IVs are in range
@@ -283,7 +283,7 @@ public class PokemonInfoTest extends BaseTest {
                 hasIv[iv] = true;
 
                 // Make sure not every IV is the same
-                if (j > 0 && iv != pokemon.getIV(j - 1)) {
+                if (j > 0 && iv != pokemon.getIVs().get(j - 1)) {
                     diffIvs = true;
                 }
             }
@@ -310,24 +310,24 @@ public class PokemonInfoTest extends BaseTest {
             for (int i = 0; i < 26; i++) {
                 bag.addItem(ItemNamesies.HP_UP);
                 Assert.assertTrue(bag.useItem(ItemNamesies.HP_UP, shedinja));
-                TestUtils.assertGreater(levelString, shedinja.getEV(Stat.HP), 0);
+                TestUtils.assertGreater(levelString, shedinja.getEVs().get(Stat.HP), 0);
                 Assert.assertEquals(1, shedinja.getHP());
                 Assert.assertEquals(1, shedinja.getMaxHP());
 
                 bag.addItem(ItemNamesies.PROTEIN);
                 Assert.assertTrue(bag.useItem(ItemNamesies.PROTEIN, shedinja));
-                TestUtils.assertGreater(levelString, shedinja.getEV(Stat.ATTACK), 0);
+                TestUtils.assertGreater(levelString, shedinja.getEVs().get(Stat.ATTACK), 0);
             }
 
             // HP EVs are now maxed, but max HP should not increase still
-            Assert.assertEquals(EffortValues.MAX_STAT_EVS, shedinja.getEV(Stat.HP));
+            Assert.assertEquals(EffortValues.MAX_STAT_EVS, shedinja.getEVs().get(Stat.HP));
             Assert.assertFalse(bag.useItem(ItemNamesies.HP_UP, shedinja));
-            Assert.assertEquals(EffortValues.MAX_STAT_EVS, shedinja.getEV(Stat.HP));
+            Assert.assertEquals(EffortValues.MAX_STAT_EVS, shedinja.getEVs().get(Stat.HP));
             Assert.assertEquals(1, shedinja.getHP());
             Assert.assertEquals(1, shedinja.getMaxHP());
 
             // Make sure other EVs contribute
-            Assert.assertEquals(EffortValues.MAX_STAT_EVS, shedinja.getEV(Stat.ATTACK));
+            Assert.assertEquals(EffortValues.MAX_STAT_EVS, shedinja.getEVs().get(Stat.ATTACK));
             if (level > 1) { // Don't check at level one since it's generally too small for change
                 TestUtils.assertGreater(levelString, shedinja.getStat(Stat.ATTACK), baseAttack);
             }

@@ -216,11 +216,11 @@ public class BreedingTest extends BaseTest {
 
             for (int j = 0; j < Stat.NUM_STATS; j++) {
                 final MatchType matchType;
-                if (baby.getIV(j) == mommy.getIV(j)) {
+                if (baby.getIVs().get(j) == mommy.getIVs().get(j)) {
                     numMatches++;
                     hasMommy = true;
                     matchType = MatchType.MOMMY;
-                } else if (baby.getIV(j) == daddy.getIV(j)) {
+                } else if (baby.getIVs().get(j) == daddy.getIVs().get(j)) {
                     numMatches++;
                     hasDaddy = true;
                     matchType = MatchType.DADDY;
@@ -264,8 +264,8 @@ public class BreedingTest extends BaseTest {
         Assert.assertEquals("Egg", baby.getActualName());
 
         for (Stat stat : Stat.STATS) {
-            int iv = baby.getIV(stat);
-            int ev = baby.getEV(stat);
+            int iv = baby.getIVs().get(stat);
+            int ev = baby.getEVs().get(stat);
 
             // Make sure IVs are all in range
             Assert.assertTrue(getFailMessage(mommy, daddy, baby), iv >= 0 && iv <= IndividualValues.MAX_IV);
@@ -310,8 +310,8 @@ public class BreedingTest extends BaseTest {
         Assert.assertEquals(baby.isShiny(), hatched.isShiny());
 
         for (Stat stat : Stat.STATS) {
-            Assert.assertEquals(baby.getIV(stat), hatched.getIV(stat));
-            Assert.assertEquals(baby.getEV(stat), hatched.getEV(stat));
+            Assert.assertEquals(baby.getIVs().get(stat), hatched.getIVs().get(stat));
+            Assert.assertEquals(baby.getEVs().get(stat), hatched.getEVs().get(stat));
         }
 
         List<Move> hatchedMoves = hatched.getActualMoves();
@@ -333,8 +333,8 @@ public class BreedingTest extends BaseTest {
 
     private static boolean hasEqualIVs(TestPokemon mommy, TestPokemon daddy, Eggy baby, Stat stat) {
         int index = stat.index();
-        int babyIv = baby.getIV(index);
-        return babyIv == mommy.getIV(index) || babyIv == daddy.getIV(index);
+        int babyIv = baby.getIVs().get(index);
+        return babyIv == mommy.getIVs().get(index) || babyIv == daddy.getIVs().get(index);
     }
 
     private static String getFailMessage(String message, TestPokemon mommy, TestPokemon daddy, Eggy baby) {
@@ -356,7 +356,7 @@ public class BreedingTest extends BaseTest {
                 "%s %s IVs: %s Item: %s Nature: %s Moves: %s",
                 isBaby ? "Baby" : StringUtils.properCase(partyPokemon.getGender().name().toLowerCase()),
                 partyPokemon.getActualName(),
-                new StringAppender().appendJoin(" ", Stat.NUM_STATS, index -> partyPokemon.getIV(index) + ""),
+                new StringAppender().appendJoin(" ", Stat.STATS, stat -> partyPokemon.getIVs().get(stat) + ""),
                 partyPokemon.getActualHeldItem().getName(),
                 partyPokemon.getNature().getName(),
                 partyPokemon.getActualMoves()

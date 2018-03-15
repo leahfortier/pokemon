@@ -3619,7 +3619,14 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
             int index = stat.index();
-            return Stat.getStat(index, user.getLevel(), getStats()[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
+            return Stat.getStat(
+                    index,
+                    user.getLevel(),
+                    getStats()[index],
+                    user.getIVs().get(index),
+                    user.getEVs().get(index),
+                    user.getNature().getNatureVal(index)
+            );
         }
 
         @Override
@@ -3674,7 +3681,14 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
             int index = stat.index();
-            return Stat.getStat(index, user.getLevel(), getStats()[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
+            return Stat.getStat(
+                    index,
+                    user.getLevel(),
+                    getStats()[index],
+                    user.getIVs().get(index),
+                    user.getEVs().get(index),
+                    user.getNature().getNatureVal(index)
+            );
         }
 
         @Override
@@ -3729,7 +3743,14 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
             int index = stat.index();
-            return Stat.getStat(index, user.getLevel(), getStats()[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
+            return Stat.getStat(
+                    index,
+                    user.getLevel(),
+                    getStats()[index],
+                    user.getIVs().get(index),
+                    user.getEVs().get(index),
+                    user.getNature().getNatureVal(index)
+            );
         }
 
         @Override

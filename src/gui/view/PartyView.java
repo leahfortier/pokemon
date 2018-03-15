@@ -508,8 +508,8 @@ class PartyView extends View {
 
             int drawY = firstRowY + (i + 1)*spacing;
             TextUtils.drawRightAlignedString(g, statString, 285, drawY);
-            TextUtils.drawRightAlignedString(g, "" + selectedPkm.getIV(i), 327, drawY);
-            TextUtils.drawRightAlignedString(g, "" + selectedPkm.getEV(i), 371, drawY);
+            TextUtils.drawRightAlignedString(g, "" + selectedPkm.getIVs().get(i), 327, drawY);
+            TextUtils.drawRightAlignedString(g, "" + selectedPkm.getEVs().get(i), 371, drawY);
         }
 
         // HP Bar

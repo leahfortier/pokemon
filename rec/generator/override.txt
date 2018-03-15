@@ -1934,7 +1934,14 @@ FormChange:
 	AddMapField: GetStat:
 		// Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
 		int index = stat.index();
-		return Stat.getStat(index, user.getLevel(), getStats()[index], user.getIV(index), user.getEV(index), user.getNature().getNatureVal(index));
+        return Stat.getStat(
+                index,
+                user.getLevel(),
+                getStats()[index],
+                user.getIVs().get(index),
+                user.getEVs().get(index),
+                user.getNature().getNatureVal(index)
+        );
 		###
 *
 EndTurnFormChange:

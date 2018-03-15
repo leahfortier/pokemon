@@ -51,8 +51,12 @@ public class IndividualValues implements Serializable {
         this.characteristic = characteristics[this.IVs[maxIndex]%5][maxIndex];
     }
 
-    public int getIV(int index) {
+    public int get(int index) {
         return IVs[index];
+    }
+
+    public int get(Stat stat) {
+        return this.get(stat.index());
     }
 
     public String getCharacteristic() {

@@ -14,8 +14,8 @@ public interface EvDecreaseBerry extends Berry, PokemonUseItem {
         int[] vals = new int[Stat.NUM_STATS];
 
         // For EVs over 110, the berry will decrease the EV to 100
-        if (p.getEV(decreaseIndex) > 110) {
-            vals[decreaseIndex] = 100 - p.getEV(decreaseIndex);
+        if (p.getEVs().get(decreaseIndex) > 110) {
+            vals[decreaseIndex] = 100 - p.getEVs().get(decreaseIndex);
         }
         // Otherwise, just decreases by 10
         else {

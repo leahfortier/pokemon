@@ -100,7 +100,7 @@ public class MedalCase implements Serializable {
 
         int perfectIVs = 0;
         for (Stat stat : Stat.STATS) {
-            if (hatched.getIV(stat.index()) == IndividualValues.MAX_IV) {
+            if (hatched.getIVs().get(stat) == IndividualValues.MAX_IV) {
                 perfectIVs++;
             }
         }

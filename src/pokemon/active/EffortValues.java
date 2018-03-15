@@ -15,8 +15,12 @@ public class EffortValues implements Serializable {
         this.EVs = new int[Stat.NUM_STATS];
     }
 
-    public int getEV(int index) {
+    public int get(int index) {
         return EVs[index];
+    }
+
+    public int get(Stat stat) {
+        return this.get(stat.index());
     }
 
     public int totalEVs() {

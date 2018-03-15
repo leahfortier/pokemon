@@ -367,8 +367,8 @@ class DayCareView extends View {
                 FontMetrics.setFont(g, 14);
 
                 TextUtils.drawRightAlignedString(g, selected.getStat(i) + "", 635, statsY);
-                TextUtils.drawRightAlignedString(g, selected.getIV(i) + "", 681, statsY);
-                TextUtils.drawRightAlignedString(g, selected.getEV(i) + "", 735, statsY);
+                TextUtils.drawRightAlignedString(g, selected.getIVs().get(i) + "", 681, statsY);
+                TextUtils.drawRightAlignedString(g, selected.getEVs().get(i) + "", 735, statsY);
             }
         }
 

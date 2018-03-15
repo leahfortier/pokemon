@@ -149,7 +149,7 @@ public abstract class PartyPokemon implements Serializable {
         stats = new int[Stat.NUM_STATS];
         int[] gain = new int[Stat.NUM_STATS];
         for (int i = 0; i < stats.length; i++) {
-            stats[i] = Stat.getStat(i, level, pokemon.getStat(i), this.getIV(i), this.getEV(i), nature.getNatureVal(i));
+            stats[i] = Stat.getStat(i, level, pokemon.getStat(i), IVs.get(i), EVs.get(i), nature.getNatureVal(i));
             gain[i] = stats[i] - prevStats[i];
         }
 
@@ -282,20 +282,12 @@ public abstract class PartyPokemon implements Serializable {
         return this.getStat(stat.index());
     }
 
-    public int getIV(int index) {
-        return this.IVs.getIV(index);
+    public IndividualValues getIVs() {
+        return this.IVs;
     }
 
-    public int getIV(Stat stat) {
-        return this.getIV(stat.index());
-    }
-
-    public int getEV(int index) {
-        return this.EVs.getEV(index);
-    }
-
-    public int getEV(Stat stat) {
-        return this.getEV(stat.index());
+    public EffortValues getEVs() {
+        return this.EVs;
     }
 
     public Nature getNature() {
@@ -542,12 +534,12 @@ public abstract class PartyPokemon implements Serializable {
 
     public Type computeHiddenPowerType() {
         return Type.getHiddenType(((
-                this.getIV(Stat.HP)%2 +
-                        2*(this.getIV(Stat.ATTACK)%2) +
-                        4*(this.getIV(Stat.DEFENSE)%2) +
-                        8*(this.getIV(Stat.SPEED)%2) +
-                        16*(this.getIV(Stat.SP_ATTACK)%2) +
-                        32*(this.getIV(Stat.SP_DEFENSE)%2)
+                IVs.get(Stat.HP)%2 +
+                        2*(IVs.get(Stat.ATTACK)%2) +
+                        4*(IVs.get(Stat.DEFENSE)%2) +
+                        8*(IVs.get(Stat.SPEED)%2) +
+                        16*(IVs.get(Stat.SP_ATTACK)%2) +
+                        32*(IVs.get(Stat.SP_DEFENSE)%2)
         )*15)/63);
     }
 

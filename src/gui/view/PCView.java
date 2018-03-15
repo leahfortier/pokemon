@@ -401,8 +401,8 @@ class PCView extends View {
 
                 // TODO: What's up with the + i/2 in the y????
                 TextUtils.drawRightAlignedString(g, selected.getStat(i) + "", 635, 360 + i*18 + i/2);
-                TextUtils.drawRightAlignedString(g, selected.getIV(i) + "", 681, 360 + i*18 + i/2);
-                TextUtils.drawRightAlignedString(g, selected.getEV(i) + "", 735, 360 + i*18 + i/2);
+                TextUtils.drawRightAlignedString(g, selected.getIVs().get(i) + "", 681, 360 + i*18 + i/2);
+                TextUtils.drawRightAlignedString(g, selected.getEVs().get(i) + "", 735, 360 + i*18 + i/2);
             }
         }
 
