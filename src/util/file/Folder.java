@@ -16,6 +16,7 @@ public abstract class Folder {
     // Battle code
     public static final String ATTACK = FileIO.makeFolderPath(BATTLE, "attack");
     public static final String EFFECT = FileIO.makeFolderPath(BATTLE, "effect");
+    public static final String INTERFACE_EFFECT = FileIO.makeFolderPath(EFFECT, "interfaces");
     public static final String STATUS = FileIO.makeFolderPath(EFFECT, "status");
     public static final String POKEMON_EFFECT = FileIO.makeFolderPath(EFFECT, "pokemon");
     public static final String TEAM_EFFECT = FileIO.makeFolderPath(EFFECT, "team");

@@ -2,7 +2,8 @@ package battle.effect;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.EffectInterfaces.EffectReceivedEffect;
+import battle.effect.interfaces.InvokeInterfaces.EffectReceivedEffect;
+import battle.effect.source.CastSource;
 import main.Global;
 import message.Messages;
 import util.RandomUtils;

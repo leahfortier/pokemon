@@ -3,6 +3,7 @@
 
 import requests
 from lxml import html
+
 from util import getQueryText
 
 

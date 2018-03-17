@@ -1,8 +1,8 @@
-package map.overworld;
+package map.overworld.wild;
 
 import battle.ActivePokemon;
-import battle.effect.EffectInterfaces.WildEncounterAlterer;
-import battle.effect.EffectInterfaces.WildEncounterSelector;
+import battle.effect.interfaces.InvokeInterfaces.WildEncounterAlterer;
+import battle.effect.interfaces.InvokeInterfaces.WildEncounterSelector;
 import main.Game;
 import pokemon.species.PokemonNamesies;
 import util.GeneralUtils;

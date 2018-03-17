@@ -1,6 +1,6 @@
 package generator.interfaces;
 
-import battle.effect.EffectInterfaces;
+import battle.effect.interfaces.InvokeInterfaces;
 import generator.StuffGen;
 import util.file.FileIO;
 import util.file.FileName;
@@ -10,13 +10,9 @@ import util.string.StringAppender;
 import java.util.Scanner;
 
 public class InterfaceGen {
-    private static final String INTERFACE_PATH = Folder.EFFECT + EffectInterfaces.class.getSimpleName() + ".java";
+    private static final String INTERFACE_PATH = Folder.INTERFACE_EFFECT + InvokeInterfaces.class.getSimpleName() + ".java";
 
     public InterfaceGen() {
-        gen();
-    }
-
-    private static void gen() {
         final Scanner in = FileIO.openFile(FileName.INTERFACES);
         final StringAppender out = StuffGen.startGen(INTERFACE_PATH);
 

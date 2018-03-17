@@ -2,12 +2,12 @@ package test.battle;
 
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
-import battle.effect.CastSource;
-import battle.effect.attack.ChangeTypeSource;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.battle.terrain.TerrainNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
+import battle.effect.source.CastSource;
+import battle.effect.source.ChangeTypeSource;
 import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;

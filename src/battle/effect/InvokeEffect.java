@@ -1,5 +1,7 @@
 package battle.effect;
 
+import battle.effect.source.CastSource;
+
 public interface InvokeEffect {
     InvokeSource getSource();
 

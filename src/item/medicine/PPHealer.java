@@ -2,7 +2,7 @@ package item.medicine;
 
 import battle.ActivePokemon;
 import battle.attack.Move;
-import battle.effect.CastSource;
+import battle.effect.source.CastSource;
 import item.hold.HoldItem;
 import item.use.MoveUseItem;
 import main.Global;

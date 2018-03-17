@@ -1,6 +1,6 @@
 package pattern.map;
 
-import map.overworld.WildEncounterInfo;
+import map.overworld.wild.WildEncounterInfo;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.MultiPointTriggerMatcher;
 

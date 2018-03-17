@@ -4,7 +4,7 @@ import item.ItemNamesies;
 import map.condition.Condition;
 import map.condition.Condition.ItemCondition;
 import map.condition.ConditionHolder.AndCondition;
-import map.overworld.WildEncounterInfo;
+import map.overworld.wild.WildEncounterInfo;
 import map.triggers.Trigger;
 import map.triggers.battle.FishingTrigger;
 import util.Point;

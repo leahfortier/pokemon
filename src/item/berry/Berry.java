@@ -2,8 +2,8 @@ package item.berry;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.CastSource;
 import battle.effect.pokemon.PokemonEffectNamesies;
+import battle.effect.source.CastSource;
 import item.hold.HoldItem;
 import message.MessageUpdate;
 import message.Messages;

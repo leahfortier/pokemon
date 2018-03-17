@@ -2,7 +2,7 @@ package trainer;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.EffectInterfaces.SwitchOutEffect;
+import battle.effect.interfaces.InvokeInterfaces.SwitchOutEffect;
 import item.bag.Bag;
 import main.Global;
 import pokemon.active.PartyPokemon;

@@ -3,9 +3,9 @@ package item.berry;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.MoveCategory;
-import battle.effect.CastSource;
-import battle.effect.EffectInterfaces.OpponentApplyDamageEffect;
-import battle.effect.EffectInterfaces.TakeDamageEffect;
+import battle.effect.interfaces.InvokeInterfaces.OpponentApplyDamageEffect;
+import battle.effect.interfaces.InvokeInterfaces.TakeDamageEffect;
+import battle.effect.source.CastSource;
 import message.Messages;
 import pokemon.Stat;
 

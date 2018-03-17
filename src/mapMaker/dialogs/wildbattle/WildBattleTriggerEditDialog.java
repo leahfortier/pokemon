@@ -1,7 +1,7 @@
 package mapMaker.dialogs.wildbattle;
 
-import map.overworld.EncounterRate;
-import map.overworld.WildEncounterInfo;
+import map.overworld.wild.EncounterRate;
+import map.overworld.wild.WildEncounterInfo;
 import mapMaker.dialogs.ConditionPanel;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.WildBattleMatcher;

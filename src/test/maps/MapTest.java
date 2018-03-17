@@ -11,7 +11,7 @@ import map.condition.ConditionHolder.NotCondition;
 import map.condition.ConditionHolder.OrCondition;
 import map.daynight.DayCycle;
 import map.overworld.WalkType;
-import map.overworld.WildEncounterInfo;
+import map.overworld.wild.WildEncounterInfo;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

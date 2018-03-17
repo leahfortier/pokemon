@@ -1,8 +1,8 @@
 package pattern.map;
 
 import map.condition.ConditionSet;
-import map.overworld.EncounterRate;
-import map.overworld.WildEncounterInfo;
+import map.overworld.wild.EncounterRate;
+import map.overworld.wild.WildEncounterInfo;
 import pattern.generic.TriggerMatcher;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package battle.effect;
+package battle.effect.source;
 
 import battle.ActivePokemon;
 import battle.Battle;
@@ -6,7 +6,8 @@ import item.Item;
 import main.Global;
 import pokemon.ability.Ability;
 
-public enum CastSource {
+public enum
+CastSource {
     ATTACK(false, (b, caster) -> caster.getAttack()),
     ABILITY(true, (b, caster) -> caster.getAbility()),
     HELD_ITEM(true, (b, caster) -> caster.getHeldItem(b)),

@@ -81,74 +81,6 @@ SuperDuperEndTurnEffect:
 		EffectList: p
 	*
 ***
-RecoilMove:
-	Method:
-		Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
-	*
-	Extends: AttackInterface, ApplyDamageEffect
-	Method:
-		Override: True
-		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
-		Default:
-			this.applyRecoil(b, user, damage);
-			###
-	*
-***
-RecoilPercentageMove:
-	Extends: RecoilMove
-	Method:
-		Header: int getDamagePercentageDenominator()
-	*
-	Method:
-		Override: True
-		Header: void applyRecoil(Battle b, ActivePokemon user, int damage)
-		Default:
-			if (user.hasAbility(AbilityNamesies.ROCK_HEAD) || user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(user.getName() + " was hurt by recoil!");
-            user.reduceHealth(b, (int)Math.ceil((double)damage/getDamagePercentageDenominator()), false);
-			###
-	*
-***
-SelfHealingMove:
-    Extends: AttackInterface
-	Method:
-		Header: double getHealFraction(Battle b, ActivePokemon victim)
-	*
-	Method:
-		Header: void heal(Battle b, ActivePokemon victim)
-		Default:
-			// Heal yourself!
-			victim.healHealthFraction(this.getHealFraction(b, victim));
-
-			// TODO: Make sure the message is set up correctly for the hp change
-			Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
-			###
-	*
-***
-PhysicalContactEffect:
-	Method:
-		Comments:
-			// b: The current battle
-			// user: The user of the attack that caused the physical contact
-			// victim: The Pokemon that received the physical contact attack
-			###
-		Header: void contact(Battle b, ActivePokemon user, ActivePokemon victim)
-	*
-	Extends: OpponentApplyDamageEffect
-	Method:
-		Override: True
-		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
-		Default:
-			// Only apply if physical contact is made
-			if (user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && !user.hasAbility(AbilityNamesies.LONG_REACH)) {
-				this.contact(b, user, victim);
-			}
-			###
-	*
-***
 TakeDamageEffect:
 	Method:
 		Comments:
@@ -182,22 +114,6 @@ CrashDamageMove:
 		Move: user
 		Invoke: Void
 	*
-***
-EffectReleaser:
-    Method:
-        Header: void release(Battle b, ActivePokemon released, String releaseMessage)
-        Default:
-            Messages.add(releaseMessage);
-
-            if (this instanceof PokemonEffect) {
-                released.getEffects().remove((PokemonEffect)this);
-            } else if (this instanceof TeamEffect) {
-                b.getTrainer(released).getEffects().remove((TeamEffect)this);
-            } else {
-                Global.error("Invalid release object " + this.getClass().getSimpleName());
-            }
-            ###
-    *
 ***
 BarrierEffect:
 	Extends: EffectReleaser
@@ -658,32 +574,6 @@ StatModifyingEffect:
 		MoldBreakerNullCheck: s.user() ? null : opp
 	*
 ***
-SimpleStatModifyingEffect:
-	Extends: StatModifyingEffect
-	Method:
-		Header: boolean isModifyStat(Stat s)
-	*
-	Method:
-		Header: double getModifier()
-	*
-	Method:
-		Header: boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp)
-		Default:
-			return true;
-			###
-	*
-	Method:
-		Override: True
-		Header: double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
-		Default:
-			if (isModifyStat(s) && canModifyStat(b, p, opp)) {
-					return getModifier();
-			}
-
-			return 1;
-			###
-	*
-***
 StatChangingEffect:
 	Method:
 		Comments:
@@ -760,50 +650,6 @@ AlwaysCritEffect:
 		InvokeAttack: attacking
 		InvokeName: defCritsies
 	*
-***
-EffectCurerItem:
-    Extends: HoldItem, EffectReceivedEffect, EndTurnEffect
-    Method:
-        Header: Set<PokemonEffectNamesies> getCurableEffects()
-    *
-    Method:
-        Header: String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType)
-    *
-    Method:
-        Header: boolean usesies(ActivePokemon user)
-        Default:
-            boolean used = false;
-            for (PokemonEffectNamesies removableEffect : this.getCurableEffects()) {
-                if (user.getEffects().remove(removableEffect)) {
-                    used = true;
-                    Messages.add(this.getRemoveMessage(user, removableEffect));
-                }
-            }
-
-            return used;
-            ###
-    *
-    Method:
-        Header: void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType)
-        Override: True
-        Default:
-        if (effectType instanceof PokemonEffectNamesies && this.getCurableEffects().contains(effectType)) {
-            PokemonEffectNamesies pokemonEffectType = (PokemonEffectNamesies)effectType;
-            Messages.add(this.getRemoveMessage(victim, pokemonEffectType));
-            victim.getEffects().remove(pokemonEffectType);
-            this.consumeItem(b, victim);
-        }
-        ###
-    *
-    Method:
-        Header: void applyEndTurn(ActivePokemon victim, Battle b)
-        Override: True
-        Default:
-            if (usesies(victim)) {
-                this.consumeItem(b, victim);
-            }
-            ###
-    *
 ***
 EffectReceivedEffect:
 	Method:
@@ -882,133 +728,11 @@ SelfAttackBlocker:
 			###
 	*
 ***
-ItemSwapperEffect:
-	Method:
-		Header: String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem)
-	*
-    Method:
-        Header: void swapItems(Battle b, ActivePokemon user, ActivePokemon victim)
-        Default:
-            HoldItem userItem = user.getHeldItem(b);
-            HoldItem victimItem = victim.getHeldItem(b);
-
-            Messages.add(this.getSwitchMessage(user, userItem, victim, victimItem));
-
-            // For wild battles, an actual switch occurs
-            if (b.isWildBattle()) {
-                user.giveItem(victimItem);
-                victim.giveItem(userItem);
-            } else {
-                user.setCastSource(victimItem);
-                PokemonEffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, user, CastSource.CAST_SOURCE, false);
-
-                user.setCastSource(userItem);
-                PokemonEffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
-            }
-            ###
-    *
-***
-SwapOpponentEffect:
-	Method:
-		Header: String getSwapMessage(ActivePokemon user, ActivePokemon victim)
-	*
-    Method:
-        Header: void swapOpponent(Battle b, ActivePokemon user, ActivePokemon victim)
-        Default:
-            if (!user.canSwapOpponent(b, victim)) {
-                return;
-            }
-
-            Messages.add(this.getSwapMessage(user, victim));
-
-            Team opponent = b.getTrainer(victim);
-            if (opponent instanceof WildPokemon) {
-                // End the battle against a wild Pokemon
-                Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
-            } else {
-                Trainer trainer = (Trainer)opponent;
-
-                // Swap to a random Pokemon!
-                trainer.switchToRandom(b);
-                b.enterBattle(trainer.front(), enterer -> "...and " + enterer.getName() + " was dragged out!");
-            }
-            ###
-    *
-***
-ProtectingEffect:
-	Extends: AttackBlocker
-	Method:
-		Header: void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp)
-		Default: Empty
-	*
-	Method:
-		Header: boolean protectingCondition(Battle b, ActivePokemon attacking)
-		Default:
-			return true;
-			###
-	*
-	Method:
-		Override: True
-		Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
-		Default:
-			Attack attack = user.getAttack();
-			return protectingCondition(b, user) && !attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.PROTECT_PIERCING);
-			###
-	*
-	Method:
-		Override: True
-		Header: void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim)
-		Default:
-			CrashDamageMove.invokeCrashDamageMove(b, user);
-			this.protectingEffects(b, user, victim);
-			###
-	*
-	Method:
-		Override: True
-		Header: String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim)
-		Default:
-			return victim.getName() + " is protecting itself!";
-			###
-	*
-***
-AttackSelectionSelfBlockerEffect:
-	Extends: AttackSelectionEffect, SelfAttackBlocker
-	Method:
-		Override: True
-		Header: boolean block(Battle b, ActivePokemon user)
-		Default:
-			return !this.usable(b, user, user.getMove());
-			###
-	*
-***
-PowderMove:
-	Extends: AttackInterface, SelfAttackBlocker
-	Method:
-		Override: True
-		Header: boolean block(Battle b, ActivePokemon user)
-		Default:
-			// Powder moves don't work against Grass-type Pokemon
-			return b.getOtherPokemon(user).isType(b, Type.GRASS);
-			###
-	*
-***
 WildEncounterAlterer:
 	Method:
 		Header: void alterWildPokemon(ActivePokemon playerFront, WildEncounterInfo encounterData, WildEncounter encounter)
 		Invoke: Void
 		NonBattleEffects: playerFront
-	*
-***
-MaxLevelWildEncounterEffect:
-	Extends: WildEncounterAlterer
-	Method:
-		Override: True
-		Header: void alterWildPokemon(ActivePokemon playerFront, WildEncounterInfo encounterData, WildEncounter encounter)
-		Default:
-			if (RandomUtils.chanceTest(50)) {
-				encounter.setLevel(encounterData.getMaxLevel());
-			}
-			###
 	*
 ***
 RepellingEffect:
@@ -1023,49 +747,12 @@ RepellingEffect:
             ###
 	*
 ***
-RepelLowLevelEncounterEffect:
-	Extends: RepellingEffect
-	Method:
-		Override: True
-		Header: boolean shouldRepel(ActivePokemon playerFront, WildEncounter wildPokemon)
-		Default:
-			return RandomUtils.chanceTest(50) && wildPokemon.getLevel() + 5 <= playerFront.getLevel();
-			###
-	*
-***
 WildEncounterSelector:
 	Method:
 		Header: WildEncounterInfo getWildEncounter(ActivePokemon playerFront, WildEncounterInfo[] wildEncounters)
 		Invoke: Get
 		NonBattleEffects: playerFront
 		InvokeName: getForcedWildEncounter
-	*
-***
-TypedWildEncounterSelector:
-	Extends: WildEncounterSelector
-	Method:
-		Header: Type getEncounterType()
-	*
-	Method:
-		Override: True
-		Header: WildEncounterInfo getWildEncounter(ActivePokemon playerFront, WildEncounterInfo[] wildEncounters)
-		Default:
-			if (RandomUtils.chanceTest(50)) {
-				List<WildEncounterInfo> typedList = new ArrayList<>();
-				for (WildEncounterInfo wildEncounter : wildEncounters) {
-					PokemonInfo pokemon = wildEncounter.getPokemonName().getInfo();
-					if (pokemon.isType(this.getEncounterType())) {
-						typedList.add(wildEncounter);
-					}
-				}
-
-				if (!typedList.isEmpty()) {
-					return RandomUtils.getRandomValue(typedList);
-				}
-			}
-
-			return null;
-			###
 	*
 ***
 EncounterRateMultiplier:
@@ -1121,26 +808,6 @@ WeatherEliminatingEffect:
 			###
 	*
 ***
-EntryEndTurnEffect:
-	Extends: EntryEffect, EndTurnEffect
-	Method:
-		Header: void applyEffect(Battle b, ActivePokemon p)
-	*
-	Method:
-		Override: True
-		Header: void applyEndTurn(ActivePokemon victim, Battle b)
-		Default:
-			applyEffect(b, victim);
-			###
-	*
-	Method:
-		Override: True
-		Header: void enter(Battle b, ActivePokemon enterer)
-		Default:
-			applyEffect(b, enterer);
-			###
-	*
-***
 SwitchOutEffect:
 	Method:
 		Header: void switchOut(ActivePokemon switchee)
@@ -1156,71 +823,6 @@ WeatherExtendingEffect:
 		Invoke: Add
 		InvokeParameters: Battle b, ActivePokemon p
 		EffectList: p
-	*
-***
-SapHealthEffect:
-	Extends: ApplyDamageEffect
-	Method:
-		Header: double sapPercentage()
-		Default:
-			return .5;
-			###
-	*
-	Method:
-		Header: String getSapMessage(ActivePokemon victim)
-		Default:
-			return victim.getName() + "'s health was sapped!";
-			###
-	*
-	Method:
-		Header: void sapHealth(Battle b, ActivePokemon user, ActivePokemon victim, int damageAmount, boolean print)
-		Default:
-			int sapAmount = (int)Math.ceil(damageAmount*this.sapPercentage());
-
-			// Sap message
-			if (print) {
-					Messages.add(this.getSapMessage(victim));
-			}
-			
-			// Big Root heals an additional 30%
-			if (user.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
-					sapAmount *= 1.3;
-			}
-
-			if (victim.hasAbility(AbilityNamesies.LIQUID_OOZE)) {
-					Messages.add(victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName() + " caused " + user.getName() + " to lose health instead!");
-					user.reduceHealth(b, sapAmount, false);
-					return;
-			}
-
-			// Healers gon' heal
-			if (!user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
-					user.heal(sapAmount);
-			}
-
-			Messages.add(new MessageUpdate().updatePokemon(b, victim));
-			Messages.add(new MessageUpdate().updatePokemon(b, user));
-			###
-	*
-	Method:
-		Override: True
-		Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
-		Default:
-			this.sapHealth(b, user, victim, damage, true);
-			###
-	*
-***
-PowerCountMove:
-	Extends: AttackInterface, PowerChangeEffect
-	Method:
-		Header: boolean doubleDefenseCurled()
-	*
-	Method:
-		Override: True
-		Header: double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-		Default:
-			return Math.min(user.getCount(), 5)*(this.doubleDefenseCurled() && user.hasEffect(PokemonEffectNamesies.USED_DEFENSE_CURL) ? 2 : 1);
-			###
 	*
 ***
 ItemBlockerEffect:
@@ -1273,6 +875,4 @@ DefiniteEscape:
         Invoke: CheckMessage true getEscapeMessage(b, p)
         InvokeName: canDefinitelyEscape
     *
-***
-PassableEffect:
 ***

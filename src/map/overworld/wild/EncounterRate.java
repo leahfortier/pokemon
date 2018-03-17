@@ -1,4 +1,4 @@
-package map.overworld;
+package map.overworld.wild;
 
 public enum EncounterRate {
     VERY_COMMON(15),

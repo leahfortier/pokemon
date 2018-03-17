@@ -2,6 +2,7 @@ package battle.effect;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.source.CastSource;
 import util.serialization.Serializable;
 
 public interface MessageGetter extends Serializable {

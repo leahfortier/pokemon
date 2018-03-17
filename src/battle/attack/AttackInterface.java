@@ -2,10 +2,10 @@ package battle.attack;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.EffectInterfaces.ApplyDamageEffect;
-import battle.effect.EffectInterfaces.OpponentApplyDamageEffect;
-import battle.effect.EffectInterfaces.OpponentTakeDamageEffect;
-import battle.effect.EffectInterfaces.TakeDamageEffect;
+import battle.effect.interfaces.InvokeInterfaces.ApplyDamageEffect;
+import battle.effect.interfaces.InvokeInterfaces.OpponentApplyDamageEffect;
+import battle.effect.interfaces.InvokeInterfaces.OpponentTakeDamageEffect;
+import battle.effect.interfaces.InvokeInterfaces.TakeDamageEffect;
 import main.Game;
 import message.Messages;
 import pokemon.Stat;

@@ -1,6 +1,6 @@
 package mapMaker.dialogs.wildbattle;
 
-import map.overworld.WildEncounterInfo;
+import map.overworld.wild.WildEncounterInfo;
 import mapMaker.dialogs.TriggerDialog;
 import pattern.map.FishingMatcher;
 import pokemon.active.PartyPokemon;

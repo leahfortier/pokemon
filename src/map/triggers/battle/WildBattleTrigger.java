@@ -2,7 +2,7 @@ package map.triggers.battle;
 
 import battle.Battle;
 import main.Game;
-import map.overworld.WildEncounter;
+import map.overworld.wild.WildEncounter;
 import map.triggers.Trigger;
 import trainer.WildPokemon;
 import trainer.player.Player;

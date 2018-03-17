@@ -10,7 +10,7 @@ import map.entity.FishingSpotEntity;
 import map.entity.ItemEntity;
 import map.entity.MiscEntity;
 import map.overworld.WalkType;
-import map.overworld.WildEncounterInfo;
+import map.overworld.wild.WildEncounterInfo;
 import map.triggers.Trigger;
 import map.triggers.battle.WalkingWildBattleTrigger;
 import map.triggers.map.MapTransitionTrigger;

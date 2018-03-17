@@ -1,17 +1,17 @@
 package battle;
 
 import battle.effect.Effect;
-import battle.effect.EffectInterfaces.BattleEndTurnEffect;
-import battle.effect.EffectInterfaces.EndTurnEffect;
-import battle.effect.EffectInterfaces.SuperDuperEndTurnEffect;
-import battle.effect.EffectInterfaces.TerrainCastEffect;
-import battle.effect.EffectInterfaces.WeatherEliminatingEffect;
 import battle.effect.EffectList;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.battle.BattleEffect;
 import battle.effect.battle.terrain.TerrainEffect;
 import battle.effect.battle.weather.WeatherEffect;
 import battle.effect.battle.weather.WeatherNamesies;
+import battle.effect.interfaces.InvokeInterfaces.BattleEndTurnEffect;
+import battle.effect.interfaces.InvokeInterfaces.EndTurnEffect;
+import battle.effect.interfaces.InvokeInterfaces.SuperDuperEndTurnEffect;
+import battle.effect.interfaces.InvokeInterfaces.TerrainCastEffect;
+import battle.effect.interfaces.InvokeInterfaces.WeatherEliminatingEffect;
 import main.Game;
 import map.area.AreaData;
 import map.overworld.TerrainType;

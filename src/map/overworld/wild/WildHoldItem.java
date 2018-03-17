@@ -1,4 +1,4 @@
-package map.overworld;
+package map.overworld.wild;
 
 import battle.ActivePokemon;
 import item.ItemNamesies;

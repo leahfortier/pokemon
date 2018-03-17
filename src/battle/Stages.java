@@ -1,9 +1,9 @@
 package battle;
 
-import battle.effect.CastSource;
-import battle.effect.EffectInterfaces.ModifyStageValueEffect;
-import battle.effect.EffectInterfaces.StatLoweredEffect;
-import battle.effect.EffectInterfaces.StatProtectingEffect;
+import battle.effect.interfaces.InvokeInterfaces.ModifyStageValueEffect;
+import battle.effect.interfaces.InvokeInterfaces.StatLoweredEffect;
+import battle.effect.interfaces.InvokeInterfaces.StatProtectingEffect;
+import battle.effect.source.CastSource;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
