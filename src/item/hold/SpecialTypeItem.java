@@ -2,7 +2,7 @@ package item.hold;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.interfaces.InvokeInterfaces.PowerChangeEffect;
+import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import message.Messages;
 import type.Type;
 

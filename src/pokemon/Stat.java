@@ -2,12 +2,12 @@ package pokemon;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.interfaces.InvokeInterfaces.OpponentIgnoreStageEffect;
-import battle.effect.interfaces.InvokeInterfaces.OpponentStatSwitchingEffect;
-import battle.effect.interfaces.InvokeInterfaces.StageChangingEffect;
-import battle.effect.interfaces.InvokeInterfaces.StatChangingEffect;
-import battle.effect.interfaces.InvokeInterfaces.StatModifyingEffect;
-import battle.effect.interfaces.InvokeInterfaces.StatSwitchingEffect;
+import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
+import battle.effect.InvokeInterfaces.OpponentStatSwitchingEffect;
+import battle.effect.InvokeInterfaces.StageChangingEffect;
+import battle.effect.InvokeInterfaces.StatChangingEffect;
+import battle.effect.InvokeInterfaces.StatModifyingEffect;
+import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import main.Global;
 
 import java.util.Arrays;

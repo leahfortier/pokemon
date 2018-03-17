@@ -3,7 +3,7 @@ package trainer.player;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
-import battle.effect.interfaces.InvokeInterfaces.EndBattleEffect;
+import battle.effect.InvokeInterfaces.EndBattleEffect;
 import battle.effect.team.TeamEffectNamesies;
 import gui.view.ViewMode;
 import item.ItemNamesies;

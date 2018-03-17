@@ -1,8 +1,8 @@
 package map.triggers.battle;
 
 import battle.ActivePokemon;
-import battle.effect.interfaces.InvokeInterfaces.EncounterRateMultiplier;
-import battle.effect.interfaces.InvokeInterfaces.RepellingEffect;
+import battle.effect.InvokeInterfaces.EncounterRateMultiplier;
+import battle.effect.InvokeInterfaces.RepellingEffect;
 import main.Game;
 import map.overworld.wild.EncounterRate;
 import map.overworld.wild.WildEncounter;

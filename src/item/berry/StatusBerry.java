@@ -2,8 +2,8 @@ package item.berry;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.interfaces.InvokeInterfaces.EndTurnEffect;
-import battle.effect.interfaces.InvokeInterfaces.StatusReceivedEffect;
+import battle.effect.InvokeInterfaces.EndTurnEffect;
+import battle.effect.InvokeInterfaces.StatusReceivedEffect;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
 import item.medicine.StatusHealer;

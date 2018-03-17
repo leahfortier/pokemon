@@ -2,7 +2,7 @@ package item.berry;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.interfaces.InvokeInterfaces.OpponentPowerChangeEffect;
+import battle.effect.InvokeInterfaces.OpponentPowerChangeEffect;
 import message.Messages;
 import type.Type;
 import type.TypeAdvantage;

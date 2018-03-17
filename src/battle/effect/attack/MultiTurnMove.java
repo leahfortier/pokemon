@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackInterface;
 import battle.attack.Move;
-import battle.effect.interfaces.InvokeInterfaces.ForceMoveEffect;
+import battle.effect.InvokeInterfaces.ForceMoveEffect;
 import item.ItemNamesies;
 import item.hold.HoldItem;
 

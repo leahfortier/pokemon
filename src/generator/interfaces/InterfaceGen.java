@@ -1,6 +1,6 @@
 package generator.interfaces;
 
-import battle.effect.interfaces.InvokeInterfaces;
+import battle.effect.InvokeInterfaces;
 import generator.StuffGen;
 import util.file.FileIO;
 import util.file.FileName;

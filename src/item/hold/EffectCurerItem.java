@@ -3,8 +3,8 @@ package item.hold;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.EffectNamesies;
-import battle.effect.interfaces.InvokeInterfaces.EffectReceivedEffect;
-import battle.effect.interfaces.InvokeInterfaces.EndTurnEffect;
+import battle.effect.InvokeInterfaces.EffectReceivedEffect;
+import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import message.Messages;
 

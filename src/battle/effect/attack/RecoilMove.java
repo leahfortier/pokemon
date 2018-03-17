@@ -3,7 +3,7 @@ package battle.effect.attack;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackInterface;
-import battle.effect.interfaces.InvokeInterfaces.ApplyDamageEffect;
+import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import message.Messages;
 import pokemon.ability.AbilityNamesies;
 

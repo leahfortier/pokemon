@@ -3,7 +3,7 @@ package battle.effect.attack;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackInterface;
-import battle.effect.interfaces.InvokeInterfaces.PowerChangeEffect;
+import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 
 public interface PowerCountMove extends AttackInterface, PowerChangeEffect {
