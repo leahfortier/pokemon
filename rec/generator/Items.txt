@@ -1478,7 +1478,7 @@ Fast Ball:
     Desc: A Pok\u00e9 Ball that makes it easier to catch Pok\u00e9mon that are usually very quick to run away.
     Price: 300
     Comments: // If the opponent has a base speed of 100 or higher, multiplier is 4
-    CatchRateCondition: 4 o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100
+    CatchRateCondition: 4 o.getPokemonInfo().getStats().get(Stat.SPEED) >= 100
 *
 Great Ball:
     Desc: A good, high-performance Pok\u00e9 Ball that provides a higher Pok\u00e9mon catch rate than a standard Pok\u00e9 Ball.

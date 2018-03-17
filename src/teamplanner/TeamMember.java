@@ -2,10 +2,8 @@ package teamplanner;
 
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
-import pokemon.Stat;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
-import type.PokeType;
 import type.Type;
 import util.file.FileIO;
 import util.string.StringAppender;
@@ -98,12 +96,8 @@ class TeamMember {
 
         out.append(pokemonSpecies.getName() + ":");
 
-        PokeType type = pokemonSpecies.getType();
-        out.append("\n\tType: " + type.toString());
-
-        out.append("\n\tStats: ")
-           .appendJoin(" ", Stat.NUM_STATS, i -> pokemonSpecies.getStat(i) + "");
-
+        out.append("\n\tType: " + pokemonSpecies.getType());
+        out.append("\n\tStats: " + pokemonSpecies.getStats());
         out.append("\n\tNature: " + nature);
         out.append("\n\tAbility: " + ability);
         out.appendIf(item != null, "\n\tItem: " + item);

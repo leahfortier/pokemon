@@ -648,10 +648,10 @@ Download:
     Int: EntryEffect
     Enter:
         ActivePokemon other = b.getOtherPokemon(enterer);
-        PokemonInfo otherInfo = other.getPokemonInfo();
+        BaseStats otherStats = other.getPokemonInfo().getStats();
 
-        int baseDefense = otherInfo.getStat(Stat.DEFENSE.index());
-        int baseSpecialDefense = otherInfo.getStat(Stat.SP_DEFENSE.index());
+        int baseDefense = otherStats.get(Stat.DEFENSE);
+        int baseSpecialDefense = otherStats.get(Stat.SP_DEFENSE);
 
         Stat toRaise = baseDefense < baseSpecialDefense ? Stat.ATTACK : Stat.SP_ATTACK;
 

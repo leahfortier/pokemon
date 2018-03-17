@@ -11,6 +11,7 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.active.EffortValues;
 import pokemon.active.IndividualValues;
 import pokemon.active.PartyPokemon;
+import pokemon.species.BaseStats;
 import pokemon.species.LevelUpMove;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
@@ -171,11 +172,11 @@ public class PokemonInfoTest extends BaseTest {
     }
 
     private int getBaseStatTotal(PokemonNamesies pokemonNamesies) {
-        PokemonInfo pokemonInfo = pokemonNamesies.getInfo();
+        BaseStats baseStats = pokemonNamesies.getInfo().getStats();
 
         int total = 0;
         for (int i = 0; i < Stat.NUM_STATS; i++) {
-            total += pokemonInfo.getStat(i);
+            total += baseStats.get(i);
         }
 
         return total;

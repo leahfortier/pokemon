@@ -99,6 +99,8 @@ import pokemon.Stat;
 import pokemon.active.Gender;
 import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
+import pokemon.active.StatValues;
+import pokemon.species.BaseStats;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
 import trainer.Trainer;
@@ -1806,10 +1808,10 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             ActivePokemon other = b.getOtherPokemon(enterer);
-            PokemonInfo otherInfo = other.getPokemonInfo();
+            BaseStats otherStats = other.getPokemonInfo().getStats();
 
-            int baseDefense = otherInfo.getStat(Stat.DEFENSE.index());
-            int baseSpecialDefense = otherInfo.getStat(Stat.SP_DEFENSE.index());
+            int baseDefense = otherStats.get(Stat.DEFENSE);
+            int baseSpecialDefense = otherStats.get(Stat.SP_DEFENSE);
 
             Stat toRaise = baseDefense < baseSpecialDefense ? Stat.ATTACK : Stat.SP_ATTACK;
 
@@ -3582,12 +3584,12 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
     static class Schooling extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect {
         private static final long serialVersionUID = 1L;
 
-        private static final int[] SOLO_STATS = new int[] { 45, 20, 20, 25, 25, 40 };
-        private static final int[] SCHOOL_STATS = new int[] { 45, 140, 130, 140, 135, 30 };
+        private static final BaseStats SOLO_STATS = new BaseStats(new int[] { 45, 20, 20, 25, 25, 40 });
+        private static final BaseStats SCHOOL_STATS = new BaseStats(new int[] { 45, 140, 130, 140, 135, 30 });
 
         private boolean schoolForm;
 
-        private int[] getStats() {
+        private BaseStats getStats() {
             return schoolForm ? SCHOOL_STATS : SOLO_STATS;
         }
 
@@ -3619,15 +3621,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-            int index = stat.index();
-            return Stat.getStat(
-                    index,
-                    user.getLevel(),
-                    getStats()[index],
-                    user.getIVs().get(index),
-                    user.getEVs().get(index),
-                    user.getNature().getNatureVal(index)
-            );
+            return user.getStats().calculate(stat, this.getStats());
         }
 
         @Override
@@ -3644,12 +3638,12 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
     static class ShieldsDown extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect {
         private static final long serialVersionUID = 1L;
 
-        private static final int[] METEOR_STATS = new int[] { 60, 60, 100, 60, 100, 60 };
-        private static final int[] CORE_STATS = new int[] { 60, 100, 60, 100, 60, 120 };
+        private static final BaseStats METEOR_STATS = new BaseStats(new int[] { 60, 60, 100, 60, 100, 60 });
+        private static final BaseStats CORE_STATS = new BaseStats(new int[] { 60, 100, 60, 100, 60, 120 });
 
         private boolean coreForm;
 
-        private int[] getStats() {
+        private BaseStats getStats() {
             return coreForm ? CORE_STATS : METEOR_STATS;
         }
 
@@ -3681,15 +3675,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-            int index = stat.index();
-            return Stat.getStat(
-                    index,
-                    user.getLevel(),
-                    getStats()[index],
-                    user.getIVs().get(index),
-                    user.getEVs().get(index),
-                    user.getNature().getNatureVal(index)
-            );
+            return user.getStats().calculate(stat, this.getStats());
         }
 
         @Override
@@ -3706,12 +3692,12 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
     static class StanceChange extends Ability implements BeforeTurnEffect, EntryEffect, DifferentStatEffect {
         private static final long serialVersionUID = 1L;
 
-        private static final int[] BLADE_STATS = new int[] { 60, 150, 50, 150, 50, 60 };
-        private static final int[] SHIELD_STATS = new int[] { 60, 50, 150, 50, 150, 60 };
+        private static final BaseStats BLADE_STATS = new BaseStats(new int[] { 60, 150, 50, 150, 50, 60 });
+        private static final BaseStats SHIELD_STATS = new BaseStats(new int[] { 60, 50, 150, 50, 150, 60 });
 
         private boolean shieldForm;
 
-        private int[] getStats() {
+        private BaseStats getStats() {
             return shieldForm ? SHIELD_STATS : BLADE_STATS;
         }
 
@@ -3743,15 +3729,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-            int index = stat.index();
-            return Stat.getStat(
-                    index,
-                    user.getLevel(),
-                    getStats()[index],
-                    user.getIVs().get(index),
-                    user.getEVs().get(index),
-                    user.getNature().getNatureVal(index)
-            );
+            return user.getStats().calculate(stat, this.getStats());
         }
 
         @Override

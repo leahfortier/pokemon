@@ -41,8 +41,8 @@ public class Move implements Serializable {
         type = attack.getActualType();
     }
 
-    public Move(Attack m, int startPP) {
-        this(m);
+    public Move(Attack attack, int startPP) {
+        this(attack);
         pp = startPP;
     }
 

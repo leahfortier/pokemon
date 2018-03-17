@@ -464,7 +464,7 @@ class PokedexView extends View {
             for (int i = 0; i < Stat.NUM_STATS; i++) {
                 int y = textY + (i + 1)*(FontMetrics.getTextHeight(g) + spacing);
                 g.drawString(Stat.getStat(i, false).getName(), leftX, y);
-                TextUtils.drawRightAlignedString(g, selected.getStat(i) + "", baseStatRightX, y);
+                TextUtils.drawRightAlignedString(g, selected.getStats().get(i) + "", baseStatRightX, y);
                 TextUtils.drawRightAlignedString(g, selected.getGivenEV(i) + "", evRightX, y);
             }
         }

@@ -51,7 +51,7 @@ public class TestPokemon extends ActivePokemon {
         Assert.assertTrue(moves.length <= Move.MAX_MOVES);
         this.setMoves(
                 Arrays.stream(moves)
-                      .map(move -> new Move(move.getNewAttack()))
+                      .map(Move::new)
                       .collect(Collectors.toList())
         );
         return this;

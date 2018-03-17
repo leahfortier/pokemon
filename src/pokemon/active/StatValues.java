@@ -2,7 +2,7 @@ package pokemon.active;
 
 import main.Game;
 import pokemon.Stat;
-import pokemon.species.PokemonInfo;
+import pokemon.species.BaseStats;
 import trainer.player.medal.Medal;
 import trainer.player.medal.MedalCase;
 import util.serialization.Serializable;
@@ -63,20 +63,10 @@ public class StatValues implements Serializable {
     int[] setStats() {
         int[] prevStats = stats.clone();
 
-        PokemonInfo pokemon = statsHolder.getPokemonInfo();
-
         stats = new int[Stat.NUM_STATS];
         int[] gain = new int[Stat.NUM_STATS];
         for (int i = 0; i < stats.length; i++) {
-            stats[i] = Stat.getStat(
-                    i,
-                    statsHolder.getLevel(),
-                    pokemon.getStat(i),
-                    IVs.get(i),
-                    EVs.get(i),
-                    nature.getNatureVal(i)
-            );
-
+            stats[i] = this.calculate(i, statsHolder.getPokemonInfo().getStats());
             gain[i] = stats[i] - prevStats[i];
         }
 
@@ -102,5 +92,29 @@ public class StatValues implements Serializable {
         }
 
         return added;
+    }
+
+    public int calculate(Stat stat, BaseStats baseStats) {
+        return this.calculate(stat.index(), baseStats);
+    }
+
+    // Generates a new stat
+    public int calculate(int statIndex, BaseStats baseStats) {
+        int level = statsHolder.getLevel();
+        int baseStat = baseStats.get(statIndex);
+        int IV = IVs.get(statIndex);
+        int EV = EVs.get(statIndex);
+        double natureVal = nature.getNatureVal(statIndex);
+
+        if (statIndex == Stat.HP.index()) {
+            // Shedinja...
+            if (baseStat == 1) {
+                return 1;
+            } else {
+                return (int)(((IV + 2*baseStat + (EV/4.0))*level/100.0) + 10 + level);
+            }
+        }
+
+        return (int)((((IV + 2*baseStat + (EV/4.0))*level/100.0) + 5)*natureVal);
     }
 }

@@ -5,6 +5,7 @@ import main.Global;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Nature;
+import pokemon.species.BaseStats;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
 import type.PokeType;
@@ -112,7 +113,8 @@ public class TeamPlanner {
             }
 
             if (nature == null) {
-                Stat decrease = pokemon.getStat(Stat.ATTACK.index()) < pokemon.getStat(Stat.SP_ATTACK.index()) ? Stat.ATTACK : Stat.SP_ATTACK;
+                BaseStats baseStats = pokemon.getStats();
+                Stat decrease = baseStats.get(Stat.ATTACK) < baseStats.get(Stat.SP_ATTACK) ? Stat.ATTACK : Stat.SP_ATTACK;
                 for (int i = 0; i < Stat.NUM_STATS; i++) {
                     if (i == Stat.HP.index() || i == decrease.index()) {
                         continue;

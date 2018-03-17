@@ -4016,7 +4016,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
-            return o.getPokemonInfo().getStat(Stat.SPEED.index()) >= 100 ? 4 : 1;
+            return o.getPokemonInfo().getStats().get(Stat.SPEED) >= 100 ? 4 : 1;
         }
     }
 
