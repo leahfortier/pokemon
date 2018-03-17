@@ -1972,7 +1972,7 @@ public final class EffectInterfaces {
             return "Got away safely!";
         }
 
-        default boolean canEscape(Battle b, ActivePokemon p) {
+        default boolean canEscape() {
             return true;
         }
 
@@ -1981,7 +1981,7 @@ public final class EffectInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof DefiniteEscape && InvokeEffect.isActiveEffect(invokee)) {
                     DefiniteEscape effect = (DefiniteEscape)invokee;
-                    if (effect.canEscape(b, p)) {
+                    if (effect.canEscape()) {
                         Messages.add(effect.getEscapeMessage(b, p));
                         return true;
                     }

@@ -288,7 +288,7 @@ LevitationEffect:
 		Default: Empty
 	*
 	Method:
-		Parameters: Battle b, ActivePokemon p, ActivePokemon moldBreaker
+		InvokeParameters: Battle b, ActivePokemon p, ActivePokemon moldBreaker
 		Invoke: Contains
 		EffectList: p
 		MoldBreaker: moldBreaker
@@ -312,7 +312,7 @@ EndBattleEffect:
 ***
 GroundedEffect:
 	Method:
-		Parameters: Battle b, ActivePokemon p
+		InvokeParameters: Battle b, ActivePokemon p
 		Invoke: Contains
 		EffectList: p
 	*
@@ -828,7 +828,7 @@ OpponentStatusReceivedEffect:
 ***
 SleepyFightsterEffect:
 	Method:
-		Parameters: Battle b, ActivePokemon p
+		InvokeParameters: Battle b, ActivePokemon p
 		Invoke: Contains
 		EffectList: p
 		InvokeAttack: p
@@ -1225,7 +1225,7 @@ PowerCountMove:
 ***
 ItemBlockerEffect:
     Method:
-        Parameters: Battle b, ActivePokemon p
+        InvokeParameters: Battle b, ActivePokemon p
         Invoke: Contains
         SetInvokees:
 			// Don't include the item because then it's all like ahhhhhh
@@ -1246,7 +1246,7 @@ OpponentItemBlockerEffect:
 StallingEffect:
     Method:
         Invoke: Contains
-        Parameters: Battle b, ActivePokemon p
+        InvokeParameters: Battle b, ActivePokemon p
         EffectList: p
     *
 ***
@@ -1268,7 +1268,7 @@ DefiniteEscape:
         Default:
             return true;
             ###
-        Parameters: Battle b, ActivePokemon p
+        InvokeParameters: Battle b, ActivePokemon p
         EffectList: p
         Invoke: CheckMessage true getEscapeMessage(b, p)
         InvokeName: canDefinitelyEscape

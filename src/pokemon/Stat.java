@@ -104,20 +104,16 @@ public enum Stat {
         int stage = getStage(s, p, opp, b);
         int stat = s == EVASION || s == ACCURACY ? 100 : p.getStat(b, s);
 
-//        int temp = stat;
-
         // Modify stat based off stage
         if (stage > 0) {
-            stat *= ((s.modifier + stage)/s.modifier);
+            stat *= (s.modifier + stage)/s.modifier;
         } else if (stage < 0) {
-            stat *= (s.modifier/(s.modifier - stage));
+            stat *= s.modifier/(s.modifier - stage);
         }
 
         // Applies stat changes to each for each item in list
         stat *= StatModifyingEffect.getModifier(b, p, opp, s);
         stat = StatChangingEffect.modifyStat(b, p, opp, s, stat);
-
-//        System.out.println(p.getName() + " " + s.name + " Stat Change: " + temp + " -> " + stat);
 
         // Just to be safe
         stat = Math.max(1, stat);

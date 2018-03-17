@@ -18,10 +18,7 @@ import java.util.regex.Pattern;
 
 class InterfaceMethod {
     private static final String COMMENTS = "Comments";
-    private static final String RETURN_TYPE = "ReturnType";
-    private static final String METHOD_NAME = "MethodName";
     private static final String HEADER = "Header";
-    private static final String PARAMETERS = "Parameters";
     private static final String INVOKE_PARAMETERS = "InvokeParameters";
     private static final String INVOKE = "Invoke";
     private static final String INVOKE_NAME = "InvokeName";
@@ -95,29 +92,6 @@ class InterfaceMethod {
             this.returnType = matcher.group(1);
             this.methodName = matcher.group(2);
             this.parameters = matcher.group(3);
-        }
-
-        final String returnType = fields.getAndRemoveTrimmed(RETURN_TYPE);
-        if (returnType != null) {
-            if (!StringUtils.isNullOrEmpty(this.returnType) || !StringUtils.isNullOrEmpty(this.methodName)) {
-                Global.error("Cannot set the return type manually if it has already be set via the header field. " +
-                                     "Header Return Type: " + this.returnType + ", Header Method Name: " + this.methodName +
-                                     "New Return Type: " + returnType + ", Interface Name: " + this.interfaceName);
-            }
-
-            final String methodName = fields.getAndRemoveTrimmed(METHOD_NAME);
-            if (methodName == null) {
-                Global.error("Return type and method name must be specified together. " +
-                                     "Return Type: " + returnType + ", Interface Name: " + this.interfaceName);
-            }
-
-            this.returnType = returnType;
-            this.methodName = methodName;
-        }
-
-        final String parameters = fields.getAndRemoveTrimmed(PARAMETERS);
-        if (parameters != null) {
-            this.parameters = parameters;
         }
 
         final String invokeParameters = fields.getAndRemoveTrimmed(INVOKE_PARAMETERS);
