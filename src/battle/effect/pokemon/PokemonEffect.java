@@ -1686,7 +1686,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Ingrain extends PokemonEffect implements TrappingEffect, EndTurnEffect, GroundedEffect, PassableEffect {
+    static class Ingrain extends PokemonEffect implements TrappingEffect, GroundedEffect, PassableEffect, EndTurnEffect {
         private static final long serialVersionUID = 1L;
 
         Ingrain() {
@@ -1696,20 +1696,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(victim.hasEffect(this.namesies()));
-        }
-
-        @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (!victim.canHeal()) {
-                return;
-            }
-
-            int healAmount = victim.healHealthFraction(1/16.0);
-            if (victim.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
-                victim.heal((int)(healAmount*.3));
-            }
-
-            Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to ingrain!").updatePokemon(b, victim));
         }
 
         @Override
@@ -1730,6 +1716,16 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return victim.getName() + " planted its roots!";
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            int healAmount = victim.getHealHealthFractionAmount(1/16.0);
+            if (victim.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
+                healAmount *= 1.3;
+            }
+
+            victim.heal(healAmount, b, victim.getName() + " restored some HP due to ingrain!");
         }
     }
 
@@ -1918,22 +1914,18 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (!victim.canHeal()) {
-                return;
-            }
-
-            int healAmount = victim.healHealthFraction(1/16.0);
-            if (victim.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
-                victim.heal((int)(healAmount*.3));
-            }
-
-            Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to aqua ring!").updatePokemon(b, victim));
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return user.getName() + " surrounded itself with a veil of water!";
         }
 
         @Override
-        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return user.getName() + " surrounded itself with a veil of water!";
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            int healAmount = victim.getHealHealthFractionAmount(1/16.0);
+            if (victim.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
+                healAmount *= 1.3;
+            }
+
+            victim.heal(healAmount, b, victim.getName() + " restored some HP due to aqua ring!");
         }
     }
 

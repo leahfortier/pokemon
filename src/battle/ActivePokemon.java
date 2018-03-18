@@ -63,6 +63,7 @@ import util.string.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ActivePokemon extends PartyPokemon {
     private static final long serialVersionUID = 1L;
@@ -564,13 +565,13 @@ public class ActivePokemon extends PartyPokemon {
         return !this.isActuallyDead() && !this.fullHealth() && !this.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
     }
 
-    public int healHealthFraction(double fraction, Battle b, String message) {
+    private int heal(Battle b, String message, Supplier<Integer> healAction) {
         if (!this.canHeal()) {
             return 0;
         }
 
         Messages.add(message);
-        int healAmount = super.healHealthFraction(fraction);
+        int healAmount = healAction.get();
 
         if (healAmount <= 0) {
             Global.error("Heal amount should be positive.");
@@ -578,6 +579,14 @@ public class ActivePokemon extends PartyPokemon {
 
         Messages.add(new MessageUpdate().updatePokemon(b, this));
         return healAmount;
+    }
+
+    public int heal(int amount, Battle b, String message) {
+        return this.heal(b, message, () -> super.heal(amount));
+    }
+
+    public int healHealthFraction(double fraction, Battle b, String message) {
+        return this.heal(b, message, () -> super.healHealthFraction(fraction));
     }
 
     // Don't think you'll make it out alive

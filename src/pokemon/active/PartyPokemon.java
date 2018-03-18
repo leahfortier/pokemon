@@ -28,6 +28,7 @@ import util.string.StringUtils;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public abstract class PartyPokemon implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -303,6 +304,21 @@ public abstract class PartyPokemon implements Serializable {
 
     public Color getHPColor() {
         return DrawUtils.getHPColor(getHPRatio());
+    }
+
+    private int getHealAmount(Supplier<Integer> healAction) {
+        int prevHp = this.getHP();
+        int healAmount = healAction.get();
+        this.setHP(prevHp);
+        return healAmount;
+    }
+
+    public int getHealAmount(int amount) {
+        return this.getHealAmount(() -> this.heal(amount));
+    }
+
+    public int getHealHealthFractionAmount(double fraction) {
+        return this.getHealAmount(() -> this.healHealthFraction(fraction));
     }
 
     // Restores hp by amount, returns the actual amount of hp that was restored

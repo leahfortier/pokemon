@@ -997,6 +997,17 @@ EndTurnStatusCure:
 		}
 		###
 *
+EndTurnBigRootHealer:
+    AddInterface: EndTurnEffect
+    AddMapField: ApplyEndTurn:
+        int healAmount = victim.getHealHealthFractionAmount(1/16.0);
+        if (victim.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
+            healAmount *= 1.3;
+        }
+
+        victim.heal(healAmount, b, victim.getName() + " restored some HP due to {0}!");
+        ###
+*
 PinchAbility:
 	AddMapField: PowerMultiplierCondition: 1.5 user.getHPRatio() < 1/3.0 && user.isAttackType(Type.{00})
 *

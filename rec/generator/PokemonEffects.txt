@@ -587,23 +587,12 @@ Telekinesis:
     FallMessage: "The effects of telekinesis were cancelled!"
 *
 Ingrain:
-    Int: TrappingEffect, EndTurnEffect, GroundedEffect, PassableEffect
+    Int: TrappingEffect, GroundedEffect, PassableEffect
     Trapped:
         return true;
         ###
     TrappingMessage: trapped.getName() + " cannot be recalled due to ingrain!"
-    ApplyEndTurn:
-        if (!victim.canHeal()) {
-            return;
-        }
-
-        int healAmount = victim.healHealthFraction(1/16.0);
-        if (victim.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
-            victim.heal((int)(healAmount*.3));
-        }
-
-        Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to ingrain!").updatePokemon(b, victim));
-        ###
+    EndTurnBigRootHealer: ingrain
     CastMessage: victim.getName() + " planted its roots!"
     AfterCast:
         removeLevitation(b, victim);
@@ -685,19 +674,8 @@ Uproar:
         ###
 *
 AquaRing:
-    Int: PassableEffect, EndTurnEffect
-    ApplyEndTurn:
-        if (!victim.canHeal()) {
-            return;
-        }
-        
-        int healAmount = victim.healHealthFraction(1/16.0);
-        if (victim.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
-            victim.heal((int)(healAmount*.3));
-        }
-
-        Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to aqua ring!").updatePokemon(b, victim));
-        ###
+    Int: PassableEffect
+    EndTurnBigRootHealer: aqua ring
     CastMessage: user.getName() + " surrounded itself with a veil of water!"
 *
 Nightmare:
