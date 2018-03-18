@@ -1,7 +1,5 @@
 package util;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +16,6 @@ public class ReverseIterable<T> implements Iterable<T> {
         this.list = list;
     }
 
-    @NotNull
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {

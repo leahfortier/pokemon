@@ -3,7 +3,6 @@ package pattern.action;
 import map.condition.Condition;
 import map.triggers.GroupTrigger;
 import map.triggers.Trigger;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +17,6 @@ public class ActionList implements Iterable<ActionMatcher> {
         this.actions = Arrays.asList(actions);
     }
 
-    @NotNull
     @Override
     public Iterator<ActionMatcher> iterator() {
         return this.actions.iterator();
