@@ -252,7 +252,7 @@ public class Battle implements Serializable {
         }
 
         // Dead Front Pokemon, but you still have others to spare -- force a switch
-        if (!player.blackout(this)) {
+        if (!player.blackout(this) && !opponent.blackout(this)) {
             Messages.add(new MessageUpdate("What Pokemon would you like to switch to?").withUpdate(MessageUpdateType.FORCE_SWITCH));
             return false;
         }
