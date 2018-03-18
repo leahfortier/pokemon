@@ -10,6 +10,7 @@ import item.hold.PowerItem;
 import pokemon.Stat;
 import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
+import pokemon.active.MoveList;
 import pokemon.active.Nature;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
@@ -195,7 +196,7 @@ public class Breeding {
 
         // Add the last four moves on the list
         List<Move> babyMoves = new ArrayList<>();
-        final int numMoves = Math.min(babyMovesNamesies.size(), Move.MAX_MOVES);
+        final int numMoves = Math.min(babyMovesNamesies.size(), MoveList.MAX_MOVES);
         final int startingIndex = babyMovesNamesies.size() - numMoves;
 
         for (int i = 0; i < numMoves; i++) {

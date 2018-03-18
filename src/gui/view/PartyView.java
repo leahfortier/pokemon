@@ -36,7 +36,7 @@ import java.util.List;
 
 class PartyView extends View {
     private static final int NUM_BOTTOM_BUTTONS = 3;
-    private static final int NUM_BUTTONS = Trainer.MAX_POKEMON + Move.MAX_MOVES + NUM_BOTTOM_BUTTONS;
+    private static final int NUM_BUTTONS = Trainer.MAX_POKEMON + MoveList.MAX_MOVES + NUM_BOTTOM_BUTTONS;
     private static final int MOVES = Trainer.MAX_POKEMON;
     private static final int RETURN = NUM_BUTTONS - 1;
     private static final int SWITCH = NUM_BUTTONS - 2;
@@ -179,7 +179,7 @@ class PartyView extends View {
                 buttonWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(NICKNAME).up(MOVES + Move.MAX_MOVES - 1).left(SWITCH).down(0)
+                new ButtonTransitions().right(NICKNAME).up(MOVES + MoveList.MAX_MOVES - 1).left(SWITCH).down(0)
         );
 
         tabButtons = new Button[Trainer.MAX_POKEMON];
@@ -218,7 +218,7 @@ class PartyView extends View {
                 .withBlackOutline();
 
         moveButtons = movesPanel.getButtons(
-                10, Move.MAX_MOVES, 1, MOVES,
+                10, MoveList.MAX_MOVES, 1, MOVES,
                 new ButtonTransitions().up(0).down(RETURN)
         );
 
@@ -451,7 +451,7 @@ class PartyView extends View {
 
             // Stats Box or Move description
             int selectedButton = buttons.getSelected();
-            if (selectedButton >= MOVES && selectedButton < MOVES + Move.MAX_MOVES) {
+            if (selectedButton >= MOVES && selectedButton < MOVES + MoveList.MAX_MOVES) {
                 drawMoveDescriptionPanel(g, statsPanel, moves.get(selectedButton - MOVES).getAttack());
             } else {
                 drawStatBox(g, selectedPkm);
@@ -566,7 +566,7 @@ class PartyView extends View {
                 tabButtons[i].setActive(i < team.size());
             }
 
-            for (int i = 0; i < Move.MAX_MOVES; i++) {
+            for (int i = 0; i < MoveList.MAX_MOVES; i++) {
                 moveButtons[i].setActive(!pkm.isEgg() && i < moves.size());
             }
 

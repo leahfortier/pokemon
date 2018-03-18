@@ -1,9 +1,9 @@
 package mapMaker.dialogs.action;
 
 import battle.attack.AttackNamesies;
-import battle.attack.Move;
 import main.Global;
 import pattern.PokemonMatcher;
+import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import pokemon.species.PokemonNamesies;
 import util.ColorDocumentListener.ColorCondition;
@@ -26,7 +26,7 @@ public class PokemonDataPanel extends JPanel {
     private final JFormattedTextField levelFormattedTextField;
     private final JCheckBox selectedCheckBox;
 
-    private final AttackNamesies[] customMoves = new AttackNamesies[Move.MAX_MOVES];
+    private final AttackNamesies[] customMoves = new AttackNamesies[MoveList.MAX_MOVES];
 
     // Fucking Java won't let this be final
     private JComboBox<String> moveComboBox;
@@ -105,8 +105,8 @@ public class PokemonDataPanel extends JPanel {
     }
 
     private void setMoves(final List<AttackNamesies> moves) {
-        if (moves.size() > Move.MAX_MOVES) {
-            Global.error("Cannot set more than " + Move.MAX_MOVES + " moves.");
+        if (moves.size() > MoveList.MAX_MOVES) {
+            Global.error("Cannot set more than " + MoveList.MAX_MOVES + " moves.");
         }
 
         this.moveCheckBox.setSelected(true);

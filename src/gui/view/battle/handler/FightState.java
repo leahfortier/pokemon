@@ -47,7 +47,7 @@ public class FightState implements VisualStateHandler {
         moveButtons = new ButtonList(view.createPanelButtons());
         moveButtons.setSelected(lastMoveUsed);
 
-        for (int i = 0; i < Move.MAX_MOVES; i++) {
+        for (int i = 0; i < MoveList.MAX_MOVES; i++) {
             moveButtons.get(i).setActive(i < selectedMoveList.size());
         }
 

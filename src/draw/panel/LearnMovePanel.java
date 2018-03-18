@@ -83,7 +83,7 @@ public class LearnMovePanel {
             }
         } else if (state == State.DELETE) {
             for (int y = 0, moveIndex = 0; y < 2; y++) {
-                for (int x = 0; x < Move.MAX_MOVES/2; x++, moveIndex++) {
+                for (int x = 0; x < MoveList.MAX_MOVES/2; x++, moveIndex++) {
                     int index = Point.getIndex(x, y, NUM_COLS);
                     if (buttons.get(index).checkConsumePress()) {
                         state = State.END;
@@ -132,7 +132,7 @@ public class LearnMovePanel {
                 for (int x = 0; x < NUM_COLS; x++) {
                     int index = Point.getIndex(x, y, NUM_COLS);
                     Button button = buttons.get(index);
-                    button.setActive(x < Move.MAX_MOVES/2 || button == newMoveButton);
+                    button.setActive(x < MoveList.MAX_MOVES/2 || button == newMoveButton);
                     if (button == newMoveButton) {
                         buttons.setSelected(index);
                     }
@@ -154,7 +154,7 @@ public class LearnMovePanel {
             MoveList moves = learning.getActualMoves();
             Attack selected = null;
             for (int y = 0, moveIndex = 0; y < 2; y++) {
-                for (int x = 0; x < Move.MAX_MOVES/2; x++, moveIndex++) {
+                for (int x = 0; x < MoveList.MAX_MOVES/2; x++, moveIndex++) {
                     int index = Point.getIndex(x, y, NUM_COLS);
                     Move move = moves.get(moveIndex);
 

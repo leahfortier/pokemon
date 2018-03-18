@@ -27,7 +27,7 @@ public interface TechnicalMachine extends MoveUseItem {
         MoveList moveList = p.getActualMoves();
 
         // If they don't have a full move list, append to the end
-        if (moveList.size() < Move.MAX_MOVES) {
+        if (moveList.size() < MoveList.MAX_MOVES) {
             p.addMove(tmMove, moveList.size(), false);
             return true;
         }

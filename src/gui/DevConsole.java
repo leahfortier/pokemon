@@ -1,7 +1,6 @@
 package gui;
 
 import battle.attack.AttackNamesies;
-import battle.attack.Move;
 import input.ControlKey;
 import input.InputControl;
 import item.ItemNamesies;
@@ -10,6 +9,7 @@ import main.Global;
 import map.area.AreaData;
 import map.overworld.OverworldTool;
 import pattern.PokemonMatcher;
+import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import pokemon.species.PokemonNamesies;
 import test.maps.TestMap;
@@ -216,7 +216,7 @@ public class DevConsole {
                     moves = new ArrayList<>();
                     Pattern oldDelimiter = in.delimiter();
                     in.useDelimiter(",");
-                    for (int i = 0; i < Move.MAX_MOVES; i++) {
+                    for (int i = 0; i < MoveList.MAX_MOVES; i++) {
                         String s = in.next().trim();
                         AttackNamesies attack = AttackNamesies.tryValueOf(s);
                         if (attack == null) {

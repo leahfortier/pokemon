@@ -17,6 +17,8 @@ import java.util.stream.Stream;
 public class MoveList implements Iterable<Move>, Serializable {
     private static final long serialVersionUID = 1L;
 
+    public static final int MAX_MOVES = 4;
+
     private List<Move> moves;
 
     public MoveList(List<Move> moves) {
@@ -43,7 +45,7 @@ public class MoveList implements Iterable<Move>, Serializable {
             moves.add(new Move(attackNamesies));
 
             // This can be an 'if' statement, but just to be safe...
-            while (moves.size() > Move.MAX_MOVES) {
+            while (moves.size() > MAX_MOVES) {
                 moves.remove(0);
             }
         }
@@ -54,7 +56,7 @@ public class MoveList implements Iterable<Move>, Serializable {
     }
 
     void setMoves(List<Move> list) {
-        if (list.isEmpty() || list.size() > Move.MAX_MOVES) {
+        if (list.isEmpty() || list.size() > MAX_MOVES) {
             Global.error("Invalid move list: " + list);
         }
 
@@ -64,7 +66,7 @@ public class MoveList implements Iterable<Move>, Serializable {
     // Adds the move at the specified index if full and to the end otherwise
     // Does not handle evolution or anything else like that -- should be handled in subclasses
     public void add(Move m, int index) {
-        if (moves.size() < Move.MAX_MOVES) {
+        if (moves.size() < MAX_MOVES) {
             moves.add(m);
         } else {
             moves.set(index, m);

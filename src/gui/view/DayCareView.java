@@ -2,7 +2,6 @@ package gui.view;
 
 import battle.ActivePokemon;
 import battle.attack.Attack;
-import battle.attack.Move;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
@@ -125,7 +124,7 @@ class DayCareView extends View {
         int moveSpacing = 10;
         int movePanelWidth = (movesPanel.width - 3*moveSpacing)/2;
         int movePanelHeight = (movesPanel.height - 3*moveSpacing)/2;
-        movePanels = new DrawPanel[Move.MAX_MOVES];
+        movePanels = new DrawPanel[MoveList.MAX_MOVES];
         for (int i = 0; i < movePanels.length; i++) {
             movePanels[i] = new DrawPanel(
                     movesPanel.x + (i%2 + 1)*moveSpacing + (i%2)*movePanelWidth,

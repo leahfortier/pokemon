@@ -215,7 +215,7 @@ public class ActivePokemon extends PartyPokemon {
         }
 
         Move move = new Move(attackName);
-        if (actualMoves.size() < Move.MAX_MOVES) {
+        if (actualMoves.size() < MoveList.MAX_MOVES) {
             addMove(move, actualMoves.size() - 1, inBattle);
         } else {
             // Need a non-empty message so that it doesn't get absorbed

@@ -79,7 +79,7 @@ public class PokemonState implements VisualStateHandler {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        fakeMoveButtons = movesPanel.getButtons(125, 40, Move.MAX_MOVES, 1);
+        fakeMoveButtons = movesPanel.getButtons(125, 40, MoveList.MAX_MOVES, 1);
 
         int switchButtonHeight = 36;
         pokemonSwitchButton = new Button(

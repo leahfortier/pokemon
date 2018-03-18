@@ -277,7 +277,7 @@ public class BreedingTest extends BaseTest {
         final MoveList babyMoves = baby.getActualMoves();
         Assert.assertTrue(
                 getFailMessage("Invalid move list size " + babyMoves.size(), mommy, daddy, baby),
-                babyMoves.size() > 0 && babyMoves.size() <= Move.MAX_MOVES
+                babyMoves.size() > 0 && babyMoves.size() <= MoveList.MAX_MOVES
         );
 
         for (Move move : babyMoves) {

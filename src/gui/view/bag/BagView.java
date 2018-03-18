@@ -52,7 +52,7 @@ public class BagView extends View {
     private static final BagCategory[] CATEGORIES = BagCategory.values();
     private static final int ITEMS_PER_PAGE = 10;
 
-    private static final int NUM_BUTTONS = CATEGORIES.length + Trainer.MAX_POKEMON + ITEMS_PER_PAGE + Move.MAX_MOVES + 6 /* Misc Buttons */;
+    private static final int NUM_BUTTONS = CATEGORIES.length + Trainer.MAX_POKEMON + ITEMS_PER_PAGE + MoveList.MAX_MOVES + 6 /* Misc Buttons */;
     private static final int PARTY = CATEGORIES.length;
     private static final int ITEMS = PARTY + Trainer.MAX_POKEMON;
     private static final int MOVES = ITEMS + ITEMS_PER_PAGE;
@@ -203,7 +203,7 @@ public class BagView extends View {
         Button[] buttons = new Button[NUM_BUTTONS];
         System.arraycopy(tabButtons, 0, buttons, 0, CATEGORIES.length);
         System.arraycopy(partyButtons, 0, buttons, PARTY, Trainer.MAX_POKEMON);
-        System.arraycopy(moveButtons, 0, buttons, MOVES, Move.MAX_MOVES);
+        System.arraycopy(moveButtons, 0, buttons, MOVES, MoveList.MAX_MOVES);
         System.arraycopy(itemButtons, 0, buttons, ITEMS, ITEMS_PER_PAGE);
 
         UseState[] useStates = UseState.values();
@@ -587,7 +587,7 @@ public class BagView extends View {
             itemButtons[i].setActive(state == BagState.ITEM_SELECT && i < displayed - pageNum*ITEMS_PER_PAGE);
         }
 
-        for (int i = 0; i < Move.MAX_MOVES; i++) {
+        for (int i = 0; i < MoveList.MAX_MOVES; i++) {
             moveButtons[i].setActive(state == BagState.MOVE_SELECT && i < selectedPokemon.getActualMoves().size());
         }
 

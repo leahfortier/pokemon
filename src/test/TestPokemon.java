@@ -9,6 +9,7 @@ import org.junit.Assert;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
+import pokemon.active.MoveList;
 import pokemon.species.PokemonNamesies;
 import test.battle.TestBattle;
 import util.string.StringUtils;
@@ -48,7 +49,7 @@ public class TestPokemon extends ActivePokemon {
     }
 
     public TestPokemon withMoves(AttackNamesies... moves) {
-        Assert.assertTrue(moves.length <= Move.MAX_MOVES);
+        Assert.assertTrue(moves.length <= MoveList.MAX_MOVES);
         this.setMoves(
                 Arrays.stream(moves)
                       .map(Move::new)
