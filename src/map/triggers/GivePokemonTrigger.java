@@ -2,7 +2,6 @@ package map.triggers;
 
 import main.Game;
 import pattern.PokemonMatcher;
-import pokemon.active.PartyPokemon;
 
 public class GivePokemonTrigger extends Trigger {
     private final PokemonMatcher pokemonMatcher;
@@ -13,6 +12,6 @@ public class GivePokemonTrigger extends Trigger {
 
     @Override
     public void execute() {
-        Game.getPlayer().addPokemon(PartyPokemon.createActivePokemon(this.pokemonMatcher, true));
+        Game.getPlayer().addPokemon(this.pokemonMatcher.createPokemon(false, true));
     }
 }

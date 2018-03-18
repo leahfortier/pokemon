@@ -1,6 +1,5 @@
 package pokemon.active;
 
-import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.status.StatusCondition;
@@ -10,8 +9,6 @@ import item.Item;
 import item.ItemNamesies;
 import item.hold.HoldItem;
 import main.Game;
-import main.Global;
-import pattern.PokemonMatcher;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
@@ -23,6 +20,7 @@ import pokemon.species.PokemonNamesies;
 import trainer.player.medal.MedalTheme;
 import type.PokeType;
 import type.Type;
+import util.GeneralUtils;
 import util.RandomUtils;
 import util.serialization.Serializable;
 import util.string.StringUtils;
@@ -75,6 +73,32 @@ public abstract class PartyPokemon implements Serializable {
         this.stats.setStats();
         this.fullyHeal();
         this.resetAttributes();
+    }
+
+    // Constructor for matchers
+    protected PartyPokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean isPlayer,
+                           String nickname, Boolean shiny, List<Move> moves, Gender gender, Nature nature) {
+        this(pokemonNamesies, level, isWild, isPlayer);
+
+        if (!StringUtils.isNullOrEmpty(nickname)) {
+            this.setNickname(nickname);
+        }
+
+        if (GeneralUtils.getBooleanValue(shiny)) {
+            this.setShiny();
+        }
+
+        if (moves != null) {
+            this.setMoves(moves);
+        }
+
+        if (gender != null) {
+            this.setGender(gender);
+        }
+
+        if (nature != null) {
+            this.setNature(nature);
+        }
     }
 
     protected PartyPokemon(Eggy eggy) {
@@ -442,47 +466,5 @@ public abstract class PartyPokemon implements Serializable {
                         16*(IVs.get(Stat.SP_ATTACK)%2) +
                         32*(IVs.get(Stat.SP_DEFENSE)%2)
         )*15)/63);
-    }
-
-    // Constructor for matchers
-    public static PartyPokemon createActivePokemon(PokemonMatcher pokemonMatcher, boolean isPlayer) {
-        final PokemonNamesies namesies = pokemonMatcher.getNamesies();
-
-        PartyPokemon pokemon;
-        if (pokemonMatcher.isEgg()) {
-            if (!isPlayer) {
-                Global.error("Trainers cannot have eggs.");
-            }
-
-            pokemon = new Eggy(namesies);
-        } else {
-            pokemon = new ActivePokemon(namesies, pokemonMatcher.getLevel(), false, isPlayer);
-            String nickname = pokemonMatcher.getNickname();
-            if (!StringUtils.isNullOrEmpty(nickname)) {
-                pokemon.setNickname(nickname);
-            }
-        }
-
-        if (pokemonMatcher.isShiny()) {
-            pokemon.setShiny();
-        }
-
-        if (pokemonMatcher.hasMoves()) {
-            pokemon.setMoves(pokemonMatcher.getMoves());
-        }
-
-        if (pokemonMatcher.hasHoldItem()) {
-            pokemon.giveItem(pokemonMatcher.getHoldItem());
-        }
-
-        if (pokemonMatcher.hasGender()) {
-            pokemon.setGender(pokemonMatcher.getGender());
-        }
-
-        if (pokemonMatcher.hasNature()) {
-            pokemon.setNature(pokemonMatcher.getNature());
-        }
-
-        return pokemon;
     }
 }

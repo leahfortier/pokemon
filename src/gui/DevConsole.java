@@ -21,6 +21,8 @@ import util.file.Folder;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -192,7 +194,7 @@ public class DevConsole {
 
         // Default values
         int level = PartyPokemon.MAX_LEVEL;
-        AttackNamesies[] moves = null;
+        List<AttackNamesies> moves = null;
         boolean shiny = false;
 
         while (in.hasNext()) {
@@ -211,17 +213,17 @@ public class DevConsole {
                     shiny = true;
                     break;
                 case "moves":
-                    moves = new AttackNamesies[Move.MAX_MOVES];
+                    moves = new ArrayList<>();
                     Pattern oldDelimiter = in.delimiter();
                     in.useDelimiter(",");
-                    for (int i = 0; i < moves.length; i++) {
+                    for (int i = 0; i < Move.MAX_MOVES; i++) {
                         String s = in.next().trim();
                         AttackNamesies attack = AttackNamesies.tryValueOf(s);
                         if (attack == null) {
                             Global.info("Invalid move: " + s);
                             return;
                         } else {
-                            moves[i] = attack;
+                            moves.add(attack);
                         }
                     }
                     in.useDelimiter(oldDelimiter);
@@ -235,7 +237,7 @@ public class DevConsole {
         System.out.println("adding " + namesies.getName());
 
         PokemonMatcher pokemonMatcher = new PokemonMatcher(namesies, null, level, shiny, moves, null);
-        player.addPokemon(PartyPokemon.createActivePokemon(pokemonMatcher, true));
+        player.addPokemon(pokemonMatcher.createPokemon(false, true));
     }
 
     private void giveItem(Scanner in, Player player) {

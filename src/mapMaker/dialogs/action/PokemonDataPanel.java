@@ -14,6 +14,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import java.util.Arrays;
 import java.util.List;
 
 public class PokemonDataPanel extends JPanel {
@@ -98,7 +99,7 @@ public class PokemonDataPanel extends JPanel {
                 nicknameTextField.getText(),
                 Integer.parseInt(levelFormattedTextField.getText().trim()),
                 shinyCheckBox.isSelected(),
-                customMoves,
+                Arrays.asList(customMoves),
                 null // TODO: Should be able to give item
         );
     }

@@ -1,8 +1,13 @@
 package pokemon.breeding;
 
 import battle.ActivePokemon;
+import battle.attack.Move;
+import pokemon.active.Gender;
+import pokemon.active.Nature;
 import pokemon.active.PartyPokemon;
 import pokemon.species.PokemonNamesies;
+
+import java.util.List;
 
 public class Eggy extends PartyPokemon {
     private static final long serialVersionUID = 1L;
@@ -13,11 +18,14 @@ public class Eggy extends PartyPokemon {
 
     private int eggSteps;
 
-    public Eggy(PokemonNamesies pokemonNamesies) {
-        super(pokemonNamesies, 1, false, true);
+    public Eggy(PokemonNamesies pokemonNamesies, Boolean shiny, List<Move> moves, Gender gender, Nature nature) {
+        super(pokemonNamesies, 1, false, true, "Egg", shiny, moves, gender, nature);
 
-        this.setNickname("Egg");
         this.eggSteps = this.getPokemonInfo().getEggSteps();
+    }
+
+    public Eggy(PokemonNamesies pokemonNamesies) {
+        this(pokemonNamesies, null, null, null, null);
     }
 
     public Eggy(ActivePokemon daddy, ActivePokemon mommy, PokemonNamesies pokemonNamesies) {

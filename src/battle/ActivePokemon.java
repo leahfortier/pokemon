@@ -41,7 +41,9 @@ import message.Messages;
 import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
+import pokemon.active.Gender;
 import pokemon.active.MoveList;
+import pokemon.active.Nature;
 import pokemon.active.PartyPokemon;
 import pokemon.breeding.Eggy;
 import pokemon.evolution.BaseEvolution;
@@ -85,6 +87,13 @@ public class ActivePokemon extends PartyPokemon {
         super(pokemonNamesies, level, isWild, isPlayer);
     }
 
+    // Constructor for matchers
+    public ActivePokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean isPlayer,
+                         String nickname, Boolean shiny, List<Move> moves, Gender gender, Nature nature) {
+        super(pokemonNamesies, level, isWild, isPlayer, nickname, shiny, moves, gender, nature);
+    }
+
+    // Constructor for eggys
     public ActivePokemon(Eggy eggy) {
         super(eggy);
     }

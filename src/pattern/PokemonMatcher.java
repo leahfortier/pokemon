@@ -1,5 +1,6 @@
 package pattern;
 
+import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import item.ItemNamesies;
@@ -7,13 +8,13 @@ import main.Global;
 import pokemon.active.Gender;
 import pokemon.active.Nature;
 import pokemon.active.PartyPokemon;
+import pokemon.breeding.Eggy;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
 import util.GeneralUtils;
 import util.serialization.JsonMatcher;
+import util.string.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class PokemonMatcher implements JsonMatcher {
         this(namesies, null, level, false, null, null);
     }
 
-    public PokemonMatcher(PokemonNamesies namesies, String nickname, int level, boolean isShiny, AttackNamesies[] moves, ItemNamesies holdItem) {
+    public PokemonMatcher(PokemonNamesies namesies, String nickname, int level, boolean isShiny, List<AttackNamesies> moves, ItemNamesies holdItem) {
         if (namesies == null) {
             Global.error("Pokemon namesies cannot be null for a Pokemon Matcher");
         }
@@ -50,7 +51,7 @@ public class PokemonMatcher implements JsonMatcher {
         this.holdItem = holdItem;
 
         if (moves != null) {
-            this.moves = Arrays.stream(moves).filter(Objects::nonNull).collect(Collectors.toList());
+            this.moves = moves.stream().filter(Objects::nonNull).collect(Collectors.toList());
             if (this.moves.isEmpty()) {
                 this.moves = null;
             }
@@ -95,15 +96,6 @@ public class PokemonMatcher implements JsonMatcher {
         return this.moves != null && !this.moves.isEmpty();
     }
 
-    public List<Move> getMoves() {
-        List<Move> moves = new ArrayList<>();
-        if (this.moves != null) {
-            moves.addAll(this.moves.stream().map(Move::new).collect(Collectors.toList()));
-        }
-
-        return moves;
-    }
-
     public List<AttackNamesies> getMoveNames() {
         return this.moves;
     }
@@ -124,10 +116,6 @@ public class PokemonMatcher implements JsonMatcher {
         this.gender = gender;
     }
 
-    public boolean hasGender() {
-        return this.gender != null;
-    }
-
     public Gender getGender() {
         return this.gender;
     }
@@ -136,12 +124,40 @@ public class PokemonMatcher implements JsonMatcher {
         this.nature = nature;
     }
 
-    public boolean hasNature() {
-        return this.nature != null;
-    }
-
     public Nature getNature() {
         return this.nature;
+    }
+
+    public PartyPokemon createPokemon(boolean isWild, boolean isPlayer) {
+        PokemonNamesies namesies = this.getNamesies();
+        List<Move> moves = this.moves == null ? null : this.moves.stream().map(Move::new).collect(Collectors.toList());
+
+        if (this.isEgg()) {
+            if (!isPlayer) {
+                Global.error("Enemy trainers cannot have eggs.");
+            } else if (isWild) {
+                Global.error("Eggs cannot be wild.");
+            } else if (this.hasHoldItem()) {
+                Global.error("Eggs cannot hold items.");
+            } else if (!StringUtils.isNullOrEmpty(this.getNickname())) {
+                Global.error("Eggs cannot have nicknames.");
+            } else if (this.getLevel() != 1) {
+                Global.error("Eggs can only be level 1.");
+            }
+
+            return new Eggy(namesies, this.isShiny, moves, this.gender, this.nature);
+        } else {
+            ActivePokemon pokemon = new ActivePokemon(
+                    namesies, this.getLevel(), isWild, isPlayer, this.getNickname(),
+                    this.isShiny, moves, this.gender, this.nature
+            );
+
+            if (this.hasHoldItem()) {
+                pokemon.giveItem(this.holdItem);
+            }
+
+            return pokemon;
+        }
     }
 
     public static PokemonMatcher createEggMatcher(PokemonNamesies eggy) {

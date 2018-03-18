@@ -6,7 +6,6 @@ import map.triggers.Trigger;
 import pattern.PokemonMatcher;
 import pattern.action.EntityActionMatcher.BattleActionMatcher;
 import pattern.action.UpdateMatcher;
-import pokemon.active.PartyPokemon;
 import trainer.EnemyTrainer;
 import util.RandomUtils;
 
@@ -23,7 +22,7 @@ public class TrainerBattleTrigger extends Trigger {
 
         RandomUtils.setTempRandomSeed(matcher.getJson().hashCode());
         for (PokemonMatcher pokemonMatcher : matcher.getPokemon()) {
-            trainer.addPokemon(PartyPokemon.createActivePokemon(pokemonMatcher, false));
+            trainer.addPokemon(pokemonMatcher.createPokemon(false, false));
         }
         RandomUtils.resetRandomSeedToInitial();
 
