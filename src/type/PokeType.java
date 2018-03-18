@@ -1,6 +1,5 @@
 package type;
 
-import org.jetbrains.annotations.NotNull;
 import pokemon.active.PartyPokemon;
 import pokemon.species.PokemonInfo;
 import util.serialization.Serializable;
@@ -54,7 +53,6 @@ public class PokeType implements Iterable<Type>, Serializable {
         return firstType.getName() + (this.isDualTyped() ? "/" + this.secondType.getName() : "");
     }
 
-    @NotNull
     @Override
     public Iterator<Type> iterator() {
         return Arrays.asList(firstType, secondType).iterator();
