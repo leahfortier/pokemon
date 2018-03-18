@@ -2739,13 +2739,11 @@ Heal Pulse:
     Type: Psychic
     Cat: Status
     MoveType: Aura_Pulse, Healing
-    Applies: !victim.fullHealth() && !victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)
+    Applies: victim.canHeal()
     UniqueEffects:
         // Heal by 50% unless the user has Mega Launcher -- then heal by 75%
         double fraction = user.hasAbility(AbilityNamesies.MEGA_LAUNCHER) ? .75 : .5;
-
-        victim.healHealthFraction(fraction);
-        Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+        victim.healHealthFraction(fraction, b, victim.getName() + "'s health was restored!");
         ###
 *
 Metal Sound:
@@ -4383,11 +4381,10 @@ Present:
     ShouldApplyDamage:
         return this.applyDamage;
         ###
-    Applies: this.applyDamage || (!victim.fullHealth() && !victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK))
+    Applies: this.applyDamage || victim.canHeal()
     UniqueEffects:
         if (!applyDamage) {
-            victim.healHealthFraction(1/4.0);
-            Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+            victim.healHealthFraction(1/4.0, b, victim.getName() + "'s health was restored!");
         }
         ###
 *

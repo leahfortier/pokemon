@@ -1700,7 +1700,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
+            if (!victim.canHeal()) {
                 return;
             }
 
@@ -1919,7 +1919,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
+            if (!victim.canHeal()) {
                 return;
             }
 

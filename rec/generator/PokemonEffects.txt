@@ -593,7 +593,7 @@ Ingrain:
         ###
     TrappingMessage: trapped.getName() + " cannot be recalled due to ingrain!"
     ApplyEndTurn:
-        if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
+        if (!victim.canHeal()) {
             return;
         }
 
@@ -687,7 +687,7 @@ Uproar:
 AquaRing:
     Int: PassableEffect, EndTurnEffect
     ApplyEndTurn:
-        if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
+        if (!victim.canHeal()) {
             return;
         }
         

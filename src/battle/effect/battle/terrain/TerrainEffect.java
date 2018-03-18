@@ -10,8 +10,6 @@ import battle.effect.battle.BattleEffect;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
 import map.overworld.TerrainType;
-import message.MessageUpdate;
-import message.Messages;
 import type.Type;
 
 public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> {
@@ -87,9 +85,8 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> {
 
         @Override
         public void singleEndTurnEffect(Battle b, ActivePokemon victim) {
-            if (!victim.fullHealth() && !victim.isLevitating(b)) {
-                victim.healHealthFraction(1/16.0);
-                Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to the Grassy Terrain!").updatePokemon(b, victim));
+            if (!victim.isLevitating(b)) {
+                victim.healHealthFraction(1/16.0, b, victim.getName() + " restored some HP due to the Grassy Terrain!");
             }
         }
 

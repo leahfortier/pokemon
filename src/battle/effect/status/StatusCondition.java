@@ -14,7 +14,6 @@ import battle.effect.InvokeInterfaces.SleepyFightsterEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
-import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import message.MessageUpdate;
 import message.Messages;
@@ -285,17 +284,12 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+            if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
+                victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + AbilityNamesies.POISON_HEAL.getName() + " restored its health!");
                 return;
             }
 
-            if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
-                if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
-                    return;
-                }
-
-                victim.healHealthFraction(1/8.0);
-                Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.POISON_HEAL + " restored its health!").updatePokemon(b, victim));
+            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
                 return;
             }
 
@@ -348,17 +342,12 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+            if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
+                victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + AbilityNamesies.POISON_HEAL.getName() + " restored its health!");
                 return;
             }
 
-            if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
-                if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
-                    return;
-                }
-
-                victim.healHealthFraction(1/8.0);
-                Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.POISON_HEAL + " restored its health!").updatePokemon(b, victim));
+            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
                 return;
             }
 

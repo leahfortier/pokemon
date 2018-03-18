@@ -560,6 +560,26 @@ public class ActivePokemon extends PartyPokemon {
         return list;
     }
 
+    public boolean canHeal() {
+        return !this.isActuallyDead() && !this.fullHealth() && !this.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+    }
+
+    public int healHealthFraction(double fraction, Battle b, String message) {
+        if (!this.canHeal()) {
+            return 0;
+        }
+
+        Messages.add(message);
+        int healAmount = super.healHealthFraction(fraction);
+
+        if (healAmount <= 0) {
+            Global.error("Heal amount should be positive.");
+        }
+
+        Messages.add(new MessageUpdate().updatePokemon(b, this));
+        return healAmount;
+    }
+
     // Don't think you'll make it out alive
     public void killKillKillMurderMurderMurder(Battle b) {
         this.reduceHealthFraction(b, 1);

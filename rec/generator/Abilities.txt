@@ -40,13 +40,7 @@ Torrent:
 *
 Rain Dish:
     Desc: The Pok\u00e9mon gradually regains HP in rain.
-    Int: EndTurnEffect
-    ApplyEndTurn:
-        if (b.getWeather().namesies() == WeatherNamesies.RAINING) {
-            victim.healHealthFraction(1/16.0);
-            Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
-        }
-        ###
+    WeatherHealer: Raining
 *
 Shield Dust:
     Desc: This Pok\u00e9mon's dust blocks the additional effects of attacks taken.
@@ -249,9 +243,8 @@ Dry Skin:
         if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
             Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
             victim.reduceHealthFraction(b, 1/8.0);
-        } else if (b.getWeather().namesies() == WeatherNamesies.RAINING && !victim.fullHealth()) {
-            victim.healHealthFraction(1/8.0);
-            Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
+        } else if (b.getWeather().namesies() == WeatherNamesies.RAINING) {
+            victim.healHealthFraction(1/8.0, b, victim.getName() + "'s HP was restored due to its " + this.getName() + "!");
         }
         ###
     AbsorbType: Water
@@ -912,16 +905,8 @@ Color Change:
 *
 Ice Body:
     Desc: The Pok\u00e9mon gradually regains HP in a hailstorm.
-    Int: EndTurnEffect, WeatherBlockerEffect
-    ApplyEndTurn:
-        if (b.getWeather().namesies() == WeatherNamesies.HAILING) {
-            victim.healHealthFraction(1/16.0);
-            Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
-        }
-        ###
-    WeatherBlock:
-        return weather == WeatherNamesies.HAILING;
-        ###
+    WeatherHealer: Hailing
+    WeatherBlocker: Hailing
 *
 Light Metal:
     Desc: Halves the Pok\u00e9mon's weight.
@@ -968,14 +953,11 @@ Heatproof:
 *
 Sand Force:
     Desc: Boosts the power of Rock-, Ground-, and Steel-type moves in a sandstorm.
-    Int: WeatherBlockerEffect
     GetMultiplier:
         Type type = user.getAttackType();
         return (type == Type.ROCK || type == Type.STEEL || type == Type.GROUND) && b.getWeather().namesies() == WeatherNamesies.SANDSTORM ? 1.3 : 1;
         ###
-    WeatherBlock:
-        return weather == WeatherNamesies.SANDSTORM;
-        ###
+    WeatherBlocker: Sandstorm
 *
 Snow Warning:
     Desc: The Pok\u00e9mon summons a hailstorm when it enters a battle.

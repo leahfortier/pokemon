@@ -12,11 +12,9 @@ import battle.effect.InvokeInterfaces.EndBattleEffect;
 import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.SimpleStatModifyingEffect;
-import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
-import message.MessageUpdate;
 import message.Messages;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
@@ -451,12 +449,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
         @Override
         public void subside(Battle b, ActivePokemon p) {
-            if (p.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
-                return;
-            }
-
-            p.healHealthFraction(1/2.0);
-            Messages.add(new MessageUpdate(casterName + "'s wish came true!").updatePokemon(b, p));
+            p.healHealthFraction(1/2.0, b, casterName + "'s wish came true!");
         }
     }
 
@@ -582,10 +575,8 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            enterer.healHealthFraction(1);
             enterer.removeStatus();
-
-            Messages.add(new MessageUpdate(enterer.getName() + " health was restored due to the " + wish + "!").updatePokemon(b, enterer));
+            enterer.healHealthFraction(1, b, enterer.getName() + " health was restored due to the " + wish + "!");
             super.active = false;
         }
     }

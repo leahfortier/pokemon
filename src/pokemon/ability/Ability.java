@@ -342,8 +342,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (b.getWeather().namesies() == WeatherNamesies.RAINING) {
-                victim.healHealthFraction(1/16.0);
-                Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
+                victim.healHealthFraction(1/16.0, b, victim.getName() + "'s HP was restored due to its " + this.getName() + "!");
             }
         }
     }
@@ -826,9 +825,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
                 Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
                 victim.reduceHealthFraction(b, 1/8.0);
-            } else if (b.getWeather().namesies() == WeatherNamesies.RAINING && !victim.fullHealth()) {
-                victim.healHealthFraction(1/8.0);
-                Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
+            } else if (b.getWeather().namesies() == WeatherNamesies.RAINING) {
+                victim.healHealthFraction(1/8.0, b, victim.getName() + "'s HP was restored due to its " + this.getName() + "!");
             }
         }
 
@@ -845,12 +843,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
-            if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
-                return;
-            }
-
-            victim.healHealthFraction(1/4.0);
-            Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored instead!").updatePokemon(b, victim));
+            victim.healHealthFraction(1/4.0, b, victim.getName() + "'s HP was restored instead!");
         }
 
         @Override
@@ -1691,12 +1684,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
-            if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
-                return;
-            }
-
-            victim.healHealthFraction(1/4.0);
-            Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored instead!").updatePokemon(b, victim));
+            victim.healHealthFraction(1/4.0, b, victim.getName() + "'s HP was restored instead!");
         }
 
         @Override
@@ -1720,12 +1708,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
-            if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
-                return;
-            }
-
-            victim.healHealthFraction(1/4.0);
-            Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored instead!").updatePokemon(b, victim));
+            victim.healHealthFraction(1/4.0, b, victim.getName() + "'s HP was restored instead!");
         }
 
         @Override
@@ -2419,7 +2402,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class IceBody extends Ability implements EndTurnEffect, WeatherBlockerEffect {
+    static class IceBody extends Ability implements WeatherBlockerEffect, EndTurnEffect {
         private static final long serialVersionUID = 1L;
 
         IceBody() {
@@ -2429,8 +2412,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (b.getWeather().namesies() == WeatherNamesies.HAILING) {
-                victim.healHealthFraction(1/16.0);
-                Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored due to its " + this.getName() + "!").updatePokemon(b, victim));
+                victim.healHealthFraction(1/16.0, b, victim.getName() + "'s HP was restored due to its " + this.getName() + "!");
             }
         }
 
@@ -2558,7 +2540,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class SandForce extends Ability implements WeatherBlockerEffect, PowerChangeEffect {
+    static class SandForce extends Ability implements PowerChangeEffect, WeatherBlockerEffect {
         private static final long serialVersionUID = 1L;
 
         SandForce() {

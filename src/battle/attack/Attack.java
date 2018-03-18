@@ -4950,14 +4950,12 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Heal by 50% unless the user has Mega Launcher -- then heal by 75%
             double fraction = user.hasAbility(AbilityNamesies.MEGA_LAUNCHER) ? .75 : .5;
-
-            victim.healHealthFraction(fraction);
-            Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+            victim.healHealthFraction(fraction, b, victim.getName() + "'s health was restored!");
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !victim.fullHealth() && !victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return victim.canHeal();
         }
     }
 
@@ -7510,8 +7508,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (!applyDamage) {
-                victim.healHealthFraction(1/4.0);
-                Messages.add(new MessageUpdate(victim.getName() + "'s health was restored!").updatePokemon(b, victim));
+                victim.healHealthFraction(1/4.0, b, victim.getName() + "'s health was restored!");
             }
         }
 
@@ -7534,7 +7531,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return this.applyDamage || (!victim.fullHealth() && !victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK));
+            return this.applyDamage || victim.canHeal();
         }
     }
 

@@ -5,7 +5,6 @@ import battle.Battle;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import item.hold.HoldItem;
-import message.MessageUpdate;
 import message.Messages;
 import pokemon.ability.AbilityNamesies;
 import type.Type;
@@ -31,10 +30,8 @@ public interface Berry extends HoldItem {
         // Eat dat berry!!
         PokemonEffectNamesies.EATEN_BERRY.getEffect().cast(b, consumer, consumer, CastSource.HELD_ITEM, false);
 
-        if (consumer.hasAbility(AbilityNamesies.CHEEK_POUCH) && !consumer.fullHealth() && !consumer.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
-            Messages.add(consumer.getName() + "'s " + consumer.getAbility().getName() + " restored its health!");
-            consumer.healHealthFraction(1/3.0);
-            Messages.add(new MessageUpdate().updatePokemon(b, consumer));
+        if (consumer.hasAbility(AbilityNamesies.CHEEK_POUCH) && consumer.canHeal()) {
+            consumer.healHealthFraction(1/3.0, b, consumer.getName() + "'s " + consumer.getAbility().getName() + " restored its health!");
         }
     }
 

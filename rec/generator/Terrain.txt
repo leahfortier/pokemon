@@ -33,9 +33,8 @@ GrassyTerrain:
     Terrain: Grass
     Int: BattleEndTurnEffect
     BattleEndTurn:
-        if (!victim.fullHealth() && !victim.isLevitating(b)) {
-            victim.healHealthFraction(1/16.0);
-            Messages.add(new MessageUpdate(victim.getName() + " restored some HP due to the Grassy Terrain!").updatePokemon(b, victim));
+        if (!victim.isLevitating(b)) {
+            victim.healHealthFraction(1/16.0, b, victim.getName() + " restored some HP due to the Grassy Terrain!");
         }
         ###
     Comments: // Grass-type moves are 50% stronger with the grassy terrain

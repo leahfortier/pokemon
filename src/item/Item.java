@@ -323,13 +323,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (victim.isType(b, Type.POISON)) {
-                // Don't heal if at full health
-                if (victim.fullHealth()) {
-                    return;
-                }
-
-                victim.healHealthFraction(1/16.0);
-                Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.getName() + "!").updatePokemon(b, victim));
+                victim.healHealthFraction(1/16.0, b, victim.getName() + "'s HP was restored by its " + this.getName() + "!");
             } else if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
                 Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
                 victim.reduceHealthFraction(b, 1/8.0);
@@ -2484,12 +2478,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
-                return;
-            }
-
-            victim.healHealthFraction(1/16.0);
-            Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored by its " + this.getName() + "!").updatePokemon(b, victim));
+            victim.healHealthFraction(1/16.0, b, victim.getName() + "'s HP was restored by its " + this.getName() + "!");
         }
 
         @Override
@@ -5252,10 +5241,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (!victim.fullHealth() && TypeAdvantage.isSuperEffective(user, victim, b)) {
-                Messages.add(victim.getName() + "'s " + this.getName() + " restored its health!");
-                victim.healHealthFraction(.25);
-                Messages.add(new MessageUpdate().updatePokemon(b, victim));
+            String message = victim.getName() + "'s " + this.getName() + " restored its health!";
+            if (TypeAdvantage.isSuperEffective(user, victim, b) && victim.healHealthFraction(.25, b, message) > 0) {
                 this.consumeItem(b, victim);
             }
         }

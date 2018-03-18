@@ -10,7 +10,7 @@ import util.string.StringAppender;
 import java.util.Scanner;
 
 public class InterfaceGen {
-    private static final String INTERFACE_PATH = Folder.INTERFACE_EFFECT + InvokeInterfaces.class.getSimpleName() + ".java";
+    private static final String INTERFACE_PATH = Folder.EFFECT + InvokeInterfaces.class.getSimpleName() + ".java";
 
     public InterfaceGen() {
         final Scanner in = FileIO.openFile(FileName.INTERFACES);

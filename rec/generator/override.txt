@@ -80,17 +80,12 @@ PoisonCondition:
     AddMapField: SourceRemoveMessage: victim.getName() + "'s " + sourceName + " cured it of its poison!"
     AddInterface: EndTurnEffect
     AddMapField: ApplyEndTurn:
-        if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+        if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
+            victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + AbilityNamesies.POISON_HEAL.getName() + " restored its health!");
             return;
         }
 
-        if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
-            if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
-                return;
-            }
-
-            victim.healHealthFraction(1/8.0);
-            Messages.add(new MessageUpdate(victim.getName() + "'s " + AbilityNamesies.POISON_HEAL + " restored its health!").updatePokemon(b, victim));
+        if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
             return;
         }
 
@@ -991,12 +986,7 @@ AbsorbType:
 	AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.{00}.getName() + " moves!"
 	AddMapField: AlternateEffect:
 		// Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
-		if (victim.fullHealth() || victim.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
-			return;
-		}
-
-		victim.healHealthFraction(1/4.0);
-		Messages.add(new MessageUpdate(victim.getName() + "'s HP was restored instead!").updatePokemon(b, victim));
+		victim.healHealthFraction(1/4.0, b, victim.getName() + "'s HP was restored instead!");
 		###
 *
 EndTurnStatusCure:
@@ -1067,6 +1057,20 @@ HalfAmount:
 *
 WeatherBlock:
 	Header: boolean block(WeatherNamesies weather)
+*
+WeatherBlocker:
+	AddInterface: WeatherBlockerEffect
+    AddMapField: WeatherBlock:
+        return weather == WeatherNamesies.{00};
+        ###
+*
+WeatherHealer:
+    AddInterface: EndTurnEffect
+    AddMapField: ApplyEndTurn:
+        if (b.getWeather().namesies() == WeatherNamesies.{00}) {
+            victim.healHealthFraction(1/16.0, b, victim.getName() + "'s HP was restored due to its " + this.getName() + "!");
+        }
+        ###
 *
 OnApplyDamage:
 	Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
