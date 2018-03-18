@@ -90,7 +90,8 @@ public class MessageUpdate {
     // Updates all current display information of the given pokemon
     // Hp, status condition, type, name, and gender
     public MessageUpdate updatePokemon(Battle b, ActivePokemon pokemon) {
-        if (b == null) {
+        // Only actually update if in battle and this is the front pokemon
+        if (b == null || b.getTrainer(pokemon).front() != pokemon) {
             return this;
         }
 

@@ -44,6 +44,13 @@ public class ItemTest extends BaseTest {
                     item.getBattleBagCategories().iterator().hasNext()
             );
 
+            // Berry category iff it is a berry
+            Assert.assertEquals(
+                    item.getName() + " " + item.getBagCategory(),
+                    item instanceof Berry,
+                    item.getBagCategory() == BagCategory.BERRY
+            );
+
             // Category berries can't be for status moves
             if (item instanceof CategoryBerry) {
                 MoveCategory category = ((CategoryBerry)item).getCategory();

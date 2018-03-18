@@ -565,8 +565,10 @@ public class ActivePokemon extends PartyPokemon {
         return !this.isActuallyDead() && !this.fullHealth() && !this.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
     }
 
-    private int heal(Battle b, String message, Supplier<Integer> healAction) {
-        if (!this.canHeal()) {
+    private int heal(boolean checkEffects, Battle b, String message, Supplier<Integer> healAction) {
+        if (checkEffects && !this.canHeal()) {
+            return 0;
+        } else if (!checkEffects && (this.isActuallyDead() || this.fullHealth())) {
             return 0;
         }
 
@@ -581,12 +583,20 @@ public class ActivePokemon extends PartyPokemon {
         return healAmount;
     }
 
+    public int heal(int amount, boolean checkEffects, Battle b, String message) {
+        return this.heal(checkEffects, b, message, () -> super.heal(amount));
+    }
+
     public int heal(int amount, Battle b, String message) {
-        return this.heal(b, message, () -> super.heal(amount));
+        return this.heal(amount, true, b, message);
+    }
+
+    public int healHealthFraction(double fraction, boolean checkEffects, Battle b, String message) {
+        return this.heal(checkEffects, b, message, () -> super.healHealthFraction(fraction));
     }
 
     public int healHealthFraction(double fraction, Battle b, String message) {
-        return this.heal(b, message, () -> super.healHealthFraction(fraction));
+        return this.healHealthFraction(fraction, true, b, message);
     }
 
     // Don't think you'll make it out alive

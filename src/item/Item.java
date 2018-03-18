@@ -66,7 +66,6 @@ import item.hold.SpecialTypeItem.PlateItem;
 import item.medicine.AllPPHealer;
 import item.medicine.EvIncreaser.Vitamin;
 import item.medicine.EvIncreaser.Wing;
-import item.medicine.FixedHpHealer;
 import item.medicine.HpHealer;
 import item.medicine.PPHealer;
 import item.medicine.RepelItem;
@@ -83,7 +82,6 @@ import item.use.UseItem;
 import main.Game;
 import map.overworld.TerrainType;
 import map.overworld.wild.WildEncounter;
-import message.MessageUpdate;
 import message.Messages;
 import pokemon.Stat;
 import pokemon.ability.Ability;
@@ -1468,12 +1466,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-            if (user.fullHealth() || user.getAttack().isMoveType(MoveType.USER_FAINTS)) {
+            if (user.getAttack().isMoveType(MoveType.USER_FAINTS)) {
                 return;
             }
 
-            user.heal((int)Math.ceil(damage/8.0));
-            Messages.add(new MessageUpdate(user.getName() + " restored some HP due to its " + this.getName() + "!").updatePokemon(b, user));
+            user.heal((int)Math.ceil(damage/8.0), b, user.getName() + " restored some HP due to its " + this.getName() + "!");
         }
     }
 
@@ -3318,7 +3315,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class BerryJuice extends Item implements FixedHpHealer {
+    static class BerryJuice extends Item implements HpHealer {
         private static final long serialVersionUID = 1L;
 
         BerryJuice() {
@@ -3328,12 +3325,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getFixedHealAmount(ActivePokemon p) {
+        public int getHealAmount(ActivePokemon p) {
             return 20;
         }
     }
 
-    static class SweetHeart extends Item implements FixedHpHealer {
+    static class SweetHeart extends Item implements HpHealer {
         private static final long serialVersionUID = 1L;
 
         SweetHeart() {
@@ -3343,12 +3340,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getFixedHealAmount(ActivePokemon p) {
+        public int getHealAmount(ActivePokemon p) {
             return 20;
         }
     }
 
-    static class Potion extends Item implements FixedHpHealer {
+    static class Potion extends Item implements HpHealer {
         private static final long serialVersionUID = 1L;
 
         Potion() {
@@ -3358,12 +3355,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getFixedHealAmount(ActivePokemon p) {
+        public int getHealAmount(ActivePokemon p) {
             return 20;
         }
     }
 
-    static class EnergyPowder extends Item implements FixedHpHealer {
+    static class EnergyPowder extends Item implements HpHealer {
         private static final long serialVersionUID = 1L;
 
         EnergyPowder() {
@@ -3373,12 +3370,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getFixedHealAmount(ActivePokemon p) {
+        public int getHealAmount(ActivePokemon p) {
             return 60;
         }
     }
 
-    static class FreshWater extends Item implements FixedHpHealer {
+    static class FreshWater extends Item implements HpHealer {
         private static final long serialVersionUID = 1L;
 
         FreshWater() {
@@ -3388,12 +3385,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getFixedHealAmount(ActivePokemon p) {
+        public int getHealAmount(ActivePokemon p) {
             return 30;
         }
     }
 
-    static class SuperPotion extends Item implements FixedHpHealer {
+    static class SuperPotion extends Item implements HpHealer {
         private static final long serialVersionUID = 1L;
 
         SuperPotion() {
@@ -3403,12 +3400,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getFixedHealAmount(ActivePokemon p) {
+        public int getHealAmount(ActivePokemon p) {
             return 60;
         }
     }
 
-    static class SodaPop extends Item implements FixedHpHealer {
+    static class SodaPop extends Item implements HpHealer {
         private static final long serialVersionUID = 1L;
 
         SodaPop() {
@@ -3418,12 +3415,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getFixedHealAmount(ActivePokemon p) {
+        public int getHealAmount(ActivePokemon p) {
             return 50;
         }
     }
 
-    static class Lemonade extends Item implements FixedHpHealer {
+    static class Lemonade extends Item implements HpHealer {
         private static final long serialVersionUID = 1L;
 
         Lemonade() {
@@ -3433,12 +3430,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getFixedHealAmount(ActivePokemon p) {
+        public int getHealAmount(ActivePokemon p) {
             return 70;
         }
     }
 
-    static class MoomooMilk extends Item implements FixedHpHealer {
+    static class MoomooMilk extends Item implements HpHealer {
         private static final long serialVersionUID = 1L;
 
         MoomooMilk() {
@@ -3448,12 +3445,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getFixedHealAmount(ActivePokemon p) {
+        public int getHealAmount(ActivePokemon p) {
             return 100;
         }
     }
 
-    static class EnergyRoot extends Item implements FixedHpHealer {
+    static class EnergyRoot extends Item implements HpHealer {
         private static final long serialVersionUID = 1L;
 
         EnergyRoot() {
@@ -3463,12 +3460,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getFixedHealAmount(ActivePokemon p) {
+        public int getHealAmount(ActivePokemon p) {
             return 120;
         }
     }
 
-    static class HyperPotion extends Item implements FixedHpHealer {
+    static class HyperPotion extends Item implements HpHealer {
         private static final long serialVersionUID = 1L;
 
         HyperPotion() {
@@ -3478,7 +3475,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getFixedHealAmount(ActivePokemon p) {
+        public int getHealAmount(ActivePokemon p) {
             return 120;
         }
     }
@@ -3493,8 +3490,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getAmountHealed(ActivePokemon p) {
-            return p.healHealthFraction(1);
+        public int getHealAmount(ActivePokemon p) {
+            return p.getMaxHP();
         }
     }
 
@@ -4446,7 +4443,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class OranBerry extends Item implements FixedHpHealer, HealthTriggeredBerry {
+    static class OranBerry extends Item implements HpHealer, HealthTriggeredBerry {
         private static final long serialVersionUID = 1L;
 
         OranBerry() {
@@ -4456,7 +4453,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getFixedHealAmount(ActivePokemon p) {
+        public int getHealAmount(ActivePokemon p) {
             return 10;
         }
 
@@ -4576,8 +4573,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getAmountHealed(ActivePokemon p) {
-            return p.healHealthFraction(1/4.0);
+        public int getHealAmount(ActivePokemon p) {
+            return p.getHealHealthFractionAmount(1/4.0);
         }
 
         @Override

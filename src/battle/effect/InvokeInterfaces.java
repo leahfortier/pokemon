@@ -155,16 +155,12 @@ public final class InvokeInterfaces {
         default void sapHealth(Battle b, ActivePokemon user, ActivePokemon victim, int damageAmount, boolean print) {
             int sapAmount = (int)Math.ceil(damageAmount*this.sapPercentage());
 
-            // Sap message
-            if (print) {
-                Messages.add(this.getSapMessage(victim));
-            }
-
             // Big Root heals an additional 30%
             if (user.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
                 sapAmount *= 1.3;
             }
 
+            // Oozy makes you woozy
             if (victim.hasAbility(AbilityNamesies.LIQUID_OOZE)) {
                 Messages.add(victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName() + " caused " + user.getName() + " to lose health instead!");
                 user.reduceHealth(b, sapAmount, false);
@@ -172,12 +168,7 @@ public final class InvokeInterfaces {
             }
 
             // Healers gon' heal
-            if (!user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
-                user.heal(sapAmount);
-            }
-
-            Messages.add(new MessageUpdate().updatePokemon(b, victim));
-            Messages.add(new MessageUpdate().updatePokemon(b, user));
+            user.heal(sapAmount, b, print ? this.getSapMessage(victim) : "");
         }
 
         @Override

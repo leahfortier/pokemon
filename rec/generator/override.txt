@@ -1369,16 +1369,16 @@ Revive:
 	AddMapField: Cat: Medicine
 	AddMapField: BattleCat: Status
 	AddMapField: BattleUse:
-		// Only applies to the dead
-		if (!p.isActuallyDead()) {
-			return false;
-		}
+        // Only applies to the dead
+        if (!p.isActuallyDead()) {
+            return false;
+        }
 
-		p.removeStatus();
-		p.healHealthFraction({1});
+        p.removeStatus();
+        p.healHealthFraction({1});
 
-		Messages.add(p.getName() + " was {2} revived!");
-		return true;
+        Messages.add(p.getName() + " was {2} revived!");
+        return true;
 		###
 *
 ShouldHealStatus:
@@ -1391,20 +1391,16 @@ StatusRemove:
 		return p.hasStatus(StatusNamesies.{00});
 		###
 *
-FixedHealAmount:
-    AddInterface: FixedHpHealer
-	Header: int getFixedHealAmount(ActivePokemon p)
-    AddMapField: BattleCat: HP_PP
-*
 GetAmountHealed:
-	Header: int getAmountHealed(ActivePokemon p)
+	Header: int getHealAmount(ActivePokemon p)
     AddMapField: BattleCat: HP_PP
     AddInterface: HpHealer
+    Body:
+        return {0};
+        ###
 *
 HealAmt:
-	AddMapField: FixedHealAmount:
-		return {0};
-		###
+	AddMapField: GetAmountHealed: {0}
 	AddMapField: Cat: Medicine
 *
 XStageIncrease:

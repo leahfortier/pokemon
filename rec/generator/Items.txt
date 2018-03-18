@@ -496,12 +496,11 @@ Shell Bell:
     Desc: An item to be held by a Pok\u00e9mon. The holder regains a little HP every time it inflicts damage on others.
     Price: 4000
     OnApplyDamage:
-        if (user.fullHealth() || user.getAttack().isMoveType(MoveType.USER_FAINTS)) {
+        if (user.getAttack().isMoveType(MoveType.USER_FAINTS)) {
             return;
         }
 
-        user.heal((int)Math.ceil(damage/8.0));
-        Messages.add(new MessageUpdate(user.getName() + " restored some HP due to its " + this.getName() + "!").updatePokemon(b, user));
+        user.heal((int)Math.ceil(damage/8.0), b, user.getName() + " restored some HP due to its " + this.getName() + "!");
         ###
 *
 Smoke Ball:
@@ -1274,12 +1273,9 @@ Hyper Potion:
     HealAmt: 120
 *
 Max Potion:
-    Cat: Medicine
     Desc: A spray-type medicine for treating wounds. It will completely restore the max HP of a single Pok\u00e9mon.
     Price: 2500
-    GetAmountHealed:
-        return p.healHealthFraction(1);
-        ###
+    HealAmt: p.getMaxHP()
 *
 Revive:
     Desc: A medicine that can revive fainted Pok\u00e9mon. It also restores half of a fainted Pok\u00e9mon's maximum HP.
@@ -1668,9 +1664,7 @@ Oran Berry:
     NGPow: 80
     FixedBerryHealthTrigger: 3
     GainEffect: return use(b, user, source);
-    FixedHealAmount:
-        return 10;
-        ###
+    GetAmountHealed: 10
 *
 Persim Berry:
     Int: BattleUseItem, MessageGetter, GainableEffectBerry, EffectCurerItem
@@ -1708,9 +1702,7 @@ Sitrus Berry:
     NGPow: 80
     FixedBerryHealthTrigger: 2
     GainEffect: return use(b, user, source);
-    GetAmountHealed:
-        return p.healHealthFraction(1/4.0);
-        ###
+    GetAmountHealed: p.getHealHealthFractionAmount(1/4.0)
     HarvestHours: 48
 *
 Razz Berry:
