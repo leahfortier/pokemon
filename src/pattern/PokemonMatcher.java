@@ -141,7 +141,7 @@ public class PokemonMatcher implements JsonMatcher {
                 Global.error("Eggs cannot hold items.");
             } else if (!StringUtils.isNullOrEmpty(this.getNickname())) {
                 Global.error("Eggs cannot have nicknames.");
-            } else if (this.getLevel() != 1) {
+            } else if (this.getLevel() > 1) {
                 Global.error("Eggs can only be level 1.");
             }
 

@@ -337,7 +337,7 @@ public abstract class PartyPokemon implements Serializable {
     public void setNickname(String nickname) {
         if (!StringUtils.isNullOrEmpty(nickname) && !nickname.equals(this.nickname)) {
             this.nickname = nickname;
-            if (this.isPlayer()) {
+            if (this.isPlayer() && !this.isEgg()) {
                 Game.getPlayer().getMedalCase().increase(MedalTheme.NICKNAMES_GIVEN);
             }
         }
