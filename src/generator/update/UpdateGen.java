@@ -1,6 +1,7 @@
 package generator.update;
 
 import draw.ImageUtils;
+import main.Global;
 import map.condition.Condition;
 import map.condition.ConditionHolder.AndCondition;
 import map.condition.ConditionSet;
@@ -36,13 +37,56 @@ public class UpdateGen {
 //        pokemonInfoStuff();
 //        updateNum();
 //        resizeImages();
-//        trimImages();
+        trimImages();
 //        translateAlBhed();
-        addCondition();
+//        addCondition();
+//        outputShowdownImagesFile();
+    }
+
+    private static void outputShowdownImagesFile() {
+        StringAppender out = new StringAppender();
+
+        for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
+            if (num >= PokemonNamesies.RIZARDON.getInfo().getNumber()) {
+                continue;
+            }
+
+            appendNotExists(out, num, "");
+            appendNotExists(out, num, "-back");
+            appendNotExists(out, num, "-shiny");
+            appendNotExists(out, num, "-shiny-back");
+        }
+
+        FileIO.overwriteFile(Folder.SCRIPTS + "ps-images.in", out.toString());
+    }
+
+    private static void appendNotExists(StringAppender out, int num, String suffix) {
+        File imageFile = FileIO.getImageFile(num, suffix, Folder.POKEMON_TILES);
+        if (imageFile.exists()) {
+//            return;
+        }
+
+        String sourcePath = "bw";
+        switch (suffix) {
+            case "":
+            case "-back":
+            case "-shiny":
+                sourcePath += suffix;
+                break;
+            case "-shiny-back":
+                sourcePath += "-back-shiny";
+                break;
+            default:
+                Global.error("Unknown image suffix " + suffix);
+                break;
+        }
+
+        sourcePath += "/" + PokemonInfo.getPokemonInfo(num).getName().toLowerCase().replaceAll("[:'.\\- ]", "") + ".png";
+        out.appendLine(sourcePath + " " + imageFile.getName());
     }
 
     private static void trimImages() {
-        String inputLocation = "../Downloads/sunmoonsprites";
+        String inputLocation = Folder.IMAGES + "temp";
         String outputLocation = Folder.POKEMON_TILES;
 
         for (File imageFile : FileIO.listFiles(inputLocation)) {
