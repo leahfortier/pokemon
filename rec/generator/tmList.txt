@@ -1,4 +1,4 @@
-Hone Claws
+Work Up
 Dragon Claw
 Psyshock
 Calm Mind
@@ -23,7 +23,7 @@ Smack Down
 Thunderbolt
 Thunder
 Earthquake
-Dig
+Leech Life
 Psychic
 Shadow Ball
 Brick Break
@@ -54,23 +54,23 @@ Scald
 Fling
 Charge Beam
 Sky Drop
-Incinerate
+Brutal Swing
 Will-O-Wisp
 Acrobatics
 Embargo
 Explosion
 Shadow Claw
 Payback
-Retaliate
+Smart Strike
 Giga Impact
 Rock Polish
-Flash
+Aurora Veil
 Stone Edge
 Volt Switch
 Thunder Wave
 Gyro Ball
 Swords Dance
-Struggle Bug
+Fly
 Psych Up
 Bulldoze
 Frost Breath
@@ -88,15 +88,10 @@ Substitute
 Flash Cannon
 Trick Room
 Wild Charge
-Rock Smash
+Surf
 Snarl
 Nature Power
 Dark Pulse
-Power-Up Punch
+Waterfall
 Dazzling Gleam
 Confide
-Cut
-Fly
-Surf
-Strength
-Waterfall

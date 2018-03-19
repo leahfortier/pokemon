@@ -5924,16 +5924,16 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class HoneClawsTM extends Item implements TechnicalMachine {
+    static class WorkUpTM extends Item implements TechnicalMachine {
         private static final long serialVersionUID = 1L;
 
-        HoneClawsTM() {
-            super(ItemNamesies.HONE_CLAWS_TM, "The user sharpens its claws to boost its Attack stat and accuracy.", BagCategory.TM);
+        WorkUpTM() {
+            super(ItemNamesies.WORK_UP_TM, "The user is roused, and its Attack and Sp. Atk stats increase.", BagCategory.TM);
         }
 
         @Override
         public AttackNamesies getAttack() {
-            return AttackNamesies.HONE_CLAWS;
+            return AttackNamesies.WORK_UP;
         }
     }
 
@@ -6249,16 +6249,16 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class DigTM extends Item implements TechnicalMachine {
+    static class LeechLifeTM extends Item implements TechnicalMachine {
         private static final long serialVersionUID = 1L;
 
-        DigTM() {
-            super(ItemNamesies.DIG_TM, "The user burrows, then attacks on the next turn.", BagCategory.TM);
+        LeechLifeTM() {
+            super(ItemNamesies.LEECH_LIFE_TM, "The user drains the target's blood. The user's HP is restored by half the damage taken by the target.", BagCategory.TM);
         }
 
         @Override
         public AttackNamesies getAttack() {
-            return AttackNamesies.DIG;
+            return AttackNamesies.LEECH_LIFE;
         }
     }
 
@@ -6652,16 +6652,16 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class IncinerateTM extends Item implements TechnicalMachine {
+    static class BrutalSwingTM extends Item implements TechnicalMachine {
         private static final long serialVersionUID = 1L;
 
-        IncinerateTM() {
-            super(ItemNamesies.INCINERATE_TM, "The user attacks opposing Pokémon with fire. If a Pokémon is holding a certain item, such as a Berry, the item becomes burned up and unusable.", BagCategory.TM);
+        BrutalSwingTM() {
+            super(ItemNamesies.BRUTAL_SWING_TM, "The user swings its body around violently to inflict damage on everything in its vicinity.", BagCategory.TM);
         }
 
         @Override
         public AttackNamesies getAttack() {
-            return AttackNamesies.INCINERATE;
+            return AttackNamesies.BRUTAL_SWING;
         }
     }
 
@@ -6743,16 +6743,16 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class RetaliateTM extends Item implements TechnicalMachine {
+    static class SmartStrikeTM extends Item implements TechnicalMachine {
         private static final long serialVersionUID = 1L;
 
-        RetaliateTM() {
-            super(ItemNamesies.RETALIATE_TM, "The user gets revenge for a fainted ally. If an ally fainted in the previous turn, this move's power is increased.", BagCategory.TM);
+        SmartStrikeTM() {
+            super(ItemNamesies.SMART_STRIKE_TM, "The user stabs the target with a sharp horn. This attack never misses.", BagCategory.TM);
         }
 
         @Override
         public AttackNamesies getAttack() {
-            return AttackNamesies.RETALIATE;
+            return AttackNamesies.SMART_STRIKE;
         }
     }
 
@@ -6782,16 +6782,16 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class FlashTM extends Item implements TechnicalMachine {
+    static class AuroraVeilTM extends Item implements TechnicalMachine {
         private static final long serialVersionUID = 1L;
 
-        FlashTM() {
-            super(ItemNamesies.FLASH_TM, "The user flashes a bright light that cuts the target's accuracy.", BagCategory.TM);
+        AuroraVeilTM() {
+            super(ItemNamesies.AURORA_VEIL_TM, "This move reduces damage from physical and special moves for five turns. This can be used only in a hailstorm.", BagCategory.TM);
         }
 
         @Override
         public AttackNamesies getAttack() {
-            return AttackNamesies.FLASH;
+            return AttackNamesies.AURORA_VEIL;
         }
     }
 
@@ -6860,16 +6860,16 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class StruggleBugTM extends Item implements TechnicalMachine {
+    static class FlyTM extends Item implements TechnicalMachine {
         private static final long serialVersionUID = 1L;
 
-        StruggleBugTM() {
-            super(ItemNamesies.STRUGGLE_BUG_TM, "While resisting, the user attacks the opposing Pokémon. This lowers the Sp. Atk stat of those hit.", BagCategory.TM);
+        FlyTM() {
+            super(ItemNamesies.FLY_TM, "The user soars and then strikes its target on the next turn.", BagCategory.TM);
         }
 
         @Override
         public AttackNamesies getAttack() {
-            return AttackNamesies.STRUGGLE_BUG;
+            return AttackNamesies.FLY;
         }
     }
 
@@ -7094,16 +7094,16 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class RockSmashTM extends Item implements TechnicalMachine {
+    static class SurfTM extends Item implements TechnicalMachine {
         private static final long serialVersionUID = 1L;
 
-        RockSmashTM() {
-            super(ItemNamesies.ROCK_SMASH_TM, "The user attacks with a punch. This may also lower the target's Defense stat.", BagCategory.TM);
+        SurfTM() {
+            super(ItemNamesies.SURF_TM, "The user attacks everything around it by swamping its surroundings with a giant wave.", BagCategory.TM);
         }
 
         @Override
         public AttackNamesies getAttack() {
-            return AttackNamesies.ROCK_SMASH;
+            return AttackNamesies.SURF;
         }
     }
 
@@ -7146,16 +7146,16 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class PowerUpPunchTM extends Item implements TechnicalMachine {
+    static class WaterfallTM extends Item implements TechnicalMachine {
         private static final long serialVersionUID = 1L;
 
-        PowerUpPunchTM() {
-            super(ItemNamesies.POWER_UP_PUNCH_TM, "Striking opponents over and over makes the user's fists harder. Hitting a target raises the Attack stat.", BagCategory.TM);
+        WaterfallTM() {
+            super(ItemNamesies.WATERFALL_TM, "The user charges at the target and may make it flinch.", BagCategory.TM);
         }
 
         @Override
         public AttackNamesies getAttack() {
-            return AttackNamesies.POWER_UP_PUNCH;
+            return AttackNamesies.WATERFALL;
         }
     }
 
@@ -7182,71 +7182,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.CONFIDE;
-        }
-    }
-
-    static class CutTM extends Item implements TechnicalMachine {
-        private static final long serialVersionUID = 1L;
-
-        CutTM() {
-            super(ItemNamesies.CUT_TM, "The target is cut with a scythe or claw.", BagCategory.TM);
-        }
-
-        @Override
-        public AttackNamesies getAttack() {
-            return AttackNamesies.CUT;
-        }
-    }
-
-    static class FlyTM extends Item implements TechnicalMachine {
-        private static final long serialVersionUID = 1L;
-
-        FlyTM() {
-            super(ItemNamesies.FLY_TM, "The user soars and then strikes its target on the next turn.", BagCategory.TM);
-        }
-
-        @Override
-        public AttackNamesies getAttack() {
-            return AttackNamesies.FLY;
-        }
-    }
-
-    static class SurfTM extends Item implements TechnicalMachine {
-        private static final long serialVersionUID = 1L;
-
-        SurfTM() {
-            super(ItemNamesies.SURF_TM, "The user attacks everything around it by swamping its surroundings with a giant wave.", BagCategory.TM);
-        }
-
-        @Override
-        public AttackNamesies getAttack() {
-            return AttackNamesies.SURF;
-        }
-    }
-
-    static class StrengthTM extends Item implements TechnicalMachine {
-        private static final long serialVersionUID = 1L;
-
-        StrengthTM() {
-            super(ItemNamesies.STRENGTH_TM, "The target is slugged with a punch thrown at maximum power.", BagCategory.TM);
-        }
-
-        @Override
-        public AttackNamesies getAttack() {
-            return AttackNamesies.STRENGTH;
-        }
-    }
-
-    static class WaterfallTM extends Item implements TechnicalMachine {
-        private static final long serialVersionUID = 1L;
-
-        WaterfallTM() {
-            super(ItemNamesies.WATERFALL_TM, "The user charges at the target and may make it flinch.", BagCategory.TM);
-        }
-
-        @Override
-        public AttackNamesies getAttack() {
-            return AttackNamesies.WATERFALL;
         }
     }
 }
