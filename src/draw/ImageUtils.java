@@ -5,9 +5,11 @@ import type.PokeType;
 import util.FontMetrics;
 import util.Point;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
@@ -184,8 +186,6 @@ public final class ImageUtils {
     }
 
     public static BufferedImage trimImage(BufferedImage image) {
-        int empty = image.getRGB(0, 0); // This assumes the top left corner is blank just FYI...
-
         int leftmost = image.getWidth();
         int topmost = image.getHeight();
         int rightmost = 0;
@@ -193,7 +193,7 @@ public final class ImageUtils {
 
         for (int i = 0; i < image.getWidth(); i++) {
             for (int j = 0; j < image.getHeight(); j++) {
-                if (image.getRGB(i, j) != empty) {
+                if (new Color(image.getRGB(i, j), true).getTransparency() == Transparency.OPAQUE) {
                     leftmost = Math.min(i, leftmost);
                     rightmost = Math.max(i, rightmost);
                     topmost = Math.min(j, topmost);

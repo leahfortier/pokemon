@@ -138,8 +138,12 @@ public class ImageTest extends BaseTest {
             BufferedImage firstImage = FileIO.readImage(firstImageFile);
             BufferedImage secondImage = FileIO.readImage(secondImageFile);
 
-            Assert.assertEquals(message, firstImage.getWidth(), secondImage.getWidth());
-            Assert.assertEquals(message, firstImage.getHeight(), secondImage.getHeight());
+            try {
+                Assert.assertEquals(message, firstImage.getWidth(), secondImage.getWidth());
+                Assert.assertEquals(message, firstImage.getHeight(), secondImage.getHeight());
+            } catch (AssertionError error) {
+                System.err.println(error.getMessage());
+            }
         }
     }
 

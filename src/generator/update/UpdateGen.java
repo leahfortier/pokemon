@@ -86,7 +86,7 @@ public class UpdateGen {
     }
 
     private static void trimImages() {
-        String inputLocation = Folder.IMAGES + "temp";
+        String inputLocation = "../Downloads/sunmoonsprites";
         String outputLocation = Folder.POKEMON_TILES;
 
         for (File imageFile : FileIO.listFiles(inputLocation)) {
@@ -98,7 +98,7 @@ public class UpdateGen {
             BufferedImage trimmed = ImageUtils.trimImage(image);
 
             String newName = imageFile.getName();
-            File file = new File(outputLocation + FileIO.FILE_SLASH + newName);
+            File file = new File(outputLocation + newName);
             FileIO.writeImage(trimmed, file);
 
             System.out.println("Writing trimmed image to " + file.getPath());
