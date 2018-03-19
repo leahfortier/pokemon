@@ -175,7 +175,7 @@ public class Battle implements Serializable {
     }
 
     public boolean isSimulating() {
-        return !(this.player instanceof Player);
+        return this.player instanceof SimulatedPlayer;
     }
 
     protected void printShit() {
