@@ -105,7 +105,11 @@ public class FileIO {
     }
 
     public static File getImageFile(int num, String suffix, String folderPath) {
-        return new File(folderPath + String.format("%03d", num) + suffix + ".png");
+        return getImageFile(num, false, suffix, folderPath);
+    }
+
+    public static File getImageFile(int num, boolean form, String suffix, String folderPath) {
+        return new File(folderPath + String.format("%03d", num) + (form ? "b" : "") + suffix + ".png");
     }
 
     public static String makeFolderPath(String... path) {

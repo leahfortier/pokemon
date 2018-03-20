@@ -12,12 +12,12 @@ for i, line in enumerate(f):
     split = line.split()
     
     source = "https://play.pokemonshowdown.com/sprites/" + split[0]
-    dest = "../rec/images/temp/" + split[1]
+    dest = "../../Downloads/sunmoonsprites/" + split[1]
     
     userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36"
     request = urllib.request.Request(source, data=None, headers={'User-Agent':userAgent})
-    imageFile = urllib.request.urlopen(request)
+    response = urllib.request.urlopen(request)
     
-    fh = open(dest, 'wb')
-    fh.write(imageFile.read()) 
-    fh.write(imageFile.read()) # Do this twice because shit is fucking weird as shit I hate everything and sometimes still doesn't fuckity python fuck you
+    imageFile = open(dest, 'wb')
+    imageFile.write(response.read()) 
+    imageFile.close()

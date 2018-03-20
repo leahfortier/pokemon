@@ -1,7 +1,6 @@
 package generator.update;
 
 import draw.ImageUtils;
-import main.Global;
 import map.condition.Condition;
 import map.condition.ConditionHolder.AndCondition;
 import map.condition.ConditionSet;
@@ -15,6 +14,7 @@ import util.file.FileIO.NullOutputStream;
 import util.file.FileName;
 import util.file.Folder;
 import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -47,41 +47,103 @@ public class UpdateGen {
         StringAppender out = new StringAppender();
 
         for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
-            if (num >= PokemonNamesies.RIZARDON.getInfo().getNumber()) {
-                continue;
+            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(num);
+
+            List<String> forms = new ArrayList<>();
+            if (pokemonInfo.getNumber() < PokemonNamesies.RIZARDON.getInfo().getNumber()) {
+                forms.add("");
             }
 
-            appendNotExists(out, num, "");
-            appendNotExists(out, num, "-back");
-            appendNotExists(out, num, "-shiny");
-            appendNotExists(out, num, "-shiny-back");
+            switch (pokemonInfo.namesies()) {
+                case AEGISLASH:
+                    forms.add("-blade");
+                    break;
+                case WISHIWASHI:
+                    forms.add("-school");
+                    break;
+                case MIMIKYU:
+                    forms.add("-busted");
+                    break;
+                case MINIOR:
+                    forms.add("-meteor");
+                    break;
+                case RIZARDON:
+                    forms.add("charizard-megax");
+                    break;
+                case KUCHIITO:
+                    forms.add("mawile-mega");
+                    break;
+                case ASBEL:
+                    forms.add("absol-mega");
+                    break;
+                case YAMIRAMI:
+                    forms.add("sableye-mega");
+                    break;
+                case SILPH_SURFER:
+                    forms.add("raichu-alola");
+                    break;
+                case SNOWSHREW:
+                    forms.add("sandshrew-alola");
+                    break;
+                case SNOWSLASH:
+                    forms.add("sandslash-alola");
+                    break;
+                case YUKIKON:
+                    forms.add("vulpix-alola");
+                    break;
+                case KYUKON:
+                    forms.add("ninetales-alola");
+                    break;
+                case SLEIMA:
+                    forms.add("grimer-alola");
+                    break;
+                case SLEIMOK:
+                    forms.add("muk-alola");
+                    break;
+                case KOKONATSU:
+                    forms.add("exeggutor-alola");
+                    break;
+                case GARA_GARA:
+                    forms.add("marowak-alola");
+                    break;
+                case JUPETTA:
+                    forms.add("banette-mega");
+                    break;
+                case LOUGAROC:
+                    forms.add("lycanroc-midnight");
+                    break;
+                case LUGARUGAN:
+                    forms.add("lycanroc-dusk");
+                    break;
+            }
+
+            for (String form : forms) {
+                appendNotExists(out, num, form, "");
+                appendNotExists(out, num, form, "-back");
+                appendNotExists(out, num, form, "-shiny");
+                appendNotExists(out, num, form, "-shiny-back");
+            }
         }
 
         FileIO.overwriteFile(Folder.SCRIPTS + "ps-images.in", out.toString());
     }
 
-    private static void appendNotExists(StringAppender out, int num, String suffix) {
-        File imageFile = FileIO.getImageFile(num, suffix, Folder.POKEMON_TILES);
-        if (imageFile.exists()) {
-//            return;
-        }
+    private static void appendNotExists(StringAppender out, int num, String form, String suffix) {
+        boolean isAddedPoke = num >= PokemonNamesies.RIZARDON.getInfo().getNumber();
+        File imageFile = FileIO.getImageFile(num, !StringUtils.isNullOrEmpty(form) && !isAddedPoke, suffix, Folder.POKEMON_TILES);
 
         String sourcePath = "bw";
-        switch (suffix) {
-            case "":
-            case "-back":
-            case "-shiny":
-                sourcePath += suffix;
-                break;
-            case "-shiny-back":
-                sourcePath += "-back-shiny";
-                break;
-            default:
-                Global.error("Unknown image suffix " + suffix);
-                break;
+        if (suffix.equals("-shiny-back")) {
+            sourcePath += "-back-shiny";
+        } else {
+            sourcePath += suffix;
         }
+        sourcePath += "/";
+        if (!isAddedPoke) {
+            sourcePath += PokemonInfo.getPokemonInfo(num).getName().toLowerCase().replaceAll("[:'.\\- ]", "");
+        }
+        sourcePath += form + ".png";
 
-        sourcePath += "/" + PokemonInfo.getPokemonInfo(num).getName().toLowerCase().replaceAll("[:'.\\- ]", "") + ".png";
         out.appendLine(sourcePath + " " + imageFile.getName());
     }
 
