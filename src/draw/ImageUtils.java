@@ -132,7 +132,7 @@ public final class ImageUtils {
                     pixels[currComponent] = Math.min(Math.max(pixels[currComponent], 0), 255);
                 }
 
-                if (pixels[3] == 0) {
+                if (pixels.length == 4 && pixels[3] == 0) {
                     pixels[0] = pixels[1] = pixels[2] = 0;
                 }
 
@@ -203,5 +203,44 @@ public final class ImageUtils {
         }
 
         return image.getSubimage(leftmost, topmost, rightmost - leftmost + 1, bottommost - topmost + 1);
+    }
+
+    public static int numOpaquePixels(BufferedImage image) {
+        int numOpaque = 0;
+        for (int i = 0; i < image.getWidth(); i++) {
+            for (int j = 0; j < image.getHeight(); j++) {
+                if (new Color(image.getRGB(i, j), true).getTransparency() == Transparency.OPAQUE) {
+                    numOpaque++;
+                }
+            }
+        }
+
+        return numOpaque;
+    }
+
+    // Returns the number of non-matching opaque pixels for images of the same size
+    public static int pixelsDiff(BufferedImage first, BufferedImage second) {
+        if (first.getWidth() != second.getWidth() || first.getHeight() != second.getHeight()) {
+            return -1;
+        }
+
+        int numDiff = 0;
+        for (int i = 0; i < first.getWidth(); i++) {
+            for (int j = 0; j < first.getHeight(); j++) {
+                Color firstColor = new Color(first.getRGB(i, j), true);
+                Color secondColor = new Color(second.getRGB(i, j), true);
+                boolean firstOpaque = firstColor.getTransparency() == Transparency.OPAQUE;
+                boolean secondOpaque = secondColor.getTransparency() == Transparency.OPAQUE;
+
+                // Difference when only one is opaque or when both are opaque but different colors
+                if ((firstOpaque && !secondOpaque)
+                    || (secondOpaque && !firstOpaque)
+                    || (firstOpaque && !firstColor.equals(secondColor))) {
+                    numDiff++;
+                }
+            }
+        }
+
+        return numDiff;
     }
 }
