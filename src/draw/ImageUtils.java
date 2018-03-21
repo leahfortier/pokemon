@@ -5,6 +5,7 @@ import type.PokeType;
 import util.FontMetrics;
 import util.Point;
 
+import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -13,6 +14,8 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
 
 public final class ImageUtils {
     private static final float[] SILHOUETTE_SCALE = new float[] { 0, 0, 0, 255 };
@@ -96,17 +99,23 @@ public final class ImageUtils {
         return scaleImage(img, (float)maxWidth/img.getWidth());
     }
 
+    // DO NOT RETURN IMG WHEN SCALE IS ONE BECAUSE IT DOES OTHER THINGS TOO MAINLY CHANGING THE TYPE
     public static BufferedImage scaleImage(BufferedImage img, float scale) {
-        if (scale == 1.0f) {
-            return img;
-        }
+        int scaledWidth = (int)(img.getWidth()*scale);
+        int scaledHeight = (int)(img.getHeight()*scale);
 
-        Image tmp = img.getScaledInstance((int)(img.getWidth()*scale), (int)(img.getHeight()*scale), BufferedImage.SCALE_SMOOTH);
-        BufferedImage buffer = new BufferedImage((int)(img.getWidth()*scale), (int)(img.getHeight()*scale), BufferedImage.TYPE_INT_ARGB);
+        Image tmp = img.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
+        BufferedImage buffer = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
 
         buffer.getGraphics().drawImage(tmp, 0, 0, null);
 
         return buffer;
+    }
+
+    // ALL IMAGES SHOULD BE READ USING THIS
+    public static BufferedImage read(File imageFile, float scale) throws IOException {
+        BufferedImage image = ImageIO.read(imageFile);
+        return ImageUtils.scaleImage(image, scale);
     }
 
     public static BufferedImage silhouette(BufferedImage image) {
@@ -132,7 +141,7 @@ public final class ImageUtils {
                     pixels[currComponent] = Math.min(Math.max(pixels[currComponent], 0), 255);
                 }
 
-                if (pixels.length == 4 && pixels[3] == 0) {
+                if (pixels[3] == 0) {
                     pixels[0] = pixels[1] = pixels[2] = 0;
                 }
 
@@ -140,6 +149,26 @@ public final class ImageUtils {
             }
         }
         return image;
+    }
+
+    // Returns a new image where it is just flipped horizontally
+    public static BufferedImage invertImage(BufferedImage image) {
+        BufferedImage inverted = new BufferedImage(
+                image.getColorModel(),
+                image.copyData(null),
+                image.isAlphaPremultiplied(),
+                null
+        );
+
+        int width = image.getWidth();
+        int height = image.getHeight();
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                inverted.setRGB(width - x - 1, y, image.getRGB(x, y));
+            }
+        }
+
+        return inverted;
     }
 
     public static int transformAnimation(

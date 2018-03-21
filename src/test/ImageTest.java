@@ -135,32 +135,54 @@ public class ImageTest extends BaseTest {
             // Same direction images should have the same silhouette
             assertSameSilhouette(message + " Front", frontImageFile, shinyFrontImageFile);
             assertSameSilhouette(message + " Back", backImageFile, shinyBackImageFile);
+
+            // Front and back images should not be the same
+            assertDifferent(message, frontImageFile, backImageFile);
+            assertDifferent(message + " Shiny", shinyFrontImageFile, shinyBackImageFile);
         }
     }
 
-    private void assertSameSilhouette(String message, File firstImageFile, File secondImageFile) {
-        if (firstImageFile.exists() && secondImageFile.exists()) {
-            BufferedImage firstImage = FileIO.readImage(firstImageFile);
-            BufferedImage secondImage = FileIO.readImage(secondImageFile);
+    private void assertSameSilhouette(String message, File basicImageFile, File shinyImageFile) {
+        if (!basicImageFile.exists() || !shinyImageFile.exists()) {
+            return;
+        }
 
-            try {
-                Assert.assertEquals(message + " Width", firstImage.getWidth(), secondImage.getWidth());
-                Assert.assertEquals(message + " Height", firstImage.getHeight(), secondImage.getHeight());
+        BufferedImage basicImage = FileIO.readImage(basicImageFile);
+        BufferedImage shinyImage = FileIO.readImage(shinyImageFile);
 
-                int firstNumOpaque = ImageUtils.numOpaquePixels(firstImage);
-                int secondNumOpaque = ImageUtils.numOpaquePixels(secondImage);
-                TestUtils.assertGreater(message + " Num Opaque", firstNumOpaque, 0);
-                TestUtils.assertGreater(message + " Num Opaque", secondNumOpaque, 0);
-                TestUtils.assertAlmostEquals(message + " Num Opaque", firstNumOpaque, secondNumOpaque, 5);
-                TestUtils.assertAlmostEquals(
-                        message + " Pixels (" + firstNumOpaque + ")", 0,
-                        ImageUtils.pixelsDiff(ImageUtils.silhouette(firstImage), ImageUtils.silhouette(secondImage)), 5
-                );
+        Assert.assertEquals(message + " Width", basicImage.getWidth(), shinyImage.getWidth());
+        Assert.assertEquals(message + " Height", basicImage.getHeight(), shinyImage.getHeight());
 
-                Assert.assertTrue(message + " Same as Shiny", ImageUtils.pixelsDiff(firstImage, secondImage) > 0);
-            } catch (AssertionError error) {
-                System.err.println(error.getMessage());
-            }
+        int firstNumOpaque = ImageUtils.numOpaquePixels(basicImage);
+        int secondNumOpaque = ImageUtils.numOpaquePixels(shinyImage);
+        TestUtils.assertGreater(message + " Num Opaque", firstNumOpaque, 0);
+        TestUtils.assertGreater(message + " Num Opaque", secondNumOpaque, 0);
+        TestUtils.assertAlmostEquals(message + " Num Opaque", firstNumOpaque, secondNumOpaque, 5);
+        TestUtils.assertAlmostEquals(
+                message + " Pixels (" + firstNumOpaque + "/" + basicImage.getWidth()*basicImage.getHeight() + ")", 0,
+                ImageUtils.pixelsDiff(ImageUtils.silhouette(basicImage), ImageUtils.silhouette(shinyImage)), 5
+        );
+
+        try {
+            Assert.assertTrue(message + " Same as Shiny", ImageUtils.pixelsDiff(basicImage, shinyImage) > 0);
+        } catch (AssertionError error) {
+            System.err.println(error.getMessage());
+        }
+    }
+
+    private void assertDifferent(String message, File frontImageFile, File backImageFile) {
+        if (!frontImageFile.exists() || !backImageFile.exists()) {
+            return;
+        }
+
+        BufferedImage frontImage = FileIO.readImage(frontImageFile);
+        BufferedImage backImage = FileIO.readImage(backImageFile);
+
+        try {
+            Assert.assertTrue(message + " Same Front and Back", ImageUtils.pixelsDiff(frontImage, backImage) != 0);
+            Assert.assertTrue(message + " Inverted Front and Back", ImageUtils.pixelsDiff(backImage, ImageUtils.invertImage(frontImage)) != 0);
+        } catch (AssertionError error) {
+            System.err.println(error.getMessage());
         }
     }
 

@@ -1,5 +1,6 @@
 package util.file;
 
+import draw.ImageUtils;
 import main.Global;
 import util.string.SpecialCharacter;
 import util.string.StringAppender;
@@ -96,7 +97,7 @@ public class FileIO {
 
         BufferedImage image = null;
         try {
-            image = ImageIO.read(file);
+            image = ImageUtils.read(file, 1f);
         } catch (IOException exception) {
             Global.error("Could not open image from following path: " + file.getAbsolutePath());
         }
