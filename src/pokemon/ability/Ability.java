@@ -3579,24 +3579,28 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             this.schoolForm = false;
         }
 
-        private void changeForm(ActivePokemon formsie) {
+        private void checkFormChange(ActivePokemon formsie) {
             if (this.schoolForm != formsie.getHPRatio() >= .25 && formsie.getLevel() >= 20) {
-                this.schoolForm = !schoolForm;
-                Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (schoolForm ? "School" : "Solo") + " Forme!")
-                            .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), schoolForm), formsie.isPlayer())
-                );
+                changeForm(formsie);
             }
         }
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            changeForm(victim);
+            checkFormChange(victim);
         }
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             schoolForm = false;
-            changeForm(enterer);
+            checkFormChange(enterer);
+        }
+
+        private void changeForm(ActivePokemon formsie) {
+            this.schoolForm = !schoolForm;
+            Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (schoolForm ? "School" : "Solo") + " Forme!")
+                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), schoolForm), formsie.isPlayer())
+            );
         }
 
         @Override
@@ -3619,38 +3623,42 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
     static class ShieldsDown extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect {
         private static final long serialVersionUID = 1L;
 
-        private static final BaseStats METEOR_STATS = new BaseStats(new int[] { 60, 60, 100, 60, 100, 60 });
         private static final BaseStats CORE_STATS = new BaseStats(new int[] { 60, 100, 60, 100, 60, 120 });
+        private static final BaseStats METEOR_STATS = new BaseStats(new int[] { 60, 60, 100, 60, 100, 60 });
 
-        private boolean coreForm;
+        private boolean meteorForm;
 
         private BaseStats getStats() {
-            return coreForm ? CORE_STATS : METEOR_STATS;
+            return meteorForm ? METEOR_STATS : CORE_STATS;
         }
 
         ShieldsDown() {
             super(AbilityNamesies.SHIELDS_DOWN, "When its HP becomes half or less, the Pok\u00e9mon's shell breaks and it becomes aggressive.");
-            this.coreForm = false;
+            this.meteorForm = false;
         }
 
-        private void changeForm(ActivePokemon formsie) {
-            if (this.coreForm != formsie.getHPRatio() < .5) {
-                this.coreForm = !coreForm;
-                Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (coreForm ? "Core" : "Meteor") + " Forme!")
-                            .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), coreForm), formsie.isPlayer())
-                );
+        private void checkFormChange(ActivePokemon formsie) {
+            if (this.meteorForm != formsie.getHPRatio() > .5) {
+                changeForm(formsie);
             }
         }
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            changeForm(victim);
+            checkFormChange(victim);
         }
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            coreForm = false;
-            changeForm(enterer);
+            meteorForm = false;
+            checkFormChange(enterer);
+        }
+
+        private void changeForm(ActivePokemon formsie) {
+            this.meteorForm = !meteorForm;
+            Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (meteorForm ? "Meteor" : "Core") + " Forme!")
+                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), meteorForm), formsie.isPlayer())
+            );
         }
 
         @Override
@@ -3673,29 +3681,24 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
     static class StanceChange extends Ability implements BeforeTurnEffect, EntryEffect, DifferentStatEffect {
         private static final long serialVersionUID = 1L;
 
-        private static final BaseStats BLADE_STATS = new BaseStats(new int[] { 60, 150, 50, 150, 50, 60 });
         private static final BaseStats SHIELD_STATS = new BaseStats(new int[] { 60, 50, 150, 50, 150, 60 });
+        private static final BaseStats BLADE_STATS = new BaseStats(new int[] { 60, 150, 50, 150, 50, 60 });
 
-        private boolean shieldForm;
+        private boolean bladeForm;
 
         private BaseStats getStats() {
-            return shieldForm ? SHIELD_STATS : BLADE_STATS;
+            return bladeForm ? BLADE_STATS : SHIELD_STATS;
         }
 
         StanceChange() {
             super(AbilityNamesies.STANCE_CHANGE, "The Pok\u00e9mon changes its form to Blade Forme when it uses an attack move, and changes to Shield Forme when it uses King's Shield.");
-            this.shieldForm = true;
+            this.bladeForm = false;
         }
 
         @Override
         public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-            // TODO: Change image once I can find Aegislash Shield Form sprites
-            if (shieldForm && !p.getAttack().isStatusMove()) {
-                shieldForm = false;
-                Messages.add(p.getName() + " changed into Blade Forme!");
-            } else if (!shieldForm && p.getAttack().namesies() == AttackNamesies.KINGS_SHIELD) {
-                shieldForm = true;
-                Messages.add(p.getName() + " changed into Shield Forme!");
+            if ((!bladeForm && !p.getAttack().isStatusMove()) || (bladeForm && p.getAttack().namesies() == AttackNamesies.KINGS_SHIELD)) {
+                changeForm(p);
             }
 
             return true;
@@ -3704,7 +3707,14 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + " is in Shield Forme!");
-            shieldForm = true;
+            bladeForm = false;
+        }
+
+        private void changeForm(ActivePokemon formsie) {
+            this.bladeForm = !bladeForm;
+            Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (bladeForm ? "Blade" : "Shield") + " Forme!")
+                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), bladeForm), formsie.isPlayer())
+            );
         }
 
         @Override

@@ -69,7 +69,8 @@ public class DecisionTree {
         trainer.replaceFront(front);
 
         // Need to set these manually since this field has to be transient because ActivePokemon and BattleAttributes store each other
-        front.getStages().setAttributesHolder(front);
+        front.getStages().setStagesHolder(front);
+        front.getStats().setStatsHolder(front);
 
         trainer.setAction(TrainerAction.FIGHT);
         front.setMove(new Move(move.getAttack()));

@@ -1432,31 +1432,26 @@ Refrigerate:
 *
 Schooling:
     Desc: When it has a lot of HP, the Pok\u00e9mon forms a powerful school. It stops schooling when its HP is low.
-    EndTurnFormChange: schoolForm false Solo 45 20 20 25 25 40 School 45 140 130 140 135 30 formsie.getHPRatio() >= .25 && formsie.getLevel() >= 20
+    EndTurnFormChange: schoolForm Solo 45,_20,_20,_25,_25,_40 School 45,_140,_130,_140,_135,_30 formsie.getHPRatio() >= .25 && formsie.getLevel() >= 20
 *
 Shields Down:
     Desc: When its HP becomes half or less, the Pok\u00e9mon's shell breaks and it becomes aggressive.
-    EndTurnFormChange: coreForm false Meteor 60 60 100 60 100 60 Core 60 100 60 100 60 120 formsie.getHPRatio() < .5
+    EndTurnFormChange: meteorForm Core 60,_100,_60,_100,_60,_120 Meteor 60,_60,_100,_60,_100,_60 formsie.getHPRatio() > .5
 *
 Stance Change:
     Desc: The Pok\u00e9mon changes its form to Blade Forme when it uses an attack move, and changes to Shield Forme when it uses King's Shield.
-    FormChange: shieldForm true Blade 60 150 50 150 50 60 Shield 60 50 150 50 150 60
+    FormChange: bladeForm Shield 60,_50,_150,_50,_150,_60 Blade 60,_150,_50,_150,_50,_60 
     Int: BeforeTurnEffect, EntryEffect
     CanAttack:
-        // TODO: Change image once I can find Aegislash Shield Form sprites
-        if (shieldForm && !p.getAttack().isStatusMove()) {
-            shieldForm = false;
-            Messages.add(p.getName() + " changed into Blade Forme!");
-        } else if (!shieldForm && p.getAttack().namesies() == AttackNamesies.KINGS_SHIELD) {
-            shieldForm = true;
-            Messages.add(p.getName() + " changed into Shield Forme!");
+        if ((!bladeForm && !p.getAttack().isStatusMove()) || (bladeForm && p.getAttack().namesies() == AttackNamesies.KINGS_SHIELD)) {
+            changeForm(p);
         }
 
         return true;
         ###
     Enter:
         Messages.add(enterer.getName() + " is in Shield Forme!");
-        shieldForm = true;
+        bladeForm = false;
         ###
 *
 Fur Coat:

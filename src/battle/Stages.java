@@ -13,17 +13,17 @@ import util.serialization.Serializable;
 public class Stages implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private transient ActivePokemon attributesHolder;
+    private transient ActivePokemon stagesHolder;
 
     private int[] stages;
 
-    public Stages(ActivePokemon attributesHolder) {
-        this.attributesHolder = attributesHolder;
+    public Stages(ActivePokemon stagesHolder) {
+        this.stagesHolder = stagesHolder;
         this.reset();
     }
 
-    public void setAttributesHolder(ActivePokemon attributesHolder) {
-        this.attributesHolder = attributesHolder;
+    public void setStagesHolder(ActivePokemon stagesHolder) {
+        this.stagesHolder = stagesHolder;
     }
 
     public void reset() {
@@ -42,7 +42,7 @@ public class Stages implements Serializable {
         stages[index] = Math.min(Stat.MAX_STAT_CHANGES, stages[index]);
         stages[index] = Math.max(-1*Stat.MAX_STAT_CHANGES, stages[index]);
 
-        Messages.add(new MessageUpdate().withPokemon(attributesHolder));
+        Messages.add(new MessageUpdate().withPokemon(stagesHolder));
     }
 
     private void incrementStage(Stat stat, int val) {
@@ -60,7 +60,7 @@ public class Stages implements Serializable {
 
     // Modifies a stat for a Pokemon and prints appropriate messages and stuff
     public boolean modifyStage(ActivePokemon caster, int val, Stat stat, Battle b, CastSource source, ModifyStageMessageGetter messageGetter) {
-        ActivePokemon victim = this.attributesHolder;
+        ActivePokemon victim = this.stagesHolder;
 
         // Don't modify the stages of a dead Pokemon
         if (victim.isFainted(b)) {
@@ -166,7 +166,7 @@ public class Stages implements Serializable {
             case USE_ITEM:
                 // Bulbasaur's Attack was sharply raised!
                 return (victimName, statName, changed) -> String.format(
-                        "%s's %s was %s!", this.attributesHolder.getName(), statName, changed
+                        "%s's %s was %s!", this.stagesHolder.getName(), statName, changed
                 );
             case ABILITY:
             case HELD_ITEM:

@@ -15,7 +15,7 @@ public class StatValues implements Serializable {
     private IndividualValues IVs;
     private EffortValues EVs;
 
-    private final transient PartyPokemon statsHolder;
+    private transient PartyPokemon statsHolder;
 
     StatValues(PartyPokemon statsHolder) {
         this.statsHolder = statsHolder;
@@ -24,6 +24,10 @@ public class StatValues implements Serializable {
         this.nature = new Nature();
         this.IVs = new IndividualValues();
         this.EVs = new EffortValues();
+    }
+
+    public void setStatsHolder(PartyPokemon statsHolder) {
+        this.statsHolder = statsHolder;
     }
 
     public int get(int index) {

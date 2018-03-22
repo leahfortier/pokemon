@@ -11,6 +11,7 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
 import test.BaseTest;
 import test.TestPokemon;
+import test.TestUtils;
 import trainer.EnemyTrainer;
 import type.Type;
 import type.TypeAdvantage;
@@ -607,5 +608,63 @@ public class AbilityTest extends BaseTest {
         Assert.assertTrue(defending.isHoldingItem(battle, ItemNamesies.RAWST_BERRY));
         Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
         Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+    }
+
+    @Test
+    public void stanceChangeTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.AEGISLASH, PokemonNamesies.AEGISLASH);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.STANCE_CHANGE));
+        Assert.assertTrue(defending.hasAbility(AbilityNamesies.STANCE_CHANGE));
+
+        // Should start in shield form
+        assertStanceChangeForm(true, battle, attacking);
+        assertStanceChangeForm(true, battle, defending);
+
+        // Sunny Day is a status move, so it will remain in Shield Form
+        // Stored Power is Special, so it will change to Blade Form
+        battle.fight(AttackNamesies.SUNNY_DAY, AttackNamesies.STORED_POWER);
+        assertStanceChangeForm(true, battle, attacking);
+        assertStanceChangeForm(false, battle, defending);
+        attacking.assertNotFullHealth();
+        defending.assertFullHealth();
+
+        // Scary Face is a status move, but only King's Shield will revert back to Shield Forme
+        battle.fight(AttackNamesies.SYNTHESIS, AttackNamesies.SCARY_FACE);
+        assertStanceChangeForm(true, battle, attacking);
+        assertStanceChangeForm(false, battle, defending);
+        attacking.assertFullHealth();
+        defending.assertFullHealth();
+        new TestStages().set(Stat.SPEED, -2).test(attacking);
+        new TestStages().test(defending);
+
+        // King's Shield has priority and revert to Shield Forme as well as protect from Absorb
+        // Absorb changes to Blade Forme, but because it does not make contact, attack will not decrease
+        battle.fight(AttackNamesies.ABSORB, AttackNamesies.KINGS_SHIELD);
+        assertStanceChangeForm(false, battle, attacking);
+        assertStanceChangeForm(true, battle, defending);
+        attacking.assertFullHealth();
+        defending.assertFullHealth();
+        new TestStages().set(Stat.SPEED, -2).test(attacking);
+        new TestStages().test(defending);
+
+        // Peck will make contact and reduce defending's attack by 2
+        battle.fight(AttackNamesies.KINGS_SHIELD, AttackNamesies.PECK);
+        assertStanceChangeForm(true, battle, attacking);
+        assertStanceChangeForm(false, battle, defending);
+        attacking.assertFullHealth();
+        defending.assertFullHealth();
+        new TestStages().set(Stat.SPEED, -2).test(attacking);
+        new TestStages().set(Stat.ATTACK, -2).test(defending);
+    }
+
+    private void assertStanceChangeForm(boolean shieldForm, TestBattle battle, TestPokemon stanceChanger) {
+        if (shieldForm) {
+            TestUtils.assertGreater("", stanceChanger.getStat(battle, Stat.DEFENSE), stanceChanger.getStat(battle, Stat.ATTACK));
+        } else {
+            TestUtils.assertGreater("", stanceChanger.getStat(battle, Stat.ATTACK), stanceChanger.getStat(battle, Stat.DEFENSE));
+        }
     }
 }

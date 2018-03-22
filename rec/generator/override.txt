@@ -1926,20 +1926,28 @@ BlockItem:
     Header: boolean blockItem(Battle b, ActivePokemon p, ItemNamesies item)
 *
 FormChange:
+    Header: void changeForm(ActivePokemon formsie)
+    AccessModifier: Private
+	Body:
+        this.{1} = !{1};
+        Messages.add(new MessageUpdate(formsie.getName() + " changed into " + ({1} ? "{4}" : "{2}") + " Forme!")
+                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), {1}), formsie.isPlayer())
+        );
+		###
 	AddMapField: Irrestealable: True
 	AddMapField: Irreplaceable: True
 	AddMapField: Field:
-		private static final BaseStats {33}_STATS = new BaseStats(new int[] { {4}, {5}, {6}, {7}, {8}, {9} });
-		private static final BaseStats {1010}_STATS = new BaseStats(new int[] { {11}, {12}, {13}, {14}, {15}, {16} });
+		private static final BaseStats {22}_STATS = new BaseStats(new int[] { {3_} });
+		private static final BaseStats {44}_STATS = new BaseStats(new int[] { {5_} });
 
 		private boolean {1};
 		
 		private BaseStats getStats() {
-			return {1} ? {1010}_STATS : {33}_STATS;
+			return {1} ? {44}_STATS : {22}_STATS;
 		}
 		###
 	AddMapField: Activate:
-		this.{1} = {2};
+		this.{1} = false;
 		###
 	AddInterface: DifferentStatEffect
 	AddMapField: GetStat:
@@ -1948,25 +1956,22 @@ FormChange:
 		###
 *
 EndTurnFormChange:
-	Header: void changeForm(ActivePokemon formsie)
+	Header: void checkFormChange(ActivePokemon formsie)
 	AccessModifier: Private
 	Body:
-		if (this.{1} != {17-}) {
-			this.{1} = !{1};
-			Messages.add(new MessageUpdate(formsie.getName() + " changed into " + ({1} ? "{10}" : "{3}") + " Forme!")
-							.withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), {1}), formsie.isPlayer())
-			);
+		if (this.{1} != {6-}) {
+            changeForm(formsie);
 		}
 		###
-	AddMapField: FormChange: {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16}
+	AddMapField: FormChange: {1} {2} {3} {4} {5}
 	AddInterface: EndTurnEffect
 	AddInterface: EntryEffect
 	AddMapField: Enter:
 		{1} = false;
-		changeForm(enterer);
+		checkFormChange(enterer);
 		###
 	AddMapField: ApplyEndTurn:
-		changeForm(victim);
+		checkFormChange(victim);
 		###
 *
 EntryEndTurn:
