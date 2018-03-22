@@ -3,6 +3,7 @@ package test;
 import battle.attack.MoveCategory;
 import battle.effect.battle.weather.WeatherEffect;
 import battle.effect.battle.weather.WeatherNamesies;
+import draw.ImageUtils;
 import generator.update.UpdateGen;
 import item.Item;
 import item.ItemNamesies;
@@ -25,26 +26,26 @@ public class ImageTest extends BaseTest {
     @Test
     public void missingTest() {
         for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
-            checkExists(num, "", Folder.POKEDEX_TILES, true);
-            checkExists(num, "-small", Folder.PARTY_TILES, true);
-            checkExists(num, "", Folder.POKEMON_TILES, false);
-            checkExists(num, "-back", Folder.POKEMON_TILES, false);
-            checkExists(num, "-shiny", Folder.POKEMON_TILES, false);
-            checkExists(num, "-shiny-back", Folder.POKEMON_TILES, false);
+            checkExists(num, "", Folder.POKEDEX_TILES);
+            checkExists(num, "-small", Folder.PARTY_TILES);
+            checkExists(num, "", Folder.POKEMON_TILES);
+            checkExists(num, "-back", Folder.POKEMON_TILES);
+            checkExists(num, "-shiny", Folder.POKEMON_TILES);
+            checkExists(num, "-shiny-back", Folder.POKEMON_TILES);
         }
 
-        checkExists(Folder.PARTY_TILES, Eggy.TINY_EGG_IMAGE_NAME, true);
-        checkExists(Folder.POKEDEX_TILES, Eggy.BASE_EGG_IMAGE_NAME, true);
-        checkExists(Folder.POKEMON_TILES, Eggy.SPRITE_EGG_IMAGE_NAME, true);
-        checkExists(Folder.POKEMON_TILES, "substitute", true);
-        checkExists(Folder.POKEMON_TILES, "substitute-back", true);
+        checkExists(Folder.PARTY_TILES, Eggy.TINY_EGG_IMAGE_NAME);
+        checkExists(Folder.POKEDEX_TILES, Eggy.BASE_EGG_IMAGE_NAME);
+        checkExists(Folder.POKEMON_TILES, Eggy.SPRITE_EGG_IMAGE_NAME);
+        checkExists(Folder.POKEMON_TILES, "substitute");
+        checkExists(Folder.POKEMON_TILES, "substitute-back");
 
         for (MoveCategory category : MoveCategory.values()) {
-            checkExists(Folder.ATTACK_TILES, "MoveCategory" + StringUtils.properCase(category.name().toLowerCase()), true);
+            checkExists(Folder.ATTACK_TILES, "MoveCategory" + StringUtils.properCase(category.name().toLowerCase()));
         }
 
         for (BagCategory category : BagCategory.values()) {
-            checkExists(Folder.BAG_TILES, "cat_" + category.getDisplayName().replaceAll("\\s", "").toLowerCase(), true);
+            checkExists(Folder.BAG_TILES, "cat_" + category.getDisplayName().replaceAll("\\s", "").toLowerCase());
         }
 
         for (ItemNamesies itemName : ItemNamesies.values()) {
@@ -53,42 +54,46 @@ public class ImageTest extends BaseTest {
             }
 
             Item item = itemName.getItem();
-            checkExists(Folder.ITEM_TILES, item.getImageName(), false);
+            try {
+                checkExists(Folder.ITEM_TILES, item.getImageName());
+            } catch (AssertionError error) {
+                System.err.println(error.getMessage());
+            }
         }
 
         for (Medal medal : Medal.values()) {
-            checkExists(Folder.MEDAL_TILES, medal.getImageName(), true);
+            checkExists(Folder.MEDAL_TILES, medal.getImageName());
             Assert.assertNotEquals(medal.getImageName(), Medal.getUnknownMedalImageName());
         }
 
         for (TerrainType terrainType : TerrainType.values()) {
-            checkExists(Folder.TERRAIN_TILES, StringUtils.properCase(terrainType.name().toLowerCase()) + "Circle", true);
+            checkExists(Folder.TERRAIN_TILES, StringUtils.properCase(terrainType.name().toLowerCase()) + "Circle");
         }
 
         for (Type type : Type.values()) {
-            checkExists(Folder.TYPE_TILES, "Type" + type.getName(), true);
+            checkExists(Folder.TYPE_TILES, "Type" + type.getName());
         }
 
         for (WeatherNamesies effectNamesies : WeatherNamesies.values()) {
             WeatherEffect weather = effectNamesies.getEffect();
-            checkExists(Folder.WEATHER_TILES, weather.getImageName(), true);
+            checkExists(Folder.WEATHER_TILES, weather.getImageName());
         }
     }
 
-    private void checkExists(int num, String suffix, String folderPath, boolean required) {
-        checkExists(FileIO.getImageFile(num, suffix, folderPath), required);
+    private void checkExists(int num, String suffix, String folderPath) {
+        checkExists(FileIO.getImageFile(num, suffix, folderPath));
     }
 
-    private void checkExists(String folderPath, String imageName, boolean required) {
+    private void checkExists(String folderPath, String imageName) {
         if (!imageName.endsWith(".png")) {
             imageName += ".png";
         }
 
-        checkExists(new File(folderPath + imageName), required);
+        checkExists(new File(folderPath + imageName));
     }
 
-    private void checkExists(File imageFile, boolean required) {
-        TestUtils.semiAssertTrue(imageFile.getPath() + " does not exist.", required, imageFile.exists());
+    private void checkExists(File imageFile) {
+        Assert.assertTrue(imageFile.getPath() + " does not exist.", imageFile.exists());
     }
 
     @Test
@@ -127,19 +132,57 @@ public class ImageTest extends BaseTest {
             Assert.assertEquals(message, frontImageFile.exists(), backImageFile.exists());
             Assert.assertEquals(message, shinyFrontImageFile.exists(), shinyBackImageFile.exists());
 
-            // Same direction images should be the same size
-            assertSameSize(message + " Front", frontImageFile, shinyFrontImageFile);
-            assertSameSize(message + " Back", backImageFile, shinyBackImageFile);
+            // Same direction images should have the same silhouette
+            assertSameSilhouette(message + " Front", frontImageFile, shinyFrontImageFile);
+            assertSameSilhouette(message + " Back", backImageFile, shinyBackImageFile);
+
+            // Front and back images should not be the same
+            assertDifferent(message, frontImageFile, backImageFile);
+            assertDifferent(message + " Shiny", shinyFrontImageFile, shinyBackImageFile);
         }
     }
 
-    private void assertSameSize(String message, File firstImageFile, File secondImageFile) {
-        if (firstImageFile.exists() && secondImageFile.exists()) {
-            BufferedImage firstImage = FileIO.readImage(firstImageFile);
-            BufferedImage secondImage = FileIO.readImage(secondImageFile);
+    private void assertSameSilhouette(String message, File basicImageFile, File shinyImageFile) {
+        if (!basicImageFile.exists() || !shinyImageFile.exists()) {
+            return;
+        }
 
-            Assert.assertEquals(message, firstImage.getWidth(), secondImage.getWidth());
-            Assert.assertEquals(message, firstImage.getHeight(), secondImage.getHeight());
+        BufferedImage basicImage = FileIO.readImage(basicImageFile);
+        BufferedImage shinyImage = FileIO.readImage(shinyImageFile);
+
+        Assert.assertEquals(message + " Width", basicImage.getWidth(), shinyImage.getWidth());
+        Assert.assertEquals(message + " Height", basicImage.getHeight(), shinyImage.getHeight());
+
+        int firstNumOpaque = ImageUtils.numOpaquePixels(basicImage);
+        int secondNumOpaque = ImageUtils.numOpaquePixels(shinyImage);
+        TestUtils.assertGreater(message + " Num Opaque", firstNumOpaque, 0);
+        TestUtils.assertGreater(message + " Num Opaque", secondNumOpaque, 0);
+        TestUtils.assertAlmostEquals(message + " Num Opaque", firstNumOpaque, secondNumOpaque, 5);
+        TestUtils.assertAlmostEquals(
+                message + " Pixels (" + firstNumOpaque + "/" + basicImage.getWidth()*basicImage.getHeight() + ")", 0,
+                ImageUtils.pixelsDiff(ImageUtils.silhouette(basicImage), ImageUtils.silhouette(shinyImage)), 5
+        );
+
+        try {
+            Assert.assertTrue(message + " Same as Shiny", ImageUtils.pixelsDiff(basicImage, shinyImage) > 0);
+        } catch (AssertionError error) {
+            System.err.println(error.getMessage());
+        }
+    }
+
+    private void assertDifferent(String message, File frontImageFile, File backImageFile) {
+        if (!frontImageFile.exists() || !backImageFile.exists()) {
+            return;
+        }
+
+        BufferedImage frontImage = FileIO.readImage(frontImageFile);
+        BufferedImage backImage = FileIO.readImage(backImageFile);
+
+        try {
+            Assert.assertTrue(message + " Same Front and Back", ImageUtils.pixelsDiff(frontImage, backImage) != 0);
+            Assert.assertTrue(message + " Inverted Front and Back", ImageUtils.pixelsDiff(backImage, ImageUtils.invertImage(frontImage)) != 0);
+        } catch (AssertionError error) {
+            System.err.println(error.getMessage());
         }
     }
 

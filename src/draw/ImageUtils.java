@@ -5,12 +5,17 @@ import type.PokeType;
 import util.FontMetrics;
 import util.Point;
 
+import javax.imageio.ImageIO;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
 
 public final class ImageUtils {
     private static final float[] SILHOUETTE_SCALE = new float[] { 0, 0, 0, 255 };
@@ -94,17 +99,23 @@ public final class ImageUtils {
         return scaleImage(img, (float)maxWidth/img.getWidth());
     }
 
+    // DO NOT RETURN IMG WHEN SCALE IS ONE BECAUSE IT DOES OTHER THINGS TOO MAINLY CHANGING THE TYPE
     public static BufferedImage scaleImage(BufferedImage img, float scale) {
-        if (scale == 1.0f) {
-            return img;
-        }
+        int scaledWidth = (int)(img.getWidth()*scale);
+        int scaledHeight = (int)(img.getHeight()*scale);
 
-        Image tmp = img.getScaledInstance((int)(img.getWidth()*scale), (int)(img.getHeight()*scale), BufferedImage.SCALE_SMOOTH);
-        BufferedImage buffer = new BufferedImage((int)(img.getWidth()*scale), (int)(img.getHeight()*scale), BufferedImage.TYPE_INT_ARGB);
+        Image tmp = img.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
+        BufferedImage buffer = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
 
         buffer.getGraphics().drawImage(tmp, 0, 0, null);
 
         return buffer;
+    }
+
+    // ALL IMAGES SHOULD BE READ USING THIS
+    public static BufferedImage read(File imageFile, float scale) throws IOException {
+        BufferedImage image = ImageIO.read(imageFile);
+        return ImageUtils.scaleImage(image, scale);
     }
 
     public static BufferedImage silhouette(BufferedImage image) {
@@ -138,6 +149,26 @@ public final class ImageUtils {
             }
         }
         return image;
+    }
+
+    // Returns a new image where it is just flipped horizontally
+    public static BufferedImage invertImage(BufferedImage image) {
+        BufferedImage inverted = new BufferedImage(
+                image.getColorModel(),
+                image.copyData(null),
+                image.isAlphaPremultiplied(),
+                null
+        );
+
+        int width = image.getWidth();
+        int height = image.getHeight();
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                inverted.setRGB(width - x - 1, y, image.getRGB(x, y));
+            }
+        }
+
+        return inverted;
     }
 
     public static int transformAnimation(
@@ -184,8 +215,6 @@ public final class ImageUtils {
     }
 
     public static BufferedImage trimImage(BufferedImage image) {
-        int empty = image.getRGB(0, 0); // This assumes the top left corner is blank just FYI...
-
         int leftmost = image.getWidth();
         int topmost = image.getHeight();
         int rightmost = 0;
@@ -193,7 +222,7 @@ public final class ImageUtils {
 
         for (int i = 0; i < image.getWidth(); i++) {
             for (int j = 0; j < image.getHeight(); j++) {
-                if (image.getRGB(i, j) != empty) {
+                if (new Color(image.getRGB(i, j), true).getTransparency() == Transparency.OPAQUE) {
                     leftmost = Math.min(i, leftmost);
                     rightmost = Math.max(i, rightmost);
                     topmost = Math.min(j, topmost);
@@ -203,5 +232,44 @@ public final class ImageUtils {
         }
 
         return image.getSubimage(leftmost, topmost, rightmost - leftmost + 1, bottommost - topmost + 1);
+    }
+
+    public static int numOpaquePixels(BufferedImage image) {
+        int numOpaque = 0;
+        for (int i = 0; i < image.getWidth(); i++) {
+            for (int j = 0; j < image.getHeight(); j++) {
+                if (new Color(image.getRGB(i, j), true).getTransparency() == Transparency.OPAQUE) {
+                    numOpaque++;
+                }
+            }
+        }
+
+        return numOpaque;
+    }
+
+    // Returns the number of non-matching opaque pixels for images of the same size
+    public static int pixelsDiff(BufferedImage first, BufferedImage second) {
+        if (first.getWidth() != second.getWidth() || first.getHeight() != second.getHeight()) {
+            return -1;
+        }
+
+        int numDiff = 0;
+        for (int i = 0; i < first.getWidth(); i++) {
+            for (int j = 0; j < first.getHeight(); j++) {
+                Color firstColor = new Color(first.getRGB(i, j), true);
+                Color secondColor = new Color(second.getRGB(i, j), true);
+                boolean firstOpaque = firstColor.getTransparency() == Transparency.OPAQUE;
+                boolean secondOpaque = secondColor.getTransparency() == Transparency.OPAQUE;
+
+                // Difference when only one is opaque or when both are opaque but different colors
+                if ((firstOpaque && !secondOpaque)
+                    || (secondOpaque && !firstOpaque)
+                    || (firstOpaque && !firstColor.equals(secondColor))) {
+                    numDiff++;
+                }
+            }
+        }
+
+        return numDiff;
     }
 }

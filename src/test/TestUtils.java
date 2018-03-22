@@ -13,17 +13,10 @@ public class TestUtils {
         Assert.assertEquals(expected, actual, DELTA);
     }
 
-    public static void semiAssertTrue(String message, boolean assertion) {
-        semiAssertTrue(message, false, assertion);
-    }
-
-    public static void semiAssertTrue(String message, boolean fullAssert, boolean assertion) {
-        if (!assertion) {
-            if (fullAssert) {
-                Assert.fail(message);
-            } else {
-                System.err.println(message);
-            }
+    // Close enough
+    public static void assertAlmostEquals(String message, int expected, int actual, int delta) {
+        if (Math.abs(expected - actual) > delta) {
+            Assert.fail(message + " Expected: " + expected + ", Actual: " + actual);
         }
     }
 

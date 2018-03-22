@@ -14,6 +14,7 @@ import util.file.FileIO.NullOutputStream;
 import util.file.FileName;
 import util.file.Folder;
 import util.string.StringAppender;
+import util.string.StringUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -36,9 +37,114 @@ public class UpdateGen {
 //        pokemonInfoStuff();
 //        updateNum();
 //        resizeImages();
-//        trimImages();
+        trimImages();
 //        translateAlBhed();
-        addCondition();
+//        addCondition();
+//        outputShowdownImagesFile();
+    }
+
+    private static void outputShowdownImagesFile() {
+        StringAppender out = new StringAppender();
+
+        for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
+            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(num);
+
+            List<String> forms = new ArrayList<>();
+            if (pokemonInfo.getNumber() < PokemonNamesies.RIZARDON.getInfo().getNumber()) {
+                forms.add("");
+            }
+
+            switch (pokemonInfo.namesies()) {
+                case AEGISLASH:
+                    forms.add("-blade");
+                    break;
+                case WISHIWASHI:
+                    forms.add("-school");
+                    break;
+                case MIMIKYU:
+                    forms.add("-busted");
+                    break;
+                case MINIOR:
+                    forms.add("-meteor");
+                    break;
+                case RIZARDON:
+                    forms.add("charizard-megax");
+                    break;
+                case KUCHIITO:
+                    forms.add("mawile-mega");
+                    break;
+                case ASBEL:
+                    forms.add("absol-mega");
+                    break;
+                case YAMIRAMI:
+                    forms.add("sableye-mega");
+                    break;
+                case SILPH_SURFER:
+                    forms.add("raichu-alola");
+                    break;
+                case SNOWSHREW:
+                    forms.add("sandshrew-alola");
+                    break;
+                case SNOWSLASH:
+                    forms.add("sandslash-alola");
+                    break;
+                case YUKIKON:
+                    forms.add("vulpix-alola");
+                    break;
+                case KYUKON:
+                    forms.add("ninetales-alola");
+                    break;
+                case SLEIMA:
+                    forms.add("grimer-alola");
+                    break;
+                case SLEIMOK:
+                    forms.add("muk-alola");
+                    break;
+                case KOKONATSU:
+                    forms.add("exeggutor-alola");
+                    break;
+                case GARA_GARA:
+                    forms.add("marowak-alola");
+                    break;
+                case JUPETTA:
+                    forms.add("banette-mega");
+                    break;
+                case LOUGAROC:
+                    forms.add("lycanroc-midnight");
+                    break;
+                case LUGARUGAN:
+                    forms.add("lycanroc-dusk");
+                    break;
+            }
+
+            for (String form : forms) {
+                appendNotExists(out, num, form, "");
+                appendNotExists(out, num, form, "-back");
+                appendNotExists(out, num, form, "-shiny");
+                appendNotExists(out, num, form, "-shiny-back");
+            }
+        }
+
+        FileIO.overwriteFile(Folder.SCRIPTS + "ps-images.in", out.toString());
+    }
+
+    private static void appendNotExists(StringAppender out, int num, String form, String suffix) {
+        boolean isAddedPoke = num >= PokemonNamesies.RIZARDON.getInfo().getNumber();
+        File imageFile = FileIO.getImageFile(num, !StringUtils.isNullOrEmpty(form) && !isAddedPoke, suffix, Folder.POKEMON_TILES);
+
+        String sourcePath = "bw";
+        if (suffix.equals("-shiny-back")) {
+            sourcePath += "-back-shiny";
+        } else {
+            sourcePath += suffix;
+        }
+        sourcePath += "/";
+        if (!isAddedPoke) {
+            sourcePath += PokemonInfo.getPokemonInfo(num).getName().toLowerCase().replaceAll("[:'.\\- ]", "");
+        }
+        sourcePath += form + ".png";
+
+        out.appendLine(sourcePath + " " + imageFile.getName());
     }
 
     private static void trimImages() {
@@ -54,7 +160,7 @@ public class UpdateGen {
             BufferedImage trimmed = ImageUtils.trimImage(image);
 
             String newName = imageFile.getName();
-            File file = new File(outputLocation + FileIO.FILE_SLASH + newName);
+            File file = new File(outputLocation + newName);
             FileIO.writeImage(trimmed, file);
 
             System.out.println("Writing trimmed image to " + file.getPath());

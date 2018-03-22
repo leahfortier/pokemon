@@ -4,7 +4,6 @@ import draw.ImageUtils;
 import util.file.FileIO;
 import util.file.Folder;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -39,8 +38,7 @@ public class TileSet {
         if (!map.containsKey(imageName)) {
             File file = new File(this.folderPath + imageName + ".png");
             try {
-                BufferedImage image = ImageIO.read(file);
-                image = ImageUtils.scaleImage(image, scale);
+                BufferedImage image = ImageUtils.read(file, scale);
                 map.put(imageName, image);
             } catch (IOException exception) {
                 return IMAGE_NOT_FOUND;

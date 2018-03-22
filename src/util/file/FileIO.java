@@ -1,5 +1,6 @@
 package util.file;
 
+import draw.ImageUtils;
 import main.Global;
 import util.string.SpecialCharacter;
 import util.string.StringAppender;
@@ -96,7 +97,7 @@ public class FileIO {
 
         BufferedImage image = null;
         try {
-            image = ImageIO.read(file);
+            image = ImageUtils.read(file, 1f);
         } catch (IOException exception) {
             Global.error("Could not open image from following path: " + file.getAbsolutePath());
         }
@@ -105,7 +106,11 @@ public class FileIO {
     }
 
     public static File getImageFile(int num, String suffix, String folderPath) {
-        return new File(folderPath + String.format("%03d", num) + suffix + ".png");
+        return getImageFile(num, false, suffix, folderPath);
+    }
+
+    public static File getImageFile(int num, boolean form, String suffix, String folderPath) {
+        return new File(folderPath + String.format("%03d", num) + (form ? "b" : "") + suffix + ".png");
     }
 
     public static String makeFolderPath(String... path) {
