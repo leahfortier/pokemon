@@ -14,22 +14,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.function.IntFunction;
 
 public class MapDataMatcher implements JsonMatcher {
-    private AreaMatcher[] areas = new AreaMatcher[0];
-    private MapTransitionMatcher[] mapTransitions = new MapTransitionMatcher[0];
-    private NPCMatcher[] NPCs = new NPCMatcher[0];
-    private ItemMatcher[] items = new ItemMatcher[0];
-    private MiscEntityMatcher[] miscEntities = new MiscEntityMatcher[0];
-    private EventMatcher[] events = new EventMatcher[0];
-    private WildBattleAreaMatcher[] wildBattles = new WildBattleAreaMatcher[0];
-    private FishingMatcher[] fishingSpots = new FishingMatcher[0];
+    private AreaMatcher[] areas;
+    private MapTransitionMatcher[] mapTransitions;
+    private NPCMatcher[] NPCs;
+    private ItemMatcher[] items;
+    private MiscEntityMatcher[] miscEntities;
+    private EventMatcher[] events;
+    private WildBattleAreaMatcher[] wildBattles;
+    private FishingMatcher[] fishingSpots;
 
     public MapDataMatcher(Set<AreaMatcher> areaData, List<LocationTriggerMatcher> entities) {
         this.areas = areaData.stream()
-                .sorted(Comparator.comparing(areaMatcher -> areaMatcher.getAreaData().getAreaName()))
-                .toArray(AreaMatcher[]::new);
+                             .sorted(Comparator.comparing(areaMatcher -> areaMatcher.getAreaData().getAreaName()))
+                             .toArray(AreaMatcher[]::new);
 
         Map<TriggerModelType, List<LocationTriggerMatcher>> triggerMap = new EnumMap<>(TriggerModelType.class);
         for (TriggerModelType triggerModelType : TriggerModelType.values()) {
@@ -40,23 +40,22 @@ public class MapDataMatcher implements JsonMatcher {
             triggerMap.get(entity.getTriggerModelType()).add(entity);
         }
 
-        this.mapTransitions = fillTriggerArray(this.mapTransitions, triggerMap.get(TriggerModelType.MAP_TRANSITION), trigger -> (MapTransitionMatcher)trigger);
-        this.NPCs = fillTriggerArray(this.NPCs, triggerMap.get(TriggerModelType.NPC), trigger -> (NPCMatcher)trigger);
-        this.items = fillTriggerArray(this.items, GeneralUtils.combine(triggerMap.get(TriggerModelType.ITEM), triggerMap.get(TriggerModelType.HIDDEN_ITEM)), trigger -> (ItemMatcher)trigger);
-        this.miscEntities = fillTriggerArray(this.miscEntities, triggerMap.get(TriggerModelType.MISC_ENTITY), trigger -> (MiscEntityMatcher)trigger);
-        this.events = fillTriggerArray(this.events, triggerMap.get(TriggerModelType.EVENT), trigger -> (EventMatcher)trigger);
-        this.wildBattles = fillTriggerArray(this.wildBattles, triggerMap.get(TriggerModelType.WILD_BATTLE), trigger -> (WildBattleAreaMatcher)trigger);
-        this.fishingSpots = fillTriggerArray(this.fishingSpots, triggerMap.get(TriggerModelType.FISHING), trigger -> (FishingMatcher)trigger);
+        this.mapTransitions = fillTriggerArray(MapTransitionMatcher[]::new, triggerMap.get(TriggerModelType.MAP_TRANSITION), trigger -> (MapTransitionMatcher)trigger);
+        this.NPCs = fillTriggerArray(NPCMatcher[]::new, triggerMap.get(TriggerModelType.NPC), trigger -> (NPCMatcher)trigger);
+        this.items = fillTriggerArray(ItemMatcher[]::new, GeneralUtils.combine(triggerMap.get(TriggerModelType.ITEM), triggerMap.get(TriggerModelType.HIDDEN_ITEM)), trigger -> (ItemMatcher)trigger);
+        this.miscEntities = fillTriggerArray(MiscEntityMatcher[]::new, triggerMap.get(TriggerModelType.MISC_ENTITY), trigger -> (MiscEntityMatcher)trigger);
+        this.events = fillTriggerArray(EventMatcher[]::new, triggerMap.get(TriggerModelType.EVENT), trigger -> (EventMatcher)trigger);
+        this.wildBattles = fillTriggerArray(WildBattleAreaMatcher[]::new, triggerMap.get(TriggerModelType.WILD_BATTLE), trigger -> (WildBattleAreaMatcher)trigger);
+        this.fishingSpots = fillTriggerArray(FishingMatcher[]::new, triggerMap.get(TriggerModelType.FISHING), trigger -> (FishingMatcher)trigger);
     }
 
     private <T extends LocationTriggerMatcher> T[] fillTriggerArray(
-            T[] array,
+            IntFunction<T[]> arrayGetter,
             List<LocationTriggerMatcher> triggerList,
             Function<LocationTriggerMatcher, T> mapper) {
         return triggerList.stream()
                           .map(mapper)
-                          .collect(Collectors.toList())
-                          .toArray(array);
+                          .toArray(arrayGetter);
     }
 
     public AreaMatcher getDefaultArea() {

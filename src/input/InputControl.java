@@ -22,6 +22,7 @@ import java.util.Set;
  */
 public class InputControl implements MouseListener, KeyListener, MouseMotionListener {
     private static InputControl instance;
+
     public static InputControl instance() {
         if (instance == null) {
             instance = new InputControl();
@@ -234,8 +235,8 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 
     private boolean isIgnored(KeyEvent keyEvent) {
         return IGNORED_INPUT_KEYS.stream()
-                .map(ControlKey::getKey)
-                .anyMatch(key -> key.isKey(keyEvent.getKeyChar()));
+                                 .map(ControlKey::getKey)
+                                 .anyMatch(key -> key.isKey(keyEvent.getKeyChar()));
     }
 
     @Override

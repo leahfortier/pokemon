@@ -372,17 +372,17 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     public String[] getAvailableRegions() {
         File mapsFolder = new File(getPathWithRoot(Folder.MAPS));
         return FileIO.listDirectories(mapsFolder)
-                .stream()
-                .map(File::getName)
-                .toArray(String[]::new);
+                     .stream()
+                     .map(File::getName)
+                     .toArray(String[]::new);
     }
 
     public MapName[] getAvailableMaps(String region) {
         File regionFolder = new File(FileIO.makeFolderPath(Folder.MAPS, region));
         return FileIO.listDirectories(regionFolder)
-                .stream()
-                .map(file -> new MapName(region, file.getName()))
-                .toArray(MapName[]::new);
+                     .stream()
+                     .map(file -> new MapName(region, file.getName()))
+                     .toArray(MapName[]::new);
     }
 
     // TODO: I still never figured out what root is doing
