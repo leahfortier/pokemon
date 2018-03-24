@@ -4,7 +4,7 @@
 import requests
 from lxml import html
 
-from util import getImageName, addRowValues
+from util import get_image_name, add_row_values
 
 f = open("moves.in", "r")
 out = open("moves.out", "w")
@@ -25,8 +25,8 @@ for i, attackName in enumerate(f):
     
     # Name, Type, Category
     row = mainTable[rowIndex]
-    attackType = getImageName(row.xpath('td[2]/a/img')[0])
-    category = getImageName(row.xpath('td[3]/a/img')[0])
+    attackType = get_image_name(row.xpath('td[2]/a/img')[0])
+    category = get_image_name(row.xpath('td[3]/a/img')[0])
     if category == "Other":
         category = "Status"
     values.append(attackType)
@@ -35,36 +35,36 @@ for i, attackName in enumerate(f):
     
     # PP, Base Power, Accuracy
     rowIndex += 2
-    addRowValues(mainTable, rowIndex, values, 1, 2, 3)
+    add_row_values(mainTable, rowIndex, values, 1, 2, 3)
     
     # Description
     rowIndex += 2
-    addRowValues(mainTable, rowIndex, values, 1)
+    add_row_values(mainTable, rowIndex, values, 1)
     
     if mainTable[rowIndex + 1].text_content().strip() == "In-Depth Effect:":
         rowIndex += 2
     
     # Secondary Effect and Effect Chance
     rowIndex += 2
-    addRowValues(mainTable, rowIndex, values, 2)
+    add_row_values(mainTable, rowIndex, values, 2)
     
     # Z-Move things
     rowIndex += 2
     
     # Crit Rate, Speed Priority, Target
     rowIndex += 2
-    addRowValues(mainTable, rowIndex, values, 1, 2)
+    add_row_values(mainTable, rowIndex, values, 1, 2)
     
     # I don't know I guess it's a new fucking table now?
     mainTable = mainTable.getnext()
     rowIndex = 1
     
     # Physical Contact, Sound-Type, Punch Move, Snatchable, Z-Move
-    addRowValues(mainTable, rowIndex, values, 1, 2, 3, 4)
+    add_row_values(mainTable, rowIndex, values, 1, 2, 3, 4)
     
     # Defrost, Triple Battle, Magic Bounce, Protected, Mirror Move
     rowIndex += 2
-    addRowValues(mainTable, rowIndex, values, 1, 3, 4, 5)
+    add_row_values(mainTable, rowIndex, values, 1, 3, 4, 5)
     
     for value in values:
         out.write(value + '\n')

@@ -9,91 +9,111 @@ dashy = u'\u2014'
 leftQuote = u'\u201c'
 rightQuote = u'\u201d'
 
+
 def namesies(stringsies):
     return stringsies.strip().replace(' ', '_').replace('-', '_').replace('\'', '').upper()
 
-def removePrefix(string, prefix):
+
+def remove_prefix(string, prefix):
     assert string.startswith(prefix)
     return string[len(prefix):]
 
-# Listsies should be a list of strings 
+
+# Listsies should be a list of strings
 # This will remove all empty and whitespace characters from the list and return it
-def removeEmpty(listsies):
+def remove_empty(listsies):
     temp = []
     for string in listsies:
         if string.strip() == "":
             temp.append(string)
     for empty in temp:
         listsies.remove(empty)
-    
-def indexSwap(arr, i, j):
+
+
+def index_swap(arr, i, j):
     temp = arr[i]
     arr[i] = arr[j]
     arr[j] = temp
-    
+
+
 # I don't know why this works for category as well as type but it does
-def getImageName(imageElement):
-    imageName = imageElement.attrib["src"]
-    return imageName[imageName.find("type") + 5 : -4].capitalize()
+def get_image_name(image_element):
+    image_name = image_element.attrib["src"]
+    return image_name[image_name.find("type") + 5: -4].capitalize()
+
 
 # types should be an array that points to img elements
-def getTypes(typeImages):
-    assert len(typeImages) == 1 or len(typeImages) == 2
-    
-    types = ["No_Type"]*2
-    for i, typeImage in enumerate(typeImages):
+def get_types(type_images):
+    assert len(type_images) == 1 or len(type_images) == 2
+
+    types = ["No_Type"] * 2
+    for i, typeImage in enumerate(type_images):
         # imageName is of the form "...type/<typeName>.gif"
-        types[i] = getImageName(typeImage)
-        
+        types[i] = get_image_name(typeImage)
+
     return types
-    
+
+
 # Removes the form/forme suffix from the end
-def normalizeForm(form):
+def normalize_form(form):
     return re.sub(" Forme?$", "", form).strip()
 
-def replaceSpecial(s):
-    return s.replace(poke, "\u00e9").replace('  ', ' ').replace(rightTick, "'").replace(dashy, "--").replace(leftQuote, "\"").replace(rightQuote, "\"")
+
+def replace_special(s):
+    s = s.replace(poke, "\u00e9")
+    s = s.replace('  ', ' ')
+    s = s.replace(rightTick, "'")
+    s = s.replace(dashy, "--")
+    s = s.replace(leftQuote, "\"")
+    s = s.replace(rightQuote, "\"")
+    return s
+
 
 # Column indices should be specified as 1-indexed
-def addRowValues(mainTable, rowIndex, values, *columnIndices):
-    row = mainTable[rowIndex]
-    for columnIndex in columnIndices:
+def add_row_values(main_table, row_index, values, *column_indices):
+    row = main_table[row_index]
+    for columnIndex in column_indices:
         value = row.xpath('td')[columnIndex - 1].text.strip()
-        addValue(values, value)
+        add_value(values, value)
 
-def addValue(values, value):
+
+def add_value(values, value):
     value = value.strip()
-    value = replaceSpecial(value)
+    value = replace_special(value)
     values.append(value)
     print(value)
     return value
 
-def getElementText(table, element):
+
+def get_element_text(element):
     text = element.text
-    if not text is None:
+    if text is not None:
         return text
     return element.text_content()
 
-def getQueryText(table, query):
-    for querychild in query:
-        text = getElementText(table, querychild)
-        if not text is None:
+
+def get_query_text(query):
+    for query_child in query:
+        text = get_element_text(query_child)
+        if text is not None:
             return text
-        for child in querychild.getchildren():
-            text = getElementText(table, child)
-            if not text is None:
+        for child in query_child.getchildren():
+            text = get_element_text(child)
+            if text is not None:
                 return text
 
-def checkQueries(table, *queries):
+
+def check_queries(table, *queries):
     for queryString in queries:
         query = table.xpath(queryString)
-        text = getQueryText(table, query)
-        if not text is None:
+        text = get_query_text(query)
+        if text is not None:
             return text
 
-def checkHeader(table, header):
+
+def check_header(table, header):
     if table.tag == 'table':
-        text = checkQueries(table, 'tr[1]/td/b', 'tr[1]/td', 'thead/tr[1]/td')
-        if not text is None and text == header:
+        text = check_queries(table, 'tr[1]/td/b', 'tr[1]/td', 'thead/tr[1]/td')
+        if text is not None and text == header:
             return True
     return False

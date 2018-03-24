@@ -3,7 +3,8 @@
 
 from forms import AddedPokes
 
-def attackSubstitution(num, attack):
+
+def attack_substitution(num, attack):
     if attack is None:
         raise Exception()
     elif attack == 'After You':
@@ -243,10 +244,11 @@ def attackSubstitution(num, attack):
     elif attack == 'Judgment':
         # Intentional spelling change -- applies to all obviously
         return 'Judgement'
-    
+
     return attack
 
-def abilitySubstitution(num, ability):
+
+def ability_substitution(num, ability):
     if ability == 'Battery':
         # Charjabug
         if num == 737:
@@ -312,7 +314,7 @@ def abilitySubstitution(num, ability):
         # Elgyem/Beheeyem
         if num == 605 or num == 606:
             return 'Analytic'
-        # Wobbuffet/Wynaut and Meditite/Medicham and Dialga/Palkia/Giratina 
+        # Wobbuffet/Wynaut and Meditite/Medicham and Dialga/Palkia/Giratina
         # and Oranguru and the Tapus
         elif num == 202 or num == 360 \
                 or num == 307 or num == 308 \
@@ -323,11 +325,12 @@ def abilitySubstitution(num, ability):
     elif ability == 'Zen Mode':
         if num == 555:
             return 'No_Ability'
-    
+
     return ability
 
+
 # My personal type changes
-def typeSubstitution(num, types):
+def type_substitution(num, types):
     # Ninetales is now Psychic type
     if num == 38:
         assert types == ['Fire', 'No_Type']
@@ -364,6 +367,5 @@ def typeSubstitution(num, types):
     elif num == AddedPokes.MEGA_ABSOL.value:
         assert types == ['Dark', 'No_Type']
         return ['Dark', 'Fairy']
-    
-    return types
 
+    return types

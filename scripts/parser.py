@@ -4,19 +4,19 @@
 import requests
 from lxml import html
 
-from util import getQueryText
+from util import get_query_text
 
 
 class Parser:
-    def __init__(self, lookupNum):
-        self.lookupNum = lookupNum
+    def __init__(self, lookup_num):
+        self.lookupNum = lookup_num
         self.tableCheck = True
         
-        page = requests.get('http://www.serebii.net/pokedex-sm/' + str(lookupNum).zfill(3) + '.shtml')
+        page = requests.get('http://www.serebii.net/pokedex-sm/' + str(lookup_num).zfill(3) + '.shtml')
         tree = html.fromstring(page.text)
-        self.mainDiv = tree.xpath('/html/body/table[2]/tr[2]/td[2]/font/div[2]/div')[0];
+        self.mainDiv = tree.xpath('/html/body/table[2]/tr[2]/td[2]/font/div[2]/div')[0]
         
-        if lookupNum < 722:
+        if lookup_num < 722:
             self.index = 1
             self.infoTable = self.mainDiv.xpath('p[1]')[0].getnext()
         else:
@@ -25,22 +25,24 @@ class Parser:
             if self.lookupNum == 807:
                 self.index += 1
             self.infoTable = self.mainDiv.xpath('table[' + str(self.index) + ']')[0]
-            
+
+        self.backupTable = self.infoTable
+        self.backupIndex = self.index
         self.backup()
     
-    def updateTable(self, *headers):
+    def update_table(self, *headers):
         for header in headers:
-            if self.updateTableIndex(header, 0):
+            if self.update_table_index(header, 0):
                 return True
         return False
     
-    def updateTableIndex(self, header, headerIndex):
-        tempIndex = self.index
-        tempTableCheck = self.tableCheck
-        tempInfoTable = self.infoTable
+    def update_table_index(self, header, header_index):
+        temp_index = self.index
+        temp_table_check = self.tableCheck
+        temp_info_table = self.infoTable
     
         while True:
-            if self.checkHeader(header, headerIndex):
+            if self.check_header(header, header_index):
                 return True
     
             if self.lookupNum < 650:
@@ -51,8 +53,8 @@ class Parser:
                     self.infoTable = self.mainDiv.xpath('p[' + str(self.index) + ']')
     
                     if len(self.infoTable) == 0:
-                        self.index = tempIndex
-                        self.infoTable = tempInfoTable
+                        self.index = temp_index
+                        self.infoTable = temp_info_table
                         return False
     
                     self.infoTable = self.infoTable[0].getnext()
@@ -75,37 +77,37 @@ class Parser:
                         self.infoTable = self.mainDiv.xpath('p[' + str(self.index) + ']')
     
                         if len(self.infoTable) == 0:
-                            self.index = tempIndex;
-                            self.tableCheck = tempTableCheck
-                            self.infoTable = tempInfoTable
+                            self.index = temp_index
+                            self.tableCheck = temp_table_check
+                            self.infoTable = temp_info_table
                             return False
     
                         self.infoTable = self.infoTable[0].getnext()
 
     # I don't think this works in all scenarios but this shit is way too complicated to understand
-    def nextTable(self):
+    def next_table(self):
         if self.lookupNum < 722:
             self.infoTable = self.infoTable.getnext()
         else:
             self.index += 1
-            self.infoTable = self.mainDiv.xpath('table[' + str(self.index) + ']')[0]    
+            self.infoTable = self.mainDiv.xpath('table[' + str(self.index) + ']')[0]
 
-    def getSchemaIndex(self, schema, columnName):
+    def get_schema_index(self, schema, column_name):
         for index, column in enumerate(schema.getchildren()):
-            if column.text == columnName:
+            if column.text == column_name:
                 return index
-    
-    def checkQueries(self, *queries):
+
+    def check_queries(self, *queries):
         for queryString in queries:
             query = self.infoTable.xpath(queryString)
-            text = getQueryText(query)
-            if not text is None:
+            text = get_query_text(query)
+            if text is not None:
                 return text
     
-    def checkHeader(self, header, headerIndex):
+    def check_header(self, header, header_index):
         if self.infoTable.tag == 'table':
-            text = self.checkQueries('tr[1]/td/b', 'tr[1]/td', 'thead/tr[1]/td')
-            if not text is None and text[headerIndex:] == header:
+            text = self.check_queries('tr[1]/td/b', 'tr[1]/td', 'thead/tr[1]/td')
+            if text is not None and text[header_index:] == header:
                 return True
         return False
     
@@ -113,6 +115,6 @@ class Parser:
         self.backupTable = self.infoTable
         self.backupIndex = self.index
         
-    def restoreBackup(self):
+    def restore_backup(self):
         self.infoTable = self.backupTable
         self.index = self.backupIndex

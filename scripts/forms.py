@@ -3,6 +3,7 @@
 
 from enum import Enum, auto
 
+
 class Stat(Enum):
     HP = 0
     ATTACK = 1
@@ -10,6 +11,7 @@ class Stat(Enum):
     SP_ATTACK = 3
     SP_DEFENSE = 4
     SPEED = 5
+
 
 # Original Pokes require an enum since their number is subject to change
 class AddedPokes(Enum):
@@ -29,7 +31,8 @@ class AddedPokes(Enum):
     MEGA_BANNETTE = auto()
     MIDNIGHT_LYCANROC = auto()
     DUSK_LYCANROC = auto()
-    
+
+
 class FormConfig:
     def __init__(self, num):
         self.formName = None
@@ -44,9 +47,9 @@ class FormConfig:
         self.useMegaAbilities = True
         self.evDiffs = [0]*6
         self.isAlolan = False
-        baseExpSuffix = None
-        imageSuffix = None
-        megaSuffix = ""
+        base_exp_suffix = None
+        image_suffix = None
+        mega_suffix = ""
         
         # Flabebe has a stupid name with stupid special characters
         if num == 669:
@@ -114,9 +117,9 @@ class FormConfig:
             self.lookupNum = 6
             self.isMega = True
             self.name = "Rizardon"
-            megaSuffix = " X"
-            imageSuffix = "-mx"
-            baseExpSuffix = "" # Use the same base exp as Charizard
+            mega_suffix = " X"
+            image_suffix = "-mx"
+            base_exp_suffix = ""  # Use the same base exp as Charizard
         elif num == AddedPokes.MEGA_MAWILE.value:
             self.lookupNum = 303
             self.isMega = True
@@ -185,76 +188,75 @@ class FormConfig:
             self.lookupNum = 745
             self.name = "Lougaroc"
             self.formIndex = 1
-            imageSuffix = "-m"
+            image_suffix = "-m"
         elif num == AddedPokes.DUSK_LYCANROC.value:
             self.formName = "Dusk"
             self.normalForm = False
             self.lookupNum = 745
             self.name = "Lugarugan"
             self.formIndex = 2
-            imageSuffix = "-d"
+            image_suffix = "-d"
         
         if self.isAlolan:
             self.formName = "Alola"
             self.normalForm = False
             self.typeFormName = "Alolan"
             self.formIndex = 1
-            imageSuffix = "-a"
+            image_suffix = "-a"
         
         # Basculin, Meowstic, Magearna (fucking Soul-Heart has a dash)
         self.useAbilitiesList = num in [550, 678, 801]
         
         if self.isMega:
-            self.megaName = "Mega Evolution" + megaSuffix
-            if baseExpSuffix is None:
-                baseExpSuffix = "M"
-            if imageSuffix is None:
-                imageSuffix = "-m"
+            self.megaName = "Mega Evolution" + mega_suffix
+            if base_exp_suffix is None:
+                base_exp_suffix = "M"
+            if image_suffix is None:
+                image_suffix = "-m"
         else:
             assert not self.useMegaStats
-            assert megaSuffix == ""
+            assert mega_suffix == ""
             
-        if baseExpSuffix is None:
-            baseExpSuffix = ""        
-        if imageSuffix is None:
-            imageSuffix = ""
+        if base_exp_suffix is None:
+            base_exp_suffix = ""
+        if image_suffix is None:
+            image_suffix = ""
             
-        self.baseExpName = str(self.lookupNum).zfill(3) + baseExpSuffix        
-        self.formImageName = str(self.lookupNum).zfill(3) + imageSuffix
-        self.pokedexImageName = str(self.lookupNum) + imageSuffix
+        self.baseExpName = str(self.lookupNum).zfill(3) + base_exp_suffix
+        self.formImageName = str(self.lookupNum).zfill(3) + image_suffix
+        self.pokedexImageName = str(self.lookupNum) + image_suffix
         
         if self.evFormName is None:
             self.evFormName = self.formName
         if self.typeFormName is None:
             self.typeFormName = self.formName
-        
-        
-    def hasForm(self, row, formIndex):
+
+    def has_form(self, row, form_index):
         # No form index implies there is only the normal form or all forms are treated the same
-        if formIndex is None:
+        if form_index is None:
             return True
         
-        for form in row[formIndex][0][0].getchildren():
-            if self.checkForm(form[0]):
+        for form in row[form_index][0][0].getchildren():
+            if self.check_form(form[0]):
                 return True
             
         return False
     
-    def hasFormFromTable(self, table):
-        hasImage = False
+    def has_form_from_table(self, table):
+        has_image = False
         for form in table.getchildren():
             if form.tag != "img":
                 continue
             
-            hasImage = True
-            if self.checkForm(form):
+            has_image = True
+            if self.check_form(form):
                 return True
     
         # If you didn't find any image tags, then there are not multiple forms
         # So the only form is the normal form        
-        return not hasImage
+        return not has_image
     
-    def checkForm(self, form):
-        imageName = form.attrib["src"]
-        if imageName.endswith('/' + self.formImageName + '.png'):
+    def check_form(self, form):
+        image_name = form.attrib["src"]
+        if image_name.endswith('/' + self.formImageName + '.png'):
             return True

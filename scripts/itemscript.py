@@ -4,15 +4,17 @@
 import requests
 from lxml import html
 
-from util import poke, getImageName, checkHeader, addValue
+from util import poke, get_image_name, check_header, add_value
 
 
-def updateTable(table, header):
+def update_table(table, header):
     while True:
-        if table is None or checkHeader(table, header):
-            return table
-        
+        if table is None or check_header(table, header):
+            break
+
         table = table.getnext()
+    return table
+
 
 f = open("items.in", "r")
 out = open("items.out", "w")
@@ -25,13 +27,13 @@ for i, itemName in enumerate(f):
     
     page = requests.get('http://www.serebii.net/itemdex/' + lookupName + '.shtml')
     tree = html.fromstring(page.text)
-    mainTable = tree.xpath('/html/body/table[2]/tr[2]/td[2]/font/p[1]')[0].getnext().getnext()
+    main_table = tree.xpath('/html/body/table[2]/tr[2]/td[2]/font/p[1]')[0].getnext().getnext()
     
     # Sprites, Item Type, Japanese Name, Fling Damage, Price
-    row = mainTable[1]
+    row = main_table[1]
     
     # Item Type
-    itemType = addValue(values, row[1][0].text)
+    itemType = add_value(values, row[1][0].text)
     
     fling = '0'
     price = '0'
@@ -43,36 +45,36 @@ for i, itemName in enumerate(f):
             
         # Price (last column)
         priceElement = row[-1].xpath('table/tr/td[2]')[0]
-        if not priceElement.text is None:
+        if priceElement.text is not None:
             price = priceElement.text
-    addValue(values, fling)
-    addValue(values, price)
+    add_value(values, fling)
+    add_value(values, price)
     
     # <br>, <br>, Attainable In
-    mainTable = mainTable.getnext().getnext().getnext()
+    main_table = main_table.getnext().getnext().getnext()
     
     # <br>, <br>, In-Depth Effect (or Berry Table info things)
-    mainTable = mainTable.getnext().getnext().getnext()
+    main_table = main_table.getnext().getnext().getnext()
     
     ngType = 'No_Type'
     ngPow = '0'
     if itemType == 'Berry':
         # Natural Gift Type, Natural Gift Power, Colour
-        row = mainTable[1]
+        row = main_table[1]
         
-        ngType = getImageName(row[0].xpath('a/img')[0])
+        ngType = get_image_name(row[0].xpath('a/img')[0])
         ngPow = row[1].text
-    addValue(values, ngType)
-    addValue(values, ngPow)
+    add_value(values, ngType)
+    add_value(values, ngPow)
     
     # <br>, Flavour Text
-    mainTable = updateTable(mainTable, 'Flavour Text')
+    main_table = update_table(main_table, 'Flavour Text')
     
     # Last Flavor Text row should be the most updated one
-    row = mainTable.xpath('tr')[-1]
+    row = main_table.xpath('tr')[-1]
     
     # Last column holds the flavor text (first ones have the game name)
-    addValue(values, row[-1].text)
+    add_value(values, row[-1].text)
     
     for value in values:
         out.write(value + '\n')

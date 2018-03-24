@@ -8,36 +8,37 @@ from lxml import html
 
 from forms import Stat, AddedPokes, FormConfig
 from parser import Parser
-from substitutions import attackSubstitution, abilitySubstitution, typeSubstitution
-from util import namesies, removePrefix, removeEmpty, indexSwap, getTypes, normalizeForm, replaceSpecial, dashy
+from substitution import attack_substitution, ability_substitution, type_substitution
+from util import namesies, remove_prefix, remove_empty, index_swap, get_types, normalize_form, replace_special, dashy
 
 
-def getBaseExpMap():
+def get_base_exp_map():
     page = requests.get('https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_effort_value_yield')
     tree = html.fromstring(page.text)
 
     table = tree.xpath('//*[@id="mw-content-text"]/table[1]/tr')
-    baseExpMap = {}
+    base_exp_map = {}
     for i, row in enumerate(table):
         # Schema
         if i == 0:
             continue
 
         num = row[0].text_content().strip()
-        baseExp = int(row[3].text_content().replace("*", "").strip())
+        base_exp = int(row[3].text_content().replace("*", "").strip())
         
         # First one is likely the base form
-        if num in baseExpMap:
+        if num in base_exp_map:
             continue
         
-        baseExpMap[num] = baseExp
+        base_exp_map[num] = base_exp
     
-    return baseExpMap
+    return base_exp_map
 
-with open ("../temp.txt", "w") as f:
+
+with open("../temp.txt", "w") as f:
     startTime = time.time()
     
-    baseExpMap = getBaseExpMap()    
+    baseExpMap = get_base_exp_map()
     for num in range(1, list(AddedPokes)[-1].value + 1):
 #    for num in [1]:
         formConfig = FormConfig(num)
@@ -47,10 +48,10 @@ with open ("../temp.txt", "w") as f:
         if formConfig.isMega:
             # First row is Mega Evolution title
             infoIndex += 1
-            assert parser.updateTable(formConfig.megaName)
+            assert parser.update_table(formConfig.megaName)
             
         # Picture, Name, Other Names, No., Gender Ratio, Type
-        row = parser.infoTable.xpath('tr[' + str(infoIndex) +  ']')[0]
+        row = parser.infoTable.xpath('tr[' + str(infoIndex) + ']')[0]
             
         formConfig.lookupName = row.xpath('td[2]')[0].text
         if formConfig.name is None:
@@ -85,18 +86,18 @@ with open ("../temp.txt", "w") as f:
         typesCell = row.xpath('td[6]')[0]
         types = typesCell.xpath('a/img')
         if len(types) > 0:
-            types = getTypes(types)
+            types = get_types(types)
         # Multiple forms
         else:
             types = None
             forms = typesCell.xpath('table[1]/tr')
             for form in forms:
-                typeFormName = normalizeForm(form[0].text)
+                typeFormName = normalize_form(form[0].text)
                 if typeFormName == formConfig.typeFormName:
-                    types = getTypes(form[1].xpath('a/img'))
+                    types = get_types(form[1].xpath('a/img'))
                     break
                     
-        types = typeSubstitution(num, types)
+        types = type_substitution(num, types)
         type1 = types[0]
         type2 = types[1]
                 
@@ -106,7 +107,7 @@ with open ("../temp.txt", "w") as f:
         # Next row of the info table (skip two for the schema of the row)
         # Classification, Height, Weight, Capture Rate, Base Egg Steps
         infoIndex += 2
-        row = parser.infoTable.xpath('tr[' + str(infoIndex) +  ']')[0]
+        row = parser.infoTable.xpath('tr[' + str(infoIndex) + ']')[0]
 
         # Hoopa apparently has a different classification for its different forms
         if num == 720:
@@ -154,9 +155,9 @@ with open ("../temp.txt", "w") as f:
         print("Egg Steps: " + str(eggSteps))
 
         if formConfig.isMega and not formConfig.useMegaAbilities:
-            parser.restoreBackup()
+            parser.restore_backup()
 
-        assert parser.updateTable('Abilities')
+        assert parser.update_table('Abilities')
         ability1 = None
         ability2 = None
         if formConfig.useAbilitiesList:
@@ -169,11 +170,11 @@ with open ("../temp.txt", "w") as f:
                 ability2 = "No_Ability"
         else:
             allAbilities = parser.infoTable.xpath('tr[1]/td')[0].text_content()
-            allAbilities = removePrefix(allAbilities, "Abilities: ")
+            allAbilities = remove_prefix(allAbilities, "Abilities: ")
             allAbilities = allAbilities.replace("(Hidden)", "")
             allAbilities = allAbilities.replace("(Hidden Ability)", "")
             allAbilities = re.split("\)", allAbilities)
-            removeEmpty(allAbilities)
+            remove_empty(allAbilities)
             for formAbilities in allAbilities:
                 formIndex = formAbilities.rfind("(")
                 if formIndex == -1:
@@ -183,7 +184,7 @@ with open ("../temp.txt", "w") as f:
                 else:
                     assert len(allAbilities) > 1
                     form = formAbilities[formIndex + 1:].strip()
-                    form = normalizeForm(form)
+                    form = normalize_form(form)
                     if formConfig.formName != form:
                         continue
                     formAbilities = formAbilities[:formIndex]
@@ -197,11 +198,11 @@ with open ("../temp.txt", "w") as f:
                 else:
                     ability2 = "No_Ability"
                 break
-        assert not ability1 is None
-        assert not ability2 is None
+        assert ability1 is not None
+        assert ability2 is not None
             
-        ability1 = abilitySubstitution(num, ability1)
-        ability2 = abilitySubstitution(num, ability2)
+        ability1 = ability_substitution(num, ability1)
+        ability2 = ability_substitution(num, ability2)
         if ability1 == 'No_Ability':
             tempAbility = ability1
             ability1 = ability2
@@ -211,8 +212,8 @@ with open ("../temp.txt", "w") as f:
         print("Ability2: " + ability2)
 
         # Next table -- the one with the abilities and such
-        parser.restoreBackup()
-        parser.nextTable()
+        parser.restore_backup()
+        parser.next_table()
         
         # Experience Growth, Base Happiness, Effort Values Earned, S.O.S. Calling
         row = parser.infoTable.xpath('tr[4]')[0]
@@ -232,8 +233,8 @@ with open ("../temp.txt", "w") as f:
             
             # String doesn't contain EV info -- new form name
             if evIndex == -1:
-                form = normalizeForm(evString)
-                assert not form in evMap
+                form = normalize_form(evString)
+                assert form not in evMap
                 evMap[form] = [0]*6
                 continue
             
@@ -268,7 +269,7 @@ with open ("../temp.txt", "w") as f:
             
         # Swap Attack and Sp. Attack for Rizardon
         if num == AddedPokes.MEGA_CHARIZARD.value:
-            indexSwap(evs, Stat.ATTACK.value, Stat.SP_ATTACK.value)
+            index_swap(evs, Stat.ATTACK.value, Stat.SP_ATTACK.value)
 
         # Add diffs
         evs = [sum(x) for x in zip(evs, formConfig.evDiffs)]
@@ -276,8 +277,8 @@ with open ("../temp.txt", "w") as f:
         print("Effort Values: " + str(evs))
         
         # Egg Group table
-        parser.nextTable()
-        parser.nextTable()
+        parser.next_table()
+        parser.next_table()
         
         eggGroup = parser.infoTable.xpath('tr[2]/td[2]')[0]
         if eggGroup.text is not None:
@@ -298,7 +299,7 @@ with open ("../temp.txt", "w") as f:
         print("Egg Group1: " + eggGroup1)
         print("Egg Group2: " + eggGroup2)
 
-        if parser.updateTable('Flavor Text'):
+        if parser.update_table('Flavor Text'):
             flavorText = parser.infoTable.xpath('tr[2]/td[2]')[0].text
             if flavorText == 'Sun':
                 flavorText = parser.infoTable.xpath('tr[2]/td[3]')[0].text
@@ -309,7 +310,7 @@ with open ("../temp.txt", "w") as f:
             flavorText = 'None'
         
         # Replace the special e character in the flavor text
-        flavorText = replaceSpecial(flavorText)
+        flavorText = replace_special(flavorText)
         print("Flavor Text: " + flavorText)
 
         print("Attacks:")
@@ -328,7 +329,7 @@ with open ("../temp.txt", "w") as f:
                              'Sun / Moon Level Up' + suffix,
                              formConfig.formName + " Form Level Up"]
         
-        assert parser.updateTable(*levelUpTables)
+        assert parser.update_table(*levelUpTables)
         attacks = []
         for i in range(2, len(parser.infoTable) - 1, 2):
             level = parser.infoTable[i][0].text
@@ -339,7 +340,7 @@ with open ("../temp.txt", "w") as f:
                 level = 0
                 
             attack = parser.infoTable[i][1][0].text
-            attack = attackSubstitution(num, attack)
+            attack = attack_substitution(num, attack)
             if attack is None:
                 assert level == 0
                 continue
@@ -349,10 +350,10 @@ with open ("../temp.txt", "w") as f:
 
         print("TMS:")
         tms = []
-        if parser.updateTable('TM & HM Attacks'):    
+        if parser.update_table('TM & HM Attacks'):
             schema = parser.infoTable[1]
-            attackIndex = parser.getSchemaIndex(schema, "Attack Name")
-            formIndex = parser.getSchemaIndex(schema, "Form")
+            attackIndex = parser.get_schema_index(schema, "Attack Name")
+            formIndex = parser.get_schema_index(schema, "Form")
             
             for i in range(2, len(parser.infoTable) - 1, 2):
                 row = parser.infoTable[i]
@@ -361,7 +362,7 @@ with open ("../temp.txt", "w") as f:
                 if attack in ["Frustration", "Return", "Quash"]:
                     continue
                 
-                if not formConfig.hasForm(row, formIndex):
+                if not formConfig.has_form(row, formIndex):
                     continue
                 
                 tms.append(attack)
@@ -381,9 +382,9 @@ with open ("../temp.txt", "w") as f:
 
         print("Egg Moves:")
         eggMoves = []
-        if parser.updateTable('Egg Moves '):
+        if parser.update_table('Egg Moves '):
             schema = parser.infoTable[1]
-            attackIndex = parser.getSchemaIndex(schema, "Attack Name")
+            attackIndex = parser.get_schema_index(schema, "Attack Name")
             
             for i in range(2, len(parser.infoTable) - 1, 2):
                 row = parser.infoTable[i]
@@ -391,14 +392,15 @@ with open ("../temp.txt", "w") as f:
                 attack = row[attackIndex][0].text
                 if attack == "Ion Deluge":
                     attack = "Electrify"
-                elif attack in ["Helping Hand", "Ally Switch", "After You", "Wide Guard", "Quash", "Rage Powder", "Follow Me", "Spotlight"]:
+                elif attack in ["Helping Hand", "Ally Switch", "After You", "Wide Guard", "Quash", "Rage Powder",
+                                "Follow Me", "Spotlight"]:
                     continue
                     
                 # This column does not have a name in the schema
                 # It is always present since it additionally contains the details
                 # For Pokemon with multiple forms, these will additionally be included here
                 detailsCol = row[-1]
-                if not formConfig.hasFormFromTable(detailsCol):
+                if not formConfig.has_form_from_table(detailsCol):
                     continue
                 
                 eggMoves.append(attack)
@@ -406,12 +408,12 @@ with open ("../temp.txt", "w") as f:
 
         print("Move Tutor Moves:")
         tutorMoves = []
-        if parser.updateTable('Move Tutor Attacks'):
+        if parser.update_table('Move Tutor Attacks'):
             table = parser.infoTable.xpath('thead/tr')
             
             schema = table[1]
-            attackIndex = parser.getSchemaIndex(schema, "Attack Name")
-            formIndex = parser.getSchemaIndex(schema, "Form")
+            attackIndex = parser.get_schema_index(schema, "Attack Name")
+            formIndex = parser.get_schema_index(schema, "Form")
             
             for i in range(2, len(table) - 1, 2):
                 row = table[i]
@@ -420,17 +422,17 @@ with open ("../temp.txt", "w") as f:
                 if attack in ["Helping Hand", "After You", "Ally Switch"]:
                     continue
                 
-                if not formConfig.hasForm(row, formIndex):
+                if not formConfig.has_form(row, formIndex):
                     continue
                 
                 tutorMoves.append(attack)
                 print(attack)
-        if parser.updateTable('Ultra Sun/Ultra Moon Move Tutor Attacks'):
+        if parser.update_table('Ultra Sun/Ultra Moon Move Tutor Attacks'):
             table = parser.infoTable.xpath('thead/tr')
             
             schema = table[1]
-            attackIndex = parser.getSchemaIndex(schema, "Attack Name")
-            formIndex = parser.getSchemaIndex(schema, "Form")
+            attackIndex = parser.get_schema_index(schema, "Attack Name")
+            formIndex = parser.get_schema_index(schema, "Form")
             
             for i in range(2, len(table) - 1, 2):
                 row = table[i]
@@ -439,7 +441,7 @@ with open ("../temp.txt", "w") as f:
                 if attack in ["Helping Hand", "After You", "Ally Switch"]:
                     continue
                 
-                if not formConfig.hasForm(row, formIndex):
+                if not formConfig.has_form(row, formIndex):
                     continue
                 
                 tutorMoves.append(attack)
@@ -475,7 +477,7 @@ with open ("../temp.txt", "w") as f:
             statsTables = ["Stats - " + formConfig.formName + " Form", "Stats"]
         else:
             statsTables = ["Stats"]
-        assert parser.updateTable(*statsTables)
+        assert parser.update_table(*statsTables)
         
         stats = [0]*6
         for i in range(0, len(stats)):
@@ -486,8 +488,8 @@ with open ("../temp.txt", "w") as f:
             stats[Stat.ATTACK.value] -= 30
         # Use Charizard's stats with modifications
         if num == AddedPokes.MEGA_CHARIZARD.value:
-            indexSwap(stats, Stat.ATTACK.value, Stat.SP_ATTACK.value)
-            indexSwap(stats, Stat.DEFENSE.value, Stat.SP_DEFENSE.value)
+            index_swap(stats, Stat.ATTACK.value, Stat.SP_ATTACK.value)
+            index_swap(stats, Stat.DEFENSE.value, Stat.SP_DEFENSE.value)
             stats[Stat.ATTACK.value] += 10
             stats[Stat.SPEED.value] -= 10
         # Use Absol's stats with increase speed

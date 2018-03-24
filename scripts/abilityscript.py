@@ -4,7 +4,7 @@
 import requests
 from lxml import html
 
-from util import addRowValues
+from util import add_row_values
 
 f = open("abilities.in", "r")
 out = open("abilities.out", "w")
@@ -18,8 +18,8 @@ for i, abilityName in enumerate(f):
     page = requests.get('http://www.serebii.net/abilitydex/' + lookupName + '.shtml')
     tree = html.fromstring(page.text)
     mainTable = tree.xpath('/html/body/table[2]/tr[2]/td[2]/font/p[2]')[0].getnext()
-    
-    addRowValues(mainTable, 3, values, 1)
+
+    add_row_values(mainTable, 3, values, 1)
     
     for value in values:
         out.write(value + '\n')
