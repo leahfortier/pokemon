@@ -19,10 +19,29 @@ import util.file.FileIO;
 import util.file.Folder;
 import util.string.StringUtils;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
 import java.io.File;
+import java.io.IOException;
 
 public class ImageTest extends BaseTest {
+
+    @Test
+    public void metadataTest() throws IOException {
+        for (File imageFile : FileIO.listFiles(Folder.IMAGES)) {
+            if (imageFile.isDirectory() || imageFile.isHidden() || imageFile.getName().endsWith(".txt")) {
+                continue;
+            }
+
+            Assert.assertTrue(imageFile.getPath(), imageFile.getName().endsWith(".png"));
+
+            BufferedImage rawImage = ImageIO.read(imageFile);
+            Assert.assertEquals(imageFile.getPath(), 4, rawImage.getSampleModel().getNumBands());
+            Assert.assertEquals(imageFile.getPath(), DataBuffer.TYPE_BYTE, rawImage.getSampleModel().getDataType());
+        }
+    }
+
     @Test
     public void missingTest() {
         for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {

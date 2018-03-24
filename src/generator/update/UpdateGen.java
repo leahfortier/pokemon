@@ -37,7 +37,7 @@ public class UpdateGen {
 //        pokemonInfoStuff();
 //        updateNum();
 //        resizeImages();
-        trimImages();
+//        trimImages();
 //        translateAlBhed();
 //        addCondition();
 //        outputShowdownImagesFile();
@@ -159,8 +159,7 @@ public class UpdateGen {
             BufferedImage image = FileIO.readImage(imageFile);
             BufferedImage trimmed = ImageUtils.trimImage(image);
 
-            String newName = imageFile.getName();
-            File file = new File(outputLocation + newName);
+            File file = new File(outputLocation + imageFile.getName());
             FileIO.writeImage(trimmed, file);
 
             System.out.println("Writing trimmed image to " + file.getPath());
