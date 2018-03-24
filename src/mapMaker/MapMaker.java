@@ -56,7 +56,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class MapMaker extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener, ListSelectionListener {
     public final Canvas canvas;
@@ -310,7 +309,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
             return false;
         }
 
-        String[] availableMaps = Arrays.stream(getAvailableMaps(region)).map(MapName::getMapName).collect(Collectors.toList()).toArray(new String[0]);
+        String[] availableMaps = Arrays.stream(getAvailableMaps(region)).map(MapName::getMapName).toArray(String[]::new);
         String map = (String)JOptionPane.showInputDialog(this, "Select a map", "Load", JOptionPane.PLAIN_MESSAGE, null, availableMaps, availableMaps[0]);
         if (StringUtils.isNullOrEmpty(map)) {
             return false;
@@ -373,19 +372,17 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     public String[] getAvailableRegions() {
         File mapsFolder = new File(getPathWithRoot(Folder.MAPS));
         return FileIO.listDirectories(mapsFolder)
-                     .stream()
-                     .map(File::getName)
-                     .collect(Collectors.toList())
-                     .toArray(new String[0]);
+                .stream()
+                .map(File::getName)
+                .toArray(String[]::new);
     }
 
     public MapName[] getAvailableMaps(String region) {
         File regionFolder = new File(FileIO.makeFolderPath(Folder.MAPS, region));
         return FileIO.listDirectories(regionFolder)
-                     .stream()
-                     .map(file -> new MapName(region, file.getName()))
-                     .collect(Collectors.toList())
-                     .toArray(new MapName[0]);
+                .stream()
+                .map(file -> new MapName(region, file.getName()))
+                .toArray(MapName[]::new);
     }
 
     // TODO: I still never figured out what root is doing
@@ -551,7 +548,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
             }
         }
 
-        if (event.getModifiers() == Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) {
+        if (event.getModifiersEx() == Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) {
             controlKeyDown = true;
         }
     }
@@ -563,7 +560,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
             this.previousToolType = null;
         }
 
-        if (event.getModifiers() != Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) {
+        if (event.getModifiersEx() != Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) {
             controlKeyDown = false;
         }
     }

@@ -18,7 +18,7 @@ public class ReverseIterable<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new Iterator<T>() {
+        return new Iterator<>() {
             private final ListIterator<? extends T> iterator = list.listIterator(list.size());
 
             @Override

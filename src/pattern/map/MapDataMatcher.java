@@ -28,9 +28,8 @@ public class MapDataMatcher implements JsonMatcher {
 
     public MapDataMatcher(Set<AreaMatcher> areaData, List<LocationTriggerMatcher> entities) {
         this.areas = areaData.stream()
-                             .sorted(Comparator.comparing(areaMatcher -> areaMatcher.getAreaData().getAreaName()))
-                             .collect(Collectors.toList())
-                             .toArray(new AreaMatcher[0]);
+                .sorted(Comparator.comparing(areaMatcher -> areaMatcher.getAreaData().getAreaName()))
+                .toArray(AreaMatcher[]::new);
 
         Map<TriggerModelType, List<LocationTriggerMatcher>> triggerMap = new EnumMap<>(TriggerModelType.class);
         for (TriggerModelType triggerModelType : TriggerModelType.values()) {

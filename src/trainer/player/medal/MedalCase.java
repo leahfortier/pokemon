@@ -145,7 +145,7 @@ public class MedalCase implements Serializable {
         }
     }
 
-    public void update(MedalTheme theme, int count) {
+    private void update(MedalTheme theme, int count) {
         this.themeCounters.put(theme, count);
         theme.checkThreshold(themeCounters.get(theme));
     }

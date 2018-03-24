@@ -1299,7 +1299,7 @@ Sacred Ash:
     Desc: This rare ash can revive all fainted Pok\u00e9mon in a party. In doing so, it also fully restores their maximum HP.
     Price: 50000
     Field:
-        public boolean use(Trainer t) {
+        private boolean use(Trainer t) {
             boolean healed = false;
             for (ActivePokemon p : t.getActiveTeam()) {
                 if (p.isActuallyDead()) {

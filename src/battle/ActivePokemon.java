@@ -591,12 +591,8 @@ public class ActivePokemon extends PartyPokemon {
         return this.heal(amount, true, b, message);
     }
 
-    public int healHealthFraction(double fraction, boolean checkEffects, Battle b, String message) {
-        return this.heal(checkEffects, b, message, () -> super.healHealthFraction(fraction));
-    }
-
     public int healHealthFraction(double fraction, Battle b, String message) {
-        return this.healHealthFraction(fraction, true, b, message);
+        return this.heal(true, b, message, () -> super.healHealthFraction(fraction));
     }
 
     // Don't think you'll make it out alive

@@ -234,9 +234,8 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
 
     private boolean isIgnored(KeyEvent keyEvent) {
         return IGNORED_INPUT_KEYS.stream()
-                                 .map(ControlKey::getKey)
-                                 .filter(key -> key.isKey(keyEvent.getKeyChar()))
-                                 .count() > 0;
+                .map(ControlKey::getKey)
+                .anyMatch(key -> key.isKey(keyEvent.getKeyChar()));
     }
 
     @Override

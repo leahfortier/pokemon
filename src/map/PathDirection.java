@@ -13,7 +13,7 @@ public enum PathDirection {
     DOWN('d', 0, 1),
     WAIT('w', 0, 0);
 
-    private static final Map<Character, PathDirection> characterDirectionMap = new HashMap<Character, PathDirection>() {{
+    private static final Map<Character, PathDirection> characterDirectionMap = new HashMap<>() {{
         for (PathDirection direction : PathDirection.values()) {
             this.put(direction.character, direction);
         }

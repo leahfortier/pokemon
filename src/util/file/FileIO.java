@@ -246,7 +246,7 @@ public class FileIO {
             return new PrintStream(fileName);
         } catch (FileNotFoundException e) {
             Global.error("Could not open output file " + fileName + ".");
-            return null;
+            return new PrintStream(new NullOutputStream()); // Just so I don't get NPE warnings since above exits
         }
     }
 
@@ -313,6 +313,6 @@ public class FileIO {
 
     public static class NullOutputStream extends OutputStream {
         @Override
-        public void write(int b) throws IOException {}
+        public void write(int b) {}
     }
 }

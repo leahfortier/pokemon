@@ -61,7 +61,7 @@ with open ("../temp.txt", "w") as f:
         maleRatio = row.xpath('td[5]')[0]
 
         # Genderless Pokemon
-        if maleRatio.text != None:
+        if maleRatio.text is not None:
             maleRatio = -1
         else:
             # Remove the % from the end and convert to float
@@ -280,7 +280,7 @@ with open ("../temp.txt", "w") as f:
         parser.nextTable()
         
         eggGroup = parser.infoTable.xpath('tr[2]/td[2]')[0]
-        if eggGroup.text != None:
+        if eggGroup.text is not None:
             eggGroup1 = "Undiscovered"
             eggGroup2 = "None"
         else:

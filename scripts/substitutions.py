@@ -87,7 +87,7 @@ def attackSubstitution(num, attack):
         elif num == 531:
             return 'Heal Bell'
         # Growlithe and Lillipup line
-        elif num == 58 or num >= 506 and num <= 508:
+        elif num == 58 or 506 <= num <= 508:
             return 'Howl'
         # Keldeo
         elif num == 647:
@@ -108,7 +108,7 @@ def attackSubstitution(num, attack):
         elif num == 542:
             return 'Me First'
         # Nidoran line
-        elif num >= 29 and num <= 33:
+        elif 29 <= num <= 33:
             return 'Poison Tail'
         # Alomomola
         elif num == 594:
@@ -160,7 +160,7 @@ def attackSubstitution(num, attack):
         elif num == 12 or num == 637:
             return 'Morning Sun'
         # Hoppip line
-        elif num >= 187 and num <= 189:
+        elif 187 <= num <= 189:
             return 'Silver Wind'
     elif attack == 'Return':
         # Lopunny
@@ -273,7 +273,7 @@ def abilitySubstitution(num, ability):
             return 'Water Absorb'
     elif ability == 'Minus':
         # Klink line
-        if num >= 599 and num <= 601:
+        if 599 <= num <= 601:
             return 'No_Ability'
         # Minun
         elif num == 312:
@@ -284,10 +284,10 @@ def abilitySubstitution(num, ability):
             return 'No_Ability'
     elif ability == 'Plus':
         # Klink line
-        if num >= 599 and num <= 601:
+        if 599 <= num <= 601:
             return 'Clear Body'
         # Mareep line
-        elif num >= 179 and num <= 181:
+        elif 179 <= num <= 181:
             return 'No_Ability'
         # Plusle
         elif num == 311:
@@ -306,7 +306,7 @@ def abilitySubstitution(num, ability):
             return 'Prankster'
     elif ability == 'Symbiosis':
         # Flabebe line
-        if num >= 669 and num <= 671:
+        if 669 <= num <= 671:
             return 'Flower Gift'
     elif ability == 'Telepathy':
         # Elgyem/Beheeyem
@@ -318,7 +318,7 @@ def abilitySubstitution(num, ability):
                 or num == 307 or num == 308 \
                 or num == 483 or num == 484 or num == 487 \
                 or num == 765 \
-                or num >= 785 and num <= 788:
+                or 785 <= num <= 788:
             return 'No_Ability'
     elif ability == 'Zen Mode':
         if num == 555:
@@ -353,11 +353,11 @@ def typeSubstitution(num, types):
         assert types == ['Electric', 'No_Type']
         return ['Electric', 'Dark']
     # Flabebe line is now Grass type
-    elif num >= 669 and num <= 671:
+    elif 669 <= num <= 671:
         assert types == ['Fairy', 'No_Type']
         return ['Fairy', 'Grass']
     # Goomy line is now Water type
-    elif num >= 704 and num <= 706:
+    elif 704 <= num <= 706:
         assert types == ['Dragon', 'No_Type']
         return ['Dragon', 'Water']
     # Mega Absol (Asbel) is Fairy type :)

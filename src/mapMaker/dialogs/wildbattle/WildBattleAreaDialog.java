@@ -13,7 +13,6 @@ import javax.swing.JComponent;
 import javax.swing.JTextField;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
     private final JComponent panel;
@@ -103,8 +102,7 @@ public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
         String[] encounterNames = wildBattleTriggers
                 .stream()
                 .map(WildBattleMatcher::getName)
-                .collect(Collectors.toList())
-                .toArray(new String[0]);
+                .toArray(String[]::new);
 
         encountersComboBox.setModel(new DefaultComboBoxModel<>(encounterNames));
 

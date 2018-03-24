@@ -104,7 +104,7 @@ import java.util.Set;
 public abstract class Item implements ItemInterface, Comparable<Item> {
     private static final long serialVersionUID = 1L;
 
-    protected final ItemNamesies namesies;
+    private final ItemNamesies namesies;
     private String description;
     private BagCategory bagCategory;
     private List<BattleBagCategory> battleBagCategories;
@@ -3570,7 +3570,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
     static class SacredAsh extends Item implements PlayerUseItem, BattleUseItem, HoldItem {
         private static final long serialVersionUID = 1L;
 
-        public boolean use(Trainer t) {
+        private boolean use(Trainer t) {
             boolean healed = false;
             for (ActivePokemon p : t.getActiveTeam()) {
                 if (p.isActuallyDead()) {

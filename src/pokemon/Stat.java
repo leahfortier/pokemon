@@ -10,8 +10,6 @@ import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import main.Global;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public enum Stat {
@@ -51,8 +49,8 @@ public enum Stat {
             }
         }
 
-        STATS = Collections.unmodifiableList(Arrays.asList(stats));
-        BATTLE_STATS = Collections.unmodifiableList(Arrays.asList(battleStats));
+        STATS = List.of(stats);
+        BATTLE_STATS = List.of(battleStats);
     }
 
     private final int index;

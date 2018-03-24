@@ -46,12 +46,12 @@ class Parser:
             if self.lookupNum < 650:
                 self.infoTable = self.infoTable.getnext()
                     
-                if self.infoTable == None:
+                if self.infoTable is None:
                     self.index += 1
                     self.infoTable = self.mainDiv.xpath('p[' + str(self.index) + ']')
     
                     if len(self.infoTable) == 0:
-                        self.index = tempIndex;
+                        self.index = tempIndex
                         self.infoTable = tempInfoTable
                         return False
     
@@ -70,7 +70,7 @@ class Parser:
                 else:
                     self.infoTable = self.infoTable.getnext()
     
-                    if self.infoTable == None:
+                    if self.infoTable is None:
                         self.index += 1
                         self.infoTable = self.mainDiv.xpath('p[' + str(self.index) + ']')
     

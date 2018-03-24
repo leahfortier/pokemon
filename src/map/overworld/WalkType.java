@@ -22,7 +22,7 @@ public enum WalkType {
     STAIRS_UP_RIGHT(0xFF00FF, true),
     STAIRS_UP_LEFT(0xFFC800, true);
 
-    private static final Map<Integer, WalkType> valueMap = new HashMap<Integer, WalkType>() {{
+    private static final Map<Integer, WalkType> valueMap = new HashMap<>() {{
         for (WalkType walkType : WalkType.values()) {
             this.put(walkType.getRGB(), walkType);
         }

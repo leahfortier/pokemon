@@ -206,17 +206,17 @@ class FormConfig:
         
         if self.isMega:
             self.megaName = "Mega Evolution" + megaSuffix
-            if baseExpSuffix == None:
+            if baseExpSuffix is None:
                 baseExpSuffix = "M"
-            if imageSuffix == None:
+            if imageSuffix is None:
                 imageSuffix = "-m"
         else:
             assert not self.useMegaStats
             assert megaSuffix == ""
             
-        if baseExpSuffix == None:
+        if baseExpSuffix is None:
             baseExpSuffix = ""        
-        if imageSuffix == None:
+        if imageSuffix is None:
             imageSuffix = ""
             
         self.baseExpName = str(self.lookupNum).zfill(3) + baseExpSuffix        
