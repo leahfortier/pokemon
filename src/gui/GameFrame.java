@@ -1,6 +1,5 @@
 package gui;
 
-import com.apple.eawt.Application;
 import draw.DrawUtils;
 import input.ControlKey;
 import input.InputControl;
@@ -18,6 +17,7 @@ import javax.swing.WindowConstants;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Taskbar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
@@ -37,7 +37,7 @@ public class GameFrame {
 
         frame.setTitle(Global.TITLE);
         frame.setIconImage(Global.FRAME_ICON);
-        Application.getApplication().setDockIconImage(Global.FRAME_ICON);
+        Taskbar.getTaskbar().setIconImage(Global.FRAME_ICON);
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
