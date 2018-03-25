@@ -573,7 +573,7 @@ public class AbilityTest extends BaseTest {
         Assert.assertFalse(attacking.isHoldingItem(battle));
         Assert.assertFalse(defending.isHoldingItem(battle));
         Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-//        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY)); // TODO: Fling isn't working for this
+        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
 
         battle.attackingFight(AttackNamesies.REFRESH);
         Assert.assertFalse(attacking.hasStatus());

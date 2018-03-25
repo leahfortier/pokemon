@@ -1341,7 +1341,7 @@ Guard Spec.:
     Desc: An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after it is used in battle.
     Price: 700
     BattleUse:
-        return PokemonEffectNamesies.GUARD_SPECIAL.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
+        return TeamEffectNamesies.GUARD_SPECIAL.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
         ###
 *
 X Accuracy:

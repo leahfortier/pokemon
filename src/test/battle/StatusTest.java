@@ -2,6 +2,7 @@ package test.battle;
 
 import battle.attack.AttackNamesies;
 import battle.effect.status.StatusNamesies;
+import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
@@ -137,10 +138,18 @@ public class StatusTest extends BaseTest {
         battle.defendingFight(AttackNamesies.SAFEGUARD);
         battle.attackingFight(AttackNamesies.TOXIC);
         Assert.assertFalse(defending.hasStatus());
+        Assert.assertTrue(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.SAFEGUARD));
 
         attacking.withAbility(AbilityNamesies.MOLD_BREAKER);
         battle.attackingFight(AttackNamesies.TOXIC);
         Assert.assertFalse(defending.hasStatus());
+        Assert.assertTrue(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.SAFEGUARD));
+
+        // Unless that ability is Inflitrator
+        attacking.withAbility(AbilityNamesies.INFILTRATOR);
+        battle.attackingFight(AttackNamesies.TOXIC);
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+        Assert.assertTrue(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.SAFEGUARD));
     }
 
     @Test

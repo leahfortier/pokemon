@@ -203,5 +203,12 @@ PayDay:
         player.getDatCashMoney(coins);
         ###
 *
+Safeguard:
+    Defog: "The effects of " + released.getName() + "'s Safeguard faded."
+    SafeguardEffect: Safeguard
+*
+GuardSpecial:
+    SafeguardEffect: Guard Special
+*
 GetDatCashMoneyTwice:
 *

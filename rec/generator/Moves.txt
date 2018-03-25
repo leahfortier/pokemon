@@ -779,7 +779,7 @@ Safeguard:
     PP: 25
     Type: Normal
     Cat: Status
-    PokemonEffect: Safeguard
+    TeamEffect: Safeguard
     SelfTarget: True
 *
 Captivate:

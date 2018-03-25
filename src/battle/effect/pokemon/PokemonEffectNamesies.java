@@ -31,7 +31,6 @@ import battle.effect.pokemon.PokemonEffect.Focusing;
 import battle.effect.pokemon.PokemonEffect.Foresight;
 import battle.effect.pokemon.PokemonEffect.Grounded;
 import battle.effect.pokemon.PokemonEffect.Grudge;
-import battle.effect.pokemon.PokemonEffect.GuardSpecial;
 import battle.effect.pokemon.PokemonEffect.GuardSplit;
 import battle.effect.pokemon.PokemonEffect.HalfWeight;
 import battle.effect.pokemon.PokemonEffect.HealBlock;
@@ -59,7 +58,6 @@ import battle.effect.pokemon.PokemonEffect.Protecting;
 import battle.effect.pokemon.PokemonEffect.QuickGuard;
 import battle.effect.pokemon.PokemonEffect.Raging;
 import battle.effect.pokemon.PokemonEffect.RaiseCrits;
-import battle.effect.pokemon.PokemonEffect.Safeguard;
 import battle.effect.pokemon.PokemonEffect.SandTomb;
 import battle.effect.pokemon.PokemonEffect.SelfConfusion;
 import battle.effect.pokemon.PokemonEffect.ShellTrap;
@@ -104,8 +102,6 @@ public enum PokemonEffectNamesies implements EffectNamesies {
     BRACING(Bracing::new),
     CONFUSION(Confusion::new),
     SELF_CONFUSION(SelfConfusion::new),
-    SAFEGUARD(Safeguard::new),
-    GUARD_SPECIAL(GuardSpecial::new),
     ENCORE(Encore::new),
     DISABLE(Disable::new),
     RAISE_CRITS(RaiseCrits::new),

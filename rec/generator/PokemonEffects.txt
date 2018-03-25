@@ -204,13 +204,6 @@ SelfConfusion:
         move = caster.getMove();
         ###
 *
-Safeguard:
-    Defog: "The effects of " + released.getName() + "'s Safeguard faded."
-    SafeguardEffect: Safeguard
-*
-GuardSpecial:
-    SafeguardEffect: Guard Special
-*
 Encore:
     FailAbility: Aroma Veil
     FailMessage:

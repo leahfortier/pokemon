@@ -1742,7 +1742,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         Safeguard() {
             super(AttackNamesies.SAFEGUARD, Type.NORMAL, MoveCategory.STATUS, 25, "The user creates a protective field that prevents status conditions for five turns.");
-            super.effects.add(PokemonEffectNamesies.SAFEGUARD);
+            super.effects.add(TeamEffectNamesies.SAFEGUARD);
             super.selfTarget = true;
         }
     }

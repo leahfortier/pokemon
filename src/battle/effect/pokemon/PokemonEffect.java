@@ -42,7 +42,6 @@ import battle.effect.InvokeInterfaces.StageChangingEffect;
 import battle.effect.InvokeInterfaces.StatChangingEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
-import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
@@ -880,77 +879,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             if (PokemonEffectNamesies.CONFUSION.getEffect().apply(b, p, p, CastSource.EFFECT, false)) {
                 Messages.add(p.getName() + " became confused due to fatigue!");
             }
-        }
-    }
-
-    static class Safeguard extends PokemonEffect implements StatusPreventionEffect, DefogRelease {
-        private static final long serialVersionUID = 1L;
-
-        Safeguard() {
-            super(PokemonEffectNamesies.SAFEGUARD, 5, 5, false, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
-        }
-
-        @Override
-        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return user.getName() + " is covered by a veil!";
-        }
-
-        @Override
-        public String getSubsideMessage(ActivePokemon victim) {
-            return "The effects of " + victim.getName() + "'s Safeguard faded.";
-        }
-
-        @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
-        }
-
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return "Safeguard protects " + victim.getName() + " from status conditions!";
-        }
-
-        @Override
-        public String getDefogReleaseMessage(ActivePokemon released) {
-            return "The effects of " + released.getName() + "'s Safeguard faded.";
-        }
-    }
-
-    static class GuardSpecial extends PokemonEffect implements StatusPreventionEffect {
-        private static final long serialVersionUID = 1L;
-
-        GuardSpecial() {
-            super(PokemonEffectNamesies.GUARD_SPECIAL, 5, 5, false, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
-        }
-
-        @Override
-        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return user.getName() + " is covered by a veil!";
-        }
-
-        @Override
-        public String getSubsideMessage(ActivePokemon victim) {
-            return "The effects of " + victim.getName() + "'s Guard Special faded.";
-        }
-
-        @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
-        }
-
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return "Guard Special protects " + victim.getName() + " from status conditions!";
         }
     }
 

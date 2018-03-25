@@ -12,6 +12,7 @@ import battle.effect.InvokeInterfaces.EndBattleEffect;
 import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.SimpleStatModifyingEffect;
+import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
@@ -620,6 +621,77 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
             Messages.add(player.getName() + " picked up " + coins + " pokedollars!");
             player.getDatCashMoney(coins);
+        }
+    }
+
+    static class Safeguard extends TeamEffect implements StatusPreventionEffect, DefogRelease {
+        private static final long serialVersionUID = 1L;
+
+        Safeguard() {
+            super(TeamEffectNamesies.SAFEGUARD, 5, 5, false, false);
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+        }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return user.getName() + " is covered by a veil!";
+        }
+
+        @Override
+        public String getSubsideMessage(ActivePokemon victim) {
+            return "The effects of " + victim.getName() + "'s Safeguard faded.";
+        }
+
+        @Override
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
+        }
+
+        @Override
+        public String statusPreventionMessage(ActivePokemon victim) {
+            return "Safeguard protects " + victim.getName() + " from status conditions!";
+        }
+
+        @Override
+        public String getDefogReleaseMessage(ActivePokemon released) {
+            return "The effects of " + released.getName() + "'s Safeguard faded.";
+        }
+    }
+
+    static class GuardSpecial extends TeamEffect implements StatusPreventionEffect {
+        private static final long serialVersionUID = 1L;
+
+        GuardSpecial() {
+            super(TeamEffectNamesies.GUARD_SPECIAL, 5, 5, false, false);
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+        }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return user.getName() + " is covered by a veil!";
+        }
+
+        @Override
+        public String getSubsideMessage(ActivePokemon victim) {
+            return "The effects of " + victim.getName() + "'s Guard Special faded.";
+        }
+
+        @Override
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
+        }
+
+        @Override
+        public String statusPreventionMessage(ActivePokemon victim) {
+            return "Guard Special protects " + victim.getName() + " from status conditions!";
         }
     }
 

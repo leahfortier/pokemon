@@ -6,11 +6,13 @@ import battle.effect.team.TeamEffect.DeadAlly;
 import battle.effect.team.TeamEffect.DoomDesire;
 import battle.effect.team.TeamEffect.FutureSight;
 import battle.effect.team.TeamEffect.GetDatCashMoneyTwice;
+import battle.effect.team.TeamEffect.GuardSpecial;
 import battle.effect.team.TeamEffect.HealSwitch;
 import battle.effect.team.TeamEffect.LightScreen;
 import battle.effect.team.TeamEffect.LuckyChant;
 import battle.effect.team.TeamEffect.PayDay;
 import battle.effect.team.TeamEffect.Reflect;
+import battle.effect.team.TeamEffect.Safeguard;
 import battle.effect.team.TeamEffect.Spikes;
 import battle.effect.team.TeamEffect.StealthRock;
 import battle.effect.team.TeamEffect.StickyWeb;
@@ -37,6 +39,8 @@ public enum TeamEffectNamesies implements EffectNamesies {
     HEAL_SWITCH(HealSwitch::new),
     DEAD_ALLY(DeadAlly::new),
     PAY_DAY(PayDay::new),
+    SAFEGUARD(Safeguard::new),
+    GUARD_SPECIAL(GuardSpecial::new),
     GET_DAT_CASH_MONEY_TWICE(GetDatCashMoneyTwice::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
