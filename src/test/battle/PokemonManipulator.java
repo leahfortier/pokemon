@@ -14,6 +14,10 @@ import trainer.Trainer;
 
 @FunctionalInterface
 interface PokemonManipulator {
+    default void manipulate(TestBattle battle) {
+        this.manipulate(battle, battle.getAttacking(), battle.getDefending());
+    }
+
     void manipulate(TestBattle battle, TestPokemon attacking, TestPokemon defending);
 
     static void useAttack(AttackNamesies attackNamesies, TestBattle battle, TestPokemon attacking, TestPokemon defending, boolean attackingTarget) {

@@ -216,9 +216,9 @@ public class StatusTest extends BaseTest {
         // Basic Burn Heal, make sure Antidote fails for burns
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
         Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED));
-        PokemonManipulator.useItem(ItemNamesies.ANTIDOTE, true, false).manipulate(battle, attacking, defending1);
+        PokemonManipulator.useItem(ItemNamesies.ANTIDOTE, true, false).manipulate(battle);
         Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED));
-        PokemonManipulator.useItem(ItemNamesies.BURN_HEAL).manipulate(battle, attacking, defending1);
+        PokemonManipulator.useItem(ItemNamesies.BURN_HEAL).manipulate(battle);
         Assert.assertFalse(attacking.hasStatus());
 
         // Make sure Antidote works for both bad poison and regular poison
@@ -227,22 +227,22 @@ public class StatusTest extends BaseTest {
         Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
 
         // Make sure burn heal doesn't heal poison
-        PokemonManipulator.useItem(ItemNamesies.BURN_HEAL, true, false).manipulate(battle, attacking, defending1);
+        PokemonManipulator.useItem(ItemNamesies.BURN_HEAL, true, false).manipulate(battle);
         Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
         Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
 
-        PokemonManipulator.useItem(ItemNamesies.ANTIDOTE).manipulate(battle, attacking, defending1);
+        PokemonManipulator.useItem(ItemNamesies.ANTIDOTE).manipulate(battle);
         Assert.assertFalse(attacking.hasStatus());
 
         battle.defendingFight(AttackNamesies.POISON_POWDER);
         Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
         Assert.assertFalse(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
 
-        PokemonManipulator.useItem(ItemNamesies.ANTIDOTE).manipulate(battle, attacking, defending1);
+        PokemonManipulator.useItem(ItemNamesies.ANTIDOTE).manipulate(battle);
         Assert.assertFalse(attacking.hasStatus());
 
         // Full Heal can't heal a status you don't have
-        PokemonManipulator.useItem(ItemNamesies.FULL_HEAL, true, false).manipulate(battle, attacking, defending1);
+        PokemonManipulator.useItem(ItemNamesies.FULL_HEAL, true, false).manipulate(battle);
         Assert.assertFalse(attacking.hasStatus());
 
         battle.attackingFight(AttackNamesies.SHEER_COLD);

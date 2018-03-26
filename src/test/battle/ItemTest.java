@@ -425,7 +425,7 @@ public class ItemTest extends BaseTest {
         TestPokemon attacking = battle.getAttacking().withItem(ItemNamesies.POWER_HERB);
         TestPokemon defending = battle.getDefending();
 
-        beforeFirstTurn.manipulate(battle, attacking, defending);
+        beforeFirstTurn.manipulate(battle);
 
         attacking.setMove(new Move(attackingMove));
         defending.setMove(new Move(AttackNamesies.SPLASH));
@@ -445,7 +445,7 @@ public class ItemTest extends BaseTest {
         Assert.assertEquals(attackingPP - (fullyExecuted ? 1 : 0), attacking.getMove().getPP());
         Assert.assertEquals(defendingPP - 1, defending.getMove().getPP());
 
-        afterFirstTurn.manipulate(battle, attacking, defending);
+        afterFirstTurn.manipulate(battle);
 
         battle.fight();
 
@@ -455,7 +455,7 @@ public class ItemTest extends BaseTest {
         Assert.assertEquals(attackingPP - (!isMultiTurn || skipCharge ? 2 : 1), attacking.getMove().getPP());
         Assert.assertEquals(defendingPP - 2, defending.getMove().getPP());
 
-        afterSecondTurn.manipulate(battle, attacking, defending);
+        afterSecondTurn.manipulate(battle);
     }
 
     @Test
@@ -513,5 +513,33 @@ public class ItemTest extends BaseTest {
         battle.attackingFight(AttackNamesies.ATTRACT);
         Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.INFATUATED));
         Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
+    }
+
+    @Test
+    public void healBlockTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        battle.fight(AttackNamesies.BELLY_DRUM, AttackNamesies.HEAL_BLOCK);
+        attacking.assertHealthRatio(.5);
+        defending.assertFullHealth();
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.HEAL_BLOCK));
+        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.HEAL_BLOCK));
+
+        // Heal Block doesn't affect Use Items -- (THEY STILL WORK)
+        PokemonManipulator.useItem(ItemNamesies.SITRUS_BERRY).manipulate(battle);
+        attacking.assertHealthRatio(.75, 1);
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.HEAL_BLOCK));
+
+        attacking.giveItem(ItemNamesies.SITRUS_BERRY);
+        battle.fight(AttackNamesies.ENDURE, AttackNamesies.HORN_DRILL);
+        Assert.assertEquals(attacking.getHpString(), 1, attacking.getHP());
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.HEAL_BLOCK));
+        Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.SITRUS_BERRY));
     }
 }

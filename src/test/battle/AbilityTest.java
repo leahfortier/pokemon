@@ -93,16 +93,13 @@ public class AbilityTest extends BaseTest {
     }
 
     private void wonderGuardTest(AttackNamesies attackNamesies, TestInfo testInfo, PokemonManipulator testSuccess) {
-        testInfo.defending(PokemonNamesies.SHEDINJA);
+        testInfo.defending(PokemonNamesies.SHEDINJA, AbilityNamesies.WONDER_GUARD);
 
         TestBattle battle = testInfo.createBattle();
         testInfo.manipulate(battle);
 
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.WONDER_GUARD);
-
         battle.attackingFight(attackNamesies);
-        testSuccess.manipulate(battle, attacking, defending);
+        testSuccess.manipulate(battle);
     }
 
     @Test
@@ -219,7 +216,7 @@ public class AbilityTest extends BaseTest {
         attacking.apply(beforePriority <= 0 || attacking.getAttack().isSelfTargetStatusMove(), attack, battle);
 
         battle.emptyHeal();
-        manipulator.manipulate(battle, attacking, defending);
+        manipulator.manipulate(battle);
 
         attacking.setupMove(attack, battle);
         Assert.assertEquals(afterPriority, battle.getAttackPriority(attacking));
@@ -416,7 +413,7 @@ public class AbilityTest extends BaseTest {
         attacking.withAbility(AbilityNamesies.SHEER_FORCE);
         battle.setExpectedDamageModifier(applies ? 1.3 : 1.0);
         battle.attackingFight(attackNamesies);
-        withSheerForceChecks.manipulate(battle, attacking, defending);
+        withSheerForceChecks.manipulate(battle);
 
         battle.emptyHeal();
         battle.clearAllEffects();
@@ -426,7 +423,7 @@ public class AbilityTest extends BaseTest {
         defending.withAbility(AbilityNamesies.SHEER_FORCE);
         battle.setExpectedDamageModifier(1.0);
         battle.attackingFight(attackNamesies);
-        withoutSheerForceChecks.manipulate(battle, attacking, defending);
+        withoutSheerForceChecks.manipulate(battle);
     }
 
     @Test
@@ -666,5 +663,83 @@ public class AbilityTest extends BaseTest {
         } else {
             TestUtils.assertGreater("", stanceChanger.getStat(battle, Stat.ATTACK), stanceChanger.getStat(battle, Stat.DEFENSE));
         }
+    }
+
+    @Test
+    public void dancerTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.JOLTEON, PokemonNamesies.SANDSHREW);
+        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.DANCER);
+        TestPokemon defending = battle.getDefending();
+
+        // Does not trigger if only the attacker is the dancer
+        battle.attackingFight(AttackNamesies.SWORDS_DANCE);
+        new TestStages().set(Stat.ATTACK, 2).test(attacking);
+        new TestStages().test(defending);
+
+        // Defending will user Swords Dance and then attacking will repeat using dancer
+        battle.defendingFight(AttackNamesies.SWORDS_DANCE);
+        new TestStages().set(Stat.ATTACK, 4).test(attacking);
+        new TestStages().set(Stat.ATTACK, 2).test(defending);
+
+        battle.clearAllEffects();
+        new TestStages().test(attacking);
+        new TestStages().test(defending);
+
+        // When both have Dancer they do not continuously dance forever
+        defending.withAbility(AbilityNamesies.DANCER);
+        battle.attackingFight(AttackNamesies.SWORDS_DANCE);
+        new TestStages().set(Stat.ATTACK, 2).test(attacking);
+        new TestStages().set(Stat.ATTACK, 2).test(defending);
+
+        // Revelation Dance will fail (electric against ground) so it will not be repeated in the dance
+        battle.attackingFight(AttackNamesies.REVELATION_DANCE);
+        attacking.assertFullHealth();
+        defending.assertFullHealth();
+
+        // Feather Dance reduces attack by 2
+        battle.attackingFight(AttackNamesies.FEATHER_DANCE);
+        new TestStages().test(attacking);
+        new TestStages().test(defending);
+
+        // Magic Bounce will reflect the Feather Dance back on the Dancer,
+        // but it will NOT count as the opponent using a dance move
+        defending.withAbility(AbilityNamesies.MAGIC_BOUNCE);
+        battle.attackingFight(AttackNamesies.FEATHER_DANCE);
+        new TestStages().set(Stat.ATTACK, -2).test(attacking);
+        new TestStages().test(defending);
+
+        battle.attackingFight(AttackNamesies.SWORDS_DANCE);
+        new TestStages().test(attacking);
+        new TestStages().test(defending);
+
+        // Defending will use Feather Dance normally
+        // Dancer will then copy Feather Dance
+        // Magic Bounce will then reflect that
+        battle.defendingFight(AttackNamesies.FEATHER_DANCE);
+        new TestStages().set(Stat.ATTACK, -4).test(attacking);
+        new TestStages().test(defending);
+
+        battle.clearAllEffects();
+
+        // If the Dancer is under the effects of Taunt, then it won't be able to copy a status dance move
+        defending.withAbility(AbilityNamesies.DANCER);
+        battle.defendingFight(AttackNamesies.TAUNT);
+        battle.defendingFight(AttackNamesies.SWORDS_DANCE);
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.TAUNT));
+        new TestStages().test(attacking);
+        new TestStages().set(Stat.ATTACK, 2).test(defending);
+
+        battle.clearAllEffects();
+
+        // Attacking will use Snatch
+        // Defending will use Swords Dance
+        // Attacking will snatch it
+        // Dancer will then copy Swords Dance
+        // Note: I don't think this is actually the intended behavior
+        battle.fight(AttackNamesies.SNATCH, AttackNamesies.SWORDS_DANCE);
+        new TestStages().set(Stat.ATTACK, 4).test(attacking);
+        new TestStages().test(defending);
+
+        // TODO: Petal Dance and Lunar Dance
     }
 }

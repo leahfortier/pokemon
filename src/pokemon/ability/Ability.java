@@ -48,7 +48,7 @@ import battle.effect.InvokeInterfaces.OpponentStatusReceivedEffect;
 import battle.effect.InvokeInterfaces.OpponentTakeDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentTrappingEffect;
 import battle.effect.InvokeInterfaces.PhysicalContactEffect;
-import battle.effect.InvokeInterfaces.PowderMove;
+import battle.effect.InvokeInterfaces.PowderBlocker;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.InvokeInterfaces.PriorityChangeEffect;
 import battle.effect.InvokeInterfaces.RepelLowLevelEncounterEffect;
@@ -802,7 +802,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Grass-type Pokemon, Pokemon with Overcoat, and Pokemon holding the Safety Goggles are immune to Effect Spore
-            if (user.isType(b, Type.GRASS) || user.hasAbility(AbilityNamesies.OVERCOAT) || user.isHoldingItem(b, ItemNamesies.SAFETY_GOGGLES)) {
+            if (PowderBlocker.containsPowderBlocker(b, user)) {
                 return;
             }
 
@@ -2029,7 +2029,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class Overcoat extends Ability implements WeatherBlockerEffect, AttackBlocker {
+    static class Overcoat extends Ability implements WeatherBlockerEffect, PowderBlocker {
         private static final long serialVersionUID = 1L;
 
         Overcoat() {
@@ -2039,11 +2039,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public boolean block(WeatherNamesies weather) {
             return true;
-        }
-
-        @Override
-        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttack() instanceof PowderMove;
         }
 
         @Override

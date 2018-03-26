@@ -32,6 +32,7 @@ import battle.effect.InvokeInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.InvokeInterfaces.OpponentTrappingEffect;
 import battle.effect.InvokeInterfaces.PassableEffect;
 import battle.effect.InvokeInterfaces.PhysicalContactEffect;
+import battle.effect.InvokeInterfaces.PowderBlocker;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.InvokeInterfaces.ProtectingEffect;
 import battle.effect.InvokeInterfaces.RapidSpinRelease;
@@ -2657,7 +2658,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Powder extends PokemonEffect implements BeforeTurnEffect {
+    static class Powder extends PokemonEffect implements SelfAttackBlocker {
         private static final long serialVersionUID = 1L;
 
         Powder() {
@@ -2666,38 +2667,43 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
-        }
-
-        @Override
-        public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-            // Fire-type moves makes the user explode
-            if (p.isAttackType(Type.FIRE)) {
-                Messages.add("The powder exploded!");
-                p.reduceHealthFraction(b, 1/4.0);
-                return false;
-            }
-
-            return true;
+            return !(PowderBlocker.containsPowderBlocker(b, victim) || victim.hasEffect(this.namesies()));
         }
 
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return user.getName() + " sprinkled powder on " + victim.getName() + "!";
         }
+
+        @Override
+        public boolean block(Battle b, ActivePokemon user) {
+            // Fire-type moves makes the user explode
+            return user.isAttackType(Type.FIRE);
+        }
+
+        @Override
+        public void alternateEffect(Battle b, ActivePokemon user) {
+            if (!user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+                user.reduceHealthFraction(b, 1/4.0);
+            }
+        }
+
+        @Override
+        public String getBlockMessage(Battle b, ActivePokemon user) {
+            return "The powder exploded!";
+        }
     }
 
-    // TODO: Why does this need the UsedProof field?
     static class EatenBerry extends PokemonEffect {
         private static final long serialVersionUID = 1L;
 
         EatenBerry() {
-            super(PokemonEffectNamesies.EATEN_BERRY, -1, -1, false, true);
+            super(PokemonEffectNamesies.EATEN_BERRY, -1, -1, false, false);
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            this.addCastMessage(b, caster, victim, source, printCast);
+        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return !(victim.hasEffect(this.namesies()));
         }
     }
 

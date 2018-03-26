@@ -93,7 +93,7 @@ public class TypeTest extends BaseTest {
         Assert.assertTrue(TypeAdvantage.doesNotEffect(attacking, defending, battle));
 
         // Cast the effect and make sure the move hits
-        manipulator.manipulate(battle, attacking, defending);
+        manipulator.manipulate(battle);
         Assert.assertFalse(TypeAdvantage.doesNotEffect(attacking, defending, battle));
     }
 
@@ -262,7 +262,7 @@ public class TypeTest extends BaseTest {
                 );
             }
 
-            manipulator.manipulate(battle, attacking, defending);
+            manipulator.manipulate(battle);
             attacking.setupMove(attack, battle);
 
             double afterActual = TypeAdvantage.getAdvantage(attacking, defending, battle);
@@ -338,39 +338,33 @@ public class TypeTest extends BaseTest {
     @Test
     public void effectiveTest() {
         // "Self-target" damage dealing, damage dealing, and fucking Thunder Wave -- all ineffective against Ground-type
-        checkEffective(false, new TestInfo().defending(PokemonNamesies.SANDSHREW).with(AttackNamesies.CHARGE_BEAM));
-        checkEffective(false, new TestInfo().defending(PokemonNamesies.SANDSHREW).with(AttackNamesies.THUNDER_SHOCK));
-        checkEffective(false, new TestInfo().defending(PokemonNamesies.SANDSHREW).with(AttackNamesies.THUNDER_WAVE));
+        checkEffective(false, AttackNamesies.CHARGE_BEAM, new TestInfo().defending(PokemonNamesies.SANDSHREW));
+        checkEffective(false, AttackNamesies.THUNDER_SHOCK, new TestInfo().defending(PokemonNamesies.SANDSHREW));
+        checkEffective(false, AttackNamesies.THUNDER_WAVE, new TestInfo().defending(PokemonNamesies.SANDSHREW));
 
         // Status moves (self-target or not excluding Thunder Wave) and field moves are fine
-        checkEffective(true, new TestInfo().attacking(PokemonNamesies.SANDSHREW)
-                                           .defending(PokemonNamesies.SANDSHREW)
-                                           .with(AttackNamesies.EERIE_IMPULSE));
-        checkEffective(true, new TestInfo().attacking(PokemonNamesies.SANDSHREW)
-                                           .defending(PokemonNamesies.SANDSHREW)
-                                           .with(AttackNamesies.MAGNET_RISE));
-        checkEffective(true, new TestInfo().attacking(PokemonNamesies.SANDSHREW)
-                                           .defending(PokemonNamesies.SANDSHREW)
-                                           .with(AttackNamesies.ELECTRIC_TERRAIN));
+        checkEffective(true, AttackNamesies.EERIE_IMPULSE, new TestInfo().attacking(PokemonNamesies.SANDSHREW)
+                                                                         .defending(PokemonNamesies.SANDSHREW));
+        checkEffective(true, AttackNamesies.MAGNET_RISE, new TestInfo().attacking(PokemonNamesies.SANDSHREW)
+                                                                       .defending(PokemonNamesies.SANDSHREW));
+        checkEffective(true, AttackNamesies.ELECTRIC_TERRAIN, new TestInfo().attacking(PokemonNamesies.SANDSHREW)
+                                                                            .defending(PokemonNamesies.SANDSHREW));
 
-        checkEffective(true, new TestInfo().attacking(PokemonNamesies.SANDSHREW).with(AttackNamesies.THUNDER_WAVE));
-        checkEffective(false, new TestInfo().attacking(PokemonNamesies.SANDSHREW)
-                                            .defending(AbilityNamesies.MAGIC_BOUNCE)
-                                            .with(AttackNamesies.THUNDER_WAVE));
-        checkEffective(true, new TestInfo().attacking(PokemonNamesies.SANDSHREW)
-                                           .defending(AbilityNamesies.MAGIC_BOUNCE)
-                                           .with(AttackNamesies.CHARGE_BEAM));
+        checkEffective(true, AttackNamesies.THUNDER_WAVE, new TestInfo().attacking(PokemonNamesies.SANDSHREW));
+        checkEffective(false, AttackNamesies.THUNDER_WAVE, new TestInfo().attacking(PokemonNamesies.SANDSHREW)
+                                                                         .defending(AbilityNamesies.MAGIC_BOUNCE));
+        checkEffective(true, AttackNamesies.CHARGE_BEAM, new TestInfo().attacking(PokemonNamesies.SANDSHREW)
+                                                                       .defending(AbilityNamesies.MAGIC_BOUNCE));
 
         // Lightningrod absorbs Electric moves
-        checkEffective(false, new TestInfo().defending(AbilityNamesies.LIGHTNINGROD)
-                                            .with(AttackNamesies.THUNDER_WAVE));
+        checkEffective(false, AttackNamesies.THUNDER_WAVE, new TestInfo().defending(AbilityNamesies.LIGHTNINGROD));
     }
 
-    private void checkEffective(boolean effective, TestInfo testInfo) {
+    private void checkEffective(boolean effective, AttackNamesies attackNamesies, TestInfo testInfo) {
         TestBattle battle = testInfo.createBattle();
         TestPokemon attacking = battle.getAttacking();
 
         testInfo.manipulate(battle);
-        attacking.apply(effective, testInfo.attackName, battle);
+        attacking.apply(effective, attackNamesies, battle);
     }
 }

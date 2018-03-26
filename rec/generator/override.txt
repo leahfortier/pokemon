@@ -950,6 +950,9 @@ Contact:
 SelfBlock:
 	Header: boolean block(Battle b, ActivePokemon user)
 *
+SelfAlternateEffect:
+    Header: void alternateEffect(Battle b, ActivePokemon user)
+*
 SelfBlockMessage:
 	Header: String getBlockMessage(Battle b, ActivePokemon user)
 *
@@ -1630,10 +1633,7 @@ RepelSteps:
     AddInterface: RepelItem
 *
 PowderResist:
-	AddInterface: AttackBlocker
-	AddMapField: Block:
-		return user.getAttack() instanceof PowderMove;
-		###
+	AddInterface: PowderBlocker
 	AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " protects it from powder moves!"
 *
 NegateNoAdvantage:

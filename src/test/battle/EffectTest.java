@@ -137,12 +137,12 @@ public class EffectTest extends BaseTest {
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
-        manipulator.manipulate(battle, attacking, defending);
+        manipulator.manipulate(battle);
 
         attacking.callFullNewMove(battle, defending, protectMove);
         defending.apply(!shouldProtect, attack, battle);
 
-        additionalChecks.manipulate(battle, attacking, defending);
+        additionalChecks.manipulate(battle);
 
         if (shouldProtect) {
             battle.emptyHeal();
@@ -315,7 +315,7 @@ public class EffectTest extends BaseTest {
     }
 
     private void checkCritStage(int expectedStage, TestInfo testInfo) {
-        TestBattle battle = TestBattle.create(testInfo.attackingName, testInfo.defendingName);
+        TestBattle battle = testInfo.createBattle();
         TestPokemon attacking = battle.getAttacking();
 
         int beforeStage = battle.getCritStage(attacking);

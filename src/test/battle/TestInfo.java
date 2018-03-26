@@ -5,13 +5,12 @@ import battle.effect.EffectNamesies;
 import item.ItemNamesies;
 import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
-import test.TestPokemon;
 import util.string.StringUtils;
 
 class TestInfo {
-    PokemonNamesies attackingName;
-    PokemonNamesies defendingName;
-    AttackNamesies attackName;
+    private PokemonNamesies attackingName;
+    private PokemonNamesies defendingName;
+    private AttackNamesies attackName;
     private PokemonManipulator manipulator;
 
     TestInfo() {
@@ -22,14 +21,11 @@ class TestInfo {
     }
 
     public void manipulate(TestBattle battle) {
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
-
-        this.manipulator.manipulate(battle, attacking, defending);
+        this.manipulator.manipulate(battle);
 
         // Setup the move, unless explicitly set to null to avoid this
         if (attackName != null) {
-            attacking.setupMove(attackName, battle);
+            battle.getAttacking().setupMove(attackName, battle);
         }
     }
 
@@ -52,10 +48,6 @@ class TestInfo {
         return this;
     }
 
-    TestInfo fight(AttackNamesies attackingName, AttackNamesies defendingName) {
-        return this.with((battle, attacking, defending) -> battle.fight(attackingName, defendingName));
-    }
-
     TestInfo attackingFight(AttackNamesies attackName) {
         return this.with((battle, attacking, defending) -> battle.attackingFight(attackName));
     }
@@ -72,6 +64,10 @@ class TestInfo {
     TestInfo attacking(AbilityNamesies abilityNamesies) {
         this.updateManipulator(PokemonManipulator.giveAttackingAbility(abilityNamesies));
         return this;
+    }
+
+    TestInfo attacking(PokemonNamesies pokemonNamesies, AbilityNamesies abilityNamesies) {
+        return this.attacking(pokemonNamesies).attacking(abilityNamesies);
     }
 
     TestInfo attacking(PokemonNamesies pokemonNamesies, EffectNamesies effectNamesies) {
@@ -120,9 +116,7 @@ class TestInfo {
     }
 
     public TestBattle createBattle() {
-        TestBattle battle = TestBattle.create(this.attackingName, this.defendingName);
-        battle.getAttacking().setupMove(this.attackName, battle);
-        return battle;
+        return TestBattle.create(this.attackingName, this.defendingName);
     }
 
     @Override

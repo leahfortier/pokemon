@@ -1051,21 +1051,22 @@ FairyLock:
 Powder:
     NumTurns: 1
     CastMessage: user.getName() + " sprinkled powder on " + victim.getName() + "!"
-    Int: BeforeTurnEffect
-    CanAttack:
+    Int: SelfAttackBlocker
+    SelfBlock:
         // Fire-type moves makes the user explode
-        if (p.isAttackType(Type.FIRE)) {
-            Messages.add("The powder exploded!");
-            p.reduceHealthFraction(b, 1/4.0);
-            return false;
-        }
-
-        return true;
+        return user.isAttackType(Type.FIRE);
         ###
+    SelfAlternateEffect:
+        if (!user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+            user.reduceHealthFraction(b, 1/4.0);
+        }
+        ###
+    SelfBlockMessage:
+        return "The powder exploded!";
+        ###
+    FailCondition: PowderBlocker.containsPowderBlocker(b, victim)
 *
 EatenBerry:
-    Comments: // TODO: Why does this need the UsedProof field?
-    UsedProof: True
 *
 BreaksTheMold:
     NumTurns: 1

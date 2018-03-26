@@ -8,7 +8,6 @@ import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
-import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.BracingEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
@@ -25,7 +24,7 @@ import battle.effect.InvokeInterfaces.LevitationEffect;
 import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentTakeDamageEffect;
 import battle.effect.InvokeInterfaces.PhysicalContactEffect;
-import battle.effect.InvokeInterfaces.PowderMove;
+import battle.effect.InvokeInterfaces.PowderBlocker;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.InvokeInterfaces.RepellingEffect;
 import battle.effect.InvokeInterfaces.SimpleStatModifyingEffect;
@@ -1409,7 +1408,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class SafetyGoggles extends Item implements HoldItem, WeatherBlockerEffect, AttackBlocker {
+    static class SafetyGoggles extends Item implements HoldItem, WeatherBlockerEffect, PowderBlocker {
         private static final long serialVersionUID = 1L;
 
         SafetyGoggles() {
@@ -1420,11 +1419,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public boolean block(WeatherNamesies weather) {
             return true;
-        }
-
-        @Override
-        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttack() instanceof PowderMove;
         }
 
         @Override

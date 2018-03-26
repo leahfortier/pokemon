@@ -32,6 +32,7 @@ public interface HpHealer extends MessageGetter, BattlePokemonUseItem, HoldItem 
         }
 
         // Success if healed a positive amount of health
-        return p.heal(this.getHealAmount(p), false, b, this.getMessage(b, p, source)) > 0;
+        // Only check effects for held items
+        return p.heal(this.getHealAmount(p), source == CastSource.HELD_ITEM, b, this.getMessage(b, p, source)) > 0;
     }
 }

@@ -90,7 +90,7 @@ public class TestPokemon extends ActivePokemon {
     public void assertHealthRatio(double fraction, int errorHp) {
         int hpFraction = (int)(Math.ceil(fraction*this.getMaxHP()));
         Assert.assertTrue(
-                StringUtils.spaceSeparated(hpFraction, this.getHP(), errorHp),
+                StringUtils.spaceSeparated(fraction, this.getHPRatio(), hpFraction, this.getHP(), this.getMaxHP(), errorHp),
                 hpFraction >= this.getHP() - errorHp && hpFraction <= this.getHP() + errorHp
         );
     }

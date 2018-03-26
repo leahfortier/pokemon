@@ -721,6 +721,10 @@ SelfAttackBlocker:
 		EffectList: user
 		InvokeAttack: user
 	*
+    Method:
+		Header: void alternateEffect(Battle b, ActivePokemon user)
+		Default: Empty
+	*
 	Method:
 		Header: String getBlockMessage(Battle b, ActivePokemon user)
 		Default:
@@ -874,5 +878,25 @@ DefiniteEscape:
         EffectList: p
         Invoke: CheckMessage true getEscapeMessage(b, p)
         InvokeName: canDefinitelyEscape
+    *
+***
+PowderBlocker:
+    Extends: AttackBlocker
+    Method:
+        Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
+        Default:
+            return user.getAttack() instanceof PowderMove;
+            ###
+        Override: True
+    *
+    Method:
+        InvokeParameters: Battle b, ActivePokemon p
+        Invoke: Contains
+        EffectList: p
+        Begin:
+            if (p.isType(b, Type.GRASS)) {
+                return true;
+            }
+            ###
     *
 ***

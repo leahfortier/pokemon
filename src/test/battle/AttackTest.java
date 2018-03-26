@@ -1462,13 +1462,13 @@ public class AttackTest extends BaseTest {
 
     @Test
     public void hiddenPowerTest() {
-        hiddenPowerTest(new int[]{ 30, 31, 31, 30, 31, 31 }, Type.GRASS);
-        hiddenPowerTest(new int[]{ 30, 30, 30, 30, 30, 30 }, Type.FIGHTING);
-        hiddenPowerTest(new int[]{ 31, 31, 31, 31, 31, 31 }, Type.DARK);
-        hiddenPowerTest(new int[]{ 31, 31, 31, 30, 31, 31 }, Type.ELECTRIC);
+        hiddenPowerTest(new int[] { 30, 31, 31, 30, 31, 31 }, Type.GRASS);
+        hiddenPowerTest(new int[] { 30, 30, 30, 30, 30, 30 }, Type.FIGHTING);
+        hiddenPowerTest(new int[] { 31, 31, 31, 31, 31, 31 }, Type.DARK);
+        hiddenPowerTest(new int[] { 31, 31, 31, 30, 31, 31 }, Type.ELECTRIC);
 
-        checkHiddenPower(new int[]{ 14, 11, 13, 12, 19, 15 }, Type.GRASS);
-        checkHiddenPower(new int[]{ 31, 31, 30, 30, 30, 30 }, Type.FIGHTING);
+        checkHiddenPower(new int[] { 14, 11, 13, 12, 19, 15 }, Type.GRASS);
+        checkHiddenPower(new int[] { 31, 31, 30, 30, 30, 30 }, Type.FIGHTING);
 
         // All even IVs is Fighting-type Hidden Power
         // All odd IVs is Dark-type Hidden Power
@@ -1538,5 +1538,105 @@ public class AttackTest extends BaseTest {
         battle.fight(AttackNamesies.HIDDEN_POWER, AttackNamesies.ELECTRIFY);
         Assert.assertTrue(attacking.isAttackType(Type.ELECTRIC));
         defending.assertNotFullHealth();
+    }
+
+    @Test
+    public void powderTest() {
+
+        // Just make sure it works on a non-Grass type
+        powderTest(
+                AttackNamesies.POWDER, false,
+                new TestInfo().attacking(PokemonNamesies.SQUIRTLE),
+                (battle, attacking, defending) -> Assert.assertTrue(defending.lastMoveSucceeded())
+        );
+
+        // Powder doesn't work on Grass-type Pokemon
+        powderTest(
+                AttackNamesies.POWDER, false,
+                new TestInfo().attacking(PokemonNamesies.BULBASAUR),
+                (battle, attacking, defending) -> Assert.assertFalse(defending.lastMoveSucceeded())
+        );
+
+        // Powder doesn't work on Pokemon with Overcoat
+        powderTest(
+                AttackNamesies.POWDER, false,
+                new TestInfo().attacking(PokemonNamesies.SQUIRTLE, AbilityNamesies.OVERCOAT),
+                (battle, attacking, defending) -> Assert.assertFalse(defending.lastMoveSucceeded())
+        );
+
+        // Powder doesn't work on Pokemon with Safety Goggles
+        powderTest(
+                AttackNamesies.POWDER, false,
+                new TestInfo().attacking(PokemonNamesies.SQUIRTLE, ItemNamesies.SAFETY_GOGGLES),
+                (battle, attacking, defending) -> Assert.assertFalse(defending.lastMoveSucceeded())
+        );
+
+        // Powder only affects Fire-type moves
+        powderTest(
+                AttackNamesies.WATER_GUN, false, new TestInfo(),
+                (battle, attacking, defending) -> attacking.assertNotFullHealth()
+        );
+
+        // Using a Fire-type move under the effects of Powder will decrease health by 25%
+        powderTest(AttackNamesies.EMBER, true, new TestInfo(), PokemonManipulator.empty());
+
+        // Even if it is a status move
+        powderTest(AttackNamesies.WILL_O_WISP, true, new TestInfo(), PokemonManipulator.empty());
+
+        // Fiery Dance will not trigger Dancer
+        // Succeeding the .75 health ratio is the real test for this
+        powderTest(
+                AttackNamesies.FIERY_DANCE, true,
+                new TestInfo().attacking(AbilityNamesies.DANCER),
+                PokemonManipulator.empty()
+        );
+
+        // Natural Gift will fail if holding a Fire-type berry and the berry will not be consumed
+        powderTest(
+                AttackNamesies.NATURAL_GIFT, true,
+                new TestInfo().defending(ItemNamesies.OCCA_BERRY),
+                (battle, attacking, defending) -> {
+                    Assert.assertTrue(defending.isHoldingItem(battle, ItemNamesies.OCCA_BERRY));
+                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+                }
+        );
+
+        // Make sure health does not decrease when the user has Magic Guard, but user is still blocked from using the attack
+        powderTest(
+                AttackNamesies.EMBER, true,
+                new TestInfo().defending(AbilityNamesies.MAGIC_GUARD),
+                (battle, attacking, defending) -> {
+                    // These are mostly checked already but just want to reinforce in this case
+                    defending.assertFullHealth();
+                    attacking.assertFullHealth();
+                }
+        );
+    }
+
+    private void powderTest(AttackNamesies attackNamesies, boolean explodes, TestInfo testInfo, PokemonManipulator afterCheck) {
+        TestBattle battle = testInfo.createBattle();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+        testInfo.manipulate(battle);
+
+        battle.fight(AttackNamesies.POWDER, attackNamesies);
+        Assert.assertTrue(attacking.lastMoveSucceeded());
+
+        defending.assertHealthRatio(explodes && !defending.hasAbility(AbilityNamesies.MAGIC_GUARD) ? .75 : 1);
+        if (explodes) {
+            Assert.assertFalse(defending.lastMoveSucceeded());
+            attacking.assertFullHealth();
+            Assert.assertFalse(attacking.hasStatus());
+            new TestStages().test(attacking);
+        }
+
+        Assert.assertEquals(explodes, defending.isAttackType(Type.FIRE));
+
+        // Neither will have the effect since it goes away at the end of the turn
+        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.POWDER));
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.POWDER));
+
+        afterCheck.manipulate(battle);
     }
 }

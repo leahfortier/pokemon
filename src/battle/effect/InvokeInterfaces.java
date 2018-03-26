@@ -1617,6 +1617,7 @@ public final class InvokeInterfaces {
 
     public interface SelfAttackBlocker {
         boolean block(Battle b, ActivePokemon user);
+        default void alternateEffect(Battle b, ActivePokemon user) {}
 
         default String getBlockMessage(Battle b, ActivePokemon user) {
             return Effect.DEFAULT_FAIL_MESSAGE;
@@ -1900,6 +1901,29 @@ public final class InvokeInterfaces {
                         Messages.add(effect.getEscapeMessage(b, p));
                         return true;
                     }
+                }
+            }
+
+            return false;
+        }
+    }
+
+    public interface PowderBlocker extends AttackBlocker {
+
+        @Override
+        default boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.getAttack() instanceof PowderMove;
+        }
+
+        static boolean containsPowderBlocker(Battle b, ActivePokemon p) {
+            if (p.isType(b, Type.GRASS)) {
+                return true;
+            }
+
+            List<InvokeEffect> invokees = b.getEffectsList(p);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof PowderBlocker && InvokeEffect.isActiveEffect(invokee)) {
+                    return true;
                 }
             }
 

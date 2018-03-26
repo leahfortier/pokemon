@@ -226,7 +226,7 @@ Effect Spore:
         ###
     Contact:
         // Grass-type Pokemon, Pokemon with Overcoat, and Pokemon holding the Safety Goggles are immune to Effect Spore
-        if (user.isType(b, Type.GRASS) || user.hasAbility(AbilityNamesies.OVERCOAT) || user.isHoldingItem(b, ItemNamesies.SAFETY_GOGGLES)) {
+        if (PowderBlocker.containsPowderBlocker(b, user)) {
             return;
         }
 

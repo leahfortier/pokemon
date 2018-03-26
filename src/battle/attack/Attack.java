@@ -311,6 +311,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
     // Takes type advantage, victim ability, and victim type into account to determine if the attack is effective
     public boolean effective(Battle b, ActivePokemon me, ActivePokemon o) {
+        SelfAttackBlocker selfAttackBlocker = SelfAttackBlocker.checkBlocked(b, me);
+        if (selfAttackBlocker != null) {
+            Messages.add(selfAttackBlocker.getBlockMessage(b, me));
+            selfAttackBlocker.alternateEffect(b, me);
+            return false;
+        }
+
         // Self-target moves and field moves don't need to take type advantage always work
         if (this.isSelfTargetStatusMove() || this.isMoveType(MoveType.FIELD)) {
             return true;
@@ -318,12 +325,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         // Non-status moves (AND FUCKING THUNDER WAVE) -- need to check the type chart
         if ((!isStatusMove() || this.namesies() == AttackNamesies.THUNDER_WAVE) && this.zeroAdvantage(b, me, o)) {
-            return false;
-        }
-
-        SelfAttackBlocker selfAttackBlocker = SelfAttackBlocker.checkBlocked(b, me);
-        if (selfAttackBlocker != null) {
-            Messages.add(selfAttackBlocker.getBlockMessage(b, me));
             return false;
         }
 
@@ -378,7 +379,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
     }
 
     public boolean canPrintFail() {
-        return this.effectChance == 100 && this.category == MoveCategory.STATUS;
+        return this.effectChance == 100 && this.isStatusMove();
     }
 
     private boolean canPrintCast() {
@@ -7205,6 +7206,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // NOTE: The messaging looks off when combined with Lum Berry but I don't know if this can be easily fixed
             StatusNamesies toTransfer = user.getStatus().namesies();
             String transferMessage = user.getName() + " transferred its status condition to " + victim.getName() + "!";
             toTransfer.getStatus().apply(b, user, victim, transferMessage);
