@@ -33,6 +33,7 @@ import battle.effect.InvokeInterfaces.SleepyFightsterEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.SwapOpponentEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
+import battle.effect.attack.FixedDamageMove;
 import battle.effect.attack.MultiStrikeMove;
 import battle.effect.attack.MultiTurnMove.ChargingMove;
 import battle.effect.attack.MultiTurnMove.RechargingMove;
@@ -515,7 +516,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class SonicBoom extends Attack {
+    static class SonicBoom extends Attack implements FixedDamageMove {
         private static final long serialVersionUID = 1L;
 
         SonicBoom() {
@@ -524,8 +525,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            o.reduceHealth(b, 20);
+        public int getFixedDamageAmount(ActivePokemon me, ActivePokemon o) {
+            return 20;
         }
     }
 
@@ -704,7 +705,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class DragonRage extends Attack {
+    static class DragonRage extends Attack implements FixedDamageMove {
         private static final long serialVersionUID = 1L;
 
         DragonRage() {
@@ -713,8 +714,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            o.reduceHealth(b, 40);
+        public int getFixedDamageAmount(ActivePokemon me, ActivePokemon o) {
+            return 40;
         }
     }
 
@@ -2005,7 +2006,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class Endeavor extends Attack {
+    static class Endeavor extends Attack implements FixedDamageMove {
         private static final long serialVersionUID = 1L;
 
         Endeavor() {
@@ -2015,8 +2016,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            o.reduceHealth(b, o.getHP() - me.getHP());
+        public int getFixedDamageAmount(ActivePokemon me, ActivePokemon o) {
+            return o.getHP() - me.getHP();
         }
 
         @Override
@@ -2257,7 +2258,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class SuperFang extends Attack {
+    static class SuperFang extends Attack implements FixedDamageMove {
         private static final long serialVersionUID = 1L;
 
         SuperFang() {
@@ -2268,12 +2269,12 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            o.reduceHealth(b, (int)Math.ceil(o.getHP()/2.0));
+        public int getFixedDamageAmount(ActivePokemon me, ActivePokemon o) {
+            return (int)Math.ceil(o.getHP()/2.0);
         }
     }
 
-    static class NaturesMadness extends Attack {
+    static class NaturesMadness extends Attack implements FixedDamageMove {
         private static final long serialVersionUID = 1L;
 
         NaturesMadness() {
@@ -2282,8 +2283,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            o.reduceHealth(b, (int)Math.ceil(o.getHP()/2.0));
+        public int getFixedDamageAmount(ActivePokemon me, ActivePokemon o) {
+            return (int)Math.ceil(o.getHP()/2.0);
         }
     }
 
@@ -4151,7 +4152,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class SeismicToss extends Attack {
+    static class SeismicToss extends Attack implements FixedDamageMove {
         private static final long serialVersionUID = 1L;
 
         SeismicToss() {
@@ -4161,8 +4162,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            o.reduceHealth(b, me.getLevel());
+        public int getFixedDamageAmount(ActivePokemon me, ActivePokemon o) {
+            return me.getLevel();
         }
     }
 
@@ -5425,7 +5426,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class NightShade extends Attack {
+    static class NightShade extends Attack implements FixedDamageMove {
         private static final long serialVersionUID = 1L;
 
         NightShade() {
@@ -5434,8 +5435,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            o.reduceHealth(b, me.getLevel());
+        public int getFixedDamageAmount(ActivePokemon me, ActivePokemon o) {
+            return me.getLevel();
         }
     }
 
@@ -7326,7 +7327,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class Psywave extends Attack {
+    static class Psywave extends Attack implements FixedDamageMove {
         private static final long serialVersionUID = 1L;
 
         Psywave() {
@@ -7335,8 +7336,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            o.reduceHealth(b, (int)Math.max(1, (RandomUtils.getRandomInt(11) + 5)*me.getLevel()/10.0));
+        public int getFixedDamageAmount(ActivePokemon me, ActivePokemon o) {
+            return (int)Math.max(1, (RandomUtils.getRandomInt(11) + 5)*me.getLevel()/10.0);
         }
     }
 
@@ -7873,7 +7874,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class MetalBurst extends Attack {
+    static class MetalBurst extends Attack implements FixedDamageMove {
         private static final long serialVersionUID = 1L;
 
         MetalBurst() {
@@ -7882,8 +7883,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            o.reduceHealth(b, (int)(me.getDamageTaken()*1.5));
+        public int getFixedDamageAmount(ActivePokemon me, ActivePokemon o) {
+            return (int)(me.getDamageTaken()*1.5);
         }
 
         @Override
@@ -8930,7 +8931,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class FinalGambit extends Attack {
+    static class FinalGambit extends Attack implements FixedDamageMove {
         private static final long serialVersionUID = 1L;
 
         FinalGambit() {
@@ -8941,8 +8942,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            o.reduceHealth(b, me.getHP());
+        public int getFixedDamageAmount(ActivePokemon me, ActivePokemon o) {
+            return me.getHP();
         }
     }
 

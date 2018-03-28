@@ -17,9 +17,11 @@ ShouldApplyEffects:
 	Header: boolean shouldApplyEffects(Battle b, ActivePokemon user)
 *
 FixedDamage:
-	AddMapField: ApplyDamage:
-		o.reduceHealth(b, {0});
-		###
+    Header: int getFixedDamageAmount(ActivePokemon me, ActivePokemon o)
+    Body:
+        return {0};
+        ###
+    AddInterface: FixedDamageMove
 *
 GetPriority:
 	Header: int getPriority(Battle b, ActivePokemon me)
