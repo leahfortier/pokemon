@@ -29,8 +29,7 @@ Solar Power:
     PowerMultiplierCondition: 1.5 user.getAttack().getCategory() == MoveCategory.SPECIAL && b.getWeather().namesies() == WeatherNamesies.SUNNY
     ApplyEndTurn:
         if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
-            Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
-            victim.reduceHealthFraction(b, 1/8.0);
+            victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
         }
         ###
 *
@@ -241,8 +240,7 @@ Dry Skin:
     Int: EndTurnEffect, OpponentPowerChangeEffect
     ApplyEndTurn:
         if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
-            Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
-            victim.reduceHealthFraction(b, 1/8.0);
+            victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
         } else if (b.getWeather().namesies() == WeatherNamesies.RAINING) {
             victim.healHealthFraction(1/8.0, b, victim.getName() + "'s HP was restored due to its " + this.getName() + "!");
         }
@@ -844,8 +842,7 @@ Rough Skin:
     Desc: This Pok\u00e9mon inflicts damage with its rough skin to the attacker on contact.
     Int: PhysicalContactEffect
     Contact:
-        Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
-        user.reduceHealthFraction(b, 1/8.0);
+        user.reduceHealthFraction(b, 1/8.0, user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
         ###
 *
 Solid Rock:
@@ -939,8 +936,7 @@ Aftermath:
     Int: PhysicalContactEffect
     Contact:
         if (victim.isFainted(b) && !user.hasAbility(AbilityNamesies.DAMP)) {
-            Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
-            user.reduceHealthFraction(b, 1/4.0);
+            user.reduceHealthFraction(b, 1/4.0, user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
         }
         ###
 *
@@ -1012,8 +1008,7 @@ Bad Dreams:
     ApplyEndTurn:
         ActivePokemon other = b.getOtherPokemon(victim);
         if (other.hasStatus(StatusNamesies.ASLEEP)) {
-            Messages.add(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
-            other.reduceHealthFraction(b, 1/8.0);
+            other.reduceHealthFraction(b, 1/8.0, other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
         }
         ###
 *
@@ -1193,8 +1188,7 @@ Iron Barbs:
     Desc: Inflicts damage to the attacker on contact with iron barbs.
     Int: PhysicalContactEffect
     Contact:
-        Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
-        user.reduceHealthFraction(b, 1/8.0);
+        user.reduceHealthFraction(b, 1/8.0, user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
         ###
 *
 Mold Breaker:
@@ -1682,8 +1676,8 @@ Dancer:
 Innards Out:
     Desc: Damages the attacker landing the finishing hit by the amount equal to its last HP.
     DeathWish:
-        Messages.add(murderer.getName() + " was hurt by " + dead.getName() + "'s " + this.getName() + "!");
-        murderer.reduceHealth(b, dead.getDamageTaken(), false);
+        // TODO: I don't think the murderer.isAttacking() is sufficient for deathwish
+        murderer.indirectReduceHealth(b, dead.getDamageTaken(), false, murderer.getName() + " was hurt by " + dead.getName() + "'s " + this.getName() + "!");
         ###
 *
 Fluffy:

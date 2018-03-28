@@ -321,9 +321,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (victim.isType(b, Type.POISON)) {
                 victim.healHealthFraction(1/16.0, b, victim.getName() + "'s HP was restored by its " + this.getName() + "!");
-            } else if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
-                victim.reduceHealthFraction(b, 1/8.0);
+            } else {
+                victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
             }
         }
     }
@@ -854,12 +853,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-            if (user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(user.getName() + " was hurt by its " + this.getName() + "!");
-            user.reduceHealthFraction(b, .1);
+            user.reduceHealthFraction(b, .1, user.getName() + " was hurt by its " + this.getName() + "!");
         }
     }
 
@@ -1398,8 +1392,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
-            user.reduceHealthFraction(b, 1/8.0);
+            user.reduceHealthFraction(b, 1/8.0, user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
         }
 
         @Override
@@ -1545,10 +1538,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         private void stickyPoke(Battle b, ActivePokemon victim, String possession) {
-            if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                Messages.add(victim.getName() + " was hurt by " + possession + " " + this.getName() + "!");
-                victim.reduceHealthFraction(b, 1/8.0);
-            }
+            victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " was hurt by " + possession + " " + this.getName() + "!");
         }
 
         StickyBarb() {

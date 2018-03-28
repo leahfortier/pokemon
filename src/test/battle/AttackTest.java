@@ -923,12 +923,9 @@ public class AttackTest extends BaseTest {
     @Test
     public void rapidSpinDefogTest() {
         TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
+        TestPokemon attacking = battle.getAttacking().withItem(ItemNamesies.GRIP_CLAW);
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.MAGIC_GUARD).withItem(ItemNamesies.LIGHT_CLAY);
         Team defendingTeam = battle.getOpponent();
-
-        attacking.giveItem(ItemNamesies.GRIP_CLAW);
-        defending.withAbility(AbilityNamesies.MAGIC_GUARD).giveItem(ItemNamesies.LIGHT_CLAY);
 
         // Add effects
         battle.attackingFight(AttackNamesies.STEALTH_ROCK);
@@ -1034,24 +1031,6 @@ public class AttackTest extends BaseTest {
         defending.assertNotFullHealth();
         attacking.assertFullHealth();
         Assert.assertFalse(attacking.hasStatus());
-    }
-
-    @Test
-    public void mindBlownTest() {
-        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
-
-        battle.attackingFight(AttackNamesies.MIND_BLOWN);
-        defending.assertNotFullHealth();
-        attacking.assertHealthRatio(.5);
-
-        battle.emptyHeal();
-
-        attacking.withAbility(AbilityNamesies.MAGIC_GUARD);
-        battle.attackingFight(AttackNamesies.MIND_BLOWN);
-        defending.assertNotFullHealth();
-        attacking.assertFullHealth();
     }
 
     @Test

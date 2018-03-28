@@ -154,6 +154,9 @@ public final class InvokeInterfaces {
 
         default void sapHealth(Battle b, ActivePokemon user, ActivePokemon victim, int damageAmount, boolean print) {
             int sapAmount = (int)Math.ceil(damageAmount*this.sapPercentage());
+            if (sapAmount == 0) {
+                return;
+            }
 
             // Big Root heals an additional 30%
             if (user.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
@@ -162,8 +165,11 @@ public final class InvokeInterfaces {
 
             // Oozy makes you woozy
             if (victim.hasAbility(AbilityNamesies.LIQUID_OOZE)) {
-                Messages.add(victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName() + " caused " + user.getName() + " to lose health instead!");
-                user.reduceHealth(b, sapAmount, false);
+                user.indirectReduceHealth(
+                        b, sapAmount, false,
+                        victim.getName() + "'s " + AbilityNamesies.LIQUID_OOZE.getName()
+                                + " caused " + user.getName() + " to lose health instead!"
+                );
                 return;
             }
 

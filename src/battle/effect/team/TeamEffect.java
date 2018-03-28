@@ -308,18 +308,8 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            if (enterer.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
             double advantage = Type.ROCK.getAdvantage().getAdvantage(enterer, b);
-            if (advantage == 0) {
-                // Technically not totally necessary since Rock is not ineffective against any type but just in case anything changes we don't want to print
-                return;
-            }
-
-            Messages.add(enterer.getName() + " was hurt by stealth rock!");
-            enterer.reduceHealthFraction(b, advantage/8.0);
+            enterer.reduceHealthFraction(b, advantage/8.0, enterer.getName() + " was hurt by stealth rock!");
         }
 
         @Override
@@ -384,6 +374,17 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
         private int layers;
 
+        private double getReduceFraction() {
+            switch (layers) {
+                case 1:
+                    return 1/8.0;
+                case 2:
+                    return 1/6.0;
+                default:
+                    return 1/4.0;
+            }
+        }
+
         Spikes() {
             super(TeamEffectNamesies.SPIKES, -1, -1, false, true);
             this.layers = 1;
@@ -409,17 +410,8 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            if (enterer.isLevitating(b) || enterer.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(enterer.getName() + " was hurt by spikes!");
-            if (layers == 1) {
-                enterer.reduceHealthFraction(b, 1/8.0);
-            } else if (layers == 2) {
-                enterer.reduceHealthFraction(b, 1/6.0);
-            } else {
-                enterer.reduceHealthFraction(b, 1/4.0);
+            if (!enterer.isLevitating(b)) {
+                enterer.reduceHealthFraction(b, this.getReduceFraction(), enterer.getName() + " was hurt by spikes!");
             }
         }
 

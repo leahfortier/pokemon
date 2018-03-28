@@ -11,7 +11,6 @@ import battle.effect.InvokeInterfaces.WeatherExtendingEffect;
 import battle.effect.battle.BattleEffect;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
-import message.Messages;
 import pokemon.Stat;
 import type.Type;
 
@@ -204,8 +203,7 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
             }
 
             // Buffety buffety buffet
-            Messages.add(victim.getName() + " is buffeted by the sandstorm!");
-            victim.reduceHealthFraction(b, 1/16.0);
+            victim.reduceHealthFraction(b, 1/16.0, victim.getName() + " is buffeted by the sandstorm!");
         }
 
         @Override
@@ -258,8 +256,7 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
             }
 
             // Buffety buffety buffet
-            Messages.add(victim.getName() + " is buffeted by the hail!");
-            victim.reduceHealthFraction(b, 1/16.0);
+            victim.reduceHealthFraction(b, 1/16.0, victim.getName() + " is buffeted by the hail!");
         }
     }
 }

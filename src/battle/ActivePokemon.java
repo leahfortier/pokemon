@@ -490,11 +490,11 @@ public class ActivePokemon extends PartyPokemon {
     public boolean isFainted(Battle b) {
         // We have already checked that this Pokemon is fainted -- don't print/apply effects more than once
         if (isActuallyDead()) {
-            if (this.getHP() == 0) {
-                return true;
+            if (this.getHP() != 0) {
+                Global.error("Pokemon should only have the Fainted Status Condition when HP is zero.");
             }
 
-            Global.error("Pokemon should only have the Fainted Status Condition when HP is zero.");
+            return true;
         }
 
         // Deady
@@ -596,31 +596,58 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     // Don't think you'll make it out alive
-    public void killKillKillMurderMurderMurder(Battle b) {
-        this.reduceHealthFraction(b, 1);
+    public void killKillKillMurderMurderMurder(Battle b, String murderMessage) {
+        this.forceReduceHealthFraction(b, 1, murderMessage);
     }
 
-    // Reduces the amount of health that corresponds to fraction of the pokemon's total health and returns this amount
-    // In general, when reducing a fraction instead of a given amount, it is indirect damage
-    public int reduceHealthFraction(Battle b, double fraction) {
-        return reduceHealth(b, (int)Math.max(this.getMaxHP()*fraction, 1), false);
+    // Reduces the amount of health that corresponds to fraction of the pokemon's max health
+    // Returns the total amount of health reduced
+    // Will always reduce damage regardless of effects like Magic Guard
+    public int forceReduceHealthFraction(Battle b, double fraction, String message) {
+        return this.reduceHealthFraction(b, fraction, true, message);
     }
 
+    // Reduces the amount of health that corresponds to fraction of the pokemon's max health
+    // Returns the total amount of health reduced
+    // Will consider effects like Magic Guard and potentially not reduce damage
+    public int reduceHealthFraction(Battle b, double fraction, String message) {
+        return this.reduceHealthFraction(b, fraction, false, message);
+    }
+
+    // Fraction reduction is always indirect damage
+    private int reduceHealthFraction(Battle b, double fraction, boolean forced, String message) {
+        return indirectReduceHealth(b, (int)Math.max(this.getMaxHP()*fraction, 1), forced, message);
+    }
+
+    // General rule of thumb: forced is true if it should still reduce damage for Magical Guardians
+    public int indirectReduceHealth(Battle b, int amount, boolean forced, String message) {
+        return this.reduceHealth(b, amount, forced ? DamageType.FORCED_INDIRECT : DamageType.CASUAL_INDIRECT, message);
+    }
+
+    // No message for direct damage
     public int reduceHealth(Battle b, int amount) {
-        return this.reduceHealth(b, amount, true);
+        return this.reduceHealth(b, amount, DamageType.DIRECT, "");
     }
 
     // Reduces hp by amount, returns the actual amount of hp that was reduced
-    // Only checks effects like bracing and absorb damage is isDirectDamage is true
-    public int reduceHealth(Battle b, int amount, boolean isDirectDamage) {
+    // Only checks effects like bracing and absorb damage is damageType is DIRECT
+    // Only prints the message if damage is actually reduced (or absorbed)
+    private int reduceHealth(Battle b, int amount, DamageType damageType, String message) {
 
         // Not actually reducing health...
         if (amount == 0) {
             return 0;
         }
 
+        // Magic Guard make the user immune to indirect damage
+        if (damageType == DamageType.CASUAL_INDIRECT && this.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
+            return 0;
+        }
+
+        Messages.add(message);
+
         // Check if the damage will be absorbed by an effect
-        if (isDirectDamage && AbsorbDamageEffect.checkAbsorbDamageEffect(b, this, amount)) {
+        if (damageType == DamageType.DIRECT && AbsorbDamageEffect.checkAbsorbDamageEffect(b, this, amount)) {
             return 0;
         }
 
@@ -633,7 +660,7 @@ public class ActivePokemon extends PartyPokemon {
         this.takeDamage(taken);
 
         // Enduring the hit
-        if (this.getHP() == 0 && isDirectDamage) {
+        if (this.getHP() == 0 && damageType == DamageType.DIRECT) {
             BracingEffect brace = BracingEffect.getBracingEffect(b, this, fullHealth);
             if (brace != null) {
                 taken -= heal(1);
@@ -643,8 +670,9 @@ public class ActivePokemon extends PartyPokemon {
             }
         }
 
+        Messages.add(new MessageUpdate().updatePokemon(b, this));
+
         if (!isFainted(b)) {
-            Messages.add(new MessageUpdate().updatePokemon(b, this));
             DamageTakenEffect.invokeDamageTakenEffect(b, this);
         }
 
@@ -897,5 +925,16 @@ public class ActivePokemon extends PartyPokemon {
 
     public static class PokemonEffectList extends EffectList<PokemonEffectNamesies, PokemonEffect> {
         private static final long serialVersionUID = 1L;
+    }
+
+    private enum DamageType {
+        // Damage caused by a straight-up attack (like Tackle)
+        DIRECT,
+
+        // Indirect damage that MUST be taken (like the user fainting from Explosion)
+        FORCED_INDIRECT,
+
+        // Indirect damage that doesn't necessarily need to be taken (like poison damage and Magic Guard)
+        CASUAL_INDIRECT
     }
 }

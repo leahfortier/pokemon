@@ -1,6 +1,7 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
+import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
@@ -741,5 +742,229 @@ public class AbilityTest extends BaseTest {
         new TestStages().test(defending);
 
         // TODO: Petal Dance and Lunar Dance
+    }
+
+    @Test
+    public void sturdyTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.STURDY);
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.STURDY);
+
+        // Make sure they actually die for moves that cause the user to faint
+        battle.defendingFight(AttackNamesies.EXPLOSION);
+        Assert.assertFalse(attacking.isFainted(battle));
+        Assert.assertTrue(attacking.getHP() > 0);
+        attacking.assertNotFullHealth();
+        Assert.assertTrue(defending.isFainted(battle));
+    }
+
+    @Test
+    public void magicGuardTest() {
+        // Make sure they actually die for moves that cause the user to faint (no difference with magic guard)
+        magicGuardTest(
+                new TestInfo().fight(AttackNamesies.ENDURE, AttackNamesies.EXPLOSION),
+                (battle, attacking, defending) -> {
+                    Assert.assertFalse(attacking.isFainted(battle));
+                    Assert.assertTrue(attacking.getHP() > 0);
+                    attacking.assertNotFullHealth();
+                    Assert.assertTrue(defending.isFainted(battle));
+                }
+        );
+
+        // Magic Guard does not protect against struggle
+        magicGuardTest(
+                new TestInfo().fight(AttackNamesies.ENDURE, AttackNamesies.STRUGGLE),
+                (battle, attacking, defending) -> {
+                    attacking.assertNotFullHealth();
+                    defending.assertHealthRatio(.75);
+                }
+        );
+
+        // But it does work against other recoil moves
+        magicGuardTest(
+                new TestInfo().fight(AttackNamesies.ENDURE, AttackNamesies.TAKE_DOWN),
+                (battle, attacking, defending) -> {
+                    attacking.assertNotFullHealth();
+                    defending.assertNotFullHealth();
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertNotFullHealth();
+                    defending.assertFullHealth();
+                }
+        );
+
+        // Magic Guard takes no poison damage (but will still be considered poisoned)
+        magicGuardTest(
+                new TestInfo().attackingFight(AttackNamesies.TOXIC),
+                (battle, attacking, defending) -> {
+                    attacking.assertFullHealth();
+                    defending.assertHealthRatio(15/16.0);
+                    Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertFullHealth();
+                    defending.assertFullHealth();
+                    Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+                }
+        );
+
+        // Magic Guard prevents leech seed sucking
+        // Make sure it does not heal the sucker
+        magicGuardTest(
+                new TestInfo().fight(AttackNamesies.LEECH_SEED, AttackNamesies.SUPER_FANG),
+                (battle, attacking, defending) -> {
+                    TestUtils.assertGreater(attacking.getHpString(), attacking.getHPRatio(), .5);
+                    defending.assertHealthRatio(7/8.0);
+                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.LEECH_SEED));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHealthRatio(.5, 1);
+                    defending.assertFullHealth();
+                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.LEECH_SEED));
+                }
+        );
+
+        // Should still take damage from Belly Drum
+        magicGuardTest(
+                new TestInfo().fight(AttackNamesies.GROWL, AttackNamesies.BELLY_DRUM),
+                (battle, attacking, defending) -> {
+                    attacking.assertFullHealth();
+                    defending.assertHealthRatio(.5);
+                    new TestStages().test(attacking);
+                    new TestStages().set(Stat.ATTACK, Stat.MAX_STAT_CHANGES).test(defending);
+                }
+        );
+
+        // Should take damage from using curse as a ghost-type
+        magicGuardTest(
+                new TestInfo().defending(PokemonNamesies.GASTLY).defendingFight(AttackNamesies.CURSE),
+                (battle, attacking, defending) -> {
+                    attacking.assertHealthRatio(.75);
+                    defending.assertHealthRatio(.5);
+                    new TestStages().test(attacking);
+                    new TestStages().test(defending);
+                    Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CURSE));
+                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CURSE));
+                }
+        );
+
+        // But shouldn't take damage from the curse
+        magicGuardTest(
+                new TestInfo().attacking(PokemonNamesies.GASTLY).attackingFight(AttackNamesies.CURSE),
+                (battle, attacking, defending) -> {
+                    attacking.assertHealthRatio(.5);
+                    defending.assertHealthRatio(.75);
+                    new TestStages().test(attacking);
+                    new TestStages().test(defending);
+                    Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CURSE));
+                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CURSE));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHealthRatio(.5);
+                    defending.assertHealthRatio(1);
+                    new TestStages().test(attacking);
+                    new TestStages().test(defending);
+                    Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CURSE));
+                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CURSE));
+                }
+        );
+
+        // Should take no damage from sandstorm
+        magicGuardTest(
+                new TestInfo().attackingFight(AttackNamesies.SANDSTORM),
+                (battle, attacking, defending) -> {
+                    attacking.assertHealthRatio(15/16.0);
+                    defending.assertHealthRatio(15/16.0);
+                    Assert.assertTrue(battle.hasEffect(WeatherNamesies.SANDSTORM));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHealthRatio(15/16.0);
+                    defending.assertFullHealth();
+                    Assert.assertTrue(battle.hasEffect(WeatherNamesies.SANDSTORM));
+                }
+        );
+
+        // Should not take damage from Life Orb
+        magicGuardTest(
+                new TestInfo().defending(ItemNamesies.LIFE_ORB)
+                              .with((battle, attacking, defending) -> {
+                                  battle.setExpectedDamageModifier(5324.0/4096.0);
+                                  battle.fight(AttackNamesies.ENDURE, AttackNamesies.TACKLE);
+                              }),
+                (battle, attacking, defending) -> {
+                    attacking.assertNotFullHealth();
+                    defending.assertHealthRatio(.9);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertNotFullHealth();
+                    defending.assertFullHealth();
+                }
+        );
+
+        // Should not take damage from Mind Blown
+        magicGuardTest(
+                new TestInfo().fight(AttackNamesies.ENDURE, AttackNamesies.MIND_BLOWN),
+                (battle, attacking, defending) -> {
+                    attacking.assertNotFullHealth();
+                    defending.assertHealthRatio(.5);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertNotFullHealth();
+                    defending.assertFullHealth();
+                }
+        );
+
+        // Make sure Magic Guardian still takes direct damage from sap health moves and leech face leeches life
+        magicGuardTest(
+                new TestInfo().with((battle, attacking, defending) -> {
+                    battle.attackingFight(AttackNamesies.BELLY_DRUM);
+                    attacking.assertHealthRatio(.5);
+                    defending.assertFullHealth();
+
+                    battle.fight(AttackNamesies.ABSORB, AttackNamesies.ENDURE);
+                }),
+                (battle, attacking, defending) -> {
+                    TestUtils.assertGreater(attacking.getHpString(), attacking.getHPRatio(), .5);
+                    defending.assertNotFullHealth();
+                }
+        );
+
+        // Don't lose health from Liquid Ooze (I guess? can't find anything to the contrary...)
+        // But don't gain health either
+        magicGuardTest(
+                new TestInfo().attacking(AbilityNamesies.LIQUID_OOZE)
+                              .with((battle, attacking, defending) -> {
+                                  battle.defendingFight(AttackNamesies.BELLY_DRUM);
+                                  attacking.assertFullHealth();
+                                  defending.assertHealthRatio(.5);
+
+                                  battle.fight(AttackNamesies.ENDURE, AttackNamesies.ABSORB);
+                              }),
+                (battle, attacking, defending) -> {
+                    attacking.assertNotFullHealth();
+                    TestUtils.assertGreater(defending.getHpString(), .5, defending.getHPRatio());
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertNotFullHealth();
+                    defending.assertHealthRatio(.5);
+                }
+        );
+    }
+
+    // For when the result is the same with or without magic guard
+    private void magicGuardTest(TestInfo setup, PokemonManipulator samesies) {
+        magicGuardTest(setup, samesies, samesies);
+    }
+
+    private void magicGuardTest(TestInfo setup, PokemonManipulator withoutMagicGuard, PokemonManipulator withMagicGuard) {
+        TestBattle battle = setup.createBattle();
+        setup.manipulate(battle);
+        Assert.assertFalse(battle.getDefending().hasAbility(AbilityNamesies.MAGIC_GUARD));
+        withoutMagicGuard.manipulate(battle);
+
+        battle = setup.createBattle();
+        battle.getDefending().withAbility(AbilityNamesies.MAGIC_GUARD);
+        setup.manipulate(battle);
+        withMagicGuard.manipulate(battle);
     }
 }

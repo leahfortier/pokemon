@@ -147,8 +147,7 @@ Struggle:
     Desc: This attack is used in desperation only if the user has no PP. It also damages the user a little.
     Cat: Physical
     Recoil:
-        Messages.add(user.getName() + " was hurt by recoil!");
-        user.reduceHealthFraction(b, 1/4.0);
+        user.forceReduceHealthFraction(b, 1/4.0, user.getName() + " was hurt by recoil!");
         ###
     MoveType: Encoreless, Mimicless, Assistless, Metronomeless, Mirrorless
 *
@@ -2366,10 +2365,10 @@ Belly Drum:
     UniqueEffects:
         // Maximization station
         user.getStages().modifyStage(
-            user, Stat.MAX_STAT_CHANGES, Stat.ATTACK, b, CastSource.ATTACK, 
-            (victimName, statName, changed) -> user.getName() + " cut its own HP and maximized " + victimName + " " + statName + "!"
+                user, 2*Stat.MAX_STAT_CHANGES, Stat.ATTACK, b, CastSource.ATTACK,
+                (victimName, statName, changed) -> user.getName() + " cut its own HP and maximized " + victimName + " " + statName + "!"
         );
-        user.reduceHealthFraction(b, 1/2.0);
+        user.forceReduceHealthFraction(b, 1/2.0, "");
         ###
 *
 Submission:
@@ -6561,10 +6560,7 @@ Mind Blown:
     Cat: Special
     MoveType: Exploding
     UniqueEffects:
-        Messages.add(user.getName() + " blew its mind!!!");
-        if (!user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-            user.reduceHealthFraction(b, 1/2.0);
-        }
+        user.reduceHealthFraction(b, 1/2.0, user.getName() + " blew its mind!!!");
         ###
 *
 Plasma Fists:

@@ -308,8 +308,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
-                Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
-                victim.reduceHealthFraction(b, 1/8.0);
+                victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
             }
         }
 
@@ -823,8 +822,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
-                Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
-                victim.reduceHealthFraction(b, 1/8.0);
+                victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
             } else if (b.getWeather().namesies() == WeatherNamesies.RAINING) {
                 victim.healHealthFraction(1/8.0, b, victim.getName() + "'s HP was restored due to its " + this.getName() + "!");
             }
@@ -2271,8 +2269,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
-            user.reduceHealthFraction(b, 1/8.0);
+            user.reduceHealthFraction(b, 1/8.0, user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
         }
     }
 
@@ -2516,8 +2513,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.isFainted(b) && !user.hasAbility(AbilityNamesies.DAMP)) {
-                Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
-                user.reduceHealthFraction(b, 1/4.0);
+                user.reduceHealthFraction(b, 1/4.0, user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
             }
         }
     }
@@ -2671,8 +2667,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             ActivePokemon other = b.getOtherPokemon(victim);
             if (other.hasStatus(StatusNamesies.ASLEEP)) {
-                Messages.add(other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
-                other.reduceHealthFraction(b, 1/8.0);
+                other.reduceHealthFraction(b, 1/8.0, other.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
             }
         }
     }
@@ -2990,8 +2985,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
-            user.reduceHealthFraction(b, 1/8.0);
+            user.reduceHealthFraction(b, 1/8.0, user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
         }
     }
 
@@ -4241,8 +4235,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         private void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-            Messages.add(murderer.getName() + " was hurt by " + dead.getName() + "'s " + this.getName() + "!");
-            murderer.reduceHealth(b, dead.getDamageTaken(), false);
+            // TODO: I don't think the murderer.isAttacking() is sufficient for deathwish
+            murderer.indirectReduceHealth(b, dead.getDamageTaken(), false, murderer.getName() + " was hurt by " + dead.getName() + "'s " + this.getName() + "!");
         }
 
         @Override

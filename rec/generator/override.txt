@@ -82,15 +82,9 @@ PoisonCondition:
     AddMapField: ApplyEndTurn:
         if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
             victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + AbilityNamesies.POISON_HEAL.getName() + " restored its health!");
-            return;
+        } else {
+            victim.reduceHealthFraction(b, {0}, victim.getName() + " was hurt by its poison!");
         }
-
-        if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-            return;
-        }
-
-        Messages.add(victim.getName() + " was hurt by its poison!");
-        victim.reduceHealthFraction(b, {0});
         ###
 *
 Recoil:
@@ -637,15 +631,9 @@ PartialTrap:
 	AddMapField: RapidSpin: released.getName() + " was released from {1_}!"
 	AddMapField: TrappingMessage: trapped.getName() + " cannot be recalled due to {1_}!"
 	AddMapField: ApplyEndTurn:
-		if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-			return;
-		}
-
-		Messages.add(victim.getName() + " is hurt by {1_}!");
-
 		// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
         double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-		victim.reduceHealthFraction(b, fraction);
+		victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by {1_}!");
 		###
 *
 SafeguardEffect:
@@ -1207,8 +1195,7 @@ BuffetMessage:
         }
 
         // Buffety buffety buffet
-        Messages.add({0});
-        victim.reduceHealthFraction(b, 1/16.0);
+        victim.reduceHealthFraction(b, 1/16.0, {0});
 		###
 *
 WeatherStatChange:

@@ -48,6 +48,10 @@ class TestInfo {
         return this;
     }
 
+    TestInfo fight(AttackNamesies attackingMove, AttackNamesies defendingMove) {
+        return this.with((battle, attacking, defending) -> battle.fight(attackingMove, defendingMove));
+    }
+
     TestInfo attackingFight(AttackNamesies attackName) {
         return this.with((battle, attacking, defending) -> battle.attackingFight(attackName));
     }

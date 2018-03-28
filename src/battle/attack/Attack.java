@@ -342,7 +342,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
     private void applyUniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
         // Kill yourself!!
         if (isMoveType(MoveType.USER_FAINTS)) {
-            user.killKillKillMurderMurderMurder(b);
+            user.killKillKillMurderMurderMurder(b, "");
         }
 
         this.uniqueEffects(b, user, victim);
@@ -571,8 +571,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void applyRecoil(Battle b, ActivePokemon user, int damage) {
-            Messages.add(user.getName() + " was hurt by recoil!");
-            user.reduceHealthFraction(b, 1/4.0);
+            user.forceReduceHealthFraction(b, 1/4.0, user.getName() + " was hurt by recoil!");
         }
     }
 
@@ -4337,10 +4336,10 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Maximization station
             user.getStages().modifyStage(
-                    user, Stat.MAX_STAT_CHANGES, Stat.ATTACK, b, CastSource.ATTACK,
+                    user, 2*Stat.MAX_STAT_CHANGES, Stat.ATTACK, b, CastSource.ATTACK,
                     (victimName, statName, changed) -> user.getName() + " cut its own HP and maximized " + victimName + " " + statName + "!"
             );
-            user.reduceHealthFraction(b, 1/2.0);
+            user.forceReduceHealthFraction(b, 1/2.0, "");
         }
 
         @Override
@@ -11092,10 +11091,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Messages.add(user.getName() + " blew its mind!!!");
-            if (!user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                user.reduceHealthFraction(b, 1/2.0);
-            }
+            user.reduceHealthFraction(b, 1/2.0, user.getName() + " blew its mind!!!");
         }
     }
 

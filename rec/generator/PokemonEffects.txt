@@ -32,13 +32,9 @@ LeechSeed:
         ###
     CastMessage: victim.getName() + " was seeded!"
     ApplyEndTurn:
-        if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-            return;
-        }
-
-        // Message needs to be added first instead of in sapHealth so that it is before the victim's reduce health message
-        Messages.add(this.getSapMessage(victim));
-        this.sapHealth(b, b.getOtherPokemon(victim), victim, victim.reduceHealthFraction(b, 1/8.0), false);
+        // Only print the sap message once
+        int sappedAmount = victim.reduceHealthFraction(b, 1/8.0, this.getSapMessage(victim));
+        this.sapHealth(b, b.getOtherPokemon(victim), victim, sappedAmount, false);
         ###
     RapidSpin: released.getName() + " was released from leech seed!"
     OnApplyDamage:
@@ -96,8 +92,7 @@ SpikyShield:
     OnProtectingSuccess:
         // Pokemon that make contact with the spiky shield have their health reduced
         if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
-            Messages.add(p.getName() + " was hurt by " + opp.getName() + "'s Spiky Shield!");
-            p.reduceHealthFraction(b, 1/8.0);
+            p.reduceHealthFraction(b, 1/8.0, p.getName() + " was hurt by " + opp.getName() + "'s Spiky Shield!");
         }
         ###
 *
@@ -170,10 +165,10 @@ Confusion:
         if (RandomUtils.chanceTest(50)) {
         
             // Perform confusion damage
-            p.callTempMove(AttackNamesies.CONFUSION_DAMAGE, () -> {
-                    Messages.add("It hurt itself in confusion!");
-                    p.reduceHealth(b, b.calculateDamage(p, p));
-            });
+            p.callTempMove(
+                    AttackNamesies.CONFUSION_DAMAGE,
+                    () -> p.indirectReduceHealth(b, b.calculateDamage(p, p), true, "It hurt itself in confusion!")
+            );
 
             return false;
         }
@@ -600,16 +595,11 @@ Grounded:
 Curse:
     Int: EndTurnEffect, PassableEffect
     ApplyEndTurn:
-        if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-            return;
-        }
-
-        Messages.add(victim.getName() + " was hurt by the curse!");
-        victim.reduceHealthFraction(b, 1/4.0);
+        victim.reduceHealthFraction(b, 1/4.0, victim.getName() + " was hurt by the curse!");
         ###
     CastMessage: user.getName() + " cut its own HP and put a curse on " + victim.getName() + "!"
     AfterCast:
-        caster.reduceHealthFraction(b, 1/2.0);
+        caster.forceReduceHealthFraction(b, 1/2.0, "");
         ###
 *
 Yawn:
@@ -680,12 +670,7 @@ Nightmare:
             return;
         }
 
-        if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-            return;
-        }
-
-        Messages.add(victim.getName() + " was hurt by its nightmare!");
-        victim.reduceHealthFraction(b, 1/4.0);
+        victim.reduceHealthFraction(b, 1/4.0, victim.getName() + " was hurt by its nightmare!");
         ###
     ShouldSubside:
         return !victim.hasStatus(StatusNamesies.ASLEEP);
@@ -786,7 +771,9 @@ Substitute:
         ###
     CastMessage: victim.getName() + " put in a substitute!"
     BeforeCast:
-        hp = victim.reduceHealthFraction(b, .25) + 1;
+        // TODO: Should this be in after cast so it comes after the cast message??
+        // If that doesn't work either then put the cast message in this method and don't override cast message
+        hp = victim.forceReduceHealthFraction(b, .25, "") + 1;
         ###
     AfterCast:
         String imageName = "substitute" + (victim.isPlayer() ? "-back" : "");
@@ -997,8 +984,7 @@ DestinyBond:
         return true;
         ###
     DeathWish:
-        Messages.add(dead.getName() + " took " + murderer.getName() + " down with it!");
-        murderer.killKillKillMurderMurderMurder(b);
+        murderer.killKillKillMurderMurderMurder(b, dead.getName() + " took " + murderer.getName() + " down with it!");
         ###
     SuccessiveDecay: True
 *
@@ -1014,7 +1000,7 @@ PerishSong:
     ApplyEndTurn:
         Messages.add(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!");
         if (super.numTurns == 1) {
-            victim.killKillKillMurderMurderMurder(b);
+            victim.killKillKillMurderMurderMurder(b, "");
         }
         ###
 *
@@ -1057,9 +1043,7 @@ Powder:
         return user.isAttackType(Type.FIRE);
         ###
     SelfAlternateEffect:
-        if (!user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-            user.reduceHealthFraction(b, 1/4.0);
-        }
+        user.reduceHealthFraction(b, 1/4.0, "");
         ###
     SelfBlockMessage:
         return "The powder exploded!";

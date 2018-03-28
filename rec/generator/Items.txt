@@ -97,9 +97,8 @@ Black Sludge:
     ApplyEndTurn:
         if (victim.isType(b, Type.POISON)) {
             victim.healHealthFraction(1/16.0, b, victim.getName() + "'s HP was restored by its " + this.getName() + "!");
-        } else if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-            Messages.add(victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
-            victim.reduceHealthFraction(b, 1/8.0);
+        } else {
+            victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
         }
         ###
 *
@@ -276,12 +275,7 @@ Life Orb:
         return 5324.0/4096.0;
         ###
     OnApplyDamage:
-        if (user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-            return;
-        }
-
-        Messages.add(user.getName() + " was hurt by its " + this.getName() + "!");
-        user.reduceHealthFraction(b, .1);
+        user.reduceHealthFraction(b, .1, user.getName() + " was hurt by its " + this.getName() + "!");
         ###
 *
 Light Ball:
@@ -463,8 +457,7 @@ Rocky Helmet:
     Price: 4000
     Fling: 60
     Contact:
-        Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
-        user.reduceHealthFraction(b, 1/8.0);
+        user.reduceHealthFraction(b, 1/8.0, user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
         ###
 *
 Safety Goggles:
@@ -546,10 +539,7 @@ Sticky Barb:
     Fling: 80
     Field:
         private void stickyPoke(Battle b, ActivePokemon victim, String possession) {
-            if (!victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                Messages.add(victim.getName() + " was hurt by " + possession + " " + this.getName() + "!");
-                victim.reduceHealthFraction(b, 1/8.0);
-            }
+            victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " was hurt by " + possession + " " + this.getName() + "!");
         }
         ###
     ApplyEndTurn:

@@ -111,13 +111,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            // Message needs to be added first instead of in sapHealth so that it is before the victim's reduce health message
-            Messages.add(this.getSapMessage(victim));
-            this.sapHealth(b, b.getOtherPokemon(victim), victim, victim.reduceHealthFraction(b, 1/8.0), false);
+            // Only print the sap message once
+            int sappedAmount = victim.reduceHealthFraction(b, 1/8.0, this.getSapMessage(victim));
+            this.sapHealth(b, b.getOtherPokemon(victim), victim, sappedAmount, false);
         }
 
         @Override
@@ -206,15 +202,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(victim.getName() + " is hurt by fire spin!");
-
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
             double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction);
+            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by fire spin!");
         }
 
         @Override
@@ -259,15 +249,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(victim.getName() + " is hurt by infestation!");
-
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
             double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction);
+            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by infestation!");
         }
 
         @Override
@@ -312,15 +296,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(victim.getName() + " is hurt by magma storm!");
-
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
             double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction);
+            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by magma storm!");
         }
 
         @Override
@@ -365,15 +343,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(victim.getName() + " is hurt by clamp!");
-
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
             double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction);
+            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by clamp!");
         }
 
         @Override
@@ -418,15 +390,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(victim.getName() + " is hurt by whirlpool!");
-
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
             double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction);
+            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by whirlpool!");
         }
 
         @Override
@@ -471,15 +437,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(victim.getName() + " is hurt by wrap!");
-
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
             double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction);
+            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by wrap!");
         }
 
         @Override
@@ -524,15 +484,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(victim.getName() + " is hurt by bind!");
-
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
             double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction);
+            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by bind!");
         }
 
         @Override
@@ -577,15 +531,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(victim.getName() + " is hurt by sand tomb!");
-
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
             double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction);
+            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by sand tomb!");
         }
 
         @Override
@@ -639,8 +587,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
             // Pokemon that make contact with the spiky shield have their health reduced
             if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
-                Messages.add(p.getName() + " was hurt by " + opp.getName() + "'s Spiky Shield!");
-                p.reduceHealthFraction(b, 1/8.0);
+                p.reduceHealthFraction(b, 1/8.0, p.getName() + " was hurt by " + opp.getName() + "'s Spiky Shield!");
             }
         }
 
@@ -823,10 +770,10 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             if (RandomUtils.chanceTest(50)) {
 
                 // Perform confusion damage
-                p.callTempMove(AttackNamesies.CONFUSION_DAMAGE, () -> {
-                    Messages.add("It hurt itself in confusion!");
-                    p.reduceHealth(b, b.calculateDamage(p, p));
-                });
+                p.callTempMove(
+                        AttackNamesies.CONFUSION_DAMAGE,
+                        () -> p.indirectReduceHealth(b, b.calculateDamage(p, p), true, "It hurt itself in confusion!")
+                );
 
                 return false;
             }
@@ -1690,17 +1637,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(victim.getName() + " was hurt by the curse!");
-            victim.reduceHealthFraction(b, 1/4.0);
+            victim.reduceHealthFraction(b, 1/4.0, victim.getName() + " was hurt by the curse!");
         }
 
         @Override
         public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            caster.reduceHealthFraction(b, 1/2.0);
+            caster.forceReduceHealthFraction(b, 1/2.0, "");
         }
 
         @Override
@@ -1877,12 +1819,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
                 return;
             }
 
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(victim.getName() + " was hurt by its nightmare!");
-            victim.reduceHealthFraction(b, 1/4.0);
+            victim.reduceHealthFraction(b, 1/4.0, victim.getName() + " was hurt by its nightmare!");
         }
 
         @Override
@@ -2090,7 +2027,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            hp = victim.reduceHealthFraction(b, .25) + 1;
+            // TODO: Should this be in after cast so it comes after the cast message??
+            // If that doesn't work either then put the cast message in this method and don't override cast message
+            hp = victim.forceReduceHealthFraction(b, .25, "") + 1;
         }
 
         @Override
@@ -2541,8 +2480,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         private void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-            Messages.add(dead.getName() + " took " + murderer.getName() + " down with it!");
-            murderer.killKillKillMurderMurderMurder(b);
+            murderer.killKillKillMurderMurderMurder(b, dead.getName() + " took " + murderer.getName() + " down with it!");
         }
 
         @Override
@@ -2575,7 +2513,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             Messages.add(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!");
             if (super.numTurns == 1) {
-                victim.killKillKillMurderMurderMurder(b);
+                victim.killKillKillMurderMurderMurder(b, "");
             }
         }
 
@@ -2683,9 +2621,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void alternateEffect(Battle b, ActivePokemon user) {
-            if (!user.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                user.reduceHealthFraction(b, 1/4.0);
-            }
+            user.reduceHealthFraction(b, 1/4.0, "");
         }
 
         @Override

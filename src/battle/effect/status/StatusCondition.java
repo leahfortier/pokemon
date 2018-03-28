@@ -286,15 +286,9 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
                 victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + AbilityNamesies.POISON_HEAL.getName() + " restored its health!");
-                return;
+            } else {
+                victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " was hurt by its poison!");
             }
-
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(victim.getName() + " was hurt by its poison!");
-            victim.reduceHealthFraction(b, 1/8.0);
         }
 
         @Override
@@ -344,15 +338,9 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
                 victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + AbilityNamesies.POISON_HEAL.getName() + " restored its health!");
-                return;
+            } else {
+                victim.reduceHealthFraction(b, this.turns++/16.0, victim.getName() + " was hurt by its poison!");
             }
-
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(victim.getName() + " was hurt by its poison!");
-            victim.reduceHealthFraction(b, this.turns++/16.0);
         }
 
         @Override
@@ -407,12 +395,8 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-                return;
-            }
-
-            Messages.add(victim.getName() + " was hurt by its burn!");
-            victim.reduceHealthFraction(b, victim.hasAbility(AbilityNamesies.HEATPROOF) ? 1/16.0 : 1/8.0);
+            double reduceFraction = victim.hasAbility(AbilityNamesies.HEATPROOF) ? 1/16.0 : 1/8.0;
+            victim.reduceHealthFraction(b, reduceFraction, victim.getName() + " was hurt by its burn!");
         }
 
         @Override

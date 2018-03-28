@@ -6,7 +6,6 @@ import battle.attack.MoveCategory;
 import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.source.CastSource;
-import message.Messages;
 import pokemon.Stat;
 
 public interface CategoryBerry extends Berry {
@@ -39,9 +38,8 @@ public interface CategoryBerry extends Berry {
         @Override
         default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
             // If hit by a move of a specific category, the user will also be hurt
-            if (user.getAttack().getCategory() == this.getCategory()) {
-                Messages.add(user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!");
-                user.reduceHealthFraction(b, 1/8.0);
+            if (user.getAttack().getCategory() == this.getCategory()
+                    && user.reduceHealthFraction(b, 1/8.0, user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!") > 0) {
                 this.consumeItem(b, victim);
             }
         }

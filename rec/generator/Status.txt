@@ -82,12 +82,8 @@ Burned:
     CatchMod: 1.5
     Int: EndTurnEffect
     ApplyEndTurn:
-        if (victim.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
-            return;
-        }
-
-        Messages.add(victim.getName() + " was hurt by its burn!");
-        victim.reduceHealthFraction(b, victim.hasAbility(AbilityNamesies.HEATPROOF) ? 1/16.0 : 1/8.0);
+        double reduceFraction = victim.hasAbility(AbilityNamesies.HEATPROOF) ? 1/16.0 : 1/8.0;
+        victim.reduceHealthFraction(b, reduceFraction, victim.getName() + " was hurt by its burn!");
         ###
     Comments: 
         // Fire-type Pokemon cannot be burned
