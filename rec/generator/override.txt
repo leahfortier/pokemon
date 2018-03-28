@@ -302,13 +302,8 @@ ProtectingAttack:
 	AddMapField: MoveType: Successive_Decay, Assistless, Metronomeless, Non_Snatchable
 *
 OHKO:
+    AddInterface: OhkoMove
 	AddMapField: Applies: user.getLevel() >= victim.getLevel()
-	AddMapField: ApplyDamage:
-		// Certain death
-		o.reduceHealth(b, o.getHP());
-		Messages.add("It's a One-Hit KO!");
-		###
-	AddMapField: MoveType: One_Hit_KO
 	AddMapField: GetAccuracy:
 		return super.accuracy + (me.getLevel() - o.getLevel());
 		###

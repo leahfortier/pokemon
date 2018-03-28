@@ -570,7 +570,7 @@ Telekinesis:
     Int: LevitationEffect
     OpponentBypassAccuracy:
         // Opponent can always strike you unless they are using a OHKO move or you are semi-invulnerable
-        return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO) && !defending.isSemiInvulnerable();
+        return !(attacking.getAttack() instanceof OhkoMove) && !defending.isSemiInvulnerable();
         ###
     FallMessage: "The effects of telekinesis were cancelled!"
 *

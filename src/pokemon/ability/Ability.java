@@ -72,6 +72,7 @@ import battle.effect.InvokeInterfaces.TypedWildEncounterSelector;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
 import battle.effect.InvokeInterfaces.WeatherEliminatingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
+import battle.effect.attack.OhkoMove;
 import battle.effect.attack.RecoilMove;
 import battle.effect.battle.terrain.TerrainNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
@@ -1168,7 +1169,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttack().isMoveType(MoveType.ONE_HIT_KO);
+            return user.getAttack() instanceof OhkoMove;
         }
 
         @Override
@@ -2337,9 +2338,9 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             ActivePokemon other = b.getOtherPokemon(enterer);
-            for (Move m : other.getMoves(b)) {
-                Attack attack = m.getAttack();
-                if (attack.getActualType().getAdvantage().isSuperEffective(enterer, b) || attack.isMoveType(MoveType.ONE_HIT_KO)) {
+            for (Move move : other.getMoves(b)) {
+                Attack attack = move.getAttack();
+                if (attack instanceof OhkoMove || attack.getActualType().getAdvantage().isSuperEffective(enterer, b)) {
                     Messages.add(enterer.getName() + "'s " + this.getName() + " made it shudder!");
                     break;
                 }

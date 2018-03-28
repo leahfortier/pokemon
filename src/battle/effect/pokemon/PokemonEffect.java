@@ -48,6 +48,7 @@ import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.MessageGetter;
+import battle.effect.attack.OhkoMove;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
@@ -1541,7 +1542,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Opponent can always strike you unless they are using a OHKO move or you are semi-invulnerable
-            return !attacking.getAttack().isMoveType(MoveType.ONE_HIT_KO) && !defending.isSemiInvulnerable();
+            return !(attacking.getAttack() instanceof OhkoMove) && !defending.isSemiInvulnerable();
         }
 
         @Override

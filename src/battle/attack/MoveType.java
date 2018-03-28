@@ -17,7 +17,6 @@ public enum MoveType {
     MIRRORLESS,
     NO_MAGIC_COAT,
     NON_SNATCHABLE,
-    ONE_HIT_KO,
     PHYSICAL_CONTACT,
     PROTECT_PIERCING,
     PUNCHING,

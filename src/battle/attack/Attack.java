@@ -37,6 +37,7 @@ import battle.effect.attack.FixedDamageMove;
 import battle.effect.attack.MultiStrikeMove;
 import battle.effect.attack.MultiTurnMove.ChargingMove;
 import battle.effect.attack.MultiTurnMove.RechargingMove;
+import battle.effect.attack.OhkoMove;
 import battle.effect.attack.PowerCountMove;
 import battle.effect.attack.RecoilMove;
 import battle.effect.attack.RecoilMove.RecoilPercentageMove;
@@ -3006,21 +3007,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class HornDrill extends Attack {
+    static class HornDrill extends Attack implements OhkoMove {
         private static final long serialVersionUID = 1L;
 
         HornDrill() {
             super(AttackNamesies.HORN_DRILL, Type.NORMAL, MoveCategory.PHYSICAL, 5, "The user stabs the target with a horn that rotates like a drill. The target faints instantly if this attack hits.");
             super.accuracy = 30;
-            super.moveTypes.add(MoveType.ONE_HIT_KO);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            // Certain death
-            o.reduceHealth(b, o.getHP());
-            Messages.add("It's a One-Hit KO!");
         }
 
         @Override
@@ -3850,26 +3843,18 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class Fissure extends Attack implements SemiInvulnerableBypasser {
+    static class Fissure extends Attack implements OhkoMove, SemiInvulnerableBypasser {
         private static final long serialVersionUID = 1L;
 
         Fissure() {
             super(AttackNamesies.FISSURE, Type.GROUND, MoveCategory.PHYSICAL, 5, "The user opens up a fissure in the ground and drops the target in. The target faints instantly if this attack hits.");
             super.accuracy = 30;
-            super.moveTypes.add(MoveType.ONE_HIT_KO);
         }
 
         @Override
         public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hit when the opponent is underground
             return defending.isSemiInvulnerableDigging();
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            // Certain death
-            o.reduceHealth(b, o.getHP());
-            Messages.add("It's a One-Hit KO!");
         }
 
         @Override
@@ -5206,20 +5191,12 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class SheerCold extends Attack {
+    static class SheerCold extends Attack implements OhkoMove {
         private static final long serialVersionUID = 1L;
 
         SheerCold() {
             super(AttackNamesies.SHEER_COLD, Type.ICE, MoveCategory.SPECIAL, 5, "The target faints instantly. It's less likely to hit the target if it's used by Pok\u00e9mon other than Ice types.");
             super.accuracy = 30;
-            super.moveTypes.add(MoveType.ONE_HIT_KO);
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            // Certain death
-            o.reduceHealth(b, o.getHP());
-            Messages.add("It's a One-Hit KO!");
         }
 
         @Override
@@ -5624,21 +5601,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class Guillotine extends Attack {
+    static class Guillotine extends Attack implements OhkoMove {
         private static final long serialVersionUID = 1L;
 
         Guillotine() {
             super(AttackNamesies.GUILLOTINE, Type.NORMAL, MoveCategory.PHYSICAL, 5, "A vicious, tearing attack with big pincers. The target faints instantly if this attack hits.");
             super.accuracy = 30;
-            super.moveTypes.add(MoveType.ONE_HIT_KO);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-        }
-
-        @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            // Certain death
-            o.reduceHealth(b, o.getHP());
-            Messages.add("It's a One-Hit KO!");
         }
 
         @Override
