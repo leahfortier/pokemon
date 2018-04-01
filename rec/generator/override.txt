@@ -823,8 +823,8 @@ GetMultiplier:
 GetOppMultiplier:
 	Header: double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 *
-ValidMove:
-	Header: boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
+ShouldBlock:
+	Header: boolean shouldBlock(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 StatProtect:
 	AddMapField: StatProtectingEffect: {0}

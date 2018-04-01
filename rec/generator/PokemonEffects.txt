@@ -765,30 +765,26 @@ Transformed:
         ###
 *
 Substitute:
-    Int: AbsorbDamageEffect, PassableEffect, EffectBlockerEffect
+    Int: AbsorbDamageEffect, PassableEffect, EffectBlockerEffect, StickyHoldEffect
     Field:
         private int hp;
         ###
-    CastMessage: victim.getName() + " put in a substitute!"
-    BeforeCast:
-        // TODO: Should this be in after cast so it comes after the cast message??
-        // If that doesn't work either then put the cast message in this method and don't override cast message
-        hp = victim.forceReduceHealthFraction(b, .25, "") + 1;
-        ###
     AfterCast:
+        this.hp = victim.forceReduceHealthFraction(b, .25, victim.getName() + " put in a substitute!") + 1;
+        
         String imageName = "substitute" + (victim.isPlayer() ? "-back" : "");
         Messages.add(new MessageUpdate().updatePokemon(b, victim).withImageName(imageName, victim.isPlayer()));
         ###
     FailCondition: victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3
-    ValidMove:
+    ShouldBlock:
         // Self-target and field moves are always successful
         if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD)) {
-            return true;
+            return false;
         }
 
         // Substitute-piercing moves, Sound-based moves, and Pokemon with the Infiltrator ability bypass Substitute
         if (user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING) || user.getAttack().isMoveType(MoveType.SOUND_BASED) || user.hasAbility(AbilityNamesies.INFILTRATOR)) {
-            return true;
+            return false;
         }
 
         // Print the failure for status moves
@@ -796,7 +792,7 @@ Substitute:
             Messages.add(this.getFailMessage(b, user, victim));
         }
 
-        return false;
+        return true;
         ###
     AbsorbDamage:
         this.hp -= damageAmount;

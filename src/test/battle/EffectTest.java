@@ -416,6 +416,7 @@ public class EffectTest extends BaseTest {
     public void substituteTest() {
         TestBattle battle = TestBattle.create(PokemonNamesies.HAPPINY, PokemonNamesies.KARTANA);
         TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
 
         battle.attackingFight(AttackNamesies.SUBSTITUTE);
         attacking.assertHealthRatio(.75);
@@ -431,6 +432,9 @@ public class EffectTest extends BaseTest {
         battle.defendingFight(AttackNamesies.TAIL_WHIP);
         new TestStages().test(attacking);
 
+        battle.defendingFight(AttackNamesies.LEECH_SEED);
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.LEECH_SEED));
+
         // Unless it is sound-based
         battle.defendingFight(AttackNamesies.GROWL);
         new TestStages().set(Stat.ATTACK, -1).test(attacking);
@@ -438,9 +442,20 @@ public class EffectTest extends BaseTest {
         attacking.assertFullHealth();
         Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
 
+        // Recoil damage should not be absorbed
+        battle.fight(AttackNamesies.TAKE_DOWN, AttackNamesies.ENDURE);
+        attacking.assertNotFullHealth();
+        defending.assertNotFullHealth();
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
+
+        battle.emptyHeal();
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
+
         // Break the substitute -- user should still have full health
-        battle.defendingFight(AttackNamesies.EARTHQUAKE);
+        // Recoil damage is calculated based on actual HP lost, so it will only take the minimum of 1 HP
+        battle.defendingFight(AttackNamesies.HEAD_SMASH);
         attacking.assertFullHealth();
+        Assert.assertEquals(defending.getMaxHP() - 1, defending.getHP());
         Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
 
         // No more substitute -- murder is fair game (except don't actualllly murder because it will heal the player)

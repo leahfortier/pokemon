@@ -43,8 +43,8 @@ Rain Dish:
 *
 Shield Dust:
     Desc: This Pok\u00e9mon's dust blocks the additional effects of attacks taken.
-    ValidMove:
-        return !user.getAttack().hasSecondaryEffects();
+    ShouldBlock:
+        return user.getAttack().hasSecondaryEffects();
         ###
     Int: EffectBlockerEffect
 *
@@ -1221,6 +1221,7 @@ Run Away:
 *
 Sticky Hold:
     Desc: Items held by the Pok\u00e9mon are stuck fast and cannot be removed by other Pok\u00e9mon.
+    Int: StickyHoldEffect
 *
 Klutz:
     Desc: The Pok\u00e9mon can't use any held items.

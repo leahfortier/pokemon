@@ -31,6 +31,7 @@ import battle.effect.InvokeInterfaces.SelfAttackBlocker;
 import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.SleepyFightsterEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
+import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.SwapOpponentEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.attack.FixedDamageMove;
@@ -8366,7 +8367,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             HoldItem heldItem = victim.getHeldItem(b);
-            if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !victim.hasAbility(AbilityNamesies.STICKY_HOLD)) {
+            if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !StickyHoldEffect.containsStickyHoldEffect(b, victim)) {
                 Messages.add(victim.getName() + "'s " + heldItem.getName() + " was burned!");
                 heldItem.consumeItemWithoutEffects(b, victim);
             }

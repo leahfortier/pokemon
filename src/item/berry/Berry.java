@@ -2,6 +2,7 @@ package item.berry;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import item.hold.HoldItem;
@@ -37,7 +38,7 @@ public interface Berry extends HoldItem {
 
     default void stealBerry(Battle b, ActivePokemon stealer, ActivePokemon holder) {
         // Can't steal sticky berries
-        if (holder.hasAbility(AbilityNamesies.STICKY_HOLD)) {
+        if (StickyHoldEffect.containsStickyHoldEffect(b, holder)) {
             return;
         }
 

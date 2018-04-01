@@ -14,6 +14,17 @@ import trainer.Trainer;
 
 @FunctionalInterface
 interface PokemonManipulator {
+    // Returns a new manipulator combining the actions of this and the parameter manipulators (in that order)
+    // Note: This is NOT a mutable operation (does not alter the current manipulator)
+    default PokemonManipulator add(PokemonManipulator... manipulators) {
+        return (battle, attacking, defending) -> {
+            this.manipulate(battle, attacking, defending);
+            for (PokemonManipulator manipulator : manipulators) {
+                manipulator.manipulate(battle, attacking, defending);
+            }
+        };
+    }
+
     default void manipulate(TestBattle battle) {
         this.manipulate(battle, battle.getAttacking(), battle.getDefending());
     }
@@ -36,14 +47,6 @@ interface PokemonManipulator {
 
     static PokemonManipulator empty() {
         return (battle, attacking, defending) -> {};
-    }
-
-    static PokemonManipulator combine(PokemonManipulator... manipulators) {
-        return (battle, attacking, defending) -> {
-            for (PokemonManipulator manipulator : manipulators) {
-                manipulator.manipulate(battle, attacking, defending);
-            }
-        };
     }
 
     static PokemonManipulator attackingAttack(AttackNamesies attackNamesies) {

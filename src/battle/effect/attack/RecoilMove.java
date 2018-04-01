@@ -23,12 +23,9 @@ public interface RecoilMove extends AttackInterface, ApplyDamageEffect {
                 return;
             }
 
-            user.indirectReduceHealth(
-                    b,
-                    (int)Math.ceil((double)damage/getDamagePercentageDenominator()),
-                    false,
-                    user.getName() + " was hurt by recoil!"
-            );
+            // Recoil amount must be at least one
+            int recoilAmount = (int)Math.max(Math.ceil((double)damage/getDamagePercentageDenominator()), 1);
+            user.indirectReduceHealth(b, recoilAmount, false, user.getName() + " was hurt by recoil!");
         }
     }
 }

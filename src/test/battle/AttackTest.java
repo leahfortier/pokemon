@@ -1418,25 +1418,45 @@ public class AttackTest extends BaseTest {
     }
 
     private void incinerateTest(ItemNamesies victimItem, boolean incinerated) {
-        TestBattle battle = TestBattle.create();
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
+        PokemonManipulator manipulator = (battle, attacking, defending) -> {
+            // Make sure victim does not consume the effects of the berry when eaten (in this example Oran Berry)
+            // Use Substitute so Incinerate damage will be absorbed and Oran Berry will not be able to activate naturally before incinerate to death
+            battle.defendingFight(AttackNamesies.SUBSTITUTE);
+            defending.assertHealthRatio(.75);
 
-        // Make sure victim does not consume the effects of the berry when eaten (in this example Oran Berry)
-        // Use Substitute so Incinerate damage will be absorbed and Oran Berry will not be able to activate naturally before incinerate to death
-        battle.defendingFight(AttackNamesies.SUBSTITUTE);
-        defending.assertHealthRatio(.75);
+            defending.withItem(victimItem);
+            battle.attackingFight(AttackNamesies.INCINERATE);
+        };
 
-        defending.withItem(victimItem);
-        battle.attackingFight(AttackNamesies.INCINERATE);
+        PokemonManipulator sticksies = (battle, attacking, defending) -> {
+            Assert.assertTrue(defending.hasAbility(AbilityNamesies.STICKY_HOLD));
+            Assert.assertTrue(defending.isHoldingItem(battle));
+            Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+            Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+            Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+            Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+            defending.assertHealthRatio(.75);
+            attacking.assertFullHealth();
+        };
 
-        Assert.assertNotEquals(incinerated, defending.isHoldingItem(battle));
-        Assert.assertEquals(incinerated, defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-        defending.assertHealthRatio(.75);
-        attacking.assertFullHealth();
+        PokemonManipulator nonStick = (battle, attacking, defending) -> {
+            Assert.assertNotEquals(incinerated, defending.isHoldingItem(battle));
+            Assert.assertEquals(incinerated, defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+            Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+            Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+            Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+            defending.assertHealthRatio(.75);
+            attacking.assertFullHealth();
+        };
+
+        new TestInfo(PokemonNamesies.XURKITREE, PokemonNamesies.IGGLYBUFF)
+                .with(manipulator)
+                .doubleTake(AbilityNamesies.STICKY_HOLD, nonStick, sticksies);
+
+        PokemonManipulator moldBreaker = PokemonManipulator.giveAttackingAbility(AbilityNamesies.MOLD_BREAKER);
+        new TestInfo(PokemonNamesies.XURKITREE, PokemonNamesies.IGGLYBUFF)
+                .with(moldBreaker.add(manipulator))
+                .doubleTake(AbilityNamesies.STICKY_HOLD, nonStick);
     }
 
     @Test

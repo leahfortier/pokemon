@@ -351,8 +351,8 @@ BeforeTurnEffect:
 ***
 EffectBlockerEffect:
 	Method:
-		Header: boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim)
-		Invoke: Check false
+		Header: boolean shouldBlock(Battle b, ActivePokemon user, ActivePokemon victim)
+		Invoke: Check true
 		InvokeName: checkBlocked
 		MoldBreaker: user
 		EffectList: victim
@@ -854,6 +854,14 @@ StallingEffect:
         Invoke: Contains
         InvokeParameters: Battle b, ActivePokemon p
         EffectList: p
+    *
+***
+StickyHoldEffect:
+    Method:
+        Invoke: Contains
+        InvokeParameters: Battle b, ActivePokemon stickyHands
+        EffectList: stickyHands
+        MoldBreaker: b.getOtherPokemon(stickyHands)
     *
 ***
 DefiniteEscape:

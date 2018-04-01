@@ -63,6 +63,7 @@ import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
+import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.InvokeInterfaces.SwapOpponentEffect;
 import battle.effect.InvokeInterfaces.SwitchOutEffect;
@@ -355,8 +356,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.getAttack().hasSecondaryEffects();
+        public boolean shouldBlock(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.getAttack().hasSecondaryEffects();
         }
     }
 
@@ -3037,7 +3038,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class StickyHold extends Ability {
+    static class StickyHold extends Ability implements StickyHoldEffect {
         private static final long serialVersionUID = 1L;
 
         StickyHold() {

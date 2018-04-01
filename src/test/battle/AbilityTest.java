@@ -953,18 +953,10 @@ public class AbilityTest extends BaseTest {
 
     // For when the result is the same with or without magic guard
     private void magicGuardTest(TestInfo setup, PokemonManipulator samesies) {
-        magicGuardTest(setup, samesies, samesies);
+        setup.doubleTake(AbilityNamesies.MAGIC_GUARD, samesies);
     }
 
     private void magicGuardTest(TestInfo setup, PokemonManipulator withoutMagicGuard, PokemonManipulator withMagicGuard) {
-        TestBattle battle = setup.createBattle();
-        setup.manipulate(battle);
-        Assert.assertFalse(battle.getDefending().hasAbility(AbilityNamesies.MAGIC_GUARD));
-        withoutMagicGuard.manipulate(battle);
-
-        battle = setup.createBattle();
-        battle.getDefending().withAbility(AbilityNamesies.MAGIC_GUARD);
-        setup.manipulate(battle);
-        withMagicGuard.manipulate(battle);
+        setup.doubleTake(AbilityNamesies.MAGIC_GUARD, withoutMagicGuard, withMagicGuard);
     }
 }

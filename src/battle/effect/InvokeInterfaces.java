@@ -872,7 +872,7 @@ public final class InvokeInterfaces {
     }
 
     public interface EffectBlockerEffect {
-        boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim);
+        boolean shouldBlock(Battle b, ActivePokemon user, ActivePokemon victim);
 
         static boolean checkBlocked(Battle b, ActivePokemon user, ActivePokemon victim) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);
@@ -885,7 +885,7 @@ public final class InvokeInterfaces {
                     }
 
                     EffectBlockerEffect effect = (EffectBlockerEffect)invokee;
-                    if (!effect.validMove(b, user, victim)) {
+                    if (effect.shouldBlock(b, user, victim)) {
                         return true;
                     }
                 }
@@ -1875,6 +1875,26 @@ public final class InvokeInterfaces {
             List<InvokeEffect> invokees = b.getEffectsList(p);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof StallingEffect && InvokeEffect.isActiveEffect(invokee)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
+    public interface StickyHoldEffect {
+
+        static boolean containsStickyHoldEffect(Battle b, ActivePokemon stickyHands) {
+            List<InvokeEffect> invokees = b.getEffectsList(stickyHands);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof StickyHoldEffect && InvokeEffect.isActiveEffect(invokee)) {
+
+                    // If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && b.getOtherPokemon(stickyHands).breaksTheMold()) {
+                        continue;
+                    }
+
                     return true;
                 }
             }

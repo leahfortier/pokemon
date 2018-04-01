@@ -20,6 +20,7 @@ import battle.effect.InvokeInterfaces.MurderEffect;
 import battle.effect.InvokeInterfaces.NameChanger;
 import battle.effect.InvokeInterfaces.OpponentItemBlockerEffect;
 import battle.effect.InvokeInterfaces.OpponentTrappingEffect;
+import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.holder.AbilityHolder;
@@ -288,7 +289,7 @@ public class ActivePokemon extends PartyPokemon {
     public boolean canSwapItems(Battle b, ActivePokemon swapster) {
         return (this.isHoldingItem(b) || swapster.isHoldingItem(b))
                 && !this.isWildPokemon(b)
-                && !(swapster.hasAbility(AbilityNamesies.STICKY_HOLD) && !this.breaksTheMold());
+                && !StickyHoldEffect.containsStickyHoldEffect(b, swapster);
     }
 
     public boolean canSwapOpponent(Battle b, ActivePokemon victim) {

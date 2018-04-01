@@ -3,6 +3,7 @@ package test.battle;
 import battle.attack.AttackNamesies;
 import battle.effect.EffectNamesies;
 import item.ItemNamesies;
+import org.junit.Assert;
 import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
 import util.string.StringUtils;
@@ -14,8 +15,12 @@ class TestInfo {
     private PokemonManipulator manipulator;
 
     TestInfo() {
-        this.attackingName = PokemonNamesies.BULBASAUR;
-        this.defendingName = PokemonNamesies.CHARMANDER;
+        this(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
+    }
+
+    TestInfo(PokemonNamesies attacking, PokemonNamesies defending) {
+        this.attackingName = attacking;
+        this.defendingName = defending;
         this.attackName = AttackNamesies.TACKLE;
         this.manipulator = PokemonManipulator.empty();
     }
@@ -30,7 +35,7 @@ class TestInfo {
     }
 
     private void updateManipulator(PokemonManipulator manipulator) {
-        this.manipulator = PokemonManipulator.combine(this.manipulator, manipulator);
+        this.manipulator = this.manipulator.add(manipulator);
     }
 
     TestInfo attacking(PokemonNamesies pokemonName) {
@@ -121,6 +126,33 @@ class TestInfo {
 
     public TestBattle createBattle() {
         return TestBattle.create(this.attackingName, this.defendingName);
+    }
+
+    // For when the result is the same with or without the ability
+    public void doubleTake(AbilityNamesies abilityNamesies, PokemonManipulator samesies) {
+        this.doubleTake(abilityNamesies, samesies, samesies);
+    }
+
+    public void doubleTake(AbilityNamesies abilityNamesies, PokemonManipulator withoutManipulator, PokemonManipulator withManipulator) {
+        this.doubleTake(
+                (battle, attacking, defending) -> defending.withAbility(abilityNamesies),
+                (battle, attacking, defending) -> {
+                    Assert.assertFalse(defending.hasAbility(abilityNamesies));
+                    withoutManipulator.manipulate(battle, attacking, defending);
+                },
+                withManipulator
+        );
+    }
+
+    public void doubleTake(PokemonManipulator manipulator, PokemonManipulator withoutManipulator, PokemonManipulator withManipulator) {
+        TestBattle battle = this.createBattle();
+        this.manipulate(battle);
+        withoutManipulator.manipulate(battle);
+
+        battle = this.createBattle();
+        manipulator.manipulate(battle);
+        this.manipulate(battle);
+        withManipulator.manipulate(battle);
     }
 
     @Override

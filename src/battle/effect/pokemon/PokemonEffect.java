@@ -44,6 +44,7 @@ import battle.effect.InvokeInterfaces.StatChangingEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
+import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
@@ -2012,7 +2013,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Substitute extends PokemonEffect implements AbsorbDamageEffect, PassableEffect, EffectBlockerEffect {
+    static class Substitute extends PokemonEffect implements AbsorbDamageEffect, PassableEffect, EffectBlockerEffect, StickyHoldEffect {
         private static final long serialVersionUID = 1L;
 
         private int hp;
@@ -2027,33 +2028,23 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // TODO: Should this be in after cast so it comes after the cast message??
-            // If that doesn't work either then put the cast message in this method and don't override cast message
-            hp = victim.forceReduceHealthFraction(b, .25, "") + 1;
-        }
-
-        @Override
         public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            this.hp = victim.forceReduceHealthFraction(b, .25, victim.getName() + " put in a substitute!") + 1;
+
             String imageName = "substitute" + (victim.isPlayer() ? "-back" : "");
             Messages.add(new MessageUpdate().updatePokemon(b, victim).withImageName(imageName, victim.isPlayer()));
         }
 
         @Override
-        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return victim.getName() + " put in a substitute!";
-        }
-
-        @Override
-        public boolean validMove(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public boolean shouldBlock(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Self-target and field moves are always successful
             if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD)) {
-                return true;
+                return false;
             }
 
             // Substitute-piercing moves, Sound-based moves, and Pokemon with the Infiltrator ability bypass Substitute
             if (user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING) || user.getAttack().isMoveType(MoveType.SOUND_BASED) || user.hasAbility(AbilityNamesies.INFILTRATOR)) {
-                return true;
+                return false;
             }
 
             // Print the failure for status moves
@@ -2061,7 +2052,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
                 Messages.add(this.getFailMessage(b, user, victim));
             }
 
-            return false;
+            return true;
         }
 
         @Override
