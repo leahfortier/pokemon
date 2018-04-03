@@ -6,13 +6,17 @@ import item.ItemNamesies;
 import org.junit.Assert;
 import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
+import util.string.StringAppender;
 import util.string.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 class TestInfo {
     private PokemonNamesies attackingName;
     private PokemonNamesies defendingName;
-    private AttackNamesies attackName;
     private PokemonManipulator manipulator;
+    private List<String> toString;
 
     TestInfo() {
         this(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
@@ -21,17 +25,13 @@ class TestInfo {
     TestInfo(PokemonNamesies attacking, PokemonNamesies defending) {
         this.attackingName = attacking;
         this.defendingName = defending;
-        this.attackName = AttackNamesies.TACKLE;
         this.manipulator = PokemonManipulator.empty();
+
+        this.toString = new ArrayList<>();
     }
 
     public void manipulate(TestBattle battle) {
         this.manipulator.manipulate(battle);
-
-        // Setup the move, unless explicitly set to null to avoid this
-        if (attackName != null) {
-            battle.getAttacking().setupMove(attackName, battle);
-        }
     }
 
     private void updateManipulator(PokemonManipulator manipulator) {
@@ -49,19 +49,22 @@ class TestInfo {
     }
 
     TestInfo with(AttackNamesies attackName) {
-        this.attackName = attackName;
-        return this;
+        this.toString.add(attackName.getName());
+        return this.with((battle, attacking, defending) -> attacking.setupMove(attackName, battle));
     }
 
     TestInfo fight(AttackNamesies attackingMove, AttackNamesies defendingMove) {
+        this.toString.add("FIGHT[" + attackingMove.getName() + ", " + defendingMove.getName() + "]");
         return this.with((battle, attacking, defending) -> battle.fight(attackingMove, defendingMove));
     }
 
     TestInfo attackingFight(AttackNamesies attackName) {
+        this.addString(true, attackName.getName());
         return this.with((battle, attacking, defending) -> battle.attackingFight(attackName));
     }
 
     TestInfo defendingFight(AttackNamesies attackName) {
+        this.addString(false, attackName.getName());
         return this.with((battle, attacking, defending) -> battle.defendingFight(attackName));
     }
 
@@ -71,6 +74,7 @@ class TestInfo {
     }
 
     TestInfo attacking(AbilityNamesies abilityNamesies) {
+        this.addString(true, abilityNamesies.getName());
         this.updateManipulator(PokemonManipulator.giveAttackingAbility(abilityNamesies));
         return this;
     }
@@ -100,32 +104,48 @@ class TestInfo {
     }
 
     TestInfo defending(AbilityNamesies abilityNamesies) {
+        this.addString(false, abilityNamesies.getName());
         this.updateManipulator(PokemonManipulator.giveDefendingAbility(abilityNamesies));
         return this;
     }
 
     TestInfo attacking(ItemNamesies itemNamesies) {
+        this.addString(true, itemNamesies.getName());
         this.updateManipulator(PokemonManipulator.giveAttackingItem(itemNamesies));
         return this;
     }
 
     TestInfo defending(ItemNamesies itemNamesies) {
+        this.addString(false, itemNamesies.getName());
         this.updateManipulator(PokemonManipulator.giveDefendingItem(itemNamesies));
         return this;
     }
 
     TestInfo attacking(EffectNamesies effectNamesies) {
+        this.addEffectString(true, effectNamesies);
         this.updateManipulator(PokemonManipulator.giveAttackingEffect(effectNamesies));
         return this;
     }
 
     TestInfo defending(EffectNamesies effectNamesies) {
+        this.addEffectString(false, effectNamesies);
         this.updateManipulator(PokemonManipulator.giveDefendingEffect(effectNamesies));
         return this;
     }
 
+    private void addEffectString(boolean attacking, EffectNamesies effectNamesies) {
+        this.addString(attacking, StringUtils.properCase(effectNamesies.toString().toLowerCase().replaceAll("_", " ")));
+    }
+
+    private void addString(boolean attacking, String name) {
+        this.toString.add((attacking ? "ATTACKING" : "DEFENDING") + "[" + name + "]");
+    }
+
     public TestBattle createBattle() {
-        return TestBattle.create(this.attackingName, this.defendingName);
+        TestBattle battle = TestBattle.create(this.attackingName, this.defendingName);
+        battle.getAttacking().withAbility(AbilityNamesies.NO_ABILITY);
+        battle.getDefending().withAbility(AbilityNamesies.NO_ABILITY);
+        return battle;
     }
 
     // For when the result is the same with or without the ability
@@ -157,6 +177,12 @@ class TestInfo {
 
     @Override
     public String toString() {
-        return StringUtils.spaceSeparated(attackingName, defendingName, attackName);
+        return new StringAppender()
+                .append(attackingName.getName())
+                .append(" ")
+                .append(defendingName.getName())
+                .append(" ")
+                .appendJoin(" ", this.toString)
+                .toString();
     }
 }

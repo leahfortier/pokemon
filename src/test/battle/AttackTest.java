@@ -737,15 +737,19 @@ public class AttackTest extends BaseTest {
 
     @Test
     public void bugBiteTest() {
-        TestBattle battle = TestBattle.create(PokemonNamesies.DRAGONITE, PokemonNamesies.DRAGONITE);
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
+        // Attacking Pokemon will hold Rawst Berry
+        // Burn the defending Pokemon
         attacking.giveItem(ItemNamesies.RAWST_BERRY);
         battle.attackingFight(AttackNamesies.WILL_O_WISP);
         Assert.assertTrue(attacking.isHoldingItem(battle));
         Assert.assertTrue(defending.hasStatus(StatusNamesies.BURNED));
 
+        // Defending Pokemon will use Bug Bite and eat the Rawst Berry, curing its burn
+        // Attacking will have its item consumed, but defending is the one who ate the berry
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.BUG_BITE);
         Assert.assertFalse(attacking.isHoldingItem(battle));
         Assert.assertFalse(defending.isHoldingItem(battle));
@@ -755,6 +759,13 @@ public class AttackTest extends BaseTest {
         Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
         Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
 
+        // Should fail since the defending did not use their own item
+        battle.defendingFight(AttackNamesies.RECYCLE);
+        Assert.assertFalse(defending.lastMoveSucceeded());
+        Assert.assertFalse(attacking.isHoldingItem(battle));
+        Assert.assertFalse(defending.isHoldingItem(battle));
+
+        // Using Recycle after having having your berry eaten will bring the Rawst Berry back
         battle.attackingFight(AttackNamesies.RECYCLE);
         Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.RAWST_BERRY));
         Assert.assertFalse(defending.isHoldingItem(battle));
@@ -765,18 +776,22 @@ public class AttackTest extends BaseTest {
         Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
         Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
 
+        // Poison the attacker -- will not trigger Rawst Berry
         battle.defendingFight(AttackNamesies.POISON_POWDER);
         Assert.assertTrue(attacking.isHoldingItem(battle));
         Assert.assertFalse(defending.isHoldingItem(battle));
-        Assert.assertTrue(attacking.hasStatus());
+        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
         Assert.assertFalse(defending.hasStatus());
 
+        // Transfer Poison to the defending
         battle.attackingFight(AttackNamesies.PSYCHO_SHIFT);
         Assert.assertTrue(attacking.isHoldingItem(battle));
         Assert.assertFalse(defending.isHoldingItem(battle));
         Assert.assertFalse(attacking.hasStatus());
-        Assert.assertTrue(defending.hasStatus());
+        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
 
+        // Burn the attacker -- will consume the Rawst Berry
+        // Note: I am writing these comments much later than the code was written, I have no idea what poison has to do with anything
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
         Assert.assertFalse(attacking.isHoldingItem(battle));
         Assert.assertFalse(defending.isHoldingItem(battle));
@@ -786,26 +801,6 @@ public class AttackTest extends BaseTest {
         Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
         Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
         Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-    }
-
-    @Test
-    public void powerChangeTest() {
-        TestBattle battle = TestBattle.create();
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
-
-        // Acrobatics has double power when not holding an item
-        attacking.setupMove(AttackNamesies.ACROBATICS, battle);
-        TestUtils.assertEquals(2, battle.getDamageModifier(attacking, defending));
-        attacking.giveItem(ItemNamesies.POTION);
-        TestUtils.assertEquals(1, battle.getDamageModifier(attacking, defending));
-
-        // Body Slam -- doubles when the opponent uses Minimize
-        attacking.setupMove(AttackNamesies.BODY_SLAM, battle);
-        TestUtils.assertEquals(1, battle.getDamageModifier(attacking, defending));
-        defending.apply(true, AttackNamesies.MINIMIZE, battle);
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.USED_MINIMIZE));
-        TestUtils.assertEquals(2, battle.getDamageModifier(attacking, defending));
     }
 
     @Test

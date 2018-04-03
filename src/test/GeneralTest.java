@@ -31,6 +31,7 @@ public class GeneralTest extends BaseTest {
         Assert.assertEquals("DFS Town X-Scissor", StringUtils.properCase("DFS town x-scissor"));
         Assert.assertEquals("LeechSeed", StringUtils.properCase("LeechSeed"));
         Assert.assertEquals("Leech_Seed", StringUtils.properCase("leech_seed"));
+        Assert.assertEquals("LEECH_SEED", StringUtils.properCase("LEECH_SEED"));
         Assert.assertEquals("Pok\u00e9 Ball", StringUtils.properCase("pok\u00e9 ball"));
     }
 

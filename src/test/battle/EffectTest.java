@@ -241,10 +241,10 @@ public class EffectTest extends BaseTest {
 
         // +1 crit stage when using -- but no effect when used previously
         checkCritStage(2, new TestInfo().with(AttackNamesies.RAZOR_LEAF));
-        checkCritStage(1, new TestInfo().attackingFight(AttackNamesies.RAZOR_LEAF));
+        checkCritStage(1, new TestInfo().attackingFight(AttackNamesies.RAZOR_LEAF).with(AttackNamesies.TACKLE));
 
         // +1 crit stage when used, but not when using (I guess it's a status move so it technically doesn't have a stage but whatever)
-        checkCritStage(2, new TestInfo().attackingFight(AttackNamesies.FOCUS_ENERGY));
+        checkCritStage(2, new TestInfo().attackingFight(AttackNamesies.FOCUS_ENERGY).with(AttackNamesies.TACKLE));
         checkCritStage(1, new TestInfo().with(AttackNamesies.FOCUS_ENERGY));
 
         // +1 after using Dire Hit (can only use once -- should fail if used again)
@@ -390,7 +390,6 @@ public class EffectTest extends BaseTest {
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
-        testInfo.with((AttackNamesies)null);
         testInfo.manipulate(battle);
 
         // Can't use setup move since it fucks with multi-turn moves
@@ -414,6 +413,40 @@ public class EffectTest extends BaseTest {
 
     @Test
     public void substituteTest() {
+        // Status moves won't work against the substitute
+        substituteTest(
+                new TestInfo().defendingFight(AttackNamesies.THUNDER_WAVE),
+                (battle, attacking, defending) -> Assert.assertTrue(attacking.hasStatus()),
+                (battle, attacking, defending) -> Assert.assertFalse(attacking.hasStatus())
+        );
+
+        substituteTest(
+                new TestInfo().defendingFight(AttackNamesies.TAIL_WHIP),
+                (battle, attacking, defending) -> new TestStages().set(Stat.DEFENSE, -1).test(attacking),
+                (battle, attacking, defending) -> new TestStages().test(attacking)
+        );
+
+        substituteTest(
+                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE).defendingFight(AttackNamesies.LEECH_SEED),
+                (battle, attacking, defending) -> Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.LEECH_SEED)),
+                (battle, attacking, defending) -> Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.LEECH_SEED))
+        );
+
+        // Unless it is sound-based
+        substituteTest(
+                new TestInfo().defendingFight(AttackNamesies.GROWL),
+                (battle, attacking, defending) -> new TestStages().set(Stat.ATTACK, -1).test(attacking)
+        );
+
+        // Recoil damage should not be absorbed
+        substituteTest(
+                new TestInfo().fight(AttackNamesies.TAKE_DOWN, AttackNamesies.ENDURE),
+                (battle, attacking, defending) -> {
+                    attacking.assertNotFullHealth();
+                    defending.assertNotFullHealth();
+                }
+        );
+
         TestBattle battle = TestBattle.create(PokemonNamesies.HAPPINY, PokemonNamesies.KARTANA);
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
@@ -423,32 +456,6 @@ public class EffectTest extends BaseTest {
 
         battle.emptyHeal();
         attacking.assertFullHealth();
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
-
-        // Status moves won't work against the substitute
-        battle.defendingFight(AttackNamesies.THUNDER_WAVE);
-        Assert.assertFalse(attacking.hasStatus());
-
-        battle.defendingFight(AttackNamesies.TAIL_WHIP);
-        new TestStages().test(attacking);
-
-        battle.defendingFight(AttackNamesies.LEECH_SEED);
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.LEECH_SEED));
-
-        // Unless it is sound-based
-        battle.defendingFight(AttackNamesies.GROWL);
-        new TestStages().set(Stat.ATTACK, -1).test(attacking);
-
-        attacking.assertFullHealth();
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
-
-        // Recoil damage should not be absorbed
-        battle.fight(AttackNamesies.TAKE_DOWN, AttackNamesies.ENDURE);
-        attacking.assertNotFullHealth();
-        defending.assertNotFullHealth();
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
-
-        battle.emptyHeal();
         Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
 
         // Break the substitute -- user should still have full health
@@ -462,6 +469,34 @@ public class EffectTest extends BaseTest {
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.EARTHQUAKE);
         attacking.assertNotFullHealth();
         Assert.assertEquals(1, attacking.getHP());
+    }
+
+    private void substituteTest(TestInfo testInfo, PokemonManipulator samesies) {
+        substituteTest(testInfo, samesies, samesies);
+    }
+
+    private void substituteTest(TestInfo testInfo, PokemonManipulator without, PokemonManipulator with) {
+        PokemonManipulator substitution = (battle, attacking, defending) -> {
+            battle.attackingFight(AttackNamesies.SUBSTITUTE);
+            attacking.assertHealthRatio(.75);
+
+            battle.emptyHeal();
+            attacking.assertFullHealth();
+            Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
+        };
+
+        testInfo.doubleTake(
+                substitution,
+                (battle, attacking, defending) -> {
+                    Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
+                    without.manipulate(battle, attacking, defending);
+                },
+                (battle, attacking, defending) -> {
+                    Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
+                    with.manipulate(battle, attacking, defending);
+                    Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
+                }
+        );
     }
 
     @Test

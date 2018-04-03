@@ -959,4 +959,26 @@ public class AbilityTest extends BaseTest {
     private void magicGuardTest(TestInfo setup, PokemonManipulator withoutMagicGuard, PokemonManipulator withMagicGuard) {
         setup.doubleTake(AbilityNamesies.MAGIC_GUARD, withoutMagicGuard, withMagicGuard);
     }
+
+    @Test
+    public void flashFireTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SQUIRTLE, PokemonNamesies.CHARMANDER);
+        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.FLASH_FIRE);
+        TestPokemon defending = battle.getDefending();
+
+        // Unactivated Fire move
+        attacking.setupMove(AttackNamesies.EMBER, battle);
+        TestUtils.assertEquals(1, battle.getDamageModifier(attacking, defending));
+
+        // Activate Flash Fire
+        battle.defendingFight(AttackNamesies.EMBER);
+
+        // Activated non-Fire move
+        attacking.setupMove(AttackNamesies.SURF, battle);
+        TestUtils.assertEquals(1, battle.getDamageModifier(attacking, defending));
+
+        // Activated Fire move
+        attacking.setupMove(AttackNamesies.EMBER, battle);
+        TestUtils.assertEquals(1.5, battle.getDamageModifier(attacking, defending));
+    }
 }

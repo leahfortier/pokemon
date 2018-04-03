@@ -81,37 +81,35 @@ public class ModifierTest extends BaseTest {
         int afterStat = Stat.getStat(stat, statPokemon, otherPokemon, battle);
         int otherAfterStat = Stat.getStat(stat, otherPokemon, statPokemon, battle);
 
-        TestUtils.assertEquals(
+        Assert.assertEquals(
                 StringUtils.spaceSeparated(beforeStat, afterStat, expectedChange, testInfo),
                 (int)(beforeStat*expectedChange),
                 afterStat
         );
 
-        TestUtils.assertEquals((int)(otherBeforeStat*otherExpectedChange), otherAfterStat);
+        Assert.assertEquals((int)(otherBeforeStat*otherExpectedChange), otherAfterStat);
     }
 
     @Test
     public void filterTest() {
         // Super-effective attack should be reduced by 25%
-        powerModifierTest(.75, new TestInfo().defending(PokemonNamesies.SQUIRTLE, AbilityNamesies.FILTER).with(AttackNamesies.VINE_WHIP));
-        powerModifierTest(.75, new TestInfo().defending(PokemonNamesies.CHANDELURE, AbilityNamesies.PRISM_ARMOR).with(AttackNamesies.SURF));
-        powerModifierTest(.75, new TestInfo().defending(PokemonNamesies.DRIFBLIM, AbilityNamesies.SOLID_ROCK).with(AttackNamesies.THUNDERBOLT));
+        powerChangeTest(.75, AttackNamesies.VINE_WHIP, new TestInfo().defending(PokemonNamesies.SQUIRTLE, AbilityNamesies.FILTER));
+        powerChangeTest(.75, AttackNamesies.SURF, new TestInfo().defending(PokemonNamesies.CHANDELURE, AbilityNamesies.PRISM_ARMOR));
+        powerChangeTest(.75, AttackNamesies.THUNDERBOLT, new TestInfo().defending(PokemonNamesies.DRIFBLIM, AbilityNamesies.SOLID_ROCK));
 
         // Neutral and not very effective moves should not be modified
-        powerModifierTest(1, new TestInfo().defending(PokemonNamesies.RAICHU, AbilityNamesies.FILTER).with(AttackNamesies.VINE_WHIP));
-        powerModifierTest(1, new TestInfo().defending(PokemonNamesies.BUDEW, AbilityNamesies.SOLID_ROCK).with(AttackNamesies.THUNDER));
+        powerChangeTest(1, AttackNamesies.VINE_WHIP, new TestInfo().defending(PokemonNamesies.RAICHU, AbilityNamesies.FILTER));
+        powerChangeTest(1, AttackNamesies.THUNDER, new TestInfo().defending(PokemonNamesies.BUDEW, AbilityNamesies.SOLID_ROCK));
 
         // Should not change modifier when the attacker has mold breaker
-        powerModifierTest(1, new TestInfo()
+        powerChangeTest(1, AttackNamesies.VINE_WHIP, new TestInfo()
                 .defending(PokemonNamesies.SQUIRTLE, AbilityNamesies.FILTER)
-                .with(AttackNamesies.VINE_WHIP)
                 .attacking(AbilityNamesies.MOLD_BREAKER)
         );
 
         // Prism Armor is unaffected by mold breaker
-        powerModifierTest(.75, new TestInfo()
+        powerChangeTest(.75, AttackNamesies.SURF, new TestInfo()
                 .defending(PokemonNamesies.CHANDELURE, AbilityNamesies.PRISM_ARMOR)
-                .with(AttackNamesies.SURF)
                 .attacking(AbilityNamesies.MOLD_BREAKER)
         );
     }
@@ -119,26 +117,29 @@ public class ModifierTest extends BaseTest {
     @Test
     public void typeEffectiveTest() {
         // Tinted Lens doubles the power when not very effective
-        powerModifierTest(2, new TestInfo().defending(PokemonNamesies.BUDEW).attacking(AbilityNamesies.TINTED_LENS).with(AttackNamesies.THUNDER_SHOCK));
-        powerModifierTest(1, new TestInfo().defending(PokemonNamesies.SQUIRTLE).attacking(AbilityNamesies.TINTED_LENS).with(AttackNamesies.VINE_WHIP));
-        powerModifierTest(1, new TestInfo().defending(PokemonNamesies.RAICHU).attacking(AbilityNamesies.TINTED_LENS).with(AttackNamesies.EMBER));
+        powerChangeTest(2, AttackNamesies.THUNDER_SHOCK, new TestInfo().defending(PokemonNamesies.BUDEW).attacking(AbilityNamesies.TINTED_LENS));
+        powerChangeTest(2, AttackNamesies.VINE_WHIP, new TestInfo().defending(PokemonNamesies.BUTTERFREE).attacking(AbilityNamesies.TINTED_LENS));
+        powerChangeTest(1, AttackNamesies.VINE_WHIP, new TestInfo().defending(PokemonNamesies.SQUIRTLE).attacking(AbilityNamesies.TINTED_LENS));
+        powerChangeTest(1, AttackNamesies.EMBER, new TestInfo().defending(PokemonNamesies.RAICHU).attacking(AbilityNamesies.TINTED_LENS));
 
         // Expert Belt increases the power of super effective moves by 20%
-        powerModifierTest(1.2, new TestInfo().defending(PokemonNamesies.SQUIRTLE).attacking(ItemNamesies.EXPERT_BELT).with(AttackNamesies.VINE_WHIP));
-        powerModifierTest(1, new TestInfo().defending(PokemonNamesies.SQUIRTLE).attacking(ItemNamesies.EXPERT_BELT).with(AttackNamesies.DARK_PULSE));
-        powerModifierTest(1, new TestInfo().defending(PokemonNamesies.SQUIRTLE).attacking(ItemNamesies.EXPERT_BELT).with(AttackNamesies.SURF));
+        powerChangeTest(1.2, AttackNamesies.VINE_WHIP, new TestInfo().defending(PokemonNamesies.SQUIRTLE).attacking(ItemNamesies.EXPERT_BELT));
+        powerChangeTest(1, AttackNamesies.DARK_PULSE, new TestInfo().defending(PokemonNamesies.SQUIRTLE).attacking(ItemNamesies.EXPERT_BELT));
+        powerChangeTest(1, AttackNamesies.SURF, new TestInfo().defending(PokemonNamesies.SQUIRTLE).attacking(ItemNamesies.EXPERT_BELT));
 
         // Tanga berry reduces super-effective bug moves
-        powerModifierTest(.5, new TestInfo().defending(PokemonNamesies.KADABRA, ItemNamesies.TANGA_BERRY).with(AttackNamesies.X_SCISSOR));
-        powerModifierTest(1, new TestInfo().defending(PokemonNamesies.KADABRA, ItemNamesies.TANGA_BERRY).with(AttackNamesies.CRUNCH));
-        powerModifierTest(1, new TestInfo().defending(PokemonNamesies.KADABRA, ItemNamesies.TANGA_BERRY).with(AttackNamesies.SURF));
-        powerModifierTest(1, new TestInfo().defending(PokemonNamesies.KADABRA, ItemNamesies.TANGA_BERRY).with(AttackNamesies.PSYBEAM));
+        powerChangeTest(.5, AttackNamesies.X_SCISSOR, new TestInfo().defending(PokemonNamesies.KADABRA, ItemNamesies.TANGA_BERRY));
+        powerChangeTest(1, AttackNamesies.CRUNCH, new TestInfo().defending(PokemonNamesies.KADABRA, ItemNamesies.TANGA_BERRY));
+        powerChangeTest(1, AttackNamesies.SURF, new TestInfo().defending(PokemonNamesies.KADABRA, ItemNamesies.TANGA_BERRY));
+        powerChangeTest(1, AttackNamesies.PSYBEAM, new TestInfo().defending(PokemonNamesies.KADABRA, ItemNamesies.TANGA_BERRY));
 
         // Yache berry reduces super-effective ice moves
-        powerModifierTest(.5, new TestInfo().defending(PokemonNamesies.DRAGONITE, ItemNamesies.YACHE_BERRY).with(AttackNamesies.ICE_BEAM));
-        powerModifierTest(1, new TestInfo().defending(PokemonNamesies.DRAGONITE, ItemNamesies.YACHE_BERRY).with(AttackNamesies.OUTRAGE));
-        powerModifierTest(1, new TestInfo().defending(PokemonNamesies.DRAGONITE, ItemNamesies.YACHE_BERRY).with(AttackNamesies.TACKLE));
-        powerModifierTest(1, new TestInfo().defending(PokemonNamesies.DRAGONITE, ItemNamesies.YACHE_BERRY).with(AttackNamesies.SURF));
+        powerChangeTest(.5, AttackNamesies.ICE_BEAM, new TestInfo().defending(PokemonNamesies.DRAGONITE, ItemNamesies.YACHE_BERRY));
+        powerChangeTest(1, AttackNamesies.OUTRAGE, new TestInfo().defending(PokemonNamesies.DRAGONITE, ItemNamesies.YACHE_BERRY));
+        powerChangeTest(1, AttackNamesies.TACKLE, new TestInfo().defending(PokemonNamesies.DRAGONITE, ItemNamesies.YACHE_BERRY));
+        powerChangeTest(1, AttackNamesies.SURF, new TestInfo().defending(PokemonNamesies.DRAGONITE, ItemNamesies.YACHE_BERRY));
+        powerChangeTest(1, AttackNamesies.ICE_BEAM, new TestInfo().defending(PokemonNamesies.EEVEE, ItemNamesies.YACHE_BERRY));
+        powerChangeTest(1, AttackNamesies.ICE_BEAM, new TestInfo().defending(PokemonNamesies.CHARMANDER, ItemNamesies.YACHE_BERRY));
     }
 
     /*
@@ -151,83 +152,122 @@ public class ModifierTest extends BaseTest {
     @Test
     public void weatherTest() {
         // Weather effects boost/lower the power of certain types of moves
-        powerModifierTest(1.5, new TestInfo().with(AttackNamesies.SURF).attacking(WeatherNamesies.RAINING));
-        powerModifierTest(.5, new TestInfo().with(AttackNamesies.FLAMETHROWER).attacking(WeatherNamesies.RAINING));
-        powerModifierTest(1, new TestInfo().with(AttackNamesies.THUNDERBOLT).attacking(WeatherNamesies.RAINING));
+        powerChangeTest(1.5, AttackNamesies.SURF, new TestInfo().attacking(WeatherNamesies.RAINING));
+        powerChangeTest(.5, AttackNamesies.FLAMETHROWER, new TestInfo().attacking(WeatherNamesies.RAINING));
+        powerChangeTest(1, AttackNamesies.THUNDERBOLT, new TestInfo().attacking(WeatherNamesies.RAINING));
 
-        powerModifierTest(1.5, new TestInfo().with(AttackNamesies.FLAMETHROWER).attacking(WeatherNamesies.SUNNY));
-        powerModifierTest(.5, new TestInfo().with(AttackNamesies.SURF).attacking(WeatherNamesies.SUNNY));
-        powerModifierTest(1, new TestInfo().with(AttackNamesies.THUNDERBOLT).attacking(WeatherNamesies.SUNNY));
+        powerChangeTest(1.5, AttackNamesies.FLAMETHROWER, new TestInfo().attacking(WeatherNamesies.SUNNY));
+        powerChangeTest(.5, AttackNamesies.SURF, new TestInfo().attacking(WeatherNamesies.SUNNY));
+        powerChangeTest(1, AttackNamesies.THUNDERBOLT, new TestInfo().attacking(WeatherNamesies.SUNNY));
     }
 
     @Test
-    public void powerModifierTest() {
+    public void powerChangeTest() {
         // Adamant Orb boosts dragon and steel type moves but only for Dialga
-        powerModifierTest(1.2, new TestInfo().attacking(PokemonNamesies.DIALGA, ItemNamesies.ADAMANT_ORB).with(AttackNamesies.OUTRAGE));
-        powerModifierTest(1.2, new TestInfo().attacking(PokemonNamesies.DIALGA, ItemNamesies.ADAMANT_ORB).with(AttackNamesies.IRON_HEAD));
-        powerModifierTest(1, new TestInfo().attacking(PokemonNamesies.DIALGA, ItemNamesies.ADAMANT_ORB).with(AttackNamesies.TACKLE));
-        powerModifierTest(1, new TestInfo().attacking(PokemonNamesies.DRAGONAIR, ItemNamesies.ADAMANT_ORB).with(AttackNamesies.OUTRAGE));
+        powerChangeTest(1.2, AttackNamesies.OUTRAGE, new TestInfo().attacking(PokemonNamesies.DIALGA, ItemNamesies.ADAMANT_ORB));
+        powerChangeTest(1.2, AttackNamesies.IRON_HEAD, new TestInfo().attacking(PokemonNamesies.DIALGA, ItemNamesies.ADAMANT_ORB));
+        powerChangeTest(1, AttackNamesies.TACKLE, new TestInfo().attacking(PokemonNamesies.DIALGA, ItemNamesies.ADAMANT_ORB));
+        powerChangeTest(1, AttackNamesies.OUTRAGE, new TestInfo().attacking(PokemonNamesies.DRAGONAIR, ItemNamesies.ADAMANT_ORB));
 
         // Charcoal
-        powerModifierTest(1.2, new TestInfo().attacking(PokemonNamesies.CHARMANDER, ItemNamesies.CHARCOAL).with(AttackNamesies.FLAMETHROWER));
-        powerModifierTest(1.2, new TestInfo().attacking(PokemonNamesies.BUDEW, ItemNamesies.CHARCOAL).with(AttackNamesies.FLAMETHROWER));
-        powerModifierTest(1, new TestInfo().attacking(PokemonNamesies.CHARIZARD, ItemNamesies.CHARCOAL).with(AttackNamesies.AIR_SLASH));
+        powerChangeTest(1.2, AttackNamesies.FLAMETHROWER, new TestInfo().attacking(PokemonNamesies.CHARMANDER, ItemNamesies.CHARCOAL));
+        powerChangeTest(1.2, AttackNamesies.FLAMETHROWER, new TestInfo().attacking(PokemonNamesies.BUDEW, ItemNamesies.CHARCOAL));
+        powerChangeTest(1, AttackNamesies.AIR_SLASH, new TestInfo().attacking(PokemonNamesies.CHARIZARD, ItemNamesies.CHARCOAL));
 
         // Life orb
-        powerModifierTest(5324.0/4096.0, new TestInfo().attacking(ItemNamesies.LIFE_ORB).with(AttackNamesies.AIR_SLASH));
-        powerModifierTest(5324.0/4096.0, new TestInfo().attacking(ItemNamesies.LIFE_ORB).with(AttackNamesies.OUTRAGE));
+        powerChangeTest(5324.0/4096.0, AttackNamesies.AIR_SLASH, new TestInfo().attacking(ItemNamesies.LIFE_ORB));
+        powerChangeTest(5324.0/4096.0, AttackNamesies.OUTRAGE, new TestInfo().attacking(ItemNamesies.LIFE_ORB));
 
         // Muscle band boosts Physical moves
-        powerModifierTest(1.1, new TestInfo().attacking(ItemNamesies.MUSCLE_BAND).with(AttackNamesies.VINE_WHIP));
-        powerModifierTest(1, new TestInfo().attacking(ItemNamesies.MUSCLE_BAND).with(AttackNamesies.ENERGY_BALL));
+        powerChangeTest(1.1, AttackNamesies.VINE_WHIP, new TestInfo().attacking(ItemNamesies.MUSCLE_BAND));
+        powerChangeTest(1, AttackNamesies.ENERGY_BALL, new TestInfo().attacking(ItemNamesies.MUSCLE_BAND));
 
         // Galvanize boosts normal-type moves that have been changed electric type
-        powerModifierTest(1.2, new TestInfo().attacking(AbilityNamesies.GALVANIZE).with(AttackNamesies.SWIFT));
-        powerModifierTest(1, new TestInfo().attacking(AbilityNamesies.GALVANIZE).with(AttackNamesies.THUNDERBOLT));
-        powerModifierTest(1, new TestInfo().attacking(AbilityNamesies.GALVANIZE).with(AttackNamesies.VINE_WHIP));
+        powerChangeTest(1.2, AttackNamesies.SWIFT, new TestInfo().attacking(AbilityNamesies.GALVANIZE));
+        powerChangeTest(1, AttackNamesies.THUNDERBOLT, new TestInfo().attacking(AbilityNamesies.GALVANIZE));
+        powerChangeTest(1, AttackNamesies.VINE_WHIP, new TestInfo().attacking(AbilityNamesies.GALVANIZE));
 
         // Normalize boosts non-normal-type moves that have been changed to normal type
-        powerModifierTest(1, new TestInfo().attacking(AbilityNamesies.NORMALIZE).with(AttackNamesies.SWIFT));
-        powerModifierTest(1.2, new TestInfo().attacking(AbilityNamesies.NORMALIZE).with(AttackNamesies.THUNDERBOLT));
-        powerModifierTest(1.2, new TestInfo().attacking(AbilityNamesies.NORMALIZE).with(AttackNamesies.VINE_WHIP));
+        powerChangeTest(1, AttackNamesies.SWIFT, new TestInfo().attacking(AbilityNamesies.NORMALIZE));
+        powerChangeTest(1.2, AttackNamesies.THUNDERBOLT, new TestInfo().attacking(AbilityNamesies.NORMALIZE));
+        powerChangeTest(1.2, AttackNamesies.VINE_WHIP, new TestInfo().attacking(AbilityNamesies.NORMALIZE));
     }
 
     @Test
     public void terrainTest() {
         // Terrain effects boost/lower the power of certain types of moves
-        powerModifierTest(1.5, new TestInfo().with(AttackNamesies.THUNDER).attacking(TerrainNamesies.ELECTRIC_TERRAIN));
-        powerModifierTest(1.5, new TestInfo().with(AttackNamesies.PSYCHIC).attacking(TerrainNamesies.PSYCHIC_TERRAIN));
-        powerModifierTest(1.5, new TestInfo().with(AttackNamesies.SOLAR_BEAM).attacking(TerrainNamesies.GRASSY_TERRAIN));
-        powerModifierTest(.5, new TestInfo().with(AttackNamesies.OUTRAGE).attacking(TerrainNamesies.MISTY_TERRAIN));
+        powerChangeTest(1.5, AttackNamesies.THUNDER, new TestInfo().attacking(TerrainNamesies.ELECTRIC_TERRAIN));
+        powerChangeTest(1.5, AttackNamesies.PSYCHIC, new TestInfo().attacking(TerrainNamesies.PSYCHIC_TERRAIN));
+        powerChangeTest(1.5, AttackNamesies.SOLAR_BEAM, new TestInfo().attacking(TerrainNamesies.GRASSY_TERRAIN));
+        powerChangeTest(.5, AttackNamesies.OUTRAGE, new TestInfo().attacking(TerrainNamesies.MISTY_TERRAIN));
 
         // Different move type -- no change
-        powerModifierTest(1, new TestInfo().with(AttackNamesies.DAZZLING_GLEAM).attacking(TerrainNamesies.MISTY_TERRAIN));
+        powerChangeTest(1, AttackNamesies.DAZZLING_GLEAM, new TestInfo().attacking(TerrainNamesies.MISTY_TERRAIN));
 
         // Float with Flying -- no change
-        powerModifierTest(1, new TestInfo().with(AttackNamesies.PSYBEAM).attacking(PokemonNamesies.PIDGEOT, TerrainNamesies.PSYCHIC_TERRAIN));
+        powerChangeTest(1, AttackNamesies.PSYBEAM, new TestInfo().attacking(PokemonNamesies.PIDGEOT, TerrainNamesies.PSYCHIC_TERRAIN));
 
         // Float with Levitate -- no change
-        powerModifierTest(1, new TestInfo().with(AttackNamesies.THUNDER).attacking(AbilityNamesies.LEVITATE).attacking(TerrainNamesies.ELECTRIC_TERRAIN));
+        powerChangeTest(1, AttackNamesies.THUNDER, new TestInfo().attacking(AbilityNamesies.LEVITATE).attacking(TerrainNamesies.ELECTRIC_TERRAIN));
 
         // Float with telekinesis -- no change
-        powerModifierTest(1, new TestInfo().with(AttackNamesies.VINE_WHIP).attacking(PokemonEffectNamesies.TELEKINESIS).attacking(TerrainNamesies.GRASSY_TERRAIN));
+        powerChangeTest(1, AttackNamesies.VINE_WHIP, new TestInfo().attacking(PokemonEffectNamesies.TELEKINESIS).attacking(TerrainNamesies.GRASSY_TERRAIN));
     }
 
-    private void powerModifierTest(double expectedChange, TestInfo testInfo) {
+    // No modifier without manipulation, expectedModifier with it
+    private void powerChangeTest(double expectedModifier, AttackNamesies attackNamesies, TestInfo testInfo) {
         TestBattle battle = testInfo.createBattle();
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
+        // Check modifiers manually
         double beforeModifier = battle.getDamageModifier(attacking, defending);
+        TestUtils.assertEquals(1, beforeModifier);
 
         testInfo.manipulate(battle);
+        attacking.setupMove(attackNamesies, battle);
         double afterModifier = battle.getDamageModifier(attacking, defending);
 
         TestUtils.assertEquals(
-                StringUtils.spaceSeparated(beforeModifier, afterModifier, expectedChange, testInfo),
-                expectedChange*beforeModifier,
+                StringUtils.spaceSeparated(beforeModifier, afterModifier, expectedModifier, attackNamesies, testInfo),
+                expectedModifier,
                 afterModifier
         );
+
+        // Make sure modifiers actual happen in battle
+        powerChangeTest(expectedModifier, false, attackNamesies, testInfo);
+        powerChangeTest(expectedModifier, true, attackNamesies, testInfo);
+    }
+
+    private void powerChangeTest(double expectedModifier, boolean manipulate, AttackNamesies attackNamesies, TestInfo testInfo) {
+        TestBattle battle = testInfo.createBattle();
+        if (manipulate) {
+            testInfo.manipulate(battle);
+        }
+
+        battle.setExpectedDamageModifier(manipulate ? expectedModifier : 1);
+        battle.attackingFight(attackNamesies);
+    }
+
+    @Test
+    public void powerModifierTest() {
+        // Acrobatics has double power when not holding an item
+        powerModifierTest(2, AttackNamesies.ACROBATICS, new TestInfo());
+        powerModifierTest(1, AttackNamesies.ACROBATICS, new TestInfo().attacking(ItemNamesies.POTION));
+
+        // Body Slam -- doubles when the opponent uses Minimize
+        powerModifierTest(1, AttackNamesies.BODY_SLAM, new TestInfo());
+        powerModifierTest(2, AttackNamesies.BODY_SLAM, new TestInfo().defendingFight(AttackNamesies.MINIMIZE));
+    }
+
+    // Differs from the powerChangeTest in that it only checks once
+    // Immediately applies manipulations in the testInfo and confirms the power modifier
+    private void powerModifierTest(double expectedModifier, AttackNamesies attackNamesies, TestInfo testInfo) {
+        TestBattle battle = testInfo.createBattle();
+        testInfo.manipulate(battle);
+
+        battle.setExpectedDamageModifier(expectedModifier);
+        battle.attackingFight(attackNamesies);
     }
 
     @Test
@@ -348,26 +388,6 @@ public class ModifierTest extends BaseTest {
         stageChangeTest(0, Stat.SP_ATTACK, new TestInfo()
                 .attacking(AbilityNamesies.LIGHTNINGROD)
                 .defendingFight(AttackNamesies.TACKLE));
-    }
-
-    @Test
-    public void flashFireTest() {
-        TestBattle battle = TestBattle.create(PokemonNamesies.SQUIRTLE, PokemonNamesies.CHARMANDER);
-        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.FLASH_FIRE);
-        TestPokemon defending = battle.getDefending();
-
-        attacking.setupMove(AttackNamesies.EMBER, battle);
-        double unactivatedFire = battle.getDamageModifier(attacking, defending);
-        TestUtils.assertEquals(1, unactivatedFire);
-
-        battle.defendingFight(AttackNamesies.EMBER);
-        attacking.setupMove(AttackNamesies.SURF, battle);
-        double activatedNonFire = battle.getDamageModifier(attacking, defending);
-        TestUtils.assertEquals(1, activatedNonFire);
-
-        attacking.setupMove(AttackNamesies.EMBER, battle);
-        double activatedFire = battle.getDamageModifier(attacking, defending);
-        TestUtils.assertEquals(1.5, activatedFire);
     }
 
     @Test
