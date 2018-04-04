@@ -2,9 +2,9 @@ package battle.effect.battle.weather;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
-import battle.effect.InvokeInterfaces.SimpleStatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
 import battle.effect.InvokeInterfaces.WeatherExtendingEffect;
