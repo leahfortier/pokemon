@@ -179,6 +179,14 @@ public class TestBattle extends Battle {
     }
 
     static TestBattle create(PokemonNamesies attacking, PokemonNamesies defending) {
+        return create(false, attacking, defending);
+    }
+
+    static TestBattle create(boolean isTrainerBattle, PokemonNamesies attacking, PokemonNamesies defending) {
+        if (isTrainerBattle) {
+            return createTrainerBattle(attacking, defending);
+        }
+
         return create(TestPokemon.newPlayerPokemon(attacking), TestPokemon.newWildPokemon(defending));
     }
 

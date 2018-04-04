@@ -229,7 +229,7 @@ public class ModifierTest extends BaseTest {
         double afterModifier = battle.getDamageModifier(attacking, defending);
 
         TestUtils.assertEquals(
-                StringUtils.spaceSeparated(beforeModifier, afterModifier, expectedModifier, attackNamesies, testInfo),
+                StringUtils.spaceSeparated(attackNamesies, testInfo),
                 expectedModifier,
                 afterModifier
         );
@@ -264,8 +264,16 @@ public class ModifierTest extends BaseTest {
     // Immediately applies manipulations in the testInfo and confirms the power modifier
     private void powerModifierTest(double expectedModifier, AttackNamesies attackNamesies, TestInfo testInfo) {
         TestBattle battle = testInfo.createBattle();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
         testInfo.manipulate(battle);
 
+        // Manual check
+        attacking.setupMove(attackNamesies, battle);
+        TestUtils.assertEquals(expectedModifier, battle.getDamageModifier(attacking, defending));
+
+        // Battle check
         battle.setExpectedDamageModifier(expectedModifier);
         battle.attackingFight(attackNamesies);
     }

@@ -765,9 +765,23 @@ Transformed:
         ###
 *
 Substitute:
-    Int: AbsorbDamageEffect, PassableEffect, EffectBlockerEffect, StickyHoldEffect
+    Int: AbsorbDamageEffect, PassableEffect, EffectBlockerEffect, StickyHoldEffect, StatusPreventionEffect, StatProtectingEffect
     Field:
         private int hp;
+        
+        // Substitute-piercing moves, Sound-based moves, and Pokemon with the Infiltrator ability bypass Substitute
+        private boolean infiltrated(ActivePokemon user) {
+            if (user.hasAbility(AbilityNamesies.INFILTRATOR)) {
+                return true;
+            }
+
+            Attack attack = user.getAttack();
+            if (attack == null) {
+                return false;
+            }
+            
+            return attack.isMoveType(MoveType.SUBSTITUTE_PIERCING) || attack.isMoveType(MoveType.SOUND_BASED);
+        }
         ###
     AfterCast:
         this.hp = victim.forceReduceHealthFraction(b, .25, victim.getName() + " put in a substitute!") + 1;
@@ -778,12 +792,7 @@ Substitute:
     FailCondition: victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3
     ShouldBlock:
         // Self-target and field moves are always successful
-        if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD)) {
-            return false;
-        }
-
-        // Substitute-piercing moves, Sound-based moves, and Pokemon with the Infiltrator ability bypass Substitute
-        if (user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING) || user.getAttack().isMoveType(MoveType.SOUND_BASED) || user.hasAbility(AbilityNamesies.INFILTRATOR)) {
+        if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD) || this.infiltrated(user)) {
             return false;
         }
 
@@ -806,6 +815,13 @@ Substitute:
         // Substitute always blocks damage
         return true;
         ###
+    StatProtectingEffect:
+        return !this.infiltrated(caster);
+        ###
+    StatusPrevent:
+        return !this.infiltrated(caster);
+        ###
+    StatusPreventMessage: Effect.DEFAULT_FAIL_MESSAGE
 *
 Mist:
     NumTurns: 5
@@ -816,9 +832,7 @@ Mist:
     StatProtectingEffect:
         return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
         ###
-    StatProtectMessage:
-        return "The mist prevents stat reductions!";
-        ###
+    StatProtectMessage: "The mist prevents stat reductions!"
 *
 MagicCoat:
     CastMessage: user.getName() + " shrouded itself with a magic coat!"

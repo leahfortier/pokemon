@@ -834,6 +834,9 @@ StatProtectingEffect:
 *
 StatProtectMessage:
 	Header: String preventionMessage(Battle b, ActivePokemon p, Stat s)
+    Body:
+        return {0};
+        ###
 *
 Sporty:
 	AddMapField: PowerMultiplierCondition: .33 user.isAttackType(Type.{11})

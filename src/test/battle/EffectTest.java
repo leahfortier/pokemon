@@ -432,10 +432,61 @@ public class EffectTest extends BaseTest {
                 (battle, attacking, defending) -> Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.LEECH_SEED))
         );
 
+        substituteTest(
+                new TestInfo().defendingFight(AttackNamesies.YAWN),
+                (battle, attacking, defending) -> Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.YAWN)),
+                (battle, attacking, defending) -> Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.YAWN))
+        );
+
         // Unless it is sound-based
         substituteTest(
                 new TestInfo().defendingFight(AttackNamesies.GROWL),
                 (battle, attacking, defending) -> new TestStages().set(Stat.ATTACK, -1).test(attacking)
+        );
+
+        // Items cannot be swapped or knocked off or eaten
+        // Needs to be a trainer battle or it won't remove the item
+        substituteTest(
+                new TestInfo().asTrainerBattle()
+                              .attacking(ItemNamesies.POTION)
+                              .defendingFight(AttackNamesies.TRICK),
+                (battle, attacking, defending) -> {
+                    Assert.assertFalse(attacking.isHoldingItem(battle));
+                    Assert.assertTrue(defending.isHoldingItem(battle, ItemNamesies.POTION));
+                },
+                (battle, attacking, defending) -> {
+                    Assert.assertFalse(defending.lastMoveSucceeded());
+                    Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.POTION));
+                    Assert.assertFalse(defending.isHoldingItem(battle));
+                }
+        );
+
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .asTrainerBattle()
+                        .attacking(ItemNamesies.POTION)
+                        .defendingFight(AttackNamesies.KNOCK_OFF),
+                (battle, attacking, defending) -> Assert.assertFalse(attacking.isHoldingItem(battle)),
+                (battle, attacking, defending) -> Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.POTION))
+        );
+
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .asTrainerBattle()
+                        .attacking(ItemNamesies.RAWST_BERRY)
+                        .fight(AttackNamesies.WILL_O_WISP, AttackNamesies.PLUCK),
+                (battle, attacking, defending) -> {
+                    Assert.assertFalse(attacking.isHoldingItem(battle));
+                    Assert.assertFalse(defending.hasStatus());
+                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+                    Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+                },
+                (battle, attacking, defending) -> {
+                    Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.RAWST_BERRY));
+                    Assert.assertTrue(defending.hasStatus(StatusNamesies.BURNED));
+                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+                    Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+                }
         );
 
         // Recoil damage should not be absorbed
@@ -444,6 +495,28 @@ public class EffectTest extends BaseTest {
                 (battle, attacking, defending) -> {
                     attacking.assertNotFullHealth();
                     defending.assertNotFullHealth();
+                }
+        );
+
+        // Should not lose attack to Intimidate
+        substituteTest(
+                // Create a second Pokemon with Intimidate
+                // Then use Roar to lure it out
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
+                        .asTrainerBattle()
+                        .with((battle, attacking, defending) -> {
+                            TestPokemon defending2 = TestPokemon.newTrainerPokemon(PokemonNamesies.SQUIRTLE);
+                            defending2.withAbility(AbilityNamesies.INTIMIDATE);
+                            ((EnemyTrainer)battle.getOpponent()).addPokemon(defending2);
+                        })
+                        .attackingFight(AttackNamesies.ROAR),
+                (battle, attacking, defending) -> {
+                    Assert.assertTrue(defending.isPokemon(PokemonNamesies.SQUIRTLE));
+                    new TestStages().set(Stat.ATTACK, -1).test(attacking);
+                },
+                (battle, attacking, defending) -> {
+                    Assert.assertTrue(defending.isPokemon(PokemonNamesies.SQUIRTLE));
+                    new TestStages().test(attacking);
                 }
         );
 

@@ -43,6 +43,7 @@ import battle.effect.InvokeInterfaces.StageChangingEffect;
 import battle.effect.InvokeInterfaces.StatChangingEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
+import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
@@ -2013,10 +2014,24 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Substitute extends PokemonEffect implements AbsorbDamageEffect, PassableEffect, EffectBlockerEffect, StickyHoldEffect {
+    static class Substitute extends PokemonEffect implements AbsorbDamageEffect, PassableEffect, EffectBlockerEffect, StickyHoldEffect, StatusPreventionEffect, StatProtectingEffect {
         private static final long serialVersionUID = 1L;
 
         private int hp;
+
+        // Substitute-piercing moves, Sound-based moves, and Pokemon with the Infiltrator ability bypass Substitute
+        private boolean infiltrated(ActivePokemon user) {
+            if (user.hasAbility(AbilityNamesies.INFILTRATOR)) {
+                return true;
+            }
+
+            Attack attack = user.getAttack();
+            if (attack == null) {
+                return false;
+            }
+
+            return attack.isMoveType(MoveType.SUBSTITUTE_PIERCING) || attack.isMoveType(MoveType.SOUND_BASED);
+        }
 
         Substitute() {
             super(PokemonEffectNamesies.SUBSTITUTE, -1, -1, false, false);
@@ -2036,14 +2051,19 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
+        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            return !this.infiltrated(caster);
+        }
+
+        @Override
+        public String statusPreventionMessage(ActivePokemon victim) {
+            return Effect.DEFAULT_FAIL_MESSAGE;
+        }
+
+        @Override
         public boolean shouldBlock(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Self-target and field moves are always successful
-            if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD)) {
-                return false;
-            }
-
-            // Substitute-piercing moves, Sound-based moves, and Pokemon with the Infiltrator ability bypass Substitute
-            if (user.getAttack().isMoveType(MoveType.SUBSTITUTE_PIERCING) || user.getAttack().isMoveType(MoveType.SOUND_BASED) || user.hasAbility(AbilityNamesies.INFILTRATOR)) {
+            if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD) || this.infiltrated(user)) {
                 return false;
             }
 
@@ -2053,6 +2073,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             }
 
             return true;
+        }
+
+        @Override
+        public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
+            return !this.infiltrated(caster);
         }
 
         @Override

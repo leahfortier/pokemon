@@ -160,12 +160,8 @@ public class ItemTest extends BaseTest {
         swapItemsTest(true);
     }
 
-    private void swapItemsTest(boolean trainerBattle) {
-        PokemonNamesies attackingPokemon = PokemonNamesies.BULBASAUR;
-        PokemonNamesies defendingPokemon = PokemonNamesies.CHARMANDER;
-        TestBattle battle = trainerBattle
-                ? TestBattle.createTrainerBattle(attackingPokemon, defendingPokemon)
-                : TestBattle.create(attackingPokemon, defendingPokemon);
+    private void swapItemsTest(boolean isTrainerBattle) {
+        TestBattle battle = TestBattle.create(isTrainerBattle, PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
@@ -233,12 +229,8 @@ public class ItemTest extends BaseTest {
         stickyBarbTest(true);
     }
 
-    private void stickyBarbTest(boolean trainerBattle) {
-        PokemonNamesies attackingPokemon = PokemonNamesies.BULBASAUR;
-        PokemonNamesies defendingPokemon = PokemonNamesies.CHARMANDER;
-        TestBattle battle = trainerBattle
-                ? TestBattle.createTrainerBattle(attackingPokemon, defendingPokemon)
-                : TestBattle.create(attackingPokemon, defendingPokemon);
+    private void stickyBarbTest(boolean isTrainerBattle) {
+        TestBattle battle = TestBattle.create(isTrainerBattle, PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
@@ -465,12 +457,8 @@ public class ItemTest extends BaseTest {
         swapConsumeItemTest(true);
     }
 
-    private void swapConsumeItemTest(boolean trainerBattle) {
-        PokemonNamesies attackingPokemon = PokemonNamesies.BULBASAUR;
-        PokemonNamesies defendingPokemon = PokemonNamesies.CHARMANDER;
-        TestBattle battle = trainerBattle
-                ? TestBattle.createTrainerBattle(attackingPokemon, defendingPokemon)
-                : TestBattle.create(attackingPokemon, defendingPokemon);
+    private void swapConsumeItemTest(boolean isTrainerBattle) {
+        TestBattle battle = TestBattle.create(isTrainerBattle, PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
         TestPokemon attacking = battle.getAttacking().withItem(ItemNamesies.LUM_BERRY);
         TestPokemon defending = battle.getDefending().withItem(ItemNamesies.RAWST_BERRY);
 

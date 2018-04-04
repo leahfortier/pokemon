@@ -16,6 +16,7 @@ class TestInfo {
     private PokemonNamesies attackingName;
     private PokemonNamesies defendingName;
     private PokemonManipulator manipulator;
+    private boolean isTrainerBattle;
     private List<String> toString;
 
     TestInfo() {
@@ -26,7 +27,7 @@ class TestInfo {
         this.attackingName = attacking;
         this.defendingName = defending;
         this.manipulator = PokemonManipulator.empty();
-
+        this.isTrainerBattle = false;
         this.toString = new ArrayList<>();
     }
 
@@ -51,6 +52,11 @@ class TestInfo {
     TestInfo with(AttackNamesies attackName) {
         this.toString.add(attackName.getName());
         return this.with((battle, attacking, defending) -> attacking.setupMove(attackName, battle));
+    }
+
+    TestInfo asTrainerBattle() {
+        this.isTrainerBattle = true;
+        return this;
     }
 
     TestInfo fight(AttackNamesies attackingMove, AttackNamesies defendingMove) {
@@ -142,7 +148,7 @@ class TestInfo {
     }
 
     public TestBattle createBattle() {
-        TestBattle battle = TestBattle.create(this.attackingName, this.defendingName);
+        TestBattle battle = TestBattle.create(this.isTrainerBattle, this.attackingName, this.defendingName);
         battle.getAttacking().withAbility(AbilityNamesies.NO_ABILITY);
         battle.getDefending().withAbility(AbilityNamesies.NO_ABILITY);
         return battle;
