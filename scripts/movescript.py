@@ -8,63 +8,63 @@ from util import get_image_name, add_row_values
 
 f = open("moves.in", "r")
 out = open("moves.out", "w")
-for i, attackName in enumerate(f):
-    attackName = attackName.strip()
-    values = [attackName]
-    print(i, attackName)
+for i, attack_name in enumerate(f):
+    attack_name = attack_name.strip()
+    values = [attack_name]
+    print(i, attack_name)
     
-    lookupName = attackName.lower().replace(" ", "")
-    if lookupName == "judgement":
-        lookupName = "judgment"
+    lookup_name = attack_name.lower().replace(" ", "")
+    if lookup_name == "judgement":
+        lookup_name = "judgment"
     
-    page = requests.get('http://www.serebii.net/attackdex-sm/' + lookupName + '.shtml')
+    page = requests.get('http://www.serebii.net/attackdex-sm/' + lookup_name + '.shtml')
     tree = html.fromstring(page.text)
-    mainTable = tree.xpath('/html/body/table[2]/tr[2]/td[2]/font/div[3]/font/p')[-1].getnext()
+    main_table = tree.xpath('/html/body/table[2]/tr[2]/td[2]/font/div[3]/font/p')[-1].getnext()
     
-    rowIndex = 1
+    row_index = 1
     
     # Name, Type, Category
-    row = mainTable[rowIndex]
-    attackType = get_image_name(row.xpath('td[2]/a/img')[0])
+    row = main_table[row_index]
+    attack_type = get_image_name(row.xpath('td[2]/a/img')[0])
     category = get_image_name(row.xpath('td[3]/a/img')[0])
     if category == "Other":
         category = "Status"
-    values.append(attackType)
+    values.append(attack_type)
     values.append(category)
-    print(attackType, category)
+    print(attack_type, category)
     
     # PP, Base Power, Accuracy
-    rowIndex += 2
-    add_row_values(mainTable, rowIndex, values, 1, 2, 3)
+    row_index += 2
+    add_row_values(main_table, row_index, values, 1, 2, 3)
     
     # Description
-    rowIndex += 2
-    add_row_values(mainTable, rowIndex, values, 1)
+    row_index += 2
+    add_row_values(main_table, row_index, values, 1)
     
-    if mainTable[rowIndex + 1].text_content().strip() == "In-Depth Effect:":
-        rowIndex += 2
+    if main_table[row_index + 1].text_content().strip() == "In-Depth Effect:":
+        row_index += 2
     
     # Secondary Effect and Effect Chance
-    rowIndex += 2
-    add_row_values(mainTable, rowIndex, values, 2)
+    row_index += 2
+    add_row_values(main_table, row_index, values, 2)
     
     # Z-Move things
-    rowIndex += 2
+    row_index += 2
     
     # Crit Rate, Speed Priority, Target
-    rowIndex += 2
-    add_row_values(mainTable, rowIndex, values, 1, 2)
+    row_index += 2
+    add_row_values(main_table, row_index, values, 1, 2)
     
     # I don't know I guess it's a new fucking table now?
-    mainTable = mainTable.getnext()
-    rowIndex = 1
+    main_table = main_table.getnext()
+    row_index = 1
     
     # Physical Contact, Sound-Type, Punch Move, Snatchable, Z-Move
-    add_row_values(mainTable, rowIndex, values, 1, 2, 3, 4)
+    add_row_values(main_table, row_index, values, 1, 2, 3, 4)
     
     # Defrost, Triple Battle, Magic Bounce, Protected, Mirror Move
-    rowIndex += 2
-    add_row_values(mainTable, rowIndex, values, 1, 3, 4, 5)
+    row_index += 2
+    add_row_values(main_table, row_index, values, 1, 3, 4, 5)
     
     for value in values:
         out.write(value + '\n')

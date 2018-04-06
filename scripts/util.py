@@ -4,10 +4,10 @@
 import re
 
 poke = u'é'
-rightTick = u'\u2019'
+right_tick = u'\u2019'
 dashy = u'\u2014'
-leftQuote = u'\u201c'
-rightQuote = u'\u201d'
+left_quote = u'\u201c'
+right_quote = u'\u201d'
 
 
 def namesies(stringsies):
@@ -47,9 +47,9 @@ def get_types(type_images):
     assert len(type_images) == 1 or len(type_images) == 2
 
     types = ["No_Type"] * 2
-    for i, typeImage in enumerate(type_images):
+    for i, type_image in enumerate(type_images):
         # imageName is of the form "...type/<typeName>.gif"
-        types[i] = get_image_name(typeImage)
+        types[i] = get_image_name(type_image)
 
     return types
 
@@ -62,18 +62,18 @@ def normalize_form(form):
 def replace_special(s):
     s = s.replace(poke, "\u00e9")
     s = s.replace('  ', ' ')
-    s = s.replace(rightTick, "'")
+    s = s.replace(right_tick, "'")
     s = s.replace(dashy, "--")
-    s = s.replace(leftQuote, "\"")
-    s = s.replace(rightQuote, "\"")
+    s = s.replace(left_quote, "\"")
+    s = s.replace(right_quote, "\"")
     return s
 
 
 # Column indices should be specified as 1-indexed
 def add_row_values(main_table, row_index, values, *column_indices):
     row = main_table[row_index]
-    for columnIndex in column_indices:
-        value = row.xpath('td')[columnIndex - 1].text.strip()
+    for column_index in column_indices:
+        value = row.xpath('td')[column_index - 1].text.strip()
         add_value(values, value)
 
 
@@ -104,8 +104,8 @@ def get_query_text(query):
 
 
 def check_queries(table, *queries):
-    for queryString in queries:
-        query = table.xpath(queryString)
+    for query_string in queries:
+        query = table.xpath(query_string)
         text = get_query_text(query)
         if text is not None:
             return text
