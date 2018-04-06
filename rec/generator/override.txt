@@ -824,10 +824,21 @@ GetOppMultiplier:
 	Header: double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 ShouldBlock:
-	Header: boolean shouldBlock(Battle b, ActivePokemon user, ActivePokemon victim)
+	Header: boolean shouldBlock(ActivePokemon caster, ActivePokemon victim, EffectNamesies effectNamesies)
 *
 StatProtect:
-	AddMapField: StatProtectingEffect: {0}
+    AddMapField: StatProtectingEffect: 
+        return stat == Stat.{00};
+        ###
+    AddMapField: StatProtectMessage: p.getName() + "'s " + this.getName() + " prevents its " + s.getName() + " from being lowered!"
+    AddInterface: StatProtectingEffect
+*
+StatProtectAll:
+    AddMapField: StatProtectingEffect: 
+        return {0};
+        ###
+    AddMapField: StatProtectMessage: p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!"
+    AddInterface: StatProtectingEffect
 *
 StatProtectingEffect:
 	Header: boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat)

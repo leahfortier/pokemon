@@ -981,4 +981,18 @@ public class AbilityTest extends BaseTest {
         attacking.setupMove(AttackNamesies.EMBER, battle);
         TestUtils.assertEquals(1.5, battle.getDamageModifier(attacking, defending));
     }
+
+    @Test
+    public void shieldDustTest() {
+        // Inferno has a 100% chance to burn
+        // But if the opponent has Shield Dust, then it is actually ZERO PERCENT
+        new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                .with((battle, attacking, defending) -> battle.setExpectedDamageModifier(1.0))
+                .attackingFight(AttackNamesies.INFERNO)
+                .doubleTake(
+                        AbilityNamesies.SHIELD_DUST,
+                        (battle, attacking, defending) -> Assert.assertTrue(defending.hasStatus(StatusNamesies.BURNED)),
+                        (battle, attacking, defending) -> Assert.assertFalse(defending.hasStatus())
+                );
+    }
 }

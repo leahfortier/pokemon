@@ -2,6 +2,7 @@ package battle.effect;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.InvokeInterfaces.EffectBlockerEffect;
 import battle.effect.InvokeInterfaces.EffectReceivedEffect;
 import battle.effect.source.CastSource;
 import main.Global;
@@ -88,12 +89,21 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Inv
     }
 
     public boolean apply(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-        if (this.applies(b, caster, victim, source)) {
+        if (this.fullApplies(b, caster, victim, source)) {
             this.cast(b, caster, victim, source, printCast);
             return true;
         }
 
         return false;
+    }
+
+    private boolean fullApplies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+        EffectBlockerEffect blockerEffect = EffectBlockerEffect.getBlockerEffect(b, caster, victim, this.namesies);
+        if (blockerEffect != null) {
+            return false;
+        }
+
+        return this.applies(b, caster, victim, source);
     }
 
     // Should be overriden by subclasses as deemed appropriate
@@ -121,6 +131,11 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Inv
     }
 
     public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        EffectBlockerEffect blockerEffect = EffectBlockerEffect.getBlockerEffect(b, user, victim, this.namesies);
+        if (blockerEffect != null) {
+            return blockerEffect.getBlockMessage(victim, this.namesies);
+        }
+
         return DEFAULT_FAIL_MESSAGE;
     }
 

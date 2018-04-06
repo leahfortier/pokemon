@@ -1618,6 +1618,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
+    // NOTE: Works like Clear Body, since ain't nobody want to keep track of stats
     static class WhiteHerb extends Item implements HoldItem, StatProtectingEffect {
         private static final long serialVersionUID = 1L;
 
@@ -1628,8 +1629,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
-            // NOTE: Works like Clear Body, since ain't nobody want to keep track of stats.
             return true;
+        }
+
+        @Override
+        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+            return p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!";
         }
 
         @Override

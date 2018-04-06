@@ -49,7 +49,7 @@ public final class EffectInterfaces {
     private EffectInterfaces() {
         Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
     }
-    
+
     public interface ItemSwapperEffect {
         String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem);
 

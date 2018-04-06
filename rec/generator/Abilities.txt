@@ -43,10 +43,6 @@ Rain Dish:
 *
 Shield Dust:
     Desc: This Pok\u00e9mon's dust blocks the additional effects of attacks taken.
-    ShouldBlock:
-        return user.getAttack().hasSecondaryEffects();
-        ###
-    Int: EffectBlockerEffect
 *
 Shed Skin:
     Desc: The Pok\u00e9mon may heal its own status conditions by shedding its skin.
@@ -72,10 +68,8 @@ Sniper:
 *
 Keen Eye:
     Desc: Keen eyes prevent other Pok\u00e9mon from lowering this Pok\u00e9mon's accuracy.
-    Int: StatProtectingEffect, OpponentIgnoreStageEffect, RepelLowLevelEncounterEffect
-    StatProtect:
-        return stat == Stat.ACCURACY;
-        ###
+    Int: OpponentIgnoreStageEffect, RepelLowLevelEncounterEffect
+    StatProtect: Accuracy
     IgnoreStage:
         return s == Stat.EVASION;
         ###
@@ -350,17 +344,11 @@ Own Tempo:
 *
 Clear Body:
     Desc: Prevents other Pok\u00e9mon's moves or Abilities from lowering the Pok\u00e9mon's stats.
-    Int: StatProtectingEffect
-    StatProtect:
-        return true;
-        ###
+    StatProtectAll: true
 *
 Full Metal Body:
     Desc: Prevents other Pok\u00e9mon's moves or Abilities from lowering the Pok\u00e9mon's stats.
-    Int: StatProtectingEffect
-    StatProtect:
-        return true;
-        ###
+    StatProtectAll: true
     MoldBreakerBreaker: True
 *
 Liquid Ooze:
@@ -481,10 +469,7 @@ Forewarn:
 *
 Hyper Cutter:
     Desc: The Pok\u00e9mon's proud of its powerful pincers. They prevent other Pok\u00e9mon from lowering its Attack stat.
-    Int: StatProtectingEffect
-    StatProtect:
-        return stat == Stat.ATTACK;
-        ###
+    StatProtect: Attack
 *
 Soundproof:
     Desc: Soundproofing of the Pok\u00e9mon itself gives full immunity to all sound-based moves.
@@ -857,10 +842,7 @@ Solid Rock:
 *
 White Smoke:
     Desc: The Pok\u00e9mon is protected by its white smoke, which prevents other Pok\u00e9mon from lowering its stats.
-    Int: StatProtectingEffect
-    StatProtect:
-        return true;
-        ###
+    StatProtectAll: true
     EncounterRateMultiplier: .5
 *
 Toxic Boost:
@@ -1029,10 +1011,7 @@ Contrary:
 *
 Big Pecks:
     Desc: Protects the Pok\u00e9mon from Defense-lowering effects.
-    Int: StatProtectingEffect
-    StatProtect:
-        return stat == Stat.DEFENSE;
-        ###
+    StatProtect: Defense
 *
 Poison Touch:
     Desc: May poison a target when the Pok\u00e9mon makes contact.
@@ -1469,14 +1448,12 @@ Surge Surfer:
 *
 Flower Veil:
     Desc: Grass-type Pok\u00e9mon are protected from status conditions and the lowering of their stats.
-    Int: StatusPreventionEffect, StatProtectingEffect
+    Int: StatusPreventionEffect
     StatusPrevent:
         return victim.isType(b, Type.GRASS);
         ###
     StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents status conditions!"
-    StatProtect:
-        return victim.isType(b, Type.GRASS);
-        ###
+    StatProtectAll: victim.isType(b, Type.GRASS)
 *
 Gale Wings:
     Desc: Gives priority to Flying-type moves when the Pok\u00e9mon's HP is full.

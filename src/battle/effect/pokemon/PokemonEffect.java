@@ -12,6 +12,7 @@ import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.EffectInterfaces.ProtectingEffect;
 import battle.effect.EffectInterfaces.SapHealthEffect;
+import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
@@ -2025,11 +2026,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
                 return true;
             }
 
-            Attack attack = user.getAttack();
-            if (attack == null) {
+            // TODO: I don't know if this is sufficient or if we need a CastSource situation or what
+            if (!user.isAttacking()) {
                 return false;
             }
 
+            Attack attack = user.getAttack();
             return attack.isMoveType(MoveType.SUBSTITUTE_PIERCING) || attack.isMoveType(MoveType.SOUND_BASED);
         }
 
@@ -2061,23 +2063,36 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public boolean shouldBlock(Battle b, ActivePokemon user, ActivePokemon victim) {
-            // Self-target and field moves are always successful
-            if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD) || this.infiltrated(user)) {
+        public boolean shouldBlock(ActivePokemon caster, ActivePokemon victim, EffectNamesies effectNamesies) {
+            // Only block externally applied effects
+            if (caster == victim) {
                 return false;
             }
 
-            // Print the failure for status moves
-            if (user.getAttack().isStatusMove()) {
-                Messages.add(this.getFailMessage(b, user, victim));
+            // Substitute only blocks Pokemon effects
+            if (!(effectNamesies instanceof PokemonEffectNamesies)) {
+                return false;
             }
 
+            // Those pesky infiltrators
+            if (this.infiltrated(caster)) {
+                return false;
+            }
+
+            // TODO: Attacks with multiple failing attacks print failure multiple times
+            // Ex: Tickle prints "...but it failed!" twice
+            // Or things like Swagger print "Raised Attack!" then "...but it failed!" (referring to failed Confusion)
             return true;
         }
 
         @Override
         public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
             return !this.infiltrated(caster);
+        }
+
+        @Override
+        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+            return Effect.DEFAULT_FAIL_MESSAGE;
         }
 
         @Override

@@ -351,12 +351,20 @@ BeforeTurnEffect:
 ***
 EffectBlockerEffect:
 	Method:
-		Header: boolean shouldBlock(Battle b, ActivePokemon user, ActivePokemon victim)
-		Invoke: Check true
-		InvokeName: checkBlocked
-		MoldBreaker: user
+        Comments: // TODO: Same deal as StatusPreventionEffect -- update this if we can have multiple invoke methods (check and check get)
+		Header: boolean shouldBlock(ActivePokemon caster, ActivePokemon victim, EffectNamesies effectNamesies)
+		Invoke: CheckGet true
+		InvokeName: getBlockerEffect
+        InvokeParameters: Battle b
+		MoldBreaker: caster
 		EffectList: victim
 	*
+    Method:
+        Header: String getBlockMessage(ActivePokemon victim, EffectNamesies effectNamesies)
+        Default:
+            return Effect.DEFAULT_FAIL_MESSAGE;
+            ###
+    *
 ***
 TargetSwapperEffect:
 	Method:
@@ -392,17 +400,6 @@ StatProtectingEffect:
 	*
 	Method:
 		Header: String preventionMessage(Battle b, ActivePokemon p, Stat s)
-		Default:
-            String statName = s.getName().toLowerCase();
-            
-            CastSource source = this.getSource().getCastSource();
-            if (source.hasSourceName()) {
-                String sourceName = source.getSourceName(b, p);
-                return p.getName() + "'s " + sourceName + " prevents its " + statName + " from being lowered!";
-            }
-
-            return p.getName() + "'s " + statName + " cannot be lowered!";
-			###
 	*
 ***
 StatusPreventionEffect:

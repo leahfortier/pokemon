@@ -775,11 +775,12 @@ Substitute:
                 return true;
             }
 
-            Attack attack = user.getAttack();
-            if (attack == null) {
+            // TODO: I don't know if this is sufficient or if we need a CastSource situation or what
+            if (!user.isAttacking()) {
                 return false;
             }
             
+            Attack attack = user.getAttack();
             return attack.isMoveType(MoveType.SUBSTITUTE_PIERCING) || attack.isMoveType(MoveType.SOUND_BASED);
         }
         ###
@@ -791,16 +792,24 @@ Substitute:
         ###
     FailCondition: victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3
     ShouldBlock:
-        // Self-target and field moves are always successful
-        if (user.getAttack().isSelfTarget() || user.getAttack().isMoveType(MoveType.FIELD) || this.infiltrated(user)) {
+        // Only block externally applied effects
+        if (caster == victim) {
+            return false;
+        }
+    
+        // Substitute only blocks Pokemon effects
+        if (!(effectNamesies instanceof PokemonEffectNamesies)) {
             return false;
         }
 
-        // Print the failure for status moves
-        if (user.getAttack().isStatusMove()) {
-            Messages.add(this.getFailMessage(b, user, victim));
+        // Those pesky infiltrators
+        if (this.infiltrated(caster)) {
+            return false;
         }
 
+        // TODO: Attacks with multiple failing attacks print failure multiple times
+        // Ex: Tickle prints "...but it failed!" twice
+        // Or things like Swagger print "Raised Attack!" then "...but it failed!" (referring to failed Confusion)
         return true;
         ###
     AbsorbDamage:
@@ -818,6 +827,7 @@ Substitute:
     StatProtectingEffect:
         return !this.infiltrated(caster);
         ###
+    StatProtectMessage: Effect.DEFAULT_FAIL_MESSAGE
     StatusPrevent:
         return !this.infiltrated(caster);
         ###

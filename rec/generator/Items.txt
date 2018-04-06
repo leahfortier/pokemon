@@ -577,15 +577,13 @@ Weakness Policy:
         ###
 *
 White Herb:
-    Int: HoldItem, StatProtectingEffect
+    Int: HoldItem
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. It will restore any lowered stat in battle. It can be used only once.
     Price: 4000
     Fling: 10
-    StatProtect:
-        // NOTE: Works like Clear Body, since ain't nobody want to keep track of stats.
-        return true;
-        ###
+    StatProtectAll: true
+    Comments: // NOTE: Works like Clear Body, since ain't nobody want to keep track of stats
     FlingEffect:
         // Restores negative stat changes to the pelted
         for (Stat stat : Stat.BATTLE_STATS) {

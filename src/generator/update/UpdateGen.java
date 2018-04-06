@@ -1,10 +1,14 @@
 package generator.update;
 
+import battle.attack.Attack;
+import battle.attack.AttackNamesies;
+import battle.attack.MoveType;
 import draw.ImageUtils;
 import map.condition.Condition;
 import map.condition.ConditionHolder.AndCondition;
 import map.condition.ConditionSet;
 import pattern.map.ConditionMatcher;
+import pokemon.Stat;
 import pokemon.evolution.EvolutionType;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
@@ -20,8 +24,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.function.Predicate;
 
 // Mostly for when pokemoninfo.txt needs to be edited
 public class UpdateGen {
@@ -41,6 +48,74 @@ public class UpdateGen {
 //        translateAlBhed();
 //        addCondition();
 //        outputShowdownImagesFile();
+//        testBulbapediaMoveTypeList();
+        printStatOrder();
+    }
+
+    // Basically I'm sick of writing this -- just prints Pokemon ordered by base stat
+    private static void printStatOrder() {
+        // Feel free to change the stat or give a filter
+        Stat toOrder = Stat.SP_ATTACK;
+        Predicate<PokemonInfo> filter = p -> true;
+
+        List<PokemonInfo> pokes = new ArrayList<>();
+        for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
+            pokes.add(PokemonInfo.getPokemonInfo(num));
+        }
+
+        pokes.stream()
+             .filter(filter)
+             .sorted(Comparator.comparingInt(p -> p.getStats().get(toOrder)))
+             .forEachOrdered(p -> System.out.println(p.getName() + " " + p.getStats().get(toOrder)));
+    }
+
+    private static void testBulbapediaMoveTypeList() {
+        // Moves that aren't in the game for simplicity
+        // This is not exhaustive and more should be added as needed
+        Set<String> exclude = Set.of(
+                "After You",
+                "Helping Hand",
+                "Hold Hands",
+                "Hyperspace Fury",
+                "Hyperspace Hole",
+                "Instruct"
+        );
+
+        // This file should just contain a copy and pasted list of moves from those drop down thingies
+        Scanner in = FileIO.openFile("temp.txt");
+
+        // Those usually have extra crap in them so just change this to be the number of args to ignore
+        // Note: This doesn't work if any of these args have whitespace in them (Category, Type, etc. is more what we're looking for)
+        int numIgnorableArgs = 2;
+
+        // Change this to match whatever it is you are testing
+        Predicate<Attack> inList = attack -> attack.isMoveType(MoveType.SUBSTITUTE_PIERCING) || attack.isMoveType(MoveType.SOUND_BASED);
+
+        List<String> expected = new ArrayList<>();
+        while (in.hasNext()) {
+            String line = in.nextLine();
+            String[] split = line.trim().split("\\s+");
+
+            String attackName = new StringAppender()
+                    .appendJoin(" ", split.length - numIgnorableArgs, i -> split[i])
+                    .toString();
+            if (!exclude.contains(attackName)) {
+                expected.add(attackName);
+            }
+        }
+
+        List<String> actual = new ArrayList<>();
+        for (AttackNamesies attackNamesies : AttackNamesies.values()) {
+            Attack attack = attackNamesies.getNewAttack();
+            if (inList.test(attack)) {
+                actual.add(attack.getName());
+            }
+        }
+
+        System.out.println("Actual but not expected:");
+        System.out.println(GeneralUtils.inFirstNotSecond(actual, expected));
+        System.out.println("Expected but not actual:");
+        System.out.println(GeneralUtils.inFirstNotSecond(expected, actual));
     }
 
     private static void outputShowdownImagesFile() {

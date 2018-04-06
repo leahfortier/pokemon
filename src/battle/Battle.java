@@ -278,7 +278,6 @@ public class Battle implements Serializable {
 
     private boolean deadOpponent() {
         ActivePokemon dead = opponent.front();
-        Player player = (Player)this.player;
 
         // YOU'RE FINE
         if (!dead.isFainted(this)) {
@@ -286,6 +285,7 @@ public class Battle implements Serializable {
         }
 
         // Gain dat EXP
+        Player player = (Player)this.player;
         player.gainEXP(dead, this);
 
         // You have achieved total victory

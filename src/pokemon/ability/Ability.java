@@ -31,7 +31,6 @@ import battle.effect.InvokeInterfaces.CritBlockerEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.DefiniteEscape;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
-import battle.effect.InvokeInterfaces.EffectBlockerEffect;
 import battle.effect.InvokeInterfaces.EffectChanceMultiplierEffect;
 import battle.effect.InvokeInterfaces.EffectReceivedEffect;
 import battle.effect.InvokeInterfaces.EncounterRateMultiplier;
@@ -348,16 +347,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class ShieldDust extends Ability implements EffectBlockerEffect {
+    static class ShieldDust extends Ability {
         private static final long serialVersionUID = 1L;
 
         ShieldDust() {
             super(AbilityNamesies.SHIELD_DUST, "This Pok\u00e9mon's dust blocks the additional effects of attacks taken.");
-        }
-
-        @Override
-        public boolean shouldBlock(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttack().hasSecondaryEffects();
         }
     }
 
@@ -434,7 +428,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class KeenEye extends Ability implements StatProtectingEffect, OpponentIgnoreStageEffect, RepelLowLevelEncounterEffect {
+    static class KeenEye extends Ability implements OpponentIgnoreStageEffect, RepelLowLevelEncounterEffect, StatProtectingEffect {
         private static final long serialVersionUID = 1L;
 
         KeenEye() {
@@ -449,6 +443,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
             return stat == Stat.ACCURACY;
+        }
+
+        @Override
+        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+            return p.getName() + "'s " + this.getName() + " prevents its " + s.getName() + " from being lowered!";
         }
     }
 
@@ -1114,6 +1113,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
             return true;
         }
+
+        @Override
+        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+            return p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!";
+        }
     }
 
     static class FullMetalBody extends Ability implements StatProtectingEffect {
@@ -1126,6 +1130,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
             return true;
+        }
+
+        @Override
+        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+            return p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!";
         }
 
         @Override
@@ -1373,6 +1382,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
             return stat == Stat.ATTACK;
+        }
+
+        @Override
+        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+            return p.getName() + "'s " + this.getName() + " prevents its " + s.getName() + " from being lowered!";
         }
     }
 
@@ -2301,6 +2315,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
+        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+            return p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!";
+        }
+
+        @Override
         public double getEncounterRateMultiplier() {
             return .5;
         }
@@ -2715,6 +2734,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
             return stat == Stat.DEFENSE;
+        }
+
+        @Override
+        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+            return p.getName() + "'s " + this.getName() + " prevents its " + s.getName() + " from being lowered!";
         }
     }
 
@@ -3809,6 +3833,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
             return victim.isType(b, Type.GRASS);
+        }
+
+        @Override
+        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+            return p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!";
         }
     }
 

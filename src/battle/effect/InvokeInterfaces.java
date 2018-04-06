@@ -630,26 +630,32 @@ public final class InvokeInterfaces {
     }
 
     public interface EffectBlockerEffect {
-        boolean shouldBlock(Battle b, ActivePokemon user, ActivePokemon victim);
 
-        static boolean checkBlocked(Battle b, ActivePokemon user, ActivePokemon victim) {
+        // TODO: Same deal as StatusPreventionEffect -- update this if we can have multiple invoke methods (check and check get)
+        boolean shouldBlock(ActivePokemon caster, ActivePokemon victim, EffectNamesies effectNamesies);
+
+        default String getBlockMessage(ActivePokemon victim, EffectNamesies effectNamesies) {
+            return Effect.DEFAULT_FAIL_MESSAGE;
+        }
+
+        static EffectBlockerEffect getBlockerEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectNamesies) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof EffectBlockerEffect && InvokeEffect.isActiveEffect(invokee)) {
 
                     // If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && user.breaksTheMold()) {
+                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && caster.breaksTheMold()) {
                         continue;
                     }
 
                     EffectBlockerEffect effect = (EffectBlockerEffect)invokee;
-                    if (effect.shouldBlock(b, user, victim)) {
-                        return true;
+                    if (effect.shouldBlock(caster, victim, effectNamesies)) {
+                        return effect;
                     }
                 }
             }
 
-            return false;
+            return null;
         }
     }
 
@@ -706,18 +712,7 @@ public final class InvokeInterfaces {
 
     public interface StatProtectingEffect extends InvokeEffect {
         boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat);
-
-        default String preventionMessage(Battle b, ActivePokemon p, Stat s) {
-            String statName = s.getName().toLowerCase();
-
-            CastSource source = this.getSource().getCastSource();
-            if (source.hasSourceName()) {
-                String sourceName = source.getSourceName(b, p);
-                return p.getName() + "'s " + sourceName + " prevents its " + statName + " from being lowered!";
-            }
-
-            return p.getName() + "'s " + statName + " cannot be lowered!";
-        }
+        String preventionMessage(Battle b, ActivePokemon p, Stat s);
 
         static StatProtectingEffect getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);

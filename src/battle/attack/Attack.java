@@ -20,7 +20,6 @@ import battle.effect.InvokeInterfaces.CrashDamageMove;
 import battle.effect.InvokeInterfaces.CritBlockerEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.DefogRelease;
-import battle.effect.InvokeInterfaces.EffectBlockerEffect;
 import battle.effect.InvokeInterfaces.EffectChanceMultiplierEffect;
 import battle.effect.InvokeInterfaces.MurderEffect;
 import battle.effect.InvokeInterfaces.OpponentEndAttackEffect;
@@ -294,7 +293,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         // Check the opponents effects and see if it will prevent effects from occurring
-        if (EffectBlockerEffect.checkBlocked(b, me, o)) {
+        if (o.hasAbility(AbilityNamesies.SHIELD_DUST) && this.hasSecondaryEffects()) {
             return false;
         }
 
@@ -10079,7 +10078,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         private static final long serialVersionUID = 1L;
 
         AromaticMist() {
-            super(AttackNamesies.AROMATIC_MIST, Type.FAIRY, MoveCategory.STATUS, 20, "The user raises the Sp. Def stat of an ally Pok\u00e9mon by using a mysterious aroma.");
+            super(AttackNamesies.AROMATIC_MIST, Type.FAIRY, MoveCategory.STATUS, 20, "The user raises its Sp. Def stat by using a mysterious aroma.");
             super.selfTarget = true;
             super.statChanges[Stat.SP_DEFENSE.index()] = 1;
         }
@@ -10879,6 +10878,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super(AttackNamesies.SPECTRAL_THIEF, Type.GHOST, MoveCategory.PHYSICAL, 10, "The user hides in the target's shadow, steals the target's stat boosts, and then attacks.");
             super.power = 90;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 

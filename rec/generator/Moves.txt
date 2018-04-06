@@ -5883,7 +5883,7 @@ Fairy Lock:
 *
 Aromatic Mist:
     Type: Fairy
-    Desc: The user raises the Sp. Def stat of an ally Pok\u00e9mon by using a mysterious aroma.
+    Desc: The user raises its Sp. Def stat by using a mysterious aroma.
     PP: 20
     SelfTarget: True
     Cat: Status
@@ -6436,6 +6436,7 @@ Spectral Thief:
     Acc: 100
     Cat: Physical
     PP: 10
+    MoveType: Substitute_Piercing
     AfterApplyCheck:
         for (Stat stat : Stat.BATTLE_STATS) {
             int stage = victim.getStages().getStage(stat);
