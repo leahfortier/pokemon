@@ -593,7 +593,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
-            if (effectType == PokemonEffectNamesies.INFATUATED && PokemonEffectNamesies.INFATUATED.getEffect().apply(b, victim, caster, CastSource.HELD_ITEM, false)) {
+            if (effectType == PokemonEffectNamesies.INFATUATION && PokemonEffectNamesies.INFATUATION.getEffect().apply(b, victim, caster, CastSource.HELD_ITEM, false)) {
                 Messages.add(victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!");
             }
         }
@@ -981,7 +981,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         private static final Map<PokemonEffectNamesies, String> REMOVEABLE_EFFECTS = new EnumMap<>(PokemonEffectNamesies.class);
         static {
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.INFATUATED, "infatuated");
+            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.INFATUATION, "infatuated");
             REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.DISABLE, "disabled");
             REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.TAUNT, "under the effects of taunt");
             REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.ENCORE, "under the effects of encore");

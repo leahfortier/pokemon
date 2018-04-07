@@ -613,25 +613,23 @@ OppTrappingMessage:
 	Header: String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper)
 *
 PartialTrap:
+    Header: String getReduceMessage(ActivePokemon victim)
+    Body:
+        return victim.getName() + " is hurt by {1_}!";
+        ###
 	AddMapField: AfterCast:
 		if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
 			this.setTurns(5);
 		}
 		###
-	AddInterface: EndTurnEffect
-	AddInterface: TrappingEffect
+	AddInterface: PartialTrappingEffect
 	AddMapField: MinTurns: 4
 	AddMapField: MaxTurns: 5
 	AddMapField: NextTurnSubside: True
 	AddMapField: CastMessage: {2-}
 	AddMapField: SubsideMessage: victim.getName() + " is no longer trapped by {1_}."
-	AddMapField: RapidSpin: released.getName() + " was released from {1_}!"
+	AddMapField: RapidSpinNoInterface: released.getName() + " was released from {1_}!"
 	AddMapField: TrappingMessage: trapped.getName() + " cannot be recalled due to {1_}!"
-	AddMapField: ApplyEndTurn:
-		// Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-        double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-		victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by {1_}!");
-		###
 *
 SafeguardEffect:
 	AddMapField: CastMessage: user.getName() + " is covered by a veil!"
@@ -721,6 +719,9 @@ StatRatio:
 *
 RapidSpin:
     AddInterface: RapidSpinRelease
+    AddMapField: RapidSpinNoInterface: {0}
+*
+RapidSpinNoInterface:
 	Header: String getRapidSpinReleaseMessage(ActivePokemon released)
 	Body:
 		return {0};
@@ -1681,7 +1682,7 @@ Aura:
 		###
 *
 RaiseAllStats:
-	AddMapField: StatChange: 7 Attack 1 Defense 1 Sp_Attack 1 Sp_Defense 1 Speed 1 Accuracy 1 Evasion 1
+	AddMapField: StatChange: 5 Attack 1 Defense 1 Sp_Attack 1 Sp_Defense 1 Speed 1
 *
 ConsumeBerry:
 	AddMapField: UniqueEffects:

@@ -1494,7 +1494,7 @@ Flatter:
     Cat: Status
     Acc: 100
     PokemonEffect: Confusion
-    StatChange: 1 Sp_Attack 2
+    StatChange: 1 Sp_Attack 1
 *
 Poison Fang:
     Desc: The user bites the target with toxic fangs. This may also leave the target badly poisoned.
@@ -4526,7 +4526,7 @@ Attract:
     Type: Normal
     Cat: Status
     Acc: 100
-    PokemonEffect: Infatuated
+    PokemonEffect: Infatuation
     MoveType: Substitute_Piercing
 *
 Force Palm:
@@ -4786,7 +4786,7 @@ Trick Room:
     Cat: Status
     BattleEffect: StandardBattleEffect TrickRoom
 *
-Roar Of Time:
+Roar of Time:
     Desc: The user blasts the target with power that distorts even time. The user can't move on the next turn.
     PP: 5
     Type: Dragon
@@ -6262,10 +6262,10 @@ Throat Chop:
     PP: 15
     Pow: 80
     Acc: 100
-    PokemonEffect: SoundBlock
+    PokemonEffect: Silence
 *
 Pollen Puff:
-    Desc: The user attacks the enemy with a pollen puff that explodes. If the target is an ally, it gives the ally a pollen puff that restores its HP instead.
+    Desc: The user attacks the enemy with a pollen puff that explodes.
     Type: Bug
     Cat: Special
     PP: 15
@@ -6522,7 +6522,7 @@ Hyperspace Hole:
     Type: Psychic
     Cat: Special
     PP: 5
-    MoveType: Protect_Piercing
+    MoveType: Protect_Piercing, Substitute_Piercing
     Pow: 80
 *
 Steam Eruption:

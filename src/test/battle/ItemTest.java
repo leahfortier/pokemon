@@ -275,11 +275,11 @@ public class ItemTest extends BaseTest {
         TestPokemon defending = battle.getDefending().withGender(Gender.MALE);
 
         battle.attackingFight(AttackNamesies.ATTRACT);
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
+        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATION));
 
         attacking.giveItem(ItemNamesies.MENTAL_HERB);
         battle.attackingFight(AttackNamesies.FLING);
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
+        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.INFATUATION));
         Assert.assertFalse(attacking.isHoldingItem(battle));
 
         battle.defendingFight(AttackNamesies.CONFUSE_RAY);
@@ -489,18 +489,18 @@ public class ItemTest extends BaseTest {
         TestPokemon defending = battle.getDefending().withGender(Gender.MALE);
 
         battle.attackingFight(AttackNamesies.ATTRACT);
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.INFATUATED));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.INFATUATION));
+        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATION));
 
         battle.clearAllEffects();
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.INFATUATED));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.INFATUATION));
+        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.INFATUATION));
 
         // Destiny Knot causes the caster to be infatuated as well
         defending.withItem(ItemNamesies.DESTINY_KNOT);
         battle.attackingFight(AttackNamesies.ATTRACT);
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.INFATUATED));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.INFATUATION));
+        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATION));
     }
 
     @Test

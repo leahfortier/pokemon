@@ -121,8 +121,16 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         this.printCast = true;
     }
 
-    public Iterable<EffectNamesies> getEffects() {
-        return this.effects;
+    public List<EffectNamesies> getEffectsCopy() {
+        return new ArrayList<>(this.effects);
+    }
+
+    public int[] getStatChangesCopy() {
+        return this.statChanges.clone();
+    }
+
+    public StatusNamesies getStatus() {
+        return this.status;
     }
 
     public int getActualPriority() {
@@ -1690,8 +1698,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.statChanges[Stat.SP_ATTACK.index()] = 1;
             super.statChanges[Stat.SP_DEFENSE.index()] = 1;
             super.statChanges[Stat.SPEED.index()] = 1;
-            super.statChanges[Stat.ACCURACY.index()] = 1;
-            super.statChanges[Stat.EVASION.index()] = 1;
         }
     }
 
@@ -2913,7 +2919,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super(AttackNamesies.FLATTER, Type.DARK, MoveCategory.STATUS, 15, "Flattery is used to confuse the target. However, this also raises the target's Sp. Atk stat.");
             super.accuracy = 100;
             super.effects.add(PokemonEffectNamesies.CONFUSION);
-            super.statChanges[Stat.SP_ATTACK.index()] = 2;
+            super.statChanges[Stat.SP_ATTACK.index()] = 1;
         }
     }
 
@@ -6350,8 +6356,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.statChanges[Stat.SP_ATTACK.index()] = 1;
             super.statChanges[Stat.SP_DEFENSE.index()] = 1;
             super.statChanges[Stat.SPEED.index()] = 1;
-            super.statChanges[Stat.ACCURACY.index()] = 1;
-            super.statChanges[Stat.EVASION.index()] = 1;
         }
     }
 
@@ -7234,8 +7238,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.statChanges[Stat.SP_ATTACK.index()] = 1;
             super.statChanges[Stat.SP_DEFENSE.index()] = 1;
             super.statChanges[Stat.SPEED.index()] = 1;
-            super.statChanges[Stat.ACCURACY.index()] = 1;
-            super.statChanges[Stat.EVASION.index()] = 1;
         }
     }
 
@@ -7739,7 +7741,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         Attract() {
             super(AttackNamesies.ATTRACT, Type.NORMAL, MoveCategory.STATUS, 15, "If it is the opposite gender of the user, the target becomes infatuated and less likely to attack.");
             super.accuracy = 100;
-            super.effects.add(PokemonEffectNamesies.INFATUATED);
+            super.effects.add(PokemonEffectNamesies.INFATUATION);
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
         }
     }
@@ -10631,7 +10633,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super(AttackNamesies.THROAT_CHOP, Type.DARK, MoveCategory.PHYSICAL, 15, "The user attacks the target's throat, and the resultant suffering prevents the target from using moves that emit sound for two turns.");
             super.power = 80;
             super.accuracy = 100;
-            super.effects.add(PokemonEffectNamesies.SOUND_BLOCK);
+            super.effects.add(PokemonEffectNamesies.SILENCE);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
@@ -10641,7 +10643,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         private static final long serialVersionUID = 1L;
 
         PollenPuff() {
-            super(AttackNamesies.POLLEN_PUFF, Type.BUG, MoveCategory.SPECIAL, 15, "The user attacks the enemy with a pollen puff that explodes. If the target is an ally, it gives the ally a pollen puff that restores its HP instead.");
+            super(AttackNamesies.POLLEN_PUFF, Type.BUG, MoveCategory.SPECIAL, 15, "The user attacks the enemy with a pollen puff that explodes.");
             super.power = 90;
             super.accuracy = 100;
         }
@@ -11015,6 +11017,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super(AttackNamesies.HYPERSPACE_HOLE, Type.PSYCHIC, MoveCategory.SPECIAL, 5, "Using a hyperspace hole, the user appears right next to the target and strikes. This also hits a target using a move such as Protect or Detect.");
             super.power = 80;
             super.moveTypes.add(MoveType.PROTECT_PIERCING);
+            super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
         }
     }
 

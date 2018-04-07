@@ -138,7 +138,7 @@ Cute Charm:
     Desc: Contact with the Pok\u00e9mon may cause infatuation.
     Int: PhysicalContactEffect
     Contact:
-        if (RandomUtils.chanceTest(30) && PokemonEffectNamesies.INFATUATED.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
+        if (RandomUtils.chanceTest(30) && PokemonEffectNamesies.INFATUATION.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
             Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
         }
         ###

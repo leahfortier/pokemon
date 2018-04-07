@@ -523,7 +523,8 @@ Torment:
     UnusableMessage: p.getName() + " cannot use the same move twice in a row!"
     CastMessage: user.getName() + " tormented " + victim.getName() + "!"
 *
-SoundBlock:
+Silence:
+    Comments: // STFU MF
     NumTurns: 3
     CanHave: True
     Int: AttackSelectionSelfBlockerEffect
@@ -809,7 +810,7 @@ Substitute:
 
         // TODO: Attacks with multiple failing attacks print failure multiple times
         // Ex: Tickle prints "...but it failed!" twice
-        // Or things like Swagger print "Raised Attack!" then "...but it failed!" (referring to failed Confusion)
+        // Swagger prints "Raised Attack!" then "...but it failed!" (referring to failed Confusion)
         return true;
         ###
     AbsorbDamage:
@@ -955,7 +956,7 @@ HealBlock:
         return user.getAttack().isMoveType(MoveType.HEALING);
         ###
 *
-Infatuated:
+Infatuation:
     FailAbility: Oblivious, Aroma Veil
     FailCondition: !Gender.oppositeGenders(caster, victim)
     Int: BeforeTurnEffect
