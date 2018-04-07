@@ -12,9 +12,11 @@ import battle.effect.InvokeInterfaces.CrashDamageMove;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
+import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.RepellingEffect;
 import battle.effect.InvokeInterfaces.SelfAttackBlocker;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
+import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.InvokeInterfaces.WildEncounterSelector;
 import battle.effect.pokemon.PokemonEffect;
@@ -283,6 +285,17 @@ public final class EffectInterfaces {
         @Override
         default boolean block(Battle b, ActivePokemon user) {
             return !this.usable(b, user, user.getMove());
+        }
+    }
+
+    public interface PartialTrappingEffect extends EndTurnEffect, TrappingEffect, RapidSpinRelease {
+        String getReduceMessage(ActivePokemon victim);
+
+        @Override
+        default void applyEndTurn(ActivePokemon victim, Battle b) {
+            // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
+            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
+            victim.reduceHealthFraction(b, fraction, this.getReduceMessage(victim));
         }
     }
 }

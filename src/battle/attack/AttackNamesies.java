@@ -1143,7 +1143,7 @@ public enum AttackNamesies {
     DUAL_CHOP("Dual Chop", DualChop::new),
     ROCK_WRECKER("Rock Wrecker", RockWrecker::new),
     TRICK_ROOM("Trick Room", TrickRoom::new),
-    ROAR_OF_TIME("Roar Of Time", RoarOfTime::new),
+    ROAR_OF_TIME("Roar of Time", RoarOfTime::new),
     SPACIAL_REND("Spacial Rend", SpacialRend::new),
     MAGMA_STORM("Magma Storm", MagmaStorm::new),
     CRUSH_GRIP("Crush Grip", CrushGrip::new),

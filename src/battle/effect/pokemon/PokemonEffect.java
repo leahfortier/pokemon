@@ -8,6 +8,7 @@ import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.AttackSelectionSelfBlockerEffect;
+import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.EffectInterfaces.ProtectingEffect;
@@ -170,7 +171,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class FireSpin extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+    static class FireSpin extends PokemonEffect implements PartialTrappingEffect {
         private static final long serialVersionUID = 1L;
 
         FireSpin() {
@@ -180,6 +181,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(victim.hasEffect(this.namesies()));
+        }
+
+        @Override
+        public String getReduceMessage(ActivePokemon victim) {
+            return victim.getName() + " is hurt by fire spin!";
         }
 
         @Override
@@ -205,19 +211,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by fire spin!");
-        }
-
-        @Override
         public String trappingMessage(ActivePokemon trapped) {
             return trapped.getName() + " cannot be recalled due to fire spin!";
         }
     }
 
-    static class Infestation extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+    static class Infestation extends PokemonEffect implements PartialTrappingEffect {
         private static final long serialVersionUID = 1L;
 
         Infestation() {
@@ -227,6 +226,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(victim.hasEffect(this.namesies()));
+        }
+
+        @Override
+        public String getReduceMessage(ActivePokemon victim) {
+            return victim.getName() + " is hurt by infestation!";
         }
 
         @Override
@@ -252,19 +256,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by infestation!");
-        }
-
-        @Override
         public String trappingMessage(ActivePokemon trapped) {
             return trapped.getName() + " cannot be recalled due to infestation!";
         }
     }
 
-    static class MagmaStorm extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+    static class MagmaStorm extends PokemonEffect implements PartialTrappingEffect {
         private static final long serialVersionUID = 1L;
 
         MagmaStorm() {
@@ -274,6 +271,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(victim.hasEffect(this.namesies()));
+        }
+
+        @Override
+        public String getReduceMessage(ActivePokemon victim) {
+            return victim.getName() + " is hurt by magma storm!";
         }
 
         @Override
@@ -299,19 +301,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by magma storm!");
-        }
-
-        @Override
         public String trappingMessage(ActivePokemon trapped) {
             return trapped.getName() + " cannot be recalled due to magma storm!";
         }
     }
 
-    static class Clamped extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+    static class Clamped extends PokemonEffect implements PartialTrappingEffect {
         private static final long serialVersionUID = 1L;
 
         Clamped() {
@@ -321,6 +316,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(victim.hasEffect(this.namesies()));
+        }
+
+        @Override
+        public String getReduceMessage(ActivePokemon victim) {
+            return victim.getName() + " is hurt by clamp!";
         }
 
         @Override
@@ -346,19 +346,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by clamp!");
-        }
-
-        @Override
         public String trappingMessage(ActivePokemon trapped) {
             return trapped.getName() + " cannot be recalled due to clamp!";
         }
     }
 
-    static class Whirlpooled extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+    static class Whirlpooled extends PokemonEffect implements PartialTrappingEffect {
         private static final long serialVersionUID = 1L;
 
         Whirlpooled() {
@@ -368,6 +361,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(victim.hasEffect(this.namesies()));
+        }
+
+        @Override
+        public String getReduceMessage(ActivePokemon victim) {
+            return victim.getName() + " is hurt by whirlpool!";
         }
 
         @Override
@@ -393,19 +391,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by whirlpool!");
-        }
-
-        @Override
         public String trappingMessage(ActivePokemon trapped) {
             return trapped.getName() + " cannot be recalled due to whirlpool!";
         }
     }
 
-    static class Wrapped extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+    static class Wrapped extends PokemonEffect implements PartialTrappingEffect {
         private static final long serialVersionUID = 1L;
 
         Wrapped() {
@@ -415,6 +406,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(victim.hasEffect(this.namesies()));
+        }
+
+        @Override
+        public String getReduceMessage(ActivePokemon victim) {
+            return victim.getName() + " is hurt by wrap!";
         }
 
         @Override
@@ -440,19 +436,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by wrap!");
-        }
-
-        @Override
         public String trappingMessage(ActivePokemon trapped) {
             return trapped.getName() + " cannot be recalled due to wrap!";
         }
     }
 
-    static class Binded extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+    static class Binded extends PokemonEffect implements PartialTrappingEffect {
         private static final long serialVersionUID = 1L;
 
         Binded() {
@@ -462,6 +451,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(victim.hasEffect(this.namesies()));
+        }
+
+        @Override
+        public String getReduceMessage(ActivePokemon victim) {
+            return victim.getName() + " is hurt by bind!";
         }
 
         @Override
@@ -487,19 +481,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by bind!");
-        }
-
-        @Override
         public String trappingMessage(ActivePokemon trapped) {
             return trapped.getName() + " cannot be recalled due to bind!";
         }
     }
 
-    static class SandTomb extends PokemonEffect implements EndTurnEffect, TrappingEffect, RapidSpinRelease {
+    static class SandTomb extends PokemonEffect implements PartialTrappingEffect {
         private static final long serialVersionUID = 1L;
 
         SandTomb() {
@@ -509,6 +496,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(victim.hasEffect(this.namesies()));
+        }
+
+        @Override
+        public String getReduceMessage(ActivePokemon victim) {
+            return victim.getName() + " is hurt by sand tomb!";
         }
 
         @Override
@@ -531,13 +523,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getRapidSpinReleaseMessage(ActivePokemon released) {
             return released.getName() + " was released from sand tomb!";
-        }
-
-        @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
-            victim.reduceHealthFraction(b, fraction, victim.getName() + " is hurt by sand tomb!");
         }
 
         @Override
@@ -1428,11 +1413,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class SoundBlock extends PokemonEffect implements AttackSelectionSelfBlockerEffect {
+    // STFU MF
+    static class Silence extends PokemonEffect implements AttackSelectionSelfBlockerEffect {
         private static final long serialVersionUID = 1L;
 
-        SoundBlock() {
-            super(PokemonEffectNamesies.SOUND_BLOCK, 3, 3, false, false);
+        Silence() {
+            super(PokemonEffectNamesies.SILENCE, 3, 3, false, false);
         }
 
         @Override
@@ -2081,7 +2067,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
             // TODO: Attacks with multiple failing attacks print failure multiple times
             // Ex: Tickle prints "...but it failed!" twice
-            // Or things like Swagger print "Raised Attack!" then "...but it failed!" (referring to failed Confusion)
+            // Swagger prints "Raised Attack!" then "...but it failed!" (referring to failed Confusion)
             return true;
         }
 
@@ -2389,11 +2375,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Infatuated extends PokemonEffect implements BeforeTurnEffect {
+    static class Infatuation extends PokemonEffect implements BeforeTurnEffect {
         private static final long serialVersionUID = 1L;
 
-        Infatuated() {
-            super(PokemonEffectNamesies.INFATUATED, -1, -1, false, false);
+        Infatuation() {
+            super(PokemonEffectNamesies.INFATUATION, -1, -1, false, false);
         }
 
         @Override

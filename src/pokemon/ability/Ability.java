@@ -653,7 +653,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (RandomUtils.chanceTest(30) && PokemonEffectNamesies.INFATUATED.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
+            if (RandomUtils.chanceTest(30) && PokemonEffectNamesies.INFATUATION.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
                 Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
             }
         }

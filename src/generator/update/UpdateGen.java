@@ -77,7 +77,6 @@ public class UpdateGen {
                 "Helping Hand",
                 "Hold Hands",
                 "Hyperspace Fury",
-                "Hyperspace Hole",
                 "Instruct"
         );
 
