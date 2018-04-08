@@ -105,13 +105,13 @@ StatusFang:
 	AddMapField: MoveType: Biting
 	AddMapField: BeginAttack:
 		super.status = StatusNamesies.NO_STATUS;
-		super.effects.clear();
+		super.effect = null;
 
 		// If the effect is being applied, 50/50 chance to give a status condition vs. flinching
 		if (RandomUtils.chanceTest(50)) {
 			super.status = StatusNamesies.{00};
 		} else {
-			super.effects.add(PokemonEffectNamesies.FLINCH);
+			super.effect = PokemonEffectNamesies.FLINCH;
 		}
 		###
 *
