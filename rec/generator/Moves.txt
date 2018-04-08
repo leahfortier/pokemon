@@ -11,11 +11,11 @@ Constructor:
 Fields:
     Pow Int power
     Acc Int accuracy
-    PokemonEffect Multiple Enum PokemonEffectNamesies effects
-    TeamEffect Multiple Enum TeamEffectNamesies effects
-    StandardBattleEffect Multiple Enum StandardBattleEffectNamesies effects
-    Weather Multiple Enum WeatherNamesies effects
-    Terrain Multiple Enum TerrainNamesies effects
+    PokemonEffect Enum PokemonEffectNamesies effect
+    TeamEffect Enum TeamEffectNamesies effect
+    StandardBattleEffect Enum StandardBattleEffectNamesies effect
+    Weather Enum WeatherNamesies effect
+    Terrain Enum TerrainNamesies effect
     EffChance Int effectChance
     Status Enum StatusNamesies status
     MoveType Multiple Enum MoveType moveTypes
@@ -2693,11 +2693,11 @@ Curse:
     Type: Ghost
     BeginAttack:
         super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-        super.effects.clear();
+        super.effect = null;
 
         // Different effects based on the type of the user
         if (attacking.isType(b, Type.GHOST)) {
-            super.effects.add(PokemonEffectNamesies.CURSE);
+            super.effect = PokemonEffectNamesies.CURSE;
             super.selfTarget = false;
         } else {
             super.statChanges[Stat.ATTACK.index()] = 1;
@@ -5220,7 +5220,7 @@ Secret Power:
 
         super.status = terrain.getStatusCondition();
         super.statChanges = terrain.getStatChanges();
-        super.effects = terrain.getEffects();
+        super.effect = terrain.getEffect();
         ###
     EffChance: 30
 *

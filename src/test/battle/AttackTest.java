@@ -72,14 +72,11 @@ public class AttackTest extends BaseTest {
             }
 
             // Moves that cast battle effects are field moves
-            for (EffectNamesies effectNamesies : attack.getEffectsCopy()) {
-                Effect effect = effectNamesies.getEffect();
-                if (effect instanceof BattleEffect) {
-                    Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.NO_MAGIC_COAT));
-                    Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.FIELD));
-                }
+            EffectNamesies effect = attack.getEffect();
+            if (effect != null && effect.getEffect() instanceof BattleEffect) {
+                Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.NO_MAGIC_COAT));
+                Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.FIELD));
             }
-            Assert.assertTrue(attack.getName(), attack.getEffectsCopy().isEmpty() || attack.getEffectsCopy().size() == 1);
 
             // Status moves must apply their effects 100% of the time
             if (attack.isStatusMove()) {
