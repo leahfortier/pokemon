@@ -62,6 +62,15 @@ public final class GeneralUtils {
         System.arraycopy(temp, 0, second, 0, first.length);
     }
 
+    public static boolean isNonEmpty(int[] array) {
+        for (int value : array) {
+            if (value != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static boolean hasOnlyOneNonEmpty(Object... objects) {
         return Arrays.stream(objects)
                      .filter(Objects::nonNull)
