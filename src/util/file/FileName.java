@@ -13,10 +13,6 @@ public abstract class FileName {
     public static final String TM_LIST = Folder.GENERATOR + "tmList.txt";
     public static final String INTERFACES = Folder.GENERATOR + "interfaces.txt";
 
-    public static final String MOVE_SCRIPT_INPUT = Folder.SCRIPTS + "moves.in";
-    public static final String MOVE_PARSER = Folder.SCRIPTS + "moves.out";
-    public static final String MOVE_API = Folder.SCRIPTS + "api_moves.out";
-
     public static final String MAP_TILES_INDEX = getIndexFileName(Folder.MAP_TILES);
     public static final String TRAINER_TILES_INDEX = getIndexFileName(Folder.TRAINER_TILES);
     public static final String MAP_MAKER_TILES_INDEX = getIndexFileName(Folder.MAP_MAKER_TILES);

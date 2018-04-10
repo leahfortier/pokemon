@@ -4,12 +4,8 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
-import battle.effect.EffectInterfaces.PartialTrappingEffect;
-import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
-import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.status.StatusNamesies;
 import generator.update.ItemUpdater;
 import generator.update.ItemUpdater.ItemParser;
 import generator.update.MoveUpdater;
@@ -26,15 +22,9 @@ import item.use.TechnicalMachine;
 import org.junit.Assert;
 import org.junit.Test;
 import test.BaseTest;
-import test.TestUtils;
 import type.Type;
-import util.GeneralUtils;
-import util.file.FileIO;
-import util.file.FileName;
-import util.string.StringUtils;
 
 import java.util.EnumSet;
-import java.util.Scanner;
 import java.util.Set;
 
 public class ScriptTest extends BaseTest {
@@ -315,70 +305,5 @@ public class ScriptTest extends BaseTest {
         }
 
         Assert.assertTrue(toParse.isEmpty());
-    }
-
-    @Test
-    public void moveApiTest() {
-        Scanner in = FileIO.openFile(FileName.MOVE_API);
-        while (in.hasNext()) {
-            MoveApiParser parser = new MoveApiParser(in);
-
-            Attack attack = parser.namesies.getNewAttack();
-            String message = attack.getName() + " " + parser.description;
-
-            Assert.assertEquals(message, parser.description, attack.getDescription());
-            Assert.assertEquals(message, parser.type, attack.getActualType());
-            Assert.assertEquals(message, parser.moveCategory, attack.getCategory());
-            Assert.assertEquals(message, parser.pp, attack.getPP());
-            Assert.assertEquals(message, parser.priority, attack.getActualPriority());
-            Assert.assertEquals(message, parser.power, attack.getPowerString());
-            Assert.assertEquals(message, parser.accuracy, attack.getAccuracyString());
-            Assert.assertEquals(message, parser.effectChance, attack.getEffectChance());
-            TestUtils.assertEquals(message, parser.statChanges, attack.getStatChangesCopy());
-
-            EffectNamesies effect = attack.getEffect();
-            StatusNamesies status = attack.getStatus();
-            if (effect == PokemonEffectNamesies.FLINCH) {
-                Assert.assertEquals(message, parser.ailmentChance, 0);
-                Assert.assertEquals(message, parser.flinchChance, parser.effectChance);
-                TestUtils.assertGreater(message, attack.getEffectChance(), 0);
-            } else {
-                Assert.assertEquals(message, parser.flinchChance, 0);
-
-                Set<PokemonEffectNamesies> nonApiEffects = Set.of(
-                        PokemonEffectNamesies.ENCORE,
-                        PokemonEffectNamesies.IMPRISON,
-                        PokemonEffectNamesies.TRAPPED,
-                        PokemonEffectNamesies.TAUNT,
-                        PokemonEffectNamesies.POWDER,
-                        PokemonEffectNamesies.CHANGE_TYPE,
-                        PokemonEffectNamesies.CHANGE_ABILITY,
-                        PokemonEffectNamesies.CHANGE_ATTACK_TYPE
-                );
-
-                // It looks like the API only includes status conditions non-self target Pokemon effects (except for Ingrain and the whitelist above)
-                Assert.assertEquals(
-                        message + " \n" + StringUtils.spaceSeparated(parser.ailment, effect, status),
-                        parser.ailment == null,
-                        (effect == null && status == StatusNamesies.NO_STATUS)
-                                || (effect != null && (!(effect instanceof PokemonEffectNamesies) || nonApiEffects.contains(effect))
-                                || (attack.isSelfTarget() && parser.namesies != AttackNamesies.INGRAIN))
-                );
-
-                if (attack.hasSecondaryEffects()) {
-                    if (status != StatusNamesies.NO_STATUS || effect == PokemonEffectNamesies.CONFUSION) {
-                        Assert.assertEquals(message + "\n" + parser.ailment, parser.ailmentChance, parser.effectChance);
-                        Assert.assertEquals(message + "\n" + parser.ailment, parser.statChance, 0);
-                    } else if (!GeneralUtils.isNonEmpty(attack.getStatChangesCopy())) {
-                        Assert.assertEquals(message + "\n" + parser.ailment, parser.statChance, parser.effectChance);
-                        TestUtils.assertEqualsAny(message, parser.ailmentChance, 0, parser.effectChance);
-                    }
-                } else if (effect != null && effect.getEffect() instanceof PartialTrappingEffect) {
-                    Assert.assertEquals(message + "\n" + parser.ailment, parser.ailmentChance, 100);
-                } else {
-                    Assert.assertEquals(message + "\n" + parser.ailment, parser.ailmentChance, 0);
-                }
-            }
-        }
     }
 }
