@@ -32,6 +32,15 @@ public class TestUtils {
         Assert.fail(message + "\n" + actual + " not in " + Arrays.toString(expectedOptions));
     }
 
+    public static void assertEqualsAny(String message, String actual, String... expectedOptions) {
+        for (String expected : expectedOptions) {
+            if (actual.equals(expected)) {
+                return;
+            }
+        }
+        Assert.fail(message + "\n" + actual + " not in " + Arrays.toString(expectedOptions));
+    }
+
     // Close enough
     public static void assertAlmostEquals(String message, int expected, int actual, int delta) {
         if (Math.abs(expected - actual) > delta) {
