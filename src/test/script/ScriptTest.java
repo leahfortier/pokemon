@@ -10,6 +10,7 @@ import generator.update.ItemUpdater;
 import generator.update.ItemUpdater.ItemParser;
 import generator.update.MoveUpdater;
 import generator.update.MoveUpdater.MoveParser;
+import generator.update.UpdateGen;
 import item.Item;
 import item.ItemNamesies;
 import item.bag.BagCategory;
@@ -32,6 +33,7 @@ import java.util.EnumSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ScriptTest extends BaseTest {
     @Test
@@ -320,6 +322,11 @@ public class ScriptTest extends BaseTest {
 
         Assert.assertEquals("{", in.nextLine());
 
+        Set<String> unimplementedIds = UpdateGen.unimplementedMoves
+                .stream()
+                .map(this::getId)
+                .collect(Collectors.toSet());
+
         Map<AttackNamesies, ShowdownMoveParser> moveMap = new EnumMap<>(AttackNamesies.class);
         while (in.hasNext()) {
             String attackKey = StringUtils.trimQuotes(in.next());
@@ -333,7 +340,29 @@ public class ScriptTest extends BaseTest {
 
             ShowdownMoveParser moveParser = new ShowdownMoveParser(in, attackKey);
             AttackNamesies attackNamesies = moveParser.getAttack();
-            if (attackNamesies != null) {
+            String isZ = moveParser.isZ;
+            Boolean isUnreleased = moveParser.is("isUnreleased");
+            Boolean isNonstandard = moveParser.is("isNonstandard");
+            if (attackNamesies == null) {
+                if (attackKey.startsWith("hiddenpower")) {
+                    Assert.assertNotNull(attackKey, StringUtils.enumTryValueOf(Type.class, attackKey.substring("hiddenpower".length())));
+                } else if (unimplementedIds.contains(attackKey)) {
+                    Assert.assertNull(attackKey, isZ);
+                    Assert.assertNull(attackKey, isUnreleased);
+                    Assert.assertNull(attackKey, isNonstandard);
+                } else if (isZ != null) {
+                    Assert.assertNull(attackKey, isUnreleased);
+                    Assert.assertNull(attackKey, isNonstandard);
+                } else if (isUnreleased != null && isUnreleased) {
+                    Assert.assertNull(attackKey, isNonstandard);
+                } else {
+                    Assert.assertNotNull(attackKey, isNonstandard);
+                    Assert.assertTrue(attackKey, isNonstandard);
+                }
+            } else {
+                Assert.assertFalse(attackKey, unimplementedIds.contains(attackKey));
+                Assert.assertNull(attackKey, isZ);
+                Assert.assertNull(attackKey, isNonstandard);
                 moveMap.put(attackNamesies, moveParser);
             }
         }
@@ -345,5 +374,14 @@ public class ScriptTest extends BaseTest {
             Assert.assertTrue(attackNamesies.getName(), moveMap.containsKey(attackNamesies));
         }
         Assert.assertEquals(allAttacks.size(), moveMap.size());
+
+        for (AttackNamesies attackNamesies : moveMap.keySet()) {
+            ShowdownMoveParser moveParser = moveMap.get(attackNamesies);
+        }
+    }
+
+    // Id is all lowercase no special characters (except numbers if applicable)
+    private String getId(String attackName) {
+        return StringUtils.getNamesiesString(attackName).replaceAll("_", "").toLowerCase();
     }
 }
