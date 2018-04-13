@@ -23,8 +23,14 @@ import org.junit.Assert;
 import org.junit.Test;
 import test.BaseTest;
 import type.Type;
+import util.file.FileIO;
+import util.file.Folder;
+import util.string.StringUtils;
 
+import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 public class ScriptTest extends BaseTest {
@@ -305,5 +311,39 @@ public class ScriptTest extends BaseTest {
         }
 
         Assert.assertTrue(toParse.isEmpty());
+    }
+
+    @Test
+    public void showdownMoveParserTest() {
+        Scanner in = FileIO.openFile(Folder.SCRIPTS + "ps-moves.txt");
+        in.useDelimiter("[\\s:]+");
+
+        Assert.assertEquals("{", in.nextLine());
+
+        Map<AttackNamesies, ShowdownMoveParser> moveMap = new EnumMap<>(AttackNamesies.class);
+        while (in.hasNext()) {
+            String attackKey = StringUtils.trimQuotes(in.next());
+            if (attackKey.equals("}")) {
+                break;
+            }
+
+            Assert.assertTrue(attackKey, attackKey.matches("[a-z0-9]+"));
+            Assert.assertEquals(attackKey, "{", in.next());
+            Assert.assertEquals(attackKey, "", in.nextLine());
+
+            ShowdownMoveParser moveParser = new ShowdownMoveParser(in, attackKey);
+            AttackNamesies attackNamesies = moveParser.getAttack();
+            if (attackNamesies != null) {
+                moveMap.put(attackNamesies, moveParser);
+            }
+        }
+
+        in.close();
+
+        Set<AttackNamesies> allAttacks = EnumSet.complementOf(EnumSet.of(AttackNamesies.CONFUSION_DAMAGE));
+        for (AttackNamesies attackNamesies : allAttacks) {
+            Assert.assertTrue(attackNamesies.getName(), moveMap.containsKey(attackNamesies));
+        }
+        Assert.assertEquals(allAttacks.size(), moveMap.size());
     }
 }

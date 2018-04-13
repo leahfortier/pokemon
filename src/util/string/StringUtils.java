@@ -24,12 +24,39 @@ public class StringUtils {
         return isNullOrWhiteSpace(s) ? null : s;
     }
 
+    public static String trimPrefix(String s, String prefix) {
+        if (s.startsWith(prefix)) {
+            return s.substring(prefix.length(), s.length());
+        } else {
+            return s;
+        }
+    }
+
     public static String trimSuffix(String s, String suffix) {
         if (s.endsWith(suffix)) {
             return s.substring(0, s.length() - suffix.length());
+        } else {
+            return s;
         }
+    }
 
-        return s;
+    public static String trimChars(String quoted, String prefix, String suffix) {
+        while (quoted.startsWith(prefix) && quoted.endsWith(suffix)) {
+            quoted = quoted.substring(1, quoted.length() - 1);
+        }
+        return quoted;
+    }
+
+    public static String trimQuotes(String quoted) {
+        return trimChars(quoted, "\"", "\"");
+    }
+
+    public static String trimSingleQuotes(String quoted) {
+        return trimChars(quoted, "'", "'");
+    }
+
+    public static boolean isAlphaOnly(String s) {
+        return s.matches("[a-zA-Z]+");
     }
 
     public static String articleString(final String s) {
