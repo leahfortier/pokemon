@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -32,6 +33,30 @@ import java.util.function.Predicate;
 
 // Mostly for when pokemoninfo.txt needs to be edited
 public class UpdateGen {
+    // Moves that aren't in the game for various reasons (double battle only, event only, not level up learnable, etc.)
+    // This list does not include any Z-moves
+    public static final Set<String> unimplementedMoves = Set.of(
+            "After You",
+            "Ally Switch",
+            "Celebrate",
+            "Follow Me",
+            "Frustration",
+            "Happy Hour",
+            "Helping Hand",
+            "Hold Back",
+            "Hold Hands",
+            "Hyperspace Fury",
+            "Ion Deluge",
+            "Instruct",
+            "Quash",
+            "Rage Powder",
+            "Return",
+            "Spotlight",
+            "Thousand Arrows",
+            "Thousand Waves",
+            "Wide Guard"
+    );
+
     public static void main(String[] args) {
         new UpdateGen();
 
@@ -49,7 +74,31 @@ public class UpdateGen {
 //        addCondition();
 //        outputShowdownImagesFile();
 //        testBulbapediaMoveTypeList();
-        printStatOrder();
+//        printStatOrder();
+//        removeTrailingJsonCommas();
+    }
+
+    private static void removeTrailingJsonCommas() {
+        String fileName = Folder.SCRIPTS + "ps-moves.txt";
+
+        Scanner in = FileIO.openFile(fileName);
+        StringAppender out = new StringAppender();
+
+        String prevLine = in.nextLine();
+        while (in.hasNext()) {
+            String line = in.nextLine();
+            if (line.trim().startsWith("}")) {
+                prevLine = StringUtils.trimSuffix(prevLine, ",");
+            }
+
+            out.appendLine(prevLine);
+            prevLine = line;
+        }
+
+        out.appendLine(prevLine);
+
+        in.close();
+        FileIO.overwriteFile(fileName, out.toString());
     }
 
     // Basically I'm sick of writing this -- just prints Pokemon ordered by base stat
@@ -70,15 +119,9 @@ public class UpdateGen {
     }
 
     private static void testBulbapediaMoveTypeList() {
-        // Moves that aren't in the game for simplicity
-        // This is not exhaustive and more should be added as needed
-        Set<String> exclude = Set.of(
-                "After You",
-                "Helping Hand",
-                "Hold Hands",
-                "Hyperspace Fury",
-                "Instruct"
-        );
+        // Moves to ignore including those that are not implemented
+        // Can be added to as necessary
+        Set<String> exclude = new HashSet<>(unimplementedMoves);
 
         // This file should just contain a copy and pasted list of moves from those drop down thingies
         Scanner in = FileIO.openFile("temp.txt");

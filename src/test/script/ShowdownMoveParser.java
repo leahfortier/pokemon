@@ -9,7 +9,9 @@ import test.TestUtils;
 import type.Type;
 import util.string.StringUtils;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -38,30 +40,21 @@ public class ShowdownMoveParser {
     public String weather;
     public String terrain;
     public String sideCondition;
-    public Boolean selfSwitch;
+    public String isZ;
     public String[] noMetronome;
     public Type type;
     public int[] boosts;
-    public Boolean noSketch;
-    public Boolean ignoreAbility;
-    public Boolean ignoreDefensive;
-    public Boolean ignoreEvasion;
-    public Boolean forceSwitch;
-    public Boolean ohko;
-    public Boolean willCrit;
-    public Boolean hasCustomRecoil;
-    public Boolean breaksProtect;
-    public Boolean thawsTarget;
-    public Boolean sleepUsable;
+    public Map<String, Boolean> booleanMap;
     public Set<String> functionKeys;
     public SecondaryEffect secondary;
     public Self self;
 
     public ShowdownMoveParser(Scanner in, String attackKey) {
-        Set<String> seenKeys = new HashSet<>();
-        this.functionKeys = new HashSet<>();
         this.attackKey = attackKey;
+        this.functionKeys = new HashSet<>();
+        this.booleanMap = new HashMap<>();
 
+        Set<String> seenKeys = new HashSet<>();
         while (true) {
             String key = in.next().trim();
             if (key.startsWith("}")) {
@@ -84,23 +77,10 @@ public class ShowdownMoveParser {
                     break;
                 case "desc":
                 case "shortDesc":
-                case "isZ":
                 case "contestType":
                 case "nonGhostTarget":
                 case "pressureTarget":
                     readString(message, in);
-                    break;
-                case "ignoreImmunity":
-                    if (attackKey.equals("thousandarrows")) {
-                        Assert.assertEquals(message, "{'Ground': true}", readCurly(message, in));
-                        break;
-                    }
-                    // fallthrough
-                case "isViable":
-                case "stallingMove":
-                case "isUnreleased":
-                case "isNonstandard":
-                    readBoolean(message, in);
                     break;
                 case "zMoveEffect":
                 case "pseudoWeather":
@@ -119,30 +99,6 @@ public class ShowdownMoveParser {
                     } else {
                         Assert.assertEquals(message, attackKey, id);
                     }
-                    break;
-                case "isFutureMove":
-                    checkBoolean(message, in, attackKey, "doomdesire", "futuresight");
-                    break;
-                case "noFaint":
-                    checkBoolean(message, in, attackKey, "falseswipe", "holdback");
-                    break;
-                case "useTargetOffensive":
-                    checkBoolean(message, in, attackKey, "foulplay");
-                    break;
-                case "mindBlownRecoil":
-                    checkBoolean(message, in, attackKey, "mindblown");
-                    break;
-                case "noPPBoosts":
-                    checkBoolean(message, in, attackKey, "sketch", "struggle", "trumpcard");
-                    break;
-                case "stealsBoosts":
-                    checkBoolean(message, in, attackKey, "spectralthief", "magikarpsrevenge");
-                    break;
-                case "struggleRecoil":
-                    checkBoolean(message, in, attackKey, "struggle");
-                    break;
-                case "multiaccuracy":
-                    checkBoolean(message, in, attackKey, "triplekick");
                     break;
                 case "accuracy":
                     this.accuracy = readIntString(message, in, "true", "--");
@@ -239,50 +195,58 @@ public class ShowdownMoveParser {
                 case "sideCondition":
                     this.sideCondition = readSingleQuotedString(message, in);
                     break;
+                case "isZ":
+                    this.isZ = readString(message, in);
+                    break;
                 case "selfSwitch":
                     if (attackKey.equals("batonpass")) {
                         Assert.assertEquals(message, "copyvolatile", readSingleQuotedString(message, in));
                     } else {
-                        this.selfSwitch = readBoolean(message, in);
+                        Assert.assertTrue(message, readBoolean(message, in));
                     }
-                    break;
-                case "noSketch":
-                    this.noSketch = readBoolean(message, in);
-                    break;
-                case "ignoreAbility":
-                    this.ignoreAbility = readBoolean(message, in);
-                    break;
-                case "ignoreDefensive":
-                    this.ignoreDefensive = readBoolean(message, in);
-                    break;
-                case "ignoreEvasion":
-                    this.ignoreEvasion = readBoolean(message, in);
-                    break;
-                case "forceSwitch":
-                    this.forceSwitch = readBoolean(message, in);
+                    this.booleanMap.put(key, true);
                     break;
                 case "ohko":
                     if (attackKey.equals("sheercold")) {
                         Assert.assertEquals(message, "Ice", readSingleQuotedString(message, in));
-                        this.ohko = true;
                     } else {
-                        this.ohko = readBoolean(message, in);
+                        Assert.assertTrue(message, readBoolean(message, in));
                     }
+                    this.booleanMap.put(key, true);
                     break;
+                case "ignoreImmunity":
+                    boolean ignoreImmunity;
+                    if (attackKey.equals("thousandarrows")) {
+                        Assert.assertEquals(message, "{'Ground': true}", readCurly(message, in));
+                        ignoreImmunity = true;
+                    } else {
+                        ignoreImmunity = readBoolean(message, in);
+                    }
+                    this.booleanMap.put(key, ignoreImmunity);
+                    break;
+                case "isViable":
+                case "stallingMove":
+                case "isUnreleased":
+                case "isNonstandard":
+                case "isFutureMove":
+                case "noFaint":
+                case "useTargetOffensive":
+                case "mindBlownRecoil":
+                case "noPPBoosts":
+                case "stealsBoosts":
+                case "struggleRecoil":
+                case "multiaccuracy":
+                case "noSketch":
+                case "ignoreAbility":
+                case "ignoreDefensive":
+                case "ignoreEvasion":
+                case "forceSwitch":
                 case "willCrit":
-                    this.willCrit = readBoolean(message, in);
-                    break;
                 case "hasCustomRecoil":
-                    this.hasCustomRecoil = readBoolean(message, in);
-                    break;
                 case "breaksProtect":
-                    this.breaksProtect = readBoolean(message, in);
-                    break;
                 case "thawsTarget":
-                    this.thawsTarget = readBoolean(message, in);
-                    break;
                 case "sleepUsable":
-                    this.sleepUsable = readBoolean(message, in);
+                    this.booleanMap.put(key, readBoolean(message, in));
                     break;
                 case "onTryHit":
                     if (attackKey.equals("teleport")) {
@@ -764,6 +728,10 @@ public class ShowdownMoveParser {
         }
 
         return AttackNamesies.tryValueOf(attackName);
+    }
+
+    public Boolean is(String booleanName) {
+        return this.booleanMap.get(booleanName);
     }
 
     public class Self {
