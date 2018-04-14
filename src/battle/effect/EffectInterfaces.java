@@ -5,7 +5,6 @@ import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.AttackInterface;
 import battle.attack.MoveType;
-import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.CrashDamageMove;
@@ -145,7 +144,7 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface SapHealthEffect extends ApplyDamageEffect {
+    public interface SapHealthEffect {
 
         default double sapPercentage() {
             return .5;
@@ -178,11 +177,6 @@ public final class EffectInterfaces {
 
             // Healers gon' heal
             user.heal(sapAmount, b, print ? this.getSapMessage(victim) : "");
-        }
-
-        @Override
-        default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-            this.sapHealth(b, user, victim, damage, true);
         }
     }
 

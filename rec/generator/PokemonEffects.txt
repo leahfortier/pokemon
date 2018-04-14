@@ -37,9 +37,6 @@ LeechSeed:
         this.sapHealth(b, b.getOtherPokemon(victim), victim, sappedAmount, false);
         ###
     RapidSpin: released.getName() + " was released from leech seed!"
-    OnApplyDamage:
-        // Need to override this to not sap health when applying damage
-        ###
 *
 Flinch:
     Int: BeforeTurnEffect
@@ -105,7 +102,7 @@ BanefulBunker:
         }
         ###
 *
-Protecting:
+Protect:
     ProtectingEffect: True
 *
 QuickGuard:

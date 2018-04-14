@@ -7,6 +7,7 @@ import org.junit.Assert;
 import pokemon.Stat;
 import test.TestUtils;
 import type.Type;
+import util.GeneralUtils;
 import util.string.StringUtils;
 
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ShowdownMoveParser {
-    public String attackKey;
+    private String attackKey;
     public String attackName;
     public String accuracy;
     public Integer basePower;
@@ -37,9 +38,6 @@ public class ShowdownMoveParser {
     public int[] multiHit;
     public StatusNamesies status;
     public String volatileStatus;
-    public String weather;
-    public String terrain;
-    public String sideCondition;
     public String isZ;
     public String[] noMetronome;
     public Type type;
@@ -87,7 +85,6 @@ public class ShowdownMoveParser {
                     readString(message, in);
                     break;
                 case "zMoveEffect":
-                case "pseudoWeather":
                     readSingleQuotedString(message, in);
                     break;
                 case "zMoveBoost":
@@ -105,7 +102,12 @@ public class ShowdownMoveParser {
                     }
                     break;
                 case "accuracy":
-                    this.accuracy = readIntString(message, in, "true", "--");
+                    this.accuracy = readValue(message, in);
+                    if (accuracy.equals("true")) {
+                        accuracy = "--";
+                    } else {
+                        readInt(message, accuracy);
+                    }
                     break;
                 case "basePower":
                     this.basePower = readInt(message, in);
@@ -115,7 +117,7 @@ public class ShowdownMoveParser {
                         case "nightshade":
                         case "seismictoss":
                             Assert.assertEquals(message, "level", readSingleQuotedString(message, in));
-                            this.functionKeys.add("onDamageCallback");
+                            this.functionKeys.add("damageCallback");
                             break;
                         default:
                             this.fixedDamage = readInt(message, in);
@@ -144,7 +146,7 @@ public class ShowdownMoveParser {
                     this.drain = readBraces(message, in);
                     break;
                 case "heal":
-                    this.drain = readBraces(message, in);
+                    this.heal = readBraces(message, in);
                     break;
                 case "recoil":
                     this.recoil = readBraces(message, in);
@@ -188,16 +190,12 @@ public class ShowdownMoveParser {
                     this.status = readStatus(message, in);
                     break;
                 case "volatileStatus":
-                    this.volatileStatus = readSingleQuotedString(message, in);
-                    break;
-                case "weather":
-                    this.weather = readSingleQuotedString(message, in);
-                    break;
-                case "terrain":
-                    this.terrain = readSingleQuotedString(message, in);
-                    break;
                 case "sideCondition":
-                    this.sideCondition = readSingleQuotedString(message, in);
+                case "weather":
+                case "terrain":
+                case "pseudoWeather":
+                    Assert.assertNull(message, this.volatileStatus);
+                    this.volatileStatus = readSingleQuotedString(message, in).toLowerCase();
                     break;
                 case "isZ":
                     this.isZ = readString(message, in);
@@ -397,16 +395,6 @@ public class ShowdownMoveParser {
         TestUtils.assertEqualsAny(message, attackKey, expected);
     }
 
-    private String readIntString(String message, Scanner in, String validNonInt, String replacement) {
-        String value = readValue(message, in);
-        if (value.equals(validNonInt)) {
-            return replacement;
-        }
-
-        readInt(message, value);
-        return value;
-    }
-
     private void readFunction(String message, Scanner in) {
         int numBraces = 1;
 
@@ -596,8 +584,8 @@ public class ShowdownMoveParser {
 
                 switch (key) {
                     case "boosts":
-                        Assert.assertNull(message, secondary.statChanges);
-                        secondary.statChanges = readStatChanges(message, in);
+                        Assert.assertNull(message, secondary.boosts);
+                        secondary.boosts = readStatChanges(message, in);
                         break;
                     case "chance":
                         if (secondary.chance == null) {
@@ -645,7 +633,7 @@ public class ShowdownMoveParser {
                     checkBoolean(message, in, attackKey, "sparklingaria");
                     break;
                 case "boosts":
-                    secondary.statChanges = readStatChanges(message, in);
+                    secondary.boosts = readStatChanges(message, in);
                     break;
                 case "chance":
                     secondary.chance = readInt(message, in);
@@ -737,6 +725,29 @@ public class ShowdownMoveParser {
         return this.booleanMap.remove(booleanName);
     }
 
+    public int[] getBoosts() {
+        int[] boosts = this.boosts;
+        int[] secondaryBoosts = this.secondary == null ? null : this.secondary.boosts;
+        int[] secondarySelfBoosts = this.secondary == null ? null : (this.secondary.self == null ? null : this.secondary.self.boosts);
+        int[] selfBoosts = this.self == null ? null : this.self.boosts;
+
+        // At most one of these can be non-empty
+        int numNonNull = GeneralUtils.numNonNull(boosts, secondaryBoosts, secondarySelfBoosts, selfBoosts);
+        TestUtils.assertEqualsAny(attackName, numNonNull, 0, 1);
+
+        if (boosts != null) {
+            return boosts;
+        } else if (secondaryBoosts != null) {
+            return secondaryBoosts;
+        } else if (secondarySelfBoosts != null) {
+            return secondarySelfBoosts;
+        } else if (selfBoosts != null) {
+            return selfBoosts;
+        } else {
+            return null;
+        }
+    }
+
     public void assertEmpty() {
         Assert.assertTrue(attackKey + " " + this.booleanMap, this.booleanMap.isEmpty());
     }
@@ -747,7 +758,7 @@ public class ShowdownMoveParser {
     }
 
     public class SecondaryEffect {
-        int[] statChanges;
+        int[] boosts;
         Integer chance;
         String volatileStatus;
         Self self;

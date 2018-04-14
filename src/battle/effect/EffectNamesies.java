@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface EffectNamesies {
     Effect getEffect();
+    String name();
 
     // TODO: Test that this is all of them
     static List<EffectNamesies> values() {
