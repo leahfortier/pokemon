@@ -44,7 +44,7 @@ public class ShowdownMoveParser {
     public String[] noMetronome;
     public Type type;
     public int[] boosts;
-    public Map<String, Boolean> booleanMap;
+    private Map<String, Boolean> booleanMap;
     public Set<String> functionKeys;
     public SecondaryEffect secondary;
     public Self self;
@@ -74,6 +74,10 @@ public class ShowdownMoveParser {
                 case "zMovePower":
                 case "onBasePowerPriority":
                     readInt(message, in);
+                    break;
+                case "isViable":
+                case "stallingMove":
+                    readBoolean(message, in);
                     break;
                 case "desc":
                 case "shortDesc":
@@ -224,8 +228,6 @@ public class ShowdownMoveParser {
                     }
                     this.booleanMap.put(key, ignoreImmunity);
                     break;
-                case "isViable":
-                case "stallingMove":
                 case "isUnreleased":
                 case "isNonstandard":
                 case "isFutureMove":
@@ -730,8 +732,13 @@ public class ShowdownMoveParser {
         return AttackNamesies.tryValueOf(attackName);
     }
 
+    // Note: Removes the value from the map in the process for the empty check
     public Boolean is(String booleanName) {
-        return this.booleanMap.get(booleanName);
+        return this.booleanMap.remove(booleanName);
+    }
+
+    public void assertEmpty() {
+        Assert.assertTrue(attackKey + " " + this.booleanMap, this.booleanMap.isEmpty());
     }
 
     public class Self {

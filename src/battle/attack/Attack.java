@@ -9372,6 +9372,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Fails if used by a wild pokemon or if the trainer does not have anyone to switch to
             Team team = b.getTrainer(user);
             return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon(b);
         }
@@ -11048,6 +11049,17 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
                 return Stat.ATTACK;
             }
             return s;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            PokemonEffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // TODO: I don't like this -- it should def remove the same exact effect it casted at the beginning -- what if there are other ways to apply the effect??
+            attacking.getEffects().remove(PokemonEffectNamesies.BREAKS_THE_MOLD);
         }
     }
 

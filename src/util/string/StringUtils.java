@@ -64,7 +64,7 @@ public class StringUtils {
             return "";
         }
 
-        boolean vowelStart = (s.charAt(0) + "").matches("[AEIOU]");
+        boolean vowelStart = Character.toString(s.charAt(0)).toUpperCase().matches("[AEIOU]");
         return "a" + (vowelStart ? "n" : "") + " " + s;
     }
 

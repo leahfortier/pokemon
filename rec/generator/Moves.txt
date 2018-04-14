@@ -5456,6 +5456,7 @@ Baton Pass:
     Cat: Status
     Type: Normal
     FullApplies:
+        // Fails if used by a wild pokemon or if the trainer does not have anyone to switch to
         Team team = b.getTrainer(user);
         return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon(b);
         ###
@@ -6551,6 +6552,7 @@ Photon Geyser:
         return s;
         ###
     Int: StatSwitchingEffect
+    IgnoreAbilityMove: True
 *
 Mind Blown:
     Desc: The user attacks everything around it by causing its own head to explode. This also damages the user.

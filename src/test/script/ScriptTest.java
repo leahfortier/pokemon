@@ -4,8 +4,15 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
+import battle.effect.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
+import battle.effect.InvokeInterfaces.CrashDamageMove;
 import battle.effect.InvokeInterfaces.CritStageEffect;
+import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
+import battle.effect.attack.OhkoMove;
+import generator.ClassFields;
+import generator.GeneratorType;
+import generator.format.InputFormatter;
 import generator.update.ItemUpdater;
 import generator.update.ItemUpdater.ItemParser;
 import generator.update.MoveUpdater;
@@ -366,7 +373,6 @@ public class ScriptTest extends BaseTest {
                 moveMap.put(attackNamesies, moveParser);
             }
         }
-
         in.close();
 
         Set<AttackNamesies> allAttacks = EnumSet.complementOf(EnumSet.of(AttackNamesies.CONFUSION_DAMAGE));
@@ -375,8 +381,99 @@ public class ScriptTest extends BaseTest {
         }
         Assert.assertEquals(allAttacks.size(), moveMap.size());
 
+        Map<AttackNamesies, ClassFields> genFieldsMap = readGen();
+        Assert.assertEquals(AttackNamesies.values().length, genFieldsMap.size());
+
         for (AttackNamesies attackNamesies : moveMap.keySet()) {
             ShowdownMoveParser moveParser = moveMap.get(attackNamesies);
+            Attack attack = attackNamesies.getNewAttack();
+            ClassFields genFields = genFieldsMap.get(attackNamesies);
+
+            Boolean ignoreImmunity = moveParser.is("ignoreImmunity");
+            if (attackNamesies == AttackNamesies.THUNDER_WAVE) {
+                Assert.assertNotNull(attackNamesies.getName(), ignoreImmunity);
+                Assert.assertFalse(attackNamesies.getName(), ignoreImmunity);
+            } else {
+                // TODO: Add tests for these
+                checkBoolean(attackNamesies, ignoreImmunity, AttackNamesies.FUTURE_SIGHT, AttackNamesies.BIDE);
+            }
+
+            // TODO: I don't think this is actually enforced for trump card/sketch
+            checkBoolean(attackNamesies, moveParser.is("noPPBoosts"), AttackNamesies.STRUGGLE, AttackNamesies.TRUMP_CARD, AttackNamesies.SKETCH);
+
+            // TODO: I don't think this is enforced -- only Fire-type moves
+            checkBoolean(attackNamesies, moveParser.is("thawsTarget"), AttackNamesies.SCALD, AttackNamesies.STEAM_ERUPTION);
+
+            // Note: Chatter can be sketched in this game
+            checkBoolean(attackNamesies, moveParser.is("noSketch"), AttackNamesies.STRUGGLE, AttackNamesies.CHATTER);
+
+            checkBoolean(attackNamesies, moveParser.is("struggleRecoil"), AttackNamesies.STRUGGLE);
+            checkBoolean(attackNamesies, moveParser.is("mindBlownRecoil"), AttackNamesies.MIND_BLOWN);
+            checkBoolean(attackNamesies, moveParser.is("noFaint"), AttackNamesies.FALSE_SWIPE);
+            checkBoolean(attackNamesies, moveParser.is("sleepUsable"), AttackNamesies.SLEEP_TALK, AttackNamesies.SNORE);
+            checkBoolean(attackNamesies, moveParser.is("stealsBoosts"), AttackNamesies.SPECTRAL_THIEF);
+
+            // TODO: Neither of these actually work as expected right now
+            checkBoolean(attackNamesies, moveParser.is("multiaccuracy"), AttackNamesies.TRIPLE_KICK);
+            checkBoolean(attackNamesies, moveParser.is("useTargetOffensive"), AttackNamesies.FOUL_PLAY);
+
+            Boolean isFutureMove = moveParser.is("isFutureMove");
+            checkBoolean(attackNamesies, isFutureMove, AttackNamesies.FUTURE_SIGHT, AttackNamesies.DOOM_DESIRE);
+            checkBoolean(attackNamesies, moveParser.is("breaksProtect"), !attack.isStatusMove() && attack.isMoveType(MoveType.PROTECT_PIERCING) && isFutureMove == null);
+
+            checkBoolean(attackNamesies, moveParser.is("ignoreEvasion"), attack instanceof OpponentIgnoreStageEffect);
+            checkBoolean(attackNamesies, moveParser.is("ignoreDefensive"), attack instanceof OpponentIgnoreStageEffect);
+            checkBoolean(attackNamesies, moveParser.is("ohko"), attack instanceof OhkoMove);
+            checkBoolean(attackNamesies, moveParser.is("hasCustomRecoil"), attack instanceof CrashDamageMove);
+            checkBoolean(attackNamesies, moveParser.is("willCrit"), attack instanceof AlwaysCritEffect);
+            checkBoolean(attackNamesies, moveParser.is("forceSwitch"), attack instanceof SwapOpponentEffect);
+
+            checkBoolean(attackNamesies, moveParser.is("ignoreAbility"), genFields.contains("IgnoreAbilityMove"));
+            checkBoolean(attackNamesies, moveParser.is("selfSwitch"), genFields.contains("SelfSwitching") || attackNamesies == AttackNamesies.BATON_PASS);
+
+            moveParser.assertEmpty();
+        }
+    }
+
+    private Map<AttackNamesies, ClassFields> readGen() {
+        Scanner in = FileIO.openFile(GeneratorType.ATTACK_GEN.getInputPath());
+        new InputFormatter().readFileFormat(in);
+
+        Map<AttackNamesies, ClassFields> fieldsMap = new EnumMap<>(AttackNamesies.class);
+        while (in.hasNext()) {
+            String line = in.nextLine().trim();
+
+            // Ignore comments and white space
+            if (line.isEmpty() || line.startsWith("#")) {
+                continue;
+            }
+
+            String name = line.replace(":", "");
+            ClassFields fields = new ClassFields(in, name);
+
+            fieldsMap.put(AttackNamesies.getValueOf(name), fields);
+        }
+
+        return fieldsMap;
+    }
+
+    private void checkBoolean(AttackNamesies attackNamesies, Boolean value, AttackNamesies... trueAttacks) {
+        boolean inList = false;
+        for (AttackNamesies trueAttack : trueAttacks) {
+            if (trueAttack == attackNamesies) {
+                inList = true;
+                break;
+            }
+        }
+        checkBoolean(attackNamesies, value, inList);
+    }
+
+    private void checkBoolean(AttackNamesies attackNamesies, Boolean value, boolean attackTrue) {
+        if (attackTrue) {
+            Assert.assertNotNull(attackNamesies.getName(), value);
+            Assert.assertTrue(attackNamesies.getName(), value);
+        } else {
+            Assert.assertNull(attackNamesies.getName(), value);
         }
     }
 
