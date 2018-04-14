@@ -41,6 +41,7 @@ import battle.effect.attack.OhkoMove;
 import battle.effect.attack.PowerCountMove;
 import battle.effect.attack.RecoilMove;
 import battle.effect.attack.RecoilMove.RecoilPercentageMove;
+import battle.effect.attack.SapHealthMove;
 import battle.effect.attack.SelfHealingMove;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.battle.terrain.TerrainNamesies;
@@ -1199,7 +1200,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         Protect() {
             super(AttackNamesies.PROTECT, Type.NORMAL, MoveCategory.STATUS, 10, "Enables the user to evade all attacks. Its chance of failing rises if it is used in succession.");
-            super.effect = PokemonEffectNamesies.PROTECTING;
+            super.effect = PokemonEffectNamesies.PROTECT;
             super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
             super.moveTypes.add(MoveType.ASSISTLESS);
             super.moveTypes.add(MoveType.METRONOMELESS);
@@ -1214,7 +1215,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         Detect() {
             super(AttackNamesies.DETECT, Type.FIGHTING, MoveCategory.STATUS, 5, "Enables the user to evade all attacks. Its chance of failing rises if it is used in succession.");
-            super.effect = PokemonEffectNamesies.PROTECTING;
+            super.effect = PokemonEffectNamesies.PROTECT;
             super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
             super.moveTypes.add(MoveType.ASSISTLESS);
             super.moveTypes.add(MoveType.METRONOMELESS);
@@ -3416,7 +3417,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class LeechLife extends Attack implements SapHealthEffect {
+    static class LeechLife extends Attack implements SapHealthMove {
         private static final long serialVersionUID = 1L;
 
         LeechLife() {
@@ -3476,7 +3477,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class Absorb extends Attack implements SapHealthEffect {
+    static class Absorb extends Attack implements SapHealthMove {
         private static final long serialVersionUID = 1L;
 
         Absorb() {
@@ -3487,7 +3488,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class MegaDrain extends Attack implements SapHealthEffect {
+    static class MegaDrain extends Attack implements SapHealthMove {
         private static final long serialVersionUID = 1L;
 
         MegaDrain() {
@@ -3536,7 +3537,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class GigaDrain extends Attack implements SapHealthEffect {
+    static class GigaDrain extends Attack implements SapHealthMove {
         private static final long serialVersionUID = 1L;
 
         GigaDrain() {
@@ -5434,7 +5435,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class DreamEater extends Attack implements SapHealthEffect {
+    static class DreamEater extends Attack implements SapHealthMove {
         private static final long serialVersionUID = 1L;
 
         DreamEater() {
@@ -8452,7 +8453,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class DrainPunch extends Attack implements SapHealthEffect {
+    static class DrainPunch extends Attack implements SapHealthMove {
         private static final long serialVersionUID = 1L;
 
         DrainPunch() {
@@ -8559,7 +8560,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class HornLeech extends Attack implements SapHealthEffect {
+    static class HornLeech extends Attack implements SapHealthMove {
         private static final long serialVersionUID = 1L;
 
         HornLeech() {
@@ -9822,7 +9823,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class OblivionWing extends Attack implements SapHealthEffect {
+    static class OblivionWing extends Attack implements SapHealthMove {
         private static final long serialVersionUID = 1L;
 
         OblivionWing() {
@@ -9926,7 +9927,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class DrainingKiss extends Attack implements SapHealthEffect {
+    static class DrainingKiss extends Attack implements SapHealthMove {
         private static final long serialVersionUID = 1L;
 
         DrainingKiss() {
@@ -9953,7 +9954,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class ParabolicCharge extends Attack implements SapHealthEffect {
+    static class ParabolicCharge extends Attack implements SapHealthMove {
         private static final long serialVersionUID = 1L;
 
         ParabolicCharge() {

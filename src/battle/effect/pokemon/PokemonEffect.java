@@ -141,11 +141,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
             return super.getFailMessage(b, user, victim);
         }
-
-        @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-            // Need to override this to not sap health when applying damage
-        }
     }
 
     static class Flinch extends PokemonEffect implements BeforeTurnEffect {
@@ -612,11 +607,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Protecting extends PokemonEffect implements ProtectingEffect {
+    static class Protect extends PokemonEffect implements ProtectingEffect {
         private static final long serialVersionUID = 1L;
 
-        Protecting() {
-            super(PokemonEffectNamesies.PROTECTING, 1, 1, false, false);
+        Protect() {
+            super(PokemonEffectNamesies.PROTECT, 1, 1, false, false);
         }
 
         @Override

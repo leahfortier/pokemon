@@ -62,7 +62,7 @@ public final class GeneralUtils {
         System.arraycopy(temp, 0, second, 0, first.length);
     }
 
-    public static boolean isNonEmpty(int[] array) {
+    public static boolean isEmpty(int[] array) {
         for (int value : array) {
             if (value != 0) {
                 return false;
@@ -71,10 +71,10 @@ public final class GeneralUtils {
         return true;
     }
 
-    public static boolean hasOnlyOneNonEmpty(Object... objects) {
-        return Arrays.stream(objects)
-                     .filter(Objects::nonNull)
-                     .count() == 1;
+    public static int numNonNull(Object... objects) {
+        return (int)Arrays.stream(objects)
+                          .filter(Objects::nonNull)
+                          .count();
     }
 
     public static <T> T wrapIncrementValue(T[] values, int currentIndex, int incrementAmount) {

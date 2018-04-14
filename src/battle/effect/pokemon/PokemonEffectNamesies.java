@@ -54,7 +54,7 @@ import battle.effect.pokemon.PokemonEffect.PerishSong;
 import battle.effect.pokemon.PokemonEffect.Powder;
 import battle.effect.pokemon.PokemonEffect.PowerSplit;
 import battle.effect.pokemon.PokemonEffect.PowerTrick;
-import battle.effect.pokemon.PokemonEffect.Protecting;
+import battle.effect.pokemon.PokemonEffect.Protect;
 import battle.effect.pokemon.PokemonEffect.QuickGuard;
 import battle.effect.pokemon.PokemonEffect.Raging;
 import battle.effect.pokemon.PokemonEffect.RaiseCrits;
@@ -95,7 +95,7 @@ public enum PokemonEffectNamesies implements EffectNamesies {
     KINGS_SHIELD(KingsShield::new),
     SPIKY_SHIELD(SpikyShield::new),
     BANEFUL_BUNKER(BanefulBunker::new),
-    PROTECTING(Protecting::new),
+    PROTECT(Protect::new),
     QUICK_GUARD(QuickGuard::new),
     CRAFTY_SHIELD(CraftyShield::new),
     MAT_BLOCK(MatBlock::new),

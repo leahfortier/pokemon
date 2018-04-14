@@ -487,14 +487,14 @@ Protect:
     PP: 10
     Cat: Status
     Type: Normal
-    ProtectingAttack: Protecting
+    ProtectingAttack: Protect
 *
 Detect:
     Desc: Enables the user to evade all attacks. Its chance of failing rises if it is used in succession.
     PP: 5
     Type: Fighting
     Cat: Status
-    ProtectingAttack: Protecting
+    ProtectingAttack: Protect
 *
 Quick Guard:
     Desc: The user protects itself and its allies from priority moves.
@@ -6208,7 +6208,8 @@ Strength Sap:
     Cat: Status
     Acc: 100
     PP: 10
-    SapHealthMove: True
+    Int: SapHealthEffect
+    MoveType: Healing
     Field:
         private int victimAttackStat;
         ###

@@ -4,12 +4,24 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
+import battle.effect.Effect;
+import battle.effect.EffectInterfaces.PartialTrappingEffect;
+import battle.effect.EffectInterfaces.SapHealthEffect;
 import battle.effect.EffectInterfaces.SwapOpponentEffect;
+import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.CrashDamageMove;
 import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
+import battle.effect.InvokeInterfaces.OpponentStatSwitchingEffect;
+import battle.effect.attack.FixedDamageMove;
+import battle.effect.attack.MultiStrikeMove;
 import battle.effect.attack.OhkoMove;
+import battle.effect.attack.RecoilMove.RecoilPercentageMove;
+import battle.effect.attack.SapHealthMove;
+import battle.effect.attack.SelfHealingMove;
+import battle.effect.pokemon.PokemonEffectNamesies;
+import battle.effect.status.StatusNamesies;
 import generator.ClassFields;
 import generator.GeneratorType;
 import generator.format.InputFormatter;
@@ -29,17 +41,24 @@ import item.use.EvolutionItem;
 import item.use.TechnicalMachine;
 import org.junit.Assert;
 import org.junit.Test;
+import pokemon.Stat;
 import test.BaseTest;
+import test.TestUtils;
+import test.battle.TestStages;
 import type.Type;
+import util.Action;
+import util.GeneralUtils;
 import util.file.FileIO;
 import util.file.Folder;
 import util.string.StringUtils;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class ScriptTest extends BaseTest {
@@ -347,6 +366,15 @@ public class ScriptTest extends BaseTest {
 
             ShowdownMoveParser moveParser = new ShowdownMoveParser(in, attackKey);
             AttackNamesies attackNamesies = moveParser.getAttack();
+            Assert.assertNotNull(attackKey, moveParser.accuracy);
+            Assert.assertNotNull(attackKey, moveParser.basePower);
+            Assert.assertNotNull(attackKey, moveParser.category);
+            Assert.assertNotNull(attackKey, moveParser.flags);
+            Assert.assertNotNull(attackKey, moveParser.pp);
+            Assert.assertNotNull(attackKey, moveParser.priority);
+            Assert.assertNotNull(attackKey, moveParser.target);
+            Assert.assertNotNull(attackKey, moveParser.type);
+
             String isZ = moveParser.isZ;
             Boolean isUnreleased = moveParser.is("isUnreleased");
             Boolean isNonstandard = moveParser.is("isNonstandard");
@@ -384,15 +412,150 @@ public class ScriptTest extends BaseTest {
         Map<AttackNamesies, ClassFields> genFieldsMap = readGen();
         Assert.assertEquals(AttackNamesies.values().length, genFieldsMap.size());
 
+        // Handled separately in their API
+        nullStatChangesUpdate(moveMap, AttackNamesies.DEFOG, new TestStages().set(Stat.EVASION, -1));
+        nullStatChangesUpdate(moveMap, AttackNamesies.STRENGTH_SAP, new TestStages().set(Stat.ATTACK, -1));
+        nullStatChangesUpdate(moveMap, AttackNamesies.VENOM_DRENCH, new TestStages().set(Stat.ATTACK, -1).set(Stat.SP_ATTACK, -1).set(Stat.SPEED, -1));
+        nullStatChangesUpdate(moveMap, AttackNamesies.SKULL_BASH, new TestStages().set(Stat.DEFENSE, 1));
+
+        // Manually changed moves in this API
+        nullStatChangesUpdate(moveMap, AttackNamesies.FLOWER_SHIELD, new TestStages().set(Stat.DEFENSE, 1));
+        nullStatChangesUpdate(moveMap, AttackNamesies.ROTOTILLER, new TestStages().set(Stat.ATTACK, 1).set(Stat.SP_ATTACK, 1));
+        nullStatChangesUpdate(moveMap, AttackNamesies.GEAR_UP, new TestStages().set(Stat.ATTACK, 1).set(Stat.SP_ATTACK, 1));
+        nullStatChangesUpdate(moveMap, AttackNamesies.MAGNETIC_FLUX, new TestStages().set(Stat.DEFENSE, 1).set(Stat.SP_DEFENSE, 1));
+
         for (AttackNamesies attackNamesies : moveMap.keySet()) {
             ShowdownMoveParser moveParser = moveMap.get(attackNamesies);
             Attack attack = attackNamesies.getNewAttack();
+            Effect effect = attack.getEffect() == null ? null : attack.getEffect().getEffect();
+            String effectId = effect == null ? null : getId(effect.namesies().name());
             ClassFields genFields = genFieldsMap.get(attackNamesies);
+
+            specialCase(attackNamesies, moveParser);
+
+            String message = attackNamesies.getName();
+            Assert.assertEquals(message, moveParser.attackName, attack.getName());
+            Assert.assertEquals(message, moveParser.accuracy, attack.getAccuracyString());
+            Assert.assertEquals(message, moveParser.category, attack.getCategory());
+            Assert.assertEquals(message, moveParser.type, attack.getActualType());
+            Assert.assertEquals(message, (int)moveParser.pp, attack.getPP());
+            Assert.assertEquals(message, (int)moveParser.priority, attack.getActualPriority());
+
+            String powerString = moveParser.basePower == 0 ? "--" : Integer.toString(moveParser.basePower);
+            Assert.assertEquals(message, powerString, attack.getPowerString());
+
+            // TODO: We still have that bug where explosion doesn't cause fainting against a Ghost... :(
+            checkCondition(attackNamesies, moveParser.selfDestruct, attack.isMoveType(MoveType.USER_FAINTS), () -> {});
+
+            checkRatioArray(
+                    attackNamesies, moveParser.recoil, attack instanceof RecoilPercentageMove,
+                    () -> 1.0/Integer.parseInt(genFields.get("RecoilPercentage"))
+            );
+
+            checkRatioArray(
+                    attackNamesies, moveParser.heal, genFields.contains("HealFraction") || attackNamesies == AttackNamesies.ROOST,
+                    () -> {
+                        double fraction;
+                        if (attackNamesies == AttackNamesies.ROOST) {
+                            fraction = .5;
+                        } else {
+                            fraction = Double.parseDouble(genFields.get("HealFraction"));
+                        }
+
+                        // Should not cause an NPE since this is only checking for the constant fractions
+                        TestUtils.assertEquals(message, fraction, ((SelfHealingMove)attack).getHealFraction(null, null));
+                        return fraction;
+                    }
+            );
+
+            checkRatioArray(
+                    attackNamesies, moveParser.drain, attack instanceof SapHealthMove,
+                    () -> {
+                        SapHealthEffect sappy = (SapHealthEffect)attack;
+                        return sappy.sapPercentage();
+                    }
+            );
+
+            checkCondition(
+                    attackNamesies, moveParser.multiHit, attack instanceof MultiStrikeMove,
+                    () -> {
+                        Assert.assertEquals(message, 2, moveParser.multiHit.length);
+                        Assert.assertTrue(message, attack instanceof MultiStrikeMove); // For the warning
+                        MultiStrikeMove multiStrikeMove = (MultiStrikeMove)attack;
+                        Assert.assertEquals(message, moveParser.multiHit[0], multiStrikeMove.getMinHits());
+                        Assert.assertEquals(message, moveParser.multiHit[1], multiStrikeMove.getMaxHits());
+                    }
+            );
+
+            checkCondition(
+                    attackNamesies, moveParser.status,
+                    attack.isStatusMove() && attack.getStatus() != StatusNamesies.NO_STATUS && attackNamesies != AttackNamesies.REST,
+                    () -> Assert.assertEquals(message, moveParser.status, attack.getStatus())
+            );
+
+            if (effect instanceof PartialTrappingEffect) {
+                Assert.assertEquals(message, "partiallytrapped", moveParser.volatileStatus);
+            } else if (moveParser.volatileStatus != null) {
+                Assert.assertNotNull(message, effect);
+                Assert.assertEquals(message, moveParser.volatileStatus, effectId);
+            } else if (attack.isStatusMove()) {
+                Set<EffectNamesies> nonParseVolatile = Set.of(
+                        PokemonEffectNamesies.CHANGE_TYPE,
+                        PokemonEffectNamesies.CHANGE_ABILITY,
+                        PokemonEffectNamesies.POWER_SPLIT,
+                        PokemonEffectNamesies.GUARD_SPLIT,
+                        PokemonEffectNamesies.TRANSFORMED,
+                        PokemonEffectNamesies.MIMIC,
+                        PokemonEffectNamesies.TRAPPED,
+                        PokemonEffectNamesies.LOCK_ON
+                );
+                Assert.assertTrue(message, effect == null || nonParseVolatile.contains(effect.namesies()));
+            }
+
+            int[] actualBoosts = attack.getStatChangesCopy();
+            int[] parserBoosts = moveParser.getBoosts();
+            if (GeneralUtils.isEmpty(actualBoosts)) {
+                Assert.assertNull(message, parserBoosts);
+            } else {
+                Assert.assertNotNull(message, parserBoosts);
+                TestUtils.assertEquals(message, parserBoosts, actualBoosts);
+            }
+
+            checkCondition(
+                    attackNamesies, moveParser.defensiveCategory, attack instanceof OpponentStatSwitchingEffect,
+                    () -> {
+                        Assert.assertNotEquals(message, MoveCategory.STATUS, moveParser.defensiveCategory);
+                        Assert.assertNotEquals(message, moveParser.category, moveParser.defensiveCategory);
+                    }
+            );
+
+            checkCondition(
+                    attackNamesies, moveParser.critRatio, attack instanceof CritStageEffect,
+                    () -> Assert.assertEquals(message, 2, (int)moveParser.critRatio)
+            );
+
+
+            if (attack instanceof FixedDamageMove) {
+                String fixedDamage = genFields.get("FixedDamage");
+                Assert.assertNotNull(message, fixedDamage);
+
+                boolean hasCallback = moveParser.functionKeys.contains("damageCallback");
+                try {
+                    int damage = Integer.parseInt(fixedDamage);
+                    Assert.assertEquals(message, (int)moveParser.fixedDamage, damage);
+                    Assert.assertFalse(message, hasCallback);
+                } catch (NumberFormatException ex) {
+                    Assert.assertNull(message, moveParser.fixedDamage);
+                    Assert.assertTrue(message, hasCallback);
+                }
+            } else {
+                Assert.assertNull(message, moveParser.fixedDamage);
+            }
 
             Boolean ignoreImmunity = moveParser.is("ignoreImmunity");
             if (attackNamesies == AttackNamesies.THUNDER_WAVE) {
-                Assert.assertNotNull(attackNamesies.getName(), ignoreImmunity);
-                Assert.assertFalse(attackNamesies.getName(), ignoreImmunity);
+                Assert.assertNotNull(message, ignoreImmunity);
+                Assert.assertFalse(message, ignoreImmunity);
             } else {
                 // TODO: Add tests for these
                 checkBoolean(attackNamesies, ignoreImmunity, AttackNamesies.FUTURE_SIGHT, AttackNamesies.BIDE);
@@ -432,6 +595,29 @@ public class ScriptTest extends BaseTest {
             checkBoolean(attackNamesies, moveParser.is("selfSwitch"), genFields.contains("SelfSwitching") || attackNamesies == AttackNamesies.BATON_PASS);
 
             moveParser.assertEmpty();
+        }
+    }
+
+    private void checkRatioArray(AttackNamesies attackNamesies, int[] parserArray, boolean condition, Supplier<Double> ratioGetter) {
+        checkCondition(
+                attackNamesies, parserArray, condition, () -> {
+                    double genRatio = ratioGetter.get();
+                    String message = attackNamesies.getName() + " " + Arrays.toString(parserArray) + " " + genRatio;
+                    Assert.assertEquals(message, 2, parserArray.length);
+                    double parserRatio = (double)parserArray[0]/parserArray[1];
+                    Assert.assertTrue(message, parserRatio > 0 && parserRatio < 1);
+                    Assert.assertTrue(message, genRatio > 0 && genRatio < 1);
+                    TestUtils.assertEquals(message, (int)(parserRatio*100), (int)(genRatio*100));
+                }
+        );
+    }
+
+    private void checkCondition(AttackNamesies attackNamesies, Object parserValue, boolean condition, Action additionalChecks) {
+        if (condition) {
+            Assert.assertNotNull(attackNamesies.getName(), parserValue);
+            additionalChecks.performAction();
+        } else {
+            Assert.assertNull(attackNamesies.getName(), parserValue);
         }
     }
 
@@ -478,7 +664,96 @@ public class ScriptTest extends BaseTest {
     }
 
     // Id is all lowercase no special characters (except numbers if applicable)
-    private String getId(String attackName) {
-        return StringUtils.getNamesiesString(attackName).replaceAll("_", "").toLowerCase();
+    private String getId(String name) {
+        return StringUtils.getNamesiesString(name).replaceAll("_", "").toLowerCase();
+    }
+
+    private String volatileStatusUpdate(String volatileStatus) {
+        if (volatileStatus == null) {
+            return null;
+        }
+
+        switch (volatileStatus) {
+            case "endure":
+                return "bracing";
+            case "focusenergy":
+                return "raisecrits";
+            case "defensecurl":
+                return "useddefensecurl";
+            case "minimize":
+                return "usedminimize";
+            case "smackdown":
+                return "grounded";
+            case "autotomize":
+                return "halfweight";
+            case "attract":
+                return "infatuation";
+            case "gastroacid":
+                return "changeability";
+            case "electrify":
+            case "iondeluge":
+                return "changeattacktype";
+            case "healingwish":
+            case "lunardance":
+                return "healswitch";
+            case "raindance":
+                return "raining";
+            case "sunnyday":
+                return "sunny";
+            case "hail":
+                return "hailing";
+        }
+
+        return volatileStatus;
+    }
+
+    private void nullStatChangesUpdate(Map<AttackNamesies, ShowdownMoveParser> moveParserMap, AttackNamesies attackNamesies, TestStages newStages) {
+        ShowdownMoveParser moveParser = moveParserMap.get(attackNamesies);
+        String message = attackNamesies.getName();
+        Assert.assertNull(message, moveParser.getBoosts());
+        moveParser.boosts = newStages.get();
+    }
+
+    private void specialCase(AttackNamesies attackNamesies, ShowdownMoveParser moveParser) {
+        moveParser.volatileStatus = volatileStatusUpdate(moveParser.volatileStatus);
+
+        String message = attackNamesies.getName();
+        switch (attackNamesies) {
+            case TRIPLE_KICK:
+                Assert.assertEquals(message, 10, (int)moveParser.basePower);
+                moveParser.basePower = 20;
+                break;
+            case FOUL_PLAY:
+                Assert.assertEquals(message, 95, (int)moveParser.basePower);
+                moveParser.basePower = 0;
+                break;
+            case STRUGGLE:
+                Assert.assertEquals(message, Type.NORMAL, moveParser.type);
+                moveParser.type = Type.NO_TYPE;
+                break;
+            case QUICK_GUARD:
+            case CRAFTY_SHIELD:
+                // Why are Quick Guard/Crafty Shield different than Protect/Spiky Shield/etc. it's weird and I don't care
+                Assert.assertEquals(message, 3, (int)moveParser.priority);
+                moveParser.priority = 4;
+                break;
+            case ELECTRIFY:
+                // I merged this move with Ion Deluge and that includes priority
+                Assert.assertEquals(message, 0, (int)moveParser.priority);
+                moveParser.priority = 1;
+                break;
+            case CURSE:
+                Assert.assertEquals(message, "curse", moveParser.volatileStatus);
+                moveParser.volatileStatus = null;
+                break;
+            case GROWTH:
+                TestUtils.assertEquals(message, new TestStages().set(Stat.ATTACK, 1).set(Stat.SP_ATTACK, 1).get(), moveParser.boosts);
+                moveParser.boosts = null;
+                break;
+            case JUDGEMENT:
+                Assert.assertEquals(message, "Judgment", moveParser.attackName);
+                moveParser.attackName = "Judgement";
+                break;
+        }
     }
 }
