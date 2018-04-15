@@ -2598,6 +2598,7 @@ Rock Blast:
     PP: 10
     Pow: 25
     Acc: 90
+    MoveType: Bomb_Ball
     Cat: Physical
     Type: Rock
     MultiStrike: 2 5
@@ -3371,6 +3372,7 @@ Psychic Fangs:
     Acc: 100
     Pow: 85
     BarrierBreaker: True
+    MoveType: Biting
 *
 High Jump Kick:
     Desc: The target is attacked with a knee kick from a jump. If it misses, the user is hurt instead.
@@ -3522,6 +3524,7 @@ Beak Blast:
     PhysicalContact: False
     FocusMove: Beak_Blast
     Acc: 100
+    MoveType: Bomb_Ball
 *
 Me First:
     Desc: The user cuts ahead of the target to copy and use the target's intended move with greater power. This move fails if it isn't used first.
@@ -6116,6 +6119,7 @@ Origin Pulse:
     Cat: Special
     Acc: 85
     PP: 10
+    MoveType: Aura_Pulse
 *
 Precipice Blades:
     Desc: The user attacks opposing Pok\u00e9mon by manifesting the power of the land in fearsome blades of stone.
@@ -6273,6 +6277,7 @@ Pollen Puff:
     PP: 15
     Pow: 90
     Acc: 100
+    MoveType: Bomb_Ball
     Comments: // TODO: Had to remove the special effects of this move because double battle things, but would like to replace it with something else
 *
 Lunge:

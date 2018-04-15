@@ -6,6 +6,7 @@ import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
+import battle.effect.EffectInterfaces.PowderMove;
 import battle.effect.EffectInterfaces.SapHealthEffect;
 import battle.effect.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.EffectNamesies;
@@ -16,6 +17,8 @@ import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.InvokeInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.attack.FixedDamageMove;
 import battle.effect.attack.MultiStrikeMove;
+import battle.effect.attack.MultiTurnMove.ChargingMove;
+import battle.effect.attack.MultiTurnMove.RechargingMove;
 import battle.effect.attack.OhkoMove;
 import battle.effect.attack.RecoilMove.RecoilPercentageMove;
 import battle.effect.attack.SapHealthMove;
@@ -424,16 +427,24 @@ public class ScriptTest extends BaseTest {
         nullStatChangesUpdate(moveMap, AttackNamesies.GEAR_UP, new TestStages().set(Stat.ATTACK, 1).set(Stat.SP_ATTACK, 1));
         nullStatChangesUpdate(moveMap, AttackNamesies.MAGNETIC_FLUX, new TestStages().set(Stat.DEFENSE, 1).set(Stat.SP_DEFENSE, 1));
 
-        for (AttackNamesies attackNamesies : moveMap.keySet()) {
-            ShowdownMoveParser moveParser = moveMap.get(attackNamesies);
-            Attack attack = attackNamesies.getNewAttack();
+        removeFlag(moveMap, "authentic", AttackNamesies.MIMIC, AttackNamesies.REFLECT_TYPE, AttackNamesies.CONVERSION_2, AttackNamesies.SNATCH, AttackNamesies.FAIRY_LOCK, AttackNamesies.AROMATIC_MIST, AttackNamesies.MAGNETIC_FLUX, AttackNamesies.GEAR_UP, AttackNamesies.POWDER, AttackNamesies.ME_FIRST, AttackNamesies.POWER_SWAP, AttackNamesies.GUARD_SWAP, AttackNamesies.SPEED_SWAP, AttackNamesies.SKETCH, AttackNamesies.DEFOG, AttackNamesies.BESTOW);
+        removeFlag(moveMap, "charge", AttackNamesies.SKY_DROP);
+        removeFlag(moveMap, "contact", AttackNamesies.PLASMA_FISTS); // I'm surprised this is wrong they seem to really have their shit together
+        removeFlag(moveMap, "mirror", AttackNamesies.WONDER_ROOM, AttackNamesies.TRICK_ROOM, AttackNamesies.MAGIC_ROOM, AttackNamesies.MIND_READER, AttackNamesies.LOCK_ON, AttackNamesies.FAIRY_LOCK);
+        removeFlag(moveMap, "protect", AttackNamesies.MIMIC, AttackNamesies.MIND_READER, AttackNamesies.LOCK_ON, AttackNamesies.REFLECT_TYPE, AttackNamesies.POWER_SPLIT, AttackNamesies.GUARD_SPLIT, AttackNamesies.FLORAL_HEALING, AttackNamesies.PURIFY);
+        removeFlag(moveMap, "reflectable", AttackNamesies.FLORAL_HEALING, AttackNamesies.PURIFY);
+        removeFlag(moveMap, "snatch", AttackNamesies.QUICK_GUARD, AttackNamesies.IMPRISON);
+
+        for (AttackNamesies namesies : moveMap.keySet()) {
+            ShowdownMoveParser moveParser = moveMap.get(namesies);
+            Attack attack = namesies.getNewAttack();
             Effect effect = attack.getEffect() == null ? null : attack.getEffect().getEffect();
             String effectId = effect == null ? null : getId(effect.namesies().name());
-            ClassFields genFields = genFieldsMap.get(attackNamesies);
+            ClassFields genFields = genFieldsMap.get(namesies);
 
-            specialCase(attackNamesies, moveParser);
+            specialCase(namesies, moveParser);
 
-            String message = attackNamesies.getName();
+            String message = namesies.getName();
             Assert.assertEquals(message, moveParser.attackName, attack.getName());
             Assert.assertEquals(message, moveParser.accuracy, attack.getAccuracyString());
             Assert.assertEquals(message, moveParser.category, attack.getCategory());
@@ -445,18 +456,93 @@ public class ScriptTest extends BaseTest {
             Assert.assertEquals(message, powerString, attack.getPowerString());
 
             // TODO: We still have that bug where explosion doesn't cause fainting against a Ghost... :(
-            checkCondition(attackNamesies, moveParser.selfDestruct, attack.isMoveType(MoveType.USER_FAINTS), () -> {});
+            checkCondition(namesies, moveParser.selfDestruct, attack.isMoveType(MoveType.USER_FAINTS), () -> {});
+
+            // authentic: Ignores a target's substitute.
+            checkFlag(namesies, moveParser, "authentic", attack.isMoveType(MoveType.SUBSTITUTE_PIERCING) || attack.isMoveType(MoveType.SOUND_BASED));
+
+            // bite: Power is multiplied by 1.5 when used by a Pokemon with the Ability Strong Jaw.
+            // Note: I include Super Fang here even though it is unaffected by Strong Jaw in case biting is used for other purposes
+            checkFlag(namesies, moveParser, "bite", MoveType.BITING, AttackNamesies.SUPER_FANG);
+
+            // bullet: Has no effect on Pokemon with the Ability Bulletproof.
+            checkFlag(namesies, moveParser, "bullet", MoveType.BOMB_BALL);
+
+            // charge: The user is unable to make a move between turns.
+            checkFlag(namesies, moveParser, "charge", attack instanceof ChargingMove);
+
+            // contact: Makes contact.
+            checkFlag(namesies, moveParser, "contact", MoveType.PHYSICAL_CONTACT);
+
+            // dance: When used by a Pokemon, other Pokemon with the Ability Dancer can attempt to execute the same move.
+            // Note: I include Rain Dance in case this is every used for anything else even though repeating this move is useless
+            checkFlag(namesies, moveParser, "dance", MoveType.DANCE, AttackNamesies.RAIN_DANCE);
+
+            // defrost: Thaws the user if executed successfully while the user is frozen.
+            checkFlag(namesies, moveParser, "defrost", MoveType.DEFROST);
+
+            // gravity: Prevented from being executed or selected during Gravity's effect.
+            checkFlag(namesies, moveParser, "gravity", MoveType.AIRBORNE);
+
+            // heal: Prevented from being executed or selected during Heal Block's effect.
+            // Note: I mostly use this tag for the Triage ability instead of Heal Block
+            // Another note: These added moves here I just though made sense they don't technically apply to Triage either
+            checkFlag(namesies, moveParser, "heal", MoveType.HEALING, AttackNamesies.AROMATHERAPY, AttackNamesies.REFRESH, AttackNamesies.HEAL_BELL);
+
+            // mirror: Can be copied by Mirror Move.
+            checkFlag(
+                    namesies, moveParser, "mirror",
+                    !attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.MIRRORLESS),
+                    AttackNamesies.IMPRISON, AttackNamesies.PSYCH_UP, AttackNamesies.HEAL_PULSE
+            );
+
+            // powder: Has no effect on Grass-type Pokemon, Pokemon with the Ability Overcoat, and Pokemon holding Safety Goggles.
+            checkFlag(namesies, moveParser, "powder", attack instanceof PowderMove);
+
+            // protect: Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
+            checkFlag(
+                    namesies, moveParser, "protect",
+                    !attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.PROTECT_PIERCING),
+                    AttackNamesies.MEAN_LOOK, AttackNamesies.BLOCK, AttackNamesies.BESTOW
+            );
+
+            // pulse: Power is multiplied by 1.5 when used by a Pokemon with the Ability Mega Launcher.
+            checkFlag(namesies, moveParser, "pulse", MoveType.AURA_PULSE);
+
+            // punch: Power is multiplied by 1.2 when used by a Pokemon with the Ability Iron Fist.
+            // Note: Jabbing totally counts as punching
+            checkFlag(namesies, moveParser, "punch", MoveType.PUNCHING, AttackNamesies.POISON_JAB);
+
+            // recharge: If this move is successful, the user must recharge on the following turn and cannot make a move.
+            checkFlag(namesies, moveParser, "recharge", attack instanceof RechargingMove);
+
+            // reflectable: Bounced back to the original user by Magic Coat or the Ability Magic Bounce.
+            checkFlag(
+                    namesies, moveParser, "reflectable",
+                    !attack.isSelfTarget() && attack.isStatusMove() && !attack.isMoveType(MoveType.NO_MAGIC_COAT),
+                    AttackNamesies.IMPRISON, AttackNamesies.TEETER_DANCE
+            );
+
+            // snatch: Can be stolen from the original user and instead used by another Pokemon using Snatch.
+            checkFlag(
+                    namesies, moveParser, "snatch",
+                    attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.NON_SNATCHABLE),
+                    AttackNamesies.ACUPRESSURE, AttackNamesies.AROMATIC_MIST, AttackNamesies.FLOWER_SHIELD, AttackNamesies.ROTOTILLER, AttackNamesies.FLORAL_HEALING, AttackNamesies.PURIFY
+            );
+
+            // sound: Has no effect on Pokemon with the Ability Soundproof.
+            checkFlag(namesies, moveParser, "sound", MoveType.SOUND_BASED);
 
             checkRatioArray(
-                    attackNamesies, moveParser.recoil, attack instanceof RecoilPercentageMove,
+                    namesies, moveParser.recoil, attack instanceof RecoilPercentageMove,
                     () -> 1.0/Integer.parseInt(genFields.get("RecoilPercentage"))
             );
 
             checkRatioArray(
-                    attackNamesies, moveParser.heal, genFields.contains("HealFraction") || attackNamesies == AttackNamesies.ROOST,
+                    namesies, moveParser.heal, genFields.contains("HealFraction") || namesies == AttackNamesies.ROOST,
                     () -> {
                         double fraction;
-                        if (attackNamesies == AttackNamesies.ROOST) {
+                        if (namesies == AttackNamesies.ROOST) {
                             fraction = .5;
                         } else {
                             fraction = Double.parseDouble(genFields.get("HealFraction"));
@@ -469,7 +555,7 @@ public class ScriptTest extends BaseTest {
             );
 
             checkRatioArray(
-                    attackNamesies, moveParser.drain, attack instanceof SapHealthMove,
+                    namesies, moveParser.drain, attack instanceof SapHealthMove,
                     () -> {
                         SapHealthEffect sappy = (SapHealthEffect)attack;
                         return sappy.sapPercentage();
@@ -477,7 +563,7 @@ public class ScriptTest extends BaseTest {
             );
 
             checkCondition(
-                    attackNamesies, moveParser.multiHit, attack instanceof MultiStrikeMove,
+                    namesies, moveParser.multiHit, attack instanceof MultiStrikeMove,
                     () -> {
                         Assert.assertEquals(message, 2, moveParser.multiHit.length);
                         Assert.assertTrue(message, attack instanceof MultiStrikeMove); // For the warning
@@ -488,8 +574,8 @@ public class ScriptTest extends BaseTest {
             );
 
             checkCondition(
-                    attackNamesies, moveParser.status,
-                    attack.isStatusMove() && attack.getStatus() != StatusNamesies.NO_STATUS && attackNamesies != AttackNamesies.REST,
+                    namesies, moveParser.status,
+                    attack.isStatusMove() && attack.getStatus() != StatusNamesies.NO_STATUS && namesies != AttackNamesies.REST,
                     () -> Assert.assertEquals(message, moveParser.status, attack.getStatus())
             );
 
@@ -522,7 +608,7 @@ public class ScriptTest extends BaseTest {
             }
 
             checkCondition(
-                    attackNamesies, moveParser.defensiveCategory, attack instanceof OpponentStatSwitchingEffect,
+                    namesies, moveParser.defensiveCategory, attack instanceof OpponentStatSwitchingEffect,
                     () -> {
                         Assert.assertNotEquals(message, MoveCategory.STATUS, moveParser.defensiveCategory);
                         Assert.assertNotEquals(message, moveParser.category, moveParser.defensiveCategory);
@@ -530,7 +616,7 @@ public class ScriptTest extends BaseTest {
             );
 
             checkCondition(
-                    attackNamesies, moveParser.critRatio, attack instanceof CritStageEffect,
+                    namesies, moveParser.critRatio, attack instanceof CritStageEffect,
                     () -> Assert.assertEquals(message, 2, (int)moveParser.critRatio)
             );
 
@@ -553,46 +639,46 @@ public class ScriptTest extends BaseTest {
             }
 
             Boolean ignoreImmunity = moveParser.is("ignoreImmunity");
-            if (attackNamesies == AttackNamesies.THUNDER_WAVE) {
+            if (namesies == AttackNamesies.THUNDER_WAVE) {
                 Assert.assertNotNull(message, ignoreImmunity);
                 Assert.assertFalse(message, ignoreImmunity);
             } else {
                 // TODO: Add tests for these
-                checkBoolean(attackNamesies, ignoreImmunity, AttackNamesies.FUTURE_SIGHT, AttackNamesies.BIDE);
+                checkBoolean(namesies, ignoreImmunity, AttackNamesies.FUTURE_SIGHT, AttackNamesies.BIDE);
             }
 
             // TODO: I don't think this is actually enforced for trump card/sketch
-            checkBoolean(attackNamesies, moveParser.is("noPPBoosts"), AttackNamesies.STRUGGLE, AttackNamesies.TRUMP_CARD, AttackNamesies.SKETCH);
+            checkBoolean(namesies, moveParser.is("noPPBoosts"), AttackNamesies.STRUGGLE, AttackNamesies.TRUMP_CARD, AttackNamesies.SKETCH);
 
             // TODO: I don't think this is enforced -- only Fire-type moves
-            checkBoolean(attackNamesies, moveParser.is("thawsTarget"), AttackNamesies.SCALD, AttackNamesies.STEAM_ERUPTION);
+            checkBoolean(namesies, moveParser.is("thawsTarget"), AttackNamesies.SCALD, AttackNamesies.STEAM_ERUPTION);
 
             // Note: Chatter can be sketched in this game
-            checkBoolean(attackNamesies, moveParser.is("noSketch"), AttackNamesies.STRUGGLE, AttackNamesies.CHATTER);
+            checkBoolean(namesies, moveParser.is("noSketch"), AttackNamesies.STRUGGLE, AttackNamesies.CHATTER);
 
-            checkBoolean(attackNamesies, moveParser.is("struggleRecoil"), AttackNamesies.STRUGGLE);
-            checkBoolean(attackNamesies, moveParser.is("mindBlownRecoil"), AttackNamesies.MIND_BLOWN);
-            checkBoolean(attackNamesies, moveParser.is("noFaint"), AttackNamesies.FALSE_SWIPE);
-            checkBoolean(attackNamesies, moveParser.is("sleepUsable"), AttackNamesies.SLEEP_TALK, AttackNamesies.SNORE);
-            checkBoolean(attackNamesies, moveParser.is("stealsBoosts"), AttackNamesies.SPECTRAL_THIEF);
+            checkBoolean(namesies, moveParser.is("struggleRecoil"), AttackNamesies.STRUGGLE);
+            checkBoolean(namesies, moveParser.is("mindBlownRecoil"), AttackNamesies.MIND_BLOWN);
+            checkBoolean(namesies, moveParser.is("noFaint"), AttackNamesies.FALSE_SWIPE);
+            checkBoolean(namesies, moveParser.is("sleepUsable"), AttackNamesies.SLEEP_TALK, AttackNamesies.SNORE);
+            checkBoolean(namesies, moveParser.is("stealsBoosts"), AttackNamesies.SPECTRAL_THIEF);
 
             // TODO: Neither of these actually work as expected right now
-            checkBoolean(attackNamesies, moveParser.is("multiaccuracy"), AttackNamesies.TRIPLE_KICK);
-            checkBoolean(attackNamesies, moveParser.is("useTargetOffensive"), AttackNamesies.FOUL_PLAY);
+            checkBoolean(namesies, moveParser.is("multiaccuracy"), AttackNamesies.TRIPLE_KICK);
+            checkBoolean(namesies, moveParser.is("useTargetOffensive"), AttackNamesies.FOUL_PLAY);
 
             Boolean isFutureMove = moveParser.is("isFutureMove");
-            checkBoolean(attackNamesies, isFutureMove, AttackNamesies.FUTURE_SIGHT, AttackNamesies.DOOM_DESIRE);
-            checkBoolean(attackNamesies, moveParser.is("breaksProtect"), !attack.isStatusMove() && attack.isMoveType(MoveType.PROTECT_PIERCING) && isFutureMove == null);
+            checkBoolean(namesies, isFutureMove, AttackNamesies.FUTURE_SIGHT, AttackNamesies.DOOM_DESIRE);
+            checkBoolean(namesies, moveParser.is("breaksProtect"), !attack.isStatusMove() && attack.isMoveType(MoveType.PROTECT_PIERCING) && isFutureMove == null);
 
-            checkBoolean(attackNamesies, moveParser.is("ignoreEvasion"), attack instanceof OpponentIgnoreStageEffect);
-            checkBoolean(attackNamesies, moveParser.is("ignoreDefensive"), attack instanceof OpponentIgnoreStageEffect);
-            checkBoolean(attackNamesies, moveParser.is("ohko"), attack instanceof OhkoMove);
-            checkBoolean(attackNamesies, moveParser.is("hasCustomRecoil"), attack instanceof CrashDamageMove);
-            checkBoolean(attackNamesies, moveParser.is("willCrit"), attack instanceof AlwaysCritEffect);
-            checkBoolean(attackNamesies, moveParser.is("forceSwitch"), attack instanceof SwapOpponentEffect);
+            checkBoolean(namesies, moveParser.is("ignoreEvasion"), attack instanceof OpponentIgnoreStageEffect);
+            checkBoolean(namesies, moveParser.is("ignoreDefensive"), attack instanceof OpponentIgnoreStageEffect);
+            checkBoolean(namesies, moveParser.is("ohko"), attack instanceof OhkoMove);
+            checkBoolean(namesies, moveParser.is("hasCustomRecoil"), attack instanceof CrashDamageMove);
+            checkBoolean(namesies, moveParser.is("willCrit"), attack instanceof AlwaysCritEffect);
+            checkBoolean(namesies, moveParser.is("forceSwitch"), attack instanceof SwapOpponentEffect);
 
-            checkBoolean(attackNamesies, moveParser.is("ignoreAbility"), genFields.contains("IgnoreAbilityMove"));
-            checkBoolean(attackNamesies, moveParser.is("selfSwitch"), genFields.contains("SelfSwitching") || attackNamesies == AttackNamesies.BATON_PASS);
+            checkBoolean(namesies, moveParser.is("ignoreAbility"), genFields.contains("IgnoreAbilityMove"));
+            checkBoolean(namesies, moveParser.is("selfSwitch"), genFields.contains("SelfSwitching") || namesies == AttackNamesies.BATON_PASS);
 
             moveParser.assertEmpty();
         }
@@ -663,6 +749,15 @@ public class ScriptTest extends BaseTest {
         }
     }
 
+    private void checkFlag(AttackNamesies attackNamesies, ShowdownMoveParser moveParser, String flagName, MoveType moveType, AttackNamesies... exceptions) {
+        checkFlag(attackNamesies, moveParser, flagName, attackNamesies.getNewAttack().isMoveType(moveType), exceptions);
+    }
+
+    private void checkFlag(AttackNamesies attackNamesies, ShowdownMoveParser moveParser, String flagName, boolean condition, AttackNamesies... exceptions) {
+        Assert.assertEquals(attackNamesies.getName(), moveParser.flags.contains(flagName) || Arrays.asList(exceptions).contains(attackNamesies), condition);
+        moveParser.flags.remove(flagName);
+    }
+
     // Id is all lowercase no special characters (except numbers if applicable)
     private String getId(String name) {
         return StringUtils.getNamesiesString(name).replaceAll("_", "").toLowerCase();
@@ -712,6 +807,15 @@ public class ScriptTest extends BaseTest {
         String message = attackNamesies.getName();
         Assert.assertNull(message, moveParser.getBoosts());
         moveParser.boosts = newStages.get();
+    }
+
+    private void removeFlag(Map<AttackNamesies, ShowdownMoveParser> moveParserMap, String flagName, AttackNamesies... attackNamesies) {
+        for (AttackNamesies namesies : attackNamesies) {
+            ShowdownMoveParser moveParser = moveParserMap.get(namesies);
+            String message = namesies.getName()+ " " + flagName;
+            Assert.assertTrue(message, moveParser.flags.contains(flagName));
+            moveParser.flags.remove(flagName);
+        }
     }
 
     private void specialCase(AttackNamesies attackNamesies, ShowdownMoveParser moveParser) {

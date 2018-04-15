@@ -29,7 +29,7 @@ public class ShowdownMoveParser {
     public Integer critRatio;
     public MoveCategory category;
     public MoveCategory defensiveCategory;
-    public String flags;
+    public Set<String> flags;
     public String target;
     public String selfDestruct;
     public int[] drain;
@@ -140,7 +140,10 @@ public class ShowdownMoveParser {
                     this.defensiveCategory = readEnumValue(message, in, MoveCategory.class);
                     break;
                 case "flags":
-                    this.flags = readCurly(message, in);
+                    this.flags = readFlags(message, in);
+                    this.flags.remove("distance"); // distance: Can target a Pokemon positioned anywhere in a Triple Battle.
+                    this.flags.remove("mystery");  // mystery: Unknown effect.
+                    this.flags.remove("nonsky");   // nonsky: Prevented from being executed or selected in a Sky Battle.
                     break;
                 case "drain":
                     this.drain = readBraces(message, in);
@@ -219,7 +222,7 @@ public class ShowdownMoveParser {
                 case "ignoreImmunity":
                     boolean ignoreImmunity;
                     if (attackKey.equals("thousandarrows")) {
-                        Assert.assertEquals(message, "{'Ground': true}", readCurly(message, in));
+                        Assert.assertEquals(message, "'Ground': true", readCurly(message, in));
                         ignoreImmunity = true;
                     } else {
                         ignoreImmunity = readBoolean(message, in);
@@ -321,7 +324,33 @@ public class ShowdownMoveParser {
     private String readCurly(String message, Scanner in) {
         String value = readValue(message, in);
         Assert.assertTrue(message, value.startsWith("{") && value.endsWith("}"));
+        value = value.substring(1, value.length() - 1);
+        Assert.assertFalse(message, value.startsWith("{") || value.endsWith("}"));
         return value;
+    }
+
+    private Set<String> readFlags(String message, Scanner in) {
+        Set<String> flags = new HashSet<>();
+
+        String value = readCurly(message, in);
+        if (value.isEmpty()) {
+            return flags;
+        }
+
+        Pattern flagPattern = Pattern.compile("([a-z]+): ([0-9]+)");
+        String[] split = value.split(", ");
+
+        for (String flagString : split) {
+            Matcher matcher = flagPattern.matcher(flagString);
+            Assert.assertTrue(message, matcher.matches());
+            Assert.assertEquals(message, 1, Integer.parseInt(matcher.group(2)));
+
+            String flag = matcher.group(1);
+            Assert.assertFalse(message, flags.contains(flag));
+            flags.add(flag);
+        }
+
+        return flags;
     }
 
     private String[] readStringBraces(String message, Scanner in) {
@@ -749,6 +778,7 @@ public class ShowdownMoveParser {
     }
 
     public void assertEmpty() {
+        Assert.assertTrue(attackKey + " " + this.flags, this.flags.isEmpty());
         Assert.assertTrue(attackKey + " " + this.booleanMap, this.booleanMap.isEmpty());
     }
 

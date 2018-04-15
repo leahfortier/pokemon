@@ -4668,6 +4668,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super(AttackNamesies.ROCK_BLAST, Type.ROCK, MoveCategory.PHYSICAL, 10, "The user hurls hard rocks at the target. Two to five rocks are launched in a row.");
             super.power = 25;
             super.accuracy = 90;
+            super.moveTypes.add(MoveType.BOMB_BALL);
         }
 
         @Override
@@ -5915,6 +5916,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super(AttackNamesies.PSYCHIC_FANGS, Type.PSYCHIC, MoveCategory.PHYSICAL, 10, "The user bites the target with its psychic capabilities. This can also destroy Light Screen and Reflect.");
             super.power = 85;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.BITING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
@@ -6173,6 +6175,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.power = 100;
             super.accuracy = 100;
             super.effect = PokemonEffectNamesies.BEAK_BLAST;
+            super.moveTypes.add(MoveType.BOMB_BALL);
             super.moveTypes.add(MoveType.ASSISTLESS);
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             super.moveTypes.add(MoveType.METRONOMELESS);
@@ -10400,6 +10403,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super(AttackNamesies.ORIGIN_PULSE, Type.WATER, MoveCategory.SPECIAL, 10, "The user attacks opposing Pok\u00e9mon with countless beams of light that glow a deep and brilliant blue.");
             super.power = 110;
             super.accuracy = 85;
+            super.moveTypes.add(MoveType.AURA_PULSE);
         }
     }
 
@@ -10646,6 +10650,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super(AttackNamesies.POLLEN_PUFF, Type.BUG, MoveCategory.SPECIAL, 15, "The user attacks the enemy with a pollen puff that explodes.");
             super.power = 90;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.BOMB_BALL);
         }
     }
 
