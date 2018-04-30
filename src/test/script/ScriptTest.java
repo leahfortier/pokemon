@@ -415,6 +415,15 @@ public class ScriptTest extends BaseTest {
         Map<AttackNamesies, ClassFields> genFieldsMap = readGen();
         Assert.assertEquals(AttackNamesies.values().length, genFieldsMap.size());
 
+        nullFangySecondary(moveMap, AttackNamesies.FIRE_FANG, StatusNamesies.BURNED);
+        nullFangySecondary(moveMap, AttackNamesies.ICE_FANG, StatusNamesies.FROZEN);
+        nullFangySecondary(moveMap, AttackNamesies.THUNDER_FANG, StatusNamesies.PARALYZED);
+
+        nullOnHitSecondary(moveMap, AttackNamesies.ANCHOR_SHOT);
+        nullOnHitSecondary(moveMap, AttackNamesies.SPIRIT_SHACKLE);
+        nullOnHitSecondary(moveMap, AttackNamesies.SPARKLING_ARIA);
+        nullOnHitSecondary(moveMap, AttackNamesies.THROAT_CHOP);
+
         // Handled separately in their API
         nullStatChangesUpdate(moveMap, AttackNamesies.DEFOG, new TestStages().set(Stat.EVASION, -1));
         nullStatChangesUpdate(moveMap, AttackNamesies.STRENGTH_SAP, new TestStages().set(Stat.ATTACK, -1));
@@ -620,6 +629,39 @@ public class ScriptTest extends BaseTest {
                     () -> Assert.assertEquals(message, 2, (int)moveParser.critRatio)
             );
 
+            checkCondition(
+                    namesies,
+                    moveParser.secondary,
+                    attack.hasSecondaryEffects() && namesies != AttackNamesies.SKULL_BASH,
+                    () -> {
+                        Assert.assertEquals(message, (int)moveParser.secondary.chance, attack.getEffectChance());
+                        Assert.assertTrue(message, moveParser.secondary.functionKeys.isEmpty());
+                        Assert.assertTrue(
+                                message,
+                                moveParser.secondary.self == null || moveParser.secondary.self.toString().equals("")
+                        );
+                        checkCondition(
+                                namesies,
+                                moveParser.secondary.volatileStatus,
+                                attack.getEffect() == PokemonEffectNamesies.FLINCH || attack.getEffect() == PokemonEffectNamesies.CONFUSION,
+                                () -> Assert.assertEquals(message, moveParser.secondary.volatileStatus, effectId)
+                        );
+                        checkCondition(
+                                namesies, moveParser.secondary.status,
+                                attack.getStatus() != StatusNamesies.NO_STATUS,
+                                () -> Assert.assertEquals(message, moveParser.secondary.status, attack.getStatus())
+                        );
+                    }
+            );
+
+            checkSelfVolatile(namesies, moveParser, "lockedmove", attack.getEffect() == PokemonEffectNamesies.SELF_CONFUSION);
+            checkSelfVolatile(namesies, moveParser, "mustrecharge", attack instanceof RechargingMove);
+            checkSelfVolatile(namesies, moveParser, effectId, moveParser.self != null && moveParser.self.volatileStatus != null);
+
+            Assert.assertTrue(
+                    message + " " + moveParser.self,
+                    moveParser.self == null || moveParser.self.toString().equals("")
+            );
 
             if (attack instanceof FixedDamageMove) {
                 String fixedDamage = genFields.get("FixedDamage");
@@ -758,6 +800,15 @@ public class ScriptTest extends BaseTest {
         moveParser.flags.remove(flagName);
     }
 
+    private void checkSelfVolatile(AttackNamesies attackNamesies, ShowdownMoveParser moveParser, String volatileStatus, boolean condition) {
+        if (condition) {
+            String message = attackNamesies.getName();
+            Assert.assertNotNull(message, moveParser.self);
+            Assert.assertEquals(message, volatileStatus, moveParser.self.volatileStatus);
+            moveParser.self.volatileStatus = null;
+        }
+    }
+
     // Id is all lowercase no special characters (except numbers if applicable)
     private String getId(String name) {
         return StringUtils.getNamesiesString(name).replaceAll("_", "").toLowerCase();
@@ -797,9 +848,39 @@ public class ScriptTest extends BaseTest {
                 return "sunny";
             case "hail":
                 return "hailing";
+            case "rage":
+                return "raging";
         }
 
         return volatileStatus;
+    }
+
+    private void nullFangySecondary(Map<AttackNamesies, ShowdownMoveParser> moveParserMap, AttackNamesies attackNamesies, StatusNamesies statusNamesies) {
+        ShowdownMoveParser moveParser = moveParserMap.get(attackNamesies);
+        String message = attackNamesies.getName();
+        Assert.assertNotNull(message, moveParser.secondary);
+        Assert.assertNotEquals(message, "", moveParser.secondary.toString());
+        Assert.assertEquals(message, 20, (int)moveParser.secondary.chance);
+        moveParser.secondary.chance = null;
+        Assert.assertEquals(message, "flinch", moveParser.secondary.volatileStatus);
+        moveParser.secondary.volatileStatus = null;
+        Assert.assertEquals(message, statusNamesies, moveParser.secondary.status);
+        moveParser.secondary.status = null;
+        Assert.assertEquals(message, "", moveParser.secondary.toString());
+        moveParser.secondary.chance = 20;
+    }
+
+    private void nullOnHitSecondary(Map<AttackNamesies, ShowdownMoveParser> moveParserMap, AttackNamesies attackNamesies) {
+        ShowdownMoveParser moveParser = moveParserMap.get(attackNamesies);
+        String message = attackNamesies.getName();
+        Assert.assertNotNull(message, moveParser.secondary);
+        Assert.assertNotEquals(message, "", moveParser.secondary.toString());
+        Assert.assertEquals(message, 100, (int)moveParser.secondary.chance);
+        Assert.assertEquals(message, 1, moveParser.secondary.functionKeys.size());
+        Assert.assertTrue(message, moveParser.secondary.functionKeys.remove("onHit"));
+        moveParser.secondary.chance = null;
+        Assert.assertEquals(message, "", moveParser.secondary.toString());
+        moveParser.secondary = null;
     }
 
     private void nullStatChangesUpdate(Map<AttackNamesies, ShowdownMoveParser> moveParserMap, AttackNamesies attackNamesies, TestStages newStages) {
@@ -820,6 +901,9 @@ public class ScriptTest extends BaseTest {
 
     private void specialCase(AttackNamesies attackNamesies, ShowdownMoveParser moveParser) {
         moveParser.volatileStatus = volatileStatusUpdate(moveParser.volatileStatus);
+        if (moveParser.self != null) {
+            moveParser.self.volatileStatus = volatileStatusUpdate(moveParser.self.volatileStatus);
+        }
 
         String message = attackNamesies.getName();
         switch (attackNamesies) {
@@ -850,6 +934,11 @@ public class ScriptTest extends BaseTest {
                 Assert.assertEquals(message, "curse", moveParser.volatileStatus);
                 moveParser.volatileStatus = null;
                 break;
+            case ROOST:
+                Assert.assertNotNull(message, moveParser.self);
+                Assert.assertEquals(message, "roost", moveParser.self.volatileStatus);
+                moveParser.self.volatileStatus = null;
+                break;
             case GROWTH:
                 TestUtils.assertEquals(message, new TestStages().set(Stat.ATTACK, 1).set(Stat.SP_ATTACK, 1).get(), moveParser.boosts);
                 moveParser.boosts = null;
@@ -857,6 +946,21 @@ public class ScriptTest extends BaseTest {
             case JUDGEMENT:
                 Assert.assertEquals(message, "Judgment", moveParser.attackName);
                 moveParser.attackName = "Judgement";
+                break;
+            case SECRET_POWER:
+                Assert.assertEquals(message, 30, (int)moveParser.secondary.chance);
+                moveParser.secondary.chance = null;
+                Assert.assertEquals(message, StatusNamesies.PARALYZED, moveParser.secondary.status);
+                moveParser.secondary.status = null;
+                Assert.assertEquals(message, "", moveParser.secondary.toString());
+                moveParser.secondary.chance = 30;
+                break;
+            case TRI_ATTACK:
+                Assert.assertEquals(message, 20, (int)moveParser.secondary.chance);
+                moveParser.secondary.chance = null;
+                Assert.assertTrue(message, moveParser.secondary.functionKeys.remove("onHit"));
+                Assert.assertEquals(message, "", moveParser.secondary.toString());
+                moveParser.secondary.chance = 20;
                 break;
         }
     }
