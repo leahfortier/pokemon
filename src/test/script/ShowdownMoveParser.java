@@ -8,8 +8,10 @@ import pokemon.Stat;
 import test.TestUtils;
 import type.Type;
 import util.GeneralUtils;
+import util.string.StringAppender;
 import util.string.StringUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -39,7 +41,6 @@ public class ShowdownMoveParser {
     public StatusNamesies status;
     public String volatileStatus;
     public String isZ;
-    public String[] noMetronome;
     public Type type;
     public int[] boosts;
     private Map<String, Boolean> booleanMap;
@@ -89,6 +90,10 @@ public class ShowdownMoveParser {
                     break;
                 case "zMoveBoost":
                     readCurly(message, in);
+                    break;
+                case "noMetronome":
+                    Assert.assertEquals(message, "metronome", attackKey);
+                    readStringBraces(message, in);
                     break;
                 case "effect":
                     readEffect(message, in);
@@ -156,10 +161,6 @@ public class ShowdownMoveParser {
                     break;
                 case "multihit":
                     this.multiHit = readMultiHit(message, in);
-                    break;
-                case "noMetronome":
-                    Assert.assertEquals(message, "metronome", attackKey);
-                    this.noMetronome = readStringBraces(message, in);
                     break;
                 case "secondary":
                     Assert.assertNull(message, secondary);
@@ -678,7 +679,7 @@ public class ShowdownMoveParser {
                     break;
                 case "onHit":
                     readFunction(message, in);
-                    this.functionKeys.add(key);
+                    secondary.functionKeys.add(key);
                     break;
                 default:
                     Assert.fail(message + "\nUnknown key " + key);
@@ -765,12 +766,16 @@ public class ShowdownMoveParser {
         TestUtils.assertEqualsAny(attackName, numNonNull, 0, 1);
 
         if (boosts != null) {
+            this.boosts = null;
             return boosts;
         } else if (secondaryBoosts != null) {
+            this.secondary.boosts = null;
             return secondaryBoosts;
         } else if (secondarySelfBoosts != null) {
+            this.secondary.self.boosts = null;
             return secondarySelfBoosts;
         } else if (selfBoosts != null) {
+            this.self.boosts = null;
             return selfBoosts;
         } else {
             return null;
@@ -785,6 +790,18 @@ public class ShowdownMoveParser {
     public class Self {
         int[] boosts;
         String volatileStatus;
+
+        @Override
+        public String toString() {
+            StringAppender s = new StringAppender();
+            if (boosts != null) {
+                s.appendDelimiter(" ", "Boosts: " + Arrays.toString(boosts));
+            }
+            if (!StringUtils.isNullOrEmpty(volatileStatus)) {
+                s.appendDelimiter(" ", "Volatile: " + volatileStatus);
+            }
+            return s.toString();
+        }
     }
 
     public class SecondaryEffect {
@@ -797,6 +814,30 @@ public class ShowdownMoveParser {
 
         public SecondaryEffect() {
             functionKeys = new HashSet<>();
+        }
+
+        @Override
+        public String toString() {
+            StringAppender s = new StringAppender();
+            if (boosts != null) {
+                s.appendDelimiter(" ", "Boosts: " + Arrays.toString(boosts));
+            }
+            if (chance != null) {
+                s.appendDelimiter(" ", "Chance: " + chance);
+            }
+            if (!StringUtils.isNullOrEmpty(volatileStatus)) {
+                s.appendDelimiter(" ", "Volatile: " + volatileStatus);
+            }
+            if (self != null) {
+                s.appendDelimiter(" ", "Self: <" + self + ">");
+            }
+            if (status != null) {
+                s.appendDelimiter(" ", "Status: " + status);
+            }
+            if (!functionKeys.isEmpty()) {
+                s.appendDelimiter(" ", "Functions: <" + functionKeys + ">");
+            }
+            return s.toString();
         }
     }
 }

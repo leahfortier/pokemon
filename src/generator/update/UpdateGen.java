@@ -73,7 +73,7 @@ public class UpdateGen {
 //        translateAlBhed();
 //        addCondition();
 //        outputShowdownImagesFile();
-//        testBulbapediaMoveTypeList();
+        testBulbapediaMoveTypeList();
 //        printStatOrder();
 //        removeTrailingJsonCommas();
     }
@@ -131,7 +131,7 @@ public class UpdateGen {
         int numIgnorableArgs = 2;
 
         // Change this to match whatever it is you are testing
-        Predicate<Attack> inList = attack -> attack.isMoveType(MoveType.SUBSTITUTE_PIERCING) || attack.isMoveType(MoveType.SOUND_BASED);
+        Predicate<Attack> inList = attack -> attack.isMoveType(MoveType.METRONOMELESS);
 
         List<String> expected = new ArrayList<>();
         while (in.hasNext()) {
