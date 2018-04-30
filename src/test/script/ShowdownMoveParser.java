@@ -732,6 +732,7 @@ public class ShowdownMoveParser {
                     break;
                 case "onHit":
                     readFunction(message, in);
+                    self.onHit = true;
                     break;
                 default:
                     Assert.fail(message + "\nUnknown key " + key);
@@ -790,6 +791,7 @@ public class ShowdownMoveParser {
     public class Self {
         int[] boosts;
         String volatileStatus;
+        boolean onHit;
 
         @Override
         public String toString() {
@@ -799,6 +801,9 @@ public class ShowdownMoveParser {
             }
             if (!StringUtils.isNullOrEmpty(volatileStatus)) {
                 s.appendDelimiter(" ", "Volatile: " + volatileStatus);
+            }
+            if (onHit) {
+                s.appendDelimiter(" ", "OnHit");
             }
             return s.toString();
         }

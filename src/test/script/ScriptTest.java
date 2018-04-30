@@ -607,15 +607,6 @@ public class ScriptTest extends BaseTest {
                 Assert.assertTrue(message, effect == null || nonParseVolatile.contains(effect.namesies()));
             }
 
-            int[] actualBoosts = attack.getStatChangesCopy();
-            int[] parserBoosts = moveParser.getBoosts();
-            if (GeneralUtils.isEmpty(actualBoosts)) {
-                Assert.assertNull(message, parserBoosts);
-            } else {
-                Assert.assertNotNull(message, parserBoosts);
-                TestUtils.assertEquals(message, parserBoosts, actualBoosts);
-            }
-
             checkCondition(
                     namesies, moveParser.defensiveCategory, attack instanceof OpponentStatSwitchingEffect,
                     () -> {
@@ -628,6 +619,70 @@ public class ScriptTest extends BaseTest {
                     namesies, moveParser.critRatio, attack instanceof CritStageEffect,
                     () -> Assert.assertEquals(message, 2, (int)moveParser.critRatio)
             );
+
+            if (moveParser.self != null
+                    && (moveParser.self.onHit || moveParser.self.boosts != null
+                        || (moveParser.self.volatileStatus != null
+                            && Set.of("raging", "lockedmove", "uproar").contains(moveParser.self.volatileStatus)))) {
+                Assert.assertTrue(message, attack.isSelfTarget());
+                moveParser.self.onHit = false;
+            } else if ((moveParser.secondary != null && moveParser.secondary.self != null)
+                    || genFields.contains("FocusMove")
+                    || namesies == AttackNamesies.SKULL_BASH
+                    || namesies == AttackNamesies.MIMIC
+                    || namesies == AttackNamesies.LOCK_ON
+                    || namesies == AttackNamesies.MIND_READER
+                    || namesies == AttackNamesies.REFLECT_TYPE
+                    || namesies == AttackNamesies.TRANSFORM
+                    || namesies == AttackNamesies.CONVERSION_2
+                    || namesies == AttackNamesies.POWER_SPLIT
+                    || namesies == AttackNamesies.GUARD_SPLIT
+                    || namesies == AttackNamesies.ROLE_PLAY
+                    || namesies == AttackNamesies.FLORAL_HEALING
+                    || namesies == AttackNamesies.PURIFY
+                    || namesies == AttackNamesies.PAY_DAY) {
+                Assert.assertTrue(message, attack.isSelfTarget());
+            } else if (genFields.contains("MirrorMove")
+                    || namesies == AttackNamesies.METRONOME
+                    || namesies == AttackNamesies.SLEEP_TALK
+                    || namesies == AttackNamesies.ASSIST
+                    || namesies == AttackNamesies.IMPRISON) {
+                Assert.assertFalse(message, attack.isSelfTarget());
+            } else {
+                switch (moveParser.target) {
+                    case "normal":
+                    case "allAdjacentFoes":
+                    case "randomNormal":
+                    case "any":
+                    case "foeSide":
+                    case "allAdjacent":
+                    case "scripted":
+                    case "adjacentFoe":
+                        Assert.assertFalse(message, attack.isSelfTarget());
+                        break;
+                    case "self":
+                    case "allySide":
+                    case "allyTeam":
+                    case "adjacentAllyOrSelf":
+                    case "adjacentAlly":
+                        Assert.assertTrue(message, attack.isSelfTarget());
+                        break;
+                    case "all":
+                        Assert.assertTrue(message, attack.isMoveType(MoveType.FIELD) || attack.isSelfTarget() || namesies == AttackNamesies.PERISH_SONG);
+                        break;
+                    default:
+                        Assert.fail(message + " Unknown target " + moveParser.target);
+                }
+            }
+
+            int[] actualBoosts = attack.getStatChangesCopy();
+            int[] parserBoosts = moveParser.getBoosts();
+            if (GeneralUtils.isEmpty(actualBoosts)) {
+                Assert.assertNull(message, parserBoosts);
+            } else {
+                Assert.assertNotNull(message, parserBoosts);
+                TestUtils.assertEquals(message, parserBoosts, actualBoosts);
+            }
 
             checkCondition(
                     namesies,
@@ -658,10 +713,7 @@ public class ScriptTest extends BaseTest {
             checkSelfVolatile(namesies, moveParser, "mustrecharge", attack instanceof RechargingMove);
             checkSelfVolatile(namesies, moveParser, effectId, moveParser.self != null && moveParser.self.volatileStatus != null);
 
-            Assert.assertTrue(
-                    message + " " + moveParser.self,
-                    moveParser.self == null || moveParser.self.toString().equals("")
-            );
+            Assert.assertTrue(message + " " + moveParser.self, moveParser.self == null || moveParser.self.toString().equals(""));
 
             if (attack instanceof FixedDamageMove) {
                 String fixedDamage = genFields.get("FixedDamage");
@@ -893,7 +945,7 @@ public class ScriptTest extends BaseTest {
     private void removeFlag(Map<AttackNamesies, ShowdownMoveParser> moveParserMap, String flagName, AttackNamesies... attackNamesies) {
         for (AttackNamesies namesies : attackNamesies) {
             ShowdownMoveParser moveParser = moveParserMap.get(namesies);
-            String message = namesies.getName()+ " " + flagName;
+            String message = namesies.getName() + " " + flagName;
             Assert.assertTrue(message, moveParser.flags.contains(flagName));
             moveParser.flags.remove(flagName);
         }
