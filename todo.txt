@@ -59,21 +59,9 @@ Names that go out of bounds:
 	Crabominable
 	Disarming Voice
 	Silph Surfer
-
-Sprites that should eventually be replaced since they're fuzzy:
-	Rowlet
-	Dartrix
-	Litten
-	Pikipek
-	Grubbin
-	Charjabug
-	Rockruff
-	Wishiwashi
-	Dewpider
-	Salandit
-	Stufful
-	Jangmo-o
-	Cosmog
+    Lv100 (Enemy) Charmander has the gender sign overlap with the level
+    BallItem text against a trainer goes out of bounds
+    Synchronize ability text is wayyyy out of bounds on party view
 
 Missing Pokemon Sprites:
 	755 Morelull
@@ -83,6 +71,24 @@ Missing Pokemon Sprites:
 	795 Pheromosa
 	796 Xurkitree
 	798 Kartana
+
+Move descriptions that change manually:
+    Sky Drop
+    Flower Shield
+    Rototiller
+    Magnetic Flux
+    Gear Up
+    Pollen Puff
+    Aromatic Mist
+Ability descriptions that change manually:
+    Healer
+    Flower Veil
+Item descriptions that change manually:
+    Fishing Rod
+    Deep Sea Scale
+    Safari Ball (if it references some rando place)
+    Razz Berry
+    All the EV Decreasing Berries (like Pomeg Berry)
 
 	Options menu:
 		- Sound
@@ -98,3 +104,91 @@ Missing Pokemon Sprites:
 	Mirror move executes multi-turn moves in a single turn
 	Choose/give a TM for beating gym leaders
 	Blue needs to be in the Pokemon Center after you battle him
+	Make sure relearning moves works for evolve moves too
+	Generalize double cast remove effects (example: Power Trick)
+	Make Effect for Guts/Facade for Attack boost with status to be generic for Burned
+	  -- actually maybe just status booster so can work for Quick Feet as well
+	Also an effect for Magic Guard for direct damage only
+	Generate Status Conditions
+	Test for base evolutions don't have a move that they learn at evolution
+	Test that Shedinja is genderless when it evolves and that it doesn't appear when you cancel evolution
+	Zeraora pokedex image doesn't look legit -- make sure that gets handled at some point
+	Make cast method final for effects and have a different method to handle additional things that need to happen so shit isn't always calling super
+	Generalize activated field for single turn power multipliers (like Normalize)
+	Remove mainMenuTiles (can keep some for reference inside the images folder) but def move out of tiles
+		-- same with pauseViewTiles
+	Berry harvest time and amounts
+	Look at light screen and light clay cast thingy -- why is it not applying turns to itself?
+	Change effects list for Defog and RapidSpin to only include PokemonEffect and TeamEffects
+	Why is ItemSwapperEffect and SwapOpponentEffect a thing? just for generator?
+	refactor RaiseCritsEffect -- apparently Focus Energy is supposed to raise by 2 and not stack with Dire Hit
+	Moongeist Beam removes BreakTheMold effect at the end of the move -- can it be applied any other way?
+	should movetypes be a set?
+	generalize switch stat (Magic Room/Power Trick)
+	healHealthFraction with message input
+	active and numTurns in Effect can be private instead of protected
+	make separate thingy for added methods in generator (instead of including in Field)
+	BasicPanels fullMessagePanel -- Is 440 game.height - panel.height?
+	TileSet getTile should use readImage in FileIO -- just check exists first
+	change the names of activepokemon for out of battle effects like repelling effect and those wild pokemon encouter changer things from attacking to just like front
+	NoSwapEffect for canSwapOpponent() -- Ingrain/Suction Cups (mold breaker)
+	Exeggutor plant gives two exeggutor?? -- got one, battled mom, got another? also got one, saved, got another
+	look at natural cure again
+	MoveUseItems do not work in battle -- causes NPE
+	Guard Spec. is doing Safeguard when it should be Mist -- same with Flower Veil
+	Purify doesn't work correctly
+	Strength Sap should fail if the target has -6 Attack
+	Heal Block doesn't work right either
+	rewrite Ability.evolutionAssign() to hold the ability index to remain consistent across evolutions
+	False Swipe -- remove the exact same effect, not just any bracing effect
+	   - same deal with Me First
+	Dancer -- test with Snatch (should not activate); test with Flinched (should not activate)
+	test entering a new location while medals are displaying
+	Explosion doesn't kill the user when used against a Ghost type Pokemon
+	Rest shows the incorrect status prevent message -- just says "...but it failed!"
+	can we throw a Pokeball at a semi-invulnerable Poke?
+	Bag View messages for evolution and learn moves
+    Test self-switching moves from 4th index to a Pokemon with less than four moves (I think the move index isn't getting rest -- will this indexoutofboundsexception?)
+    should status cure moves be apply damage effects or unique effects?
+    add brick break to defog/rapid spin tests
+    quick guard apparently not affected by successive decay?
+    beat up power was changed
+    triple kick power is supposed to be 10, 20, 30
+    foul play is all wrong
+    dark void should affect Insomnia and whatnot and fail for not Darkrai
+    acupressure should only try to raise non-maximized stats and should fail if all maxed out
+    test healing wish and snatch
+    rototiller should only work if Pokemon is grounded
+    power split and guard split are supposed to effect both pokemon
+    okay so Mirror Move is supposed to use the last move that targeted the user, not the last move that the opponent used... what is happening I did not know this
+    look at sheer cold
+    conversion was changed
+    look at destiny bond and successive decay
+    look at Ruby sprite on Serebii
+    metronome + multi-turn move is not working (Dive)
+    Wallet class (CashMoneyHouse?)
+    in bag view, selecting a use button should look different than inactive use buttons
+    change order of move list
+    moves like core enforcer don't remove the effect if attack is unsuccessful
+    remove ExtraApplies field in override
+    check flinch with multi turn moves -- should it always reset ready? or just for like smack down?
+    write tests for effects that if you use them twice it removes the effect (Wonder Room/Power Trick)
+    can selfconfusion remove itself inside totalandcompletefailure?
+    Message for Trick looks terrible when one of the Pokemon isn't holding anything (switched with Bulbasaur's No Item!)
+    uproar specifically checks if pp runs out to remove effect -- should that be for other similar moves too?
+    should light clay/grip claw be effectreceivedeffects?
+    ask Narcos about next turn subside since I don't like it -- should terrain effects be that way? rn they're diff than weather which seems weird
+    remove effect inside subside -- then we can use it in more places
+    substitute almost certainly doesn't work with form change abilities for images at least
+    test life orb (with multi-strike among other things)
+    separate sap health move class so leech seed isn't the same thing
+    assert status method for test pokemon
+    fairy lock looks like it lasts indefinitely? but it should only be one turn?
+    look at fling message update for white herb -- I don't think it will update the stats
+    make Marcos fix the substitute failure messaging problems I don't wanna do it
+    does safeguard prevent confusion?
+    underground pokemon should not take damage from hail/sandstorm
+    does levitating check take semiinvulnerable into account? like will you heal from grassy terrain if you're flying?
+    test moongeist beam and shadow shield (combos like that)
+    apparently soak fails against arceus (I'm sure it's that multitype prevents having its type changed)
+    write test for venom drench and make sure it works on both poisoned and badly poisoned
