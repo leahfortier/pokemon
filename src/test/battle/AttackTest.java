@@ -873,13 +873,13 @@ public class AttackTest extends BaseTest {
         // Stage should not change without MURDER
         battle.fight(AttackNamesies.FELL_STINGER, AttackNamesies.ENDURE);
         Assert.assertFalse(defending.isActuallyDead());
-        new TestStages().test(attacking);
-        new TestStages().test(defending);
+        attacking.assertNoStages();
+        defending.assertNoStages();
 
         // Kill kill kill MURDER MURDER MURDER
         battle.attackingFight(AttackNamesies.FELL_STINGER);
         Assert.assertTrue(defending.isActuallyDead());
-        new TestStages().set(Stat.ATTACK, 3).test(attacking);
+        attacking.assertStages(new TestStages().set(Stat.ATTACK, 3));
     }
 
     @Test
@@ -888,131 +888,109 @@ public class AttackTest extends BaseTest {
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
-        new TestStages().test(attacking);
-        new TestStages().test(defending);
+        attacking.assertNoStages();
+        defending.assertNoStages();
 
         // Screech is -2 defense to opponent, Swords Dance is +2 attack for use
         battle.fight(AttackNamesies.SCREECH, AttackNamesies.SWORDS_DANCE);
-        new TestStages().test(attacking);
-        new TestStages().set(Stat.DEFENSE, -2)
-                        .set(Stat.ATTACK, 2)
-                        .test(defending);
+        attacking.assertNoStages();
+        defending.assertStages(new TestStages().set(Stat.DEFENSE, -2)
+                                               .set(Stat.ATTACK, 2));
 
         // Swaps attacking stats
         battle.attackingFight(AttackNamesies.POWER_SWAP);
-        new TestStages().set(Stat.ATTACK, 2)
-                        .test(attacking);
-        new TestStages().set(Stat.DEFENSE, -2)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.ATTACK, 2));
+        defending.assertStages(new TestStages().set(Stat.DEFENSE, -2));
 
         battle.attackingFight(AttackNamesies.POWER_SWAP);
-        new TestStages().test(attacking);
-        new TestStages().set(Stat.DEFENSE, -2)
-                        .set(Stat.ATTACK, 2)
-                        .test(defending);
+        attacking.assertNoStages();
+        defending.assertStages(new TestStages().set(Stat.DEFENSE, -2)
+                                               .set(Stat.ATTACK, 2));
 
         // Does the same exact thing regardless of attacker
         battle.defendingFight(AttackNamesies.POWER_SWAP);
-        new TestStages().set(Stat.ATTACK, 2)
-                        .test(attacking);
-        new TestStages().set(Stat.DEFENSE, -2)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.ATTACK, 2));
+        defending.assertStages(new TestStages().set(Stat.DEFENSE, -2));
 
         // Swaps all stats
         battle.defendingFight(AttackNamesies.HEART_SWAP);
-        new TestStages().set(Stat.DEFENSE, -2)
-                        .test(attacking);
-        new TestStages().set(Stat.ATTACK, 2)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.DEFENSE, -2));
+        defending.assertStages(new TestStages().set(Stat.ATTACK, 2));
 
         // Quiver Dance increases Sp. Attack, Sp. Defense, and Speed by 1 for user,
         // Sand Attack decreases opponent Accuracy by 1
         battle.fight(AttackNamesies.QUIVER_DANCE, AttackNamesies.SAND_ATTACK);
-        new TestStages().set(Stat.DEFENSE, -2)
-                        .set(Stat.SP_ATTACK, 1)
-                        .set(Stat.SP_DEFENSE, 1)
-                        .set(Stat.SPEED, 1)
-                        .set(Stat.ACCURACY, -1)
-                        .test(attacking);
-        new TestStages().set(Stat.ATTACK, 2)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.DEFENSE, -2)
+                                               .set(Stat.SP_ATTACK, 1)
+                                               .set(Stat.SP_DEFENSE, 1)
+                                               .set(Stat.SPEED, 1)
+                                               .set(Stat.ACCURACY, -1));
+        defending.assertStages(new TestStages().set(Stat.ATTACK, 2));
 
         // Swaps defensive stats
         battle.attackingFight(AttackNamesies.GUARD_SWAP);
-        new TestStages().set(Stat.SP_ATTACK, 1)
-                        .set(Stat.SPEED, 1)
-                        .set(Stat.ACCURACY, -1)
-                        .test(attacking);
-        new TestStages().set(Stat.ATTACK, 2)
-                        .set(Stat.DEFENSE, -2)
-                        .set(Stat.SP_DEFENSE, 1)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.SP_ATTACK, 1)
+                                               .set(Stat.SPEED, 1)
+                                               .set(Stat.ACCURACY, -1));
+        defending.assertStages(new TestStages().set(Stat.ATTACK, 2)
+                                               .set(Stat.DEFENSE, -2)
+                                               .set(Stat.SP_DEFENSE, 1));
 
         // Calm Mind increases Sp. Attack and Sp. Defense by 1 for the user
         battle.fight(AttackNamesies.CALM_MIND, AttackNamesies.CALM_MIND);
-        new TestStages().set(Stat.SP_ATTACK, 2)
-                        .set(Stat.SP_DEFENSE, 1)
-                        .set(Stat.SPEED, 1)
-                        .set(Stat.ACCURACY, -1)
-                        .test(attacking);
-        new TestStages().set(Stat.ATTACK, 2)
-                        .set(Stat.DEFENSE, -2)
-                        .set(Stat.SP_ATTACK, 1)
-                        .set(Stat.SP_DEFENSE, 2)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.SP_ATTACK, 2)
+                                               .set(Stat.SP_DEFENSE, 1)
+                                               .set(Stat.SPEED, 1)
+                                               .set(Stat.ACCURACY, -1));
+        defending.assertStages(new TestStages().set(Stat.ATTACK, 2)
+                                               .set(Stat.DEFENSE, -2)
+                                               .set(Stat.SP_ATTACK, 1)
+                                               .set(Stat.SP_DEFENSE, 2));
 
         battle.attackingFight(AttackNamesies.GUARD_SWAP);
-        new TestStages().set(Stat.SP_ATTACK, 2)
-                        .set(Stat.DEFENSE, -2)
-                        .set(Stat.SP_DEFENSE, 2)
-                        .set(Stat.SPEED, 1)
-                        .set(Stat.ACCURACY, -1)
-                        .test(attacking);
-        new TestStages().set(Stat.ATTACK, 2)
-                        .set(Stat.SP_ATTACK, 1)
-                        .set(Stat.SP_DEFENSE, 1)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.SP_ATTACK, 2)
+                                               .set(Stat.DEFENSE, -2)
+                                               .set(Stat.SP_DEFENSE, 2)
+                                               .set(Stat.SPEED, 1)
+                                               .set(Stat.ACCURACY, -1));
+        defending.assertStages(new TestStages().set(Stat.ATTACK, 2)
+                                               .set(Stat.SP_ATTACK, 1)
+                                               .set(Stat.SP_DEFENSE, 1));
 
         // Decrease defending speed by 2, then swap speeds
         battle.fight(AttackNamesies.STRING_SHOT, AttackNamesies.SPEED_SWAP);
-        new TestStages().set(Stat.SP_ATTACK, 2)
-                        .set(Stat.DEFENSE, -2)
-                        .set(Stat.SP_DEFENSE, 2)
-                        .set(Stat.SPEED, -2)
-                        .set(Stat.ACCURACY, -1)
-                        .test(attacking);
-        new TestStages().set(Stat.ATTACK, 2)
-                        .set(Stat.SP_ATTACK, 1)
-                        .set(Stat.SP_DEFENSE, 1)
-                        .set(Stat.SPEED, 1)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.SP_ATTACK, 2)
+                                               .set(Stat.DEFENSE, -2)
+                                               .set(Stat.SP_DEFENSE, 2)
+                                               .set(Stat.SPEED, -2)
+                                               .set(Stat.ACCURACY, -1));
+        defending.assertStages(new TestStages().set(Stat.ATTACK, 2)
+                                               .set(Stat.SP_ATTACK, 1)
+                                               .set(Stat.SP_DEFENSE, 1)
+                                               .set(Stat.SPEED, 1));
 
         // Just for the hell of it
         battle.defendingFight(AttackNamesies.HEART_SWAP);
-        new TestStages().set(Stat.ATTACK, 2)
-                        .set(Stat.SP_ATTACK, 1)
-                        .set(Stat.SP_DEFENSE, 1)
-                        .set(Stat.SPEED, 1)
-                        .test(attacking);
-        new TestStages().set(Stat.SP_ATTACK, 2)
-                        .set(Stat.DEFENSE, -2)
-                        .set(Stat.SP_DEFENSE, 2)
-                        .set(Stat.SPEED, -2)
-                        .set(Stat.ACCURACY, -1)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.ATTACK, 2)
+                                               .set(Stat.SP_ATTACK, 1)
+                                               .set(Stat.SP_DEFENSE, 1)
+                                               .set(Stat.SPEED, 1));
+        defending.assertStages(new TestStages().set(Stat.SP_ATTACK, 2)
+                                               .set(Stat.DEFENSE, -2)
+                                               .set(Stat.SP_DEFENSE, 2)
+                                               .set(Stat.SPEED, -2)
+                                               .set(Stat.ACCURACY, -1));
 
         battle.defendingFight(AttackNamesies.POWER_SWAP);
-        new TestStages().set(Stat.SP_ATTACK, 2)
-                        .set(Stat.SP_DEFENSE, 1)
-                        .set(Stat.SPEED, 1)
-                        .test(attacking);
-        new TestStages().set(Stat.ATTACK, 2)
-                        .set(Stat.SP_ATTACK, 1)
-                        .set(Stat.DEFENSE, -2)
-                        .set(Stat.SP_DEFENSE, 2)
-                        .set(Stat.SPEED, -2)
-                        .set(Stat.ACCURACY, -1)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.SP_ATTACK, 2)
+                                               .set(Stat.SP_DEFENSE, 1)
+                                               .set(Stat.SPEED, 1));
+        defending.assertStages(new TestStages().set(Stat.ATTACK, 2)
+                                               .set(Stat.SP_ATTACK, 1)
+                                               .set(Stat.DEFENSE, -2)
+                                               .set(Stat.SP_DEFENSE, 2)
+                                               .set(Stat.SPEED, -2)
+                                               .set(Stat.ACCURACY, -1));
     }
 
     @Test
@@ -1021,98 +999,84 @@ public class AttackTest extends BaseTest {
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.PROTEAN);
 
-        new TestStages().test(attacking);
-        new TestStages().test(defending);
+        attacking.assertNoStages();
+        defending.assertNoStages();
 
         battle.defendingFight(AttackNamesies.SHELL_SMASH);
         Assert.assertTrue(defending.isType(battle, Type.NORMAL));
-        new TestStages().test(attacking);
-        new TestStages().set(Stat.ATTACK, 2)
-                        .set(Stat.SP_ATTACK, 2)
-                        .set(Stat.SPEED, 2)
-                        .set(Stat.DEFENSE, -1)
-                        .set(Stat.SP_DEFENSE, -1)
-                        .test(defending);
+        attacking.assertNoStages();
+        defending.assertStages(new TestStages().set(Stat.ATTACK, 2)
+                                               .set(Stat.SP_ATTACK, 2)
+                                               .set(Stat.SPEED, 2)
+                                               .set(Stat.DEFENSE, -1)
+                                               .set(Stat.SP_DEFENSE, -1));
 
         // Should fail since target it normal-type -- make sure it didn't steal stats
         Assert.assertTrue(attacking.lastMoveSucceeded());
         battle.attackingFight(AttackNamesies.SPECTRAL_THIEF);
         Assert.assertFalse(attacking.lastMoveSucceeded());
-        new TestStages().test(attacking);
-        new TestStages().set(Stat.ATTACK, 2)
-                        .set(Stat.SP_ATTACK, 2)
-                        .set(Stat.SPEED, 2)
-                        .set(Stat.DEFENSE, -1)
-                        .set(Stat.SP_DEFENSE, -1)
-                        .test(defending);
+        attacking.assertNoStages();
+        defending.assertStages(new TestStages().set(Stat.ATTACK, 2)
+                                               .set(Stat.SP_ATTACK, 2)
+                                               .set(Stat.SPEED, 2)
+                                               .set(Stat.DEFENSE, -1)
+                                               .set(Stat.SP_DEFENSE, -1));
 
         defending.withAbility(AbilityNamesies.STURDY);
         battle.fight(AttackNamesies.SOAK, AttackNamesies.GROWL);
         Assert.assertFalse(defending.isType(battle, Type.NORMAL));
-        new TestStages().set(Stat.ATTACK, -1)
-                        .test(attacking);
-        new TestStages().set(Stat.ATTACK, 2)
-                        .set(Stat.SP_ATTACK, 2)
-                        .set(Stat.SPEED, 2)
-                        .set(Stat.DEFENSE, -1)
-                        .set(Stat.SP_DEFENSE, -1)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.ATTACK, -1));
+        defending.assertStages(new TestStages().set(Stat.ATTACK, 2)
+                                               .set(Stat.SP_ATTACK, 2)
+                                               .set(Stat.SPEED, 2)
+                                               .set(Stat.DEFENSE, -1)
+                                               .set(Stat.SP_DEFENSE, -1));
 
         // Steal stat gains!
         battle.attackingFight(AttackNamesies.SPECTRAL_THIEF);
-        new TestStages().set(Stat.ATTACK, 1)
-                        .set(Stat.SP_ATTACK, 2)
-                        .set(Stat.SPEED, 2)
-                        .test(attacking);
-        new TestStages().set(Stat.DEFENSE, -1)
-                        .set(Stat.SP_DEFENSE, -1)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.ATTACK, 1)
+                                               .set(Stat.SP_ATTACK, 2)
+                                               .set(Stat.SPEED, 2));
+        defending.assertStages(new TestStages().set(Stat.DEFENSE, -1)
+                                               .set(Stat.SP_DEFENSE, -1));
 
         battle.defendingFight(AttackNamesies.SHELL_SMASH);
-        new TestStages().set(Stat.ATTACK, 1)
-                        .set(Stat.SP_ATTACK, 2)
-                        .set(Stat.SPEED, 2)
-                        .test(attacking);
-        new TestStages().set(Stat.ATTACK, 2)
-                        .set(Stat.SP_ATTACK, 2)
-                        .set(Stat.SPEED, 2)
-                        .set(Stat.DEFENSE, -2)
-                        .set(Stat.SP_DEFENSE, -2)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.ATTACK, 1)
+                                               .set(Stat.SP_ATTACK, 2)
+                                               .set(Stat.SPEED, 2));
+        defending.assertStages(new TestStages().set(Stat.ATTACK, 2)
+                                               .set(Stat.SP_ATTACK, 2)
+                                               .set(Stat.SPEED, 2)
+                                               .set(Stat.DEFENSE, -2)
+                                               .set(Stat.SP_DEFENSE, -2));
 
         battle.emptyHeal();
 
         // Contrary will give stat decreases instead of gains
         attacking.withAbility(AbilityNamesies.CONTRARY);
         battle.attackingFight(AttackNamesies.SPECTRAL_THIEF);
-        new TestStages().set(Stat.ATTACK, -1)
-                        .test(attacking);
-        new TestStages().set(Stat.DEFENSE, -2)
-                        .set(Stat.SP_DEFENSE, -2)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.ATTACK, -1));
+        defending.assertStages(new TestStages().set(Stat.DEFENSE, -2)
+                                               .set(Stat.SP_DEFENSE, -2));
 
         battle.defendingFight(AttackNamesies.SHELL_SMASH);
-        new TestStages().set(Stat.ATTACK, -1)
-                        .test(attacking);
-        new TestStages().set(Stat.ATTACK, 2)
-                        .set(Stat.SP_ATTACK, 2)
-                        .set(Stat.SPEED, 2)
-                        .set(Stat.DEFENSE, -3)
-                        .set(Stat.SP_DEFENSE, -3)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.ATTACK, -1));
+        defending.assertStages(new TestStages().set(Stat.ATTACK, 2)
+                                               .set(Stat.SP_ATTACK, 2)
+                                               .set(Stat.SPEED, 2)
+                                               .set(Stat.DEFENSE, -3)
+                                               .set(Stat.SP_DEFENSE, -3));
 
         battle.emptyHeal();
 
         // Simple will double the gains!
         attacking.withAbility(AbilityNamesies.SIMPLE);
         battle.attackingFight(AttackNamesies.SPECTRAL_THIEF);
-        new TestStages().set(Stat.ATTACK, 3)
-                        .set(Stat.SP_ATTACK, 4)
-                        .set(Stat.SPEED, 4)
-                        .test(attacking);
-        new TestStages().set(Stat.DEFENSE, -3)
-                        .set(Stat.SP_DEFENSE, -3)
-                        .test(defending);
+        attacking.assertStages(new TestStages().set(Stat.ATTACK, 3)
+                                               .set(Stat.SP_ATTACK, 4)
+                                               .set(Stat.SPEED, 4));
+        defending.assertStages(new TestStages().set(Stat.DEFENSE, -3)
+                                               .set(Stat.SP_DEFENSE, -3));
 
         // TODO: Test Substitute
     }
@@ -1127,14 +1091,14 @@ public class AttackTest extends BaseTest {
 
         battle.emptyHeal();
         battle.attackingFight(AttackNamesies.MINIMIZE);
-        new TestStages().set(Stat.EVASION, 2).test(attacking);
+        attacking.assertStages(new TestStages().set(Stat.EVASION, 2));
 
         battle.setExpectedDamageModifier(3.0);
         battle.attackingFight(AttackNamesies.STORED_POWER);
 
         battle.emptyHeal();
         battle.defendingFight(AttackNamesies.SCREECH);
-        new TestStages().set(Stat.EVASION, 2).set(Stat.DEFENSE, -2).test(attacking);
+        attacking.assertStages(new TestStages().set(Stat.EVASION, 2).set(Stat.DEFENSE, -2));
 
         // Stored power ignores negative stat gains
         battle.setExpectedDamageModifier(3.0);
@@ -1425,7 +1389,7 @@ public class AttackTest extends BaseTest {
             Assert.assertFalse(defending.lastMoveSucceeded());
             attacking.assertFullHealth();
             attacking.assertNoStatus();
-            new TestStages().test(attacking);
+            attacking.assertNoStages();
         }
 
         Assert.assertEquals(explodes, defending.isAttackType(Type.FIRE));
@@ -1447,37 +1411,38 @@ public class AttackTest extends BaseTest {
         battle.attackingFight(AttackNamesies.VENOM_DRENCH);
         Assert.assertFalse(attacking.lastMoveSucceeded());
         defending.assertNoStatus();
-        new TestStages().test(defending);
+        defending.assertNoStages();
 
         // Add regular poison
         battle.attackingFight(AttackNamesies.POISON_POWDER);
         Assert.assertTrue(attacking.lastMoveSucceeded());
         defending.assertRegularPoison();
-        new TestStages().test(defending);
+        defending.assertNoStages();
 
         // Venon Drench is a success
         battle.attackingFight(AttackNamesies.VENOM_DRENCH);
         Assert.assertTrue(attacking.lastMoveSucceeded());
         defending.assertRegularPoison();
-        new TestStages().set(Stat.ATTACK, -1).set(Stat.SP_ATTACK, -1).set(Stat.SPEED, -1).test(defending);
+        defending.assertStages(new TestStages().set(Stat.ATTACK, -1).set(Stat.SP_ATTACK, -1).set(Stat.SPEED, -1));
 
         // Remove stat changes and status condition
         battle.fight(AttackNamesies.HAZE, AttackNamesies.REFRESH);
         Assert.assertTrue(attacking.lastMoveSucceeded());
         Assert.assertTrue(defending.lastMoveSucceeded());
         defending.assertNoStatus();
-        new TestStages().test(defending);
+        defending.assertNoStages();
 
         // Add bad poison
         battle.attackingFight(AttackNamesies.TOXIC);
         Assert.assertTrue(attacking.lastMoveSucceeded());
         defending.assertBadPoison();
-        new TestStages().test(defending);
+        defending.assertNoStages();
 
         // Make sure it works on bad poison as well
         battle.attackingFight(AttackNamesies.VENOM_DRENCH);
         Assert.assertTrue(attacking.lastMoveSucceeded());
         defending.assertBadPoison();
-        new TestStages().set(Stat.ATTACK, -1).set(Stat.SP_ATTACK, -1).set(Stat.SPEED, -1).test(defending);
+        defending.assertStages(new TestStages().set(Stat.ATTACK, -1).set(Stat.SP_ATTACK, -1).set(Stat.SPEED, -1));
     }
 }
+

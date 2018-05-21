@@ -7,12 +7,14 @@ import battle.attack.Move;
 import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
+import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
 import pokemon.active.MoveList;
 import pokemon.species.PokemonNamesies;
 import test.battle.TestBattle;
+import test.battle.TestStages;
 import util.string.StringUtils;
 
 import java.util.Arrays;
@@ -120,6 +122,16 @@ public class TestPokemon extends ActivePokemon {
     public void assertBadPoison() {
         Assert.assertTrue(this.hasStatus(StatusNamesies.POISONED));
         Assert.assertTrue(this.hasStatus(StatusNamesies.BADLY_POISONED));
+    }
+
+    public void assertNoStages() {
+        this.assertStages(new TestStages());
+    }
+
+    public void assertStages(TestStages testStages) {
+        for (Stat stat : Stat.BATTLE_STATS) {
+            Assert.assertEquals(stat.getName(), testStages.getStage(stat), this.getStage(stat));
+        }
     }
 
     public static TestPokemon newPlayerPokemon(final PokemonNamesies pokemon) {

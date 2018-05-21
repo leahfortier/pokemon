@@ -223,7 +223,7 @@ public class ItemTest extends BaseTest {
         Assert.assertEquals(success, defending.getActualHeldItem().namesies() == ItemNamesies.NO_ITEM);
 
         // If successful, should increase Sp. Attack by one
-        new TestStages().set(Stat.SP_ATTACK, success ? 1 : 0).test(defending);
+        defending.assertStages(new TestStages().set(Stat.SP_ATTACK, success ? 1 : 0));
     }
 
     @Test
@@ -231,8 +231,8 @@ public class ItemTest extends BaseTest {
         PokemonManipulator notFullHealth = (battle, attacking, defending) -> {
             attacking.assertFullHealth();
             defending.assertNotFullHealth();
-            new TestStages().test(attacking);
-            new TestStages().test(defending);
+            attacking.assertNoStages();
+            defending.assertNoStages();
 
             // Additionally fully heals the defending so this can be used in subsequent turns and still be meaningful
             defending.fullyHeal();
@@ -245,8 +245,8 @@ public class ItemTest extends BaseTest {
             attacking.assertFullHealth();
             defending.assertFullHealth();
 
-            new TestStages().test(attacking);
-            new TestStages().test(defending);
+            attacking.assertNoStages();
+            defending.assertNoStages();
         };
 
         // Power Herb is consumed and damage is dealt first turn, charges on the second
@@ -257,20 +257,18 @@ public class ItemTest extends BaseTest {
         powerHerbTest(AttackNamesies.SKULL_BASH, true, notFullHealth, (battle, attacking, defending) -> {
             MultiTurnMove multiTurnMove = (MultiTurnMove)attacking.getAttack();
             Assert.assertTrue(multiTurnMove.isCharging());
-            new TestStages().set(Stat.DEFENSE, 1)
-                            .test(attacking);
-            new TestStages().test(defending);
+            attacking.assertStages(new TestStages().set(Stat.DEFENSE, 1));
+            defending.assertNoStages();
         });
 
         // Power Herb is consumed and stats are raised
         powerHerbTest(AttackNamesies.GEOMANCY, true, (battle, attacking, defending) -> {
             attacking.assertFullHealth();
             defending.assertFullHealth();
-            new TestStages().set(Stat.SP_ATTACK, 2)
-                            .set(Stat.SP_DEFENSE, 2)
-                            .set(Stat.SPEED, 2)
-                            .test(attacking);
-            new TestStages().test(defending);
+            attacking.assertStages(new TestStages().set(Stat.SP_ATTACK, 2)
+                                                   .set(Stat.SP_DEFENSE, 2)
+                                                   .set(Stat.SPEED, 2));
+            defending.assertNoStages();
 
             // Reset stages so next check can be more meaningful
             attacking.getStages().reset();
@@ -429,3 +427,4 @@ public class ItemTest extends BaseTest {
         Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.SITRUS_BERRY));
     }
 }
+

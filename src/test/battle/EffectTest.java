@@ -423,8 +423,8 @@ public class EffectTest extends BaseTest {
 
         substituteTest(
                 new TestInfo().defendingFight(AttackNamesies.TAIL_WHIP),
-                (battle, attacking, defending) -> new TestStages().set(Stat.DEFENSE, -1).test(attacking),
-                (battle, attacking, defending) -> new TestStages().test(attacking)
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(Stat.DEFENSE, -1)),
+                (battle, attacking, defending) -> attacking.assertNoStages()
         );
 
         substituteTest(
@@ -442,7 +442,7 @@ public class EffectTest extends BaseTest {
         // Unless it is sound-based
         substituteTest(
                 new TestInfo().defendingFight(AttackNamesies.GROWL),
-                (battle, attacking, defending) -> new TestStages().set(Stat.ATTACK, -1).test(attacking)
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(Stat.ATTACK, -1))
         );
 
         // Should still be able to give self-target effects
@@ -532,8 +532,8 @@ public class EffectTest extends BaseTest {
                         .with((battle, attacking, defending) -> Assert.assertTrue(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.REFLECT)))
                         .defendingFight(AttackNamesies.DEFOG)
                         .with((battle, attacking, defending) -> Assert.assertFalse(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.REFLECT))),
-                (battle, attacking, defending) -> new TestStages().set(Stat.EVASION, -1).test(attacking),
-                (battle, attacking, defending) -> new TestStages().test(attacking)
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(Stat.EVASION, -1)),
+                (battle, attacking, defending) -> attacking.assertNoStages()
         );
 
         // Inferno should not burn if it doesn't break the substitute
@@ -576,11 +576,11 @@ public class EffectTest extends BaseTest {
                         .attackingFight(AttackNamesies.ROAR),
                 (battle, attacking, defending) -> {
                     Assert.assertTrue(defending.isPokemon(PokemonNamesies.SQUIRTLE));
-                    new TestStages().set(Stat.ATTACK, -1).test(attacking);
+                    attacking.assertStages(new TestStages().set(Stat.ATTACK, -1));
                 },
                 (battle, attacking, defending) -> {
                     Assert.assertTrue(defending.isPokemon(PokemonNamesies.SQUIRTLE));
-                    new TestStages().test(attacking);
+                    attacking.assertNoStages();
                 }
         );
 
@@ -803,3 +803,4 @@ public class EffectTest extends BaseTest {
         defending.assertHealthRatio(13/16.0, 5);
     }
 }
+
