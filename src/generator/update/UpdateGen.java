@@ -73,32 +73,8 @@ public class UpdateGen {
 //        translateAlBhed();
 //        addCondition();
 //        outputShowdownImagesFile();
-        testBulbapediaMoveTypeList();
+//        testBulbapediaMoveTypeList();
 //        printStatOrder();
-//        removeTrailingJsonCommas();
-    }
-
-    private static void removeTrailingJsonCommas() {
-        String fileName = Folder.SCRIPTS + "ps-moves.txt";
-
-        Scanner in = FileIO.openFile(fileName);
-        StringAppender out = new StringAppender();
-
-        String prevLine = in.nextLine();
-        while (in.hasNext()) {
-            String line = in.nextLine();
-            if (line.trim().startsWith("}")) {
-                prevLine = StringUtils.trimSuffix(prevLine, ",");
-            }
-
-            out.appendLine(prevLine);
-            prevLine = line;
-        }
-
-        out.appendLine(prevLine);
-
-        in.close();
-        FileIO.overwriteFile(fileName, out.toString());
     }
 
     // Basically I'm sick of writing this -- just prints Pokemon ordered by base stat
