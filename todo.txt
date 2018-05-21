@@ -63,37 +63,51 @@ Names that go out of bounds:
     BallItem text against a trainer goes out of bounds
     Synchronize ability text is wayyyy out of bounds on party view
 
-Missing Pokemon Sprites:
-	755 Morelull
-	758 Salazzle
-	765 Oranguru
-	773 Silvally
-	795 Pheromosa
-	796 Xurkitree
-	798 Kartana
+Sprites Issues:
+    Missing Shiny Sprites:
+    	755 Morelull
+        766 Passimian
+    	773 Silvally
+    	795 Pheromosa
+    	796 Xurkitree
+        797 Celesteela
+    	798 Kartana
+        799 Guzzlord
+        814 Snowslash
+        816 Kyukon
+    Missing Back Sprites:
+        795 Pheromosa
+        796 Xurkitree
+        800 Necrozma
+    Inverted Back Sprites:
+        805 Stakataka
+        806 Blacephalon
+        807 Zeraora
 
-Move descriptions that change manually:
-    Sky Drop
-    Flower Shield
-    Rototiller
-    Magnetic Flux
-    Gear Up
-    Pollen Puff
-    Aromatic Mist
-Ability descriptions that change manually:
-    Healer
-    Flower Veil
-Item descriptions that change manually:
-    Fishing Rod
-    Deep Sea Scale
-    Safari Ball (if it references some rando place)
-    Razz Berry
-    All the EV Decreasing Berries (like Pomeg Berry)
-
-	Options menu:
-		- Sound
-		- Text Speed
-		- Animation Speed
+Descriptions that change manually:
+    Moves:
+        Sky Drop
+        Flower Shield
+        Rototiller
+        Magnetic Flux
+        Gear Up
+        Pollen Puff
+        Aromatic Mist
+    Abilities:
+        Healer
+        Flower Veil
+    Items:
+        Fishing Rod
+        Deep Sea Scale
+        Safari Ball (if it references some rando place)
+        Razz Berry
+        All the EV Decreasing Berries (like Pomeg Berry)
+        
+Other random things:
+    Options menu:
+        - Sound
+        - Text Speed
+        - Animation Speed
 	generalize catch animation again
 	invoke methods that need to call another method immediately after (boolean and void generally or boolean and String just for message)
 	connect interface gen with override input
@@ -181,8 +195,6 @@ Item descriptions that change manually:
     remove effect inside subside -- then we can use it in more places
     substitute almost certainly doesn't work with form change abilities for images at least
     test life orb (with multi-strike among other things)
-    separate sap health move class so leech seed isn't the same thing
-    assert status method for test pokemon
     fairy lock looks like it lasts indefinitely? but it should only be one turn?
     look at fling message update for white herb -- I don't think it will update the stats
     make Marcos fix the substitute failure messaging problems I don't wanna do it
@@ -191,4 +203,4 @@ Item descriptions that change manually:
     does levitating check take semiinvulnerable into account? like will you heal from grassy terrain if you're flying?
     test moongeist beam and shadow shield (combos like that)
     apparently soak fails against arceus (I'm sure it's that multitype prevents having its type changed)
-    write test for venom drench and make sure it works on both poisoned and badly poisoned
+    

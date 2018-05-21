@@ -77,78 +77,77 @@ public class StatusTest extends BaseTest {
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
-        Assert.assertFalse(defending.hasStatus());
+        defending.assertNoStatus();
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+        defending.assertBadPoison();
 
         battle.defendingFight(AttackNamesies.PURIFY);
-        Assert.assertFalse(defending.hasStatus());
+        defending.assertNoStatus();
 
         // Cannot poison a pokemon with immunity
         defending.withAbility(AbilityNamesies.IMMUNITY);
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertFalse(defending.hasStatus());
+        defending.assertNoStatus();
 
         // Unless you have Mold Breaker
         attacking.withAbility(AbilityNamesies.MOLD_BREAKER);
         attacking.apply(true, AttackNamesies.TOXIC, battle);
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
+        defending.assertBadPoison();
 
         battle.defendingFight(AttackNamesies.REFRESH);
-        Assert.assertFalse(defending.hasStatus());
+        defending.assertNoStatus();
 
         // When executing a full turn, Toxic should be successful and poison the target
         // However, the end of the turn should restore its condition
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertFalse(defending.hasStatus());
+        defending.assertNoStatus();
 
         // Suppressed ability -- should poison regardless of mold breaker
         battle.attackingFight(AttackNamesies.GASTRO_ACID);
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
+        defending.assertBadPoison();
 
         battle.emptyHeal();
-        Assert.assertFalse(defending.hasStatus());
+        defending.assertNoStatus();
 
         // Poison-type Pokemon cannot be poisoned
         battle.defendingFight(AttackNamesies.REFLECT_TYPE);
         Assert.assertTrue(defending.isType(battle, Type.POISON));
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertFalse(defending.hasStatus());
+        defending.assertNoStatus();
 
         // Unless you have Corrosion
         attacking.withAbility(AbilityNamesies.CORROSION);
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
+        defending.assertBadPoison();
 
         // Type should not heal at end of turn
         battle.attackingFight(AttackNamesies.SPLASH);
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
+        defending.assertBadPoison();
 
         battle.emptyHeal();
-        Assert.assertFalse(defending.hasStatus());
+        defending.assertNoStatus();
 
         // Remove Poison-typing
         battle.attackingFight(AttackNamesies.SOAK);
         Assert.assertFalse(defending.isType(battle, Type.POISON));
-        Assert.assertFalse(defending.hasStatus());
+        defending.assertNoStatus();
 
         // Safeguard has nothing to do with ability
         battle.defendingFight(AttackNamesies.SAFEGUARD);
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertFalse(defending.hasStatus());
+        defending.assertNoStatus();
         Assert.assertTrue(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.SAFEGUARD));
 
         attacking.withAbility(AbilityNamesies.MOLD_BREAKER);
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertFalse(defending.hasStatus());
+        defending.assertNoStatus();
         Assert.assertTrue(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.SAFEGUARD));
 
         // Unless that ability is Inflitrator
         attacking.withAbility(AbilityNamesies.INFILTRATOR);
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+        defending.assertBadPoison();
         Assert.assertTrue(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.SAFEGUARD));
     }
 
@@ -161,14 +160,14 @@ public class StatusTest extends BaseTest {
         battle.attackingFight(AttackNamesies.TOXIC);
 
         // After 1 turn -- 15/16 health ratio
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+        defending.assertBadPoison();
         attacking.assertFullHealth();
         defending.assertHealthRatio(15/16f);
 
         // After 2 turns -- 13/16 health ratio
         int prevHp = defending.getHP();
         battle.splashFight();
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+        defending.assertBadPoison();
         attacking.assertFullHealth();
         defending.assertHealthRatioDiff(prevHp, 2/16f);
         defending.assertHealthRatio(13/16f, 1);
@@ -176,7 +175,7 @@ public class StatusTest extends BaseTest {
         // After 3 turns -- 10/16 health ratio
         prevHp = defending.getHP();
         battle.splashFight();
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+        defending.assertBadPoison();
         attacking.assertFullHealth();
         defending.assertHealthRatioDiff(prevHp, 3/16f);
         defending.assertHealthRatio(10/16f, 2);
@@ -184,7 +183,7 @@ public class StatusTest extends BaseTest {
         // After 4 turns -- 6/16 health ratio
         prevHp = defending.getHP();
         battle.splashFight();
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+        defending.assertBadPoison();
         attacking.assertFullHealth();
         defending.assertHealthRatioDiff(prevHp, 4/16f);
         defending.assertHealthRatio(6/16f, 3);
@@ -192,7 +191,7 @@ public class StatusTest extends BaseTest {
         // After 5 turns -- 1/16 health ratio
         prevHp = defending.getHP();
         battle.splashFight();
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+        defending.assertBadPoison();
         attacking.assertFullHealth();
         defending.assertHealthRatioDiff(prevHp, 5/16f);
         defending.assertHealthRatio(1/16f, 4);
@@ -215,35 +214,32 @@ public class StatusTest extends BaseTest {
 
         // Basic Burn Heal, make sure Antidote fails for burns
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED));
+        attacking.assertStatus(StatusNamesies.BURNED);
         PokemonManipulator.useItem(ItemNamesies.ANTIDOTE, true, false).manipulate(battle);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED));
+        attacking.assertStatus(StatusNamesies.BURNED);
         PokemonManipulator.useItem(ItemNamesies.BURN_HEAL).manipulate(battle);
-        Assert.assertFalse(attacking.hasStatus());
+        attacking.assertNoStatus();
 
         // Make sure Antidote works for both bad poison and regular poison
         battle.defendingFight(AttackNamesies.TOXIC);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
+        attacking.assertBadPoison();
 
         // Make sure burn heal doesn't heal poison
         PokemonManipulator.useItem(ItemNamesies.BURN_HEAL, true, false).manipulate(battle);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
+        attacking.assertBadPoison();
 
         PokemonManipulator.useItem(ItemNamesies.ANTIDOTE).manipulate(battle);
-        Assert.assertFalse(attacking.hasStatus());
+        attacking.assertNoStatus();
 
         battle.defendingFight(AttackNamesies.POISON_POWDER);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
-        Assert.assertFalse(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
+        attacking.assertRegularPoison();
 
         PokemonManipulator.useItem(ItemNamesies.ANTIDOTE).manipulate(battle);
-        Assert.assertFalse(attacking.hasStatus());
+        attacking.assertNoStatus();
 
         // Full Heal can't heal a status you don't have
         PokemonManipulator.useItem(ItemNamesies.FULL_HEAL, true, false).manipulate(battle);
-        Assert.assertFalse(attacking.hasStatus());
+        attacking.assertNoStatus();
 
         battle.attackingFight(AttackNamesies.SHEER_COLD);
         Assert.assertTrue(defending1.isActuallyDead());
@@ -257,7 +253,7 @@ public class StatusTest extends BaseTest {
         // But revive does!
         PokemonManipulator.useItem(ItemNamesies.REVIVE, false, true).manipulate(battle, defending1, attacking);
         Assert.assertFalse(defending1.isActuallyDead());
-        Assert.assertFalse(defending1.hasStatus());
+        defending1.assertNoStatus();
         defending1.assertHealthRatio(.5, 1);
         Assert.assertTrue(battle.getDefending() == defending2);
     }

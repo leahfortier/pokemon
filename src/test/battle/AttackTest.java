@@ -436,42 +436,38 @@ public class AttackTest extends BaseTest {
 
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         battle.attackingFight(AttackNamesies.WILL_O_WISP);
-        Assert.assertFalse(attacking.hasStatus());
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.BURNED));
+        attacking.assertNoStatus();
+        defending.assertStatus(StatusNamesies.BURNED);
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED));
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertStatus(StatusNamesies.BURNED);
+        defending.assertNoStatus();
 
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+        defending.assertBadPoison();
 
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         defending.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED));
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
+        attacking.assertStatus(StatusNamesies.BURNED);
+        defending.assertBadPoison();
 
         battle.attackingFight(AttackNamesies.REFRESH);
-        Assert.assertFalse(attacking.hasStatus());
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+        attacking.assertNoStatus();
+        defending.assertBadPoison();
 
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertBadPoison();
+        defending.assertNoStatus();
 
         attacking.withAbility(AbilityNamesies.PROTEAN);
         Assert.assertTrue(attacking.isType(battle, Type.WATER));
         battle.attackingFight(AttackNamesies.CLEAR_SMOG);
         Assert.assertTrue(attacking.isType(battle, Type.POISON));
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
+        attacking.assertBadPoison();
         battle.attackingFight(AttackNamesies.PSYCHO_SHIFT);
-        Assert.assertFalse(attacking.hasStatus());
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+        attacking.assertNoStatus();
+        defending.assertBadPoison();
         Assert.assertTrue(attacking.isType(battle, Type.PSYCHIC));
         battle.attackingFight(AttackNamesies.ACID_ARMOR);
         Assert.assertTrue(attacking.isType(battle, Type.POISON));
@@ -481,32 +477,32 @@ public class AttackTest extends BaseTest {
         battle.attackingFight(AttackNamesies.DRAGON_DANCE);
         Assert.assertTrue(attacking.getType(battle).toString(), attacking.isType(battle, Type.DRAGON));
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
+        attacking.assertBadPoison();
 
         defending.withAbility(AbilityNamesies.IMMUNITY);
         defending.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertBadPoison();
+        defending.assertNoStatus();
 
         battle.emptyHeal();
         attacking.withMoves(AttackNamesies.PSYCHO_SHIFT);
-        Assert.assertFalse(attacking.hasStatus());
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertNoStatus();
+        defending.assertNoStatus();
         battle.defendingFight(AttackNamesies.SPORE);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.ASLEEP));
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertStatus(StatusNamesies.ASLEEP);
+        defending.assertNoStatus();
         battle.attackingFight(AttackNamesies.SLEEP_TALK);
-        Assert.assertFalse(attacking.hasStatus());
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.ASLEEP));
+        attacking.assertNoStatus();
+        defending.assertStatus(StatusNamesies.ASLEEP);
 
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.ASLEEP));
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertStatus(StatusNamesies.ASLEEP);
+        defending.assertNoStatus();
 
         defending.withAbility(AbilityNamesies.INSOMNIA);
         battle.attackingFight(AttackNamesies.SLEEP_TALK);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.ASLEEP));
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertStatus(StatusNamesies.ASLEEP);
+        defending.assertNoStatus();
     }
 
     @Test
@@ -553,14 +549,14 @@ public class AttackTest extends BaseTest {
         attacking.giveItem(ItemNamesies.RAWST_BERRY);
         battle.attackingFight(AttackNamesies.WILL_O_WISP);
         Assert.assertTrue(attacking.isHoldingItem(battle));
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.BURNED));
+        defending.assertStatus(StatusNamesies.BURNED);
 
         // Defending Pokemon will use Bug Bite and eat the Rawst Berry, curing its burn
         // Attacking will have its item consumed, but defending is the one who ate the berry
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.BUG_BITE);
         Assert.assertFalse(attacking.isHoldingItem(battle));
         Assert.assertFalse(defending.isHoldingItem(battle));
-        Assert.assertFalse(defending.hasStatus());
+        defending.assertNoStatus();
         Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
         Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
         Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
@@ -576,8 +572,8 @@ public class AttackTest extends BaseTest {
         battle.attackingFight(AttackNamesies.RECYCLE);
         Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.RAWST_BERRY));
         Assert.assertFalse(defending.isHoldingItem(battle));
-        Assert.assertFalse(attacking.hasStatus());
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertNoStatus();
+        defending.assertNoStatus();
         Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
         Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
         Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
@@ -587,23 +583,23 @@ public class AttackTest extends BaseTest {
         battle.defendingFight(AttackNamesies.POISON_POWDER);
         Assert.assertTrue(attacking.isHoldingItem(battle));
         Assert.assertFalse(defending.isHoldingItem(battle));
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertRegularPoison();
+        defending.assertNoStatus();
 
         // Transfer Poison to the defending
         battle.attackingFight(AttackNamesies.PSYCHO_SHIFT);
         Assert.assertTrue(attacking.isHoldingItem(battle));
         Assert.assertFalse(defending.isHoldingItem(battle));
-        Assert.assertFalse(attacking.hasStatus());
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED));
+        attacking.assertNoStatus();
+        defending.assertRegularPoison();
 
         // Burn the attacker -- will consume the Rawst Berry
         // Note: I am writing these comments much later than the code was written, I have no idea what poison has to do with anything
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
         Assert.assertFalse(attacking.isHoldingItem(battle));
         Assert.assertFalse(defending.isHoldingItem(battle));
-        Assert.assertFalse(attacking.hasStatus());
-        Assert.assertTrue(defending.hasStatus());
+        attacking.assertNoStatus();
+        defending.assertRegularPoison();
         Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
         Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
         Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
@@ -811,28 +807,28 @@ public class AttackTest extends BaseTest {
         battle.defendingFight(AttackNamesies.TOXIC);
 
         attacking.assertNotFullHealth();
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
+        attacking.assertBadPoison();
 
         battle.attackingFight(AttackNamesies.REST);
         attacking.assertFullHealth();
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.ASLEEP));
+        attacking.assertStatus(StatusNamesies.ASLEEP);
 
         // Resting Pokemon should be asleep for exactly two turns -- False Swipe should fail here and the next turn
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);
         defending.assertFullHealth();
         attacking.assertFullHealth();
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.ASLEEP));
+        attacking.assertStatus(StatusNamesies.ASLEEP);
 
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);
         defending.assertFullHealth();
         attacking.assertFullHealth();
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.ASLEEP));
+        attacking.assertStatus(StatusNamesies.ASLEEP);
 
         // Should wake up on this turn
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);
         defending.assertNotFullHealth();
         attacking.assertFullHealth();
-        Assert.assertFalse(attacking.hasStatus());
+        attacking.assertNoStatus();
     }
 
     @Test
@@ -1428,7 +1424,7 @@ public class AttackTest extends BaseTest {
         if (explodes) {
             Assert.assertFalse(defending.lastMoveSucceeded());
             attacking.assertFullHealth();
-            Assert.assertFalse(attacking.hasStatus());
+            attacking.assertNoStatus();
             new TestStages().test(attacking);
         }
 
@@ -1439,5 +1435,49 @@ public class AttackTest extends BaseTest {
         Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.POWDER));
 
         afterCheck.manipulate(battle);
+    }
+
+    @Test
+    public void venomDrenchTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Fails if the target isn't poisoned
+        battle.attackingFight(AttackNamesies.VENOM_DRENCH);
+        Assert.assertFalse(attacking.lastMoveSucceeded());
+        defending.assertNoStatus();
+        new TestStages().test(defending);
+
+        // Add regular poison
+        battle.attackingFight(AttackNamesies.POISON_POWDER);
+        Assert.assertTrue(attacking.lastMoveSucceeded());
+        defending.assertRegularPoison();
+        new TestStages().test(defending);
+
+        // Venon Drench is a success
+        battle.attackingFight(AttackNamesies.VENOM_DRENCH);
+        Assert.assertTrue(attacking.lastMoveSucceeded());
+        defending.assertRegularPoison();
+        new TestStages().set(Stat.ATTACK, -1).set(Stat.SP_ATTACK, -1).set(Stat.SPEED, -1).test(defending);
+
+        // Remove stat changes and status condition
+        battle.fight(AttackNamesies.HAZE, AttackNamesies.REFRESH);
+        Assert.assertTrue(attacking.lastMoveSucceeded());
+        Assert.assertTrue(defending.lastMoveSucceeded());
+        defending.assertNoStatus();
+        new TestStages().test(defending);
+
+        // Add bad poison
+        battle.attackingFight(AttackNamesies.TOXIC);
+        Assert.assertTrue(attacking.lastMoveSucceeded());
+        defending.assertBadPoison();
+        new TestStages().test(defending);
+
+        // Make sure it works on bad poison as well
+        battle.attackingFight(AttackNamesies.VENOM_DRENCH);
+        Assert.assertTrue(attacking.lastMoveSucceeded());
+        defending.assertBadPoison();
+        new TestStages().set(Stat.ATTACK, -1).set(Stat.SP_ATTACK, -1).set(Stat.SPEED, -1).test(defending);
     }
 }

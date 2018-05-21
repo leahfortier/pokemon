@@ -93,10 +93,10 @@ public class EffectTest extends BaseTest {
 
         // Baneful Bunker poisons when contact is made
         checkProtect(true, AttackNamesies.BANEFUL_BUNKER, AttackNamesies.TACKLE,
-                     (battle, attacking, defending) -> Assert.assertTrue(defending.hasStatus(StatusNamesies.POISONED))
+                     (battle, attacking, defending) -> defending.assertRegularPoison()
         );
         checkProtect(true, AttackNamesies.BANEFUL_BUNKER, AttackNamesies.WATER_GUN,
-                     (battle, attacking, defending) -> Assert.assertFalse(defending.hasStatus(StatusNamesies.POISONED))
+                     (battle, attacking, defending) -> defending.assertNoStatus()
         );
 
         // King's Shield lowers attack when contact was made
@@ -150,7 +150,7 @@ public class EffectTest extends BaseTest {
             battle.fight(protectMove, attack);
 
             attacking.assertFullHealth();
-            Assert.assertFalse(attacking.hasStatus());
+            attacking.assertNoStatus();
             Assert.assertTrue(attacking.getEffects().asList().isEmpty());
             for (Stat stat : Stat.BATTLE_STATS) {
                 Assert.assertEquals(0, attacking.getStage(stat));
@@ -417,8 +417,8 @@ public class EffectTest extends BaseTest {
         // Status moves won't work against the substitute
         substituteTest(
                 new TestInfo().defendingFight(AttackNamesies.THUNDER_WAVE),
-                (battle, attacking, defending) -> Assert.assertTrue(attacking.hasStatus()),
-                (battle, attacking, defending) -> Assert.assertFalse(attacking.hasStatus())
+                (battle, attacking, defending) -> attacking.assertStatus(StatusNamesies.PARALYZED),
+                (battle, attacking, defending) -> attacking.assertNoStatus()
         );
 
         substituteTest(
@@ -503,13 +503,13 @@ public class EffectTest extends BaseTest {
                         .fight(AttackNamesies.WILL_O_WISP, AttackNamesies.PLUCK),
                 (battle, attacking, defending) -> {
                     Assert.assertFalse(attacking.isHoldingItem(battle));
-                    Assert.assertFalse(defending.hasStatus());
+                    defending.assertNoStatus();
                     Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
                     Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
                 },
                 (battle, attacking, defending) -> {
                     Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.RAWST_BERRY));
-                    Assert.assertTrue(defending.hasStatus(StatusNamesies.BURNED));
+                    defending.assertStatus(StatusNamesies.BURNED);
                     Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
                     Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
                 }
@@ -521,8 +521,8 @@ public class EffectTest extends BaseTest {
                         .defending(ItemNamesies.FLAME_ORB)
                         .defendingFight(AttackNamesies.FLING)
                         .with((battle, attacking, defending) -> Assert.assertFalse(defending.isHoldingItem(battle))),
-                (battle, attacking, defending) -> Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED)),
-                (battle, attacking, defending) -> Assert.assertFalse(attacking.hasStatus())
+                (battle, attacking, defending) -> attacking.assertStatus(StatusNamesies.BURNED),
+                (battle, attacking, defending) -> attacking.assertNoStatus()
         );
 
         // Defog will remove effects without decreasing evasion
@@ -541,11 +541,11 @@ public class EffectTest extends BaseTest {
                 new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
                         .defendingFight(AttackNamesies.INFERNO),
                 (battle, attacking, defending) -> {
-                    Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED));
+                    attacking.assertStatus(StatusNamesies.BURNED);
                     attacking.assertNotFullHealth();
                 },
                 (battle, attacking, defending) -> {
-                    Assert.assertFalse(attacking.hasStatus());
+                    attacking.assertNoStatus();
                     attacking.assertFullHealth();
                 }
         );
@@ -557,7 +557,7 @@ public class EffectTest extends BaseTest {
                 new TestInfo(PokemonNamesies.WEEDLE, PokemonNamesies.XURKITREE)
                         .attacking(AbilityNamesies.MAGIC_GUARD)
                         .fight(AttackNamesies.ENDURE, AttackNamesies.INFERNO)
-                        .with((battle, attacking, defending) -> Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED))),
+                        .with((battle, attacking, defending) -> attacking.assertStatus(StatusNamesies.BURNED)),
                 (battle, attacking, defending) -> Assert.assertEquals(1, attacking.getHP()),
                 (battle, attacking, defending) -> attacking.assertFullHealth()
         );
@@ -598,15 +598,14 @@ public class EffectTest extends BaseTest {
                     Assert.assertTrue(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
 
                     // Only one layer
-                    Assert.assertTrue(attacking.hasStatus(StatusNamesies.POISONED));
-                    Assert.assertFalse(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
+                    attacking.assertRegularPoison();
                 },
                 (battle, attacking, defending) -> {
                     Assert.assertTrue(attacking.isPokemon(PokemonNamesies.SQUIRTLE));
                     Assert.assertTrue(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
 
                     // TODO: Fix this in Baton Pass -- not currently working since it adds the effects AFTER it is already in battle so it doesn't work for EntryEffects like Toxic Spikes
-//                    Assert.assertFalse(attacking.hasStatus());
+//                    attacking.assertNoStatus();
                 }
         );
 
@@ -622,7 +621,7 @@ public class EffectTest extends BaseTest {
                 (battle, attacking, defending) -> {
                     Assert.assertTrue(attacking.isPokemon(PokemonNamesies.GRIMER));
                     Assert.assertFalse(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
-                    Assert.assertFalse(attacking.hasStatus());
+                    attacking.assertNoStatus();
                 }
         );
 
@@ -780,7 +779,7 @@ public class EffectTest extends BaseTest {
         battle.defendingFight(AttackNamesies.GRASS_WHISTLE); // Terrain count: 2
         Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
         Assert.assertTrue(attacking.isLevitating(battle));
-        Assert.assertFalse(attacking.hasStatus());
+        attacking.assertNoStatus();
         Assert.assertFalse(attacking.isHoldingItem(battle)); // Chesto Berry consumed
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(12/16.0, 4);

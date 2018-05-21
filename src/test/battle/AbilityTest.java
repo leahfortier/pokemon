@@ -56,7 +56,7 @@ public class AbilityTest extends BaseTest {
             defending.assertFullHealth();
         });
         wonderGuardTest(AttackNamesies.THUNDER_WAVE, emptyInfo, (battle, attacking, defending) -> {
-            Assert.assertTrue(defending.hasStatus(StatusNamesies.PARALYZED));
+            defending.assertStatus(StatusNamesies.PARALYZED);
             defending.assertFullHealth();
             new TestStages().test(defending);
         });
@@ -72,8 +72,8 @@ public class AbilityTest extends BaseTest {
             defending.assertFullHealth();
             new TestStages().test(attacking);
             new TestStages().test(defending);
-            Assert.assertFalse(attacking.hasStatus());
-            Assert.assertFalse(defending.hasStatus());
+            attacking.assertNoStatus();
+            defending.assertNoStatus();
         };
 
         // Attacking non-super effective moves should not work
@@ -366,8 +366,8 @@ public class AbilityTest extends BaseTest {
         // Inferno has a 100% chance to burn the target
         sheerForceSuccessTest(
                 AttackNamesies.INFERNO,
-                (battle, attacking, defending) -> Assert.assertFalse(defending.hasStatus()),
-                (battle, attacking, defending) -> Assert.assertTrue(defending.hasStatus(StatusNamesies.BURNED))
+                (battle, attacking, defending) -> defending.assertNoStatus(),
+                (battle, attacking, defending) -> defending.assertStatus(StatusNamesies.BURNED)
         );
 
         // Flare Blitz has a chance to Burn, so gets increase from Sheer Force, but should still take recoil damage regardless
@@ -375,7 +375,7 @@ public class AbilityTest extends BaseTest {
                 AttackNamesies.FLARE_BLITZ,
                 (battle, attacking, defending) -> {
                     attacking.assertNotFullHealth();
-                    Assert.assertFalse(defending.hasStatus());
+                    defending.assertNoStatus();
                 },
                 (battle, attacking, defending) -> attacking.assertNotFullHealth()
         );
@@ -505,36 +505,36 @@ public class AbilityTest extends BaseTest {
 
         // Thunder Wave will paralyze the target and then Synchronize with paralyze the attacker
         battle.attackingFight(AttackNamesies.THUNDER_WAVE);
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.PARALYZED));
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.PARALYZED));
+        defending.assertStatus(StatusNamesies.PARALYZED);
+        attacking.assertStatus(StatusNamesies.PARALYZED);
 
         attacking.giveItem(ItemNamesies.LUM_BERRY);
         defending.giveItem(ItemNamesies.CHERI_BERRY);
         battle.splashFight();
-        Assert.assertFalse(attacking.hasStatus());
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertNoStatus();
+        defending.assertNoStatus();
         Assert.assertFalse(attacking.isHoldingItem(battle));
         Assert.assertFalse(defending.isHoldingItem(battle));
 
         // Synchronize does not work on Sleep
         battle.attackingFight(AttackNamesies.SPORE);
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.ASLEEP));
-        Assert.assertFalse(attacking.hasStatus());
+        defending.assertStatus(StatusNamesies.ASLEEP);
+        attacking.assertNoStatus();
 
         defending.withMoves(AttackNamesies.SLEEP_TALK, AttackNamesies.REFRESH);
         battle.defendingFight(AttackNamesies.SLEEP_TALK);
-        Assert.assertFalse(attacking.hasStatus());
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertNoStatus();
+        defending.assertNoStatus();
 
         // Make sure it works with bad poison
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
+        defending.assertBadPoison();
+        attacking.assertBadPoison();
 
         battle.clearAllEffects();
         battle.emptyHeal();
-        Assert.assertFalse(attacking.hasStatus());
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertNoStatus();
+        defending.assertNoStatus();
 
         // Both Pokemon with Synchronize and status healing berries
         // Attacking uses Thunder Wave and defending is paralyzed
@@ -545,37 +545,37 @@ public class AbilityTest extends BaseTest {
         attacking.giveItem(ItemNamesies.LUM_BERRY);
         defending.giveItem(ItemNamesies.CHERI_BERRY);
         battle.attackingFight(AttackNamesies.THUNDER_WAVE);
-        Assert.assertFalse(attacking.hasStatus());
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertNoStatus();
+        defending.assertNoStatus();
         Assert.assertFalse(attacking.isHoldingItem(battle));
         Assert.assertFalse(defending.isHoldingItem(battle));
 
         battle.clearAllEffects();
         battle.emptyHeal();
-        Assert.assertFalse(attacking.hasStatus());
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertNoStatus();
+        defending.assertNoStatus();
         Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
 
         // Synchronize will not activate for self-inflicted status conditions
         defending.giveItem(ItemNamesies.TOXIC_ORB);
         attacking.giveItem(ItemNamesies.PECHA_BERRY);
         battle.splashFight();
-        Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
-        Assert.assertFalse(attacking.hasStatus());
+        defending.assertBadPoison();
+        attacking.assertNoStatus();
 
         // Attacking will fling Pecha Berry at defending, curing its Poison by consuming the berry
         // Defending will fling Toxic Orb at attacking, inflicting Poison on it
         battle.fight(AttackNamesies.FLING, AttackNamesies.FLING);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BADLY_POISONED));
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertBadPoison();
+        defending.assertNoStatus();
         Assert.assertFalse(attacking.isHoldingItem(battle));
         Assert.assertFalse(defending.isHoldingItem(battle));
         Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
         Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
 
         battle.attackingFight(AttackNamesies.REFRESH);
-        Assert.assertFalse(attacking.hasStatus());
-        Assert.assertFalse(defending.hasStatus());
+        attacking.assertNoStatus();
+        defending.assertNoStatus();
     }
 
     @Test
@@ -602,7 +602,7 @@ public class AbilityTest extends BaseTest {
         // Harvest will then restore the berry since the sunlight is strong
         defending.giveItem(ItemNamesies.RAWST_BERRY);
         battle.fight(AttackNamesies.WILL_O_WISP, AttackNamesies.SUNNY_DAY);
-        Assert.assertFalse(defending.hasStatus());
+        defending.assertNoStatus();
         Assert.assertTrue(defending.isHoldingItem(battle, ItemNamesies.RAWST_BERRY));
         Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
         Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
@@ -799,12 +799,12 @@ public class AbilityTest extends BaseTest {
                 (battle, attacking, defending) -> {
                     attacking.assertFullHealth();
                     defending.assertHealthRatio(15/16.0);
-                    Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+                    defending.assertBadPoison();
                 },
                 (battle, attacking, defending) -> {
                     attacking.assertFullHealth();
                     defending.assertFullHealth();
-                    Assert.assertTrue(defending.hasStatus(StatusNamesies.BADLY_POISONED));
+                    defending.assertBadPoison();
                 }
         );
 
@@ -991,8 +991,8 @@ public class AbilityTest extends BaseTest {
                 .attackingFight(AttackNamesies.INFERNO)
                 .doubleTake(
                         AbilityNamesies.SHIELD_DUST,
-                        (battle, attacking, defending) -> Assert.assertTrue(defending.hasStatus(StatusNamesies.BURNED)),
-                        (battle, attacking, defending) -> Assert.assertFalse(defending.hasStatus())
+                        (battle, attacking, defending) -> defending.assertStatus(StatusNamesies.BURNED),
+                        (battle, attacking, defending) -> defending.assertNoStatus()
                 );
     }
 }

@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import pokemon.ability.AbilityNamesies;
@@ -97,6 +98,28 @@ public class TestPokemon extends ActivePokemon {
 
     public void assertHealthRatioDiff(int prevHp, double fractionDiff) {
         Assert.assertEquals(prevHp - (int)(fractionDiff*this.getMaxHP()), this.getHP());
+    }
+
+    public void assertNoStatus() {
+        Assert.assertFalse(this.hasStatus());
+    }
+
+    // Confirms a status (should not be used for poison though, those have their own implementations)
+    public void assertStatus(StatusNamesies statusNamesies) {
+        Assert.assertNotEquals(StatusNamesies.POISONED, statusNamesies);
+        Assert.assertNotEquals(StatusNamesies.BADLY_POISONED, statusNamesies);
+        Assert.assertTrue(this.getStatus().getShortName(), this.hasStatus(statusNamesies));
+    }
+
+    // Asserts that the Poke is poisoned, but not badddlllyyy poisoned
+    public void assertRegularPoison() {
+        Assert.assertTrue(this.hasStatus(StatusNamesies.POISONED));
+        Assert.assertFalse(this.hasStatus(StatusNamesies.BADLY_POISONED));
+    }
+
+    public void assertBadPoison() {
+        Assert.assertTrue(this.hasStatus(StatusNamesies.POISONED));
+        Assert.assertTrue(this.hasStatus(StatusNamesies.BADLY_POISONED));
     }
 
     public static TestPokemon newPlayerPokemon(final PokemonNamesies pokemon) {

@@ -363,21 +363,21 @@ public class ItemTest extends BaseTest {
         // Lum Berry should activate to remove the burn
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
         Assert.assertTrue(defending.lastMoveSucceeded());
-        Assert.assertFalse(attacking.hasStatus());
+        attacking.assertNoStatus();
 
         // Lum Berry has already been consumed, so the burn should remain
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED));
+        attacking.assertStatus(StatusNamesies.BURNED);
 
         // Swap items to retrieve the Rawst Berry, which should activate to remove the burn
         battle.attackingFight(AttackNamesies.TRICK);
-        Assert.assertFalse(attacking.hasStatus());
+        attacking.assertNoStatus();
         Assert.assertFalse(attacking.isHoldingItem(battle));
         Assert.assertFalse(defending.isHoldingItem(battle));
 
         // Rawst Berry has already been consumed, so the burn should remain
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
-        Assert.assertTrue(attacking.hasStatus(StatusNamesies.BURNED));
+        attacking.assertStatus(StatusNamesies.BURNED);
     }
 
     @Test
