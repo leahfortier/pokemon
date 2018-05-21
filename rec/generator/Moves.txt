@@ -11,11 +11,11 @@ Constructor:
 Fields:
     Pow Int power
     Acc Int accuracy
-    PokemonEffect Multiple Enum PokemonEffectNamesies effects
-    TeamEffect Multiple Enum TeamEffectNamesies effects
-    StandardBattleEffect Multiple Enum StandardBattleEffectNamesies effects
-    Weather Multiple Enum WeatherNamesies effects
-    Terrain Multiple Enum TerrainNamesies effects
+    PokemonEffect Enum PokemonEffectNamesies effect
+    TeamEffect Enum TeamEffectNamesies effect
+    StandardBattleEffect Enum StandardBattleEffectNamesies effect
+    Weather Enum WeatherNamesies effect
+    Terrain Enum TerrainNamesies effect
     EffChance Int effectChance
     Status Enum StatusNamesies status
     MoveType Multiple Enum MoveType moveTypes
@@ -487,14 +487,14 @@ Protect:
     PP: 10
     Cat: Status
     Type: Normal
-    ProtectingAttack: Protecting
+    ProtectingAttack: Protect
 *
 Detect:
     Desc: Enables the user to evade all attacks. Its chance of failing rises if it is used in succession.
     PP: 5
     Type: Fighting
     Cat: Status
-    ProtectingAttack: Protecting
+    ProtectingAttack: Protect
 *
 Quick Guard:
     Desc: The user protects itself and its allies from priority moves.
@@ -1494,7 +1494,7 @@ Flatter:
     Cat: Status
     Acc: 100
     PokemonEffect: Confusion
-    StatChange: 1 Sp_Attack 2
+    StatChange: 1 Sp_Attack 1
 *
 Poison Fang:
     Desc: The user bites the target with toxic fangs. This may also leave the target badly poisoned.
@@ -2598,6 +2598,7 @@ Rock Blast:
     PP: 10
     Pow: 25
     Acc: 90
+    MoveType: Bomb_Ball
     Cat: Physical
     Type: Rock
     MultiStrike: 2 5
@@ -2693,11 +2694,11 @@ Curse:
     Type: Ghost
     BeginAttack:
         super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-        super.effects.clear();
+        super.effect = null;
 
         // Different effects based on the type of the user
         if (attacking.isType(b, Type.GHOST)) {
-            super.effects.add(PokemonEffectNamesies.CURSE);
+            super.effect = PokemonEffectNamesies.CURSE;
             super.selfTarget = false;
         } else {
             super.statChanges[Stat.ATTACK.index()] = 1;
@@ -3371,6 +3372,7 @@ Psychic Fangs:
     Acc: 100
     Pow: 85
     BarrierBreaker: True
+    MoveType: Biting
 *
 High Jump Kick:
     Desc: The target is attacked with a knee kick from a jump. If it misses, the user is hurt instead.
@@ -3522,6 +3524,7 @@ Beak Blast:
     PhysicalContact: False
     FocusMove: Beak_Blast
     Acc: 100
+    MoveType: Bomb_Ball
 *
 Me First:
     Desc: The user cuts ahead of the target to copy and use the target's intended move with greater power. This move fails if it isn't used first.
@@ -4526,7 +4529,7 @@ Attract:
     Type: Normal
     Cat: Status
     Acc: 100
-    PokemonEffect: Infatuated
+    PokemonEffect: Infatuation
     MoveType: Substitute_Piercing
 *
 Force Palm:
@@ -4786,7 +4789,7 @@ Trick Room:
     Cat: Status
     BattleEffect: StandardBattleEffect TrickRoom
 *
-Roar Of Time:
+Roar of Time:
     Desc: The user blasts the target with power that distorts even time. The user can't move on the next turn.
     PP: 5
     Type: Dragon
@@ -5220,7 +5223,7 @@ Secret Power:
 
         super.status = terrain.getStatusCondition();
         super.statChanges = terrain.getStatChanges();
-        super.effects = terrain.getEffects();
+        super.effect = terrain.getEffect();
         ###
     EffChance: 30
 *
@@ -5456,6 +5459,7 @@ Baton Pass:
     Cat: Status
     Type: Normal
     FullApplies:
+        // Fails if used by a wild pokemon or if the trainer does not have anyone to switch to
         Team team = b.getTrainer(user);
         return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon(b);
         ###
@@ -6115,6 +6119,7 @@ Origin Pulse:
     Cat: Special
     Acc: 85
     PP: 10
+    MoveType: Aura_Pulse
 *
 Precipice Blades:
     Desc: The user attacks opposing Pok\u00e9mon by manifesting the power of the land in fearsome blades of stone.
@@ -6207,7 +6212,8 @@ Strength Sap:
     Cat: Status
     Acc: 100
     PP: 10
-    SapHealthMove: True
+    Int: SapHealthEffect
+    MoveType: Healing
     Field:
         private int victimAttackStat;
         ###
@@ -6262,15 +6268,16 @@ Throat Chop:
     PP: 15
     Pow: 80
     Acc: 100
-    PokemonEffect: SoundBlock
+    PokemonEffect: Silence
 *
 Pollen Puff:
-    Desc: The user attacks the enemy with a pollen puff that explodes. If the target is an ally, it gives the ally a pollen puff that restores its HP instead.
+    Desc: The user attacks the enemy with a pollen puff that explodes.
     Type: Bug
     Cat: Special
     PP: 15
     Pow: 90
     Acc: 100
+    MoveType: Bomb_Ball
     Comments: // TODO: Had to remove the special effects of this move because double battle things, but would like to replace it with something else
 *
 Lunge:
@@ -6522,7 +6529,7 @@ Hyperspace Hole:
     Type: Psychic
     Cat: Special
     PP: 5
-    MoveType: Protect_Piercing
+    MoveType: Protect_Piercing, Substitute_Piercing
     Pow: 80
 *
 Steam Eruption:
@@ -6551,6 +6558,7 @@ Photon Geyser:
         return s;
         ###
     Int: StatSwitchingEffect
+    IgnoreAbilityMove: True
 *
 Mind Blown:
     Desc: The user attacks everything around it by causing its own head to explode. This also damages the user.

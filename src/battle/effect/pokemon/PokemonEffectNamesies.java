@@ -35,7 +35,7 @@ import battle.effect.pokemon.PokemonEffect.GuardSplit;
 import battle.effect.pokemon.PokemonEffect.HalfWeight;
 import battle.effect.pokemon.PokemonEffect.HealBlock;
 import battle.effect.pokemon.PokemonEffect.Imprison;
-import battle.effect.pokemon.PokemonEffect.Infatuated;
+import battle.effect.pokemon.PokemonEffect.Infatuation;
 import battle.effect.pokemon.PokemonEffect.Infestation;
 import battle.effect.pokemon.PokemonEffect.Ingrain;
 import battle.effect.pokemon.PokemonEffect.KingsShield;
@@ -54,15 +54,15 @@ import battle.effect.pokemon.PokemonEffect.PerishSong;
 import battle.effect.pokemon.PokemonEffect.Powder;
 import battle.effect.pokemon.PokemonEffect.PowerSplit;
 import battle.effect.pokemon.PokemonEffect.PowerTrick;
-import battle.effect.pokemon.PokemonEffect.Protecting;
+import battle.effect.pokemon.PokemonEffect.Protect;
 import battle.effect.pokemon.PokemonEffect.QuickGuard;
 import battle.effect.pokemon.PokemonEffect.Raging;
 import battle.effect.pokemon.PokemonEffect.RaiseCrits;
 import battle.effect.pokemon.PokemonEffect.SandTomb;
 import battle.effect.pokemon.PokemonEffect.SelfConfusion;
 import battle.effect.pokemon.PokemonEffect.ShellTrap;
+import battle.effect.pokemon.PokemonEffect.Silence;
 import battle.effect.pokemon.PokemonEffect.Snatch;
-import battle.effect.pokemon.PokemonEffect.SoundBlock;
 import battle.effect.pokemon.PokemonEffect.SpikyShield;
 import battle.effect.pokemon.PokemonEffect.Stockpile;
 import battle.effect.pokemon.PokemonEffect.Substitute;
@@ -95,7 +95,7 @@ public enum PokemonEffectNamesies implements EffectNamesies {
     KINGS_SHIELD(KingsShield::new),
     SPIKY_SHIELD(SpikyShield::new),
     BANEFUL_BUNKER(BanefulBunker::new),
-    PROTECTING(Protecting::new),
+    PROTECT(Protect::new),
     QUICK_GUARD(QuickGuard::new),
     CRAFTY_SHIELD(CraftyShield::new),
     MAT_BLOCK(MatBlock::new),
@@ -118,7 +118,7 @@ public enum PokemonEffectNamesies implements EffectNamesies {
     FORESIGHT(Foresight::new),
     MIRACLE_EYE(MiracleEye::new),
     TORMENT(Torment::new),
-    SOUND_BLOCK(SoundBlock::new),
+    SILENCE(Silence::new),
     TAUNT(Taunt::new),
     LASER_FOCUS(LaserFocus::new),
     LOCK_ON(LockOn::new),
@@ -146,7 +146,7 @@ public enum PokemonEffectNamesies implements EffectNamesies {
     POWER_SPLIT(PowerSplit::new),
     GUARD_SPLIT(GuardSplit::new),
     HEAL_BLOCK(HealBlock::new),
-    INFATUATED(Infatuated::new),
+    INFATUATION(Infatuation::new),
     SNATCH(Snatch::new),
     GRUDGE(Grudge::new),
     DESTINY_BOND(DestinyBond::new),

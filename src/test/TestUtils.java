@@ -2,6 +2,8 @@ package test;
 
 import org.junit.Assert;
 
+import java.util.Arrays;
+
 public class TestUtils {
     private static final double DELTA = 1e-15;
 
@@ -11,6 +13,32 @@ public class TestUtils {
 
     public static void assertEquals(double expected, double actual) {
         Assert.assertEquals(expected, actual, DELTA);
+    }
+
+    public static void assertEquals(String message, int[] expected, int[] actual) {
+        Assert.assertArrayEquals(
+                message + "\n" + Arrays.toString(expected) + " " + Arrays.toString(actual),
+                expected, actual
+        );
+        Assert.assertEquals(message, Arrays.toString(expected), Arrays.toString(actual));
+    }
+
+    public static void assertEqualsAny(String message, int actual, int... expectedOptions) {
+        for (int expected : expectedOptions) {
+            if (actual == expected) {
+                return;
+            }
+        }
+        Assert.fail(message + "\n" + actual + " not in " + Arrays.toString(expectedOptions));
+    }
+
+    public static void assertEqualsAny(String message, String actual, String... expectedOptions) {
+        for (String expected : expectedOptions) {
+            if (actual.equals(expected)) {
+                return;
+            }
+        }
+        Assert.fail(message + "\n" + actual + " not in " + Arrays.toString(expectedOptions));
     }
 
     // Close enough

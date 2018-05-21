@@ -23,4 +23,12 @@ public class TestStages extends Stages {
             Assert.assertEquals(stat.getName(), this.getStage(stat), stagee.getStage(stat));
         }
     }
+
+    public int[] get() {
+        int[] stages = new int[Stat.NUM_BATTLE_STATS];
+        for (Stat stat : Stat.BATTLE_STATS) {
+            stages[stat.index()] = this.getStage(stat);
+        }
+        return stages;
+    }
 }

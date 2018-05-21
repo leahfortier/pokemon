@@ -313,7 +313,9 @@ public class ModifierTest extends BaseTest {
         stageChangeTest(4, Stat.ATTACK, new TestInfo().attacking(AbilityNamesies.SIMPLE).attackingFight(AttackNamesies.SWORDS_DANCE));
 
         stageChangeTest(1, Stat.ATTACK, new TestInfo().attackingFight(AttackNamesies.GROWTH));
+        stageChangeTest(1, Stat.SP_ATTACK, new TestInfo().attackingFight(AttackNamesies.GROWTH));
         stageChangeTest(2, Stat.ATTACK, new TestInfo().attackingFight(AttackNamesies.SUNNY_DAY).attackingFight(AttackNamesies.GROWTH));
+        stageChangeTest(2, Stat.SP_ATTACK, new TestInfo().attackingFight(AttackNamesies.SUNNY_DAY).attackingFight(AttackNamesies.GROWTH));
 
         stageChangeTest(
                 3,

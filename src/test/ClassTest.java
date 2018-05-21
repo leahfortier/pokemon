@@ -3,6 +3,7 @@ package test;
 import battle.attack.Attack;
 import battle.attack.AttackInterface;
 import battle.effect.EffectInterfaces.EffectReleaser;
+import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
@@ -178,6 +179,7 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, AttackInterface.class, Attack.class);
             checkInstance(classy, NameChanger.class, Ability.class);
             checkInstance(classy, PassableEffect.class, PokemonEffect.class);
+            checkInstance(classy, PartialTrappingEffect.class, PokemonEffect.class);
             checkInstance(classy, BattleEndTurnEffect.class, BattleEffect.class);
             checkInstance(classy, EndTurnEffect.class, teamEffectList);
             checkInstance(classy, SwitchOutEffect.class, pokemonEffectList);

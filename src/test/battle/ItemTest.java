@@ -6,18 +6,13 @@ import battle.attack.MoveCategory;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
-import generator.update.ItemUpdater;
-import generator.update.ItemUpdater.ItemParser;
 import item.Item;
 import item.ItemNamesies;
 import item.bag.BagCategory;
 import item.berry.Berry;
 import item.berry.CategoryBerry;
-import item.hold.HoldItem;
 import item.use.BallItem;
 import item.use.BattleUseItem;
-import item.use.EvolutionItem;
-import item.use.TechnicalMachine;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.Stat;
@@ -26,10 +21,6 @@ import pokemon.active.Gender;
 import pokemon.species.PokemonNamesies;
 import test.BaseTest;
 import test.TestPokemon;
-import type.Type;
-
-import java.util.EnumSet;
-import java.util.Set;
 
 public class ItemTest extends BaseTest {
     @Test
@@ -58,99 +49,6 @@ public class ItemTest extends BaseTest {
                 Assert.assertNotEquals(item.getName(), MoveCategory.STATUS, category);
             }
         }
-    }
-
-    @Test
-    public void parserTest() {
-        Set<ItemNamesies> toParse = EnumSet.allOf(ItemNamesies.class);
-        toParse.remove(ItemNamesies.NO_ITEM);
-        toParse.remove(ItemNamesies.SYRUP);
-        toParse.remove(ItemNamesies.SURFBOARD);
-        toParse.remove(ItemNamesies.RUBY);
-        toParse.removeIf(itemNamesies -> itemNamesies.getItem() instanceof TechnicalMachine);
-
-        for (ItemParser itemParser : new ItemUpdater().getParseItems()) {
-            ItemNamesies itemNamesies = itemParser.itemNamesies;
-            String itemType = itemParser.itemType;
-
-            int fling = itemParser.fling;
-            int price = itemParser.price;
-
-            Type naturalGiftType = itemParser.naturalGiftType;
-            int naturalGiftPower = itemParser.naturalGiftPower;
-
-            Item item = itemNamesies.getItem();
-            if (item.isHoldable() && fling != 0) {
-                HoldItem holdItem = (HoldItem)item;
-                Assert.assertEquals(item.getName(), fling, holdItem.flingDamage());
-            } else if (!(item instanceof BallItem)) {
-                // Ball items are not holdable in this game
-                Assert.assertEquals(item.getName(), 0, fling);
-            }
-
-            if (item.getBagCategory() != BagCategory.KEY_ITEM) {
-                // Serebii has the wrong values for these, and I manually looked up in Bulbapedia instead (which is more accurate but way harder to parse)
-                // Just gonna leave this commented out since it's annoying and who cares
-//                TestUtils.semiAssertTrue(StringUtils.spaceSeparated(item.getName(), price, item.getPrice()), price == item.getPrice());
-
-                if (itemNamesies == ItemNamesies.MASTER_BALL || itemNamesies == ItemNamesies.SAFARI_BALL) {
-                    Assert.assertEquals(item.getName(), 0, item.getPrice());
-                } else {
-                    Assert.assertTrue(item.getName(), item.getPrice() > 0);
-                }
-            } else {
-                Assert.assertEquals(item.getName(), 0, price);
-                Assert.assertEquals(item.getName(), -1, item.getPrice());
-            }
-
-            if (item instanceof Berry) {
-                Berry berry = (Berry)item;
-                Assert.assertEquals(item.getName(), naturalGiftType, berry.naturalGiftType());
-                Assert.assertEquals(item.getName(), naturalGiftPower, berry.naturalGiftPower());
-                Assert.assertNotEquals(item.getName(), Type.NO_TYPE, naturalGiftType);
-                Assert.assertNotEquals(item.getName(), 0, naturalGiftPower);
-            } else {
-                Assert.assertEquals(item.getName(), Type.NO_TYPE, naturalGiftType);
-                Assert.assertEquals(item.getName(), 0, naturalGiftPower);
-            }
-
-            switch (itemType) {
-                case "Battle Effect":
-                    Assert.assertTrue(item.getName(), item instanceof BattleUseItem);
-                    break;
-                case "Miscellaneous":
-                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.MISC);
-                    break;
-                case "Evolutionary":
-                    Assert.assertTrue(item.getName(), item instanceof EvolutionItem);
-                    break;
-                case "Berry":
-                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.BERRY);
-                    break;
-                case "Key Item":
-                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.KEY_ITEM);
-                    break;
-                case "Hold Item":
-                    Assert.assertTrue(item.getName(), item instanceof HoldItem);
-                    break;
-                case "Recovery":
-                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.MEDICINE);
-                    break;
-                case "Pokeball":
-                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.BALL);
-                    break;
-                case "Vitamins":
-                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.STAT);
-                    break;
-                default:
-                    Assert.fail(item.getName() + ": " + itemType);
-                    break;
-            }
-
-            toParse.remove(itemNamesies);
-        }
-
-        Assert.assertTrue(toParse.isEmpty());
     }
 
     @Test
@@ -275,11 +173,11 @@ public class ItemTest extends BaseTest {
         TestPokemon defending = battle.getDefending().withGender(Gender.MALE);
 
         battle.attackingFight(AttackNamesies.ATTRACT);
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
+        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATION));
 
         attacking.giveItem(ItemNamesies.MENTAL_HERB);
         battle.attackingFight(AttackNamesies.FLING);
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
+        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.INFATUATION));
         Assert.assertFalse(attacking.isHoldingItem(battle));
 
         battle.defendingFight(AttackNamesies.CONFUSE_RAY);
@@ -489,18 +387,18 @@ public class ItemTest extends BaseTest {
         TestPokemon defending = battle.getDefending().withGender(Gender.MALE);
 
         battle.attackingFight(AttackNamesies.ATTRACT);
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.INFATUATED));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.INFATUATION));
+        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATION));
 
         battle.clearAllEffects();
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.INFATUATED));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
+        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.INFATUATION));
+        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.INFATUATION));
 
         // Destiny Knot causes the caster to be infatuated as well
         defending.withItem(ItemNamesies.DESTINY_KNOT);
         battle.attackingFight(AttackNamesies.ATTRACT);
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.INFATUATED));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATED));
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.INFATUATION));
+        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATION));
     }
 
     @Test

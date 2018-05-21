@@ -50,8 +50,8 @@ public class MethodFormatter {
             }
         }
 
-        int numOpen = (int)line.chars().filter(num -> num == '(').count();
-        int numClosed = (int)line.chars().filter(num -> num == ')').count();
+        int numOpen = (int)line.chars().filter(c -> c == '(').count();
+        int numClosed = (int)line.chars().filter(c -> c == ')').count();
         boolean previouslyInParentheses = parenthesesBalance > 0;
         parenthesesBalance += numOpen - numClosed;
         boolean nowInParentheses = parenthesesBalance > 0;

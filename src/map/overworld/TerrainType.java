@@ -1,7 +1,6 @@
 package map.overworld;
 
 import battle.attack.AttackNamesies;
-import battle.effect.EffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import main.Game;
@@ -11,8 +10,6 @@ import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 public enum TerrainType {
     BUILDING(Type.NORMAL, new Color(232, 243, 248), AttackNamesies.TRI_ATTACK, StatusNamesies.PARALYZED),
@@ -33,7 +30,7 @@ public enum TerrainType {
     private final AttackNamesies attack;
     private final StatusNamesies status;
     private final int[] statChanges;
-    private final List<EffectNamesies> effects;
+    private final PokemonEffectNamesies effect;
 
     TerrainType(Type type, Color color, AttackNamesies attack, StatusNamesies statusCondition) {
         this(type, color, attack, statusCondition, null, null);
@@ -43,11 +40,11 @@ public enum TerrainType {
         this(type, color, attack, StatusNamesies.NO_STATUS, toLower, null);
     }
 
-    TerrainType(Type type, Color color, AttackNamesies attack, EffectNamesies effect) {
+    TerrainType(Type type, Color color, AttackNamesies attack, PokemonEffectNamesies effect) {
         this(type, color, attack, StatusNamesies.NO_STATUS, null, effect);
     }
 
-    TerrainType(Type type, Color color, AttackNamesies attack, StatusNamesies statusCondition, Stat toLower, EffectNamesies effect) {
+    TerrainType(Type type, Color color, AttackNamesies attack, StatusNamesies statusCondition, Stat toLower, PokemonEffectNamesies effect) {
         this.type = type;
         this.color = color;
         this.imageName = StringUtils.properCase(this.name().toLowerCase()) + "Circle";
@@ -56,14 +53,10 @@ public enum TerrainType {
 
         this.status = statusCondition;
         this.statChanges = new int[Stat.NUM_BATTLE_STATS];
-        this.effects = new ArrayList<>();
+        this.effect = effect;
 
         if (toLower != null) {
             this.statChanges[toLower.index()] = -1;
-        }
-
-        if (effect != null) {
-            this.effects.add(effect);
         }
     }
 
@@ -87,8 +80,8 @@ public enum TerrainType {
         return statChanges;
     }
 
-    public List<EffectNamesies> getEffects() {
-        return effects;
+    public PokemonEffectNamesies getEffect() {
+        return effect;
     }
 
     public BufferedImage getPlayerCircleImage() {
