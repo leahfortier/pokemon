@@ -54,4 +54,11 @@ public class TestUtils {
                 greater > lesser
         );
     }
+
+    public static void assertInclusiveRange(String message, double expectedLower, double expectedUpper, double actual) {
+        Assert.assertTrue(
+                message + " !(" + expectedLower + " <= " + actual + " <= " +  expectedUpper + ")",
+                expectedLower <= actual && actual <= expectedUpper
+        );
+    }
 }

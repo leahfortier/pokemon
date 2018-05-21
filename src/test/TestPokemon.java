@@ -130,7 +130,7 @@ public class TestPokemon extends ActivePokemon {
 
     public void assertStages(TestStages testStages) {
         for (Stat stat : Stat.BATTLE_STATS) {
-            Assert.assertEquals(stat.getName(), testStages.getStage(stat), this.getStage(stat));
+            Assert.assertEquals(stat.getName(), testStages.get(stat), this.getStage(stat));
         }
     }
 

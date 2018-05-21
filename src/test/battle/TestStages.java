@@ -1,27 +1,26 @@
 package test.battle;
 
-import battle.Stages;
 import pokemon.Stat;
-import pokemon.species.PokemonNamesies;
-import test.TestPokemon;
+import test.TestUtils;
 
-public class TestStages extends Stages {
-    private static final long serialVersionUID = 1L;
+public class TestStages {
+    private int[] stages;
 
     public TestStages() {
-        super(TestPokemon.newPlayerPokemon(PokemonNamesies.BULBASAUR));
+        stages = new int[Stat.NUM_BATTLE_STATS];
     }
 
     public TestStages set(Stat s, int stage) {
-        super.setStage(s, stage);
+        TestUtils.assertInclusiveRange(s.getName(), -6, 6, stage);
+        stages[s.index()] = stage;
         return this;
     }
 
+    public int get(Stat stat) {
+        return this.stages[stat.index()];
+    }
+
     public int[] get() {
-        int[] stages = new int[Stat.NUM_BATTLE_STATS];
-        for (Stat stat : Stat.BATTLE_STATS) {
-            stages[stat.index()] = this.getStage(stat);
-        }
-        return stages;
+        return this.stages.clone();
     }
 }
