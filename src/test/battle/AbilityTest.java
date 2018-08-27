@@ -282,7 +282,7 @@ public class AbilityTest extends BaseTest {
         battle.attackingFight(AttackNamesies.SWAGGER);
         attacking.assertNoStages();
         defending.assertStages(new TestStages().set(Stat.SPEED, 2));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONFUSION));
+        defending.assertNoEffect(PokemonEffectNamesies.CONFUSION);
         defending.assertConsumedBerry(battle);
 
         // Simple doubles stat modifications to itself -- shouldn't affect contrary pokemon
@@ -356,8 +356,8 @@ public class AbilityTest extends BaseTest {
         // Dynamic Punch has a 100% chance to confuse the target
         sheerForceSuccessTest(
                 AttackNamesies.DYNAMIC_PUNCH,
-                (battle, attacking, defending) -> Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONFUSION)),
-                (battle, attacking, defending) -> Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CONFUSION))
+                (battle, attacking, defending) -> defending.assertNoEffect(PokemonEffectNamesies.CONFUSION),
+                (battle, attacking, defending) -> defending.assertHasEffect(PokemonEffectNamesies.CONFUSION)
         );
 
         // Inferno has a 100% chance to burn the target
@@ -550,7 +550,7 @@ public class AbilityTest extends BaseTest {
         battle.emptyHeal();
         attacking.assertNoStatus();
         defending.assertNoStatus();
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+        defending.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
 
         // Synchronize will not activate for self-inflicted status conditions
         defending.giveItem(ItemNamesies.TOXIC_ORB);
@@ -566,8 +566,8 @@ public class AbilityTest extends BaseTest {
         defending.assertNoStatus();
         Assert.assertFalse(attacking.isHoldingItem(battle));
         Assert.assertFalse(defending.isHoldingItem(battle));
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+        attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
+        defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
 
         battle.attackingFight(AttackNamesies.REFRESH);
         attacking.assertNoStatus();
@@ -598,8 +598,8 @@ public class AbilityTest extends BaseTest {
         battle.fight(AttackNamesies.WILL_O_WISP, AttackNamesies.SUNNY_DAY);
         defending.assertNoStatus();
         Assert.assertTrue(defending.isHoldingItem(battle, ItemNamesies.RAWST_BERRY));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+        defending.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+        defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
     }
 
     @Test
@@ -720,7 +720,7 @@ public class AbilityTest extends BaseTest {
         defending.withAbility(AbilityNamesies.DANCER);
         battle.defendingFight(AttackNamesies.TAUNT);
         battle.defendingFight(AttackNamesies.SWORDS_DANCE);
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.TAUNT));
+        attacking.assertHasEffect(PokemonEffectNamesies.TAUNT);
         attacking.assertNoStages();
         defending.assertStages(new TestStages().set(Stat.ATTACK, 2));
 
@@ -809,12 +809,12 @@ public class AbilityTest extends BaseTest {
                 (battle, attacking, defending) -> {
                     TestUtils.assertGreater(attacking.getHpString(), attacking.getHPRatio(), .5);
                     defending.assertHealthRatio(7/8.0);
-                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.LEECH_SEED));
+                    defending.assertHasEffect(PokemonEffectNamesies.LEECH_SEED);
                 },
                 (battle, attacking, defending) -> {
                     attacking.assertHealthRatio(.5, 1);
                     defending.assertFullHealth();
-                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.LEECH_SEED));
+                    defending.assertHasEffect(PokemonEffectNamesies.LEECH_SEED);
                 }
         );
 
@@ -837,8 +837,8 @@ public class AbilityTest extends BaseTest {
                     defending.assertHealthRatio(.5);
                     attacking.assertNoStages();
                     defending.assertNoStages();
-                    Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CURSE));
-                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CURSE));
+                    attacking.assertHasEffect(PokemonEffectNamesies.CURSE);
+                    defending.assertNoEffect(PokemonEffectNamesies.CURSE);
                 }
         );
 
@@ -850,16 +850,16 @@ public class AbilityTest extends BaseTest {
                     defending.assertHealthRatio(.75);
                     attacking.assertNoStages();
                     defending.assertNoStages();
-                    Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CURSE));
-                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CURSE));
+                    attacking.assertNoEffect(PokemonEffectNamesies.CURSE);
+                    defending.assertHasEffect(PokemonEffectNamesies.CURSE);
                 },
                 (battle, attacking, defending) -> {
                     attacking.assertHealthRatio(.5);
                     defending.assertHealthRatio(1);
                     attacking.assertNoStages();
                     defending.assertNoStages();
-                    Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CURSE));
-                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CURSE));
+                    attacking.assertNoEffect(PokemonEffectNamesies.CURSE);
+                    defending.assertHasEffect(PokemonEffectNamesies.CURSE);
                 }
         );
 

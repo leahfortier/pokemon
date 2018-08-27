@@ -259,8 +259,8 @@ public class AttackTest extends BaseTest {
         Assert.assertTrue(attacking.getStages().getStage(Stat.ATTACK) == 1);
         Assert.assertTrue(attacking.getStages().getStage(Stat.DEFENSE) == 1);
         Assert.assertTrue(attacking.getStages().getStage(Stat.SPEED) == -1);
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CURSE));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CURSE));
+        attacking.assertNoEffect(PokemonEffectNamesies.CURSE);
+        defending.assertNoEffect(PokemonEffectNamesies.CURSE);
 
         // Add Ghost Type
         battle.defendingFight(AttackNamesies.TRICK_OR_TREAT);
@@ -273,8 +273,8 @@ public class AttackTest extends BaseTest {
         Assert.assertTrue(attacking.getStages().getStage(Stat.ATTACK) == 1);
         Assert.assertTrue(attacking.getStages().getStage(Stat.DEFENSE) == 1);
         Assert.assertTrue(attacking.getStages().getStage(Stat.SPEED) == -1);
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CURSE));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CURSE));
+        attacking.assertNoEffect(PokemonEffectNamesies.CURSE);
+        defending.assertHasEffect(PokemonEffectNamesies.CURSE);
         attacking.assertHealthRatio(.5);
         defending.assertHealthRatio(.75);
     }
@@ -557,10 +557,10 @@ public class AttackTest extends BaseTest {
         Assert.assertFalse(attacking.isHoldingItem(battle));
         Assert.assertFalse(defending.isHoldingItem(battle));
         defending.assertNoStatus();
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+        attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
+        defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
+        attacking.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+        defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
 
         // Should fail since the defending did not use their own item
         battle.defendingFight(AttackNamesies.RECYCLE);
@@ -574,10 +574,10 @@ public class AttackTest extends BaseTest {
         Assert.assertFalse(defending.isHoldingItem(battle));
         attacking.assertNoStatus();
         defending.assertNoStatus();
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+        attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
+        defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
+        attacking.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+        defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
 
         // Poison the attacker -- will not trigger Rawst Berry
         battle.defendingFight(AttackNamesies.POISON_POWDER);
@@ -601,8 +601,8 @@ public class AttackTest extends BaseTest {
         attacking.assertNoStatus();
         defending.assertRegularPoison();
         attacking.assertConsumedBerry(battle);
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+        defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
+        defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
     }
 
     @Test
@@ -735,8 +735,8 @@ public class AttackTest extends BaseTest {
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.STEALTH_ROCK));
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.SPIKES));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.LEECH_SEED));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.WRAPPED));
+        defending.assertHasEffect(PokemonEffectNamesies.LEECH_SEED);
+        defending.assertHasEffect(PokemonEffectNamesies.WRAPPED);
 
         // Make sure effects persist
         battle.emptyHeal();
@@ -745,8 +745,8 @@ public class AttackTest extends BaseTest {
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.STEALTH_ROCK));
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.SPIKES));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.LEECH_SEED));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.WRAPPED));
+        defending.assertHasEffect(PokemonEffectNamesies.LEECH_SEED);
+        defending.assertHasEffect(PokemonEffectNamesies.WRAPPED);
 
         // Use Rapid Spin -- should remove the appropriate effects
         battle.defendingFight(AttackNamesies.RAPID_SPIN);
@@ -754,8 +754,8 @@ public class AttackTest extends BaseTest {
         Assert.assertFalse(defendingTeam.hasEffect(TeamEffectNamesies.STEALTH_ROCK));
         Assert.assertFalse(defendingTeam.hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
         Assert.assertFalse(defendingTeam.hasEffect(TeamEffectNamesies.SPIKES));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.LEECH_SEED));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.WRAPPED));
+        defending.assertNoEffect(PokemonEffectNamesies.LEECH_SEED);
+        defending.assertNoEffect(PokemonEffectNamesies.WRAPPED);
 
         // Add effects back
         battle.emptyHeal();
@@ -769,8 +769,8 @@ public class AttackTest extends BaseTest {
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.STEALTH_ROCK));
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.SPIKES));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.LEECH_SEED));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.WRAPPED));
+        defending.assertHasEffect(PokemonEffectNamesies.LEECH_SEED);
+        defending.assertHasEffect(PokemonEffectNamesies.WRAPPED);
 
         // Wrong attacker -- effects shouldn't change
         battle.attackingFight(AttackNamesies.RAPID_SPIN);
@@ -781,8 +781,8 @@ public class AttackTest extends BaseTest {
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.STEALTH_ROCK));
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.SPIKES));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.LEECH_SEED));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.WRAPPED));
+        defending.assertHasEffect(PokemonEffectNamesies.LEECH_SEED);
+        defending.assertHasEffect(PokemonEffectNamesies.WRAPPED);
 
         // Correct defog attacker -- should only remove the appropriate effects
         battle.attackingFight(AttackNamesies.DEFOG);
@@ -792,8 +792,8 @@ public class AttackTest extends BaseTest {
         Assert.assertFalse(defendingTeam.hasEffect(TeamEffectNamesies.STEALTH_ROCK));
         Assert.assertFalse(defendingTeam.hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
         Assert.assertFalse(defendingTeam.hasEffect(TeamEffectNamesies.SPIKES));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.LEECH_SEED));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.WRAPPED));
+        defending.assertHasEffect(PokemonEffectNamesies.LEECH_SEED);
+        defending.assertHasEffect(PokemonEffectNamesies.WRAPPED);
     }
 
     @Test
@@ -1130,7 +1130,7 @@ public class AttackTest extends BaseTest {
 
         battle.emptyHeal();
         battle.clearAllEffects();
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+        attacking.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
 
         // Haban Berry (Dragon-type) will fail against Sylveon
         attacking.withItem(ItemNamesies.HABAN_BERRY);
@@ -1168,8 +1168,8 @@ public class AttackTest extends BaseTest {
         battle.setExpectedDamageModifier(.5);
         battle.fight(AttackNamesies.INCINERATE, AttackNamesies.ENDURE);
         Assert.assertFalse(defending.isHoldingItem(battle));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+        defending.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+        defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
         defending.assertNotFullHealth();
         attacking.assertFullHealth();
     }
@@ -1189,8 +1189,8 @@ public class AttackTest extends BaseTest {
         PokemonManipulator sticksies = (battle, attacking, defending) -> {
             Assert.assertTrue(defending.hasAbility(AbilityNamesies.STICKY_HOLD));
             defending.assertNotConsumedItem(battle);
-            Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-            Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+            attacking.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+            attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
             defending.assertHealthRatio(.75);
             attacking.assertFullHealth();
         };
@@ -1198,10 +1198,10 @@ public class AttackTest extends BaseTest {
         // If incinerated, the item will be considered consumed for the defending, but will not be 'eaten' for either
         PokemonManipulator nonStick = (battle, attacking, defending) -> {
             Assert.assertNotEquals(incinerated, defending.isHoldingItem(battle));
-            Assert.assertEquals(incinerated, defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-            Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-            Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-            Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+            defending.assertEffect(incinerated, PokemonEffectNamesies.CONSUMED_ITEM);
+            defending.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
+            attacking.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+            attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
             defending.assertHealthRatio(.75);
             attacking.assertFullHealth();
         };
@@ -1387,8 +1387,8 @@ public class AttackTest extends BaseTest {
         Assert.assertEquals(explodes, defending.isAttackType(Type.FIRE));
 
         // Neither will have the effect since it goes away at the end of the turn
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.POWDER));
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.POWDER));
+        defending.assertNoEffect(PokemonEffectNamesies.POWDER);
+        attacking.assertNoEffect(PokemonEffectNamesies.POWDER);
 
         afterCheck.manipulate(battle);
     }

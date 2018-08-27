@@ -173,20 +173,20 @@ public class ItemTest extends BaseTest {
         TestPokemon defending = battle.getDefending().withGender(Gender.MALE);
 
         battle.attackingFight(AttackNamesies.ATTRACT);
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATION));
+        defending.assertHasEffect(PokemonEffectNamesies.INFATUATION);
 
         attacking.giveItem(ItemNamesies.MENTAL_HERB);
         battle.attackingFight(AttackNamesies.FLING);
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.INFATUATION));
+        defending.assertNoEffect(PokemonEffectNamesies.INFATUATION);
         Assert.assertFalse(attacking.isHoldingItem(battle));
 
         battle.defendingFight(AttackNamesies.CONFUSE_RAY);
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONFUSION));
+        attacking.assertHasEffect(PokemonEffectNamesies.CONFUSION);
 
         // Mental Herb cures at the end of the turn
         attacking.giveItem(ItemNamesies.MENTAL_HERB);
         battle.attackingFight(AttackNamesies.SPLASH);
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONFUSION));
+        attacking.assertNoEffect(PokemonEffectNamesies.CONFUSION);
     }
 
     @Test
@@ -219,8 +219,8 @@ public class ItemTest extends BaseTest {
         // If not success, item is suppressed but should not be consumed
         Assert.assertFalse(defending.isHoldingItem(battle));
 
-        Assert.assertEquals(success, defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
         Assert.assertEquals(success, defending.getActualHeldItem().namesies() == ItemNamesies.NO_ITEM);
+        defending.assertEffect(success, PokemonEffectNamesies.CONSUMED_ITEM);
 
         // If successful, should increase Sp. Attack by one
         defending.assertStages(new TestStages().set(Stat.SP_ATTACK, success ? 1 : 0));
@@ -383,18 +383,18 @@ public class ItemTest extends BaseTest {
         TestPokemon defending = battle.getDefending().withGender(Gender.MALE);
 
         battle.attackingFight(AttackNamesies.ATTRACT);
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.INFATUATION));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATION));
+        attacking.assertNoEffect(PokemonEffectNamesies.INFATUATION);
+        defending.assertHasEffect(PokemonEffectNamesies.INFATUATION);
 
         battle.clearAllEffects();
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.INFATUATION));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.INFATUATION));
+        attacking.assertNoEffect(PokemonEffectNamesies.INFATUATION);
+        defending.assertNoEffect(PokemonEffectNamesies.INFATUATION);
 
         // Destiny Knot causes the caster to be infatuated as well
         defending.withItem(ItemNamesies.DESTINY_KNOT);
         battle.attackingFight(AttackNamesies.ATTRACT);
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.INFATUATION));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.INFATUATION));
+        attacking.assertHasEffect(PokemonEffectNamesies.INFATUATION);
+        defending.assertHasEffect(PokemonEffectNamesies.INFATUATION);
     }
 
     @Test
@@ -406,20 +406,20 @@ public class ItemTest extends BaseTest {
         battle.fight(AttackNamesies.BELLY_DRUM, AttackNamesies.HEAL_BLOCK);
         attacking.assertHealthRatio(.5);
         defending.assertFullHealth();
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.HEAL_BLOCK));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.HEAL_BLOCK));
+        attacking.assertHasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+        defending.assertNoEffect(PokemonEffectNamesies.HEAL_BLOCK);
 
         // Heal Block doesn't affect Use Items -- (THEY STILL WORK)
         PokemonManipulator.useItem(ItemNamesies.SITRUS_BERRY).manipulate(battle);
         attacking.assertHealthRatio(.75, 1);
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.HEAL_BLOCK));
+        attacking.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+        attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
+        attacking.assertHasEffect(PokemonEffectNamesies.HEAL_BLOCK);
 
         attacking.giveItem(ItemNamesies.SITRUS_BERRY);
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.HORN_DRILL);
         Assert.assertEquals(attacking.getHpString(), 1, attacking.getHP());
         attacking.assertNotConsumedItem(battle);
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.HEAL_BLOCK));
+        attacking.assertHasEffect(PokemonEffectNamesies.HEAL_BLOCK);
     }
 }

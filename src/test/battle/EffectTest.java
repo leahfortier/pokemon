@@ -433,14 +433,14 @@ public class EffectTest extends BaseTest {
 
         substituteTest(
                 new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE).defendingFight(AttackNamesies.LEECH_SEED),
-                (battle, attacking, defending) -> Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.LEECH_SEED)),
-                (battle, attacking, defending) -> Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.LEECH_SEED))
+                (battle, attacking, defending) -> attacking.assertHasEffect(PokemonEffectNamesies.LEECH_SEED),
+                (battle, attacking, defending) -> attacking.assertNoEffect(PokemonEffectNamesies.LEECH_SEED)
         );
 
         substituteTest(
                 new TestInfo().defendingFight(AttackNamesies.YAWN),
-                (battle, attacking, defending) -> Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.YAWN)),
-                (battle, attacking, defending) -> Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.YAWN))
+                (battle, attacking, defending) -> attacking.assertHasEffect(PokemonEffectNamesies.YAWN),
+                (battle, attacking, defending) -> attacking.assertNoEffect(PokemonEffectNamesies.YAWN)
         );
 
         // Unless it is sound-based
@@ -452,7 +452,7 @@ public class EffectTest extends BaseTest {
         // Should still be able to give self-target effects
         substituteTest(
                 new TestInfo().attackingFight(AttackNamesies.STOCKPILE),
-                (battle, attacking, defending) -> Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.STOCKPILE))
+                (battle, attacking, defending) -> attacking.assertHasEffect(PokemonEffectNamesies.STOCKPILE)
         );
 
         substituteTest(
@@ -460,7 +460,7 @@ public class EffectTest extends BaseTest {
                               .with((battle, attacking, defending) -> attacking.assertHealthRatio(.5))
                               .attackingFight(AttackNamesies.AQUA_RING),
                 (battle, attacking, defending) -> {
-                    Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.AQUA_RING));
+                    attacking.assertHasEffect(PokemonEffectNamesies.AQUA_RING);
                     attacking.assertHealthRatio(9/16.0, 1);
                 }
         );
@@ -508,14 +508,14 @@ public class EffectTest extends BaseTest {
                 (battle, attacking, defending) -> {
                     defending.assertNoStatus();
                     attacking.assertConsumedItem(battle); // No eaten berry
-                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+                    defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+                    defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
                 },
                 (battle, attacking, defending) -> {
                     defending.assertStatus(StatusNamesies.BURNED);
                     attacking.assertNotConsumedItem(battle);
-                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+                    defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+                    defending.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
                 }
         );
 
@@ -635,7 +635,7 @@ public class EffectTest extends BaseTest {
                     // Recoil damage is calculated based on actual HP lost, so it will only take the minimum of 1 HP
                     attacking.assertFullHealth();
                     Assert.assertEquals(defending.getMaxHP() - 1, defending.getHP());
-                    Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
+                    attacking.assertNoEffect(PokemonEffectNamesies.SUBSTITUTE);
 
                     // To make sure Endure doesn't fail again
                     battle.splashFight();
@@ -663,19 +663,19 @@ public class EffectTest extends BaseTest {
 
             battle.emptyHeal();
             attacking.assertFullHealth();
-            Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
+            attacking.assertHasEffect(PokemonEffectNamesies.SUBSTITUTE);
         };
 
         testInfo.doubleTake(
                 substitution,
                 (battle, attacking, defending) -> {
-                    Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
+                    attacking.assertNoEffect(PokemonEffectNamesies.SUBSTITUTE);
                     without.manipulate(battle, attacking, defending);
                 },
                 (battle, attacking, defending) -> {
-                    Assert.assertNotEquals(broken, attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
+                    attacking.assertEffect(!broken, PokemonEffectNamesies.SUBSTITUTE);
                     with.manipulate(battle, attacking, defending);
-                    Assert.assertNotEquals(broken, attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
+                    attacking.assertEffect(!broken, PokemonEffectNamesies.SUBSTITUTE);
                 }
         );
     }
@@ -756,16 +756,16 @@ public class EffectTest extends BaseTest {
         // Fails because Bulby is behind a substitute
         battle.defendingFight(AttackNamesies.TELEKINESIS); // Terrain count: 4
         Assert.assertFalse(attacking.isLevitating(battle));
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.TELEKINESIS));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.TELEKINESIS));
+        attacking.assertNoEffect(PokemonEffectNamesies.TELEKINESIS);
+        defending.assertNoEffect(PokemonEffectNamesies.TELEKINESIS);
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(10/16.0, 2);
 
         // Bulby levitates with Magnet Rise -- should no longer heal from Grassy Terrain
         battle.attackingFight(AttackNamesies.MAGNET_RISE); // Terrain count: 3
         Assert.assertTrue(attacking.isLevitating(battle));
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.MAGNET_RISE));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.MAGNET_RISE));
+        attacking.assertHasEffect(PokemonEffectNamesies.MAGNET_RISE);
+        defending.assertNoEffect(PokemonEffectNamesies.MAGNET_RISE);
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(11/16.0, 3);
 
@@ -774,7 +774,7 @@ public class EffectTest extends BaseTest {
         // at first and I originally had Protean Charmander here but then left this because whatever
         attacking.withItem(ItemNamesies.CHESTO_BERRY);
         battle.defendingFight(AttackNamesies.GRASS_WHISTLE); // Terrain count: 2
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
+        attacking.assertHasEffect(PokemonEffectNamesies.SUBSTITUTE);
         Assert.assertTrue(attacking.isLevitating(battle));
         attacking.assertNoStatus();
         Assert.assertFalse(attacking.isHoldingItem(battle)); // Chesto Berry consumed
@@ -783,7 +783,7 @@ public class EffectTest extends BaseTest {
 
         // Break the substitute
         battle.defendingFight(AttackNamesies.SHEER_COLD); // Terrain count: 1
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.SUBSTITUTE));
+        attacking.assertNoEffect(PokemonEffectNamesies.SUBSTITUTE);
         Assert.assertTrue(attacking.isLevitating(battle));
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(13/16.0, 5);
@@ -794,7 +794,7 @@ public class EffectTest extends BaseTest {
         // Make sure we don't heal at the end of this turn
         // Telekinesis should succeed since Substitute was broken
         battle.defendingFight(AttackNamesies.TELEKINESIS);
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.TELEKINESIS));
+        attacking.assertHasEffect(PokemonEffectNamesies.TELEKINESIS);
         Assert.assertTrue(attacking.isLevitating(battle));
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(13/16.0, 5);
@@ -822,7 +822,7 @@ public class EffectTest extends BaseTest {
 
         // Magnet Rise gives levitation
         battle.defendingFight(AttackNamesies.MAGNET_RISE);
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.MAGNET_RISE));
+        defending.assertHasEffect(PokemonEffectNamesies.MAGNET_RISE);
         Assert.assertFalse(attacking.isLevitating(battle));
         Assert.assertTrue(defending.isLevitating(battle));
 
@@ -830,7 +830,7 @@ public class EffectTest extends BaseTest {
         battle.fight(AttackNamesies.FLING, AttackNamesies.ENDURE);
         attacking.assertConsumedItem(battle);
         Assert.assertFalse(defending.isHoldingItem(battle));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.MAGNET_RISE));
+        defending.assertNoEffect(PokemonEffectNamesies.MAGNET_RISE);
         Assert.assertTrue(attacking.isLevitating(battle));
         Assert.assertFalse(defending.isLevitating(battle));
 
@@ -861,7 +861,7 @@ public class EffectTest extends BaseTest {
         // Ingrain will ground the user (explicitly use Splash to remove Flying-type)
         defending.removeItem();
         battle.fight(AttackNamesies.INGRAIN, AttackNamesies.SPLASH);
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.INGRAIN));
+        attacking.assertHasEffect(PokemonEffectNamesies.INGRAIN);
         Assert.assertFalse(defending.isType(battle, Type.FLYING));
         Assert.assertFalse(attacking.isLevitating(battle));
         Assert.assertFalse(defending.isLevitating(battle));
@@ -874,7 +874,7 @@ public class EffectTest extends BaseTest {
         // But the non-grounded defending can do whatever the fuck it wants
         defending.withAbility(AbilityNamesies.NO_ABILITY);
         battle.defendingFight(AttackNamesies.FLY);
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.INGRAIN));
+        attacking.assertHasEffect(PokemonEffectNamesies.INGRAIN);
         Assert.assertFalse(defending.isType(battle, Type.FLYING));
         Assert.assertTrue(defending.isSemiInvulnerableFlying());
         Assert.assertFalse(attacking.isLevitating(battle));
@@ -885,7 +885,7 @@ public class EffectTest extends BaseTest {
         // Need to use setMove so it doesn't overwrite Fly
         attacking.setMove(new Move(AttackNamesies.ENDURE));
         battle.fight();
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.INGRAIN));
+        attacking.assertHasEffect(PokemonEffectNamesies.INGRAIN);
         Assert.assertFalse(defending.isType(battle, Type.FLYING));
         Assert.assertFalse(defending.isSemiInvulnerableFlying());
         Assert.assertFalse(attacking.isLevitating(battle));

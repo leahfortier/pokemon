@@ -326,7 +326,7 @@ public class ModifierTest extends BaseTest {
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
-                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.STOCKPILE));
+                    defending.assertHasEffect(PokemonEffectNamesies.STOCKPILE);
                 })
         );
 
@@ -340,7 +340,7 @@ public class ModifierTest extends BaseTest {
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.fight(AttackNamesies.ENDURE, AttackNamesies.SPIT_UP);
-                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.STOCKPILE));
+                    defending.assertNoEffect(PokemonEffectNamesies.STOCKPILE);
                 })
         );
 
@@ -352,14 +352,14 @@ public class ModifierTest extends BaseTest {
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
-                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.STOCKPILE));
+                    defending.assertHasEffect(PokemonEffectNamesies.STOCKPILE);
                     defending.assertNotFullHealth();
                     battle.defendingFight(AttackNamesies.SWALLOW);
                     defending.assertFullHealth();
-                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.STOCKPILE));
+                    defending.assertNoEffect(PokemonEffectNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
-                    Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.STOCKPILE));
+                    defending.assertHasEffect(PokemonEffectNamesies.STOCKPILE);
                 })
         );
     }
