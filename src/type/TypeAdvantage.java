@@ -132,7 +132,8 @@ public enum TypeAdvantage {
 
         // Do special case check stupid things for fucking levitation which fucks everything up
         // Pokemon that are levitating cannot be hit by ground type moves
-        if (attackingType == Type.GROUND && defending.isLevitatingWithoutTypeCheck(b, attacking)) {
+        // Note: This levitation check only includes levitation effects, but does not take Flying-type into account
+        if (attackingType == Type.GROUND && defending.isLevitating(b, attacking, false)) {
             return 0;
         }
 

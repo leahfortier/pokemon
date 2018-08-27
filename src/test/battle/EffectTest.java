@@ -373,15 +373,19 @@ public class EffectTest extends BaseTest {
         testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.WHIRLWIND);
 
         // Give the attacker berries because confusion/paralysis fucks with the test
-        testSemiInvulnerable(true, null, AttackNamesies.FLY, AttackNamesies.HURRICANE, true, new TestInfo().attacking(ItemNamesies.PERSIM_BERRY));
-        testSemiInvulnerable(true, null, AttackNamesies.FLY, AttackNamesies.THUNDER, true, new TestInfo().attacking(ItemNamesies.CHERI_BERRY));
+        testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.HURRICANE, new TestInfo().attacking(ItemNamesies.PERSIM_BERRY));
+        testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.THUNDER, new TestInfo().attacking(ItemNamesies.CHERI_BERRY));
 
-        // Smack Down will disrupt Fly, Grounding the Pokemon in the process
+        // Smack Down will disrupt Fly, grounding the Pokemon in the process
         testSemiInvulnerable(true, null, AttackNamesies.FLY, AttackNamesies.SMACK_DOWN, false, new TestInfo());
     }
 
     private void testSemiInvulnerable(Boolean expected, AttackNamesies multiTurnMove, AttackNamesies defendingMove) {
-        testSemiInvulnerable(expected, null, multiTurnMove, defendingMove, true, new TestInfo());
+        testSemiInvulnerable(expected, multiTurnMove, defendingMove, new TestInfo());
+    }
+
+    private void testSemiInvulnerable(Boolean expected, AttackNamesies multiTurnMove, AttackNamesies defendingMove, TestInfo testInfo) {
+        testSemiInvulnerable(expected, null, multiTurnMove, defendingMove, true, testInfo);
     }
 
     private void testSemiInvulnerable(Boolean firstExpected, Boolean secondExpected, AttackNamesies multiTurnMove, AttackNamesies defendingMove, boolean fullyExecuted, TestInfo testInfo) {
@@ -502,16 +506,16 @@ public class EffectTest extends BaseTest {
                         .attacking(ItemNamesies.RAWST_BERRY)
                         .fight(AttackNamesies.WILL_O_WISP, AttackNamesies.PLUCK),
                 (battle, attacking, defending) -> {
-                    Assert.assertFalse(attacking.isHoldingItem(battle));
                     defending.assertNoStatus();
+                    attacking.assertConsumedItem(battle); // No eaten berry
+                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
                     Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-                    Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
                 },
                 (battle, attacking, defending) -> {
-                    Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.RAWST_BERRY));
                     defending.assertStatus(StatusNamesies.BURNED);
+                    attacking.assertNotConsumedItem(battle);
+                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
                     Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-                    Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
                 }
         );
 
@@ -573,15 +577,13 @@ public class EffectTest extends BaseTest {
                             defending2.withAbility(AbilityNamesies.INTIMIDATE);
                             ((EnemyTrainer)battle.getOpponent()).addPokemon(defending2);
                         })
-                        .attackingFight(AttackNamesies.ROAR),
-                (battle, attacking, defending) -> {
-                    Assert.assertTrue(defending.isPokemon(PokemonNamesies.SQUIRTLE));
-                    attacking.assertStages(new TestStages().set(Stat.ATTACK, -1));
-                },
-                (battle, attacking, defending) -> {
-                    Assert.assertTrue(defending.isPokemon(PokemonNamesies.SQUIRTLE));
-                    attacking.assertNoStages();
-                }
+                        .attackingFight(AttackNamesies.ROAR)
+                        .with((battle, attacking, defending) -> {
+                            // Need to use getDefending() since the defending var is set at the start of the turn
+                            Assert.assertTrue(battle.getDefending().isPokemon(PokemonNamesies.SQUIRTLE));
+                        }),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(Stat.ATTACK, -1)),
+                (battle, attacking, defending) -> attacking.assertNoStages()
         );
 
         // Should not get poisoned from Toxic Spikes when Baton Passed
@@ -592,18 +594,13 @@ public class EffectTest extends BaseTest {
                             battle.getPlayer().addPokemon(attacking2);
                         })
                         .defendingFight(AttackNamesies.TOXIC_SPIKES)
-                        .attackingFight(AttackNamesies.BATON_PASS),
+                        .attackingFight(AttackNamesies.BATON_PASS)
+                        .with((battle, attacking, defending) -> {
+                            Assert.assertTrue(battle.getAttacking().isPokemon(PokemonNamesies.SQUIRTLE));
+                            Assert.assertTrue(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
+                        }),
+                (battle, attacking, defending) -> attacking.assertRegularPoison(), // Only one layer
                 (battle, attacking, defending) -> {
-                    Assert.assertTrue(attacking.isPokemon(PokemonNamesies.SQUIRTLE));
-                    Assert.assertTrue(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
-
-                    // Only one layer
-                    attacking.assertRegularPoison();
-                },
-                (battle, attacking, defending) -> {
-                    Assert.assertTrue(attacking.isPokemon(PokemonNamesies.SQUIRTLE));
-                    Assert.assertTrue(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
-
                     // TODO: Fix this in Baton Pass -- not currently working since it adds the effects AFTER it is already in battle so it doesn't work for EntryEffects like Toxic Spikes
 //                    attacking.assertNoStatus();
                 }
@@ -802,5 +799,97 @@ public class EffectTest extends BaseTest {
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(13/16.0, 5);
     }
-}
 
+    @Test
+    public void levitationTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Non-flying type Pokemon with no items/abilities/etc. will not be levitating
+        Assert.assertFalse(attacking.isLevitating(battle));
+        Assert.assertFalse(defending.isLevitating(battle));
+
+        // Levitate ability gives levitation (who knew????)
+        attacking.withAbility(AbilityNamesies.LEVITATE);
+        Assert.assertTrue(attacking.isLevitating(battle));
+        Assert.assertFalse(defending.isLevitating(battle));
+
+        // Iron Ball will ground a levitating Pokemon
+        attacking.withItem(ItemNamesies.IRON_BALL);
+        Assert.assertFalse(attacking.isLevitating(battle));
+        Assert.assertFalse(defending.isLevitating(battle));
+
+        // Magnet Rise gives levitation
+        battle.defendingFight(AttackNamesies.MAGNET_RISE);
+        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.MAGNET_RISE));
+        Assert.assertFalse(attacking.isLevitating(battle));
+        Assert.assertTrue(defending.isLevitating(battle));
+
+        // But is removed when pelted with an Iron Ball (not true in actual games)
+        battle.fight(AttackNamesies.FLING, AttackNamesies.ENDURE);
+        attacking.assertConsumedItem(battle);
+        Assert.assertFalse(defending.isHoldingItem(battle));
+        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.MAGNET_RISE));
+        Assert.assertTrue(attacking.isLevitating(battle));
+        Assert.assertFalse(defending.isLevitating(battle));
+
+        // Air Balloon will give the levitation effect
+        defending.withItem(ItemNamesies.AIR_BALLOON);
+        Assert.assertTrue(attacking.isLevitating(battle));
+        Assert.assertTrue(defending.isLevitating(battle));
+
+        // Until it pops (triggered by being hit)
+        battle.attackingFight(AttackNamesies.FALSE_SWIPE);
+        Assert.assertTrue(attacking.isLevitating(battle));
+        Assert.assertFalse(defending.isLevitating(battle));
+        defending.assertConsumedItem(battle);
+
+        // Make Charmander Flying-type (and therefore a master of levitation)
+        defending.withAbility(AbilityNamesies.PROTEAN);
+        battle.defendingFight(AttackNamesies.TAILWIND);
+        Assert.assertTrue(defending.isType(battle, Type.FLYING));
+        Assert.assertTrue(attacking.isLevitating(battle));
+        Assert.assertTrue(defending.isLevitating(battle));
+
+        // Give Iron Ball to Charmander -- make sure it removes levitation from flying type as well
+        defending.giveItem(ItemNamesies.IRON_BALL);
+        Assert.assertTrue(defending.isType(battle, Type.FLYING));
+        Assert.assertTrue(attacking.isLevitating(battle));
+        Assert.assertFalse(defending.isLevitating(battle));
+
+        // Ingrain will ground the user (explicitly use Splash to remove Flying-type)
+        defending.removeItem();
+        battle.fight(AttackNamesies.INGRAIN, AttackNamesies.SPLASH);
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.INGRAIN));
+        Assert.assertFalse(defending.isType(battle, Type.FLYING));
+        Assert.assertFalse(attacking.isLevitating(battle));
+        Assert.assertFalse(defending.isLevitating(battle));
+        Assert.assertTrue(attacking.isGrounded(battle));
+        Assert.assertFalse(defending.isGrounded(battle));
+
+        // Attacking shouldn't be able to fly when grounded
+        attacking.apply(false, AttackNamesies.FLY, battle);
+
+        // But the non-grounded defending can do whatever the fuck it wants
+        defending.withAbility(AbilityNamesies.NO_ABILITY);
+        battle.defendingFight(AttackNamesies.FLY);
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.INGRAIN));
+        Assert.assertFalse(defending.isType(battle, Type.FLYING));
+        Assert.assertTrue(defending.isSemiInvulnerableFlying());
+        Assert.assertFalse(attacking.isLevitating(battle));
+        Assert.assertTrue(defending.isLevitating(battle));
+        attacking.assertFullHealth();
+
+        // Finish the second turn of Fly -- make sure it lands and no more levitation station
+        // Need to use setMove so it doesn't overwrite Fly
+        attacking.setMove(new Move(AttackNamesies.ENDURE));
+        battle.fight();
+        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.INGRAIN));
+        Assert.assertFalse(defending.isType(battle, Type.FLYING));
+        Assert.assertFalse(defending.isSemiInvulnerableFlying());
+        Assert.assertFalse(attacking.isLevitating(battle));
+        Assert.assertFalse(defending.isLevitating(battle));
+        attacking.assertNotFullHealth();
+    }
+}

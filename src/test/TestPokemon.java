@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
@@ -132,6 +133,39 @@ public class TestPokemon extends ActivePokemon {
         for (Stat stat : Stat.BATTLE_STATS) {
             Assert.assertEquals(stat.getName(), testStages.get(stat), this.getStage(stat));
         }
+    }
+
+    // Either checks consumed or not consumed
+    public void assertExpectedConsumedItem(Battle battle, boolean shouldConsume) {
+        if (shouldConsume) {
+            this.assertConsumedItem(battle, false);
+        } else {
+            this.assertNotConsumedItem(battle);
+        }
+    }
+
+    // Confirms that the Pokemon is not holding an item and has the consumed item effect
+    // Explicitly confirms that a berry was not consumed in the process (use assertConsumedBerry in this case)
+    public void assertConsumedItem(Battle battle) {
+        this.assertConsumedItem(battle, false);
+    }
+
+    // Confirms that the Pokemon is not holding an item and has the consumed item and berry effects
+    public void assertConsumedBerry(Battle battle) {
+        this.assertConsumedItem(battle, true);
+    }
+
+    private void assertConsumedItem(Battle battle, boolean berry) {
+        Assert.assertFalse(this.isHoldingItem(battle));
+        Assert.assertTrue(this.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+        Assert.assertEquals(berry, this.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+    }
+
+    // Confirms that the Pokemon is still holding an item and does not have the consumed item/berry effect
+    public void assertNotConsumedItem(Battle battle) {
+        Assert.assertTrue(this.isHoldingItem(battle));
+        Assert.assertFalse(this.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+        Assert.assertFalse(this.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
     }
 
     public static TestPokemon newPlayerPokemon(final PokemonNamesies pokemon) {

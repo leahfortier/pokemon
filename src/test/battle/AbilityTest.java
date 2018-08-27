@@ -283,8 +283,7 @@ public class AbilityTest extends BaseTest {
         attacking.assertNoStages();
         defending.assertStages(new TestStages().set(Stat.SPEED, 2));
         Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONFUSION));
-        Assert.assertFalse(defending.isHoldingItem(battle));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+        defending.assertConsumedBerry(battle);
 
         // Simple doubles stat modifications to itself -- shouldn't affect contrary pokemon
         battle.fight(AttackNamesies.HAZE, AttackNamesies.SIMPLE_BEAM);
@@ -476,8 +475,7 @@ public class AbilityTest extends BaseTest {
         // Make sure other effects can still work
         attacking.withItem(ItemNamesies.PERSIM_BERRY);
         battle.defendingFight(AttackNamesies.CONFUSE_RAY);
-        Assert.assertFalse(attacking.isHoldingItem(battle));
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+        attacking.assertConsumedBerry(battle);
 
         // Switch opponent Pokemon so I can use Fake Out again
         // NOTE: We need to kill the defending instead of something like whirlwind otherwise Fake Out won't work
@@ -588,9 +586,7 @@ public class AbilityTest extends BaseTest {
         battle.fight(AttackNamesies.NUZZLE, AttackNamesies.SUNNY_DAY);
         attacking.assertNoStages();
         defending.assertStages(new TestStages().set(Stat.ATTACK, 1));
-        Assert.assertFalse(defending.isHoldingItem(battle));
-        Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-        Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+        defending.assertConsumedItem(battle);
 
         battle.emptyHeal();
         battle.clearAllEffects();
@@ -994,4 +990,3 @@ public class AbilityTest extends BaseTest {
                 );
     }
 }
-

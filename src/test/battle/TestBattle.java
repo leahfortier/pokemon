@@ -118,6 +118,7 @@ public class TestBattle extends Battle {
         fight(AttackNamesies.SPLASH, attackNamesies);
     }
 
+    // Continuously uses False Swipe until the defending Pokemon has 1 HP
     void falseSwipePalooza(boolean playerAttacking) {
         TestPokemon attacking = playerAttacking ? this.getAttacking() : this.getDefending();
         TestPokemon defending = this.getOtherPokemon(attacking);
@@ -147,6 +148,7 @@ public class TestBattle extends Battle {
             } else if (!me.isPlayer()) {
                 Assert.assertEquals(this.expectedDefendingAccuracyBypass, bypass);
             }
+
             return bypass;
         }
 

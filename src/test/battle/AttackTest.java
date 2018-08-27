@@ -600,9 +600,8 @@ public class AttackTest extends BaseTest {
         Assert.assertFalse(defending.isHoldingItem(battle));
         attacking.assertNoStatus();
         defending.assertRegularPoison();
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+        attacking.assertConsumedBerry(battle);
         Assert.assertTrue(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
         Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
     }
 
@@ -1119,15 +1118,13 @@ public class AttackTest extends BaseTest {
         attacking.withItem(ItemNamesies.ABSORB_BULB);
         attacking.apply(false, AttackNamesies.NATURAL_GIFT, battle);
         defending.assertFullHealth();
-        Assert.assertTrue(attacking.isHoldingItem(battle));
+        attacking.assertNotConsumedItem(battle);
 
-        // Occa Berry (Fire-type) will succeed and be consumed
+        // Occa Berry (Fire-type) will succeed and be consumed (but not eaten)
         attacking.withItem(ItemNamesies.OCCA_BERRY);
         attacking.apply(true, AttackNamesies.NATURAL_GIFT, battle);
         Assert.assertTrue(attacking.isAttackType(Type.FIRE));
-        Assert.assertFalse(attacking.isHoldingItem(battle));
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+        attacking.assertConsumedItem(battle);
         attacking.assertFullHealth();
         defending.assertNotFullHealth();
 
@@ -1139,7 +1136,7 @@ public class AttackTest extends BaseTest {
         attacking.withItem(ItemNamesies.HABAN_BERRY);
         attacking.apply(false, AttackNamesies.NATURAL_GIFT, battle);
         Assert.assertTrue(attacking.isAttackType(Type.DRAGON));
-        Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.HABAN_BERRY));
+        attacking.assertNotConsumedItem(battle);
 
         // Oran Berry should not heal when consumed
         battle.falseSwipePalooza(false);
@@ -1147,9 +1144,7 @@ public class AttackTest extends BaseTest {
         attacking.withItem(ItemNamesies.ORAN_BERRY);
         attacking.apply(true, AttackNamesies.NATURAL_GIFT, battle);
         Assert.assertTrue(attacking.isAttackType(Type.POISON));
-        Assert.assertFalse(attacking.isHoldingItem(battle));
-        Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+        attacking.assertConsumedItem(battle); // Confirms berry not eaten, just consumed
         Assert.assertEquals(1, attacking.getHP());
         defending.assertNotFullHealth();
     }
@@ -1190,17 +1185,17 @@ public class AttackTest extends BaseTest {
             battle.attackingFight(AttackNamesies.INCINERATE);
         };
 
+        // Incinerate does not consume when the defending has Sticky Hold
         PokemonManipulator sticksies = (battle, attacking, defending) -> {
             Assert.assertTrue(defending.hasAbility(AbilityNamesies.STICKY_HOLD));
-            Assert.assertTrue(defending.isHoldingItem(battle));
-            Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-            Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+            defending.assertNotConsumedItem(battle);
             Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
             Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
             defending.assertHealthRatio(.75);
             attacking.assertFullHealth();
         };
 
+        // If incinerated, the item will be considered consumed for the defending, but will not be 'eaten' for either
         PokemonManipulator nonStick = (battle, attacking, defending) -> {
             Assert.assertNotEquals(incinerated, defending.isHoldingItem(battle));
             Assert.assertEquals(incinerated, defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
@@ -1215,6 +1210,7 @@ public class AttackTest extends BaseTest {
                 .with(manipulator)
                 .doubleTake(AbilityNamesies.STICKY_HOLD, nonStick, sticksies);
 
+        // Mold Breaker overrides Sticky Hold for Incinerate (should still incinerate)
         PokemonManipulator moldBreaker = PokemonManipulator.giveAttackingAbility(AbilityNamesies.MOLD_BREAKER);
         new TestInfo(PokemonNamesies.XURKITREE, PokemonNamesies.IGGLYBUFF)
                 .with(moldBreaker.add(manipulator))
@@ -1356,11 +1352,7 @@ public class AttackTest extends BaseTest {
         powderTest(
                 AttackNamesies.NATURAL_GIFT, true,
                 new TestInfo().defending(ItemNamesies.OCCA_BERRY),
-                (battle, attacking, defending) -> {
-                    Assert.assertTrue(defending.isHoldingItem(battle, ItemNamesies.OCCA_BERRY));
-                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-                    Assert.assertFalse(defending.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
-                }
+                (battle, attacking, defending) -> defending.assertNotConsumedItem(battle)
         );
 
         // Make sure health does not decrease when the user has Magic Guard, but user is still blocked from using the attack
@@ -1445,4 +1437,3 @@ public class AttackTest extends BaseTest {
         defending.assertStages(new TestStages().set(Stat.ATTACK, -1).set(Stat.SP_ATTACK, -1).set(Stat.SPEED, -1));
     }
 }
-

@@ -700,25 +700,33 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean isLevitating(Battle b) {
-        return isLevitating(b, null);
+        return isLevitating(b, null, true);
     }
 
     // Returns true if the Pokemon is currently levitating for any reason
-    public boolean isLevitating(Battle b, ActivePokemon moldBreaker) {
+    // Will only return true for being a flying type is includeFlyingType is explicitly set to true
+    // Grounded effect take precedence over levitation effects
+    // Obvs levitating if you have a levitation effect
+    // Also considered to be levitating if in the semi-invulnerable stage of Fly or Bounce
+    // Stupid motherfucking Mold Breaker not allowing me to make Levitate a Levitation effect, fuck you Mold Breaker. -- NOT ANYMORE NOW WE HAVE Battle.hasInvoke FUCK YES YOU GO GLENN COCO
+    public boolean isLevitating(Battle b, ActivePokemon moldBreaker, boolean includeFlyingType) {
+        // Technically this shouldn't ever be possible if the Pokemon is grounded,
+        // however if that were to happen for whatever reason it would make sense for this to take precedence I think
+        if (this.isSemiInvulnerableFlying()) {
+            return true;
+        }
+
+        // Gravity reigns supreme
         if (isGrounded(b)) {
             return false;
         }
 
         // Flyahs gon' Fly
-        return isLevitatingWithoutTypeCheck(b, moldBreaker) || isType(b, Type.FLYING);
-    }
+        if (includeFlyingType && this.isType(b, Type.FLYING)) {
+            return true;
+        }
 
-    // Returns true if the Pokemon is currently levitating for any reason besides being a flying type pokemon
-    // Grounded effect take precedence over levitation effects
-    // Obvs levitating if you have a levitation effect
-    // Stupid motherfucking Mold Breaker not allowing me to make Levitate a Levitation effect, fuck you Mold Breaker. -- NOT ANYMORE NOW WE HAVE Battle.hasInvoke FUCK YES YOU GO GLENN COCO
-    public boolean isLevitatingWithoutTypeCheck(Battle b, ActivePokemon moldBreaker) {
-        return !isGrounded(b) && LevitationEffect.containsLevitationEffect(b, this, moldBreaker);
+        return LevitationEffect.containsLevitationEffect(b, this, moldBreaker);
     }
 
     @Override

@@ -203,4 +203,5 @@ Other random things:
     does levitating check take semiinvulnerable into account? like will you heal from grassy terrain if you're flying?
     test moongeist beam and shadow shield (combos like that)
     apparently soak fails against arceus (I'm sure it's that multitype prevents having its type changed)
+    does using a berry (not hold item) not count as berry consumption??
     

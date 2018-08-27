@@ -323,8 +323,7 @@ public class ItemTest extends BaseTest {
 
         battle.fight();
 
-        Assert.assertNotEquals(consumeItem, attacking.isHoldingItem(battle));
-        Assert.assertEquals(consumeItem, attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+        attacking.assertExpectedConsumedItem(battle, consumeItem);
 
         boolean isMultiTurn = attacking.getAttack() instanceof MultiTurnMove;
         boolean fullyExecuted = !isMultiTurn || skipCharge || consumeItem;
@@ -337,8 +336,7 @@ public class ItemTest extends BaseTest {
 
         battle.fight();
 
-        Assert.assertNotEquals(consumeItem, attacking.isHoldingItem(battle));
-        Assert.assertEquals(consumeItem, attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
+        attacking.assertExpectedConsumedItem(battle, consumeItem);
 
         Assert.assertEquals(attackingPP - (!isMultiTurn || skipCharge ? 2 : 1), attacking.getMove().getPP());
         Assert.assertEquals(defendingPP - 2, defending.getMove().getPP());
@@ -421,10 +419,7 @@ public class ItemTest extends BaseTest {
         attacking.giveItem(ItemNamesies.SITRUS_BERRY);
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.HORN_DRILL);
         Assert.assertEquals(attacking.getHpString(), 1, attacking.getHP());
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM));
-        Assert.assertFalse(attacking.hasEffect(PokemonEffectNamesies.EATEN_BERRY));
+        attacking.assertNotConsumedItem(battle);
         Assert.assertTrue(attacking.hasEffect(PokemonEffectNamesies.HEAL_BLOCK));
-        Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.SITRUS_BERRY));
     }
 }
-

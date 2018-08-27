@@ -55,13 +55,13 @@ public class EffectList<NamesiesType extends EffectNamesies, EffectType extends 
 
     public void decrement(Battle b, ActivePokemon p) {
         for (EffectType effect : this) {
-            boolean inactive = !effect.isActive();
-            if (!inactive) {
+            boolean active = effect.isActive();
+            if (active) {
                 effect.decrement(b, p);
-                inactive = !effect.isActive() && !effect.nextTurnSubside();
+                active = effect.isActive() || effect.nextTurnSubside();
             }
 
-            if (inactive) {
+            if (!active) {
                 effect.subside(b, p);
                 this.remove(effect);
 
