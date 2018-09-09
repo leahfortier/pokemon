@@ -56,4 +56,3 @@ public enum TeamEffectNamesies implements EffectNamesies {
         return this.effectCreator.get();
     }
 }
-

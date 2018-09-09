@@ -1345,4 +1345,3 @@ public enum AttackNamesies {
         return StringUtils.enumValueOf(AttackNamesies.class, name);
     }
 }
-

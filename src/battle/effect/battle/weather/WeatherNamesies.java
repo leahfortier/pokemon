@@ -30,4 +30,3 @@ public enum WeatherNamesies implements BattleEffectNamesies {
         return this.effectCreator.get();
     }
 }
-

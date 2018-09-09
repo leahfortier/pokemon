@@ -453,4 +453,3 @@ public enum AbilityNamesies {
         return StringUtils.enumValueOf(AbilityNamesies.class, name);
     }
 }
-

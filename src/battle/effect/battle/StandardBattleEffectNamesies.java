@@ -34,4 +34,3 @@ public enum StandardBattleEffectNamesies implements BattleEffectNamesies {
         return this.effectCreator.get();
     }
 }
-

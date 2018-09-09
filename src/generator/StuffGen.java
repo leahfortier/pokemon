@@ -117,10 +117,7 @@ public class StuffGen {
                 .sorted()
                 .collect(Collectors.toList());
 
-        StringAppender out = new StringAppender()
-                .appendJoin("\n", baseEvolutions, PokemonInfo::getName)
-                .appendLine();
-
+        StringAppender out = new StringAppender().appendJoin("\n", baseEvolutions, PokemonInfo::getName);
         FileIO.overwriteFile(FileName.BASE_EVOLUTIONS, out.toString());
     }
 }

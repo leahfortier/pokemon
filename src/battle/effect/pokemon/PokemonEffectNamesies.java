@@ -172,4 +172,3 @@ public enum PokemonEffectNamesies implements EffectNamesies {
         return this.effectCreator.get();
     }
 }
-

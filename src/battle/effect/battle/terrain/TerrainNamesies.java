@@ -28,4 +28,3 @@ public enum TerrainNamesies implements BattleEffectNamesies {
         return this.effectCreator.get();
     }
 }
-

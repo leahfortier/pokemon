@@ -34,4 +34,3 @@ public enum StatusNamesies {
         return this.statusGetter.get();
     }
 }
-

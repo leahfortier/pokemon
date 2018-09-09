@@ -853,4 +853,3 @@ public enum PokemonNamesies {
         return StringUtils.enumValueOf(PokemonNamesies.class, name);
     }
 }
-
