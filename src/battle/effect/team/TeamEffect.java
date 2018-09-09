@@ -27,8 +27,8 @@ import util.serialization.Serializable;
 public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public TeamEffect(TeamEffectNamesies name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
-        super(name, minTurns, maxTurns, nextTurnSubside, hasAlternateCast);
+    public TeamEffect(TeamEffectNamesies name, int minTurns, int maxTurns, boolean hasAlternateCast) {
+        super(name, minTurns, maxTurns, hasAlternateCast);
     }
 
     @Override
@@ -49,7 +49,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         Reflect() {
-            super(TeamEffectNamesies.REFLECT, 5, 5, false, false);
+            super(TeamEffectNamesies.REFLECT, 5, 5, false);
         }
 
         @Override
@@ -104,7 +104,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         LightScreen() {
-            super(TeamEffectNamesies.LIGHT_SCREEN, 5, 5, false, false);
+            super(TeamEffectNamesies.LIGHT_SCREEN, 5, 5, false);
         }
 
         @Override
@@ -159,7 +159,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         Tailwind() {
-            super(TeamEffectNamesies.TAILWIND, 4, 4, false, false);
+            super(TeamEffectNamesies.TAILWIND, 4, 4, false);
         }
 
         @Override
@@ -192,7 +192,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         AuroraVeil() {
-            super(TeamEffectNamesies.AURORA_VEIL, 5, 5, false, false);
+            super(TeamEffectNamesies.AURORA_VEIL, 5, 5, false);
         }
 
         @Override
@@ -247,7 +247,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         StickyWeb() {
-            super(TeamEffectNamesies.STICKY_WEB, -1, -1, false, false);
+            super(TeamEffectNamesies.STICKY_WEB, -1, -1, false);
         }
 
         @Override
@@ -288,7 +288,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         StealthRock() {
-            super(TeamEffectNamesies.STEALTH_ROCK, -1, -1, false, false);
+            super(TeamEffectNamesies.STEALTH_ROCK, -1, -1, false);
         }
 
         @Override
@@ -324,7 +324,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private int layers;
 
         ToxicSpikes() {
-            super(TeamEffectNamesies.TOXIC_SPIKES, -1, -1, false, true);
+            super(TeamEffectNamesies.TOXIC_SPIKES, -1, -1, true);
             this.layers = 1;
         }
 
@@ -389,7 +389,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         Spikes() {
-            super(TeamEffectNamesies.SPIKES, -1, -1, false, true);
+            super(TeamEffectNamesies.SPIKES, -1, -1, true);
             this.layers = 1;
         }
 
@@ -430,7 +430,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private String casterName;
 
         Wish() {
-            super(TeamEffectNamesies.WISH, 1, 1, true, false);
+            super(TeamEffectNamesies.WISH, 2, 2, false);
         }
 
         @Override
@@ -444,8 +444,14 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return casterName + " made a wish!";
+        }
+
+        @Override
         public void subside(Battle b, ActivePokemon p) {
-            p.healHealthFraction(1/2.0, b, casterName + "'s wish came true!");
+            Messages.add(casterName + "'s wish came true!");
+            p.healHealthFraction(1/2.0, b, p.getName() + "'s health was restored!");
         }
     }
 
@@ -453,7 +459,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         LuckyChant() {
-            super(TeamEffectNamesies.LUCKY_CHANT, 5, 5, false, false);
+            super(TeamEffectNamesies.LUCKY_CHANT, 5, 5, false);
         }
 
         @Override
@@ -478,7 +484,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private ActivePokemon theSeeer;
 
         FutureSight() {
-            super(TeamEffectNamesies.FUTURE_SIGHT, 2, 2, true, false);
+            super(TeamEffectNamesies.FUTURE_SIGHT, 3, 3, false);
         }
 
         @Override
@@ -517,7 +523,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private ActivePokemon theSeeer;
 
         DoomDesire() {
-            super(TeamEffectNamesies.DOOM_DESIRE, 2, 2, true, false);
+            super(TeamEffectNamesies.DOOM_DESIRE, 3, 3, false);
         }
 
         @Override
@@ -556,7 +562,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private String wish;
 
         HealSwitch() {
-            super(TeamEffectNamesies.HEAL_SWITCH, -1, -1, false, false);
+            super(TeamEffectNamesies.HEAL_SWITCH, -1, -1, false);
         }
 
         @Override
@@ -581,7 +587,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         DeadAlly() {
-            super(TeamEffectNamesies.DEAD_ALLY, 2, 2, false, false);
+            super(TeamEffectNamesies.DEAD_ALLY, 2, 2, false);
         }
     }
 
@@ -591,7 +597,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private int coins;
 
         PayDay() {
-            super(TeamEffectNamesies.PAY_DAY, -1, -1, false, true);
+            super(TeamEffectNamesies.PAY_DAY, -1, -1, true);
         }
 
         @Override
@@ -623,7 +629,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         Safeguard() {
-            super(TeamEffectNamesies.SAFEGUARD, 5, 5, false, false);
+            super(TeamEffectNamesies.SAFEGUARD, 5, 5, false);
         }
 
         @Override
@@ -661,7 +667,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         GuardSpecial() {
-            super(TeamEffectNamesies.GUARD_SPECIAL, 5, 5, false, false);
+            super(TeamEffectNamesies.GUARD_SPECIAL, 5, 5, false);
         }
 
         @Override
@@ -694,7 +700,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         GetDatCashMoneyTwice() {
-            super(TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE, -1, -1, false, false);
+            super(TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE, -1, -1, false);
         }
 
         @Override

@@ -7,7 +7,6 @@ Constructor:
     Namesies Enum PokemonEffectNamesies
     MinTurns Default -1 Int
     MaxTurns Default -1 Int
-    NextTurnSubside Default False Boolean
     HasAlternateCast Default False Boolean
 *
 Failure:

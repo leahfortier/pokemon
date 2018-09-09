@@ -780,15 +780,15 @@ public class EffectTest extends BaseTest {
         Assert.assertFalse(attacking.isHoldingItem(battle)); // Chesto Berry consumed
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(12/16.0, 4);
+        Assert.assertTrue(battle.hasEffect(TerrainNamesies.GRASSY_TERRAIN));
 
         // Break the substitute
+        // Terrain should be cleared at the end of that last turn (and should not have healed Charmander)
         battle.defendingFight(AttackNamesies.SHEER_COLD); // Terrain count: 1
         attacking.assertNoEffect(PokemonEffectNamesies.SUBSTITUTE);
         Assert.assertTrue(attacking.isLevitating(battle));
         attacking.assertHealthRatio(14/16.0, 2);
-        defending.assertHealthRatio(13/16.0, 5);
-
-        // Terrain should be cleared at the end of that last turn (after successfully healing Grass-type Charmander)
+        defending.assertHealthRatio(12/16.0, 4);
         Assert.assertFalse(battle.hasEffect(TerrainNamesies.GRASSY_TERRAIN));
 
         // Make sure we don't heal at the end of this turn
@@ -797,7 +797,7 @@ public class EffectTest extends BaseTest {
         attacking.assertHasEffect(PokemonEffectNamesies.TELEKINESIS);
         Assert.assertTrue(attacking.isLevitating(battle));
         attacking.assertHealthRatio(14/16.0, 2);
-        defending.assertHealthRatio(13/16.0, 5);
+        defending.assertHealthRatio(12/16.0, 4);
     }
 
     @Test

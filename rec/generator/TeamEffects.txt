@@ -7,7 +7,6 @@ Constructor:
     Namesies Enum TeamEffectNamesies
     MinTurns Default -1 Int
     MaxTurns Default -1 Int
-    NextTurnSubside Default False Boolean
     HasAlternateCast Default False Boolean
 *
 Failure:
@@ -135,17 +134,18 @@ Spikes:
     Defog: "The spikes dispersed!"
 *
 Wish:
-    NumTurns: 1
-    NextTurnSubside: True
+    NumTurns: 2
     Field: 
         private String casterName;
         ###
-    Subside: 
-        p.healHealthFraction(1/2.0, b, casterName + "'s wish came true!");
+    Subside:
+        Messages.add(casterName + "'s wish came true!");
+        p.healHealthFraction(1/2.0, b, p.getName() + "'s health was restored!");
         ###
     BeforeCast: 
         casterName = caster.getName();
         ###
+    CastMessage: casterName + " made a wish!"
 *
 LuckyChant:
     NumTurns: 5

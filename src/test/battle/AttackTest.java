@@ -729,8 +729,8 @@ public class AttackTest extends BaseTest {
         battle.attackingFight(AttackNamesies.TOXIC_SPIKES);
         battle.attackingFight(AttackNamesies.SPIKES);
         battle.attackingFight(AttackNamesies.LEECH_SEED); // Rapid Spin only
-        battle.attackingFight(AttackNamesies.WRAP); // Rapid Spin only
         battle.defendingFight(AttackNamesies.LIGHT_SCREEN); // Defog only
+        battle.attackingFight(AttackNamesies.WRAP); // Rapid Spin only
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.STEALTH_ROCK));
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
@@ -763,8 +763,8 @@ public class AttackTest extends BaseTest {
         battle.attackingFight(AttackNamesies.TOXIC_SPIKES);
         battle.attackingFight(AttackNamesies.SPIKES);
         battle.attackingFight(AttackNamesies.LEECH_SEED);
-        battle.attackingFight(AttackNamesies.WRAP);
         battle.defendingFight(AttackNamesies.LIGHT_SCREEN);
+        battle.attackingFight(AttackNamesies.WRAP);
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.STEALTH_ROCK));
         Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.TOXIC_SPIKES));

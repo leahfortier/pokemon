@@ -58,9 +58,9 @@ public class EffectList<NamesiesType extends EffectNamesies, EffectType extends 
             boolean active = effect.isActive();
             if (active) {
                 effect.decrement(b, p);
-                active = effect.isActive() || effect.nextTurnSubside();
-                if (!active) {
+                if (!effect.isActive()) {
                     effect.subside(b, p);
+                    active = false;
                 }
             }
 

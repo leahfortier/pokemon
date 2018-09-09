@@ -21,8 +21,8 @@ import type.Type;
 public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> extends Effect<NamesiesType> {
     private static final long serialVersionUID = 1L;
 
-    public BattleEffect(NamesiesType name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
-        super(name, minTurns, maxTurns, nextTurnSubside, hasAlternateCast);
+    public BattleEffect(NamesiesType name, int minTurns, int maxTurns, boolean hasAlternateCast) {
+        super(name, minTurns, maxTurns, hasAlternateCast);
     }
 
     @Override
@@ -43,7 +43,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         Gravity() {
-            super(StandardBattleEffectNamesies.GRAVITY, 5, 5, false, false);
+            super(StandardBattleEffectNamesies.GRAVITY, 5, 5, false);
         }
 
         @Override
@@ -77,7 +77,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         WaterSport() {
-            super(StandardBattleEffectNamesies.WATER_SPORT, 5, 5, false, false);
+            super(StandardBattleEffectNamesies.WATER_SPORT, 5, 5, false);
         }
 
         @Override
@@ -105,7 +105,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         MudSport() {
-            super(StandardBattleEffectNamesies.MUD_SPORT, 5, 5, false, false);
+            super(StandardBattleEffectNamesies.MUD_SPORT, 5, 5, false);
         }
 
         @Override
@@ -133,7 +133,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         WonderRoom() {
-            super(StandardBattleEffectNamesies.WONDER_ROOM, 5, 5, false, true);
+            super(StandardBattleEffectNamesies.WONDER_ROOM, 5, 5, true);
         }
 
         @Override
@@ -172,7 +172,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         TrickRoom() {
-            super(StandardBattleEffectNamesies.TRICK_ROOM, 5, 5, false, true);
+            super(StandardBattleEffectNamesies.TRICK_ROOM, 5, 5, true);
         }
 
         @Override
@@ -199,7 +199,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         MagicRoom() {
-            super(StandardBattleEffectNamesies.MAGIC_ROOM, 5, 5, false, true);
+            super(StandardBattleEffectNamesies.MAGIC_ROOM, 5, 5, true);
         }
 
         @Override
@@ -226,7 +226,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         FieldUproar() {
-            super(StandardBattleEffectNamesies.FIELD_UPROAR, -1, -1, false, false);
+            super(StandardBattleEffectNamesies.FIELD_UPROAR, -1, -1, false);
         }
 
         @Override

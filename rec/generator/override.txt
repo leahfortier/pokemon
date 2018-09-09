@@ -625,7 +625,6 @@ PartialTrap:
 	AddInterface: PartialTrappingEffect
 	AddMapField: MinTurns: 4
 	AddMapField: MaxTurns: 5
-	AddMapField: NextTurnSubside: True
 	AddMapField: CastMessage: {2-}
 	AddMapField: SubsideMessage: victim.getName() + " is no longer trapped by {1_}."
 	AddMapField: RapidSpinNoInterface: released.getName() + " was released from {1_}!"
@@ -1546,8 +1545,7 @@ FutureAttackMove:
     AddMapField: MoveType: Protect_Piercing, Mirrorless
 *
 FutureAttackEffect:
-	AddMapField: NumTurns: 2
-	AddMapField: NextTurnSubside: True
+	AddMapField: NumTurns: 3
 	AddMapField: Field:
 		private ActivePokemon theSeeer;
 		###

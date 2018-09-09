@@ -123,7 +123,7 @@ public final class InvokeInterfaces {
     }
 
     // EndTurnEffect for BattleEffects -- those should only use this and not the standard EndTurnEffect!!!
-    public interface BattleEndTurnEffect {
+    public interface BattleEndTurnEffect extends EffectInterface {
         default void singleEndTurnEffect(Battle b, ActivePokemon victim) {}
 
         default String getEndTurnMessage(Battle b) {
@@ -131,7 +131,18 @@ public final class InvokeInterfaces {
             return "";
         }
 
+        default boolean endTurnSubsider() {
+            // Should override to true when this effect should be deactivated in the end turn method when out of turns
+            return false;
+        }
+
         default void applyEndTurn(Battle b) {
+            if (this.endTurnSubsider() && this.getTurns() == 1) {
+                Messages.add(this.getSubsideMessage(null));
+                this.deactivate();
+                return;
+            }
+
             Messages.add(this.getEndTurnMessage(b));
 
             ActivePokemon playerFront = b.getPlayer().front();

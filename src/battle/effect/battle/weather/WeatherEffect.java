@@ -23,7 +23,7 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
     private final String imageName;
 
     public WeatherEffect(WeatherNamesies namesies, Type weatherElement) {
-        super(namesies, -1, -1, true, false);
+        super(namesies, -1, -1, false);
         this.weatherElement = weatherElement;
         this.imageName = this.getClass().getSimpleName().toLowerCase();
     }
@@ -38,11 +38,17 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
 
     @Override
     protected void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+        // TODO: Why is this like this instead of default turns being the constructor?
         b.getWeather().setTurns(getTurns(b, caster));
     }
 
     private int getTurns(Battle b, ActivePokemon caster) {
         return DEFAULT_TURNS + WeatherExtendingEffect.getModifier(b, caster, this.namesies());
+    }
+
+    @Override
+    public boolean endTurnSubsider() {
+        return true;
     }
 
     // EVERYTHING BELOW IS GENERATED ###

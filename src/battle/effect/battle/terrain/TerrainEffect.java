@@ -12,18 +12,23 @@ import battle.effect.status.StatusNamesies;
 import map.overworld.TerrainType;
 import type.Type;
 
-public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> {
+public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implements BattleEndTurnEffect {
     private static final long serialVersionUID = 1L;
 
     private final TerrainType terrainType;
 
     public TerrainEffect(TerrainNamesies name, TerrainType terrainType) {
-        super(name, 5, 5, false, false);
+        super(name, 5, 5, false);
         this.terrainType = terrainType;
     }
 
     public TerrainType getTerrainType() {
         return this.terrainType;
+    }
+
+    @Override
+    public boolean endTurnSubsider() {
+        return true;
     }
 
     // EVERYTHING BELOW IS GENERATED ###
@@ -71,7 +76,7 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> {
     }
 
     // Grass-type moves are 50% stronger with the grassy terrain
-    static class GrassyTerrain extends TerrainEffect implements BattleEndTurnEffect, PowerChangeEffect {
+    static class GrassyTerrain extends TerrainEffect implements PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         GrassyTerrain() {

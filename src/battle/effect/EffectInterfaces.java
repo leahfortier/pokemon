@@ -265,11 +265,26 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface PartialTrappingEffect extends EndTurnEffect, TrappingEffect, RapidSpinRelease {
-        String getReduceMessage(ActivePokemon victim);
+    public interface EndTurnSubsider extends EffectInterface, EndTurnEffect {
+        void endTurnNoSubside(Battle b, ActivePokemon victim);
 
         @Override
         default void applyEndTurn(ActivePokemon victim, Battle b) {
+            if (this.getTurns() == 1) {
+                Messages.add(this.getSubsideMessage(victim));
+                this.deactivate();
+                return;
+            }
+
+            this.endTurnNoSubside(b, victim);
+        }
+    }
+
+    public interface PartialTrappingEffect extends EndTurnSubsider, TrappingEffect, RapidSpinRelease {
+        String getReduceMessage(ActivePokemon victim);
+
+        @Override
+        default void endTurnNoSubside(Battle b, ActivePokemon victim) {
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
             double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
             victim.reduceHealthFraction(b, fraction, this.getReduceMessage(victim));
