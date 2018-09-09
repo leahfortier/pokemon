@@ -863,9 +863,7 @@ SpecialRoom:
     AddMapField: AlternateCast:
         // Remove the effect if it's already in play
         @ClassName roomsies = (@ClassName)b.getEffects().get(this.namesies);
-        
-        Messages.add(roomsies.getSubsideMessage(caster));
-		b.getEffects().remove(roomsies);
+        roomsies.subside(b, caster);
         ###
 *
 MoveTypePrevent:
@@ -936,8 +934,7 @@ FallMessage:
 	Header: void fall(Battle b, ActivePokemon fallen)
 	Body:
 		Messages.add({0});
-
-		fallen.getEffects().remove(this.namesies());
+        this.deactivate();
 		###
 *
 EndBattle:

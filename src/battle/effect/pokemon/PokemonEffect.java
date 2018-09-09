@@ -1540,8 +1540,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void fall(Battle b, ActivePokemon fallen) {
             Messages.add("The effects of telekinesis were cancelled!");
-
-            fallen.getEffects().remove(this.namesies());
+            this.deactivate();
         }
     }
 
@@ -1682,8 +1681,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void fall(Battle b, ActivePokemon fallen) {
             Messages.add("The effects of " + fallen.getName() + "'s magnet rise were cancelled!");
-
-            fallen.getEffects().remove(this.namesies());
+            this.deactivate();
         }
     }
 
@@ -1853,8 +1851,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void damageTaken(Battle b, ActivePokemon damageTaker) {
             Messages.add(damageTaker.getName() + " lost its focus and couldn't move!");
-            damageTaker.getEffects().remove(this.namesies());
             damageTaker.getEffects().add(PokemonEffectNamesies.FLINCH.getEffect());
+            this.deactivate();
         }
     }
 
@@ -1878,7 +1876,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add(user.getName() + " set off " + victim.getName() + "'s trap!!");
-            victim.getEffects().remove(this.namesies());
+            this.deactivate();
         }
     }
 
@@ -2078,7 +2076,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             this.hp -= damageAmount;
             if (this.hp <= 0) {
                 Messages.add(new MessageUpdate("The substitute broke!").withNewPokemon(damageTaker.namesies(), damageTaker.isShiny(), true, damageTaker.isPlayer()));
-                damageTaker.getEffects().remove(this.namesies());
+                this.deactivate();
             } else {
                 Messages.add("The substitute absorbed the hit!");
             }
@@ -2195,7 +2193,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             }
 
             // Bye Bye Bidesies
-            victim.getEffects().remove(this.namesies());
+            bidesies.deactivate();
         }
 
         @Override
@@ -2262,7 +2260,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             this.addCastMessage(b, caster, victim, source, printCast);
-            victim.getEffects().remove(this.namesies());
+            victim.getEffects().remove(this.namesies()); // TODO: if I change the alternate cast to be on the actual effect then this should change to deactivate
         }
 
         @Override
@@ -2480,7 +2478,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
             // TODO: What is happening
-            p.getEffects().remove(this);
+            this.deactivate();
             return true;
         }
 
@@ -2682,7 +2680,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             Move lastMoveUsed = victim.getLastMoveUsed();
             if (lastMoveUsed == null || lastMoveUsed.getAttack().namesies() != AttackNamesies.RAGE) {
-                victim.getEffects().remove(this);
+                this.deactivate();
                 return;
             }
 

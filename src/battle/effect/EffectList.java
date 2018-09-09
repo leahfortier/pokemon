@@ -45,7 +45,7 @@ public class EffectList<NamesiesType extends EffectNamesies, EffectType extends 
         return get(effect) != null;
     }
 
-    public void remove(EffectType effect) {
+    protected void remove(EffectType effect) {
         this.effects.remove(effect);
     }
 
@@ -59,6 +59,7 @@ public class EffectList<NamesiesType extends EffectNamesies, EffectType extends 
             if (active) {
                 effect.decrement(b, p);
                 if (!effect.isActive()) {
+                    // Naturally subside from decrement
                     effect.subside(b, p);
                     active = false;
                 }

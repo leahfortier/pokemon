@@ -111,9 +111,10 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
         return numTurns == 0;
     }
 
+    // Prints the subside message and deactivates the effect
     public void subside(Battle b, ActivePokemon p) {
         Messages.add(getSubsideMessage(p));
-        active = false; // Unnecessary, but just to be safe
+        this.deactivate();
     }
 
     protected void addCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source, boolean printCast) {

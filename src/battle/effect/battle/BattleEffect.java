@@ -14,7 +14,6 @@ import battle.effect.InvokeInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
-import message.Messages;
 import pokemon.Stat;
 import type.Type;
 
@@ -152,9 +151,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
             WonderRoom roomsies = (WonderRoom)b.getEffects().get(this.namesies);
-
-            Messages.add(roomsies.getSubsideMessage(caster));
-            b.getEffects().remove(roomsies);
+            roomsies.subside(b, caster);
         }
 
         @Override
@@ -179,9 +176,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
             TrickRoom roomsies = (TrickRoom)b.getEffects().get(this.namesies);
-
-            Messages.add(roomsies.getSubsideMessage(caster));
-            b.getEffects().remove(roomsies);
+            roomsies.subside(b, caster);
         }
 
         @Override
@@ -206,9 +201,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
             MagicRoom roomsies = (MagicRoom)b.getEffects().get(this.namesies);
-
-            Messages.add(roomsies.getSubsideMessage(caster));
-            b.getEffects().remove(roomsies);
+            roomsies.subside(b, caster);
         }
 
         @Override
