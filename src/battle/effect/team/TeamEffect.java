@@ -579,7 +579,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         public void enter(Battle b, ActivePokemon enterer) {
             enterer.removeStatus();
             enterer.healHealthFraction(1, b, enterer.getName() + " health was restored due to the " + wish + "!");
-            this.deactivate(); // TODO: Why is this deactivating rather than having one turn? (I didn't really look at this...)
+            this.deactivate();
         }
     }
 
