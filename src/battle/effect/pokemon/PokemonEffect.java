@@ -98,6 +98,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         return victim.hasEffect(this.namesies());
     }
 
+    @Override
+    protected PokemonEffect getEffect(Battle b, ActivePokemon victim) {
+        return victim.getEffect(this.namesies());
+    }
+
     // EVERYTHING BELOW IS GENERATED ###
 
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
@@ -949,8 +954,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             // Doesn't 'fail' if they already have the effect -- just display the message again
             this.addCastMessage(b, caster, victim, source, printCast);
 
-            RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies());
-            critsies.afterCast(b, caster, victim, source);
+            this.afterCast(b, caster, victim, source);
         }
 
         @Override
@@ -1160,8 +1164,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies());
-            stockpile.afterCast(b, caster, victim, source);
+            this.afterCast(b, caster, victim, source);
         }
 
         @Override
@@ -2173,27 +2176,25 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Bide bidesies = (Bide)victim.getEffect(this.namesies());
-
             // Already has the effect, but not ready for it to end yet -- store dat energy
-            if (bidesies.turns > 0) {
-                bidesies.turns--;
+            if (this.turns > 0) {
+                this.turns--;
                 this.addCastMessage(b, caster, victim, source, printCast);
                 return;
             }
 
             // TIME'S UP -- RELEASE DAT STORED ENERGY
             Messages.add(victim.getName() + " released energy!");
-            if (bidesies.damage == 0) {
+            if (this.damage == 0) {
                 // Sucks to suck
                 Messages.add(this.getFailMessage(b, caster, victim));
             } else {
                 // RETALIATION STATION
-                b.getOtherPokemon(victim).reduceHealth(b, 2*bidesies.damage);
+                b.getOtherPokemon(victim).reduceHealth(b, 2*this.damage);
             }
 
             // Bye Bye Bidesies
-            bidesies.deactivate();
+            this.deactivate();
         }
 
         @Override
@@ -2229,8 +2230,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            HalfWeight halfWeight = (HalfWeight)victim.getEffect(this.namesies());
-            halfWeight.layers++;
+            this.layers++;
         }
 
         @Override
@@ -2260,7 +2260,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             this.addCastMessage(b, caster, victim, source, printCast);
-            victim.getEffects().remove(this.namesies()); // TODO: if I change the alternate cast to be on the actual effect then this should change to deactivate
+            this.deactivate();
         }
 
         @Override

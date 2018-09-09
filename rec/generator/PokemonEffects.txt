@@ -293,8 +293,7 @@ RaiseCrits:
         // Doesn't 'fail' if they already have the effect -- just display the message again
         this.addCastMessage(b, caster, victim, source, printCast);
         
-        RaiseCrits critsies = (RaiseCrits)victim.getEffect(this.namesies());
-        critsies.afterCast(b, caster, victim, source);
+        this.afterCast(b, caster, victim, source);
         ###
     AfterCast:
         switch (source) {
@@ -417,8 +416,7 @@ Stockpile:
     Int: StageChangingEffect
     CanHave: True
     AlternateCast:
-        Stockpile stockpile = (Stockpile)victim.getEffect(this.namesies());
-        stockpile.afterCast(b, caster, victim, source);
+        this.afterCast(b, caster, victim, source);
         ###
     AfterCast:
         if (this.turns < 3) {
@@ -865,27 +863,25 @@ Bide:
         move = caster.getMove();
         ###
     AlternateCast:
-        Bide bidesies = (Bide)victim.getEffect(this.namesies());
-
         // Already has the effect, but not ready for it to end yet -- store dat energy
-        if (bidesies.turns > 0) {
-            bidesies.turns--;
+        if (this.turns > 0) {
+            this.turns--;
             this.addCastMessage(b, caster, victim, source, printCast);
             return;
         }
 
         // TIME'S UP -- RELEASE DAT STORED ENERGY
         Messages.add(victim.getName() + " released energy!");
-        if (bidesies.damage == 0) {
+        if (this.damage == 0) {
             // Sucks to suck
             Messages.add(this.getFailMessage(b, caster, victim));
         } else {
             // RETALIATION STATION
-            b.getOtherPokemon(victim).reduceHealth(b, 2*bidesies.damage);
+            b.getOtherPokemon(victim).reduceHealth(b, 2*this.damage);
         }
 
         // Bye Bye Bidesies
-        bidesies.deactivate();
+        this.deactivate();
         ###
     CanHave: True
     ApplyEndTurn:
@@ -898,8 +894,7 @@ HalfWeight:
         ###
     CanHave: True
     AlternateCast:
-        HalfWeight halfWeight = (HalfWeight)victim.getEffect(this.namesies());
-        halfWeight.layers++;
+        this.layers++;
         ###
     Activate:
         this.layers = 1;
@@ -922,7 +917,7 @@ PowerTrick:
     CastMessage: user.getName() + "'s attack and defense were swapped!"
     AlternateCast:
         this.addCastMessage(b, caster, victim, source, printCast);
-        victim.getEffects().remove(this.namesies()); // TODO: if I change the alternate cast to be on the actual effect then this should change to deactivate
+        this.deactivate();
         ###
 *
 PowerSplit:

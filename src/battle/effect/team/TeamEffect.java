@@ -41,6 +41,11 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         return b.getTrainer(victim).hasEffect(this.namesies());
     }
 
+    @Override
+    protected TeamEffect getEffect(Battle b, ActivePokemon victim) {
+        return b.getTrainer(victim).getEffects().get(this.namesies());
+    }
+
     // EVERYTHING BELOW IS GENERATED ###
 
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
@@ -330,10 +335,8 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            ToxicSpikes spikesies = (ToxicSpikes)b.getEffects(victim).get(this.namesies);
-            spikesies.layers++;
-
             this.addCastMessage(b, caster, victim, source, printCast);
+            this.layers++;
         }
 
         @Override
@@ -395,10 +398,8 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            Spikes spikesies = (Spikes)b.getEffects(victim).get(this.namesies);
-            spikesies.layers++;
-
             this.addCastMessage(b, caster, victim, source, printCast);
+            this.layers++;
         }
 
         @Override
@@ -602,10 +603,9 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            PayDay payday = (PayDay)b.getEffects(true).get(this.namesies);
-            payday.coins += 5*caster.getLevel();
-
+            // TODO: This should be a battle effect since it only applies to the player
             this.addCastMessage(b, caster, victim, source, printCast);
+            this.coins += 5*caster.getLevel();
         }
 
         @Override

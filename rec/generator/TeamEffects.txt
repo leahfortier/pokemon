@@ -90,10 +90,8 @@ ToxicSpikes:
     CastMessage: "Toxic spikes were scattered all around!"
     CanHave: True
     AlternateCast:
-        ToxicSpikes spikesies = (ToxicSpikes)b.getEffects(victim).get(this.namesies);        
-        spikesies.layers++;
-        
         this.addCastMessage(b, caster, victim, source, printCast);
+        this.layers++;
         ###
     RapidSpin: "The toxic spikes dispersed!"
     Defog: "The toxic spikes dispersed!"
@@ -125,10 +123,8 @@ Spikes:
     CastMessage: "Spikes were scattered all around!"
     CanHave: True
     AlternateCast:
-        Spikes spikesies = (Spikes)b.getEffects(victim).get(this.namesies);
-        spikesies.layers++;
-        
         this.addCastMessage(b, caster, victim, source, printCast);
+        this.layers++;
         ###
     RapidSpin: "The spikes dispersed!"
     Defog: "The spikes dispersed!"
@@ -183,17 +179,16 @@ PayDay:
         private int coins;
         ###
     AlternateCast:
-        PayDay payday = (PayDay)b.getEffects(true).get(this.namesies);
-        payday.coins += 5*caster.getLevel();
-        
+        // TODO: This should be a battle effect since it only applies to the player
         this.addCastMessage(b, caster, victim, source, printCast);
+        this.coins += 5*caster.getLevel();
         ###
     BeforeCast:
         coins = 5*caster.getLevel();
         ###
     CastMessage: "Coins scattered everywhere!"
     CanHave: True
-    EndBattle: 
+    EndBattle:
         Messages.add(player.getName() + " picked up " + coins + " pokedollars!");
         player.getDatCashMoney(coins);
         ###

@@ -208,4 +208,6 @@ Other random things:
     should mirror coat/counter be fixeddamagemoves?
     change alternate cast method to be called on the effect
     probably have something to automatically remove previous effect if there can only be one (ChangeAbility etc)
+    definitely need a pokedollars constant
+    should cast method be static and take in namesies?
     

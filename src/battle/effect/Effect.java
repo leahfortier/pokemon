@@ -31,10 +31,12 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
 
     protected abstract void addEffect(Battle b, ActivePokemon victim);
     protected abstract boolean hasEffect(Battle b, ActivePokemon victim);
+    protected abstract Effect<NamesiesType> getEffect(Battle b, ActivePokemon victim);
 
     public final void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
         if (this.hasAlternateCast && this.hasEffect(b, victim)) {
-            this.alternateCast(b, caster, victim, source, printCast);
+            Effect effect = this.getEffect(b, victim);
+            effect.alternateCast(b, caster, victim, source, printCast);
         } else {
             this.beforeCast(b, caster, victim, source);
             Messages.update(b);

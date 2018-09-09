@@ -862,8 +862,7 @@ SpecialRoom:
 	AddMapField: CanHave: True
     AddMapField: AlternateCast:
         // Remove the effect if it's already in play
-        @ClassName roomsies = (@ClassName)b.getEffects().get(this.namesies);
-        roomsies.subside(b, caster);
+        this.subside(b, caster);
         ###
 *
 MoveTypePrevent:
