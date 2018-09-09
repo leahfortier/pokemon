@@ -452,8 +452,8 @@ class PokemonAnimationState {
             PartyPokemon pokemon = team.get(index);
 
             boolean silhouette = index == state.teamIndex
-                    ? state.getStatus().namesies() == StatusNamesies.FAINTED
-                    : !pokemon.canFight() || (usedMaxPokemon && !pokemon.isBattleUsed());
+                                 ? state.getStatus().namesies() == StatusNamesies.FAINTED
+                                 : !pokemon.canFight() || (usedMaxPokemon && !pokemon.isBattleUsed());
 
             BufferedImage pokeball = TileSet.TINY_POKEBALL;
             if (silhouette) {

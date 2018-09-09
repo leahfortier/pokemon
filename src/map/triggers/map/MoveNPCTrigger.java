@@ -46,8 +46,8 @@ public class MoveNPCTrigger extends Trigger {
     private String getPath(NPCEntity entity, MapData map) {
         Point start = entity.getLocation();
         Point end = matcher.endLocationIsPlayer()
-                ? Game.getPlayer().getLocation()
-                : map.getEntranceLocation(matcher.getEndEntranceName(), 0, 1);
+                    ? Game.getPlayer().getLocation()
+                    : map.getEntranceLocation(matcher.getEndEntranceName(), 0, 1);
 
         Queue<PathState> queue = new ArrayDeque<>();
         Set<String> visited = new HashSet<>();

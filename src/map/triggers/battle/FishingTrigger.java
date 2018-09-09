@@ -35,8 +35,8 @@ public class FishingTrigger extends Trigger {
 
         ActivePokemon front = player.front();
         int chance = front.hasAbility(AbilityNamesies.SUCTION_CUPS) || front.hasAbility(AbilityNamesies.STICKY_HOLD)
-                ? 75 // I made up this number since I couldn't find it
-                : 50;
+                     ? 75 // I made up this number since I couldn't find it
+                     : 50;
 
         if (RandomUtils.chanceTest(chance)) {
             WildEncounter wildPokemon = WildEncounterInfo.getWildEncounter(front, this.wildEncounters);

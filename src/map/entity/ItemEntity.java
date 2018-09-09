@@ -78,8 +78,8 @@ public class ItemEntity extends Entity {
 
     private String getItemNameWithArticle() {
         return isTM
-                ? "the " + this.itemName.getName()
-                : StringUtils.articleString(this.itemName.getName());
+               ? "the " + this.itemName.getName()
+               : StringUtils.articleString(this.itemName.getName());
     }
 
     @Override

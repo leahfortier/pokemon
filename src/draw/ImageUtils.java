@@ -263,8 +263,8 @@ public final class ImageUtils {
 
                 // Difference when only one is opaque or when both are opaque but different colors
                 if ((firstOpaque && !secondOpaque)
-                    || (secondOpaque && !firstOpaque)
-                    || (firstOpaque && !firstColor.equals(secondColor))) {
+                        || (secondOpaque && !firstOpaque)
+                        || (firstOpaque && !firstColor.equals(secondColor))) {
                     numDiff++;
                 }
             }

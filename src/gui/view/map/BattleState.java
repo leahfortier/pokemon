@@ -94,8 +94,8 @@ class BattleState implements VisualStateHandler {
         battleImageSlideRight = null;
 
         SoundTitle music = battle.isWildBattle()
-                ? SoundTitle.WILD_POKEMON_BATTLE
-                : SoundTitle.TRAINER_BATTLE;
+                           ? SoundTitle.WILD_POKEMON_BATTLE
+                           : SoundTitle.TRAINER_BATTLE;
         SoundPlayer.instance().playMusic(music);
     }
 

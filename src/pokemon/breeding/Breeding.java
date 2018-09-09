@@ -88,8 +88,8 @@ public class Breeding {
         // Inherit 5 stats instead of 3 when a parent holds Destiny Knot
         int remainingIVsToInherit =
                 parentItems.stream().anyMatch(item -> item.namesies() == ItemNamesies.DESTINY_KNOT)
-                        ? 5
-                        : 3;
+                ? 5
+                : 3;
 
         int[] IVs = new int[Stat.NUM_STATS];
         Arrays.fill(IVs, -1);

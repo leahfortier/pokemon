@@ -50,7 +50,7 @@ class FormConfig:
         base_exp_suffix = None
         image_suffix = None
         mega_suffix = ""
-        
+
         # Flabebe has a stupid name with stupid special characters
         if num == 669:
             self.name = "Flabebe"
@@ -58,7 +58,7 @@ class FormConfig:
             self.name = "Nidoran F"
         elif num == 32:
             self.name = "Nidoran M"
-        
+
         # Pokemon with Alolan forms
         if num in [19, 20, 26, 27, 28, 37, 38, 50, 51, 52, 53, 74, 75, 76, 88, 89, 103, 105]:
             self.form_name = "Normal"
@@ -112,7 +112,7 @@ class FormConfig:
         # Necrozma
         elif num == 800:
             self.form_name = "Normal"
-            
+
         elif num == AddedPokes.MEGA_CHARIZARD.value:
             self.lookup_num = 6
             self.is_mega = True
@@ -196,17 +196,17 @@ class FormConfig:
             self.name = "Lugarugan"
             self.form_index = 2
             image_suffix = "-d"
-        
+
         if self.is_alolan:
             self.form_name = "Alola"
             self.normal_form = False
             self.type_form_name = "Alolan"
             self.form_index = 1
             image_suffix = "-a"
-        
+
         # Basculin, Meowstic, Magearna (fucking Soul-Heart has a dash)
         self.use_abilities_list = num in [550, 678, 801]
-        
+
         if self.is_mega:
             self.mega_name = "Mega Evolution" + mega_suffix
             if base_exp_suffix is None:
@@ -216,16 +216,16 @@ class FormConfig:
         else:
             assert not self.use_mega_stats
             assert mega_suffix == ""
-            
+
         if base_exp_suffix is None:
             base_exp_suffix = ""
         if image_suffix is None:
             image_suffix = ""
-            
+
         self.base_exp_name = str(self.lookup_num).zfill(3) + base_exp_suffix
         self.form_image_name = str(self.lookup_num).zfill(3) + image_suffix
         self.pokedex_image_name = str(self.lookup_num) + image_suffix
-        
+
         if self.ev_form_name is None:
             self.ev_form_name = self.form_name
         if self.type_form_name is None:
@@ -235,27 +235,27 @@ class FormConfig:
         # No form index implies there is only the normal form or all forms are treated the same
         if form_index is None:
             return True
-        
+
         for form in row[form_index][0][0].getchildren():
             if self.check_form(form[0]):
                 return True
-            
+
         return False
-    
+
     def has_form_from_table(self, table):
         has_image = False
         for form in table.getchildren():
             if form.tag != "img":
                 continue
-            
+
             has_image = True
             if self.check_form(form):
                 return True
-    
+
         # If you didn't find any image tags, then there are not multiple forms
         # So the only form is the normal form        
         return not has_image
-    
+
     def check_form(self, form):
         image_name = form.attrib["src"]
         if image_name.endswith('/' + self.form_image_name + '.png'):

@@ -29,8 +29,8 @@ public enum MessageUpdateType {
     }),
     WIN_BATTLE(battleView -> {
         SoundTitle music = battleView.getCurrentBattle().isWildBattle()
-                ? SoundTitle.WILD_POKEMON_DEFEATED
-                : SoundTitle.TRAINER_DEFEATED; // TODO: Get trainer win music
+                           ? SoundTitle.WILD_POKEMON_DEFEATED
+                           : SoundTitle.TRAINER_DEFEATED; // TODO: Get trainer win music
         SoundPlayer.instance().playMusic(music);
     });
 
