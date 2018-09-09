@@ -6595,4 +6595,3 @@ Plasma Fists:
         return caster.getName() + " electrified " + victim.getName() + "!";
         ###
 *
-

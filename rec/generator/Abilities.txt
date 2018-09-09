@@ -365,9 +365,9 @@ Sturdy:
         ###
     BraceMessage: bracer.getName() + "'s " + this.getName() + " endured the hit!"
     Block:
-		return user.getAttack() instanceof OhkoMove;
-		###
-	BlockMessage: victim.getName() + "'s " + this.getName() + " prevents OHKO moves!"
+        return user.getAttack() instanceof OhkoMove;
+        ###
+    BlockMessage: victim.getName() + "'s " + this.getName() + " prevents OHKO moves!"
 *
 Oblivious:
     Desc: The Pok\u00e9mon is oblivious, and that keeps it from being infatuated or falling for taunts.
@@ -399,7 +399,7 @@ Simple:
 Early Bird:
     Desc: The Pok\u00e9mon awakens twice as fast as other Pok\u00e9mon from sleep.
     Int: StatusReceivedEffect
-	StatusReceived:
+    StatusReceived:
         if (statusType == StatusNamesies.ASLEEP) {
             StatusCondition sleepyTime = victim.getStatus();
             sleepyTime.setTurns(sleepyTime.getTurns()/2);
@@ -1699,4 +1699,3 @@ Grassy Surge:
     Desc: Turns the ground into Grassy Terrain when the Pok\u00e9mon enters a battle.
     TerrainStarter: Grassy
 *
-

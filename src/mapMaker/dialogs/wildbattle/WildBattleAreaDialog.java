@@ -131,5 +131,3 @@ public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
         matcher.getWildBattles().forEach(this::addWildBattleTrigger);
     }
 }
-
-

@@ -45,7 +45,7 @@ class FontMetricsGen extends JPanel {
             appender.appendLine(fontMetrics.toString());
         }
 
-        FileIO.writeToFile(FileName.FONT_METRICS, appender.toString());
+        FileIO.overwriteFile(FileName.FONT_METRICS, appender.toString());
     }
 
     private void reset(int fontSize) {
