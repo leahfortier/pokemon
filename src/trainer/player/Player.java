@@ -38,6 +38,7 @@ import util.Point;
 import util.RandomUtils;
 import util.TimeUtils;
 import util.serialization.Serializable;
+import util.string.PokeString;
 import util.string.StringUtils;
 
 import java.util.ArrayList;
@@ -418,7 +419,7 @@ public class Player extends PlayerTrainer implements Serializable {
 
             // I've decided that the next line of code is the best line in this entire codebase
             int datCash = opp.getDatCashMoney()*(hasEffect(TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE) ? 2 : 1);
-            Messages.add(getName() + " received " + datCash + " pokedollars for winning! Woo!");
+            Messages.add(getName() + " received " + datCash + " " + PokeString.POKEDOLLARS + " for winning! Woo!");
             this.getDatCashMoney(datCash);
         } else {
             Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.WIN_BATTLE));

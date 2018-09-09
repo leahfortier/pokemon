@@ -264,7 +264,7 @@ public class Battle implements Serializable {
         if (opponent instanceof Trainer) {
             Trainer opp = (Trainer)opponent;
             int cashMoney = player.sucksToSuck(opp.getDatCashMoney());
-            Messages.add(opp.getName() + " rummaged through the pockets of your passed out body and stole " + cashMoney + " pokedollars!!!");
+            Messages.add(opp.getName() + " rummaged through the pockets of your passed out body and stole " + cashMoney + " " + PokeString.POKEDOLLARS + "!!!");
         }
 
         player.healAll();

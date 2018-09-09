@@ -22,6 +22,7 @@ import pokemon.ability.AbilityNamesies;
 import trainer.Trainer;
 import type.Type;
 import util.serialization.Serializable;
+import util.string.PokeString;
 
 // Class to handle effects that are specific to one side of the battle
 public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements Serializable {
@@ -620,7 +621,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
         @Override
         public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
-            Messages.add(player.getName() + " picked up " + coins + " pokedollars!");
+            Messages.add(player.getName() + " picked up " + coins + " " + PokeString.POKEDOLLARS + "!");
             player.getDatCashMoney(coins);
         }
     }

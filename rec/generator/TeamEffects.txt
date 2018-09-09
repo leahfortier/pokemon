@@ -189,7 +189,7 @@ PayDay:
     CastMessage: "Coins scattered everywhere!"
     CanHave: True
     EndBattle:
-        Messages.add(player.getName() + " picked up " + coins + " pokedollars!");
+        Messages.add(player.getName() + " picked up " + coins + " " + PokeString.POKEDOLLARS + "!");
         player.getDatCashMoney(coins);
         ###
 *
