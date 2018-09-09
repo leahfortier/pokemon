@@ -45,7 +45,9 @@ public class EffectList<NamesiesType extends EffectNamesies, EffectType extends 
         return get(effect) != null;
     }
 
-    public void remove(EffectType effect) {
+    // Private and should really only be called from the decrement method
+    // Whenever possible, effect.deactivate() is preferable
+    protected void remove(EffectType effect) {
         this.effects.remove(effect);
     }
 
@@ -58,11 +60,14 @@ public class EffectList<NamesiesType extends EffectNamesies, EffectType extends 
             boolean active = effect.isActive();
             if (active) {
                 effect.decrement(b, p);
-                active = effect.isActive() || effect.nextTurnSubside();
+                if (!effect.isActive()) {
+                    // Naturally subside from decrement
+                    effect.subside(b, p);
+                    active = false;
+                }
             }
 
             if (!active) {
-                effect.subside(b, p);
                 this.remove(effect);
 
                 // I think this is pretty much just for Future Sight...

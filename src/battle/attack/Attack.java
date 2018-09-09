@@ -1852,11 +1852,12 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            // TODO: We really just want this for the actual damage reduce -- will this affect Apply/TakeDamageEffects?
+            // Give bracing effect for damage application (should only affect direct damage, and not any Apply/TakeDamageEffects)
             // Don't use the cast method here since we don't want it to be affected by successive decay
-            o.getEffects().add(PokemonEffectNamesies.BRACING.getEffect());
+            PokemonEffect bracing = PokemonEffectNamesies.BRACING.getEffect();
+            o.getEffects().add(bracing);
             super.applyDamage(me, o, b);
-            o.getEffects().remove(PokemonEffectNamesies.BRACING);
+            bracing.deactivate();
         }
     }
 
@@ -5905,7 +5906,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            BarrierEffect.breakBarriers(b, user, victim);
+            BarrierEffect.breakBarriers(b, victim, user);
         }
     }
 
@@ -5922,7 +5923,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            BarrierEffect.breakBarriers(b, user, victim);
+            BarrierEffect.breakBarriers(b, victim, user);
         }
     }
 

@@ -7,7 +7,6 @@ Constructor:
     Namesies Enum PokemonEffectNamesies
     MinTurns Default -1 Int
     MaxTurns Default -1 Int
-    NextTurnSubside Default False Boolean
     HasAlternateCast Default False Boolean
 *
 Failure:
@@ -151,7 +150,7 @@ Confusion:
         // Snap it out!
         if (turns == 0) {
             Messages.add(p.getName() + " snapped out of its confusion!");
-            super.active = false;
+            this.deactivate();
             return true;
         }
 
@@ -203,7 +202,7 @@ Encore:
             return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being encored!";
         }
         ###
-    Int: ForceMoveEffect, EndTurnEffect, AttackSelectionSelfBlockerEffect
+    Int: ForceMoveEffect, AttackSelectionSelfBlockerEffect
     Field:
         private Move move;
         ###
@@ -221,11 +220,9 @@ Encore:
     BeforeCast:
         move = victim.getLastMoveUsed();
         ###
-    ApplyEndTurn:
+    ShouldSubside:
         // If the move runs out of PP, Encore immediately ends
-        if (move.getPP() == 0) {
-            active = false;
-        }
+        return move.getPP() == 0;
         ###
 *
 Disable:
@@ -638,7 +635,7 @@ Uproar:
             }
         }
         ###
-    Int: ForceMoveEffect, AttackSelectionEffect, EndTurnEffect
+    Int: ForceMoveEffect, AttackSelectionEffect
     GetForceMove:
         return uproar;
         ###
@@ -647,11 +644,9 @@ Uproar:
         return m.getAttack().namesies() == AttackNamesies.UPROAR;
         ###
     UnusableMessage: "Only Uproar can be used right now!"
-    ApplyEndTurn:
+    ShouldSubside:
         // If uproar runs out of PP, the effect immediately ends
-        if (uproar.getPP() == 0) {
-            active = false;
-        }
+        return uproar.getPP() == 0;
         ###
 *
 AquaRing:
@@ -663,8 +658,9 @@ Nightmare:
     FailCondition: !victim.hasStatus(StatusNamesies.ASLEEP)
     Int: EndTurnEffect
     ApplyEndTurn:
-        if (!victim.hasStatus(StatusNamesies.ASLEEP)) {
-            this.active = false;
+        // Only active when asleep
+        if (this.shouldSubside(b, victim)) {
+            this.deactivate();
             return;
         }
 
@@ -685,8 +681,8 @@ Focusing:
     Int: DamageTakenEffect
     DamageTaken:
         Messages.add(damageTaker.getName() + " lost its focus and couldn't move!");
-        damageTaker.getEffects().remove(this.namesies());
         damageTaker.getEffects().add(PokemonEffectNamesies.FLINCH.getEffect());
+        this.deactivate();
         ###
 *
 ShellTrap:
@@ -695,7 +691,7 @@ ShellTrap:
     Int: PhysicalContactEffect
     Contact:
         Messages.add(user.getName() + " set off " + victim.getName() + "'s trap!!");
-        victim.getEffects().remove(this.namesies());
+        this.deactivate();
         ###
 *
 BeakBlast:
@@ -814,7 +810,7 @@ Substitute:
         this.hp -= damageAmount;
         if (this.hp <= 0) {
             Messages.add(new MessageUpdate("The substitute broke!").withNewPokemon(damageTaker.namesies(), damageTaker.isShiny(), true, damageTaker.isPlayer()));
-            damageTaker.getEffects().remove(this.namesies());
+            this.deactivate();
         } else {
             Messages.add("The substitute absorbed the hit!");
         }
@@ -889,7 +885,7 @@ Bide:
         }
 
         // Bye Bye Bidesies
-        victim.getEffects().remove(this.namesies());
+        bidesies.deactivate();
         ###
     CanHave: True
     ApplyEndTurn:
@@ -926,7 +922,7 @@ PowerTrick:
     CastMessage: user.getName() + "'s attack and defense were swapped!"
     AlternateCast:
         this.addCastMessage(b, caster, victim, source, printCast);
-        victim.getEffects().remove(this.namesies());
+        victim.getEffects().remove(this.namesies()); // TODO: if I change the alternate cast to be on the actual effect then this should change to deactivate
         ###
 *
 PowerSplit:
@@ -998,7 +994,7 @@ DestinyBond:
     Int: BeforeTurnEffect
     CanAttack:
         // TODO: What is happening
-        p.getEffects().remove(this);
+        this.deactivate();
         return true;
         ###
     DeathWish:
@@ -1016,8 +1012,8 @@ PerishSong:
         }
         ###
     ApplyEndTurn:
-        Messages.add(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!");
-        if (super.numTurns == 1) {
+        Messages.add(victim.getName() + "'s Perish Song count fell to " + (this.getTurns() - 1) + "!");
+        if (this.getTurns() == 1) {
             victim.killKillKillMurderMurderMurder(b, "");
         }
         ###
@@ -1078,7 +1074,7 @@ Raging:
     OnTakeDamage:
         Move lastMoveUsed = victim.getLastMoveUsed();
         if (lastMoveUsed == null || lastMoveUsed.getAttack().namesies() != AttackNamesies.RAGE) {
-            victim.getEffects().remove(this);
+            this.deactivate();
             return;
         }
 

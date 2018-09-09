@@ -18,10 +18,8 @@ import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.InvokeInterfaces.WildEncounterSelector;
-import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
-import battle.effect.team.TeamEffect;
 import item.ItemNamesies;
 import item.hold.HoldItem;
 import main.Global;
@@ -259,21 +257,6 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface EffectReleaser {
-
-        default void release(Battle b, ActivePokemon released, String releaseMessage) {
-            Messages.add(releaseMessage);
-
-            if (this instanceof PokemonEffect) {
-                released.getEffects().remove((PokemonEffect)this);
-            } else if (this instanceof TeamEffect) {
-                b.getTrainer(released).getEffects().remove((TeamEffect)this);
-            } else {
-                Global.error("Invalid release object " + this.getClass().getSimpleName());
-            }
-        }
-    }
-
     public interface AttackSelectionSelfBlockerEffect extends AttackSelectionEffect, SelfAttackBlocker {
 
         @Override
@@ -282,11 +265,26 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface PartialTrappingEffect extends EndTurnEffect, TrappingEffect, RapidSpinRelease {
-        String getReduceMessage(ActivePokemon victim);
+    public interface EndTurnSubsider extends EffectInterface, EndTurnEffect {
+        void endTurnNoSubside(Battle b, ActivePokemon victim);
 
         @Override
         default void applyEndTurn(ActivePokemon victim, Battle b) {
+            if (this.getTurns() == 1) {
+                Messages.add(this.getSubsideMessage(victim));
+                this.deactivate();
+                return;
+            }
+
+            this.endTurnNoSubside(b, victim);
+        }
+    }
+
+    public interface PartialTrappingEffect extends EndTurnSubsider, TrappingEffect, RapidSpinRelease {
+        String getReduceMessage(ActivePokemon victim);
+
+        @Override
+        default void endTurnNoSubside(Battle b, ActivePokemon victim) {
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
             double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
             victim.reduceHealthFraction(b, fraction, this.getReduceMessage(victim));

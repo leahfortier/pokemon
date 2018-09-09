@@ -31,7 +31,6 @@ GrassyTerrain:
     CastMessage: "Grass sprouted around the battlefield!"
     SubsideMessage: "The grass withered and died."
     Terrain: Grass
-    Int: BattleEndTurnEffect
     BattleEndTurn:
         if (!victim.isLevitating(b)) {
             victim.healHealthFraction(1/16.0, b, victim.getName() + " restored some HP due to the Grassy Terrain!");

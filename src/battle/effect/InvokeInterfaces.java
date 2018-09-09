@@ -6,7 +6,6 @@ import battle.attack.Attack;
 import battle.attack.AttackInterface;
 import battle.attack.Move;
 import battle.attack.MoveType;
-import battle.effect.EffectInterfaces.EffectReleaser;
 import battle.effect.EffectInterfaces.EntryEndTurnEffect;
 import battle.effect.EffectInterfaces.PowderMove;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
@@ -124,7 +123,7 @@ public final class InvokeInterfaces {
     }
 
     // EndTurnEffect for BattleEffects -- those should only use this and not the standard EndTurnEffect!!!
-    public interface BattleEndTurnEffect {
+    public interface BattleEndTurnEffect extends EffectInterface {
         default void singleEndTurnEffect(Battle b, ActivePokemon victim) {}
 
         default String getEndTurnMessage(Battle b) {
@@ -132,7 +131,18 @@ public final class InvokeInterfaces {
             return "";
         }
 
+        default boolean endTurnSubsider() {
+            // Should override to true when this effect should be deactivated in the end turn method when out of turns
+            return false;
+        }
+
         default void applyEndTurn(Battle b) {
+            if (this.endTurnSubsider() && this.getTurns() == 1) {
+                Messages.add(this.getSubsideMessage(null));
+                this.deactivate();
+                return;
+            }
+
             Messages.add(this.getEndTurnMessage(b));
 
             ActivePokemon playerFront = b.getPlayer().front();
@@ -241,29 +251,31 @@ public final class InvokeInterfaces {
         }
     }
 
-    public interface BarrierEffect extends EffectReleaser {
+    public interface BarrierEffect extends EffectInterface {
         String getBreakMessage(ActivePokemon breaker);
 
-        default void breakBarrier(Battle b, ActivePokemon breaker, ActivePokemon broken) {
-            this.release(b, broken, this.getBreakMessage(breaker));
+        default void breakBarrier(ActivePokemon breaker) {
+            Messages.add(this.getBreakMessage(breaker));
+            this.deactivate();
         }
 
-        static void breakBarriers(Battle b, ActivePokemon breaker, ActivePokemon broken) {
+        static void breakBarriers(Battle b, ActivePokemon broken, ActivePokemon breaker) {
             List<InvokeEffect> invokees = b.getEffectsList(broken);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof BarrierEffect && InvokeEffect.isActiveEffect(invokee)) {
                     BarrierEffect effect = (BarrierEffect)invokee;
-                    effect.breakBarrier(b, breaker, broken);
+                    effect.breakBarrier(breaker);
                 }
             }
         }
     }
 
-    public interface DefogRelease extends EffectReleaser {
+    public interface DefogRelease extends EffectInterface {
         String getDefogReleaseMessage(ActivePokemon released);
 
-        default void releaseDefog(Battle b, ActivePokemon released) {
-            this.release(b, released, this.getDefogReleaseMessage(released));
+        default void releaseDefog(ActivePokemon released) {
+            Messages.add(this.getDefogReleaseMessage(released));
+            this.deactivate();
         }
 
         static void release(Battle b, ActivePokemon released) {
@@ -271,17 +283,18 @@ public final class InvokeInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof DefogRelease && InvokeEffect.isActiveEffect(invokee)) {
                     DefogRelease effect = (DefogRelease)invokee;
-                    effect.releaseDefog(b, released);
+                    effect.releaseDefog(released);
                 }
             }
         }
     }
 
-    public interface RapidSpinRelease extends EffectReleaser {
+    public interface RapidSpinRelease extends EffectInterface {
         String getRapidSpinReleaseMessage(ActivePokemon released);
 
-        default void releaseRapidSpin(Battle b, ActivePokemon released) {
-            this.release(b, released, this.getRapidSpinReleaseMessage(released));
+        default void releaseRapidSpin(ActivePokemon released) {
+            Messages.add(this.getRapidSpinReleaseMessage(released));
+            this.deactivate();
         }
 
         static void release(Battle b, ActivePokemon released) {
@@ -289,7 +302,7 @@ public final class InvokeInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof RapidSpinRelease && InvokeEffect.isActiveEffect(invokee)) {
                     RapidSpinRelease effect = (RapidSpinRelease)invokee;
-                    effect.releaseRapidSpin(b, released);
+                    effect.releaseRapidSpin(released);
                 }
             }
         }

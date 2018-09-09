@@ -10,21 +10,19 @@ import message.Messages;
 import util.RandomUtils;
 import util.serialization.Serializable;
 
-public abstract class Effect<NamesiesType extends EffectNamesies> implements InvokeEffect, Serializable {
+public abstract class Effect<NamesiesType extends EffectNamesies> implements EffectInterface, InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final String DEFAULT_FAIL_MESSAGE = "...but it failed!";
 
     protected final NamesiesType namesies;
-    private final boolean nextTurnSubside;
     private final boolean hasAlternateCast;
 
-    protected boolean active;
-    protected int numTurns;
+    private int numTurns;
+    private boolean active;
 
-    protected Effect(NamesiesType name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
+    protected Effect(NamesiesType name, int minTurns, int maxTurns, boolean hasAlternateCast) {
         this.namesies = name;
-        this.nextTurnSubside = nextTurnSubside;
         this.hasAlternateCast = hasAlternateCast;
 
         this.numTurns = minTurns == -1 ? -1 : RandomUtils.getRandomInt(minTurns, maxTurns);
@@ -56,18 +54,16 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Inv
     protected void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {}
     protected void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {}
 
-    public boolean nextTurnSubside() {
-        return nextTurnSubside;
-    }
-
     public boolean hasAlternateCast() {
         return this.hasAlternateCast;
     }
 
+    @Override
     public final NamesiesType namesies() {
         return this.namesies;
     }
 
+    @Override
     public void deactivate() {
         active = false;
     }
@@ -83,8 +79,8 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Inv
         }
 
         // All done with this effect! If it's time to subside, do it
-        if (shouldSubside(b, victim)) {
-            active = false;
+        if (numTurns == 0 || this.shouldSubside(b, victim)) {
+            this.deactivate();
         }
     }
 
@@ -115,9 +111,10 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Inv
         return numTurns == 0;
     }
 
+    // Prints the subside message and deactivates the effect
     public void subside(Battle b, ActivePokemon p) {
         Messages.add(getSubsideMessage(p));
-        active = false; // Unnecessary, but just to be safe
+        this.deactivate();
     }
 
     protected void addCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source, boolean printCast) {
@@ -139,15 +136,18 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Inv
         return DEFAULT_FAIL_MESSAGE;
     }
 
-    protected String getSubsideMessage(ActivePokemon p) {
+    @Override
+    public String getSubsideMessage(ActivePokemon victim) {
         return "";
     }
 
+    @Override
     public boolean isActive() {
         return active;
     }
 
     // Returns the number of turns left that the Effect will be in play (-1 for permanent effects)
+    @Override
     public int getTurns() {
         return numTurns;
     }

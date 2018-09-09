@@ -42,6 +42,7 @@ EndTurnEffect:
 ***
 BattleEndTurnEffect:
     Comments: // EndTurnEffect for BattleEffects -- those should only use this and not the standard EndTurnEffect!!!
+    Extends: EffectInterface
 	Method:
 		Header: void singleEndTurnEffect(Battle b, ActivePokemon victim)
         Default: Empty
@@ -54,12 +55,25 @@ BattleEndTurnEffect:
             ###
     *
     Method:
+        Header: boolean endTurnSubsider()
+        Default:
+            // Should override to true when this effect should be deactivated in the end turn method when out of turns
+            return false;
+            ###
+    *
+    Method:
         Header: void applyEndTurn(Battle b)
         Invoke: Void
         SetInvokees:
             List<BattleEffect<? extends BattleEffectNamesies>> invokees = b.getEffects().asList();
             ###
         Default:
+            if (this.endTurnSubsider() && this.getTurns() == 1) {
+                Messages.add(this.getSubsideMessage(null));
+                this.deactivate();
+                return;
+            }
+        
             Messages.add(this.getEndTurnMessage(b));
             
             ActivePokemon playerFront = b.getPlayer().front();
@@ -116,47 +130,53 @@ CrashDamageMove:
 	*
 ***
 BarrierEffect:
-	Extends: EffectReleaser
+	Extends: EffectInterface
     Method:
         Header: String getBreakMessage(ActivePokemon breaker)
     *
     Method:
-		Header: void breakBarrier(Battle b, ActivePokemon breaker, ActivePokemon broken)
+		Header: void breakBarrier(ActivePokemon breaker)
+        InvokeParameters: Battle b, ActivePokemon broken
 		EffectList: broken
 		Invoke: Void
 		InvokeName: breakBarriers
         Default:
-            this.release(b, broken, this.getBreakMessage(breaker));
+            Messages.add(this.getBreakMessage(breaker));
+            this.deactivate();
             ###
 	*
 ***
 DefogRelease:
-    Extends: EffectReleaser
+    Extends: EffectInterface
     Method:
         Header: String getDefogReleaseMessage(ActivePokemon released)
     *
     Method:
-		Header: void releaseDefog(Battle b, ActivePokemon released)
+		Header: void releaseDefog(ActivePokemon released)
+        InvokeParameters: Battle b
 		Invoke: Void
 		EffectList: released
 		InvokeName: release
         Default:
-            this.release(b, released, this.getDefogReleaseMessage(released));
+            Messages.add(this.getDefogReleaseMessage(released));
+            this.deactivate();
             ###
 	*
 ***
 RapidSpinRelease:
-    Extends: EffectReleaser
+    Extends: EffectInterface
     Method:
         Header: String getRapidSpinReleaseMessage(ActivePokemon released)
     *
     Method:
-		Header: void releaseRapidSpin(Battle b, ActivePokemon released)
+		Header: void releaseRapidSpin(ActivePokemon released)
+        InvokeParameters: Battle b
 		Invoke: Void
 		EffectList: released
 		InvokeName: release
         Default:
-            this.release(b, released, this.getRapidSpinReleaseMessage(released));
+            Messages.add(this.getRapidSpinReleaseMessage(released));
+            this.deactivate();
             ###
 	*
 ***

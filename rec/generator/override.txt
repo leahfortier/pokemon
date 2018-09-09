@@ -437,7 +437,7 @@ LightClay:
 *
 BarrierBreaker:
     AddMapField: UniqueEffects:
-		BarrierEffect.breakBarriers(b, user, victim);
+		BarrierEffect.breakBarriers(b, victim, user);
 		###
 *
 SimpleBarrier:
@@ -625,7 +625,6 @@ PartialTrap:
 	AddInterface: PartialTrappingEffect
 	AddMapField: MinTurns: 4
 	AddMapField: MaxTurns: 5
-	AddMapField: NextTurnSubside: True
 	AddMapField: CastMessage: {2-}
 	AddMapField: SubsideMessage: victim.getName() + " is no longer trapped by {1_}."
 	AddMapField: RapidSpinNoInterface: released.getName() + " was released from {1_}!"
@@ -864,9 +863,7 @@ SpecialRoom:
     AddMapField: AlternateCast:
         // Remove the effect if it's already in play
         @ClassName roomsies = (@ClassName)b.getEffects().get(this.namesies);
-        
-        Messages.add(roomsies.getSubsideMessage(caster));
-		b.getEffects().remove(roomsies);
+        roomsies.subside(b, caster);
         ###
 *
 MoveTypePrevent:
@@ -937,8 +934,7 @@ FallMessage:
 	Header: void fall(Battle b, ActivePokemon fallen)
 	Body:
 		Messages.add({0});
-
-		fallen.getEffects().remove(this.namesies());
+        this.deactivate();
 		###
 *
 EndBattle:
@@ -1546,8 +1542,7 @@ FutureAttackMove:
     AddMapField: MoveType: Protect_Piercing, Mirrorless
 *
 FutureAttackEffect:
-	AddMapField: NumTurns: 2
-	AddMapField: NextTurnSubside: True
+	AddMapField: NumTurns: 3
 	AddMapField: Field:
 		private ActivePokemon theSeeer;
 		###

@@ -14,15 +14,14 @@ import battle.effect.InvokeInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
-import message.Messages;
 import pokemon.Stat;
 import type.Type;
 
 public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> extends Effect<NamesiesType> {
     private static final long serialVersionUID = 1L;
 
-    public BattleEffect(NamesiesType name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
-        super(name, minTurns, maxTurns, nextTurnSubside, hasAlternateCast);
+    public BattleEffect(NamesiesType name, int minTurns, int maxTurns, boolean hasAlternateCast) {
+        super(name, minTurns, maxTurns, hasAlternateCast);
     }
 
     @Override
@@ -43,7 +42,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         Gravity() {
-            super(StandardBattleEffectNamesies.GRAVITY, 5, 5, false, false);
+            super(StandardBattleEffectNamesies.GRAVITY, 5, 5, false);
         }
 
         @Override
@@ -77,7 +76,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         WaterSport() {
-            super(StandardBattleEffectNamesies.WATER_SPORT, 5, 5, false, false);
+            super(StandardBattleEffectNamesies.WATER_SPORT, 5, 5, false);
         }
 
         @Override
@@ -105,7 +104,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         MudSport() {
-            super(StandardBattleEffectNamesies.MUD_SPORT, 5, 5, false, false);
+            super(StandardBattleEffectNamesies.MUD_SPORT, 5, 5, false);
         }
 
         @Override
@@ -133,7 +132,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         WonderRoom() {
-            super(StandardBattleEffectNamesies.WONDER_ROOM, 5, 5, false, true);
+            super(StandardBattleEffectNamesies.WONDER_ROOM, 5, 5, true);
         }
 
         @Override
@@ -152,9 +151,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
             WonderRoom roomsies = (WonderRoom)b.getEffects().get(this.namesies);
-
-            Messages.add(roomsies.getSubsideMessage(caster));
-            b.getEffects().remove(roomsies);
+            roomsies.subside(b, caster);
         }
 
         @Override
@@ -172,16 +169,14 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         TrickRoom() {
-            super(StandardBattleEffectNamesies.TRICK_ROOM, 5, 5, false, true);
+            super(StandardBattleEffectNamesies.TRICK_ROOM, 5, 5, true);
         }
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
             TrickRoom roomsies = (TrickRoom)b.getEffects().get(this.namesies);
-
-            Messages.add(roomsies.getSubsideMessage(caster));
-            b.getEffects().remove(roomsies);
+            roomsies.subside(b, caster);
         }
 
         @Override
@@ -199,16 +194,14 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         MagicRoom() {
-            super(StandardBattleEffectNamesies.MAGIC_ROOM, 5, 5, false, true);
+            super(StandardBattleEffectNamesies.MAGIC_ROOM, 5, 5, true);
         }
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
             // Remove the effect if it's already in play
             MagicRoom roomsies = (MagicRoom)b.getEffects().get(this.namesies);
-
-            Messages.add(roomsies.getSubsideMessage(caster));
-            b.getEffects().remove(roomsies);
+            roomsies.subside(b, caster);
         }
 
         @Override
@@ -226,7 +219,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         FieldUproar() {
-            super(StandardBattleEffectNamesies.FIELD_UPROAR, -1, -1, false, false);
+            super(StandardBattleEffectNamesies.FIELD_UPROAR, -1, -1, false);
         }
 
         @Override
@@ -246,11 +239,11 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
 
         @Override
         public boolean theVeryVeryEnd(Battle b, ActivePokemon p) {
-            if (b.getTrainer(true).front().hasEffect(PokemonEffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(PokemonEffectNamesies.UPROAR)) {
+            if (b.getPlayer().front().hasEffect(PokemonEffectNamesies.UPROAR) || b.getOpponent().front().hasEffect(PokemonEffectNamesies.UPROAR)) {
                 return false;
             }
 
-            this.active = false;
+            this.deactivate();
             return true;
         }
     }

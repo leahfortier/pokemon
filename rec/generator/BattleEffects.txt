@@ -7,7 +7,6 @@ Constructor:
     Namesies Enum StandardBattleEffectNamesies
     MinTurns Default -1 Int
     MaxTurns Default -1 Int
-    NextTurnSubside Default False Boolean
     HasAlternateCast Default False Boolean
 *
 Failure:
@@ -62,11 +61,11 @@ FieldUproar:
     StatusPrevent: return status == StatusNamesies.ASLEEP;
     StatusPreventMessage: "The uproar prevents sleep!!"
     TheVeryEnd:
-        if (b.getTrainer(true).front().hasEffect(PokemonEffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(PokemonEffectNamesies.UPROAR)) {
+        if (b.getPlayer().front().hasEffect(PokemonEffectNamesies.UPROAR) || b.getOpponent().front().hasEffect(PokemonEffectNamesies.UPROAR)) {
             return false;
         }
 
-        this.active = false;
+        this.deactivate();
         return true;
         ###
 *

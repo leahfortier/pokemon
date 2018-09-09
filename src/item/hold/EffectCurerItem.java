@@ -18,8 +18,8 @@ public interface EffectCurerItem extends HoldItem, EffectReceivedEffect, EndTurn
         boolean used = false;
         for (PokemonEffectNamesies removableEffect : this.getCurableEffects()) {
             if (user.getEffects().remove(removableEffect)) {
-                used = true;
                 Messages.add(this.getRemoveMessage(user, removableEffect));
+                used = true;
             }
         }
 

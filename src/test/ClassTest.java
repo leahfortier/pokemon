@@ -2,7 +2,6 @@ package test;
 
 import battle.attack.Attack;
 import battle.attack.AttackInterface;
-import battle.effect.EffectInterfaces.EffectReleaser;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
@@ -11,7 +10,6 @@ import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.AttackingNoAdvantageChanger;
-import battle.effect.InvokeInterfaces.BarrierEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
 import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
 import battle.effect.InvokeInterfaces.BeforeTurnEffect;
@@ -23,7 +21,6 @@ import battle.effect.InvokeInterfaces.CritBlockerEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.DamageTakenEffect;
 import battle.effect.InvokeInterfaces.DefendingNoAdvantageChanger;
-import battle.effect.InvokeInterfaces.DefogRelease;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
 import battle.effect.InvokeInterfaces.EffectBlockerEffect;
 import battle.effect.InvokeInterfaces.EncounterRateMultiplier;
@@ -188,10 +185,6 @@ public class ClassTest extends BaseTest {
             // Teams and Opponent things
             checkInstance(classy, Team.class, Trainer.class, WildPokemon.class);
             checkInstance(classy, Opponent.class, EnemyTrainer.class, WildPokemon.class);
-
-            // Effect Releaser -- Pokemon and team effects only and not directly inherited
-            checkInstance(classy, EffectReleaser.class, PokemonEffect.class, TeamEffect.class);
-            checkInstance(classy, EffectReleaser.class, DefogRelease.class, RapidSpinRelease.class, BarrierEffect.class);
 
             // MultiTurnMove should not be directly inherited
             checkInstance(classy, MultiTurnMove.class, ChargingMove.class, RechargingMove.class);

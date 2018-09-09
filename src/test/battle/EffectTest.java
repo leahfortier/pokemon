@@ -5,8 +5,11 @@ import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.EndTurnSubsider;
 import battle.effect.EffectNamesies;
+import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
 import battle.effect.battle.terrain.TerrainNamesies;
+import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
@@ -43,6 +46,25 @@ public class EffectTest extends BaseTest {
             } catch (NoSuchMethodException e) {
                 // Method was not overridden, hasAlternateCast must be false
                 Assert.assertFalse(effect.hasAlternateCast());
+            }
+        }
+    }
+
+    @Test
+    public void endTurnSubsiderTest() {
+        // Effects which implement the EndTurnSubsider, should always override the getSubsideMessage method
+        for (EffectNamesies effectNamesies : EffectNamesies.values()) {
+            Effect effect = effectNamesies.getEffect();
+            try {
+                // This will throw a NoSuchMethodException if the effect does not override the getSubsideMessage method
+                // Nothing to confirm on success, as this method can be overridden by other effects that are not EndTurnSubsiders as well
+                effect.getClass().getDeclaredMethod("getSubsideMessage", ActivePokemon.class);
+            } catch (NoSuchMethodException e) {
+                // Method was not overridden, so should not be an EndTurnSubsider (special case for Clear Skies)
+                Assert.assertFalse(effectNamesies.name(), effect instanceof EndTurnSubsider);
+                if (effect instanceof BattleEndTurnEffect && effectNamesies != WeatherNamesies.CLEAR_SKIES) {
+                    Assert.assertFalse(effectNamesies.name(), ((BattleEndTurnEffect)effect).endTurnSubsider());
+                }
             }
         }
     }
@@ -780,15 +802,15 @@ public class EffectTest extends BaseTest {
         Assert.assertFalse(attacking.isHoldingItem(battle)); // Chesto Berry consumed
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(12/16.0, 4);
+        Assert.assertTrue(battle.hasEffect(TerrainNamesies.GRASSY_TERRAIN));
 
         // Break the substitute
+        // Terrain should be cleared at the end of that last turn (and should not have healed Charmander)
         battle.defendingFight(AttackNamesies.SHEER_COLD); // Terrain count: 1
         attacking.assertNoEffect(PokemonEffectNamesies.SUBSTITUTE);
         Assert.assertTrue(attacking.isLevitating(battle));
         attacking.assertHealthRatio(14/16.0, 2);
-        defending.assertHealthRatio(13/16.0, 5);
-
-        // Terrain should be cleared at the end of that last turn (after successfully healing Grass-type Charmander)
+        defending.assertHealthRatio(12/16.0, 4);
         Assert.assertFalse(battle.hasEffect(TerrainNamesies.GRASSY_TERRAIN));
 
         // Make sure we don't heal at the end of this turn
@@ -797,7 +819,7 @@ public class EffectTest extends BaseTest {
         attacking.assertHasEffect(PokemonEffectNamesies.TELEKINESIS);
         Assert.assertTrue(attacking.isLevitating(battle));
         attacking.assertHealthRatio(14/16.0, 2);
-        defending.assertHealthRatio(13/16.0, 5);
+        defending.assertHealthRatio(12/16.0, 4);
     }
 
     @Test
