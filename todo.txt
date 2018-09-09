@@ -203,9 +203,7 @@ Other random things:
     test moongeist beam and shadow shield (combos like that)
     apparently soak fails against arceus (I'm sure it's that multitype prevents having its type changed)
     does using a berry (not hold item) not count as berry consumption??
-    have a new deactivate type method that will just remove and not properly subside
     failure things for effects should be rewritten (canHave passed in constructor, override for fail abilities or change to be on the ability having figured it all out yet)
-    is there a way to test if a class overrides a method? subsidemessage should always be overridden for endturnsubsiders
     fix direct damage for crash damage (should be forced indirect...)
     should mirror coat/counter be fixeddamagemoves?
     change alternate cast method to be called on the effect

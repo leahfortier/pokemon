@@ -45,6 +45,8 @@ public class EffectList<NamesiesType extends EffectNamesies, EffectType extends 
         return get(effect) != null;
     }
 
+    // Private and should really only be called from the decrement method
+    // Whenever possible, effect.deactivate() is preferable
     protected void remove(EffectType effect) {
         this.effects.remove(effect);
     }

@@ -167,7 +167,7 @@ HealSwitch:
     Enter: 
         enterer.removeStatus();
         enterer.healHealthFraction(1, b, enterer.getName() + " health was restored due to the " + wish + "!");
-        this.deactivate(); // TODO: Why is this deactivating rather than having one turn? (I didn't really look at this...)
+        this.deactivate();
         ###
     BeforeCast: 
         wish = caster.getAttack().namesies() == AttackNamesies.LUNAR_DANCE ? "lunar dance" : "healing wish";

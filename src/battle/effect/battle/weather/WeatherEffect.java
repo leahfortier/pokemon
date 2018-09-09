@@ -17,8 +17,6 @@ import type.Type;
 public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implements BattleEndTurnEffect {
     private static final long serialVersionUID = 1L;
 
-    private static final int DEFAULT_TURNS = 5;
-
     private final Type weatherElement;
     private final String imageName;
 
@@ -38,12 +36,8 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
 
     @Override
     protected void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-        // TODO: Why is this like this instead of default turns being the constructor?
-        b.getWeather().setTurns(getTurns(b, caster));
-    }
-
-    private int getTurns(Battle b, ActivePokemon caster) {
-        return DEFAULT_TURNS + WeatherExtendingEffect.getModifier(b, caster, this.namesies());
+        // Weather needs to set its turns in the cast method because base weather has infinite turns
+        b.getWeather().setTurns(5 + WeatherExtendingEffect.getModifier(b, caster, this.namesies()));
     }
 
     @Override
