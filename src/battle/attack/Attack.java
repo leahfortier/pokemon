@@ -49,7 +49,7 @@ import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.holder.ItemHolder;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.source.AbilityChanger;
+import battle.effect.source.ChangeAbilitySource;
 import battle.effect.source.CastSource;
 import battle.effect.source.ChangeAttackTypeSource;
 import battle.effect.source.ChangeTypeSource;
@@ -8921,7 +8921,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class GastroAcid extends Attack implements AbilityChanger {
+    static class GastroAcid extends Attack implements ChangeAbilitySource {
         private static final long serialVersionUID = 1L;
 
         GastroAcid() {
@@ -9076,7 +9076,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class RolePlay extends Attack implements AbilityChanger {
+    static class RolePlay extends Attack implements ChangeAbilitySource {
         private static final long serialVersionUID = 1L;
 
         RolePlay() {
@@ -9485,7 +9485,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class Entrainment extends Attack implements AbilityChanger {
+    static class Entrainment extends Attack implements ChangeAbilitySource {
         private static final long serialVersionUID = 1L;
 
         Entrainment() {
@@ -9521,7 +9521,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class WorrySeed extends Attack implements AbilityChanger {
+    static class WorrySeed extends Attack implements ChangeAbilitySource {
         private static final long serialVersionUID = 1L;
 
         WorrySeed() {
@@ -9546,7 +9546,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class SimpleBeam extends Attack implements AbilityChanger {
+    static class SimpleBeam extends Attack implements ChangeAbilitySource {
         private static final long serialVersionUID = 1L;
 
         SimpleBeam() {
@@ -9571,7 +9571,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class SkillSwap extends Attack implements AbilityChanger {
+    static class SkillSwap extends Attack implements ChangeAbilitySource {
         private static final long serialVersionUID = 1L;
 
         private Ability ability;

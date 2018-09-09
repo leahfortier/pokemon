@@ -391,7 +391,7 @@ ChangeAbility:
         Ability oldAbility = victim.getAbility();
         oldAbility.deactivate(b, victim);
 
-        AbilityChanger changey = (AbilityChanger)source.getSource(b, caster);
+        ChangeAbilitySource changey = (ChangeAbilitySource)source.getSource(b, caster);
         ability = changey.getAbility(b, caster, victim);
         message = changey.getMessage(b, caster, victim);
 

@@ -35,7 +35,7 @@ import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TerrainCastEffect;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
 import battle.effect.InvokeInterfaces.WeatherExtendingEffect;
-import battle.effect.MessageGetter;
+import battle.effect.EffectInterfaces.MessageGetter;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;

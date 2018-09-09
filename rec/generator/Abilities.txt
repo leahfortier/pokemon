@@ -604,7 +604,7 @@ Quick Feet:
 Trace:
     Desc: When it enters a battle, the Pok\u00e9mon copies an opposing Pok\u00e9mon's Ability.
     Irrestealable: True
-    Int: EntryEffect, AbilityChanger
+    Int: EntryEffect, ChangeAbilitySource
     Enter:
         ActivePokemon other = b.getOtherPokemon(enterer);
         if (!other.getAbility().isStealable() || other.hasAbility(this.namesies)) {
@@ -1033,7 +1033,7 @@ Wonder Skin:
 *
 Mummy:
     Desc: Contact with the Pok\u00e9mon changes the attacker's Ability to Mummy.
-    Int: PhysicalContactEffect, AbilityChanger
+    Int: PhysicalContactEffect, ChangeAbilitySource
     Contact:
         if (user.hasAbility(this.namesies) || !user.getAbility().isReplaceable()) {
             return;

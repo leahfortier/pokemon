@@ -2,7 +2,7 @@ package item.medicine;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.MessageGetter;
+import battle.effect.EffectInterfaces.MessageGetter;
 import battle.effect.source.CastSource;
 import item.hold.HoldItem;
 import item.use.BattlePokemonUseItem;

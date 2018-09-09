@@ -75,7 +75,7 @@ import battle.effect.attack.MultiTurnMove.RechargingMove;
 import battle.effect.battle.BattleEffect;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.source.AbilityChanger;
+import battle.effect.source.ChangeAbilitySource;
 import battle.effect.source.ChangeAttackTypeSource;
 import battle.effect.source.ChangeTypeSource;
 import battle.effect.status.StatusCondition;
@@ -190,7 +190,7 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, MultiTurnMove.class, ChargingMove.class, RechargingMove.class);
 
             // Casted from CastSource.getSource()
-            checkInstance(classy, AbilityChanger.class, castSources);
+            checkInstance(classy, ChangeAbilitySource.class, castSources);
             checkInstance(classy, ChangeAttackTypeSource.class, castSources);
             checkInstance(classy, ChangeTypeSource.class, castSources);
 

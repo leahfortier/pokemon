@@ -51,12 +51,12 @@ import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
-import battle.effect.MessageGetter;
+import battle.effect.EffectInterfaces.MessageGetter;
 import battle.effect.attack.OhkoMove;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
-import battle.effect.source.AbilityChanger;
+import battle.effect.source.ChangeAbilitySource;
 import battle.effect.source.CastSource;
 import battle.effect.source.ChangeAttackTypeSource;
 import battle.effect.source.ChangeTypeSource;
@@ -1124,7 +1124,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             Ability oldAbility = victim.getAbility();
             oldAbility.deactivate(b, victim);
 
-            AbilityChanger changey = (AbilityChanger)source.getSource(b, caster);
+            ChangeAbilitySource changey = (ChangeAbilitySource)source.getSource(b, caster);
             ability = changey.getAbility(b, caster, victim);
             message = changey.getMessage(b, caster, victim);
 

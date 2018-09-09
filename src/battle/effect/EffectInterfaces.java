@@ -49,6 +49,19 @@ public final class EffectInterfaces {
         Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
     }
 
+    public interface MessageGetter {
+        String getGenericMessage(ActivePokemon p);
+        String getSourceMessage(ActivePokemon p, String sourceName);
+
+        default String getMessage(Battle b, ActivePokemon p, CastSource source) {
+            if (source.hasSourceName()) {
+                return this.getSourceMessage(p, source.getSourceName(b, p));
+            } else {
+                return this.getGenericMessage(p);
+            }
+        }
+    }
+
     public interface ItemSwapperEffect {
         String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem);
 

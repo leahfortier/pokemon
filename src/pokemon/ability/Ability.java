@@ -79,7 +79,7 @@ import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.pokemon.PokemonEffectNamesies;
-import battle.effect.source.AbilityChanger;
+import battle.effect.source.ChangeAbilitySource;
 import battle.effect.source.CastSource;
 import battle.effect.source.ChangeTypeSource;
 import battle.effect.status.StatusCondition;
@@ -1759,7 +1759,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class Trace extends Ability implements EntryEffect, AbilityChanger {
+    static class Trace extends Ability implements EntryEffect, ChangeAbilitySource {
         private static final long serialVersionUID = 1L;
 
         Trace() {
@@ -2793,7 +2793,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class Mummy extends Ability implements PhysicalContactEffect, AbilityChanger {
+    static class Mummy extends Ability implements PhysicalContactEffect, ChangeAbilitySource {
         private static final long serialVersionUID = 1L;
 
         Mummy() {
