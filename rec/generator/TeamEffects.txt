@@ -70,17 +70,20 @@ ToxicSpikes:
     Activate: 
         this.layers = 1;
         ###
-    Enter: 
+    Enter:
+        // Can't touch this
         if (enterer.isLevitating(b)) {
             return;
         }
         
+        // Poison-type Pokes absorb Toxic Spikes
         if (enterer.isType(b, Type.POISON)) {
             Messages.add(enterer.getName() + " absorbed the Toxic Spikes!");
-            super.active = false;
+            this.deactivate();
             return;
         }
         
+        // Poison those bros
         ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer);
         StatusNamesies poisonCondition = layers >= 2 ? StatusNamesies.BADLY_POISONED : StatusNamesies.POISONED;
         poisonCondition.getStatus().apply(b, theOtherPokemon, enterer, CastSource.EFFECT);
@@ -164,7 +167,7 @@ HealSwitch:
     Enter: 
         enterer.removeStatus();
         enterer.healHealthFraction(1, b, enterer.getName() + " health was restored due to the " + wish + "!");
-        super.active = false;
+        this.deactivate(); // TODO: Why is this deactivating rather than having one turn? (I didn't really look at this...)
         ###
     BeforeCast: 
         wish = caster.getAttack().namesies() == AttackNamesies.LUNAR_DANCE ? "lunar dance" : "healing wish";

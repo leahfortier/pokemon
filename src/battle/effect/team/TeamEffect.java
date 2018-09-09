@@ -348,16 +348,19 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
+            // Can't touch this
             if (enterer.isLevitating(b)) {
                 return;
             }
 
+            // Poison-type Pokes absorb Toxic Spikes
             if (enterer.isType(b, Type.POISON)) {
                 Messages.add(enterer.getName() + " absorbed the Toxic Spikes!");
-                super.active = false;
+                this.deactivate();
                 return;
             }
 
+            // Poison those bros
             ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer);
             StatusNamesies poisonCondition = layers >= 2 ? StatusNamesies.BADLY_POISONED : StatusNamesies.POISONED;
             poisonCondition.getStatus().apply(b, theOtherPokemon, enterer, CastSource.EFFECT);
@@ -570,7 +573,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         public void enter(Battle b, ActivePokemon enterer) {
             enterer.removeStatus();
             enterer.healHealthFraction(1, b, enterer.getName() + " health was restored due to the " + wish + "!");
-            super.active = false;
+            this.deactivate(); // TODO: Why is this deactivating rather than having one turn? (I didn't really look at this...)
         }
     }
 

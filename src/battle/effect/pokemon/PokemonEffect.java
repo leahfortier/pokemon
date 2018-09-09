@@ -743,7 +743,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             // Snap it out!
             if (turns == 0) {
                 Messages.add(p.getName() + " snapped out of its confusion!");
-                super.active = false;
+                this.deactivate();
                 return true;
             }
 
@@ -814,7 +814,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Encore extends PokemonEffect implements ForceMoveEffect, EndTurnEffect, AttackSelectionSelfBlockerEffect {
+    static class Encore extends PokemonEffect implements ForceMoveEffect, AttackSelectionSelfBlockerEffect {
         private static final long serialVersionUID = 1L;
 
         private Move move;
@@ -826,14 +826,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.getLastMoveUsed().getAttack().isMoveType(MoveType.ENCORELESS) || victim.hasEffect(this.namesies()));
-        }
-
-        @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            // If the move runs out of PP, Encore immediately ends
-            if (move.getPP() == 0) {
-                active = false;
-            }
         }
 
         @Override
@@ -864,6 +856,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getUnusableMessage(Battle b, ActivePokemon p) {
             return "Only " + move.getAttack().getName() + " can be used right now!";
+        }
+
+        @Override
+        public boolean shouldSubside(Battle b, ActivePokemon victim) {
+            // If the move runs out of PP, Encore immediately ends
+            return move.getPP() == 0;
         }
 
         @Override
@@ -1689,7 +1687,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Uproar extends PokemonEffect implements ForceMoveEffect, AttackSelectionEffect, EndTurnEffect {
+    static class Uproar extends PokemonEffect implements ForceMoveEffect, AttackSelectionEffect {
         private static final long serialVersionUID = 1L;
 
         private Move uproar;
@@ -1708,14 +1706,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(victim.hasEffect(this.namesies()));
-        }
-
-        @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            // If uproar runs out of PP, the effect immediately ends
-            if (uproar.getPP() == 0) {
-                active = false;
-            }
         }
 
         @Override
@@ -1754,6 +1744,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getUnusableMessage(Battle b, ActivePokemon p) {
             return "Only Uproar can be used right now!";
+        }
+
+        @Override
+        public boolean shouldSubside(Battle b, ActivePokemon victim) {
+            // If uproar runs out of PP, the effect immediately ends
+            return uproar.getPP() == 0;
         }
     }
 
@@ -1799,8 +1795,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (!victim.hasStatus(StatusNamesies.ASLEEP)) {
-                this.active = false;
+            // Only active when asleep
+            if (this.shouldSubside(b, victim)) {
+                this.deactivate();
                 return;
             }
 
@@ -2524,8 +2521,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            Messages.add(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!");
-            if (super.numTurns == 1) {
+            Messages.add(victim.getName() + "'s Perish Song count fell to " + (this.getTurns() - 1) + "!");
+            if (this.getTurns() == 1) {
                 victim.killKillKillMurderMurderMurder(b, "");
             }
         }

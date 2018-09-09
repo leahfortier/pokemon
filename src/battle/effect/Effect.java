@@ -10,7 +10,7 @@ import message.Messages;
 import util.RandomUtils;
 import util.serialization.Serializable;
 
-public abstract class Effect<NamesiesType extends EffectNamesies> implements InvokeEffect, Serializable {
+public abstract class Effect<NamesiesType extends EffectNamesies> implements EffectInterface, InvokeEffect, Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final String DEFAULT_FAIL_MESSAGE = "...but it failed!";
@@ -19,8 +19,8 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Inv
     private final boolean nextTurnSubside;
     private final boolean hasAlternateCast;
 
-    protected boolean active;
-    protected int numTurns;
+    private int numTurns;
+    private boolean active;
 
     protected Effect(NamesiesType name, int minTurns, int maxTurns, boolean nextTurnSubside, boolean hasAlternateCast) {
         this.namesies = name;
@@ -64,10 +64,12 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Inv
         return this.hasAlternateCast;
     }
 
+    @Override
     public final NamesiesType namesies() {
         return this.namesies;
     }
 
+    @Override
     public void deactivate() {
         active = false;
     }
@@ -83,8 +85,8 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Inv
         }
 
         // All done with this effect! If it's time to subside, do it
-        if (shouldSubside(b, victim)) {
-            active = false;
+        if (numTurns == 0 || this.shouldSubside(b, victim)) {
+            this.deactivate();
         }
     }
 

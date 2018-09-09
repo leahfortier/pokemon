@@ -59,10 +59,12 @@ public class EffectList<NamesiesType extends EffectNamesies, EffectType extends 
             if (active) {
                 effect.decrement(b, p);
                 active = effect.isActive() || effect.nextTurnSubside();
+                if (!active) {
+                    effect.subside(b, p);
+                }
             }
 
             if (!active) {
-                effect.subside(b, p);
                 this.remove(effect);
 
                 // I think this is pretty much just for Future Sight...

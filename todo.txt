@@ -200,8 +200,8 @@ Other random things:
     make Marcos fix the substitute failure messaging problems I don't wanna do it
     does safeguard prevent confusion?
     underground pokemon should not take damage from hail/sandstorm
-    does levitating check take semiinvulnerable into account? like will you heal from grassy terrain if you're flying?
     test moongeist beam and shadow shield (combos like that)
     apparently soak fails against arceus (I'm sure it's that multitype prevents having its type changed)
     does using a berry (not hold item) not count as berry consumption??
+    have a new deactivate type method that will just remove and not properly subside
     

@@ -246,11 +246,11 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
 
         @Override
         public boolean theVeryVeryEnd(Battle b, ActivePokemon p) {
-            if (b.getTrainer(true).front().hasEffect(PokemonEffectNamesies.UPROAR) || b.getTrainer(false).front().hasEffect(PokemonEffectNamesies.UPROAR)) {
+            if (b.getPlayer().front().hasEffect(PokemonEffectNamesies.UPROAR) || b.getOpponent().front().hasEffect(PokemonEffectNamesies.UPROAR)) {
                 return false;
             }
 
-            this.active = false;
+            this.deactivate();
             return true;
         }
     }

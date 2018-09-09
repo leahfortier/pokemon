@@ -1436,4 +1436,32 @@ public class AttackTest extends BaseTest {
         defending.assertBadPoison();
         defending.assertStages(new TestStages().set(Stat.ATTACK, -1).set(Stat.SP_ATTACK, -1).set(Stat.SPEED, -1));
     }
+
+    @Test
+    public void breakBarrierTest() {
+        TestBattle battle = TestBattle.create();
+
+        // Give both teams Reflect and Light Screen
+        // TODO: This test can be more comprehensive (non-barrier effects not removed etc)
+        battle.fight(AttackNamesies.LIGHT_SCREEN, AttackNamesies.REFLECT);
+        battle.fight(AttackNamesies.REFLECT, AttackNamesies.LIGHT_SCREEN);
+        Assert.assertTrue(battle.getPlayer().hasEffect(TeamEffectNamesies.REFLECT));
+        Assert.assertTrue(battle.getPlayer().hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
+        Assert.assertTrue(battle.getOpponent().hasEffect(TeamEffectNamesies.REFLECT));
+        Assert.assertTrue(battle.getOpponent().hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
+
+        // Only break the opponent barriers
+        battle.fight(AttackNamesies.BRICK_BREAK, AttackNamesies.ENDURE);
+        Assert.assertTrue(battle.getPlayer().hasEffect(TeamEffectNamesies.REFLECT));
+        Assert.assertTrue(battle.getPlayer().hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
+        Assert.assertFalse(battle.getOpponent().hasEffect(TeamEffectNamesies.REFLECT));
+        Assert.assertFalse(battle.getOpponent().hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
+
+        // Break the players too
+        battle.fight(AttackNamesies.ENDURE, AttackNamesies.PSYCHIC_FANGS);
+        Assert.assertFalse(battle.getPlayer().hasEffect(TeamEffectNamesies.REFLECT));
+        Assert.assertFalse(battle.getPlayer().hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
+        Assert.assertFalse(battle.getOpponent().hasEffect(TeamEffectNamesies.REFLECT));
+        Assert.assertFalse(battle.getOpponent().hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
+    }
 }

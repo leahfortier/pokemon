@@ -151,7 +151,7 @@ Confusion:
         // Snap it out!
         if (turns == 0) {
             Messages.add(p.getName() + " snapped out of its confusion!");
-            super.active = false;
+            this.deactivate();
             return true;
         }
 
@@ -203,7 +203,7 @@ Encore:
             return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being encored!";
         }
         ###
-    Int: ForceMoveEffect, EndTurnEffect, AttackSelectionSelfBlockerEffect
+    Int: ForceMoveEffect, AttackSelectionSelfBlockerEffect
     Field:
         private Move move;
         ###
@@ -221,11 +221,9 @@ Encore:
     BeforeCast:
         move = victim.getLastMoveUsed();
         ###
-    ApplyEndTurn:
+    ShouldSubside:
         // If the move runs out of PP, Encore immediately ends
-        if (move.getPP() == 0) {
-            active = false;
-        }
+        return move.getPP() == 0;
         ###
 *
 Disable:
@@ -638,7 +636,7 @@ Uproar:
             }
         }
         ###
-    Int: ForceMoveEffect, AttackSelectionEffect, EndTurnEffect
+    Int: ForceMoveEffect, AttackSelectionEffect
     GetForceMove:
         return uproar;
         ###
@@ -647,11 +645,9 @@ Uproar:
         return m.getAttack().namesies() == AttackNamesies.UPROAR;
         ###
     UnusableMessage: "Only Uproar can be used right now!"
-    ApplyEndTurn:
+    ShouldSubside:
         // If uproar runs out of PP, the effect immediately ends
-        if (uproar.getPP() == 0) {
-            active = false;
-        }
+        return uproar.getPP() == 0;
         ###
 *
 AquaRing:
@@ -663,8 +659,9 @@ Nightmare:
     FailCondition: !victim.hasStatus(StatusNamesies.ASLEEP)
     Int: EndTurnEffect
     ApplyEndTurn:
-        if (!victim.hasStatus(StatusNamesies.ASLEEP)) {
-            this.active = false;
+        // Only active when asleep
+        if (this.shouldSubside(b, victim)) {
+            this.deactivate();
             return;
         }
 
@@ -1016,8 +1013,8 @@ PerishSong:
         }
         ###
     ApplyEndTurn:
-        Messages.add(victim.getName() + "'s Perish Song count fell to " + (super.numTurns - 1) + "!");
-        if (super.numTurns == 1) {
+        Messages.add(victim.getName() + "'s Perish Song count fell to " + (this.getTurns() - 1) + "!");
+        if (this.getTurns() == 1) {
             victim.killKillKillMurderMurderMurder(b, "");
         }
         ###

@@ -5905,7 +5905,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            BarrierEffect.breakBarriers(b, user, victim);
+            BarrierEffect.breakBarriers(b, victim, user);
         }
     }
 
@@ -5922,7 +5922,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            BarrierEffect.breakBarriers(b, user, victim);
+            BarrierEffect.breakBarriers(b, victim, user);
         }
     }
 

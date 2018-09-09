@@ -437,7 +437,7 @@ LightClay:
 *
 BarrierBreaker:
     AddMapField: UniqueEffects:
-		BarrierEffect.breakBarriers(b, user, victim);
+		BarrierEffect.breakBarriers(b, victim, user);
 		###
 *
 SimpleBarrier:

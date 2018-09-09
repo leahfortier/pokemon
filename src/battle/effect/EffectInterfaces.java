@@ -18,10 +18,8 @@ import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.InvokeInterfaces.WildEncounterSelector;
-import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
-import battle.effect.team.TeamEffect;
 import item.ItemNamesies;
 import item.hold.HoldItem;
 import main.Global;
@@ -256,21 +254,6 @@ public final class EffectInterfaces {
         @Override
         default void enter(Battle b, ActivePokemon enterer) {
             applyEffect(b, enterer);
-        }
-    }
-
-    public interface EffectReleaser {
-
-        default void release(Battle b, ActivePokemon released, String releaseMessage) {
-            Messages.add(releaseMessage);
-
-            if (this instanceof PokemonEffect) {
-                released.getEffects().remove((PokemonEffect)this);
-            } else if (this instanceof TeamEffect) {
-                b.getTrainer(released).getEffects().remove((TeamEffect)this);
-            } else {
-                Global.error("Invalid release object " + this.getClass().getSimpleName());
-            }
         }
     }
 
