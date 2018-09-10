@@ -238,7 +238,13 @@ public final class InvokeInterfaces {
     }
 
     public interface CrashDamageMove extends AttackInterface {
-        void crash(Battle b, ActivePokemon user);
+        int getMaxHealthPercentageDenominator();
+
+        default void crash(Battle b, ActivePokemon user) {
+            // Crash damage must be at least one and is affected by Magic Guard
+            int crashDamage = (int)Math.max(Math.ceil((double)user.getMaxHP()/getMaxHealthPercentageDenominator()), 1);
+            user.indirectReduceHealth(b, crashDamage, false, user.getName() + " kept going and crashed!");
+        }
 
         static void invokeCrashDamageMove(Battle b, ActivePokemon user) {
             List<InvokeEffect> invokees = Collections.singletonList(user.getAttack());

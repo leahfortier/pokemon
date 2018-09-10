@@ -316,10 +316,9 @@ OppSwitchStat:
 *
 CrashDamage:
     AddInterface: CrashDamageMove
-    Header: void crash(Battle b, ActivePokemon user)
+    Header: int getMaxHealthPercentageDenominator()
     Body:
-        Messages.add(user.getName() + " kept going and crashed!");
-        user.reduceHealth(b, user.getMaxHP()/{0});
+        return {0};
         ###
 *
 StatSplit:
@@ -516,11 +515,8 @@ Countering:
     AddMapField: PP: 20
     AddMapField: Acc: 100
     AddMapField: Applies: user.getDamageTaken() > 0 && victim.getMove() != null && victim.getAttack().getCategory() == MoveCategory.{00} && !b.isFirstAttack()
-    AddMapField: ApplyDamage:
-        // Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
-        int damageTaken = me.getDamageTaken();
-        o.reduceHealth(b, damageTaken*2);
-        ###
+    AddMapField: Comments: // Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
+    AddMapField: FixedDamage: me.getDamageTaken()
 *
 CallNewMove:
     AddMapField: UniqueEffects:

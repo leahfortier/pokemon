@@ -124,9 +124,17 @@ OpponentTakeDamageEffect:
 CrashDamageMove:
     Extends: AttackInterface
     Method:
+        Header: int getMaxHealthPercentageDenominator()
+    *
+    Method:
         Header: void crash(Battle b, ActivePokemon user)
         Move: user
         Invoke: Void
+        Default:
+            // Crash damage must be at least one and is affected by Magic Guard
+            int crashDamage = (int)Math.max(Math.ceil((double)user.getMaxHP()/getMaxHealthPercentageDenominator()), 1);
+            user.indirectReduceHealth(b, crashDamage, false, user.getName() + " kept going and crashed!");
+            ###
     *
 ***
 BarrierEffect:

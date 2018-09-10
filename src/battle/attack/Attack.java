@@ -5690,7 +5690,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class MirrorCoat extends Attack {
+    // Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
+    static class MirrorCoat extends Attack implements FixedDamageMove {
         private static final long serialVersionUID = 1L;
 
         MirrorCoat() {
@@ -5703,10 +5704,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            // Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
-            int damageTaken = me.getDamageTaken();
-            o.reduceHealth(b, damageTaken*2);
+        public int getFixedDamageAmount(ActivePokemon me, ActivePokemon o) {
+            return me.getDamageTaken();
         }
 
         @Override
@@ -5715,7 +5714,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class Counter extends Attack {
+    // Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
+    static class Counter extends Attack implements FixedDamageMove {
         private static final long serialVersionUID = 1L;
 
         Counter() {
@@ -5729,10 +5729,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-            // Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
-            int damageTaken = me.getDamageTaken();
-            o.reduceHealth(b, damageTaken*2);
+        public int getFixedDamageAmount(ActivePokemon me, ActivePokemon o) {
+            return me.getDamageTaken();
         }
 
         @Override
@@ -5887,9 +5885,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void crash(Battle b, ActivePokemon user) {
-            Messages.add(user.getName() + " kept going and crashed!");
-            user.reduceHealth(b, user.getMaxHP()/3);
+        public int getMaxHealthPercentageDenominator() {
+            return 3;
         }
     }
 
@@ -5938,9 +5935,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void crash(Battle b, ActivePokemon user) {
-            Messages.add(user.getName() + " kept going and crashed!");
-            user.reduceHealth(b, user.getMaxHP()/2);
+        public int getMaxHealthPercentageDenominator() {
+            return 2;
         }
     }
 
