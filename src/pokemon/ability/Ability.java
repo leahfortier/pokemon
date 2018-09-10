@@ -7,6 +7,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
+import battle.effect.Effect;
 import battle.effect.EffectInterfaces.EntryEndTurnEffect;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MaxLevelWildEncounterEffect;
@@ -653,7 +654,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (RandomUtils.chanceTest(30) && PokemonEffectNamesies.INFATUATION.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
+            if (RandomUtils.chanceTest(30) && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, user, CastSource.ABILITY, false)) {
                 Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
             }
         }
@@ -774,7 +775,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
-                if (PokemonEffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.ABILITY, false)) {
+                if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.ABILITY, false)) {
                     Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
                 }
             }
@@ -1666,7 +1667,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            PokemonEffectNamesies.TRANSFORMED.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+            Effect.cast(PokemonEffectNamesies.TRANSFORMED, b, enterer, enterer, CastSource.ABILITY, false);
         }
 
         @Override
@@ -1785,7 +1786,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
                 return;
             }
 
-            PokemonEffectNamesies.CHANGE_ABILITY.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, true);
+            Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, enterer, enterer, CastSource.ABILITY, true);
         }
 
         @Override
@@ -2410,7 +2411,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             Type t = user.getAttackType();
             if (!victim.isType(b, t)) {
                 type = t;
-                PokemonEffectNamesies.CHANGE_TYPE.getEffect().cast(b, victim, victim, CastSource.ABILITY, true);
+                Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, b, victim, victim, CastSource.ABILITY, true);
             }
         }
     }
@@ -2634,7 +2635,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
                 user.setLastMoveUsed();
-                if (PokemonEffectNamesies.DISABLE.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
+                if (Effect.apply(PokemonEffectNamesies.DISABLE, b, victim, user, CastSource.ABILITY, false)) {
                     Messages.add(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
                 }
             }
@@ -2817,7 +2818,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             }
 
             // Cast the change ability effect onto the user
-            PokemonEffectNamesies.CHANGE_ABILITY.getEffect().cast(b, victim, user, CastSource.ABILITY, true);
+            Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, victim, user, CastSource.ABILITY, true);
         }
     }
 
@@ -3873,7 +3874,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             // Protean activates for all moves except for Struggle
             if (p.getAttack().namesies() != AttackNamesies.STRUGGLE) {
                 type = p.getAttackType();
-                PokemonEffectNamesies.CHANGE_TYPE.getEffect().cast(b, p, p, CastSource.ABILITY, true);
+                Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, b, p, p, CastSource.ABILITY, true);
             }
 
             return true;
@@ -4328,7 +4329,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to Psychic Terrain!");
-            TerrainNamesies.PSYCHIC_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+            Effect.cast(TerrainNamesies.PSYCHIC_TERRAIN, b, enterer, enterer, CastSource.ABILITY, false);
         }
     }
 
@@ -4342,7 +4343,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to Electric Terrain!");
-            TerrainNamesies.ELECTRIC_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+            Effect.cast(TerrainNamesies.ELECTRIC_TERRAIN, b, enterer, enterer, CastSource.ABILITY, false);
         }
     }
 
@@ -4356,7 +4357,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to Misty Terrain!");
-            TerrainNamesies.MISTY_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+            Effect.cast(TerrainNamesies.MISTY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, false);
         }
     }
 
@@ -4370,7 +4371,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to Grassy Terrain!");
-            TerrainNamesies.GRASSY_TERRAIN.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+            Effect.cast(TerrainNamesies.GRASSY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, false);
         }
     }
 }

@@ -2,6 +2,7 @@ package item.berry;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.Effect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
@@ -29,7 +30,7 @@ public interface Berry extends HoldItem {
 
     default void consumeBerry(ActivePokemon consumer, Battle b) {
         // Eat dat berry!!
-        PokemonEffectNamesies.EATEN_BERRY.getEffect().cast(b, consumer, consumer, CastSource.HELD_ITEM, false);
+        Effect.cast(PokemonEffectNamesies.EATEN_BERRY, b, consumer, consumer, CastSource.HELD_ITEM, false);
 
         if (consumer.hasAbility(AbilityNamesies.CHEEK_POUCH) && consumer.canHeal()) {
             consumer.healHealthFraction(1/3.0, b, consumer.getName() + "'s " + consumer.getAbility().getName() + " restored its health!");

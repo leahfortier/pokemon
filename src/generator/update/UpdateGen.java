@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // Mostly for when pokemoninfo.txt needs to be edited
 public class UpdateGen {
@@ -75,6 +77,56 @@ public class UpdateGen {
 //        outputShowdownImagesFile();
 //        testBulbapediaMoveTypeList();
 //        printStatOrder();
+//        sourceCodeRegexReplace();
+    }
+
+    // Updates all the files in the source code and generator input files by replacing the regex
+    // Update the replaceLine method below to change the regex and replacement
+    private static void sourceCodeRegexReplace() {
+        for (File file : GeneralUtils.combine(FileIO.listFiles(Folder.GENERATOR), FileIO.listFiles(Folder.SRC))) {
+            if (file.getName().contains(UpdateGen.class.getSimpleName())) {
+                continue;
+            }
+
+            String fileName = file.getPath();
+            Scanner original = FileIO.openFile(fileName);
+            StringAppender out = new StringAppender();
+
+            while (original.hasNext()) {
+                String newLine = replaceLine(original.nextLine());
+                out.append(newLine + (original.hasNext() ? "\n" : ""));
+            }
+
+            original.close();
+            FileIO.overwriteFile(fileName, out.toString());
+        }
+    }
+
+    // Change the regex and replacement string to reflect what you want to change everywhere
+    // Current example:
+    //      Input: PokemonEffectNamesies.DISABLE.getEffect().cast(b, victim, user, CastSource.ABILITY, false)
+    //      Output: Effect.cast(PokemonEffectNamesies.DISABLE, b, victim, user, CastSource.ABILITY, false)
+    private static String replaceLine(String line) {
+        Pattern regex = Pattern.compile(
+                "([A-Za-z]+)Namesies." + // 1 (namesies type)
+                        "([A-Z_]+).getEffect\\(\\)" + // 2 (namesies value)
+                        ".cast\\(" +
+                        "((?:b|battle), [A-Za-z]+, [A-Za-z]+, " + // start 3 (apply params)
+                        "(?:source|CastSource\\.[A-Z_]+), " +
+                        "(?:true|false|super\\.printCast))" + // end 3
+                        "\\)"
+        );
+
+        Matcher matcher = regex.matcher(line);
+        if (matcher.find()) {
+            String replacement = "Effect.cast(" +
+                    matcher.group(1) + "Namesies." +
+                    matcher.group(2) + ", " +
+                    matcher.group(3) + ")";
+            line = matcher.replaceAll(replacement);
+        }
+
+        return line;
     }
 
     // Basically I'm sick of writing this -- just prints Pokemon ordered by base stat

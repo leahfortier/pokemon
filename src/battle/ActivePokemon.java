@@ -4,6 +4,7 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveType;
+import battle.effect.Effect;
 import battle.effect.EffectList;
 import battle.effect.InvokeEffect;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
@@ -510,7 +511,7 @@ public class ActivePokemon extends PartyPokemon {
                 MurderEffect.killKillKillMurderMurderMurder(b, this, murderer);
             }
 
-            TeamEffectNamesies.DEAD_ALLY.getEffect().cast(b, this, this, CastSource.EFFECT, false);
+            Effect.cast(TeamEffectNamesies.DEAD_ALLY, b, this, this, CastSource.EFFECT, false);
 
             // If the player slayed a Dark or Ghost type Pokemon, then they are on their way to becoming the Chosen One
             if (!isPlayer() && (isType(b, Type.DARK) || isType(b, Type.GHOST))) {

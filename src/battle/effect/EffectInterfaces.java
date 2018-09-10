@@ -77,10 +77,10 @@ public final class EffectInterfaces {
                 victim.giveItem(userItem);
             } else {
                 user.setCastSource(victimItem);
-                PokemonEffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, user, CastSource.CAST_SOURCE, false);
+                Effect.apply(PokemonEffectNamesies.CHANGE_ITEM, b, user, user, CastSource.CAST_SOURCE, false);
 
                 user.setCastSource(userItem);
-                PokemonEffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
+                Effect.apply(PokemonEffectNamesies.CHANGE_ITEM, b, user, victim, CastSource.CAST_SOURCE, false);
             }
         }
     }

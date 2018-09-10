@@ -174,7 +174,7 @@ Destiny Knot:
     Price: 4000
     Fling: 10
     ReceiveEffect:
-        if (effectType == PokemonEffectNamesies.INFATUATION && PokemonEffectNamesies.INFATUATION.getEffect().apply(b, victim, caster, CastSource.HELD_ITEM, false)) {
+        if (effectType == PokemonEffectNamesies.INFATUATION && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, caster, CastSource.HELD_ITEM, false)) {
             Messages.add(victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!");
         }
         ###
@@ -1319,7 +1319,7 @@ Dire Hit:
     Desc: An item that raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.
     Price: 650
     BattleUse:
-        return PokemonEffectNamesies.RAISE_CRITS.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
+        return Effect.apply(PokemonEffectNamesies.RAISE_CRITS, b, p, p, CastSource.USE_ITEM, true);
         ###
 *
 Guard Spec.:
@@ -1329,7 +1329,7 @@ Guard Spec.:
     Desc: An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after it is used in battle.
     Price: 700
     BattleUse:
-        return TeamEffectNamesies.GUARD_SPECIAL.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
+        return Effect.apply(TeamEffectNamesies.GUARD_SPECIAL, b, p, p, CastSource.USE_ITEM, true);
         ###
 *
 X Accuracy:
@@ -1890,7 +1890,7 @@ Lansat Berry:
     HarvestHours: 72
     FixedBerryHealthTrigger: 4
     GainEffect:
-        PokemonEffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
+        Effect.cast(PokemonEffectNamesies.RAISE_CRITS, b, user, user, source, true);
         return true;
         ###
 *
@@ -1905,7 +1905,7 @@ Starf Berry:
 
         // Raise crit
         if (rand == Stat.NUM_BATTLE_STATS) {
-            PokemonEffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
+            Effect.cast(PokemonEffectNamesies.RAISE_CRITS, b, user, user, source, true);
             return true;
         }
 

@@ -6,6 +6,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
+import battle.effect.Effect;
 import battle.effect.EffectInterfaces.EntryEndTurnEffect;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MessageGetter;
@@ -276,7 +277,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         private void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice) {
-            TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
+            Effect.cast(TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE, b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
         }
 
         @Override
@@ -593,7 +594,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
-            if (effectType == PokemonEffectNamesies.INFATUATION && PokemonEffectNamesies.INFATUATION.getEffect().apply(b, victim, caster, CastSource.HELD_ITEM, false)) {
+            if (effectType == PokemonEffectNamesies.INFATUATION && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, caster, CastSource.HELD_ITEM, false)) {
                 Messages.add(victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!");
             }
         }
@@ -1784,7 +1785,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         private void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice) {
-            TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE.getEffect().cast(b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
+            Effect.cast(TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE, b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
         }
 
         @Override
@@ -2889,7 +2890,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
-                if (PokemonEffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
+                if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, false)) {
                     Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
                 }
             }
@@ -2897,7 +2898,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            if (PokemonEffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
+            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false)) {
                 Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
             }
         }
@@ -3006,7 +3007,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
-                if (PokemonEffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.HELD_ITEM, false)) {
+                if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, false)) {
                     Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
                 }
             }
@@ -3014,7 +3015,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            if (PokemonEffectNamesies.FLINCH.getEffect().apply(b, pelted, pelted, CastSource.USE_ITEM, false)) {
+            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false)) {
                 Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
             }
         }
@@ -3609,7 +3610,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return PokemonEffectNamesies.RAISE_CRITS.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
+            return Effect.apply(PokemonEffectNamesies.RAISE_CRITS, b, p, p, CastSource.USE_ITEM, true);
         }
     }
 
@@ -3624,7 +3625,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return TeamEffectNamesies.GUARD_SPECIAL.getEffect().apply(b, p, p, CastSource.USE_ITEM, true);
+            return Effect.apply(TeamEffectNamesies.GUARD_SPECIAL, b, p, p, CastSource.USE_ITEM, true);
         }
     }
 
@@ -5259,7 +5260,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-            PokemonEffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
+            Effect.cast(PokemonEffectNamesies.RAISE_CRITS, b, user, user, source, true);
             return true;
         }
 
@@ -5298,7 +5299,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
             // Raise crit
             if (rand == Stat.NUM_BATTLE_STATS) {
-                PokemonEffectNamesies.RAISE_CRITS.getEffect().cast(b, user, user, source, true);
+                Effect.cast(PokemonEffectNamesies.RAISE_CRITS, b, user, user, source, true);
                 return true;
             }
 

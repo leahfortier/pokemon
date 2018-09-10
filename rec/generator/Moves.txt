@@ -1015,7 +1015,7 @@ Roost:
         this.heal(b, victim);
 
         if (getType(b, user, victim) != null) {
-            PokemonEffectNamesies.CHANGE_TYPE.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
+            Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, b, user, victim, CastSource.ATTACK, super.printCast);
             user.getEffect(PokemonEffectNamesies.CHANGE_TYPE).setTurns(1);
         }
         ###
@@ -5348,7 +5348,7 @@ Knock Off:
                 victim.removeItem();
             } else {
                 user.setCastSource(ItemNamesies.NO_ITEM.getItem());
-                PokemonEffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
+                Effect.apply(PokemonEffectNamesies.CHANGE_ITEM, b, user, victim, CastSource.CAST_SOURCE, false);
             }
         }
         ###
@@ -5493,8 +5493,8 @@ Perish Song:
         Messages.add("All Pokemon hearing this song will faint in three turns!");
 
         // TODO: Test and also this used to check if they didn't have the effect before casting just in case that's relevant later
-        PokemonEffectNamesies.PERISH_SONG.getEffect().apply(b, user, victim, CastSource.ATTACK, false);
-        PokemonEffectNamesies.PERISH_SONG.getEffect().apply(b, user, user, CastSource.ATTACK, false);
+        Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, user, victim, CastSource.ATTACK, false);
+        Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, user, user, CastSource.ATTACK, false);
         ###
 *
 Dragon Tail:
@@ -5595,10 +5595,10 @@ Skill Swap:
         Ability victimAbility = victim.getAbility();
 
         ability = userAbility;
-        PokemonEffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
+        Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, victim, CastSource.ATTACK, super.printCast);
 
         ability = victimAbility;
-        PokemonEffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, user, CastSource.ATTACK, super.printCast);
+        Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, user, CastSource.ATTACK, super.printCast);
         ###
 *
 Volt Switch:
@@ -6357,7 +6357,7 @@ Core Enforcer:
     BeginAttack:
         // TODO: Test
         if (!b.isFirstAttack()) {
-            PokemonEffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
+            Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         }
         ###
 *

@@ -3,6 +3,7 @@ package test.battle;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackNamesies;
+import battle.effect.Effect;
 import battle.effect.EffectNamesies;
 import battle.effect.source.CastSource;
 import item.ItemNamesies;
@@ -42,7 +43,7 @@ interface PokemonManipulator {
         ActivePokemon caster = attackingTarget ? defending : attacking;
         ActivePokemon victim = attackingTarget ? attacking : defending;
 
-        effectNamesies.getEffect().cast(battle, caster, victim, CastSource.ATTACK, false);
+        Effect.cast(effectNamesies, battle, caster, victim, CastSource.ATTACK, false);
     }
 
     static PokemonManipulator empty() {

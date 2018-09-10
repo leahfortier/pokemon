@@ -138,7 +138,7 @@ Cute Charm:
     Desc: Contact with the Pok\u00e9mon may cause infatuation.
     Int: PhysicalContactEffect
     Contact:
-        if (RandomUtils.chanceTest(30) && PokemonEffectNamesies.INFATUATION.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
+        if (RandomUtils.chanceTest(30) && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, user, CastSource.ABILITY, false)) {
             Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
         }
         ###
@@ -200,7 +200,7 @@ Stench:
     Int: OpponentTakeDamageEffect
     OpponentTakeDamage:
         if (RandomUtils.chanceTest(10)) {
-            if (PokemonEffectNamesies.FLINCH.getEffect().apply(b, user, victim, CastSource.ABILITY, false)) {
+            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.ABILITY, false)) {
                 Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
             }
         }
@@ -581,7 +581,7 @@ Imposter:
     Irrestealable: True
     Int: EntryEffect
     Enter:
-        PokemonEffectNamesies.TRANSFORMED.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, false);
+        Effect.cast(PokemonEffectNamesies.TRANSFORMED, b, enterer, enterer, CastSource.ABILITY, false);
         ###
 *
 Adaptability:
@@ -611,7 +611,7 @@ Trace:
             return;
         }
 
-        PokemonEffectNamesies.CHANGE_ABILITY.getEffect().cast(b, enterer, enterer, CastSource.ABILITY, true);
+        Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, enterer, enterer, CastSource.ABILITY, true);
         ###
     AbilityChange:
         Ability otherAbility = b.getOtherPokemon(victim).getAbility();
@@ -874,7 +874,7 @@ Color Change:
         Type t = user.getAttackType();
         if (!victim.isType(b, t)) {
             type = t;
-            PokemonEffectNamesies.CHANGE_TYPE.getEffect().cast(b, victim, victim, CastSource.ABILITY, true);
+            Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, b, victim, victim, CastSource.ABILITY, true);
         }
         ###
     Field:
@@ -963,7 +963,7 @@ Cursed Body:
     Contact:
         if (RandomUtils.chanceTest(30)) {
             user.setLastMoveUsed();
-            if (PokemonEffectNamesies.DISABLE.getEffect().apply(b, victim, user, CastSource.ABILITY, false)) {
+            if (Effect.apply(PokemonEffectNamesies.DISABLE, b, victim, user, CastSource.ABILITY, false)) {
                 Messages.add(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
             }
         }
@@ -1040,7 +1040,7 @@ Mummy:
         }
 
         // Cast the change ability effect onto the user
-        PokemonEffectNamesies.CHANGE_ABILITY.getEffect().cast(b, victim, user, CastSource.ABILITY, true);
+        Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, victim, user, CastSource.ABILITY, true);
         ###
     AbilityChange:
         return AbilityNamesies.MUMMY.getNewAbility();
@@ -1466,7 +1466,7 @@ Protean:
         // Protean activates for all moves except for Struggle
         if (p.getAttack().namesies() != AttackNamesies.STRUGGLE) {
             type = p.getAttackType();
-            PokemonEffectNamesies.CHANGE_TYPE.getEffect().cast(b, p, p, CastSource.ABILITY, true);
+            Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, b, p, p, CastSource.ABILITY, true);
         }
 
         return true;

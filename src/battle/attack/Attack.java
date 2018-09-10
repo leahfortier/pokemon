@@ -379,10 +379,9 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         // Give additional effects
         if (effect != null) {
-            Effect effect = this.effect.getEffect();
-            boolean applies = effect.apply(b, user, victim, CastSource.ATTACK, canPrintCast());
+            boolean applies = Effect.apply(effect, b, user, victim, CastSource.ATTACK, canPrintCast());
             if (!applies && canPrintFail()) {
-                Messages.add(effect.getFailMessage(b, user, victim));
+                Messages.add(effect.getEffect().getFailMessage(b, user, victim));
             }
         }
     }
@@ -2105,7 +2104,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             this.heal(b, victim);
 
             if (getType(b, user, victim) != null) {
-                PokemonEffectNamesies.CHANGE_TYPE.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
+                Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, b, user, victim, CastSource.ATTACK, super.printCast);
                 user.getEffect(PokemonEffectNamesies.CHANGE_TYPE).setTurns(1);
             }
         }
@@ -6218,7 +6217,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            PokemonEffectNamesies.FIDDY_PERCENT_STRONGER.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
+            Effect.cast(PokemonEffectNamesies.FIDDY_PERCENT_STRONGER, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
@@ -9123,7 +9122,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
                     victim.removeItem();
                 } else {
                     user.setCastSource(ItemNamesies.NO_ITEM.getItem());
-                    PokemonEffectNamesies.CHANGE_ITEM.getEffect().apply(b, user, victim, CastSource.CAST_SOURCE, false);
+                    Effect.apply(PokemonEffectNamesies.CHANGE_ITEM, b, user, victim, CastSource.CAST_SOURCE, false);
                 }
             }
         }
@@ -9400,8 +9399,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             Messages.add("All Pokemon hearing this song will faint in three turns!");
 
             // TODO: Test and also this used to check if they didn't have the effect before casting just in case that's relevant later
-            PokemonEffectNamesies.PERISH_SONG.getEffect().apply(b, user, victim, CastSource.ATTACK, false);
-            PokemonEffectNamesies.PERISH_SONG.getEffect().apply(b, user, user, CastSource.ATTACK, false);
+            Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, user, victim, CastSource.ATTACK, false);
+            Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, user, user, CastSource.ATTACK, false);
         }
     }
 
@@ -9592,10 +9591,10 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             Ability victimAbility = victim.getAbility();
 
             ability = userAbility;
-            PokemonEffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, victim, CastSource.ATTACK, super.printCast);
+            Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, victim, CastSource.ATTACK, super.printCast);
 
             ability = victimAbility;
-            PokemonEffectNamesies.CHANGE_ABILITY.getEffect().cast(b, user, user, CastSource.ATTACK, super.printCast);
+            Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, user, CastSource.ATTACK, super.printCast);
         }
 
         @Override
@@ -10778,7 +10777,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // TODO: Test
             if (!b.isFirstAttack()) {
-                PokemonEffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
+                Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
             }
         }
     }
@@ -10914,7 +10913,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            PokemonEffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
+            Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
@@ -10935,7 +10934,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            PokemonEffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
+            Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
@@ -11060,7 +11059,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            PokemonEffectNamesies.BREAKS_THE_MOLD.getEffect().cast(b, attacking, attacking, CastSource.ATTACK, false);
+            Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override

@@ -442,7 +442,7 @@ public final class InvokeInterfaces {
             if (p.isSemiInvulnerableFlying()) {
                 ((MultiTurnMove)p.getAttack()).resetReady();
                 Messages.add(p.getName() + " fell to the ground!");
-                PokemonEffectNamesies.FLINCH.getEffect().cast(b, p, p, CastSource.EFFECT, false);
+                Effect.cast(PokemonEffectNamesies.FLINCH, b, p, p, CastSource.EFFECT, false);
             }
 
             LevitationEffect.falllllllll(b, p);

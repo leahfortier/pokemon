@@ -2,6 +2,7 @@ package test.battle;
 
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import battle.effect.Effect;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.battle.terrain.TerrainNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
@@ -428,7 +429,7 @@ public class ModifierTest extends BaseTest {
         Assert.assertFalse(defending.isType(battle, Type.DARK));
         defending.setCastSource((ChangeTypeSource)(b, caster, victim) -> new PokeType(Type.DARK));
         Assert.assertFalse(defending.isType(battle, Type.DARK));
-        PokemonEffectNamesies.CHANGE_TYPE.getEffect().cast(battle, defending, defending, CastSource.CAST_SOURCE, false);
+        Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, battle, defending, defending, CastSource.CAST_SOURCE, false);
         Assert.assertTrue(defending.isType(battle, Type.DARK));
         checkPriority(0, battle, AttackNamesies.NASTY_PLOT);
         checkPriority(0, battle, AttackNamesies.THUNDER_WAVE);

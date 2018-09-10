@@ -33,23 +33,25 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
     protected abstract boolean hasEffect(Battle b, ActivePokemon victim);
     protected abstract Effect<NamesiesType> getEffect(Battle b, ActivePokemon victim);
 
-    public final void cast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-        if (this.hasAlternateCast && this.hasEffect(b, victim)) {
-            Effect effect = this.getEffect(b, victim);
+    public static Effect cast(EffectNamesies namesies, Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        Effect effect = namesies.getEffect();
+        if (effect.hasAlternateCast && effect.hasEffect(b, victim)) {
+            effect = effect.getEffect(b, victim);
             effect.alternateCast(b, caster, victim, source, printCast);
         } else {
-            this.beforeCast(b, caster, victim, source);
+            effect.beforeCast(b, caster, victim, source);
             Messages.update(b);
 
-            this.addCastMessage(b, caster, victim, source, printCast);
-            this.addEffect(b, victim);
+            effect.addCastMessage(b, caster, victim, source, printCast);
+            effect.addEffect(b, victim);
 
-            this.afterCast(b, caster, victim, source);
+            effect.afterCast(b, caster, victim, source);
             Messages.update(b);
 
-            EffectReceivedEffect.invokeEffectReceivedEffect(b, caster, victim, this.namesies());
+            EffectReceivedEffect.invokeEffectReceivedEffect(b, caster, victim, namesies);
             Messages.update(b);
         }
+        return effect;
     }
 
     protected void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {}
@@ -86,9 +88,9 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
         }
     }
 
-    public boolean apply(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-        if (this.fullApplies(b, caster, victim, source)) {
-            this.cast(b, caster, victim, source, printCast);
+    public static boolean apply(EffectNamesies namesies, Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        if (namesies.getEffect().fullApplies(b, caster, victim, source)) {
+            cast(namesies, b, caster, victim, source, printCast);
             return true;
         }
 
@@ -104,7 +106,7 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
         return this.applies(b, caster, victim, source);
     }
 
-    // Should be overriden by subclasses as deemed appropriate
+    // Should be overridden by subclasses as deemed appropriate
     protected boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
         return true;
     }
