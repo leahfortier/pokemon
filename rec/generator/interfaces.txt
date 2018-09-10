@@ -238,6 +238,14 @@ LevitationEffect:
         MoldBreaker: moldBreaker
     *
 ***
+FaintEffect:
+    Method:
+        Header: void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer)
+        Invoke: Void
+        InvokeName: grantDeathWish
+        EffectList: dead
+    *
+***
 MurderEffect:
     Comments: // KILL KILL KILL MURDER MURDER MURDER
     Method:

@@ -38,6 +38,7 @@ import battle.effect.InvokeInterfaces.EncounterRateMultiplier;
 import battle.effect.InvokeInterfaces.EndBattleEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.EntryEffect;
+import battle.effect.InvokeInterfaces.FaintEffect;
 import battle.effect.InvokeInterfaces.HalfWeightEffect;
 import battle.effect.InvokeInterfaces.ItemBlockerEffect;
 import battle.effect.InvokeInterfaces.LevitationEffect;
@@ -4259,29 +4260,17 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class InnardsOut extends Ability implements StatusReceivedEffect {
+    static class InnardsOut extends Ability implements FaintEffect {
         private static final long serialVersionUID = 1L;
 
         InnardsOut() {
             super(AbilityNamesies.INNARDS_OUT, "Damages the attacker landing the finishing hit by the amount equal to its last HP.");
         }
 
-        private void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
+        @Override
+        public void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
             // TODO: I don't think the murderer.isAttacking() is sufficient for deathwish
             murderer.indirectReduceHealth(b, dead.getDamageTaken(), false, murderer.getName() + " was hurt by " + dead.getName() + "'s " + this.getName() + "!");
-        }
-
-        @Override
-        public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType) {
-            if (statusType == StatusNamesies.FAINTED) {
-                ActivePokemon murderer = b.getOtherPokemon(victim);
-
-                // Only grant death wish if murdered through direct damage
-                if (murderer.isAttacking()) {
-                    // DEATH WISH GRANTED
-                    deathWish(b, victim, murderer);
-                }
-            }
         }
     }
 

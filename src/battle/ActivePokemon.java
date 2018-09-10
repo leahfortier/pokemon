@@ -13,6 +13,7 @@ import battle.effect.InvokeInterfaces.ChangeMoveListEffect;
 import battle.effect.InvokeInterfaces.ChangeTypeEffect;
 import battle.effect.InvokeInterfaces.DamageTakenEffect;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
+import battle.effect.InvokeInterfaces.FaintEffect;
 import battle.effect.InvokeInterfaces.GroundedEffect;
 import battle.effect.InvokeInterfaces.HalfWeightEffect;
 import battle.effect.InvokeInterfaces.ItemBlockerEffect;
@@ -490,6 +491,10 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean isFainted(Battle b) {
+        return isFainted(b, false);
+    }
+
+    private boolean isFainted(Battle b, boolean directDamage) {
         // We have already checked that this Pokemon is fainted -- don't print/apply effects more than once
         if (isActuallyDead()) {
             if (this.getHP() != 0) {
@@ -506,8 +511,9 @@ public class ActivePokemon extends PartyPokemon {
             ActivePokemon murderer = b.getOtherPokemon(this);
             StatusNamesies.FAINTED.getStatus().apply(b, murderer, this, CastSource.EFFECT);
 
-            // If the pokemon fainted via murder (by direct result of an attack) -- apply kill wishes
-            if (murderer.isAttacking()) {
+            // If the pokemon fainted via murder (by direct result of an attack) -- apply kill and death wishes
+            if (murderer.isAttacking() && directDamage) {
+                FaintEffect.grantDeathWish(b, this, murderer);
                 MurderEffect.killKillKillMurderMurderMurder(b, this, murderer);
             }
 
@@ -646,10 +652,11 @@ public class ActivePokemon extends PartyPokemon {
             return 0;
         }
 
+        boolean directDamage = damageType == DamageType.DIRECT;
         Messages.add(message);
 
         // Check if the damage will be absorbed by an effect
-        if (damageType == DamageType.DIRECT && AbsorbDamageEffect.checkAbsorbDamageEffect(b, this, amount)) {
+        if (directDamage && AbsorbDamageEffect.checkAbsorbDamageEffect(b, this, amount)) {
             return 0;
         }
 
@@ -662,7 +669,7 @@ public class ActivePokemon extends PartyPokemon {
         this.takeDamage(taken);
 
         // Enduring the hit
-        if (this.getHP() == 0 && damageType == DamageType.DIRECT) {
+        if (this.getHP() == 0 && directDamage) {
             BracingEffect brace = BracingEffect.getBracingEffect(b, this, fullHealth);
             if (brace != null) {
                 taken -= heal(1);
@@ -674,7 +681,7 @@ public class ActivePokemon extends PartyPokemon {
 
         Messages.add(new MessageUpdate().updatePokemon(b, this));
 
-        if (!isFainted(b)) {
+        if (!isFainted(b, directDamage)) {
             DamageTakenEffect.invokeDamageTakenEffect(b, this);
         }
 

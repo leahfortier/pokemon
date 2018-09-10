@@ -30,6 +30,7 @@ import battle.effect.InvokeInterfaces.DefogRelease;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
 import battle.effect.InvokeInterfaces.EffectBlockerEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
+import battle.effect.InvokeInterfaces.FaintEffect;
 import battle.effect.InvokeInterfaces.ForceMoveEffect;
 import battle.effect.InvokeInterfaces.GroundedEffect;
 import battle.effect.InvokeInterfaces.HalfWeightEffect;
@@ -47,7 +48,6 @@ import battle.effect.InvokeInterfaces.StatChangingEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
-import battle.effect.InvokeInterfaces.StatusReceivedEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
@@ -2427,7 +2427,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Grudge extends PokemonEffect implements StatusReceivedEffect {
+    static class Grudge extends PokemonEffect implements FaintEffect {
         private static final long serialVersionUID = 1L;
 
         Grudge() {
@@ -2444,26 +2444,14 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             return victim.getName() + " wants " + b.getOtherPokemon(victim).getName() + " to bear a grudge!";
         }
 
-        private void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
+        @Override
+        public void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
             Messages.add(murderer.getName() + "'s " + murderer.getAttack().getName() + " lost all its PP due to " + dead.getName() + "'s grudge!");
             murderer.getMove().reducePP(murderer.getMove().getPP());
         }
-
-        @Override
-        public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType) {
-            if (statusType == StatusNamesies.FAINTED) {
-                ActivePokemon murderer = b.getOtherPokemon(victim);
-
-                // Only grant death wish if murdered through direct damage
-                if (murderer.isAttacking()) {
-                    // DEATH WISH GRANTED
-                    deathWish(b, victim, murderer);
-                }
-            }
-        }
     }
 
-    static class DestinyBond extends PokemonEffect implements BeforeTurnEffect, StatusReceivedEffect {
+    static class DestinyBond extends PokemonEffect implements BeforeTurnEffect, FaintEffect {
         private static final long serialVersionUID = 1L;
 
         DestinyBond() {
@@ -2487,21 +2475,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             return victim.getName() + " is trying to take " + b.getOtherPokemon(victim).getName() + " down with it!";
         }
 
-        private void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-            murderer.killKillKillMurderMurderMurder(b, dead.getName() + " took " + murderer.getName() + " down with it!");
-        }
-
         @Override
-        public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType) {
-            if (statusType == StatusNamesies.FAINTED) {
-                ActivePokemon murderer = b.getOtherPokemon(victim);
-
-                // Only grant death wish if murdered through direct damage
-                if (murderer.isAttacking()) {
-                    // DEATH WISH GRANTED
-                    deathWish(b, victim, murderer);
-                }
-            }
+        public void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
+            murderer.killKillKillMurderMurderMurder(b, dead.getName() + " took " + murderer.getName() + " down with it!");
         }
     }
 

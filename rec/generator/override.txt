@@ -870,19 +870,7 @@ MoveTypePrevent:
 *
 DeathWish:
     Header: void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer)
-    AccessModifier: Private
-    AddInterface: StatusReceivedEffect
-    AddMapField: StatusReceived:
-        if (statusType == StatusNamesies.FAINTED) {
-            ActivePokemon murderer = b.getOtherPokemon(victim);
-
-            // Only grant death wish if murdered through direct damage
-            if (murderer.isAttacking()) {
-                // DEATH WISH GRANTED
-                deathWish(b, victim, murderer);
-            }
-        }
-        ###
+    AddInterface: FaintEffect
 *
 KillWish:
     Header: void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer)

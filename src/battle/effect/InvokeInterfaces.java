@@ -409,6 +409,20 @@ public final class InvokeInterfaces {
         }
     }
 
+    public interface FaintEffect {
+        void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer);
+
+        static void grantDeathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
+            List<InvokeEffect> invokees = b.getEffectsList(dead);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof FaintEffect && InvokeEffect.isActiveEffect(invokee)) {
+                    FaintEffect effect = (FaintEffect)invokee;
+                    effect.deathWish(b, dead, murderer);
+                }
+            }
+        }
+    }
+
     // KILL KILL KILL MURDER MURDER MURDER
     public interface MurderEffect {
         void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer);
