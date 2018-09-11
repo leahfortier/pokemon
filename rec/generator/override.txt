@@ -426,14 +426,6 @@ Flailing:
         }
         ###
 *
-LightClay:
-    AddMapField: NumTurns: 5
-    AddMapField: AfterCast:
-        if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-            this.setTurns(8);
-        }
-        ###
-*
 BarrierBreaker:
     AddMapField: UniqueEffects:
         BarrierEffect.breakBarriers(b, victim, user);
@@ -445,7 +437,7 @@ SimpleBarrier:
     AddMapField: Barrier: {2-}
 *
 Barrier:
-    AddMapField: LightClay: True
+    AddMapField: NumTurns: 5
     AddMapField: ModifyMultiplier: 2 !opp.hasAbility(AbilityNamesies.INFILTRATOR)
     AddMapField: SubsideMessage: "The effects of {0} faded."
     AddMapField: Defog: "The effects of {0} faded."
@@ -612,11 +604,6 @@ PartialTrap:
     Header: String getReduceMessage(ActivePokemon victim)
     Body:
         return victim.getName() + " is hurt by {1_}!";
-        ###
-    AddMapField: AfterCast:
-        if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-            this.setTurns(5);
-        }
         ###
     AddInterface: PartialTrappingEffect
     AddMapField: MinTurns: 4
@@ -1956,16 +1943,16 @@ EntryEndTurn:
     Header: void applyEffect(Battle b, ActivePokemon p)
 *
 WeatherExtendingItem:
-    AddMapField: WeatherExtendingEffect:
-        return weatherType == WeatherNamesies.{00} ? 3 : 0;
+    AddMapField: ExtendEffect:
+        return receivedEffect.namesies() == WeatherNamesies.{00} ? 3 : 0;
         ###
     AddInterface: HoldItem
     AddMapField: Cat: Misc
     AddMapField: Price: 4000
 *
-WeatherExtendingEffect:
-    Header: int getExtensionTurns(WeatherNamesies weatherType)
-    AddInterface: WeatherExtendingEffect
+ExtendEffect:
+    Header: int getExtensionTurns(Effect receivedEffect, int numTurns)
+    AddInterface: EffectExtendingEffect
 *
 PowerCountMove:
     AddInterface: PowerCountMove

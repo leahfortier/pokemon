@@ -189,13 +189,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                this.setTurns(5);
-            }
-        }
-
-        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return victim.getName() + " was trapped in the fiery vortex!";
         }
@@ -231,13 +224,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getReduceMessage(ActivePokemon victim) {
             return victim.getName() + " is hurt by infestation!";
-        }
-
-        @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                this.setTurns(5);
-            }
         }
 
         @Override
@@ -279,13 +265,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                this.setTurns(5);
-            }
-        }
-
-        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return victim.getName() + " was trapped by swirling magma!";
         }
@@ -321,13 +300,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getReduceMessage(ActivePokemon victim) {
             return victim.getName() + " is hurt by clamp!";
-        }
-
-        @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                this.setTurns(5);
-            }
         }
 
         @Override
@@ -369,13 +341,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                this.setTurns(5);
-            }
-        }
-
-        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return victim.getName() + " was trapped in the vortex!";
         }
@@ -411,13 +376,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getReduceMessage(ActivePokemon victim) {
             return victim.getName() + " is hurt by wrap!";
-        }
-
-        @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                this.setTurns(5);
-            }
         }
 
         @Override
@@ -459,13 +417,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                this.setTurns(5);
-            }
-        }
-
-        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return victim.getName() + " was binded by " + user.getName() + "!";
         }
@@ -501,13 +452,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getReduceMessage(ActivePokemon victim) {
             return victim.getName() + " is hurt by sand tomb!";
-        }
-
-        @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            if (caster.isHoldingItem(b, ItemNamesies.GRIP_CLAW)) {
-                this.setTurns(5);
-            }
         }
 
         @Override

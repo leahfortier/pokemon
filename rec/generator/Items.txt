@@ -233,6 +233,10 @@ Grip Claw:
     Desc: An item to be held by a Pok\u00e9mon. It extends the duration of multi-turn attacks like Bind and Wrap.
     Price: 4000
     Fling: 90
+    ExtendEffect:
+        // Grip Claw always gives five turns
+        return receivedEffect instanceof PartialTrappingEffect ? 5 - numTurns : 0;
+        ###
 *
 Adamant Orb:
     Desc: A brightly gleaming orb to be held by Dialga. It boosts the power of Dragon- and Steel-type moves when it is held.
@@ -292,6 +296,9 @@ Light Clay:
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. Protective moves like Light Screen and Reflect will be effective longer.
     Price: 4000
+    ExtendEffect:
+        return receivedEffect instanceof BarrierEffect ? 3 : 0;
+        ###
 *
 Lucky Egg:
     Int: HoldItem

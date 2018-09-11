@@ -10,15 +10,18 @@ import battle.effect.Effect;
 import battle.effect.EffectInterfaces.EntryEndTurnEffect;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MessageGetter;
+import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
+import battle.effect.InvokeInterfaces.BarrierEffect;
 import battle.effect.InvokeInterfaces.BracingEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.InvokeInterfaces.DefiniteEscape;
+import battle.effect.InvokeInterfaces.EffectExtendingEffect;
 import battle.effect.InvokeInterfaces.EffectReceivedEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.EntryEffect;
@@ -36,7 +39,6 @@ import battle.effect.InvokeInterfaces.StrikeFirstEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TerrainCastEffect;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
-import battle.effect.InvokeInterfaces.WeatherExtendingEffect;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
@@ -487,7 +489,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class DampRock extends Item implements HoldItem, WeatherExtendingEffect {
+    static class DampRock extends Item implements HoldItem, EffectExtendingEffect {
         private static final long serialVersionUID = 1L;
 
         DampRock() {
@@ -501,12 +503,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getExtensionTurns(WeatherNamesies weatherType) {
-            return weatherType == WeatherNamesies.RAINING ? 3 : 0;
+        public int getExtensionTurns(Effect receivedEffect, int numTurns) {
+            return receivedEffect.namesies() == WeatherNamesies.RAINING ? 3 : 0;
         }
     }
 
-    static class HeatRock extends Item implements HoldItem, WeatherExtendingEffect {
+    static class HeatRock extends Item implements HoldItem, EffectExtendingEffect {
         private static final long serialVersionUID = 1L;
 
         HeatRock() {
@@ -520,12 +522,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getExtensionTurns(WeatherNamesies weatherType) {
-            return weatherType == WeatherNamesies.SUNNY ? 3 : 0;
+        public int getExtensionTurns(Effect receivedEffect, int numTurns) {
+            return receivedEffect.namesies() == WeatherNamesies.SUNNY ? 3 : 0;
         }
     }
 
-    static class IcyRock extends Item implements HoldItem, WeatherExtendingEffect {
+    static class IcyRock extends Item implements HoldItem, EffectExtendingEffect {
         private static final long serialVersionUID = 1L;
 
         IcyRock() {
@@ -539,12 +541,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getExtensionTurns(WeatherNamesies weatherType) {
-            return weatherType == WeatherNamesies.HAILING ? 3 : 0;
+        public int getExtensionTurns(Effect receivedEffect, int numTurns) {
+            return receivedEffect.namesies() == WeatherNamesies.HAILING ? 3 : 0;
         }
     }
 
-    static class SmoothRock extends Item implements HoldItem, WeatherExtendingEffect {
+    static class SmoothRock extends Item implements HoldItem, EffectExtendingEffect {
         private static final long serialVersionUID = 1L;
 
         SmoothRock() {
@@ -558,8 +560,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getExtensionTurns(WeatherNamesies weatherType) {
-            return weatherType == WeatherNamesies.SANDSTORM ? 3 : 0;
+        public int getExtensionTurns(Effect receivedEffect, int numTurns) {
+            return receivedEffect.namesies() == WeatherNamesies.SANDSTORM ? 3 : 0;
         }
     }
 
@@ -724,12 +726,18 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class GripClaw extends Item implements HoldItem {
+    static class GripClaw extends Item implements HoldItem, EffectExtendingEffect {
         private static final long serialVersionUID = 1L;
 
         GripClaw() {
             super(ItemNamesies.GRIP_CLAW, "An item to be held by a Pok\u00e9mon. It extends the duration of multi-turn attacks like Bind and Wrap.", BagCategory.MISC);
             super.price = 4000;
+        }
+
+        @Override
+        public int getExtensionTurns(Effect receivedEffect, int numTurns) {
+            // Grip Claw always gives five turns
+            return receivedEffect instanceof PartialTrappingEffect ? 5 - numTurns : 0;
         }
 
         @Override
@@ -887,12 +895,17 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class LightClay extends Item implements HoldItem {
+    static class LightClay extends Item implements HoldItem, EffectExtendingEffect {
         private static final long serialVersionUID = 1L;
 
         LightClay() {
             super(ItemNamesies.LIGHT_CLAY, "An item to be held by a Pok\u00e9mon. Protective moves like Light Screen and Reflect will be effective longer.", BagCategory.MISC);
             super.price = 4000;
+        }
+
+        @Override
+        public int getExtensionTurns(Effect receivedEffect, int numTurns) {
+            return receivedEffect instanceof BarrierEffect ? 3 : 0;
         }
     }
 

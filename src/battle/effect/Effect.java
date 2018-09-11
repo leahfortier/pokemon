@@ -3,6 +3,7 @@ package battle.effect;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.InvokeInterfaces.EffectBlockerEffect;
+import battle.effect.InvokeInterfaces.EffectExtendingEffect;
 import battle.effect.InvokeInterfaces.EffectReceivedEffect;
 import battle.effect.source.CastSource;
 import main.Global;
@@ -47,6 +48,10 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
 
             effect.afterCast(b, caster, victim, source);
             Messages.update(b);
+
+            if (effect.numTurns > 0) {
+                effect.numTurns += EffectExtendingEffect.getModifier(b, caster, effect, effect.numTurns);
+            }
 
             EffectReceivedEffect.invokeEffectReceivedEffect(b, caster, victim, namesies);
             Messages.update(b);

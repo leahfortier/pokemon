@@ -23,6 +23,7 @@ import battle.effect.InvokeInterfaces.DamageTakenEffect;
 import battle.effect.InvokeInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
 import battle.effect.InvokeInterfaces.EffectBlockerEffect;
+import battle.effect.InvokeInterfaces.EffectExtendingEffect;
 import battle.effect.InvokeInterfaces.EncounterRateMultiplier;
 import battle.effect.InvokeInterfaces.EndBattleEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
@@ -66,7 +67,6 @@ import battle.effect.InvokeInterfaces.TerrainCastEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
 import battle.effect.InvokeInterfaces.WeatherEliminatingEffect;
-import battle.effect.InvokeInterfaces.WeatherExtendingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.InvokeInterfaces.WildEncounterSelector;
 import battle.effect.attack.MultiTurnMove;
@@ -241,7 +241,7 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, AttackBlocker.class, effectListSourcesNoAttack);
             checkInstance(classy, ModifyStageValueEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, WeatherEliminatingEffect.class, effectListSourcesNoAttack);
-            checkInstance(classy, WeatherExtendingEffect.class, effectListSourcesNoAttack);
+            checkInstance(classy, EffectExtendingEffect.class, effectListSourcesNoAttack);
 
             // Invoked from battle.getEffectsList() with attack
             for (Class<?> effectListWithAttackClass : effectListWithAttackClasses) {

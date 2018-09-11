@@ -7,7 +7,6 @@ import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
-import battle.effect.InvokeInterfaces.WeatherExtendingEffect;
 import battle.effect.battle.BattleEffect;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
@@ -37,7 +36,7 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
     @Override
     protected void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
         // Weather needs to set its turns in the cast method because base weather has infinite turns
-        b.getWeather().setTurns(5 + WeatherExtendingEffect.getModifier(b, caster, this.namesies()));
+        b.getWeather().setTurns(5);
     }
 
     @Override

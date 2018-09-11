@@ -1603,17 +1603,17 @@ public final class InvokeInterfaces {
         }
     }
 
-    public interface WeatherExtendingEffect {
-        int getExtensionTurns(WeatherNamesies weatherType);
+    public interface EffectExtendingEffect {
+        int getExtensionTurns(Effect receivedEffect, int numTurns);
 
-        static int getModifier(Battle b, ActivePokemon p, WeatherNamesies weatherType) {
+        static int getModifier(Battle b, ActivePokemon p, Effect receivedEffect, int numTurns) {
             int modifier = 0;
 
             List<InvokeEffect> invokees = b.getEffectsList(p);
             for (InvokeEffect invokee : invokees) {
-                if (invokee instanceof WeatherExtendingEffect && InvokeEffect.isActiveEffect(invokee)) {
-                    WeatherExtendingEffect effect = (WeatherExtendingEffect)invokee;
-                    modifier += effect.getExtensionTurns(weatherType);
+                if (invokee instanceof EffectExtendingEffect && InvokeEffect.isActiveEffect(invokee)) {
+                    EffectExtendingEffect effect = (EffectExtendingEffect)invokee;
+                    modifier += effect.getExtensionTurns(receivedEffect, numTurns);
                 }
             }
 

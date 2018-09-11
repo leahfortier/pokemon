@@ -89,13 +89,6 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-                this.setTurns(8);
-            }
-        }
-
-        @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
         }
@@ -141,13 +134,6 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         @Override
         public String getDefogReleaseMessage(ActivePokemon released) {
             return "The effects of light screen faded.";
-        }
-
-        @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-                this.setTurns(8);
-            }
         }
 
         @Override
@@ -229,13 +215,6 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         @Override
         public String getDefogReleaseMessage(ActivePokemon released) {
             return "The effects of aurora veil faded.";
-        }
-
-        @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
-                this.setTurns(8);
-            }
         }
 
         @Override
