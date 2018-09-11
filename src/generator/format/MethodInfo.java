@@ -52,13 +52,6 @@ public class MethodInfo {
         this.accessModifier = accessModifier;
     }
 
-    MethodInfo(final String header, final String begin, final String body, final String end) {
-        this(header, body);
-
-        this.begin = begin;
-        this.end = end;
-    }
-
     MethodInfo(final Scanner in) {
         this();
 
@@ -103,6 +96,10 @@ public class MethodInfo {
         if (this.header == null && (!this.body.isEmpty() || !this.begin.isEmpty() || !this.end.isEmpty())) {
             Global.error("Cannot have a body without a header.");
         }
+    }
+
+    public Iterable<MapField> getMapFields() {
+        return this.addMapFields;
     }
 
     private String writeFunction(String fieldValue, String className, String superClass, InputFormatter inputFormatter) {

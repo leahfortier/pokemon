@@ -61,6 +61,10 @@ public class InputFormatter {
     }
 
     public MethodInfo getOverrideMethod(String fieldName) {
+        if (this.overrideMethods == null) {
+            this.readOverrideFormat();
+        }
+
         return this.overrideMethods.get(fieldName);
     }
 

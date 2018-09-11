@@ -4,6 +4,7 @@ import generator.fieldinfo.MapField;
 import main.Global;
 import util.string.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -129,6 +130,10 @@ public class ClassFields {
         for (String field : fields.keySet()) {
             Global.error("Unused field " + field + " for class " + this.className);
         }
+    }
+
+    public Iterable<String> getFieldNames() {
+        return new ArrayList<>(this.fields.keySet());
     }
 
     @FunctionalInterface
