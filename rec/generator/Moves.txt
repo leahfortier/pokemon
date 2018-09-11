@@ -2510,7 +2510,7 @@ Wring Out:
     Acc: 100
     Cat: Special
     Type: Normal
-    TargetHPRatioMove: 120
+    TargetHpRatioMove: 120
     PhysicalContact: True
 *
 Leaf Tornado:
@@ -4114,7 +4114,7 @@ Eruption:
     Acc: 100
     Cat: Special
     Type: Fire
-    SelfHPRatioMove: 150
+    SelfHpRatioMove: 150
 *
 Charm:
     Desc: The user gazes at the target rather charmingly, making it less wary. This harshly lowers its Attack stat.
@@ -4628,7 +4628,7 @@ Water Spout:
     Acc: 100
     Cat: Special
     Type: Water
-    SelfHPRatioMove: 150
+    SelfHpRatioMove: 150
 *
 Teeter Dance:
     Desc: The user performs a wobbly dance that confuses the Pok\u00e9mon around it.
@@ -4823,7 +4823,7 @@ Crush Grip:
     Type: Normal
     Acc: 100
     Cat: Physical
-    TargetHPRatioMove: 120
+    TargetHpRatioMove: 120
 *
 Shadow Force:
     Desc: The user disappears, then strikes the target on the next turn. This move hits even if the target protects itself.

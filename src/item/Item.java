@@ -13,6 +13,7 @@ import battle.effect.EffectInterfaces.MessageGetter;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
+import battle.effect.EffectInterfaces.WeatherExtendingEffect;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
@@ -489,7 +490,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class DampRock extends Item implements HoldItem, EffectExtendingEffect {
+    static class DampRock extends Item implements HoldItem, WeatherExtendingEffect {
         private static final long serialVersionUID = 1L;
 
         DampRock() {
@@ -498,17 +499,17 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 60;
+        public WeatherNamesies getWeatherType() {
+            return WeatherNamesies.RAINING;
         }
 
         @Override
-        public int getExtensionTurns(Effect receivedEffect, int numTurns) {
-            return receivedEffect.namesies() == WeatherNamesies.RAINING ? 3 : 0;
+        public int flingDamage() {
+            return 60;
         }
     }
 
-    static class HeatRock extends Item implements HoldItem, EffectExtendingEffect {
+    static class HeatRock extends Item implements HoldItem, WeatherExtendingEffect {
         private static final long serialVersionUID = 1L;
 
         HeatRock() {
@@ -517,17 +518,17 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 60;
+        public WeatherNamesies getWeatherType() {
+            return WeatherNamesies.SUNNY;
         }
 
         @Override
-        public int getExtensionTurns(Effect receivedEffect, int numTurns) {
-            return receivedEffect.namesies() == WeatherNamesies.SUNNY ? 3 : 0;
+        public int flingDamage() {
+            return 60;
         }
     }
 
-    static class IcyRock extends Item implements HoldItem, EffectExtendingEffect {
+    static class IcyRock extends Item implements HoldItem, WeatherExtendingEffect {
         private static final long serialVersionUID = 1L;
 
         IcyRock() {
@@ -536,17 +537,17 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 40;
+        public WeatherNamesies getWeatherType() {
+            return WeatherNamesies.HAILING;
         }
 
         @Override
-        public int getExtensionTurns(Effect receivedEffect, int numTurns) {
-            return receivedEffect.namesies() == WeatherNamesies.HAILING ? 3 : 0;
+        public int flingDamage() {
+            return 40;
         }
     }
 
-    static class SmoothRock extends Item implements HoldItem, EffectExtendingEffect {
+    static class SmoothRock extends Item implements HoldItem, WeatherExtendingEffect {
         private static final long serialVersionUID = 1L;
 
         SmoothRock() {
@@ -555,13 +556,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
+        public WeatherNamesies getWeatherType() {
+            return WeatherNamesies.SANDSTORM;
         }
 
         @Override
-        public int getExtensionTurns(Effect receivedEffect, int numTurns) {
-            return receivedEffect.namesies() == WeatherNamesies.SANDSTORM ? 3 : 0;
+        public int flingDamage() {
+            return 10;
         }
     }
 

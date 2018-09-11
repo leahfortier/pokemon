@@ -8,6 +8,7 @@ import battle.attack.MoveType;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.CrashDamageMove;
+import battle.effect.InvokeInterfaces.EffectExtendingEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
@@ -18,6 +19,7 @@ import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.InvokeInterfaces.WildEncounterSelector;
+import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import item.ItemNamesies;
@@ -301,6 +303,15 @@ public final class EffectInterfaces {
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
             double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
             victim.reduceHealthFraction(b, fraction, this.getReduceMessage(victim));
+        }
+    }
+
+    public interface WeatherExtendingEffect extends EffectExtendingEffect {
+        WeatherNamesies getWeatherType();
+
+        @Override
+        default int getExtensionTurns(Effect receivedEffect, int numTurns) {
+            return receivedEffect.namesies() == this.getWeatherType() ? 3 : 0;
         }
     }
 }

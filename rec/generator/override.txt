@@ -397,13 +397,13 @@ HitDig:
         return defending.isSemiInvulnerableDigging();
         ###
 *
-SelfHPRatioMove:
+SelfHpRatioMove:
     AddMapField: Pow: {1}
     AddMapField: GetPow:
         return (int)Math.min(1, (super.power*me.getHPRatio()));
         ###
 *
-TargetHPRatioMove:
+TargetHpRatioMove:
     AddMapField: GetPow:
         return (int)Math.min(1, ({1}*o.getHPRatio()));
         ###
@@ -1943,12 +1943,14 @@ EntryEndTurn:
     Header: void applyEffect(Battle b, ActivePokemon p)
 *
 WeatherExtendingItem:
-    AddMapField: ExtendEffect:
-        return receivedEffect.namesies() == WeatherNamesies.{00} ? 3 : 0;
-        ###
     AddInterface: HoldItem
     AddMapField: Cat: Misc
     AddMapField: Price: 4000
+    AddInterface: WeatherExtendingEffect
+    Header: WeatherNamesies getWeatherType()
+    Body:
+        return WeatherNamesies.{00};
+        ###
 *
 ExtendEffect:
     Header: int getExtensionTurns(Effect receivedEffect, int numTurns)
