@@ -219,6 +219,16 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         }
 
         @Override
+        public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+            if (RandomUtils.chanceTest(25)) {
+                Messages.add(p.getName() + " is fully paralyzed!");
+                return false;
+            }
+
+            return true;
+        }
+
+        @Override
         public String getGenericCastMessage(ActivePokemon p) {
             return p.getName() + " was paralyzed!";
         }
@@ -239,23 +249,13 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         }
 
         @Override
-        public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-            if (RandomUtils.chanceTest(25)) {
-                Messages.add(p.getName() + " is fully paralyzed!");
-                return false;
-            }
-
-            return true;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return !p.hasAbility(AbilityNamesies.QUICK_FEET);
-        }
-
-        @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
         }
 
         @Override
@@ -283,15 +283,6 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
-                victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + AbilityNamesies.POISON_HEAL.getName() + " restored its health!");
-            } else {
-                victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " was hurt by its poison!");
-            }
-        }
-
-        @Override
         public boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return (!victim.isType(b, Type.POISON) && !victim.isType(b, Type.STEEL) || caster.hasAbility(AbilityNamesies.CORROSION));
         }
@@ -304,6 +295,15 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         @Override
         public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
             return victim.getName() + "'s " + sourceName + " cured it of its poison!";
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
+                victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + AbilityNamesies.POISON_HEAL.getName() + " restored its health!");
+            } else {
+                victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " was hurt by its poison!");
+            }
         }
     }
 
@@ -335,15 +335,6 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
-                victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + AbilityNamesies.POISON_HEAL.getName() + " restored its health!");
-            } else {
-                victim.reduceHealthFraction(b, this.turns++/16.0, victim.getName() + " was hurt by its poison!");
-            }
-        }
-
-        @Override
         public boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return (!victim.isType(b, Type.POISON) && !victim.isType(b, Type.STEEL) || caster.hasAbility(AbilityNamesies.CORROSION));
         }
@@ -357,6 +348,15 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
             return victim.getName() + "'s " + sourceName + " cured it of its poison!";
         }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
+                victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + AbilityNamesies.POISON_HEAL.getName() + " restored its health!");
+            } else {
+                victim.reduceHealthFraction(b, this.turns++/16.0, victim.getName() + " was hurt by its poison!");
+            }
+        }
     }
 
     // Fire-type Pokemon cannot be burned
@@ -366,6 +366,12 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
 
         Burned() {
             super(StatusNamesies.BURNED, "BRN", 1.5);
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            double reduceFraction = victim.hasAbility(AbilityNamesies.HEATPROOF) ? 1/16.0 : 1/8.0;
+            victim.reduceHealthFraction(b, reduceFraction, victim.getName() + " was hurt by its burn!");
         }
 
         @Override
@@ -394,19 +400,13 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            double reduceFraction = victim.hasAbility(AbilityNamesies.HEATPROOF) ? 1/16.0 : 1/8.0;
-            victim.reduceHealthFraction(b, reduceFraction, victim.getName() + " was hurt by its burn!");
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.ATTACK;
         }
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return !p.hasAbility(AbilityNamesies.GUTS) && p.getAttack().namesies() != AttackNamesies.FACADE;
-        }
-
-        @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.ATTACK;
         }
 
         @Override
@@ -432,26 +432,6 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         }
 
         @Override
-        public String getGenericCastMessage(ActivePokemon p) {
-            return p.getName() + " fell asleep!";
-        }
-
-        @Override
-        public String getSourceCastMessage(ActivePokemon sourcerer, ActivePokemon victim, String sourceName) {
-            return sourcerer.getName() + "'s " + sourceName + " caused " + victim.getName() + " to fall asleep!";
-        }
-
-        @Override
-        public String getGenericRemoveMessage(ActivePokemon victim) {
-            return victim.getName() + " woke up!";
-        }
-
-        @Override
-        public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
-            return victim.getName() + "'s " + sourceName + " caused it to wake up!";
-        }
-
-        @Override
         public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
             if (numTurns == 0) {
                 p.removeStatus(b, CastSource.EFFECT);
@@ -465,6 +445,16 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         }
 
         @Override
+        public String getGenericCastMessage(ActivePokemon p) {
+            return p.getName() + " fell asleep!";
+        }
+
+        @Override
+        public String getSourceCastMessage(ActivePokemon sourcerer, ActivePokemon victim, String sourceName) {
+            return sourcerer.getName() + "'s " + sourceName + " caused " + victim.getName() + " to fall asleep!";
+        }
+
+        @Override
         public int getTurns() {
             return this.numTurns;
         }
@@ -472,6 +462,16 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         @Override
         public void setTurns(int turns) {
             this.numTurns = turns;
+        }
+
+        @Override
+        public String getGenericRemoveMessage(ActivePokemon victim) {
+            return victim.getName() + " woke up!";
+        }
+
+        @Override
+        public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + "'s " + sourceName + " caused it to wake up!";
         }
     }
 
@@ -489,26 +489,6 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         }
 
         @Override
-        public String getGenericCastMessage(ActivePokemon p) {
-            return p.getName() + " was frozen!";
-        }
-
-        @Override
-        public String getSourceCastMessage(ActivePokemon sourcerer, ActivePokemon victim, String sourceName) {
-            return sourcerer.getName() + "'s " + sourceName + " froze " + victim.getName() + "!";
-        }
-
-        @Override
-        public String getGenericRemoveMessage(ActivePokemon victim) {
-            return victim.getName() + " thawed out!";
-        }
-
-        @Override
-        public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
-            return victim.getName() + "'s " + sourceName + " thawed it out!";
-        }
-
-        @Override
         public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
             // 20% chance to thaw out each turn
             if (RandomUtils.chanceTest(20) || p.getAttack().isMoveType(MoveType.DEFROST)) {
@@ -521,11 +501,31 @@ public abstract class StatusCondition implements InvokeEffect, Serializable {
         }
 
         @Override
+        public String getGenericCastMessage(ActivePokemon p) {
+            return p.getName() + " was frozen!";
+        }
+
+        @Override
+        public String getSourceCastMessage(ActivePokemon sourcerer, ActivePokemon victim, String sourceName) {
+            return sourcerer.getName() + "'s " + sourceName + " froze " + victim.getName() + "!";
+        }
+
+        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Fire-type moves defrost the user
             if (user.isAttackType(Type.FIRE)) {
                 victim.removeStatus(b, CastSource.EFFECT);
             }
+        }
+
+        @Override
+        public String getGenericRemoveMessage(ActivePokemon victim) {
+            return victim.getName() + " thawed out!";
+        }
+
+        @Override
+        public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + "'s " + sourceName + " thawed it out!";
         }
     }
 }

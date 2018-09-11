@@ -191,7 +191,6 @@ Other random things:
     Message for Trick looks terrible when one of the Pokemon isn't holding anything (switched with Bulbasaur's No Item!)
     uproar specifically checks if pp runs out to remove effect -- should that be for other similar moves too?
     should light clay/grip claw be effectreceivedeffects?
-    ask Narcos about next turn subside since I don't like it -- should terrain effects be that way? rn they're diff than weather which seems weird
     remove effect inside subside -- then we can use it in more places
     substitute almost certainly doesn't work with form change abilities for images at least
     test life orb (with multi-strike among other things)

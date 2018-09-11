@@ -5,7 +5,7 @@ import main.Global;
 import util.string.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -16,7 +16,7 @@ public class ClassFields {
     private final String className;
 
     ClassFields(String name) {
-        this.fields = new HashMap<>();
+        this.fields = new LinkedHashMap<>();
 
         this.name = name;
         this.className = StringUtils.getClassName(name);

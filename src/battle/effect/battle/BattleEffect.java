@@ -61,14 +61,14 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         }
 
         @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            removeLevitation(b, caster);
-            removeLevitation(b, victim);
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return "Gravity intensified!";
         }
 
         @Override
-        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return "Gravity intensified!";
+        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            removeLevitation(b, caster);
+            removeLevitation(b, victim);
         }
 
         @Override
@@ -153,9 +153,8 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            // Remove the effect if it's already in play
-            this.subside(b, caster);
+        public String getSubsideMessage(ActivePokemon victim) {
+            return "The dimensions of the wonder room returned to normal.";
         }
 
         @Override
@@ -164,8 +163,9 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         }
 
         @Override
-        public String getSubsideMessage(ActivePokemon victim) {
-            return "The dimensions of the wonder room returned to normal.";
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            // Remove the effect if it's already in play
+            this.subside(b, caster);
         }
     }
 
@@ -177,9 +177,8 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            // Remove the effect if it's already in play
-            this.subside(b, caster);
+        public String getSubsideMessage(ActivePokemon victim) {
+            return "The dimensions of the trick room returned to normal.";
         }
 
         @Override
@@ -188,8 +187,9 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         }
 
         @Override
-        public String getSubsideMessage(ActivePokemon victim) {
-            return "The dimensions of the trick room returned to normal.";
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            // Remove the effect if it's already in play
+            this.subside(b, caster);
         }
     }
 
@@ -201,9 +201,8 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            // Remove the effect if it's already in play
-            this.subside(b, caster);
+        public String getSubsideMessage(ActivePokemon victim) {
+            return "The dimensions of the magic room returned to normal.";
         }
 
         @Override
@@ -212,8 +211,9 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         }
 
         @Override
-        public String getSubsideMessage(ActivePokemon victim) {
-            return "The dimensions of the magic room returned to normal.";
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            // Remove the effect if it's already in play
+            this.subside(b, caster);
         }
     }
 

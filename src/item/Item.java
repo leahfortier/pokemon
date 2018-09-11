@@ -393,13 +393,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
+        public double getModifier() {
+            return 1.5;
         }
 
         @Override
-        public double getModifier() {
-            return 1.5;
+        public int flingDamage() {
+            return 10;
         }
     }
 
@@ -428,13 +428,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
+        public double getModifier() {
+            return 1.5;
         }
 
         @Override
-        public double getModifier() {
-            return 1.5;
+        public int flingDamage() {
+            return 10;
         }
     }
 
@@ -463,13 +463,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
+        public double getModifier() {
+            return 1.5;
         }
 
         @Override
-        public double getModifier() {
-            return 1.5;
+        public int flingDamage() {
+            return 10;
         }
     }
 
@@ -588,15 +588,15 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
-        }
-
-        @Override
         public void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
             if (effectType == PokemonEffectNamesies.INFATUATION && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, caster, CastSource.HELD_ITEM, false)) {
                 Messages.add(victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!");
             }
+        }
+
+        @Override
+        public int flingDamage() {
+            return 10;
         }
     }
 
@@ -609,13 +609,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return TypeAdvantage.isSuperEffective(user, victim, b) ? 1.2 : 1;
+        public int flingDamage() {
+            return 10;
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return TypeAdvantage.isSuperEffective(user, victim, b) ? 1.2 : 1;
         }
     }
 
@@ -747,13 +747,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isPokemon(PokemonNamesies.DIALGA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.STEEL)) ? 1.2 : 1;
+        public int flingDamage() {
+            return 60;
         }
 
         @Override
-        public int flingDamage() {
-            return 60;
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isPokemon(PokemonNamesies.DIALGA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.STEEL)) ? 1.2 : 1;
         }
     }
 
@@ -766,13 +766,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isPokemon(PokemonNamesies.PALKIA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.WATER)) ? 1.2 : 1;
+        public int flingDamage() {
+            return 60;
         }
 
         @Override
-        public int flingDamage() {
-            return 60;
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isPokemon(PokemonNamesies.PALKIA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.WATER)) ? 1.2 : 1;
         }
     }
 
@@ -785,13 +785,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isPokemon(PokemonNamesies.GIRATINA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.GHOST)) ? 1.2 : 1;
+        public int flingDamage() {
+            return 60;
         }
 
         @Override
-        public int flingDamage() {
-            return 60;
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isPokemon(PokemonNamesies.GIRATINA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.GHOST)) ? 1.2 : 1;
         }
     }
 
@@ -809,14 +809,14 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 130;
-        }
-
-        @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
             // Technically the Iron Ball doesn't do this as a fling effect, but it almost makes sense so I'm doing it
             removeLevitation(b, pelted);
+        }
+
+        @Override
+        public int flingDamage() {
+            return 130;
         }
 
         @Override
@@ -867,13 +867,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(PokemonNamesies.PIKACHU);
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.ATTACK || s == Stat.SP_ATTACK;
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.ATTACK || s == Stat.SP_ATTACK;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.isPokemon(PokemonNamesies.PIKACHU);
         }
 
         @Override
@@ -953,6 +953,15 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
+        public int[] getEVs(int[] vals) {
+            for (int i = 0; i < vals.length; i++) {
+                vals[i] *= 2;
+            }
+
+            return vals;
+        }
+
+        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SPEED;
         }
@@ -960,15 +969,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public int flingDamage() {
             return 60;
-        }
-
-        @Override
-        public int[] getEVs(int[] vals) {
-            for (int i = 0; i < vals.length; i++) {
-                vals[i] *= 2;
-            }
-
-            return vals;
         }
 
         @Override
@@ -997,8 +997,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
+        public Set<PokemonEffectNamesies> getCurableEffects() {
+            return REMOVEABLE_EFFECTS.keySet();
+        }
+
+        @Override
+        public String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType) {
+            return victim.getName() + " is no longer " + REMOVEABLE_EFFECTS.get(effectType) + " due to its " + this.getName() + "!";
         }
 
         @Override
@@ -1007,13 +1012,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Set<PokemonEffectNamesies> getCurableEffects() {
-            return REMOVEABLE_EFFECTS.keySet();
-        }
-
-        @Override
-        public String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType) {
-            return victim.getName() + " is no longer " + REMOVEABLE_EFFECTS.get(effectType) + " due to its " + this.getName() + "!";
+        public int flingDamage() {
+            return 10;
         }
     }
 
@@ -1026,11 +1026,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(PokemonNamesies.DITTO);
-        }
-
-        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
         }
@@ -1038,6 +1033,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public int flingDamage() {
             return 10;
+        }
+
+        @Override
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.isPokemon(PokemonNamesies.DITTO);
         }
 
         @Override
@@ -1069,13 +1069,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttack().getCategory() == MoveCategory.PHYSICAL ? 1.1 : 1;
+        public int flingDamage() {
+            return 10;
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.getAttack().getCategory() == MoveCategory.PHYSICAL ? 1.1 : 1;
         }
     }
 
@@ -1098,11 +1098,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 70;
-        }
-
-        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
@@ -1111,6 +1106,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public double getModifier() {
             return .5;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 70;
         }
     }
 
@@ -1133,11 +1133,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 70;
-        }
-
-        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
@@ -1146,6 +1141,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public double getModifier() {
             return .5;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 70;
         }
     }
 
@@ -1168,11 +1168,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 70;
-        }
-
-        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
@@ -1181,6 +1176,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public double getModifier() {
             return .5;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 70;
         }
     }
 
@@ -1203,11 +1203,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 70;
-        }
-
-        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
@@ -1216,6 +1211,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public double getModifier() {
             return .5;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 70;
         }
     }
 
@@ -1238,11 +1238,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 70;
-        }
-
-        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
@@ -1251,6 +1246,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public double getModifier() {
             return .5;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 70;
         }
     }
 
@@ -1273,11 +1273,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 70;
-        }
-
-        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
@@ -1286,6 +1281,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public double getModifier() {
             return .5;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 70;
         }
     }
 
@@ -1298,11 +1298,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 80;
-        }
-
-        @Override
         public boolean strikeFirst(Battle b, ActivePokemon striker) {
             // Quick Claw gives holder a 20% chance of striking first within its priority bracket
             return RandomUtils.chanceTest(20);
@@ -1311,6 +1306,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public String getStrikeFirstMessage(ActivePokemon striker) {
             return striker.getName() + "'s " + this.getName() + " allowed it to strike first!";
+        }
+
+        @Override
+        public int flingDamage() {
+            return 80;
         }
     }
 
@@ -1323,11 +1323,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(PokemonNamesies.DITTO);
-        }
-
-        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SPEED;
         }
@@ -1335,6 +1330,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public int flingDamage() {
             return 10;
+        }
+
+        @Override
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.isPokemon(PokemonNamesies.DITTO);
         }
 
         @Override
@@ -1373,13 +1373,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
+        public boolean negateNoAdvantage(Type attacking, Type defending) {
+            return true;
         }
 
         @Override
-        public boolean negateNoAdvantage(Type attacking, Type defending) {
-            return true;
+        public int flingDamage() {
+            return 10;
         }
     }
 
@@ -1497,13 +1497,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(PokemonNamesies.LATIOS) || p.isPokemon(PokemonNamesies.LATIAS);
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SP_ATTACK || s == Stat.SP_DEFENSE;
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SP_ATTACK || s == Stat.SP_DEFENSE;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.isPokemon(PokemonNamesies.LATIOS) || p.isPokemon(PokemonNamesies.LATIAS);
         }
 
         @Override
@@ -1548,11 +1548,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
-            return victim.getName() + "s " + this.getName() + " latched onto " + user.getName() + "!";
-        }
-
-        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             stickyPoke(b, victim, "its");
         }
@@ -1565,6 +1560,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
             }
 
             this.swapItems(b, victim, user);
+        }
+
+        @Override
+        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
+            return victim.getName() + "s " + this.getName() + " latched onto " + user.getName() + "!";
         }
 
         @Override
@@ -1582,11 +1582,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(PokemonNamesies.CUBONE) || p.isPokemon(PokemonNamesies.MAROWAK);
-        }
-
-        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.ATTACK;
         }
@@ -1594,6 +1589,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public int flingDamage() {
             return 90;
+        }
+
+        @Override
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.isPokemon(PokemonNamesies.CUBONE) || p.isPokemon(PokemonNamesies.MAROWAK);
         }
 
         @Override
@@ -1629,21 +1629,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
-            return true;
-        }
-
-        @Override
-        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
-            return p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!";
-        }
-
-        @Override
-        public int flingDamage() {
-            return 10;
-        }
-
-        @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
             // Restores negative stat changes to the pelted
             for (Stat stat : Stat.BATTLE_STATS) {
@@ -1653,6 +1638,21 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
             }
 
             Messages.add("The " + this.getName() + " restored " + pelted.getName() + "'s negative stat changes!");
+        }
+
+        @Override
+        public int flingDamage() {
+            return 10;
+        }
+
+        @Override
+        public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
+            return true;
+        }
+
+        @Override
+        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+            return p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!";
         }
     }
 
@@ -1713,11 +1713,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return !b.isFirstAttack();
-        }
-
-        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.ACCURACY;
         }
@@ -1725,6 +1720,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public int flingDamage() {
             return 10;
+        }
+
+        @Override
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return !b.isFirstAttack();
         }
 
         @Override
@@ -1747,7 +1747,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class LaxIncense extends Item implements SimpleStatModifyingEffect, IncenseItem {
+    static class LaxIncense extends Item implements IncenseItem, SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
 
         LaxIncense() {
@@ -1779,13 +1779,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
             super.price = 5000;
         }
 
+        private void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice) {
+            Effect.cast(TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE, b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
+        }
+
         @Override
         public PokemonNamesies getBaby() {
             return PokemonNamesies.HAPPINY;
-        }
-
-        private void getDatCashMoneyGetDatCashMoneyCast(Battle b, ActivePokemon gettinDatCashMoneyTwice) {
-            Effect.cast(TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE, b, gettinDatCashMoneyTwice, gettinDatCashMoneyTwice, CastSource.HELD_ITEM, false);
         }
 
         @Override
@@ -2638,13 +2638,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isAttackType(Type.POISON) ? 1.2 : 1;
+        public void flingEffect(Battle b, ActivePokemon pelted) {
+            StatusNamesies.POISONED.getStatus().apply(b, pelted, pelted, pelted.getName() + " was poisoned by the " + this.getName() + "!");
         }
 
         @Override
-        public void flingEffect(Battle b, ActivePokemon pelted) {
-            StatusNamesies.POISONED.getStatus().apply(b, pelted, pelted, pelted.getName() + " was poisoned by the " + this.getName() + "!");
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isAttackType(Type.POISON) ? 1.2 : 1;
         }
     }
 
@@ -2775,13 +2775,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(PokemonNamesies.CLAMPERL) || p.isPokemon(PokemonNamesies.CHINCHOU) || p.isPokemon(PokemonNamesies.LANTURN);
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SP_DEFENSE;
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SP_DEFENSE;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.isPokemon(PokemonNamesies.CLAMPERL) || p.isPokemon(PokemonNamesies.CHINCHOU) || p.isPokemon(PokemonNamesies.LANTURN);
         }
 
         @Override
@@ -2799,11 +2799,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(PokemonNamesies.CLAMPERL);
-        }
-
-        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SP_ATTACK;
         }
@@ -2811,6 +2806,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public int flingDamage() {
             return 90;
+        }
+
+        @Override
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.isPokemon(PokemonNamesies.CLAMPERL);
         }
 
         @Override
@@ -2888,18 +2888,18 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
+        public void flingEffect(Battle b, ActivePokemon pelted) {
+            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false)) {
+                Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
+            }
+        }
+
+        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
                 if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, false)) {
                     Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
                 }
-            }
-        }
-
-        @Override
-        public void flingEffect(Battle b, ActivePokemon pelted) {
-            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false)) {
-                Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
             }
         }
     }
@@ -3005,18 +3005,18 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
+        public void flingEffect(Battle b, ActivePokemon pelted) {
+            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false)) {
+                Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
+            }
+        }
+
+        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
                 if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, false)) {
                     Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
                 }
-            }
-        }
-
-        @Override
-        public void flingEffect(Battle b, ActivePokemon pelted) {
-            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false)) {
-                Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
             }
         }
     }
@@ -3584,11 +3584,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean use(Battle b, ActivePokemon p, Move m) {
-            return b == null ? use() : use(p, b);
-        }
-
-        @Override
         public boolean use() {
             return this.use(Game.getPlayer());
         }
@@ -3596,6 +3591,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public boolean use(ActivePokemon p, Battle b) {
             return use((Trainer)b.getTrainer(p));
+        }
+
+        @Override
+        public boolean use(Battle b, ActivePokemon p, Move m) {
+            return b == null ? use() : use(p, b);
         }
     }
 
@@ -4385,6 +4385,16 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
+        public Type naturalGiftType() {
+            return Type.FIGHTING;
+        }
+
+        @Override
+        public int naturalGiftPower() {
+            return 80;
+        }
+
+        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             for (Move m : victim.getMoves(b)) {
                 if (m.getPP() == 0) {
@@ -4393,11 +4403,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
                     break;
                 }
             }
-        }
-
-        @Override
-        public int restoreAmount(Move toRestore) {
-            return 10;
         }
 
         @Override
@@ -4423,17 +4428,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int naturalGiftPower() {
-            return 80;
-        }
-
-        @Override
-        public Type naturalGiftType() {
-            return Type.FIGHTING;
+        public int restoreAmount(Move toRestore) {
+            return 10;
         }
     }
 
-    static class OranBerry extends Item implements HpHealer, HealthTriggeredBerry {
+    static class OranBerry extends Item implements HealthTriggeredBerry, HpHealer {
         private static final long serialVersionUID = 1L;
 
         OranBerry() {
@@ -4443,18 +4443,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getHealAmount(ActivePokemon p) {
-            return 10;
-        }
-
-        @Override
-        public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-            return use(b, user, source);
-        }
-
-        @Override
-        public double healthTriggerRatio() {
-            return 1/3.0;
+        public Type naturalGiftType() {
+            return Type.POISON;
         }
 
         @Override
@@ -4463,8 +4453,18 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.POISON;
+        public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+            return use(b, user, source);
+        }
+
+        @Override
+        public int getHealAmount(ActivePokemon p) {
+            return 10;
+        }
+
+        @Override
+        public double healthTriggerRatio() {
+            return 1/3.0;
         }
     }
 
@@ -4487,13 +4487,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean use(ActivePokemon p, Battle b) {
-            return use(b, p, CastSource.USE_ITEM);
-        }
-
-        @Override
-        public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-            return use(b, user, source);
+        public Type naturalGiftType() {
+            return Type.GROUND;
         }
 
         @Override
@@ -4502,8 +4497,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.GROUND;
+        public boolean use(ActivePokemon p, Battle b) {
+            return use(b, p, CastSource.USE_ITEM);
+        }
+
+        @Override
+        public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+            return use(b, user, source);
         }
 
         @Override
@@ -4517,13 +4517,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Set<PokemonEffectNamesies> getCurableEffects() {
-            return EnumSet.of(PokemonEffectNamesies.CONFUSION);
+        public String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType) {
+            return this.getSourceMessage(victim, this.getName());
         }
 
         @Override
-        public String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType) {
-            return this.getSourceMessage(victim, this.getName());
+        public Set<PokemonEffectNamesies> getCurableEffects() {
+            return EnumSet.of(PokemonEffectNamesies.CONFUSION);
         }
     }
 
@@ -4537,12 +4537,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean shouldHeal(ActivePokemon p) {
-            // Does not apply to the healthy and the dead
-            return p.hasStatus() && !p.isActuallyDead();
-        }
-
-        @Override
         public Type naturalGiftType() {
             return Type.FLYING;
         }
@@ -4551,9 +4545,15 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         public int getHarvestHours() {
             return 48;
         }
+
+        @Override
+        public boolean shouldHeal(ActivePokemon p) {
+            // Does not apply to the healthy and the dead
+            return p.hasStatus() && !p.isActuallyDead();
+        }
     }
 
-    static class SitrusBerry extends Item implements HpHealer, HealthTriggeredBerry {
+    static class SitrusBerry extends Item implements HealthTriggeredBerry, HpHealer {
         private static final long serialVersionUID = 1L;
 
         SitrusBerry() {
@@ -4563,18 +4563,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int getHealAmount(ActivePokemon p) {
-            return p.getHealHealthFractionAmount(1/4.0);
-        }
-
-        @Override
-        public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-            return use(b, user, source);
-        }
-
-        @Override
-        public double healthTriggerRatio() {
-            return 1/2.0;
+        public Type naturalGiftType() {
+            return Type.PSYCHIC;
         }
 
         @Override
@@ -4583,13 +4573,23 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.PSYCHIC;
+        public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
+            return use(b, user, source);
+        }
+
+        @Override
+        public int getHealAmount(ActivePokemon p) {
+            return p.getHealHealthFractionAmount(1/4.0);
         }
 
         @Override
         public int getHarvestHours() {
             return 48;
+        }
+
+        @Override
+        public double healthTriggerRatio() {
+            return 1/2.0;
         }
     }
 
@@ -4602,13 +4602,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int naturalGiftPower() {
-            return 80;
+        public Type naturalGiftType() {
+            return Type.STEEL;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.STEEL;
+        public int naturalGiftPower() {
+            return 80;
         }
     }
 
@@ -4621,13 +4621,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Stat toDecrease() {
-            return Stat.HP;
+        public Type naturalGiftType() {
+            return Type.ICE;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.ICE;
+        public Stat toDecrease() {
+            return Stat.HP;
         }
     }
 
@@ -4640,13 +4640,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Stat toDecrease() {
-            return Stat.ATTACK;
+        public Type naturalGiftType() {
+            return Type.FIGHTING;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.FIGHTING;
+        public Stat toDecrease() {
+            return Stat.ATTACK;
         }
     }
 
@@ -4659,13 +4659,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Stat toDecrease() {
-            return Stat.DEFENSE;
+        public Type naturalGiftType() {
+            return Type.POISON;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.POISON;
+        public Stat toDecrease() {
+            return Stat.DEFENSE;
         }
     }
 
@@ -4678,13 +4678,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Stat toDecrease() {
-            return Stat.SP_ATTACK;
+        public Type naturalGiftType() {
+            return Type.GROUND;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.GROUND;
+        public Stat toDecrease() {
+            return Stat.SP_ATTACK;
         }
     }
 
@@ -4697,13 +4697,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Stat toDecrease() {
-            return Stat.SP_DEFENSE;
+        public Type naturalGiftType() {
+            return Type.FLYING;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.FLYING;
+        public Stat toDecrease() {
+            return Stat.SP_DEFENSE;
         }
     }
 
@@ -4716,13 +4716,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Stat toDecrease() {
-            return Stat.SPEED;
+        public Type naturalGiftType() {
+            return Type.PSYCHIC;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.PSYCHIC;
+        public Stat toDecrease() {
+            return Stat.SPEED;
         }
     }
 
@@ -4988,13 +4988,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Stat getStat() {
-            return Stat.ATTACK;
+        public Type naturalGiftType() {
+            return Type.GRASS;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.GRASS;
+        public Stat getStat() {
+            return Stat.ATTACK;
         }
     }
 
@@ -5007,13 +5007,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Stat getStat() {
-            return Stat.DEFENSE;
+        public Type naturalGiftType() {
+            return Type.ICE;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.ICE;
+        public Stat getStat() {
+            return Stat.DEFENSE;
         }
     }
 
@@ -5026,13 +5026,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Stat getStat() {
-            return Stat.SPEED;
+        public Type naturalGiftType() {
+            return Type.FIGHTING;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.FIGHTING;
+        public Stat getStat() {
+            return Stat.SPEED;
         }
     }
 
@@ -5045,13 +5045,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Stat getStat() {
-            return Stat.SP_ATTACK;
+        public Type naturalGiftType() {
+            return Type.POISON;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.POISON;
+        public Stat getStat() {
+            return Stat.SP_ATTACK;
         }
     }
 
@@ -5064,13 +5064,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Stat getStat() {
-            return Stat.SP_DEFENSE;
+        public Type naturalGiftType() {
+            return Type.GROUND;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.GROUND;
+        public Stat getStat() {
+            return Stat.SP_DEFENSE;
         }
     }
 
@@ -5083,13 +5083,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Stat getStat() {
-            return Stat.ACCURACY;
+        public Type naturalGiftType() {
+            return Type.ROCK;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.ROCK;
+        public Stat getStat() {
+            return Stat.ACCURACY;
         }
     }
 
@@ -5102,13 +5102,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Stat getStat() {
-            return Stat.DEFENSE;
+        public Type naturalGiftType() {
+            return Type.FAIRY;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.FAIRY;
+        public Stat getStat() {
+            return Stat.DEFENSE;
         }
 
         @Override
@@ -5126,13 +5126,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Stat getStat() {
-            return Stat.SP_DEFENSE;
+        public Type naturalGiftType() {
+            return Type.DARK;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.DARK;
+        public Stat getStat() {
+            return Stat.SP_DEFENSE;
         }
 
         @Override
@@ -5188,13 +5188,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int naturalGiftPower() {
-            return 100;
+        public Type naturalGiftType() {
+            return Type.GHOST;
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.GHOST;
+        public int naturalGiftPower() {
+            return 100;
         }
 
         @Override
@@ -5227,11 +5227,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            String message = victim.getName() + "'s " + this.getName() + " restored its health!";
-            if (TypeAdvantage.isSuperEffective(user, victim, b) && victim.healHealthFraction(.25, b, message) > 0) {
-                this.consumeItem(b, victim);
-            }
+        public Type naturalGiftType() {
+            return Type.BUG;
         }
 
         @Override
@@ -5240,13 +5237,16 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public Type naturalGiftType() {
-            return Type.BUG;
+        public int getHarvestHours() {
+            return 72;
         }
 
         @Override
-        public int getHarvestHours() {
-            return 72;
+        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+            String message = victim.getName() + "'s " + this.getName() + " restored its health!";
+            if (TypeAdvantage.isSuperEffective(user, victim, b) && victim.healHealthFraction(.25, b, message) > 0) {
+                this.consumeItem(b, victim);
+            }
         }
     }
 
@@ -5259,6 +5259,21 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
+        public Type naturalGiftType() {
+            return Type.FLYING;
+        }
+
+        @Override
+        public int naturalGiftPower() {
+            return 100;
+        }
+
+        @Override
+        public int getHarvestHours() {
+            return 72;
+        }
+
+        @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
             Effect.cast(PokemonEffectNamesies.RAISE_CRITS, b, user, user, source, true);
             return true;
@@ -5268,21 +5283,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         public double healthTriggerRatio() {
             return 1/4.0;
         }
-
-        @Override
-        public int naturalGiftPower() {
-            return 100;
-        }
-
-        @Override
-        public Type naturalGiftType() {
-            return Type.FLYING;
-        }
-
-        @Override
-        public int getHarvestHours() {
-            return 72;
-        }
     }
 
     static class StarfBerry extends Item implements HealthTriggeredBerry {
@@ -5291,6 +5291,21 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         StarfBerry() {
             super(ItemNamesies.STARF_BERRY, "A Berry to be consumed by Pok\u00e9mon. If a Pok\u00e9mon holds one, one of its stats will sharply increase when it's in a pinch.", BagCategory.BERRY);
             super.price = 20;
+        }
+
+        @Override
+        public Type naturalGiftType() {
+            return Type.PSYCHIC;
+        }
+
+        @Override
+        public int naturalGiftPower() {
+            return 100;
+        }
+
+        @Override
+        public int getHarvestHours() {
+            return 72;
         }
 
         @Override
@@ -5311,21 +5326,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public double healthTriggerRatio() {
             return 1/4.0;
-        }
-
-        @Override
-        public int naturalGiftPower() {
-            return 100;
-        }
-
-        @Override
-        public Type naturalGiftType() {
-            return Type.PSYCHIC;
-        }
-
-        @Override
-        public int getHarvestHours() {
-            return 72;
         }
     }
 
@@ -5452,11 +5452,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.getPokemonInfo().getEvolution().canEvolve();
-        }
-
-        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
         }
@@ -5464,6 +5459,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public int flingDamage() {
             return 40;
+        }
+
+        @Override
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.getPokemonInfo().getEvolution().canEvolve();
         }
 
         @Override
@@ -5568,13 +5568,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 80;
+        public double getModifier() {
+            return 1.5;
         }
 
         @Override
-        public double getModifier() {
-            return 1.5;
+        public int flingDamage() {
+            return 80;
         }
     }
 
@@ -5839,15 +5839,15 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
-        }
-
-        @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
             if (newTerrain == TerrainType.ELECTRIC && p.getStages().modifyStage(p, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
                 this.consumeItem(b, p);
             }
+        }
+
+        @Override
+        public int flingDamage() {
+            return 10;
         }
     }
 
@@ -5860,15 +5860,15 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
-        }
-
-        @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
             if (newTerrain == TerrainType.GRASS && p.getStages().modifyStage(p, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
                 this.consumeItem(b, p);
             }
+        }
+
+        @Override
+        public int flingDamage() {
+            return 10;
         }
     }
 
@@ -5881,15 +5881,15 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
-        }
-
-        @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
             if (newTerrain == TerrainType.MISTY && p.getStages().modifyStage(p, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
                 this.consumeItem(b, p);
             }
+        }
+
+        @Override
+        public int flingDamage() {
+            return 10;
         }
     }
 
@@ -5902,15 +5902,15 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
-        }
-
-        @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
             if (newTerrain == TerrainType.PSYCHIC && p.getStages().modifyStage(p, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
                 this.consumeItem(b, p);
             }
+        }
+
+        @Override
+        public int flingDamage() {
+            return 10;
         }
     }
 

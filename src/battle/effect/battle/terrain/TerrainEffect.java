@@ -89,13 +89,6 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
         }
 
         @Override
-        public void singleEndTurnEffect(Battle b, ActivePokemon victim) {
-            if (!victim.isLevitating(b)) {
-                victim.healHealthFraction(1/16.0, b, victim.getName() + " restored some HP due to the Grassy Terrain!");
-            }
-        }
-
-        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Grass sprouted around the battlefield!";
         }
@@ -103,6 +96,13 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
         @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The grass withered and died.";
+        }
+
+        @Override
+        public void singleEndTurnEffect(Battle b, ActivePokemon victim) {
+            if (!victim.isLevitating(b)) {
+                victim.healHealthFraction(1/16.0, b, victim.getName() + " restored some HP due to the Grassy Terrain!");
+            }
         }
 
         @Override
@@ -174,14 +174,14 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
         }
 
         @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isAttackType(Type.PSYCHIC) && !user.isLevitating(b) ? 1.5 : 1;
-        }
-
-        @Override
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Psychic terrain prevents increased priority moves from hitting
             return b.getAttackPriority(user) > 0 && !victim.isLevitating(b);
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isAttackType(Type.PSYCHIC) && !user.isLevitating(b) ? 1.5 : 1;
         }
     }
 }

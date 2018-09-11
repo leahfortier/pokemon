@@ -179,11 +179,6 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isType(b, Type.ROCK);
-        }
-
-        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SP_DEFENSE;
         }
@@ -207,6 +202,11 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         }
 
         @Override
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.isType(b, Type.ROCK);
+        }
+
+        @Override
         public double getModifier() {
             return 1.5;
         }
@@ -227,11 +227,6 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         }
 
         @Override
-        public String getEndTurnMessage(Battle b) {
-            return "The hail continues to fall.";
-        }
-
-        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "It started to hail!";
         }
@@ -239,6 +234,11 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The hail stopped.";
+        }
+
+        @Override
+        public String getEndTurnMessage(Battle b) {
+            return "The hail continues to fall.";
         }
 
         @Override

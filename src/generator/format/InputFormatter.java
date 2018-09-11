@@ -8,7 +8,6 @@ import main.Global;
 import util.file.FileIO;
 import util.file.FileName;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,14 +49,6 @@ public class InputFormatter {
         }
 
         return body;
-    }
-
-    public Iterable<String> getOverrideFields() {
-        if (this.overrideMethods == null) {
-            this.readOverrideFormat();
-        }
-
-        return new ArrayList<>(overrideMethods.keySet());
     }
 
     public MethodInfo getOverrideMethod(String fieldName) {

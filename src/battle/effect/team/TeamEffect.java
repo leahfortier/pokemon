@@ -64,8 +64,8 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getBreakMessage(ActivePokemon breaker) {
-            return breaker.getName() + " broke the reflect barrier!";
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.DEFENSE;
         }
 
         @Override
@@ -74,18 +74,13 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
+        public String getBreakMessage(ActivePokemon breaker) {
+            return breaker.getName() + " broke the reflect barrier!";
+        }
+
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The effects of reflect faded.";
-        }
-
-        @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
-        }
-
-        @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.DEFENSE;
         }
 
         @Override
@@ -98,6 +93,11 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
             if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
                 this.setTurns(8);
             }
+        }
+
+        @Override
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
         }
 
         @Override
@@ -119,8 +119,8 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getBreakMessage(ActivePokemon breaker) {
-            return breaker.getName() + " broke the light screen barrier!";
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SP_DEFENSE;
         }
 
         @Override
@@ -129,18 +129,13 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
+        public String getBreakMessage(ActivePokemon breaker) {
+            return breaker.getName() + " broke the light screen barrier!";
+        }
+
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The effects of light screen faded.";
-        }
-
-        @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
-        }
-
-        @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SP_DEFENSE;
         }
 
         @Override
@@ -153,6 +148,11 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
             if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
                 this.setTurns(8);
             }
+        }
+
+        @Override
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
         }
 
         @Override
@@ -174,8 +174,8 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return user.getName() + " raised the speed of its team!";
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
@@ -184,8 +184,8 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return user.getName() + " raised the speed of its team!";
         }
 
         @Override
@@ -207,8 +207,8 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getBreakMessage(ActivePokemon breaker) {
-            return breaker.getName() + " broke the aurora veil barrier!";
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
         }
 
         @Override
@@ -217,18 +217,13 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
+        public String getBreakMessage(ActivePokemon breaker) {
+            return breaker.getName() + " broke the aurora veil barrier!";
+        }
+
+        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The effects of aurora veil faded.";
-        }
-
-        @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
-        }
-
-        @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
         }
 
         @Override
@@ -241,6 +236,11 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
             if (caster.isHoldingItem(b, ItemNamesies.LIGHT_CLAY)) {
                 this.setTurns(8);
             }
+        }
+
+        @Override
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
         }
 
         @Override
@@ -262,16 +262,6 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return "Sticky web covers everything!";
-        }
-
-        @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon released) {
-            return "The sticky web spun away!";
-        }
-
-        @Override
         public void enter(Battle b, ActivePokemon enterer) {
             if (enterer.isLevitating(b)) {
                 return;
@@ -285,8 +275,18 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return "Sticky web covers everything!";
+        }
+
+        @Override
         public String getDefogReleaseMessage(ActivePokemon released) {
             return "The sticky web dispersed!";
+        }
+
+        @Override
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
+            return "The sticky web spun away!";
         }
     }
 
@@ -303,24 +303,24 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return "Floating rocks were scattered all around!";
-        }
-
-        @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon released) {
-            return "The floating rocks spun away!";
-        }
-
-        @Override
         public void enter(Battle b, ActivePokemon enterer) {
             double advantage = Type.ROCK.getAdvantage().getAdvantage(enterer, b);
             enterer.reduceHealthFraction(b, advantage/8.0, enterer.getName() + " was hurt by stealth rock!");
         }
 
         @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return "Floating rocks were scattered all around!";
+        }
+
+        @Override
         public String getDefogReleaseMessage(ActivePokemon released) {
             return "The floating rocks dispersed!";
+        }
+
+        @Override
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
+            return "The floating rocks spun away!";
         }
     }
 
@@ -332,22 +332,6 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         ToxicSpikes() {
             super(TeamEffectNamesies.TOXIC_SPIKES, -1, -1, true);
             this.layers = 1;
-        }
-
-        @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            this.addCastMessage(b, caster, victim, source, printCast);
-            this.layers++;
-        }
-
-        @Override
-        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return "Toxic spikes were scattered all around!";
-        }
-
-        @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon released) {
-            return "The toxic spikes dispersed!";
         }
 
         @Override
@@ -371,7 +355,23 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return "Toxic spikes were scattered all around!";
+        }
+
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            this.addCastMessage(b, caster, victim, source, printCast);
+            this.layers++;
+        }
+
+        @Override
         public String getDefogReleaseMessage(ActivePokemon released) {
+            return "The toxic spikes dispersed!";
+        }
+
+        @Override
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
             return "The toxic spikes dispersed!";
         }
     }
@@ -398,9 +398,10 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            this.addCastMessage(b, caster, victim, source, printCast);
-            this.layers++;
+        public void enter(Battle b, ActivePokemon enterer) {
+            if (!enterer.isLevitating(b)) {
+                enterer.reduceHealthFraction(b, this.getReduceFraction(), enterer.getName() + " was hurt by spikes!");
+            }
         }
 
         @Override
@@ -409,19 +410,18 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon released) {
-            return "The spikes dispersed!";
-        }
-
-        @Override
-        public void enter(Battle b, ActivePokemon enterer) {
-            if (!enterer.isLevitating(b)) {
-                enterer.reduceHealthFraction(b, this.getReduceFraction(), enterer.getName() + " was hurt by spikes!");
-            }
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+            this.addCastMessage(b, caster, victim, source, printCast);
+            this.layers++;
         }
 
         @Override
         public String getDefogReleaseMessage(ActivePokemon released) {
+            return "The spikes dispersed!";
+        }
+
+        @Override
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
             return "The spikes dispersed!";
         }
     }
@@ -441,6 +441,12 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
+        public void subside(Battle b, ActivePokemon p) {
+            Messages.add(casterName + "'s wish came true!");
+            p.healHealthFraction(1/2.0, b, p.getName() + "'s health was restored!");
+        }
+
+        @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             casterName = caster.getName();
         }
@@ -448,12 +454,6 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return casterName + " made a wish!";
-        }
-
-        @Override
-        public void subside(Battle b, ActivePokemon p) {
-            Messages.add(casterName + "'s wish came true!");
-            p.healHealthFraction(1/2.0, b, p.getName() + "'s health was restored!");
         }
     }
 
@@ -495,16 +495,6 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            theSeeer = caster;
-        }
-
-        @Override
-        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return theSeeer.getName() + " foresaw an attack!";
-        }
-
-        @Override
         public void subside(Battle b, ActivePokemon p) {
             Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 
@@ -516,6 +506,16 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
             }
 
             theSeeer.callTempMove(attack.namesies(), () -> theSeeer.getAttack().applyDamage(theSeeer, p, b));
+        }
+
+        @Override
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            theSeeer = caster;
+        }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return theSeeer.getName() + " foresaw an attack!";
         }
     }
 
@@ -534,16 +534,6 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            theSeeer = caster;
-        }
-
-        @Override
-        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return theSeeer.getName() + " foresaw an attack!";
-        }
-
-        @Override
         public void subside(Battle b, ActivePokemon p) {
             Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 
@@ -555,6 +545,16 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
             }
 
             theSeeer.callTempMove(attack.namesies(), () -> theSeeer.getAttack().applyDamage(theSeeer, p, b));
+        }
+
+        @Override
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            theSeeer = caster;
+        }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return theSeeer.getName() + " foresaw an attack!";
         }
     }
 
@@ -573,15 +573,15 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            wish = caster.getAttack().namesies() == AttackNamesies.LUNAR_DANCE ? "lunar dance" : "healing wish";
-        }
-
-        @Override
         public void enter(Battle b, ActivePokemon enterer) {
             enterer.removeStatus();
             enterer.healHealthFraction(1, b, enterer.getName() + " health was restored due to the " + wish + "!");
             this.deactivate();
+        }
+
+        @Override
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            wish = caster.getAttack().namesies() == AttackNamesies.LUNAR_DANCE ? "lunar dance" : "healing wish";
         }
     }
 
@@ -626,7 +626,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
     }
 
-    static class Safeguard extends TeamEffect implements StatusPreventionEffect, DefogRelease {
+    static class Safeguard extends TeamEffect implements DefogRelease, StatusPreventionEffect {
         private static final long serialVersionUID = 1L;
 
         Safeguard() {
@@ -636,6 +636,11 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return !(b.getTrainer(victim).hasEffect(this.namesies()));
+        }
+
+        @Override
+        public String getDefogReleaseMessage(ActivePokemon released) {
+            return "The effects of " + released.getName() + "'s Safeguard faded.";
         }
 
         @Override
@@ -656,11 +661,6 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         @Override
         public String statusPreventionMessage(ActivePokemon victim) {
             return "Safeguard protects " + victim.getName() + " from status conditions!";
-        }
-
-        @Override
-        public String getDefogReleaseMessage(ActivePokemon released) {
-            return "The effects of " + released.getName() + "'s Safeguard faded.";
         }
     }
 

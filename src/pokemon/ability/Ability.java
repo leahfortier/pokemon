@@ -273,13 +273,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.getWeather().namesies() == WeatherNamesies.SUNNY;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return b.getWeather().namesies() == WeatherNamesies.SUNNY;
         }
 
         @Override
@@ -474,13 +474,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.hasStatus();
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.ATTACK;
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.ATTACK;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.hasStatus();
         }
 
         @Override
@@ -572,13 +572,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.getWeather().namesies() == WeatherNamesies.SANDSTORM;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return b.getWeather().namesies() == WeatherNamesies.SANDSTORM;
         }
 
         @Override
@@ -595,13 +595,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.getWeather().namesies() == WeatherNamesies.HAILING;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return b.getWeather().namesies() == WeatherNamesies.HAILING;
         }
 
         @Override
@@ -684,7 +684,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class FlashFire extends Ability implements PowerChangeEffect, AttackBlocker {
+    static class FlashFire extends Ability implements AttackBlocker, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         private boolean activated;
@@ -700,11 +700,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return activated && user.isAttackType(Type.FIRE) ? 1.5 : 1;
-        }
-
-        @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             activated = true;
         }
@@ -717,6 +712,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.FIRE.getName() + "-type moves!";
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return activated && user.isAttackType(Type.FIRE) ? 1.5 : 1;
         }
     }
 
@@ -842,22 +842,27 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
+        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!";
+        }
+
+        @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
             victim.healHealthFraction(1/4.0, b, victim.getName() + "'s HP was restored instead!");
         }
-
-        @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!";
-        }
     }
 
-    static class ArenaTrap extends Ability implements OpponentTrappingEffect, EncounterRateMultiplier {
+    static class ArenaTrap extends Ability implements EncounterRateMultiplier, OpponentTrappingEffect {
         private static final long serialVersionUID = 1L;
 
         ArenaTrap() {
             super(AbilityNamesies.ARENA_TRAP, "Prevents opposing Pok\u00e9mon from fleeing.");
+        }
+
+        @Override
+        public double getEncounterRateMultiplier() {
+            return 2;
         }
 
         @Override
@@ -868,11 +873,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper) {
             return trapper.getName() + "'s " + this.getName() + " prevents " + escaper.getName() + " from escaping!";
-        }
-
-        @Override
-        public double getEncounterRateMultiplier() {
-            return 2;
         }
     }
 
@@ -903,11 +903,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
-        }
-
-        @Override
         public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             return status == StatusNamesies.PARALYZED;
         }
@@ -915,6 +910,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public String statusPreventionMessage(ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents paralysis!";
+        }
+
+        @Override
+        public void applyEffect(Battle b, ActivePokemon p) {
+            removeStatus(b, p);
         }
     }
 
@@ -939,13 +939,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user) {
-            return blockityMessage(user, user);
+        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return checkeroo(user);
         }
 
         @Override
-        public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return checkeroo(user);
+        public String getBlockMessage(Battle b, ActivePokemon user) {
+            return blockityMessage(user, user);
         }
 
         @Override
@@ -981,11 +981,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
-        }
-
-        @Override
         public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             return status == StatusNamesies.ASLEEP;
         }
@@ -993,6 +988,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public String statusPreventionMessage(ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents sleep!";
+        }
+
+        @Override
+        public void applyEffect(Battle b, ActivePokemon p) {
+            removeStatus(b, p);
         }
     }
 
@@ -1010,11 +1010,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
-        }
-
-        @Override
         public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             return status == StatusNamesies.ASLEEP;
         }
@@ -1022,6 +1017,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public String statusPreventionMessage(ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents sleep!";
+        }
+
+        @Override
+        public void applyEffect(Battle b, ActivePokemon p) {
+            removeStatus(b, p);
         }
     }
 
@@ -1130,6 +1130,12 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
+        public boolean unbreakableMold() {
+            // Ability is not ignored even when the opponent breaks the mold
+            return true;
+        }
+
+        @Override
         public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
             return true;
         }
@@ -1137,12 +1143,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
             return p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!";
-        }
-
-        @Override
-        public boolean unbreakableMold() {
-            // Ability is not ignored even when the opponent breaks the mold
-            return true;
         }
     }
 
@@ -1208,11 +1208,16 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class MagnetPull extends Ability implements OpponentTrappingEffect, TypedWildEncounterSelector {
+    static class MagnetPull extends Ability implements TypedWildEncounterSelector, OpponentTrappingEffect {
         private static final long serialVersionUID = 1L;
 
         MagnetPull() {
             super(AbilityNamesies.MAGNET_PULL, "Prevents Steel-type Pok\u00e9mon from escaping using its magnetic force.");
+        }
+
+        @Override
+        public Type getEncounterType() {
+            return Type.STEEL;
         }
 
         @Override
@@ -1223,11 +1228,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper) {
             return trapper.getName() + "'s " + this.getName() + " prevents " + escaper.getName() + " from escaping!";
-        }
-
-        @Override
-        public Type getEncounterType() {
-            return Type.STEEL;
         }
     }
 
@@ -1510,13 +1510,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.getWeather().namesies() == WeatherNamesies.RAINING;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return b.getWeather().namesies() == WeatherNamesies.RAINING;
         }
 
         @Override
@@ -1539,11 +1539,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
-        }
-
-        @Override
         public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             return status == StatusNamesies.BURNED;
         }
@@ -1551,6 +1546,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public String statusPreventionMessage(ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents burns!";
+        }
+
+        @Override
+        public void applyEffect(Battle b, ActivePokemon p) {
+            removeStatus(b, p);
         }
     }
 
@@ -1667,13 +1667,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void enter(Battle b, ActivePokemon enterer) {
-            Effect.cast(PokemonEffectNamesies.TRANSFORMED, b, enterer, enterer, CastSource.ABILITY, false);
+        public boolean isStealable() {
+            return false;
         }
 
         @Override
-        public boolean isStealable() {
-            return false;
+        public void enter(Battle b, ActivePokemon enterer) {
+            Effect.cast(PokemonEffectNamesies.TRANSFORMED, b, enterer, enterer, CastSource.ABILITY, false);
         }
     }
 
@@ -1698,14 +1698,14 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            // Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
-            victim.healHealthFraction(1/4.0, b, victim.getName() + "'s HP was restored instead!");
+        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!";
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!";
+        public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
+            victim.healHealthFraction(1/4.0, b, victim.getName() + "'s HP was restored instead!");
         }
     }
 
@@ -1722,14 +1722,14 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            // Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
-            victim.healHealthFraction(1/4.0, b, victim.getName() + "'s HP was restored instead!");
+        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " moves!";
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " moves!";
+        public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Technically, according to the description, Heal Block prevents the prevention entirely (meaning this should be in Block), but that makes no sense, they shouldn't take damage, this way makes more sense
+            victim.healHealthFraction(1/4.0, b, victim.getName() + "'s HP was restored instead!");
         }
     }
 
@@ -1741,11 +1741,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.hasStatus();
-        }
-
-        @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.SPEED;
         }
@@ -1753,6 +1748,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public double getEncounterRateMultiplier() {
             return .5;
+        }
+
+        @Override
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.hasStatus();
         }
 
         @Override
@@ -1769,15 +1769,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            Ability otherAbility = b.getOtherPokemon(victim).getAbility();
-            return otherAbility.namesies().getNewAbility();
-        }
-
-        @Override
-        public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            ActivePokemon other = b.getOtherPokemon(victim);
-            return victim.getName() + " traced " + other.getName() + "'s " + other.getAbility().getName() + "!";
+        public boolean isStealable() {
+            return false;
         }
 
         @Override
@@ -1791,8 +1784,15 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean isStealable() {
-            return false;
+        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            Ability otherAbility = b.getOtherPokemon(victim).getAbility();
+            return otherAbility.namesies().getNewAbility();
+        }
+
+        @Override
+        public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            ActivePokemon other = b.getOtherPokemon(victim);
+            return victim.getName() + " traced " + other.getName() + "'s " + other.getAbility().getName() + "!";
         }
     }
 
@@ -1844,11 +1844,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
-        }
-
-        @Override
         public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             return status == StatusNamesies.POISONED;
         }
@@ -1856,6 +1851,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public String statusPreventionMessage(ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents poison!";
+        }
+
+        @Override
+        public void applyEffect(Battle b, ActivePokemon p) {
+            removeStatus(b, p);
         }
     }
 
@@ -1885,13 +1885,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.hasStatus();
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.DEFENSE;
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.DEFENSE;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.hasStatus();
         }
 
         @Override
@@ -2077,11 +2077,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
-        }
-
-        @Override
         public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             return status == StatusNamesies.FROZEN;
         }
@@ -2089,6 +2084,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public String statusPreventionMessage(ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents freezing!";
+        }
+
+        @Override
+        public void applyEffect(Battle b, ActivePokemon p) {
+            removeStatus(b, p);
         }
     }
 
@@ -2201,6 +2201,16 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
+        public boolean isReplaceable() {
+            return false;
+        }
+
+        @Override
+        public boolean isStealable() {
+            return false;
+        }
+
+        @Override
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Status moves, super-effective moves, and None-type moves always hit
             return !user.getAttack().isStatusMove() && !TypeAdvantage.isSuperEffective(user, victim, b) && !user.isAttackType(Type.NO_TYPE);
@@ -2209,16 +2219,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " makes it immune to " + user.getAttack().getName() + "!";
-        }
-
-        @Override
-        public boolean isReplaceable() {
-            return false;
-        }
-
-        @Override
-        public boolean isStealable() {
-            return false;
         }
     }
 
@@ -2233,6 +2233,15 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
+        public Type changeAttackType(Attack attack, Type original) {
+            if (original != Type.NORMAL) {
+                this.activated = true;
+            }
+
+            return Type.NORMAL;
+        }
+
+        @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             this.activated = false;
         }
@@ -2240,15 +2249,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return activated ? 1.2 : 1;
-        }
-
-        @Override
-        public Type changeAttackType(Attack attack, Type original) {
-            if (original != Type.NORMAL) {
-                this.activated = true;
-            }
-
-            return Type.NORMAL;
         }
     }
 
@@ -2312,6 +2312,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
+        public double getEncounterRateMultiplier() {
+            return .5;
+        }
+
+        @Override
         public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
             return true;
         }
@@ -2319,11 +2324,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
             return p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!";
-        }
-
-        @Override
-        public double getEncounterRateMultiplier() {
-            return .5;
         }
     }
 
@@ -2335,13 +2335,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.hasStatus(StatusNamesies.POISONED);
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.ATTACK;
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.ATTACK;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.hasStatus(StatusNamesies.POISONED);
         }
 
         @Override
@@ -2403,11 +2403,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return new PokeType(type);
-        }
-
-        @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             Type t = user.getAttackType();
             if (!victim.isType(b, t)) {
@@ -2415,9 +2410,14 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
                 Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, b, victim, victim, CastSource.ABILITY, true);
             }
         }
+
+        @Override
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return new PokeType(type);
+        }
     }
 
-    static class IceBody extends Ability implements WeatherBlockerEffect, EndTurnEffect {
+    static class IceBody extends Ability implements EndTurnEffect, WeatherBlockerEffect {
         private static final long serialVersionUID = 1L;
 
         IceBody() {
@@ -2511,13 +2511,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.getWeather().namesies() == WeatherNamesies.SUNNY;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.ATTACK || s == Stat.SP_DEFENSE;
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.ATTACK || s == Stat.SP_DEFENSE;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return b.getWeather().namesies() == WeatherNamesies.SUNNY;
         }
 
         @Override
@@ -2659,8 +2659,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return count < 5;
+        public void enter(Battle b, ActivePokemon enterer) {
+            count = 0;
         }
 
         @Override
@@ -2669,8 +2669,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void enter(Battle b, ActivePokemon enterer) {
-            count = 0;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return count < 5;
         }
 
         @Override
@@ -2780,13 +2780,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return opp.getAttack().isStatusMove();
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.EVASION;
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.EVASION;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return opp.getAttack().isStatusMove();
         }
 
         @Override
@@ -2803,16 +2803,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return AbilityNamesies.MUMMY.getNewAbility();
-        }
-
-        @Override
-        public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return victim.getName() + "'s ability was changed to " + this.namesies().getName() + "!";
-        }
-
-        @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.hasAbility(this.namesies) || !user.getAbility().isReplaceable()) {
                 return;
@@ -2820,6 +2810,16 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
 
             // Cast the change ability effect onto the user
             Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, victim, user, CastSource.ABILITY, true);
+        }
+
+        @Override
+        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return AbilityNamesies.MUMMY.getNewAbility();
+        }
+
+        @Override
+        public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return victim.getName() + "'s ability was changed to " + this.namesies().getName() + "!";
         }
     }
 
@@ -2880,6 +2880,16 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
+        public boolean isStealable() {
+            return false;
+        }
+
+        @Override
+        public void deactivate(Battle b, ActivePokemon victim) {
+            breakIllusion(b, victim);
+        }
+
+        @Override
         public void enter(Battle b, ActivePokemon enterer) {
             // No Illusion today...
             if (!activated) {
@@ -2889,15 +2899,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             // Display the Illusion changes
             Messages.add(new MessageUpdate().withNewPokemon(illusionSpecies, illusionShiny, false, enterer.isPlayer()));
             Messages.add(new MessageUpdate().updatePokemon(b, enterer));
-        }
-
-        @Override
-        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
-            if (display && activated) {
-                return illusionType;
-            }
-
-            return p.getActualType();
         }
 
         @Override
@@ -2943,16 +2944,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean isActive() {
-            return activated;
-        }
-
-        @Override
-        public void deactivate(Battle b, ActivePokemon victim) {
-            breakIllusion(b, victim);
-        }
-
-        @Override
         public void switchOut(ActivePokemon switchee) {
             activated = false;
         }
@@ -2963,8 +2954,17 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean isStealable() {
-            return false;
+        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
+            if (display && activated) {
+                return illusionType;
+            }
+
+            return p.getActualType();
+        }
+
+        @Override
+        public boolean isActive() {
+            return activated;
         }
     }
 
@@ -3088,13 +3088,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
         }
 
         @Override
@@ -3271,8 +3271,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean isReplaceable() {
-            return false;
+        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
+            HoldItem item = p.getHeldItem(b);
+            if (item instanceof PlateItem) {
+                return new PokeType(((PlateItem)item).getType());
+            }
+
+            return p.getActualType();
         }
 
         @Override
@@ -3281,13 +3286,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
-            HoldItem item = p.getHeldItem(b);
-            if (item instanceof PlateItem) {
-                return new PokeType(((PlateItem)item).getType());
-            }
-
-            return p.getActualType();
+        public boolean isReplaceable() {
+            return false;
         }
     }
 
@@ -3299,8 +3299,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean isReplaceable() {
-            return false;
+        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
+            HoldItem item = p.getHeldItem(b);
+            if (item instanceof MemoryItem) {
+                return new PokeType(((MemoryItem)item).getType());
+            }
+
+            return p.getActualType();
         }
 
         @Override
@@ -3309,13 +3314,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
-            HoldItem item = p.getHeldItem(b);
-            if (item instanceof MemoryItem) {
-                return new PokeType(((MemoryItem)item).getType());
-            }
-
-            return p.getActualType();
+        public boolean isReplaceable() {
+            return false;
         }
     }
 
@@ -3327,13 +3327,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
-            return new PokeType(b.getWeather().getElement());
+        public boolean isStealable() {
+            return false;
         }
 
         @Override
-        public boolean isStealable() {
-            return false;
+        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
+            return new PokeType(b.getWeather().getElement());
         }
     }
 
@@ -3479,11 +3479,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
-        }
-
-        @Override
         public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             return status == StatusNamesies.ASLEEP;
         }
@@ -3491,6 +3486,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public String statusPreventionMessage(ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents sleep!";
+        }
+
+        @Override
+        public void applyEffect(Battle b, ActivePokemon p) {
+            removeStatus(b, p);
         }
     }
 
@@ -3528,16 +3528,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            this.activated = false;
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return activated ? 1.2 : 1;
-        }
-
-        @Override
         public Type changeAttackType(Attack attack, Type original) {
             if (original == Type.NORMAL) {
                 this.activated = true;
@@ -3545,6 +3535,16 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             }
 
             return original;
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            this.activated = false;
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return activated ? 1.2 : 1;
         }
     }
 
@@ -3559,16 +3559,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            this.activated = false;
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return activated ? 1.2 : 1;
-        }
-
-        @Override
         public Type changeAttackType(Attack attack, Type original) {
             if (original == Type.NORMAL) {
                 this.activated = true;
@@ -3576,6 +3566,16 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             }
 
             return original;
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            this.activated = false;
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return activated ? 1.2 : 1;
         }
     }
 
@@ -3602,17 +3602,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             }
         }
 
-        @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            checkFormChange(victim);
-        }
-
-        @Override
-        public void enter(Battle b, ActivePokemon enterer) {
-            schoolForm = false;
-            checkFormChange(enterer);
-        }
-
         private void changeForm(ActivePokemon formsie) {
             this.schoolForm = !schoolForm;
             Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (schoolForm ? "School" : "Solo") + " Forme!")
@@ -3621,9 +3610,19 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public Integer getStat(ActivePokemon user, Stat stat) {
-            // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-            return user.getStats().calculate(stat, this.getStats());
+        public void enter(Battle b, ActivePokemon enterer) {
+            schoolForm = false;
+            checkFormChange(enterer);
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            checkFormChange(victim);
+        }
+
+        @Override
+        public boolean isStealable() {
+            return false;
         }
 
         @Override
@@ -3632,8 +3631,9 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean isStealable() {
-            return false;
+        public Integer getStat(ActivePokemon user, Stat stat) {
+            // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
+            return user.getStats().calculate(stat, this.getStats());
         }
     }
 
@@ -3660,17 +3660,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             }
         }
 
-        @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            checkFormChange(victim);
-        }
-
-        @Override
-        public void enter(Battle b, ActivePokemon enterer) {
-            meteorForm = false;
-            checkFormChange(enterer);
-        }
-
         private void changeForm(ActivePokemon formsie) {
             this.meteorForm = !meteorForm;
             Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (meteorForm ? "Meteor" : "Core") + " Forme!")
@@ -3679,9 +3668,19 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public Integer getStat(ActivePokemon user, Stat stat) {
-            // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-            return user.getStats().calculate(stat, this.getStats());
+        public void enter(Battle b, ActivePokemon enterer) {
+            meteorForm = false;
+            checkFormChange(enterer);
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            checkFormChange(victim);
+        }
+
+        @Override
+        public boolean isStealable() {
+            return false;
         }
 
         @Override
@@ -3690,8 +3689,9 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean isStealable() {
-            return false;
+        public Integer getStat(ActivePokemon user, Stat stat) {
+            // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
+            return user.getStats().calculate(stat, this.getStats());
         }
     }
 
@@ -3712,6 +3712,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             this.bladeForm = false;
         }
 
+        private void changeForm(ActivePokemon formsie) {
+            this.bladeForm = !bladeForm;
+            Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (bladeForm ? "Blade" : "Shield") + " Forme!")
+                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), bladeForm), formsie.isPlayer())
+            );
+        }
+
         @Override
         public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
             if ((!bladeForm && !p.getAttack().isStatusMove()) || (bladeForm && p.getAttack().namesies() == AttackNamesies.KINGS_SHIELD)) {
@@ -3727,17 +3734,9 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             bladeForm = false;
         }
 
-        private void changeForm(ActivePokemon formsie) {
-            this.bladeForm = !bladeForm;
-            Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (bladeForm ? "Blade" : "Shield") + " Forme!")
-                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), bladeForm), formsie.isPlayer())
-            );
-        }
-
         @Override
-        public Integer getStat(ActivePokemon user, Stat stat) {
-            // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-            return user.getStats().calculate(stat, this.getStats());
+        public boolean isStealable() {
+            return false;
         }
 
         @Override
@@ -3746,8 +3745,9 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean isStealable() {
-            return false;
+        public Integer getStat(ActivePokemon user, Stat stat) {
+            // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
+            return user.getStats().calculate(stat, this.getStats());
         }
     }
 
@@ -3777,13 +3777,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.hasEffect(TerrainNamesies.GRASSY_TERRAIN);
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.DEFENSE;
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.DEFENSE;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return b.hasEffect(TerrainNamesies.GRASSY_TERRAIN);
         }
 
         @Override
@@ -3800,13 +3800,13 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.hasEffect(TerrainNamesies.ELECTRIC_TERRAIN);
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return b.hasEffect(TerrainNamesies.ELECTRIC_TERRAIN);
         }
 
         @Override
@@ -3866,11 +3866,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return new PokeType(type);
-        }
-
-        @Override
         public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
             // Protean activates for all moves except for Struggle
             if (p.getAttack().namesies() != AttackNamesies.STRUGGLE) {
@@ -3879,6 +3874,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             }
 
             return true;
+        }
+
+        @Override
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return new PokeType(type);
         }
     }
 
@@ -3923,7 +3923,7 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
     }
 
-    static class WaterBubble extends Ability implements OpponentPowerChangeEffect, PowerChangeEffect, StatusPreventionEffect, EntryEndTurnEffect {
+    static class WaterBubble extends Ability implements OpponentPowerChangeEffect, StatusPreventionEffect, EntryEndTurnEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         private void removeStatus(Battle b, ActivePokemon victim) {
@@ -3937,18 +3937,8 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isAttackType(Type.WATER) ? 2 : 1;
-        }
-
-        @Override
         public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.FIRE) ? .5 : 1;
-        }
-
-        @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
         }
 
         @Override
@@ -3959,6 +3949,16 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         @Override
         public String statusPreventionMessage(ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents burns!";
+        }
+
+        @Override
+        public void applyEffect(Battle b, ActivePokemon p) {
+            removeStatus(b, p);
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isAttackType(Type.WATER) ? 2 : 1;
         }
     }
 
@@ -4069,16 +4069,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            this.activated = false;
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return activated ? 1.2 : 1;
-        }
-
-        @Override
         public Type changeAttackType(Attack attack, Type original) {
             if (original == Type.NORMAL) {
                 this.activated = true;
@@ -4086,6 +4076,16 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
             }
 
             return original;
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            this.activated = false;
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return activated ? 1.2 : 1;
         }
     }
 
@@ -4097,6 +4097,16 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         Disguise() {
             super(AbilityNamesies.DISGUISE, "Once per battle, the shroud that covers the Pok\u00e9mon can protect it from an attack.");
             this.activated = false;
+        }
+
+        @Override
+        public boolean isStealable() {
+            return false;
+        }
+
+        @Override
+        public boolean isReplaceable() {
+            return false;
         }
 
         @Override
@@ -4114,16 +4124,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
                 return true;
             }
 
-            return false;
-        }
-
-        @Override
-        public boolean isReplaceable() {
-            return false;
-        }
-
-        @Override
-        public boolean isStealable() {
             return false;
         }
     }
@@ -4243,11 +4243,6 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
         }
 
         @Override
-        public boolean isActive() {
-            return this.activated;
-        }
-
-        @Override
         public void endsies(Battle b, ActivePokemon attacking) {
             Attack attack = attacking.getAttack();
             if (attack.isMoveType(MoveType.DANCE) && (!attacking.hasAbility(this.namesies()) || !attacking.getAbility().isActive())) {
@@ -4257,6 +4252,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
                 abilify.callFullNewMove(b, attacking, attack.namesies());
                 activated = false;
             }
+        }
+
+        @Override
+        public boolean isActive() {
+            return this.activated;
         }
     }
 

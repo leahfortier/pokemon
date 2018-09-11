@@ -663,6 +663,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.heal(b, victim);
+        }
+
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             switch (b.getWeather().namesies()) {
                 case SUNNY:
@@ -674,11 +679,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
                 default:
                     return 1/2.0;
             }
-        }
-
-        @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            this.heal(b, victim);
         }
 
         @Override
@@ -697,13 +697,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public double getHealFraction(Battle b, ActivePokemon victim) {
-            return .5;
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.heal(b, victim);
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            this.heal(b, victim);
+        public double getHealFraction(Battle b, ActivePokemon victim) {
+            return .5;
         }
 
         @Override
@@ -807,7 +807,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class SolarBeam extends Attack implements PowerChangeEffect, ChargingMove {
+    static class SolarBeam extends Attack implements ChargingMove, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         private boolean isCharging;
@@ -818,6 +818,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             super.accuracy = 100;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             this.resetReady();
+        }
+
+        @Override
+        public String getChargeMessage(ActivePokemon user) {
+            return user.getName() + " began taking in sunlight!";
         }
 
         @Override
@@ -833,8 +838,9 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public String getChargeMessage(ActivePokemon user) {
-            return user.getName() + " began taking in sunlight!";
+        public boolean requiresCharge(Battle b) {
+            // Does not need to charge during harsh sunlight
+            return b.getWeather().namesies() != WeatherNamesies.SUNNY;
         }
 
         @Override
@@ -851,15 +857,9 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public void switchReady() {
             this.isCharging = !this.isCharging;
         }
-
-        @Override
-        public boolean requiresCharge(Battle b) {
-            // Does not need to charge during harsh sunlight
-            return b.getWeather().namesies() != WeatherNamesies.SUNNY;
-        }
     }
 
-    static class SolarBlade extends Attack implements PowerChangeEffect, ChargingMove {
+    static class SolarBlade extends Attack implements ChargingMove, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         private boolean isCharging;
@@ -874,6 +874,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public String getChargeMessage(ActivePokemon user) {
+            return user.getName() + " began taking in sunlight!";
+        }
+
+        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             switch (b.getWeather().namesies()) {
                 case HAILING:
@@ -886,8 +891,9 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public String getChargeMessage(ActivePokemon user) {
-            return user.getName() + " began taking in sunlight!";
+        public boolean requiresCharge(Battle b) {
+            // Does not need to charge during harsh sunlight
+            return b.getWeather().namesies() != WeatherNamesies.SUNNY;
         }
 
         @Override
@@ -903,12 +909,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void switchReady() {
             this.isCharging = !this.isCharging;
-        }
-
-        @Override
-        public boolean requiresCharge(Battle b) {
-            // Does not need to charge during harsh sunlight
-            return b.getWeather().namesies() != WeatherNamesies.SUNNY;
         }
     }
 
@@ -945,6 +945,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public boolean semiInvulnerability() {
+            return true;
+        }
+
+        @Override
         public boolean isCharging() {
             return this.isCharging;
         }
@@ -957,11 +962,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void switchReady() {
             this.isCharging = !this.isCharging;
-        }
-
-        @Override
-        public boolean semiInvulnerability() {
-            return true;
         }
     }
 
@@ -1314,13 +1314,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
-            return this.isCharging();
+        public String getChargeMessage(ActivePokemon user) {
+            return user.getName() + " lowered its head!";
         }
 
         @Override
-        public String getChargeMessage(ActivePokemon user) {
-            return user.getName() + " lowered its head!";
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            return this.isCharging();
         }
 
         @Override
@@ -1719,6 +1719,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.heal(b, victim);
+        }
+
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             switch (b.getWeather().namesies()) {
                 case SUNNY:
@@ -1730,11 +1735,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
                 default:
                     return 1/2.0;
             }
-        }
-
-        @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            this.heal(b, victim);
         }
 
         @Override
@@ -2089,7 +2089,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class Roost extends Attack implements SelfHealingMove, ChangeTypeSource {
+    static class Roost extends Attack implements ChangeTypeSource, SelfHealingMove {
         private static final long serialVersionUID = 1L;
 
         Roost() {
@@ -2110,11 +2110,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public double getHealFraction(Battle b, ActivePokemon victim) {
-            return .5;
-        }
-
-        @Override
         public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             PokeType type = victim.getType(b);
             if (type.getFirstType() == Type.FLYING) {
@@ -2126,6 +2121,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
             }
 
             return null;
+        }
+
+        @Override
+        public double getHealFraction(Battle b, ActivePokemon victim) {
+            return .5;
         }
 
         @Override
@@ -2169,18 +2169,18 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.callNewMove(b, victim, this.mirror);
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return mirror != null && !mirror.getNewAttack().isMoveType(MoveType.MIRRORLESS);
         }
 
         @Override
-        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return mirror != null && !mirror.getNewAttack().isMoveType(MoveType.MIRRORLESS);
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            user.callNewMove(b, victim, this.mirror);
         }
     }
 
     // Twice as strong when the opponent is flying
-    static class Hurricane extends Attack implements SemiInvulnerableBypasser, BasicAccuracyBypassEffect, PowerChangeEffect {
+    static class Hurricane extends Attack implements BasicAccuracyBypassEffect, SemiInvulnerableBypasser, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         Hurricane() {
@@ -2192,9 +2192,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is flying
-            return defending.isSemiInvulnerableFlying();
+        public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
+            // Accuracy is only 50% when sunny
+            if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
+                return 50;
+            }
+
+            return super.accuracy;
         }
 
         @Override
@@ -2204,18 +2208,14 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.isSemiInvulnerableFlying() ? 2 : 1;
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Always hit when the opponent is flying
+            return defending.isSemiInvulnerableFlying();
         }
 
         @Override
-        public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
-            // Accuracy is only 50% when sunny
-            if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
-                return 50;
-            }
-
-            return super.accuracy;
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.isSemiInvulnerableFlying() ? 2 : 1;
         }
     }
 
@@ -2443,6 +2443,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public String getPowerString() {
+            return "--";
+        }
+
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Stockpile ends after Spit up is used
             user.getEffect(PokemonEffectNamesies.STOCKPILE).deactivate();
@@ -2458,11 +2463,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
             // Max power is 300
             return Math.min(turns, 3);
-        }
-
-        @Override
-        public String getPowerString() {
-            return "--";
         }
 
         @Override
@@ -2725,7 +2725,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
     }
 
     // Twice as strong when the opponent is flying
-    static class Thunder extends Attack implements SemiInvulnerableBypasser, BasicAccuracyBypassEffect, PowerChangeEffect {
+    static class Thunder extends Attack implements BasicAccuracyBypassEffect, SemiInvulnerableBypasser, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         Thunder() {
@@ -2737,9 +2737,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is flying
-            return defending.isSemiInvulnerableFlying();
+        public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
+            // Accuracy is only 50% when sunny
+            if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
+                return 50;
+            }
+
+            return super.accuracy;
         }
 
         @Override
@@ -2749,18 +2753,14 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.isSemiInvulnerableFlying() ? 2 : 1;
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Always hit when the opponent is flying
+            return defending.isSemiInvulnerableFlying();
         }
 
         @Override
-        public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
-            // Accuracy is only 50% when sunny
-            if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
-                return 50;
-            }
-
-            return super.accuracy;
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.isSemiInvulnerableFlying() ? 2 : 1;
         }
     }
 
@@ -3119,15 +3119,15 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.hasStatus(StatusNamesies.ASLEEP) ? 2 : 1;
-        }
-
-        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.ASLEEP)) {
                 victim.removeStatus(b, CastSource.ATTACK);
             }
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.hasStatus(StatusNamesies.ASLEEP) ? 2 : 1;
         }
     }
 
@@ -3206,6 +3206,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.heal(b, victim);
+        }
+
+        @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             switch (b.getWeather().namesies()) {
                 case SUNNY:
@@ -3217,11 +3222,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
                 default:
                     return 1/2.0;
             }
-        }
-
-        @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            this.heal(b, victim);
         }
 
         @Override
@@ -3384,15 +3384,15 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+            victim.removeStatus();
+        }
+
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.heal(b, victim);
 
             victim.getStatus().setTurns(2);
-        }
-
-        @Override
-        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            victim.removeStatus();
         }
 
         @Override
@@ -3508,12 +3508,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            // This is so fucking stupid that it consumes the Berry upon use, like srsly what the fuck is the fucking point of this move
-            HoldItem item = user.getHeldItem(b);
-            if (item instanceof Berry) {
-                item.consumeItemWithoutEffects(b, user);
-            }
+        public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
+            return ((Berry)me.getHeldItem(b)).naturalGiftPower();
         }
 
         @Override
@@ -3527,8 +3523,12 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
-            return ((Berry)me.getHeldItem(b)).naturalGiftPower();
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // This is so fucking stupid that it consumes the Berry upon use, like srsly what the fuck is the fucking point of this move
+            HoldItem item = user.getHeldItem(b);
+            if (item instanceof Berry) {
+                item.consumeItemWithoutEffects(b, user);
+            }
         }
 
         @Override
@@ -3706,7 +3706,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
     }
 
-    static class Magnitude extends Attack implements SemiInvulnerableBypasser, PowerChangeEffect {
+    static class Magnitude extends Attack implements PowerChangeEffect, SemiInvulnerableBypasser {
         private static final long serialVersionUID = 1L;
 
         private static final int[] CHANCES = { 5, 10, 20, 30, 20, 10, 5 };
@@ -3725,14 +3725,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Messages.add("Magnitude " + (index + 4) + "!");
+        public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
+            return POWERS[index];
         }
 
         @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is underground
-            return defending.isSemiInvulnerableDigging();
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            Messages.add("Magnitude " + (index + 4) + "!");
         }
 
         @Override
@@ -3753,8 +3752,9 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
-            return POWERS[index];
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Always hit when the opponent is underground
+            return defending.isSemiInvulnerableDigging();
         }
     }
 
@@ -3795,6 +3795,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public boolean semiInvulnerability() {
+            return true;
+        }
+
+        @Override
         public boolean isCharging() {
             return this.isCharging;
         }
@@ -3808,26 +3813,15 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         public void switchReady() {
             this.isCharging = !this.isCharging;
         }
-
-        @Override
-        public boolean semiInvulnerability() {
-            return true;
-        }
     }
 
-    static class Earthquake extends Attack implements SemiInvulnerableBypasser, PowerChangeEffect {
+    static class Earthquake extends Attack implements PowerChangeEffect, SemiInvulnerableBypasser {
         private static final long serialVersionUID = 1L;
 
         Earthquake() {
             super(AttackNamesies.EARTHQUAKE, Type.GROUND, MoveCategory.PHYSICAL, 10, "The user sets off an earthquake that strikes every Pok\u00e9mon around it.");
             super.power = 100;
             super.accuracy = 100;
-        }
-
-        @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is underground
-            return defending.isSemiInvulnerableDigging();
         }
 
         @Override
@@ -3846,6 +3840,12 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
             return multiplier;
         }
+
+        @Override
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Always hit when the opponent is underground
+            return defending.isSemiInvulnerableDigging();
+        }
     }
 
     static class Fissure extends Attack implements OhkoMove, SemiInvulnerableBypasser {
@@ -3857,14 +3857,14 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is underground
-            return defending.isSemiInvulnerableDigging();
+        public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
+            return super.accuracy + (me.getLevel() - o.getLevel());
         }
 
         @Override
-        public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
-            return super.accuracy + (me.getLevel() - o.getLevel());
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Always hit when the opponent is underground
+            return defending.isSemiInvulnerableDigging();
         }
 
         @Override
@@ -4190,13 +4190,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
-            return Math.min(super.power + 20*o.getStages().totalStatIncreases(), 200);
+        public String getPowerString() {
+            return "--";
         }
 
         @Override
-        public String getPowerString() {
-            return "--";
+        public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
+            return Math.min(super.power + 20*o.getStages().totalStatIncreases(), 200);
         }
     }
 
@@ -4324,6 +4324,12 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Fails if attack is already maxed or if you have less than half your health to give up
+            return user.getStage(Stat.ATTACK) < Stat.MAX_STAT_CHANGES && user.getHPRatio() > .5;
+        }
+
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Maximization station
             user.getStages().modifyStage(
@@ -4331,12 +4337,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
                     (victimName, statName, changed) -> user.getName() + " cut its own HP and maximized " + victimName + " " + statName + "!"
             );
             user.forceReduceHealthFraction(b, 1/2.0, "");
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            // Fails if attack is already maxed or if you have less than half your health to give up
-            return user.getStage(Stat.ATTACK) < Stat.MAX_STAT_CHANGES && user.getHPRatio() > .5;
         }
     }
 
@@ -4828,6 +4828,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public boolean semiInvulnerability() {
+            return true;
+        }
+
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " sprang up!";
         }
@@ -4845,11 +4850,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void switchReady() {
             this.isCharging = !this.isCharging;
-        }
-
-        @Override
-        public boolean semiInvulnerability() {
-            return true;
         }
     }
 
@@ -4914,13 +4914,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public double getHealFraction(Battle b, ActivePokemon victim) {
-            return .5;
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.heal(b, victim);
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            this.heal(b, victim);
+        public double getHealFraction(Battle b, ActivePokemon victim) {
+            return .5;
         }
 
         @Override
@@ -5160,6 +5160,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public boolean semiInvulnerability() {
+            return true;
+        }
+
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " hid underwater!";
         }
@@ -5177,11 +5182,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void switchReady() {
             this.isCharging = !this.isCharging;
-        }
-
-        @Override
-        public boolean semiInvulnerability() {
-            return true;
         }
     }
 
@@ -5212,7 +5212,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !victim.isType(b, Type.ICE) && user.getLevel() >= victim.getLevel();
+            return user.getLevel() >= victim.getLevel() && !victim.isType(b, Type.ICE);
         }
     }
 
@@ -5396,16 +5396,16 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Move last = victim.getLastMoveUsed();
-            Messages.add(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!");
-        }
-
-        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Fails if the victim hasn't attacked yet, their last move already has 0 PP, or they don't actually know the last move they used
             Move last = victim.getLastMoveUsed();
             return last != null && last.getPP() > 0 && victim.hasMove(b, last.getAttack().namesies());
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            Move last = victim.getLastMoveUsed();
+            Messages.add(victim.getName() + "'s " + last.getAttack().getName() + "'s PP was reduced by " + last.reducePP(4) + "!");
         }
     }
 
@@ -6114,6 +6114,12 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public void startTurn(Battle b, ActivePokemon me) {
+            super.applyBasicEffects(b, me, me);
+            me.setReducePP(true);
+        }
+
+        @Override
         public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
             return false;
         }
@@ -6121,12 +6127,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.hasEffect(PokemonEffectNamesies.FOCUSING);
-        }
-
-        @Override
-        public void startTurn(Battle b, ActivePokemon me) {
-            super.applyBasicEffects(b, me, me);
-            me.setReducePP(true);
         }
     }
 
@@ -6147,6 +6147,12 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public void startTurn(Battle b, ActivePokemon me) {
+            super.applyBasicEffects(b, me, me);
+            me.setReducePP(true);
+        }
+
+        @Override
         public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
             return false;
         }
@@ -6154,12 +6160,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return !user.hasEffect(PokemonEffectNamesies.SHELL_TRAP);
-        }
-
-        @Override
-        public void startTurn(Battle b, ActivePokemon me) {
-            super.applyBasicEffects(b, me, me);
-            me.setReducePP(true);
         }
     }
 
@@ -6181,14 +6181,14 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
-            return false;
-        }
-
-        @Override
         public void startTurn(Battle b, ActivePokemon me) {
             super.applyBasicEffects(b, me, me);
             me.setReducePP(true);
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            return false;
         }
     }
 
@@ -6217,14 +6217,14 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.callNewMove(b, victim, victim.getAttack().namesies());
-        }
-
-        @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // TODO: I don't like this -- it should def remove the same exact effect it casted at the beginning -- what if there are other ways to apply the effect??
             attacking.getEffects().remove(PokemonEffectNamesies.FIDDY_PERCENT_STRONGER);
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            user.callNewMove(b, victim, victim.getAttack().namesies());
         }
     }
 
@@ -6325,13 +6325,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public double getHealFraction(Battle b, ActivePokemon victim) {
-            return .5;
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.heal(b, victim);
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            this.heal(b, victim);
+        public double getHealFraction(Battle b, ActivePokemon victim) {
+            return .5;
         }
 
         @Override
@@ -6548,13 +6548,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.callNewMove(b, victim, this.mirror);
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return mirror != null && !mirror.getNewAttack().isMoveType(MoveType.MIRRORLESS);
         }
 
         @Override
-        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return mirror != null && !mirror.getNewAttack().isMoveType(MoveType.MIRRORLESS);
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            user.callNewMove(b, victim, this.mirror);
         }
     }
 
@@ -7021,13 +7021,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.callFullNewMove(b, victim, RandomUtils.getRandomValue(this.moves));
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.hasStatus(StatusNamesies.ASLEEP) && !this.moves.isEmpty();
         }
 
         @Override
-        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasStatus(StatusNamesies.ASLEEP) && !this.moves.isEmpty();
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            user.callFullNewMove(b, victim, RandomUtils.getRandomValue(this.moves));
         }
     }
 
@@ -7472,23 +7472,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            this.applyDamage = RandomUtils.chanceTest(80);
-        }
-
-        @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (!applyDamage) {
-                victim.healHealthFraction(1/4.0, b, victim.getName() + "'s health was restored!");
-            }
-        }
-
-        @Override
-        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
-            return this.applyDamage;
-        }
-
-        @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
             double random = RandomUtils.getRandomInt(80);
             if (random < 40) {
@@ -7497,6 +7480,23 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
                 return 80;
             } else {
                 return 120;
+            }
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.applyDamage = RandomUtils.chanceTest(80);
+        }
+
+        @Override
+        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
+            return this.applyDamage;
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            if (!applyDamage) {
+                victim.healHealthFraction(1/4.0, b, victim.getName() + "'s health was restored!");
             }
         }
 
@@ -7593,13 +7593,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public double getHealFraction(Battle b, ActivePokemon victim) {
-            return .5;
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.heal(b, victim);
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            this.heal(b, victim);
+        public double getHealFraction(Battle b, ActivePokemon victim) {
+            return .5;
         }
 
         @Override
@@ -7789,15 +7789,15 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.hasStatus(StatusNamesies.PARALYZED) ? 2 : 1;
-        }
-
-        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.PARALYZED)) {
                 victim.removeStatus(b, CastSource.ATTACK);
             }
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.hasStatus(StatusNamesies.PARALYZED) ? 2 : 1;
         }
     }
 
@@ -7833,13 +7833,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.callFullNewMove(b, victim, RandomUtils.getRandomValue(attacks));
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return !this.attacks.isEmpty();
         }
 
         @Override
-        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !this.attacks.isEmpty();
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            user.callFullNewMove(b, victim, RandomUtils.getRandomValue(attacks));
         }
     }
 
@@ -8073,13 +8073,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public double getHealFraction(Battle b, ActivePokemon victim) {
-            return .5;
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.heal(b, victim);
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            this.heal(b, victim);
+        public double getHealFraction(Battle b, ActivePokemon victim) {
+            return .5;
         }
 
         @Override
@@ -8254,6 +8254,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public boolean semiInvulnerability() {
+            return true;
+        }
+
+        @Override
         public String getChargeMessage(ActivePokemon user) {
             return user.getName() + " disappeared!";
         }
@@ -8271,11 +8276,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void switchReady() {
             this.isCharging = !this.isCharging;
-        }
-
-        @Override
-        public boolean semiInvulnerability() {
-            return true;
         }
     }
 
@@ -8819,11 +8819,8 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            // TODO: Make sure this is still working -- consumeItem used to be in endAttack
-            HoldItem item = user.getHeldItem(b);
-            item.flingEffect(b, victim);
-            item.consumeItemWithoutEffects(b, user);
+        public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
+            return me.getHeldItem(b).flingDamage();
         }
 
         @Override
@@ -8832,8 +8829,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
-            return me.getHeldItem(b).flingDamage();
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // TODO: Make sure this is still working -- consumeItem used to be in endAttack
+            HoldItem item = user.getHeldItem(b);
+            item.flingEffect(b, victim);
+            item.consumeItemWithoutEffects(b, user);
         }
 
         @Override
@@ -9130,7 +9130,7 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
     }
 
     // Apparently this isn't supposed to hit fly anymore, but that's stupid
-    static class Whirlwind extends Attack implements SemiInvulnerableBypasser, SwapOpponentEffect {
+    static class Whirlwind extends Attack implements SwapOpponentEffect, SemiInvulnerableBypasser {
         private static final long serialVersionUID = 1L;
 
         Whirlwind() {
@@ -9142,14 +9142,14 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is flying
-            return defending.isSemiInvulnerableFlying();
+        public String getSwapMessage(ActivePokemon user, ActivePokemon victim) {
+            return victim.getName() + " blew away!";
         }
 
         @Override
-        public String getSwapMessage(ActivePokemon user, ActivePokemon victim) {
-            return victim.getName() + " blew away!";
+        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Always hit when the opponent is flying
+            return defending.isSemiInvulnerableFlying();
         }
 
         @Override
@@ -9353,6 +9353,13 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Fails if used by a wild pokemon or if the trainer does not have anyone to switch to
+            Team team = b.getTrainer(user);
+            return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon(b);
+        }
+
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // TODO: Hardcore test this shit not in the mood right now but this is one of the most complicated moves so lots of tests tests tests
             user.switcheroo(b, user, CastSource.ATTACK, true);
@@ -9368,13 +9375,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
                 .stream()
                 .filter(effect -> effect instanceof PassableEffect)
                 .forEach(effect -> next.getEffects().add(effect));
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            // Fails if used by a wild pokemon or if the trainer does not have anyone to switch to
-            Team team = b.getTrainer(user);
-            return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon(b);
         }
     }
 
@@ -9582,6 +9582,16 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return ability;
+        }
+
+        @Override
+        public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return victim.getName() + "'s ability was changed to " + ability.getName() + "!";
+        }
+
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Ability userAbility = user.getAbility();
             Ability victimAbility = victim.getAbility();
@@ -9591,16 +9601,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
             ability = victimAbility;
             Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, user, CastSource.ATTACK, super.printCast);
-        }
-
-        @Override
-        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return ability;
-        }
-
-        @Override
-        public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return victim.getName() + "'s ability was changed to " + ability.getName() + "!";
         }
 
         @Override
@@ -9802,6 +9802,11 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public boolean semiInvulnerability() {
+            return true;
+        }
+
+        @Override
         public boolean isCharging() {
             return this.isCharging;
         }
@@ -9814,11 +9819,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         @Override
         public void switchReady() {
             this.isCharging = !this.isCharging;
-        }
-
-        @Override
-        public boolean semiInvulnerability() {
-            return true;
         }
     }
 
@@ -10423,14 +10423,14 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public double getHealFraction(Battle b, ActivePokemon victim) {
-            // Fully heals in a sandstorm
-            return b.getWeather().namesies() == WeatherNamesies.SANDSTORM ? 1 : .5;
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.heal(b, victim);
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            this.heal(b, victim);
+        public double getHealFraction(Battle b, ActivePokemon victim) {
+            // Fully heals in a sandstorm
+            return b.getWeather().namesies() == WeatherNamesies.SANDSTORM ? 1 : .5;
         }
 
         @Override
@@ -10449,14 +10449,14 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public double getHealFraction(Battle b, ActivePokemon victim) {
-            // Fully heals in Grassy Terrain
-            return b.hasEffect(TerrainNamesies.GRASSY_TERRAIN) ? 1 : .5;
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.heal(b, victim);
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            this.heal(b, victim);
+        public double getHealFraction(Battle b, ActivePokemon victim) {
+            // Fully heals in Grassy Terrain
+            return b.hasEffect(TerrainNamesies.GRASSY_TERRAIN) ? 1 : .5;
         }
 
         @Override
@@ -10532,15 +10532,15 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.hasStatus(StatusNamesies.BURNED) ? 2 : 1;
-        }
-
-        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.BURNED)) {
                 victim.removeStatus(b, CastSource.ATTACK);
             }
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.hasStatus(StatusNamesies.BURNED) ? 2 : 1;
         }
     }
 
@@ -10726,16 +10726,16 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
         }
 
         @Override
+        public double getHealFraction(Battle b, ActivePokemon victim) {
+            return .5;
+        }
+
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.removeStatus(b, CastSource.ATTACK);
             if (!user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
                 this.heal(b, user);
             }
-        }
-
-        @Override
-        public double getHealFraction(Battle b, ActivePokemon victim) {
-            return .5;
         }
 
         @Override

@@ -150,14 +150,13 @@ public class MethodInfo {
         boolean added = false;
         String className = fields.getClassName();
 
-        for (String fieldName : inputFormatter.getOverrideFields()) {
-            String fieldValue = fields.get(fieldName);
-            if (fieldValue == null) {
+        for (String fieldName : fields.getFieldNames()) {
+            MethodInfo methodInfo = inputFormatter.getOverrideMethod(fieldName);
+            if (methodInfo == null) {
                 continue;
             }
 
-            MethodInfo methodInfo = inputFormatter.getOverrideMethod(fieldName);
-
+            String fieldValue = fields.get(fieldName);
             String implementation = methodInfo.writeFunction(fieldValue, className, superClass, inputFormatter);
             methods.append(implementation);
 
