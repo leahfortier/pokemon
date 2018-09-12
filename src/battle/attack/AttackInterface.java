@@ -2,6 +2,7 @@ package battle.attack;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.InvokeEffect;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentTakeDamageEffect;
@@ -12,7 +13,7 @@ import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import type.TypeAdvantage;
 
-public interface AttackInterface {
+public interface AttackInterface extends InvokeEffect {
     AttackNamesies namesies();
     MoveCategory getCategory();
     boolean isSelfTarget();
@@ -84,5 +85,10 @@ public interface AttackInterface {
         // Effects that apply to the opponent when they take damage
         TakeDamageEffect.invokeTakeDamageEffect(b, me, o);
         OpponentTakeDamageEffect.invokeOpponentTakeDamageEffect(b, me, o);
+    }
+
+    @Override
+    default InvokeSource getSource() {
+        return InvokeSource.ATTACK;
     }
 }

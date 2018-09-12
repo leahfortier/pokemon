@@ -9,7 +9,6 @@ import battle.effect.EffectInterfaces.PowderMove;
 import battle.effect.EffectInterfaces.SapHealthEffect;
 import battle.effect.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.EffectNamesies;
-import battle.effect.InvokeEffect;
 import battle.effect.InvokeInterfaces.AdvantageMultiplierMove;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.AttackBlocker;
@@ -85,7 +84,7 @@ import util.serialization.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Attack implements AttackInterface, InvokeEffect, Serializable {
+public abstract class Attack implements AttackInterface {
     private static final long serialVersionUID = 1L;
 
     private AttackNamesies namesies;
@@ -396,11 +395,6 @@ public abstract class Attack implements AttackInterface, InvokeEffect, Serializa
 
     // To be overridden if necessary
     public void startTurn(Battle b, ActivePokemon me) {}
-
-    @Override
-    public InvokeSource getSource() {
-        return InvokeSource.ATTACK;
-    }
 
     @Override
     public String toString() {

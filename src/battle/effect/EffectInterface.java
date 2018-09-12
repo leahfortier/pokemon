@@ -2,7 +2,7 @@ package battle.effect;
 
 import battle.ActivePokemon;
 
-public interface EffectInterface {
+public interface EffectInterface extends InvokeEffect {
     EffectNamesies namesies();
 
     String getSubsideMessage(ActivePokemon victim);
@@ -10,4 +10,9 @@ public interface EffectInterface {
     int getTurns();
     boolean isActive();
     void deactivate();
+
+    @Override
+    default InvokeSource getSource() {
+        return InvokeSource.EFFECT;
+    }
 }

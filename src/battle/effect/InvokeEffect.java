@@ -1,8 +1,9 @@
 package battle.effect;
 
 import battle.effect.source.CastSource;
+import util.serialization.Serializable;
 
-public interface InvokeEffect {
+public interface InvokeEffect extends Serializable {
     InvokeSource getSource();
 
     static boolean isActiveEffect(InvokeEffect object) {

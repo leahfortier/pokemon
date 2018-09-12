@@ -123,11 +123,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
     }
 
     @Override
-    public InvokeSource getSource() {
-        return InvokeSource.ITEM;
-    }
-
-    @Override
     public int compareTo(Item o) {
         return this.getName().compareTo(o.getName());
     }

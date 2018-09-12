@@ -21,9 +21,8 @@ import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import type.Type;
 import util.RandomUtils;
-import util.serialization.Serializable;
 
-public abstract class StatusCondition implements InvokeEffect, Serializable {
+public abstract class StatusCondition implements InvokeEffect {
     private static final long serialVersionUID = 1L;
 
     private final StatusNamesies namesies;

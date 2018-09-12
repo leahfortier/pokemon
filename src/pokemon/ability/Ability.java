@@ -17,7 +17,6 @@ import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.EffectInterfaces.TypedWildEncounterSelector;
 import battle.effect.EffectNamesies;
-import battle.effect.InvokeEffect;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
@@ -78,7 +77,6 @@ import battle.effect.attack.OhkoMove;
 import battle.effect.attack.RecoilMove;
 import battle.effect.battle.terrain.TerrainNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
-import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
@@ -111,7 +109,6 @@ import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
 import util.ReverseIterable;
-import util.serialization.Serializable;
 import util.string.StringUtils;
 
 import java.util.ArrayList;
@@ -119,7 +116,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class Ability implements AbilityHolder, InvokeEffect, Serializable {
+public abstract class Ability implements AbilityInterface {
     private static final long serialVersionUID = 1L;
 
     protected final AbilityNamesies namesies;
@@ -136,15 +133,11 @@ public abstract class Ability implements AbilityHolder, InvokeEffect, Serializab
     }
 
     @Override
-    public InvokeSource getSource() {
-        return InvokeSource.ABILITY;
-    }
-
-    @Override
     public String toString() {
         return this.getName();
     }
 
+    @Override
     public AbilityNamesies namesies() {
         return this.namesies;
     }

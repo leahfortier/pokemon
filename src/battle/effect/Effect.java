@@ -9,9 +9,8 @@ import battle.effect.source.CastSource;
 import main.Global;
 import message.Messages;
 import util.RandomUtils;
-import util.serialization.Serializable;
 
-public abstract class Effect<NamesiesType extends EffectNamesies> implements EffectInterface, InvokeEffect, Serializable {
+public abstract class Effect<NamesiesType extends EffectNamesies> implements EffectInterface {
     private static final long serialVersionUID = 1L;
 
     public static final String DEFAULT_FAIL_MESSAGE = "...but it failed!";
@@ -163,11 +162,6 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
 
     public void setTurns(int turns) {
         numTurns = turns;
-    }
-
-    @Override
-    public InvokeSource getSource() {
-        return InvokeSource.EFFECT;
     }
 
     @Override
