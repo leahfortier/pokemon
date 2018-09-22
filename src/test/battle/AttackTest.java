@@ -437,10 +437,10 @@ public class AttackTest extends BaseTest {
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         battle.attackingFight(AttackNamesies.WILL_O_WISP);
         attacking.assertNoStatus();
-        defending.assertStatus(StatusNamesies.BURNED);
+        defending.assertHasStatus(StatusNamesies.BURNED);
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
-        attacking.assertStatus(StatusNamesies.BURNED);
+        attacking.assertHasStatus(StatusNamesies.BURNED);
         defending.assertNoStatus();
 
         battle.attackingFight(AttackNamesies.TOXIC);
@@ -448,7 +448,7 @@ public class AttackTest extends BaseTest {
 
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         defending.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
-        attacking.assertStatus(StatusNamesies.BURNED);
+        attacking.assertHasStatus(StatusNamesies.BURNED);
         defending.assertBadPoison();
 
         battle.attackingFight(AttackNamesies.REFRESH);
@@ -489,19 +489,19 @@ public class AttackTest extends BaseTest {
         attacking.assertNoStatus();
         defending.assertNoStatus();
         battle.defendingFight(AttackNamesies.SPORE);
-        attacking.assertStatus(StatusNamesies.ASLEEP);
+        attacking.assertHasStatus(StatusNamesies.ASLEEP);
         defending.assertNoStatus();
         battle.attackingFight(AttackNamesies.SLEEP_TALK);
         attacking.assertNoStatus();
-        defending.assertStatus(StatusNamesies.ASLEEP);
+        defending.assertHasStatus(StatusNamesies.ASLEEP);
 
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
-        attacking.assertStatus(StatusNamesies.ASLEEP);
+        attacking.assertHasStatus(StatusNamesies.ASLEEP);
         defending.assertNoStatus();
 
         defending.withAbility(AbilityNamesies.INSOMNIA);
         battle.attackingFight(AttackNamesies.SLEEP_TALK);
-        attacking.assertStatus(StatusNamesies.ASLEEP);
+        attacking.assertHasStatus(StatusNamesies.ASLEEP);
         defending.assertNoStatus();
     }
 
@@ -549,7 +549,7 @@ public class AttackTest extends BaseTest {
         attacking.giveItem(ItemNamesies.RAWST_BERRY);
         battle.attackingFight(AttackNamesies.WILL_O_WISP);
         Assert.assertTrue(attacking.isHoldingItem(battle));
-        defending.assertStatus(StatusNamesies.BURNED);
+        defending.assertHasStatus(StatusNamesies.BURNED);
 
         // Defending Pokemon will use Bug Bite and eat the Rawst Berry, curing its burn
         // Attacking will have its item consumed, but defending is the one who ate the berry
@@ -810,18 +810,18 @@ public class AttackTest extends BaseTest {
 
         battle.attackingFight(AttackNamesies.REST);
         attacking.assertFullHealth();
-        attacking.assertStatus(StatusNamesies.ASLEEP);
+        attacking.assertHasStatus(StatusNamesies.ASLEEP);
 
         // Resting Pokemon should be asleep for exactly two turns -- False Swipe should fail here and the next turn
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);
         defending.assertFullHealth();
         attacking.assertFullHealth();
-        attacking.assertStatus(StatusNamesies.ASLEEP);
+        attacking.assertHasStatus(StatusNamesies.ASLEEP);
 
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);
         defending.assertFullHealth();
         attacking.assertFullHealth();
-        attacking.assertStatus(StatusNamesies.ASLEEP);
+        attacking.assertHasStatus(StatusNamesies.ASLEEP);
 
         // Should wake up on this turn
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);

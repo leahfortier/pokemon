@@ -8,12 +8,12 @@ import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.Effect;
-import battle.effect.EffectInterfaces.EntryEndTurnEffect;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MaxLevelWildEncounterEffect;
 import battle.effect.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.EffectInterfaces.RepelLowLevelEncounterEffect;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
+import battle.effect.EffectInterfaces.StatusPreventionAbility;
 import battle.effect.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.EffectInterfaces.TypedWildEncounterSelector;
 import battle.effect.EffectNamesies;
@@ -142,6 +142,7 @@ public abstract class Ability implements AbilityInterface {
         return this.namesies;
     }
 
+    @Override
     public String getName() {
         return this.namesies().getName();
     }
@@ -882,32 +883,16 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Limber extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
+    static class Limber extends Ability implements StatusPreventionAbility {
         private static final long serialVersionUID = 1L;
-
-        private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusNamesies.PARALYZED)) {
-                victim.removeStatus(b, CastSource.ABILITY);
-            }
-        }
 
         Limber() {
             super(AbilityNamesies.LIMBER, "Its limber body protects the Pok\u00e9mon from paralysis.");
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return status == StatusNamesies.PARALYZED;
-        }
-
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " prevents paralysis!";
-        }
-
-        @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
+        public StatusNamesies getStatus() {
+            return StatusNamesies.PARALYZED;
         }
     }
 
@@ -960,61 +945,29 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class VitalSpirit extends Ability implements MaxLevelWildEncounterEffect, StatusPreventionEffect, EntryEndTurnEffect {
+    static class VitalSpirit extends Ability implements MaxLevelWildEncounterEffect, StatusPreventionAbility {
         private static final long serialVersionUID = 1L;
-
-        private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusNamesies.ASLEEP)) {
-                victim.removeStatus(b, CastSource.ABILITY);
-            }
-        }
 
         VitalSpirit() {
             super(AbilityNamesies.VITAL_SPIRIT, "The Pok\u00e9mon is full of vitality, and that prevents it from falling asleep.");
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return status == StatusNamesies.ASLEEP;
-        }
-
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " prevents sleep!";
-        }
-
-        @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
+        public StatusNamesies getStatus() {
+            return StatusNamesies.ASLEEP;
         }
     }
 
-    static class Insomnia extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
+    static class Insomnia extends Ability implements StatusPreventionAbility {
         private static final long serialVersionUID = 1L;
-
-        private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusNamesies.ASLEEP)) {
-                victim.removeStatus(b, CastSource.ABILITY);
-            }
-        }
 
         Insomnia() {
             super(AbilityNamesies.INSOMNIA, "The Pok\u00e9mon is suffering from insomnia and cannot fall asleep.");
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return status == StatusNamesies.ASLEEP;
-        }
-
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " prevents sleep!";
-        }
-
-        @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
+        public StatusNamesies getStatus() {
+            return StatusNamesies.ASLEEP;
         }
     }
 
@@ -1518,32 +1471,16 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class WaterVeil extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
+    static class WaterVeil extends Ability implements StatusPreventionAbility {
         private static final long serialVersionUID = 1L;
-
-        private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusNamesies.BURNED)) {
-                victim.removeStatus(b, CastSource.ABILITY);
-            }
-        }
 
         WaterVeil() {
             super(AbilityNamesies.WATER_VEIL, "The Pok\u00e9mon is covered with a water veil, which prevents the Pok\u00e9mon from getting a burn.");
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return status == StatusNamesies.BURNED;
-        }
-
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " prevents burns!";
-        }
-
-        @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
+        public StatusNamesies getStatus() {
+            return StatusNamesies.BURNED;
         }
     }
 
@@ -1823,32 +1760,16 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Immunity extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
+    static class Immunity extends Ability implements StatusPreventionAbility {
         private static final long serialVersionUID = 1L;
-
-        private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusNamesies.POISONED)) {
-                victim.removeStatus(b, CastSource.ABILITY);
-            }
-        }
 
         Immunity() {
             super(AbilityNamesies.IMMUNITY, "The immune system of the Pok\u00e9mon prevents it from getting poisoned.");
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return status == StatusNamesies.POISONED;
-        }
-
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " prevents poison!";
-        }
-
-        @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
+        public StatusNamesies getStatus() {
+            return StatusNamesies.POISONED;
         }
     }
 
@@ -2056,32 +1977,16 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class MagmaArmor extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
+    static class MagmaArmor extends Ability implements StatusPreventionAbility {
         private static final long serialVersionUID = 1L;
-
-        private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusNamesies.FROZEN)) {
-                victim.removeStatus(b, CastSource.ABILITY);
-            }
-        }
 
         MagmaArmor() {
             super(AbilityNamesies.MAGMA_ARMOR, "The Pok\u00e9mon is covered with hot magma, which prevents the Pok\u00e9mon from becoming frozen.");
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return status == StatusNamesies.FROZEN;
-        }
-
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " prevents freezing!";
-        }
-
-        @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
+        public StatusNamesies getStatus() {
+            return StatusNamesies.FROZEN;
         }
     }
 
@@ -3458,32 +3363,16 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class SweetVeil extends Ability implements StatusPreventionEffect, EntryEndTurnEffect {
+    static class SweetVeil extends Ability implements StatusPreventionAbility {
         private static final long serialVersionUID = 1L;
-
-        private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusNamesies.ASLEEP)) {
-                victim.removeStatus(b, CastSource.ABILITY);
-            }
-        }
 
         SweetVeil() {
             super(AbilityNamesies.SWEET_VEIL, "Prevents itself and ally Pok\u00e9mon from falling asleep.");
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return status == StatusNamesies.ASLEEP;
-        }
-
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " prevents sleep!";
-        }
-
-        @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
+        public StatusNamesies getStatus() {
+            return StatusNamesies.ASLEEP;
         }
     }
 
@@ -3916,37 +3805,21 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class WaterBubble extends Ability implements OpponentPowerChangeEffect, StatusPreventionEffect, EntryEndTurnEffect, PowerChangeEffect {
+    static class WaterBubble extends Ability implements OpponentPowerChangeEffect, StatusPreventionAbility, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
-
-        private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusNamesies.BURNED)) {
-                victim.removeStatus(b, CastSource.ABILITY);
-            }
-        }
 
         WaterBubble() {
             super(AbilityNamesies.WATER_BUBBLE, "Lowers the power of Fire-type moves done to the Pok\u00e9mon and prevents the Pok\u00e9mon from getting a burn.");
         }
 
         @Override
+        public StatusNamesies getStatus() {
+            return StatusNamesies.BURNED;
+        }
+
+        @Override
         public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.FIRE) ? .5 : 1;
-        }
-
-        @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return status == StatusNamesies.BURNED;
-        }
-
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " prevents burns!";
-        }
-
-        @Override
-        public void applyEffect(Battle b, ActivePokemon p) {
-            removeStatus(b, p);
         }
 
         @Override

@@ -255,7 +255,7 @@ Technician:
 *
 Limber:
     Desc: Its limber body protects the Pok\u00e9mon from paralysis.
-    StatusPreventAbility: Paralyzed paralysis
+    StatusPreventAbility: Paralyzed
 *
 Damp:
     Desc: Prevents the use of explosive moves such as Self-Destruct by dampening its surroundings.
@@ -286,12 +286,12 @@ Cloud Nine:
 *
 Vital Spirit:
     Desc: The Pok\u00e9mon is full of vitality, and that prevents it from falling asleep.
-    StatusPreventAbility: Asleep sleep
+    StatusPreventAbility: Asleep
     Int: MaxLevelWildEncounterEffect
 *
 Insomnia:
     Desc: The Pok\u00e9mon is suffering from insomnia and cannot fall asleep.
-    StatusPreventAbility: Asleep sleep
+    StatusPreventAbility: Asleep
 *
 Anger Point:
     Desc: The Pok\u00e9mon is angered when it takes a critical hit, and that maxes its Attack stat.
@@ -521,7 +521,7 @@ Swift Swim:
 *
 Water Veil:
     Desc: The Pok\u00e9mon is covered with a water veil, which prevents the Pok\u00e9mon from getting a burn.
-    StatusPreventAbility: Burned burns
+    StatusPreventAbility: Burned
 *
 Filter:
     Desc: Reduces the power of supereffective attacks taken.
@@ -646,7 +646,7 @@ Pressure:
 *
 Immunity:
     Desc: The immune system of the Pok\u00e9mon prevents it from getting poisoned.
-    StatusPreventAbility: Poisoned poison
+    StatusPreventAbility: Poisoned
 *
 Snow Cloak:
     Desc: Boosts evasion in a hailstorm.
@@ -725,7 +725,7 @@ Overcoat:
 *
 Magma Armor:
     Desc: The Pok\u00e9mon is covered with hot magma, which prevents the Pok\u00e9mon from becoming frozen.
-    StatusPreventAbility: Frozen freezing
+    StatusPreventAbility: Frozen
 *
 Suction Cups:
     Desc: This Pok\u00e9mon uses suction cups to stay in one spot to negate all moves and items that force switching out.
@@ -1390,7 +1390,7 @@ Tough Claws:
 *
 Sweet Veil:
     Desc: Prevents itself and ally Pok\u00e9mon from falling asleep.
-    StatusPreventAbility: Asleep sleep
+    StatusPreventAbility: Asleep
 *
 Aroma Veil:
     Desc: Protects itself and its allies from attacks that limit their move choices.
@@ -1504,7 +1504,7 @@ Merciless:
 Water Bubble:
     Desc: Lowers the power of Fire-type moves done to the Pok\u00e9mon and prevents the Pok\u00e9mon from getting a burn.
     Int: OpponentPowerChangeEffect
-    StatusPreventAbility: Burned burns
+    StatusPreventAbility: Burned
     PowerMultiplierCondition: 2 user.isAttackType(Type.WATER)
     GetOppMultiplier:
         return user.isAttackType(Type.FIRE) ? .5 : 1;

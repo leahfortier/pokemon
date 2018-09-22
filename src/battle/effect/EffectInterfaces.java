@@ -16,12 +16,14 @@ import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.RepellingEffect;
 import battle.effect.InvokeInterfaces.SelfAttackBlocker;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
+import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.InvokeInterfaces.WildEncounterSelector;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
+import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
 import item.hold.HoldItem;
 import main.Global;
@@ -31,6 +33,7 @@ import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
 import pokemon.Stat;
+import pokemon.ability.AbilityInterface;
 import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonInfo;
 import trainer.Team;
@@ -312,6 +315,27 @@ public final class EffectInterfaces {
         @Override
         default int getExtensionTurns(Effect receivedEffect, int numTurns) {
             return receivedEffect.namesies() == this.getWeatherType() ? 3 : 0;
+        }
+    }
+
+    public interface StatusPreventionAbility extends AbilityInterface, StatusPreventionEffect, EntryEndTurnEffect {
+        StatusNamesies getStatus();
+
+        @Override
+        default boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            return this.getStatus().getStatus().isType(status);
+        }
+
+        @Override
+        default String statusPreventionMessage(ActivePokemon victim) {
+            return this.getStatus().getStatus().getSourcePreventionMessage(victim, this.getName());
+        }
+
+        @Override
+        default void applyEffect(Battle b, ActivePokemon p) {
+            if (p.hasStatus(this.getStatus())) {
+                p.removeStatus(b, CastSource.ABILITY);
+            }
         }
     }
 }

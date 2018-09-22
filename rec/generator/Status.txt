@@ -19,6 +19,7 @@ NoStatus:
     SourceCastMessage: ""
     GenericRemoveMessage: ""
     SourceRemoveMessage: ""
+    FullSourcePreventionMessage: ""
 *
 Fainted:
     ShortName: FNT
@@ -32,6 +33,7 @@ Fainted:
     SourceCastMessage: sourcerer.getName() + "'s " + sourceName + " caused " + victim.getName() + " to faint!"
     GenericRemoveMessage: ""
     SourceRemoveMessage: ""
+    FullSourcePreventionMessage: ""
 *
 Paralyzed:
     ShortName: PRZ
@@ -54,6 +56,7 @@ Paralyzed:
     SourceCastMessage: sourcerer.getName() + "'s " + sourceName + " paralyzed " + victim.getName() + "!"
     GenericRemoveMessage: victim.getName() + " is no longer paralyzed!"
     SourceRemoveMessage: victim.getName() + "'s " + sourceName + " cured it of its paralysis!"
+    SourcePreventionMessage: paralysis
     ToModify: Speed
     ModifyMultiplier: .25 !p.hasAbility(AbilityNamesies.QUICK_FEET)
 *
@@ -94,6 +97,7 @@ Burned:
     SourceCastMessage: sourcerer.getName() + "'s " + sourceName + " burned " + victim.getName() + "!"
     GenericRemoveMessage: victim.getName() + " is no longer burned!"
     SourceRemoveMessage: victim.getName() + "'s " + sourceName + " cured it of its burn!"
+    SourcePreventionMessage: burns
     ToModify: Attack
     ModifyMultiplier: .5 !p.hasAbility(AbilityNamesies.GUTS) && p.getAttack().namesies() != AttackNamesies.FACADE
 *
@@ -130,6 +134,7 @@ Asleep:
         ###
     GenericRemoveMessage: victim.getName() + " woke up!"
     SourceRemoveMessage: victim.getName() + "'s " + sourceName + " caused it to wake up!"
+    SourcePreventionMessage: sleep
 *
 Frozen:
     ShortName: FRZ
@@ -157,4 +162,5 @@ Frozen:
         ###
     GenericRemoveMessage: victim.getName() + " thawed out!"
     SourceRemoveMessage: victim.getName() + "'s " + sourceName + " thawed it out!"
+    SourcePreventionMessage: freezing
 *

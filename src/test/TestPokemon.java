@@ -103,15 +103,33 @@ public class TestPokemon extends ActivePokemon {
         Assert.assertEquals(prevHp - (int)(fractionDiff*this.getMaxHP()), this.getHP());
     }
 
+    // Confirms the Pokemon has or does not have the specified status
+    public void assertStatus(boolean shouldHave, StatusNamesies statusNamesies) {
+        if (shouldHave) {
+            this.assertHasStatus(statusNamesies);
+        } else {
+            this.assertNoStatus();
+        }
+    }
+
+    // Confirms the Pokemon does not have any status condition
     public void assertNoStatus() {
         Assert.assertFalse(this.hasStatus());
     }
 
-    // Confirms a status (should not be used for poison though, those have their own implementations)
-    public void assertStatus(StatusNamesies statusNamesies) {
-        Assert.assertNotEquals(StatusNamesies.POISONED, statusNamesies);
-        Assert.assertNotEquals(StatusNamesies.BADLY_POISONED, statusNamesies);
-        Assert.assertTrue(this.getStatus().getShortName(), this.hasStatus(statusNamesies));
+    // Confirms the Pokemon has the specified status condition
+    public void assertHasStatus(StatusNamesies statusNamesies) {
+        switch (statusNamesies) {
+            case POISONED:
+                assertRegularPoison();
+                break;
+            case BADLY_POISONED:
+                assertBadPoison();
+                break;
+            default:
+                Assert.assertTrue(this.getStatus().getShortName(), this.hasStatus(statusNamesies));
+                break;
+        }
     }
 
     // Asserts that the Poke is poisoned, but not badddlllyyy poisoned

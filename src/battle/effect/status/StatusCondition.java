@@ -55,6 +55,8 @@ public abstract class StatusCondition implements InvokeEffect {
     protected abstract String getGenericRemoveMessage(ActivePokemon victim);
     protected abstract String getSourceRemoveMessage(ActivePokemon victim, String sourceName);
 
+    public abstract String getSourcePreventionMessage(ActivePokemon victim, String sourceName);
+
     private String getCastMessage(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
         if (source.hasSourceName()) {
             return this.getSourceCastMessage(caster, victim, source.getSourceName(b, caster));
@@ -162,6 +164,11 @@ public abstract class StatusCondition implements InvokeEffect {
         public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
             return "";
         }
+
+        @Override
+        public String getSourcePreventionMessage(ActivePokemon victim, String sourceName) {
+            return "";
+        }
     }
 
     static class Fainted extends StatusCondition {
@@ -199,6 +206,11 @@ public abstract class StatusCondition implements InvokeEffect {
 
         @Override
         public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
+            return "";
+        }
+
+        @Override
+        public String getSourcePreventionMessage(ActivePokemon victim, String sourceName) {
             return "";
         }
     }
@@ -253,6 +265,11 @@ public abstract class StatusCondition implements InvokeEffect {
         }
 
         @Override
+        public String getSourcePreventionMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + "'s " + sourceName + " prevents paralysis!";
+        }
+
+        @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return !p.hasAbility(AbilityNamesies.QUICK_FEET);
         }
@@ -303,6 +320,11 @@ public abstract class StatusCondition implements InvokeEffect {
             } else {
                 victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " was hurt by its poison!");
             }
+        }
+
+        @Override
+        public String getSourcePreventionMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + "'s " + sourceName + " prevents poison!";
         }
     }
 
@@ -356,6 +378,11 @@ public abstract class StatusCondition implements InvokeEffect {
                 victim.reduceHealthFraction(b, this.turns++/16.0, victim.getName() + " was hurt by its poison!");
             }
         }
+
+        @Override
+        public String getSourcePreventionMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + "'s " + sourceName + " prevents poison!";
+        }
     }
 
     // Fire-type Pokemon cannot be burned
@@ -401,6 +428,11 @@ public abstract class StatusCondition implements InvokeEffect {
         @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.ATTACK;
+        }
+
+        @Override
+        public String getSourcePreventionMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + "'s " + sourceName + " prevents burns!";
         }
 
         @Override
@@ -472,6 +504,11 @@ public abstract class StatusCondition implements InvokeEffect {
         public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
             return victim.getName() + "'s " + sourceName + " caused it to wake up!";
         }
+
+        @Override
+        public String getSourcePreventionMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + "'s " + sourceName + " prevents sleep!";
+        }
     }
 
     // Ice-type Pokemon cannot be frozen
@@ -525,6 +562,11 @@ public abstract class StatusCondition implements InvokeEffect {
         @Override
         public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
             return victim.getName() + "'s " + sourceName + " thawed it out!";
+        }
+
+        @Override
+        public String getSourcePreventionMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + "'s " + sourceName + " prevents freezing!";
         }
     }
 }

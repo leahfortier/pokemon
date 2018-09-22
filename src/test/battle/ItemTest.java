@@ -363,7 +363,7 @@ public class ItemTest extends BaseTest {
 
         // Lum Berry has already been consumed, so the burn should remain
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
-        attacking.assertStatus(StatusNamesies.BURNED);
+        attacking.assertHasStatus(StatusNamesies.BURNED);
 
         // Swap items to retrieve the Rawst Berry, which should activate to remove the burn
         battle.attackingFight(AttackNamesies.TRICK);
@@ -373,7 +373,7 @@ public class ItemTest extends BaseTest {
 
         // Rawst Berry has already been consumed, so the burn should remain
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
-        attacking.assertStatus(StatusNamesies.BURNED);
+        attacking.assertHasStatus(StatusNamesies.BURNED);
     }
 
     @Test

@@ -70,6 +70,15 @@ SourceRemoveMessage:
         return {0};
         ###
 *
+SourcePreventionMessage:
+    AddMapField: FullSourcePreventionMessage: victim.getName() + "'s " + sourceName + " prevents {0}!"
+*
+FullSourcePreventionMessage:
+    Header: String getSourcePreventionMessage(ActivePokemon victim, String sourceName)
+    Body:
+        return {0};
+        ###
+*
 IsStatusType:
     Header: boolean isType(StatusNamesies statusCondition)
 *
@@ -80,6 +89,7 @@ PoisonCondition:
     AddMapField: StatusApplies: (!victim.isType(b, Type.POISON) && !victim.isType(b, Type.STEEL) || caster.hasAbility(AbilityNamesies.CORROSION))
     AddMapField: GenericRemoveMessage: victim.getName() + " is no longer poisoned!"
     AddMapField: SourceRemoveMessage: victim.getName() + "'s " + sourceName + " cured it of its poison!"
+    AddMapField: SourcePreventionMessage: poison
     AddInterface: EndTurnEffect
     AddMapField: ApplyEndTurn:
         if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
@@ -981,20 +991,10 @@ PinchAbility:
     AddMapField: PowerMultiplierCondition: 1.5 user.getHPRatio() < 1/3.0 && user.isAttackType(Type.{00})
 *
 StatusPreventAbility:
-    AddInterface: StatusPreventionEffect
-    AddMapField: StatusPrevent:
-        return status == StatusNamesies.{11};
-        ###
-    AddMapField: StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents {2}!"
-    AddMapField: Field:
-        private void removeStatus(Battle b, ActivePokemon victim) {
-            if (victim.hasStatus(StatusNamesies.{11})) {
-                victim.removeStatus(b, CastSource.ABILITY);
-            }
-        }
-        ###
-    AddMapField: EntryEndTurn:
-        removeStatus(b, p);
+    AddInterface: StatusPreventionAbility
+    Header: StatusNamesies getStatus()
+    Body:
+        return StatusNamesies.{00};
         ###
 *
 StatusContact:

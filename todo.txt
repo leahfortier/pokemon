@@ -205,4 +205,5 @@ Other random things:
     failure things for effects should be rewritten (canHave passed in constructor, override for fail abilities or change to be on the ability having figured it all out yet)
     probably have something to automatically remove previous effect if there can only be one (ChangeAbility etc)
     move team planner out of this project entirely -- ask Marcos how to use this project ask more of a library thingy
+    stuffgen test shouldn't actually overwrite
     

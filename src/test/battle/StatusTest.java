@@ -85,6 +85,7 @@ public class StatusTest extends BaseTest {
         defending.assertNoStatus();
 
         // Cannot poison a pokemon with immunity
+        // TODO: Make sure this actually fails during the attack and not the end turn heal thingy
         defending.withAbility(AbilityNamesies.IMMUNITY);
         battle.attackingFight(AttackNamesies.TOXIC);
         defending.assertNoStatus();
@@ -214,9 +215,9 @@ public class StatusTest extends BaseTest {
 
         // Basic Burn Heal, make sure Antidote fails for burns
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
-        attacking.assertStatus(StatusNamesies.BURNED);
+        attacking.assertHasStatus(StatusNamesies.BURNED);
         PokemonManipulator.useItem(ItemNamesies.ANTIDOTE, true, false).manipulate(battle);
-        attacking.assertStatus(StatusNamesies.BURNED);
+        attacking.assertHasStatus(StatusNamesies.BURNED);
         PokemonManipulator.useItem(ItemNamesies.BURN_HEAL).manipulate(battle);
         attacking.assertNoStatus();
 

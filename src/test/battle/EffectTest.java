@@ -443,7 +443,7 @@ public class EffectTest extends BaseTest {
         // Status moves won't work against the substitute
         substituteTest(
                 new TestInfo().defendingFight(AttackNamesies.THUNDER_WAVE),
-                (battle, attacking, defending) -> attacking.assertStatus(StatusNamesies.PARALYZED),
+                (battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.PARALYZED),
                 (battle, attacking, defending) -> attacking.assertNoStatus()
         );
 
@@ -534,7 +534,7 @@ public class EffectTest extends BaseTest {
                     defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
                 },
                 (battle, attacking, defending) -> {
-                    defending.assertStatus(StatusNamesies.BURNED);
+                    defending.assertHasStatus(StatusNamesies.BURNED);
                     attacking.assertNotConsumedItem(battle);
                     defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
                     defending.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
@@ -547,7 +547,7 @@ public class EffectTest extends BaseTest {
                         .defending(ItemNamesies.FLAME_ORB)
                         .defendingFight(AttackNamesies.FLING)
                         .with((battle, attacking, defending) -> Assert.assertFalse(defending.isHoldingItem(battle))),
-                (battle, attacking, defending) -> attacking.assertStatus(StatusNamesies.BURNED),
+                (battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.BURNED),
                 (battle, attacking, defending) -> attacking.assertNoStatus()
         );
 
@@ -567,7 +567,7 @@ public class EffectTest extends BaseTest {
                 new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
                         .defendingFight(AttackNamesies.INFERNO),
                 (battle, attacking, defending) -> {
-                    attacking.assertStatus(StatusNamesies.BURNED);
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
                     attacking.assertNotFullHealth();
                 },
                 (battle, attacking, defending) -> {
@@ -583,7 +583,7 @@ public class EffectTest extends BaseTest {
                 new TestInfo(PokemonNamesies.WEEDLE, PokemonNamesies.XURKITREE)
                         .attacking(AbilityNamesies.MAGIC_GUARD)
                         .fight(AttackNamesies.ENDURE, AttackNamesies.INFERNO)
-                        .with((battle, attacking, defending) -> attacking.assertStatus(StatusNamesies.BURNED)),
+                        .with((battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.BURNED)),
                 (battle, attacking, defending) -> Assert.assertEquals(1, attacking.getHP()),
                 (battle, attacking, defending) -> attacking.assertFullHealth()
         );

@@ -56,7 +56,7 @@ public class AbilityTest extends BaseTest {
             defending.assertFullHealth();
         });
         wonderGuardTest(AttackNamesies.THUNDER_WAVE, emptyInfo, (battle, attacking, defending) -> {
-            defending.assertStatus(StatusNamesies.PARALYZED);
+            defending.assertHasStatus(StatusNamesies.PARALYZED);
             defending.assertFullHealth();
             defending.assertNoStages();
         });
@@ -364,7 +364,7 @@ public class AbilityTest extends BaseTest {
         sheerForceSuccessTest(
                 AttackNamesies.INFERNO,
                 (battle, attacking, defending) -> defending.assertNoStatus(),
-                (battle, attacking, defending) -> defending.assertStatus(StatusNamesies.BURNED)
+                (battle, attacking, defending) -> defending.assertHasStatus(StatusNamesies.BURNED)
         );
 
         // Flare Blitz has a chance to Burn, so gets increase from Sheer Force, but should still take recoil damage regardless
@@ -501,8 +501,8 @@ public class AbilityTest extends BaseTest {
 
         // Thunder Wave will paralyze the target and then Synchronize with paralyze the attacker
         battle.attackingFight(AttackNamesies.THUNDER_WAVE);
-        defending.assertStatus(StatusNamesies.PARALYZED);
-        attacking.assertStatus(StatusNamesies.PARALYZED);
+        defending.assertHasStatus(StatusNamesies.PARALYZED);
+        attacking.assertHasStatus(StatusNamesies.PARALYZED);
 
         attacking.giveItem(ItemNamesies.LUM_BERRY);
         defending.giveItem(ItemNamesies.CHERI_BERRY);
@@ -514,7 +514,7 @@ public class AbilityTest extends BaseTest {
 
         // Synchronize does not work on Sleep
         battle.attackingFight(AttackNamesies.SPORE);
-        defending.assertStatus(StatusNamesies.ASLEEP);
+        defending.assertHasStatus(StatusNamesies.ASLEEP);
         attacking.assertNoStatus();
 
         defending.withMoves(AttackNamesies.SLEEP_TALK, AttackNamesies.REFRESH);
@@ -985,7 +985,7 @@ public class AbilityTest extends BaseTest {
                 .attackingFight(AttackNamesies.INFERNO)
                 .doubleTake(
                         AbilityNamesies.SHIELD_DUST,
-                        (battle, attacking, defending) -> defending.assertStatus(StatusNamesies.BURNED),
+                        (battle, attacking, defending) -> defending.assertHasStatus(StatusNamesies.BURNED),
                         (battle, attacking, defending) -> defending.assertNoStatus()
                 );
     }
