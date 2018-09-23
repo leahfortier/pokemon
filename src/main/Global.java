@@ -1,11 +1,9 @@
 package main;
 
-import util.file.FileIO;
 import util.file.Folder;
 
 import javax.swing.JOptionPane;
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
 
 public final class Global {
 
@@ -16,7 +14,7 @@ public final class Global {
     public static final Dimension GAME_SIZE = new Dimension(800, 600);
 
     // Cute little Bulby icon
-    public static final BufferedImage FRAME_ICON = FileIO.readImage(Folder.POKEMON_TILES + "001.png");
+    public static final String FRAME_ICON = Folder.POKEMON_TILES + "001.png";
 
     // Frame rate the game runs at
     public static final int FRAME_RATE = 30;

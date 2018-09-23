@@ -17,6 +17,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,9 +28,10 @@ import java.util.stream.Collectors;
 
 public class FileIO {
     public static final String FILE_SLASH = File.separator;
+    public static String PATH = "";
 
     public static void deleteFile(String fileName) {
-        deleteFile(new File(fileName));
+        deleteFile(FileIO.newFile(fileName));
     }
 
     public static void deleteFile(File file) {
@@ -43,7 +45,7 @@ public class FileIO {
     }
 
     public static void createFile(final String filePath) {
-        final File file = new File(filePath);
+        final File file = FileIO.newFile(filePath);
         if (!file.exists()) {
             try {
                 if (!file.createNewFile()) {
@@ -57,7 +59,7 @@ public class FileIO {
 
     // Creates a folder with the specified path if it does not already exist
     public static void createFolder(final String folderPath) {
-        final File folder = new File(folderPath);
+        final File folder = FileIO.newFile(folderPath);
         if (!folder.exists()) {
             if (!folder.mkdir()) {
                 Global.error("Unable to create folder with path " + folderPath);
@@ -70,7 +72,7 @@ public class FileIO {
             fileName += ".png";
         }
 
-        writeImage(image, new File(fileName));
+        writeImage(image, FileIO.newFile(fileName));
     }
 
     public static void writeImage(BufferedImage image, File file) {
@@ -86,13 +88,13 @@ public class FileIO {
             fileName += ".png";
         }
 
-        File file = new File(fileName);
+        File file = FileIO.newFile(fileName);
         return readImage(file);
     }
 
     public static BufferedImage readImage(File file) {
         if (!file.exists()) {
-            Global.error("File does not exist: " + file.getPath());
+            Global.error("File does not exist: " + file.getAbsolutePath());
         }
 
         BufferedImage image = null;
@@ -110,7 +112,7 @@ public class FileIO {
     }
 
     public static File getImageFile(int num, boolean form, String suffix, String folderPath) {
-        return new File(folderPath + String.format("%03d", num) + (form ? "b" : "") + suffix + ".png");
+        return FileIO.newFile(folderPath + String.format("%03d", num) + (form ? "b" : "") + suffix + ".png");
     }
 
     public static String makeFolderPath(String... path) {
@@ -128,7 +130,7 @@ public class FileIO {
 
     // Reads the whole file ignoring commented lines starting with # when ignoreComments is true
     public static String readEntireFileWithReplacements(String fileName, boolean ignoreComments) {
-        return readEntireFileWithReplacements(new File(fileName), ignoreComments);
+        return readEntireFileWithReplacements(FileIO.newFile(fileName), ignoreComments);
     }
 
     // Reads the whole file ignoring commented lines starting with # when ignoreComments is true
@@ -137,17 +139,9 @@ public class FileIO {
         return SpecialCharacter.restoreSpecialFromUnicode(fileText);
     }
 
-    public static String readEntireFileWithoutReplacements(final String fileName, final boolean ignoreComments) {
-        return readEntireFileWithoutReplacements(new File(fileName), ignoreComments);
-    }
-
     // TODO: I think there might be a bug in this that is eliminating white space or new lines or something -- probably because of the line.length() > 0
     public static String readEntireFileWithoutReplacements(File file, boolean ignoreComments) {
         BufferedReader in = openFileBuffered(file);
-        if (in == null) {
-            Global.error("Could not open file " + file.getName());
-            return null;
-        }
 
         StringAppender build = new StringAppender();
         try {
@@ -169,7 +163,7 @@ public class FileIO {
     }
 
     public static String readEntireFile(String fileName) {
-        return readEntireFile(new File(fileName));
+        return readEntireFile(FileIO.newFile(fileName));
     }
 
     public static String readEntireFile(File file) {
@@ -186,17 +180,25 @@ public class FileIO {
         return out.toString();
     }
 
+    public static File newFile(String fileName) {
+        if (!fileName.startsWith("/")) {
+            fileName = PATH + fileName;
+        }
+
+        return new File(fileName);
+    }
+
     public static BufferedReader openFileBuffered(File file) {
         try {
             return new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
             Global.error(file.getAbsolutePath() + " not found!");
-            return null;
+            return new BufferedReader(new StringReader(""));
         }
     }
 
     public static Scanner openFile(String fileName) {
-        return openFile(new File(fileName));
+        return openFile(FileIO.newFile(fileName));
     }
 
     public static Scanner openFile(File file) {
@@ -209,7 +211,7 @@ public class FileIO {
     }
 
     public static boolean overwriteFile(final String fileName, String newFile) {
-        return overwriteFile(new File(fileName), newFile);
+        return overwriteFile(FileIO.newFile(fileName), newFile);
     }
 
     // Overwrites the given file name with the content of out only if there is a difference
@@ -228,7 +230,7 @@ public class FileIO {
     }
 
     public static void writeToFile(String fileName, String out) {
-        writeToFile(new File(fileName), out);
+        writeToFile(FileIO.newFile(fileName), out);
     }
 
     public static void writeToFile(File file, String out) {
@@ -251,7 +253,7 @@ public class FileIO {
     }
 
     public static JFileChooser getImageFileChooser(final String folderPath) {
-        final File folder = new File(folderPath);
+        final File folder = FileIO.newFile(folderPath);
         JFileChooser fileChooser = new JFileChooser(folder);
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setMultiSelectionEnabled(true);

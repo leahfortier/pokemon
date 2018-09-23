@@ -9,6 +9,7 @@ import pokemon.species.PokemonInfo;
 import util.FontMetrics;
 import util.RandomUtils;
 import util.TimeUtils;
+import util.file.FileIO;
 import util.string.PokeString;
 
 import javax.swing.JFrame;
@@ -21,6 +22,7 @@ import java.awt.Taskbar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 public class GameFrame {
     private static final boolean DEV_MODE = true;
@@ -36,8 +38,10 @@ public class GameFrame {
         frame.getContentPane().add(gui);
 
         frame.setTitle(Global.TITLE);
-        frame.setIconImage(Global.FRAME_ICON);
-        Taskbar.getTaskbar().setIconImage(Global.FRAME_ICON);
+
+        BufferedImage frameIcon = FileIO.readImage(Global.FRAME_ICON);
+        frame.setIconImage(frameIcon);
+        Taskbar.getTaskbar().setIconImage(frameIcon);
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);

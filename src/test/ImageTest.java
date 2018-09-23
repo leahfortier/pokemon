@@ -108,7 +108,7 @@ public class ImageTest extends BaseTest {
             imageName += ".png";
         }
 
-        checkExists(new File(folderPath + imageName));
+        checkExists(FileIO.newFile(folderPath + imageName));
     }
 
     private void checkExists(File imageFile) {

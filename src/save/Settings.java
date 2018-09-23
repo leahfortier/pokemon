@@ -40,7 +40,7 @@ public class Settings implements Serializable {
 
         FileIO.createFolder(Folder.SAVES);
 
-        File file = new File(FileName.SAVE_SETTINGS);
+        File file = FileIO.newFile(FileName.SAVE_SETTINGS);
         if (file.exists()) {
             settings = Serializable.fromFile(file, Settings.class);
         } else {

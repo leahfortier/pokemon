@@ -263,7 +263,7 @@ public class DevConsole {
     }
 
     public static void giveFlyLocations(Player player) {
-        File mapsDirectory = new File(Folder.MAPS);
+        File mapsDirectory = FileIO.newFile(Folder.MAPS);
         for (File mapFolder : FileIO.listSubdirectories(mapsDirectory)) {
             TestMap map = new TestMap(mapFolder);
             for (AreaData area : map.getAreas()) {

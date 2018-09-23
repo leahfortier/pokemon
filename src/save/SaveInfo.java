@@ -1,6 +1,7 @@
 package save;
 
 import trainer.player.Player;
+import util.file.FileIO;
 import util.serialization.Serializable;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class SaveInfo {
     public static SaveInfo[] updateSaveData() {
         SaveInfo[] saveInfo = new SaveInfo[Save.NUM_SAVES];
         for (int i = 0; i < Save.NUM_SAVES; i++) {
-            File file = new File(Save.getSavePath(i));
+            File file = FileIO.newFile(Save.getSavePath(i));
             if (file.exists()) {
                 saveInfo[i] = new SaveInfo(file);
             }

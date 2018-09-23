@@ -85,7 +85,7 @@ public class TileModel extends MapMakerModel {
     }
 
     private Map<Integer, BufferedImage> loadTiles(TileType tileType, MapMaker mapMaker) {
-        File indexFile = new File(mapMaker.getPathWithRoot(tileType.indexFileName));
+        File indexFile = FileIO.newFile(mapMaker.getPathWithRoot(tileType.indexFileName));
         final Map<Integer, BufferedImage> tileMap = this.tileMap.get(tileType);
         tileMap.clear();
 
@@ -109,7 +109,7 @@ public class TileModel extends MapMakerModel {
                     tileCategory = TileCategory.valueOf(in.next());
                 }
 
-                File imageFile = new File(tileType.tileFolderPath + name + ".png");
+                File imageFile = FileIO.newFile(tileType.tileFolderPath + name + ".png");
                 if (!imageFile.exists()) {
 //                    System.err.println("Could not find image " + imageFile.getName());
                     continue;

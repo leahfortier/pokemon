@@ -63,7 +63,7 @@ public class MapTest extends BaseTest {
         addedGlobals = new HashSet<>();
         npcTriggerNames = new HashMap<>();
 
-        File mapsDirectory = new File(Folder.MAPS);
+        File mapsDirectory = FileIO.newFile(Folder.MAPS);
         for (File mapFolder : FileIO.listSubdirectories(mapsDirectory)) {
             TestMap map = new TestMap(mapFolder);
             maps.add(map);

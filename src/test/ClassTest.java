@@ -99,6 +99,7 @@ import trainer.Trainer;
 import trainer.WildPokemon;
 import type.Type;
 import util.GeneralUtils;
+import util.file.FileIO;
 import util.serialization.Serializable;
 
 import java.io.File;
@@ -403,7 +404,7 @@ public class ClassTest extends BaseTest {
         List<File> dirs = new ArrayList<>();
         while (resources.hasMoreElements()) {
             URL resource = resources.nextElement();
-            dirs.add(new File(resource.getFile()));
+            dirs.add(FileIO.newFile(resource.getFile()));
         }
 
         List<Class<?>> classes = new ArrayList<>();

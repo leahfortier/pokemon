@@ -304,7 +304,7 @@ public class UpdateGen {
             BufferedImage image = FileIO.readImage(imageFile);
             BufferedImage trimmed = ImageUtils.trimImage(image);
 
-            File file = new File(outputLocation + imageFile.getName());
+            File file = FileIO.newFile(outputLocation + imageFile.getName());
             FileIO.writeImage(trimmed, file);
 
             System.out.println("Writing trimmed image to " + file.getPath());

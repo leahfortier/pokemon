@@ -57,7 +57,7 @@ public class GameData {
         conditions = ConditionsMatcher.getConditions();
 
         maps = new HashMap<>();
-        File mapsDirectory = new File(Folder.MAPS);
+        File mapsDirectory = FileIO.newFile(Folder.MAPS);
         for (File mapFolder : FileIO.listSubdirectories(mapsDirectory)) {
             MapData mapData = new MapData(mapFolder);
             maps.put(mapData.getName(), mapData);

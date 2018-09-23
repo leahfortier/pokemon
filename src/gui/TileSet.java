@@ -36,7 +36,7 @@ public class TileSet {
 
     public BufferedImage getTile(String imageName) {
         if (!map.containsKey(imageName)) {
-            File file = new File(this.folderPath + imageName + ".png");
+            File file = FileIO.newFile(this.folderPath + imageName + ".png");
             try {
                 BufferedImage image = ImageUtils.read(file, scale);
                 map.put(imageName, image);

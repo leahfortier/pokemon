@@ -117,7 +117,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         this.add(this.createToolList(), BorderLayout.EAST);
         this.add(this.canvas, BorderLayout.CENTER);
 
-        this.setRoot(new File("."));
+        this.setRoot(FileIO.newFile("."));
     }
 
     private JScrollPane createToolList() {
@@ -370,7 +370,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     }
 
     public String[] getAvailableRegions() {
-        File mapsFolder = new File(getPathWithRoot(Folder.MAPS));
+        File mapsFolder = FileIO.newFile(getPathWithRoot(Folder.MAPS));
         return FileIO.listDirectories(mapsFolder)
                      .stream()
                      .map(File::getName)
@@ -378,7 +378,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     }
 
     public MapName[] getAvailableMaps(String region) {
-        File regionFolder = new File(FileIO.makeFolderPath(Folder.MAPS, region));
+        File regionFolder = FileIO.newFile(FileIO.makeFolderPath(Folder.MAPS, region));
         return FileIO.listDirectories(regionFolder)
                      .stream()
                      .map(file -> new MapName(region, file.getName()))
