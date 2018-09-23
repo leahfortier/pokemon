@@ -210,18 +210,30 @@ public class FileIO {
         }
     }
 
-    public static boolean overwriteFile(final String fileName, String newFile) {
-        return overwriteFile(FileIO.newFile(fileName), newFile);
+    // Returns null if the file does not need to be overwritten and the new contents if it does
+    // Replaces tabs with 4 spaces and trims for new contents
+    public static String getOverwriteContents(final File overwriteFile, String newFileContents) {
+        newFileContents = newFileContents.replaceAll("\t", StringUtils.repeat(" ", 4)).trim();
+
+        final String previousFile = readEntireFile(overwriteFile);
+        if (StringUtils.isNullOrEmpty(previousFile) || !newFileContents.equals(previousFile)) {
+            return newFileContents;
+        }
+
+        return null;
+    }
+
+    public static boolean overwriteFile(final String fileName, String newFileContents) {
+        return overwriteFile(FileIO.newFile(fileName), newFileContents);
     }
 
     // Overwrites the given file name with the content of out only if there is a difference
-    public static boolean overwriteFile(final File file, String newFile) {
+    public static boolean overwriteFile(final File file, String newFileContents) {
         // Replace tabs with 4 spaces and trim
-        newFile = newFile.replaceAll("\t", StringUtils.repeat(" ", 4)).trim();
+        newFileContents = getOverwriteContents(file, newFileContents);
 
-        final String previousFile = readEntireFile(file);
-        if (StringUtils.isNullOrEmpty(previousFile) || !newFile.equals(previousFile)) {
-            writeToFile(file, newFile);
+        if (!StringUtils.isNullOrEmpty(newFileContents)) {
+            writeToFile(file, newFileContents);
             System.out.println(file.getPath() + " overwritten.");
             return true;
         }

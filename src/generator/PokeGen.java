@@ -107,7 +107,11 @@ public class PokeGen {
 
         out.append("}");
 
-        FileIO.overwriteFile(this.currentGen.getOutputPath(), out.toString());
+        this.writeGen(this.currentGen.getOutputPath(), out.toString());
+    }
+
+    protected void writeGen(String fileName, String contents) {
+        FileIO.overwriteFile(fileName, contents);
     }
 
     private String getAdditionalMethods(ClassFields fields, List<String> interfaces) {

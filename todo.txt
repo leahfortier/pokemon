@@ -204,5 +204,4 @@ Other random things:
     does using a berry (not hold item) not count as berry consumption??
     failure things for effects should be rewritten (canHave passed in constructor, override for fail abilities or change to be on the ability having figured it all out yet)
     probably have something to automatically remove previous effect if there can only be one (ChangeAbility etc)
-    stuffgen test shouldn't actually overwrite
     
