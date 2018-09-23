@@ -89,4 +89,13 @@ public interface MultiTurnMove extends AttackInterface, ForceMoveEffect {
             return user.getName() + " must recharge!";
         }
     }
+
+    interface SemiInvulnerableMove extends ChargingMove {
+        boolean isOverground();
+
+        @Override
+        default boolean semiInvulnerability() {
+            return true;
+        }
+    }
 }

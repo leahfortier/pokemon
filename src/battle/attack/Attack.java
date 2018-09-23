@@ -3,6 +3,7 @@ package battle.attack;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.DoubleMinimizerMove;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.EffectInterfaces.PowderMove;
@@ -36,6 +37,7 @@ import battle.effect.attack.FixedDamageMove;
 import battle.effect.attack.MultiStrikeMove;
 import battle.effect.attack.MultiTurnMove.ChargingMove;
 import battle.effect.attack.MultiTurnMove.RechargingMove;
+import battle.effect.attack.MultiTurnMove.SemiInvulnerableMove;
 import battle.effect.attack.OhkoMove;
 import battle.effect.attack.PowerCountMove;
 import battle.effect.attack.RecoilMove;
@@ -79,7 +81,6 @@ import type.Type;
 import type.TypeAdvantage;
 import util.GeneralUtils;
 import util.RandomUtils;
-import util.serialization.Serializable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -815,11 +816,6 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public String getChargeMessage(ActivePokemon user) {
-            return user.getName() + " began taking in sunlight!";
-        }
-
-        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             switch (b.getWeather().namesies()) {
                 case HAILING:
@@ -835,6 +831,11 @@ public abstract class Attack implements AttackInterface {
         public boolean requiresCharge(Battle b) {
             // Does not need to charge during harsh sunlight
             return b.getWeather().namesies() != WeatherNamesies.SUNNY;
+        }
+
+        @Override
+        public String getChargeMessage(ActivePokemon user) {
+            return user.getName() + " began taking in sunlight!";
         }
 
         @Override
@@ -868,11 +869,6 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public String getChargeMessage(ActivePokemon user) {
-            return user.getName() + " began taking in sunlight!";
-        }
-
-        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             switch (b.getWeather().namesies()) {
                 case HAILING:
@@ -888,6 +884,11 @@ public abstract class Attack implements AttackInterface {
         public boolean requiresCharge(Battle b) {
             // Does not need to charge during harsh sunlight
             return b.getWeather().namesies() != WeatherNamesies.SUNNY;
+        }
+
+        @Override
+        public String getChargeMessage(ActivePokemon user) {
+            return user.getName() + " began taking in sunlight!";
         }
 
         @Override
@@ -918,7 +919,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Fly extends Attack implements ChargingMove {
+    static class Fly extends Attack implements SemiInvulnerableMove {
         private static final long serialVersionUID = 1L;
 
         private boolean isCharging;
@@ -934,13 +935,13 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public String getChargeMessage(ActivePokemon user) {
-            return user.getName() + " flew up high!";
+        public boolean isOverground() {
+            return true;
         }
 
         @Override
-        public boolean semiInvulnerability() {
-            return true;
+        public String getChargeMessage(ActivePokemon user) {
+            return user.getName() + " flew up high!";
         }
 
         @Override
@@ -1308,13 +1309,13 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public String getChargeMessage(ActivePokemon user) {
-            return user.getName() + " lowered its head!";
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+            return this.isCharging();
         }
 
         @Override
-        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
-            return this.isCharging();
+        public String getChargeMessage(ActivePokemon user) {
+            return user.getName() + " lowered its head!";
         }
 
         @Override
@@ -2946,7 +2947,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class BodySlam extends Attack implements BasicAccuracyBypassEffect, PowerChangeEffect {
+    static class BodySlam extends Attack implements DoubleMinimizerMove {
         private static final long serialVersionUID = 1L;
 
         BodySlam() {
@@ -2956,16 +2957,6 @@ public abstract class Attack implements AttackInterface {
             super.effectChance = 30;
             super.status = StatusNamesies.PARALYZED;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-        }
-
-        @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            return defending.hasEffect(PokemonEffectNamesies.USED_MINIMIZE);
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.hasEffect(PokemonEffectNamesies.USED_MINIMIZE) ? 2 : 1;
         }
     }
 
@@ -3769,7 +3760,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Dig extends Attack implements ChargingMove {
+    static class Dig extends Attack implements SemiInvulnerableMove {
         private static final long serialVersionUID = 1L;
 
         private boolean isCharging;
@@ -3784,13 +3775,13 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public String getChargeMessage(ActivePokemon user) {
-            return user.getName() + " went underground!";
+        public boolean isOverground() {
+            return false;
         }
 
         @Override
-        public boolean semiInvulnerability() {
-            return true;
+        public String getChargeMessage(ActivePokemon user) {
+            return user.getName() + " went underground!";
         }
 
         @Override
@@ -4719,7 +4710,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Steamroller extends Attack implements BasicAccuracyBypassEffect, PowerChangeEffect {
+    static class Steamroller extends Attack implements DoubleMinimizerMove {
         private static final long serialVersionUID = 1L;
 
         Steamroller() {
@@ -4730,19 +4721,9 @@ public abstract class Attack implements AttackInterface {
             super.effectChance = 30;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
-
-        @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            return defending.hasEffect(PokemonEffectNamesies.USED_MINIMIZE);
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.hasEffect(PokemonEffectNamesies.USED_MINIMIZE) ? 2 : 1;
-        }
     }
 
-    static class HeavySlam extends Attack {
+    static class HeavySlam extends Attack implements DoubleMinimizerMove {
         private static final long serialVersionUID = 1L;
 
         HeavySlam() {
@@ -4768,7 +4749,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Stomp extends Attack implements BasicAccuracyBypassEffect, PowerChangeEffect {
+    static class Stomp extends Attack implements DoubleMinimizerMove {
         private static final long serialVersionUID = 1L;
 
         Stomp() {
@@ -4778,16 +4759,6 @@ public abstract class Attack implements AttackInterface {
             super.effect = PokemonEffectNamesies.FLINCH;
             super.effectChance = 30;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-        }
-
-        @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            return defending.hasEffect(PokemonEffectNamesies.USED_MINIMIZE);
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.hasEffect(PokemonEffectNamesies.USED_MINIMIZE) ? 2 : 1;
         }
     }
 
@@ -4804,7 +4775,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Bounce extends Attack implements ChargingMove {
+    static class Bounce extends Attack implements SemiInvulnerableMove {
         private static final long serialVersionUID = 1L;
 
         private boolean isCharging;
@@ -4822,7 +4793,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public boolean semiInvulnerability() {
+        public boolean isOverground() {
             return true;
         }
 
@@ -5139,7 +5110,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Dive extends Attack implements ChargingMove {
+    static class Dive extends Attack implements SemiInvulnerableMove {
         private static final long serialVersionUID = 1L;
 
         private boolean isCharging;
@@ -5154,8 +5125,8 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public boolean semiInvulnerability() {
-            return true;
+        public boolean isOverground() {
+            return false;
         }
 
         @Override
@@ -7070,7 +7041,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class DragonRush extends Attack implements BasicAccuracyBypassEffect, PowerChangeEffect {
+    static class DragonRush extends Attack implements DoubleMinimizerMove {
         private static final long serialVersionUID = 1L;
 
         DragonRush() {
@@ -7080,16 +7051,6 @@ public abstract class Attack implements AttackInterface {
             super.effect = PokemonEffectNamesies.FLINCH;
             super.effectChance = 20;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-        }
-
-        @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            return defending.hasEffect(PokemonEffectNamesies.USED_MINIMIZE);
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.hasEffect(PokemonEffectNamesies.USED_MINIMIZE) ? 2 : 1;
         }
     }
 
@@ -8232,7 +8193,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class ShadowForce extends Attack implements ChargingMove {
+    static class ShadowForce extends Attack implements SemiInvulnerableMove {
         private static final long serialVersionUID = 1L;
 
         private boolean isCharging;
@@ -8248,8 +8209,8 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public boolean semiInvulnerability() {
-            return true;
+        public boolean isOverground() {
+            return false;
         }
 
         @Override
@@ -8379,7 +8340,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class HeatCrash extends Attack {
+    static class HeatCrash extends Attack implements DoubleMinimizerMove {
         private static final long serialVersionUID = 1L;
 
         HeatCrash() {
@@ -9774,7 +9735,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class PhantomForce extends Attack implements ChargingMove {
+    static class PhantomForce extends Attack implements SemiInvulnerableMove {
         private static final long serialVersionUID = 1L;
 
         private boolean isCharging;
@@ -9791,13 +9752,13 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public String getChargeMessage(ActivePokemon user) {
-            return user.getName() + " vanished suddenly!";
+        public boolean isOverground() {
+            return false;
         }
 
         @Override
-        public boolean semiInvulnerability() {
-            return true;
+        public String getChargeMessage(ActivePokemon user) {
+            return user.getName() + " vanished suddenly!";
         }
 
         @Override
@@ -9992,7 +9953,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class FlyingPress extends Attack implements AdvantageMultiplierMove {
+    static class FlyingPress extends Attack implements AdvantageMultiplierMove, DoubleMinimizerMove {
         private static final long serialVersionUID = 1L;
 
         FlyingPress() {

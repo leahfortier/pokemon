@@ -567,6 +567,11 @@ public final class InvokeInterfaces {
         boolean block(WeatherNamesies weather);
 
         static boolean checkBlocked(Battle b, ActivePokemon p, WeatherNamesies weather) {
+            // Non-overground Pokemon are immune to weather effects
+            if (p.isSemiInvulnerableNotOverground()) {
+                return true;
+            }
+
             List<InvokeEffect> invokees = b.getEffectsList(p);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof WeatherBlockerEffect && InvokeEffect.isActiveEffect(invokee)) {

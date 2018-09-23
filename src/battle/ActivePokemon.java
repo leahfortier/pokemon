@@ -25,6 +25,7 @@ import battle.effect.InvokeInterfaces.OpponentTrappingEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.attack.MultiTurnMove;
+import battle.effect.attack.MultiTurnMove.SemiInvulnerableMove;
 import battle.effect.holder.AbilityHolder;
 import battle.effect.holder.ItemHolder;
 import battle.effect.pokemon.PokemonEffect;
@@ -420,6 +421,23 @@ public class ActivePokemon extends PartyPokemon {
 
     public boolean isSemiInvulnerableDigging() {
         return isSemiInvulnerable() && getAttack().namesies() == AttackNamesies.DIG;
+    }
+
+    // Returns true if the Pokemon is semi-invulnerable and not above ground (digging, diving, phantom forcing, etc.)
+    // Returns false if semi-invulnerable flying (or something similar) or if not semi-invulnerable at all
+    public boolean isSemiInvulnerableNotOverground() {
+        if (!isSemiInvulnerable()) {
+            return false;
+        }
+
+        final Attack attack = this.getAttack();
+        if (attack instanceof SemiInvulnerableMove) {
+            SemiInvulnerableMove semiInvulnerableMove = (SemiInvulnerableMove)attack;
+            return !semiInvulnerableMove.isOverground();
+        }
+
+        Global.error("isSemiInvulnerable() is true, but attack (" + attack.getName() + ") is not a SemiInvulnerableMove.");
+        return false;
     }
 
     public PokeType getDisplayType(Battle b) {

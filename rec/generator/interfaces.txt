@@ -346,6 +346,12 @@ WeatherBlockerEffect:
         InvokeName: checkBlocked
         InvokeParameters: Battle b, ActivePokemon p
         EffectList: p
+        Begin:
+            // Non-overground Pokemon are immune to weather effects
+            if (p.isSemiInvulnerableNotOverground()) {
+                return true;
+            }
+            ###
     *
 ***
 TrappingEffect:

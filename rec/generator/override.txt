@@ -160,13 +160,16 @@ RawSelfHealing:
     AddMapField: SelfTarget: True
     AddMapField: MoveType: Healing
 *
-ChargingMove:
-    AddInterface: ChargingMove
+ChargingMoveNoInterface:
     AddMapField: MultiTurn: True
     Header: String getChargeMessage(ActivePokemon user)
     Body:
         return {0};
         ###
+*
+ChargingMove:
+    AddInterface: ChargingMove
+    AddMapField: ChargingMoveNoInterface: {0}
 *
 RechargingMove:
     AddInterface: RechargingMove
@@ -202,9 +205,11 @@ SwitchReady:
         ###
 *
 SemiInv:
-    Header: boolean semiInvulnerability()
+    AddMapField: ChargingMoveNoInterface: {2-}
+    AddInterface: SemiInvulnerableMove
+    Header: boolean isOverground()
     Body:
-        return {0};
+        return {1};
         ###
 *
 RequiresCharge:
@@ -467,12 +472,6 @@ SpecificAbilityChange:
     AddMapField: AbilityMessage:
         return victim.getName() + "'s ability was changed to " + AbilityNamesies.{00}.getName() + "!";
         ###
-*
-HitMinimize:
-    AddMapField: BasicBypassAccuracy:
-        return defending.hasEffect(PokemonEffectNamesies.USED_MINIMIZE);
-        ###
-    AddMapField: PowerMultiplierCondition: 2 victim.hasEffect(PokemonEffectNamesies.USED_MINIMIZE)
 *
 SemiInvulnerableBypass:
     AddInterface: SemiInvulnerableBypasser

@@ -318,8 +318,7 @@ Fly:
     Type: Flying
     Cat: Physical
     MoveType: Airborne
-    ChargingMove: user.getName() + " flew up high!"
-    SemiInv: true
+    SemiInv: true user.getName() + " flew up high!"
 *
 Fire Spin:
     Desc: The target becomes trapped within a fierce vortex of fire that rages for four to five turns.
@@ -1526,7 +1525,7 @@ Body Slam:
     Type: Normal
     Status: Paralyzed
     EffChance: 30
-    HitMinimize: True
+    Int: DoubleMinimizerMove
 *
 Earth Power:
     Desc: The user makes the ground under the target erupt with power. This may also lower the target's Sp. Def stat.
@@ -2044,8 +2043,7 @@ Dig:
     Cat: Physical
     Acc: 100
     Pow: 80
-    ChargingMove: user.getName() + " went underground!"
-    SemiInv: true
+    SemiInv: false user.getName() + " went underground!"
 *
 Earthquake:
     Desc: The user sets off an earthquake that strikes every Pok\u00e9mon around it.
@@ -2644,7 +2642,7 @@ Steamroller:
     Pow: 65
     PokemonEffect: Flinch
     EffChance: 30
-    HitMinimize: True
+    Int: DoubleMinimizerMove
 *
 Heavy Slam:
     Desc: The user slams into the target with its heavy body. The more the user outweighs the target, the greater the move's power.
@@ -2653,6 +2651,7 @@ Heavy Slam:
     Cat: Physical
     Acc: 100
     WeightRatio: o me
+    Int: DoubleMinimizerMove
 *
 Stomp:
     Desc: The target is stomped with a big foot. This may also make the target flinch.
@@ -2663,7 +2662,7 @@ Stomp:
     Type: Normal
     PokemonEffect: Flinch
     EffChance: 30
-    HitMinimize: True
+    Int: DoubleMinimizerMove
 *
 Flame Charge:
     Desc: Cloaking itself in flame, the user attacks. Then, building up more power, the user raises its Speed stat.
@@ -2677,8 +2676,7 @@ Flame Charge:
 *
 Bounce:
     Desc: The user bounces up high, then drops on the target on the second turn. This may also leave the target with paralysis.
-    SemiInv: true
-    ChargingMove: user.getName() + " sprang up!"
+    SemiInv: true user.getName() + " sprang up!"
     Type: Flying
     Cat: Physical
     PP: 5
@@ -2897,8 +2895,7 @@ Dive:
     Cat: Physical
     Acc: 100
     Type: Water
-    SemiInv: true
-    ChargingMove: user.getName() + " hid underwater!"
+    SemiInv: false user.getName() + " hid underwater!"
 *
 Ice Beam:
     Desc: The target is struck with an icy-cold beam of energy. This may also leave the target frozen.
@@ -4090,7 +4087,7 @@ Dragon Rush:
     Cat: Physical
     PokemonEffect: Flinch
     EffChance: 20
-    HitMinimize: True
+    Int: DoubleMinimizerMove
 *
 Aura Sphere:
     Desc: The user lets loose a blast of aura power from deep within its body at the target. This attack never misses.
@@ -4832,8 +4829,7 @@ Shadow Force:
     Cat: Physical
     Acc: 100
     Pow: 120
-    SemiInv: true
-    ChargingMove: user.getName() + " disappeared!"
+    SemiInv: false user.getName() + " disappeared!"
     MoveType: Protect_Piercing
 *
 Heart Swap:
@@ -4919,6 +4915,7 @@ Heat Crash:
     Acc: 100
     Type: Fire
     WeightRatio: o me
+    Int: DoubleMinimizerMove
 *
 Grass Knot:
     Desc: The user snares the target with grass and trips it. The heavier the target, the greater the move's power.
@@ -5723,8 +5720,7 @@ Phantom Force:
     PP: 10
     Acc: 100
     MoveType: Protect_Piercing, Assistless
-    ChargingMove: user.getName() + " vanished suddenly!"
-    SemiInv: true
+    SemiInv: false user.getName() + " vanished suddenly!"
 *
 Oblivion Wing:
     Desc: The user absorbs its target's HP. The user's HP is restored by over half of the damage taken by the target.
@@ -5835,7 +5831,7 @@ Flying Press:
     Type: Fighting
     PP: 10
     Cat: Physical
-    Int: AdvantageMultiplierMove
+    Int: AdvantageMultiplierMove, DoubleMinimizerMove
     MultiplyAdvantage:
         return TypeAdvantage.FLYING.getAdvantage(defendingTypes);
         ###

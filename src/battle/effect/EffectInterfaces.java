@@ -7,11 +7,13 @@ import battle.attack.AttackInterface;
 import battle.attack.MoveType;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
+import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
 import battle.effect.InvokeInterfaces.CrashDamageMove;
 import battle.effect.InvokeInterfaces.EffectExtendingEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
+import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.RepellingEffect;
 import battle.effect.InvokeInterfaces.SelfAttackBlocker;
@@ -336,6 +338,18 @@ public final class EffectInterfaces {
             if (p.hasStatus(this.getStatus())) {
                 p.removeStatus(b, CastSource.ABILITY);
             }
+        }
+    }
+
+    public interface DoubleMinimizerMove extends AttackInterface, BasicAccuracyBypassEffect, PowerChangeEffect {
+        @Override
+        default boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            return defending.hasEffect(PokemonEffectNamesies.USED_MINIMIZE);
+        }
+
+        @Override
+        default double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.hasEffect(PokemonEffectNamesies.USED_MINIMIZE) ? 2 : 1;
         }
     }
 }

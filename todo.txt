@@ -190,7 +190,6 @@ Other random things:
     can selfconfusion remove itself inside totalandcompletefailure?
     Message for Trick looks terrible when one of the Pokemon isn't holding anything (switched with Bulbasaur's No Item!)
     uproar specifically checks if pp runs out to remove effect -- should that be for other similar moves too?
-    should light clay/grip claw be effectreceivedeffects?
     remove effect inside subside -- then we can use it in more places
     substitute almost certainly doesn't work with form change abilities for images at least
     test life orb (with multi-strike among other things)
@@ -198,7 +197,6 @@ Other random things:
     look at fling message update for white herb -- I don't think it will update the stats
     make Marcos fix the substitute failure messaging problems I don't wanna do it
     does safeguard prevent confusion?
-    underground pokemon should not take damage from hail/sandstorm
     test moongeist beam and shadow shield (combos like that)
     apparently soak fails against arceus (I'm sure it's that multitype prevents having its type changed)
     does using a berry (not hold item) not count as berry consumption??
