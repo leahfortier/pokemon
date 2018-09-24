@@ -198,7 +198,6 @@ Other random things:
     make Marcos fix the substitute failure messaging problems I don't wanna do it
     does safeguard prevent confusion?
     test moongeist beam and shadow shield (combos like that)
-    apparently soak fails against arceus (I'm sure it's that multitype prevents having its type changed)
     does using a berry (not hold item) not count as berry consumption??
     failure things for effects should be rewritten (canHave passed in constructor, override for fail abilities or change to be on the ability having figured it all out yet)
     probably have something to automatically remove previous effect if there can only be one (ChangeAbility etc)
