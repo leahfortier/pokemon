@@ -204,9 +204,6 @@ class FormConfig:
             self.form_index = 1
             image_suffix = "-a"
 
-        # Basculin, Meowstic, Magearna (fucking Soul-Heart has a dash)
-        self.use_abilities_list = num in [550, 678, 801]
-
         if self.is_mega:
             self.mega_name = "Mega Evolution" + mega_suffix
             if base_exp_suffix is None:
@@ -230,6 +227,9 @@ class FormConfig:
             self.ev_form_name = self.form_name
         if self.type_form_name is None:
             self.type_form_name = self.form_name
+            
+        # Basculin, Meowstic, Magearna (fucking Soul-Heart has a dash)
+        self.use_abilities_list = num in [550, 678, 801]
 
     def has_form(self, row, form_index):
         # No form index implies there is only the normal form or all forms are treated the same

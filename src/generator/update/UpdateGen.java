@@ -361,7 +361,7 @@ public class UpdateGen {
     // BE VERY CAREFUL TO ONLY RUN THIS ONCE OR IT WILL FUCK UP ALL THE IMAGES
     private static void updateNum() {
         int startNum = PokemonNamesies.RIZARDON.getInfo().getNumber();
-        int newStartNum = 808;
+        int newStartNum = 810;
 
         for (int num = PokemonInfo.NUM_POKEMON; num >= startNum; num--) {
             int newNum = num + (newStartNum - startNum);
