@@ -98,6 +98,7 @@ public class StuffGen {
         set.remove(PokemonNamesies.MANAPHY);
         set.remove(PokemonNamesies.TYPE_NULL);
         set.remove(PokemonNamesies.COSMOG);
+        set.remove(PokemonNamesies.MELTAN);
 
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
             PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);

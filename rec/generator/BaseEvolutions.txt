@@ -345,7 +345,6 @@ Drampa
 Dhelmise
 Jangmo-o
 Poipole
-Meltan
 Snowshrew
 Yukikon
 Sleima
