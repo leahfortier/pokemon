@@ -11061,4 +11061,27 @@ public abstract class Attack implements AttackInterface {
             return caster.getName() + " electrified " + victim.getName() + "!";
         }
     }
+
+    static class DoubleIronBash extends Attack implements MultiStrikeMove {
+        private static final long serialVersionUID = 1L;
+
+        DoubleIronBash() {
+            super(AttackNamesies.DOUBLE_IRON_BASH, Type.STEEL, MoveCategory.PHYSICAL, 5, "The user rotates, centering the hex nut in its chest, and then strikes with its arms twice in a row. This may also make the target flinch.");
+            super.power = 60;
+            super.accuracy = 100;
+            super.effect = PokemonEffectNamesies.FLINCH;
+            super.effectChance = 30;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public int getMinHits() {
+            return 2;
+        }
+
+        @Override
+        public int getMaxHits() {
+            return 2;
+        }
+    }
 }

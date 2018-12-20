@@ -1,47 +1,46 @@
-808. Mega Charizard
+810. Mega Charizard
   - definitely LIZARDON
   - Fire/Dragon
   - Tough Claws
   - branch evolution from Charmeleon -- likely an item
   - maybe make physical, stronger, but slower?
-  - Charizard: 		78	 84	 78	109	85	100
-  - Mega Charizard: 	78	130	111	130	85	100
-  - Lizardon: 		78	119  85  84 78   90
-809. Mega Mawile
+  - Charizard:      78   84   78  109  85  100
+  - Mega Charizard: 78  130  111  130  85  100
+  - Lizardon:       78  119   85   84  78   90
+811. Mega Mawile
   - Kuchiito
   - Keep Mega stats, but don't give Huge Power ability
-810. Mega Absol
+812. Mega Absol
   - Asbel
   - Dark/Fairy :)
   - MAGIC BOUNCE!!!
   - Asbel will have Absol's stats with +20 speed
   - Decrease Absol's attack to 100
-811. Mega Sableye
+813. Mega Sableye
   - Yamirami
   - Keep as is
-812. Alolan Raichu
+814. Alolan Raichu
   - Silph Surfer
-813. Alolan Sandshrew
+815. Alolan Sandshrew
   - SNOWshrew GET IT?????
-814. Alolan Sandslash
+816. Alolan Sandslash
   - snowSLASH
-815. Alolan Vulpix
+817. Alolan Vulpix
   - YUKIKON<33333 cuuuuttteeeeeeee
-816. Alolan Ninetales
+818. Alolan Ninetales
   - Kyukon!
-817. Alolan Grimer
+819. Alolan Grimer
   - Sleima
-818. Alolan Muk
+820. Alolan Muk
   - Sleimok
-819. Alolan Exeggutor
+821. Alolan Exeggutor
   - KOKONATSU
-820. Alolan Marowak
+822. Alolan Marowak
   - GaraGara
-821: Mega Bannette
+823. Mega Bannette
   - Jupetta
   - Decrease mega attack stats
-822: Midnight Lycanroc
+824. Midnight Lycanroc
   - Lougaroc
-823: Dusk Lycanroc
+825. Dusk Lycanroc
   - Lugarugan
-

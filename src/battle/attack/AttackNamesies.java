@@ -126,6 +126,7 @@ import battle.attack.Attack.DizzyPunch;
 import battle.attack.Attack.DoomDesire;
 import battle.attack.Attack.DoubleEdge;
 import battle.attack.Attack.DoubleHit;
+import battle.attack.Attack.DoubleIronBash;
 import battle.attack.Attack.DoubleKick;
 import battle.attack.Attack.DoubleSlap;
 import battle.attack.Attack.DoubleTeam;
@@ -1317,7 +1318,8 @@ public enum AttackNamesies {
     STEAM_ERUPTION("Steam Eruption", SteamEruption::new),
     PHOTON_GEYSER("Photon Geyser", PhotonGeyser::new),
     MIND_BLOWN("Mind Blown", MindBlown::new),
-    PLASMA_FISTS("Plasma Fists", PlasmaFists::new);
+    PLASMA_FISTS("Plasma Fists", PlasmaFists::new),
+    DOUBLE_IRON_BASH("Double Iron Bash", DoubleIronBash::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

@@ -315,6 +315,8 @@ public class UpdateGen {
         for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
             resizeImage(num, "", Folder.POKEDEX_TILES, 140, 190);
             resizeImage(num, "-small", Folder.PARTY_TILES, 32, 32);
+            resizeImage(num, "", Folder.POKEMON_TILES, 96, 96);
+            resizeImage(num, "-back", Folder.POKEMON_TILES, 96, 96);
         }
     }
 
@@ -361,7 +363,7 @@ public class UpdateGen {
     // BE VERY CAREFUL TO ONLY RUN THIS ONCE OR IT WILL FUCK UP ALL THE IMAGES
     private static void updateNum() {
         int startNum = PokemonNamesies.RIZARDON.getInfo().getNumber();
-        int newStartNum = 808;
+        int newStartNum = 810;
 
         for (int num = PokemonInfo.NUM_POKEMON; num >= startNum; num--) {
             int newNum = num + (newStartNum - startNum);

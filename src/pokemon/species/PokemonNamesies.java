@@ -812,6 +812,8 @@ public enum PokemonNamesies {
     STAKATAKA("Stakataka"),
     BLACEPHALON("Blacephalon"),
     ZERAORA("Zeraora"),
+    MELTAN("Meltan"),
+    MELMETAL("Melmetal"),
     RIZARDON("Rizardon"),
     KUCHIITO("Kuchiito"),
     ASBEL("Asbel"),

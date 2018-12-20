@@ -6591,3 +6591,14 @@ Plasma Fists:
         return caster.getName() + " electrified " + victim.getName() + "!";
         ###
 *
+Double Iron Bash:
+    Desc: The user rotates, centering the hex nut in its chest, and then strikes with its arms twice in a row. This may also make the target flinch.
+    PP: 5
+    Pow: 60
+    Cat: Physical
+    Acc: 100
+    Type: Steel
+    PokemonEffect: Flinch
+    EffChance: 30
+    MultiStrike: 2 2
+*
