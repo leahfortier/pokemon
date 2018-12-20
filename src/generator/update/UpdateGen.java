@@ -315,6 +315,8 @@ public class UpdateGen {
         for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
             resizeImage(num, "", Folder.POKEDEX_TILES, 140, 190);
             resizeImage(num, "-small", Folder.PARTY_TILES, 32, 32);
+            resizeImage(num, "", Folder.POKEMON_TILES, 96, 96);
+            resizeImage(num, "-back", Folder.POKEMON_TILES, 96, 96);
         }
     }
 
