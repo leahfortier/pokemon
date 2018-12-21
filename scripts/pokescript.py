@@ -44,7 +44,7 @@ with open("../temp.txt", "w") as f:
 
     base_exp_map = get_base_exp_map()
     for num in range(1, list(AddedPokes)[-1].value + 1):
-        #    for num in [1]:
+#    for num in [1]:
         form_config = FormConfig(num)
         parser = Parser(form_config.lookup_num)
 
@@ -217,7 +217,7 @@ with open("../temp.txt", "w") as f:
 
         # Next table -- Experience Growth, Base Happiness, Effort Values Earned, S.O.S. Calling
         parser.restore_backup()
-        parser.next_table()
+        parser.get_next()
         row = parser.info_table.xpath('tr[4]')[0]
 
         growth_rate = list(row.xpath('td[1]')[0].itertext())[1]
@@ -279,12 +279,12 @@ with open("../temp.txt", "w") as f:
         print("Effort Values: " + str(evs))
 
         # Egg Group table
-        parser.next_table()
-        parser.next_table()
+        parser.get_next()
+        parser.get_next()
 
         # Gen 1 (not including Mew I guess) plus Meltan line have the Catch/Transfer Candy section
         egg_index = 2
-        if num < 151 or num in [808, 809]:
+        if form_config.lookup_num < 151 or num in [808, 809]:
             egg_index += 1
 
         egg_group = parser.info_table.xpath('tr[2]/td[' + str(egg_index) + ']')[0]
@@ -308,7 +308,7 @@ with open("../temp.txt", "w") as f:
 
         if parser.update_table('Flavor Text'):
             flavor_text = parser.info_table.xpath('tr[2]/td[2]')[0].text
-            if flavor_text == 'Sun':
+            if flavor_text in ['Sun', "Let's Go, Pikachu!"]:
                 flavor_text = parser.info_table.xpath('tr[2]/td[3]')[0].text
             if flavor_text is None:
                 # infoTable.xpath('td[3]')[0].text == 'Ultra Sun' for this case
@@ -337,11 +337,7 @@ with open("../temp.txt", "w") as f:
                                'Sun / Moon Level Up' + suffix,
                                form_config.form_name + " Form Level Up"]
 
-        # Gen 1 decided to be different with Let's Go and put all the future tables into a separate div
-        if num < 152:
-            parser.info_table = parser.main_div.xpath('div/ul/li/table')[0]
-        assert parser.update_table(*level_up_tables)
-        
+        assert parser.update_table(*level_up_tables)        
         attacks = []
         for i in range(2, len(parser.info_table) - 1, 2):
             level = parser.info_table[i][0].text

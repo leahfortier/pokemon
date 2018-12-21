@@ -62,6 +62,9 @@ class FormConfig:
         # Pokemon with Alolan forms
         if num in [19, 20, 26, 27, 28, 37, 38, 50, 51, 52, 53, 74, 75, 76, 88, 89, 103, 105]:
             self.form_name = "Normal"
+        # Castform
+        elif num == 351:
+            self.form_name = "Normal"
         # Deoxys
         elif num == 386:
             self.form_name = "Normal"
