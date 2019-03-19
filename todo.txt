@@ -146,7 +146,7 @@ Other random things:
 	TileSet getTile should use readImage in FileIO -- just check exists first
 	change the names of activepokemon for out of battle effects like repelling effect and those wild pokemon encouter changer things from attacking to just like front
 	NoSwapEffect for canSwapOpponent() -- Ingrain/Suction Cups (mold breaker)
-	Exeggutor plant gives two exeggutor?? -- got one, battled mom, got another? also got one, saved, got another
+	Exeggutor plant gives two Exeggutor?? -- got one, battled mom, got another? also got one, saved, got another
 	look at natural cure again
 	MoveUseItems do not work in battle -- causes NPE
 	Guard Spec. is doing Safeguard when it should be Mist -- same with Flower Veil
@@ -184,7 +184,6 @@ Other random things:
     in bag view, selecting a use button should look different than inactive use buttons
     change order of move list
     moves like core enforcer don't remove the effect if attack is unsuccessful
-    remove ExtraApplies field in override
     check flinch with multi turn moves -- should it always reset ready? or just for like smack down?
     write tests for effects that if you use them twice it removes the effect (Wonder Room/Power Trick)
     can selfconfusion remove itself inside totalandcompletefailure?
@@ -201,6 +200,6 @@ Other random things:
     does using a berry (not hold item) not count as berry consumption??
     failure things for effects should be rewritten (canHave passed in constructor, override for fail abilities or change to be on the ability having figured it all out yet)
     probably have something to automatically remove previous effect if there can only be one (ChangeAbility etc)
-    Meltan/Melmetal -- also includes moving up the other numbers of added pokes
     should I get different sprites for Castform and Arceus and other Pokemon like that since it's partially setup now
+    cancelling evolution still consumes evolution item
     

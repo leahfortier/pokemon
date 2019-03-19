@@ -7,6 +7,7 @@ import draw.button.Button;
 import draw.button.ButtonList;
 import input.ControlKey;
 import input.InputControl;
+import message.MessageQueue;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import pokemon.active.MoveList;
@@ -14,7 +15,6 @@ import util.Point;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayDeque;
 
 public class LearnMovePanel {
     private static final int NUM_COLS = 4;
@@ -28,7 +28,7 @@ public class LearnMovePanel {
     private final Button noButton;
     private final Button newMoveButton;
 
-    private final ArrayDeque<MessageUpdate> messages;
+    private final MessageQueue messages;
 
     private final ActivePokemon learning;
     private final Move toLearn;
@@ -53,9 +53,9 @@ public class LearnMovePanel {
         learnedMove = false;
         state = State.MESSAGE;
 
-        messages = new ArrayDeque<>();
+        messages = new MessageQueue();
         messages.add(new MessageUpdate(learning.getName() + " is trying to learn " + toLearn.getAttack().getName() + "...").withUpdate(MessageUpdateType.LEARN_MOVE));
-        messages.add(new MessageUpdate("Delete a move in order to learn " + toLearn.getAttack().getName() + "?"));
+        messages.add("Delete a move in order to learn " + toLearn.getAttack().getName() + "?");
 
         updateActiveButtons();
     }
@@ -71,7 +71,7 @@ public class LearnMovePanel {
         if (state == State.QUESTION) {
             if (noButton.checkConsumePress()) {
                 messages.pop();
-                messages.add(new MessageUpdate(learning.getActualName() + " did not learn " + toLearn.getAttack().getName() + "."));
+                messages.add(learning.getActualName() + " did not learn " + toLearn.getAttack().getName() + ".");
                 state = State.END;
                 updateActiveButtons();
             }
@@ -95,8 +95,8 @@ public class LearnMovePanel {
                         learnedMove = true;
                         learning.addMove(toLearn, moveIndex, true);
 
-                        messages.addFirst(new MessageUpdate("...and " + learnerName + " learned " + learnMoveName + "!"));
-                        messages.addFirst(new MessageUpdate(learnerName + " forgot how to use " + deleteMoveName + "..."));
+                        messages.addFirst("...and " + learnerName + " learned " + learnMoveName + "!");
+                        messages.addFirst(learnerName + " forgot how to use " + deleteMoveName + "...");
 
                         updateActiveButtons();
                     }
@@ -106,7 +106,7 @@ public class LearnMovePanel {
             if (newMoveButton.checkConsumePress()) {
                 state = State.END;
 
-                messages.addFirst(new MessageUpdate(learning.getActualName() + " did not learn " + toLearn.getAttack().getName() + "."));
+                messages.addFirst(learning.getActualName() + " did not learn " + toLearn.getAttack().getName() + ".");
                 updateActiveButtons();
             }
         } else {
@@ -144,7 +144,7 @@ public class LearnMovePanel {
     public void draw(Graphics g) {
         BasicPanels.drawFullMessagePanel(
                 g,
-                messages.isEmpty() || state == State.DELETE ? "" : messages.peek().getMessage()
+                messages.isEmptyMessage() || state == State.DELETE ? "" : messages.peek().getMessage()
         );
 
         if (state == State.QUESTION) {

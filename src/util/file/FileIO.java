@@ -27,7 +27,6 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class FileIO {
-    public static final String FILE_SLASH = File.separator;
     public static String PATH = "";
 
     public static void deleteFile(String fileName) {
@@ -120,8 +119,8 @@ public class FileIO {
         for (String folder : path) {
             folderPath.append(folder);
 
-            if (!folderPath.toString().endsWith(FileIO.FILE_SLASH)) {
-                folderPath.append(FileIO.FILE_SLASH);
+            if (!folderPath.toString().endsWith(File.separator)) {
+                folderPath.append(File.separator);
             }
         }
 

@@ -29,7 +29,7 @@ public class GameFrame {
 
     private static final JFrame frame = new JFrame();
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         frame.setVisible(true);
 
         Canvas gui = new Canvas();

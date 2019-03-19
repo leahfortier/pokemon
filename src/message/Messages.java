@@ -3,21 +3,20 @@ package message;
 import battle.Battle;
 import util.string.StringUtils;
 
-import java.util.ArrayDeque;
 import java.util.EnumMap;
 import java.util.Map;
 
 public class Messages {
-    private static final Map<MessageState, ArrayDeque<MessageUpdate>> messageMap =
-            new EnumMap<MessageState, ArrayDeque<MessageUpdate>>(MessageState.class) {{
+    private static final Map<MessageState, MessageQueue> messageMap =
+            new EnumMap<MessageState, MessageQueue>(MessageState.class) {{
                 for (MessageState messageState : MessageState.values()) {
-                    put(messageState, new ArrayDeque<>());
+                    put(messageState, new MessageQueue());
                 }
             }};
 
     private static MessageState messageState = MessageState.MAPPITY_MAP;
 
-    private static ArrayDeque<MessageUpdate> getQueue() {
+    private static MessageQueue getQueue() {
         return messageMap.get(messageState);
     }
 

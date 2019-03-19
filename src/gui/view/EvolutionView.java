@@ -12,6 +12,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
+import message.MessageQueue;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
@@ -29,7 +30,6 @@ import util.string.StringUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.ArrayDeque;
 
 class EvolutionView extends View {
     private static final int EVOLVE_ANIMATION_LIFESPAN = 3000;
@@ -48,7 +48,7 @@ class EvolutionView extends View {
     private boolean isEgg;
 
     private State state;
-    private ArrayDeque<MessageUpdate> messages;
+    private MessageQueue messages;
 
     EvolutionView() {
         this.canvasPanel = BasicPanels.newFullGamePanel()
@@ -78,7 +78,7 @@ class EvolutionView extends View {
         if (state == State.EVOLVE) {
             // Eggs can't be cancelled
             if (input.consumeIfDown(ControlKey.BACK) && !isEgg) {
-                state = State.CANCELED;
+                state = State.CANCELLED;
                 setCancelledMessage();
             }
 
@@ -86,7 +86,7 @@ class EvolutionView extends View {
                 state = State.END;
 
                 if (isEgg) {
-                    messages.add(new MessageUpdate("Your egg hatched into " + StringUtils.articleString(preEvolution.getName()) + "!"));
+                    messages.add("Your egg hatched into " + StringUtils.articleString(preEvolution.getName()) + "!");
                     Game.getPlayer().getMedalCase().hatch(evolvingPokemon);
                 } else {
                     int[] gains = evolvingPokemon.evolve(Game.getPlayer().getEvolutionInfo().getEvolution());
@@ -110,10 +110,10 @@ class EvolutionView extends View {
             }
         }
 
-        if (state == State.END || state == State.CANCELED) {
+        if (state == State.END || state == State.CANCELLED) {
             if (!messages.isEmpty()) {
                 if (input.consumeIfMouseDown(ControlKey.SPACE) || finishedLearningMove) {
-                    while (Messages.peek().learnMove()) {
+                    while (Messages.hasMessages() && Messages.peek().learnMove()) {
                         MessageUpdate message = Messages.getNextMessage();
                         messages.add(new MessageUpdate()
                                              .withUpdate(MessageUpdateType.LEARN_MOVE)
@@ -129,7 +129,7 @@ class EvolutionView extends View {
                             break;
                         }
 
-                        if (!messages.isEmpty() && !StringUtils.isNullOrWhiteSpace(messages.peek().getMessage())) {
+                        if (!messages.isEmptyMessage()) {
                             break;
                         }
                     }
@@ -143,28 +143,21 @@ class EvolutionView extends View {
     @Override
     public void draw(Graphics g) {
         final GameData data = Game.getData();
-        final boolean endState = state == State.END || state == State.LEARN_MOVE;
+        final boolean evolvedState = state == State.END || state == State.LEARN_MOVE;
 
-        if (!endState) {
-            if (isEgg) {
-                canvasPanel.withBackgroundColors(new Color[] { Type.NORMAL.getColor(), Type.NORMAL.getColor() });
-            } else {
-                canvasPanel.withBackgroundColors(PokeType.getColors(preEvolution));
-            }
-        } else {
-            if (isEgg) {
-                canvasPanel.withBackgroundColors(PokeType.getColors(preEvolution));
-            } else {
-                canvasPanel.withBackgroundColors(PokeType.getColors(evolvingPokemon));
-            }
+        // Use pre-evolution for evolved eggs and unevolved Pokemon
+        Color[] backgroundColors = PokeType.getColors(preEvolution);
+        if (evolvedState && !isEgg) {
+            backgroundColors = PokeType.getColors(evolvingPokemon);
+        } else if (!evolvedState && isEgg) {
+            // Unhatched egg -- use normal-type colors
+            backgroundColors = new PokeType(Type.NORMAL).getColors();
         }
 
+        canvasPanel.withBackgroundColors(backgroundColors);
         canvasPanel.drawBackground(g);
 
-        if (state == State.LEARN_MOVE) {
-            // TODO: Why are we drawing this twice? Can this just be a state != LEARN_MOVE?
-            this.learnMovePanel.draw(g);
-        } else if (!messages.isEmpty()) {
+        if (state != State.LEARN_MOVE && !messages.isEmpty()) {
             MessageUpdate message = messages.peek();
             BasicPanels.drawFullMessagePanel(g, message.getMessage());
             if (message.gainUpdate()) {
@@ -195,13 +188,13 @@ class EvolutionView extends View {
         BufferedImage currEvolution = pokemonTiles.getTile(preIndex);
         BufferedImage nextEvolution = pokemonTiles.getTile(postIndex);
 
-        if (endState) {
+        if (evolvedState) {
             ImageUtils.drawBottomCenteredImage(g, nextEvolution, POKEMON_DRAW_LOCATION);
         }
 
         switch (state) {
             case START:
-            case CANCELED:
+            case CANCELLED:
                 ImageUtils.drawBottomCenteredImage(g, currEvolution, POKEMON_DRAW_LOCATION);
                 break;
             case EVOLVE:
@@ -243,20 +236,20 @@ class EvolutionView extends View {
 
     private void setInitialMessage() {
         if (isEgg) {
-            messages.add(new MessageUpdate("Your egg is hatching!"));
+            messages.add("Your egg is hatching!");
         } else {
-            messages.add(new MessageUpdate("Your " + preEvolution.getName() + " is evolving!"));
+            messages.add("Your " + preEvolution.getName() + " is evolving!");
         }
     }
 
     private void setCancelledMessage() {
-        messages.add(new MessageUpdate("Whattt!?!?!??!! " + preEvolution.getName() + " stopped evolving!!!!"));
+        messages.add("Whattt!?!?!??!! " + preEvolution.getName() + " stopped evolving!!!!");
     }
 
     @Override
     public void movedToFront() {
         state = State.START;
-        messages = new ArrayDeque<>();
+        messages = new MessageQueue();
 
         EvolutionInfo evolutionInfo = Game.getPlayer().getEvolutionInfo();
 
@@ -272,7 +265,7 @@ class EvolutionView extends View {
     private enum State {
         START,
         EVOLVE,
-        CANCELED,
+        CANCELLED,
         LEARN_MOVE,
         END
     }
