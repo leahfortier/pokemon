@@ -989,4 +989,36 @@ public class AbilityTest extends BaseTest {
                         (battle, attacking, defending) -> defending.assertNoStatus()
                 );
     }
+
+    @Test
+    public void fluffyTest() {
+        fluffyTest(AttackNamesies.EMBER, 2);
+        fluffyTest(AttackNamesies.FIRE_FANG, 1);
+        fluffyTest(AttackNamesies.TACKLE, .5);
+        fluffyTest(AttackNamesies.TACKLE, 1, PokemonManipulator.giveAttackingAbility(AbilityNamesies.LONG_REACH));
+        fluffyTest(AttackNamesies.FIRE_FANG, 2, PokemonManipulator.giveAttackingAbility(AbilityNamesies.LONG_REACH));
+    }
+
+    private void fluffyTest(AttackNamesies attackNamesies, double expectedModifier) {
+        fluffyTest(attackNamesies, expectedModifier, PokemonManipulator.empty());
+    }
+
+    private void fluffyTest(AttackNamesies attackNamesies, double expectedModifier, PokemonManipulator manipulator) {
+        TestBattle battle = new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE).createBattle();
+
+        // Confirm no modifier without Fluffy
+        battle.getDefending().setAbility(AbilityNamesies.NO_ABILITY);
+        manipulator.manipulate(battle);
+        battle.setExpectedDamageModifier(1.0);
+        battle.attackingFight(attackNamesies);
+
+        battle.emptyHeal();
+        battle.clearAllEffects();
+
+        // Confirm modifier with Fluffy
+        battle.getDefending().setAbility(AbilityNamesies.FLUFFY);
+        manipulator.manipulate(battle);
+        battle.setExpectedDamageModifier(expectedModifier);
+        battle.attackingFight(attackNamesies);
+    }
 }

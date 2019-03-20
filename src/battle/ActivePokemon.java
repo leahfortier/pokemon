@@ -375,6 +375,11 @@ public class ActivePokemon extends PartyPokemon {
         return this.hasEffect(PokemonEffectNamesies.BREAKS_THE_MOLD);
     }
 
+    // Returns true if the move currently using makes physical contact
+    public boolean isMakingContact() {
+        return this.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && !this.hasAbility(AbilityNamesies.LONG_REACH);
+    }
+
     @Override
     public boolean canFight() {
         return !this.isActuallyDead();

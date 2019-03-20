@@ -1386,7 +1386,7 @@ Mega Launcher:
 *
 Tough Claws:
     Desc: Powers up moves that make direct contact.
-    PowerMultiplierCondition: 1.33 user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)
+    PowerMultiplierCondition: 1.33 user.isMakingContact()
 *
 Sweet Veil:
     Desc: Prevents itself and ally Pok\u00e9mon from falling asleep.
@@ -1665,15 +1665,14 @@ Fluffy:
     Desc: Halves the damage taken from moves that make direct contact, but doubles that of Fire-type moves.
     Int: OpponentPowerChangeEffect
     GetOppMultiplier:
-        if (user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && user.isAttackType(Type.FIRE)) {
-            return .5;
-        }
-
+        double modifier = 1;
         if (user.isAttackType(Type.FIRE)) {
-            return 2;
+            modifier *= 2;
         }
-
-        return 1;
+        if (user.isMakingContact()) {
+            modifier /= 2;
+        }
+        return modifier;
         ###
 *
 Tangling Hair:

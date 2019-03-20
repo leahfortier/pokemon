@@ -3359,7 +3359,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) ? 1.33 : 1;
+            return user.isMakingContact() ? 1.33 : 1;
         }
     }
 
@@ -4149,15 +4149,14 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && user.isAttackType(Type.FIRE)) {
-                return .5;
-            }
-
+            double modifier = 1;
             if (user.isAttackType(Type.FIRE)) {
-                return 2;
+                modifier *= 2;
             }
-
-            return 1;
+            if (user.isMakingContact()) {
+                modifier /= 2;
+            }
+            return modifier;
         }
     }
 

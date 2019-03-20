@@ -114,7 +114,7 @@ public final class EffectInterfaces {
         @Override
         default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
             // Only apply if physical contact is made
-            if (user.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && !user.hasAbility(AbilityNamesies.LONG_REACH)) {
+            if (user.isMakingContact()) {
                 this.contact(b, user, victim);
             }
         }

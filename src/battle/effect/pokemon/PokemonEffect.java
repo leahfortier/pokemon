@@ -490,7 +490,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
             // Pokemon that make contact with the king's shield have their attack reduced
-            if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
+            if (p.isMakingContact()) {
                 p.getStages().modifyStage(
                         opp, -2, Stat.ATTACK, b, CastSource.EFFECT,
                         (victimName, statName, changed) -> "The King's Shield " + changed + " " + p.getName() + "'s " + statName + "!"
@@ -519,7 +519,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
             // Pokemon that make contact with the spiky shield have their health reduced
-            if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
+            if (p.isMakingContact()) {
                 p.reduceHealthFraction(b, 1/8.0, p.getName() + " was hurt by " + opp.getName() + "'s Spiky Shield!");
             }
         }
@@ -544,8 +544,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
-            // Pokemon that make contact with the baneful bunker are become poisoned
-            if (p.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT)) {
+            // Pokemon that make contact with the baneful bunker become poisoned
+            if (p.isMakingContact()) {
                 StatusNamesies.POISONED.getStatus().apply(b, opp, p, p.getName() + " was poisoned by " + opp.getName() + "'s Baneful Bunker!");
             }
         }
