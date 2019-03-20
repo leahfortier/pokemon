@@ -2182,7 +2182,7 @@ Physical
 20
 15
 90
-A long body, vines, or the like are used to wrap and  squeeze the target for four to five turns.
+A long body, vines, or the like are used to wrap and squeeze the target for four to five turns.
 100 %
 4.17%
 0
@@ -2830,7 +2830,7 @@ Special
 10
 90
 100
-The user makes the ground under the target erupt with power. This may also lower the target's  Sp. Def stat.
+The user makes the ground under the target erupt with power. This may also lower the target's Sp. Def stat.
 10 %
 4.17%
 0
@@ -4720,7 +4720,7 @@ Physical
 35
 10
 100
-The target is attacked with long, creeping tentacles, vines, or the like. This may also lower the target's  Speed stat.
+The target is attacked with long, creeping tentacles, vines, or the like. This may also lower the target's Speed stat.
 10 %
 4.17%
 0
@@ -6142,7 +6142,7 @@ Physical
 10
 50
 90
-The user throws the bone it holds. The bone loops around to hit the target twiceâcoming and going.
+The user throws the bone it holds. The bone loops around to hit the target twice--coming and going.
 -- %
 4.17%
 0
@@ -6556,7 +6556,7 @@ Physical
 10
 120
 85
-The user violently whirls its vines, tentacles, or the  like to harshly lash the target.
+The user violently whirls its vines, tentacles, or the like to harshly lash the target.
 -- %
 4.17%
 0
@@ -7276,7 +7276,7 @@ Status
 30
 0
 0
-The user makes its edges more jagged,  which raises its Attack stat.
+The user makes its edges more jagged, which raises its Attack stat.
 -- %
 None
 0
@@ -8638,7 +8638,7 @@ No
 No
 No
 Yes
-Roar Of Time
+Roar of Time
 Dragon
 Special
 5
@@ -10120,7 +10120,7 @@ Special
 5
 120
 70
-The user heightens its mental focus and unleashes its power. This may also lower the target's  Sp. Def stat.
+The user heightens its mental focus and unleashes its power. This may also lower the target's Sp. Def stat.
 10 %
 4.17%
 0
@@ -11560,7 +11560,7 @@ Physical
 5
 100
 100
-The user slams into the target with the force of a meteor. This move can be used on the target  regardless of its Abilities.
+The user slams into the target with the force of a meteor. This move can be used on the target regardless of its Abilities.
 -- %
 4.17%
 0
@@ -11578,7 +11578,7 @@ Special
 5
 100
 100
-The user emits a sinister ray to attack the target. This move can be used on the target regardless of  its Abilities.
+The user emits a sinister ray to attack the target. This move can be used on the target regardless of its Abilities.
 -- %
 4.17%
 0
@@ -11716,6 +11716,24 @@ No
 No
 No
 Yes
+Hyperspace Fury
+Dark
+Physical
+5
+100
+0
+Using its many arms, the user unleashes a barrage of attacks that ignore the effects of moves like Protect and Detect. But the user's Defense stat falls.
+100 %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+Yes
 Steam Eruption
 Water
 Special
@@ -11740,7 +11758,7 @@ Special
 5
 100
 100
-The user attacks a target with a pillar of light. This move inflicts Attack or Sp. Atk damageâwhichever stat is higher for the user.
+The user attacks a target with a pillar of light. This move inflicts Attack or Sp. Atk damage--whichever stat is higher for the user.
 -- %
 4.17%
 0
@@ -11783,6 +11801,24 @@ The user attacks with electrically charged fists. This move changes Normal-type 
 No
 No
 No
+No
+No
+No
+Yes
+Yes
+Double Iron Bash
+Steel
+Physical
+5
+60
+100
+The user rotates, centering the hex nut in its chest, and then strikes with its arms twice in a row. This may also make the target flinch.
+30 %
+4.17%
+0
+Yes
+No
+Yes
 No
 No
 No

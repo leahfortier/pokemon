@@ -47,7 +47,6 @@ public class UpdateGen {
             "Helping Hand",
             "Hold Back",
             "Hold Hands",
-            "Hyperspace Fury",
             "Ion Deluge",
             "Instruct",
             "Quash",

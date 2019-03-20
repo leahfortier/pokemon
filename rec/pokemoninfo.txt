@@ -68858,9 +68858,8 @@ Hex Nut
 98 1763.7 Revered long ago for its capacity to create iron from nothing, for some reason it has come back to life after 3,000 years.
 30720
 UNDISCOVERED NONE
-16
+15
 -1 THUNDER_PUNCH
-0 THUNDER_PUNCH
 0 HEADBUTT
 0 HARDEN
 0 TAIL_WHIP

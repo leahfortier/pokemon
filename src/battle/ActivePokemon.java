@@ -739,7 +739,6 @@ public class ActivePokemon extends PartyPokemon {
     // Grounded effect take precedence over levitation effects
     // Obvs levitating if you have a levitation effect
     // Also considered to be levitating if in the semi-invulnerable stage of Fly or Bounce
-    // Stupid motherfucking Mold Breaker not allowing me to make Levitate a Levitation effect, fuck you Mold Breaker. -- NOT ANYMORE NOW WE HAVE Battle.hasInvoke FUCK YES YOU GO GLENN COCO
     public boolean isLevitating(Battle b, ActivePokemon moldBreaker, boolean includeFlyingType) {
         // Technically this shouldn't ever be possible if the Pokemon is grounded,
         // however if that were to happen for whatever reason it would make sense for this to take precedence I think

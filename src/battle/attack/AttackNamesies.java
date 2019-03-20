@@ -273,6 +273,7 @@ import battle.attack.Attack.HydroPump;
 import battle.attack.Attack.HyperBeam;
 import battle.attack.Attack.HyperFang;
 import battle.attack.Attack.HyperVoice;
+import battle.attack.Attack.HyperspaceFury;
 import battle.attack.Attack.HyperspaceHole;
 import battle.attack.Attack.Hypnosis;
 import battle.attack.Attack.IceBall;
@@ -1315,6 +1316,7 @@ public enum AttackNamesies {
     WATER_PLEDGE("Water Pledge", WaterPledge::new),
     STOMPING_TANTRUM("Stomping Tantrum", StompingTantrum::new),
     HYPERSPACE_HOLE("Hyperspace Hole", HyperspaceHole::new),
+    HYPERSPACE_FURY("Hyperspace Fury", HyperspaceFury::new),
     STEAM_ERUPTION("Steam Eruption", SteamEruption::new),
     PHOTON_GEYSER("Photon Geyser", PhotonGeyser::new),
     MIND_BLOWN("Mind Blown", MindBlown::new),

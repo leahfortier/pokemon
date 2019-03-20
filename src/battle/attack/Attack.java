@@ -10974,6 +10974,21 @@ public abstract class Attack implements AttackInterface {
             super.power = 80;
             super.moveTypes.add(MoveType.PROTECT_PIERCING);
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
+            super.moveTypes.add(MoveType.METRONOMELESS);
+        }
+    }
+
+    static class HyperspaceFury extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        HyperspaceFury() {
+            super(AttackNamesies.HYPERSPACE_FURY, Type.DARK, MoveCategory.PHYSICAL, 5, "Using its many arms, the user unleashes a barrage of attacks that ignore the effects of moves like Protect and Detect. But the user’s Defense stat falls.");
+            super.power = 100;
+            super.moveTypes.add(MoveType.PROTECT_PIERCING);
+            super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
+            super.moveTypes.add(MoveType.METRONOMELESS);
+            super.selfTarget = true;
+            super.statChanges[Stat.DEFENSE.index()] = -1;
         }
     }
 
@@ -11071,6 +11086,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.effect = PokemonEffectNamesies.FLINCH;
             super.effectChance = 30;
+            super.moveTypes.add(MoveType.PUNCHING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 

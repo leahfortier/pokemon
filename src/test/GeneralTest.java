@@ -235,4 +235,14 @@ public class GeneralTest extends BaseTest {
             Assert.assertFalse(FileIO.readEntireFile(file).contains("\t"));
         }
     }
+
+    @Test
+    public void methodNameTest() {
+        Assert.assertEquals("methodName", StringUtils.getMethodName("methodName()"));
+        Assert.assertEquals("methodName", StringUtils.getMethodName("methodName(a)"));
+        Assert.assertEquals("methodName", StringUtils.getMethodName("methodName(a, b)"));
+        Assert.assertEquals("", StringUtils.getMethodName("methodName"));
+        Assert.assertEquals("", StringUtils.getMethodName("methodName("));
+        Assert.assertEquals("", StringUtils.getMethodName("methodName() {"));
+    }
 }

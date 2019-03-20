@@ -6526,8 +6526,19 @@ Hyperspace Hole:
     Type: Psychic
     Cat: Special
     PP: 5
-    MoveType: Protect_Piercing, Substitute_Piercing
+    MoveType: Protect_Piercing, Substitute_Piercing, Metronomeless
     Pow: 80
+*
+Hyperspace Fury:
+    Desc: Using its many arms, the user unleashes a barrage of attacks that ignore the effects of moves like Protect and Detect. But the user’s Defense stat falls.
+    Type: Dark
+    Cat: Physical
+    PP: 5
+    MoveType: Protect_Piercing, Substitute_Piercing, Metronomeless
+    Pow: 100
+    PhysicalContact: False
+    SelfTarget: True
+    StatChange: 1 Defense -1
 *
 Steam Eruption:
     Desc: The user immerses the target in superheated steam. This may also leave the target with a burn.
@@ -6601,4 +6612,5 @@ Double Iron Bash:
     PokemonEffect: Flinch
     EffChance: 30
     MultiStrike: 2 2
+    MoveType: Punching
 *

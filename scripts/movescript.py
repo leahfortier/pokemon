@@ -67,6 +67,7 @@ for i, attack_name in enumerate(f):
     add_row_values(main_table, row_index, values, 1, 3, 4, 5)
 
     for value in values:
+        value = value.replace('(SMUSUM)', '').strip()
         out.write(value + '\n')
 f.close()
 out.close()

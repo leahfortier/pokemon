@@ -55,11 +55,10 @@ public class ShowdownMoveParser {
 
         Set<String> seenKeys = new HashSet<>();
         while (true) {
-            String key = in.next().trim();
+            String key = readKey(in);
             if (key.startsWith("}")) {
                 break;
             } else if (key.startsWith("//")) {
-                in.nextLine();
                 continue;
             }
 
@@ -289,6 +288,25 @@ public class ShowdownMoveParser {
         }
     }
 
+    private String readKey(Scanner in) {
+        String key = in.next().trim();
+        if (key.startsWith("}")) {
+            Assert.assertTrue(key.equals("},"));
+            return "}";
+        } else if (key.startsWith("//")) {
+            // Comment -- consume the rest of the line
+            return "// " + in.nextLine();
+        } else if (key.contains("(")) {
+            // Method name -- read the rest of the header and then remove the parameters/parentheses
+            StringAppender methodName = new StringAppender(key);
+            while (!methodName.toString().contains(")")) {
+                methodName.append(" ").append(in.next());
+            }
+            key = StringUtils.getMethodName(methodName.toString());
+        }
+        return key;
+    }
+
     private String readLine(String message, Scanner in) {
         String value = in.nextLine();
         Assert.assertTrue(message, value.startsWith(":"));
@@ -428,8 +446,8 @@ public class ShowdownMoveParser {
     private void readFunction(String message, Scanner in) {
         int numBraces = 1;
 
-        String firstLine = readLine(message, in);
-        Assert.assertTrue(message + " " + firstLine, firstLine.startsWith("function ("));
+        String firstLine = in.nextLine().trim();
+        Assert.assertEquals(message, "{", firstLine);
         while (true) {
             String nextLine = in.nextLine();
             numBraces += (int)nextLine.chars().filter(c -> c == '{').count();
@@ -443,11 +461,10 @@ public class ShowdownMoveParser {
     private void readEffect(String message, Scanner in) {
         Assert.assertEquals(message, "{", readLine(message, in));
         while (true) {
-            String key = in.next();
-            if (key.trim().startsWith("}")) {
+            String key = readKey(in);
+            if (key.startsWith("}")) {
                 break;
             } else if (key.startsWith("//")) {
-                in.nextLine();
                 continue;
             }
 
@@ -473,10 +490,10 @@ public class ShowdownMoveParser {
                 case "onFoeTrapPokemonPriority":
                 case "onTryPrimaryHitPriority":
                 case "onAccuracyPriority":
+                case "onTypePriority":
                     readInt(message, in);
                     break;
                 case "noCopy":
-                case "onTryHeal":
                 case "onCriticalHit":
                     readBoolean(message, in);
                     break;
@@ -535,6 +552,11 @@ public class ShowdownMoveParser {
                 case "onAnyTryMove":
                 case "onTryPrimaryHit":
                 case "onAnySetStatus":
+                case "onTryImmunity":
+                case "onAfterDamage":
+                case "onTryHeal":
+                case "onType":
+                case "onAnyTryImmunity":
                     readFunction(message, in);
                     break;
                 default:
@@ -644,15 +666,17 @@ public class ShowdownMoveParser {
         SecondaryEffect secondary = new SecondaryEffect();
 
         String firstLine = readLine(message, in);
-        if (firstLine.equals("false,")) {
+        if (firstLine.equals("null,")) {
             return null;
         }
 
         Assert.assertEquals(message, "{", firstLine);
         while (true) {
-            String key = in.next();
-            if (key.trim().startsWith("}")) {
+            String key = readKey(in);
+            if (key.startsWith("}")) {
                 break;
+            } else if (key.startsWith("//")) {
+                continue;
             }
 
             message += " " + key;
@@ -718,9 +742,11 @@ public class ShowdownMoveParser {
         Assert.assertEquals(message, "{", firstLine);
 
         while (true) {
-            String key = in.next();
-            if (key.trim().startsWith("}")) {
+            String key = readKey(in);
+            if (key.startsWith("}")) {
                 break;
+            } else if (key.startsWith("//")) {
+                continue;
             }
 
             switch (key) {
@@ -728,6 +754,7 @@ public class ShowdownMoveParser {
                     self.boosts = readStatChanges(message, in);
                     break;
                 case "volatileStatus":
+                case "sideCondition":
                     self.volatileStatus = readSingleQuotedString(message, in);
                     break;
                 case "onHit":

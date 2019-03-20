@@ -249,7 +249,7 @@ public class ScriptTest extends BaseTest {
             toParse.remove(attackNamesies);
         }
 
-        Assert.assertTrue(toParse.isEmpty());
+        Assert.assertTrue(toParse.toString(), toParse.isEmpty());
     }
 
     @Test
@@ -346,9 +346,16 @@ public class ScriptTest extends BaseTest {
     }
 
     @Test
+    public void unimplementedMovesTest() {
+        for (String unimplemented : UpdateGen.unimplementedMoves) {
+            Assert.assertNull(AttackNamesies.tryValueOf(unimplemented));
+        }
+    }
+
+    @Test
     public void showdownMoveParserTest() {
         Scanner in = FileIO.openFile(Folder.SCRIPTS + "ps-moves.txt");
-        in.useDelimiter("[\\s:]+");
+        in.useDelimiter("[\\s:]+"); // whitespace and colon
 
         Assert.assertEquals("{", in.nextLine());
 
@@ -380,28 +387,25 @@ public class ScriptTest extends BaseTest {
             Assert.assertNotNull(attackKey, moveParser.type);
 
             String isZ = moveParser.isZ;
-            Boolean isUnreleased = moveParser.is("isUnreleased");
-            Boolean isNonstandard = moveParser.is("isNonstandard");
+            boolean isUnreleased = moveParser.is("isUnreleased") != null;
+            boolean isNonstandard = moveParser.is("isNonstandard") != null;
             if (attackNamesies == null) {
                 if (attackKey.startsWith("hiddenpower")) {
                     Assert.assertNotNull(attackKey, StringUtils.enumTryValueOf(Type.class, attackKey.substring("hiddenpower".length())));
                 } else if (unimplementedIds.contains(attackKey)) {
+                    // Moves intentionally not implemented (like Helping Hand and other dumbass double battle only moves)
                     Assert.assertNull(attackKey, isZ);
-                    Assert.assertNull(attackKey, isUnreleased);
-                    Assert.assertNull(attackKey, isNonstandard);
+                    Assert.assertFalse(attackKey, isUnreleased);
+                    Assert.assertFalse(attackKey, isNonstandard);
                 } else if (isZ != null) {
-                    Assert.assertNull(attackKey, isUnreleased);
-                    Assert.assertNull(attackKey, isNonstandard);
-                } else if (isUnreleased != null && isUnreleased) {
-                    Assert.assertNull(attackKey, isNonstandard);
+                    Assert.assertFalse(attackKey, isUnreleased);
+                    Assert.assertFalse(attackKey, isNonstandard);
                 } else {
-                    Assert.assertNotNull(attackKey, isNonstandard);
-                    Assert.assertTrue(attackKey, isNonstandard);
+                    Assert.assertTrue(attackKey, isNonstandard || isUnreleased);
                 }
             } else {
                 Assert.assertFalse(attackKey, unimplementedIds.contains(attackKey));
                 Assert.assertNull(attackKey, isZ);
-                Assert.assertNull(attackKey, isNonstandard);
                 moveMap.put(attackNamesies, moveParser);
             }
         }
@@ -424,6 +428,8 @@ public class ScriptTest extends BaseTest {
         nullOnHitSecondary(moveMap, AttackNamesies.SPIRIT_SHACKLE);
         nullOnHitSecondary(moveMap, AttackNamesies.SPARKLING_ARIA);
         nullOnHitSecondary(moveMap, AttackNamesies.THROAT_CHOP);
+
+        nullOnHitSelf(moveMap, AttackNamesies.PSYCHO_SHIFT);
 
         // Handled separately in their API
         nullStatChangesUpdate(moveMap, AttackNamesies.DEFOG, new TestStages().set(Stat.EVASION, -1));
@@ -857,7 +863,11 @@ public class ScriptTest extends BaseTest {
     }
 
     private void checkFlag(AttackNamesies attackNamesies, ShowdownMoveParser moveParser, String flagName, boolean condition, AttackNamesies... exceptions) {
-        Assert.assertEquals(attackNamesies.getName(), moveParser.flags.contains(flagName) || Arrays.asList(exceptions).contains(attackNamesies), condition);
+        Assert.assertEquals(
+                attackNamesies.getName() + " " + flagName,
+                moveParser.flags.contains(flagName) || Arrays.asList(exceptions).contains(attackNamesies),
+                condition
+        );
         moveParser.flags.remove(flagName);
     }
 
@@ -942,6 +952,17 @@ public class ScriptTest extends BaseTest {
         moveParser.secondary.chance = null;
         Assert.assertEquals(message, "", moveParser.secondary.toString());
         moveParser.secondary = null;
+    }
+
+    private void nullOnHitSelf(Map<AttackNamesies, ShowdownMoveParser> moveParserMap, AttackNamesies attackNamesies) {
+        ShowdownMoveParser moveParser = moveParserMap.get(attackNamesies);
+        String message = attackNamesies.getName();
+        Assert.assertNotNull(message, moveParser.self);
+        Assert.assertNotEquals(message, "", moveParser.self.toString());
+        Assert.assertTrue(message, moveParser.self.onHit);
+        moveParser.self.onHit = false;
+        Assert.assertEquals(message, "", moveParser.self.toString());
+        moveParser.self = null;
     }
 
     private void nullStatChangesUpdate(Map<AttackNamesies, ShowdownMoveParser> moveParserMap, AttackNamesies attackNamesies, TestStages newStages) {

@@ -106,7 +106,7 @@ public class PokemonInfoTest extends BaseTest {
                             Assert.assertTrue(message, !LevelUpMove.isDefaultLevel(level));
                         }
                     } else if (!levelUpMove.isDefaultLevel() && !actualLevelExceptions.contains(currentPair)) {
-                        Assert.assertTrue(currentLevel > 0 && currentLevel != PokemonInfo.EVOLUTION_LEVEL_LEARNED);
+                        Assert.assertTrue(currentLevel > 0);
                         for (Integer level : levels) {
                             Assert.assertTrue(message + " " + level, level == 0 || level == PokemonInfo.EVOLUTION_LEVEL_LEARNED);
                             Assert.assertTrue(message + " " + level, LevelUpMove.isDefaultLevel(level));

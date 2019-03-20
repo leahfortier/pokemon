@@ -3,6 +3,8 @@ package util.string;
 import main.Global;
 
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringUtils {
     private static final String[] PROPER_CASE_DELIMITERS = { " ", "-", "_" };
@@ -142,6 +144,16 @@ public class StringUtils {
         // Remove all non-alphanumeric characters
         return SpecialCharacter.replaceSpecialCharacters(properCase(name))
                                .replaceAll("[^0-9a-zA-Z]", "");
+    }
+
+    // Takes a string in the form methodName(parameter1, parameter2, ...) and returns methodName
+    public static String getMethodName(String methodHeader) {
+        Pattern headerPattern = Pattern.compile("^([a-zA-Z]+)\\(.*\\)$");
+        Matcher matcher = headerPattern.matcher(methodHeader);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
     }
 
     public static <T extends Enum<T>> T enumValueOf(Class<T> enumClass, String name) {
