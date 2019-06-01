@@ -13,7 +13,6 @@ import message.Messages;
 import pattern.action.ChoiceMatcher;
 import sound.SoundPlayer;
 import util.FontMetrics;
-import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -93,7 +92,7 @@ class MessageState implements VisualStateHandler {
             boolean newMessage = false;
             while (!HaltTrigger.isHalted() && Messages.hasMessages()) {
                 mapView.cycleMessage();
-                if (!mapView.isState(VisualState.MESSAGE) || !StringUtils.isNullOrEmpty(mapView.getCurrentMessage().getMessage())) {
+                if (!mapView.isState(VisualState.MESSAGE) || !mapView.emptyMessage()) {
                     newMessage = true;
                     break;
                 }

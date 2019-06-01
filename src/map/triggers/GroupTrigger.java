@@ -29,7 +29,7 @@ public class GroupTrigger extends Trigger {
         // Add all triggers in the group to the beginning of the message queue
         // Need to add in the reverse order
         for (Trigger trigger : new ReverseIterable<>(triggers)) {
-            if (trigger != null && trigger.isTriggered()) {
+            if (trigger != null && trigger.canTrigger()) {
                 Messages.addToFront(new MessageUpdate().withTrigger(trigger));
             }
         }

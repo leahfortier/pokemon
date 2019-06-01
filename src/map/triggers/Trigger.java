@@ -16,9 +16,9 @@ public abstract class Trigger {
 
     public abstract void execute();
 
-    // Evaluate the function, Should only be triggered when a player moves
+    // Evaluate the condition, should only be triggered when a player moves
     // into a map square that is defined to trigger this event
-    public boolean isTriggered() {
+    public boolean canTrigger() {
         return condition.evaluate();
     }
 }

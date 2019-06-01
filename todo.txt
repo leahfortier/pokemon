@@ -202,4 +202,7 @@ Other random things:
     probably have something to automatically remove previous effect if there can only be one (ChangeAbility etc)
     should I get different sprites for Castform and Arceus and other Pokemon like that since it's partially setup now
     cancelling evolution still consumes evolution item
+    isVisible -> isActive / isHighPriorityBlahBlah -> isVisible etc etc
+    test for consistent map file data -- like saving produces the same file
+    is there a test that all pokemon learn something at level 1?
     

@@ -116,7 +116,7 @@ public final class TileUtils {
         return image;
     }
 
-    public static BufferedImage blankImageWithText(String text) {
+    public static BufferedImage blankTileWithText(String text) {
         int extra = TextUtils.getTextWidth(text + " ", 14) + 3;
 
         BufferedImage image = new BufferedImage(Global.TILE_SIZE + extra, Global.TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
@@ -132,17 +132,17 @@ public final class TileUtils {
     }
 
     public static BufferedImage colorWithText(String text, Color color) {
-        BufferedImage image = blankImageWithText(text);
+        BufferedImage image = blankTileWithText(text);
         fillImage(image, color);
         return image;
     }
 
-    public static BufferedImage imageWithText(BufferedImage image, String text) {
+    public static BufferedImage tileWithText(BufferedImage image, String text) {
         if (image == null) {
             Global.error("Image is null :(");
         }
 
-        BufferedImage bufferedImage = blankImageWithText(text);
+        BufferedImage bufferedImage = blankTileWithText(text);
         Graphics g = bufferedImage.getGraphics();
         g.drawImage(image, 0, 0, null);
         g.dispose();

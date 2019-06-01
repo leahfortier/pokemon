@@ -35,7 +35,7 @@ public class MedalCase implements Serializable {
     // Start with all baby Pokemon and remove as we go, earn medal when empty
     private final Set<PokemonNamesies> babyPokemonUnhatched;
 
-    private final ArrayDeque<Medal> medalsToShow;
+    private final ArrayDeque<Medal> toDisplay;
 
     public MedalCase() {
         this.medalsEarned = EnumSet.noneOf(Medal.class);
@@ -59,7 +59,7 @@ public class MedalCase implements Serializable {
 
         this.babyPokemonUnhatched = PokemonInfo.getAllBabyPokemon();
 
-        this.medalsToShow = new ArrayDeque<>();
+        this.toDisplay = new ArrayDeque<>();
     }
 
     public long getCount(Medal medal) {
@@ -73,17 +73,17 @@ public class MedalCase implements Serializable {
     public void earnMedal(Medal medal) {
         if (!this.hasMedal(medal)) {
             medalsEarned.add(medal);
-            medalsToShow.add(medal);
+            toDisplay.add(medal);
             this.update(MedalTheme.MEDALS_COLLECTED, this.medalsEarned.size());
         }
     }
 
-    public boolean isThereMedalToShow() {
-        return !this.medalsToShow.isEmpty();
+    public boolean hasQueuedDisplayMedal() {
+        return !this.toDisplay.isEmpty();
     }
 
-    public Medal getNextMedalToShow() {
-        return this.medalsToShow.pop();
+    public Medal getNextDisplayMedal() {
+        return this.toDisplay.pop();
     }
 
     public void encounterPokemon(ActivePokemon encountered) {

@@ -223,15 +223,15 @@ public class MapView extends View {
         // If new area has a new name, display the area name animation
         if (currentArea != null && !StringUtils.isNullOrEmpty(areaName) && !areaName.equals(currentArea.getAreaName())) {
             areaDisplayTime = DrawUtils.AREA_NAME_ANIMATION_LIFESPAN;
-        } else if (areaDisplayTime <= 0 && medalDisplayTime <= 0 && player.getMedalCase().isThereMedalToShow()) {
-            displayMedal = player.getMedalCase().getNextMedalToShow();
+        } else if (areaDisplayTime <= 0 && medalDisplayTime <= 0 && player.getMedalCase().hasQueuedDisplayMedal()) {
+            displayMedal = player.getMedalCase().getNextDisplayMedal();
             medalDisplayTime = DrawUtils.AREA_NAME_ANIMATION_LIFESPAN;
         }
 
         player.setArea(currentMapName, area);
         currentArea = area;
 
-        // Queue to play new area's music.
+        // Queue to play new area's music
         SoundTitle areaMusic = area.getMusic();
         if (currentMusicTitle != areaMusic) {
             currentMusicTitle = areaMusic;
@@ -265,8 +265,9 @@ public class MapView extends View {
         }
     }
 
-    private boolean emptyMessage() {
-        return this.currentMessage == null || StringUtils.isNullOrEmpty(this.currentMessage.getMessage());
+    // Current message is either null or contains an empty or null message
+    public boolean emptyMessage() {
+        return MessageUpdate.isNullOrEmpty(this.currentMessage);
     }
 
     private void checkMapReset() {
@@ -293,7 +294,7 @@ public class MapView extends View {
         // Check if the next message is a trigger and execute if it is
         if (currentMessage.trigger()) {
             Trigger trigger = currentMessage.getTrigger();
-            if (trigger.isTriggered()) {
+            if (trigger.canTrigger()) {
                 trigger.execute();
                 if (!this.isState(VisualState.MESSAGE)) {
                     currentMessage = null;

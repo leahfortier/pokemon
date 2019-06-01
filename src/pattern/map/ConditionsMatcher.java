@@ -38,6 +38,11 @@ public class ConditionsMatcher implements JsonMatcher {
     }
 
     public static void addCondition(ConditionMatcher condition) {
+        Map<String, ConditionSet> conditions = ConditionsMatcher.getConditions();
+        if (conditions.containsKey(condition.getName())) {
+            Global.error("Condition with the name " + condition + " already exists.");
+        }
+
         ConditionsMatcher matcher = readConditions();
         matcher.conditions.add(condition);
 

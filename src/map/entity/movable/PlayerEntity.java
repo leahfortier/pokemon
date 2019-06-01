@@ -198,7 +198,7 @@ public class PlayerEntity extends MovableEntity {
             if (currentTriggers != null) {
                 // Execute all valid triggers
                 for (Trigger trigger : currentTriggers) {
-                    if (trigger != null && trigger.isTriggered()) {
+                    if (trigger != null && trigger.canTrigger()) {
                         trigger.execute();
                     }
                 }

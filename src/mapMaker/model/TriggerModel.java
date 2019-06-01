@@ -70,7 +70,7 @@ public class TriggerModel extends MapMakerModel {
         }
 
         public ImageIcon getImageIcon(final MapMaker mapMaker) {
-            return new ImageIcon(TileUtils.imageWithText(this.getImage(mapMaker), name), String.valueOf(this.ordinal()));
+            return new ImageIcon(TileUtils.tileWithText(this.getImage(mapMaker), name), String.valueOf(this.ordinal()));
         }
 
         public static TriggerModelType getModelTypeFromIndex(int selectedIndex) {

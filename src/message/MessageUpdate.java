@@ -380,4 +380,8 @@ public class MessageUpdate {
     public String getImageName() {
         return this.imageName;
     }
+
+    public static boolean isNullOrEmpty(MessageUpdate message) {
+        return message == null || StringUtils.isNullOrEmpty(message.getMessage());
+    }
 }

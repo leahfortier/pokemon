@@ -115,7 +115,7 @@ public class NPCEntity extends MovableEntity {
         return this.isWalkToPlayer()
                 && !this.walkingToPlayer
                 && this.moveAxis.checkAxis(this.getLocation(), this.getDirection(), Game.getPlayer().getLocation())
-                && this.getTrigger().isTriggered();
+                && this.getTrigger().canTrigger();
     }
 
     private boolean isWalkToPlayer() {
