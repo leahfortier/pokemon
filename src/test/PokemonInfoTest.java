@@ -34,11 +34,17 @@ public class PokemonInfoTest extends BaseTest {
         Assert.assertTrue(PokemonNamesies.values()[0] == PokemonNamesies.NONE);
     }
 
+    // Test to confirm each pokemon number corresponds correctly to the ordinal in PokemonNamesies enum
     @Test
     public void numberTest() {
+        PokemonNamesies[] namesies = PokemonNamesies.values();
+
+        // +1 because the first entry (zero index) is intentionally filler so that the index lines up correctly
+        Assert.assertEquals(PokemonInfo.NUM_POKEMON + 1, namesies.length);
+
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
             PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
-            PokemonNamesies pokemonNamesies = PokemonNamesies.values()[i];
+            PokemonNamesies pokemonNamesies = namesies[i];
 
             Assert.assertEquals(pokemonInfo, pokemonNamesies.getInfo());
             Assert.assertEquals(pokemonInfo.namesies(), pokemonNamesies);
@@ -49,27 +55,40 @@ public class PokemonInfoTest extends BaseTest {
     }
 
     @Test
-    public void levelUpTest() {
+    public void levelUpMovesTest() {
+        // Evolution flag must be less than zero
+        TestUtils.assertGreater("", 0, PokemonInfo.EVOLUTION_LEVEL_LEARNED);
+
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
             PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
+
             List<LevelUpMove> levelUpMoves = pokemonInfo.getLevelUpMoves();
             int previousLevel = levelUpMoves.get(0).getLevel();
+            boolean hasDefault = false;
+
             for (LevelUpMove levelUpMove : levelUpMoves) {
                 int level = levelUpMove.getLevel();
                 String message = StringUtils.spaceSeparated(pokemonInfo.getName(), level, levelUpMove.getMove().getName());
 
+                // Make sure level is valid
                 boolean inRange = level >= 0 && level <= PartyPokemon.MAX_LEVEL;
                 Assert.assertTrue(message, inRange || level == PokemonInfo.EVOLUTION_LEVEL_LEARNED);
 
-                // Make sure level up moves are in ascending order
+                // Level up moves must be in ascending order
                 Assert.assertTrue(message, level >= previousLevel);
                 previousLevel = level;
+
+                if (level == 0) {
+                    hasDefault = true;
+                }
             }
+
+            Assert.assertTrue(pokemonInfo.getName(), hasDefault);
         }
     }
 
     @Test
-    public void duplicateLevelUpTest() {
+    public void duplicateLevelUpMovesTest() {
         List<PokemonMovePair> defaultLevelExceptions = Arrays.asList(
                 new PokemonMovePair(PokemonNamesies.METAPOD, AttackNamesies.HARDEN),
                 new PokemonMovePair(PokemonNamesies.KAKUNA, AttackNamesies.HARDEN),
@@ -86,12 +105,14 @@ public class PokemonInfoTest extends BaseTest {
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
             PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
             List<LevelUpMove> levelUpMoves = pokemonInfo.getLevelUpMoves();
+
             MultiMap<AttackNamesies, Integer> map = new MultiMap<>();
             for (LevelUpMove levelUpMove : levelUpMoves) {
                 int currentLevel = levelUpMove.getLevel();
                 AttackNamesies attack = levelUpMove.getMove();
                 PokemonMovePair currentPair = new PokemonMovePair(pokemonInfo.namesies(), attack);
 
+                // We've seen this attack already
                 if (map.containsKey(attack)) {
                     String message = StringUtils.spaceSeparated(pokemonInfo.getName(), currentLevel, attack.getName());
                     List<Integer> levels = map.get(attack);
@@ -197,7 +218,6 @@ public class PokemonInfoTest extends BaseTest {
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
             PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
             int evTotal = getEvTotal(pokemonInfo);
-            Assert.assertTrue(pokemonInfo.getName() + " " + evTotal, evTotal >= 1 && evTotal <= 3);
 
             // Make sure EVs are strictly increasing across evolutions
             PokemonNamesies[] evolutions = pokemonInfo.getEvolution().getEvolutions();
@@ -207,12 +227,21 @@ public class PokemonInfoTest extends BaseTest {
         }
     }
 
+    // Returns the total number of EVs given from this pokemon and confirms the correct range for each value and the total
     private int getEvTotal(PokemonInfo pokemonInfo) {
         int total = 0;
         for (int i = 0; i < Stat.NUM_STATS; i++) {
-            total += pokemonInfo.getGivenEV(i);
+            int effortValue = pokemonInfo.getGivenEV(i);
+            checkEvRange(pokemonInfo, effortValue);
+            total += effortValue;
         }
+        checkEvRange(pokemonInfo, total);
         return total;
+    }
+
+    // Valid for an individual EV or for a total -- confirms between 1 and 3
+    private void checkEvRange(PokemonInfo pokemonInfo, int effortValue) {
+        Assert.assertTrue(pokemonInfo.getName() + " " + effortValue, effortValue >= 1 && effortValue <= 3);
     }
 
     @Test
@@ -269,7 +298,7 @@ public class PokemonInfoTest extends BaseTest {
 
     @Test
     public void ivsTest() {
-        boolean[] hasIv = new boolean[IndividualValues.MAX_IV + 1];
+        boolean[] hasIvs = new boolean[IndividualValues.MAX_IV + 1];
         boolean diffIvs = false;
         for (int i = 0; i < 1000; i++) {
             TestPokemon pokemon = TestPokemon.newWildPokemon(PokemonNamesies.BULBASAUR);
@@ -281,7 +310,7 @@ public class PokemonInfoTest extends BaseTest {
 
                 // Make sure all IVs are in range
                 Assert.assertTrue(message, iv >= 0 && iv <= IndividualValues.MAX_IV);
-                hasIv[iv] = true;
+                hasIvs[iv] = true;
 
                 // Make sure not every IV is the same
                 if (j > 0 && iv != pokemon.getIVs().get(j - 1)) {
@@ -291,8 +320,8 @@ public class PokemonInfoTest extends BaseTest {
         }
 
         Assert.assertTrue(diffIvs);
-        for (int i = 0; i < hasIv.length; i++) {
-            Assert.assertTrue(i + "", hasIv[i]);
+        for (boolean hasIv : hasIvs) {
+            Assert.assertTrue(hasIv);
         }
     }
 

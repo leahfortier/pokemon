@@ -23129,8 +23129,9 @@ Butterfly
 39 62.6 Despite its looks, it is aggressive. It jabs with its long, thin mouth if disturbed while collecting pollen.
 3840
 BUG NONE
-13
+14
 -1 GUST
+0 ABSORB
 12 ABSORB
 15 STUN_SPORE
 17 MORNING_SUN
@@ -23223,8 +23224,9 @@ Poison Moth
 47 69.7 Toxic powder is scattered with each flap. At night, it is known to strip leaves off trees lining boulevards.
 3840
 BUG NONE
-13
+14
 -1 GUST
+0 CONFUSION
 12 CONFUSION
 15 POISON_POWDER
 17 MOONLIGHT

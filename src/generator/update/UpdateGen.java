@@ -616,7 +616,7 @@ public class UpdateGen {
             }
         }
 
-        System.out.println(shubs.toString());
+        System.out.println(shubs);
     }
 
     private static void addCondition() {
