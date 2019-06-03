@@ -24,7 +24,6 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -56,6 +55,8 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MapMaker extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener, ListSelectionListener {
     public final Canvas canvas;
@@ -64,11 +65,17 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     private JComboBox<TileCategory> tileCategoriesComboBox;
     private JList<ImageIcon> tileList;
     private JList<Tool> toolList;
-    private JMenuItem newMenuItem, loadMenuItem, setRootMenuItem;
-    public JMenuItem cutMenuItem, copyMenuItem, pasteMenuItem, undoMenuItem;
-    private JLabel mapNameLabel;
+
+    private JMenuItem newMenuItem;
+    private JMenuItem loadMenuItem;
     private JMenuItem saveMenuItem;
-    private JLabel rootLabel;
+
+    public JMenuItem cutMenuItem;
+    public JMenuItem copyMenuItem;
+    public JMenuItem pasteMenuItem;
+    private JMenuItem undoMenuItem;
+
+    private JLabel mapNameLabel;
     private JComboBox<EditType> editTypeComboBox;
 
     private EditType editType;
@@ -76,16 +83,12 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
     private LocationTriggerMatcher placeableTrigger;
 
-    private File root;
-
     private Point location;
     private Point mouseHoverLocation;
 
     private SelectTool selectTool;
     private ToolType previousToolType;
     public boolean triggerToolMoveSelected;
-
-    private boolean controlKeyDown;
 
     public static void main(String[] args) {
         MapMaker mapMaker = new MapMaker();
@@ -98,8 +101,6 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     }
 
     private MapMaker() {
-        this.root = null;
-
         this.location = new Point();
         this.mouseHoverLocation = new Point();
 
@@ -117,7 +118,9 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         this.add(this.createToolList(), BorderLayout.EAST);
         this.add(this.canvas, BorderLayout.CENTER);
 
-        this.setRoot(FileIO.newFile("."));
+        MapMakerModel.reloadModels(this);
+
+        this.mapData.loadPreviousMap(this, new MapName("Depth First Search Town", "PlayersHouseUp"));
     }
 
     private JScrollPane createToolList() {
@@ -134,6 +137,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         return new JScrollPane(toolList);
     }
 
+    // TODO: This doesn't really seem to have anything to do with being an edit menu item especially after undo is UNDOing this
     private JMenuItem createEditMenuItem(String text, int keyEvent) {
         JMenuItem menuItem = GuiUtils.createMenuItem(text, keyEvent, this);
         menuItem.setEnabled(false);
@@ -143,11 +147,10 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
     private JMenu createFileMenu() {
         this.newMenuItem = GuiUtils.createMenuItem("New", KeyEvent.VK_N, this);
-        this.saveMenuItem = GuiUtils.createMenuItem("Save", KeyEvent.VK_S, this);
         this.loadMenuItem = GuiUtils.createMenuItem("Load", KeyEvent.VK_L, this);
-        this.setRootMenuItem = GuiUtils.createMenuItem("Set Root", this);
+        this.saveMenuItem = GuiUtils.createMenuItem("Save", KeyEvent.VK_S, this);
 
-        return GuiUtils.createMenu("File", newMenuItem, saveMenuItem, loadMenuItem, setRootMenuItem);
+        return GuiUtils.createMenu("File", newMenuItem, loadMenuItem, saveMenuItem);
     }
 
     private JMenu createEditMenu() {
@@ -155,7 +158,8 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         this.copyMenuItem = this.createEditMenuItem("Copy", KeyEvent.VK_C);
         this.pasteMenuItem = this.createEditMenuItem("Paste", KeyEvent.VK_V);
         this.undoMenuItem = this.createEditMenuItem("Undo", KeyEvent.VK_Z);
-        undoMenuItem.setEnabled(true);
+        this.undoMenuItem.setEnabled(true);
+
         return GuiUtils.createMenu("Edit", cutMenuItem, copyMenuItem, pasteMenuItem, undoMenuItem);
     }
 
@@ -163,18 +167,13 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         JMenuBar menuBar = new JMenuBar();
         GuiUtils.setStyle(menuBar);
 
-        mapNameLabel = GuiUtils.createLabel("MapMaker");
-
-        rootLabel = GuiUtils.createLabel("Root Location:");
-        rootLabel.setForeground(Color.RED);
+        mapNameLabel = GuiUtils.createLabel("Map Maker");
 
         menuBar.add(this.createFileMenu());
         menuBar.add(this.createEditMenu());
         menuBar.add(Box.createHorizontalStrut(53));
         menuBar.add(mapNameLabel);
         menuBar.add(Box.createHorizontalStrut(53));
-        menuBar.add(rootLabel);
-        menuBar.add(Box.createHorizontalStrut(50));
         menuBar.add(this.createEditTypeComboBox());
 
         return menuBar;
@@ -272,7 +271,13 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     // Called when trying to exit, shows a confirm dialog asking to save first if there are any unsaved changes
     // Returns whether or not the exit will actually occur
     private boolean checkSaveOnExit() {
-        int val = JOptionPane.showConfirmDialog(this, "Save current file first?", "Unsaved changes", JOptionPane.YES_NO_CANCEL_OPTION);
+        int val = JOptionPane.showConfirmDialog(
+                this,
+                "Save current file first?",
+                "Unsaved changes",
+                JOptionPane.YES_NO_CANCEL_OPTION
+        );
+
         if (val == JOptionPane.YES_OPTION) {
             saveMap();
         }
@@ -285,32 +290,56 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         MapMakerModel.getAreaModel().resetMap();
     }
 
-    // TODO: Should this be checking if that name is already taken?
-    private boolean createNewMapDialog() {
+    // Opens an input dialog and with the selection choices and returns the user's selection
+    private String getInputDialogChoice(String message, String title, String[] selectionValues) {
+        return (String)JOptionPane.showInputDialog(
+                this,
+                message,
+                title,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                selectionValues,
+                selectionValues[0]
+        );
+    }
+
+    private boolean createMapDialog() {
         String[] regionList = getAvailableRegions();
-        String region = (String)JOptionPane.showInputDialog(this, "Select a region", "Load", JOptionPane.PLAIN_MESSAGE, null, regionList, regionList[0]);
+        String region = this.getInputDialogChoice("Select a region", "Create Map", regionList);
         if (StringUtils.isNullOrEmpty(region)) {
             return false;
         }
 
-        String name = JOptionPane.showInputDialog(this, "Name the map");
-        if (StringUtils.isNullOrEmpty(name)) {
-            return false;
+        Set<String> availableMaps = Arrays.stream(getAvailableMaps(region)).map(MapName::getMapName).collect(Collectors.toSet());
+
+        // Name the map (ask until empty or unique)
+        String mapName;
+        while (true) {
+            mapName = JOptionPane.showInputDialog(this, "Name the map");
+            if (StringUtils.isNullOrEmpty(mapName)) {
+                return false;
+            }
+
+            if (availableMaps.contains(mapName)) {
+                Global.info("Map with the name " + mapName + " already exists. Please choose another name.");
+            } else {
+                break;
+            }
         }
 
-        this.mapData.createNewMap(this, new MapName(region, name));
+        this.mapData.createNewMap(this, new MapName(region, mapName));
         return true;
     }
 
-    private boolean loadPreviousMapDialog() {
+    private boolean loadMapDialog() {
         String[] regionList = getAvailableRegions();
-        String region = (String)JOptionPane.showInputDialog(this, "Select a region", "Load", JOptionPane.PLAIN_MESSAGE, null, regionList, regionList[0]);
+        String region = this.getInputDialogChoice("Select a region", "Load Map", regionList);
         if (StringUtils.isNullOrEmpty(region)) {
             return false;
         }
 
         String[] availableMaps = Arrays.stream(getAvailableMaps(region)).map(MapName::getMapName).toArray(String[]::new);
-        String map = (String)JOptionPane.showInputDialog(this, "Select a map", "Load", JOptionPane.PLAIN_MESSAGE, null, availableMaps, availableMaps[0]);
+        String map = this.getInputDialogChoice("Select a map", "Load Map", availableMaps);
         if (StringUtils.isNullOrEmpty(map)) {
             return false;
         }
@@ -321,56 +350,47 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        if (root != null) {
-            if (event.getSource() == newTileButton) {
-                this.getModel().newTileButtonPressed(this);
-            } else if (event.getSource() == saveMenuItem) {
-                saveMap();
-            } else if (event.getSource() == newMenuItem || event.getSource() == loadMenuItem) {
-                if (this.mapData.hasMap()) {
-                    boolean exit = checkSaveOnExit();
-                    if (!exit) {
-                        return;
-                    }
+        if (event.getSource() == newTileButton) {
+            this.getModel().newTileButtonPressed(this);
+        } else if (event.getSource() == saveMenuItem) {
+            saveMap();
+        } else if (event.getSource() == newMenuItem || event.getSource() == loadMenuItem) {
+            if (this.mapData.hasMap()) {
+                boolean exit = checkSaveOnExit();
+                if (!exit) {
+                    return;
                 }
+            }
 
-                this.setTool(ToolType.MOVE);
+            this.setTool(ToolType.MOVE);
 
-                if (event.getSource() == newMenuItem) {
-                    if (!createNewMapDialog()) {
-                        return;
-                    }
-                } else {
-                    if (!loadPreviousMapDialog()) {
-                        return;
-                    }
+            if (event.getSource() == newMenuItem) {
+                if (!createMapDialog()) {
+                    return;
                 }
-
-                mapNameLabel.setText(this.getCurrentMapName().toString());
-                draw();
-            } else if (event.getSource() == cutMenuItem) {
-                selectTool.cut();
-            } else if (event.getSource() == copyMenuItem) {
-                selectTool.copy();
-            } else if (event.getSource() == pasteMenuItem) {
-                this.setTool(ToolType.SELECT);
-                selectTool.paste();
-            } else if (event.getSource() == undoMenuItem) {
-                Tool.undoLastTool();
-                draw();
+            } else {
+                if (!loadMapDialog()) {
+                    return;
+                }
             }
-        } else if (event.getSource() == setRootMenuItem) {
-            JFileChooser directoryChooser = FileIO.getDirectoryChooser();
 
-            int response = directoryChooser.showOpenDialog(this);
-            if (response == JFileChooser.APPROVE_OPTION) {
-                this.setRoot(directoryChooser.getSelectedFile());
-            }
+            mapNameLabel.setText(this.getCurrentMapName().toString());
+            draw();
+        } else if (event.getSource() == cutMenuItem) {
+            selectTool.cut();
+        } else if (event.getSource() == copyMenuItem) {
+            selectTool.copy();
+        } else if (event.getSource() == pasteMenuItem) {
+            this.setTool(ToolType.SELECT);
+            selectTool.paste();
+        } else if (event.getSource() == undoMenuItem) {
+            Tool.undoLastTool();
+            draw();
         }
     }
 
     public String[] getAvailableRegions() {
-        File mapsFolder = FileIO.newFile(getPathWithRoot(Folder.MAPS));
+        File mapsFolder = FileIO.newFile(getPath(Folder.MAPS));
         return FileIO.listDirectories(mapsFolder)
                      .stream()
                      .map(File::getName)
@@ -385,41 +405,19 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
                      .toArray(MapName[]::new);
     }
 
-    // TODO: I still never figured out what root is doing
-    public String getPathWithRoot(final String path) {
-//        return root.getPath() + path;
+    public String getPath(final String path) {
         return path;
     }
 
     public String getMapFolderPath(final MapName mapName) {
-        return getPathWithRoot(FileIO.makeFolderPath(Folder.MAPS, mapName.getRegionName(), mapName.getMapName()));
+        return getPath(FileIO.makeFolderPath(Folder.MAPS, mapName.getRegionName(), mapName.getMapName()));
     }
 
     public String getMapTextFileName(final MapName mapName) {
         return getMapFolderPath(mapName) + mapName.getMapName() + ".txt";
     }
 
-    // TODO: Srsly what is going on with setting the root what the fuck
-    private void setRoot(File newRoot) {
-        System.out.println("root set to: " + newRoot);
-
-        root = newRoot;
-        rootLabel.setText(root.getPath());
-        rootLabel.setForeground(Color.BLACK);
-
-        FileIO.createFolder(getPathWithRoot(Folder.REC));
-        FileIO.createFolder(getPathWithRoot(Folder.TILES));
-        FileIO.createFolder(getPathWithRoot(Folder.MAP_TILES));
-        FileIO.createFolder(getPathWithRoot(Folder.MAPS));
-
-        MapMakerModel.reloadModels(this);
-    }
-
     private void saveMap() {
-        if (root == null) {
-            return;
-        }
-
         this.mapData.save(this);
         MapMakerModel.getTileModel().save(this);
     }
@@ -547,10 +545,6 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
                 toolList.clearSelection();
             }
         }
-
-        if (event.getModifiersEx() == Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) {
-            controlKeyDown = true;
-        }
     }
 
     @Override
@@ -561,7 +555,6 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         }
 
         if (event.getModifiersEx() != Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) {
-            controlKeyDown = false;
         }
     }
 

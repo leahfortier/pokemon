@@ -3156,10 +3156,8 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             AttackNamesies[] attackNames = AttackNamesies.values();
-
-            int index;
             do {
-                index = RandomUtils.getRandomIndex(attackNames);
+                int index = RandomUtils.getRandomIndex(attackNames);
                 metronomeMove = attackNames[index].getNewAttack();
             } while (metronomeMove.isMoveType(MoveType.METRONOMELESS));
         }

@@ -1647,10 +1647,8 @@ Metronome:
         ###
     BeginAttack:
         AttackNamesies[] attackNames = AttackNamesies.values();
-
-        int index;
         do {
-            index = RandomUtils.getRandomIndex(attackNames);
+            int index = RandomUtils.getRandomIndex(attackNames);
             metronomeMove = attackNames[index].getNewAttack();
         } while (metronomeMove.isMoveType(MoveType.METRONOMELESS));
         ###

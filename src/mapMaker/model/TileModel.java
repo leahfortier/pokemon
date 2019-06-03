@@ -85,7 +85,7 @@ public class TileModel extends MapMakerModel {
     }
 
     private Map<Integer, BufferedImage> loadTiles(TileType tileType, MapMaker mapMaker) {
-        File indexFile = FileIO.newFile(mapMaker.getPathWithRoot(tileType.indexFileName));
+        File indexFile = FileIO.newFile(mapMaker.getPath(tileType.indexFileName));
         final Map<Integer, BufferedImage> tileMap = this.tileMap.get(tileType);
         tileMap.clear();
 
@@ -153,7 +153,7 @@ public class TileModel extends MapMakerModel {
     @Override
     public void newTileButtonPressed(MapMaker mapMaker) {
 
-        JFileChooser fileChooser = FileIO.getImageFileChooser(mapMaker.getPathWithRoot(Folder.MAP_TILES));
+        JFileChooser fileChooser = FileIO.getImageFileChooser(mapMaker.getPath(Folder.MAP_TILES));
 
         int val = fileChooser.showOpenDialog(mapMaker);
         if (val == JFileChooser.APPROVE_OPTION) {
@@ -190,10 +190,10 @@ public class TileModel extends MapMakerModel {
             final String imageName = entry.getValue();
             final TileCategory tileCategory = indexToTileCategoryMap.get(entry.getKey());
 
-            indexFile.appendLine(imageName + " " + imageIndex + " " + tileCategory.toString());
+            indexFile.appendLine(imageName + " " + imageIndex + " " + tileCategory);
         }
 
-        FileIO.writeToFile(mapMaker.getPathWithRoot(FileName.MAP_TILES_INDEX), indexFile.toString());
+        FileIO.writeToFile(mapMaker.getPath(FileName.MAP_TILES_INDEX), indexFile.toString());
     }
 
     public enum TileType {
