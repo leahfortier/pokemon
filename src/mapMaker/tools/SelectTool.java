@@ -14,7 +14,6 @@ import java.awt.image.BufferedImage;
 public class SelectTool extends Tool {
     private boolean paste;
     private boolean selected;
-    private boolean controlClick;
 
     private BufferedImage copiedTiles = null;
     private EditType copiedEditType;
@@ -31,7 +30,7 @@ public class SelectTool extends Tool {
 
     @Override
     public void click(Point clickLocation) {
-        if (!paste || controlClick) {
+        if (!paste) {
             return;
         }
 
@@ -68,27 +67,10 @@ public class SelectTool extends Tool {
             return;
         }
 
-//            if (controlKeyDown && selected) {
-//                cut();
-//                controlClick = true;
-//                return;
-//            }
-
         this.startLocation = TileUtils.getLocation(pressedLocation, mapMaker.getMapLocation());
 
         pressed = true;
         deselect();
-    }
-
-    @Override
-    public void drag(Point dragLocation) {
-//            if (controlClick) {
-//                controlClick = false;
-//                paste();
-//                //return;
-//            }
-//
-//            click(x, y);
     }
 
     @Override

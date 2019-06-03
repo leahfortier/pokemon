@@ -3,6 +3,7 @@ package mapMaker.model;
 import draw.TileUtils;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
+import mapMaker.tools.Tool.ToolType;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -41,23 +42,29 @@ public class TriggerModel extends MapMakerModel {
     }
 
     public enum TriggerModelType {
-        ITEM("Item", TileType.MAP_MAKER, 0xf),
-        HIDDEN_ITEM("Hidden Item", TileType.MAP_MAKER, 0x10),
-        NPC("NPC", TileType.TRAINER, 0x40),
-        MISC_ENTITY("Misc Entity", TileType.MAP_MAKER, 0x4),
-        WILD_BATTLE("Wild Battle", TileType.MAP_MAKER, 0x3),
-        MAP_TRANSITION("Map Exit", TileType.MAP_MAKER, 0x1),
-        EVENT("Event", TileType.MAP_MAKER, 0xc),
-        FISHING("Fishing", TileType.MAP_MAKER, 0xe);
+        ITEM("Item", true, 0xf),
+        HIDDEN_ITEM("Hidden Item", true, 0x10),
+        NPC("NPC", TileType.TRAINER, true, 0x40),
+        MISC_ENTITY("Misc Entity", true, 0x4),
+        WILD_BATTLE("Wild Battle", false, 0x3),
+        MAP_TRANSITION("Map Exit", true, 0x1),
+        EVENT("Event", true, 0xc),
+        FISHING("Fishing", false, 0xe);
 
         private final String name;
 
         private final TileType tileType;
+        private final ToolType defaultTool;
         private final int imageIndex;
 
-        TriggerModelType(String name, TileType tileType, int imageIndex) {
+        TriggerModelType(String name, boolean singleClick, int imageIndex) {
+            this(name, TileType.MAP_MAKER, singleClick, imageIndex);
+        }
+
+        TriggerModelType(String name, TileType tileType, boolean singleClick, int imageIndex) {
             this.name = name;
             this.tileType = tileType;
+            this.defaultTool = singleClick ? ToolType.SINGLE_CLICK : ToolType.RECTANGLE;
             this.imageIndex = imageIndex;
         }
 
@@ -71,6 +78,10 @@ public class TriggerModel extends MapMakerModel {
 
         public ImageIcon getImageIcon(final MapMaker mapMaker) {
             return new ImageIcon(TileUtils.tileWithText(this.getImage(mapMaker), name), String.valueOf(this.ordinal()));
+        }
+
+        public ToolType getDefaultTool() {
+            return this.defaultTool;
         }
 
         public static TriggerModelType getModelTypeFromIndex(int selectedIndex) {

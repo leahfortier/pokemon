@@ -5,6 +5,7 @@ import util.Point;
 
 import javax.swing.DefaultListModel;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 
 public abstract class Tool {
     protected static Tool lastUsedTool;
@@ -40,16 +41,22 @@ public abstract class Tool {
     }
 
     public enum ToolType {
-        MOVE(MoveTool::new),
-        SINGLE_CLICK(SingleClickTool::new),
-        RECTANGLE(RectangleTool::new),
-        TRIGGER(TriggerTool::new),
-        SELECT(SelectTool::new);
+        MOVE(KeyEvent.VK_1, MoveTool::new),
+        SINGLE_CLICK(KeyEvent.VK_2, SingleClickTool::new),
+        RECTANGLE(KeyEvent.VK_3, RectangleTool::new),
+        TRIGGER(KeyEvent.VK_4, TriggerTool::new),
+        SELECT(KeyEvent.VK_5, SelectTool::new);
 
+        private final int keyEvent;
         private final ToolCreator toolCreator;
 
-        ToolType(ToolCreator toolCreator) {
+        ToolType(int keyEvent, ToolCreator toolCreator) {
+            this.keyEvent = keyEvent;
             this.toolCreator = toolCreator;
+        }
+
+        public int getKeyEvent() {
+            return this.keyEvent;
         }
 
         @FunctionalInterface

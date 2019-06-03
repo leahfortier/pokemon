@@ -44,7 +44,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -508,21 +507,19 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
 
     @Override
     public void keyPressed(KeyEvent event) {
-        // TODO: This should be stored in the tool
-        // TODO: e for eraser, s for single, r for rect, t for trigger, ? for select?
         if (event.getKeyCode() == KeyEvent.VK_SPACE && previousToolType == null && !toolList.isSelectionEmpty()) {
             previousToolType = ToolType.values()[toolList.getSelectedIndex()];
             this.setTool(ToolType.MOVE);
-        } else if (event.getKeyCode() == KeyEvent.VK_1) {
-            this.setTool(ToolType.MOVE);
-        } else if (event.getKeyCode() == KeyEvent.VK_2) {
-            this.setTool(ToolType.SINGLE_CLICK);
-        } else if (event.getKeyCode() == KeyEvent.VK_3) {
-            this.setTool(ToolType.RECTANGLE);
-        } else if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            if (this.isEditType(EditType.TRIGGERS) && this.hasPlaceableTrigger()) {
-                this.clearPlaceableTrigger();
-                toolList.clearSelection();
+        } else if (event.getKeyCode() == KeyEvent.VK_ESCAPE && this.isEditType(EditType.TRIGGERS) && this.hasPlaceableTrigger()) {
+            this.clearPlaceableTrigger();
+            toolList.clearSelection();
+        } else {
+            // Check if corresponds to a tool
+            for (ToolType toolType : ToolType.values()) {
+                if (event.getKeyCode() == toolType.getKeyEvent()) {
+                    this.setTool(toolType);
+                    break;
+                }
             }
         }
     }
@@ -532,9 +529,6 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
         if (event.getKeyCode() == KeyEvent.VK_SPACE && previousToolType != null) {
             this.setTool(previousToolType);
             this.previousToolType = null;
-        }
-
-        if (event.getModifiersEx() != Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) {
         }
     }
 
@@ -617,26 +611,15 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
                 } else {
                     TriggerModelType type = TriggerModelType.getModelTypeFromIndex(this.getSelectedTileIndex());
 
-                    // Already something placeable, ignore trying to create something new.
+                    // Already something placeable, ignore trying to create something new
                     if (!this.hasPlaceableTrigger()) {
 
                         // Trigger was not created, deselect item
                         if (!this.getTriggerData().createTrigger(type)) {
                             tileList.clearSelection();
-                        }
-                        // Trigger was created, move to single selection
-                        else {
-                            switch (type) {
-                                case WILD_BATTLE:
-                                case EVENT:
-                                case FISHING:
-                                case MISC_ENTITY:
-                                    this.setTool(ToolType.RECTANGLE);
-                                    break;
-                                default:
-                                    this.setTool(ToolType.SINGLE_CLICK);
-                                    break;
-                            }
+                        } else {
+                            // Trigger was created, set appropriate tool
+                            this.setTool(type.getDefaultTool());
                         }
                     } else if (!triggerToolMoveSelected) {
                         this.clearPlaceableTrigger();

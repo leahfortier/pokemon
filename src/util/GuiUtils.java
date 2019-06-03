@@ -35,16 +35,11 @@ public class GuiUtils {
         component.setBackground(Color.WHITE);
     }
 
-    public static JMenuItem createMenuItem(String text, ActionListener actionListener) {
+    public static JMenuItem createMenuItem(String text, int keyEvent, ActionListener actionListener) {
         JMenuItem menuItem = new JMenuItem(text);
-        menuItem.addActionListener(actionListener);
         setStyle(menuItem);
 
-        return menuItem;
-    }
-
-    public static JMenuItem createMenuItem(String text, int keyEvent, ActionListener actionListener) {
-        JMenuItem menuItem = createMenuItem(text, actionListener);
+        menuItem.addActionListener(actionListener);
 
         // System shortcut key. ControlKey for windows, command for mac.
         int shortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();

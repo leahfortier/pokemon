@@ -88,10 +88,8 @@ public class MapMakerTriggerData {
 
     private String getUniqueEntityName(LocationTriggerMatcher matcher, Set<String> entityNames) {
         TriggerModelType type = matcher.getTriggerModelType();
-        String basicEntityName = matcher.getBasicName();
-
         String typeName = getEntityNameFormat(type.getName());
-        basicEntityName = getEntityNameFormat(basicEntityName);
+        String basicEntityName = getEntityNameFormat(matcher.getBasicName());
 
         int number = 1;
         String uniqueEntityName;
