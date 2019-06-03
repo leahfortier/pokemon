@@ -45,8 +45,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -56,9 +54,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class MapMaker extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener, ListSelectionListener {
+public class MapMaker extends JPanel implements MouseListener, MouseMotionListener, KeyListener, ListSelectionListener {
     public final Canvas canvas;
 
     private JButton newTileButton;
@@ -66,14 +65,9 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
     private JList<ImageIcon> tileList;
     private JList<Tool> toolList;
 
-    private JMenuItem newMenuItem;
-    private JMenuItem loadMenuItem;
-    private JMenuItem saveMenuItem;
-
     public JMenuItem cutMenuItem;
     public JMenuItem copyMenuItem;
     public JMenuItem pasteMenuItem;
-    private JMenuItem undoMenuItem;
 
     private JLabel mapNameLabel;
     private JComboBox<EditType> editTypeComboBox;
@@ -137,28 +131,33 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         return new JScrollPane(toolList);
     }
 
-    // TODO: This doesn't really seem to have anything to do with being an edit menu item especially after undo is UNDOing this
-    private JMenuItem createEditMenuItem(String text, int keyEvent) {
-        JMenuItem menuItem = GuiUtils.createMenuItem(text, keyEvent, this);
-        menuItem.setEnabled(false);
-
-        return menuItem;
-    }
-
     private JMenu createFileMenu() {
-        this.newMenuItem = GuiUtils.createMenuItem("New", KeyEvent.VK_N, this);
-        this.loadMenuItem = GuiUtils.createMenuItem("Load", KeyEvent.VK_L, this);
-        this.saveMenuItem = GuiUtils.createMenuItem("Save", KeyEvent.VK_S, this);
+        JMenuItem newMenuItem = GuiUtils.createMenuItem("New", KeyEvent.VK_N, event -> showMap(this::createMapDialog));
+        JMenuItem loadMenuItem = GuiUtils.createMenuItem("Load", KeyEvent.VK_L, event -> showMap(this::loadMapDialog));
+        JMenuItem saveMenuItem = GuiUtils.createMenuItem("Save", KeyEvent.VK_S, event -> saveMap());
 
         return GuiUtils.createMenu("File", newMenuItem, loadMenuItem, saveMenuItem);
     }
 
     private JMenu createEditMenu() {
-        this.cutMenuItem = this.createEditMenuItem("Cut", KeyEvent.VK_X);
-        this.copyMenuItem = this.createEditMenuItem("Copy", KeyEvent.VK_C);
-        this.pasteMenuItem = this.createEditMenuItem("Paste", KeyEvent.VK_V);
-        this.undoMenuItem = this.createEditMenuItem("Undo", KeyEvent.VK_Z);
-        this.undoMenuItem.setEnabled(true);
+        // Cut and copy are only enabled when select tool is active
+        this.cutMenuItem = GuiUtils.createMenuItem("Cut", KeyEvent.VK_X, event -> selectTool.cut());
+        this.cutMenuItem.setEnabled(false);
+
+        this.copyMenuItem = GuiUtils.createMenuItem("Copy", KeyEvent.VK_C, event -> selectTool.copy());
+        this.copyMenuItem.setEnabled(false);
+
+        // Paste is enabled once something is cut/copied
+        this.pasteMenuItem = GuiUtils.createMenuItem("Paste", KeyEvent.VK_V, event -> {
+            this.setTool(ToolType.SELECT);
+            selectTool.paste();
+        });
+        this.pasteMenuItem.setEnabled(false);
+
+        JMenuItem undoMenuItem = GuiUtils.createMenuItem("Undo", KeyEvent.VK_Z, event -> {
+            Tool.undoLastTool();
+            draw();
+        });
 
         return GuiUtils.createMenu("Edit", cutMenuItem, copyMenuItem, pasteMenuItem, undoMenuItem);
     }
@@ -212,7 +211,7 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
-        newTileButton = GuiUtils.createButton("New Tile", this);
+        newTileButton = GuiUtils.createButton("New Tile", event -> this.getModel().newTileButtonPressed(this));
         panel.add(newTileButton, BorderLayout.NORTH);
 
         tileCategoriesComboBox = GuiUtils.createComboBox(
@@ -303,6 +302,28 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
         );
     }
 
+    // Used when switching maps (creating or loading) -- dialog will determine which map to pick
+    // showDialog should return false if a map was not selected
+    // if true, all relevant map information should already be stored
+    private void showMap(Supplier<Boolean> showDialog) {
+        if (this.mapData.hasMap()) {
+            boolean exit = checkSaveOnExit();
+            if (!exit) {
+                return;
+            }
+        }
+
+        // Default to move for new maps (so you can find the best place!)
+        this.setTool(ToolType.MOVE);
+
+        if (!showDialog.get()) {
+            return;
+        }
+
+        mapNameLabel.setText(this.getCurrentMapName().toString());
+        draw();
+    }
+
     private boolean createMapDialog() {
         String[] regionList = getAvailableRegions();
         String region = this.getInputDialogChoice("Select a region", "Create Map", regionList);
@@ -346,47 +367,6 @@ public class MapMaker extends JPanel implements ActionListener, MouseListener, M
 
         this.mapData.loadPreviousMap(this, new MapName(region, map));
         return true;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent event) {
-        if (event.getSource() == newTileButton) {
-            this.getModel().newTileButtonPressed(this);
-        } else if (event.getSource() == saveMenuItem) {
-            saveMap();
-        } else if (event.getSource() == newMenuItem || event.getSource() == loadMenuItem) {
-            if (this.mapData.hasMap()) {
-                boolean exit = checkSaveOnExit();
-                if (!exit) {
-                    return;
-                }
-            }
-
-            this.setTool(ToolType.MOVE);
-
-            if (event.getSource() == newMenuItem) {
-                if (!createMapDialog()) {
-                    return;
-                }
-            } else {
-                if (!loadMapDialog()) {
-                    return;
-                }
-            }
-
-            mapNameLabel.setText(this.getCurrentMapName().toString());
-            draw();
-        } else if (event.getSource() == cutMenuItem) {
-            selectTool.cut();
-        } else if (event.getSource() == copyMenuItem) {
-            selectTool.copy();
-        } else if (event.getSource() == pasteMenuItem) {
-            this.setTool(ToolType.SELECT);
-            selectTool.paste();
-        } else if (event.getSource() == undoMenuItem) {
-            Tool.undoLastTool();
-            draw();
-        }
     }
 
     public String[] getAvailableRegions() {
