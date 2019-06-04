@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 // Metadata for the current map being edited
-class EditMapMetaData {
+class EditMapMetadata {
     private static final Dimension DEFAULT_MAP_SIZE = new Dimension(10, 10);
 
     private MapName currentMapName;
@@ -38,7 +38,7 @@ class EditMapMetaData {
     private Composite alphaComposite;
     private Composite defaultComposite;
 
-    public EditMapMetaData() {
+    public EditMapMetadata() {
         this.currentMap = new EnumMap<>(MapDataType.class);
     }
 

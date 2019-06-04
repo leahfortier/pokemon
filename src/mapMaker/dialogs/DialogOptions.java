@@ -8,14 +8,10 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-class DialogOptions extends JDialog implements ActionListener {
+class DialogOptions extends JDialog {
 
     private final JPanel panel;
-
-    private final JButton saveButton;
     private final JPanel buttonsComponent;
 
     private boolean saved;
@@ -26,8 +22,12 @@ class DialogOptions extends JDialog implements ActionListener {
         panel = new JPanel();
         GuiUtils.setStyle(panel);
 
-        this.saveButton = GuiUtils.createButton("Save or Whatever", this);
-        JButton cancelButton = GuiUtils.createButton("Cancel", this);
+        JButton saveButton = GuiUtils.createButton("Save or Whatever", event -> {
+            this.saved = true;
+            finish();
+        });
+
+        JButton cancelButton = GuiUtils.createButton("Cancel", event -> finish());
 
         this.buttonsComponent = GuiUtils.createHorizontalLayoutComponent(saveButton, cancelButton);
 
@@ -44,12 +44,7 @@ class DialogOptions extends JDialog implements ActionListener {
         this.pack();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent event) {
-        if (event.getSource() == this.saveButton) {
-            this.saved = true;
-        }
-
+    private void finish() {
         this.setVisible(false);
         this.dispose();
     }

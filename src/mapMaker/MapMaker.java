@@ -36,8 +36,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -56,7 +54,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class MapMaker extends JPanel implements MouseListener, MouseMotionListener, KeyListener, ListSelectionListener {
+public class MapMaker extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
     public final Canvas canvas;
 
     private JButton newTileButton;
@@ -72,7 +70,7 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
     private JComboBox<EditType> editTypeComboBox;
 
     private EditType editType;
-    private EditMapMetaData mapData;
+    private EditMapMetadata mapData;
 
     private LocationTriggerMatcher placeableTrigger;
 
@@ -97,7 +95,7 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
         this.location = new Point();
         this.mouseHoverLocation = new Point();
 
-        this.mapData = new EditMapMetaData();
+        this.mapData = new EditMapMetadata();
         this.editType = EditType.BACKGROUND;
 
         this.canvas = new Canvas();
@@ -122,7 +120,19 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
         toolList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         toolList.setCellRenderer(new ToolRenderer());
         toolList.setFont(FontMetrics.getFont(18));
-        toolList.addListSelectionListener(this);
+
+        toolList.addListSelectionListener(event -> {
+            if (!toolList.isSelectionEmpty() && !event.getValueIsAdjusting()) {
+                toolList.getSelectedValue().reset();
+                if (toolList.getSelectedValue() != selectTool) {
+                    copyMenuItem.setEnabled(false);
+                    cutMenuItem.setEnabled(false);
+                } else if (selectTool.hasSelection()) {
+                    copyMenuItem.setEnabled(true);
+                    cutMenuItem.setEnabled(true);
+                }
+            }
+        });
 
         this.setTool(ToolType.MOVE);
         this.selectTool = (SelectTool)this.getTool(ToolType.SELECT);
@@ -233,8 +243,34 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
         tileList.setModel(this.getModel().getListModel());
         tileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        tileList.addListSelectionListener(this);
         tileList.addKeyListener(this);
+        tileList.addListSelectionListener(event -> {
+            // When a trigger item selected
+            if (this.isEditType(EditType.TRIGGERS) && !this.isTileSelectionEmpty() && !event.getValueIsAdjusting()) {
+                if (!this.hasMap()) {
+                    tileList.clearSelection();
+                } else {
+                    TriggerModelType type = TriggerModelType.getModelTypeFromIndex(this.getSelectedTileIndex());
+
+                    // Already something placeable, ignore trying to create something new
+                    if (!this.hasPlaceableTrigger()) {
+
+                        // Trigger was not created, deselect item
+                        if (!this.getTriggerData().createTrigger(type)) {
+                            tileList.clearSelection();
+                        } else {
+                            // Trigger was created, set appropriate tool
+                            this.setTool(type.getDefaultTool());
+                        }
+                    } else if (!triggerToolMoveSelected) {
+                        this.clearPlaceableTrigger();
+                        tileList.clearSelection();
+                    }
+
+                    triggerToolMoveSelected = false;
+                }
+            }
+        });
 
         JScrollPane listScroller = new JScrollPane(tileList);
         tilePanel.add(listScroller, BorderLayout.CENTER);
@@ -474,7 +510,6 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
         draw();
     }
 
-    // TODO: Do we not want to be saving the mouse hover location here? as well as above?
     @Override
     public void mouseReleased(MouseEvent event) {
         if (!toolList.isSelectionEmpty()) {
@@ -598,49 +633,6 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
 
     public void clearPlaceableTrigger() {
         this.placeableTrigger = null;
-    }
-
-    @Override
-    public void valueChanged(ListSelectionEvent event) {
-        if (event.getSource() == tileList) {
-
-            // When a trigger item selected
-            if (this.isEditType(EditType.TRIGGERS) && !this.isTileSelectionEmpty() && !event.getValueIsAdjusting()) {
-                if (!this.hasMap()) {
-                    tileList.clearSelection();
-                } else {
-                    TriggerModelType type = TriggerModelType.getModelTypeFromIndex(this.getSelectedTileIndex());
-
-                    // Already something placeable, ignore trying to create something new
-                    if (!this.hasPlaceableTrigger()) {
-
-                        // Trigger was not created, deselect item
-                        if (!this.getTriggerData().createTrigger(type)) {
-                            tileList.clearSelection();
-                        } else {
-                            // Trigger was created, set appropriate tool
-                            this.setTool(type.getDefaultTool());
-                        }
-                    } else if (!triggerToolMoveSelected) {
-                        this.clearPlaceableTrigger();
-                        tileList.clearSelection();
-                    }
-
-                    triggerToolMoveSelected = false;
-                }
-            }
-        } else if (event.getSource() == toolList) {
-            if (!toolList.isSelectionEmpty() && !event.getValueIsAdjusting()) {
-                toolList.getSelectedValue().reset();
-                if (toolList.getSelectedValue() != selectTool) {
-                    copyMenuItem.setEnabled(false);
-                    cutMenuItem.setEnabled(false);
-                } else if (selectTool.hasSelection()) {
-                    copyMenuItem.setEnabled(true);
-                    cutMenuItem.setEnabled(true);
-                }
-            }
-        }
     }
 
     private static Point getMouseLocation(MouseEvent event) {
