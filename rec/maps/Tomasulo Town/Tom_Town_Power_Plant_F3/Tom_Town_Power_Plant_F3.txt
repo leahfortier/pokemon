@@ -252,7 +252,7 @@
         "x": 15,
         "y": 7
       },
-      "triggerName": "Tom_Town_Power_Plant_F3_HiddenItem_Repel_01"
+      "triggerName": "Tom_Town_Power_Plant_F3_HiddenItem_REPEL_01"
     }
   ],
   "miscEntities": [],

@@ -59,7 +59,7 @@
         "x": 11,
         "y": 11
       },
-      "triggerName": "Tom_Town_Power_Plant_B1_HiddenItem_Potion_01"
+      "triggerName": "Tom_Town_Power_Plant_B1_HiddenItem_POTION_01"
     }
   ],
   "miscEntities": [],

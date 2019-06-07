@@ -91,7 +91,7 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
         frame.setVisible(true);
     }
 
-    private MapMaker() {
+    public MapMaker() {
         this.location = new Point();
         this.mouseHoverLocation = new Point();
 
@@ -111,7 +111,11 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
 
         MapMakerModel.reloadModels(this);
 
-        this.mapData.loadPreviousMap(this, new MapName("Depth First Search Town", "PlayersHouseUp"));
+        this.loadMap("Depth First Search Town", "PlayersHouseUp");
+    }
+
+    public void loadMap(String regionName, String mapName) {
+        this.mapData.loadMap(this, new MapName(regionName, mapName));
     }
 
     private JScrollPane createToolList() {
@@ -404,7 +408,7 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
             return false;
         }
 
-        this.mapData.loadPreviousMap(this, new MapName(region, map));
+        this.loadMap(region, map);
         return true;
     }
 
@@ -436,7 +440,7 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
         return getMapFolderPath(mapName) + mapName.getMapName() + ".txt";
     }
 
-    private boolean hasUnsavedChanges() {
+    public boolean hasUnsavedChanges() {
         return this.mapData.hasUnsavedChanges(this) || MapMakerModel.getTileModel().hasUnsavedChanges();
     }
 

@@ -121,8 +121,6 @@ public class MapMakerTriggerData {
             );
         } while (entityNames.contains(uniqueEntityName));
 
-        System.out.println(uniqueEntityName);
-
         matcher.setTriggerName(uniqueEntityName);
         entityNames.add(uniqueEntityName);
 

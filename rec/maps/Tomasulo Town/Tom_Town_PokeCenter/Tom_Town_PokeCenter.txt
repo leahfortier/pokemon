@@ -87,7 +87,7 @@
           "y": 3
         }
       ],
-      "triggerName": "Tom_Town_PokeCenter_TriggerEntity_Heal_01"
+      "triggerName": "Tom_Town_PokeCenter_MiscEntity_Heal_01"
     },
     {
       "name": "Mart",
@@ -103,7 +103,7 @@
           "y": 7
         }
       ],
-      "triggerName": "Tom_Town_PokeCenter_TriggerEntity_Mart_01"
+      "triggerName": "Tom_Town_PokeCenter_MiscEntity_Mart_01"
     },
     {
       "name": "PC_View",
@@ -119,7 +119,7 @@
           "y": 1
         }
       ],
-      "triggerName": "Tom_Town_PokeCenter_TriggerEntity_PC_View_01"
+      "triggerName": "Tom_Town_PokeCenter_MiscEntity_PC_View_01"
     }
   ],
   "events": [],

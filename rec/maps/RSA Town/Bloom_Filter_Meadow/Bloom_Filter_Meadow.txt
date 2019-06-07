@@ -197,7 +197,7 @@
         "x": 44,
         "y": 14
       },
-      "triggerName": "Bloom_Filter_Meadow_Item_Meadow_Plate_01"
+      "triggerName": "Bloom_Filter_Meadow_Item_MEADOW_PLATE_01"
     },
     {
       "item": "PECHA_BERRY",
@@ -206,7 +206,7 @@
         "x": 21,
         "y": 26
       },
-      "triggerName": "Bloom_Filter_Meadow_Item_Pecha_Berry_01"
+      "triggerName": "Bloom_Filter_Meadow_Item_PECHA_BERRY_01"
     },
     {
       "item": "SITRUS_BERRY",
@@ -215,7 +215,7 @@
         "x": 34,
         "y": 16
       },
-      "triggerName": "Bloom_Filter_Meadow_HiddenItem_SitrusBerry_01"
+      "triggerName": "Bloom_Filter_Meadow_HiddenItem_SITRUS_BERRY_01"
     }
   ],
   "miscEntities": [],

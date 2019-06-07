@@ -232,16 +232,11 @@ public class PokemonInfoTest extends BaseTest {
         int total = 0;
         for (int i = 0; i < Stat.NUM_STATS; i++) {
             int effortValue = pokemonInfo.getGivenEV(i);
-            checkEvRange(pokemonInfo, effortValue);
+            TestUtils.assertInclusiveRange(pokemonInfo.getName() + " " + effortValue, 0, 3, effortValue);
             total += effortValue;
         }
-        checkEvRange(pokemonInfo, total);
+        TestUtils.assertInclusiveRange(pokemonInfo.getName() + " " + total, 1, 3, total);
         return total;
-    }
-
-    // Valid for an individual EV or for a total -- confirms between 1 and 3
-    private void checkEvRange(PokemonInfo pokemonInfo, int effortValue) {
-        Assert.assertTrue(pokemonInfo.getName() + " " + effortValue, effortValue >= 1 && effortValue <= 3);
     }
 
     @Test

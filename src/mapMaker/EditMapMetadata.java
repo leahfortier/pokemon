@@ -127,7 +127,7 @@ class EditMapMetadata {
         triggerData.saveTriggers(mapMaker.getMapTextFileName(currentMapName));
     }
 
-    public void loadPreviousMap(MapMaker mapMaker, MapName mapName) {
+    public void loadMap(MapMaker mapMaker, MapName mapName) {
         this.currentMapName = mapName;
 
         final String mapFolderPath = mapMaker.getMapFolderPath(mapName);

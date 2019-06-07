@@ -474,7 +474,7 @@
         "x": 31,
         "y": 16
       },
-      "triggerName": "DFS_Town_Item_Paralyze_Heal_01"
+      "triggerName": "DFS_Town_Item_PARALYZE_HEAL_01"
     },
     {
       "item": "CHERI_BERRY",
@@ -483,7 +483,7 @@
         "x": 28,
         "y": 16
       },
-      "triggerName": "DFS_Town_HiddenItem_CheriBerry_01"
+      "triggerName": "DFS_Town_HiddenItem_CHERI_BERRY_01"
     },
     {
       "item": "ORAN_BERRY",
@@ -492,7 +492,7 @@
         "x": 38,
         "y": 22
       },
-      "triggerName": "DFS_Town_HiddenItem_OranBerry_01"
+      "triggerName": "DFS_Town_HiddenItem_ORAN_BERRY_01"
     }
   ],
   "miscEntities": [

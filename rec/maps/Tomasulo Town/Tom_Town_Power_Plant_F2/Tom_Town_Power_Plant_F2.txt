@@ -100,7 +100,7 @@
         "x": 2,
         "y": 6
       },
-      "triggerName": "Tom_Town_Power_Plant_F2_HiddenItem_OranBerry_01"
+      "triggerName": "Tom_Town_Power_Plant_F2_HiddenItem_ORAN_BERRY_01"
     }
   ],
   "miscEntities": [],
