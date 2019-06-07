@@ -182,7 +182,7 @@ public class PlayerEntity extends MovableEntity {
 
         // Entity
         if (entityDirection != null) {
-            if (currentInteractionEntity.isVisible()) {
+            if (currentInteractionEntity.isActive()) {
                 currentInteractionEntity.getAttention(entityDirection.getOpposite());
 
                 Trigger trigger = currentInteractionEntity.getTrigger();

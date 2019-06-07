@@ -51,8 +51,8 @@ public class ItemEntity extends Entity {
     }
 
     @Override
-    public boolean isVisible() {
-        return super.isVisible() && !hasTriggered;
+    public boolean isActive() {
+        return super.isActive() && !hasTriggered;
     }
 
     @Override

@@ -45,10 +45,10 @@ public abstract class Entity {
     }
 
     public boolean isPassable() {
-        return !this.isVisible();
+        return !this.isActive();
     }
 
-    public boolean isVisible() {
+    public boolean isActive() {
         return this.visible;
     }
 

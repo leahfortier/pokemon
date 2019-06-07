@@ -259,7 +259,7 @@ public class MapData {
 
     public List<ItemEntity> getHiddenItems() {
         return entities.stream()
-                       .filter(entity -> entity.isVisible() && entity instanceof ItemEntity)
+                       .filter(entity -> entity.isActive() && entity instanceof ItemEntity)
                        .map(entity -> (ItemEntity)entity)
                        .filter(ItemEntity::isHiddenItem)
                        .collect(Collectors.toList());
@@ -273,7 +273,7 @@ public class MapData {
 
         List<Entity> presentEntities = entities
                 .stream()
-                .filter(entity -> entity.isVisible() && entity.getLocation().equals(location))
+                .filter(entity -> entity.isActive() && entity.getLocation().equals(location))
                 .collect(Collectors.toList());
 
         return validateEntities(presentEntities);
@@ -282,7 +282,7 @@ public class MapData {
     public Entity getEntity(String entityName) {
         List<Entity> presentEntities = entities
                 .stream()
-                .filter(entity -> entity.isVisible() && entity.getEntityName().equals(entityName))
+                .filter(entity -> entity.isActive() && entity.getEntityName().equals(entityName))
                 .collect(Collectors.toList());
 
         return validateEntities(presentEntities);
