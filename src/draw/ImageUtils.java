@@ -247,6 +247,11 @@ public final class ImageUtils {
         return numOpaque;
     }
 
+    // Returns true if the number of non-matching opaque pixels for images of the same size is zero
+    public static boolean equals(BufferedImage first, BufferedImage second) {
+        return pixelsDiff(first, second) == 0;
+    }
+
     // Returns the number of non-matching opaque pixels for images of the same size
     public static int pixelsDiff(BufferedImage first, BufferedImage second) {
         if (first.getWidth() != second.getWidth() || first.getHeight() != second.getHeight()) {

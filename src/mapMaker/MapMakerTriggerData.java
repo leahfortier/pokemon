@@ -35,6 +35,7 @@ import util.string.StringUtils;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -70,20 +71,38 @@ public class MapMakerTriggerData {
         this.entities.addAll(mapDataMatcher.getAllEntities());
     }
 
-    void saveTriggers(String mapFileName) {
+    public boolean hasUnsavedChanges(String mapFileName) {
+        // File doesn't yet exist -- need to save to create
+        File mapFile = FileIO.newFile(mapFileName);
+        if (!mapFile.exists()) {
+            return true;
+        }
+
+        // File already exists -- create and compare contents
+        // If the files are the same no save is necessary (return false)
+        // But if there is any different need to save to update file
+        String oldFileContents = FileIO.readEntireFile(mapFile);
+        String newFileContents = this.getFileContents();
+        return !oldFileContents.equals(newFileContents);
+    }
+
+    public void saveTriggers(String mapFileName) {
+        FileIO.createFile(mapFileName);
+        FileIO.overwriteFile(mapFileName, this.getFileContents());
+    }
+
+    private String getFileContents() {
         // Collect and sort all the entities in a list
         List<LocationTriggerMatcher> entityList = entities
                 .stream()
-                .sorted(LocationTriggerMatcher.COMPARATOR)
+                .sorted()
                 .collect(Collectors.toList());
 
         Set<String> entityNames = new HashSet<>();
         entityList.forEach(matcher -> getUniqueEntityName(matcher, entityNames));
 
         MapDataMatcher mapDataMatcher = new MapDataMatcher(areaData, entityList);
-
-        FileIO.createFile(mapFileName);
-        FileIO.overwriteFile(mapFileName, mapDataMatcher.getJson());
+        return mapDataMatcher.getJson();
     }
 
     private String getUniqueEntityName(LocationTriggerMatcher matcher, Set<String> entityNames) {

@@ -20,6 +20,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -77,20 +78,49 @@ class EditMapMetadata {
         triggerData = new MapMakerTriggerData(mapMaker, defaultArea);
         MapMakerModel.getAreaModel().loadMap(this.triggerData);
 
-        save(mapMaker);
+        this.save(mapMaker);
+    }
+
+    public boolean hasUnsavedChanges(MapMaker mapMaker) {
+        // No map -- nothing to save
+        if (!this.hasMap()) {
+            return false;
+        }
+
+        // Check if any images need to be updated
+        final String mapFolderPath = mapMaker.getMapFolderPath(currentMapName);
+        for (MapDataType dataType : MapDataType.values()) {
+            String mapImageName = mapFolderPath + dataType.getImageName(currentMapName.getMapName());
+            File mapImageFile = FileIO.newFile(mapImageName);
+
+            // Map images do not yet exist -- need to save to create image
+            if (!mapImageFile.exists()) {
+                return true;
+            }
+
+            // Image exists already but aren't the same -- need to save to update image
+            BufferedImage mapImage = FileIO.readImage(mapImageName);
+            if (!ImageUtils.equals(mapImage, this.getMapImage(dataType))) {
+                return true;
+            }
+        }
+
+        // Check if triggers need to be updated
+        return triggerData.hasUnsavedChanges(mapMaker.getMapTextFileName(currentMapName));
     }
 
     public void save(MapMaker mapMaker) {
-        if (!this.hasMap()) {
+        if (!this.hasUnsavedChanges(mapMaker)) {
             return;
         }
 
         final String mapFolderPath = mapMaker.getMapFolderPath(currentMapName);
         FileIO.createFolder(mapFolderPath);
 
+        // Saves all map images
         for (MapDataType dataType : MapDataType.values()) {
-            String mapFileName = mapFolderPath + dataType.getImageName(currentMapName.getMapName());
-            FileIO.writeImage(this.getMapImage(dataType), mapFileName);
+            String mapImageName = mapFolderPath + dataType.getImageName(currentMapName.getMapName());
+            FileIO.writeImage(this.getMapImage(dataType), mapImageName);
         }
 
         // Save all triggers

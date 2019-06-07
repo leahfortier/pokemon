@@ -48,6 +48,7 @@ public final class FileIO {
         }
     }
 
+    // Creates a new file if file does not already exist
     public static void createFile(final String filePath) {
         final File file = FileIO.newFile(filePath);
         if (!file.exists()) {
@@ -245,11 +246,7 @@ public final class FileIO {
         return false;
     }
 
-    public static void writeToFile(String fileName, String out) {
-        writeToFile(FileIO.newFile(fileName), out);
-    }
-
-    public static void writeToFile(File file, String out) {
+    private static void writeToFile(File file, String out) {
         try {
             PrintStream printStream = new PrintStream(file);
             printStream.println(out);

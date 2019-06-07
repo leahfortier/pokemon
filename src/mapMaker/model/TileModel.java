@@ -177,8 +177,12 @@ public class TileModel extends MapMakerModel {
         }
     }
 
+    public boolean hasUnsavedChanges() {
+        return !saved;
+    }
+
     public void save(MapMaker mapMaker) {
-        if (saved) {
+        if (!hasUnsavedChanges()) {
             return;
         }
 
@@ -193,7 +197,7 @@ public class TileModel extends MapMakerModel {
             indexFile.appendLine(imageName + " " + imageIndex + " " + tileCategory);
         }
 
-        FileIO.writeToFile(mapMaker.getPath(FileName.MAP_TILES_INDEX), indexFile.toString());
+        FileIO.overwriteFile(mapMaker.getPath(FileName.MAP_TILES_INDEX), indexFile.toString());
     }
 
     public enum TileType {

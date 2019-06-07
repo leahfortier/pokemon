@@ -309,6 +309,11 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
     // Called when trying to exit, shows a confirm dialog asking to save first if there are any unsaved changes
     // Returns whether or not the exit will actually occur
     private boolean checkSaveOnExit() {
+        // No changes to save -- just exit
+        if (!this.hasUnsavedChanges()) {
+            return true;
+        }
+
         int val = JOptionPane.showConfirmDialog(
                 this,
                 "Save current file first?",
@@ -429,6 +434,10 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
 
     public String getMapTextFileName(final MapName mapName) {
         return getMapFolderPath(mapName) + mapName.getMapName() + ".txt";
+    }
+
+    private boolean hasUnsavedChanges() {
+        return this.mapData.hasUnsavedChanges(this) || MapMakerModel.getTileModel().hasUnsavedChanges();
     }
 
     private void saveMap() {

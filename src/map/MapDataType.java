@@ -3,7 +3,6 @@ package map;
 import util.file.FileIO;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -29,8 +28,7 @@ public enum MapDataType {
         final Map<MapDataType, BufferedImage> imageMap = new EnumMap<>(MapDataType.class);
         for (MapDataType dataType : MapDataType.values()) {
             String fileName = beginFilePath + dataType.getImageName(mapName);
-            File imageFile = FileIO.newFile(fileName);
-            imageMap.put(dataType, FileIO.readImage(imageFile));
+            imageMap.put(dataType, FileIO.readImage(fileName));
         }
 
         return imageMap;
