@@ -1,9 +1,16 @@
 package util;
 
+import main.Global;
+
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
-public class TimeUtils {
+public final class TimeUtils {
+    // Utility class -- should not be instantiated
+    private TimeUtils() {
+        Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
+    }
+
     public static long getCurrentTimestamp() {
         return System.currentTimeMillis();
     }

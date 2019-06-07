@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public final class GeneralUtils {
 
-    // Util class -- cannot be instantiated
+    // Utility class -- should not be instantiated
     private GeneralUtils() {
         Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
     }

@@ -15,7 +15,7 @@ public final class RandomUtils {
         RANDOM.setSeed(SEED);
     }
 
-    // Util class -- cannot be instantiated
+    // Utility class -- should not be instantiated
     private RandomUtils() {
         Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
     }

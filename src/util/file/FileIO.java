@@ -26,8 +26,13 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class FileIO {
+public final class FileIO {
     public static String PATH = "";
+
+    // Utility class -- should not be instantiated
+    private FileIO() {
+        Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
+    }
 
     public static void deleteFile(String fileName) {
         deleteFile(FileIO.newFile(fileName));

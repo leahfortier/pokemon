@@ -1,5 +1,6 @@
 package util;
 
+import main.Global;
 import util.ColorDocumentListener.ColorCondition;
 
 import javax.swing.DefaultComboBoxModel;
@@ -27,7 +28,12 @@ import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 
-public class GuiUtils {
+public final class GuiUtils {
+
+    // Utility class -- should not be instantiated
+    private GuiUtils() {
+        Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
+    }
 
     // I can't help it I like a nice white background
     public static void setStyle(JComponent component) {

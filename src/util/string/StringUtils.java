@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StringUtils {
+public final class StringUtils {
     private static final String[] PROPER_CASE_DELIMITERS = { " ", "-", "_" };
 
     // Utility class -- should not be instantiated
