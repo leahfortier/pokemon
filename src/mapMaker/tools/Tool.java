@@ -10,10 +10,12 @@ import java.awt.event.KeyEvent;
 public abstract class Tool {
     protected static Tool lastUsedTool;
 
-    final MapMaker mapMaker;
+    protected final MapMaker mapMaker;
+    private final ToolType toolType;
 
-    Tool(final MapMaker mapMaker) {
+    Tool(MapMaker mapMaker, ToolType toolType) {
         this.mapMaker = mapMaker;
+        this.toolType = toolType;
     }
 
     // Can be overridden as necessary by subclasses
@@ -25,6 +27,10 @@ public abstract class Tool {
     public void reset() {}
     protected void undo() {}
 
+    public ToolType getToolType() {
+        return this.toolType;
+    }
+
     public static void undoLastTool() {
         if (lastUsedTool != null) {
             lastUsedTool.undo();
@@ -34,7 +40,7 @@ public abstract class Tool {
     public static DefaultListModel<Tool> getToolListModel(MapMaker mapMaker) {
         DefaultListModel<Tool> toolListModel = new DefaultListModel<>();
         for (ToolType toolType : ToolType.values()) {
-            toolListModel.addElement(toolType.toolCreator.createTool(mapMaker));
+            toolListModel.addElement(toolType.createTool(mapMaker));
         }
 
         return toolListModel;
@@ -57,6 +63,10 @@ public abstract class Tool {
 
         public int getKeyEvent() {
             return this.keyEvent;
+        }
+
+        public Tool createTool(MapMaker mapMaker) {
+            return this.toolCreator.createTool(mapMaker);
         }
 
         @FunctionalInterface

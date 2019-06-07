@@ -178,9 +178,7 @@ public class MapMakerTriggerData {
 
     boolean createTrigger(TriggerModelType type) {
         mapMaker.clearPlaceableTrigger();
-
         LocationTriggerMatcher trigger = getTriggerFromDialog(type, null);
-
         mapMaker.setPlaceableTrigger(trigger);
 
         return trigger != null;

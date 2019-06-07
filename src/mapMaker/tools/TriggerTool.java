@@ -22,7 +22,7 @@ class TriggerTool extends Tool {
     private LocationTriggerMatcher selectedTrigger;
 
     TriggerTool(MapMaker mapMaker) {
-        super(mapMaker);
+        super(mapMaker, ToolType.TRIGGER);
 
         selectedTrigger = null;
 

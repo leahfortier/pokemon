@@ -122,9 +122,9 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
         toolList.setFont(FontMetrics.getFont(18));
 
         toolList.addListSelectionListener(event -> {
-            if (!toolList.isSelectionEmpty() && !event.getValueIsAdjusting()) {
-                toolList.getSelectedValue().reset();
-                if (toolList.getSelectedValue() != selectTool) {
+            if (!event.getValueIsAdjusting()) {
+                this.getTool().reset();
+                if (this.getTool() != selectTool) {
                     copyMenuItem.setEnabled(false);
                     cutMenuItem.setEnabled(false);
                 } else if (selectTool.hasSelection()) {
@@ -246,7 +246,7 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
         tileList.addKeyListener(this);
         tileList.addListSelectionListener(event -> {
             // When a trigger item selected
-            if (this.isEditType(EditType.TRIGGERS) && !this.isTileSelectionEmpty() && !event.getValueIsAdjusting()) {
+            if (this.isEditType(EditType.TRIGGERS) && this.hasSelectedTile() && !event.getValueIsAdjusting()) {
                 if (!this.hasMap()) {
                     tileList.clearSelection();
                 } else {
@@ -278,12 +278,16 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
         return tilePanel;
     }
 
-    public void setTool(ToolType toolType) {
-        this.toolList.setSelectedIndex(toolType.ordinal());
+    public Tool getTool() {
+        return toolList.getSelectedValue();
     }
 
     private Tool getTool(ToolType toolType) {
         return toolList.getModel().getElementAt(toolType.ordinal());
+    }
+
+    public void setTool(ToolType toolType) {
+        this.toolList.setSelectedIndex(toolType.ordinal());
     }
 
     public Point getMapLocation() {
@@ -317,11 +321,6 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
         }
 
         return val != JOptionPane.CANCEL_OPTION;
-    }
-
-    private void resetMap() {
-        this.location = new Point();
-        MapMakerModel.getAreaModel().resetMap();
     }
 
     // Opens an input dialog and with the selection choices and returns the user's selection
@@ -473,10 +472,7 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
 
         this.mapData.drawMap(g2d, this.location, this.getEditType());
 
-        if (!toolList.isSelectionEmpty()) {
-            toolList.getSelectedValue().draw(g2d);
-        }
-
+        this.getTool().draw(g2d);
         this.getModel().draw(g2d, this);
 
         g2d.dispose();
@@ -488,10 +484,7 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
 
     @Override
     public void mouseClicked(MouseEvent event) {
-        if (!toolList.isSelectionEmpty()) {
-            toolList.getSelectedValue().click(getMouseLocation(event));
-        }
-
+        this.getTool().click(getMouseLocation(event));
         draw();
     }
 
@@ -503,19 +496,13 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
 
     @Override
     public void mousePressed(MouseEvent event) {
-        if (!toolList.isSelectionEmpty()) {
-            toolList.getSelectedValue().pressed(getMouseLocation(event));
-        }
-
+        this.getTool().pressed(getMouseLocation(event));
         draw();
     }
 
     @Override
     public void mouseReleased(MouseEvent event) {
-        if (!toolList.isSelectionEmpty()) {
-            toolList.getSelectedValue().released(getMouseLocation(event));
-        }
-
+        this.getTool().released(getMouseLocation(event));
         draw();
     }
 
@@ -523,10 +510,7 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
     public void mouseDragged(MouseEvent event) {
         this.mouseHoverLocation = getMouseLocation(event);
 
-        if (!toolList.isSelectionEmpty()) {
-            toolList.getSelectedValue().drag(getMouseLocation(event));
-        }
-
+        this.getTool().drag(getMouseLocation(event));
         draw();
     }
 
@@ -542,12 +526,12 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
 
     @Override
     public void keyPressed(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.VK_SPACE && previousToolType == null && !toolList.isSelectionEmpty()) {
-            previousToolType = ToolType.values()[toolList.getSelectedIndex()];
+        if (event.getKeyCode() == KeyEvent.VK_SPACE && previousToolType == null) {
+            previousToolType = this.getTool().getToolType();
             this.setTool(ToolType.MOVE);
         } else if (event.getKeyCode() == KeyEvent.VK_ESCAPE && this.isEditType(EditType.TRIGGERS) && this.hasPlaceableTrigger()) {
             this.clearPlaceableTrigger();
-            toolList.clearSelection();
+            this.setTool(ToolType.MOVE);
         } else {
             // Check if corresponds to a tool
             for (ToolType toolType : ToolType.values()) {
@@ -583,8 +567,8 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
         return this.mapData.getTriggerData();
     }
 
-    public boolean isTileSelectionEmpty() {
-        return this.tileList.isSelectionEmpty();
+    public boolean hasSelectedTile() {
+        return !this.tileList.isSelectionEmpty();
     }
 
     public int getSelectedTile() {
@@ -627,7 +611,7 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
         this.placeableTrigger = trigger;
     }
 
-    public boolean hasPlaceableTrigger() {
+    private boolean hasPlaceableTrigger() {
         return this.placeableTrigger != null;
     }
 

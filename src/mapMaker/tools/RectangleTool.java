@@ -20,14 +20,14 @@ class RectangleTool extends Tool {
     private boolean pressed = false;
 
     RectangleTool(MapMaker mapMaker) {
-        super(mapMaker);
+        super(mapMaker, ToolType.RECTANGLE);
         this.rectangle = new Rectangle(false);
         this.lastRectangle = new Rectangle(false);
     }
 
     @Override
     public void released(Point releasedLocation) {
-        if (mapMaker.isTileSelectionEmpty() || !pressed) {
+        if (!mapMaker.hasSelectedTile() || !pressed) {
             return;
         }
 
@@ -57,7 +57,7 @@ class RectangleTool extends Tool {
 
     @Override
     public void pressed(Point pressedLocation) {
-        if (mapMaker.isTileSelectionEmpty()) {
+        if (!mapMaker.hasSelectedTile()) {
             return;
         }
 

@@ -7,7 +7,7 @@ class MoveTool extends Tool {
     private Point previousLocation;
 
     MoveTool(MapMaker mapMaker) {
-        super(mapMaker);
+        super(mapMaker, ToolType.MOVE);
         previousLocation = new Point();
     }
 

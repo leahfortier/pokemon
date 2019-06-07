@@ -34,7 +34,7 @@ public class AreaModel extends MapMakerModel {
         this.areaIndexMap = new HashMap<>();
     }
 
-    public void resetMap() {
+    private void resetMap() {
         areaIndexMap.clear();
         areaListModel.clear();
 

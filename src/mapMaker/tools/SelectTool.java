@@ -15,7 +15,7 @@ public class SelectTool extends Tool {
     private boolean paste;
     private boolean selected;
 
-    private BufferedImage copiedTiles = null;
+    private BufferedImage copiedTiles;
     private EditType copiedEditType;
 
     private Point startLocation;
@@ -24,7 +24,7 @@ public class SelectTool extends Tool {
     private boolean pressed = false;
 
     public SelectTool(MapMaker mapMaker) {
-        super(mapMaker);
+        super(mapMaker, ToolType.SELECT);
         this.rectangle = new Rectangle(true);
     }
 

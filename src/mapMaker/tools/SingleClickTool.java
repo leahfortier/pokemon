@@ -20,12 +20,12 @@ class SingleClickTool extends Tool {
     private LocationTriggerMatcher lastTrigger;
 
     SingleClickTool(final MapMaker mapMaker) {
-        super(mapMaker);
+        super(mapMaker, ToolType.SINGLE_CLICK);
     }
 
     @Override
     public void click(Point clickedLocation) {
-        if (mapMaker.isTileSelectionEmpty()) {
+        if (!mapMaker.hasSelectedTile()) {
             return;
         }
 
@@ -53,7 +53,7 @@ class SingleClickTool extends Tool {
         Point location = TileUtils.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
         TileUtils.outlineTileRed(g, location, mapMaker.getMapLocation());
 
-        if (mapMaker.isTileSelectionEmpty()) {
+        if (!mapMaker.hasSelectedTile()) {
             return;
         }
 
