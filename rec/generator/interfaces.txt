@@ -383,12 +383,11 @@ OpponentTrappingEffect:
 ***
 BeforeTurnEffect:
     Method:
-        Comments: // TODO: Rename these to attacking and defending
-        Header: boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+        Header: boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b)
         Invoke: Check false
         InvokeName: checkCannotAttack
-        Deadsies: p opp
-        EffectList: p
+        Deadsies: attacking defending
+        EffectList: attacking
     *
 ***
 EffectBlockerEffect:

@@ -46,7 +46,7 @@ Paralyzed:
     Int: BeforeTurnEffect
     CanAttack:
         if (RandomUtils.chanceTest(25)) {
-            Messages.add(p.getName() + " is fully paralyzed!");
+            Messages.add(attacking.getName() + " is fully paralyzed!");
             return false;
         }
 
@@ -115,14 +115,14 @@ Asleep:
     Int: BeforeTurnEffect
     CanAttack:
         if (numTurns == 0) {
-            p.removeStatus(b, CastSource.EFFECT);
+            attacking.removeStatus(b, CastSource.EFFECT);
             return true;
         }
 
         numTurns--;
 
-        Messages.add(p.getName() + " is fast asleep...");
-        return SleepyFightsterEffect.containsSleepyFightsterEffect(b, p);
+        Messages.add(attacking.getName() + " is fast asleep...");
+        return SleepyFightsterEffect.containsSleepyFightsterEffect(b, attacking);
         ###
     GenericCastMessage: p.getName() + " fell asleep!"
     SourceCastMessage: sourcerer.getName() + "'s " + sourceName + " caused " + victim.getName() + " to fall asleep!"
@@ -144,12 +144,12 @@ Frozen:
     Int: BeforeTurnEffect, TakeDamageEffect
     CanAttack:
         // 20% chance to thaw out each turn
-        if (RandomUtils.chanceTest(20) || p.getAttack().isMoveType(MoveType.DEFROST)) {
-            p.removeStatus(b, CastSource.EFFECT);
+        if (RandomUtils.chanceTest(20) || attacking.getAttack().isMoveType(MoveType.DEFROST)) {
+            attacking.removeStatus(b, CastSource.EFFECT);
             return true;
         }
 
-        Messages.add(p.getName() + " is frozen solid!");
+        Messages.add(attacking.getName() + " is frozen solid!");
         return false;
         ###
     GenericCastMessage: p.getName() + " was frozen!"

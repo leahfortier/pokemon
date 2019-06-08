@@ -1464,4 +1464,30 @@ public class AttackTest extends BaseTest {
         Assert.assertFalse(battle.getOpponent().hasEffect(TeamEffectNamesies.REFLECT));
         Assert.assertFalse(battle.getOpponent().hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
     }
+
+    @Test
+    public void futureSightTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Super simple test so far that only really checks the most basic future sight mechanics
+        battle.attackingFight(AttackNamesies.FUTURE_SIGHT);
+        Assert.assertFalse(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.FUTURE_SIGHT));
+        Assert.assertTrue(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.FUTURE_SIGHT));
+        attacking.assertFullHealth();
+        defending.assertFullHealth();
+
+        battle.splashFight();
+        Assert.assertFalse(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.FUTURE_SIGHT));
+        Assert.assertTrue(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.FUTURE_SIGHT));
+        attacking.assertFullHealth();
+        defending.assertFullHealth();
+
+        battle.splashFight();
+        Assert.assertFalse(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.FUTURE_SIGHT));
+        Assert.assertFalse(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.FUTURE_SIGHT));
+        attacking.assertFullHealth();
+        defending.assertNotFullHealth();
+    }
 }

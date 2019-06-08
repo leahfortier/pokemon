@@ -149,21 +149,21 @@ Confusion:
     CanAttack:
         // Snap it out!
         if (turns == 0) {
-            Messages.add(p.getName() + " snapped out of its confusion!");
+            Messages.add(attacking.getName() + " snapped out of its confusion!");
             this.deactivate();
             return true;
         }
 
         turns--;
-        Messages.add(p.getName() + " is confused!");
+        Messages.add(attacking.getName() + " is confused!");
 
         // 50% chance to hurt yourself in confusion while confused
         if (RandomUtils.chanceTest(50)) {
         
             // Perform confusion damage
-            p.callTempMove(
+            attacking.callTempMove(
                     AttackNamesies.CONFUSION_DAMAGE,
-                    () -> p.indirectReduceHealth(b, b.calculateDamage(p, p), true, "It hurt itself in confusion!")
+                    () -> attacking.indirectReduceHealth(b, b.calculateDamage(attacking, attacking), true, "It hurt itself in confusion!")
             );
 
             return false;
@@ -954,12 +954,12 @@ Infatuation:
         }
         ###
     CanAttack:
-        Messages.add(p.getName() + " is in love with " + opp.getName() + "!");
+        Messages.add(attacking.getName() + " is in love with " + defending.getName() + "!");
         if (RandomUtils.chanceTest(50)) {
             return true;
         }
 
-        Messages.add(p.getName() + "'s infatuation kept it from attacking!");
+        Messages.add(attacking.getName() + "'s infatuation kept it from attacking!");
         return false;
         ###
     CastMessage: victim.getName() + " fell in love!"

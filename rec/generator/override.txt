@@ -565,7 +565,7 @@ BattleEndTurnMessage:
         ###
 *
 CanAttack:
-    Header: boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b)
+    Header: boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b)
 *
 ProtectingEffect:
     AddMapField: ProtectingEffectNoDecay: True

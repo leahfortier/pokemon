@@ -632,32 +632,30 @@ public final class InvokeInterfaces {
     }
 
     public interface BeforeTurnEffect {
+        boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b);
 
-        // TODO: Rename these to attacking and defending
-        boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b);
-
-        static boolean checkCannotAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-            if (p.isFainted(b)) {
+        static boolean checkCannotAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
+            if (attacking.isFainted(b)) {
                 return false;
             }
 
-            if (opp.isFainted(b)) {
+            if (defending.isFainted(b)) {
                 return false;
             }
 
-            List<InvokeEffect> invokees = b.getEffectsList(p);
+            List<InvokeEffect> invokees = b.getEffectsList(attacking);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof BeforeTurnEffect && InvokeEffect.isActiveEffect(invokee)) {
                     BeforeTurnEffect effect = (BeforeTurnEffect)invokee;
-                    if (!effect.canAttack(p, opp, b)) {
+                    if (!effect.canAttack(attacking, defending, b)) {
                         return true;
                     }
 
-                    if (p.isFainted(b)) {
+                    if (attacking.isFainted(b)) {
                         return false;
                     }
 
-                    if (opp.isFainted(b)) {
+                    if (defending.isFainted(b)) {
                         return false;
                     }
                 }

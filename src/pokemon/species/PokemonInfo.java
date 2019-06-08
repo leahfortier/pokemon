@@ -208,8 +208,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         return baseExp;
     }
 
-    public int getGivenEV(int index) {
-        return givenEVs[index];
+    public int getGivenEV(int statIndex) {
+        return givenEVs[statIndex];
     }
 
     public int[] getGivenEVs() {
@@ -346,12 +346,12 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         return imageName;
     }
 
-    public static PokemonInfo getPokemonInfo(int index) {
+    public static PokemonInfo getPokemonInfo(int number) {
         if (map == null) {
             loadPokemonInfo();
         }
 
-        return map.get(index);
+        return map.get(number);
     }
 
     // Create and load the Pokemon info map if it doesn't already exist

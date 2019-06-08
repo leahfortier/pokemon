@@ -2081,9 +2081,9 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
             if (lazyface) {
-                Messages.add(p.getName() + " is loafing around!");
+                Messages.add(attacking.getName() + " is loafing around!");
                 return false;
             }
 
@@ -3602,9 +3602,9 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-            if ((!bladeForm && !p.getAttack().isStatusMove()) || (bladeForm && p.getAttack().namesies() == AttackNamesies.KINGS_SHIELD)) {
-                changeForm(p);
+        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
+            if ((!bladeForm && !attacking.getAttack().isStatusMove()) || (bladeForm && attacking.getAttack().namesies() == AttackNamesies.KINGS_SHIELD)) {
+                changeForm(attacking);
             }
 
             return true;
@@ -3748,11 +3748,11 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
             // Protean activates for all moves except for Struggle
-            if (p.getAttack().namesies() != AttackNamesies.STRUGGLE) {
-                type = p.getAttackType();
-                Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, b, p, p, CastSource.ABILITY, true);
+            if (attacking.getAttack().namesies() != AttackNamesies.STRUGGLE) {
+                type = attacking.getAttackType();
+                Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, b, attacking, attacking, CastSource.ABILITY, true);
             }
 
             return true;
@@ -4135,7 +4135,6 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void deathWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-            // TODO: I don't think the murderer.isAttacking() is sufficient for deathwish
             murderer.indirectReduceHealth(b, dead.getDamageTaken(), false, murderer.getName() + " was hurt by " + dead.getName() + "'s " + this.getName() + "!");
         }
     }

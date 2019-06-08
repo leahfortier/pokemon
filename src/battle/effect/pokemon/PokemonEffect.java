@@ -166,7 +166,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
             return false;
         }
     }
@@ -699,24 +699,24 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
             // Snap it out!
             if (turns == 0) {
-                Messages.add(p.getName() + " snapped out of its confusion!");
+                Messages.add(attacking.getName() + " snapped out of its confusion!");
                 this.deactivate();
                 return true;
             }
 
             turns--;
-            Messages.add(p.getName() + " is confused!");
+            Messages.add(attacking.getName() + " is confused!");
 
             // 50% chance to hurt yourself in confusion while confused
             if (RandomUtils.chanceTest(50)) {
 
                 // Perform confusion damage
-                p.callTempMove(
+                attacking.callTempMove(
                         AttackNamesies.CONFUSION_DAMAGE,
-                        () -> p.indirectReduceHealth(b, b.calculateDamage(p, p), true, "It hurt itself in confusion!")
+                        () -> attacking.indirectReduceHealth(b, b.calculateDamage(attacking, attacking), true, "It hurt itself in confusion!")
                 );
 
                 return false;
@@ -2331,13 +2331,13 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
-            Messages.add(p.getName() + " is in love with " + opp.getName() + "!");
+        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
+            Messages.add(attacking.getName() + " is in love with " + defending.getName() + "!");
             if (RandomUtils.chanceTest(50)) {
                 return true;
             }
 
-            Messages.add(p.getName() + "'s infatuation kept it from attacking!");
+            Messages.add(attacking.getName() + "'s infatuation kept it from attacking!");
             return false;
         }
 
@@ -2413,7 +2413,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
             // TODO: What is happening
             this.deactivate();
             return true;

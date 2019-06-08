@@ -422,4 +422,40 @@ public class ItemTest extends BaseTest {
         attacking.assertNotConsumedItem(battle);
         attacking.assertHasEffect(PokemonEffectNamesies.HEAL_BLOCK);
     }
+
+    @Test
+    public void lifeOrbTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking().withItem(ItemNamesies.LIFE_ORB);
+        TestPokemon defending = battle.getDefending();
+
+        battle.setExpectedDamageModifier(5324/4096.0);
+        battle.attackingFight(AttackNamesies.CONSTRICT);
+        attacking.assertHealthRatio(.9);
+        defending.assertNotFullHealth();
+
+        battle.emptyHeal();
+        attacking.assertFullHealth();
+        defending.assertFullHealth();
+
+        // TODO: Life Orb doesn't currently work with multi strike moves
+//        battle.attackingFight(AttackNamesies.FURY_SWIPES);
+//        attacking.assertHealthRatio(.9);
+//        defending.assertNotFullHealth();
+
+        // Fixed damage moves do not effect Life Orb (do not increase power or take damage)
+        battle.attackingFight(AttackNamesies.SONIC_BOOM);
+        attacking.assertFullHealth();
+        defending.assertMissingHp(20);
+
+        battle.emptyHeal();
+        attacking.assertFullHealth();
+        defending.assertFullHealth();
+
+        // Magic Guard prevents damage from Life Orb
+        attacking.withAbility(AbilityNamesies.MAGIC_GUARD);
+        battle.attackingFight(AttackNamesies.CONSTRICT);
+        attacking.assertFullHealth();
+        defending.assertNotFullHealth();
+    }
 }

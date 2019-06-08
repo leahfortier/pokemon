@@ -94,13 +94,17 @@ public class TestPokemon extends ActivePokemon {
     public void assertHealthRatio(double fraction, int errorHp) {
         int hpFraction = (int)(Math.ceil(fraction*this.getMaxHP()));
         Assert.assertTrue(
-                StringUtils.spaceSeparated(fraction, this.getHPRatio(), hpFraction, this.getHP(), this.getMaxHP(), errorHp),
+                StringUtils.spaceSeparated(fraction, this.getHPRatio(), hpFraction, this.getHpString(), errorHp),
                 hpFraction >= this.getHP() - errorHp && hpFraction <= this.getHP() + errorHp
         );
     }
 
     public void assertHealthRatioDiff(int prevHp, double fractionDiff) {
         Assert.assertEquals(prevHp - (int)(fractionDiff*this.getMaxHP()), this.getHP());
+    }
+
+    public void assertMissingHp(int missingHp) {
+        Assert.assertEquals(this.getHpString() + " " + missingHp, this.getMaxHP() - missingHp, this.getHP());
     }
 
     // Confirms the Pokemon has or does not have the specified status

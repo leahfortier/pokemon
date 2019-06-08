@@ -1021,4 +1021,47 @@ public class AbilityTest extends BaseTest {
         battle.setExpectedDamageModifier(expectedModifier);
         battle.attackingFight(attackNamesies);
     }
+
+    @Test
+    public void innardsOutTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.GUZZLORD, PokemonNamesies.DIGLETT);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.INNARDS_OUT);
+
+        // Innards Out will deal damage equal to their last HP when killed via direct damage
+        // From full HP -- reduce max HP
+        battle.attackingFight(AttackNamesies.CRUNCH);
+        attacking.assertMissingHp(defending.getMaxHP());
+        defending.assertHasStatus(StatusNamesies.FAINTED);
+
+        battle.emptyHeal();
+
+        // Set HP to 1 then murder -- should only take one
+        battle.falseSwipePalooza(true);
+        attacking.assertFullHealth();
+        Assert.assertEquals(1, defending.getHP());
+        battle.attackingFight(AttackNamesies.CRUNCH);
+        attacking.assertMissingHp(1);
+        defending.assertHasStatus(StatusNamesies.FAINTED);
+
+        battle.emptyHeal();
+
+        // Should still take innards out damage if they die from fixed damage
+        battle.falseSwipePalooza(true);
+        attacking.assertFullHealth();
+        Assert.assertEquals(1, defending.getHP());
+        battle.attackingFight(AttackNamesies.DRAGON_RAGE);
+        attacking.assertMissingHp(1);
+        defending.assertHasStatus(StatusNamesies.FAINTED);
+
+        battle.emptyHeal();
+
+        // But not if they die from indirect damage like burn
+        battle.falseSwipePalooza(true);
+        attacking.assertFullHealth();
+        Assert.assertEquals(1, defending.getHP());
+        battle.attackingFight(AttackNamesies.WILL_O_WISP);
+        attacking.assertFullHealth();
+        defending.assertHasStatus(StatusNamesies.FAINTED);
+    }
 }

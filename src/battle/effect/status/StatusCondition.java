@@ -230,9 +230,9 @@ public abstract class StatusCondition implements InvokeEffect {
         }
 
         @Override
-        public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
             if (RandomUtils.chanceTest(25)) {
-                Messages.add(p.getName() + " is fully paralyzed!");
+                Messages.add(attacking.getName() + " is fully paralyzed!");
                 return false;
             }
 
@@ -463,16 +463,16 @@ public abstract class StatusCondition implements InvokeEffect {
         }
 
         @Override
-        public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
             if (numTurns == 0) {
-                p.removeStatus(b, CastSource.EFFECT);
+                attacking.removeStatus(b, CastSource.EFFECT);
                 return true;
             }
 
             numTurns--;
 
-            Messages.add(p.getName() + " is fast asleep...");
-            return SleepyFightsterEffect.containsSleepyFightsterEffect(b, p);
+            Messages.add(attacking.getName() + " is fast asleep...");
+            return SleepyFightsterEffect.containsSleepyFightsterEffect(b, attacking);
         }
 
         @Override
@@ -525,14 +525,14 @@ public abstract class StatusCondition implements InvokeEffect {
         }
 
         @Override
-        public boolean canAttack(ActivePokemon p, ActivePokemon opp, Battle b) {
+        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
             // 20% chance to thaw out each turn
-            if (RandomUtils.chanceTest(20) || p.getAttack().isMoveType(MoveType.DEFROST)) {
-                p.removeStatus(b, CastSource.EFFECT);
+            if (RandomUtils.chanceTest(20) || attacking.getAttack().isMoveType(MoveType.DEFROST)) {
+                attacking.removeStatus(b, CastSource.EFFECT);
                 return true;
             }
 
-            Messages.add(p.getName() + " is frozen solid!");
+            Messages.add(attacking.getName() + " is frozen solid!");
             return false;
         }
 
