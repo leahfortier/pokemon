@@ -14,7 +14,7 @@ public class Eggy extends PartyPokemon {
 
     public static final String TINY_EGG_IMAGE_NAME = "egg-small";
     public static final String BASE_EGG_IMAGE_NAME = "egg";
-    public static final String SPRITE_EGG_IMAGE_NAME = "EggSprite";
+    public static final String SPRITE_EGG_IMAGE_NAME = "egg";
 
     private int eggSteps;
 
