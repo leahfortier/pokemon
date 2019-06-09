@@ -148,14 +148,14 @@ public class Button {
         return this.transitions[direction.ordinal()];
     }
 
-    public void greyOut(Graphics g, boolean totesBlacks) {
-        Color temp = g.getColor();
-        fill(g, totesBlacks ? Color.BLACK : temp.darker());
-        g.setColor(temp);
-    }
-
+    // Generally used for inactive buttons
     public void greyOut(Graphics g) {
         DrawUtils.greyOut(g, x, y, width, height);
+    }
+
+    // Generally used for currently selected buttons
+    public void highlight(Graphics g, Color buttonColor) {
+        this.fill(g, buttonColor.darker());
     }
 
     public void fillTranslated(Graphics g, Color color) {

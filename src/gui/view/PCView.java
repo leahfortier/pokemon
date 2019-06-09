@@ -310,21 +310,24 @@ class PCView extends View {
 
         // Description
         PokeType type = selected.getActualType();
-        infoPanel.withBackgroundColors(PokeType.getColors(selected))
+        Color[] colors = PokeType.getColors(selected);
+        infoPanel.withBackgroundColors(colors)
                  .drawBackground(g);
 
+        // Secondary color is the color of the buttons
+        Color buttonColor = colors[1];
         if (switchClicked) {
-            switchButton.greyOut(g, false);
+            switchButton.highlight(g, buttonColor);
         }
 
         if (!releaseButton.isActive()) {
-            releaseButton.greyOut(g, true);
+            releaseButton.greyOut(g);
         }
 
         if (!depositWithdrawButton.isActive()) {
-            depositWithdrawButton.greyOut(g, true);
+            depositWithdrawButton.greyOut(g);
         } else if (party && depositClicked) {
-            depositWithdrawButton.greyOut(g, false);
+            depositWithdrawButton.highlight(g, buttonColor);
         }
 
         basicInfoPanel.drawBackground(g);

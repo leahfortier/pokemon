@@ -222,7 +222,7 @@ public class BagView extends View {
                             .up(selectedTab.ordinal())
                             .left(tabIndex == 0 ? PARTY : useStates[tabIndex - 1].buttonIndex)
                             .down(tabIndex <= useStates.length/2 ? ITEMS : ITEMS + 1),
-                    () -> useState.update(this)
+                    () -> useState.press(this)
             );
         }
 
@@ -326,7 +326,7 @@ public class BagView extends View {
 
         // Draw Use State buttons
         for (UseState useState : UseState.values()) {
-            useState.draw(g, buttons.get(useState.buttonIndex));
+            useState.draw(g, buttons.get(useState.buttonIndex), selectedTab.getColor());
         }
 
         // Selected item Display
@@ -494,6 +494,7 @@ public class BagView extends View {
 
                         if (!p.canFight()) {
                             // TODO: Look if this color appears in multiple place and see if it should be a constant
+                            // TODO: I think this can just be greyOut -- maybe I should make some sort of translation button thing
                             pokemonButton.fillTranslated(g, new Color(0, 0, 0, 128));
                         }
                     }

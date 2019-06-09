@@ -6,6 +6,7 @@ import item.use.PlayerUseItem;
 import main.Game;
 import pokemon.active.PartyPokemon;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 enum UseState {
@@ -52,15 +53,15 @@ enum UseState {
         bagView.updateActiveButtons();
     }
 
-    void draw(Graphics g, Button button) {
-        // Grey out selected buttons
+    void draw(Graphics g, Button button, Color buttonColor) {
+        // Highlight if selected
         if (clicked) {
-            button.greyOut(g, false);
+            button.highlight(g, buttonColor);
         }
 
-        // Grey out inactive buttons
+        // Grey out if inactive
         if (!button.isActive()) {
-            button.greyOut(g, true);
+            button.greyOut(g);
         }
 
         button.fillTransparent(g);
@@ -75,7 +76,8 @@ enum UseState {
         }
     }
 
-    void update(BagView view) {
+    // Called when the button is pressed
+    void press(BagView view) {
         if (!clicked) {
             view.state = BagState.POKEMON_SELECT;
         } else {

@@ -303,7 +303,7 @@ class PartyView extends View {
             if (!switchButton.isActive()) {
                 switchButton.greyOut(g);
             } else if (switchTabIndex != -1) {
-                switchButton.greyOut(g, false);
+                switchButton.highlight(g, this.getBackgroundColors(selectedPkm)[1]);
             }
 
             switchButton.fillTransparent(g);
@@ -353,9 +353,13 @@ class PartyView extends View {
         }
     }
 
+    private Color[] getBackgroundColors(PartyPokemon selectedPkm) {
+        return PokeType.getColors(selectedPkm);
+    }
+
     private void drawPokemonInfo(Graphics g, BufferedImage pkmImg, PartyPokemon selectedPkm) {
         // Draw type color polygons
-        pokemonPanel.withBackgroundColors(PokeType.getColors(selectedPkm), true);
+        pokemonPanel.withBackgroundColors(this.getBackgroundColors(selectedPkm), true);
         if (!selectedPkm.canFight()) {
             pokemonPanel.greyOut();
         }
