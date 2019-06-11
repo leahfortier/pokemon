@@ -1322,8 +1322,7 @@ Honey Gather:
     Int: EndBattleEffect
     EndBattle:
         if (!p.isHoldingItem(b) && RandomUtils.chanceTest(5*(int)Math.ceil(p.getLevel()/10.0))) {
-            // TODO: Should give the item Honey, but this item has no purpose in our game so we'll see what this ability should actually do also something about Syrup Gather
-            p.giveItem(ItemNamesies.LEFTOVERS);
+            p.giveItem(ItemNamesies.HONEY);
         }
         ###
     Desc: The Pok\u00e9mon may gather Honey after a battle.

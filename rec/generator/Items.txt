@@ -1990,11 +1990,34 @@ Rare Bone:
     Price: 5000
 *
 Honey:
-    Int: HoldItem
+    Int: HoldItem, PlayerUseItem
     Cat: Misc
     Desc: A sweet honey with a lush aroma that attracts wild Pok\u00e9mon when it is used in tall grass, in caves, or on special trees.
     Price: 100
-    Comments: // TODO: We need this item to do something
+    PlayerUse:
+        Player player = Game.getPlayer();
+        GameData data = Game.getData();
+
+        MapData map = data.getMap(player.getMapName());
+        WalkingWildBattleTrigger walkingEncounter = map.getCurrentWildBattleTrigger();
+
+        // No wild battle on the current tile
+        if (walkingEncounter == null) {
+            return false;
+        }
+
+        // Exit bag view to map before starting the battle
+        Game.instance().getBagView().returnToMap();
+
+        // Create an encounter from the walking encounter trigger
+        WildEncounter wildPokemon = walkingEncounter.getWildEncounter(player.front());
+
+        // Let the battle begin!
+        Trigger wildBattle = new WildBattleTrigger(wildPokemon);
+        Messages.add(new MessageUpdate().withTrigger(wildBattle));
+
+        return true;
+        ###
 *
 Eviolite:
     Int: HoldItem

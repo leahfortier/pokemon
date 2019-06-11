@@ -3147,8 +3147,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
             if (!p.isHoldingItem(b) && RandomUtils.chanceTest(5*(int)Math.ceil(p.getLevel()/10.0))) {
-                // TODO: Should give the item Honey, but this item has no purpose in our game so we'll see what this ability should actually do also something about Syrup Gather
-                p.giveItem(ItemNamesies.LEFTOVERS);
+                p.giveItem(ItemNamesies.HONEY);
             }
         }
     }

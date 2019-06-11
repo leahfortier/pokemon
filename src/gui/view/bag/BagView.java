@@ -301,7 +301,7 @@ public class BagView extends View {
         }
     }
 
-    private void returnToMap() {
+    public void returnToMap() {
         Messages.clearMessages(MessageState.BAGGIN_IT_UP);
         Messages.setMessageState(MessageState.MAPPITY_MAP);
         Game.instance().setViewMode(ViewMode.MAP_VIEW);
@@ -568,6 +568,8 @@ public class BagView extends View {
 
     @Override
     public void movedToFront() {
+        // Set selected button to be the first tab and switch to first tab
+        this.buttons.setSelected(0);
         changeCategory(0);
     }
 

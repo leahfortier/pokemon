@@ -244,6 +244,22 @@ public class MapData {
         return null;
     }
 
+    // Returns null if player is not currently on a wild battle trigger tile
+    public WalkingWildBattleTrigger getCurrentWildBattleTrigger() {
+        List<Trigger> currentTriggers = this.getCurrentTriggers();
+        if (currentTriggers == null) {
+            return null;
+        }
+
+        for (Trigger trigger : currentTriggers) {
+            if (trigger instanceof WalkingWildBattleTrigger) {
+                return (WalkingWildBattleTrigger)trigger;
+            }
+        }
+
+        return null;
+    }
+
     public boolean setCharacterToEntrance() {
         Player player = Game.getPlayer();
         SimpleMapTransition mapTransition = player.getMapTransition();

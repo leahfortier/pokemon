@@ -45,6 +45,7 @@ import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
+import gui.GameData;
 import item.bag.BagCategory;
 import item.bag.BattleBagCategory;
 import item.berry.Berry;
@@ -82,8 +83,13 @@ import item.use.PlayerUseItem;
 import item.use.PokemonUseItem;
 import item.use.TechnicalMachine;
 import main.Game;
+import map.MapData;
 import map.overworld.TerrainType;
 import map.overworld.wild.WildEncounter;
+import map.triggers.Trigger;
+import map.triggers.battle.WalkingWildBattleTrigger;
+import map.triggers.battle.WildBattleTrigger;
+import message.MessageUpdate;
 import message.Messages;
 import pokemon.Stat;
 import pokemon.ability.Ability;
@@ -92,6 +98,7 @@ import pokemon.active.Gender;
 import pokemon.evolution.EvolutionMethod;
 import pokemon.species.PokemonNamesies;
 import trainer.Trainer;
+import trainer.player.Player;
 import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
@@ -5437,13 +5444,38 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    // TODO: We need this item to do something
-    static class Honey extends Item implements HoldItem {
+    static class Honey extends Item implements HoldItem, PlayerUseItem {
         private static final long serialVersionUID = 1L;
 
         Honey() {
             super(ItemNamesies.HONEY, "A sweet honey with a lush aroma that attracts wild Pok\u00e9mon when it is used in tall grass, in caves, or on special trees.", BagCategory.MISC);
             super.price = 100;
+        }
+
+        @Override
+        public boolean use() {
+            Player player = Game.getPlayer();
+            GameData data = Game.getData();
+
+            MapData map = data.getMap(player.getMapName());
+            WalkingWildBattleTrigger walkingEncounter = map.getCurrentWildBattleTrigger();
+
+            // No wild battle on the current tile
+            if (walkingEncounter == null) {
+                return false;
+            }
+
+            // Exit bag view to map before starting the battle
+            Game.instance().getBagView().returnToMap();
+
+            // Create an encounter from the walking encounter trigger
+            WildEncounter wildPokemon = walkingEncounter.getWildEncounter(player.front());
+
+            // Let the battle begin!
+            Trigger wildBattle = new WildBattleTrigger(wildPokemon);
+            Messages.add(new MessageUpdate().withTrigger(wildBattle));
+
+            return true;
         }
     }
 

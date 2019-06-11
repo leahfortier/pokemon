@@ -6,6 +6,7 @@ import gui.GameData;
 import gui.view.TradeView;
 import gui.view.View;
 import gui.view.ViewMode;
+import gui.view.bag.BagView;
 import gui.view.battle.BattleView;
 import gui.view.map.MapView;
 import input.InputControl;
@@ -95,6 +96,10 @@ public class Game {
 
     public MapView getMapView() {
         return (MapView)viewMap.get(ViewMode.MAP_VIEW);
+    }
+
+    public BagView getBagView() {
+        return (BagView)viewMap.get(ViewMode.BAG_VIEW);
     }
 
     public TradeView getTradeView() {

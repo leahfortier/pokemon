@@ -44,7 +44,7 @@ public class WalkingWildBattleTrigger extends Trigger {
         }
     }
 
-    private WildEncounter getWildEncounter(ActivePokemon playerFront) {
+    public WildEncounter getWildEncounter(ActivePokemon playerFront) {
         final WildEncounter legendaryEncounter = this.getLegendaryEncounter();
         if (legendaryEncounter != null) {
             return legendaryEncounter;
