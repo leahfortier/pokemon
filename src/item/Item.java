@@ -81,7 +81,6 @@ import item.use.MoveUseItem;
 import item.use.PlayerUseItem;
 import item.use.PokemonUseItem;
 import item.use.TechnicalMachine;
-import item.use.UseItem;
 import main.Game;
 import map.overworld.TerrainType;
 import map.overworld.wild.WildEncounter;
@@ -130,10 +129,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
     @Override
     public String toString() {
         return this.getName();
-    }
-
-    public boolean isUsable() {
-        return this instanceof UseItem;
     }
 
     public boolean isHoldable() {

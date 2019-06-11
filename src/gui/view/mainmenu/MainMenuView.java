@@ -44,10 +44,10 @@ public class MainMenuView extends View {
         bgTime = 0;
         bgIndex = 0;
 
-        settings = Settings.load();
-        saveInfo = SaveInfo.updateSaveData();
-
         state = VisualState.MAIN;
+        settings = Settings.load();
+
+        this.reloadSaveInfo();
     }
 
     Settings getSettings() {
@@ -138,7 +138,7 @@ public class MainMenuView extends View {
     @Override
     public void movedToFront() {
         setVisualState(VisualState.MAIN);
-        saveInfo = SaveInfo.updateSaveData();
+        this.reloadSaveInfo();
     }
 
     static Button createMenuButton(int index) {

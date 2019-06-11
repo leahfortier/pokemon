@@ -339,7 +339,7 @@ public class DrawPanel {
     }
 
     public void imageLabel(Graphics g, BufferedImage image) {
-        ImageUtils.drawCenteredImage(g, image, x + width/2, y + height/2);
+        ImageUtils.drawCenteredImage(g, image, centerX(), centerY());
     }
 
     public void imageLabel(Graphics g, int fontSize, BufferedImage image, String label) {

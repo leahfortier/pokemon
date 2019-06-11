@@ -6,9 +6,8 @@ import battle.attack.Move;
 import item.Item;
 import item.ItemNamesies;
 import item.use.BallItem;
+import item.use.BattleUseItem;
 import item.use.MoveUseItem;
-import item.use.PlayerUseItem;
-import item.use.PokemonUseItem;
 import item.use.UseItem;
 import main.Game;
 import main.Global;
@@ -145,37 +144,63 @@ public class Bag implements Serializable {
         }
     }
 
-    public boolean useItem(ItemNamesies item) {
-        Item useItem = item.getItem();
-        if (useItem instanceof PlayerUseItem && ((PlayerUseItem)useItem).use()) {
-            removeItem(item);
-            return true;
-        }
-
-        return false;
+    public boolean usePlayerItem(ItemNamesies item) {
+        return this.useItem(null, item, null, null);
     }
 
-    // Checks conditions, add messages, and executes the UseItem
-    // Move should be null for PokemonUseItem and nonnull for MoveUseItem
-    private boolean useItem(ItemNamesies item, PartyPokemon p, Move move) {
+    public boolean usePokemonItem(ItemNamesies item, PartyPokemon p) {
+        return this.useItem(null, item, p, null);
+    }
 
-        // Eggs can't do shit
-        if (p.isEgg()) {
-            Messages.add(DEFAULT_FAIL_MESSAGE);
+    public boolean useMoveItem(ItemNamesies item, PartyPokemon p, Move move) {
+        return this.useItem(null, item, p, move);
+    }
+
+    // Checks conditions, adds messages, and executes the UseItem
+    public boolean battleUseItem(ItemNamesies item, PartyPokemon p, Battle battle) {
+        Player player = Game.getPlayer();
+        Item useItem = item.getItem();
+
+        if (useItem instanceof BallItem) {
+            return player.catchPokemon(battle, (BallItem)useItem);
+        } else if (useItem instanceof BattleUseItem) {
+            boolean used = this.useItem(battle, item, p, null);
+            if (used) {
+                this.lastUsedItem = this.hasItem(item) ? item : ItemNamesies.NO_ITEM;
+                ActivePokemon front = player.front();
+                if (front == p) {
+                    Messages.add(new MessageUpdate().updatePokemon(battle, front));
+                }
+            }
+            return used;
+        } else {
+            Global.error("Invalid battle item " + item.getName());
             return false;
         }
+    }
 
-        // Check if the item is an instance of the corresponding UseItem class
-        Class<? extends UseItem> useClass = move == null ? PokemonUseItem.class : MoveUseItem.class;
-        Item itemValue = item.getItem();
-        if (!useClass.isInstance(itemValue)) {
+    // Move should be nonnull for MoveUseItem and null otherwise
+    // Battle can be null or non-null
+    private boolean useItem(Battle battle, ItemNamesies itemName, PartyPokemon p, Move move) {
+        Item item = itemName.getItem();
+
+        if (move != null && !(item instanceof MoveUseItem)) {
+            Global.error("Move can only be non-null for MoveUseItem");
+        }
+
+        if (battle != null && !(item instanceof BattleUseItem)) {
+            Global.error("Battle can only be non-null for BattleUseItem");
+        }
+
+        // Eggs can't do shit
+        if (p != null && p.isEgg()) {
             Messages.add(DEFAULT_FAIL_MESSAGE);
             return false;
         }
 
         // Try to use the item
-        UseItem useItem = (UseItem)itemValue;
-        final boolean success = useItem.use(null, (ActivePokemon)p, move);
+        UseItem useItem = (UseItem)item;
+        final boolean success = useItem.use(battle, (ActivePokemon)p, move);
 
         // :(
         if (!success) {
@@ -185,48 +210,8 @@ public class Bag implements Serializable {
 
         // Item successfully used -- display success messages to the user and remove this item from the bag
         Messages.addToFront(Game.getPlayer().getName() + " used the " + item.getName() + "!");
-        removeItem(item);
+        removeItem(itemName);
         return true;
-    }
-
-    public boolean useItem(ItemNamesies item, PartyPokemon p) {
-        return this.useItem(item, p, null);
-    }
-
-    public boolean useMoveItem(ItemNamesies item, PartyPokemon p, Move move) {
-        return this.useItem(item, p, move);
-    }
-
-    public boolean battleUseItem(ItemNamesies item, PartyPokemon p, Battle battle) {
-        Player player = Game.getPlayer();
-
-        Item useItem = item.getItem();
-        boolean used = false;
-        if (useItem instanceof BallItem) {
-            used = player.catchPokemon(battle, (BallItem)useItem);
-        } else if (useItem.isUsable() && !p.isEgg()) {
-            ActivePokemon activePokemon = (ActivePokemon)p;
-            used = ((UseItem)useItem).use(battle, activePokemon, null);
-            if (used && player.front() == activePokemon) {
-                Messages.add(new MessageUpdate().updatePokemon(battle, activePokemon));
-            }
-        }
-
-        if (used) {
-            Messages.addToFront(Game.getPlayer().getName() + " used the " + item.getName() + "!");
-
-            if (items.get(item) > 1) {
-                lastUsedItem = item;
-            } else {
-                lastUsedItem = ItemNamesies.NO_ITEM;
-            }
-
-            removeItem(item);
-        } else if (useItem.isUsable()) {
-            Messages.add(DEFAULT_FAIL_MESSAGE);
-        }
-
-        return used;
     }
 
     public ItemNamesies getLastUsedItem() {

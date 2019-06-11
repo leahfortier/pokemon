@@ -24,6 +24,7 @@ import item.ItemNamesies;
 import item.bag.Bag;
 import item.bag.BagCategory;
 import item.use.TechnicalMachine;
+import item.use.UseItem;
 import main.Game;
 import main.Global;
 import map.Direction;
@@ -602,7 +603,7 @@ public class BagView extends View {
         } else {
             Item selectedItemValue = selectedItem.getItem();
             buttons.get(GIVE).setActive(selectedItemValue.isHoldable());
-            buttons.get(USE).setActive(selectedItemValue.isUsable());
+            buttons.get(USE).setActive(selectedItemValue instanceof UseItem);
         }
     }
 }

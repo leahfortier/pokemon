@@ -19,7 +19,7 @@ enum UseState {
             bagView.selectedPokemon = p;
             bagView.state = BagState.MOVE_SELECT;
         } else {
-            Game.getPlayer().getBag().useItem(bagView.selectedItem, p);
+            Game.getPlayer().getBag().usePokemonItem(bagView.selectedItem, p);
             state.deactivate(bagView);
         }
     }),
@@ -79,13 +79,16 @@ enum UseState {
     // Called when the button is pressed
     void press(BagView view) {
         if (!clicked) {
+            // Currently unselected  -- switch to Pokemon select to choose which pokemon to use the item with
             view.state = BagState.POKEMON_SELECT;
         } else {
+            // Previously selected -- revert back to item select
             view.state = BagState.ITEM_SELECT;
         }
 
         clicked = !clicked;
 
+        // When any of the state buttons are clicked, it should turn off all the other states
         for (UseState otherState : UseState.values()) {
             if (this == otherState) {
                 continue;
@@ -94,8 +97,10 @@ enum UseState {
             otherState.clicked = false;
         }
 
+        // PlayerUseItems don't require selecting a Pokemon -- automatically use as soon as Use is pressed
         if (this == UseState.USE && view.selectedItem.getItem() instanceof PlayerUseItem) {
-            Game.getPlayer().getBag().useItem(view.selectedItem);
+            Game.getPlayer().getBag().usePlayerItem(view.selectedItem);
+            this.deactivate(view);
         }
 
         view.updateActiveButtons();

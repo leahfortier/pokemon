@@ -276,13 +276,7 @@ class PartyView extends View {
         BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.getImageName());
 
         if (nicknameView) {
-            nicknamePanel.withBackgroundColors(PokeType.getColors(selectedPkm), true);
-            nicknamePanel.drawBackground(g);
-
-            FontMetrics.setFont(g, 30);
-
-            String nickname = InputControl.instance().getInputCaptureString(PartyPokemon.MAX_NAME_LENGTH);
-            ImageUtils.drawCenteredImageLabel(g, pkmImg, nickname, Global.GAME_SIZE.width/2, Global.GAME_SIZE.height/2);
+            drawNicknameView(g, pkmImg, selectedPkm);
         } else {
             // Pokemon info
             drawPokemonInfo(g, pkmImg, selectedPkm);
@@ -290,33 +284,25 @@ class PartyView extends View {
             // Tabs
             drawTabs(g, data, list);
 
-            // Nickname button
-            if (!nicknameButton.isActive()) {
-                nicknameButton.greyOut(g);
-            }
-
-            nicknameButton.fillTransparent(g);
-            nicknameButton.blackOutline(g);
-            nicknameButton.label(g, 20, "Nickname!!");
-
-            // Switch Box
-            if (!switchButton.isActive()) {
-                switchButton.greyOut(g);
-            } else if (switchTabIndex != -1) {
-                switchButton.highlight(g, this.getBackgroundColors(selectedPkm)[1]);
-            }
-
-            switchButton.fillTransparent(g);
-            switchButton.blackOutline(g);
-            switchButton.label(g, 20, "Switch!");
-
-            // Return Box
-            returnButton.fillTransparent(g);
-            returnButton.blackOutline(g);
-            returnButton.label(g, 20, "Return");
+            // Nickname, Switch, and Return buttons
+            drawButtons(g, selectedPkm);
         }
 
         buttons.draw(g);
+    }
+
+    private Color[] getBackgroundColors(PartyPokemon selectedPkm) {
+        return PokeType.getColors(selectedPkm);
+    }
+
+    private void drawNicknameView(Graphics g, BufferedImage pkmImg, PartyPokemon selectedPkm) {
+        nicknamePanel.withBackgroundColors(PokeType.getColors(selectedPkm), true);
+        nicknamePanel.drawBackground(g);
+
+        FontMetrics.setFont(g, 30);
+
+        String nickname = InputControl.instance().getInputCaptureString(PartyPokemon.MAX_NAME_LENGTH);
+        ImageUtils.drawCenteredImageLabel(g, pkmImg, nickname, Global.GAME_SIZE.width/2, Global.GAME_SIZE.height/2);
     }
 
     private void drawTabs(Graphics g, GameData data, List<PartyPokemon> list) {
@@ -351,10 +337,6 @@ class PartyView extends View {
 
             g.translate(-tabButton.x, -tabButton.y);
         }
-    }
-
-    private Color[] getBackgroundColors(PartyPokemon selectedPkm) {
-        return PokeType.getColors(selectedPkm);
     }
 
     private void drawPokemonInfo(Graphics g, BufferedImage pkmImg, PartyPokemon selectedPkm) {
@@ -556,6 +538,33 @@ class PartyView extends View {
                 y,
                 moveDetailsPanel.width - 2*spacing
         );
+    }
+
+    private void drawButtons(Graphics g, PartyPokemon selectedPkm) {
+        // Nickname button
+        if (!nicknameButton.isActive()) {
+            nicknameButton.greyOut(g);
+        }
+
+        nicknameButton.fillTransparent(g);
+        nicknameButton.blackOutline(g);
+        nicknameButton.label(g, 20, "Nickname!!");
+
+        // Switch Box
+        if (!switchButton.isActive()) {
+            switchButton.greyOut(g);
+        } else if (switchTabIndex != -1) {
+            switchButton.highlight(g, this.getBackgroundColors(selectedPkm)[1]);
+        }
+
+        switchButton.fillTransparent(g);
+        switchButton.blackOutline(g);
+        switchButton.label(g, 20, "Switch!");
+
+        // Return Box
+        returnButton.fillTransparent(g);
+        returnButton.blackOutline(g);
+        returnButton.label(g, 20, "Return");
     }
 
     private void updateActiveButtons() {

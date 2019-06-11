@@ -334,19 +334,19 @@ public class PokemonInfoTest extends BaseTest {
             Bag bag = Game.getPlayer().getBag();
             for (int i = 0; i < 26; i++) {
                 bag.addItem(ItemNamesies.HP_UP);
-                Assert.assertTrue(bag.useItem(ItemNamesies.HP_UP, shedinja));
+                Assert.assertTrue(bag.usePokemonItem(ItemNamesies.HP_UP, shedinja));
                 TestUtils.assertGreater(levelString, shedinja.getEVs().get(Stat.HP), 0);
                 Assert.assertEquals(1, shedinja.getHP());
                 Assert.assertEquals(1, shedinja.getMaxHP());
 
                 bag.addItem(ItemNamesies.PROTEIN);
-                Assert.assertTrue(bag.useItem(ItemNamesies.PROTEIN, shedinja));
+                Assert.assertTrue(bag.usePokemonItem(ItemNamesies.PROTEIN, shedinja));
                 TestUtils.assertGreater(levelString, shedinja.getEVs().get(Stat.ATTACK), 0);
             }
 
             // HP EVs are now maxed, but max HP should not increase still
             Assert.assertEquals(EffortValues.MAX_STAT_EVS, shedinja.getEVs().get(Stat.HP));
-            Assert.assertFalse(bag.useItem(ItemNamesies.HP_UP, shedinja));
+            Assert.assertFalse(bag.usePokemonItem(ItemNamesies.HP_UP, shedinja));
             Assert.assertEquals(EffortValues.MAX_STAT_EVS, shedinja.getEVs().get(Stat.HP));
             Assert.assertEquals(1, shedinja.getHP());
             Assert.assertEquals(1, shedinja.getMaxHP());
@@ -360,9 +360,9 @@ public class PokemonInfoTest extends BaseTest {
             // Make sure level up doesn't increase HP either
             bag.addItem(ItemNamesies.RARE_CANDY);
             if (level == 100) {
-                Assert.assertFalse(bag.useItem(ItemNamesies.RARE_CANDY, shedinja));
+                Assert.assertFalse(bag.usePokemonItem(ItemNamesies.RARE_CANDY, shedinja));
             } else {
-                Assert.assertTrue(bag.useItem(ItemNamesies.RARE_CANDY, shedinja));
+                Assert.assertTrue(bag.usePokemonItem(ItemNamesies.RARE_CANDY, shedinja));
                 Assert.assertEquals(level + 1, shedinja.getLevel());
             }
             Assert.assertEquals(1, shedinja.getHP());

@@ -12,6 +12,6 @@ public class UseItemTrigger extends Trigger {
 
     @Override
     public void execute() {
-        Game.getPlayer().getBag().useItem(this.useItem);
+        Game.getPlayer().getBag().usePlayerItem(this.useItem);
     }
 }
