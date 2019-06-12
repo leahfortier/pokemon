@@ -204,4 +204,5 @@ Other random things:
     cancelling evolution still consumes evolution item
     is there some way to have like a FirstTriggeredCondition or something for things like items and a lot of other shit
     wait can we still not sell items in the mart???
+    is there a way to just create the button transitions from the button list by using all the button locations or something like that??
     
