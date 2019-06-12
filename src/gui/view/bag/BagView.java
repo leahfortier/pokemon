@@ -174,11 +174,7 @@ public class BagView extends View {
                 1,
                 PARTY,
                 new ButtonTransitions().right(GIVE).up(0).left(MOVES).down(0),
-                index -> {
-                    for (UseState useState : UseState.values()) {
-                        useState.use(this, Game.getPlayer().getTeam().get(index));
-                    }
-                }
+                index -> UseState.forEach(useState -> UseState.usePokemon(this, Game.getPlayer().getTeam().get(index)))
         );
 
         moveButtons = pokemonPanel.getButtons(
@@ -326,9 +322,7 @@ public class BagView extends View {
                 .drawBackground(g);
 
         // Draw Use State buttons
-        for (UseState useState : UseState.values()) {
-            useState.draw(g, buttons.get(useState.buttonIndex), selectedTab.getColor());
-        }
+        UseState.forEach(useState -> useState.draw(g, buttons.get(useState.buttonIndex), selectedTab.getColor()));
 
         // Selected item Display
         selectedPanel.drawBackground(g);
@@ -563,9 +557,7 @@ public class BagView extends View {
             pageNum = 0;
         }
 
-        for (UseState useState : UseState.values()) {
-            useState.reset();
-        }
+        UseState.forEach(UseState::reset);
 
         updateActiveButtons();
     }

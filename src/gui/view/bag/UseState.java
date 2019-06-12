@@ -8,6 +8,8 @@ import pokemon.active.PartyPokemon;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Arrays;
+import java.util.function.Consumer;
 
 enum UseState {
     GIVE("Give", BagView.GIVE, (state, bagView, p) -> {
@@ -74,11 +76,9 @@ enum UseState {
         button.label(g, 20, displayName);
     }
 
-    void use(BagView bagView, PartyPokemon p) {
-        if (this.clicked) {
-            this.useButton.useButton(this, bagView, p);
-            bagView.updateActiveButtons();
-        }
+    private void use(BagView bagView, PartyPokemon p) {
+        this.useButton.useButton(this, bagView, p);
+        bagView.updateActiveButtons();
     }
 
     // Called when the button is pressed
@@ -94,13 +94,11 @@ enum UseState {
         clicked = !clicked;
 
         // When any of the state buttons are clicked, it should turn off all the other states
-        for (UseState otherState : UseState.values()) {
-            if (this == otherState) {
-                continue;
+        forEach(otherState -> {
+            if (this != otherState) {
+                otherState.reset();
             }
-
-            otherState.reset();
-        }
+        });
 
         // PlayerUseItems don't require selecting a Pokemon -- automatically use as soon as Use is pressed
         if (this == UseState.USE && view.selectedItem.getItem() instanceof PlayerUseItem) {
@@ -109,6 +107,19 @@ enum UseState {
         }
 
         view.updateActiveButtons();
+    }
+
+    // Apply the selected state with the currently selected item and pokemon
+    static void usePokemon(BagView bagView, PartyPokemon p) {
+        forEach(useState -> {
+            if (useState.clicked) {
+                useState.use(bagView, p);
+            }
+        });
+    }
+
+    static void forEach(Consumer<UseState> action) {
+        Arrays.stream(values()).forEach(action);
     }
 
     @FunctionalInterface

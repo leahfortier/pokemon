@@ -203,4 +203,5 @@ Other random things:
     should I get different sprites for Castform and Arceus and other Pokemon like that since it's partially setup now
     cancelling evolution still consumes evolution item
     is there some way to have like a FirstTriggeredCondition or something for things like items and a lot of other shit
+    wait can we still not sell items in the mart???
     
