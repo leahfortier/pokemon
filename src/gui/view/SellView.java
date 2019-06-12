@@ -15,54 +15,50 @@ import gui.TileSet;
 import input.InputControl;
 import item.Item;
 import item.ItemNamesies;
+import item.bag.BagCategory;
 import main.Game;
 import main.Global;
 import map.Direction;
-import trainer.player.Badge;
 import trainer.player.Player;
-import trainer.player.medal.Medal;
-import trainer.player.medal.MedalTheme;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.Point;
-import util.string.PokeString;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 class SellView extends View {
-    private static final Color BACKGROUND_COLOR = new Color(68, 123, 184);
-
+    private static final BagCategory[] CATEGORIES = BagCategory.values();
     private static final int ITEMS_PER_PAGE = 10;
-    private static final int NUM_BUTTONS = ITEMS_PER_PAGE + 6;
+
+    private static final int NUM_BUTTONS = CATEGORIES.length + ITEMS_PER_PAGE + 6;
+    private static final int ITEMS = CATEGORIES.length;
     private static final int RETURN = NUM_BUTTONS - 1;
-    private static final int BUY = NUM_BUTTONS - 2;
+    private static final int SELL = NUM_BUTTONS - 2;
     private static final int AMOUNT_LEFT_ARROW = NUM_BUTTONS - 3;
     private static final int AMOUNT_RIGHT_ARROW = NUM_BUTTONS - 4;
     private static final int PAGE_RIGHT_ARROW = NUM_BUTTONS - 5;
     private static final int PAGE_LEFT_ARROW = NUM_BUTTONS - 6;
 
-    private final DrawPanel shopPanel;
-    private final DrawPanel tabPanel;
+    private final DrawPanel bagPanel;
     private final DrawPanel moneyPanel;
     private final DrawPanel itemsPanel;
     private final DrawPanel selectedPanel;
     private final DrawPanel amountPanel;
     private final DrawPanel playerMoneyPanel;
     private final DrawPanel inBagPanel;
-    private final DrawPanel itemAmountPanel;
+    private final DrawPanel sellAmountPanel;
 
     private final ButtonList buttons;
+    private final Button[] tabButtons;
     private final Button[] itemButtons;
     private final Button amountLeftButton;
     private final Button amountRightButton;
-    private final Button buyButton;
+    private final Button sellButton;
     private final Button pageLeftButton;
     private final Button pageRightButton;
     private final Button returnButton;
@@ -70,14 +66,14 @@ class SellView extends View {
     private int pageNum;
     private int itemAmount;
 
-    private List<ItemNamesies> forSaleItems;
+    private BagCategory selectedTab;
     private ItemNamesies selectedItem;
 
     SellView() {
         int tabHeight = 55;
         int spacing = 28;
 
-        shopPanel = new DrawPanel(
+        bagPanel = new DrawPanel(
                 spacing,
                 spacing + tabHeight,
                 Point.subtract(
@@ -86,38 +82,26 @@ class SellView extends View {
                         2*spacing + tabHeight
                 )
         )
-                .withBackgroundColor(BACKGROUND_COLOR)
                 .withTransparentBackground()
                 .withBorderPercentage(0)
-                .withBlackOutline();
-
-        tabPanel = new DrawPanel(
-                shopPanel.x + shopPanel.width/6,
-                shopPanel.y - tabHeight + DrawUtils.OUTLINE_SIZE,
-                shopPanel.width/6,
-                tabHeight
-        )
-                .withBackgroundColor(BACKGROUND_COLOR)
-                .withTransparentBackground()
-                .withBorderPercentage(0)
-                .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.DOWN)));
+                .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP)));
 
         int buttonHeight = 38;
         int selectedHeight = 82;
-        int halfPanelWidth = (shopPanel.width - 3*spacing)/2;
+        int halfPanelWidth = (bagPanel.width - 3*spacing)/2;
 
         moneyPanel = new DrawPanel(
-                shopPanel.x + spacing,
-                shopPanel.y + spacing,
+                bagPanel.x + spacing,
+                bagPanel.y + spacing,
                 halfPanelWidth,
-                shopPanel.height - 2*spacing
+                bagPanel.height - 2*spacing
         )
                 .withFullTransparency()
                 .withBlackOutline();
 
         selectedPanel = new DrawPanel(
                 moneyPanel.x + moneyPanel.width + spacing,
-                shopPanel.y + spacing,
+                bagPanel.y + spacing,
                 halfPanelWidth,
                 selectedHeight
         )
@@ -127,28 +111,29 @@ class SellView extends View {
         Button[] fakeButtons = moneyPanel.getButtons(10, 6, 1);
         playerMoneyPanel = new DrawPanel(fakeButtons[0]).withBlackOutline();
         inBagPanel = new DrawPanel(fakeButtons[1]).withBlackOutline();
-        itemAmountPanel = new DrawPanel(fakeButtons[4]).withBlackOutline();
+        sellAmountPanel = new DrawPanel(fakeButtons[4]).withBlackOutline();
 
-        Button fakeBuyButton = fakeButtons[5];
-        buyButton = new Button(
-                fakeBuyButton.x,
-                fakeBuyButton.y,
-                fakeBuyButton.width,
-                fakeBuyButton.height,
+        Button[] buttons = new Button[NUM_BUTTONS];
+        this.buttons = new ButtonList(buttons);
+
+        Button fakeSellButton = fakeButtons[5];
+        sellButton = new Button(
+                fakeSellButton.x,
+                fakeSellButton.y,
+                fakeSellButton.width,
+                fakeSellButton.height,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(RETURN).left(RETURN),
+                new ButtonTransitions().right(RETURN).up(0).left(RETURN).down(0),
                 () -> {
                     Player player = Game.getPlayer();
-                    player.sucksToSuck(itemAmount*selectedItem.getItem().getPrice());
-                    player.getBag().addItem(selectedItem, itemAmount);
-                    player.getMedalCase().increase(MedalTheme.ITEMS_BOUGHT, itemAmount);
+                    player.getDatCashMoney(itemAmount*selectedItem.getItem().getSellPrice());
+                    player.getBag().removeItem(selectedItem, itemAmount);
 
-                    if (selectedItem == ItemNamesies.POKE_BALL && itemAmount >= 10) {
-                        player.getBag().addItem(ItemNamesies.PREMIER_BALL);
-                        player.getMedalCase().earnMedal(Medal.SMART_SHOPPER);
+                    this.updateCategory();
+
+                    if (this.selectedItem == ItemNamesies.NO_ITEM) {
+                        this.buttons.setSelected(0);
                     }
-
-                    setSelectedItem(selectedItem);
                 }
         );
 
@@ -158,7 +143,7 @@ class SellView extends View {
                 selectedPanel.width/3,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(AMOUNT_RIGHT_ARROW).up(RETURN).left(BUY).down(0),
+                new ButtonTransitions().right(AMOUNT_RIGHT_ARROW).up(0).left(SELL).down(ITEMS),
                 () -> this.updateItemAmount(-1)
         );
 
@@ -168,7 +153,7 @@ class SellView extends View {
                 amountLeftButton.width,
                 amountLeftButton.height,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(AMOUNT_LEFT_ARROW).up(RETURN).left(AMOUNT_LEFT_ARROW).down(1),
+                new ButtonTransitions().right(AMOUNT_LEFT_ARROW).up(0).left(AMOUNT_LEFT_ARROW).down(ITEMS + 1),
                 () -> this.updateItemAmount(1)
         );
 
@@ -183,11 +168,11 @@ class SellView extends View {
 
         returnButton = Button.createExitButton(
                 selectedPanel.x,
-                shopPanel.y + shopPanel.height - spacing - buttonHeight,
+                bagPanel.y + bagPanel.height - spacing - buttonHeight,
                 halfPanelWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(BUY).up(PAGE_LEFT_ARROW).left(BUY).down(AMOUNT_LEFT_ARROW)
+                new ButtonTransitions().right(SELL).up(PAGE_LEFT_ARROW).left(SELL).down(0)
         );
 
         itemsPanel = new DrawPanel(
@@ -199,9 +184,24 @@ class SellView extends View {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        itemAmount = 1;
-
-        Button[] buttons = new Button[NUM_BUTTONS];
+        tabButtons = new Button[CATEGORIES.length];
+        for (int i = 0; i < CATEGORIES.length; i++) {
+            final int index = i;
+            tabButtons[i] = Button.createTabButton(
+                    i,
+                    bagPanel.x,
+                    bagPanel.y,
+                    bagPanel.width,
+                    tabHeight,
+                    tabButtons.length,
+                    new ButtonTransitions()
+                            .up(RETURN)
+                            .down(PAGE_LEFT_ARROW)
+                            .basic(Direction.RIGHT, i, 1, CATEGORIES.length)
+                            .basic(Direction.LEFT, i, 1, CATEGORIES.length),
+                    () -> changeCategory(index)
+            );
+        }
 
         itemButtons = itemsPanel.getButtons(
                 5,
@@ -209,39 +209,39 @@ class SellView extends View {
                 2,
                 ITEMS_PER_PAGE/2,
                 2,
-                0,
+                ITEMS,
                 new ButtonTransitions().up(AMOUNT_RIGHT_ARROW).down(PAGE_RIGHT_ARROW),
-                index -> setSelectedItem(GeneralUtils.getPageValue(forSaleItems, pageNum, ITEMS_PER_PAGE, index))
+                index -> setSelectedItem(GeneralUtils.getPageValue(Game.getPlayer().getBag().getCategory(selectedTab), pageNum, ITEMS_PER_PAGE, index))
         );
-        System.arraycopy(itemButtons, 0, buttons, 0, ITEMS_PER_PAGE);
 
-        buttons[PAGE_LEFT_ARROW] = pageLeftButton = new Button(
+        pageLeftButton = new Button(
                 498,
                 451,
                 35,
                 20,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(PAGE_RIGHT_ARROW).up(ITEMS_PER_PAGE - 2).left(BUY).down(RETURN),
+                new ButtonTransitions().right(PAGE_RIGHT_ARROW).up(ITEMS_PER_PAGE - 2).left(SELL).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         );
 
-        buttons[PAGE_RIGHT_ARROW] = pageRightButton = new Button(
+        pageRightButton = new Button(
                 613,
                 451,
                 35,
                 20,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(BUY).up(ITEMS_PER_PAGE - 1).left(PAGE_LEFT_ARROW).down(RETURN),
+                new ButtonTransitions().right(SELL).up(ITEMS_PER_PAGE - 1).left(PAGE_LEFT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
 
-        buttons[BUY] = buyButton;
-
+        System.arraycopy(tabButtons, 0, buttons, 0, CATEGORIES.length);
+        System.arraycopy(itemButtons, 0, buttons, ITEMS, ITEMS_PER_PAGE);
+        buttons[PAGE_LEFT_ARROW] = pageLeftButton;
+        buttons[PAGE_RIGHT_ARROW] = pageRightButton;
+        buttons[SELL] = sellButton;
         buttons[AMOUNT_LEFT_ARROW] = amountLeftButton;
         buttons[AMOUNT_RIGHT_ARROW] = amountRightButton;
         buttons[RETURN] = returnButton;
-
-        this.buttons = new ButtonList(buttons);
 
         this.movedToFront();
     }
@@ -267,7 +267,8 @@ class SellView extends View {
         BasicPanels.drawCanvasPanel(g);
 
         // Info Boxes
-        shopPanel.drawBackground(g);
+        bagPanel.withBackgroundColor(selectedTab.getColor())
+                .drawBackground(g);
 
         if (!amountLeftButton.isActive()) {
             amountLeftButton.greyOut(g);
@@ -276,7 +277,7 @@ class SellView extends View {
 
         // Item Display
         selectedPanel.drawBackground(g);
-        if (selectedItem != null) {
+        if (selectedItem != ItemNamesies.NO_ITEM) {
             int spacing = 8;
 
             Item selectedItemValue = selectedItem.getItem();
@@ -301,25 +302,26 @@ class SellView extends View {
                     startY + FontMetrics.getDistanceBetweenRows(g),
                     selectedPanel.width - 2*spacing
             );
-
-            amountPanel.drawBackground(g);
-            amountPanel.label(g, 20, itemAmount + "");
-
-            amountLeftButton.fillTransparent(g);
-            amountLeftButton.blackOutline(g);
-            PolygonUtils.drawCenteredArrow(g, amountLeftButton.centerX(), amountLeftButton.centerY(), 35, 20, Direction.LEFT);
-
-            amountRightButton.fillTransparent(g);
-            amountRightButton.blackOutline(g);
-            PolygonUtils.drawCenteredArrow(g, amountRightButton.centerX(), amountRightButton.centerY(), 35, 20, Direction.RIGHT);
         }
+
+        amountPanel.drawBackground(g);
+        amountPanel.label(g, 20, itemAmount + "");
+
+        amountLeftButton.fillTransparent(g);
+        amountLeftButton.blackOutline(g);
+        PolygonUtils.drawCenteredArrow(g, amountLeftButton.centerX(), amountLeftButton.centerY(), 35, 20, Direction.LEFT);
+
+        amountRightButton.fillTransparent(g);
+        amountRightButton.blackOutline(g);
+        PolygonUtils.drawCenteredArrow(g, amountRightButton.centerX(), amountRightButton.centerY(), 35, 20, Direction.RIGHT);
 
         FontMetrics.setFont(g, 12);
         g.setColor(Color.BLACK);
 
         // Draw each items in category
         itemsPanel.drawBackground(g);
-        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(forSaleItems, pageNum, ITEMS_PER_PAGE);
+        Set<ItemNamesies> list = player.getBag().getCategory(selectedTab);
+        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(list, pageNum, ITEMS_PER_PAGE);
         for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
             for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
                 ItemNamesies item = iter.next();
@@ -357,17 +359,17 @@ class SellView extends View {
         inBagPanel.label(g, 18, "In Bag: " + player.getBag().getQuantity(selectedItem));
 
         // Total display
-        itemAmountPanel.drawBackground(g);
-        itemAmountPanel.label(g, 18, "Total: " + Global.MONEY_SYMBOL + selectedItem.getItem().getPrice()*itemAmount);
+        sellAmountPanel.drawBackground(g);
+        sellAmountPanel.label(g, 18, "Total: " + Global.MONEY_SYMBOL + selectedItem.getItem().getSellPrice()*itemAmount);
 
         // Buy button
-        buyButton.fillTransparent(g);
-        if (!buyButton.isActive()) {
-            buyButton.greyOut(g);
+        sellButton.fillTransparent(g);
+        if (!sellButton.isActive()) {
+            sellButton.greyOut(g);
         }
 
-        buyButton.label(g, 24, "BUY");
-        buyButton.blackOutline(g);
+        sellButton.label(g, 24, "SELL");
+        sellButton.blackOutline(g);
 
         // Return button
         returnButton.fillTransparent(g);
@@ -375,8 +377,21 @@ class SellView extends View {
         returnButton.label(g, 20, "Return");
 
         // Tab
-        tabPanel.drawBackground(g);
-        tabPanel.label(g, 16, PokeString.POKE + " Mart");
+        for (int i = 0; i < CATEGORIES.length; i++) {
+            Button tabButton = tabButtons[i];
+            tabButton.fillTransparent(g, CATEGORIES[i].getColor());
+            tabButton.outlineTab(g, i, selectedTab.ordinal());
+
+            g.translate(tabButton.x, tabButton.y);
+
+            g.setColor(Color.BLACK);
+            FontMetrics.setFont(g, 14);
+
+            ImageUtils.drawCenteredImage(g, CATEGORIES[i].getIcon(), 16, 26);
+            g.drawString(CATEGORIES[i].getDisplayName(), 30, 30);
+
+            g.translate(-tabButton.x, -tabButton.y);
+        }
 
         buttons.draw(g);
     }
@@ -386,111 +401,25 @@ class SellView extends View {
         return ViewMode.SELL_VIEW;
     }
 
-    private void resetForSaleItems() {
-        Player player = Game.getPlayer();
-
-        this.forSaleItems = new ArrayList<>();
-        Collections.addAll(
-                forSaleItems,
-                ItemNamesies.POTION,
-                ItemNamesies.POKE_BALL,
-                ItemNamesies.ANTIDOTE,
-                ItemNamesies.PARALYZE_HEAL,
-                ItemNamesies.BURN_HEAL,
-                ItemNamesies.AWAKENING,
-                ItemNamesies.ICE_HEAL
-        );
-
-        if (player.hasBadge(Badge.ROUND)) {
-            Collections.addAll(
-                    forSaleItems,
-                    ItemNamesies.GREAT_BALL,
-                    ItemNamesies.SUPER_POTION,
-                    ItemNamesies.REPEL
-            );
-        }
-
-        if (player.hasBadge(Badge.SECOND)) {
-            Collections.addAll(
-                    forSaleItems,
-                    ItemNamesies.REVIVE
-            );
-        }
-
-        if (player.hasBadge(Badge.THIRD)) {
-            Collections.addAll(
-                    forSaleItems,
-                    ItemNamesies.SUPER_REPEL
-            );
-        }
-
-        if (player.hasBadge(Badge.FOURTH)) {
-            Collections.addAll(
-                    forSaleItems,
-                    ItemNamesies.ULTRA_BALL,
-                    ItemNamesies.HYPER_POTION
-            );
-        }
-
-        if (player.hasBadge(Badge.FIFTH)) {
-            Collections.addAll(
-                    forSaleItems,
-                    ItemNamesies.FULL_HEAL,
-                    ItemNamesies.MAX_REPEL
-            );
-        }
-
-        if (player.hasBadge(Badge.SIXTH)) {
-            Collections.addAll(
-                    forSaleItems,
-                    ItemNamesies.MAX_POTION
-            );
-        }
-
-        if (player.hasBadge(Badge.SEVENTH)) {
-            Collections.addAll(
-                    forSaleItems,
-                    ItemNamesies.FULL_RESTORE
-            );
-        }
-
-        this.forSaleItems.sort((firstItemName, secondItemName) -> {
-            Item firstItem = firstItemName.getItem();
-            Item secondItem = secondItemName.getItem();
-
-            if (firstItem.getBagCategory() != secondItem.getBagCategory()) {
-                return firstItem.getBagCategory().ordinal() - secondItem.getBagCategory().ordinal();
-            }
-
-            if (firstItem.getPrice() != secondItem.getPrice()) {
-                return firstItem.getPrice() - secondItem.getPrice();
-            }
-
-            return firstItem.getName().compareTo(secondItem.getName());
-        });
-    }
-
     @Override
     public void movedToFront() {
-        this.resetForSaleItems();
-        this.setSelectedItem(forSaleItems.get(0));
-        this.updateActiveButtons();
+        // Set selected button to be the first tab and switch to first tab
+        this.buttons.setSelected(0);
+        this.changeCategory(0);
     }
 
     private void updateItemAmount(int delta) {
-        this.itemAmount = GeneralUtils.wrapIncrement(this.itemAmount, delta, 1, this.maxPurchaseAmount());
-    }
-
-    private int maxPurchaseAmount() {
-        return Game.getPlayer().getDatCashMoney()/selectedItem.getItem().getPrice();
+        int numItems = Game.getPlayer().getBag().getQuantity(this.selectedItem);
+        this.itemAmount = GeneralUtils.wrapIncrement(this.itemAmount, delta, 1, numItems);
     }
 
     private int totalPages() {
-        return GeneralUtils.getTotalPages(forSaleItems.size(), ITEMS_PER_PAGE);
+        int size = Game.getPlayer().getBag().getCategory(selectedTab).size();
+        return GeneralUtils.getTotalPages(size, ITEMS_PER_PAGE);
     }
 
     private void updateActiveButtons() {
-        int displayed = forSaleItems.size();
+        int displayed = Game.getPlayer().getBag().getCategory(selectedTab).size();
         for (int i = 0; i < ITEMS_PER_PAGE; i++) {
             itemButtons[i].setActive(i < displayed - pageNum*ITEMS_PER_PAGE);
         }
@@ -498,11 +427,33 @@ class SellView extends View {
         boolean amountSet = itemAmount > 0;
         amountLeftButton.setActive(amountSet);
         amountRightButton.setActive(amountSet);
-        buyButton.setActive(amountSet);
+        sellButton.setActive(amountSet);
     }
 
     private void setSelectedItem(ItemNamesies item) {
         selectedItem = item;
-        itemAmount = selectedItem.getItem().getPrice() <= Game.getPlayer().getDatCashMoney() ? 1 : 0;
+        itemAmount = selectedItem.getItem().getPrice() > 0 ? 1 : 0;
+    }
+
+    private void updateCategory() {
+        changeCategory(this.selectedTab.ordinal());
+    }
+
+    private void changeCategory(int index) {
+        if (selectedTab.ordinal() != index) {
+            pageNum = 0;
+        }
+
+        selectedTab = CATEGORIES[index];
+
+        Set<ItemNamesies> list = Game.getPlayer().getBag().getCategory(selectedTab);
+        this.setSelectedItem(list.isEmpty() ? ItemNamesies.NO_ITEM : list.iterator().next());
+
+        // No more items on the current page
+        if (list.size() < (pageNum + 1)*ITEMS_PER_PAGE) {
+            pageNum = 0;
+        }
+
+        updateActiveButtons();
     }
 }

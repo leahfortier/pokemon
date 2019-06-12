@@ -19,7 +19,7 @@ public enum CommonTrigger {
                     "What would you like to do?",
                     new ChoiceMatcher[]{
                             new ChoiceMatcher("Buy", new ChangeViewActionMatcher(ViewMode.MART_VIEW)),
-                            new ChoiceMatcher("Sell", new ChangeViewActionMatcher(ViewMode.BAG_VIEW)),
+                            new ChoiceMatcher("Sell", new ChangeViewActionMatcher(ViewMode.SELL_VIEW)),
                     }
             ))
     )),
