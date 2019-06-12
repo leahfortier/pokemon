@@ -1897,7 +1897,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             // Set the new stats
             stats = new int[Stat.NUM_STATS];
             for (int i = 0; i < stats.length; i++) {
-                stats[i] = victim.getStats().calculate(i, transformee.getPokemonInfo().getStats());
+                stats[i] = victim.stats().calculate(i, transformee.getPokemonInfo().getStats());
             }
             stats[Stat.HP.index()] = victim.getMaxHP();
 

@@ -15,7 +15,7 @@ public interface EvIncreaser extends HoldItem, PokemonUseItem {
         int[] toAdd = new int[Stat.NUM_STATS];
         toAdd[this.toIncrease().index()] += this.increaseAmount();
 
-        if (!p.getStats().addEVs(toAdd)) {
+        if (!p.stats().addEVs(toAdd)) {
             return false;
         }
 

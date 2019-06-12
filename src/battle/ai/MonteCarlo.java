@@ -69,9 +69,9 @@ public class MonteCarlo {
 
             // Need to set these manually since this field has to be transient because ActivePokemon and BattleAttributes store each other
             playerPokemon.getStages().setStagesHolder(playerPokemon);
-            playerPokemon.getStats().setStatsHolder(playerPokemon);
+            playerPokemon.stats().setStatsHolder(playerPokemon);
             opponentPokemon.getStages().setStagesHolder(opponentPokemon);
-            opponentPokemon.getStats().setStatsHolder(opponentPokemon);
+            opponentPokemon.stats().setStatsHolder(opponentPokemon);
 
             for (Move move : simulated.getTrainer(!current.isOpp).front().getMoves(simulated)) {
                 Node childNode = new Node(new ArrayList<>(current.path), !current.isOpp);

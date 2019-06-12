@@ -70,7 +70,7 @@ public abstract class PartyPokemon implements Serializable {
         this.totalEXP = pokemon.getGrowthRate().getEXP(this.level);
         this.totalEXP += RandomUtils.getRandomInt(expToNextLevel());
 
-        this.stats.setStats();
+        this.setStats();
         this.fullyHeal();
         this.resetAttributes();
     }
@@ -123,7 +123,7 @@ public abstract class PartyPokemon implements Serializable {
         // Don't add randomness for eggs
         this.totalEXP = pokemonInfo.getGrowthRate().getEXP(this.level);
 
-        this.stats.setStats();
+        this.setStats();
         this.fullyHeal();
         this.resetAttributes();
     }
@@ -149,12 +149,14 @@ public abstract class PartyPokemon implements Serializable {
         return pokemon.getInfo();
     }
 
-    protected void setIVs(IndividualValues IVs) {
-        this.stats.setIVs(IVs);
+    // This method should always be used and the field should never be used directly
+    public StatValues stats() {
+        this.stats.setStatsHolder(this);
+        return stats;
     }
 
-    public StatValues getStats() {
-        return stats;
+    private int[] setStats() {
+        return this.stats().setStats();
     }
 
     // Returns whether or not this Pokemon knows this move already
@@ -175,7 +177,7 @@ public abstract class PartyPokemon implements Serializable {
         }
 
         // Update stats and return gain
-        return this.stats.setStats();
+        return this.setStats();
     }
 
     // Handles actual evolution, but doesn't set any messages or anything or try to learn new moves or shit like that
@@ -196,7 +198,7 @@ public abstract class PartyPokemon implements Serializable {
         }
 
         // Update stats and return gain
-        return this.stats.setStats();
+        return this.setStats();
     }
 
     private void setShiny() {
@@ -220,7 +222,7 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public int getStat(int index) {
-        return this.stats.get(index);
+        return this.stats().get(index);
     }
 
     public int getStat(Stat stat) {
@@ -228,19 +230,23 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public IndividualValues getIVs() {
-        return this.stats.getIVs();
+        return this.stats().getIVs();
+    }
+
+    protected void setIVs(IndividualValues IVs) {
+        this.stats().setIVs(IVs);
     }
 
     public EffortValues getEVs() {
-        return this.stats.getEVs();
+        return this.stats().getEVs();
     }
 
     public Nature getNature() {
-        return stats.getNature();
+        return this.stats().getNature();
     }
 
     protected void setNature(Nature nature) {
-        this.stats.setNature(nature);
+        this.stats().setNature(nature);
     }
 
     // Returns whether or not the Pokemon is afflicted with a status condition
@@ -282,7 +288,7 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public int getMaxHP() {
-        return stats.get(Stat.HP);
+        return this.getStat(Stat.HP);
     }
 
     public int getHP() {

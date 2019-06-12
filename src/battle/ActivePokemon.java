@@ -157,7 +157,7 @@ public class ActivePokemon extends PartyPokemon {
         if (item instanceof EVItem) {
             vals = ((EVItem)item).getEVs(vals);
         }
-        this.getStats().addEVs(vals);
+        this.stats().addEVs(vals);
 
         // Level up if applicable
         while (this.getTotalEXP() >= this.getPokemonInfo().getGrowthRate().getEXP(this.getLevel() + 1)) {
@@ -182,7 +182,7 @@ public class ActivePokemon extends PartyPokemon {
             Messages.add(new MessageUpdate().updatePokemon(b, this));
         }
 
-        Messages.add(new MessageUpdate().withStatGains(gain, this.getStats().getClonedStats()));
+        Messages.add(new MessageUpdate().withStatGains(gain, this.stats().getClonedStats()));
 
         // Learn new moves
         this.getPokemonInfo().getMoves(this.getLevel()).forEach(attackNamesies -> learnMove(attackNamesies, inBattle));

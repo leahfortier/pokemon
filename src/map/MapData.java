@@ -252,7 +252,7 @@ public class MapData {
         }
 
         for (Trigger trigger : currentTriggers) {
-            if (trigger instanceof WalkingWildBattleTrigger) {
+            if (trigger instanceof WalkingWildBattleTrigger && trigger.canTrigger()) {
                 return (WalkingWildBattleTrigger)trigger;
             }
         }

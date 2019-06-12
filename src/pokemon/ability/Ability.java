@@ -3514,7 +3514,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-            return user.getStats().calculate(stat, this.getStats());
+            return user.stats().calculate(stat, this.getStats());
         }
     }
 
@@ -3572,7 +3572,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-            return user.getStats().calculate(stat, this.getStats());
+            return user.stats().calculate(stat, this.getStats());
         }
     }
 
@@ -3628,7 +3628,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-            return user.getStats().calculate(stat, this.getStats());
+            return user.stats().calculate(stat, this.getStats());
         }
     }
 

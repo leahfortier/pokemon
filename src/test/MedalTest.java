@@ -39,7 +39,7 @@ public class MedalTest extends BaseTest {
         ActivePokemon bulby = new ActivePokemon(PokemonNamesies.BULBASAUR, 5, false, true);
         Assert.assertFalse(player.getMedalCase().hasMedal(Medal.TRAINED_TO_MAX_POTENTIAL));
 
-        StatValues stats = bulby.getStats();
+        StatValues stats = bulby.stats();
         stats.addEVs(new int[] { 1, 1, 1, 1, 1, 1 });
         Assert.assertFalse(player.getMedalCase().hasMedal(Medal.TRAINED_TO_MAX_POTENTIAL));
 

@@ -22,7 +22,7 @@ public interface EvDecreaseBerry extends Berry, PokemonUseItem {
             vals[decreaseIndex] -= 10;
         }
 
-        if (!p.getStats().addEVs(vals)) {
+        if (!p.stats().addEVs(vals)) {
             return false;
         }
 
