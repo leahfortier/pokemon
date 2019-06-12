@@ -151,6 +151,9 @@ public class BagView extends View {
         selectedTab = CATEGORIES[0];
         selectedItem = ItemNamesies.NO_ITEM;
 
+        Button[] buttons = new Button[NUM_BUTTONS];
+        this.buttons = new ButtonList(buttons);
+
         tabButtons = new Button[CATEGORIES.length];
         for (int i = 0; i < CATEGORIES.length; i++) {
             final int index = i;
@@ -199,7 +202,6 @@ public class BagView extends View {
                 index -> selectedItem = GeneralUtils.getPageValue(Game.getPlayer().getBag().getCategory(selectedTab), pageNum, ITEMS_PER_PAGE, index)
         );
 
-        Button[] buttons = new Button[NUM_BUTTONS];
         System.arraycopy(tabButtons, 0, buttons, 0, CATEGORIES.length);
         System.arraycopy(partyButtons, 0, buttons, PARTY, Trainer.MAX_POKEMON);
         System.arraycopy(moveButtons, 0, buttons, MOVES, MoveList.MAX_MOVES);
@@ -228,7 +230,7 @@ public class BagView extends View {
                         if (useState.isClicked()) {
                             // State is now selected  -- switch to Pokemon select to choose which pokemon to use the item with
                             this.state = BagState.POKEMON_SELECT;
-                            this.setSelectedButton(PARTY);
+                            this.buttons.setSelected(PARTY);
                         } else {
                             // No longer selected -- revert back to item select
                             this.state = BagState.ITEM_SELECT;
@@ -267,10 +269,7 @@ public class BagView extends View {
 
         buttons[LEFT_ARROW] = leftArrow;
         buttons[RIGHT_ARROW] = rightArrow;
-
         buttons[RETURN] = returnButton;
-
-        this.buttons = new ButtonList(buttons);
 
         movedToFront();
     }
@@ -554,11 +553,6 @@ public class BagView extends View {
         return ViewMode.BAG_VIEW;
     }
 
-    // Mostly this exists because it's being called in constructor before buttons initialized
-    private void setSelectedButton(int index) {
-        this.buttons.setSelected(index);
-    }
-
     private void updateCategory() {
         changeCategory(this.selectedTab.ordinal());
     }
@@ -593,7 +587,7 @@ public class BagView extends View {
         if (!p.isEgg() && this.selectedItem.getItem() instanceof MoveUseItem) {
             this.selectedPokemon = p;
             this.state = BagState.MOVE_SELECT;
-            this.setSelectedButton(MOVES);
+            this.buttons.setSelected(MOVES);
             this.updateActiveButtons();
         } else {
             Game.getPlayer().getBag().usePokemonItem(this.selectedItem, p);
@@ -620,7 +614,7 @@ public class BagView extends View {
     private void deactivateState(UseState state) {
         state.reset();
 
-        this.setSelectedButton(state.buttonIndex);
+        this.buttons.setSelected(state.buttonIndex);
         this.state = BagState.ITEM_SELECT;
 
         if (!Game.getPlayer().getBag().hasItem(this.selectedItem)) {
@@ -633,8 +627,8 @@ public class BagView extends View {
     @Override
     public void movedToFront() {
         // Set selected button to be the first tab and switch to first tab
-        this.setSelectedButton(0);
-        changeCategory(0);
+        this.buttons.setSelected(0);
+        this.changeCategory(0);
     }
 
     private int totalPages() {

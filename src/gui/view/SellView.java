@@ -36,7 +36,7 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
-class MartView extends View {
+class SellView extends View {
     private static final Color BACKGROUND_COLOR = new Color(68, 123, 184);
 
     private static final int ITEMS_PER_PAGE = 10;
@@ -73,7 +73,7 @@ class MartView extends View {
     private List<ItemNamesies> forSaleItems;
     private ItemNamesies selectedItem;
 
-    MartView() {
+    SellView() {
         int tabHeight = 55;
         int spacing = 28;
 
@@ -383,7 +383,7 @@ class MartView extends View {
 
     @Override
     public ViewMode getViewModel() {
-        return ViewMode.MART_VIEW;
+        return ViewMode.SELL_VIEW;
     }
 
     private void resetForSaleItems() {

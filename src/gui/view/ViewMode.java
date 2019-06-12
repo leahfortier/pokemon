@@ -22,6 +22,7 @@ public enum ViewMode {
     PARTY_VIEW(PartyView::new),
     PC_VIEW(PCView::new),
     POKEDEX_VIEW(PokedexView::new),
+    SELL_VIEW(SellView::new),
     START_VIEW(StartView::new),
     TRADE_VIEW(TradeView::new),
     TRAINER_CARD_VIEW(TrainerCardView::new);
