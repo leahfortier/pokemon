@@ -3,8 +3,9 @@ package item.use;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
+import item.use.UseItem.BagUseItem;
 
-public interface MoveUseItem extends UseItem {
+public interface MoveUseItem extends BagUseItem {
     boolean use(ActivePokemon p, Move m);
 
     @Override

@@ -41,8 +41,13 @@ enum UseState {
         this.useButton = useButton;
     }
 
-    private void deactivate(BagView bagView) {
+    void reset() {
         this.clicked = false;
+    }
+
+    private void deactivate(BagView bagView) {
+        this.reset();
+
         bagView.setSelectedButton(this);
         bagView.state = BagState.ITEM_SELECT;
 
@@ -94,7 +99,7 @@ enum UseState {
                 continue;
             }
 
-            otherState.clicked = false;
+            otherState.reset();
         }
 
         // PlayerUseItems don't require selecting a Pokemon -- automatically use as soon as Use is pressed
