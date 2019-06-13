@@ -129,7 +129,7 @@ public class BagView extends View {
         itemButtons = panel.getItemButtons(
                 ITEMS,
                 new ButtonTransitions().up(USE).down(RIGHT_ARROW),
-                index -> selectedItem = GeneralUtils.getPageValue(Game.getPlayer().getBag().getCategory(selectedTab), pageNum, ITEMS_PER_PAGE, index)
+                index -> selectedItem = GeneralUtils.getPageValue(this.getDisplayItems(), pageNum, ITEMS_PER_PAGE, index)
         );
 
         UseState[] useStates = UseState.values();
@@ -237,7 +237,7 @@ public class BagView extends View {
         panel.drawSelectedItem(g, selectedItem);
 
         // Draw each item in category
-        panel.drawItems(g, itemButtons, Game.getPlayer().getBag().getCategory(selectedTab), pageNum);
+        panel.drawItems(g, itemButtons, this.getDisplayItems(), pageNum);
 
         // Draw page numbers
         panel.drawPageNumbers(g, pageNum, totalPages());
@@ -395,7 +395,7 @@ public class BagView extends View {
         selectedTab = CATEGORIES[index];
         state = BagState.ITEM_SELECT;
 
-        Set<ItemNamesies> list = Game.getPlayer().getBag().getCategory(selectedTab);
+        Set<ItemNamesies> list = this.getDisplayItems();
         selectedItem = list.isEmpty() ? ItemNamesies.NO_ITEM : list.iterator().next();
 
         // No more items on the current page
@@ -482,9 +482,12 @@ public class BagView extends View {
         this.changeCategory(0);
     }
 
+    private Set<ItemNamesies> getDisplayItems() {
+        return Game.getPlayer().getBag().getCategory(selectedTab);
+    }
+
     private int totalPages() {
-        int size = Game.getPlayer().getBag().getCategory(selectedTab).size();
-        return GeneralUtils.getTotalPages(size, ITEMS_PER_PAGE);
+        return GeneralUtils.getTotalPages(this.getDisplayItems().size(), ITEMS_PER_PAGE);
     }
 
     private void updateActiveButtons() {
@@ -495,7 +498,7 @@ public class BagView extends View {
             partyButtons[i].setActive(state == BagState.POKEMON_SELECT && i < team.size());
         }
 
-        int displayed = player.getBag().getCategory(selectedTab).size();
+        int displayed = this.getDisplayItems().size();
         for (int i = 0; i < ITEMS_PER_PAGE; i++) {
             itemButtons[i].setActive(state == BagState.ITEM_SELECT && i < displayed - pageNum*ITEMS_PER_PAGE);
         }

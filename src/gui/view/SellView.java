@@ -216,7 +216,7 @@ class SellView extends View {
                 2,
                 ITEMS,
                 new ButtonTransitions().up(AMOUNT_RIGHT_ARROW).down(PAGE_RIGHT_ARROW),
-                index -> setSelectedItem(GeneralUtils.getPageValue(Game.getPlayer().getBag().getCategory(selectedTab), pageNum, ITEMS_PER_PAGE, index))
+                index -> setSelectedItem(GeneralUtils.getPageValue(this.getDisplayItems(), pageNum, ITEMS_PER_PAGE, index))
         );
 
         pageLeftButton = new Button(
@@ -325,7 +325,7 @@ class SellView extends View {
 
         // Draw each items in category
         itemsPanel.drawBackground(g);
-        Set<ItemNamesies> list = player.getBag().getCategory(selectedTab);
+        Set<ItemNamesies> list = this.getDisplayItems();
         Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(list, pageNum, ITEMS_PER_PAGE);
         for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
             for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
@@ -418,13 +418,16 @@ class SellView extends View {
         this.itemAmount = GeneralUtils.wrapIncrement(this.itemAmount, delta, 1, numItems);
     }
 
+    private Set<ItemNamesies> getDisplayItems() {
+        return Game.getPlayer().getBag().getCategory(selectedTab);
+    }
+
     private int totalPages() {
-        int size = Game.getPlayer().getBag().getCategory(selectedTab).size();
-        return GeneralUtils.getTotalPages(size, ITEMS_PER_PAGE);
+        return GeneralUtils.getTotalPages(this.getDisplayItems().size(), ITEMS_PER_PAGE);
     }
 
     private void updateActiveButtons() {
-        int displayed = Game.getPlayer().getBag().getCategory(selectedTab).size();
+        int displayed = this.getDisplayItems().size();
         for (int i = 0; i < ITEMS_PER_PAGE; i++) {
             itemButtons[i].setActive(i < displayed - pageNum*ITEMS_PER_PAGE);
         }
@@ -451,7 +454,7 @@ class SellView extends View {
 
         selectedTab = CATEGORIES[index];
 
-        Set<ItemNamesies> list = Game.getPlayer().getBag().getCategory(selectedTab);
+        Set<ItemNamesies> list = this.getDisplayItems();
         this.setSelectedItem(list.isEmpty() ? ItemNamesies.NO_ITEM : list.iterator().next());
 
         // No more items on the current page
