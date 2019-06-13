@@ -131,6 +131,11 @@ public class DrawPanel {
         return this;
     }
 
+    public DrawPanel withBlackOutline(Collection<Direction> directions) {
+        this.outlineDirections = directions.toArray(new Direction[0]);
+        return this;
+    }
+
     public DrawPanel withTextAnimation() {
         this.animateMessage = true;
         return this;
@@ -138,11 +143,6 @@ public class DrawPanel {
 
     public DrawPanel greyOut() {
         this.greyOut = true;
-        return this;
-    }
-
-    public DrawPanel withBlackOutline(Collection<Direction> directions) {
-        this.outlineDirections = directions.toArray(new Direction[0]);
         return this;
     }
 

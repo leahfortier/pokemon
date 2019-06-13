@@ -52,17 +52,18 @@ public class MartPanel extends BagPanel {
         PolygonUtils.drawCenteredArrow(g, arrow.centerX(), arrow.centerY(), 35, 20, arrowDirection);
     }
 
-    public void drawPlayerMoney(Graphics g) {
+    public void drawMoneyPanel(Graphics g, ItemNamesies selectedItem, int total) {
+        leftPanel.drawBackground(g);
+
+        // Player Money
         playerMoneyPanel.drawBackground(g);
         playerMoneyPanel.label(g, 18, "Money: " + Global.MONEY_SYMBOL + Game.getPlayer().getDatCashMoney());
-    }
 
-    public void drawInBagAmount(Graphics g, ItemNamesies selectedItem) {
+        // In bag display
         inBagPanel.drawBackground(g);
         inBagPanel.label(g, 18, "In Bag: " + Game.getPlayer().getBag().getQuantity(selectedItem));
-    }
 
-    public void drawTotalAmount(Graphics g, int total) {
+        // Total display
         totalAmountPanel.drawBackground(g);
         totalAmountPanel.label(g, 18, "Total: " + Global.MONEY_SYMBOL + total);
     }

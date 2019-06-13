@@ -60,13 +60,7 @@ class SellView extends View {
         sellButton = new Button(
                 panel.confirmPanel,
                 new ButtonTransitions().right(RETURN).up(0).left(RETURN).down(0),
-                () -> {
-                    Player player = Game.getPlayer();
-                    player.getDatCashMoney(itemAmount*selectedItem.getItem().getSellPrice());
-                    player.getBag().removeItem(selectedItem, itemAmount);
-
-                    this.updateCategory();
-                }
+                this::sell
         );
 
         amountLeftButton = new Button(
@@ -168,16 +162,8 @@ class SellView extends View {
         pageLeftButton.drawArrow(g, Direction.LEFT);
         pageRightButton.drawArrow(g, Direction.RIGHT);
 
-        panel.leftPanel.drawBackground(g);
-
-        // Player Money
-        panel.drawPlayerMoney(g);
-
-        // In bag display
-        panel.drawInBagAmount(g, selectedItem);
-
-        // Total display
-        panel.drawTotalAmount(g, selectedItem.getItem().getSellPrice()*itemAmount);
+        // Left panel -- player money, in bag amount, total sell price
+        panel.drawMoneyPanel(g, selectedItem, selectedItem.getItem().getSellPrice()*itemAmount);
 
         // Sell button
         panel.drawConfirmButton(g, sellButton, "SELL");
@@ -253,5 +239,13 @@ class SellView extends View {
         }
 
         updateActiveButtons();
+    }
+
+    private void sell() {
+        Player player = Game.getPlayer();
+        player.getDatCashMoney(itemAmount*selectedItem.getItem().getSellPrice());
+        player.getBag().removeItem(selectedItem, itemAmount);
+
+        this.updateCategory();
     }
 }
