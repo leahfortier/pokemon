@@ -1,15 +1,28 @@
 package gui.view.bag;
 
+import draw.ImageUtils;
+import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonTransitions;
 import draw.panel.DrawPanel;
 import draw.panel.DrawPanel.ButtonIndexAction;
+import gui.TileSet;
+import item.Item;
+import item.ItemNamesies;
+import item.bag.Bag;
 import item.bag.BagCategory;
+import main.Game;
 import main.Global;
 import map.Direction;
+import util.FontMetrics;
+import util.GeneralUtils;
 import util.Point;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.EnumSet;
+import java.util.Iterator;
 
 public class BagPanel {
     private static final BagCategory[] CATEGORIES = BagCategory.values();
@@ -17,8 +30,8 @@ public class BagPanel {
 
     public final DrawPanel bagPanel;
     public final DrawPanel pokemonPanel;
-    public final DrawPanel itemsPanel;
-    public final DrawPanel selectedPanel;
+    private final DrawPanel itemsPanel;
+    private final DrawPanel selectedPanel;
 
     public final DrawPanel[] tabPanels;
     public final DrawPanel[] buttonPanels;
@@ -122,5 +135,103 @@ public class BagPanel {
                 defaultTransitions,
                 indexAction
         );
+    }
+
+    public void drawSelectedItem(Graphics g, ItemNamesies selectedItem) {
+        selectedPanel.drawBackground(g);
+
+        // Only draw actual items
+        if (selectedItem == ItemNamesies.NO_ITEM) {
+            return;
+        }
+
+        int spacing = 8;
+
+        TileSet itemTiles = Game.getData().getItemTiles();
+        Bag bag = Game.getPlayer().getBag();
+
+        Item selectedItemValue = selectedItem.getItem();
+
+        g.setColor(Color.BLACK);
+        FontMetrics.setFont(g, 20);
+
+        // Tile size for image
+        // TODO: Create test for size
+        int nameX = selectedPanel.x + 2*spacing + Global.TILE_SIZE;
+        int startY = selectedPanel.y + FontMetrics.getDistanceBetweenRows(g);
+
+        // Draw item image
+        BufferedImage img = itemTiles.getTile(selectedItemValue.getImageName());
+        ImageUtils.drawBottomCenteredImage(g, img, selectedPanel.x + (nameX - selectedPanel.x)/2, startY);
+
+        g.drawString(selectedItem.getName(), nameX, startY);
+
+        if (selectedItemValue.hasQuantity()) {
+            String quantityString = "x" + bag.getQuantity(selectedItem);
+            TextUtils.drawRightAlignedString(g, quantityString, selectedPanel.rightX() - 2*spacing, startY);
+        }
+
+        FontMetrics.setFont(g, 14);
+        TextUtils.drawWrappedText(
+                g,
+                selectedItemValue.getDescription(),
+                selectedPanel.x + spacing,
+                startY + FontMetrics.getDistanceBetweenRows(g),
+                selectedPanel.width - 2*spacing
+        );
+    }
+
+    public void drawItems(Graphics g, Button[] itemButtons, Iterable<ItemNamesies> items, int pageNum) {
+        itemsPanel.drawBackground(g);
+
+        TileSet itemTiles = Game.getData().getItemTiles();
+        Bag bag = Game.getPlayer().getBag();
+
+        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(items, pageNum, ITEMS_PER_PAGE);
+        for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
+            for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
+                ItemNamesies item = iter.next();
+                Item itemValue = item.getItem();
+                Button itemButton = itemButtons[k];
+
+                itemButton.fill(g, Color.WHITE);
+                itemButton.blackOutline(g);
+
+                g.translate(itemButton.x, itemButton.y);
+
+                ImageUtils.drawCenteredImage(g, itemTiles.getTile(itemValue.getImageName()), 14, 14);
+
+                g.drawString(item.getName(), 29, 18);
+
+                if (itemValue.hasQuantity()) {
+                    TextUtils.drawRightAlignedString(g, "x" + bag.getQuantity(item), 142, 18);
+                }
+
+                g.translate(-itemButton.x, -itemButton.y);
+            }
+        }
+    }
+
+    public void drawPageNumbers(Graphics g, int pageNum, int totalPages) {
+        FontMetrics.setFont(g, 16);
+        TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages, itemsPanel.centerX(), rightArrow.centerY());
+    }
+
+    public void drawTabs(Graphics g, Button[] tabButtons, BagCategory selectedTab) {
+        for (int i = 0; i < CATEGORIES.length; i++) {
+            Button tabButton = tabButtons[i];
+            tabButton.fillTransparent(g, CATEGORIES[i].getColor());
+            tabButton.outlineTab(g, i, selectedTab.ordinal());
+
+            g.translate(tabButton.x, tabButton.y);
+
+            g.setColor(Color.BLACK);
+            FontMetrics.setFont(g, 14);
+
+            ImageUtils.drawCenteredImage(g, CATEGORIES[i].getIcon(), 16, 26);
+            g.drawString(CATEGORIES[i].getDisplayName(), 30, 30);
+
+            g.translate(-tabButton.x, -tabButton.y);
+        }
     }
 }
