@@ -1,4 +1,4 @@
-package gui.view.bag;
+package gui.view.item;
 
 import draw.button.Button;
 import pokemon.active.PartyPokemon;

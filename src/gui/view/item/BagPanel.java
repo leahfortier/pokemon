@@ -1,4 +1,4 @@
-package gui.view.bag;
+package gui.view.item;
 
 import draw.ImageUtils;
 import draw.TextUtils;

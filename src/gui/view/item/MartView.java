@@ -1,4 +1,4 @@
-package gui.view;
+package gui.view.item;
 
 import draw.button.Button;
 import draw.button.ButtonList;
@@ -6,7 +6,8 @@ import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
-import gui.view.bag.MartPanel;
+import gui.view.View;
+import gui.view.ViewMode;
 import input.InputControl;
 import item.Item;
 import item.ItemNamesies;
@@ -26,7 +27,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-class MartView extends View {
+public class MartView extends View {
     private static final Color BACKGROUND_COLOR = new Color(68, 123, 184);
     private static final int ITEMS_PER_PAGE = 10;
 
@@ -57,7 +58,7 @@ class MartView extends View {
     private List<ItemNamesies> forSaleItems;
     private ItemNamesies selectedItem;
 
-    MartView() {
+    public MartView() {
         panel = new MartPanel();
 
         panel.bagPanel.withBackgroundColor(BACKGROUND_COLOR)

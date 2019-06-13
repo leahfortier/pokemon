@@ -1,11 +1,12 @@
-package gui.view;
+package gui.view.item;
 
 import draw.button.Button;
 import draw.button.ButtonList;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
-import gui.view.bag.MartPanel;
+import gui.view.View;
+import gui.view.ViewMode;
 import input.InputControl;
 import item.ItemNamesies;
 import item.bag.BagCategory;
@@ -17,7 +18,7 @@ import util.GeneralUtils;
 import java.awt.Graphics;
 import java.util.Set;
 
-class SellView extends View {
+public class SellView extends View {
     private static final BagCategory[] CATEGORIES = BagCategory.values();
     private static final int ITEMS_PER_PAGE = 10;
 
@@ -49,7 +50,7 @@ class SellView extends View {
     private BagCategory selectedTab;
     private ItemNamesies selectedItem;
 
-    SellView() {
+    public SellView() {
         selectedTab = CATEGORIES[0];
         selectedItem = ItemNamesies.NO_ITEM;
 

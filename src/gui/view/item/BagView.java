@@ -1,4 +1,4 @@
-package gui.view.bag;
+package gui.view.item;
 
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
