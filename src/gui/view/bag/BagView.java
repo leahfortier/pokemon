@@ -48,6 +48,7 @@ public class BagView extends View {
     private static final int ITEMS_PER_PAGE = 10;
 
     private static final int NUM_BUTTONS = CATEGORIES.length + Trainer.MAX_POKEMON + ITEMS_PER_PAGE + MoveList.MAX_MOVES + 6;
+    private static final int TABS = 0;
     private static final int PARTY = CATEGORIES.length;
     private static final int ITEMS = PARTY + Trainer.MAX_POKEMON;
     private static final int MOVES = ITEMS + ITEMS_PER_PAGE;
@@ -90,7 +91,7 @@ public class BagView extends View {
 
         returnButton = new Button(
                 panel.returnPanel,
-                new ButtonTransitions().right(PARTY).up(RIGHT_ARROW).left(PARTY).down(0),
+                new ButtonTransitions().right(PARTY).up(RIGHT_ARROW).left(PARTY).down(TABS),
                 this::returnToMap
         );
 
@@ -113,7 +114,7 @@ public class BagView extends View {
                 Trainer.MAX_POKEMON,
                 1,
                 PARTY,
-                new ButtonTransitions().right(GIVE).up(0).left(MOVES).down(0),
+                new ButtonTransitions().right(GIVE).up(TABS).left(MOVES).down(TABS),
                 index -> UseState.applyPokemon(this, Game.getPlayer().getTeam().get(index))
         );
 
@@ -122,7 +123,7 @@ public class BagView extends View {
                 Trainer.MAX_POKEMON,
                 1,
                 MOVES,
-                new ButtonTransitions().right(PARTY).up(0).left(GIVE).down(0),
+                new ButtonTransitions().right(PARTY).up(TABS).left(GIVE).down(TABS),
                 this::useMoveItem
         );
 
@@ -159,7 +160,7 @@ public class BagView extends View {
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
 
-        System.arraycopy(tabButtons, 0, buttons, 0, CATEGORIES.length);
+        System.arraycopy(tabButtons, 0, buttons, TABS, CATEGORIES.length);
         System.arraycopy(partyButtons, 0, buttons, PARTY, Trainer.MAX_POKEMON);
         System.arraycopy(moveButtons, 0, buttons, MOVES, MoveList.MAX_MOVES);
         System.arraycopy(itemButtons, 0, buttons, ITEMS, ITEMS_PER_PAGE);

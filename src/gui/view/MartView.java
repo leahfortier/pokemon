@@ -28,9 +28,10 @@ import java.util.List;
 
 class MartView extends View {
     private static final Color BACKGROUND_COLOR = new Color(68, 123, 184);
-
     private static final int ITEMS_PER_PAGE = 10;
+
     private static final int NUM_BUTTONS = ITEMS_PER_PAGE + 6;
+    private static final int ITEMS = 0;
     private static final int RETURN = NUM_BUTTONS - 1;
     private static final int BUY = NUM_BUTTONS - 2;
     private static final int AMOUNT_LEFT_ARROW = NUM_BUTTONS - 3;
@@ -76,13 +77,13 @@ class MartView extends View {
 
         amountLeftButton = new Button(
                 panel.buttonPanels[0],
-                new ButtonTransitions().right(AMOUNT_RIGHT_ARROW).up(RETURN).left(BUY).down(0),
+                new ButtonTransitions().right(AMOUNT_RIGHT_ARROW).up(RETURN).left(BUY).down(ITEMS),
                 () -> this.updateItemAmount(-1)
         );
 
         amountRightButton = new Button(
                 panel.buttonPanels[2],
-                new ButtonTransitions().right(AMOUNT_LEFT_ARROW).up(RETURN).left(AMOUNT_LEFT_ARROW).down(1),
+                new ButtonTransitions().right(BUY).up(RETURN).left(AMOUNT_LEFT_ARROW).down(ITEMS + 1),
                 () -> this.updateItemAmount(1)
         );
 
@@ -93,8 +94,8 @@ class MartView extends View {
         );
 
         itemButtons = panel.getItemButtons(
-                0,
-                new ButtonTransitions().up(AMOUNT_RIGHT_ARROW).down(PAGE_RIGHT_ARROW),
+                ITEMS,
+                new ButtonTransitions().up(AMOUNT_LEFT_ARROW).down(PAGE_LEFT_ARROW),
                 index -> setSelectedItem(GeneralUtils.getPageValue(forSaleItems, pageNum, ITEMS_PER_PAGE, index))
         );
 
@@ -111,7 +112,7 @@ class MartView extends View {
         );
 
         Button[] buttons = new Button[NUM_BUTTONS];
-        System.arraycopy(itemButtons, 0, buttons, 0, ITEMS_PER_PAGE);
+        System.arraycopy(itemButtons, 0, buttons, ITEMS, ITEMS_PER_PAGE);
         buttons[PAGE_LEFT_ARROW] = pageLeftButton;
         buttons[PAGE_RIGHT_ARROW] = pageRightButton;
         buttons[BUY] = buyButton;

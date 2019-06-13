@@ -22,6 +22,7 @@ class SellView extends View {
     private static final int ITEMS_PER_PAGE = 10;
 
     private static final int NUM_BUTTONS = CATEGORIES.length + ITEMS_PER_PAGE + 6;
+    private static final int TABS = 0;
     private static final int ITEMS = CATEGORIES.length;
     private static final int RETURN = NUM_BUTTONS - 1;
     private static final int SELL = NUM_BUTTONS - 2;
@@ -59,25 +60,25 @@ class SellView extends View {
 
         sellButton = new Button(
                 panel.confirmPanel,
-                new ButtonTransitions().right(RETURN).up(0).left(RETURN).down(0),
+                new ButtonTransitions().right(RETURN).up(TABS).left(RETURN).down(TABS),
                 this::sell
         );
 
         amountLeftButton = new Button(
                 panel.buttonPanels[0],
-                new ButtonTransitions().right(AMOUNT_RIGHT_ARROW).up(0).left(SELL).down(ITEMS),
+                new ButtonTransitions().right(AMOUNT_RIGHT_ARROW).up(TABS).left(SELL).down(ITEMS),
                 () -> this.updateItemAmount(-1)
         );
 
         amountRightButton = new Button(
                 panel.buttonPanels[2],
-                new ButtonTransitions().right(AMOUNT_LEFT_ARROW).up(0).left(AMOUNT_LEFT_ARROW).down(ITEMS + 1),
+                new ButtonTransitions().right(SELL).up(TABS).left(AMOUNT_LEFT_ARROW).down(ITEMS + 1),
                 () -> this.updateItemAmount(1)
         );
 
         returnButton = new Button(
                 panel.returnPanel,
-                new ButtonTransitions().right(SELL).up(PAGE_LEFT_ARROW).left(SELL).down(0),
+                new ButtonTransitions().right(SELL).up(PAGE_LEFT_ARROW).left(SELL).down(TABS),
                 ButtonPressAction.getExitAction()
         );
 
@@ -88,7 +89,7 @@ class SellView extends View {
                     panel.tabPanels[i],
                     new ButtonTransitions()
                             .up(RETURN)
-                            .down(PAGE_LEFT_ARROW)
+                            .down(AMOUNT_LEFT_ARROW)
                             .basic(Direction.RIGHT, i, 1, tabButtons.length)
                             .basic(Direction.LEFT, i, 1, tabButtons.length),
                     () -> changeCategory(index)
@@ -97,7 +98,7 @@ class SellView extends View {
 
         itemButtons = panel.getItemButtons(
                 ITEMS,
-                new ButtonTransitions().up(AMOUNT_RIGHT_ARROW).down(PAGE_RIGHT_ARROW),
+                new ButtonTransitions().up(AMOUNT_LEFT_ARROW).down(PAGE_LEFT_ARROW),
                 index -> setSelectedItem(GeneralUtils.getPageValue(this.getDisplayItems(), pageNum, ITEMS_PER_PAGE, index))
         );
 
@@ -113,7 +114,7 @@ class SellView extends View {
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
 
-        System.arraycopy(tabButtons, 0, buttons, 0, CATEGORIES.length);
+        System.arraycopy(tabButtons, 0, buttons, TABS, CATEGORIES.length);
         System.arraycopy(itemButtons, 0, buttons, ITEMS, ITEMS_PER_PAGE);
         buttons[PAGE_LEFT_ARROW] = pageLeftButton;
         buttons[PAGE_RIGHT_ARROW] = pageRightButton;
@@ -145,7 +146,7 @@ class SellView extends View {
                       .drawBackground(g);
 
         // Item Display
-        panel.drawSelectedItem(g, selectedItem, true);
+        panel.drawSelectedItem(g, selectedItem, false);
 
         // Draw selected amount
         panel.drawAmount(g, itemAmount);
