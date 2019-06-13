@@ -82,19 +82,7 @@ class SellView extends View {
                 ButtonPressAction.getExitAction()
         );
 
-        tabButtons = new Button[CATEGORIES.length];
-        for (int i = 0; i < tabButtons.length; i++) {
-            final int index = i;
-            tabButtons[i] = new Button(
-                    panel.tabPanels[i],
-                    new ButtonTransitions()
-                            .up(RETURN)
-                            .down(AMOUNT_LEFT_ARROW)
-                            .basic(Direction.RIGHT, i, 1, tabButtons.length)
-                            .basic(Direction.LEFT, i, 1, tabButtons.length),
-                    () -> changeCategory(index)
-            );
-        }
+        tabButtons = panel.getTabButtons(TABS, RETURN, AMOUNT_LEFT_ARROW, this::changeCategory);
 
         itemButtons = panel.getItemButtons(
                 ITEMS,

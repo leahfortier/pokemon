@@ -92,19 +92,7 @@ public class BagView extends View {
                 this::returnToMap
         );
 
-        tabButtons = new Button[CATEGORIES.length];
-        for (int i = 0; i < tabButtons.length; i++) {
-            final int index = i;
-            tabButtons[i] = new Button(
-                    panel.tabPanels[i],
-                    new ButtonTransitions()
-                            .up(RETURN)
-                            .down(USE)
-                            .basic(Direction.RIGHT, i, 1, tabButtons.length)
-                            .basic(Direction.LEFT, i, 1, tabButtons.length),
-                    () -> changeCategory(index)
-            );
-        }
+        tabButtons = panel.getTabButtons(TABS, RETURN, USE, this::changeCategory);
 
         partyButtons = panel.leftPanel.getButtons(
                 10,

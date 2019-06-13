@@ -23,6 +23,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.function.Consumer;
 
 public class BagPanel {
     private static final BagCategory[] CATEGORIES = BagCategory.values();
@@ -135,6 +136,23 @@ public class BagPanel {
                 defaultTransitions,
                 indexAction
         );
+    }
+
+    // changeCategory takes in the current tab index and sets the current tab to that corresponding index
+    public Button[] getTabButtons(int startIndex, int upIndex, int downIndex, Consumer<Integer> changeCategory) {
+        Button[] tabButtons = new Button[CATEGORIES.length];
+        for (int i = 0; i < tabButtons.length; i++) {
+            final int index = i;
+            tabButtons[i] = new Button(
+                    this.tabPanels[i],
+                    new ButtonTransitions().up(upIndex)
+                                           .down(downIndex)
+                                           .basic(Direction.RIGHT, startIndex + i, 1, tabButtons.length)
+                                           .basic(Direction.LEFT, startIndex + i, 1, tabButtons.length),
+                    () -> changeCategory.accept(index)
+            );
+        }
+        return tabButtons;
     }
 
     public void drawSelectedItem(Graphics g, ItemNamesies selectedItem, boolean includeQuantity) {
