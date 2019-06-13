@@ -14,6 +14,7 @@ import item.bag.BagCategory;
 import main.Game;
 import main.Global;
 import map.Direction;
+import trainer.Trainer;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.Point;
@@ -23,7 +24,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.EnumSet;
 import java.util.Iterator;
-import java.util.function.Consumer;
 
 public class BagPanel {
     private static final BagCategory[] CATEGORIES = BagCategory.values();
@@ -138,8 +138,7 @@ public class BagPanel {
         );
     }
 
-    // changeCategory takes in the current tab index and sets the current tab to that corresponding index
-    public Button[] getTabButtons(int startIndex, int upIndex, int downIndex, Consumer<Integer> changeCategory) {
+    public Button[] getTabButtons(int startIndex, int upIndex, int downIndex, ButtonIndexAction indexAction) {
         Button[] tabButtons = new Button[CATEGORIES.length];
         for (int i = 0; i < tabButtons.length; i++) {
             final int index = i;
@@ -149,10 +148,14 @@ public class BagPanel {
                                            .down(downIndex)
                                            .basic(Direction.RIGHT, startIndex + i, 1, tabButtons.length)
                                            .basic(Direction.LEFT, startIndex + i, 1, tabButtons.length),
-                    () -> changeCategory.accept(index)
+                    () -> indexAction.pressButton(index)
             );
         }
         return tabButtons;
+    }
+
+    public Button[] getLeftButtons(int startIndex, ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
+        return leftPanel.getButtons(10, Trainer.MAX_POKEMON, 1, startIndex, defaultTransitions, indexAction);
     }
 
     public void drawSelectedItem(Graphics g, ItemNamesies selectedItem, boolean includeQuantity) {

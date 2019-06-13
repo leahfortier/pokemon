@@ -94,19 +94,13 @@ public class BagView extends View {
 
         tabButtons = panel.getTabButtons(TABS, RETURN, USE, this::changeCategory);
 
-        partyButtons = panel.leftPanel.getButtons(
-                10,
-                Trainer.MAX_POKEMON,
-                1,
+        partyButtons = panel.getLeftButtons(
                 PARTY,
                 new ButtonTransitions().right(GIVE).up(TABS).left(MOVES).down(TABS),
                 index -> UseState.applyPokemon(this, Game.getPlayer().getTeam().get(index))
         );
 
-        moveButtons = panel.leftPanel.getButtons(
-                10,
-                Trainer.MAX_POKEMON,
-                1,
+        moveButtons = panel.getLeftButtons(
                 MOVES,
                 new ButtonTransitions().right(PARTY).up(TABS).left(GIVE).down(TABS),
                 this::useMoveItem
