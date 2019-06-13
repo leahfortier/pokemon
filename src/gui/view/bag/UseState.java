@@ -11,7 +11,6 @@ import java.util.function.Consumer;
 enum UseState {
     GIVE("Give", BagView.GIVE, BagView::giveItem),
     USE("Use", BagView.USE, BagView::useItem),
-    // TODO: Change back to discard -- maybe have discard when over an item, and take when over a Pokemon
     TAKE("Take", BagView.TAKE, BagView::takeItem);
 
     final int buttonIndex;

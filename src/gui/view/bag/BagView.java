@@ -10,7 +10,6 @@ import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
-import draw.panel.LearnMovePanel;
 import gui.TileSet;
 import gui.view.View;
 import gui.view.ViewMode;
@@ -75,10 +74,8 @@ public class BagView extends View {
     private PartyPokemon selectedPokemon;
 
     private int pageNum;
-
     private BagCategory selectedTab;
     private MessageUpdate message;
-    private LearnMovePanel learnMovePanel;
 
     public BagView() {
         selectedTab = CATEGORIES[0];
@@ -179,39 +176,25 @@ public class BagView extends View {
 
         InputControl input = InputControl.instance();
 
-        if (learnMovePanel != null) {
-            learnMovePanel.update();
-            if (learnMovePanel.isFinished()) {
-                learnMovePanel = null;
-            }
-        } else {
-            if (message != null && input.consumeIfMouseDown(ControlKey.SPACE)) {
-                message = null;
-            }
+        if (message != null && input.consumeIfMouseDown(ControlKey.SPACE)) {
+            message = null;
+        }
 
-            while ((message == null || StringUtils.isNullOrWhiteSpace(message.getMessage()))
-                    && Messages.hasMessages()) {
-                message = Messages.getNextMessage();
-
-                if (message.isViewChange()) {
-                    Game.instance().setViewMode(message.getViewMode());
-                }
-
-                // TODO: Do we need this? it isn't even used for TMs...2
-                if (message.learnMove()) {
-                    this.learnMovePanel = new LearnMovePanel(message.getMoveLearner(), message.getMove());
-                    break;
-                }
+        while ((message == null || StringUtils.isNullOrWhiteSpace(message.getMessage()))
+                && Messages.hasMessages()) {
+            message = Messages.getNextMessage();
+            if (message.isViewChange()) {
+                Game.instance().setViewMode(message.getViewMode());
             }
+        }
 
-            buttons.update();
-            if (buttons.consumeSelectedPress()) {
-                updateActiveButtons();
-            }
+        buttons.update();
+        if (buttons.consumeSelectedPress()) {
+            updateActiveButtons();
+        }
 
-            if (input.consumeIfDown(ControlKey.ESC)) {
-                returnToMap();
-            }
+        if (input.consumeIfDown(ControlKey.ESC)) {
+            returnToMap();
         }
     }
 
@@ -262,9 +245,7 @@ public class BagView extends View {
         panel.drawTabs(g, tabButtons, selectedTab);
 
         // Messages or buttons
-        if (learnMovePanel != null) {
-            learnMovePanel.draw(g);
-        } else if (message != null && !StringUtils.isNullOrWhiteSpace(message.getMessage())) {
+        if (message != null && !StringUtils.isNullOrWhiteSpace(message.getMessage())) {
             BasicPanels.drawFullMessagePanel(g, message.getMessage());
         } else {
             buttons.draw(g);
