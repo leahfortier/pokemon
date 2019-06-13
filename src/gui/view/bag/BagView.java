@@ -3,11 +3,9 @@ package gui.view.bag;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
-import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
-import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
@@ -40,13 +38,11 @@ import trainer.player.Player;
 import type.PokeType;
 import util.FontMetrics;
 import util.GeneralUtils;
-import util.Point;
 import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -91,84 +87,35 @@ public class BagView extends View {
     private LearnMovePanel learnMovePanel;
 
     public BagView() {
-        int tabHeight = 55;
-        int spacing = 28;
-
-        bagPanel = new DrawPanel(
-                spacing,
-                spacing + tabHeight,
-                Point.subtract(
-                        Global.GAME_SIZE,
-                        2*spacing,
-                        2*spacing + tabHeight
-                )
-        )
-                .withTransparentBackground()
-                .withBorderPercentage(0)
-                .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP)));
-
-        int buttonHeight = 38;
-        int selectedHeight = 82;
-        int halfPanelWidth = (bagPanel.width - 3*spacing)/2;
-
-        pokemonPanel = new DrawPanel(
-                bagPanel.x + spacing,
-                bagPanel.y + spacing,
-                halfPanelWidth,
-                bagPanel.height - 2*spacing
-        )
-                .withFullTransparency()
-                .withBlackOutline();
-
-        selectedPanel = new DrawPanel(
-                pokemonPanel.rightX() + spacing,
-                bagPanel.y + spacing,
-                halfPanelWidth,
-                selectedHeight
-        )
-                .withFullTransparency()
-                .withBlackOutline();
-
-        returnButton = new Button(
-                selectedPanel.x,
-                bagPanel.bottomY() - spacing - buttonHeight,
-                halfPanelWidth,
-                buttonHeight,
-                ButtonHoverAction.BOX,
-                new ButtonTransitions().right(PARTY).up(RIGHT_ARROW).left(PARTY).down(0),
-                this::returnToMap
-        );
-
-        itemsPanel = new DrawPanel(
-                selectedPanel.x,
-                selectedPanel.bottomY() + buttonHeight + spacing,
-                halfPanelWidth,
-                pokemonPanel.height - selectedPanel.height - 2*buttonHeight - 2*spacing
-        )
-                .withFullTransparency()
-                .withBlackOutline();
-
         selectedTab = CATEGORIES[0];
         selectedItem = ItemNamesies.NO_ITEM;
+
+        BagPanel panel = new BagPanel();
+
+        bagPanel = panel.bagPanel;
+        pokemonPanel = panel.pokemonPanel;
+        selectedPanel = panel.selectedPanel;
+        itemsPanel = panel.itemsPanel;
 
         Button[] buttons = new Button[NUM_BUTTONS];
         this.buttons = new ButtonList(buttons);
 
+        returnButton = new Button(
+                panel.returnPanel,
+                new ButtonTransitions().right(PARTY).up(RIGHT_ARROW).left(PARTY).down(0),
+                this::returnToMap
+        );
+
         tabButtons = new Button[CATEGORIES.length];
-        for (int i = 0; i < CATEGORIES.length; i++) {
+        for (int i = 0; i < tabButtons.length; i++) {
             final int index = i;
-            tabButtons[i] = Button.createTabButton(
-                    i,
-                    bagPanel.x,
-                    bagPanel.y,
-                    bagPanel.width,
-                    tabHeight,
-                    tabButtons.length,
+            tabButtons[i] = new Button(
+                    panel.tabPanels[i],
                     new ButtonTransitions()
                             .up(RETURN)
                             .down(USE)
-                            .basic(Direction.RIGHT, i, 1, CATEGORIES.length)
-                            .basic(Direction.LEFT, i, 1, CATEGORIES.length),
+                            .basic(Direction.RIGHT, i, 1, tabButtons.length)
+                            .basic(Direction.LEFT, i, 1, tabButtons.length),
                     () -> changeCategory(index)
             );
         }
@@ -191,81 +138,43 @@ public class BagView extends View {
                 this::useMoveItem
         );
 
-        itemButtons = itemsPanel.getButtons(
-                5,
-                ITEMS_PER_PAGE/2 + 1,
-                2,
-                ITEMS_PER_PAGE/2,
-                2,
+        itemButtons = panel.getItemButtons(
                 ITEMS,
                 new ButtonTransitions().up(USE).down(RIGHT_ARROW),
                 index -> selectedItem = GeneralUtils.getPageValue(Game.getPlayer().getBag().getCategory(selectedTab), pageNum, ITEMS_PER_PAGE, index)
+        );
+
+        UseState[] useStates = UseState.values();
+        int lastIndex = useStates.length - 1;
+        for (int i = 0; i < useStates.length; i++) {
+            UseState useState = useStates[i];
+            buttons[useState.buttonIndex] = new Button(
+                    panel.buttonPanels[i],
+                    new ButtonTransitions()
+                            .right(i == lastIndex ? PARTY : useStates[i + 1].buttonIndex)
+                            .up(selectedTab.ordinal())
+                            .left(i == 0 ? PARTY : useStates[i - 1].buttonIndex)
+                            .down(i <= useStates.length/2 ? ITEMS : ITEMS + 1),
+                    () -> pressState(useState)
+            );
+        }
+
+        leftArrow = new Button(
+                panel.leftArrow,
+                new ButtonTransitions().right(RIGHT_ARROW).up(ITEMS + ITEMS_PER_PAGE - 2).left(RIGHT_ARROW).down(RETURN),
+                () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
+        );
+
+        rightArrow = new Button(
+                panel.rightArrow,
+                new ButtonTransitions().right(LEFT_ARROW).up(ITEMS + ITEMS_PER_PAGE - 1).left(LEFT_ARROW).down(RETURN),
+                () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
 
         System.arraycopy(tabButtons, 0, buttons, 0, CATEGORIES.length);
         System.arraycopy(partyButtons, 0, buttons, PARTY, Trainer.MAX_POKEMON);
         System.arraycopy(moveButtons, 0, buttons, MOVES, MoveList.MAX_MOVES);
         System.arraycopy(itemButtons, 0, buttons, ITEMS, ITEMS_PER_PAGE);
-
-        UseState[] useStates = UseState.values();
-        int lastIndex = useStates.length - 1;
-        for (UseState useState : useStates) {
-            int tabIndex = useState.ordinal();
-            buttons[useState.buttonIndex] = Button.createTabButton(
-                    tabIndex,
-                    selectedPanel.x,
-                    selectedPanel.y + selectedPanel.height + buttonHeight - 2*DrawUtils.OUTLINE_SIZE,
-                    selectedPanel.width,
-                    buttonHeight,
-                    useStates.length,
-                    new ButtonTransitions()
-                            .right(tabIndex == lastIndex ? PARTY : useStates[tabIndex + 1].buttonIndex)
-                            .up(selectedTab.ordinal())
-                            .left(tabIndex == 0 ? PARTY : useStates[tabIndex - 1].buttonIndex)
-                            .down(tabIndex <= useStates.length/2 ? ITEMS : ITEMS + 1),
-                    () -> {
-                        // Switch the state (turns off other states as well)
-                        useState.switchClicked();
-
-                        if (useState.isClicked()) {
-                            // State is now selected  -- switch to Pokemon select to choose which pokemon to use the item with
-                            this.state = BagState.POKEMON_SELECT;
-                            this.buttons.setSelected(PARTY);
-                        } else {
-                            // No longer selected -- revert back to item select
-                            this.state = BagState.ITEM_SELECT;
-                        }
-
-                        // PlayerUseItems don't require selecting a Pokemon -- automatically use as soon as Use is pressed
-                        if (useState == UseState.USE && this.selectedItem.getItem() instanceof PlayerUseItem) {
-                            this.usePlayerItem();
-                        }
-
-                        this.updateActiveButtons();
-                    }
-            );
-        }
-
-        int arrowHeight = 20;
-        leftArrow = new Button(
-                itemsPanel.x + itemsPanel.width/4,
-                itemButtons[itemButtons.length - 1].centerY() + (itemButtons[2].y - itemButtons[0].y) - arrowHeight/2,
-                35,
-                arrowHeight,
-                ButtonHoverAction.BOX,
-                new ButtonTransitions().right(RIGHT_ARROW).up(ITEMS + ITEMS_PER_PAGE - 2).left(RIGHT_ARROW).down(RETURN),
-                () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
-        );
-
-        rightArrow = new Button(
-                itemsPanel.rightX() - (leftArrow.x - itemsPanel.x) - leftArrow.width,
-                leftArrow.y,
-                leftArrow.width,
-                leftArrow.height,
-                ButtonHoverAction.BOX,
-                new ButtonTransitions().right(LEFT_ARROW).up(ITEMS + ITEMS_PER_PAGE - 1).left(LEFT_ARROW).down(RETURN),
-                () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
-        );
 
         buttons[LEFT_ARROW] = leftArrow;
         buttons[RIGHT_ARROW] = rightArrow;
@@ -619,6 +528,27 @@ public class BagView extends View {
 
         if (!Game.getPlayer().getBag().hasItem(this.selectedItem)) {
             this.updateCategory();
+        }
+
+        this.updateActiveButtons();
+    }
+
+    private void pressState(UseState useState) {
+        // Switch the state (turns off other states as well)
+        useState.switchClicked();
+
+        if (useState.isClicked()) {
+            // State is now selected  -- switch to Pokemon select to choose which pokemon to use the item with
+            this.state = BagState.POKEMON_SELECT;
+            this.buttons.setSelected(PARTY);
+        } else {
+            // No longer selected -- revert back to item select
+            this.state = BagState.ITEM_SELECT;
+        }
+
+        // PlayerUseItems don't require selecting a Pokemon -- automatically use as soon as Use is pressed
+        if (useState == UseState.USE && this.selectedItem.getItem() instanceof PlayerUseItem) {
+            this.usePlayerItem();
         }
 
         this.updateActiveButtons();

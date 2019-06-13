@@ -42,6 +42,10 @@ public class Button {
         this(x, y, width, height, hoverAction, transitions, null);
     }
 
+    public Button(DrawPanel panel, ButtonTransitions transitions, ButtonPressAction pressAction) {
+        this(panel.x, panel.y, panel.width, panel.height, ButtonHoverAction.BOX, transitions, pressAction);
+    }
+
     public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions, ButtonPressAction pressAction) {
         this.x = x;
         this.y = y;
@@ -274,6 +278,7 @@ public class Button {
         return new Button(x, y, width, height, hoverAction, transitions, () -> Game.instance().popView());
     }
 
+    // TODO: Remove these methods and switch to the DrawPanel one
     public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, ButtonTransitions transitions) {
         return createTabButton(tabIndex, panelX, panelY, panelWidth, tabHeight, numButtons, transitions, null);
     }

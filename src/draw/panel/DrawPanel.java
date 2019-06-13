@@ -413,6 +413,29 @@ public class DrawPanel {
         );
     }
 
+    public DrawPanel createBottomTab(int tabIndex, int tabHeight, int numTabs) {
+        return this.createTab(tabIndex, tabHeight, numTabs, true);
+    }
+
+    public DrawPanel createTab(int tabIndex, int tabHeight, int numTabs) {
+        return this.createTab(tabIndex, tabHeight, numTabs, false);
+    }
+
+    private DrawPanel createTab(int tabIndex, int tabHeight, int numTabs, boolean isBottomTab) {
+        int tabWidth = this.width/numTabs;
+        int remainder = this.width%numTabs;
+
+        int y = isBottomTab ? this.y + this.height - DrawUtils.OUTLINE_SIZE
+                            : this.y - tabHeight + DrawUtils.OUTLINE_SIZE;
+
+        return new DrawPanel(
+                this.x + tabIndex*tabWidth + Math.min(tabIndex, remainder),
+                y,
+                tabWidth + (tabIndex < remainder ? 1 : 0),
+                tabHeight
+        );
+    }
+
     @FunctionalInterface
     public interface ButtonIndexAction {
         void pressButton(int index);

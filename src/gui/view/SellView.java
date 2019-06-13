@@ -70,6 +70,9 @@ class SellView extends View {
     private ItemNamesies selectedItem;
 
     SellView() {
+        selectedTab = CATEGORIES[0];
+        selectedItem = ItemNamesies.NO_ITEM;
+
         int tabHeight = 55;
         int spacing = 28;
 
