@@ -37,12 +37,15 @@ public class MartPanel extends BagPanel {
                 .withBlackOutline();
     }
 
-    public void drawAmount(Graphics g, int itemAmount) {
+    public void drawAmount(Graphics g, int itemAmount, Button leftArrow, Button rightArrow) {
         amountPanel.drawBackground(g);
         amountPanel.label(g, 20, itemAmount + "");
+
+        this.drawAmountArrow(g, leftArrow, Direction.LEFT);
+        this.drawAmountArrow(g, rightArrow, Direction.RIGHT);
     }
 
-    public void drawAmountArrow(Graphics g, Button arrow, Direction arrowDirection) {
+    private void drawAmountArrow(Graphics g, Button arrow, Direction arrowDirection) {
         if (!arrow.isActive()) {
             arrow.greyOut(g);
         }

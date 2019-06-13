@@ -146,10 +146,8 @@ class MartView extends View {
         // Item Display
         panel.drawSelectedItem(g, selectedItem, false);
 
-        // Draw selected amount
-        panel.drawAmount(g, itemAmount);
-        panel.drawAmountArrow(g, amountLeftButton, Direction.LEFT);
-        panel.drawAmountArrow(g, amountRightButton, Direction.RIGHT);
+        // Draw selected amount and arrows
+        panel.drawAmount(g, itemAmount, amountLeftButton, amountRightButton);
 
         // Draw each item in category
         panel.drawItems(g, itemButtons, forSaleItems, pageNum, false);
