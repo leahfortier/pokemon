@@ -156,7 +156,6 @@ public class BagPanel {
         FontMetrics.setFont(g, 20);
 
         // Tile size for image
-        // TODO: Create test for size
         int nameX = selectedPanel.x + 2*spacing + Global.TILE_SIZE;
         int startY = selectedPanel.y + FontMetrics.getDistanceBetweenRows(g);
 

@@ -8,6 +8,7 @@ import generator.update.UpdateGen;
 import item.Item;
 import item.ItemNamesies;
 import item.bag.BagCategory;
+import main.Global;
 import map.overworld.TerrainType;
 import org.junit.Assert;
 import org.junit.Test;
@@ -117,9 +118,19 @@ public class ImageTest extends BaseTest {
 
     @Test
     public void sizeTest() {
+        // Party and item tiles are tile size
+        DimensionChecker tileDimension = new DimensionChecker(Global.TILE_SIZE, Global.TILE_SIZE);
+
+        for (ItemNamesies itemName : ItemNamesies.values()) {
+            if (itemName == ItemNamesies.NO_ITEM) {
+                continue;
+            }
+            checkMaxSize(Folder.ITEM_TILES, itemName.getItem().getImageName(), tileDimension);
+        }
+
         for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
             checkMaxSize(num, "", Folder.POKEDEX_TILES, new DimensionChecker(140, 190).singleDimensionEquals(2));
-            checkMaxSize(num, "-small", Folder.PARTY_TILES, new DimensionChecker(32, 32).singleDimensionEquals(0));
+            checkMaxSize(num, "-small", Folder.PARTY_TILES, tileDimension.singleDimensionEquals(0));
 
             String[] spriteSuffixes = { "", "-back", "-shiny", "-shiny-back" };
             for (String suffix : spriteSuffixes) {
@@ -130,6 +141,14 @@ public class ImageTest extends BaseTest {
 
     private void checkMaxSize(int num, String suffix, String folderPath, DimensionChecker dimensionChecker) {
         checkMaxSize(FileIO.getImageFile(num, suffix, folderPath), dimensionChecker);
+    }
+
+    private void checkMaxSize(String folderPath, String imageName, DimensionChecker dimensionChecker) {
+        if (!imageName.endsWith(".png")) {
+            imageName += ".png";
+        }
+
+        checkMaxSize(FileIO.newFile(folderPath + imageName), dimensionChecker);
     }
 
     private void checkMaxSize(File imageFile, DimensionChecker dimensionChecker) {
