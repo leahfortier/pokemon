@@ -38,6 +38,7 @@ import java.util.List;
 class PartyView extends View {
     private static final int NUM_BOTTOM_BUTTONS = 3;
     private static final int NUM_BUTTONS = Trainer.MAX_POKEMON + MoveList.MAX_MOVES + NUM_BOTTOM_BUTTONS;
+    private static final int TABS = 0;
     private static final int MOVES = Trainer.MAX_POKEMON;
     private static final int RETURN = NUM_BUTTONS - 1;
     private static final int SWITCH = NUM_BUTTONS - 2;
@@ -160,7 +161,7 @@ class PartyView extends View {
                 buttonWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(SWITCH).up(0).left(RETURN).down(0),
+                new ButtonTransitions().right(SWITCH).up(TABS).left(RETURN).down(TABS),
                 () -> nicknameView = true
         );
 
@@ -170,7 +171,7 @@ class PartyView extends View {
                 buttonWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(RETURN).up(0).left(NICKNAME).down(0),
+                new ButtonTransitions().right(RETURN).up(TABS).left(NICKNAME).down(TABS),
                 () -> switchTabIndex = switchTabIndex == -1 ? selectedTab : -1
         );
 
@@ -180,22 +181,17 @@ class PartyView extends View {
                 buttonWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(NICKNAME).up(MOVES + MoveList.MAX_MOVES - 1).left(SWITCH).down(0),
+                new ButtonTransitions().right(NICKNAME).up(MOVES + MoveList.MAX_MOVES - 1).left(SWITCH).down(TABS),
                 ButtonPressAction.getExitAction()
         );
 
         tabButtons = new Button[Trainer.MAX_POKEMON];
         for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
             final int index = i;
-            tabButtons[i] = Button.createTabButton(
-                    i,
-                    pokemonPanel.x,
-                    pokemonPanel.y,
-                    pokemonPanel.width,
-                    tabHeight,
-                    tabButtons.length,
+            tabButtons[i] = new Button(
+                    pokemonPanel.createTab(i, tabHeight, tabButtons.length),
                     ButtonTransitions.getBasicTransitions(
-                            i, 1, Trainer.MAX_POKEMON, 0,
+                            i, 1, Trainer.MAX_POKEMON, TABS,
                             new ButtonTransitions().up(RETURN).down(MOVES)
                     ),
                     () -> {
@@ -225,7 +221,7 @@ class PartyView extends View {
         );
 
         Button[] buttons = new Button[NUM_BUTTONS];
-        System.arraycopy(tabButtons, 0, buttons, 0, tabButtons.length);
+        System.arraycopy(tabButtons, 0, buttons, TABS, tabButtons.length);
         System.arraycopy(moveButtons, 0, buttons, MOVES, moveButtons.length);
         buttons[NICKNAME] = nicknameButton;
         buttons[SWITCH] = switchButton;

@@ -414,19 +414,25 @@ public class DrawPanel {
     }
 
     public DrawPanel createBottomTab(int tabIndex, int tabHeight, int numTabs) {
-        return this.createTab(tabIndex, tabHeight, numTabs, true);
+        return this.createTab(tabIndex, tabHeight, numTabs, false, true);
+    }
+
+    public DrawPanel createBottomInsetTab(int tabIndex, int tabHeight, int numTabs) {
+        return this.createTab(tabIndex, tabHeight, numTabs, true, true);
     }
 
     public DrawPanel createTab(int tabIndex, int tabHeight, int numTabs) {
-        return this.createTab(tabIndex, tabHeight, numTabs, false);
+        return this.createTab(tabIndex, tabHeight, numTabs, false, false);
     }
 
-    private DrawPanel createTab(int tabIndex, int tabHeight, int numTabs, boolean isBottomTab) {
+    // Inset is true if the button should overlap with the panel
+    private DrawPanel createTab(int tabIndex, int tabHeight, int numTabs, boolean inset, boolean isBottomTab) {
         int tabWidth = this.width/numTabs;
         int remainder = this.width%numTabs;
 
-        int y = isBottomTab ? this.y + this.height - DrawUtils.OUTLINE_SIZE
-                            : this.y - tabHeight + DrawUtils.OUTLINE_SIZE;
+        int offset = inset ? tabHeight - DrawUtils.OUTLINE_SIZE : 0;
+        int y = isBottomTab ? this.y + this.height - DrawUtils.OUTLINE_SIZE - offset
+                            : this.y - tabHeight + DrawUtils.OUTLINE_SIZE + offset;
 
         return new DrawPanel(
                 this.x + tabIndex*tabWidth + Math.min(tabIndex, remainder),

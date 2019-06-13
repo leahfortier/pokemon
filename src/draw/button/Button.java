@@ -41,6 +41,10 @@ public class Button {
         this(x, y, width, height, hoverAction, transitions, null);
     }
 
+    public Button(DrawPanel panel, ButtonTransitions transitions) {
+        this(panel, transitions, null);
+    }
+
     public Button(DrawPanel panel, ButtonTransitions transitions, ButtonPressAction pressAction) {
         this(panel.x, panel.y, panel.width, panel.height, ButtonHoverAction.BOX, transitions, pressAction);
     }
@@ -271,25 +275,5 @@ public class Button {
         g.translate(-x, -y);
 
         this.draw(g);
-    }
-
-    // TODO: Remove these methods and switch to the DrawPanel one
-    public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, ButtonTransitions transitions) {
-        return createTabButton(tabIndex, panelX, panelY, panelWidth, tabHeight, numButtons, transitions, null);
-    }
-
-    public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, ButtonTransitions transitions, ButtonPressAction buttonPressAction) {
-        int tabWidth = panelWidth/numButtons;
-        int remainder = panelWidth%numButtons;
-
-        return new Button(
-                panelX + tabIndex*tabWidth + Math.min(tabIndex, remainder),
-                panelY - tabHeight + DrawUtils.OUTLINE_SIZE,
-                tabWidth + (tabIndex < remainder ? 1 : 0),
-                tabHeight,
-                ButtonHoverAction.BOX,
-                transitions,
-                buttonPressAction
-        );
     }
 }

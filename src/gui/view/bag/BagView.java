@@ -164,7 +164,6 @@ public class BagView extends View {
         System.arraycopy(partyButtons, 0, buttons, PARTY, Trainer.MAX_POKEMON);
         System.arraycopy(moveButtons, 0, buttons, MOVES, MoveList.MAX_MOVES);
         System.arraycopy(itemButtons, 0, buttons, ITEMS, ITEMS_PER_PAGE);
-
         buttons[LEFT_ARROW] = leftArrow;
         buttons[RIGHT_ARROW] = rightArrow;
         buttons[RETURN] = returnButton;
