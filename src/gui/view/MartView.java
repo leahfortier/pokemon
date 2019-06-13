@@ -7,6 +7,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
@@ -181,13 +182,14 @@ class MartView extends View {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        returnButton = Button.createExitButton(
+        returnButton = new Button(
                 selectedPanel.x,
                 shopPanel.y + shopPanel.height - spacing - buttonHeight,
                 halfPanelWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(BUY).up(PAGE_LEFT_ARROW).left(BUY).down(AMOUNT_LEFT_ARROW)
+                new ButtonTransitions().right(BUY).up(PAGE_LEFT_ARROW).left(BUY).down(AMOUNT_LEFT_ARROW),
+                ButtonPressAction.getExitAction()
         );
 
         itemsPanel = new DrawPanel(

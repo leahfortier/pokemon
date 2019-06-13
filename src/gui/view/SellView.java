@@ -7,6 +7,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
@@ -169,13 +170,14 @@ class SellView extends View {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        returnButton = Button.createExitButton(
+        returnButton = new Button(
                 selectedPanel.x,
                 bagPanel.y + bagPanel.height - spacing - buttonHeight,
                 halfPanelWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(SELL).up(PAGE_LEFT_ARROW).left(SELL).down(0)
+                new ButtonTransitions().right(SELL).up(PAGE_LEFT_ARROW).left(SELL).down(0),
+                ButtonPressAction.getExitAction()
         );
 
         itemsPanel = new DrawPanel(

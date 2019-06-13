@@ -8,7 +8,6 @@ import draw.TextUtils;
 import draw.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
-import main.Game;
 import map.Direction;
 import util.FontMetrics;
 import util.Point;
@@ -272,10 +271,6 @@ public class Button {
         g.translate(-x, -y);
 
         this.draw(g);
-    }
-
-    public static Button createExitButton(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions) {
-        return new Button(x, y, width, height, hoverAction, transitions, () -> Game.instance().popView());
     }
 
     // TODO: Remove these methods and switch to the DrawPanel one

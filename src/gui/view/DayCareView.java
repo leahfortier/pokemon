@@ -8,6 +8,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
@@ -216,13 +217,14 @@ class DayCareView extends View {
                 }
         );
 
-        returnButton = buttons[RETURN] = Button.createExitButton(
+        returnButton = buttons[RETURN] = new Button(
                 infoPanel.rightX() - depositWithdrawButton.width,
                 depositWithdrawButton.y,
                 depositWithdrawButton.width,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(0).left(DEPOSIT_WITHDRAW)
+                new ButtonTransitions().right(0).left(DEPOSIT_WITHDRAW),
+                ButtonPressAction.getExitAction()
         );
 
         this.buttons = new ButtonList(buttons);

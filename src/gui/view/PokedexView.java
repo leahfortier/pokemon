@@ -7,6 +7,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
@@ -247,9 +248,10 @@ class PokedexView extends View {
                 () -> movePageNum = GeneralUtils.wrapIncrement(movePageNum, 1, maxMovePages())
         );
 
-        buttons[RETURN] = returnButton = Button.createExitButton(
+        buttons[RETURN] = returnButton = new Button(
                 410, 522, 350, 38, ButtonHoverAction.BOX,
-                new ButtonTransitions().right(0).up(PER_PAGE).left(RIGHT_ARROW).down(PER_PAGE)
+                new ButtonTransitions().right(0).up(PER_PAGE).left(RIGHT_ARROW).down(PER_PAGE),
+                ButtonPressAction.getExitAction()
         );
 
         this.buttons = new ButtonList(buttons);

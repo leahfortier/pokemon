@@ -9,6 +9,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
@@ -173,13 +174,14 @@ class PartyView extends View {
                 () -> switchTabIndex = switchTabIndex == -1 ? selectedTab : -1
         );
 
-        returnButton = Button.createExitButton(
+        returnButton = new Button(
                 switchButton.rightX() + spacing,
                 switchButton.y,
                 buttonWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(NICKNAME).up(MOVES + MoveList.MAX_MOVES - 1).left(SWITCH).down(0)
+                new ButtonTransitions().right(NICKNAME).up(MOVES + MoveList.MAX_MOVES - 1).left(SWITCH).down(0),
+                ButtonPressAction.getExitAction()
         );
 
         tabButtons = new Button[Trainer.MAX_POKEMON];
