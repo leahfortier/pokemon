@@ -108,7 +108,7 @@ public class BagView extends View {
             );
         }
 
-        partyButtons = panel.pokemonPanel.getButtons(
+        partyButtons = panel.leftPanel.getButtons(
                 10,
                 Trainer.MAX_POKEMON,
                 1,
@@ -117,7 +117,7 @@ public class BagView extends View {
                 index -> UseState.applyPokemon(this, Game.getPlayer().getTeam().get(index))
         );
 
-        moveButtons = panel.pokemonPanel.getButtons(
+        moveButtons = panel.leftPanel.getButtons(
                 10,
                 Trainer.MAX_POKEMON,
                 1,
@@ -234,10 +234,10 @@ public class BagView extends View {
         UseState.forEach(useState -> useState.draw(g, buttons.get(useState.buttonIndex), selectedTab.getColor()));
 
         // Selected item display
-        panel.drawSelectedItem(g, selectedItem);
+        panel.drawSelectedItem(g, selectedItem, true);
 
         // Draw each item in category
-        panel.drawItems(g, itemButtons, this.getDisplayItems(), pageNum);
+        panel.drawItems(g, itemButtons, this.getDisplayItems(), pageNum, true);
 
         // Draw page numbers
         panel.drawPageNumbers(g, pageNum, totalPages());
@@ -246,7 +246,7 @@ public class BagView extends View {
         leftArrow.drawArrow(g, Direction.LEFT);
         rightArrow.drawArrow(g, Direction.RIGHT);
 
-        panel.pokemonPanel.drawBackground(g);
+        panel.leftPanel.drawBackground(g);
         if (state == BagState.MOVE_SELECT) {
             // Draw moves
             drawMoves(g);
@@ -256,9 +256,7 @@ public class BagView extends View {
         }
 
         // Draw return button
-        returnButton.fillTransparent(g);
-        returnButton.blackOutline(g);
-        returnButton.label(g, 20, "Return");
+        panel.drawReturnButton(g, returnButton);
 
         // Draw tabs
         panel.drawTabs(g, tabButtons, selectedTab);

@@ -29,9 +29,9 @@ public class BagPanel {
     private static final int ITEMS_PER_PAGE = 10;
 
     public final DrawPanel bagPanel;
-    public final DrawPanel pokemonPanel;
+    public final DrawPanel leftPanel;
     private final DrawPanel itemsPanel;
-    private final DrawPanel selectedPanel;
+    protected final DrawPanel selectedPanel;
 
     public final DrawPanel[] tabPanels;
     public final DrawPanel[] buttonPanels;
@@ -61,7 +61,7 @@ public class BagPanel {
         int selectedHeight = 82;
         int halfPanelWidth = (bagPanel.width - 3*spacing)/2;
 
-        pokemonPanel = new DrawPanel(
+        leftPanel = new DrawPanel(
                 bagPanel.x + spacing,
                 bagPanel.y + spacing,
                 halfPanelWidth,
@@ -71,7 +71,7 @@ public class BagPanel {
                 .withBlackOutline();
 
         selectedPanel = new DrawPanel(
-                pokemonPanel.rightX() + spacing,
+                leftPanel.rightX() + spacing,
                 bagPanel.y + spacing,
                 halfPanelWidth,
                 selectedHeight
@@ -83,7 +83,7 @@ public class BagPanel {
                 selectedPanel.x,
                 selectedPanel.bottomY() + buttonHeight + spacing,
                 halfPanelWidth,
-                pokemonPanel.height - selectedPanel.height - 2*buttonHeight - 2*spacing
+                leftPanel.height - selectedPanel.height - 2*buttonHeight - 2*spacing
         )
                 .withFullTransparency()
                 .withBlackOutline();
@@ -137,7 +137,7 @@ public class BagPanel {
         );
     }
 
-    public void drawSelectedItem(Graphics g, ItemNamesies selectedItem) {
+    public void drawSelectedItem(Graphics g, ItemNamesies selectedItem, boolean includeQuantity) {
         selectedPanel.drawBackground(g);
 
         // Only draw actual items
@@ -148,8 +148,6 @@ public class BagPanel {
         int spacing = 8;
 
         TileSet itemTiles = Game.getData().getItemTiles();
-        Bag bag = Game.getPlayer().getBag();
-
         Item selectedItemValue = selectedItem.getItem();
 
         g.setColor(Color.BLACK);
@@ -165,8 +163,8 @@ public class BagPanel {
 
         g.drawString(selectedItem.getName(), nameX, startY);
 
-        if (selectedItemValue.hasQuantity()) {
-            String quantityString = "x" + bag.getQuantity(selectedItem);
+        if (includeQuantity && selectedItemValue.hasQuantity()) {
+            String quantityString = "x" + Game.getPlayer().getBag().getQuantity(selectedItem);
             TextUtils.drawRightAlignedString(g, quantityString, selectedPanel.rightX() - 2*spacing, startY);
         }
 
@@ -180,11 +178,14 @@ public class BagPanel {
         );
     }
 
-    public void drawItems(Graphics g, Button[] itemButtons, Iterable<ItemNamesies> items, int pageNum) {
+    public void drawItems(Graphics g, Button[] itemButtons, Iterable<ItemNamesies> items, int pageNum, boolean includeQuantity) {
         itemsPanel.drawBackground(g);
 
         TileSet itemTiles = Game.getData().getItemTiles();
         Bag bag = Game.getPlayer().getBag();
+
+        FontMetrics.setFont(g, 12);
+        g.setColor(Color.BLACK);
 
         Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(items, pageNum, ITEMS_PER_PAGE);
         for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
@@ -199,10 +200,9 @@ public class BagPanel {
                 g.translate(itemButton.x, itemButton.y);
 
                 ImageUtils.drawCenteredImage(g, itemTiles.getTile(itemValue.getImageName()), 14, 14);
-
                 g.drawString(item.getName(), 29, 18);
 
-                if (itemValue.hasQuantity()) {
+                if (includeQuantity && itemValue.hasQuantity()) {
                     TextUtils.drawRightAlignedString(g, "x" + bag.getQuantity(item), 142, 18);
                 }
 
@@ -232,5 +232,11 @@ public class BagPanel {
 
             g.translate(-tabButton.x, -tabButton.y);
         }
+    }
+
+    public void drawReturnButton(Graphics g, Button returnButton) {
+        returnButton.fillTransparent(g);
+        returnButton.blackOutline(g);
+        returnButton.label(g, 20, "Return");
     }
 }
