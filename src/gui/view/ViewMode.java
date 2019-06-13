@@ -1,7 +1,7 @@
 package gui.view;
 
-import gui.view.item.BagView;
 import gui.view.battle.BattleView;
+import gui.view.item.BagView;
 import gui.view.item.MartView;
 import gui.view.item.SellView;
 import gui.view.mainmenu.MainMenuView;

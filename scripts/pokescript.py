@@ -1,9 +1,10 @@
 # -*- coding: latin-1 -*-
 
 import math
+import time
+
 import re
 import requests
-import time
 from lxml import html
 
 from forms import Stat, AddedPokes, FormConfig

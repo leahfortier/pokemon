@@ -15,7 +15,6 @@ import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
-import item.ItemNamesies;
 import message.Messages;
 import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
