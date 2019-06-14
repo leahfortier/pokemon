@@ -7,17 +7,25 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import java.awt.Color;
-import java.awt.Frame;
+import java.awt.Dialog;
 
 class DialogOptions extends JDialog {
-
     private final JPanel panel;
     private final JPanel buttonsComponent;
 
     private boolean saved;
 
+    private static Dialog getOwner(JComponent parent) {
+        // If the parent is a TriggerDialog, then its dialog options are the owner
+        if (parent instanceof TriggerDialog) {
+            return ((TriggerDialog)parent).getDialogOptions();
+        } else {
+            return null;
+        }
+    }
+
     DialogOptions(String name, JComponent parent) {
-        super((Frame)null, true);
+        super(getOwner(parent), true);
 
         panel = new JPanel();
         GuiUtils.setStyle(panel);

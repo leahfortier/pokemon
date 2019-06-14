@@ -28,6 +28,10 @@ public abstract class TriggerDialog<T> extends JPanel {
         }
     }
 
+    public DialogOptions getDialogOptions() {
+        return this.dialogOptions;
+    }
+
     public T getMatcher(JComponent parent) {
         this.dialogOptions = new DialogOptions(this.dialogTitle, parent);
         this.render();
