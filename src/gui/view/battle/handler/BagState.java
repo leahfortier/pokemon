@@ -71,13 +71,8 @@ public class BagState implements VisualStateHandler {
 
         bagTabButtons = new Button[BATTLE_BAG_CATEGORIES.length];
         for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
-            bagButtons[i] = bagTabButtons[i] = Button.createTabButton(
-                    i,
-                    bagCategoryPanel.x,
-                    bagCategoryPanel.y,
-                    bagCategoryPanel.width,
-                    28,
-                    bagTabButtons.length,
+            bagButtons[i] = bagTabButtons[i] = new Button(
+                    bagCategoryPanel.createTab(i, 28, bagTabButtons.length),
                     new ButtonTransitions()
                             .up(LAST_ITEM_BUTTON)
                             .down(ITEMS)

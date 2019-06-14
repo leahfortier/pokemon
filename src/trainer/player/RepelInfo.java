@@ -40,10 +40,10 @@ public class RepelInfo implements Serializable {
                 Bag bag = player.getBag();
                 if (bag.hasItem(this.repelItem)) {
                     ActionMatcher useAnotherAction = new UseItemActionMatcher(repelItem);
-                    ChoiceMatcher useAnother = new ChoiceMatcher("Sure!", new ActionMatcher[] { useAnotherAction });
+                    ChoiceMatcher useAnother = new ChoiceMatcher("Sure!", useAnotherAction);
 
                     ActionMatcher doNotUseAction = new DialogueActionMatcher("They're coming for you. Worry.");
-                    ChoiceMatcher doNotUse = new ChoiceMatcher("Nah...", new ActionMatcher[] { doNotUseAction });
+                    ChoiceMatcher doNotUse = new ChoiceMatcher("Nah...", doNotUseAction);
 
                     ChoiceActionMatcher choice = new ChoiceActionMatcher(
                             "Would you like to use another " + repelItem.getName() + "?",

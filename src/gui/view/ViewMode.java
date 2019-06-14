@@ -1,7 +1,9 @@
 package gui.view;
 
-import gui.view.bag.BagView;
 import gui.view.battle.BattleView;
+import gui.view.item.BagView;
+import gui.view.item.MartView;
+import gui.view.item.SellView;
 import gui.view.mainmenu.MainMenuView;
 import gui.view.map.MapView;
 
@@ -22,6 +24,7 @@ public enum ViewMode {
     PARTY_VIEW(PartyView::new),
     PC_VIEW(PCView::new),
     POKEDEX_VIEW(PokedexView::new),
+    SELL_VIEW(SellView::new),
     START_VIEW(StartView::new),
     TRADE_VIEW(TradeView::new),
     TRAINER_CARD_VIEW(TrainerCardView::new);

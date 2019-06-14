@@ -7,6 +7,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
@@ -234,12 +235,13 @@ class PCView extends View {
                 }
         );
 
-        buttons[RETURN] = returnButton = Button.createExitButton(
+        buttons[RETURN] = returnButton = new Button(
                 410, 522, 350, 38, ButtonHoverAction.BOX,
                 new ButtonTransitions()
                         .right(0)
                         .up(SWITCH)
-                        .left(PARTY + Trainer.MAX_POKEMON - 1)
+                        .left(PARTY + Trainer.MAX_POKEMON - 1),
+                ButtonPressAction.getExitAction()
         );
 
         this.buttons = new ButtonList(buttons);

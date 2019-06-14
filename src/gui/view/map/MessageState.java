@@ -18,7 +18,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 class MessageState implements VisualStateHandler {
-    private int dialogueSelection;
+    private int choiceIndex;
 
     @Override
     public void draw(Graphics g, MapView mapView) {
@@ -53,7 +53,7 @@ class MessageState implements VisualStateHandler {
             g.setColor(Color.BLACK);
             for (int i = 0; i < choices.length; i++) {
                 int y = choicesPanel.y + spacing + i*distanceBetweenRows + textHeight;
-                if (i == dialogueSelection) {
+                if (i == choiceIndex) {
                     g.fillOval(choicesPanel.x + spacing, y - textHeight/2 - circleRadius/2, circleRadius, circleRadius);
                 }
 
@@ -73,20 +73,21 @@ class MessageState implements VisualStateHandler {
 
         if (currentMessage.isChoice()) {
             if (input.consumeIfDown(ControlKey.DOWN)) {
-                dialogueSelection++;
+                choiceIndex++;
             } else if (input.consumeIfDown(ControlKey.UP)) {
-                dialogueSelection--;
+                choiceIndex--;
             }
 
-            dialogueSelection += currentMessage.getChoices().length;
-            dialogueSelection %= currentMessage.getChoices().length;
+            choiceIndex += currentMessage.getChoices().length;
+            choiceIndex %= currentMessage.getChoices().length;
         }
 
         if (!SoundPlayer.instance().soundEffectIsPlaying() && input.consumeIfMouseDown(ControlKey.SPACE)) {
             if (currentMessage.isChoice()) {
-                ChoiceMatcher choice = currentMessage.getChoices()[dialogueSelection];
+                ChoiceMatcher choice = currentMessage.getChoices()[choiceIndex];
                 Trigger trigger = choice.getActions().getGroupTrigger(null, null);
                 Messages.addToFront(new MessageUpdate().withTrigger(trigger));
+                choiceIndex = 0;
             }
 
             boolean newMessage = false;

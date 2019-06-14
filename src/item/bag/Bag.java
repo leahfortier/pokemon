@@ -93,12 +93,26 @@ public class Bag implements Serializable {
     }
 
     public void addItem(ItemNamesies item, int amount) {
+        if (amount < 1) {
+            Global.error("Invalid add amount " + amount + " -- must be positive");
+        }
+
+        Item itemValue = item.getItem();
+
+        // Don't increase for TMs or KeyItems
+        if (!itemValue.hasQuantity()) {
+            if (amount > 1) {
+                Global.error("Cannot add multiple TM/KeyItems: " + item.getName() + " " + amount);
+            } else if (this.hasItem(item)) {
+                return;
+            }
+        }
+
         // Increment the items by the amount
         if (items.containsKey(item)) {
             items.put(item, items.get(item) + amount);
         } else {
             items.put(item, amount);
-            Item itemValue = item.getItem();
             this.getCategory(itemValue.getBagCategory()).add(item);
             for (BattleBagCategory category : itemValue.getBattleBagCategories()) {
                 this.getCategory(category).add(item);
@@ -115,8 +129,16 @@ public class Bag implements Serializable {
     }
 
     public void removeItem(ItemNamesies item) {
+        this.removeItem(item, 1);
+    }
+
+    public void removeItem(ItemNamesies item, int amount) {
+        if (amount < 1) {
+            Global.error("Invalid remove amount " + amount + " -- must be positive");
+        }
+
         // Trying to remove nonexistent items -- bad news
-        if (!items.containsKey(item) || items.get(item) <= 0) {
+        if (!items.containsKey(item) || items.get(item) < amount) {
             Global.error("You can't remove an item you don't have! (" + item.getName() + ")");
         }
 
@@ -124,15 +146,15 @@ public class Bag implements Serializable {
 
         // Don't decrement for TMs or KeyItems
         if (!itemValue.hasQuantity()) {
-            if (items.get(item) != 1) {
+            if (items.get(item) != 1 || amount > 1) {
                 Global.error("Must only have exactly quantity per TM/KeyItem");
             }
 
             return;
         }
 
-        // All other items -- decrement by one
-        items.put(item, items.get(item) - 1);
+        // All other items -- decrement by amount
+        items.put(item, items.get(item) - amount);
 
         // If this was the last one, remove from maps
         if (items.get(item) == 0) {

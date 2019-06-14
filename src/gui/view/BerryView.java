@@ -6,6 +6,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
@@ -119,13 +120,14 @@ public class BerryView extends View {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        returnButton = Button.createExitButton(
+        returnButton = new Button(
                 selectedPanel.x,
                 farmPanel.bottomY() - spacing - buttonHeight,
                 halfPanelWidth,
                 buttonHeight,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().up(RIGHT_ARROW).down(RIGHT_ARROW)
+                new ButtonTransitions().up(RIGHT_ARROW).down(RIGHT_ARROW),
+                ButtonPressAction.getExitAction()
         );
 
         itemsPanel = new DrawPanel(

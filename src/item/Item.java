@@ -164,6 +164,10 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         return this.price;
     }
 
+    public int getSellPrice() {
+        return this.price/2;
+    }
+
     public BagCategory getBagCategory() {
         return this.bagCategory;
     }

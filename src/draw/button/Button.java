@@ -8,7 +8,6 @@ import draw.TextUtils;
 import draw.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
-import main.Game;
 import map.Direction;
 import util.FontMetrics;
 import util.Point;
@@ -40,6 +39,14 @@ public class Button {
 
     public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions) {
         this(x, y, width, height, hoverAction, transitions, null);
+    }
+
+    public Button(DrawPanel panel, ButtonTransitions transitions) {
+        this(panel, transitions, null);
+    }
+
+    public Button(DrawPanel panel, ButtonTransitions transitions, ButtonPressAction pressAction) {
+        this(panel.x, panel.y, panel.width, panel.height, ButtonHoverAction.BOX, transitions, pressAction);
     }
 
     public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions, ButtonPressAction pressAction) {
@@ -268,28 +275,5 @@ public class Button {
         g.translate(-x, -y);
 
         this.draw(g);
-    }
-
-    public static Button createExitButton(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions) {
-        return new Button(x, y, width, height, hoverAction, transitions, () -> Game.instance().popView());
-    }
-
-    public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, ButtonTransitions transitions) {
-        return createTabButton(tabIndex, panelX, panelY, panelWidth, tabHeight, numButtons, transitions, null);
-    }
-
-    public static Button createTabButton(int tabIndex, int panelX, int panelY, int panelWidth, int tabHeight, int numButtons, ButtonTransitions transitions, ButtonPressAction buttonPressAction) {
-        int tabWidth = panelWidth/numButtons;
-        int remainder = panelWidth%numButtons;
-
-        return new Button(
-                panelX + tabIndex*tabWidth + Math.min(tabIndex, remainder),
-                panelY - tabHeight + DrawUtils.OUTLINE_SIZE,
-                tabWidth + (tabIndex < remainder ? 1 : 0),
-                tabHeight,
-                ButtonHoverAction.BOX,
-                transitions,
-                buttonPressAction
-        );
     }
 }

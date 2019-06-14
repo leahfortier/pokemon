@@ -1,12 +1,12 @@
 package gui.view;
 
 import battle.attack.Attack;
-import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
@@ -160,13 +160,8 @@ class PokedexView extends View {
         tabButtons = new Button[NUM_TAB_BUTTONS];
         for (int i = 0; i < tabButtons.length; i++) {
             final int index = i;
-            buttons[TAB_START + i] = tabButtons[i] = Button.createTabButton(
-                    i,
-                    infoPanel.x,
-                    infoPanel.bottomY() - DrawUtils.OUTLINE_SIZE,
-                    infoPanel.width,
-                    buttonHeight,
-                    NUM_TAB_BUTTONS,
+            buttons[TAB_START + i] = tabButtons[i] = new Button(
+                    infoPanel.createBottomInsetTab(i, buttonHeight, NUM_TAB_BUTTONS),
                     ButtonTransitions.getBasicTransitions(
                             i, 1, tabButtons.length, TAB_START,
                             new ButtonTransitions().right(LEFT_ARROW).up(MOVES_RIGHT_ARROW).left(RIGHT_ARROW).down(RETURN)
@@ -247,9 +242,10 @@ class PokedexView extends View {
                 () -> movePageNum = GeneralUtils.wrapIncrement(movePageNum, 1, maxMovePages())
         );
 
-        buttons[RETURN] = returnButton = Button.createExitButton(
+        buttons[RETURN] = returnButton = new Button(
                 410, 522, 350, 38, ButtonHoverAction.BOX,
-                new ButtonTransitions().right(0).up(PER_PAGE).left(RIGHT_ARROW).down(PER_PAGE)
+                new ButtonTransitions().right(0).up(PER_PAGE).left(RIGHT_ARROW).down(PER_PAGE),
+                ButtonPressAction.getExitAction()
         );
 
         this.buttons = new ButtonList(buttons);

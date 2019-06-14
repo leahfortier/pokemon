@@ -22,13 +22,16 @@ import pokemon.species.PokemonNamesies;
 import test.BaseTest;
 import test.TestPokemon;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public class ItemTest extends BaseTest {
     @Test
     public void categoryTest() {
         for (ItemNamesies itemNamesies : ItemNamesies.values()) {
             Item item = itemNamesies.getItem();
 
-            // If it has battle catagories, then it must be a BattleUseItem
+            // If it has battle categories, then it must be a BattleUseItem
             Assert.assertEquals(
                     item.getName(),
                     item instanceof BattleUseItem || item instanceof BallItem,
@@ -47,6 +50,35 @@ public class ItemTest extends BaseTest {
                 MoveCategory category = ((CategoryBerry)item).getCategory();
                 Assert.assertNotNull(item.getName(), category);
                 Assert.assertNotEquals(item.getName(), MoveCategory.STATUS, category);
+            }
+
+            // Only Key Items and TMs do not have quantities
+            Assert.assertEquals(
+                    item.getName(),
+                    item.getBagCategory() == BagCategory.KEY_ITEM || item.getBagCategory() == BagCategory.TM,
+                    !item.hasQuantity()
+            );
+        }
+    }
+
+    @Test
+    public void priceTest() {
+        for (ItemNamesies itemNamesies : ItemNamesies.values()) {
+            Item item = itemNamesies.getItem();
+
+            if (itemNamesies == ItemNamesies.NO_ITEM) {
+                continue;
+            }
+
+            // If it has a quantity, then it should have a price
+            Set<ItemNamesies> noPrice = EnumSet.of(ItemNamesies.MASTER_BALL, ItemNamesies.SAFARI_BALL);
+            if (noPrice.contains(itemNamesies)) {
+                Assert.assertEquals(item.getName(), 0, item.getPrice());
+            } else if (item.hasQuantity()) {
+                Assert.assertTrue(item.getName(), item.getPrice() > 1);
+                Assert.assertTrue(item.getName(), item.getPrice() > item.getSellPrice());
+            } else {
+                Assert.assertEquals(item.getName(), -1, item.getPrice());
             }
         }
     }

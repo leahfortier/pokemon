@@ -8,6 +8,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
@@ -138,13 +139,14 @@ public class MoveRelearnerView extends View {
                 () -> learnMovePanel = new LearnMovePanel((ActivePokemon)team.get(selectedPokemon), new Move(selectedMove))
         );
 
-        returnButton = Button.createExitButton(
+        returnButton = new Button(
                 learnMoveButton.rightX() + spacing,
                 learnMoveButton.y,
                 learnMoveButton.width,
                 learnMoveButton.height,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(LEARN_MOVE).up(MOVES_PER_PAGE + Trainer.MAX_POKEMON - 1).left(LEARN_MOVE).down(MOVES_PER_PAGE)
+                new ButtonTransitions().right(LEARN_MOVE).up(MOVES_PER_PAGE + Trainer.MAX_POKEMON - 1).left(LEARN_MOVE).down(MOVES_PER_PAGE),
+                ButtonPressAction.getExitAction()
         );
 
         int arrowWidth = 35;

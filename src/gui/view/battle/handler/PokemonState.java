@@ -119,8 +119,8 @@ public class PokemonState implements VisualStateHandler {
 
         pokemonTabButtons = new Button[Trainer.MAX_POKEMON];
         for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-            pokemonButtons[i] = pokemonTabButtons[i] = Button.createTabButton(
-                    i, pokemonPanel.x, pokemonPanel.y, pokemonPanel.width, 34, pokemonTabButtons.length,
+            pokemonButtons[i] = pokemonTabButtons[i] = new Button(
+                    pokemonPanel.createTab(i, 34, pokemonTabButtons.length),
                     new ButtonTransitions()
                             .up(POKEMON_SWITCH_BUTTON)
                             .down(POKEMON_SWITCH_BUTTON)

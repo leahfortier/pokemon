@@ -1,6 +1,9 @@
 package map.triggers;
 
 import gui.view.ViewMode;
+import pattern.action.ActionMatcher.ChoiceActionMatcher;
+import pattern.action.ChoiceMatcher;
+import pattern.action.EnumActionMatcher.ChangeViewActionMatcher;
 import sound.SoundTitle;
 import trainer.player.medal.MedalTheme;
 import util.string.PokeString;
@@ -12,7 +15,13 @@ public enum CommonTrigger {
     )),
     LOAD_MART(new GroupTrigger(
             new DialogueTrigger("Welcome to the " + PokeString.POKE + "Mart!"),
-            new ChangeViewTrigger(ViewMode.MART_VIEW)
+            new ChoiceTrigger(new ChoiceActionMatcher(
+                    "What would you like to do?",
+                    new ChoiceMatcher[]{
+                            new ChoiceMatcher("Buy", new ChangeViewActionMatcher(ViewMode.MART_VIEW)),
+                            new ChoiceMatcher("Sell", new ChangeViewActionMatcher(ViewMode.SELL_VIEW)),
+                    }
+            ))
     )),
     POKE_CENTER(new GroupTrigger(
             // NOTE: If this is changed in any way, please also change the RSA Town Pokecenter trigger manually
