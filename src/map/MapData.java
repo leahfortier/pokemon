@@ -51,10 +51,11 @@ public class MapData {
     private final MultiMap<Integer, Trigger> triggers;
     private final Map<String, MapTransitionMatcher> mapEntrances;
 
-    public MapData(File mapFile) {
-        name = new MapName(mapFile.getParentFile().getName(), mapFile.getName());
+    public MapData(File mapFolder) {
+        // Parent folder is the region, current folder is the map name
+        name = new MapName(mapFolder.getParentFile().getName(), mapFolder.getName());
 
-        String beginFilePath = FileIO.makeFolderPath(mapFile.getPath());
+        String beginFilePath = FileIO.makeFolderPath(mapFolder.getPath());
         final Map<MapDataType, BufferedImage> imageMap = MapDataType.getImageMap(beginFilePath, name.getMapName());
 
         BufferedImage backgroundMap = imageMap.get(MapDataType.BACKGROUND);

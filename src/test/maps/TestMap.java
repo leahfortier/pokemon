@@ -10,11 +10,11 @@ import java.io.File;
 public class TestMap extends MapData {
     private final MapDataMatcher matcher;
 
-    public TestMap(File mapFile) {
-        super(mapFile);
+    public TestMap(File mapFolder) {
+        super(mapFolder);
 
-        String beginFilePath = FileIO.makeFolderPath(mapFile.getPath());
-        this.matcher = MapDataMatcher.matchArea(beginFilePath + getName().getMapName() + ".txt");
+        String beginFilePath = FileIO.makeFolderPath(mapFolder.getPath());
+        this.matcher = MapDataMatcher.matchArea(beginFilePath + this.getName().getMapName() + ".txt");
     }
 
     public MapDataMatcher getMatcher() {

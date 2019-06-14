@@ -184,5 +184,4 @@ Other random things:
     is there some way to have like a FirstTriggeredCondition or something for things like items and a lot of other shit
     is there a way to just create the button transitions from the button list by using all the button locations or something like that??
     map maker dialogs open in the bg instead of at the front and it's actually super annoying
-    add test to make sure only relevant files are inside map folder
     

@@ -384,7 +384,7 @@ public class UpdateGen {
         while (in.hasNext()) {
             int num = in.nextInt(); in.nextLine();
             int newNum = num + (newStartNum - startNum);
-            out.println(newNum); // Num
+            out.println(newNum);        // Num
             out.println(in.nextLine()); // Name
             out.println(in.nextLine()); // Base Stats
             out.println(in.nextLine()); // Base Exp
@@ -400,8 +400,8 @@ public class UpdateGen {
             out.println(in.nextLine()); // Height Weight FlavorText
             out.println(in.nextLine()); // Egg Steps
             out.println(in.nextLine()); // Egg Groups
-            readMoves(in, out);            // Level Up Moves
-            readMoves(in, out);            // Learnable Moves
+            readMoves(in, out);         // Level Up Moves
+            readMoves(in, out);         // Learnable Moves
             out.println(in.nextLine()); // New Line
         }
 

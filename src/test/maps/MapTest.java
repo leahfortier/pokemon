@@ -94,6 +94,27 @@ public class MapTest extends BaseTest {
     }
 
     @Test
+    public void filesTest() {
+        // Confirm that each map folder only has the correct files in it
+        File mapsDirectory = FileIO.newFile(Folder.MAPS);
+        for (File mapFolder : FileIO.listSubdirectories(mapsDirectory)) {
+            Set<String> requiredFiles = new HashSet<>();
+            requiredFiles.add(mapFolder.getName() + ".txt");
+            for (MapDataType type : MapDataType.values()) {
+                requiredFiles.add(type.getImageName(mapFolder.getName()));
+            }
+
+            for (File mapFile : FileIO.listFiles(mapFolder.getPath())) {
+                String fileName = mapFile.getName();
+                Assert.assertTrue(mapFile.getPath(), requiredFiles.contains(fileName));
+                requiredFiles.remove(fileName);
+            }
+
+            Assert.assertTrue(requiredFiles.toString(), requiredFiles.isEmpty());
+        }
+    }
+
+    @Test
     public void flyLocationTest() {
         for (TestMap map : maps) {
             for (AreaData area : map.getAreas()) {
