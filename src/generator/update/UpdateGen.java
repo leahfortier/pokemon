@@ -405,7 +405,8 @@ public class UpdateGen {
             out.println(in.nextLine()); // New Line
         }
 
-        Scanner in2 = FileIO.openFile("addedpokes.txt");
+        String fileName = Folder.NOTES + "addedpokes.txt";
+        Scanner in2 = FileIO.openFile(fileName);
         StringAppender out2 = new StringAppender();
         int num = startNum;
         while (in2.hasNext()) {
@@ -417,7 +418,7 @@ public class UpdateGen {
             }
             out2.appendLine(line);
         }
-        FileIO.overwriteFile("addedpokes.txt", out2.toString());
+        FileIO.overwriteFile(fileName, out2.toString());
     }
 
     private static List<String> getMoves(Scanner in) {

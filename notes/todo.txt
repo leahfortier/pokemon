@@ -63,27 +63,6 @@ Names that go out of bounds:
     BallItem text against a trainer goes out of bounds
     Synchronize ability text is wayyyy out of bounds on party view
 
-Sprites Issues:
-    Missing Shiny Sprites:
-    	755 Morelull
-        766 Passimian
-    	773 Silvally
-    	795 Pheromosa
-    	796 Xurkitree
-        797 Celesteela
-    	798 Kartana
-        799 Guzzlord
-        814 Snowslash
-        816 Kyukon
-    Missing Back Sprites:
-        795 Pheromosa
-        796 Xurkitree
-        800 Necrozma
-    Inverted Back Sprites:
-        805 Stakataka
-        806 Blacephalon
-        807 Zeraora
-
 Descriptions that change manually:
     Moves:
         Sky Drop
@@ -203,7 +182,7 @@ Other random things:
     should I get different sprites for Castform and Arceus and other Pokemon like that since it's partially setup now
     cancelling evolution still consumes evolution item
     is there some way to have like a FirstTriggeredCondition or something for things like items and a lot of other shit
-    wait can we still not sell items in the mart???
     is there a way to just create the button transitions from the button list by using all the button locations or something like that??
     map maker dialogs open in the bg instead of at the front and it's actually super annoying
+    add test to make sure only relevant files are inside map folder
     
