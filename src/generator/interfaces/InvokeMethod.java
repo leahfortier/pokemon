@@ -87,7 +87,7 @@ abstract class InvokeMethod {
     }
 
     private String getMoldBreakerDeclaration(final InterfaceMethod interfaceMethod) {
-        if (!interfaceMethod.isMoldBreakNullCheck()) {
+        if (!interfaceMethod.isMoldBreakerNullCheck()) {
             return "";
         }
 
@@ -95,15 +95,16 @@ abstract class InvokeMethod {
     }
 
     private String getMoldBreaker(final InterfaceMethod interfaceMethod) {
-        if (StringUtils.isNullOrEmpty(interfaceMethod.getMoldBreaker())) {
+        String moldBreaker = interfaceMethod.getMoldBreaker();
+        if (StringUtils.isNullOrEmpty(moldBreaker)) {
             return "";
         }
 
         return "\n// If this is an ability that is being affected by mold breaker, we don't want to do anything with it\n" +
                 "if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && " +
-                (interfaceMethod.isMoldBreakNullCheck() || interfaceMethod.getMoldBreaker().equals("moldBreaker")
+                (interfaceMethod.isMoldBreakerNullCheck() || moldBreaker.equals("moldBreaker")
                         ? "moldBreaker != null && moldBreaker"
-                        : interfaceMethod.getMoldBreaker()) +
+                        : moldBreaker) +
                 ".breaksTheMold()) {\n" +
                 "continue;\n" +
                 "}";

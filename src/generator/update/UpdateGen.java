@@ -87,24 +87,29 @@ public class UpdateGen {
                 continue;
             }
 
-            String fileName = file.getPath();
-            Scanner original = FileIO.openFile(fileName);
-            StringAppender out = new StringAppender();
-
-            while (original.hasNext()) {
-                String newLine = replaceLine(original.nextLine());
-                out.append(newLine + (original.hasNext() ? "\n" : ""));
-            }
-
-            original.close();
-            FileIO.overwriteFile(fileName, out.toString());
+            singleFileRegexReplace(file.getPath());
         }
+    }
+
+    private static void singleFileRegexReplace(String fileName) {
+        Scanner original = FileIO.openFile(fileName);
+        StringAppender out = new StringAppender();
+
+        while (original.hasNext()) {
+            String newLine = replaceLine(original.nextLine());
+            out.append(newLine + (original.hasNext() ? "\n" : ""));
+        }
+
+        original.close();
+        FileIO.overwriteFile(fileName, out.toString());
     }
 
     // Change the regex and replacement string to reflect what you want to change everywhere
     // Current example:
-    //      Input: PokemonEffectNamesies.DISABLE.getEffect().cast(b, victim, user, CastSource.ABILITY, false)
-    //      Output: Effect.cast(PokemonEffectNamesies.DISABLE, b, victim, user, CastSource.ABILITY, false)
+    //      Regex In: <NamesiesType>Namesies.<EFFECT_NAME>.getEffect().cast(<parameters>)
+    //      Regex Out: Effect.cast(<NamesiesType>Namesies.<EFFECT_NAME>, <parameters>)
+    //      Ex Input: PokemonEffectNamesies.DISABLE.getEffect().cast(b, victim, user, CastSource.ABILITY, false)
+    //      Ex Output: Effect.cast(PokemonEffectNamesies.DISABLE, b, victim, user, CastSource.ABILITY, false)
     private static String replaceLine(String line) {
         Pattern regex = Pattern.compile(
                 "([A-Za-z]+)Namesies." + // 1 (namesies type)
