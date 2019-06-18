@@ -10,6 +10,7 @@ import battle.attack.MoveType;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MaxLevelWildEncounterEffect;
+import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.EffectInterfaces.RepelLowLevelEncounterEffect;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
@@ -1153,9 +1154,13 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    // TODO: This also needs to work with Taunt again
-    static class Oblivious extends Ability implements AttackBlocker, EffectPreventionEffect {
+    static class Oblivious extends Ability implements AttackBlocker, MultipleEffectPreventionAbility {
         private static final long serialVersionUID = 1L;
+
+        private static final Map<PokemonEffectNamesies, String> PREVENTION_EFFECTS = Map.of(
+                PokemonEffectNamesies.INFATUATION, "infatuation",
+                PokemonEffectNamesies.TAUNT, "it from being taunted"
+        );
 
         Oblivious() {
             super(AbilityNamesies.OBLIVIOUS, "The Pok\u00e9mon is oblivious, and that keeps it from being infatuated or falling for taunts.");
@@ -1172,13 +1177,8 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName) {
-            return victim.getName() + "'s " + this.getName() + " prevents infatuation!";
-        }
-
-        @Override
-        public boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
-            return effectName == PokemonEffectNamesies.INFATUATION;
+        public Map<PokemonEffectNamesies, String> getPreventableEffects() {
+            return PREVENTION_EFFECTS;
         }
     }
 
@@ -3413,7 +3413,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class AromaVeil extends Ability implements EffectPreventionEffect {
+    static class AromaVeil extends Ability implements MultipleEffectPreventionAbility {
         private static final long serialVersionUID = 1L;
 
         private static final Map<PokemonEffectNamesies, String> PREVENTION_EFFECTS = Map.of(
@@ -3425,29 +3425,13 @@ public abstract class Ability implements AbilityInterface {
                 PokemonEffectNamesies.HEAL_BLOCK, "heal block"
         );
 
-        private String getEffectMessage(EffectNamesies effectName) {
-            if (effectName instanceof PokemonEffectNamesies && PREVENTION_EFFECTS.containsKey(effectName)) {
-                return PREVENTION_EFFECTS.get(effectName);
-            }
-            Global.error("Should only be called for a valid effect name " + effectName);
-            return "";
-        }
-
         AromaVeil() {
             super(AbilityNamesies.AROMA_VEIL, "Protects itself and its allies from attacks that limit their move choices.");
         }
 
         @Override
-        public boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
-            if (effectName instanceof PokemonEffectNamesies) {
-                return PREVENTION_EFFECTS.containsKey(effectName);
-            }
-            return false;
-        }
-
-        @Override
-        public String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName) {
-            return victim.getName() + "'s " + this.getName() + " prevents " + this.getEffectMessage(effectName) + "!";
+        public Map<PokemonEffectNamesies, String> getPreventableEffects() {
+            return PREVENTION_EFFECTS;
         }
     }
 

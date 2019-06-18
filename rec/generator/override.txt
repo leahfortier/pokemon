@@ -818,6 +818,13 @@ EffectPreventMessage:
         return {0};
         ###
 *
+MultipleEffectPreventionAbility:
+    Header: Map<PokemonEffectNamesies, String> getPreventableEffects()
+    AddInterface: MultipleEffectPreventionAbility
+    Body:
+        return {0};
+        ###
+*
 PowerMultiplierCondition:
     AddMapField: GetMultiplier:
         return {2-} ? {1} : 1;

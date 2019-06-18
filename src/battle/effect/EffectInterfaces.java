@@ -10,6 +10,7 @@ import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
 import battle.effect.InvokeInterfaces.CrashDamageMove;
 import battle.effect.InvokeInterfaces.EffectExtendingEffect;
+import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
@@ -46,6 +47,7 @@ import util.RandomUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 // Holds non-generated interface methods for InvokeEffects
 // These should not have invoke methods as they are created manually
@@ -338,6 +340,34 @@ public final class EffectInterfaces {
             if (p.hasStatus(this.getStatus())) {
                 p.removeStatus(b, CastSource.ABILITY);
             }
+        }
+    }
+
+    public interface MultipleEffectPreventionAbility extends AbilityInterface, EffectPreventionEffect {
+        // Returns a map from preventable effect to relevant error message
+        Map<PokemonEffectNamesies, String> getPreventableEffects();
+
+        default String getEffectMessage(EffectNamesies effectName) {
+            Map<PokemonEffectNamesies, String> preventableEffects = this.getPreventableEffects();
+            if (effectName instanceof PokemonEffectNamesies && preventableEffects.containsKey(effectName)) {
+                return preventableEffects.get(effectName);
+            }
+
+            Global.error("Should only be called for a valid effect name " + effectName);
+            return "";
+        }
+
+        @Override
+        default boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+            if (effectName instanceof PokemonEffectNamesies) {
+                return this.getPreventableEffects().containsKey(effectName);
+            }
+            return false;
+        }
+
+        @Override
+        default String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName) {
+            return victim.getName() + "'s " + this.getName() + " prevents " + this.getEffectMessage(effectName) + "!";
         }
     }
 

@@ -375,13 +375,17 @@ Sturdy:
 Oblivious:
     Desc: The Pok\u00e9mon is oblivious, and that keeps it from being infatuated or falling for taunts.
     Int: AttackBlocker
-    Comments: // TODO: This also needs to work with Taunt again
     Block:
         return user.getAttack().namesies() == AttackNamesies.CAPTIVATE;
         ###
     BlockMessage: victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!"
-    EffectPrevent: Infatuation
-    EffectPreventMessage: victim.getName() + "'s " + this.getName() + " prevents infatuation!"
+    MultipleEffectPreventionAbility: PREVENTION_EFFECTS
+    Field:
+        private static final Map<PokemonEffectNamesies, String> PREVENTION_EFFECTS = Map.of(
+                PokemonEffectNamesies.INFATUATION, "infatuation",
+                PokemonEffectNamesies.TAUNT, "it from being taunted"
+        );
+        ###
 *
 Magnet Pull:
     OpponentTrappingAbility: escaper.isType(b, Type.STEEL) && !escaper.isType(b, Type.GHOST)
@@ -1401,6 +1405,7 @@ Sweet Veil:
 *
 Aroma Veil:
     Desc: Protects itself and its allies from attacks that limit their move choices.
+    MultipleEffectPreventionAbility: PREVENTION_EFFECTS
     Field:
         private static final Map<PokemonEffectNamesies, String> PREVENTION_EFFECTS = Map.of(
                 PokemonEffectNamesies.INFATUATION, "infatuation",
@@ -1410,22 +1415,7 @@ Aroma Veil:
                 PokemonEffectNamesies.TAUNT, "it from being taunted",
                 PokemonEffectNamesies.HEAL_BLOCK, "heal block"
         );
-
-        private String getEffectMessage(EffectNamesies effectName) {
-            if (effectName instanceof PokemonEffectNamesies && PREVENTION_EFFECTS.containsKey(effectName)) {
-                return PREVENTION_EFFECTS.get(effectName);
-            }
-            Global.error("Should only be called for a valid effect name " + effectName);
-            return "";
-        }
         ###
-    FullEffectPrevent:
-        if (effectName instanceof PokemonEffectNamesies) {
-            return PREVENTION_EFFECTS.containsKey(effectName);
-        }
-        return false;
-        ###
-    EffectPreventMessage: victim.getName() + "'s " + this.getName() + " prevents " + this.getEffectMessage(effectName) + "!"
 *
 Healer:
     Desc: Sometimes heals its status condition.
