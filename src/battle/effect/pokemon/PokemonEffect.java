@@ -28,7 +28,7 @@ import battle.effect.InvokeInterfaces.DamageTakenEffect;
 import battle.effect.InvokeInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.InvokeInterfaces.DefogRelease;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
-import battle.effect.InvokeInterfaces.EffectBlockerEffect;
+import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.FaintEffect;
 import battle.effect.InvokeInterfaces.ForceMoveEffect;
@@ -1938,7 +1938,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Substitute extends PokemonEffect implements AbsorbDamageEffect, PassableEffect, EffectBlockerEffect, StickyHoldEffect, StatusPreventionEffect, StatProtectingEffect {
+    static class Substitute extends PokemonEffect implements AbsorbDamageEffect, PassableEffect, EffectPreventionEffect, StickyHoldEffect, StatusPreventionEffect, StatProtectingEffect {
         private static final long serialVersionUID = 1L;
 
         private int hp;
@@ -1976,14 +1976,14 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public boolean shouldBlock(ActivePokemon caster, ActivePokemon victim, EffectNamesies effectNamesies) {
+        public boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
             // Only block externally applied effects
             if (caster == victim) {
                 return false;
             }
 
             // Substitute only blocks Pokemon effects
-            if (!(effectNamesies instanceof PokemonEffectNamesies)) {
+            if (!(effectName instanceof PokemonEffectNamesies)) {
                 return false;
             }
 
@@ -1996,6 +1996,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             // Ex: Tickle prints "...but it failed!" twice
             // Swagger prints "Raised Attack!" then "...but it failed!" (referring to failed Confusion)
             return true;
+        }
+
+        @Override
+        public String effectPreventionMessage(ActivePokemon victim) {
+            return Effect.DEFAULT_FAIL_MESSAGE;
         }
 
         @Override

@@ -665,36 +665,6 @@ public final class InvokeInterfaces {
         }
     }
 
-    public interface EffectBlockerEffect {
-
-        // TODO: Same deal as StatusPreventionEffect -- update this if we can have multiple invoke methods (check and check get)
-        boolean shouldBlock(ActivePokemon caster, ActivePokemon victim, EffectNamesies effectNamesies);
-
-        default String getBlockMessage(ActivePokemon victim, EffectNamesies effectNamesies) {
-            return Effect.DEFAULT_FAIL_MESSAGE;
-        }
-
-        static EffectBlockerEffect getBlockerEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectNamesies) {
-            List<InvokeEffect> invokees = b.getEffectsList(victim);
-            for (InvokeEffect invokee : invokees) {
-                if (invokee instanceof EffectBlockerEffect && InvokeEffect.isActiveEffect(invokee)) {
-
-                    // If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && caster.breaksTheMold()) {
-                        continue;
-                    }
-
-                    EffectBlockerEffect effect = (EffectBlockerEffect)invokee;
-                    if (effect.shouldBlock(caster, victim, effectNamesies)) {
-                        return effect;
-                    }
-                }
-            }
-
-            return null;
-        }
-    }
-
     public interface TargetSwapperEffect {
         boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent);
 
@@ -789,6 +759,33 @@ public final class InvokeInterfaces {
 
                     StatusPreventionEffect effect = (StatusPreventionEffect)invokee;
                     if (effect.preventStatus(b, caster, victim, status)) {
+                        return effect;
+                    }
+                }
+            }
+
+            return null;
+        }
+    }
+
+    public interface EffectPreventionEffect {
+
+        // TODO: Same deal as StatusPreventionEffect -- update this if we can have multiple invoke methods (check and check get)
+        boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName);
+        String effectPreventionMessage(ActivePokemon victim);
+
+        static EffectPreventionEffect getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+            List<InvokeEffect> invokees = b.getEffectsList(victim);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof EffectPreventionEffect && InvokeEffect.isActiveEffect(invokee)) {
+
+                    // If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && caster.breaksTheMold()) {
+                        continue;
+                    }
+
+                    EffectPreventionEffect effect = (EffectPreventionEffect)invokee;
+                    if (effect.preventEffect(b, caster, victim, effectName)) {
                         return effect;
                     }
                 }

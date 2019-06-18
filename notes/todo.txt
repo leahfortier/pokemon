@@ -174,8 +174,7 @@ Other random things:
     fairy lock looks like it lasts indefinitely? but it should only be one turn?
     look at fling message update for white herb -- I don't think it will update the stats
     make Marcos fix the substitute failure messaging problems I don't wanna do it
-    does safeguard prevent confusion?
-    test moongeist beam and shadow shield (combos like that)
+    test moongeist beam and shadow shield (combos like that) -- honestly I don't even know how this is supposed to work
     does using a berry (not hold item) not count as berry consumption??
     failure things for effects should be rewritten (canHave passed in constructor, override for fail abilities or change to be on the ability having figured it all out yet)
     probably have something to automatically remove previous effect if there can only be one (ChangeAbility etc)

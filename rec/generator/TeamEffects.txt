@@ -196,6 +196,11 @@ PayDay:
 Safeguard:
     Defog: "The effects of " + released.getName() + "'s Safeguard faded."
     SafeguardEffect: Safeguard
+    Comments:
+        // TODO: This needs to prevent confusion as well
+        // Also test this does not prevent sleep from rest
+        // And also test prevents Flame/Toxic Orb
+        ###
 *
 GuardSpecial:
     SafeguardEffect: Guard Special

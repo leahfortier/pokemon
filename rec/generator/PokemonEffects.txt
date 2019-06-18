@@ -757,7 +757,7 @@ Transformed:
         ###
 *
 Substitute:
-    Int: AbsorbDamageEffect, PassableEffect, EffectBlockerEffect, StickyHoldEffect, StatusPreventionEffect, StatProtectingEffect
+    Int: AbsorbDamageEffect, PassableEffect, EffectPreventionEffect, StickyHoldEffect, StatusPreventionEffect, StatProtectingEffect
     Field:
         private int hp;
         
@@ -783,14 +783,14 @@ Substitute:
         Messages.add(new MessageUpdate().updatePokemon(b, victim).withImageName(imageName, victim.isPlayer()));
         ###
     FailCondition: victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3
-    ShouldBlock:
+    EffectPrevent:
         // Only block externally applied effects
         if (caster == victim) {
             return false;
         }
     
         // Substitute only blocks Pokemon effects
-        if (!(effectNamesies instanceof PokemonEffectNamesies)) {
+        if (!(effectName instanceof PokemonEffectNamesies)) {
             return false;
         }
 
@@ -804,6 +804,7 @@ Substitute:
         // Swagger prints "Raised Attack!" then "...but it failed!" (referring to failed Confusion)
         return true;
         ###
+    EffectPreventMessage: Effect.DEFAULT_FAIL_MESSAGE
     AbsorbDamage:
         this.hp -= damageAmount;
         if (this.hp <= 0) {

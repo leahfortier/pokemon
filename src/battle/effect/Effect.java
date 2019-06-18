@@ -2,8 +2,8 @@ package battle.effect;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.InvokeInterfaces.EffectBlockerEffect;
 import battle.effect.InvokeInterfaces.EffectExtendingEffect;
+import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EffectReceivedEffect;
 import battle.effect.source.CastSource;
 import main.Global;
@@ -102,8 +102,8 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
     }
 
     private boolean fullApplies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-        EffectBlockerEffect blockerEffect = EffectBlockerEffect.getBlockerEffect(b, caster, victim, this.namesies);
-        if (blockerEffect != null) {
+        EffectPreventionEffect preventionEffect = EffectPreventionEffect.getPreventEffect(b, caster, victim, this.namesies);
+        if (preventionEffect != null) {
             return false;
         }
 
@@ -136,9 +136,9 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
     }
 
     public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-        EffectBlockerEffect blockerEffect = EffectBlockerEffect.getBlockerEffect(b, user, victim, this.namesies);
-        if (blockerEffect != null) {
-            return blockerEffect.getBlockMessage(victim, this.namesies);
+        EffectPreventionEffect preventionEffect = EffectPreventionEffect.getPreventEffect(b, user, victim, this.namesies);
+        if (preventionEffect != null) {
+            return preventionEffect.effectPreventionMessage(victim);
         }
 
         return DEFAULT_FAIL_MESSAGE;

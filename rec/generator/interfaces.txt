@@ -390,23 +390,6 @@ BeforeTurnEffect:
         EffectList: attacking
     *
 ***
-EffectBlockerEffect:
-    Method:
-        Comments: // TODO: Same deal as StatusPreventionEffect -- update this if we can have multiple invoke methods (check and check get)
-        Header: boolean shouldBlock(ActivePokemon caster, ActivePokemon victim, EffectNamesies effectNamesies)
-        Invoke: CheckGet true
-        InvokeName: getBlockerEffect
-        InvokeParameters: Battle b
-        MoldBreaker: caster
-        EffectList: victim
-    *
-    Method:
-        Header: String getBlockMessage(ActivePokemon victim, EffectNamesies effectNamesies)
-        Default:
-            return Effect.DEFAULT_FAIL_MESSAGE;
-            ###
-    *
-***
 TargetSwapperEffect:
     Method:
         Header: boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent)
@@ -454,6 +437,19 @@ StatusPreventionEffect:
     *
     Method:
         Header: String statusPreventionMessage(ActivePokemon victim)
+    *
+***
+EffectPreventionEffect:
+    Method:
+        Comments: // TODO: Same deal as StatusPreventionEffect -- update this if we can have multiple invoke methods (check and check get)
+        Header: boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName)
+        Invoke: CheckGet true
+        InvokeName: getPreventEffect
+        EffectList: victim
+        MoldBreaker: caster
+    *
+    Method:
+        Header: String effectPreventionMessage(ActivePokemon victim)
     *
 ***
 BracingEffect:

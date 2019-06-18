@@ -604,6 +604,9 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
     }
 
+    // TODO: This needs to prevent confusion as well
+    // Also test this does not prevent sleep from rest
+    // And also test prevents Flame/Toxic Orb
     static class Safeguard extends TeamEffect implements DefogRelease, StatusPreventionEffect {
         private static final long serialVersionUID = 1L;
 

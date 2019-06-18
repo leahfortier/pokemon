@@ -22,8 +22,8 @@ import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.DamageTakenEffect;
 import battle.effect.InvokeInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
-import battle.effect.InvokeInterfaces.EffectBlockerEffect;
 import battle.effect.InvokeInterfaces.EffectExtendingEffect;
+import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EncounterRateMultiplier;
 import battle.effect.InvokeInterfaces.EndBattleEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
@@ -216,7 +216,7 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, TrappingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, OpponentTrappingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, BeforeTurnEffect.class, effectListSourcesNoAttack);
-            checkInstance(classy, EffectBlockerEffect.class, effectListSourcesNoAttack);
+            checkInstance(classy, EffectPreventionEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, TargetSwapperEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, StatProtectingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, StatusPreventionEffect.class, effectListSourcesNoAttack);
