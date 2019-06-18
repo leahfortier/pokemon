@@ -813,7 +813,7 @@ FullEffectPrevent:
     AddInterface: EffectPreventionEffect
 *
 EffectPreventMessage:
-    Header: String effectPreventionMessage(ActivePokemon victim)
+    Header: String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName)
     Body:
         return {0};
         ###

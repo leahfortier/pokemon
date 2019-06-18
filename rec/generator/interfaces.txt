@@ -449,7 +449,10 @@ EffectPreventionEffect:
         MoldBreaker: caster
     *
     Method:
-        Header: String effectPreventionMessage(ActivePokemon victim)
+        Header: String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName)
+        Default:
+            return Effect.DEFAULT_FAIL_MESSAGE;
+            ###
     *
 ***
 BracingEffect:

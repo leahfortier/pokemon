@@ -138,7 +138,7 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
     public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
         EffectPreventionEffect preventionEffect = EffectPreventionEffect.getPreventEffect(b, user, victim, this.namesies);
         if (preventionEffect != null) {
-            return preventionEffect.effectPreventionMessage(victim);
+            return preventionEffect.effectPreventionMessage(victim, this.namesies);
         }
 
         return DEFAULT_FAIL_MESSAGE;

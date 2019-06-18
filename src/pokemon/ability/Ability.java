@@ -745,11 +745,16 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class InnerFocus extends Ability {
+    static class InnerFocus extends Ability implements EffectPreventionEffect {
         private static final long serialVersionUID = 1L;
 
         InnerFocus() {
             super(AbilityNamesies.INNER_FOCUS, "The Pok\u00e9mon's intensely focused, and that protects the Pok\u00e9mon from flinching.");
+        }
+
+        @Override
+        public boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+            return effectName == PokemonEffectNamesies.FLINCH;
         }
     }
 
@@ -1051,7 +1056,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String effectPreventionMessage(ActivePokemon victim) {
+        public String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName) {
             return victim.getName() + "'s " + this.getName() + " prevents confusion!";
         }
 
@@ -1147,7 +1152,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Oblivious extends Ability implements AttackBlocker {
+    static class Oblivious extends Ability implements AttackBlocker, EffectPreventionEffect {
         private static final long serialVersionUID = 1L;
 
         Oblivious() {
@@ -1162,6 +1167,16 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!";
+        }
+
+        @Override
+        public String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName) {
+            return victim.getName() + "'s " + this.getName() + " prevents infatuation!";
+        }
+
+        @Override
+        public boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+            return effectName == PokemonEffectNamesies.INFATUATION;
         }
     }
 
@@ -1349,11 +1364,16 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Soundproof extends Ability implements AttackBlocker {
+    static class Soundproof extends Ability implements AttackBlocker, EffectPreventionEffect {
         private static final long serialVersionUID = 1L;
 
         Soundproof() {
             super(AbilityNamesies.SOUNDPROOF, "Soundproofing of the Pok\u00e9mon itself gives full immunity to all sound-based moves.");
+        }
+
+        @Override
+        public String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName) {
+            return victim.getName() + "'s " + this.getName() + " makes it immune to sound based moves!";
         }
 
         @Override
@@ -1364,6 +1384,11 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents sound-based moves!";
+        }
+
+        @Override
+        public boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+            return effectName == PokemonEffectNamesies.PERISH_SONG;
         }
     }
 

@@ -39,7 +39,6 @@ LeechSeed:
 *
 Flinch:
     Int: BeforeTurnEffect
-    FailAbility: Inner Focus
     FailCondition: !b.isFirstAttack()
     CastMessage: victim.getName() + " flinched!"
     CanAttack:
@@ -801,7 +800,6 @@ Substitute:
         // Swagger prints "Raised Attack!" then "...but it failed!" (referring to failed Confusion)
         return true;
         ###
-    EffectPreventMessage: Effect.DEFAULT_FAIL_MESSAGE
     AbsorbDamage:
         this.hp -= damageAmount;
         if (this.hp <= 0) {
@@ -943,14 +941,8 @@ HealBlock:
         ###
 *
 Infatuation:
-    FailAbility: Oblivious, Aroma Veil
     FailCondition: !Gender.oppositeGenders(caster, victim)
     Int: BeforeTurnEffect
-    FailMessage:
-        if (Gender.oppositeGenders(user, victim) && (victim.hasAbility(AbilityNamesies.OBLIVIOUS) || victim.hasAbility(AbilityNamesies.AROMA_VEIL))) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " prevents infatuation!";
-        }
-        ###
     CanAttack:
         Messages.add(attacking.getName() + " is in love with " + defending.getName() + "!");
         if (RandomUtils.chanceTest(50)) {
@@ -997,13 +989,7 @@ DestinyBond:
 *
 PerishSong:
     NumTurns: 3
-    FailAbility: Soundproof
     Int: PassableEffect, EndTurnEffect
-    FailMessage:
-        if (victim.hasAbility(AbilityNamesies.SOUNDPROOF)) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " makes it immune to sound based moves!";
-        }
-        ###
     ApplyEndTurn:
         Messages.add(victim.getName() + "'s Perish Song count fell to " + (this.getTurns() - 1) + "!");
         if (this.getTurns() == 1) {

@@ -772,7 +772,10 @@ public final class InvokeInterfaces {
 
         // TODO: Same deal as StatusPreventionEffect -- update this if we can have multiple invoke methods (check and check get)
         boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName);
-        String effectPreventionMessage(ActivePokemon victim);
+
+        default String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName) {
+            return Effect.DEFAULT_FAIL_MESSAGE;
+        }
 
         static EffectPreventionEffect getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);

@@ -157,7 +157,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.INNER_FOCUS) && !caster.breaksTheMold()) || !b.isFirstAttack() || victim.hasEffect(this.namesies()));
+            return !(!b.isFirstAttack() || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1997,11 +1997,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String effectPreventionMessage(ActivePokemon victim) {
-            return Effect.DEFAULT_FAIL_MESSAGE;
-        }
-
-        @Override
         public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
             this.hp -= damageAmount;
             if (this.hp <= 0) {
@@ -2321,16 +2316,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.OBLIVIOUS) && !caster.breaksTheMold()) || (victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || !Gender.oppositeGenders(caster, victim) || victim.hasEffect(this.namesies()));
-        }
-
-        @Override
-        public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (Gender.oppositeGenders(user, victim) && (victim.hasAbility(AbilityNamesies.OBLIVIOUS) || victim.hasAbility(AbilityNamesies.AROMA_VEIL))) {
-                return victim.getName() + "'s " + victim.getAbility().getName() + " prevents infatuation!";
-            }
-
-            return super.getFailMessage(b, user, victim);
+            return !(!Gender.oppositeGenders(caster, victim) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2437,16 +2423,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.SOUNDPROOF) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies()));
-        }
-
-        @Override
-        public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.hasAbility(AbilityNamesies.SOUNDPROOF)) {
-                return victim.getName() + "'s " + victim.getAbility().getName() + " makes it immune to sound based moves!";
-            }
-
-            return super.getFailMessage(b, user, victim);
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override

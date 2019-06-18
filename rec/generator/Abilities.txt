@@ -191,6 +191,7 @@ Frisk:
 *
 Inner Focus:
     Desc: The Pok\u00e9mon's intensely focused, and that protects the Pok\u00e9mon from flinching.
+    EffectPrevent: Flinch
 *
 Infiltrator:
     Desc: Passes through the opposing Pok\u00e9mon's barrier, substitute, and the like and strikes.
@@ -378,6 +379,8 @@ Oblivious:
         return user.getAttack().namesies() == AttackNamesies.CAPTIVATE;
         ###
     BlockMessage: victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!"
+    EffectPrevent: Infatuation
+    EffectPreventMessage: victim.getName() + "'s " + this.getName() + " prevents infatuation!"
 *
 Magnet Pull:
     OpponentTrappingAbility: escaper.isType(b, Type.STEEL) && !escaper.isType(b, Type.GHOST)
@@ -476,6 +479,8 @@ Hyper Cutter:
 Soundproof:
     Desc: Soundproofing of the Pok\u00e9mon itself gives full immunity to all sound-based moves.
     MoveTypePrevent: Sound_Based sound-based moves
+    EffectPrevent: Perish_Song
+    EffectPreventMessage: victim.getName() + "'s " + this.getName() + " makes it immune to sound based moves!"
 *
 Reckless:
     Desc: Powers up moves that have recoil damage.
