@@ -11,8 +11,6 @@ Constructor:
 *
 Failure:
     Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-    FailType Multiple Enum Type victim.isType(b, {0})
-    FailAbility Multiple Enum AbilityNamesies (victim.hasAbility({0}) && !caster.breaksTheMold())
     FailCondition StraightUp {0}
     CanHave Not Default True Boolean victim.hasEffect(this.namesies())
 *
@@ -21,7 +19,7 @@ Failure:
 
 LeechSeed:
     Int: EndTurnEffect, PassableEffect, SapHealthEffect
-    FailType: Grass
+    FailCondition: victim.isType(b, Type.GRASS)
     FailMessage:
         if (victim.isType(b, Type.GRASS)) {
             return "It doesn't affect " + victim.getName() + "!";

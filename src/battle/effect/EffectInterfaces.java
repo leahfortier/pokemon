@@ -24,6 +24,7 @@ import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.InvokeInterfaces.WildEncounterSelector;
 import battle.effect.battle.weather.WeatherNamesies;
+import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
@@ -343,7 +344,7 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface MultipleEffectPreventionAbility extends AbilityInterface, EffectPreventionEffect {
+    public interface MultipleEffectPreventionAbility extends AbilityInterface, EffectPreventionEffect, EntryEndTurnEffect {
         // Returns a map from preventable effect to relevant error message
         Map<PokemonEffectNamesies, String> getPreventableEffects();
 
@@ -368,6 +369,19 @@ public final class EffectInterfaces {
         @Override
         default String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName) {
             return victim.getName() + "'s " + this.getName() + " prevents " + this.getEffectMessage(effectName) + "!";
+        }
+
+        @Override
+        default void applyEffect(Battle b, ActivePokemon p) {
+            Map<PokemonEffectNamesies, String> preventableEffects = this.getPreventableEffects();
+            for (PokemonEffectNamesies effectName : preventableEffects.keySet()) {
+                if (p.hasEffect(effectName)) {
+                    // TODO: Not the correct message
+                    PokemonEffect effect = p.getEffect(effectName);
+                    Messages.add(effect.getSubsideMessage(p));
+                    p.getEffects().remove(effect);
+                }
+            }
         }
     }
 
