@@ -192,12 +192,6 @@ SelfConfusion:
         ###
 *
 Encore:
-    FailAbility: Aroma Veil
-    FailMessage:
-        if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being encored!";
-        }
-        ###
     Int: ForceMoveEffect, AttackSelectionSelfBlockerEffect
     Field:
         private Move move;
@@ -222,7 +216,6 @@ Encore:
         ###
 *
 Disable:
-    FailAbility: Aroma Veil
     Int: AttackSelectionSelfBlockerEffect
     Field:
         private Move disabled;
@@ -241,8 +234,6 @@ Disable:
     FailMessage:
         if (victim.hasEffect(this.namesies())) {
             return victim.getName() + " is already disabled!";
-        } else if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being disabled!";
         }
         ###
 *
@@ -497,12 +488,6 @@ MiracleEye:
     ForesightEffect: Dark attacking == Type.PSYCHIC
 *
 Torment:
-    FailAbility: Aroma Veil
-    FailMessage:
-        if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " prevents torment!";
-        }
-        ###
     Int: AttackSelectionSelfBlockerEffect
     Usable:
         Move lastMoveUsed = p.getLastMoveUsed();
@@ -523,13 +508,7 @@ Silence:
 *
 Taunt:
     NumTurns: 3
-    FailAbility: Aroma Veil, Oblivious
     Int: AttackSelectionSelfBlockerEffect
-    FailMessage:
-        if (victim.hasAbility(AbilityNamesies.OBLIVIOUS) || victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being taunted!";
-        }
-        ###
     Usable:
         return !m.getAttack().isStatusMove();
         ###
@@ -925,12 +904,6 @@ GuardSplit:
     CastMessage: user.getName() + " split the defense!"
 *
 HealBlock:
-    FailAbility: Aroma Veil
-    FailMessage:
-        if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " prevents heal block!";
-        }
-        ###
     NumTurns: 5
     CastMessage: user.getName() + " blocked " + victim.getName() + " from healing!"
     SubsideMessage: "The effects of heal block wore off."

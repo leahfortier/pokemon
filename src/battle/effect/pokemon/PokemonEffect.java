@@ -772,16 +772,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.getLastMoveUsed().getAttack().isMoveType(MoveType.ENCORELESS) || victim.hasEffect(this.namesies()));
-        }
-
-        @Override
-        public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-                return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being encored!";
-            }
-
-            return super.getFailMessage(b, user, victim);
+            return !(victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.getLastMoveUsed().getAttack().isMoveType(MoveType.ENCORELESS) || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -832,7 +823,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.hasEffect(this.namesies()));
+            return !(victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -864,8 +855,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasEffect(this.namesies())) {
                 return victim.getName() + " is already disabled!";
-            } else if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-                return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being disabled!";
             }
 
             return super.getFailMessage(b, user, victim);
@@ -1322,16 +1311,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies()));
-        }
-
-        @Override
-        public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-                return victim.getName() + "'s " + victim.getAbility().getName() + " prevents torment!";
-            }
-
-            return super.getFailMessage(b, user, victim);
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -1379,16 +1359,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || (victim.hasAbility(AbilityNamesies.OBLIVIOUS) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies()));
-        }
-
-        @Override
-        public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.hasAbility(AbilityNamesies.OBLIVIOUS) || victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-                return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being taunted!";
-            }
-
-            return super.getFailMessage(b, user, victim);
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -2278,16 +2249,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.AROMA_VEIL) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies()));
-        }
-
-        @Override
-        public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-                return victim.getName() + "'s " + victim.getAbility().getName() + " prevents heal block!";
-            }
-
-            return super.getFailMessage(b, user, victim);
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override

@@ -995,16 +995,15 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
     static class MentalHerb extends Item implements HoldItem, EffectCurerItem {
         private static final long serialVersionUID = 1L;
 
-        private static final Map<PokemonEffectNamesies, String> REMOVEABLE_EFFECTS = new EnumMap<>(PokemonEffectNamesies.class);
-        static {
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.INFATUATION, "infatuated");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.DISABLE, "disabled");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.TAUNT, "under the effects of taunt");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.ENCORE, "under the effects of encore");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.TORMENT, "under the effects of torment");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.CONFUSION, "confused");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.HEAL_BLOCK, "under the effects of heal block");
-        }
+        private static final Map<PokemonEffectNamesies, String> REMOVABLE_EFFECTS = Map.of(
+                PokemonEffectNamesies.INFATUATION, "infatuated",
+                PokemonEffectNamesies.DISABLE, "disabled",
+                PokemonEffectNamesies.TAUNT, "under the effects of taunt",
+                PokemonEffectNamesies.ENCORE, "under the effects of encore",
+                PokemonEffectNamesies.TORMENT, "under the effects of torment",
+                PokemonEffectNamesies.CONFUSION, "confused",
+                PokemonEffectNamesies.HEAL_BLOCK, "under the effects of heal block"
+        );
 
         MentalHerb() {
             super(ItemNamesies.MENTAL_HERB, "An item to be held by a Pok\u00e9mon. The holder shakes off move-binding effects to move freely. It can be used only once.", BagCategory.MISC);
@@ -1013,12 +1012,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public Set<PokemonEffectNamesies> getCurableEffects() {
-            return REMOVEABLE_EFFECTS.keySet();
+            return REMOVABLE_EFFECTS.keySet();
         }
 
         @Override
         public String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType) {
-            return victim.getName() + " is no longer " + REMOVEABLE_EFFECTS.get(effectType) + " due to its " + this.getName() + "!";
+            return victim.getName() + " is no longer " + REMOVABLE_EFFECTS.get(effectType) + " due to its " + this.getName() + "!";
         }
 
         @Override

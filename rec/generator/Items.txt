@@ -349,19 +349,18 @@ Mental Herb:
     Price: 4000
     Fling: 10
     Field:
-        private static final Map<PokemonEffectNamesies, String> REMOVEABLE_EFFECTS = new EnumMap<>(PokemonEffectNamesies.class);
-        static {
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.INFATUATION, "infatuated");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.DISABLE, "disabled");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.TAUNT, "under the effects of taunt");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.ENCORE, "under the effects of encore");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.TORMENT, "under the effects of torment");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.CONFUSION, "confused");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.HEAL_BLOCK, "under the effects of heal block");
-        }
+        private static final Map<PokemonEffectNamesies, String> REMOVABLE_EFFECTS = Map.of(
+            PokemonEffectNamesies.INFATUATION, "infatuated", 
+            PokemonEffectNamesies.DISABLE, "disabled", 
+            PokemonEffectNamesies.TAUNT, "under the effects of taunt", 
+            PokemonEffectNamesies.ENCORE, "under the effects of encore", 
+            PokemonEffectNamesies.TORMENT, "under the effects of torment", 
+            PokemonEffectNamesies.CONFUSION, "confused", 
+            PokemonEffectNamesies.HEAL_BLOCK, "under the effects of heal block"
+        );
         ###
-    GetCurableEffects: REMOVEABLE_EFFECTS.keySet()
-    CureEffectRemoveMessage: victim.getName() + " is no longer " + REMOVEABLE_EFFECTS.get(effectType) + " due to its " + this.getName() + "!"
+    GetCurableEffects: REMOVABLE_EFFECTS.keySet()
+    CureEffectRemoveMessage: victim.getName() + " is no longer " + REMOVABLE_EFFECTS.get(effectType) + " due to its " + this.getName() + "!"
     FlingEffect:
         usesies(pelted);
         ###

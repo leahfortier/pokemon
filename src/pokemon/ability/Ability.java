@@ -115,6 +115,7 @@ import util.string.StringUtils;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public abstract class Ability implements AbilityInterface {
@@ -1152,6 +1153,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
+    // TODO: This also needs to work with Taunt again
     static class Oblivious extends Ability implements AttackBlocker, EffectPreventionEffect {
         private static final long serialVersionUID = 1L;
 
@@ -3411,11 +3413,41 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class AromaVeil extends Ability {
+    static class AromaVeil extends Ability implements EffectPreventionEffect {
         private static final long serialVersionUID = 1L;
+
+        private static final Map<PokemonEffectNamesies, String> PREVENTION_EFFECTS = Map.of(
+                PokemonEffectNamesies.INFATUATION, "infatuation",
+                PokemonEffectNamesies.ENCORE, "it from being encored",
+                PokemonEffectNamesies.DISABLE, "it from being disabled",
+                PokemonEffectNamesies.TORMENT, "torment",
+                PokemonEffectNamesies.TAUNT, "it from being taunted",
+                PokemonEffectNamesies.HEAL_BLOCK, "heal block"
+        );
+
+        private String getEffectMessage(EffectNamesies effectName) {
+            if (effectName instanceof PokemonEffectNamesies && PREVENTION_EFFECTS.containsKey(effectName)) {
+                return PREVENTION_EFFECTS.get(effectName);
+            }
+            Global.error("Should only be called for a valid effect name " + effectName);
+            return "";
+        }
 
         AromaVeil() {
             super(AbilityNamesies.AROMA_VEIL, "Protects itself and its allies from attacks that limit their move choices.");
+        }
+
+        @Override
+        public boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+            if (effectName instanceof PokemonEffectNamesies) {
+                return PREVENTION_EFFECTS.containsKey(effectName);
+            }
+            return false;
+        }
+
+        @Override
+        public String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName) {
+            return victim.getName() + "'s " + this.getName() + " prevents " + this.getEffectMessage(effectName) + "!";
         }
     }
 
