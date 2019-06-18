@@ -684,15 +684,13 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !((victim.hasAbility(AbilityNamesies.OWN_TEMPO) && !caster.breaksTheMold()) || victim.hasEffect(this.namesies()));
+            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
         public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasEffect(this.namesies())) {
                 return victim.getName() + " is already confused!";
-            } else if (victim.hasAbility(AbilityNamesies.OWN_TEMPO)) {
-                return victim.getName() + "'s " + victim.getAbility().getName() + " prevents confusion!";
             }
 
             return super.getFailMessage(b, user, victim);
@@ -1938,7 +1936,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Substitute extends PokemonEffect implements AbsorbDamageEffect, PassableEffect, EffectPreventionEffect, StickyHoldEffect, StatusPreventionEffect, StatProtectingEffect {
+    static class Substitute extends PokemonEffect implements AbsorbDamageEffect, PassableEffect, StickyHoldEffect, StatusPreventionEffect, StatProtectingEffect, EffectPreventionEffect {
         private static final long serialVersionUID = 1L;
 
         private int hp;

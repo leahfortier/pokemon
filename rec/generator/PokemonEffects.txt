@@ -135,12 +135,9 @@ Bracing:
 *
 Confusion:
     Int: PassableEffect, BeforeTurnEffect
-    FailAbility: Own Tempo
     FailMessage:
         if (victim.hasEffect(this.namesies())) {
             return victim.getName() + " is already confused!";
-        } else if (victim.hasAbility(AbilityNamesies.OWN_TEMPO)) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " prevents confusion!";
         }
         ###
     Field:
@@ -757,7 +754,7 @@ Transformed:
         ###
 *
 Substitute:
-    Int: AbsorbDamageEffect, PassableEffect, EffectPreventionEffect, StickyHoldEffect, StatusPreventionEffect, StatProtectingEffect
+    Int: AbsorbDamageEffect, PassableEffect, StickyHoldEffect, StatusPreventionEffect, StatProtectingEffect
     Field:
         private int hp;
         
@@ -783,7 +780,7 @@ Substitute:
         Messages.add(new MessageUpdate().updatePokemon(b, victim).withImageName(imageName, victim.isPlayer()));
         ###
     FailCondition: victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3
-    EffectPrevent:
+    FullEffectPrevent:
         // Only block externally applied effects
         if (caster == victim) {
             return false;

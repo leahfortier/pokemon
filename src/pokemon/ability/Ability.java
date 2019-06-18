@@ -32,6 +32,7 @@ import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.DefiniteEscape;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
 import battle.effect.InvokeInterfaces.EffectChanceMultiplierEffect;
+import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EffectReceivedEffect;
 import battle.effect.InvokeInterfaces.EncounterRateMultiplier;
 import battle.effect.InvokeInterfaces.EndBattleEffect;
@@ -1042,11 +1043,21 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class OwnTempo extends Ability {
+    static class OwnTempo extends Ability implements EffectPreventionEffect {
         private static final long serialVersionUID = 1L;
 
         OwnTempo() {
             super(AbilityNamesies.OWN_TEMPO, "This Pok\u00e9mon has its own tempo, and that prevents it from becoming confused.");
+        }
+
+        @Override
+        public String effectPreventionMessage(ActivePokemon victim) {
+            return victim.getName() + "'s " + this.getName() + " prevents confusion!";
+        }
+
+        @Override
+        public boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+            return effectName == PokemonEffectNamesies.CONFUSION;
         }
     }
 
