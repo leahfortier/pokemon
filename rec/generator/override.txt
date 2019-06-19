@@ -1727,13 +1727,13 @@ NextLevel:
 *
 FlinchItem:
     AddMapField: FlingEffect:
-        if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false)) {
+        if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false).isSuccess()) {
             Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
         }
         ###
     AddMapField: OpponentTakeDamage:
         if (RandomUtils.chanceTest(10)) {
-            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, false)) {
+            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, false).isSuccess()) {
                 Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
             }
         }

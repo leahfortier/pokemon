@@ -652,7 +652,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (RandomUtils.chanceTest(30) && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, user, CastSource.ABILITY, false)) {
+            if (RandomUtils.chanceTest(30) && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, user, CastSource.ABILITY, false).isSuccess()) {
                 Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
             }
         }
@@ -778,7 +778,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
-                if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.ABILITY, false)) {
+                if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.ABILITY, false).isSuccess()) {
                     Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
                 }
             }
@@ -2572,7 +2572,7 @@ public abstract class Ability implements AbilityInterface {
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
                 user.setLastMoveUsed();
-                if (Effect.apply(PokemonEffectNamesies.DISABLE, b, victim, user, CastSource.ABILITY, false)) {
+                if (Effect.apply(PokemonEffectNamesies.DISABLE, b, victim, user, CastSource.ABILITY, false).isSuccess()) {
                     Messages.add(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
                 }
             }

@@ -92,22 +92,23 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
         }
     }
 
-    public static boolean apply(EffectNamesies namesies, Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-        if (namesies.getEffect().fullApplies(b, caster, victim, source)) {
+    public static ApplyStatus apply(EffectNamesies namesies, Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        ApplyStatus status = namesies.getEffect().fullApplies(b, caster, victim, source);
+        if (status.isSuccess()) {
             cast(namesies, b, caster, victim, source, printCast);
-            return true;
         }
 
-        return false;
+        return status;
     }
 
-    private boolean fullApplies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+    private ApplyStatus fullApplies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
         EffectPreventionEffect preventionEffect = EffectPreventionEffect.getPreventEffect(b, caster, victim, this.namesies);
         if (preventionEffect != null) {
-            return false;
+            return ApplyStatus.failure(preventionEffect.effectPreventionMessage(victim, this.namesies));
         }
 
-        return this.applies(b, caster, victim, source);
+        boolean applies = this.applies(b, caster, victim, source);
+        return applies ? ApplyStatus.success() : ApplyStatus.failure(this.getFailMessage(b, caster, victim));
     }
 
     // Should be overridden by subclasses as deemed appropriate

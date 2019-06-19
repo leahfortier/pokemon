@@ -104,7 +104,6 @@ import type.TypeAdvantage;
 import util.RandomUtils;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -593,7 +592,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
-            if (effectType == PokemonEffectNamesies.INFATUATION && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, caster, CastSource.HELD_ITEM, false)) {
+            if (effectType == PokemonEffectNamesies.INFATUATION && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, caster, CastSource.HELD_ITEM, false).isSuccess()) {
                 Messages.add(victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!");
             }
         }
@@ -2903,7 +2902,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false)) {
+            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false).isSuccess()) {
                 Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
             }
         }
@@ -2911,7 +2910,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
-                if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, false)) {
+                if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, false).isSuccess()) {
                     Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
                 }
             }
@@ -3020,7 +3019,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false)) {
+            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false).isSuccess()) {
                 Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
             }
         }
@@ -3028,7 +3027,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
-                if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, false)) {
+                if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, false).isSuccess()) {
                     Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
                 }
             }
@@ -3624,7 +3623,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return Effect.apply(PokemonEffectNamesies.RAISE_CRITS, b, p, p, CastSource.USE_ITEM, true);
+            return Effect.apply(PokemonEffectNamesies.RAISE_CRITS, b, p, p, CastSource.USE_ITEM, true).isSuccess();
         }
     }
 
@@ -3639,7 +3638,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return Effect.apply(TeamEffectNamesies.GUARD_SPECIAL, b, p, p, CastSource.USE_ITEM, true);
+            return Effect.apply(TeamEffectNamesies.GUARD_SPECIAL, b, p, p, CastSource.USE_ITEM, true).isSuccess();
         }
     }
 
