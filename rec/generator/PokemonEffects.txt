@@ -127,9 +127,9 @@ Bracing:
 *
 Confusion:
     Int: PassableEffect, BeforeTurnEffect
-    FailMessage:
+    FullEffectApplies:
         if (victim.hasEffect(this.namesies())) {
-            return victim.getName() + " is already confused!";
+            return ApplyResult.failure(victim.getName() + " is already confused!");
         }
         ###
     Field:
@@ -227,17 +227,14 @@ Disable:
         Move lastMove = victim.getLastMoveUsed();
         if (lastMove == null || lastMove.getPP() == 0) {
             return ApplyResult.failure();
+        } else if (victim.hasEffect(this.namesies())) {
+            return ApplyResult.failure(victim.getName() + " is already disabled!");
         }
         ###
     SubsideMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " is no longer disabled!"
     CastMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " was disabled!"
     BeforeCast:
         disabled = victim.getLastMoveUsed();
-        ###
-    FailMessage:
-        if (victim.hasEffect(this.namesies())) {
-            return victim.getName() + " is already disabled!";
-        }
         ###
 *
 RaiseCrits:
@@ -423,7 +420,7 @@ Stockpile:
             return;
         }
 
-        Messages.add(this.getFailMessage(b, caster, victim));
+        Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
         ###
     StageChange:
         return s == Stat.DEFENSE || s == Stat.SP_DEFENSE ? turns : 0;
@@ -462,7 +459,7 @@ Mimic:
         Attack lastAttack = lastMoveUsed == null ? null : lastMoveUsed.getAttack();
 
         if (lastAttack == null || victim.hasMove(b, lastAttack.namesies()) || lastAttack.isMoveType(MoveType.MIMICLESS)) {
-            Messages.add(this.getFailMessage(b, caster, victim));
+            Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
             return;
         }
 
@@ -868,7 +865,7 @@ Bide:
         Messages.add(victim.getName() + " released energy!");
         if (this.damage == 0) {
             // Sucks to suck
-            Messages.add(this.getFailMessage(b, caster, victim));
+            Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
         } else {
             // RETALIATION STATION
             b.getOtherPokemon(victim).reduceHealth(b, 2*this.damage);

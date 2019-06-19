@@ -903,13 +903,6 @@ DeathWish:
 KillWish:
     Header: void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer)
 *
-FailMessage:
-    Header: String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim)
-    End:
-
-        return super.getFailMessage(b, user, victim);
-        ###
-*
 Defog:
     AddInterface: DefogRelease
     Header: String getDefogReleaseMessage(ActivePokemon released)

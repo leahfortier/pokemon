@@ -634,15 +634,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.hasEffect(this.namesies())) {
-                return victim.getName() + " is already confused!";
-            }
-
-            return super.getFailMessage(b, user, victim);
-        }
-
-        @Override
         public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
             // Snap it out!
             if (turns == 0) {
@@ -672,6 +663,15 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return victim.getName() + " became confused!";
+        }
+
+        @Override
+        public ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            if (victim.hasEffect(this.namesies())) {
+                return ApplyResult.failure(victim.getName() + " is already confused!");
+            }
+
+            return ApplyResult.success();
         }
     }
 
@@ -793,19 +793,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.hasEffect(this.namesies())) {
-                return victim.getName() + " is already disabled!";
-            }
-
-            return super.getFailMessage(b, user, victim);
-        }
-
-        @Override
         public ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             Move lastMove = victim.getLastMoveUsed();
             if (lastMove == null || lastMove.getPP() == 0) {
                 return ApplyResult.failure();
+            } else if (victim.hasEffect(this.namesies())) {
+                return ApplyResult.failure(victim.getName() + " is already disabled!");
             }
 
             return ApplyResult.success();
@@ -1065,7 +1058,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
                 return;
             }
 
-            Messages.add(this.getFailMessage(b, caster, victim));
+            Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
         }
 
         @Override
@@ -1136,7 +1129,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             Attack lastAttack = lastMoveUsed == null ? null : lastMoveUsed.getAttack();
 
             if (lastAttack == null || victim.hasMove(b, lastAttack.namesies()) || lastAttack.isMoveType(MoveType.MIMICLESS)) {
-                Messages.add(this.getFailMessage(b, caster, victim));
+                Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
                 return;
             }
 
@@ -1987,7 +1980,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             Messages.add(victim.getName() + " released energy!");
             if (this.damage == 0) {
                 // Sucks to suck
-                Messages.add(this.getFailMessage(b, caster, victim));
+                Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
             } else {
                 // RETALIATION STATION
                 b.getOtherPokemon(victim).reduceHealth(b, 2*this.damage);
