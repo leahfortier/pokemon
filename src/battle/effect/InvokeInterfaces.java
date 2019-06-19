@@ -769,15 +769,9 @@ public final class InvokeInterfaces {
     }
 
     public interface EffectPreventionEffect {
+        ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName);
 
-        // TODO: Same deal as StatusPreventionEffect -- update this if we can have multiple invoke methods (check and check get)
-        boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName);
-
-        default String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName) {
-            return Effect.DEFAULT_FAIL_MESSAGE;
-        }
-
-        static EffectPreventionEffect getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+        static ApplyResult getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof EffectPreventionEffect && InvokeEffect.isActiveEffect(invokee)) {
@@ -788,13 +782,14 @@ public final class InvokeInterfaces {
                     }
 
                     EffectPreventionEffect effect = (EffectPreventionEffect)invokee;
-                    if (effect.preventEffect(b, caster, victim, effectName)) {
-                        return effect;
+                    ApplyResult value = effect.preventEffect(b, caster, victim, effectName);
+                    if (value != null) {
+                        return value;
                     }
                 }
             }
 
-            return null;
+            return ApplyResult.success();
         }
     }
 

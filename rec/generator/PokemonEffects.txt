@@ -759,23 +759,23 @@ Substitute:
     FullEffectPrevent:
         // Only block externally applied effects
         if (caster == victim) {
-            return false;
+            return ApplyResult.success();
         }
     
         // Substitute only blocks Pokemon effects
         if (!(effectName instanceof PokemonEffectNamesies)) {
-            return false;
+            return ApplyResult.success();
         }
 
         // Those pesky infiltrators
         if (this.infiltrated(caster)) {
-            return false;
+            return ApplyResult.success();
         }
 
         // TODO: Attacks with multiple failing attacks print failure multiple times
         // Ex: Tickle prints "...but it failed!" twice
         // Swagger prints "Raised Attack!" then "...but it failed!" (referring to failed Confusion)
-        return true;
+        return ApplyResult.failure();
         ###
     AbsorbDamage:
         this.hp -= damageAmount;

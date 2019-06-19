@@ -441,18 +441,11 @@ StatusPreventionEffect:
 ***
 EffectPreventionEffect:
     Method:
-        Comments: // TODO: Same deal as StatusPreventionEffect -- update this if we can have multiple invoke methods (check and check get)
-        Header: boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName)
-        Invoke: CheckGet true
+        Header: ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName)
+        Invoke: Get
         InvokeName: getPreventEffect
         EffectList: victim
         MoldBreaker: caster
-    *
-    Method:
-        Header: String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName)
-        Default:
-            return Effect.DEFAULT_FAIL_MESSAGE;
-            ###
     *
 ***
 BracingEffect:

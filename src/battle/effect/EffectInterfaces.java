@@ -359,16 +359,11 @@ public final class EffectInterfaces {
         }
 
         @Override
-        default boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
-            if (effectName instanceof PokemonEffectNamesies) {
-                return this.getPreventableEffects().containsKey(effectName);
+        default ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+            if (effectName instanceof PokemonEffectNamesies && this.getPreventableEffects().containsKey(effectName)) {
+                return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " prevents " + this.getEffectMessage(effectName) + "!");
             }
-            return false;
-        }
-
-        @Override
-        default String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName) {
-            return victim.getName() + "'s " + this.getName() + " prevents " + this.getEffectMessage(effectName) + "!";
+            return ApplyResult.success();
         }
 
         @Override

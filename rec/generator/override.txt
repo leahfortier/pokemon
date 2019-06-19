@@ -805,18 +805,15 @@ StatusPreventMessage:
 *
 EffectPrevent:
     AddMapField: FullEffectPrevent:
-        return effectName == PokemonEffectNamesies.{00};
+        if (effectName == PokemonEffectNamesies.{1}) {
+            return ApplyResult.failure({2-});
+        }
+        return ApplyResult.success();
         ###
 *
 FullEffectPrevent:
-    Header: boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName)
+    Header: ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName)
     AddInterface: EffectPreventionEffect
-*
-EffectPreventMessage:
-    Header: String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName)
-    Body:
-        return {0};
-        ###
 *
 MultipleEffectPreventionAbility:
     Header: Map<PokemonEffectNamesies, String> getPreventableEffects()

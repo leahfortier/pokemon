@@ -7,6 +7,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
+import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MaxLevelWildEncounterEffect;
@@ -755,8 +756,11 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
-            return effectName == PokemonEffectNamesies.FLINCH;
+        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+            if (effectName == PokemonEffectNamesies.FLINCH) {
+                return ApplyResult.failure(Effect.DEFAULT_FAIL_MESSAGE);
+            }
+            return ApplyResult.success();
         }
     }
 
@@ -1058,13 +1062,11 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName) {
-            return victim.getName() + "'s " + this.getName() + " prevents confusion!";
-        }
-
-        @Override
-        public boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
-            return effectName == PokemonEffectNamesies.CONFUSION;
+        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+            if (effectName == PokemonEffectNamesies.CONFUSION) {
+                return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " prevents confusion!");
+            }
+            return ApplyResult.success();
         }
     }
 
@@ -1374,11 +1376,6 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String effectPreventionMessage(ActivePokemon victim, EffectNamesies effectName) {
-            return victim.getName() + "'s " + this.getName() + " makes it immune to sound based moves!";
-        }
-
-        @Override
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttack().isMoveType(MoveType.SOUND_BASED);
         }
@@ -1389,8 +1386,11 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
-            return effectName == PokemonEffectNamesies.PERISH_SONG;
+        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+            if (effectName == PokemonEffectNamesies.PERISH_SONG) {
+                return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " makes it immune to sound based moves!");
+            }
+            return ApplyResult.success();
         }
     }
 

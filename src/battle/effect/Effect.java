@@ -104,9 +104,9 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
     }
 
     private ApplyResult fullApplies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-        EffectPreventionEffect preventionEffect = EffectPreventionEffect.getPreventEffect(b, caster, victim, this.namesies);
-        if (preventionEffect != null) {
-            return ApplyResult.failure(preventionEffect.effectPreventionMessage(victim, this.namesies));
+        ApplyResult preventionResult = EffectPreventionEffect.getPreventEffect(b, caster, victim, this.namesies);
+        if (!preventionResult.isSuccess()) {
+            return preventionResult;
         }
 
         // Fails if the victim already has this effect (and they can't have it again)
@@ -145,10 +145,11 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
     }
 
     public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-        EffectPreventionEffect preventionEffect = EffectPreventionEffect.getPreventEffect(b, user, victim, this.namesies);
-        if (preventionEffect != null) {
-            return preventionEffect.effectPreventionMessage(victim, this.namesies);
-        }
+        // TODO: Going to be deleting this method soon
+//        EffectPreventionEffect preventionEffect = EffectPreventionEffect.getPreventEffect(b, user, victim, this.namesies);
+//        if (preventionEffect != null) {
+//            return preventionEffect.effectPreventionMessage(victim, this.namesies);
+//        }
 
         return DEFAULT_FAIL_MESSAGE;
     }

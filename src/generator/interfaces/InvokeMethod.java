@@ -1,5 +1,6 @@
 package generator.interfaces;
 
+import battle.effect.ApplyResult;
 import generator.AccessModifier;
 import generator.format.MethodInfo;
 import util.GeneralUtils;
@@ -281,7 +282,15 @@ abstract class InvokeMethod {
 
         @Override
         protected String getPostLoop(InterfaceMethod interfaceMethod) {
-            return "return null;";
+            String returnValue = "null";
+
+            // Default return value for ApplyResult is a success object, not a null one
+            String returnType = this.getReturnType(interfaceMethod);
+            if (returnType.equals(ApplyResult.class.getSimpleName())) {
+                returnValue = "ApplyResult.success()";
+            }
+
+            return "return " + returnValue + ";";
         }
     }
 

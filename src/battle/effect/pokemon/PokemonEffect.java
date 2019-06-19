@@ -6,6 +6,7 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveType;
+import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.AttackSelectionSelfBlockerEffect;
 import battle.effect.EffectInterfaces.MessageGetter;
@@ -1805,26 +1806,26 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public boolean preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
             // Only block externally applied effects
             if (caster == victim) {
-                return false;
+                return ApplyResult.success();
             }
 
             // Substitute only blocks Pokemon effects
             if (!(effectName instanceof PokemonEffectNamesies)) {
-                return false;
+                return ApplyResult.success();
             }
 
             // Those pesky infiltrators
             if (this.infiltrated(caster)) {
-                return false;
+                return ApplyResult.success();
             }
 
             // TODO: Attacks with multiple failing attacks print failure multiple times
             // Ex: Tickle prints "...but it failed!" twice
             // Swagger prints "Raised Attack!" then "...but it failed!" (referring to failed Confusion)
-            return true;
+            return ApplyResult.failure();
         }
 
         @Override
