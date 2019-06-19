@@ -24,9 +24,9 @@ NoStatus:
 Fainted:
     ShortName: FNT
     CatchMod: 1
-    FullApplies:
+    StatusBaseApplies:
         // Fainted status condition applies regardless of other status conditions
-        return this.statusApplies(b, user, victim);
+        return this.statusApplies(b, user, victim) ? ApplyResult.success() : ApplyResult.failure();
         ###
     StatusApplies: victim.getHP() == 0
     GenericCastMessage: p.getName() + " fainted!"

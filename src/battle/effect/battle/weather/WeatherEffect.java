@@ -2,6 +2,7 @@ package battle.effect.battle.weather;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.ApplyResult;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
@@ -115,13 +116,13 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return status == StatusNamesies.FROZEN;
-        }
+        public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            // Can't freeze in the sunlight
+            if (status == StatusNamesies.FROZEN) {
+                return ApplyResult.failure("Too sunny to freeze!!");
+            }
 
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return "Too sunny to freeze!!";
+            return ApplyResult.success();
         }
 
         @Override

@@ -2,6 +2,7 @@ package battle.effect.battle;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.InvokeInterfaces.GroundedEffect;
@@ -210,13 +211,12 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return status == StatusNamesies.ASLEEP;
-        }
+        public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            if (status == StatusNamesies.ASLEEP) {
+                return ApplyResult.failure("The uproar prevents sleep!!");
+            }
 
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return "The uproar prevents sleep!!";
+            return ApplyResult.success();
         }
 
         @Override

@@ -55,8 +55,11 @@ MagicRoom:
 *
 FieldUproar:
     Int: StatusPreventionEffect
-    StatusPrevent: return status == StatusNamesies.ASLEEP;
-    StatusPreventMessage: "The uproar prevents sleep!!"
+    StatusPrevent:
+        if (status == StatusNamesies.ASLEEP) {
+            return ApplyResult.failure("The uproar prevents sleep!!");
+        }
+        ###
     TheVeryEnd:
         if (b.getPlayer().front().hasEffect(PokemonEffectNamesies.UPROAR) || b.getOpponent().front().hasEffect(PokemonEffectNamesies.UPROAR)) {
             return false;

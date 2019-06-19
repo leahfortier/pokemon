@@ -742,12 +742,9 @@ public final class InvokeInterfaces {
     }
 
     public interface StatusPreventionEffect {
+        ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status);
 
-        // TODO: Would be nice in the future if I am able to implement multiple invoke methods for the same interface method since this could also use a basic check invoke as well
-        boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status);
-        String statusPreventionMessage(ActivePokemon victim);
-
-        static StatusPreventionEffect getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+        static ApplyResult getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof StatusPreventionEffect && InvokeEffect.isActiveEffect(invokee)) {
@@ -758,13 +755,14 @@ public final class InvokeInterfaces {
                     }
 
                     StatusPreventionEffect effect = (StatusPreventionEffect)invokee;
-                    if (effect.preventStatus(b, caster, victim, status)) {
-                        return effect;
+                    ApplyResult value = effect.preventStatus(b, caster, victim, status);
+                    if (value != null) {
+                        return value;
                     }
                 }
             }
 
-            return null;
+            return ApplyResult.success();
         }
     }
 

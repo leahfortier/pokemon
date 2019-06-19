@@ -327,13 +327,12 @@ public final class EffectInterfaces {
         StatusNamesies getStatus();
 
         @Override
-        default boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return this.getStatus().getStatus().isType(status);
-        }
+        default ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            if (this.getStatus().getStatus().isType(status)) {
+                return ApplyResult.failure(this.getStatus().getStatus().getSourcePreventionMessage(victim, this.getName()));
+            }
 
-        @Override
-        default String statusPreventionMessage(ActivePokemon victim) {
-            return this.getStatus().getStatus().getSourcePreventionMessage(victim, this.getName());
+            return ApplyResult.success();
         }
 
         @Override

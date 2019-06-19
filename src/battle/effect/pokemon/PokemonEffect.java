@@ -1459,6 +1459,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
+        public ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return StatusNamesies.ASLEEP.getStatus().applies(b, caster, victim);
+        }
+
+        @Override
         public void subside(Battle b, ActivePokemon p) {
             StatusNamesies.ASLEEP.getStatus().apply(b, b.getOtherPokemon(p), p, CastSource.EFFECT);
         }
@@ -1466,11 +1471,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return victim.getName() + " grew drowsy!";
-        }
-
-        @Override
-        public ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return StatusNamesies.ASLEEP.getStatus().applies(b, caster, victim);
         }
     }
 
@@ -1862,13 +1862,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return !this.infiltrated(caster);
-        }
+        public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            if (!this.infiltrated(caster)) {
+                return ApplyResult.failure();
+            }
 
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return Effect.DEFAULT_FAIL_MESSAGE;
+            return ApplyResult.success();
         }
 
         @Override

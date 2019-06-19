@@ -428,15 +428,11 @@ StatProtectingEffect:
 ***
 StatusPreventionEffect:
     Method:
-        Comments: // TODO: Would be nice in the future if I am able to implement multiple invoke methods for the same interface method since this could also use a basic check invoke as well
-        Header: boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status)
-        Invoke: CheckGet true
+        Header: ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status)
+        Invoke: Get
         InvokeName: getPreventEffect
         EffectList: victim
         MoldBreaker: caster
-    *
-    Method:
-        Header: String statusPreventionMessage(ActivePokemon victim)
     *
 ***
 EffectPreventionEffect:

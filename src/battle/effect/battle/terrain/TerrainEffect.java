@@ -2,6 +2,7 @@ package battle.effect.battle.terrain;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.ApplyResult;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
@@ -54,14 +55,13 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+        public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             // Levitating Pokemon are immune to the mist
-            return !victim.isLevitating(b);
-        }
+            if (!victim.isLevitating(b)) {
+                return ApplyResult.failure("The protective mist prevents status conditions!");
+            }
 
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return "The protective mist prevents status conditions!";
+            return ApplyResult.success();
         }
 
         @Override
@@ -120,13 +120,12 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return status == StatusNamesies.ASLEEP && !victim.isLevitating(b);
-        }
+        public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            if (status == StatusNamesies.ASLEEP && !victim.isLevitating(b)) {
+                return ApplyResult.failure("The electric terrain prevents sleep!");
+            }
 
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return "The electric terrain prevents sleep!";
+            return ApplyResult.success();
         }
 
         @Override

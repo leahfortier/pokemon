@@ -1463,13 +1463,12 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return b.getWeather().namesies() == WeatherNamesies.SUNNY;
-        }
+        public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
+                return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " prevents status conditions!");
+            }
 
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " prevents status conditions!";
+            return ApplyResult.success();
         }
     }
 
@@ -3756,13 +3755,12 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return victim.isType(b, Type.GRASS);
-        }
+        public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            if (victim.isType(b, Type.GRASS)) {
+                return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " prevents status conditions!");
+            }
 
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return victim.getName() + "'s " + this.getName() + " prevents status conditions!";
+            return ApplyResult.success();
         }
 
         @Override

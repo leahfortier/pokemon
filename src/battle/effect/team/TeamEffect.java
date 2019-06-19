@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
+import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.InvokeInterfaces.BarrierEffect;
@@ -575,13 +576,12 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
-        }
+        public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            if (!caster.hasAbility(AbilityNamesies.INFILTRATOR)) {
+                return ApplyResult.failure("Safeguard protects " + victim.getName() + " from status conditions!");
+            }
 
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return "Safeguard protects " + victim.getName() + " from status conditions!";
+            return ApplyResult.success();
         }
     }
 
@@ -603,13 +603,12 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
-        }
+        public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            if (!caster.hasAbility(AbilityNamesies.INFILTRATOR)) {
+                return ApplyResult.failure("Guard Special protects " + victim.getName() + " from status conditions!");
+            }
 
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return "Guard Special protects " + victim.getName() + " from status conditions!";
+            return ApplyResult.success();
         }
     }
 

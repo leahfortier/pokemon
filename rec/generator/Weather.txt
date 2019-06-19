@@ -29,8 +29,12 @@ Sunny:
     CastMessage: "The sunlight turned harsh!"
     SubsideMessage: "The sunlight faded."
     WeatherStatChange: Fire Water
-    StatusPrevent: return status == StatusNamesies.FROZEN;
-    StatusPreventMessage: "Too sunny to freeze!!"
+    StatusPrevent:
+        // Can't freeze in the sunlight
+        if (status == StatusNamesies.FROZEN) {
+            return ApplyResult.failure("Too sunny to freeze!!");
+        }
+        ###
 *
 Sandstorm:
     WeatherElement: Rock

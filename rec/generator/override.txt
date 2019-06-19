@@ -56,6 +56,9 @@ FullEffectApplies:
 TotalEffectApplies:
     Header: ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 *
+StatusBaseApplies:
+    Header: ApplyResult applies(Battle b, ActivePokemon user, ActivePokemon victim)
+*
 StatusApplies:
     Header: boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim)
     Body:
@@ -644,9 +647,10 @@ SafeguardEffect:
     AddMapField: NumTurns: 5
     AddInterface: StatusPreventionEffect
     AddMapField: StatusPrevent:
-        return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
+        if (!caster.hasAbility(AbilityNamesies.INFILTRATOR)) {
+            return ApplyResult.failure("{0} protects " + victim.getName() + " from status conditions!");
+        }
         ###
-    AddMapField: StatusPreventMessage: "{0} protects " + victim.getName() + " from status conditions!"
 *
 UsedProof:
     AddMapField: CanHave: True
@@ -811,12 +815,10 @@ SetTurns:
     Header: void setTurns(int turns)
 *
 StatusPrevent:
-    Header: boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status)
-*
-StatusPreventMessage:
-    Header: String statusPreventionMessage(ActivePokemon victim)
-    Body:
-        return {0};
+    Header: ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status)
+    End:
+        
+        return ApplyResult.success();
         ###
 *
 EffectPrevent:

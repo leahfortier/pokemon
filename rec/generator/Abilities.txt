@@ -516,9 +516,10 @@ Leaf Guard:
     Desc: Prevents status conditions in sunny weather.
     Int: StatusPreventionEffect
     StatusPrevent:
-        return b.getWeather().namesies() == WeatherNamesies.SUNNY;
+        if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
+            return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " prevents status conditions!");
+        }
         ###
-    StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents status conditions!"
 *
 Scrappy:
     Desc: The Pok\u00e9mon can hit Ghost-type Pok\u00e9mon with Normal- and Fighting-type moves.
@@ -1470,9 +1471,10 @@ Flower Veil:
     Desc: Grass-type Pok\u00e9mon are protected from status conditions and the lowering of their stats.
     Int: StatusPreventionEffect
     StatusPrevent:
-        return victim.isType(b, Type.GRASS);
+        if (victim.isType(b, Type.GRASS)) {
+            return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " prevents status conditions!");
+        }
         ###
-    StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents status conditions!"
     StatProtectAll: victim.isType(b, Type.GRASS)
 *
 Gale Wings:
@@ -1632,7 +1634,7 @@ Comatose:
                 return false;
             }
 
-            if (StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, sleepyHead, sleepyHead)) {
+            if (StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, sleepyHead, sleepyHead).isSuccess()) {
                 sleepyHead.removeStatus();
                 StatusNamesies.ASLEEP.getStatus().apply(b, sleepyHead, sleepyHead, CastSource.ABILITY);
                 sleepyHead.getStatus().setTurns(-1);

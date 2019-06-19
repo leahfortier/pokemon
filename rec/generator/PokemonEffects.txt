@@ -580,7 +580,9 @@ Curse:
 *
 Yawn:
     NumTurns: 2
-    EffectApplies: StatusNamesies.ASLEEP.getStatus().applies(b, caster, victim)
+    TotalEffectApplies:
+        return StatusNamesies.ASLEEP.getStatus().applies(b, caster, victim);
+        ###
     Subside:
         StatusNamesies.ASLEEP.getStatus().apply(b, b.getOtherPokemon(p), p, CastSource.EFFECT);
         ###
@@ -812,9 +814,10 @@ Substitute:
         ###
     StatProtectMessage: Effect.DEFAULT_FAIL_MESSAGE
     StatusPrevent:
-        return !this.infiltrated(caster);
+        if (!this.infiltrated(caster)) {
+            return ApplyResult.failure();
+        }
         ###
-    StatusPreventMessage: Effect.DEFAULT_FAIL_MESSAGE
 *
 Mist:
     NumTurns: 5
