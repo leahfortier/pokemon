@@ -16,13 +16,15 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
     public static final String DEFAULT_FAIL_MESSAGE = "...but it failed!";
 
     protected final NamesiesType namesies;
+    private final boolean canHave;
     private final boolean hasAlternateCast;
 
     private int numTurns;
     private boolean active;
 
-    protected Effect(NamesiesType name, int minTurns, int maxTurns, boolean hasAlternateCast) {
+    protected Effect(NamesiesType name, int minTurns, int maxTurns, boolean canHave, boolean hasAlternateCast) {
         this.namesies = name;
+        this.canHave = canHave;
         this.hasAlternateCast = hasAlternateCast;
 
         this.numTurns = minTurns == -1 ? -1 : RandomUtils.getRandomInt(minTurns, maxTurns);
@@ -105,6 +107,12 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
         EffectPreventionEffect preventionEffect = EffectPreventionEffect.getPreventEffect(b, caster, victim, this.namesies);
         if (preventionEffect != null) {
             return ApplyStatus.failure(preventionEffect.effectPreventionMessage(victim, this.namesies));
+        }
+
+        // Fails if the victim already has this effect (and they can't have it again)
+        if (!this.canHave && this.hasEffect(b, victim)) {
+            // TODO: Not sure about the messaging for this
+            return ApplyStatus.failure();
         }
 
         boolean applies = this.applies(b, caster, victim, source);

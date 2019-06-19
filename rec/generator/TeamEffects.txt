@@ -7,11 +7,11 @@ Constructor:
     Namesies Enum TeamEffectNamesies
     MinTurns Default -1 Int
     MaxTurns Default -1 Int
+    CanHave Default False Boolean
     HasAlternateCast Default False Boolean
 *
 Failure:
     Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-    CanHave Not Default True Boolean b.getTrainer(victim).hasEffect(this.namesies())
 *
 
 ***

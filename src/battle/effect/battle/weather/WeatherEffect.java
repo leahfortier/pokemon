@@ -19,8 +19,8 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
     private final Type weatherElement;
     private final String imageName;
 
-    public WeatherEffect(WeatherNamesies namesies, Type weatherElement) {
-        super(namesies, -1, -1, false);
+    public WeatherEffect(WeatherNamesies namesies, Type weatherElement, boolean canHave) {
+        super(namesies, -1, -1, canHave, false);
         this.weatherElement = weatherElement;
         this.imageName = this.getClass().getSimpleName().toLowerCase();
     }
@@ -52,7 +52,7 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         private static final long serialVersionUID = 1L;
 
         ClearSkies() {
-            super(WeatherNamesies.CLEAR_SKIES, Type.NORMAL);
+            super(WeatherNamesies.CLEAR_SKIES, Type.NORMAL, true);
         }
     }
 
@@ -60,12 +60,7 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Raining() {
-            super(WeatherNamesies.RAINING, Type.WATER);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
+            super(WeatherNamesies.RAINING, Type.WATER, false);
         }
 
         @Override
@@ -101,12 +96,7 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Sunny() {
-            super(WeatherNamesies.SUNNY, Type.FIRE);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
+            super(WeatherNamesies.SUNNY, Type.FIRE, false);
         }
 
         @Override
@@ -154,12 +144,7 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         private static final Type[] immunees = new Type[] { Type.ROCK, Type.GROUND, Type.STEEL };
 
         Sandstorm() {
-            super(WeatherNamesies.SANDSTORM, Type.ROCK);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
+            super(WeatherNamesies.SANDSTORM, Type.ROCK, false);
         }
 
         @Override
@@ -217,12 +202,7 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         private static final Type[] immunees = new Type[] { Type.ICE };
 
         Hailing() {
-            super(WeatherNamesies.HAILING, Type.ICE);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
+            super(WeatherNamesies.HAILING, Type.ICE, false);
         }
 
         @Override

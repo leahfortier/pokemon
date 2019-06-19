@@ -84,8 +84,8 @@ import java.util.List;
 public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public PokemonEffect(PokemonEffectNamesies name, int minTurns, int maxTurns, boolean hasAlternateCast) {
-        super(name, minTurns, maxTurns, hasAlternateCast);
+    public PokemonEffect(PokemonEffectNamesies name, int minTurns, int maxTurns, boolean canHave, boolean hasAlternateCast) {
+        super(name, minTurns, maxTurns, canHave, hasAlternateCast);
     }
 
     @Override
@@ -111,12 +111,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         LeechSeed() {
-            super(PokemonEffectNamesies.LEECH_SEED, -1, -1, false);
+            super(PokemonEffectNamesies.LEECH_SEED, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.isType(b, Type.GRASS) || victim.hasEffect(this.namesies()));
+            return !(victim.isType(b, Type.GRASS));
         }
 
         @Override
@@ -152,12 +152,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Flinch() {
-            super(PokemonEffectNamesies.FLINCH, 1, 1, false);
+            super(PokemonEffectNamesies.FLINCH, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!b.isFirstAttack() || victim.hasEffect(this.namesies()));
+            return !(!b.isFirstAttack());
         }
 
         @Override
@@ -175,12 +175,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         FireSpin() {
-            super(PokemonEffectNamesies.FIRE_SPIN, 4, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.FIRE_SPIN, 4, 5, false, false);
         }
 
         @Override
@@ -213,12 +208,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Infestation() {
-            super(PokemonEffectNamesies.INFESTATION, 4, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.INFESTATION, 4, 5, false, false);
         }
 
         @Override
@@ -251,12 +241,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         MagmaStorm() {
-            super(PokemonEffectNamesies.MAGMA_STORM, 4, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.MAGMA_STORM, 4, 5, false, false);
         }
 
         @Override
@@ -289,12 +274,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Clamped() {
-            super(PokemonEffectNamesies.CLAMPED, 4, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.CLAMPED, 4, 5, false, false);
         }
 
         @Override
@@ -327,12 +307,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Whirlpooled() {
-            super(PokemonEffectNamesies.WHIRLPOOLED, 4, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.WHIRLPOOLED, 4, 5, false, false);
         }
 
         @Override
@@ -365,12 +340,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Wrapped() {
-            super(PokemonEffectNamesies.WRAPPED, 4, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.WRAPPED, 4, 5, false, false);
         }
 
         @Override
@@ -403,12 +373,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Binded() {
-            super(PokemonEffectNamesies.BINDED, 4, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.BINDED, 4, 5, false, false);
         }
 
         @Override
@@ -441,12 +406,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         SandTomb() {
-            super(PokemonEffectNamesies.SAND_TOMB, 4, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.SAND_TOMB, 4, 5, false, false);
         }
 
         @Override
@@ -479,12 +439,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         KingsShield() {
-            super(PokemonEffectNamesies.KINGS_SHIELD, 1, 1, false);
+            super(PokemonEffectNamesies.KINGS_SHIELD, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())));
         }
 
         @Override
@@ -508,12 +468,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         SpikyShield() {
-            super(PokemonEffectNamesies.SPIKY_SHIELD, 1, 1, false);
+            super(PokemonEffectNamesies.SPIKY_SHIELD, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())));
         }
 
         @Override
@@ -534,12 +494,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         BanefulBunker() {
-            super(PokemonEffectNamesies.BANEFUL_BUNKER, 1, 1, false);
+            super(PokemonEffectNamesies.BANEFUL_BUNKER, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())));
         }
 
         @Override
@@ -560,12 +520,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Protect() {
-            super(PokemonEffectNamesies.PROTECT, 1, 1, false);
+            super(PokemonEffectNamesies.PROTECT, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())));
         }
 
         @Override
@@ -578,12 +538,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         QuickGuard() {
-            super(PokemonEffectNamesies.QUICK_GUARD, 1, 1, false);
+            super(PokemonEffectNamesies.QUICK_GUARD, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())));
         }
 
         @Override
@@ -601,12 +561,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         CraftyShield() {
-            super(PokemonEffectNamesies.CRAFTY_SHIELD, 1, 1, false);
+            super(PokemonEffectNamesies.CRAFTY_SHIELD, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())));
         }
 
         @Override
@@ -625,12 +585,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         MatBlock() {
-            super(PokemonEffectNamesies.MAT_BLOCK, 1, 1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.MAT_BLOCK, 1, 1, false, false);
         }
 
         @Override
@@ -648,12 +603,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Bracing() {
-            super(PokemonEffectNamesies.BRACING, 1, 1, false);
+            super(PokemonEffectNamesies.BRACING, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())));
         }
 
         @Override
@@ -678,13 +633,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private int turns;
 
         Confusion() {
-            super(PokemonEffectNamesies.CONFUSION, -1, -1, false);
+            super(PokemonEffectNamesies.CONFUSION, -1, -1, false, false);
             this.turns = RandomUtils.getRandomInt(1, 4); // Between 1 and 4 turns
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
         }
 
         @Override
@@ -735,12 +685,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private Move move;
 
         SelfConfusion() {
-            super(PokemonEffectNamesies.SELF_CONFUSION, 2, 3, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.SELF_CONFUSION, 2, 3, false, false);
         }
 
         @Override
@@ -767,12 +712,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private Move move;
 
         Encore() {
-            super(PokemonEffectNamesies.ENCORE, 3, 3, false);
+            super(PokemonEffectNamesies.ENCORE, 3, 3, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.getLastMoveUsed().getAttack().isMoveType(MoveType.ENCORELESS) || victim.hasEffect(this.namesies()));
+            return !(victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.getLastMoveUsed().getAttack().isMoveType(MoveType.ENCORELESS));
         }
 
         @Override
@@ -818,12 +763,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private Move disabled;
 
         Disable() {
-            super(PokemonEffectNamesies.DISABLE, 4, 4, false);
+            super(PokemonEffectNamesies.DISABLE, 4, 4, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.hasEffect(this.namesies()));
+            return !(victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0);
         }
 
         @Override
@@ -869,7 +814,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private boolean berrylicious;
 
         RaiseCrits() {
-            super(PokemonEffectNamesies.RAISE_CRITS, -1, -1, true);
+            super(PokemonEffectNamesies.RAISE_CRITS, -1, -1, true, true);
             this.focusEnergy = false;
             this.direHit = false;
             this.berrylicious = false;
@@ -952,7 +897,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private HoldItem item;
 
         ChangeItem() {
-            super(PokemonEffectNamesies.CHANGE_ITEM, -1, -1, false);
+            super(PokemonEffectNamesies.CHANGE_ITEM, -1, -1, true, false);
         }
 
         @Override
@@ -973,7 +918,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private ChangeAttackTypeSource typeSource;
 
         ChangeAttackType() {
-            super(PokemonEffectNamesies.CHANGE_ATTACK_TYPE, 1, 1, false);
+            super(PokemonEffectNamesies.CHANGE_ATTACK_TYPE, 1, 1, true, false);
         }
 
         @Override
@@ -1015,7 +960,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         ChangeType() {
-            super(PokemonEffectNamesies.CHANGE_TYPE, -1, -1, false);
+            super(PokemonEffectNamesies.CHANGE_TYPE, -1, -1, true, false);
         }
 
         @Override
@@ -1051,7 +996,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private String message;
 
         ChangeAbility() {
-            super(PokemonEffectNamesies.CHANGE_ABILITY, -1, -1, false);
+            super(PokemonEffectNamesies.CHANGE_ABILITY, -1, -1, true, false);
         }
 
         @Override
@@ -1084,7 +1029,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private int turns;
 
         Stockpile() {
-            super(PokemonEffectNamesies.STOCKPILE, -1, -1, true);
+            super(PokemonEffectNamesies.STOCKPILE, -1, -1, true, true);
             this.turns = 0;
         }
 
@@ -1125,7 +1070,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         UsedDefenseCurl() {
-            super(PokemonEffectNamesies.USED_DEFENSE_CURL, -1, -1, true);
+            super(PokemonEffectNamesies.USED_DEFENSE_CURL, -1, -1, true, true);
         }
 
         @Override
@@ -1138,7 +1083,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         UsedMinimize() {
-            super(PokemonEffectNamesies.USED_MINIMIZE, -1, -1, true);
+            super(PokemonEffectNamesies.USED_MINIMIZE, -1, -1, true, true);
         }
 
         @Override
@@ -1153,12 +1098,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private Move mimicMove;
 
         Mimic() {
-            super(PokemonEffectNamesies.MIMIC, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.MIMIC, -1, -1, false, false);
         }
 
         @Override
@@ -1201,12 +1141,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private List<AttackNamesies> unableMoves;
 
         Imprison() {
-            super(PokemonEffectNamesies.IMPRISON, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.IMPRISON, -1, -1, false, false);
         }
 
         @Override
@@ -1237,12 +1172,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Trapped() {
-            super(PokemonEffectNamesies.TRAPPED, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.TRAPPED, -1, -1, false, false);
         }
 
         @Override
@@ -1260,7 +1190,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Foresight() {
-            super(PokemonEffectNamesies.FORESIGHT, -1, -1, true);
+            super(PokemonEffectNamesies.FORESIGHT, -1, -1, true, true);
         }
 
         @Override
@@ -1283,7 +1213,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         MiracleEye() {
-            super(PokemonEffectNamesies.MIRACLE_EYE, -1, -1, true);
+            super(PokemonEffectNamesies.MIRACLE_EYE, -1, -1, true, true);
         }
 
         @Override
@@ -1306,12 +1236,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Torment() {
-            super(PokemonEffectNamesies.TORMENT, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.TORMENT, -1, -1, false, false);
         }
 
         @Override
@@ -1336,7 +1261,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Silence() {
-            super(PokemonEffectNamesies.SILENCE, 3, 3, false);
+            super(PokemonEffectNamesies.SILENCE, 3, 3, true, false);
         }
 
         @Override
@@ -1354,12 +1279,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Taunt() {
-            super(PokemonEffectNamesies.TAUNT, 3, 3, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.TAUNT, 3, 3, false, false);
         }
 
         @Override
@@ -1387,12 +1307,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         LaserFocus() {
-            super(PokemonEffectNamesies.LASER_FOCUS, 2, 2, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.LASER_FOCUS, 2, 2, false, false);
         }
 
         @Override
@@ -1405,12 +1320,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         LockOn() {
-            super(PokemonEffectNamesies.LOCK_ON, 2, 2, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.LOCK_ON, 2, 2, false, false);
         }
 
         @Override
@@ -1429,12 +1339,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Telekinesis() {
-            super(PokemonEffectNamesies.TELEKINESIS, 4, 4, false);
+            super(PokemonEffectNamesies.TELEKINESIS, 4, 4, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.isGrounded(b) || victim.hasEffect(this.namesies()));
+            return !(victim.isGrounded(b));
         }
 
         @Override
@@ -1464,12 +1374,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Ingrain() {
-            super(PokemonEffectNamesies.INGRAIN, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.INGRAIN, -1, -1, false, false);
         }
 
         @Override
@@ -1507,12 +1412,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Grounded() {
-            super(PokemonEffectNamesies.GROUNDED, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.GROUNDED, -1, -1, false, false);
         }
 
         @Override
@@ -1525,12 +1425,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Curse() {
-            super(PokemonEffectNamesies.CURSE, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.CURSE, -1, -1, false, false);
         }
 
         @Override
@@ -1553,12 +1448,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Yawn() {
-            super(PokemonEffectNamesies.YAWN, 2, 2, false);
+            super(PokemonEffectNamesies.YAWN, 2, 2, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!StatusNamesies.ASLEEP.getStatus().applies(b, caster, victim) || victim.hasEffect(this.namesies()));
+            return !(!StatusNamesies.ASLEEP.getStatus().applies(b, caster, victim));
         }
 
         @Override
@@ -1576,12 +1471,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         MagnetRise() {
-            super(PokemonEffectNamesies.MAGNET_RISE, 5, 5, false);
+            super(PokemonEffectNamesies.MAGNET_RISE, 5, 5, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.isGrounded(b) || victim.hasEffect(this.namesies()));
+            return !(victim.isGrounded(b));
         }
 
         @Override
@@ -1614,12 +1509,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         Uproar() {
-            super(PokemonEffectNamesies.UPROAR, 3, 3, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.UPROAR, 3, 3, false, false);
         }
 
         @Override
@@ -1671,12 +1561,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         AquaRing() {
-            super(PokemonEffectNamesies.AQUA_RING, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.AQUA_RING, -1, -1, false, false);
         }
 
         @Override
@@ -1699,12 +1584,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Nightmare() {
-            super(PokemonEffectNamesies.NIGHTMARE, -1, -1, false);
+            super(PokemonEffectNamesies.NIGHTMARE, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!victim.hasStatus(StatusNamesies.ASLEEP) || victim.hasEffect(this.namesies()));
+            return !(!victim.hasStatus(StatusNamesies.ASLEEP));
         }
 
         @Override
@@ -1733,12 +1618,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Charge() {
-            super(PokemonEffectNamesies.CHARGE, 2, 2, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.CHARGE, 2, 2, false, false);
         }
 
         @Override
@@ -1751,12 +1631,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Focusing() {
-            super(PokemonEffectNamesies.FOCUSING, 1, 1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.FOCUSING, 1, 1, false, false);
         }
 
         @Override
@@ -1776,12 +1651,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         ShellTrap() {
-            super(PokemonEffectNamesies.SHELL_TRAP, 1, 1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.SHELL_TRAP, 1, 1, false, false);
         }
 
         @Override
@@ -1800,12 +1670,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         BeakBlast() {
-            super(PokemonEffectNamesies.BEAK_BLAST, 1, 1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.BEAK_BLAST, 1, 1, false, false);
         }
 
         @Override
@@ -1823,12 +1688,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         FiddyPercentStronger() {
-            super(PokemonEffectNamesies.FIDDY_PERCENT_STRONGER, 1, 1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.FIDDY_PERCENT_STRONGER, 1, 1, false, false);
         }
 
         @Override
@@ -1845,12 +1705,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private PokeType type;
 
         Transformed() {
-            super(PokemonEffectNamesies.TRANSFORMED, -1, -1, false);
+            super(PokemonEffectNamesies.TRANSFORMED, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getOtherPokemon(victim).hasEffect(this.namesies()) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive())) || victim.hasEffect(this.namesies()));
+            return !(b.getOtherPokemon(victim).hasEffect(this.namesies()) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive())));
         }
 
         @Override
@@ -1928,12 +1788,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         Substitute() {
-            super(PokemonEffectNamesies.SUBSTITUTE, -1, -1, false);
+            super(PokemonEffectNamesies.SUBSTITUTE, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3 || victim.hasEffect(this.namesies()));
+            return !(victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3);
         }
 
         @Override
@@ -2006,12 +1866,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Mist() {
-            super(PokemonEffectNamesies.MIST, 5, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.MIST, 5, 5, false, false);
         }
 
         @Override
@@ -2044,12 +1899,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         MagicCoat() {
-            super(PokemonEffectNamesies.MAGIC_COAT, 1, 1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.MAGIC_COAT, 1, 1, false, false);
         }
 
         @Override
@@ -2077,7 +1927,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private int damage;
 
         Bide() {
-            super(PokemonEffectNamesies.BIDE, -1, -1, true);
+            super(PokemonEffectNamesies.BIDE, -1, -1, true, true);
             this.turns = 1;
             this.damage = 0;
         }
@@ -2137,7 +1987,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private int layers;
 
         HalfWeight() {
-            super(PokemonEffectNamesies.HALF_WEIGHT, -1, -1, true);
+            super(PokemonEffectNamesies.HALF_WEIGHT, -1, -1, true, true);
             this.layers = 1;
         }
 
@@ -2156,7 +2006,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         PowerTrick() {
-            super(PokemonEffectNamesies.POWER_TRICK, -1, -1, true);
+            super(PokemonEffectNamesies.POWER_TRICK, -1, -1, true, true);
         }
 
         @Override
@@ -2186,12 +2036,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         PowerSplit() {
-            super(PokemonEffectNamesies.POWER_SPLIT, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.POWER_SPLIT, -1, -1, false, false);
         }
 
         @Override
@@ -2215,12 +2060,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         GuardSplit() {
-            super(PokemonEffectNamesies.GUARD_SPLIT, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.GUARD_SPLIT, -1, -1, false, false);
         }
 
         @Override
@@ -2244,12 +2084,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         HealBlock() {
-            super(PokemonEffectNamesies.HEAL_BLOCK, 5, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.HEAL_BLOCK, 5, 5, false, false);
         }
 
         @Override
@@ -2273,12 +2108,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Infatuation() {
-            super(PokemonEffectNamesies.INFATUATION, -1, -1, false);
+            super(PokemonEffectNamesies.INFATUATION, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!Gender.oppositeGenders(caster, victim) || victim.hasEffect(this.namesies()));
+            return !(!Gender.oppositeGenders(caster, victim));
         }
 
         @Override
@@ -2302,12 +2137,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Snatch() {
-            super(PokemonEffectNamesies.SNATCH, 1, 1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.SNATCH, 1, 1, false, false);
         }
 
         @Override
@@ -2326,12 +2156,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Grudge() {
-            super(PokemonEffectNamesies.GRUDGE, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.GRUDGE, -1, -1, false, false);
         }
 
         @Override
@@ -2350,12 +2175,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         DestinyBond() {
-            super(PokemonEffectNamesies.DESTINY_BOND, -1, -1, false);
+            super(PokemonEffectNamesies.DESTINY_BOND, -1, -1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())) || victim.hasEffect(this.namesies()));
+            return !(!RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())));
         }
 
         @Override
@@ -2380,12 +2205,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         PerishSong() {
-            super(PokemonEffectNamesies.PERISH_SONG, 3, 3, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.PERISH_SONG, 3, 3, false, false);
         }
 
         @Override
@@ -2401,12 +2221,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Embargo() {
-            super(PokemonEffectNamesies.EMBARGO, 5, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.EMBARGO, 5, 5, false, false);
         }
 
         @Override
@@ -2426,7 +2241,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private HoldItem consumed;
 
         ConsumedItem() {
-            super(PokemonEffectNamesies.CONSUMED_ITEM, -1, -1, false);
+            super(PokemonEffectNamesies.CONSUMED_ITEM, -1, -1, true, false);
         }
 
         @Override
@@ -2446,12 +2261,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         FairyLock() {
-            super(PokemonEffectNamesies.FAIRY_LOCK, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.FAIRY_LOCK, -1, -1, false, false);
         }
 
         @Override
@@ -2470,12 +2280,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Powder() {
-            super(PokemonEffectNamesies.POWDER, 1, 1, false);
+            super(PokemonEffectNamesies.POWDER, 1, 1, false, false);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(PowderBlocker.containsPowderBlocker(b, victim) || victim.hasEffect(this.namesies()));
+            return !(PowderBlocker.containsPowderBlocker(b, victim));
         }
 
         @Override
@@ -2504,12 +2314,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         EatenBerry() {
-            super(PokemonEffectNamesies.EATEN_BERRY, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.EATEN_BERRY, -1, -1, false, false);
         }
     }
 
@@ -2517,12 +2322,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         BreaksTheMold() {
-            super(PokemonEffectNamesies.BREAKS_THE_MOLD, 1, 1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.BREAKS_THE_MOLD, 1, 1, false, false);
         }
     }
 
@@ -2530,12 +2330,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Raging() {
-            super(PokemonEffectNamesies.RAGING, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(victim.hasEffect(this.namesies()));
+            super(PokemonEffectNamesies.RAGING, -1, -1, false, false);
         }
 
         @Override

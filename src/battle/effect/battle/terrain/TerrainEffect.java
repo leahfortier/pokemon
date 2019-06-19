@@ -18,7 +18,7 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
     private final TerrainType terrainType;
 
     public TerrainEffect(TerrainNamesies name, TerrainType terrainType) {
-        super(name, 5, 5, false);
+        super(name, 5, 5, false, false);
         this.terrainType = terrainType;
     }
 
@@ -41,11 +41,6 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
 
         MistyTerrain() {
             super(TerrainNamesies.MISTY_TERRAIN, TerrainType.MISTY);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
         }
 
         @Override
@@ -84,11 +79,6 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
         }
 
         @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
-        }
-
-        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Grass sprouted around the battlefield!";
         }
@@ -117,11 +107,6 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
 
         ElectricTerrain() {
             super(TerrainNamesies.ELECTRIC_TERRAIN, TerrainType.ELECTRIC);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
         }
 
         @Override
@@ -156,11 +141,6 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
 
         PsychicTerrain() {
             super(TerrainNamesies.PSYCHIC_TERRAIN, TerrainType.PSYCHIC);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
         }
 
         @Override

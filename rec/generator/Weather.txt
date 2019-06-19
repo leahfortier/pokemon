@@ -6,10 +6,10 @@
 Constructor:
     Namesies Enum WeatherNamesies
     WeatherElement Enum Type
+    CanHave Default False Boolean
 *
 Failure:
     Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-    CanHave Not Default True Boolean b.hasEffect(this.namesies)
 *
 
 ***
