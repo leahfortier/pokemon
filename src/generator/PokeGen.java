@@ -144,8 +144,6 @@ public class PokeGen {
             fields.addNew("MoveType", MoveType.PHYSICAL_CONTACT.name());
         }
 
-        methods.appendPrefix(inputFormatter.getFailure(fields, this.currentGen.getSuperClassName()));
-
         return methods.toString();
     }
 

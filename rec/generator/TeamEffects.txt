@@ -10,9 +10,6 @@ Constructor:
     CanHave Default False Boolean
     HasAlternateCast Default False Boolean
 *
-Failure:
-    Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-*
 
 ***
 

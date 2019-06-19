@@ -2,7 +2,6 @@ package generator.format;
 
 import generator.ClassFields;
 import generator.fieldinfo.ConstructorInfo;
-import generator.fieldinfo.FailureInfo;
 import generator.fieldinfo.InfoList;
 import main.Global;
 import util.file.FileIO;
@@ -16,7 +15,6 @@ import java.util.Scanner;
 public class InputFormatter {
     private Map<String, MethodInfo> overrideMethods;
     private ConstructorInfo constructorInfo;
-    private FailureInfo failureInfo;
 
     public void close() {}
     public void validate(ClassFields fields) {}
@@ -93,17 +91,7 @@ public class InputFormatter {
         return constructorInfo.getConstructor(fields);
     }
 
-    public String getFailure(ClassFields fields, String superClass) {
-        if (failureInfo == null) {
-            return "";
-        }
-
-        return failureInfo.writeFailure(fields, superClass, this);
-    }
-
     public void readFileFormat(Scanner in) {
-        failureInfo = null;
-
         InfoList superInfo = new InfoList(null);
         InfoList fieldKeys = new InfoList(null);
         while (in.hasNext()) {
@@ -125,9 +113,6 @@ public class InputFormatter {
                     break;
                 case "Fields":
                     fieldKeys = new InfoList(in);
-                    break;
-                case "Failure":
-                    failureInfo = new FailureInfo(in);
                     break;
                 default:
                     Global.error("Invalid format type " + formatType);
