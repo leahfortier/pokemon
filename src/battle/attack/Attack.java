@@ -2,7 +2,7 @@ package battle.attack;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.ApplyStatus;
+import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.DoubleMinimizerMove;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
@@ -380,9 +380,9 @@ public abstract class Attack implements AttackInterface {
 
         // Give additional effects
         if (effect != null) {
-            ApplyStatus status = Effect.apply(effect, b, user, victim, CastSource.ATTACK, this.canPrintCast());
-            if (!status.isSuccess() && this.canPrintFail()) {
-                Messages.add(status.getMessage());
+            ApplyResult result = Effect.apply(effect, b, user, victim, CastSource.ATTACK, this.canPrintCast());
+            if (!result.isSuccess() && this.canPrintFail()) {
+                Messages.add(result.getMessage());
             }
         }
     }

@@ -2,23 +2,23 @@ package battle.effect;
 
 import main.Global;
 
-public abstract class ApplyStatus {
-    public static ApplyStatus success() {
-        return new SuccessStatus();
+public abstract class ApplyResult {
+    public static ApplyResult success() {
+        return new SuccessResult();
     }
 
-    public static ApplyStatus failure() {
+    public static ApplyResult failure() {
         return failure(Effect.DEFAULT_FAIL_MESSAGE);
     }
 
-    public static ApplyStatus failure(String failMessage) {
-        return new FailureStatus(failMessage);
+    public static ApplyResult failure(String failMessage) {
+        return new FailureResult(failMessage);
     }
 
     public abstract boolean isSuccess();
     public abstract String getMessage();
 
-    private static class SuccessStatus extends ApplyStatus {
+    private static class SuccessResult extends ApplyResult {
 
         @Override
         public boolean isSuccess() {
@@ -27,15 +27,15 @@ public abstract class ApplyStatus {
 
         @Override
         public String getMessage() {
-            Global.error("Error message is only for failure statuses");
+            Global.error("Error message is only for failure results");
             return "";
         }
     }
 
-    private static class FailureStatus extends ApplyStatus {
+    private static class FailureResult extends ApplyResult {
         private final String failMessage;
 
-        public FailureStatus(String failMessage) {
+        public FailureResult(String failMessage) {
             this.failMessage = failMessage;
         }
 
