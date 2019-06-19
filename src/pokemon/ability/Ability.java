@@ -4088,7 +4088,7 @@ public abstract class Ability implements AbilityInterface {
                 return false;
             }
 
-            if (StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, sleepyHead, sleepyHead)) {
+            if (StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, sleepyHead, sleepyHead).isSuccess()) {
                 sleepyHead.removeStatus();
                 StatusNamesies.ASLEEP.getStatus().apply(b, sleepyHead, sleepyHead, CastSource.ABILITY);
                 sleepyHead.getStatus().setTurns(-1);

@@ -369,9 +369,9 @@ public abstract class Attack implements AttackInterface {
         // Give Status Condition
         if (status != StatusNamesies.NO_STATUS) {
             StatusCondition statusCondition = status.getStatus();
-            boolean applies = statusCondition.apply(b, user, victim, CastSource.ATTACK);
-            if (!applies && this.canPrintFail()) {
-                Messages.add(statusCondition.getFailMessage(b, user, victim));
+            ApplyResult result = statusCondition.apply(b, user, victim, CastSource.ATTACK);
+            if (!result.isSuccess() && this.canPrintFail()) {
+                Messages.add(result.getMessage());
             }
         }
 
@@ -3386,7 +3386,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.hasStatus(StatusNamesies.ASLEEP) && StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, user, user) && !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return !user.hasStatus(StatusNamesies.ASLEEP) && StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, user, user).isSuccess() && !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
         }
     }
 
@@ -7141,7 +7141,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasStatus() && user.getStatus().namesies().getStatus().applies(b, user, victim);
+            return user.hasStatus() && user.getStatus().namesies().getStatus().applies(b, user, victim).isSuccess();
         }
     }
 

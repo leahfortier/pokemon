@@ -1470,7 +1470,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return ApplyResult.newResult(StatusNamesies.ASLEEP.getStatus().applies(b, caster, victim));
+            return StatusNamesies.ASLEEP.getStatus().applies(b, caster, victim);
         }
     }
 
