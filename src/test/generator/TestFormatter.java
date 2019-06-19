@@ -54,9 +54,9 @@ class TestFormatter extends InputFormatter {
     }
 
     @Override
-    protected String replaceBody(String body, String original, String remaining, int parameterIndex, int numParameters) {
+    protected String replaceBody(String body, String original, String remaining, int parameterIndex) {
         for (ReplaceType replaceType : ReplaceType.values()) {
-            String newBody = replaceType.replaceBody(body, original, remaining, parameterIndex, numParameters);
+            String newBody = replaceType.replaceBody(body, original, remaining, parameterIndex);
             if (!body.equals(newBody)) {
                 if (replaceType == ReplaceType.FINISH) {
                     Assert.assertTrue("Don't use {" + parameterIndex + "-}, use {0} instead.", parameterIndex != 0 && parameterIndex != 1);

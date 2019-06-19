@@ -191,7 +191,7 @@ Frisk:
 *
 Inner Focus:
     Desc: The Pok\u00e9mon's intensely focused, and that protects the Pok\u00e9mon from flinching.
-    EffectPrevent: FLINCH Effect.DEFAULT_FAIL_MESSAGE
+    EffectPrevent: Flinch Effect.DEFAULT_FAIL_MESSAGE
 *
 Infiltrator:
     Desc: Passes through the opposing Pok\u00e9mon's barrier, substitute, and the like and strikes.
@@ -342,7 +342,7 @@ No Guard:
 *
 Own Tempo:
     Desc: This Pok\u00e9mon has its own tempo, and that prevents it from becoming confused.
-    EffectPrevent: CONFUSION victim.getName() + "'s " + this.getName() + " prevents confusion!"
+    EffectPrevent: Confusion victim.getName() + "'s " + this.getName() + " prevents confusion!"
 *
 Clear Body:
     Desc: Prevents other Pok\u00e9mon's moves or Abilities from lowering the Pok\u00e9mon's stats.
@@ -483,7 +483,7 @@ Hyper Cutter:
 Soundproof:
     Desc: Soundproofing of the Pok\u00e9mon itself gives full immunity to all sound-based moves.
     MoveTypePrevent: Sound_Based sound-based moves
-    EffectPrevent: PERISH_SONG victim.getName() + "'s " + this.getName() + " makes it immune to sound based moves!"
+    EffectPrevent: Perish_Song victim.getName() + "'s " + this.getName() + " makes it immune to sound based moves!"
 *
 Reckless:
     Desc: Powers up moves that have recoil damage.

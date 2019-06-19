@@ -805,7 +805,7 @@ StatusPreventMessage:
 *
 EffectPrevent:
     AddMapField: FullEffectPrevent:
-        if (effectName == PokemonEffectNamesies.{1}) {
+        if (effectName == PokemonEffectNamesies.{11}) {
             return ApplyResult.failure({2-});
         }
         return ApplyResult.success();

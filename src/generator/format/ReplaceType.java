@@ -2,7 +2,7 @@ package generator.format;
 
 public enum ReplaceType {
     BASIC("", (original, remaining) -> original),
-    UPPER_CASE((index, size) -> size < Integer.parseInt(index + "" + index) ? index + "" : "", (original, remaining) -> original.toUpperCase()),
+    UPPER_CASE(index -> index + "", (original, remaining) -> original.toUpperCase()),
     UNDER_SPACE("_", (original, remaining) -> original.replaceAll("_", " ")),
     FINISH("-", (original, remaining) -> original + remaining);
 
@@ -10,7 +10,7 @@ public enum ReplaceType {
     private final InputReplacer inputReplacer;
 
     ReplaceType(String replaceSuffix, InputReplacer inputReplacer) {
-        this((index, size) -> replaceSuffix, inputReplacer);
+        this(index -> replaceSuffix, inputReplacer);
     }
 
     ReplaceType(SuffixGetter suffixGetter, InputReplacer inputReplacer) {
@@ -18,8 +18,8 @@ public enum ReplaceType {
         this.inputReplacer = inputReplacer;
     }
 
-    public String replaceBody(String body, String original, String remaining, int parameterIndex, int numParameters) {
-        String suffix = this.suffixGetter.getSuffix(parameterIndex, numParameters);
+    public String replaceBody(String body, String original, String remaining, int parameterIndex) {
+        String suffix = this.suffixGetter.getSuffix(parameterIndex);
         String newValue = this.inputReplacer.replaceInput(original, remaining);
 
         return body.replace(String.format("{%d%s}", parameterIndex, suffix), newValue);
@@ -27,7 +27,7 @@ public enum ReplaceType {
 
     @FunctionalInterface
     private interface SuffixGetter {
-        String getSuffix(int index, int size);
+        String getSuffix(int index);
     }
 
     @FunctionalInterface
