@@ -29,6 +29,7 @@ GetPriority:
 GetType:
     Header: Type getType(Battle b, ActivePokemon user)
 *
+# This is for attacks, not effects
 FullApplies:
     Header: boolean applies(Battle b, ActivePokemon user, ActivePokemon victim)
 *
@@ -39,6 +40,21 @@ Applies:
 *
 ExtraApplies:
     AddMapField: Applies: {0}
+*
+EffectApplies:
+    AddMapField: TotalEffectApplies:
+        return ApplyResult.newResult({0});
+        ###
+*
+# Not totally sure why there's an extra space in between these two lines...
+FullEffectApplies:
+    AddMapField: TotalEffectApplies:
+        {0}
+        return ApplyResult.success();
+        ###
+*
+TotalEffectApplies:
+    Header: ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
 *
 StatusApplies:
     Header: boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim)
@@ -583,7 +599,7 @@ OnProtectingSuccess:
     Header: void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp)
 *
 SuccessiveDecay:
-    AddMapField: FailCondition: !RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))
+    AddMapField: EffectApplies: RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))
 *
 Trapped:
     Header: boolean trapped(Battle b, ActivePokemon escaper)

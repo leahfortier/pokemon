@@ -8,9 +8,6 @@ Constructor:
     WeatherElement Enum Type
     CanHave Default False Boolean
 *
-Failure:
-    Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-*
 
 ***
 

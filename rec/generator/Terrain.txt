@@ -7,9 +7,6 @@ Constructor:
     Namesies Enum TerrainNamesies
     Terrain Enum TerrainType
 *
-Failure:
-    Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-*
 
 ***
 

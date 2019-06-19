@@ -104,24 +104,30 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
     }
 
     private ApplyResult fullApplies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+        // Check if the victim has an effect that prevents this effect
         ApplyResult preventionResult = EffectPreventionEffect.getPreventEffect(b, caster, victim, this.namesies);
         if (!preventionResult.isSuccess()) {
             return preventionResult;
         }
 
+        // Check effect-specific failures
+        // Note: This should be before the direct hasEffect check since some effects check directly with special messages
+        ApplyResult applies = this.applies(b, caster, victim, source);
+        if (!applies.isSuccess()) {
+            return applies;
+        }
+
         // Fails if the victim already has this effect (and they can't have it again)
         if (!this.canHave && this.hasEffect(b, victim)) {
-            // TODO: Not sure about the messaging for this
             return ApplyResult.failure();
         }
 
-        boolean applies = this.applies(b, caster, victim, source);
-        return applies ? ApplyResult.success() : ApplyResult.failure(this.getFailMessage(b, caster, victim));
+        return ApplyResult.success();
     }
 
     // Should be overridden by subclasses as deemed appropriate
-    protected boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-        return true;
+    protected ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+        return ApplyResult.success();
     }
 
     protected boolean shouldSubside(Battle b, ActivePokemon victim) {

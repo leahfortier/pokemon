@@ -10,21 +10,16 @@ Constructor:
     CanHave Default False Boolean
     HasAlternateCast Default False Boolean
 *
-Failure:
-    Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-    FailCondition StraightUp {0}
-*
 
 ***
 
 LeechSeed:
     Int: EndTurnEffect, PassableEffect, SapHealthEffect
-    FailCondition: victim.isType(b, Type.GRASS)
-    FailMessage:
+    FullEffectApplies:
         if (victim.isType(b, Type.GRASS)) {
-            return "It doesn't affect " + victim.getName() + "!";
+            return ApplyResult.failure("It doesn't affect " + victim.getName() + "!");
         } else if (victim.hasEffect(this.namesies())) {
-            return victim.getName() + " is already seeded!";
+            return ApplyResult.failure(victim.getName() + " is already seeded!");
         }
         ###
     CastMessage: victim.getName() + " was seeded!"
@@ -37,7 +32,7 @@ LeechSeed:
 *
 Flinch:
     Int: BeforeTurnEffect
-    FailCondition: !b.isFirstAttack()
+    EffectApplies: b.isFirstAttack()
     CastMessage: victim.getName() + " flinched!"
     CanAttack:
         return false;
@@ -203,7 +198,12 @@ Encore:
         return move.getAttack().namesies() == m.getAttack().namesies();
         ###
     UnusableMessage: "Only " + move.getAttack().getName() + " can be used right now!"
-    FailCondition: victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.getLastMoveUsed().getAttack().isMoveType(MoveType.ENCORELESS)
+    FullEffectApplies:
+        Move lastMove = victim.getLastMoveUsed();
+        if (lastMove == null || lastMove.getPP() == 0 || lastMove.getAttack().isMoveType(MoveType.ENCORELESS)) {
+            return ApplyResult.failure();
+        }
+        ###
     CastMessage: victim.getName() + " got an encore!"
     BeforeCast:
         move = victim.getLastMoveUsed();
@@ -223,7 +223,12 @@ Disable:
         return disabled.getAttack().namesies() != m.getAttack().namesies();
         ###
     UnusableMessage: disabled.getAttack().getName() + " is disabled!"
-    FailCondition: victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0
+    FullEffectApplies:
+        Move lastMove = victim.getLastMoveUsed();
+        if (lastMove == null || lastMove.getPP() == 0) {
+            return ApplyResult.failure();
+        }
+        ###
     SubsideMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " is no longer disabled!"
     CastMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " was disabled!"
     BeforeCast:
@@ -269,7 +274,15 @@ RaiseCrits:
 
         return critStage + stage;
         ###
-    FailCondition: source == CastSource.USE_ITEM && victim.hasEffect(this.namesies()) && ((RaiseCrits)victim.getEffect(this.namesies())).direHit
+    FullEffectApplies:
+        // Only actually fails again for Dire Hit
+        if (source == CastSource.USE_ITEM && victim.hasEffect(this.namesies())) {
+            RaiseCrits effect = (RaiseCrits)victim.getEffect(this.namesies());
+            if (effect.direHit) {
+                return ApplyResult.failure();
+            }
+        }
+        ###
     CastMessage: this.getMessage(b, victim, source)
     GenericMessage: p.getName() + " is getting pumped!"
     SourceMessage: p.getName() + " is getting pumped due to its " + sourceName + "!"
@@ -531,7 +544,7 @@ LockOn:
 Telekinesis:
     NumTurns: 4
     CastMessage: victim.getName() + " was levitated due to " + user.getName() + "'s telekinesis!"
-    FailCondition: victim.isGrounded(b)
+    EffectApplies: !victim.isGrounded(b)
     SubsideMessage: victim.getName() + " is no longer under the effects of telekinesis."
     Int: LevitationEffect
     OpponentBypassAccuracy:
@@ -570,7 +583,7 @@ Curse:
 *
 Yawn:
     NumTurns: 2
-    FailCondition: !StatusNamesies.ASLEEP.getStatus().applies(b, caster, victim)
+    EffectApplies: StatusNamesies.ASLEEP.getStatus().applies(b, caster, victim)
     Subside:
         StatusNamesies.ASLEEP.getStatus().apply(b, b.getOtherPokemon(p), p, CastSource.EFFECT);
         ###
@@ -580,7 +593,7 @@ MagnetRise:
     Int: LevitationEffect, PassableEffect
     NumTurns: 5
     CastMessage: user.getName() + " levitated with electromagnetism!"
-    FailCondition: victim.isGrounded(b)
+    EffectApplies: !victim.isGrounded(b)
     SubsideMessage: victim.getName() + " is no longer under the effects of magnet rise."
     FallMessage: "The effects of " + fallen.getName() + "'s magnet rise were cancelled!"
 *
@@ -626,7 +639,7 @@ AquaRing:
     CastMessage: user.getName() + " surrounded itself with a veil of water!"
 *
 Nightmare:
-    FailCondition: !victim.hasStatus(StatusNamesies.ASLEEP)
+    EffectApplies: victim.hasStatus(StatusNamesies.ASLEEP)
     Int: EndTurnEffect
     ApplyEndTurn:
         // Only active when asleep
@@ -717,7 +730,15 @@ Transformed:
         Messages.add(new MessageUpdate().withNewPokemon(transformee.namesies(), transformee.isShiny(), true, victim.isPlayer()));
         Messages.add(new MessageUpdate().updatePokemon(b, victim));
         ###
-    FailCondition: b.getOtherPokemon(victim).hasEffect(this.namesies()) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive()))
+    FullEffectApplies:
+        if (b.getOtherPokemon(victim).hasEffect(this.namesies())) {
+            // Cannot transform into transformed Pokemon
+            return ApplyResult.failure();
+        } else if ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive())) {
+            // Also cannot transform into an Illusioned Pokemon
+            return ApplyResult.failure();
+        }
+        ###
     Int: ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect
     GetMoveList:
         return moveList;
@@ -755,7 +776,7 @@ Substitute:
         String imageName = "substitute" + (victim.isPlayer() ? "-back" : "");
         Messages.add(new MessageUpdate().updatePokemon(b, victim).withImageName(imageName, victim.isPlayer()));
         ###
-    FailCondition: victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3
+    EffectApplies: victim.getHPRatio() > .25 && victim.getMaxHP() > 3
     FullEffectPrevent:
         // Only block externally applied effects
         if (caster == victim) {
@@ -912,7 +933,7 @@ HealBlock:
         ###
 *
 Infatuation:
-    FailCondition: !Gender.oppositeGenders(caster, victim)
+    EffectApplies: Gender.oppositeGenders(caster, victim)
     Int: BeforeTurnEffect
     CanAttack:
         Messages.add(attacking.getName() + " is in love with " + defending.getName() + "!");
@@ -1012,7 +1033,7 @@ Powder:
     SelfBlockMessage:
         return "The powder exploded!";
         ###
-    FailCondition: PowderBlocker.containsPowderBlocker(b, victim)
+    EffectApplies: !PowderBlocker.containsPowderBlocker(b, victim)
 *
 EatenBerry:
 *

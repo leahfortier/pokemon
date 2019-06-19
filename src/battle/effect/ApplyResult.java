@@ -3,6 +3,10 @@ package battle.effect;
 import main.Global;
 
 public abstract class ApplyResult {
+    public static ApplyResult newResult(boolean success) {
+        return success ? success() : failure();
+    }
+
     public static ApplyResult success() {
         return new SuccessResult();
     }
