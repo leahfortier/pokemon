@@ -22,6 +22,10 @@ public abstract class ApplyResult {
     public abstract boolean isSuccess();
     public abstract String getMessage();
 
+    public boolean isFailure() {
+        return !this.isSuccess();
+    }
+
     private static class SuccessResult extends ApplyResult {
 
         @Override

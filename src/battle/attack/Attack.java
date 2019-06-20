@@ -370,7 +370,7 @@ public abstract class Attack implements AttackInterface {
         if (status != StatusNamesies.NO_STATUS) {
             StatusCondition statusCondition = status.getStatus();
             ApplyResult result = statusCondition.apply(b, user, victim, CastSource.ATTACK);
-            if (!result.isSuccess() && this.canPrintFail()) {
+            if (result.isFailure() && this.canPrintFail()) {
                 Messages.add(result.getMessage());
             }
         }
@@ -381,7 +381,7 @@ public abstract class Attack implements AttackInterface {
         // Give additional effects
         if (effect != null) {
             ApplyResult result = Effect.apply(effect, b, user, victim, CastSource.ATTACK, this.canPrintCast());
-            if (!result.isSuccess() && this.canPrintFail()) {
+            if (result.isFailure() && this.canPrintFail()) {
                 Messages.add(result.getMessage());
             }
         }

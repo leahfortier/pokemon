@@ -75,7 +75,7 @@ public abstract class StatusCondition implements InvokeEffect {
 
     public ApplyResult appliesWithoutStatusCheck(Battle b, ActivePokemon caster, ActivePokemon victim) {
         ApplyResult result = StatusPreventionEffect.getPreventEffect(b, caster, victim, this.namesies);
-        if (!result.isSuccess()) {
+        if (result.isFailure()) {
             return result;
         }
 

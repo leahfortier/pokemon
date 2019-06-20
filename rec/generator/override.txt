@@ -828,16 +828,16 @@ EffectPrevent:
         return PokemonEffectNamesies.{00};
         ###
 *
-FullEffectPrevent:
-    Header: ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName)
-    AddInterface: EffectPreventionEffect
-*
 MultipleEffectPreventionAbility:
     Header: Set<PokemonEffectNamesies> getPreventableEffects()
     AddInterface: MultipleEffectPreventionAbility
     Body:
         return {0};
         ###
+*
+FullEffectPrevent:
+    Header: ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName)
+    AddInterface: EffectPreventionEffect
 *
 EffectSourcePreventMessage:
     Header: String getSourcePreventMessage(ActivePokemon victim, String sourceName)

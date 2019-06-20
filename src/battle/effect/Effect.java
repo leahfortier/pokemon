@@ -105,16 +105,16 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
 
     private ApplyResult fullApplies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
         // Check if the victim has an effect that prevents this effect
-        ApplyResult preventionResult = EffectPreventionEffect.getPreventEffect(b, caster, victim, this.namesies);
-        if (!preventionResult.isSuccess()) {
-            return preventionResult;
+        ApplyResult effectResult = EffectPreventionEffect.getPreventEffect(b, caster, victim, this.namesies);
+        if (effectResult.isFailure()) {
+            return effectResult;
         }
 
         // Check effect-specific failures
         // Note: This should be before the direct hasEffect check since some effects check directly with special messages
-        ApplyResult applies = this.applies(b, caster, victim, source);
-        if (!applies.isSuccess()) {
-            return applies;
+        ApplyResult applyResult = this.applies(b, caster, victim, source);
+        if (applyResult.isFailure()) {
+            return applyResult;
         }
 
         // Fails if the victim already has this effect (and they can't have it again)
