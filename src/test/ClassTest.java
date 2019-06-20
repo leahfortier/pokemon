@@ -2,8 +2,11 @@ package test;
 
 import battle.attack.Attack;
 import battle.attack.AttackInterface;
+import battle.effect.EffectInterfaces.EffectPreventionAbility;
+import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
+import battle.effect.EffectInterfaces.SingleEffectPreventionAbility;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
@@ -189,6 +192,9 @@ public class ClassTest extends BaseTest {
 
             // MultiTurnMove should not be directly inherited
             checkInstance(classy, MultiTurnMove.class, ChargingMove.class, RechargingMove.class);
+
+            // EffectPreventionAbility should be single or multiple
+            checkInstance(classy, EffectPreventionAbility.class, SingleEffectPreventionAbility.class, MultipleEffectPreventionAbility.class);
 
             // Casted from CastSource.getSource()
             checkInstance(classy, ChangeAbilitySource.class, castSources);

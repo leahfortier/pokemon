@@ -12,13 +12,12 @@ import java.util.Set;
 
 public interface EffectCurerItem extends HoldItem, EffectReceivedEffect, EndTurnEffect {
     Set<PokemonEffectNamesies> getCurableEffects();
-    String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType);
 
     default boolean usesies(ActivePokemon user) {
         boolean used = false;
         for (PokemonEffectNamesies removableEffect : this.getCurableEffects()) {
             if (user.getEffects().remove(removableEffect)) {
-                Messages.add(this.getRemoveMessage(user, removableEffect));
+                Messages.add(removableEffect.getEffect().getSourceRemoveMessage(user, this.getName()));
                 used = true;
             }
         }
@@ -30,7 +29,7 @@ public interface EffectCurerItem extends HoldItem, EffectReceivedEffect, EndTurn
     default void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
         if (effectType instanceof PokemonEffectNamesies && this.getCurableEffects().contains(effectType)) {
             PokemonEffectNamesies pokemonEffectType = (PokemonEffectNamesies)effectType;
-            Messages.add(this.getRemoveMessage(victim, pokemonEffectType));
+            Messages.add(pokemonEffectType.getEffect().getSourceRemoveMessage(victim, this.getName()));
             victim.getEffects().remove(pokemonEffectType);
             this.consumeItem(b, victim);
         }

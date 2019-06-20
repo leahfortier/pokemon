@@ -106,7 +106,6 @@ import util.RandomUtils;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public abstract class Item implements ItemInterface, Comparable<Item> {
@@ -994,14 +993,14 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
     static class MentalHerb extends Item implements HoldItem, EffectCurerItem {
         private static final long serialVersionUID = 1L;
 
-        private static final Map<PokemonEffectNamesies, String> REMOVABLE_EFFECTS = Map.of(
-                PokemonEffectNamesies.INFATUATION, "infatuated",
-                PokemonEffectNamesies.DISABLE, "disabled",
-                PokemonEffectNamesies.TAUNT, "under the effects of taunt",
-                PokemonEffectNamesies.ENCORE, "under the effects of encore",
-                PokemonEffectNamesies.TORMENT, "under the effects of torment",
-                PokemonEffectNamesies.CONFUSION, "confused",
-                PokemonEffectNamesies.HEAL_BLOCK, "under the effects of heal block"
+        private static final Set<PokemonEffectNamesies> REMOVABLE_EFFECTS = EnumSet.of(
+                PokemonEffectNamesies.INFATUATION,
+                PokemonEffectNamesies.DISABLE,
+                PokemonEffectNamesies.TAUNT,
+                PokemonEffectNamesies.ENCORE,
+                PokemonEffectNamesies.TORMENT,
+                PokemonEffectNamesies.CONFUSION,
+                PokemonEffectNamesies.HEAL_BLOCK
         );
 
         MentalHerb() {
@@ -1011,12 +1010,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public Set<PokemonEffectNamesies> getCurableEffects() {
-            return REMOVABLE_EFFECTS.keySet();
-        }
-
-        @Override
-        public String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType) {
-            return victim.getName() + " is no longer " + REMOVABLE_EFFECTS.get(effectType) + " due to its " + this.getName() + "!";
+            return REMOVABLE_EFFECTS;
         }
 
         @Override
@@ -4527,11 +4521,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public String getSourceMessage(ActivePokemon p, String sourceName) {
             return p.getName() + "'s " + this.getName() + " snapped it out of confusion!";
-        }
-
-        @Override
-        public String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType) {
-            return this.getSourceMessage(victim, this.getName());
         }
 
         @Override

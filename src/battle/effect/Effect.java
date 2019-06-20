@@ -155,6 +155,14 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
         return "";
     }
 
+    public String getSourcePreventMessage(ActivePokemon victim, String sourceName) {
+        return DEFAULT_FAIL_MESSAGE;
+    }
+
+    public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
+        return this.getSubsideMessage(victim);
+    }
+
     @Override
     public boolean isActive() {
         return active;

@@ -349,18 +349,17 @@ Mental Herb:
     Price: 4000
     Fling: 10
     Field:
-        private static final Map<PokemonEffectNamesies, String> REMOVABLE_EFFECTS = Map.of(
-            PokemonEffectNamesies.INFATUATION, "infatuated", 
-            PokemonEffectNamesies.DISABLE, "disabled", 
-            PokemonEffectNamesies.TAUNT, "under the effects of taunt", 
-            PokemonEffectNamesies.ENCORE, "under the effects of encore", 
-            PokemonEffectNamesies.TORMENT, "under the effects of torment", 
-            PokemonEffectNamesies.CONFUSION, "confused", 
-            PokemonEffectNamesies.HEAL_BLOCK, "under the effects of heal block"
+        private static final Set<PokemonEffectNamesies> REMOVABLE_EFFECTS = EnumSet.of(
+                PokemonEffectNamesies.INFATUATION,
+                PokemonEffectNamesies.DISABLE,
+                PokemonEffectNamesies.TAUNT,
+                PokemonEffectNamesies.ENCORE,
+                PokemonEffectNamesies.TORMENT,
+                PokemonEffectNamesies.CONFUSION,
+                PokemonEffectNamesies.HEAL_BLOCK
         );
         ###
-    GetCurableEffects: REMOVABLE_EFFECTS.keySet()
-    CureEffectRemoveMessage: victim.getName() + " is no longer " + REMOVABLE_EFFECTS.get(effectType) + " due to its " + this.getName() + "!"
+    GetCurableEffects: REMOVABLE_EFFECTS
     FlingEffect:
         usesies(pelted);
         ###
@@ -1680,7 +1679,6 @@ Persim Berry:
     GainEffect: return use(b, user, source);
     GenericMessage: p.getName() + " snapped out of its confusion!"
     SourceMessage: p.getName() + "'s " + this.getName() + " snapped it out of confusion!"
-    CureEffectRemoveMessage: this.getSourceMessage(victim, this.getName())
     GetCurableEffects: EnumSet.of(PokemonEffectNamesies.CONFUSION)
 *
 Lum Berry:

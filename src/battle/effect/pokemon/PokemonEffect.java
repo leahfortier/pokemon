@@ -634,6 +634,16 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
+        public String getSourcePreventMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + "'s " + sourceName + " prevents confusion!";
+        }
+
+        @Override
+        public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + " is no longer confused due to its " + sourceName + "!";
+        }
+
+        @Override
         public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
             // Snap it out!
             if (turns == 0) {
@@ -737,6 +747,16 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
+        public String getSourcePreventMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + "'s " + sourceName + " prevents it from being encored!";
+        }
+
+        @Override
+        public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + " is no longer under the effects of encore due to its " + sourceName + "!";
+        }
+
+        @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             move = victim.getLastMoveUsed();
         }
@@ -785,6 +805,16 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return victim.getName() + "'s " + disabled.getAttack().getName() + " was disabled!";
+        }
+
+        @Override
+        public String getSourcePreventMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + "'s " + sourceName + " prevents it from being disabled!";
+        }
+
+        @Override
+        public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + " is no longer disabled due to its " + sourceName + "!";
         }
 
         @Override
@@ -1261,6 +1291,16 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return user.getName() + " tormented " + victim.getName() + "!";
         }
+
+        @Override
+        public String getSourcePreventMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + "'s " + sourceName + " prevents torment!";
+        }
+
+        @Override
+        public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + " is no longer tormented due to its " + sourceName + "!";
+        }
     }
 
     // STFU MF
@@ -1307,6 +1347,16 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The effects of the taunt wore off.";
+        }
+
+        @Override
+        public String getSourcePreventMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + "'s " + sourceName + " prevents it from being taunted!";
+        }
+
+        @Override
+        public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + " is no longer taunted due to its " + sourceName + "!";
         }
     }
 
@@ -2112,6 +2162,16 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
+        public String getSourcePreventMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + "'s " + sourceName + " prevents heal block!";
+        }
+
+        @Override
+        public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + " is no longer heal blocked due to its " + sourceName + "!";
+        }
+
+        @Override
         public boolean block(Battle b, ActivePokemon user) {
             // TODO: Test
             return user.getAttack().isMoveType(MoveType.HEALING);
@@ -2139,6 +2199,16 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return victim.getName() + " fell in love!";
+        }
+
+        @Override
+        public String getSourcePreventMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + "'s " + sourceName + " prevents infatuation!";
+        }
+
+        @Override
+        public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
+            return victim.getName() + " is no longer infatuated due to its " + sourceName + "!";
         }
 
         @Override

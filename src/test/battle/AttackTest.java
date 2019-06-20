@@ -430,75 +430,104 @@ public class AttackTest extends BaseTest {
         TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.MAGIC_GUARD);
         TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.MAGIC_GUARD);
 
+        // So water-type Pokemon with Magic Guard should be fine for all statues and take no passive damage
         battle.fight(AttackNamesies.SOAK, AttackNamesies.SOAK);
         Assert.assertTrue(attacking.isType(battle, Type.WATER));
         Assert.assertTrue(defending.isType(battle, Type.WATER));
 
+        // Should fail because no status condition
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
+
+        // Burn the opponent
         battle.attackingFight(AttackNamesies.WILL_O_WISP);
         attacking.assertNoStatus();
         defending.assertHasStatus(StatusNamesies.BURNED);
+
+        // Attacking still doesn't have a status condition
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
+        attacking.assertNoStatus();
+        defending.assertHasStatus(StatusNamesies.BURNED);
+
+        // But the defending does! (now attacking is the burned)
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
         attacking.assertHasStatus(StatusNamesies.BURNED);
         defending.assertNoStatus();
 
+        // Poison dat defender badly
         battle.attackingFight(AttackNamesies.TOXIC);
+        attacking.assertHasStatus(StatusNamesies.BURNED);
         defending.assertBadPoison();
 
+        // Psycho shift should fail for both now (since they both have statuses)
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         defending.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         attacking.assertHasStatus(StatusNamesies.BURNED);
         defending.assertBadPoison();
 
+        // HEAL THE BURN (like feeeel the burn get itttttt okay sorry)
         battle.attackingFight(AttackNamesies.REFRESH);
         attacking.assertNoStatus();
         defending.assertBadPoison();
 
+        // Same deal as before -- shift the bad poison to the attacking
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
         attacking.assertBadPoison();
         defending.assertNoStatus();
 
+        // Switch to Poison-type (I guess you can still be poisoned afterwards)
         attacking.withAbility(AbilityNamesies.PROTEAN);
         Assert.assertTrue(attacking.isType(battle, Type.WATER));
         battle.attackingFight(AttackNamesies.CLEAR_SMOG);
         Assert.assertTrue(attacking.isType(battle, Type.POISON));
         attacking.assertBadPoison();
+
+        // Shift the bad poison back to the defending
         battle.attackingFight(AttackNamesies.PSYCHO_SHIFT);
         attacking.assertNoStatus();
         defending.assertBadPoison();
         Assert.assertTrue(attacking.isType(battle, Type.PSYCHIC));
+
+        // Switch back to Poison-type -- Psycho Shift should fail now since it doesn't affect poison brothers
         battle.attackingFight(AttackNamesies.ACID_ARMOR);
         Assert.assertTrue(attacking.isType(battle, Type.POISON));
         defending.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
 
-        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.PROTEAN));
+        // Switch to Dragon-type -- should succeed now
         battle.attackingFight(AttackNamesies.DRAGON_DANCE);
-        Assert.assertTrue(attacking.getType(battle).toString(), attacking.isType(battle, Type.DRAGON));
+        Assert.assertTrue(attacking.isType(battle, Type.DRAGON));
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
         attacking.assertBadPoison();
+        defending.assertNoStatus();
 
+        // Give defending Immunity (cannot be poisoned) -- Psycho Shift should fail
         defending.withAbility(AbilityNamesies.IMMUNITY);
         defending.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
         attacking.assertBadPoison();
         defending.assertNoStatus();
 
         battle.emptyHeal();
-        attacking.withMoves(AttackNamesies.PSYCHO_SHIFT);
         attacking.assertNoStatus();
         defending.assertNoStatus();
+
+        // Put attacking to sleep
         battle.defendingFight(AttackNamesies.SPORE);
         attacking.assertHasStatus(StatusNamesies.ASLEEP);
         defending.assertNoStatus();
+
+        // Set move list to only be Psycho Shift and use Sleep Talk (thus calling Psycho Shift)
+        // This should succeed and the defending should now be asleep
+        attacking.withMoves(AttackNamesies.PSYCHO_SHIFT);
         battle.attackingFight(AttackNamesies.SLEEP_TALK);
         attacking.assertNoStatus();
         defending.assertHasStatus(StatusNamesies.ASLEEP);
 
+        // I guess you can just do this since the apply method doesn't confirm it can attack (since it's asleep...) whatever
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
         attacking.assertHasStatus(StatusNamesies.ASLEEP);
         defending.assertNoStatus();
 
+        // Sleep Talk Psycho Shift will fail if sleep doesn't apply (like with Insomnia ability)
         defending.withAbility(AbilityNamesies.INSOMNIA);
         battle.attackingFight(AttackNamesies.SLEEP_TALK);
         attacking.assertHasStatus(StatusNamesies.ASLEEP);

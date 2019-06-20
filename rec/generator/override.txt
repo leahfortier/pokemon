@@ -822,11 +822,10 @@ StatusPrevent:
         ###
 *
 EffectPrevent:
-    AddMapField: FullEffectPrevent:
-        if (effectName == PokemonEffectNamesies.{11}) {
-            return ApplyResult.failure({2-});
-        }
-        return ApplyResult.success();
+    Header: PokemonEffectNamesies getPreventableEffect()
+    AddInterface: SingleEffectPreventionAbility
+    Body:
+        return PokemonEffectNamesies.{00};
         ###
 *
 FullEffectPrevent:
@@ -834,10 +833,22 @@ FullEffectPrevent:
     AddInterface: EffectPreventionEffect
 *
 MultipleEffectPreventionAbility:
-    Header: Map<PokemonEffectNamesies, String> getPreventableEffects()
+    Header: Set<PokemonEffectNamesies> getPreventableEffects()
     AddInterface: MultipleEffectPreventionAbility
     Body:
         return {0};
+        ###
+*
+EffectSourcePreventMessage:
+    Header: String getSourcePreventMessage(ActivePokemon victim, String sourceName)
+    Body:
+        return victim.getName() + "'s " + sourceName + " prevents {0}!";
+        ###
+*
+EffectSourceRemoveMessage:
+    Header: String getSourceRemoveMessage(ActivePokemon victim, String sourceName)
+    Body:
+        return victim.getName() + " is no longer {0} due to its " + sourceName + "!";
         ###
 *
 PowerMultiplierCondition:
@@ -1824,12 +1835,6 @@ IgnoreAbilityMove:
 *
 GetCurableEffects:
     Header: Set<PokemonEffectNamesies> getCurableEffects()
-    Body:
-        return {0};
-        ###
-*
-CureEffectRemoveMessage:
-    Header: String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType)
     Body:
         return {0};
         ###

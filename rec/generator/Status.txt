@@ -26,7 +26,7 @@ Fainted:
     CatchMod: 1
     StatusBaseApplies:
         // Fainted status condition applies regardless of other status conditions
-        return this.statusApplies(b, user, victim) ? ApplyResult.success() : ApplyResult.failure();
+        return ApplyResult.newResult(this.statusApplies(b, user, victim));
         ###
     StatusApplies: victim.getHP() == 0
     GenericCastMessage: p.getName() + " fainted!"

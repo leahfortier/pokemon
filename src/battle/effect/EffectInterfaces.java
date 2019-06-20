@@ -47,8 +47,9 @@ import type.Type;
 import util.RandomUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 // Holds non-generated interface methods for InvokeEffects
 // These should not have invoke methods as they are created manually
@@ -343,39 +344,53 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface MultipleEffectPreventionAbility extends AbilityInterface, EffectPreventionEffect, EntryEndTurnEffect {
-        // Returns a map from preventable effect to relevant error message
-        Map<PokemonEffectNamesies, String> getPreventableEffects();
-
-        default String getEffectMessage(EffectNamesies effectName) {
-            Map<PokemonEffectNamesies, String> preventableEffects = this.getPreventableEffects();
-            if (effectName instanceof PokemonEffectNamesies && preventableEffects.containsKey(effectName)) {
-                return preventableEffects.get(effectName);
-            }
-
-            Global.error("Should only be called for a valid effect name " + effectName);
-            return "";
-        }
+    public interface EffectPreventionAbility extends AbilityInterface, EffectPreventionEffect, EntryEndTurnEffect {
+        Iterable<PokemonEffectNamesies> getPreventableEffects();
+        boolean isPreventableEffect(EffectNamesies effectNamesies);
 
         @Override
         default ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
-            if (effectName instanceof PokemonEffectNamesies && this.getPreventableEffects().containsKey(effectName)) {
-                return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " prevents " + this.getEffectMessage(effectName) + "!");
+            if (this.isPreventableEffect(effectName)) {
+                return ApplyResult.failure(effectName.getEffect().getSourcePreventMessage(victim, this.getName()));
             }
+
             return ApplyResult.success();
         }
 
         @Override
         default void applyEffect(Battle b, ActivePokemon p) {
-            Map<PokemonEffectNamesies, String> preventableEffects = this.getPreventableEffects();
-            for (PokemonEffectNamesies effectName : preventableEffects.keySet()) {
+            // If the victim was able to receive the effect (mold breaker, ability change, etc.), remove it at the end of turn
+            for (PokemonEffectNamesies effectName : this.getPreventableEffects()) {
                 if (p.hasEffect(effectName)) {
-                    // TODO: Not the correct message
                     PokemonEffect effect = p.getEffect(effectName);
-                    Messages.add(effect.getSubsideMessage(p));
+                    Messages.add(effect.getSourceRemoveMessage(p, this.getName()));
                     p.getEffects().remove(effect);
                 }
             }
+        }
+    }
+
+    public interface SingleEffectPreventionAbility extends EffectPreventionAbility {
+        PokemonEffectNamesies getPreventableEffect();
+
+        @Override
+        default boolean isPreventableEffect(EffectNamesies effectNamesies) {
+            return effectNamesies == this.getPreventableEffect();
+        }
+
+        @Override
+        default Iterable<PokemonEffectNamesies> getPreventableEffects() {
+            return Collections.singletonList(this.getPreventableEffect());
+        }
+    }
+
+    public interface MultipleEffectPreventionAbility extends EffectPreventionAbility {
+        @Override
+        Set<PokemonEffectNamesies> getPreventableEffects();
+
+        @Override
+        default boolean isPreventableEffect(EffectNamesies effectNamesies) {
+            return effectNamesies instanceof PokemonEffectNamesies && this.getPreventableEffects().contains(effectNamesies);
         }
     }
 

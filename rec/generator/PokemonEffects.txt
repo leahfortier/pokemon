@@ -132,6 +132,8 @@ Confusion:
             return ApplyResult.failure(victim.getName() + " is already confused!");
         }
         ###
+    EffectSourcePreventMessage: confusion
+    EffectSourceRemoveMessage: confused
     Field:
         private int turns;
         ###
@@ -205,6 +207,8 @@ Encore:
         }
         ###
     CastMessage: victim.getName() + " got an encore!"
+    EffectSourcePreventMessage: it from being encored
+    EffectSourceRemoveMessage: under the effects of encore
     BeforeCast:
         move = victim.getLastMoveUsed();
         ###
@@ -233,6 +237,8 @@ Disable:
         ###
     SubsideMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " is no longer disabled!"
     CastMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " was disabled!"
+    EffectSourcePreventMessage: it from being disabled
+    EffectSourceRemoveMessage: disabled
     BeforeCast:
         disabled = victim.getLastMoveUsed();
         ###
@@ -503,6 +509,8 @@ Torment:
         ###
     UnusableMessage: p.getName() + " cannot use the same move twice in a row!"
     CastMessage: user.getName() + " tormented " + victim.getName() + "!"
+    EffectSourcePreventMessage: torment
+    EffectSourceRemoveMessage: tormented
 *
 Silence:
     Comments: // STFU MF
@@ -523,6 +531,8 @@ Taunt:
     UnusableMessage: "No!! Not while you're under the effects of taunt!!"
     CastMessage: victim.getName() + " fell for the taunt!"
     SubsideMessage: "The effects of the taunt wore off."
+    EffectSourcePreventMessage: it from being taunted
+    EffectSourceRemoveMessage: taunted
 *
 LaserFocus:
     NumTurns: 2
@@ -926,6 +936,8 @@ HealBlock:
     NumTurns: 5
     CastMessage: user.getName() + " blocked " + victim.getName() + " from healing!"
     SubsideMessage: "The effects of heal block wore off."
+    EffectSourcePreventMessage: heal block
+    EffectSourceRemoveMessage: heal blocked
     Int: SelfAttackBlocker
     SelfBlock:
         // TODO: Test
@@ -945,6 +957,8 @@ Infatuation:
         return false;
         ###
     CastMessage: victim.getName() + " fell in love!"
+    EffectSourcePreventMessage: infatuation
+    EffectSourceRemoveMessage: infatuated
 *
 Snatch:
     NumTurns: 1

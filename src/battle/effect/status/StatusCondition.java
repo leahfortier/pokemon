@@ -75,11 +75,11 @@ public abstract class StatusCondition implements InvokeEffect {
 
     public ApplyResult appliesWithoutStatusCheck(Battle b, ActivePokemon caster, ActivePokemon victim) {
         ApplyResult result = StatusPreventionEffect.getPreventEffect(b, caster, victim, this.namesies);
-        if (result != null) {
+        if (!result.isSuccess()) {
             return result;
         }
 
-        return this.statusApplies(b, caster, victim) ? ApplyResult.success() : ApplyResult.failure();
+        return ApplyResult.newResult(this.statusApplies(b, caster, victim));
     }
 
     public ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -180,7 +180,7 @@ public abstract class StatusCondition implements InvokeEffect {
         @Override
         public ApplyResult applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Fainted status condition applies regardless of other status conditions
-            return this.statusApplies(b, user, victim) ? ApplyResult.success() : ApplyResult.failure();
+            return ApplyResult.newResult(this.statusApplies(b, user, victim));
         }
 
         @Override

@@ -15,6 +15,7 @@ import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.EffectInterfaces.RepelLowLevelEncounterEffect;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
+import battle.effect.EffectInterfaces.SingleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.StatusPreventionAbility;
 import battle.effect.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.EffectInterfaces.TypedWildEncounterSelector;
@@ -117,7 +118,6 @@ import util.string.StringUtils;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public abstract class Ability implements AbilityInterface {
@@ -748,7 +748,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class InnerFocus extends Ability implements EffectPreventionEffect {
+    static class InnerFocus extends Ability implements SingleEffectPreventionAbility {
         private static final long serialVersionUID = 1L;
 
         InnerFocus() {
@@ -756,11 +756,8 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
-            if (effectName == PokemonEffectNamesies.FLINCH) {
-                return ApplyResult.failure(Effect.DEFAULT_FAIL_MESSAGE);
-            }
-            return ApplyResult.success();
+        public PokemonEffectNamesies getPreventableEffect() {
+            return PokemonEffectNamesies.FLINCH;
         }
     }
 
@@ -1054,7 +1051,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class OwnTempo extends Ability implements EffectPreventionEffect {
+    static class OwnTempo extends Ability implements SingleEffectPreventionAbility {
         private static final long serialVersionUID = 1L;
 
         OwnTempo() {
@@ -1062,11 +1059,8 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
-            if (effectName == PokemonEffectNamesies.CONFUSION) {
-                return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " prevents confusion!");
-            }
-            return ApplyResult.success();
+        public PokemonEffectNamesies getPreventableEffect() {
+            return PokemonEffectNamesies.CONFUSION;
         }
     }
 
@@ -1159,9 +1153,9 @@ public abstract class Ability implements AbilityInterface {
     static class Oblivious extends Ability implements AttackBlocker, MultipleEffectPreventionAbility {
         private static final long serialVersionUID = 1L;
 
-        private static final Map<PokemonEffectNamesies, String> PREVENTION_EFFECTS = Map.of(
-                PokemonEffectNamesies.INFATUATION, "infatuation",
-                PokemonEffectNamesies.TAUNT, "it from being taunted"
+        private static final Set<PokemonEffectNamesies> PREVENTION_EFFECTS = EnumSet.of(
+                PokemonEffectNamesies.INFATUATION,
+                PokemonEffectNamesies.TAUNT
         );
 
         Oblivious() {
@@ -1179,7 +1173,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public Map<PokemonEffectNamesies, String> getPreventableEffects() {
+        public Set<PokemonEffectNamesies> getPreventableEffects() {
             return PREVENTION_EFFECTS;
         }
     }
@@ -1376,6 +1370,15 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
+        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+            if (effectName == PokemonEffectNamesies.PERISH_SONG) {
+                return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " makes it immune to sound based moves!");
+            }
+
+            return ApplyResult.success();
+        }
+
+        @Override
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttack().isMoveType(MoveType.SOUND_BASED);
         }
@@ -1383,14 +1386,6 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents sound-based moves!";
-        }
-
-        @Override
-        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
-            if (effectName == PokemonEffectNamesies.PERISH_SONG) {
-                return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " makes it immune to sound based moves!");
-            }
-            return ApplyResult.success();
         }
     }
 
@@ -3415,13 +3410,13 @@ public abstract class Ability implements AbilityInterface {
     static class AromaVeil extends Ability implements MultipleEffectPreventionAbility {
         private static final long serialVersionUID = 1L;
 
-        private static final Map<PokemonEffectNamesies, String> PREVENTION_EFFECTS = Map.of(
-                PokemonEffectNamesies.INFATUATION, "infatuation",
-                PokemonEffectNamesies.ENCORE, "it from being encored",
-                PokemonEffectNamesies.DISABLE, "it from being disabled",
-                PokemonEffectNamesies.TORMENT, "torment",
-                PokemonEffectNamesies.TAUNT, "it from being taunted",
-                PokemonEffectNamesies.HEAL_BLOCK, "heal block"
+        private static final Set<PokemonEffectNamesies> PREVENTION_EFFECTS = EnumSet.of(
+                PokemonEffectNamesies.INFATUATION,
+                PokemonEffectNamesies.ENCORE,
+                PokemonEffectNamesies.DISABLE,
+                PokemonEffectNamesies.TORMENT,
+                PokemonEffectNamesies.TAUNT,
+                PokemonEffectNamesies.HEAL_BLOCK
         );
 
         AromaVeil() {
@@ -3429,7 +3424,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public Map<PokemonEffectNamesies, String> getPreventableEffects() {
+        public Set<PokemonEffectNamesies> getPreventableEffects() {
             return PREVENTION_EFFECTS;
         }
     }
