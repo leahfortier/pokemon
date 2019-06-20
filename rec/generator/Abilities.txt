@@ -138,7 +138,7 @@ Cute Charm:
     Desc: Contact with the Pok\u00e9mon may cause infatuation.
     Int: PhysicalContactEffect
     Contact:
-        if (RandomUtils.chanceTest(30) && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, user, CastSource.ABILITY, false)) {
+        if (RandomUtils.chanceTest(30) && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, user, CastSource.ABILITY, false).isSuccess()) {
             Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
         }
         ###
@@ -191,6 +191,7 @@ Frisk:
 *
 Inner Focus:
     Desc: The Pok\u00e9mon's intensely focused, and that protects the Pok\u00e9mon from flinching.
+    EffectPrevent: Flinch
 *
 Infiltrator:
     Desc: Passes through the opposing Pok\u00e9mon's barrier, substitute, and the like and strikes.
@@ -200,7 +201,7 @@ Stench:
     Int: OpponentTakeDamageEffect
     OpponentTakeDamage:
         if (RandomUtils.chanceTest(10)) {
-            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.ABILITY, false)) {
+            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.ABILITY, false).isSuccess()) {
                 Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
             }
         }
@@ -341,6 +342,7 @@ No Guard:
 *
 Own Tempo:
     Desc: This Pok\u00e9mon has its own tempo, and that prevents it from becoming confused.
+    EffectPrevent: Confusion
 *
 Clear Body:
     Desc: Prevents other Pok\u00e9mon's moves or Abilities from lowering the Pok\u00e9mon's stats.
@@ -376,6 +378,13 @@ Oblivious:
         return user.getAttack().namesies() == AttackNamesies.CAPTIVATE;
         ###
     BlockMessage: victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!"
+    MultipleEffectPreventionAbility: PREVENTION_EFFECTS
+    Field:
+        private static final Set<PokemonEffectNamesies> PREVENTION_EFFECTS = EnumSet.of(
+                PokemonEffectNamesies.INFATUATION,
+                PokemonEffectNamesies.TAUNT
+        );
+        ###
 *
 Magnet Pull:
     OpponentTrappingAbility: escaper.isType(b, Type.STEEL) && !escaper.isType(b, Type.GHOST)
@@ -474,6 +483,13 @@ Hyper Cutter:
 Soundproof:
     Desc: Soundproofing of the Pok\u00e9mon itself gives full immunity to all sound-based moves.
     MoveTypePrevent: Sound_Based sound-based moves
+    FullEffectPrevent:
+        if (effectName == PokemonEffectNamesies.PERISH_SONG) {
+            return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " makes it immune to sound based moves!");
+        }
+        
+        return ApplyResult.success();
+        ###
 *
 Reckless:
     Desc: Powers up moves that have recoil damage.
@@ -506,9 +522,10 @@ Leaf Guard:
     Desc: Prevents status conditions in sunny weather.
     Int: StatusPreventionEffect
     StatusPrevent:
-        return b.getWeather().namesies() == WeatherNamesies.SUNNY;
+        if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
+            return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " prevents status conditions!");
+        }
         ###
-    StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents status conditions!"
 *
 Scrappy:
     Desc: The Pok\u00e9mon can hit Ghost-type Pok\u00e9mon with Normal- and Fighting-type moves.
@@ -963,7 +980,7 @@ Cursed Body:
     Contact:
         if (RandomUtils.chanceTest(30)) {
             user.setLastMoveUsed();
-            if (Effect.apply(PokemonEffectNamesies.DISABLE, b, victim, user, CastSource.ABILITY, false)) {
+            if (Effect.apply(PokemonEffectNamesies.DISABLE, b, victim, user, CastSource.ABILITY, false).isSuccess()) {
                 Messages.add(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
             }
         }
@@ -1393,6 +1410,17 @@ Sweet Veil:
 *
 Aroma Veil:
     Desc: Protects itself and its allies from attacks that limit their move choices.
+    MultipleEffectPreventionAbility: PREVENTION_EFFECTS
+    Field:
+        private static final Set<PokemonEffectNamesies> PREVENTION_EFFECTS = EnumSet.of(
+                PokemonEffectNamesies.INFATUATION,
+                PokemonEffectNamesies.ENCORE,
+                PokemonEffectNamesies.DISABLE,
+                PokemonEffectNamesies.TORMENT,
+                PokemonEffectNamesies.TAUNT,
+                PokemonEffectNamesies.HEAL_BLOCK
+        );
+        ###
 *
 Healer:
     Desc: Sometimes heals its status condition.
@@ -1449,9 +1477,10 @@ Flower Veil:
     Desc: Grass-type Pok\u00e9mon are protected from status conditions and the lowering of their stats.
     Int: StatusPreventionEffect
     StatusPrevent:
-        return victim.isType(b, Type.GRASS);
+        if (victim.isType(b, Type.GRASS)) {
+            return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " prevents status conditions!");
+        }
         ###
-    StatusPreventMessage: victim.getName() + "'s " + this.getName() + " prevents status conditions!"
     StatProtectAll: victim.isType(b, Type.GRASS)
 *
 Gale Wings:
@@ -1611,7 +1640,7 @@ Comatose:
                 return false;
             }
 
-            if (StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, sleepyHead, sleepyHead)) {
+            if (StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, sleepyHead, sleepyHead).isSuccess()) {
                 sleepyHead.removeStatus();
                 StatusNamesies.ASLEEP.getStatus().apply(b, sleepyHead, sleepyHead, CastSource.ABILITY);
                 sleepyHead.getStatus().setTurns(-1);

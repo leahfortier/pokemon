@@ -10,6 +10,7 @@ import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
 import battle.effect.InvokeInterfaces.CrashDamageMove;
 import battle.effect.InvokeInterfaces.EffectExtendingEffect;
+import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
@@ -23,6 +24,7 @@ import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.InvokeInterfaces.WildEncounterSelector;
 import battle.effect.battle.weather.WeatherNamesies;
+import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
@@ -45,7 +47,9 @@ import type.Type;
 import util.RandomUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 // Holds non-generated interface methods for InvokeEffects
 // These should not have invoke methods as they are created manually
@@ -324,13 +328,12 @@ public final class EffectInterfaces {
         StatusNamesies getStatus();
 
         @Override
-        default boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return this.getStatus().getStatus().isType(status);
-        }
+        default ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            if (this.getStatus().getStatus().isType(status)) {
+                return ApplyResult.failure(this.getStatus().getStatus().getSourcePreventionMessage(victim, this.getName()));
+            }
 
-        @Override
-        default String statusPreventionMessage(ActivePokemon victim) {
-            return this.getStatus().getStatus().getSourcePreventionMessage(victim, this.getName());
+            return ApplyResult.success();
         }
 
         @Override
@@ -338,6 +341,56 @@ public final class EffectInterfaces {
             if (p.hasStatus(this.getStatus())) {
                 p.removeStatus(b, CastSource.ABILITY);
             }
+        }
+    }
+
+    public interface EffectPreventionAbility extends AbilityInterface, EffectPreventionEffect, EntryEndTurnEffect {
+        Iterable<PokemonEffectNamesies> getPreventableEffects();
+        boolean isPreventableEffect(EffectNamesies effectNamesies);
+
+        @Override
+        default ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+            if (this.isPreventableEffect(effectName)) {
+                return ApplyResult.failure(effectName.getEffect().getSourcePreventMessage(victim, this.getName()));
+            }
+
+            return ApplyResult.success();
+        }
+
+        @Override
+        default void applyEffect(Battle b, ActivePokemon p) {
+            // If the victim was able to receive the effect (mold breaker, ability change, etc.), remove it at the end of turn
+            for (PokemonEffectNamesies effectName : this.getPreventableEffects()) {
+                if (p.hasEffect(effectName)) {
+                    PokemonEffect effect = p.getEffect(effectName);
+                    Messages.add(effect.getSourceRemoveMessage(p, this.getName()));
+                    p.getEffects().remove(effect);
+                }
+            }
+        }
+    }
+
+    public interface SingleEffectPreventionAbility extends EffectPreventionAbility {
+        PokemonEffectNamesies getPreventableEffect();
+
+        @Override
+        default boolean isPreventableEffect(EffectNamesies effectNamesies) {
+            return effectNamesies == this.getPreventableEffect();
+        }
+
+        @Override
+        default Iterable<PokemonEffectNamesies> getPreventableEffects() {
+            return Collections.singletonList(this.getPreventableEffect());
+        }
+    }
+
+    public interface MultipleEffectPreventionAbility extends EffectPreventionAbility {
+        @Override
+        Set<PokemonEffectNamesies> getPreventableEffects();
+
+        @Override
+        default boolean isPreventableEffect(EffectNamesies effectNamesies) {
+            return effectNamesies instanceof PokemonEffectNamesies && this.getPreventableEffects().contains(effectNamesies);
         }
     }
 

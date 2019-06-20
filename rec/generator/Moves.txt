@@ -1774,7 +1774,7 @@ Rest:
     Cat: Status
     Status: Asleep
     Comments: // Need the sleep check in case called from Sleep Talk, Comatose, etc.
-    ExtraApplies: !user.hasStatus(StatusNamesies.ASLEEP) && StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, user, user)
+    ExtraApplies: !user.hasStatus(StatusNamesies.ASLEEP) && StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, user, user).isSuccess()
     AfterApplyCheck:
         victim.removeStatus();
         ###
@@ -4135,7 +4135,7 @@ Psycho Shift:
     Type: Psychic
     Cat: Status
     Acc: 100
-    Applies: user.hasStatus() && user.getStatus().namesies().getStatus().applies(b, user, victim)
+    Applies: user.hasStatus() && user.getStatus().namesies().getStatus().applies(b, user, victim).isSuccess()
     UniqueEffects:
         // NOTE: The messaging looks off when combined with Lum Berry but I don't know if this can be easily fixed
         StatusNamesies toTransfer = user.getStatus().namesies();

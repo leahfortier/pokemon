@@ -7,10 +7,6 @@ Constructor:
     Namesies Enum TerrainNamesies
     Terrain Enum TerrainType
 *
-Failure:
-    Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-    CanHave Not Default True Boolean b.hasEffect(this.namesies)
-*
 
 ***
 
@@ -21,9 +17,10 @@ MistyTerrain:
     Int: StatusPreventionEffect
     StatusPrevent:
         // Levitating Pokemon are immune to the mist
-        return !victim.isLevitating(b);
+        if (!victim.isLevitating(b)) {
+            return ApplyResult.failure("The protective mist prevents status conditions!");
+        }
         ###
-    StatusPreventMessage: "The protective mist prevents status conditions!"
     Comments: // Dragon type moves have halved power during the misty terrain
     PowerMultiplierCondition: .5 user.isAttackType(Type.DRAGON) && !user.isLevitating(b)
 *
@@ -45,9 +42,10 @@ ElectricTerrain:
     Terrain: Electric
     Int: StatusPreventionEffect
     StatusPrevent:
-        return status == StatusNamesies.ASLEEP && !victim.isLevitating(b);
+        if (status == StatusNamesies.ASLEEP && !victim.isLevitating(b)) {
+            return ApplyResult.failure("The electric terrain prevents sleep!");
+        }
         ###
-    StatusPreventMessage: "The electric terrain prevents sleep!"
     Comments: // Electric-type moves are 50% stronger with the electric terrain
     PowerMultiplierCondition: 1.5 user.isAttackType(Type.ELECTRIC) && !user.isLevitating(b)
 *

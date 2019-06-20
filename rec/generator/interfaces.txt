@@ -390,23 +390,6 @@ BeforeTurnEffect:
         EffectList: attacking
     *
 ***
-EffectBlockerEffect:
-    Method:
-        Comments: // TODO: Same deal as StatusPreventionEffect -- update this if we can have multiple invoke methods (check and check get)
-        Header: boolean shouldBlock(ActivePokemon caster, ActivePokemon victim, EffectNamesies effectNamesies)
-        Invoke: CheckGet true
-        InvokeName: getBlockerEffect
-        InvokeParameters: Battle b
-        MoldBreaker: caster
-        EffectList: victim
-    *
-    Method:
-        Header: String getBlockMessage(ActivePokemon victim, EffectNamesies effectNamesies)
-        Default:
-            return Effect.DEFAULT_FAIL_MESSAGE;
-            ###
-    *
-***
 TargetSwapperEffect:
     Method:
         Header: boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent)
@@ -445,15 +428,20 @@ StatProtectingEffect:
 ***
 StatusPreventionEffect:
     Method:
-        Comments: // TODO: Would be nice in the future if I am able to implement multiple invoke methods for the same interface method since this could also use a basic check invoke as well
-        Header: boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status)
-        Invoke: CheckGet true
+        Header: ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status)
+        Invoke: Get
         InvokeName: getPreventEffect
         EffectList: victim
         MoldBreaker: caster
     *
+***
+EffectPreventionEffect:
     Method:
-        Header: String statusPreventionMessage(ActivePokemon victim)
+        Header: ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName)
+        Invoke: Get
+        InvokeName: getPreventEffect
+        EffectList: victim
+        MoldBreaker: caster
     *
 ***
 BracingEffect:

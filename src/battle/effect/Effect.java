@@ -2,8 +2,8 @@ package battle.effect;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.effect.InvokeInterfaces.EffectBlockerEffect;
 import battle.effect.InvokeInterfaces.EffectExtendingEffect;
+import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EffectReceivedEffect;
 import battle.effect.source.CastSource;
 import main.Global;
@@ -16,13 +16,15 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
     public static final String DEFAULT_FAIL_MESSAGE = "...but it failed!";
 
     protected final NamesiesType namesies;
+    private final boolean canHave;
     private final boolean hasAlternateCast;
 
     private int numTurns;
     private boolean active;
 
-    protected Effect(NamesiesType name, int minTurns, int maxTurns, boolean hasAlternateCast) {
+    protected Effect(NamesiesType name, int minTurns, int maxTurns, boolean canHave, boolean hasAlternateCast) {
         this.namesies = name;
+        this.canHave = canHave;
         this.hasAlternateCast = hasAlternateCast;
 
         this.numTurns = minTurns == -1 ? -1 : RandomUtils.getRandomInt(minTurns, maxTurns);
@@ -92,27 +94,40 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
         }
     }
 
-    public static boolean apply(EffectNamesies namesies, Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-        if (namesies.getEffect().fullApplies(b, caster, victim, source)) {
+    public static ApplyResult apply(EffectNamesies namesies, Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        ApplyResult result = namesies.getEffect().fullApplies(b, caster, victim, source);
+        if (result.isSuccess()) {
             cast(namesies, b, caster, victim, source, printCast);
-            return true;
         }
 
-        return false;
+        return result;
     }
 
-    private boolean fullApplies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-        EffectBlockerEffect blockerEffect = EffectBlockerEffect.getBlockerEffect(b, caster, victim, this.namesies);
-        if (blockerEffect != null) {
-            return false;
+    private ApplyResult fullApplies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+        // Check if the victim has an effect that prevents this effect
+        ApplyResult effectResult = EffectPreventionEffect.getPreventEffect(b, caster, victim, this.namesies);
+        if (effectResult.isFailure()) {
+            return effectResult;
         }
 
-        return this.applies(b, caster, victim, source);
+        // Check effect-specific failures
+        // Note: This should be before the direct hasEffect check since some effects check directly with special messages
+        ApplyResult applyResult = this.applies(b, caster, victim, source);
+        if (applyResult.isFailure()) {
+            return applyResult;
+        }
+
+        // Fails if the victim already has this effect (and they can't have it again)
+        if (!this.canHave && this.hasEffect(b, victim)) {
+            return ApplyResult.failure();
+        }
+
+        return ApplyResult.success();
     }
 
     // Should be overridden by subclasses as deemed appropriate
-    protected boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-        return true;
+    protected ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+        return ApplyResult.success();
     }
 
     protected boolean shouldSubside(Battle b, ActivePokemon victim) {
@@ -135,18 +150,17 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
         return "";
     }
 
-    public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-        EffectBlockerEffect blockerEffect = EffectBlockerEffect.getBlockerEffect(b, user, victim, this.namesies);
-        if (blockerEffect != null) {
-            return blockerEffect.getBlockMessage(victim, this.namesies);
-        }
-
-        return DEFAULT_FAIL_MESSAGE;
-    }
-
     @Override
     public String getSubsideMessage(ActivePokemon victim) {
         return "";
+    }
+
+    public String getSourcePreventMessage(ActivePokemon victim, String sourceName) {
+        return DEFAULT_FAIL_MESSAGE;
+    }
+
+    public String getSourceRemoveMessage(ActivePokemon victim, String sourceName) {
+        return this.getSubsideMessage(victim);
     }
 
     @Override

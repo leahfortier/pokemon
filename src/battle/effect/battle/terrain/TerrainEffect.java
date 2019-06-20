@@ -2,6 +2,7 @@ package battle.effect.battle.terrain;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.ApplyResult;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
@@ -18,7 +19,7 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
     private final TerrainType terrainType;
 
     public TerrainEffect(TerrainNamesies name, TerrainType terrainType) {
-        super(name, 5, 5, false);
+        super(name, 5, 5, false, false);
         this.terrainType = terrainType;
     }
 
@@ -44,11 +45,6 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
         }
 
         @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
-        }
-
-        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Mist swirled around the battlefield!";
         }
@@ -59,14 +55,13 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+        public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
             // Levitating Pokemon are immune to the mist
-            return !victim.isLevitating(b);
-        }
+            if (!victim.isLevitating(b)) {
+                return ApplyResult.failure("The protective mist prevents status conditions!");
+            }
 
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return "The protective mist prevents status conditions!";
+            return ApplyResult.success();
         }
 
         @Override
@@ -81,11 +76,6 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
 
         GrassyTerrain() {
             super(TerrainNamesies.GRASSY_TERRAIN, TerrainType.GRASS);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
         }
 
         @Override
@@ -120,11 +110,6 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
         }
 
         @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
-        }
-
-        @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return "Electricity crackled around the battlefield!";
         }
@@ -135,13 +120,12 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return status == StatusNamesies.ASLEEP && !victim.isLevitating(b);
-        }
+        public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            if (status == StatusNamesies.ASLEEP && !victim.isLevitating(b)) {
+                return ApplyResult.failure("The electric terrain prevents sleep!");
+            }
 
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return "The electric terrain prevents sleep!";
+            return ApplyResult.success();
         }
 
         @Override
@@ -156,11 +140,6 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
 
         PsychicTerrain() {
             super(TerrainNamesies.PSYCHIC_TERRAIN, TerrainType.PSYCHIC);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
         }
 
         @Override

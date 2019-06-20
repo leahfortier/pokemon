@@ -2,6 +2,7 @@ package battle.effect.battle;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.InvokeInterfaces.GroundedEffect;
@@ -20,8 +21,8 @@ import type.Type;
 public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> extends Effect<NamesiesType> {
     private static final long serialVersionUID = 1L;
 
-    public BattleEffect(NamesiesType name, int minTurns, int maxTurns, boolean hasAlternateCast) {
-        super(name, minTurns, maxTurns, hasAlternateCast);
+    public BattleEffect(NamesiesType name, int minTurns, int maxTurns, boolean canHave, boolean hasAlternateCast) {
+        super(name, minTurns, maxTurns, canHave, hasAlternateCast);
     }
 
     @Override
@@ -47,12 +48,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         Gravity() {
-            super(StandardBattleEffectNamesies.GRAVITY, 5, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
+            super(StandardBattleEffectNamesies.GRAVITY, 5, 5, false, false);
         }
 
         @Override
@@ -81,12 +77,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         WaterSport() {
-            super(StandardBattleEffectNamesies.WATER_SPORT, 5, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
+            super(StandardBattleEffectNamesies.WATER_SPORT, 5, 5, false, false);
         }
 
         @Override
@@ -109,12 +100,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         MudSport() {
-            super(StandardBattleEffectNamesies.MUD_SPORT, 5, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
+            super(StandardBattleEffectNamesies.MUD_SPORT, 5, 5, false, false);
         }
 
         @Override
@@ -137,7 +123,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         WonderRoom() {
-            super(StandardBattleEffectNamesies.WONDER_ROOM, 5, 5, true);
+            super(StandardBattleEffectNamesies.WONDER_ROOM, 5, 5, true, true);
         }
 
         @Override
@@ -173,7 +159,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         TrickRoom() {
-            super(StandardBattleEffectNamesies.TRICK_ROOM, 5, 5, true);
+            super(StandardBattleEffectNamesies.TRICK_ROOM, 5, 5, true, true);
         }
 
         @Override
@@ -197,7 +183,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         MagicRoom() {
-            super(StandardBattleEffectNamesies.MAGIC_ROOM, 5, 5, true);
+            super(StandardBattleEffectNamesies.MAGIC_ROOM, 5, 5, true, true);
         }
 
         @Override
@@ -221,22 +207,16 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         private static final long serialVersionUID = 1L;
 
         FieldUproar() {
-            super(StandardBattleEffectNamesies.FIELD_UPROAR, -1, -1, false);
+            super(StandardBattleEffectNamesies.FIELD_UPROAR, -1, -1, false, false);
         }
 
         @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.hasEffect(this.namesies));
-        }
+        public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            if (status == StatusNamesies.ASLEEP) {
+                return ApplyResult.failure("The uproar prevents sleep!!");
+            }
 
-        @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return status == StatusNamesies.ASLEEP;
-        }
-
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return "The uproar prevents sleep!!";
+            return ApplyResult.success();
         }
 
         @Override

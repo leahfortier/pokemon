@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.MoveType;
-import battle.effect.Effect;
+import battle.effect.ApplyResult;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.InvokeEffect;
 import battle.effect.InvokeInterfaces.BeforeTurnEffect;
@@ -73,40 +73,39 @@ public abstract class StatusCondition implements InvokeEffect {
         }
     }
 
-    public String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
-        StatusPreventionEffect statusPrevent = StatusPreventionEffect.getPreventEffect(b, user, victim, this.namesies);
-        if (statusPrevent != null) {
-            return statusPrevent.statusPreventionMessage(victim);
+    public ApplyResult appliesWithoutStatusCheck(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        ApplyResult result = StatusPreventionEffect.getPreventEffect(b, caster, victim, this.namesies);
+        if (result.isFailure()) {
+            return result;
         }
 
-        return Effect.DEFAULT_FAIL_MESSAGE;
+        return ApplyResult.newResult(this.statusApplies(b, caster, victim));
     }
 
-    public boolean appliesWithoutStatusCheck(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return this.statusApplies(b, caster, victim) &&
-                StatusPreventionEffect.getPreventEffect(b, caster, victim, this.namesies) == null;
-    }
+    public ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        if (victim.hasStatus()) {
+            return ApplyResult.failure();
+        }
 
-    public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-        return !victim.hasStatus() && this.appliesWithoutStatusCheck(b, caster, victim);
+        return this.appliesWithoutStatusCheck(b, caster, victim);
     }
 
     // Returns true if a status was successfully given, and false if it failed for any reason
-    public boolean apply(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+    public ApplyResult apply(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
         return apply(b, caster, victim, this.getCastMessage(b, caster, victim, source));
     }
 
-    public boolean apply(Battle b, ActivePokemon caster, ActivePokemon victim, String castMessage) {
-        if (this.applies(b, caster, victim)) {
+    public ApplyResult apply(Battle b, ActivePokemon caster, ActivePokemon victim, String castMessage) {
+        ApplyResult result = this.applies(b, caster, victim);
+        if (result.isSuccess()) {
             victim.setStatus(this);
             Messages.add(new MessageUpdate(castMessage).updatePokemon(b, victim));
 
             StatusReceivedEffect.invokeStatusReceivedEffect(b, caster, victim, this.namesies);
             OpponentStatusReceivedEffect.invokeOpponentStatusReceivedEffect(b, victim, this.namesies);
-            return true;
         }
 
-        return false;
+        return result;
     }
 
     public boolean isType(StatusNamesies statusCondition) {
@@ -179,9 +178,9 @@ public abstract class StatusCondition implements InvokeEffect {
         }
 
         @Override
-        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public ApplyResult applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Fainted status condition applies regardless of other status conditions
-            return this.statusApplies(b, user, victim);
+            return ApplyResult.newResult(this.statusApplies(b, user, victim));
         }
 
         @Override

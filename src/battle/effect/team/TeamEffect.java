@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
+import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.InvokeInterfaces.BarrierEffect;
@@ -27,8 +28,8 @@ import util.string.PokeString;
 public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public TeamEffect(TeamEffectNamesies name, int minTurns, int maxTurns, boolean hasAlternateCast) {
-        super(name, minTurns, maxTurns, hasAlternateCast);
+    public TeamEffect(TeamEffectNamesies name, int minTurns, int maxTurns, boolean canHave, boolean hasAlternateCast) {
+        super(name, minTurns, maxTurns, canHave, hasAlternateCast);
     }
 
     @Override
@@ -54,12 +55,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         Reflect() {
-            super(TeamEffectNamesies.REFLECT, 5, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+            super(TeamEffectNamesies.REFLECT, 5, 5, false, false);
         }
 
         @Override
@@ -102,12 +98,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         LightScreen() {
-            super(TeamEffectNamesies.LIGHT_SCREEN, 5, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+            super(TeamEffectNamesies.LIGHT_SCREEN, 5, 5, false, false);
         }
 
         @Override
@@ -150,12 +141,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         Tailwind() {
-            super(TeamEffectNamesies.TAILWIND, 4, 4, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+            super(TeamEffectNamesies.TAILWIND, 4, 4, false, false);
         }
 
         @Override
@@ -183,12 +169,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         AuroraVeil() {
-            super(TeamEffectNamesies.AURORA_VEIL, 5, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+            super(TeamEffectNamesies.AURORA_VEIL, 5, 5, false, false);
         }
 
         @Override
@@ -231,12 +212,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         StickyWeb() {
-            super(TeamEffectNamesies.STICKY_WEB, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+            super(TeamEffectNamesies.STICKY_WEB, -1, -1, false, false);
         }
 
         @Override
@@ -272,12 +248,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         StealthRock() {
-            super(TeamEffectNamesies.STEALTH_ROCK, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+            super(TeamEffectNamesies.STEALTH_ROCK, -1, -1, false, false);
         }
 
         @Override
@@ -308,7 +279,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private int layers;
 
         ToxicSpikes() {
-            super(TeamEffectNamesies.TOXIC_SPIKES, -1, -1, true);
+            super(TeamEffectNamesies.TOXIC_SPIKES, -1, -1, true, true);
             this.layers = 1;
         }
 
@@ -371,7 +342,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         Spikes() {
-            super(TeamEffectNamesies.SPIKES, -1, -1, true);
+            super(TeamEffectNamesies.SPIKES, -1, -1, true, true);
             this.layers = 1;
         }
 
@@ -410,12 +381,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private String casterName;
 
         Wish() {
-            super(TeamEffectNamesies.WISH, 2, 2, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+            super(TeamEffectNamesies.WISH, 2, 2, false, false);
         }
 
         @Override
@@ -439,12 +405,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         LuckyChant() {
-            super(TeamEffectNamesies.LUCKY_CHANT, 5, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+            super(TeamEffectNamesies.LUCKY_CHANT, 5, 5, false, false);
         }
 
         @Override
@@ -464,12 +425,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private ActivePokemon theSeeer;
 
         FutureSight() {
-            super(TeamEffectNamesies.FUTURE_SIGHT, 3, 3, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+            super(TeamEffectNamesies.FUTURE_SIGHT, 3, 3, false, false);
         }
 
         @Override
@@ -503,12 +459,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private ActivePokemon theSeeer;
 
         DoomDesire() {
-            super(TeamEffectNamesies.DOOM_DESIRE, 3, 3, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+            super(TeamEffectNamesies.DOOM_DESIRE, 3, 3, false, false);
         }
 
         @Override
@@ -542,12 +493,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private String wish;
 
         HealSwitch() {
-            super(TeamEffectNamesies.HEAL_SWITCH, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+            super(TeamEffectNamesies.HEAL_SWITCH, -1, -1, false, false);
         }
 
         @Override
@@ -567,7 +513,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         DeadAlly() {
-            super(TeamEffectNamesies.DEAD_ALLY, 2, 2, false);
+            super(TeamEffectNamesies.DEAD_ALLY, 2, 2, true, false);
         }
     }
 
@@ -577,7 +523,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private int coins;
 
         PayDay() {
-            super(TeamEffectNamesies.PAY_DAY, -1, -1, true);
+            super(TeamEffectNamesies.PAY_DAY, -1, -1, true, true);
         }
 
         @Override
@@ -604,16 +550,14 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
     }
 
+    // TODO: This needs to prevent confusion as well
+    // Also test this does not prevent sleep from rest
+    // And also test prevents Flame/Toxic Orb
     static class Safeguard extends TeamEffect implements DefogRelease, StatusPreventionEffect {
         private static final long serialVersionUID = 1L;
 
         Safeguard() {
-            super(TeamEffectNamesies.SAFEGUARD, 5, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+            super(TeamEffectNamesies.SAFEGUARD, 5, 5, false, false);
         }
 
         @Override
@@ -632,13 +576,12 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
-        }
+        public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            if (!caster.hasAbility(AbilityNamesies.INFILTRATOR)) {
+                return ApplyResult.failure("Safeguard protects " + victim.getName() + " from status conditions!");
+            }
 
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return "Safeguard protects " + victim.getName() + " from status conditions!";
+            return ApplyResult.success();
         }
     }
 
@@ -646,12 +589,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         GuardSpecial() {
-            super(TeamEffectNamesies.GUARD_SPECIAL, 5, 5, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+            super(TeamEffectNamesies.GUARD_SPECIAL, 5, 5, false, false);
         }
 
         @Override
@@ -665,13 +603,12 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
-        }
+        public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
+            if (!caster.hasAbility(AbilityNamesies.INFILTRATOR)) {
+                return ApplyResult.failure("Guard Special protects " + victim.getName() + " from status conditions!");
+            }
 
-        @Override
-        public String statusPreventionMessage(ActivePokemon victim) {
-            return "Guard Special protects " + victim.getName() + " from status conditions!";
+            return ApplyResult.success();
         }
     }
 
@@ -679,12 +616,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         private static final long serialVersionUID = 1L;
 
         GetDatCashMoneyTwice() {
-            super(TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE, -1, -1, false);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            return !(b.getTrainer(victim).hasEffect(this.namesies()));
+            super(TeamEffectNamesies.GET_DAT_CASH_MONEY_TWICE, -1, -1, false, false);
         }
     }
 }

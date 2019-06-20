@@ -174,7 +174,7 @@ Destiny Knot:
     Price: 4000
     Fling: 10
     ReceiveEffect:
-        if (effectType == PokemonEffectNamesies.INFATUATION && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, caster, CastSource.HELD_ITEM, false)) {
+        if (effectType == PokemonEffectNamesies.INFATUATION && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, caster, CastSource.HELD_ITEM, false).isSuccess()) {
             Messages.add(victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!");
         }
         ###
@@ -349,19 +349,17 @@ Mental Herb:
     Price: 4000
     Fling: 10
     Field:
-        private static final Map<PokemonEffectNamesies, String> REMOVEABLE_EFFECTS = new EnumMap<>(PokemonEffectNamesies.class);
-        static {
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.INFATUATION, "infatuated");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.DISABLE, "disabled");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.TAUNT, "under the effects of taunt");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.ENCORE, "under the effects of encore");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.TORMENT, "under the effects of torment");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.CONFUSION, "confused");
-            REMOVEABLE_EFFECTS.put(PokemonEffectNamesies.HEAL_BLOCK, "under the effects of heal block");
-        }
+        private static final Set<PokemonEffectNamesies> REMOVABLE_EFFECTS = EnumSet.of(
+                PokemonEffectNamesies.INFATUATION,
+                PokemonEffectNamesies.DISABLE,
+                PokemonEffectNamesies.TAUNT,
+                PokemonEffectNamesies.ENCORE,
+                PokemonEffectNamesies.TORMENT,
+                PokemonEffectNamesies.CONFUSION,
+                PokemonEffectNamesies.HEAL_BLOCK
+        );
         ###
-    GetCurableEffects: REMOVEABLE_EFFECTS.keySet()
-    CureEffectRemoveMessage: victim.getName() + " is no longer " + REMOVEABLE_EFFECTS.get(effectType) + " due to its " + this.getName() + "!"
+    GetCurableEffects: REMOVABLE_EFFECTS
     FlingEffect:
         usesies(pelted);
         ###
@@ -1326,7 +1324,7 @@ Dire Hit:
     Desc: An item that raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.
     Price: 650
     BattleUse:
-        return Effect.apply(PokemonEffectNamesies.RAISE_CRITS, b, p, p, CastSource.USE_ITEM, true);
+        return Effect.apply(PokemonEffectNamesies.RAISE_CRITS, b, p, p, CastSource.USE_ITEM, true).isSuccess();
         ###
 *
 Guard Spec.:
@@ -1336,7 +1334,7 @@ Guard Spec.:
     Desc: An item that prevents stat reduction among the Trainer's party Pok\u00e9mon for five turns after it is used in battle.
     Price: 700
     BattleUse:
-        return Effect.apply(TeamEffectNamesies.GUARD_SPECIAL, b, p, p, CastSource.USE_ITEM, true);
+        return Effect.apply(TeamEffectNamesies.GUARD_SPECIAL, b, p, p, CastSource.USE_ITEM, true).isSuccess();
         ###
 *
 X Accuracy:
@@ -1681,7 +1679,6 @@ Persim Berry:
     GainEffect: return use(b, user, source);
     GenericMessage: p.getName() + " snapped out of its confusion!"
     SourceMessage: p.getName() + "'s " + this.getName() + " snapped it out of confusion!"
-    CureEffectRemoveMessage: this.getSourceMessage(victim, this.getName())
     GetCurableEffects: EnumSet.of(PokemonEffectNamesies.CONFUSION)
 *
 Lum Berry:

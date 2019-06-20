@@ -7,26 +7,19 @@ Constructor:
     Namesies Enum PokemonEffectNamesies
     MinTurns Default -1 Int
     MaxTurns Default -1 Int
+    CanHave Default False Boolean
     HasAlternateCast Default False Boolean
-*
-Failure:
-    Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-    FailType Multiple Enum Type victim.isType(b, {0})
-    FailAbility Multiple Enum AbilityNamesies (victim.hasAbility({0}) && !caster.breaksTheMold())
-    FailCondition StraightUp {0}
-    CanHave Not Default True Boolean victim.hasEffect(this.namesies())
 *
 
 ***
 
 LeechSeed:
     Int: EndTurnEffect, PassableEffect, SapHealthEffect
-    FailType: Grass
-    FailMessage:
+    FullEffectApplies:
         if (victim.isType(b, Type.GRASS)) {
-            return "It doesn't affect " + victim.getName() + "!";
+            return ApplyResult.failure("It doesn't affect " + victim.getName() + "!");
         } else if (victim.hasEffect(this.namesies())) {
-            return victim.getName() + " is already seeded!";
+            return ApplyResult.failure(victim.getName() + " is already seeded!");
         }
         ###
     CastMessage: victim.getName() + " was seeded!"
@@ -39,8 +32,7 @@ LeechSeed:
 *
 Flinch:
     Int: BeforeTurnEffect
-    FailAbility: Inner Focus
-    FailCondition: !b.isFirstAttack()
+    EffectApplies: b.isFirstAttack()
     CastMessage: victim.getName() + " flinched!"
     CanAttack:
         return false;
@@ -135,14 +127,13 @@ Bracing:
 *
 Confusion:
     Int: PassableEffect, BeforeTurnEffect
-    FailAbility: Own Tempo
-    FailMessage:
+    FullEffectApplies:
         if (victim.hasEffect(this.namesies())) {
-            return victim.getName() + " is already confused!";
-        } else if (victim.hasAbility(AbilityNamesies.OWN_TEMPO)) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " prevents confusion!";
+            return ApplyResult.failure(victim.getName() + " is already confused!");
         }
         ###
+    EffectSourcePreventMessage: confusion
+    EffectSourceRemoveMessage: confused
     Field:
         private int turns;
         ###
@@ -184,7 +175,7 @@ SelfConfusion:
     MinTurns: 2
     MaxTurns: 3
     Subside:
-        if (Effect.apply(PokemonEffectNamesies.CONFUSION, b, p, p, CastSource.EFFECT, false)) {
+        if (Effect.apply(PokemonEffectNamesies.CONFUSION, b, p, p, CastSource.EFFECT, false).isSuccess()) {
             Messages.add(p.getName() + " became confused due to fatigue!");
         }
         ###
@@ -196,12 +187,6 @@ SelfConfusion:
         ###
 *
 Encore:
-    FailAbility: Aroma Veil
-    FailMessage:
-        if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being encored!";
-        }
-        ###
     Int: ForceMoveEffect, AttackSelectionSelfBlockerEffect
     Field:
         private Move move;
@@ -215,8 +200,15 @@ Encore:
         return move.getAttack().namesies() == m.getAttack().namesies();
         ###
     UnusableMessage: "Only " + move.getAttack().getName() + " can be used right now!"
-    FailCondition: victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0 || victim.getLastMoveUsed().getAttack().isMoveType(MoveType.ENCORELESS)
+    FullEffectApplies:
+        Move lastMove = victim.getLastMoveUsed();
+        if (lastMove == null || lastMove.getPP() == 0 || lastMove.getAttack().isMoveType(MoveType.ENCORELESS)) {
+            return ApplyResult.failure();
+        }
+        ###
     CastMessage: victim.getName() + " got an encore!"
+    EffectSourcePreventMessage: it from being encored
+    EffectSourceRemoveMessage: under the effects of encore
     BeforeCast:
         move = victim.getLastMoveUsed();
         ###
@@ -226,7 +218,6 @@ Encore:
         ###
 *
 Disable:
-    FailAbility: Aroma Veil
     Int: AttackSelectionSelfBlockerEffect
     Field:
         private Move disabled;
@@ -236,18 +227,20 @@ Disable:
         return disabled.getAttack().namesies() != m.getAttack().namesies();
         ###
     UnusableMessage: disabled.getAttack().getName() + " is disabled!"
-    FailCondition: victim.getLastMoveUsed() == null || victim.getLastMoveUsed().getPP() == 0
+    FullEffectApplies:
+        Move lastMove = victim.getLastMoveUsed();
+        if (lastMove == null || lastMove.getPP() == 0) {
+            return ApplyResult.failure();
+        } else if (victim.hasEffect(this.namesies())) {
+            return ApplyResult.failure(victim.getName() + " is already disabled!");
+        }
+        ###
     SubsideMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " is no longer disabled!"
     CastMessage: victim.getName() + "'s " + disabled.getAttack().getName() + " was disabled!"
+    EffectSourcePreventMessage: it from being disabled
+    EffectSourceRemoveMessage: disabled
     BeforeCast:
         disabled = victim.getLastMoveUsed();
-        ###
-    FailMessage:
-        if (victim.hasEffect(this.namesies())) {
-            return victim.getName() + " is already disabled!";
-        } else if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being disabled!";
-        }
         ###
 *
 RaiseCrits:
@@ -284,7 +277,15 @@ RaiseCrits:
 
         return critStage + stage;
         ###
-    FailCondition: source == CastSource.USE_ITEM && victim.hasEffect(this.namesies()) && ((RaiseCrits)victim.getEffect(this.namesies())).direHit
+    FullEffectApplies:
+        // Only actually fails again for Dire Hit
+        if (source == CastSource.USE_ITEM && victim.hasEffect(this.namesies())) {
+            RaiseCrits effect = (RaiseCrits)victim.getEffect(this.namesies());
+            if (effect.direHit) {
+                return ApplyResult.failure();
+            }
+        }
+        ###
     CastMessage: this.getMessage(b, victim, source)
     GenericMessage: p.getName() + " is getting pumped!"
     SourceMessage: p.getName() + " is getting pumped due to its " + sourceName + "!"
@@ -425,7 +426,7 @@ Stockpile:
             return;
         }
 
-        Messages.add(this.getFailMessage(b, caster, victim));
+        Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
         ###
     StageChange:
         return s == Stat.DEFENSE || s == Stat.SP_DEFENSE ? turns : 0;
@@ -464,7 +465,7 @@ Mimic:
         Attack lastAttack = lastMoveUsed == null ? null : lastMoveUsed.getAttack();
 
         if (lastAttack == null || victim.hasMove(b, lastAttack.namesies()) || lastAttack.isMoveType(MoveType.MIMICLESS)) {
-            Messages.add(this.getFailMessage(b, caster, victim));
+            Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
             return;
         }
 
@@ -501,12 +502,6 @@ MiracleEye:
     ForesightEffect: Dark attacking == Type.PSYCHIC
 *
 Torment:
-    FailAbility: Aroma Veil
-    FailMessage:
-        if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " prevents torment!";
-        }
-        ###
     Int: AttackSelectionSelfBlockerEffect
     Usable:
         Move lastMoveUsed = p.getLastMoveUsed();
@@ -514,6 +509,8 @@ Torment:
         ###
     UnusableMessage: p.getName() + " cannot use the same move twice in a row!"
     CastMessage: user.getName() + " tormented " + victim.getName() + "!"
+    EffectSourcePreventMessage: torment
+    EffectSourceRemoveMessage: tormented
 *
 Silence:
     Comments: // STFU MF
@@ -527,19 +524,15 @@ Silence:
 *
 Taunt:
     NumTurns: 3
-    FailAbility: Aroma Veil, Oblivious
     Int: AttackSelectionSelfBlockerEffect
-    FailMessage:
-        if (victim.hasAbility(AbilityNamesies.OBLIVIOUS) || victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being taunted!";
-        }
-        ###
     Usable:
         return !m.getAttack().isStatusMove();
         ###
     UnusableMessage: "No!! Not while you're under the effects of taunt!!"
     CastMessage: victim.getName() + " fell for the taunt!"
     SubsideMessage: "The effects of the taunt wore off."
+    EffectSourcePreventMessage: it from being taunted
+    EffectSourceRemoveMessage: taunted
 *
 LaserFocus:
     NumTurns: 2
@@ -558,7 +551,7 @@ LockOn:
 Telekinesis:
     NumTurns: 4
     CastMessage: victim.getName() + " was levitated due to " + user.getName() + "'s telekinesis!"
-    FailCondition: victim.isGrounded(b)
+    EffectApplies: !victim.isGrounded(b)
     SubsideMessage: victim.getName() + " is no longer under the effects of telekinesis."
     Int: LevitationEffect
     OpponentBypassAccuracy:
@@ -597,7 +590,9 @@ Curse:
 *
 Yawn:
     NumTurns: 2
-    FailCondition: !StatusNamesies.ASLEEP.getStatus().applies(b, caster, victim)
+    TotalEffectApplies:
+        return StatusNamesies.ASLEEP.getStatus().applies(b, caster, victim);
+        ###
     Subside:
         StatusNamesies.ASLEEP.getStatus().apply(b, b.getOtherPokemon(p), p, CastSource.EFFECT);
         ###
@@ -607,7 +602,7 @@ MagnetRise:
     Int: LevitationEffect, PassableEffect
     NumTurns: 5
     CastMessage: user.getName() + " levitated with electromagnetism!"
-    FailCondition: victim.isGrounded(b)
+    EffectApplies: !victim.isGrounded(b)
     SubsideMessage: victim.getName() + " is no longer under the effects of magnet rise."
     FallMessage: "The effects of " + fallen.getName() + "'s magnet rise were cancelled!"
 *
@@ -653,7 +648,7 @@ AquaRing:
     CastMessage: user.getName() + " surrounded itself with a veil of water!"
 *
 Nightmare:
-    FailCondition: !victim.hasStatus(StatusNamesies.ASLEEP)
+    EffectApplies: victim.hasStatus(StatusNamesies.ASLEEP)
     Int: EndTurnEffect
     ApplyEndTurn:
         // Only active when asleep
@@ -744,7 +739,15 @@ Transformed:
         Messages.add(new MessageUpdate().withNewPokemon(transformee.namesies(), transformee.isShiny(), true, victim.isPlayer()));
         Messages.add(new MessageUpdate().updatePokemon(b, victim));
         ###
-    FailCondition: b.getOtherPokemon(victim).hasEffect(this.namesies()) || ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive()))
+    FullEffectApplies:
+        if (b.getOtherPokemon(victim).hasEffect(this.namesies())) {
+            // Cannot transform into transformed Pokemon
+            return ApplyResult.failure();
+        } else if ((caster.hasAbility(AbilityNamesies.ILLUSION) && caster.getAbility().isActive())) {
+            // Also cannot transform into an Illusioned Pokemon
+            return ApplyResult.failure();
+        }
+        ###
     Int: ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect
     GetMoveList:
         return moveList;
@@ -757,7 +760,7 @@ Transformed:
         ###
 *
 Substitute:
-    Int: AbsorbDamageEffect, PassableEffect, EffectBlockerEffect, StickyHoldEffect, StatusPreventionEffect, StatProtectingEffect
+    Int: AbsorbDamageEffect, PassableEffect, StickyHoldEffect, StatusPreventionEffect, StatProtectingEffect
     Field:
         private int hp;
         
@@ -782,27 +785,27 @@ Substitute:
         String imageName = "substitute" + (victim.isPlayer() ? "-back" : "");
         Messages.add(new MessageUpdate().updatePokemon(b, victim).withImageName(imageName, victim.isPlayer()));
         ###
-    FailCondition: victim.getHPRatio() <= .25 || victim.getMaxHP() <= 3
-    ShouldBlock:
+    EffectApplies: victim.getHPRatio() > .25 && victim.getMaxHP() > 3
+    FullEffectPrevent:
         // Only block externally applied effects
         if (caster == victim) {
-            return false;
+            return ApplyResult.success();
         }
     
         // Substitute only blocks Pokemon effects
-        if (!(effectNamesies instanceof PokemonEffectNamesies)) {
-            return false;
+        if (!(effectName instanceof PokemonEffectNamesies)) {
+            return ApplyResult.success();
         }
 
         // Those pesky infiltrators
         if (this.infiltrated(caster)) {
-            return false;
+            return ApplyResult.success();
         }
 
         // TODO: Attacks with multiple failing attacks print failure multiple times
         // Ex: Tickle prints "...but it failed!" twice
         // Swagger prints "Raised Attack!" then "...but it failed!" (referring to failed Confusion)
-        return true;
+        return ApplyResult.failure();
         ###
     AbsorbDamage:
         this.hp -= damageAmount;
@@ -821,9 +824,10 @@ Substitute:
         ###
     StatProtectMessage: Effect.DEFAULT_FAIL_MESSAGE
     StatusPrevent:
-        return !this.infiltrated(caster);
+        if (!this.infiltrated(caster)) {
+            return ApplyResult.failure();
+        }
         ###
-    StatusPreventMessage: Effect.DEFAULT_FAIL_MESSAGE
 *
 Mist:
     NumTurns: 5
@@ -874,7 +878,7 @@ Bide:
         Messages.add(victim.getName() + " released energy!");
         if (this.damage == 0) {
             // Sucks to suck
-            Messages.add(this.getFailMessage(b, caster, victim));
+            Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
         } else {
             // RETALIATION STATION
             b.getOtherPokemon(victim).reduceHealth(b, 2*this.damage);
@@ -929,15 +933,11 @@ GuardSplit:
     CastMessage: user.getName() + " split the defense!"
 *
 HealBlock:
-    FailAbility: Aroma Veil
-    FailMessage:
-        if (victim.hasAbility(AbilityNamesies.AROMA_VEIL)) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " prevents heal block!";
-        }
-        ###
     NumTurns: 5
     CastMessage: user.getName() + " blocked " + victim.getName() + " from healing!"
     SubsideMessage: "The effects of heal block wore off."
+    EffectSourcePreventMessage: heal block
+    EffectSourceRemoveMessage: heal blocked
     Int: SelfAttackBlocker
     SelfBlock:
         // TODO: Test
@@ -945,14 +945,8 @@ HealBlock:
         ###
 *
 Infatuation:
-    FailAbility: Oblivious, Aroma Veil
-    FailCondition: !Gender.oppositeGenders(caster, victim)
+    EffectApplies: Gender.oppositeGenders(caster, victim)
     Int: BeforeTurnEffect
-    FailMessage:
-        if (Gender.oppositeGenders(user, victim) && (victim.hasAbility(AbilityNamesies.OBLIVIOUS) || victim.hasAbility(AbilityNamesies.AROMA_VEIL))) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " prevents infatuation!";
-        }
-        ###
     CanAttack:
         Messages.add(attacking.getName() + " is in love with " + defending.getName() + "!");
         if (RandomUtils.chanceTest(50)) {
@@ -963,6 +957,8 @@ Infatuation:
         return false;
         ###
     CastMessage: victim.getName() + " fell in love!"
+    EffectSourcePreventMessage: infatuation
+    EffectSourceRemoveMessage: infatuated
 *
 Snatch:
     NumTurns: 1
@@ -999,13 +995,7 @@ DestinyBond:
 *
 PerishSong:
     NumTurns: 3
-    FailAbility: Soundproof
     Int: PassableEffect, EndTurnEffect
-    FailMessage:
-        if (victim.hasAbility(AbilityNamesies.SOUNDPROOF)) {
-            return victim.getName() + "'s " + victim.getAbility().getName() + " makes it immune to sound based moves!";
-        }
-        ###
     ApplyEndTurn:
         Messages.add(victim.getName() + "'s Perish Song count fell to " + (this.getTurns() - 1) + "!");
         if (this.getTurns() == 1) {
@@ -1057,7 +1047,7 @@ Powder:
     SelfBlockMessage:
         return "The powder exploded!";
         ###
-    FailCondition: PowderBlocker.containsPowderBlocker(b, victim)
+    EffectApplies: !PowderBlocker.containsPowderBlocker(b, victim)
 *
 EatenBerry:
 *

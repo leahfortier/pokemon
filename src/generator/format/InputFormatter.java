@@ -2,7 +2,6 @@ package generator.format;
 
 import generator.ClassFields;
 import generator.fieldinfo.ConstructorInfo;
-import generator.fieldinfo.FailureInfo;
 import generator.fieldinfo.InfoList;
 import main.Global;
 import util.file.FileIO;
@@ -16,15 +15,14 @@ import java.util.Scanner;
 public class InputFormatter {
     private Map<String, MethodInfo> overrideMethods;
     private ConstructorInfo constructorInfo;
-    private FailureInfo failureInfo;
 
     public void close() {}
     public void validate(ClassFields fields) {}
     public void useOverride(String overrideName) {}
 
-    protected String replaceBody(String body, String original, String remaining, int parameterIndex, int numParameters) {
+    protected String replaceBody(String body, String original, String remaining, int parameterIndex) {
         for (ReplaceType replaceType : ReplaceType.values()) {
-            body = replaceType.replaceBody(body, original, remaining, parameterIndex, numParameters);
+            body = replaceType.replaceBody(body, original, remaining, parameterIndex);
         }
 
         return body;
@@ -34,7 +32,7 @@ public class InputFormatter {
         body = body.replace("@ClassName", className);
         body = body.replace("@SuperClass", superClass.toUpperCase());
 
-        body = replaceBody(body, fieldValue, "", 0, -1);
+        body = replaceBody(body, fieldValue, "", 0);
 
         int index = 0;
         String[] mcSplit = fieldValue.split(" ");
@@ -45,7 +43,7 @@ public class InputFormatter {
             index += mcSplit[i].length();
             String remaining = fieldValue.substring(index, fieldValue.length());
 
-            body = replaceBody(body, mcSplit[i], remaining, i + 1, mcSplit.length);
+            body = replaceBody(body, mcSplit[i], remaining, i + 1);
         }
 
         return body;
@@ -93,17 +91,7 @@ public class InputFormatter {
         return constructorInfo.getConstructor(fields);
     }
 
-    public String getFailure(ClassFields fields, String superClass) {
-        if (failureInfo == null) {
-            return "";
-        }
-
-        return failureInfo.writeFailure(fields, superClass, this);
-    }
-
     public void readFileFormat(Scanner in) {
-        failureInfo = null;
-
         InfoList superInfo = new InfoList(null);
         InfoList fieldKeys = new InfoList(null);
         while (in.hasNext()) {
@@ -125,9 +113,6 @@ public class InputFormatter {
                     break;
                 case "Fields":
                     fieldKeys = new InfoList(in);
-                    break;
-                case "Failure":
-                    failureInfo = new FailureInfo(in);
                     break;
                 default:
                     Global.error("Invalid format type " + formatType);

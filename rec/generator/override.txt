@@ -29,6 +29,7 @@ GetPriority:
 GetType:
     Header: Type getType(Battle b, ActivePokemon user)
 *
+# This is for attacks, not effects
 FullApplies:
     Header: boolean applies(Battle b, ActivePokemon user, ActivePokemon victim)
 *
@@ -39,6 +40,24 @@ Applies:
 *
 ExtraApplies:
     AddMapField: Applies: {0}
+*
+EffectApplies:
+    AddMapField: TotalEffectApplies:
+        return ApplyResult.newResult({0});
+        ###
+*
+# Not totally sure why there's an extra space in between these two lines...
+FullEffectApplies:
+    AddMapField: TotalEffectApplies:
+        {0}
+        return ApplyResult.success();
+        ###
+*
+TotalEffectApplies:
+    Header: ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
+*
+StatusBaseApplies:
+    Header: ApplyResult applies(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 StatusApplies:
     Header: boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim)
@@ -583,7 +602,7 @@ OnProtectingSuccess:
     Header: void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp)
 *
 SuccessiveDecay:
-    AddMapField: FailCondition: !RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))
+    AddMapField: EffectApplies: RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))
 *
 Trapped:
     Header: boolean trapped(Battle b, ActivePokemon escaper)
@@ -628,9 +647,10 @@ SafeguardEffect:
     AddMapField: NumTurns: 5
     AddInterface: StatusPreventionEffect
     AddMapField: StatusPrevent:
-        return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
+        if (!caster.hasAbility(AbilityNamesies.INFILTRATOR)) {
+            return ApplyResult.failure("{0} protects " + victim.getName() + " from status conditions!");
+        }
         ###
-    AddMapField: StatusPreventMessage: "{0} protects " + victim.getName() + " from status conditions!"
 *
 UsedProof:
     AddMapField: CanHave: True
@@ -795,12 +815,40 @@ SetTurns:
     Header: void setTurns(int turns)
 *
 StatusPrevent:
-    Header: boolean preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status)
+    Header: ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status)
+    End:
+        
+        return ApplyResult.success();
+        ###
 *
-StatusPreventMessage:
-    Header: String statusPreventionMessage(ActivePokemon victim)
+EffectPrevent:
+    Header: PokemonEffectNamesies getPreventableEffect()
+    AddInterface: SingleEffectPreventionAbility
+    Body:
+        return PokemonEffectNamesies.{00};
+        ###
+*
+MultipleEffectPreventionAbility:
+    Header: Set<PokemonEffectNamesies> getPreventableEffects()
+    AddInterface: MultipleEffectPreventionAbility
     Body:
         return {0};
+        ###
+*
+FullEffectPrevent:
+    Header: ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName)
+    AddInterface: EffectPreventionEffect
+*
+EffectSourcePreventMessage:
+    Header: String getSourcePreventMessage(ActivePokemon victim, String sourceName)
+    Body:
+        return victim.getName() + "'s " + sourceName + " prevents {0}!";
+        ###
+*
+EffectSourceRemoveMessage:
+    Header: String getSourceRemoveMessage(ActivePokemon victim, String sourceName)
+    Body:
+        return victim.getName() + " is no longer {0} due to its " + sourceName + "!";
         ###
 *
 PowerMultiplierCondition:
@@ -814,9 +862,6 @@ GetMultiplier:
 *
 GetOppMultiplier:
     Header: double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
-*
-ShouldBlock:
-    Header: boolean shouldBlock(ActivePokemon caster, ActivePokemon victim, EffectNamesies effectNamesies)
 *
 StatProtect:
     AddMapField: StatProtectingEffect: 
@@ -870,13 +915,6 @@ DeathWish:
 *
 KillWish:
     Header: void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer)
-*
-FailMessage:
-    Header: String getFailMessage(Battle b, ActivePokemon user, ActivePokemon victim)
-    End:
-
-        return super.getFailMessage(b, user, victim);
-        ###
 *
 Defog:
     AddInterface: DefogRelease
@@ -1708,13 +1746,13 @@ NextLevel:
 *
 FlinchItem:
     AddMapField: FlingEffect:
-        if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false)) {
+        if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false).isSuccess()) {
             Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
         }
         ###
     AddMapField: OpponentTakeDamage:
         if (RandomUtils.chanceTest(10)) {
-            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, false)) {
+            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, false).isSuccess()) {
                 Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
             }
         }
@@ -1797,12 +1835,6 @@ IgnoreAbilityMove:
 *
 GetCurableEffects:
     Header: Set<PokemonEffectNamesies> getCurableEffects()
-    Body:
-        return {0};
-        ###
-*
-CureEffectRemoveMessage:
-    Header: String getRemoveMessage(ActivePokemon victim, PokemonEffectNamesies effectType)
     Body:
         return {0};
         ###

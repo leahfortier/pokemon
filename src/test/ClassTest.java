@@ -2,8 +2,11 @@ package test;
 
 import battle.attack.Attack;
 import battle.attack.AttackInterface;
+import battle.effect.EffectInterfaces.EffectPreventionAbility;
+import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
+import battle.effect.EffectInterfaces.SingleEffectPreventionAbility;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
@@ -22,8 +25,8 @@ import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.DamageTakenEffect;
 import battle.effect.InvokeInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
-import battle.effect.InvokeInterfaces.EffectBlockerEffect;
 import battle.effect.InvokeInterfaces.EffectExtendingEffect;
+import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EncounterRateMultiplier;
 import battle.effect.InvokeInterfaces.EndBattleEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
@@ -190,6 +193,9 @@ public class ClassTest extends BaseTest {
             // MultiTurnMove should not be directly inherited
             checkInstance(classy, MultiTurnMove.class, ChargingMove.class, RechargingMove.class);
 
+            // EffectPreventionAbility should be single or multiple
+            checkInstance(classy, EffectPreventionAbility.class, SingleEffectPreventionAbility.class, MultipleEffectPreventionAbility.class);
+
             // Casted from CastSource.getSource()
             checkInstance(classy, ChangeAbilitySource.class, castSources);
             checkInstance(classy, ChangeAttackTypeSource.class, castSources);
@@ -216,7 +222,7 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, TrappingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, OpponentTrappingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, BeforeTurnEffect.class, effectListSourcesNoAttack);
-            checkInstance(classy, EffectBlockerEffect.class, effectListSourcesNoAttack);
+            checkInstance(classy, EffectPreventionEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, TargetSwapperEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, StatProtectingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, StatusPreventionEffect.class, effectListSourcesNoAttack);

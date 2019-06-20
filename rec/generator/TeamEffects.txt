@@ -7,11 +7,8 @@ Constructor:
     Namesies Enum TeamEffectNamesies
     MinTurns Default -1 Int
     MaxTurns Default -1 Int
+    CanHave Default False Boolean
     HasAlternateCast Default False Boolean
-*
-Failure:
-    Header boolean applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
-    CanHave Not Default True Boolean b.getTrainer(victim).hasEffect(this.namesies())
 *
 
 ***
@@ -196,6 +193,11 @@ PayDay:
 Safeguard:
     Defog: "The effects of " + released.getName() + "'s Safeguard faded."
     SafeguardEffect: Safeguard
+    Comments:
+        // TODO: This needs to prevent confusion as well
+        // Also test this does not prevent sleep from rest
+        // And also test prevents Flame/Toxic Orb
+        ###
 *
 GuardSpecial:
     SafeguardEffect: Guard Special
