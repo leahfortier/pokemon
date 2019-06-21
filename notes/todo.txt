@@ -156,7 +156,6 @@ Other random things:
     look at sheer cold
     conversion was changed
     look at destiny bond and successive decay
-    look at Ruby sprite on Serebii
     metronome + multi-turn move is not working (Dive)
     Wallet class (CashMoneyHouse?)
     change order of move list
