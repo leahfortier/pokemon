@@ -644,12 +644,12 @@ PartialTrap:
 UsedProof:
     AddMapField: CanHave: True
     AddMapField: AlternateCast:
-        this.addCastMessage(b, caster, victim, source, printCast);
+        this.addCastMessage(b, caster, victim, source, castMessage);
         ###
 *
 AlternateCast:
     AddMapField: HasAlternateCast: True
-    Header: void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
+    Header: void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage)
 *
 BeforeCast:
     Header: void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)

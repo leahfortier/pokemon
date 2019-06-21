@@ -313,8 +313,8 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            this.addCastMessage(b, caster, victim, source, printCast);
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
+            this.addCastMessage(b, caster, victim, source, castMessage);
             this.layers++;
         }
 
@@ -363,8 +363,8 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            this.addCastMessage(b, caster, victim, source, printCast);
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
+            this.addCastMessage(b, caster, victim, source, castMessage);
             this.layers++;
         }
 
@@ -531,9 +531,9 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
             // TODO: This should be a battle effect since it only applies to the player
-            this.addCastMessage(b, caster, victim, source, printCast);
+            this.addCastMessage(b, caster, victim, source, castMessage);
             this.coins += 5*caster.getLevel();
         }
 

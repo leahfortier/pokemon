@@ -35,6 +35,10 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
     protected abstract boolean hasEffect(Battle b, ActivePokemon victim);
     protected abstract Effect<NamesiesType> getEffect(Battle b, ActivePokemon victim);
 
+    public static Effect cast(EffectNamesies namesies, Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        return cast(namesies, b, caster, victim, source, CastMessageGetter.get(printCast));
+    }
+
     public static Effect cast(EffectNamesies namesies, Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
         Effect effect = namesies.getEffect();
         if (effect.hasAlternateCast && effect.hasEffect(b, victim)) {
@@ -63,9 +67,6 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
     protected void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {}
     protected void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {}
     protected void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {}
-
-    // TODO: DELETE
-    protected void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {}
 
     public boolean canHave() {
         return this.canHave;
@@ -102,7 +103,7 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
     }
 
     public static ApplyResult apply(EffectNamesies namesies, Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-        return apply(namesies, b, caster, victim, source, printCast ? CastMessageGetter.empty() : Effect::getCastMessage);
+        return apply(namesies, b, caster, victim, source, CastMessageGetter.get(printCast));
     }
 
     public static ApplyResult apply(EffectNamesies namesies, Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, String castMessage) {
@@ -159,10 +160,6 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
         Messages.add(castMessage.getMessage(this, b, user, victim, source));
     }
 
-    protected void addCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source, boolean printCast) {
-        // TODO: DELETE
-    }
-
     protected String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
         return "";
     }
@@ -204,12 +201,14 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
     public interface CastMessageGetter {
         String getMessage(Effect effect, Battle b, ActivePokemon user, ActivePokemon victim, CastSource source);
 
-        static CastMessageGetter empty() {
-            return with("");
-        }
-
+        // Always prints the input message
         static CastMessageGetter with(String message) {
             return (effect, b, user, victim, source) -> message;
+        }
+
+        // Prints the effect's default cast message if true, and prints nothing if false
+        static CastMessageGetter get(boolean printCast) {
+            return printCast ? Effect::getCastMessage : CastMessageGetter.with("");
         }
     }
 }
