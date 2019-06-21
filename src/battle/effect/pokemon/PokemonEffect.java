@@ -695,9 +695,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void subside(Battle b, ActivePokemon p) {
-            if (Effect.apply(PokemonEffectNamesies.CONFUSION, b, p, p, CastSource.EFFECT, false).isSuccess()) {
-                Messages.add(p.getName() + " became confused due to fatigue!");
-            }
+            String message = p.getName() + " became confused due to fatigue!";
+            Effect.apply(PokemonEffectNamesies.CONFUSION, b, p, p, CastSource.EFFECT, message);
         }
 
         @Override
@@ -888,9 +887,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
             // Doesn't 'fail' if they already have the effect -- just display the message again
-            this.addCastMessage(b, caster, victim, source, printCast);
+            this.addCastMessage(b, caster, victim, source, castMessage);
 
             this.afterCast(b, caster, victim, source);
         }
@@ -1075,7 +1074,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
             this.afterCast(b, caster, victim, source);
         }
 
@@ -1110,8 +1109,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            this.addCastMessage(b, caster, victim, source, printCast);
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
+            this.addCastMessage(b, caster, victim, source, castMessage);
         }
     }
 
@@ -1123,8 +1122,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            this.addCastMessage(b, caster, victim, source, printCast);
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
+            this.addCastMessage(b, caster, victim, source, castMessage);
         }
     }
 
@@ -1235,8 +1234,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            this.addCastMessage(b, caster, victim, source, printCast);
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
+            this.addCastMessage(b, caster, victim, source, castMessage);
         }
 
         @Override
@@ -1258,8 +1257,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            this.addCastMessage(b, caster, victim, source, printCast);
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
+            this.addCastMessage(b, caster, victim, source, castMessage);
         }
 
         @Override
@@ -1983,11 +1982,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
             // Already has the effect, but not ready for it to end yet -- store dat energy
             if (this.turns > 0) {
                 this.turns--;
-                this.addCastMessage(b, caster, victim, source, printCast);
+                this.addCastMessage(b, caster, victim, source, castMessage);
                 return;
             }
 
@@ -2022,7 +2021,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
             this.layers++;
         }
 
@@ -2056,8 +2055,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {
-            this.addCastMessage(b, caster, victim, source, printCast);
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
+            this.addCastMessage(b, caster, victim, source, castMessage);
             this.deactivate();
         }
     }

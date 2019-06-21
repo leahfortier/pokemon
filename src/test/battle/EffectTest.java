@@ -5,6 +5,7 @@ import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.Effect;
+import battle.effect.Effect.CastMessageGetter;
 import battle.effect.EffectInterfaces.EndTurnSubsider;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
@@ -38,7 +39,7 @@ public class EffectTest extends BaseTest {
                         ActivePokemon.class,
                         ActivePokemon.class,
                         CastSource.class,
-                        boolean.class
+                        CastMessageGetter.class
                 );
 
                 // If it didn't throw an exception, then hasAlternateCast MUST be true

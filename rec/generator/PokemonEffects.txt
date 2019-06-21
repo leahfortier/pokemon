@@ -175,9 +175,8 @@ SelfConfusion:
     MinTurns: 2
     MaxTurns: 3
     Subside:
-        if (Effect.apply(PokemonEffectNamesies.CONFUSION, b, p, p, CastSource.EFFECT, false).isSuccess()) {
-            Messages.add(p.getName() + " became confused due to fatigue!");
-        }
+        String message = p.getName() + " became confused due to fatigue!";
+        Effect.apply(PokemonEffectNamesies.CONFUSION, b, p, p, CastSource.EFFECT, message);
         ###
     GetForceMove:
         return move;
@@ -292,7 +291,7 @@ RaiseCrits:
     CanHave: True
     AlternateCast:
         // Doesn't 'fail' if they already have the effect -- just display the message again
-        this.addCastMessage(b, caster, victim, source, printCast);
+        this.addCastMessage(b, caster, victim, source, castMessage);
         
         this.afterCast(b, caster, victim, source);
         ###
@@ -859,7 +858,7 @@ Bide:
         // Already has the effect, but not ready for it to end yet -- store dat energy
         if (this.turns > 0) {
             this.turns--;
-            this.addCastMessage(b, caster, victim, source, printCast);
+            this.addCastMessage(b, caster, victim, source, castMessage);
             return;
         }
 
@@ -909,7 +908,7 @@ PowerTrick:
     Int: PassableEffect, StatSwitchingEffect
     CastMessage: user.getName() + "'s attack and defense were swapped!"
     AlternateCast:
-        this.addCastMessage(b, caster, victim, source, printCast);
+        this.addCastMessage(b, caster, victim, source, castMessage);
         this.deactivate();
         ###
 *

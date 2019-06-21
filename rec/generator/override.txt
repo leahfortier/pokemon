@@ -644,12 +644,12 @@ PartialTrap:
 UsedProof:
     AddMapField: CanHave: True
     AddMapField: AlternateCast:
-        this.addCastMessage(b, caster, victim, source, printCast);
+        this.addCastMessage(b, caster, victim, source, castMessage);
         ###
 *
 AlternateCast:
     AddMapField: HasAlternateCast: True
-    Header: void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast)
+    Header: void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage)
 *
 BeforeCast:
     Header: void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source)
@@ -1736,15 +1736,13 @@ NextLevel:
 *
 FlinchItem:
     AddMapField: FlingEffect:
-        if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false).isSuccess()) {
-            Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
-        }
+        String message = "The " + this.getName() + " caused " + pelted.getName() + " to flinch!";
+        Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, message);
         ###
     AddMapField: OpponentTakeDamage:
         if (RandomUtils.chanceTest(10)) {
-            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, false).isSuccess()) {
-                Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
-            }
+            String message = user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!";
+            Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, message);
         }
         ###
     AddInterface: OpponentTakeDamageEffect
@@ -1856,8 +1854,8 @@ OpponentEndAttack:
 TerrainStarter:
     AddInterface: EntryEffect
     AddMapField: Enter:
-        Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to {0} Terrain!");
-        Effect.cast(TerrainNamesies.{00}_TERRAIN, b, enterer, enterer, CastSource.ABILITY, false);
+        String message = enterer.getName() + "'s " + this.getName() + " changed the field to {0} Terrain!";
+        Effect.cast(TerrainNamesies.{00}_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         ###
 *
 MoldBreakerBreaker:

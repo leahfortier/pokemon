@@ -174,8 +174,9 @@ Destiny Knot:
     Price: 4000
     Fling: 10
     ReceiveEffect:
-        if (effectType == PokemonEffectNamesies.INFATUATION && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, caster, CastSource.HELD_ITEM, false).isSuccess()) {
-            Messages.add(victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!");
+        if (effectType == PokemonEffectNamesies.INFATUATION) {
+            String message = victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!";
+            Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, caster, CastSource.HELD_ITEM, message);
         }
         ###
 *
@@ -1908,6 +1909,7 @@ Starf Berry:
         int rand = RandomUtils.getRandomInt(Stat.NUM_BATTLE_STATS + 1);
 
         // Raise crit
+        // TODO: Doesn't this fail sometimes though? why are we always returning true?
         if (rand == Stat.NUM_BATTLE_STATS) {
             Effect.cast(PokemonEffectNamesies.RAISE_CRITS, b, user, user, source, true);
             return true;

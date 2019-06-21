@@ -461,8 +461,7 @@ public final class InvokeInterfaces {
         default void removeLevitation(Battle b, ActivePokemon p) {
             if (p.isSemiInvulnerableFlying()) {
                 ((MultiTurnMove)p.getAttack()).resetReady();
-                Messages.add(p.getName() + " fell to the ground!");
-                Effect.cast(PokemonEffectNamesies.FLINCH, b, p, p, CastSource.EFFECT, false);
+                Effect.cast(PokemonEffectNamesies.FLINCH, b, p, p, CastSource.EFFECT, p.getName() + " fell to the ground!");
             }
 
             LevitationEffect.falllllllll(b, p);
