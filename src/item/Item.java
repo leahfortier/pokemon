@@ -591,8 +591,9 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
-            if (effectType == PokemonEffectNamesies.INFATUATION && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, caster, CastSource.HELD_ITEM, false).isSuccess()) {
-                Messages.add(victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!");
+            if (effectType == PokemonEffectNamesies.INFATUATION) {
+                String message = victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!";
+                Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, caster, CastSource.HELD_ITEM, message);
             }
         }
 
@@ -2896,17 +2897,15 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false).isSuccess()) {
-                Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
-            }
+            String message = "The " + this.getName() + " caused " + pelted.getName() + " to flinch!";
+            Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, message);
         }
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
-                if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, false).isSuccess()) {
-                    Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
-                }
+                String message = user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!";
+                Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, message);
             }
         }
     }
@@ -3013,17 +3012,15 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            if (Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, false).isSuccess()) {
-                Messages.add("The " + this.getName() + " caused " + pelted.getName() + " to flinch!");
-            }
+            String message = "The " + this.getName() + " caused " + pelted.getName() + " to flinch!";
+            Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, message);
         }
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
-                if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, false).isSuccess()) {
-                    Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
-                }
+                String message = user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!";
+                Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, message);
             }
         }
     }

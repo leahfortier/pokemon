@@ -653,8 +653,9 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (RandomUtils.chanceTest(30) && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, user, CastSource.ABILITY, false).isSuccess()) {
-                Messages.add(victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!");
+            if (RandomUtils.chanceTest(30)) {
+                String message = victim.getName() + "'s " + this.getName() + " infatuated " + user.getName() + "!";
+                Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, user, CastSource.ABILITY, message);
             }
         }
 
@@ -779,9 +780,8 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
-                if (Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.ABILITY, false).isSuccess()) {
-                    Messages.add(user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!");
-                }
+                String message = user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!";
+                Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.ABILITY, message);
             }
         }
 
@@ -2566,9 +2566,8 @@ public abstract class Ability implements AbilityInterface {
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
                 user.setLastMoveUsed();
-                if (Effect.apply(PokemonEffectNamesies.DISABLE, b, victim, user, CastSource.ABILITY, false).isSuccess()) {
-                    Messages.add(victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName());
-                }
+                String message = victim.getName() + "'s " + this.getName() + " disabled " + user.getName() + "'s " + user.getAttack().getName();
+                Effect.apply(PokemonEffectNamesies.DISABLE, b, victim, user, CastSource.ABILITY, message);
             }
         }
     }

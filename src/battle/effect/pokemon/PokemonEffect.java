@@ -695,9 +695,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void subside(Battle b, ActivePokemon p) {
-            if (Effect.apply(PokemonEffectNamesies.CONFUSION, b, p, p, CastSource.EFFECT, false).isSuccess()) {
-                Messages.add(p.getName() + " became confused due to fatigue!");
-            }
+            String message = p.getName() + " became confused due to fatigue!";
+            Effect.apply(PokemonEffectNamesies.CONFUSION, b, p, p, CastSource.EFFECT, message);
         }
 
         @Override

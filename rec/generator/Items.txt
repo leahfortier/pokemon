@@ -174,8 +174,9 @@ Destiny Knot:
     Price: 4000
     Fling: 10
     ReceiveEffect:
-        if (effectType == PokemonEffectNamesies.INFATUATION && Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, caster, CastSource.HELD_ITEM, false).isSuccess()) {
-            Messages.add(victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!");
+        if (effectType == PokemonEffectNamesies.INFATUATION) {
+            String message = victim.getName() + "'s " + this.getName() + " caused " + caster.getName() + " to fall in love!";
+            Effect.apply(PokemonEffectNamesies.INFATUATION, b, victim, caster, CastSource.HELD_ITEM, message);
         }
         ###
 *
