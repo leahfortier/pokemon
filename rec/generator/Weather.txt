@@ -24,7 +24,6 @@ Raining:
 *
 Sunny:
     WeatherElement: Fire
-    Int: StatusPreventionEffect
     BattleEndTurnMessage: "The sunlight is strong."
     CastMessage: "The sunlight turned harsh!"
     SubsideMessage: "The sunlight faded."

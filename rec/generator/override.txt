@@ -641,17 +641,6 @@ PartialTrap:
     AddMapField: RapidSpinNoInterface: released.getName() + " was released from {1_}!"
     AddMapField: TrappingMessage: trapped.getName() + " cannot be recalled due to {1_}!"
 *
-SafeguardEffect:
-    AddMapField: CastMessage: user.getName() + " is covered by a veil!"
-    AddMapField: SubsideMessage: "The effects of " + victim.getName() + "'s {0} faded."
-    AddMapField: NumTurns: 5
-    AddInterface: StatusPreventionEffect
-    AddMapField: StatusPrevent:
-        if (!caster.hasAbility(AbilityNamesies.INFILTRATOR)) {
-            return ApplyResult.failure("{0} protects " + victim.getName() + " from status conditions!");
-        }
-        ###
-*
 UsedProof:
     AddMapField: CanHave: True
     AddMapField: AlternateCast:
@@ -816,6 +805,7 @@ SetTurns:
 *
 StatusPrevent:
     Header: ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status)
+    AddInterface: StatusPreventionEffect
     End:
         
         return ApplyResult.success();

@@ -64,6 +64,10 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
     protected void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {}
     protected void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, boolean printCast) {}
 
+    public boolean canHave() {
+        return this.canHave;
+    }
+
     public boolean hasAlternateCast() {
         return this.hasAlternateCast;
     }

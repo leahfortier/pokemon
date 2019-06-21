@@ -27,7 +27,6 @@ import battle.effect.InvokeInterfaces.ChangeTypeEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.DamageTakenEffect;
 import battle.effect.InvokeInterfaces.DefendingNoAdvantageChanger;
-import battle.effect.InvokeInterfaces.DefogRelease;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
 import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
@@ -1832,7 +1831,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Substitute extends PokemonEffect implements AbsorbDamageEffect, PassableEffect, StickyHoldEffect, StatusPreventionEffect, StatProtectingEffect, EffectPreventionEffect {
+    static class Substitute extends PokemonEffect implements AbsorbDamageEffect, PassableEffect, StickyHoldEffect, StatProtectingEffect, EffectPreventionEffect, StatusPreventionEffect {
         private static final long serialVersionUID = 1L;
 
         private int hp;
@@ -1923,39 +1922,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             return ApplyResult.newResult(victim.getHPRatio() > .25 && victim.getMaxHP() > 3);
-        }
-    }
-
-    static class Mist extends PokemonEffect implements StatProtectingEffect, DefogRelease {
-        private static final long serialVersionUID = 1L;
-
-        Mist() {
-            super(PokemonEffectNamesies.MIST, 5, 5, false, false);
-        }
-
-        @Override
-        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return user.getName() + " shrouded itself in mist!";
-        }
-
-        @Override
-        public String getSubsideMessage(ActivePokemon victim) {
-            return "The mist faded.";
-        }
-
-        @Override
-        public String getDefogReleaseMessage(ActivePokemon released) {
-            return "The mist faded.";
-        }
-
-        @Override
-        public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
-            return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
-        }
-
-        @Override
-        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
-            return "The mist prevents stat reductions!";
         }
     }
 

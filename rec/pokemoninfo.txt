@@ -65293,7 +65293,7 @@ NONE
 1
 5 MISTY_SEED
 25
-FLOWER_VEIL TRIAGE
+NATURAL_CURE TRIAGE
 Posy Picker
 4 0.7 It attaches flowers to its highly nutritious vine. This revitalizes the flowers, and they give off an aromatic scent.
 5120

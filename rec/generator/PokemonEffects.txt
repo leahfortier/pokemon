@@ -760,7 +760,7 @@ Transformed:
         ###
 *
 Substitute:
-    Int: AbsorbDamageEffect, PassableEffect, StickyHoldEffect, StatusPreventionEffect, StatProtectingEffect
+    Int: AbsorbDamageEffect, PassableEffect, StickyHoldEffect, StatProtectingEffect
     Field:
         private int hp;
         
@@ -828,17 +828,6 @@ Substitute:
             return ApplyResult.failure();
         }
         ###
-*
-Mist:
-    NumTurns: 5
-    CastMessage: user.getName() + " shrouded itself in mist!"
-    SubsideMessage: "The mist faded."
-    Defog: "The mist faded."
-    Int: StatProtectingEffect
-    StatProtectingEffect:
-        return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
-        ###
-    StatProtectMessage: "The mist prevents stat reductions!"
 *
 MagicCoat:
     CastMessage: user.getName() + " shrouded itself with a magic coat!"

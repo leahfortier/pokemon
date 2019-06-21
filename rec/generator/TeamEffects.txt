@@ -191,16 +191,43 @@ PayDay:
         ###
 *
 Safeguard:
-    Defog: "The effects of " + released.getName() + "'s Safeguard faded."
-    SafeguardEffect: Safeguard
-    Comments:
-        // TODO: This needs to prevent confusion as well
-        // Also test this does not prevent sleep from rest
-        // And also test prevents Flame/Toxic Orb
+    Defog: "The effects of Safeguard faded."
+    CastMessage: user.getName() + " is covered by a veil!"
+    SubsideMessage: "The effects of Safeguard faded."
+    NumTurns: 5
+    StatusPrevent:
+        if (caster != victim && !caster.hasAbility(AbilityNamesies.INFILTRATOR)) {
+            return ApplyResult.failure("Safeguard prevents status conditions!");
+        }
+        ###
+    FullEffectPrevent:
+        if (effectName == PokemonEffectNamesies.CONFUSION && caster != victim && !caster.hasAbility(AbilityNamesies.INFILTRATOR)) {
+            return ApplyResult.failure("Safeguard prevents confusion!");
+        }
+                
+        return ApplyResult.success();
         ###
 *
+Mist:
+    NumTurns: 5
+    CastMessage: user.getName() + " shrouded itself in mist!"
+    SubsideMessage: "The mist faded."
+    Defog: "The mist faded."
+    Int: StatProtectingEffect
+    StatProtectingEffect:
+        return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
+        ###
+    StatProtectMessage: "The mist prevents stat reductions!"
+*
 GuardSpecial:
-    SafeguardEffect: Guard Special
+    CastMessage: user.getName() + " is shrouded by a veil!"
+    SubsideMessage: "The effects of Guard Special faded."
+    NumTurns: 5
+    Int: StatProtectingEffect
+    StatProtectingEffect:
+        return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
+        ###
+    StatProtectMessage: "Guard Special prevents stat reductions!"
 *
 GetDatCashMoneyTwice:
 *

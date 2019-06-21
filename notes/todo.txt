@@ -128,7 +128,6 @@ Other random things:
 	Exeggutor plant gives two Exeggutor?? -- got one, battled mom, got another? also got one, saved, got another
 	look at natural cure again
 	MoveUseItems do not work in battle -- causes NPE
-	Guard Spec. is doing Safeguard when it should be Mist -- same with Flower Veil
 	Purify doesn't work correctly
 	Strength Sap should fail if the target has -6 Attack
 	Heal Block doesn't work right either
@@ -180,4 +179,5 @@ Other random things:
     is there some way to have like a FirstTriggeredCondition or something for things like items and a lot of other shit
     is there a way to just create the button transitions from the button list by using all the button locations or something like that??
     can we rework printCast things? like pass in the alternate message to print instead of false?
+    can we rewrite infiltrator to be like mold breaker or something? that shit is everywhere and I hate it
     

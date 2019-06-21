@@ -54,7 +54,6 @@ MagicRoom:
     SpecialRoom: magic prevent using items
 *
 FieldUproar:
-    Int: StatusPreventionEffect
     StatusPrevent:
         if (status == StatusNamesies.ASLEEP) {
             return ApplyResult.failure("The uproar prevents sleep!!");

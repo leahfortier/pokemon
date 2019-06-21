@@ -10,6 +10,7 @@ import battle.effect.team.TeamEffect.GuardSpecial;
 import battle.effect.team.TeamEffect.HealSwitch;
 import battle.effect.team.TeamEffect.LightScreen;
 import battle.effect.team.TeamEffect.LuckyChant;
+import battle.effect.team.TeamEffect.Mist;
 import battle.effect.team.TeamEffect.PayDay;
 import battle.effect.team.TeamEffect.Reflect;
 import battle.effect.team.TeamEffect.Safeguard;
@@ -40,6 +41,7 @@ public enum TeamEffectNamesies implements EffectNamesies {
     DEAD_ALLY(DeadAlly::new),
     PAY_DAY(PayDay::new),
     SAFEGUARD(Safeguard::new),
+    MIST(Mist::new),
     GUARD_SPECIAL(GuardSpecial::new),
     GET_DAT_CASH_MONEY_TWICE(GetDatCashMoneyTwice::new);
 

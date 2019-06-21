@@ -43,6 +43,9 @@ public class EffectTest extends BaseTest {
 
                 // If it didn't throw an exception, then hasAlternateCast MUST be true
                 Assert.assertTrue(effect.hasAlternateCast());
+
+                // In order to have an alternate cast, they need to be able to have the effect
+                Assert.assertTrue(effect.canHave());
             } catch (NoSuchMethodException e) {
                 // Method was not overridden, hasAlternateCast must be false
                 Assert.assertFalse(effect.hasAlternateCast());
@@ -913,5 +916,122 @@ public class EffectTest extends BaseTest {
         Assert.assertFalse(attacking.isLevitating(battle));
         Assert.assertFalse(defending.isLevitating(battle));
         attacking.assertNotFullHealth();
+    }
+
+    @Test
+    public void safeguardTest() {
+        // Also should not work on self-confusion fatigue things
+        safeguardTest(
+                (battle, attacking, defending) -> {
+                    // Thrash will attack for 2-3 turns and then confuse the user
+                    attacking.setMove(new Move(AttackNamesies.RECOVER));
+                    defending.setMove(new Move(AttackNamesies.THRASH));
+
+                    battle.fight();
+                    defending.assertHasEffect(PokemonEffectNamesies.SELF_CONFUSION);
+
+                    battle.fight();
+
+                    // If attacking still has the effect, then it's three turns -- do that turn
+                    if (defending.hasEffect(PokemonEffectNamesies.SELF_CONFUSION)) {
+                        battle.fight();
+                    }
+
+                    defending.assertNoEffect(PokemonEffectNamesies.SELF_CONFUSION);
+                },
+                (battle, attacking, defending) -> defending.assertHasEffect(PokemonEffectNamesies.CONFUSION)
+        );
+
+        // Safeguard prevents against status conditions (like poison)
+        safeguardTest(
+                (battle, attacking, defending) -> battle.attackingFight(AttackNamesies.TOXIC),
+                (battle, attacking, defending) -> defending.assertBadPoison(),
+                (battle, attacking, defending) -> defending.assertNoStatus()
+        );
+
+        // (And also burn)
+        safeguardTest(
+                (battle, attacking, defending) -> battle.attackingFight(AttackNamesies.WILL_O_WISP),
+                (battle, attacking, defending) -> defending.assertHasStatus(StatusNamesies.BURNED),
+                (battle, attacking, defending) -> defending.assertNoStatus()
+        );
+
+        // Safeguard protects against confusion also
+        safeguardTest(
+                (battle, attacking, defending) -> battle.attackingFight(AttackNamesies.CONFUSE_RAY),
+                (battle, attacking, defending) -> defending.assertHasEffect(PokemonEffectNamesies.CONFUSION),
+                (battle, attacking, defending) -> defending.assertNoEffect(PokemonEffectNamesies.CONFUSION)
+        );
+
+        // Unless the attacker has Infiltrator
+        safeguardTest(
+                (battle, attacking, defending) -> {
+                    attacking.withAbility(AbilityNamesies.INFILTRATOR);
+                    battle.attackingFight(AttackNamesies.WILL_O_WISP);
+                },
+                (battle, attacking, defending) -> defending.assertHasStatus(StatusNamesies.BURNED)
+        );
+
+        // For confusion too
+        safeguardTest(
+                (battle, attacking, defending) -> {
+                    attacking.withAbility(AbilityNamesies.INFILTRATOR);
+                    battle.attackingFight(AttackNamesies.CONFUSE_RAY);
+                },
+                (battle, attacking, defending) -> defending.assertHasEffect(PokemonEffectNamesies.CONFUSION)
+        );
+
+        // Safeguard does not prevent against self-inflicted statuses like Toxic Orb
+        safeguardTest(
+                (battle, attacking, defending) -> {
+                    defending.giveItem(ItemNamesies.TOXIC_ORB);
+                    battle.splashFight();
+                },
+                (battle, attacking, defending) -> defending.assertBadPoison()
+        );
+
+        // Same deal with Rest (False Swipe so that Rest doesn't fail for full health reasons)
+        safeguardTest(
+                (battle, attacking, defending) -> battle.fight(AttackNamesies.FALSE_SWIPE, AttackNamesies.REST),
+                (battle, attacking, defending) -> defending.assertHasStatus(StatusNamesies.ASLEEP)
+        );
+
+        // Also should not work on self-confusion fatigue things
+        safeguardTest(
+                (battle, attacking, defending) -> {
+                    // Thrash will attack for 2-3 turns and then confuse the user
+                    attacking.setMove(new Move(AttackNamesies.THRASH));
+                    defending.setMove(new Move(AttackNamesies.RECOVER));
+
+                    battle.fight();
+                    attacking.assertHasEffect(PokemonEffectNamesies.SELF_CONFUSION);
+
+                    battle.fight();
+
+                    // If attacking still has the effect, then it's three turns -- do that turn
+                    if (attacking.hasEffect(PokemonEffectNamesies.SELF_CONFUSION)) {
+                        battle.fight();
+                    }
+
+                    attacking.assertNoEffect(PokemonEffectNamesies.SELF_CONFUSION);
+                },
+                (battle, attacking, defending) -> attacking.hasEffect(PokemonEffectNamesies.CONFUSION)
+        );
+    }
+
+    private void safeguardTest(PokemonManipulator manipulator, PokemonManipulator samesies) {
+        safeguardTest(manipulator, samesies, samesies);
+    }
+
+    private void safeguardTest(PokemonManipulator manipulator, PokemonManipulator withoutManipulator, PokemonManipulator withManipulator) {
+        PokemonManipulator safeguard = (battle, attacking, defending) -> {
+            battle.defendingFight(AttackNamesies.SAFEGUARD);
+            Assert.assertFalse(battle.getPlayer().hasEffect(TeamEffectNamesies.SAFEGUARD));
+            Assert.assertTrue(battle.getOpponent().hasEffect(TeamEffectNamesies.SAFEGUARD));
+        };
+
+        new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                .with(manipulator)
+                .doubleTake(safeguard, withoutManipulator, withManipulator);
     }
 }

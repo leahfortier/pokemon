@@ -520,7 +520,6 @@ Serene Grace:
 *
 Leaf Guard:
     Desc: Prevents status conditions in sunny weather.
-    Int: StatusPreventionEffect
     StatusPrevent:
         if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
             return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " prevents status conditions!");
@@ -1475,7 +1474,6 @@ Surge Surfer:
 *
 Flower Veil:
     Desc: Grass-type Pok\u00e9mon are protected from status conditions and the lowering of their stats.
-    Int: StatusPreventionEffect
     StatusPrevent:
         if (victim.isType(b, Type.GRASS)) {
             return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " prevents status conditions!");

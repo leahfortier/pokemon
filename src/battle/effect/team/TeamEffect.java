@@ -7,13 +7,17 @@ import battle.attack.AttackNamesies;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
+import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.BarrierEffect;
 import battle.effect.InvokeInterfaces.CritBlockerEffect;
 import battle.effect.InvokeInterfaces.DefogRelease;
+import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EndBattleEffect;
 import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.RapidSpinRelease;
+import battle.effect.InvokeInterfaces.StatProtectingEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
+import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
 import message.Messages;
@@ -550,10 +554,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
     }
 
-    // TODO: This needs to prevent confusion as well
-    // Also test this does not prevent sleep from rest
-    // And also test prevents Flame/Toxic Orb
-    static class Safeguard extends TeamEffect implements DefogRelease, StatusPreventionEffect {
+    static class Safeguard extends TeamEffect implements DefogRelease, StatusPreventionEffect, EffectPreventionEffect {
         private static final long serialVersionUID = 1L;
 
         Safeguard() {
@@ -562,7 +563,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
         @Override
         public String getDefogReleaseMessage(ActivePokemon released) {
-            return "The effects of " + released.getName() + "'s Safeguard faded.";
+            return "The effects of Safeguard faded.";
         }
 
         @Override
@@ -572,20 +573,62 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
         @Override
         public String getSubsideMessage(ActivePokemon victim) {
-            return "The effects of " + victim.getName() + "'s Safeguard faded.";
+            return "The effects of Safeguard faded.";
         }
 
         @Override
         public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            if (!caster.hasAbility(AbilityNamesies.INFILTRATOR)) {
-                return ApplyResult.failure("Safeguard protects " + victim.getName() + " from status conditions!");
+            if (caster != victim && !caster.hasAbility(AbilityNamesies.INFILTRATOR)) {
+                return ApplyResult.failure("Safeguard prevents status conditions!");
+            }
+
+            return ApplyResult.success();
+        }
+
+        @Override
+        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+            if (effectName == PokemonEffectNamesies.CONFUSION && caster != victim && !caster.hasAbility(AbilityNamesies.INFILTRATOR)) {
+                return ApplyResult.failure("Safeguard prevents confusion!");
             }
 
             return ApplyResult.success();
         }
     }
 
-    static class GuardSpecial extends TeamEffect implements StatusPreventionEffect {
+    static class Mist extends TeamEffect implements StatProtectingEffect, DefogRelease {
+        private static final long serialVersionUID = 1L;
+
+        Mist() {
+            super(TeamEffectNamesies.MIST, 5, 5, false, false);
+        }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return user.getName() + " shrouded itself in mist!";
+        }
+
+        @Override
+        public String getSubsideMessage(ActivePokemon victim) {
+            return "The mist faded.";
+        }
+
+        @Override
+        public String getDefogReleaseMessage(ActivePokemon released) {
+            return "The mist faded.";
+        }
+
+        @Override
+        public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
+            return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
+        }
+
+        @Override
+        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+            return "The mist prevents stat reductions!";
+        }
+    }
+
+    static class GuardSpecial extends TeamEffect implements StatProtectingEffect {
         private static final long serialVersionUID = 1L;
 
         GuardSpecial() {
@@ -594,21 +637,22 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return user.getName() + " is covered by a veil!";
+            return user.getName() + " is shrouded by a veil!";
         }
 
         @Override
         public String getSubsideMessage(ActivePokemon victim) {
-            return "The effects of " + victim.getName() + "'s Guard Special faded.";
+            return "The effects of Guard Special faded.";
         }
 
         @Override
-        public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            if (!caster.hasAbility(AbilityNamesies.INFILTRATOR)) {
-                return ApplyResult.failure("Guard Special protects " + victim.getName() + " from status conditions!");
-            }
+        public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
+            return !caster.hasAbility(AbilityNamesies.INFILTRATOR);
+        }
 
-            return ApplyResult.success();
+        @Override
+        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+            return "Guard Special prevents stat reductions!";
         }
     }
 

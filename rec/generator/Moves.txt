@@ -3872,7 +3872,7 @@ Mist:
     Type: Ice
     Cat: Status
     SelfTarget: True
-    PokemonEffect: Mist
+    TeamEffect: Mist
 *
 Last Resort:
     Desc: This move can be used only after the user has used all the other moves it knows in the battle.

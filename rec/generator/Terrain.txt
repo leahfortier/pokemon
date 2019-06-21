@@ -14,7 +14,6 @@ MistyTerrain:
     CastMessage: "Mist swirled around the battlefield!"
     SubsideMessage: "The mist disappeared from the battlefield."
     Terrain: Misty
-    Int: StatusPreventionEffect
     StatusPrevent:
         // Levitating Pokemon are immune to the mist
         if (!victim.isLevitating(b)) {
@@ -40,7 +39,6 @@ ElectricTerrain:
     CastMessage: "Electricity crackled around the battlefield!"
     SubsideMessage: "The electricity dissipated."
     Terrain: Electric
-    Int: StatusPreventionEffect
     StatusPrevent:
         if (status == StatusNamesies.ASLEEP && !victim.isLevitating(b)) {
             return ApplyResult.failure("The electric terrain prevents sleep!");

@@ -48,7 +48,6 @@ import battle.effect.pokemon.PokemonEffect.MagnetRise;
 import battle.effect.pokemon.PokemonEffect.MatBlock;
 import battle.effect.pokemon.PokemonEffect.Mimic;
 import battle.effect.pokemon.PokemonEffect.MiracleEye;
-import battle.effect.pokemon.PokemonEffect.Mist;
 import battle.effect.pokemon.PokemonEffect.Nightmare;
 import battle.effect.pokemon.PokemonEffect.PerishSong;
 import battle.effect.pokemon.PokemonEffect.Powder;
@@ -138,7 +137,6 @@ public enum PokemonEffectNamesies implements EffectNamesies {
     FIDDY_PERCENT_STRONGER(FiddyPercentStronger::new),
     TRANSFORMED(Transformed::new),
     SUBSTITUTE(Substitute::new),
-    MIST(Mist::new),
     MAGIC_COAT(MagicCoat::new),
     BIDE(Bide::new),
     HALF_WEIGHT(HalfWeight::new),

@@ -6743,7 +6743,7 @@ public abstract class Attack implements AttackInterface {
 
         Mist() {
             super(AttackNamesies.MIST, Type.ICE, MoveCategory.STATUS, 30, "The user cloaks itself and its allies in a white mist that prevents any of their stats from being lowered for five turns.");
-            super.effect = PokemonEffectNamesies.MIST;
+            super.effect = TeamEffectNamesies.MIST;
             super.selfTarget = true;
         }
     }
