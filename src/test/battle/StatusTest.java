@@ -145,7 +145,7 @@ public class StatusTest extends BaseTest {
         defending.assertNoStatus();
         Assert.assertTrue(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.SAFEGUARD));
 
-        // Unless that ability is Inflitrator
+        // Unless that ability is Infiltrator
         attacking.withAbility(AbilityNamesies.INFILTRATOR);
         battle.attackingFight(AttackNamesies.TOXIC);
         defending.assertBadPoison();
