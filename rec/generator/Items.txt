@@ -583,22 +583,40 @@ Weakness Policy:
         ###
 *
 White Herb:
-    Int: HoldItem
+    Int: HoldItem, EndTurnEffect
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. It will restore any lowered stat in battle. It can be used only once.
     Price: 4000
     Fling: 10
-    StatProtectAll: true
-    Comments: // NOTE: Works like Clear Body, since ain't nobody want to keep track of stats
-    FlingEffect:
-        // Restores negative stat changes to the pelted
-        for (Stat stat : Stat.BATTLE_STATS) {
-            if (pelted.getStage(stat) < 0) {
-                pelted.getStages().setStage(stat, 0);
+    Field:
+        // Restores negative stat changes to the victim
+        private boolean usesies(ActivePokemon p) {
+            boolean used = false;
+            for (Stat stat : Stat.BATTLE_STATS) {
+                if (p.getStage(stat) < 0) {
+                    p.getStages().setStage(stat, 0);
+                    used = true;
+                }
             }
+            return used;
         }
-
-        Messages.add("The " + this.getName() + " restored " + pelted.getName() + "'s negative stat changes!");
+        ###
+    FlingEffect:
+        if (usesies(pelted)) {
+            Messages.add("The " + this.getName() + " restored " + pelted.getName() + "'s negative stat changes!");
+        }
+        ###
+    StatLowered:
+        if (usesies(victim)) {
+            Messages.add(victim.getName() + "'s " + this.getName() + " restored its negative stat changes!");
+            this.consumeItem(b, victim);
+        }
+        ###
+    ApplyEndTurn:
+        if (usesies(victim)) {
+            Messages.add(victim.getName() + "'s " + this.getName() + " restored its negative stat changes!");
+            this.consumeItem(b, victim);
+        }
         ###
 *
 Wide Lens:

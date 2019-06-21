@@ -2416,7 +2416,10 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            victim.getStages().modifyStage(victim, 2, Stat.ATTACK, b, CastSource.ABILITY);
+            // Doesn't raise for self-inflicted lowers
+            if (caster != victim) {
+                victim.getStages().modifyStage(victim, 2, Stat.ATTACK, b, CastSource.ABILITY);
+            }
         }
     }
 
@@ -2429,7 +2432,10 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            victim.getStages().modifyStage(victim, 2, Stat.SP_ATTACK, b, CastSource.ABILITY);
+            // Doesn't raise for self-inflicted lowers
+            if (caster != victim) {
+                victim.getStages().modifyStage(victim, 2, Stat.SP_ATTACK, b, CastSource.ABILITY);
+            }
         }
     }
 

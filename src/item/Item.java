@@ -35,7 +35,7 @@ import battle.effect.InvokeInterfaces.PowderBlocker;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.InvokeInterfaces.RepellingEffect;
 import battle.effect.InvokeInterfaces.StallingEffect;
-import battle.effect.InvokeInterfaces.StatProtectingEffect;
+import battle.effect.InvokeInterfaces.StatLoweredEffect;
 import battle.effect.InvokeInterfaces.StrikeFirstEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TerrainCastEffect;
@@ -1627,9 +1627,20 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    // NOTE: Works like Clear Body, since ain't nobody want to keep track of stats
-    static class WhiteHerb extends Item implements HoldItem, StatProtectingEffect {
+    static class WhiteHerb extends Item implements HoldItem, EndTurnEffect, StatLoweredEffect {
         private static final long serialVersionUID = 1L;
+
+        // Restores negative stat changes to the victim
+        private boolean usesies(ActivePokemon p) {
+            boolean used = false;
+            for (Stat stat : Stat.BATTLE_STATS) {
+                if (p.getStage(stat) < 0) {
+                    p.getStages().setStage(stat, 0);
+                    used = true;
+                }
+            }
+            return used;
+        }
 
         WhiteHerb() {
             super(ItemNamesies.WHITE_HERB, "An item to be held by a Pok\u00e9mon. It will restore any lowered stat in battle. It can be used only once.", BagCategory.MISC);
@@ -1638,29 +1649,30 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
-            // Restores negative stat changes to the pelted
-            for (Stat stat : Stat.BATTLE_STATS) {
-                if (pelted.getStage(stat) < 0) {
-                    pelted.getStages().setStage(stat, 0);
-                }
+            if (usesies(pelted)) {
+                Messages.add("The " + this.getName() + " restored " + pelted.getName() + "'s negative stat changes!");
             }
+        }
 
-            Messages.add("The " + this.getName() + " restored " + pelted.getName() + "'s negative stat changes!");
+        @Override
+        public void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            if (usesies(victim)) {
+                Messages.add(victim.getName() + "'s " + this.getName() + " restored its negative stat changes!");
+                this.consumeItem(b, victim);
+            }
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            if (usesies(victim)) {
+                Messages.add(victim.getName() + "'s " + this.getName() + " restored its negative stat changes!");
+                this.consumeItem(b, victim);
+            }
         }
 
         @Override
         public int flingDamage() {
             return 10;
-        }
-
-        @Override
-        public boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
-            return true;
-        }
-
-        @Override
-        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
-            return p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!";
         }
     }
 

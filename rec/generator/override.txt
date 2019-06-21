@@ -1728,11 +1728,16 @@ NormalTypeChanger:
     AddMapField: PowerMultiplierCondition: 1.2 activated
 *
 NextLevel:
+    AddMapField: StatLowered:
+        // Doesn't raise for self-inflicted lowers
+        if (caster != victim) {
+            victim.getStages().modifyStage(victim, 2, Stat.{00}, b, CastSource.@SuperClass);
+        }
+        ###
+*
+StatLowered:
     AddInterface: StatLoweredEffect
     Header: void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim)
-    Body:
-        victim.getStages().modifyStage(victim, 2, Stat.{00}, b, CastSource.@SuperClass);
-        ###
 *
 FlinchItem:
     AddMapField: FlingEffect:

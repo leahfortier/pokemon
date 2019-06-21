@@ -122,8 +122,7 @@ public class Stages implements Serializable {
 
         this.incrementStage(stat, val);
 
-        // Defiant raises Attack stat by two when a stat is lowered by the opponent
-        if (val < 0 && caster != victim) {
+        if (val < 0) {
             StatLoweredEffect.invokeStatLoweredEffect(b, caster, victim);
         }
 
