@@ -1908,6 +1908,7 @@ Starf Berry:
         int rand = RandomUtils.getRandomInt(Stat.NUM_BATTLE_STATS + 1);
 
         // Raise crit
+        // TODO: Doesn't this fail sometimes though? why are we always returning true?
         if (rand == Stat.NUM_BATTLE_STATS) {
             Effect.cast(PokemonEffectNamesies.RAISE_CRITS, b, user, user, source, true);
             return true;

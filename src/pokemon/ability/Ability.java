@@ -4225,8 +4225,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to Psychic Terrain!");
-            Effect.cast(TerrainNamesies.PSYCHIC_TERRAIN, b, enterer, enterer, CastSource.ABILITY, false);
+            String message = enterer.getName() + "'s " + this.getName() + " changed the field to Psychic Terrain!";
+            Effect.cast(TerrainNamesies.PSYCHIC_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -4239,8 +4239,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to Electric Terrain!");
-            Effect.cast(TerrainNamesies.ELECTRIC_TERRAIN, b, enterer, enterer, CastSource.ABILITY, false);
+            String message = enterer.getName() + "'s " + this.getName() + " changed the field to Electric Terrain!";
+            Effect.cast(TerrainNamesies.ELECTRIC_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -4253,8 +4253,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to Misty Terrain!");
-            Effect.cast(TerrainNamesies.MISTY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, false);
+            String message = enterer.getName() + "'s " + this.getName() + " changed the field to Misty Terrain!";
+            Effect.cast(TerrainNamesies.MISTY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -4267,8 +4267,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to Grassy Terrain!");
-            Effect.cast(TerrainNamesies.GRASSY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, false);
+            String message = enterer.getName() + "'s " + this.getName() + " changed the field to Grassy Terrain!";
+            Effect.cast(TerrainNamesies.GRASSY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 }

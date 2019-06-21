@@ -39,6 +39,10 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
         return cast(namesies, b, caster, victim, source, CastMessageGetter.get(printCast));
     }
 
+    public static Effect cast(EffectNamesies namesies, Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, String castMessage) {
+        return cast(namesies, b, caster, victim, source, CastMessageGetter.with(castMessage));
+    }
+
     public static Effect cast(EffectNamesies namesies, Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
         Effect effect = namesies.getEffect();
         if (effect.hasAlternateCast && effect.hasEffect(b, victim)) {

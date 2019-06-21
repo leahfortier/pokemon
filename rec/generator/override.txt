@@ -1856,8 +1856,8 @@ OpponentEndAttack:
 TerrainStarter:
     AddInterface: EntryEffect
     AddMapField: Enter:
-        Messages.add(enterer.getName() + "'s " + this.getName() + " changed the field to {0} Terrain!");
-        Effect.cast(TerrainNamesies.{00}_TERRAIN, b, enterer, enterer, CastSource.ABILITY, false);
+        String message = enterer.getName() + "'s " + this.getName() + " changed the field to {0} Terrain!";
+        Effect.cast(TerrainNamesies.{00}_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         ###
 *
 MoldBreakerBreaker:
