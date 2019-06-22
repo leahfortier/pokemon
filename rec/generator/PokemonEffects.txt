@@ -244,43 +244,22 @@ Disable:
 *
 RaiseCrits:
     Field:
-        private boolean focusEnergy;
-        private boolean direHit;
-        private boolean berrylicious;
+        // Contains the sources which have increased the crit stages so far
+        // Each unique source further increases the crit stage
+        private Set<CastSource> sources;
         ###
     Activate:
-        this.focusEnergy = false;
-        this.direHit = false;
-        this.berrylicious = false;
+        this.sources = new HashSet<>();
         ###
     Int: CritStageEffect, PassableEffect, MessageGetter
     IncreaseCritStage:
-        int critStage = 0;
-
-        // TODO: Should probably make an enum or something because this is stupid
-        if (focusEnergy) {
-            critStage++;
-        }
-
-        if (direHit) {
-            critStage++;
-        }
-
-        if (berrylicious) {
-            critStage++;
-        }
-
-        if (critStage == 0) {
-            Global.error("RaiseCrits effect is not actually raising crits.");
-        }
-
-        return critStage + stage;
+        return sources.size() + stage;
         ###
     FullEffectApplies:
         // Only actually fails again for Dire Hit
         if (source == CastSource.USE_ITEM && victim.hasEffect(this.namesies())) {
             RaiseCrits effect = (RaiseCrits)victim.getEffect(this.namesies());
-            if (effect.direHit) {
+            if (effect.sources.contains(source)) {
                 return ApplyResult.failure();
             }
         }
@@ -298,13 +277,9 @@ RaiseCrits:
     AfterCast:
         switch (source) {
             case ATTACK:
-                this.focusEnergy = true;
-                break;
             case USE_ITEM:
-                this.direHit = true;
-                break;
             case HELD_ITEM:
-                this.berrylicious = true;
+                this.sources.add(source);
                 break;
             default:
                 Global.error("Unknown source for RaiseCrits effect.");

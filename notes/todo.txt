@@ -113,7 +113,6 @@ Other random things:
 	Berry harvest time and amounts
 	Look at light screen and light clay cast thingy -- why is it not applying turns to itself?
 	Change effects list for Defog and RapidSpin to only include PokemonEffect and TeamEffects
-	Why is ItemSwapperEffect and SwapOpponentEffect a thing? just for generator?
 	refactor RaiseCritsEffect -- apparently Focus Energy is supposed to raise by 2 and not stack with Dire Hit
 	Moongeist Beam removes BreakTheMold effect at the end of the move -- can it be applied any other way?
 	should movetypes be a set?

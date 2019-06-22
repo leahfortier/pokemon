@@ -78,7 +78,9 @@ import util.RandomUtils;
 import util.serialization.Serializable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 // Class to handle effects that are on a single Pokemon
 public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implements Serializable {
@@ -836,39 +838,18 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
     static class RaiseCrits extends PokemonEffect implements CritStageEffect, PassableEffect, MessageGetter {
         private static final long serialVersionUID = 1L;
 
-        private boolean focusEnergy;
-        private boolean direHit;
-        private boolean berrylicious;
+        // Contains the sources which have increased the crit stages so far
+        // Each unique source further increases the crit stage
+        private Set<CastSource> sources;
 
         RaiseCrits() {
             super(PokemonEffectNamesies.RAISE_CRITS, -1, -1, true, true);
-            this.focusEnergy = false;
-            this.direHit = false;
-            this.berrylicious = false;
+            this.sources = new HashSet<>();
         }
 
         @Override
         public int increaseCritStage(int stage, ActivePokemon p) {
-            int critStage = 0;
-
-            // TODO: Should probably make an enum or something because this is stupid
-            if (focusEnergy) {
-                critStage++;
-            }
-
-            if (direHit) {
-                critStage++;
-            }
-
-            if (berrylicious) {
-                critStage++;
-            }
-
-            if (critStage == 0) {
-                Global.error("RaiseCrits effect is not actually raising crits.");
-            }
-
-            return critStage + stage;
+            return sources.size() + stage;
         }
 
         @Override
@@ -898,13 +879,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             switch (source) {
                 case ATTACK:
-                    this.focusEnergy = true;
-                    break;
                 case USE_ITEM:
-                    this.direHit = true;
-                    break;
                 case HELD_ITEM:
-                    this.berrylicious = true;
+                    this.sources.add(source);
                     break;
                 default:
                     Global.error("Unknown source for RaiseCrits effect.");
@@ -917,7 +894,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             // Only actually fails again for Dire Hit
             if (source == CastSource.USE_ITEM && victim.hasEffect(this.namesies())) {
                 RaiseCrits effect = (RaiseCrits)victim.getEffect(this.namesies());
-                if (effect.direHit) {
+                if (effect.sources.contains(source)) {
                     return ApplyResult.failure();
                 }
             }

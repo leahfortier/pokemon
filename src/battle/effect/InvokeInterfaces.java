@@ -906,6 +906,7 @@ public final class InvokeInterfaces {
     public interface CritStageEffect {
 
         default int increaseCritStage(int stage, ActivePokemon p) {
+            // TODO: This shouldn't take the stage in and should only return the diff
             return stage + 1;
         }
 

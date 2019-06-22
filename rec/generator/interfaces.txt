@@ -498,6 +498,7 @@ CritStageEffect:
     Method:
         Header: int increaseCritStage(int stage, ActivePokemon p)
         Default:
+            // TODO: This shouldn't take the stage in and should only return the diff
             return stage + 1;
             ###
         Invoke: Update
