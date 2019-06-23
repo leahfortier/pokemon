@@ -905,21 +905,22 @@ public final class InvokeInterfaces {
 
     public interface CritStageEffect {
 
-        default int increaseCritStage(int stage, ActivePokemon p) {
-            // TODO: This shouldn't take the stage in and should only return the diff
-            return stage + 1;
+        default int increaseCritStage(ActivePokemon p) {
+            return 1;
         }
 
-        static int updateCritStage(Battle b, int stage, ActivePokemon p) {
+        static int getModifier(Battle b, ActivePokemon p) {
+            int modifier = 0;
+
             List<InvokeEffect> invokees = b.getEffectsList(p, p.getAttack());
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof CritStageEffect && InvokeEffect.isActiveEffect(invokee)) {
                     CritStageEffect effect = (CritStageEffect)invokee;
-                    stage = effect.increaseCritStage(stage, p);
+                    modifier += effect.increaseCritStage(p);
                 }
             }
 
-            return stage;
+            return modifier;
         }
     }
 

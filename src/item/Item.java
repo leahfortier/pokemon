@@ -928,12 +928,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int increaseCritStage(int stage, ActivePokemon p) {
-            if (p.isPokemon(PokemonNamesies.CHANSEY)) {
-                return stage + 2;
-            }
-
-            return stage;
+        public int increaseCritStage(ActivePokemon p) {
+            return p.isPokemon(PokemonNamesies.CHANSEY) ? 2 : 0;
         }
 
         @Override
@@ -1529,12 +1525,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int increaseCritStage(int stage, ActivePokemon p) {
-            if (p.isPokemon(PokemonNamesies.FARFETCHD)) {
-                return stage + 2;
-            }
-
-            return stage;
+        public int increaseCritStage(ActivePokemon p) {
+            return p.isPokemon(PokemonNamesies.FARFETCHD) ? 2 : 0;
         }
 
         @Override

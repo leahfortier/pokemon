@@ -568,8 +568,7 @@ public class Battle implements Serializable {
     }
 
     public int getCritStage(ActivePokemon me) {
-        int stage = 1;
-        stage = CritStageEffect.updateCritStage(this, stage, me);
+        int stage = 1 + CritStageEffect.getModifier(this, me);
         stage = Math.min(stage, CRITSICLES.length); // Max it out, yo
         return stage;
     }

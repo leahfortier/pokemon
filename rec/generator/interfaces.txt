@@ -496,14 +496,11 @@ DifferentStatEffect
 ***
 CritStageEffect:
     Method:
-        Header: int increaseCritStage(int stage, ActivePokemon p)
+        Header: int increaseCritStage(ActivePokemon p)
         Default:
-            // TODO: This shouldn't take the stage in and should only return the diff
-            return stage + 1;
+            return 1;
             ###
-        Invoke: Update
-        Update: stage
-        InvokeName: updateCritStage
+        Invoke: Add
         InvokeParameters: Battle b
         EffectList: p
         InvokeAttack: p

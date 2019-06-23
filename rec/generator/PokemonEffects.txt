@@ -253,7 +253,7 @@ RaiseCrits:
         ###
     Int: CritStageEffect, PassableEffect, MessageGetter
     IncreaseCritStage:
-        return sources.size() + stage;
+        return sources.size();
         ###
     FullEffectApplies:
         // Only actually fails again for Dire Hit

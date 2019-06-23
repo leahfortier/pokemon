@@ -314,11 +314,7 @@ Lucky Punch:
     Price: 1000
     Fling: 40
     IncreaseCritStage:
-        if (p.isPokemon(PokemonNamesies.CHANSEY)) {
-            return stage + 2;
-        }
-
-        return stage;
+        return p.isPokemon(PokemonNamesies.CHANSEY) ? 2 : 0;
         ###
 *
 Luminous Moss:
@@ -530,11 +526,7 @@ Stick:
     Price: 1000
     Fling: 60
     IncreaseCritStage:
-        if (p.isPokemon(PokemonNamesies.FARFETCHD)) {
-            return stage + 2;
-        }
-
-        return stage;
+        return p.isPokemon(PokemonNamesies.FARFETCHD) ? 2 : 0;
         ###
 *
 Sticky Barb:

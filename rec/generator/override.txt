@@ -935,7 +935,7 @@ GetStat:
     Header: Integer getStat(ActivePokemon user, Stat stat)
 *
 IncreaseCritStage:
-    Header: int increaseCritStage(int stage, ActivePokemon p)
+    Header: int increaseCritStage(ActivePokemon p)
 *
 FallMessage:
     Header: void fall(Battle b, ActivePokemon fallen)
