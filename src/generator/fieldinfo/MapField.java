@@ -17,15 +17,21 @@ public class MapField {
         }
 
         String key = split[0].trim();
-        String value = split[1].trim();
-        if (value.isEmpty()) {
-            value = readMethod(in);
-        } else if (value.equals("<Empty>")) {
-            value = "";
-        }
+        String value = this.readValue(in, key, split[1].trim());
 
         this.fieldName = key;
         this.fieldValue = value;
+    }
+
+    // value parameter is the remainder of the line with the key
+    protected String readValue(Scanner in, String key, String value) {
+        if (value.isEmpty()) {
+            return readMethod(in);
+        } else if (value.equals("<Empty>")) {
+            return  "";
+        } else {
+            return value;
+        }
     }
 
     private String readMethod(Scanner in) {

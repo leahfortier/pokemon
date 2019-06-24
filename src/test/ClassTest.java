@@ -2,6 +2,8 @@ package test;
 
 import battle.attack.Attack;
 import battle.attack.AttackInterface;
+import battle.effect.Effect;
+import battle.effect.EffectInterface;
 import battle.effect.EffectInterfaces.EffectPreventionAbility;
 import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
@@ -93,6 +95,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import pokemon.ability.Ability;
+import pokemon.ability.AbilityInterface;
 import pokemon.species.PokemonNamesies;
 import save.Save;
 import trainer.EnemyTrainer;
@@ -178,6 +181,9 @@ public class ClassTest extends BaseTest {
         for (Class<?> classy : classes) {
             checkInstance(classy, ItemInterface.class, Item.class);
             checkInstance(classy, AttackInterface.class, Attack.class);
+            checkInstance(classy, AbilityInterface.class, Ability.class);
+            checkInstance(classy, EffectInterface.class, Effect.class);
+
             checkInstance(classy, NameChanger.class, Ability.class);
             checkInstance(classy, PassableEffect.class, PokemonEffect.class);
             checkInstance(classy, PartialTrappingEffect.class, PokemonEffect.class);

@@ -2,6 +2,7 @@ package generator.interfaces;
 
 import generator.ClassFields;
 import generator.StuffGen;
+import generator.fieldinfo.MapField;
 import main.Global;
 import util.string.StringAppender;
 
@@ -33,44 +34,31 @@ class Interface {
     private void readInterface(Scanner in) {
         while (in.hasNextLine()) {
             String line = in.nextLine().trim();
-
             if (line.equals("***")) {
                 break;
             }
 
-            final String[] split = line.split(":", 2);
-            final String fieldKey = split[0].trim();
+            // Read in the next field and value
+            InterfaceField mapField = new InterfaceField(in, line);
 
-            switch (fieldKey) {
+            String key = mapField.fieldName;
+            String value = mapField.fieldValue;
+
+            switch (key) {
                 case COMMENTS:
-                    // TODO: Right now class comment is restricted to a single line
-                    this.headerComments = getSingleLineInput(COMMENTS, split);
-                    break;
-                case METHOD:
-                    final ClassFields fields = new ClassFields(in, this.interfaceName);
-                    this.methods.add(new InterfaceMethod(fields));
+                    this.headerComments = value;
                     break;
                 case EXTENDS:
-                    this.extendsInterfaces = getSingleLineInput(EXTENDS, split);
+                    this.extendsInterfaces = value;
+                    break;
+                case METHOD:
+                    this.methods.add(mapField.method);
                     break;
                 default:
-                    Global.error("Invalid key name " + fieldKey + " for interface " + this.interfaceName);
+                    Global.error("Invalid key name " + key + " for interface " + this.interfaceName);
                     break;
             }
         }
-    }
-
-    private String getSingleLineInput(String key, String[] split) {
-        if (split.length != 2) {
-            Global.error(key + " for " + this.interfaceName + " must be on a single line.");
-        }
-
-        final String fieldValue = split[1].trim();
-        if (fieldValue.isEmpty()) {
-            Global.error(key + " for " + this.interfaceName + " is empty.");
-        }
-
-        return fieldValue;
     }
 
     String writeInterface() {
@@ -95,5 +83,25 @@ class Interface {
                 additional,
                 isInterface
         );
+    }
+
+    // A MapField object that overrides the readValue method to read an interface method for the appropriate key
+    private class InterfaceField extends MapField {
+        private InterfaceMethod method;
+
+        public InterfaceField(Scanner in, String line) {
+            super(in, line);
+        }
+
+        @Override
+        protected String readValue(Scanner in, String key, String value) {
+            if (key.equals(METHOD)) {
+                ClassFields fields = new ClassFields(in, interfaceName);
+                this.method = new InterfaceMethod(fields);
+                return "";
+            } else {
+                return super.readValue(in, key, value);
+            }
+        }
     }
 }

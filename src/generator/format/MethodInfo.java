@@ -37,13 +37,6 @@ public class MethodInfo {
         this.addMapFields = new ArrayList<>();
     }
 
-    public MethodInfo(final String header, final String body) {
-        this();
-
-        this.header = header;
-        this.body = body;
-    }
-
     public MethodInfo(final String header, final String body, final AccessModifier accessModifier) {
         this();
 
