@@ -1916,18 +1916,36 @@ Starf Berry:
     HarvestHours: 72
     FixedBerryHealthTrigger: 4
     GainEffect:
-        int rand = RandomUtils.getRandomInt(Stat.NUM_BATTLE_STATS + 1);
-
-        // Raise crit
-        // TODO: Doesn't this fail sometimes though? why are we always returning true?
-        if (rand == Stat.NUM_BATTLE_STATS) {
-            Effect.cast(PokemonEffectNamesies.RAISE_CRITS, b, user, user, source, true);
-            return true;
+        // Add index for each battle stat and also an extra value (for crits)
+        List<Integer> stats = new ArrayList<>();
+        for (int i = 0; i <= Stat.NUM_BATTLE_STATS; i++) {
+            stats.add(i);
         }
 
-        // Raise random battle stat
-        Stat stat = Stat.getStat(rand, true);
-        return user.getStages().modifyStage(user, 1, stat, b, source);
+        // Try all stats until success
+        while (!stats.isEmpty()) {
+            int randIndex = RandomUtils.getRandomIndex(stats);
+            int statIndex = stats.get(randIndex);
+            stats.remove(randIndex);
+
+            final boolean success;
+
+            // Raise crit
+            if (statIndex == Stat.NUM_BATTLE_STATS) {
+                success = Effect.apply(PokemonEffectNamesies.RAISE_CRITS, b, user, user, source, true).isSuccess();
+            } else {
+                // Sharply raise random battle stat
+                success = user.getStages().modifyStage(user, 2, Stat.getStat(statIndex, true), b, source);
+            }
+
+            // Stat raised successfully -- don't raise any others
+            if (success) {
+                return true;
+            }
+        }
+
+        // You probably don't need the berry at this point anyhow...
+        return false;
         ###
 *
 # Other Items

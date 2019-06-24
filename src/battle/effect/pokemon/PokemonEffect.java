@@ -839,7 +839,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         // Contains the sources which have increased the crit stages so far
-        // Each unique source further increases the crit stage
         private Set<CastSource> sources;
 
         RaiseCrits() {
@@ -849,7 +848,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public int increaseCritStage(ActivePokemon p) {
-            return sources.size();
+            // Each source increases the stage by two
+            return 2*sources.size();
         }
 
         @Override
@@ -869,18 +869,16 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
-            // Doesn't 'fail' if they already have the effect -- just display the message again
             this.addCastMessage(b, caster, victim, source, castMessage);
-
             this.afterCast(b, caster, victim, source);
         }
 
         @Override
         public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             switch (source) {
-                case ATTACK:
-                case USE_ITEM:
-                case HELD_ITEM:
+                case ATTACK:    // Focus Energy
+                case USE_ITEM:  // Dire Hit
+                case HELD_ITEM: // Lansat/Starf Berry
                     this.sources.add(source);
                     break;
                 default:
@@ -891,8 +889,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // Only actually fails again for Dire Hit
-            if (source == CastSource.USE_ITEM && victim.hasEffect(this.namesies())) {
+            // Fails if already increased from same source
+            if (victim.hasEffect(this.namesies())) {
                 RaiseCrits effect = (RaiseCrits)victim.getEffect(this.namesies());
                 if (effect.sources.contains(source)) {
                     return ApplyResult.failure();

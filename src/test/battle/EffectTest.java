@@ -270,18 +270,18 @@ public class EffectTest extends BaseTest {
         checkCritStage(2, new TestInfo().with(AttackNamesies.RAZOR_LEAF));
         checkCritStage(1, new TestInfo().attackingFight(AttackNamesies.RAZOR_LEAF).with(AttackNamesies.TACKLE));
 
-        // +1 crit stage when used, but not when using (I guess it's a status move so it technically doesn't have a stage but whatever)
-        checkCritStage(2, new TestInfo().attackingFight(AttackNamesies.FOCUS_ENERGY).with(AttackNamesies.TACKLE));
+        // +2 crit stage when used, but not when using (I guess it's a status move so it technically doesn't have a stage but whatever)
+        checkCritStage(3, new TestInfo().attackingFight(AttackNamesies.FOCUS_ENERGY).with(AttackNamesies.TACKLE));
         checkCritStage(1, new TestInfo().with(AttackNamesies.FOCUS_ENERGY));
 
-        // +1 after using Dire Hit (can only use once -- should fail if used again)
-        checkCritStage(2, new TestInfo().with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT)));
-        checkCritStage(2, new TestInfo()
+        // +2 after using Dire Hit (can only use once -- should fail if used again)
+        checkCritStage(3, new TestInfo().with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT)));
+        checkCritStage(3, new TestInfo()
                 .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, true))
                 .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, false))
         );
 
-        // +1 from Lansat Berry when health is below 1/4
+        // +2 from Lansat Berry when health is below 1/4
         checkCritStage(1, new TestInfo().attacking(ItemNamesies.LANSAT_BERRY));
         checkCritStage(1, new TestInfo()
                 .attacking(ItemNamesies.LANSAT_BERRY)
@@ -291,9 +291,13 @@ public class EffectTest extends BaseTest {
                     attacking.assertHealthRatio(.5);
                 })
         );
-        checkCritStage(2, new TestInfo()
+        checkCritStage(3, new TestInfo()
                 .attacking(PokemonNamesies.BULBASAUR, ItemNamesies.LANSAT_BERRY)
-                .with((battle, attacking, defending) -> battle.falseSwipePalooza(false))
+                .with((battle, attacking, defending) -> {
+                    attacking.assertNotConsumedItem(battle);
+                    battle.falseSwipePalooza(false);
+                    attacking.assertConsumedBerry(battle);
+                })
         );
 
         // Razor Claw and Scope Lens increase by 1
@@ -320,14 +324,13 @@ public class EffectTest extends BaseTest {
                 .with(AttackNamesies.NIGHT_SLASH)
         );
 
-        checkCritStage(3, new TestInfo()
+        checkCritStage(5, new TestInfo()
                 .attackingFight(AttackNamesies.FOCUS_ENERGY)
                 .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT))
         );
 
-        checkCritStage(4, new TestInfo()
+        checkCritStage(5, new TestInfo()
                 .attackingFight(AttackNamesies.FOCUS_ENERGY)
-                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT))
                 .attacking(ItemNamesies.LANSAT_BERRY).with((battle, attacking, defending) -> battle.falseSwipePalooza(false))
         );
 
