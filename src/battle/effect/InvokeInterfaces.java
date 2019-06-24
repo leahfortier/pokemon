@@ -100,6 +100,60 @@ public final class InvokeInterfaces {
         }
     }
 
+    // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
+    public interface TakeDamageEffect {
+
+        // b: The current battle
+        // user: The user of the attack
+        // victim: The one who is taking damage and is implementing this effect
+        void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim);
+
+        static void invokeTakeDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+            if (victim.isFainted(b)) {
+                return;
+            }
+
+            List<InvokeEffect> invokees = b.getEffectsList(victim);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof TakeDamageEffect && InvokeEffect.isActiveEffect(invokee)) {
+                    TakeDamageEffect effect = (TakeDamageEffect)invokee;
+                    effect.takeDamage(b, user, victim);
+
+                    if (victim.isFainted(b)) {
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
+    public interface OpponentTakeDamageEffect {
+
+        // b: The current battle
+        // user: The user of the attack and implementer of the effect
+        // victim: The Pokemon who is taking damage
+        void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim);
+
+        static void invokeOpponentTakeDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+            if (victim.isFainted(b)) {
+                return;
+            }
+
+            List<InvokeEffect> invokees = b.getEffectsList(user);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof OpponentTakeDamageEffect && InvokeEffect.isActiveEffect(invokee)) {
+                    OpponentTakeDamageEffect effect = (OpponentTakeDamageEffect)invokee;
+                    effect.takeDamage(b, user, victim);
+
+                    if (victim.isFainted(b)) {
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     public interface EndTurnEffect {
         void applyEndTurn(ActivePokemon victim, Battle b);
 
@@ -185,58 +239,6 @@ public final class InvokeInterfaces {
         }
     }
 
-    public interface TakeDamageEffect {
-
-        // b: The current battle
-        // user: The user of the attack
-        // victim: The one who is taking damage and is implementing this effect
-        void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim);
-
-        static void invokeTakeDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.isFainted(b)) {
-                return;
-            }
-
-            List<InvokeEffect> invokees = b.getEffectsList(victim);
-            for (InvokeEffect invokee : invokees) {
-                if (invokee instanceof TakeDamageEffect && InvokeEffect.isActiveEffect(invokee)) {
-                    TakeDamageEffect effect = (TakeDamageEffect)invokee;
-                    effect.takeDamage(b, user, victim);
-
-                    if (victim.isFainted(b)) {
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    public interface OpponentTakeDamageEffect {
-
-        // b: The current battle
-        // user: The user of the attack and implementer of the effect
-        // victim: The Pokemon who is taking damage
-        void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim);
-
-        static void invokeOpponentTakeDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.isFainted(b)) {
-                return;
-            }
-
-            List<InvokeEffect> invokees = b.getEffectsList(user);
-            for (InvokeEffect invokee : invokees) {
-                if (invokee instanceof OpponentTakeDamageEffect && InvokeEffect.isActiveEffect(invokee)) {
-                    OpponentTakeDamageEffect effect = (OpponentTakeDamageEffect)invokee;
-                    effect.takeDamage(b, user, victim);
-
-                    if (victim.isFainted(b)) {
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
     public interface CrashDamageMove extends AttackInterface {
         int getMaxHealthPercentageDenominator();
 
@@ -314,9 +316,9 @@ public final class InvokeInterfaces {
         }
     }
 
+    // This only operates on the ability which I'm not a super huge fan of but then again I'm not passing the battle
+    // in here and also fuck illusion srsly maybe it should just be special cased since it's so fucking unique
     public interface NameChanger {
-
-        // TODO: Not a fan that this only operates on the ability but then again I'm not passing the battle in here and also fuck illusion srsly I might just special case it since it's so fucking unique
         String getNameChange();
         void setNameChange(Battle b, ActivePokemon victim);
 
@@ -524,7 +526,7 @@ public final class InvokeInterfaces {
 
     public interface OpponentAccuracyBypassEffect {
 
-        // Attacker is the Pokemon whose accuracy is being evaluated, defender is the Pokemon on which this effect is attached to
+        // Attacker is the Pokemon whose accuracy is being evaluated, defending is the Pokemon on which this effect is attached to
         // This is evaluated BEFORE the semi-invulnerable checks, so if this returns true, the move will hit even if the defending is semi-invulnerable
         boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending);
 

@@ -32,6 +32,34 @@ OpponentApplyDamageEffect:
         Deadsies: user
     *
 ***
+TakeDamageEffect:
+    Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
+    Method:
+        Comments:
+            // b: The current battle
+            // user: The user of the attack
+            // victim: The one who is taking damage and is implementing this effect
+            ###
+        Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+        EffectList: victim
+        Invoke: Void
+        Deadsies: victim
+    *
+***
+OpponentTakeDamageEffect:
+    Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
+    Method:
+        Comments:
+            // b: The current battle
+            // user: The user of the attack and implementer of the effect
+            // victim: The Pokemon who is taking damage
+            ###
+        Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+        EffectList: user
+        Invoke: Void
+        Deadsies: victim
+    *
+***
 EndTurnEffect:
     Method:
         Header: void applyEndTurn(ActivePokemon victim, Battle b)
@@ -93,32 +121,6 @@ SuperDuperEndTurnEffect:
         Header: boolean theVeryVeryEnd(Battle b, ActivePokemon p)
         Invoke: Check true
         EffectList: p
-    *
-***
-TakeDamageEffect:
-    Method:
-        Comments:
-            // b: The current battle
-            // user: The user of the attack
-            // victim: The one who is taking damage and is implementing this effect
-            ###
-        Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
-        EffectList: victim
-        Invoke: Void
-        Deadsies: victim
-    *
-***
-OpponentTakeDamageEffect:
-    Method:
-        Comments:
-            // b: The current battle
-            // user: The user of the attack and implementer of the effect
-            // victim: The Pokemon who is taking damage
-            ###
-        Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
-        EffectList: user
-        Invoke: Void
-        Deadsies: victim
     *
 ***
 CrashDamageMove:
@@ -189,8 +191,11 @@ RapidSpinRelease:
     *
 ***
 NameChanger:
+    Comments:
+        // This only operates on the ability which I'm not a super huge fan of but then again I'm not passing the battle
+        // in here and also fuck illusion srsly maybe it should just be special cased since it's so fucking unique
+        ###
     Method:
-        Comments: // TODO: Not a fan that this only operates on the ability but then again I'm not passing the battle in here and also fuck illusion srsly I might just special case it since it's so fucking unique
         Header: String getNameChange()
         Invoke: Get
         InvokeParameters: ActivePokemon p
@@ -318,7 +323,7 @@ BasicAccuracyBypassEffect:
 OpponentAccuracyBypassEffect:
     Method:
         Comments: 
-            // Attacker is the Pokemon whose accuracy is being evaluated, defender is the Pokemon on which this effect is attached to
+            // Attacker is the Pokemon whose accuracy is being evaluated, defending is the Pokemon on which this effect is attached to
             // This is evaluated BEFORE the semi-invulnerable checks, so if this returns true, the move will hit even if the defending is semi-invulnerable
             ###
         Header: boolean opponentBypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending)
