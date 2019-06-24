@@ -265,6 +265,16 @@ public class PokemonInfoTest extends BaseTest {
                 Assert.assertEquals(seen.contains(ability), pokemonInfo.hasAbility(ability));
             }
 
+            // Flower Veil was changed and only makes sense for Grass-type Pokemon now
+            // Levitate doesn't makes sense for Flying-type Pokemon
+            for (AbilityNamesies ability : abilities) {
+                if (ability == AbilityNamesies.FLOWER_VEIL) {
+                    Assert.assertTrue(pokemonInfo.isType(Type.GRASS));
+                } else if (ability == AbilityNamesies.LEVITATE) {
+                    Assert.assertFalse(pokemonInfo.isType(Type.FLYING));
+                }
+            }
+
             // Don't worry about it (but really if this fails change the message in Iron Fist)
             if (pokemonInfo.namesies() == PokemonNamesies.PANGORO) {
                 Assert.assertTrue(pokemonInfo.hasAbility(AbilityNamesies.MOLD_BREAKER));

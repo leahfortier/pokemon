@@ -261,6 +261,10 @@ def ability_substitution(num, ability):
         # Spewpa
         if num == 665:
             return 'No_Ability'
+    elif ability == 'Flower Veil':
+        # Comfey -- this ability was changed and doesn't make as much sense anymore for Comfey
+        if num == 764:
+            return 'Natural Cure'
     elif ability == 'Illuminate':
         # Staryu/Starmie and Watchog
         if num == 120 or num == 121 or num == 505:
@@ -339,10 +343,6 @@ def type_substitution(num, types):
     elif num == 54 or num == 55:
         assert types == ['Water', 'No_Type']
         return ['Water', 'Psychic']
-    # Horsea/Seadra are now Dragon type
-    elif num == 116 or num == 117:
-        assert types == ['Water', 'No_Type']
-        return ['Water', 'Dragon']
     # Gyarados is now Water/Dragon instead of Water/Flying
     elif num == 130:
         assert types == ['Water', 'Flying']
