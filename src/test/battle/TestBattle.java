@@ -23,7 +23,6 @@ import util.string.StringUtils;
 public class TestBattle extends Battle {
     private static final long serialVersionUID = 1L;
 
-    private Double expectedDamageModifier;
     private Boolean expectedDefendingAccuracyBypass;
 
     private TestBattle(Opponent opponent) {
@@ -44,6 +43,7 @@ public class TestBattle extends Battle {
         double modifier = super.getDamageModifier(attacking, defending);
 
         Assert.assertTrue(attacking.getAttack().getName(), modifier > 0);
+        Double expectedDamageModifier = ((TestPokemon)attacking).getExpectedDamageModifier();
         if (expectedDamageModifier != null) {
             TestUtils.assertEquals(
                     StringUtils.spaceSeparated(attacking.getAttack(), attacking.getCount()),
@@ -52,10 +52,6 @@ public class TestBattle extends Battle {
         }
 
         return modifier;
-    }
-
-    void setExpectedDamageModifier(Double damageModifier) {
-        this.expectedDamageModifier = damageModifier;
     }
 
     TestPokemon getAttacking() {
@@ -84,6 +80,8 @@ public class TestBattle extends Battle {
 
         this.getEffects().reset();
         this.addEffect(WeatherNamesies.CLEAR_SKIES.getEffect());
+
+        expectedDefendingAccuracyBypass = null;
     }
 
     void splashFight() {

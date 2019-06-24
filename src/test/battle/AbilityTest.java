@@ -409,7 +409,7 @@ public class AbilityTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         attacking.withAbility(AbilityNamesies.SHEER_FORCE);
-        battle.setExpectedDamageModifier(applies ? 1.3 : 1.0);
+        attacking.setExpectedDamageModifier(applies ? 1.3 : 1.0);
         battle.attackingFight(attackNamesies);
         withSheerForceChecks.manipulate(battle);
 
@@ -419,7 +419,7 @@ public class AbilityTest extends BaseTest {
         // Make sure it applies effects without Sheer Force
         attacking.withAbility(AbilityNamesies.NO_ABILITY);
         defending.withAbility(AbilityNamesies.SHEER_FORCE);
-        battle.setExpectedDamageModifier(1.0);
+        attacking.setExpectedDamageModifier(1.0);
         battle.attackingFight(attackNamesies);
         withoutSheerForceChecks.manipulate(battle);
     }
@@ -882,7 +882,7 @@ public class AbilityTest extends BaseTest {
         magicGuardTest(
                 new TestInfo().defending(ItemNamesies.LIFE_ORB)
                               .with((battle, attacking, defending) -> {
-                                  battle.setExpectedDamageModifier(5324.0/4096.0);
+                                  defending.setExpectedDamageModifier(5324.0/4096.0);
                                   battle.fight(AttackNamesies.ENDURE, AttackNamesies.TACKLE);
                               }),
                 (battle, attacking, defending) -> {
@@ -981,7 +981,7 @@ public class AbilityTest extends BaseTest {
         // Inferno has a 100% chance to burn
         // But if the opponent has Shield Dust, then it is actually ZERO PERCENT
         new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
-                .with((battle, attacking, defending) -> battle.setExpectedDamageModifier(1.0))
+                .with((battle, attacking, defending) -> attacking.setExpectedDamageModifier(1.0))
                 .attackingFight(AttackNamesies.INFERNO)
                 .doubleTake(
                         AbilityNamesies.SHIELD_DUST,
@@ -1005,20 +1005,22 @@ public class AbilityTest extends BaseTest {
 
     private void fluffyTest(AttackNamesies attackNamesies, double expectedModifier, PokemonManipulator manipulator) {
         TestBattle battle = new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE).createBattle();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
 
         // Confirm no modifier without Fluffy
-        battle.getDefending().setAbility(AbilityNamesies.NO_ABILITY);
+        defending.setAbility(AbilityNamesies.NO_ABILITY);
         manipulator.manipulate(battle);
-        battle.setExpectedDamageModifier(1.0);
+        attacking.setExpectedDamageModifier(1.0);
         battle.attackingFight(attackNamesies);
 
         battle.emptyHeal();
         battle.clearAllEffects();
 
         // Confirm modifier with Fluffy
-        battle.getDefending().setAbility(AbilityNamesies.FLUFFY);
+        defending.setAbility(AbilityNamesies.FLUFFY);
         manipulator.manipulate(battle);
-        battle.setExpectedDamageModifier(expectedModifier);
+        attacking.setExpectedDamageModifier(expectedModifier);
         battle.attackingFight(attackNamesies);
     }
 

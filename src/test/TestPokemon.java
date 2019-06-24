@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 public class TestPokemon extends ActivePokemon {
     private static final long serialVersionUID = 1L;
 
+    private Double expectedDamageModifier;
+
     public TestPokemon(final PokemonNamesies pokemon, final boolean isWild, final boolean isPlayer) {
         this(pokemon, 100, isWild, isPlayer);
     }
@@ -60,6 +62,20 @@ public class TestPokemon extends ActivePokemon {
                       .collect(Collectors.toList())
         );
         return this;
+    }
+
+    @Override
+    public void resetAttributes() {
+        super.resetAttributes();
+        this.setExpectedDamageModifier(null);
+    }
+
+    public void setExpectedDamageModifier(Double damageModifier) {
+        this.expectedDamageModifier = damageModifier;
+    }
+
+    public Double getExpectedDamageModifier() {
+        return this.expectedDamageModifier;
     }
 
     public void setupMove(AttackNamesies attackNamesies, Battle battle) {

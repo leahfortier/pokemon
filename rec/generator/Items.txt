@@ -1,16 +1,14 @@
 # Format:
 #
-# Class Name: // Also actual name, unless specified. Spaces will show up in the name, but not class name.
+# Item Name:
 #    Int: *Interfaces to implement*
 #    Cat: *BagCategory*
 #    BattleCat: *BattleBagCategory*, comma separate for multiple
 #    Price: (leave out for -1, or unsellable)
-#    ApplyEndTurn:
+#    FunctionName:
 #        Function ending in "###" on a new line
 # * // End this item
 # // Any field not on the same line as its declarer (i.e. Apply) is considered a function
-# // TODO:
-# // Not implemented: Casteliacone, Heal Powder, Lava Cookie
 
 Constructor:
     Namesies Enum ItemNamesies

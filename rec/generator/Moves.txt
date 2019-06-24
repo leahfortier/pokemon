@@ -3533,7 +3533,6 @@ Me First:
         return b.isFirstAttack() && victim.getMove() != null && !victim.getAttack().isStatusMove();
         ###
     TempEffectMove: FIDDY_PERCENT_STRONGER
-    Comments: // TODO: Test
     CallNewMove: victim.getAttack().namesies()
 *
 Refresh:

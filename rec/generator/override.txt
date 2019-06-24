@@ -1815,12 +1815,14 @@ ShouldCrit:
     Header: boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending)
 *
 TempEffectMove:
+    AddMapField: Field:
+        private Effect effect;
+        ###
     AddMapField: BeginAttack:
-        Effect.cast(PokemonEffectNamesies.{00}, b, attacking, attacking, CastSource.ATTACK, false);
+        this.effect = Effect.cast(PokemonEffectNamesies.{00}, b, attacking, attacking, CastSource.ATTACK, false);
         ###
     AddMapField: EndAttack:
-        // TODO: I don't like this -- it should def remove the same exact effect it casted at the beginning -- what if there are other ways to apply the effect??
-        attacking.getEffects().remove(PokemonEffectNamesies.{00});
+        this.effect.deactivate();
         ###
 *
 IgnoreAbilityMove:

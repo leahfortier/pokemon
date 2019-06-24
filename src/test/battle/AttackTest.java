@@ -679,7 +679,7 @@ public class AttackTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         defending.fullyHeal();
-        battle.setExpectedDamageModifier(expectedModifier);
+        attacking.setExpectedDamageModifier(expectedModifier);
         battle.attackingFight(attack);
         TestUtils.assertEquals(expectedModifier, battle.getDamageModifier(attacking, defending));
     }
@@ -1114,14 +1114,14 @@ public class AttackTest extends BaseTest {
         TestBattle battle = TestBattle.create();
         TestPokemon attacking = battle.getAttacking();
 
-        battle.setExpectedDamageModifier(1.0);
+        attacking.setExpectedDamageModifier(1.0);
         battle.attackingFight(AttackNamesies.STORED_POWER);
 
         battle.emptyHeal();
         battle.attackingFight(AttackNamesies.MINIMIZE);
         attacking.assertStages(new TestStages().set(Stat.EVASION, 2));
 
-        battle.setExpectedDamageModifier(3.0);
+        attacking.setExpectedDamageModifier(3.0);
         battle.attackingFight(AttackNamesies.STORED_POWER);
 
         battle.emptyHeal();
@@ -1129,7 +1129,7 @@ public class AttackTest extends BaseTest {
         attacking.assertStages(new TestStages().set(Stat.EVASION, 2).set(Stat.DEFENSE, -2));
 
         // Stored power ignores negative stat gains
-        battle.setExpectedDamageModifier(3.0);
+        attacking.setExpectedDamageModifier(3.0);
         battle.attackingFight(AttackNamesies.STORED_POWER);
     }
 
@@ -1194,7 +1194,7 @@ public class AttackTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         defending.withItem(ItemNamesies.OCCA_BERRY);
-        battle.setExpectedDamageModifier(.5);
+        attacking.setExpectedDamageModifier(.5);
         battle.fight(AttackNamesies.INCINERATE, AttackNamesies.ENDURE);
         Assert.assertFalse(defending.isHoldingItem(battle));
         defending.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
@@ -1303,7 +1303,7 @@ public class AttackTest extends BaseTest {
 
         // Normalize makes Hidden Power Normal-type
         attacking.withAbility(AbilityNamesies.NORMALIZE);
-        battle.setExpectedDamageModifier(1.2);
+        attacking.setExpectedDamageModifier(1.2);
         battle.fight(AttackNamesies.HIDDEN_POWER, AttackNamesies.ENDURE);
         Assert.assertTrue(attacking.isAttackType(Type.NORMAL));
         defending.assertNotFullHealth();
@@ -1320,7 +1320,7 @@ public class AttackTest extends BaseTest {
         battle.attackingFight(AttackNamesies.SOAK);
         Assert.assertTrue(defending.isType(battle, Type.WATER));
         Assert.assertFalse(defending.isType(battle, Type.ELECTRIC));
-        battle.setExpectedDamageModifier(1.0);
+        attacking.setExpectedDamageModifier(1.0);
         battle.fight(AttackNamesies.HIDDEN_POWER, AttackNamesies.ELECTRIFY);
         Assert.assertTrue(attacking.isAttackType(Type.ELECTRIC));
         defending.assertNotFullHealth();
@@ -1328,7 +1328,6 @@ public class AttackTest extends BaseTest {
 
     @Test
     public void powderTest() {
-
         // Just make sure it works on a non-Grass type
         powderTest(
                 AttackNamesies.POWDER, false,
@@ -1518,5 +1517,56 @@ public class AttackTest extends BaseTest {
         Assert.assertFalse(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.FUTURE_SIGHT));
         attacking.assertFullHealth();
         defending.assertNotFullHealth();
+    }
+
+    @Test
+    public void meFirstTest() {
+        // Basic use-case (player always goes first, so Me First will activate and False Swipe will be 50% stronger)
+        meFirstTest(1.5, 1.0, AttackNamesies.ME_FIRST, AttackNamesies.FALSE_SWIPE, (battle, attacking, defending) -> {
+            attacking.assertNotFullHealth();
+            defending.assertNotFullHealth();
+
+            Assert.assertTrue(attacking.lastMoveSucceeded());
+            Assert.assertTrue(defending.lastMoveSucceeded());
+        });
+
+        // Me First goes second (failureeee)
+        meFirstTest(1.0, null, AttackNamesies.FALSE_SWIPE, AttackNamesies.ME_FIRST, (battle, attacking, defending) -> {
+            // False Swipe hits defending
+            defending.assertNotFullHealth();
+            Assert.assertTrue(attacking.lastMoveSucceeded());
+
+            // Me First fails and attacking is fine
+            attacking.assertFullHealth();
+            Assert.assertFalse(defending.lastMoveSucceeded());
+        });
+
+        // Me First goes first, but opponent is using a status move (failureeee)
+        meFirstTest(null, null, AttackNamesies.ME_FIRST, AttackNamesies.GROWL, (battle, attacking, defending) -> {
+            // Growl succeeds against player, but Me First does not replicate it
+            attacking.assertStages(new TestStages().set(Stat.ATTACK, -1));
+            defending.assertStages(new TestStages());
+
+            attacking.assertFullHealth();
+            defending.assertFullHealth();
+
+            Assert.assertFalse(attacking.lastMoveSucceeded());
+            Assert.assertTrue(defending.lastMoveSucceeded());
+        });
+    }
+
+    private void meFirstTest(Double attackingModifier, Double defendingModifier, AttackNamesies attackingAttack, AttackNamesies defendingAttack, PokemonManipulator afterCheck) {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        attacking.setExpectedDamageModifier(attackingModifier);
+        defending.setExpectedDamageModifier(defendingModifier);
+        battle.fight(attackingAttack, defendingAttack);
+        afterCheck.manipulate(battle);
+
+        // This effect should not persist once the turn ends
+        attacking.assertNoEffect(PokemonEffectNamesies.FIDDY_PERCENT_STRONGER);
+        defending.assertNoEffect(PokemonEffectNamesies.FIDDY_PERCENT_STRONGER);
     }
 }

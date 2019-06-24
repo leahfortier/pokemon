@@ -235,7 +235,7 @@ public class ModifierTest extends BaseTest {
                 afterModifier
         );
 
-        // Make sure modifiers actual happen in battle
+        // Make sure modifiers actually happen in battle
         powerChangeTest(expectedModifier, false, attackNamesies, testInfo);
         powerChangeTest(expectedModifier, true, attackNamesies, testInfo);
     }
@@ -246,7 +246,7 @@ public class ModifierTest extends BaseTest {
             testInfo.manipulate(battle);
         }
 
-        battle.setExpectedDamageModifier(manipulate ? expectedModifier : 1);
+        battle.getAttacking().setExpectedDamageModifier(manipulate ? expectedModifier : 1);
         battle.attackingFight(attackNamesies);
     }
 
@@ -275,7 +275,7 @@ public class ModifierTest extends BaseTest {
         TestUtils.assertEquals(expectedModifier, battle.getDamageModifier(attacking, defending));
 
         // Battle check
-        battle.setExpectedDamageModifier(expectedModifier);
+        attacking.setExpectedDamageModifier(expectedModifier);
         battle.attackingFight(attackNamesies);
     }
 

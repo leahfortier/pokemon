@@ -6156,9 +6156,10 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    // TODO: Test
     static class MeFirst extends Attack {
         private static final long serialVersionUID = 1L;
+
+        private Effect effect;
 
         MeFirst() {
             super(AttackNamesies.ME_FIRST, Type.NORMAL, MoveCategory.STATUS, 20, "The user cuts ahead of the target to copy and use the target's intended move with greater power. This move fails if it isn't used first.");
@@ -6177,13 +6178,12 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            Effect.cast(PokemonEffectNamesies.FIDDY_PERCENT_STRONGER, b, attacking, attacking, CastSource.ATTACK, false);
+            this.effect = Effect.cast(PokemonEffectNamesies.FIDDY_PERCENT_STRONGER, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // TODO: I don't like this -- it should def remove the same exact effect it casted at the beginning -- what if there are other ways to apply the effect??
-            attacking.getEffects().remove(PokemonEffectNamesies.FIDDY_PERCENT_STRONGER);
+            this.effect.deactivate();
         }
 
         @Override
@@ -10854,6 +10854,8 @@ public abstract class Attack implements AttackInterface {
     static class SunsteelStrike extends Attack {
         private static final long serialVersionUID = 1L;
 
+        private Effect effect;
+
         SunsteelStrike() {
             super(AttackNamesies.SUNSTEEL_STRIKE, Type.STEEL, MoveCategory.PHYSICAL, 5, "The user slams into the target with the force of a meteor. This move can be used on the target regardless of its Abilities.");
             super.power = 100;
@@ -10863,18 +10865,19 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
+            this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // TODO: I don't like this -- it should def remove the same exact effect it casted at the beginning -- what if there are other ways to apply the effect??
-            attacking.getEffects().remove(PokemonEffectNamesies.BREAKS_THE_MOLD);
+            this.effect.deactivate();
         }
     }
 
     static class MoongeistBeam extends Attack {
         private static final long serialVersionUID = 1L;
+
+        private Effect effect;
 
         MoongeistBeam() {
             super(AttackNamesies.MOONGEIST_BEAM, Type.GHOST, MoveCategory.SPECIAL, 5, "The user emits a sinister ray to attack the target. This move can be used on the target regardless of its Abilities.");
@@ -10884,13 +10887,12 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
+            this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // TODO: I don't like this -- it should def remove the same exact effect it casted at the beginning -- what if there are other ways to apply the effect??
-            attacking.getEffects().remove(PokemonEffectNamesies.BREAKS_THE_MOLD);
+            this.effect.deactivate();
         }
     }
 
@@ -11007,6 +11009,8 @@ public abstract class Attack implements AttackInterface {
     static class PhotonGeyser extends Attack implements StatSwitchingEffect {
         private static final long serialVersionUID = 1L;
 
+        private Effect effect;
+
         PhotonGeyser() {
             super(AttackNamesies.PHOTON_GEYSER, Type.PSYCHIC, MoveCategory.SPECIAL, 5, "The user attacks a target with a pillar of light. This move inflicts Attack or Sp. Atk damage -- whichever stat is higher for the user.");
             super.power = 100;
@@ -11024,13 +11028,12 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
+            this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // TODO: I don't like this -- it should def remove the same exact effect it casted at the beginning -- what if there are other ways to apply the effect??
-            attacking.getEffects().remove(PokemonEffectNamesies.BREAKS_THE_MOLD);
+            this.effect.deactivate();
         }
     }
 

@@ -461,7 +461,7 @@ public class ItemTest extends BaseTest {
         TestPokemon attacking = battle.getAttacking().withItem(ItemNamesies.LIFE_ORB);
         TestPokemon defending = battle.getDefending();
 
-        battle.setExpectedDamageModifier(5324/4096.0);
+        attacking.setExpectedDamageModifier(5324/4096.0);
         battle.attackingFight(AttackNamesies.CONSTRICT);
         attacking.assertHealthRatio(.9);
         defending.assertNotFullHealth();
