@@ -362,7 +362,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 
         map = new HashMap<>();
 
-        Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(FileName.POKEMON_INFO, false));
+        Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(FileName.POKEMON_INFO));
         while (in.hasNext()) {
             PokemonInfo pokemonInfo = new PokemonInfo(
                     in.nextInt(),                                   // Num

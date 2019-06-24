@@ -483,12 +483,11 @@ public class UpdateGen {
         return false;
     }
 
-    // TODO: WHY IS 'new Scanner(FileIO.readEntireFileWithReplacements("temp.txt", false));' DIFFERENT THAN 'FileIO.openFile("temp.txt");'
     // Compares the pokemon info to info in a new file and outputs the differences
     // Ignores evolution, wild hold items, and flavor text
     private static void newPokemonInfoCompare() {
         Scanner in1 = FileIO.openFile(FileName.POKEMON_INFO);
-        Scanner in2 = new Scanner(FileIO.readEntireFileWithReplacements("temp.txt", false));
+        Scanner in2 = FileIO.openFile("temp.txt");
 
         PrintStream out = FileIO.openOutputFile("temp2.txt");
         PrintStream nullOut = new PrintStream(new NullOutputStream());
@@ -524,6 +523,7 @@ public class UpdateGen {
             diff(in1, in2, "Egg Groups", diffs);
             movesDiff(in1, in2, "Level Up", diffs);
             movesDiff(in1, in2, "Learnable", diffs);
+            in1.nextLine(); in2.nextLine(); // New line
 
             if (!diffs.isEmpty()) {
                 out.printf("%03d %s:\n\t%s\n", num, name, diffs.toString().replace("\n", "\n\t"));

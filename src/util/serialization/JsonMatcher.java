@@ -37,7 +37,7 @@ public interface JsonMatcher {
 
     // Deserializes the specified json file into the specified class
     static <T> T fromFile(String fileName, Class<T> classy) {
-        String jsonContents = FileIO.readEntireFileWithReplacements(fileName, false);
+        String jsonContents = FileIO.readEntireFileWithReplacements(fileName);
 
         T deserialized = JsonMatcher.deserialize(jsonContents, classy);
         JsonObject mappity = JsonMatcher.deserialize(jsonContents, JsonObject.class);

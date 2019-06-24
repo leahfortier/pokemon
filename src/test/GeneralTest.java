@@ -231,8 +231,9 @@ public class GeneralTest extends BaseTest {
     public void tabsTest() {
         for (File file : FileIO.listFiles("src")) {
             // Overwrite file should handle tab replacement
-            FileIO.overwriteFile(file, FileIO.readEntireFile(file));
-            Assert.assertFalse(FileIO.readEntireFile(file).contains("\t"));
+            String fileName = file.getPath();
+            FileIO.overwriteFile(fileName, FileIO.readEntireFile(fileName));
+            Assert.assertFalse(FileIO.readEntireFile(fileName).contains("\t"));
         }
     }
 

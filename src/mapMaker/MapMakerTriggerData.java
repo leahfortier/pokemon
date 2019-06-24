@@ -81,7 +81,7 @@ public class MapMakerTriggerData {
         // File already exists -- create and compare contents
         // If the files are the same no save is necessary (return false)
         // But if there is any different need to save to update file
-        String oldFileContents = FileIO.readEntireFile(mapFile);
+        String oldFileContents = FileIO.readEntireFile(mapFileName);
         String newFileContents = this.getFileContents();
         return !oldFileContents.equals(newFileContents);
     }

@@ -34,6 +34,14 @@ public final class FileIO {
         Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
     }
 
+    public static File newFile(String fileName) {
+        if (!fileName.startsWith("/")) {
+            fileName = PATH + fileName;
+        }
+
+        return new File(fileName);
+    }
+
     public static void deleteFile(String fileName) {
         deleteFile(FileIO.newFile(fileName));
     }
@@ -133,64 +141,25 @@ public final class FileIO {
         return folderPath.toString();
     }
 
-    // Reads the whole file ignoring commented lines starting with # when ignoreComments is true
-    public static String readEntireFileWithReplacements(String fileName, boolean ignoreComments) {
-        return readEntireFileWithReplacements(FileIO.newFile(fileName), ignoreComments);
-    }
-
-    // Reads the whole file ignoring commented lines starting with # when ignoreComments is true
-    public static String readEntireFileWithReplacements(File file, boolean ignoreComments) {
-        String fileText = readEntireFileWithoutReplacements(file, ignoreComments);
-        return SpecialCharacter.restoreSpecialFromUnicode(fileText);
-    }
-
-    // TODO: I think there might be a bug in this that is eliminating white space or new lines or something -- probably because of the line.length() > 0
-    public static String readEntireFileWithoutReplacements(File file, boolean ignoreComments) {
-        BufferedReader in = openFileBuffered(file);
-
-        StringAppender build = new StringAppender();
-        try {
-            String line;
-            while ((line = in.readLine()) != null) {
-                if (line.length() > 0 && (line.charAt(0) != '#' || ignoreComments)) {
-                    build.appendLine(line);
-                }
-            }
-        } catch (IOException exception) {
-            Global.error("IO EXCEPTION WHILE READING " + file.getName() + "!!!!");
-        }
-
-        return build.toString();
-    }
-
     public static boolean fileEquals(String firstFileName, String secondFileName) {
         return readEntireFile(firstFileName).equals(readEntireFile(secondFileName));
     }
 
+    // Reads the whole file replacing special characters
+    public static String readEntireFileWithReplacements(String fileName) {
+        String fileText = readEntireFile(fileName);
+        return SpecialCharacter.restoreSpecialFromUnicode(fileText);
+    }
+
+    // Returns the entire file as a string
     public static String readEntireFile(String fileName) {
-        return readEntireFile(FileIO.newFile(fileName));
-    }
-
-    public static String readEntireFile(File file) {
-        final Scanner in = openFile(file);
-        final StringAppender out = new StringAppender();
-
-        while (in.hasNextLine()) {
-            // Can't use appendLine() since it adds a new line at the end
-            // Can't use appendDelimiter("\n") since it doesn't append the empty string
-            out.appendIf(!out.isEmpty(), "\n")
-               .append(in.nextLine());
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(fileName));
+            return new StringAppender().appendJoin("\n", lines).toString();
+        } catch (IOException e) {
+            Global.error("IOException while reading " + fileName + ": " + e.getMessage());
+            return "";
         }
-
-        return out.toString();
-    }
-
-    public static File newFile(String fileName) {
-        if (!fileName.startsWith("/")) {
-            fileName = PATH + fileName;
-        }
-
-        return new File(fileName);
     }
 
     public static BufferedReader openFileBuffered(File file) {
@@ -217,10 +186,10 @@ public final class FileIO {
 
     // Returns null if the file does not need to be overwritten and the new contents if it does
     // Replaces tabs with 4 spaces and trims for new contents
-    public static String getOverwriteContents(final File overwriteFile, String newFileContents) {
+    public static String getOverwriteContents(String overwriteFileName, String newFileContents) {
         newFileContents = newFileContents.replaceAll("\t", StringUtils.repeat(" ", 4)).trim();
 
-        final String previousFile = readEntireFile(overwriteFile);
+        final String previousFile = readEntireFile(overwriteFileName);
         if (StringUtils.isNullOrEmpty(previousFile) || !newFileContents.equals(previousFile)) {
             return newFileContents;
         }
@@ -228,31 +197,27 @@ public final class FileIO {
         return null;
     }
 
-    public static boolean overwriteFile(final String fileName, String newFileContents) {
-        return overwriteFile(FileIO.newFile(fileName), newFileContents);
-    }
-
     // Overwrites the given file name with the content of out only if there is a difference
-    public static boolean overwriteFile(final File file, String newFileContents) {
+    public static boolean overwriteFile(String fileName, String newFileContents) {
         // Replace tabs with 4 spaces and trim
-        newFileContents = getOverwriteContents(file, newFileContents);
+        newFileContents = getOverwriteContents(fileName, newFileContents);
 
         if (!StringUtils.isNullOrEmpty(newFileContents)) {
-            writeToFile(file, newFileContents);
-            System.out.println(file.getPath() + " overwritten.");
+            writeToFile(fileName, newFileContents);
+            System.out.println(fileName + " overwritten.");
             return true;
         }
 
         return false;
     }
 
-    private static void writeToFile(File file, String out) {
+    private static void writeToFile(String fileName, String out) {
         try {
-            PrintStream printStream = new PrintStream(file);
+            PrintStream printStream = new PrintStream(FileIO.newFile(fileName));
             printStream.println(out);
             printStream.close();
         } catch (FileNotFoundException ex) {
-            Global.error("Cannot print to file " + file.getPath() + ".");
+            Global.error("Cannot print to file " + fileName + ".");
         }
     }
 
@@ -265,7 +230,7 @@ public final class FileIO {
         }
     }
 
-    public static JFileChooser getImageFileChooser(final String folderPath) {
+    public static JFileChooser getImageFileChooser(String folderPath) {
         final File folder = FileIO.newFile(folderPath);
         JFileChooser fileChooser = new JFileChooser(folder);
         fileChooser.setAcceptAllFileFilterUsed(false);

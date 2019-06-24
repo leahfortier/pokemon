@@ -22,7 +22,7 @@ public class GeneratorTest extends BaseTest {
         @Override
         protected void writeGen(String fileName, String contents) {
             // Don't actually overwrite files inside the test
-            contents = FileIO.getOverwriteContents(FileIO.newFile(fileName), contents);
+            contents = FileIO.getOverwriteContents(fileName, contents);
             Assert.assertTrue(fileName, StringUtils.isNullOrEmpty(contents));
         }
     }
