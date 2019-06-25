@@ -1704,4 +1704,42 @@ public class AttackTest extends BaseTest {
         attacking.assertStages(new TestStages());
         defending.assertStages(new TestStages().set(Stat.ATTACK, -5));
     }
+
+    @Test
+    public void moldBreakerMovesTest() {
+        // Tbh there are not a ton of abilities that interact with Core Enforcer... seems kind of pointless...
+        // Core Enforcer goes first -- does not break the mold (Multiscale still activates)
+        moldBreakerMovesTest(.5, true, AttackNamesies.CORE_ENFORCER, AbilityNamesies.MULTISCALE);
+        moldBreakerMovesTest(.5, true, AttackNamesies.CORE_ENFORCER, AbilityNamesies.SHADOW_SHIELD);
+
+        // Core Enforcer goes second -- break the Multiscale!
+        // Shadow Shield has unbreakable mold and should not be affected by Core Enforcer
+        moldBreakerMovesTest(1, false, AttackNamesies.CORE_ENFORCER, AbilityNamesies.MULTISCALE);
+        moldBreakerMovesTest(.5, false, AttackNamesies.CORE_ENFORCER, AbilityNamesies.SHADOW_SHIELD);
+
+        // Moongeist Beam always breaks mold regardless of attack order (Shadow Shield still blocks though)
+        moldBreakerMovesTest(1, true, AttackNamesies.MOONGEIST_BEAM, AbilityNamesies.MULTISCALE);
+        moldBreakerMovesTest(1, false, AttackNamesies.MOONGEIST_BEAM, AbilityNamesies.MULTISCALE);
+        moldBreakerMovesTest(.5, true, AttackNamesies.MOONGEIST_BEAM, AbilityNamesies.SHADOW_SHIELD);
+        moldBreakerMovesTest(.5, false, AttackNamesies.MOONGEIST_BEAM, AbilityNamesies.SHADOW_SHIELD);
+    }
+
+    private void moldBreakerMovesTest(double expectedModifier, boolean attackFirst, AttackNamesies moldBreaker, AbilityNamesies otherAbility) {
+        // Endure has increased priority (causing the player to attack second)
+        AttackNamesies otherAttack = attackFirst ? AttackNamesies.SPLASH : AttackNamesies.ENDURE;
+        moldBreakerMovesTest(expectedModifier, moldBreaker, otherAttack, otherAbility);
+    }
+
+    private void moldBreakerMovesTest(double expectedModifier, AttackNamesies moldBreaker, AttackNamesies otherAttack, AbilityNamesies otherAbility) {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        defending.withAbility(otherAbility);
+        attacking.setExpectedDamageModifier(expectedModifier);
+
+        battle.fight(moldBreaker, otherAttack);
+        defending.assertNotFullHealth();
+        attacking.assertNoEffect(PokemonEffectNamesies.BREAKS_THE_MOLD);
+    }
 }

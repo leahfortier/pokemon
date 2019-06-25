@@ -1818,6 +1818,23 @@ SapMessage:
 ShouldCrit:
     Header: boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending)
 *
+# NOTE: If changed, should likely update TempEffectMove below
+ConditionTempEffectMove:
+    AddMapField: Field:
+        private Effect effect;
+        ###
+    AddMapField: BeginAttack:
+        if ({2-}) {
+            this.effect = Effect.cast(PokemonEffectNamesies.{11}, b, attacking, attacking, CastSource.ATTACK, false);
+        }
+        ###
+    AddMapField: EndAttack:
+        if (this.effect != null) {
+            this.effect.deactivate();
+        }
+        ###
+*
+# NOTE: If changed, should likely update ConditionTempEffectMove above
 TempEffectMove:
     AddMapField: Field:
         private Effect effect;

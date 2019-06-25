@@ -168,7 +168,6 @@ Other random things:
     substitute almost certainly doesn't work with form change abilities for images at least
     fairy lock looks like it lasts indefinitely? but it should only be one turn?
     make Marcos fix the substitute failure messaging problems I don't wanna do it
-    test moongeist beam and shadow shield (combos like that) -- honestly I don't even know how this is supposed to work
     does using a berry (not hold item) not count as berry consumption??
     probably have something to automatically remove previous effect if there can only be one (ChangeAbility etc)
     should I get different sprites for Castform and Arceus and other Pokemon like that since it's partially setup now

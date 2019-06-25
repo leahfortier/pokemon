@@ -6340,12 +6340,7 @@ Core Enforcer:
     Cat: Special
     Pow: 100
     Acc: 100
-    BeginAttack:
-        // TODO: Test
-        if (!b.isFirstAttack()) {
-            Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
-        }
-        ###
+    ConditionTempEffectMove: BREAKS_THE_MOLD !b.isFirstAttack()
 *
 Trop Kick:
     Desc: The user lands an intense kick of tropical origins on the target. This also lowers the target's Attack stat.
@@ -6549,6 +6544,7 @@ Photon Geyser:
     Acc: 100
     Cat: Special
     SwitchStat:
+        // TODO: This isn't taking stages and such into account and it should
         // If attack stat is higher, use that instead
         if (s == Stat.SP_ATTACK && statPokemon.getStat(b, Stat.ATTACK) > statPokemon.getStat(b, Stat.SP_ATTACK)) {
             return Stat.ATTACK;

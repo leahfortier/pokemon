@@ -192,6 +192,13 @@ public class ModifierTest extends BaseTest {
         powerChangeTest(1, AttackNamesies.SWIFT, new TestInfo().attacking(AbilityNamesies.NORMALIZE));
         powerChangeTest(1.2, AttackNamesies.THUNDERBOLT, new TestInfo().attacking(AbilityNamesies.NORMALIZE));
         powerChangeTest(1.2, AttackNamesies.VINE_WHIP, new TestInfo().attacking(AbilityNamesies.NORMALIZE));
+
+        // Multiscale halves power when at full health
+        powerChangeTest(.5, AttackNamesies.VINE_WHIP, new TestInfo().defending(AbilityNamesies.MULTISCALE));
+        powerChangeTest(1, AttackNamesies.VINE_WHIP, new TestInfo().defending(AbilityNamesies.MULTISCALE).with((battle, attacking, defending) -> {
+            battle.attackingFight(AttackNamesies.FALSE_SWIPE);
+            defending.assertNotFullHealth();
+        }));
     }
 
     @Test

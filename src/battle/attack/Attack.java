@@ -10709,6 +10709,8 @@ public abstract class Attack implements AttackInterface {
     static class CoreEnforcer extends Attack {
         private static final long serialVersionUID = 1L;
 
+        private Effect effect;
+
         CoreEnforcer() {
             super(AttackNamesies.CORE_ENFORCER, Type.DRAGON, MoveCategory.SPECIAL, 10, "If the Pok\u00e9mon the user has inflicted damage on have already used their moves, this move eliminates the effect of the target's Ability.");
             super.power = 100;
@@ -10717,9 +10719,15 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // TODO: Test
             if (!b.isFirstAttack()) {
-                Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
+                this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
+            }
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            if (this.effect != null) {
+                this.effect.deactivate();
             }
         }
     }
@@ -11011,6 +11019,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
+            // TODO: This isn't taking stages and such into account and it should
             // If attack stat is higher, use that instead
             if (s == Stat.SP_ATTACK && statPokemon.getStat(b, Stat.ATTACK) > statPokemon.getStat(b, Stat.SP_ATTACK)) {
                 return Stat.ATTACK;
