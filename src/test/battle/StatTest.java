@@ -20,8 +20,8 @@ public class StatTest extends BaseTest {
             Stat stat = Stat.getStat(i, true);
             Assert.assertNotEquals(stat, Stat.HP);
             if (stat == Stat.ACCURACY || stat == Stat.EVASION) {
-                Assert.assertEquals(stat.getName(), 100, Stat.getStat(stat, attacking, defending, battle));
-                Assert.assertEquals(stat.getName(), 100, Stat.getStat(stat, defending, attacking, battle));
+                Assert.assertEquals(stat.getName(), 100, Stat.getStat(stat, attacking, battle));
+                Assert.assertEquals(stat.getName(), 100, Stat.getStat(stat, defending, battle));
             } else {
                 equalStats(battle, true, stat);
                 equalStats(battle, false, stat);
@@ -91,13 +91,12 @@ public class StatTest extends BaseTest {
 
     private void checkStats(boolean equals, TestBattle battle, boolean isPlayer, Stat baseStat, Stat computedStat) {
         TestPokemon statPokemon = (TestPokemon)battle.getTrainer(isPlayer).front();
-        TestPokemon other = battle.getOtherPokemon(statPokemon);
-        checkStats(equals, battle, statPokemon, other, baseStat, computedStat);
+        checkStats(equals, battle, statPokemon, baseStat, computedStat);
     }
 
-    private void checkStats(boolean equals, TestBattle battle, TestPokemon statPokemon, TestPokemon other, Stat baseStat, Stat computedStat) {
+    private void checkStats(boolean equals, TestBattle battle, TestPokemon statPokemon, Stat baseStat, Stat computedStat) {
         int base = statPokemon.getStat(battle, baseStat);
-        int computed = Stat.getStat(computedStat, statPokemon, other, battle);
+        int computed = Stat.getStat(computedStat, statPokemon, battle);
         Assert.assertEquals(
                 String.format("Base: %s %d, Computed: %s %d", baseStat.getName(), base, computedStat.getName(), computed),
                 base == computed,

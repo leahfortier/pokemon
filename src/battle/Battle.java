@@ -347,8 +347,8 @@ public class Battle implements Serializable {
             return false;
         }
 
-        int pSpeed = Stat.getStat(Stat.SPEED, plyr, opp, this);
-        int oSpeed = Stat.getStat(Stat.SPEED, opp, plyr, this);
+        int pSpeed = Stat.getStat(Stat.SPEED, plyr, this);
+        int oSpeed = Stat.getStat(Stat.SPEED, opp, this);
 
         int val = (int)((pSpeed*32.0)/(oSpeed/4.0) + 30.0*escapeAttempts);
         if (RandomUtils.chanceTest(val, 256)) {
@@ -527,8 +527,8 @@ public class Battle implements Serializable {
         int power = me.getAttack().getPower(this, me, o);
         power *= getDamageModifier(me, o);
 
-        int attackStat = Stat.getStat(attacking, me, o, this);
-        int defenseStat = Stat.getStat(defending, o, me, this);
+        int attackStat = Stat.getStat(attacking, me, this);
+        int defenseStat = Stat.getStat(defending, o, this);
 
         double stab = TypeAdvantage.getSTAB(this, me);
         double adv = TypeAdvantage.getAdvantage(me, o, this);
@@ -622,8 +622,8 @@ public class Battle implements Serializable {
         }
 
         int moveAccuracy = me.getAttack().getAccuracy(this, me, o);
-        int accuracy = Stat.getStat(Stat.ACCURACY, me, o, this);
-        int evasion = Stat.getStat(Stat.EVASION, o, me, this);
+        int accuracy = Stat.getStat(Stat.ACCURACY, me, this);
+        int evasion = Stat.getStat(Stat.EVASION, o, this);
 
         return RandomUtils.chanceTest((int)(moveAccuracy*((double)accuracy/(double)evasion)));
     }
@@ -690,8 +690,8 @@ public class Battle implements Serializable {
         }
 
         // Get the speeds of the Pokemon
-        int pSpeed = getSpeedStat(plyr, opp);
-        int oSpeed = getSpeedStat(opp, plyr);
+        int pSpeed = getSpeedStat(plyr);
+        int oSpeed = getSpeedStat(opp);
 
         // Speeds are equal -- alternate
         if (pSpeed == oSpeed) {
@@ -702,8 +702,8 @@ public class Battle implements Serializable {
         return reverse ? oSpeed > pSpeed : oSpeed < pSpeed;
     }
 
-    protected int getSpeedStat(ActivePokemon statPokemon, ActivePokemon otherPokemon) {
-        return Stat.getStat(Stat.SPEED, statPokemon, otherPokemon, this);
+    protected int getSpeedStat(ActivePokemon statPokemon) {
+        return Stat.getStat(Stat.SPEED, statPokemon, this);
     }
 
     @FunctionalInterface

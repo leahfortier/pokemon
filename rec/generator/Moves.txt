@@ -1454,7 +1454,7 @@ Gyro Ball:
     Type: Steel
     MoveType: Bomb_Ball
     GetPow:
-        return (int)Math.min(150, 25.0*Stat.getStat(Stat.SPEED, o, me, b)/Stat.getStat(Stat.SPEED, me, o, b));
+        return (int)Math.min(150, 25.0*Stat.getStat(Stat.SPEED, o, b)/Stat.getStat(Stat.SPEED, me, b));
         ###
 *
 Crush Claw:
@@ -6206,7 +6206,7 @@ Strength Sap:
     MoveType: Healing
     UniqueEffects:
         // Only heal if stat actually lowers
-        int victimAttackStat = Stat.getStat(Stat.ATTACK, victim, user, b);
+        int victimAttackStat = Stat.getStat(Stat.ATTACK, victim, b);
         boolean reduced = victim.getStages().modifyStage(user, -1, Stat.ATTACK, b, CastSource.ATTACK);
         if (reduced) {
             this.sapHealth(b, user, victim, victimAttackStat, true);

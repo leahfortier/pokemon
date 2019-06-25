@@ -118,13 +118,15 @@ public class ActivePokemon extends PartyPokemon {
         return this.getStages().getStage(stat);
     }
 
-    public int getStat(Battle b, Stat s) {
-        Integer stat = DifferentStatEffect.getStat(b, this, s);
-        if (stat != null) {
-            return stat;
+    // Returns the straight up stat value
+    // This does NOT include any battle modifiers like stages or anything like that
+    public int getStat(Battle b, Stat stat) {
+        Integer statValue = DifferentStatEffect.getStat(b, this, stat);
+        if (statValue != null) {
+            return statValue;
         }
 
-        return this.getStat(s);
+        return this.getStat(stat);
     }
 
     public MoveList getMoves(Battle b) {

@@ -126,7 +126,7 @@ public class TestBattle extends Battle {
     }
 
     @Override
-    protected int getSpeedStat(ActivePokemon statPokemon, ActivePokemon otherPokemon) {
+    protected int getSpeedStat(ActivePokemon statPokemon) {
         // Player always strikes first in its priority bracket in tests
         // Note: THESE VALUES DO NOT REFLECT STAT VALUES AT ALL I JUST WANT THE PLAYER'S TO BE HIGHER
         return statPokemon.isPlayer() ? 1 : 0;

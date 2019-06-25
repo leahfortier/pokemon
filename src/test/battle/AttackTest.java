@@ -104,8 +104,8 @@ public class AttackTest extends BaseTest {
                 attacking.setupMove(attackNamesies, battle);
 
                 int moveAccuracy = attacking.getAttack().getAccuracy(battle, attacking, defending);
-                int accuracy = Stat.getStat(Stat.ACCURACY, attacking, defending, battle);
-                int evasion = Stat.getStat(Stat.EVASION, defending, attacking, battle);
+                int accuracy = Stat.getStat(Stat.ACCURACY, attacking, battle);
+                int evasion = Stat.getStat(Stat.EVASION, defending, battle);
 
                 int totalAccuracy = (int)(moveAccuracy*((double)accuracy/(double)evasion));
                 Assert.assertTrue(attack.getName(), accuracy < 100);
@@ -1630,7 +1630,7 @@ public class AttackTest extends BaseTest {
         Assert.assertEquals(1, attacking.getHP());
         defending.assertFullHealth();
 
-        int attackStat = Stat.getStat(Stat.ATTACK, defending, attacking, battle);
+        int attackStat = Stat.getStat(Stat.ATTACK, defending, battle);
         TestUtils.assertGreater(attacking.getMaxHP(), 2*attackStat);
         Assert.assertEquals(defending.getStat(battle, Stat.ATTACK), attackStat);
 
@@ -1642,7 +1642,7 @@ public class AttackTest extends BaseTest {
         defending.assertStages(new TestStages().set(Stat.ATTACK, -1));
 
         // Make sure stat value actually decreases
-        int newAttackStat = Stat.getStat(Stat.ATTACK, defending, attacking, battle);
+        int newAttackStat = Stat.getStat(Stat.ATTACK, defending, battle);
         TestUtils.assertGreater(attackStat, newAttackStat);
         battle.attackingFight(AttackNamesies.STRENGTH_SAP);
         Assert.assertEquals(1 + attackStat + newAttackStat, attacking.getHP());
@@ -1665,7 +1665,7 @@ public class AttackTest extends BaseTest {
         defending.assertStages(new TestStages().set(Stat.ATTACK, -3));
 
         // Liquid Ooze will make the attacker lose HP instead of heal -- but it will still lose strength
-        attackStat = Stat.getStat(Stat.ATTACK, defending, attacking, battle);
+        attackStat = Stat.getStat(Stat.ATTACK, defending, battle);
         defending.withAbility(AbilityNamesies.LIQUID_OOZE);
         battle.attackingFight(AttackNamesies.STRENGTH_SAP);
         attacking.assertMissingHp(attackStat);
@@ -1689,7 +1689,7 @@ public class AttackTest extends BaseTest {
 
         // Contrary will cause Strength Sap to increase its attack -- should succeed at -6 stage
         defending.withAbility(AbilityNamesies.CONTRARY);
-        attackStat = Stat.getStat(Stat.ATTACK, defending, attacking, battle);
+        attackStat = Stat.getStat(Stat.ATTACK, defending, battle);
         battle.attackingFight(AttackNamesies.STRENGTH_SAP);
         Assert.assertEquals(1 + attackStat, attacking.getHP());
         defending.assertFullHealth();

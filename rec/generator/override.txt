@@ -705,7 +705,7 @@ WeightRatio:
 *
 StatRatio:
     AddMapField: GetPow:
-        double ratio = (double)Stat.getStat(Stat.{11}, {2}, {3}, b)/Stat.getStat(Stat.{11}, {3}, {2}, b);
+        double ratio = (double)Stat.getStat(Stat.{11}, {2}, b)/Stat.getStat(Stat.{11}, {3}, b);
         if (ratio > .5) {
             return 60;
         } else if (ratio > .33) {

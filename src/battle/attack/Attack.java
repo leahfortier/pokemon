@@ -2638,7 +2638,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
-            double ratio = (double)Stat.getStat(Stat.SPEED, o, me, b)/Stat.getStat(Stat.SPEED, me, o, b);
+            double ratio = (double)Stat.getStat(Stat.SPEED, o, b)/Stat.getStat(Stat.SPEED, me, b);
             if (ratio > .5) {
                 return 60;
             } else if (ratio > .33) {
@@ -2856,7 +2856,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
-            return (int)Math.min(150, 25.0*Stat.getStat(Stat.SPEED, o, me, b)/Stat.getStat(Stat.SPEED, me, o, b));
+            return (int)Math.min(150, 25.0*Stat.getStat(Stat.SPEED, o, b)/Stat.getStat(Stat.SPEED, me, b));
         }
     }
 
@@ -9389,7 +9389,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
-            double ratio = (double)Stat.getStat(Stat.ATTACK, me, o, b)/Stat.getStat(Stat.ATTACK, o, me, b);
+            double ratio = (double)Stat.getStat(Stat.ATTACK, me, b)/Stat.getStat(Stat.ATTACK, o, b);
             if (ratio > .5) {
                 return 60;
             } else if (ratio > .33) {
@@ -10517,7 +10517,7 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Only heal if stat actually lowers
-            int victimAttackStat = Stat.getStat(Stat.ATTACK, victim, user, b);
+            int victimAttackStat = Stat.getStat(Stat.ATTACK, victim, b);
             boolean reduced = victim.getStages().modifyStage(user, -1, Stat.ATTACK, b, CastSource.ATTACK);
             if (reduced) {
                 this.sapHealth(b, user, victim, victimAttackStat, true);
