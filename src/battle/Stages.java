@@ -71,7 +71,7 @@ public class Stages implements Serializable {
         boolean print = source == CastSource.ATTACK && caster.getAttack().canPrintFail();
 
         // Effects that change the value of the modifier
-        val = ModifyStageValueEffect.updateModifyStageValueEffect(b, caster, victim, val);
+        val *= ModifyStageValueEffect.getModifier(b, caster, victim);
 
         // Effects that prevent stat reductions caused by the opponent
         if (val < 0 && caster != victim) {

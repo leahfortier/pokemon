@@ -1515,11 +1515,11 @@ public final class InvokeInterfaces {
     }
 
     public interface ModifyStageValueEffect {
+        int modifyStageValue();
 
-        // TODO: This should just be a multiplier and not take in the modVal
-        int modifyStageValue(int modVal);
+        static double getModifier(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            double modifier = 1;
 
-        static int updateModifyStageValueEffect(Battle b, ActivePokemon caster, ActivePokemon victim, int modVal) {
             ActivePokemon moldBreaker = caster == victim ? null : caster;
 
             List<InvokeEffect> invokees = b.getEffectsList(victim);
@@ -1532,11 +1532,11 @@ public final class InvokeInterfaces {
                     }
 
                     ModifyStageValueEffect effect = (ModifyStageValueEffect)invokee;
-                    modVal = effect.modifyStageValue(modVal);
+                    modifier *= effect.modifyStageValue();
                 }
             }
 
-            return modVal;
+            return modifier;
         }
     }
 

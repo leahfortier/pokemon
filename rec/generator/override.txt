@@ -1086,7 +1086,11 @@ OpponentApplyDamage:
     Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
 *
 ModifyStageValue:
-    Header: int modifyStageValue(int modVal)
+    Header: int modifyStageValue()
+    AddInterface: ModifyStageValueEffect
+    Body:
+        return {0};
+        ###
 *
 SwitchOut:
     Header: void switchOut(ActivePokemon switchee)

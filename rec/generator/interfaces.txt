@@ -797,10 +797,8 @@ EncounterRateMultiplier:
 ***
 ModifyStageValueEffect:
     Method:
-        Comments: // TODO: This should just be a multiplier and not take in the modVal
-        Header: int modifyStageValue(int modVal)
-        Invoke: Update
-        Update: modVal
+        Header: int modifyStageValue()
+        Invoke: Multiply
         InvokeParameters: Battle b, ActivePokemon caster, ActivePokemon victim
         MoldBreakerNullCheck: caster == victim ? null : caster
         EffectList: victim

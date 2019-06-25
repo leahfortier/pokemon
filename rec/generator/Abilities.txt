@@ -400,10 +400,7 @@ Unaware:
 *
 Simple:
     Desc: The stat changes the Pok\u00e9mon receives are doubled.
-    Int: ModifyStageValueEffect
-    ModifyStageValue:
-        return modVal*2;
-        ###
+    ModifyStageValue: 2
 *
 Early Bird:
     Desc: The Pok\u00e9mon awakens twice as fast as other Pok\u00e9mon from sleep.
@@ -1019,10 +1016,7 @@ Victory Star:
 *
 Contrary:
     Desc: Makes stat changes have an opposite effect.
-    Int: ModifyStageValueEffect
-    ModifyStageValue:
-        return -1*modVal;
-        ###
+    ModifyStageValue: -1
 *
 Big Pecks:
     Desc: Protects the Pok\u00e9mon from Defense-lowering effects.

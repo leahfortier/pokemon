@@ -1222,8 +1222,8 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public int modifyStageValue(int modVal) {
-            return modVal*2;
+        public int modifyStageValue() {
+            return 2;
         }
     }
 
@@ -2656,8 +2656,8 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public int modifyStageValue(int modVal) {
-            return -1*modVal;
+        public int modifyStageValue() {
+            return -1;
         }
     }
 
