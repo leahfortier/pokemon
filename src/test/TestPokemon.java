@@ -123,18 +123,9 @@ public class TestPokemon extends ActivePokemon {
         Assert.assertEquals(this.getHpString() + " " + missingHp, this.getMaxHP() - missingHp, this.getHP());
     }
 
-    // Confirms the Pokemon has or does not have the specified status
-    public void assertStatus(boolean shouldHave, StatusNamesies statusNamesies) {
-        if (shouldHave) {
-            this.assertHasStatus(statusNamesies);
-        } else {
-            this.assertNoStatus();
-        }
-    }
-
     // Confirms the Pokemon does not have any status condition
     public void assertNoStatus() {
-        Assert.assertFalse(this.hasStatus());
+        Assert.assertFalse(this.getStatus().toString(), this.hasStatus());
     }
 
     // Confirms the Pokemon has the specified status condition
@@ -147,7 +138,7 @@ public class TestPokemon extends ActivePokemon {
                 assertBadPoison();
                 break;
             default:
-                Assert.assertTrue(this.getStatus().getShortName(), this.hasStatus(statusNamesies));
+                Assert.assertTrue(this.getStatus().toString(), this.hasStatus(statusNamesies));
                 break;
         }
     }

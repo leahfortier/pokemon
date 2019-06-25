@@ -433,7 +433,6 @@ public class ScriptTest extends BaseTest {
 
         // Handled separately in their API
         nullStatChangesUpdate(moveMap, AttackNamesies.DEFOG, new TestStages().set(Stat.EVASION, -1));
-        nullStatChangesUpdate(moveMap, AttackNamesies.STRENGTH_SAP, new TestStages().set(Stat.ATTACK, -1));
         nullStatChangesUpdate(moveMap, AttackNamesies.VENOM_DRENCH, new TestStages().set(Stat.ATTACK, -1).set(Stat.SP_ATTACK, -1).set(Stat.SPEED, -1));
         nullStatChangesUpdate(moveMap, AttackNamesies.SKULL_BASH, new TestStages().set(Stat.DEFENSE, 1));
 

@@ -1569,4 +1569,139 @@ public class AttackTest extends BaseTest {
         attacking.assertNoEffect(PokemonEffectNamesies.FIDDY_PERCENT_STRONGER);
         defending.assertNoEffect(PokemonEffectNamesies.FIDDY_PERCENT_STRONGER);
     }
+
+    @Test
+    public void sleepTalkTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Growl is the only move that can succeed from Sleep Talk in this list
+        attacking.withMoves(AttackNamesies.SLEEP_TALK, AttackNamesies.GROWL, AttackNamesies.UPROAR, AttackNamesies.ASSIST);
+
+        // Will fail because not asleep
+        battle.attackingFight(AttackNamesies.SLEEP_TALK);
+        attacking.assertNoStatus();
+        attacking.assertStages(new TestStages());
+        defending.assertStages(new TestStages());
+        Assert.assertFalse(attacking.lastMoveSucceeded());
+
+        // Nighty night
+        battle.defendingFight(AttackNamesies.SING);
+        attacking.assertHasStatus(StatusNamesies.ASLEEP);
+
+        // Okay let's try that again
+        battle.attackingFight(AttackNamesies.SLEEP_TALK);
+        attacking.assertHasStatus(StatusNamesies.ASLEEP);
+        attacking.assertStages(new TestStages());
+        defending.assertStages(new TestStages().set(Stat.ATTACK, -1));
+        Assert.assertTrue(attacking.lastMoveSucceeded());
+
+        battle.splashFight();
+        battle.splashFight();
+
+        // Must be awake by now
+        battle.attackingFight(AttackNamesies.GROWL);
+        attacking.assertNoStatus();
+        attacking.assertStages(new TestStages());
+        defending.assertStages(new TestStages().set(Stat.ATTACK, -2));
+
+        // Go back to sleepies
+        battle.defendingFight(AttackNamesies.SING);
+        attacking.assertHasStatus(StatusNamesies.ASLEEP);
+
+        // Only know moves that fail with Sleep Talk -- will fail
+        attacking.withMoves(AttackNamesies.SLEEP_TALK, AttackNamesies.UPROAR, AttackNamesies.ASSIST, AttackNamesies.SOLAR_BEAM);
+        battle.attackingFight(AttackNamesies.SLEEP_TALK);
+        attacking.assertHasStatus(StatusNamesies.ASLEEP);
+        attacking.assertFullHealth();
+        defending.assertFullHealth();
+        Assert.assertFalse(attacking.lastMoveSucceeded());
+    }
+
+    @Test
+    public void strengthSapTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.BLISSEY, PokemonNamesies.MAGIKARP);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Set attacking to 1 HP
+        battle.falseSwipePalooza(false);
+        Assert.assertEquals(1, attacking.getHP());
+        defending.assertFullHealth();
+
+        int attackStat = Stat.getStat(Stat.ATTACK, defending, attacking, battle);
+        TestUtils.assertGreater(attacking.getMaxHP(), 2*attackStat);
+        Assert.assertEquals(defending.getStat(battle, Stat.ATTACK), attackStat);
+
+        // Steal strengthhh
+        battle.attackingFight(AttackNamesies.STRENGTH_SAP);
+        Assert.assertEquals(1 + attackStat, attacking.getHP());
+        defending.assertFullHealth();
+        attacking.assertStages(new TestStages());
+        defending.assertStages(new TestStages().set(Stat.ATTACK, -1));
+
+        // Make sure stat value actually decreases
+        int newAttackStat = Stat.getStat(Stat.ATTACK, defending, attacking, battle);
+        TestUtils.assertGreater(attackStat, newAttackStat);
+        battle.attackingFight(AttackNamesies.STRENGTH_SAP);
+        Assert.assertEquals(1 + attackStat + newAttackStat, attacking.getHP());
+        defending.assertFullHealth();
+        attacking.assertStages(new TestStages());
+        defending.assertStages(new TestStages().set(Stat.ATTACK, -2));
+
+        // Heal to full HP
+        battle.emptyHeal();
+        attacking.assertFullHealth();
+        defending.assertFullHealth();
+        attacking.assertStages(new TestStages());
+        defending.assertStages(new TestStages().set(Stat.ATTACK, -2));
+
+        // Should still reduce attack even when at full health
+        battle.attackingFight(AttackNamesies.STRENGTH_SAP);
+        attacking.assertFullHealth();
+        defending.assertFullHealth();
+        attacking.assertStages(new TestStages());
+        defending.assertStages(new TestStages().set(Stat.ATTACK, -3));
+
+        // Liquid Ooze will make the attacker lose HP instead of heal -- but it will still lose strength
+        attackStat = Stat.getStat(Stat.ATTACK, defending, attacking, battle);
+        defending.withAbility(AbilityNamesies.LIQUID_OOZE);
+        battle.attackingFight(AttackNamesies.STRENGTH_SAP);
+        attacking.assertMissingHp(attackStat);
+        defending.assertFullHealth();
+        attacking.assertStages(new TestStages());
+        defending.assertStages(new TestStages().set(Stat.ATTACK, -4));
+
+        // Lower attack to minimum
+        battle.attackingFight(AttackNamesies.FEATHER_DANCE);
+        defending.assertStages(new TestStages().set(Stat.ATTACK, -6));
+        defending.withAbility(AbilityNamesies.NO_ABILITY);
+
+        battle.falseSwipePalooza(false);
+        Assert.assertEquals(1, attacking.getHP());
+        defending.assertFullHealth();
+
+        // Strength Sap will fail if at minimum (should not heal either)
+        battle.attackingFight(AttackNamesies.STRENGTH_SAP);
+        Assert.assertEquals(1, attacking.getHP());
+        defending.assertFullHealth();
+
+        // Contrary will cause Strength Sap to increase its attack -- should succeed at -6 stage
+        defending.withAbility(AbilityNamesies.CONTRARY);
+        attackStat = Stat.getStat(Stat.ATTACK, defending, attacking, battle);
+        battle.attackingFight(AttackNamesies.STRENGTH_SAP);
+        Assert.assertEquals(1 + attackStat, attacking.getHP());
+        defending.assertFullHealth();
+        attacking.assertStages(new TestStages());
+        defending.assertStages(new TestStages().set(Stat.ATTACK, -5));
+
+        // Should not heal if the stat can't be lowered due to ability
+        defending.withAbility(AbilityNamesies.HYPER_CUTTER);
+        battle.attackingFight(AttackNamesies.STRENGTH_SAP);
+        Assert.assertEquals(1 + attackStat, attacking.getHP());
+        defending.assertFullHealth();
+        attacking.assertStages(new TestStages());
+        defending.assertStages(new TestStages().set(Stat.ATTACK, -5));
+    }
 }

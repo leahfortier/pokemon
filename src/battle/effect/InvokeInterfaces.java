@@ -1515,6 +1515,8 @@ public final class InvokeInterfaces {
     }
 
     public interface ModifyStageValueEffect {
+
+        // TODO: This should just be a multiplier and not take in the modVal
         int modifyStageValue(int modVal);
 
         static int updateModifyStageValueEffect(Battle b, ActivePokemon caster, ActivePokemon victim, int modVal) {

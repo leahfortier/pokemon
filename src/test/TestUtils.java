@@ -48,6 +48,10 @@ public class TestUtils {
         }
     }
 
+    public static void assertGreater(double greater, double lesser) {
+        assertGreater("", greater, lesser);
+    }
+
     public static void assertGreater(String message, double greater, double lesser) {
         Assert.assertTrue(
                 message + " " + greater + " !> " + lesser,

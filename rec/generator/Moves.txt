@@ -4049,7 +4049,6 @@ Sleep Talk:
         private List<Move> moves;
         ###
     BeginAttack:
-        // TODO: Test
         this.moves = attacking.getMoves(b).filter(move -> !move.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL));
         ###
     Applies: user.hasStatus(StatusNamesies.ASLEEP) && !this.moves.isEmpty()
@@ -4562,7 +4561,6 @@ Assist:
     Cat: Status
     MoveType: No_Magic_Coat, Sleep_Talk_Fail, Metronomeless, Assistless, Protect_Piercing, Mirrorless
     BeginAttack:
-        // TODO: Test
         this.attacks = new ArrayList<>();
         for (ActivePokemon p : b.getTrainer(attacking).getActiveTeam()) {
             if (p != attacking) {
@@ -5185,7 +5183,6 @@ Fling:
         Messages.add(user.getName() + " flung its " + user.getHeldItem(b).getName() + "!");
         ###
     UniqueEffects:
-        // TODO: Make sure this is still working -- consumeItem used to be in endAttack
         HoldItem item = user.getHeldItem(b);
         item.flingEffect(b, victim);
         item.consumeItemWithoutEffects(b, user);
@@ -5213,7 +5210,6 @@ Secret Power:
     Cat: Physical
     Acc: 100
     BeginAttack:
-        // TODO: Test
         TerrainType terrain = b.getTerrainType();
 
         super.status = terrain.getStatusCondition();
@@ -6208,17 +6204,14 @@ Strength Sap:
     PP: 10
     Int: SapHealthEffect
     MoveType: Healing
-    Field:
-        private int victimAttackStat;
-        ###
-    BeginAttack:
-        // TODO: Test
-        this.victimAttackStat = Stat.getStat(Stat.ATTACK, defending, attacking, b);
-        ###
     UniqueEffects:
-        this.sapHealth(b, user, victim, victimAttackStat, true);
+        // Only heal if stat actually lowers
+        int victimAttackStat = Stat.getStat(Stat.ATTACK, victim, user, b);
+        boolean reduced = victim.getStages().modifyStage(user, -1, Stat.ATTACK, b, CastSource.ATTACK);
+        if (reduced) {
+            this.sapHealth(b, user, victim, victimAttackStat, true);
+        }
         ###
-    StatChange: 1 Attack -1
     SapPercentage: 1
 *
 Leafage:

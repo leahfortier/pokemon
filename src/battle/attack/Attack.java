@@ -6980,7 +6980,6 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // TODO: Test
             this.moves = attacking.getMoves(b).filter(move -> !move.getAttack().isMoveType(MoveType.SLEEP_TALK_FAIL));
         }
 
@@ -7772,7 +7771,6 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // TODO: Test
             this.attacks = new ArrayList<>();
             for (ActivePokemon p : b.getTrainer(attacking).getActiveTeam()) {
                 if (p != attacking) {
@@ -8784,7 +8782,6 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            // TODO: Make sure this is still working -- consumeItem used to be in endAttack
             HoldItem item = user.getHeldItem(b);
             item.flingEffect(b, victim);
             item.consumeItemWithoutEffects(b, user);
@@ -8845,7 +8842,6 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // TODO: Test
             TerrainType terrain = b.getTerrainType();
 
             super.status = terrain.getStatusCondition();
@@ -10512,24 +10508,20 @@ public abstract class Attack implements AttackInterface {
     static class StrengthSap extends Attack implements SapHealthEffect {
         private static final long serialVersionUID = 1L;
 
-        private int victimAttackStat;
-
         StrengthSap() {
             super(AttackNamesies.STRENGTH_SAP, Type.GRASS, MoveCategory.STATUS, 10, "The user restores its HP by the same amount as the target's Attack stat. It also lowers the target's Attack stat.");
             super.accuracy = 100;
             super.moveTypes.add(MoveType.HEALING);
-            super.statChanges[Stat.ATTACK.index()] = -1;
-        }
-
-        @Override
-        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // TODO: Test
-            this.victimAttackStat = Stat.getStat(Stat.ATTACK, defending, attacking, b);
         }
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            this.sapHealth(b, user, victim, victimAttackStat, true);
+            // Only heal if stat actually lowers
+            int victimAttackStat = Stat.getStat(Stat.ATTACK, victim, user, b);
+            boolean reduced = victim.getStages().modifyStage(user, -1, Stat.ATTACK, b, CastSource.ATTACK);
+            if (reduced) {
+                this.sapHealth(b, user, victim, victimAttackStat, true);
+            }
         }
 
         @Override
