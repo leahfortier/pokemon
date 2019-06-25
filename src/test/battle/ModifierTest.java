@@ -68,11 +68,8 @@ public class ModifierTest extends BaseTest {
 
     private void statModifierTest(double expectedChange, double otherExpectedChange, Stat stat, TestInfo testInfo) {
         TestBattle battle = testInfo.createBattle();
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
-
-        TestPokemon statPokemon = stat.user() ? attacking : defending;
-        TestPokemon otherPokemon = stat.user() ? defending : attacking;
+        TestPokemon statPokemon = stat.user() ? battle.getAttacking() : battle.getDefending();
+        TestPokemon otherPokemon = battle.getOtherPokemon(statPokemon);
 
         int beforeStat = Stat.getStat(stat, statPokemon, battle);
         int otherBeforeStat = Stat.getStat(stat, otherPokemon, battle);

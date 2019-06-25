@@ -705,7 +705,7 @@ WeightRatio:
 *
 StatRatio:
     AddMapField: GetPow:
-        double ratio = (double)Stat.getStat(Stat.{11}, {2}, b)/Stat.getStat(Stat.{11}, {3}, b);
+        double ratio = (double)Stat.{11}.getBasicStat(b, {2})/Stat.{11}.getBasicStat(b, {3});
         if (ratio > .5) {
             return 60;
         } else if (ratio > .33) {
@@ -1818,15 +1818,13 @@ SapMessage:
 ShouldCrit:
     Header: boolean shouldCrit(Battle b, ActivePokemon attacking, ActivePokemon defending)
 *
-# NOTE: If changed, should likely update TempEffectMove below
-ConditionTempEffectMove:
+TempEffectMove:
     AddMapField: Field:
         private Effect effect;
         ###
     AddMapField: BeginAttack:
-        if ({2-}) {
-            this.effect = Effect.cast(PokemonEffectNamesies.{11}, b, attacking, attacking, CastSource.ATTACK, false);
-        }
+        {2-}
+        this.effect = Effect.cast(PokemonEffectNamesies.{11}, b, attacking, attacking, CastSource.ATTACK, false);
         ###
     AddMapField: EndAttack:
         if (this.effect != null) {
@@ -1834,20 +1832,8 @@ ConditionTempEffectMove:
         }
         ###
 *
-# NOTE: If changed, should likely update ConditionTempEffectMove above
-TempEffectMove:
-    AddMapField: Field:
-        private Effect effect;
-        ###
-    AddMapField: BeginAttack:
-        this.effect = Effect.cast(PokemonEffectNamesies.{00}, b, attacking, attacking, CastSource.ATTACK, false);
-        ###
-    AddMapField: EndAttack:
-        this.effect.deactivate();
-        ###
-*
 IgnoreAbilityMove:
-    AddMapField: TempEffectMove: BREAKS_THE_MOLD
+    AddMapField: TempEffectMove: BREAKS_THE_MOLD {0}
 *
 GetCurableEffects:
     Header: Set<PokemonEffectNamesies> getCurableEffects()

@@ -91,7 +91,26 @@ public enum Stat {
         return user;
     }
 
-    // Gets the stat of a Pokemon during battle
+    // Gets the stat value only taking the raw stage into account
+    public int getBasicStat(Battle b, ActivePokemon p) {
+        return this.getBasicStat(b, p, p.getStage(this));
+    }
+
+    // Gets the stat value only taking the stage into account
+    private int getBasicStat(Battle b, ActivePokemon p, int stage) {
+        int stat = this == EVASION || this == ACCURACY ? 100 : p.getStat(b, this);
+
+        // Modify stat based off stage
+        if (stage > 0) {
+            stat *= (this.modifier + stage)/this.modifier;
+        } else if (stage < 0) {
+            stat *= this.modifier/(this.modifier - stage);
+        }
+
+        return stat;
+    }
+
+    // Gets the stat of a Pokemon during battle with all modifiers taken into account
     public static int getStat(Stat s, ActivePokemon p, Battle b) {
         ActivePokemon opp = b.getOtherPokemon(p);
 
@@ -101,14 +120,7 @@ public enum Stat {
 
         // Apply stage changes
         int stage = getStage(s, p, opp, b);
-        int stat = s == EVASION || s == ACCURACY ? 100 : p.getStat(b, s);
-
-        // Modify stat based off stage
-        if (stage > 0) {
-            stat *= (s.modifier + stage)/s.modifier;
-        } else if (stage < 0) {
-            stat *= s.modifier/(s.modifier - stage);
-        }
+        int stat = s.getBasicStat(b, p, stage);
 
         // Applies stat changes to each for each item in list
         stat *= StatModifyingEffect.getModifier(b, p, opp, s);

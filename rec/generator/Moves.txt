@@ -1454,7 +1454,7 @@ Gyro Ball:
     Type: Steel
     MoveType: Bomb_Ball
     GetPow:
-        return (int)Math.min(150, 25.0*Stat.getStat(Stat.SPEED, o, b)/Stat.getStat(Stat.SPEED, me, b));
+        return (int)Math.min(150, 25.0*Stat.SPEED.getBasicStat(b, o)/Stat.SPEED.getBasicStat(b, me));
         ###
 *
 Crush Claw:
@@ -3532,7 +3532,7 @@ Me First:
         // Fails if it is the second turn or the opponent is using a status move
         return b.isFirstAttack() && victim.getMove() != null && !victim.getAttack().isStatusMove();
         ###
-    TempEffectMove: FIDDY_PERCENT_STRONGER
+    TempEffectMove: FIDDY_PERCENT_STRONGER // FIDDY
     CallNewMove: victim.getAttack().namesies()
 *
 Refresh:
@@ -6206,7 +6206,7 @@ Strength Sap:
     MoveType: Healing
     UniqueEffects:
         // Only heal if stat actually lowers
-        int victimAttackStat = Stat.getStat(Stat.ATTACK, victim, b);
+        int victimAttackStat = Stat.ATTACK.getBasicStat(b, victim);
         boolean reduced = victim.getStages().modifyStage(user, -1, Stat.ATTACK, b, CastSource.ATTACK);
         if (reduced) {
             this.sapHealth(b, user, victim, victimAttackStat, true);
@@ -6340,7 +6340,13 @@ Core Enforcer:
     Cat: Special
     Pow: 100
     Acc: 100
-    ConditionTempEffectMove: BREAKS_THE_MOLD !b.isFirstAttack()
+    IgnoreAbilityMove:
+        // TODO: This is completely wrong and it doesn't break the mold on the second turn it's like a gastro acid thing on the second turn will fix in the next commit
+        // Only break the mold if attacking second
+        if (b.isFirstAttack()) {
+            return;
+        }
+        ###
 *
 Trop Kick:
     Desc: The user lands an intense kick of tropical origins on the target. This also lowers the target's Attack stat.
@@ -6443,7 +6449,7 @@ Sunsteel Strike:
     PP: 5
     Pow: 100
     Acc: 100
-    IgnoreAbilityMove: True
+    IgnoreAbilityMove: // BREAK THE MOLD
 *
 Moongeist Beam:
     Desc: The user emits a sinister ray to attack the target. This move can be used on the target regardless of its Abilities.
@@ -6452,7 +6458,7 @@ Moongeist Beam:
     PP: 5
     Pow: 100
     Acc: 100
-    IgnoreAbilityMove: True
+    IgnoreAbilityMove: // BREAK THE MOLD
 *
 Tearful Look:
     Desc: The user gets teary eyed to make the target lose its combative spirit. This lowers the target's Attack and Sp. Atk stats.
@@ -6544,15 +6550,19 @@ Photon Geyser:
     Acc: 100
     Cat: Special
     SwitchStat:
-        // TODO: This isn't taking stages and such into account and it should
-        // If attack stat is higher, use that instead
-        if (s == Stat.SP_ATTACK && statPokemon.getStat(b, Stat.ATTACK) > statPokemon.getStat(b, Stat.SP_ATTACK)) {
-            return Stat.ATTACK;
-        }
-        return s;
+        return s == Stat.SP_ATTACK && this.switchStats ? Stat.ATTACK : s;
         ###
-    Int: StatSwitchingEffect
-    IgnoreAbilityMove: True
+    OppSwitchStat:
+        return s == Stat.SP_DEFENSE && this.switchStats ? Stat.DEFENSE : s;
+        ###
+    Field:
+        private boolean switchStats;
+        ###
+    Int: StatSwitchingEffect, OpponentStatSwitchingEffect
+    IgnoreAbilityMove:
+        // If attack stat is higher, switch to physical move (both attack and defense used)
+        this.switchStats = Stat.ATTACK.getBasicStat(b, attacking) > Stat.SP_ATTACK.getBasicStat(b, attacking);
+        ###
 *
 Mind Blown:
     Desc: The user attacks everything around it by causing its own head to explode. This also damages the user.

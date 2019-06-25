@@ -245,16 +245,16 @@ public class Battle implements Serializable {
         return this.getTrainer(isPlayer).getAction() == TrainerAction.SWITCH;
     }
 
-    private boolean deadUser() {
+    private void deadUser() {
         // Front Pokemon is still functioning
         if (!player.front().isFainted(this)) {
-            return false;
+            return;
         }
 
         // Dead Front Pokemon, but you still have others to spare -- force a switch
         if (!player.blackout(this) && !opponent.blackout(this)) {
             Messages.add(new MessageUpdate("What Pokemon would you like to switch to?").withUpdate(MessageUpdateType.FORCE_SWITCH));
-            return false;
+            return;
         }
 
         // Blackout -- you're fucked
@@ -272,16 +272,14 @@ public class Battle implements Serializable {
 
         Messages.clearMessages(MessageState.MAPPITY_MAP);
         Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
-
-        return true;
     }
 
-    private boolean deadOpponent() {
+    private void deadOpponent() {
         ActivePokemon dead = opponent.front();
 
         // YOU'RE FINE
         if (!dead.isFainted(this)) {
-            return false;
+            return;
         }
 
         // Gain dat EXP
@@ -291,7 +289,7 @@ public class Battle implements Serializable {
         // You have achieved total victory
         if (opponent.blackout(this)) {
             player.winBattle(this, opponent);
-            return true;
+            return;
         }
 
         // We know this is not a wild battle anymore and I don't feel like casting so much
@@ -300,8 +298,6 @@ public class Battle implements Serializable {
         // They still have some Pokes left
         opp.switchToRandom(this);
         enterBattle(opp.front());
-
-        return false;
     }
 
     public void enterBattle(ActivePokemon enterer) {
@@ -347,8 +343,9 @@ public class Battle implements Serializable {
             return false;
         }
 
-        int pSpeed = Stat.getStat(Stat.SPEED, plyr, this);
-        int oSpeed = Stat.getStat(Stat.SPEED, opp, this);
+        // Only use the stage for the speed estimate
+        int pSpeed = Stat.SPEED.getBasicStat(this, plyr);
+        int oSpeed = Stat.SPEED.getBasicStat(this, opp);
 
         int val = (int)((pSpeed*32.0)/(oSpeed/4.0) + 30.0*escapeAttempts);
         if (RandomUtils.chanceTest(val, 256)) {

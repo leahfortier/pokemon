@@ -2638,7 +2638,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
-            double ratio = (double)Stat.getStat(Stat.SPEED, o, b)/Stat.getStat(Stat.SPEED, me, b);
+            double ratio = (double)Stat.SPEED.getBasicStat(b, o)/Stat.SPEED.getBasicStat(b, me);
             if (ratio > .5) {
                 return 60;
             } else if (ratio > .33) {
@@ -2856,7 +2856,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
-            return (int)Math.min(150, 25.0*Stat.getStat(Stat.SPEED, o, b)/Stat.getStat(Stat.SPEED, me, b));
+            return (int)Math.min(150, 25.0*Stat.SPEED.getBasicStat(b, o)/Stat.SPEED.getBasicStat(b, me));
         }
     }
 
@@ -6178,12 +6178,15 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // FIDDY
             this.effect = Effect.cast(PokemonEffectNamesies.FIDDY_PERCENT_STRONGER, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            this.effect.deactivate();
+            if (this.effect != null) {
+                this.effect.deactivate();
+            }
         }
 
         @Override
@@ -9389,7 +9392,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
-            double ratio = (double)Stat.getStat(Stat.ATTACK, me, b)/Stat.getStat(Stat.ATTACK, o, b);
+            double ratio = (double)Stat.ATTACK.getBasicStat(b, me)/Stat.ATTACK.getBasicStat(b, o);
             if (ratio > .5) {
                 return 60;
             } else if (ratio > .33) {
@@ -10517,7 +10520,7 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Only heal if stat actually lowers
-            int victimAttackStat = Stat.getStat(Stat.ATTACK, victim, b);
+            int victimAttackStat = Stat.ATTACK.getBasicStat(b, victim);
             boolean reduced = victim.getStages().modifyStage(user, -1, Stat.ATTACK, b, CastSource.ATTACK);
             if (reduced) {
                 this.sapHealth(b, user, victim, victimAttackStat, true);
@@ -10719,9 +10722,13 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            if (!b.isFirstAttack()) {
-                this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
+            // TODO: This is completely wrong and it doesn't break the mold on the second turn it's like a gastro acid thing on the second turn will fix in the next commit
+            // Only break the mold if attacking second
+            if (b.isFirstAttack()) {
+                return;
             }
+
+            this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
@@ -10865,12 +10872,15 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // BREAK THE MOLD
             this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            this.effect.deactivate();
+            if (this.effect != null) {
+                this.effect.deactivate();
+            }
         }
     }
 
@@ -10887,12 +10897,15 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // BREAK THE MOLD
             this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            this.effect.deactivate();
+            if (this.effect != null) {
+                this.effect.deactivate();
+            }
         }
     }
 
@@ -11006,9 +11019,10 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class PhotonGeyser extends Attack implements StatSwitchingEffect {
+    static class PhotonGeyser extends Attack implements StatSwitchingEffect, OpponentStatSwitchingEffect {
         private static final long serialVersionUID = 1L;
 
+        private boolean switchStats;
         private Effect effect;
 
         PhotonGeyser() {
@@ -11019,22 +11033,27 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
-            // TODO: This isn't taking stages and such into account and it should
-            // If attack stat is higher, use that instead
-            if (s == Stat.SP_ATTACK && statPokemon.getStat(b, Stat.ATTACK) > statPokemon.getStat(b, Stat.SP_ATTACK)) {
-                return Stat.ATTACK;
-            }
-            return s;
+            return s == Stat.SP_ATTACK && this.switchStats ? Stat.ATTACK : s;
+        }
+
+        @Override
+        public Stat getSwitchStat(Stat s) {
+            return s == Stat.SP_DEFENSE && this.switchStats ? Stat.DEFENSE : s;
         }
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // If attack stat is higher, switch to physical move (both attack and defense used)
+            this.switchStats = Stat.ATTACK.getBasicStat(b, attacking) > Stat.SP_ATTACK.getBasicStat(b, attacking);
+
             this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            this.effect.deactivate();
+            if (this.effect != null) {
+                this.effect.deactivate();
+            }
         }
     }
 

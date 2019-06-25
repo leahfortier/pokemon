@@ -1630,7 +1630,7 @@ public class AttackTest extends BaseTest {
         Assert.assertEquals(1, attacking.getHP());
         defending.assertFullHealth();
 
-        int attackStat = Stat.getStat(Stat.ATTACK, defending, battle);
+        int attackStat = Stat.ATTACK.getBasicStat(battle, defending);
         TestUtils.assertGreater(attacking.getMaxHP(), 2*attackStat);
         Assert.assertEquals(defending.getStat(battle, Stat.ATTACK), attackStat);
 
@@ -1642,7 +1642,7 @@ public class AttackTest extends BaseTest {
         defending.assertStages(new TestStages().set(Stat.ATTACK, -1));
 
         // Make sure stat value actually decreases
-        int newAttackStat = Stat.getStat(Stat.ATTACK, defending, battle);
+        int newAttackStat = Stat.ATTACK.getBasicStat(battle, defending);
         TestUtils.assertGreater(attackStat, newAttackStat);
         battle.attackingFight(AttackNamesies.STRENGTH_SAP);
         Assert.assertEquals(1 + attackStat + newAttackStat, attacking.getHP());
@@ -1665,7 +1665,7 @@ public class AttackTest extends BaseTest {
         defending.assertStages(new TestStages().set(Stat.ATTACK, -3));
 
         // Liquid Ooze will make the attacker lose HP instead of heal -- but it will still lose strength
-        attackStat = Stat.getStat(Stat.ATTACK, defending, battle);
+        attackStat = Stat.ATTACK.getBasicStat(battle, defending);
         defending.withAbility(AbilityNamesies.LIQUID_OOZE);
         battle.attackingFight(AttackNamesies.STRENGTH_SAP);
         attacking.assertMissingHp(attackStat);
@@ -1689,7 +1689,7 @@ public class AttackTest extends BaseTest {
 
         // Contrary will cause Strength Sap to increase its attack -- should succeed at -6 stage
         defending.withAbility(AbilityNamesies.CONTRARY);
-        attackStat = Stat.getStat(Stat.ATTACK, defending, battle);
+        attackStat = Stat.ATTACK.getBasicStat(battle, defending);
         battle.attackingFight(AttackNamesies.STRENGTH_SAP);
         Assert.assertEquals(1 + attackStat, attacking.getHP());
         defending.assertFullHealth();
@@ -1718,25 +1718,34 @@ public class AttackTest extends BaseTest {
         moldBreakerMovesTest(.5, false, AttackNamesies.CORE_ENFORCER, AbilityNamesies.SHADOW_SHIELD);
 
         // Moongeist Beam always breaks mold regardless of attack order (Shadow Shield still blocks though)
-        moldBreakerMovesTest(1, true, AttackNamesies.MOONGEIST_BEAM, AbilityNamesies.MULTISCALE);
-        moldBreakerMovesTest(1, false, AttackNamesies.MOONGEIST_BEAM, AbilityNamesies.MULTISCALE);
-        moldBreakerMovesTest(.5, true, AttackNamesies.MOONGEIST_BEAM, AbilityNamesies.SHADOW_SHIELD);
-        moldBreakerMovesTest(.5, false, AttackNamesies.MOONGEIST_BEAM, AbilityNamesies.SHADOW_SHIELD);
+        moldBreakerMovesTest(1, AttackNamesies.MOONGEIST_BEAM, AbilityNamesies.MULTISCALE);
+        moldBreakerMovesTest(.5, AttackNamesies.MOONGEIST_BEAM, AbilityNamesies.SHADOW_SHIELD);
+
+        // Photon Geyser same deal as Moongeist Beam
+        moldBreakerMovesTest(1, AttackNamesies.PHOTON_GEYSER, AbilityNamesies.MULTISCALE);
+        moldBreakerMovesTest(.5, AttackNamesies.PHOTON_GEYSER, AbilityNamesies.SHADOW_SHIELD);
+    }
+
+    private void moldBreakerMovesTest(double expectedModifier, AttackNamesies moldBreaker, AbilityNamesies otherAbility) {
+        // Same result regardless of attacking order
+        moldBreakerMovesTest(expectedModifier, true, moldBreaker, otherAbility);
+        moldBreakerMovesTest(expectedModifier, false, moldBreaker, otherAbility);
     }
 
     private void moldBreakerMovesTest(double expectedModifier, boolean attackFirst, AttackNamesies moldBreaker, AbilityNamesies otherAbility) {
         // Endure has increased priority (causing the player to attack second)
         AttackNamesies otherAttack = attackFirst ? AttackNamesies.SPLASH : AttackNamesies.ENDURE;
-        moldBreakerMovesTest(expectedModifier, moldBreaker, otherAttack, otherAbility);
+        moldBreakerMovesTest(expectedModifier, moldBreaker, otherAttack, otherAbility, new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE));
     }
 
-    private void moldBreakerMovesTest(double expectedModifier, AttackNamesies moldBreaker, AttackNamesies otherAttack, AbilityNamesies otherAbility) {
-        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+    private void moldBreakerMovesTest(double expectedModifier, AttackNamesies moldBreaker, AttackNamesies otherAttack, AbilityNamesies otherAbility, TestInfo testInfo) {
+        TestBattle battle = testInfo.createBattle();
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
         defending.withAbility(otherAbility);
         attacking.setExpectedDamageModifier(expectedModifier);
+        testInfo.manipulate(battle);
 
         battle.fight(moldBreaker, otherAttack);
         defending.assertNotFullHealth();
