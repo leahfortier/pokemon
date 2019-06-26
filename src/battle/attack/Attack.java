@@ -31,7 +31,6 @@ import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.SelfAttackBlocker;
 import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.SleepyFightsterEffect;
-import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.attack.FixedDamageMove;
@@ -294,18 +293,18 @@ public abstract class Attack implements AttackInterface {
         return selfTarget ? user : opponent;
     }
 
-    private boolean canApplyEffects(Battle b, ActivePokemon me, ActivePokemon o) {
+    private boolean canApplyEffects(Battle b, ActivePokemon me, ActivePokemon target) {
         int chance = (int)(effectChance*EffectChanceMultiplierEffect.getModifier(b, me));
         if (!RandomUtils.chanceTest(chance)) {
             return false;
         }
 
         // Check the opponents effects and see if it will prevent effects from occurring
-        if (o.hasAbility(AbilityNamesies.SHIELD_DUST) && this.hasSecondaryEffects()) {
+        if (target.hasAbility(AbilityNamesies.SHIELD_DUST) && this.hasSecondaryEffects()) {
             return false;
         }
 
-        return this.shouldApplyEffects(b, me);
+        return this.shouldApplyEffects(b, me, target);
     }
 
     private boolean zeroAdvantage(Battle b, ActivePokemon p, ActivePokemon opp) {
@@ -1310,7 +1309,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             return this.isCharging();
         }
 
@@ -6084,7 +6083,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             return false;
         }
 
@@ -6117,7 +6116,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             return false;
         }
 
@@ -6151,7 +6150,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             return false;
         }
     }
@@ -6178,15 +6177,12 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // FIDDY
             this.effect = Effect.cast(PokemonEffectNamesies.FIDDY_PERCENT_STRONGER, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            if (this.effect != null) {
-                this.effect.deactivate();
-            }
+            this.effect.deactivate();
         }
 
         @Override
@@ -8879,11 +8875,6 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return AbilityNamesies.NO_ABILITY.getNewAbility();
-        }
-
-        @Override
         public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return caster.getName() + " suppressed " + victim.getName() + "'s ability!";
         }
@@ -8891,6 +8882,11 @@ public abstract class Attack implements AttackInterface {
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getAbility().isReplaceable();
+        }
+
+        @Override
+        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return AbilityNamesies.NO_ABILITY.getNewAbility();
         }
     }
 
@@ -9479,11 +9475,6 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return AbilityNamesies.INSOMNIA.getNewAbility();
-        }
-
-        @Override
         public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return victim.getName() + "'s ability was changed to " + AbilityNamesies.INSOMNIA.getName() + "!";
         }
@@ -9491,6 +9482,11 @@ public abstract class Attack implements AttackInterface {
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getAbility().isReplaceable();
+        }
+
+        @Override
+        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return AbilityNamesies.INSOMNIA.getNewAbility();
         }
     }
 
@@ -9504,11 +9500,6 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return AbilityNamesies.SIMPLE.getNewAbility();
-        }
-
-        @Override
         public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return victim.getName() + "'s ability was changed to " + AbilityNamesies.SIMPLE.getName() + "!";
         }
@@ -9516,6 +9507,11 @@ public abstract class Attack implements AttackInterface {
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.getAbility().isReplaceable();
+        }
+
+        @Override
+        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return AbilityNamesies.SIMPLE.getNewAbility();
         }
     }
 
@@ -10709,33 +10705,29 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class CoreEnforcer extends Attack {
+    static class CoreEnforcer extends Attack implements ChangeAbilitySource {
         private static final long serialVersionUID = 1L;
-
-        private Effect effect;
 
         CoreEnforcer() {
             super(AttackNamesies.CORE_ENFORCER, Type.DRAGON, MoveCategory.SPECIAL, 10, "If the Pok\u00e9mon the user has inflicted damage on have already used their moves, this move eliminates the effect of the target's Ability.");
             super.power = 100;
             super.accuracy = 100;
+            super.effect = PokemonEffectNamesies.CHANGE_ABILITY;
         }
 
         @Override
-        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // TODO: This is completely wrong and it doesn't break the mold on the second turn it's like a gastro acid thing on the second turn will fix in the next commit
-            // Only break the mold if attacking second
-            if (b.isFirstAttack()) {
-                return;
-            }
-
-            this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return !b.isFirstAttack() && victim.getAbility().isReplaceable();
         }
 
         @Override
-        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            if (this.effect != null) {
-                this.effect.deactivate();
-            }
+        public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return caster.getName() + " suppressed " + victim.getName() + "'s ability!";
+        }
+
+        @Override
+        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return AbilityNamesies.NO_ABILITY.getNewAbility();
         }
     }
 
@@ -10872,15 +10864,12 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // BREAK THE MOLD
             this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            if (this.effect != null) {
-                this.effect.deactivate();
-            }
+            this.effect.deactivate();
         }
     }
 
@@ -10897,15 +10886,12 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // BREAK THE MOLD
             this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            if (this.effect != null) {
-                this.effect.deactivate();
-            }
+            this.effect.deactivate();
         }
     }
 
@@ -11019,10 +11005,9 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class PhotonGeyser extends Attack implements StatSwitchingEffect, OpponentStatSwitchingEffect {
+    static class PhotonGeyser extends Attack {
         private static final long serialVersionUID = 1L;
 
-        private boolean switchStats;
         private Effect effect;
 
         PhotonGeyser() {
@@ -11032,28 +11017,19 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
-            return s == Stat.SP_ATTACK && this.switchStats ? Stat.ATTACK : s;
-        }
-
-        @Override
-        public Stat getSwitchStat(Stat s) {
-            return s == Stat.SP_DEFENSE && this.switchStats ? Stat.DEFENSE : s;
-        }
-
-        @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // If attack stat is higher, switch to physical move (both attack and defense used)
-            this.switchStats = Stat.ATTACK.getBasicStat(b, attacking) > Stat.SP_ATTACK.getBasicStat(b, attacking);
-
+            // If attack stat is higher, switch to physical move
+            if (Stat.ATTACK.getBasicStat(b, attacking) > Stat.SP_ATTACK.getBasicStat(b, attacking)) {
+                super.category = MoveCategory.PHYSICAL;
+            }
             this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            if (this.effect != null) {
-                this.effect.deactivate();
-            }
+            // Reset category to special
+            super.category = MoveCategory.SPECIAL;
+            this.effect.deactivate();
         }
     }
 

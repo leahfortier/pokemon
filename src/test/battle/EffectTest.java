@@ -686,17 +686,15 @@ public class EffectTest extends BaseTest {
     }
 
     private void substituteTest(boolean broken, TestInfo testInfo, PokemonManipulator without, PokemonManipulator with) {
-        PokemonManipulator substitution = (battle, attacking, defending) -> {
-            battle.attackingFight(AttackNamesies.SUBSTITUTE);
-            attacking.assertHealthRatio(.75);
-
-            battle.emptyHeal();
-            attacking.assertFullHealth();
-            attacking.assertHasEffect(PokemonEffectNamesies.SUBSTITUTE);
-        };
-
         testInfo.doubleTake(
-                substitution,
+                (battle, attacking, defending) -> {
+                    battle.attackingFight(AttackNamesies.SUBSTITUTE);
+                    attacking.assertHealthRatio(.75);
+
+                    battle.emptyHeal();
+                    attacking.assertFullHealth();
+                    attacking.assertHasEffect(PokemonEffectNamesies.SUBSTITUTE);
+                },
                 (battle, attacking, defending) -> {
                     attacking.assertNoEffect(PokemonEffectNamesies.SUBSTITUTE);
                     without.manipulate(battle, attacking, defending);

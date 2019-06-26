@@ -3,12 +3,18 @@ package test.battle;
 import battle.attack.AttackNamesies;
 import battle.effect.InvokeInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
+import battle.effect.battle.StandardBattleEffectNamesies;
+import battle.effect.pokemon.PokemonEffectNamesies;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.Stat;
 import pokemon.species.PokemonNamesies;
 import test.BaseTest;
 import test.TestPokemon;
+import test.TestUtils;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 public class StatTest extends BaseTest {
     @Test
@@ -33,78 +39,93 @@ public class StatTest extends BaseTest {
 
     @Test
     public void statSwitchingTest() {
-        TestBattle battle = TestBattle.create(PokemonNamesies.MACHAMP, PokemonNamesies.ALAKAZAM);
+        // Fun fact: These are 2/10 Pokemon that have greater than 10 difference between their closest base stats
+        TestBattle battle = TestBattle.create(PokemonNamesies.SNEASEL, PokemonNamesies.CARRACOSTA);
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
-        // This test is pointless if any of these are the same
-        Assert.assertNotEquals(attacking.getStat(battle, Stat.ATTACK), attacking.getStat(battle, Stat.SP_ATTACK));
-        Assert.assertNotEquals(attacking.getStat(battle, Stat.DEFENSE), attacking.getStat(battle, Stat.SP_DEFENSE));
-        Assert.assertNotEquals(defending.getStat(battle, Stat.ATTACK), defending.getStat(battle, Stat.SP_ATTACK));
-        Assert.assertNotEquals(defending.getStat(battle, Stat.DEFENSE), defending.getStat(battle, Stat.SP_DEFENSE));
+        // Confirm all stats are unique
+        TestUtils.assertUnique(attacking.stats().getClonedStats());
+        TestUtils.assertUnique(defending.stats().getClonedStats());
 
         // Psystrike uses attacker's Special Attack stat and defender's Defense stat
         attacking.setupMove(AttackNamesies.PSYSTRIKE, battle);
         defending.setupMove(AttackNamesies.PSYCHIC, battle);
-        equalStats(battle, attacking, Stat.SP_ATTACK);
-        equalStats(battle, defending, Stat.DEFENSE, Stat.SP_DEFENSE);
-        confirmAttacking(battle, attacking);
-        confirmDefending(battle, defending);
+        assertStats(battle, attacking, new StatChecker());
+        assertStats(battle, defending, new StatChecker().set(Stat.SP_DEFENSE, Stat.DEFENSE));
 
-        // Test requires Attack being greater for attacking and Sp. Attack greater for defending
-        Assert.assertTrue(attacking.getStat(battle, Stat.ATTACK) > attacking.getStat(battle, Stat.SP_ATTACK));
-        Assert.assertTrue(defending.getStat(battle, Stat.SP_ATTACK) > defending.getStat(battle, Stat.ATTACK));
-
-        // Photon Geyser uses Attack and Defense stats if it attack is higher
-        attacking.setupMove(AttackNamesies.PHOTON_GEYSER, battle);
-        equalStats(battle, attacking, Stat.ATTACK, Stat.SP_ATTACK);
-        equalStats(battle, defending, Stat.DEFENSE, Stat.SP_DEFENSE);
-        confirmAttacking(battle, attacking);
-        confirmDefending(battle, defending);
-
-        // Unchanged when defending uses since Sp. Attack is greater (because Alakazam) and the default
-        // Note: Both Pokemon have Photon Geyser set up here
-        defending.setupMove(AttackNamesies.PHOTON_GEYSER, battle);
-        equalStats(battle, attacking, Stat.ATTACK, Stat.SP_ATTACK);
-        equalStats(battle, defending, Stat.DEFENSE, Stat.SP_DEFENSE);
-        equalStats(battle, defending, Stat.SP_ATTACK);
-        equalStats(battle, attacking, Stat.SP_DEFENSE);
-
-        // Only defending using Photon Geyser -- use normally (no change since Alakazam)
+        // Nothing interesting going on anymore -- all stats should be normal
         attacking.setupMove(AttackNamesies.TACKLE, battle);
-        equalStats(battle, defending, Stat.SP_ATTACK);
-        equalStats(battle, attacking, Stat.SP_DEFENSE);
-        confirmDefending(battle, attacking);
-        confirmAttacking(battle, defending);
+        assertStats(battle, attacking, new StatChecker());
+        assertStats(battle, defending, new StatChecker());
+
+        // Real trickster (switches Attack and Defense)
+        // Power Trick only affects the user
+        battle.attackingFight(AttackNamesies.POWER_TRICK);
+        attacking.assertHasEffect(PokemonEffectNamesies.POWER_TRICK);
+        assertStats(battle, attacking, new StatChecker().set(Stat.ATTACK, Stat.DEFENSE).set(Stat.DEFENSE, Stat.ATTACK));
+        assertStats(battle, defending, new StatChecker());
+
+        // Using Power Trick again will remove the effect
+        battle.attackingFight(AttackNamesies.POWER_TRICK);
+        attacking.assertNoEffect(PokemonEffectNamesies.POWER_TRICK);
+        assertStats(battle, attacking, new StatChecker());
+        assertStats(battle, defending, new StatChecker());
+
+        // Wonder Room switches defensive stats for both Pokemon
+        battle.attackingFight(AttackNamesies.WONDER_ROOM);
+        Assert.assertTrue(battle.hasEffect(StandardBattleEffectNamesies.WONDER_ROOM));
+        assertStats(battle, attacking, new StatChecker().set(Stat.DEFENSE, Stat.SP_DEFENSE).set(Stat.SP_DEFENSE, Stat.DEFENSE));
+        assertStats(battle, defending, new StatChecker().set(Stat.DEFENSE, Stat.SP_DEFENSE).set(Stat.SP_DEFENSE, Stat.DEFENSE));
+
+        // Using again will remove the effect (regardless of who uses)
+        battle.defendingFight(AttackNamesies.WONDER_ROOM);
+        Assert.assertFalse(battle.hasEffect(StandardBattleEffectNamesies.WONDER_ROOM));
+        assertStats(battle, attacking, new StatChecker());
+        assertStats(battle, defending, new StatChecker());
     }
 
-    // The Pokemon that is attacking this turn should have no changes to either defense stat
-    private void confirmAttacking(TestBattle battle, TestPokemon defending) {
-        equalStats(battle, defending, Stat.DEFENSE);
-        equalStats(battle, defending, Stat.SP_DEFENSE);
+    // Holds a map from stat to what the stat should switch to
+    private static class StatChecker {
+        private Map<Stat, Stat> statMap;
+
+        public StatChecker() {
+            this.statMap = new EnumMap<>(Stat.class);
+
+            // Add all basic stats (no HP) and map to itself (by default each stat returns its own value -- not switched)
+            for (Stat stat : Stat.STATS) {
+                if (stat == Stat.HP) {
+                    continue;
+                }
+
+                this.statMap.put(stat, stat);
+            }
+        }
+
+        public StatChecker set(Stat computedStat, Stat baseStat) {
+            // Can only set stat once
+            Assert.assertEquals(this.statMap.get(computedStat), computedStat);
+            this.statMap.put(computedStat, baseStat);
+            return this;
+        }
     }
 
-    // The Pokemon that is defending this turn should have no changes to either attack stat
-    private void confirmDefending(TestBattle battle, TestPokemon defending) {
-        equalStats(battle, defending, Stat.ATTACK);
-        equalStats(battle, defending, Stat.SP_ATTACK);
-    }
+    private void assertStats(TestBattle battle, TestPokemon statPokemon, StatChecker statChecker) {
+        for (Stat computedStat : statChecker.statMap.keySet()) {
+            Stat baseStat = statChecker.statMap.get(computedStat);
 
-    // Confirms that the base stat is the same as itself when computed
-    // Confirms that the computed stat has the same value as the base stat
-    // Confirms that the computed stat is different than itself when computed
-    private void equalStats(TestBattle battle, TestPokemon statPokemon, Stat baseStat, Stat computedStat) {
-        checkStats(true, battle, statPokemon, baseStat, computedStat);
-        equalStats(battle, statPokemon, baseStat);
-        notEqualStats(battle, statPokemon, computedStat);
+            // Confirms that the base stat is the same as itself when computed
+            checkStats(true, battle, statPokemon, baseStat, computedStat);
+
+            // If not equal, confirms that the computed stat is different than itself when computed
+            if (computedStat != baseStat) {
+                checkStats(false, battle, statPokemon, computedStat, computedStat);
+            }
+        }
     }
 
     private void equalStats(TestBattle battle, TestPokemon statPokemon, Stat stat) {
         checkStats(true, battle, statPokemon, stat, stat);
-    }
-
-    private void notEqualStats(TestBattle battle, TestPokemon statPokemon, Stat stat) {
-        checkStats(false, battle, statPokemon, stat, stat);
     }
 
     private void checkStats(boolean equals, TestBattle battle, TestPokemon statPokemon, Stat baseStat, Stat computedStat) {

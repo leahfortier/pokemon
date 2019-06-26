@@ -777,7 +777,7 @@ public class ScriptTest extends BaseTest {
             checkBoolean(namesies, moveParser.is("willCrit"), attack instanceof AlwaysCritEffect);
             checkBoolean(namesies, moveParser.is("forceSwitch"), attack instanceof SwapOpponentEffect);
 
-            checkBoolean(namesies, moveParser.is("ignoreAbility"), genFields.contains("IgnoreAbilityMove"));
+            checkBoolean(namesies, moveParser.is("ignoreAbility"), genFields.contains("IgnoreAbilityMove") || namesies == AttackNamesies.PHOTON_GEYSER);
             checkBoolean(namesies, moveParser.is("selfSwitch"), genFields.contains("SelfSwitching") || namesies == AttackNamesies.BATON_PASS);
 
             moveParser.assertEmpty();

@@ -212,6 +212,16 @@ public class TestPokemon extends ActivePokemon {
         this.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
     }
 
+    public void assertAbility(AbilityNamesies abilityNamesies) {
+        Assert.assertTrue(this.getAbility().getName(), this.hasAbility(abilityNamesies));
+        this.assertNoEffect(PokemonEffectNamesies.CHANGE_ABILITY);
+    }
+
+    public void assertChangedAbility(AbilityNamesies abilityNamesies) {
+        Assert.assertTrue(this.getAbility().getName(), this.hasAbility(abilityNamesies));
+        this.assertHasEffect(PokemonEffectNamesies.CHANGE_ABILITY);
+    }
+
     public static TestPokemon newPlayerPokemon(final PokemonNamesies pokemon) {
         return new TestPokemon(pokemon, false, true);
     }

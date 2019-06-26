@@ -15,6 +15,7 @@ import java.util.List;
 class TestInfo {
     private PokemonNamesies attackingName;
     private PokemonNamesies defendingName;
+    private PokemonManipulator setupManipulator;
     private PokemonManipulator manipulator;
     private boolean isTrainerBattle;
     private List<String> toString;
@@ -26,6 +27,7 @@ class TestInfo {
     TestInfo(PokemonNamesies attacking, PokemonNamesies defending) {
         this.attackingName = attacking;
         this.defendingName = defending;
+        this.setupManipulator = PokemonManipulator.empty();
         this.manipulator = PokemonManipulator.empty();
         this.isTrainerBattle = false;
         this.toString = new ArrayList<>();
@@ -46,6 +48,11 @@ class TestInfo {
 
     TestInfo defending(PokemonNamesies pokemonName) {
         this.defendingName = pokemonName;
+        return this;
+    }
+
+    TestInfo setup(PokemonManipulator setupManipulator) {
+        this.setupManipulator = this.setupManipulator.add(setupManipulator);
         return this;
     }
 
@@ -151,11 +158,12 @@ class TestInfo {
         TestBattle battle = TestBattle.create(this.isTrainerBattle, this.attackingName, this.defendingName);
         battle.getAttacking().withAbility(AbilityNamesies.NO_ABILITY);
         battle.getDefending().withAbility(AbilityNamesies.NO_ABILITY);
+        this.setupManipulator.manipulate(battle);
         return battle;
     }
 
     // For when the result is the same with or without the ability
-    public void doubleTake(AbilityNamesies abilityNamesies, PokemonManipulator samesies) {
+    public void doubleTakeSamesies(AbilityNamesies abilityNamesies, PokemonManipulator samesies) {
         this.doubleTake(abilityNamesies, samesies, samesies);
     }
 
@@ -170,15 +178,24 @@ class TestInfo {
         );
     }
 
-    public void doubleTake(PokemonManipulator manipulator, PokemonManipulator withoutManipulator, PokemonManipulator withManipulator) {
-        TestBattle battle = this.createBattle();
-        this.manipulate(battle);
-        withoutManipulator.manipulate(battle);
+    public void doubleTakeSamesies(PokemonManipulator manipulator, PokemonManipulator samesies) {
+        this.doubleTake(manipulator, samesies, samesies);
+    }
 
-        battle = this.createBattle();
+    // Defining case goes in manipulator (to test with and without this condition)
+    // Manipulator inside TestInfo will be called AFTER defining manipulator
+    // withoutManipulator and withManipulator should mostly be checking conditions afterwards to make sure it happened as expected
+    public void doubleTake(PokemonManipulator manipulator, PokemonManipulator withoutManipulator, PokemonManipulator withManipulator) {
+        handle(PokemonManipulator.empty(), withoutManipulator);
+        handle(manipulator, withManipulator);
+    }
+
+    // Handles all the manipulators in the proper order
+    private void handle(PokemonManipulator manipulator, PokemonManipulator afterCheck) {
+        TestBattle battle = this.createBattle();
         manipulator.manipulate(battle);
         this.manipulate(battle);
-        withManipulator.manipulate(battle);
+        afterCheck.manipulate(battle);
     }
 
     @Override

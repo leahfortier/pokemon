@@ -61,7 +61,6 @@ import battle.effect.InvokeInterfaces.StatChangingEffect;
 import battle.effect.InvokeInterfaces.StatLoweredEffect;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
-import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
 import battle.effect.InvokeInterfaces.SuperDuperEndTurnEffect;
@@ -127,7 +126,6 @@ public class ClassTest extends BaseTest {
             BasicAccuracyBypassEffect.class,
             CritBlockerEffect.class,
             OpponentIgnoreStageEffect.class,
-            StatSwitchingEffect.class,
             OpponentStatSwitchingEffect.class,
             PowerChangeEffect.class,
             AlwaysCritEffect.class,

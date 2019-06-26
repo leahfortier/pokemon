@@ -561,7 +561,6 @@ StatSwitchingEffect:
         Invoke: Update
         Update: s
         EffectList: statPokemon
-        InvokeAttack: statPokemon
         InvokeName: switchStat
     *
 ***

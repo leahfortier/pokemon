@@ -14,7 +14,7 @@ ShouldApplyDamage:
     Header: boolean shouldApplyDamage(Battle b, ActivePokemon user)
 *
 ShouldApplyEffects:
-    Header: boolean shouldApplyEffects(Battle b, ActivePokemon user)
+    Header: boolean shouldApplyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 FixedDamage:
     Header: int getFixedDamageAmount(ActivePokemon me, ActivePokemon o)
@@ -481,15 +481,25 @@ Barrier:
         return breaker.getName() + " broke the {0} barrier!";
         ###
 *
-SpecificAbilityChange:
+# Note: Does not include replaceable apply check (only used for status moves)
+AbilityChangeMove:
     AddInterface: ChangeAbilitySource
-    AddMapField: Applies: victim.getAbility().isReplaceable()
     AddMapField: PokemonEffect: ChangeAbility
     AddMapField: AbilityChange:
         return AbilityNamesies.{00}.getNewAbility();
         ###
+*
+SpecificAbilityChange:
+    AddMapField: Applies: victim.getAbility().isReplaceable()
+    AddMapField: AbilityChangeMove: {0}
     AddMapField: AbilityMessage:
         return victim.getName() + "'s ability was changed to " + AbilityNamesies.{00}.getName() + "!";
+        ###
+*
+SuppressAbilityMove:
+    AddMapField: AbilityChangeMove: NO_ABILITY
+    AddMapField: AbilityMessage:
+        return caster.getName() + " suppressed " + victim.getName() + "'s ability!";
         ###
 *
 SemiInvulnerableBypass:
@@ -1823,17 +1833,14 @@ TempEffectMove:
         private Effect effect;
         ###
     AddMapField: BeginAttack:
-        {2-}
-        this.effect = Effect.cast(PokemonEffectNamesies.{11}, b, attacking, attacking, CastSource.ATTACK, false);
+        this.effect = Effect.cast(PokemonEffectNamesies.{00}, b, attacking, attacking, CastSource.ATTACK, false);
         ###
     AddMapField: EndAttack:
-        if (this.effect != null) {
-            this.effect.deactivate();
-        }
+        this.effect.deactivate();
         ###
 *
 IgnoreAbilityMove:
-    AddMapField: TempEffectMove: BREAKS_THE_MOLD {0}
+    AddMapField: TempEffectMove: BREAKS_THE_MOLD
 *
 GetCurableEffects:
     Header: Set<PokemonEffectNamesies> getCurableEffects()

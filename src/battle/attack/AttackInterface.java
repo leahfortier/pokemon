@@ -39,7 +39,7 @@ public interface AttackInterface extends InvokeEffect {
         return !this.isStatusMove();
     }
 
-    default boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+    default boolean shouldApplyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
         return true;
     }
 

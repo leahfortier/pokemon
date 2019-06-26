@@ -947,7 +947,7 @@ public class AbilityTest extends BaseTest {
 
     // For when the result is the same with or without magic guard
     private void magicGuardTest(TestInfo setup, PokemonManipulator samesies) {
-        setup.doubleTake(AbilityNamesies.MAGIC_GUARD, samesies);
+        setup.doubleTakeSamesies(AbilityNamesies.MAGIC_GUARD, samesies);
     }
 
     private void magicGuardTest(TestInfo setup, PokemonManipulator withoutMagicGuard, PokemonManipulator withMagicGuard) {
@@ -1065,5 +1065,74 @@ public class AbilityTest extends BaseTest {
         battle.attackingFight(AttackNamesies.WILL_O_WISP);
         attacking.assertFullHealth();
         defending.assertHasStatus(StatusNamesies.FAINTED);
+    }
+
+    @Test
+    public void suppressAbilityTest() {
+        // Gastro Acid will remove Levitate and allow Earthquake to work
+        suppressAbilityTest(true, (battle, attacking, defending) -> battle.attackingFight(AttackNamesies.GASTRO_ACID));
+
+        // Core Enforcer (when it attacks second) has the same effect as Gastro Acid
+        // (Endure has priority so it goes second here)
+        // Btw we need to do all this healing crap to confirm full health (did not get hit by Earthquake etc)
+        suppressAbilityTest(true, (battle, attacking, defending) -> {
+            defending.withItem(ItemNamesies.CHESTO_BERRY);
+            battle.fight(AttackNamesies.CORE_ENFORCER, AttackNamesies.ENDURE);
+            defending.assertNotFullHealth();
+            battle.defendingFight(AttackNamesies.REST);
+            defending.assertFullHealth();
+            defending.assertNoStatus();
+            defending.assertConsumedBerry(battle);
+        });
+
+        // When Core Enforcer goes first, it should fail at suppressing
+        suppressAbilityTest(false, (battle, attacking, defending) -> {
+            defending.withItem(ItemNamesies.CHESTO_BERRY);
+            battle.attackingFight(AttackNamesies.CORE_ENFORCER);
+            defending.assertNotFullHealth();
+            battle.defendingFight(AttackNamesies.REST);
+            defending.assertFullHealth();
+            defending.assertNoStatus();
+            defending.assertConsumedBerry(battle);
+        });
+    }
+
+    private void suppressAbilityTest(boolean shouldSuppress, PokemonManipulator suppress) {
+        // Suppressed ability will make Earthquake hit a Pokemon with levitate
+        suppressAbilityTest(
+                shouldSuppress, suppress,
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        // Adds Levitate at the beginning and Earthquake will happen after suppression
+                        .setup((battle, attacking, defending) -> defending.withAbility(AbilityNamesies.LEVITATE))
+                        .attackingFight(AttackNamesies.EARTHQUAKE),
+                (battle, attacking, defending) -> {
+                    defending.assertAbility(AbilityNamesies.LEVITATE);
+                    defending.assertFullHealth();
+                },
+                (battle, attacking, defending) -> {
+                    defending.assertChangedAbility(AbilityNamesies.NO_ABILITY);
+                    defending.assertNotFullHealth();
+                }
+        );
+
+        // Cannot suppress irreplaceable abilities (like Multitype)
+        new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.ARCEUS)
+                .setup((battle, attacking, defending) -> defending.withAbility(AbilityNamesies.MULTITYPE))
+                .with((battle, attacking, defending) -> {
+                    defending.assertAbility(AbilityNamesies.MULTITYPE);
+                    Assert.assertFalse(defending.getAbility().isReplaceable());
+                })
+                .doubleTakeSamesies(
+                        suppress,
+                        (battle, attacking, defending) -> defending.assertAbility(AbilityNamesies.MULTITYPE)
+                );
+    }
+
+    private void suppressAbilityTest(boolean shouldSuppress, PokemonManipulator suppress, TestInfo testInfo, PokemonManipulator withAbility, PokemonManipulator suppressedAbility) {
+        if (shouldSuppress) {
+            testInfo.doubleTake(suppress, withAbility, suppressedAbility);
+        } else {
+            testInfo.doubleTakeSamesies(suppress, withAbility);
+        }
     }
 }

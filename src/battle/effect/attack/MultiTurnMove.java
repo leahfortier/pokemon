@@ -66,9 +66,9 @@ public interface MultiTurnMove extends AttackInterface, ForceMoveEffect {
     }
 
     @Override
-    default boolean shouldApplyEffects(Battle b, ActivePokemon user) {
+    default boolean shouldApplyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
         // Multi-turn moves default to no effects on the charging turn
-        return AttackInterface.super.shouldApplyEffects(b, user) && !this.isCharging();
+        return AttackInterface.super.shouldApplyEffects(b, user, victim) && !this.isCharging();
     }
 
     interface ChargingMove extends MultiTurnMove {
