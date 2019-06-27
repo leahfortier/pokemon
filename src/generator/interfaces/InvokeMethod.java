@@ -46,7 +46,7 @@ abstract class InvokeMethod {
                 .appendPostDelimiter("\n", getMoldBreakerDeclaration(interfaceMethod))
                 .appendLine(getDeclaration(interfaceMethod))
                 .appendLine("for (InvokeEffect invokee : invokees) {")
-                .appendLine("if (invokee instanceof " + interfaceMethod.getInterfaceName() + " && InvokeEffect.isActiveEffect(invokee)) {")
+                .appendLine("if (invokee instanceof " + interfaceMethod.getInterfaceName() + " && invokee.isActiveEffect()) {")
                 .appendPostDelimiter("\n\n", getMoldBreaker(interfaceMethod))
                 .appendLine(getInnerLoop(interfaceMethod))
                 .appendPostDelimiter("\n", getDeadsies(interfaceMethod))

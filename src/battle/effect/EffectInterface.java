@@ -15,4 +15,9 @@ public interface EffectInterface extends InvokeEffect {
     default InvokeSource getSource() {
         return InvokeSource.EFFECT;
     }
+
+    @Override
+    default boolean isActiveEffect() {
+        return this.isActive();
+    }
 }

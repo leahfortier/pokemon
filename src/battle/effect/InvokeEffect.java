@@ -6,12 +6,7 @@ import util.serialization.Serializable;
 public interface InvokeEffect extends Serializable {
     InvokeSource getSource();
 
-    static boolean isActiveEffect(InvokeEffect object) {
-        if (object instanceof Effect) {
-            Effect effect = (Effect)object;
-            return effect.isActive();
-        }
-
+    default boolean isActiveEffect() {
         return true;
     }
 
