@@ -7337,9 +7337,9 @@ public abstract class Attack implements AttackInterface {
 
         PowerSplit() {
             super(AttackNamesies.POWER_SPLIT, Type.PSYCHIC, MoveCategory.STATUS, 10, "The user employs its psychic power to average its Attack and Sp. Atk stats with those of the target.");
-            super.effect = PokemonEffectNamesies.POWER_SPLIT;
-            super.moveTypes.add(MoveType.NON_SNATCHABLE);
-            super.selfTarget = true;
+            super.effect = StandardBattleEffectNamesies.POWER_SPLIT;
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
         }
     }
 
@@ -7348,9 +7348,9 @@ public abstract class Attack implements AttackInterface {
 
         GuardSplit() {
             super(AttackNamesies.GUARD_SPLIT, Type.PSYCHIC, MoveCategory.STATUS, 10, "The user employs its psychic power to average its Defense and Sp. Def stats with those of the target.");
-            super.effect = PokemonEffectNamesies.GUARD_SPLIT;
-            super.moveTypes.add(MoveType.NON_SNATCHABLE);
-            super.selfTarget = true;
+            super.effect = StandardBattleEffectNamesies.GUARD_SPLIT;
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+            super.moveTypes.add(MoveType.FIELD);
         }
     }
 

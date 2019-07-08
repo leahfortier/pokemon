@@ -1,6 +1,7 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
+import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.InvokeInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.battle.StandardBattleEffectNamesies;
@@ -146,6 +147,56 @@ public class StatTest extends BaseTest {
                 String.format("Base: %s %d, Computed: %s %d", baseStat.getName(), base, computedStat.getName(), computed),
                 base == computed,
                 equals
+        );
+    }
+
+    @Test
+    public void statSplittingTest() {
+        statSplittingTest(AttackNamesies.POWER_SPLIT, AttackNamesies.WORK_UP, StandardBattleEffectNamesies.POWER_SPLIT, Stat.ATTACK, Stat.SP_ATTACK);
+        statSplittingTest(AttackNamesies.GUARD_SPLIT, AttackNamesies.COSMIC_POWER, StandardBattleEffectNamesies.GUARD_SPLIT, Stat.DEFENSE, Stat.SP_DEFENSE);
+    }
+
+    private void statSplittingTest(AttackNamesies splitter, AttackNamesies increaser, BattleEffectNamesies splitEffect, Stat... stats) {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Stats must be different for this test to make sense
+        compareStats(false, battle, stats);
+
+        battle.attackingFight(splitter);
+        Assert.assertTrue(battle.hasEffect(splitEffect));
+
+        // Annndddd now they're the same it's magic
+        compareStats(true, battle, stats);
+        attacking.assertStages(new TestStages());
+        defending.assertStages(new TestStages());
+
+        // Stages should not be split
+        battle.attackingFight(increaser);
+        attacking.assertStages(new TestStages().set(1, stats));
+        defending.assertStages(new TestStages());
+
+        compareStats(false, battle, stats);
+    }
+
+    private void compareStats(boolean equals, TestBattle battle, Stat... stats) {
+        for (Stat s : stats) {
+            compareStats(equals, s, battle);
+        }
+    }
+
+    private void compareStats(boolean equals, Stat s, TestBattle battle) {
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        int attackingStat = Stat.getStat(s, attacking, battle);
+        int defendingStat = Stat.getStat(s, defending, battle);
+
+        Assert.assertEquals(
+                "Stat: " + s.getName() + ", Attacking: " + attackingStat + ", Defending: " + defendingStat,
+                equals,
+                attackingStat == defendingStat
         );
     }
 }

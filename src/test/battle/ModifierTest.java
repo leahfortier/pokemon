@@ -377,11 +377,11 @@ public class ModifierTest extends BaseTest {
         TestPokemon statPokemon = stat.user() ? attacking : defending;
         TestPokemon otherPokemon = stat.user() ? defending : attacking;
 
-        int beforeStage = Stat.getStage(stat, statPokemon, otherPokemon, battle);
+        int beforeStage = stat.getStage(statPokemon, otherPokemon, battle);
         Assert.assertEquals(0, beforeStage);
 
         testInfo.manipulate(battle);
-        int afterStage = Stat.getStage(stat, statPokemon, otherPokemon, battle);
+        int afterStage = stat.getStage(statPokemon, otherPokemon, battle);
 
         Assert.assertEquals(
                 StringUtils.spaceSeparated(afterStage, expectedStage, stat, testInfo),

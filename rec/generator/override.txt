@@ -358,7 +358,6 @@ CrashDamage:
 StatSplit:
     AddInterface: StatChangingEffect
     AddMapField: ChangeStat:
-
         // If the stat is a splitting stat, return the average between the user and the opponent
         if (s == Stat.{11} || s == Stat.{22}) {
             return (p.getStat(b, s) + opp.getStat(b, s))/2;
@@ -366,6 +365,7 @@ StatSplit:
 
         return stat;
         ###
+    AddMapField: CastMessage: user.getName() + " split the {3}!"
 *
 StageChange:
     Header: int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)

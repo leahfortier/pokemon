@@ -44,7 +44,6 @@ import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.SelfAttackBlocker;
 import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.StageChangingEffect;
-import battle.effect.InvokeInterfaces.StatChangingEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
@@ -2033,54 +2032,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
             this.addCastMessage(b, caster, victim, source, castMessage);
             this.deactivate();
-        }
-    }
-
-    static class PowerSplit extends PokemonEffect implements StatChangingEffect {
-        private static final long serialVersionUID = 1L;
-
-        PowerSplit() {
-            super(PokemonEffectNamesies.POWER_SPLIT, -1, -1, false, false);
-        }
-
-        @Override
-        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return user.getName() + " split the power!";
-        }
-
-        @Override
-        public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-
-            // If the stat is a splitting stat, return the average between the user and the opponent
-            if (s == Stat.ATTACK || s == Stat.SP_ATTACK) {
-                return (p.getStat(b, s) + opp.getStat(b, s))/2;
-            }
-
-            return stat;
-        }
-    }
-
-    static class GuardSplit extends PokemonEffect implements StatChangingEffect {
-        private static final long serialVersionUID = 1L;
-
-        GuardSplit() {
-            super(PokemonEffectNamesies.GUARD_SPLIT, -1, -1, false, false);
-        }
-
-        @Override
-        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return user.getName() + " split the defense!";
-        }
-
-        @Override
-        public int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-
-            // If the stat is a splitting stat, return the average between the user and the opponent
-            if (s == Stat.DEFENSE || s == Stat.SP_DEFENSE) {
-                return (p.getStat(b, s) + opp.getStat(b, s))/2;
-            }
-
-            return stat;
         }
     }
 

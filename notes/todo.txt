@@ -150,7 +150,6 @@ Other random things:
     acupressure should only try to raise non-maximized stats and should fail if all maxed out
     test healing wish and snatch
     rototiller should only work if Pokemon is grounded
-    power split and guard split are supposed to effect both pokemon
     okay so Mirror Move is supposed to use the last move that targeted the user, not the last move that the opponent used... what is happening I did not know this
     look at sheer cold
     conversion was changed
@@ -158,9 +157,7 @@ Other random things:
     metronome + multi-turn move is not working (Dive)
     Wallet class (CashMoneyHouse?)
     change order of move list
-    moves like core enforcer don't remove the effect if attack is unsuccessful
     check flinch with multi turn moves -- should it always reset ready? or just for like smack down?
-    write tests for effects that if you use them twice it removes the effect (Wonder Room/Power Trick)
     can selfconfusion remove itself inside totalandcompletefailure?
     Message for Trick looks terrible when one of the Pokemon isn't holding anything (switched with Bulbasaur's No Item!)
     uproar specifically checks if pp runs out to remove effect -- should that be for other similar moves too?
@@ -174,5 +171,4 @@ Other random things:
     cancelling evolution still consumes evolution item
     is there some way to have like a FirstTriggeredCondition or something for things like items and a lot of other shit
     is there a way to just create the button transitions from the button list by using all the button locations or something like that??
-    berry menu is broken
     

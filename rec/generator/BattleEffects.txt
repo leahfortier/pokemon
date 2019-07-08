@@ -68,3 +68,9 @@ FieldUproar:
         return true;
         ###
 *
+PowerSplit:
+    StatSplit: Attack Sp_Attack power
+*
+GuardSplit:
+    StatSplit: Defense Sp_Defense defense
+*

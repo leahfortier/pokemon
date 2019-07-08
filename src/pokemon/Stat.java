@@ -93,18 +93,34 @@ public enum Stat {
 
     // Gets the stat value only taking the raw stage into account
     public int getBasicStat(Battle b, ActivePokemon p) {
-        return this.getBasicStat(b, p, p.getStage(this));
+        return this.getStat(b, p, b.getOtherPokemon(p), false);
     }
 
     // Gets the stat value only taking the stage into account
-    private int getBasicStat(Battle b, ActivePokemon p, int stage) {
-        int stat = this == EVASION || this == ACCURACY ? 100 : p.getStat(b, this);
+    private int getStat(Battle b, ActivePokemon p, ActivePokemon opp, boolean applyEffects) {
+        int stat;
+        if (this == EVASION || this == ACCURACY) {
+            stat = 100;
+        } else {
+            stat = p.getStat(b, this);
+            if (applyEffects) {
+                stat = StatChangingEffect.modifyStat(b, p, opp, this, stat);
+            }
+        }
+
+        // Only use basic stage if not applying effects
+        int stage = applyEffects ? this.getStage(p, opp, b) : p.getStage(this);
 
         // Modify stat based off stage
         if (stage > 0) {
             stat *= (this.modifier + stage)/this.modifier;
         } else if (stage < 0) {
             stat *= this.modifier/(this.modifier - stage);
+        }
+
+        // Applies stat changes to each for each item in list
+        if (applyEffects) {
+            stat *= StatModifyingEffect.getModifier(b, p, opp, this);
         }
 
         return stat;
@@ -118,13 +134,8 @@ public enum Stat {
         s = StatSwitchingEffect.switchStat(b, p, s);
         s = OpponentStatSwitchingEffect.switchStat(b, opp, s);
 
-        // Apply stage changes
-        int stage = getStage(s, p, opp, b);
-        int stat = s.getBasicStat(b, p, stage);
-
-        // Applies stat changes to each for each item in list
-        stat *= StatModifyingEffect.getModifier(b, p, opp, s);
-        stat = StatChangingEffect.modifyStat(b, p, opp, s, stat);
+        // Apply stage and stat changes
+        int stat = s.getStat(b, p, opp, true);
 
         // Just to be safe
         stat = Math.max(1, stat);
@@ -132,16 +143,16 @@ public enum Stat {
         return stat;
     }
 
-    public static int getStage(Stat s, ActivePokemon stagePokemon, ActivePokemon otherPokemon, Battle b) {
+    public int getStage(ActivePokemon stagePokemon, ActivePokemon otherPokemon, Battle b) {
         // Effects that completely ignore stage changes
-        if (OpponentIgnoreStageEffect.checkIgnoreStage(b, stagePokemon, otherPokemon, s)) {
+        if (OpponentIgnoreStageEffect.checkIgnoreStage(b, stagePokemon, otherPokemon, this)) {
             return 0;
         }
 
-        int stage = stagePokemon.getStage(s);
+        int stage = stagePokemon.getStage(this);
 
         // Update the stage due to effects
-        stage += StageChangingEffect.getModifier(b, stagePokemon, otherPokemon, s);
+        stage += StageChangingEffect.getModifier(b, stagePokemon, otherPokemon, this);
 
         // Let's keep everything in bounds, okay!
         return Math.max(-1*MAX_STAT_CHANGES, Math.min(stage, MAX_STAT_CHANGES));
@@ -150,8 +161,7 @@ public enum Stat {
     // Returns the corresponding Stat based on the index passed in
     public static Stat getStat(int index, boolean battle) {
         for (Stat s : values()) {
-            if ((s.onlyBattle == InBattle.ONLY && !battle) ||
-                    (s.onlyBattle == InBattle.NEVER && battle)) {
+            if ((s.onlyBattle == InBattle.ONLY && !battle) || (s.onlyBattle == InBattle.NEVER && battle)) {
                 continue;
             }
 

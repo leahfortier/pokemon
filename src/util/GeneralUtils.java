@@ -190,6 +190,6 @@ public final class GeneralUtils {
     }
 
     public static int getTotalPages(int totalItems, int itemsPerPage) {
-        return (int)Math.ceil((double)totalItems/itemsPerPage);
+        return Math.max(1, (int)Math.ceil((double)totalItems/itemsPerPage));
     }
 }

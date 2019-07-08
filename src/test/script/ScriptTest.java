@@ -23,6 +23,7 @@ import battle.effect.attack.OhkoMove;
 import battle.effect.attack.RecoilMove.RecoilPercentageMove;
 import battle.effect.attack.SapHealthMove;
 import battle.effect.attack.SelfHealingMove;
+import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import generator.ClassFields;
@@ -603,8 +604,8 @@ public class ScriptTest extends BaseTest {
                 Set<EffectNamesies> nonParseVolatile = Set.of(
                         PokemonEffectNamesies.CHANGE_TYPE,
                         PokemonEffectNamesies.CHANGE_ABILITY,
-                        PokemonEffectNamesies.POWER_SPLIT,
-                        PokemonEffectNamesies.GUARD_SPLIT,
+                        StandardBattleEffectNamesies.POWER_SPLIT,
+                        StandardBattleEffectNamesies.GUARD_SPLIT,
                         PokemonEffectNamesies.TRANSFORMED,
                         PokemonEffectNamesies.MIMIC,
                         PokemonEffectNamesies.TRAPPED,
@@ -641,8 +642,6 @@ public class ScriptTest extends BaseTest {
                     || namesies == AttackNamesies.REFLECT_TYPE
                     || namesies == AttackNamesies.TRANSFORM
                     || namesies == AttackNamesies.CONVERSION_2
-                    || namesies == AttackNamesies.POWER_SPLIT
-                    || namesies == AttackNamesies.GUARD_SPLIT
                     || namesies == AttackNamesies.ROLE_PLAY
                     || namesies == AttackNamesies.FLORAL_HEALING
                     || namesies == AttackNamesies.PURIFY
@@ -1021,7 +1020,7 @@ public class ScriptTest extends BaseTest {
                 moveParser.self.volatileStatus = null;
                 break;
             case GROWTH:
-                TestUtils.assertEquals(message, new TestStages().set(Stat.ATTACK, 1).set(Stat.SP_ATTACK, 1).get(), moveParser.boosts);
+                TestUtils.assertEquals(message, new TestStages().set(1, Stat.ATTACK, Stat.SP_ATTACK).get(), moveParser.boosts);
                 moveParser.boosts = null;
                 break;
             case JUDGEMENT:

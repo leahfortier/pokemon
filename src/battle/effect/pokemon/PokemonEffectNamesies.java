@@ -31,7 +31,6 @@ import battle.effect.pokemon.PokemonEffect.Focusing;
 import battle.effect.pokemon.PokemonEffect.Foresight;
 import battle.effect.pokemon.PokemonEffect.Grounded;
 import battle.effect.pokemon.PokemonEffect.Grudge;
-import battle.effect.pokemon.PokemonEffect.GuardSplit;
 import battle.effect.pokemon.PokemonEffect.HalfWeight;
 import battle.effect.pokemon.PokemonEffect.HealBlock;
 import battle.effect.pokemon.PokemonEffect.Imprison;
@@ -51,7 +50,6 @@ import battle.effect.pokemon.PokemonEffect.MiracleEye;
 import battle.effect.pokemon.PokemonEffect.Nightmare;
 import battle.effect.pokemon.PokemonEffect.PerishSong;
 import battle.effect.pokemon.PokemonEffect.Powder;
-import battle.effect.pokemon.PokemonEffect.PowerSplit;
 import battle.effect.pokemon.PokemonEffect.PowerTrick;
 import battle.effect.pokemon.PokemonEffect.Protect;
 import battle.effect.pokemon.PokemonEffect.QuickGuard;
@@ -141,8 +139,6 @@ public enum PokemonEffectNamesies implements EffectNamesies {
     BIDE(Bide::new),
     HALF_WEIGHT(HalfWeight::new),
     POWER_TRICK(PowerTrick::new),
-    POWER_SPLIT(PowerSplit::new),
-    GUARD_SPLIT(GuardSplit::new),
     HEAL_BLOCK(HealBlock::new),
     INFATUATION(Infatuation::new),
     SNATCH(Snatch::new),

@@ -4292,18 +4292,14 @@ Power Split:
     PP: 10
     Type: Psychic
     Cat: Status
-    PokemonEffect: PowerSplit
-    SelfTarget: True
-    MoveType: Non_Snatchable
+    BattleEffect: StandardBattleEffect PowerSplit
 *
 Guard Split:
     Desc: The user employs its psychic power to average its Defense and Sp. Def stats with those of the target.
     PP: 10
     Type: Psychic
     Cat: Status
-    PokemonEffect: GuardSplit
-    SelfTarget: True
-    MoveType: Non_Snatchable
+    BattleEffect: StandardBattleEffect GuardSplit
 *
 Hone Claws:
     Desc: The user sharpens its claws to boost its Attack stat and accuracy.

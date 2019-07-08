@@ -885,14 +885,6 @@ PowerTrick:
         this.deactivate();
         ###
 *
-PowerSplit:
-    StatSplit: Attack Sp_Attack
-    CastMessage: user.getName() + " split the power!"
-*
-GuardSplit:
-    StatSplit: Defense Sp_Defense
-    CastMessage: user.getName() + " split the defense!"
-*
 HealBlock:
     NumTurns: 5
     CastMessage: user.getName() + " blocked " + victim.getName() + " from healing!"

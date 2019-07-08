@@ -3,8 +3,10 @@ package battle.effect.battle;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.battle.BattleEffect.FieldUproar;
 import battle.effect.battle.BattleEffect.Gravity;
+import battle.effect.battle.BattleEffect.GuardSplit;
 import battle.effect.battle.BattleEffect.MagicRoom;
 import battle.effect.battle.BattleEffect.MudSport;
+import battle.effect.battle.BattleEffect.PowerSplit;
 import battle.effect.battle.BattleEffect.TrickRoom;
 import battle.effect.battle.BattleEffect.WaterSport;
 import battle.effect.battle.BattleEffect.WonderRoom;
@@ -19,7 +21,9 @@ public enum StandardBattleEffectNamesies implements BattleEffectNamesies {
     WONDER_ROOM(WonderRoom::new),
     TRICK_ROOM(TrickRoom::new),
     MAGIC_ROOM(MagicRoom::new),
-    FIELD_UPROAR(FieldUproar::new);
+    FIELD_UPROAR(FieldUproar::new),
+    POWER_SPLIT(PowerSplit::new),
+    GUARD_SPLIT(GuardSplit::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 
