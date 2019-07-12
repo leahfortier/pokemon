@@ -3046,16 +3046,16 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
-            return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
-        }
-
-        @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Steal from the Pokemon who made physical contact with you
             if (!victim.isFainted(b) && victim.canStealItem(b, user)) {
                 this.swapItems(b, victim, user);
             }
+        }
+
+        @Override
+        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
+            return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
         }
     }
 
@@ -3339,16 +3339,16 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
-            return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
-        }
-
-        @Override
         public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
             // Steal the victim's item when damage is dealt
             if (!user.isFainted(b) && user.canStealItem(b, victim)) {
                 this.swapItems(b, user, victim);
             }
+        }
+
+        @Override
+        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
+            return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
         }
     }
 

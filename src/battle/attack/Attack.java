@@ -9127,13 +9127,13 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
-            return user.getName() + " gave " + victim.getName() + " its " + userItem.getName() + "!";
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.canGiftItem(b, victim);
         }
 
         @Override
-        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canGiftItem(b, victim);
+        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
+            return user.getName() + " gave " + victim.getName() + " its " + userItem.getName() + "!";
         }
     }
 
@@ -9155,7 +9155,13 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
-            return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!";
+            if (userItem.namesies() == ItemNamesies.NO_ITEM) {
+                return user.getName() + " switched with " + victim.getName() + "'s " + victimItem.getName() + "!";
+            } else if (victimItem.namesies() == ItemNamesies.NO_ITEM) {
+                return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "!";
+            } else {
+                return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!";
+            }
         }
 
         @Override
@@ -9182,7 +9188,13 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
-            return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!";
+            if (userItem.namesies() == ItemNamesies.NO_ITEM) {
+                return user.getName() + " switched with " + victim.getName() + "'s " + victimItem.getName() + "!";
+            } else if (victimItem.namesies() == ItemNamesies.NO_ITEM) {
+                return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "!";
+            } else {
+                return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!";
+            }
         }
 
         @Override

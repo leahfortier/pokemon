@@ -128,7 +128,6 @@ Other random things:
 	look at natural cure again
 	MoveUseItems do not work in battle -- causes NPE
 	Purify doesn't work correctly
-	Strength Sap should fail if the target has -6 Attack
 	Heal Block doesn't work right either
 	rewrite Ability.evolutionAssign() to hold the ability index to remain consistent across evolutions
 	False Swipe -- remove the exact same effect, not just any bracing effect
@@ -159,7 +158,6 @@ Other random things:
     change order of move list
     check flinch with multi turn moves -- should it always reset ready? or just for like smack down?
     can selfconfusion remove itself inside totalandcompletefailure?
-    Message for Trick looks terrible when one of the Pokemon isn't holding anything (switched with Bulbasaur's No Item!)
     uproar specifically checks if pp runs out to remove effect -- should that be for other similar moves too?
     remove effect inside subside -- then we can use it in more places
     substitute almost certainly doesn't work with form change abilities for images at least

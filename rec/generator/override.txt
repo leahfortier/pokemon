@@ -303,18 +303,28 @@ StartTurn:
     Header: void startTurn(Battle b, ActivePokemon me)
 *
 SwitchItemMessage:
-    AddInterface: ItemSwapperEffect
-    Header: String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem)
-    Body:
+    AddMapField: FullSwitchItemMessage:
         return {0};
         ###
+*
+FullSwitchItemMessage:
+    AddInterface: ItemSwapperEffect
+    Header: String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem)
 *
 SwapItemsMove:
     AddMapField: Applies: user.canSwapItems(b, victim)
     AddMapField: UniqueEffects:
         this.swapItems(b, user, victim);
         ###
-    AddMapField: SwitchItemMessage: user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!"
+    AddMapField: FullSwitchItemMessage: 
+        if (userItem.namesies() == ItemNamesies.NO_ITEM) {
+            return user.getName() + " switched with " + victim.getName() + "'s " + victimItem.getName() + "!";
+        } else if (victimItem.namesies() == ItemNamesies.NO_ITEM) {
+            return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "!";
+        } else {
+            return user.getName() + " switched its " + userItem.getName() + " with " + victim.getName() + "'s " + victimItem.getName() + "!";
+        }
+        ###
     AddMapField: MoveType: Assistless, Metronomeless, No_Magic_Coat
 *
 ItemStealerMove:

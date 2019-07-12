@@ -1563,13 +1563,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
-            return victim.getName() + "s " + this.getName() + " latched onto " + user.getName() + "!";
+        public int flingDamage() {
+            return 80;
         }
 
         @Override
-        public int flingDamage() {
-            return 80;
+        public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
+            return victim.getName() + "s " + this.getName() + " latched onto " + user.getName() + "!";
         }
     }
 
