@@ -36,6 +36,7 @@ import battle.effect.InvokeInterfaces.GroundedEffect;
 import battle.effect.InvokeInterfaces.HalfWeightEffect;
 import battle.effect.InvokeInterfaces.ItemBlockerEffect;
 import battle.effect.InvokeInterfaces.LevitationEffect;
+import battle.effect.InvokeInterfaces.NoSwapEffect;
 import battle.effect.InvokeInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.InvokeInterfaces.OpponentTrappingEffect;
 import battle.effect.InvokeInterfaces.PowderBlocker;
@@ -1399,7 +1400,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Ingrain extends PokemonEffect implements TrappingEffect, GroundedEffect, PassableEffect, EndTurnEffect {
+    static class Ingrain extends PokemonEffect implements TrappingEffect, GroundedEffect, PassableEffect, NoSwapEffect, EndTurnEffect {
         private static final long serialVersionUID = 1L;
 
         Ingrain() {

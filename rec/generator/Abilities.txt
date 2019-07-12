@@ -742,7 +742,7 @@ Magma Armor:
 *
 Suction Cups:
     Desc: This Pok\u00e9mon uses suction cups to stay in one spot to negate all moves and items that force switching out.
-    Int: AttackBlocker
+    Int: AttackBlocker, NoSwapEffect
     Block:
         Attack attack = user.getAttack();
         return attack instanceof SwapOpponentEffect && attack.isStatusMove();

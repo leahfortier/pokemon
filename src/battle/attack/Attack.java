@@ -8317,7 +8317,7 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             HoldItem heldItem = victim.getHeldItem(b);
-            if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !StickyHoldEffect.containsStickyHoldEffect(b, victim)) {
+            if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !StickyHoldEffect.containsStickyHoldEffect(b, user, victim)) {
                 Messages.add(victim.getName() + "'s " + heldItem.getName() + " was burned!");
                 heldItem.consumeItemWithoutEffects(b, victim);
             }

@@ -20,6 +20,7 @@ import battle.effect.InvokeInterfaces.ItemBlockerEffect;
 import battle.effect.InvokeInterfaces.LevitationEffect;
 import battle.effect.InvokeInterfaces.MurderEffect;
 import battle.effect.InvokeInterfaces.NameChanger;
+import battle.effect.InvokeInterfaces.NoSwapEffect;
 import battle.effect.InvokeInterfaces.OpponentItemBlockerEffect;
 import battle.effect.InvokeInterfaces.OpponentTrappingEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
@@ -294,15 +295,12 @@ public class ActivePokemon extends PartyPokemon {
     public boolean canSwapItems(Battle b, ActivePokemon swapster) {
         return (this.isHoldingItem(b) || swapster.isHoldingItem(b))
                 && !this.isWildPokemon(b)
-                && !StickyHoldEffect.containsStickyHoldEffect(b, swapster);
+                && !StickyHoldEffect.containsStickyHoldEffect(b, this, swapster);
     }
 
     public boolean canSwapOpponent(Battle b, ActivePokemon victim) {
-        if (b.isFirstAttack() || victim.hasEffect(PokemonEffectNamesies.INGRAIN)) {
-            return false;
-        }
-
-        if (victim.hasAbility(AbilityNamesies.SUCTION_CUPS) && !this.breaksTheMold()) {
+        // Can't swap on the first turn
+        if (b.isFirstAttack() || NoSwapEffect.containsNoSwapEffect(b, this, victim)) {
             return false;
         }
 

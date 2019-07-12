@@ -885,9 +885,17 @@ StallingEffect:
 StickyHoldEffect:
     Method:
         Invoke: Contains
-        InvokeParameters: Battle b, ActivePokemon stickyHands
+        InvokeParameters: Battle b, ActivePokemon user, ActivePokemon stickyHands
         EffectList: stickyHands
-        MoldBreaker: b.getOtherPokemon(stickyHands)
+        MoldBreaker: user
+    *
+***
+NoSwapEffect:
+    Method:
+        Invoke: Contains
+        InvokeParameters: Battle b, ActivePokemon swapper, ActivePokemon swapped
+        EffectList: swapped
+        MoldBreaker: swapper
     *
 ***
 DefiniteEscape:

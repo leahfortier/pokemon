@@ -123,15 +123,12 @@ Other random things:
 	BasicPanels fullMessagePanel -- Is 440 game.height - panel.height?
 	TileSet getTile should use readImage in FileIO -- just check exists first
 	change the names of activepokemon for out of battle effects like repelling effect and those wild pokemon encouter changer things from attacking to just like front
-	NoSwapEffect for canSwapOpponent() -- Ingrain/Suction Cups (mold breaker)
 	Exeggutor plant gives two Exeggutor?? -- got one, battled mom, got another? also got one, saved, got another
 	look at natural cure again
 	MoveUseItems do not work in battle -- causes NPE
 	Purify doesn't work correctly
 	Heal Block doesn't work right either
 	rewrite Ability.evolutionAssign() to hold the ability index to remain consistent across evolutions
-	False Swipe -- remove the exact same effect, not just any bracing effect
-	   - same deal with Me First
 	Dancer -- test with Snatch (should not activate); test with Flinched (should not activate)
 	test entering a new location while medals are displaying
 	Explosion doesn't kill the user when used against a Ghost type Pokemon

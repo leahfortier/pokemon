@@ -4883,7 +4883,7 @@ Incinerate:
     Pow: 60
     UniqueEffects:
         HoldItem heldItem = victim.getHeldItem(b);
-        if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !StickyHoldEffect.containsStickyHoldEffect(b, victim)) {
+        if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !StickyHoldEffect.containsStickyHoldEffect(b, user, victim)) {
             Messages.add(victim.getName() + "'s " + heldItem.getName() + " was burned!");
             heldItem.consumeItemWithoutEffects(b, victim);
         }

@@ -48,6 +48,7 @@ import battle.effect.InvokeInterfaces.LevitationEffect;
 import battle.effect.InvokeInterfaces.ModifyStageValueEffect;
 import battle.effect.InvokeInterfaces.MurderEffect;
 import battle.effect.InvokeInterfaces.NameChanger;
+import battle.effect.InvokeInterfaces.NoSwapEffect;
 import battle.effect.InvokeInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.InvokeInterfaces.OpponentEndAttackEffect;
 import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
@@ -2022,7 +2023,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class SuctionCups extends Ability implements AttackBlocker {
+    static class SuctionCups extends Ability implements AttackBlocker, NoSwapEffect {
         private static final long serialVersionUID = 1L;
 
         SuctionCups() {

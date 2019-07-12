@@ -39,7 +39,7 @@ public interface Berry extends HoldItem {
 
     default void stealBerry(Battle b, ActivePokemon stealer, ActivePokemon holder) {
         // Can't steal sticky berries
-        if (StickyHoldEffect.containsStickyHoldEffect(b, holder)) {
+        if (StickyHoldEffect.containsStickyHoldEffect(b, stealer, holder)) {
             return;
         }
 

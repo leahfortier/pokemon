@@ -1672,13 +1672,33 @@ public final class InvokeInterfaces {
 
     public interface StickyHoldEffect {
 
-        static boolean containsStickyHoldEffect(Battle b, ActivePokemon stickyHands) {
+        static boolean containsStickyHoldEffect(Battle b, ActivePokemon user, ActivePokemon stickyHands) {
             List<InvokeEffect> invokees = b.getEffectsList(stickyHands);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof StickyHoldEffect && invokee.isActiveEffect()) {
 
                     // If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && b.getOtherPokemon(stickyHands).breaksTheMold()) {
+                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && user.breaksTheMold()) {
+                        continue;
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
+    public interface NoSwapEffect {
+
+        static boolean containsNoSwapEffect(Battle b, ActivePokemon swapper, ActivePokemon swapped) {
+            List<InvokeEffect> invokees = b.getEffectsList(swapped);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof NoSwapEffect && invokee.isActiveEffect()) {
+
+                    // If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && swapper.breaksTheMold()) {
                         continue;
                     }
 

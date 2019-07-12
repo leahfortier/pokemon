@@ -533,7 +533,7 @@ Telekinesis:
     FallMessage: "The effects of telekinesis were cancelled!"
 *
 Ingrain:
-    Int: TrappingEffect, GroundedEffect, PassableEffect
+    Int: TrappingEffect, GroundedEffect, PassableEffect, NoSwapEffect
     Trapped:
         return true;
         ###
