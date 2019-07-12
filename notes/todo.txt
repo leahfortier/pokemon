@@ -105,7 +105,6 @@ Other random things:
 	Generate Status Conditions
 	Test for base evolutions don't have a move that they learn at evolution
 	Test that Shedinja is genderless when it evolves and that it doesn't appear when you cancel evolution
-	Zeraora pokedex image doesn't look legit -- make sure that gets handled at some point
 	Make cast method final for effects and have a different method to handle additional things that need to happen so shit isn't always calling super
 	Generalize activated field for single turn power multipliers (like Normalize)
 	Remove mainMenuTiles (can keep some for reference inside the images folder) but def move out of tiles
@@ -113,13 +112,8 @@ Other random things:
 	Berry harvest time and amounts
 	Look at light screen and light clay cast thingy -- why is it not applying turns to itself?
 	Change effects list for Defog and RapidSpin to only include PokemonEffect and TeamEffects
-	refactor RaiseCritsEffect -- apparently Focus Energy is supposed to raise by 2 and not stack with Dire Hit
-	Moongeist Beam removes BreakTheMold effect at the end of the move -- can it be applied any other way?
 	should movetypes be a set?
-	generalize switch stat (Magic Room/Power Trick)
 	healHealthFraction with message input
-	active and numTurns in Effect can be private instead of protected
-	make separate thingy for added methods in generator (instead of including in Field)
 	BasicPanels fullMessagePanel -- Is 440 game.height - panel.height?
 	TileSet getTile should use readImage in FileIO -- just check exists first
 	change the names of activepokemon for out of battle effects like repelling effect and those wild pokemon encouter changer things from attacking to just like front
