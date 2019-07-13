@@ -83,8 +83,7 @@ Tangled Feet:
 *
 Guts:
     Desc: It's so gutsy that having a status condition boosts the Pok\u00e9mon's Attack stat.
-    ToModify: Attack
-    ModifyMultiplier: 1.5 p.hasStatus()
+    StatStatusBooster: 1.5 Attack
 *
 Intimidate:
     Desc: The Pok\u00e9mon intimidates opposing Pok\u00e9mon upon entering battle, lowering their Attack stat.
@@ -610,8 +609,7 @@ Volt Absorb:
 *
 Quick Feet:
     Desc: Boosts the Speed stat if the Pok\u00e9mon has a status condition.
-    ToModify: Speed
-    ModifyMultiplier: 1.5 p.hasStatus()
+    StatStatusBooster: 1.5 Speed
     EncounterRateMultiplier: .5
 *
 Trace:

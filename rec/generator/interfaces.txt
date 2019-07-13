@@ -652,6 +652,16 @@ AdvantageMultiplierMove:
         Move: attacking
     *
 ***
+StatusBoosterEffect:
+    Method:
+        Header: boolean statusBooster(Stat stat)
+        Invoke: Check true
+        InvokeName: isStatusBooster
+        InvokeParameters: Battle b, ActivePokemon user
+        EffectList: user
+        InvokeAttack: user
+    *
+***
 AbsorbDamageEffect:
     Method:
         Header: boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount)

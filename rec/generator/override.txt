@@ -391,6 +391,23 @@ StatusCureMove:
         }
         ###
 *
+StatStatusBooster:
+    AddInterface: StatStatusBoosterEffect
+    AddMapField: ToModify: {2}
+    AddMapField: SimpleGetModifier: {1}
+*
+PowerStatusBooster:
+    AddInterface: PowerStatusBoosterEffect
+    Header: double getStatusBoost()
+    Body:
+        return {0};
+        ###
+*
+StatModifyingStatus:
+    AddInterface: StatModifyingStatus
+    AddMapField: ToModify: {2}
+    AddMapField: SimpleGetModifier: {1}
+*
 StormyMove:
     AddMapField: GetAccuracy:
         // Accuracy is only 50% when sunny

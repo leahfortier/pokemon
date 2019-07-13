@@ -1240,6 +1240,24 @@ public final class InvokeInterfaces {
         }
     }
 
+    public interface StatusBoosterEffect {
+        boolean statusBooster(Stat stat);
+
+        static boolean isStatusBooster(Battle b, ActivePokemon user, Stat stat) {
+            List<InvokeEffect> invokees = b.getEffectsList(user, user.getAttack());
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof StatusBoosterEffect && invokee.isActiveEffect()) {
+                    StatusBoosterEffect effect = (StatusBoosterEffect)invokee;
+                    if (effect.statusBooster(stat)) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
+
     public interface AbsorbDamageEffect {
         boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount);
 

@@ -19,6 +19,7 @@ import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.RepellingEffect;
 import battle.effect.InvokeInterfaces.SelfAttackBlocker;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
+import battle.effect.InvokeInterfaces.StatusBoosterEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
@@ -27,6 +28,7 @@ import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
+import battle.effect.status.StatusInterface;
 import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
 import item.hold.HoldItem;
@@ -403,6 +405,45 @@ public final class EffectInterfaces {
         @Override
         default double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.hasEffect(PokemonEffectNamesies.USED_MINIMIZE) ? 2 : 1;
+        }
+    }
+
+    // Boosts a stat when has a status condition
+    public interface StatStatusBoosterEffect extends StatusBoosterEffect, SimpleStatModifyingEffect {
+        @Override
+        default boolean statusBooster(Stat stat) {
+            return this.isModifyStat(stat);
+        }
+
+        @Override
+        default boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.hasStatus();
+        }
+    }
+
+    // Boosts power when has a status condition
+    public interface PowerStatusBoosterEffect extends StatusBoosterEffect, PowerChangeEffect {
+        double getStatusBoost();
+
+        @Override
+        default boolean statusBooster(Stat stat) {
+            return stat.isAttackingStat();
+        }
+
+        @Override
+        default double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.hasStatus() ? this.getStatusBoost() : 1;
+        }
+    }
+
+    public interface StatModifyingStatus extends StatusInterface, SimpleStatModifyingEffect {
+        @Override
+        default double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
+            if (StatusBoosterEffect.isStatusBooster(b, p, s)) {
+                return 1;
+            } else {
+                return SimpleStatModifyingEffect.super.modify(b, p, opp, s);
+            }
         }
     }
 }

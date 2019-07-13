@@ -8,6 +8,7 @@ import battle.effect.EffectInterfaces.DoubleMinimizerMove;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.EffectInterfaces.PowderMove;
+import battle.effect.EffectInterfaces.PowerStatusBoosterEffect;
 import battle.effect.EffectInterfaces.SapHealthEffect;
 import battle.effect.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.EffectNamesies;
@@ -7987,7 +7988,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Facade extends Attack implements PowerChangeEffect {
+    static class Facade extends Attack implements PowerStatusBoosterEffect {
         private static final long serialVersionUID = 1L;
 
         Facade() {
@@ -7998,8 +7999,8 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasStatus() ? 2 : 1;
+        public double getStatusBoost() {
+            return 2;
         }
     }
 

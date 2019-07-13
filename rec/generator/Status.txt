@@ -57,8 +57,7 @@ Paralyzed:
     GenericRemoveMessage: victim.getName() + " is no longer paralyzed!"
     SourceRemoveMessage: victim.getName() + "'s " + sourceName + " cured it of its paralysis!"
     SourcePreventionMessage: paralysis
-    ToModify: Speed
-    ModifyMultiplier: .25 !p.hasAbility(AbilityNamesies.QUICK_FEET)
+    StatModifyingStatus: .25 Speed
 *
 Poisoned:
     PoisonCondition: 1/8.0
@@ -98,8 +97,7 @@ Burned:
     GenericRemoveMessage: victim.getName() + " is no longer burned!"
     SourceRemoveMessage: victim.getName() + "'s " + sourceName + " cured it of its burn!"
     SourcePreventionMessage: burns
-    ToModify: Attack
-    ModifyMultiplier: .5 !p.hasAbility(AbilityNamesies.GUTS) && p.getAttack().namesies() != AttackNamesies.FACADE
+    StatModifyingStatus: .5 Attack
 *
 Asleep:
     ShortName: SLP

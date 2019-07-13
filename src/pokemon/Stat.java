@@ -91,6 +91,10 @@ public enum Stat {
         return user;
     }
 
+    public boolean isAttackingStat() {
+        return this == ATTACK || this == SP_ATTACK;
+    }
+
     // Gets the stat value only taking the raw stage into account
     public int getBasicStat(Battle b, ActivePokemon p) {
         return this.getStat(b, p, b.getOtherPokemon(p), false);

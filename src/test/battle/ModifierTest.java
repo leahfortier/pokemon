@@ -196,6 +196,14 @@ public class ModifierTest extends BaseTest {
             battle.attackingFight(AttackNamesies.FALSE_SWIPE);
             defending.assertNotFullHealth();
         }));
+
+        // Facade doubles in power when has a status condition
+        powerChangeTest(1, AttackNamesies.FACADE, new TestInfo());
+        powerChangeTest(2, AttackNamesies.FACADE, new TestInfo().defendingFight(AttackNamesies.WILL_O_WISP));
+        powerChangeTest(2, AttackNamesies.FACADE, new TestInfo().defendingFight(AttackNamesies.THUNDER_WAVE));
+        powerChangeTest(2, AttackNamesies.FACADE, new TestInfo().defendingFight(AttackNamesies.TOXIC).attacking(PokemonNamesies.EEVEE));
+        powerChangeTest(2, AttackNamesies.FACADE, new TestInfo().defendingFight(AttackNamesies.POISON_POWDER).attacking(PokemonNamesies.EEVEE));
+        powerChangeTest(1, AttackNamesies.FACADE, new TestInfo().defendingFight(AttackNamesies.CONFUSE_RAY));
     }
 
     @Test

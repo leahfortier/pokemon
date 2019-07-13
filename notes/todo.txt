@@ -99,10 +99,7 @@ Other random things:
 	Blue needs to be in the Pokemon Center after you battle him
 	Make sure relearning moves works for evolve moves too
 	Generalize double cast remove effects (example: Power Trick)
-	Make Effect for Guts/Facade for Attack boost with status to be generic for Burned
-	  -- actually maybe just status booster so can work for Quick Feet as well
 	Also an effect for Magic Guard for direct damage only
-	Generate Status Conditions
 	Test for base evolutions don't have a move that they learn at evolution
 	Test that Shedinja is genderless when it evolves and that it doesn't appear when you cancel evolution
 	Make cast method final for effects and have a different method to handle additional things that need to happen so shit isn't always calling super

@@ -16,6 +16,7 @@ import battle.effect.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.EffectInterfaces.RepelLowLevelEncounterEffect;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.EffectInterfaces.SingleEffectPreventionAbility;
+import battle.effect.EffectInterfaces.StatStatusBoosterEffect;
 import battle.effect.EffectInterfaces.StatusPreventionAbility;
 import battle.effect.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.EffectInterfaces.TypedWildEncounterSelector;
@@ -465,7 +466,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Guts extends Ability implements SimpleStatModifyingEffect {
+    static class Guts extends Ability implements StatStatusBoosterEffect {
         private static final long serialVersionUID = 1L;
 
         Guts() {
@@ -475,11 +476,6 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.ATTACK;
-        }
-
-        @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.hasStatus();
         }
 
         @Override
@@ -1696,16 +1692,11 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class QuickFeet extends Ability implements EncounterRateMultiplier, SimpleStatModifyingEffect {
+    static class QuickFeet extends Ability implements StatStatusBoosterEffect, EncounterRateMultiplier {
         private static final long serialVersionUID = 1L;
 
         QuickFeet() {
             super(AbilityNamesies.QUICK_FEET, "Boosts the Speed stat if the Pok\u00e9mon has a status condition.");
-        }
-
-        @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
         }
 
         @Override
@@ -1714,8 +1705,8 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.hasStatus();
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override

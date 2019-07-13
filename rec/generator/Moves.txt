@@ -4711,7 +4711,7 @@ Facade:
     PP: 20
     Type: Normal
     Pow: 70
-    PowerMultiplierCondition: 2 user.hasStatus()
+    PowerStatusBooster: 2
     Acc: 100
     Cat: Physical
 *

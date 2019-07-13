@@ -39,6 +39,9 @@ public class StatusTest extends BaseTest {
         // Unless the victim has Quick Feet -- increases by 50%
         statChangeTest(1.5, AttackNamesies.THUNDER_WAVE, Stat.SPEED, new TestInfo().defending(AbilityNamesies.QUICK_FEET));
 
+        // Using Facade should not effect anything but power
+        statChangeTest(.25, AttackNamesies.THUNDER_WAVE, Stat.SPEED, new TestInfo().with((battle, attacking, defending) -> defending.setupMove(AttackNamesies.FACADE, battle)));
+
         // Burn reduces attack by 50%
         statChangeTest(.5, AttackNamesies.WILL_O_WISP, Stat.ATTACK, new TestInfo());
 
@@ -47,6 +50,9 @@ public class StatusTest extends BaseTest {
 
         // Or the victim is using the move Facade -- power is increased
         statChangeTest(1, AttackNamesies.WILL_O_WISP, Stat.ATTACK, new TestInfo().with((battle, attacking, defending) -> defending.setupMove(AttackNamesies.FACADE, battle)));
+
+        // Quick Feet has nothing to do with attack
+        statChangeTest(.5, AttackNamesies.WILL_O_WISP, Stat.ATTACK, new TestInfo().defending(AbilityNamesies.QUICK_FEET));
     }
 
     private void statChangeTest(double ratio, AttackNamesies statusAttack, Stat stat, TestInfo testInfo) {

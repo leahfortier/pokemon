@@ -2,11 +2,9 @@ package battle.effect.status;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.attack.AttackNamesies;
 import battle.attack.MoveType;
 import battle.effect.ApplyResult;
-import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
-import battle.effect.InvokeEffect;
+import battle.effect.EffectInterfaces.StatModifyingStatus;
 import battle.effect.InvokeInterfaces.BeforeTurnEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.OpponentStatusReceivedEffect;
@@ -22,7 +20,7 @@ import pokemon.ability.AbilityNamesies;
 import type.Type;
 import util.RandomUtils;
 
-public abstract class StatusCondition implements InvokeEffect {
+public abstract class StatusCondition implements StatusInterface {
     private static final long serialVersionUID = 1L;
 
     private final StatusNamesies namesies;
@@ -35,6 +33,7 @@ public abstract class StatusCondition implements InvokeEffect {
         this.catchModifier = catchModifier;
     }
 
+    @Override
     public StatusNamesies namesies() {
         return this.namesies;
     }
@@ -117,11 +116,6 @@ public abstract class StatusCondition implements InvokeEffect {
     }
 
     public void setTurns(int turns) {}
-
-    @Override
-    public InvokeSource getSource() {
-        return InvokeSource.EFFECT;
-    }
 
     @Override
     public String toString() {
@@ -216,7 +210,7 @@ public abstract class StatusCondition implements InvokeEffect {
 
     // Electric-type Pokemon cannot be paralyzed
     // Paralysis reduces speed by 75%
-    static class Paralyzed extends StatusCondition implements BeforeTurnEffect, SimpleStatModifyingEffect {
+    static class Paralyzed extends StatusCondition implements BeforeTurnEffect, StatModifyingStatus {
         private static final long serialVersionUID = 1L;
 
         Paralyzed() {
@@ -259,18 +253,13 @@ public abstract class StatusCondition implements InvokeEffect {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
-        }
-
-        @Override
         public String getSourcePreventionMessage(ActivePokemon victim, String sourceName) {
             return victim.getName() + "'s " + sourceName + " prevents paralysis!";
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return !p.hasAbility(AbilityNamesies.QUICK_FEET);
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
@@ -386,7 +375,7 @@ public abstract class StatusCondition implements InvokeEffect {
 
     // Fire-type Pokemon cannot be burned
     // Burn decreases attack by 50%
-    static class Burned extends StatusCondition implements EndTurnEffect, SimpleStatModifyingEffect {
+    static class Burned extends StatusCondition implements EndTurnEffect, StatModifyingStatus {
         private static final long serialVersionUID = 1L;
 
         Burned() {
@@ -425,18 +414,13 @@ public abstract class StatusCondition implements InvokeEffect {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.ATTACK;
-        }
-
-        @Override
         public String getSourcePreventionMessage(ActivePokemon victim, String sourceName) {
             return victim.getName() + "'s " + sourceName + " prevents burns!";
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return !p.hasAbility(AbilityNamesies.GUTS) && p.getAttack().namesies() != AttackNamesies.FACADE;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.ATTACK;
         }
 
         @Override

@@ -9,6 +9,7 @@ import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.EffectInterfaces.SingleEffectPreventionAbility;
+import battle.effect.EffectInterfaces.StatModifyingStatus;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
@@ -61,6 +62,7 @@ import battle.effect.InvokeInterfaces.StatChangingEffect;
 import battle.effect.InvokeInterfaces.StatLoweredEffect;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
+import battle.effect.InvokeInterfaces.StatusBoosterEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
 import battle.effect.InvokeInterfaces.SuperDuperEndTurnEffect;
@@ -83,6 +85,7 @@ import battle.effect.source.ChangeAbilitySource;
 import battle.effect.source.ChangeAttackTypeSource;
 import battle.effect.source.ChangeTypeSource;
 import battle.effect.status.StatusCondition;
+import battle.effect.status.StatusInterface;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffect;
 import item.Item;
@@ -132,7 +135,8 @@ public class ClassTest extends BaseTest {
             SleepyFightsterEffect.class,
             SelfAttackBlocker.class,
             CritStageEffect.class,
-            ForceMoveEffect.class
+            ForceMoveEffect.class,
+            StatusBoosterEffect.class
     );
 
     private static List<Class<?>> classes;
@@ -258,6 +262,9 @@ public class ClassTest extends BaseTest {
             for (Class<?> effectListWithAttackClass : effectListWithAttackClasses) {
                 checkInstance(classy, effectListWithAttackClass, effectListSourcesWithAttack);
             }
+
+            // If a status if a stat modifier, then it must be a StatModifyingStatus
+            checkAllInstances(classy, StatModifyingStatus.class, StatusInterface.class, StatModifyingEffect.class);
         }
     }
 
@@ -314,7 +321,7 @@ public class ClassTest extends BaseTest {
 
     // If toCheck is an instance of assigned (interface), then is MUST be an instance of at least one of implies (classes)
     private void checkInstance(Class<?> toCheck, Class<?> assigned, Class<?>... implies) {
-        // assigned must be in interface
+        // assigned must be an interface
         Assert.assertTrue(assigned.isInterface());
 
         // Only check for class implementations
@@ -326,6 +333,24 @@ public class ClassTest extends BaseTest {
                     Arrays.stream(implies).map(Class::getSimpleName).collect(Collectors.toList())
             );
             Assert.assertTrue(message, isAnyInstance(toCheck, implies));
+        }
+    }
+
+    // If toCheck is an instance of all assigned (interfaces), then is MUST be an instance of implies
+    private void checkAllInstances(Class<?> toCheck, Class<?> implies, Class<?>... allAssigned) {
+        // Only check for class implementations
+        if (toCheck.isInterface()) {
+            return;
+        }
+
+        if (isAllInstance(toCheck, allAssigned)) {
+            String message = String.format(
+                    "%s is an instance of each of %s but is not a %s.",
+                    toCheck.getSimpleName(),
+                    Arrays.stream(allAssigned).map(Class::getSimpleName).collect(Collectors.toList()),
+                    implies.getSimpleName()
+            );
+            Assert.assertTrue(message, implies.isAssignableFrom(toCheck));
         }
     }
 
@@ -400,6 +425,16 @@ public class ClassTest extends BaseTest {
             }
         }
         return false;
+    }
+
+    // Returns true if toCheck is an instance of at all of instances
+    private boolean isAllInstance(Class<?> toCheck, Class<?>... instances) {
+        for (Class<?> instance : instances) {
+            if (!instance.isAssignableFrom(toCheck)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // Scans all classes accessible from the context class loader which belong to the given package and subpackages.
