@@ -7140,7 +7140,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasStatus() && user.getStatus().namesies().getStatus().applies(b, user, victim).isSuccess();
+            return user.hasStatus() && user.getStatus().applies(b, user, victim).isSuccess();
         }
     }
 

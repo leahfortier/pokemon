@@ -3229,8 +3229,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean shouldHeal(ActivePokemon p) {
-            // Does not apply to the healthy and the dead
-            return p.hasStatus() && !p.isActuallyDead();
+            // Can't heal what you don't have
+            return p.hasStatus();
         }
     }
 
@@ -4551,8 +4551,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean shouldHeal(ActivePokemon p) {
-            // Does not apply to the healthy and the dead
-            return p.hasStatus() && !p.isActuallyDead();
+            // Can't heal what you don't have
+            return p.hasStatus();
         }
     }
 

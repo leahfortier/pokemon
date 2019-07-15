@@ -508,6 +508,11 @@ public class ActivePokemon extends PartyPokemon {
         Messages.add(new MessageUpdate(status.getRemoveMessage(b, this, source)).updatePokemon(b, this));
     }
 
+    // Returns whether or not the Pokemon is afflicted with a status condition (does not include fainted)
+    public boolean hasStatus() {
+        return !this.hasStatus(StatusNamesies.NO_STATUS) && !this.isActuallyDead();
+    }
+
     public boolean isActuallyDead() {
         return this.hasStatus(StatusNamesies.FAINTED);
     }

@@ -249,11 +249,6 @@ public abstract class PartyPokemon implements Serializable {
         this.stats().setNature(nature);
     }
 
-    // Returns whether or not the Pokemon is afflicted with a status condition
-    public boolean hasStatus() {
-        return !this.hasStatus(StatusNamesies.NO_STATUS);
-    }
-
     public boolean hasStatus(StatusNamesies type) {
         return status.isType(type);
     }

@@ -67,7 +67,6 @@ Poisoned:
 BadlyPoisoned:
     PoisonCondition: this.turns++/16.0
     Field:
-        // TODO: Confirm that it's okay that the type is BADLY_POISONED instead of POISONED
         private int turns;
         ###
     Activate:

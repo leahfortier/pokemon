@@ -320,7 +320,6 @@ public abstract class StatusCondition implements StatusInterface {
     static class BadlyPoisoned extends StatusCondition implements EndTurnEffect {
         private static final long serialVersionUID = 1L;
 
-        // TODO: Confirm that it's okay that the type is BADLY_POISONED instead of POISONED
         private int turns;
 
         BadlyPoisoned() {

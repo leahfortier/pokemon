@@ -4133,7 +4133,7 @@ Psycho Shift:
     Type: Psychic
     Cat: Status
     Acc: 100
-    Applies: user.hasStatus() && user.getStatus().namesies().getStatus().applies(b, user, victim).isSuccess()
+    Applies: user.hasStatus() && user.getStatus().applies(b, user, victim).isSuccess()
     UniqueEffects:
         // NOTE: The messaging looks off when combined with Lum Berry but I don't know if this can be easily fixed
         StatusNamesies toTransfer = user.getStatus().namesies();
