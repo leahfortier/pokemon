@@ -6780,7 +6780,7 @@ public abstract class Attack implements AttackInterface {
     static class Conversion extends Attack implements ChangeTypeSource {
         private static final long serialVersionUID = 1L;
 
-        private List<Type> types;
+        private Type type;
 
         Conversion() {
             super(AttackNamesies.CONVERSION, Type.NORMAL, MoveCategory.STATUS, 30, "The user changes its type to become the same type as the move at the top of the list of moves it knows.");
@@ -6790,23 +6790,18 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            this.types = new ArrayList<>();
-            for (Move move : attacking.getMoves(b)) {
-                Type type = move.getAttack().getActualType();
-                if (!attacking.isType(b, type)) {
-                    this.types.add(type);
-                }
-            }
+            // Change to the type of the first in the first slot
+            this.type = attacking.getMoves(b).get(0).getAttack().getActualType();
         }
 
         @Override
         public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return new PokeType(RandomUtils.getRandomValue(this.types));
+            return new PokeType(this.type);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !this.types.isEmpty();
+            return !user.isType(b, this.type);
         }
     }
 

@@ -3933,21 +3933,16 @@ Conversion:
     Type: Normal
     Cat: Status
     SelfTarget: True
-    Applies: !this.types.isEmpty()
+    Applies: !user.isType(b, this.type)
     Field:
-        private List<Type> types;
+        private Type type;
         ###
     BeginAttack:
-        this.types = new ArrayList<>();
-        for (Move move : attacking.getMoves(b)) {
-            Type type = move.getAttack().getActualType();
-            if (!attacking.isType(b, type)) {
-                this.types.add(type);
-            }
-        }
+        // Change to the type of the first in the first slot
+        this.type = attacking.getMoves(b).get(0).getAttack().getActualType();
         ###
     ChangeType:
-        return new PokeType(RandomUtils.getRandomValue(this.types));
+        return new PokeType(this.type);
         ###
     PokemonEffect: ChangeType
 *

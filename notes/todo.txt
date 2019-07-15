@@ -132,7 +132,6 @@ Other random things:
     acupressure should only try to raise non-maximized stats and should fail if all maxed out
     test healing wish and snatch
     okay so Mirror Move is supposed to use the last move that targeted the user, not the last move that the opponent used... what is happening I did not know this
-    conversion was changed
     look at destiny bond and successive decay
     metronome + multi-turn move is not working (Dive)
     Wallet class (CashMoneyHouse?)
