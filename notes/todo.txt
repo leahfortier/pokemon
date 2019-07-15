@@ -99,7 +99,6 @@ Other random things:
 	Blue needs to be in the Pokemon Center after you battle him
 	Make sure relearning moves works for evolve moves too
 	Generalize double cast remove effects (example: Power Trick)
-	Also an effect for Magic Guard for direct damage only
 	Test for base evolutions don't have a move that they learn at evolution
 	Test that Shedinja is genderless when it evolves and that it doesn't appear when you cancel evolution
 	Make cast method final for effects and have a different method to handle additional things that need to happen so shit isn't always calling super
@@ -110,14 +109,10 @@ Other random things:
 	Look at light screen and light clay cast thingy -- why is it not applying turns to itself?
 	Change effects list for Defog and RapidSpin to only include PokemonEffect and TeamEffects
 	should movetypes be a set?
-	healHealthFraction with message input
 	BasicPanels fullMessagePanel -- Is 440 game.height - panel.height?
 	TileSet getTile should use readImage in FileIO -- just check exists first
-	change the names of activepokemon for out of battle effects like repelling effect and those wild pokemon encouter changer things from attacking to just like front
 	Exeggutor plant gives two Exeggutor?? -- got one, battled mom, got another? also got one, saved, got another
-	look at natural cure again
 	MoveUseItems do not work in battle -- causes NPE
-	Purify doesn't work correctly
 	Heal Block doesn't work right either
 	rewrite Ability.evolutionAssign() to hold the ability index to remain consistent across evolutions
 	Dancer -- test with Snatch (should not activate); test with Flinched (should not activate)
@@ -157,4 +152,5 @@ Other random things:
     cancelling evolution still consumes evolution item
     is there some way to have like a FirstTriggeredCondition or something for things like items and a lot of other shit
     is there a way to just create the button transitions from the button list by using all the button locations or something like that??
-    
+    Al Bhed translation shouldn't be hardcoded -- just a flag on the area or something
+    hasStatus should be rewritten to return false when fainted because like that doesn't count ever...

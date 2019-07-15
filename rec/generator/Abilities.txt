@@ -503,11 +503,20 @@ Iron Fist:
 *
 Natural Cure:
     Desc: All status conditions heal when the Pok\u00e9mon switches out.
-    Int: SwitchOutEffect
-    SwitchOut:
-        if (!switchee.hasStatus(StatusNamesies.FAINTED)) {
-            switchee.removeStatus();
+    Int: SwitchOutEffect, EndBattleEffect
+    Field:
+        private void removeStatus(ActivePokemon p) {
+            if (!p.hasStatus(StatusNamesies.FAINTED)) {
+                p.removeStatus();
+            }
         }
+        ###
+    SwitchOut:
+        this.removeStatus(switchee);
+        ###
+    EndBattle:
+        // Also removes status at the end of battle
+        this.removeStatus(p);
         ###
 *
 Serene Grace:

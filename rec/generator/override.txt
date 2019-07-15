@@ -171,7 +171,7 @@ BasicHealing:
 *
 SelfHealing:
     AddMapField: RawSelfHealing: {0}
-    AddMapField: Applies: !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)
+    AddMapField: Applies: user.canHeal()
 *
 RawSelfHealing:
     AddInterface: SelfHealingMove

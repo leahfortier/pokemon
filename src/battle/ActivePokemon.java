@@ -105,9 +105,8 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public Ability getAbility() {
-
         // Check if the Pokemon has had its ability changed during the battle
-        PokemonEffect effect = getEffect(PokemonEffectNamesies.CHANGE_ABILITY);
+        PokemonEffect effect = this.getEffect(PokemonEffectNamesies.CHANGE_ABILITY);
         if (effect != null) {
             return ((AbilityHolder)effect).getAbility();
         }
@@ -592,20 +591,32 @@ public class ActivePokemon extends PartyPokemon {
         return list;
     }
 
+    // Checks effects (namely Heal Block) by default
     public boolean canHeal() {
-        return !this.isActuallyDead() && !this.fullHealth() && !this.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+        return this.canHeal(true);
+    }
+
+    public boolean canHeal(boolean checkEffects) {
+        if (this.isActuallyDead() || this.fullHealth()) {
+            // Fainted Pokemon and Pokemon already at full health cannot heal
+            return false;
+        } else if (checkEffects && this.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
+            // Cannot heal while heal blocked
+            return false;
+        } else {
+            // Otherwise good to go
+            return true;
+        }
     }
 
     private int heal(boolean checkEffects, Battle b, String message, Supplier<Integer> healAction) {
-        if (checkEffects && !this.canHeal()) {
-            return 0;
-        } else if (!checkEffects && (this.isActuallyDead() || this.fullHealth())) {
+        if (!this.canHeal(checkEffects)) {
             return 0;
         }
 
         Messages.add(message);
-        int healAmount = healAction.get();
 
+        int healAmount = healAction.get();
         if (healAmount <= 0) {
             Global.error("Heal amount should be positive.");
         }

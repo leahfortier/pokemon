@@ -6304,10 +6304,12 @@ Purify:
         ###
     ExtraApplies: user.hasStatus()
     UniqueEffects:
+        // Okay so this is a little different than in the games
+        // So normally you heal a target's (presumably ally's) status condition and then yourself
+        // But not gonna implement to heal the opponent's status condition because that's stupid
+        // So basically it's just a better Refresh that heals when successful
         user.removeStatus(b, CastSource.ATTACK);
-        if (!user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
-            this.heal(b, user);
-        }
+        this.heal(b, user);
         ###
 *
 Revelation Dance:

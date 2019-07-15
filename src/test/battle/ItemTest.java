@@ -431,7 +431,7 @@ public class ItemTest extends BaseTest {
 
     @Test
     public void healBlockTest() {
-        TestBattle battle = TestBattle.create();
+        TestBattle battle = TestBattle.create(PokemonNamesies.HAPPINY, PokemonNamesies.KARTANA);
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
@@ -449,7 +449,7 @@ public class ItemTest extends BaseTest {
         attacking.assertHasEffect(PokemonEffectNamesies.HEAL_BLOCK);
 
         attacking.giveItem(ItemNamesies.SITRUS_BERRY);
-        battle.fight(AttackNamesies.ENDURE, AttackNamesies.HORN_DRILL);
+        battle.fight(AttackNamesies.ENDURE, AttackNamesies.LEAF_BLADE);
         Assert.assertEquals(attacking.getHpString(), 1, attacking.getHP());
         attacking.assertNotConsumedItem(battle);
         attacking.assertHasEffect(PokemonEffectNamesies.HEAL_BLOCK);

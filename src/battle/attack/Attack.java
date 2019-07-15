@@ -679,7 +679,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return user.canHeal();
         }
     }
 
@@ -704,7 +704,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return user.canHeal();
         }
     }
 
@@ -1735,7 +1735,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return user.canHeal();
         }
     }
 
@@ -2126,7 +2126,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return user.canHeal();
         }
     }
 
@@ -2504,7 +2504,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasEffect(PokemonEffectNamesies.STOCKPILE) && !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return user.hasEffect(PokemonEffectNamesies.STOCKPILE) && user.canHeal();
         }
     }
 
@@ -3210,7 +3210,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return user.canHeal();
         }
     }
 
@@ -3386,7 +3386,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.hasStatus(StatusNamesies.ASLEEP) && StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, user, user).isSuccess() && !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return !user.hasStatus(StatusNamesies.ASLEEP) && StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, user, user).isSuccess() && user.canHeal();
         }
     }
 
@@ -4889,7 +4889,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return user.canHeal();
         }
     }
 
@@ -6300,7 +6300,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return user.canHeal();
         }
     }
 
@@ -7557,7 +7557,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return user.canHeal();
         }
     }
 
@@ -8036,7 +8036,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return user.canHeal();
         }
     }
 
@@ -10397,7 +10397,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return user.canHeal();
         }
     }
 
@@ -10423,7 +10423,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.fullHealth() && !user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK);
+            return user.canHeal();
         }
     }
 
@@ -10690,10 +10690,12 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Okay so this is a little different than in the games
+            // So normally you heal a target's (presumably ally's) status condition and then yourself
+            // But not gonna implement to heal the opponent's status condition because that's stupid
+            // So basically it's just a better Refresh that heals when successful
             user.removeStatus(b, CastSource.ATTACK);
-            if (!user.hasEffect(PokemonEffectNamesies.HEAL_BLOCK)) {
-                this.heal(b, user);
-            }
+            this.heal(b, user);
         }
 
         @Override

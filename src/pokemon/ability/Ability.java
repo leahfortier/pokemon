@@ -1419,8 +1419,14 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class NaturalCure extends Ability implements SwitchOutEffect {
+    static class NaturalCure extends Ability implements SwitchOutEffect, EndBattleEffect {
         private static final long serialVersionUID = 1L;
+
+        private void removeStatus(ActivePokemon p) {
+            if (!p.hasStatus(StatusNamesies.FAINTED)) {
+                p.removeStatus();
+            }
+        }
 
         NaturalCure() {
             super(AbilityNamesies.NATURAL_CURE, "All status conditions heal when the Pok\u00e9mon switches out.");
@@ -1428,9 +1434,13 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void switchOut(ActivePokemon switchee) {
-            if (!switchee.hasStatus(StatusNamesies.FAINTED)) {
-                switchee.removeStatus();
-            }
+            this.removeStatus(switchee);
+        }
+
+        @Override
+        public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
+            // Also removes status at the end of battle
+            this.removeStatus(p);
         }
     }
 
