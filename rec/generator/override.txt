@@ -347,10 +347,9 @@ ProtectingAttack:
 *
 OHKO:
     AddInterface: OhkoMove
-    AddMapField: Applies: user.getLevel() >= victim.getLevel()
-    AddMapField: GetAccuracy:
-        return super.accuracy + (me.getLevel() - o.getLevel());
-        ###
+*
+OhkoAccuracy:
+    Header: int baseAccuracy(Battle b, ActivePokemon user)
 *
 SwitchStat:
     Header: Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s)

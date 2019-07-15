@@ -2912,7 +2912,11 @@ Sheer Cold:
     Acc: 30
     Cat: Special
     Type: Ice
-    ExtraApplies: !victim.isType(b, Type.ICE)
+    Applies: super.applies(b, user, victim) && !victim.isType(b, Type.ICE)
+    OhkoAccuracy:
+        // Accuracy is 10% lower for non-ice types
+        return OhkoMove.super.baseAccuracy(b, user) - (user.isType(b, Type.ICE) ? 0 : 10);
+        ###
 *
 Poison Gas:
     Desc: A cloud of poison gas is sprayed in the face of opposing Pok\u00e9mon, poisoning those hit.
@@ -5931,6 +5935,7 @@ Rototiller:
     SelfTarget: True
     Cat: Status
     StatChange: 2 Attack 1 Sp_Attack 1
+    Applies: user.isGrounded(b)
 *
 Water Shuriken:
     Desc: The user hits the target with throwing stars two to five times in a row. This move always goes first.

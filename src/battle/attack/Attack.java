@@ -182,7 +182,8 @@ public abstract class Attack implements AttackInterface {
         return false;
     }
 
-    public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
+    @Override
+    public int getBaseAccuracy() {
         return this.accuracy;
     }
 
@@ -246,10 +247,6 @@ public abstract class Attack implements AttackInterface {
 
     public String getPowerString() {
         return this.power == 0 ? "--" : this.power + "";
-    }
-
-    protected boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-        return true;
     }
 
     // To be overridden as necessary
@@ -3006,16 +3003,6 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 30;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
-
-        @Override
-        public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
-            return super.accuracy + (me.getLevel() - o.getLevel());
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getLevel() >= victim.getLevel();
-        }
     }
 
     static class Megahorn extends Attack {
@@ -3841,19 +3828,9 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
-            return super.accuracy + (me.getLevel() - o.getLevel());
-        }
-
-        @Override
         public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hit when the opponent is underground
             return defending.isSemiInvulnerableDigging();
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getLevel() >= victim.getLevel();
         }
     }
 
@@ -5170,13 +5147,14 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
-            return super.accuracy + (me.getLevel() - o.getLevel());
+        public int baseAccuracy(Battle b, ActivePokemon user) {
+            // Accuracy is 10% lower for non-ice types
+            return OhkoMove.super.baseAccuracy(b, user) - (user.isType(b, Type.ICE) ? 0 : 10);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getLevel() >= victim.getLevel() && !victim.isType(b, Type.ICE);
+            return super.applies(b, user, victim) && !victim.isType(b, Type.ICE);
         }
     }
 
@@ -5578,16 +5556,6 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.GUILLOTINE, Type.NORMAL, MoveCategory.PHYSICAL, 5, "A vicious, tearing attack with big pincers. The target faints instantly if this attack hits.");
             super.accuracy = 30;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-        }
-
-        @Override
-        public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
-            return super.accuracy + (me.getLevel() - o.getLevel());
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getLevel() >= victim.getLevel();
         }
     }
 
@@ -10120,6 +10088,11 @@ public abstract class Attack implements AttackInterface {
             super.selfTarget = true;
             super.statChanges[Stat.ATTACK.index()] = 1;
             super.statChanges[Stat.SP_ATTACK.index()] = 1;
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isGrounded(b);
         }
     }
 

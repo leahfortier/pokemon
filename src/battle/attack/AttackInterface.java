@@ -17,6 +17,7 @@ public interface AttackInterface extends InvokeEffect {
     AttackNamesies namesies();
     MoveCategory getCategory();
     boolean isSelfTarget();
+    int getBaseAccuracy();
 
     default String getName() {
         return this.namesies().getName();
@@ -30,9 +31,17 @@ public interface AttackInterface extends InvokeEffect {
         return this.isSelfTarget() && this.isStatusMove();
     }
 
+    default int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
+        return this.getBaseAccuracy();
+    }
+
     default void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
     default void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
     default void totalAndCompleteFailure(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
+
+    default boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+        return true;
+    }
 
     default boolean shouldApplyDamage(Battle b, ActivePokemon user) {
         // Status moves default to no damage
