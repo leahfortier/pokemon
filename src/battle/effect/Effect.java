@@ -181,6 +181,7 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
         if (effect.hasAlternateCast && effect.hasEffect(b, victim)) {
             effect = effect.getEffect(b, victim);
             effect.alternateCast(b, caster, victim, source, castMessage);
+            Messages.update(b);
         } else {
             effect.beforeCast(b, caster, victim, source);
             Messages.update(b);

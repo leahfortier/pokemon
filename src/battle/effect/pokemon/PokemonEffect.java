@@ -61,7 +61,6 @@ import battle.effect.source.ChangeAbilitySource;
 import battle.effect.source.ChangeAttackTypeSource;
 import battle.effect.source.ChangeTypeSource;
 import battle.effect.status.StatusNamesies;
-import item.Item;
 import item.ItemNamesies;
 import item.hold.HoldItem;
 import main.Global;
@@ -947,40 +946,25 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class ChangeType extends PokemonEffect implements ChangeTypeEffect {
+    static class ChangeType extends PokemonEffect implements ChangeTypeEffect, MessageGetter {
         private static final long serialVersionUID = 1L;
 
         private PokeType type;
-        private ChangeTypeSource typeSource;
-        private CastSource castSource;
-
-        private String castMessage(ActivePokemon victim) {
-            // TODO: This is ugly
-            switch (castSource) {
-                case ATTACK:
-                    return victim.getName() + " was changed to " + type + " type!!";
-                case ABILITY:
-                    return victim.getName() + "'s " + ((Ability)typeSource).getName() + " changed it to the " + type + " type!!";
-                case HELD_ITEM:
-                    return victim.getName() + "'s " + ((Item)typeSource).getName() + " changed it to the " + type + " type!!";
-                default:
-                    Global.error("Invalid cast source for ChangeType " + castSource);
-                    return null;
-            }
-        }
 
         ChangeType() {
-            super(PokemonEffectNamesies.CHANGE_TYPE, -1, -1, true, false);
+            super(PokemonEffectNamesies.CHANGE_TYPE, -1, -1, true, true);
+        }
+
+        @Override
+        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
+            this.beforeCast(b, caster, victim, source);
+            this.addCastMessage(b, caster, victim, source, castMessage);
         }
 
         @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            castSource = source;
-            typeSource = (ChangeTypeSource)source.getSource(b, caster);
+            ChangeTypeSource typeSource = (ChangeTypeSource)source.getSource(b, caster);
             type = typeSource.getType(b, caster, victim);
-
-            // Remove any other ChangeType effects that the victim may have
-            victim.getEffects().remove(this.namesies());
         }
 
         @Override
@@ -990,7 +974,17 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return castMessage(victim);
+            return this.getMessage(b, victim, source);
+        }
+
+        @Override
+        public String getGenericMessage(ActivePokemon p) {
+            return p.getName() + " was changed to " + type + " type!!";
+        }
+
+        @Override
+        public String getSourceMessage(ActivePokemon p, String sourceName) {
+            return p.getName() + "'s " + sourceName + " changed it to the " + type + " type!!";
         }
 
         @Override

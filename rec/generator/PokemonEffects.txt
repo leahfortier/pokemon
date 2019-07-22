@@ -315,39 +315,24 @@ ChangeAttackType:
         ###
 *
 ChangeType:
-    Int: ChangeTypeEffect
+    Int: ChangeTypeEffect, MessageGetter
     Field:
         private PokeType type;
-        private ChangeTypeSource typeSource;
-        private CastSource castSource;
-
-        private String castMessage(ActivePokemon victim) {
-            // TODO: This is ugly
-            switch (castSource) {
-                case ATTACK:
-                    return victim.getName() + " was changed to " + type + " type!!";
-                case ABILITY:
-                    return victim.getName() + "'s " + ((Ability)typeSource).getName() + " changed it to the " + type + " type!!";
-                case HELD_ITEM:
-                    return victim.getName() + "'s " + ((Item)typeSource).getName() + " changed it to the " + type + " type!!";
-                default:
-                    Global.error("Invalid cast source for ChangeType " + castSource);
-                    return null;
-            }
-        }
+        ###
+    AlternateCast:
+        this.beforeCast(b, caster, victim, source);
+        this.addCastMessage(b, caster, victim, source, castMessage);
         ###
     BeforeCast:
-        castSource = source;
-        typeSource = (ChangeTypeSource)source.getSource(b, caster);
+        ChangeTypeSource typeSource = (ChangeTypeSource)source.getSource(b, caster);
         type = typeSource.getType(b, caster, victim);
-
-        // Remove any other ChangeType effects that the victim may have
-        victim.getEffects().remove(this.namesies());
         ###
     GetChangeTypeEffect:
         return type;
         ###
-    CastMessage: castMessage(victim)
+    CastMessage: this.getMessage(b, victim, source)
+    GenericMessage: p.getName() + " was changed to " + type + " type!!"
+    SourceMessage: p.getName() + "'s " + sourceName + " changed it to the " + type + " type!!"
     CanHave: True
     Subside:
         Messages.add(new MessageUpdate().updatePokemon(b, p));
