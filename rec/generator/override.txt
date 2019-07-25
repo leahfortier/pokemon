@@ -1349,7 +1349,7 @@ TimeSpaceOrb:
     AddMapField: Price: 10000
     AddInterface: HoldItem
     AddMapField: Cat: Misc
-    AddMapField: PowerMultiplierCondition: 1.2 user.isPokemon(PokemonNamesies.{11}) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.{22}))
+    AddMapField: PowerMultiplierCondition: 1.2 user.isPokemon(PokemonNamesies.{11}) && user.isAttackType(Type.DRAGON, Type.{22})
 *
 SpecialItemAbility:
     AddInterface: ChangeTypeEffect

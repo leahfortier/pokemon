@@ -414,7 +414,7 @@ Thick Fat:
     Desc: The Pok\u00e9mon is protected by a layer of thick fat, which halves the damage taken from Fire- and Ice-type moves.
     Int: OpponentPowerChangeEffect
     GetOppMultiplier:
-        return user.isAttackType(Type.FIRE) || user.isAttackType(Type.ICE) ? .5 : 1;
+        return user.isAttackType(Type.FIRE, Type.ICE) ? .5 : 1;
         ###
 *
 Hydration:

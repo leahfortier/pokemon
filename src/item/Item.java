@@ -762,7 +762,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isPokemon(PokemonNamesies.DIALGA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.STEEL)) ? 1.2 : 1;
+            return user.isPokemon(PokemonNamesies.DIALGA) && user.isAttackType(Type.DRAGON, Type.STEEL) ? 1.2 : 1;
         }
     }
 
@@ -781,7 +781,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isPokemon(PokemonNamesies.PALKIA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.WATER)) ? 1.2 : 1;
+            return user.isPokemon(PokemonNamesies.PALKIA) && user.isAttackType(Type.DRAGON, Type.WATER) ? 1.2 : 1;
         }
     }
 
@@ -800,7 +800,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isPokemon(PokemonNamesies.GIRATINA) && (user.isAttackType(Type.DRAGON) || user.isAttackType(Type.GHOST)) ? 1.2 : 1;
+            return user.isPokemon(PokemonNamesies.GIRATINA) && user.isAttackType(Type.DRAGON, Type.GHOST) ? 1.2 : 1;
         }
     }
 
@@ -1036,7 +1036,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean isModifyStat(Stat s) {
-            return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
+            return s == Stat.DEFENSE;
         }
 
         @Override
@@ -1046,7 +1046,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public double getModifier() {
-            return 1.5;
+            return 2;
         }
     }
 
@@ -1507,12 +1507,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(PokemonNamesies.LATIOS) || p.isPokemon(PokemonNamesies.LATIAS);
+            return p.isPokemon(PokemonNamesies.LATIOS, PokemonNamesies.LATIAS) && p.isAttackType(Type.PSYCHIC, Type.DRAGON);
         }
 
         @Override
         public double getModifier() {
-            return 1.5;
+            return 1.2;
         }
     }
 
@@ -1593,7 +1593,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(PokemonNamesies.CUBONE) || p.isPokemon(PokemonNamesies.MAROWAK);
+            return p.isPokemon(PokemonNamesies.CUBONE, PokemonNamesies.MAROWAK);
         }
 
         @Override
@@ -2793,7 +2793,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(PokemonNamesies.CLAMPERL) || p.isPokemon(PokemonNamesies.CHINCHOU) || p.isPokemon(PokemonNamesies.LANTURN);
+            return p.isPokemon(PokemonNamesies.CLAMPERL, PokemonNamesies.CHINCHOU, PokemonNamesies.LANTURN);
         }
 
         @Override

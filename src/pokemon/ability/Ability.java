@@ -1249,7 +1249,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isAttackType(Type.FIRE) || user.isAttackType(Type.ICE) ? .5 : 1;
+            return user.isAttackType(Type.FIRE, Type.ICE) ? .5 : 1;
         }
     }
 

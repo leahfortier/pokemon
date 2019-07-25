@@ -389,8 +389,13 @@ public abstract class PartyPokemon implements Serializable {
         return shiny;
     }
 
-    public boolean isPokemon(PokemonNamesies name) {
-        return pokemon == name;
+    public boolean isPokemon(PokemonNamesies... names) {
+        for (PokemonNamesies name : names) {
+            if (pokemon == name) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Does not include shiny -- this is for the small party tiles

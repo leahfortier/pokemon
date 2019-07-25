@@ -397,8 +397,13 @@ public class ActivePokemon extends PartyPokemon {
         return m.getAttack();
     }
 
-    public boolean isAttackType(Type t) {
-        return this.getAttackType() == t;
+    public boolean isAttackType(Type... types) {
+        for (Type t : types) {
+            if (this.getAttackType() == t) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Type getAttackType() {

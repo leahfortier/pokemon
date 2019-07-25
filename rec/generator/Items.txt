@@ -361,7 +361,7 @@ Metal Powder:
     Desc: An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Defense stat.
     Price: 1000
     Fling: 10
-    TwoModifyMultiplier: Defense Sp_Defense 1.5 p.isPokemon(PokemonNamesies.DITTO)
+    ToModifyMultiplier: Defense 2 p.isPokemon(PokemonNamesies.DITTO)
 *
 Metronome:
     Int: HoldItem
@@ -507,7 +507,7 @@ Soul Dew:
     Cat: Misc
     Desc: A wondrous orb to be held by either Latios or Latias. It raises the power of Psychic- and Dragon-type moves.
     Price: 4000
-    TwoModifyMultiplier: Sp_Attack Sp_Defense 1.5 p.isPokemon(PokemonNamesies.LATIOS) || p.isPokemon(PokemonNamesies.LATIAS)
+    TwoModifyMultiplier: Sp_Attack Sp_Defense 1.2 p.isPokemon(PokemonNamesies.LATIOS, PokemonNamesies.LATIAS) && p.isAttackType(Type.PSYCHIC, Type.DRAGON)
     Comments: // I changed the price on my own because everything else was increasing like that and this said N/A
 *
 Stick:
@@ -550,7 +550,7 @@ Thick Club:
     Desc: An item to be held by Cubone or Marowak. It's a hard bone of some sort that boosts the Attack stat.
     Price: 1000
     Fling: 90
-    ToModifyMultiplier: Attack 2 p.isPokemon(PokemonNamesies.CUBONE) || p.isPokemon(PokemonNamesies.MAROWAK)
+    ToModifyMultiplier: Attack 2 p.isPokemon(PokemonNamesies.CUBONE, PokemonNamesies.MAROWAK)
 *
 Weakness Policy:
     Int: HoldItem, TakeDamageEffect
@@ -946,7 +946,7 @@ Deep Sea Scale:
     Cat: Misc
     Desc: An item to be held by Clamperl, Chinchou, or Lanturn. This scale shines with a faint pink and raises the holder's Sp. Def stat.
     Price: 2000
-    ToModifyMultiplier: Sp_Defense 2 p.isPokemon(PokemonNamesies.CLAMPERL) || p.isPokemon(PokemonNamesies.CHINCHOU) || p.isPokemon(PokemonNamesies.LANTURN)
+    ToModifyMultiplier: Sp_Defense 2 p.isPokemon(PokemonNamesies.CLAMPERL, PokemonNamesies.CHINCHOU, PokemonNamesies.LANTURN)
 *
 Deep Sea Tooth:
     Int: HoldItem, EvolutionItem
