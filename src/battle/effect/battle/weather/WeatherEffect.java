@@ -164,11 +164,6 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SP_DEFENSE;
-        }
-
-        @Override
         public void singleEndTurnEffect(Battle b, ActivePokemon victim) {
             // Don't buffet the immune!
             for (Type type : immunees) {
@@ -184,6 +179,11 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
 
             // Buffety buffety buffet
             victim.reduceHealthFraction(b, 1/16.0, victim.getName() + " is buffeted by the sandstorm!");
+        }
+
+        @Override
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SP_DEFENSE;
         }
 
         @Override

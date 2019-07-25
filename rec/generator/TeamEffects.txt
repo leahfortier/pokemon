@@ -20,8 +20,7 @@ LightScreen:
     SimpleBarrier: Sp_Defense light screen
 *
 Tailwind:
-    ToModify: Speed
-    SimpleModifier: 2 
+    SimpleToModify: Speed 2
     NumTurns: 4
     SubsideMessage: "The effects of tailwind faded."
     CastMessage: user.getName() + " raised the speed of its team!"

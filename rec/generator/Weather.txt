@@ -42,8 +42,7 @@ Sandstorm:
     BattleEndTurnMessage: "The sandstorm rages."
     CastMessage: "A sandstorm kicked up!"
     SubsideMessage: "The sandstorm subsided."
-    ToModify: Sp_Defense
-    ModifyMultiplier: 1.5 p.isType(b, Type.ROCK)
+    ToModifyMultiplier: Sp_Defense 1.5 p.isType(b, Type.ROCK)
 *
 Hailing:
     WeatherElement: Ice

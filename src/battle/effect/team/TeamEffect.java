@@ -149,11 +149,6 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
-        }
-
-        @Override
         public String getSubsideMessage(ActivePokemon victim) {
             return "The effects of tailwind faded.";
         }
@@ -161,6 +156,11 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return user.getName() + " raised the speed of its team!";
+        }
+
+        @Override
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override

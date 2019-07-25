@@ -339,13 +339,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.EVASION;
+        public int flingDamage() {
+            return 10;
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.EVASION;
         }
 
         @Override
@@ -379,11 +379,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.ATTACK;
-        }
-
-        @Override
         public boolean usable(Battle b, ActivePokemon p, Move m) {
             Move last = p.getLastMoveUsed();
             return last == null || m == last;
@@ -395,13 +390,18 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public double getModifier() {
-            return 1.5;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.ATTACK;
         }
 
         @Override
         public int flingDamage() {
             return 10;
+        }
+
+        @Override
+        public double getModifier() {
+            return 1.5;
         }
     }
 
@@ -414,11 +414,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
-        }
-
-        @Override
         public boolean usable(Battle b, ActivePokemon p, Move m) {
             Move last = p.getLastMoveUsed();
             return last == null || m == last;
@@ -430,13 +425,18 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public double getModifier() {
-            return 1.5;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
         public int flingDamage() {
             return 10;
+        }
+
+        @Override
+        public double getModifier() {
+            return 1.5;
         }
     }
 
@@ -449,11 +449,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SP_ATTACK;
-        }
-
-        @Override
         public boolean usable(Battle b, ActivePokemon p, Move m) {
             Move last = p.getLastMoveUsed();
             return last == null || m == last;
@@ -465,13 +460,18 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public double getModifier() {
-            return 1.5;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SP_ATTACK;
         }
 
         @Override
         public int flingDamage() {
             return 10;
+        }
+
+        @Override
+        public double getModifier() {
+            return 1.5;
         }
     }
 
@@ -813,11 +813,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
-        }
-
-        @Override
         public void flingEffect(Battle b, ActivePokemon pelted) {
             // Technically the Iron Ball doesn't do this as a fling effect, but it almost makes sense so I'm doing it
             removeLevitation(b, pelted);
@@ -826,6 +821,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public int flingDamage() {
             return 130;
+        }
+
+        @Override
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
@@ -881,13 +881,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(PokemonNamesies.PIKACHU);
+        public void flingEffect(Battle b, ActivePokemon pelted) {
+            StatusNamesies.PARALYZED.getStatus().apply(b, pelted, pelted, pelted.getName() + " was paralyzed by the " + this.getName() + "!");
         }
 
         @Override
-        public void flingEffect(Battle b, ActivePokemon pelted) {
-            StatusNamesies.PARALYZED.getStatus().apply(b, pelted, pelted, pelted.getName() + " was paralyzed by the " + this.getName() + "!");
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.isPokemon(PokemonNamesies.PIKACHU);
         }
 
         @Override
@@ -972,13 +972,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
+        public int flingDamage() {
+            return 60;
         }
 
         @Override
-        public int flingDamage() {
-            return 60;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
@@ -1030,13 +1030,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
+        public int flingDamage() {
+            return 10;
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
         }
 
         @Override
@@ -1097,24 +1097,24 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
-        }
-
-        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
         }
 
         @Override
-        public double getModifier() {
-            return .5;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
         public int flingDamage() {
             return 70;
+        }
+
+        @Override
+        public double getModifier() {
+            return .5;
         }
     }
 
@@ -1132,24 +1132,24 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
-        }
-
-        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
         }
 
         @Override
-        public double getModifier() {
-            return .5;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
         public int flingDamage() {
             return 70;
+        }
+
+        @Override
+        public double getModifier() {
+            return .5;
         }
     }
 
@@ -1167,24 +1167,24 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
-        }
-
-        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
         }
 
         @Override
-        public double getModifier() {
-            return .5;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
         public int flingDamage() {
             return 70;
+        }
+
+        @Override
+        public double getModifier() {
+            return .5;
         }
     }
 
@@ -1202,24 +1202,24 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
-        }
-
-        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
         }
 
         @Override
-        public double getModifier() {
-            return .5;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
         public int flingDamage() {
             return 70;
+        }
+
+        @Override
+        public double getModifier() {
+            return .5;
         }
     }
 
@@ -1237,24 +1237,24 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
-        }
-
-        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
         }
 
         @Override
-        public double getModifier() {
-            return .5;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
         public int flingDamage() {
             return 70;
+        }
+
+        @Override
+        public double getModifier() {
+            return .5;
         }
     }
 
@@ -1272,24 +1272,24 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
-        }
-
-        @Override
         public int[] getEVs(int[] vals) {
             vals[powerStat().index()] += 4;
             return vals;
         }
 
         @Override
-        public double getModifier() {
-            return .5;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
         public int flingDamage() {
             return 70;
+        }
+
+        @Override
+        public double getModifier() {
+            return .5;
         }
     }
 
@@ -1327,13 +1327,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
+        public int flingDamage() {
+            return 10;
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SPEED;
         }
 
         @Override
@@ -1582,13 +1582,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.ATTACK;
+        public int flingDamage() {
+            return 90;
         }
 
         @Override
-        public int flingDamage() {
-            return 90;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.ATTACK;
         }
 
         @Override
@@ -1677,13 +1677,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.ACCURACY;
+        public int flingDamage() {
+            return 10;
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.ACCURACY;
         }
 
         @Override
@@ -1701,13 +1701,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SP_ATTACK;
+        public int flingDamage() {
+            return 10;
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SP_ATTACK;
         }
 
         @Override
@@ -1725,13 +1725,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.ACCURACY;
+        public int flingDamage() {
+            return 10;
         }
 
         @Override
-        public int flingDamage() {
-            return 10;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.ACCURACY;
         }
 
         @Override
@@ -1768,13 +1768,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.EVASION;
+        public PokemonNamesies getBaby() {
+            return PokemonNamesies.WYNAUT;
         }
 
         @Override
-        public PokemonNamesies getBaby() {
-            return PokemonNamesies.WYNAUT;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.EVASION;
         }
 
         @Override
@@ -2811,13 +2811,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SP_ATTACK;
+        public int flingDamage() {
+            return 90;
         }
 
         @Override
-        public int flingDamage() {
-            return 90;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SP_ATTACK;
         }
 
         @Override
@@ -5499,13 +5499,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
+        public int flingDamage() {
+            return 40;
         }
 
         @Override
-        public int flingDamage() {
-            return 40;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.DEFENSE || s == Stat.SP_DEFENSE;
         }
 
         @Override
@@ -5600,11 +5600,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SP_DEFENSE;
-        }
-
-        @Override
         public boolean usable(Battle b, ActivePokemon p, Move m) {
             return !m.getAttack().isStatusMove();
         }
@@ -5615,13 +5610,18 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public double getModifier() {
-            return 1.5;
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SP_DEFENSE;
         }
 
         @Override
         public int flingDamage() {
             return 80;
+        }
+
+        @Override
+        public double getModifier() {
+            return 1.5;
         }
     }
 

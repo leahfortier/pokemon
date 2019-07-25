@@ -777,13 +777,30 @@ SimpleModifier:
     AddMapField: SimpleGetModifier: {1}
     AddInterface: SimpleStatModifyingEffect
 *
+# <Stat> <Multiplier>
+SimpleToModify:
+    AddMapField: ToModify: {1}
+    AddMapField: SimpleModifier: {2}
+*
+# <Stat> <Multiplier> <Condition>
+ToModifyMultiplier:
+    AddMapField: ToModify: {1}
+    AddMapField: ModifyMultiplier: {2-}
+*
+# <FirstStat> <SecondStat> <Multiplier> <Condition>
+TwoModifyMultiplier:
+    AddMapField: TwoModify: {1} {2}
+    AddMapField: ModifyMultiplier: {3-}
+*
 ModifyMultiplier:
     AddMapField: SimpleModifier: {1}
     AddMapField: CanModify: {2-}
 *
 CanModify:
     Header: boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp)
-    Body: return {0};
+    Body: 
+        return {0};
+        ###
 *
 TwoModify:
     Header: boolean isModifyStat(Stat s)
@@ -1069,8 +1086,7 @@ StatusContact:
     AddInterface: PhysicalContactEffect
 *
 SpeedWeather:
-    AddMapField: ToModify: Speed
-    AddMapField: ModifyMultiplier: 2 b.getWeather().namesies() == WeatherNamesies.{00}
+    AddMapField: ToModifyMultiplier: Speed 2 b.getWeather().namesies() == WeatherNamesies.{00}
 *
 WeatherStarter:
     AddInterface: EntryEffect
@@ -1173,8 +1189,7 @@ TypeTakeDamageStatIncrease:
     AddInterface: TakeDamageEffect
 *
 ChoiceItem:
-    AddMapField: ToModify: {0}
-    AddMapField: SimpleModifier: 1.5
+    AddMapField: SimpleToModify: {0} 1.5
     AddInterface: AttackSelectionEffect
     AddMapField: Usable:
         Move last = p.getLastMoveUsed();
@@ -1278,8 +1293,7 @@ PowerStat:
     Body:
         return Stat.{00};
         ###
-    AddMapField: ToModify: Speed
-    AddMapField: SimpleModifier: .5
+    AddMapField: SimpleToModify: Speed .5
     AddMapField: GetEVs:
         vals[powerStat().index()] += 4;
         return vals;

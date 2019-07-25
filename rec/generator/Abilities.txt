@@ -50,8 +50,7 @@ Shed Skin:
 *
 Compoundeyes:
     Desc: The Pok\u00e9mon's compound eyes boost its accuracy.
-    SimpleModifier: 1.3
-    ToModify: Accuracy
+    SimpleToModify: Accuracy 1.3
 *
 Tinted Lens:
     Desc: The Pok\u00e9mon can use \"not very effective\" moves to deal regular damage.
@@ -675,8 +674,7 @@ Snow Cloak:
 *
 Marvel Scale:
     Desc: The Pok\u00e9mon's marvelous scales boost the Defense stat if it has a status condition.
-    ToModify: Defense
-    ModifyMultiplier: 1.5 p.hasStatus()
+    ToModifyMultiplier: Defense 1.5 p.hasStatus()
 *
 Multiscale:
     Desc: Reduces the amount of damage the Pok\u00e9mon takes when its HP is full.
@@ -713,8 +711,7 @@ Hustle:
 *
 Huge Power:
     Desc: Doubles the Pok\u00e9mon's Attack stat.
-    ToModify: Attack
-    SimpleModifier: 2
+    SimpleToModify: Attack 2
 *
 Speed Boost:
     Desc: Its Speed stat is boosted every turn.
@@ -843,8 +840,7 @@ Stall:
 *
 Pure Power:
     Desc: Using its pure power, the Pok\u00e9mon doubles its Attack stat.
-    ToModify: Attack
-    SimpleModifier: 2
+    SimpleToModify: Attack 2
 *
 Rough Skin:
     Desc: This Pok\u00e9mon inflicts damage with its rough skin to the attacker on contact.
@@ -867,8 +863,7 @@ White Smoke:
 *
 Toxic Boost:
     Desc: Powers up physical attacks when the Pok\u00e9mon is poisoned.
-    ToModify: Attack
-    ModifyMultiplier: 1.5 p.hasStatus(StatusNamesies.POISONED)
+    ToModifyMultiplier: Attack 1.5 p.hasStatus(StatusNamesies.POISONED)
 *
 Anticipation:
     Desc: The Pok\u00e9mon can sense an opposing Pok\u00e9mon's dangerous moves.
@@ -933,8 +928,7 @@ Competitive:
 *
 Flower Gift:
     Desc: Boosts the Attack and Sp. Def stats of itself and allies when it is sunny.
-    TwoModify: Attack Sp_Defense
-    ModifyMultiplier: 1.5 b.getWeather().namesies() == WeatherNamesies.SUNNY
+    TwoModifyMultiplier: Attack Sp_Defense 1.5 b.getWeather().namesies() == WeatherNamesies.SUNNY
 *
 Aftermath:
     Desc: Damages the attacker if it contacts the Pok\u00e9mon with a finishing hit.
@@ -1003,8 +997,7 @@ Slow Start:
     Enter:
         count = 0;
         ###
-    TwoModify: Attack Speed
-    ModifyMultiplier: .5 count < 5
+    TwoModifyMultiplier: Attack Speed .5 count < 5
 *
 Bad Dreams:
     Desc: Reduces the HP of sleeping opposing Pok\u00e9mon.
@@ -1018,8 +1011,7 @@ Bad Dreams:
 *
 Victory Star:
     Desc: Boosts the accuracy of its allies and itself.
-    ToModify: Accuracy
-    SimpleModifier: 1.1
+    SimpleToModify: Accuracy 1.1
 *
 Contrary:
     Desc: Makes stat changes have an opposite effect.
@@ -1044,8 +1036,7 @@ Prankster:
 *
 Wonder Skin:
     Desc: Makes status moves more likely to miss.
-    ToModify: Evasion
-    ModifyMultiplier: 1.5 opp.getAttack().isStatusMove()
+    ToModifyMultiplier: Evasion 1.5 opp.getAttack().isStatusMove()
 *
 Mummy:
     Desc: Contact with the Pok\u00e9mon changes the attacker's Ability to Mummy.
@@ -1224,8 +1215,7 @@ Klutz:
 *
 Unburden:
     Desc: Boosts the Speed stat if the Pok\u00e9mon's held item is used or lost.
-    ToModify: Speed
-    ModifyMultiplier: 2 p.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM)
+    ToModifyMultiplier: Speed 2 p.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM)
 *
 Pickpocket:
     Int: PhysicalContactEffect
@@ -1459,18 +1449,15 @@ Stance Change:
 *
 Fur Coat:
     Desc: Halves the damage from physical moves onto this Pok\u00e9mon.
-    ToModify: Defense
-    SimpleModifier: 2
+    SimpleToModify: Defense 2
 *
 Grass Pelt:
     Desc: Boosts the Pok\u00e9mon's Defense stat in Grassy Terrain.
-    ToModify: Defense
-    ModifyMultiplier: 1.5 b.hasEffect(TerrainNamesies.GRASSY_TERRAIN)
+    ToModifyMultiplier: Defense 1.5 b.hasEffect(TerrainNamesies.GRASSY_TERRAIN)
 *
 Surge Surfer:
     Desc: Doubles the Pok\u00e9mon's Speed stat on Electric Terrain.
-    ToModify: Speed
-    ModifyMultiplier: 2 b.hasEffect(TerrainNamesies.ELECTRIC_TERRAIN)
+    ToModifyMultiplier: Speed 2 b.hasEffect(TerrainNamesies.ELECTRIC_TERRAIN)
 *
 Flower Veil:
     Desc: Grass-type Pok\u00e9mon are protected from status conditions and the lowering of their stats.

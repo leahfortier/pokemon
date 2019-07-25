@@ -106,8 +106,7 @@ Bright Powder:
     Desc: An item to be held by a Pok\u00e9mon. It casts a tricky glare that lowers the opposing Pok\u00e9mon's accuracy.
     Price: 4000
     Fling: 10
-    ToModify: Evasion
-    SimpleModifier: 1.1
+    SimpleToModify: Evasion 1.1
 *
 Cell Battery:
     Cat: Misc
@@ -255,8 +254,7 @@ Iron Ball:
     Desc: An item to be held by a Pok\u00e9mon. It lowers Speed and allows Ground-type moves to hit Flying-type and levitating holders.
     Price: 4000
     Fling: 130
-    ToModify: Speed
-    SimpleModifier: .5
+    SimpleToModify: Speed .5
     FlingEffect:
         // Technically the Iron Ball doesn't do this as a fling effect, but it almost makes sense so I'm doing it
         removeLevitation(b, pelted);
@@ -286,8 +284,7 @@ Light Ball:
     Cat: Misc
     Desc: An item to be held by Pikachu. It's a puzzling orb that boosts its Attack and Sp. Atk stats.
     Price: 1000
-    TwoModify: Attack Sp_Attack
-    ModifyMultiplier: 2 p.isPokemon(PokemonNamesies.PIKACHU)
+    TwoModifyMultiplier: Attack Sp_Attack 2 p.isPokemon(PokemonNamesies.PIKACHU)
     StatusFling: paralyzed
 *
 Light Clay:
@@ -334,8 +331,7 @@ Macho Brace:
 
         return vals;
         ###
-    ToModify: Speed
-    SimpleModifier: .5
+    SimpleToModify: Speed .5
 *
 Mental Herb:
     Int: HoldItem, EffectCurerItem
@@ -365,8 +361,7 @@ Metal Powder:
     Desc: An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Defense stat.
     Price: 1000
     Fling: 10
-    TwoModify: Defense Sp_Defense
-    ModifyMultiplier: 1.5 p.isPokemon(PokemonNamesies.DITTO)
+    TwoModifyMultiplier: Defense Sp_Defense 1.5 p.isPokemon(PokemonNamesies.DITTO)
 *
 Metronome:
     Int: HoldItem
@@ -427,8 +422,7 @@ Quick Powder:
     Desc: An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Speed stat.
     Price: 1000
     Fling: 10
-    ToModify: Speed
-    ModifyMultiplier: 1.5 p.isPokemon(PokemonNamesies.DITTO)
+    ToModifyMultiplier: Speed 1.5 p.isPokemon(PokemonNamesies.DITTO)
 *
 Red Card:
     Int: HoldItem, OpponentApplyDamageEffect
@@ -513,8 +507,7 @@ Soul Dew:
     Cat: Misc
     Desc: A wondrous orb to be held by either Latios or Latias. It raises the power of Psychic- and Dragon-type moves.
     Price: 4000
-    TwoModify: Sp_Attack Sp_Defense
-    ModifyMultiplier: 1.5 p.isPokemon(PokemonNamesies.LATIOS) || p.isPokemon(PokemonNamesies.LATIAS)
+    TwoModifyMultiplier: Sp_Attack Sp_Defense 1.5 p.isPokemon(PokemonNamesies.LATIOS) || p.isPokemon(PokemonNamesies.LATIAS)
     Comments: // I changed the price on my own because everything else was increasing like that and this said N/A
 *
 Stick:
@@ -557,8 +550,7 @@ Thick Club:
     Desc: An item to be held by Cubone or Marowak. It's a hard bone of some sort that boosts the Attack stat.
     Price: 1000
     Fling: 90
-    ToModify: Attack
-    ModifyMultiplier: 2 p.isPokemon(PokemonNamesies.CUBONE) || p.isPokemon(PokemonNamesies.MAROWAK)
+    ToModifyMultiplier: Attack 2 p.isPokemon(PokemonNamesies.CUBONE) || p.isPokemon(PokemonNamesies.MAROWAK)
 *
 Weakness Policy:
     Int: HoldItem, TakeDamageEffect
@@ -615,8 +607,7 @@ Wide Lens:
     Desc: An item to be held by a Pok\u00e9mon. It's a magnifying lens that slightly boosts the accuracy of moves.
     Price: 4000
     Fling: 10
-    ToModify: Accuracy
-    SimpleModifier: 1.1
+    SimpleToModify: Accuracy 1.1
 *
 Wise Glasses:
     Int: HoldItem
@@ -624,8 +615,7 @@ Wise Glasses:
     Desc: An item to be held by a Pok\u00e9mon. This thick pair of glasses slightly boosts the power of special moves.
     Price: 4000
     Fling: 10
-    ToModify: Sp_Attack
-    SimpleModifier: 1.1
+    SimpleToModify: Sp_Attack 1.1
 *
 Zoom Lens:
     Int: HoldItem
@@ -633,8 +623,7 @@ Zoom Lens:
     Desc: An item to be held by a Pok\u00e9mon. If the holder moves after its target moves, its accuracy will be boosted.
     Price: 4000
     Fling: 10
-    ToModify: Accuracy
-    ModifyMultiplier: 1.2 !b.isFirstAttack()
+    ToModifyMultiplier: Accuracy 1.2 !b.isFirstAttack()
 *
 Full Incense:
     Int: StallingEffect
@@ -645,9 +634,8 @@ Full Incense:
 Lax Incense:
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. The beguiling aroma of this incense may cause attacks to miss its holder.
-    ToModify: Evasion
+    SimpleToModify: Evasion 1.1
     Baby: Wynaut
-    SimpleModifier: 1.1
 *
 Luck Incense:
     Cat: Misc
@@ -958,8 +946,7 @@ Deep Sea Scale:
     Cat: Misc
     Desc: An item to be held by Clamperl, Chinchou, or Lanturn. This scale shines with a faint pink and raises the holder's Sp. Def stat.
     Price: 2000
-    ToModify: Sp_Defense
-    ModifyMultiplier: 2 p.isPokemon(PokemonNamesies.CLAMPERL) || p.isPokemon(PokemonNamesies.CHINCHOU) || p.isPokemon(PokemonNamesies.LANTURN)
+    ToModifyMultiplier: Sp_Defense 2 p.isPokemon(PokemonNamesies.CLAMPERL) || p.isPokemon(PokemonNamesies.CHINCHOU) || p.isPokemon(PokemonNamesies.LANTURN)
 *
 Deep Sea Tooth:
     Int: HoldItem, EvolutionItem
@@ -967,8 +954,7 @@ Deep Sea Tooth:
     Desc: An item to be held by Clamperl. This fang gleams a sharp silver and raises the holder's Sp. Atk stat.
     Price: 2000
     Fling: 90
-    ToModify: Sp_Attack
-    ModifyMultiplier: 2 p.isPokemon(PokemonNamesies.CLAMPERL)
+    ToModifyMultiplier: Sp_Attack 2 p.isPokemon(PokemonNamesies.CLAMPERL)
 *
 Dragon Scale:
     Int: HoldItem, EvolutionItem
@@ -2050,8 +2036,7 @@ Eviolite:
     Desc: A mysterious Evolutionary lump. When held by a Pok\u00e9mon that can still evolve, it raises both Defense and Sp. Def.
     Fling: 40
     Price: 4000
-    TwoModify: Defense Sp_Defense
-    ModifyMultiplier: 1.5 p.getPokemonInfo().getEvolution().canEvolve()
+    TwoModifyMultiplier: Defense Sp_Defense 1.5 p.getPokemonInfo().getEvolution().canEvolve()
 *
 Heart Scale:
     Int: HoldItem
@@ -2095,8 +2080,7 @@ Assault Vest:
     Price: 1000
     Cat: Misc
     Int: HoldItem, AttackSelectionEffect
-    ToModify: Sp_Defense
-    SimpleModifier: 1.5
+    SimpleToModify: Sp_Defense 1.5
     Usable:
         return !m.getAttack().isStatusMove();
         ###
