@@ -38,7 +38,6 @@ import battle.effect.InvokeInterfaces.ItemBlockerEffect;
 import battle.effect.InvokeInterfaces.LevitationEffect;
 import battle.effect.InvokeInterfaces.NoSwapEffect;
 import battle.effect.InvokeInterfaces.OpponentAccuracyBypassEffect;
-import battle.effect.InvokeInterfaces.OpponentTrappingEffect;
 import battle.effect.InvokeInterfaces.PowderBlocker;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.InvokeInterfaces.RapidSpinRelease;
@@ -1907,8 +1906,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent) {
-            Attack attack = user.getAttack();
-            if (!attack.isSelfTarget() && attack.isStatusMove() && !attack.isMoveType(MoveType.NO_MAGIC_COAT)) {
+            if (user.getAttack().isMagicReflectable()) {
                 Messages.add(opponent.getName() + "'s " + "Magic Coat" + " reflected " + user.getName() + "'s move!");
                 return true;
             }
@@ -2112,8 +2110,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent) {
-            Attack attack = user.getAttack();
-            if (attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.NON_SNATCHABLE)) {
+            if (user.getAttack().isSnatchable()) {
                 Messages.add(opponent.getName() + " snatched " + user.getName() + "'s move!");
                 return true;
             }
@@ -2224,25 +2221,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public HoldItem getItem() {
             return consumed;
-        }
-    }
-
-    static class FairyLock extends PokemonEffect implements OpponentTrappingEffect {
-        private static final long serialVersionUID = 1L;
-
-        FairyLock() {
-            super(PokemonEffectNamesies.FAIRY_LOCK, -1, -1, false, false);
-        }
-
-        @Override
-        public String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper) {
-            return escaper.getName() + " is trapped by the Fairy Lock!";
-        }
-
-        @Override
-        public boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
-            // TODO: This isn't right
-            return true;
         }
     }
 

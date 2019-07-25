@@ -23,7 +23,6 @@ import battle.effect.pokemon.PokemonEffect.Disable;
 import battle.effect.pokemon.PokemonEffect.EatenBerry;
 import battle.effect.pokemon.PokemonEffect.Embargo;
 import battle.effect.pokemon.PokemonEffect.Encore;
-import battle.effect.pokemon.PokemonEffect.FairyLock;
 import battle.effect.pokemon.PokemonEffect.FiddyPercentStronger;
 import battle.effect.pokemon.PokemonEffect.FireSpin;
 import battle.effect.pokemon.PokemonEffect.Flinch;
@@ -147,7 +146,6 @@ public enum PokemonEffectNamesies implements EffectNamesies {
     PERISH_SONG(PerishSong::new),
     EMBARGO(Embargo::new),
     CONSUMED_ITEM(ConsumedItem::new),
-    FAIRY_LOCK(FairyLock::new),
     POWDER(Powder::new),
     EATEN_BERRY(EatenBerry::new),
     BREAKS_THE_MOLD(BreaksTheMold::new),

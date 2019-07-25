@@ -177,10 +177,15 @@ public class ScriptTest extends BaseTest {
                     Assert.assertEquals(false, protecty);
                     protecty = true;
                     break;
+                case FAIRY_LOCK:
+                    Assert.assertEquals(false, magicBouncy);
+                    Assert.assertEquals(false, protecty);
+                    magicBouncy = true;
+                    protecty = true;
+                    break;
                 case WONDER_ROOM:
                 case TRICK_ROOM:
                 case MAGIC_ROOM:
-                case FAIRY_LOCK:
                     // This makes no sense I reign supreme
                     Assert.assertEquals(true, mirrorMovey);
                     mirrorMovey = false;
@@ -242,9 +247,9 @@ public class ScriptTest extends BaseTest {
                     break;
             }
 
-            Assert.assertEquals(attack.getName(), snatchable, attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.NON_SNATCHABLE));
-            Assert.assertEquals(attack.getName(), magicBouncy, !attack.isSelfTarget() && attack.isStatusMove() && !attack.isMoveType(MoveType.NO_MAGIC_COAT));
-            Assert.assertEquals(attack.getName(), protecty, !attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.PROTECT_PIERCING));
+            Assert.assertEquals(attack.getName(), snatchable, attack.isSnatchable());
+            Assert.assertEquals(attack.getName(), magicBouncy, attack.isMagicReflectable());
+            Assert.assertEquals(attack.getName(), protecty, attack.isProtectAffected());
             Assert.assertEquals(attack.getName(), mirrorMovey, !attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.MIRRORLESS));
 
             toParse.remove(attackNamesies);
@@ -509,18 +514,14 @@ public class ScriptTest extends BaseTest {
             checkFlag(
                     namesies, moveParser, "mirror",
                     !attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.MIRRORLESS),
-                    AttackNamesies.IMPRISON, AttackNamesies.PSYCH_UP, AttackNamesies.HEAL_PULSE
+                    AttackNamesies.IMPRISON, AttackNamesies.PSYCH_UP, AttackNamesies.HEAL_PULSE, AttackNamesies.FAIRY_LOCK
             );
 
             // powder: Has no effect on Grass-type Pokemon, Pokemon with the Ability Overcoat, and Pokemon holding Safety Goggles.
             checkFlag(namesies, moveParser, "powder", attack instanceof PowderMove);
 
             // protect: Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
-            checkFlag(
-                    namesies, moveParser, "protect",
-                    !attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.PROTECT_PIERCING),
-                    AttackNamesies.MEAN_LOOK, AttackNamesies.BLOCK, AttackNamesies.BESTOW
-            );
+            checkFlag(namesies, moveParser, "protect", attack.isProtectAffected(), AttackNamesies.MEAN_LOOK, AttackNamesies.BLOCK, AttackNamesies.FAIRY_LOCK, AttackNamesies.BESTOW);
 
             // pulse: Power is multiplied by 1.5 when used by a Pokemon with the Ability Mega Launcher.
             checkFlag(namesies, moveParser, "pulse", MoveType.AURA_PULSE);
@@ -533,18 +534,10 @@ public class ScriptTest extends BaseTest {
             checkFlag(namesies, moveParser, "recharge", attack instanceof RechargingMove);
 
             // reflectable: Bounced back to the original user by Magic Coat or the Ability Magic Bounce.
-            checkFlag(
-                    namesies, moveParser, "reflectable",
-                    !attack.isSelfTarget() && attack.isStatusMove() && !attack.isMoveType(MoveType.NO_MAGIC_COAT),
-                    AttackNamesies.IMPRISON, AttackNamesies.TEETER_DANCE
-            );
+            checkFlag(namesies, moveParser, "reflectable", attack.isMagicReflectable(), AttackNamesies.IMPRISON, AttackNamesies.TEETER_DANCE, AttackNamesies.FAIRY_LOCK);
 
             // snatch: Can be stolen from the original user and instead used by another Pokemon using Snatch.
-            checkFlag(
-                    namesies, moveParser, "snatch",
-                    attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.NON_SNATCHABLE),
-                    AttackNamesies.ACUPRESSURE, AttackNamesies.AROMATIC_MIST, AttackNamesies.FLOWER_SHIELD, AttackNamesies.ROTOTILLER, AttackNamesies.FLORAL_HEALING, AttackNamesies.PURIFY
-            );
+            checkFlag(namesies, moveParser, "snatch", attack.isSnatchable(), AttackNamesies.ACUPRESSURE, AttackNamesies.AROMATIC_MIST, AttackNamesies.FLOWER_SHIELD, AttackNamesies.ROTOTILLER, AttackNamesies.FLORAL_HEALING, AttackNamesies.PURIFY);
 
             // sound: Has no effect on Pokemon with the Ability Soundproof.
             checkFlag(namesies, moveParser, "sound", MoveType.SOUND_BASED);
@@ -651,6 +644,8 @@ public class ScriptTest extends BaseTest {
                     || namesies == AttackNamesies.METRONOME
                     || namesies == AttackNamesies.SLEEP_TALK
                     || namesies == AttackNamesies.ASSIST
+                    || namesies == AttackNamesies.FAIRY_LOCK
+                    || namesies == AttackNamesies.PERISH_SONG
                     || namesies == AttackNamesies.IMPRISON) {
                 Assert.assertFalse(message, attack.isSelfTarget());
             } else {
@@ -673,7 +668,7 @@ public class ScriptTest extends BaseTest {
                         Assert.assertTrue(message, attack.isSelfTarget());
                         break;
                     case "all":
-                        Assert.assertTrue(message, attack.isMoveType(MoveType.FIELD) || attack.isSelfTarget() || namesies == AttackNamesies.PERISH_SONG);
+                        Assert.assertTrue(message, attack.isMoveType(MoveType.FIELD) || attack.isSelfTarget());
                         break;
                     default:
                         Assert.fail(message + " Unknown target " + moveParser.target);
@@ -919,6 +914,8 @@ public class ScriptTest extends BaseTest {
                 return "hailing";
             case "rage":
                 return "raging";
+            case "fairylock":
+                return "trapped";
         }
 
         return volatileStatus;

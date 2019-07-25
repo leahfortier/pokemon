@@ -902,8 +902,7 @@ Snatch:
     NumTurns: 1
     Int: TargetSwapperEffect
     TargetSwap:
-        Attack attack = user.getAttack();
-        if (attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.NON_SNATCHABLE)) {
+        if (user.getAttack().isSnatchable()) {
             Messages.add(opponent.getName() + " snatched " + user.getName() + "'s move!");
             return true;
         }
@@ -961,15 +960,6 @@ ConsumedItem:
         return consumed;
         ###
     CanHave: True
-*
-FairyLock:
-    OppTrappingMessage:
-        return escaper.getName() + " is trapped by the Fairy Lock!";
-        ###
-    OppTrapped:
-        // TODO: This isn't right
-        return true;
-        ###
 *
 Powder:
     NumTurns: 1

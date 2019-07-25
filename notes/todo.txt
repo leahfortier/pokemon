@@ -65,22 +65,23 @@ Names that go out of bounds:
 
 Descriptions that change manually:
     Moves:
-        Sky Drop
-        Flower Shield
-        Rototiller
-        Magnetic Flux
-        Gear Up
-        Pollen Puff
-        Aromatic Mist
+        Sky Drop (Remove 'The target cannot attack while in the sky.')
+        Flower Shield ('The Defense stat of all Grass-type Pokémon in battle' -> 'its Defense stat')
+        Rototiller ('the Attack and Sp. Atk stats of Grass-type Pokémon' -> 'its Attack and Sp. Atk stats')
+        Magnetic Flux ('the Defense and Sp. Def stats of ally Pokémon with the Plus or Minus Ability' -> 'its Defense and Sp. Def stats')
+        Gear Up ('the Attack and Sp. Atk stats of ally Pokémon with the Plus or Minus Ability' -> 'its Attack and Sp. Atk stats')
+        Pollen Puff (Remove 'If the target is an ally, it gives the ally a pollen puff that restores its HP instead.')
+        Aromatic Mist ('the Sp. Def stat of an ally Pokémon' -> 'its Sp. Def stat')
+        Fairy Lock (Remove 'during the last turn')
     Abilities:
-        Healer
-        Flower Veil
+        Healer ('an ally's' -> 'its')
+        Flower Veil (Remove 'Ally')
     Items:
         Fishing Rod
-        Deep Sea Scale
-        Safari Ball (if it references some rando place)
+        Deep Sea Scale (Added ', Chinchou, or Lanturn' -- Lanturn rules and deserves this)
+        Safari Ball (If it references some rando place)
         Razz Berry
-        All the EV Decreasing Berries (like Pomeg Berry)
+        All the EV Decreasing Berries (Ex: Pomeg Berry) (Remove 'makes it more friendly but')
         
 Other random things:
     Options menu:
@@ -141,7 +142,6 @@ Other random things:
     uproar specifically checks if pp runs out to remove effect -- should that be for other similar moves too?
     remove effect inside subside -- then we can use it in more places
     substitute almost certainly doesn't work with form change abilities for images at least
-    fairy lock looks like it lasts indefinitely? but it should only be one turn?
     make Marcos fix the substitute failure messaging problems I don't wanna do it
     does using a berry (not hold item) not count as berry consumption??
     probably have something to automatically remove previous effect if there can only be one (ChangeAbility etc)
@@ -150,4 +150,5 @@ Other random things:
     is there some way to have like a FirstTriggeredCondition or something for things like items and a lot of other shit
     is there a way to just create the button transitions from the button list by using all the button locations or something like that??
     Al Bhed translation shouldn't be hardcoded -- just a flag on the area or something
-    
+    test rest + Insomnia
+    test transformed + pokemon specific effects (Light Ball/Dark Void etc)

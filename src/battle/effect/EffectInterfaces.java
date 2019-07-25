@@ -2,9 +2,7 @@ package battle.effect;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.attack.Attack;
 import battle.attack.AttackInterface;
-import battle.attack.MoveType;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
@@ -144,8 +142,7 @@ public final class EffectInterfaces {
 
         @Override
         default boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Attack attack = user.getAttack();
-            return protectingCondition(b, user) && !attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.PROTECT_PIERCING);
+            return protectingCondition(b, user) && user.getAttack().isProtectAffected();
         }
 
         @Override

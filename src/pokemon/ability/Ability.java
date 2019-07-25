@@ -1957,8 +1957,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent) {
-            Attack attack = user.getAttack();
-            if (!attack.isSelfTarget() && attack.isStatusMove() && !attack.isMoveType(MoveType.NO_MAGIC_COAT)) {
+            if (user.getAttack().isMagicReflectable()) {
                 Messages.add(opponent.getName() + "'s " + this.getName() + " reflected " + user.getName() + "'s move!");
                 return true;
             }

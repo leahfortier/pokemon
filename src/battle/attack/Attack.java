@@ -392,6 +392,21 @@ public abstract class Attack implements AttackInterface {
         return this.printCast;
     }
 
+    // Returns true if this move can be Snatched
+    public final boolean isSnatchable() {
+        return this.isSelfTargetStatusMove() && !this.isMoveType(MoveType.NON_SNATCHABLE);
+    }
+
+    // Returns true if this move can be reflected by Magic Coat/Magic Bounce
+    public final boolean isMagicReflectable() {
+        return !this.isSelfTarget() && this.isStatusMove() && !this.isMoveType(MoveType.NO_MAGIC_COAT);
+    }
+
+    // Returns true if affected by Protect-like moves
+    public final boolean isProtectAffected() {
+        return !this.isSelfTargetStatusMove() && !this.isMoveType(MoveType.FIELD) && !this.isMoveType(MoveType.PROTECT_PIERCING);
+    }
+
     // To be overridden if necessary
     public void startTurn(Battle b, ActivePokemon me) {}
 
@@ -9989,14 +10004,13 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
+    // Note: Changed to work for the remainder of combat and not just the following turn
     static class FairyLock extends Attack {
         private static final long serialVersionUID = 1L;
 
         FairyLock() {
-            super(AttackNamesies.FAIRY_LOCK, Type.FAIRY, MoveCategory.STATUS, 10, "By locking down the battlefield, the user keeps all Pok\u00e9mon from fleeing during the next turn.");
-            super.effect = PokemonEffectNamesies.FAIRY_LOCK;
-            super.moveTypes.add(MoveType.NON_SNATCHABLE);
-            super.selfTarget = true;
+            super(AttackNamesies.FAIRY_LOCK, Type.FAIRY, MoveCategory.STATUS, 10, "By locking down the battlefield, the user keeps all Pok\u00e9mon from fleeing.");
+            super.effect = PokemonEffectNamesies.TRAPPED;
         }
     }
 
