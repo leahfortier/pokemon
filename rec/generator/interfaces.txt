@@ -140,7 +140,7 @@ CrashDamageMove:
     *
 ***
 BarrierEffect:
-    Extends: EffectInterface
+    Extends: EffectInterface, SimpleStatModifyingEffect
     Method:
         Header: String getBreakMessage(ActivePokemon breaker)
     *
@@ -153,6 +153,20 @@ BarrierEffect:
         Default:
             Messages.add(this.getBreakMessage(breaker));
             this.deactivate();
+            ###
+    *
+    Method:
+        Header: boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp)
+        Override: True
+        Default:
+            return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
+            ###
+    *
+    Method:
+        Header: double getModifier()
+        Override: True
+        Default:
+            return 2;
             ###
     *
 ***

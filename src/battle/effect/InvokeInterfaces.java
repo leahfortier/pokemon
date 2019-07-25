@@ -8,6 +8,7 @@ import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.EffectInterfaces.EntryEndTurnEffect;
 import battle.effect.EffectInterfaces.PowderMove;
+import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.battle.BattleEffect;
@@ -25,6 +26,7 @@ import map.overworld.wild.WildEncounterInfo;
 import message.Messages;
 import pokemon.Stat;
 import pokemon.ability.Ability;
+import pokemon.ability.AbilityNamesies;
 import pokemon.active.MoveList;
 import trainer.Trainer;
 import type.PokeType;
@@ -259,12 +261,22 @@ public final class InvokeInterfaces {
         }
     }
 
-    public interface BarrierEffect extends EffectInterface {
+    public interface BarrierEffect extends EffectInterface, SimpleStatModifyingEffect {
         String getBreakMessage(ActivePokemon breaker);
 
         default void breakBarrier(ActivePokemon breaker) {
             Messages.add(this.getBreakMessage(breaker));
             this.deactivate();
+        }
+
+        @Override
+        default boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
+        }
+
+        @Override
+        default double getModifier() {
+            return 2;
         }
 
         static void breakBarriers(Battle b, ActivePokemon broken, ActivePokemon breaker) {

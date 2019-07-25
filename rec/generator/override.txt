@@ -498,7 +498,6 @@ SimpleBarrier:
 *
 Barrier:
     AddMapField: NumTurns: 5
-    AddMapField: ModifyMultiplier: 2 !opp.hasAbility(AbilityNamesies.INFILTRATOR)
     AddMapField: SubsideMessage: "The effects of {0} faded."
     AddMapField: Defog: "The effects of {0} faded."
     AddInterface: BarrierEffect

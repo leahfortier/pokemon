@@ -55,7 +55,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/
 
-    static class Reflect extends TeamEffect implements BarrierEffect, DefogRelease, SimpleStatModifyingEffect {
+    static class Reflect extends TeamEffect implements BarrierEffect, DefogRelease {
         private static final long serialVersionUID = 1L;
 
         Reflect() {
@@ -86,19 +86,9 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         public String getDefogReleaseMessage(ActivePokemon released) {
             return "The effects of reflect faded.";
         }
-
-        @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
-        }
-
-        @Override
-        public double getModifier() {
-            return 2;
-        }
     }
 
-    static class LightScreen extends TeamEffect implements BarrierEffect, DefogRelease, SimpleStatModifyingEffect {
+    static class LightScreen extends TeamEffect implements BarrierEffect, DefogRelease {
         private static final long serialVersionUID = 1L;
 
         LightScreen() {
@@ -128,16 +118,6 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         @Override
         public String getDefogReleaseMessage(ActivePokemon released) {
             return "The effects of light screen faded.";
-        }
-
-        @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
-        }
-
-        @Override
-        public double getModifier() {
-            return 2;
         }
     }
 
@@ -169,7 +149,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
     }
 
-    static class AuroraVeil extends TeamEffect implements BarrierEffect, DefogRelease, SimpleStatModifyingEffect {
+    static class AuroraVeil extends TeamEffect implements BarrierEffect, DefogRelease {
         private static final long serialVersionUID = 1L;
 
         AuroraVeil() {
@@ -199,16 +179,6 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         @Override
         public String getDefogReleaseMessage(ActivePokemon released) {
             return "The effects of aurora veil faded.";
-        }
-
-        @Override
-        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
-        }
-
-        @Override
-        public double getModifier() {
-            return 2;
         }
     }
 
