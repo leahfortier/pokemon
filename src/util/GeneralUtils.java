@@ -192,4 +192,10 @@ public final class GeneralUtils {
     public static int getTotalPages(int totalItems, int itemsPerPage) {
         return Math.max(1, (int)Math.ceil((double)totalItems/itemsPerPage));
     }
+
+    // Returns the estimated number of trials needed to get all n objects with probability 1/n
+    // with confidence p (between 0 and 1)
+    public static int numTrials(double p, int n) {
+        return (int)Math.ceil(-n * Math.log((1 - p)/n));
+    }
 }

@@ -27,6 +27,7 @@ import test.TestPokemon;
 import test.TestUtils;
 import trainer.Team;
 import type.Type;
+import util.GeneralUtils;
 
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -297,7 +298,10 @@ public class AttackTest extends BaseTest {
         boolean acupressureAlwaysSame = true;
         boolean[] acupressureStats = new boolean[Stat.NUM_BATTLE_STATS];
 
-        for (int i = 0; i < 1000; i++) {
+        // n = 15 for Tri-Attack because 20%
+        int numTrials = GeneralUtils.numTrials(.99, 15);
+        Assert.assertEquals(110, numTrials);
+        for (int i = 0; i < numTrials; i++) {
             TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
             TestPokemon attacking = battle.getAttacking();
             TestPokemon defending = battle.getDefending();
