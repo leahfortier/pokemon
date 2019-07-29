@@ -51,7 +51,7 @@ public class AbilityTest extends BaseTest {
 
         // Status move should work
         wonderGuardTest(AttackNamesies.DRAGON_DANCE, emptyInfo, (battle, attacking, defending) -> {
-            attacking.assertStages(new TestStages().set(Stat.ATTACK, 1).set(Stat.SPEED, 1));
+            attacking.assertStages(new TestStages().set(1, Stat.ATTACK, Stat.SPEED));
             defending.assertNoStages();
             defending.assertFullHealth();
         });
@@ -233,8 +233,8 @@ public class AbilityTest extends BaseTest {
 
         // Contrary Pokemon will have their stat increased when it should be decreased
         battle.fight(AttackNamesies.STRING_SHOT, AttackNamesies.STRING_SHOT);
-        attacking.assertStages(new TestStages().set(Stat.SPEED, -2));
-        defending.assertStages(new TestStages().set(Stat.SPEED, 2));
+        attacking.assertStages(new TestStages().set(-2, Stat.SPEED));
+        defending.assertStages(new TestStages().set(2, Stat.SPEED));
 
         // Will also decrease their stat when it should be increased
         battle.fight(AttackNamesies.AGILITY, AttackNamesies.AGILITY);
@@ -242,16 +242,10 @@ public class AbilityTest extends BaseTest {
         defending.assertNoStages();
 
         battle.fight(AttackNamesies.SHELL_SMASH, AttackNamesies.SHELL_SMASH);
-        attacking.assertStages(new TestStages().set(Stat.ATTACK, 2)
-                                               .set(Stat.SP_ATTACK, 2)
-                                               .set(Stat.SPEED, 2)
-                                               .set(Stat.DEFENSE, -1)
-                                               .set(Stat.SP_DEFENSE, -1));
-        defending.assertStages(new TestStages().set(Stat.ATTACK, -2)
-                                               .set(Stat.SP_ATTACK, -2)
-                                               .set(Stat.SPEED, -2)
-                                               .set(Stat.DEFENSE, 1)
-                                               .set(Stat.SP_DEFENSE, 1));
+        attacking.assertStages(new TestStages().set(2, Stat.ATTACK, Stat.SP_ATTACK, Stat.SPEED)
+                                               .set(-1, Stat.DEFENSE, Stat.SP_DEFENSE));
+        defending.assertStages(new TestStages().set(-2, Stat.ATTACK, Stat.SP_ATTACK, Stat.SPEED)
+                                               .set(1, Stat.DEFENSE, Stat.SP_DEFENSE));
 
         battle.attackingFight(AttackNamesies.HAZE);
         attacking.assertNoStages();
@@ -260,8 +254,8 @@ public class AbilityTest extends BaseTest {
         // Contrary is affected by Mold Breaker
         attacking.withAbility(AbilityNamesies.MOLD_BREAKER);
         battle.fight(AttackNamesies.STRING_SHOT, AttackNamesies.STRING_SHOT);
-        attacking.assertStages(new TestStages().set(Stat.SPEED, -2));
-        defending.assertStages(new TestStages().set(Stat.SPEED, -2));
+        attacking.assertStages(new TestStages().set(-2, Stat.SPEED));
+        defending.assertStages(new TestStages().set(-2, Stat.SPEED));
 
         // Reset stages and remove Mold Breaker
         battle.fight(AttackNamesies.HAZE, AttackNamesies.GASTRO_ACID);
@@ -274,14 +268,14 @@ public class AbilityTest extends BaseTest {
         // String shot is no longer a reduction, so it works
         battle.attackingFight(AttackNamesies.STRING_SHOT);
         attacking.assertNoStages();
-        defending.assertStages(new TestStages().set(Stat.SPEED, 2));
+        defending.assertStages(new TestStages().set(2, Stat.SPEED));
 
         // Swagger is now a reduction, so it fails to raise/lower attack, but still confuses
         // Persim Berry heals confusion -- it should be consumed (since I don't wanna deal with confusion in tests)
         defending.giveItem(ItemNamesies.PERSIM_BERRY);
         battle.attackingFight(AttackNamesies.SWAGGER);
         attacking.assertNoStages();
-        defending.assertStages(new TestStages().set(Stat.SPEED, 2));
+        defending.assertStages(new TestStages().set(2, Stat.SPEED));
         defending.assertNoEffect(PokemonEffectNamesies.CONFUSION);
         defending.assertConsumedBerry(battle);
 
@@ -292,8 +286,8 @@ public class AbilityTest extends BaseTest {
         defending.assertNoStages();
 
         battle.fight(AttackNamesies.STRING_SHOT, AttackNamesies.STRING_SHOT);
-        attacking.assertStages(new TestStages().set(Stat.SPEED, -4));
-        defending.assertStages(new TestStages().set(Stat.SPEED, 2));
+        attacking.assertStages(new TestStages().set(-4, Stat.SPEED));
+        defending.assertStages(new TestStages().set(2, Stat.SPEED));
 
         battle.attackingFight(AttackNamesies.HAZE);
         attacking.assertNoStages();
@@ -301,8 +295,8 @@ public class AbilityTest extends BaseTest {
 
         // Belly Drum sets attack stage to -6 instead of +6
         battle.fight(AttackNamesies.BELLY_DRUM, AttackNamesies.BELLY_DRUM);
-        attacking.assertStages(new TestStages().set(Stat.ATTACK, 6));
-        defending.assertStages(new TestStages().set(Stat.ATTACK, -6));
+        attacking.assertStages(new TestStages().set(6, Stat.ATTACK));
+        defending.assertStages(new TestStages().set(-6, Stat.ATTACK));
         attacking.assertHealthRatio(.5);
         defending.assertHealthRatio(.5);
 
@@ -313,8 +307,8 @@ public class AbilityTest extends BaseTest {
         Assert.assertTrue(defending.lastMoveSucceeded());
         attacking.assertHealthRatio(1);
         defending.assertHealthRatio(.5);
-        attacking.assertStages(new TestStages().set(Stat.ATTACK, 6));
-        defending.assertStages(new TestStages().set(Stat.ATTACK, -6));
+        attacking.assertStages(new TestStages().set(6, Stat.ATTACK));
+        defending.assertStages(new TestStages().set(-6, Stat.ATTACK));
 
         battle.clearAllEffects();
         attacking.withAbility(AbilityNamesies.STURDY);
@@ -322,19 +316,19 @@ public class AbilityTest extends BaseTest {
 
         // Leaf Storm is a damage dealing move that also decreases the user's Sp. Attack UNLESS YOU HAVE CONTRARY
         battle.fight(AttackNamesies.LEAF_STORM, AttackNamesies.LEAF_STORM);
-        attacking.assertStages(new TestStages().set(Stat.SP_ATTACK, -2));
-        defending.assertStages(new TestStages().set(Stat.SP_ATTACK, 2));
+        attacking.assertStages(new TestStages().set(-2, Stat.SP_ATTACK));
+        defending.assertStages(new TestStages().set(2, Stat.SP_ATTACK));
 
         battle.fight(AttackNamesies.SWORDS_DANCE, AttackNamesies.SWORDS_DANCE);
-        attacking.assertStages(new TestStages().set(Stat.ATTACK, 2).set(Stat.SP_ATTACK, -2));
-        defending.assertStages(new TestStages().set(Stat.ATTACK, -2).set(Stat.SP_ATTACK, 2));
+        attacking.assertStages(new TestStages().set(2, Stat.ATTACK).set(-2, Stat.SP_ATTACK));
+        defending.assertStages(new TestStages().set(-2, Stat.ATTACK).set(2, Stat.SP_ATTACK));
 
         // Gaining/Losing Contrary does not affect your current stages
         battle.defendingFight(AttackNamesies.SKILL_SWAP);
         Assert.assertTrue(attacking.hasAbility(AbilityNamesies.CONTRARY));
         Assert.assertFalse(defending.hasAbility(AbilityNamesies.CONTRARY));
-        attacking.assertStages(new TestStages().set(Stat.ATTACK, 2).set(Stat.SP_ATTACK, -2));
-        defending.assertStages(new TestStages().set(Stat.ATTACK, -2).set(Stat.SP_ATTACK, 2));
+        attacking.assertStages(new TestStages().set(2, Stat.ATTACK).set(-2, Stat.SP_ATTACK));
+        defending.assertStages(new TestStages().set(-2, Stat.ATTACK).set(2, Stat.SP_ATTACK));
     }
 
     @Test
@@ -343,14 +337,14 @@ public class AbilityTest extends BaseTest {
         sheerForceSuccessTest(
                 AttackNamesies.MYSTICAL_FIRE,
                 (battle, attacking, defending) -> defending.assertNoStages(),
-                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(Stat.SP_ATTACK, -1))
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-1, Stat.SP_ATTACK))
         );
 
         // Power-Up Punch has a 100% chance to raise the user's Attack
         sheerForceSuccessTest(
                 AttackNamesies.POWER_UP_PUNCH,
                 (battle, attacking, defending) -> attacking.assertNoStages(),
-                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(Stat.ATTACK, 1))
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(1, Stat.ATTACK))
         );
 
         // Dynamic Punch has a 100% chance to confuse the target
@@ -390,7 +384,7 @@ public class AbilityTest extends BaseTest {
         sheerForceFailureTest(AttackNamesies.OUTRAGE, PokemonManipulator.empty());
         sheerForceFailureTest(
                 AttackNamesies.OVERHEAT,
-                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(Stat.SP_ATTACK, -2))
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-2, Stat.SP_ATTACK))
         );
     }
 
@@ -434,7 +428,7 @@ public class AbilityTest extends BaseTest {
         // Steadfast is not affected by mold breaker
         battle.fight(AttackNamesies.FAKE_OUT, AttackNamesies.TACKLE);
         attacking.assertNoStages();
-        defending.assertStages(new TestStages().set(Stat.SPEED, 1));
+        defending.assertStages(new TestStages().set(1, Stat.SPEED));
         attacking.assertFullHealth();
         defending.assertNotFullHealth();
 
@@ -443,14 +437,14 @@ public class AbilityTest extends BaseTest {
         // Fake out will fail the second time
         battle.fight(AttackNamesies.FAKE_OUT, AttackNamesies.TACKLE);
         attacking.assertNoStages();
-        defending.assertStages(new TestStages().set(Stat.SPEED, 1));
+        defending.assertStages(new TestStages().set(1, Stat.SPEED));
         attacking.assertNotFullHealth();
         defending.assertFullHealth();
 
         // Make sure speed doesn't raise from other effects
         battle.attackingFight(AttackNamesies.CONFUSE_RAY);
         attacking.assertNoStages();
-        defending.assertStages(new TestStages().set(Stat.SPEED, 1));
+        defending.assertStages(new TestStages().set(1, Stat.SPEED));
     }
 
     @Test
@@ -585,7 +579,7 @@ public class AbilityTest extends BaseTest {
         defending.withItem(ItemNamesies.CELL_BATTERY);
         battle.fight(AttackNamesies.NUZZLE, AttackNamesies.SUNNY_DAY);
         attacking.assertNoStages();
-        defending.assertStages(new TestStages().set(Stat.ATTACK, 1));
+        defending.assertStages(new TestStages().set(1, Stat.ATTACK));
         defending.assertConsumedItem(battle);
 
         battle.emptyHeal();
@@ -629,7 +623,7 @@ public class AbilityTest extends BaseTest {
         assertStanceChangeForm(false, battle, defending);
         attacking.assertFullHealth();
         defending.assertFullHealth();
-        attacking.assertStages(new TestStages().set(Stat.SPEED, -2));
+        attacking.assertStages(new TestStages().set(-2, Stat.SPEED));
         defending.assertNoStages();
 
         // King's Shield has priority and revert to Shield Forme as well as protect from Absorb
@@ -639,7 +633,7 @@ public class AbilityTest extends BaseTest {
         assertStanceChangeForm(true, battle, defending);
         attacking.assertFullHealth();
         defending.assertFullHealth();
-        attacking.assertStages(new TestStages().set(Stat.SPEED, -2));
+        attacking.assertStages(new TestStages().set(-2, Stat.SPEED));
         defending.assertNoStages();
 
         // Peck will make contact and reduce defending's attack by 2
@@ -648,8 +642,8 @@ public class AbilityTest extends BaseTest {
         assertStanceChangeForm(false, battle, defending);
         attacking.assertFullHealth();
         defending.assertFullHealth();
-        attacking.assertStages(new TestStages().set(Stat.SPEED, -2));
-        defending.assertStages(new TestStages().set(Stat.ATTACK, -2));
+        attacking.assertStages(new TestStages().set(-2, Stat.SPEED));
+        defending.assertStages(new TestStages().set(-2, Stat.ATTACK));
     }
 
     private void assertStanceChangeForm(boolean shieldForm, TestBattle battle, TestPokemon stanceChanger) {
@@ -668,13 +662,13 @@ public class AbilityTest extends BaseTest {
 
         // Does not trigger if only the attacker is the dancer
         battle.attackingFight(AttackNamesies.SWORDS_DANCE);
-        attacking.assertStages(new TestStages().set(Stat.ATTACK, 2));
+        attacking.assertStages(new TestStages().set(2, Stat.ATTACK));
         defending.assertNoStages();
 
         // Defending will user Swords Dance and then attacking will repeat using dancer
         battle.defendingFight(AttackNamesies.SWORDS_DANCE);
-        attacking.assertStages(new TestStages().set(Stat.ATTACK, 4));
-        defending.assertStages(new TestStages().set(Stat.ATTACK, 2));
+        attacking.assertStages(new TestStages().set(4, Stat.ATTACK));
+        defending.assertStages(new TestStages().set(2, Stat.ATTACK));
 
         battle.clearAllEffects();
         attacking.assertNoStages();
@@ -683,8 +677,8 @@ public class AbilityTest extends BaseTest {
         // When both have Dancer they do not continuously dance forever
         defending.withAbility(AbilityNamesies.DANCER);
         battle.attackingFight(AttackNamesies.SWORDS_DANCE);
-        attacking.assertStages(new TestStages().set(Stat.ATTACK, 2));
-        defending.assertStages(new TestStages().set(Stat.ATTACK, 2));
+        attacking.assertStages(new TestStages().set(2, Stat.ATTACK));
+        defending.assertStages(new TestStages().set(2, Stat.ATTACK));
 
         // Revelation Dance will fail (electric against ground) so it will not be repeated in the dance
         battle.attackingFight(AttackNamesies.REVELATION_DANCE);
@@ -700,7 +694,7 @@ public class AbilityTest extends BaseTest {
         // but it will NOT count as the opponent using a dance move
         defending.withAbility(AbilityNamesies.MAGIC_BOUNCE);
         battle.attackingFight(AttackNamesies.FEATHER_DANCE);
-        attacking.assertStages(new TestStages().set(Stat.ATTACK, -2));
+        attacking.assertStages(new TestStages().set(-2, Stat.ATTACK));
         defending.assertNoStages();
 
         battle.attackingFight(AttackNamesies.SWORDS_DANCE);
@@ -711,7 +705,7 @@ public class AbilityTest extends BaseTest {
         // Dancer will then copy Feather Dance
         // Magic Bounce will then reflect that
         battle.defendingFight(AttackNamesies.FEATHER_DANCE);
-        attacking.assertStages(new TestStages().set(Stat.ATTACK, -4));
+        attacking.assertStages(new TestStages().set(-4, Stat.ATTACK));
         defending.assertNoStages();
 
         battle.clearAllEffects();
@@ -722,7 +716,7 @@ public class AbilityTest extends BaseTest {
         battle.defendingFight(AttackNamesies.SWORDS_DANCE);
         attacking.assertHasEffect(PokemonEffectNamesies.TAUNT);
         attacking.assertNoStages();
-        defending.assertStages(new TestStages().set(Stat.ATTACK, 2));
+        defending.assertStages(new TestStages().set(2, Stat.ATTACK));
 
         battle.clearAllEffects();
 
@@ -732,7 +726,7 @@ public class AbilityTest extends BaseTest {
         // Dancer will then copy Swords Dance
         // Note: I don't think this is actually the intended behavior
         battle.fight(AttackNamesies.SNATCH, AttackNamesies.SWORDS_DANCE);
-        attacking.assertStages(new TestStages().set(Stat.ATTACK, 4));
+        attacking.assertStages(new TestStages().set(4, Stat.ATTACK));
         defending.assertNoStages();
 
         // TODO: Petal Dance and Lunar Dance
@@ -825,7 +819,7 @@ public class AbilityTest extends BaseTest {
                     attacking.assertFullHealth();
                     defending.assertHealthRatio(.5);
                     attacking.assertNoStages();
-                    defending.assertStages(new TestStages().set(Stat.ATTACK, Stat.MAX_STAT_CHANGES));
+                    defending.assertStages(new TestStages().set(Stat.MAX_STAT_CHANGES, Stat.ATTACK));
                 }
         );
 

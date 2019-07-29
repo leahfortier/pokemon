@@ -121,13 +121,17 @@ public class UpdateGen {
                         "\\)"
         );
 
-        Matcher matcher = regex.matcher(line);
-        if (matcher.find()) {
+        while (true) {
+            Matcher matcher = regex.matcher(line);
+            if (!matcher.find()) {
+                break;
+            }
+
             String replacement = "Effect.cast(" +
                     matcher.group(1) + "Namesies." +
                     matcher.group(2) + ", " +
                     matcher.group(3) + ")";
-            line = matcher.replaceAll(replacement);
+            line = matcher.replaceFirst(replacement);
         }
 
         return line;

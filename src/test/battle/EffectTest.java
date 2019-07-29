@@ -456,7 +456,7 @@ public class EffectTest extends BaseTest {
 
         substituteTest(
                 new TestInfo().defendingFight(AttackNamesies.TAIL_WHIP),
-                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(Stat.DEFENSE, -1)),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.DEFENSE)),
                 (battle, attacking, defending) -> attacking.assertNoStages()
         );
 
@@ -475,7 +475,7 @@ public class EffectTest extends BaseTest {
         // Unless it is sound-based
         substituteTest(
                 new TestInfo().defendingFight(AttackNamesies.GROWL),
-                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(Stat.ATTACK, -1))
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.ATTACK))
         );
 
         // Should still be able to give self-target effects
@@ -565,7 +565,7 @@ public class EffectTest extends BaseTest {
                         .with((battle, attacking, defending) -> Assert.assertTrue(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.REFLECT)))
                         .defendingFight(AttackNamesies.DEFOG)
                         .with((battle, attacking, defending) -> Assert.assertFalse(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.REFLECT))),
-                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(Stat.EVASION, -1)),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.EVASION)),
                 (battle, attacking, defending) -> attacking.assertNoStages()
         );
 
@@ -611,7 +611,7 @@ public class EffectTest extends BaseTest {
                             // Need to use getDefending() since the defending var is set at the start of the turn
                             Assert.assertTrue(battle.getDefending().isPokemon(PokemonNamesies.SQUIRTLE));
                         }),
-                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(Stat.ATTACK, -1)),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.ATTACK)),
                 (battle, attacking, defending) -> attacking.assertNoStages()
         );
 

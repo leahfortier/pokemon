@@ -255,7 +255,7 @@ public class ItemTest extends BaseTest {
         defending.assertEffect(success, PokemonEffectNamesies.CONSUMED_ITEM);
 
         // If successful, should increase Sp. Attack by one
-        defending.assertStages(new TestStages().set(Stat.SP_ATTACK, success ? 1 : 0));
+        defending.assertStages(new TestStages().set(success ? 1 : 0, Stat.SP_ATTACK));
     }
 
     @Test
@@ -289,7 +289,7 @@ public class ItemTest extends BaseTest {
         powerHerbTest(AttackNamesies.SKULL_BASH, true, notFullHealth, (battle, attacking, defending) -> {
             MultiTurnMove multiTurnMove = (MultiTurnMove)attacking.getAttack();
             Assert.assertTrue(multiTurnMove.isCharging());
-            attacking.assertStages(new TestStages().set(Stat.DEFENSE, 1));
+            attacking.assertStages(new TestStages().set(1, Stat.DEFENSE));
             defending.assertNoStages();
         });
 
@@ -297,9 +297,7 @@ public class ItemTest extends BaseTest {
         powerHerbTest(AttackNamesies.GEOMANCY, true, (battle, attacking, defending) -> {
             attacking.assertFullHealth();
             defending.assertFullHealth();
-            attacking.assertStages(new TestStages().set(Stat.SP_ATTACK, 2)
-                                                   .set(Stat.SP_DEFENSE, 2)
-                                                   .set(Stat.SPEED, 2));
+            attacking.assertStages(new TestStages().set(2, Stat.SP_ATTACK, Stat.SP_DEFENSE, Stat.SPEED));
             defending.assertNoStages();
 
             // Reset stages so next check can be more meaningful

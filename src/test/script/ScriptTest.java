@@ -438,15 +438,15 @@ public class ScriptTest extends BaseTest {
         nullOnHitSelf(moveMap, AttackNamesies.PSYCHO_SHIFT);
 
         // Handled separately in their API
-        nullStatChangesUpdate(moveMap, AttackNamesies.DEFOG, new TestStages().set(Stat.EVASION, -1));
-        nullStatChangesUpdate(moveMap, AttackNamesies.VENOM_DRENCH, new TestStages().set(Stat.ATTACK, -1).set(Stat.SP_ATTACK, -1).set(Stat.SPEED, -1));
-        nullStatChangesUpdate(moveMap, AttackNamesies.SKULL_BASH, new TestStages().set(Stat.DEFENSE, 1));
+        nullStatChangesUpdate(moveMap, AttackNamesies.DEFOG, new TestStages().set(-1, Stat.EVASION));
+        nullStatChangesUpdate(moveMap, AttackNamesies.VENOM_DRENCH, new TestStages().set(-1, Stat.ATTACK, Stat.SP_ATTACK, Stat.SPEED));
+        nullStatChangesUpdate(moveMap, AttackNamesies.SKULL_BASH, new TestStages().set(1, Stat.DEFENSE));
 
         // Manually changed moves in this API
-        nullStatChangesUpdate(moveMap, AttackNamesies.FLOWER_SHIELD, new TestStages().set(Stat.DEFENSE, 1));
-        nullStatChangesUpdate(moveMap, AttackNamesies.ROTOTILLER, new TestStages().set(Stat.ATTACK, 1).set(Stat.SP_ATTACK, 1));
-        nullStatChangesUpdate(moveMap, AttackNamesies.GEAR_UP, new TestStages().set(Stat.ATTACK, 1).set(Stat.SP_ATTACK, 1));
-        nullStatChangesUpdate(moveMap, AttackNamesies.MAGNETIC_FLUX, new TestStages().set(Stat.DEFENSE, 1).set(Stat.SP_DEFENSE, 1));
+        nullStatChangesUpdate(moveMap, AttackNamesies.FLOWER_SHIELD, new TestStages().set(1, Stat.DEFENSE));
+        nullStatChangesUpdate(moveMap, AttackNamesies.ROTOTILLER, new TestStages().set(1, Stat.ATTACK, Stat.SP_ATTACK));
+        nullStatChangesUpdate(moveMap, AttackNamesies.GEAR_UP, new TestStages().set(1, Stat.ATTACK, Stat.SP_ATTACK));
+        nullStatChangesUpdate(moveMap, AttackNamesies.MAGNETIC_FLUX, new TestStages().set(1, Stat.DEFENSE, Stat.SP_DEFENSE));
 
         removeFlag(moveMap, "authentic", AttackNamesies.MIMIC, AttackNamesies.REFLECT_TYPE, AttackNamesies.CONVERSION_2, AttackNamesies.SNATCH, AttackNamesies.FAIRY_LOCK, AttackNamesies.AROMATIC_MIST, AttackNamesies.MAGNETIC_FLUX, AttackNamesies.GEAR_UP, AttackNamesies.POWDER, AttackNamesies.ME_FIRST, AttackNamesies.POWER_SWAP, AttackNamesies.GUARD_SWAP, AttackNamesies.SPEED_SWAP, AttackNamesies.SKETCH, AttackNamesies.DEFOG, AttackNamesies.BESTOW);
         removeFlag(moveMap, "charge", AttackNamesies.SKY_DROP);
