@@ -5,6 +5,8 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.AbilityHolder;
+import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.EffectInterfaces.PokemonHolder;
 import battle.effect.EffectList;
 import battle.effect.InvokeEffect;
@@ -28,8 +30,6 @@ import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.attack.MultiTurnMove.SemiInvulnerableMove;
-import battle.effect.EffectInterfaces.AbilityHolder;
-import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
@@ -475,7 +475,7 @@ public class ActivePokemon extends PartyPokemon {
     public boolean isPokemon(Battle b, PokemonNamesies... names) {
         PokemonEffect transformed = this.getEffect(PokemonEffectNamesies.TRANSFORMED);
         if (transformed != null) {
-            return GeneralUtils.contains(((PokemonHolder)transformed).getPokemon(), names); 
+            return GeneralUtils.contains(((PokemonHolder)transformed).getPokemon(), names);
         }
 
         return this.isActualPokemon(names);

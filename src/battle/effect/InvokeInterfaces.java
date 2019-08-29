@@ -28,7 +28,6 @@ import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.MoveList;
-import pokemon.species.PokemonNamesies;
 import trainer.Trainer;
 import type.PokeType;
 import type.Type;
