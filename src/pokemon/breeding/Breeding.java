@@ -151,7 +151,7 @@ public class Breeding {
     }
 
     private boolean isDitto(ActivePokemon pokes) {
-        return pokes.isPokemon(PokemonNamesies.DITTO);
+        return pokes.isActualPokemon(PokemonNamesies.DITTO);
     }
 
     private ActivePokemon getRandomParent(final ActivePokemon daddy, final ActivePokemon mommy) {

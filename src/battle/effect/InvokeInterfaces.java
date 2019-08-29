@@ -28,6 +28,7 @@ import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.MoveList;
+import pokemon.species.PokemonNamesies;
 import trainer.Trainer;
 import type.PokeType;
 import type.Type;
@@ -879,6 +880,25 @@ public final class InvokeInterfaces {
         }
     }
 
+    public interface ChangePokemonEffect {
+        PokemonNamesies getPokemon();
+
+        static PokemonNamesies getPokemon(Battle b, ActivePokemon p) {
+            List<InvokeEffect> invokees = b.getEffectsList(p);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof ChangePokemonEffect && invokee.isActiveEffect()) {
+                    ChangePokemonEffect effect = (ChangePokemonEffect)invokee;
+                    PokemonNamesies value = effect.getPokemon();
+                    if (value != null) {
+                        return value;
+                    }
+                }
+            }
+
+            return null;
+        }
+    }
+
     public interface ForceMoveEffect {
         Move getForcedMove(ActivePokemon attacking);
 
@@ -919,7 +939,7 @@ public final class InvokeInterfaces {
 
     public interface CritStageEffect {
 
-        default int increaseCritStage(ActivePokemon p) {
+        default int increaseCritStage(Battle b, ActivePokemon p) {
             return 1;
         }
 
@@ -930,7 +950,7 @@ public final class InvokeInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof CritStageEffect && invokee.isActiveEffect()) {
                     CritStageEffect effect = (CritStageEffect)invokee;
-                    modifier += effect.increaseCritStage(p);
+                    modifier += effect.increaseCritStage(b, p);
                 }
             }
 

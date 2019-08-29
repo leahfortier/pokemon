@@ -10,6 +10,7 @@ import battle.effect.InvokeEffect;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
 import battle.effect.InvokeInterfaces.BracingEffect;
 import battle.effect.InvokeInterfaces.ChangeMoveListEffect;
+import battle.effect.InvokeInterfaces.ChangePokemonEffect;
 import battle.effect.InvokeInterfaces.ChangeTypeEffect;
 import battle.effect.InvokeInterfaces.DamageTakenEffect;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
@@ -63,6 +64,7 @@ import trainer.player.medal.MedalTheme;
 import type.PokeType;
 import type.Type;
 import util.Action;
+import util.GeneralUtils;
 import util.serialization.Serializable;
 import util.string.StringUtils;
 
@@ -468,6 +470,15 @@ public class ActivePokemon extends PartyPokemon {
 
     public boolean isType(Battle b, Type type) {
         return this.getType(b).isType(type);
+    }
+
+    public boolean isPokemon(Battle b, PokemonNamesies... names) {
+        PokemonNamesies changePokemon = ChangePokemonEffect.getPokemon(b, this);
+        if (changePokemon != null) {
+            return GeneralUtils.contains(changePokemon, names);
+        }
+
+        return this.isActualPokemon(names);
     }
 
     public String getName() {

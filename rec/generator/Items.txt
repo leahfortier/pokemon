@@ -284,7 +284,7 @@ Light Ball:
     Cat: Misc
     Desc: An item to be held by Pikachu. It's a puzzling orb that boosts its Attack and Sp. Atk stats.
     Price: 1000
-    TwoModifyMultiplier: Attack Sp_Attack 2 p.isPokemon(PokemonNamesies.PIKACHU)
+    TwoModifyMultiplier: Attack Sp_Attack 2 p.isPokemon(b, PokemonNamesies.PIKACHU)
     StatusFling: paralyzed
 *
 Light Clay:
@@ -309,7 +309,7 @@ Lucky Punch:
     Price: 1000
     Fling: 40
     IncreaseCritStage:
-        return p.isPokemon(PokemonNamesies.CHANSEY) ? 2 : 0;
+        return p.isPokemon(b, PokemonNamesies.CHANSEY) ? 2 : 0;
         ###
 *
 Luminous Moss:
@@ -361,7 +361,7 @@ Metal Powder:
     Desc: An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Defense stat.
     Price: 1000
     Fling: 10
-    ToModifyMultiplier: Defense 2 p.isPokemon(PokemonNamesies.DITTO)
+    ToModifyMultiplier: Defense 2 p.isPokemon(b, PokemonNamesies.DITTO)
 *
 Metronome:
     Int: HoldItem
@@ -422,7 +422,7 @@ Quick Powder:
     Desc: An item to be held by Ditto. Extremely fine yet hard, this odd powder boosts the Speed stat.
     Price: 1000
     Fling: 10
-    ToModifyMultiplier: Speed 1.5 p.isPokemon(PokemonNamesies.DITTO)
+    ToModifyMultiplier: Speed 1.5 p.isPokemon(b, PokemonNamesies.DITTO)
 *
 Red Card:
     Int: HoldItem, OpponentApplyDamageEffect
@@ -507,7 +507,7 @@ Soul Dew:
     Cat: Misc
     Desc: A wondrous orb to be held by either Latios or Latias. It raises the power of Psychic- and Dragon-type moves.
     Price: 4000
-    TwoModifyMultiplier: Sp_Attack Sp_Defense 1.2 p.isPokemon(PokemonNamesies.LATIOS, PokemonNamesies.LATIAS) && p.isAttackType(Type.PSYCHIC, Type.DRAGON)
+    TwoModifyMultiplier: Sp_Attack Sp_Defense 1.2 p.isPokemon(b, PokemonNamesies.LATIOS, PokemonNamesies.LATIAS) && p.isAttackType(Type.PSYCHIC, Type.DRAGON)
     Comments: // I changed the price on my own because everything else was increasing like that and this said N/A
 *
 Stick:
@@ -517,7 +517,7 @@ Stick:
     Price: 1000
     Fling: 60
     IncreaseCritStage:
-        return p.isPokemon(PokemonNamesies.FARFETCHD) ? 2 : 0;
+        return p.isPokemon(b, PokemonNamesies.FARFETCHD) ? 2 : 0;
         ###
 *
 Sticky Barb:
@@ -550,7 +550,7 @@ Thick Club:
     Desc: An item to be held by Cubone or Marowak. It's a hard bone of some sort that boosts the Attack stat.
     Price: 1000
     Fling: 90
-    ToModifyMultiplier: Attack 2 p.isPokemon(PokemonNamesies.CUBONE, PokemonNamesies.MAROWAK)
+    ToModifyMultiplier: Attack 2 p.isPokemon(b, PokemonNamesies.CUBONE, PokemonNamesies.MAROWAK)
 *
 Weakness Policy:
     Int: HoldItem, TakeDamageEffect
@@ -946,7 +946,7 @@ Deep Sea Scale:
     Cat: Misc
     Desc: An item to be held by Clamperl, Chinchou, or Lanturn. This scale shines with a faint pink and raises the holder's Sp. Def stat.
     Price: 2000
-    ToModifyMultiplier: Sp_Defense 2 p.isPokemon(PokemonNamesies.CLAMPERL, PokemonNamesies.CHINCHOU, PokemonNamesies.LANTURN)
+    ToModifyMultiplier: Sp_Defense 2 p.isPokemon(b, PokemonNamesies.CLAMPERL, PokemonNamesies.CHINCHOU, PokemonNamesies.LANTURN)
 *
 Deep Sea Tooth:
     Int: HoldItem, EvolutionItem
@@ -954,7 +954,7 @@ Deep Sea Tooth:
     Desc: An item to be held by Clamperl. This fang gleams a sharp silver and raises the holder's Sp. Atk stat.
     Price: 2000
     Fling: 90
-    ToModifyMultiplier: Sp_Attack 2 p.isPokemon(PokemonNamesies.CLAMPERL)
+    ToModifyMultiplier: Sp_Attack 2 p.isPokemon(b, PokemonNamesies.CLAMPERL)
 *
 Dragon Scale:
     Int: HoldItem, EvolutionItem

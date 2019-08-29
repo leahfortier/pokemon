@@ -75,20 +75,20 @@ public class BreedingTest extends BaseTest {
         Eggy baby = getBaby(mommy, daddy);
 
         // Mommy and daddy Rapidash -> baby Ponyta
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.PONYTA));
+        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isActualPokemon(PokemonNamesies.PONYTA));
 
         mommy = getParent(PokemonNamesies.NINETALES, Gender.FEMALE);
         baby = getBaby(mommy, daddy);
 
         // Mommy Ninetales and daddy Rapidash -> baby Vulpix
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.VULPIX));
+        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isActualPokemon(PokemonNamesies.VULPIX));
 
         mommy = getParent(PokemonNamesies.MANAPHY, Gender.GENDERLESS);
         daddy = getParent(PokemonNamesies.DITTO, Gender.GENDERLESS);
         baby = getBaby(mommy, daddy);
 
         // Manaphy + Ditto -> Phione
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.PHIONE));
+        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isActualPokemon(PokemonNamesies.PHIONE));
     }
 
     // TODO: Add more cases -- make sure TM that is in level up moves is not learned
@@ -118,26 +118,26 @@ public class BreedingTest extends BaseTest {
         Eggy baby = getBaby(mommy, daddy);
 
         // Wobby mom with incense + daddy wobby = wynaut baby
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.WYNAUT));
+        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isActualPokemon(PokemonNamesies.WYNAUT));
 
         mommy.removeItem();
         baby = getBaby(mommy, daddy);
 
         // Without holding the incense should be a wobby baby
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.WOBBUFFET));
+        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isActualPokemon(PokemonNamesies.WOBBUFFET));
 
         mommy.withItem(ItemNamesies.SEA_INCENSE);
         daddy.withItem(ItemNamesies.ROSE_INCENSE);
         baby = getBaby(mommy, daddy);
 
         // Holding incorrect incense should be a wobby baby
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.WOBBUFFET));
+        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isActualPokemon(PokemonNamesies.WOBBUFFET));
 
         mommy = getParent(PokemonNamesies.DITTO, Gender.GENDERLESS).withItem(ItemNamesies.LAX_INCENSE);
         baby = getBaby(mommy, daddy);
 
         // Ditto mom with incense + daddy wobby = wynaut baby
-        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isPokemon(PokemonNamesies.WYNAUT));
+        Assert.assertTrue(getFailMessage(mommy, daddy, baby), baby.isActualPokemon(PokemonNamesies.WYNAUT));
     }
 
     @Test

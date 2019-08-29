@@ -494,6 +494,15 @@ ChangeTypeEffect:
         EffectPriority: p.getEffect(PokemonEffectNamesies.CHANGE_TYPE)
     *
 ***
+ChangePokemonEffect:
+    Method:
+        Header: PokemonNamesies getPokemon()
+        Invoke: Get
+        InvokeName: getPokemon
+        InvokeParameters: Battle b, ActivePokemon p
+        EffectList: p
+    *
+***
 ForceMoveEffect:
     Method:
         Header: Move getForcedMove(ActivePokemon attacking)
@@ -515,12 +524,11 @@ DifferentStatEffect
 ***
 CritStageEffect:
     Method:
-        Header: int increaseCritStage(ActivePokemon p)
+        Header: int increaseCritStage(Battle b, ActivePokemon p)
         Default:
             return 1;
             ###
         Invoke: Add
-        InvokeParameters: Battle b
         EffectList: p
         InvokeAttack: p
     *

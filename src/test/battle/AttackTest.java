@@ -864,6 +864,9 @@ public class AttackTest extends BaseTest {
         defending.assertNotFullHealth();
         attacking.assertFullHealth();
         attacking.assertNoStatus();
+
+        // TODO: Test with Insomnia
+        // TODO: Test with Sleep Talk
     }
 
     @Test
