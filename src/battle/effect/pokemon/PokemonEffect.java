@@ -23,6 +23,7 @@ import battle.effect.InvokeInterfaces.BeforeTurnEffect;
 import battle.effect.InvokeInterfaces.BracingEffect;
 import battle.effect.InvokeInterfaces.ChangeAttackTypeEffect;
 import battle.effect.InvokeInterfaces.ChangeMoveListEffect;
+import battle.effect.InvokeInterfaces.ChangePokemonEffect;
 import battle.effect.InvokeInterfaces.ChangeTypeEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.DamageTakenEffect;
@@ -70,6 +71,7 @@ import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.active.MoveList;
+import pokemon.species.PokemonNamesies;
 import type.PokeType;
 import type.Type;
 import util.RandomUtils;
@@ -845,7 +847,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public int increaseCritStage(ActivePokemon p) {
+        public int increaseCritStage(Battle b, ActivePokemon p) {
             // Each source increases the stage by two
             return 2*sources.size();
         }
@@ -1720,9 +1722,10 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Transformed extends PokemonEffect implements ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect {
+    static class Transformed extends PokemonEffect implements ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect, ChangePokemonEffect {
         private static final long serialVersionUID = 1L;
 
+        private PokemonNamesies pokemon;
         private MoveList moveList;
         private int[] stats;
         private PokeType type;
@@ -1740,6 +1743,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             // Pokemon to transform into
             ActivePokemon transformee = b.getOtherPokemon(victim);
+            pokemon = transformee.namesies();
 
             // Set the new stats
             stats = new int[Stat.NUM_STATS];
@@ -1765,7 +1769,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             type = transformee.getPokemonInfo().getType();
 
             // Castaway
-            Messages.add(new MessageUpdate().withNewPokemon(transformee.namesies(), transformee.isShiny(), true, victim.isPlayer()));
+            Messages.add(new MessageUpdate().withNewPokemon(pokemon, transformee.isShiny(), true, victim.isPlayer()));
             Messages.add(new MessageUpdate().updatePokemon(b, victim));
         }
 
@@ -1782,6 +1786,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public PokeType getType(Battle b, ActivePokemon p, boolean display) {
             return type;
+        }
+
+        @Override
+        public PokemonNamesies getPokemon() {
+            return pokemon;
         }
 
         @Override

@@ -141,7 +141,7 @@ Other random things:
     can selfconfusion remove itself inside totalandcompletefailure?
     uproar specifically checks if pp runs out to remove effect -- should that be for other similar moves too?
     remove effect inside subside -- then we can use it in more places
-    substitute almost certainly doesn't work with form change abilities for images at least
+    substitute almost certainly doesn't work with form change abilities for images at least (or transform etc)
     make Marcos fix the substitute failure messaging problems I don't wanna do it
     does using a berry (not hold item) not count as berry consumption??
     probably have something to automatically remove previous effect if there can only be one (ChangeAbility etc)
@@ -152,3 +152,4 @@ Other random things:
     Al Bhed translation shouldn't be hardcoded -- just a flag on the area or something
         - so if you put the flag on the area then when you talk to the rival he speaks Al Bhed...
     test transformed + pokemon specific effects (Light Ball/Dark Void etc)
+    

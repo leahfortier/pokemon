@@ -473,7 +473,7 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean isPokemon(Battle b, PokemonNamesies... names) {
-        PokemonNamesies changePokemon = ChangePokemonEffect.getPokemon(b, this);
+        PokemonNamesies changePokemon = ChangePokemonEffect.getChangedPokemon(b, this);
         if (changePokemon != null) {
             return GeneralUtils.contains(changePokemon, names);
         }

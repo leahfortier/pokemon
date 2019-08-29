@@ -837,6 +837,13 @@ Enter:
 GetChangeTypeEffect:
     Header: PokeType getType(Battle b, ActivePokemon p, boolean display)
 *
+GetChangePokemon:
+    AddInterface: ChangePokemonEffect
+    Header: PokemonNamesies getPokemon()
+    Body:
+        return {0};
+        ###
+*
 GetNameChange:
     Header: String getNameChange()
 *
@@ -987,7 +994,7 @@ GetStat:
     Header: Integer getStat(ActivePokemon user, Stat stat)
 *
 IncreaseCritStage:
-    Header: int increaseCritStage(ActivePokemon p)
+    Header: int increaseCritStage(Battle b, ActivePokemon p)
 *
 FallMessage:
     Header: void fall(Battle b, ActivePokemon fallen)

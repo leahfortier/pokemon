@@ -660,6 +660,7 @@ FiddyPercentStronger:
 *
 Transformed:
     Field:
+        private PokemonNamesies pokemon;
         private MoveList moveList;
         private int[] stats;
         private PokeType type;
@@ -668,6 +669,7 @@ Transformed:
     AfterCast:
         // Pokemon to transform into
         ActivePokemon transformee = b.getOtherPokemon(victim);
+        pokemon = transformee.namesies();
 
         // Set the new stats
         stats = new int[Stat.NUM_STATS];
@@ -693,7 +695,7 @@ Transformed:
         type = transformee.getPokemonInfo().getType();
         
         // Castaway
-        Messages.add(new MessageUpdate().withNewPokemon(transformee.namesies(), transformee.isShiny(), true, victim.isPlayer()));
+        Messages.add(new MessageUpdate().withNewPokemon(pokemon, transformee.isShiny(), true, victim.isPlayer()));
         Messages.add(new MessageUpdate().updatePokemon(b, victim));
         ###
     FullEffectApplies:
@@ -715,6 +717,7 @@ Transformed:
     GetChangeTypeEffect:
         return type;
         ###
+    GetChangePokemon: pokemon
 *
 Substitute:
     Int: AbsorbDamageEffect, PassableEffect, StickyHoldEffect, StatProtectingEffect

@@ -498,7 +498,7 @@ ChangePokemonEffect:
     Method:
         Header: PokemonNamesies getPokemon()
         Invoke: Get
-        InvokeName: getPokemon
+        InvokeName: getChangedPokemon
         InvokeParameters: Battle b, ActivePokemon p
         EffectList: p
     *
