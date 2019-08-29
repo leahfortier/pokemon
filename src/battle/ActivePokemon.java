@@ -10,7 +10,7 @@ import battle.effect.InvokeEffect;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
 import battle.effect.InvokeInterfaces.BracingEffect;
 import battle.effect.InvokeInterfaces.ChangeMoveListEffect;
-import battle.effect.InvokeInterfaces.ChangePokemonEffect;
+import battle.effect.InvokeInterfaces.ChangeSpeciesEffect;
 import battle.effect.InvokeInterfaces.ChangeTypeEffect;
 import battle.effect.InvokeInterfaces.DamageTakenEffect;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
@@ -473,7 +473,7 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean isPokemon(Battle b, PokemonNamesies... names) {
-        PokemonNamesies changePokemon = ChangePokemonEffect.getChangedPokemon(b, this);
+        PokemonNamesies changePokemon = ChangeSpeciesEffect.getChangedPokemon(b, this);
         if (changePokemon != null) {
             return GeneralUtils.contains(changePokemon, names);
         }

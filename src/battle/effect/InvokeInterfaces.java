@@ -880,14 +880,14 @@ public final class InvokeInterfaces {
         }
     }
 
-    public interface ChangePokemonEffect {
+    public interface ChangeSpeciesEffect {
         PokemonNamesies getPokemon();
 
         static PokemonNamesies getChangedPokemon(Battle b, ActivePokemon p) {
             List<InvokeEffect> invokees = b.getEffectsList(p);
             for (InvokeEffect invokee : invokees) {
-                if (invokee instanceof ChangePokemonEffect && invokee.isActiveEffect()) {
-                    ChangePokemonEffect effect = (ChangePokemonEffect)invokee;
+                if (invokee instanceof ChangeSpeciesEffect && invokee.isActiveEffect()) {
+                    ChangeSpeciesEffect effect = (ChangeSpeciesEffect)invokee;
                     PokemonNamesies value = effect.getPokemon();
                     if (value != null) {
                         return value;

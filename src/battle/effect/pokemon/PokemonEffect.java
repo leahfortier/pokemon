@@ -23,7 +23,7 @@ import battle.effect.InvokeInterfaces.BeforeTurnEffect;
 import battle.effect.InvokeInterfaces.BracingEffect;
 import battle.effect.InvokeInterfaces.ChangeAttackTypeEffect;
 import battle.effect.InvokeInterfaces.ChangeMoveListEffect;
-import battle.effect.InvokeInterfaces.ChangePokemonEffect;
+import battle.effect.InvokeInterfaces.ChangeSpeciesEffect;
 import battle.effect.InvokeInterfaces.ChangeTypeEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.DamageTakenEffect;
@@ -1722,7 +1722,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Transformed extends PokemonEffect implements ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect, ChangePokemonEffect {
+    static class Transformed extends PokemonEffect implements ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect, ChangeSpeciesEffect {
         private static final long serialVersionUID = 1L;
 
         private PokemonNamesies pokemon;

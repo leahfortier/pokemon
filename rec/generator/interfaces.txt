@@ -494,7 +494,7 @@ ChangeTypeEffect:
         EffectPriority: p.getEffect(PokemonEffectNamesies.CHANGE_TYPE)
     *
 ***
-ChangePokemonEffect:
+ChangeSpeciesEffect:
     Method:
         Header: PokemonNamesies getPokemon()
         Invoke: Get

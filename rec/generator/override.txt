@@ -838,7 +838,7 @@ GetChangeTypeEffect:
     Header: PokeType getType(Battle b, ActivePokemon p, boolean display)
 *
 GetChangePokemon:
-    AddInterface: ChangePokemonEffect
+    AddInterface: ChangeSpeciesEffect
     Header: PokemonNamesies getPokemon()
     Body:
         return {0};
