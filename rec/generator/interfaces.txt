@@ -494,15 +494,6 @@ ChangeTypeEffect:
         EffectPriority: p.getEffect(PokemonEffectNamesies.CHANGE_TYPE)
     *
 ***
-ChangeSpeciesEffect:
-    Method:
-        Header: PokemonNamesies getPokemon()
-        Invoke: Get
-        InvokeName: getChangedPokemon
-        InvokeParameters: Battle b, ActivePokemon p
-        EffectList: p
-    *
-***
 ForceMoveEffect:
     Method:
         Header: Move getForcedMove(ActivePokemon attacking)

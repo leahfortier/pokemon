@@ -837,13 +837,6 @@ Enter:
 GetChangeTypeEffect:
     Header: PokeType getType(Battle b, ActivePokemon p, boolean display)
 *
-GetChangePokemon:
-    AddInterface: ChangeSpeciesEffect
-    Header: PokemonNamesies getPokemon()
-    Body:
-        return {0};
-        ###
-*
 GetNameChange:
     Header: String getNameChange()
 *
@@ -972,11 +965,26 @@ Defog:
         return {0};
         ###
 *
-GetAbility:
+AbilityHolder:
+    AddInterface: AbilityHolder
     Header: Ability getAbility()
+    Body:
+        return {0};
+        ###
 *
-GetItem:
+ItemHolder:
+    AddInterface: ItemHolder
     Header: HoldItem getItem()
+    Body:
+        return {0};
+        ###
+*
+PokemonHolder:
+    AddInterface: PokemonHolder
+    Header: PokemonNamesies getPokemon()
+    Body:
+        return {0};
+        ###
 *
 Bracing:
     Header: boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth)

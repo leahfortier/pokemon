@@ -37,9 +37,11 @@ import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
 import pokemon.Stat;
+import pokemon.ability.Ability;
 import pokemon.ability.AbilityInterface;
 import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonNamesies;
 import trainer.Team;
 import trainer.Trainer;
 import trainer.WildPokemon;
@@ -58,6 +60,18 @@ public final class EffectInterfaces {
     // Class to hold interfaces -- should not be instantiated
     private EffectInterfaces() {
         Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
+    }
+
+    public interface AbilityHolder {
+        Ability getAbility();
+    }
+
+    public interface ItemHolder {
+        HoldItem getItem();
+    }
+
+    public interface PokemonHolder {
+        PokemonNamesies getPokemon();
     }
 
     public interface MessageGetter {

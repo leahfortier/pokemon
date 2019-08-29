@@ -48,7 +48,7 @@ import battle.effect.attack.SelfHealingMove;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.battle.terrain.TerrainNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
-import battle.effect.holder.ItemHolder;
+import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;

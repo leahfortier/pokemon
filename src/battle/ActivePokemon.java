@@ -5,12 +5,12 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.PokemonHolder;
 import battle.effect.EffectList;
 import battle.effect.InvokeEffect;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
 import battle.effect.InvokeInterfaces.BracingEffect;
 import battle.effect.InvokeInterfaces.ChangeMoveListEffect;
-import battle.effect.InvokeInterfaces.ChangeSpeciesEffect;
 import battle.effect.InvokeInterfaces.ChangeTypeEffect;
 import battle.effect.InvokeInterfaces.DamageTakenEffect;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
@@ -28,8 +28,8 @@ import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.attack.MultiTurnMove.SemiInvulnerableMove;
-import battle.effect.holder.AbilityHolder;
-import battle.effect.holder.ItemHolder;
+import battle.effect.EffectInterfaces.AbilityHolder;
+import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
@@ -473,9 +473,9 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean isPokemon(Battle b, PokemonNamesies... names) {
-        PokemonNamesies changePokemon = ChangeSpeciesEffect.getChangedPokemon(b, this);
-        if (changePokemon != null) {
-            return GeneralUtils.contains(changePokemon, names);
+        PokemonEffect transformed = this.getEffect(PokemonEffectNamesies.TRANSFORMED);
+        if (transformed != null) {
+            return GeneralUtils.contains(((PokemonHolder)transformed).getPokemon(), names); 
         }
 
         return this.isActualPokemon(names);

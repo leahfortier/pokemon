@@ -1,7 +1,7 @@
 package pokemon.ability;
 
 import battle.effect.InvokeEffect;
-import battle.effect.holder.AbilityHolder;
+import battle.effect.EffectInterfaces.AbilityHolder;
 
 public interface AbilityInterface extends AbilityHolder, InvokeEffect {
     AbilityNamesies namesies();

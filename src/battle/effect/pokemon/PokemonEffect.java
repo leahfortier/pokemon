@@ -13,6 +13,7 @@ import battle.effect.EffectInterfaces.MessageGetter;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.EffectInterfaces.PhysicalContactEffect;
+import battle.effect.EffectInterfaces.PokemonHolder;
 import battle.effect.EffectInterfaces.ProtectingEffect;
 import battle.effect.EffectInterfaces.SapHealthEffect;
 import battle.effect.EffectNamesies;
@@ -54,8 +55,8 @@ import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.attack.OhkoMove;
 import battle.effect.battle.StandardBattleEffectNamesies;
-import battle.effect.holder.AbilityHolder;
-import battle.effect.holder.ItemHolder;
+import battle.effect.EffectInterfaces.AbilityHolder;
+import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.source.CastSource;
 import battle.effect.source.ChangeAbilitySource;
 import battle.effect.source.ChangeAttackTypeSource;
@@ -1722,7 +1723,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Transformed extends PokemonEffect implements ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect, ChangeSpeciesEffect {
+    static class Transformed extends PokemonEffect implements ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect, PokemonHolder {
         private static final long serialVersionUID = 1L;
 
         private PokemonNamesies pokemon;

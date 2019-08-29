@@ -286,7 +286,6 @@ RaiseCrits:
         ###
 *
 ChangeItem:
-    Int: ItemHolder
     BeforeCast:
         item = ((ItemHolder)source.getSource(b, caster)).getItem();
         victim.getEffects().remove(this.namesies());
@@ -294,9 +293,7 @@ ChangeItem:
     Field:
         private HoldItem item;
         ###
-    GetItem:
-        return item;
-        ###
+    ItemHolder: item
     CanHave: True
 *
 ChangeAttackType:
@@ -339,7 +336,6 @@ ChangeType:
         ###
 *
 ChangeAbility:
-    Int: AbilityHolder
     Field:
         private Ability ability;
         private String message;
@@ -355,9 +351,7 @@ ChangeAbility:
         // Remove any other ChangeAbility effects that the victim may have
         victim.getEffects().remove(this.namesies());
         ###
-    GetAbility:
-        return ability;
-        ###
+    AbilityHolder: ability
     CanHave: True
     CastMessage: message
 *
@@ -717,7 +711,7 @@ Transformed:
     GetChangeTypeEffect:
         return type;
         ###
-    GetChangePokemon: pokemon
+    PokemonHolder: pokemon
 *
 Substitute:
     Int: AbsorbDamageEffect, PassableEffect, StickyHoldEffect, StatProtectingEffect
@@ -958,10 +952,7 @@ ConsumedItem:
         victim.removeItem();
         victim.getEffects().remove(this.namesies());
         ###
-    Int: ItemHolder
-    GetItem:
-        return consumed;
-        ###
+    ItemHolder: consumed
     CanHave: True
 *
 Powder:

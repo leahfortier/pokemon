@@ -83,7 +83,7 @@ import battle.effect.attack.OhkoMove;
 import battle.effect.attack.RecoilMove;
 import battle.effect.battle.terrain.TerrainNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
-import battle.effect.holder.ItemHolder;
+import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import battle.effect.source.ChangeAbilitySource;

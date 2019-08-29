@@ -3,7 +3,7 @@ package item.hold;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.Effect;
-import battle.effect.holder.ItemHolder;
+import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import item.ItemInterface;
