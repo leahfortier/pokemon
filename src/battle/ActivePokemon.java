@@ -472,7 +472,7 @@ public class ActivePokemon extends PartyPokemon {
         return this.getType(b).isType(type);
     }
 
-    public boolean isPokemon(Battle b, PokemonNamesies... names) {
+    public boolean isPokemon(PokemonNamesies... names) {
         PokemonEffect transformed = this.getEffect(PokemonEffectNamesies.TRANSFORMED);
         if (transformed != null) {
             return GeneralUtils.contains(((PokemonHolder)transformed).getPokemon(), names);

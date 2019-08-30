@@ -600,7 +600,7 @@ public class EffectTest extends BaseTest {
                         .attackingFight(AttackNamesies.ROAR)
                         .with((battle, attacking, defending) -> {
                             // Need to use getDefending() since the defending var is set at the start of the turn
-                            Assert.assertTrue(battle.getDefending().isPokemon(battle, PokemonNamesies.SQUIRTLE));
+                            Assert.assertTrue(battle.getDefending().isPokemon(PokemonNamesies.SQUIRTLE));
                         }),
                 (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.ATTACK)),
                 (battle, attacking, defending) -> attacking.assertNoStages()
@@ -616,7 +616,7 @@ public class EffectTest extends BaseTest {
                         .defendingFight(AttackNamesies.TOXIC_SPIKES)
                         .attackingFight(AttackNamesies.BATON_PASS)
                         .with((battle, attacking, defending) -> {
-                            Assert.assertTrue(battle.getAttacking().isPokemon(battle, PokemonNamesies.SQUIRTLE));
+                            Assert.assertTrue(battle.getAttacking().isPokemon(PokemonNamesies.SQUIRTLE));
                             Assert.assertTrue(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
                         }),
                 (battle, attacking, defending) -> attacking.assertRegularPoison(), // Only one layer
@@ -636,7 +636,7 @@ public class EffectTest extends BaseTest {
                         .defendingFight(AttackNamesies.TOXIC_SPIKES)
                         .attackingFight(AttackNamesies.BATON_PASS),
                 (battle, attacking, defending) -> {
-                    Assert.assertTrue(attacking.isPokemon(battle, PokemonNamesies.GRIMER));
+                    Assert.assertTrue(attacking.isPokemon(PokemonNamesies.GRIMER));
                     Assert.assertFalse(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
                     attacking.assertNoStatus();
                 }

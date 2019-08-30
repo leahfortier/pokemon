@@ -762,7 +762,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isPokemon(b, PokemonNamesies.DIALGA) && user.isAttackType(Type.DRAGON, Type.STEEL) ? 1.2 : 1;
+            return user.isPokemon(PokemonNamesies.DIALGA) && user.isAttackType(Type.DRAGON, Type.STEEL) ? 1.2 : 1;
         }
     }
 
@@ -781,7 +781,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isPokemon(b, PokemonNamesies.PALKIA) && user.isAttackType(Type.DRAGON, Type.WATER) ? 1.2 : 1;
+            return user.isPokemon(PokemonNamesies.PALKIA) && user.isAttackType(Type.DRAGON, Type.WATER) ? 1.2 : 1;
         }
     }
 
@@ -800,7 +800,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isPokemon(b, PokemonNamesies.GIRATINA) && user.isAttackType(Type.DRAGON, Type.GHOST) ? 1.2 : 1;
+            return user.isPokemon(PokemonNamesies.GIRATINA) && user.isAttackType(Type.DRAGON, Type.GHOST) ? 1.2 : 1;
         }
     }
 
@@ -887,7 +887,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(b, PokemonNamesies.PIKACHU);
+            return p.isPokemon(PokemonNamesies.PIKACHU);
         }
 
         @Override
@@ -929,7 +929,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public int increaseCritStage(Battle b, ActivePokemon p) {
-            return p.isPokemon(b, PokemonNamesies.CHANSEY) ? 2 : 0;
+            return p.isPokemon(PokemonNamesies.CHANSEY) ? 2 : 0;
         }
 
         @Override
@@ -1041,7 +1041,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(b, PokemonNamesies.DITTO);
+            return p.isPokemon(PokemonNamesies.DITTO);
         }
 
         @Override
@@ -1338,7 +1338,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(b, PokemonNamesies.DITTO);
+            return p.isPokemon(PokemonNamesies.DITTO);
         }
 
         @Override
@@ -1507,7 +1507,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(b, PokemonNamesies.LATIOS, PokemonNamesies.LATIAS) && p.isAttackType(Type.PSYCHIC, Type.DRAGON);
+            return p.isPokemon(PokemonNamesies.LATIOS, PokemonNamesies.LATIAS) && p.isAttackType(Type.PSYCHIC, Type.DRAGON);
         }
 
         @Override
@@ -1526,7 +1526,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public int increaseCritStage(Battle b, ActivePokemon p) {
-            return p.isPokemon(b, PokemonNamesies.FARFETCHD) ? 2 : 0;
+            return p.isPokemon(PokemonNamesies.FARFETCHD) ? 2 : 0;
         }
 
         @Override
@@ -1593,7 +1593,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(b, PokemonNamesies.CUBONE, PokemonNamesies.MAROWAK);
+            return p.isPokemon(PokemonNamesies.CUBONE, PokemonNamesies.MAROWAK);
         }
 
         @Override
@@ -2793,7 +2793,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(b, PokemonNamesies.CLAMPERL, PokemonNamesies.CHINCHOU, PokemonNamesies.LANTURN);
+            return p.isPokemon(PokemonNamesies.CLAMPERL, PokemonNamesies.CHINCHOU, PokemonNamesies.LANTURN);
         }
 
         @Override
@@ -2822,7 +2822,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(b, PokemonNamesies.CLAMPERL);
+            return p.isPokemon(PokemonNamesies.CLAMPERL);
         }
 
         @Override

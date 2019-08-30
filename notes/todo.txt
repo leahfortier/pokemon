@@ -153,4 +153,5 @@ Other random things:
         - so if you put the flag on the area then when you talk to the rival he speaks Al Bhed...
     test transformed + pokemon specific effects (Light Ball/Dark Void etc)
     wondering if there should be an enum for things like user/isPlayer type things because the booleans can be pretty confusing
+    need to rework in test where no ability is set (right now doesn't work for EntryEffect abilities -- already enabled when you change to NoAbility and when you want to change to the entry one it's already too late)
     
