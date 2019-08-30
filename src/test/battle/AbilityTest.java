@@ -451,10 +451,13 @@ public class AbilityTest extends BaseTest {
     public void innerFocusTest() {
         TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
         TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.INNER_FOCUS);
-        TestPokemon defending1 = battle.getDefending().withAbility(AbilityNamesies.NO_ABILITY); // Not fucking Sturdy
+        TestPokemon defending1 = battle.getDefending();
         TestPokemon defending2 = TestPokemon.newTrainerPokemon(PokemonNamesies.SHUCKLE).withAbility(AbilityNamesies.MOLD_BREAKER);
         ((EnemyTrainer)battle.getOpponent()).addPokemon(defending2);
         Assert.assertTrue(battle.getDefending() == defending1);
+
+        // Not fucking Sturdy
+        defending1.assertAbility(AbilityNamesies.NO_ABILITY);
 
         // Fake out will not cause the defending to flinch and it will successfully use Tackle
         // (Fake Out will still strike first even though it is listed second since it has priority)
@@ -599,11 +602,8 @@ public class AbilityTest extends BaseTest {
     @Test
     public void stanceChangeTest() {
         TestBattle battle = TestBattle.create(PokemonNamesies.AEGISLASH, PokemonNamesies.AEGISLASH);
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
-
-        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.STANCE_CHANGE));
-        Assert.assertTrue(defending.hasAbility(AbilityNamesies.STANCE_CHANGE));
+        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.STANCE_CHANGE);
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.STANCE_CHANGE);
 
         // Should start in shield form
         assertStanceChangeForm(true, battle, attacking);
@@ -1003,7 +1003,7 @@ public class AbilityTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         // Confirm no modifier without Fluffy
-        defending.setAbility(AbilityNamesies.NO_ABILITY);
+        defending.assertAbility(AbilityNamesies.NO_ABILITY);
         manipulator.manipulate(battle);
         attacking.setExpectedDamageModifier(1.0);
         battle.attackingFight(attackNamesies);

@@ -159,8 +159,8 @@ class TestInfo {
 
     public TestBattle createBattle() {
         TestBattle battle = TestBattle.create(this.isTrainerBattle, this.attackingName, this.defendingName);
-        battle.getAttacking().withAbility(AbilityNamesies.NO_ABILITY);
-        battle.getDefending().withAbility(AbilityNamesies.NO_ABILITY);
+        battle.getAttacking().assertAbility(AbilityNamesies.NO_ABILITY);
+        battle.getDefending().assertAbility(AbilityNamesies.NO_ABILITY);
         this.setupManipulator.manipulate(battle);
         return battle;
     }

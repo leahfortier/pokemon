@@ -33,6 +33,9 @@ public class TestPokemon extends ActivePokemon {
 
     public TestPokemon(final PokemonNamesies pokemon, final int level, final boolean isWild, final boolean isPlayer) {
         super(pokemon, level, isWild, isPlayer);
+
+        // Test Pokemon need to have their ability explicitly changed
+        this.setAbility(AbilityNamesies.NO_ABILITY);
     }
 
     public TestPokemon withIVs(int[] IVs) {
