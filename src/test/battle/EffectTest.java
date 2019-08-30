@@ -345,16 +345,7 @@ public class EffectTest extends BaseTest {
     }
 
     private void checkCritStage(int expectedStage, TestInfo testInfo) {
-        TestBattle battle = testInfo.createBattle();
-        TestPokemon attacking = battle.getAttacking();
-
-        int beforeStage = battle.getCritStage(attacking);
-        Assert.assertEquals(1, beforeStage);
-
-        testInfo.manipulate(battle);
-
-        int afterStage = battle.getCritStage(attacking);
-        Assert.assertEquals(expectedStage, afterStage);
+        testInfo.checkCritStage(expectedStage);
     }
 
     // TODO: I don't know if EffectTest makes sense for this but whatever
