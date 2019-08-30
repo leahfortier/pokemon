@@ -16,6 +16,7 @@ import pokemon.active.MoveList;
 import pokemon.species.PokemonNamesies;
 import test.battle.TestBattle;
 import test.battle.TestStages;
+import util.string.StringAppender;
 import util.string.StringUtils;
 
 import java.util.Arrays;
@@ -76,6 +77,12 @@ public class TestPokemon extends ActivePokemon {
 
     public Double getExpectedDamageModifier() {
         return this.expectedDamageModifier;
+    }
+
+    public String statsString() {
+        return new StringAppender()
+                .appendJoin(" ", Stat.STATS, stat -> String.valueOf(this.getStat(stat)))
+                .toString();
     }
 
     public void setupMove(AttackNamesies attackNamesies, Battle battle) {

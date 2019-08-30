@@ -214,30 +214,27 @@ class TestInfo {
         Assert.assertEquals(expectedStage, afterStage);
     }
 
+    // By default, check the stat on the more relevant Pokemon
+    // Attack, Sp. Attack, Accuracy, Speed uses attacking
+    // Defense, Sp. Defense, Evasion uses defending
     public void statModifierTest(double expectedChange, Stat stat) {
-        this.statModifierTest(expectedChange, 1, stat);
+        this.statModifierTest(expectedChange, stat, stat.user());
     }
 
-    public void statModifierTest(double expectedChange, double otherExpectedChange, Stat stat) {
+    // user should be true if checking the stat on the attacking pokemon and false for the defending pokemon
+    public void statModifierTest(double expectedChange, Stat stat, boolean user) {
         TestBattle battle = this.createBattle();
-        TestPokemon statPokemon = stat.user() ? battle.getAttacking() : battle.getDefending();
-        TestPokemon otherPokemon = battle.getOtherPokemon(statPokemon);
+        TestPokemon statPokemon = user ? battle.getAttacking() : battle.getDefending();
 
         int beforeStat = Stat.getStat(stat, statPokemon, battle);
-        int otherBeforeStat = Stat.getStat(stat, otherPokemon, battle);
-
         this.manipulate(battle);
-
         int afterStat = Stat.getStat(stat, statPokemon, battle);
-        int otherAfterStat = Stat.getStat(stat, otherPokemon, battle);
 
         Assert.assertEquals(
                 StringUtils.spaceSeparated(beforeStat, afterStat, expectedChange, this),
                 (int)(beforeStat*expectedChange),
                 afterStat
         );
-
-        Assert.assertEquals((int)(otherBeforeStat*otherExpectedChange), otherAfterStat);
     }
 
     // No modifier without manipulation, expectedModifier with it

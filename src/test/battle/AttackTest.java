@@ -91,14 +91,8 @@ public class AttackTest extends BaseTest {
         for (AttackNamesies attackNamesies : AttackNamesies.values()) {
             Attack attack = attackNamesies.getNewAttack();
 
-            try {
-                // If the accuracy string is "--", then the move should ALWAYS hit
-                Integer.parseInt(attack.getAccuracyString());
-
-                // Self-target status moves and field moves should always have "--" accuracy string
-                Assert.assertFalse(attack.getName(), attack.isSelfTargetStatusMove());
-                Assert.assertFalse(attack.getName(), attack.isMoveType(MoveType.FIELD));
-            } catch (NumberFormatException ex) {
+            // If the accuracy string is "--", then the move should ALWAYS hit
+            if (attack.getAccuracyString().equals("--")) {
                 // Super perfect always hit moves -- test with -6 accuracy and +6 evasion, move should still hit
                 TestBattle battle = TestBattle.create();
                 TestPokemon attacking = battle.getAttacking();
@@ -117,6 +111,13 @@ public class AttackTest extends BaseTest {
                 Assert.assertTrue(attack.getName(), accuracy < 100);
                 Assert.assertTrue(attack.getName(), evasion > 100);
                 Assert.assertTrue(attack.getName(), totalAccuracy > 100);
+            } else {
+                // If not "--", then should be an integer and this should not throw a NumberFormatException
+                Integer.parseInt(attack.getAccuracyString());
+
+                // Self-target status moves and field moves should always have "--" accuracy string
+                Assert.assertFalse(attack.getName(), attack.isSelfTargetStatusMove());
+                Assert.assertFalse(attack.getName(), attack.isMoveType(MoveType.FIELD));
             }
         }
     }

@@ -152,4 +152,5 @@ Other random things:
     Al Bhed translation shouldn't be hardcoded -- just a flag on the area or something
         - so if you put the flag on the area then when you talk to the rival he speaks Al Bhed...
     test transformed + pokemon specific effects (Light Ball/Dark Void etc)
+    wondering if there should be an enum for things like user/isPlayer type things because the booleans can be pretty confusing
     

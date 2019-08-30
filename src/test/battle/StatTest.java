@@ -157,7 +157,8 @@ public class StatTest extends BaseTest {
     }
 
     private void statSplittingTest(AttackNamesies splitter, AttackNamesies increaser, BattleEffectNamesies splitEffect, Stat... stats) {
-        TestBattle battle = TestBattle.create();
+        // The Pokemon have the largest minimum distance between each base stat (100)
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.ARCEUS);
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
@@ -194,7 +195,9 @@ public class StatTest extends BaseTest {
         int defendingStat = Stat.getStat(s, defending, battle);
 
         Assert.assertEquals(
-                "Stat: " + s.getName() + ", Attacking: " + attackingStat + ", Defending: " + defendingStat,
+                "Stat: " + s.getName() + ", Attacking: " + attackingStat + ", Defending: " + defendingStat + "\n" +
+                "Attacking: " + attacking.statsString() + "\n" +
+                "Defending: " + defending.statsString(),
                 equals,
                 attackingStat == defendingStat
         );

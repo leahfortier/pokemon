@@ -53,7 +53,8 @@ public class ModifierTest extends BaseTest {
 
         statModifierTest(1.5, Stat.ATTACK, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1.5, Stat.SP_DEFENSE, new TestInfo().defending(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
-        statModifierTest(1, 1.5, Stat.SP_DEFENSE, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
+        statModifierTest(1.5, Stat.SP_DEFENSE, true, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
+        statModifierTest(1, Stat.SP_DEFENSE, false, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
 
         statModifierTest(2, Stat.DEFENSE, new TestInfo().with(AttackNamesies.TACKLE).defending(AbilityNamesies.FUR_COAT));
@@ -64,8 +65,8 @@ public class ModifierTest extends BaseTest {
         testInfo.statModifierTest(expectedChange, stat);
     }
 
-    private void statModifierTest(double expectedChange, double otherExpectedChange, Stat stat, TestInfo testInfo) {
-        testInfo.statModifierTest(expectedChange, otherExpectedChange, stat);
+    private void statModifierTest(double expectedChange, Stat stat, boolean user, TestInfo testInfo) {
+        testInfo.statModifierTest(expectedChange, stat, user);
     }
 
     @Test
