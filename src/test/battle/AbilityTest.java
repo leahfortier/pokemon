@@ -506,8 +506,8 @@ public class AbilityTest extends BaseTest {
         battle.splashFight();
         attacking.assertNoStatus();
         defending.assertNoStatus();
-        Assert.assertFalse(attacking.isHoldingItem(battle));
-        Assert.assertFalse(defending.isHoldingItem(battle));
+        attacking.assertNotHoldingItem(battle);
+        defending.assertNotHoldingItem(battle);
 
         // Synchronize does not work on Sleep
         battle.attackingFight(AttackNamesies.SPORE);
@@ -540,8 +540,8 @@ public class AbilityTest extends BaseTest {
         battle.attackingFight(AttackNamesies.THUNDER_WAVE);
         attacking.assertNoStatus();
         defending.assertNoStatus();
-        Assert.assertFalse(attacking.isHoldingItem(battle));
-        Assert.assertFalse(defending.isHoldingItem(battle));
+        attacking.assertNotHoldingItem(battle);
+        defending.assertNotHoldingItem(battle);
 
         battle.clearAllEffects();
         battle.emptyHeal();
@@ -561,8 +561,8 @@ public class AbilityTest extends BaseTest {
         battle.fight(AttackNamesies.FLING, AttackNamesies.FLING);
         attacking.assertBadPoison();
         defending.assertNoStatus();
-        Assert.assertFalse(attacking.isHoldingItem(battle));
-        Assert.assertFalse(defending.isHoldingItem(battle));
+        attacking.assertNotHoldingItem(battle);
+        defending.assertNotHoldingItem(battle);
         attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
         defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
 
@@ -594,7 +594,7 @@ public class AbilityTest extends BaseTest {
         defending.giveItem(ItemNamesies.RAWST_BERRY);
         battle.fight(AttackNamesies.WILL_O_WISP, AttackNamesies.SUNNY_DAY);
         defending.assertNoStatus();
-        Assert.assertTrue(defending.isHoldingItem(battle, ItemNamesies.RAWST_BERRY));
+        defending.assertHoldingItem(battle, ItemNamesies.RAWST_BERRY);
         defending.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
         defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
     }

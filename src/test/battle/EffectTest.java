@@ -501,13 +501,13 @@ public class EffectTest extends BaseTest {
                               .attacking(ItemNamesies.POTION)
                               .defendingFight(AttackNamesies.TRICK),
                 (battle, attacking, defending) -> {
-                    Assert.assertFalse(attacking.isHoldingItem(battle));
-                    Assert.assertTrue(defending.isHoldingItem(battle, ItemNamesies.POTION));
+                    attacking.assertNotHoldingItem(battle);
+                    defending.assertHoldingItem(battle, ItemNamesies.POTION);
                 },
                 (battle, attacking, defending) -> {
                     Assert.assertFalse(defending.lastMoveSucceeded());
-                    Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.POTION));
-                    Assert.assertFalse(defending.isHoldingItem(battle));
+                    attacking.assertHoldingItem(battle, ItemNamesies.POTION);
+                    defending.assertNotHoldingItem(battle);
                 }
         );
 
@@ -516,8 +516,8 @@ public class EffectTest extends BaseTest {
                         .asTrainerBattle()
                         .attacking(ItemNamesies.POTION)
                         .defendingFight(AttackNamesies.KNOCK_OFF),
-                (battle, attacking, defending) -> Assert.assertFalse(attacking.isHoldingItem(battle)),
-                (battle, attacking, defending) -> Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.POTION))
+                (battle, attacking, defending) -> attacking.assertNotHoldingItem(battle),
+                (battle, attacking, defending) -> attacking.assertHoldingItem(battle, ItemNamesies.POTION)
         );
 
         substituteTest(
@@ -795,7 +795,7 @@ public class EffectTest extends BaseTest {
         attacking.assertHasEffect(PokemonEffectNamesies.SUBSTITUTE);
         Assert.assertTrue(attacking.isLevitating(battle));
         attacking.assertNoStatus();
-        Assert.assertFalse(attacking.isHoldingItem(battle)); // Chesto Berry consumed
+        attacking.assertNotHoldingItem(battle); // Chesto Berry consumed
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(12/16.0, 4);
         Assert.assertTrue(battle.hasEffect(TerrainNamesies.GRASSY_TERRAIN));
@@ -847,7 +847,7 @@ public class EffectTest extends BaseTest {
         // But is removed when pelted with an Iron Ball (not true in actual games)
         battle.fight(AttackNamesies.FLING, AttackNamesies.ENDURE);
         attacking.assertConsumedItem(battle);
-        Assert.assertFalse(defending.isHoldingItem(battle));
+        defending.assertNotHoldingItem(battle);
         defending.assertNoEffect(PokemonEffectNamesies.MAGNET_RISE);
         Assert.assertTrue(attacking.isLevitating(battle));
         Assert.assertFalse(defending.isLevitating(battle));

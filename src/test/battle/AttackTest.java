@@ -591,8 +591,8 @@ public class AttackTest extends BaseTest {
         // Defending Pokemon will use Bug Bite and eat the Rawst Berry, curing its burn
         // Attacking will have its item consumed, but defending is the one who ate the berry
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.BUG_BITE);
-        Assert.assertFalse(attacking.isHoldingItem(battle));
-        Assert.assertFalse(defending.isHoldingItem(battle));
+        attacking.assertNotHoldingItem(battle);
+        defending.assertNotHoldingItem(battle);
         defending.assertNoStatus();
         attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
         defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
@@ -602,13 +602,13 @@ public class AttackTest extends BaseTest {
         // Should fail since the defending did not use their own item
         battle.defendingFight(AttackNamesies.RECYCLE);
         Assert.assertFalse(defending.lastMoveSucceeded());
-        Assert.assertFalse(attacking.isHoldingItem(battle));
-        Assert.assertFalse(defending.isHoldingItem(battle));
+        attacking.assertNotHoldingItem(battle);
+        defending.assertNotHoldingItem(battle);
 
         // Using Recycle after having having your berry eaten will bring the Rawst Berry back
         battle.attackingFight(AttackNamesies.RECYCLE);
-        Assert.assertTrue(attacking.isHoldingItem(battle, ItemNamesies.RAWST_BERRY));
-        Assert.assertFalse(defending.isHoldingItem(battle));
+        attacking.assertHoldingItem(battle, ItemNamesies.RAWST_BERRY);
+        defending.assertNotHoldingItem(battle);
         attacking.assertNoStatus();
         defending.assertNoStatus();
         attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
@@ -619,22 +619,22 @@ public class AttackTest extends BaseTest {
         // Poison the attacker -- will not trigger Rawst Berry
         battle.defendingFight(AttackNamesies.POISON_POWDER);
         Assert.assertTrue(attacking.isHoldingItem(battle));
-        Assert.assertFalse(defending.isHoldingItem(battle));
+        defending.assertNotHoldingItem(battle);
         attacking.assertRegularPoison();
         defending.assertNoStatus();
 
         // Transfer Poison to the defending
         battle.attackingFight(AttackNamesies.PSYCHO_SHIFT);
         Assert.assertTrue(attacking.isHoldingItem(battle));
-        Assert.assertFalse(defending.isHoldingItem(battle));
+        defending.assertNotHoldingItem(battle);
         attacking.assertNoStatus();
         defending.assertRegularPoison();
 
         // Burn the attacker -- will consume the Rawst Berry
         // Note: I am writing these comments much later than the code was written, I have no idea what poison has to do with anything
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
-        Assert.assertFalse(attacking.isHoldingItem(battle));
-        Assert.assertFalse(defending.isHoldingItem(battle));
+        attacking.assertNotHoldingItem(battle);
+        defending.assertNotHoldingItem(battle);
         attacking.assertNoStatus();
         defending.assertRegularPoison();
         attacking.assertConsumedBerry(battle);
@@ -1172,7 +1172,7 @@ public class AttackTest extends BaseTest {
         defending.withItem(ItemNamesies.OCCA_BERRY);
         attacking.setExpectedDamageModifier(.5);
         battle.fight(AttackNamesies.INCINERATE, AttackNamesies.ENDURE);
-        Assert.assertFalse(defending.isHoldingItem(battle));
+        defending.assertNotHoldingItem(battle);
         defending.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
         defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
         defending.assertNotFullHealth();

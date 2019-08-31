@@ -189,6 +189,14 @@ public class TestPokemon extends ActivePokemon {
         Assert.assertEquals(effectNamesies.name(), shouldHave, this.hasEffect(effectNamesies));
     }
 
+    public void assertHoldingItem(Battle battle, ItemNamesies itemNamesies) {
+        Assert.assertTrue(this.isHoldingItem(battle, itemNamesies));
+    }
+
+    public void assertNotHoldingItem(Battle battle) {
+        Assert.assertFalse(this.isHoldingItem(battle));
+    }
+
     // Either checks consumed or not consumed
     public void assertExpectedConsumedItem(Battle battle, boolean shouldConsume) {
         if (shouldConsume) {
