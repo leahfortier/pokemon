@@ -1830,4 +1830,63 @@ public class AttackTest extends BaseTest {
         Assert.assertEquals(AttackNamesies.PHOTON_GEYSER, photonGeyser.namesies());
         Assert.assertEquals(MoveCategory.SPECIAL, photonGeyser.getCategory());
     }
+
+    @Test
+    public void darkVoidTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.DARKRAI, PokemonNamesies.DITTO);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Ditto cannot use Dark Void because not a Darkrai
+        battle.defendingFight(AttackNamesies.DARK_VOID);
+        attacking.assertNoStatus();
+        defending.assertNoStatus();
+        Assert.assertFalse(defending.lastMoveSucceeded());
+
+        // BUT DARKRAI CAN
+        battle.attackingFight(AttackNamesies.DARK_VOID);
+        attacking.assertNoStatus();
+        defending.assertHasStatus(StatusNamesies.ASLEEP);
+
+        // Wakkeeeee uppppppp
+        battle.emptyHeal();
+        attacking.assertNoStatus();
+        defending.assertNoStatus();
+
+        // Ditto now has Magic Bounce which should reflect the Dark Void back to Darkrai (even though Ditto no Darky)
+        defending.withAbility(AbilityNamesies.MAGIC_BOUNCE);
+        battle.attackingFight(AttackNamesies.DARK_VOID);
+        attacking.assertHasStatus(StatusNamesies.ASLEEP);
+        defending.assertNoStatus();
+
+        battle.emptyHeal();
+        attacking.assertNoStatus();
+        defending.assertNoStatus();
+        defending.assertSpecies(PokemonNamesies.DITTO);
+        defending.withAbility(AbilityNamesies.NO_ABILITY);
+
+        // Shouldn't reflect when it doesn't work
+        attacking.withAbility(AbilityNamesies.MAGIC_BOUNCE);
+        battle.defendingFight(AttackNamesies.DARK_VOID);
+        attacking.assertNoStatus();
+        defending.assertNoStatus();
+        Assert.assertFalse(defending.lastMoveSucceeded());
+        attacking.withAbility(AbilityNamesies.NO_ABILITY);
+
+        // Who's not a Darkrai now?????? (Not Ditto)
+        battle.defendingFight(AttackNamesies.TRANSFORM);
+        defending.assertSpecies(PokemonNamesies.DARKRAI);
+        attacking.assertNoStatus();
+        defending.assertNoStatus();
+
+        // (Transformed) Darkrai should work
+        battle.defendingFight(AttackNamesies.DARK_VOID);
+        attacking.assertHasStatus(StatusNamesies.ASLEEP);
+        defending.assertNoStatus();
+
+        battle.emptyHeal();
+        attacking.assertNoStatus();
+        defending.assertNoStatus();
+        defending.assertSpecies(PokemonNamesies.DARKRAI);
+    }
 }
