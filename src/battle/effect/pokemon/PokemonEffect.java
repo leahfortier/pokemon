@@ -8,11 +8,14 @@ import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.AbilityHolder;
 import battle.effect.EffectInterfaces.AttackSelectionSelfBlockerEffect;
+import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.EffectInterfaces.MessageGetter;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.EffectInterfaces.PhysicalContactEffect;
+import battle.effect.EffectInterfaces.PokemonHolder;
 import battle.effect.EffectInterfaces.ProtectingEffect;
 import battle.effect.EffectInterfaces.SapHealthEffect;
 import battle.effect.EffectNamesies;
@@ -53,8 +56,6 @@ import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.attack.OhkoMove;
 import battle.effect.battle.StandardBattleEffectNamesies;
-import battle.effect.holder.AbilityHolder;
-import battle.effect.holder.ItemHolder;
 import battle.effect.source.CastSource;
 import battle.effect.source.ChangeAbilitySource;
 import battle.effect.source.ChangeAttackTypeSource;
@@ -70,6 +71,7 @@ import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.active.MoveList;
+import pokemon.species.PokemonNamesies;
 import type.PokeType;
 import type.Type;
 import util.RandomUtils;
@@ -1720,9 +1722,10 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Transformed extends PokemonEffect implements ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect {
+    static class Transformed extends PokemonEffect implements ChangeMoveListEffect, DifferentStatEffect, ChangeTypeEffect, PokemonHolder {
         private static final long serialVersionUID = 1L;
 
+        private PokemonNamesies pokemon;
         private MoveList moveList;
         private int[] stats;
         private PokeType type;
@@ -1740,6 +1743,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             // Pokemon to transform into
             ActivePokemon transformee = b.getOtherPokemon(victim);
+            pokemon = transformee.namesies();
 
             // Set the new stats
             stats = new int[Stat.NUM_STATS];
@@ -1765,7 +1769,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             type = transformee.getPokemonInfo().getType();
 
             // Castaway
-            Messages.add(new MessageUpdate().withNewPokemon(transformee.namesies(), transformee.isShiny(), true, victim.isPlayer()));
+            Messages.add(new MessageUpdate().withNewPokemon(pokemon, transformee.isShiny(), true, victim.isPlayer()));
             Messages.add(new MessageUpdate().updatePokemon(b, victim));
         }
 
@@ -1782,6 +1786,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public PokeType getType(Battle b, ActivePokemon p, boolean display) {
             return type;
+        }
+
+        @Override
+        public PokemonNamesies getPokemon() {
+            return pokemon;
         }
 
         @Override

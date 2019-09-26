@@ -18,10 +18,8 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
 import test.BaseTest;
 import test.TestPokemon;
-import test.TestUtils;
 import type.PokeType;
 import type.Type;
-import util.string.StringUtils;
 
 public class ModifierTest extends BaseTest {
     @Test
@@ -55,7 +53,8 @@ public class ModifierTest extends BaseTest {
 
         statModifierTest(1.5, Stat.ATTACK, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1.5, Stat.SP_DEFENSE, new TestInfo().defending(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
-        statModifierTest(1, 1.5, Stat.SP_DEFENSE, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
+        statModifierTest(1.5, Stat.SP_DEFENSE, true, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
+        statModifierTest(1, Stat.SP_DEFENSE, false, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
 
         statModifierTest(2, Stat.DEFENSE, new TestInfo().with(AttackNamesies.TACKLE).defending(AbilityNamesies.FUR_COAT));
@@ -63,29 +62,11 @@ public class ModifierTest extends BaseTest {
     }
 
     private void statModifierTest(double expectedChange, Stat stat, TestInfo testInfo) {
-        statModifierTest(expectedChange, 1, stat, testInfo);
+        testInfo.statModifierTest(expectedChange, stat);
     }
 
-    private void statModifierTest(double expectedChange, double otherExpectedChange, Stat stat, TestInfo testInfo) {
-        TestBattle battle = testInfo.createBattle();
-        TestPokemon statPokemon = stat.user() ? battle.getAttacking() : battle.getDefending();
-        TestPokemon otherPokemon = battle.getOtherPokemon(statPokemon);
-
-        int beforeStat = Stat.getStat(stat, statPokemon, battle);
-        int otherBeforeStat = Stat.getStat(stat, otherPokemon, battle);
-
-        testInfo.manipulate(battle);
-
-        int afterStat = Stat.getStat(stat, statPokemon, battle);
-        int otherAfterStat = Stat.getStat(stat, otherPokemon, battle);
-
-        Assert.assertEquals(
-                StringUtils.spaceSeparated(beforeStat, afterStat, expectedChange, testInfo),
-                (int)(beforeStat*expectedChange),
-                afterStat
-        );
-
-        Assert.assertEquals((int)(otherBeforeStat*otherExpectedChange), otherAfterStat);
+    private void statModifierTest(double expectedChange, Stat stat, boolean user, TestInfo testInfo) {
+        testInfo.statModifierTest(expectedChange, stat, user);
     }
 
     @Test
@@ -229,37 +210,7 @@ public class ModifierTest extends BaseTest {
 
     // No modifier without manipulation, expectedModifier with it
     private void powerChangeTest(double expectedModifier, AttackNamesies attackNamesies, TestInfo testInfo) {
-        TestBattle battle = testInfo.createBattle();
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
-
-        // Check modifiers manually
-        double beforeModifier = battle.getDamageModifier(attacking, defending);
-        TestUtils.assertEquals(1, beforeModifier);
-
-        testInfo.manipulate(battle);
-        attacking.setupMove(attackNamesies, battle);
-        double afterModifier = battle.getDamageModifier(attacking, defending);
-
-        TestUtils.assertEquals(
-                StringUtils.spaceSeparated(attackNamesies, testInfo),
-                expectedModifier,
-                afterModifier
-        );
-
-        // Make sure modifiers actually happen in battle
-        powerChangeTest(expectedModifier, false, attackNamesies, testInfo);
-        powerChangeTest(expectedModifier, true, attackNamesies, testInfo);
-    }
-
-    private void powerChangeTest(double expectedModifier, boolean manipulate, AttackNamesies attackNamesies, TestInfo testInfo) {
-        TestBattle battle = testInfo.createBattle();
-        if (manipulate) {
-            testInfo.manipulate(battle);
-        }
-
-        battle.getAttacking().setExpectedDamageModifier(manipulate ? expectedModifier : 1);
-        battle.attackingFight(attackNamesies);
+        testInfo.powerChangeTest(expectedModifier, attackNamesies);
     }
 
     @Test
@@ -276,24 +227,11 @@ public class ModifierTest extends BaseTest {
     // Differs from the powerChangeTest in that it only checks once
     // Immediately applies manipulations in the testInfo and confirms the power modifier
     private void powerModifierTest(double expectedModifier, AttackNamesies attackNamesies, TestInfo testInfo) {
-        TestBattle battle = testInfo.createBattle();
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
-
-        testInfo.manipulate(battle);
-
-        // Manual check
-        attacking.setupMove(attackNamesies, battle);
-        TestUtils.assertEquals(expectedModifier, battle.getDamageModifier(attacking, defending));
-
-        // Battle check
-        attacking.setExpectedDamageModifier(expectedModifier);
-        battle.attackingFight(attackNamesies);
+        testInfo.powerModifierTest(expectedModifier, attackNamesies);
     }
 
     @Test
     public void stageChangeTest() {
-
         stageChangeTest(1, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.NO_ABILITY).defendingFight(AttackNamesies.DEFENSE_CURL));
         stageChangeTest(2, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.SIMPLE).defendingFight(AttackNamesies.DEFENSE_CURL));
         stageChangeTest(-1, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.CONTRARY).defendingFight(AttackNamesies.DEFENSE_CURL));
@@ -378,24 +316,7 @@ public class ModifierTest extends BaseTest {
     }
 
     private void stageChangeTest(int expectedStage, Stat stat, TestInfo testInfo) {
-        TestBattle battle = testInfo.createBattle();
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
-
-        TestPokemon statPokemon = stat.user() ? attacking : defending;
-        TestPokemon otherPokemon = stat.user() ? defending : attacking;
-
-        int beforeStage = stat.getStage(statPokemon, otherPokemon, battle);
-        Assert.assertEquals(0, beforeStage);
-
-        testInfo.manipulate(battle);
-        int afterStage = stat.getStage(statPokemon, otherPokemon, battle);
-
-        Assert.assertEquals(
-                StringUtils.spaceSeparated(afterStage, expectedStage, stat, testInfo),
-                expectedStage,
-                afterStage
-        );
+        testInfo.stageChangeTest(expectedStage, stat);
     }
 
     @Test

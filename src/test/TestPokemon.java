@@ -16,6 +16,7 @@ import pokemon.active.MoveList;
 import pokemon.species.PokemonNamesies;
 import test.battle.TestBattle;
 import test.battle.TestStages;
+import util.string.StringAppender;
 import util.string.StringUtils;
 
 import java.util.Arrays;
@@ -32,6 +33,9 @@ public class TestPokemon extends ActivePokemon {
 
     public TestPokemon(final PokemonNamesies pokemon, final int level, final boolean isWild, final boolean isPlayer) {
         super(pokemon, level, isWild, isPlayer);
+
+        // Test Pokemon need to have their ability explicitly changed
+        this.setAbility(AbilityNamesies.NO_ABILITY);
     }
 
     public TestPokemon withIVs(int[] IVs) {
@@ -78,6 +82,12 @@ public class TestPokemon extends ActivePokemon {
         return this.expectedDamageModifier;
     }
 
+    public String statsString() {
+        return new StringAppender()
+                .appendJoin(" ", Stat.STATS, stat -> String.valueOf(this.getStat(stat)))
+                .toString();
+    }
+
     public void setupMove(AttackNamesies attackNamesies, Battle battle) {
         this.setMove(new Move(attackNamesies));
         this.startAttack(battle);
@@ -109,9 +119,9 @@ public class TestPokemon extends ActivePokemon {
 
     public void assertHealthRatio(double fraction, int errorHp) {
         int hpFraction = (int)(Math.ceil(fraction*this.getMaxHP()));
-        Assert.assertTrue(
+        TestUtils.assertAlmostEquals(
                 StringUtils.spaceSeparated(fraction, this.getHPRatio(), hpFraction, this.getHpString(), errorHp),
-                hpFraction >= this.getHP() - errorHp && hpFraction <= this.getHP() + errorHp
+                hpFraction, this.getHP(), errorHp
         );
     }
 
@@ -179,6 +189,14 @@ public class TestPokemon extends ActivePokemon {
         Assert.assertEquals(effectNamesies.name(), shouldHave, this.hasEffect(effectNamesies));
     }
 
+    public void assertHoldingItem(Battle battle, ItemNamesies itemNamesies) {
+        Assert.assertTrue(this.isHoldingItem(battle, itemNamesies));
+    }
+
+    public void assertNotHoldingItem(Battle battle) {
+        Assert.assertFalse(this.isHoldingItem(battle));
+    }
+
     // Either checks consumed or not consumed
     public void assertExpectedConsumedItem(Battle battle, boolean shouldConsume) {
         if (shouldConsume) {
@@ -220,6 +238,17 @@ public class TestPokemon extends ActivePokemon {
     public void assertChangedAbility(AbilityNamesies abilityNamesies) {
         Assert.assertTrue(this.getAbility().getName(), this.hasAbility(abilityNamesies));
         this.assertHasEffect(PokemonEffectNamesies.CHANGE_ABILITY);
+    }
+
+    public void assertSpecies(PokemonNamesies species) {
+        Assert.assertTrue(this.namesies() + " " + species, this.isPokemon(species));
+        if (species == this.namesies()) {
+            Assert.assertTrue(this.isActualPokemon(species));
+            this.assertNoEffect(PokemonEffectNamesies.TRANSFORMED);
+        } else {
+            Assert.assertFalse(this.isActualPokemon(species));
+            this.assertHasEffect(PokemonEffectNamesies.TRANSFORMED);
+        }
     }
 
     public static TestPokemon newPlayerPokemon(final PokemonNamesies pokemon) {

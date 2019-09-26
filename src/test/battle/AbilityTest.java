@@ -451,10 +451,13 @@ public class AbilityTest extends BaseTest {
     public void innerFocusTest() {
         TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
         TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.INNER_FOCUS);
-        TestPokemon defending1 = battle.getDefending().withAbility(AbilityNamesies.NO_ABILITY); // Not fucking Sturdy
+        TestPokemon defending1 = battle.getDefending();
         TestPokemon defending2 = TestPokemon.newTrainerPokemon(PokemonNamesies.SHUCKLE).withAbility(AbilityNamesies.MOLD_BREAKER);
         ((EnemyTrainer)battle.getOpponent()).addPokemon(defending2);
         Assert.assertTrue(battle.getDefending() == defending1);
+
+        // Not fucking Sturdy
+        defending1.assertAbility(AbilityNamesies.NO_ABILITY);
 
         // Fake out will not cause the defending to flinch and it will successfully use Tackle
         // (Fake Out will still strike first even though it is listed second since it has priority)
@@ -503,8 +506,8 @@ public class AbilityTest extends BaseTest {
         battle.splashFight();
         attacking.assertNoStatus();
         defending.assertNoStatus();
-        Assert.assertFalse(attacking.isHoldingItem(battle));
-        Assert.assertFalse(defending.isHoldingItem(battle));
+        attacking.assertNotHoldingItem(battle);
+        defending.assertNotHoldingItem(battle);
 
         // Synchronize does not work on Sleep
         battle.attackingFight(AttackNamesies.SPORE);
@@ -537,8 +540,8 @@ public class AbilityTest extends BaseTest {
         battle.attackingFight(AttackNamesies.THUNDER_WAVE);
         attacking.assertNoStatus();
         defending.assertNoStatus();
-        Assert.assertFalse(attacking.isHoldingItem(battle));
-        Assert.assertFalse(defending.isHoldingItem(battle));
+        attacking.assertNotHoldingItem(battle);
+        defending.assertNotHoldingItem(battle);
 
         battle.clearAllEffects();
         battle.emptyHeal();
@@ -558,8 +561,8 @@ public class AbilityTest extends BaseTest {
         battle.fight(AttackNamesies.FLING, AttackNamesies.FLING);
         attacking.assertBadPoison();
         defending.assertNoStatus();
-        Assert.assertFalse(attacking.isHoldingItem(battle));
-        Assert.assertFalse(defending.isHoldingItem(battle));
+        attacking.assertNotHoldingItem(battle);
+        defending.assertNotHoldingItem(battle);
         attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
         defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
 
@@ -591,7 +594,7 @@ public class AbilityTest extends BaseTest {
         defending.giveItem(ItemNamesies.RAWST_BERRY);
         battle.fight(AttackNamesies.WILL_O_WISP, AttackNamesies.SUNNY_DAY);
         defending.assertNoStatus();
-        Assert.assertTrue(defending.isHoldingItem(battle, ItemNamesies.RAWST_BERRY));
+        defending.assertHoldingItem(battle, ItemNamesies.RAWST_BERRY);
         defending.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
         defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
     }
@@ -599,11 +602,8 @@ public class AbilityTest extends BaseTest {
     @Test
     public void stanceChangeTest() {
         TestBattle battle = TestBattle.create(PokemonNamesies.AEGISLASH, PokemonNamesies.AEGISLASH);
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
-
-        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.STANCE_CHANGE));
-        Assert.assertTrue(defending.hasAbility(AbilityNamesies.STANCE_CHANGE));
+        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.STANCE_CHANGE);
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.STANCE_CHANGE);
 
         // Should start in shield form
         assertStanceChangeForm(true, battle, attacking);
@@ -1003,7 +1003,7 @@ public class AbilityTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         // Confirm no modifier without Fluffy
-        defending.setAbility(AbilityNamesies.NO_ABILITY);
+        defending.assertAbility(AbilityNamesies.NO_ABILITY);
         manipulator.manipulate(battle);
         attacking.setExpectedDamageModifier(1.0);
         battle.attackingFight(attackNamesies);

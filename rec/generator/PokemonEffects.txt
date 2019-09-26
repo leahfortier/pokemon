@@ -286,7 +286,6 @@ RaiseCrits:
         ###
 *
 ChangeItem:
-    Int: ItemHolder
     BeforeCast:
         item = ((ItemHolder)source.getSource(b, caster)).getItem();
         victim.getEffects().remove(this.namesies());
@@ -294,9 +293,7 @@ ChangeItem:
     Field:
         private HoldItem item;
         ###
-    GetItem:
-        return item;
-        ###
+    ItemHolder: item
     CanHave: True
 *
 ChangeAttackType:
@@ -339,7 +336,6 @@ ChangeType:
         ###
 *
 ChangeAbility:
-    Int: AbilityHolder
     Field:
         private Ability ability;
         private String message;
@@ -355,9 +351,7 @@ ChangeAbility:
         // Remove any other ChangeAbility effects that the victim may have
         victim.getEffects().remove(this.namesies());
         ###
-    GetAbility:
-        return ability;
-        ###
+    AbilityHolder: ability
     CanHave: True
     CastMessage: message
 *
@@ -660,6 +654,7 @@ FiddyPercentStronger:
 *
 Transformed:
     Field:
+        private PokemonNamesies pokemon;
         private MoveList moveList;
         private int[] stats;
         private PokeType type;
@@ -668,6 +663,7 @@ Transformed:
     AfterCast:
         // Pokemon to transform into
         ActivePokemon transformee = b.getOtherPokemon(victim);
+        pokemon = transformee.namesies();
 
         // Set the new stats
         stats = new int[Stat.NUM_STATS];
@@ -693,7 +689,7 @@ Transformed:
         type = transformee.getPokemonInfo().getType();
         
         // Castaway
-        Messages.add(new MessageUpdate().withNewPokemon(transformee.namesies(), transformee.isShiny(), true, victim.isPlayer()));
+        Messages.add(new MessageUpdate().withNewPokemon(pokemon, transformee.isShiny(), true, victim.isPlayer()));
         Messages.add(new MessageUpdate().updatePokemon(b, victim));
         ###
     FullEffectApplies:
@@ -715,6 +711,7 @@ Transformed:
     GetChangeTypeEffect:
         return type;
         ###
+    PokemonHolder: pokemon
 *
 Substitute:
     Int: AbsorbDamageEffect, PassableEffect, StickyHoldEffect, StatProtectingEffect
@@ -955,10 +952,7 @@ ConsumedItem:
         victim.removeItem();
         victim.getEffects().remove(this.namesies());
         ###
-    Int: ItemHolder
-    GetItem:
-        return consumed;
-        ###
+    ItemHolder: consumed
     CanHave: True
 *
 Powder:

@@ -5,6 +5,7 @@ import battle.Battle;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.DoubleMinimizerMove;
+import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.EffectInterfaces.PowderMove;
@@ -48,7 +49,6 @@ import battle.effect.attack.SelfHealingMove;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.battle.terrain.TerrainNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
-import battle.effect.holder.ItemHolder;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
@@ -75,6 +75,7 @@ import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.active.MoveList;
+import pokemon.species.PokemonNamesies;
 import trainer.Team;
 import trainer.Trainer;
 import type.PokeType;
@@ -8235,6 +8236,11 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.DARK_VOID, Type.DARK, MoveCategory.STATUS, 10, "Opposing Pok\u00e9mon are dragged into a world of total darkness that makes them sleep.");
             super.accuracy = 50;
             super.status = StatusNamesies.ASLEEP;
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isPokemon(PokemonNamesies.DARKRAI);
         }
     }
 

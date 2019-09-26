@@ -71,6 +71,10 @@ public final class GeneralUtils {
         return true;
     }
 
+    public static <T> boolean contains(T value, T[] values) {
+        return Arrays.asList(values).contains(value);
+    }
+
     public static int numNonNull(Object... objects) {
         return (int)Arrays.stream(objects)
                           .filter(Objects::nonNull)

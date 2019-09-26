@@ -5,6 +5,9 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.AbilityHolder;
+import battle.effect.EffectInterfaces.ItemHolder;
+import battle.effect.EffectInterfaces.PokemonHolder;
 import battle.effect.EffectList;
 import battle.effect.InvokeEffect;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
@@ -27,8 +30,6 @@ import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.attack.MultiTurnMove.SemiInvulnerableMove;
-import battle.effect.holder.AbilityHolder;
-import battle.effect.holder.ItemHolder;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
@@ -63,6 +64,7 @@ import trainer.player.medal.MedalTheme;
 import type.PokeType;
 import type.Type;
 import util.Action;
+import util.GeneralUtils;
 import util.serialization.Serializable;
 import util.string.StringUtils;
 
@@ -468,6 +470,15 @@ public class ActivePokemon extends PartyPokemon {
 
     public boolean isType(Battle b, Type type) {
         return this.getType(b).isType(type);
+    }
+
+    public boolean isPokemon(PokemonNamesies... names) {
+        PokemonEffect transformed = this.getEffect(PokemonEffectNamesies.TRANSFORMED);
+        if (transformed != null) {
+            return GeneralUtils.contains(((PokemonHolder)transformed).getPokemon(), names);
+        }
+
+        return this.isActualPokemon(names);
     }
 
     public String getName() {

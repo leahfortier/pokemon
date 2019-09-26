@@ -4843,6 +4843,7 @@ Dark Void:
     Cat: Status
     Status: Asleep
     Acc: 50
+    Applies: user.isPokemon(PokemonNamesies.DARKRAI)
 *
 Seed Flare:
     Desc: The user emits a shock wave from its body to attack its target. This may also harshly lower the target's Sp. Def stat.
