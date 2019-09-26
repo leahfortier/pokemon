@@ -119,9 +119,9 @@ public class TestPokemon extends ActivePokemon {
 
     public void assertHealthRatio(double fraction, int errorHp) {
         int hpFraction = (int)(Math.ceil(fraction*this.getMaxHP()));
-        Assert.assertTrue(
+        TestUtils.assertAlmostEquals(
                 StringUtils.spaceSeparated(fraction, this.getHPRatio(), hpFraction, this.getHpString(), errorHp),
-                hpFraction >= this.getHP() - errorHp && hpFraction <= this.getHP() + errorHp
+                hpFraction, this.getHP(), errorHp
         );
     }
 
@@ -238,6 +238,17 @@ public class TestPokemon extends ActivePokemon {
     public void assertChangedAbility(AbilityNamesies abilityNamesies) {
         Assert.assertTrue(this.getAbility().getName(), this.hasAbility(abilityNamesies));
         this.assertHasEffect(PokemonEffectNamesies.CHANGE_ABILITY);
+    }
+
+    public void assertSpecies(PokemonNamesies species) {
+        Assert.assertTrue(this.namesies() + " " + species, this.isPokemon(species));
+        if (species == this.namesies()) {
+            Assert.assertTrue(this.isActualPokemon(species));
+            this.assertNoEffect(PokemonEffectNamesies.TRANSFORMED);
+        } else {
+            Assert.assertFalse(this.isActualPokemon(species));
+            this.assertHasEffect(PokemonEffectNamesies.TRANSFORMED);
+        }
     }
 
     public static TestPokemon newPlayerPokemon(final PokemonNamesies pokemon) {

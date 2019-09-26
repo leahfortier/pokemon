@@ -1027,4 +1027,74 @@ public class EffectTest extends BaseTest {
                 .with(manipulator)
                 .doubleTake(safeguard, withoutManipulator, withManipulator);
     }
+
+    @Test
+    public void transformTest() {
+        TestInfo testInfo = new TestInfo(PokemonNamesies.DITTO, PokemonNamesies.PIKACHU)
+                .attacking(ItemNamesies.QUICK_POWDER)
+                .defending(ItemNamesies.LIGHT_BALL)
+                .with((battle, attacking, defending) -> {
+                    // Confirm no Imposter problems
+                    attacking.assertAbility(AbilityNamesies.NO_ABILITY);
+                    attacking.assertNoEffect(PokemonEffectNamesies.TRANSFORMED);
+
+                    attacking.assertSpecies(PokemonNamesies.DITTO);
+                    defending.assertSpecies(PokemonNamesies.PIKACHU);
+                });
+
+        // Quick Powder increases Speed by 50% for Ditto
+        testInfo.statModifierTest(1.5, Stat.SPEED, true);
+        testInfo.statModifierTest(1, Stat.SPEED, false);
+
+        // Light Ball doubles Pikachu's Attack and Sp. Attack
+        testInfo.statModifierTest(1, Stat.ATTACK, true);
+        testInfo.statModifierTest(1, Stat.SP_ATTACK, true);
+        testInfo.statModifierTest(2, Stat.ATTACK, false);
+        testInfo.statModifierTest(2, Stat.SP_ATTACK, false);
+
+        // Transform time!
+        testInfo.attackingFight(AttackNamesies.TRANSFORM)
+                .with((battle, attacking, defending) -> {
+                    attacking.assertHasEffect(PokemonEffectNamesies.TRANSFORMED);
+                    defending.assertNoEffect(PokemonEffectNamesies.TRANSFORMED);
+
+                    attacking.assertSpecies(PokemonNamesies.PIKACHU);
+                    defending.assertSpecies(PokemonNamesies.PIKACHU);
+
+                    attacking.assertHoldingItem(battle, ItemNamesies.QUICK_POWDER);
+                    defending.assertHoldingItem(battle, ItemNamesies.LIGHT_BALL);
+                });
+
+        // Not a Ditto anymore so Quick Powder shouldn't work
+        testInfo.statModifierTest(1, Stat.SPEED, true);
+        testInfo.statModifierTest(1, Stat.SPEED, false);
+
+        // But is a Pikachu, but not holding Light Ball so that shouldn't work still
+        testInfo.statModifierTest(1, Stat.ATTACK, true);
+        testInfo.statModifierTest(1, Stat.SP_ATTACK, true);
+        testInfo.statModifierTest(2, Stat.ATTACK, false);
+        testInfo.statModifierTest(2, Stat.SP_ATTACK, false);
+
+        // Switch items!
+        testInfo.attackingFight(AttackNamesies.TRICK)
+                .with((battle, attacking, defending) -> {
+                    attacking.assertHasEffect(PokemonEffectNamesies.TRANSFORMED);
+
+                    attacking.assertSpecies(PokemonNamesies.PIKACHU);
+                    defending.assertSpecies(PokemonNamesies.PIKACHU);
+
+                    defending.assertHoldingItem(battle, ItemNamesies.QUICK_POWDER);
+                    attacking.assertHoldingItem(battle, ItemNamesies.LIGHT_BALL);
+                });
+
+        // Regular Pikachu is holding Quick Powder now -- should do nothing
+        testInfo.statModifierTest(1, Stat.SPEED, true);
+        testInfo.statModifierTest(1, Stat.SPEED, false);
+
+        // Holding Light Ball now and is a (transformed) Pikachu, so should be stronger
+        testInfo.statModifierTest(2, Stat.ATTACK, true);
+        testInfo.statModifierTest(2, Stat.SP_ATTACK, true);
+        testInfo.statModifierTest(1, Stat.ATTACK, false);
+        testInfo.statModifierTest(1, Stat.SP_ATTACK, false);
+    }
 }

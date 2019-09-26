@@ -1,7 +1,9 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
+import battle.effect.EffectInterfaces.PokemonHolder;
 import battle.effect.EffectNamesies;
+import battle.effect.pokemon.PokemonEffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import pokemon.Stat;
@@ -230,10 +232,24 @@ class TestInfo {
         this.manipulate(battle);
         int afterStat = Stat.getStat(stat, statPokemon, battle);
 
-        Assert.assertEquals(
+        // If the Pokemon is now transformed, need to adjust stats
+        // Note: Will likely need to update in future to also include stance change abilities and such
+        int delta = 0;
+        if (statPokemon.hasEffect(PokemonEffectNamesies.TRANSFORMED)) {
+            // Calculate what the stat should be with different base stats (but no effects)
+            PokemonHolder transformed = (PokemonHolder)statPokemon.getEffect(PokemonEffectNamesies.TRANSFORMED);
+            int basePokemonStat = statPokemon.stats().calculate(stat, statPokemon.getPokemonInfo().getStats());
+            int transformPokemonStat = statPokemon.stats().calculate(stat, transformed.getPokemon().getInfo().getStats());
+
+            expectedChange *= (double)transformPokemonStat/basePokemonStat;
+            delta = 1;
+        }
+
+        TestUtils.assertAlmostEquals(
                 StringUtils.spaceSeparated(beforeStat, afterStat, expectedChange, this),
                 (int)(beforeStat*expectedChange),
-                afterStat
+                afterStat,
+                delta
         );
     }
 
