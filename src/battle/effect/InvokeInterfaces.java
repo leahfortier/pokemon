@@ -919,7 +919,7 @@ public final class InvokeInterfaces {
 
     public interface CritStageEffect {
 
-        default int increaseCritStage(Battle b, ActivePokemon p) {
+        default int increaseCritStage(ActivePokemon p) {
             return 1;
         }
 
@@ -930,7 +930,7 @@ public final class InvokeInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof CritStageEffect && invokee.isActiveEffect()) {
                     CritStageEffect effect = (CritStageEffect)invokee;
-                    modifier += effect.increaseCritStage(b, p);
+                    modifier += effect.increaseCritStage(p);
                 }
             }
 

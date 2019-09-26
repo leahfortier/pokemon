@@ -928,7 +928,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int increaseCritStage(Battle b, ActivePokemon p) {
+        public int increaseCritStage(ActivePokemon p) {
             return p.isPokemon(PokemonNamesies.CHANSEY) ? 2 : 0;
         }
 
@@ -1525,7 +1525,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int increaseCritStage(Battle b, ActivePokemon p) {
+        public int increaseCritStage(ActivePokemon p) {
             return p.isPokemon(PokemonNamesies.FARFETCHD) ? 2 : 0;
         }
 

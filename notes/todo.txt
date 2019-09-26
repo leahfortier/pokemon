@@ -154,4 +154,3 @@ Other random things:
     test transformed + pokemon specific effects (Light Ball/Dark Void etc)
     wondering if there should be an enum for things like user/isPlayer type things because the booleans can be pretty confusing
     
-    

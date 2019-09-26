@@ -847,7 +847,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public int increaseCritStage(Battle b, ActivePokemon p) {
+        public int increaseCritStage(ActivePokemon p) {
             // Each source increases the stage by two
             return 2*sources.size();
         }
