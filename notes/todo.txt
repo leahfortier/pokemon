@@ -163,3 +163,4 @@ Other random things:
         - lots and lots of status immunities etc
     should have an isWeather method on the battle
     do we already have a test that powerchangeeffects and such are never status moves
+    

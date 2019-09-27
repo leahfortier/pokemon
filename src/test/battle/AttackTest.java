@@ -1797,13 +1797,14 @@ public class AttackTest extends BaseTest {
         final PokemonNamesies pokemon;
         final Stat higher, lower;
         if (attackHigher) {
-            // Hitmonlee for Attack > Sp. Attack
-            pokemon = PokemonNamesies.HITMONLEE;
+            // Krabby for Attack > Sp. Attack
+            pokemon = PokemonNamesies.KRABBY;
             higher = Stat.ATTACK;
             lower = Stat.SP_ATTACK;
         } else {
-            // Alakazam for Sp. Attack > Attack
-            pokemon = PokemonNamesies.ALAKAZAM;
+            // Abra for Sp. Attack > Attack
+            // Note: Alakazam was occasionally too strong and with a crit could kill Shuckie
+            pokemon = PokemonNamesies.ABRA;
             higher = Stat.SP_ATTACK;
             lower = Stat.ATTACK;
         }
