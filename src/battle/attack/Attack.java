@@ -4,6 +4,8 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.DoubleDigger;
+import battle.effect.EffectInterfaces.DoubleFlyer;
 import battle.effect.EffectInterfaces.DoubleMinimizerMove;
 import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
@@ -11,6 +13,9 @@ import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.EffectInterfaces.PowderMove;
 import battle.effect.EffectInterfaces.PowerStatusBoosterEffect;
 import battle.effect.EffectInterfaces.SapHealthEffect;
+import battle.effect.EffectInterfaces.SemiInvulnerableDiggingBypasser;
+import battle.effect.EffectInterfaces.SemiInvulnerableFlyingBypasser;
+import battle.effect.EffectInterfaces.StormyMove;
 import battle.effect.EffectInterfaces.SwapOpponentEffect;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AdvantageMultiplierMove;
@@ -1646,25 +1651,13 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    // Twice as strong when the opponent is flying
-    static class Gust extends Attack implements SemiInvulnerableBypasser, PowerChangeEffect {
+    static class Gust extends Attack implements DoubleFlyer {
         private static final long serialVersionUID = 1L;
 
         Gust() {
             super(AttackNamesies.GUST, Type.FLYING, MoveCategory.SPECIAL, 35, "A gust of wind is whipped up by wings and launched at the target to inflict damage.");
             super.power = 40;
             super.accuracy = 100;
-        }
-
-        @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is flying
-            return defending.isSemiInvulnerableFlying();
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.isSemiInvulnerableFlying() ? 2 : 1;
         }
     }
 
@@ -2063,8 +2056,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    // Twice as strong when the opponent is flying
-    static class Twister extends Attack implements SemiInvulnerableBypasser, PowerChangeEffect {
+    static class Twister extends Attack implements DoubleFlyer {
         private static final long serialVersionUID = 1L;
 
         Twister() {
@@ -2073,17 +2065,6 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.effect = PokemonEffectNamesies.FLINCH;
             super.effectChance = 20;
-        }
-
-        @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is flying
-            return defending.isSemiInvulnerableFlying();
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.isSemiInvulnerableFlying() ? 2 : 1;
         }
     }
 
@@ -2188,8 +2169,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    // Twice as strong when the opponent is flying
-    static class Hurricane extends Attack implements BasicAccuracyBypassEffect, SemiInvulnerableBypasser, PowerChangeEffect {
+    static class Hurricane extends Attack implements StormyMove {
         private static final long serialVersionUID = 1L;
 
         Hurricane() {
@@ -2198,33 +2178,6 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 70;
             super.effect = PokemonEffectNamesies.CONFUSION;
             super.effectChance = 30;
-        }
-
-        @Override
-        public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
-            // Accuracy is only 50% when sunny
-            if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
-                return 50;
-            }
-
-            return super.accuracy;
-        }
-
-        @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hits in the rain
-            return b.getWeather().namesies() == WeatherNamesies.RAINING;
-        }
-
-        @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is flying
-            return defending.isSemiInvulnerableFlying();
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.isSemiInvulnerableFlying() ? 2 : 1;
         }
     }
 
@@ -2733,8 +2686,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    // Twice as strong when the opponent is flying
-    static class Thunder extends Attack implements BasicAccuracyBypassEffect, SemiInvulnerableBypasser, PowerChangeEffect {
+    static class Thunder extends Attack implements StormyMove {
         private static final long serialVersionUID = 1L;
 
         Thunder() {
@@ -2743,33 +2695,6 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 70;
             super.effectChance = 30;
             super.status = StatusNamesies.PARALYZED;
-        }
-
-        @Override
-        public int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
-            // Accuracy is only 50% when sunny
-            if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
-                return 50;
-            }
-
-            return super.accuracy;
-        }
-
-        @Override
-        public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hits in the rain
-            return b.getWeather().namesies() == WeatherNamesies.RAINING;
-        }
-
-        @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is flying
-            return defending.isSemiInvulnerableFlying();
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.isSemiInvulnerableFlying() ? 2 : 1;
         }
     }
 
@@ -3694,7 +3619,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Magnitude extends Attack implements PowerChangeEffect, SemiInvulnerableBypasser {
+    static class Magnitude extends Attack implements DoubleDigger {
         private static final long serialVersionUID = 1L;
 
         private static final int[] CHANCES = { 5, 10, 20, 30, 20, 10, 5 };
@@ -3720,29 +3645,6 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add("Magnitude " + (index + 4) + "!");
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            double multiplier = 1;
-
-            // Power is halved during Grassy Terrain
-            if (b.hasEffect(TerrainNamesies.GRASSY_TERRAIN)) {
-                multiplier *= .5;
-            }
-
-            // Power is doubled when the opponent is underground
-            if (victim.isSemiInvulnerableDigging()) {
-                multiplier *= 2;
-            }
-
-            return multiplier;
-        }
-
-        @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is underground
-            return defending.isSemiInvulnerableDigging();
         }
     }
 
@@ -3803,7 +3705,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Earthquake extends Attack implements PowerChangeEffect, SemiInvulnerableBypasser {
+    static class Earthquake extends Attack implements DoubleDigger {
         private static final long serialVersionUID = 1L;
 
         Earthquake() {
@@ -3811,43 +3713,14 @@ public abstract class Attack implements AttackInterface {
             super.power = 100;
             super.accuracy = 100;
         }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            double multiplier = 1;
-
-            // Power is halved during Grassy Terrain
-            if (b.hasEffect(TerrainNamesies.GRASSY_TERRAIN)) {
-                multiplier *= .5;
-            }
-
-            // Power is doubled when the opponent is underground
-            if (victim.isSemiInvulnerableDigging()) {
-                multiplier *= 2;
-            }
-
-            return multiplier;
-        }
-
-        @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is underground
-            return defending.isSemiInvulnerableDigging();
-        }
     }
 
-    static class Fissure extends Attack implements OhkoMove, SemiInvulnerableBypasser {
+    static class Fissure extends Attack implements SemiInvulnerableDiggingBypasser, OhkoMove {
         private static final long serialVersionUID = 1L;
 
         Fissure() {
             super(AttackNamesies.FISSURE, Type.GROUND, MoveCategory.PHYSICAL, 5, "The user opens up a fissure in the ground and drops the target in. The target faints instantly if this attack hits.");
             super.accuracy = 30;
-        }
-
-        @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is underground
-            return defending.isSemiInvulnerableDigging();
         }
     }
 
@@ -4660,8 +4533,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    // Twice as strong when the opponent is flying
-    static class SmackDown extends Attack implements SemiInvulnerableBypasser, PowerChangeEffect {
+    static class SmackDown extends Attack implements DoubleFlyer {
         private static final long serialVersionUID = 1L;
 
         SmackDown() {
@@ -4669,17 +4541,6 @@ public abstract class Attack implements AttackInterface {
             super.power = 50;
             super.accuracy = 100;
             super.effect = PokemonEffectNamesies.GROUNDED;
-        }
-
-        @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is flying
-            return defending.isSemiInvulnerableFlying();
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.isSemiInvulnerableFlying() ? 2 : 1;
         }
     }
 
@@ -6013,7 +5874,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class SkyUppercut extends Attack implements SemiInvulnerableBypasser {
+    static class SkyUppercut extends Attack implements SemiInvulnerableFlyingBypasser {
         private static final long serialVersionUID = 1L;
 
         SkyUppercut() {
@@ -6022,12 +5883,6 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 90;
             super.moveTypes.add(MoveType.PUNCHING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-        }
-
-        @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is flying
-            return defending.isSemiInvulnerableFlying();
         }
     }
 
@@ -9065,7 +8920,7 @@ public abstract class Attack implements AttackInterface {
     }
 
     // Apparently this isn't supposed to hit fly anymore, but that's stupid
-    static class Whirlwind extends Attack implements SwapOpponentEffect, SemiInvulnerableBypasser {
+    static class Whirlwind extends Attack implements SemiInvulnerableFlyingBypasser, SwapOpponentEffect {
         private static final long serialVersionUID = 1L;
 
         Whirlwind() {
@@ -9079,12 +8934,6 @@ public abstract class Attack implements AttackInterface {
         @Override
         public String getSwapMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + " blew away!";
-        }
-
-        @Override
-        public boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            // Always hit when the opponent is flying
-            return defending.isSemiInvulnerableFlying();
         }
 
         @Override

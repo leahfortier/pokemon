@@ -725,7 +725,7 @@ Gust:
     Pow: 40
     Acc: 100
     PP: 35
-    DoubleFly: True
+    Int: DoubleFlyer
 *
 Supersonic:
     Desc: The user generates odd sound waves from its body that confuse the target.
@@ -989,7 +989,7 @@ Twister:
     Acc: 100
     PokemonEffect: Flinch
     EffChance: 20
-    DoubleFly: True
+    Int: DoubleFlyer
 *
 Feather Dance:
     Desc: The user covers the target's body with a mass of down that harshly lowers its Attack stat.
@@ -1043,7 +1043,7 @@ Hurricane:
     PP: 10
     Type: Flying
     Cat: Special
-    StormyMove: True
+    Int: StormyMove
     PokemonEffect: Confusion
     EffChance: 30
 *
@@ -1389,7 +1389,7 @@ Thunder:
     Cat: Special
     Pow: 110
     Acc: 70
-    StormyMove: True
+    Int: StormyMove
     Status: Paralyzed
     EffChance: 30
 *
@@ -2017,7 +2017,7 @@ Magnitude:
     GetPow:
         return POWERS[index];
         ###
-    DoubleDig: True
+    Int: DoubleDigger
     UniqueEffects:
         Messages.add("Magnitude " + (index + 4) + "!");
         ###
@@ -2051,7 +2051,7 @@ Earthquake:
     Cat: Physical
     Type: Ground
     PhysicalContact: False
-    DoubleDig: True
+    Int: DoubleDigger
 *
 Fissure:
     Desc: The user opens up a fissure in the ground and drops the target in. The target faints instantly if this attack hits.
@@ -2061,7 +2061,7 @@ Fissure:
     Cat: Physical
     Type: Ground
     PhysicalContact: False
-    HitDig: True
+    Int: SemiInvulnerableDiggingBypasser
 *
 Night Slash:
     Desc: The user slashes the target the instant an opportunity arises. Critical hits land more easily.
@@ -2604,7 +2604,7 @@ Rock Blast:
 *
 Smack Down:
     PokemonEffect: Grounded
-    DoubleFly: True
+    Int: DoubleFlyer
     Pow: 50
     Desc: The user throws a stone or similar projectile to attack an opponent. A flying Pok\u00e9mon will fall to the ground when it's hit.
     PP: 15
@@ -3480,7 +3480,7 @@ Sky Uppercut:
     MoveType: Punching
     Acc: 90
     Type: Fighting
-    HitFly: True
+    Int: SemiInvulnerableFlyingBypasser
 *
 Mega Punch:
     Desc: The target is slugged by a punch thrown with muscle-packed power.
@@ -5335,7 +5335,7 @@ Whirlwind:
     Type: Normal
     Cat: Status
     SwapOpponentOnly: victim.getName() + " blew away!"
-    HitFly: True
+    Int: SemiInvulnerableFlyingBypasser
     Comments: // Apparently this isn't supposed to hit fly anymore, but that's stupid
 *
 Bestow:

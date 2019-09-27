@@ -16,12 +16,14 @@ import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.RepellingEffect;
 import battle.effect.InvokeInterfaces.SelfAttackBlocker;
+import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatusBoosterEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.InvokeInterfaces.WildEncounterSelector;
+import battle.effect.battle.terrain.TerrainNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
@@ -455,6 +457,70 @@ public final class EffectInterfaces {
             } else {
                 return SimpleStatModifyingEffect.super.modify(b, p, opp, s);
             }
+        }
+    }
+
+    // Always hit when the opponent is digging
+    public interface SemiInvulnerableDiggingBypasser extends SemiInvulnerableBypasser {
+        @Override
+        default boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Always hit when the opponent is underground
+            return defending.isSemiInvulnerableDigging();
+        }
+    }
+
+    // Always hit and twice as strong when the opponent is digging
+    // Power is halved by Grassy Terrain
+    public interface DoubleDigger extends SemiInvulnerableDiggingBypasser, PowerChangeEffect {
+        @Override
+        default double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            double multiplier = 1;
+
+            // Power is halved during Grassy Terrain
+            if (b.hasEffect(TerrainNamesies.GRASSY_TERRAIN)) {
+                multiplier *= .5;
+            }
+
+            // Power is doubled when the opponent is underground
+            if (victim.isSemiInvulnerableDigging()) {
+                multiplier *= 2;
+            }
+
+            return multiplier;
+        }
+    }
+
+    // Always hit when the opponent is flying
+    public interface SemiInvulnerableFlyingBypasser extends SemiInvulnerableBypasser {
+        @Override
+        default boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            return defending.isSemiInvulnerableFlying();
+        }
+    }
+
+    // Always hit and twice as strong when the opponent is flying
+    public interface DoubleFlyer extends SemiInvulnerableFlyingBypasser, PowerChangeEffect {
+        @Override
+        default double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.isSemiInvulnerableFlying() ? 2 : 1;
+        }
+    }
+
+    // Accuracy is only 50% when sunny and always hits in the rain
+    // Always hit and twice as strong when the opponent is flying
+    public interface StormyMove extends AttackInterface, DoubleFlyer, BasicAccuracyBypassEffect {
+        @Override
+        default int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
+            if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
+                return 50;
+            }
+
+            return this.getBaseAccuracy();
+        }
+
+        @Override
+        default boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            return b.getWeather().namesies() == WeatherNamesies.RAINING;
         }
     }
 }

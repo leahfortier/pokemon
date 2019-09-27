@@ -408,56 +408,6 @@ StatModifyingStatus:
     AddMapField: ToModify: {2}
     AddMapField: SimpleGetModifier: {1}
 *
-StormyMove:
-    AddMapField: GetAccuracy:
-        // Accuracy is only 50% when sunny
-        if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
-            return 50;
-        }
-
-        return super.accuracy;
-        ###
-    AddMapField: BasicBypassAccuracy:
-        // Always hits in the rain
-        return b.getWeather().namesies() == WeatherNamesies.RAINING;
-        ###
-    AddMapField: DoubleFly: True
-*
-DoubleFly:
-    AddMapField: HitFly: True
-    AddMapField: Comments: // Twice as strong when the opponent is flying
-    AddMapField: PowerMultiplierCondition: 2 victim.isSemiInvulnerableFlying()
-*
-HitFly:
-    AddMapField: SemiInvulnerableBypass:
-        // Always hit when the opponent is flying
-        return defending.isSemiInvulnerableFlying();
-        ###
-*
-DoubleDig:
-    AddMapField: HitDig: True
-    AddMapField: GetMultiplier:
-        double multiplier = 1;
-
-        // Power is halved during Grassy Terrain
-        if (b.hasEffect(TerrainNamesies.GRASSY_TERRAIN)) {
-            multiplier *= .5;
-        }
-
-        // Power is doubled when the opponent is underground
-        if (victim.isSemiInvulnerableDigging()) {
-            multiplier *= 2;
-        }
-
-        return multiplier;
-        ###
-*
-HitDig:
-    AddMapField: SemiInvulnerableBypass:
-        // Always hit when the opponent is underground
-        return defending.isSemiInvulnerableDigging();
-        ###
-*
 SelfHpRatioMove:
     AddMapField: Pow: {1}
     AddMapField: GetPow:
@@ -1721,9 +1671,6 @@ EmptyPowerString:
 *
 ApplyDamage:
     Header: void applyDamage(ActivePokemon me, ActivePokemon o, Battle b)
-*
-GetAccuracy:
-    Header: int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o)
 *
 Aura:
     AddMapField: GetMultiplier:
