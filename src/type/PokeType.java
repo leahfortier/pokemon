@@ -35,6 +35,15 @@ public class PokeType implements Iterable<Type>, Serializable {
         return secondType;
     }
 
+    // Returns relevant types as an array
+    public Type[] getTypes() {
+        if (this.isDualTyped()) {
+            return new Type[] { firstType, secondType };
+        } else {
+            return new Type[] { firstType };
+        }
+    }
+
     public boolean isDualTyped() {
         return this.getSecondType() != Type.NO_TYPE;
     }
@@ -55,7 +64,7 @@ public class PokeType implements Iterable<Type>, Serializable {
 
     @Override
     public Iterator<Type> iterator() {
-        return Arrays.asList(firstType, secondType).iterator();
+        return Arrays.asList(this.getTypes()).iterator();
     }
 
     public static Color[] getColors(PokemonInfo p) {

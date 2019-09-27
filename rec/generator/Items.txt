@@ -1540,7 +1540,7 @@ Nest Ball:
 Net Ball:
     Desc: A somewhat different Pok\u00e9 Ball that is more effective when attempting to catch Water- or Bug-type Pok\u00e9mon.
     Price: 1000
-    CatchRateCondition: 3 o.isType(b, Type.WATER) || o.isType(b, Type.BUG)
+    CatchRateCondition: 3 o.isType(b, Type.WATER, Type.BUG)
 *
 Pok\u00e9 Ball:
     Desc: A device for catching wild Pok\u00e9mon. It's thrown like a ball at a Pok\u00e9mon, comfortably encapsulating its target.

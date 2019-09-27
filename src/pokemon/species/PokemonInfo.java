@@ -485,10 +485,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         return Arrays.stream(babyPokemon).collect(Collectors.toSet());
     }
 
-    public static Set<PokemonNamesies> getAllTypedPokemon(Type type) {
-        return EnumSet.copyOf(pokemonTypeMap.get(type));
-    }
-
     public static int getNumTypedPokemon(Type type) {
         return pokemonTypeMap.get(type).size();
     }

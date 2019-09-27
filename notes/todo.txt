@@ -150,7 +150,6 @@ Other random things:
     is there a way to just create the button transitions from the button list by using all the button locations or something like that??
     Al Bhed translation shouldn't be hardcoded -- just a flag on the area or something
         - so if you put the flag on the area then when you talk to the rival he speaks Al Bhed...
-    change ActivePokemon.isType to take in multiple types like isPokemon and isAttackType
     rework SemiInvulnerableBypasser to have separate flying and digging etc interfaces
     uhhhhh so should I store the current battle on the player object???? would that just make everythinnnnggggggg better????
         - if I end up doing would definitely do the simulating check for medal case not everywhere
@@ -158,6 +157,9 @@ Other random things:
         - then it can also do the crit test and return the advantage (so is not calculated twice for message purposes)
         - like most of this stuff doesn't feel like it should be inside applyDamage -- that should just be applying the damage!!!! not printing/more calculating!!
     TestBattle should have assertTrainer[Has/No]Effect method
+        - TestPokemon should also have assert[Not]Type method
     should probably have tests for moves that ignore stages
     can we delete powerModifierTest()? I really don't understand how it differs from powerChangeTest
-    
+    might make sense at this point to have types be their own classes (still enum like the namesies)
+        - Powder moves with grass
+        - lots and lots of status immunities etc

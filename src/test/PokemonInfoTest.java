@@ -289,15 +289,21 @@ public class PokemonInfoTest extends BaseTest {
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
             PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
             PokeType pokeType = pokemonInfo.getType();
+            Type[] types = pokeType.getTypes();
 
             // No-Type can only be the second type
             Assert.assertNotEquals(Type.NO_TYPE, pokeType.getFirstType());
 
             // Make sure no duplicate types
-            Set<Type> seen = EnumSet.noneOf(Type.class);
-            for (Type type : pokeType) {
-                Assert.assertFalse(seen.contains(type));
-                seen.add(type);
+            Assert.assertNotEquals(pokeType.getFirstType(), pokeType.getSecondType());
+
+            // Dual-typed if and only if second type is not No-Type
+            if (pokeType.isDualTyped()) {
+                Assert.assertNotEquals(Type.NO_TYPE, pokeType.getSecondType());
+                Assert.assertEquals(2, types.length);
+            } else {
+                Assert.assertEquals(Type.NO_TYPE, pokeType.getSecondType());
+                Assert.assertEquals(1, types.length);
             }
         }
     }

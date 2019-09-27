@@ -37,8 +37,7 @@ Sunny:
 *
 Sandstorm:
     WeatherElement: Rock
-    BuffetImmune: Type.ROCK, Type.GROUND, Type.STEEL
-    BuffetMessage: victim.getName() + " is buffeted by the sandstorm!"
+    BuffetMessage: Type.ROCK,_Type.GROUND,_Type.STEEL victim.getName() + " is buffeted by the sandstorm!"
     BattleEndTurnMessage: "The sandstorm rages."
     CastMessage: "A sandstorm kicked up!"
     SubsideMessage: "The sandstorm subsided."
@@ -48,7 +47,6 @@ Hailing:
     WeatherElement: Ice
     CastMessage: "It started to hail!"
     SubsideMessage: "The hail stopped."
-    BuffetImmune: Type.ICE
-    BuffetMessage: victim.getName() + " is buffeted by the hail!"
+    BuffetMessage: Type.ICE victim.getName() + " is buffeted by the hail!"
     BattleEndTurnMessage: "The hail continues to fall."
 *

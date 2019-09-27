@@ -105,7 +105,7 @@ PoisonCondition:
     AddMapField: ShortName: PSN
     AddMapField: CatchMod: 1.5
     AddMapField: Comments: // Poison-type and Steel-type Pokemon cannot be poisoned unless the caster has the Corrosion ability
-    AddMapField: StatusApplies: (!victim.isType(b, Type.POISON) && !victim.isType(b, Type.STEEL) || caster.hasAbility(AbilityNamesies.CORROSION))
+    AddMapField: StatusApplies: (!victim.isType(b, Type.POISON, Type.STEEL) || caster.hasAbility(AbilityNamesies.CORROSION))
     AddMapField: GenericRemoveMessage: victim.getName() + " is no longer poisoned!"
     AddMapField: SourceRemoveMessage: victim.getName() + "'s " + sourceName + " cured it of its poison!"
     AddMapField: SourcePreventionMessage: poison
@@ -1250,18 +1250,11 @@ EncounterRateMultiplier:
 WeatherEncounterRateDecreaser:
     AddMapField: EncounterRateMultiplier: Game.getPlayer().getArea().getWeather() == WeatherState.{00} ? .5 : 1
 *
-BuffetImmune:
-    AddMapField: Field:
-        private static final Type[] immunees = new Type[] { {0} };
-        ###
-*
 BuffetMessage:
     AddMapField: BattleEndTurn:
         // Don't buffet the immune!
-        for (Type type : immunees) {
-            if (victim.isType(b, type)) {
-                return;
-            }
+        if (victim.isType(b, {1_})) {
+            return;
         }
 
         // Srsly don't buffet the immune!!
@@ -1270,7 +1263,7 @@ BuffetMessage:
         }
 
         // Buffety buffety buffet
-        victim.reduceHealthFraction(b, 1/16.0, {0});
+        victim.reduceHealthFraction(b, 1/16.0, {2-});
         ###
 *
 WeatherStatChange:

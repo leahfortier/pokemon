@@ -4184,7 +4184,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public double getModifier(ActivePokemon me, ActivePokemon o, Battle b) {
-            return o.isType(b, Type.WATER) || o.isType(b, Type.BUG) ? 3 : 1;
+            return o.isType(b, Type.WATER, Type.BUG) ? 3 : 1;
         }
     }
 

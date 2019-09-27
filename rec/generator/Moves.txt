@@ -3169,11 +3169,8 @@ Synchronoise:
     Cat: Special
     Acc: 100
     Pow: 120
-    FullApplies:
-        // Like this is literally the stupidest move ever like srsly what is wrong with the creators
-        PokeType type = user.getType(b);
-        return victim.isType(b, type.getFirstType()) || (type.isDualTyped() && victim.isType(b, type.getSecondType()));
-        ###
+    Applies: victim.isType(b, user.getType(b).getTypes())
+    Comments: // Like this is literally the stupidest move ever like srsly what is wrong with the creators
 *
 Psyshock:
     Desc: The user materializes an odd psychic wave to attack the target. This attack does physical damage.

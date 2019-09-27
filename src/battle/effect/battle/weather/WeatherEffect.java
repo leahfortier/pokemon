@@ -142,8 +142,6 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
     static class Sandstorm extends WeatherEffect implements SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
 
-        private static final Type[] immunees = new Type[] { Type.ROCK, Type.GROUND, Type.STEEL };
-
         Sandstorm() {
             super(WeatherNamesies.SANDSTORM, Type.ROCK, false);
         }
@@ -166,10 +164,8 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         @Override
         public void singleEndTurnEffect(Battle b, ActivePokemon victim) {
             // Don't buffet the immune!
-            for (Type type : immunees) {
-                if (victim.isType(b, type)) {
-                    return;
-                }
+            if (victim.isType(b, Type.ROCK, Type.GROUND, Type.STEEL)) {
+                return;
             }
 
             // Srsly don't buffet the immune!!
@@ -200,8 +196,6 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
     static class Hailing extends WeatherEffect {
         private static final long serialVersionUID = 1L;
 
-        private static final Type[] immunees = new Type[] { Type.ICE };
-
         Hailing() {
             super(WeatherNamesies.HAILING, Type.ICE, false);
         }
@@ -224,10 +218,8 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         @Override
         public void singleEndTurnEffect(Battle b, ActivePokemon victim) {
             // Don't buffet the immune!
-            for (Type type : immunees) {
-                if (victim.isType(b, type)) {
-                    return;
-                }
+            if (victim.isType(b, Type.ICE)) {
+                return;
             }
 
             // Srsly don't buffet the immune!!

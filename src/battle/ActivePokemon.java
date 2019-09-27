@@ -469,8 +469,15 @@ public class ActivePokemon extends PartyPokemon {
         return getActualType();
     }
 
-    public boolean isType(Battle b, Type type) {
-        return this.getType(b).isType(type);
+    // Returns true if is at least one of the input types
+    public boolean isType(Battle b, Type... types) {
+        PokeType pokeType = this.getType(b);
+        for (Type type : types) {
+            if (pokeType.isType(type)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isPokemon(PokemonNamesies... names) {
@@ -564,7 +571,7 @@ public class ActivePokemon extends PartyPokemon {
             Effect.cast(TeamEffectNamesies.DEAD_ALLY, b, this, this, CastSource.EFFECT, false);
 
             // If the player slayed a Dark or Ghost type Pokemon, then they are on their way to becoming the Chosen One
-            if (!isPlayer() && (isType(b, Type.DARK) || isType(b, Type.GHOST))) {
+            if (!isPlayer() && (isType(b, Type.DARK, Type.GHOST))) {
                 Game.getPlayer().getMedalCase().increase(MedalTheme.DEMON_POKEMON_DEFEATED);
             }
 

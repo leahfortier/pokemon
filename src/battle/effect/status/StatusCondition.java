@@ -288,7 +288,7 @@ public abstract class StatusCondition implements StatusInterface {
 
         @Override
         public boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return (!victim.isType(b, Type.POISON) && !victim.isType(b, Type.STEEL) || caster.hasAbility(AbilityNamesies.CORROSION));
+            return (!victim.isType(b, Type.POISON, Type.STEEL) || caster.hasAbility(AbilityNamesies.CORROSION));
         }
 
         @Override
@@ -344,7 +344,7 @@ public abstract class StatusCondition implements StatusInterface {
 
         @Override
         public boolean statusApplies(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return (!victim.isType(b, Type.POISON) && !victim.isType(b, Type.STEEL) || caster.hasAbility(AbilityNamesies.CORROSION));
+            return (!victim.isType(b, Type.POISON, Type.STEEL) || caster.hasAbility(AbilityNamesies.CORROSION));
         }
 
         @Override
