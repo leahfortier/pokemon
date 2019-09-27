@@ -11,6 +11,7 @@ import pokemon.active.PartyPokemon;
 import pokemon.breeding.Eggy;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
+import trainer.TrainerType;
 import util.GeneralUtils;
 import util.serialization.JsonMatcher;
 import util.string.StringUtils;
@@ -128,14 +129,14 @@ public class PokemonMatcher implements JsonMatcher {
         return this.nature;
     }
 
-    public PartyPokemon createPokemon(boolean isWild, boolean isPlayer) {
+    public PartyPokemon createPokemon(TrainerType trainerType) {
         PokemonNamesies namesies = this.getNamesies();
         List<Move> moves = this.moves == null ? null : this.moves.stream().map(Move::new).collect(Collectors.toList());
 
         if (this.isEgg()) {
-            if (!isPlayer) {
+            if (!trainerType.isPlayer()) {
                 Global.error("Enemy trainers cannot have eggs.");
-            } else if (isWild) {
+            } else if (trainerType.isWild()) {
                 Global.error("Eggs cannot be wild.");
             } else if (this.hasHoldItem()) {
                 Global.error("Eggs cannot hold items.");
@@ -148,7 +149,7 @@ public class PokemonMatcher implements JsonMatcher {
             return new Eggy(namesies, this.isShiny, moves, this.gender, this.nature);
         } else {
             ActivePokemon pokemon = new ActivePokemon(
-                    namesies, this.getLevel(), isWild, isPlayer, this.getNickname(),
+                    namesies, this.getLevel(), trainerType, this.getNickname(),
                     this.isShiny, moves, this.gender, this.nature
             );
 

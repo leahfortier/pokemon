@@ -59,6 +59,7 @@ import pokemon.species.PokemonNamesies;
 import sound.SoundTitle;
 import trainer.Team;
 import trainer.Trainer;
+import trainer.TrainerType;
 import trainer.WildPokemon;
 import trainer.player.medal.MedalTheme;
 import type.PokeType;
@@ -91,14 +92,14 @@ public class ActivePokemon extends PartyPokemon {
     private boolean lastMoveSucceeded;
 
     // General constructor for an active Pokemon (isPlayer is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
-    public ActivePokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean isPlayer) {
-        super(pokemonNamesies, level, isWild, isPlayer);
+    public ActivePokemon(PokemonNamesies pokemonNamesies, int level, TrainerType trainerType) {
+        super(pokemonNamesies, level, trainerType);
     }
 
     // Constructor for matchers
-    public ActivePokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean isPlayer,
+    public ActivePokemon(PokemonNamesies pokemonNamesies, int level, TrainerType trainerType,
                          String nickname, Boolean shiny, List<Move> moves, Gender gender, Nature nature) {
-        super(pokemonNamesies, level, isWild, isPlayer, nickname, shiny, moves, gender, nature);
+        super(pokemonNamesies, level, trainerType, nickname, shiny, moves, gender, nature);
     }
 
     // Constructor for eggys

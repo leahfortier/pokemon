@@ -6,6 +6,7 @@ import pattern.PokemonMatcher;
 import pokemon.active.Gender;
 import pokemon.active.Nature;
 import pokemon.species.PokemonNamesies;
+import trainer.TrainerType;
 import trainer.WildPokemon;
 import util.RandomUtils;
 import util.serialization.JsonMatcher;
@@ -49,7 +50,7 @@ public class WildEncounter implements JsonMatcher {
 
         this.pokemonMatcher.setHoldItem(WildHoldItem.getWildHoldItem(pokemonMatcher.getNamesies(), attacking));
 
-        ActivePokemon wildPokemon = (ActivePokemon)this.pokemonMatcher.createPokemon(true, false);
+        ActivePokemon wildPokemon = (ActivePokemon)this.pokemonMatcher.createPokemon(TrainerType.WILD);
         return new WildPokemon(wildPokemon);
     }
 }

@@ -19,6 +19,7 @@ import pokemon.active.PartyPokemon;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
 import trainer.Trainer;
+import trainer.TrainerType;
 import trainer.player.Player;
 import type.PokeType;
 import type.Type;
@@ -123,8 +124,7 @@ public class TradeView extends View {
                         ActivePokemon theirPokes = new ActivePokemon(
                                 offering.namesies(),
                                 myPokes.getLevel(),
-                                false,
-                                true
+                                TrainerType.PLAYER
                         );
 
                         team.set(i, theirPokes);

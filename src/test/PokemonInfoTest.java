@@ -15,6 +15,7 @@ import pokemon.species.BaseStats;
 import pokemon.species.LevelUpMove;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
+import trainer.TrainerType;
 import type.PokeType;
 import type.Type;
 import util.MultiMap;
@@ -334,7 +335,7 @@ public class PokemonInfoTest extends BaseTest {
     public void shedinjaTest() {
         int[] levels = new int[] { 1, 50, 100 };
         for (int level : levels) {
-            TestPokemon shedinja = new TestPokemon(PokemonNamesies.SHEDINJA, level, false, true);
+            TestPokemon shedinja = new TestPokemon(PokemonNamesies.SHEDINJA, level, TrainerType.PLAYER);
             Assert.assertEquals(1, shedinja.getHP());
             Assert.assertEquals(1, shedinja.getMaxHP());
 

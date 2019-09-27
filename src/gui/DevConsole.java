@@ -13,6 +13,7 @@ import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import pokemon.species.PokemonNamesies;
 import test.maps.TestMap;
+import trainer.TrainerType;
 import trainer.player.Player;
 import util.FontMetrics;
 import util.file.FileIO;
@@ -237,7 +238,7 @@ public class DevConsole {
         System.out.println("adding " + namesies.getName());
 
         PokemonMatcher pokemonMatcher = new PokemonMatcher(namesies, null, level, shiny, moves, null);
-        player.addPokemon(pokemonMatcher.createPokemon(false, true));
+        player.addPokemon(pokemonMatcher.createPokemon(TrainerType.PLAYER));
     }
 
     private void giveItem(Scanner in, Player player) {

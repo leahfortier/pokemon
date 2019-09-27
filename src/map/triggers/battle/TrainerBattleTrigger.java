@@ -7,6 +7,7 @@ import pattern.PokemonMatcher;
 import pattern.action.EntityActionMatcher.BattleActionMatcher;
 import pattern.action.UpdateMatcher;
 import trainer.EnemyTrainer;
+import trainer.TrainerType;
 import util.RandomUtils;
 
 public class TrainerBattleTrigger extends Trigger {
@@ -22,7 +23,7 @@ public class TrainerBattleTrigger extends Trigger {
 
         RandomUtils.setTempRandomSeed(matcher.getJson().hashCode());
         for (PokemonMatcher pokemonMatcher : matcher.getPokemon()) {
-            trainer.addPokemon(pokemonMatcher.createPokemon(false, false));
+            trainer.addPokemon(pokemonMatcher.createPokemon(TrainerType.OPPONENT));
         }
         RandomUtils.resetRandomSeedToInitial();
 
