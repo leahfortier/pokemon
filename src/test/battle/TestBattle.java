@@ -8,6 +8,7 @@ import battle.attack.Move;
 import battle.attack.MoveType;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.battle.weather.WeatherNamesies;
+import battle.effect.team.TeamEffectNamesies;
 import org.junit.Assert;
 import pokemon.species.PokemonNamesies;
 import test.TestCharacter;
@@ -160,6 +161,14 @@ public class TestBattle extends Battle {
 
     void setExpectedDefendingAccuracyBypass(Boolean accuracyBypass) {
         this.expectedDefendingAccuracyBypass = accuracyBypass;
+    }
+
+    public void assertHasEffect(ActivePokemon member, TeamEffectNamesies effectNamesies) {
+        Assert.assertTrue(this.getTrainer(member).hasEffect(effectNamesies));
+    }
+
+    public void assertNoEffect(ActivePokemon member, TeamEffectNamesies effectNamesies) {
+        Assert.assertFalse(this.getTrainer(member).hasEffect(effectNamesies));
     }
 
     static TestBattle createTrainerBattle(PokemonNamesies attacking, PokemonNamesies defending) {

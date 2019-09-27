@@ -5266,7 +5266,7 @@ Retaliate:
     Acc: 100
     Cat: Physical
     Pow: 70
-    PowerMultiplierCondition: 2 b.getEffects(user).hasEffect(TeamEffectNamesies.DEAD_ALLY)
+    PowerMultiplierCondition: 2 b.getTrainer(user).hasEffect(TeamEffectNamesies.DEAD_ALLY)
 *
 Circle Throw:
     Desc: The target is thrown, and a different Pok\u00e9mon is dragged out. In the wild, this ends a battle against a single Pok\u00e9mon.

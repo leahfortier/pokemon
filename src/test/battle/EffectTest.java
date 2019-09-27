@@ -554,9 +554,9 @@ public class EffectTest extends BaseTest {
         substituteTest(
                 new TestInfo()
                         .attackingFight(AttackNamesies.REFLECT)
-                        .with((battle, attacking, defending) -> Assert.assertTrue(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.REFLECT)))
+                        .with((battle, attacking, defending) -> battle.assertHasEffect(attacking, TeamEffectNamesies.REFLECT))
                         .defendingFight(AttackNamesies.DEFOG)
-                        .with((battle, attacking, defending) -> Assert.assertFalse(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.REFLECT))),
+                        .with((battle, attacking, defending) -> battle.assertNoEffect(attacking, TeamEffectNamesies.REFLECT)),
                 (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.EVASION)),
                 (battle, attacking, defending) -> attacking.assertNoStages()
         );
@@ -618,7 +618,7 @@ public class EffectTest extends BaseTest {
                         .attackingFight(AttackNamesies.BATON_PASS)
                         .with((battle, attacking, defending) -> {
                             Assert.assertTrue(battle.getAttacking().isPokemon(PokemonNamesies.SQUIRTLE));
-                            Assert.assertTrue(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
+                            battle.assertHasEffect(attacking, TeamEffectNamesies.TOXIC_SPIKES);
                         }),
                 (battle, attacking, defending) -> attacking.assertRegularPoison(), // Only one layer
                 (battle, attacking, defending) -> {
@@ -638,7 +638,7 @@ public class EffectTest extends BaseTest {
                         .attackingFight(AttackNamesies.BATON_PASS),
                 (battle, attacking, defending) -> {
                     Assert.assertTrue(attacking.isPokemon(PokemonNamesies.GRIMER));
-                    Assert.assertFalse(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
+                    battle.assertNoEffect(attacking, TeamEffectNamesies.TOXIC_SPIKES);
                     attacking.assertNoStatus();
                 }
         );
@@ -1020,8 +1020,8 @@ public class EffectTest extends BaseTest {
     private void safeguardTest(PokemonManipulator manipulator, PokemonManipulator withoutManipulator, PokemonManipulator withManipulator) {
         PokemonManipulator safeguard = (battle, attacking, defending) -> {
             battle.defendingFight(AttackNamesies.SAFEGUARD);
-            Assert.assertFalse(battle.getPlayer().hasEffect(TeamEffectNamesies.SAFEGUARD));
-            Assert.assertTrue(battle.getOpponent().hasEffect(TeamEffectNamesies.SAFEGUARD));
+            battle.assertNoEffect(attacking, TeamEffectNamesies.SAFEGUARD);
+            battle.assertHasEffect(defending, TeamEffectNamesies.SAFEGUARD);
         };
 
         new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)

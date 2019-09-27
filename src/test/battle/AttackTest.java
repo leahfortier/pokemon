@@ -25,7 +25,6 @@ import pokemon.stat.Stat;
 import test.BaseTest;
 import test.TestPokemon;
 import test.TestUtils;
-import trainer.Team;
 import type.Type;
 import util.GeneralUtils;
 
@@ -760,7 +759,6 @@ public class AttackTest extends BaseTest {
         TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
         TestPokemon attacking = battle.getAttacking().withItem(ItemNamesies.GRIP_CLAW);
         TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.MAGIC_GUARD).withItem(ItemNamesies.LIGHT_CLAY);
-        Team defendingTeam = battle.getOpponent();
 
         // Add effects
         battle.attackingFight(AttackNamesies.STEALTH_ROCK);
@@ -769,29 +767,29 @@ public class AttackTest extends BaseTest {
         battle.attackingFight(AttackNamesies.LEECH_SEED); // Rapid Spin only
         battle.defendingFight(AttackNamesies.LIGHT_SCREEN); // Defog only
         battle.attackingFight(AttackNamesies.WRAP); // Rapid Spin only
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.STEALTH_ROCK));
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.SPIKES));
+        battle.assertHasEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
+        battle.assertHasEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
+        battle.assertHasEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
+        battle.assertHasEffect(defending, TeamEffectNamesies.SPIKES);
         defending.assertHasEffect(PokemonEffectNamesies.LEECH_SEED);
         defending.assertHasEffect(PokemonEffectNamesies.WRAPPED);
 
         // Make sure effects persist
         battle.emptyHeal();
         battle.defendingFight(AttackNamesies.CONSTRICT);
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.STEALTH_ROCK));
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.SPIKES));
+        battle.assertHasEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
+        battle.assertHasEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
+        battle.assertHasEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
+        battle.assertHasEffect(defending, TeamEffectNamesies.SPIKES);
         defending.assertHasEffect(PokemonEffectNamesies.LEECH_SEED);
         defending.assertHasEffect(PokemonEffectNamesies.WRAPPED);
 
         // Use Rapid Spin -- should remove the appropriate effects
         battle.defendingFight(AttackNamesies.RAPID_SPIN);
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
-        Assert.assertFalse(defendingTeam.hasEffect(TeamEffectNamesies.STEALTH_ROCK));
-        Assert.assertFalse(defendingTeam.hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
-        Assert.assertFalse(defendingTeam.hasEffect(TeamEffectNamesies.SPIKES));
+        battle.assertHasEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
+        battle.assertNoEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
+        battle.assertNoEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
+        battle.assertNoEffect(defending, TeamEffectNamesies.SPIKES);
         defending.assertNoEffect(PokemonEffectNamesies.LEECH_SEED);
         defending.assertNoEffect(PokemonEffectNamesies.WRAPPED);
 
@@ -803,10 +801,10 @@ public class AttackTest extends BaseTest {
         battle.attackingFight(AttackNamesies.LEECH_SEED);
         battle.defendingFight(AttackNamesies.LIGHT_SCREEN);
         battle.attackingFight(AttackNamesies.WRAP);
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.STEALTH_ROCK));
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.SPIKES));
+        battle.assertHasEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
+        battle.assertHasEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
+        battle.assertHasEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
+        battle.assertHasEffect(defending, TeamEffectNamesies.SPIKES);
         defending.assertHasEffect(PokemonEffectNamesies.LEECH_SEED);
         defending.assertHasEffect(PokemonEffectNamesies.WRAPPED);
 
@@ -815,10 +813,10 @@ public class AttackTest extends BaseTest {
         battle.defendingFight(AttackNamesies.DEFOG);
         Assert.assertEquals(-1, attacking.getStage(Stat.EVASION));
         Assert.assertEquals(0, defending.getStage(Stat.EVASION));
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.STEALTH_ROCK));
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
-        Assert.assertTrue(defendingTeam.hasEffect(TeamEffectNamesies.SPIKES));
+        battle.assertHasEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
+        battle.assertHasEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
+        battle.assertHasEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
+        battle.assertHasEffect(defending, TeamEffectNamesies.SPIKES);
         defending.assertHasEffect(PokemonEffectNamesies.LEECH_SEED);
         defending.assertHasEffect(PokemonEffectNamesies.WRAPPED);
 
@@ -826,10 +824,11 @@ public class AttackTest extends BaseTest {
         battle.attackingFight(AttackNamesies.DEFOG);
         Assert.assertEquals(-1, attacking.getStage(Stat.EVASION));
         Assert.assertEquals(-1, defending.getStage(Stat.EVASION));
-        Assert.assertFalse(defendingTeam.hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
-        Assert.assertFalse(defendingTeam.hasEffect(TeamEffectNamesies.STEALTH_ROCK));
-        Assert.assertFalse(defendingTeam.hasEffect(TeamEffectNamesies.TOXIC_SPIKES));
-        Assert.assertFalse(defendingTeam.hasEffect(TeamEffectNamesies.SPIKES));
+        battle.assertNoEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
+        battle.assertNoEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
+        battle.assertNoEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
+        battle.assertNoEffect(defending, TeamEffectNamesies.SPIKES);
+        battle.assertNoEffect(defending, TeamEffectNamesies.SPIKES);
         defending.assertHasEffect(PokemonEffectNamesies.LEECH_SEED);
         defending.assertHasEffect(PokemonEffectNamesies.WRAPPED);
     }
@@ -1445,29 +1444,31 @@ public class AttackTest extends BaseTest {
     @Test
     public void breakBarrierTest() {
         TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
 
         // Give both teams Reflect and Light Screen
         // TODO: This test can be more comprehensive (non-barrier effects not removed etc)
         battle.fight(AttackNamesies.LIGHT_SCREEN, AttackNamesies.REFLECT);
         battle.fight(AttackNamesies.REFLECT, AttackNamesies.LIGHT_SCREEN);
-        Assert.assertTrue(battle.getPlayer().hasEffect(TeamEffectNamesies.REFLECT));
-        Assert.assertTrue(battle.getPlayer().hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
-        Assert.assertTrue(battle.getOpponent().hasEffect(TeamEffectNamesies.REFLECT));
-        Assert.assertTrue(battle.getOpponent().hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
+        battle.assertHasEffect(attacking, TeamEffectNamesies.REFLECT);
+        battle.assertHasEffect(attacking, TeamEffectNamesies.LIGHT_SCREEN);
+        battle.assertHasEffect(defending, TeamEffectNamesies.REFLECT);
+        battle.assertHasEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
 
         // Only break the opponent barriers
         battle.fight(AttackNamesies.BRICK_BREAK, AttackNamesies.ENDURE);
-        Assert.assertTrue(battle.getPlayer().hasEffect(TeamEffectNamesies.REFLECT));
-        Assert.assertTrue(battle.getPlayer().hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
-        Assert.assertFalse(battle.getOpponent().hasEffect(TeamEffectNamesies.REFLECT));
-        Assert.assertFalse(battle.getOpponent().hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
+        battle.assertHasEffect(attacking, TeamEffectNamesies.REFLECT);
+        battle.assertHasEffect(attacking, TeamEffectNamesies.LIGHT_SCREEN);
+        battle.assertNoEffect(defending, TeamEffectNamesies.REFLECT);
+        battle.assertNoEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
 
         // Break the players too
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.PSYCHIC_FANGS);
-        Assert.assertFalse(battle.getPlayer().hasEffect(TeamEffectNamesies.REFLECT));
-        Assert.assertFalse(battle.getPlayer().hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
-        Assert.assertFalse(battle.getOpponent().hasEffect(TeamEffectNamesies.REFLECT));
-        Assert.assertFalse(battle.getOpponent().hasEffect(TeamEffectNamesies.LIGHT_SCREEN));
+        battle.assertNoEffect(attacking, TeamEffectNamesies.REFLECT);
+        battle.assertNoEffect(attacking, TeamEffectNamesies.LIGHT_SCREEN);
+        battle.assertNoEffect(defending, TeamEffectNamesies.REFLECT);
+        battle.assertNoEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
     }
 
     @Test
@@ -1478,20 +1479,20 @@ public class AttackTest extends BaseTest {
 
         // Super simple test so far that only really checks the most basic future sight mechanics
         battle.attackingFight(AttackNamesies.FUTURE_SIGHT);
-        Assert.assertFalse(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.FUTURE_SIGHT));
-        Assert.assertTrue(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.FUTURE_SIGHT));
+        battle.assertNoEffect(attacking, TeamEffectNamesies.FUTURE_SIGHT);
+        battle.assertHasEffect(defending, TeamEffectNamesies.FUTURE_SIGHT);
         attacking.assertFullHealth();
         defending.assertFullHealth();
 
         battle.splashFight();
-        Assert.assertFalse(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.FUTURE_SIGHT));
-        Assert.assertTrue(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.FUTURE_SIGHT));
+        battle.assertNoEffect(attacking, TeamEffectNamesies.FUTURE_SIGHT);
+        battle.assertHasEffect(defending, TeamEffectNamesies.FUTURE_SIGHT);
         attacking.assertFullHealth();
         defending.assertFullHealth();
 
         battle.splashFight();
-        Assert.assertFalse(battle.getTrainer(attacking).hasEffect(TeamEffectNamesies.FUTURE_SIGHT));
-        Assert.assertFalse(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.FUTURE_SIGHT));
+        battle.assertNoEffect(attacking, TeamEffectNamesies.FUTURE_SIGHT);
+        battle.assertNoEffect(defending, TeamEffectNamesies.FUTURE_SIGHT);
         attacking.assertFullHealth();
         defending.assertNotFullHealth();
     }
@@ -1809,7 +1810,7 @@ public class AttackTest extends BaseTest {
 
         TestBattle battle = TestBattle.create(pokemon, PokemonNamesies.SHUCKLE);
         TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.STURDY);
 
         manipulator.manipulate(battle);
 

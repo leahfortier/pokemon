@@ -143,18 +143,18 @@ public class StatusTest extends BaseTest {
         battle.defendingFight(AttackNamesies.SAFEGUARD);
         battle.attackingFight(AttackNamesies.TOXIC);
         defending.assertNoStatus();
-        Assert.assertTrue(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.SAFEGUARD));
+        battle.assertHasEffect(defending, TeamEffectNamesies.SAFEGUARD);
 
         attacking.withAbility(AbilityNamesies.MOLD_BREAKER);
         battle.attackingFight(AttackNamesies.TOXIC);
         defending.assertNoStatus();
-        Assert.assertTrue(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.SAFEGUARD));
+        battle.assertHasEffect(defending, TeamEffectNamesies.SAFEGUARD);
 
         // Unless that ability is Infiltrator
         attacking.withAbility(AbilityNamesies.INFILTRATOR);
         battle.attackingFight(AttackNamesies.TOXIC);
         defending.assertBadPoison();
-        Assert.assertTrue(battle.getTrainer(defending).hasEffect(TeamEffectNamesies.SAFEGUARD));
+        battle.assertHasEffect(defending, TeamEffectNamesies.SAFEGUARD);
     }
 
     @Test

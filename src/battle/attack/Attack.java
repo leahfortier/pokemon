@@ -8808,7 +8808,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return b.getEffects(user).hasEffect(TeamEffectNamesies.DEAD_ALLY) ? 2 : 1;
+            return b.getTrainer(user).hasEffect(TeamEffectNamesies.DEAD_ALLY) ? 2 : 1;
         }
     }
 

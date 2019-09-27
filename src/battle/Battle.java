@@ -38,7 +38,6 @@ import trainer.Opponent;
 import trainer.PlayerTrainer;
 import trainer.SimulatedPlayer;
 import trainer.Team;
-import trainer.Team.TeamEffectList;
 import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.WildPokemon;
@@ -457,10 +456,6 @@ public class Battle implements Serializable {
         return effects;
     }
 
-    public TeamEffectList getEffects(ActivePokemon teamMember) {
-        return teamMember.isPlayer() ? player.getEffects() : opponent.getEffects();
-    }
-
     public List<InvokeEffect> getEffectsList(ActivePokemon p, InvokeEffect... additionalItems) {
         return this.getEffectsList(p, true, additionalItems);
     }
@@ -470,7 +465,7 @@ public class Battle implements Serializable {
         Collections.addAll(list, additionalItems);
 
         list.addAll(p.getAllEffects(this, includeItem));
-        list.addAll(this.getEffects(p).asList());
+        list.addAll(this.getTrainer(p).getEffects().asList());
         list.addAll(this.getEffects().asList());
 
         return list;
