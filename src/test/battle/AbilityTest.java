@@ -145,30 +145,30 @@ public class AbilityTest extends BaseTest {
         TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.COLOR_CHANGE);
 
         Assert.assertTrue(defending.hasAbility(AbilityNamesies.COLOR_CHANGE));
-        Assert.assertTrue(defending.isType(battle, Type.NORMAL));
+        defending.assertType(battle, Type.NORMAL);
 
         battle.fight(AttackNamesies.WATER_GUN, AttackNamesies.ENDURE);
-        Assert.assertTrue(defending.isType(battle, Type.WATER));
-        Assert.assertFalse(defending.isType(battle, Type.NORMAL));
+        defending.assertType(battle, Type.WATER);
+        defending.assertNotType(battle, Type.NORMAL);
 
         battle.emptyHeal();
         battle.fight(AttackNamesies.EMBER, AttackNamesies.ENDURE);
-        Assert.assertTrue(defending.isType(battle, Type.FIRE));
-        Assert.assertFalse(defending.isType(battle, Type.WATER));
+        defending.assertType(battle, Type.FIRE);
+        defending.assertNotType(battle, Type.WATER);
 
         // Status moves should not change type
         battle.attackingFight(AttackNamesies.GROWL);
-        Assert.assertTrue(defending.isType(battle, Type.FIRE));
-        Assert.assertFalse(defending.isType(battle, Type.NORMAL));
+        defending.assertType(battle, Type.FIRE);
+        defending.assertNotType(battle, Type.NORMAL);
 
         // Status moves should not change type
         battle.attackingFight(AttackNamesies.THUNDER_WAVE);
-        Assert.assertTrue(defending.isType(battle, Type.FIRE));
-        Assert.assertFalse(defending.isType(battle, Type.ELECTRIC));
+        defending.assertType(battle, Type.FIRE);
+        defending.assertNotType(battle, Type.ELECTRIC);
 
         battle.attackingFight(AttackNamesies.TACKLE);
-        Assert.assertTrue(defending.isType(battle, Type.NORMAL));
-        Assert.assertFalse(defending.isType(battle, Type.FIRE));
+        defending.assertType(battle, Type.NORMAL);
+        defending.assertNotType(battle, Type.FIRE);
     }
 
     @Test

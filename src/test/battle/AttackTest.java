@@ -202,7 +202,7 @@ public class AttackTest extends BaseTest {
         battle.emptyHeal();
         defending.withAbility(AbilityNamesies.PROTEAN);
         battle.defendingFight(AttackNamesies.HAZE);
-        Assert.assertTrue(defending.isType(battle, Type.ICE));
+        defending.assertType(battle, Type.ICE);
         battle.attackingFight(AttackNamesies.SHEER_COLD);
         defending.assertFullHealth();
     }
@@ -262,7 +262,7 @@ public class AttackTest extends BaseTest {
 
         // Non-Ghost type curse -- apply stat changes
         battle.attackingFight(AttackNamesies.CURSE);
-        Assert.assertFalse(attacking.isType(battle, Type.GHOST));
+        attacking.assertNotType(battle, Type.GHOST);
         attacking.assertStages(new TestStages().set(1, Stat.ATTACK, Stat.DEFENSE)
                                                .set(-1, Stat.SPEED));
         attacking.assertNoEffect(PokemonEffectNamesies.CURSE);
@@ -270,7 +270,7 @@ public class AttackTest extends BaseTest {
 
         // Add Ghost Type
         battle.defendingFight(AttackNamesies.TRICK_OR_TREAT);
-        Assert.assertTrue(attacking.isType(battle, Type.GHOST));
+        attacking.assertType(battle, Type.GHOST);
         attacking.assertFullHealth();
         defending.assertFullHealth();
 
@@ -371,21 +371,21 @@ public class AttackTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         // Should fail with full hp
-        Assert.assertTrue(attacking.isType(battle, Type.FLYING));
+        attacking.assertType(battle, Type.FLYING);
         attacking.apply(false, AttackNamesies.ROOST, battle);
-        Assert.assertTrue(attacking.isType(battle, Type.FLYING));
+        attacking.assertType(battle, Type.FLYING);
 
         // Reduce health and apply again
         battle.attackingFight(AttackNamesies.BELLY_DRUM);
         attacking.assertNotFullHealth();
         attacking.apply(true, AttackNamesies.ROOST, battle);
-        Assert.assertFalse(attacking.isType(battle, Type.FLYING));
+        attacking.assertNotType(battle, Type.FLYING);
         attacking.assertFullHealth();
 
         // Should fail because attack is already maxed -- flying type should come back at the end of the turn
         battle.attackingFight(AttackNamesies.BELLY_DRUM);
         attacking.assertFullHealth();
-        Assert.assertTrue(attacking.isType(battle, Type.FLYING));
+        attacking.assertType(battle, Type.FLYING);
 
         // Clear stat changes and reduce again
         Assert.assertTrue(attacking.getStage(Stat.ATTACK) == Stat.MAX_STAT_CHANGES);
@@ -397,7 +397,7 @@ public class AttackTest extends BaseTest {
         // Using a full turn should bring the flying type back at the end
         attacking.assertNotFullHealth();
         battle.attackingFight(AttackNamesies.ROOST);
-        Assert.assertTrue(attacking.isType(battle, Type.FLYING));
+        attacking.assertType(battle, Type.FLYING);
         attacking.assertFullHealth();
 
         defending.apply(false, AttackNamesies.MUD_SLAP, battle);
@@ -440,8 +440,8 @@ public class AttackTest extends BaseTest {
 
         // So water-type Pokemon with Magic Guard should be fine for all statues and take no passive damage
         battle.fight(AttackNamesies.SOAK, AttackNamesies.SOAK);
-        Assert.assertTrue(attacking.isType(battle, Type.WATER));
-        Assert.assertTrue(defending.isType(battle, Type.WATER));
+        attacking.assertType(battle, Type.WATER);
+        defending.assertType(battle, Type.WATER);
 
         // Should fail because no status condition
         attacking.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
@@ -485,25 +485,25 @@ public class AttackTest extends BaseTest {
 
         // Switch to Poison-type (I guess you can still be poisoned afterwards)
         attacking.withAbility(AbilityNamesies.PROTEAN);
-        Assert.assertTrue(attacking.isType(battle, Type.WATER));
+        attacking.assertType(battle, Type.WATER);
         battle.attackingFight(AttackNamesies.CLEAR_SMOG);
-        Assert.assertTrue(attacking.isType(battle, Type.POISON));
+        attacking.assertType(battle, Type.POISON);
         attacking.assertBadPoison();
 
         // Shift the bad poison back to the defending
         battle.attackingFight(AttackNamesies.PSYCHO_SHIFT);
         attacking.assertNoStatus();
         defending.assertBadPoison();
-        Assert.assertTrue(attacking.isType(battle, Type.PSYCHIC));
+        attacking.assertType(battle, Type.PSYCHIC);
 
         // Switch back to Poison-type -- Psycho Shift should fail now since it doesn't affect poison brothers
         battle.attackingFight(AttackNamesies.ACID_ARMOR);
-        Assert.assertTrue(attacking.isType(battle, Type.POISON));
+        attacking.assertType(battle, Type.POISON);
         defending.apply(false, AttackNamesies.PSYCHO_SHIFT, battle);
 
         // Switch to Dragon-type -- should succeed now
         battle.attackingFight(AttackNamesies.DRAGON_DANCE);
-        Assert.assertTrue(attacking.isType(battle, Type.DRAGON));
+        attacking.assertType(battle, Type.DRAGON);
         defending.apply(true, AttackNamesies.PSYCHO_SHIFT, battle);
         attacking.assertBadPoison();
         defending.assertNoStatus();
@@ -549,13 +549,13 @@ public class AttackTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         // Powder moves shouldn't work on Grass-type Pokemon
-        Assert.assertTrue(attacking.isType(battle, Type.GRASS));
+        attacking.assertType(battle, Type.GRASS);
         defending.apply(false, AttackNamesies.SLEEP_POWDER, battle);
         attacking.apply(true, AttackNamesies.SLEEP_POWDER, battle);
 
         battle.emptyHeal();
         battle.defendingFight(AttackNamesies.SOAK);
-        Assert.assertFalse(attacking.isType(battle, Type.GRASS));
+        attacking.assertNotType(battle, Type.GRASS);
         defending.apply(true, AttackNamesies.SLEEP_POWDER, battle);
 
         // Or Pokemon with Overcoat
@@ -1027,7 +1027,7 @@ public class AttackTest extends BaseTest {
         defending.assertNoStages();
 
         battle.defendingFight(AttackNamesies.SHELL_SMASH);
-        Assert.assertTrue(defending.isType(battle, Type.NORMAL));
+        defending.assertType(battle, Type.NORMAL);
         attacking.assertNoStages();
         defending.assertStages(new TestStages().set(2, Stat.ATTACK, Stat.SP_ATTACK, Stat.SPEED)
                                                .set(-1, Stat.DEFENSE, Stat.SP_DEFENSE));
@@ -1042,7 +1042,7 @@ public class AttackTest extends BaseTest {
 
         defending.withAbility(AbilityNamesies.STURDY);
         battle.fight(AttackNamesies.SOAK, AttackNamesies.GROWL);
-        Assert.assertFalse(defending.isType(battle, Type.NORMAL));
+        defending.assertNotType(battle, Type.NORMAL);
         attacking.assertStages(new TestStages().set(-1, Stat.ATTACK));
         defending.assertStages(new TestStages().set(2, Stat.ATTACK, Stat.SP_ATTACK, Stat.SPEED)
                                                .set(-1, Stat.DEFENSE, Stat.SP_DEFENSE));
@@ -1294,8 +1294,8 @@ public class AttackTest extends BaseTest {
         // Double check this override when it is actually effective to make sure Normalize isn't being activated for the 20% boost
         // Yes I realize this here doesn't have much to do with Hidden Power fucking sue me
         battle.attackingFight(AttackNamesies.SOAK);
-        Assert.assertTrue(defending.isType(battle, Type.WATER));
-        Assert.assertFalse(defending.isType(battle, Type.ELECTRIC));
+        defending.assertType(battle, Type.WATER);
+        defending.assertNotType(battle, Type.ELECTRIC);
         attacking.setExpectedDamageModifier(1.0);
         battle.fight(AttackNamesies.HIDDEN_POWER, AttackNamesies.ELECTRIFY);
         Assert.assertTrue(attacking.isAttackType(Type.ELECTRIC));

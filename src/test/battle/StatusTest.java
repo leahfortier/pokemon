@@ -118,7 +118,7 @@ public class StatusTest extends BaseTest {
 
         // Poison-type Pokemon cannot be poisoned
         battle.defendingFight(AttackNamesies.REFLECT_TYPE);
-        Assert.assertTrue(defending.isType(battle, Type.POISON));
+        defending.assertType(battle, Type.POISON);
         battle.attackingFight(AttackNamesies.TOXIC);
         defending.assertNoStatus();
 
@@ -136,7 +136,7 @@ public class StatusTest extends BaseTest {
 
         // Remove Poison-typing
         battle.attackingFight(AttackNamesies.SOAK);
-        Assert.assertFalse(defending.isType(battle, Type.POISON));
+        defending.assertNotType(battle, Type.POISON);
         defending.assertNoStatus();
 
         // Safeguard has nothing to do with ability

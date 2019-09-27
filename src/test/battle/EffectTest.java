@@ -214,14 +214,14 @@ public class EffectTest extends BaseTest {
         // Ghost-type Pokemon can always escape
         attacking.withAbility(AbilityNamesies.PROTEAN);
         battle.attackingFight(AttackNamesies.SPITE);
-        Assert.assertTrue(attacking.isType(battle, Type.GHOST));
+        attacking.assertType(battle, Type.GHOST);
         Assert.assertTrue(attacking.canEscape(battle));
 
         // Arena trap only works non-levitating Pokemon
         defending.withAbility(AbilityNamesies.ARENA_TRAP);
         Assert.assertTrue(attacking.canEscape(battle));
         battle.attackingFight(AttackNamesies.TAILWIND);
-        Assert.assertTrue(attacking.isType(battle, Type.FLYING));
+        attacking.assertType(battle, Type.FLYING);
         Assert.assertTrue(attacking.canEscape(battle));
         attacking.giveItem(ItemNamesies.IRON_BALL);
         Assert.assertFalse(attacking.canEscape(battle));
@@ -232,10 +232,10 @@ public class EffectTest extends BaseTest {
         defending.withAbility(AbilityNamesies.MAGNET_PULL);
         Assert.assertTrue(attacking.canEscape(battle));
         battle.attackingFight(AttackNamesies.GEAR_UP);
-        Assert.assertTrue(attacking.isType(battle, Type.STEEL));
+        attacking.assertType(battle, Type.STEEL);
         Assert.assertFalse(attacking.canEscape(battle));
         battle.attackingFight(AttackNamesies.HAZE);
-        Assert.assertFalse(attacking.isType(battle, Type.STEEL));
+        attacking.assertNotType(battle, Type.STEEL);
         Assert.assertTrue(attacking.canEscape(battle));
 
         // Partial trapping moves trap
@@ -867,13 +867,13 @@ public class EffectTest extends BaseTest {
         // Make Charmander Flying-type (and therefore a master of levitation)
         defending.withAbility(AbilityNamesies.PROTEAN);
         battle.defendingFight(AttackNamesies.TAILWIND);
-        Assert.assertTrue(defending.isType(battle, Type.FLYING));
+        defending.assertType(battle, Type.FLYING);
         Assert.assertTrue(attacking.isLevitating(battle));
         Assert.assertTrue(defending.isLevitating(battle));
 
         // Give Iron Ball to Charmander -- make sure it removes levitation from flying type as well
         defending.giveItem(ItemNamesies.IRON_BALL);
-        Assert.assertTrue(defending.isType(battle, Type.FLYING));
+        defending.assertType(battle, Type.FLYING);
         Assert.assertTrue(attacking.isLevitating(battle));
         Assert.assertFalse(defending.isLevitating(battle));
 
@@ -881,7 +881,7 @@ public class EffectTest extends BaseTest {
         defending.removeItem();
         battle.fight(AttackNamesies.INGRAIN, AttackNamesies.SPLASH);
         attacking.assertHasEffect(PokemonEffectNamesies.INGRAIN);
-        Assert.assertFalse(defending.isType(battle, Type.FLYING));
+        defending.assertNotType(battle, Type.FLYING);
         Assert.assertFalse(attacking.isLevitating(battle));
         Assert.assertFalse(defending.isLevitating(battle));
         Assert.assertTrue(attacking.isGrounded(battle));
@@ -894,7 +894,7 @@ public class EffectTest extends BaseTest {
         defending.withAbility(AbilityNamesies.NO_ABILITY);
         battle.defendingFight(AttackNamesies.FLY);
         attacking.assertHasEffect(PokemonEffectNamesies.INGRAIN);
-        Assert.assertFalse(defending.isType(battle, Type.FLYING));
+        defending.assertNotType(battle, Type.FLYING);
         Assert.assertTrue(defending.isSemiInvulnerableFlying());
         Assert.assertFalse(attacking.isLevitating(battle));
         Assert.assertTrue(defending.isLevitating(battle));
@@ -905,7 +905,7 @@ public class EffectTest extends BaseTest {
         attacking.setMove(new Move(AttackNamesies.ENDURE));
         battle.fight();
         attacking.assertHasEffect(PokemonEffectNamesies.INGRAIN);
-        Assert.assertFalse(defending.isType(battle, Type.FLYING));
+        defending.assertNotType(battle, Type.FLYING);
         Assert.assertFalse(defending.isSemiInvulnerableFlying());
         Assert.assertFalse(attacking.isLevitating(battle));
         Assert.assertFalse(defending.isLevitating(battle));

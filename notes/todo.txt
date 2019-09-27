@@ -155,7 +155,6 @@ Other random things:
     should we have a new class to handle damage calculation shit and return an object with all relevant information (not just damage)
         - then it can also do the crit test and return the advantage (so is not calculated twice for message purposes)
         - like most of this stuff doesn't feel like it should be inside applyDamage -- that should just be applying the damage!!!! not printing/more calculating!!
-    TestPokemon should also have assert[Not]Type method
     should probably have tests for moves that ignore stages
     can we delete powerModifierTest()? I really don't understand how it differs from powerChangeTest
     might make sense at this point to have types be their own classes (still enum like the namesies)

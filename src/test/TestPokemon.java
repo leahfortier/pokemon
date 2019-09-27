@@ -17,6 +17,7 @@ import pokemon.stat.Stat;
 import test.battle.TestBattle;
 import test.battle.TestStages;
 import trainer.TrainerType;
+import type.Type;
 import util.string.StringAppender;
 import util.string.StringUtils;
 
@@ -239,6 +240,14 @@ public class TestPokemon extends ActivePokemon {
     public void assertChangedAbility(AbilityNamesies abilityNamesies) {
         Assert.assertTrue(this.getAbility().getName(), this.hasAbility(abilityNamesies));
         this.assertHasEffect(PokemonEffectNamesies.CHANGE_ABILITY);
+    }
+
+    public void assertType(Battle b, Type type) {
+        Assert.assertTrue(this.isType(b, type));
+    }
+
+    public void assertNotType(Battle b, Type type) {
+        Assert.assertFalse(this.isType(b, type));
     }
 
     public void assertSpecies(PokemonNamesies species) {
