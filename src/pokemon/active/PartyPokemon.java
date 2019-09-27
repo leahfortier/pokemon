@@ -57,7 +57,7 @@ public abstract class PartyPokemon implements Serializable {
         this.nickname = this.pokemon.getName();
         this.level = level;
         this.isPlayer = trainerType.isPlayer();
-        this.shiny = (trainerType.isWild()) && RandomUtils.chanceTest(1, 8192);
+        this.shiny = trainerType.isWild() && RandomUtils.chanceTest(1, 8192);
 
         this.stats = new StatValues(this);
         this.moves = new MoveList(this);

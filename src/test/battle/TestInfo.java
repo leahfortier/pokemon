@@ -218,14 +218,19 @@ class TestInfo {
     }
 
     // By default, check the stat on the more relevant Pokemon
-    // Attack, Sp. Attack, Accuracy, Speed uses attacking
+    // Attack, Sp. Attack, Accuracy uses attacking
     // Defense, Sp. Defense, Evasion uses defending
+    // For ambiguous stats (like Speed), must use the more explicit method
     public void statModifierTest(double expectedChange, Stat stat) {
         this.statModifierTest(expectedChange, stat, stat.user());
     }
 
-    // user will check attacking by default if it is BOTH
     public void statModifierTest(double expectedChange, Stat stat, User user) {
+        // HP not a relevant stat to modify
+        // user should be explictly stated for ambigous stats (like Speed)
+        Assert.assertNotEquals(Stat.HP, stat);
+        Assert.assertNotEquals(User.BOTH, user);
+
         TestBattle battle = this.createBattle();
         TestPokemon statPokemon = user.isAttacking() ? battle.getAttacking() : battle.getDefending();
 
@@ -275,17 +280,16 @@ class TestInfo {
         );
 
         // Make sure modifiers actually happen in battle
-        powerChangeTest(expectedModifier, false, attackNamesies);
-        powerChangeTest(expectedModifier, true, attackNamesies);
+        // Without manipulation, should have a modifier of 1
+        powerChangeTest(1, PokemonManipulator.empty(), attackNamesies);
+        powerChangeTest(expectedModifier, this.manipulator, attackNamesies);
     }
 
-    private void powerChangeTest(double expectedModifier, boolean manipulate, AttackNamesies attackNamesies) {
+    private void powerChangeTest(double expectedModifier, PokemonManipulator manipulator, AttackNamesies attackNamesies) {
         TestBattle battle = this.createBattle();
-        if (manipulate) {
-            this.manipulate(battle);
-        }
+        manipulator.manipulate(battle);
 
-        battle.getAttacking().setExpectedDamageModifier(manipulate ? expectedModifier : 1);
+        battle.getAttacking().setExpectedDamageModifier(expectedModifier);
         battle.attackingFight(attackNamesies);
     }
 

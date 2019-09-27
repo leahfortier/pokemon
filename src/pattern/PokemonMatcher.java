@@ -135,9 +135,7 @@ public class PokemonMatcher implements JsonMatcher {
 
         if (this.isEgg()) {
             if (!trainerType.isPlayer()) {
-                Global.error("Enemy trainers cannot have eggs.");
-            } else if (trainerType.isWild()) {
-                Global.error("Eggs cannot be wild.");
+                Global.error("Only players can have eggs.");
             } else if (this.hasHoldItem()) {
                 Global.error("Eggs cannot hold items.");
             } else if (!StringUtils.isNullOrEmpty(this.getNickname())) {

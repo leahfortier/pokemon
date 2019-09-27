@@ -91,10 +91,12 @@ public enum Stat {
         return user;
     }
 
+    // Includes stats which are not exclusively attacking stats like HP or Speedz
     public boolean isAttacking() {
         return user.isAttacking();
     }
 
+    // Includes stats which are not exclusively defending stats like HP or Speed
     public boolean isDefending() {
         return user.isDefending();
     }

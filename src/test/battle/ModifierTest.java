@@ -45,18 +45,18 @@ public class ModifierTest extends BaseTest {
 
         statModifierTest(1.5, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.DRAGONAIR).defending(ItemNamesies.EVIOLITE));
         statModifierTest(1.5, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.CHANSEY).defending(ItemNamesies.EVIOLITE));
-        statModifierTest(1, Stat.SPEED, new TestInfo().defending(PokemonNamesies.CHANSEY).defending(ItemNamesies.EVIOLITE));
+        statModifierTest(1, Stat.SPEED, User.ATTACKING, new TestInfo().defending(PokemonNamesies.CHANSEY).defending(ItemNamesies.EVIOLITE));
         statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.HUNTAIL).defending(ItemNamesies.EVIOLITE));
         statModifierTest(1, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.RAICHU).defending(ItemNamesies.EVIOLITE));
 
-        statModifierTest(2, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.CHLOROPHYLL).attacking(WeatherNamesies.SUNNY));
+        statModifierTest(2, Stat.SPEED, User.ATTACKING, new TestInfo().attacking(AbilityNamesies.CHLOROPHYLL).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().attacking(AbilityNamesies.CHLOROPHYLL).attacking(WeatherNamesies.SUNNY));
 
         statModifierTest(1.5, Stat.ATTACK, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1.5, Stat.SP_DEFENSE, new TestInfo().defending(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1.5, Stat.SP_DEFENSE, User.ATTACKING, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1, Stat.SP_DEFENSE, User.DEFENDING, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
-        statModifierTest(1, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
+        statModifierTest(1, Stat.SPEED, User.ATTACKING, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
 
         statModifierTest(2, Stat.DEFENSE, new TestInfo().with(AttackNamesies.TACKLE).defending(AbilityNamesies.FUR_COAT));
         statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().with(AttackNamesies.SURF).defending(AbilityNamesies.FUR_COAT));

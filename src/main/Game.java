@@ -59,8 +59,8 @@ public class Game {
     }
 
     private void setupCharacter() {
-        player.front().giveItem(ItemNamesies.ORAN_BERRY);
         player.addPokemon(new ActivePokemon(PokemonNamesies.EEVEE, 1, TrainerType.PLAYER));
+        player.front().giveItem(ItemNamesies.ORAN_BERRY);
     }
 
     private void checkViewSwitch() {
