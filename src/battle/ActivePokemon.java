@@ -147,7 +147,7 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public void gainEXP(Battle b, int gain, PartyPokemon dead) {
-        boolean front = b.getPlayer().front() == this;
+        boolean front = b.isFront(this);
 
         // Add EXP
         super.gainEXP(gain);
@@ -176,7 +176,7 @@ public class ActivePokemon extends PartyPokemon {
         }
 
         boolean inBattle = b != null;
-        boolean front = inBattle && b.getPlayer().front() == this;
+        boolean front = inBattle && b.isFront(this);
 
         // Grow to the next level
         int[] gain = super.levelUp();

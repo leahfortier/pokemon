@@ -736,6 +736,7 @@ Substitute:
     AfterCast:
         this.hp = victim.forceReduceHealthFraction(b, .25, victim.getName() + " put in a substitute!") + 1;
         
+        // TODO: This should definitely be in some sort of function I don't like this at all
         String imageName = "substitute" + (victim.isPlayer() ? "-back" : "");
         Messages.add(new MessageUpdate().updatePokemon(b, victim).withImageName(imageName, victim.isPlayer()));
         ###

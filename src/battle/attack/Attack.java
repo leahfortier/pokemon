@@ -1942,12 +1942,12 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public int getPriority(Battle b, ActivePokemon me) {
-            return b.isSwitching(!me.isPlayer()) ? 7 : super.priority;
+            return b.isSwitching(b.getOtherPokemon(me)) ? 7 : super.priority;
         }
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return b.isSwitching(victim.isPlayer()) ? 2 : 1;
+            return b.isSwitching(victim) ? 2 : 1;
         }
     }
 
