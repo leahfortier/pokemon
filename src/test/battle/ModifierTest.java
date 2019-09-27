@@ -13,9 +13,10 @@ import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
+import pokemon.stat.Stat;
+import pokemon.stat.User;
 import test.BaseTest;
 import test.TestPokemon;
 import type.PokeType;
@@ -53,8 +54,8 @@ public class ModifierTest extends BaseTest {
 
         statModifierTest(1.5, Stat.ATTACK, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1.5, Stat.SP_DEFENSE, new TestInfo().defending(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
-        statModifierTest(1.5, Stat.SP_DEFENSE, true, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
-        statModifierTest(1, Stat.SP_DEFENSE, false, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
+        statModifierTest(1.5, Stat.SP_DEFENSE, User.ATTACKING, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
+        statModifierTest(1, Stat.SP_DEFENSE, User.DEFENDING, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
 
         statModifierTest(2, Stat.DEFENSE, new TestInfo().with(AttackNamesies.TACKLE).defending(AbilityNamesies.FUR_COAT));
@@ -65,7 +66,7 @@ public class ModifierTest extends BaseTest {
         testInfo.statModifierTest(expectedChange, stat);
     }
 
-    private void statModifierTest(double expectedChange, Stat stat, boolean user, TestInfo testInfo) {
+    private void statModifierTest(double expectedChange, Stat stat, User user, TestInfo testInfo) {
         testInfo.statModifierTest(expectedChange, stat, user);
     }
 

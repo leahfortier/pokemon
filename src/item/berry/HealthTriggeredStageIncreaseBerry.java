@@ -3,7 +3,7 @@ package item.berry;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.source.CastSource;
-import pokemon.Stat;
+import pokemon.stat.Stat;
 
 public interface HealthTriggeredStageIncreaseBerry extends HealthTriggeredBerry {
     Stat getStat();

@@ -4,7 +4,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.MoveCategory;
 import battle.effect.status.StatusNamesies;
 import org.junit.Assert;
-import pokemon.Stat;
+import pokemon.stat.Stat;
 import test.TestUtils;
 import type.Type;
 import util.GeneralUtils;

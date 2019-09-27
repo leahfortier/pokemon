@@ -1,7 +1,7 @@
 package test.battle;
 
 import org.junit.Assert;
-import pokemon.Stat;
+import pokemon.stat.Stat;
 import test.TestUtils;
 
 public class TestStages {

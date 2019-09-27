@@ -603,7 +603,7 @@ StageChangingEffect:
     Method:
         Header: int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
         Invoke: Add
-        MoldBreakerNullCheck: s.user() ? null : opp
+        MoldBreakerNullCheck: s.isAttacking() ? null : opp
         EffectList: p
     *
 ***
@@ -612,7 +612,7 @@ StatModifyingEffect:
         Header: double modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
         Invoke: Multiply
         EffectList: p
-        MoldBreakerNullCheck: s.user() ? null : opp
+        MoldBreakerNullCheck: s.isAttacking() ? null : opp
     *
 ***
 StatChangingEffect:
@@ -630,7 +630,7 @@ StatChangingEffect:
         Update: stat
         InvokeName: modifyStat
         EffectList: p
-        MoldBreakerNullCheck: s.user() ? null : opp
+        MoldBreakerNullCheck: s.isAttacking() ? null : opp
     *
 ***
 EffectChanceMultiplierEffect:

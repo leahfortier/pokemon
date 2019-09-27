@@ -7,13 +7,13 @@ import item.ItemNamesies;
 import item.hold.HoldItem;
 import item.hold.IncenseItem;
 import item.hold.PowerItem;
-import pokemon.Stat;
 import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
 import pokemon.active.MoveList;
 import pokemon.active.Nature;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
+import pokemon.stat.Stat;
 import util.RandomUtils;
 
 import java.util.ArrayList;

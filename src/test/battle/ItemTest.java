@@ -15,10 +15,10 @@ import item.use.BallItem;
 import item.use.BattleUseItem;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.species.PokemonNamesies;
+import pokemon.stat.Stat;
 import test.BaseTest;
 import test.TestPokemon;
 

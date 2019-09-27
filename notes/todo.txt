@@ -158,4 +158,5 @@ Other random things:
         - then it can also do the crit test and return the advantage (so is not calculated twice for message purposes)
         - like most of this stuff doesn't feel like it should be inside applyDamage -- that should just be applying the damage!!!! not printing/more calculating!!
     TestBattle should have assertTrainer[Has/No]Effect method
+    should probably have tests for moves that ignore stages
     

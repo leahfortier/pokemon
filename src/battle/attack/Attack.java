@@ -70,12 +70,12 @@ import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
-import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.active.MoveList;
 import pokemon.species.PokemonNamesies;
+import pokemon.stat.Stat;
 import trainer.Team;
 import trainer.Trainer;
 import type.PokeType;
@@ -2957,7 +2957,8 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean ignoreStage(Stat s) {
-            return !s.user();
+            // Ignore stages on the other pokemon
+            return s.isDefending();
         }
     }
 
@@ -8592,7 +8593,8 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean ignoreStage(Stat s) {
-            return !s.user();
+            // Ignore stages on the other pokemon
+            return s.isDefending();
         }
     }
 
@@ -10467,7 +10469,8 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean ignoreStage(Stat s) {
-            return !s.user();
+            // Ignore stages on the other pokemon
+            return s.isDefending();
         }
     }
 

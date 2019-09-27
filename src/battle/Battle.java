@@ -32,7 +32,7 @@ import message.MessageUpdateType;
 import message.Messages;
 import message.Messages.MessageState;
 import pattern.action.UpdateMatcher;
-import pokemon.Stat;
+import pokemon.stat.Stat;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
 import trainer.PlayerTrainer;

@@ -69,7 +69,7 @@ public enum InterfaceMethodKey {
         builder.setInvokeeDeclaration(
                 "// Only add the attack when checking a defensive stat -- this means the other pokemon is the one currently attacking\n" +
                         "List<InvokeEffect> invokees = " + builder.battleParameter + ".getEffectsList(" + value + ");\n" +
-                        "if (!s.user()) {\n" +
+                        "if (s.isDefending()) {\n" +
                         "invokees.add(" + value + ".getAttack());\n" +
                         "}\n"
         );

@@ -18,9 +18,10 @@ import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
+import pokemon.stat.Stat;
+import pokemon.stat.User;
 import test.BaseTest;
 import test.TestPokemon;
 import trainer.EnemyTrainer;
@@ -1043,14 +1044,14 @@ public class EffectTest extends BaseTest {
                 });
 
         // Quick Powder increases Speed by 50% for Ditto
-        testInfo.statModifierTest(1.5, Stat.SPEED, true);
-        testInfo.statModifierTest(1, Stat.SPEED, false);
+        testInfo.statModifierTest(1.5, Stat.SPEED, User.ATTACKING);
+        testInfo.statModifierTest(1, Stat.SPEED, User.DEFENDING);
 
         // Light Ball doubles Pikachu's Attack and Sp. Attack
-        testInfo.statModifierTest(1, Stat.ATTACK, true);
-        testInfo.statModifierTest(1, Stat.SP_ATTACK, true);
-        testInfo.statModifierTest(2, Stat.ATTACK, false);
-        testInfo.statModifierTest(2, Stat.SP_ATTACK, false);
+        testInfo.statModifierTest(1, Stat.ATTACK, User.ATTACKING);
+        testInfo.statModifierTest(1, Stat.SP_ATTACK, User.ATTACKING);
+        testInfo.statModifierTest(2, Stat.ATTACK, User.DEFENDING);
+        testInfo.statModifierTest(2, Stat.SP_ATTACK, User.DEFENDING);
 
         // Transform time!
         testInfo.attackingFight(AttackNamesies.TRANSFORM)
@@ -1066,14 +1067,14 @@ public class EffectTest extends BaseTest {
                 });
 
         // Not a Ditto anymore so Quick Powder shouldn't work
-        testInfo.statModifierTest(1, Stat.SPEED, true);
-        testInfo.statModifierTest(1, Stat.SPEED, false);
+        testInfo.statModifierTest(1, Stat.SPEED, User.ATTACKING);
+        testInfo.statModifierTest(1, Stat.SPEED, User.DEFENDING);
 
         // But is a Pikachu, but not holding Light Ball so that shouldn't work still
-        testInfo.statModifierTest(1, Stat.ATTACK, true);
-        testInfo.statModifierTest(1, Stat.SP_ATTACK, true);
-        testInfo.statModifierTest(2, Stat.ATTACK, false);
-        testInfo.statModifierTest(2, Stat.SP_ATTACK, false);
+        testInfo.statModifierTest(1, Stat.ATTACK, User.ATTACKING);
+        testInfo.statModifierTest(1, Stat.SP_ATTACK, User.ATTACKING);
+        testInfo.statModifierTest(2, Stat.ATTACK, User.DEFENDING);
+        testInfo.statModifierTest(2, Stat.SP_ATTACK, User.DEFENDING);
 
         // Switch items!
         testInfo.attackingFight(AttackNamesies.TRICK)
@@ -1088,13 +1089,13 @@ public class EffectTest extends BaseTest {
                 });
 
         // Regular Pikachu is holding Quick Powder now -- should do nothing
-        testInfo.statModifierTest(1, Stat.SPEED, true);
-        testInfo.statModifierTest(1, Stat.SPEED, false);
+        testInfo.statModifierTest(1, Stat.SPEED, User.ATTACKING);
+        testInfo.statModifierTest(1, Stat.SPEED, User.DEFENDING);
 
         // Holding Light Ball now and is a (transformed) Pikachu, so should be stronger
-        testInfo.statModifierTest(2, Stat.ATTACK, true);
-        testInfo.statModifierTest(2, Stat.SP_ATTACK, true);
-        testInfo.statModifierTest(1, Stat.ATTACK, false);
-        testInfo.statModifierTest(1, Stat.SP_ATTACK, false);
+        testInfo.statModifierTest(2, Stat.ATTACK, User.ATTACKING);
+        testInfo.statModifierTest(2, Stat.SP_ATTACK, User.ATTACKING);
+        testInfo.statModifierTest(1, Stat.ATTACK, User.DEFENDING);
+        testInfo.statModifierTest(1, Stat.SP_ATTACK, User.DEFENDING);
     }
 }

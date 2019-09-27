@@ -3,7 +3,7 @@ package item.berry;
 import battle.ActivePokemon;
 import item.use.PokemonUseItem;
 import message.Messages;
-import pokemon.Stat;
+import pokemon.stat.Stat;
 
 public interface EvDecreaseBerry extends Berry, PokemonUseItem {
     Stat toDecrease();

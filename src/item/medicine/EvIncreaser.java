@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import item.hold.HoldItem;
 import item.use.PokemonUseItem;
 import message.Messages;
-import pokemon.Stat;
+import pokemon.stat.Stat;
 
 public interface EvIncreaser extends HoldItem, PokemonUseItem {
     Stat toIncrease();

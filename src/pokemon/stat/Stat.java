@@ -1,4 +1,4 @@
-package pokemon;
+package pokemon.stat;
 
 import battle.ActivePokemon;
 import battle.Battle;
@@ -13,14 +13,14 @@ import main.Global;
 import java.util.List;
 
 public enum Stat {
-    HP(0, "HP", "HP", "HP", -1, InBattle.NEVER, true),
-    ATTACK(1, "Attack", "Attack", "Atk", 2, InBattle.BOTH, true),
-    DEFENSE(2, "Defense", "Defense", "Def", 2, InBattle.BOTH, false),
-    SP_ATTACK(3, "Special Attack", "Sp. Attack", "SpA", 2, InBattle.BOTH, true),
-    SP_DEFENSE(4, "Special Defense", "Sp. Defense", "SpD", 2, InBattle.BOTH, false),
-    SPEED(5, "Speed", "Speed", "Spd", 2, InBattle.BOTH, true),
-    ACCURACY(0, "Accuracy", "Accuracy", "Acc", 3, InBattle.ONLY, true),
-    EVASION(6, "Evasion", "Evasion", "Eva", 3, InBattle.ONLY, false);
+    HP(0, "HP", "HP", "HP", -1, InBattle.NEVER, User.BOTH),
+    ATTACK(1, "Attack", "Attack", "Atk", 2, InBattle.BOTH, User.ATTACKING),
+    DEFENSE(2, "Defense", "Defense", "Def", 2, InBattle.BOTH, User.DEFENDING),
+    SP_ATTACK(3, "Special Attack", "Sp. Attack", "SpA", 2, InBattle.BOTH, User.ATTACKING),
+    SP_DEFENSE(4, "Special Defense", "Sp. Defense", "SpD", 2, InBattle.BOTH, User.DEFENDING),
+    SPEED(5, "Speed", "Speed", "Spd", 2, InBattle.BOTH, User.BOTH),
+    ACCURACY(0, "Accuracy", "Accuracy", "Acc", 3, InBattle.ONLY, User.ATTACKING),
+    EVASION(6, "Evasion", "Evasion", "Eva", 3, InBattle.ONLY, User.DEFENDING);
 
     public static final int NUM_STATS = 6;
     public static final int NUM_BATTLE_STATS = 7;
@@ -59,9 +59,9 @@ public enum Stat {
     private final String shortestName;
     private final double modifier;
     private final InBattle onlyBattle;
-    private final boolean user;
+    private final User user;
 
-    Stat(int index, String name, String shortName, String shortestName, int modifier, InBattle onlyBattle, boolean user) {
+    Stat(int index, String name, String shortName, String shortestName, int modifier, InBattle onlyBattle, User user) {
         this.index = index;
         this.name = name;
         this.shortName = shortName;
@@ -87,8 +87,16 @@ public enum Stat {
         return this.shortestName;
     }
 
-    public boolean user() {
+    public User user() {
         return user;
+    }
+
+    public boolean isAttacking() {
+        return user.isAttacking();
+    }
+
+    public boolean isDefending() {
+        return user.isDefending();
     }
 
     public boolean isAttackingStat() {

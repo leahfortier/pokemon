@@ -6,9 +6,10 @@ import battle.effect.EffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
-import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
+import pokemon.stat.Stat;
+import pokemon.stat.User;
 import test.TestPokemon;
 import test.TestUtils;
 import util.string.StringAppender;
@@ -223,10 +224,10 @@ class TestInfo {
         this.statModifierTest(expectedChange, stat, stat.user());
     }
 
-    // user should be true if checking the stat on the attacking pokemon and false for the defending pokemon
-    public void statModifierTest(double expectedChange, Stat stat, boolean user) {
+    // user will check attacking by default if it is BOTH
+    public void statModifierTest(double expectedChange, Stat stat, User user) {
         TestBattle battle = this.createBattle();
-        TestPokemon statPokemon = user ? battle.getAttacking() : battle.getDefending();
+        TestPokemon statPokemon = user.isAttacking() ? battle.getAttacking() : battle.getDefending();
 
         int beforeStat = Stat.getStat(stat, statPokemon, battle);
         this.manipulate(battle);
@@ -308,11 +309,8 @@ class TestInfo {
 
     public void stageChangeTest(int expectedStage, Stat stat) {
         TestBattle battle = this.createBattle();
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
-
-        TestPokemon statPokemon = stat.user() ? attacking : defending;
-        TestPokemon otherPokemon = stat.user() ? defending : attacking;
+        TestPokemon statPokemon = stat.isAttacking() ? battle.getAttacking() : battle.getDefending();
+        TestPokemon otherPokemon = battle.getOtherPokemon(statPokemon);
 
         int beforeStage = stat.getStage(statPokemon, otherPokemon, battle);
         Assert.assertEquals(0, beforeStage);

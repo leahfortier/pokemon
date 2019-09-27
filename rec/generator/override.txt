@@ -279,7 +279,8 @@ SpecialDefenseMove:
 IgnoreStageMove:
     AddInterface: OpponentIgnoreStageEffect
     AddMapField: IgnoreStage:
-        return !s.user();
+        // Ignore stages on the other pokemon
+        return s.isDefending();
         ###
 *
 FusionMove:

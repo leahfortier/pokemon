@@ -66,12 +66,12 @@ import item.hold.HoldItem;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.active.MoveList;
 import pokemon.species.PokemonNamesies;
+import pokemon.stat.Stat;
 import type.PokeType;
 import type.Type;
 import util.RandomUtils;
@@ -1835,6 +1835,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             this.hp = victim.forceReduceHealthFraction(b, .25, victim.getName() + " put in a substitute!") + 1;
 
+            // TODO: This should definitely be in some sort of function I don't like this at all
             String imageName = "substitute" + (victim.isPlayer() ? "-back" : "");
             Messages.add(new MessageUpdate().updatePokemon(b, victim).withImageName(imageName, victim.isPlayer()));
         }

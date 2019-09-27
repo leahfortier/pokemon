@@ -1,6 +1,6 @@
 package pokemon.species;
 
-import pokemon.Stat;
+import pokemon.stat.Stat;
 import util.string.StringAppender;
 
 public class BaseStats {

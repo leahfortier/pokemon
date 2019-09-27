@@ -11,7 +11,7 @@ import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
 import battle.effect.battle.BattleEffect;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
-import pokemon.Stat;
+import pokemon.stat.Stat;
 import type.Type;
 
 public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implements BattleEndTurnEffect {

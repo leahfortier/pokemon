@@ -2,8 +2,8 @@ package pokemon.evolution;
 
 import battle.ActivePokemon;
 import item.ItemNamesies;
-import pokemon.Stat;
 import pokemon.species.PokemonNamesies;
+import pokemon.stat.Stat;
 
 class StatEvolution extends Evolution {
     private static final long serialVersionUID = 1L;
