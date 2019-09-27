@@ -42,7 +42,7 @@ public abstract class PartyPokemon implements Serializable {
     private MoveList moves;
     private int hp;
     private int level;
-    private TrainerType trainerType;
+    private boolean isPlayer;
     private StatusCondition status;
     private int totalEXP;
     private HoldItem heldItem;
@@ -56,7 +56,7 @@ public abstract class PartyPokemon implements Serializable {
 
         this.nickname = this.pokemon.getName();
         this.level = level;
-        this.trainerType = trainerType;
+        this.isPlayer = trainerType.isPlayer();
         this.shiny = (trainerType.isWild()) && RandomUtils.chanceTest(1, 8192);
 
         this.stats = new StatValues(this);
@@ -108,7 +108,7 @@ public abstract class PartyPokemon implements Serializable {
 
         this.nickname = pokemon.getName();
         this.level = 1;
-        this.trainerType = TrainerType.PLAYER;
+        this.isPlayer = true;
 
         this.shiny = eggy.isShiny();
         this.stats = new StatValues(this);
@@ -346,7 +346,7 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public boolean isPlayer() {
-        return this.trainerType.isPlayer();
+        return this.isPlayer;
     }
 
     public MoveList getActualMoves() {
@@ -443,7 +443,7 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public void setCaught() {
-        this.trainerType = TrainerType.PLAYER;
+        this.isPlayer = true;
     }
 
     public void giveItem(ItemNamesies itemName) {
