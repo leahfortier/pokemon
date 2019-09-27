@@ -44,7 +44,6 @@ import main.Global;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
-import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
@@ -56,9 +55,11 @@ import pokemon.evolution.BaseEvolution;
 import pokemon.evolution.EvolutionMethod;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
+import pokemon.stat.Stat;
 import sound.SoundTitle;
 import trainer.Team;
 import trainer.Trainer;
+import trainer.TrainerType;
 import trainer.WildPokemon;
 import trainer.player.medal.MedalTheme;
 import type.PokeType;
@@ -91,14 +92,14 @@ public class ActivePokemon extends PartyPokemon {
     private boolean lastMoveSucceeded;
 
     // General constructor for an active Pokemon (isPlayer is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
-    public ActivePokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean isPlayer) {
-        super(pokemonNamesies, level, isWild, isPlayer);
+    public ActivePokemon(PokemonNamesies pokemonNamesies, int level, TrainerType trainerType) {
+        super(pokemonNamesies, level, trainerType);
     }
 
     // Constructor for matchers
-    public ActivePokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean isPlayer,
+    public ActivePokemon(PokemonNamesies pokemonNamesies, int level, TrainerType trainerType,
                          String nickname, Boolean shiny, List<Move> moves, Gender gender, Nature nature) {
-        super(pokemonNamesies, level, isWild, isPlayer, nickname, shiny, moves, gender, nature);
+        super(pokemonNamesies, level, trainerType, nickname, shiny, moves, gender, nature);
     }
 
     // Constructor for eggys
@@ -146,7 +147,7 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public void gainEXP(Battle b, int gain, PartyPokemon dead) {
-        boolean front = b.getPlayer().front() == this;
+        boolean front = b.isFront(this);
 
         // Add EXP
         super.gainEXP(gain);
@@ -175,7 +176,7 @@ public class ActivePokemon extends PartyPokemon {
         }
 
         boolean inBattle = b != null;
-        boolean front = inBattle && b.getPlayer().front() == this;
+        boolean front = inBattle && b.isFront(this);
 
         // Grow to the next level
         int[] gain = super.levelUp();

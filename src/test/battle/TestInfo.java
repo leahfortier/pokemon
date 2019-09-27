@@ -6,9 +6,10 @@ import battle.effect.EffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
-import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
+import pokemon.stat.Stat;
+import pokemon.stat.User;
 import test.TestPokemon;
 import test.TestUtils;
 import util.string.StringAppender;
@@ -217,16 +218,21 @@ class TestInfo {
     }
 
     // By default, check the stat on the more relevant Pokemon
-    // Attack, Sp. Attack, Accuracy, Speed uses attacking
+    // Attack, Sp. Attack, Accuracy uses attacking
     // Defense, Sp. Defense, Evasion uses defending
+    // For ambiguous stats (like Speed), must use the more explicit method
     public void statModifierTest(double expectedChange, Stat stat) {
         this.statModifierTest(expectedChange, stat, stat.user());
     }
 
-    // user should be true if checking the stat on the attacking pokemon and false for the defending pokemon
-    public void statModifierTest(double expectedChange, Stat stat, boolean user) {
+    public void statModifierTest(double expectedChange, Stat stat, User user) {
+        // HP not a relevant stat to modify
+        // user should be explictly stated for ambigous stats (like Speed)
+        Assert.assertNotEquals(Stat.HP, stat);
+        Assert.assertNotEquals(User.BOTH, user);
+
         TestBattle battle = this.createBattle();
-        TestPokemon statPokemon = user ? battle.getAttacking() : battle.getDefending();
+        TestPokemon statPokemon = user.isAttacking() ? battle.getAttacking() : battle.getDefending();
 
         int beforeStat = Stat.getStat(stat, statPokemon, battle);
         this.manipulate(battle);
@@ -274,17 +280,16 @@ class TestInfo {
         );
 
         // Make sure modifiers actually happen in battle
-        powerChangeTest(expectedModifier, false, attackNamesies);
-        powerChangeTest(expectedModifier, true, attackNamesies);
+        // Without manipulation, should have a modifier of 1
+        powerChangeTest(1, PokemonManipulator.empty(), attackNamesies);
+        powerChangeTest(expectedModifier, this.manipulator, attackNamesies);
     }
 
-    private void powerChangeTest(double expectedModifier, boolean manipulate, AttackNamesies attackNamesies) {
+    private void powerChangeTest(double expectedModifier, PokemonManipulator manipulator, AttackNamesies attackNamesies) {
         TestBattle battle = this.createBattle();
-        if (manipulate) {
-            this.manipulate(battle);
-        }
+        manipulator.manipulate(battle);
 
-        battle.getAttacking().setExpectedDamageModifier(manipulate ? expectedModifier : 1);
+        battle.getAttacking().setExpectedDamageModifier(expectedModifier);
         battle.attackingFight(attackNamesies);
     }
 
@@ -308,11 +313,8 @@ class TestInfo {
 
     public void stageChangeTest(int expectedStage, Stat stat) {
         TestBattle battle = this.createBattle();
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
-
-        TestPokemon statPokemon = stat.user() ? attacking : defending;
-        TestPokemon otherPokemon = stat.user() ? defending : attacking;
+        TestPokemon statPokemon = stat.isAttacking() ? battle.getAttacking() : battle.getDefending();
+        TestPokemon otherPokemon = battle.getOtherPokemon(statPokemon);
 
         int beforeStage = stat.getStage(statPokemon, otherPokemon, battle);
         Assert.assertEquals(0, beforeStage);

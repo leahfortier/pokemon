@@ -129,7 +129,6 @@ Other random things:
     beat up power was changed
     triple kick power is supposed to be 10, 20, 30
     foul play is all wrong
-    dark void should affect Insomnia and whatnot and fail for not Darkrai
     acupressure should only try to raise non-maximized stats and should fail if all maxed out
     test healing wish and snatch
     okay so Mirror Move is supposed to use the last move that targeted the user, not the last move that the opponent used... what is happening I did not know this
@@ -151,5 +150,14 @@ Other random things:
     is there a way to just create the button transitions from the button list by using all the button locations or something like that??
     Al Bhed translation shouldn't be hardcoded -- just a flag on the area or something
         - so if you put the flag on the area then when you talk to the rival he speaks Al Bhed...
-    wondering if there should be an enum for things like user/isPlayer type things because the booleans can be pretty confusing
+    change ActivePokemon.isType to take in multiple types like isPokemon and isAttackType
+    rework SemiInvulnerableBypasser to have separate flying and digging etc interfaces
+    uhhhhh so should I store the current battle on the player object???? would that just make everythinnnnggggggg better????
+        - if I end up doing would definitely do the simulating check for medal case not everywhere
+    should we have a new class to handle damage calculation shit and return an object with all relevant information (not just damage)
+        - then it can also do the crit test and return the advantage (so is not calculated twice for message purposes)
+        - like most of this stuff doesn't feel like it should be inside applyDamage -- that should just be applying the damage!!!! not printing/more calculating!!
+    TestBattle should have assertTrainer[Has/No]Effect method
+    should probably have tests for moves that ignore stages
+    can we delete powerModifierTest()? I really don't understand how it differs from powerChangeTest
     

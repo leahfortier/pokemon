@@ -6,7 +6,7 @@ import battle.attack.MoveCategory;
 import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.source.CastSource;
-import pokemon.Stat;
+import pokemon.stat.Stat;
 
 public interface CategoryBerry extends Berry {
     MoveCategory getCategory();

@@ -1,6 +1,6 @@
 package pokemon.active;
 
-import pokemon.Stat;
+import pokemon.stat.Stat;
 import util.serialization.Serializable;
 
 public class EffortValues implements Serializable {

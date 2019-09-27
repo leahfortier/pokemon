@@ -559,7 +559,7 @@ public class Player extends PlayerTrainer implements Serializable {
         Messages.add(name + " threw the " + ball.getName() + "!");
         this.pokeball = ball;
 
-        ActivePokemon catchPokemon = b.getOtherPokemon(true);
+        ActivePokemon catchPokemon = b.getOpponent().front();
         int maxHP = catchPokemon.getMaxHP();
         int hp = catchPokemon.getHP();
 

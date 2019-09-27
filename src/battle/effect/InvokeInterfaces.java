@@ -24,10 +24,10 @@ import map.overworld.TerrainType;
 import map.overworld.wild.WildEncounter;
 import map.overworld.wild.WildEncounterInfo;
 import message.Messages;
-import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.MoveList;
+import pokemon.stat.Stat;
 import trainer.Trainer;
 import type.PokeType;
 import type.Type;
@@ -835,7 +835,7 @@ public final class InvokeInterfaces {
         static boolean checkIgnoreStage(Battle b, ActivePokemon stagePokemon, ActivePokemon other, Stat s) {
             // Only add the attack when checking a defensive stat -- this means the other pokemon is the one currently attacking
             List<InvokeEffect> invokees = b.getEffectsList(other);
-            if (!s.user()) {
+            if (s.isDefending()) {
                 invokees.add(other.getAttack());
             }
 
@@ -1054,7 +1054,7 @@ public final class InvokeInterfaces {
         static Stat switchStat(Battle b, ActivePokemon other, Stat s) {
             // Only add the attack when checking a defensive stat -- this means the other pokemon is the one currently attacking
             List<InvokeEffect> invokees = b.getEffectsList(other);
-            if (!s.user()) {
+            if (s.isDefending()) {
                 invokees.add(other.getAttack());
             }
 
@@ -1097,7 +1097,7 @@ public final class InvokeInterfaces {
         static int getModifier(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
             int modifier = 0;
 
-            ActivePokemon moldBreaker = s.user() ? null : opp;
+            ActivePokemon moldBreaker = s.isDefending() ? opp : null;
 
             List<InvokeEffect> invokees = b.getEffectsList(p);
             for (InvokeEffect invokee : invokees) {
@@ -1123,7 +1123,7 @@ public final class InvokeInterfaces {
         static double getModifier(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
             double modifier = 1;
 
-            ActivePokemon moldBreaker = s.user() ? null : opp;
+            ActivePokemon moldBreaker = s.isDefending() ? opp : null;
 
             List<InvokeEffect> invokees = b.getEffectsList(p);
             for (InvokeEffect invokee : invokees) {
@@ -1154,7 +1154,7 @@ public final class InvokeInterfaces {
         int modify(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat);
 
         static int modifyStat(Battle b, ActivePokemon p, ActivePokemon opp, Stat s, int stat) {
-            ActivePokemon moldBreaker = s.user() ? null : opp;
+            ActivePokemon moldBreaker = s.isDefending() ? opp : null;
 
             List<InvokeEffect> invokees = b.getEffectsList(p);
             for (InvokeEffect invokee : invokees) {
@@ -1545,6 +1545,8 @@ public final class InvokeInterfaces {
     }
 
     public interface ModifyStageValueEffect {
+
+        // TODO: Can we test this with mold breaker? it looks backwards at first glance
         int modifyStageValue();
 
         static double getModifier(Battle b, ActivePokemon caster, ActivePokemon victim) {

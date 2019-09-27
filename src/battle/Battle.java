@@ -32,7 +32,7 @@ import message.MessageUpdateType;
 import message.Messages;
 import message.Messages.MessageState;
 import pattern.action.UpdateMatcher;
-import pokemon.Stat;
+import pokemon.stat.Stat;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
 import trainer.PlayerTrainer;
@@ -220,11 +220,11 @@ public class Battle implements Serializable {
         opp.resetTurn();
 
         // Fucking focus punch
-        if (isFighting(true)) {
+        if (isFighting(plyr)) {
             plyr.getAttack().startTurn(this, plyr);
         }
 
-        if (isFighting(false)) {
+        if (isFighting(opp)) {
             opp.getAttack().startTurn(this, opp);
         }
     }
@@ -235,14 +235,14 @@ public class Battle implements Serializable {
 
     // If the trainer selected an attack, this will return true - Wild Pokemon will always return true
     // It will return false if the trainer tried to run, switch Pokemon, or used an item
-    private boolean isFighting(boolean isPlayer) {
-        return this.getTrainer(isPlayer).getAction() == TrainerAction.FIGHT;
+    private boolean isFighting(ActivePokemon fighter) {
+        return this.getTrainer(fighter).getAction() == TrainerAction.FIGHT;
     }
 
     // If the trainer selected Switch, this will return true -- Wild Pokemon will always return false
     // It will return false if the trainer tried to run, use an attack, or use an item
-    public boolean isSwitching(boolean isPlayer) {
-        return this.getTrainer(isPlayer).getAction() == TrainerAction.SWITCH;
+    public boolean isSwitching(ActivePokemon switchPokemon) {
+        return this.getTrainer(switchPokemon).getAction() == TrainerAction.SWITCH;
     }
 
     private void deadUser() {
@@ -322,7 +322,7 @@ public class Battle implements Serializable {
 
         EntryEffect.invokeEntryEffect(this, enterer);
 
-        getTrainer(!enterer.isPlayer()).resetUsed();
+        getOtherTrainer(enterer).resetUsed();
         enterer.setUsed(true);
     }
 
@@ -358,7 +358,7 @@ public class Battle implements Serializable {
         return false;
     }
 
-    private boolean isFront(ActivePokemon p) {
+    public boolean isFront(ActivePokemon p) {
         return p == getTrainer(p).front();
     }
 
@@ -368,14 +368,14 @@ public class Battle implements Serializable {
         ActivePokemon me = firstAttacking == playerFirst ? player.front() : opponent.front();
         ActivePokemon o = this.getOtherPokemon(me);
 
-        if (isSwitching(me.isPlayer())) {
+        if (isSwitching(me)) {
             Trainer trainer = (Trainer)getTrainer(me);
             trainer.performSwitch(this);
             return;
         }
 
         // Don't do anything if they're not actually attacking
-        if (!isFighting(me.isPlayer()) || !isFront(me)) {
+        if (!isFighting(me) || !isFront(me)) {
             return;
         }
 
@@ -458,11 +458,7 @@ public class Battle implements Serializable {
     }
 
     public TeamEffectList getEffects(ActivePokemon teamMember) {
-        return getEffects(teamMember.isPlayer());
-    }
-
-    public TeamEffectList getEffects(boolean isPlayer) {
-        return isPlayer ? player.getEffects() : opponent.getEffects();
+        return teamMember.isPlayer() ? player.getEffects() : opponent.getEffects();
     }
 
     public List<InvokeEffect> getEffectsList(ActivePokemon p, InvokeEffect... additionalItems) {
@@ -480,6 +476,10 @@ public class Battle implements Serializable {
         return list;
     }
 
+    public Team getOtherTrainer(ActivePokemon pokemon) {
+        return this.getTrainer(this.getOtherPokemon(pokemon));
+    }
+
     public Team getTrainer(ActivePokemon pokemon) {
         return getTrainer(pokemon.isPlayer());
     }
@@ -488,13 +488,9 @@ public class Battle implements Serializable {
         return isPlayer ? player : opponent;
     }
 
-    public ActivePokemon getOtherPokemon(ActivePokemon pokemon) {
-        return getOtherPokemon(pokemon.isPlayer());
-    }
-
     // Returns the current Pokemon that is out on the team opposite to the one passed in
-    public ActivePokemon getOtherPokemon(boolean isPlayer) {
-        return isPlayer ? opponent.front() : player.front();
+    public ActivePokemon getOtherPokemon(ActivePokemon pokemon) {
+        return pokemon.isPlayer() ? opponent.front() : player.front();
     }
 
     public boolean isWildBattle() {

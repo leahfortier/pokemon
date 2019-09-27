@@ -17,11 +17,11 @@ import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
 import pokemon.species.PokemonNamesies;
+import pokemon.stat.Stat;
 import test.BaseTest;
 import test.TestPokemon;
 import test.TestUtils;
@@ -177,6 +177,7 @@ public class AttackTest extends BaseTest {
 
     @Test
     public void ohkoTest() {
+        // TODO: Don't think this is testing that these fail for lower level -- specifically check that with Sheer Cold
         TestBattle battle = TestBattle.create(PokemonNamesies.MAGIKARP, PokemonNamesies.DRAGONITE);
         TestPokemon defending = battle.getDefending();
 
@@ -214,11 +215,11 @@ public class AttackTest extends BaseTest {
         TestPokemon attacking2 = TestPokemon.newPlayerPokemon(PokemonNamesies.HAPPINY);
         battle.getPlayer().addPokemon(attacking2);
 
-        Assert.assertTrue(battle.getPlayer().front() == attacking1);
+        Assert.assertTrue(battle.isFront(attacking1));
 
         // Use U-Turn -- make sure they swap
         battle.attackingFight(AttackNamesies.U_TURN);
-        Assert.assertTrue(battle.getPlayer().front() == attacking2);
+        Assert.assertTrue(battle.isFront(attacking2));
 
         // TODO: Baton Pass
         // TODO: No more remaining Pokemon, wild battles, wimp out, red card, eject button

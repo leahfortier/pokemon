@@ -6,6 +6,7 @@ import pokemon.active.Gender;
 import pokemon.active.Nature;
 import pokemon.active.PartyPokemon;
 import pokemon.species.PokemonNamesies;
+import trainer.TrainerType;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class Eggy extends PartyPokemon {
     private int eggSteps;
 
     public Eggy(PokemonNamesies pokemonNamesies, Boolean shiny, List<Move> moves, Gender gender, Nature nature) {
-        super(pokemonNamesies, 1, false, true, "Egg", shiny, moves, gender, nature);
+        super(pokemonNamesies, 1, TrainerType.PLAYER, "Egg", shiny, moves, gender, nature);
 
         this.eggSteps = this.getPokemonInfo().getEggSteps();
     }

@@ -15,6 +15,7 @@ import map.MapName;
 import message.Messages;
 import pattern.map.MapTransitionMatcher;
 import pokemon.species.PokemonNamesies;
+import trainer.TrainerType;
 import trainer.player.Player;
 
 import java.awt.Graphics;
@@ -58,7 +59,7 @@ public class Game {
     }
 
     private void setupCharacter() {
-        player.addPokemon(new ActivePokemon(PokemonNamesies.EEVEE, 1, false, true));
+        player.addPokemon(new ActivePokemon(PokemonNamesies.EEVEE, 1, TrainerType.PLAYER));
         player.front().giveItem(ItemNamesies.ORAN_BERRY);
     }
 

@@ -8,14 +8,15 @@ import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
-import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
 import pokemon.active.MoveList;
 import pokemon.species.PokemonNamesies;
+import pokemon.stat.Stat;
 import test.battle.TestBattle;
 import test.battle.TestStages;
+import trainer.TrainerType;
 import util.string.StringAppender;
 import util.string.StringUtils;
 
@@ -27,12 +28,12 @@ public class TestPokemon extends ActivePokemon {
 
     private Double expectedDamageModifier;
 
-    public TestPokemon(final PokemonNamesies pokemon, final boolean isWild, final boolean isPlayer) {
-        this(pokemon, 100, isWild, isPlayer);
+    public TestPokemon(final PokemonNamesies pokemon, final TrainerType trainerType) {
+        this(pokemon, 100, trainerType);
     }
 
-    public TestPokemon(final PokemonNamesies pokemon, final int level, final boolean isWild, final boolean isPlayer) {
-        super(pokemon, level, isWild, isPlayer);
+    public TestPokemon(final PokemonNamesies pokemon, final int level, final TrainerType trainerType) {
+        super(pokemon, level, trainerType);
 
         // Test Pokemon need to have their ability explicitly changed
         this.setAbility(AbilityNamesies.NO_ABILITY);
@@ -252,14 +253,14 @@ public class TestPokemon extends ActivePokemon {
     }
 
     public static TestPokemon newPlayerPokemon(final PokemonNamesies pokemon) {
-        return new TestPokemon(pokemon, false, true);
+        return new TestPokemon(pokemon, TrainerType.PLAYER);
     }
 
     public static TestPokemon newWildPokemon(final PokemonNamesies pokemon) {
-        return new TestPokemon(pokemon, true, false);
+        return new TestPokemon(pokemon, TrainerType.WILD);
     }
 
     public static TestPokemon newTrainerPokemon(final PokemonNamesies pokemon) {
-        return new TestPokemon(pokemon, false, false);
+        return new TestPokemon(pokemon, TrainerType.OPPONENT);
     }
 }

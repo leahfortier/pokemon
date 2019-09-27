@@ -9,7 +9,6 @@ import item.Item;
 import item.ItemNamesies;
 import item.hold.HoldItem;
 import main.Game;
-import pokemon.Stat;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.Eggy;
@@ -17,6 +16,8 @@ import pokemon.evolution.BaseEvolution;
 import pokemon.species.LevelUpMove;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
+import pokemon.stat.Stat;
+import trainer.TrainerType;
 import trainer.player.medal.MedalTheme;
 import type.PokeType;
 import type.Type;
@@ -50,13 +51,13 @@ public abstract class PartyPokemon implements Serializable {
     private boolean shiny;
 
     // General constructor for an active Pokemon (isPlayer is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
-    protected PartyPokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean isPlayer) {
+    protected PartyPokemon(PokemonNamesies pokemonNamesies, int level, TrainerType trainerType) {
         this.pokemon = pokemonNamesies;
 
         this.nickname = this.pokemon.getName();
         this.level = level;
-        this.isPlayer = isPlayer;
-        this.shiny = (isPlayer || isWild) && RandomUtils.chanceTest(1, 8192);
+        this.isPlayer = trainerType.isPlayer();
+        this.shiny = trainerType.isWild() && RandomUtils.chanceTest(1, 8192);
 
         this.stats = new StatValues(this);
         this.moves = new MoveList(this);
@@ -76,9 +77,9 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     // Constructor for matchers
-    protected PartyPokemon(PokemonNamesies pokemonNamesies, int level, boolean isWild, boolean isPlayer,
+    protected PartyPokemon(PokemonNamesies pokemonNamesies, int level, TrainerType trainerType,
                            String nickname, Boolean shiny, List<Move> moves, Gender gender, Nature nature) {
-        this(pokemonNamesies, level, isWild, isPlayer);
+        this(pokemonNamesies, level, trainerType);
 
         if (!StringUtils.isNullOrEmpty(nickname)) {
             this.setNickname(nickname);
@@ -442,7 +443,7 @@ public abstract class PartyPokemon implements Serializable {
     }
 
     public void setCaught() {
-        isPlayer = true;
+        this.isPlayer = true;
     }
 
     public void giveItem(ItemNamesies itemName) {

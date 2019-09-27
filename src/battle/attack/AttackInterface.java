@@ -9,8 +9,8 @@ import battle.effect.InvokeInterfaces.OpponentTakeDamageEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import main.Game;
 import message.Messages;
-import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import pokemon.stat.Stat;
 import type.TypeAdvantage;
 
 public interface AttackInterface extends InvokeEffect {

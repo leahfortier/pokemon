@@ -1,8 +1,8 @@
 package pokemon.active;
 
 import main.Game;
-import pokemon.Stat;
 import pokemon.species.BaseStats;
+import pokemon.stat.Stat;
 import trainer.player.medal.Medal;
 import trainer.player.medal.MedalCase;
 import util.serialization.Serializable;

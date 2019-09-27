@@ -7,7 +7,7 @@ import battle.effect.source.CastSource;
 import main.Global;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.Stat;
+import pokemon.stat.Stat;
 import util.serialization.Serializable;
 
 public class Stages implements Serializable {

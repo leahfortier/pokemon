@@ -16,7 +16,7 @@ import battle.effect.InvokeInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
-import pokemon.Stat;
+import pokemon.stat.Stat;
 import type.Type;
 
 public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> extends Effect<NamesiesType> {

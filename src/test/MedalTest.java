@@ -8,6 +8,7 @@ import pokemon.active.EffortValues;
 import pokemon.active.StatValues;
 import pokemon.species.PokemonNamesies;
 import save.Save;
+import trainer.TrainerType;
 import trainer.player.Player;
 import trainer.player.medal.Medal;
 import trainer.player.medal.MedalCase;
@@ -36,7 +37,7 @@ public class MedalTest extends BaseTest {
     public void evsTest() {
         Player player = Game.getPlayer();
 
-        ActivePokemon bulby = new ActivePokemon(PokemonNamesies.BULBASAUR, 5, false, true);
+        ActivePokemon bulby = new ActivePokemon(PokemonNamesies.BULBASAUR, 5, TrainerType.PLAYER);
         Assert.assertFalse(player.getMedalCase().hasMedal(Medal.TRAINED_TO_MAX_POTENTIAL));
 
         StatValues stats = bulby.stats();

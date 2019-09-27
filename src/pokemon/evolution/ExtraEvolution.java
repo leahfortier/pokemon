@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import item.ItemNamesies;
 import main.Game;
 import pokemon.species.PokemonNamesies;
+import trainer.TrainerType;
 
 // SHEDDDIIINNNJJJAAAAAA
 public class ExtraEvolution extends Evolution {
@@ -27,7 +28,7 @@ public class ExtraEvolution extends Evolution {
         }
 
         // If an evolution will indeed occur, add the extra Pokemon
-        Game.getPlayer().addPokemon(new ActivePokemon(extraPokemon, extraLevel, false, true), false);
+        Game.getPlayer().addPokemon(new ActivePokemon(extraPokemon, extraLevel, TrainerType.PLAYER), false);
         return baseEvolution;
     }
 
@@ -43,6 +44,6 @@ public class ExtraEvolution extends Evolution {
 
     @Override
     public String toString() {
-        return EvolutionType.EXTRA + " " + extraPokemon.name() + " " + evolution.toString();
+        return EvolutionType.EXTRA + " " + extraPokemon.name() + " " + evolution;
     }
 }

@@ -15,8 +15,8 @@ import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.source.CastSource;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.Stat;
 import pokemon.ability.AbilityNamesies;
+import pokemon.stat.Stat;
 import type.Type;
 import util.RandomUtils;
 

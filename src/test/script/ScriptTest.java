@@ -46,7 +46,7 @@ import item.use.EvolutionItem;
 import item.use.TechnicalMachine;
 import org.junit.Assert;
 import org.junit.Test;
-import pokemon.Stat;
+import pokemon.stat.Stat;
 import test.BaseTest;
 import test.TestUtils;
 import test.battle.TestStages;

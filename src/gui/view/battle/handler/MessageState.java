@@ -11,7 +11,7 @@ import input.ControlKey;
 import input.InputControl;
 import map.Direction;
 import message.MessageUpdate;
-import pokemon.Stat;
+import pokemon.stat.Stat;
 import util.FontMetrics;
 
 import java.awt.Color;

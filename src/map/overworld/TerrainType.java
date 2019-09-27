@@ -4,7 +4,7 @@ import battle.attack.AttackNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import main.Game;
-import pokemon.Stat;
+import pokemon.stat.Stat;
 import type.Type;
 import util.string.StringUtils;
 
