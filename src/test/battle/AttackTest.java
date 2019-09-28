@@ -8,7 +8,11 @@ import battle.attack.MoveType;
 import battle.effect.EffectInterfaces.SapHealthEffect;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
+import battle.effect.InvokeInterfaces.ApplyDamageEffect;
+import battle.effect.InvokeInterfaces.CritBlockerEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
+import battle.effect.InvokeInterfaces.MurderEffect;
+import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.attack.SelfHealingMove;
 import battle.effect.battle.BattleEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
@@ -64,6 +68,16 @@ public class AttackTest extends BaseTest {
             // Crit stage moves cannot be status moves
             if (attack instanceof CritStageEffect || attack instanceof AlwaysCritEffect) {
                 Assert.assertNotEquals(attack.getName(), MoveCategory.STATUS, attack.getCategory());
+            }
+
+            // Moves that change power, apply damage, murder, and crit cannot be status moves
+            if (attack instanceof PowerChangeEffect
+                    || attack instanceof ApplyDamageEffect
+                    || attack instanceof MurderEffect
+                    || attack instanceof AlwaysCritEffect
+                    || attack instanceof CritStageEffect
+                    || attack instanceof CritBlockerEffect) {
+                Assert.assertFalse(attack.isStatusMove());
             }
 
             // Moves that cast battle effects are field moves

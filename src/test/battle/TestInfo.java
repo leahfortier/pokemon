@@ -261,6 +261,10 @@ class TestInfo {
 
     // No modifier without manipulation, expectedModifier with it
     public void powerChangeTest(double expectedModifier, AttackNamesies attackNamesies) {
+        powerChangeTest(1, expectedModifier, attackNamesies);
+    }
+
+    public void powerChangeTest(double withoutModifier, double expectedModifier, AttackNamesies attackNamesies) {
         TestBattle battle = this.createBattle();
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
@@ -280,8 +284,7 @@ class TestInfo {
         );
 
         // Make sure modifiers actually happen in battle
-        // Without manipulation, should have a modifier of 1
-        powerChangeTest(1, PokemonManipulator.empty(), attackNamesies);
+        powerChangeTest(withoutModifier, PokemonManipulator.empty(), attackNamesies);
         powerChangeTest(expectedModifier, this.manipulator, attackNamesies);
     }
 
@@ -290,24 +293,6 @@ class TestInfo {
         manipulator.manipulate(battle);
 
         battle.getAttacking().setExpectedDamageModifier(expectedModifier);
-        battle.attackingFight(attackNamesies);
-    }
-
-    // Differs from the powerChangeTest in that it only checks once
-    // Immediately applies manipulations in the testInfo and confirms the power modifier
-    public void powerModifierTest(double expectedModifier, AttackNamesies attackNamesies) {
-        TestBattle battle = this.createBattle();
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
-
-        this.manipulate(battle);
-
-        // Manual check
-        attacking.setupMove(attackNamesies, battle);
-        TestUtils.assertEquals(expectedModifier, battle.getDamageModifier(attacking, defending));
-
-        // Battle check
-        attacking.setExpectedDamageModifier(expectedModifier);
         battle.attackingFight(attackNamesies);
     }
 

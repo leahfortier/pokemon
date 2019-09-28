@@ -156,10 +156,9 @@ Other random things:
         - then it can also do the crit test and return the advantage (so is not calculated twice for message purposes)
         - like most of this stuff doesn't feel like it should be inside applyDamage -- that should just be applying the damage!!!! not printing/more calculating!!
     should probably have tests for moves that ignore stages
-    can we delete powerModifierTest()? I really don't understand how it differs from powerChangeTest
     might make sense at this point to have types be their own classes (still enum like the namesies)
         - Powder moves with grass
         - lots and lots of status immunities etc
     should have an isWeather method on the battle
-    do we already have a test that powerchangeeffects and such are never status moves
+    
     
