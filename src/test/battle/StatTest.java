@@ -46,6 +46,7 @@ public class StatTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         // Confirm all stats are unique
+        // Note: This has failed with the HP stat (which is technically irrelevant)
         TestUtils.assertUnique(attacking.stats().getClonedStats());
         TestUtils.assertUnique(defending.stats().getClonedStats());
 

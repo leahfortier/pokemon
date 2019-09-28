@@ -180,7 +180,7 @@ Growth:
         super.statChanges[Stat.SP_ATTACK.index()] = 1;
 
         // Doubles stat changes in the sunlight
-        if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
+        if (b.isWeather(WeatherNamesies.SUNNY)) {
             for (int i = 0; i < super.statChanges.length; i++) {
                 super.statChanges[i] *= 2;
             }
@@ -458,7 +458,7 @@ Aurora Veil:
     Cat: Status
     TeamEffect: AuroraVeil
     SelfTarget: True
-    Applies: b.getWeather().namesies() == WeatherNamesies.HAILING
+    Applies: b.isWeather(WeatherNamesies.HAILING)
 *
 Spiky Shield:
     Desc: In addition to protecting the user from attacks, this move also damages any attacker who makes direct contact.
@@ -3818,7 +3818,7 @@ Blizzard:
     EffChance: 10
     BasicBypassAccuracy:
         // Always hits when it's hailing unless the opponent is hiding
-        return b.getWeather().namesies() == WeatherNamesies.HAILING;
+        return b.isWeather(WeatherNamesies.HAILING);
         ###
 *
 Shock Wave:
@@ -4442,7 +4442,7 @@ Weather Ball:
     GetType:
         return b.getWeather().getElement();
         ###
-    PowerMultiplierCondition: 2 b.getWeather().namesies() != WeatherNamesies.CLEAR_SKIES
+    PowerMultiplierCondition: 2 !b.isWeather(WeatherNamesies.CLEAR_SKIES)
     Pow: 50
     Acc: 100
     Cat: Special
@@ -6113,7 +6113,7 @@ Shore Up:
     PP: 10
     BasicHealing:
         // Fully heals in a sandstorm
-        return b.getWeather().namesies() == WeatherNamesies.SANDSTORM ? 1 : .5;
+        return b.isWeather(WeatherNamesies.SANDSTORM) ? 1 : .5;
         ###
 *
 Floral Healing:

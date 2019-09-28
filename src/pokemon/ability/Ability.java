@@ -279,7 +279,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.getWeather().namesies() == WeatherNamesies.SUNNY;
+            return b.isWeather(WeatherNamesies.SUNNY);
         }
 
         @Override
@@ -310,14 +310,14 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
+            if (b.isWeather(WeatherNamesies.SUNNY)) {
                 victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
             }
         }
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttack().getCategory() == MoveCategory.SPECIAL && b.getWeather().namesies() == WeatherNamesies.SUNNY ? 1.5 : 1;
+            return user.getAttack().getCategory() == MoveCategory.SPECIAL && b.isWeather(WeatherNamesies.SUNNY) ? 1.5 : 1;
         }
     }
 
@@ -343,7 +343,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (b.getWeather().namesies() == WeatherNamesies.RAINING) {
+            if (b.isWeather(WeatherNamesies.RAINING)) {
                 victim.healHealthFraction(1/16.0, b, victim.getName() + "'s HP was restored due to its " + this.getName() + "!");
             }
         }
@@ -550,7 +550,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
-            return s == Stat.EVASION && b.getWeather().namesies() == WeatherNamesies.SANDSTORM ? 1 : 0;
+            return s == Stat.EVASION && b.isWeather(WeatherNamesies.SANDSTORM) ? 1 : 0;
         }
 
         @Override
@@ -573,7 +573,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.getWeather().namesies() == WeatherNamesies.SANDSTORM;
+            return b.isWeather(WeatherNamesies.SANDSTORM);
         }
 
         @Override
@@ -596,7 +596,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.getWeather().namesies() == WeatherNamesies.HAILING;
+            return b.isWeather(WeatherNamesies.HAILING);
         }
 
         @Override
@@ -824,9 +824,9 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
+            if (b.isWeather(WeatherNamesies.SUNNY)) {
                 victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
-            } else if (b.getWeather().namesies() == WeatherNamesies.RAINING) {
+            } else if (b.isWeather(WeatherNamesies.RAINING)) {
                 victim.healHealthFraction(1/8.0, b, victim.getName() + "'s HP was restored due to its " + this.getName() + "!");
             }
         }
@@ -1262,7 +1262,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.hasStatus() && b.getWeather().namesies() == WeatherNamesies.RAINING) {
+            if (victim.hasStatus() && b.isWeather(WeatherNamesies.RAINING)) {
                 victim.removeStatus(b, CastSource.ABILITY);
             }
         }
@@ -1466,7 +1466,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
+            if (b.isWeather(WeatherNamesies.SUNNY)) {
                 return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " prevents status conditions!");
             }
 
@@ -1501,7 +1501,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.getWeather().namesies() == WeatherNamesies.RAINING;
+            return b.isWeather(WeatherNamesies.RAINING);
         }
 
         @Override
@@ -1816,7 +1816,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
-            return s == Stat.EVASION && b.getWeather().namesies() == WeatherNamesies.HAILING ? 1 : 0;
+            return s == Stat.EVASION && b.isWeather(WeatherNamesies.HAILING) ? 1 : 0;
         }
 
         @Override
@@ -2357,7 +2357,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (b.getWeather().namesies() == WeatherNamesies.HAILING) {
+            if (b.isWeather(WeatherNamesies.HAILING)) {
                 victim.healHealthFraction(1/16.0, b, victim.getName() + "'s HP was restored due to its " + this.getName() + "!");
             }
         }
@@ -2454,7 +2454,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return b.getWeather().namesies() == WeatherNamesies.SUNNY;
+            return b.isWeather(WeatherNamesies.SUNNY);
         }
 
         @Override
@@ -2491,7 +2491,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class SandForce extends Ability implements PowerChangeEffect, WeatherBlockerEffect {
+    static class SandForce extends Ability implements WeatherBlockerEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         SandForce() {
@@ -2500,8 +2500,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Type type = user.getAttackType();
-            return (type == Type.ROCK || type == Type.STEEL || type == Type.GROUND) && b.getWeather().namesies() == WeatherNamesies.SANDSTORM ? 1.3 : 1;
+            return user.isAttackType(Type.ROCK, Type.GROUND, Type.STEEL) && b.isWeather(WeatherNamesies.SANDSTORM) ? 1.3 : 1;
         }
 
         @Override
@@ -3082,7 +3081,7 @@ public abstract class Ability implements AbilityInterface {
 
             // Restore the item if applicable
             HoldItem restored = consumed.getItem();
-            if (restored instanceof Berry && (b.getWeather().namesies() == WeatherNamesies.SUNNY || RandomUtils.chanceTest(50))) {
+            if (restored instanceof Berry && (b.isWeather(WeatherNamesies.SUNNY) || RandomUtils.chanceTest(50))) {
                 victim.giveItem(restored);
                 Messages.add(victim.getName() + "'s " + this.getName() + " restored its " + restored.getName() + "!");
             }

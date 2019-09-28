@@ -248,7 +248,7 @@ SunlightCharger:
         ###
     AddMapField: RequiresCharge:
         // Does not need to charge during harsh sunlight
-        return b.getWeather().namesies() != WeatherNamesies.SUNNY;
+        return !b.isWeather(WeatherNamesies.SUNNY);
         ###
 *
 MultiStrike:
@@ -1051,7 +1051,7 @@ StatusContact:
     AddInterface: PhysicalContactEffect
 *
 SpeedWeather:
-    AddMapField: ToModifyMultiplier: Speed 2 b.getWeather().namesies() == WeatherNamesies.{00}
+    AddMapField: ToModifyMultiplier: Speed 2 b.isWeather(WeatherNamesies.{00})
 *
 WeatherStarter:
     AddInterface: EntryEffect
@@ -1063,7 +1063,7 @@ WeatherStarter:
 WeatherEvasion:
     AddInterface: StageChangingEffect
     AddMapField: StageChange:
-        return s == Stat.EVASION && b.getWeather().namesies() == WeatherNamesies.{00} ? 1 : 0;
+        return s == Stat.EVASION && b.isWeather(WeatherNamesies.{00}) ? 1 : 0;
         ###
 *
 WeatherEliminate:
@@ -1091,7 +1091,7 @@ WeatherBlocker:
 WeatherHealer:
     AddInterface: EndTurnEffect
     AddMapField: ApplyEndTurn:
-        if (b.getWeather().namesies() == WeatherNamesies.{00}) {
+        if (b.isWeather(WeatherNamesies.{00})) {
             victim.healHealthFraction(1/16.0, b, victim.getName() + "'s HP was restored due to its " + this.getName() + "!");
         }
         ###

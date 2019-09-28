@@ -511,7 +511,7 @@ public final class EffectInterfaces {
     public interface StormyMove extends AttackInterface, DoubleFlyer, BasicAccuracyBypassEffect {
         @Override
         default int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
-            if (b.getWeather().namesies() == WeatherNamesies.SUNNY) {
+            if (b.isWeather(WeatherNamesies.SUNNY)) {
                 return 50;
             }
 
@@ -520,7 +520,7 @@ public final class EffectInterfaces {
 
         @Override
         default boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            return b.getWeather().namesies() == WeatherNamesies.RAINING;
+            return b.isWeather(WeatherNamesies.RAINING);
         }
     }
 }
