@@ -1,21 +1,17 @@
 package battle;
 
+import battle.DamageCalculator.DamageCalculation;
 import battle.attack.Attack;
 import battle.attack.MoveType;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.InvokeEffect;
-import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
 import battle.effect.InvokeInterfaces.BeforeTurnEffect;
 import battle.effect.InvokeInterfaces.CrashDamageMove;
-import battle.effect.InvokeInterfaces.CritBlockerEffect;
-import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.DefiniteEscape;
 import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.NameChanger;
 import battle.effect.InvokeInterfaces.OpponentAccuracyBypassEffect;
-import battle.effect.InvokeInterfaces.OpponentPowerChangeEffect;
-import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.InvokeInterfaces.PriorityChangeEffect;
 import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.StallingEffect;
@@ -44,7 +40,6 @@ import trainer.TrainerAction;
 import trainer.WildPokemon;
 import trainer.player.Player;
 import trainer.player.medal.MedalTheme;
-import type.TypeAdvantage;
 import util.RandomUtils;
 import util.serialization.Serializable;
 import util.string.PokeString;
@@ -57,8 +52,7 @@ import java.util.List;
 public class Battle implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    // Crit yo pants
-    private static final int[] CRITSICLES = { 16, 8, 4, 3, 2 };
+    protected final DamageCalculator damageCalculator;
 
     private final Opponent opponent; // SO OBJECT-ORIENTED
     private PlayerTrainer player;
@@ -77,12 +71,18 @@ public class Battle implements Serializable {
     }
 
     public Battle(Opponent opponent) {
+        this(opponent, new DamageCalculator());
+    }
+
+    protected Battle(Opponent opponent, DamageCalculator damageCalculator) {
         Messages.clearMessages(MessageState.FIGHTY_FIGHT);
         Messages.setMessageState(MessageState.FIGHTY_FIGHT);
         Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.ENTER_BATTLE));
 
         Player player = Game.getPlayer();
         player.getMedalCase().increase(MedalTheme.BATTLES_BATTLED);
+
+        this.damageCalculator = damageCalculator;
 
         this.player = player;
         this.opponent = opponent;
@@ -497,73 +497,8 @@ public class Battle implements Serializable {
         return opponent instanceof WildPokemon;
     }
 
-    public int calculateDamage(ActivePokemon me, ActivePokemon o) {
-        final Stat attacking;
-        final Stat defending;
-        switch (me.getAttack().getCategory()) {
-            case PHYSICAL:
-                attacking = Stat.ATTACK;
-                defending = Stat.DEFENSE;
-                break;
-            case SPECIAL:
-                attacking = Stat.SP_ATTACK;
-                defending = Stat.SP_DEFENSE;
-                break;
-            default:
-                Global.error("Invalid category " + me.getAttack().getCategory() + " for calculating damage");
-                return -1;
-        }
-
-        int level = me.getLevel();
-        int random = RandomUtils.getRandomInt(16) + 85;
-
-        int power = me.getAttack().getPower(this, me, o);
-        power *= getDamageModifier(me, o);
-
-        int attackStat = Stat.getStat(attacking, me, this);
-        int defenseStat = Stat.getStat(defending, o, this);
-
-        double stab = TypeAdvantage.getSTAB(this, me);
-        double adv = TypeAdvantage.getAdvantage(me, o, this);
-
-//                System.out.printf("%s %s %d %d %d %d %d %f %f %d%n",
-//                me.getActualName(),
-//                me.getAttack().getName(),
-//                level,
-//                power,
-//                random,
-//                attackStat,
-//                defenseStat,
-//                stab,
-//                adv,
-//                damage);
-
-        return (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
-    }
-
-    protected double getDamageModifier(ActivePokemon me, ActivePokemon o) {
-        return PowerChangeEffect.getModifier(this, me, o)*OpponentPowerChangeEffect.getModifier(this, me, o);
-    }
-
-    public boolean criticalHit(ActivePokemon me, ActivePokemon o) {
-        if (CritBlockerEffect.checkBlocked(this, me, o)) {
-            return false;
-        }
-
-        if (AlwaysCritEffect.defCritsies(this, me, o)) {
-            return true;
-        }
-
-        // Increase crit stage and such
-        int stage = getCritStage(me);
-
-        return RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
-    }
-
-    public int getCritStage(ActivePokemon me) {
-        int stage = 1 + CritStageEffect.getModifier(this, me);
-        stage = Math.min(stage, CRITSICLES.length); // Max it out, yo
-        return stage;
+    public DamageCalculation calculateDamage(ActivePokemon me, ActivePokemon o) {
+        return this.damageCalculator.calculateDamage(this, me, o);
     }
 
     protected Boolean bypassAccuracy(ActivePokemon me, ActivePokemon o) {

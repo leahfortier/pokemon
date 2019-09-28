@@ -13,46 +13,32 @@ import org.junit.Assert;
 import pokemon.species.PokemonNamesies;
 import test.TestCharacter;
 import test.TestPokemon;
-import test.TestUtils;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
 import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.WildPokemon;
-import util.string.StringUtils;
 
 public class TestBattle extends Battle {
     private static final long serialVersionUID = 1L;
 
+    private TestDamageCalculator damageCalculator;
+
     private Boolean expectedDefendingAccuracyBypass;
-
-    private TestBattle(Opponent opponent) {
-        super(opponent);
-
-        this.getPlayer().setAction(TrainerAction.FIGHT);
-
-        this.getAttacking().setupMove(AttackNamesies.SPLASH, this);
-        this.getDefending().setupMove(AttackNamesies.SPLASH, this);
-    }
 
     private TestBattle(ActivePokemon nahMahBoi) {
         this(new WildPokemon(nahMahBoi));
     }
 
-    @Override
-    public double getDamageModifier(ActivePokemon attacking, ActivePokemon defending) {
-        double modifier = super.getDamageModifier(attacking, defending);
+    private TestBattle(Opponent opponent) {
+        super(opponent, new TestDamageCalculator());
 
-        Assert.assertTrue(attacking.getAttack().getName(), modifier > 0);
-        Double expectedDamageModifier = ((TestPokemon)attacking).getExpectedDamageModifier();
-        if (expectedDamageModifier != null) {
-            TestUtils.assertEquals(
-                    StringUtils.spaceSeparated(attacking.getAttack(), attacking.getCount()),
-                    expectedDamageModifier, modifier
-            );
-        }
+        this.damageCalculator = (TestDamageCalculator)super.damageCalculator;
 
-        return modifier;
+        this.getPlayer().setAction(TrainerAction.FIGHT);
+
+        this.getAttacking().setupMove(AttackNamesies.SPLASH, this);
+        this.getDefending().setupMove(AttackNamesies.SPLASH, this);
     }
 
     TestPokemon getAttacking() {
@@ -161,6 +147,14 @@ public class TestBattle extends Battle {
 
     void setExpectedDefendingAccuracyBypass(Boolean accuracyBypass) {
         this.expectedDefendingAccuracyBypass = accuracyBypass;
+    }
+
+    public int getCritStage(ActivePokemon me) {
+        return this.damageCalculator.getCritStage(this, me);
+    }
+
+    public double getDamageModifier(ActivePokemon me, ActivePokemon o) {
+        return this.damageCalculator.getDamageModifier(this, me, o);
     }
 
     public void assertHasEffect(ActivePokemon member, TeamEffectNamesies effectNamesies) {

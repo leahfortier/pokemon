@@ -47,6 +47,7 @@ public class StatTest extends BaseTest {
 
         // Confirm all stats are unique
         // Note: This has failed with the HP stat (which is technically irrelevant)
+        // Note: Has also failed for Carracosta's Sp. Attack and Sp. Defense at 164
         TestUtils.assertUnique(attacking.stats().getClonedStats());
         TestUtils.assertUnique(defending.stats().getClonedStats());
 

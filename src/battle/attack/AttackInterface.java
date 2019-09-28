@@ -2,6 +2,7 @@ package battle.attack;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.DamageCalculator.DamageCalculation;
 import battle.effect.InvokeEffect;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
@@ -54,16 +55,11 @@ public interface AttackInterface extends InvokeEffect {
 
     // Physical and Special moves -- do dat damage!
     default void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
-
         // Deal damage
-        int damage = b.calculateDamage(me, o);
-        boolean critYoPants = b.criticalHit(me, o);
-        if (critYoPants) {
-            damage *= me.hasAbility(AbilityNamesies.SNIPER) ? 3 : 2;
-        }
+        DamageCalculation calculation = b.calculateDamage(me, o);
 
-        damage = o.reduceHealth(b, damage);
-        if (critYoPants) {
+        int damage = o.reduceHealth(b, calculation.getDamage());
+        if (calculation.isCritical()) {
             Messages.add("It's a critical hit!!");
             if (o.hasAbility(AbilityNamesies.ANGER_POINT)) {
                 Messages.add(o.getName() + "'s " + AbilityNamesies.ANGER_POINT.getName() + " raised its attack to the max!");
@@ -72,7 +68,7 @@ public interface AttackInterface extends InvokeEffect {
         }
 
         // Print Advantage
-        double advantage = TypeAdvantage.getAdvantage(me, o, b);
+        double advantage = calculation.getAdvantage();
         if (TypeAdvantage.isNotVeryEffective(advantage)) {
             Messages.add(TypeAdvantage.getNotVeryEffectiveMessage());
         } else if (TypeAdvantage.isSuperEffective(advantage)) {
