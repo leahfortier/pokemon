@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from forms import AddedPokes
+from scripts.forms import AddedPokes
 
 
 def attack_substitution(num, attack):

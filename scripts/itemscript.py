@@ -4,7 +4,7 @@
 import requests
 from lxml import html
 
-from util import poke, get_image_name, check_header, add_value
+from scripts.util import poke, get_image_name, check_header, add_value
 
 
 def update_table(table, header):

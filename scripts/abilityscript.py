@@ -4,7 +4,7 @@
 import requests
 from lxml import html
 
-from util import add_row_values
+from scripts.util import add_row_values
 
 f = open("abilities.in", "r")
 out = open("abilities.out", "w")

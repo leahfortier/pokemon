@@ -4,7 +4,7 @@
 import requests
 from lxml import html
 
-from util import get_query_text
+from scripts.util import get_query_text
 
 
 class Parser:

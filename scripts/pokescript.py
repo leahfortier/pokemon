@@ -7,10 +7,10 @@ import re
 import requests
 from lxml import html
 
-from forms import Stat, AddedPokes, FormConfig
-from parser import Parser
-from substitution import attack_substitution, ability_substitution, type_substitution
-from util import namesies, remove_prefix, remove_empty, index_swap, get_types, normalize_form, replace_special, dashy
+from scripts.forms import Stat, AddedPokes, FormConfig
+from scripts.parser import Parser
+from scripts.substitution import attack_substitution, ability_substitution, type_substitution
+from scripts.util import namesies, remove_prefix, remove_empty, index_swap, get_types, normalize_form, replace_special, dashy
 
 
 def get_base_exp_map():
@@ -338,7 +338,7 @@ with open("../temp.txt", "w") as f:
                                'Sun / Moon Level Up' + suffix,
                                form_config.form_name + " Form Level Up"]
 
-        assert parser.update_table(*level_up_tables)        
+        assert parser.update_table(*level_up_tables)
         attacks = []
         for i in range(2, len(parser.info_table) - 1, 2):
             level = parser.info_table[i][0].text
@@ -377,9 +377,9 @@ with open("../temp.txt", "w") as f:
                 tms.append(attack)
                 print(attack)
         # Manually add Fly for:
-        # Butterfree, Beedrill, Venomoth, Scyther, Dragonair, Ledyba line, 
-        # Natu, Yanma, Gligar, Beautifly, Dustox, Masquerain, Ninjask, 
-        # Shedinja, Volbeat, Illumise, Mothim, Vespiquen, Garchomp, Yanmega, 
+        # Butterfree, Beedrill, Venomoth, Scyther, Dragonair, Ledyba line,
+        # Natu, Yanma, Gligar, Beautifly, Dustox, Masquerain, Ninjask,
+        # Shedinja, Volbeat, Illumise, Mothim, Vespiquen, Garchomp, Yanmega,
         # Gliscor, Emolga, Vivillon, Rowlet line, Vikavolt, Cutiefly line
         if num in [12, 15, 49, 123, 148, 165, 166,
                    177, 193, 207, 267, 269, 284, 291,
