@@ -19,6 +19,26 @@ def remove_prefix(string, prefix):
     return string[len(prefix):]
 
 
+def remove_suffix(string, suffix):
+    assert string.endswith(suffix)
+    return string[:-len(suffix)]
+
+
+# Rounded to the nearest integer inch
+def decimeters_to_inches(decimeters):
+    return round(decimeters/.254)
+
+
+# Rounded to the first decimal lbs
+def hectograms_to_lbs(hectograms):
+    return round(hectograms*.22046, 1)
+
+
+# Replaces new lines with spaces and trims the string
+def remove_new_lines(s):
+    return s.replace('\n', ' ').strip()
+
+
 # Listsies should be a list of strings
 # This will remove all empty and whitespace characters from the list and return it
 def remove_empty(listsies):
