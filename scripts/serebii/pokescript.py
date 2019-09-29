@@ -8,7 +8,7 @@ import requests
 from lxml import html
 
 from scripts.forms import Stat, AddedPokes, FormConfig
-from scripts.parser import Parser
+from scripts.serebii.parser import Parser
 from scripts.substitution import attack_substitution, ability_substitution, type_substitution
 from scripts.util import namesies, remove_prefix, remove_empty, index_swap, get_types, normalize_form, replace_special, dashy
 

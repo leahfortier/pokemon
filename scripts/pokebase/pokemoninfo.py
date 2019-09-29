@@ -104,14 +104,18 @@ class PokemonInfo:
                     move.level_learned = 0
 
                 self.level_up_moves.append(str(move.level_learned) + " " + namesies(move.name))
-            elif move.learn_method in ['machine', 'egg', 'tutor']:
+            # Did you know that if you bred Pikachu holding Light Ball the Pichu will know Volt Tackle??
+            # Form change is for Rotom
+            elif move.learn_method in ['machine', 'egg', 'tutor', 'light-ball-egg', 'form-change']:
                 self.learnable_moves.append(namesies(move.name))
             else:
-                raise Exception('Unknown move learn method ' + move.learn_method)
+                raise Exception('Unknown move learn method ' + move.learn_method + ' for ' + move.name)
 
         self.level_up_moves.sort(key = attack_sort)
         print("Level-up Moves:", self.level_up_moves)
         print("Learnable Moves:", self.learnable_moves)
+
+        print()
 
     def write(self, f):
         f.write(str(self.num) + '\n')
