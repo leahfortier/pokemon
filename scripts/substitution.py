@@ -47,8 +47,9 @@ def learnable_attack_additions(num:int) -> List[str]:
     return additions
 
 
-# Replaces the level-up move with an alternative if applicable
-# Can potentially return the empty string to indicate removing the move altogether
+# Replaces the level-up move with an alternative if applicable for the corresponding Pokemon
+# Will return the empty string to indicate removing the move altogether
+# The input attack string is expected to be in namesies format
 def attack_substitution(num: int, attack: str) -> str:
     attack = _attack_substitution(attack)
 
@@ -287,88 +288,30 @@ def attack_substitution(num: int, attack: str) -> str:
     return attack
 
 
-def ability_substitution(num, ability):
+# Removes or replaces the ability with an alternative if applicable for the corresponding Pokemon
+# Will return the empty string to indicate removing ability (never 'NO_ABILITY')
+# The input ability string is expected to be in namesies format
+def ability_substitution(num: int, ability: str) -> str:
     if ability == 'BATTERY':
         # Charjabug
         if num == 737:
             return 'STATIC'
-    elif ability == 'EARLY_BIRD':
-        # Natu/Xatu -- I just love this ability and I want more Pokemon to have it
-        if num == 177 or num == 178:
-            return 'MAGIC_BOUNCE'
-    elif ability == 'FRIEND_GUARD':
-        # Spewpa
-        if num == 665:
-            return 'NO_ABILITY'
     elif ability == 'FLOWER_VEIL':
         # Comfey -- this ability was changed and doesn't make as much sense anymore for Comfey
         if num == 764:
-            return 'NATURAL_CURE'
-    elif ability == 'ILLUMINATE':
-        # Staryu/Starmie and Watchog
-        if num == 120 or num == 121 or num == 505:
-            return 'ANALYTIC'
-        # Volbeat
-        elif num == 313:
-            return 'PRANKSTER'
-        elif num == 755 or num == 756:
-            return 'RAIN_DISH'
-        # Chinchou/Lanturn
-        elif num == 170 or num == 171:
-            return 'WATER_ABSORB'
-    elif ability == 'MINUS':
-        # Klink line
-        if 599 <= num <= 601:
-            return 'NO_ABILITY'
-        # Minun
-        elif num == 312:
-            return 'STATIC'
-    elif ability == 'POWER_CONSTRUCT':
-        # Zygarde -- this should always be true if inside this if
-        if num == 718:
-            return 'NO_ABILITY'
-    elif ability == 'PLUS':
-        # Klink line
-        if 599 <= num <= 601:
-            return 'CLEAR_BODY'
-        # Mareep line
-        elif 179 <= num <= 181:
-            return 'NO_ABILITY'
-        # Plusle
-        elif num == 311:
-            return 'STATIC'
-    elif ability == 'RECEIVER':
-        # Passimian
-        if num == 766:
-            return 'NO_ABILITY'
+            return ''
     elif ability == 'RUN_AWAY':
         # Ponyta/Rapidash should really have this ability
+        # Also I know that this is their HA and if this is blank then they'll get it, but this case would exist
+        # regardless of the fact that its their HA so I think I'll just leave as is
         if num == 77 or num == 78:
             return 'FLAME_BODY'
-    elif ability == 'STALL':
-        # Sableye -- Prankster is way cooler
-        if num == 302:
-            return 'PRANKSTER'
-    elif ability == 'SYMBIOSIS':
-        # Flabebe line
-        if 669 <= num <= 671:
-            return 'FLOWER_GIFT'
-    elif ability == 'TELEPATHY':
-        # Elgyem/Beheeyem
-        if num == 605 or num == 606:
-            return 'ANALYTIC'
-        # Wobbuffet/Wynaut and Meditite/Medicham and Dialga/Palkia/Giratina
-        # and Oranguru and the Tapus
-        elif num == 202 or num == 360 \
-                or num == 307 or num == 308 \
-                or num == 483 or num == 484 or num == 487 \
-                or num == 765 \
-                or 785 <= num <= 788:
-            return 'NO_ABILITY'
-    elif ability == 'ZEN_MODE':
-        # Darmanitan
-        if num == 555:
-            return 'NO_ABILITY'
+
+    # All abilities which were removed
+    # Needs to be at the bottom for Pokemon with substitutions instead of removals
+    if ability in ['BATTERY', 'FRIEND_GUARD', 'ILLUMINATE', 'MINUS', 'POWER_CONSTRUCT', 'PLUS', 'RECEIVER',
+                   'SYMBIOSIS', 'TELEPATHY', 'ZEN_MODE']:
+        return ''
 
     return ability
 

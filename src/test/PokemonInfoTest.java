@@ -31,8 +31,8 @@ public class PokemonInfoTest extends BaseTest {
     @Test
     public void totalPokemonTest() {
         // Add one to account for the empty pokemon at the beginning
-        Assert.assertTrue(PokemonNamesies.values().length == PokemonInfo.NUM_POKEMON + 1);
-        Assert.assertTrue(PokemonNamesies.values()[0] == PokemonNamesies.NONE);
+        Assert.assertEquals(PokemonNamesies.values().length, PokemonInfo.NUM_POKEMON + 1);
+        Assert.assertSame(PokemonNamesies.values()[0], PokemonNamesies.NONE);
     }
 
     // Test to confirm each pokemon number corresponds correctly to the ordinal in PokemonNamesies enum
@@ -125,7 +125,7 @@ public class PokemonInfoTest extends BaseTest {
                         Assert.assertTrue(currentLevel == 0 || currentLevel == PokemonInfo.EVOLUTION_LEVEL_LEARNED);
                         for (Integer level : levels) {
                             Assert.assertTrue(message, level > 1);
-                            Assert.assertTrue(message, !LevelUpMove.isDefaultLevel(level));
+                            Assert.assertFalse(message, LevelUpMove.isDefaultLevel(level));
                         }
                     } else if (!levelUpMove.isDefaultLevel() && !actualLevelExceptions.contains(currentPair)) {
                         Assert.assertTrue(currentLevel > 0);
@@ -253,6 +253,7 @@ public class PokemonInfoTest extends BaseTest {
             Assert.assertNotEquals(AbilityNamesies.NO_ABILITY, abilities[0]);
 
             // Make sure no duplicate abilities
+            Assert.assertNotEquals(abilities[0], abilities[1]);
             Set<AbilityNamesies> seen = EnumSet.noneOf(AbilityNamesies.class);
             for (AbilityNamesies ability : abilities) {
                 Assert.assertFalse(seen.contains(ability));
@@ -274,6 +275,11 @@ public class PokemonInfoTest extends BaseTest {
                 } else if (ability == AbilityNamesies.LEVITATE) {
                     Assert.assertFalse(pokemonInfo.isType(Type.FLYING));
                 }
+            }
+
+            // They need it!!! (If this fails change the Run Away case in substitution)
+            if (pokemonInfo.namesies() == PokemonNamesies.PONYTA || pokemonInfo.namesies() == PokemonNamesies.RAPIDASH) {
+                Assert.assertTrue(pokemonInfo.hasAbility(AbilityNamesies.FLAME_BODY));
             }
 
             // Don't worry about it (but really if this fails change the message in Iron Fist)

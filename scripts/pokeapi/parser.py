@@ -4,7 +4,8 @@ from typing import List, Dict, Tuple
 import math
 import pokebase
 
-from scripts.substitution import attack_substitution, learnable_attack_substitution, learnable_attack_additions
+from scripts.substitution import attack_substitution, learnable_attack_substitution, learnable_attack_additions, \
+    ability_substitution
 from scripts.util import namesies, remove_suffix, decimeters_to_inches, hectograms_to_lbs, replace_new_lines, \
     remove_prefix
 
@@ -113,15 +114,19 @@ class Parser:
 
     # Returns the abilities as namesies strings in a list of size 2
     # If only has one regular ability, use the hidden ability as second
+    # If it only has one valid ability, the second will be 'NO_ABILITY'
     # Ex: ['OVERGROW', 'CHLOROPHYLL']
     def get_abilities(self) -> List[str]:
         abilities = ['']*3
 
         # Add each ability in the corresponding slot in the list
         for ability in self.pokemon.abilities:
-            abilities[ability.slot - 1] = namesies(ability.ability.name)
+            ability_name = namesies(ability.ability.name)
 
-            # Hidden abilities need to be the third slot
+            # Replace/remove the ability if applicable
+            abilities[ability.slot - 1] = ability_substitution(self.num, ability_name)
+
+            # Hidden abilities must be in the third slot
             if ability.is_hidden:
                 assert ability.slot == 3
 

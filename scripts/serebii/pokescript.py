@@ -208,8 +208,11 @@ with open("../temp.txt", "w") as f:
         assert ability1 is not None
         assert ability2 is not None
 
-        ability1 = ability_substitution(num, ability1)
-        ability2 = ability_substitution(num, ability2)
+        # TODO: I have completely broken this and I don't feel like fixing it here when I need to fix everything
+        # else in this file anyways but the point is that this method now removes instead of replacing so it should
+        # default to the HA now if any of these are empty
+        ability1 = ability_substitution(num, namesies(ability1))
+        ability2 = ability_substitution(num, namesies(ability2))
         if ability1 == 'No_Ability':
             temp_ability = ability1
             ability1 = ability2
@@ -351,12 +354,12 @@ with open("../temp.txt", "w") as f:
                 level = 0
 
             attack = parser.info_table[i][1][0].text
-            attack = attack_substitution(num, attack)
+            attack = attack_substitution(num, namesies(attack))
             if attack == '':
                 assert level == 0
                 continue
 
-            attacks.append(str(level) + " " + namesies(attack))
+            attacks.append(str(level) + " " + attack)
             print(str(int(level)) + " " + attack)
 
         print("TMS:")
