@@ -35,7 +35,7 @@ def hectograms_to_lbs(hectograms: int) -> float:
 
 
 # Replaces new lines with spaces and trims the string
-def remove_new_lines(s: str) -> str:
+def replace_new_lines(s: str) -> str:
     return s.replace('\n', ' ').strip()
 
 
