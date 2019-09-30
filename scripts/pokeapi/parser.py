@@ -4,6 +4,7 @@ from typing import List, Dict, Tuple
 import math
 import pokebase
 
+from scripts.substitution import attack_substitution, learnable_attack_substitution, learnable_attack_additions
 from scripts.util import namesies, remove_suffix, decimeters_to_inches, hectograms_to_lbs, replace_new_lines, \
     remove_prefix
 
@@ -43,6 +44,7 @@ class Move:
     def __str__(self):
         return self.name
 
+
 class Parser:
     def __init__(self, num: int):
         self.num = num
@@ -76,14 +78,8 @@ class Parser:
     # Returns the growth rate as a namesies string
     # Ex: 'MEDIUM_SLOW'
     def get_growth_rate(self) -> str:
-        growth_rate = namesies(self.species.growth_rate.name)
-        if growth_rate == 'MEDIUM':
-            growth_rate = 'MEDIUM_FAST'
-        elif growth_rate == 'FAST_THEN_VERY_SLOW':
-            growth_rate = 'FLUCTUATING'
-        elif growth_rate == 'SLOW_THEN_VERY_FAST':
-            growth_rate = 'ERRATIC'
-        return growth_rate
+        growth_rate = _get_growth_rate(self.species.growth_rate.name)
+        return namesies(growth_rate)
 
     # Returns the type of the Pokemon as a size 2 list of namesies strings
     # Ex: ['GRASS', 'POISON']
@@ -194,9 +190,8 @@ class Parser:
 
     # Returns the egg groups as namesies strings in a size 2 list
     # If there is only one group, the second group will be 'NONE'
-    # Ex: ['PLANT', 'MONSTER'] TODO: Make sure to update this example once I know which format I'm using
+    # Ex: ['GRASS', 'MONSTER']
     def get_egg_groups(self) -> List[str]:
-        # TODO: Some of these names are different from the serebii ones and I need to handle that
         egg_groups = [namesies(_get_egg_group(egg_group.name)) for egg_group in self.species.egg_groups]
         if len(egg_groups) == 1:
             egg_groups.append('NONE')
@@ -237,14 +232,26 @@ class Parser:
                 elif move.level_learned == 1:
                     move.level_learned = 0
 
+                # Potentially replace this move with another one
+                attack_name = attack_substitution(self.num, attack_name)
+                if attack_name == '':
+                    # Should only be removing default moves
+                    assert move.level_learned == 0
+                    continue
+
                 level_up_moves.append(str(move.level_learned) + " " + attack_name)
             # All other learnable moves
             # Did you know that if you bred Pikachu holding Light Ball the Pichu will know Volt Tackle??
             # Form change is for Rotom
             elif move.learn_method in ['machine', 'egg', 'tutor', 'light-ball-egg', 'form-change']:
+                # Don't include unimplemented moves
+                attack_name = learnable_attack_substitution(attack_name)
+                if attack_name == '':
+                    continue
+
                 learnable_moves.append(attack_name)
             else:
-                raise Exception('Unknown move learn method ' + move.learn_method + ' for ' + attack_name)
+                raise Exception('Unknown move learn method ' + move.learn_method + ' for ' + move.name)
 
         # Remove duplicates for evolution moves and default moves (only keep evolution move)
         evolution_moves = [remove_prefix(move, "-1 ") for move in level_up_moves if move.startswith("-1 ")]
@@ -253,6 +260,9 @@ class Parser:
 
         # Level-up moves are sorted by level
         level_up_moves.sort(key = _attack_level_sort)
+
+        # Add any manually added learnable moves
+        learnable_moves.extend(learnable_attack_additions(self.num))
 
         return version, level_up_moves, learnable_moves
 
@@ -273,6 +283,18 @@ def _get_stat(stat_name: str) -> Stat:
         return Stat.SPEED
     else:
         raise Exception('Unknown stat name ' + stat_name)
+
+
+# Replaces the growth rate with alternative names if applicable
+def _get_growth_rate(growth_rate: str) -> str:
+    if growth_rate == 'medium':
+        return 'medium-fast'
+    elif growth_rate == 'fast-then-very-slow':
+        return 'fluctuating'
+    elif growth_rate == 'slow-then-very-fast':
+        return 'erratic'
+    else:
+        return growth_rate
 
 
 # Replaces the egg group with alternative names if applicable

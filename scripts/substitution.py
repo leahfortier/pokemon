@@ -1,13 +1,58 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from typing import List
 
 from scripts.serebii.forms import AddedPokes
 
 
-def attack_substitution(num, attack):
-    if attack is None:
+# Attack replacement rules that always apply independent of pokemon and learn method
+def _attack_substitution(attack: str) -> str:
+    if attack is None or attack == '':
         raise Exception()
-    elif attack == 'After You':
+    # Ion Deluge was combined into Electrify
+    elif attack == 'Ion Deluge':
+        return 'Electrify'
+    # Intentional spelling change
+    elif attack == 'Judgment':
+        return 'Judgement'
+    else:
+        return attack
+
+
+# Replaces the learnable move with an alternative if applicable
+# Will return the empty string to indicate removing the move
+def learnable_attack_substitution(attack: str) -> str:
+    attack = _attack_substitution(attack)
+    if attack in ['After You', 'Ally Switch', 'Follow Me', 'Frustration', 'Helping Hand', 'Instruct', 'Quash',
+                  'Rage Powder', 'Return', 'Spotlight', 'Wide Guard']:
+        return ''
+    return attack
+
+
+# Other learnable moves that were manually added (because I think it makes sense for Butterfree to Fly)
+def learnable_attack_additions(num:int) -> List[str]:
+    additions = []  # type: List[str]
+
+    # Manually add Fly for:
+    # Butterfree, Beedrill, Venomoth, Scyther, Dragonair, Ledyba line,
+    # Natu, Yanma, Gligar, Beautifly, Dustox, Masquerain, Ninjask,
+    # Shedinja, Volbeat, Illumise, Mothim, Vespiquen, Garchomp, Yanmega,
+    # Gliscor, Emolga, Vivillon, Rowlet line, Vikavolt, Cutiefly line
+    if num in [12, 15, 49, 123, 148, 165, 166,
+               177, 193, 207, 267, 269, 284, 291,
+               292, 313, 314, 414, 416, 445, 469,
+               472, 587, 666, 722, 723, 724, 738, 742, 743]:
+        additions.append("Fly")
+
+    return additions
+
+
+# Replaces the level-up move with an alternative if applicable
+# Can potentially return the empty string to indicate removing the move altogether
+def attack_substitution(num: int, attack: str) -> str:
+    attack = _attack_substitution(attack)
+
+    if attack == 'After You':
         # Patrat/Watchog
         if num == 504 or num == 505:
             return 'Covet'
@@ -135,7 +180,7 @@ def attack_substitution(num, attack):
         # Eeveelutions all start with this
         # Also Poipole and Naganadel -- TODO: too lazy to come up with an alternative right now
         elif num in [133, 134, 135, 136, 196, 197, 470, 471, 700, 803, 804]:
-            return None
+            return ''
     elif attack == 'Instruct':
         # Oranguru
         if num == 765:
@@ -150,7 +195,7 @@ def attack_substitution(num, attack):
         # Murkrow/Honchkrow
         elif num == 198 or num == 430:
             return 'Roost'
-    elif attack == 'Rage Powder':
+    elif attack == 'RAGE_POWDER':
         # Foongus/Amoonguss
         if num == 590 or num == 591:
             return 'Gastro Acid'
@@ -159,7 +204,7 @@ def attack_substitution(num, attack):
             return 'Leech Life'
         # Butterfree and Volcarona
         elif num == 12 or num == 637:
-            return 'Morning Sun'
+            return 'MORNING_SUN'
         # Hoppip line
         elif 187 <= num <= 189:
             return 'Silver Wind'
@@ -237,13 +282,7 @@ def attack_substitution(num, attack):
             return 'Teeter Dance'
         # Celesteela and Guzzlord -- TODO: too lazy to come up with an alternative right now
         elif num == 797 or num == 799:
-            return None
-    elif attack == 'Ion Deluge':
-        # Replace for all Pokemon
-        return 'Electrify'
-    elif attack == 'Judgment':
-        # Intentional spelling change -- applies to all obviously
-        return 'Judgement'
+            return ''
 
     return attack
 

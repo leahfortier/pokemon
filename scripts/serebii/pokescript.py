@@ -9,7 +9,8 @@ from lxml import html
 
 from scripts.serebii.forms import Stat, AddedPokes, FormConfig
 from scripts.serebii.parser import Parser
-from scripts.substitution import attack_substitution, ability_substitution, type_substitution
+from scripts.substitution import attack_substitution, ability_substitution, type_substitution, \
+    learnable_attack_additions
 from scripts.util import namesies, remove_prefix, remove_empty, index_swap, replace_special, dashy
 from scripts.serebii.parse_util import get_types, normalize_form
 
@@ -351,7 +352,7 @@ with open("../temp.txt", "w") as f:
 
             attack = parser.info_table[i][1][0].text
             attack = attack_substitution(num, attack)
-            if attack is None:
+            if attack == '':
                 assert level == 0
                 continue
 
@@ -377,16 +378,8 @@ with open("../temp.txt", "w") as f:
 
                 tms.append(attack)
                 print(attack)
-        # Manually add Fly for:
-        # Butterfree, Beedrill, Venomoth, Scyther, Dragonair, Ledyba line,
-        # Natu, Yanma, Gligar, Beautifly, Dustox, Masquerain, Ninjask,
-        # Shedinja, Volbeat, Illumise, Mothim, Vespiquen, Garchomp, Yanmega,
-        # Gliscor, Emolga, Vivillon, Rowlet line, Vikavolt, Cutiefly line
-        if num in [12, 15, 49, 123, 148, 165, 166,
-                   177, 193, 207, 267, 269, 284, 291,
-                   292, 313, 314, 414, 416, 445, 469,
-                   472, 587, 666, 722, 723, 724, 738, 742, 743]:
-            attack = "Fly"
+        additions = learnable_attack_additions(num)
+        for attack in additions:
             tms.append(attack)
             print(attack)
 
