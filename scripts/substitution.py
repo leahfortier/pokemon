@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 from typing import List
 
-from scripts.serebii.forms import AddedPokes
+from scripts.forms import AddedPokes, Stat
+from scripts.util import index_swap
 
 
 # Attack replacement rules that always apply independent of pokemon and learn method
@@ -317,7 +318,8 @@ def ability_substitution(num: int, ability: str) -> str:
 
 
 # My personal type changes
-def type_substitution(num, types):
+# Types should be a size 2 list of non-empty namesies types (should use 'NO_TYPE' instead of empty)
+def type_substitution(num: int, types: List[str]) -> List[str]:
     # Ninetales is now Psychic type
     if num == 38:
         assert types == ['FIRE', 'NO_TYPE']
@@ -352,3 +354,51 @@ def type_substitution(num, types):
         return ['DARK', 'FAIRY']
 
     return types
+
+
+# Replaces the name of the Pokemon if applicable
+def name_substitution(num: int, name: str) -> str:
+    # Flabebe has a stupid name with stupid special characters
+    if num == 669:
+        return "Flabebe"
+    elif num == 29:
+        return "Nidoran F"
+    elif num == 32:
+        return "Nidoran M"
+
+    return name
+
+
+# Replaces the gender ratio of the Pokemon if applicable
+def gender_substitution(num: int, male_ratio: int) -> int:
+    # Silcoon/Beautifly, Gardevoir are 100% female now
+    if num in [266, 267, 282]:
+        assert male_ratio == 50
+        return 0
+    # Cascoon/Dustox, Glalie are 100% male now
+    elif num in [268, 269, 362]:
+        assert male_ratio == 50
+        return 100
+
+    return male_ratio
+
+
+# Replaces the stats of the Pokemon if applicable
+# Directly edits the contents of stats which should be a size 6 list of the base stats
+def stat_substitution(num: int, stats: List[int]) -> None:
+    # Decrease Absol's attack since it has an evolution now
+    if num == 359:
+        stats[Stat.ATTACK.value] -= 30
+    # Use Charizard's stats with modifications
+    if num == AddedPokes.MEGA_CHARIZARD.value:
+        index_swap(stats, Stat.ATTACK.value, Stat.SP_ATTACK.value)
+        index_swap(stats, Stat.DEFENSE.value, Stat.SP_DEFENSE.value)
+        stats[Stat.ATTACK.value] += 10
+        stats[Stat.SPEED.value] -= 10
+    # Use Absol's stats with increase speed
+    if num == AddedPokes.MEGA_ABSOL.value:
+        stats[Stat.SPEED.value] += 20
+    # Decrease mega attack stats
+    if num == AddedPokes.MEGA_BANNETTE.value:
+        stats[Stat.ATTACK.value] -= 35
+        stats[Stat.SP_ATTACK.value] -= 10

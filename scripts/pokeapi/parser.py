@@ -1,11 +1,11 @@
-from enum import Enum
 from typing import List, Dict, Tuple
 
 import math
 import pokebase
 
+from scripts.forms import Stat
 from scripts.substitution import attack_substitution, learnable_attack_substitution, learnable_attack_additions, \
-    ability_substitution
+    ability_substitution, type_substitution, name_substitution, gender_substitution, stat_substitution
 from scripts.util import namesies, remove_suffix, decimeters_to_inches, hectograms_to_lbs, replace_new_lines, \
     remove_prefix
 
@@ -22,16 +22,6 @@ PAIRED_VERSIONS = ['ultra-sun-ultra-moon',
                    'x-y',
                    'black-2-white-2',
                    'black-white']
-
-
-# TODO: This is temporarily duplicated and I also don't want it in this file
-class Stat(Enum):
-    HP = 0
-    ATTACK = 1
-    DEFENSE = 2
-    SP_ATTACK = 3
-    SP_DEFENSE = 4
-    SPEED = 5
 
 
 class Move:
@@ -58,7 +48,10 @@ class Parser:
     def get_name(self) -> str:
         # If the language is English ('en'), return the entry's name
         # Ex: {'language': {'name': 'en', 'url': 'https://pokeapi.co/api/v2/language/9/'}, 'name': 'Bulbasaur'}
-        return next(entry.name for entry in self.species.names if entry.language.name == 'en')
+        name = next(entry.name for entry in self.species.names if entry.language.name == 'en')
+
+        # TODO: Need to replace special characters as well (Farfetch'd has weird apostrophe here)
+        return name_substitution(self.num, name)
 
     # Returns the base stats and given effort values in a tuple
     # Ex: ([45, 49, 49, 65, 65, 45], [0, 0, 0, 1, 0, 0])
@@ -69,6 +62,10 @@ class Parser:
             stat_index = _get_stat(stat.stat.name).value
             stats[stat_index] = stat.base_stat
             evs[stat_index] = stat.effort
+
+        # Adjust stats if applicable
+        stat_substitution(self.num, stats)
+
         return stats, evs
 
     # Returns the base experience
@@ -83,13 +80,20 @@ class Parser:
         return namesies(growth_rate)
 
     # Returns the type of the Pokemon as a size 2 list of namesies strings
+    # Single-typed Pokemon will have 'NO_TYPE' as second type
     # Ex: ['GRASS', 'POISON']
     def get_types(self) -> List[str]:
         types = ['', 'NO_TYPE']
         for poke_type in self.pokemon.types:
             types[poke_type.slot - 1] = namesies(poke_type.type.name)
+
+        # Replace types if applicable
+        types = type_substitution(self.num, types)
+
         assert len(types) == 2
         assert types[0] != ''
+        assert types[0] != 'NO_TYPE'
+
         return types
 
     # Returns the capture rate
@@ -110,6 +114,10 @@ class Parser:
             else:
                 male_ratio = math.ceil(male_ratio)
             male_ratio = int(male_ratio)
+
+        # Adjust any gender ratios if applicable
+        male_ratio = gender_substitution(self.num, male_ratio)
+
         return male_ratio
 
     # Returns the abilities as namesies strings in a list of size 2

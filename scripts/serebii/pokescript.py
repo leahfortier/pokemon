@@ -7,10 +7,11 @@ import re
 import requests
 from lxml import html
 
-from scripts.serebii.forms import Stat, AddedPokes, FormConfig
+from scripts.forms import AddedPokes, Stat
+from scripts.serebii.forms import FormConfig
 from scripts.serebii.parser import Parser
 from scripts.substitution import attack_substitution, ability_substitution, type_substitution, \
-    learnable_attack_additions
+    learnable_attack_additions, gender_substitution, stat_substitution
 from scripts.util import namesies, remove_prefix, remove_empty, index_swap, replace_special, dashy
 from scripts.serebii.parse_util import get_types, normalize_form
 
@@ -79,15 +80,7 @@ with open("../temp.txt", "w") as f:
             else:
                 male_ratio = math.ceil(male_ratio)
 
-        # Silcoon/Beautifly, Gardevoir are 100% female now
-        if num in [266, 267, 282]:
-            assert male_ratio == 50
-            male_ratio = 0
-        # Cascoon/Dustox, Glalie are 100% male now
-        elif num in [268, 269, 362]:
-            assert male_ratio == 50
-            male_ratio = 100
-
+        male_ratio = gender_substitution(num, male_ratio)
         print("Male Ratio: " + str(male_ratio))
 
         types_cell = row.xpath('td[6]')[0]
@@ -489,23 +482,7 @@ with open("../temp.txt", "w") as f:
         for i in range(0, len(stats)):
             stats[i] = int(parser.info_table.xpath('tr[3]/td[' + str(2 + i) + ']')[0].text)
 
-        # Decrease Absol's attack since it has an evolution now
-        if num == 359:
-            stats[Stat.ATTACK.value] -= 30
-        # Use Charizard's stats with modifications
-        if num == AddedPokes.MEGA_CHARIZARD.value:
-            index_swap(stats, Stat.ATTACK.value, Stat.SP_ATTACK.value)
-            index_swap(stats, Stat.DEFENSE.value, Stat.SP_DEFENSE.value)
-            stats[Stat.ATTACK.value] += 10
-            stats[Stat.SPEED.value] -= 10
-        # Use Absol's stats with increase speed
-        if num == AddedPokes.MEGA_ABSOL.value:
-            stats[Stat.SPEED.value] += 20
-        # Decrease mega attack stats
-        if num == AddedPokes.MEGA_BANNETTE.value:
-            stats[Stat.ATTACK.value] -= 35
-            stats[Stat.SP_ATTACK.value] -= 10
-
+        stat_substitution(num, stats)
         print("Stats: " + str(stats))
 
         base_exp = base_exp_map[form_config.base_exp_name]

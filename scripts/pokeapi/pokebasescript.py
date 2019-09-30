@@ -7,8 +7,8 @@ with open("../../temp.txt", "w") as f:
     start_time = time.time()
 
     # for num in range(1, list(AddedPokes)[-1].value + 1):
-    # for num in range(1, 808):  # Currently breaks at Meltan
-    for num in [1]:
+    for num in range(1, 808):  # Currently breaks at Meltan
+    # for num in [1]:
         try:
             pokemon = PokemonInfo(num)
             pokemon.write(f)
