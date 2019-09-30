@@ -871,7 +871,7 @@ NONE
 1
 5 SILVER_POWDER
 50
-COMPOUNDEYES TINTED_LENS
+COMPOUND_EYES TINTED_LENS
 Butterfly
 43 70.5 It loves the honey of flowers and can locate flower patches that have even tiny amounts of pollen.
 3840
@@ -1806,7 +1806,7 @@ ITEM SILPH_SURFER SUN_STONE
 50 ORAN_BERRY
 5 LIGHT_BALL
 50
-STATIC LIGHTNINGROD
+STATIC LIGHTNING_ROD
 Mouse
 16 13.2 It occasionally uses an electric shock to recharge a fellow Pikachu that is in a weakened state.
 2560
@@ -1897,7 +1897,7 @@ NONE
 1
 50 ORAN_BERRY
 50
-STATIC LIGHTNINGROD
+STATIC LIGHTNING_ROD
 Mouse
 31 66.1 Its tail discharges electricity into the ground, protecting it from getting shocked.
 2560
@@ -3885,7 +3885,7 @@ BUG POISON
 LEVEL VENOMOTH 31
 0
 50
-COMPOUNDEYES TINTED_LENS
+COMPOUND_EYES TINTED_LENS
 Insect
 39 66.1 Its big eyes are actually clusters of tiny eyes. At night, its kind is drawn by light.
 5120
@@ -8841,7 +8841,7 @@ TIME NIGHT LEVEL GARA_GARA 28
 1
 5 THICK_CLUB
 50
-ROCK_HEAD LIGHTNINGROD
+ROCK_HEAD LIGHTNING_ROD
 Lonely
 16 14.3 When it thinks of its dead mother, it cries. Its crying makes the skull it wears rattle hollowly.
 5120
@@ -8933,7 +8933,7 @@ NONE
 1
 5 THICK_CLUB
 50
-ROCK_HEAD LIGHTNINGROD
+ROCK_HEAD LIGHTNING_ROD
 Bone Keeper
 39 99.2 From its birth, this savage Pok\u00e9mon constantly holds bones. It is skilled in using them as weapons.
 5120
@@ -9487,7 +9487,7 @@ LEVEL RHYDON 42
 1
 50 PROTECTOR
 50
-LIGHTNINGROD ROCK_HEAD
+LIGHTNING_ROD ROCK_HEAD
 Spikes
 39 253.5 Its powerful tackles can destroy anything. However, it is too slow witted to help people work.
 5120
@@ -9586,7 +9586,7 @@ ITEM RHYPERIOR PROTECTOR
 1
 50 PROTECTOR
 50
-LIGHTNINGROD ROCK_HEAD
+LIGHTNING_ROD ROCK_HEAD
 Drill
 75 264.6 Standing on its hind legs freed its forelegs and made it smarter. It is very forgetful, however.
 5120
@@ -14899,7 +14899,7 @@ ITEM PIKACHU SUN_STONE
 1
 50 ORAN_BERRY
 50
-STATIC LIGHTNINGROD
+STATIC LIGHTNING_ROD
 Tiny Mouse
 12 4.4 The electric sacs in its cheeks are small. If even a little electricity leaks, it becomes shocked.
 2560
@@ -16721,7 +16721,7 @@ MOVE YANMEGA ANCIENT_POWER
 1
 5 WIDE_LENS
 50
-SPEED_BOOST COMPOUNDEYES
+SPEED_BOOST COMPOUND_EYES
 Clear Wing
 47 83.8 It can hover in one spot by flapping its wings at high speed. It flits about to guard its territory.
 5120
@@ -23219,7 +23219,7 @@ NONE
 5 SILVER_POWDER
 5 SHED_SHELL
 100
-SHIELD_DUST COMPOUNDEYES
+SHIELD_DUST COMPOUND_EYES
 Poison Moth
 47 69.7 Toxic powder is scattered with each flap. At night, it is known to strip leaves off trees lining boulevards.
 3840
@@ -25040,7 +25040,7 @@ EXTRA SHEDINJA 20 LEVEL NINJASK 20
 1
 5 SOFT_SAND
 50
-COMPOUNDEYES RUN_AWAY
+COMPOUND_EYES RUN_AWAY
 Trainee
 20 12.1 It grows underground, sensing its surroundings using antennae instead of its virtually blind eyes.
 3840
@@ -26775,7 +26775,7 @@ ELECTRIC NO_TYPE
 LEVEL MANECTRIC 26
 0
 50
-STATIC LIGHTNINGROD
+STATIC LIGHTNING_ROD
 Lightning
 24 33.5 Using electricity stored in its fur, it stimulates its muscles to heighten its reaction speed.
 5120
@@ -26852,7 +26852,7 @@ ELECTRIC NO_TYPE
 NONE
 0
 50
-STATIC LIGHTNINGROD
+STATIC LIGHTNING_ROD
 Discharge
 59 88.6 It discharges electricity from its mane. It creates a thundercloud overhead to drop lightning bolts.
 5120
@@ -26939,7 +26939,7 @@ NONE
 1
 5 CELL_BATTERY
 50
-STATIC LIGHTNINGROD
+STATIC LIGHTNING_ROD
 Cheering
 16 9.3 It cheers on friends with pom-poms made of sparks. It drains power from telephone poles.
 5120
@@ -40044,7 +40044,7 @@ NONE
 1
 50 PROTECTOR
 50
-LIGHTNINGROD SOLID_ROCK
+LIGHTNING_ROD SOLID_ROCK
 Drill
 94 623.5 It can launch a rock held in its hand like a missile by tightening then expanding muscles instantly.
 5120
@@ -45269,7 +45269,7 @@ LEVEL ZEBSTRIKA 27
 1
 50 CHERI_BERRY
 50
-LIGHTNINGROD MOTOR_DRIVE
+LIGHTNING_ROD MOTOR_DRIVE
 Electrified
 31 65.7 Its mane shines when it discharges electricity. They use their flashing manes to communicate with one another.
 5120
@@ -45341,7 +45341,7 @@ NONE
 1
 50 CHERI_BERRY
 50
-LIGHTNINGROD MOTOR_DRIVE
+LIGHTNING_ROD MOTOR_DRIVE
 Thunderbolt
 63 175.3 They have lightning-like movements. When Zebstrika run at full speed, the sound of thunder reverberates.
 5120
@@ -51499,7 +51499,7 @@ BUG ELECTRIC
 LEVEL GALVANTULA 36
 0
 50
-COMPOUNDEYES UNNERVE
+COMPOUND_EYES UNNERVE
 Attaching
 4 1.3 Joltik that live in cities have learned a technique for sucking electricity from the outlets in houses.
 5120
@@ -51577,7 +51577,7 @@ BUG ELECTRIC
 NONE
 0
 50
-COMPOUNDEYES UNNERVE
+COMPOUND_EYES UNNERVE
 EleSpider
 31 31.5 When attacked, they create an electric barrier by spitting out many electrically charged threads.
 5120
@@ -57343,7 +57343,7 @@ BUG NO_TYPE
 LEVEL SPEWPA 9
 0
 50
-SHIELD_DUST COMPOUNDEYES
+SHIELD_DUST COMPOUND_EYES
 Scatterdust
 12 5.5 The powder that covers its body regulates its temperature, so it can live in any region or climate.
 3840
@@ -57396,7 +57396,7 @@ BUG FLYING
 NONE
 0
 50
-SHIELD_DUST COMPOUNDEYES
+SHIELD_DUST COMPOUND_EYES
 Scale
 47 37.5 The patterns on this Pok\u00e9mon's wings depend on the climate and topography of its habitat. It scatters colorful scales.
 3840
@@ -66342,7 +66342,7 @@ NONE
 1
 5 ELECTRIC_SEED
 50
-IRON_BARBS LIGHTNINGROD
+IRON_BARBS LIGHTNING_ROD
 Roly-Poly
 12 7.3 The spiny fur on its back is normally at rest. When this Pok\u00e9mon becomes agitated, its fur stands on end and stabs into its attackers.
 2560
@@ -70114,7 +70114,7 @@ NONE
 1
 5 THICK_CLUB
 50
-CURSED_BODY LIGHTNINGROD
+CURSED_BODY LIGHTNING_ROD
 Bone Keeper
 39 75.0 The bones it possesses were once its mother's. Its mother's regrets have become like a vengeful spirit protecting this Pok\u00e9mon.
 5120

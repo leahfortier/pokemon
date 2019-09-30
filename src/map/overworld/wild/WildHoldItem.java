@@ -50,7 +50,7 @@ public class WildHoldItem implements Serializable {
     }
 
     static ItemNamesies getWildHoldItem(PokemonNamesies pokemon, ActivePokemon playerFront) {
-        boolean compoundEyes = playerFront.hasAbility(AbilityNamesies.COMPOUNDEYES);
+        boolean compoundEyes = playerFront.hasAbility(AbilityNamesies.COMPOUND_EYES);
         int random = RandomUtils.getRandomInt(100);
         int sum = 0;
 

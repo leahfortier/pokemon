@@ -46,7 +46,7 @@ public class WildTest extends BaseTest {
 
         for (int i = 0; i < 1000; i++) {
             checkItem(player, pokemon, AbilityNamesies.NO_ABILITY, wildHoldItems, noAbilitySet, alwaysItem);
-            checkItem(player, pokemon, AbilityNamesies.COMPOUNDEYES, wildHoldItems, compoundEyesSet, compoundEyesAlwaysItem);
+            checkItem(player, pokemon, AbilityNamesies.COMPOUND_EYES, wildHoldItems, compoundEyesSet, compoundEyesAlwaysItem);
         }
 
         Assert.assertTrue(noAbilitySet.toString(), noAbilitySet.isEmpty());

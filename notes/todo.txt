@@ -76,6 +76,7 @@ Descriptions that change manually:
     Abilities:
         Healer ('an ally's' -> 'its')
         Flower Veil (Remove 'Ally')
+        Battery ('Ally' -> 'the')
     Items:
         Fishing Rod
         Deep Sea Scale (Added ', Chinchou, or Lanturn' -- Lanturn rules and deserves this)

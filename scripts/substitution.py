@@ -293,11 +293,7 @@ def attack_substitution(num: int, attack: str) -> str:
 # Will return the empty string to indicate removing ability (never 'NO_ABILITY')
 # The input ability string is expected to be in namesies format
 def ability_substitution(num: int, ability: str) -> str:
-    if ability == 'BATTERY':
-        # Charjabug
-        if num == 737:
-            return 'STATIC'
-    elif ability == 'FLOWER_VEIL':
+    if ability == 'FLOWER_VEIL':
         # Comfey -- this ability was changed and doesn't make as much sense anymore for Comfey
         if num == 764:
             return ''
@@ -310,7 +306,7 @@ def ability_substitution(num: int, ability: str) -> str:
 
     # All abilities which were removed
     # Needs to be at the bottom for Pokemon with substitutions instead of removals
-    if ability in ['BATTERY', 'FRIEND_GUARD', 'ILLUMINATE', 'MINUS', 'POWER_CONSTRUCT', 'PLUS', 'RECEIVER',
+    if ability in ['FRIEND_GUARD', 'ILLUMINATE', 'MINUS', 'POWER_CONSTRUCT', 'PLUS', 'RECEIVER',
                    'SYMBIOSIS', 'TELEPATHY', 'ZEN_MODE']:
         return ''
 

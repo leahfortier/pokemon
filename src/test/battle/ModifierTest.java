@@ -318,15 +318,15 @@ public class ModifierTest extends BaseTest {
     @Test
     public void absorbTypeTest() {
         stageChangeTest(1, Stat.SP_ATTACK, new TestInfo()
-                .attacking(AbilityNamesies.LIGHTNINGROD)
+                .attacking(AbilityNamesies.LIGHTNING_ROD)
                 .defendingFight(AttackNamesies.THUNDER_PUNCH));
 
         stageChangeTest(0, Stat.SP_ATTACK, new TestInfo()
-                .defending(AbilityNamesies.LIGHTNINGROD)
+                .defending(AbilityNamesies.LIGHTNING_ROD)
                 .defendingFight(AttackNamesies.THUNDER_PUNCH));
 
         stageChangeTest(0, Stat.SP_ATTACK, new TestInfo()
-                .attacking(AbilityNamesies.LIGHTNINGROD)
+                .attacking(AbilityNamesies.LIGHTNING_ROD)
                 .defendingFight(AttackNamesies.TACKLE));
     }
 

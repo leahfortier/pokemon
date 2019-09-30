@@ -10,6 +10,7 @@ import pokemon.ability.Ability.ArenaTrap;
 import pokemon.ability.Ability.AromaVeil;
 import pokemon.ability.Ability.AuraBreak;
 import pokemon.ability.Ability.BadDreams;
+import pokemon.ability.Ability.Battery;
 import pokemon.ability.Ability.BattleArmor;
 import pokemon.ability.Ability.BeastBoost;
 import pokemon.ability.Ability.Berserk;
@@ -23,7 +24,7 @@ import pokemon.ability.Ability.CloudNine;
 import pokemon.ability.Ability.ColorChange;
 import pokemon.ability.Ability.Comatose;
 import pokemon.ability.Ability.Competitive;
-import pokemon.ability.Ability.Compoundeyes;
+import pokemon.ability.Ability.CompoundEyes;
 import pokemon.ability.Ability.Contrary;
 import pokemon.ability.Ability.Corrosion;
 import pokemon.ability.Ability.CursedBody;
@@ -86,7 +87,7 @@ import pokemon.ability.Ability.Klutz;
 import pokemon.ability.Ability.LeafGuard;
 import pokemon.ability.Ability.Levitate;
 import pokemon.ability.Ability.LightMetal;
-import pokemon.ability.Ability.Lightningrod;
+import pokemon.ability.Ability.LightningRod;
 import pokemon.ability.Ability.Limber;
 import pokemon.ability.Ability.LiquidOoze;
 import pokemon.ability.Ability.LiquidVoice;
@@ -227,7 +228,8 @@ public enum AbilityNamesies {
     RAIN_DISH("Rain Dish", RainDish::new),
     SHIELD_DUST("Shield Dust", ShieldDust::new),
     SHED_SKIN("Shed Skin", ShedSkin::new),
-    COMPOUNDEYES("Compoundeyes", Compoundeyes::new),
+    COMPOUND_EYES("Compound Eyes", CompoundEyes::new),
+    BATTERY("Battery", Battery::new),
     TINTED_LENS("Tinted Lens", TintedLens::new),
     SWARM("Swarm", Swarm::new),
     SNIPER("Sniper", Sniper::new),
@@ -236,7 +238,7 @@ public enum AbilityNamesies {
     GUTS("Guts", Guts::new),
     INTIMIDATE("Intimidate", Intimidate::new),
     STATIC("Static", Static::new),
-    LIGHTNINGROD("Lightningrod", Lightningrod::new),
+    LIGHTNING_ROD("Lightning Rod", LightningRod::new),
     SAND_VEIL("Sand Veil", SandVeil::new),
     SAND_RUSH("Sand Rush", SandRush::new),
     SLUSH_RUSH("Slush Rush", SlushRush::new),
