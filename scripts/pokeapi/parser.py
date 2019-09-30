@@ -60,7 +60,7 @@ class Parser:
         stats = [0]*6
         evs = [0]*6
         for stat in self.pokemon.stats:
-            stat_index = get_stat(stat.stat.name).value
+            stat_index = _get_stat(stat.stat.name).value
             stats[stat_index] = stat.base_stat
             evs[stat_index] = stat.effort
         return stats, evs
@@ -194,7 +194,7 @@ class Parser:
     # Ex: ['PLANT', 'MONSTER'] TODO: Make sure to update this example once I know which format I'm using
     def get_egg_groups(self) -> List[str]:
         # TODO: Some of these names are different from the serebii ones and I need to handle that
-        egg_groups = [namesies(egg_group.name) for egg_group in self.species.egg_groups]
+        egg_groups = [namesies(_get_egg_group(egg_group.name)) for egg_group in self.species.egg_groups]
         if len(egg_groups) == 1:
             egg_groups.append('NONE')
         assert len(egg_groups) == 2
@@ -242,13 +242,13 @@ class Parser:
                 raise Exception('Unknown move learn method ' + move.learn_method + ' for ' + attack_name)
 
         # Level-up moves are sorted by level
-        level_up_moves.sort(key = attack_level_sort)
+        level_up_moves.sort(key = _attack_level_sort)
 
         return level_up_moves, learnable_moves
 
 
 # Returns the Stat that matches the input name
-def get_stat(stat_name: str) -> Stat:
+def _get_stat(stat_name: str) -> Stat:
     if stat_name == 'hp':
         return Stat.HP
     elif stat_name == 'attack':
@@ -265,9 +265,31 @@ def get_stat(stat_name: str) -> Stat:
         raise Exception('Unknown stat name ' + stat_name)
 
 
+# Replaces the egg group with alternative names if applicable
+def _get_egg_group(egg_group: str) -> str:
+    if egg_group == 'plant':
+        return 'grass'
+    elif egg_group == 'ground':
+        return 'field'
+    elif egg_group == 'humanshape':
+        return 'human-like'
+    elif egg_group == 'indeterminate':
+        return 'amorphous'
+    elif egg_group == 'no-eggs':
+        return 'undiscovered'
+    elif egg_group == 'water1':
+        return 'water-1'
+    elif egg_group == 'water2':
+        return 'water-2'
+    elif egg_group == 'water3':
+        return 'water-3'
+    else:
+        return egg_group
+
+
 # Used for sorting the level up moves by level
 # Attack should be a string with format '<int:level> <string:attackName>' (Ex: '7 LEECH_SEED')
-def attack_level_sort(attack: str) -> int:
+def _attack_level_sort(attack: str) -> int:
     split = attack.split(' ')
     assert len(split) == 2
     return int(split[0])

@@ -60,15 +60,14 @@ class PokemonInfo:
     # Writes all pokemon info to f in the relevant order
     def write(self, f: IO) -> None:
         f.write(str(self.num) + '\n')
-        f.write(str(self.name) + '\n')
+        f.write(self.name + '\n')
 
         stats = [str(stat) for stat in self.stats]
         f.write(' '.join(stats) + '\n')
 
         f.write(str(self.base_exp) + '\n')
         f.write(self.growth_rate + '\n')
-        f.write(self.types[0] + ' ')
-        f.write(self.types[1] + '\n')
+        f.write(' '.join(self.types) + '\n')
 
         f.write(str(self.capture_rate) + '\n')
 
@@ -82,15 +81,13 @@ class PokemonInfo:
         f.write('0\n')
 
         f.write(str(self.male_ratio) + '\n')
-        f.write(self.abilities[0] + ' ')
-        f.write(self.abilities[1] + '\n')
+        f.write(' '.join(self.abilities) + '\n')
         f.write(str(self.classification) + '\n')
         f.write(str(self.height) + ' ')
         f.write(str(self.weight) + ' ')
         f.write(str(self.flavor_text) + '\n')
         f.write(str(self.egg_steps) + '\n')
-        f.write(str(self.egg_groups[0]) + ' ')
-        f.write(str(self.egg_groups[1]) + '\n')
+        f.write(' '.join(self.egg_groups) + '\n')
 
         f.write(str(len(self.level_up_moves)) + '\n')
         for attack in self.level_up_moves:
