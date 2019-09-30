@@ -4,7 +4,8 @@ from typing import List, Dict, Tuple
 import math
 import pokebase
 
-from scripts.util import namesies, remove_suffix, decimeters_to_inches, hectograms_to_lbs, replace_new_lines
+from scripts.util import namesies, remove_suffix, decimeters_to_inches, hectograms_to_lbs, replace_new_lines, \
+    remove_prefix
 
 INDIVIDUAL_VERSIONS = ['ultra-sun', 'ultra-moon',
                        'sun', 'moon',
@@ -39,6 +40,8 @@ class Move:
         if self.learn_method == 'level-up':
             self.level_learned = version_entry['level_learned_at']
 
+    def __str__(self):
+        return self.name
 
 class Parser:
     def __init__(self, num: int):
@@ -200,13 +203,14 @@ class Parser:
         assert len(egg_groups) == 2
         return egg_groups
 
-    # Returns the level-up moves and the learnable moves as a tuple
+    # Returns the moves version, level-up moves, and the learnable moves as a tuple
     # Level-up moves will be a list of strings of the format '<int:level> <string:attackName>' (Ex: '7 LEECH_SEED')
     #   and will be sorted by level order
     # Learnable moves (egg moves, move tutors, tms) will be a list of strings of namesies attack names
-    # Ex: (['0 TACKLE', '3 GROWL', '7 LEECH_SEED', '9 VINE_WHIP', ...., '37 SEED_BOMB'],
+    # Ex: ('ultra-sun-ultra-moon',
+    #      ['0 TACKLE', '3 GROWL', '7 LEECH_SEED', '9 VINE_WHIP', ...., '37 SEED_BOMB'],
     #      ['SWORDS_DANCE', 'SOLAR_BEAM', 'PETAL_DANCE', 'TOXIC', 'DOUBLE_TEAM', ...])
-    def get_moves(self) -> Tuple[List[str], List[str]]:
+    def get_moves(self) -> Tuple[str, List[str], List[str]]:
         # Maps from version name to list of Moves in that version
         version_to_moves = {}  # type: Dict[str, List[Move]]
         for entry in self.pokemon.moves:
@@ -215,7 +219,8 @@ class Parser:
                 version_to_moves.setdefault(version_name, []).append(Move(entry, version_entry))
 
         # Get the moves of the most relevant version
-        moves = next(version_to_moves[version] for version in PAIRED_VERSIONS if version in version_to_moves)
+        version = next(version for version in PAIRED_VERSIONS if version in version_to_moves)
+        moves = version_to_moves[version]
 
         # Create move lists from version's moves
         level_up_moves = []   # type: List[str]
@@ -241,10 +246,15 @@ class Parser:
             else:
                 raise Exception('Unknown move learn method ' + move.learn_method + ' for ' + attack_name)
 
+        # Remove duplicates for evolution moves and default moves (only keep evolution move)
+        evolution_moves = [remove_prefix(move, "-1 ") for move in level_up_moves if move.startswith("-1 ")]
+        for move_name in evolution_moves:
+            level_up_moves.remove("0 " + move_name)
+
         # Level-up moves are sorted by level
         level_up_moves.sort(key = _attack_level_sort)
 
-        return level_up_moves, learnable_moves
+        return version, level_up_moves, learnable_moves
 
 
 # Returns the Stat that matches the input name
