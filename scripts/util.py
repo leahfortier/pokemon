@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+from typing import List
 
 poke = u'é'
 right_tick = u'\u2019'
@@ -10,47 +11,45 @@ left_quote = u'\u201c'
 right_quote = u'\u201d'
 
 
-def namesies(stringsies):
+def namesies(stringsies: str) -> str:
     return stringsies.strip().replace(' ', '_').replace('-', '_').replace('\'', '').upper()
 
 
-def remove_prefix(string, prefix):
+def remove_prefix(string: str, prefix: str) -> str:
     assert string.startswith(prefix)
     return string[len(prefix):]
 
 
-def remove_suffix(string, suffix):
+def remove_suffix(string: str, suffix: str) -> str:
     assert string.endswith(suffix)
     return string[:-len(suffix)]
 
 
 # Rounded to the nearest integer inch
-def decimeters_to_inches(decimeters):
+def decimeters_to_inches(decimeters: int) -> int:
     return round(decimeters/.254)
 
 
 # Rounded to the first decimal lbs
-def hectograms_to_lbs(hectograms):
+def hectograms_to_lbs(hectograms: int) -> float:
     return round(hectograms*.22046, 1)
 
 
 # Replaces new lines with spaces and trims the string
-def remove_new_lines(s):
+def remove_new_lines(s: str) -> str:
     return s.replace('\n', ' ').strip()
 
 
 # Listsies should be a list of strings
-# This will remove all empty and whitespace characters from the list and return it
-def remove_empty(listsies):
-    temp = []
-    for string in listsies:
-        if string.strip() == "":
-            temp.append(string)
+# This will remove all empty and whitespace characters from the list
+def remove_empty(listsies: List[str]) -> None:
+    temp = [string for string in listsies if string.strip() == '']
     for empty in temp:
         listsies.remove(empty)
 
 
-def index_swap(arr, i, j):
+# Swaps the contents at indices i and j in arr
+def index_swap(arr: List, i: int, j: int) -> None:
     temp = arr[i]
     arr[i] = arr[j]
     arr[j] = temp
@@ -79,7 +78,7 @@ def normalize_form(form):
     return re.sub(" Forme?$", "", form).strip()
 
 
-def replace_special(s):
+def replace_special(s: str) -> str:
     s = s.replace(poke, "\u00e9")
     s = s.replace('  ', ' ')
     s = s.replace(right_tick, "'")

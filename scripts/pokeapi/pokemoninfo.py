@@ -1,3 +1,5 @@
+from typing import List, IO
+
 import math
 
 import pokebase
@@ -7,7 +9,7 @@ from scripts.util import namesies, remove_suffix, decimeters_to_inches, hectogra
 
 
 class PokemonInfo:
-    def __init__(self, num):
+    def __init__(self, num: int):
         self.num = num
         form_config = FormConfig(num)
 
@@ -91,8 +93,8 @@ class PokemonInfo:
         assert len(self.egg_groups) == 2
         print("Egg Groups:", self.egg_groups)
 
-        self.level_up_moves = []
-        self.learnable_moves = []
+        self.level_up_moves = []   # type: List[str]
+        self.learnable_moves = []  # type: List[str]
         moves = get_moves(pokemon.moves)
         for move in moves:
             if move.learn_method == 'level-up':
@@ -117,7 +119,8 @@ class PokemonInfo:
 
         print()
 
-    def write(self, f):
+    # Writes all pokemon info to f in the relevant order
+    def write(self, f: IO) -> None:
         f.write(str(self.num) + '\n')
         f.write(str(self.name) + '\n')
 

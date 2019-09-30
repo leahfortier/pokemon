@@ -1,13 +1,13 @@
 import time
 
-from scripts.pokebase.pokemoninfo import PokemonInfo
+from scripts.pokeapi.pokemoninfo import PokemonInfo
 
-with open("../temp.txt", "w") as f:
+with open("../../temp.txt", "w") as f:
     start_time = time.time()
 
     # for num in range(1, list(AddedPokes)[-1].value + 1):
-    for num in range(479, 808): # Currently breaks at Meltan
-    # for num in [172]:
+    # for num in range(479, 808): # Currently breaks at Meltan
+    for num in [1]:
         pokemon = PokemonInfo(num)
         pokemon.write(f)
 
@@ -15,5 +15,5 @@ with open("../temp.txt", "w") as f:
     total_seconds = int(end_time - start_time)
     minutes = total_seconds // 60
     seconds = total_seconds % 60
-    print(str(minutes) + " Minutes, " + str(seconds) + " Seconds")
+    print(minutes, "Minutes,", seconds, "Seconds")
 
