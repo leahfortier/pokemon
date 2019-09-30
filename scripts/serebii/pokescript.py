@@ -7,10 +7,11 @@ import re
 import requests
 from lxml import html
 
-from scripts.forms import Stat, AddedPokes, FormConfig
+from scripts.serebii.forms import Stat, AddedPokes, FormConfig
 from scripts.serebii.parser import Parser
 from scripts.substitution import attack_substitution, ability_substitution, type_substitution
-from scripts.util import namesies, remove_prefix, remove_empty, index_swap, get_types, normalize_form, replace_special, dashy
+from scripts.util import namesies, remove_prefix, remove_empty, index_swap, replace_special, dashy
+from scripts.serebii.parse_util import get_types, normalize_form
 
 
 def get_base_exp_map():

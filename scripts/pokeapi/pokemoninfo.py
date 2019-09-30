@@ -4,16 +4,15 @@ import math
 
 import pokebase
 
-from scripts.forms import FormConfig, get_stat, get_english, get_english_version, attack_sort, get_moves
+from scripts.pokeapi.parser import get_stat, get_english, get_english_version, get_moves, attack_sort
 from scripts.util import namesies, remove_suffix, decimeters_to_inches, hectograms_to_lbs, remove_new_lines
 
 
 class PokemonInfo:
     def __init__(self, num: int):
         self.num = num
-        form_config = FormConfig(num)
 
-        pokemon = pokebase.pokemon(form_config.lookup_num)
+        pokemon = pokebase.pokemon(num)
         species = pokemon.species
 
         # Get the English name
