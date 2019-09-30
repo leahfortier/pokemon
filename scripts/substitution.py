@@ -10,11 +10,11 @@ def _attack_substitution(attack: str) -> str:
     if attack is None or attack == '':
         raise Exception()
     # Ion Deluge was combined into Electrify
-    elif attack == 'Ion Deluge':
-        return 'Electrify'
+    elif attack == 'ION_DELUGE':
+        return 'ELECTRIFY'
     # Intentional spelling change
-    elif attack == 'Judgment':
-        return 'Judgement'
+    elif attack == 'JUDGMENT':
+        return 'JUDGEMENT'
     else:
         return attack
 
@@ -23,8 +23,8 @@ def _attack_substitution(attack: str) -> str:
 # Will return the empty string to indicate removing the move
 def learnable_attack_substitution(attack: str) -> str:
     attack = _attack_substitution(attack)
-    if attack in ['After You', 'Ally Switch', 'Follow Me', 'Frustration', 'Helping Hand', 'Instruct', 'Quash',
-                  'Rage Powder', 'Return', 'Spotlight', 'Wide Guard']:
+    if attack in ['AFTER_YOU', 'ALLY_SWITCH', 'FOLLOW_ME', 'FRUSTRATION', 'HELPING_HAND', 'INSTRUCT', 'QUASH',
+                  'RAGE_POWDER', 'RETURN', 'SPOTLIGHT', 'WIDE_GUARD']:
         return ''
     return attack
 
@@ -42,7 +42,7 @@ def learnable_attack_additions(num:int) -> List[str]:
                177, 193, 207, 267, 269, 284, 291,
                292, 313, 314, 414, 416, 445, 469,
                472, 587, 666, 722, 723, 724, 738, 742, 743]:
-        additions.append("Fly")
+        additions.append("FLY")
 
     return additions
 
@@ -52,234 +52,234 @@ def learnable_attack_additions(num:int) -> List[str]:
 def attack_substitution(num: int, attack: str) -> str:
     attack = _attack_substitution(attack)
 
-    if attack == 'After You':
+    if attack == 'AFTER_YOU':
         # Patrat/Watchog
         if num == 504 or num == 505:
-            return 'Covet'
+            return 'COVET'
         # Lopunny
         elif num == 428:
-            return 'Draining Kiss'
+            return 'DRAINING_KISS'
         # Petilil
         elif num == 548:
-            return 'Heal Bell'
+            return 'HEAL_BELL'
         # Minccino
         elif num == 572:
-            return 'Iron Tail'
+            return 'IRON_TAIL'
         # Togetic/Togekiss
         elif num == 176 or num == 468:
-            return 'Moonblast'
+            return 'MOONBLAST'
         # Togepi
         elif num == 175:
-            return 'Soft Boiled'
+            return 'SOFT_BOILED'
         # Buneary
         elif num == 427:
-            return 'Sweet Kiss'
+            return 'SWEET_KISS'
         # Clefairy and Audino
         elif num == 35 or num == 531:
-            return 'Wish'
+            return 'WISH'
         # Oranguru
         elif num == 765:
-            return 'Wonder Room'
+            return 'WONDER_ROOM'
         # Maractus
         elif num == 556:
-            return 'Wood Hammer'
-    elif attack == 'Ally Switch':
+            return 'WOOD_HAMMER'
+    elif attack == 'ALLY_SWITCH':
         # Kadabra/Alakazam
         if num == 64 or num == 65:
-            return 'Barrier'
+            return 'BARRIER'
         # Hoopa
         elif num == 720:
-            return 'Magic Room'
-    elif attack == 'Follow Me':
+            return 'MAGIC_ROOM'
+    elif attack == 'FOLLOW_ME':
         # Sentret/Furret
         if num == 161 or num == 162:
-            return 'Covet'
+            return 'COVET'
         # Togepi/Togetic
         elif num == 175 or num == 176:
-            return 'Draining Kiss'
+            return 'DRAINING_KISS'
         # Clefairy
         elif num == 35:
-            return 'Mimic'
-    elif attack == 'Frustration':
+            return 'MIMIC'
+    elif attack == 'FRUSTRATION':
         # Buneary
         if num == 427:
-            return 'Fake Tears'
-    elif attack == 'Helping Hand':
+            return 'FAKE_TEARS'
+    elif attack == 'HELPING_HAND':
         # Meowstic
         if num == 678:
-            return 'Assist'
+            return 'ASSIST'
         # Jirachi
         elif num == 385:
-            return 'Calm Mind'
+            return 'CALM_MIND'
         # Sentret/Furret
         elif num == 161 or num == 162:
-            return 'Charm'
+            return 'CHARM'
         # Tyrogue and Minccino
         elif num == 236 or num == 572:
-            return 'Covet'
+            return 'COVET'
         # Volbeat/Illumise
         elif num == 313 or num == 314:
-            return 'Dizzy Punch'
+            return 'DIZZY_PUNCH'
         # Marill/Azumarill/Azurill
         elif num == 183 or num == 184 or num == 298:
-            return 'Draining Kiss'
+            return 'DRAINING_KISS'
         # Gallade
         elif num == 475:
-            return 'Dual Chop'
+            return 'DUAL_CHOP'
         # Petilil
         elif num == 548:
-            return 'Fairy Wind'
+            return 'FAIRY_WIND'
         # Audino
         elif num == 531:
-            return 'Heal Bell'
+            return 'HEAL_BELL'
         # Growlithe and Lillipup line
         elif num == 58 or 506 <= num <= 508:
-            return 'Howl'
+            return 'HOWL'
         # Keldeo
         elif num == 647:
-            return 'Icy Wind'
+            return 'ICY_WIND'
         # Cobalion
         elif num == 638:
-            return 'Iron Defense'
+            return 'IRON_DEFENSE'
         # Cinccino
         elif num == 573:
-            return 'Iron Tail'
+            return 'IRON_TAIL'
         # Magearna
         elif num == 801:
-            return 'Light Screen'
+            return 'LIGHT_SCREEN'
         # Comfey
         elif num == 764:
-            return 'Lucky Chant'
+            return 'LUCKY_CHANT'
         # Leavanny
         elif num == 542:
-            return 'Me First'
+            return 'ME_FIRST'
         # Nidoran line
         elif 29 <= num <= 33:
-            return 'Poison Tail'
+            return 'POISON_TAIL'
         # Alomomola
         elif num == 594:
-            return 'Refresh'
+            return 'REFRESH'
         # Terrakion
         elif num == 639:
-            return 'Stealth Rock'
+            return 'STEALTH_ROCK'
         # Plusle/Minun
         elif num == 311 or num == 312:
-            return 'Sweet Kiss'
+            return 'SWEET_KISS'
         # Virizion
         elif num == 640:
-            return 'Synthesis'
+            return 'SYNTHESIS'
         # Latias/Latios and Cottonee and Oricorio
         elif num in [380, 381, 546, 741]:
-            return 'Tailwind'
+            return 'TAILWIND'
         # Cherubi/Cherrim and Pykumuku
         elif num == 420 or num == 421 or num == 771:
-            return 'Tickle'
-        # Wishiwashi
+            return 'TICKLE'
+        # WISHiwashi
         elif num == 746:
-            return 'Water Sport'
+            return 'WATER_SPORT'
         # Eeveelutions all start with this
         # Also Poipole and Naganadel -- TODO: too lazy to come up with an alternative right now
         elif num in [133, 134, 135, 136, 196, 197, 470, 471, 700, 803, 804]:
             return ''
-    elif attack == 'Instruct':
+    elif attack == 'INSTRUCT':
         # Oranguru
         if num == 765:
-            return 'Light Screen'
-    elif attack == 'Quash':
+            return 'LIGHT_SCREEN'
+    elif attack == 'QUASH':
         # Sableye
         if num == 302 or num == AddedPokes.MEGA_SABLEYE.value:
-            return 'Night Slash'
+            return 'NIGHT_SLASH'
         # Oranguru
         elif num == 765:
-            return 'Psychic Terrain'
+            return 'PSYCHIC_TERRAIN'
         # Murkrow/Honchkrow
         elif num == 198 or num == 430:
-            return 'Roost'
+            return 'ROOST'
     elif attack == 'RAGE_POWDER':
         # Foongus/Amoonguss
         if num == 590 or num == 591:
-            return 'Gastro Acid'
+            return 'GASTRO_ACID'
         # Paras/Parasect
         elif num == 46 or num == 47:
-            return 'Leech Life'
+            return 'LEECH_LIFE'
         # Butterfree and Volcarona
         elif num == 12 or num == 637:
             return 'MORNING_SUN'
         # Hoppip line
         elif 187 <= num <= 189:
-            return 'Silver Wind'
-    elif attack == 'Return':
+            return 'SILVER_WIND'
+    elif attack == 'RETURN':
         # Lopunny
         if num == 428:
-            return 'Captivate'
-    elif attack == 'Spotlight':
+            return 'CAPTIVATE'
+    elif attack == 'SPOTLIGHT':
         # Morelull/Shiinotic
         if num == 755 or num == 756:
-            return 'Aromatherapy'
+            return 'AROMATHERAPY'
         # Starmie
         elif num == 121:
-            return 'Cosmic Power'
+            return 'COSMIC_POWER'
         # Lanturn
         elif num == 171:
-            return 'Soak'
+            return 'SOAK'
         # Clefairy/Clefable
         elif num == 35 or num == 36:
-            return 'Wish'
-    elif attack == 'Wide Guard':
+            return 'WISH'
+    elif attack == 'WIDE_GUARD':
         # Mareanie/Toxapex
         if num == 747 or num == 748:
-            return 'Acid Armor'
+            return 'ACID_ARMOR'
         # Throh
         elif num == 538:
-            return 'Brick Break'
+            return 'BRICK_BREAK'
         # Mantine/Mantyke
         elif num == 226 or num == 458:
-            return 'Dive'
+            return 'DIVE'
         # Hitmontop
         elif num == 237:
-            return 'Drill Run'
+            return 'DRILL_RUN'
         # Mienshao
         elif num == 620:
-            return 'Dual Chop'
+            return 'DUAL_CHOP'
         # Kingler
         elif num == 99:
-            return 'Fury Cutter'
+            return 'FURY_CUTTER'
         # Tirtouga/Carracosta
         elif num == 564 or num == 565:
-            return 'Iron Defense'
+            return 'IRON_DEFENSE'
         # Lunala
         elif num == 792:
-            return 'Light Screen'
+            return 'LIGHT_SCREEN'
         # Hitmonlee
         elif num == 106:
-            return 'Low Kick'
+            return 'LOW_KICK'
         # Regigagas
         elif num == 486:
-            return 'Mega Punch'
+            return 'MEGA_PUNCH'
         # Alomomola and Avalugg
         elif num == 594 or num == 713:
-            return 'Mist'
+            return 'MIST'
         # Solgaleo
         elif num == 791:
-            return 'Reflect'
+            return 'REFLECT'
         # Gallade
         elif num == 475:
-            return 'Sacred Sword'
+            return 'SACRED_SWORD'
         # Probopass
         elif num == 476:
-            return 'Stealth Rock'
+            return 'STEALTH_ROCK'
         # Araquanid
         elif num == 752:
-            return 'Sticky Web'
+            return 'STICKY_WEB'
         # Stakataka
         elif num == 805:
-            return 'Stone Edge'
+            return 'STONE_EDGE'
         # Machamp
         elif num == 68:
-            return 'Superpower'
+            return 'SUPERPOWER'
         # Mr. Mime
         elif num == 122:
-            return 'Teeter Dance'
+            return 'TEETER_DANCE'
         # Celesteela and Guzzlord -- TODO: too lazy to come up with an alternative right now
         elif num == 797 or num == 799:
             return ''
@@ -288,75 +288,75 @@ def attack_substitution(num: int, attack: str) -> str:
 
 
 def ability_substitution(num, ability):
-    if ability == 'Battery':
+    if ability == 'BATTERY':
         # Charjabug
         if num == 737:
-            return 'Static'
-    elif ability == 'Early Bird':
+            return 'STATIC'
+    elif ability == 'EARLY_BIRD':
         # Natu/Xatu -- I just love this ability and I want more Pokemon to have it
         if num == 177 or num == 178:
-            return 'Magic Bounce'
-    elif ability == 'Friend Guard':
+            return 'MAGIC_BOUNCE'
+    elif ability == 'FRIEND_GUARD':
         # Spewpa
         if num == 665:
-            return 'No_Ability'
-    elif ability == 'Flower Veil':
+            return 'NO_ABILITY'
+    elif ability == 'FLOWER_VEIL':
         # Comfey -- this ability was changed and doesn't make as much sense anymore for Comfey
         if num == 764:
-            return 'Natural Cure'
-    elif ability == 'Illuminate':
+            return 'NATURAL_CURE'
+    elif ability == 'ILLUMINATE':
         # Staryu/Starmie and Watchog
         if num == 120 or num == 121 or num == 505:
-            return 'Analytic'
+            return 'ANALYTIC'
         # Volbeat
         elif num == 313:
-            return 'Prankster'
+            return 'PRANKSTER'
         elif num == 755 or num == 756:
-            return 'Rain Dish'
+            return 'RAIN_DISH'
         # Chinchou/Lanturn
         elif num == 170 or num == 171:
-            return 'Water Absorb'
-    elif ability == 'Minus':
+            return 'WATER_ABSORB'
+    elif ability == 'MINUS':
         # Klink line
         if 599 <= num <= 601:
-            return 'No_Ability'
+            return 'NO_ABILITY'
         # Minun
         elif num == 312:
-            return 'Static'
-    elif ability == 'Power Construct':
+            return 'STATIC'
+    elif ability == 'POWER_CONSTRUCT':
         # Zygarde -- this should always be true if inside this if
         if num == 718:
-            return 'No_Ability'
-    elif ability == 'Plus':
+            return 'NO_ABILITY'
+    elif ability == 'PLUS':
         # Klink line
         if 599 <= num <= 601:
-            return 'Clear Body'
+            return 'CLEAR_BODY'
         # Mareep line
         elif 179 <= num <= 181:
-            return 'No_Ability'
+            return 'NO_ABILITY'
         # Plusle
         elif num == 311:
-            return 'Static'
-    elif ability == 'Receiver':
+            return 'STATIC'
+    elif ability == 'RECEIVER':
         # Passimian
         if num == 766:
-            return 'No_Ability'
-    elif ability == 'Run Away':
+            return 'NO_ABILITY'
+    elif ability == 'RUN_AWAY':
         # Ponyta/Rapidash should really have this ability
         if num == 77 or num == 78:
-            return 'Flame Body'
-    elif ability == 'Stall':
+            return 'FLAME_BODY'
+    elif ability == 'STALL':
         # Sableye -- Prankster is way cooler
         if num == 302:
-            return 'Prankster'
-    elif ability == 'Symbiosis':
+            return 'PRANKSTER'
+    elif ability == 'SYMBIOSIS':
         # Flabebe line
         if 669 <= num <= 671:
-            return 'Flower Gift'
-    elif ability == 'Telepathy':
+            return 'FLOWER_GIFT'
+    elif ability == 'TELEPATHY':
         # Elgyem/Beheeyem
         if num == 605 or num == 606:
-            return 'Analytic'
+            return 'ANALYTIC'
         # Wobbuffet/Wynaut and Meditite/Medicham and Dialga/Palkia/Giratina
         # and Oranguru and the Tapus
         elif num == 202 or num == 360 \
@@ -364,10 +364,11 @@ def ability_substitution(num, ability):
                 or num == 483 or num == 484 or num == 487 \
                 or num == 765 \
                 or 785 <= num <= 788:
-            return 'No_Ability'
-    elif ability == 'Zen Mode':
+            return 'NO_ABILITY'
+    elif ability == 'ZEN_MODE':
+        # Darmanitan
         if num == 555:
-            return 'No_Ability'
+            return 'NO_ABILITY'
 
     return ability
 
@@ -376,35 +377,35 @@ def ability_substitution(num, ability):
 def type_substitution(num, types):
     # Ninetales is now Psychic type
     if num == 38:
-        assert types == ['Fire', 'No_Type']
-        return ['Fire', 'Psychic']
+        assert types == ['FIRE', 'NO_TYPE']
+        return ['FIRE', 'PSYCHIC']
     # Psyduck/Golduck are now Psychic type
     elif num == 54 or num == 55:
-        assert types == ['Water', 'No_Type']
-        return ['Water', 'Psychic']
+        assert types == ['WATER', 'NO_TYPE']
+        return ['WATER', 'PSYCHIC']
     # Gyarados is now Water/Dragon instead of Water/Flying
     elif num == 130:
-        assert types == ['Water', 'Flying']
-        return ['Water', 'Dragon']
+        assert types == ['WATER', 'FLYING']
+        return ['WATER', 'DRAGON']
     # Noctowl is now Psychic/Flying
     elif num == 164:
-        assert types == ['Normal', 'Flying']
-        return ['Psychic', 'Flying']
+        assert types == ['NORMAL', 'FLYING']
+        return ['PSYCHIC', 'FLYING']
     # Luxray is now Dark type
     elif num == 405:
-        assert types == ['Electric', 'No_Type']
-        return ['Electric', 'Dark']
+        assert types == ['ELECTRIC', 'NO_TYPE']
+        return ['ELECTRIC', 'DARK']
     # Flabebe line is now Grass type
     elif 669 <= num <= 671:
-        assert types == ['Fairy', 'No_Type']
-        return ['Fairy', 'Grass']
+        assert types == ['FAIRY', 'NO_TYPE']
+        return ['FAIRY', 'GRASS']
     # Goomy line is now Water type
     elif 704 <= num <= 706:
-        assert types == ['Dragon', 'No_Type']
-        return ['Dragon', 'Water']
+        assert types == ['DRAGON', 'NO_TYPE']
+        return ['DRAGON', 'WATER']
     # Mega Absol (Asbel) is Fairy type :)
     elif num == AddedPokes.MEGA_ABSOL.value:
-        assert types == ['Dark', 'No_Type']
-        return ['Dark', 'Fairy']
+        assert types == ['DARK', 'NO_TYPE']
+        return ['DARK', 'FAIRY']
 
     return types
