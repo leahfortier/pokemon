@@ -947,7 +947,7 @@ LEVEL KAKUNA 7
 0
 50
 SHIELD_DUST RUN_AWAY
-Hairy
+Hairy Bug
 12 7.1 It eats its weight in leaves every day. It fends off attackers with the needle on its head.
 3840
 BUG NONE
@@ -10319,7 +10319,7 @@ ITEM STARMIE WATER_STONE
 5 STAR_PIECE
 -1
 ANALYTIC NATURAL_CURE
-Starshape
+Star Shape
 31 76.1 If its body is torn, it can grow back if the red core remains. The core flashes at midnight.
 5120
 WATER_3 NONE
@@ -10674,7 +10674,7 @@ NONE
 100 ASPEAR_BERRY
 0
 OBLIVIOUS FOREWARN
-Humanshape
+Human Shape
 55 89.5 Its cries sound like human speech. However, it is impossible to tell what it is trying to say.
 6400
 HUMAN_LIKE NONE
@@ -10952,7 +10952,7 @@ NONE
 0
 50
 HYPER_CUTTER MOLD_BREAKER
-Stagbeetle
+Stag Beetle
 59 121.3 It grips prey with its pincers until the prey is torn in half. What it can't tear, it tosses far.
 6400
 BUG NONE
@@ -15349,7 +15349,7 @@ LEVEL XATU 25
 0
 50
 SYNCHRONIZE MAGIC_BOUNCE
-Little Bird
+Tiny Bird
 8 4.4 It picks food from cactus plants, deftly avoiding buds and spines. It seems to skip about to move.
 5120
 FLYING NONE
@@ -15872,7 +15872,7 @@ LEVEL AZUMARILL 18
 0
 50
 THICK_FAT HUGE_POWER
-Aquamouse
+Aqua Mouse
 16 18.7 The oil-filled end of its tail floats on water. It keeps Marill from drowning even in a strong current.
 2560
 WATER_1 FAIRY
@@ -15956,7 +15956,7 @@ NONE
 0
 50
 THICK_FAT HUGE_POWER
-Aquarabbit
+Aqua Rabbit
 31 62.8 It can spend all day in water, since it can inhale and store a large volume of air.
 2560
 WATER_1 FAIRY
@@ -17875,7 +17875,7 @@ TIME NIGHT ITEM GLISCOR RAZOR_FANG
 5 RAZOR_FANG
 50
 HYPER_CUTTER SAND_VEIL
-Flyscorpion
+Fly Scorpion
 43 142.9 It glides as if sliding. It startles foes by clamping on to their faces, then jabs with its poison stinger.
 5120
 BUG NONE
@@ -18551,7 +18551,7 @@ NONE
 0
 50
 SWARM GUTS
-Singlehorn
+Single Horn
 59 119.0 It loves sweet honey. To keep all the honey to itself, it hurls rivals away with its prized horn.
 6400
 BUG NONE
@@ -22976,7 +22976,7 @@ NONE
 5 MAX_REVIVE
 50
 PICKUP GLUTTONY
-Rush
+Rushing
 20 71.6 It charges prey at speeds over 60 mph. However, because it can only run straight, it often fails.
 3840
 FIELD NONE
@@ -23692,7 +23692,7 @@ NONE
 5 POWER_HERB
 50
 CHLOROPHYLL EARLY_BIRD
-Wickid
+Wicked
 51 131.4 By flapping its leafy fan, it can whip up gusts of 100 ft/second that can level houses.
 3840
 FIELD GRASS
@@ -23785,7 +23785,7 @@ LEVEL SWELLOW 22
 5 CHARTI_BERRY
 50
 GUTS SCRAPPY
-TinySwallow
+Tiny Swallow
 12 5.1 It has a gutsy spirit that makes it bravely take on tough foes. It flies in search of warm climates.
 3840
 FLYING NONE
@@ -38943,7 +38943,7 @@ NONE
 5 POISON_BARB
 50
 BATTLE_ARMOR SNIPER
-Ogre Scorp
+Ogre Scorpion
 51 135.6 Possessing a sturdy build, it takes pride in its strength, taking down foes without using toxins.
 5120
 BUG WATER_3
@@ -39571,7 +39571,7 @@ LEVEL ABOMASNOW 40
 5 NEVER_MELT_ICE
 50
 SNOW_WARNING SOUNDPROOF
-Frosted Tree
+Frost Tree
 39 111.3 Seemingly curious about people, they gather around footsteps they find on snowy mountains.
 5120
 MONSTER GRASS
@@ -39648,7 +39648,7 @@ NONE
 5 NEVER_MELT_ICE
 50
 SNOW_WARNING SOUNDPROOF
-Frosted Tree
+Frost Tree
 87 298.7 They appear when the snow flowers bloom. When the petals fall, they retreat to places unknown again.
 5120
 MONSTER GRASS
@@ -40816,7 +40816,7 @@ NONE
 5 RAZOR_FANG
 50
 HYPER_CUTTER SAND_VEIL
-Fang Scorp
+Fang Scorpion
 79 93.7 If it succeeds in catching even a faint breeze properly, it can circle the globe without flapping once.
 5120
 BUG NONE
@@ -56095,7 +56095,7 @@ LEVEL QUILLADIN 16
 5 MIRACLE_SEED
 87
 OVERGROW BULLETPROOF
-Spiky Nut
+Spiny Nut
 16 19.8 Such a thick shell of wood covers its head and back that even a direct hit from a truck wouldn't faze it.
 5120
 FIELD NONE
@@ -57699,7 +57699,7 @@ ITEM FLORGES SHINY_STONE
 0
 0
 FLOWER_VEIL FLOWER_GIFT
-Fairy
+Single Bloom
 8 2.0 When the flowers of a well-tended flower bed bloom, it appears and celebrates with an elegant dance.
 5120
 FAIRY NONE
