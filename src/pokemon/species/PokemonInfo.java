@@ -112,7 +112,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     private final Evolution evolution;
     private final List<WildHoldItem> wildHoldItems;
     private final AbilityNamesies[] abilities;
-    private final int maleRatio;
+    private final int femaleRatio;
     private final String classification;
     private final int height;
     private final double weight;
@@ -154,7 +154,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         this.evolution = evolution;
         this.wildHoldItems = wildHoldItems;
         this.abilities = abilities.toArray(new AbilityNamesies[0]);
-        this.maleRatio = genderRatio;
+        this.femaleRatio = genderRatio;
         this.classification = classification;
         this.height = height;
         this.weight = weight;
@@ -216,8 +216,9 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         return givenEVs;
     }
 
-    public int getMaleRatio() {
-        return maleRatio;
+    // Female ratio is in eighths, -1 for genderless
+    public int getFemaleRatio() {
+        return femaleRatio;
     }
 
     public String getHeightString() {
@@ -376,7 +377,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
                     GeneralUtils.sixIntArray(in),                   // EVs
                     EvolutionType.getEvolution(in),                 // Evolution
                     WildHoldItem.createList(in),                    // Wild Items
-                    Integer.parseInt(in.nextLine()),                // Male Ratio
+                    Integer.parseInt(in.nextLine()),                // Female Ratio
                     createEnumList(in, AbilityNamesies.class),      // Abilities
                     in.nextLine().trim(),                           // Classification
                     in.nextInt(),                                   // Height
