@@ -362,6 +362,12 @@ def name_substitution(num: int) -> str:
     if num == 669:
         # Flabebe has a stupid name with stupid special characters
         return "Flabebe"
+    # Meltan/Melmetal are not currently in PokeAPI and are just using placeholder information (figured would be less
+    # confusing if I included their names though)
+    elif num == 808:
+        return "Meltan"
+    elif num == 809:
+        return "Melmetal"
     elif num == AddedPokes.MEGA_CHARIZARD.value:
         return "Rizardon"
     elif num == AddedPokes.MEGA_MAWILE.value:

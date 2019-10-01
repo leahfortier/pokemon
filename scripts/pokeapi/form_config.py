@@ -67,3 +67,7 @@ class FormConfig:
         elif num == AddedPokes.DUSK_LYCANROC.value:
             self.base_num = 745
             self.id = "lycanroc-dusk"
+        # Meltan and Melmetal are not currently in the PokeAPI -- just use Bulbasaur as placeholder information
+        elif num in [808, 809]:
+            self.base_num = 1
+            self.id = 'bulbasaur'
