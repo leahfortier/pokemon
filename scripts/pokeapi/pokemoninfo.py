@@ -51,8 +51,7 @@ class PokemonInfo:
         self.egg_groups = parser.get_egg_groups()
         print("Egg Groups:", self.egg_groups)
 
-        version, self.level_up_moves, self.learnable_moves = parser.get_moves()
-        print("Moves Version:", version)
+        self.level_up_moves, self.learnable_moves = parser.get_moves()
         print("Level-up Moves:", self.level_up_moves)
         print("Learnable Moves:", self.learnable_moves)
 

@@ -4,10 +4,12 @@ import math
 import pokebase
 
 from scripts.forms import Stat
+from scripts.pokeapi.form_config import FormConfig
 from scripts.substitution import attack_substitution, learnable_attack_substitution, learnable_attack_additions, \
-    ability_substitution, type_substitution, name_substitution, gender_substitution, stat_substitution
+    ability_substitution, type_substitution, name_substitution, gender_substitution, stat_substitution, \
+    effort_substitution
 from scripts.util import namesies, remove_suffix, decimeters_to_inches, hectograms_to_lbs, replace_new_lines, \
-    remove_prefix
+    remove_prefix, replace_special
 
 INDIVIDUAL_VERSIONS = ['ultra-sun', 'ultra-moon',
                        'sun', 'moon',
@@ -39,39 +41,65 @@ class Move:
 class Parser:
     def __init__(self, num: int):
         self.num = num
+        self.form_config = FormConfig(num)
 
-        self.pokemon = pokebase.pokemon(num)
-        self.species = self.pokemon.species
+        # Look up the pokemon and species information
+        self.base_pokemon = pokebase.pokemon(self.form_config.base_num)
+        self.species = self.base_pokemon.species
+
+        # Set the actual pokemon
+        # Most cases will be the same as the base
+        if self.num == self.form_config.base_num:
+            self.pokemon = self.base_pokemon
+        # Added pokemon need their form (Mega, Alolan, etc.) looked up through the specified id
+        else:
+            self.pokemon = pokebase.pokemon(self.form_config.id)
+
+    # Returns either the pokemon or the base pokemon depending on is_base
+    def _get_pokemon(self, is_base: bool):
+        if is_base:
+            return self.base_pokemon
+        else:
+            return self.pokemon
 
     # Returns the English name from the list of the species' names
     # Ex: 'Bulbasaur'
     def get_name(self) -> str:
-        # If the language is English ('en'), return the entry's name
-        # Ex: {'language': {'name': 'en', 'url': 'https://pokeapi.co/api/v2/language/9/'}, 'name': 'Bulbasaur'}
-        name = next(entry.name for entry in self.species.names if entry.language.name == 'en')
+        # Check if this Pokemon has a hardcoded name
+        name = name_substitution(self.num)
+        if name == '':
+            # If the language is English ('en'), return the entry's name
+            # Ex: {'language': {'name': 'en', 'url': 'https://pokeapi.co/api/v2/language/9/'}, 'name': 'Bulbasaur'}
+            name = next(entry.name for entry in self.species.names if entry.language.name == 'en')
 
-        # TODO: Need to replace special characters as well (Farfetch'd has weird apostrophe here)
-        return name_substitution(self.num, name)
+        # Important for things like Farfetch'd vs Farfetch’d
+        return replace_special(name)
 
     # Returns the base stats and given effort values in a tuple
     # Ex: ([45, 49, 49, 65, 65, 45], [0, 0, 0, 1, 0, 0])
     def get_stats_evs(self) -> Tuple[List[int], List[int]]:
         stats = [0]*6
         evs = [0]*6
-        for stat in self.pokemon.stats:
+
+        # Check if getting the stats from this pokemon or its base form
+        pokemon = self._get_pokemon(self.form_config.use_base_stats)
+        for stat in pokemon.stats:
             stat_index = _get_stat(stat.stat.name).value
             stats[stat_index] = stat.base_stat
             evs[stat_index] = stat.effort
 
-        # Adjust stats if applicable
+        # Adjust stats/EVs if applicable
         stat_substitution(self.num, stats)
+        effort_substitution(self.num, evs)
 
         return stats, evs
 
     # Returns the base experience
     # Ex: 64
     def get_base_experience(self) -> int:
-        return self.pokemon.base_experience
+        # Check if getting the experience from this pokemon or its base form
+        pokemon = self._get_pokemon(self.form_config.use_base_exp)
+        return pokemon.base_experience
 
     # Returns the growth rate as a namesies string
     # Ex: 'MEDIUM_SLOW'
@@ -128,7 +156,8 @@ class Parser:
         abilities = ['']*3
 
         # Add each ability in the corresponding slot in the list
-        for ability in self.pokemon.abilities:
+        pokemon = self._get_pokemon(self.form_config.use_base_abilities)
+        for ability in pokemon.abilities:
             ability_name = namesies(ability.ability.name)
 
             # Replace/remove the ability if applicable
@@ -215,14 +244,13 @@ class Parser:
         assert len(egg_groups) == 2
         return egg_groups
 
-    # Returns the moves version, level-up moves, and the learnable moves as a tuple
+    # Returns the level-up moves and the learnable moves as a tuple
     # Level-up moves will be a list of strings of the format '<int:level> <string:attackName>' (Ex: '7 LEECH_SEED')
     #   and will be sorted by level order
     # Learnable moves (egg moves, move tutors, tms) will be a list of strings of namesies attack names
-    # Ex: ('ultra-sun-ultra-moon',
-    #      ['0 TACKLE', '3 GROWL', '7 LEECH_SEED', '9 VINE_WHIP', ...., '37 SEED_BOMB'],
+    # Ex: (['0 TACKLE', '3 GROWL', '7 LEECH_SEED', '9 VINE_WHIP', ...., '37 SEED_BOMB'],
     #      ['SWORDS_DANCE', 'SOLAR_BEAM', 'PETAL_DANCE', 'TOXIC', 'DOUBLE_TEAM', ...])
-    def get_moves(self) -> Tuple[str, List[str], List[str]]:
+    def get_moves(self) -> Tuple[List[str], List[str]]:
         # Maps from version name to list of Moves in that version
         version_to_moves = {}  # type: Dict[str, List[Move]]
         for entry in self.pokemon.moves:
@@ -281,7 +309,7 @@ class Parser:
         # Add any manually added learnable moves
         learnable_moves.extend(learnable_attack_additions(self.num))
 
-        return version, level_up_moves, learnable_moves
+        return level_up_moves, learnable_moves
 
 
 # Returns the Stat that matches the input name

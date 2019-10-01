@@ -352,17 +352,50 @@ def type_substitution(num: int, types: List[str]) -> List[str]:
     return types
 
 
-# Replaces the name of the Pokemon if applicable
-def name_substitution(num: int, name: str) -> str:
-    # Flabebe has a stupid name with stupid special characters
-    if num == 669:
-        return "Flabebe"
-    elif num == 29:
+# Returns the replacement name of the Pokemon if applicable
+# Returns the empty string if the Pokemon's name does not need to be replaced and should be looked up normally
+def name_substitution(num: int) -> str:
+    if num == 29:
         return "Nidoran F"
     elif num == 32:
         return "Nidoran M"
+    if num == 669:
+        # Flabebe has a stupid name with stupid special characters
+        return "Flabebe"
+    elif num == AddedPokes.MEGA_CHARIZARD.value:
+        return "Rizardon"
+    elif num == AddedPokes.MEGA_MAWILE.value:
+        return "Kuchiito"
+    elif num == AddedPokes.MEGA_ABSOL.value:
+        return "Asbel"
+    elif num == AddedPokes.MEGA_SABLEYE.value:
+        return "Yamirami"
+    elif num == AddedPokes.ALOLAN_RAICHU.value:
+        return "Silph Surfer"
+    elif num == AddedPokes.ALOLAN_SANDSHREW.value:
+        return "Snowshrew"
+    elif num == AddedPokes.ALOLAN_SANDSLASH.value:
+        return "Snowslash"
+    elif num == AddedPokes.ALOLAN_VULPIX.value:
+        return "Yukikon"
+    elif num == AddedPokes.ALOLAN_NINETALES.value:
+        return "Kyukon"
+    elif num == AddedPokes.ALOLAN_GRIMER.value:
+        return "Sleima"
+    elif num == AddedPokes.ALOLAN_MUK.value:
+        return "Sleimok"
+    elif num == AddedPokes.ALOLAN_EXEGGUTOR.value:
+        return "Kokonatsu"
+    elif num == AddedPokes.ALOLAN_MAROWAK.value:
+        return "GaraGara"
+    elif num == AddedPokes.MEGA_BANETTE.value:
+        return "Jupetta"
+    elif num == AddedPokes.MIDNIGHT_LYCANROC.value:
+        return "Lougaroc"
+    elif num == AddedPokes.DUSK_LYCANROC.value:
+        return "Lugarugan"
 
-    return name
+    return ''
 
 
 # Replaces the gender ratio of the Pokemon if applicable
@@ -395,6 +428,24 @@ def stat_substitution(num: int, stats: List[int]) -> None:
     if num == AddedPokes.MEGA_ABSOL.value:
         stats[Stat.SPEED.value] += 20
     # Decrease mega attack stats
-    if num == AddedPokes.MEGA_BANNETTE.value:
+    if num == AddedPokes.MEGA_BANETTE.value:
         stats[Stat.ATTACK.value] -= 35
         stats[Stat.SP_ATTACK.value] -= 10
+
+
+# Replaces the effort values of the Pokemon if applicable
+# Directly edits the contents of evs which should be a size 6 list of the effort values
+def effort_substitution(num: int, evs: List[int]) -> None:
+    if num == AddedPokes.MEGA_CHARIZARD.value:
+        # Swap Attack and Sp. Attack for Rizardon
+        index_swap(evs, Stat.ATTACK.value, Stat.SP_ATTACK.value)
+    elif num == AddedPokes.MEGA_MAWILE.value:
+        evs[Stat.DEFENSE.value] += 1
+    elif num == AddedPokes.MEGA_ABSOL.value:
+        evs[Stat.ATTACK.value] += 1
+    elif num == AddedPokes.MEGA_SABLEYE.value:
+        evs[Stat.ATTACK.value] -= 1
+        evs[Stat.DEFENSE.value] += 1
+        evs[Stat.SP_DEFENSE.value] += 1
+    elif num == AddedPokes.MEGA_BANETTE.value:
+        evs[Stat.ATTACK.value] += 1

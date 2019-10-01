@@ -25,6 +25,6 @@ class AddedPokes(Enum):
     ALOLAN_MUK = auto()
     ALOLAN_EXEGGUTOR = auto()
     ALOLAN_MAROWAK = auto()
-    MEGA_BANNETTE = auto()
+    MEGA_BANETTE = auto()
     MIDNIGHT_LYCANROC = auto()
     DUSK_LYCANROC = auto()

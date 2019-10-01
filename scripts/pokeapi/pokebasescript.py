@@ -1,6 +1,7 @@
 import requests
 import time
 
+from scripts.forms import AddedPokes
 from scripts.pokeapi.pokemoninfo import PokemonInfo
 
 with open("../../temp.txt", "w") as f:

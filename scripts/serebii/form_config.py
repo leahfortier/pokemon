@@ -151,7 +151,7 @@ class FormConfig:
             self.lookup_num = 105
             self.name = "GaraGara"
             self.is_alolan = True
-        elif num == AddedPokes.MEGA_BANNETTE.value:
+        elif num == AddedPokes.MEGA_BANETTE.value:
             self.lookup_num = 354
             self.name = "Jupetta"
             self.is_mega = True

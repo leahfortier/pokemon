@@ -8,7 +8,7 @@ import requests
 from lxml import html
 
 from scripts.forms import AddedPokes, Stat
-from scripts.serebii.forms import FormConfig
+from scripts.serebii.form_config import FormConfig
 from scripts.serebii.parser import Parser
 from scripts.substitution import attack_substitution, ability_substitution, type_substitution, \
     learnable_attack_additions, gender_substitution, stat_substitution
@@ -268,6 +268,7 @@ with open("../temp.txt", "w") as f:
         else:
             evs = ev_map[form_config.ev_form_name]
 
+        # TODO: Should use effort_substitution
         # Swap Attack and Sp. Attack for Rizardon
         if num == AddedPokes.MEGA_CHARIZARD.value:
             index_swap(evs, Stat.ATTACK.value, Stat.SP_ATTACK.value)
