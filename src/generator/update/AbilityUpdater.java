@@ -14,8 +14,8 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class AbilityUpdater extends GeneratorUpdater {
-    private static final String SCRIPTS_INPUT_FILE_NAME = Folder.SCRIPTS + "abilities.in";
-    private static final String SCRIPTS_OUTPUT_FILE_NAME = Folder.SCRIPTS + "abilities.out";
+    private static final String SCRIPTS_INPUT_FILE_NAME = Folder.SCRIPTS_COMPARE + "abilities.in";
+    private static final String SCRIPTS_OUTPUT_FILE_NAME = Folder.SCRIPTS_COMPARE + "abilities.out";
 
     private final Map<AbilityNamesies, String> parsedDescriptionsMap;
 

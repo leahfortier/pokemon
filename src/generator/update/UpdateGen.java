@@ -278,7 +278,7 @@ public class UpdateGen {
             }
         }
 
-        FileIO.overwriteFile(Folder.SCRIPTS + "ps-images.in", out.toString());
+        FileIO.overwriteFile(Folder.SCRIPTS_COMPARE + "ps-images.in", out.toString());
     }
 
     private static void appendNotExists(StringAppender out, int num, String form, String suffix) {

@@ -49,4 +49,7 @@ public abstract class Folder {
     public static final String MAP_TILES = FileIO.makeFolderPath(TILES, "mapTiles");
     public static final String TRAINER_TILES = FileIO.makeFolderPath(TILES, "trainerTiles");
     public static final String MAP_MAKER_TILES = FileIO.makeFolderPath(TILES, "mapMakerTiles");
+
+    // Script folders
+    public static final String SCRIPTS_COMPARE = FileIO.makeFolderPath(SCRIPTS, "compare");
 }

@@ -17,8 +17,8 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class MoveUpdater extends GeneratorUpdater {
-    private static final String SCRIPTS_INPUT_FILE_NAME = Folder.SCRIPTS + "moves.in";
-    private static final String SCRIPTS_OUTPUT_FILE_NAME = Folder.SCRIPTS + "moves.out";
+    private static final String SCRIPTS_INPUT_FILE_NAME = Folder.SCRIPTS_COMPARE + "moves.in";
+    private static final String SCRIPTS_OUTPUT_FILE_NAME = Folder.SCRIPTS_COMPARE + "moves.out";
 
     private final Map<AttackNamesies, MoveParser> parseMoves;
 
