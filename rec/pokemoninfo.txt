@@ -45655,7 +45655,7 @@ UNAWARE KLUTZ
 Bat
 16 4.6 Its habitat is dark forests and caves. It emits ultrasonic waves from its nose to learn about its surroundings.
 3840
-FIELD FLYING
+FLYING FIELD
 14
 0 CONFUSION
 4 ODOR_SLEUTH
@@ -45752,7 +45752,7 @@ UNAWARE KLUTZ
 Courting
 35 23.1 It emits sound waves of various frequencies from its nose, including some powerful enough to destroy rocks.
 3840
-FIELD FLYING
+FLYING FIELD
 17
 0 CONFUSION
 0 ODOR_SLEUTH
@@ -47262,7 +47262,7 @@ PRANKSTER INFILTRATOR
 Cotton Puff
 12 1.3 When attacked, it escapes by shooting cotton from its body. The cotton serves as a decoy to distract the attacker.
 5120
-GRASS FAIRY
+FAIRY GRASS
 17
 0 ABSORB
 0 FAIRY_WIND
@@ -47340,7 +47340,7 @@ PRANKSTER INFILTRATOR
 Windveiled
 28 14.6 Like the wind, it can slip through any gap, no matter how small. It leaves balls of white fluff behind.
 5120
-GRASS FAIRY
+FAIRY GRASS
 8
 0 GROWTH
 0 LEECH_SEED
@@ -53601,7 +53601,7 @@ ROUGH_SKIN SHEER_FORCE
 Cave
 63 306.4 It warms its body by absorbing sunlight with its wings. When its body temperature falls, it can no longer move.
 7680
-DRAGON MONSTER
+MONSTER DRAGON
 16
 0 LEER
 0 SCRATCH

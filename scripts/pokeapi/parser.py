@@ -225,12 +225,15 @@ class Parser:
     # If there is only one group, the second group will be 'NONE'
     # Ex: ['MONSTER', 'GRASS']
     def get_egg_groups(self) -> List[str]:
+        # Get them egg groupies
         egg_groups = [namesies(_get_egg_group(egg_group.name)) for egg_group in self.species.egg_groups]
-        if len(egg_groups) == 1:
-            egg_groups.append('NONE')
 
         # Just feel like these are backwards even though the order doesn't matter
         egg_groups.reverse()
+
+        # Add empty group if applicable
+        if len(egg_groups) == 1:
+            egg_groups.append('NONE')
 
         assert len(egg_groups) == 2
         return egg_groups

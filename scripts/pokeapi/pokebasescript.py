@@ -13,7 +13,6 @@ with open("../../temp.txt", "w") as f:
             pokemon = PokemonInfo(num)
             pokemon.write(f)
         except requests.exceptions.HTTPError as error:
-            # For some reason this starting failing suddenly for #314 Illumise and #350 Milotic
             f.write("#" + str(num).zfill(3) + " ERROR: " + str(error) + "\n\n")
 
     end_time = time.time()
