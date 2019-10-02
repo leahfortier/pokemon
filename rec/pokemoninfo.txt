@@ -10318,7 +10318,7 @@ ITEM STARMIE WATER_STONE
 50 STARDUST
 5 STAR_PIECE
 -1
-ANALYTIC NATURAL_CURE
+NATURAL_CURE ANALYTIC
 Star Shape
 31 76.1 If its body is torn, it can grow back if the red core remains. The core flashes at midnight.
 5120
@@ -10394,7 +10394,7 @@ NONE
 50 STARDUST
 5 STAR_PIECE
 -1
-ANALYTIC NATURAL_CURE
+NATURAL_CURE ANALYTIC
 Mysterious
 43 176.4 At the center of its body is a red core, which sends mysterious radio signals into the night sky.
 5120
@@ -15348,7 +15348,7 @@ PSYCHIC FLYING
 LEVEL XATU 25
 0
 4
-SYNCHRONIZE MAGIC_BOUNCE
+SYNCHRONIZE EARLY_BIRD
 Tiny Bird
 8 4.4 It picks food from cactus plants, deftly avoiding buds and spines. It seems to skip about to move.
 5120
@@ -15442,7 +15442,7 @@ PSYCHIC FLYING
 NONE
 0
 4
-SYNCHRONIZE MAGIC_BOUNCE
+SYNCHRONIZE EARLY_BIRD
 Mystic
 59 33.1 This odd Pok\u00e9mon can see both the past and the future. It eyes the sun's movement all day.
 5120
@@ -26050,7 +26050,7 @@ ITEM YAMIRAMI RUBY
 1
 5 WIDE_LENS
 4
-KEEN_EYE PRANKSTER
+KEEN_EYE STALL
 Darkness
 20 24.3 It hides in the darkness of caves. Its diet of gems has transformed its eyes into gemstones.
 6400
@@ -26939,7 +26939,7 @@ NONE
 1
 5 CELL_BATTERY
 4
-STATIC LIGHTNING_ROD
+LIGHTNING_ROD NO_ABILITY
 Cheering
 16 9.3 It cheers on friends with pom-poms made of sparks. It drains power from telephone poles.
 5120
@@ -27021,7 +27021,7 @@ NONE
 1
 5 CELL_BATTERY
 4
-STATIC VOLT_ABSORB
+VOLT_ABSORB NO_ABILITY
 Cheering
 16 9.3 It cheers on friends. If its friends are losing, its body lets off more and more sparks.
 5120
@@ -27103,7 +27103,7 @@ NONE
 1
 5 BRIGHT_POWDER
 0
-PRANKSTER SWARM
+SWARM PRANKSTER
 Firefly
 28 39.0 It communicates with others by lighting up its rear at night. It loves Illumise's sweet aroma.
 3840
@@ -43808,7 +43808,7 @@ NORMAL NO_TYPE
 NONE
 0
 4
-ANALYTIC KEEN_EYE
+KEEN_EYE ANALYTIC
 Lookout
 43 59.5 When they see an enemy, their tails stand high, and they spit the seeds of berries stored in their cheek pouches.
 5120
@@ -47558,7 +47558,7 @@ NONE
 5 DEEP_SEA_TOOTH
 5 DEEP_SEA_SCALE
 4
-RECKLESS ROCK_HEAD
+RECKLESS ADAPTABILITY
 Hostile
 39 39.7 Red and blue Basculin get along so poorly, they'll start fighting instantly. These Pok\u00e9mon are very hostile.
 10240
@@ -52215,7 +52215,7 @@ PSYCHIC NO_TYPE
 LEVEL BEHEEYEM 42
 0
 4
-ANALYTIC SYNCHRONIZE
+SYNCHRONIZE ANALYTIC
 Cerebral
 20 19.8 It uses its strong psychic power to squeeze its opponent's brain, causing unendurable headaches.
 5120
@@ -52310,7 +52310,7 @@ PSYCHIC NO_TYPE
 NONE
 0
 4
-ANALYTIC SYNCHRONIZE
+SYNCHRONIZE ANALYTIC
 Cerebral
 39 76.1 It can manipulate an opponent's memory. Apparently, it communicates by flashing its three different-colored fingers.
 5120
@@ -57629,7 +57629,7 @@ FAIRY GRASS
 LEVEL FLOETTE 19
 0
 8
-FLOWER_VEIL FLOWER_GIFT
+FLOWER_VEIL NO_ABILITY
 Single Bloom
 4 0.2 When it finds a flower it likes, it dwells on that flower its whole life long. It floats in the wind's embrace with an untroubled heart.
 5120
@@ -57698,7 +57698,7 @@ FAIRY GRASS
 ITEM FLORGES SHINY_STONE
 0
 8
-FLOWER_VEIL FLOWER_GIFT
+FLOWER_VEIL NO_ABILITY
 Single Bloom
 8 2.0 When the flowers of a well-tended flower bed bloom, it appears and celebrates with an elegant dance.
 5120
@@ -57768,7 +57768,7 @@ FAIRY GRASS
 NONE
 0
 8
-FLOWER_VEIL FLOWER_GIFT
+FLOWER_VEIL NO_ABILITY
 Garden
 43 22.0 In times long past, governors of castles would invite Florges to create flower gardens to embellish the castle domains.
 5120
@@ -63216,7 +63216,7 @@ ITEM VIKAVOLT THUNDER_STONE
 1
 5 CELL_BATTERY
 4
-STATIC NO_ABILITY
+BATTERY NO_ABILITY
 Battery
 20 23.1 Its body is capable of storing electricity. On camping trips, people are grateful to have one around.
 3840
@@ -64592,7 +64592,7 @@ LEVEL SHIINOTIC 24
 50 TINY_MUSHROOM
 5 BIG_MUSHROOM
 4
-RAIN_DISH EFFECT_SPORE
+EFFECT_SPORE RAIN_DISH
 Illuminating
 8 3.3 It scatters spores that flicker and glow. Anyone seeing these lights falls into a deep slumber.
 5120
@@ -64664,7 +64664,7 @@ NONE
 50 TINY_MUSHROOM
 5 BIG_MUSHROOM
 4
-RAIN_DISH EFFECT_SPORE
+EFFECT_SPORE RAIN_DISH
 Illuminating
 39 25.4 Forests where Shiinotic live are treacherous to enter at night. People confused by its strange lights can never find their way home again.
 5120
@@ -65293,7 +65293,7 @@ NONE
 1
 5 MISTY_SEED
 6
-NATURAL_CURE TRIAGE
+TRIAGE NATURAL_CURE
 Posy Picker
 4 0.7 It attaches flowers to its highly nutritious vine. This revitalizes the flowers, and they give off an aromatic scent.
 5120
