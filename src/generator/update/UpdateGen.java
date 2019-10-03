@@ -403,7 +403,7 @@ public class UpdateGen {
             out.println(in.nextLine()); // EVs
             readEvolution(in, out);     // Evolution
             readHoldItems(in, out);     // Wild Items
-            out.println(in.nextLine()); // Male Ratio
+            out.println(in.nextLine()); // Female Ratio
             out.println(in.nextLine()); // Abilities
             out.println(in.nextLine()); // Classification
             out.println(in.nextLine()); // Height Weight FlavorText
@@ -499,7 +499,7 @@ public class UpdateGen {
             diff(in1, in2, "EVs", diffs);
             readEvolution(in1); readEvolution(in2); // Don't compare these
             readHoldItems(in1); readHoldItems(in2); // Don't compare these either
-            diff(in1, in2, "Male Ratio", diffs);
+            diff(in1, in2, "Female Ratio", diffs);
             diff(in1, in2, "Abilities", diffs);
             diff(in1, in2, "Classification", diffs);
             diff(in1.nextInt() + "", in2.nextInt() + "", "Height", diffs);
@@ -528,7 +528,7 @@ public class UpdateGen {
         out.println(in.nextLine()); // EVs
         readEvolution(in, out);     // Evolution
         readHoldItems(in, out);     // Wild Items
-        out.println(in.nextLine()); // Male Ratio
+        out.println(in.nextLine()); // Female Ratio
         out.println(in.nextLine()); // Abilities
         out.println(in.nextLine()); // Classification
         out.println(in.nextLine()); // Height Weight FlavorText
@@ -551,7 +551,7 @@ public class UpdateGen {
         out.println(in.nextLine()); in2.nextLine(); // EVs
         readEvolution(in, out); readEvolution(in2); // Evolution
         readHoldItems(in, out); readHoldItems(in2); // Wild Items
-        out.println(in.nextLine()); in2.nextLine(); // Male Ratio
+        out.println(in.nextLine()); in2.nextLine(); // Female Ratio
         out.println(in.nextLine()); in2.nextLine(); // Abilities
         out.println(in.nextLine()); in2.nextLine(); // Classification
         out.println(in.nextLine()); in2.nextLine(); // Height Weight FlavorText

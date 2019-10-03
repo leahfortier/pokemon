@@ -63,7 +63,7 @@ public abstract class PartyPokemon implements Serializable {
         this.moves = new MoveList(this);
 
         PokemonInfo pokemon = this.getPokemonInfo();
-        this.setGender(Gender.getGender(pokemon.getMaleRatio()));
+        this.setGender(Gender.getGender(pokemon.getFemaleRatio()));
         this.setAbility(Ability.assign(pokemon));
 
         this.heldItem = (HoldItem)ItemNamesies.NO_ITEM.getItem();

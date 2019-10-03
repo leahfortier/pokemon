@@ -130,24 +130,13 @@ class Parser:
     def get_capture_rate(self) -> int:
         return capture_rate_substitution(self.num, self.species.capture_rate)
 
-    # Returns the percentage that this Pokemon is male (-1 for genderless)
-    # Ex: 87
+    # Returns the the chance of this Pokémon being female, in eighths; or -1 for genderless
+    # Ex: 1 (Bulbasaur is female 1/8th (12.5%) of the time)
     def get_gender_ratio(self) -> int:
-        # TODO: I like the gender in eighths and should convert back to this once everything is settled
-        # gender_rate: the chance of this Pokémon being female, in eighths; or -1 for genderless
-        male_ratio = self.species.gender_rate
-        if male_ratio != -1:
-            male_ratio = 100 - 100*male_ratio/8
-            if male_ratio > 50:
-                male_ratio = math.floor(male_ratio)
-            else:
-                male_ratio = math.ceil(male_ratio)
-            male_ratio = int(male_ratio)
-
-        # Adjust any gender ratios if applicable
-        male_ratio = gender_substitution(self.num, male_ratio)
-
-        return male_ratio
+        # Get the gender ratio and adjust if applicable
+        female_ratio = self.species.gender_rate
+        female_ratio = gender_substitution(self.num, female_ratio)
+        return female_ratio
 
     # Returns the abilities as namesies strings in a list of size 2
     # If only has one regular ability, use the hidden ability as second

@@ -79,6 +79,7 @@ with open("../temp.txt", "w") as f:
             else:
                 male_ratio = math.ceil(male_ratio)
 
+        # TODO: Gender ratio format was changed to female ratio in eighths
         male_ratio = gender_substitution(num, male_ratio)
         print("Male Ratio: " + str(male_ratio))
 

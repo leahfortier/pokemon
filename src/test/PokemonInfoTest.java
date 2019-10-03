@@ -209,11 +209,13 @@ public class PokemonInfoTest extends BaseTest {
 
     @Test
     public void genderTest() {
-        List<Integer> validMaleRatios = Arrays.asList(-1, 0, 13, 25, 50, 75, 87, 100);
+        TestUtils.assertOutsideRange(0, 8, Gender.GENDERLESS_VALUE);
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
             PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
-            int maleRatio = pokemonInfo.getMaleRatio();
-            Assert.assertTrue(pokemonInfo.getName() + " " + maleRatio, validMaleRatios.contains(maleRatio));
+            int femaleRatio = pokemonInfo.getFemaleRatio();
+            if (femaleRatio != Gender.GENDERLESS_VALUE) {
+                TestUtils.assertInclusiveRange(pokemonInfo.getName(), 0, 8, femaleRatio);
+            }
         }
     }
 
@@ -435,7 +437,7 @@ public class PokemonInfoTest extends BaseTest {
         Assert.assertEquals(30720, pokemonInfo.getEggSteps());
         Assert.assertEquals("Hex Nut", pokemonInfo.getClassification());
         Assert.assertEquals(GrowthRate.SLOW, pokemonInfo.getGrowthRate());
-        Assert.assertEquals(Gender.GENDERLESS_CONSTANT, pokemonInfo.getMaleRatio());
+        Assert.assertEquals(Gender.GENDERLESS_VALUE, pokemonInfo.getFemaleRatio());
 
         Assert.assertArrayEquals(new EggGroup[] { EggGroup.UNDISCOVERED, EggGroup.NONE }, pokemonInfo.getEggGroups());
 
