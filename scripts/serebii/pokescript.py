@@ -343,14 +343,14 @@ with open("../temp.txt", "w") as f:
             level = parser.info_table[i][0].text
 
             if level == 'Evolve':
-                level = -1
-            elif level == dashy:
                 level = 0
+            elif level == dashy:
+                level = 1
 
             attack = parser.info_table[i][1][0].text
             attack = attack_substitution(num, namesies(attack))
             if attack == '':
-                assert level == 0
+                assert level == 1
                 continue
 
             attacks.append(str(level) + " " + attack)
