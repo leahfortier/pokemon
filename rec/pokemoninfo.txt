@@ -66605,7 +66605,7 @@ NONE
 4
 BERSERK SAP_SIPPER
 Placid
-118 407.8 It has a compassionate personality, but if it is angered, it completely destroys its surroundings with its intense breath.
+118 407.9 It has a compassionate personality, but if it is angered, it completely destroys its surroundings with its intense breath.
 5120
 MONSTER DRAGON
 15
@@ -68448,7 +68448,7 @@ Poipole
 SLOW
 POISON NO_TYPE
 45
-0 0 0 0 1 0
+0 0 0 0 0 1
 MOVE NAGANADEL DRAGON_PULSE
 0
 -1

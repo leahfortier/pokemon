@@ -10,14 +10,15 @@ from scripts.util import index_swap
 def _attack_substitution(attack: str) -> str:
     if attack is None or attack == '':
         raise Exception()
+
     # Ion Deluge was combined into Electrify
-    elif attack == 'ION_DELUGE':
+    if attack == 'ION_DELUGE':
         return 'ELECTRIFY'
     # Intentional spelling change
     elif attack == 'JUDGMENT':
         return 'JUDGEMENT'
-    else:
-        return attack
+
+    return attack
 
 
 # Replaces the learnable move with an alternative if applicable
@@ -27,6 +28,7 @@ def learnable_attack_substitution(attack: str) -> str:
     if attack in ['AFTER_YOU', 'ALLY_SWITCH', 'FOLLOW_ME', 'FRUSTRATION', 'HELPING_HAND', 'INSTRUCT', 'QUASH',
                   'RAGE_POWDER', 'RETURN', 'SPOTLIGHT', 'WIDE_GUARD']:
         return ''
+
     return attack
 
 
@@ -359,8 +361,8 @@ def name_substitution(num: int) -> str:
         return "Nidoran F"
     elif num == 32:
         return "Nidoran M"
-    if num == 669:
-        # Flabebe has a stupid name with stupid special characters
+    # Flabebe has a stupid name with stupid special characters
+    elif num == 669:
         return "Flabebe"
     # Meltan/Melmetal are not currently in PokeAPI and are just using placeholder information (figured would be less
     # confusing if I included their names though)
@@ -425,17 +427,24 @@ def stat_substitution(num: int, stats: List[int]) -> None:
     # Decrease Absol's attack since it has an evolution now
     if num == 359:
         stats[Stat.ATTACK.value] -= 30
+    # Use Rotom's alternate form stats
+    elif num == 479:
+        stats[Stat.ATTACK.value] += 15
+        stats[Stat.DEFENSE.value] += 30
+        stats[Stat.SP_ATTACK.value] += 10
+        stats[Stat.SP_DEFENSE.value] += 30
+        stats[Stat.SPEED.value] -= 5
     # Use Charizard's stats with modifications
-    if num == AddedPokes.MEGA_CHARIZARD.value:
+    elif num == AddedPokes.MEGA_CHARIZARD.value:
         index_swap(stats, Stat.ATTACK.value, Stat.SP_ATTACK.value)
         index_swap(stats, Stat.DEFENSE.value, Stat.SP_DEFENSE.value)
         stats[Stat.ATTACK.value] += 10
         stats[Stat.SPEED.value] -= 10
     # Use Absol's stats with increase speed
-    if num == AddedPokes.MEGA_ABSOL.value:
+    elif num == AddedPokes.MEGA_ABSOL.value:
         stats[Stat.SPEED.value] += 20
     # Decrease mega attack stats
-    if num == AddedPokes.MEGA_BANETTE.value:
+    elif num == AddedPokes.MEGA_BANETTE.value:
         stats[Stat.ATTACK.value] -= 35
         stats[Stat.SP_ATTACK.value] -= 10
 
