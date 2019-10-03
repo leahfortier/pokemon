@@ -851,9 +851,8 @@ Cocoon
 28 21.8 A steel-hard shell protects its tender body. It quietly endures hardships while awaiting evolution.
 3840
 BUG NONE
-2
+1
 0 HARDEN
-1 HARDEN
 3
 BUG_BITE
 IRON_DEFENSE
@@ -975,9 +974,8 @@ Cocoon
 24 22.0 While awaiting evolution, it hides from predators under leaves and in nooks of branches.
 3840
 BUG NONE
-2
+1
 0 HARDEN
-1 HARDEN
 3
 BUG_BITE
 IRON_DEFENSE
@@ -23103,9 +23101,8 @@ Cocoon
 24 22.0 It wraps silk around the branches of a tree. It drinks rainwater on its silk while awaiting evolution.
 3840
 BUG NONE
-2
+1
 0 HARDEN
-1 HARDEN
 3
 BUG_BITE
 IRON_DEFENSE
@@ -23198,9 +23195,8 @@ Cocoon
 28 25.4 It never forgets any attack it endured while in the cocoon. After evolution, it seeks payback.
 3840
 BUG NONE
-2
+1
 0 HARDEN
-1 HARDEN
 3
 BUG_BITE
 IRON_DEFENSE
