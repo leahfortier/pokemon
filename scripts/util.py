@@ -3,6 +3,8 @@
 
 from typing import List
 
+import time
+
 poke = u'é'
 right_tick = u'\u2019'
 dashy = u'\u2014'
@@ -62,3 +64,16 @@ def replace_special(s: str) -> str:
     s = s.replace(left_quote, "\"")
     s = s.replace(right_quote, "\"")
     return s
+
+
+# Basic timer class that prints elapsed time
+class Timer:
+    def __init__(self):
+        self.start_time = time.time()
+
+    def print(self):
+        end_time = time.time()
+        total_seconds = int(end_time - self.start_time)
+        minutes = total_seconds // 60
+        seconds = total_seconds % 60
+        print(minutes, "Minutes,", seconds, "Seconds")

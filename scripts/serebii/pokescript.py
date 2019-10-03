@@ -1,7 +1,6 @@
 # -*- coding: latin-1 -*-
 
 import math
-import time
 
 import re
 import requests
@@ -12,7 +11,7 @@ from scripts.serebii.form_config import FormConfig
 from scripts.serebii.parser import Parser
 from scripts.substitution import attack_substitution, ability_substitution, type_substitution, \
     learnable_attack_additions, gender_substitution, stat_substitution
-from scripts.util import namesies, remove_prefix, remove_empty, index_swap, replace_special, dashy
+from scripts.util import namesies, remove_prefix, remove_empty, index_swap, replace_special, dashy, Timer
 from scripts.serebii.parse_util import get_types, normalize_form
 
 
@@ -44,7 +43,7 @@ def get_base_exp_map():
 
 
 with open("../temp.txt", "w") as f:
-    start_time = time.time()
+    timer = Timer()
 
     base_exp_map = get_base_exp_map()
     for num in range(1, list(AddedPokes)[-1].value + 1):
@@ -542,8 +541,4 @@ with open("../temp.txt", "w") as f:
 
         f.write('\n')
 
-    end_time = time.time()
-    total_seconds = int(end_time - start_time)
-    minutes = total_seconds // 60
-    seconds = total_seconds % 60
-    print(str(minutes) + " Minutes, " + str(seconds) + " Seconds")
+    timer.print()
