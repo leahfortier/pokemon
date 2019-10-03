@@ -60,9 +60,6 @@ public class PokemonInfoTest extends BaseTest {
 
     @Test
     public void levelUpMovesTest() {
-        // Evolution flag must be less than zero
-        TestUtils.assertGreater("", 0, PokemonInfo.EVOLUTION_LEVEL_LEARNED);
-
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
             PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
 
@@ -75,8 +72,7 @@ public class PokemonInfoTest extends BaseTest {
                 String message = StringUtils.spaceSeparated(pokemonInfo.getName(), level, levelUpMove.getMove().getName());
 
                 // Make sure level is valid
-                boolean inRange = level >= 0 && level <= PartyPokemon.MAX_LEVEL;
-                Assert.assertTrue(message, inRange || level == PokemonInfo.EVOLUTION_LEVEL_LEARNED);
+                TestUtils.assertInclusiveRange(message, 0, 100, level);
 
                 // Level up moves must be in ascending order
                 Assert.assertTrue(message, level >= previousLevel);
@@ -93,14 +89,8 @@ public class PokemonInfoTest extends BaseTest {
 
     @Test
     public void duplicateLevelUpMovesTest() {
-        List<PokemonMovePair> defaultLevelExceptions = Arrays.asList(
-                new PokemonMovePair(PokemonNamesies.METAPOD, AttackNamesies.HARDEN),
-                new PokemonMovePair(PokemonNamesies.KAKUNA, AttackNamesies.HARDEN),
-                new PokemonMovePair(PokemonNamesies.SILCOON, AttackNamesies.HARDEN),
-                new PokemonMovePair(PokemonNamesies.CASCOON, AttackNamesies.HARDEN)
-        );
-
-        List<PokemonMovePair> actualLevelExceptions = Arrays.asList(
+        // The following Pokemon can learn these moves more than once
+        List<PokemonMovePair> exceptions = Arrays.asList(
                 new PokemonMovePair(PokemonNamesies.SMEARGLE, AttackNamesies.SKETCH),
                 new PokemonMovePair(PokemonNamesies.PUMPKABOO, AttackNamesies.TRICK_OR_TREAT),
                 new PokemonMovePair(PokemonNamesies.GOURGEIST, AttackNamesies.TRICK_OR_TREAT)
@@ -118,23 +108,24 @@ public class PokemonInfoTest extends BaseTest {
 
                 // We've seen this attack already
                 if (map.containsKey(attack)) {
-                    String message = StringUtils.spaceSeparated(pokemonInfo.getName(), currentLevel, attack.getName());
                     List<Integer> levels = map.get(attack);
+                    String message = StringUtils.spaceSeparated(pokemonInfo.getName(), currentLevel, attack.getName(), levels);
 
                     // No duplicates for the same level/move combination
                     Assert.assertFalse(message, levels.contains(currentLevel));
 
-                    if (levelUpMove.isDefaultLevel() && !defaultLevelExceptions.contains(currentPair)) {
-                        Assert.assertTrue(currentLevel == 0 || currentLevel == PokemonInfo.EVOLUTION_LEVEL_LEARNED);
+                    // Default moves should be first in the order, and there can be no default level collisions
+                    Assert.assertFalse(message, levelUpMove.isDefaultLevel());
+
+                    // However, it is possible to learn a move at a regular level as well as a default level
+                    if (!exceptions.contains(currentPair)) {
+                        // Confirm again that the current level is not default (this is kind of unnecessary oh well)
+                        Assert.assertTrue(message, currentLevel > 1);
+
+                        // There should be exactly one collision at this point and IT BETTER BE A DEFAULT LEVEL
+                        Assert.assertEquals(message, 1, levels.size());
                         for (Integer level : levels) {
-                            Assert.assertTrue(message, level > 1);
-                            Assert.assertFalse(message, LevelUpMove.isDefaultLevel(level));
-                        }
-                    } else if (!levelUpMove.isDefaultLevel() && !actualLevelExceptions.contains(currentPair)) {
-                        Assert.assertTrue(currentLevel > 0);
-                        for (Integer level : levels) {
-                            Assert.assertTrue(message + " " + level, level == 0 || level == PokemonInfo.EVOLUTION_LEVEL_LEARNED);
-                            Assert.assertTrue(message + " " + level, LevelUpMove.isDefaultLevel(level));
+                            Assert.assertTrue(message, LevelUpMove.isDefaultLevel(level));
                         }
                     }
                 }
@@ -145,20 +136,21 @@ public class PokemonInfoTest extends BaseTest {
             for (Entry<AttackNamesies, List<Integer>> entry : map.entrySet()) {
                 AttackNamesies attack = entry.getKey();
                 PokemonMovePair pair = new PokemonMovePair(pokemonInfo.namesies(), attack);
-                if (actualLevelExceptions.contains(pair)) {
+                if (exceptions.contains(pair)) {
                     continue;
                 }
 
                 List<Integer> levels = entry.getValue();
                 String message = StringUtils.spaceSeparated(pokemonInfo.getName(), attack.getName(), levels.size());
-                Assert.assertTrue(message, levels.size() > 0 && levels.size() <= 2);
+                TestUtils.assertInclusiveRange(message, 1, 2, levels.size());
             }
         }
 
         // Default level tests
-        Assert.assertTrue(LevelUpMove.isDefaultLevel(0));
         Assert.assertTrue(LevelUpMove.isDefaultLevel(PokemonInfo.EVOLUTION_LEVEL_LEARNED));
-        for (int level = 1; level <= PartyPokemon.MAX_LEVEL; level++) {
+        Assert.assertTrue(LevelUpMove.isDefaultLevel(0)); // Evolution level
+        Assert.assertTrue(LevelUpMove.isDefaultLevel(1)); // Default level
+        for (int level = 2; level <= PartyPokemon.MAX_LEVEL; level++) {
             Assert.assertFalse(LevelUpMove.isDefaultLevel(level));
         }
     }
