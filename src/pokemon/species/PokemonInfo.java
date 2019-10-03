@@ -33,7 +33,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     private static final long serialVersionUID = 1L;
 
     public static final int NUM_POKEMON = 825;
-    public static final int EVOLUTION_LEVEL_LEARNED = -1;
+    public static final int EVOLUTION_LEVEL_LEARNED = 0;
 
     // All starters
     private static final PokemonNamesies[] starterPokemon = new PokemonNamesies[] {

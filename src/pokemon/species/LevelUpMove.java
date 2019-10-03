@@ -24,6 +24,6 @@ public class LevelUpMove {
     }
 
     public static boolean isDefaultLevel(int level) {
-        return level == 0 || level == PokemonInfo.EVOLUTION_LEVEL_LEARNED;
+        return level == PokemonInfo.EVOLUTION_LEVEL_LEARNED || level == 1;
     }
 }

@@ -265,18 +265,11 @@ class Parser:
 
             # Level-up moves
             if move.learn_method == 'level-up':
-                # 0 -> -1 is for learning on evolution
-                if move.level_learned == 0:
-                    move.level_learned = -1
-                # 1 -> 0 is for default moves
-                elif move.level_learned == 1:
-                    move.level_learned = 0
-
                 # Potentially replace this move with another one
                 attack_name = attack_substitution(self.num, attack_name)
                 if attack_name == '':
                     # Should only be removing default moves
-                    assert move.level_learned == 0
+                    assert move.level_learned == 1
                     continue
 
                 level_up_moves.append(str(move.level_learned) + " " + attack_name)
@@ -294,9 +287,9 @@ class Parser:
                 raise Exception('Unknown move learn method ' + move.learn_method + ' for ' + move.name)
 
         # Remove duplicates for evolution moves and default moves (only keep evolution move)
-        evolution_moves = [remove_prefix(move, "-1 ") for move in level_up_moves if move.startswith("-1 ")]
+        evolution_moves = [remove_prefix(move, "0 ") for move in level_up_moves if move.startswith("0 ")]
         for move_name in evolution_moves:
-            level_up_moves.remove("0 " + move_name)
+            level_up_moves.remove("1 " + move_name)
 
         # Level-up moves are sorted by level
         level_up_moves.sort(key = _attack_level_sort)
