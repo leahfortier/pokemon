@@ -78,7 +78,7 @@ public class PokemonInfoTest extends BaseTest {
                 Assert.assertTrue(message, level >= previousLevel);
                 previousLevel = level;
 
-                if (level == 0) {
+                if (LevelUpMove.isDefaultLevel(level)) {
                     hasDefault = true;
                 }
             }

@@ -478,11 +478,20 @@ public class UpdateGen {
         PrintStream out = FileIO.openOutputFile("temp2.txt");
         PrintStream nullOut = new PrintStream(new NullOutputStream());
 
+        // Change name to whichever Pokemon in2 starts from
         for (int i = 1; i < PokemonNamesies.BULBASAUR.ordinal(); i++) {
             outputSinglePokemon(in1, nullOut);
         }
 
-        while (in2.hasNext()) {
+        for (int i = 1; in2.hasNext(); i++) {
+            // Don't print differences for Meltan/Melmetal
+            PokemonNamesies pokemonNamesies = PokemonNamesies.values()[i];
+            if (pokemonNamesies == PokemonNamesies.MELTAN || pokemonNamesies == PokemonNamesies.MELMETAL) {
+                outputSinglePokemon(in1, nullOut);
+                outputSinglePokemon(in2, nullOut);
+                continue;
+            }
+
             StringAppender diffs = new StringAppender();
 
             int num = in1.nextInt(); in1.nextLine();
