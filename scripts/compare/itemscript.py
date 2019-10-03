@@ -4,7 +4,8 @@
 import requests
 from lxml import html
 
-from scripts.util import poke, get_image_name, check_header, add_value
+from scripts.serebii.parse_util import check_header, add_value, get_image_name
+from scripts.util import poke
 
 
 def update_table(table, header):

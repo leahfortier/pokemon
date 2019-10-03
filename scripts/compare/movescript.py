@@ -4,7 +4,7 @@
 import requests
 from lxml import html
 
-from scripts.util import get_image_name, add_row_values
+from scripts.serebii.parse_util import get_image_name, add_row_values
 
 f = open("moves.in", "r")
 out = open("moves.out", "w")

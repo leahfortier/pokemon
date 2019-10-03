@@ -278,7 +278,7 @@ public class UpdateGen {
             }
         }
 
-        FileIO.overwriteFile(Folder.SCRIPTS + "ps-images.in", out.toString());
+        FileIO.overwriteFile(Folder.SCRIPTS_COMPARE + "ps-images.in", out.toString());
     }
 
     private static void appendNotExists(StringAppender out, int num, String form, String suffix) {
@@ -464,27 +464,9 @@ public class UpdateGen {
 
     // If the two lines are different, appends "diffName: line1 -> line2" to the diffs builder
     private static void diff(String line1, String line2, String diffName, StringAppender diffs) {
-        if (!line1.equals(line2) && !ignoreDiff(line1, line2, diffName)) {
+        if (!line1.equals(line2)) {
             diffs.appendLine(diffName + ":\n\t" + line1 + " -> " + line2);
         }
-    }
-
-    private static boolean ignoreDiff(String line1, String line2, String diffName) {
-        switch (diffName) {
-            case "Male Ratio":
-                switch (line1) {
-                    case "87":
-                        return line2.equals("88");
-                    case "25":
-                        return line2.equals("24");
-                    case "75":
-                        return line2.equals("76");
-                    case "13":
-                        return line2.equals("12");
-                }
-        }
-
-        return false;
     }
 
     // Compares the pokemon info to info in a new file and outputs the differences
@@ -557,23 +539,54 @@ public class UpdateGen {
         out.println(in.nextLine()); // New Line
     }
 
+    // Outputs a single Pokemon, but reads from two input sources (only one is printed by default)
+    private static void outputSinglePokemon(Scanner in, Scanner in2, PrintStream out) {
+        out.println(in.nextLine()); in2.nextLine(); // Num
+        out.println(in.nextLine()); in2.nextLine(); // Name
+        out.println(in.nextLine()); in2.nextLine(); // Base Stats
+        out.println(in.nextLine()); in2.nextLine(); // Base Exp
+        out.println(in.nextLine()); in2.nextLine(); // Growth Rate
+        out.println(in.nextLine()); in2.nextLine(); // Types
+        out.println(in.nextLine()); in2.nextLine(); // Catch Rate
+        out.println(in.nextLine()); in2.nextLine(); // EVs
+        readEvolution(in, out); readEvolution(in2); // Evolution
+        readHoldItems(in, out); readHoldItems(in2); // Wild Items
+        out.println(in.nextLine()); in2.nextLine(); // Male Ratio
+        out.println(in.nextLine()); in2.nextLine(); // Abilities
+        out.println(in.nextLine()); in2.nextLine(); // Classification
+        out.println(in.nextLine()); in2.nextLine(); // Height Weight FlavorText
+        out.println(in.nextLine()); in2.nextLine(); // Egg Steps
+        out.println(in.nextLine()); in2.nextLine(); // Egg Groups
+        readMoves(in, out); readMoves(in2);         // Level Up Moves
+        readMoves(in, out); readMoves(in2);         // Learnable Moves
+        out.println(in.nextLine()); in2.nextLine(); // New Line
+    }
+
     // Used for editing pokemoninfo.txt
     private static void pokemonInfoStuff() {
         Scanner in = FileIO.openFile(FileName.POKEMON_INFO);
+        Scanner in2 = FileIO.openFile("temp.txt");
         PrintStream out = FileIO.openOutputFile("out.txt");
 
         while (in.hasNext()) {
-            outputSinglePokemon(in, out);
+            outputSinglePokemon(in, in2, out);
         }
     }
 
     private static void readMoves(Scanner in, PrintStream out) {
-        int numMoves = in.nextInt(); in.nextLine();
-        out.println(numMoves); // Number of Moves
+        out.print(readMoves(in));
+    }
 
+    private static String readMoves(Scanner in) {
+        StringAppender moves = new StringAppender();
+
+        int numMoves = in.nextInt(); in.nextLine();
+        moves.appendLine(numMoves + "");     // Number of Moves
         for (int i = 0; i < numMoves; i++) {
-            out.println(in.nextLine()); // Each move
+            moves.appendLine(in.nextLine()); // Each move
         }
+
+        return moves.toString();
     }
 
     private static void readEvolution(Scanner in, PrintStream out) {

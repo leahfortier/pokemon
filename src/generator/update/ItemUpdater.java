@@ -15,8 +15,8 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class ItemUpdater extends GeneratorUpdater {
-    private static final String SCRIPTS_INPUT_FILE_NAME = Folder.SCRIPTS + "items.in";
-    private static final String SCRIPTS_OUTPUT_FILE_NAME = Folder.SCRIPTS + "items.out";
+    private static final String SCRIPTS_INPUT_FILE_NAME = Folder.SCRIPTS_COMPARE + "items.in";
+    private static final String SCRIPTS_OUTPUT_FILE_NAME = Folder.SCRIPTS_COMPARE + "items.out";
 
     private final Map<ItemNamesies, ItemParser> parseItems;
 

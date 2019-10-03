@@ -1,6 +1,6 @@
 import urllib
 
-from scripts.forms import AddedPokes, FormConfig
+from scripts.serebii.form_config import AddedPokes, FormConfig
 
 for num in range(1, list(AddedPokes)[-1].value + 1):
     form_config = FormConfig(num)

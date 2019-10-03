@@ -372,16 +372,34 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Compoundeyes extends Ability implements SimpleStatModifyingEffect {
+    static class CompoundEyes extends Ability implements SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
 
-        Compoundeyes() {
-            super(AbilityNamesies.COMPOUNDEYES, "The Pok\u00e9mon's compound eyes boost its accuracy.");
+        CompoundEyes() {
+            super(AbilityNamesies.COMPOUND_EYES, "The Pok\u00e9mon's compound eyes boost its accuracy.");
         }
 
         @Override
         public boolean isModifyStat(Stat s) {
             return s == Stat.ACCURACY;
+        }
+
+        @Override
+        public double getModifier() {
+            return 1.3;
+        }
+    }
+
+    static class Battery extends Ability implements SimpleStatModifyingEffect {
+        private static final long serialVersionUID = 1L;
+
+        Battery() {
+            super(AbilityNamesies.BATTERY, "Powers up the Pok\u00e9mon's special moves.");
+        }
+
+        @Override
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SP_ATTACK;
         }
 
         @Override
@@ -518,11 +536,11 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Lightningrod extends Ability implements AttackBlocker {
+    static class LightningRod extends Ability implements AttackBlocker {
         private static final long serialVersionUID = 1L;
 
-        Lightningrod() {
-            super(AbilityNamesies.LIGHTNINGROD, "The Pok\u00e9mon draws in all Electric-type moves. Instead of being hit by Electric-type moves, it boosts its Sp. Atk.");
+        LightningRod() {
+            super(AbilityNamesies.LIGHTNING_ROD, "The Pok\u00e9mon draws in all Electric-type moves. Instead of being hit by Electric-type moves, it boosts its Sp. Atk.");
         }
 
         @Override

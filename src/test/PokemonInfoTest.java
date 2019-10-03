@@ -8,9 +8,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.EffortValues;
+import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
 import pokemon.active.PartyPokemon;
+import pokemon.breeding.EggGroup;
 import pokemon.species.BaseStats;
+import pokemon.species.GrowthRate;
 import pokemon.species.LevelUpMove;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
@@ -31,8 +34,8 @@ public class PokemonInfoTest extends BaseTest {
     @Test
     public void totalPokemonTest() {
         // Add one to account for the empty pokemon at the beginning
-        Assert.assertTrue(PokemonNamesies.values().length == PokemonInfo.NUM_POKEMON + 1);
-        Assert.assertTrue(PokemonNamesies.values()[0] == PokemonNamesies.NONE);
+        Assert.assertEquals(PokemonNamesies.values().length, PokemonInfo.NUM_POKEMON + 1);
+        Assert.assertSame(PokemonNamesies.values()[0], PokemonNamesies.NONE);
     }
 
     // Test to confirm each pokemon number corresponds correctly to the ordinal in PokemonNamesies enum
@@ -125,7 +128,7 @@ public class PokemonInfoTest extends BaseTest {
                         Assert.assertTrue(currentLevel == 0 || currentLevel == PokemonInfo.EVOLUTION_LEVEL_LEARNED);
                         for (Integer level : levels) {
                             Assert.assertTrue(message, level > 1);
-                            Assert.assertTrue(message, !LevelUpMove.isDefaultLevel(level));
+                            Assert.assertFalse(message, LevelUpMove.isDefaultLevel(level));
                         }
                     } else if (!levelUpMove.isDefaultLevel() && !actualLevelExceptions.contains(currentPair)) {
                         Assert.assertTrue(currentLevel > 0);
@@ -253,6 +256,7 @@ public class PokemonInfoTest extends BaseTest {
             Assert.assertNotEquals(AbilityNamesies.NO_ABILITY, abilities[0]);
 
             // Make sure no duplicate abilities
+            Assert.assertNotEquals(abilities[0], abilities[1]);
             Set<AbilityNamesies> seen = EnumSet.noneOf(AbilityNamesies.class);
             for (AbilityNamesies ability : abilities) {
                 Assert.assertFalse(seen.contains(ability));
@@ -274,6 +278,11 @@ public class PokemonInfoTest extends BaseTest {
                 } else if (ability == AbilityNamesies.LEVITATE) {
                     Assert.assertFalse(pokemonInfo.isType(Type.FLYING));
                 }
+            }
+
+            // They need it!!! (If this fails change the Run Away case in substitution)
+            if (pokemonInfo.namesies() == PokemonNamesies.PONYTA || pokemonInfo.namesies() == PokemonNamesies.RAPIDASH) {
+                Assert.assertTrue(pokemonInfo.hasAbility(AbilityNamesies.FLAME_BODY));
             }
 
             // Don't worry about it (but really if this fails change the message in Iron Fist)
@@ -385,6 +394,57 @@ public class PokemonInfoTest extends BaseTest {
             Assert.assertEquals(1, shedinja.getHP());
             Assert.assertEquals(1, shedinja.getMaxHP());
         }
+    }
+
+    @Test
+    public void meltanTest() {
+        // These Pokemon are not in the script API and it's probably really easy to accidentally overwrite their
+        // data since the script is giving them placeholder information
+        PokemonInfo meltan = PokemonNamesies.MELTAN.getInfo();
+        PokemonInfo melmetal = PokemonNamesies.MELMETAL.getInfo();
+
+        Assert.assertEquals("46 65 65 55 35 34", meltan.getStats().toString());
+        Assert.assertEquals("135 143 143 80 65 34", melmetal.getStats().toString());
+
+        Assert.assertArrayEquals(new int[] { 0, 1, 0, 0, 0, 0 }, meltan.getGivenEVs());
+        Assert.assertArrayEquals(new int[] { 0, 3, 0, 0, 0, 0 }, melmetal.getGivenEVs());
+
+        Assert.assertEquals(135, meltan.getBaseEXP());
+        Assert.assertEquals(270, melmetal.getBaseEXP());
+
+        Assert.assertEquals("0'08\"", meltan.getHeightString());
+        Assert.assertEquals("8'02\"", melmetal.getHeightString());
+
+        TestUtils.assertEquals(17.6, meltan.getWeight());
+        TestUtils.assertEquals(1763.7, melmetal.getWeight());
+
+        Assert.assertEquals("Magnet Pull", meltan.getAbilitiesString());
+        Assert.assertEquals("Iron Fist", melmetal.getAbilitiesString());
+
+        meltanTest(meltan);
+        meltanTest(melmetal);
+    }
+
+    // Used for info that is true for both Meltan and Melmetal
+    private void meltanTest(PokemonInfo pokemonInfo) {
+
+        Assert.assertTrue(pokemonInfo.isType(Type.STEEL));
+        Assert.assertFalse(pokemonInfo.getType().isDualTyped());
+
+        Assert.assertEquals(3, pokemonInfo.getCatchRate());
+        Assert.assertEquals(30720, pokemonInfo.getEggSteps());
+        Assert.assertEquals("Hex Nut", pokemonInfo.getClassification());
+        Assert.assertEquals(GrowthRate.SLOW, pokemonInfo.getGrowthRate());
+        Assert.assertEquals(Gender.GENDERLESS_CONSTANT, pokemonInfo.getMaleRatio());
+
+        Assert.assertArrayEquals(new EggGroup[] { EggGroup.UNDISCOVERED, EggGroup.NONE }, pokemonInfo.getEggGroups());
+
+        Assert.assertEquals(PokemonNamesies.MELTAN, pokemonInfo.getBaseEvolution());
+
+        // Probably a good enough indicator that the moves weren't changed
+        Assert.assertTrue(pokemonInfo.canLearnMove(AttackNamesies.THUNDER_SHOCK));
+        Assert.assertTrue(pokemonInfo.canLearnMove(AttackNamesies.ACID_ARMOR));
+        Assert.assertTrue(pokemonInfo.canLearnMove(AttackNamesies.FLASH_CANNON));
     }
 
     private static class PokemonMovePair {

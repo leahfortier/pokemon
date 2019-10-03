@@ -871,7 +871,7 @@ NONE
 1
 5 SILVER_POWDER
 50
-COMPOUNDEYES TINTED_LENS
+COMPOUND_EYES TINTED_LENS
 Butterfly
 43 70.5 It loves the honey of flowers and can locate flower patches that have even tiny amounts of pollen.
 3840
@@ -947,7 +947,7 @@ LEVEL KAKUNA 7
 0
 50
 SHIELD_DUST RUN_AWAY
-Hairy
+Hairy Bug
 12 7.1 It eats its weight in leaves every day. It fends off attackers with the needle on its head.
 3840
 BUG NONE
@@ -1806,7 +1806,7 @@ ITEM SILPH_SURFER SUN_STONE
 50 ORAN_BERRY
 5 LIGHT_BALL
 50
-STATIC LIGHTNINGROD
+STATIC LIGHTNING_ROD
 Mouse
 16 13.2 It occasionally uses an electric shock to recharge a fellow Pikachu that is in a weakened state.
 2560
@@ -1897,7 +1897,7 @@ NONE
 1
 50 ORAN_BERRY
 50
-STATIC LIGHTNINGROD
+STATIC LIGHTNING_ROD
 Mouse
 31 66.1 Its tail discharges electricity into the ground, protecting it from getting shocked.
 2560
@@ -3885,7 +3885,7 @@ BUG POISON
 LEVEL VENOMOTH 31
 0
 50
-COMPOUNDEYES TINTED_LENS
+COMPOUND_EYES TINTED_LENS
 Insect
 39 66.1 Its big eyes are actually clusters of tiny eyes. At night, its kind is drawn by light.
 5120
@@ -8841,7 +8841,7 @@ TIME NIGHT LEVEL GARA_GARA 28
 1
 5 THICK_CLUB
 50
-ROCK_HEAD LIGHTNINGROD
+ROCK_HEAD LIGHTNING_ROD
 Lonely
 16 14.3 When it thinks of its dead mother, it cries. Its crying makes the skull it wears rattle hollowly.
 5120
@@ -8933,7 +8933,7 @@ NONE
 1
 5 THICK_CLUB
 50
-ROCK_HEAD LIGHTNINGROD
+ROCK_HEAD LIGHTNING_ROD
 Bone Keeper
 39 99.2 From its birth, this savage Pok\u00e9mon constantly holds bones. It is skilled in using them as weapons.
 5120
@@ -9487,7 +9487,7 @@ LEVEL RHYDON 42
 1
 50 PROTECTOR
 50
-LIGHTNINGROD ROCK_HEAD
+LIGHTNING_ROD ROCK_HEAD
 Spikes
 39 253.5 Its powerful tackles can destroy anything. However, it is too slow witted to help people work.
 5120
@@ -9586,7 +9586,7 @@ ITEM RHYPERIOR PROTECTOR
 1
 50 PROTECTOR
 50
-LIGHTNINGROD ROCK_HEAD
+LIGHTNING_ROD ROCK_HEAD
 Drill
 75 264.6 Standing on its hind legs freed its forelegs and made it smarter. It is very forgetful, however.
 5120
@@ -10318,8 +10318,8 @@ ITEM STARMIE WATER_STONE
 50 STARDUST
 5 STAR_PIECE
 -1
-ANALYTIC NATURAL_CURE
-Starshape
+NATURAL_CURE ANALYTIC
+Star Shape
 31 76.1 If its body is torn, it can grow back if the red core remains. The core flashes at midnight.
 5120
 WATER_3 NONE
@@ -10394,7 +10394,7 @@ NONE
 50 STARDUST
 5 STAR_PIECE
 -1
-ANALYTIC NATURAL_CURE
+NATURAL_CURE ANALYTIC
 Mysterious
 43 176.4 At the center of its body is a red core, which sends mysterious radio signals into the night sky.
 5120
@@ -10674,7 +10674,7 @@ NONE
 100 ASPEAR_BERRY
 0
 OBLIVIOUS FOREWARN
-Humanshape
+Human Shape
 55 89.5 Its cries sound like human speech. However, it is impossible to tell what it is trying to say.
 6400
 HUMAN_LIKE NONE
@@ -10952,7 +10952,7 @@ NONE
 0
 50
 HYPER_CUTTER MOLD_BREAKER
-Stagbeetle
+Stag Beetle
 59 121.3 It grips prey with its pincers until the prey is torn in half. What it can't tear, it tosses far.
 6400
 BUG NONE
@@ -14899,7 +14899,7 @@ ITEM PIKACHU SUN_STONE
 1
 50 ORAN_BERRY
 50
-STATIC LIGHTNINGROD
+STATIC LIGHTNING_ROD
 Tiny Mouse
 12 4.4 The electric sacs in its cheeks are small. If even a little electricity leaks, it becomes shocked.
 2560
@@ -15348,8 +15348,8 @@ PSYCHIC FLYING
 LEVEL XATU 25
 0
 50
-SYNCHRONIZE MAGIC_BOUNCE
-Little Bird
+SYNCHRONIZE EARLY_BIRD
+Tiny Bird
 8 4.4 It picks food from cactus plants, deftly avoiding buds and spines. It seems to skip about to move.
 5120
 FLYING NONE
@@ -15442,7 +15442,7 @@ PSYCHIC FLYING
 NONE
 0
 50
-SYNCHRONIZE MAGIC_BOUNCE
+SYNCHRONIZE EARLY_BIRD
 Mystic
 59 33.1 This odd Pok\u00e9mon can see both the past and the future. It eyes the sun's movement all day.
 5120
@@ -15872,7 +15872,7 @@ LEVEL AZUMARILL 18
 0
 50
 THICK_FAT HUGE_POWER
-Aquamouse
+Aqua Mouse
 16 18.7 The oil-filled end of its tail floats on water. It keeps Marill from drowning even in a strong current.
 2560
 WATER_1 FAIRY
@@ -15956,7 +15956,7 @@ NONE
 0
 50
 THICK_FAT HUGE_POWER
-Aquarabbit
+Aqua Rabbit
 31 62.8 It can spend all day in water, since it can inhale and store a large volume of air.
 2560
 WATER_1 FAIRY
@@ -16721,7 +16721,7 @@ MOVE YANMEGA ANCIENT_POWER
 1
 5 WIDE_LENS
 50
-SPEED_BOOST COMPOUNDEYES
+SPEED_BOOST COMPOUND_EYES
 Clear Wing
 47 83.8 It can hover in one spot by flapping its wings at high speed. It flits about to guard its territory.
 5120
@@ -17875,7 +17875,7 @@ TIME NIGHT ITEM GLISCOR RAZOR_FANG
 5 RAZOR_FANG
 50
 HYPER_CUTTER SAND_VEIL
-Flyscorpion
+Fly Scorpion
 43 142.9 It glides as if sliding. It startles foes by clamping on to their faces, then jabs with its poison stinger.
 5120
 BUG NONE
@@ -18551,7 +18551,7 @@ NONE
 0
 50
 SWARM GUTS
-Singlehorn
+Single Horn
 59 119.0 It loves sweet honey. To keep all the honey to itself, it hurls rivals away with its prized horn.
 6400
 BUG NONE
@@ -22976,7 +22976,7 @@ NONE
 5 MAX_REVIVE
 50
 PICKUP GLUTTONY
-Rush
+Rushing
 20 71.6 It charges prey at speeds over 60 mph. However, because it can only run straight, it often fails.
 3840
 FIELD NONE
@@ -23219,7 +23219,7 @@ NONE
 5 SILVER_POWDER
 5 SHED_SHELL
 100
-SHIELD_DUST COMPOUNDEYES
+SHIELD_DUST COMPOUND_EYES
 Poison Moth
 47 69.7 Toxic powder is scattered with each flap. At night, it is known to strip leaves off trees lining boulevards.
 3840
@@ -23692,7 +23692,7 @@ NONE
 5 POWER_HERB
 50
 CHLOROPHYLL EARLY_BIRD
-Wickid
+Wicked
 51 131.4 By flapping its leafy fan, it can whip up gusts of 100 ft/second that can level houses.
 3840
 FIELD GRASS
@@ -23785,7 +23785,7 @@ LEVEL SWELLOW 22
 5 CHARTI_BERRY
 50
 GUTS SCRAPPY
-TinySwallow
+Tiny Swallow
 12 5.1 It has a gutsy spirit that makes it bravely take on tough foes. It flies in search of warm climates.
 3840
 FLYING NONE
@@ -25040,7 +25040,7 @@ EXTRA SHEDINJA 20 LEVEL NINJASK 20
 1
 5 SOFT_SAND
 50
-COMPOUNDEYES RUN_AWAY
+COMPOUND_EYES RUN_AWAY
 Trainee
 20 12.1 It grows underground, sensing its surroundings using antennae instead of its virtually blind eyes.
 3840
@@ -26050,7 +26050,7 @@ ITEM YAMIRAMI RUBY
 1
 5 WIDE_LENS
 50
-KEEN_EYE PRANKSTER
+KEEN_EYE STALL
 Darkness
 20 24.3 It hides in the darkness of caves. Its diet of gems has transformed its eyes into gemstones.
 6400
@@ -26775,7 +26775,7 @@ ELECTRIC NO_TYPE
 LEVEL MANECTRIC 26
 0
 50
-STATIC LIGHTNINGROD
+STATIC LIGHTNING_ROD
 Lightning
 24 33.5 Using electricity stored in its fur, it stimulates its muscles to heighten its reaction speed.
 5120
@@ -26852,7 +26852,7 @@ ELECTRIC NO_TYPE
 NONE
 0
 50
-STATIC LIGHTNINGROD
+STATIC LIGHTNING_ROD
 Discharge
 59 88.6 It discharges electricity from its mane. It creates a thundercloud overhead to drop lightning bolts.
 5120
@@ -26939,7 +26939,7 @@ NONE
 1
 5 CELL_BATTERY
 50
-STATIC LIGHTNINGROD
+LIGHTNING_ROD NO_ABILITY
 Cheering
 16 9.3 It cheers on friends with pom-poms made of sparks. It drains power from telephone poles.
 5120
@@ -27021,7 +27021,7 @@ NONE
 1
 5 CELL_BATTERY
 50
-STATIC VOLT_ABSORB
+VOLT_ABSORB NO_ABILITY
 Cheering
 16 9.3 It cheers on friends. If its friends are losing, its body lets off more and more sparks.
 5120
@@ -27103,7 +27103,7 @@ NONE
 1
 5 BRIGHT_POWDER
 100
-PRANKSTER SWARM
+SWARM PRANKSTER
 Firefly
 28 39.0 It communicates with others by lighting up its rear at night. It loves Illumise's sweet aroma.
 3840
@@ -38943,7 +38943,7 @@ NONE
 5 POISON_BARB
 50
 BATTLE_ARMOR SNIPER
-Ogre Scorp
+Ogre Scorpion
 51 135.6 Possessing a sturdy build, it takes pride in its strength, taking down foes without using toxins.
 5120
 BUG WATER_3
@@ -39571,7 +39571,7 @@ LEVEL ABOMASNOW 40
 5 NEVER_MELT_ICE
 50
 SNOW_WARNING SOUNDPROOF
-Frosted Tree
+Frost Tree
 39 111.3 Seemingly curious about people, they gather around footsteps they find on snowy mountains.
 5120
 MONSTER GRASS
@@ -39648,7 +39648,7 @@ NONE
 5 NEVER_MELT_ICE
 50
 SNOW_WARNING SOUNDPROOF
-Frosted Tree
+Frost Tree
 87 298.7 They appear when the snow flowers bloom. When the petals fall, they retreat to places unknown again.
 5120
 MONSTER GRASS
@@ -40044,7 +40044,7 @@ NONE
 1
 50 PROTECTOR
 50
-LIGHTNINGROD SOLID_ROCK
+LIGHTNING_ROD SOLID_ROCK
 Drill
 94 623.5 It can launch a rock held in its hand like a missile by tightening then expanding muscles instantly.
 5120
@@ -40816,7 +40816,7 @@ NONE
 5 RAZOR_FANG
 50
 HYPER_CUTTER SAND_VEIL
-Fang Scorp
+Fang Scorpion
 79 93.7 If it succeeds in catching even a faint breeze properly, it can circle the globe without flapping once.
 5120
 BUG NONE
@@ -43808,7 +43808,7 @@ NORMAL NO_TYPE
 NONE
 0
 50
-ANALYTIC KEEN_EYE
+KEEN_EYE ANALYTIC
 Lookout
 43 59.5 When they see an enemy, their tails stand high, and they spit the seeds of berries stored in their cheek pouches.
 5120
@@ -45269,7 +45269,7 @@ LEVEL ZEBSTRIKA 27
 1
 50 CHERI_BERRY
 50
-LIGHTNINGROD MOTOR_DRIVE
+LIGHTNING_ROD MOTOR_DRIVE
 Electrified
 31 65.7 Its mane shines when it discharges electricity. They use their flashing manes to communicate with one another.
 5120
@@ -45341,7 +45341,7 @@ NONE
 1
 50 CHERI_BERRY
 50
-LIGHTNINGROD MOTOR_DRIVE
+LIGHTNING_ROD MOTOR_DRIVE
 Thunderbolt
 63 175.3 They have lightning-like movements. When Zebstrika run at full speed, the sound of thunder reverberates.
 5120
@@ -45655,7 +45655,7 @@ UNAWARE KLUTZ
 Bat
 16 4.6 Its habitat is dark forests and caves. It emits ultrasonic waves from its nose to learn about its surroundings.
 3840
-FIELD FLYING
+FLYING FIELD
 14
 0 CONFUSION
 4 ODOR_SLEUTH
@@ -45752,7 +45752,7 @@ UNAWARE KLUTZ
 Courting
 35 23.1 It emits sound waves of various frequencies from its nose, including some powerful enough to destroy rocks.
 3840
-FIELD FLYING
+FLYING FIELD
 17
 0 CONFUSION
 0 ODOR_SLEUTH
@@ -47262,7 +47262,7 @@ PRANKSTER INFILTRATOR
 Cotton Puff
 12 1.3 When attacked, it escapes by shooting cotton from its body. The cotton serves as a decoy to distract the attacker.
 5120
-GRASS FAIRY
+FAIRY GRASS
 17
 0 ABSORB
 0 FAIRY_WIND
@@ -47340,7 +47340,7 @@ PRANKSTER INFILTRATOR
 Windveiled
 28 14.6 Like the wind, it can slip through any gap, no matter how small. It leaves balls of white fluff behind.
 5120
-GRASS FAIRY
+FAIRY GRASS
 8
 0 GROWTH
 0 LEECH_SEED
@@ -47558,7 +47558,7 @@ NONE
 5 DEEP_SEA_TOOTH
 5 DEEP_SEA_SCALE
 50
-RECKLESS ROCK_HEAD
+RECKLESS ADAPTABILITY
 Hostile
 39 39.7 Red and blue Basculin get along so poorly, they'll start fighting instantly. These Pok\u00e9mon are very hostile.
 10240
@@ -51499,7 +51499,7 @@ BUG ELECTRIC
 LEVEL GALVANTULA 36
 0
 50
-COMPOUNDEYES UNNERVE
+COMPOUND_EYES UNNERVE
 Attaching
 4 1.3 Joltik that live in cities have learned a technique for sucking electricity from the outlets in houses.
 5120
@@ -51577,7 +51577,7 @@ BUG ELECTRIC
 NONE
 0
 50
-COMPOUNDEYES UNNERVE
+COMPOUND_EYES UNNERVE
 EleSpider
 31 31.5 When attacked, they create an electric barrier by spitting out many electrically charged threads.
 5120
@@ -52215,7 +52215,7 @@ PSYCHIC NO_TYPE
 LEVEL BEHEEYEM 42
 0
 50
-ANALYTIC SYNCHRONIZE
+SYNCHRONIZE ANALYTIC
 Cerebral
 20 19.8 It uses its strong psychic power to squeeze its opponent's brain, causing unendurable headaches.
 5120
@@ -52310,7 +52310,7 @@ PSYCHIC NO_TYPE
 NONE
 0
 50
-ANALYTIC SYNCHRONIZE
+SYNCHRONIZE ANALYTIC
 Cerebral
 39 76.1 It can manipulate an opponent's memory. Apparently, it communicates by flashing its three different-colored fingers.
 5120
@@ -53601,7 +53601,7 @@ ROUGH_SKIN SHEER_FORCE
 Cave
 63 306.4 It warms its body by absorbing sunlight with its wings. When its body temperature falls, it can no longer move.
 7680
-DRAGON MONSTER
+MONSTER DRAGON
 16
 0 LEER
 0 SCRATCH
@@ -56095,7 +56095,7 @@ LEVEL QUILLADIN 16
 5 MIRACLE_SEED
 87
 OVERGROW BULLETPROOF
-Spiky Nut
+Spiny Nut
 16 19.8 Such a thick shell of wood covers its head and back that even a direct hit from a truck wouldn't faze it.
 5120
 FIELD NONE
@@ -57343,7 +57343,7 @@ BUG NO_TYPE
 LEVEL SPEWPA 9
 0
 50
-SHIELD_DUST COMPOUNDEYES
+SHIELD_DUST COMPOUND_EYES
 Scatterdust
 12 5.5 The powder that covers its body regulates its temperature, so it can live in any region or climate.
 3840
@@ -57396,7 +57396,7 @@ BUG FLYING
 NONE
 0
 50
-SHIELD_DUST COMPOUNDEYES
+SHIELD_DUST COMPOUND_EYES
 Scale
 47 37.5 The patterns on this Pok\u00e9mon's wings depend on the climate and topography of its habitat. It scatters colorful scales.
 3840
@@ -57629,7 +57629,7 @@ FAIRY GRASS
 LEVEL FLOETTE 19
 0
 0
-FLOWER_VEIL FLOWER_GIFT
+FLOWER_VEIL NO_ABILITY
 Single Bloom
 4 0.2 When it finds a flower it likes, it dwells on that flower its whole life long. It floats in the wind's embrace with an untroubled heart.
 5120
@@ -57698,8 +57698,8 @@ FAIRY GRASS
 ITEM FLORGES SHINY_STONE
 0
 0
-FLOWER_VEIL FLOWER_GIFT
-Fairy
+FLOWER_VEIL NO_ABILITY
+Single Bloom
 8 2.0 When the flowers of a well-tended flower bed bloom, it appears and celebrates with an elegant dance.
 5120
 FAIRY NONE
@@ -57768,7 +57768,7 @@ FAIRY GRASS
 NONE
 0
 0
-FLOWER_VEIL FLOWER_GIFT
+FLOWER_VEIL NO_ABILITY
 Garden
 43 22.0 In times long past, governors of castles would invite Florges to create flower gardens to embellish the castle domains.
 5120
@@ -63216,7 +63216,7 @@ ITEM VIKAVOLT THUNDER_STONE
 1
 5 CELL_BATTERY
 50
-STATIC NO_ABILITY
+BATTERY NO_ABILITY
 Battery
 20 23.1 Its body is capable of storing electricity. On camping trips, people are grateful to have one around.
 3840
@@ -64592,7 +64592,7 @@ LEVEL SHIINOTIC 24
 50 TINY_MUSHROOM
 5 BIG_MUSHROOM
 50
-RAIN_DISH EFFECT_SPORE
+EFFECT_SPORE RAIN_DISH
 Illuminating
 8 3.3 It scatters spores that flicker and glow. Anyone seeing these lights falls into a deep slumber.
 5120
@@ -64664,7 +64664,7 @@ NONE
 50 TINY_MUSHROOM
 5 BIG_MUSHROOM
 50
-RAIN_DISH EFFECT_SPORE
+EFFECT_SPORE RAIN_DISH
 Illuminating
 39 25.4 Forests where Shiinotic live are treacherous to enter at night. People confused by its strange lights can never find their way home again.
 5120
@@ -65293,7 +65293,7 @@ NONE
 1
 5 MISTY_SEED
 25
-NATURAL_CURE TRIAGE
+TRIAGE NATURAL_CURE
 Posy Picker
 4 0.7 It attaches flowers to its highly nutritious vine. This revitalizes the flowers, and they give off an aromatic scent.
 5120
@@ -66342,7 +66342,7 @@ NONE
 1
 5 ELECTRIC_SEED
 50
-IRON_BARBS LIGHTNINGROD
+IRON_BARBS LIGHTNING_ROD
 Roly-Poly
 12 7.3 The spiny fur on its back is normally at rest. When this Pok\u00e9mon becomes agitated, its fur stands on end and stabs into its attackers.
 2560
@@ -66605,7 +66605,7 @@ NONE
 50
 BERSERK SAP_SIPPER
 Placid
-118 407.8 It has a compassionate personality, but if it is angered, it completely destroys its surroundings with its intense breath.
+118 407.9 It has a compassionate personality, but if it is angered, it completely destroys its surroundings with its intense breath.
 5120
 MONSTER DRAGON
 15
@@ -67709,7 +67709,7 @@ Buzzwole
 257
 SLOW
 BUG FIGHTING
-25
+45
 0 1 2 0 0 0
 NONE
 0
@@ -67791,7 +67791,7 @@ Pheromosa
 257
 SLOW
 BUG FIGHTING
-255
+45
 0 0 0 0 0 3
 NONE
 0
@@ -67870,7 +67870,7 @@ Xurkitree
 257
 SLOW
 ELECTRIC NO_TYPE
-30
+45
 0 0 0 3 0 0
 NONE
 0
@@ -67947,7 +67947,7 @@ Celesteela
 257
 SLOW
 STEEL FLYING
-25
+45
 0 1 1 1 0 0
 NONE
 0
@@ -68027,7 +68027,7 @@ Kartana
 257
 SLOW
 GRASS STEEL
-255
+45
 0 3 0 0 0 0
 NONE
 0
@@ -68092,7 +68092,7 @@ Guzzlord
 257
 SLOW
 DARK DRAGON
-15
+45
 3 0 0 0 0 0
 NONE
 0
@@ -68178,7 +68178,7 @@ Necrozma
 270
 SLOW
 PSYCHIC NO_TYPE
-3
+45
 0 1 0 2 0 0
 NONE
 0
@@ -68448,7 +68448,7 @@ Poipole
 SLOW
 POISON NO_TYPE
 45
-0 0 0 0 1 0
+0 0 0 0 0 1
 MOVE NAGANADEL DRAGON_PULSE
 0
 -1
@@ -70114,7 +70114,7 @@ NONE
 1
 5 THICK_CLUB
 50
-CURSED_BODY LIGHTNINGROD
+CURSED_BODY LIGHTNING_ROD
 Bone Keeper
 39 75.0 The bones it possesses were once its mother's. Its mother's regrets have become like a vengeful spirit protecting this Pok\u00e9mon.
 5120

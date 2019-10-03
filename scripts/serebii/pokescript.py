@@ -7,10 +7,13 @@ import re
 import requests
 from lxml import html
 
-from scripts.forms import Stat, AddedPokes, FormConfig
-from scripts.parser import Parser
-from scripts.substitution import attack_substitution, ability_substitution, type_substitution
-from scripts.util import namesies, remove_prefix, remove_empty, index_swap, get_types, normalize_form, replace_special, dashy
+from scripts.forms import AddedPokes, Stat
+from scripts.serebii.form_config import FormConfig
+from scripts.serebii.parser import Parser
+from scripts.substitution import attack_substitution, ability_substitution, type_substitution, \
+    learnable_attack_additions, gender_substitution, stat_substitution
+from scripts.util import namesies, remove_prefix, remove_empty, index_swap, replace_special, dashy
+from scripts.serebii.parse_util import get_types, normalize_form
 
 
 def get_base_exp_map():
@@ -77,15 +80,7 @@ with open("../temp.txt", "w") as f:
             else:
                 male_ratio = math.ceil(male_ratio)
 
-        # Silcoon/Beautifly, Gardevoir are 100% female now
-        if num in [266, 267, 282]:
-            assert male_ratio == 50
-            male_ratio = 0
-        # Cascoon/Dustox, Glalie are 100% male now
-        elif num in [268, 269, 362]:
-            assert male_ratio == 50
-            male_ratio = 100
-
+        male_ratio = gender_substitution(num, male_ratio)
         print("Male Ratio: " + str(male_ratio))
 
         types_cell = row.xpath('td[6]')[0]
@@ -206,8 +201,11 @@ with open("../temp.txt", "w") as f:
         assert ability1 is not None
         assert ability2 is not None
 
-        ability1 = ability_substitution(num, ability1)
-        ability2 = ability_substitution(num, ability2)
+        # TODO: I have completely broken this and I don't feel like fixing it here when I need to fix everything
+        # else in this file anyways but the point is that this method now removes instead of replacing so it should
+        # default to the HA now if any of these are empty
+        ability1 = ability_substitution(num, namesies(ability1))
+        ability2 = ability_substitution(num, namesies(ability2))
         if ability1 == 'No_Ability':
             temp_ability = ability1
             ability1 = ability2
@@ -270,6 +268,7 @@ with open("../temp.txt", "w") as f:
         else:
             evs = ev_map[form_config.ev_form_name]
 
+        # TODO: Should use effort_substitution
         # Swap Attack and Sp. Attack for Rizardon
         if num == AddedPokes.MEGA_CHARIZARD.value:
             index_swap(evs, Stat.ATTACK.value, Stat.SP_ATTACK.value)
@@ -349,12 +348,12 @@ with open("../temp.txt", "w") as f:
                 level = 0
 
             attack = parser.info_table[i][1][0].text
-            attack = attack_substitution(num, attack)
-            if attack is None:
+            attack = attack_substitution(num, namesies(attack))
+            if attack == '':
                 assert level == 0
                 continue
 
-            attacks.append(str(level) + " " + namesies(attack))
+            attacks.append(str(level) + " " + attack)
             print(str(int(level)) + " " + attack)
 
         print("TMS:")
@@ -376,16 +375,8 @@ with open("../temp.txt", "w") as f:
 
                 tms.append(attack)
                 print(attack)
-        # Manually add Fly for:
-        # Butterfree, Beedrill, Venomoth, Scyther, Dragonair, Ledyba line,
-        # Natu, Yanma, Gligar, Beautifly, Dustox, Masquerain, Ninjask,
-        # Shedinja, Volbeat, Illumise, Mothim, Vespiquen, Garchomp, Yanmega,
-        # Gliscor, Emolga, Vivillon, Rowlet line, Vikavolt, Cutiefly line
-        if num in [12, 15, 49, 123, 148, 165, 166,
-                   177, 193, 207, 267, 269, 284, 291,
-                   292, 313, 314, 414, 416, 445, 469,
-                   472, 587, 666, 722, 723, 724, 738, 742, 743]:
-            attack = "Fly"
+        additions = learnable_attack_additions(num)
+        for attack in additions:
             tms.append(attack)
             print(attack)
 
@@ -492,23 +483,7 @@ with open("../temp.txt", "w") as f:
         for i in range(0, len(stats)):
             stats[i] = int(parser.info_table.xpath('tr[3]/td[' + str(2 + i) + ']')[0].text)
 
-        # Decrease Absol's attack since it has an evolution now
-        if num == 359:
-            stats[Stat.ATTACK.value] -= 30
-        # Use Charizard's stats with modifications
-        if num == AddedPokes.MEGA_CHARIZARD.value:
-            index_swap(stats, Stat.ATTACK.value, Stat.SP_ATTACK.value)
-            index_swap(stats, Stat.DEFENSE.value, Stat.SP_DEFENSE.value)
-            stats[Stat.ATTACK.value] += 10
-            stats[Stat.SPEED.value] -= 10
-        # Use Absol's stats with increase speed
-        if num == AddedPokes.MEGA_ABSOL.value:
-            stats[Stat.SPEED.value] += 20
-        # Decrease mega attack stats
-        if num == AddedPokes.MEGA_BANNETTE.value:
-            stats[Stat.ATTACK.value] -= 35
-            stats[Stat.SP_ATTACK.value] -= 10
-
+        stat_substitution(num, stats)
         print("Stats: " + str(stats))
 
         base_exp = base_exp_map[form_config.base_exp_name]

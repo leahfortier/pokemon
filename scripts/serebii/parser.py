@@ -4,9 +4,12 @@
 import requests
 from lxml import html
 
-from scripts.util import get_query_text
+from scripts.serebii.parse_util import get_query_text
 
 
+# Yeah so for the most part this serebii pokemon page parser is deprecated since the site is always changing
+# and this is constantly breaking and needing to be rewritten in a really not fun way
+# Switching to the use PokeAPI instead in pokebasescript.py
 class Parser:
     def __init__(self, lookup_num):
         self.lookup_num = lookup_num
@@ -26,6 +29,7 @@ class Parser:
 
         self.backup_table = self.info_table
         self.backup_index = self.index
+        self.backup_div = self.div_check
         self.backup()
 
     def update_table(self, *headers):

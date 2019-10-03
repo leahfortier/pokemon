@@ -360,7 +360,7 @@ public class ScriptTest extends BaseTest {
 
     @Test
     public void showdownMoveParserTest() {
-        Scanner in = FileIO.openFile(Folder.SCRIPTS + "ps-moves.txt");
+        Scanner in = FileIO.openFile(Folder.SCRIPTS_COMPARE + "ps-moves.txt");
         in.useDelimiter("[\\s:]+"); // whitespace and colon
 
         Assert.assertEquals("{", in.nextLine());

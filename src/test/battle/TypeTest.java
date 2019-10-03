@@ -357,7 +357,7 @@ public class TypeTest extends BaseTest {
                                                                        .defending(AbilityNamesies.MAGIC_BOUNCE));
 
         // Lightningrod absorbs Electric moves
-        checkEffective(false, AttackNamesies.THUNDER_WAVE, new TestInfo().defending(AbilityNamesies.LIGHTNINGROD));
+        checkEffective(false, AttackNamesies.THUNDER_WAVE, new TestInfo().defending(AbilityNamesies.LIGHTNING_ROD));
     }
 
     private void checkEffective(boolean effective, AttackNamesies attackNamesies, TestInfo testInfo) {

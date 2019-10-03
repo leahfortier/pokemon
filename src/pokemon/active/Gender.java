@@ -11,7 +11,7 @@ public enum Gender {
     FEMALE("\u2640", new Color(220, 50, 70), ratio -> ratio != Gender.GENDERLESS_CONSTANT && ratio != 100),
     GENDERLESS(" ", Color.WHITE, ratio -> ratio == Gender.GENDERLESS_CONSTANT);
 
-    private static final int GENDERLESS_CONSTANT = -1;
+    public static final int GENDERLESS_CONSTANT = -1;
 
     private final String character;
     private final Color color;
