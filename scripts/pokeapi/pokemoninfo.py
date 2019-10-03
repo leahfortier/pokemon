@@ -3,6 +3,7 @@ from typing import IO
 from scripts.pokeapi.parser import Parser
 
 
+# Class to gather and print all information related to the specified Pokemon
 class PokemonInfo:
     def __init__(self, num: int):
         parser = Parser(num)

@@ -7,7 +7,7 @@ from scripts.forms import Stat
 from scripts.pokeapi.form_config import FormConfig
 from scripts.substitution import attack_substitution, learnable_attack_substitution, learnable_attack_additions, \
     ability_substitution, type_substitution, name_substitution, gender_substitution, stat_substitution, \
-    effort_substitution
+    effort_substitution, capture_rate_substitution
 from scripts.util import namesies, remove_suffix, decimeters_to_inches, hectograms_to_lbs, replace_new_lines, \
     remove_prefix, replace_special
 
@@ -26,11 +26,11 @@ PAIRED_VERSIONS = ['ultra-sun-ultra-moon',
                    'black-white']
 
 
+# Class that holds the move name, learn method, and level learned (for 'level-up' moves)
 class Move:
     def __init__(self, move_entry, version_entry: Dict):
         self.name = move_entry.move.name
         self.learn_method = version_entry['move_learn_method']['name']
-        # self.level_learned = None
         if self.learn_method == 'level-up':
             self.level_learned = version_entry['level_learned_at']
 
@@ -38,6 +38,7 @@ class Move:
         return self.name
 
 
+# Class to parse PokeAPI info for the specified Pokemon
 class Parser:
     def __init__(self, num: int):
         self.num = num
@@ -127,7 +128,7 @@ class Parser:
     # Returns the capture rate
     # Ex: 45
     def get_capture_rate(self) -> int:
-        return self.species.capture_rate
+        return capture_rate_substitution(self.num, self.species.capture_rate)
 
     # Returns the the chance of this Pokémon being female, in eighths; or -1 for genderless
     # Ex: 1 (Bulbasaur is female 1/8th (12.5%) of the time)
@@ -239,7 +240,7 @@ class Parser:
         return egg_groups
 
     # Returns the level-up moves and the learnable moves as a tuple
-    # Level-up moves will be a list of strings of the format '<int:level> <string:attackName>' (Ex: '7 LEECH_SEED')
+    # Level-up moves will be a list of strings of the format '<level> <ATTACK_NAME>' (Ex: '7 LEECH_SEED')
     #   and will be sorted by level order
     # Learnable moves (egg moves, move tutors, tms) will be a list of strings of namesies attack names
     # Ex: (['0 TACKLE', '3 GROWL', '7 LEECH_SEED', '9 VINE_WHIP', ...., '37 SEED_BOMB'],
@@ -281,15 +282,15 @@ class Parser:
                 level_up_moves.append(str(move.level_learned) + " " + attack_name)
             # All other learnable moves
             # Did you know that if you bred Pikachu holding Light Ball the Pichu will know Volt Tackle??
-            # Form change is for Rotom
-            elif move.learn_method in ['machine', 'egg', 'tutor', 'light-ball-egg', 'form-change']:
+            elif move.learn_method in ['machine', 'egg', 'tutor', 'light-ball-egg']:
                 # Don't include unimplemented moves
                 attack_name = learnable_attack_substitution(attack_name)
                 if attack_name == '':
                     continue
 
                 learnable_moves.append(attack_name)
-            else:
+            # Form change is for Rotom
+            elif not (self.num == 479 and move.learn_method == 'form-change'):
                 raise Exception('Unknown move learn method ' + move.learn_method + ' for ' + move.name)
 
         # Remove duplicates for evolution moves and default moves (only keep evolution move)
@@ -359,7 +360,7 @@ def _get_egg_group(egg_group: str) -> str:
 
 
 # Used for sorting the level up moves by level
-# Attack should be a string with format '<int:level> <string:attackName>' (Ex: '7 LEECH_SEED')
+# Attack should be a string with format '<level> <ATTACK_NAME>' (Ex: '7 LEECH_SEED')
 def _attack_level_sort(attack: str) -> int:
     split = attack.split(' ')
     assert len(split) == 2

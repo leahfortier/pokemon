@@ -421,6 +421,16 @@ def gender_substitution(num: int, female_ratio: int) -> int:
     return female_ratio
 
 
+# Replaces the gender ratio of the Pokemon if applicable
+def capture_rate_substitution(num: int, capture_rate: int) -> int:
+    # Necrozma -- 255 just seems really unreasonable
+    if num == 800:
+        assert capture_rate == 255
+        return 45
+
+    return capture_rate
+
+
 # Replaces the stats of the Pokemon if applicable
 # Directly edits the contents of stats which should be a size 6 list of the base stats
 def stat_substitution(num: int, stats: List[int]) -> None:
