@@ -66,14 +66,6 @@ public class TestUtils {
         );
     }
 
-    // Confirms that the actual value is NOT between lower and upper inclusive
-    public static void assertOutsideRange(double lower, double upper, double actual) {
-        Assert.assertTrue(
-                lower + " <= " + actual + " <= " + upper,
-                actual < lower || actual > upper
-        );
-    }
-
     public static void assertUnique(int[] values) {
         for (int i = 0; i < values.length; i++) {
             for (int j = i + 1; j < values.length; j++) {

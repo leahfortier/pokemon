@@ -28,8 +28,8 @@ class PokemonInfo:
         self.capture_rate = parser.get_capture_rate()
         print("Capture Rate:", self.capture_rate)
 
-        self.female_ratio = parser.get_gender_ratio()
-        print("Female Ratio:", self.female_ratio)
+        self.male_ratio = parser.get_gender_ratio()
+        print("Male Ratio:", self.male_ratio)
 
         self.abilities = parser.get_abilities()
         print("Abilities:", self.abilities)
@@ -81,7 +81,7 @@ class PokemonInfo:
         # TODO: Wild Hold Items
         f.write('0\n')
 
-        f.write(str(self.female_ratio) + '\n')
+        f.write(str(self.male_ratio) + '\n')
         f.write(' '.join(self.abilities) + '\n')
         f.write(str(self.classification) + '\n')
         f.write(str(self.height) + ' ')

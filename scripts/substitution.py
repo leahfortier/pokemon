@@ -407,18 +407,17 @@ def name_substitution(num: int) -> str:
 
 
 # Replaces the gender ratio of the Pokemon if applicable
-# female_ratio (and return value) is the chance of this Pokémon being female, in eighths; or -1 for genderless
-def gender_substitution(num: int, female_ratio: int) -> int:
+def gender_substitution(num: int, male_ratio: int) -> int:
     # Silcoon/Beautifly, Gardevoir are 100% female now
     if num in [266, 267, 282]:
-        assert female_ratio == 4
-        return 8
+        assert male_ratio == 50
+        return 0
     # Cascoon/Dustox, Glalie are 100% male now
     elif num in [268, 269, 362]:
-        assert female_ratio == 4
-        return 0
+        assert male_ratio == 50
+        return 100
 
-    return female_ratio
+    return male_ratio
 
 
 # Replaces the gender ratio of the Pokemon if applicable
