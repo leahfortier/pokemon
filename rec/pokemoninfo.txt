@@ -5692,9 +5692,8 @@ Superpower
 63 286.6 Its four muscled arms slam foes with powerful punches and chops at blinding speed.
 5120
 HUMAN_LIKE NONE
-21
+20
 0 STRENGTH
-1 SUPERPOWER
 1 LOW_KICK
 1 LEER
 1 FOCUS_ENERGY
@@ -8445,8 +8444,7 @@ Pincer
 51 132.3 The larger pincer has 10,000- horsepower strength. However, it is so heavy, it is difficult to aim.
 5120
 WATER_3 NONE
-18
-1 FURY_CUTTER
+17
 1 MUD_SPORT
 1 BUBBLE
 1 VICE_GRIP
@@ -10397,9 +10395,8 @@ Mysterious
 43 176.4 At the center of its body is a red core, which sends mysterious radio signals into the night sky.
 5120
 WATER_3 NONE
-7
+6
 1 HYDRO_PUMP
-1 COSMIC_POWER
 1 WATER_GUN
 1 RAPID_SPIN
 1 RECOVER
@@ -10470,11 +10467,10 @@ Barrier
 51 120.2 It shapes an invisible wall in midair by minutely vibrating its fingertips to stop molecules in the air.
 6400
 HUMAN_LIKE NONE
-25
+24
 1 MISTY_TERRAIN
 1 MAGICAL_LEAF
 1 QUICK_GUARD
-1 TEETER_DANCE
 1 POWER_SWAP
 1 GUARD_SWAP
 1 BARRIER
@@ -14812,12 +14808,11 @@ Light
 47 49.6 Lanturn's light can shine up from great depths. It is nicknamed "The Deep-Sea Star."
 5120
 WATER_2 NONE
-23
+22
 0 STOCKPILE
 0 SWALLOW
 0 SPIT_UP
 1 EERIE_IMPULSE
-1 SOAK
 1 BUBBLE
 1 SUPERSONIC
 1 THUNDER_WAVE
@@ -20450,7 +20445,7 @@ Scuffle
 UNDISCOVERED NONE
 4
 1 TACKLE
-1 COVET
+1 ENDURE
 1 FAKE_OUT
 1 FORESIGHT
 38
@@ -32857,9 +32852,8 @@ Eon
 55 88.2 Its body is covered with a down that can refract light in such a way that it becomes invisible.
 30720
 UNDISCOVERED NONE
-20
+19
 1 HEALING_WISH
-1 TAILWIND
 1 WISH
 1 PSYWAVE
 1 SAFEGUARD
@@ -32959,9 +32953,8 @@ Eon
 79 132.3 A highly intelligent Pok\u00e9mon. By folding back its wings in flight, it can overtake jet planes.
 30720
 UNDISCOVERED NONE
-20
+19
 1 MEMENTO
-1 TAILWIND
 1 HEAL_BLOCK
 1 PSYWAVE
 1 SAFEGUARD
@@ -36732,8 +36725,7 @@ Rabbit
 16 12.1 Its ears are always rolled up. They can be forcefully extended to shatter even a large boulder.
 5120
 FIELD HUMAN_LIKE
-17
-1 FAKE_TEARS
+16
 1 DEFENSE_CURL
 1 SPLASH
 1 POUND
@@ -41235,12 +41227,11 @@ Compass
 55 749.6 It freely controls three small units called Mini-Noses using magnetic force.
 5120
 MINERAL NONE
-24
+23
 0 TRI_ATTACK
 1 MAGNETIC_FLUX
 1 MAGNET_RISE
 1 GRAVITY
-1 STEALTH_ROCK
 1 TACKLE
 1 IRON_DEFENSE
 1 BLOCK
@@ -46009,14 +46000,13 @@ Hearing
 43 68.3 It touches others with the feelers on its ears, using the sound of their heartbeats to tell how they are feeling.
 5120
 FAIRY NONE
-21
+20
 1 LAST_RESORT
 1 HYPER_VOICE
 1 MISTY_TERRAIN
 1 PLAY_NICE
 1 POUND
 1 GROWL
-1 HEAL_BELL
 5 BABY_DOLL_EYES
 9 REFRESH
 13 DISARMING_VOICE
@@ -49648,10 +49638,9 @@ Scarf
 20 16.5 Their white fur is coated in a special oil that makes it easy for them to deflect attacks.
 3840
 FIELD NONE
-6
+5
 1 BULLET_SEED
 1 ROCK_BLAST
-1 IRON_TAIL
 1 TICKLE
 1 SING
 1 TAIL_SLAP
@@ -58361,10 +58350,9 @@ Constraint
 24 18.7 The eyeball patterns on the interior of its ears emit psychic energy. It keeps the patterns tightly covered because that power is too immense.
 5120
 FIELD NONE
-23
+22
 1 QUICK_GUARD
 1 MEAN_LOOK
-1 ASSIST
 1 SCRATCH
 1 LEER
 1 COVET
@@ -61242,9 +61230,8 @@ Iceberg
 79 1113.3 The way several Bergmite huddle on its back makes it look like an aircraft carrier made of ice.
 5120
 MONSTER NONE
-23
+22
 0 BODY_SLAM
-1 MIST
 1 CRUNCH
 1 SKULL_BASH
 1 IRON_DEFENSE
@@ -61832,11 +61819,10 @@ Mischief
 20 19.8 It gathers things it likes and pushes them through its loop to teleport them to a secret place.
 30720
 UNDISCOVERED NONE
-20
+19
 1 HYPERSPACE_HOLE
 1 TRICK
 1 DESTINY_BOND
-1 MAGIC_ROOM
 1 CONFUSION
 6 ASTONISH
 10 MAGIC_COAT
@@ -64356,8 +64342,7 @@ Water Bubble
 71 180.8 It delivers headbutts with the water bubble on its head. Small Pok\u00e9mon get sucked into the bubble, where they drown.
 3840
 WATER_1 BUG
-18
-1 STICKY_WEB
+17
 1 SOAK
 1 BUBBLE
 1 INFESTATION
@@ -65292,8 +65277,7 @@ Posy Picker
 4 0.7 It attaches flowers to its highly nutritious vine. This revitalizes the flowers, and they give off an aromatic scent.
 5120
 GRASS NONE
-19
-1 LUCKY_CHANT
+18
 1 VINE_WHIP
 1 FLOWER_SHIELD
 4 LEECH_SEED
@@ -68277,12 +68261,11 @@ Artificial
 39 177.5 This artificial Pok\u00e9mon, constructed more than 500 years ago, can understand human speech but cannot itself speak.
 30720
 UNDISCOVERED NONE
-20
+19
 1 CRAFTY_SHIELD
 1 GEAR_UP
 1 SHIFT_GEAR
 1 IRON_HEAD
-1 LIGHT_SCREEN
 1 SONIC_BOOM
 1 DEFENSE_CURL
 1 PSYBEAM

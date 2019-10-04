@@ -25,11 +25,16 @@ def _attack_substitution(attack: str) -> str:
 # Will return the empty string to indicate removing the move
 def learnable_attack_substitution(attack: str) -> str:
     attack = _attack_substitution(attack)
-    if attack in ['AFTER_YOU', 'ALLY_SWITCH', 'FOLLOW_ME', 'FRUSTRATION', 'HELPING_HAND', 'INSTRUCT', 'QUASH',
-                  'RAGE_POWDER', 'RETURN', 'SPOTLIGHT', 'WIDE_GUARD']:
+    if is_unsupported_attack(attack):
         return ''
 
     return attack
+
+
+# Returns true if the input namesies attack is a move which was removed from the game
+def is_unsupported_attack(attack: str) -> bool:
+    return attack in ['AFTER_YOU', 'ALLY_SWITCH', 'FOLLOW_ME', 'FRUSTRATION', 'HELPING_HAND', 'INSTRUCT', 'QUASH',
+                      'RAGE_POWDER', 'RETURN', 'SPOTLIGHT', 'WIDE_GUARD']
 
 
 # Other learnable moves that were manually added (because I think it makes sense for Butterfree to Fly)
@@ -63,8 +68,6 @@ def _replace_move(attack: str, to_replace: str, alternative: str) -> str:
 def attack_substitution(num: int, attack: str) -> str:
     attack = _attack_substitution(attack)
 
-
-    return attack
     # Butterfree
     if num == 12:
         attack = _replace_move(attack, 'RAGE_POWDER', 'MORNING_SUN')
@@ -73,6 +76,8 @@ def attack_substitution(num: int, attack: str) -> str:
         attack = _replace_move(attack, 'HELPING_HAND', 'POISON_TAIL')
     # Clefairy/Clefable (Clefable does not learn After You/Follow Me technically)
     elif num in [35, 36]:
+        # Note: I know it looks weird that multiple moves are substituting for Wish, but one is the last move
+        # learned and the other is a default move and tbh it kind of works (if changes test will catch also)
         attack = _replace_move(attack, 'AFTER_YOU', 'WISH')
         attack = _replace_move(attack, 'FOLLOW_ME', 'MIMIC')
         attack = _replace_move(attack, 'SPOTLIGHT', 'WISH')
@@ -85,37 +90,20 @@ def attack_substitution(num: int, attack: str) -> str:
     # Kadabra/Alakazam
     elif num in [64, 65]:
         attack = _replace_move(attack, 'ALLY_SWITCH', 'BARRIER')
-    # Machamp
-    elif num == 68:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'SUPERPOWER')
-    # Kingler
-    elif num == 99:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'FURY_CUTTER')
     # Hitmonlee
     elif num == 106:
         attack = _replace_move(attack, 'WIDE_GUARD', 'LOW_KICK')
-    # Starmie
-    elif num == 121:
-        attack = _replace_move(attack, 'SPOTLIGHT', 'COSMIC_POWER')
-    # Mr. Mime
-    elif num == 122:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'TEETER_DANCE')
-    # Eeveelutions all start with Helping Hand (OR AT LEAST THEY DID)
-    elif num in [133, 134, 135, 136, 196, 197, 470, 471, 700]:
-        attack = _replace_move(attack, 'HELPING_HAND', '')
     # Sentret/Furret
     elif num in [161, 162]:
         attack = _replace_move(attack, 'FOLLOW_ME', 'COVET')
         attack = _replace_move(attack, 'HELPING_HAND', 'CHARM')
-    # Lanturn
-    elif num == 171:
-        attack = _replace_move(attack, 'SPOTLIGHT', 'SOAK')
     # Togepi
     elif num == 175:
         attack = _replace_move(attack, 'AFTER_YOU', 'SOFT_BOILED')
         attack = _replace_move(attack, 'FOLLOW_ME', 'DRAINING_KISS')
     # Togetic/Togekiss (technically Togekiss doesn't learn Follow Me)
     elif num in [176, 468]:
+        # TODO: Look at Togekiss and Moonblast
         attack = _replace_move(attack, 'AFTER_YOU', 'MOONBLAST')
         attack = _replace_move(attack, 'FOLLOW_ME', 'DRAINING_KISS')
     # Marill/Azumarill/Azurill
@@ -132,7 +120,8 @@ def attack_substitution(num: int, attack: str) -> str:
         attack = _replace_move(attack, 'WIDE_GUARD', 'DIVE')
     # Tyrogue
     elif num == 236:
-        attack = _replace_move(attack, 'HELPING_HAND', 'COVET')
+        # Did you know that Tyrogue's only level-up moves are four default ones?
+        attack = _replace_move(attack, 'HELPING_HAND', 'ENDURE')
     # Hitmontop
     elif num == 237:
         attack = _replace_move(attack, 'WIDE_GUARD', 'DRILL_RUN')
@@ -145,9 +134,6 @@ def attack_substitution(num: int, attack: str) -> str:
     # Volbeat/Illumise
     elif num in [313, 314]:
         attack = _replace_move(attack, 'HELPING_HAND', 'DIZZY_PUNCH')
-    # Latias/Latios
-    elif num in [380, 381]:
-        attack = _replace_move(attack, 'HELPING_HAND', 'TAILWIND')
     # Jirachi
     elif num == 385:
         attack = _replace_move(attack, 'HELPING_HAND', 'CALM_MIND')
@@ -157,7 +143,6 @@ def attack_substitution(num: int, attack: str) -> str:
     # Buneary
     elif num == 427:
         attack = _replace_move(attack, 'AFTER_YOU', 'SWEET_KISS')
-        attack = _replace_move(attack, 'FRUSTRATION', 'FAKE_TEARS')
     # Lopunny
     elif num == 428:
         attack = _replace_move(attack, 'AFTER_YOU', 'DRAINING_KISS')
@@ -166,9 +151,6 @@ def attack_substitution(num: int, attack: str) -> str:
     elif num == 475:
         attack = _replace_move(attack, 'HELPING_HAND', 'DUAL_CHOP')
         attack = _replace_move(attack, 'WIDE_GUARD', 'SACRED_SWORD')
-    # Probopass
-    elif num == 476:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'STEALTH_ROCK')
     # Regigagas
     elif num == 486:
         attack = _replace_move(attack, 'WIDE_GUARD', 'MEGA_PUNCH')
@@ -181,7 +163,6 @@ def attack_substitution(num: int, attack: str) -> str:
     # Audino
     elif num == 531:
         attack = _replace_move(attack, 'AFTER_YOU', 'WISH')
-        attack = _replace_move(attack, 'HELPING_HAND', 'HEAL_BELL')
     # Throh
     elif num == 538:
         attack = _replace_move(attack, 'WIDE_GUARD', 'BRICK_BREAK')
@@ -205,9 +186,6 @@ def attack_substitution(num: int, attack: str) -> str:
     elif num == 572:
         attack = _replace_move(attack, 'AFTER_YOU', 'IRON_TAIL')
         attack = _replace_move(attack, 'HELPING_HAND', 'COVET')
-    # Cinccino
-    elif num == 573:
-        attack = _replace_move(attack, 'HELPING_HAND', 'IRON_TAIL')
     # Foongus/Amoonguss
     elif num in [590, 591]:
         attack = _replace_move(attack, 'RAGE_POWDER', 'GASTRO_ACID')
@@ -233,15 +211,6 @@ def attack_substitution(num: int, attack: str) -> str:
     # Keldeo
     elif num == 647:
         attack = _replace_move(attack, 'HELPING_HAND', 'ICY_WIND')
-    # Meowstic
-    elif num == 678:
-        attack = _replace_move(attack, 'HELPING_HAND', 'ASSIST')
-    # Avalugg
-    elif num == 713:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'MIST')
-    # Hoopa
-    elif num == 720:
-        attack = _replace_move(attack, 'ALLY_SWITCH', 'MAGIC_ROOM')
     # Oricorio
     elif num == 741:
         attack = _replace_move(attack, 'HELPING_HAND', 'TAILWIND')
@@ -251,15 +220,9 @@ def attack_substitution(num: int, attack: str) -> str:
     # Mareanie/Toxapex
     elif num in [747, 748]:
         attack = _replace_move(attack, 'WIDE_GUARD', 'ACID_ARMOR')
-    # Araquanid
-    elif num == 752:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'STICKY_WEB')
     # Morelull/Shiinotic
     elif num in [755, 756]:
         attack = _replace_move(attack, 'SPOTLIGHT', 'AROMATHERAPY')
-    # Comfey
-    elif num == 764:
-        attack = _replace_move(attack, 'HELPING_HAND', 'LUCKY_CHANT')
     # Oranguru
     elif num == 765:
         attack = _replace_move(attack, 'AFTER_YOU', 'WONDER_ROOM')
@@ -274,18 +237,14 @@ def attack_substitution(num: int, attack: str) -> str:
     # Lunala
     elif num == 792:
         attack = _replace_move(attack, 'WIDE_GUARD', 'LIGHT_SCREEN')
-    # Celesteela and Guzzlord -- TODO: too lazy to come up with an alternative right now
-    elif num in [797, 799]:
-        attack = _replace_move(attack, 'WIDE_GUARD', '')
-    # Magearna
-    elif num == 801:
-        attack = _replace_move(attack, 'HELPING_HAND', 'LIGHT_SCREEN')
-    # Poipole/Naganadel -- TODO: too lazy to come up with an alternative right now
-    elif num in [803, 804]:
-        attack = _replace_move(attack, 'HELPING_HAND', '')
     # Stakataka
     elif num == 805:
         attack = _replace_move(attack, 'WIDE_GUARD', 'STONE_EDGE')
+
+    if is_unsupported_attack(attack):
+        return ''
+    else:
+        return attack
 
 
 # Removes or replaces the ability with an alternative if applicable for the corresponding Pokemon
