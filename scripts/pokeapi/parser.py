@@ -1,6 +1,5 @@
 from typing import List, Dict, Tuple
 
-import math
 import pokebase
 
 from scripts.forms import Stat

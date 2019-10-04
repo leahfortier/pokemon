@@ -33,7 +33,7 @@ def learnable_attack_substitution(attack: str) -> str:
 
 
 # Other learnable moves that were manually added (because I think it makes sense for Butterfree to Fly)
-def learnable_attack_additions(num:int) -> List[str]:
+def learnable_attack_additions(num: int) -> List[str]:
     additions = []  # type: List[str]
 
     # Manually add Fly for:
@@ -50,245 +50,242 @@ def learnable_attack_additions(num:int) -> List[str]:
     return additions
 
 
+# Replaces attack with alternative if it is the same as to_replace
+def _replace_move(attack: str, to_replace: str, alternative: str) -> str:
+    if attack == to_replace:
+        return alternative
+    return attack
+
+
 # Replaces the level-up move with an alternative if applicable for the corresponding Pokemon
 # Will return the empty string to indicate removing the move altogether
 # The input attack string is expected to be in namesies format
 def attack_substitution(num: int, attack: str) -> str:
     attack = _attack_substitution(attack)
 
-    if attack == 'AFTER_YOU':
-        # Patrat/Watchog
-        if num == 504 or num == 505:
-            return 'COVET'
-        # Lopunny
-        elif num == 428:
-            return 'DRAINING_KISS'
-        # Petilil
-        elif num == 548:
-            return 'HEAL_BELL'
-        # Minccino
-        elif num == 572:
-            return 'IRON_TAIL'
-        # Togetic/Togekiss
-        elif num == 176 or num == 468:
-            return 'MOONBLAST'
-        # Togepi
-        elif num == 175:
-            return 'SOFT_BOILED'
-        # Buneary
-        elif num == 427:
-            return 'SWEET_KISS'
-        # Clefairy and Audino
-        elif num == 35 or num == 531:
-            return 'WISH'
-        # Oranguru
-        elif num == 765:
-            return 'WONDER_ROOM'
-        # Maractus
-        elif num == 556:
-            return 'WOOD_HAMMER'
-    elif attack == 'ALLY_SWITCH':
-        # Kadabra/Alakazam
-        if num == 64 or num == 65:
-            return 'BARRIER'
-        # Hoopa
-        elif num == 720:
-            return 'MAGIC_ROOM'
-    elif attack == 'FOLLOW_ME':
-        # Sentret/Furret
-        if num == 161 or num == 162:
-            return 'COVET'
-        # Togepi/Togetic
-        elif num == 175 or num == 176:
-            return 'DRAINING_KISS'
-        # Clefairy
-        elif num == 35:
-            return 'MIMIC'
-    elif attack == 'FRUSTRATION':
-        # Buneary
-        if num == 427:
-            return 'FAKE_TEARS'
-    elif attack == 'HELPING_HAND':
-        # Meowstic
-        if num == 678:
-            return 'ASSIST'
-        # Jirachi
-        elif num == 385:
-            return 'CALM_MIND'
-        # Sentret/Furret
-        elif num == 161 or num == 162:
-            return 'CHARM'
-        # Tyrogue and Minccino
-        elif num == 236 or num == 572:
-            return 'COVET'
-        # Volbeat/Illumise
-        elif num == 313 or num == 314:
-            return 'DIZZY_PUNCH'
-        # Marill/Azumarill/Azurill
-        elif num == 183 or num == 184 or num == 298:
-            return 'DRAINING_KISS'
-        # Gallade
-        elif num == 475:
-            return 'DUAL_CHOP'
-        # Petilil
-        elif num == 548:
-            return 'FAIRY_WIND'
-        # Audino
-        elif num == 531:
-            return 'HEAL_BELL'
-        # Growlithe and Lillipup line
-        elif num == 58 or 506 <= num <= 508:
-            return 'HOWL'
-        # Keldeo
-        elif num == 647:
-            return 'ICY_WIND'
-        # Cobalion
-        elif num == 638:
-            return 'IRON_DEFENSE'
-        # Cinccino
-        elif num == 573:
-            return 'IRON_TAIL'
-        # Magearna
-        elif num == 801:
-            return 'LIGHT_SCREEN'
-        # Comfey
-        elif num == 764:
-            return 'LUCKY_CHANT'
-        # Leavanny
-        elif num == 542:
-            return 'ME_FIRST'
-        # Nidoran line
-        elif 29 <= num <= 33:
-            return 'POISON_TAIL'
-        # Alomomola
-        elif num == 594:
-            return 'REFRESH'
-        # Terrakion
-        elif num == 639:
-            return 'STEALTH_ROCK'
-        # Plusle/Minun
-        elif num == 311 or num == 312:
-            return 'SWEET_KISS'
-        # Virizion
-        elif num == 640:
-            return 'SYNTHESIS'
-        # Latias/Latios and Cottonee and Oricorio
-        elif num in [380, 381, 546, 741]:
-            return 'TAILWIND'
-        # Cherubi/Cherrim and Pykumuku
-        elif num == 420 or num == 421 or num == 771:
-            return 'TICKLE'
-        # WISHiwashi
-        elif num == 746:
-            return 'WATER_SPORT'
-        # Eeveelutions all start with this
-        # Also Poipole and Naganadel -- TODO: too lazy to come up with an alternative right now
-        elif num in [133, 134, 135, 136, 196, 197, 470, 471, 700, 803, 804]:
-            return ''
-    elif attack == 'INSTRUCT':
-        # Oranguru
-        if num == 765:
-            return 'LIGHT_SCREEN'
-    elif attack == 'QUASH':
-        # Sableye
-        if num == 302 or num == AddedPokes.MEGA_SABLEYE.value:
-            return 'NIGHT_SLASH'
-        # Oranguru
-        elif num == 765:
-            return 'PSYCHIC_TERRAIN'
-        # Murkrow/Honchkrow
-        elif num == 198 or num == 430:
-            return 'ROOST'
-    elif attack == 'RAGE_POWDER':
-        # Foongus/Amoonguss
-        if num == 590 or num == 591:
-            return 'GASTRO_ACID'
-        # Paras/Parasect
-        elif num == 46 or num == 47:
-            return 'LEECH_LIFE'
-        # Butterfree and Volcarona
-        elif num == 12 or num == 637:
-            return 'MORNING_SUN'
-        # Hoppip line
-        elif 187 <= num <= 189:
-            return 'SILVER_WIND'
-    elif attack == 'RETURN':
-        # Lopunny
-        if num == 428:
-            return 'CAPTIVATE'
-    elif attack == 'SPOTLIGHT':
-        # Morelull/Shiinotic
-        if num == 755 or num == 756:
-            return 'AROMATHERAPY'
-        # Starmie
-        elif num == 121:
-            return 'COSMIC_POWER'
-        # Lanturn
-        elif num == 171:
-            return 'SOAK'
-        # Clefairy/Clefable
-        elif num == 35 or num == 36:
-            return 'WISH'
-    elif attack == 'WIDE_GUARD':
-        # Mareanie/Toxapex
-        if num == 747 or num == 748:
-            return 'ACID_ARMOR'
-        # Throh
-        elif num == 538:
-            return 'BRICK_BREAK'
-        # Mantine/Mantyke
-        elif num == 226 or num == 458:
-            return 'DIVE'
-        # Hitmontop
-        elif num == 237:
-            return 'DRILL_RUN'
-        # Mienshao
-        elif num == 620:
-            return 'DUAL_CHOP'
-        # Kingler
-        elif num == 99:
-            return 'FURY_CUTTER'
-        # Tirtouga/Carracosta
-        elif num == 564 or num == 565:
-            return 'IRON_DEFENSE'
-        # Lunala
-        elif num == 792:
-            return 'LIGHT_SCREEN'
-        # Hitmonlee
-        elif num == 106:
-            return 'LOW_KICK'
-        # Regigagas
-        elif num == 486:
-            return 'MEGA_PUNCH'
-        # Alomomola and Avalugg
-        elif num == 594 or num == 713:
-            return 'MIST'
-        # Solgaleo
-        elif num == 791:
-            return 'REFLECT'
-        # Gallade
-        elif num == 475:
-            return 'SACRED_SWORD'
-        # Probopass
-        elif num == 476:
-            return 'STEALTH_ROCK'
-        # Araquanid
-        elif num == 752:
-            return 'STICKY_WEB'
-        # Stakataka
-        elif num == 805:
-            return 'STONE_EDGE'
-        # Machamp
-        elif num == 68:
-            return 'SUPERPOWER'
-        # Mr. Mime
-        elif num == 122:
-            return 'TEETER_DANCE'
-        # Celesteela and Guzzlord -- TODO: too lazy to come up with an alternative right now
-        elif num == 797 or num == 799:
-            return ''
 
     return attack
+    # Butterfree
+    if num == 12:
+        attack = _replace_move(attack, 'RAGE_POWDER', 'MORNING_SUN')
+    # Nidoran line
+    elif 29 <= num <= 33:
+        attack = _replace_move(attack, 'HELPING_HAND', 'POISON_TAIL')
+    # Clefairy/Clefable (Clefable does not learn After You/Follow Me technically)
+    elif num in [35, 36]:
+        attack = _replace_move(attack, 'AFTER_YOU', 'WISH')
+        attack = _replace_move(attack, 'FOLLOW_ME', 'MIMIC')
+        attack = _replace_move(attack, 'SPOTLIGHT', 'WISH')
+    # Paras/Parasect
+    elif num in [46, 47]:
+        attack = _replace_move(attack, 'RAGE_POWDER', 'LEECH_LIFE')
+    # Growlithe
+    elif num == 58:
+        attack = _replace_move(attack, 'HELPING_HAND', 'HOWL')
+    # Kadabra/Alakazam
+    elif num in [64, 65]:
+        attack = _replace_move(attack, 'ALLY_SWITCH', 'BARRIER')
+    # Machamp
+    elif num == 68:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'SUPERPOWER')
+    # Kingler
+    elif num == 99:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'FURY_CUTTER')
+    # Hitmonlee
+    elif num == 106:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'LOW_KICK')
+    # Starmie
+    elif num == 121:
+        attack = _replace_move(attack, 'SPOTLIGHT', 'COSMIC_POWER')
+    # Mr. Mime
+    elif num == 122:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'TEETER_DANCE')
+    # Eeveelutions all start with Helping Hand (OR AT LEAST THEY DID)
+    elif num in [133, 134, 135, 136, 196, 197, 470, 471, 700]:
+        attack = _replace_move(attack, 'HELPING_HAND', '')
+    # Sentret/Furret
+    elif num in [161, 162]:
+        attack = _replace_move(attack, 'FOLLOW_ME', 'COVET')
+        attack = _replace_move(attack, 'HELPING_HAND', 'CHARM')
+    # Lanturn
+    elif num == 171:
+        attack = _replace_move(attack, 'SPOTLIGHT', 'SOAK')
+    # Togepi
+    elif num == 175:
+        attack = _replace_move(attack, 'AFTER_YOU', 'SOFT_BOILED')
+        attack = _replace_move(attack, 'FOLLOW_ME', 'DRAINING_KISS')
+    # Togetic/Togekiss (technically Togekiss doesn't learn Follow Me)
+    elif num in [176, 468]:
+        attack = _replace_move(attack, 'AFTER_YOU', 'MOONBLAST')
+        attack = _replace_move(attack, 'FOLLOW_ME', 'DRAINING_KISS')
+    # Marill/Azumarill/Azurill
+    elif num in [183, 184, 298]:
+        attack = _replace_move(attack, 'HELPING_HAND', 'DRAINING_KISS')
+    # Hoppip line
+    elif num in [187, 188, 189]:
+        attack = _replace_move(attack, 'RAGE_POWDER', 'SILVER_WIND')
+    # Murkrow/Honchkrow
+    elif num in [198, 430]:
+        attack = _replace_move(attack, 'QUASH', 'ROOST')
+    # Mantine/Mantyke
+    elif num in [226, 458]:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'DIVE')
+    # Tyrogue
+    elif num == 236:
+        attack = _replace_move(attack, 'HELPING_HAND', 'COVET')
+    # Hitmontop
+    elif num == 237:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'DRILL_RUN')
+    # Sableye/Yamirami
+    elif num in [302, AddedPokes.MEGA_SABLEYE.value]:
+        attack = _replace_move(attack, 'QUASH', 'NIGHT_SLASH')
+    # Plusle/Minun
+    elif num in [311, 312]:
+        attack = _replace_move(attack, 'HELPING_HAND', 'SWEET_KISS')
+    # Volbeat/Illumise
+    elif num in [313, 314]:
+        attack = _replace_move(attack, 'HELPING_HAND', 'DIZZY_PUNCH')
+    # Latias/Latios
+    elif num in [380, 381]:
+        attack = _replace_move(attack, 'HELPING_HAND', 'TAILWIND')
+    # Jirachi
+    elif num == 385:
+        attack = _replace_move(attack, 'HELPING_HAND', 'CALM_MIND')
+    # Cherubi/Cherrim
+    elif num in [420, 421]:
+        attack = _replace_move(attack, 'HELPING_HAND', 'TICKLE')
+    # Buneary
+    elif num == 427:
+        attack = _replace_move(attack, 'AFTER_YOU', 'SWEET_KISS')
+        attack = _replace_move(attack, 'FRUSTRATION', 'FAKE_TEARS')
+    # Lopunny
+    elif num == 428:
+        attack = _replace_move(attack, 'AFTER_YOU', 'DRAINING_KISS')
+        attack = _replace_move(attack, 'RETURN', 'CAPTIVATE')
+    # Gallade
+    elif num == 475:
+        attack = _replace_move(attack, 'HELPING_HAND', 'DUAL_CHOP')
+        attack = _replace_move(attack, 'WIDE_GUARD', 'SACRED_SWORD')
+    # Probopass
+    elif num == 476:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'STEALTH_ROCK')
+    # Regigagas
+    elif num == 486:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'MEGA_PUNCH')
+    # Patrat/Watchog
+    elif num in [504, 505]:
+        attack = _replace_move(attack, 'AFTER_YOU', 'COVET')
+    # Lillipup line
+    elif num in [506, 507, 508]:
+        attack = _replace_move(attack, 'HELPING_HAND', 'HOWL')
+    # Audino
+    elif num == 531:
+        attack = _replace_move(attack, 'AFTER_YOU', 'WISH')
+        attack = _replace_move(attack, 'HELPING_HAND', 'HEAL_BELL')
+    # Throh
+    elif num == 538:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'BRICK_BREAK')
+    # Leavanny
+    elif num == 542:
+        attack = _replace_move(attack, 'HELPING_HAND', 'ME_FIRST')
+    # Cottonee
+    elif num == 546:
+        attack = _replace_move(attack, 'HELPING_HAND', 'TAILWIND')
+    # Petilil
+    elif num == 548:
+        attack = _replace_move(attack, 'AFTER_YOU', 'HEAL_BELL')
+        attack = _replace_move(attack, 'HELPING_HAND', 'FAIRY_WIND')
+    # Maractus
+    elif num == 556:
+        attack = _replace_move(attack, 'AFTER_YOU', 'WOOD_HAMMER')
+    # Tirtouga/Carracosta
+    elif num in [564, 565]:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'IRON_DEFENSE')
+    # Minccino
+    elif num == 572:
+        attack = _replace_move(attack, 'AFTER_YOU', 'IRON_TAIL')
+        attack = _replace_move(attack, 'HELPING_HAND', 'COVET')
+    # Cinccino
+    elif num == 573:
+        attack = _replace_move(attack, 'HELPING_HAND', 'IRON_TAIL')
+    # Foongus/Amoonguss
+    elif num in [590, 591]:
+        attack = _replace_move(attack, 'RAGE_POWDER', 'GASTRO_ACID')
+    # Alomomola
+    elif num == 594:
+        attack = _replace_move(attack, 'HELPING_HAND', 'REFRESH')
+        attack = _replace_move(attack, 'WIDE_GUARD', 'MIST')
+    # Mienshao
+    elif num == 620:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'DUAL_CHOP')
+    # Volcarona
+    elif num == 637:
+        attack = _replace_move(attack, 'RAGE_POWDER', 'MORNING_SUN')
+    # Cobalion
+    elif num == 638:
+        attack = _replace_move(attack, 'HELPING_HAND', 'IRON_DEFENSE')
+    # Terrakion
+    elif num == 639:
+        attack = _replace_move(attack, 'HELPING_HAND', 'STEALTH_ROCK')
+    # Virizion
+    elif num == 640:
+        attack = _replace_move(attack, 'HELPING_HAND', 'SYNTHESIS')
+    # Keldeo
+    elif num == 647:
+        attack = _replace_move(attack, 'HELPING_HAND', 'ICY_WIND')
+    # Meowstic
+    elif num == 678:
+        attack = _replace_move(attack, 'HELPING_HAND', 'ASSIST')
+    # Avalugg
+    elif num == 713:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'MIST')
+    # Hoopa
+    elif num == 720:
+        attack = _replace_move(attack, 'ALLY_SWITCH', 'MAGIC_ROOM')
+    # Oricorio
+    elif num == 741:
+        attack = _replace_move(attack, 'HELPING_HAND', 'TAILWIND')
+    # WISHiwashi
+    elif num == 746:
+        attack = _replace_move(attack, 'HELPING_HAND', 'WATER_SPORT')
+    # Mareanie/Toxapex
+    elif num in [747, 748]:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'ACID_ARMOR')
+    # Araquanid
+    elif num == 752:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'STICKY_WEB')
+    # Morelull/Shiinotic
+    elif num in [755, 756]:
+        attack = _replace_move(attack, 'SPOTLIGHT', 'AROMATHERAPY')
+    # Comfey
+    elif num == 764:
+        attack = _replace_move(attack, 'HELPING_HAND', 'LUCKY_CHANT')
+    # Oranguru
+    elif num == 765:
+        attack = _replace_move(attack, 'AFTER_YOU', 'WONDER_ROOM')
+        attack = _replace_move(attack, 'INSTRUCT', 'LIGHT_SCREEN')
+        attack = _replace_move(attack, 'QUASH', 'PSYCHIC_TERRAIN')
+    # Pykumuku
+    elif num == 771:
+        attack = _replace_move(attack, 'HELPING_HAND', 'TICKLE')
+    # Solgaleo
+    elif num == 791:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'REFLECT')
+    # Lunala
+    elif num == 792:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'LIGHT_SCREEN')
+    # Celesteela and Guzzlord -- TODO: too lazy to come up with an alternative right now
+    elif num in [797, 799]:
+        attack = _replace_move(attack, 'WIDE_GUARD', '')
+    # Magearna
+    elif num == 801:
+        attack = _replace_move(attack, 'HELPING_HAND', 'LIGHT_SCREEN')
+    # Poipole/Naganadel -- TODO: too lazy to come up with an alternative right now
+    elif num in [803, 804]:
+        attack = _replace_move(attack, 'HELPING_HAND', '')
+    # Stakataka
+    elif num == 805:
+        attack = _replace_move(attack, 'WIDE_GUARD', 'STONE_EDGE')
 
 
 # Removes or replaces the ability with an alternative if applicable for the corresponding Pokemon
