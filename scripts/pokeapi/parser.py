@@ -4,11 +4,12 @@ import pokebase
 
 from scripts.forms import Stat
 from scripts.pokeapi.form_config import FormConfig
+from scripts.move import Move, LevelUpMoves
 from scripts.substitution import attack_substitution, learnable_attack_substitution, learnable_attack_additions, \
     ability_substitution, type_substitution, name_substitution, gender_substitution, stat_substitution, \
-    effort_substitution, capture_rate_substitution
+    effort_substitution, capture_rate_substitution, level_up_attack_additions
 from scripts.util import namesies, remove_suffix, decimeters_to_inches, hectograms_to_lbs, replace_new_lines, \
-    remove_prefix, replace_special
+    replace_special
 
 INDIVIDUAL_VERSIONS = ['ultra-sun', 'ultra-moon',
                        'sun', 'moon',
@@ -23,18 +24,6 @@ PAIRED_VERSIONS = ['ultra-sun-ultra-moon',
                    'x-y',
                    'black-2-white-2',
                    'black-white']
-
-
-# Class that holds the move name, learn method, and level learned (for 'level-up' moves)
-class Move:
-    def __init__(self, move_entry, version_entry: Dict):
-        self.name = move_entry.move.name
-        self.learn_method = version_entry['move_learn_method']['name']
-        if self.learn_method == 'level-up':
-            self.level_learned = version_entry['level_learned_at']
-
-    def __str__(self):
-        return self.name
 
 
 # Class to parse PokeAPI info for the specified Pokemon
@@ -250,14 +239,14 @@ class Parser:
         for entry in self.pokemon.moves:
             for version_entry in entry.version_group_details:
                 version_name = version_entry['version_group']['name']
-                version_to_moves.setdefault(version_name, []).append(Move(entry, version_entry))
+                version_to_moves.setdefault(version_name, []).append(_get_move(entry, version_entry))
 
         # Get the moves of the most relevant version
         version = next(version for version in PAIRED_VERSIONS if version in version_to_moves)
         moves = version_to_moves[version]
 
         # Create move lists from version's moves
-        level_up_moves = []   # type: List[str]
+        level_up_moves = LevelUpMoves()
         learnable_moves = []  # type: List[str]
         for move in moves:
             attack_name = namesies(move.name)
@@ -271,7 +260,7 @@ class Parser:
                     assert move.level_learned == 1
                     continue
 
-                level_up_moves.append(str(move.level_learned) + " " + attack_name)
+                level_up_moves.add(move.level_learned, attack_name)
             # All other learnable moves
             # Did you know that if you bred Pikachu holding Light Ball the Pichu will know Volt Tackle??
             elif move.learn_method in ['machine', 'egg', 'tutor', 'light-ball-egg']:
@@ -285,18 +274,12 @@ class Parser:
             elif not (self.num == 479 and move.learn_method == 'form-change'):
                 raise Exception('Unknown move learn method ' + move.learn_method + ' for ' + move.name)
 
-        # Remove duplicates for evolution moves and default moves (only keep evolution move)
-        evolution_moves = [remove_prefix(move, "0 ") for move in level_up_moves if move.startswith("0 ")]
-        for move_name in evolution_moves:
-            level_up_moves.remove("1 " + move_name)
-
-        # Level-up moves are sorted by level
-        level_up_moves.sort(key = _attack_level_sort)
+        level_up_attack_additions(self.num, level_up_moves)
 
         # Add any manually added learnable moves
         learnable_moves.extend(learnable_attack_additions(self.num))
 
-        return level_up_moves, learnable_moves
+        return level_up_moves.get(), learnable_moves
 
 
 # Returns the Stat that matches the input name
@@ -349,11 +332,9 @@ def _get_egg_group(egg_group: str) -> str:
         return 'water-3'
     else:
         return egg_group
-
-
-# Used for sorting the level up moves by level
-# Attack should be a string with format '<level> <ATTACK_NAME>' (Ex: '7 LEECH_SEED')
-def _attack_level_sort(attack: str) -> int:
-    split = attack.split(' ')
-    assert len(split) == 2
-    return int(split[0])
+# Parses the move entry into a Move object
+def _get_move(move_entry, version_entry: Dict) -> Move:
+    name = move_entry.move.name
+    learn_method = version_entry['move_learn_method']['name']
+    level_learned = version_entry['level_learned_at'] if learn_method == 'level-up' else None
+    return Move(name, level_learned, learn_method)

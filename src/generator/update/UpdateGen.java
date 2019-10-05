@@ -483,6 +483,7 @@ public class UpdateGen {
             outputSinglePokemon(in1, nullOut);
         }
 
+        boolean hasDiffs = false;
         for (int i = 1; in2.hasNext(); i++) {
             // Don't print differences for Meltan/Melmetal
             PokemonNamesies pokemonNamesies = PokemonNamesies.values()[i];
@@ -521,8 +522,13 @@ public class UpdateGen {
             in1.nextLine(); in2.nextLine(); // New line
 
             if (!diffs.isEmpty()) {
+                hasDiffs = true;
                 out.printf("%03d %s:\n\t%s\n", num, name, diffs.toString().replace("\n", "\n\t"));
             }
+        }
+
+        if (!hasDiffs) {
+            out.print("No relevant diffs.");
         }
     }
 

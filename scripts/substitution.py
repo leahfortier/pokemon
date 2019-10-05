@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from typing import List
+from typing import List, Dict
 
 from scripts.forms import AddedPokes, Stat
+from scripts.move import LevelUpMoves
 from scripts.util import index_swap
 
 
@@ -55,10 +56,46 @@ def learnable_attack_additions(num: int) -> List[str]:
     return additions
 
 
+def level_up_attack_additions(num: int, moves: LevelUpMoves) -> None:
+    # Bulbasaur -- not sure why the fuck it doesn't learn Solar Beam by level up unless it evolves but that's DUMB
+    # Note: If Bulby's level-up moves change in general the level might need tweaking
+    if num == 1:
+        moves.add(39, 'SOLAR_BEAM')
+    # Rapidash -- it should definitely learn Blaze Kick, right???
+    elif num == 78:
+        moves.add_default('BLAZE_KICK')
+    # Luxray -- I added Dark-type to it and it should learn some Dark moves
+    elif num == 405:
+        moves.add_evolution('FOUL_PLAY')
+    # Budew -- really wanted to add Leech Seed in earlier (in attack_substitution)
+    # Note: This should be edited if Budew's move list changes
+    elif num == 406:
+        moves.add(19, 'WORRY_SEED')
+    # Togekiss -- like come on it should know this plus already changed Togetic to learn it by level up
+    elif num == 468:
+        moves.add_default('MOONBLAST')
+    # Asbel -- needs some Fairy moves and people to notice its lovely wings
+    elif num == AddedPokes.MEGA_ABSOL.value:
+        moves.add_evolution('PLAY_ROUGH')
+        moves.add_default('MOONLIGHT')
+        moves.add_default('WING_ATTACK') # BECAUSE IT HAS WINGS
+        moves.add_default('TAILWIND')
+
+
 # Replaces attack with alternative if it is the same as to_replace
 def _replace_move(attack: str, to_replace: str, alternative: str) -> str:
     if attack == to_replace:
         return alternative
+    return attack
+
+
+# Will swap the moves if the attack is either of them
+# This is to avoid overwriting by using _replace_move twice in a row
+def _swap_move(attack: str, first: str, second: str) -> str:
+    if attack == first:
+        return second
+    elif attack == second:
+        return first
     return attack
 
 
@@ -101,9 +138,8 @@ def attack_substitution(num: int, attack: str) -> str:
     elif num == 175:
         attack = _replace_move(attack, 'AFTER_YOU', 'SOFT_BOILED')
         attack = _replace_move(attack, 'FOLLOW_ME', 'DRAINING_KISS')
-    # Togetic/Togekiss (technically Togekiss doesn't learn Follow Me)
-    elif num in [176, 468]:
-        # TODO: Look at Togekiss and Moonblast
+    # Togetic
+    elif num == 176:
         attack = _replace_move(attack, 'AFTER_YOU', 'MOONBLAST')
         attack = _replace_move(attack, 'FOLLOW_ME', 'DRAINING_KISS')
     # Marill/Azumarill/Azurill
@@ -137,6 +173,12 @@ def attack_substitution(num: int, attack: str) -> str:
     # Jirachi
     elif num == 385:
         attack = _replace_move(attack, 'HELPING_HAND', 'CALM_MIND')
+    # Budew
+    elif num == 406:
+        # You can get Budew early in this game and Leech Seed is super helpful and it should definitely learn it early
+        # This is in correspondence with level_up_attack_additions where it readds the Worry Seed later
+        # Note: This definitely needs to be looked at if it's move list ever changes
+        attack = _replace_move(attack, 'WORRY_SEED', 'LEECH_SEED')
     # Cherubi/Cherrim
     elif num in [420, 421]:
         attack = _replace_move(attack, 'HELPING_HAND', 'TICKLE')
@@ -240,6 +282,14 @@ def attack_substitution(num: int, attack: str) -> str:
     # Stakataka
     elif num == 805:
         attack = _replace_move(attack, 'WIDE_GUARD', 'STONE_EDGE')
+    # Rizardon
+    elif num == AddedPokes.MEGA_CHARIZARD.value:
+        # These correspond with the level_up_attack_additions for Rizardon
+        # Basically Dragon Claw changes from default to evolution
+        # Wing Attack changes from evolution to default
+        # Inferno (level 62) changes to Outrage
+        attack = _swap_move(attack, 'WING_ATTACK', 'DRAGON_CLAW')
+        attack = _replace_move(attack, 'INFERNO', 'OUTRAGE')
 
     if is_unsupported_attack(attack):
         return ''

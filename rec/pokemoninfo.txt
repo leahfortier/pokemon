@@ -69112,7 +69112,7 @@ Disaster
 47 108.0 When this Pok\u00e9mon whips the winglike fur on its back as though beating its wings, it sends an intimidating aura flying at its opponents.
 6400
 FIELD NONE
-25
+26
 0 PLAY_ROUGH
 1 MOONLIGHT
 1 WING_ATTACK
@@ -69121,6 +69121,7 @@ FIELD NONE
 1 FUTURE_SIGHT
 1 SCRATCH
 1 FEINT
+1 LEER
 1 QUICK_ATTACK
 4 LEER
 7 QUICK_ATTACK
