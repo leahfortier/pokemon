@@ -431,7 +431,7 @@ public class PokemonInfoTest extends BaseTest {
         Assert.assertEquals(GrowthRate.SLOW, pokemonInfo.getGrowthRate());
         Assert.assertEquals(Gender.GENDERLESS_VALUE, pokemonInfo.getFemaleRatio());
 
-        Assert.assertArrayEquals(new EggGroup[] { EggGroup.UNDISCOVERED, EggGroup.NONE }, pokemonInfo.getEggGroups());
+        Assert.assertArrayEquals(new EggGroup[] { EggGroup.NO_EGGS, EggGroup.NONE }, pokemonInfo.getEggGroups());
 
         Assert.assertEquals(PokemonNamesies.MELTAN, pokemonInfo.getBaseEvolution());
 

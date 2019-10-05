@@ -294,7 +294,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     }
 
     public boolean canBreed() {
-        return eggGroups[0] != EggGroup.UNDISCOVERED;
+        return eggGroups[0] != EggGroup.NO_EGGS;
     }
 
     public PokemonNamesies getBaseEvolution() {

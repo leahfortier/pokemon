@@ -215,7 +215,7 @@ class Parser:
     # Ex: ['MONSTER', 'GRASS']
     def get_egg_groups(self) -> List[str]:
         # Get them egg groupies
-        egg_groups = [namesies(_get_egg_group(egg_group.name)) for egg_group in self.species.egg_groups]
+        egg_groups = [namesies(egg_group.name) for egg_group in self.species.egg_groups]
 
         # Just feel like these are backwards even though the order doesn't matter
         egg_groups.reverse()
@@ -312,26 +312,6 @@ def _get_growth_rate(growth_rate: str) -> str:
         return growth_rate
 
 
-# Replaces the egg group with alternative names if applicable
-def _get_egg_group(egg_group: str) -> str:
-    if egg_group == 'plant':
-        return 'grass'
-    elif egg_group == 'ground':
-        return 'field'
-    elif egg_group == 'humanshape':
-        return 'human-like'
-    elif egg_group == 'indeterminate':
-        return 'amorphous'
-    elif egg_group == 'no-eggs':
-        return 'undiscovered'
-    elif egg_group == 'water1':
-        return 'water-1'
-    elif egg_group == 'water2':
-        return 'water-2'
-    elif egg_group == 'water3':
-        return 'water-3'
-    else:
-        return egg_group
 # Parses the move entry into a Move object
 def _get_move(move_entry, version_entry: Dict) -> Move:
     name = move_entry.move.name
