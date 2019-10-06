@@ -2809,7 +2809,7 @@ NONE
 5 MOON_STONE
 1 COMET_SHARD
 6
-CUTE_CHARM MAGIC_GUARD UNAWARE
+CUTE_CHARM MAGIC_GUARD
 Fairy
 51 88.2 It is very wary and rarely shows itself to people. Its ears can hear a pin drop over half a mile away.
 2560
@@ -3204,7 +3204,7 @@ NONE
 50 ORAN_BERRY
 5 MOON_STONE
 6
-CUTE_CHARM COMPETITIVE FRISK
+CUTE_CHARM COMPETITIVE
 Balloon
 39 26.5 Its fine fur feels sublime to the touch. It can expand its body by inhaling air.
 2560
@@ -6471,7 +6471,7 @@ LEVEL RAPIDASH 40
 1
 5 SHUCA_BERRY
 4
-FLAME_BODY FLASH_FIRE FLAME_BODY
+RUN_AWAY FLASH_FIRE FLAME_BODY
 Fire Horse
 39 66.1 As a newborn, it can barely stand. However, through galloping, its legs are made tougher and faster.
 5120
@@ -6542,7 +6542,7 @@ NONE
 1
 5 SHUCA_BERRY
 4
-FLAME_BODY FLASH_FIRE FLAME_BODY
+RUN_AWAY FLASH_FIRE FLAME_BODY
 Fire Horse
 67 209.4 When at an all-out gallop, its blazing mane sparkles, enhancing its beautiful appearance.
 5120
@@ -37918,7 +37918,7 @@ TIME DAY ITEM CHANSEY OVAL_STONE
 5 LUCKY_EGG
 50 OVAL_STONE
 8
-NATURAL_CURE SERENE_GRACE
+NATURAL_CURE SERENE_GRACE HEALER
 Playhouse
 24 53.8 It likes to carry around a small rock. It may wander around others' feet and cause them to stumble.
 10240
@@ -68811,7 +68811,7 @@ STEEL NO_TYPE
 ITEM MELMETAL METAL_COAT
 0
 -1
-MAGNET_PULL NO_ABILITY
+MAGNET_PULL
 Hex Nut
 8 17.6 It melts particles of iron and other metals found in the subsoil, so it can absorb them into its body of molten steel.
 30720
@@ -68845,7 +68845,7 @@ STEEL NO_TYPE
 NONE
 0
 -1
-IRON_FIST NO_ABILITY
+IRON_FIST
 Hex Nut
 98 1763.7 Revered long ago for its capacity to create iron from nothing, for some reason it has come back to life after 3,000 years.
 30720

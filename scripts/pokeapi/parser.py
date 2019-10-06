@@ -127,7 +127,7 @@ class Parser:
         return female_ratio
 
     # Returns the abilities as namesies strings in a list of between sizes 1 and 3
-    # Ex: ['OVERGROW', 'CHLOROPHYLL']
+    # Ex: ['OVERGROW', 'CHLOROPHYLL'] or ['SHED_SKIN'] or ['RUN_AWAY', 'FLASH_FIRE', 'FLAME_BODY']
     def get_abilities(self) -> List[str]:
         abilities = ['']*3
 

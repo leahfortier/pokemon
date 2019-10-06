@@ -301,8 +301,17 @@ def attack_substitution(num: int, attack: str) -> str:
 # Will return the empty string to indicate removing ability (never 'NO_ABILITY')
 # The input ability string is expected to be in namesies format
 def ability_substitution(num: int, ability: str) -> str:
+    # Clefable -- Pre-evolutions have Friend Guard and causes terrible confusion
+    if num == 36:
+        ability = _replace(ability, 'UNAWARE', '')
+    # Wigglytuff -- same deal as Clefable
+    elif num == 40:
+        ability = _replace(ability, 'FRISK', '')
+    # Happiny -- similar but backwards to the Wigglyfable sitution
+    elif num == 440:
+        ability = _replace(ability, 'FRIEND_GUARD', 'HEALER')
     # Comfey -- this ability was changed and doesn't make as much sense anymore for Comfey
-    if num == 764:
+    elif num == 764:
         ability = _replace(ability, 'FLOWER_VEIL', '')
 
     # All abilities which were removed
