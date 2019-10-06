@@ -211,13 +211,10 @@ class Parser:
         return self.species.hatch_counter * 256
 
     # Returns the egg groups as namesies strings in a list either size 1 or 2
-    # Ex: ['MONSTER', 'GRASS'] or ['BUG'] or ['NO_EGGS']
+    # Ex: ['PLANT', 'MONSTER'] or ['BUG'] or ['NO_EGGS']
     def get_egg_groups(self) -> List[str]:
         # Get them egg groupies
         egg_groups = [namesies(egg_group.name) for egg_group in self.species.egg_groups]
-
-        # Just feel like these are backwards even though the order doesn't matter
-        egg_groups.reverse()
 
         assert len(egg_groups) in [1, 2]
         return egg_groups

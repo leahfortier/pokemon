@@ -14,7 +14,7 @@ OVERGROW CHLOROPHYLL
 Seed
 28 15.2 For some time after its birth, it grows by gaining nourishment from the seed on its back.
 5120
-MONSTER PLANT
+PLANT MONSTER
 15
 1 TACKLE
 3 GROWL
@@ -96,7 +96,7 @@ OVERGROW CHLOROPHYLL
 Seed
 39 28.7 When the bud on its back starts swelling, a sweet aroma wafts to indicate the flower's coming bloom.
 5120
-MONSTER PLANT
+PLANT MONSTER
 16
 1 TACKLE
 1 GROWL
@@ -179,7 +179,7 @@ OVERGROW CHLOROPHYLL
 Seed
 79 220.5 After a rainy day, the flower on its back smells stronger. The scent attracts other Pok\u00e9mon.
 5120
-MONSTER PLANT
+PLANT MONSTER
 19
 0 PETAL_DANCE
 1 TACKLE
@@ -274,7 +274,7 @@ BLAZE SOLAR_POWER
 Lizard
 24 18.7 The fire on the tip of its tail is a measure of its life. If healthy, its tail burns intensely.
 5120
-MONSTER DRAGON
+DRAGON MONSTER
 12
 1 SCRATCH
 1 GROWL
@@ -358,7 +358,7 @@ BLAZE SOLAR_POWER
 Flame
 43 41.9 In the rocky mountains where Charmeleon live, their fiery tails shine at night like stars.
 5120
-MONSTER DRAGON
+DRAGON MONSTER
 13
 1 SCRATCH
 1 GROWL
@@ -441,7 +441,7 @@ BLAZE SOLAR_POWER
 Flame
 67 199.5 When expelling a blast of superhot fire, the red flame at the tip of its tail burns more intensely.
 5120
-MONSTER DRAGON
+DRAGON MONSTER
 21
 0 WING_ATTACK
 1 FLARE_BLITZ
@@ -550,7 +550,7 @@ TORRENT RAIN_DISH
 Tiny Turtle
 20 19.8 It shelters itself in its shell, then strikes back with spouts of water at every opportunity.
 5120
-MONSTER WATER1
+WATER1 MONSTER
 14
 1 TACKLE
 4 TAIL_WHIP
@@ -635,7 +635,7 @@ TORRENT RAIN_DISH
 Turtle
 39 49.6 It is said to live 10,000 years. Its furry tail is popular as a symbol of longevity.
 5120
-MONSTER WATER1
+WATER1 MONSTER
 16
 1 TACKLE
 1 TAIL_WHIP
@@ -722,7 +722,7 @@ TORRENT RAIN_DISH
 Shellfish
 63 188.5 The jets of water it spouts from the rocket cannons on its shell can punch through thick steel.
 5120
-MONSTER WATER1
+WATER1 MONSTER
 18
 1 FLASH_CANNON
 1 TACKLE
@@ -1619,7 +1619,7 @@ INTIMIDATE SHED_SKIN
 Snake
 79 15.2 It sneaks through grass without making a sound and strikes unsuspecting prey from behind.
 5120
-GROUND DRAGON
+DRAGON GROUND
 17
 1 WRAP
 1 LEER
@@ -1707,7 +1707,7 @@ INTIMIDATE SHED_SKIN
 Cobra
 138 143.3 The pattern on its belly is for intimidation. It constricts foes while they are frozen in fear.
 5120
-GROUND DRAGON
+DRAGON GROUND
 23
 0 CRUNCH
 1 ICE_FANG
@@ -1808,7 +1808,7 @@ STATIC LIGHTNING_ROD
 Mouse
 16 13.2 It occasionally uses an electric shock to recharge a fellow Pikachu that is in a weakened state.
 2560
-GROUND FAIRY
+FAIRY GROUND
 18
 1 TAIL_WHIP
 1 THUNDER_SHOCK
@@ -1899,7 +1899,7 @@ STATIC LIGHTNING_ROD
 Mouse
 31 66.1 Its tail discharges electricity into the ground, protecting it from getting shocked.
 2560
-GROUND FAIRY
+FAIRY GROUND
 4
 1 THUNDER_SHOCK
 1 TAIL_WHIP
@@ -2161,7 +2161,7 @@ POISON_POINT RIVALRY
 Poison Pin
 16 15.4 While it does not prefer to fight, even one drop of the poison it secretes from barbs can be fatal.
 5120
-MONSTER GROUND
+GROUND MONSTER
 13
 1 GROWL
 1 SCRATCH
@@ -2422,7 +2422,7 @@ POISON_POINT RIVALRY
 Poison Pin
 20 19.8 It scans its surroundings by raising its ears out of the grass. Its toxic horn is for protection.
 5120
-MONSTER GROUND
+GROUND MONSTER
 13
 1 LEER
 1 PECK
@@ -2499,7 +2499,7 @@ POISON_POINT RIVALRY
 Poison Pin
 35 43.0 It has a violent disposition and stabs foes with its horn, which oozes poison upon impact.
 5120
-MONSTER GROUND
+GROUND MONSTER
 13
 1 LEER
 1 PECK
@@ -2577,7 +2577,7 @@ POISON_POINT RIVALRY
 Drill
 55 136.7 One swing of its mighty tail can snap a telephone pole as if it were a matchstick.
 5120
-MONSTER GROUND
+GROUND MONSTER
 9
 1 MEGAHORN
 1 PECK
@@ -3716,7 +3716,7 @@ EFFECT_SPORE DRY_SKIN
 Mushroom
 12 11.9 Mushrooms named tochukaso grow on its back. They grow along with the host Paras.
 5120
-BUG PLANT
+PLANT BUG
 12
 1 SCRATCH
 6 STUN_SPORE
@@ -3800,7 +3800,7 @@ EFFECT_SPORE DRY_SKIN
 Mushroom
 39 65.0 A mushroom grown larger than the host's body controls Parasect. It scatters poisonous spores.
 5120
-BUG PLANT
+PLANT BUG
 16
 1 CROSS_POISON
 1 SCRATCH
@@ -4400,7 +4400,7 @@ DAMP CLOUD_NINE
 Duck
 31 43.2 Overwhelmed by enigmatic abilities, it suffers a constant headache. It sometimes uses mysterious powers.
 5120
-WATER1 GROUND
+GROUND WATER1
 16
 1 WATER_SPORT
 1 SCRATCH
@@ -4491,7 +4491,7 @@ DAMP CLOUD_NINE
 Duck
 67 168.9 It is seen swimming dynamically and elegantly using its well-developed limbs and flippers.
 5120
-WATER1 GROUND
+GROUND WATER1
 20
 1 ME_FIRST
 1 AQUA_JET
@@ -6632,7 +6632,7 @@ OBLIVIOUS OWN_TEMPO
 Dopey
 47 79.4 Although slow, it is skilled at fishing with its tail. It does not feel pain if its tail is bitten.
 5120
-MONSTER WATER1
+WATER1 MONSTER
 16
 1 CURSE
 1 YAWN
@@ -6728,7 +6728,7 @@ OBLIVIOUS OWN_TEMPO
 Hermit Crab
 63 173.1 Though usually dim witted, it seems to become inspired if the Shellder on its tail bites down.
 5120
-MONSTER WATER1
+WATER1 MONSTER
 19
 0 WITHDRAW
 1 HEAL_PULSE
@@ -6991,7 +6991,7 @@ KEEN_EYE INNER_FOCUS
 Wild Duck
 31 33.1 It can't live without the stalk it holds. That's why it defends the stalk from attackers with its life.
 5120
-FLYING GROUND
+GROUND FLYING
 19
 1 BRAVE_BIRD
 1 POISON_JAB
@@ -7238,7 +7238,7 @@ THICK_FAT HYDRATION
 Sea Lion
 43 198.4 A Pok\u00e9mon that lives on icebergs. It swims in the sea using the point on its head to break up ice.
 5120
-WATER1 GROUND
+GROUND WATER1
 17
 1 HEADBUTT
 3 GROWL
@@ -7323,7 +7323,7 @@ THICK_FAT HYDRATION
 Sea Lion
 67 264.6 In snow, the pure white coat covering its body obscures it from predators.
 5120
-WATER1 GROUND
+GROUND WATER1
 21
 0 SHEER_COLD
 1 HEADBUTT
@@ -9488,7 +9488,7 @@ LIGHTNING_ROD ROCK_HEAD
 Spikes
 39 253.5 Its powerful tackles can destroy anything. However, it is too slow witted to help people work.
 5120
-MONSTER GROUND
+GROUND MONSTER
 15
 1 HORN_ATTACK
 1 TAIL_WHIP
@@ -9587,7 +9587,7 @@ LIGHTNING_ROD ROCK_HEAD
 Drill
 75 264.6 Standing on its hind legs freed its forelegs and made it smarter. It is very forgetful, however.
 5120
-MONSTER GROUND
+GROUND MONSTER
 19
 0 HAMMER_ARM
 1 HORN_DRILL
@@ -10013,7 +10013,7 @@ SWIFT_SWIM SNIPER
 Dragon
 16 17.6 It makes its nest in the shade of corals. If it senses danger, it spits murky ink and flees.
 5120
-WATER1 DRAGON
+DRAGON WATER1
 12
 1 BUBBLE
 5 SMOKESCREEN
@@ -10085,7 +10085,7 @@ POISON_POINT SNIPER
 Dragon
 47 55.1 Its spines provide protection. Its fins and bones are prized as traditional medicine ingredients.
 5120
-WATER1 DRAGON
+DRAGON WATER1
 16
 1 HYDRO_PUMP
 1 BUBBLE
@@ -11116,7 +11116,7 @@ SWIFT_SWIM RATTLED
 Fish
 35 22.0 A Magikarp living for many years can leap a mountain using Splash. The move remains useless, though.
 1280
-WATER2 DRAGON
+DRAGON WATER2
 3
 1 SPLASH
 15 TACKLE
@@ -11139,7 +11139,7 @@ INTIMIDATE MOXIE
 Atrocious
 256 518.1 Once it begins to rampage, a Gyarados will burn everything down, even in a harsh storm.
 1280
-WATER2 DRAGON
+DRAGON WATER2
 14
 0 BITE
 1 THRASH
@@ -11221,7 +11221,7 @@ WATER_ABSORB SHELL_ARMOR
 Transport
 98 485.0 It loves crossing the sea with people and Pok\u00e9mon on its back. It understands human speech.
 10240
-MONSTER WATER1
+WATER1 MONSTER
 15
 1 SING
 1 GROWL
@@ -11749,7 +11749,7 @@ SWIFT_SWIM SHELL_ARMOR
 Spiral
 16 16.5 A Pok\u00e9mon that was resurrected from a fossil using modern science. It swam in ancient seas.
 7680
-WATER1 WATER3
+WATER3 WATER1
 14
 1 CONSTRICT
 1 WITHDRAW
@@ -11830,7 +11830,7 @@ SWIFT_SWIM SHELL_ARMOR
 Spiral
 39 77.2 It is thought that this Pok\u00e9mon became extinct because its spiral shell grew too large.
 7680
-WATER1 WATER3
+WATER3 WATER1
 17
 0 SPIKE_CANNON
 1 HYDRO_PUMP
@@ -11917,7 +11917,7 @@ SWIFT_SWIM BATTLE_ARMOR
 Shellfish
 20 25.4 It is thought to have inhabited beaches 300 million years ago. It is protected by a stiff shell.
 7680
-WATER1 WATER3
+WATER3 WATER1
 12
 1 SCRATCH
 1 HARDEN
@@ -11994,7 +11994,7 @@ SWIFT_SWIM BATTLE_ARMOR
 Shellfish
 51 89.3 It is thought that this Pok\u00e9mon came onto land because its prey adapted to life on land.
 7680
-WATER1 WATER3
+WATER3 WATER1
 18
 0 SLASH
 1 NIGHT_SLASH
@@ -12507,7 +12507,7 @@ SHED_SKIN MARVEL_SCALE
 Dragon
 71 7.3 It is called the "Mirage Pok\u00e9mon" because so few have seen it. Its shed skin has been found.
 10240
-WATER1 DRAGON
+DRAGON WATER1
 14
 1 WRAP
 1 LEER
@@ -12592,7 +12592,7 @@ SHED_SKIN MARVEL_SCALE
 Dragon
 157 36.4 If its body takes on an aura, the weather changes instantly. It is said to live in seas and lakes.
 10240
-WATER1 DRAGON
+DRAGON WATER1
 16
 1 WRAP
 1 LEER
@@ -12680,7 +12680,7 @@ INNER_FOCUS MULTISCALE
 Dragon
 87 463.0 It is said to make its home somewhere in the sea. It guides crews of shipwrecks to shore.
 10240
-WATER1 DRAGON
+DRAGON WATER1
 22
 0 WING_ATTACK
 1 HURRICANE
@@ -13113,7 +13113,7 @@ OVERGROW LEAF_GUARD
 Leaf
 35 14.1 It uses the leaf on its head to determine the temperature and humidity. It loves to sunbathe.
 5120
-MONSTER PLANT
+PLANT MONSTER
 14
 1 TACKLE
 1 GROWL
@@ -13193,7 +13193,7 @@ OVERGROW LEAF_GUARD
 Leaf
 47 34.8 The buds that ring its neck give off a spicy aroma that perks people up.
 5120
-MONSTER PLANT
+PLANT MONSTER
 16
 1 TACKLE
 1 GROWL
@@ -13276,7 +13276,7 @@ OVERGROW LEAF_GUARD
 Herb
 71 221.6 Its breath has the fantastic ability to revive dead plants and flowers.
 5120
-MONSTER PLANT
+PLANT MONSTER
 19
 0 PETAL_DANCE
 1 PETAL_BLIZZARD
@@ -13628,7 +13628,7 @@ TORRENT SHEER_FORCE
 Big Jaw
 24 20.9 It has the habit of biting anything with its developed jaws. Even its Trainer needs to be careful.
 5120
-MONSTER WATER1
+WATER1 MONSTER
 16
 1 SCRATCH
 1 LEER
@@ -13719,7 +13719,7 @@ TORRENT SHEER_FORCE
 Big Jaw
 43 55.1 Once it bites down, it won't let go until it loses its fangs. New fangs quickly grow into place.
 5120
-MONSTER WATER1
+WATER1 MONSTER
 17
 1 SCRATCH
 1 LEER
@@ -13812,7 +13812,7 @@ TORRENT SHEER_FORCE
 Big Jaw
 91 195.8 It usually moves slowly, but it goes at blinding speed when it attacks and bites prey.
 5120
-MONSTER WATER1
+WATER1 MONSTER
 19
 1 AGILITY
 1 SCRATCH
@@ -15241,7 +15241,7 @@ HUSTLE SERENE_GRACE
 Happiness
 24 7.1 To share its happiness, it flies around the world seeking kind- hearted people.
 2560
-FLYING FAIRY
+FAIRY FLYING
 19
 1 MAGICAL_LEAF
 1 GROWL
@@ -15545,7 +15545,7 @@ STATIC NO_ABILITY
 Wool
 24 17.2 Its fluffy coat swells to double when static electricity builds up. Touching it can be shocking.
 5120
-MONSTER GROUND
+GROUND MONSTER
 15
 1 TACKLE
 1 GROWL
@@ -15618,7 +15618,7 @@ STATIC NO_ABILITY
 Wool
 31 29.3 If its coat becomes fully charged with electricity, its tail lights up. It fires hair that zaps on impact.
 5120
-MONSTER GROUND
+GROUND MONSTER
 17
 1 TACKLE
 1 GROWL
@@ -15699,7 +15699,7 @@ STATIC NO_ABILITY
 Light
 55 135.6 The tip of its tail shines brightly. In the olden days, people sent signals using the tail's light.
 5120
-MONSTER GROUND
+GROUND MONSTER
 24
 0 THUNDER_PUNCH
 1 ZAP_CANNON
@@ -15871,7 +15871,7 @@ THICK_FAT HUGE_POWER
 Aqua Mouse
 16 18.7 The oil-filled end of its tail floats on water. It keeps Marill from drowning even in a strong current.
 2560
-WATER1 FAIRY
+FAIRY WATER1
 16
 1 TACKLE
 1 WATER_GUN
@@ -15955,7 +15955,7 @@ THICK_FAT HUGE_POWER
 Aqua Rabbit
 31 62.8 It can spend all day in water, since it can inhale and store a large volume of air.
 2560
-WATER1 FAIRY
+FAIRY WATER1
 18
 1 TACKLE
 1 WATER_GUN
@@ -16216,7 +16216,7 @@ CHLOROPHYLL LEAF_GUARD
 Cottonweed
 16 1.1 It drifts on winds. It is said that when Hoppip gather in fields and mountains, spring is on the way.
 5120
-FAIRY PLANT
+PLANT FAIRY
 20
 1 SPLASH
 1 ABSORB
@@ -16296,7 +16296,7 @@ CHLOROPHYLL LEAF_GUARD
 Cottonweed
 24 2.2 It blooms when the weather warms. It floats in the sky to soak up as much sunlight as possible.
 5120
-FAIRY PLANT
+PLANT FAIRY
 22
 1 SPLASH
 1 ABSORB
@@ -16378,7 +16378,7 @@ CHLOROPHYLL LEAF_GUARD
 Cottonweed
 31 6.6 Blown by seasonal winds, it circles the globe, scattering cotton spores as it goes.
 5120
-FAIRY PLANT
+PLANT FAIRY
 22
 1 SPLASH
 1 ABSORB
@@ -16796,7 +16796,7 @@ DAMP WATER_ABSORB
 Water Fish
 16 18.7 When walking on land, it covers its body with a poisonous film that keeps its skin from dehydrating.
 5120
-WATER1 GROUND
+GROUND WATER1
 13
 1 WATER_GUN
 1 TAIL_WHIP
@@ -16878,7 +16878,7 @@ DAMP WATER_ABSORB
 Water Fish
 55 165.3 It has an easygoing nature. It doesn't care if it bumps its head on boats and boulders while swimming.
 5120
-WATER1 GROUND
+GROUND WATER1
 14
 1 WATER_GUN
 1 TAIL_WHIP
@@ -17239,7 +17239,7 @@ OBLIVIOUS OWN_TEMPO
 Royal
 79 175.3 Being bitten by Shellder gave it intelligence comparable to that of award-winning scientists.
 5120
-MONSTER WATER1
+WATER1 MONSTER
 19
 1 HEAL_PULSE
 1 POWER_GEM
@@ -18072,7 +18072,7 @@ INTIMIDATE RUN_AWAY
 Fairy
 24 17.2 Small Pok\u00e9mon flee from its scary face. It is, however, considered by women to be cute.
 5120
-GROUND FAIRY
+FAIRY GROUND
 15
 1 ICE_FANG
 1 FIRE_FANG
@@ -18173,7 +18173,7 @@ INTIMIDATE QUICK_FEET
 Fairy
 55 107.4 It is timid in spite of its looks. If it becomes enraged, however, it will strike with its huge fangs.
 5120
-GROUND FAIRY
+FAIRY GROUND
 17
 1 OUTRAGE
 1 ICE_FANG
@@ -19281,7 +19281,7 @@ HUSTLE NATURAL_CURE
 Coral
 24 11.0 Many live in the clean seas of the south. They apparently can't live in polluted waters.
 5120
-WATER1 WATER3
+WATER3 WATER1
 18
 1 TACKLE
 1 HARDEN
@@ -19378,7 +19378,7 @@ HUSTLE SNIPER
 Jet
 24 26.5 It forcefully squirts water. The water jet never misses prey even if the Remoraid is deep in the sea.
 5120
-WATER1 WATER2
+WATER2 WATER1
 13
 1 WATER_GUN
 6 LOCK_ON
@@ -19458,7 +19458,7 @@ SUCTION_CUPS SNIPER
 Jet
 35 62.8 It loves to lurk inside holes in rocks. It sometimes sprays ink on prey by sticking out only its mouth.
 5120
-WATER1 WATER2
+WATER2 WATER1
 19
 0 OCTAZOOKA
 1 GUNK_SHOT
@@ -19551,7 +19551,7 @@ VITAL_SPIRIT HUSTLE
 Delivery
 35 35.3 It carries food rolled up in its tail. It has the habit of sharing food with people lost in mountains.
 5120
-WATER1 GROUND
+GROUND WATER1
 2
 1 PRESENT
 25 DRILL_PECK
@@ -19985,7 +19985,7 @@ SWIFT_SWIM SNIPER
 Dragon
 71 335.1 It lives in caves on the seafloor and creates giant whirlpools every time it moves.
 5120
-WATER1 DRAGON
+DRAGON WATER1
 17
 1 HYDRO_PUMP
 1 YAWN
@@ -21858,7 +21858,7 @@ OVERGROW UNBURDEN
 Wood Gecko
 20 11.0 The soles of its feet are covered by countless tiny spikes, enabling it to walk on walls and ceilings.
 5120
-MONSTER DRAGON
+DRAGON MONSTER
 14
 1 POUND
 1 LEER
@@ -21946,7 +21946,7 @@ OVERGROW UNBURDEN
 Wood Gecko
 35 47.6 It lives in dense jungles. While  closing in on its prey, it leaps from branch to branch.
 5120
-MONSTER DRAGON
+DRAGON MONSTER
 18
 0 FURY_CUTTER
 1 POUND
@@ -22041,7 +22041,7 @@ OVERGROW UNBURDEN
 Forest
 67 115.1 The leaves that grow on its arms can slice down thick trees. It is without peer in jungle combat.
 5120
-MONSTER DRAGON
+DRAGON MONSTER
 21
 0 DUAL_CHOP
 1 FURY_CUTTER
@@ -22432,7 +22432,7 @@ TORRENT DAMP
 Mud Fish
 16 16.8 To alert it, the fin on its head senses the flow of water. It has the strength to heft boulders.
 5120
-MONSTER WATER1
+WATER1 MONSTER
 13
 1 TACKLE
 1 GROWL
@@ -22516,7 +22516,7 @@ TORRENT DAMP
 Mud Fish
 28 61.7 Its sturdy legs give it sure footing, even in mud. It burrows into dirt to sleep.
 5120
-MONSTER WATER1
+WATER1 MONSTER
 16
 0 MUD_SHOT
 1 TACKLE
@@ -22609,7 +22609,7 @@ TORRENT DAMP
 Mud Fish
 59 180.6 It can swim while towing a large ship. It bashes down foes with a swing of its thick arms.
 5120
-MONSTER WATER1
+WATER1 MONSTER
 18
 1 MUD_SHOT
 1 HAMMER_ARM
@@ -23288,7 +23288,7 @@ SWIFT_SWIM RAIN_DISH
 Water Weed
 20 5.7 It looks like an aquatic plant and serves as a ferry to Pok\u00e9mon that can't swim.
 3840
-WATER1 PLANT
+PLANT WATER1
 13
 1 ASTONISH
 3 GROWL
@@ -23365,7 +23365,7 @@ SWIFT_SWIM RAIN_DISH
 Jolly
 47 71.6 It has a mischievous spirit. If it spots an angler, it will tug on the fishing line to interfere.
 3840
-WATER1 PLANT
+PLANT WATER1
 13
 1 ASTONISH
 3 GROWL
@@ -23451,7 +23451,7 @@ SWIFT_SWIM RAIN_DISH
 Carefree
 59 121.3 If it hears festive music, all its muscles fill with energy. It can't help breaking out into a dance.
 3840
-WATER1 PLANT
+PLANT WATER1
 4
 1 ASTONISH
 1 GROWL
@@ -23532,7 +23532,7 @@ CHLOROPHYLL EARLY_BIRD
 Acorn
 20 8.8 When it dangles from a tree branch, it looks just like an acorn. It enjoys scaring other Pok\u00e9mon.
 3840
-GROUND PLANT
+PLANT GROUND
 7
 1 BIDE
 3 HARDEN
@@ -23601,7 +23601,7 @@ CHLOROPHYLL EARLY_BIRD
 Wily
 39 61.7 The sound of its grass flute makes its listeners uneasy. It lives deep in forests.
 3840
-GROUND PLANT
+PLANT GROUND
 12
 0 RAZOR_LEAF
 1 POUND
@@ -23689,7 +23689,7 @@ CHLOROPHYLL EARLY_BIRD
 Wicked
 51 131.4 By flapping its leafy fan, it can whip up gusts of 100 ft/second that can level houses.
 3840
-GROUND PLANT
+PLANT GROUND
 7
 1 RAZOR_LEAF
 1 FEINT_ATTACK
@@ -23944,7 +23944,7 @@ KEEN_EYE HYDRATION
 Seagull
 24 20.9 It soars high in the sky, riding on updrafts like a glider. It carries food tucked in its bill.
 5120
-WATER1 FLYING
+FLYING WATER1
 14
 1 GROWL
 1 WATER_GUN
@@ -24029,7 +24029,7 @@ KEEN_EYE DRIZZLE
 Water Bird
 47 61.7 It is a messenger of the skies, carrying small Pok\u00e9mon and eggs to safety in its bill.
 5120
-WATER1 FLYING
+FLYING WATER1
 23
 0 PROTECT
 1 HURRICANE
@@ -24443,7 +24443,7 @@ SWIFT_SWIM RAIN_DISH
 Pond Skater
 20 3.7 It appears as if it is skating on water. It draws prey with a sweet scent from the tip of its head.
 3840
-WATER1 BUG
+BUG WATER1
 11
 1 BUBBLE
 6 QUICK_ATTACK
@@ -24515,7 +24515,7 @@ INTIMIDATE UNNERVE
 Eyeball
 31 7.9 Its antennae have eye patterns on them. Its four wings enable it to hover and fly in any direction.
 3840
-WATER1 BUG
+BUG WATER1
 20
 1 QUIVER_DANCE
 1 WHIRLWIND
@@ -24607,7 +24607,7 @@ EFFECT_SPORE POISON_HEAL
 Mushroom
 16 9.9 It spouts poison spores from the top of its head. These spores cause pain all over if inhaled.
 3840
-FAIRY PLANT
+PLANT FAIRY
 13
 1 ABSORB
 1 TACKLE
@@ -24680,7 +24680,7 @@ EFFECT_SPORE POISON_HEAL
 Mushroom
 47 86.4 Its short arms stretch when it throws punches. Its technique is equal to that of pro boxers.
 3840
-FAIRY PLANT
+PLANT FAIRY
 16
 0 MACH_PUNCH
 1 ABSORB
@@ -25254,7 +25254,7 @@ SOUNDPROOF RATTLED
 Whisper
 24 35.9 Usually, its cries are like quiet murmurs. If frightened, it shrieks at the same volume as a jet plane.
 5120
-MONSTER GROUND
+GROUND MONSTER
 13
 1 POUND
 4 ECHOED_VOICE
@@ -25333,7 +25333,7 @@ SOUNDPROOF SCRAPPY
 Big Voice
 39 89.3 The shock waves from its cries can tip over trucks. It stamps its feet to power up.
 5120
-MONSTER GROUND
+GROUND MONSTER
 17
 0 BITE
 1 POUND
@@ -25427,7 +25427,7 @@ SOUNDPROOF SCRAPPY
 Loud Noise
 59 185.2 Its howls can be heard over six miles away. It emits all sorts of noises from the ports on its body.
 5120
-MONSTER GROUND
+GROUND MONSTER
 24
 0 CRUNCH
 1 BITE
@@ -25872,7 +25872,7 @@ CUTE_CHARM NORMALIZE
 Kitten
 24 24.3 It can't stop itself from chasing moving things, and it runs in a circle, chasing its own tail.
 3840
-GROUND FAIRY
+FAIRY GROUND
 19
 1 FAKE_OUT
 1 GROWL
@@ -25967,7 +25967,7 @@ CUTE_CHARM NORMALIZE
 Prim
 43 71.9 It is highly popular among female Trainers for its sublime fur. It does not keep a nest.
 3840
-GROUND FAIRY
+FAIRY GROUND
 4
 1 FAKE_OUT
 1 SING
@@ -26159,7 +26159,7 @@ HYPER_CUTTER INTIMIDATE
 Deceiver
 24 25.4 Attached to its head is a huge set of jaws formed by horns. It can chew through iron beams.
 5120
-GROUND FAIRY
+FAIRY GROUND
 20
 1 PLAY_ROUGH
 1 IRON_HEAD
@@ -27103,7 +27103,7 @@ SWARM PRANKSTER
 Firefly
 28 39.0 It communicates with others by lighting up its rear at night. It loves Illumise's sweet aroma.
 3840
-BUG HUMANSHAPE
+HUMANSHAPE BUG
 16
 1 FLASH
 1 TACKLE
@@ -27192,7 +27192,7 @@ OBLIVIOUS TINTED_LENS
 Firefly
 24 39.0 With its sweet aroma, it guides Volbeat to draw signs with light in the night sky.
 3840
-BUG HUMANSHAPE
+HUMANSHAPE BUG
 16
 1 PLAY_NICE
 1 TACKLE
@@ -27282,7 +27282,7 @@ NATURAL_CURE POISON_POINT
 Thorn
 12 4.4 The more healthy the Roselia, the more pleasant its flowers' aroma. Its scent deeply relaxes people.
 5120
-FAIRY PLANT
+PLANT FAIRY
 17
 1 ABSORB
 4 GROWTH
@@ -27702,7 +27702,7 @@ WATER_VEIL OBLIVIOUS
 Ball Whale
 79 286.6 On sunny days, it lands on beaches to bounce like a ball and play. It spouts water from its nose.
 10240
-GROUND WATER2
+WATER2 GROUND
 16
 1 SPLASH
 4 GROWL
@@ -27780,7 +27780,7 @@ WATER_VEIL OBLIVIOUS
 Float Whale
 571 877.4 The biggest of all Pok\u00e9mon. It can dive to a depth of almost 10,000 feet on only one breath.
 10240
-GROUND WATER2
+WATER2 GROUND
 22
 1 SOAK
 1 NOBLE_ROAR
@@ -28338,7 +28338,7 @@ OWN_TEMPO TANGLED_FEET
 Spot Panda
 43 11.0 No two Spinda have the same pattern of spots. Its tottering step fouls the aim of foes.
 3840
-GROUND HUMANSHAPE
+HUMANSHAPE GROUND
 13
 1 TACKLE
 5 COPYCAT
@@ -28694,7 +28694,7 @@ SAND_VEIL WATER_ABSORB
 Cactus
 16 113.1 By storing water in its body, this desert dweller can survive for 30 days without water.
 5120
-PLANT HUMANSHAPE
+HUMANSHAPE PLANT
 17
 1 POISON_STING
 1 LEER
@@ -28787,7 +28787,7 @@ SAND_VEIL WATER_ABSORB
 Scarecrow
 51 170.6 It becomes active at night, seeking prey that is exhausted from the day's desert heat.
 5120
-PLANT HUMANSHAPE
+HUMANSHAPE PLANT
 22
 0 SPIKY_SHIELD
 1 DESTINY_BOND
@@ -28890,7 +28890,7 @@ NATURAL_CURE CLOUD_NINE
 Cotton Bird
 16 2.6 It can't relax if it or its surroundings are not clean. It wipes off dirt with its wings.
 5120
-FLYING DRAGON
+DRAGON FLYING
 17
 1 PECK
 1 GROWL
@@ -28973,7 +28973,7 @@ NATURAL_CURE CLOUD_NINE
 Humming
 43 45.4 If it bonds with a person, it will gently envelop the friend with its soft wings, then hum.
 5120
-FLYING DRAGON
+DRAGON FLYING
 23
 0 DRAGON_BREATH
 1 SKY_ATTACK
@@ -29180,7 +29180,7 @@ SHED_SKIN INFILTRATOR
 Fang Snake
 106 115.7 For many generations, it has feuded with Zangoose. It whets its bladed tail on rocks for battle.
 5120
-GROUND DRAGON
+DRAGON GROUND
 20
 1 WRAP
 1 SWAGGER
@@ -29625,7 +29625,7 @@ HYPER_CUTTER SHELL_ARMOR
 Ruffian
 24 25.4 Its hardy vitality enables it to adapt to any environment. Its pincers will never release prey.
 3840
-WATER1 WATER3
+WATER3 WATER1
 15
 1 BUBBLE
 5 HARDEN
@@ -29710,7 +29710,7 @@ HYPER_CUTTER SHELL_ARMOR
 Rogue
 43 72.3 It is a ruffian that uses its pincers to pick up and toss out other Pok\u00e9mon from its pond.
 3840
-WATER1 WATER3
+WATER3 WATER1
 19
 0 SWIFT
 1 BUBBLE
@@ -30316,7 +30316,7 @@ SWIFT_SWIM OBLIVIOUS
 Fish
 24 16.3 It is a shabby and ugly Pok\u00e9mon. However, it is very hardy and can survive on little water.
 5120
-WATER1 DRAGON
+DRAGON WATER1
 3
 1 SPLASH
 15 TACKLE
@@ -30375,7 +30375,7 @@ MARVEL_SCALE COMPETITIVE
 Tender
 244 357.1 Its lovely scales are described as rainbow colored. They change color depending on the viewing angle.
 5120
-WATER1 DRAGON
+DRAGON WATER1
 19
 0 WATER_PULSE
 1 WRAP
@@ -30463,7 +30463,7 @@ FORECAST NO_ABILITY
 Weather
 12 1.8 Its appearance changes with the weather. Recently, its molecules were found to be just like water.
 6400
-FAIRY INDETERMINATE
+INDETERMINATE FAIRY
 13
 1 TACKLE
 10 WATER_GUN
@@ -31049,7 +31049,7 @@ CHLOROPHYLL SOLAR_POWER
 Fruit
 79 220.5 Delicious fruits grew out from around its neck because it always ate the same kind of fruit.
 6400
-MONSTER PLANT
+PLANT MONSTER
 17
 1 LEAF_STORM
 1 LEER
@@ -31392,7 +31392,7 @@ INNER_FOCUS ICE_BODY
 Snow Hat
 28 37.0 It is said that several Snorunt gather under giant leaves and live together in harmony.
 5120
-FAIRY MINERAL
+MINERAL FAIRY
 13
 1 POWDER_SNOW
 1 LEER
@@ -31462,7 +31462,7 @@ INNER_FOCUS ICE_BODY
 Face
 59 565.5 It prevents prey from escaping by instantaneously freezing moisture in the air.
 5120
-FAIRY MINERAL
+MINERAL FAIRY
 18
 0 FREEZE_DRY
 1 SHEER_COLD
@@ -31548,7 +31548,7 @@ THICK_FAT ICE_BODY
 Clap
 31 87.1 It rolls across ice floes to reach shore because its body is poorly shaped for swimming.
 5120
-WATER1 GROUND
+GROUND WATER1
 15
 1 DEFENSE_CURL
 1 POWDER_SNOW
@@ -31626,7 +31626,7 @@ THICK_FAT ICE_BODY
 Ball Roll
 43 193.1 It habitually spins things on its nose. By doing so, it learns textures and odors.
 5120
-WATER1 GROUND
+GROUND WATER1
 16
 0 SWAGGER
 1 DEFENSE_CURL
@@ -31706,7 +31706,7 @@ THICK_FAT ICE_BODY
 Ice Break
 55 332.0 It shatters ice with its big tusks. Its thick blubber repels not only the cold, but also enemy attacks.
 5120
-WATER1 GROUND
+GROUND WATER1
 18
 0 ICE_FANG
 1 SWAGGER
@@ -32012,7 +32012,7 @@ SWIFT_SWIM ROCK_HEAD
 Longevity
 39 51.6 A rare Pok\u00e9mon discovered during a deep-sea exploration. It has not changed in over 100 million years.
 10240
-WATER1 WATER2
+WATER2 WATER1
 17
 1 FLAIL
 1 HEAD_SMASH
@@ -33524,7 +33524,7 @@ OVERGROW SHELL_ARMOR
 Tiny Leaf
 16 22.5 The shell on its back is made of soil. On a very healthy Turtwig, the shell should feel moist.
 5120
-MONSTER PLANT
+PLANT MONSTER
 12
 1 TACKLE
 5 WITHDRAW
@@ -33604,7 +33604,7 @@ OVERGROW SHELL_ARMOR
 Grove
 43 213.8 It knows where pure water wells up. It carries fellow Pok\u00e9mon there on its back.
 5120
-MONSTER PLANT
+PLANT MONSTER
 14
 1 TACKLE
 1 WITHDRAW
@@ -33686,7 +33686,7 @@ OVERGROW SHELL_ARMOR
 Continent
 87 683.4 Some Pok\u00e9mon are born on a Torterra's back and spend their entire life there.
 5120
-MONSTER PLANT
+PLANT MONSTER
 17
 0 EARTHQUAKE
 1 WOOD_HAMMER
@@ -33786,7 +33786,7 @@ BLAZE IRON_FIST
 Chimp
 20 13.7 It is very agile. Before going to sleep, it extinguishes the flame on its tail to prevent fires.
 5120
-GROUND HUMANSHAPE
+HUMANSHAPE GROUND
 13
 1 SCRATCH
 1 LEER
@@ -33878,7 +33878,7 @@ BLAZE IRON_FIST
 Playful
 35 48.5 It skillfully controls the intensity of the fire on its tail to keep its foes at an ideal distance.
 5120
-GROUND HUMANSHAPE
+HUMANSHAPE GROUND
 15
 0 MACH_PUNCH
 1 SCRATCH
@@ -33976,7 +33976,7 @@ BLAZE IRON_FIST
 Flame
 47 121.3 It uses unique fighting moves with fire on its hands and feet. It will take on any opponent.
 5120
-GROUND HUMANSHAPE
+HUMANSHAPE GROUND
 17
 0 CLOSE_COMBAT
 1 MACH_PUNCH
@@ -34086,7 +34086,7 @@ TORRENT DEFIANT
 Penguin
 16 11.5 A poor walker, it often falls down. However, its strong pride makes it puff up its chest without a care.
 5120
-WATER1 GROUND
+GROUND WATER1
 13
 1 POUND
 4 GROWL
@@ -34167,7 +34167,7 @@ TORRENT DEFIANT
 Penguin
 31 50.7 Because every Prinplup considers itself to be the most important, they can never form a group.
 5120
-WATER1 GROUND
+GROUND WATER1
 16
 0 METAL_CLAW
 1 TACKLE
@@ -34252,7 +34252,7 @@ TORRENT DEFIANT
 Emperor
 67 186.3 If anyone were to hurt its pride, it would slash them with wings that can cleave through an ice floe.
 5120
-WATER1 GROUND
+GROUND WATER1
 17
 0 AQUA_JET
 1 METAL_CLAW
@@ -34579,7 +34579,7 @@ SIMPLE UNAWARE
 Plump Mouse
 20 44.1 A comparison revealed that Bidoof's front teeth grow at the same rate as Rattata's.
 3840
-WATER1 GROUND
+GROUND WATER1
 14
 1 TACKLE
 1 GROWL
@@ -34664,7 +34664,7 @@ SIMPLE UNAWARE
 Beaver
 39 69.4 A river dammed by Bibarel will never overflow its banks, which is appreciated by people nearby.
 3840
-WATER1 GROUND
+GROUND WATER1
 17
 0 WATER_GUN
 1 AQUA_JET
@@ -35159,7 +35159,7 @@ NATURAL_CURE POISON_POINT
 Bouquet
 35 32.0 Each of its hands contains different toxins, but both hands can jab with near-fatal power.
 5120
-FAIRY PLANT
+PLANT FAIRY
 7
 1 VENOM_DRENCH
 1 GRASSY_TERRAIN
@@ -35885,7 +35885,7 @@ RUN_AWAY PICKUP
 EleSquirrel
 16 8.6 A pair may be seen rubbing their cheek pouches together in an effort to share stored electricity.
 2560
-GROUND FAIRY
+FAIRY GROUND
 15
 1 GROWL
 1 BIDE
@@ -35969,7 +35969,7 @@ SWIFT_SWIM WATER_VEIL
 Sea Weasel
 28 65.0 It spins its two tails like a screw to propel itself through water. The tails also slice clinging seaweed.
 5120
-WATER1 GROUND
+GROUND WATER1
 14
 1 SONIC_BOOM
 4 GROWL
@@ -36047,7 +36047,7 @@ SWIFT_SWIM WATER_VEIL
 Sea Weasel
 43 73.9 It is a common sight around fishing ports. It is known to rescue people and carry off prey.
 5120
-WATER1 GROUND
+GROUND WATER1
 19
 1 ICE_FANG
 1 CRUNCH
@@ -36139,7 +36139,7 @@ CHLOROPHYLL NO_ABILITY
 Cherry
 16 7.3 The small ball is not only filled with nutrients, it is also tasty. Starly try to peck it off.
 5120
-FAIRY PLANT
+PLANT FAIRY
 12
 1 MORNING_SUN
 1 TACKLE
@@ -36211,7 +36211,7 @@ FLOWER_GIFT NO_ABILITY
 Blossom
 20 20.5 If it senses strong sunlight, it opens its folded petals to absorb the sun's rays with its whole body.
 5120
-FAIRY PLANT
+PLANT FAIRY
 15
 0 PETAL_DANCE
 1 MORNING_SUN
@@ -36288,7 +36288,7 @@ STICKY_HOLD STORM_DRAIN
 Sea Slug
 12 13.9 Beware of pushing strongly on its squishy body, as it makes a mysterious purple fluid ooze out.
 5120
-WATER1 INDETERMINATE
+INDETERMINATE WATER1
 10
 1 MUD_SLAP
 2 MUD_SPORT
@@ -36357,7 +36357,7 @@ STICKY_HOLD STORM_DRAIN
 Sea Slug
 35 65.9 Long ago, its entire back was shielded with a sturdy shell. There are traces of it left in its cells.
 5120
-WATER1 INDETERMINATE
+INDETERMINATE WATER1
 13
 1 MUD_SLAP
 1 MUD_SPORT
@@ -36735,7 +36735,7 @@ RUN_AWAY KLUTZ
 Rabbit
 16 12.1 Its ears are always rolled up. They can be forcefully extended to shatter even a large boulder.
 5120
-GROUND HUMANSHAPE
+HUMANSHAPE GROUND
 16
 1 DEFENSE_CURL
 1 SPLASH
@@ -36832,7 +36832,7 @@ CUTE_CHARM KLUTZ
 Rabbit
 47 73.4 The ears appear to be delicate. If they are touched roughly, it kicks with its graceful legs.
 5120
-GROUND HUMANSHAPE
+HUMANSHAPE GROUND
 23
 0 CAPTIVATE
 1 HEALING_WISH
@@ -38166,7 +38166,7 @@ SAND_VEIL ROUGH_SKIN
 Land Shark
 28 45.2 It attacks using its huge mouth. While its attacks are powerful, it hurts itself out of clumsiness, too.
 10240
-MONSTER DRAGON
+DRAGON MONSTER
 10
 1 TACKLE
 3 SAND_ATTACK
@@ -38243,7 +38243,7 @@ SAND_VEIL ROUGH_SKIN
 Cave
 55 123.5 It loves sparkly things. It seeks treasures in caves and hoards the loot in its nest.
 10240
-MONSTER DRAGON
+DRAGON MONSTER
 13
 0 DUAL_CHOP
 1 TACKLE
@@ -38325,7 +38325,7 @@ SAND_VEIL ROUGH_SKIN
 Mach
 75 209.4 It is said that when one runs at high speed, its wings create blades of wind that can fell nearby trees.
 10240
-MONSTER DRAGON
+DRAGON MONSTER
 16
 0 CRUNCH
 1 DUAL_CHOP
@@ -38611,7 +38611,7 @@ STEADFAST INNER_FOCUS
 Aura
 47 119.0 A well-trained one can sense auras to identify and take in the feelings of creatures over half a mile away.
 6400
-GROUND HUMANSHAPE
+HUMANSHAPE GROUND
 20
 0 AURA_SPHERE
 1 LASER_FOCUS
@@ -38859,7 +38859,7 @@ BATTLE_ARMOR SNIPER
 Scorpion
 31 26.5 As soon as the tail claws close, its needle tips secrete poison. It can survive a year without food.
 5120
-BUG WATER3
+WATER3 BUG
 17
 1 BITE
 1 POISON_STING
@@ -38944,7 +38944,7 @@ BATTLE_ARMOR SNIPER
 Ogre Scorpion
 51 135.6 Possessing a sturdy build, it takes pride in its strength, taking down foes without using toxins.
 5120
-BUG WATER3
+WATER3 BUG
 21
 1 THUNDER_FANG
 1 ICE_FANG
@@ -39572,7 +39572,7 @@ SNOW_WARNING SOUNDPROOF
 Frost Tree
 39 111.3 Seemingly curious about people, they gather around footsteps they find on snowy mountains.
 5120
-MONSTER PLANT
+PLANT MONSTER
 12
 1 POWDER_SNOW
 1 LEER
@@ -39649,7 +39649,7 @@ SNOW_WARNING SOUNDPROOF
 Frost Tree
 87 298.7 They appear when the snow flowers bloom. When the petals fall, they retreat to places unknown again.
 5120
-MONSTER PLANT
+PLANT MONSTER
 15
 1 ICE_PUNCH
 1 POWDER_SNOW
@@ -40046,7 +40046,7 @@ LIGHTNING_ROD SOLID_ROCK
 Drill
 94 623.5 It can launch a rock held in its hand like a missile by tightening then expanding muscles instantly.
 5120
-MONSTER GROUND
+GROUND MONSTER
 22
 1 HAMMER_ARM
 1 ROCK_WRECKER
@@ -40466,7 +40466,7 @@ HUSTLE SERENE_GRACE
 Jubilee
 59 83.8 It shares many blessings with people who respect one another's rights and avoid needless strife.
 2560
-FLYING FAIRY
+FAIRY FLYING
 5
 1 MOONBLAST
 1 SKY_ATTACK
@@ -41448,7 +41448,7 @@ SNOW_CLOAK CURSED_BODY
 Snow Land
 51 58.6 It freezes prey by blowing its -58 degrees F breath. It is said to then secretly display its prey.
 5120
-FAIRY MINERAL
+MINERAL FAIRY
 19
 0 OMINOUS_WIND
 1 DESTINY_BOND
@@ -42406,7 +42406,7 @@ HYDRATION NO_ABILITY
 Sea Drifter
 16 6.8 It drifts in warm seas. It always returns to where it was born, no matter how far it may have drifted.
 10240
-WATER1 FAIRY
+FAIRY WATER1
 11
 1 BUBBLE
 1 WATER_SPORT
@@ -42471,7 +42471,7 @@ HYDRATION NO_ABILITY
 Seafaring
 12 3.1 It is born with a wondrous power that lets it bond with any kind of Pok\u00e9mon.
 2560
-WATER1 FAIRY
+FAIRY WATER1
 13
 1 TAIL_GLOW
 1 BUBBLE
@@ -42922,7 +42922,7 @@ OVERGROW CONTRARY
 Grass Snake
 24 17.9 It is very intelligent and calm. Being exposed to lots of sunlight makes its movements swifter.
 5120
-GROUND PLANT
+PLANT GROUND
 15
 1 TACKLE
 4 LEER
@@ -43007,7 +43007,7 @@ OVERGROW CONTRARY
 Grass Snake
 31 35.3 It moves along the ground as if sliding. Its swift movements befuddle its foes, and it then attacks with a vine whip.
 5120
-GROUND PLANT
+PLANT GROUND
 18
 1 TACKLE
 1 LEER
@@ -43095,7 +43095,7 @@ OVERGROW CONTRARY
 Regal
 130 138.9 It can stop its opponents' movements with just a glare. It takes in solar energy and boosts it internally.
 5120
-GROUND PLANT
+PLANT GROUND
 18
 1 TACKLE
 1 LEER
@@ -45652,7 +45652,7 @@ UNAWARE KLUTZ
 Bat
 16 4.6 Its habitat is dark forests and caves. It emits ultrasonic waves from its nose to learn about its surroundings.
 3840
-FLYING GROUND
+GROUND FLYING
 14
 1 CONFUSION
 4 ODOR_SLEUTH
@@ -45749,7 +45749,7 @@ UNAWARE KLUTZ
 Courting
 35 23.1 It emits sound waves of various frequencies from its nose, including some powerful enough to destroy rocks.
 3840
-FLYING GROUND
+GROUND FLYING
 17
 1 CONFUSION
 1 ODOR_SLEUTH
@@ -47258,7 +47258,7 @@ PRANKSTER INFILTRATOR
 Cotton Puff
 12 1.3 When attacked, it escapes by shooting cotton from its body. The cotton serves as a decoy to distract the attacker.
 5120
-FAIRY PLANT
+PLANT FAIRY
 17
 1 ABSORB
 1 FAIRY_WIND
@@ -47336,7 +47336,7 @@ PRANKSTER INFILTRATOR
 Windveiled
 28 14.6 Like the wind, it can slip through any gap, no matter how small. It leaves balls of white fluff behind.
 5120
-FAIRY PLANT
+PLANT FAIRY
 8
 1 GROWTH
 1 LEECH_SEED
@@ -48198,7 +48198,7 @@ STURDY SHELL_ARMOR
 Rock Inn
 12 32.0 This Pok\u00e9mon can easily melt holes in hard rocks with a liquid secreted from its mouth.
 5120
-BUG MINERAL
+MINERAL BUG
 15
 1 FURY_CUTTER
 5 ROCK_BLAST
@@ -48276,7 +48276,7 @@ STURDY SHELL_ARMOR
 Stone Home
 55 440.9 Competing for territory, Crustle fight viciously. The one whose boulder is broken is the loser of the battle.
 5120
-BUG MINERAL
+MINERAL BUG
 18
 1 SHELL_SMASH
 1 ROCK_BLAST
@@ -48359,7 +48359,7 @@ SHED_SKIN MOXIE
 Shedding
 24 26.0 Its skin has a rubbery elasticity, so it can reduce damage by defensively pulling its skin up to its neck.
 3840
-GROUND DRAGON
+DRAGON GROUND
 16
 1 LEER
 1 HEADBUTT
@@ -48462,7 +48462,7 @@ SHED_SKIN MOXIE
 Hoodlum
 43 66.1 Groups of them beat up anything that enters their territory. Each can spit acidic liquid from its mouth.
 3840
-GROUND DRAGON
+DRAGON GROUND
 18
 1 LEER
 1 HEADBUTT
@@ -48668,7 +48668,7 @@ MUMMY NO_ABILITY
 Spirit
 20 3.3 Each of them carries a mask that used to be its face when it was human. Sometimes they look at it and cry.
 6400
-MINERAL INDETERMINATE
+INDETERMINATE MINERAL
 15
 1 ASTONISH
 1 PROTECT
@@ -48755,7 +48755,7 @@ MUMMY NO_ABILITY
 Coffin
 67 168.7 It has been said that they swallow those who get too close and turn them into mummies. They like to eat gold nuggets.
 6400
-MINERAL INDETERMINATE
+INDETERMINATE MINERAL
 18
 0 SCARY_FACE
 1 ASTONISH
@@ -48847,7 +48847,7 @@ SOLID_ROCK STURDY
 Prototurtle
 28 36.4 Restored from a fossil, this Pok\u00e9mon can dive to depths beyond half a mile.
 7680
-WATER1 WATER3
+WATER3 WATER1
 18
 1 BIDE
 1 WITHDRAW
@@ -48933,7 +48933,7 @@ SOLID_ROCK STURDY
 Prototurtle
 47 178.6 They can live both in the ocean and on land. A slap from one of them is enough to open a hole in the bottom of a tanker.
 7680
-WATER1 WATER3
+WATER3 WATER1
 19
 1 BIDE
 1 WITHDRAW
@@ -49026,7 +49026,7 @@ DEFEATIST NO_ABILITY
 First Bird
 20 20.9 Said to be an ancestor of bird Pok\u00e9mon, they were unable to fly and moved about by hopping from one branch to another.
 7680
-FLYING WATER3
+WATER3 FLYING
 18
 1 QUICK_ATTACK
 1 LEER
@@ -49116,7 +49116,7 @@ DEFEATIST NO_ABILITY
 First Bird
 55 70.5 They are intelligent and will cooperate to catch prey. From the ground, they use a running start to take flight.
 7680
-FLYING WATER3
+WATER3 FLYING
 19
 1 QUICK_ATTACK
 1 LEER
@@ -50323,7 +50323,7 @@ KEEN_EYE BIG_PECKS
 Water Bird
 20 12.1 These bird Pok\u00e9mon are excellent divers. They swim around in the water eating their favorite food--peat moss.
 5120
-WATER1 FLYING
+FLYING WATER1
 15
 1 WATER_GUN
 3 WATER_SPORT
@@ -50395,7 +50395,7 @@ KEEN_EYE BIG_PECKS
 White Bird
 51 53.4 Swanna start to dance at dusk. The one dancing in the middle is the leader of the flock.
 5120
-WATER1 FLYING
+FLYING WATER1
 18
 1 WATER_GUN
 1 WATER_SPORT
@@ -51417,7 +51417,7 @@ HEALER HYDRATION
 Caring
 47 69.7 The special membrane enveloping Alomomola has the ability to heal wounds.
 10240
-WATER1 WATER2
+WATER2 WATER1
 23
 1 PLAY_NICE
 1 HYDRO_PUMP
@@ -51661,7 +51661,7 @@ IRON_BARBS NO_ABILITY
 Thorn Seed
 24 41.4 When threatened, it attacks by shooting a barrage of spikes, which gives it a chance to escape by rolling away.
 5120
-PLANT MINERAL
+MINERAL PLANT
 15
 1 TACKLE
 1 HARDEN
@@ -51739,7 +51739,7 @@ IRON_BARBS ANTICIPATION
 Thorn Pod
 39 242.5 It fights by swinging around its three spiky feelers. A hit from these steel spikes can reduce a boulder to rubble.
 5120
-PLANT MINERAL
+MINERAL PLANT
 19
 0 POWER_WHIP
 1 ROCK_CLIMB
@@ -52654,7 +52654,7 @@ RIVALRY MOLD_BREAKER
 Tusk
 24 39.7 They use their tusks to crush the berries they eat. Repeated regrowth makes their tusks strong and sharp.
 10240
-MONSTER DRAGON
+DRAGON MONSTER
 16
 1 SCRATCH
 4 LEER
@@ -52735,7 +52735,7 @@ RIVALRY MOLD_BREAKER
 Axe Jaw
 39 79.4 Since a broken tusk will not grow back, they diligently sharpen their tusks on river rocks after they've been fighting.
 10240
-MONSTER DRAGON
+DRAGON MONSTER
 19
 1 SCRATCH
 1 LEER
@@ -52823,7 +52823,7 @@ RIVALRY MOLD_BREAKER
 Axe Jaw
 71 232.6 They are kind but can be relentless when defending territory. They challenge foes with tusks that can cut steel.
 10240
-MONSTER DRAGON
+DRAGON MONSTER
 20
 1 OUTRAGE
 1 SCRATCH
@@ -53324,7 +53324,7 @@ STATIC LIMBER
 Trap
 28 24.3 Its skin is very hard, so it is unhurt even if stepped on by sumo wrestlers. It smiles when transmitting electricity.
 5120
-WATER1 INDETERMINATE
+INDETERMINATE WATER1
 19
 1 FISSURE
 1 FLAIL
@@ -53417,7 +53417,7 @@ INNER_FOCUS REGENERATOR
 Martial Arts
 35 44.1 In fights, they dominate with onslaughts of flowing, continuous attacks. With their sharp claws, they cut enemies.
 6400
-GROUND HUMANSHAPE
+HUMANSHAPE GROUND
 16
 1 POUND
 5 MEDITATE
@@ -53502,7 +53502,7 @@ INNER_FOCUS REGENERATOR
 Martial Arts
 55 78.3 It wields the fur on its arms like a whip. Its arm attacks come with such rapidity that they cannot even be seen.
 6400
-GROUND HUMANSHAPE
+HUMANSHAPE GROUND
 21
 1 AURA_SPHERE
 1 REVERSAL
@@ -53596,7 +53596,7 @@ ROUGH_SKIN SHEER_FORCE
 Cave
 63 306.4 It warms its body by absorbing sunlight with its wings. When its body temperature falls, it can no longer move.
 7680
-MONSTER DRAGON
+DRAGON MONSTER
 16
 1 LEER
 1 SCRATCH
@@ -57996,7 +57996,7 @@ IRON_FIST MOLD_BREAKER
 Playful
 24 17.6 It does its level best to glare and pull a scary face, but it can't help grinning if anyone pats its head.
 6400
-GROUND HUMANSHAPE
+HUMANSHAPE GROUND
 14
 1 TACKLE
 1 LEER
@@ -58091,7 +58091,7 @@ IRON_FIST MOLD_BREAKER
 Daunting
 83 299.8 It charges ahead and bashes its opponents like a berserker, uncaring about any hits it might take. Its arms are mighty enough to snap a telephone pole.
 6400
-GROUND HUMANSHAPE
+HUMANSHAPE GROUND
 23
 0 BULLET_PUNCH
 1 HAMMER_ARM
@@ -58977,7 +58977,7 @@ CONTRARY SUCTION_CUPS
 Revolving
 16 7.7 It flashes the light-emitting spots on its body, which drains its opponent's will to fight. It takes the opportunity to scuttle away and hide.
 5120
-WATER1 WATER2
+WATER2 WATER1
 18
 1 TACKLE
 1 PECK
@@ -59060,7 +59060,7 @@ CONTRARY SUCTION_CUPS
 Overturning
 59 103.6 It lures its prey close with hypnotic motions, then wraps its tentacles around it before finishing it off with digestive fluids.
 5120
-WATER1 WATER2
+WATER2 WATER1
 20
 1 REVERSAL
 1 TACKLE
@@ -59347,7 +59347,7 @@ POISON_POINT POISON_TOUCH
 Mock Kelp
 20 16.1 It looks just like rotten kelp. It hides from foes while storing up power for its evolution.
 5120
-WATER1 DRAGON
+DRAGON WATER1
 16
 1 TACKLE
 1 SMOKESCREEN
@@ -59419,7 +59419,7 @@ POISON_POINT POISON_TOUCH
 Mock Kelp
 71 179.7 Tales are told of ships that wander into seas where Dragalge live, never to return.
 5120
-WATER1 DRAGON
+DRAGON WATER1
 20
 0 TWISTER
 1 DRAGON_TAIL
@@ -59501,7 +59501,7 @@ MEGA_LAUNCHER NO_ABILITY
 Water Gun
 20 18.3 Through controlled explosions of internal gas, it can expel water like a pistol shot. At close distances, it can shatter rock.
 3840
-WATER1 WATER3
+WATER3 WATER1
 13
 1 SPLASH
 1 WATER_GUN
@@ -59569,7 +59569,7 @@ MEGA_LAUNCHER NO_ABILITY
 Howitzer
 51 77.8 By expelling water from the nozzle in the back of its claw, it can move at a speed of 60 knots.
 3840
-WATER1 WATER3
+WATER3 WATER1
 19
 0 AURA_SPHERE
 1 DARK_PULSE
@@ -59650,7 +59650,7 @@ DRY_SKIN SAND_VEIL
 Generator
 20 13.2 The frills on either side of its head have cells that generate electricity when exposed to sunlight.
 5120
-MONSTER DRAGON
+DRAGON MONSTER
 13
 1 POUND
 1 TAIL_WHIP
@@ -59723,7 +59723,7 @@ DRY_SKIN SAND_VEIL
 Generator
 39 46.3 It stimulates its muscles with electricity, boosting the strength in its legs and enabling it to run 100 yards in five seconds.
 5120
-MONSTER DRAGON
+DRAGON MONSTER
 7
 1 EERIE_IMPULSE
 1 ELECTRIFY
@@ -59799,7 +59799,7 @@ STRONG_JAW STURDY
 Royal Heir
 31 57.3 Its immense jaws have enough destructive force that it can chew up an automobile. It lived 100 million years ago.
 7680
-MONSTER DRAGON
+DRAGON MONSTER
 15
 1 TAIL_WHIP
 1 TACKLE
@@ -59880,7 +59880,7 @@ STRONG_JAW ROCK_HEAD
 Despot
 98 595.2 Nothing could stop this Pok\u00e9mon 100 million years ago, so it behaved like a king.
 7680
-MONSTER DRAGON
+DRAGON MONSTER
 21
 0 ROCK_SLIDE
 1 HEAD_SMASH
@@ -60350,7 +60350,7 @@ CHEEK_POUCH PICKUP
 Antenna
 8 4.9 It uses its tail to absorb electricity from power plants or from outlets in houses, and then it fires the electricity from its whiskers.
 5120
-GROUND FAIRY
+FAIRY GROUND
 16
 1 TACKLE
 1 TAIL_WHIP
@@ -60444,7 +60444,7 @@ CLEAR_BODY STURDY
 Jewel
 12 12.6 It has slept underground for hundreds of millions of years since its birth. It's occasionally found during the excavation of caves.
 6400
-FAIRY MINERAL
+MINERAL FAIRY
 16
 1 TACKLE
 1 HARDEN
@@ -60818,7 +60818,7 @@ NATURAL_CURE FRISK
 Stump
 16 15.4 According to old tales, these Pok\u00e9mon are stumps possessed by the spirits of children who died while lost in the forest.
 5120
-PLANT INDETERMINATE
+INDETERMINATE PLANT
 14
 1 TACKLE
 1 CONFUSE_RAY
@@ -60899,7 +60899,7 @@ NATURAL_CURE FRISK
 Elder Tree
 59 156.5 Using its roots as a nervous system, it controls the trees in the forest. It's kind to the Pok\u00e9mon that reside in its body.
 5120
-PLANT INDETERMINATE
+INDETERMINATE PLANT
 18
 0 SHADOW_CLAW
 1 HORN_LEECH
@@ -62535,7 +62535,7 @@ TORRENT LIQUID_VOICE
 Sea Lion
 16 16.5 This Pok\u00e9mon snorts body fluids from its nose, blowing balloons to smash into its foes. It's famous for being a hard worker.
 3840
-WATER1 GROUND
+GROUND WATER1
 16
 1 POUND
 1 WATER_GUN
@@ -62609,7 +62609,7 @@ TORRENT LIQUID_VOICE
 Pop Star
 24 38.6 A skillful dancer, it creates a sequence of water balloons as it dances, and briskly bombards its enemies.
 3840
-WATER1 GROUND
+GROUND WATER1
 18
 1 POUND
 1 WATER_GUN
@@ -62685,7 +62685,7 @@ TORRENT LIQUID_VOICE
 Soloist
 71 97.0 It controls its water balloons with song. The melody is learned from others of its kind and is passed down from one generation to the next.
 3840
-WATER1 GROUND
+GROUND WATER1
 19
 0 SPARKLING_ARIA
 1 POUND
@@ -63595,7 +63595,7 @@ HONEY_GATHER SHIELD_DUST
 Bee Fly
 4 0.4 It feeds on the nectar and pollen of flowers. Because it's able to sense auras, it can identify which flowers are about to bloom.
 5120
-BUG FAIRY
+FAIRY BUG
 11
 1 ABSORB
 4 FAIRY_WIND
@@ -63675,7 +63675,7 @@ HONEY_GATHER SHIELD_DUST
 Bee Fly
 8 1.1 It rolls up pollen into puffs. It makes many different varieties, some used as food and others used in battle.
 5120
-BUG FAIRY
+FAIRY BUG
 15
 0 POLLEN_PUFF
 1 ABSORB
@@ -64281,7 +64281,7 @@ WATER_BUBBLE WATER_ABSORB
 Water Bubble
 12 8.8 It crawls onto the land in search of food. Its water bubble allows it to breathe and protects its soft head.
 3840
-WATER1 BUG
+BUG WATER1
 14
 1 WATER_SPORT
 1 BUBBLE
@@ -64354,7 +64354,7 @@ WATER_BUBBLE WATER_ABSORB
 Water Bubble
 71 180.8 It delivers headbutts with the water bubble on its head. Small Pok\u00e9mon get sucked into the bubble, where they drown.
 3840
-WATER1 BUG
+BUG WATER1
 17
 1 SOAK
 1 BUBBLE
@@ -64736,7 +64736,7 @@ CORROSION OBLIVIOUS
 Toxic Lizard
 24 10.6 It burns its bodily fluids to create a poisonous gas. When its enemies become disoriented from inhaling the gas, it attacks them.
 5120
-MONSTER DRAGON
+DRAGON MONSTER
 14
 1 SCRATCH
 1 POISON_GAS
@@ -64813,7 +64813,7 @@ CORROSION OBLIVIOUS
 Toxic Lizard
 47 48.9 For some reason, only females have been found. It creates a reverse harem of male Salandit that it lives with.
 5120
-MONSTER DRAGON
+DRAGON MONSTER
 21
 0 CAPTIVATE
 1 DISABLE
@@ -65560,7 +65560,7 @@ WIMP_OUT NO_ABILITY
 Turn Tail
 20 26.5 This Pok\u00e9mon is a coward. As it desperately dashes off, the flailing of its many legs leaves a sparkling clean path in its wake.
 5120
-BUG WATER3
+WATER3 BUG
 2
 1 STRUGGLE_BUG
 1 SAND_ATTACK
@@ -65605,7 +65605,7 @@ EMERGENCY_EXIT NO_ABILITY
 Hard Scale
 79 238.1 With a flashing slash of its giant sharp claws, it cleaves seawater--or even air--right in two.
 5120
-BUG WATER3
+WATER3 BUG
 16
 0 FIRST_IMPRESSION
 1 STRUGGLE_BUG
@@ -66245,7 +66245,7 @@ SHELL_ARMOR NO_ABILITY
 Blast Turtle
 79 467.4 The shell on its back is chemically unstable and explodes violently if struck. The hole in its stomach is its weak point.
 5120
-MONSTER DRAGON
+DRAGON MONSTER
 15
 1 EMBER
 1 TACKLE
@@ -66337,7 +66337,7 @@ IRON_BARBS LIGHTNING_ROD
 Roly-Poly
 12 7.3 The spiny fur on its back is normally at rest. When this Pok\u00e9mon becomes agitated, its fur stands on end and stabs into its attackers.
 2560
-GROUND FAIRY
+FAIRY GROUND
 15
 1 TACKLE
 1 THUNDER_SHOCK
@@ -66598,7 +66598,7 @@ BERSERK SAP_SIPPER
 Placid
 118 407.9 It has a compassionate personality, but if it is angered, it completely destroys its surroundings with its intense breath.
 5120
-MONSTER DRAGON
+DRAGON MONSTER
 15
 1 PLAY_NICE
 1 ECHOED_VOICE
@@ -68904,7 +68904,7 @@ TOUGH_CLAWS NO_ABILITY
 Flame
 67 243.6 It is said that Rizardon's fire burns hotter if it has experienced harsh battles.
 5120
-MONSTER DRAGON
+DRAGON MONSTER
 21
 0 DRAGON_CLAW
 1 FLARE_BLITZ
@@ -69013,7 +69013,7 @@ HYPER_CUTTER INTIMIDATE
 Deceiver
 39 51.8 It uses its docile-looking face to lull foes into complacency, then bites with its huge, relentless jaws.
 5120
-GROUND FAIRY
+FAIRY GROUND
 20
 1 PLAY_ROUGH
 1 IRON_HEAD
@@ -69357,7 +69357,7 @@ SURGE_SURFER NO_ABILITY
 Mouse
 28 46.3 It uses psychokinesis to control electricity. It hops aboard its own tail, using psychic power to lift the tail and move about while riding it.
 2560
-GROUND FAIRY
+FAIRY GROUND
 6
 0 PSYCHIC
 1 SPEED_SWAP
