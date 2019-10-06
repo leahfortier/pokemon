@@ -2060,17 +2060,23 @@ Max Repel:
     Price: 900
 *
 Ability Capsule:
-    Desc: A capsule that allows a Pok\u00e9mon with two Abilities to switch between these Abilities when it is used.
+    Desc: A capsule that allows a Pok\u00e9mon to switch between its Abilities when it is used.
     Price: 10000
     Cat: Misc
     Int: PokemonUseItem
     PokemonUse:
-        AbilityNamesies other = Ability.getOtherAbility(p);
-        if (other == AbilityNamesies.NO_ABILITY) {
+        // Get a list of possible abilities this Pokemon can have and remove the current ability
+        List<AbilityNamesies> abilities = new ArrayList<>();
+        Collections.addAll(abilities, p.getPokemonInfo().getAbilities());
+        abilities.removeIf(p::hasAbility);
+
+        // No possible abilities to change to
+        if (abilities.isEmpty()) {
             return false;
         }
 
-        p.setAbility(other);
+        // Set to a random ability
+        p.setAbility(RandomUtils.getRandomValue(abilities));
         Messages.add(p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!");
         return true;
         ###

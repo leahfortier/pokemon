@@ -227,19 +227,6 @@ public abstract class Ability implements AbilityInterface {
         return RandomUtils.getRandomValue(abilities);
     }
 
-    public static AbilityNamesies getOtherAbility(ActivePokemon p) {
-        return getOtherAbility(p.getPokemonInfo(), p.getAbility().namesies());
-    }
-
-    private static AbilityNamesies getOtherAbility(PokemonInfo p, AbilityNamesies ability) {
-        if (!p.hasAbility(ability)) {
-            Global.error("Incorrect ability " + ability + " for " + p.getName() + ".");
-        }
-
-        AbilityNamesies[] abilities = p.getAbilities();
-        return abilities[0] == ability ? abilities[1] : abilities[0];
-    }
-
     // EVERYTHING BELOW IS GENERATED ###
 
     /**** WARNING DO NOT PUT ANY VALUABLE CODE HERE IT WILL BE DELETED *****/

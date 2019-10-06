@@ -83,6 +83,7 @@ Descriptions that change manually:
         Safari Ball (If it references some rando place)
         Razz Berry
         All the EV Decreasing Berries (Ex: Pomeg Berry) (Remove 'makes it more friendly but')
+        Ability Capsule (not just for two abilities)
         
 Other random things:
     Options menu:
