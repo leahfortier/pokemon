@@ -126,9 +126,7 @@ class Parser:
         female_ratio = gender_substitution(self.num, female_ratio)
         return female_ratio
 
-    # Returns the abilities as namesies strings in a list of size 2
-    # If only has one regular ability, use the hidden ability as second
-    # If it only has one valid ability, the second will be 'NO_ABILITY'
+    # Returns the abilities as namesies strings in a list of between sizes 1 and 3
     # Ex: ['OVERGROW', 'CHLOROPHYLL']
     def get_abilities(self) -> List[str]:
         abilities = ['']*3
@@ -146,13 +144,9 @@ class Parser:
                 assert ability.slot == 3
 
         # Remove empty slots
-        abilities = [ability for ability in abilities if ability != ''][:2]
+        abilities = [ability for ability in abilities if ability != '']
 
-        # Only has a single ability -- give empty ability as second
-        if len(abilities) == 1:
-            abilities.append('NO_ABILITY')
-
-        assert len(abilities) == 2
+        assert len(abilities) in [1, 2, 3]
         return abilities
 
     # Returns the classification (genus)
