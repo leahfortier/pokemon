@@ -68815,7 +68815,7 @@ MAGNET_PULL NO_ABILITY
 Hex Nut
 8 17.6 It melts particles of iron and other metals found in the subsoil, so it can absorb them into its body of molten steel.
 30720
-MONSTER PLANT
+NO_EGGS NONE
 7
 1 HEADBUTT
 1 HARDEN
@@ -68849,7 +68849,7 @@ IRON_FIST NO_ABILITY
 Hex Nut
 98 1763.7 Revered long ago for its capacity to create iron from nothing, for some reason it has come back to life after 3,000 years.
 30720
-MONSTER PLANT
+NO_EGGS NONE
 15
 0 THUNDER_PUNCH
 1 HEADBUTT
