@@ -210,9 +210,8 @@ class Parser:
         # weird with these hatch counter things and I just count down directly and don't care :/
         return self.species.hatch_counter * 256
 
-    # Returns the egg groups as namesies strings in a size 2 list
-    # If there is only one group, the second group will be 'NONE'
-    # Ex: ['MONSTER', 'GRASS']
+    # Returns the egg groups as namesies strings in a list either size 1 or 2
+    # Ex: ['MONSTER', 'GRASS'] or ['BUG'] or ['NO_EGGS']
     def get_egg_groups(self) -> List[str]:
         # Get them egg groupies
         egg_groups = [namesies(egg_group.name) for egg_group in self.species.egg_groups]
@@ -220,11 +219,7 @@ class Parser:
         # Just feel like these are backwards even though the order doesn't matter
         egg_groups.reverse()
 
-        # Add empty group if applicable
-        if len(egg_groups) == 1:
-            egg_groups.append('NONE')
-
-        assert len(egg_groups) == 2
+        assert len(egg_groups) in [1, 2]
         return egg_groups
 
     # Returns the level-up moves and the learnable moves as a tuple

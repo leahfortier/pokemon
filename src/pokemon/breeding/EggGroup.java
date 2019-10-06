@@ -15,6 +15,5 @@ public enum EggGroup {
     PLANT,
     WATER1,
     WATER2,
-    WATER3,
-    NONE
+    WATER3
 }

@@ -121,7 +121,6 @@ public class Breeding {
     }
 
     public boolean canBreed(ActivePokemon aPokes, ActivePokemon bPokes) {
-
         // If either pokemon cannot breed, then they can't breed together
         if (!aPokes.canBreed() || !bPokes.canBreed()) {
             return false;
@@ -142,7 +141,7 @@ public class Breeding {
 
         for (EggGroup aPokesEggGroup : aPokesEggGroups) {
             for (EggGroup bPokesEggGroup : bPokesEggGroups) {
-                if (aPokesEggGroup == bPokesEggGroup && aPokesEggGroup != EggGroup.NONE) {
+                if (aPokesEggGroup == bPokesEggGroup) {
                     return true;
                 }
             }

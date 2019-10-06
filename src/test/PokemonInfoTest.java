@@ -341,6 +341,37 @@ public class PokemonInfoTest extends BaseTest {
     }
 
     @Test
+    public void eggGroupTest() {
+        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
+            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
+            EggGroup[] eggGroups = pokemonInfo.getEggGroups();
+
+            // Pokemon can either have one or two egg groups
+            TestUtils.assertInclusiveRange(pokemonInfo.getName(), 1, 2, eggGroups.length);
+
+            // If two egg groups, cannot be the same
+            if (eggGroups.length == 2) {
+                Assert.assertNotEquals(pokemonInfo.getName(), eggGroups[0], eggGroups[1]);
+            }
+
+            // Egg group is Ditto if and only if the Pokemon is Ditto
+            Assert.assertEquals(
+                    pokemonInfo.getName(),
+                    eggGroups[0] == EggGroup.DITTO,
+                    pokemonInfo.namesies() == PokemonNamesies.DITTO
+            );
+
+            for (EggGroup eggGroup : eggGroups) {
+                // If cannot produce eggs, then NO_EGGS should be the only egg group
+                // Similarily, the Ditto egg group is standalone
+                if (eggGroup == EggGroup.NO_EGGS || eggGroup == EggGroup.DITTO) {
+                    Assert.assertEquals(pokemonInfo.getName(), 1, eggGroups.length);
+                }
+            }
+        }
+    }
+
+    @Test
     public void shedinjaTest() {
         int[] levels = new int[] { 1, 50, 100 };
         for (int level : levels) {
@@ -431,7 +462,7 @@ public class PokemonInfoTest extends BaseTest {
         Assert.assertEquals(GrowthRate.SLOW, pokemonInfo.getGrowthRate());
         Assert.assertEquals(Gender.GENDERLESS_VALUE, pokemonInfo.getFemaleRatio());
 
-        Assert.assertArrayEquals(new EggGroup[] { EggGroup.NO_EGGS, EggGroup.NONE }, pokemonInfo.getEggGroups());
+        Assert.assertArrayEquals(new EggGroup[] { EggGroup.NO_EGGS }, pokemonInfo.getEggGroups());
 
         Assert.assertEquals(PokemonNamesies.MELTAN, pokemonInfo.getBaseEvolution());
 
