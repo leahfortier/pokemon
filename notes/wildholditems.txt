@@ -1,0 +1,1259 @@
+List of all Pokemon and every potential wild hold item and rarity list from the PokeAPI
+
+#012 Butterfree:
+	SILVER_POWDER -> [5]
+
+#015 Beedrill:
+	POISON_BARB -> [5]
+
+#019 Rattata:
+	CHILAN_BERRY -> [5]
+
+#020 Raticate:
+	ORAN_BERRY -> [50]
+	SITRUS_BERRY -> [5]
+	CHILAN_BERRY -> [5]
+
+#021 Spearow:
+	SHARP_BEAK -> [5]
+
+#022 Fearow:
+	SHARP_BEAK -> [5]
+
+#024 Arbok:
+	POISON_BARB -> [5]
+
+#025 Pikachu:
+	ORAN_BERRY -> [50]
+	LIGHT_BALL -> [1, 5]
+
+#026 Raichu:
+	ORAN_BERRY -> [50, 5]
+
+#027 Sandshrew:
+	QUICK_CLAW -> [5]
+	GRIP_CLAW -> [5]
+
+#028 Sandslash:
+	QUICK_CLAW -> [5]
+	SOFT_SAND -> [5]
+	GRIP_CLAW -> [5]
+
+#035 Clefairy:
+	MOON_STONE -> [5]
+	LEPPA_BERRY -> [50]
+	COMET_SHARD -> [1]
+
+#036 Clefable:
+	MOON_STONE -> [5]
+	LEPPA_BERRY -> [50]
+	COMET_SHARD -> [1]
+
+#037 Vulpix:
+	RAWST_BERRY -> [50, 100]
+	CHARCOAL -> [5]
+
+#038 Ninetales:
+	RAWST_BERRY -> [50, 100]
+	CHARCOAL -> [5]
+
+#039 Jigglypuff:
+	MOON_STONE -> [5]
+	ORAN_BERRY -> [50]
+
+#040 Wigglytuff:
+	MOON_STONE -> [5]
+	ORAN_BERRY -> [50]
+
+#043 Oddish:
+	ABSORB_BULB -> [5]
+
+#044 Gloom:
+	ABSORB_BULB -> [5]
+
+#045 Vileplume:
+	ABSORB_BULB -> [5]
+
+#046 Paras:
+	TINY_MUSHROOM -> [50]
+	BIG_MUSHROOM -> [5]
+	BALM_MUSHROOM -> [1]
+
+#047 Parasect:
+	TINY_MUSHROOM -> [50]
+	BIG_MUSHROOM -> [5]
+	BALM_MUSHROOM -> [1]
+
+#049 Venomoth:
+	SILVER_POWDER -> [5]
+	SHED_SHELL -> [5]
+
+#050 Diglett:
+	SOFT_SAND -> [5]
+
+#051 Dugtrio:
+	SOFT_SAND -> [5]
+
+#052 Meowth:
+	NUGGET -> [5]
+	QUICK_CLAW -> [5]
+
+#053 Persian:
+	QUICK_CLAW -> [5]
+
+#056 Mankey:
+	PAYAPA_BERRY -> [5]
+
+#057 Primeape:
+	PAYAPA_BERRY -> [5]
+
+#058 Growlithe:
+	RAWST_BERRY -> [50, 100]
+
+#059 Arcanine:
+	RAWST_BERRY -> [50, 100]
+
+#061 Poliwhirl:
+	KINGS_ROCK -> [5]
+
+#062 Poliwrath:
+	KINGS_ROCK -> [5]
+
+#063 Abra:
+	TWISTED_SPOON -> [5]
+
+#064 Kadabra:
+	TWISTED_SPOON -> [5]
+
+#065 Alakazam:
+	TWISTED_SPOON -> [5]
+
+#066 Machop:
+	FOCUS_BAND -> [5]
+
+#067 Machoke:
+	FOCUS_BAND -> [5]
+
+#068 Machamp:
+	FOCUS_BAND -> [5]
+
+#072 Tentacool:
+	POISON_BARB -> [5]
+
+#073 Tentacruel:
+	POISON_BARB -> [5]
+
+#074 Geodude:
+	EVERSTONE -> [5]
+
+#075 Graveler:
+	EVERSTONE -> [5]
+	HARD_STONE -> [5]
+
+#076 Golem:
+	EVERSTONE -> [5]
+	HARD_STONE -> [5]
+
+#077 Ponyta:
+	SHUCA_BERRY -> [5]
+
+#078 Rapidash:
+	SHUCA_BERRY -> [5]
+
+#079 Slowpoke:
+	KINGS_ROCK -> [5]
+	LAGGING_TAIL -> [5]
+
+#080 Slowbro:
+	KINGS_ROCK -> [5]
+
+#081 Magnemite:
+	METAL_COAT -> [5]
+
+#082 Magneton:
+	METAL_COAT -> [5]
+	MAGNET -> [5]
+
+#083 Farfetch'd:
+	STICK -> [5]
+
+#084 Doduo:
+	SHARP_BEAK -> [5]
+
+#085 Dodrio:
+	SHARP_BEAK -> [5]
+
+#086 Seel:
+	ASPEAR_BERRY -> [50]
+
+#087 Dewgong:
+	ASPEAR_BERRY -> [50]
+	NEVER_MELT_ICE -> [5]
+
+#088 Grimer:
+	NUGGET -> [5]
+	BLACK_SLUDGE -> [5]
+
+#089 Muk:
+	NUGGET -> [5]
+	TOXIC_ORB -> [1]
+	BLACK_SLUDGE -> [50]
+
+#090 Shellder:
+	PEARL -> [50]
+	BIG_PEARL -> [5]
+
+#091 Cloyster:
+	PEARL -> [50]
+	BIG_PEARL -> [5]
+
+#093 Haunter:
+	SPELL_TAG -> [5]
+
+#094 Gengar:
+	SPELL_TAG -> [5]
+
+#095 Onix:
+	HARD_STONE -> [5]
+
+#102 Exeggcute:
+	PSYCHIC_SEED -> [5]
+
+#104 Cubone:
+	THICK_CLUB -> [5]
+
+#105 Marowak:
+	THICK_CLUB -> [5]
+
+#108 Lickitung:
+	LAGGING_TAIL -> [5]
+
+#109 Koffing:
+	SMOKE_BALL -> [5]
+
+#110 Weezing:
+	SMOKE_BALL -> [5]
+
+#113 Chansey:
+	OVAL_STONE -> [50]
+	LUCKY_EGG -> [5]
+	LUCKY_PUNCH -> [50]
+
+#116 Horsea:
+	DRAGON_SCALE -> [5]
+
+#117 Seadra:
+	DRAGON_SCALE -> [5]
+
+#118 Goldeen:
+	MYSTIC_WATER -> [5]
+
+#119 Seaking:
+	MYSTIC_WATER -> [5]
+
+#120 Staryu:
+	STARDUST -> [50]
+	STAR_PIECE -> [5]
+
+#121 Starmie:
+	STARDUST -> [50]
+	STAR_PIECE -> [5]
+
+#122 Mr. Mime:
+	LEPPA_BERRY -> [5]
+
+#124 Jynx:
+	ASPEAR_BERRY -> [100]
+
+#125 Electabuzz:
+	ELECTIRIZER -> [50, 5]
+
+#126 Magmar:
+	RAWST_BERRY -> [100]
+	MAGMARIZER -> [50, 5]
+
+#131 Lapras:
+	MYSTIC_WATER -> [100, 5]
+
+#132 Ditto:
+	METAL_POWDER -> [5]
+	QUICK_POWDER -> [50]
+
+#143 Snorlax:
+	CHESTO_BERRY -> [100]
+	LEFTOVERS -> [100, 5]
+
+#147 Dratini:
+	DRAGON_SCALE -> [5]
+
+#148 Dragonair:
+	DRAGON_SCALE -> [5]
+	DRAGON_FANG -> [5]
+
+#149 Dragonite:
+	DRAGON_SCALE -> [5]
+	DRAGON_FANG -> [5]
+
+#151 Mew:
+	LUM_BERRY -> [100, 5]
+
+#152 Chikorita:
+	LUM_BERRY -> [100]
+
+#161 Sentret:
+	ORAN_BERRY -> [5]
+
+#162 Furret:
+	ORAN_BERRY -> [50]
+	SITRUS_BERRY -> [5]
+
+#170 Chinchou:
+	YELLOW_SHARD -> [5]
+	DEEP_SEA_SCALE -> [5]
+
+#171 Lanturn:
+	YELLOW_SHARD -> [5]
+	DEEP_SEA_SCALE -> [5]
+
+#172 Pichu:
+	ORAN_BERRY -> [50, 5]
+
+#173 Cleffa:
+	MOON_STONE -> [5]
+	LEPPA_BERRY -> [50]
+	COMET_SHARD -> [1]
+
+#174 Igglybuff:
+	ORAN_BERRY -> [50]
+
+#182 Bellossom:
+	ABSORB_BULB -> [5]
+
+#186 Politoed:
+	KINGS_ROCK -> [5]
+
+#191 Sunkern:
+	COBA_BERRY -> [5]
+
+#193 Yanma:
+	WIDE_LENS -> [5]
+
+#199 Slowking:
+	KINGS_ROCK -> [5]
+
+#200 Misdreavus:
+	SPELL_TAG -> [5]
+
+#203 Girafarig:
+	PERSIM_BERRY -> [5]
+
+#208 Steelix:
+	METAL_COAT -> [5]
+
+#211 Qwilfish:
+	POISON_BARB -> [5]
+
+#213 Shuckle:
+	BERRY_JUICE -> [100, 5]
+	ORAN_BERRY -> [100]
+
+#215 Sneasel:
+	QUICK_CLAW -> [5]
+	GRIP_CLAW -> [50]
+
+#216 Teddiursa:
+	ORAN_BERRY -> [50]
+	SITRUS_BERRY -> [5]
+
+#217 Ursaring:
+	ORAN_BERRY -> [50]
+	SITRUS_BERRY -> [5]
+
+#220 Swinub:
+	ASPEAR_BERRY -> [50]
+
+#221 Piloswine:
+	ASPEAR_BERRY -> [50]
+	NEVER_MELT_ICE -> [5]
+
+#222 Corsola:
+	RED_SHARD -> [5]
+	HARD_STONE -> [5]
+	LUMINOUS_MOSS -> [5]
+
+#227 Skarmory:
+	METAL_COAT -> [5]
+	SHARP_BEAK -> [5]
+
+#230 Kingdra:
+	DRAGON_SCALE -> [5]
+
+#231 Phanpy:
+	PASSHO_BERRY -> [5]
+
+#232 Donphan:
+	PASSHO_BERRY -> [5]
+
+#233 Porygon2:
+	UP_GRADE -> [100]
+
+#238 Smoochum:
+	ASPEAR_BERRY -> [100]
+
+#239 Elekid:
+	ELECTIRIZER -> [50, 5]
+
+#240 Magby:
+	RAWST_BERRY -> [100]
+	MAGMARIZER -> [50, 5]
+
+#241 Miltank:
+	MOOMOO_MILK -> [100, 5]
+
+#242 Blissey:
+	OVAL_STONE -> [50]
+	LUCKY_EGG -> [100, 5]
+
+#250 Ho-Oh:
+	SACRED_ASH -> [100, 5]
+
+#251 Celebi:
+	LUM_BERRY -> [100, 5]
+
+#261 Poochyena:
+	PECHA_BERRY -> [5]
+
+#262 Mightyena:
+	PECHA_BERRY -> [5]
+
+#263 Zigzagoon:
+	POTION -> [50]
+	REVIVE -> [5]
+	ORAN_BERRY -> [5]
+
+#264 Linoone:
+	POTION -> [50]
+	MAX_REVIVE -> [5]
+	ORAN_BERRY -> [50]
+	SITRUS_BERRY -> [5]
+
+#265 Wurmple:
+	PECHA_BERRY -> [50]
+	BRIGHT_POWDER -> [5]
+
+#267 Beautifly:
+	SILVER_POWDER -> [5]
+	SHED_SHELL -> [5]
+
+#269 Dustox:
+	SILVER_POWDER -> [5]
+	SHED_SHELL -> [5]
+
+#270 Lotad:
+	MENTAL_HERB -> [5]
+
+#271 Lombre:
+	MENTAL_HERB -> [5]
+
+#272 Ludicolo:
+	MENTAL_HERB -> [5]
+
+#273 Seedot:
+	POWER_HERB -> [5]
+
+#274 Nuzleaf:
+	POWER_HERB -> [5]
+
+#275 Shiftry:
+	POWER_HERB -> [5]
+
+#276 Taillow:
+	CHARTI_BERRY -> [5]
+
+#277 Swellow:
+	CHARTI_BERRY -> [5]
+
+#278 Wingull:
+	PRETTY_WING -> [50]
+
+#279 Pelipper:
+	PRETTY_WING -> [50]
+
+#283 Surskit:
+	HONEY -> [50]
+
+#284 Masquerain:
+	SILVER_POWDER -> [5]
+
+#285 Shroomish:
+	TINY_MUSHROOM -> [50]
+	BIG_MUSHROOM -> [5]
+	KEBIA_BERRY -> [5]
+
+#286 Breloom:
+	TINY_MUSHROOM -> [50]
+	BIG_MUSHROOM -> [5]
+	KEBIA_BERRY -> [5]
+
+#290 Nincada:
+	SOFT_SAND -> [5]
+
+#293 Whismur:
+	CHESTO_BERRY -> [5]
+
+#294 Loudred:
+	CHESTO_BERRY -> [5]
+
+#295 Exploud:
+	CHESTO_BERRY -> [5]
+
+#296 Makuhita:
+	BLACK_BELT -> [5]
+
+#297 Hariyama:
+	KINGS_ROCK -> [5]
+
+#299 Nosepass:
+	HARD_STONE -> [5]
+	MAGNET -> [5]
+
+#300 Skitty:
+	PECHA_BERRY -> [50]
+	LEPPA_BERRY -> [5]
+
+#301 Delcatty:
+	PECHA_BERRY -> [50]
+	LEPPA_BERRY -> [5]
+
+#302 Sableye:
+	WIDE_LENS -> [5]
+
+#303 Mawile:
+	OCCA_BERRY -> [5]
+	IRON_BALL -> [5]
+
+#304 Aron:
+	HARD_STONE -> [5]
+
+#305 Lairon:
+	HARD_STONE -> [5]
+
+#306 Aggron:
+	HARD_STONE -> [5]
+
+#311 Plusle:
+	CELL_BATTERY -> [5]
+
+#312 Minun:
+	CELL_BATTERY -> [5]
+
+#313 Volbeat:
+	BRIGHT_POWDER -> [5]
+
+#314 Illumise:
+	BRIGHT_POWDER -> [5]
+
+#315 Roselia:
+	POISON_BARB -> [5]
+	ABSORB_BULB -> [1]
+
+#316 Gulpin:
+	BIG_PEARL -> [5]
+	ORAN_BERRY -> [50, 5]
+	SITRUS_BERRY -> [5]
+
+#317 Swalot:
+	BIG_PEARL -> [5]
+	ORAN_BERRY -> [50, 5]
+	SITRUS_BERRY -> [5]
+
+#318 Carvanha:
+	DEEP_SEA_TOOTH -> [5]
+
+#319 Sharpedo:
+	DEEP_SEA_TOOTH -> [5]
+
+#322 Numel:
+	RAWST_BERRY -> [100]
+
+#323 Camerupt:
+	RAWST_BERRY -> [100]
+
+#324 Torkoal:
+	CHARCOAL -> [5]
+
+#325 Spoink:
+	PERSIM_BERRY -> [50]
+	TANGA_BERRY -> [5]
+
+#326 Grumpig:
+	PERSIM_BERRY -> [50]
+	TANGA_BERRY -> [5]
+
+#327 Spinda:
+	CHESTO_BERRY -> [5]
+
+#328 Trapinch:
+	SOFT_SAND -> [5]
+
+#331 Cacnea:
+	POISON_BARB -> [5]
+	STICKY_BARB -> [5]
+
+#332 Cacturne:
+	POISON_BARB -> [5]
+	STICKY_BARB -> [5]
+
+#335 Zangoose:
+	QUICK_CLAW -> [5]
+
+#336 Seviper:
+	PERSIM_BERRY -> [100]
+	SHED_SHELL -> [5]
+
+#337 Lunatone:
+	MOON_STONE -> [5]
+	STARDUST -> [50]
+	COMET_SHARD -> [1]
+
+#338 Solrock:
+	SUN_STONE -> [5]
+	STARDUST -> [50]
+	COMET_SHARD -> [1]
+
+#343 Baltoy:
+	LIGHT_CLAY -> [5]
+
+#344 Claydol:
+	LIGHT_CLAY -> [5]
+
+#345 Lileep:
+	BIG_ROOT -> [5]
+
+#346 Cradily:
+	BIG_ROOT -> [5]
+
+#351 Castform:
+	MYSTIC_WATER -> [100, 5]
+
+#352 Kecleon:
+	PERSIM_BERRY -> [5]
+
+#353 Shuppet:
+	SPELL_TAG -> [5]
+
+#354 Banette:
+	SPELL_TAG -> [5]
+
+#355 Duskull:
+	KASIB_BERRY -> [5]
+	SPELL_TAG -> [5]
+
+#356 Dusclops:
+	KASIB_BERRY -> [5]
+	SPELL_TAG -> [5]
+
+#358 Chimecho:
+	COLBUR_BERRY -> [5]
+	CLEANSE_TAG -> [5]
+
+#361 Snorunt:
+	BABIRI_BERRY -> [5]
+	SNOWBALL -> [5]
+
+#362 Glalie:
+	BABIRI_BERRY -> [5]
+	NEVER_MELT_ICE -> [5]
+
+#366 Clamperl:
+	BLUE_SHARD -> [5]
+	PEARL -> [50]
+	BIG_PEARL -> [5]
+
+#367 Huntail:
+	DEEP_SEA_TOOTH -> [5]
+
+#368 Gorebyss:
+	DEEP_SEA_SCALE -> [5]
+
+#369 Relicanth:
+	GREEN_SHARD -> [5]
+	DEEP_SEA_SCALE -> [5]
+
+#370 Luvdisc:
+	HEART_SCALE -> [50]
+
+#371 Bagon:
+	DRAGON_SCALE -> [5]
+	DRAGON_FANG -> [5]
+
+#372 Shelgon:
+	DRAGON_SCALE -> [5]
+	DRAGON_FANG -> [5]
+
+#373 Salamence:
+	DRAGON_SCALE -> [5]
+	DRAGON_FANG -> [5]
+
+#374 Beldum:
+	METAL_COAT -> [5]
+
+#375 Metang:
+	METAL_COAT -> [5]
+
+#376 Metagross:
+	METAL_COAT -> [5]
+
+#385 Jirachi:
+	STAR_PIECE -> [100, 5]
+
+#396 Starly:
+	YACHE_BERRY -> [5]
+
+#397 Staravia:
+	YACHE_BERRY -> [5]
+
+#398 Staraptor:
+	YACHE_BERRY -> [5]
+
+#400 Bibarel:
+	ORAN_BERRY -> [50]
+	SITRUS_BERRY -> [5]
+
+#401 Kricketot:
+	METRONOME -> [5]
+
+#402 Kricketune:
+	METRONOME -> [5]
+
+#406 Budew:
+	POISON_BARB -> [5]
+
+#407 Roserade:
+	POISON_BARB -> [5]
+	ABSORB_BULB -> [1]
+
+#413 Wormadam:
+	SILVER_POWDER -> [5]
+
+#414 Mothim:
+	SILVER_POWDER -> [5]
+
+#415 Combee:
+	HONEY -> [100, 5]
+
+#416 Vespiquen:
+	POISON_BARB -> [5]
+
+#418 Buizel:
+	WACAN_BERRY -> [5]
+
+#419 Floatzel:
+	WACAN_BERRY -> [5]
+
+#420 Cherubi:
+	MIRACLE_SEED -> [5]
+
+#421 Cherrim:
+	MIRACLE_SEED -> [5]
+
+#426 Drifblim:
+	AIR_BALLOON -> [1]
+
+#427 Buneary:
+	PECHA_BERRY -> [50]
+	CHOPLE_BERRY -> [5]
+
+#428 Lopunny:
+	PECHA_BERRY -> [50]
+	CHOPLE_BERRY -> [5]
+
+#431 Glameow:
+	CHERI_BERRY -> [5]
+
+#432 Purugly:
+	CHERI_BERRY -> [5]
+
+#433 Chingling:
+	COLBUR_BERRY -> [5]
+	CLEANSE_TAG -> [5]
+
+#434 Stunky:
+	PECHA_BERRY -> [5]
+
+#435 Skuntank:
+	PECHA_BERRY -> [5]
+
+#436 Bronzor:
+	METAL_COAT -> [5]
+
+#437 Bronzong:
+	METAL_COAT -> [5]
+
+#439 Mime Jr.:
+	LEPPA_BERRY -> [5]
+
+#440 Happiny:
+	OVAL_STONE -> [50]
+	LUCKY_EGG -> [5]
+	LUCKY_PUNCH -> [5]
+
+#441 Chatot:
+	METRONOME -> [5]
+
+#443 Gible:
+	HABAN_BERRY -> [5]
+
+#444 Gabite:
+	HABAN_BERRY -> [5]
+
+#445 Garchomp:
+	HABAN_BERRY -> [5]
+
+#446 Munchlax:
+	LEFTOVERS -> [100, 5]
+
+#451 Skorupi:
+	POISON_BARB -> [5]
+
+#452 Drapion:
+	POISON_BARB -> [5]
+
+#453 Croagunk:
+	BLACK_SLUDGE -> [5]
+
+#454 Toxicroak:
+	BLACK_SLUDGE -> [5]
+
+#456 Finneon:
+	RINDO_BERRY -> [5]
+
+#457 Lumineon:
+	RINDO_BERRY -> [5]
+
+#459 Snover:
+	NEVER_MELT_ICE -> [5]
+
+#460 Abomasnow:
+	NEVER_MELT_ICE -> [5]
+
+#461 Weavile:
+	QUICK_CLAW -> [5]
+	GRIP_CLAW -> [50]
+
+#462 Magnezone:
+	METAL_COAT -> [5]
+
+#463 Lickilicky:
+	LAGGING_TAIL -> [5]
+
+#466 Electivire:
+	ELECTIRIZER -> [50, 5]
+
+#467 Magmortar:
+	MAGMARIZER -> [50, 5]
+
+#469 Yanmega:
+	WIDE_LENS -> [5]
+
+#476 Probopass:
+	HARD_STONE -> [5]
+	MAGNET -> [5]
+
+#477 Dusknoir:
+	KASIB_BERRY -> [5]
+	SPELL_TAG -> [5]
+
+#478 Froslass:
+	BABIRI_BERRY -> [5]
+
+#492 Shaymin:
+	LUM_BERRY -> [100, 5]
+
+#511 Pansage:
+	ORAN_BERRY -> [50]
+	OCCA_BERRY -> [5]
+
+#512 Simisage:
+	ORAN_BERRY -> [50]
+	OCCA_BERRY -> [5]
+
+#513 Pansear:
+	ORAN_BERRY -> [50]
+	PASSHO_BERRY -> [5]
+
+#514 Simisear:
+	ORAN_BERRY -> [50]
+	PASSHO_BERRY -> [5]
+
+#515 Panpour:
+	ORAN_BERRY -> [50]
+	RINDO_BERRY -> [5]
+
+#516 Simipour:
+	ORAN_BERRY -> [50]
+	RINDO_BERRY -> [5]
+
+#522 Blitzle:
+	CHERI_BERRY -> [50]
+
+#523 Zebstrika:
+	CHERI_BERRY -> [50]
+
+#524 Roggenrola:
+	EVERSTONE -> [50]
+	HARD_STONE -> [5]
+
+#525 Boldore:
+	EVERSTONE -> [50]
+	HARD_STONE -> [5]
+
+#526 Gigalith:
+	EVERSTONE -> [50]
+	HARD_STONE -> [5]
+
+#531 Audino:
+	ORAN_BERRY -> [50]
+	SITRUS_BERRY -> [5]
+
+#535 Tympole:
+	PECHA_BERRY -> [50]
+	PERSIM_BERRY -> [50]
+
+#536 Palpitoad:
+	PECHA_BERRY -> [50]
+	PERSIM_BERRY -> [50]
+
+#537 Seismitoad:
+	PECHA_BERRY -> [50]
+	PERSIM_BERRY -> [50]
+
+#538 Throh:
+	BLACK_BELT -> [5]
+	EXPERT_BELT -> [1]
+
+#539 Sawk:
+	BLACK_BELT -> [5]
+	EXPERT_BELT -> [1]
+
+#540 Sewaddle:
+	MENTAL_HERB -> [5]
+
+#541 Swadloon:
+	MENTAL_HERB -> [5]
+
+#542 Leavanny:
+	MENTAL_HERB -> [5]
+
+#543 Venipede:
+	PECHA_BERRY -> [50]
+	POISON_BARB -> [5]
+
+#544 Whirlipede:
+	PECHA_BERRY -> [50]
+	POISON_BARB -> [5]
+
+#545 Scolipede:
+	PECHA_BERRY -> [50]
+	POISON_BARB -> [5]
+
+#546 Cottonee:
+	ABSORB_BULB -> [5]
+
+#547 Whimsicott:
+	ABSORB_BULB -> [5]
+
+#548 Petilil:
+	ABSORB_BULB -> [5]
+
+#549 Lilligant:
+	ABSORB_BULB -> [5]
+
+#550 Basculin:
+	DEEP_SEA_TOOTH -> [5]
+
+#551 Sandile:
+	BLACK_GLASSES -> [5]
+
+#552 Krokorok:
+	BLACK_GLASSES -> [5]
+
+#553 Krookodile:
+	BLACK_GLASSES -> [50]
+
+#554 Darumaka:
+	RAWST_BERRY -> [50]
+
+#555 Darmanitan:
+	RAWST_BERRY -> [50]
+
+#556 Maractus:
+	MIRACLE_SEED -> [5]
+
+#557 Dwebble:
+	RARE_BONE -> [1]
+	HARD_STONE -> [5]
+
+#558 Crustle:
+	RARE_BONE -> [1]
+	HARD_STONE -> [5]
+
+#559 Scraggy:
+	SHED_SHELL -> [5]
+
+#560 Scrafty:
+	SHED_SHELL -> [5]
+
+#562 Yamask:
+	SPELL_TAG -> [5]
+
+#563 Cofagrigus:
+	SPELL_TAG -> [5]
+
+#568 Trubbish:
+	NUGGET -> [1]
+	SILK_SCARF -> [5]
+	BLACK_SLUDGE -> [5]
+
+#569 Garbodor:
+	NUGGET -> [5]
+	SILK_SCARF -> [50]
+	BLACK_SLUDGE -> [50, 5]
+	BIG_NUGGET -> [1]
+
+#572 Minccino:
+	CHESTO_BERRY -> [50]
+
+#573 Cinccino:
+	CHESTO_BERRY -> [50]
+
+#574 Gothita:
+	PERSIM_BERRY -> [50]
+
+#575 Gothorita:
+	PERSIM_BERRY -> [50]
+
+#576 Gothitelle:
+	PERSIM_BERRY -> [50]
+
+#577 Solosis:
+	PERSIM_BERRY -> [50]
+
+#578 Duosion:
+	PERSIM_BERRY -> [50]
+
+#579 Reuniclus:
+	PERSIM_BERRY -> [50]
+
+#582 Vanillite:
+	NEVER_MELT_ICE -> [5]
+
+#583 Vanillish:
+	NEVER_MELT_ICE -> [5]
+
+#584 Vanilluxe:
+	NEVER_MELT_ICE -> [50]
+
+#587 Emolga:
+	CHERI_BERRY -> [100]
+
+#590 Foongus:
+	TINY_MUSHROOM -> [50]
+	BIG_MUSHROOM -> [5]
+	BALM_MUSHROOM -> [1]
+
+#591 Amoonguss:
+	TINY_MUSHROOM -> [50]
+	BIG_MUSHROOM -> [5]
+	BALM_MUSHROOM -> [1]
+
+#597 Ferroseed:
+	STICKY_BARB -> [5]
+
+#598 Ferrothorn:
+	STICKY_BARB -> [5]
+
+#613 Cubchoo:
+	ASPEAR_BERRY -> [50]
+
+#614 Beartic:
+	ASPEAR_BERRY -> [50]
+
+#615 Cryogonal:
+	NEVER_MELT_ICE -> [5]
+
+#618 Stunfisk:
+	SOFT_SAND -> [5]
+
+#621 Druddigon:
+	DRAGON_FANG -> [5]
+
+#622 Golett:
+	LIGHT_CLAY -> [5]
+
+#623 Golurk:
+	LIGHT_CLAY -> [5]
+
+#631 Heatmor:
+	FLAME_ORB -> [1]
+
+#637 Volcarona:
+	SILVER_POWDER -> [100, 5]
+
+#648 Meloetta:
+	STAR_PIECE -> [100, 5]
+
+#674 Pancham:
+	MENTAL_HERB -> [5]
+
+#675 Pangoro:
+	MENTAL_HERB -> [5]
+
+#701 Hawlucha:
+	KINGS_ROCK -> [5]
+
+#704 Goomy:
+	SHED_SHELL -> [5]
+
+#705 Sliggoo:
+	SHED_SHELL -> [5]
+
+#731 Pikipek:
+	ORAN_BERRY -> [5]
+
+#732 Trumbeak:
+	SITRUS_BERRY -> [5]
+
+#733 Toucannon:
+	RAWST_BERRY -> [5]
+
+#734 Yungoos:
+	PECHA_BERRY -> [5]
+
+#735 Gumshoos:
+	PECHA_BERRY -> [5]
+
+#737 Charjabug:
+	CELL_BATTERY -> [5]
+
+#739 Crabrawler:
+	ASPEAR_BERRY -> [5]
+
+#740 Crabominable:
+	CHERI_BERRY -> [5]
+
+#741 Oricorio:
+	HONEY -> [5]
+
+#742 Cutiefly:
+	HONEY -> [5]
+
+#743 Ribombee:
+	HONEY -> [5]
+
+#747 Mareanie:
+	POISON_BARB -> [5]
+
+#748 Toxapex:
+	POISON_BARB -> [5]
+
+#749 Mudbray:
+	LIGHT_CLAY -> [5]
+
+#750 Mudsdale:
+	LIGHT_CLAY -> [5]
+
+#751 Dewpider:
+	MYSTIC_WATER -> [5]
+
+#752 Araquanid:
+	MYSTIC_WATER -> [5]
+
+#753 Fomantis:
+	MIRACLE_SEED -> [5]
+
+#754 Lurantis:
+	MIRACLE_SEED -> [5]
+
+#755 Morelull:
+	TINY_MUSHROOM -> [50]
+	BIG_MUSHROOM -> [5]
+
+#756 Shiinotic:
+	TINY_MUSHROOM -> [50]
+	BIG_MUSHROOM -> [5]
+
+#757 Salandit:
+	SMOKE_BALL -> [5]
+
+#758 Salazzle:
+	SMOKE_BALL -> [5]
+
+#761 Bounsweet:
+	GRASSY_SEED -> [5]
+
+#762 Steenee:
+	GRASSY_SEED -> [5]
+
+#763 Tsareena:
+	GRASSY_SEED -> [50]
+
+#764 Comfey:
+	MISTY_SEED -> [5]
+
+#769 Sandygast:
+	SPELL_TAG -> [5]
+
+#770 Palossand:
+	SPELL_TAG -> [5]
+
+#774 Minior:
+	STAR_PIECE -> [5]
+
+#776 Turtonator:
+	CHARCOAL -> [5]
+
+#777 Togedemaru:
+	ELECTRIC_SEED -> [5]
+
+#778 Mimikyu:
+	CHESTO_BERRY -> [5]
+
+#779 Bruxish:
+	RAZOR_FANG -> [5]
+
+#780 Drampa:
+	PERSIM_BERRY -> [5]
+
+#782 Jangmo-o:
+	RAZOR_CLAW -> [5]
+
+#783 Hakamo-o:
+	RAZOR_CLAW -> [5]
+
+#784 Kommo-o:
+	RAZOR_CLAW -> [50]
+
+#815 Snowshrew:
+	GRIP_CLAW -> [5]
+
+#816 Snowslash:
+	GRIP_CLAW -> [5]
+
+#817 Yukikon:
+	SNOWBALL -> [5]
+
+#818 Kyukon:
+	SNOWBALL -> [5]
+
+#819 Sleima:
+	BLACK_SLUDGE -> [5]
+
+#820 Sleimok:
+	BLACK_SLUDGE -> [50]
+
+#822 GaraGara:
+	THICK_CLUB -> [5]
+
+#823 Jupetta:
+	SPELL_TAG -> [5]

@@ -75,10 +75,10 @@ class PokemonInfo:
         evs = [str(ev) for ev in self.evs]
         f.write(' '.join(evs) + '\n')
 
-        # TODO: Evolutions
+        # Evolutions are handled manually
         f.write('NONE\n')
 
-        # TODO: Wild Hold Items
+        # Wild Hold Items are handled manually
         f.write('0\n')
 
         f.write(str(self.female_ratio) + '\n')

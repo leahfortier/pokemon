@@ -1,15 +1,17 @@
+from typing import Union
+
 from scripts.forms import AddedPokes
 
 
 class FormConfig:
     def __init__(self, num: int) -> None:
-        self.base_num = num
-        self.id = num
+        self.base_num = num  # type: int
+        self.id = num        # type: Union[int, str]
 
         # If any of the following are true, will use the corresponding info from the base pokemon instead
-        self.use_base_exp = False
-        self.use_base_stats = False
-        self.use_base_abilities = False
+        self.use_base_exp = False        # type: bool
+        self.use_base_stats = False      # type: bool
+        self.use_base_abilities = False  # type: bool
 
         # Use the same base experience and base stats as Charizard (will also be substituted)
         if num == AddedPokes.MEGA_CHARIZARD.value:
