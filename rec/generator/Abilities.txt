@@ -501,12 +501,7 @@ Reckless:
 Iron Fist:
     Desc: Powers up punching moves.
     PowerMultiplierCondition: 1.2 user.getAttack().isMoveType(MoveType.PUNCHING)
-    Int: EntryEffect
-    Enter:
-        if (enterer.namesies() == PokemonNamesies.PANGORO) {
-            Messages.add(enterer.getName() + " does not break the mold!!!!!!!");
-        }
-        ###
+    OtherPangoro: True
 *
 Natural Cure:
     Desc: All status conditions heal when the Pok\u00e9mon switches out.
@@ -542,6 +537,7 @@ Scrappy:
     Desc: The Pok\u00e9mon can hit Ghost-type Pok\u00e9mon with Normal- and Fighting-type moves.
     RemoveAdvantageType: Ghost attacking == Type.NORMAL || attacking == Type.FIGHTING
     Int: AttackingNoAdvantageChanger
+    OtherPangoro: True
 *
 Swift Swim:
     Desc: Boosts the Pok\u00e9mon's Speed stat in rain.

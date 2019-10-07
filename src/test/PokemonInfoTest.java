@@ -282,10 +282,11 @@ public class PokemonInfoTest extends BaseTest {
                 assertMaxAbilities(message, pokemonInfo, 1);
             }
 
-            // Don't worry about it (but really if this fails change the message in Iron Fist)
+            // Don't worry about it (but really if this fails change the message in Iron Fist or Scrappy)
             if (pokemonInfo.namesies() == PokemonNamesies.PANGORO) {
                 Assert.assertTrue(pokemonInfo.hasAbility(AbilityNamesies.MOLD_BREAKER));
                 Assert.assertTrue(pokemonInfo.hasAbility(AbilityNamesies.IRON_FIST));
+                Assert.assertTrue(pokemonInfo.hasAbility(AbilityNamesies.SCRAPPY));
             }
         }
     }

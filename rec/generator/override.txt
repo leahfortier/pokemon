@@ -1056,6 +1056,15 @@ DecreaseContactAbility:
         user.getStages().modifyStage(victim, -1, Stat.{00}, b, CastSource.ABILITY);
         ###
 *
+# Srsly don't worry about it
+OtherPangoro:
+    AddInterface: EntryEffect
+    AddMapField: Enter:
+        if (enterer.namesies() == PokemonNamesies.PANGORO) {
+            Messages.add(enterer.getName() + " does not break the mold!!!!!!!");
+        }
+        ###
+*
 SpeedWeather:
     AddMapField: ToModifyMultiplier: Speed 2 b.isWeather(WeatherNamesies.{00})
 *

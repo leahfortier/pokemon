@@ -1390,15 +1390,15 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.getAttack().isMoveType(MoveType.PUNCHING) ? 1.2 : 1;
+        }
+
+        @Override
         public void enter(Battle b, ActivePokemon enterer) {
             if (enterer.namesies() == PokemonNamesies.PANGORO) {
                 Messages.add(enterer.getName() + " does not break the mold!!!!!!!");
             }
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttack().isMoveType(MoveType.PUNCHING) ? 1.2 : 1;
         }
     }
 
@@ -1457,7 +1457,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Scrappy extends Ability implements AttackingNoAdvantageChanger {
+    static class Scrappy extends Ability implements AttackingNoAdvantageChanger, EntryEffect {
         private static final long serialVersionUID = 1L;
 
         Scrappy() {
@@ -1467,6 +1467,13 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public boolean negateNoAdvantage(Type attacking, Type defending) {
             return defending == Type.GHOST && (attacking == Type.NORMAL || attacking == Type.FIGHTING);
+        }
+
+        @Override
+        public void enter(Battle b, ActivePokemon enterer) {
+            if (enterer.namesies() == PokemonNamesies.PANGORO) {
+                Messages.add(enterer.getName() + " does not break the mold!!!!!!!");
+            }
         }
     }
 
