@@ -4311,12 +4311,46 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    // TODO: IMPLEMENT
-    static class PowerOfAlchemy extends Ability {
+    // WE ARE SYLAR WITH THE POWER OF ALCHEMY
+    // More seriously though yes this ability was changed from ally to opponent
+    static class PowerOfAlchemy extends Ability implements MurderEffect, ChangeAbilitySource {
         private static final long serialVersionUID = 1L;
 
+        private AbilityNamesies stolenWithThePowerOfAlchemy;
+        private String message;
+
         PowerOfAlchemy() {
-            super(AbilityNamesies.POWER_OF_ALCHEMY, "The Pokémon copies the Ability of the defeated.");
+            super(AbilityNamesies.POWER_OF_ALCHEMY, "The Pok\u00e9mon copies the Ability of a defeated enemy.");
+        }
+
+        @Override
+        public boolean isStealable() {
+            return false;
+        }
+
+        @Override
+        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return stolenWithThePowerOfAlchemy.getNewAbility();
+        }
+
+        @Override
+        public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return message;
+        }
+
+        @Override
+        public void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
+            // Steal the dead's ability when you MURDER THEM
+            Ability deadAbility = dead.getAbility();
+            if (!deadAbility.isStealable()) {
+                return;
+            }
+
+            this.stolenWithThePowerOfAlchemy = deadAbility.namesies();
+            this.message = murderer.getName() + " stole " + dead.getName() + "'s " + deadAbility.getName() + " with the Power of Alchemy!!!";
+
+            // Cast the change ability effect onto the murderer to give the dead's ability
+            Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, murderer, murderer, CastSource.ABILITY, true);
         }
     }
 }

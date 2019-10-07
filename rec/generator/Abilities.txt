@@ -1750,6 +1750,34 @@ Moody:
         ###
 *
 Power of Alchemy:
-    Desc: The Pokémon copies the Ability of the defeated.
-    Comments: // TODO: IMPLEMENT
+    Desc: The Pok\u00e9mon copies the Ability of a defeated enemy.
+    Comments: 
+        // WE ARE SYLAR WITH THE POWER OF ALCHEMY
+        // More seriously though yes this ability was changed from ally to opponent
+        ###
+    Irrestealable: True
+    Int: MurderEffect, ChangeAbilitySource
+    Field:
+        private AbilityNamesies stolenWithThePowerOfAlchemy;
+        private String message;
+        ###
+    AbilityChange:
+        return stolenWithThePowerOfAlchemy.getNewAbility();
+        ###
+    AbilityMessage:
+        return message;
+        ###
+    KillWish:
+        // Steal the dead's ability when you MURDER THEM
+        Ability deadAbility = dead.getAbility();
+        if (!deadAbility.isStealable()) {
+            return;
+        }
+
+        this.stolenWithThePowerOfAlchemy = deadAbility.namesies();
+        this.message = murderer.getName() + " stole " + dead.getName() + "'s " + deadAbility.getName() + " with the Power of Alchemy!!!";
+
+        // Cast the change ability effect onto the murderer to give the dead's ability
+        Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, murderer, murderer, CastSource.ABILITY, true);
+        ###
 *
