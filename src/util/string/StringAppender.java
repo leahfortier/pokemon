@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -116,7 +115,7 @@ public class StringAppender {
 
     // Joins the objects by the delimiter and appends
     public StringAppender appendJoin(String delimiter, Collection<?> joinees) {
-        return this.appendJoin(delimiter, joinees, Objects::toString);
+        return this.appendJoin(delimiter, joinees, StringUtils::toString);
     }
 
     public <T> StringAppender appendJoin(String delimiter, T[] joinees, Function<T, String> mapper) {

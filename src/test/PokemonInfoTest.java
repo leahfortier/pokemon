@@ -242,41 +242,44 @@ public class PokemonInfoTest extends BaseTest {
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
             PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
             AbilityNamesies[] abilities = pokemonInfo.getAbilities();
+            String message = StringUtils.spaceSeparated(pokemonInfo.getName(), abilities);
 
-            // Must be size 2
-            Assert.assertEquals(2, abilities.length);
+            // Must be between sizes 1 and 3
+            TestUtils.assertInclusiveRange(message, 1, 3, abilities.length);
+            Assert.assertEquals(message, abilities.length, pokemonInfo.numAbilities());
 
-            // No-Ability can only be the second ability
-            Assert.assertNotEquals(AbilityNamesies.NO_ABILITY, abilities[0]);
-
-            // Make sure no duplicate abilities
-            Assert.assertNotEquals(abilities[0], abilities[1]);
             Set<AbilityNamesies> seen = EnumSet.noneOf(AbilityNamesies.class);
             for (AbilityNamesies ability : abilities) {
-                Assert.assertFalse(seen.contains(ability));
+                Assert.assertTrue(message, pokemonInfo.hasAbility(ability));
+
+                // Make sure no duplicate abilities
+                Assert.assertFalse(message, seen.contains(ability));
                 seen.add(ability);
 
-                Assert.assertTrue(pokemonInfo.hasAbility(ability));
+                // No-Ability is not a valid ability
+                Assert.assertNotEquals(message, AbilityNamesies.NO_ABILITY, ability);
+
+                // Flower Veil was changed and only makes sense for Grass-type Pokemon now
+                // Levitate doesn't makes sense for Flying-type Pokemon
+                if (ability == AbilityNamesies.FLOWER_VEIL) {
+                    Assert.assertTrue(message, pokemonInfo.isType(Type.GRASS));
+                } else if (ability == AbilityNamesies.LEVITATE) {
+                    Assert.assertFalse(message, pokemonInfo.isType(Type.FLYING));
+                }
             }
 
             // Must only return true for hasAbility if in the list
             for (AbilityNamesies ability : AbilityNamesies.values()) {
-                Assert.assertEquals(seen.contains(ability), pokemonInfo.hasAbility(ability));
+                Assert.assertEquals(message, seen.contains(ability), pokemonInfo.hasAbility(ability));
             }
 
-            // Flower Veil was changed and only makes sense for Grass-type Pokemon now
-            // Levitate doesn't makes sense for Flying-type Pokemon
-            for (AbilityNamesies ability : abilities) {
-                if (ability == AbilityNamesies.FLOWER_VEIL) {
-                    Assert.assertTrue(pokemonInfo.isType(Type.GRASS));
-                } else if (ability == AbilityNamesies.LEVITATE) {
-                    Assert.assertFalse(pokemonInfo.isType(Type.FLYING));
-                }
-            }
-
-            // They need it!!! (If this fails change the Run Away case in substitution)
-            if (pokemonInfo.namesies() == PokemonNamesies.PONYTA || pokemonInfo.namesies() == PokemonNamesies.RAPIDASH) {
-                Assert.assertTrue(pokemonInfo.hasAbility(AbilityNamesies.FLAME_BODY));
+            // Cannot evolve from two to three abilities
+            if (abilities.length == 2) {
+                assertMaxAbilities(message, pokemonInfo, 2);
+            } else if (abilities.length == 1 && pokemonInfo.getBaseEvolution() == pokemonInfo.namesies()) {
+                // If base evolution is 1, then all need to be 1
+                // Note: Okay for middle evolution to go from 1 to 2 or 3
+                assertMaxAbilities(message, pokemonInfo, 1);
             }
 
             // Don't worry about it (but really if this fails change the message in Iron Fist)
@@ -284,6 +287,18 @@ public class PokemonInfoTest extends BaseTest {
                 Assert.assertTrue(pokemonInfo.hasAbility(AbilityNamesies.MOLD_BREAKER));
                 Assert.assertTrue(pokemonInfo.hasAbility(AbilityNamesies.IRON_FIST));
             }
+        }
+    }
+
+    // Asserts that this Pokemon and all of its potential evolutions (across multiple levels) have a max of maxAbilities
+    private void assertMaxAbilities(String message, PokemonInfo pokemonInfo, int maxAbilities) {
+        for (PokemonNamesies evolution : pokemonInfo.getEvolution().getEvolutions()) {
+            PokemonInfo evolutionInfo = evolution.getInfo();
+            AbilityNamesies[] evolutionAbilities = evolutionInfo.getAbilities();
+            String evolutionMessage = message + " -> #" + evolutionInfo.getNumber() + " " + evolution.getName() + " " + Arrays.toString(evolutionAbilities);
+
+            Assert.assertTrue(evolutionMessage, evolutionAbilities.length <= maxAbilities);
+            assertMaxAbilities(message, evolutionInfo, maxAbilities);
         }
     }
 

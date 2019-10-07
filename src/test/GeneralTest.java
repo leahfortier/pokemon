@@ -17,6 +17,7 @@ import util.string.StringUtils;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -270,7 +271,6 @@ public class GeneralTest extends BaseTest {
 
         checkStringAppender("abc;123", new StringAppender("abc;123"));
         Assert.assertEquals("111", StringUtils.repeat("1", 3));
-        Assert.assertEquals("1 a 1.3", StringUtils.spaceSeparated(1, "a", 1.3));
     }
 
     private void checkStringAppender(String equals, StringAppender appender) {
@@ -300,5 +300,16 @@ public class GeneralTest extends BaseTest {
         Assert.assertEquals("", StringUtils.getMethodName("methodName"));
         Assert.assertEquals("", StringUtils.getMethodName("methodName("));
         Assert.assertEquals("", StringUtils.getMethodName("methodName() {"));
+    }
+
+    @Test
+    public void stringSeparatedTest() {
+        Assert.assertEquals("1 2 3", StringUtils.spaceSeparated(1, 2, 3));
+        Assert.assertEquals("1 2 3", StringUtils.spaceSeparated(1, "2", 3));
+        Assert.assertEquals("1 a 2.3", StringUtils.spaceSeparated(1, "a", 2.3));
+        Assert.assertEquals("1 [2, 3] c", StringUtils.spaceSeparated(1, new int[] { 2, 3 }, "c"));
+        Assert.assertEquals("1 BULBASAUR", StringUtils.spaceSeparated(1, PokemonNamesies.BULBASAUR));
+        Assert.assertEquals("1 [OVERGROW]", StringUtils.spaceSeparated(1, new AbilityNamesies[] { AbilityNamesies.OVERGROW }));
+        Assert.assertEquals("1 [OVERGROW]", StringUtils.spaceSeparated(1, List.of(AbilityNamesies.OVERGROW)));
     }
 }
