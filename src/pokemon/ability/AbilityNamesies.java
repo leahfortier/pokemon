@@ -47,6 +47,7 @@ import pokemon.ability.Ability.EmergencyExit;
 import pokemon.ability.Ability.FairyAura;
 import pokemon.ability.Ability.Filter;
 import pokemon.ability.Ability.FlameBody;
+import pokemon.ability.Ability.FlareBoost;
 import pokemon.ability.Ability.FlashFire;
 import pokemon.ability.Ability.FlowerGift;
 import pokemon.ability.Ability.FlowerVeil;
@@ -59,6 +60,7 @@ import pokemon.ability.Ability.FurCoat;
 import pokemon.ability.Ability.GaleWings;
 import pokemon.ability.Ability.Galvanize;
 import pokemon.ability.Ability.Gluttony;
+import pokemon.ability.Ability.Gooey;
 import pokemon.ability.Ability.GrassPelt;
 import pokemon.ability.Ability.GrassySurge;
 import pokemon.ability.Ability.Guts;
@@ -237,6 +239,7 @@ public enum AbilityNamesies {
     KEEN_EYE("Keen Eye", KeenEye::new),
     TANGLED_FEET("Tangled Feet", TangledFeet::new),
     GUTS("Guts", Guts::new),
+    FLARE_BOOST("Flare Boost", FlareBoost::new),
     INTIMIDATE("Intimidate", Intimidate::new),
     STATIC("Static", Static::new),
     LIGHTNING_ROD("Lightning Rod", LightningRod::new),
@@ -430,6 +433,7 @@ public enum AbilityNamesies {
     INNARDS_OUT("Innards Out", InnardsOut::new),
     FLUFFY("Fluffy", Fluffy::new),
     TANGLING_HAIR("Tangling Hair", TanglingHair::new),
+    GOOEY("Gooey", Gooey::new),
     PSYCHIC_SURGE("Psychic Surge", PsychicSurge::new),
     ELECTRIC_SURGE("Electric Surge", ElectricSurge::new),
     MISTY_SURGE("Misty Surge", MistySurge::new),

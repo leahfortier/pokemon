@@ -1050,6 +1050,12 @@ StatusContact:
         ###
     AddInterface: PhysicalContactEffect
 *
+DecreaseContactAbility:
+    AddInterface: PhysicalContactEffect
+    AddMapField: Contact:
+        user.getStages().modifyStage(victim, -1, Stat.{00}, b, CastSource.ABILITY);
+        ###
+*
 SpeedWeather:
     AddMapField: ToModifyMultiplier: Speed 2 b.isWeather(WeatherNamesies.{00})
 *

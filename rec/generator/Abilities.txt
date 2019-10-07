@@ -88,6 +88,10 @@ Guts:
     Desc: It's so gutsy that having a status condition boosts the Pok\u00e9mon's Attack stat.
     StatStatusBooster: 1.5 Attack
 *
+Flare Boost:
+    Desc: Powers up special attacks when the Pokémon is burned.
+    StatStatusBooster: 1.5 Sp_Attack
+*
 Intimidate:
     Desc: The Pok\u00e9mon intimidates opposing Pok\u00e9mon upon entering battle, lowering their Attack stat.
     Int: EntryEffect, RepelLowLevelEncounterEffect
@@ -1693,10 +1697,11 @@ Fluffy:
 *
 Tangling Hair:
     Desc: Contact with the Pok\u00e9mon lowers the attacker's Speed stat.
-    Int: PhysicalContactEffect
-    Contact:
-        user.getStages().modifyStage(victim, -1, Stat.SPEED, b, CastSource.ABILITY);
-        ###
+    DecreaseContactAbility: Speed
+*
+Gooey:
+    Desc: Contact with the Pok\u00e9mon lowers the attacker's Speed stat.
+    DecreaseContactAbility: Speed
 *
 Psychic Surge:
     Desc: Turns the ground into Psychic Terrain when the Pok\u00e9mon enters a battle.

@@ -449,6 +449,24 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
+    static class FlareBoost extends Ability implements StatStatusBoosterEffect {
+        private static final long serialVersionUID = 1L;
+
+        FlareBoost() {
+            super(AbilityNamesies.FLARE_BOOST, "Powers up special attacks when the Pokémon is burned.");
+        }
+
+        @Override
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SP_ATTACK;
+        }
+
+        @Override
+        public double getModifier() {
+            return 1.5;
+        }
+    }
+
     static class Intimidate extends Ability implements EntryEffect, RepelLowLevelEncounterEffect {
         private static final long serialVersionUID = 1L;
 
@@ -4181,6 +4199,19 @@ public abstract class Ability implements AbilityInterface {
 
         TanglingHair() {
             super(AbilityNamesies.TANGLING_HAIR, "Contact with the Pok\u00e9mon lowers the attacker's Speed stat.");
+        }
+
+        @Override
+        public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
+            user.getStages().modifyStage(victim, -1, Stat.SPEED, b, CastSource.ABILITY);
+        }
+    }
+
+    static class Gooey extends Ability implements PhysicalContactEffect {
+        private static final long serialVersionUID = 1L;
+
+        Gooey() {
+            super(AbilityNamesies.GOOEY, "Contact with the Pok\u00e9mon lowers the attacker's Speed stat.");
         }
 
         @Override
