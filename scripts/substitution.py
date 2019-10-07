@@ -310,6 +310,10 @@ def ability_substitution(num: int, ability: str) -> str:
     # Happiny -- similar but backwards to the Wigglyfable sitution
     elif num == 440:
         ability = _replace(ability, 'FRIEND_GUARD', 'HEALER')
+    # Ferrothorn -- so this is incredible dumb even in the main game that Ferrothorn has a HA, but Ferroseed
+    # doesn't?? that doesn't make any sense at all and I'm not condoning that type of behavior
+    elif num == 598:
+        ability = _replace(ability, 'ANTICIPATION', '')
     # Comfey -- this ability was changed and doesn't make as much sense anymore for Comfey
     elif num == 764:
         ability = _replace(ability, 'FLOWER_VEIL', '')

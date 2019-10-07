@@ -51735,7 +51735,7 @@ NONE
 1
 5 STICKY_BARB
 4
-IRON_BARBS ANTICIPATION
+IRON_BARBS
 Thorn Pod
 39 242.5 It fights by swinging around its three spiky feelers. A hit from these steel spikes can reduce a boulder to rubble.
 5120
