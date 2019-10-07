@@ -4275,4 +4275,48 @@ public abstract class Ability implements AbilityInterface {
             Effect.cast(TerrainNamesies.GRASSY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
+
+    static class Moody extends Ability implements EndTurnEffect {
+        private static final long serialVersionUID = 1L;
+
+        private Stat modifyStat(Battle b, ActivePokemon victim, List<Stat> potential, int delta) {
+            // All stats maxed/mined -- don't alter
+            if (potential.isEmpty()) {
+                return null;
+            }
+
+            Stat stat = RandomUtils.getRandomValue(potential);
+            boolean success = victim.getStages().modifyStage(victim, delta, stat, b, CastSource.ABILITY);
+
+            return success ? stat : null;
+        }
+
+        Moody() {
+            super(AbilityNamesies.MOODY, "Raises one stat sharply and lowers another every turn.");
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            // Sharply increase random stat
+            Stat modified = modifyStat(b, victim, victim.getStages().getNonMaxStats(), 2);
+
+            // Cannot alter the same stat
+            List<Stat> nonMined = victim.getStages().getNonMinStats();
+            if (modified != null) {
+                nonMined.remove(modified);
+            }
+
+            // Decrease random stat
+            modifyStat(b, victim, nonMined, -1);
+        }
+    }
+
+    // TODO: IMPLEMENT
+    static class PowerOfAlchemy extends Ability {
+        private static final long serialVersionUID = 1L;
+
+        PowerOfAlchemy() {
+            super(AbilityNamesies.POWER_OF_ALCHEMY, "The Pokémon copies the Ability of the defeated.");
+        }
+    }
 }

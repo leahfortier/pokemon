@@ -1719,3 +1719,37 @@ Grassy Surge:
     Desc: Turns the ground into Grassy Terrain when the Pok\u00e9mon enters a battle.
     TerrainStarter: Grassy
 *
+Moody:
+    Desc: Raises one stat sharply and lowers another every turn.
+    Int: EndTurnEffect
+    ApplyEndTurn:
+        // Sharply increase random stat
+        Stat modified = modifyStat(b, victim, victim.getStages().getNonMaxStats(), 2);
+
+        // Cannot alter the same stat
+        List<Stat> nonMined = victim.getStages().getNonMinStats();
+        if (modified != null) {
+            nonMined.remove(modified);
+        }
+
+        // Decrease random stat
+        modifyStat(b, victim, nonMined, -1);
+        ###
+    Field:
+        private Stat modifyStat(Battle b, ActivePokemon victim, List<Stat> potential, int delta) {
+            // All stats maxed/mined -- don't alter
+            if (potential.isEmpty()) {
+                return null;
+            }
+
+            Stat stat = RandomUtils.getRandomValue(potential);
+            boolean success = victim.getStages().modifyStage(victim, delta, stat, b, CastSource.ABILITY);
+
+            return success ? stat : null;
+        }
+        ###
+*
+Power of Alchemy:
+    Desc: The Pokémon copies the Ability of the defeated.
+    Comments: // TODO: IMPLEMENT
+*

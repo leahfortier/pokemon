@@ -105,6 +105,7 @@ import pokemon.ability.Ability.MegaLauncher;
 import pokemon.ability.Ability.Merciless;
 import pokemon.ability.Ability.MistySurge;
 import pokemon.ability.Ability.MoldBreaker;
+import pokemon.ability.Ability.Moody;
 import pokemon.ability.Ability.MotorDrive;
 import pokemon.ability.Ability.Moxie;
 import pokemon.ability.Ability.Multiscale;
@@ -124,6 +125,7 @@ import pokemon.ability.Ability.Pixilate;
 import pokemon.ability.Ability.PoisonHeal;
 import pokemon.ability.Ability.PoisonPoint;
 import pokemon.ability.Ability.PoisonTouch;
+import pokemon.ability.Ability.PowerOfAlchemy;
 import pokemon.ability.Ability.Prankster;
 import pokemon.ability.Ability.Pressure;
 import pokemon.ability.Ability.PrismArmor;
@@ -437,7 +439,9 @@ public enum AbilityNamesies {
     PSYCHIC_SURGE("Psychic Surge", PsychicSurge::new),
     ELECTRIC_SURGE("Electric Surge", ElectricSurge::new),
     MISTY_SURGE("Misty Surge", MistySurge::new),
-    GRASSY_SURGE("Grassy Surge", GrassySurge::new);
+    GRASSY_SURGE("Grassy Surge", GrassySurge::new),
+    MOODY("Moody", Moody::new),
+    POWER_OF_ALCHEMY("Power of Alchemy", PowerOfAlchemy::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

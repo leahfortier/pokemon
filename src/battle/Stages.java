@@ -10,6 +10,9 @@ import message.Messages;
 import pokemon.stat.Stat;
 import util.serialization.Serializable;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Stages implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -51,6 +54,20 @@ public class Stages implements Serializable {
 
     public void resetStage(Stat stat) {
         setStage(stat, 0);
+    }
+
+    public List<Stat> getNonMaxStats() {
+        return getNonValueStats(Stat.MAX_STAT_CHANGES);
+    }
+
+    public List<Stat> getNonMinStats() {
+        return getNonValueStats(-Stat.MAX_STAT_CHANGES);
+    }
+
+    private List<Stat> getNonValueStats(int value) {
+        return Stat.BATTLE_STATS.stream()
+                                .filter(stat -> this.stages[stat.index()] != value)
+                                .collect(Collectors.toList());
     }
 
     public boolean modifyStage(ActivePokemon caster, int val, Stat stat, Battle b, CastSource source) {
