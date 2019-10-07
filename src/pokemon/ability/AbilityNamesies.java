@@ -65,6 +65,7 @@ import pokemon.ability.Ability.Guts;
 import pokemon.ability.Ability.Harvest;
 import pokemon.ability.Ability.Healer;
 import pokemon.ability.Ability.Heatproof;
+import pokemon.ability.Ability.HeavyMetal;
 import pokemon.ability.Ability.HoneyGather;
 import pokemon.ability.Ability.HugePower;
 import pokemon.ability.Ability.Hustle;
@@ -340,6 +341,7 @@ public enum AbilityNamesies {
     COLOR_CHANGE("Color Change", ColorChange::new),
     ICE_BODY("Ice Body", IceBody::new),
     LIGHT_METAL("Light Metal", LightMetal::new),
+    HEAVY_METAL("Heavy Metal", HeavyMetal::new),
     DRIZZLE("Drizzle", Drizzle::new),
     AIR_LOCK("Air Lock", AirLock::new),
     DEFIANT("Defiant", Defiant::new),

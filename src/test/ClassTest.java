@@ -28,6 +28,7 @@ import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.DamageTakenEffect;
 import battle.effect.InvokeInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
+import battle.effect.InvokeInterfaces.DoubleWeightEffect;
 import battle.effect.InvokeInterfaces.EffectExtendingEffect;
 import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EncounterRateMultiplier;
@@ -243,6 +244,7 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, DefendingNoAdvantageChanger.class, effectListSourcesNoAttack);
             checkInstance(classy, ChangeMoveListEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, HalfWeightEffect.class, effectListSourcesNoAttack);
+            checkInstance(classy, DoubleWeightEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, StageChangingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, StatModifyingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, StatChangingEffect.class, effectListSourcesNoAttack);

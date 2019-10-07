@@ -912,7 +912,10 @@ Ice Body:
 Light Metal:
     Desc: Halves the Pok\u00e9mon's weight.
     Int: HalfWeightEffect
-    HalfAmount: 1
+*
+Heavy Metal:
+    Desc: Doubles the Pok\u00e9mon's weight.
+    Int: DoubleWeightEffect
 *
 Drizzle:
     Desc: The Pok\u00e9mon makes it rain when it enters a battle.

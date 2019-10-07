@@ -1074,9 +1074,9 @@ WeatherEliminate:
         ###
 *
 HalfAmount:
-    Header: int getHalfAmount(int halfAmount)
+    Header: int getHalfAmount()
     Body:
-        return halfAmount + {0};
+        return {0};
         ###
 *
 WeatherBlock:

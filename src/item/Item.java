@@ -667,11 +667,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
             super(ItemNamesies.FLOAT_STONE, "An item to be held by a Pok\u00e9mon. This very light stone reduces the weight of a Pok\u00e9mon when held.", BagCategory.MISC);
             super.price = 4000;
         }
-
-        @Override
-        public int getHalfAmount(int halfAmount) {
-            return halfAmount + 1;
-        }
     }
 
     static class FocusBand extends Item implements HoldItem, BracingEffect {

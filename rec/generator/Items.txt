@@ -198,7 +198,6 @@ Float Stone:
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. This very light stone reduces the weight of a Pok\u00e9mon when held.
     Price: 4000
-    HalfAmount: 1
 *
 Focus Band:
     Int: HoldItem, BracingEffect

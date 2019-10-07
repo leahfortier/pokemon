@@ -36,6 +36,7 @@ import battle.effect.InvokeInterfaces.CritBlockerEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.DefiniteEscape;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
+import battle.effect.InvokeInterfaces.DoubleWeightEffect;
 import battle.effect.InvokeInterfaces.EffectChanceMultiplierEffect;
 import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EffectReceivedEffect;
@@ -2338,10 +2339,13 @@ public abstract class Ability implements AbilityInterface {
         LightMetal() {
             super(AbilityNamesies.LIGHT_METAL, "Halves the Pok\u00e9mon's weight.");
         }
+    }
 
-        @Override
-        public int getHalfAmount(int halfAmount) {
-            return halfAmount + 1;
+    static class HeavyMetal extends Ability implements DoubleWeightEffect {
+        private static final long serialVersionUID = 1L;
+
+        HeavyMetal() {
+            super(AbilityNamesies.HEAVY_METAL, "Doubles the Pok\u00e9mon's weight.");
         }
     }
 
