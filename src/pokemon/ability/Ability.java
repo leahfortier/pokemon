@@ -104,9 +104,7 @@ import message.MessageUpdate;
 import message.Messages;
 import pokemon.active.Gender;
 import pokemon.active.MoveList;
-import pokemon.active.PartyPokemon;
 import pokemon.species.BaseStats;
-import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import trainer.Trainer;
@@ -186,45 +184,6 @@ public abstract class Ability implements AbilityInterface {
         }
 
         return other;
-    }
-
-    public static AbilityNamesies assign(PokemonInfo p) {
-        AbilityNamesies[] abilities = p.getAbilities();
-
-        if (abilities[0] == AbilityNamesies.NO_ABILITY) {
-            Global.error("First ability should not be none (Pokemon " + p.getName() + ")");
-        }
-
-        // Only has one ability -- return the first one
-        if (abilities[1] == AbilityNamesies.NO_ABILITY) {
-            return abilities[0];
-        }
-
-        // Has two abilities -- return a random one
-        return RandomUtils.getRandomValue(abilities);
-    }
-
-    public static AbilityNamesies evolutionAssign(PartyPokemon p, PokemonInfo ev) {
-        AbilityNamesies prev = p.getActualAbility().namesies();
-
-        // Evolution has current ability
-        if (ev.hasAbility(prev)) {
-            return prev;
-        }
-
-        // Evolution only has a single ability
-        AbilityNamesies[] abilities = ev.getAbilities();
-        if (abilities[1] == AbilityNamesies.NO_ABILITY) {
-            return abilities[0];
-        }
-
-        // Evolution has the alternative
-        AbilityNamesies other = getOtherAbility(p.getPokemonInfo(), prev);
-        if (ev.hasAbility(other)) {
-            return getOtherAbility(ev, other);
-        }
-
-        return RandomUtils.getRandomValue(abilities);
     }
 
     // EVERYTHING BELOW IS GENERATED ###

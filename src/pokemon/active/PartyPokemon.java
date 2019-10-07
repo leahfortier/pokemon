@@ -28,6 +28,7 @@ import util.string.StringUtils;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class PartyPokemon implements Serializable {
@@ -46,6 +47,7 @@ public abstract class PartyPokemon implements Serializable {
     private StatusCondition status;
     private int totalEXP;
     private HoldItem heldItem;
+    private int abilityIndex;
     private Ability ability;
     private Gender gender;
     private boolean shiny;
@@ -64,7 +66,9 @@ public abstract class PartyPokemon implements Serializable {
 
         PokemonInfo pokemon = this.getPokemonInfo();
         this.setGender(Gender.getGender(pokemon.getFemaleRatio()));
-        this.setAbility(Ability.assign(pokemon));
+
+        this.abilityIndex = this.createAbilityIndex();
+        this.assignAbility(-1);
 
         this.heldItem = (HoldItem)ItemNamesies.NO_ITEM.getItem();
 
@@ -188,15 +192,18 @@ public abstract class PartyPokemon implements Serializable {
         Game.getPlayer().getMedalCase().increase(MedalTheme.POKEMON_EVOLVED);
 
         boolean sameName = nickname.equals(pokemon.getName());
-        PokemonInfo evolutionInfo = evolution.getEvolution();
+        int numAbilities = this.getPokemonInfo().numAbilities();
 
-        this.setAbility(Ability.evolutionAssign(this, evolutionInfo));
-        pokemon = evolutionInfo.namesies();
+        // Actually change Pokemon
+        pokemon = evolution.getEvolution().namesies();
 
         // Set name if it was not given a nickname
         if (sameName) {
             nickname = pokemon.getName();
         }
+
+        // Update ability
+        this.assignAbility(numAbilities);
 
         // Update stats and return gain
         return this.setStats();
@@ -271,8 +278,49 @@ public abstract class PartyPokemon implements Serializable {
         return ability;
     }
 
+    private int createAbilityIndex() {
+        // Pokemon can never evolve from 2 abilities to 3, so if only two, the third slot is never relevant
+        if (this.getPokemonInfo().numAbilities() == 2) {
+            return RandomUtils.getRandomInt(2);
+        } else {
+            return RandomUtils.getRandomInt(3);
+        }
+    }
+
+    // Sets the ability of the new Pokemon (either just created or just evolved)
+    // It is expected at this point that the ability index is set -- this will set the corresponding ability
+    // Takes in the previous number of abilities (only relevant for evolution, -1 for new Pokemon)
+    private void assignAbility(int previousAbilities) {
+        // If decreasing from 3 to 2 abilities, then the index needs to be reworked
+        AbilityNamesies[] abilities = this.getPokemonInfo().getAbilities();
+        if (previousAbilities == 3 && abilities.length == 2) {
+            this.abilityIndex /= 2;
+        }
+
+        // Get the ability corresponding to the ability index
+        final AbilityNamesies ability;
+        if (abilities.length == 1) {
+            ability = abilities[0];
+        } else {
+            ability = abilities[this.abilityIndex];
+        }
+
+        // Actually set the ability
+        this.setAbility(ability);
+    }
+
     public void setAbility(AbilityNamesies ability) {
         this.ability = ability.getNewAbility();
+
+        // Potentially update ability index (should really only happen for Ability Capsule)
+        PokemonInfo pokemonInfo = this.getPokemonInfo();
+        if (pokemonInfo.hasAbility(ability) && pokemonInfo.numAbilities() > 1) {
+            this.abilityIndex = Arrays.asList(pokemonInfo.getAbilities()).indexOf(ability);
+        }
+    }
+
+    public int getAbilityIndex() {
+        return this.abilityIndex;
     }
 
     public boolean canBreed() {
