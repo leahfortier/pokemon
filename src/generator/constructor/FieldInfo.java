@@ -11,29 +11,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+// Used for the field definitions at the top of the file
 public class FieldInfo {
-    public final String fieldName;
-    public final boolean multiple;
-    public final boolean not;
-    public final String defaultValue;
-    public final String fieldType;
-    public final String enumType;
-    public final String remaining;
+    private final String fieldName;
+    private final boolean multiple;
+    private final String defaultValue;
+    private final String fieldType;
+    private final String enumType;
+    private final String remaining;
 
-    public FieldInfo(SplitScanner split) {
+    public FieldInfo(String line) {
+        SplitScanner split = new SplitScanner(line);
+
         this.fieldName = split.next();
+        String fieldType = split.next();
 
         boolean multiple = false;
-        boolean not = false;
-
-        String fieldType = split.next();
         if (fieldType.equals("Multiple")) {
             multiple = true;
-            fieldType = split.next();
-        }
-
-        if (fieldType.equals("Not")) {
-            not = true;
             fieldType = split.next();
         }
 
@@ -51,10 +46,13 @@ public class FieldInfo {
         this.remaining = split.getRemaining();
 
         this.multiple = multiple;
-        this.not = not;
         this.defaultValue = defaultValue;
         this.fieldType = fieldType;
         this.enumType = enumType;
+    }
+
+    public String getFieldName() {
+        return this.fieldName;
     }
 
     public String getAssignment(String inputFieldValue) {

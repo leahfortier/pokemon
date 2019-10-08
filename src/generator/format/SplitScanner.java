@@ -7,7 +7,6 @@ public class SplitScanner {
     private final String original;
     private final String delimiter;
     private int index;
-    private int tempIndex;
 
     public SplitScanner(String toSplit) {
         this.delimiter = " ";
@@ -35,17 +34,5 @@ public class SplitScanner {
 
         String[] newSplit = this.original.split(delimiter, this.index + 1);
         return newSplit[index];
-    }
-
-    public void setTempIndex() {
-        this.tempIndex = index;
-    }
-
-    public void restoreTempIndex() {
-        this.index = tempIndex;
-    }
-
-    public void reset() {
-        this.index = 0;
     }
 }

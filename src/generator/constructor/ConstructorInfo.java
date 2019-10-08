@@ -6,10 +6,13 @@ import generator.format.MethodInfo;
 import util.string.StringAppender;
 
 public class ConstructorInfo {
-    private final InfoList superInfo;
-    private final InfoList fieldKeys;
+    // Contains the information of what needs to be passed in the super constructor (required fields)
+    private final FieldInfoList superInfo;
 
-    public ConstructorInfo(InfoList superInfo, InfoList fieldKeys) {
+    // Contains the information of (optional) fields that have manual field setting after super call
+    private final FieldInfoList fieldKeys;
+
+    public ConstructorInfo(FieldInfoList superInfo, FieldInfoList fieldKeys) {
         this.superInfo = superInfo;
         this.fieldKeys = fieldKeys;
     }
@@ -19,7 +22,7 @@ public class ConstructorInfo {
     // Example: 'AttackNamesies.ATTACK_NAME, "Attack Description", 35, Type.NORMAL, MoveCategory.PHYSICAL'
     private String getInternalConstructorValues(ClassFields fields) {
         StringAppender superValues = new StringAppender();
-        for (FieldInfo fieldInfo : superInfo.infoList) {
+        for (FieldInfo fieldInfo : superInfo) {
             String value = fieldInfo.getConstructorValue(fields);
             superValues.appendDelimiter(", ", value);
         }
@@ -31,9 +34,9 @@ public class ConstructorInfo {
         StringAppender constructor = new StringAppender();
         constructor.appendLine("super(" + getInternalConstructorValues(fields) + ");");
 
-        for (FieldInfo fieldInfo : fieldKeys.infoList) {
+        for (FieldInfo fieldInfo : fieldKeys) {
             fields.getPerformAndRemove(
-                    fieldInfo.fieldName,
+                    fieldInfo.getFieldName(),
                     value -> constructor.appendLine(fieldInfo.getAssignment(value))
             );
         }

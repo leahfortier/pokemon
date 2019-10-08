@@ -2,7 +2,7 @@ package generator.format;
 
 import generator.fields.ClassFields;
 import generator.constructor.ConstructorInfo;
-import generator.constructor.InfoList;
+import generator.constructor.FieldInfoList;
 import main.Global;
 import util.file.FileIO;
 import util.file.FileName;
@@ -92,8 +92,8 @@ public class InputFormatter {
     }
 
     public void readFileFormat(Scanner in) {
-        InfoList superInfo = new InfoList(null);
-        InfoList fieldKeys = new InfoList(null);
+        FieldInfoList superInfo = new FieldInfoList(null);
+        FieldInfoList fieldKeys = new FieldInfoList(null);
         while (in.hasNext()) {
             String line = in.nextLine().trim();
 
@@ -109,10 +109,10 @@ public class InputFormatter {
             String formatType = line.replace(":", "");
             switch (formatType) {
                 case "Constructor":
-                    superInfo = new InfoList(in);
+                    superInfo = new FieldInfoList(in);
                     break;
                 case "Fields":
-                    fieldKeys = new InfoList(in);
+                    fieldKeys = new FieldInfoList(in);
                     break;
                 default:
                     Global.error("Invalid format type " + formatType);
