@@ -5308,36 +5308,17 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-            // Add index for each battle stat and also an extra value (for crits)
-            List<Integer> stats = new ArrayList<>();
-            for (int i = 0; i <= Stat.NUM_BATTLE_STATS; i++) {
-                stats.add(i);
-            }
-
-            // Try all stats until success
-            while (!stats.isEmpty()) {
-                int randIndex = RandomUtils.getRandomIndex(stats);
-                int statIndex = stats.get(randIndex);
-                stats.remove(randIndex);
-
-                final boolean success;
-
-                // Raise crit
-                if (statIndex == Stat.NUM_BATTLE_STATS) {
-                    success = Effect.apply(PokemonEffectNamesies.RAISE_CRITS, b, user, user, source, true).isSuccess();
-                } else {
-                    // Sharply raise random battle stat
-                    success = user.getStages().modifyStage(user, 2, Stat.getStat(statIndex, true), b, source);
-                }
-
-                // Stat raised successfully -- don't raise any others
-                if (success) {
-                    return true;
-                }
-            }
+            // Get stats that can still increase
+            List<Stat> stats = user.getStages().getNonMaxStats();
 
             // You probably don't need the berry at this point anyhow...
-            return false;
+            if (stats.isEmpty()) {
+                return false;
+            }
+
+            // Sharply raise random battle stat
+            Stat stat = RandomUtils.getRandomValue(stats);
+            return user.getStages().modifyStage(user, 2, stat, b, source);
         }
 
         @Override
