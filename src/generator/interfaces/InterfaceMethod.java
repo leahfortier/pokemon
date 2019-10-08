@@ -1,7 +1,7 @@
 package generator.interfaces;
 
 import generator.AccessModifier;
-import generator.ClassFields;
+import generator.fields.ClassFields;
 import generator.format.MethodInfo;
 import util.string.StringAppender;
 import util.string.StringUtils;

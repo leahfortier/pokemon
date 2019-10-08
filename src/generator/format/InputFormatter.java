@@ -1,8 +1,8 @@
 package generator.format;
 
-import generator.ClassFields;
-import generator.fieldinfo.ConstructorInfo;
-import generator.fieldinfo.InfoList;
+import generator.fields.ClassFields;
+import generator.constructor.ConstructorInfo;
+import generator.constructor.InfoList;
 import main.Global;
 import util.file.FileIO;
 import util.file.FileName;

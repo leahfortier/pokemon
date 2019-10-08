@@ -1,6 +1,5 @@
-package generator;
+package generator.fields;
 
-import generator.fieldinfo.MapField;
 import main.Global;
 import util.string.StringUtils;
 
@@ -15,7 +14,7 @@ public class ClassFields {
     private final String name;
     private final String className;
 
-    ClassFields(String name) {
+    public ClassFields(String name) {
         this.fields = new LinkedHashMap<>();
 
         this.name = name;
@@ -88,7 +87,7 @@ public class ClassFields {
         fields.put(fieldKey, mapField);
     }
 
-    String getRequired(String fieldName) {
+    public String getRequired(String fieldName) {
         if (!this.contains(fieldName)) {
             Global.error("Missing required field " + fieldName + " for class " + className);
         }

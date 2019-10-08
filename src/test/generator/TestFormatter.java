@@ -1,6 +1,6 @@
 package test.generator;
 
-import generator.ClassFields;
+import generator.fields.ClassFields;
 import generator.format.InputFormatter;
 import generator.format.MethodInfo;
 import generator.format.ReplaceType;

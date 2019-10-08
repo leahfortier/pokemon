@@ -26,7 +26,7 @@ import battle.effect.attack.SelfHealingMove;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
-import generator.ClassFields;
+import generator.fields.ClassFields;
 import generator.GeneratorType;
 import generator.format.InputFormatter;
 import generator.format.MethodInfo;

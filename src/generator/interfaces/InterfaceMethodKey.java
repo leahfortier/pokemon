@@ -1,6 +1,6 @@
 package generator.interfaces;
 
-import generator.ClassFields;
+import generator.fields.ClassFields;
 import main.Global;
 import pattern.MatchType;
 import util.string.StringUtils;

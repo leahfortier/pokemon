@@ -1,7 +1,7 @@
-package generator.fieldinfo;
+package generator.constructor;
 
 import generator.AccessModifier;
-import generator.ClassFields;
+import generator.fields.ClassFields;
 import generator.format.MethodInfo;
 import util.string.StringAppender;
 

@@ -1,4 +1,4 @@
-package generator.fieldinfo;
+package generator.constructor;
 
 import generator.format.SplitScanner;
 

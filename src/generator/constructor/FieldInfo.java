@@ -1,6 +1,6 @@
-package generator.fieldinfo;
+package generator.constructor;
 
-import generator.ClassFields;
+import generator.fields.ClassFields;
 import generator.format.SplitScanner;
 import main.Global;
 import util.GeneralUtils;

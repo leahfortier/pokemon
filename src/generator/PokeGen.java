@@ -4,6 +4,7 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
+import generator.fields.ClassFields;
 import generator.format.InputFormatter;
 import generator.format.MethodInfo;
 import item.use.TechnicalMachine;

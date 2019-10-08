@@ -1,4 +1,4 @@
-package generator.fieldinfo;
+package generator.fields;
 
 import generator.format.MethodFormatter;
 import main.Global;
