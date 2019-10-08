@@ -30,21 +30,23 @@ public class ConstructorInfo {
         return superValues.toString();
     }
 
-    public String getConstructor(ClassFields fields) {
-        StringAppender constructor = new StringAppender();
-        constructor.appendLine("super(" + getInternalConstructorValues(fields) + ");");
-
+    // Optional fields that are set manually after the call to the super constructor
+    // Ex: 'super.power = 40;
+    //      super.accuracy = 100;'
+    private String getOptionalFieldAssignments(ClassFields fields) {
+        StringAppender fieldAssignments = new StringAppender();
         for (ConstructorField constructorField : fieldKeys) {
             fields.getPerformAndRemove(
                     constructorField.getFieldName(),
-                    value -> constructor.appendLine(constructorField.getAssignment(value))
+                    value -> fieldAssignments.appendLine(constructorField.getAssignment(value))
             );
         }
 
+        // Stat changes too complicated to be handled by ConstructorField
         fields.getPerformAndRemove("StatChange", value -> {
             String[] mcSplit = value.split(" ");
             for (int i = 0, index = 1; i < Integer.parseInt(mcSplit[0]); i++) {
-                constructor.append("super.statChanges[Stat.")
+                fieldAssignments.append("super.statChanges[Stat.")
                            .append(mcSplit[index++].toUpperCase())
                            .append(".index()] = ")
                            .append(mcSplit[index++])
@@ -52,8 +54,22 @@ public class ConstructorInfo {
             }
         });
 
+        return fieldAssignments.toString();
+    }
+
+    public String getConstructor(ClassFields fields) {
+        StringAppender constructor = new StringAppender();
+
+        // Call to super constructor
+        constructor.appendLine("super(" + this.getInternalConstructorValues(fields) + ");");
+
+        // Optional field assignments
+        constructor.append(this.getOptionalFieldAssignments(fields));
+
+        // Additional unique constructor specifications
         fields.getPerformAndRemove("Activate", constructor::append);
 
+        // Put it all together!
         return new MethodInfo(
                 fields.getClassName() + "()",
                 constructor.toString(),
