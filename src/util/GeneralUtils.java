@@ -202,4 +202,14 @@ public final class GeneralUtils {
     public static int numTrials(double p, int n) {
         return (int)Math.ceil(-n * Math.log((1 - p)/n));
     }
+
+    public static boolean hasDeclaredMethod(Class<?> classy, String methodName, Class<?>... parameterTypes) {
+        try {
+            // This will throw a NoSuchMethodException if the classy does not have the specified method
+            classy.getDeclaredMethod(methodName, parameterTypes);
+            return true;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
 }

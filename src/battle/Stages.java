@@ -156,16 +156,17 @@ public class Stages implements Serializable {
         }
     }
 
-    public int totalStatIncreases() {
-        int sum = 0;
-        for (Stat stat : Stat.BATTLE_STATS) {
-            int stage = getStage(stat);
-            if (stage > 0) {
-                sum += stage;
-            }
-        }
+    // Returns the sum of all stages
+    public int totalStatChanges() {
+        return Stat.BATTLE_STATS.stream().mapToInt(this::getStage).sum();
+    }
 
-        return sum;
+    // Returns the sum of all positive stages
+    public int totalStatIncreases() {
+        return Stat.BATTLE_STATS.stream()
+                                .filter(stat -> this.getStage(stat) > 0)
+                                .mapToInt(this::getStage)
+                                .sum();
     }
 
     public void swapStages(Stat stat, ActivePokemon other) {

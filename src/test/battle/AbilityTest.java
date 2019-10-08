@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
+import pokemon.active.Gender;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import test.general.BaseTest;
@@ -1143,5 +1144,147 @@ public class AbilityTest extends BaseTest {
         } else {
             testInfo.doubleTakeSamesies(suppress, withAbility);
         }
+    }
+
+    @Test
+    public void magicBounceTest() {
+        // Growl decreases opponent's attack by 1 and is reflectable
+        magicBounceTest(
+                AttackNamesies.GROWL,
+                new TestInfo(),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages().set(-1, Stat.ATTACK));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(-1, Stat.ATTACK));
+                    defending.assertStages(new TestStages());
+                }
+        );
+
+        // Status-inducing moves are reflectable
+        magicBounceTest(
+                AttackNamesies.WILL_O_WISP,
+                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE),
+                (battle, attacking, defending) -> {
+                    attacking.assertNoStatus();
+                    defending.assertHasStatus(StatusNamesies.BURNED);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+                    defending.assertNoStatus();
+                }
+        );
+
+        // Gastro Acid negates opponent's ability and is reflectable
+        // Overgrow is replaceable and will be negated when reflected
+        magicBounceTest(
+                AttackNamesies.GASTRO_ACID,
+                new TestInfo().attacking(AbilityNamesies.OVERGROW),
+                (battle, attacking, defending) -> {
+                    attacking.assertAbility(AbilityNamesies.OVERGROW);
+                    defending.assertChangedAbility(AbilityNamesies.NO_ABILITY);
+                    Assert.assertTrue(attacking.lastMoveSucceeded());
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertChangedAbility(AbilityNamesies.NO_ABILITY);
+                    defending.assertAbility(AbilityNamesies.MAGIC_BOUNCE);
+                    Assert.assertTrue(attacking.lastMoveSucceeded());
+                }
+        );
+
+        // Gastro Acid negates opponent's ability and is reflectable
+        // RKS System is not replacable and should fail when reflected
+        magicBounceTest(
+                AttackNamesies.GASTRO_ACID,
+                new TestInfo().attacking(AbilityNamesies.RKS_SYSTEM),
+                (battle, attacking, defending) -> {
+                    attacking.assertAbility(AbilityNamesies.RKS_SYSTEM);
+                    defending.assertChangedAbility(AbilityNamesies.NO_ABILITY);
+                    Assert.assertTrue(attacking.lastMoveSucceeded());
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertAbility(AbilityNamesies.RKS_SYSTEM);
+                    defending.assertAbility(AbilityNamesies.MAGIC_BOUNCE);
+                    Assert.assertFalse(attacking.lastMoveSucceeded());
+                }
+        );
+
+        // Heal Pulse is reflectable, but nothing happens when both at full health
+        magicBounceTest(
+                AttackNamesies.HEAL_PULSE,
+                new TestInfo(),
+                (battle, attacking, defending) -> Assert.assertFalse(attacking.lastMoveSucceeded())
+        );
+
+        // Heal Pulse with enemy not at full
+        magicBounceTest(
+                AttackNamesies.HEAL_PULSE,
+                new TestInfo().attackingFight(AttackNamesies.FALSE_SWIPE)
+                              .with((battle, attacking, defending) -> {
+                                  attacking.assertFullHealth();
+                                  defending.assertNotFullHealth();
+                              }),
+                (battle, attacking, defending) -> {
+                    // Use the move as expected
+                    attacking.assertFullHealth();
+                    defending.assertFullHealth();
+                    Assert.assertTrue(attacking.lastMoveSucceeded());
+                },
+                (battle, attacking, defending) -> {
+                    // Fails when reflected because user has full health
+                    attacking.assertFullHealth();
+                    defending.assertNotFullHealth();
+                    Assert.assertFalse(attacking.lastMoveSucceeded());
+                }
+        );
+
+        // Heal Pulse with user not at full
+        magicBounceTest(
+                AttackNamesies.HEAL_PULSE,
+                new TestInfo().defendingFight(AttackNamesies.FALSE_SWIPE)
+                              .with((battle, attacking, defending) -> {
+                                  attacking.assertNotFullHealth();
+                                  defending.assertFullHealth();
+                              }),
+                (battle, attacking, defending) -> {
+                    // Fails because defending has full health
+                    attacking.assertNotFullHealth();
+                    defending.assertFullHealth();
+                    Assert.assertFalse(attacking.lastMoveSucceeded());
+                },
+                (battle, attacking, defending) -> {
+                    // Even though defending is full, is reflected so uses attacking's health (and then healing it)
+                    attacking.assertFullHealth();
+                    defending.assertFullHealth();
+                    Assert.assertTrue(attacking.lastMoveSucceeded());
+                }
+        );
+
+        // Not 100% sure this is how it would work, but I assume Captivate always fails when reflected since it will
+        // never be the opposite gender
+        magicBounceTest(
+                AttackNamesies.CAPTIVATE,
+                new TestInfo(PokemonNamesies.JYNX, PokemonNamesies.HITMONLEE)
+                        .with((battle, attacking, defending) -> Assert.assertTrue(Gender.oppositeGenders(attacking, defending))),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages().set(-2, Stat.SP_ATTACK));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages());
+                    Assert.assertFalse(attacking.lastMoveSucceeded());
+                }
+        );
+    }
+
+    private void magicBounceTest(AttackNamesies attack, TestInfo testInfo, PokemonManipulator samesies) {
+        magicBounceTest(attack, testInfo, samesies, samesies);
+    }
+
+    private void magicBounceTest(AttackNamesies attackNamesies, TestInfo testInfo, PokemonManipulator withoutBounce, PokemonManipulator withBounce) {
+        testInfo.attackingFight(attackNamesies);
+        testInfo.doubleTake(AbilityNamesies.MAGIC_BOUNCE, withoutBounce, withBounce);
     }
 }

@@ -28,29 +28,28 @@ import test.pokemon.TestPokemon;
 import test.general.TestUtils;
 import trainer.EnemyTrainer;
 import type.Type;
+import util.GeneralUtils;
 
 public class EffectTest extends BaseTest {
     @Test
     public void alternateCastTest() {
         for (EffectNamesies effectNamesies : EffectNamesies.values()) {
             Effect effect = effectNamesies.getEffect();
-            try {
-                // This will throw a NoSuchMethodException if the effect does not override the alternateCast method
-                effect.getClass().getDeclaredMethod(
-                        "alternateCast",
-                        Battle.class,
-                        ActivePokemon.class,
-                        ActivePokemon.class,
-                        CastSource.class,
-                        CastMessageGetter.class
-                );
 
-                // If it didn't throw an exception, then hasAlternateCast MUST be true
+            // True if the effect overrides the alternateCast method
+            if (GeneralUtils.hasDeclaredMethod(effect.getClass(),
+                                               "alternateCast",
+                                               Battle.class,
+                                               ActivePokemon.class,
+                                               ActivePokemon.class,
+                                               CastSource.class,
+                                               CastMessageGetter.class)) {
+                // If it has the alternateCast method, then hasAlternateCast MUST be true
                 Assert.assertTrue(effect.hasAlternateCast());
 
                 // In order to have an alternate cast, they need to be able to have the effect
                 Assert.assertTrue(effect.canHave());
-            } catch (NoSuchMethodException e) {
+            } else {
                 // Method was not overridden, hasAlternateCast must be false
                 Assert.assertFalse(effect.hasAlternateCast());
             }

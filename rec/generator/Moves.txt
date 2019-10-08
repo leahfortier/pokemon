@@ -2826,9 +2826,10 @@ Acupressure:
     Type: Normal
     Cat: Status
     SelfTarget: True
-    BeginAttack:
+    Applies: !victim.getStages().getNonMaxStats().isEmpty()
+    AfterApplyCheck:
         super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-        super.statChanges[RandomUtils.getRandomInt(super.statChanges.length)] = 2;
+        super.statChanges[RandomUtils.getRandomValue(victim.getStages().getNonMaxStats()).index()] = 2;
         ###
 *
 Double Hit:
@@ -5520,7 +5521,7 @@ Entrainment:
     AbilityMessage:
         return victim.getName() + " copied " + caster.getName() + "'s " + caster.getAbility().getName() + "!";
         ###
-    Applies: victim.getAbility().isReplaceable() && user.getAbility().isStealable()
+    Applies: !victim.hasAbility(user.getAbility().namesies()) && victim.getAbility().isReplaceable() && user.getAbility().isStealable()
 *
 Magic Room:
     Desc: The user creates a bizarre area in which Pok\u00e9mon's held items lose their effects for five turns.

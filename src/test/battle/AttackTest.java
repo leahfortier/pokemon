@@ -27,8 +27,8 @@ import pokemon.active.IndividualValues;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import test.general.BaseTest;
-import test.pokemon.TestPokemon;
 import test.general.TestUtils;
+import test.pokemon.TestPokemon;
 import type.Type;
 import util.GeneralUtils;
 
@@ -376,6 +376,44 @@ public class AttackTest extends BaseTest {
         for (int j = 0; j < acupressureStats.length; j++) {
             Assert.assertTrue(Stat.getStat(j, true).getName(), acupressureStats[j]);
         }
+    }
+
+    @Test
+    public void acupressureTest() {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Acupressure sharply raises a random stat
+        battle.attackingFight(AttackNamesies.ACUPRESSURE);
+        attacking.assertTotalStages(2);
+        defending.assertStages(new TestStages());
+
+        // Can be stole with Snatch
+        battle.fight(AttackNamesies.ACUPRESSURE, AttackNamesies.SNATCH);
+        attacking.assertTotalStages(2);
+        defending.assertTotalStages(2);
+
+        // Use Acupressure 20 more times (every stat should be exactly maxed afterwards)
+        // Should be decent at making sure its never choosing a stat that is already maxed
+        for (int i = 0; i < 20; i++) {
+            battle.attackingFight(AttackNamesies.ACUPRESSURE);
+            attacking.assertTotalStages(2*(i + 2)); // +2 since we've already gone once
+            defending.assertTotalStages(2);
+            Assert.assertTrue(attacking.lastMoveSucceeded());
+        }
+
+        // All stats should be maxed now
+        attacking.assertStages(new TestStages().set(Stat.MAX_STAT_CHANGES, Stat.BATTLE_STATS.toArray(new Stat[0])));
+
+        // Acupressure should fail now
+        battle.attackingFight(AttackNamesies.ACUPRESSURE);
+        Assert.assertFalse(attacking.lastMoveSucceeded());
+
+        // But should still be snatchable
+        battle.fight(AttackNamesies.ACUPRESSURE, AttackNamesies.SNATCH);
+        attacking.assertTotalStages(Stat.MAX_STAT_CHANGES*Stat.NUM_BATTLE_STATS);
+        defending.assertTotalStages(4);
     }
 
     @Test

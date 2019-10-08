@@ -256,18 +256,19 @@ public abstract class Attack implements AttackInterface {
     }
 
     // To be overridden as necessary
-    protected void afterApplyCheck(Battle b, ActivePokemon attacking, ActivePokemon defending) {}
+    protected void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {}
     protected void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {}
 
     public final boolean apply(ActivePokemon me, ActivePokemon o, Battle b) {
         ActivePokemon target = getTarget(b, me, o);
+        ActivePokemon basicTarget = this.isStatusMove() ? target : o;
 
         // Don't do anything for moves that are uneffective
-        if (!effective(b, me, this.isStatusMove() ? target : o)) {
+        if (!effective(b, me, basicTarget)) {
             return false;
         }
 
-        if (!applies(b, me, o)) {
+        if (!applies(b, me, basicTarget)) {
             Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
             return false;
         }
@@ -323,7 +324,7 @@ public abstract class Attack implements AttackInterface {
     }
 
     // Takes type advantage, victim ability, and victim type into account to determine if the attack is effective
-    public boolean effective(Battle b, ActivePokemon me, ActivePokemon o) {
+    public final boolean effective(Battle b, ActivePokemon me, ActivePokemon o) {
         SelfAttackBlocker selfAttackBlocker = SelfAttackBlocker.checkBlocked(b, me);
         if (selfAttackBlocker != null) {
             Messages.add(selfAttackBlocker.getBlockMessage(b, me));
@@ -4878,9 +4879,14 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-            super.statChanges[RandomUtils.getRandomInt(super.statChanges.length)] = 2;
+            super.statChanges[RandomUtils.getRandomValue(victim.getStages().getNonMaxStats()).index()] = 2;
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return !victim.getStages().getNonMaxStats().isEmpty();
         }
     }
 
@@ -9297,7 +9303,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.getAbility().isReplaceable() && user.getAbility().isStealable();
+            return !victim.hasAbility(user.getAbility().namesies()) && victim.getAbility().isReplaceable() && user.getAbility().isStealable();
         }
     }
 

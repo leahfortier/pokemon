@@ -115,6 +115,12 @@ public class TestPokemon extends ActivePokemon {
                 .toString();
     }
 
+    public String stagesString() {
+        return new StringAppender()
+                .appendJoin(" ", Stat.BATTLE_STATS, stat -> String.valueOf(this.getStage(stat)))
+                .toString();
+    }
+
     public void setupMove(AttackNamesies attackNamesies, Battle battle) {
         this.setMove(new Move(attackNamesies));
         this.startAttack(battle);
@@ -196,9 +202,20 @@ public class TestPokemon extends ActivePokemon {
     }
 
     public void assertStages(TestStages testStages) {
+        int total = 0;
         for (Stat stat : Stat.BATTLE_STATS) {
-            Assert.assertEquals(stat.getName(), testStages.get(stat), this.getStage(stat));
+            Assert.assertEquals(
+                    stat.getName() + " "  + this.stagesString(),
+                    testStages.get(stat),
+                    this.getStage(stat)
+            );
+            total += testStages.get(stat);
         }
+        assertTotalStages(total);
+    }
+
+    public void assertTotalStages(int total) {
+        Assert.assertEquals(this.stagesString(), total, this.getStages().totalStatChanges());
     }
 
     // Confirms the Pokemon has the specified effect
