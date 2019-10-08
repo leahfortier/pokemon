@@ -216,7 +216,7 @@ public class StatusTest extends BaseTest {
         TestPokemon defending1 = battle.getDefending();
         TestPokemon defending2 = TestPokemon.newTrainerPokemon(PokemonNamesies.ESPEON);
         ((EnemyTrainer)battle.getOpponent()).addPokemon(defending2);
-        Assert.assertTrue(battle.getDefending() == defending1);
+        Assert.assertSame(battle.getDefending(), defending1);
 
         // Basic Burn Heal, make sure Antidote fails for burns
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
@@ -249,18 +249,18 @@ public class StatusTest extends BaseTest {
 
         battle.attackingFight(AttackNamesies.SHEER_COLD);
         Assert.assertTrue(defending1.isActuallyDead());
-        Assert.assertTrue(battle.getDefending() == defending2);
+        Assert.assertSame(battle.getDefending(), defending2);
 
         // Full Heal doesn't work on fainted Pokemon
         PokemonManipulator.useItem(ItemNamesies.FULL_HEAL, false, false).manipulate(battle, defending1, attacking);
         Assert.assertTrue(defending1.isActuallyDead());
-        Assert.assertTrue(battle.getDefending() == defending2);
+        Assert.assertSame(battle.getDefending(), defending2);
 
         // But revive does!
         PokemonManipulator.useItem(ItemNamesies.REVIVE, false, true).manipulate(battle, defending1, attacking);
         Assert.assertFalse(defending1.isActuallyDead());
         defending1.assertNoStatus();
         defending1.assertHealthRatio(.5, 1);
-        Assert.assertTrue(battle.getDefending() == defending2);
+        Assert.assertSame(battle.getDefending(), defending2);
     }
 }

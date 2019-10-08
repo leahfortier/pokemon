@@ -1070,9 +1070,14 @@ public final class InvokeInterfaces {
     }
 
     public interface HalfWeightEffect {
-        int getHalfAmount(int halfAmount);
 
-        static int updateHalfAmount(Battle b, ActivePokemon anorexic, int halfAmount) {
+        default int getHalfAmount() {
+            return 1;
+        }
+
+        static int getHalfAmount(Battle b, ActivePokemon anorexic) {
+            int modifier = 0;
+
             List<InvokeEffect> invokees = b.getEffectsList(anorexic);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof HalfWeightEffect && invokee.isActiveEffect()) {
@@ -1083,11 +1088,38 @@ public final class InvokeInterfaces {
                     }
 
                     HalfWeightEffect effect = (HalfWeightEffect)invokee;
-                    halfAmount = effect.getHalfAmount(halfAmount);
+                    modifier += effect.getHalfAmount();
                 }
             }
 
-            return halfAmount;
+            return modifier;
+        }
+    }
+
+    public interface DoubleWeightEffect {
+
+        default int getDoubleAmount() {
+            return 1;
+        }
+
+        static int getDoubleAmount(Battle b, ActivePokemon fatty) {
+            int modifier = 0;
+
+            List<InvokeEffect> invokees = b.getEffectsList(fatty);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof DoubleWeightEffect && invokee.isActiveEffect()) {
+
+                    // If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && b.getOtherPokemon(fatty).breaksTheMold()) {
+                        continue;
+                    }
+
+                    DoubleWeightEffect effect = (DoubleWeightEffect)invokee;
+                    modifier += effect.getDoubleAmount();
+                }
+            }
+
+            return modifier;
         }
     }
 

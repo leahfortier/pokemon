@@ -846,7 +846,7 @@ BUG NO_TYPE
 LEVEL BUTTERFREE 10
 0
 4
-SHED_SKIN NO_ABILITY
+SHED_SKIN
 Cocoon
 28 21.8 A steel-hard shell protects its tender body. It quietly endures hardships while awaiting evolution.
 3840
@@ -969,7 +969,7 @@ BUG POISON
 LEVEL BEEDRILL 10
 0
 4
-SHED_SKIN NO_ABILITY
+SHED_SKIN
 Cocoon
 24 22.0 While awaiting evolution, it hides from predators under leaves and in nooks of branches.
 3840
@@ -1069,7 +1069,7 @@ NORMAL FLYING
 LEVEL PIDGEOTTO 18
 0
 4
-KEEN_EYE TANGLED_FEET
+KEEN_EYE TANGLED_FEET BIG_PECKS
 Tiny Bird
 12 4.0 It is docile and prefers to avoid conflict. If disturbed, however, it can ferociously strike back.
 3840
@@ -1138,7 +1138,7 @@ NORMAL FLYING
 LEVEL PIDGEOT 36
 0
 4
-KEEN_EYE TANGLED_FEET
+KEEN_EYE TANGLED_FEET BIG_PECKS
 Bird
 43 66.1 It flies over its wide territory in search of prey, downing it with its highly developed claws.
 3840
@@ -1209,7 +1209,7 @@ NORMAL FLYING
 NONE
 0
 4
-KEEN_EYE TANGLED_FEET
+KEEN_EYE TANGLED_FEET BIG_PECKS
 Bird
 59 87.1 By flapping its wings with all its might, Pidgeot can make a gust of wind capable of bending tall trees.
 3840
@@ -1286,7 +1286,7 @@ LEVEL RATICATE 20
 1
 5 CHILAN_BERRY
 4
-RUN_AWAY GUTS
+RUN_AWAY GUTS HUSTLE
 Mouse
 12 7.7 Cautious in the extreme, its hardy vitality lets it live in any kind of environment.
 3840
@@ -1369,7 +1369,7 @@ NONE
 5 SITRUS_BERRY
 50 ORAN_BERRY
 4
-RUN_AWAY GUTS
+RUN_AWAY GUTS HUSTLE
 Mouse
 28 40.8 It whittles its constantly growing fangs by gnawing on hard things. It can chew apart cinder walls.
 3840
@@ -1615,7 +1615,7 @@ LEVEL ARBOK 22
 1
 5 BINDING_BAND
 4
-INTIMIDATE SHED_SKIN
+INTIMIDATE SHED_SKIN UNNERVE
 Snake
 79 15.2 It sneaks through grass without making a sound and strikes unsuspecting prey from behind.
 5120
@@ -1703,7 +1703,7 @@ NONE
 5 POISON_BARB
 5 BINDING_BAND
 4
-INTIMIDATE SHED_SKIN
+INTIMIDATE SHED_SKIN UNNERVE
 Cobra
 138 143.3 The pattern on its belly is for intimidation. It constricts foes while they are frozen in fear.
 5120
@@ -2157,7 +2157,7 @@ POISON NO_TYPE
 LEVEL NIDORINA 16
 0
 8
-POISON_POINT RIVALRY
+POISON_POINT RIVALRY HUSTLE
 Poison Pin
 16 15.4 While it does not prefer to fight, even one drop of the poison it secretes from barbs can be fatal.
 5120
@@ -2233,7 +2233,7 @@ POISON NO_TYPE
 ITEM NIDOQUEEN MOON_STONE
 0
 8
-POISON_POINT RIVALRY
+POISON_POINT RIVALRY HUSTLE
 Poison Pin
 31 44.1 When it senses danger, it raises all the barbs on its body. These barbs grow slower than Nidorino's.
 5120
@@ -2310,7 +2310,7 @@ POISON GROUND
 NONE
 0
 8
-POISON_POINT RIVALRY
+POISON_POINT RIVALRY SHEER_FORCE
 Drill
 51 132.3 Its entire body is armored with hard scales. It will protect the young in its burrow with its life.
 5120
@@ -2418,7 +2418,7 @@ POISON NO_TYPE
 LEVEL NIDORINO 16
 0
 0
-POISON_POINT RIVALRY
+POISON_POINT RIVALRY HUSTLE
 Poison Pin
 20 19.8 It scans its surroundings by raising its ears out of the grass. Its toxic horn is for protection.
 5120
@@ -2495,7 +2495,7 @@ POISON NO_TYPE
 ITEM NIDOKING MOON_STONE
 0
 0
-POISON_POINT RIVALRY
+POISON_POINT RIVALRY HUSTLE
 Poison Pin
 35 43.0 It has a violent disposition and stabs foes with its horn, which oozes poison upon impact.
 5120
@@ -2573,7 +2573,7 @@ POISON GROUND
 NONE
 0
 0
-POISON_POINT RIVALRY
+POISON_POINT RIVALRY SHEER_FORCE
 Drill
 55 136.7 One swing of its mighty tail can snap a telephone pole as if it were a matchstick.
 5120
@@ -3712,7 +3712,7 @@ LEVEL PARASECT 24
 5 BIG_MUSHROOM
 1 BALM_MUSHROOM
 4
-EFFECT_SPORE DRY_SKIN
+EFFECT_SPORE DRY_SKIN DAMP
 Mushroom
 12 11.9 Mushrooms named tochukaso grow on its back. They grow along with the host Paras.
 5120
@@ -3796,7 +3796,7 @@ NONE
 5 BIG_MUSHROOM
 1 BALM_MUSHROOM
 4
-EFFECT_SPORE DRY_SKIN
+EFFECT_SPORE DRY_SKIN DAMP
 Mushroom
 39 65.0 A mushroom grown larger than the host's body controls Parasect. It scatters poisonous spores.
 5120
@@ -3884,7 +3884,7 @@ BUG POISON
 LEVEL VENOMOTH 31
 0
 4
-COMPOUND_EYES TINTED_LENS
+COMPOUND_EYES TINTED_LENS RUN_AWAY
 Insect
 39 66.1 Its big eyes are actually clusters of tiny eyes. At night, its kind is drawn by light.
 5120
@@ -3955,7 +3955,7 @@ NONE
 5 SILVER_POWDER
 5 SHED_SHELL
 4
-SHIELD_DUST TINTED_LENS
+SHIELD_DUST TINTED_LENS WONDER_SKIN
 Poison Moth
 59 27.6 It flutters its wings to scatter dustlike scales. The scales leach toxins if they contact skin.
 5120
@@ -4042,7 +4042,7 @@ LEVEL DUGTRIO 26
 1
 5 SOFT_SAND
 4
-SAND_VEIL ARENA_TRAP
+SAND_VEIL ARENA_TRAP SAND_FORCE
 Mole
 8 1.8 A Pok\u00e9mon that lives underground. Because of its dark habitat, it is repelled by bright sunlight.
 5120
@@ -4116,7 +4116,7 @@ NONE
 1
 5 SOFT_SAND
 4
-SAND_VEIL ARENA_TRAP
+SAND_VEIL ARENA_TRAP SAND_FORCE
 Mole
 28 73.4 Its three heads move alternately, driving it through tough soil to depths of over 60 miles.
 5120
@@ -4201,7 +4201,7 @@ LEVEL PERSIAN 28
 5 NUGGET
 5 AMULET_COIN
 4
-PICKUP TECHNICIAN
+PICKUP TECHNICIAN UNNERVE
 Scratch Cat
 16 9.3 It is nocturnal in nature. If it spots something shiny, its eyes glitter brightly.
 5120
@@ -4295,7 +4295,7 @@ NONE
 5 QUICK_CLAW
 5 AMULET_COIN
 4
-LIMBER TECHNICIAN
+LIMBER TECHNICIAN UNNERVE
 Classy Cat
 39 70.5 A very haughty Pok\u00e9mon. Among fans, the size of the jewel in its forehead is a topic of much talk.
 5120
@@ -4396,7 +4396,7 @@ WATER PSYCHIC
 LEVEL GOLDUCK 33
 0
 4
-DAMP CLOUD_NINE
+DAMP CLOUD_NINE SWIFT_SWIM
 Duck
 31 43.2 Overwhelmed by enigmatic abilities, it suffers a constant headache. It sometimes uses mysterious powers.
 5120
@@ -4487,7 +4487,7 @@ WATER PSYCHIC
 NONE
 0
 4
-DAMP CLOUD_NINE
+DAMP CLOUD_NINE SWIFT_SWIM
 Duck
 67 168.9 It is seen swimming dynamically and elegantly using its well-developed limbs and flippers.
 5120
@@ -4590,7 +4590,7 @@ LEVEL PRIMEAPE 28
 1
 5 PAYAPA_BERRY
 4
-VITAL_SPIRIT ANGER_POINT
+VITAL_SPIRIT ANGER_POINT DEFIANT
 Pig Monkey
 20 61.7 It lives in treetop colonies. If one becomes enraged, the whole colony rampages for no reason.
 5120
@@ -4694,7 +4694,7 @@ NONE
 1
 5 PAYAPA_BERRY
 4
-VITAL_SPIRIT ANGER_POINT
+VITAL_SPIRIT ANGER_POINT DEFIANT
 Pig Monkey
 39 70.5 It grows angry if you see its eyes and gets angrier if you run. If you beat it, it gets even madder.
 5120
@@ -4804,7 +4804,7 @@ ITEM ARCANINE FIRE_STONE
 1
 100 RAWST_BERRY
 2
-INTIMIDATE FLASH_FIRE
+INTIMIDATE FLASH_FIRE JUSTIFIED
 Puppy
 28 41.9 A Pok\u00e9mon with a loyal nature. It will remain motionless until it is given an order by its Trainer.
 5120
@@ -4885,7 +4885,7 @@ NONE
 1
 100 RAWST_BERRY
 2
-INTIMIDATE FLASH_FIRE
+INTIMIDATE FLASH_FIRE JUSTIFIED
 Legendary
 75 341.7 Its proud and regal appearance has captured the hearts of people since long ago.
 5120
@@ -4960,7 +4960,7 @@ WATER NO_TYPE
 LEVEL POLIWHIRL 25
 0
 4
-WATER_ABSORB DAMP
+WATER_ABSORB DAMP SWIFT_SWIM
 Tadpole
 24 27.3 Its skin is so thin, its internal organs are visible. It has trouble walking on its newly grown feet.
 5120
@@ -5033,7 +5033,7 @@ ITEM POLITOED KINGS_ROCK
 1
 5 KINGS_ROCK
 4
-WATER_ABSORB DAMP
+WATER_ABSORB DAMP SWIFT_SWIM
 Tadpole
 39 44.1 The spiral pattern on its belly subtly undulates. Staring at it gradually causes drowsiness.
 5120
@@ -5112,7 +5112,7 @@ NONE
 1
 5 KINGS_ROCK
 4
-WATER_ABSORB DAMP
+WATER_ABSORB DAMP SWIFT_SWIM
 Tadpole
 51 119.0 With its extremely tough muscles, it can keep swimming in the Pacific Ocean without resting.
 5120
@@ -5196,7 +5196,7 @@ LEVEL KADABRA 16
 1
 5 TWISTED_SPOON
 2
-SYNCHRONIZE INNER_FOCUS
+SYNCHRONIZE INNER_FOCUS MAGIC_GUARD
 Psi
 35 43.0 Using its psychic power is such a strain on its brain that it needs to sleep for 18 hours a day.
 5120
@@ -5285,7 +5285,7 @@ ITEM ALAKAZAM TWISTED_SPOON
 1
 5 TWISTED_SPOON
 2
-SYNCHRONIZE INNER_FOCUS
+SYNCHRONIZE INNER_FOCUS MAGIC_GUARD
 Psi
 51 124.6 It stares at its silver spoon to focus its mind. It emits more alpha waves while doing so.
 5120
@@ -5389,7 +5389,7 @@ NONE
 1
 5 TWISTED_SPOON
 2
-SYNCHRONIZE INNER_FOCUS
+SYNCHRONIZE INNER_FOCUS MAGIC_GUARD
 Psi
 59 105.8 The spoons clutched in its hands are said to have been created by its psychic powers.
 5120
@@ -5497,7 +5497,7 @@ LEVEL MACHOKE 28
 1
 5 FOCUS_BAND
 2
-GUTS NO_GUARD
+GUTS NO_GUARD STEADFAST
 Superpower
 31 43.0 Though small in stature, it is powerful enough to easily heft and throw a number of Geodude at once.
 5120
@@ -5591,7 +5591,7 @@ ITEM MACHAMP BLACK_BELT
 5 FOCUS_BAND
 5 BLACK_BELT
 2
-GUTS NO_GUARD
+GUTS NO_GUARD STEADFAST
 Superpower
 59 155.4 It happily carries heavy cargo to toughen up. It willingly does hard work for people.
 5120
@@ -5688,7 +5688,7 @@ NONE
 5 FOCUS_BAND
 5 BLACK_BELT
 2
-GUTS NO_GUARD
+GUTS NO_GUARD STEADFAST
 Superpower
 63 286.6 Its four muscled arms slam foes with powerful punches and chops at blinding speed.
 5120
@@ -6033,7 +6033,7 @@ LEVEL TENTACRUEL 30
 5 POISON_BARB
 5 BINDING_BAND
 4
-CLEAR_BODY LIQUID_OOZE
+CLEAR_BODY LIQUID_OOZE RAIN_DISH
 Jellyfish
 35 100.3 Because its body is almost entirely composed of water, it shrivels up if it is washed ashore.
 5120
@@ -6118,7 +6118,7 @@ NONE
 5 POISON_BARB
 5 BINDING_BAND
 4
-CLEAR_BODY LIQUID_OOZE
+CLEAR_BODY LIQUID_OOZE RAIN_DISH
 Jellyfish
 63 121.3 It extends its 80 tentacles to form an encircling poisonous net that is difficult to escape.
 5120
@@ -6210,7 +6210,7 @@ LEVEL GRAVELER 25
 5 EVERSTONE
 5 HARD_STONE
 4
-ROCK_HEAD STURDY
+ROCK_HEAD STURDY SAND_VEIL
 Rock
 16 44.1 At rest, it looks just like a rock. Carelessly stepping on it will make it swing its fists angrily.
 3840
@@ -6293,7 +6293,7 @@ ITEM GOLEM HARD_STONE
 5 EVERSTONE
 5 HARD_STONE
 4
-ROCK_HEAD STURDY
+ROCK_HEAD STURDY SAND_VEIL
 Rock
 39 231.5 It rolls on mountain paths to move. Once it builds momentum, no Pok\u00e9mon can stop it without difficulty.
 3840
@@ -6379,7 +6379,7 @@ NONE
 5 EVERSTONE
 5 HARD_STONE
 4
-ROCK_HEAD STURDY
+ROCK_HEAD STURDY SAND_VEIL
 Megaton
 55 661.4 Even dynamite can't harm its hard, boulderlike body. It sheds its hide just once a year.
 3840
@@ -6471,7 +6471,7 @@ LEVEL RAPIDASH 40
 1
 5 SHUCA_BERRY
 4
-FLAME_BODY FLASH_FIRE
+RUN_AWAY FLASH_FIRE FLAME_BODY
 Fire Horse
 39 66.1 As a newborn, it can barely stand. However, through galloping, its legs are made tougher and faster.
 5120
@@ -6542,7 +6542,7 @@ NONE
 1
 5 SHUCA_BERRY
 4
-FLAME_BODY FLASH_FIRE
+RUN_AWAY FLASH_FIRE FLAME_BODY
 Fire Horse
 67 209.4 When at an all-out gallop, its blazing mane sparkles, enhancing its beautiful appearance.
 5120
@@ -6628,7 +6628,7 @@ ITEM SLOWKING KINGS_ROCK
 5 LAGGING_TAIL
 5 KINGS_ROCK
 4
-OBLIVIOUS OWN_TEMPO
+OBLIVIOUS OWN_TEMPO REGENERATOR
 Dopey
 47 79.4 Although slow, it is skilled at fishing with its tail. It does not feel pain if its tail is bitten.
 5120
@@ -6724,7 +6724,7 @@ NONE
 1
 5 KINGS_ROCK
 4
-OBLIVIOUS OWN_TEMPO
+OBLIVIOUS OWN_TEMPO REGENERATOR
 Hermit Crab
 63 173.1 Though usually dim witted, it seems to become inspired if the Shellder on its tail bites down.
 5120
@@ -6835,7 +6835,7 @@ LEVEL MAGNETON 30
 5 MAGNET
 5 METAL_COAT
 -1
-MAGNET_PULL STURDY
+MAGNET_PULL STURDY ANALYTIC
 Magnet
 12 13.2 The faster the units at its sides rotate, the greater the magnetic force they generate.
 5120
@@ -6908,7 +6908,7 @@ ITEM MAGNEZONE THUNDER_STONE
 5 MAGNET
 5 METAL_COAT
 -1
-MAGNET_PULL STURDY
+MAGNET_PULL STURDY ANALYTIC
 Magnet
 39 132.3 Many mysteriously appear when more sunspots dot the sun. They stop TV sets from displaying properly.
 5120
@@ -6987,7 +6987,7 @@ NONE
 1
 5 STICK
 4
-KEEN_EYE INNER_FOCUS
+KEEN_EYE INNER_FOCUS DEFIANT
 Wild Duck
 31 33.1 It can't live without the stalk it holds. That's why it defends the stalk from attackers with its life.
 5120
@@ -7082,7 +7082,7 @@ LEVEL DODRIO 31
 1
 5 SHARP_BEAK
 4
-RUN_AWAY EARLY_BIRD
+RUN_AWAY EARLY_BIRD TANGLED_FEET
 Twin Bird
 55 86.4 The brains in its two heads appear to communicate emotions to each other with a telepathic power.
 5120
@@ -7153,7 +7153,7 @@ NONE
 1
 5 SHARP_BEAK
 4
-RUN_AWAY EARLY_BIRD
+RUN_AWAY EARLY_BIRD TANGLED_FEET
 Triple Bird
 71 187.8 When Doduo evolves into this odd breed, one of its heads splits into two. It runs at nearly 40 mph.
 5120
@@ -7234,7 +7234,7 @@ LEVEL DEWGONG 34
 1
 50 ASPEAR_BERRY
 4
-THICK_FAT HYDRATION
+THICK_FAT HYDRATION ICE_BODY
 Sea Lion
 43 198.4 A Pok\u00e9mon that lives on icebergs. It swims in the sea using the point on its head to break up ice.
 5120
@@ -7319,7 +7319,7 @@ NONE
 50 ASPEAR_BERRY
 5 NEVER_MELT_ICE
 4
-THICK_FAT HYDRATION
+THICK_FAT HYDRATION ICE_BODY
 Sea Lion
 67 264.6 In snow, the pure white coat covering its body obscures it from predators.
 5120
@@ -7412,7 +7412,7 @@ LEVEL MUK 38
 5 BLACK_SLUDGE
 5 NUGGET
 4
-STENCH STICKY_HOLD
+STENCH STICKY_HOLD POISON_TOUCH
 Sludge
 35 66.1 It was born when sludge in a dirty stream was exposed to the moon's X-rays. It appears among filth.
 5120
@@ -7503,7 +7503,7 @@ NONE
 5 NUGGET
 1 TOXIC_ORB
 4
-STENCH STICKY_HOLD
+STENCH STICKY_HOLD POISON_TOUCH
 Sludge
 47 66.1 A toxic fluid seeps from its body. The fluid instantly kills plants and trees on contact.
 5120
@@ -7603,7 +7603,7 @@ ITEM CLOYSTER WATER_STONE
 50 PEARL
 5 BIG_PEARL
 4
-SHELL_ARMOR SKILL_LINK
+SHELL_ARMOR SKILL_LINK OVERCOAT
 Bivalve
 12 8.8 It swims backward by opening and closing its two shells. Its large tongue is always kept hanging out.
 5120
@@ -7677,7 +7677,7 @@ NONE
 50 PEARL
 5 BIG_PEARL
 4
-SHELL_ARMOR SKILL_LINK
+SHELL_ARMOR SKILL_LINK OVERCOAT
 Bivalve
 59 292.1 It fights by keeping its shell tightly shut for protection and by shooting spikes to repel foes.
 5120
@@ -7750,7 +7750,7 @@ LEVEL HAUNTER 25
 1
 5 SPELL_TAG
 4
-LEVITATE NO_ABILITY
+LEVITATE
 Gas
 51 0.2 Born from gases, anyone would faint if engulfed by its gaseous body, which contains poison.
 5120
@@ -7847,7 +7847,7 @@ ITEM GENGAR SPELL_TAG
 1
 5 SPELL_TAG
 4
-LEVITATE NO_ABILITY
+LEVITATE
 Gas
 63 0.2 It likes to lurk in the dark and tap shoulders with a gaseous hand. Its touch causes endless shuddering.
 5120
@@ -7949,7 +7949,7 @@ NONE
 1
 5 SPELL_TAG
 4
-CURSED_BODY NO_ABILITY
+CURSED_BODY
 Shadow
 59 89.3 The leer that floats in darkness belongs to a Gengar delighting in casting curses on people.
 5120
@@ -8060,7 +8060,7 @@ ITEM STEELIX METAL_COAT
 1
 5 HARD_STONE
 4
-ROCK_HEAD STURDY
+ROCK_HEAD STURDY WEAK_ARMOR
 Rock Snake
 346 463.0 It burrows through the ground at a speed of 50 mph while feeding on large boulders.
 6400
@@ -8151,7 +8151,7 @@ PSYCHIC NO_TYPE
 LEVEL HYPNO 26
 0
 4
-INSOMNIA FOREWARN
+INSOMNIA FOREWARN INNER_FOCUS
 Hypnosis
 39 71.4 It can tell what people are dreaming by sniffing with its big nose. It loves fun dreams.
 5120
@@ -8252,7 +8252,7 @@ PSYCHIC NO_TYPE
 NONE
 0
 4
-INSOMNIA FOREWARN
+INSOMNIA FOREWARN INNER_FOCUS
 Hypnosis
 63 166.7 Seeing its swinging pendulum can induce sleep in three seconds, even in someone who just woke up.
 5120
@@ -8362,7 +8362,7 @@ WATER NO_TYPE
 LEVEL KINGLER 28
 0
 4
-HYPER_CUTTER SHELL_ARMOR
+HYPER_CUTTER SHELL_ARMOR SHEER_FORCE
 River Crab
 16 14.3 It lives in burrows dug on sandy beaches. Its pincers fully grow back if they are broken in battle.
 5120
@@ -8440,7 +8440,7 @@ WATER NO_TYPE
 NONE
 0
 4
-HYPER_CUTTER SHELL_ARMOR
+HYPER_CUTTER SHELL_ARMOR SHEER_FORCE
 Pincer
 51 132.3 The larger pincer has 10,000- horsepower strength. However, it is so heavy, it is difficult to aim.
 5120
@@ -8523,7 +8523,7 @@ ELECTRIC NO_TYPE
 LEVEL ELECTRODE 30
 0
 -1
-SOUNDPROOF STATIC
+SOUNDPROOF STATIC AFTERMATH
 Ball
 20 22.9 It looks just like a Pok\u00e9 Ball. It is dangerous because it may electrocute or explode on touch.
 5120
@@ -8589,7 +8589,7 @@ ELECTRIC NO_TYPE
 NONE
 0
 -1
-SOUNDPROOF STATIC
+SOUNDPROOF STATIC AFTERMATH
 Ball
 47 146.8 It is known to drift on winds if it is bloated to bursting with stored electricity.
 5120
@@ -8838,7 +8838,7 @@ TIME NIGHT LEVEL GARA_GARA 28
 1
 5 THICK_CLUB
 4
-ROCK_HEAD LIGHTNING_ROD
+ROCK_HEAD LIGHTNING_ROD BATTLE_ARMOR
 Lonely
 16 14.3 When it thinks of its dead mother, it cries. Its crying makes the skull it wears rattle hollowly.
 5120
@@ -8930,7 +8930,7 @@ NONE
 1
 5 THICK_CLUB
 4
-ROCK_HEAD LIGHTNING_ROD
+ROCK_HEAD LIGHTNING_ROD BATTLE_ARMOR
 Bone Keeper
 39 99.2 From its birth, this savage Pok\u00e9mon constantly holds bones. It is skilled in using them as weapons.
 5120
@@ -9032,7 +9032,7 @@ FIGHTING NO_TYPE
 NONE
 0
 0
-LIMBER RECKLESS
+LIMBER RECKLESS UNBURDEN
 Kicking
 59 109.8 Its legs can stretch double. First-time foes are startled by its extensible reach.
 6400
@@ -9121,7 +9121,7 @@ FIGHTING NO_TYPE
 NONE
 0
 0
-KEEN_EYE IRON_FIST
+KEEN_EYE IRON_FIST INNER_FOCUS
 Punching
 55 110.7 The arm-twisting punches it throws pulverize even concrete. It rests after three minutes of fighting.
 6400
@@ -9212,7 +9212,7 @@ MOVE LICKILICKY ROLLOUT
 1
 5 LAGGING_TAIL
 4
-OWN_TEMPO OBLIVIOUS
+OWN_TEMPO OBLIVIOUS CLOUD_NINE
 Licking
 47 144.4 When it extends its over-six-foot- long tongue, its tail quivers. There is a possibility they are connected.
 5120
@@ -9313,7 +9313,7 @@ LEVEL WEEZING 35
 1
 5 SMOKE_BALL
 4
-LEVITATE NO_ABILITY
+LEVITATE
 Poison Gas
 24 2.2 Lighter-than-air gases in its body keep it aloft. The gases not only smell, they are also explosive.
 5120
@@ -9396,7 +9396,7 @@ NONE
 1
 5 SMOKE_BALL
 4
-LEVITATE NO_ABILITY
+LEVITATE
 Poison Gas
 47 20.9 It grows by feeding on gases released by garbage. Though very rare, triplets have been found.
 5120
@@ -9484,7 +9484,7 @@ LEVEL RHYDON 42
 1
 50 PROTECTOR
 4
-LIGHTNING_ROD ROCK_HEAD
+LIGHTNING_ROD ROCK_HEAD RECKLESS
 Spikes
 39 253.5 Its powerful tackles can destroy anything. However, it is too slow witted to help people work.
 5120
@@ -9583,7 +9583,7 @@ ITEM RHYPERIOR PROTECTOR
 1
 50 PROTECTOR
 4
-LIGHTNING_ROD ROCK_HEAD
+LIGHTNING_ROD ROCK_HEAD RECKLESS
 Drill
 75 264.6 Standing on its hind legs freed its forelegs and made it smarter. It is very forgetful, however.
 5120
@@ -9703,7 +9703,7 @@ ITEM BLISSEY SHINY_STONE
 5 LUCKY_EGG
 5 OVAL_STONE
 8
-NATURAL_CURE SERENE_GRACE
+NATURAL_CURE SERENE_GRACE HEALER
 Egg
 43 76.3 A kindly Pok\u00e9mon that lays highly nutritious eggs and shares them with injured Pok\u00e9mon or people.
 10240
@@ -9819,7 +9819,7 @@ GRASS NO_TYPE
 MOVE TANGROWTH ANCIENT_POWER
 0
 4
-CHLOROPHYLL LEAF_GUARD
+CHLOROPHYLL LEAF_GUARD REGENERATOR
 Vine
 39 77.2 The blue vines shrouding its body are covered in a growth of fine hair. It is known to be ticklish.
 5120
@@ -9904,7 +9904,7 @@ NORMAL NO_TYPE
 NONE
 0
 8
-EARLY_BIRD SCRAPPY
+EARLY_BIRD SCRAPPY INNER_FOCUS
 Parent
 87 176.4 It raises its offspring in its belly pouch. It lets the baby out to play only when it feels safe.
 5120
@@ -10009,7 +10009,7 @@ LEVEL SEADRA 32
 1
 5 DRAGON_SCALE
 4
-SWIFT_SWIM SNIPER
+SWIFT_SWIM SNIPER DAMP
 Dragon
 16 17.6 It makes its nest in the shade of corals. If it senses danger, it spits murky ink and flees.
 5120
@@ -10081,7 +10081,7 @@ ITEM KINGDRA DRAGON_SCALE
 1
 5 DRAGON_SCALE
 4
-POISON_POINT SNIPER
+POISON_POINT SNIPER DAMP
 Dragon
 47 55.1 Its spines provide protection. Its fins and bones are prized as traditional medicine ingredients.
 5120
@@ -10160,7 +10160,7 @@ LEVEL SEAKING 33
 1
 5 MYSTIC_WATER
 4
-SWIFT_SWIM WATER_VEIL
+SWIFT_SWIM WATER_VEIL LIGHTNING_ROD
 Goldfish
 24 33.1 Though it appears very elegant when swimming with fins unfurled, it can jab powerfully with its horn.
 5120
@@ -10235,7 +10235,7 @@ NONE
 1
 5 MYSTIC_WATER
 4
-SWIFT_SWIM WATER_VEIL
+SWIFT_SWIM WATER_VEIL LIGHTNING_ROD
 Goldfish
 51 86.0 In autumn, its body becomes more fatty in preparing to propose to a mate. It takes on beautiful colors.
 5120
@@ -10464,7 +10464,7 @@ NONE
 1
 5 LEPPA_BERRY
 4
-SOUNDPROOF FILTER
+SOUNDPROOF FILTER TECHNICIAN
 Barrier
 51 120.2 It shapes an invisible wall in midair by minutely vibrating its fingertips to stop molecules in the air.
 6400
@@ -10585,7 +10585,7 @@ BUG FLYING
 ITEM SCIZOR METAL_COAT
 0
 4
-SWARM TECHNICIAN
+SWARM TECHNICIAN STEADFAST
 Mantis
 59 123.5 The sharp scythes on its forearms become increasingly sharp by cutting through hard objects.
 6400
@@ -10669,7 +10669,7 @@ NONE
 1
 100 ASPEAR_BERRY
 8
-OBLIVIOUS FOREWARN
+OBLIVIOUS FOREWARN DRY_SKIN
 Human Shape
 55 89.5 Its cries sound like human speech. However, it is impossible to tell what it is trying to say.
 6400
@@ -10947,7 +10947,7 @@ BUG NO_TYPE
 NONE
 0
 4
-HYPER_CUTTER MOLD_BREAKER
+HYPER_CUTTER MOLD_BREAKER MOXIE
 Stag Beetle
 59 121.3 It grips prey with its pincers until the prey is torn in half. What it can't tear, it tosses far.
 6400
@@ -11031,7 +11031,7 @@ NORMAL NO_TYPE
 NONE
 0
 0
-INTIMIDATE ANGER_POINT
+INTIMIDATE ANGER_POINT SHEER_FORCE
 Wild Bull
 55 194.9 Once it takes aim at its foe, it makes a headlong charge. It is famous for its violent nature.
 5120
@@ -11217,7 +11217,7 @@ NONE
 1
 100 MYSTIC_WATER
 4
-WATER_ABSORB SHELL_ARMOR
+WATER_ABSORB SHELL_ARMOR HYDRATION
 Transport
 98 485.0 It loves crossing the sea with people and Pok\u00e9mon on its back. It understands human speech.
 10240
@@ -11341,7 +11341,7 @@ ITEM SYLVEON SHINY_STONE
 1
 5 EVIOLITE
 1
-RUN_AWAY ADAPTABILITY
+RUN_AWAY ADAPTABILITY ANTICIPATION
 Evolution
 12 14.3 Because its genetic makeup is irregular, it quickly changes its form due to a variety of causes.
 8960
@@ -11664,7 +11664,7 @@ ITEM PORYGON2 UP_GRADE
 1
 5 UP_GRADE
 -1
-TRACE DOWNLOAD
+TRACE DOWNLOAD ANALYTIC
 Virtual
 31 80.5 A man-made Pok\u00e9mon created using advanced scientific means. It can move freely in cyberspace.
 5120
@@ -11745,7 +11745,7 @@ ROCK WATER
 LEVEL OMASTAR 40
 0
 1
-SWIFT_SWIM SHELL_ARMOR
+SWIFT_SWIM SHELL_ARMOR WEAK_ARMOR
 Spiral
 16 16.5 A Pok\u00e9mon that was resurrected from a fossil using modern science. It swam in ancient seas.
 7680
@@ -11826,7 +11826,7 @@ ROCK WATER
 NONE
 0
 1
-SWIFT_SWIM SHELL_ARMOR
+SWIFT_SWIM SHELL_ARMOR WEAK_ARMOR
 Spiral
 39 77.2 It is thought that this Pok\u00e9mon became extinct because its spiral shell grew too large.
 7680
@@ -11913,7 +11913,7 @@ ROCK WATER
 LEVEL KABUTOPS 40
 0
 1
-SWIFT_SWIM BATTLE_ARMOR
+SWIFT_SWIM BATTLE_ARMOR WEAK_ARMOR
 Shellfish
 20 25.4 It is thought to have inhabited beaches 300 million years ago. It is protected by a stiff shell.
 7680
@@ -11990,7 +11990,7 @@ ROCK WATER
 NONE
 0
 1
-SWIFT_SWIM BATTLE_ARMOR
+SWIFT_SWIM BATTLE_ARMOR WEAK_ARMOR
 Shellfish
 51 89.3 It is thought that this Pok\u00e9mon came onto land because its prey adapted to life on land.
 7680
@@ -12084,7 +12084,7 @@ ROCK FLYING
 NONE
 0
 1
-ROCK_HEAD PRESSURE
+ROCK_HEAD PRESSURE UNNERVE
 Fossil
 71 130.1 A Pok\u00e9mon that roamed the skies in the dinosaur era. Its teeth are like saw blades.
 8960
@@ -12181,7 +12181,7 @@ NONE
 1
 100 LEFTOVERS
 1
-IMMUNITY THICK_FAT
+IMMUNITY THICK_FAT GLUTTONY
 Sleeping
 83 1014.1 When its belly is full, it becomes too lethargic to even lift a finger, so it is safe to bounce on its belly.
 10240
@@ -12914,7 +12914,7 @@ NONE
 1
 100 LUM_BERRY
 -1
-SYNCHRONIZE NO_ABILITY
+SYNCHRONIZE
 New Species
 16 8.8 Because it can use all kinds of moves, many scientists believe Mew to be the ancestor of Pok\u00e9mon.
 30720
@@ -13913,7 +13913,7 @@ LEVEL FURRET 15
 1
 5 ORAN_BERRY
 4
-RUN_AWAY KEEN_EYE
+RUN_AWAY KEEN_EYE FRISK
 Scout
 31 13.2 It has a very nervous nature. It stands up high on its tail so it can scan wide areas.
 3840
@@ -14008,7 +14008,7 @@ NONE
 50 ORAN_BERRY
 5 SITRUS_BERRY
 4
-RUN_AWAY KEEN_EYE
+RUN_AWAY KEEN_EYE FRISK
 Long Body
 71 71.6 The mother puts its offspring to sleep by curling up around them. It corners foes with speed.
 3840
@@ -14110,7 +14110,7 @@ NORMAL FLYING
 TIME NIGHT LEVEL NOCTOWL 20
 0
 4
-INSOMNIA KEEN_EYE
+INSOMNIA KEEN_EYE TINTED_LENS
 Owl
 28 46.7 It marks time precisely. Some countries consider it to be a wise friend, versed in the world's ways.
 3840
@@ -14195,7 +14195,7 @@ PSYCHIC FLYING
 NONE
 0
 4
-INSOMNIA KEEN_EYE
+INSOMNIA KEEN_EYE TINTED_LENS
 Owl
 63 89.9 Its eyes are specially developed to enable it to see clearly even in murky darkness and minimal light.
 3840
@@ -14286,7 +14286,7 @@ BUG FLYING
 LEVEL LEDIAN 18
 0
 4
-SWARM EARLY_BIRD
+SWARM EARLY_BIRD RATTLED
 Five Star
 39 23.8 It is so timid, it can't move if it isn't with a swarm of others. It conveys its feelings with scent.
 3840
@@ -14370,7 +14370,7 @@ BUG FLYING
 NONE
 0
 4
-SWARM EARLY_BIRD
+SWARM EARLY_BIRD IRON_FIST
 Five Star
 55 78.5 It uses starlight as energy. When more stars appear at night, the patterns on its back grow larger.
 3840
@@ -14460,7 +14460,7 @@ BUG POISON
 LEVEL ARIADOS 22
 0
 4
-SWARM INSOMNIA
+SWARM INSOMNIA SNIPER
 String Spit
 20 18.7 It sets a trap by spinning a web with thin but strong silk. It waits motionlessly for prey to arrive.
 3840
@@ -14538,7 +14538,7 @@ BUG POISON
 NONE
 0
 4
-SWARM INSOMNIA
+SWARM INSOMNIA SNIPER
 Long Leg
 43 73.9 It attaches silk to its prey and sets it free. Later, it tracks the silk to the prey and its friends.
 3840
@@ -15146,7 +15146,7 @@ FAIRY NO_TYPE
 ITEM TOGETIC SUN_STONE
 0
 1
-HUSTLE SERENE_GRACE
+HUSTLE SERENE_GRACE SUPER_LUCK
 Spike Ball
 12 3.3 It transforms the kindness and joy of others into happiness, which it stores in its shell.
 2560
@@ -15237,7 +15237,7 @@ FAIRY FLYING
 ITEM TOGEKISS SHINY_STONE
 0
 1
-HUSTLE SERENE_GRACE
+HUSTLE SERENE_GRACE SUPER_LUCK
 Happiness
 24 7.1 To share its happiness, it flies around the world seeking kind- hearted people.
 2560
@@ -15344,7 +15344,7 @@ PSYCHIC FLYING
 LEVEL XATU 25
 0
 4
-SYNCHRONIZE EARLY_BIRD
+SYNCHRONIZE EARLY_BIRD MAGIC_BOUNCE
 Tiny Bird
 8 4.4 It picks food from cactus plants, deftly avoiding buds and spines. It seems to skip about to move.
 5120
@@ -15438,7 +15438,7 @@ PSYCHIC FLYING
 NONE
 0
 4
-SYNCHRONIZE EARLY_BIRD
+SYNCHRONIZE EARLY_BIRD MAGIC_BOUNCE
 Mystic
 59 33.1 This odd Pok\u00e9mon can see both the past and the future. It eyes the sun's movement all day.
 5120
@@ -15541,7 +15541,7 @@ ELECTRIC NO_TYPE
 LEVEL FLAAFFY 15
 0
 4
-STATIC NO_ABILITY
+STATIC
 Wool
 24 17.2 Its fluffy coat swells to double when static electricity builds up. Touching it can be shocking.
 5120
@@ -15614,7 +15614,7 @@ ELECTRIC NO_TYPE
 LEVEL AMPHAROS 30
 0
 4
-STATIC NO_ABILITY
+STATIC
 Wool
 31 29.3 If its coat becomes fully charged with electricity, its tail lights up. It fires hair that zaps on impact.
 5120
@@ -15695,7 +15695,7 @@ ELECTRIC NO_TYPE
 NONE
 0
 4
-STATIC NO_ABILITY
+STATIC
 Light
 55 135.6 The tip of its tail shines brightly. In the olden days, people sent signals using the tail's light.
 5120
@@ -15867,7 +15867,7 @@ WATER FAIRY
 LEVEL AZUMARILL 18
 0
 4
-THICK_FAT HUGE_POWER
+THICK_FAT HUGE_POWER SAP_SIPPER
 Aqua Mouse
 16 18.7 The oil-filled end of its tail floats on water. It keeps Marill from drowning even in a strong current.
 2560
@@ -15951,7 +15951,7 @@ WATER FAIRY
 NONE
 0
 4
-THICK_FAT HUGE_POWER
+THICK_FAT HUGE_POWER SAP_SIPPER
 Aqua Rabbit
 31 62.8 It can spend all day in water, since it can inhale and store a large volume of air.
 2560
@@ -16042,7 +16042,7 @@ ROCK NO_TYPE
 NONE
 0
 4
-STURDY ROCK_HEAD
+STURDY ROCK_HEAD RATTLED
 Imitation
 47 83.8 To avoid being attacked, it does nothing but mimic a tree. It hates water and flees from rain.
 5120
@@ -16135,7 +16135,7 @@ NONE
 1
 5 KINGS_ROCK
 4
-WATER_ABSORB DAMP
+WATER_ABSORB DAMP DRIZZLE
 Frog
 43 74.7 It gathers groups of others as their leader. Its cries make Poliwag obey.
 5120
@@ -16212,7 +16212,7 @@ GRASS FLYING
 LEVEL SKIPLOOM 18
 0
 4
-CHLOROPHYLL LEAF_GUARD
+CHLOROPHYLL LEAF_GUARD INFILTRATOR
 Cottonweed
 16 1.1 It drifts on winds. It is said that when Hoppip gather in fields and mountains, spring is on the way.
 5120
@@ -16292,7 +16292,7 @@ GRASS FLYING
 LEVEL JUMPLUFF 27
 0
 4
-CHLOROPHYLL LEAF_GUARD
+CHLOROPHYLL LEAF_GUARD INFILTRATOR
 Cottonweed
 24 2.2 It blooms when the weather warms. It floats in the sky to soak up as much sunlight as possible.
 5120
@@ -16374,7 +16374,7 @@ GRASS FLYING
 NONE
 0
 4
-CHLOROPHYLL LEAF_GUARD
+CHLOROPHYLL LEAF_GUARD INFILTRATOR
 Cottonweed
 31 6.6 Blown by seasonal winds, it circles the globe, scattering cotton spores as it goes.
 5120
@@ -16458,7 +16458,7 @@ NORMAL NO_TYPE
 MOVE AMBIPOM DOUBLE_HIT
 0
 4
-RUN_AWAY PICKUP
+RUN_AWAY PICKUP SKILL_LINK
 Long Tail
 31 25.4 It lives high among the treetops. It can use its tail as freely and cleverly as its hands.
 5120
@@ -16559,7 +16559,7 @@ ITEM SUNFLORA SUN_STONE
 1
 5 COBA_BERRY
 4
-CHLOROPHYLL SOLAR_POWER
+CHLOROPHYLL SOLAR_POWER EARLY_BIRD
 Seed
 12 4.0 It suddenly falls out of the sky in the morning. A year after a cold summer, their population explodes.
 5120
@@ -16635,7 +16635,7 @@ GRASS NO_TYPE
 NONE
 0
 4
-CHLOROPHYLL SOLAR_POWER
+CHLOROPHYLL SOLAR_POWER EARLY_BIRD
 Sun
 31 18.7 It gets energy from warm sunlight and is known for its habit of moving in pursuit of it.
 5120
@@ -16717,7 +16717,7 @@ MOVE YANMEGA ANCIENT_POWER
 1
 5 WIDE_LENS
 4
-SPEED_BOOST COMPOUND_EYES
+SPEED_BOOST COMPOUND_EYES FRISK
 Clear Wing
 47 83.8 It can hover in one spot by flapping its wings at high speed. It flits about to guard its territory.
 5120
@@ -16792,7 +16792,7 @@ WATER GROUND
 LEVEL QUAGSIRE 20
 0
 4
-DAMP WATER_ABSORB
+DAMP WATER_ABSORB UNAWARE
 Water Fish
 16 18.7 When walking on land, it covers its body with a poisonous film that keeps its skin from dehydrating.
 5120
@@ -16874,7 +16874,7 @@ WATER GROUND
 NONE
 0
 4
-DAMP WATER_ABSORB
+DAMP WATER_ABSORB UNAWARE
 Water Fish
 55 165.3 It has an easygoing nature. It doesn't care if it bumps its head on boats and boulders while swimming.
 5120
@@ -17143,7 +17143,7 @@ DARK FLYING
 ITEM HONCHKROW DUSK_STONE
 0
 4
-INSOMNIA SUPER_LUCK
+INSOMNIA SUPER_LUCK PRANKSTER
 Darkness
 20 4.6 If spotted, it will lure an unwary person into chasing it, then lose the pursuer on mountain trails.
 5120
@@ -17235,7 +17235,7 @@ NONE
 1
 5 KINGS_ROCK
 4
-OBLIVIOUS OWN_TEMPO
+OBLIVIOUS OWN_TEMPO REGENERATOR
 Royal
 79 175.3 Being bitten by Shellder gave it intelligence comparable to that of award-winning scientists.
 5120
@@ -17346,7 +17346,7 @@ ITEM MISMAGIUS DUSK_STONE
 1
 5 SPELL_TAG
 4
-LEVITATE NO_ABILITY
+LEVITATE
 Screech
 28 2.2 A Pok\u00e9mon that startles people in the middle of the night. It gathers fear as its energy.
 6400
@@ -17442,7 +17442,7 @@ PSYCHIC NO_TYPE
 NONE
 0
 -1
-LEVITATE NO_ABILITY
+LEVITATE
 Symbol
 20 11.0 When alone, nothing happens. However, if there are two or more, an odd power is said to emerge.
 10240
@@ -17463,7 +17463,7 @@ PSYCHIC NO_TYPE
 NONE
 0
 4
-SHADOW_TAG NO_ABILITY
+SHADOW_TAG
 Patient
 51 62.8 It desperately tries to keep its black tail hidden. It is said to be proof the tail hides a secret.
 5120
@@ -17488,7 +17488,7 @@ NONE
 1
 5 PERSIM_BERRY
 4
-INNER_FOCUS EARLY_BIRD
+INNER_FOCUS EARLY_BIRD SAP_SIPPER
 Long Neck
 59 91.5 The head on its tail contains a small brain. It can instinctively fight even while facing backward.
 5120
@@ -17764,7 +17764,7 @@ NORMAL NO_TYPE
 NONE
 0
 4
-SERENE_GRACE RUN_AWAY
+SERENE_GRACE RUN_AWAY RATTLED
 Land Snake
 59 30.9 It digs into the ground with its tail and makes a mazelike nest. It can fly just a little.
 5120
@@ -17870,7 +17870,7 @@ TIME NIGHT ITEM GLISCOR RAZOR_FANG
 1
 5 RAZOR_FANG
 4
-HYPER_CUTTER SAND_VEIL
+HYPER_CUTTER SAND_VEIL IMMUNITY
 Fly Scorpion
 43 142.9 It glides as if sliding. It startles foes by clamping on to their faces, then jabs with its poison stinger.
 5120
@@ -17969,7 +17969,7 @@ NONE
 1
 5 METAL_COAT
 4
-ROCK_HEAD STURDY
+ROCK_HEAD STURDY SHEER_FORCE
 Iron Snake
 362 881.8 It is thought its body transformed as a result of iron accumulating internally from swallowing soil.
 6400
@@ -18068,7 +18068,7 @@ FAIRY NO_TYPE
 LEVEL GRANBULL 23
 0
 6
-INTIMIDATE RUN_AWAY
+INTIMIDATE RUN_AWAY RATTLED
 Fairy
 24 17.2 Small Pok\u00e9mon flee from its scary face. It is, however, considered by women to be cute.
 5120
@@ -18169,7 +18169,7 @@ FAIRY NO_TYPE
 NONE
 0
 6
-INTIMIDATE QUICK_FEET
+INTIMIDATE QUICK_FEET RATTLED
 Fairy
 55 107.4 It is timid in spite of its looks. If it becomes enraged, however, it will strike with its huge fangs.
 5120
@@ -18282,7 +18282,7 @@ NONE
 1
 5 POISON_BARB
 4
-POISON_POINT SWIFT_SWIM
+POISON_POINT SWIFT_SWIM INTIMIDATE
 Balloon
 20 8.6 It shoots the poison spines on its body in all directions. Its round form makes it a poor swimmer.
 5120
@@ -18373,7 +18373,7 @@ BUG STEEL
 NONE
 0
 4
-SWARM TECHNICIAN
+SWARM TECHNICIAN LIGHT_METAL
 Pincer
 71 260.1 It raises its pincers with eyelike markings for intimidation. It also swings them down dangerously.
 6400
@@ -18465,7 +18465,7 @@ NONE
 1
 100 BERRY_JUICE
 4
-STURDY GLUTTONY
+STURDY GLUTTONY CONTRARY
 Mold
 24 45.2 It stores berries in its shell. The berries eventually ferment to become delicious juices.
 5120
@@ -18546,7 +18546,7 @@ BUG FIGHTING
 NONE
 0
 4
-SWARM GUTS
+SWARM GUTS MOXIE
 Single Horn
 59 119.0 It loves sweet honey. To keep all the honey to itself, it hurls rivals away with its prized horn.
 6400
@@ -18637,7 +18637,7 @@ TIME NIGHT ITEM WEAVILE RAZOR_CLAW
 5 QUICK_CLAW
 5 RAZOR_CLAW
 4
-INNER_FOCUS KEEN_EYE
+INNER_FOCUS KEEN_EYE PICKPOCKET
 Sharp Claw
 35 61.7 A smart and sneaky Pok\u00e9mon. A pair may work together to steal eggs by having one lure the parents away.
 5120
@@ -18742,7 +18742,7 @@ LEVEL URSARING 30
 5 SITRUS_BERRY
 1 HONEY
 4
-PICKUP QUICK_FEET
+PICKUP QUICK_FEET HONEY_GATHER
 Little Bear
 24 19.4 It lets honey soak into its paws so it can lick them all the time. Every set of paws tastes unique.
 5120
@@ -18836,7 +18836,7 @@ NONE
 5 SITRUS_BERRY
 1 HONEY
 4
-GUTS QUICK_FEET
+GUTS QUICK_FEET UNNERVE
 Hibernator
 71 277.3 In its territory, it leaves scratches on trees that bear delicious berries or fruits.
 5120
@@ -18938,7 +18938,7 @@ LEVEL MAGCARGO 38
 1
 5 HEAT_ROCK
 4
-MAGMA_ARMOR FLAME_BODY
+MAGMA_ARMOR FLAME_BODY WEAK_ARMOR
 Lava
 28 77.2 Its body is made of magma. If it doesn't keep moving, its body will cool and harden.
 5120
@@ -19015,7 +19015,7 @@ NONE
 1
 5 HEAT_ROCK
 4
-MAGMA_ARMOR FLAME_BODY
+MAGMA_ARMOR FLAME_BODY WEAK_ARMOR
 Lava
 31 121.3 Its body temperature is roughly 18,000 degrees F. Flames spout from gaps in its hardened shell.
 5120
@@ -19109,7 +19109,7 @@ LEVEL PILOSWINE 33
 1
 50 ASPEAR_BERRY
 4
-OBLIVIOUS SNOW_CLOAK
+OBLIVIOUS SNOW_CLOAK THICK_FAT
 Pig
 16 14.3 It has a very sensitive nose. It can locate mushrooms, berries, and even hot springs buried under ice.
 5120
@@ -19189,7 +19189,7 @@ MOVE MAMOSWINE ANCIENT_POWER
 50 ASPEAR_BERRY
 5 NEVER_MELT_ICE
 4
-OBLIVIOUS SNOW_CLOAK
+OBLIVIOUS SNOW_CLOAK THICK_FAT
 Swine
 43 123.0 Covered by a shaggy coat, it is strong against the cold. Its tusks of ice thicken when it snows.
 5120
@@ -19277,7 +19277,7 @@ NONE
 5 HARD_STONE
 5 LUMINOUS_MOSS
 6
-HUSTLE NATURAL_CURE
+HUSTLE NATURAL_CURE REGENERATOR
 Coral
 24 11.0 Many live in the clean seas of the south. They apparently can't live in polluted waters.
 5120
@@ -19374,7 +19374,7 @@ WATER NO_TYPE
 LEVEL OCTILLERY 25
 0
 4
-HUSTLE SNIPER
+HUSTLE SNIPER MOODY
 Jet
 24 26.5 It forcefully squirts water. The water jet never misses prey even if the Remoraid is deep in the sea.
 5120
@@ -19454,7 +19454,7 @@ WATER NO_TYPE
 NONE
 0
 4
-SUCTION_CUPS SNIPER
+SUCTION_CUPS SNIPER MOODY
 Jet
 35 62.8 It loves to lurk inside holes in rocks. It sometimes sprays ink on prey by sticking out only its mouth.
 5120
@@ -19547,7 +19547,7 @@ ICE FLYING
 NONE
 0
 4
-VITAL_SPIRIT HUSTLE
+VITAL_SPIRIT HUSTLE INSOMNIA
 Delivery
 35 35.3 It carries food rolled up in its tail. It has the habit of sharing food with people lost in mountains.
 5120
@@ -19619,7 +19619,7 @@ WATER FLYING
 NONE
 0
 4
-SWIFT_SWIM WATER_ABSORB
+SWIFT_SWIM WATER_ABSORB WATER_VEIL
 Kite
 83 485.0 While elegantly swimming in the sea, it ignores Remoraid that cling to its fins seeking food scraps.
 6400
@@ -19710,7 +19710,7 @@ NONE
 5 SHARP_BEAK
 5 METAL_COAT
 4
-KEEN_EYE STURDY
+KEEN_EYE STURDY WEAK_ARMOR
 Armor Bird
 67 111.3 Despite being clad entirely in iron-hard armor, it flies at speeds over 180 mph.
 6400
@@ -19793,7 +19793,7 @@ DARK FIRE
 LEVEL HOUNDOOM 24
 0
 4
-EARLY_BIRD FLASH_FIRE
+EARLY_BIRD FLASH_FIRE UNNERVE
 Dark
 24 23.8 It is smart enough to hunt in packs. It uses a variety of cries for communicating with others.
 5120
@@ -19882,7 +19882,7 @@ DARK FIRE
 NONE
 0
 4
-EARLY_BIRD FLASH_FIRE
+EARLY_BIRD FLASH_FIRE UNNERVE
 Dark
 55 77.2 The flames it breathes when angry contain toxins. If they cause a burn, it will hurt forever.
 5120
@@ -19981,7 +19981,7 @@ NONE
 1
 5 DRAGON_SCALE
 4
-SWIFT_SWIM SNIPER
+SWIFT_SWIM SNIPER DAMP
 Dragon
 71 335.1 It lives in caves on the seafloor and creates giant whirlpools every time it moves.
 5120
@@ -20231,7 +20231,7 @@ ITEM PORYGON_Z DUBIOUS_DISC
 1
 5 DUBIOUS_DISC
 -1
-TRACE DOWNLOAD
+TRACE DOWNLOAD ANALYTIC
 Virtual
 24 71.6 It was upgraded to enable the exploration of other planets. However, it failed to measure up.
 5120
@@ -20315,7 +20315,7 @@ NORMAL NO_TYPE
 NONE
 0
 4
-INTIMIDATE FRISK
+INTIMIDATE FRISK SAP_SIPPER
 Big Horn
 55 157.0 Staring at its antlers creates an odd sensation as if one were being drawn into their centers.
 5120
@@ -20411,7 +20411,7 @@ NORMAL NO_TYPE
 NONE
 0
 4
-OWN_TEMPO TECHNICIAN
+OWN_TEMPO TECHNICIAN MOODY
 Painter
 47 127.9 It marks its territory by using its tail like a paintbrush. There are more than 5,000 different marks.
 5120
@@ -20443,7 +20443,7 @@ STAT Higher DEFENSE ATTACK LEVEL HITMONCHAN 20
 STAT Equal ATTACK DEFENSE LEVEL HITMONTOP 20
 0
 0
-GUTS STEADFAST
+GUTS STEADFAST VITAL_SPIRIT
 Scuffle
 28 46.3 It is famous for its eagerness to fight and always nurses injuries from challenging larger foes.
 6400
@@ -20504,7 +20504,7 @@ FIGHTING NO_TYPE
 NONE
 0
 0
-INTIMIDATE TECHNICIAN
+INTIMIDATE TECHNICIAN STEADFAST
 Handstand
 55 105.8 It fights while spinning like a top. The centrifugal force boosts its destructive power by ten.
 6400
@@ -20588,7 +20588,7 @@ LEVEL JYNX 30
 1
 100 ASPEAR_BERRY
 8
-OBLIVIOUS FOREWARN
+OBLIVIOUS FOREWARN HYDRATION
 Kiss
 16 13.2 It tests everything by touching with its lips, which remember what it likes and dislikes.
 6400
@@ -20842,7 +20842,7 @@ NONE
 1
 100 MOOMOO_MILK
 8
-THICK_FAT SCRAPPY
+THICK_FAT SCRAPPY SAP_SIPPER
 Milk Cow
 47 166.4 It is said that kids who drink Miltank's milk grow up to become hearty, healthy adults.
 5120
@@ -20940,7 +20940,7 @@ NONE
 50 LUCKY_EGG
 5 OVAL_STONE
 8
-NATURAL_CURE SERENE_GRACE
+NATURAL_CURE SERENE_GRACE HEALER
 Happiness
 59 103.2 The eggs it lays are filled with happiness. Eating even one bite will bring a smile to anyone.
 10240
@@ -21363,7 +21363,7 @@ TYPE_PARTY DARK LEVEL TYRANITAR 55
 1
 5 HARD_STONE
 4
-SHED_SKIN NO_ABILITY
+SHED_SKIN
 Hard Shell
 47 335.1 Its body is as hard as bedrock. By venting pressurized gas, it can launch itself like a rocket.
 10240
@@ -21762,7 +21762,7 @@ NONE
 1
 100 LUM_BERRY
 -1
-NATURAL_CURE NO_ABILITY
+NATURAL_CURE
 Time Travel
 24 11.0 It has the power to travel across time, but it is said to appear only in peaceful times.
 30720
@@ -22709,7 +22709,7 @@ LEVEL MIGHTYENA 18
 1
 5 PECHA_BERRY
 4
-RUN_AWAY QUICK_FEET
+RUN_AWAY QUICK_FEET RATTLED
 Bite
 20 30.0 A Pok\u00e9mon with a persistent nature, it chases its chosen prey until the prey becomes exhausted.
 3840
@@ -22790,7 +22790,7 @@ NONE
 1
 5 PECHA_BERRY
 4
-INTIMIDATE QUICK_FEET
+INTIMIDATE QUICK_FEET MOXIE
 Bite
 39 81.6 It chases down prey in a pack. It will never disobey the commands of a skilled Trainer.
 3840
@@ -22886,7 +22886,7 @@ LEVEL LINOONE 20
 5 ORAN_BERRY
 5 REVIVE
 4
-PICKUP GLUTTONY
+PICKUP GLUTTONY QUICK_FEET
 Tiny Raccoon
 16 38.6 It walks in zigzag fashion. It is good at finding items in the grass and even in the ground.
 3840
@@ -22973,7 +22973,7 @@ NONE
 5 SITRUS_BERRY
 5 MAX_REVIVE
 4
-PICKUP GLUTTONY
+PICKUP GLUTTONY QUICK_FEET
 Rushing
 20 71.6 It charges prey at speeds over 60 mph. However, because it can only run straight, it often fails.
 3840
@@ -23096,7 +23096,7 @@ BUG NO_TYPE
 LEVEL BEAUTIFLY 10
 0
 8
-SHED_SKIN NO_ABILITY
+SHED_SKIN
 Cocoon
 24 22.0 It wraps silk around the branches of a tree. It drinks rainwater on its silk while awaiting evolution.
 3840
@@ -23189,7 +23189,7 @@ BUG NO_TYPE
 LEVEL DUSTOX 10
 0
 0
-SHED_SKIN NO_ABILITY
+SHED_SKIN
 Cocoon
 28 25.4 It never forgets any attack it endured while in the cocoon. After evolution, it seeks payback.
 3840
@@ -23284,7 +23284,7 @@ LEVEL LOMBRE 14
 1
 5 MENTAL_HERB
 4
-SWIFT_SWIM RAIN_DISH
+SWIFT_SWIM RAIN_DISH OWN_TEMPO
 Water Weed
 20 5.7 It looks like an aquatic plant and serves as a ferry to Pok\u00e9mon that can't swim.
 3840
@@ -23361,7 +23361,7 @@ ITEM LUDICOLO WATER_STONE
 1
 5 MENTAL_HERB
 4
-SWIFT_SWIM RAIN_DISH
+SWIFT_SWIM RAIN_DISH OWN_TEMPO
 Jolly
 47 71.6 It has a mischievous spirit. If it spots an angler, it will tug on the fishing line to interfere.
 3840
@@ -23447,7 +23447,7 @@ NONE
 1
 5 MENTAL_HERB
 4
-SWIFT_SWIM RAIN_DISH
+SWIFT_SWIM RAIN_DISH OWN_TEMPO
 Carefree
 59 121.3 If it hears festive music, all its muscles fill with energy. It can't help breaking out into a dance.
 3840
@@ -23528,7 +23528,7 @@ LEVEL NUZLEAF 14
 1
 5 POWER_HERB
 4
-CHLOROPHYLL EARLY_BIRD
+CHLOROPHYLL EARLY_BIRD PICKPOCKET
 Acorn
 20 8.8 When it dangles from a tree branch, it looks just like an acorn. It enjoys scaring other Pok\u00e9mon.
 3840
@@ -23597,7 +23597,7 @@ ITEM SHIFTRY LEAF_STONE
 1
 5 POWER_HERB
 4
-CHLOROPHYLL EARLY_BIRD
+CHLOROPHYLL EARLY_BIRD PICKPOCKET
 Wily
 39 61.7 The sound of its grass flute makes its listeners uneasy. It lives deep in forests.
 3840
@@ -23685,7 +23685,7 @@ NONE
 1
 5 POWER_HERB
 4
-CHLOROPHYLL EARLY_BIRD
+CHLOROPHYLL EARLY_BIRD PICKPOCKET
 Wicked
 51 131.4 By flapping its leafy fan, it can whip up gusts of 100 ft/second that can level houses.
 3840
@@ -23940,7 +23940,7 @@ LEVEL PELIPPER 25
 10 SWIFT_WING
 10 PRETTY_WING
 4
-KEEN_EYE HYDRATION
+KEEN_EYE HYDRATION RAIN_DISH
 Seagull
 24 20.9 It soars high in the sky, riding on updrafts like a glider. It carries food tucked in its bill.
 5120
@@ -24025,7 +24025,7 @@ NONE
 10 PRETTY_WING
 5 LUCKY_EGG
 4
-KEEN_EYE DRIZZLE
+KEEN_EYE DRIZZLE RAIN_DISH
 Water Bird
 47 61.7 It is a messenger of the skies, carrying small Pok\u00e9mon and eggs to safety in its bill.
 5120
@@ -24603,7 +24603,7 @@ TYPE_PARTY FIGHTING LEVEL BRELOOM 23
 5 BIG_MUSHROOM
 5 KEBIA_BERRY
 4
-EFFECT_SPORE POISON_HEAL
+EFFECT_SPORE POISON_HEAL QUICK_FEET
 Mushroom
 16 9.9 It spouts poison spores from the top of its head. These spores cause pain all over if inhaled.
 3840
@@ -24676,7 +24676,7 @@ NONE
 5 BIG_MUSHROOM
 5 KEBIA_BERRY
 4
-EFFECT_SPORE POISON_HEAL
+EFFECT_SPORE POISON_HEAL TECHNICIAN
 Mushroom
 47 86.4 Its short arms stretch when it throws punches. Its technique is equal to that of pro boxers.
 3840
@@ -24764,7 +24764,7 @@ NORMAL NO_TYPE
 LEVEL VIGOROTH 18
 0
 4
-TRUANT NO_ABILITY
+TRUANT
 Slacker
 31 52.9 It spends nearly all its time in a day sprawled out. Just seeing it makes one drowsy.
 3840
@@ -24844,7 +24844,7 @@ NORMAL NO_TYPE
 LEVEL SLAKING 36
 0
 4
-VITAL_SPIRIT NO_ABILITY
+VITAL_SPIRIT
 Wild Monkey
 55 102.5 Its heart beats at a tenfold tempo, so it cannot sit still for even a moment.
 3840
@@ -24935,7 +24935,7 @@ NORMAL NO_TYPE
 NONE
 0
 4
-TRUANT NO_ABILITY
+TRUANT
 Lazy
 79 287.7 The world's laziest Pok\u00e9mon. When it is lounging, it is actually saving energy for striking back.
 3840
@@ -25175,7 +25175,7 @@ BUG GHOST
 NONE
 0
 -1
-WONDER_GUARD NO_ABILITY
+WONDER_GUARD
 Shed
 31 2.6 A discarded bug shell that came to life. Peering into the crack on its back is said to steal one's spirit.
 3840
@@ -25529,7 +25529,7 @@ LEVEL HARIYAMA 24
 1
 5 BLACK_BELT
 2
-THICK_FAT GUTS
+THICK_FAT GUTS SHEER_FORCE
 Guts
 39 190.5 It toughens its body by slamming into thick trees. Many snapped trees can be found near its nest.
 5120
@@ -25615,7 +25615,7 @@ NONE
 5 KINGS_ROCK
 5 BLACK_BELT
 2
-THICK_FAT GUTS
+THICK_FAT GUTS SHEER_FORCE
 Arm Thrust
 91 559.5 It loves to match power with big-bodied Pok\u00e9mon. It can knock a truck flying with its arm thrusts.
 5120
@@ -25709,7 +25709,7 @@ NORMAL FAIRY
 ITEM MARILL WATER_STONE
 0
 6
-THICK_FAT HUGE_POWER
+THICK_FAT HUGE_POWER SAP_SIPPER
 Polka Dot
 8 4.4 Its tail bounces like a rubber ball. It flings that tail around to fight opponents bigger than itself.
 2560
@@ -25782,7 +25782,7 @@ ITEM PROBOPASS THUNDER_STONE
 5 HARD_STONE
 5 MAGNET
 4
-STURDY MAGNET_PULL
+STURDY MAGNET_PULL SAND_FORCE
 Compass
 39 213.8 When endangered, it may protect itself by raising its magnetism and drawing iron objects to its body.
 5120
@@ -25868,7 +25868,7 @@ ITEM DELCATTY MOON_STONE
 5 LEPPA_BERRY
 50 PECHA_BERRY
 6
-CUTE_CHARM NORMALIZE
+CUTE_CHARM NORMALIZE WONDER_SKIN
 Kitten
 24 24.3 It can't stop itself from chasing moving things, and it runs in a circle, chasing its own tail.
 3840
@@ -25963,7 +25963,7 @@ NONE
 5 LEPPA_BERRY
 50 PECHA_BERRY
 6
-CUTE_CHARM NORMALIZE
+CUTE_CHARM NORMALIZE WONDER_SKIN
 Prim
 43 71.9 It is highly popular among female Trainers for its sublime fur. It does not keep a nest.
 3840
@@ -26046,7 +26046,7 @@ ITEM YAMIRAMI RUBY
 1
 5 WIDE_LENS
 4
-KEEN_EYE STALL
+KEEN_EYE STALL PRANKSTER
 Darkness
 20 24.3 It hides in the darkness of caves. Its diet of gems has transformed its eyes into gemstones.
 6400
@@ -26155,7 +26155,7 @@ MOVE KUCHIITO CRUNCH
 5 OCCA_BERRY
 5 IRON_BALL
 4
-HYPER_CUTTER INTIMIDATE
+HYPER_CUTTER INTIMIDATE SHEER_FORCE
 Deceiver
 24 25.4 Attached to its head is a huge set of jaws formed by horns. It can chew through iron beams.
 5120
@@ -26266,7 +26266,7 @@ LEVEL LAIRON 32
 1
 5 HARD_STONE
 4
-STURDY ROCK_HEAD
+STURDY ROCK_HEAD HEAVY_METAL
 Iron Armor
 16 132.3 It usually lives deep in mountains. However, hunger may drive it to eat railroad tracks and cars.
 8960
@@ -26352,7 +26352,7 @@ LEVEL AGGRON 42
 1
 5 HARD_STONE
 4
-STURDY ROCK_HEAD
+STURDY ROCK_HEAD HEAVY_METAL
 Iron Armor
 35 264.6 For food, it digs up iron ore. It smashes its steely body against others to fight over territory.
 8960
@@ -26442,7 +26442,7 @@ NONE
 1
 5 HARD_STONE
 4
-STURDY ROCK_HEAD
+STURDY ROCK_HEAD HEAVY_METAL
 Iron Armor
 83 793.7 While seeking iron for food, it digs tunnels by breaking through bedrock with its steel horns.
 8960
@@ -26564,7 +26564,7 @@ FIGHTING PSYCHIC
 LEVEL MEDICHAM 37
 0
 4
-PURE_POWER NO_ABILITY
+PURE_POWER
 Meditate
 24 24.7 It always trains deep in mountains. It levitates when it heightens its spiritual power through meditation.
 5120
@@ -26662,7 +26662,7 @@ FIGHTING PSYCHIC
 NONE
 0
 4
-PURE_POWER NO_ABILITY
+PURE_POWER
 Meditate
 51 69.4 It gains the ability to see the aura of its opponents by honing its mind through starvation.
 5120
@@ -26935,7 +26935,7 @@ NONE
 1
 5 CELL_BATTERY
 4
-LIGHTNING_ROD NO_ABILITY
+LIGHTNING_ROD
 Cheering
 16 9.3 It cheers on friends with pom-poms made of sparks. It drains power from telephone poles.
 5120
@@ -27017,7 +27017,7 @@ NONE
 1
 5 CELL_BATTERY
 4
-VOLT_ABSORB NO_ABILITY
+VOLT_ABSORB
 Cheering
 16 9.3 It cheers on friends. If its friends are losing, its body lets off more and more sparks.
 5120
@@ -27188,7 +27188,7 @@ NONE
 1
 5 BRIGHT_POWDER
 8
-OBLIVIOUS TINTED_LENS
+OBLIVIOUS TINTED_LENS PRANKSTER
 Firefly
 24 39.0 With its sweet aroma, it guides Volbeat to draw signs with light in the night sky.
 3840
@@ -27278,7 +27278,7 @@ ITEM ROSERADE SHINY_STONE
 5 POISON_BARB
 1 ABSORB_BULB
 4
-NATURAL_CURE POISON_POINT
+NATURAL_CURE POISON_POINT LEAF_GUARD
 Thorn
 12 4.4 The more healthy the Roselia, the more pleasant its flowers' aroma. Its scent deeply relaxes people.
 5120
@@ -27362,7 +27362,7 @@ LEVEL SWALOT 26
 5 SITRUS_BERRY
 5 BIG_PEARL
 4
-LIQUID_OOZE STICKY_HOLD
+LIQUID_OOZE STICKY_HOLD GLUTTONY
 Stomach
 16 22.7 Almost all its body is its stomach. Its harsh digestive juices quickly dissolve anything it swallows.
 5120
@@ -27443,7 +27443,7 @@ NONE
 5 SITRUS_BERRY
 5 BIG_PEARL
 4
-LIQUID_OOZE STICKY_HOLD
+LIQUID_OOZE STICKY_HOLD GLUTTONY
 Poison Bag
 67 176.4 It swallows anything whole. It sweats toxic fluids from its follicles to douse foes.
 5120
@@ -27698,7 +27698,7 @@ WATER NO_TYPE
 LEVEL WAILORD 40
 0
 4
-WATER_VEIL OBLIVIOUS
+WATER_VEIL OBLIVIOUS PRESSURE
 Ball Whale
 79 286.6 On sunny days, it lands on beaches to bounce like a ball and play. It spouts water from its nose.
 10240
@@ -27776,7 +27776,7 @@ WATER NO_TYPE
 NONE
 0
 4
-WATER_VEIL OBLIVIOUS
+WATER_VEIL OBLIVIOUS PRESSURE
 Float Whale
 571 877.4 The biggest of all Pok\u00e9mon. It can dive to a depth of almost 10,000 feet on only one breath.
 10240
@@ -27866,7 +27866,7 @@ LEVEL CAMERUPT 33
 1
 100 RAWST_BERRY
 4
-OBLIVIOUS SIMPLE
+OBLIVIOUS SIMPLE OWN_TEMPO
 Numb
 28 52.9 Its humped back stores intensely hot magma. In rain, the magma cools, slowing its movement.
 5120
@@ -27948,7 +27948,7 @@ NONE
 1
 100 RAWST_BERRY
 4
-MAGMA_ARMOR SOLID_ROCK
+MAGMA_ARMOR SOLID_ROCK ANGER_POINT
 Eruption
 75 485.0 It has volcanoes on its back. If magma builds up in its body, it shudders, then erupts violently.
 5120
@@ -28045,7 +28045,7 @@ NONE
 5 HEAT_ROCK
 5 CHARCOAL
 4
-WHITE_SMOKE DROUGHT
+WHITE_SMOKE DROUGHT SHELL_ARMOR
 Coal
 20 177.2 It burns coal inside its shell for energy. It blows out black soot if it is endangered.
 5120
@@ -28131,7 +28131,7 @@ LEVEL GRUMPIG 32
 50 PERSIM_BERRY
 5 TANGA_BERRY
 4
-THICK_FAT OWN_TEMPO
+THICK_FAT OWN_TEMPO GLUTTONY
 Bounce
 28 67.5 It bounces constantly, using its tail like a spring. The shock of bouncing keeps its heart beating.
 5120
@@ -28224,7 +28224,7 @@ NONE
 50 PERSIM_BERRY
 5 TANGA_BERRY
 4
-THICK_FAT OWN_TEMPO
+THICK_FAT OWN_TEMPO GLUTTONY
 Manipulate
 35 157.6 It uses black pearls to amplify its psycho-power. It does an odd dance to gain control over foes.
 5120
@@ -28334,7 +28334,7 @@ NONE
 1
 5 CHESTO_BERRY
 4
-OWN_TEMPO TANGLED_FEET
+OWN_TEMPO TANGLED_FEET CONTRARY
 Spot Panda
 43 11.0 No two Spinda have the same pattern of spots. Its tottering step fouls the aim of foes.
 3840
@@ -28432,7 +28432,7 @@ LEVEL VIBRAVA 35
 1
 5 SOFT_SAND
 4
-HYPER_CUTTER ARENA_TRAP
+HYPER_CUTTER ARENA_TRAP SHEER_FORCE
 Ant Pit
 28 33.1 It makes a conical pit in desert sand and lies in wait at the bottom for prey to come tumbling down.
 5120
@@ -28504,7 +28504,7 @@ GROUND DRAGON
 LEVEL FLYGON 45
 0
 4
-LEVITATE NO_ABILITY
+LEVITATE
 Vibration
 43 33.7 It violently shudders its wings, generating ultrasonic waves to induce headaches in people.
 5120
@@ -28589,7 +28589,7 @@ GROUND DRAGON
 NONE
 0
 4
-LEVITATE NO_ABILITY
+LEVITATE
 Mystic
 79 180.8 It whips up sandstorms with powerful flaps of its wings. It is known as "The Desert Spirit."
 5120
@@ -29269,7 +29269,7 @@ NONE
 5 MOON_STONE
 1 COMET_SHARD
 -1
-LEVITATE NO_ABILITY
+LEVITATE
 Meteorite
 39 370.4 Because it turns active on nights of the full moon, it is said to have some link to the lunar phases.
 6400
@@ -29366,7 +29366,7 @@ NONE
 5 SUN_STONE
 1 COMET_SHARD
 -1
-LEVITATE NO_ABILITY
+LEVITATE
 Meteorite
 47 339.5 A new Pok\u00e9mon species, rumored to be from the sun. It gives off light while spinning.
 6400
@@ -29462,7 +29462,7 @@ WATER GROUND
 LEVEL WHISCASH 30
 0
 4
-OBLIVIOUS ANTICIPATION
+OBLIVIOUS ANTICIPATION HYDRATION
 Whiskers
 16 4.2 Its slimy body is hard to grasp. In one region, it is said to have been born from hardened mud.
 5120
@@ -29535,7 +29535,7 @@ WATER GROUND
 NONE
 0
 4
-OBLIVIOUS ANTICIPATION
+OBLIVIOUS ANTICIPATION HYDRATION
 Whiskers
 35 52.0 It is extremely protective of its territory. If any foe approaches, it attacks using vicious tremors.
 5120
@@ -29621,7 +29621,7 @@ WATER NO_TYPE
 TYPE_PARTY DARK LEVEL CRAWDAUNT 30
 0
 4
-HYPER_CUTTER SHELL_ARMOR
+HYPER_CUTTER SHELL_ARMOR ADAPTABILITY
 Ruffian
 24 25.4 Its hardy vitality enables it to adapt to any environment. Its pincers will never release prey.
 3840
@@ -29706,7 +29706,7 @@ WATER DARK
 NONE
 0
 4
-HYPER_CUTTER SHELL_ARMOR
+HYPER_CUTTER SHELL_ARMOR ADAPTABILITY
 Rogue
 43 72.3 It is a ruffian that uses its pincers to pick up and toss out other Pok\u00e9mon from its pond.
 3840
@@ -29803,7 +29803,7 @@ LEVEL CLAYDOL 36
 1
 5 LIGHT_CLAY
 -1
-LEVITATE NO_ABILITY
+LEVITATE
 Clay Doll
 20 47.4 It moves by spinning on its foot. It is a rare Pok\u00e9mon that was discovered in ancient ruins.
 5120
@@ -29891,7 +29891,7 @@ NONE
 1
 5 LIGHT_CLAY
 -1
-LEVITATE NO_ABILITY
+LEVITATE
 Clay Doll
 59 238.1 An ancient clay figurine that came to life as a Pok\u00e9mon from exposure to a mysterious ray of light.
 5120
@@ -30312,7 +30312,7 @@ WATER NO_TYPE
 ITEM MILOTIC PRISM_SCALE
 0
 4
-SWIFT_SWIM OBLIVIOUS
+SWIFT_SWIM OBLIVIOUS ADAPTABILITY
 Fish
 24 16.3 It is a shabby and ugly Pok\u00e9mon. However, it is very hardy and can survive on little water.
 5120
@@ -30371,7 +30371,7 @@ WATER NO_TYPE
 NONE
 0
 4
-MARVEL_SCALE COMPETITIVE
+MARVEL_SCALE COMPETITIVE CUTE_CHARM
 Tender
 244 357.1 Its lovely scales are described as rainbow colored. They change color depending on the viewing angle.
 5120
@@ -30459,7 +30459,7 @@ NONE
 1
 100 MYSTIC_WATER
 4
-FORECAST NO_ABILITY
+FORECAST
 Weather
 12 1.8 Its appearance changes with the weather. Recently, its molecules were found to be just like water.
 6400
@@ -30649,7 +30649,7 @@ LEVEL BANETTE 37
 1
 5 SPELL_TAG
 4
-INSOMNIA FRISK
+INSOMNIA FRISK CURSED_BODY
 Puppet
 24 5.1 It loves vengeful emotions and hangs in rows under the eaves of houses where vengeful people live.
 6400
@@ -30743,7 +30743,7 @@ ITEM JUPETTA REAPER_CLOTH
 1
 5 SPELL_TAG
 4
-INSOMNIA FRISK
+INSOMNIA FRISK CURSED_BODY
 Marionette
 43 27.6 A doll that became a Pok\u00e9mon over its grudge from being junked. It seeks the child that disowned it.
 6400
@@ -31045,7 +31045,7 @@ GRASS FLYING
 NONE
 0
 4
-CHLOROPHYLL SOLAR_POWER
+CHLOROPHYLL SOLAR_POWER HARVEST
 Fruit
 79 220.5 Delicious fruits grew out from around its neck because it always ate the same kind of fruit.
 6400
@@ -31135,7 +31135,7 @@ NONE
 5 COLBUR_BERRY
 5 CLEANSE_TAG
 4
-LEVITATE NO_ABILITY
+LEVITATE
 Wind Chime
 24 2.2 Its cries echo inside its hollow body to emerge as beautiful notes for startling and repelling foes.
 6400
@@ -31238,7 +31238,7 @@ ITEM ASBEL PRETTY_WING
 1
 5 LIFE_ORB
 4
-PRESSURE SUPER_LUCK
+PRESSURE SUPER_LUCK JUSTIFIED
 Disaster
 47 103.6 Rumored to sense disasters with its horn, it became a target. It fled deep into the mountains.
 6400
@@ -31357,7 +31357,7 @@ PSYCHIC NO_TYPE
 LEVEL WOBBUFFET 15
 0
 4
-SHADOW_TAG NO_ABILITY
+SHADOW_TAG
 Bright
 24 30.9 It grows strong by pushing up against others en masse. It loves eating sweet fruit.
 5120
@@ -31388,7 +31388,7 @@ GENDER FEMALE LEVEL FROSLASS 42
 5 BABIRI_BERRY
 5 SNOWBALL
 4
-INNER_FOCUS ICE_BODY
+INNER_FOCUS ICE_BODY MOODY
 Snow Hat
 28 37.0 It is said that several Snorunt gather under giant leaves and live together in harmony.
 5120
@@ -31458,7 +31458,7 @@ NONE
 5 NEVER_MELT_ICE
 5 SNOWBALL
 0
-INNER_FOCUS ICE_BODY
+INNER_FOCUS ICE_BODY MOODY
 Face
 59 565.5 It prevents prey from escaping by instantaneously freezing moisture in the air.
 5120
@@ -31544,7 +31544,7 @@ ICE WATER
 LEVEL SEALEO 32
 0
 4
-THICK_FAT ICE_BODY
+THICK_FAT ICE_BODY OBLIVIOUS
 Clap
 31 87.1 It rolls across ice floes to reach shore because its body is poorly shaped for swimming.
 5120
@@ -31622,7 +31622,7 @@ ICE WATER
 LEVEL WALREIN 44
 0
 4
-THICK_FAT ICE_BODY
+THICK_FAT ICE_BODY OBLIVIOUS
 Ball Roll
 43 193.1 It habitually spins things on its nose. By doing so, it learns textures and odors.
 5120
@@ -31702,7 +31702,7 @@ ICE WATER
 NONE
 0
 4
-THICK_FAT ICE_BODY
+THICK_FAT ICE_BODY OBLIVIOUS
 Ice Break
 55 332.0 It shatters ice with its big tusks. Its thick blubber repels not only the cold, but also enemy attacks.
 5120
@@ -32008,7 +32008,7 @@ NONE
 1
 5 DEEP_SEA_SCALE
 1
-SWIFT_SWIM ROCK_HEAD
+SWIFT_SWIM ROCK_HEAD STURDY
 Longevity
 39 51.6 A rare Pok\u00e9mon discovered during a deep-sea exploration. It has not changed in over 100 million years.
 10240
@@ -32858,7 +32858,7 @@ DRAGON PSYCHIC
 NONE
 0
 8
-LEVITATE NO_ABILITY
+LEVITATE
 Eon
 55 88.2 Its body is covered with a down that can refract light in such a way that it becomes invisible.
 30720
@@ -32959,7 +32959,7 @@ DRAGON PSYCHIC
 NONE
 0
 0
-LEVITATE NO_ABILITY
+LEVITATE
 Eon
 79 132.3 A highly intelligent Pok\u00e9mon. By folding back its wings in flight, it can overtake jet planes.
 30720
@@ -33058,7 +33058,7 @@ WATER NO_TYPE
 NONE
 0
 -1
-DRIZZLE NO_ABILITY
+DRIZZLE
 Sea Basin
 177 776.0 It is said to have widened the seas by causing downpours. It had been asleep in a marine trench.
 30720
@@ -33133,7 +33133,7 @@ GROUND NO_TYPE
 NONE
 0
 -1
-DROUGHT NO_ABILITY
+DROUGHT
 Continent
 138 2094.4 It had been asleep in underground magma ever since it fiercely fought Kyogre long ago.
 30720
@@ -33220,7 +33220,7 @@ DRAGON FLYING
 NONE
 0
 -1
-AIR_LOCK NO_ABILITY
+AIR_LOCK
 Sky High
 276 455.2 It lives in the ozone layer far above the clouds and cannot be seen from the ground.
 30720
@@ -33319,7 +33319,7 @@ NONE
 1
 100 STAR_PIECE
 -1
-SERENE_GRACE NO_ABILITY
+SERENE_GRACE
 Wish
 12 2.4 It is said to have the ability to grant any wish for just one week every thousand years.
 30720
@@ -33413,7 +33413,7 @@ PSYCHIC NO_TYPE
 NONE
 0
 -1
-PRESSURE NO_ABILITY
+PRESSURE
 DNA
 67 134.0 An alien virus that fell to earth on a meteor underwent a DNA mutation to become this Pok\u00e9mon.
 30720
@@ -34575,7 +34575,7 @@ NORMAL NO_TYPE
 LEVEL BIBAREL 15
 0
 4
-SIMPLE UNAWARE
+SIMPLE UNAWARE MOODY
 Plump Mouse
 20 44.1 A comparison revealed that Bidoof's front teeth grow at the same rate as Rattata's.
 3840
@@ -34660,7 +34660,7 @@ NONE
 5 SITRUS_BERRY
 50 ORAN_BERRY
 4
-SIMPLE UNAWARE
+SIMPLE UNAWARE MOODY
 Beaver
 39 69.4 A river dammed by Bibarel will never overflow its banks, which is appreciated by people nearby.
 3840
@@ -34854,7 +34854,7 @@ ELECTRIC NO_TYPE
 LEVEL LUXIO 15
 0
 4
-RIVALRY INTIMIDATE
+RIVALRY INTIMIDATE GUTS
 Flash
 20 20.9 The extension and contraction of its muscles generates electricity. It glows when in trouble.
 5120
@@ -34927,7 +34927,7 @@ ELECTRIC NO_TYPE
 TYPE_PARTY DARK LEVEL LUXRAY 30
 0
 4
-RIVALRY INTIMIDATE
+RIVALRY INTIMIDATE GUTS
 Spark
 35 67.2 Strong electricity courses through the tips of its sharp claws. A light scratch causes fainting in foes.
 5120
@@ -35000,7 +35000,7 @@ ELECTRIC DARK
 NONE
 0
 4
-RIVALRY INTIMIDATE
+RIVALRY INTIMIDATE GUTS
 Gleam Eyes
 55 92.6 It can see clearly through walls to track down its prey and seek its lost young.
 5120
@@ -35083,7 +35083,7 @@ TIME DAY ITEM ROSELIA LEAF_STONE
 1
 5 POISON_BARB
 4
-NATURAL_CURE POISON_POINT
+NATURAL_CURE POISON_POINT LEAF_GUARD
 Bud
 8 2.6 Sensitive to changing temperature, the bud is said to bloom when it feels the sun's warm touch.
 5120
@@ -35155,7 +35155,7 @@ NONE
 5 POISON_BARB
 1 ABSORB_BULB
 4
-NATURAL_CURE POISON_POINT
+NATURAL_CURE POISON_POINT TECHNICIAN
 Bouquet
 35 32.0 Each of its hands contains different toxins, but both hands can jab with near-fatal power.
 5120
@@ -35881,7 +35881,7 @@ ELECTRIC NO_TYPE
 NONE
 0
 4
-RUN_AWAY PICKUP
+RUN_AWAY PICKUP VOLT_ABSORB
 EleSquirrel
 16 8.6 A pair may be seen rubbing their cheek pouches together in an effort to share stored electricity.
 2560
@@ -36135,7 +36135,7 @@ LEVEL CHERRIM 25
 1
 5 MIRACLE_SEED
 4
-CHLOROPHYLL NO_ABILITY
+CHLOROPHYLL
 Cherry
 16 7.3 The small ball is not only filled with nutrients, it is also tasty. Starly try to peck it off.
 5120
@@ -36207,7 +36207,7 @@ NONE
 1
 5 MIRACLE_SEED
 4
-FLOWER_GIFT NO_ABILITY
+FLOWER_GIFT
 Blossom
 20 20.5 If it senses strong sunlight, it opens its folded petals to absorb the sun's rays with its whole body.
 5120
@@ -36284,7 +36284,7 @@ WATER NO_TYPE
 LEVEL GASTRODON 30
 0
 4
-STICKY_HOLD STORM_DRAIN
+STICKY_HOLD STORM_DRAIN SAND_FORCE
 Sea Slug
 12 13.9 Beware of pushing strongly on its squishy body, as it makes a mysterious purple fluid ooze out.
 5120
@@ -36353,7 +36353,7 @@ WATER GROUND
 NONE
 0
 4
-STICKY_HOLD STORM_DRAIN
+STICKY_HOLD STORM_DRAIN SAND_FORCE
 Sea Slug
 35 65.9 Long ago, its entire back was shielded with a sturdy shell. There are traces of it left in its cells.
 5120
@@ -36438,7 +36438,7 @@ NORMAL NO_TYPE
 NONE
 0
 4
-TECHNICIAN PICKUP
+TECHNICIAN PICKUP SKILL_LINK
 Long Tail
 47 44.8 Split into two, the tails are so adept at handling and doing things, Ambipom rarely uses its hands.
 5120
@@ -36545,7 +36545,7 @@ LEVEL DRIFBLIM 28
 1
 5 AIR_BALLOON
 4
-AFTERMATH UNBURDEN
+AFTERMATH UNBURDEN FLARE_BOOST
 Balloon
 16 2.6 Because of the way it floats aimlessly, an old folktale calls it a "Signpost for Wandering Spirits."
 7680
@@ -36634,7 +36634,7 @@ NONE
 1
 1 AIR_BALLOON
 4
-AFTERMATH UNBURDEN
+AFTERMATH UNBURDEN FLARE_BOOST
 Blimp
 47 33.1 At dusk, swarms of them are carried aloft on winds. When noticed, they suddenly vanish.
 7680
@@ -36731,7 +36731,7 @@ ITEM LOPUNNY SHINY_STONE
 50 PECHA_BERRY
 5 CHOPLE_BERRY
 4
-RUN_AWAY KLUTZ
+RUN_AWAY KLUTZ LIMBER
 Rabbit
 16 12.1 Its ears are always rolled up. They can be forcefully extended to shatter even a large boulder.
 5120
@@ -36828,7 +36828,7 @@ NONE
 50 PECHA_BERRY
 5 CHOPLE_BERRY
 4
-CUTE_CHARM KLUTZ
+CUTE_CHARM KLUTZ LIMBER
 Rabbit
 47 73.4 The ears appear to be delicate. If they are touched roughly, it kicks with its graceful legs.
 5120
@@ -36938,7 +36938,7 @@ GHOST NO_TYPE
 NONE
 0
 4
-LEVITATE NO_ABILITY
+LEVITATE
 Magical
 35 9.7 Its cry sounds like an incantation. It is said the cry may rarely be imbued with happiness-giving power.
 6400
@@ -37033,7 +37033,7 @@ DARK FLYING
 NONE
 0
 4
-INSOMNIA SUPER_LUCK
+INSOMNIA SUPER_LUCK MOXIE
 Big Boss
 35 60.2 If one utters a deep cry, many Murkrow gather quickly. For this, it is called "Summoner of Night."
 5120
@@ -37125,7 +37125,7 @@ LEVEL PURUGLY 38
 1
 5 CHERI_BERRY
 6
-LIMBER OWN_TEMPO
+LIMBER OWN_TEMPO KEEN_EYE
 Catty
 20 8.6 It hides its spiteful tendency of hooking its claws into the nose of its Trainer if it isn't fed.
 5120
@@ -37208,7 +37208,7 @@ NONE
 1
 5 CHERI_BERRY
 6
-THICK_FAT OWN_TEMPO
+THICK_FAT OWN_TEMPO DEFIANT
 Tiger Cat
 39 96.6 It binds its body with its tails to make itself look bigger. If it locks eyes, it will glare ceaselessly.
 5120
@@ -37300,7 +37300,7 @@ TIME NIGHT ITEM CHIMECHO MOON_STONE
 5 COLBUR_BERRY
 5 CLEANSE_TAG
 4
-LEVITATE NO_ABILITY
+LEVITATE
 Bell
 8 1.3 There is an orb inside its mouth. When it hops, the orb bounces all over and makes a ringing sound.
 6400
@@ -37386,7 +37386,7 @@ LEVEL SKUNTANK 34
 1
 5 PECHA_BERRY
 4
-STENCH AFTERMATH
+STENCH AFTERMATH KEEN_EYE
 Skunk
 16 42.3 It sprays a foul fluid from its rear. Its stench spreads over a mile radius, driving Pok\u00e9mon away.
 5120
@@ -37470,7 +37470,7 @@ NONE
 1
 5 PECHA_BERRY
 4
-STENCH AFTERMATH
+STENCH AFTERMATH KEEN_EYE
 Skunk
 39 83.8 It attacks by spraying a horribly smelly fluid from the tip of its tail. Attacks from above confound it.
 5120
@@ -37560,7 +37560,7 @@ LEVEL BRONZONG 33
 1
 5 METAL_COAT
 -1
-LEVITATE HEATPROOF
+LEVITATE HEATPROOF HEAVY_METAL
 Bronze
 20 133.4 There are researchers who believe this Pok\u00e9mon reflected like a mirror in the distant past.
 5120
@@ -37641,7 +37641,7 @@ NONE
 1
 5 METAL_COAT
 -1
-LEVITATE HEATPROOF
+LEVITATE HEATPROOF HEAVY_METAL
 Bronze Bell
 51 412.3 It brought rains by opening portals to another world. It was revered as a bringer of plentiful harvests.
 5120
@@ -37732,7 +37732,7 @@ ROCK NO_TYPE
 MOVE SUDOWOODO MIMIC
 0
 4
-STURDY ROCK_HEAD
+STURDY ROCK_HEAD RATTLED
 Bonsai
 20 33.1 It prefers an arid atmosphere. It leaks water that looks like tears when adjusting its moisture level.
 5120
@@ -37809,7 +37809,7 @@ MOVE MR_MIME MIMIC
 1
 5 LEPPA_BERRY
 4
-SOUNDPROOF FILTER
+SOUNDPROOF FILTER TECHNICIAN
 Mime
 24 28.7 It mimics the expressions and motions of those it sees to understand the feelings of others.
 6400
@@ -37918,7 +37918,7 @@ TIME DAY ITEM CHANSEY OVAL_STONE
 5 LUCKY_EGG
 50 OVAL_STONE
 8
-NATURAL_CURE SERENE_GRACE
+NATURAL_CURE SERENE_GRACE HEALER
 Playhouse
 24 53.8 It likes to carry around a small rock. It may wander around others' feet and cause them to stumble.
 10240
@@ -37996,7 +37996,7 @@ NONE
 1
 5 METRONOME
 4
-KEEN_EYE TANGLED_FEET
+KEEN_EYE TANGLED_FEET BIG_PECKS
 Music Note
 20 4.2 Its tongue is just like a human's. As a result, it can cleverly mimic human speech.
 5120
@@ -38419,7 +38419,7 @@ ITEM SNORLAX LAX_INCENSE
 1
 100 LEFTOVERS
 1
-PICKUP THICK_FAT
+PICKUP THICK_FAT GLUTTONY
 Big Eater
 24 231.5 In its desperation to gulp down food, it forgets about the food it has hidden under its fur.
 10240
@@ -38520,7 +38520,7 @@ FIGHTING NO_TYPE
 TIME DAY ITEM LUCARIO DAWN_STONE
 0
 1
-STEADFAST INNER_FOCUS
+STEADFAST INNER_FOCUS PRANKSTER
 Emanation
 28 44.5 It has the peculiar power of being able to see emotions such as joy and rage in the form of waves.
 6400
@@ -38607,7 +38607,7 @@ FIGHTING STEEL
 NONE
 0
 1
-STEADFAST INNER_FOCUS
+STEADFAST INNER_FOCUS JUSTIFIED
 Aura
 47 119.0 A well-trained one can sense auras to identify and take in the feelings of creatures over half a mile away.
 6400
@@ -38855,7 +38855,7 @@ TYPE_PARTY DARK LEVEL DRAPION 40
 1
 5 POISON_BARB
 4
-BATTLE_ARMOR SNIPER
+BATTLE_ARMOR SNIPER KEEN_EYE
 Scorpion
 31 26.5 As soon as the tail claws close, its needle tips secrete poison. It can survive a year without food.
 5120
@@ -38940,7 +38940,7 @@ NONE
 1
 5 POISON_BARB
 4
-BATTLE_ARMOR SNIPER
+BATTLE_ARMOR SNIPER KEEN_EYE
 Ogre Scorpion
 51 135.6 Possessing a sturdy build, it takes pride in its strength, taking down foes without using toxins.
 5120
@@ -39039,7 +39039,7 @@ LEVEL TOXICROAK 37
 1
 5 BLACK_SLUDGE
 4
-ANTICIPATION DRY_SKIN
+ANTICIPATION DRY_SKIN POISON_TOUCH
 Toxic Mouth
 28 50.7 It rarely fights fairly, but that is strictly to ensure survival. It is popular as a mascot.
 2560
@@ -39142,7 +39142,7 @@ NONE
 1
 5 BLACK_SLUDGE
 4
-ANTICIPATION DRY_SKIN
+ANTICIPATION DRY_SKIN POISON_TOUCH
 Toxic Mouth
 51 97.9 It has a poison sac at its throat. When it croaks, the stored poison is churned for greater potency.
 5120
@@ -39251,7 +39251,7 @@ GRASS NO_TYPE
 NONE
 0
 4
-LEVITATE NO_ABILITY
+LEVITATE
 Bug Catcher
 55 59.5 It binds itself to trees in marshes. It attracts prey with its sweet- smelling drool and gulps them down.
 6400
@@ -39332,7 +39332,7 @@ LEVEL LUMINEON 31
 1
 5 RINDO_BERRY
 4
-SWIFT_SWIM STORM_DRAIN
+SWIFT_SWIM STORM_DRAIN WATER_VEIL
 Wing Fish
 16 15.4 The line running down its side can store sunlight. It shines vividly at night.
 5120
@@ -39410,7 +39410,7 @@ NONE
 1
 5 RINDO_BERRY
 4
-SWIFT_SWIM STORM_DRAIN
+SWIFT_SWIM STORM_DRAIN WATER_VEIL
 Neon
 47 52.9 It crawls along the seafloor using its long front fins like legs. It competes for food with Lanturn.
 5120
@@ -39492,7 +39492,7 @@ WATER FLYING
 ITEM MANTINE WATER_STONE
 0
 4
-SWIFT_SWIM WATER_ABSORB
+SWIFT_SWIM WATER_ABSORB WATER_VEIL
 Kite
 39 143.3 People organize tours to see this Pok\u00e9mon frolic and skim the tops of waves with Remoraid.
 6400
@@ -39851,7 +39851,7 @@ NONE
 5 MAGNET
 5 METAL_COAT
 -1
-MAGNET_PULL STURDY
+MAGNET_PULL STURDY ANALYTIC
 Magnet Area
 47 396.8 A group tried to use scientific means to make Magnezone evolve, but their efforts ended in failure.
 5120
@@ -39934,7 +39934,7 @@ NONE
 1
 5 LAGGING_TAIL
 4
-OWN_TEMPO OBLIVIOUS
+OWN_TEMPO OBLIVIOUS CLOUD_NINE
 Licking
 67 308.6 The long tongue is always soggy with slobber. The saliva contains a solvent that causes numbness.
 5120
@@ -40042,7 +40042,7 @@ NONE
 1
 50 PROTECTOR
 4
-LIGHTNING_ROD SOLID_ROCK
+LIGHTNING_ROD SOLID_ROCK RECKLESS
 Drill
 94 623.5 It can launch a rock held in its hand like a missile by tightening then expanding muscles instantly.
 5120
@@ -40164,7 +40164,7 @@ GRASS NO_TYPE
 NONE
 0
 4
-CHLOROPHYLL LEAF_GUARD
+CHLOROPHYLL LEAF_GUARD REGENERATOR
 Vine
 79 283.5 Its arms are made of plants that bind themselves to things. They grow back right away if cut.
 5120
@@ -40462,7 +40462,7 @@ FAIRY FLYING
 NONE
 0
 1
-HUSTLE SERENE_GRACE
+HUSTLE SERENE_GRACE SUPER_LUCK
 Jubilee
 59 83.8 It shares many blessings with people who respect one another's rights and avoid needless strife.
 2560
@@ -40557,7 +40557,7 @@ NONE
 1
 5 WIDE_LENS
 4
-SPEED_BOOST TINTED_LENS
+SPEED_BOOST TINTED_LENS FRISK
 Ogre Darner
 75 113.5 Its jaw power is incredible. It is adept at biting apart foes while flying by at high speed.
 5120
@@ -40813,7 +40813,7 @@ NONE
 1
 5 RAZOR_FANG
 4
-HYPER_CUTTER SAND_VEIL
+HYPER_CUTTER SAND_VEIL POISON_HEAL
 Fang Scorpion
 79 93.7 If it succeeds in catching even a faint breeze properly, it can circle the globe without flapping once.
 5120
@@ -40922,7 +40922,7 @@ ICE GROUND
 NONE
 0
 4
-OBLIVIOUS SNOW_CLOAK
+OBLIVIOUS SNOW_CLOAK THICK_FAT
 Twin Tusk
 98 641.5 A frozen one was dug up from soil dating back 10,000 years. It woke up to much amazement.
 5120
@@ -41013,7 +41013,7 @@ NORMAL NO_TYPE
 NONE
 0
 -1
-ADAPTABILITY DOWNLOAD
+ADAPTABILITY DOWNLOAD ANALYTIC
 Virtual
 35 75.0 Its programming was modified to enable work in alien dimensions. It did not work as planned.
 5120
@@ -41234,7 +41234,7 @@ NONE
 5 HARD_STONE
 5 MAGNET
 4
-STURDY MAGNET_PULL
+STURDY MAGNET_PULL SAND_FORCE
 Compass
 55 749.6 It freely controls three small units called Mini-Noses using magnetic force.
 5120
@@ -41540,7 +41540,7 @@ ELECTRIC GHOST
 NONE
 0
 -1
-LEVITATE NO_ABILITY
+LEVITATE
 Plasma
 12 0.7 Its electric-like body can enter some kinds of machines and take control in order to make mischief.
 5120
@@ -41613,7 +41613,7 @@ PSYCHIC NO_TYPE
 NONE
 0
 -1
-LEVITATE NO_ABILITY
+LEVITATE
 Knowledge
 12 0.7 When Uxie flew, people gained the ability to solve problems. It was the birth of knowledge.
 20480
@@ -41707,7 +41707,7 @@ PSYCHIC NO_TYPE
 NONE
 0
 -1
-LEVITATE NO_ABILITY
+LEVITATE
 Emotion
 12 0.7 When Mesprit flew, people learned the joy and sadness of living. It was the birth of emotions.
 20480
@@ -41799,7 +41799,7 @@ PSYCHIC NO_TYPE
 NONE
 0
 -1
-LEVITATE NO_ABILITY
+LEVITATE
 Willpower
 12 0.7 When Azelf flew, people gained the determination to do things. It was the birth of willpower.
 20480
@@ -41896,7 +41896,7 @@ STEEL DRAGON
 NONE
 0
 -1
-PRESSURE NO_ABILITY
+PRESSURE
 Temporal
 213 1505.7 A legendary Pok\u00e9mon of Sinnoh. It is said that time flows when Dialga's heart beats.
 30720
@@ -41983,7 +41983,7 @@ WATER DRAGON
 NONE
 0
 -1
-PRESSURE NO_ABILITY
+PRESSURE
 Spatial
 165 740.7 A legendary Pok\u00e9mon of Sinnoh. It is said that space becomes more stable with Palkia's every breath.
 30720
@@ -42152,7 +42152,7 @@ NORMAL NO_TYPE
 NONE
 0
 -1
-SLOW_START NO_ABILITY
+SLOW_START
 Colossal
 146 925.9 It is said to have made Pok\u00e9mon that look like itself from a special ice mountain, rocks, and magma.
 30720
@@ -42234,7 +42234,7 @@ GHOST DRAGON
 NONE
 0
 -1
-PRESSURE NO_ABILITY
+PRESSURE
 Renegade
 177 1653.4 It was banished for its violence. It silently gazed upon the old world from the Distortion World.
 30720
@@ -42323,7 +42323,7 @@ PSYCHIC NO_TYPE
 NONE
 0
 8
-LEVITATE NO_ABILITY
+LEVITATE
 Lunar
 59 188.7 On nights around the quarter moon, the aurora from its tail extends and undulates beautifully.
 30720
@@ -42402,7 +42402,7 @@ WATER NO_TYPE
 NONE
 0
 -1
-HYDRATION NO_ABILITY
+HYDRATION
 Sea Drifter
 16 6.8 It drifts in warm seas. It always returns to where it was born, no matter how far it may have drifted.
 10240
@@ -42467,7 +42467,7 @@ WATER NO_TYPE
 NONE
 0
 -1
-HYDRATION NO_ABILITY
+HYDRATION
 Seafaring
 12 3.1 It is born with a wondrous power that lets it bond with any kind of Pok\u00e9mon.
 2560
@@ -42543,7 +42543,7 @@ DARK NO_TYPE
 NONE
 0
 -1
-BAD_DREAMS NO_ABILITY
+BAD_DREAMS
 Pitch-Black
 59 111.3 To protect itself, it afflicts those around it with nightmares. However, it means no harm.
 30720
@@ -42633,7 +42633,7 @@ NONE
 1
 100 LUM_BERRY
 -1
-NATURAL_CURE NO_ABILITY
+NATURAL_CURE
 Gratitude
 8 4.6 The flowers all over its body burst into bloom if it is lovingly hugged and senses gratitude.
 30720
@@ -42698,7 +42698,7 @@ NORMAL NO_TYPE
 NONE
 0
 -1
-MULTITYPE NO_ABILITY
+MULTITYPE
 Alpha
 126 705.5 It is said to have emerged from an egg in a place where there was nothing, then shaped the world.
 30720
@@ -42823,7 +42823,7 @@ PSYCHIC FIRE
 NONE
 0
 -1
-VICTORY_STAR NO_ABILITY
+VICTORY_STAR
 Victory
 16 8.8 This Pok\u00e9mon brings victory. It is said that Trainers with Victini always win, regardless of the type of encounter.
 30720
@@ -43727,7 +43727,7 @@ NORMAL NO_TYPE
 LEVEL WATCHOG 20
 0
 4
-RUN_AWAY KEEN_EYE
+RUN_AWAY KEEN_EYE ANALYTIC
 Scout
 20 25.6 Using food stored in cheek pouches, they can keep watch for days. They use their tails to communicate with others.
 3840
@@ -43904,7 +43904,7 @@ NORMAL NO_TYPE
 LEVEL HERDIER 16
 0
 4
-VITAL_SPIRIT PICKUP
+VITAL_SPIRIT PICKUP RUN_AWAY
 Puppy
 16 9.0 It faces strong opponents with great courage. But, when at a disadvantage in a fight, this intelligent Pok\u00e9mon flees.
 3840
@@ -43980,7 +43980,7 @@ NORMAL NO_TYPE
 LEVEL STOUTLAND 32
 0
 4
-INTIMIDATE SAND_RUSH
+INTIMIDATE SAND_RUSH SCRAPPY
 Loyal Dog
 35 32.4 It has black, cape-like fur that is very hard and decreases the amount of damage it receives.
 3840
@@ -44059,7 +44059,7 @@ NORMAL NO_TYPE
 NONE
 0
 4
-INTIMIDATE SAND_RUSH
+INTIMIDATE SAND_RUSH SCRAPPY
 Big-Hearted
 47 134.5 It rescues people stranded by blizzards in the mountains. Its shaggy fur shields it from the cold.
 3840
@@ -44146,7 +44146,7 @@ DARK NO_TYPE
 LEVEL LIEPARD 20
 0
 4
-LIMBER UNBURDEN
+LIMBER UNBURDEN PRANKSTER
 Devious
 16 22.3 They steal from people for fun, but their victims can't help but forgive them. Their deceptively cute act is perfect.
 5120
@@ -44233,7 +44233,7 @@ DARK NO_TYPE
 NONE
 0
 4
-LIMBER UNBURDEN
+LIMBER UNBURDEN PRANKSTER
 Cruel
 43 82.7 These Pok\u00e9mon vanish and appear unexpectedly. Many Trainers are drawn to their beautiful form and fur.
 5120
@@ -45046,7 +45046,7 @@ NORMAL FLYING
 LEVEL TRANQUILL 21
 0
 4
-BIG_PECKS SUPER_LUCK
+BIG_PECKS SUPER_LUCK RIVALRY
 Tiny Pigeon
 12 4.6 Each follows its Trainer's orders as best it can, but they sometimes fail to understand complicated commands.
 3840
@@ -45116,7 +45116,7 @@ NORMAL FLYING
 LEVEL UNFEZANT 32
 0
 4
-BIG_PECKS SUPER_LUCK
+BIG_PECKS SUPER_LUCK RIVALRY
 Wild Pigeon
 24 33.1 It can return to its Trainer's location regardless of the distance separating them.
 3840
@@ -45189,7 +45189,7 @@ NORMAL FLYING
 NONE
 0
 4
-BIG_PECKS SUPER_LUCK
+BIG_PECKS SUPER_LUCK RIVALRY
 Proud
 47 63.9 Males swing their head plumage to threaten opponents. The females' flying abilities surpass those of the males.
 3840
@@ -45266,7 +45266,7 @@ LEVEL ZEBSTRIKA 27
 1
 50 CHERI_BERRY
 4
-LIGHTNING_ROD MOTOR_DRIVE
+LIGHTNING_ROD MOTOR_DRIVE SAP_SIPPER
 Electrified
 31 65.7 Its mane shines when it discharges electricity. They use their flashing manes to communicate with one another.
 5120
@@ -45338,7 +45338,7 @@ NONE
 1
 50 CHERI_BERRY
 4
-LIGHTNING_ROD MOTOR_DRIVE
+LIGHTNING_ROD MOTOR_DRIVE SAP_SIPPER
 Thunderbolt
 63 175.3 They have lightning-like movements. When Zebstrika run at full speed, the sound of thunder reverberates.
 5120
@@ -45420,7 +45420,7 @@ LEVEL BOLDORE 25
 50 EVERSTONE
 5 HARD_STONE
 4
-STURDY WEAK_ARMOR
+STURDY WEAK_ARMOR SAND_FORCE
 Mantle
 16 39.7 Its ear is hexagonal in shape. Compressed underground, its body is as hard as steel.
 3840
@@ -45491,7 +45491,7 @@ ITEM GIGALITH HARD_STONE
 50 EVERSTONE
 5 HARD_STONE
 4
-STURDY WEAK_ARMOR
+STURDY WEAK_ARMOR SAND_FORCE
 Ore
 35 224.9 When it overflows with power, the orange crystal on its body glows. It looks for underground water in caves.
 3840
@@ -45567,7 +45567,7 @@ NONE
 50 EVERSTONE
 5 HARD_STONE
 4
-STURDY SAND_STREAM
+STURDY SAND_STREAM SAND_FORCE
 Compressed
 67 573.2 Compressing the energy from its internal core lets it fire off an attack capable of blowing away a mountain.
 3840
@@ -45648,7 +45648,7 @@ PSYCHIC FLYING
 ITEM SWOOBAT MOON_STONE
 0
 4
-UNAWARE KLUTZ
+UNAWARE KLUTZ SIMPLE
 Bat
 16 4.6 Its habitat is dark forests and caves. It emits ultrasonic waves from its nose to learn about its surroundings.
 3840
@@ -45745,7 +45745,7 @@ PSYCHIC FLYING
 NONE
 0
 4
-UNAWARE KLUTZ
+UNAWARE KLUTZ SIMPLE
 Courting
 35 23.1 It emits sound waves of various frequencies from its nose, including some powerful enough to destroy rocks.
 3840
@@ -45849,7 +45849,7 @@ GROUND NO_TYPE
 LEVEL EXCADRILL 31
 0
 4
-SAND_RUSH SAND_FORCE
+SAND_RUSH SAND_FORCE MOLD_BREAKER
 Mole
 12 18.7 It can dig through the ground at a speed of 30 mph. It could give a car running aboveground a good race.
 5120
@@ -45921,7 +45921,7 @@ GROUND STEEL
 NONE
 0
 4
-SAND_RUSH SAND_FORCE
+SAND_RUSH SAND_FORCE MOLD_BREAKER
 Subterrene
 28 89.1 It can help in tunnel construction. Its drill has evolved into steel strong enough to bore through iron plates.
 5120
@@ -46007,7 +46007,7 @@ NONE
 5 SITRUS_BERRY
 50 ORAN_BERRY
 4
-HEALER REGENERATOR
+HEALER REGENERATOR KLUTZ
 Hearing
 43 68.3 It touches others with the feelers on its ears, using the sound of their heartbeats to tell how they are feeling.
 5120
@@ -46125,7 +46125,7 @@ FIGHTING NO_TYPE
 LEVEL GURDURR 25
 0
 2
-GUTS SHEER_FORCE
+GUTS SHEER_FORCE IRON_FIST
 Muscular
 24 27.6 It fights by swinging a piece of lumber around. It is close to evolving when it can handle the lumber without difficulty.
 5120
@@ -46210,7 +46210,7 @@ FIGHTING NO_TYPE
 ITEM CONKELDURR BLACK_BELT
 0
 2
-GUTS SHEER_FORCE
+GUTS SHEER_FORCE IRON_FIST
 Muscular
 47 88.2 This Pok\u00e9mon is so muscular and strongly built that even a group of wrestlers could not make it budge an inch.
 5120
@@ -46297,7 +46297,7 @@ FIGHTING NO_TYPE
 NONE
 0
 2
-GUTS SHEER_FORCE
+GUTS SHEER_FORCE IRON_FIST
 Muscular
 55 191.8 It is thought that Conkeldurr taught humans how to make concrete more than 2,000 years ago.
 5120
@@ -46391,7 +46391,7 @@ LEVEL PALPITOAD 25
 50 PERSIM_BERRY
 50 PECHA_BERRY
 4
-SWIFT_SWIM HYDRATION
+SWIFT_SWIM HYDRATION WATER_ABSORB
 Tadpole
 20 9.9 They warn others of danger by vibrating their cheeks to create a high-pitched sound.
 5120
@@ -46463,7 +46463,7 @@ LEVEL SEISMITOAD 36
 50 PERSIM_BERRY
 50 PECHA_BERRY
 4
-SWIFT_SWIM HYDRATION
+SWIFT_SWIM HYDRATION WATER_ABSORB
 Vibration
 31 37.5 When they vibrate the bumps on their heads, they can make waves in water or earthquake-like vibrations on land.
 5120
@@ -46541,7 +46541,7 @@ NONE
 50 PERSIM_BERRY
 50 PECHA_BERRY
 4
-SWIFT_SWIM POISON_TOUCH
+SWIFT_SWIM POISON_TOUCH WATER_ABSORB
 Vibration
 59 136.7 They shoot paralyzing liquid from their head bumps. They use vibration to hurt their opponents.
 5120
@@ -46638,7 +46638,7 @@ NONE
 5 BLACK_BELT
 1 EXPERT_BELT
 0
-GUTS INNER_FOCUS
+GUTS INNER_FOCUS MOLD_BREAKER
 Judo
 51 122.4 When it tightens its belt, it becomes stronger. Wild Throh use vines to weave their own belts.
 5120
@@ -46719,7 +46719,7 @@ NONE
 5 BLACK_BELT
 1 EXPERT_BELT
 0
-STURDY INNER_FOCUS
+STURDY INNER_FOCUS MOLD_BREAKER
 Karate
 55 112.4 The sound of Sawk punching boulders and trees can be heard all the way from the mountains where they train.
 5120
@@ -46798,7 +46798,7 @@ LEVEL SWADLOON 20
 1
 5 MENTAL_HERB
 4
-SWARM CHLOROPHYLL
+SWARM CHLOROPHYLL OVERCOAT
 Sewing
 12 5.5 Leavanny dress it in clothes they made for it when it hatched. It hides its head in its hood while it is sleeping.
 3840
@@ -46869,7 +46869,7 @@ ITEM LEAVANNY LEAF_STONE
 1
 5 MENTAL_HERB
 4
-LEAF_GUARD CHLOROPHYLL
+LEAF_GUARD CHLOROPHYLL OVERCOAT
 Leaf-Wrapped
 20 16.1 Forests where Swadloon live have superb foliage because the nutrients they make from fallen leaves nourish the plant life.
 3840
@@ -46937,7 +46937,7 @@ NONE
 1
 5 MENTAL_HERB
 4
-SWARM CHLOROPHYLL
+SWARM CHLOROPHYLL OVERCOAT
 Nurturing
 47 45.2 Upon finding a small Pok\u00e9mon, it weaves clothing for it from leaves, using the cutters on its arms and sticky silk.
 3840
@@ -47030,7 +47030,7 @@ LEVEL WHIRLIPEDE 22
 50 PECHA_BERRY
 5 POISON_BARB
 4
-POISON_POINT SWARM
+POISON_POINT SWARM SPEED_BOOST
 Centipede
 16 11.7 Its bite injects a potent poison, enough to paralyze large bird Pok\u00e9mon that try to prey on it.
 3840
@@ -47097,7 +47097,7 @@ LEVEL SCOLIPEDE 30
 5 POISON_BARB
 50 PECHA_BERRY
 4
-POISON_POINT SWARM
+POISON_POINT SWARM SPEED_BOOST
 Curlipede
 47 129.0 Protected by a hard shell, it spins its body like a wheel and crashes furiously into its enemies.
 3840
@@ -47167,7 +47167,7 @@ NONE
 5 POISON_BARB
 50 PECHA_BERRY
 4
-POISON_POINT SWARM
+POISON_POINT SWARM SPEED_BOOST
 Megapede
 98 442.0 With quick movements, it chases down its foes, attacking relentlessly with its horns until it prevails.
 5120
@@ -47254,7 +47254,7 @@ ITEM WHIMSICOTT SUN_STONE
 1
 5 ABSORB_BULB
 4
-PRANKSTER INFILTRATOR
+PRANKSTER INFILTRATOR CHLOROPHYLL
 Cotton Puff
 12 1.3 When attacked, it escapes by shooting cotton from its body. The cotton serves as a decoy to distract the attacker.
 5120
@@ -47332,7 +47332,7 @@ NONE
 1
 5 ABSORB_BULB
 4
-PRANKSTER INFILTRATOR
+PRANKSTER INFILTRATOR CHLOROPHYLL
 Windveiled
 28 14.6 Like the wind, it can slip through any gap, no matter how small. It leaves balls of white fluff behind.
 5120
@@ -47410,7 +47410,7 @@ ITEM LILLIGANT SUN_STONE
 1
 5 ABSORB_BULB
 8
-CHLOROPHYLL OWN_TEMPO
+CHLOROPHYLL OWN_TEMPO LEAF_GUARD
 Bulb
 20 14.6 The leaves on its head are very bitter. Eating one of these leaves is known to refresh a tired body.
 5120
@@ -47483,7 +47483,7 @@ NONE
 1
 5 ABSORB_BULB
 8
-CHLOROPHYLL OWN_TEMPO
+CHLOROPHYLL OWN_TEMPO LEAF_GUARD
 Flowering
 43 35.9 Even veteran Trainers face a challenge in getting its beautiful flower to bloom. This Pok\u00e9mon is popular with celebrities.
 5120
@@ -47554,7 +47554,7 @@ NONE
 5 DEEP_SEA_TOOTH
 5 DEEP_SEA_SCALE
 4
-RECKLESS ADAPTABILITY
+RECKLESS ADAPTABILITY MOLD_BREAKER
 Hostile
 39 39.7 Red and blue Basculin get along so poorly, they'll start fighting instantly. These Pok\u00e9mon are very hostile.
 10240
@@ -47630,7 +47630,7 @@ LEVEL KROKOROK 29
 1
 5 BLACK_GLASSES
 4
-INTIMIDATE MOXIE
+INTIMIDATE MOXIE ANGER_POINT
 Desert Croc
 28 33.5 They live buried in the sands of the desert. The sun-warmed sands prevent their body temperature from dropping.
 5120
@@ -47715,7 +47715,7 @@ LEVEL KROOKODILE 40
 1
 5 BLACK_GLASSES
 4
-INTIMIDATE MOXIE
+INTIMIDATE MOXIE ANGER_POINT
 Desert Croc
 39 73.6 They live in groups of a few individuals. Protective membranes shield their eyes from sandstorms.
 5120
@@ -47811,7 +47811,7 @@ NONE
 1
 50 BLACK_GLASSES
 4
-INTIMIDATE MOXIE
+INTIMIDATE MOXIE ANGER_POINT
 Intimidation
 59 212.3 They never allow prey to escape. Their jaws are so powerful, they can crush the body of an automobile.
 5120
@@ -48008,7 +48008,7 @@ NONE
 1
 50 RAWST_BERRY
 4
-SHEER_FORCE NO_ABILITY
+SHEER_FORCE
 Blazing
 51 204.8 Its internal fire burns at 2,500° F, making enough power that it can destroy a dump truck with one punch.
 5120
@@ -48110,7 +48110,7 @@ NONE
 1
 5 MIRACLE_SEED
 4
-WATER_ABSORB CHLOROPHYLL
+WATER_ABSORB CHLOROPHYLL STORM_DRAIN
 Cactus
 39 61.7 It uses an up-tempo song and dance to drive away the bird Pok\u00e9mon that prey on its flower seeds.
 5120
@@ -48194,7 +48194,7 @@ LEVEL CRUSTLE 34
 5 HARD_STONE
 1 RARE_BONE
 4
-STURDY SHELL_ARMOR
+STURDY SHELL_ARMOR WEAK_ARMOR
 Rock Inn
 12 32.0 This Pok\u00e9mon can easily melt holes in hard rocks with a liquid secreted from its mouth.
 5120
@@ -48272,7 +48272,7 @@ NONE
 1 RARE_BONE
 5 HARD_STONE
 4
-STURDY SHELL_ARMOR
+STURDY SHELL_ARMOR WEAK_ARMOR
 Stone Home
 55 440.9 Competing for territory, Crustle fight viciously. The one whose boulder is broken is the loser of the battle.
 5120
@@ -48355,7 +48355,7 @@ LEVEL SCRAFTY 39
 1
 5 SHED_SHELL
 4
-SHED_SKIN MOXIE
+SHED_SKIN MOXIE INTIMIDATE
 Shedding
 24 26.0 Its skin has a rubbery elasticity, so it can reduce damage by defensively pulling its skin up to its neck.
 3840
@@ -48458,7 +48458,7 @@ NONE
 1
 5 SHED_SHELL
 4
-SHED_SKIN MOXIE
+SHED_SKIN MOXIE INTIMIDATE
 Hoodlum
 43 66.1 Groups of them beat up anything that enters their territory. Each can spit acidic liquid from its mouth.
 3840
@@ -48567,7 +48567,7 @@ PSYCHIC FLYING
 NONE
 0
 4
-WONDER_SKIN MAGIC_GUARD
+WONDER_SKIN MAGIC_GUARD TINTED_LENS
 Avianoid
 55 30.9 They never vary the route they fly, because their memories of guarding an ancient city remain steadfast.
 5120
@@ -48664,7 +48664,7 @@ LEVEL COFAGRIGUS 34
 1
 5 SPELL_TAG
 4
-MUMMY NO_ABILITY
+MUMMY
 Spirit
 20 3.3 Each of them carries a mask that used to be its face when it was human. Sometimes they look at it and cry.
 6400
@@ -48751,7 +48751,7 @@ NONE
 1
 5 SPELL_TAG
 4
-MUMMY NO_ABILITY
+MUMMY
 Coffin
 67 168.7 It has been said that they swallow those who get too close and turn them into mummies. They like to eat gold nuggets.
 6400
@@ -48843,7 +48843,7 @@ WATER ROCK
 LEVEL CARRACOSTA 37
 0
 1
-SOLID_ROCK STURDY
+SOLID_ROCK STURDY SWIFT_SWIM
 Prototurtle
 28 36.4 Restored from a fossil, this Pok\u00e9mon can dive to depths beyond half a mile.
 7680
@@ -48929,7 +48929,7 @@ WATER ROCK
 NONE
 0
 1
-SOLID_ROCK STURDY
+SOLID_ROCK STURDY SWIFT_SWIM
 Prototurtle
 47 178.6 They can live both in the ocean and on land. A slap from one of them is enough to open a hole in the bottom of a tanker.
 7680
@@ -49022,7 +49022,7 @@ ROCK FLYING
 LEVEL ARCHEOPS 37
 0
 1
-DEFEATIST NO_ABILITY
+DEFEATIST
 First Bird
 20 20.9 Said to be an ancestor of bird Pok\u00e9mon, they were unable to fly and moved about by hopping from one branch to another.
 7680
@@ -49112,7 +49112,7 @@ ROCK FLYING
 NONE
 0
 1
-DEFEATIST NO_ABILITY
+DEFEATIST
 First Bird
 55 70.5 They are intelligent and will cooperate to catch prey. From the ground, they use a running start to take flight.
 7680
@@ -49213,7 +49213,7 @@ LEVEL GARBODOR 36
 5 BLACK_SLUDGE
 1 NUGGET
 4
-STENCH STICKY_HOLD
+STENCH STICKY_HOLD AFTERMATH
 Trash Bag
 24 68.3 Inhaling the gas they belch will make you sleep for a week. They prefer unsanitary places.
 5120
@@ -49292,7 +49292,7 @@ NONE
 5 NUGGET
 1 BIG_NUGGET
 4
-STENCH WEAK_ARMOR
+STENCH WEAK_ARMOR AFTERMATH
 Trash Heap
 75 236.6 It clenches opponents with its left arm and finishes them off with foul-smelling poison gas belched from its mouth.
 5120
@@ -49379,7 +49379,7 @@ DARK NO_TYPE
 LEVEL ZOROARK 30
 0
 1
-ILLUSION NO_ABILITY
+ILLUSION
 Tricky Fox
 28 27.6 It changes into the forms of others to surprise them. Apparently, it often transforms into a silent child.
 6400
@@ -49463,7 +49463,7 @@ DARK NO_TYPE
 NONE
 0
 1
-ILLUSION NO_ABILITY
+ILLUSION
 Illusion Fox
 63 178.8 Bonds between these Pok\u00e9mon are very strong. It protects the safety of its pack by tricking its opponents.
 5120
@@ -49563,7 +49563,7 @@ ITEM CINCCINO SHINY_STONE
 1
 50 CHESTO_BERRY
 6
-CUTE_CHARM TECHNICIAN
+CUTE_CHARM TECHNICIAN SKILL_LINK
 Chinchilla
 16 12.8 They greet one another by rubbing each other with their tails, which are always kept well groomed and clean.
 3840
@@ -49645,7 +49645,7 @@ NONE
 1
 50 CHESTO_BERRY
 6
-CUTE_CHARM TECHNICIAN
+CUTE_CHARM TECHNICIAN SKILL_LINK
 Scarf
 20 16.5 Their white fur is coated in a special oil that makes it easy for them to deflect attacks.
 3840
@@ -49721,7 +49721,7 @@ LEVEL GOTHORITA 32
 1
 50 PERSIM_BERRY
 6
-FRISK COMPETITIVE
+FRISK COMPETITIVE SHADOW_TAG
 Fixation
 16 12.8 Their ribbonlike feelers increase their psychic power. They are always staring at something.
 5120
@@ -49819,7 +49819,7 @@ LEVEL GOTHITELLE 41
 1
 50 PERSIM_BERRY
 6
-FRISK COMPETITIVE
+FRISK COMPETITIVE SHADOW_TAG
 Manipulate
 28 39.7 They use hypnosis to control people and Pok\u00e9mon. Tales of Gothorita leading people astray are told in every corner.
 5120
@@ -49919,7 +49919,7 @@ NONE
 1
 50 PERSIM_BERRY
 6
-FRISK COMPETITIVE
+FRISK COMPETITIVE SHADOW_TAG
 Astral Body
 59 97.0 Starry skies thousands of light-years away are visible in the space distorted by their intense psychic power.
 5120
@@ -50024,7 +50024,7 @@ LEVEL DUOSION 32
 1
 50 PERSIM_BERRY
 4
-OVERCOAT MAGIC_GUARD
+OVERCOAT MAGIC_GUARD REGENERATOR
 Cell
 12 2.2 They drive away attackers by unleashing psychic power. They can use telepathy to talk with others.
 5120
@@ -50116,7 +50116,7 @@ LEVEL REUNICLUS 41
 1
 50 PERSIM_BERRY
 4
-OVERCOAT MAGIC_GUARD
+OVERCOAT MAGIC_GUARD REGENERATOR
 Mitosis
 24 17.6 Since they have two divided brains, at times they suddenly try to take two different actions at once.
 5120
@@ -50211,7 +50211,7 @@ NONE
 1
 50 PERSIM_BERRY
 4
-OVERCOAT MAGIC_GUARD
+OVERCOAT MAGIC_GUARD REGENERATOR
 Multiplying
 39 44.3 When Reuniclus shake hands, a network forms between their brains, increasing their psychic power.
 5120
@@ -50319,7 +50319,7 @@ WATER FLYING
 LEVEL SWANNA 35
 0
 4
-KEEN_EYE BIG_PECKS
+KEEN_EYE BIG_PECKS HYDRATION
 Water Bird
 20 12.1 These bird Pok\u00e9mon are excellent divers. They swim around in the water eating their favorite food--peat moss.
 5120
@@ -50391,7 +50391,7 @@ WATER FLYING
 NONE
 0
 4
-KEEN_EYE BIG_PECKS
+KEEN_EYE BIG_PECKS HYDRATION
 White Bird
 51 53.4 Swanna start to dance at dusk. The one dancing in the middle is the leader of the flock.
 5120
@@ -50470,7 +50470,7 @@ LEVEL VANILLISH 35
 1
 5 NEVER_MELT_ICE
 4
-ICE_BODY SNOW_CLOAK
+ICE_BODY SNOW_CLOAK WEAK_ARMOR
 Fresh Snow
 16 12.6 The temperature of their breath is -58° F. They create snow crystals and make snow fall in the areas around them.
 5120
@@ -50542,7 +50542,7 @@ LEVEL VANILLUXE 47
 1
 5 NEVER_MELT_ICE
 4
-ICE_BODY SNOW_CLOAK
+ICE_BODY SNOW_CLOAK WEAK_ARMOR
 Icy Snow
 43 90.4 Snowy mountains are this Pok\u00e9mon's habitat. During an ancient ice age, they moved to southern areas.
 5120
@@ -50617,7 +50617,7 @@ NONE
 1
 50 NEVER_MELT_ICE
 4
-ICE_BODY SNOW_WARNING
+ICE_BODY SNOW_WARNING WEAK_ARMOR
 Snowstorm
 51 126.8 Swallowing large amounts of water, they make snow clouds inside their bodies and attack their foes with violent blizzards.
 5120
@@ -50696,7 +50696,7 @@ NORMAL GRASS
 LEVEL SAWSBUCK 34
 0
 4
-CHLOROPHYLL SAP_SIPPER
+CHLOROPHYLL SAP_SIPPER SERENE_GRACE
 Season
 24 43.0 The color and scent of their fur changes to match the mountain grass. When they sense hostility, they hide in the grass.
 5120
@@ -50772,7 +50772,7 @@ NORMAL GRASS
 NONE
 0
 4
-CHLOROPHYLL SAP_SIPPER
+CHLOROPHYLL SAP_SIPPER SERENE_GRACE
 Season
 75 203.9 They migrate according to the seasons. People can tell the season by looking at Sawsbuck's horns.
 5120
@@ -50940,7 +50940,7 @@ BUG NO_TYPE
 ITEM ESCAVALIER METAL_COAT
 0
 4
-SWARM SHED_SKIN
+SWARM SHED_SKIN NO_GUARD
 Clamping
 20 13.0 These mysterious Pok\u00e9mon evolve when they receive electrical stimulation while they are in the same place as Shelmet.
 3840
@@ -51010,7 +51010,7 @@ BUG STEEL
 NONE
 0
 4
-SWARM SHELL_ARMOR
+SWARM SHELL_ARMOR OVERCOAT
 Cavalry
 39 72.8 They fly around at high speed, striking with their pointed spears. Even when in trouble, they face opponents bravely.
 3840
@@ -51245,7 +51245,7 @@ WATER GHOST
 LEVEL JELLICENT 40
 0
 4
-WATER_ABSORB CURSED_BODY
+WATER_ABSORB CURSED_BODY DAMP
 Floating
 47 72.8 With its thin, veil-like arms wrapped around the body of its opponent, it sinks to the ocean floor.
 5120
@@ -51326,7 +51326,7 @@ WATER GHOST
 NONE
 0
 4
-WATER_ABSORB CURSED_BODY
+WATER_ABSORB CURSED_BODY DAMP
 Floating
 87 297.6 The fate of the ships and crew that wander into Jellicent's habitat: all sunken, all lost, all vanished.
 5120
@@ -51413,7 +51413,7 @@ WATER NO_TYPE
 NONE
 0
 4
-HEALER HYDRATION
+HEALER HYDRATION REGENERATOR
 Caring
 47 69.7 The special membrane enveloping Alomomola has the ability to heal wounds.
 10240
@@ -51494,7 +51494,7 @@ BUG ELECTRIC
 LEVEL GALVANTULA 36
 0
 4
-COMPOUND_EYES UNNERVE
+COMPOUND_EYES UNNERVE SWARM
 Attaching
 4 1.3 Joltik that live in cities have learned a technique for sucking electricity from the outlets in houses.
 5120
@@ -51572,7 +51572,7 @@ BUG ELECTRIC
 NONE
 0
 4
-COMPOUND_EYES UNNERVE
+COMPOUND_EYES UNNERVE SWARM
 EleSpider
 31 31.5 When attacked, they create an electric barrier by spitting out many electrically charged threads.
 5120
@@ -51657,7 +51657,7 @@ LEVEL FERROTHORN 40
 1
 5 STICKY_BARB
 4
-IRON_BARBS NO_ABILITY
+IRON_BARBS
 Thorn Seed
 24 41.4 When threatened, it attacks by shooting a barrage of spikes, which gives it a chance to escape by rolling away.
 5120
@@ -51735,7 +51735,7 @@ NONE
 1
 5 STICKY_BARB
 4
-IRON_BARBS ANTICIPATION
+IRON_BARBS
 Thorn Pod
 39 242.5 It fights by swinging around its three spiky feelers. A hit from these steel spikes can reduce a boulder to rubble.
 5120
@@ -51826,7 +51826,7 @@ STEEL NO_TYPE
 LEVEL KLANG 38
 0
 -1
-CLEAR_BODY NO_ABILITY
+CLEAR_BODY
 Gear
 12 46.3 The two minigears that mesh together are predetermined. Each will rebound from other minigears without meshing.
 5120
@@ -51891,7 +51891,7 @@ STEEL NO_TYPE
 LEVEL KLINKLANG 49
 0
 -1
-CLEAR_BODY NO_ABILITY
+CLEAR_BODY
 Gear
 24 112.4 By changing the direction in which it rotates, it communicates its feelings to others. When angry, it rotates faster.
 5120
@@ -51959,7 +51959,7 @@ STEEL NO_TYPE
 NONE
 0
 -1
-CLEAR_BODY NO_ABILITY
+CLEAR_BODY
 Gear
 24 178.6 Its red core functions as an energy tank. It fires the charged energy through its spikes into an area.
 5120
@@ -52032,7 +52032,7 @@ ELECTRIC NO_TYPE
 LEVEL EELEKTRIK 39
 0
 4
-LEVITATE NO_ABILITY
+LEVITATE
 EleFish
 8 0.7 While one alone doesn't have much power, a chain of many Tynamo can be as powerful as lightning.
 5120
@@ -52058,7 +52058,7 @@ ELECTRIC NO_TYPE
 ITEM EELEKTROSS THUNDER_STONE
 0
 4
-LEVITATE NO_ABILITY
+LEVITATE
 EleFish
 47 48.5 They coil around foes and shock them with electricity-generating organs that seem simply to be circular patterns.
 5120
@@ -52128,7 +52128,7 @@ ELECTRIC NO_TYPE
 NONE
 0
 4
-LEVITATE NO_ABILITY
+LEVITATE
 EleFish
 83 177.5 They crawl out of the ocean using their arms. They will attack prey on shore and immediately drag it into the ocean.
 5120
@@ -52408,7 +52408,7 @@ GHOST FIRE
 LEVEL LAMPENT 41
 0
 4
-FLASH_FIRE FLAME_BODY
+FLASH_FIRE FLAME_BODY INFILTRATOR
 Candle
 12 6.8 Litwick shines a light that absorbs the life energy of people and Pok\u00e9mon, which becomes the fuel that it burns.
 5120
@@ -52491,7 +52491,7 @@ GHOST FIRE
 ITEM CHANDELURE DUSK_STONE
 0
 4
-FLASH_FIRE FLAME_BODY
+FLASH_FIRE FLAME_BODY INFILTRATOR
 Lamp
 24 28.7 This ominous Pok\u00e9mon is feared. Through cities it wanders, searching for the spirits of the fallen.
 5120
@@ -52576,7 +52576,7 @@ GHOST FIRE
 NONE
 0
 4
-FLASH_FIRE FLAME_BODY
+FLASH_FIRE FLAME_BODY INFILTRATOR
 Luring
 39 75.6 It absorbs a spirit, which it then burns. By waving the flames on its arms, it puts its foes into a hypnotic trance.
 5120
@@ -52650,7 +52650,7 @@ DRAGON NO_TYPE
 LEVEL FRAXURE 38
 0
 4
-RIVALRY MOLD_BREAKER
+RIVALRY MOLD_BREAKER UNNERVE
 Tusk
 24 39.7 They use their tusks to crush the berries they eat. Repeated regrowth makes their tusks strong and sharp.
 10240
@@ -52731,7 +52731,7 @@ DRAGON NO_TYPE
 LEVEL HAXORUS 48
 0
 4
-RIVALRY MOLD_BREAKER
+RIVALRY MOLD_BREAKER UNNERVE
 Axe Jaw
 39 79.4 Since a broken tusk will not grow back, they diligently sharpen their tusks on river rocks after they've been fighting.
 10240
@@ -52819,7 +52819,7 @@ DRAGON NO_TYPE
 NONE
 0
 4
-RIVALRY MOLD_BREAKER
+RIVALRY MOLD_BREAKER UNNERVE
 Axe Jaw
 71 232.6 They are kind but can be relentless when defending territory. They challenge foes with tusks that can cut steel.
 10240
@@ -52919,7 +52919,7 @@ LEVEL BEARTIC 37
 1
 50 ASPEAR_BERRY
 4
-SNOW_CLOAK SLUSH_RUSH
+SNOW_CLOAK SLUSH_RUSH RATTLED
 Chill
 20 18.7 When it is not feeling well, its mucus gets watery and the power of its Ice-type moves decreases.
 5120
@@ -52996,7 +52996,7 @@ NONE
 1
 50 ASPEAR_BERRY
 4
-SNOW_CLOAK SLUSH_RUSH
+SNOW_CLOAK SLUSH_RUSH SWIFT_SWIM
 Freezing
 102 573.2 It can make its breath freeze at will. Very able in the water, it swims around in northern seas and catches prey.
 5120
@@ -53093,7 +53093,7 @@ NONE
 1
 5 NEVER_MELT_ICE
 -1
-LEVITATE NO_ABILITY
+LEVITATE
 Crystallizing
 43 326.3 When its body temperature goes up, it turns into steam and vanishes. When its temperature lowers, it returns to ice.
 6400
@@ -53170,7 +53170,7 @@ BUG NO_TYPE
 ITEM ACCELGOR SHED_SHELL
 0
 4
-HYDRATION SHELL_ARMOR
+HYDRATION SHELL_ARMOR OVERCOAT
 Snail
 16 17.0 When attacked, it defends itself by closing the lid of its shell. It can spit a sticky, poisonous liquid.
 3840
@@ -53238,7 +53238,7 @@ BUG NO_TYPE
 NONE
 0
 4
-HYDRATION STICKY_HOLD
+HYDRATION STICKY_HOLD UNBURDEN
 Shell Out
 31 55.8 When its body dries out, it weakens. So, to prevent dehydration, it wraps itself in many layers of thin membrane.
 3840
@@ -53320,7 +53320,7 @@ NONE
 1
 5 SOFT_SAND
 4
-STATIC LIMBER
+STATIC LIMBER SAND_VEIL
 Trap
 28 24.3 Its skin is very hard, so it is unhurt even if stepped on by sumo wrestlers. It smiles when transmitting electricity.
 5120
@@ -53413,7 +53413,7 @@ FIGHTING NO_TYPE
 LEVEL MIENSHAO 50
 0
 4
-INNER_FOCUS REGENERATOR
+INNER_FOCUS REGENERATOR RECKLESS
 Martial Arts
 35 44.1 In fights, they dominate with onslaughts of flowing, continuous attacks. With their sharp claws, they cut enemies.
 6400
@@ -53498,7 +53498,7 @@ FIGHTING NO_TYPE
 NONE
 0
 4
-INNER_FOCUS REGENERATOR
+INNER_FOCUS REGENERATOR RECKLESS
 Martial Arts
 55 78.3 It wields the fur on its arms like a whip. Its arm attacks come with such rapidity that they cannot even be seen.
 6400
@@ -53592,7 +53592,7 @@ NONE
 1
 5 DRAGON_FANG
 4
-ROUGH_SKIN SHEER_FORCE
+ROUGH_SKIN SHEER_FORCE MOLD_BREAKER
 Cave
 63 306.4 It warms its body by absorbing sunlight with its wings. When its body temperature falls, it can no longer move.
 7680
@@ -53693,7 +53693,7 @@ LEVEL GOLURK 43
 1
 5 LIGHT_CLAY
 -1
-IRON_FIST KLUTZ
+IRON_FIST KLUTZ NO_GUARD
 Automaton
 39 202.8 The energy that burns inside it enables it to move, but no one has yet been able to identify this energy.
 6400
@@ -53775,7 +53775,7 @@ NONE
 1
 5 LIGHT_CLAY
 -1
-IRON_FIST KLUTZ
+IRON_FIST KLUTZ NO_GUARD
 Automaton
 110 727.5 It flies across the sky at Mach speeds. Removing the seal on its chest makes its internal energy go out of control.
 6400
@@ -53870,7 +53870,7 @@ DARK STEEL
 LEVEL BISHARP 52
 0
 4
-DEFIANT INNER_FOCUS
+DEFIANT INNER_FOCUS PRESSURE
 Sharp Blade
 20 22.5 Blades comprise this Pok\u00e9mon's entire body. If battling dulls the blades, it sharpens them on stones by the river.
 5120
@@ -53959,7 +53959,7 @@ DARK STEEL
 NONE
 0
 4
-DEFIANT INNER_FOCUS
+DEFIANT INNER_FOCUS PRESSURE
 Sword Blade
 63 154.3 It leads a group of Pawniard. It battles to become the boss, but will be driven from the group if it loses.
 5120
@@ -54060,7 +54060,7 @@ NORMAL NO_TYPE
 NONE
 0
 4
-RECKLESS SAP_SIPPER
+RECKLESS SAP_SIPPER SOUNDPROOF
 Bash Buffalo
 63 208.6 Their fluffy fur absorbs damage, even if they strike foes with a fierce headbutt.
 5120
@@ -54140,7 +54140,7 @@ NORMAL FLYING
 LEVEL BRAVIARY 54
 0
 0
-KEEN_EYE SHEER_FORCE
+KEEN_EYE SHEER_FORCE HUSTLE
 Eaglet
 20 23.1 They crush berries with their talons. They bravely stand up to any opponent, no matter how strong it is.
 5120
@@ -54205,7 +54205,7 @@ NORMAL FLYING
 NONE
 0
 0
-KEEN_EYE SHEER_FORCE
+KEEN_EYE SHEER_FORCE DEFIANT
 Valiant
 59 90.4 They fight for their friends without any thought about danger to themselves. One can carry a car while flying.
 5120
@@ -54281,7 +54281,7 @@ DARK FLYING
 LEVEL MANDIBUZZ 54
 0
 8
-BIG_PECKS OVERCOAT
+BIG_PECKS OVERCOAT WEAK_ARMOR
 Diapered
 20 19.8 Its wings are too tiny to allow it to fly. As the time approaches for it to evolve, it discards the bones it was wearing.
 5120
@@ -54360,7 +54360,7 @@ DARK FLYING
 NONE
 0
 8
-BIG_PECKS OVERCOAT
+BIG_PECKS OVERCOAT WEAK_ARMOR
 Bone Vulture
 47 87.1 It makes a nest out of bones it finds. It grabs weakened prey in its talons and hauls it to its nest of bones.
 5120
@@ -54450,7 +54450,7 @@ NONE
 1
 1 FLAME_ORB
 4
-GLUTTONY FLASH_FIRE
+GLUTTONY FLASH_FIRE WHITE_SMOKE
 Anteater
 55 127.9 It breathes through a hole in its tail while it burns with an internal fire. Durant is its prey.
 5120
@@ -54543,7 +54543,7 @@ BUG STEEL
 NONE
 0
 4
-SWARM HUSTLE
+SWARM HUSTLE TRUANT
 Iron Ant
 12 72.8 They attack in groups, covering themselves in steel armor to protect themselves from Heatmor.
 5120
@@ -54615,7 +54615,7 @@ DARK DRAGON
 LEVEL ZWEILOUS 50
 0
 4
-HUSTLE NO_ABILITY
+HUSTLE
 Irate
 31 38.1 It tends to bite everything, and it is not a picky eater. Approaching it carelessly is dangerous.
 10240
@@ -54696,7 +54696,7 @@ DARK DRAGON
 LEVEL HYDREIGON 64
 0
 4
-HUSTLE NO_ABILITY
+HUSTLE
 Hostile
 55 110.2 After it has eaten up all the food in its territory, it moves to another area. Its two heads do not get along.
 10240
@@ -54779,7 +54779,7 @@ DARK DRAGON
 NONE
 0
 4
-LEVITATE NO_ABILITY
+LEVITATE
 Brutal
 71 352.7 This brutal Pok\u00e9mon travels the skies on its six wings. Anything that moves seems like a foe to it, triggering its attack.
 10240
@@ -55055,7 +55055,7 @@ STEEL FIGHTING
 NONE
 0
 -1
-JUSTIFIED NO_ABILITY
+JUSTIFIED
 Iron Will
 83 551.1 This legendary Pok\u00e9mon battled against humans to protect Pok\u00e9mon. Its personality is calm and composed.
 20480
@@ -55132,7 +55132,7 @@ ROCK FIGHTING
 NONE
 0
 -1
-JUSTIFIED NO_ABILITY
+JUSTIFIED
 Cavern
 75 573.2 This Pok\u00e9mon came to the defense of Pok\u00e9mon that had lost their homes in a war among humans.
 20480
@@ -55209,7 +55209,7 @@ GRASS FIGHTING
 NONE
 0
 -1
-JUSTIFIED NO_ABILITY
+JUSTIFIED
 Grassland
 79 440.9 This Pok\u00e9mon fought humans in order to protect its friends. Legends about it continue to be passed down.
 20480
@@ -55464,7 +55464,7 @@ DRAGON FIRE
 NONE
 0
 -1
-TURBOBLAZE NO_ABILITY
+TURBOBLAZE
 Vast White
 126 727.5 This Pok\u00e9mon appears in legends. It sends flames into the air from its tail, burning up everything around it.
 30720
@@ -55549,7 +55549,7 @@ DRAGON ELECTRIC
 NONE
 0
 -1
-TERAVOLT NO_ABILITY
+TERAVOLT
 Deep Black
 114 760.6 Concealing itself in lightning clouds, it flies throughout the Unova region. It creates electricity in its tail.
 30720
@@ -55725,7 +55725,7 @@ DRAGON ICE
 NONE
 0
 -1
-PRESSURE NO_ABILITY
+PRESSURE
 Boundary
 118 716.5 It generates a powerful, freezing energy inside itself, but its body became frozen when the energy leaked out.
 30720
@@ -55809,7 +55809,7 @@ WATER FIGHTING
 NONE
 0
 -1
-JUSTIFIED NO_ABILITY
+JUSTIFIED
 Colt
 55 106.9 By blasting water from its hooves, it can glide across water. It excels at using leg moves while battling.
 20480
@@ -55888,7 +55888,7 @@ NONE
 1
 100 STAR_PIECE
 -1
-SERENE_GRACE NO_ABILITY
+SERENE_GRACE
 Melody
 24 14.3 Its melodies are sung with a special vocalization method that can control the feelings of those who hear it.
 30720
@@ -55997,7 +55997,7 @@ BUG STEEL
 NONE
 0
 -1
-DOWNLOAD NO_ABILITY
+DOWNLOAD
 Paleozoic
 59 181.9 Over 300 million years ago, it was feared as the strongest of hunters. It has been modified by Team Plasma.
 30720
@@ -56943,7 +56943,7 @@ NORMAL NO_TYPE
 LEVEL DIGGERSBY 20
 0
 4
-PICKUP CHEEK_POUCH
+PICKUP CHEEK_POUCH HUGE_POWER
 Digging
 16 11.0 It has ears like shovels. Digging holes strengthens its ears so much that they can sever thick roots effortlessly.
 3840
@@ -57021,7 +57021,7 @@ NORMAL GROUND
 NONE
 0
 4
-PICKUP CHEEK_POUCH
+PICKUP CHEEK_POUCH HUGE_POWER
 Digging
 39 93.5 As powerful as an excavator, its ears can reduce dense bedrock to rubble. When it's finished digging, it lounges lazily.
 3840
@@ -57364,7 +57364,7 @@ BUG NO_TYPE
 LEVEL VIVILLON 12
 0
 4
-SHED_SKIN NO_ABILITY
+SHED_SKIN
 Scatterdust
 12 18.5 The beaks of bird Pok\u00e9mon can't begin to scratch its stalwart body. To defend itself, it spews powder.
 3840
@@ -57468,7 +57468,7 @@ FIRE NORMAL
 LEVEL PYROAR 35
 0
 7
-RIVALRY UNNERVE
+RIVALRY UNNERVE MOXIE
 Lion Cub
 24 29.8 They set off on their own from their pride and live by themselves to become stronger. These hot-blooded Pok\u00e9mon are quick to fight.
 5120
@@ -57543,7 +57543,7 @@ FIRE NORMAL
 NONE
 0
 7
-RIVALRY UNNERVE
+RIVALRY UNNERVE MOXIE
 Royal
 59 179.7 With fiery breath of more than 10,000 degrees Fahrenheit, they viciously threaten any challenger. The females protect the pride's cubs.
 5120
@@ -57624,7 +57624,7 @@ FAIRY GRASS
 LEVEL FLOETTE 19
 0
 8
-FLOWER_VEIL NO_ABILITY
+FLOWER_VEIL
 Single Bloom
 4 0.2 When it finds a flower it likes, it dwells on that flower its whole life long. It floats in the wind's embrace with an untroubled heart.
 5120
@@ -57693,7 +57693,7 @@ FAIRY GRASS
 ITEM FLORGES SHINY_STONE
 0
 8
-FLOWER_VEIL NO_ABILITY
+FLOWER_VEIL
 Single Bloom
 8 2.0 When the flowers of a well-tended flower bed bloom, it appears and celebrates with an elegant dance.
 5120
@@ -57763,7 +57763,7 @@ FAIRY GRASS
 NONE
 0
 8
-FLOWER_VEIL NO_ABILITY
+FLOWER_VEIL
 Garden
 43 22.0 In times long past, governors of castles would invite Florges to create flower gardens to embellish the castle domains.
 5120
@@ -57992,7 +57992,7 @@ TYPE_PARTY DARK LEVEL PANGORO 32
 1
 5 MENTAL_HERB
 4
-IRON_FIST MOLD_BREAKER
+IRON_FIST MOLD_BREAKER SCRAPPY
 Playful
 24 17.6 It does its level best to glare and pull a scary face, but it can't help grinning if anyone pats its head.
 6400
@@ -58087,7 +58087,7 @@ NONE
 1
 5 MENTAL_HERB
 4
-IRON_FIST MOLD_BREAKER
+IRON_FIST MOLD_BREAKER SCRAPPY
 Daunting
 83 299.8 It charges ahead and bashes its opponents like a berserker, uncaring about any hits it might take. Its arms are mighty enough to snap a telephone pole.
 6400
@@ -58206,7 +58206,7 @@ NORMAL NO_TYPE
 NONE
 0
 4
-FUR_COAT NO_ABILITY
+FUR_COAT
 Poodle
 47 61.7 Historically, in the Kalos region, these Pok\u00e9mon were the designated guardians of the king.
 5120
@@ -58277,7 +58277,7 @@ PSYCHIC NO_TYPE
 LEVEL MEOWSTIC 25
 0
 4
-KEEN_EYE INFILTRATOR
+KEEN_EYE INFILTRATOR OWN_TEMPO
 Restraint
 12 7.7 It has enough psychic energy to blast everything within 300 feet of itself, but it has no control over its power.
 5120
@@ -58358,7 +58358,7 @@ PSYCHIC NO_TYPE
 NONE
 0
 4
-KEEN_EYE INFILTRATOR
+KEEN_EYE INFILTRATOR PRANKSTER
 Constraint
 24 18.7 The eyeball patterns on the interior of its ears emit psychic energy. It keeps the patterns tightly covered because that power is too immense.
 5120
@@ -58455,7 +58455,7 @@ STEEL GHOST
 LEVEL DOUBLADE 35
 0
 4
-NO_GUARD NO_ABILITY
+NO_GUARD
 Sword
 31 4.4 If anyone dares to grab its hilt, it wraps a blue cloth around that person's arm and drains that person's life energy completely.
 5120
@@ -58521,7 +58521,7 @@ STEEL GHOST
 ITEM AEGISLASH DUSK_STONE
 0
 4
-NO_GUARD NO_ABILITY
+NO_GUARD
 Sword
 31 9.9 The complex attack patterns of its two swords are unstoppable, even for an opponent greatly accomplished at swordplay.
 5120
@@ -58588,7 +58588,7 @@ STEEL GHOST
 NONE
 0
 4
-STANCE_CHANGE NO_ABILITY
+STANCE_CHANGE
 Royal Sword
 67 116.8 Apparently, it can detect innate qualities of leadership. According to legend, whoever it recognizes is destined to become king.
 5120
@@ -58973,7 +58973,7 @@ DARK PSYCHIC
 LEVEL MALAMAR 30
 0
 4
-CONTRARY SUCTION_CUPS
+CONTRARY SUCTION_CUPS INFILTRATOR
 Revolving
 16 7.7 It flashes the light-emitting spots on its body, which drains its opponent's will to fight. It takes the opportunity to scuttle away and hide.
 5120
@@ -59056,7 +59056,7 @@ DARK PSYCHIC
 NONE
 0
 4
-CONTRARY SUCTION_CUPS
+CONTRARY SUCTION_CUPS INFILTRATOR
 Overturning
 59 103.6 It lures its prey close with hypnotic motions, then wraps its tentacles around it before finishing it off with digestive fluids.
 5120
@@ -59148,7 +59148,7 @@ ROCK WATER
 LEVEL BARBARACLE 39
 0
 4
-TOUGH_CLAWS SNIPER
+TOUGH_CLAWS SNIPER PICKPOCKET
 Two-Handed
 20 68.3 They stretch and then contract, yanking their rocks along with them in bold hops. They eat  seaweed that washes up on the shoreline.
 5120
@@ -59238,7 +59238,7 @@ ROCK WATER
 NONE
 0
 4
-TOUGH_CLAWS SNIPER
+TOUGH_CLAWS SNIPER PICKPOCKET
 Collective
 51 211.6 Barbaracle's legs and hands have minds of their own, and they will move independently. But they usually follow the head's orders.
 5120
@@ -59343,7 +59343,7 @@ POISON WATER
 LEVEL DRAGALGE 48
 0
 4
-POISON_POINT POISON_TOUCH
+POISON_POINT POISON_TOUCH ADAPTABILITY
 Mock Kelp
 20 16.1 It looks just like rotten kelp. It hides from foes while storing up power for its evolution.
 5120
@@ -59415,7 +59415,7 @@ POISON DRAGON
 NONE
 0
 4
-POISON_POINT POISON_TOUCH
+POISON_POINT POISON_TOUCH ADAPTABILITY
 Mock Kelp
 71 179.7 Tales are told of ships that wander into seas where Dragalge live, never to return.
 5120
@@ -59497,7 +59497,7 @@ WATER NO_TYPE
 LEVEL CLAWITZER 37
 0
 4
-MEGA_LAUNCHER NO_ABILITY
+MEGA_LAUNCHER
 Water Gun
 20 18.3 Through controlled explosions of internal gas, it can expel water like a pistol shot. At close distances, it can shatter rock.
 3840
@@ -59565,7 +59565,7 @@ WATER NO_TYPE
 NONE
 0
 4
-MEGA_LAUNCHER NO_ABILITY
+MEGA_LAUNCHER
 Howitzer
 51 77.8 By expelling water from the nozzle in the back of its claw, it can move at a speed of 60 knots.
 3840
@@ -59646,7 +59646,7 @@ ELECTRIC NORMAL
 ITEM HELIOLISK SUN_STONE
 0
 4
-DRY_SKIN SAND_VEIL
+DRY_SKIN SAND_VEIL SOLAR_POWER
 Generator
 20 13.2 The frills on either side of its head have cells that generate electricity when exposed to sunlight.
 5120
@@ -59719,7 +59719,7 @@ ELECTRIC NORMAL
 NONE
 0
 4
-DRY_SKIN SAND_VEIL
+DRY_SKIN SAND_VEIL SOLAR_POWER
 Generator
 39 46.3 It stimulates its muscles with electricity, boosting the strength in its legs and enabling it to run 100 yards in five seconds.
 5120
@@ -60246,7 +60246,7 @@ NONE
 1
 5 KINGS_ROCK
 4
-LIMBER UNBURDEN
+LIMBER UNBURDEN MOLD_BREAKER
 Wrestling
 31 47.4 With its wings, it controls its position in the air. It likes to attack from above, a maneuver that is difficult to defend against.
 5120
@@ -60518,7 +60518,7 @@ LEVEL SLIGGOO 40
 1
 5 SHED_SHELL
 4
-SAP_SIPPER HYDRATION
+SAP_SIPPER HYDRATION GOOEY
 Soft Tissue
 12 6.2 It's covered in a slimy membrane that makes any punches or kicks slide off it harmlessly.
 10240
@@ -60581,7 +60581,7 @@ LEVEL GOODRA 50
 1
 5 SHED_SHELL
 4
-SAP_SIPPER HYDRATION
+SAP_SIPPER HYDRATION GOOEY
 Soft Tissue
 31 38.6 Its four horns are a high-performance radar system. It uses them to sense sounds and smells, rather than using ears or a nose.
 10240
@@ -60647,7 +60647,7 @@ NONE
 1
 5 SHED_SHELL
 4
-SAP_SIPPER HYDRATION
+SAP_SIPPER HYDRATION GOOEY
 Dragon
 79 331.8 It attacks with retractable horns. It throws a punch that's the equivalent of the force of a hundred pro boxers.
 10240
@@ -60814,7 +60814,7 @@ ITEM TREVENANT BIG_ROOT
 1
 5 BIG_ROOT
 4
-NATURAL_CURE FRISK
+NATURAL_CURE FRISK HARVEST
 Stump
 16 15.4 According to old tales, these Pok\u00e9mon are stumps possessed by the spirits of children who died while lost in the forest.
 5120
@@ -60895,7 +60895,7 @@ NONE
 1
 5 BIG_ROOT
 4
-NATURAL_CURE FRISK
+NATURAL_CURE FRISK HARVEST
 Elder Tree
 59 156.5 Using its roots as a nervous system, it controls the trees in the forest. It's kind to the Pok\u00e9mon that reside in its body.
 5120
@@ -60989,7 +60989,7 @@ ITEM GOURGEIST MIRACLE_SEED
 1
 5 MIRACLE_SEED
 4
-PICKUP FRISK
+PICKUP FRISK INSOMNIA
 Pumpkin
 16 11.0 It is said to carry wandering spirits to the place where they belong so they can move on.
 5120
@@ -61074,7 +61074,7 @@ NONE
 1
 5 MIRACLE_SEED
 4
-PICKUP FRISK
+PICKUP FRISK INSOMNIA
 Pumpkin
 35 27.6 It enwraps its prey in its hairlike arms. It sings joyfully as it observes the suffering of its prey.
 5120
@@ -61169,7 +61169,7 @@ LEVEL AVALUGG 37
 5 NEVER_MELT_ICE
 1 ICY_ROCK
 4
-OWN_TEMPO ICE_BODY
+OWN_TEMPO ICE_BODY STURDY
 Ice Chunk
 39 219.4 Using air of -150 degrees Fahrenheit, they freeze opponents solid. They live in herds above the snow line on mountains.
 5120
@@ -61238,7 +61238,7 @@ NONE
 5 NEVER_MELT_ICE
 1 ICY_ROCK
 4
-OWN_TEMPO ICE_BODY
+OWN_TEMPO ICE_BODY STURDY
 Iceberg
 79 1113.3 The way several Bergmite huddle on its back makes it look like an aircraft carrier made of ice.
 5120
@@ -61506,7 +61506,7 @@ FAIRY NO_TYPE
 NONE
 0
 -1
-FAIRY_AURA NO_ABILITY
+FAIRY_AURA
 Life
 118 474.0 When the horns on its head shine in seven colors, it is said to be sharing everlasting life.
 30720
@@ -61586,7 +61586,7 @@ DARK FLYING
 NONE
 0
 -1
-DARK_AURA NO_ABILITY
+DARK_AURA
 Destruction
 228 447.5 When its life comes to an end, it absorbs the life energy of every living thing and turns into a cocoon once more.
 30720
@@ -61669,7 +61669,7 @@ DRAGON GROUND
 NONE
 0
 -1
-AURA_BREAK NO_ABILITY
+AURA_BREAK
 Order
 197 672.4 It's hypothesized that it's monitoring those who destroy the ecosystem from deep in the cave where it lives.
 30720
@@ -61744,7 +61744,7 @@ ROCK FAIRY
 NONE
 0
 -1
-CLEAR_BODY NO_ABILITY
+CLEAR_BODY
 Jewel
 28 19.4 It can instantly create many diamonds by compressing the carbon in the air between its hands.
 6400
@@ -61827,7 +61827,7 @@ PSYCHIC GHOST
 NONE
 0
 -1
-MAGICIAN NO_ABILITY
+MAGICIAN
 Mischief
 20 19.8 It gathers things it likes and pushes them through its loop to teleport them to a secret place.
 30720
@@ -61932,7 +61932,7 @@ FIRE WATER
 NONE
 0
 -1
-WATER_ABSORB NO_ABILITY
+WATER_ABSORB
 Steam
 67 429.9 It expels its internal steam from the arms on its back. It has enough power to blow away a mountain.
 30720
@@ -62769,7 +62769,7 @@ LEVEL TRUMBEAK 14
 1
 5 ORAN_BERRY
 4
-KEEN_EYE SKILL_LINK
+KEEN_EYE SKILL_LINK PICKUP
 Woodpecker
 12 2.6 It can peck at a rate of 16 times a second to drill holes in trees. It uses the holes for food storage and for nesting.
 3840
@@ -62840,7 +62840,7 @@ LEVEL TOUCANNON 28
 1
 5 SITRUS_BERRY
 4
-KEEN_EYE SKILL_LINK
+KEEN_EYE SKILL_LINK PICKUP
 Bugle Beak
 24 32.6 It eats berries and stores their seeds in its beak. When it encounters enemies or prey, it fires off all the seeds in a burst.
 3840
@@ -62915,7 +62915,7 @@ NONE
 1
 5 RAWST_BERRY
 4
-KEEN_EYE SKILL_LINK
+KEEN_EYE SKILL_LINK SHEER_FORCE
 Cannon
 43 57.3 When it battles, its beak heats up. The temperature can easily exceed 212 degrees Fahrenheit, causing severe burns when it hits.
 3840
@@ -62994,7 +62994,7 @@ TIME DAY LEVEL GUMSHOOS 20
 1
 5 PECHA_BERRY
 4
-STAKEOUT STRONG_JAW
+STAKEOUT STRONG_JAW ADAPTABILITY
 Loitering
 16 13.2 With its sharp fangs, it will bite anything. It did not originally live in Alola but was imported from another region.
 3840
@@ -63065,7 +63065,7 @@ NONE
 1
 5 PECHA_BERRY
 4
-STAKEOUT STRONG_JAW
+STAKEOUT STRONG_JAW ADAPTABILITY
 Stakeout
 28 31.3 When it finds a trace of its prey, it patiently stakes out the location...but it's always snoozing by nightfall.
 3840
@@ -63148,7 +63148,7 @@ BUG NO_TYPE
 LEVEL CHARJABUG 20
 0
 4
-SWARM NO_ABILITY
+SWARM
 Larva
 16 9.7 Its strong jaw enables it to scrape trees and slurp out the sap. It normally lives underground.
 3840
@@ -63209,7 +63209,7 @@ ITEM VIKAVOLT THUNDER_STONE
 1
 5 CELL_BATTERY
 4
-BATTERY NO_ABILITY
+BATTERY
 Battery
 20 23.1 Its body is capable of storing electricity. On camping trips, people are grateful to have one around.
 3840
@@ -63276,7 +63276,7 @@ BUG ELECTRIC
 NONE
 0
 4
-LEVITATE NO_ABILITY
+LEVITATE
 Stag Beetle
 59 99.2 It zips around, on sharp lookout for an opening. It concentrates electrical energy within its large jaws and uses it to zap its enemies.
 3840
@@ -63357,7 +63357,7 @@ ITEM CRABOMINABLE ICE_STONE
 1
 5 ASPEAR_BERRY
 4
-HYPER_CUTTER IRON_FIST
+HYPER_CUTTER IRON_FIST ANGER_POINT
 Boxing
 24 15.4 While guarding its weak points with its pincers, it looks for an opening and unleashes punches. When it loses, it foams at the mouth and faints.
 5120
@@ -63433,7 +63433,7 @@ NONE
 1
 5 CHERI_BERRY
 4
-HYPER_CUTTER IRON_FIST
+HYPER_CUTTER IRON_FIST ANGER_POINT
 Woolly Crab
 67 396.8 It aimed for the top but got lost and ended up on a snowy mountain. Being forced to endure the cold, this Pok\u00e9mon evolved and grew fur.
 5120
@@ -63519,7 +63519,7 @@ NONE
 1
 5 HONEY
 6
-DANCER NO_ABILITY
+DANCER
 Dancing
 24 7.5 It beats its wings together to create fire. As it moves in the steps of its beautiful dance, it bathes opponents in intense flames.
 5120
@@ -63591,7 +63591,7 @@ LEVEL RIBOMBEE 25
 1
 5 HONEY
 4
-HONEY_GATHER SHIELD_DUST
+HONEY_GATHER SHIELD_DUST SWEET_VEIL
 Bee Fly
 4 0.4 It feeds on the nectar and pollen of flowers. Because it's able to sense auras, it can identify which flowers are about to bloom.
 5120
@@ -63671,7 +63671,7 @@ NONE
 1
 5 HONEY
 4
-HONEY_GATHER SHIELD_DUST
+HONEY_GATHER SHIELD_DUST SWEET_VEIL
 Bee Fly
 8 1.1 It rolls up pollen into puffs. It makes many different varieties, some used as food and others used in battle.
 5120
@@ -63759,7 +63759,7 @@ TIME NIGHT LEVEL LOUGAROC 25
 TIME DUSK LEVEL LUGARUGAN 25
 0
 4
-KEEN_EYE VITAL_SPIRIT
+KEEN_EYE VITAL_SPIRIT STEADFAST
 Puppy
 20 20.3 It's considered to be a good Pok\u00e9mon for beginners because of its friendliness, but its disposition grows rougher as it grows up.
 3840
@@ -63830,7 +63830,7 @@ ROCK NO_TYPE
 NONE
 0
 4
-KEEN_EYE SAND_RUSH
+KEEN_EYE SAND_RUSH STEADFAST
 Wolf
 31 55.1 Its quick movements confuse its enemies. Well equipped with claws and fangs, it also uses the sharp rocks in its mane as weapons.
 3840
@@ -63910,7 +63910,7 @@ WATER NO_TYPE
 NONE
 0
 4
-SCHOOLING NO_ABILITY
+SCHOOLING
 Small Fry
 8 0.7 When it's in trouble, its eyes moisten and begin to shine. The shining light attracts its comrades, and they stand together against their enemies.
 3840
@@ -63977,7 +63977,7 @@ LEVEL TOXAPEX 38
 1
 5 POISON_BARB
 4
-MERCILESS LIMBER
+MERCILESS LIMBER REGENERATOR
 Brutal Star
 16 17.6 It plunges the poison spike on its head into its prey. When the prey has weakened, Mareanie deals the finishing blow with its 10 tentacles.
 5120
@@ -64053,7 +64053,7 @@ NONE
 1
 5 POISON_BARB
 4
-MERCILESS LIMBER
+MERCILESS LIMBER REGENERATOR
 Brutal Star
 28 32.0 Toxapex crawls along the ocean floor on its 12 legs. It leaves a trail of Corsola bits scattered in its wake.
 5120
@@ -64136,7 +64136,7 @@ LEVEL MUDSDALE 30
 1
 5 LIGHT_CLAY
 4
-OWN_TEMPO STAMINA
+OWN_TEMPO STAMINA INNER_FOCUS
 Donkey
 39 242.5 The mud stuck to Mudbray's hooves enhances its grip and its powerful running gait.
 5120
@@ -64204,7 +64204,7 @@ NONE
 1
 5 LIGHT_CLAY
 4
-OWN_TEMPO STAMINA
+OWN_TEMPO STAMINA INNER_FOCUS
 Draft Horse
 98 2028.2 It spits a mud that provides resistance to both wind and rain, so the walls of old houses were often coated with it.
 5120
@@ -64895,7 +64895,7 @@ NORMAL FIGHTING
 LEVEL BEWEAR 27
 0
 4
-FLUFFY KLUTZ
+FLUFFY KLUTZ CUTE_CHARM
 Flailing
 20 15.0 Despite its adorable appearance, when it gets angry and flails about, its arms and legs could knock a pro wrestler sprawling.
 3840
@@ -64973,7 +64973,7 @@ NORMAL FIGHTING
 NONE
 0
 4
-FLUFFY KLUTZ
+FLUFFY KLUTZ UNNERVE
 Strong Arm
 83 297.6 This immensely dangerous Pok\u00e9mon possesses overwhelming physical strength. Its habitat is generally off-limits.
 3840
@@ -65059,7 +65059,7 @@ LEVEL STEENEE 18
 1
 5 GRASSY_SEED
 8
-LEAF_GUARD OBLIVIOUS
+LEAF_GUARD OBLIVIOUS SWEET_VEIL
 Fruit
 12 7.1 A delectable aroma pours from its body. They are often swallowed whole by Toucannon lured by that wafting deliciousness.
 5120
@@ -65124,7 +65124,7 @@ MOVE TSAREENA STOMP
 1
 5 GRASSY_SEED
 8
-LEAF_GUARD OBLIVIOUS
+LEAF_GUARD OBLIVIOUS SWEET_VEIL
 Fruit
 28 18.1 The sepals on its head developed to protect its body. These are quite hard, so even if pecked by bird Pok\u00e9mon, this Pok\u00e9mon is totally fine.
 5120
@@ -65200,7 +65200,7 @@ NONE
 1
 50 GRASSY_SEED
 8
-LEAF_GUARD QUEENLY_MAJESTY
+LEAF_GUARD QUEENLY_MAJESTY SWEET_VEIL
 Fruit
 47 47.2 Its long, striking legs aren't just for show but to be used to kick with skill. In victory, it shows off by kicking the defeated, laughing boisterously.
 5120
@@ -65370,7 +65370,7 @@ NORMAL PSYCHIC
 NONE
 0
 4
-INNER_FOCUS NO_ABILITY
+INNER_FOCUS
 Sage
 59 167.5 Known for its extreme intelligence, this Pok\u00e9mon will look down on inexperienced Trainers, so it's best suited to veteran Trainers.
 5120
@@ -65462,7 +65462,7 @@ FIGHTING NO_TYPE
 NONE
 0
 4
-DEFIANT NO_ABILITY
+DEFIANT
 Teamwork
 79 182.5 They form groups of roughly 20 individuals. Their mutual bond is remarkable--they will never let down a comrade.
 5120
@@ -65556,7 +65556,7 @@ BUG WATER
 LEVEL GOLISOPOD 30
 0
 4
-WIMP_OUT NO_ABILITY
+WIMP_OUT
 Turn Tail
 20 26.5 This Pok\u00e9mon is a coward. As it desperately dashes off, the flailing of its many legs leaves a sparkling clean path in its wake.
 5120
@@ -65601,7 +65601,7 @@ BUG WATER
 NONE
 0
 4
-EMERGENCY_EXIT NO_ABILITY
+EMERGENCY_EXIT
 Hard Scale
 79 238.1 With a flashing slash of its giant sharp claws, it cleaves seawater--or even air--right in two.
 5120
@@ -65919,7 +65919,7 @@ NORMAL NO_TYPE
 ITEM SILVALLY UP_GRADE
 0
 -1
-BATTLE_ARMOR NO_ABILITY
+BATTLE_ARMOR
 Synthetic
 75 265.7 The heavy control mask it wears suppresses its intrinsic capabilities. This Pok\u00e9mon has some hidden special power.
 30720
@@ -65991,7 +65991,7 @@ NORMAL NO_TYPE
 NONE
 0
 -1
-RKS_SYSTEM NO_ABILITY
+RKS_SYSTEM
 Synthetic
 91 221.6 Its trust in its partner is what awakens it. This Pok\u00e9mon is capable of changing its type, a flexibility that is well displayed in battle.
 30720
@@ -66093,7 +66093,7 @@ NONE
 1
 5 STAR_PIECE
 -1
-SHIELDS_DOWN NO_ABILITY
+SHIELDS_DOWN
 Meteor
 12 88.2 Originally making its home in the ozone layer, it hurtles to the ground when the shell enclosing its body grows too heavy.
 6400
@@ -66170,7 +66170,7 @@ NORMAL NO_TYPE
 NONE
 0
 4
-COMATOSE NO_ABILITY
+COMATOSE
 Drowsing
 16 43.9 It is born asleep, and it dies asleep. All its movements are apparently no more than the results of it tossing and turning in its dreams.
 5120
@@ -66241,7 +66241,7 @@ NONE
 1
 5 CHARCOAL
 4
-SHELL_ARMOR NO_ABILITY
+SHELL_ARMOR
 Blast Turtle
 79 467.4 The shell on its back is chemically unstable and explodes violently if struck. The hole in its stomach is its weak point.
 5120
@@ -66333,7 +66333,7 @@ NONE
 1
 5 ELECTRIC_SEED
 4
-IRON_BARBS LIGHTNING_ROD
+IRON_BARBS LIGHTNING_ROD STURDY
 Roly-Poly
 12 7.3 The spiny fur on its back is normally at rest. When this Pok\u00e9mon becomes agitated, its fur stands on end and stabs into its attackers.
 2560
@@ -66419,7 +66419,7 @@ NONE
 1
 5 CHESTO_BERRY
 4
-DISGUISE NO_ABILITY
+DISGUISE
 Disguise
 8 1.5 Its actual appearance is unknown. A scholar who saw what was under its rag was overwhelmed by terror and died from the shock.
 5120
@@ -66509,7 +66509,7 @@ NONE
 1
 5 RAZOR_FANG
 4
-DAZZLING STRONG_JAW
+DAZZLING STRONG_JAW WONDER_SKIN
 Gnash Teeth
 35 41.9 When it unleashes its psychic power from the protuberance on its head, the grating sound of grinding teeth echoes through the area.
 3840
@@ -66594,7 +66594,7 @@ NONE
 1
 5 PERSIM_BERRY
 4
-BERSERK SAP_SIPPER
+BERSERK SAP_SIPPER CLOUD_NINE
 Placid
 118 407.9 It has a compassionate personality, but if it is angered, it completely destroys its surroundings with its intense breath.
 5120
@@ -66697,7 +66697,7 @@ GHOST GRASS
 NONE
 0
 -1
-STEELWORKER NO_ABILITY
+STEELWORKER
 Sea Creeper
 154 463.0 Swinging its massive anchor, it can KO Wailord in a single blow. What appears to be green seaweed is actually its body.
 6400
@@ -66781,7 +66781,7 @@ LEVEL HAKAMO_O 35
 1
 5 RAZOR_CLAW
 4
-BULLETPROOF SOUNDPROOF
+BULLETPROOF SOUNDPROOF OVERCOAT
 Scaly
 24 65.5 It expresses its feelings by smacking its scales. Metallic sounds echo through the tall mountains where Jangmo-o lives.
 10240
@@ -66862,7 +66862,7 @@ LEVEL KOMMO_O 45
 1
 5 RAZOR_CLAW
 4
-BULLETPROOF SOUNDPROOF
+BULLETPROOF SOUNDPROOF OVERCOAT
 Scaly
 47 103.6 It leaps at its prey with a courageous shout. Its scaly punches tear its opponents to shreds.
 10240
@@ -66952,7 +66952,7 @@ NONE
 1
 50 RAZOR_CLAW
 4
-BULLETPROOF SOUNDPROOF
+BULLETPROOF SOUNDPROOF OVERCOAT
 Scaly
 63 172.4 When it spots enemies, it threatens them by jingling the scales on its tail. Weak opponents will crack and flee in panic.
 10240
@@ -67061,7 +67061,7 @@ ELECTRIC FAIRY
 NONE
 0
 -1
-ELECTRIC_SURGE NO_ABILITY
+ELECTRIC_SURGE
 Land Spirit
 71 45.2 This guardian deity of Melemele is brimming with curiosity. It summons thunderclouds and stores their lightning inside its body.
 3840
@@ -67148,7 +67148,7 @@ PSYCHIC FAIRY
 NONE
 0
 -1
-PSYCHIC_SURGE NO_ABILITY
+PSYCHIC_SURGE
 Land Spirit
 47 41.0 This guardian deity of Akala is guilelessly cruel. The fragrant aroma of flowers is the source of its energy.
 3840
@@ -67227,7 +67227,7 @@ GRASS FAIRY
 NONE
 0
 -1
-GRASSY_SURGE NO_ABILITY
+GRASSY_SURGE
 Land Spirit
 75 100.3 It pulls large trees up by the roots and swings them around. It causes vegetation to grow, and then it absorbs energy from the growth.
 3840
@@ -67315,7 +67315,7 @@ WATER FAIRY
 NONE
 0
 -1
-MISTY_SURGE NO_ABILITY
+MISTY_SURGE
 Land Spirit
 51 46.7 The dense fog it creates brings the downfall and destruction of its confused enemies. Ocean currents are the source of its energy.
 3840
@@ -67397,7 +67397,7 @@ PSYCHIC NO_TYPE
 LEVEL COSMOEM 43
 0
 -1
-UNAWARE NO_ABILITY
+UNAWARE
 Nebula
 8 0.2 Its body is gaseous and frail. It slowly grows as it collects dust from the atmosphere.
 30720
@@ -67420,7 +67420,7 @@ TIME DAY LEVEL SOLGALEO 53
 TIME NIGHT LEVEL LUNALA 53
 0
 -1
-STURDY NO_ABILITY
+STURDY
 Protostar
 4 2204.4 Motionless as if dead, its body is faintly warm to the touch. In the distant past, it was called the cocoon of the stars.
 30720
@@ -67441,7 +67441,7 @@ PSYCHIC STEEL
 NONE
 0
 -1
-FULL_METAL_BODY NO_ABILITY
+FULL_METAL_BODY
 Sunne
 134 507.1 It is said to live in another world. The intense light it radiates from the surface of its body can make the darkest of nights light up like midday.
 30720
@@ -67530,7 +67530,7 @@ PSYCHIC GHOST
 NONE
 0
 -1
-SHADOW_SHIELD NO_ABILITY
+SHADOW_SHIELD
 Moone
 157 264.6 It is said to be a female evolution of Cosmog. When its third eye activates, away it flies to another world.
 30720
@@ -67622,7 +67622,7 @@ ROCK POISON
 NONE
 0
 -1
-BEAST_BOOST NO_ABILITY
+BEAST_BOOST
 Parasite
 47 122.4 One of several mysterious Ultra Beasts. People on the street report observing those infested by it suddenly becoming violent.
 30720
@@ -67705,7 +67705,7 @@ BUG FIGHTING
 NONE
 0
 -1
-BEAST_BOOST NO_ABILITY
+BEAST_BOOST
 Swollen
 94 735.5 This Ultra Beast appeared from another world. It shows off its body, but whether that display is a boast or a threat remains unclear.
 30720
@@ -67787,7 +67787,7 @@ BUG FIGHTING
 NONE
 0
 -1
-BEAST_BOOST NO_ABILITY
+BEAST_BOOST
 Lissome
 71 55.1 One of the dangerous Ultra Beasts, it has been spotted running across the land at terrific speeds.
 30720
@@ -67866,7 +67866,7 @@ ELECTRIC NO_TYPE
 NONE
 0
 -1
-BEAST_BOOST NO_ABILITY
+BEAST_BOOST
 Glowing
 150 220.5 One of the mysterious life-forms known as Ultra Beasts. Astonishing electric shocks emanate from its entire body, according to witnesses.
 30720
@@ -67943,7 +67943,7 @@ STEEL FLYING
 NONE
 0
 -1
-BEAST_BOOST NO_ABILITY
+BEAST_BOOST
 Launch
 362 2204.4 It appeared from the Ultra Wormhole. Witnesses observed it flying across the sky at high speed.
 30720
@@ -68023,7 +68023,7 @@ GRASS STEEL
 NONE
 0
 -1
-BEAST_BOOST NO_ABILITY
+BEAST_BOOST
 Drawn Sword
 12 0.2 This Ultra Beast came from the Ultra Wormhole. It seems not to attack enemies on its own, but its sharp body is a dangerous weapon in itself.
 30720
@@ -68088,7 +68088,7 @@ DARK DRAGON
 NONE
 0
 -1
-BEAST_BOOST NO_ABILITY
+BEAST_BOOST
 Junkivore
 217 1957.7 It has gobbled mountains and swallowed whole buildings, according to reports. It's one of the Ultra Beasts.
 30720
@@ -68174,7 +68174,7 @@ PSYCHIC NO_TYPE
 NONE
 0
 -1
-PRISM_ARMOR NO_ABILITY
+PRISM_ARMOR
 Prism
 94 507.1 Reminiscent of the Ultra Beasts, this life-form, apparently asleep underground, is thought to have come from another world in ancient times.
 30720
@@ -68269,7 +68269,7 @@ STEEL FAIRY
 NONE
 0
 -1
-SOUL_HEART NO_ABILITY
+SOUL_HEART
 Artificial
 39 177.5 This artificial Pok\u00e9mon, constructed more than 500 years ago, can understand human speech but cannot itself speak.
 30720
@@ -68348,7 +68348,7 @@ FIGHTING GHOST
 NONE
 0
 -1
-TECHNICIAN NO_ABILITY
+TECHNICIAN
 Gloomdweller
 28 48.9 Able to conceal itself in shadows, it never appears before humans, so its very existence was the stuff of myth.
 30720
@@ -68442,7 +68442,7 @@ POISON NO_TYPE
 MOVE NAGANADEL DRAGON_PULSE
 0
 -1
-BEAST_BOOST NO_ABILITY
+BEAST_BOOST
 Poison Pin
 24 4.0 This Ultra Beast is well enough liked to be chosen as a first partner in its own world.
 30720
@@ -68496,7 +68496,7 @@ POISON DRAGON
 NONE
 0
 -1
-BEAST_BOOST NO_ABILITY
+BEAST_BOOST
 Poison Pin
 142 330.7 It stores hundreds of liters of poisonous liquid inside its body. It is one of the organisms known as UBs.
 30720
@@ -68579,7 +68579,7 @@ ROCK STEEL
 NONE
 0
 -1
-BEAST_BOOST NO_ABILITY
+BEAST_BOOST
 Rampart
 217 1807.8 It appeared from an Ultra Wormhole. Each one appears to be made up of many life-forms stacked one on top of each other.
 30720
@@ -68654,7 +68654,7 @@ FIRE GHOST
 NONE
 0
 -1
-BEAST_BOOST NO_ABILITY
+BEAST_BOOST
 Fireworks
 71 28.7 It slithers toward people. Then, without warning, it triggers the explosion of its own head. It's apparently one kind of Ultra Beast.
 30720
@@ -68727,7 +68727,7 @@ ELECTRIC NO_TYPE
 NONE
 0
 -1
-VOLT_ABSORB NO_ABILITY
+VOLT_ABSORB
 Thunderclap
 59 98.1 It electrifies its claws and tears its opponents apart with them. Even if they dodge its attack, they'll be electrocuted by the flying sparks.
 30720
@@ -68811,7 +68811,7 @@ STEEL NO_TYPE
 ITEM MELMETAL METAL_COAT
 0
 -1
-MAGNET_PULL NO_ABILITY
+MAGNET_PULL
 Hex Nut
 8 17.6 It melts particles of iron and other metals found in the subsoil, so it can absorb them into its body of molten steel.
 30720
@@ -68845,7 +68845,7 @@ STEEL NO_TYPE
 NONE
 0
 -1
-IRON_FIST NO_ABILITY
+IRON_FIST
 Hex Nut
 98 1763.7 Revered long ago for its capacity to create iron from nothing, for some reason it has come back to life after 3,000 years.
 30720
@@ -68900,7 +68900,7 @@ NONE
 1
 5 CHARCOAL
 1
-TOUGH_CLAWS NO_ABILITY
+TOUGH_CLAWS
 Flame
 67 243.6 It is said that Rizardon's fire burns hotter if it has experienced harsh battles.
 5120
@@ -69009,7 +69009,7 @@ NONE
 5 OCCA_BERRY
 5 IRON_BALL
 4
-HYPER_CUTTER INTIMIDATE
+HYPER_CUTTER INTIMIDATE SHEER_FORCE
 Deceiver
 39 51.8 It uses its docile-looking face to lull foes into complacency, then bites with its huge, relentless jaws.
 5120
@@ -69120,7 +69120,7 @@ NONE
 1
 5 LIFE_ORB
 4
-MAGIC_BOUNCE NO_ABILITY
+MAGIC_BOUNCE
 Disaster
 47 108.0 When this Pok\u00e9mon whips the winglike fur on its back as though beating its wings, it sends an intimidating aura flying at its opponents.
 6400
@@ -69245,7 +69245,7 @@ NONE
 1
 5 WIDE_LENS
 4
-MAGIC_BOUNCE NO_ABILITY
+MAGIC_BOUNCE
 Darkness
 20 354.9 Supporting a giant heavy jewel, it can't change direction very nimbly and is vulnerable to attack from behind.
 6400
@@ -69353,7 +69353,7 @@ NONE
 1
 50 ORAN_BERRY
 4
-SURGE_SURFER NO_ABILITY
+SURGE_SURFER
 Mouse
 28 46.3 It uses psychokinesis to control electricity. It hops aboard its own tail, using psychic power to lift the tail and move about while riding it.
 2560
@@ -69804,7 +69804,7 @@ LEVEL SLEIMOK 38
 5 BLACK_SLUDGE
 5 NUGGET
 4
-POISON_TOUCH GLUTTONY
+POISON_TOUCH GLUTTONY POWER_OF_ALCHEMY
 Sludge
 28 92.6 The crystals on Sleima's body are lumps of toxins. If one falls off, lethal poisons leak out.
 5120
@@ -69901,7 +69901,7 @@ NONE
 5 NUGGET
 1 TOXIC_ORB
 4
-POISON_TOUCH GLUTTONY
+POISON_TOUCH GLUTTONY POWER_OF_ALCHEMY
 Sludge
 39 114.6 While it's unexpectedly quiet and friendly, if it's not fed any trash for a while, it will smash its Trainer's furnishings and eat up the fragments.
 5120
@@ -70105,7 +70105,7 @@ NONE
 1
 5 THICK_CLUB
 4
-CURSED_BODY LIGHTNING_ROD
+CURSED_BODY LIGHTNING_ROD ROCK_HEAD
 Bone Keeper
 39 75.0 The bones it possesses were once its mother's. Its mother's regrets have become like a vengeful spirit protecting this Pok\u00e9mon.
 5120
@@ -70219,7 +70219,7 @@ NONE
 1
 5 SPELL_TAG
 4
-PRANKSTER NO_ABILITY
+PRANKSTER
 Marionette
 47 28.7 Strong feelings of hatred turned a puppet into a Pok\u00e9mon. If it opens its mouth, its cursed energy escapes.
 6400
@@ -70322,7 +70322,7 @@ ROCK NO_TYPE
 NONE
 0
 4
-KEEN_EYE VITAL_SPIRIT
+KEEN_EYE VITAL_SPIRIT NO_GUARD
 Wolf
 43 55.1 Its quick movements confuse its enemies. Well equipped with claws and fangs, it also uses the sharp rocks in its mane as weapons.
 3840
@@ -70410,7 +70410,7 @@ ROCK NO_TYPE
 NONE
 0
 4
-TOUGH_CLAWS NO_ABILITY
+TOUGH_CLAWS
 Wolf
 31 55.1 This strange form is the result of its evolving at dusk. An intense fighting spirit underlies its calmness.
 3840

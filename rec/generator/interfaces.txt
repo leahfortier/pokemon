@@ -590,13 +590,28 @@ OpponentStatSwitchingEffect:
 ***
 HalfWeightEffect:
     Method:
-        Header: int getHalfAmount(int halfAmount)
-        Invoke: Update
-        Update: halfAmount
-        InvokeName: updateHalfAmount
+        Header: int getHalfAmount()
+        Default:
+            return 1;
+            ###
+        Invoke: Add
+        InvokeName: getHalfAmount
         InvokeParameters: Battle b, ActivePokemon anorexic
         MoldBreaker: b.getOtherPokemon(anorexic)
         EffectList: anorexic
+    *
+***
+DoubleWeightEffect:
+    Method:
+        Header: int getDoubleAmount()
+        Default:
+            return 1;
+            ###
+        Invoke: Add
+        InvokeName: getDoubleAmount
+        InvokeParameters: Battle b, ActivePokemon fatty
+        MoldBreaker: b.getOtherPokemon(fatty)
+        EffectList: fatty
     *
 ***
 StageChangingEffect:

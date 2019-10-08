@@ -3,6 +3,7 @@ package util.string;
 import main.Global;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -170,6 +171,17 @@ public final class StringUtils {
             return Enum.valueOf(enumClass, getNamesiesString(name));
         } catch (IllegalArgumentException exception) {
             return null;
+        }
+    }
+
+    // Yes I realize this is not totally comprehensive but it honestly seems fine for now and can be added on if necessary
+    public static String toString(Object object) {
+        if (object instanceof Object[]) {
+            return Arrays.toString((Object[])object);
+        } else if (object instanceof int[]) {
+            return Arrays.toString((int[])object);
+        } else {
+            return Objects.toString(object);
         }
     }
 }

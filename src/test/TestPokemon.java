@@ -12,6 +12,7 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
 import pokemon.active.MoveList;
+import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import test.battle.TestBattle;
@@ -68,6 +69,29 @@ public class TestPokemon extends ActivePokemon {
                       .collect(Collectors.toList())
         );
         return this;
+    }
+
+    @Override
+    public void setAbility(AbilityNamesies ability) {
+        super.setAbility(ability);
+
+        PokemonInfo pokemonInfo = this.getPokemonInfo();
+        AbilityNamesies[] abilities = pokemonInfo.getAbilities();
+        int abilityIndex = this.getAbilityIndex();
+        String message = StringUtils.spaceSeparated(this.getActualName(), abilityIndex, abilities);
+
+        // Make sure ability index is always in valid range (regardless if this Pokemon can have this ability)
+        TestUtils.assertInclusiveRange(message, 0, 2, abilityIndex);
+
+        // If this Pokemon can only have 2 possible abilities, then it can never have the third ability index
+        if (abilities.length == 2) {
+            Assert.assertNotEquals(message, 2, this.getAbilityIndex());
+        }
+
+        // If this pokemon can naturally receive this ability, make sure the index is correct
+        if (pokemonInfo.hasAbility(ability) && abilities.length != 1) {
+            Assert.assertEquals(message, ability, abilities[abilityIndex]);
+        }
     }
 
     @Override
@@ -233,7 +257,10 @@ public class TestPokemon extends ActivePokemon {
     }
 
     public void assertAbility(AbilityNamesies abilityNamesies) {
-        Assert.assertTrue(this.getAbility().getName(), this.hasAbility(abilityNamesies));
+        Assert.assertTrue(
+                StringUtils.spaceSeparated(this.getActualName(), this.getAbility(), abilityNamesies),
+                this.hasAbility(abilityNamesies)
+        );
         this.assertNoEffect(PokemonEffectNamesies.CHANGE_ABILITY);
     }
 

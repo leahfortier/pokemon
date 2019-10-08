@@ -497,12 +497,7 @@ Reckless:
 Iron Fist:
     Desc: Powers up punching moves.
     PowerMultiplierCondition: 1.2 user.getAttack().isMoveType(MoveType.PUNCHING)
-    Int: EntryEffect
-    Enter:
-        if (enterer.namesies() == PokemonNamesies.PANGORO) {
-            Messages.add(enterer.getName() + " does not break the mold!!!!!!!");
-        }
-        ###
+    OtherPangoro: True
 *
 Natural Cure:
     Desc: All status conditions heal when the Pok\u00e9mon switches out.
@@ -538,6 +533,7 @@ Scrappy:
     Desc: The Pok\u00e9mon can hit Ghost-type Pok\u00e9mon with Normal- and Fighting-type moves.
     RemoveAdvantageType: Ghost attacking == Type.NORMAL || attacking == Type.FIGHTING
     Int: AttackingNoAdvantageChanger
+    OtherPangoro: True
 *
 Swift Swim:
     Desc: Boosts the Pok\u00e9mon's Speed stat in rain.
@@ -867,7 +863,11 @@ White Smoke:
 *
 Toxic Boost:
     Desc: Powers up physical attacks when the Pok\u00e9mon is poisoned.
-    ToModifyMultiplier: Attack 1.5 p.hasStatus(StatusNamesies.POISONED)
+    SpecificStatusBooster: Attack 1.5 Poisoned
+*
+Flare Boost:
+    Desc: Powers up special attacks when the Pokémon is burned.
+    SpecificStatusBooster: Sp_Attack 1.5 Burned
 *
 Anticipation:
     Desc: The Pok\u00e9mon can sense an opposing Pok\u00e9mon's dangerous moves.
@@ -912,7 +912,10 @@ Ice Body:
 Light Metal:
     Desc: Halves the Pok\u00e9mon's weight.
     Int: HalfWeightEffect
-    HalfAmount: 1
+*
+Heavy Metal:
+    Desc: Doubles the Pok\u00e9mon's weight.
+    Int: DoubleWeightEffect
 *
 Drizzle:
     Desc: The Pok\u00e9mon makes it rain when it enters a battle.
@@ -1690,10 +1693,11 @@ Fluffy:
 *
 Tangling Hair:
     Desc: Contact with the Pok\u00e9mon lowers the attacker's Speed stat.
-    Int: PhysicalContactEffect
-    Contact:
-        user.getStages().modifyStage(victim, -1, Stat.SPEED, b, CastSource.ABILITY);
-        ###
+    DecreaseContactAbility: Speed
+*
+Gooey:
+    Desc: Contact with the Pok\u00e9mon lowers the attacker's Speed stat.
+    DecreaseContactAbility: Speed
 *
 Psychic Surge:
     Desc: Turns the ground into Psychic Terrain when the Pok\u00e9mon enters a battle.
@@ -1710,4 +1714,66 @@ Misty Surge:
 Grassy Surge:
     Desc: Turns the ground into Grassy Terrain when the Pok\u00e9mon enters a battle.
     TerrainStarter: Grassy
+*
+Moody:
+    Desc: Raises one stat sharply and lowers another every turn.
+    Int: EndTurnEffect
+    ApplyEndTurn:
+        // Sharply increase random stat
+        Stat modified = modifyStat(b, victim, victim.getStages().getNonMaxStats(), 2);
+
+        // Cannot alter the same stat
+        List<Stat> nonMined = victim.getStages().getNonMinStats();
+        if (modified != null) {
+            nonMined.remove(modified);
+        }
+
+        // Decrease random stat
+        modifyStat(b, victim, nonMined, -1);
+        ###
+    Field:
+        private Stat modifyStat(Battle b, ActivePokemon victim, List<Stat> potential, int delta) {
+            // All stats maxed/mined -- don't alter
+            if (potential.isEmpty()) {
+                return null;
+            }
+
+            Stat stat = RandomUtils.getRandomValue(potential);
+            boolean success = victim.getStages().modifyStage(victim, delta, stat, b, CastSource.ABILITY);
+
+            return success ? stat : null;
+        }
+        ###
+*
+Power of Alchemy:
+    Desc: The Pok\u00e9mon copies the Ability of a defeated enemy.
+    Comments: 
+        // WE ARE SYLAR WITH THE POWER OF ALCHEMY
+        // More seriously though yes this ability was changed from ally to opponent
+        ###
+    Irrestealable: True
+    Int: MurderEffect, ChangeAbilitySource
+    Field:
+        private AbilityNamesies stolenWithThePowerOfAlchemy;
+        private String message;
+        ###
+    AbilityChange:
+        return stolenWithThePowerOfAlchemy.getNewAbility();
+        ###
+    AbilityMessage:
+        return message;
+        ###
+    KillWish:
+        // Steal the dead's ability when you MURDER THEM
+        Ability deadAbility = dead.getAbility();
+        if (!deadAbility.isStealable()) {
+            return;
+        }
+
+        this.stolenWithThePowerOfAlchemy = deadAbility.namesies();
+        this.message = murderer.getName() + " stole " + dead.getName() + "'s " + deadAbility.getName() + " with the Power of Alchemy!!!";
+
+        // Cast the change ability effect onto the murderer to give the dead's ability
+        Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, murderer, murderer, CastSource.ABILITY, true);
+        ###
 *

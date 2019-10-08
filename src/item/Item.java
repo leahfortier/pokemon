@@ -91,7 +91,6 @@ import map.triggers.battle.WalkingWildBattleTrigger;
 import map.triggers.battle.WildBattleTrigger;
 import message.MessageUpdate;
 import message.Messages;
-import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.evolution.EvolutionMethod;
@@ -104,6 +103,7 @@ import type.TypeAdvantage;
 import util.RandomUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -666,11 +666,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         FloatStone() {
             super(ItemNamesies.FLOAT_STONE, "An item to be held by a Pok\u00e9mon. This very light stone reduces the weight of a Pok\u00e9mon when held.", BagCategory.MISC);
             super.price = 4000;
-        }
-
-        @Override
-        public int getHalfAmount(int halfAmount) {
-            return halfAmount + 1;
         }
     }
 
@@ -5574,18 +5569,23 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         AbilityCapsule() {
-            super(ItemNamesies.ABILITY_CAPSULE, "A capsule that allows a Pok\u00e9mon with two Abilities to switch between these Abilities when it is used.", BagCategory.MISC);
+            super(ItemNamesies.ABILITY_CAPSULE, "A capsule that allows a Pok\u00e9mon to switch between its Abilities when it is used.", BagCategory.MISC);
             super.price = 10000;
         }
 
         @Override
         public boolean use(ActivePokemon p) {
-            AbilityNamesies other = Ability.getOtherAbility(p);
-            if (other == AbilityNamesies.NO_ABILITY) {
+            // Get a list of possible abilities this Pokemon can have and remove the current ability
+            List<AbilityNamesies> abilities = new ArrayList<>(Arrays.asList(p.getPokemonInfo().getAbilities()));
+            abilities.removeIf(p::hasAbility);
+
+            // No possible abilities to change to
+            if (abilities.isEmpty()) {
                 return false;
             }
 
-            p.setAbility(other);
+            // Set to a random ability
+            p.setAbility(RandomUtils.getRandomValue(abilities));
             Messages.add(p.getName() + "'s ability was changed to " + p.getAbility().getName() + "!");
             return true;
         }

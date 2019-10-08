@@ -82,11 +82,11 @@ def level_up_attack_additions(num: int, moves: LevelUpMoves) -> None:
         moves.add_default('TAILWIND')
 
 
-# Replaces attack with alternative if it is the same as to_replace
-def _replace_move(attack: str, to_replace: str, alternative: str) -> str:
-    if attack == to_replace:
+# Replaces value with alternative if it is the same as to_replace
+def _replace(value: str, to_replace: str, alternative: str) -> str:
+    if value == to_replace:
         return alternative
-    return attack
+    return value
 
 
 # Will swap the moves if the attack is either of them
@@ -107,181 +107,181 @@ def attack_substitution(num: int, attack: str) -> str:
 
     # Butterfree
     if num == 12:
-        attack = _replace_move(attack, 'RAGE_POWDER', 'MORNING_SUN')
+        attack = _replace(attack, 'RAGE_POWDER', 'MORNING_SUN')
     # Nidoran line
     elif 29 <= num <= 33:
-        attack = _replace_move(attack, 'HELPING_HAND', 'POISON_TAIL')
+        attack = _replace(attack, 'HELPING_HAND', 'POISON_TAIL')
     # Clefairy/Clefable (Clefable does not learn After You/Follow Me technically)
     elif num in [35, 36]:
         # Note: I know it looks weird that multiple moves are substituting for Wish, but one is the last move
         # learned and the other is a default move and tbh it kind of works (if changes test will catch also)
-        attack = _replace_move(attack, 'AFTER_YOU', 'WISH')
-        attack = _replace_move(attack, 'FOLLOW_ME', 'MIMIC')
-        attack = _replace_move(attack, 'SPOTLIGHT', 'WISH')
+        attack = _replace(attack, 'AFTER_YOU', 'WISH')
+        attack = _replace(attack, 'FOLLOW_ME', 'MIMIC')
+        attack = _replace(attack, 'SPOTLIGHT', 'WISH')
     # Paras/Parasect
     elif num in [46, 47]:
-        attack = _replace_move(attack, 'RAGE_POWDER', 'LEECH_LIFE')
+        attack = _replace(attack, 'RAGE_POWDER', 'LEECH_LIFE')
     # Growlithe
     elif num == 58:
-        attack = _replace_move(attack, 'HELPING_HAND', 'HOWL')
+        attack = _replace(attack, 'HELPING_HAND', 'HOWL')
     # Kadabra/Alakazam
     elif num in [64, 65]:
-        attack = _replace_move(attack, 'ALLY_SWITCH', 'BARRIER')
+        attack = _replace(attack, 'ALLY_SWITCH', 'BARRIER')
     # Hitmonlee
     elif num == 106:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'LOW_KICK')
+        attack = _replace(attack, 'WIDE_GUARD', 'LOW_KICK')
     # Sentret/Furret
     elif num in [161, 162]:
-        attack = _replace_move(attack, 'FOLLOW_ME', 'COVET')
-        attack = _replace_move(attack, 'HELPING_HAND', 'CHARM')
+        attack = _replace(attack, 'FOLLOW_ME', 'COVET')
+        attack = _replace(attack, 'HELPING_HAND', 'CHARM')
     # Togepi
     elif num == 175:
-        attack = _replace_move(attack, 'AFTER_YOU', 'SOFT_BOILED')
-        attack = _replace_move(attack, 'FOLLOW_ME', 'DRAINING_KISS')
+        attack = _replace(attack, 'AFTER_YOU', 'SOFT_BOILED')
+        attack = _replace(attack, 'FOLLOW_ME', 'DRAINING_KISS')
     # Togetic
     elif num == 176:
-        attack = _replace_move(attack, 'AFTER_YOU', 'MOONBLAST')
-        attack = _replace_move(attack, 'FOLLOW_ME', 'DRAINING_KISS')
+        attack = _replace(attack, 'AFTER_YOU', 'MOONBLAST')
+        attack = _replace(attack, 'FOLLOW_ME', 'DRAINING_KISS')
     # Marill/Azumarill/Azurill
     elif num in [183, 184, 298]:
-        attack = _replace_move(attack, 'HELPING_HAND', 'DRAINING_KISS')
+        attack = _replace(attack, 'HELPING_HAND', 'DRAINING_KISS')
     # Hoppip line
     elif num in [187, 188, 189]:
-        attack = _replace_move(attack, 'RAGE_POWDER', 'SILVER_WIND')
+        attack = _replace(attack, 'RAGE_POWDER', 'SILVER_WIND')
     # Murkrow/Honchkrow
     elif num in [198, 430]:
-        attack = _replace_move(attack, 'QUASH', 'ROOST')
+        attack = _replace(attack, 'QUASH', 'ROOST')
     # Mantine/Mantyke
     elif num in [226, 458]:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'DIVE')
+        attack = _replace(attack, 'WIDE_GUARD', 'DIVE')
     # Tyrogue
     elif num == 236:
         # Did you know that Tyrogue's only level-up moves are four default ones?
-        attack = _replace_move(attack, 'HELPING_HAND', 'ENDURE')
+        attack = _replace(attack, 'HELPING_HAND', 'ENDURE')
     # Hitmontop
     elif num == 237:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'DRILL_RUN')
+        attack = _replace(attack, 'WIDE_GUARD', 'DRILL_RUN')
     # Sableye/Yamirami
     elif num in [302, AddedPokes.MEGA_SABLEYE.value]:
-        attack = _replace_move(attack, 'QUASH', 'NIGHT_SLASH')
+        attack = _replace(attack, 'QUASH', 'NIGHT_SLASH')
     # Plusle/Minun
     elif num in [311, 312]:
-        attack = _replace_move(attack, 'HELPING_HAND', 'SWEET_KISS')
+        attack = _replace(attack, 'HELPING_HAND', 'SWEET_KISS')
     # Volbeat/Illumise
     elif num in [313, 314]:
-        attack = _replace_move(attack, 'HELPING_HAND', 'DIZZY_PUNCH')
+        attack = _replace(attack, 'HELPING_HAND', 'DIZZY_PUNCH')
     # Jirachi
     elif num == 385:
-        attack = _replace_move(attack, 'HELPING_HAND', 'CALM_MIND')
+        attack = _replace(attack, 'HELPING_HAND', 'CALM_MIND')
     # Budew
     elif num == 406:
         # You can get Budew early in this game and Leech Seed is super helpful and it should definitely learn it early
         # This is in correspondence with level_up_attack_additions where it readds the Worry Seed later
         # Note: This definitely needs to be looked at if it's move list ever changes
-        attack = _replace_move(attack, 'WORRY_SEED', 'LEECH_SEED')
+        attack = _replace(attack, 'WORRY_SEED', 'LEECH_SEED')
     # Cherubi/Cherrim
     elif num in [420, 421]:
-        attack = _replace_move(attack, 'HELPING_HAND', 'TICKLE')
+        attack = _replace(attack, 'HELPING_HAND', 'TICKLE')
     # Buneary
     elif num == 427:
-        attack = _replace_move(attack, 'AFTER_YOU', 'SWEET_KISS')
+        attack = _replace(attack, 'AFTER_YOU', 'SWEET_KISS')
     # Lopunny
     elif num == 428:
-        attack = _replace_move(attack, 'AFTER_YOU', 'DRAINING_KISS')
-        attack = _replace_move(attack, 'RETURN', 'CAPTIVATE')
+        attack = _replace(attack, 'AFTER_YOU', 'DRAINING_KISS')
+        attack = _replace(attack, 'RETURN', 'CAPTIVATE')
     # Gallade
     elif num == 475:
-        attack = _replace_move(attack, 'HELPING_HAND', 'DUAL_CHOP')
-        attack = _replace_move(attack, 'WIDE_GUARD', 'SACRED_SWORD')
+        attack = _replace(attack, 'HELPING_HAND', 'DUAL_CHOP')
+        attack = _replace(attack, 'WIDE_GUARD', 'SACRED_SWORD')
     # Regigagas
     elif num == 486:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'MEGA_PUNCH')
+        attack = _replace(attack, 'WIDE_GUARD', 'MEGA_PUNCH')
     # Patrat/Watchog
     elif num in [504, 505]:
-        attack = _replace_move(attack, 'AFTER_YOU', 'COVET')
+        attack = _replace(attack, 'AFTER_YOU', 'COVET')
     # Lillipup line
     elif num in [506, 507, 508]:
-        attack = _replace_move(attack, 'HELPING_HAND', 'HOWL')
+        attack = _replace(attack, 'HELPING_HAND', 'HOWL')
     # Audino
     elif num == 531:
-        attack = _replace_move(attack, 'AFTER_YOU', 'WISH')
+        attack = _replace(attack, 'AFTER_YOU', 'WISH')
     # Throh
     elif num == 538:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'BRICK_BREAK')
+        attack = _replace(attack, 'WIDE_GUARD', 'BRICK_BREAK')
     # Leavanny
     elif num == 542:
-        attack = _replace_move(attack, 'HELPING_HAND', 'ME_FIRST')
+        attack = _replace(attack, 'HELPING_HAND', 'ME_FIRST')
     # Cottonee
     elif num == 546:
-        attack = _replace_move(attack, 'HELPING_HAND', 'TAILWIND')
+        attack = _replace(attack, 'HELPING_HAND', 'TAILWIND')
     # Petilil
     elif num == 548:
-        attack = _replace_move(attack, 'AFTER_YOU', 'HEAL_BELL')
-        attack = _replace_move(attack, 'HELPING_HAND', 'FAIRY_WIND')
+        attack = _replace(attack, 'AFTER_YOU', 'HEAL_BELL')
+        attack = _replace(attack, 'HELPING_HAND', 'FAIRY_WIND')
     # Maractus
     elif num == 556:
-        attack = _replace_move(attack, 'AFTER_YOU', 'WOOD_HAMMER')
+        attack = _replace(attack, 'AFTER_YOU', 'WOOD_HAMMER')
     # Tirtouga/Carracosta
     elif num in [564, 565]:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'IRON_DEFENSE')
+        attack = _replace(attack, 'WIDE_GUARD', 'IRON_DEFENSE')
     # Minccino
     elif num == 572:
-        attack = _replace_move(attack, 'AFTER_YOU', 'IRON_TAIL')
-        attack = _replace_move(attack, 'HELPING_HAND', 'COVET')
+        attack = _replace(attack, 'AFTER_YOU', 'IRON_TAIL')
+        attack = _replace(attack, 'HELPING_HAND', 'COVET')
     # Foongus/Amoonguss
     elif num in [590, 591]:
-        attack = _replace_move(attack, 'RAGE_POWDER', 'GASTRO_ACID')
+        attack = _replace(attack, 'RAGE_POWDER', 'GASTRO_ACID')
     # Alomomola
     elif num == 594:
-        attack = _replace_move(attack, 'HELPING_HAND', 'REFRESH')
-        attack = _replace_move(attack, 'WIDE_GUARD', 'MIST')
+        attack = _replace(attack, 'HELPING_HAND', 'REFRESH')
+        attack = _replace(attack, 'WIDE_GUARD', 'MIST')
     # Mienshao
     elif num == 620:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'DUAL_CHOP')
+        attack = _replace(attack, 'WIDE_GUARD', 'DUAL_CHOP')
     # Volcarona
     elif num == 637:
-        attack = _replace_move(attack, 'RAGE_POWDER', 'MORNING_SUN')
+        attack = _replace(attack, 'RAGE_POWDER', 'MORNING_SUN')
     # Cobalion
     elif num == 638:
-        attack = _replace_move(attack, 'HELPING_HAND', 'IRON_DEFENSE')
+        attack = _replace(attack, 'HELPING_HAND', 'IRON_DEFENSE')
     # Terrakion
     elif num == 639:
-        attack = _replace_move(attack, 'HELPING_HAND', 'STEALTH_ROCK')
+        attack = _replace(attack, 'HELPING_HAND', 'STEALTH_ROCK')
     # Virizion
     elif num == 640:
-        attack = _replace_move(attack, 'HELPING_HAND', 'SYNTHESIS')
+        attack = _replace(attack, 'HELPING_HAND', 'SYNTHESIS')
     # Keldeo
     elif num == 647:
-        attack = _replace_move(attack, 'HELPING_HAND', 'ICY_WIND')
+        attack = _replace(attack, 'HELPING_HAND', 'ICY_WIND')
     # Oricorio
     elif num == 741:
-        attack = _replace_move(attack, 'HELPING_HAND', 'TAILWIND')
+        attack = _replace(attack, 'HELPING_HAND', 'TAILWIND')
     # WISHiwashi
     elif num == 746:
-        attack = _replace_move(attack, 'HELPING_HAND', 'WATER_SPORT')
+        attack = _replace(attack, 'HELPING_HAND', 'WATER_SPORT')
     # Mareanie/Toxapex
     elif num in [747, 748]:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'ACID_ARMOR')
+        attack = _replace(attack, 'WIDE_GUARD', 'ACID_ARMOR')
     # Morelull/Shiinotic
     elif num in [755, 756]:
-        attack = _replace_move(attack, 'SPOTLIGHT', 'AROMATHERAPY')
+        attack = _replace(attack, 'SPOTLIGHT', 'AROMATHERAPY')
     # Oranguru
     elif num == 765:
-        attack = _replace_move(attack, 'AFTER_YOU', 'WONDER_ROOM')
-        attack = _replace_move(attack, 'INSTRUCT', 'LIGHT_SCREEN')
-        attack = _replace_move(attack, 'QUASH', 'PSYCHIC_TERRAIN')
+        attack = _replace(attack, 'AFTER_YOU', 'WONDER_ROOM')
+        attack = _replace(attack, 'INSTRUCT', 'LIGHT_SCREEN')
+        attack = _replace(attack, 'QUASH', 'PSYCHIC_TERRAIN')
     # Pykumuku
     elif num == 771:
-        attack = _replace_move(attack, 'HELPING_HAND', 'TICKLE')
+        attack = _replace(attack, 'HELPING_HAND', 'TICKLE')
     # Solgaleo
     elif num == 791:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'REFLECT')
+        attack = _replace(attack, 'WIDE_GUARD', 'REFLECT')
     # Lunala
     elif num == 792:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'LIGHT_SCREEN')
+        attack = _replace(attack, 'WIDE_GUARD', 'LIGHT_SCREEN')
     # Stakataka
     elif num == 805:
-        attack = _replace_move(attack, 'WIDE_GUARD', 'STONE_EDGE')
+        attack = _replace(attack, 'WIDE_GUARD', 'STONE_EDGE')
     # Rizardon
     elif num == AddedPokes.MEGA_CHARIZARD.value:
         # These correspond with the level_up_attack_additions for Rizardon
@@ -289,7 +289,7 @@ def attack_substitution(num: int, attack: str) -> str:
         # Wing Attack changes from evolution to default
         # Inferno (level 62) changes to Outrage
         attack = _swap_move(attack, 'WING_ATTACK', 'DRAGON_CLAW')
-        attack = _replace_move(attack, 'INFERNO', 'OUTRAGE')
+        attack = _replace(attack, 'INFERNO', 'OUTRAGE')
 
     if is_unsupported_attack(attack):
         return ''
@@ -301,16 +301,22 @@ def attack_substitution(num: int, attack: str) -> str:
 # Will return the empty string to indicate removing ability (never 'NO_ABILITY')
 # The input ability string is expected to be in namesies format
 def ability_substitution(num: int, ability: str) -> str:
-    if ability == 'FLOWER_VEIL':
-        # Comfey -- this ability was changed and doesn't make as much sense anymore for Comfey
-        if num == 764:
-            return ''
-    elif ability == 'RUN_AWAY':
-        # Ponyta/Rapidash should really have this ability
-        # Also I know that this is their HA and if this is blank then they'll get it, but this case would exist
-        # regardless of the fact that its their HA so I think I'll just leave as is
-        if num == 77 or num == 78:
-            return 'FLAME_BODY'
+    # Clefable -- Pre-evolutions have Friend Guard and causes terrible confusion
+    if num == 36:
+        ability = _replace(ability, 'UNAWARE', '')
+    # Wigglytuff -- same deal as Clefable
+    elif num == 40:
+        ability = _replace(ability, 'FRISK', '')
+    # Happiny -- similar but backwards to the Wigglyfable sitution
+    elif num == 440:
+        ability = _replace(ability, 'FRIEND_GUARD', 'HEALER')
+    # Ferrothorn -- so this is incredible dumb even in the main game that Ferrothorn has a HA, but Ferroseed
+    # doesn't?? that doesn't make any sense at all and I'm not condoning that type of behavior
+    elif num == 598:
+        ability = _replace(ability, 'ANTICIPATION', '')
+    # Comfey -- this ability was changed and doesn't make as much sense anymore for Comfey
+    elif num == 764:
+        ability = _replace(ability, 'FLOWER_VEIL', '')
 
     # All abilities which were removed
     # Needs to be at the bottom for Pokemon with substitutions instead of removals

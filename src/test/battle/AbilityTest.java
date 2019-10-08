@@ -7,6 +7,7 @@ import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
+import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
@@ -18,6 +19,20 @@ import type.Type;
 import type.TypeAdvantage;
 
 public class AbilityTest extends BaseTest {
+    @Test
+    public void descriptionTest() {
+        for (AbilityNamesies abilityNamesies : AbilityNamesies.values()) {
+            if (abilityNamesies == AbilityNamesies.NO_ABILITY) {
+                continue;
+            }
+
+            // All descriptions should end with a period
+            Ability ability = abilityNamesies.getNewAbility();
+            String description = ability.getDescription();
+            Assert.assertTrue(ability.getName() + " " + description, description.endsWith("."));
+        }
+    }
+
     @Test
     public void levitateTest() {
         TestBattle battle = TestBattle.create();

@@ -77,12 +77,14 @@ Descriptions that change manually:
         Healer ('an ally's' -> 'its')
         Flower Veil (Remove 'Ally')
         Battery ('Ally' -> 'the')
+        Power of Alchemy ('ally' -> 'enemy')
     Items:
         Fishing Rod
         Deep Sea Scale (Added ', Chinchou, or Lanturn' -- Lanturn rules and deserves this)
         Safari Ball (If it references some rando place)
         Razz Berry
         All the EV Decreasing Berries (Ex: Pomeg Berry) (Remove 'makes it more friendly but')
+        Ability Capsule (not just for two abilities)
         
 Other random things:
     Options menu:

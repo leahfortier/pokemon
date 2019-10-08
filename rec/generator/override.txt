@@ -391,6 +391,9 @@ StatusCureMove:
         }
         ###
 *
+SpecificStatusBooster:
+    AddMapField: ToModifyMultiplier: {11} {2} p.hasStatus(StatusNamesies.{33})
+*
 StatStatusBooster:
     AddInterface: StatStatusBoosterEffect
     AddMapField: ToModify: {2}
@@ -1050,6 +1053,21 @@ StatusContact:
         ###
     AddInterface: PhysicalContactEffect
 *
+DecreaseContactAbility:
+    AddInterface: PhysicalContactEffect
+    AddMapField: Contact:
+        user.getStages().modifyStage(victim, -1, Stat.{00}, b, CastSource.ABILITY);
+        ###
+*
+# Srsly don't worry about it
+OtherPangoro:
+    AddInterface: EntryEffect
+    AddMapField: Enter:
+        if (enterer.namesies() == PokemonNamesies.PANGORO) {
+            Messages.add(enterer.getName() + " does not break the mold!!!!!!!");
+        }
+        ###
+*
 SpeedWeather:
     AddMapField: ToModifyMultiplier: Speed 2 b.isWeather(WeatherNamesies.{00})
 *
@@ -1074,9 +1092,9 @@ WeatherEliminate:
         ###
 *
 HalfAmount:
-    Header: int getHalfAmount(int halfAmount)
+    Header: int getHalfAmount()
     Body:
-        return halfAmount + {0};
+        return {0};
         ###
 *
 WeatherBlock:

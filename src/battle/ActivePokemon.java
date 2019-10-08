@@ -16,6 +16,7 @@ import battle.effect.InvokeInterfaces.ChangeMoveListEffect;
 import battle.effect.InvokeInterfaces.ChangeTypeEffect;
 import battle.effect.InvokeInterfaces.DamageTakenEffect;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
+import battle.effect.InvokeInterfaces.DoubleWeightEffect;
 import battle.effect.InvokeInterfaces.FaintEffect;
 import battle.effect.InvokeInterfaces.GroundedEffect;
 import battle.effect.InvokeInterfaces.HalfWeightEffect;
@@ -834,10 +835,9 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public double getWeight(Battle b) {
-        int halfAmount = 0;
-        halfAmount = HalfWeightEffect.updateHalfAmount(b, this, halfAmount);
-
-        return this.getPokemonInfo().getWeight()/Math.pow(2, halfAmount);
+        int doubleAmount = DoubleWeightEffect.getDoubleAmount(b, this);
+        int halfAmount = HalfWeightEffect.getHalfAmount(b, this);
+        return this.getPokemonInfo().getWeight()*Math.pow(2, doubleAmount)/Math.pow(2, halfAmount);
     }
 
     public void setReducePP(boolean reduce) {

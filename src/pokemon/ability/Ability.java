@@ -36,6 +36,7 @@ import battle.effect.InvokeInterfaces.CritBlockerEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.DefiniteEscape;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
+import battle.effect.InvokeInterfaces.DoubleWeightEffect;
 import battle.effect.InvokeInterfaces.EffectChanceMultiplierEffect;
 import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EffectReceivedEffect;
@@ -104,9 +105,7 @@ import message.MessageUpdate;
 import message.Messages;
 import pokemon.active.Gender;
 import pokemon.active.MoveList;
-import pokemon.active.PartyPokemon;
 import pokemon.species.BaseStats;
-import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import trainer.Trainer;
@@ -186,58 +185,6 @@ public abstract class Ability implements AbilityInterface {
         }
 
         return other;
-    }
-
-    public static AbilityNamesies assign(PokemonInfo p) {
-        AbilityNamesies[] abilities = p.getAbilities();
-
-        if (abilities[0] == AbilityNamesies.NO_ABILITY) {
-            Global.error("First ability should not be none (Pokemon " + p.getName() + ")");
-        }
-
-        // Only has one ability -- return the first one
-        if (abilities[1] == AbilityNamesies.NO_ABILITY) {
-            return abilities[0];
-        }
-
-        // Has two abilities -- return a random one
-        return RandomUtils.getRandomValue(abilities);
-    }
-
-    public static AbilityNamesies evolutionAssign(PartyPokemon p, PokemonInfo ev) {
-        AbilityNamesies prev = p.getActualAbility().namesies();
-
-        // Evolution has current ability
-        if (ev.hasAbility(prev)) {
-            return prev;
-        }
-
-        // Evolution only has a single ability
-        AbilityNamesies[] abilities = ev.getAbilities();
-        if (abilities[1] == AbilityNamesies.NO_ABILITY) {
-            return abilities[0];
-        }
-
-        // Evolution has the alternative
-        AbilityNamesies other = getOtherAbility(p.getPokemonInfo(), prev);
-        if (ev.hasAbility(other)) {
-            return getOtherAbility(ev, other);
-        }
-
-        return RandomUtils.getRandomValue(abilities);
-    }
-
-    public static AbilityNamesies getOtherAbility(ActivePokemon p) {
-        return getOtherAbility(p.getPokemonInfo(), p.getAbility().namesies());
-    }
-
-    private static AbilityNamesies getOtherAbility(PokemonInfo p, AbilityNamesies ability) {
-        if (!p.hasAbility(ability)) {
-            Global.error("Incorrect ability " + ability + " for " + p.getName() + ".");
-        }
-
-        AbilityNamesies[] abilities = p.getAbilities();
-        return abilities[0] == ability ? abilities[1] : abilities[0];
     }
 
     // EVERYTHING BELOW IS GENERATED ###
@@ -1425,15 +1372,15 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.getAttack().isMoveType(MoveType.PUNCHING) ? 1.2 : 1;
+        }
+
+        @Override
         public void enter(Battle b, ActivePokemon enterer) {
             if (enterer.namesies() == PokemonNamesies.PANGORO) {
                 Messages.add(enterer.getName() + " does not break the mold!!!!!!!");
             }
-        }
-
-        @Override
-        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getAttack().isMoveType(MoveType.PUNCHING) ? 1.2 : 1;
         }
     }
 
@@ -1492,7 +1439,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Scrappy extends Ability implements AttackingNoAdvantageChanger {
+    static class Scrappy extends Ability implements AttackingNoAdvantageChanger, EntryEffect {
         private static final long serialVersionUID = 1L;
 
         Scrappy() {
@@ -1502,6 +1449,13 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public boolean negateNoAdvantage(Type attacking, Type defending) {
             return defending == Type.GHOST && (attacking == Type.NORMAL || attacking == Type.FIGHTING);
+        }
+
+        @Override
+        public void enter(Battle b, ActivePokemon enterer) {
+            if (enterer.namesies() == PokemonNamesies.PANGORO) {
+                Messages.add(enterer.getName() + " does not break the mold!!!!!!!");
+            }
         }
     }
 
@@ -2299,6 +2253,29 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
+    static class FlareBoost extends Ability implements SimpleStatModifyingEffect {
+        private static final long serialVersionUID = 1L;
+
+        FlareBoost() {
+            super(AbilityNamesies.FLARE_BOOST, "Powers up special attacks when the Pokémon is burned.");
+        }
+
+        @Override
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SP_ATTACK;
+        }
+
+        @Override
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.hasStatus(StatusNamesies.BURNED);
+        }
+
+        @Override
+        public double getModifier() {
+            return 1.5;
+        }
+    }
+
     static class Anticipation extends Ability implements EntryEffect {
         private static final long serialVersionUID = 1L;
 
@@ -2392,10 +2369,13 @@ public abstract class Ability implements AbilityInterface {
         LightMetal() {
             super(AbilityNamesies.LIGHT_METAL, "Halves the Pok\u00e9mon's weight.");
         }
+    }
 
-        @Override
-        public int getHalfAmount(int halfAmount) {
-            return halfAmount + 1;
+    static class HeavyMetal extends Ability implements DoubleWeightEffect {
+        private static final long serialVersionUID = 1L;
+
+        HeavyMetal() {
+            super(AbilityNamesies.HEAVY_METAL, "Doubles the Pok\u00e9mon's weight.");
         }
     }
 
@@ -4239,6 +4219,19 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
+    static class Gooey extends Ability implements PhysicalContactEffect {
+        private static final long serialVersionUID = 1L;
+
+        Gooey() {
+            super(AbilityNamesies.GOOEY, "Contact with the Pok\u00e9mon lowers the attacker's Speed stat.");
+        }
+
+        @Override
+        public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
+            user.getStages().modifyStage(victim, -1, Stat.SPEED, b, CastSource.ABILITY);
+        }
+    }
+
     static class PsychicSurge extends Ability implements EntryEffect {
         private static final long serialVersionUID = 1L;
 
@@ -4292,6 +4285,84 @@ public abstract class Ability implements AbilityInterface {
         public void enter(Battle b, ActivePokemon enterer) {
             String message = enterer.getName() + "'s " + this.getName() + " changed the field to Grassy Terrain!";
             Effect.cast(TerrainNamesies.GRASSY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
+        }
+    }
+
+    static class Moody extends Ability implements EndTurnEffect {
+        private static final long serialVersionUID = 1L;
+
+        private Stat modifyStat(Battle b, ActivePokemon victim, List<Stat> potential, int delta) {
+            // All stats maxed/mined -- don't alter
+            if (potential.isEmpty()) {
+                return null;
+            }
+
+            Stat stat = RandomUtils.getRandomValue(potential);
+            boolean success = victim.getStages().modifyStage(victim, delta, stat, b, CastSource.ABILITY);
+
+            return success ? stat : null;
+        }
+
+        Moody() {
+            super(AbilityNamesies.MOODY, "Raises one stat sharply and lowers another every turn.");
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            // Sharply increase random stat
+            Stat modified = modifyStat(b, victim, victim.getStages().getNonMaxStats(), 2);
+
+            // Cannot alter the same stat
+            List<Stat> nonMined = victim.getStages().getNonMinStats();
+            if (modified != null) {
+                nonMined.remove(modified);
+            }
+
+            // Decrease random stat
+            modifyStat(b, victim, nonMined, -1);
+        }
+    }
+
+    // WE ARE SYLAR WITH THE POWER OF ALCHEMY
+    // More seriously though yes this ability was changed from ally to opponent
+    static class PowerOfAlchemy extends Ability implements MurderEffect, ChangeAbilitySource {
+        private static final long serialVersionUID = 1L;
+
+        private AbilityNamesies stolenWithThePowerOfAlchemy;
+        private String message;
+
+        PowerOfAlchemy() {
+            super(AbilityNamesies.POWER_OF_ALCHEMY, "The Pok\u00e9mon copies the Ability of a defeated enemy.");
+        }
+
+        @Override
+        public boolean isStealable() {
+            return false;
+        }
+
+        @Override
+        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return stolenWithThePowerOfAlchemy.getNewAbility();
+        }
+
+        @Override
+        public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return message;
+        }
+
+        @Override
+        public void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
+            // Steal the dead's ability when you MURDER THEM
+            Ability deadAbility = dead.getAbility();
+            if (!deadAbility.isStealable()) {
+                return;
+            }
+
+            this.stolenWithThePowerOfAlchemy = deadAbility.namesies();
+            this.message = murderer.getName() + " stole " + dead.getName() + "'s " + deadAbility.getName() + " with the Power of Alchemy!!!";
+
+            // Cast the change ability effect onto the murderer to give the dead's ability
+            Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, murderer, murderer, CastSource.ABILITY, true);
         }
     }
 }

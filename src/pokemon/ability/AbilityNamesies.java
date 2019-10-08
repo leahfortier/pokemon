@@ -47,6 +47,7 @@ import pokemon.ability.Ability.EmergencyExit;
 import pokemon.ability.Ability.FairyAura;
 import pokemon.ability.Ability.Filter;
 import pokemon.ability.Ability.FlameBody;
+import pokemon.ability.Ability.FlareBoost;
 import pokemon.ability.Ability.FlashFire;
 import pokemon.ability.Ability.FlowerGift;
 import pokemon.ability.Ability.FlowerVeil;
@@ -59,12 +60,14 @@ import pokemon.ability.Ability.FurCoat;
 import pokemon.ability.Ability.GaleWings;
 import pokemon.ability.Ability.Galvanize;
 import pokemon.ability.Ability.Gluttony;
+import pokemon.ability.Ability.Gooey;
 import pokemon.ability.Ability.GrassPelt;
 import pokemon.ability.Ability.GrassySurge;
 import pokemon.ability.Ability.Guts;
 import pokemon.ability.Ability.Harvest;
 import pokemon.ability.Ability.Healer;
 import pokemon.ability.Ability.Heatproof;
+import pokemon.ability.Ability.HeavyMetal;
 import pokemon.ability.Ability.HoneyGather;
 import pokemon.ability.Ability.HugePower;
 import pokemon.ability.Ability.Hustle;
@@ -102,6 +105,7 @@ import pokemon.ability.Ability.MegaLauncher;
 import pokemon.ability.Ability.Merciless;
 import pokemon.ability.Ability.MistySurge;
 import pokemon.ability.Ability.MoldBreaker;
+import pokemon.ability.Ability.Moody;
 import pokemon.ability.Ability.MotorDrive;
 import pokemon.ability.Ability.Moxie;
 import pokemon.ability.Ability.Multiscale;
@@ -121,6 +125,7 @@ import pokemon.ability.Ability.Pixilate;
 import pokemon.ability.Ability.PoisonHeal;
 import pokemon.ability.Ability.PoisonPoint;
 import pokemon.ability.Ability.PoisonTouch;
+import pokemon.ability.Ability.PowerOfAlchemy;
 import pokemon.ability.Ability.Prankster;
 import pokemon.ability.Ability.Pressure;
 import pokemon.ability.Ability.PrismArmor;
@@ -335,11 +340,13 @@ public enum AbilityNamesies {
     SOLID_ROCK("Solid Rock", SolidRock::new),
     WHITE_SMOKE("White Smoke", WhiteSmoke::new),
     TOXIC_BOOST("Toxic Boost", ToxicBoost::new),
+    FLARE_BOOST("Flare Boost", FlareBoost::new),
     ANTICIPATION("Anticipation", Anticipation::new),
     STORM_DRAIN("Storm Drain", StormDrain::new),
     COLOR_CHANGE("Color Change", ColorChange::new),
     ICE_BODY("Ice Body", IceBody::new),
     LIGHT_METAL("Light Metal", LightMetal::new),
+    HEAVY_METAL("Heavy Metal", HeavyMetal::new),
     DRIZZLE("Drizzle", Drizzle::new),
     AIR_LOCK("Air Lock", AirLock::new),
     DEFIANT("Defiant", Defiant::new),
@@ -428,10 +435,13 @@ public enum AbilityNamesies {
     INNARDS_OUT("Innards Out", InnardsOut::new),
     FLUFFY("Fluffy", Fluffy::new),
     TANGLING_HAIR("Tangling Hair", TanglingHair::new),
+    GOOEY("Gooey", Gooey::new),
     PSYCHIC_SURGE("Psychic Surge", PsychicSurge::new),
     ELECTRIC_SURGE("Electric Surge", ElectricSurge::new),
     MISTY_SURGE("Misty Surge", MistySurge::new),
-    GRASSY_SURGE("Grassy Surge", GrassySurge::new);
+    GRASSY_SURGE("Grassy Surge", GrassySurge::new),
+    MOODY("Moody", Moody::new),
+    POWER_OF_ALCHEMY("Power of Alchemy", PowerOfAlchemy::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

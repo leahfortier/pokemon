@@ -2003,8 +2003,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public int getHalfAmount(int halfAmount) {
-            return halfAmount + layers;
+        public int getHalfAmount() {
+            return layers;
         }
     }
 
