@@ -166,7 +166,7 @@ Flash Fire:
     Field:
         private boolean activated;
         ###
-    Activate:
+    Constructor:
         this.activated = false;
         ###
     AbilityIsActive:
@@ -782,7 +782,7 @@ Truant:
     Field:
         private boolean lazyface;
         ###
-    Activate:
+    Constructor:
         this.lazyface = false;
         ###
     Int: EndTurnEffect, BeforeTurnEffect
@@ -826,7 +826,7 @@ Normalize:
     Field:
         private boolean activated;
         ###
-    Activate:
+    Constructor:
         this.activated = false;
         ###
     ApplyEndTurn:
@@ -991,7 +991,7 @@ Slow Start:
     Field:
         int count;
         ###
-    Activate:
+    Constructor:
         this.count = 0;
         ###
     Int: EndTurnEffect, EntryEffect
@@ -1097,7 +1097,7 @@ Illusion:
             Messages.add(new MessageUpdate().updatePokemon(b, victim));
         }
         ###
-    Activate:
+    Constructor:
         this.activated = false;
         ###
     Deactivate:
@@ -1572,7 +1572,7 @@ Disguise:
     Field:
         private boolean activated;
         ###
-    Activate:
+    Constructor:
         this.activated = false;
         ###
     Int: AbsorbDamageEffect
@@ -1664,7 +1664,7 @@ Dancer:
     Field:
         private boolean activated;
         ###
-    Activate:
+    Constructor:
         activated = false;
         ###
     AbilityIsActive:

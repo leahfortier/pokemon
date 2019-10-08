@@ -205,7 +205,7 @@ MultiTurn:
         ###
     AddMapField: ResetReady: True
     AddMapField: SwitchReady: True
-    AddMapField: Activate: 
+    AddMapField: Constructor: 
         this.resetReady();
         ###
 *
@@ -1744,7 +1744,7 @@ NormalTypeChanger:
     AddMapField: Field:
         private boolean activated;
         ###
-    AddMapField: Activate:
+    AddMapField: Constructor:
         this.activated = false;
         ###
     AddInterface: EndTurnEffect
@@ -1962,7 +1962,7 @@ FormChange:
             return {1} ? {44}_STATS : {22}_STATS;
         }
         ###
-    AddMapField: Activate:
+    AddMapField: Constructor:
         this.{1} = false;
         ###
     AddInterface: DifferentStatEffect

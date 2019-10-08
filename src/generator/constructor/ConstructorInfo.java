@@ -67,7 +67,7 @@ public class ConstructorInfo {
         constructor.append(this.getOptionalFieldAssignments(fields));
 
         // Additional unique constructor specifications
-        fields.getPerformAndRemove("Activate", constructor::append);
+        fields.getPerformAndRemove("Constructor", constructor::append);
 
         // Put it all together!
         return new MethodInfo(

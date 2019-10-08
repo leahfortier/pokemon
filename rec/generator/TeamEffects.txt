@@ -62,7 +62,7 @@ ToxicSpikes:
     Field: 
         private int layers;
         ###
-    Activate: 
+    Constructor: 
         this.layers = 1;
         ###
     Enter:
@@ -108,7 +108,7 @@ Spikes:
             }
         }
         ###
-    Activate: 
+    Constructor: 
         this.layers = 1;
         ###
     Enter: 

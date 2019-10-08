@@ -162,7 +162,7 @@ Confusion:
 
         return true;
         ###
-    Activate:
+    Constructor:
         this.turns = RandomUtils.getRandomInt(1, 4); // Between 1 and 4 turns
         ###
     CastMessage: victim.getName() + " became confused!"
@@ -247,7 +247,7 @@ RaiseCrits:
         // Contains the sources which have increased the crit stages so far
         private Set<CastSource> sources;
         ###
-    Activate:
+    Constructor:
         this.sources = new HashSet<>();
         ###
     Int: CritStageEffect, PassableEffect, MessageGetter
@@ -359,7 +359,7 @@ Stockpile:
     Field:
         private int turns;
         ###
-    Activate:
+    Constructor:
         this.turns = 0;
         ###
     GetTurns:
@@ -803,7 +803,7 @@ Bide:
         return turns;
         ###
     CastMessage: user.getName() + " is storing energy!"
-    Activate:
+    Constructor:
         this.turns = 1;
         this.damage = 0;
         ###
@@ -844,7 +844,7 @@ HalfWeight:
     AlternateCast:
         this.layers++;
         ###
-    Activate:
+    Constructor:
         this.layers = 1;
         ###
     Int: HalfWeightEffect
