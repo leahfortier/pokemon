@@ -9,6 +9,7 @@ import battle.effect.Effect.CastMessageGetter;
 import battle.effect.EffectInterfaces.EndTurnSubsider;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
+import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.battle.terrain.TerrainNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
@@ -24,6 +25,7 @@ import pokemon.stat.Stat;
 import pokemon.stat.User;
 import test.BaseTest;
 import test.TestPokemon;
+import test.TestUtils;
 import trainer.EnemyTrainer;
 import type.Type;
 
@@ -1097,5 +1099,90 @@ public class EffectTest extends BaseTest {
         testInfo.statModifierTest(2, Stat.SP_ATTACK, User.ATTACKING);
         testInfo.statModifierTest(1, Stat.ATTACK, User.DEFENDING);
         testInfo.statModifierTest(1, Stat.SP_ATTACK, User.DEFENDING);
+    }
+
+    @Test
+    public void weightChangeTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.ROSERADE, PokemonNamesies.SCOLIPEDE);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Roserade is 32 lbs, Scolipede is 442 lbs
+        assertWeight(battle, 32, 442);
+
+        // Light Metal halves weight
+        attacking.withAbility(AbilityNamesies.LIGHT_METAL);
+        assertWeight(battle, 16, 442);
+
+        // Heavy Metal doubles weight
+        defending.withAbility(AbilityNamesies.HEAVY_METAL);
+        assertWeight(battle, 16, 884);
+
+        // Float Stone halves weight (stacks with Light Metal)
+        attacking.withItem(ItemNamesies.FLOAT_STONE);
+        assertWeight(battle, 8, 884);
+
+        // Float Stone should cancel Heavy Metal out for its normal weight
+        defending.withItem(ItemNamesies.FLOAT_STONE);
+        assertWeight(battle, 8, 442);
+
+        // Autotomize halves the weight and can stack multiple times
+        battle.attackingFight(AttackNamesies.AUTOTOMIZE);
+        assertWeight(battle, 4, 442);
+        attacking.assertStages(new TestStages().set(2, Stat.SPEED));
+        defending.assertStages(new TestStages());
+
+        battle.defendingFight(AttackNamesies.AUTOTOMIZE);
+        assertWeight(battle, 4, 221);
+        attacking.assertStages(new TestStages().set(2, Stat.SPEED));
+        defending.assertStages(new TestStages().set(2, Stat.SPEED));
+
+        battle.attackingFight(AttackNamesies.AUTOTOMIZE);
+        assertWeight(battle, 2, 221);
+        attacking.assertStages(new TestStages().set(4, Stat.SPEED));
+        defending.assertStages(new TestStages().set(2, Stat.SPEED));
+
+        battle.attackingFight(AttackNamesies.AUTOTOMIZE);
+        assertWeight(battle, 1, 221);
+        attacking.assertStages(new TestStages().set(6, Stat.SPEED));
+        defending.assertStages(new TestStages().set(2, Stat.SPEED));
+
+        // Snatcher will take the half weight
+        battle.fight(AttackNamesies.AUTOTOMIZE, AttackNamesies.SNATCH);
+        assertWeight(battle, 1, 110.5);
+        attacking.assertStages(new TestStages().set(6, Stat.SPEED));
+        defending.assertStages(new TestStages().set(4, Stat.SPEED));
+
+        // Autotomize halved weight even if the Speed is maxed
+        battle.attackingFight(AttackNamesies.AUTOTOMIZE);
+        assertWeight(battle, .5, 110.5);
+        attacking.assertStages(new TestStages().set(6, Stat.SPEED));
+        defending.assertStages(new TestStages().set(4, Stat.SPEED));
+
+        // Float Stone no longer working
+        battle.attackingFight(AttackNamesies.MAGIC_ROOM);
+        assertWeight(battle, 1, 221);
+        attacking.assertStages(new TestStages().set(6, Stat.SPEED));
+        defending.assertStages(new TestStages().set(4, Stat.SPEED));
+        battle.assertHasEffect(StandardBattleEffectNamesies.MAGIC_ROOM);
+
+        // Defending no longer has Heavy Metal
+        battle.attackingFight(AttackNamesies.GASTRO_ACID);
+        assertWeight(battle, 1, 110.5);
+        attacking.assertAbility(AbilityNamesies.LIGHT_METAL);
+        defending.assertChangedAbility(AbilityNamesies.NO_ABILITY);
+        battle.assertHasEffect(StandardBattleEffectNamesies.MAGIC_ROOM);
+
+        // Attacking no longer has Light Metal
+        battle.defendingFight(AttackNamesies.SIMPLE_BEAM);
+        assertWeight(battle, 2, 110.5);
+        attacking.assertChangedAbility(AbilityNamesies.SIMPLE);
+        defending.assertChangedAbility(AbilityNamesies.NO_ABILITY);
+        battle.assertHasEffect(StandardBattleEffectNamesies.MAGIC_ROOM);
+    }
+
+    private void assertWeight(TestBattle battle, double attackingWeight, double defendingWeight) {
+        TestUtils.assertEquals(attackingWeight, battle.getAttacking().getWeight(battle));
+        TestUtils.assertEquals(defendingWeight, battle.getDefending().getWeight(battle));
     }
 }

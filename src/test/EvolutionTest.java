@@ -8,6 +8,7 @@ import pokemon.evolution.BaseEvolution;
 import pokemon.evolution.EvolutionMethod;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
+import util.Triplet;
 import util.string.StringUtils;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -245,9 +246,103 @@ public class EvolutionTest extends BaseTest {
         abilityTest(testInfo, false);
     }
 
+    private void abilityTest(AbilityInfo testInfo, boolean sameSlots) {
+        // Create the base Pokemon and give the base ability
+        TestPokemon pokemon = TestPokemon.newPlayerPokemon(testInfo.basePokemon);
+        pokemon.setAbility(testInfo.baseAbility);
+
+        abilityTest(testInfo, sameSlots, pokemon);
+    }
+
+    @Test
+    public void multipleAbilityTest() {
+        // Two -> One -> Two (first and last same abilities)
+        multipleAbilityTest(
+                PokemonNamesies.SCATTERBUG, PokemonNamesies.SPEWPA, PokemonNamesies.VIVILLON,
+                List.of(AbilityNamesies.SHIELD_DUST, AbilityNamesies.COMPOUND_EYES),
+                List.of(AbilityNamesies.SHED_SKIN),
+                List.of(AbilityNamesies.SHIELD_DUST, AbilityNamesies.COMPOUND_EYES),
+                new Triplet<>(AbilityNamesies.SHIELD_DUST, AbilityNamesies.SHED_SKIN, AbilityNamesies.SHIELD_DUST),
+                new Triplet<>(AbilityNamesies.COMPOUND_EYES, AbilityNamesies.SHED_SKIN, AbilityNamesies.COMPOUND_EYES)
+        );
+
+        // Two -> One -> Two (first and last different abilities)
+        multipleAbilityTest(
+                PokemonNamesies.CATERPIE, PokemonNamesies.METAPOD, PokemonNamesies.BUTTERFREE,
+                List.of(AbilityNamesies.SHIELD_DUST, AbilityNamesies.RUN_AWAY),
+                List.of(AbilityNamesies.SHED_SKIN),
+                List.of(AbilityNamesies.COMPOUND_EYES, AbilityNamesies.TINTED_LENS),
+                new Triplet<>(AbilityNamesies.SHIELD_DUST, AbilityNamesies.SHED_SKIN, AbilityNamesies.COMPOUND_EYES),
+                new Triplet<>(AbilityNamesies.RUN_AWAY, AbilityNamesies.SHED_SKIN, AbilityNamesies.TINTED_LENS)
+        );
+
+        // Note: No Pokemon found with Three -> One -> Three
+    }
+
+    @SafeVarargs
+    private void multipleAbilityTest(PokemonNamesies basePokemon,
+                                     PokemonNamesies middlePokemon,
+                                     PokemonNamesies evolutionPokemon,
+                                     List<AbilityNamesies> baseAbilities,
+                                     List<AbilityNamesies> middleAbilities,
+                                     List<AbilityNamesies> evolutionAbilities,
+                                     Triplet<AbilityNamesies, AbilityNamesies, AbilityNamesies>... abilities) {
+        confirmAbilities(basePokemon, baseAbilities);
+        confirmAbilities(middlePokemon, middleAbilities);
+        confirmAbilities(evolutionPokemon, evolutionAbilities);
+
+        // This test requires the first and last evolution to be the same size (not 1) and the middle evolution to be 1
+        // (If they're the same size then should just use a simpler test without multiple pieces)
+        Assert.assertEquals(baseAbilities.size(), evolutionAbilities.size());
+        Assert.assertNotEquals(baseAbilities.size(), middleAbilities.size());
+        Assert.assertEquals(1, middleAbilities.size());
+
+        // Each entry should correspond to each base ability
+        Assert.assertEquals(baseAbilities.size(), abilities.length);
+
+        Set<AbilityNamesies> baseSeen = EnumSet.copyOf(baseAbilities);
+        Set<AbilityNamesies> middleSeen = EnumSet.copyOf(middleAbilities);
+        Set<AbilityNamesies> evolutionSeen = EnumSet.copyOf(evolutionAbilities);
+
+        for (Triplet<AbilityNamesies, AbilityNamesies, AbilityNamesies> abilityPair : abilities) {
+            AbilityNamesies baseAbility = abilityPair.getFirst();
+            AbilityNamesies middleAbility = abilityPair.getSecond();
+            AbilityNamesies evolutionAbility = abilityPair.getThird();
+
+            multipleAbilityTest(
+                    new AbilityInfo(basePokemon, middlePokemon, baseAbility, middleAbility, null),
+                    new AbilityInfo(middlePokemon, evolutionPokemon, middleAbility, evolutionAbility, null)
+            );
+
+            Assert.assertTrue(baseSeen.contains(baseAbility));
+            Assert.assertTrue(evolutionSeen.contains(evolutionAbility));
+            baseSeen.remove(baseAbility);
+            middleSeen.remove(middleAbility);
+            evolutionSeen.remove(evolutionAbility);
+        }
+
+        // Make sure every ability has been tested
+        Assert.assertTrue(baseSeen.isEmpty());
+        Assert.assertTrue(middleSeen.isEmpty());
+        Assert.assertTrue(evolutionSeen.isEmpty());
+    }
+
+    private void multipleAbilityTest(AbilityInfo firstEvolution, AbilityInfo secondEvolution) {
+        // Testing for evolving a Pokemon twice so it needs to be the same Pokemon in the middle
+        Assert.assertEquals(firstEvolution.evolutionPokemon, secondEvolution.basePokemon);
+
+        // Create the base Pokemon and give the base ability
+        TestPokemon pokemon = TestPokemon.newPlayerPokemon(firstEvolution.basePokemon);
+        pokemon.setAbility(firstEvolution.baseAbility);
+
+        abilityTest(firstEvolution, false, pokemon);
+        abilityTest(secondEvolution, false, pokemon);
+    }
+
     // Used for testing abilities on evolution
     // sameSlots refers to if the Pokemon and its evolution have the same number of potential abilities
-    private void abilityTest(AbilityInfo testInfo, boolean sameSlots) {
+    // TestPokemon is expected to already have the base ability set
+    private void abilityTest(AbilityInfo testInfo, boolean sameSlots, TestPokemon pokemon) {
         PokemonInfo baseInfo = testInfo.baseInfo();
         PokemonInfo evolutionInfo = testInfo.evolutionInfo();
 
@@ -257,10 +352,6 @@ public class EvolutionTest extends BaseTest {
 
         // This test is also only for evolutions with the same number of ability slots
         Assert.assertEquals(sameSlots, baseInfo.numAbilities() == evolutionInfo.numAbilities());
-
-        // Create the base Pokemon and give the base ability
-        TestPokemon pokemon = TestPokemon.newPlayerPokemon(testInfo.basePokemon);
-        pokemon.setAbility(testInfo.baseAbility);
 
         // Confirm ability index (if not the only ability)
         int baseAbilityIndex = pokemon.getAbilityIndex();

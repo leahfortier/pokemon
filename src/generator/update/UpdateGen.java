@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -441,21 +442,26 @@ public class UpdateGen {
         return moves;
     }
 
-    private static void addMovesDiff(List<String> moves, String diffName, StringAppender diffs) {
-        if (!moves.isEmpty()) {
-            diffs.appendLine(diffName + ":\n\t" + String.join("\n\t", moves));
-        }
+    private static void movesDiff(Scanner in1, Scanner in2, String diffName, StringAppender diffs) {
+        listDiff(in1, in2, diffName + " Moves", diffs, UpdateGen::getMoves);
     }
 
-    private static void movesDiff(Scanner in1, Scanner in2, String diffName, StringAppender diffs) {
-        List<String> moves1 = getMoves(in1);
-        List<String> moves2 = getMoves(in2);
+    private static void listDiff(Scanner in1, Scanner in2, String diffName, StringAppender diffs,
+                                 Function<Scanner, List<String>> readValues) {
+        List<String> values1 = readValues.apply(in1);
+        List<String> values2 = readValues.apply(in2);
 
-        List<String> removedMoves = GeneralUtils.inFirstNotSecond(moves1, moves2);
-        List<String> addedMoves = GeneralUtils.inFirstNotSecond(moves2, moves1);
+        List<String> removedValues = GeneralUtils.inFirstNotSecond(values1, values2);
+        List<String> addedValues = GeneralUtils.inFirstNotSecond(values2, values1);
 
-        addMovesDiff(removedMoves, diffName + " Removed Moves", diffs);
-        addMovesDiff(addedMoves, diffName + " Added Moves", diffs);
+        addListDiff(removedValues, "Removed " + diffName, diffs);
+        addListDiff(addedValues, "Added " + diffName, diffs);
+    }
+
+    private static void addListDiff(List<String> values, String diffName, StringAppender diffs) {
+        if (!values.isEmpty()) {
+            diffs.appendLine(diffName + ":\n\t" + String.join("\n\t", values));
+        }
     }
 
     private static void diff(Scanner in1, Scanner in2, String diffName, StringAppender diffs) {
@@ -476,11 +482,10 @@ public class UpdateGen {
         Scanner in2 = FileIO.openFile("temp.txt");
 
         PrintStream out = FileIO.openOutputFile("temp2.txt");
-        PrintStream nullOut = new PrintStream(new NullOutputStream());
 
         // Change name to whichever Pokemon in2 starts from
         for (int i = 1; i < PokemonNamesies.BULBASAUR.ordinal(); i++) {
-            outputSinglePokemon(in1, nullOut);
+            readSinglePokemon(in1);
         }
 
         boolean hasDiffs = false;
@@ -488,8 +493,8 @@ public class UpdateGen {
             // Don't print differences for Meltan/Melmetal
             PokemonNamesies pokemonNamesies = PokemonNamesies.values()[i];
             if (pokemonNamesies == PokemonNamesies.MELTAN || pokemonNamesies == PokemonNamesies.MELMETAL) {
-                outputSinglePokemon(in1, nullOut);
-                outputSinglePokemon(in2, nullOut);
+                readSinglePokemon(in1);
+                readSinglePokemon(in2);
                 continue;
             }
 
@@ -530,6 +535,10 @@ public class UpdateGen {
         if (!hasDiffs) {
             out.print("No relevant diffs.");
         }
+    }
+
+    private static void readSinglePokemon(Scanner in) {
+        outputSinglePokemon(in, new PrintStream(new NullOutputStream()));
     }
 
     private static void outputSinglePokemon(Scanner in, PrintStream out) {
@@ -583,7 +592,15 @@ public class UpdateGen {
         Scanner in2 = FileIO.openFile("temp.txt");
         PrintStream out = FileIO.openOutputFile("out.txt");
 
-        while (in.hasNext()) {
+        for (int i = 1; in.hasNext(); i++) {
+            // Don't apply changes for Meltan/Melmetal
+            PokemonNamesies pokemonNamesies = PokemonNamesies.values()[i];
+            if (pokemonNamesies == PokemonNamesies.MELTAN || pokemonNamesies == PokemonNamesies.MELMETAL) {
+                outputSinglePokemon(in, out);
+                readSinglePokemon(in2);
+                continue;
+            }
+
             outputSinglePokemon(in, in2, out);
         }
     }

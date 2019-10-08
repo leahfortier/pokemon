@@ -6,6 +6,7 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveType;
+import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.team.TeamEffectNamesies;
@@ -155,6 +156,14 @@ public class TestBattle extends Battle {
 
     public double getDamageModifier(ActivePokemon me, ActivePokemon o) {
         return this.damageCalculator.getDamageModifier(this, me, o);
+    }
+
+    public void assertHasEffect(BattleEffectNamesies effectNamesies) {
+        Assert.assertTrue(this.hasEffect(effectNamesies));
+    }
+
+    public void assertNoEffect(BattleEffectNamesies effectNamesies) {
+        Assert.assertFalse(this.hasEffect(effectNamesies));
     }
 
     public void assertHasEffect(ActivePokemon member, TeamEffectNamesies effectNamesies) {

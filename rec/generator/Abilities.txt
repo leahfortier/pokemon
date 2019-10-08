@@ -88,10 +88,6 @@ Guts:
     Desc: It's so gutsy that having a status condition boosts the Pok\u00e9mon's Attack stat.
     StatStatusBooster: 1.5 Attack
 *
-Flare Boost:
-    Desc: Powers up special attacks when the Pokémon is burned.
-    StatStatusBooster: 1.5 Sp_Attack
-*
 Intimidate:
     Desc: The Pok\u00e9mon intimidates opposing Pok\u00e9mon upon entering battle, lowering their Attack stat.
     Int: EntryEffect, RepelLowLevelEncounterEffect
@@ -867,7 +863,11 @@ White Smoke:
 *
 Toxic Boost:
     Desc: Powers up physical attacks when the Pok\u00e9mon is poisoned.
-    ToModifyMultiplier: Attack 1.5 p.hasStatus(StatusNamesies.POISONED)
+    SpecificStatusBooster: Attack 1.5 Poisoned
+*
+Flare Boost:
+    Desc: Powers up special attacks when the Pokémon is burned.
+    SpecificStatusBooster: Sp_Attack 1.5 Burned
 *
 Anticipation:
     Desc: The Pok\u00e9mon can sense an opposing Pok\u00e9mon's dangerous moves.

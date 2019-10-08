@@ -2065,8 +2065,7 @@ Ability Capsule:
     Int: PokemonUseItem
     PokemonUse:
         // Get a list of possible abilities this Pokemon can have and remove the current ability
-        List<AbilityNamesies> abilities = new ArrayList<>();
-        Collections.addAll(abilities, p.getPokemonInfo().getAbilities());
+        List<AbilityNamesies> abilities = new ArrayList<>(Arrays.asList(p.getPokemonInfo().getAbilities()));
         abilities.removeIf(p::hasAbility);
 
         // No possible abilities to change to

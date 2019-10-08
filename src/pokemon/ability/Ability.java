@@ -449,24 +449,6 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class FlareBoost extends Ability implements StatStatusBoosterEffect {
-        private static final long serialVersionUID = 1L;
-
-        FlareBoost() {
-            super(AbilityNamesies.FLARE_BOOST, "Powers up special attacks when the Pokémon is burned.");
-        }
-
-        @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SP_ATTACK;
-        }
-
-        @Override
-        public double getModifier() {
-            return 1.5;
-        }
-    }
-
     static class Intimidate extends Ability implements EntryEffect, RepelLowLevelEncounterEffect {
         private static final long serialVersionUID = 1L;
 
@@ -2263,6 +2245,29 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
             return p.hasStatus(StatusNamesies.POISONED);
+        }
+
+        @Override
+        public double getModifier() {
+            return 1.5;
+        }
+    }
+
+    static class FlareBoost extends Ability implements SimpleStatModifyingEffect {
+        private static final long serialVersionUID = 1L;
+
+        FlareBoost() {
+            super(AbilityNamesies.FLARE_BOOST, "Powers up special attacks when the Pokémon is burned.");
+        }
+
+        @Override
+        public boolean isModifyStat(Stat s) {
+            return s == Stat.SP_ATTACK;
+        }
+
+        @Override
+        public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
+            return p.hasStatus(StatusNamesies.BURNED);
         }
 
         @Override

@@ -391,6 +391,9 @@ StatusCureMove:
         }
         ###
 *
+SpecificStatusBooster:
+    AddMapField: ToModifyMultiplier: {11} {2} p.hasStatus(StatusNamesies.{33})
+*
 StatStatusBooster:
     AddInterface: StatStatusBoosterEffect
     AddMapField: ToModify: {2}

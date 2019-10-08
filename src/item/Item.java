@@ -103,7 +103,7 @@ import type.TypeAdvantage;
 import util.RandomUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -5576,8 +5576,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public boolean use(ActivePokemon p) {
             // Get a list of possible abilities this Pokemon can have and remove the current ability
-            List<AbilityNamesies> abilities = new ArrayList<>();
-            Collections.addAll(abilities, p.getPokemonInfo().getAbilities());
+            List<AbilityNamesies> abilities = new ArrayList<>(Arrays.asList(p.getPokemonInfo().getAbilities()));
             abilities.removeIf(p::hasAbility);
 
             // No possible abilities to change to
