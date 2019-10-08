@@ -44,13 +44,16 @@ public class ConstructorInfo {
 
         // Stat changes too complicated to be handled by ConstructorField
         fields.getPerformAndRemove("StatChange", value -> {
-            String[] mcSplit = value.split(" ");
-            for (int i = 0, index = 1; i < Integer.parseInt(mcSplit[0]); i++) {
+            // value should be in the form '<Stat_Name1> <change1> <Stat_Name2> <change2> ...'
+            // Ex In: 'StatChange: Attack -1'
+            // Ex Out: 'super.statChanges[Stat.ATTACK.index()] = -1;'
+            String[] split = value.split(" ");
+            for (int i = 0; i < split.length; i += 2) {
                 fieldAssignments.append("super.statChanges[Stat.")
-                           .append(mcSplit[index++].toUpperCase())
-                           .append(".index()] = ")
-                           .append(mcSplit[index++])
-                           .append(";\n");
+                                .append(split[i].toUpperCase())
+                                .append(".index()] = ")
+                                .append(split[i + 1])
+                                .appendLine(";");
             }
         });
 

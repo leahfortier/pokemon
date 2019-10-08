@@ -798,7 +798,7 @@ SetNameChange:
     Header: void setNameChange(Battle b, ActivePokemon victim)
 *
 AbilityIsActive:
-    Header: boolean isActive()
+    Header: boolean isActive()  
 *
 Deactivate:
     Header: void deactivate(Battle b, ActivePokemon victim)
@@ -1700,7 +1700,7 @@ Aura:
         ###
 *
 RaiseAllStats:
-    AddMapField: StatChange: 5 Attack 1 Defense 1 Sp_Attack 1 Sp_Defense 1 Speed 1
+    AddMapField: StatChange: Attack 1 Defense 1 Sp_Attack 1 Sp_Defense 1 Speed 1
 *
 ConsumeBerry:
     AddMapField: UniqueEffects:
