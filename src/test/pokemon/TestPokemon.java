@@ -1,4 +1,4 @@
-package test;
+package test.pokemon;
 
 import battle.ActivePokemon;
 import battle.Battle;
@@ -17,6 +17,7 @@ import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import test.battle.TestBattle;
 import test.battle.TestStages;
+import test.general.TestUtils;
 import trainer.TrainerType;
 import type.Type;
 import util.string.StringAppender;

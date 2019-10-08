@@ -26,9 +26,9 @@ import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
-import test.BaseTest;
-import test.TestPokemon;
-import test.TestUtils;
+import test.general.BaseTest;
+import test.pokemon.TestPokemon;
+import test.general.TestUtils;
 import type.Type;
 import util.GeneralUtils;
 

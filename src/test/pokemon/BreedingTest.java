@@ -1,4 +1,4 @@
-package test;
+package test.pokemon;
 
 import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
@@ -16,6 +16,7 @@ import pokemon.breeding.Eggy;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
+import test.general.BaseTest;
 import util.string.StringAppender;
 import util.string.StringUtils;
 

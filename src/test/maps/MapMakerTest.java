@@ -6,7 +6,7 @@ import mapMaker.tools.Tool.ToolType;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import test.BaseTest;
+import test.general.BaseTest;
 import util.file.FileIO;
 import util.file.Folder;
 

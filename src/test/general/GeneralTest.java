@@ -1,4 +1,4 @@
-package test;
+package test.general;
 
 import battle.attack.AttackNamesies;
 import generator.format.SplitScanner;
@@ -10,6 +10,7 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
+import test.pokemon.TestPokemon;
 import util.TimeUtils;
 import util.file.FileIO;
 import util.string.StringAppender;

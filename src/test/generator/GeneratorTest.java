@@ -3,7 +3,7 @@ package test.generator;
 import generator.PokeGen;
 import org.junit.Assert;
 import org.junit.Test;
-import test.BaseTest;
+import test.general.BaseTest;
 import util.file.FileIO;
 import util.string.StringUtils;
 

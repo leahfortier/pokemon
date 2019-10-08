@@ -1,4 +1,4 @@
-package test;
+package test.pokemon;
 
 import battle.attack.AttackNamesies;
 import item.ItemNamesies;
@@ -18,6 +18,8 @@ import pokemon.species.LevelUpMove;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
+import test.general.TestUtils;
+import test.general.BaseTest;
 import trainer.TrainerType;
 import type.PokeType;
 import type.Type;

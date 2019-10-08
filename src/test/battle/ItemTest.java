@@ -19,8 +19,8 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
-import test.BaseTest;
-import test.TestPokemon;
+import test.general.BaseTest;
+import test.pokemon.TestPokemon;
 
 import java.util.EnumSet;
 import java.util.Set;

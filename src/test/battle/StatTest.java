@@ -10,9 +10,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
-import test.BaseTest;
-import test.TestPokemon;
-import test.TestUtils;
+import test.general.BaseTest;
+import test.pokemon.TestPokemon;
+import test.general.TestUtils;
 
 import java.util.EnumMap;
 import java.util.Map;

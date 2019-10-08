@@ -1,4 +1,4 @@
-package test;
+package test.general;
 
 import main.Game;
 import map.MapData;

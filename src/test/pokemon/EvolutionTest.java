@@ -1,4 +1,4 @@
-package test;
+package test.pokemon;
 
 import item.ItemNamesies;
 import org.junit.Assert;
@@ -8,6 +8,7 @@ import pokemon.evolution.BaseEvolution;
 import pokemon.evolution.EvolutionMethod;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
+import test.general.BaseTest;
 import util.Triplet;
 import util.string.StringUtils;
 

@@ -10,7 +10,7 @@ import item.ItemNamesies;
 import item.bag.Bag;
 import org.junit.Assert;
 import pokemon.ability.AbilityNamesies;
-import test.TestPokemon;
+import test.pokemon.TestPokemon;
 import trainer.Trainer;
 
 @FunctionalInterface

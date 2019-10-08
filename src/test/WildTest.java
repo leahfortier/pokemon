@@ -9,6 +9,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
+import test.general.BaseTest;
+import test.general.TestCharacter;
+import test.pokemon.TestPokemon;
 import trainer.player.Player;
 
 import java.util.HashSet;

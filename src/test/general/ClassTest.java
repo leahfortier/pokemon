@@ -1,4 +1,4 @@
-package test;
+package test.general;
 
 import battle.attack.Attack;
 import battle.attack.AttackInterface;

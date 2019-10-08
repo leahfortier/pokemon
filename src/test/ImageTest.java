@@ -14,6 +14,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.breeding.Eggy;
 import pokemon.species.PokemonInfo;
+import test.general.BaseTest;
+import test.general.TestUtils;
 import trainer.player.medal.Medal;
 import type.Type;
 import util.file.FileIO;

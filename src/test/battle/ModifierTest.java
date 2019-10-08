@@ -17,8 +17,8 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import pokemon.stat.User;
-import test.BaseTest;
-import test.TestPokemon;
+import test.general.BaseTest;
+import test.pokemon.TestPokemon;
 import type.PokeType;
 import type.Type;
 

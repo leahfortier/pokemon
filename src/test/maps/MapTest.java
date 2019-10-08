@@ -36,7 +36,7 @@ import pattern.map.MiscEntityMatcher;
 import pattern.map.NPCMatcher;
 import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
-import test.BaseTest;
+import test.general.BaseTest;
 import util.Point;
 import util.file.FileIO;
 import util.file.Folder;

@@ -2,7 +2,7 @@ package test.battle;
 
 import org.junit.Assert;
 import pokemon.stat.Stat;
-import test.TestUtils;
+import test.general.TestUtils;
 
 public class TestStages {
     private int[] stages;

@@ -8,6 +8,7 @@ import pokemon.active.EffortValues;
 import pokemon.active.StatValues;
 import pokemon.species.PokemonNamesies;
 import save.Save;
+import test.general.BaseTest;
 import trainer.TrainerType;
 import trainer.player.Player;
 import trainer.player.medal.Medal;

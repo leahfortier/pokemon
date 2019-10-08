@@ -9,8 +9,8 @@ import org.junit.Test;
 import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
-import test.BaseTest;
-import test.TestPokemon;
+import test.general.BaseTest;
+import test.pokemon.TestPokemon;
 import trainer.EnemyTrainer;
 import type.Type;
 

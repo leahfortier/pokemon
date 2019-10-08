@@ -1,4 +1,4 @@
-package test;
+package test.general;
 
 import battle.ActivePokemon;
 import map.MapName;

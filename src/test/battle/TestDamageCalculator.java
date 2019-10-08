@@ -4,8 +4,8 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.DamageCalculator;
 import org.junit.Assert;
-import test.TestPokemon;
-import test.TestUtils;
+import test.pokemon.TestPokemon;
+import test.general.TestUtils;
 import util.string.StringUtils;
 
 public class TestDamageCalculator extends DamageCalculator {

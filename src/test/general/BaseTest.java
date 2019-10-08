@@ -1,4 +1,4 @@
-package test;
+package test.general;
 
 import org.junit.BeforeClass;
 import trainer.player.Player;
