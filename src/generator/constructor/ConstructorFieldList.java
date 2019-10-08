@@ -5,10 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-public class FieldInfoList implements Iterable<FieldInfo> {
-    private final List<FieldInfo> infoList;
+public class ConstructorFieldList implements Iterable<ConstructorField> {
+    private final List<ConstructorField> infoList;
 
-    public FieldInfoList(Scanner in) {
+    public ConstructorFieldList(Scanner in) {
         this.infoList = new ArrayList<>();
 
         if (in == null) {
@@ -21,12 +21,12 @@ public class FieldInfoList implements Iterable<FieldInfo> {
                 break;
             }
 
-            this.infoList.add(new FieldInfo(line));
+            this.infoList.add(new ConstructorField(line));
         }
     }
 
     @Override
-    public Iterator<FieldInfo> iterator() {
+    public Iterator<ConstructorField> iterator() {
         return this.infoList.iterator();
     }
 }

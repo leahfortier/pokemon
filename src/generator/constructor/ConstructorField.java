@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 // Used for the field definitions at the top of the file
-public class FieldInfo {
+public class ConstructorField {
     private final String fieldName;
     private final boolean multiple;
     private final String defaultValue;
@@ -20,7 +20,7 @@ public class FieldInfo {
     private final String enumType;
     private final String remaining;
 
-    public FieldInfo(String line) {
+    public ConstructorField(String line) {
         SplitScanner split = new SplitScanner(line);
 
         this.fieldName = split.next();
