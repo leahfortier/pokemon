@@ -2,7 +2,6 @@ package pokemon.evolution;
 
 import battle.ActivePokemon;
 import item.ItemNamesies;
-import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
 
 public abstract class BaseEvolution extends Evolution {
@@ -18,13 +17,13 @@ public abstract class BaseEvolution extends Evolution {
 
     protected abstract BaseEvolution getEvolution(ActivePokemon toEvolve, ItemNamesies useItem);
 
-    public final PokemonInfo getEvolution() {
-        return evolutionNamesies.getInfo();
+    public final PokemonNamesies getEvolution() {
+        return evolutionNamesies;
     }
 
     @Override
     public final PokemonNamesies[] getEvolutions() {
-        return new PokemonNamesies[] { getEvolution().namesies() };
+        return new PokemonNamesies[] { this.getEvolution() };
     }
 
     @Override

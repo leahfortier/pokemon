@@ -363,7 +363,7 @@ public class EvolutionTest extends BaseTest {
         // Evolve the Pokemon (by level up)
         BaseEvolution evolution = testInfo.getEvolution(pokemon);
         Assert.assertNotNull(evolution);
-        Assert.assertEquals(testInfo.evolutionPokemon, evolution.getEvolution().namesies());
+        Assert.assertEquals(testInfo.evolutionPokemon, evolution.getEvolution());
         pokemon.evolve(evolution);
 
         // Make sure its the expected Pokemon and that it has the expected ability

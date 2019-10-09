@@ -18,7 +18,7 @@ import message.MessageUpdateType;
 import message.Messages;
 import pokemon.breeding.Eggy;
 import pokemon.evolution.BaseEvolution;
-import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import trainer.player.EvolutionInfo;
 import type.PokeType;
@@ -43,8 +43,8 @@ class EvolutionView extends View {
     private int animationEvolve;
 
     private ActivePokemon evolvingPokemon;
-    private PokemonInfo preEvolution;
-    private PokemonInfo postEvolution;
+    private PokemonNamesies preEvolution;
+    private PokemonNamesies postEvolution;
     private boolean isEgg;
 
     private State state;
@@ -182,11 +182,11 @@ class EvolutionView extends View {
         FontMetrics.setFont(g, 30);
         g.setColor(Color.BLACK);
 
-        String preIndex = isEgg ? Eggy.SPRITE_EGG_IMAGE_NAME : preEvolution.getImageName(evolvingPokemon.isShiny());
-        String postIndex = isEgg ? preEvolution.getImageName(evolvingPokemon.isShiny()) : postEvolution.getImageName(evolvingPokemon.isShiny());
+        String preImageName = isEgg ? Eggy.SPRITE_EGG_IMAGE_NAME : getImageName(preEvolution);
+        String postImageName = getImageName(isEgg ? preEvolution : postEvolution);
 
-        BufferedImage currEvolution = pokemonTiles.getTile(preIndex);
-        BufferedImage nextEvolution = pokemonTiles.getTile(postIndex);
+        BufferedImage currEvolution = pokemonTiles.getTile(preImageName);
+        BufferedImage nextEvolution = pokemonTiles.getTile(postImageName);
 
         if (evolvedState) {
             ImageUtils.drawBottomCenteredImage(g, nextEvolution, POKEMON_DRAW_LOCATION);
@@ -204,6 +204,10 @@ class EvolutionView extends View {
                 learnMovePanel.draw(g);
                 break;
         }
+    }
+
+    private String getImageName(PokemonNamesies pokemonNamesies) {
+        return pokemonNamesies.getInfo().getImageName(evolvingPokemon.isShiny());
     }
 
     private void evolveAnimation(Graphics g, BufferedImage currEvolution, BufferedImage nextEvolution) {
@@ -224,7 +228,7 @@ class EvolutionView extends View {
 
     private void setPokemon(ActivePokemon pokemon, BaseEvolution evolve) {
         evolvingPokemon = pokemon;
-        preEvolution = pokemon.getPokemonInfo();
+        preEvolution = pokemon.namesies();
 
         if (evolve == null) {
             isEgg = true;

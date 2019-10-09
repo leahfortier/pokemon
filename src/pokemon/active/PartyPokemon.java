@@ -195,7 +195,7 @@ public abstract class PartyPokemon implements Serializable {
         int numAbilities = this.getPokemonInfo().numAbilities();
 
         // Actually change Pokemon
-        pokemon = evolution.getEvolution().namesies();
+        pokemon = evolution.getEvolution();
 
         // Set name if it was not given a nickname
         if (sameName) {

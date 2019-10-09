@@ -29,7 +29,7 @@ class MoveEvolution extends BaseEvolution {
 
     @Override
     public String toString() {
-        return EvolutionType.MOVE + " " + super.getEvolution().namesies() + " " + this.move;
+        return EvolutionType.MOVE + " " + super.getEvolution() + " " + this.move;
     }
 
     @Override

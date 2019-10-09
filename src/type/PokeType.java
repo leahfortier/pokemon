@@ -1,7 +1,7 @@
 package type;
 
 import pokemon.active.PartyPokemon;
-import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonNamesies;
 import util.serialization.Serializable;
 
 import java.awt.Color;
@@ -67,8 +67,8 @@ public class PokeType implements Iterable<Type>, Serializable {
         return Arrays.asList(this.getTypes()).iterator();
     }
 
-    public static Color[] getColors(PokemonInfo p) {
-        return p.getType().getColors();
+    public static Color[] getColors(PokemonNamesies pokemonNamesies) {
+        return pokemonNamesies.getInfo().getType().getColors();
     }
 
     public static Color[] getColors(PartyPokemon p) {

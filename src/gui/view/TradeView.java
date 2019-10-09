@@ -16,7 +16,6 @@ import main.Game;
 import main.Global;
 import message.Messages;
 import pokemon.active.PartyPokemon;
-import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
 import trainer.Trainer;
 import trainer.TrainerType;
@@ -51,8 +50,8 @@ public class TradeView extends View {
 
     private int tradeAnimationTime;
 
-    private PokemonInfo offering;
-    private PokemonInfo requested;
+    private PokemonNamesies offering;
+    private PokemonNamesies requested;
 
     private BufferedImage theirPokesBackImage;
     private BufferedImage theirPokesFrontImage;
@@ -120,9 +119,9 @@ public class TradeView extends View {
                 Button button = getTeamButton(i);
                 if (button.checkConsumePress()) {
                     PartyPokemon myPokes = team.get(i);
-                    if (!myPokes.isEgg() && myPokes.namesies() == requested.namesies()) {
+                    if (!myPokes.isEgg() && myPokes.namesies() == requested) {
                         ActivePokemon theirPokes = new ActivePokemon(
-                                offering.namesies(),
+                                offering,
                                 myPokes.getLevel(),
                                 TrainerType.PLAYER
                         );
@@ -155,11 +154,11 @@ public class TradeView extends View {
         return buttons.get(teamIndex + teamIndex/NUM_TEAM_COLS);
     }
 
-    private void drawPanel(Graphics g, String label, DrawPanel panel, PokemonInfo pokemon) {
+    private void drawPanel(Graphics g, String label, DrawPanel panel, PokemonNamesies pokemon) {
         FontMetrics.setFont(g, 22);
 
         TextUtils.drawCenteredHeightString(g, label, panel.x + panel.getBorderSize() + 10, panel.y + panel.height/3);
-        ImageUtils.drawCenteredImageLabel(g, partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getName(), panel.centerX(), panel.y + 2*panel.height/3);
+        ImageUtils.drawCenteredImageLabel(g, partyTiles.getTile(pokemon.getInfo().getTinyImageName()), pokemon.getName(), panel.centerX(), panel.y + 2*panel.height/3);
     }
 
     private void drawTradeAnimation(Graphics g) {
@@ -264,15 +263,19 @@ public class TradeView extends View {
     }
 
     public void setTrade(PokemonNamesies tradePokemon, PokemonNamesies requestedPokemon) {
-        this.offering = tradePokemon.getInfo();
-        this.requested = requestedPokemon.getInfo();
+        this.offering = tradePokemon;
+        this.requested = requestedPokemon;
 
         this.canvasPanel.withBackgroundColors(new Color[] {
-                requested.getType().getFirstType().getColor(),
-                offering.getType().getFirstType().getColor()
+                this.getFirstTypeColor(requested),
+                this.getFirstTypeColor(offering)
         });
 
         this.offeringPanel.withBackgroundColors(PokeType.getColors(offering));
         this.requestedPanel.withBackgroundColors(PokeType.getColors(requested));
+    }
+
+    private Color getFirstTypeColor(PokemonNamesies pokemonNamesies) {
+        return pokemonNamesies.getInfo().getType().getFirstType().getColor();
     }
 }

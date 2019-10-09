@@ -25,7 +25,7 @@ class ItemEvolution extends BaseEvolution {
 
     @Override
     public String toString() {
-        return EvolutionType.ITEM + " " + super.getEvolution().namesies() + " " + this.item;
+        return EvolutionType.ITEM + " " + super.getEvolution() + " " + this.item;
     }
 
     @Override
