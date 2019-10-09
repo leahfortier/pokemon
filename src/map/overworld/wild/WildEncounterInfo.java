@@ -5,7 +5,7 @@ import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.InvokeInterfaces.WildEncounterSelector;
 import main.Game;
 import pokemon.species.PokemonNamesies;
-import util.GeneralUtils;
+import util.RandomUtils;
 
 import java.util.Arrays;
 
@@ -64,6 +64,6 @@ public class WildEncounterInfo {
             return forcedEncounter;
         }
 
-        return GeneralUtils.getPercentageValue(Arrays.asList(wildEncounters), WildEncounterInfo::getProbability);
+        return RandomUtils.getPercentageValue(Arrays.asList(wildEncounters), WildEncounterInfo::getProbability);
     }
 }

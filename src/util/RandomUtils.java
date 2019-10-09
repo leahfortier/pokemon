@@ -5,6 +5,7 @@ import main.Global;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 // Util class with methods related to RNG
 public final class RandomUtils {
@@ -73,5 +74,39 @@ public final class RandomUtils {
 
     public static <T> int getRandomIndex(List<T> list) {
         return getRandomInt(list.size());
+    }
+
+    // Returns a random value in values, where the probability of each value is specified in the chanceMapper
+    // It is expected that the sum of all values put through the mapper is exactly 100
+    public static <T> T getPercentageValue(List<T> values, Function<T, Integer> chanceMapper) {
+        int[] chances = new int[values.size()];
+        int sum = 0;
+        for (int i = 0; i < values.size(); i++) {
+            chances[i] = chanceMapper.apply(values.get(i));
+            sum += chances[i];
+        }
+
+        if (sum != 100) {
+            Global.error("Chances array is improperly formatted.");
+        }
+
+        return values.get(getPercentageIndex(chances));
+    }
+
+    // Returns a random index in chances, where each index has the probability of chance[index]
+    // It is expected that the sum of chances is exactly 100
+    public static int getPercentageIndex(int[] chances) {
+        int sum = 0;
+        int random = getRandomInt(100);
+
+        for (int i = 0; i < chances.length; i++) {
+            sum += chances[i];
+            if (random < sum) {
+                return i;
+            }
+        }
+
+        Global.error("Chances array is improperly formatted.");
+        return -1;
     }
 }

@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class GeneralUtils {
@@ -17,43 +16,6 @@ public final class GeneralUtils {
     // Utility class -- should not be instantiated
     private GeneralUtils() {
         Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
-    }
-
-    public static <T> T getPercentageValue(List<T> values, Function<T, Integer> chanceMapper) {
-        int[] chances = new int[values.size()];
-        int sum = 0;
-        for (int i = 0; i < values.size(); i++) {
-            chances[i] = chanceMapper.apply(values.get(i));
-            sum += chances[i];
-        }
-
-        if (sum != 100) {
-            Global.error("Chances array is improperly formatted.");
-        }
-
-        return values.get(getPercentageIndex(chances));
-    }
-
-    public static int getPercentageIndex(int[] chances) {
-        int sum = 0;
-        int random = RandomUtils.getRandomInt(100);
-
-        for (int i = 0; i < chances.length; i++) {
-            sum += chances[i];
-            if (random < sum) {
-                return i;
-            }
-        }
-
-        Global.error("Chances array is improperly formatted.");
-        return -1;
-    }
-
-    public static void shiftArray(int[] array, int shift) {
-        int[] temp = array.clone();
-        for (int i = 0; i < array.length; i++) {
-            array[i] = temp[(i + shift)%array.length];
-        }
     }
 
     public static void swapArrays(int[] first, int[] second) {
@@ -88,11 +50,11 @@ public final class GeneralUtils {
     public static int wrapIncrement(int previousAmount, int incrementAmount, int minValue, int maxValue) {
         int amount = previousAmount;
 
-        amount -= minValue;             // Set to be zero indexed
-        amount += incrementAmount;      // Increment by the specified amount
-        amount += maxValue;             // Confirm positive (BECAUSE CS IS STUPID AND MOD DOESN'T WORK RIGHT)
-        amount %= maxValue;             // Apply wrap around
-        amount += minValue;             // Set back to original index
+        amount -= minValue;        // Set to be zero indexed
+        amount += incrementAmount; // Increment by the specified amount
+        amount += maxValue;        // Confirm positive (BECAUSE CS IS STUPID AND MOD DOESN'T WORK RIGHT)
+        amount %= maxValue;        // Apply wrap around
+        amount += minValue;        // Set back to original index
 
         return amount;
     }
@@ -124,15 +86,15 @@ public final class GeneralUtils {
         }
     }
 
-    public static int max(double... values) {
-        double max = values[0];
-        for (double value : values) {
+    public static int max(int... values) {
+        int max = values[0];
+        for (int value : values) {
             if (value > max) {
                 max = value;
             }
         }
 
-        return (int)max;
+        return max;
     }
 
     public static int[] sixIntArray(Scanner in) {
@@ -168,6 +130,10 @@ public final class GeneralUtils {
         return iterator;
     }
 
+    public static int getTotalPages(int totalItems, int itemsPerPage) {
+        return Math.max(1, (int)Math.ceil((double)totalItems/itemsPerPage));
+    }
+
     public static <T> List<T> combine(List<T> firstList, List<T> secondList) {
         List<T> list = new ArrayList<>();
         list.addAll(firstList);
@@ -191,10 +157,6 @@ public final class GeneralUtils {
         T[] array = Arrays.copyOf(base, base.length + extraArgs.length);
         System.arraycopy(extraArgs, 0, array, base.length, array.length - base.length);
         return array;
-    }
-
-    public static int getTotalPages(int totalItems, int itemsPerPage) {
-        return Math.max(1, (int)Math.ceil((double)totalItems/itemsPerPage));
     }
 
     // Returns the estimated number of trials needed to get all n objects with probability 1/n

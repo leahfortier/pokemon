@@ -86,7 +86,6 @@ import trainer.Trainer;
 import type.PokeType;
 import type.Type;
 import type.TypeAdvantage;
-import util.GeneralUtils;
 import util.RandomUtils;
 
 import java.util.ArrayList;
@@ -3635,7 +3634,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            index = GeneralUtils.getPercentageIndex(CHANCES);
+            index = RandomUtils.getPercentageIndex(CHANCES);
         }
 
         @Override

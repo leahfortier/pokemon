@@ -2012,7 +2012,7 @@ Magnitude:
         ###
     PhysicalContact: False
     BeginAttack:
-        index = GeneralUtils.getPercentageIndex(CHANCES);
+        index = RandomUtils.getPercentageIndex(CHANCES);
         ###
     GetPow:
         return POWERS[index];
