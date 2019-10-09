@@ -20,6 +20,7 @@ import map.triggers.battle.FishingTrigger;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
+import message.Messages.MessageState;
 import pattern.SimpleMapTransition;
 import pattern.action.UpdateMatcher;
 import pokemon.ability.AbilityNamesies;
@@ -397,20 +398,19 @@ public class Player extends PlayerTrainer implements Serializable {
         int base = dead.getPokemonInfo().getBaseEXP();
         for (PartyPokemon p : team) {
             if (p.canFight() && p.isUsed()) {
-                ActivePokemon a = (ActivePokemon)p;
+                ActivePokemon active = (ActivePokemon)p;
 
                 double gain = wild*base*lev*Math.pow(2*lev + 10, 2.5);
-                gain /= 5*Math.pow(lev + a.getLevel() + 10, 2.5);
+                gain /= 5*Math.pow(lev + active.getLevel() + 10, 2.5);
                 gain++;
-                gain *= a.isHoldingItem(b, ItemNamesies.LUCKY_EGG) ? 1.5 : 1;
+                gain *= active.isHoldingItem(b, ItemNamesies.LUCKY_EGG) ? 1.5 : 1;
 
-                a.gainEXP(b, (int)Math.max(1, gain/numUsed), dead);
+                active.gainEXP(b, (int)Math.max(1, gain/numUsed), dead);
             }
         }
     }
 
     public void winBattle(Battle b, Opponent opponent) {
-
         // Trainers pay up!
         if (opponent instanceof Trainer) {
             Trainer opp = (Trainer)opponent;
@@ -433,6 +433,24 @@ public class Player extends PlayerTrainer implements Serializable {
         setFront();
 
         // WE'RE DONE HERE
+        Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
+    }
+
+    public void loseBattle(Battle b, Opponent opponent) {
+        // Blackout -- you're fucked
+        Messages.add(this.getName() + " is out of usable " + PokeString.POKEMON + "! " + this.getName() + " blacked out!");
+
+        // Sucks to suck
+        if (opponent instanceof Trainer) {
+            Trainer opp = (Trainer)opponent;
+            int cashMoney = this.sucksToSuck(opp.getDatCashMoney());
+            Messages.add(opp.getName() + " rummaged through the pockets of your passed out body and stole " + cashMoney + " " + PokeString.POKEDOLLARS + "!!!");
+        }
+
+        this.healAll();
+        this.teleportToPokeCenter();
+
+        Messages.clearMessages(MessageState.MAPPITY_MAP);
         Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
     }
 

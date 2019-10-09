@@ -170,10 +170,8 @@ public class Battle implements Serializable {
 
         effects.endTurn();
 
-        if (!isSimulating()) {
-            deadUser();
-            deadOpponent();
-        }
+        // Is this the end?
+        checkExit();
 
         printShit();
     }
@@ -249,59 +247,54 @@ public class Battle implements Serializable {
         return this.getTrainer(switchPokemon).getAction() == TrainerAction.SWITCH;
     }
 
-    private void deadUser() {
-        // Front Pokemon is still functioning
-        if (!player.front().isFainted(this)) {
+    // Handles exiting the battle and swapping dead Pokemon if relevant
+    private void checkExit() {
+        if (this.isSimulating()) {
             return;
+        }
+
+        boolean playerDead = player.front().isFainted(this);
+        boolean opponentDead = opponent.front().isFainted(this);
+
+        // Both front Pokemon are still functioning
+        if (!playerDead && !opponentDead) {
+            return;
+        }
+
+        // At least one Pokemon is dead
+        boolean playerBlackout = player.blackout(this);
+        boolean opponentBlackout = opponent.blackout(this);
+
+        Player player = (Player)this.player;
+
+        // There's no escape from this one...
+        if (playerBlackout) {
+            player.loseBattle(this, opponent);
+            return;
+        }
+
+        // They dead (not necessarily completely but still)
+        if (opponentDead) {
+            // Gain dat EXP
+            player.gainEXP(opponent.front(), this);
+
+            // You have achieved total victory
+            if (opponentBlackout) {
+                player.winBattle(this, opponent);
+                return;
+            }
         }
 
         // Dead Front Pokemon, but you still have others to spare -- force a switch
-        if (!player.blackout(this) && !opponent.blackout(this)) {
+        if (playerDead) {
             Messages.add(new MessageUpdate("What Pokemon would you like to switch to?").withUpdate(MessageUpdateType.FORCE_SWITCH));
-            return;
         }
 
-        // Blackout -- you're fucked
-        Messages.add(player.getName() + " is out of usable " + PokeString.POKEMON + "! " + player.getName() + " blacked out!");
-
-        // Sucks to suck
-        if (opponent instanceof Trainer) {
-            Trainer opp = (Trainer)opponent;
-            int cashMoney = player.sucksToSuck(opp.getDatCashMoney());
-            Messages.add(opp.getName() + " rummaged through the pockets of your passed out body and stole " + cashMoney + " " + PokeString.POKEDOLLARS + "!!!");
+        // We know this is not a wild battle anymore and they still have some Pokes left so send them out
+        if (opponentDead) {
+            ((Trainer)opponent).switchToRandom(this);
+            enterBattle(opponent.front());
         }
-
-        player.healAll();
-        ((Player)player).teleportToPokeCenter();
-
-        Messages.clearMessages(MessageState.MAPPITY_MAP);
-        Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
-    }
-
-    private void deadOpponent() {
-        ActivePokemon dead = opponent.front();
-
-        // YOU'RE FINE
-        if (!dead.isFainted(this)) {
-            return;
-        }
-
-        // Gain dat EXP
-        Player player = (Player)this.player;
-        player.gainEXP(dead, this);
-
-        // You have achieved total victory
-        if (opponent.blackout(this)) {
-            player.winBattle(this, opponent);
-            return;
-        }
-
-        // We know this is not a wild battle anymore and I don't feel like casting so much
-        Trainer opp = (Trainer)opponent;
-
-        // They still have some Pokes left
-        opp.switchToRandom(this);
-        enterBattle(opp.front());
     }
 
     public void enterBattle(ActivePokemon enterer) {
