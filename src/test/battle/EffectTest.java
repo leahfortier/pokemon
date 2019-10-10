@@ -140,13 +140,13 @@ public class EffectTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         battle.fight(AttackNamesies.PROTECT, AttackNamesies.SCREECH);
-        Assert.assertEquals(0, attacking.getStage(Stat.DEFENSE));
-        Assert.assertEquals(0, defending.getStage(Stat.DEFENSE));
+        attacking.assertStages(new TestStages());
+        defending.assertStages(new TestStages());
 
         // Make sure wears off by the next turn
         battle.defendingFight(AttackNamesies.SCREECH);
-        Assert.assertEquals(-2, attacking.getStage(Stat.DEFENSE));
-        Assert.assertEquals(0, defending.getStage(Stat.DEFENSE));
+        attacking.assertStages(new TestStages().set(-2, Stat.DEFENSE));
+        defending.assertStages(new TestStages());
     }
 
     private void checkProtect(boolean shouldProtect, AttackNamesies protectMove, AttackNamesies attack) {
@@ -179,10 +179,8 @@ public class EffectTest extends BaseTest {
 
             attacking.assertFullHealth();
             attacking.assertNoStatus();
+            attacking.assertStages(new TestStages());
             Assert.assertTrue(attacking.getEffects().asList().isEmpty());
-            for (Stat stat : Stat.BATTLE_STATS) {
-                Assert.assertEquals(0, attacking.getStage(stat));
-            }
         }
     }
 
@@ -800,7 +798,7 @@ public class EffectTest extends BaseTest {
         attacking.assertNotHoldingItem(battle); // Chesto Berry consumed
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(12/16.0, 4);
-        Assert.assertTrue(battle.hasEffect(TerrainNamesies.GRASSY_TERRAIN));
+        battle.assertHasEffect(TerrainNamesies.GRASSY_TERRAIN);
 
         // Break the substitute
         // Terrain should be cleared at the end of that last turn (and should not have healed Charmander)
@@ -809,7 +807,7 @@ public class EffectTest extends BaseTest {
         Assert.assertTrue(attacking.isLevitating(battle));
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(12/16.0, 4);
-        Assert.assertFalse(battle.hasEffect(TerrainNamesies.GRASSY_TERRAIN));
+        battle.assertNoEffect(TerrainNamesies.GRASSY_TERRAIN);
 
         // Make sure we don't heal at the end of this turn
         // Telekinesis should succeed since Substitute was broken

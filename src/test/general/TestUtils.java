@@ -73,12 +73,4 @@ public class TestUtils {
                 actual < lower || actual > upper
         );
     }
-
-    public static void assertUnique(int[] values) {
-        for (int i = 0; i < values.length; i++) {
-            for (int j = i + 1; j < values.length; j++) {
-                Assert.assertNotEquals(Arrays.toString(values), values[i], values[j]);
-            }
-        }
-    }
 }

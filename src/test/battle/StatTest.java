@@ -8,14 +8,16 @@ import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import org.junit.Assert;
 import org.junit.Test;
+import pokemon.active.StatValues;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import test.general.BaseTest;
-import test.general.TestUtils;
 import test.pokemon.TestPokemon;
 
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class StatTest extends BaseTest {
     @Test
@@ -46,10 +48,9 @@ public class StatTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         // Confirm all stats are unique
-        // Note: This has failed with the HP stat (which is technically irrelevant)
         // Note: Has also failed for Carracosta's Sp. Attack and Sp. Defense at 164
-        TestUtils.assertUnique(attacking.stats().getClonedStats());
-        TestUtils.assertUnique(defending.stats().getClonedStats());
+        assertUniqueStats(attacking);
+        assertUniqueStats(defending);
 
         // Psystrike uses attacker's Special Attack stat and defender's Defense stat
         attacking.setupMove(AttackNamesies.PSYSTRIKE, battle);
@@ -77,15 +78,32 @@ public class StatTest extends BaseTest {
 
         // Wonder Room switches defensive stats for both Pokemon
         battle.attackingFight(AttackNamesies.WONDER_ROOM);
-        Assert.assertTrue(battle.hasEffect(StandardBattleEffectNamesies.WONDER_ROOM));
+        battle.assertHasEffect(StandardBattleEffectNamesies.WONDER_ROOM);
         assertStats(battle, attacking, new StatChecker().set(Stat.DEFENSE, Stat.SP_DEFENSE).set(Stat.SP_DEFENSE, Stat.DEFENSE));
         assertStats(battle, defending, new StatChecker().set(Stat.DEFENSE, Stat.SP_DEFENSE).set(Stat.SP_DEFENSE, Stat.DEFENSE));
 
         // Using again will remove the effect (regardless of who uses)
         battle.defendingFight(AttackNamesies.WONDER_ROOM);
-        Assert.assertFalse(battle.hasEffect(StandardBattleEffectNamesies.WONDER_ROOM));
+        battle.assertNoEffect(StandardBattleEffectNamesies.WONDER_ROOM);
         assertStats(battle, attacking, new StatChecker());
         assertStats(battle, defending, new StatChecker());
+    }
+
+    // Asserts that all Pokemon's stats are unique ignoring HP
+    private void assertUniqueStats(TestPokemon pokemon) {
+        StatValues stats = pokemon.stats();
+        Set<Integer> seen = new HashSet<>();
+        for (Stat stat : Stat.STATS) {
+            if (stat == Stat.HP) {
+                continue;
+            }
+
+            int statValue = stats.get(stat);
+            Assert.assertFalse(pokemon.statsString(), seen.contains(statValue));
+            seen.add(statValue);
+        }
+
+        Assert.assertEquals(pokemon.statsString(), Stat.NUM_STATS - 1, seen.size());
     }
 
     // Holds a map from stat to what the stat should switch to
@@ -168,7 +186,7 @@ public class StatTest extends BaseTest {
         compareStats(false, battle, stats);
 
         battle.attackingFight(splitter);
-        Assert.assertTrue(battle.hasEffect(splitEffect));
+        battle.assertHasEffect(splitEffect);
 
         // Annndddd now they're the same it's magic
         compareStats(true, battle, stats);

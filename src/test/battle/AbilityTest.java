@@ -875,17 +875,13 @@ public class AbilityTest extends BaseTest {
 
         // Should take no damage from sandstorm
         magicGuardTest(
-                new TestInfo().attackingFight(AttackNamesies.SANDSTORM),
-                (battle, attacking, defending) -> {
-                    attacking.assertHealthRatio(15/16.0);
-                    defending.assertHealthRatio(15/16.0);
-                    Assert.assertTrue(battle.hasEffect(WeatherNamesies.SANDSTORM));
-                },
-                (battle, attacking, defending) -> {
-                    attacking.assertHealthRatio(15/16.0);
-                    defending.assertFullHealth();
-                    Assert.assertTrue(battle.hasEffect(WeatherNamesies.SANDSTORM));
-                }
+                new TestInfo().attackingFight(AttackNamesies.SANDSTORM)
+                              .with((battle, attacking, defending) -> {
+                                  attacking.assertHealthRatio(15/16.0);
+                                  battle.assertHasEffect(WeatherNamesies.SANDSTORM);
+                              }),
+                (battle, attacking, defending) -> defending.assertHealthRatio(15/16.0),
+                (battle, attacking, defending) -> defending.assertFullHealth()
         );
 
         // Should not take damage from Life Orb
@@ -894,15 +890,11 @@ public class AbilityTest extends BaseTest {
                               .with((battle, attacking, defending) -> {
                                   defending.setExpectedDamageModifier(5324.0/4096.0);
                                   battle.fight(AttackNamesies.ENDURE, AttackNamesies.TACKLE);
+
+                                  attacking.assertNotFullHealth();
                               }),
-                (battle, attacking, defending) -> {
-                    attacking.assertNotFullHealth();
-                    defending.assertHealthRatio(.9);
-                },
-                (battle, attacking, defending) -> {
-                    attacking.assertNotFullHealth();
-                    defending.assertFullHealth();
-                }
+                (battle, attacking, defending) -> defending.assertHealthRatio(.9),
+                (battle, attacking, defending) -> defending.assertFullHealth()
         );
 
         // Should not take damage from Mind Blown
@@ -943,15 +935,11 @@ public class AbilityTest extends BaseTest {
                                   defending.assertHealthRatio(.5);
 
                                   battle.fight(AttackNamesies.ENDURE, AttackNamesies.ABSORB);
+
+                                  attacking.assertNotFullHealth();
                               }),
-                (battle, attacking, defending) -> {
-                    attacking.assertNotFullHealth();
-                    TestUtils.assertGreater(defending.getHpString(), .5, defending.getHPRatio());
-                },
-                (battle, attacking, defending) -> {
-                    attacking.assertNotFullHealth();
-                    defending.assertHealthRatio(.5);
-                }
+                (battle, attacking, defending) -> TestUtils.assertGreater(defending.getHpString(), .5, defending.getHPRatio()),
+                (battle, attacking, defending) -> defending.assertHealthRatio(.5)
         );
     }
 

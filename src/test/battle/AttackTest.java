@@ -751,16 +751,16 @@ public class AttackTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
 
         battle.fight(AttackNamesies.DOUBLE_TEAM, AttackNamesies.MINIMIZE);
-        Assert.assertEquals(1, attacking.getStage(Stat.EVASION));
-        Assert.assertEquals(2, defending.getStage(Stat.EVASION));
+        attacking.assertStages(new TestStages().set(1, Stat.EVASION));
+        defending.assertStages(new TestStages().set(2, Stat.EVASION));
 
         battle.attackingFight(AttackNamesies.FORESIGHT);
-        Assert.assertEquals(1, attacking.getStage(Stat.EVASION));
-        Assert.assertEquals(0, defending.getStage(Stat.EVASION));
+        attacking.assertStages(new TestStages().set(1, Stat.EVASION));
+        defending.assertStages(new TestStages());
 
         battle.defendingFight(AttackNamesies.MIRACLE_EYE);
-        Assert.assertEquals(0, attacking.getStage(Stat.EVASION));
-        Assert.assertEquals(0, defending.getStage(Stat.EVASION));
+        attacking.assertStages(new TestStages());
+        defending.assertStages(new TestStages());
     }
 
     @Test
@@ -863,8 +863,8 @@ public class AttackTest extends BaseTest {
         // Wrong attacker -- effects shouldn't change
         battle.attackingFight(AttackNamesies.RAPID_SPIN);
         battle.defendingFight(AttackNamesies.DEFOG);
-        Assert.assertEquals(-1, attacking.getStage(Stat.EVASION));
-        Assert.assertEquals(0, defending.getStage(Stat.EVASION));
+        attacking.assertStages(new TestStages().set(-1, Stat.EVASION));
+        defending.assertStages(new TestStages());
         battle.assertHasEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
         battle.assertHasEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
         battle.assertHasEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
@@ -874,8 +874,8 @@ public class AttackTest extends BaseTest {
 
         // Correct defog attacker -- should only remove the appropriate effects
         battle.attackingFight(AttackNamesies.DEFOG);
-        Assert.assertEquals(-1, attacking.getStage(Stat.EVASION));
-        Assert.assertEquals(-1, defending.getStage(Stat.EVASION));
+        attacking.assertStages(new TestStages().set(-1, Stat.EVASION));
+        defending.assertStages(new TestStages().set(-1, Stat.EVASION));
         battle.assertNoEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
         battle.assertNoEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
         battle.assertNoEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
