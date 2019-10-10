@@ -167,8 +167,8 @@ public class ModifierTest extends BaseTest {
         powerChangeTest(1, AttackNamesies.THUNDERBOLT, new TestInfo().attacking(AbilityNamesies.GALVANIZE));
         powerChangeTest(1, AttackNamesies.VINE_WHIP, new TestInfo().attacking(AbilityNamesies.GALVANIZE));
 
-        // Normalize boosts non-normal-type moves that have been changed to normal type
-        powerChangeTest(1, AttackNamesies.SWIFT, new TestInfo().attacking(AbilityNamesies.NORMALIZE));
+        // Normalize boosts normal-type moves (regardless of if it was originally normal)
+        powerChangeTest(1.2, AttackNamesies.SWIFT, new TestInfo().attacking(AbilityNamesies.NORMALIZE));
         powerChangeTest(1.2, AttackNamesies.THUNDERBOLT, new TestInfo().attacking(AbilityNamesies.NORMALIZE));
         powerChangeTest(1.2, AttackNamesies.VINE_WHIP, new TestInfo().attacking(AbilityNamesies.NORMALIZE));
 

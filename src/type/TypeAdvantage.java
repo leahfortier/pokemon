@@ -5,6 +5,7 @@ import battle.Battle;
 import battle.effect.InvokeInterfaces.AdvantageMultiplierMove;
 import battle.effect.InvokeInterfaces.AttackingNoAdvantageChanger;
 import battle.effect.InvokeInterfaces.DefendingNoAdvantageChanger;
+import message.Messages;
 import pokemon.ability.AbilityNamesies;
 
 import java.util.EnumMap;
@@ -182,12 +183,12 @@ public enum TypeAdvantage {
         return advantage == 0;
     }
 
-    public static String getSuperEffectiveMessage() {
-        return "It's super effective!";
-    }
-
-    public static String getNotVeryEffectiveMessage() {
-        return "It's not very effective...";
+    public static void addAdvantageMessage(double advantage) {
+        if (isNotVeryEffective(advantage)) {
+            Messages.add("It's not very effective...");
+        } else if (isSuperEffective(advantage)) {
+            Messages.add("It's super effective!");
+        }
     }
 
     public static String getDoesNotEffectMessage(ActivePokemon opp) {

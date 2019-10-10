@@ -7,7 +7,7 @@ from scripts.pokeapi.form_config import FormConfig
 from scripts.move import Move, LevelUpMoves
 from scripts.substitution import attack_substitution, learnable_attack_substitution, learnable_attack_additions, \
     ability_substitution, type_substitution, name_substitution, gender_substitution, stat_substitution, \
-    effort_substitution, capture_rate_substitution, level_up_attack_additions
+    effort_substitution, capture_rate_substitution, level_up_attack_additions, egg_group_substitution
 from scripts.util import namesies, remove_suffix, decimeters_to_inches, hectograms_to_lbs, replace_new_lines, \
     replace_special
 
@@ -209,6 +209,7 @@ class Parser:
     def get_egg_groups(self) -> List[str]:
         # Get them egg groupies
         egg_groups = [namesies(egg_group.name) for egg_group in self.species.egg_groups]
+        egg_groups = egg_group_substitution(self.num, egg_groups)
 
         assert len(egg_groups) in [1, 2]
         return egg_groups

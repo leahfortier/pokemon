@@ -433,7 +433,17 @@ def gender_substitution(num: int, female_ratio: int) -> int:
     return female_ratio
 
 
-# Replaces the gender ratio of the Pokemon if applicable
+# Replaces the egg group of the Pokemon if applicable
+def egg_group_substitution(num: int, egg_groups: List[str]) -> List[str]:
+    # Nidorina and Nidoqueen for some super mysterious reason cannot breed in the games and it makes no sense
+    if num in [30, 31]:
+        assert egg_groups == ['NO_EGGS']
+        return ['GROUND', 'MONSTER']
+
+    return egg_groups
+
+
+# Replaces the capture rate of the Pokemon if applicable
 def capture_rate_substitution(num: int, capture_rate: int) -> int:
     # Necrozma -- 255 just seems really unreasonable
     if num == 800:

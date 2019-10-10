@@ -122,7 +122,7 @@ public class MedalCase implements Serializable {
         if (TypeAdvantage.isSuperEffective(advantage)) {
             this.increase(MedalTheme.SUPER_EFFECTIVE_MOVES_USED);
         } else if (TypeAdvantage.isNotVeryEffective(advantage)) {
-            earnMedal(Medal.NONEFFECTIVE_ARTIST);
+            this.earnMedal(Medal.NONEFFECTIVE_ARTIST);
         }
     }
 

@@ -19,7 +19,6 @@ import util.serialization.Serializable;
 import util.string.StringAppender;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -61,7 +60,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
             PokemonNamesies.POPPLIO
     };
 
-    private static final PokemonNamesies[] babyPokemon = new PokemonNamesies[] {
+    private static final Set<PokemonNamesies> babyPokemon = EnumSet.of(
             PokemonNamesies.PICHU,
             PokemonNamesies.CLEFFA,
             PokemonNamesies.IGGLYBUFF,
@@ -80,7 +79,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
             PokemonNamesies.MUNCHLAX,
             PokemonNamesies.RIOLU,
             PokemonNamesies.MANTYKE
-    };
+    );
 
     private static final Map<Type, Set<PokemonNamesies>> pokemonTypeMap = new EnumMap<>(Type.class);
 
@@ -237,6 +236,10 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         return String.format("%d'%02d\"", height/12, height%12);
     }
 
+    public int getHeightInches() {
+        return height;
+    }
+
     public double getWeight() {
         return weight;
     }
@@ -323,6 +326,10 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         }
 
         return incenseBabies.contains(namesies);
+    }
+
+    public boolean isBabyPokemon() {
+        return babyPokemon.contains(namesies);
     }
 
     // Returns what level the Pokemon will learn the given attack, returns null if they cannot learn it by level up
@@ -491,11 +498,11 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     }
 
     public static int getNumBabyPokemon() {
-        return babyPokemon.length;
+        return babyPokemon.size();
     }
 
     public static Set<PokemonNamesies> getAllBabyPokemon() {
-        return Arrays.stream(babyPokemon).collect(Collectors.toSet());
+        return EnumSet.copyOf(babyPokemon);
     }
 
     public static int getNumTypedPokemon(Type type) {

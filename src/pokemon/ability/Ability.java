@@ -2125,33 +2125,21 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Normalize extends Ability implements ChangeAttackTypeEffect, EndTurnEffect, PowerChangeEffect {
+    static class Normalize extends Ability implements ChangeAttackTypeEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
-
-        private boolean activated;
 
         Normalize() {
             super(AbilityNamesies.NORMALIZE, "All the Pok\u00e9mon's moves become Normal type. The power of those moves is boosted a little.");
-            this.activated = false;
         }
 
         @Override
         public Type changeAttackType(Attack attack, Type original) {
-            if (original != Type.NORMAL) {
-                this.activated = true;
-            }
-
             return Type.NORMAL;
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            this.activated = false;
-        }
-
-        @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return activated ? 1.2 : 1;
+            return user.isAttackType(Type.NORMAL) ? 1.2 : 1;
         }
     }
 

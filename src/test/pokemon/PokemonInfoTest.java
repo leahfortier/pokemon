@@ -23,6 +23,7 @@ import test.general.BaseTest;
 import trainer.TrainerType;
 import type.PokeType;
 import type.Type;
+import util.GeneralUtils;
 import util.MultiMap;
 import util.string.StringUtils;
 
@@ -83,6 +84,11 @@ public class PokemonInfoTest extends BaseTest {
                 if (LevelUpMove.isDefaultLevel(level)) {
                     hasDefault = true;
                 }
+
+                // If it learns a move at evolution, then it cannot be a base evolution
+                if (level == PokemonInfo.EVOLUTION_LEVEL_LEARNED) {
+                    Assert.assertNotEquals(pokemonInfo.namesies(), pokemonInfo.getBaseEvolution());
+                }
             }
 
             Assert.assertTrue(pokemonInfo.getName(), hasDefault);
@@ -118,17 +124,14 @@ public class PokemonInfoTest extends BaseTest {
 
                     // Default moves should be first in the order, and there can be no default level collisions
                     Assert.assertFalse(message, levelUpMove.isDefaultLevel());
+                    Assert.assertTrue(message, currentLevel > 1);
 
                     // However, it is possible to learn a move at a regular level as well as a default level
                     if (!exceptions.contains(currentPair)) {
-                        // Confirm again that the current level is not default (this is kind of unnecessary oh well)
-                        Assert.assertTrue(message, currentLevel > 1);
-
                         // There should be exactly one collision at this point and IT BETTER BE A DEFAULT LEVEL
+                        // Also when I say default level I do not include evolution level (that should be only once)
                         Assert.assertEquals(message, 1, levels.size());
-                        for (Integer level : levels) {
-                            Assert.assertTrue(message, LevelUpMove.isDefaultLevel(level));
-                        }
+                        Assert.assertEquals(message, 1, levels.get(0).intValue());
                     }
                 }
 
@@ -199,18 +202,6 @@ public class PokemonInfoTest extends BaseTest {
         }
 
         return total;
-    }
-
-    @Test
-    public void genderTest() {
-        TestUtils.assertOutsideRange(0, 8, Gender.GENDERLESS_VALUE);
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
-            int femaleRatio = pokemonInfo.getFemaleRatio();
-            if (femaleRatio != Gender.GENDERLESS_VALUE) {
-                TestUtils.assertInclusiveRange(pokemonInfo.getName(), 0, 8, femaleRatio);
-            }
-        }
     }
 
     @Test
@@ -360,37 +351,116 @@ public class PokemonInfoTest extends BaseTest {
 
     @Test
     public void eggGroupTest() {
+        Set<EggGroup> allGroups = EnumSet.allOf(EggGroup.class);
+        EggGroup[] noEggs = new EggGroup[] { EggGroup.NO_EGGS };
+
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
             PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
+            PokemonNamesies namesies = pokemonInfo.namesies();
             EggGroup[] eggGroups = pokemonInfo.getEggGroups();
+            String name = pokemonInfo.getName();
 
             // Pokemon can either have one or two egg groups
-            TestUtils.assertInclusiveRange(pokemonInfo.getName(), 1, 2, eggGroups.length);
+            TestUtils.assertInclusiveRange(name, 1, 2, eggGroups.length);
 
             // If two egg groups, cannot be the same
             if (eggGroups.length == 2) {
-                Assert.assertNotEquals(pokemonInfo.getName(), eggGroups[0], eggGroups[1]);
+                Assert.assertNotEquals(name, eggGroups[0], eggGroups[1]);
             }
 
             // Egg group is Ditto if and only if the Pokemon is Ditto
-            Assert.assertEquals(
-                    pokemonInfo.getName(),
-                    eggGroups[0] == EggGroup.DITTO,
-                    pokemonInfo.namesies() == PokemonNamesies.DITTO
-            );
+            Assert.assertEquals(name, eggGroups[0] == EggGroup.DITTO, namesies == PokemonNamesies.DITTO);
 
             for (EggGroup eggGroup : eggGroups) {
                 // If cannot produce eggs, then NO_EGGS should be the only egg group
                 // Similarily, the Ditto egg group is standalone
                 if (eggGroup == EggGroup.NO_EGGS || eggGroup == EggGroup.DITTO) {
-                    Assert.assertEquals(pokemonInfo.getName(), 1, eggGroups.length);
+                    Assert.assertEquals(name, 1, eggGroups.length);
                 }
+
+                allGroups.remove(eggGroup);
+            }
+
+            // Make sure egg groups are consistent across evolutions (unless is a baby)
+            PokemonNamesies[] evolutions = pokemonInfo.getEvolution().getEvolutions();
+            for (PokemonNamesies evolution : evolutions) {
+                String message = name + " " + evolution.getName();
+                PokemonInfo evolutionInfo = evolution.getInfo();
+
+                // Baby Pokemon can never breed (but can always be bred)
+                if (pokemonInfo.isBabyPokemon()) {
+                    Assert.assertArrayEquals(message, noEggs, eggGroups);
+                    Assert.assertTrue(message, GeneralUtils.contains(EggGroup.NO_EGGS, eggGroups));
+                    Assert.assertFalse(message, GeneralUtils.contains(EggGroup.NO_EGGS, evolutionInfo.getEggGroups()));
+                } else {
+                    assertSameEggGroups(namesies, evolution);
+                }
+
+                // Evolved Pokemon cannot be babies
+                Assert.assertFalse(message, evolutionInfo.isBabyPokemon());
             }
         }
+
+        // Make sure every egg group is seen at least once
+        Assert.assertTrue(allGroups.toString(), allGroups.isEmpty());
+
+        // Just to be sure
+        assertSameEggGroups(PokemonNamesies.NIDORAN_F, PokemonNamesies.NIDORAN_M);
+        assertSameEggGroups(PokemonNamesies.VOLBEAT, PokemonNamesies.ILLUMISE);
+    }
+
+    private void assertSameEggGroups(PokemonNamesies first, PokemonNamesies second) {
+        Assert.assertArrayEquals(
+                first.getName() + " " + second.getName(),
+                first.getInfo().getEggGroups(),
+                second.getInfo().getEggGroups()
+        );
+    }
+
+    @Test
+    public void attributesTest() {
+        // Testing for other basic attributes like height, weight, catch rate
+        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
+            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
+            String name = pokemonInfo.getName();
+
+            // Height and weight must be positive
+            TestUtils.assertGreater(name, pokemonInfo.getHeightInches(), 0);
+            TestUtils.assertGreater(name, pokemonInfo.getWeight(), 0);
+
+            // Catch rate must be between 3 and 255
+            TestUtils.assertInclusiveRange(name, 3, 255, pokemonInfo.getCatchRate());
+
+            // Egg steps must be divisible by 256
+            Assert.assertEquals(name, 0, pokemonInfo.getEggSteps()%256);
+
+            // Capital classification
+            Assert.assertTrue(name, Character.isUpperCase(pokemonInfo.getClassification().charAt(0)));
+
+            // Flavor text should start and end with proper punctuation
+            // Also I really don't like when periods come before the quotation they should be after...
+            // 20 is kind of arbitrary (and kind of short) but just to make sure it's something
+            String flavorText = pokemonInfo.getFlavorText();
+            String flavorMessage = name + " " + flavorText;
+            Assert.assertTrue(flavorMessage, Character.isUpperCase(flavorText.charAt(0)));
+            Assert.assertTrue(flavorMessage, flavorText.endsWith(".") || flavorText.endsWith("!"));
+            Assert.assertFalse(flavorMessage, flavorText.contains(".\""));
+            TestUtils.assertGreater(flavorMessage, flavorMessage.length(), 20);
+
+            // Gender ratio must be between 0 and 8 if not genderless
+            int femaleRatio = pokemonInfo.getFemaleRatio();
+            if (femaleRatio != Gender.GENDERLESS_VALUE) {
+                TestUtils.assertInclusiveRange(name, 0, 8, femaleRatio);
+            }
+        }
+
+        // Genderless value cannot be in the same range as the female ratios
+        TestUtils.assertOutsideRange(0, 8, Gender.GENDERLESS_VALUE);
     }
 
     @Test
     public void shedinjaTest() {
+        // Basically making sure tht its HP is always 1
         int[] levels = new int[] { 1, 50, 100 };
         for (int level : levels) {
             TestPokemon shedinja = new TestPokemon(PokemonNamesies.SHEDINJA, level, TrainerType.PLAYER);

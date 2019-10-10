@@ -2237,7 +2237,7 @@ POISON_POINT RIVALRY HUSTLE
 Poison Pin
 31 44.1 When it senses danger, it raises all the barbs on its body. These barbs grow slower than Nidorino's.
 5120
-NO_EGGS
+GROUND MONSTER
 13
 1 GROWL
 1 SCRATCH
@@ -2314,7 +2314,7 @@ POISON_POINT RIVALRY SHEER_FORCE
 Drill
 51 132.3 Its entire body is armored with hard scales. It will protect the young in its burrow with its life.
 5120
-NO_EGGS
+GROUND MONSTER
 9
 1 SUPERPOWER
 1 SCRATCH
@@ -8752,7 +8752,7 @@ NONE
 4
 CHLOROPHYLL HARVEST
 Coconut
-79 264.6 It is called "The Walking Jungle." If a head grows too big, it falls off and becomes an Exeggcute.
+79 264.6 It is called "The Walking Jungle". If a head grows too big, it falls off and becomes an Exeggcute.
 5120
 PLANT
 9
@@ -14808,7 +14808,7 @@ NONE
 4
 VOLT_ABSORB WATER_ABSORB
 Light
-47 49.6 Lanturn's light can shine up from great depths. It is nicknamed "The Deep-Sea Star."
+47 49.6 Lanturn's light can shine up from great depths. It is nicknamed "The Deep-Sea Star".
 5120
 WATER2
 22
@@ -27611,7 +27611,7 @@ NONE
 4
 ROUGH_SKIN SPEED_BOOST
 Brutal
-71 195.8 Its fangs rip through sheet iron. It swims at 75 mph and is known as "The Bully of the Sea."
+71 195.8 Its fangs rip through sheet iron. It swims at 75 mph and is known as "The Bully of the Sea".
 5120
 WATER2
 21
@@ -28591,7 +28591,7 @@ NONE
 4
 LEVITATE
 Mystic
-79 180.8 It whips up sandstorms with powerful flaps of its wings. It is known as "The Desert Spirit."
+79 180.8 It whips up sandstorms with powerful flaps of its wings. It is known as "The Desert Spirit".
 5120
 BUG
 20
@@ -36547,7 +36547,7 @@ LEVEL DRIFBLIM 28
 4
 AFTERMATH UNBURDEN FLARE_BOOST
 Balloon
-16 2.6 Because of the way it floats aimlessly, an old folktale calls it a "Signpost for Wandering Spirits."
+16 2.6 Because of the way it floats aimlessly, an old folktale calls it a "Signpost for Wandering Spirits".
 7680
 INDETERMINATE
 15
@@ -37035,7 +37035,7 @@ NONE
 4
 INSOMNIA SUPER_LUCK MOXIE
 Big Boss
-35 60.2 If one utters a deep cry, many Murkrow gather quickly. For this, it is called "Summoner of Night."
+35 60.2 If one utters a deep cry, many Murkrow gather quickly. For this, it is called "Summoner of Night".
 5120
 FLYING
 12
@@ -55640,7 +55640,7 @@ NONE
 0
 SAND_FORCE SHEER_FORCE
 Abundance
-59 149.9 Lands visited by Landorus grant such bountiful crops that it has been hailed as "The Guardian of the Fields."
+59 149.9 Lands visited by Landorus grant such bountiful crops that it has been hailed as "The Guardian of the Fields".
 30720
 NO_EGGS
 20

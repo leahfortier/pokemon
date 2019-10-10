@@ -62,6 +62,7 @@ Names that go out of bounds:
     Lv100 (Enemy) Charmander has the gender sign overlap with the level
     BallItem text against a trainer goes out of bounds
     Synchronize ability text is wayyyy out of bounds on party view
+    pokedex gender string overflow for 87.5/12.5%
 
 Descriptions that change manually:
     Moves:
@@ -92,7 +93,6 @@ Other random things:
         - Text Speed
         - Animation Speed
 	generalize catch animation again
-	invoke methods that need to call another method immediately after (boolean and void generally or boolean and String just for message)
 	connect interface gen with override input
 	create some sort of silph surboard for Silph Surfer evolution
 	self switching moves require input -- currently just switching to random
@@ -103,22 +103,17 @@ Other random things:
 	Blue needs to be in the Pokemon Center after you battle him
 	Make sure relearning moves works for evolve moves too
 	Generalize double cast remove effects (example: Power Trick)
-	Test for base evolutions don't have a move that they learn at evolution
 	Test that Shedinja is genderless when it evolves and that it doesn't appear when you cancel evolution
-	Make cast method final for effects and have a different method to handle additional things that need to happen so shit isn't always calling super
-	Generalize activated field for single turn power multipliers (like Normalize)
 	Remove mainMenuTiles (can keep some for reference inside the images folder) but def move out of tiles
 		-- same with pauseViewTiles
 	Berry harvest time and amounts
 	Look at light screen and light clay cast thingy -- why is it not applying turns to itself?
-	Change effects list for Defog and RapidSpin to only include PokemonEffect and TeamEffects
 	should movetypes be a set?
 	BasicPanels fullMessagePanel -- Is 440 game.height - panel.height?
 	TileSet getTile should use readImage in FileIO -- just check exists first
 	Exeggutor plant gives two Exeggutor?? -- got one, battled mom, got another? also got one, saved, got another
 	MoveUseItems do not work in battle -- causes NPE
 	Heal Block doesn't work right either
-	rewrite Ability.evolutionAssign() to hold the ability index to remain consistent across evolutions
 	Dancer -- test with Snatch (should not activate); test with Flinched (should not activate)
 	test entering a new location while medals are displaying
 	Explosion doesn't kill the user when used against a Ghost type Pokemon
@@ -132,7 +127,6 @@ Other random things:
     beat up power was changed
     triple kick power is supposed to be 10, 20, 30
     foul play is all wrong
-    acupressure should only try to raise non-maximized stats and should fail if all maxed out
     test healing wish and snatch
     okay so Mirror Move is supposed to use the last move that targeted the user, not the last move that the opponent used... what is happening I did not know this
     look at destiny bond and successive decay
@@ -155,12 +149,14 @@ Other random things:
         - so if you put the flag on the area then when you talk to the rival he speaks Al Bhed...
     uhhhhh so should I store the current battle on the player object???? would that just make everythinnnnggggggg better????
         - if I end up doing would definitely do the simulating check for medal case not everywhere
-    should we have a new class to handle damage calculation shit and return an object with all relevant information (not just damage)
-        - then it can also do the crit test and return the advantage (so is not calculated twice for message purposes)
-        - like most of this stuff doesn't feel like it should be inside applyDamage -- that should just be applying the damage!!!! not printing/more calculating!!
     should probably have tests for moves that ignore stages
     might make sense at this point to have types be their own classes (still enum like the namesies)
         - Powder moves with grass
         - lots and lots of status immunities etc
-    
-    
+    not sure if I want to do anything with new flavor text entries (but after what happened with the classifications I'm wondering if this is more important)
+    I'm not sure we actually need to be replacing the names with special characters and it might be worth giving it another look (Nidoran F/M, Flabebe)
+    add more things to evolution test besides abilities
+    oran berry message prints before its super effective prints
+    toxic boost flare boost and marvel scale should be statusboosters
+    need like a 'b' button where you can click through things but can't start a new dialogue
+    need iterator for PokemonInfo
