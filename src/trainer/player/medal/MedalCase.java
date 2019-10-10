@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.attack.AttackNamesies;
 import pokemon.active.IndividualValues;
 import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonList;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import trainer.player.pokedex.Pokedex;
@@ -57,7 +58,7 @@ public class MedalCase implements Serializable {
             }
         }
 
-        this.babyPokemonUnhatched = PokemonInfo.getAllBabyPokemon();
+        this.babyPokemonUnhatched = PokemonList.instance().getAllBabyPokemon();
 
         this.toDisplay = new ArrayDeque<>();
     }
@@ -96,7 +97,7 @@ public class MedalCase implements Serializable {
         this.increase(MedalTheme.EGGS_HATCHED);
 
         this.babyPokemonUnhatched.remove(hatched.namesies());
-        this.update(MedalTheme.BABIES_HATCHED, PokemonInfo.getNumBabyPokemon() - this.babyPokemonUnhatched.size());
+        this.update(MedalTheme.BABIES_HATCHED, PokemonList.instance().getNumBabyPokemon() - this.babyPokemonUnhatched.size());
 
         int perfectIVs = 0;
         for (Stat stat : Stat.STATS) {
@@ -140,7 +141,7 @@ public class MedalCase implements Serializable {
             for (Type type : pokemonInfo.getType()) {
                 this.uncaughtPokemonTypeMap.get(type).remove(updated);
                 // TODO: Test case for this in case it changes names -- I don't like that this is hardcoded
-                this.update(MedalTheme.valueOf(type.name() + "_CATCHER"), PokemonInfo.getNumTypedPokemon(type) - this.uncaughtPokemonTypeMap.get(type).size());
+                this.update(MedalTheme.valueOf(type.name() + "_CATCHER"), PokemonList.instance().getNumTypedPokemon(type) - this.uncaughtPokemonTypeMap.get(type).size());
             }
         }
     }

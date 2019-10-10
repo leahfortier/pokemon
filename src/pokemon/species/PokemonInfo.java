@@ -12,14 +12,12 @@ import pokemon.evolution.EvolutionType;
 import type.PokeType;
 import type.Type;
 import util.GeneralUtils;
-import util.RandomUtils;
 import util.file.FileIO;
 import util.file.FileName;
 import util.serialization.Serializable;
 import util.string.StringAppender;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,69 +33,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     public static final int NUM_POKEMON = 825;
     public static final int EVOLUTION_LEVEL_LEARNED = 0;
 
-    // All starters
-    private static final PokemonNamesies[] starterPokemon = new PokemonNamesies[] {
-            PokemonNamesies.BULBASAUR,
-            PokemonNamesies.CHARMANDER,
-            PokemonNamesies.SQUIRTLE,
-            PokemonNamesies.CHIKORITA,
-            PokemonNamesies.CYNDAQUIL,
-            PokemonNamesies.TOTODILE,
-            PokemonNamesies.TREECKO,
-            PokemonNamesies.TORCHIC,
-            PokemonNamesies.MUDKIP,
-            PokemonNamesies.TURTWIG,
-            PokemonNamesies.CHIMCHAR,
-            PokemonNamesies.PIPLUP,
-            PokemonNamesies.SNIVY,
-            PokemonNamesies.TEPIG,
-            PokemonNamesies.OSHAWOTT,
-            PokemonNamesies.CHESPIN,
-            PokemonNamesies.FENNEKIN,
-            PokemonNamesies.FROAKIE,
-            PokemonNamesies.ROWLET,
-            PokemonNamesies.LITTEN,
-            PokemonNamesies.POPPLIO
-    };
-
-    private static final Set<PokemonNamesies> babyPokemon = EnumSet.of(
-            PokemonNamesies.PICHU,
-            PokemonNamesies.CLEFFA,
-            PokemonNamesies.IGGLYBUFF,
-            PokemonNamesies.TOGEPI,
-            PokemonNamesies.TYROGUE,
-            PokemonNamesies.SMOOCHUM,
-            PokemonNamesies.ELEKID,
-            PokemonNamesies.MAGBY,
-            PokemonNamesies.AZURILL,
-            PokemonNamesies.WYNAUT,
-            PokemonNamesies.BUDEW,
-            PokemonNamesies.CHINGLING,
-            PokemonNamesies.BONSLY,
-            PokemonNamesies.MIME_JR,
-            PokemonNamesies.HAPPINY,
-            PokemonNamesies.MUNCHLAX,
-            PokemonNamesies.RIOLU,
-            PokemonNamesies.MANTYKE
-    );
-
-    private static final Map<Type, Set<PokemonNamesies>> pokemonTypeMap = new EnumMap<>(Type.class);
-
     private static Map<Integer, PokemonInfo> map;
     private static Set<PokemonNamesies> incenseBabies;
-
-    static {
-        for (Type type : Type.values()) {
-            pokemonTypeMap.put(type, EnumSet.noneOf(PokemonNamesies.class));
-        }
-
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemon = PokemonInfo.getPokemonInfo(i);
-            for (Type type : pokemon.getType()) {
-                pokemonTypeMap.get(type).add(pokemon.namesies());
-            }
-        }
-    }
 
     private final int number;
     private final PokemonNamesies namesies;
@@ -329,7 +266,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     }
 
     public boolean isBabyPokemon() {
-        return babyPokemon.contains(namesies);
+        return PokemonList.instance().isBabyPokemon(namesies);
     }
 
     // Returns what level the Pokemon will learn the given attack, returns null if they cannot learn it by level up
@@ -491,21 +428,5 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
                 incenseBabies.add(((IncenseItem)item).getBaby());
             }
         }
-    }
-
-    public static PokemonNamesies getRandomStarterPokemon() {
-        return RandomUtils.getRandomValue(starterPokemon);
-    }
-
-    public static int getNumBabyPokemon() {
-        return babyPokemon.size();
-    }
-
-    public static Set<PokemonNamesies> getAllBabyPokemon() {
-        return EnumSet.copyOf(babyPokemon);
-    }
-
-    public static int getNumTypedPokemon(Type type) {
-        return pokemonTypeMap.get(type).size();
     }
 }

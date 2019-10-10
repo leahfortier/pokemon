@@ -1,6 +1,13 @@
 package pokemon.species;
 
+import type.Type;
+import util.RandomUtils;
+
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public class PokemonList implements Iterable<PokemonInfo> {
     private static PokemonList instance;
@@ -12,8 +19,88 @@ public class PokemonList implements Iterable<PokemonInfo> {
         return instance;
     }
 
+    // All starters
+    private static final PokemonNamesies[] starterPokemon = new PokemonNamesies[] {
+            PokemonNamesies.BULBASAUR,
+            PokemonNamesies.CHARMANDER,
+            PokemonNamesies.SQUIRTLE,
+            PokemonNamesies.CHIKORITA,
+            PokemonNamesies.CYNDAQUIL,
+            PokemonNamesies.TOTODILE,
+            PokemonNamesies.TREECKO,
+            PokemonNamesies.TORCHIC,
+            PokemonNamesies.MUDKIP,
+            PokemonNamesies.TURTWIG,
+            PokemonNamesies.CHIMCHAR,
+            PokemonNamesies.PIPLUP,
+            PokemonNamesies.SNIVY,
+            PokemonNamesies.TEPIG,
+            PokemonNamesies.OSHAWOTT,
+            PokemonNamesies.CHESPIN,
+            PokemonNamesies.FENNEKIN,
+            PokemonNamesies.FROAKIE,
+            PokemonNamesies.ROWLET,
+            PokemonNamesies.LITTEN,
+            PokemonNamesies.POPPLIO
+    };
+
+    private static final Set<PokemonNamesies> babyPokemon = EnumSet.of(
+            PokemonNamesies.PICHU,
+            PokemonNamesies.CLEFFA,
+            PokemonNamesies.IGGLYBUFF,
+            PokemonNamesies.TOGEPI,
+            PokemonNamesies.TYROGUE,
+            PokemonNamesies.SMOOCHUM,
+            PokemonNamesies.ELEKID,
+            PokemonNamesies.MAGBY,
+            PokemonNamesies.AZURILL,
+            PokemonNamesies.WYNAUT,
+            PokemonNamesies.BUDEW,
+            PokemonNamesies.CHINGLING,
+            PokemonNamesies.BONSLY,
+            PokemonNamesies.MIME_JR,
+            PokemonNamesies.HAPPINY,
+            PokemonNamesies.MUNCHLAX,
+            PokemonNamesies.RIOLU,
+            PokemonNamesies.MANTYKE
+    );
+
+    private final Map<Type, Set<PokemonNamesies>> pokemonTypeMap;
+
     // Singleton
-    private PokemonList() {}
+    private PokemonList() {
+        pokemonTypeMap = new EnumMap<>(Type.class);
+        for (Type type : Type.values()) {
+            pokemonTypeMap.put(type, EnumSet.noneOf(PokemonNamesies.class));
+        }
+
+        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
+            PokemonInfo pokemon = PokemonInfo.getPokemonInfo(i);
+            for (Type type : pokemon.getType()) {
+                pokemonTypeMap.get(type).add(pokemon.namesies());
+            }
+        }
+    }
+
+    public PokemonNamesies getRandomStarterPokemon() {
+        return RandomUtils.getRandomValue(starterPokemon);
+    }
+
+    public boolean isBabyPokemon(PokemonNamesies namesies) {
+        return babyPokemon.contains(namesies);
+    }
+
+    public int getNumBabyPokemon() {
+        return babyPokemon.size();
+    }
+
+    public Set<PokemonNamesies> getAllBabyPokemon() {
+        return EnumSet.copyOf(babyPokemon);
+    }
+
+    public int getNumTypedPokemon(Type type) {
+        return pokemonTypeMap.get(type).size();
+    }
 
     @Override
     public Iterator<PokemonInfo> iterator() {
