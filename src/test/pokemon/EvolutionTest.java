@@ -408,17 +408,17 @@ public class EvolutionTest extends BaseTest {
     }
 
     private class AbilityInfo {
-        private PokemonNamesies basePokemon;
-        private PokemonNamesies evolutionPokemon;
+        private final PokemonNamesies basePokemon;
+        private final PokemonNamesies evolutionPokemon;
 
-        private AbilityNamesies baseAbility;
-        private AbilityNamesies evolutionAbility;
+        private final AbilityNamesies baseAbility;
+        private final AbilityNamesies evolutionAbility;
 
-        private int baseAbilityIndex;
-        private int evolutionAbilityIndex;
+        private final int baseAbilityIndex;
+        private final int evolutionAbilityIndex;
 
-        private EvolutionMethod method;
-        private ItemNamesies evolutionItem;
+        private final EvolutionMethod method;
+        private final ItemNamesies evolutionItem;
 
         public AbilityInfo(PokemonNamesies basePokemon, PokemonNamesies evolutionPokemon,
                            AbilityNamesies baseAbility, AbilityNamesies evolutionAbility,
@@ -432,10 +432,13 @@ public class EvolutionTest extends BaseTest {
             this.baseAbilityIndex = getAbilityIndex(basePokemon, baseAbility);
             this.evolutionAbilityIndex = getAbilityIndex(evolutionPokemon, evolutionAbility);
 
-            this.method = EvolutionMethod.LEVEL;
-            this.evolutionItem = null;
-
-            this.item(evolutionItem);
+            if (evolutionItem == null) {
+                this.method = EvolutionMethod.LEVEL;
+                this.evolutionItem = null;
+            } else {
+                this.method = EvolutionMethod.ITEM;
+                this.evolutionItem = evolutionItem;
+            }
         }
 
         public AbilityInfo(PokemonNamesies basePokemon, PokemonNamesies evolutionPokemon,
@@ -446,24 +449,6 @@ public class EvolutionTest extends BaseTest {
         public AbilityInfo(PokemonNamesies basePokemon, PokemonNamesies evolutionPokemon,
                            AbilityNamesies sameAbility) {
             this(basePokemon, evolutionPokemon, sameAbility, sameAbility);
-        }
-
-        public AbilityInfo method(EvolutionMethod method) {
-            if (method == EvolutionMethod.ITEM) {
-                Assert.assertNotNull(this.evolutionItem);
-            }
-
-            this.method = method;
-            return this;
-        }
-
-        public AbilityInfo item(ItemNamesies itemNamesies) {
-            if (itemNamesies == null) {
-                return this;
-            }
-
-            this.evolutionItem = itemNamesies;
-            return this.method(EvolutionMethod.ITEM);
         }
 
         public PokemonInfo baseInfo() {

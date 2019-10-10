@@ -110,15 +110,16 @@ public class StatValues implements Serializable {
         int EV = EVs.get(statIndex);
         double natureVal = nature.getNatureVal(statIndex);
 
+        double value = (IV + 2*baseStat + (EV/4.0))*level/100.0;
         if (statIndex == Stat.HP.index()) {
             // Shedinja...
             if (baseStat == 1) {
                 return 1;
             } else {
-                return (int)(((IV + 2*baseStat + (EV/4.0))*level/100.0) + 10 + level);
+                return (int)(value + 10 + level);
             }
         }
 
-        return (int)((((IV + 2*baseStat + (EV/4.0))*level/100.0) + 5)*natureVal);
+        return (int)((value + 5)*natureVal);
     }
 }

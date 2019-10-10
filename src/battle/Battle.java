@@ -269,7 +269,7 @@ public class Battle implements Serializable {
 
         // There's no escape from this one...
         if (playerBlackout) {
-            player.loseBattle(this, opponent);
+            player.loseBattle(opponent);
             return;
         }
 

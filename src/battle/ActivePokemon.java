@@ -895,7 +895,7 @@ public class ActivePokemon extends PartyPokemon {
         firstTurn = false;
     }
 
-    public void takeDamage(int damage) {
+    private void takeDamage(int damage) {
         damageTaken = damage;
     }
 

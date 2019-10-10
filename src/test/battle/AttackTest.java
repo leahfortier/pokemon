@@ -153,7 +153,7 @@ public class AttackTest extends BaseTest {
         defending.assertNotFullHealth();
 
         int damage = attacking.getMaxHP() - attacking.getHP();
-        Assert.assertTrue(defending.getMaxHP() - defending.getHP() == (int)(Math.ceil(damage/3.0)));
+        Assert.assertEquals(defending.getMaxHP() - defending.getHP(), (int)(Math.ceil(damage/3.0)));
 
         attacking.fullyHeal();
         defending.fullyHeal();
@@ -245,24 +245,24 @@ public class AttackTest extends BaseTest {
         TestPokemon attacking2 = TestPokemon.newPlayerPokemon(PokemonNamesies.REGIROCK);
         battle.getPlayer().addPokemon(attacking2);
 
-        Assert.assertTrue(battle.getAttacking() == attacking1);
+        Assert.assertSame(battle.getAttacking(), attacking1);
 
         // Use Dragon Tail -- make sure they swap
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.DRAGON_TAIL);
-        Assert.assertTrue(battle.getAttacking() == attacking2);
+        Assert.assertSame(battle.getAttacking(), attacking2);
 
         // Don't swap with Suction Cups
         attacking2.withAbility(AbilityNamesies.SUCTION_CUPS);
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.CIRCLE_THROW);
-        Assert.assertTrue(battle.getAttacking() == attacking2);
+        Assert.assertSame(battle.getAttacking(), attacking2);
 
         attacking2.withAbility(AbilityNamesies.NO_ABILITY);
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.ROAR);
-        Assert.assertTrue(battle.getAttacking() == attacking1);
+        Assert.assertSame(battle.getAttacking(), attacking1);
 
         // Don't swap when ingrained
         battle.fight(AttackNamesies.INGRAIN, AttackNamesies.WHIRLWIND);
-        Assert.assertTrue(battle.getAttacking() == attacking1);
+        Assert.assertSame(battle.getAttacking(), attacking1);
 
         // TODO: No more remaining Pokemon, wild battles, wimp out, red card, eject button
     }
@@ -440,11 +440,11 @@ public class AttackTest extends BaseTest {
         attacking.assertType(battle, Type.FLYING);
 
         // Clear stat changes and reduce again
-        Assert.assertTrue(attacking.getStage(Stat.ATTACK) == Stat.MAX_STAT_CHANGES);
+        attacking.assertStages(new TestStages().set(Stat.MAX_STAT_CHANGES, Stat.ATTACK));
         battle.attackingFight(AttackNamesies.HAZE);
-        Assert.assertTrue(attacking.getStage(Stat.ATTACK) == 0);
+        attacking.assertStages(new TestStages());
         battle.attackingFight(AttackNamesies.BELLY_DRUM);
-        Assert.assertTrue(attacking.getStage(Stat.ATTACK) == Stat.MAX_STAT_CHANGES);
+        attacking.assertStages(new TestStages().set(Stat.MAX_STAT_CHANGES, Stat.ATTACK));
 
         // Using a full turn should bring the flying type back at the end
         attacking.assertNotFullHealth();

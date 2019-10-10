@@ -16,4 +16,3 @@ with open("ps-moves.txt", "w") as f:
         print('could not find substring ' + begin_string)
     else:
         f.write(file[start_index + len(begin_string) -1 : end_index + 1])
-    

@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import item.ItemNamesies;
 import pokemon.species.PokemonNamesies;
 import util.RandomUtils;
+import util.string.StringAppender;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,11 +57,9 @@ public class MultipleEvolution extends Evolution {
 
     @Override
     public String toString() {
-        String toString = EvolutionType.MULTI + " " + this.evolutions.length;
-        for (Evolution evolution : this.evolutions) {
-            toString += "\n" + evolution.toString();
-        }
-
-        return toString;
+        return new StringAppender()
+                .appendLine(EvolutionType.MULTI + " " + this.evolutions.length)
+                .appendJoin("\n", this.evolutions)
+                .toString();
     }
 }

@@ -14,7 +14,7 @@ public enum Direction {
     LEFT(ControlKey.LEFT, PathDirection.LEFT),
     DOWN(ControlKey.DOWN, PathDirection.DOWN);
 
-    private static final Map<PathDirection, Direction> pathDirectionMap = new EnumMap<PathDirection, Direction>(PathDirection.class) {{
+    private static final Map<PathDirection, Direction> pathDirectionMap = new EnumMap<>(PathDirection.class) {{
         for (Direction direction : Direction.values()) {
             this.put(direction.getPathDirection(), direction);
         }

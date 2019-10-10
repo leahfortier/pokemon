@@ -129,10 +129,10 @@ public class EffectTest extends BaseTest {
 
         // King's Shield lowers attack when contact was made
         checkProtect(true, AttackNamesies.KINGS_SHIELD, AttackNamesies.TACKLE,
-                     (battle, attacking, defending) -> Assert.assertTrue(defending.getStage(Stat.ATTACK) == -2)
+                     (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-2, Stat.ATTACK))
         );
         checkProtect(true, AttackNamesies.KINGS_SHIELD, AttackNamesies.WATER_GUN,
-                     (battle, attacking, defending) -> Assert.assertTrue(defending.getStage(Stat.ATTACK) == 0)
+                     (battle, attacking, defending) -> defending.assertStages(new TestStages())
         );
 
         TestBattle battle = TestBattle.create();
@@ -374,10 +374,10 @@ public class EffectTest extends BaseTest {
         Assert.assertEquals(AbilityNamesies.OVERGROW.getName(), CastSource.ABILITY.getSourceName(battle, attacking));
         Assert.assertEquals(ItemNamesies.ORAN_BERRY.getName(), CastSource.HELD_ITEM.getSourceName(battle, attacking));
 
-        Assert.assertTrue(attacking.getAbility() == CastSource.ABILITY.getSource(battle, attacking));
-        Assert.assertTrue(attacking.getHeldItem(battle) == CastSource.HELD_ITEM.getSource(battle, attacking));
-        Assert.assertTrue(attacking.getAttack() == CastSource.ATTACK.getSource(battle, attacking));
-        Assert.assertTrue(attacking.getCastSource() == CastSource.CAST_SOURCE.getSource(battle, attacking));
+        Assert.assertSame(attacking.getAbility(), CastSource.ABILITY.getSource(battle, attacking));
+        Assert.assertSame(attacking.getHeldItem(battle), CastSource.HELD_ITEM.getSource(battle, attacking));
+        Assert.assertSame(attacking.getAttack(), CastSource.ATTACK.getSource(battle, attacking));
+        Assert.assertSame(attacking.getCastSource(), CastSource.CAST_SOURCE.getSource(battle, attacking));
     }
 
     @Test
@@ -744,7 +744,7 @@ public class EffectTest extends BaseTest {
         TestPokemon defending2 = TestPokemon.newTrainerPokemon(notSoStealthy).withAbility(abilityNamesies);
 
         ((EnemyTrainer)battle.getOpponent()).addPokemon(defending2);
-        Assert.assertTrue(battle.getDefending() == defending1);
+        Assert.assertSame(battle.getDefending(), defending1);
 
         // Use Stealth Rock -- nothing should really happen
         battle.attackingFight(AttackNamesies.STEALTH_ROCK);
@@ -753,7 +753,7 @@ public class EffectTest extends BaseTest {
 
         // Send out the other Pokemon -- it won't be as stealthy as it thought
         battle.attackingFight(AttackNamesies.WHIRLWIND);
-        Assert.assertTrue(battle.getDefending() == defending2);
+        Assert.assertSame(battle.getDefending(), defending2);
         defending2.assertHealthRatio(expectedHealthFraction);
     }
 

@@ -103,7 +103,7 @@ public class ScriptTest extends BaseTest {
                     break;
                 case QUICK_GUARD:
                     // Doesn't make sense to snatch with only single battles, plus they're in the same priority bracket
-                    Assert.assertEquals(true, snatchable);
+                    Assert.assertTrue(snatchable);
                     snatchable = false;
                     // Fall through
                 case CRAFTY_SHIELD:
@@ -114,7 +114,7 @@ public class ScriptTest extends BaseTest {
                 case POISON_JAB:
                 case PLASMA_FISTS:
                     // Because they should be
-                    Assert.assertEquals(false, punchMove);
+                    Assert.assertFalse(punchMove);
                     punchMove = true;
                     break;
                 case ELECTRIFY:
@@ -124,9 +124,9 @@ public class ScriptTest extends BaseTest {
                     break;
                 case IMPRISON:
                     // I don't know why this is like this but it makes no sense
-                    Assert.assertEquals(true, snatchable);
-                    Assert.assertEquals(false, magicBouncy);
-                    Assert.assertEquals(false, mirrorMovey);
+                    Assert.assertTrue(snatchable);
+                    Assert.assertFalse(magicBouncy);
+                    Assert.assertFalse(mirrorMovey);
                     snatchable = false;
                     magicBouncy = true;
                     mirrorMovey = true;
@@ -136,20 +136,20 @@ public class ScriptTest extends BaseTest {
                 case FLOWER_SHIELD:
                 case ROTOTILLER:
                     // These were changed to only affect the user
-                    Assert.assertEquals(false, snatchable);
+                    Assert.assertFalse(snatchable);
                     snatchable = true;
                     break;
                 case TEETER_DANCE:
                     // This too
-                    Assert.assertEquals(false, magicBouncy);
+                    Assert.assertFalse(magicBouncy);
                     magicBouncy = true;
                     break;
                 case FLORAL_HEALING:
                 case PURIFY:
                     // Also these moves
-                    Assert.assertEquals(false, snatchable);
-                    Assert.assertEquals(true, magicBouncy);
-                    Assert.assertEquals(true, protecty);
+                    Assert.assertFalse(snatchable);
+                    Assert.assertTrue(magicBouncy);
+                    Assert.assertTrue(protecty);
                     snatchable = true;
                     magicBouncy = false;
                     protecty = false;
@@ -157,8 +157,8 @@ public class ScriptTest extends BaseTest {
                 case MIND_READER:
                 case LOCK_ON:
                     // Because I don't care enough
-                    Assert.assertEquals(true, protecty);
-                    Assert.assertEquals(true, mirrorMovey);
+                    Assert.assertTrue(protecty);
+                    Assert.assertTrue(mirrorMovey);
                     protecty = false;
                     mirrorMovey = false;
                     break;
@@ -167,19 +167,19 @@ public class ScriptTest extends BaseTest {
                 case POWER_SPLIT:
                 case GUARD_SPLIT:
                     // DGAF
-                    Assert.assertEquals(true, protecty);
+                    Assert.assertTrue(protecty);
                     protecty = false;
                     break;
                 case MEAN_LOOK:
                 case BLOCK:
                 case BESTOW:
                     // I feel like I should be right here
-                    Assert.assertEquals(false, protecty);
+                    Assert.assertFalse(protecty);
                     protecty = true;
                     break;
                 case FAIRY_LOCK:
-                    Assert.assertEquals(false, magicBouncy);
-                    Assert.assertEquals(false, protecty);
+                    Assert.assertFalse(magicBouncy);
+                    Assert.assertFalse(protecty);
                     magicBouncy = true;
                     protecty = true;
                     break;
@@ -187,13 +187,13 @@ public class ScriptTest extends BaseTest {
                 case TRICK_ROOM:
                 case MAGIC_ROOM:
                     // This makes no sense I reign supreme
-                    Assert.assertEquals(true, mirrorMovey);
+                    Assert.assertTrue(mirrorMovey);
                     mirrorMovey = false;
                     break;
                 case PSYCH_UP:
                 case HEAL_PULSE:
                     // Again, I make the rules in this game
-                    Assert.assertEquals(false, mirrorMovey);
+                    Assert.assertFalse(mirrorMovey);
                     mirrorMovey = true;
                     break;
                 case TRIPLE_KICK:
@@ -317,28 +317,28 @@ public class ScriptTest extends BaseTest {
                     Assert.assertTrue(item.getName(), item instanceof BattleUseItem);
                     break;
                 case "Miscellaneous":
-                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.MISC);
+                    Assert.assertEquals(item.getName(), item.getBagCategory(), BagCategory.MISC);
                     break;
                 case "Evolutionary":
                     Assert.assertTrue(item.getName(), item instanceof EvolutionItem);
                     break;
                 case "Berry":
-                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.BERRY);
+                    Assert.assertEquals(item.getName(), item.getBagCategory(), BagCategory.BERRY);
                     break;
                 case "Key Item":
-                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.KEY_ITEM);
+                    Assert.assertEquals(item.getName(), item.getBagCategory(), BagCategory.KEY_ITEM);
                     break;
                 case "Hold Item":
                     Assert.assertTrue(item.getName(), item instanceof HoldItem);
                     break;
                 case "Recovery":
-                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.MEDICINE);
+                    Assert.assertEquals(item.getName(), item.getBagCategory(), BagCategory.MEDICINE);
                     break;
                 case "Pokeball":
-                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.BALL);
+                    Assert.assertEquals(item.getName(), item.getBagCategory(), BagCategory.BALL);
                     break;
                 case "Vitamins":
-                    Assert.assertTrue(item.getName(), item.getBagCategory() == BagCategory.STAT);
+                    Assert.assertEquals(item.getName(), item.getBagCategory(), BagCategory.STAT);
                     break;
                 default:
                     Assert.fail(item.getName() + ": " + itemType);

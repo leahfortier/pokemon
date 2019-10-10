@@ -227,8 +227,7 @@ with open("../temp.txt", "w") as f:
         # If no form is specified, use this in the mapping
         default_form = "FormNotSpecified"
         form = default_form
-        ev_map = {}
-        ev_map[form] = [0] * 6
+        ev_map = {form: [0] * 6}
         for ev_string in ev_strings:
             ev_index = ev_string.find(" Point(s)")
 

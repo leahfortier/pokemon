@@ -19,8 +19,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
-    private JTextField itemTextField;
-    private JLabel itemImageLabel;
+    private final JTextField itemTextField;
+    private final JLabel itemImageLabel;
 
     public ItemEntityDialog(ItemMatcher itemMatcher) {
         super("Item Editor");

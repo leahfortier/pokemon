@@ -112,8 +112,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
     private static final long serialVersionUID = 1L;
 
     private final ItemNamesies namesies;
-    private String description;
-    private BagCategory bagCategory;
+    private final String description;
+    private final BagCategory bagCategory;
     private List<BattleBagCategory> battleBagCategories;
     private int price;
 

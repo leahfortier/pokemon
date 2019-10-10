@@ -38,6 +38,6 @@ public class TimeEvolution extends Evolution {
 
     @Override
     public String toString() {
-        return EvolutionType.TIME + " " + timeOfDay.name() + " " + evolution.toString();
+        return EvolutionType.TIME + " " + timeOfDay.name() + " " + evolution;
     }
 }

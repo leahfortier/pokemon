@@ -229,9 +229,7 @@ class PokemonAnimationState {
         }
         // Transform into Pokeball
         else if (animationCatch > lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*.7) {
-            pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255;
             pokeyScales[3] = ((animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
-            ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255;
             ballScales[3] = (1 - (animationCatch - (lifespan - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.7f))/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
         }
         // Restore color
@@ -252,9 +250,7 @@ class PokemonAnimationState {
         }
         // Transform into Pokemon
         else if (animationCatch > CATCH_TRANSFORM_ANIMATION_LIFESPAN*.3) {
-            pokeyOffsets[0] = pokeyOffsets[1] = pokeyOffsets[2] = 255;
             pokeyScales[3] = (1 - (animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
-            ballOffsets[0] = ballOffsets[1] = ballOffsets[2] = 255;
             ballScales[3] = ((animationCatch - CATCH_TRANSFORM_ANIMATION_LIFESPAN*0.3f)/(CATCH_TRANSFORM_ANIMATION_LIFESPAN*(.7f - .3f)));
         }
         // Restore color

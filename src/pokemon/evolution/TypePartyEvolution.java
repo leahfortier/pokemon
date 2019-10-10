@@ -43,6 +43,6 @@ public class TypePartyEvolution extends Evolution {
 
     @Override
     public String toString() {
-        return EvolutionType.TYPE_PARTY + " " + type.name() + " " + evolution.toString();
+        return EvolutionType.TYPE_PARTY + " " + type.name() + " " + evolution;
     }
 }

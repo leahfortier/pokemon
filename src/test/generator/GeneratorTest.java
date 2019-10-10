@@ -13,7 +13,7 @@ public class GeneratorTest extends BaseTest {
         new TestPokeGen();
     }
 
-    public static class TestPokeGen extends PokeGen {
+    private static class TestPokeGen extends PokeGen {
 
         public TestPokeGen() {
             super(new TestFormatter());

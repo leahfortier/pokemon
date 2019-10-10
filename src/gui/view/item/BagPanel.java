@@ -25,7 +25,7 @@ import java.awt.image.BufferedImage;
 import java.util.EnumSet;
 import java.util.Iterator;
 
-public class BagPanel {
+class BagPanel {
     private static final BagCategory[] CATEGORIES = BagCategory.values();
     private static final int ITEMS_PER_PAGE = 10;
 

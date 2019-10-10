@@ -93,7 +93,7 @@ public class MoveNPCTrigger extends Trigger {
         return null;
     }
 
-    private class PathState {
+    private static class PathState {
         private final Point location;
         private final String path;
 

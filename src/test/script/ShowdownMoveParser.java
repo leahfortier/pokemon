@@ -291,7 +291,7 @@ public class ShowdownMoveParser {
     private String readKey(Scanner in) {
         String key = in.next().trim();
         if (key.startsWith("}")) {
-            Assert.assertTrue(key.equals("},"));
+            Assert.assertEquals("},", key);
             return "}";
         } else if (key.startsWith("//")) {
             // Comment -- consume the rest of the line
@@ -448,14 +448,11 @@ public class ShowdownMoveParser {
 
         String firstLine = in.nextLine().trim();
         Assert.assertEquals(message, "{", firstLine);
-        while (true) {
+        do {
             String nextLine = in.nextLine();
             numBraces += (int)nextLine.chars().filter(c -> c == '{').count();
             numBraces -= (int)nextLine.chars().filter(c -> c == '}').count();
-            if (numBraces == 0) {
-                break;
-            }
-        }
+        } while (numBraces != 0);
     }
 
     private void readEffect(String message, Scanner in) {
@@ -815,7 +812,7 @@ public class ShowdownMoveParser {
         Assert.assertTrue(attackKey + " " + this.booleanMap, this.booleanMap.isEmpty());
     }
 
-    public class Self {
+    public static class Self {
         int[] boosts;
         String volatileStatus;
         boolean onHit;
@@ -836,7 +833,7 @@ public class ShowdownMoveParser {
         }
     }
 
-    public class SecondaryEffect {
+    public static class SecondaryEffect {
         int[] boosts;
         Integer chance;
         String volatileStatus;

@@ -40,13 +40,10 @@ public class PC implements Serializable {
         }
     }
 
-    private boolean expandBoxes() {
+    private void expandBoxes() {
         if (numPokemon >= (BOX_HEIGHT*BOX_WIDTH*boxes.size())/2) {
             addBoxes(DEFAULT_BOXES);
-            return true;
         }
-
-        return false;
     }
 
     // Returns the box you're currently on

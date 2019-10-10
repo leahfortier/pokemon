@@ -41,7 +41,7 @@ public class InputFormatter {
         // Increment the index to represent the space
         for (int i = 0; i < mcSplit.length; i++, index++) {
             index += mcSplit[i].length();
-            String remaining = fieldValue.substring(index, fieldValue.length());
+            String remaining = fieldValue.substring(index);
 
             body = replaceBody(body, mcSplit[i], remaining, i + 1);
         }

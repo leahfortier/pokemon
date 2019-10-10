@@ -118,6 +118,10 @@ public class StringAppender {
         return this.appendJoin(delimiter, joinees, StringUtils::toString);
     }
 
+    public <T> StringAppender appendJoin(String delimiter, T[] joinees) {
+        return this.appendJoin(delimiter, joinees, StringUtils::toString);
+    }
+
     public <T> StringAppender appendJoin(String delimiter, T[] joinees, Function<T, String> mapper) {
         return this.appendJoin(delimiter, Arrays.asList(joinees), mapper);
     }

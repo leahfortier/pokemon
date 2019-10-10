@@ -51,10 +51,6 @@ public class MoveList implements Iterable<Move>, Serializable {
         }
     }
 
-    void setMoves(MoveList list) {
-        this.setMoves(list.moves);
-    }
-
     void setMoves(List<Move> list) {
         if (list.isEmpty() || list.size() > MAX_MOVES) {
             Global.error("Invalid move list: " + list);

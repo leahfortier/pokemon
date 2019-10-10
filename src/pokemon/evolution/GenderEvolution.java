@@ -42,6 +42,6 @@ class GenderEvolution extends Evolution {
 
     @Override
     public String toString() {
-        return EvolutionType.GENDER + " " + gender.name() + " " + evolution.toString();
+        return EvolutionType.GENDER + " " + gender.name() + " " + evolution;
     }
 }

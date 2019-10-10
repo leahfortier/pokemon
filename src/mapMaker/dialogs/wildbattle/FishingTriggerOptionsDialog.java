@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FishingTriggerOptionsDialog extends TriggerDialog<FishingMatcher> {
-    private JComboBox<String> comboBox;
+    private final JComboBox<String> comboBox;
 
-    private JButton createButton;
-    private JButton editButton;
-    private List<FishingMatcher> fishingTriggers;
+    private final JButton createButton;
+    private final JButton editButton;
+    private final List<FishingMatcher> fishingTriggers;
 
     public FishingTriggerOptionsDialog(List<FishingMatcher> fishingMatchers) {
         super("Fishing Trigger Options");

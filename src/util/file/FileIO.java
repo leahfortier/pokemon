@@ -198,17 +198,14 @@ public final class FileIO {
     }
 
     // Overwrites the given file name with the content of out only if there is a difference
-    public static boolean overwriteFile(String fileName, String newFileContents) {
+    public static void overwriteFile(String fileName, String newFileContents) {
         // Replace tabs with 4 spaces and trim
         newFileContents = getOverwriteContents(fileName, newFileContents);
 
         if (!StringUtils.isNullOrEmpty(newFileContents)) {
             writeToFile(fileName, newFileContents);
             System.out.println(fileName + " overwritten.");
-            return true;
         }
-
-        return false;
     }
 
     private static void writeToFile(String fileName, String out) {

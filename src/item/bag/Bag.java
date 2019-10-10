@@ -49,10 +49,10 @@ public class Bag implements Serializable {
         }
     }
 
-    public boolean giveItem(PartyPokemon p, ItemNamesies hold) {
+    public void giveItem(PartyPokemon p, ItemNamesies hold) {
         if (p.isEgg()) {
             Messages.add("You can't give an item to an egg!");
-            return false;
+            return;
         }
 
         ItemNamesies item = p.getActualHeldItem().namesies();
@@ -65,27 +65,24 @@ public class Bag implements Serializable {
         p.giveItem(hold);
         removeItem(hold);
         Messages.add(p.getActualName() + " is now holding " + hold.getName() + ".");
-
-        return true;
     }
 
-    public boolean takeItem(PartyPokemon p) {
+    public void takeItem(PartyPokemon p) {
         if (p.isEgg()) {
             Messages.add("Eggs can't hold anything. They're eggs.");
-            return false;
+            return;
         }
 
         ItemNamesies item = p.getActualHeldItem().namesies();
         if (item == ItemNamesies.NO_ITEM) {
             Messages.add(p.getActualName() + " is not holding anything.");
-            return false;
+            return;
         }
 
         // Remove the item from the pokemon and add it to the bag
         p.removeItem();
         addItem(item);
         Messages.add("Took the " + item.getName() + " from " + p.getActualName() + ".");
-        return true;
     }
 
     public void addItem(ItemNamesies item) {

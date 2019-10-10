@@ -156,10 +156,8 @@ public class MapTest extends BaseTest {
                     int rgb = map.getRGB(x, y, MapDataType.MOVE);
                     WalkType walkType = WalkType.getWalkType(rgb);
                     if (walkType != WalkType.NOT_WALKABLE) {
-                        Assert.assertFalse(
-                                map.getName() + " " + x + " " + y,
-                                map.getArea(new Point(x, y)) == AreaData.VOID
-                        );
+                        String message = StringUtils.spaceSeparated(map.getName(), x, y);
+                        Assert.assertNotEquals(message, AreaData.VOID, map.getArea(new Point(x, y)));
                     }
                 }
             }

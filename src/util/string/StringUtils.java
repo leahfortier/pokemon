@@ -29,7 +29,7 @@ public final class StringUtils {
 
     public static String trimPrefix(String s, String prefix) {
         if (s.startsWith(prefix)) {
-            return s.substring(prefix.length(), s.length());
+            return s.substring(prefix.length());
         } else {
             return s;
         }

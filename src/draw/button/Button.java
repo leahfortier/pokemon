@@ -109,10 +109,6 @@ public class Button {
         }
     }
 
-    public void update() {
-        update(false);
-    }
-
     public boolean checkConsumePress() {
         if (press) {
             press = false;

@@ -15,7 +15,7 @@ import type.TypeAdvantage;
 import util.string.StringUtils;
 
 public class TypeTest extends BaseTest {
-    private static final double typeAdvantage[][] = {
+    private static final double[][] typeAdvantage = {
             {1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, .5,  0,  1,  1, .5,  1, 1}, // Normal
             {1, .5, .5,  1,  2,  2,  1,  1,  1,  1,  1,  2, .5,  1, .5,  1,  2,  1, 1}, // Fire
             {1,  2, .5,  1, .5,  1,  1,  1,  2,  1,  1,  1,  2,  1, .5,  1,  1,  1, 1}, // Water
@@ -46,10 +46,8 @@ public class TypeTest extends BaseTest {
                 double chartAdv = typeAdvantage[attacking.getIndex()][i];
                 double classAdv = advantage.getAdvantage(defending);
 
-                Assert.assertTrue(
-                        StringUtils.spaceSeparated(attacking, defending, chartAdv, classAdv),
-                        chartAdv == classAdv
-                );
+                String message = StringUtils.spaceSeparated(attacking, defending, chartAdv, classAdv);
+                TestUtils.assertEquals(message, chartAdv, classAdv);
             }
         }
     }

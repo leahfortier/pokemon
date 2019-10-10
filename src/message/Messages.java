@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class Messages {
     private static final Map<MessageState, MessageQueue> messageMap =
-            new EnumMap<MessageState, MessageQueue>(MessageState.class) {{
+            new EnumMap<>(MessageState.class) {{
                 for (MessageState messageState : MessageState.values()) {
                     put(messageState, new MessageQueue());
                 }

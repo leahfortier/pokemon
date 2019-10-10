@@ -151,12 +151,10 @@ public class MapMakerTriggerData {
                 Point point = ((SinglePointTriggerMatcher)entity).getLocation();
 
                 BufferedImage image = null;
-                switch (triggerModelType) {
-                    case NPC:
-                        NPCMatcher npc = (NPCMatcher)entity;
-                        int imageIndex = MovableEntity.getTrainerSpriteIndex(npc.getSpriteIndex(), npc.getDirection());
-                        image = mapMaker.getTileFromSet(TileType.TRAINER, imageIndex);
-                        break;
+                if (triggerModelType == TriggerModelType.NPC) {
+                    NPCMatcher npc = (NPCMatcher)entity;
+                    int imageIndex = MovableEntity.getTrainerSpriteIndex(npc.getSpriteIndex(), npc.getDirection());
+                    image = mapMaker.getTileFromSet(TileType.TRAINER, imageIndex);
                 }
 
                 if (image == null) {

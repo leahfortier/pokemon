@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 // Used for the field definitions at the top of the file
-public class ConstructorField {
+class ConstructorField {
     private final String fieldName;
     private final boolean multiple;
     private final String defaultValue;
@@ -79,7 +79,7 @@ public class ConstructorField {
                 .toString();
     }
 
-    public String getValue(String fieldValue) {
+    private String getValue(String fieldValue) {
         fieldValue = fieldValue.trim();
 
         switch (fieldType) {

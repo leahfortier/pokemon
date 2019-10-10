@@ -351,9 +351,7 @@ public class Player extends PlayerTrainer implements Serializable {
     }
 
     public void removeGlobal(String s) {
-        if (definedGlobals.contains(s)) {
-            definedGlobals.remove(s);
-        }
+        definedGlobals.remove(s);
     }
 
     public PC getPC() {
@@ -436,7 +434,7 @@ public class Player extends PlayerTrainer implements Serializable {
         Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
     }
 
-    public void loseBattle(Battle b, Opponent opponent) {
+    public void loseBattle(Opponent opponent) {
         // Blackout -- you're fucked
         Messages.add(this.getName() + " is out of usable " + PokeString.POKEMON + "! " + this.getName() + " blacked out!");
 

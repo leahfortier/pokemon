@@ -191,9 +191,7 @@ public final class ImageUtils {
         }
         // Change form
         else if (animationValue > animationLifespan*0.3) {
-            firstOffsets[0] = firstOffsets[1] = firstOffsets[2] = 255;
             firstScales[3] = ((animationValue - animationLifespan*0.3f)/(animationLifespan*(0.7f - 0.3f)));
-            secondOffsets[0] = secondOffsets[1] = secondOffsets[2] = 255;
             secondScales[3] = (1 - (animationValue - animationLifespan*0.3f)/(animationLifespan*(0.7f - 0.3f)));
         }
         // Restore color

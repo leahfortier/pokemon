@@ -470,7 +470,7 @@ public class AbilityTest extends BaseTest {
         TestPokemon defending1 = battle.getDefending();
         TestPokemon defending2 = TestPokemon.newTrainerPokemon(PokemonNamesies.SHUCKLE).withAbility(AbilityNamesies.MOLD_BREAKER);
         ((EnemyTrainer)battle.getOpponent()).addPokemon(defending2);
-        Assert.assertTrue(battle.getDefending() == defending1);
+        Assert.assertSame(battle.getDefending(), defending1);
 
         // Not fucking Sturdy
         defending1.assertAbility(AbilityNamesies.NO_ABILITY);
@@ -495,7 +495,7 @@ public class AbilityTest extends BaseTest {
         // ANOTHER NOTE: Everything feels a little backwards with attacking and defending in this test
         // because this does not appropriately swap if the player is killed
         battle.attackingFight(AttackNamesies.FISSURE);
-        Assert.assertTrue(battle.getDefending() == defending2);
+        Assert.assertSame(battle.getDefending(), defending2);
         Assert.assertTrue(defending2.isFirstTurn());
 
         // Defending2 has Mold Breaker, so attacking will still flinch with Inner Focus

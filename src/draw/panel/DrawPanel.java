@@ -289,8 +289,7 @@ public class DrawPanel {
             return TextUtils.drawWrappedText(g, text, startX, startY, textWidth);
         }
 
-        int lastWordLength;
-        if (drawingText == null || !text.equals(drawingText)) {
+        if (!text.equals(drawingText)) {
             messageTimeElapsed = 0;
             drawingText = text;
             finishedAnimating = false;
@@ -305,10 +304,10 @@ public class DrawPanel {
 
         finishedAnimating = charactersToShow == text.length();
 
+        int lastWordLength;
         if (charactersToShow != 0 && text.charAt(charactersToShow - 1) != ' ') {
             String startString = text.substring(0, charactersToShow);
             int start = startString.lastIndexOf(' ') + 1;
-            start = start == -1 ? 0 : start;
 
             String endString = text.substring(charactersToShow - 1);
             int end = endString.indexOf(' ');

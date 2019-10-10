@@ -95,12 +95,12 @@ import java.util.List;
 public abstract class Attack implements AttackInterface {
     private static final long serialVersionUID = 1L;
 
-    private AttackNamesies namesies;
-    private String description;
+    private final AttackNamesies namesies;
+    private final String description;
+    private final Type type;
+    private final int pp;
     private int power;
     private int accuracy;
-    private int pp;
-    private Type type;
     private MoveCategory category;
     private EffectNamesies effect;
     private int effectChance;
