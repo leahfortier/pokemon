@@ -569,15 +569,18 @@ public class Player extends PlayerTrainer implements Serializable {
 
     // OH MY GOD CATCH A POKEMON OH MY GOD
     public boolean catchPokemon(Battle b, BallItem ball) {
+        ActivePokemon catchPokemon = b.getOpponent().front();
         if (!b.isWildBattle()) {
-            Messages.add("You can't try and catch a trainer's Pokemon! That's just rude!!!");
+            Messages.add("You can't try and catch a trainer's " + PokeString.POKEMON + "! That's just rude!!!");
+            return false;
+        } else if (catchPokemon.isSemiInvulnerable()) {
+            Messages.add(catchPokemon.getName() + " is out of range!!");
             return false;
         }
 
         Messages.add(name + " threw the " + ball.getName() + "!");
         this.pokeball = ball;
 
-        ActivePokemon catchPokemon = b.getOpponent().front();
         int maxHP = catchPokemon.getMaxHP();
         int hp = catchPokemon.getHP();
 

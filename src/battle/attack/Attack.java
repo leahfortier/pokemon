@@ -87,6 +87,7 @@ import type.PokeType;
 import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
+import util.string.PokeString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9193,7 +9194,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Messages.add("All Pokemon hearing this song will faint in three turns!");
+            Messages.add("All " + PokeString.POKEMON + " hearing this song will faint in three turns!");
 
             // TODO: Test and also this used to check if they didn't have the effect before casting just in case that's relevant later
             Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, user, victim, CastSource.ATTACK, false);

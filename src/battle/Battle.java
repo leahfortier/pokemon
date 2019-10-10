@@ -287,7 +287,8 @@ public class Battle implements Serializable {
 
         // Dead Front Pokemon, but you still have others to spare -- force a switch
         if (playerDead) {
-            Messages.add(new MessageUpdate("What Pokemon would you like to switch to?").withUpdate(MessageUpdateType.FORCE_SWITCH));
+            Messages.add(new MessageUpdate("What " + PokeString.POKEMON + " would you like to switch to?")
+                                 .withUpdate(MessageUpdateType.FORCE_SWITCH));
         }
 
         // We know this is not a wild battle anymore and they still have some Pokes left so send them out

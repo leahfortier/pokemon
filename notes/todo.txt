@@ -118,10 +118,7 @@ Other random things:
 	test entering a new location while medals are displaying
 	Explosion doesn't kill the user when used against a Ghost type Pokemon
 	Rest shows the incorrect status prevent message -- just says "...but it failed!"
-	can we throw a Pokeball at a semi-invulnerable Poke?
 	Bag View messages for evolution and learn moves
-    Test self-switching moves from 4th index to a Pokemon with less than four moves (I think the move index isn't getting rest -- will this indexoutofboundsexception?)
-    should status cure moves be apply damage effects or unique effects?
     add brick break to defog/rapid spin tests
     quick guard apparently not affected by successive decay?
     beat up power was changed
@@ -160,3 +157,4 @@ Other random things:
     toxic boost flare boost and marvel scale should be statusboosters
     need like a 'b' button where you can click through things but can't start a new dialogue
     need iterator for PokemonInfo
+    opponent's trace message appears before your Pokemon is even out and looks really weird

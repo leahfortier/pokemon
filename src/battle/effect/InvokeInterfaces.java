@@ -49,7 +49,6 @@ public final class InvokeInterfaces {
     // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
     public interface ApplyDamageEffect {
 
-        // b: The current battle
         // user: The user of that attack, the one who is implementing this effect
         // victim: The Pokemon that received the attack
         // damage: The amount of damage that was dealt to victim by the user
@@ -77,7 +76,6 @@ public final class InvokeInterfaces {
     // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
     public interface OpponentApplyDamageEffect {
 
-        // b: The current battle
         // user: The user of that attack
         // victim: The Pokemon that received the attack, the one who is probably implementing this effect
         // damage: The amount of damage that was dealt to victim by the user
@@ -105,7 +103,6 @@ public final class InvokeInterfaces {
     // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
     public interface TakeDamageEffect {
 
-        // b: The current battle
         // user: The user of the attack
         // victim: The one who is taking damage and is implementing this effect
         void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim);
@@ -132,7 +129,6 @@ public final class InvokeInterfaces {
     // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
     public interface OpponentTakeDamageEffect {
 
-        // b: The current battle
         // user: The user of the attack and implementer of the effect
         // victim: The Pokemon who is taking damage
         void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim);
@@ -376,9 +372,8 @@ public final class InvokeInterfaces {
 
     public interface StatLoweredEffect {
 
-        // b: The current battle
         // caster: The Pokemon responsible for causing the stat to be lowered
-        // victim: The Pokemon who's stat is being lowered
+        // victim: The Pokemon whose stat is being lowered
         void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim);
 
         static void invokeStatLoweredEffect(Battle b, ActivePokemon caster, ActivePokemon victim) {
@@ -1177,7 +1172,6 @@ public final class InvokeInterfaces {
 
     public interface StatChangingEffect {
 
-        // b: The current battle
         // p: The Pokemon that the stat is being altered on
         // opp: The opposing Pokemon
         // s: The stat that is being altered
