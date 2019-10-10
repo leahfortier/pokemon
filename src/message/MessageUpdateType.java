@@ -17,7 +17,6 @@ public enum MessageUpdateType {
     ENTER_NAME,
     APPEND_TO_NAME,
     SHOW_POKEMON,
-    PROMPT_SWITCH(VisualState.POKEMON),
     LEARN_MOVE(VisualState.LEARN_MOVE),
     STAT_GAIN(VisualState.STAT_GAIN),
     EXIT_BATTLE(ViewMode.MAP_VIEW),

@@ -77,6 +77,20 @@ public final class StringUtils {
                 .toString();
     }
 
+    public static boolean endsWithAny(String s, String... suffixes) {
+        if (s == null) {
+            return false;
+        }
+
+        for (String suffix : suffixes) {
+            if (s.endsWith(suffix)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // Convert to list of strings and join by a space
     public static String spaceSeparated(Object... values) {
         return new StringAppender()

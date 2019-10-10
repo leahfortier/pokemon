@@ -84,7 +84,7 @@ public class TileModel extends MapMakerModel {
         return true;
     }
 
-    private Map<Integer, BufferedImage> loadTiles(TileType tileType, MapMaker mapMaker) {
+    private void loadTiles(TileType tileType, MapMaker mapMaker) {
         File indexFile = FileIO.newFile(mapMaker.getPath(tileType.indexFileName));
         final Map<Integer, BufferedImage> tileMap = this.tileMap.get(tileType);
         tileMap.clear();
@@ -111,15 +111,13 @@ public class TileModel extends MapMakerModel {
 
                 File imageFile = FileIO.newFile(tileType.tileFolderPath + name + ".png");
                 if (!imageFile.exists()) {
-//                    System.err.println("Could not find image " + imageFile.getName());
                     continue;
                 }
 
                 BufferedImage image = FileIO.readImage(imageFile);
                 if (tileType == TileType.MAP) {
                     BufferedImage resizedImage = image.getSubimage(
-                            0,
-                            0,
+                            0, 0,
                             Math.min(image.getWidth(), Global.TILE_SIZE*3),
                             Math.min(image.getHeight(), Global.TILE_SIZE*3)
                     );
@@ -138,8 +136,6 @@ public class TileModel extends MapMakerModel {
 
             in.close();
         }
-
-        return tileMap;
     }
 
     public boolean containsTile(TileType tileType, int imageIndex) {
@@ -152,7 +148,6 @@ public class TileModel extends MapMakerModel {
 
     @Override
     public void newTileButtonPressed(MapMaker mapMaker) {
-
         JFileChooser fileChooser = FileIO.getImageFileChooser(mapMaker.getPath(Folder.MAP_TILES));
 
         int val = fileChooser.showOpenDialog(mapMaker);

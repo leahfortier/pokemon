@@ -179,6 +179,25 @@ public class GeneralTest extends BaseTest {
         }
     }
 
+    // Test to confirm that StringAppender is the only class that should be using a StringBuilder
+    // Otherwise they should be using StringAppender instead!!
+    @Test
+    public void noStringBuilderTest() {
+        // GeneralTest is here too since this is just checking text not like actual Java usage stuff
+        // This is mapping class object to simple file end name (Ex: 'StringAppender.java')
+        String[] exceptions = List.of(GeneralTest.class, StringAppender.class)
+                                  .stream()
+                                  .map(classy -> classy.getSimpleName() + ".java")
+                                  .toArray(String[]::new);
+
+        // Go through all the source files and make sure StringBuilder appears if and only if in the above exceptions
+        for (File file : FileIO.listFiles("src")) {
+            String fileName = file.getPath();
+            String contents = FileIO.readEntireFile(fileName);
+            Assert.assertEquals(fileName, StringUtils.endsWithAny(fileName, exceptions), contents.contains("StringBuilder"));
+        }
+    }
+
     @Test
     public void tabsTest() {
         for (File file : FileIO.listFiles("src")) {

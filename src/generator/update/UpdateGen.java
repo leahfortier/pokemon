@@ -69,6 +69,7 @@ public class UpdateGen {
 //        GeneratorUpdater.updateAll();
 //        newPokemonInfoCompare();
 //        pokemonInfoStuff();
+//        pokemonInfoStuff2();
 //        updateNum();
 //        resizeImages();
 //        trimImages();
@@ -588,6 +589,16 @@ public class UpdateGen {
 
     // Used for editing pokemoninfo.txt
     private static void pokemonInfoStuff() {
+        Scanner in = FileIO.openFile(FileName.POKEMON_INFO);
+        PrintStream out = FileIO.openOutputFile("out.txt");
+
+        while (in.hasNext()) {
+            outputSinglePokemon(in, out);
+        }
+    }
+
+    // Used for editing pokemoninfo.txt using a second input source
+    private static void pokemonInfoStuff2() {
         Scanner in = FileIO.openFile(FileName.POKEMON_INFO);
         Scanner in2 = FileIO.openFile("temp.txt");
         PrintStream out = FileIO.openOutputFile("out.txt");
