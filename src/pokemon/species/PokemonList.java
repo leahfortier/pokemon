@@ -1,5 +1,8 @@
 package pokemon.species;
 
+import item.Item;
+import item.ItemNamesies;
+import item.hold.IncenseItem;
 import type.Type;
 import util.RandomUtils;
 
@@ -66,6 +69,7 @@ public class PokemonList implements Iterable<PokemonInfo> {
     );
 
     private final Map<Type, Set<PokemonNamesies>> pokemonTypeMap;
+    private final Set<PokemonNamesies> incenseBabies;
 
     // Singleton
     private PokemonList() {
@@ -74,16 +78,27 @@ public class PokemonList implements Iterable<PokemonInfo> {
             pokemonTypeMap.put(type, EnumSet.noneOf(PokemonNamesies.class));
         }
 
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemon = PokemonInfo.getPokemonInfo(i);
+        for (PokemonInfo pokemon : this) {
             for (Type type : pokemon.getType()) {
                 pokemonTypeMap.get(type).add(pokemon.namesies());
+            }
+        }
+
+        incenseBabies = EnumSet.noneOf(PokemonNamesies.class);
+        for (ItemNamesies itemNamesies : ItemNamesies.values()) {
+            Item item = itemNamesies.getItem();
+            if (item instanceof IncenseItem) {
+                incenseBabies.add(((IncenseItem)item).getBaby());
             }
         }
     }
 
     public PokemonNamesies getRandomStarterPokemon() {
         return RandomUtils.getRandomValue(starterPokemon);
+    }
+
+    public boolean isIncenseBaby(PokemonNamesies namesies) {
+        return incenseBabies.contains(namesies);
     }
 
     public boolean isBabyPokemon(PokemonNamesies namesies) {

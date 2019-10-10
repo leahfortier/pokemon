@@ -1,9 +1,6 @@
 package pokemon.species;
 
 import battle.attack.AttackNamesies;
-import item.Item;
-import item.ItemNamesies;
-import item.hold.IncenseItem;
 import map.overworld.wild.WildHoldItem;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.EggGroup;
@@ -20,7 +17,6 @@ import util.string.StringAppender;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -34,7 +30,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     public static final int EVOLUTION_LEVEL_LEARNED = 0;
 
     private static Map<Integer, PokemonInfo> map;
-    private static Set<PokemonNamesies> incenseBabies;
 
     private final int number;
     private final PokemonNamesies namesies;
@@ -258,11 +253,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     }
 
     public boolean isIncenseBaby() {
-        if (incenseBabies == null) {
-            loadIncenseBabies();
-        }
-
-        return incenseBabies.contains(namesies);
+        return PokemonList.instance().isIncenseBaby(namesies);
     }
 
     public boolean isBabyPokemon() {
@@ -416,16 +407,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 
             if (!changed) {
                 return targetPokes.namesies();
-            }
-        }
-    }
-
-    private static void loadIncenseBabies() {
-        incenseBabies = new HashSet<>();
-        for (ItemNamesies itemNamesies : ItemNamesies.values()) {
-            Item item = itemNamesies.getItem();
-            if (item instanceof IncenseItem) {
-                incenseBabies.add(((IncenseItem)item).getBaby());
             }
         }
     }
