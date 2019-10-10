@@ -3,8 +3,8 @@ from typing import List, Dict, Tuple
 import pokebase
 
 from scripts.forms import Stat
-from scripts.pokeapi.form_config import FormConfig
 from scripts.move import Move, LevelUpMoves
+from scripts.pokeapi.form_config import FormConfig
 from scripts.substitution import attack_substitution, learnable_attack_substitution, learnable_attack_additions, \
     ability_substitution, type_substitution, name_substitution, gender_substitution, stat_substitution, \
     effort_substitution, capture_rate_substitution, level_up_attack_additions, egg_group_substitution

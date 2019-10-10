@@ -1,7 +1,7 @@
 package generator.interfaces;
 
-import generator.fields.ClassFields;
 import generator.StuffGen;
+import generator.fields.ClassFields;
 import generator.fields.MapField;
 import main.Global;
 import util.string.StringAppender;

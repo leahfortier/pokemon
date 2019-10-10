@@ -10,8 +10,8 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import pokemon.stat.User;
-import test.pokemon.TestPokemon;
 import test.general.TestUtils;
+import test.pokemon.TestPokemon;
 import util.string.StringAppender;
 import util.string.StringUtils;
 

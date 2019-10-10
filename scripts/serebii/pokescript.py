@@ -1,18 +1,18 @@
 # -*- coding: latin-1 -*-
 
-import math
-
 import re
+
+import math
 import requests
 from lxml import html
 
 from scripts.forms import AddedPokes, Stat
 from scripts.serebii.form_config import FormConfig
+from scripts.serebii.parse_util import get_types, normalize_form
 from scripts.serebii.parser import Parser
 from scripts.substitution import attack_substitution, ability_substitution, type_substitution, \
     learnable_attack_additions, gender_substitution, stat_substitution
 from scripts.util import namesies, remove_prefix, remove_empty, index_swap, replace_special, dashy, Timer
-from scripts.serebii.parse_util import get_types, normalize_form
 
 
 def get_base_exp_map():

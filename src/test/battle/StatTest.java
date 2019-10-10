@@ -11,8 +11,8 @@ import org.junit.Test;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import test.general.BaseTest;
-import test.pokemon.TestPokemon;
 import test.general.TestUtils;
+import test.pokemon.TestPokemon;
 
 import java.util.EnumMap;
 import java.util.Map;
