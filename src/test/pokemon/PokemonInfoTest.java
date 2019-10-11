@@ -16,6 +16,7 @@ import pokemon.species.BaseStats;
 import pokemon.species.GrowthRate;
 import pokemon.species.LevelUpMove;
 import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonList;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import test.general.BaseTest;
@@ -50,7 +51,7 @@ public class PokemonInfoTest extends BaseTest {
         Assert.assertEquals(PokemonInfo.NUM_POKEMON + 1, namesies.length);
 
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
+            PokemonInfo pokemonInfo = PokemonList.get(i);
             PokemonNamesies pokemonNamesies = namesies[i];
 
             Assert.assertEquals(pokemonInfo, pokemonNamesies.getInfo());
@@ -63,9 +64,7 @@ public class PokemonInfoTest extends BaseTest {
 
     @Test
     public void levelUpMovesTest() {
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
-
+        for (PokemonInfo pokemonInfo : PokemonList.instance()) {
             List<LevelUpMove> levelUpMoves = pokemonInfo.getLevelUpMoves();
             int previousLevel = levelUpMoves.get(0).getLevel();
             boolean hasDefault = false;
@@ -104,8 +103,7 @@ public class PokemonInfoTest extends BaseTest {
                 new PokemonMovePair(PokemonNamesies.GOURGEIST, AttackNamesies.TRICK_OR_TREAT)
         );
 
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
+        for (PokemonInfo pokemonInfo : PokemonList.instance()) {
             List<LevelUpMove> levelUpMoves = pokemonInfo.getLevelUpMoves();
 
             MultiMap<AttackNamesies, Integer> map = new MultiMap<>();
@@ -162,9 +160,7 @@ public class PokemonInfoTest extends BaseTest {
 
     @Test
     public void stockpileTest() {
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
-
+        for (PokemonInfo pokemonInfo : PokemonList.instance()) {
             Integer stockpileLevel = pokemonInfo.levelLearned(AttackNamesies.STOCKPILE);
             Integer spitUpLevel = pokemonInfo.levelLearned(AttackNamesies.SPIT_UP);
             Integer swallowLevel = pokemonInfo.levelLearned(AttackNamesies.SWALLOW);
@@ -206,8 +202,7 @@ public class PokemonInfoTest extends BaseTest {
 
     @Test
     public void evTest() {
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
+        for (PokemonInfo pokemonInfo : PokemonList.instance()) {
             int evTotal = getEvTotal(pokemonInfo);
 
             // Make sure EVs are strictly increasing across evolutions
@@ -232,8 +227,7 @@ public class PokemonInfoTest extends BaseTest {
 
     @Test
     public void abilityTest() {
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
+        for (PokemonInfo pokemonInfo : PokemonList.instance()) {
             AbilityNamesies[] abilities = pokemonInfo.getAbilities();
             String message = StringUtils.spaceSeparated(pokemonInfo.getName(), abilities);
 
@@ -298,8 +292,7 @@ public class PokemonInfoTest extends BaseTest {
 
     @Test
     public void typeTest() {
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
+        for (PokemonInfo pokemonInfo : PokemonList.instance()) {
             PokeType pokeType = pokemonInfo.getType();
             Type[] types = pokeType.getTypes();
 
@@ -354,8 +347,7 @@ public class PokemonInfoTest extends BaseTest {
         Set<EggGroup> allGroups = EnumSet.allOf(EggGroup.class);
         EggGroup[] noEggs = new EggGroup[] { EggGroup.NO_EGGS };
 
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
+        for (PokemonInfo pokemonInfo : PokemonList.instance()) {
             PokemonNamesies namesies = pokemonInfo.namesies();
             EggGroup[] eggGroups = pokemonInfo.getEggGroups();
             String name = pokemonInfo.getName();
@@ -420,8 +412,7 @@ public class PokemonInfoTest extends BaseTest {
     @Test
     public void attributesTest() {
         // Testing for other basic attributes like height, weight, catch rate
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
+        for (PokemonInfo pokemonInfo : PokemonList.instance()) {
             String name = pokemonInfo.getName();
 
             // Height and weight must be positive

@@ -219,7 +219,7 @@ public class PokemonList implements Iterable<PokemonInfo> {
         return new PokemonIterator();
     }
 
-    private static class PokemonIterator implements Iterator<PokemonInfo> {
+    private class PokemonIterator implements Iterator<PokemonInfo> {
         // Pokemon numbers are 1-indexed
         private int index = 1;
 
@@ -230,7 +230,7 @@ public class PokemonList implements Iterable<PokemonInfo> {
 
         @Override
         public PokemonInfo next() {
-            return PokemonInfo.getPokemonInfo(index++);
+            return getPokemonInfo(index++);
         }
     }
 }

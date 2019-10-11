@@ -10,6 +10,7 @@ import map.condition.ConditionSet;
 import pattern.map.ConditionMatcher;
 import pokemon.evolution.EvolutionType;
 import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonList;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import util.GeneralUtils;
@@ -146,8 +147,8 @@ public class UpdateGen {
         Predicate<PokemonInfo> filter = p -> true;
 
         List<PokemonInfo> pokes = new ArrayList<>();
-        for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
-            pokes.add(PokemonInfo.getPokemonInfo(num));
+        for (PokemonInfo pokemonInfo : PokemonList.instance()) {
+            pokes.add(pokemonInfo);
         }
 
         pokes.stream()
@@ -201,9 +202,7 @@ public class UpdateGen {
     private static void outputShowdownImagesFile() {
         StringAppender out = new StringAppender();
 
-        for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(num);
-
+        for (PokemonInfo pokemonInfo : PokemonList.instance()) {
             List<String> forms = new ArrayList<>();
             if (pokemonInfo.getNumber() < PokemonNamesies.RIZARDON.getInfo().getNumber()) {
                 forms.add("");
@@ -272,6 +271,7 @@ public class UpdateGen {
                     break;
             }
 
+            int num = pokemonInfo.getNumber();
             for (String form : forms) {
                 appendNotExists(out, num, form, "");
                 appendNotExists(out, num, form, "-back");
@@ -295,7 +295,7 @@ public class UpdateGen {
         }
         sourcePath += "/";
         if (!isAddedPoke) {
-            sourcePath += PokemonInfo.getPokemonInfo(num).getName().toLowerCase().replaceAll("[:'.\\- ]", "");
+            sourcePath += PokemonList.get(num).getName().toLowerCase().replaceAll("[:'.\\- ]", "");
         }
         sourcePath += form + ".png";
 

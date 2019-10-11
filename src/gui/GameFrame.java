@@ -5,7 +5,7 @@ import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
-import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonList;
 import util.FontMetrics;
 import util.RandomUtils;
 import util.TimeUtils;
@@ -56,7 +56,7 @@ public class GameFrame {
     private static void loadAllTheThings() {
         System.out.println("Random Seed: " + RandomUtils.getSeed());
 
-        PokemonInfo.loadPokemonInfo();
+        PokemonList.instance();
         FontMetrics.loadFontMetricsMap();
     }
 

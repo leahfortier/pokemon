@@ -21,6 +21,7 @@ import pokemon.evolution.MultipleEvolution;
 import pokemon.evolution.NoEvolution;
 import pokemon.species.LevelUpMove;
 import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonList;
 import pokemon.stat.Stat;
 import trainer.player.pokedex.Pokedex;
 import type.PokeType;
@@ -151,7 +152,7 @@ class PokedexView extends View {
                                 k, NUM_ROWS, NUM_COLS, 0,
                                 new ButtonTransitions().right(RETURN).up(RIGHT_ARROW).down(RIGHT_ARROW)
                         ),
-                        () -> selected = PokemonInfo.getPokemonInfo(getIndex(row, col) + 1)
+                        () -> selected = PokemonList.get(getIndex(row, col) + 1)
                 );
             }
         }
@@ -250,7 +251,7 @@ class PokedexView extends View {
 
         this.buttons = new ButtonList(buttons);
 
-        selected = PokemonInfo.getPokemonInfo(1);
+        selected = PokemonList.get(1);
         changeTab(TabInfo.MAIN);
     }
 
@@ -288,7 +289,7 @@ class PokedexView extends View {
                     continue;
                 }
 
-                PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(number);
+                PokemonInfo pokemonInfo = PokemonList.get(number);
                 Button pokemonButton = pokemonButtons[i][j];
 
                 if (pokedex.isNotSeen(pokemonInfo)) {
@@ -640,7 +641,7 @@ class PokedexView extends View {
 
     @Override
     public void movedToFront() {
-        selected = PokemonInfo.getPokemonInfo(1);
+        selected = PokemonList.get(1);
         numSeen = pokedex.numSeen();
         numCaught = pokedex.numCaught();
         changeTab(TabInfo.MAIN);

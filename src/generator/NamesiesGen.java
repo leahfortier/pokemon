@@ -2,6 +2,7 @@ package generator;
 
 import main.Global;
 import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonList;
 import util.file.FileIO;
 import util.string.StringAppender;
 import util.string.StringUtils;
@@ -22,8 +23,7 @@ class NamesiesGen {
 
         if (namesiesType == NamesiesType.POKEMON_NAMESIES) {
             // Create namesies for each Pokemon
-            for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-                PokemonInfo info = PokemonInfo.getPokemonInfo(i);
+            for (PokemonInfo info : PokemonList.instance()) {
                 this.createNamesies(info.getName(), null);
             }
         }

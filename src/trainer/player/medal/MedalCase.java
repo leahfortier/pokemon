@@ -51,8 +51,7 @@ public class MedalCase implements Serializable {
             this.uncaughtPokemonTypeMap.put(type, EnumSet.noneOf(PokemonNamesies.class));
         }
 
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemon = PokemonInfo.getPokemonInfo(i);
+        for (PokemonInfo pokemon : PokemonList.instance()) {
             for (Type type : pokemon.getType()) {
                 this.uncaughtPokemonTypeMap.get(type).add(pokemon.namesies());
             }

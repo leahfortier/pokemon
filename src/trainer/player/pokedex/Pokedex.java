@@ -3,6 +3,7 @@ package trainer.player.pokedex;
 import battle.ActivePokemon;
 import main.Game;
 import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonList;
 import pokemon.species.PokemonNamesies;
 import util.serialization.Serializable;
 
@@ -17,8 +18,8 @@ public class Pokedex implements Serializable {
 
     public Pokedex() {
         pokedex = new EnumMap<>(PokemonNamesies.class);
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            pokedex.put(PokemonInfo.getPokemonInfo(i).namesies(), new PokedexInfo());
+        for (PokemonInfo pokemonInfo : PokemonList.instance()) {
+            pokedex.put(pokemonInfo.namesies(), new PokedexInfo());
         }
     }
 

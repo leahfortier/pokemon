@@ -284,11 +284,6 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
         return imageName;
     }
 
-    // TODO: Deprecate
-    public static PokemonInfo getPokemonInfo(int number) {
-        return PokemonList.get(number);
-    }
-
     // TODO: Instead of generating this on the fly should just be added to the text file and stored
     private static PokemonNamesies getBaseEvolution(PokemonInfo targetPokes) {
         if (targetPokes.namesies() == PokemonNamesies.MANAPHY) {
