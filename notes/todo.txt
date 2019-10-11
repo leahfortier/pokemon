@@ -156,5 +156,4 @@ Other random things:
     oran berry message prints before its super effective prints
     toxic boost flare boost and marvel scale should be statusboosters
     need like a 'b' button where you can click through things but can't start a new dialogue
-    need iterator for PokemonInfo
     opponent's trace message appears before your Pokemon is even out and looks really weird

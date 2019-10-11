@@ -844,7 +844,7 @@ public enum PokemonNamesies {
     }
 
     public PokemonInfo getInfo() {
-        return PokemonInfo.getPokemonInfo(this.ordinal());
+        return PokemonList.get(this.ordinal());
     }
 
     public static PokemonNamesies tryValueOf(String name) {

@@ -9,7 +9,7 @@ import pokemon.active.Gender;
 import pokemon.active.Nature;
 import pokemon.active.PartyPokemon;
 import pokemon.breeding.Eggy;
-import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonList;
 import pokemon.species.PokemonNamesies;
 import trainer.TrainerType;
 import util.GeneralUtils;
@@ -67,7 +67,7 @@ public class PokemonMatcher implements JsonMatcher {
                 Global.error("Cannot set namesies for random starter pokemon.");
             }
 
-            return PokemonInfo.getRandomStarterPokemon();
+            return PokemonList.instance().getRandomStarterPokemon();
         }
 
         return this.namesies;

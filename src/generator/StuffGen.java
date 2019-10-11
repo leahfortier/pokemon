@@ -3,13 +3,13 @@ package generator;
 import generator.format.InputFormatter;
 import generator.interfaces.InterfaceGen;
 import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonList;
 import pokemon.species.PokemonNamesies;
 import util.file.FileIO;
 import util.file.FileName;
 import util.string.StringAppender;
 import util.string.StringUtils;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -89,10 +89,10 @@ public class StuffGen {
     }
 
     private static void baseEvolutionGenerator() {
-        Set<PokemonNamesies> set = new HashSet<>();
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            set.add(PokemonInfo.getPokemonInfo(i).namesies());
-        }
+        Set<PokemonNamesies> set = PokemonList.instance()
+                                              .stream()
+                                              .map(PokemonInfo::namesies)
+                                              .collect(Collectors.toSet());
 
         set.remove(PokemonNamesies.SHEDINJA);
         set.remove(PokemonNamesies.MANAPHY);
@@ -100,9 +100,7 @@ public class StuffGen {
         set.remove(PokemonNamesies.COSMOG);
         set.remove(PokemonNamesies.MELTAN);
 
-        for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(i);
-
+        for (PokemonInfo pokemonInfo : PokemonList.instance()) {
             if (!pokemonInfo.canBreed() && !pokemonInfo.getEvolution().canEvolve()) {
                 set.remove(pokemonInfo.namesies());
             }

@@ -14,6 +14,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import pokemon.breeding.Eggy;
 import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonList;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import trainer.player.medal.Medal;
@@ -159,14 +160,14 @@ public class ImageTest extends BaseTest {
 
     @Test
     public void spriteTest() {
-        for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
+        for (PokemonInfo pokemonInfo : PokemonList.instance()) {
+            int num = pokemonInfo.getNumber();
+            String message = num + " " + pokemonInfo.getName();
+
             File frontImageFile = FileIO.getImageFile(num, "", Folder.POKEMON_TILES);
             File backImageFile = FileIO.getImageFile(num, "-back", Folder.POKEMON_TILES);
             File shinyFrontImageFile = FileIO.getImageFile(num, "-shiny", Folder.POKEMON_TILES);
             File shinyBackImageFile = FileIO.getImageFile(num, "-shiny-back", Folder.POKEMON_TILES);
-
-            PokemonInfo pokemonInfo = PokemonInfo.getPokemonInfo(num);
-            String message = num + " " + pokemonInfo.getName();
 
             // Front and back images should always exist together
             Assert.assertEquals(message, frontImageFile.exists(), backImageFile.exists());
