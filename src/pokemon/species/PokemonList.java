@@ -1,15 +1,27 @@
 package pokemon.species;
 
+import battle.attack.AttackNamesies;
 import item.Item;
 import item.ItemNamesies;
 import item.hold.IncenseItem;
+import map.overworld.wild.WildHoldItem;
+import pokemon.ability.AbilityNamesies;
+import pokemon.breeding.EggGroup;
+import pokemon.evolution.EvolutionType;
 import type.Type;
+import util.GeneralUtils;
 import util.RandomUtils;
+import util.file.FileIO;
+import util.file.FileName;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 public class PokemonList implements Iterable<PokemonInfo> {
@@ -23,7 +35,7 @@ public class PokemonList implements Iterable<PokemonInfo> {
     }
 
     // All starters
-    private static final PokemonNamesies[] starterPokemon = new PokemonNamesies[] {
+    private final PokemonNamesies[] starterPokemon = new PokemonNamesies[] {
             PokemonNamesies.BULBASAUR,
             PokemonNamesies.CHARMANDER,
             PokemonNamesies.SQUIRTLE,
@@ -47,7 +59,8 @@ public class PokemonList implements Iterable<PokemonInfo> {
             PokemonNamesies.POPPLIO
     };
 
-    private static final Set<PokemonNamesies> babyPokemon = EnumSet.of(
+    // All baby Pokemon
+    private final Set<PokemonNamesies> babyPokemon = EnumSet.of(
             PokemonNamesies.PICHU,
             PokemonNamesies.CLEFFA,
             PokemonNamesies.IGGLYBUFF,
@@ -71,8 +84,12 @@ public class PokemonList implements Iterable<PokemonInfo> {
     private final Map<Type, Set<PokemonNamesies>> pokemonTypeMap;
     private final Set<PokemonNamesies> incenseBabies;
 
+    private final Map<Integer, PokemonInfo> map;
+
     // Singleton
     private PokemonList() {
+        this.map = this.loadPokemonInfo();
+
         pokemonTypeMap = new EnumMap<>(Type.class);
         for (Type type : Type.values()) {
             pokemonTypeMap.put(type, EnumSet.noneOf(PokemonNamesies.class));
@@ -91,6 +108,77 @@ public class PokemonList implements Iterable<PokemonInfo> {
                 incenseBabies.add(((IncenseItem)item).getBaby());
             }
         }
+    }
+
+    // Create and load the Pokemon info map if it doesn't already exist
+    private Map<Integer, PokemonInfo> loadPokemonInfo() {
+        Map<Integer, PokemonInfo> map = new HashMap<>();
+
+        Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(FileName.POKEMON_INFO));
+        while (in.hasNext()) {
+            PokemonInfo pokemonInfo = new PokemonInfo(
+                    in.nextInt(),                                   // Num
+                    in.nextLine().trim() + in.nextLine().trim(),    // Name
+                    GeneralUtils.sixIntArray(in),                   // Base Stats
+                    in.nextInt(),                                   // Base EXP
+                    in.nextLine().trim() + in.nextLine().trim(),    // Growth Rate
+                    Type.valueOf(in.next().trim()),                 // First Type
+                    Type.valueOf(in.nextLine().trim()),             // Second Type
+                    in.nextInt(),                                   // Catch Rate
+                    GeneralUtils.sixIntArray(in),                   // EVs
+                    EvolutionType.getEvolution(in),                 // Evolution
+                    WildHoldItem.createList(in),                    // Wild Items
+                    Integer.parseInt(in.nextLine()),                // Female Ratio
+                    createEnumList(in, AbilityNamesies.class),      // Abilities
+                    in.nextLine().trim(),                           // Classification
+                    in.nextInt(),                                   // Height
+                    in.nextDouble(),                                // Weight
+                    in.nextLine().trim(),                           // Flavor Text
+                    Integer.parseInt(in.nextLine()),                // Egg Steps
+                    createEnumList(in, EggGroup.class),             // Egg Groups
+                    createLevelUpMoves(in),                         // Level Up Moves
+                    createMovesSet(in)                              // Learnable Moves
+            );
+
+            map.put(pokemonInfo.getNumber(), pokemonInfo);
+        }
+
+        in.close();
+
+        return map;
+    }
+
+    private static <T extends Enum<T>> List<T> createEnumList(Scanner in, Class<T> enumType) {
+        return GeneralUtils.arrayValueOf(enumType, in.nextLine().trim().split(" "));
+    }
+
+    private static List<LevelUpMove> createLevelUpMoves(Scanner in) {
+        List<LevelUpMove> levelUpMoves = new ArrayList<>();
+        int numMoves = in.nextInt();
+
+        for (int i = 0; i < numMoves; i++) {
+            int level = in.nextInt();
+            String attackName = in.nextLine().trim();
+            AttackNamesies namesies = AttackNamesies.valueOf(attackName);
+
+            levelUpMoves.add(new LevelUpMove(level, namesies));
+        }
+
+        return levelUpMoves;
+    }
+
+    private static Set<AttackNamesies> createMovesSet(Scanner in) {
+        Set<AttackNamesies> learnableMoves = EnumSet.noneOf(AttackNamesies.class);
+        int numMoves = in.nextInt();
+        in.nextLine();
+
+        for (int i = 0; i < numMoves; i++) {
+            String attackName = in.nextLine().trim();
+            AttackNamesies namesies = AttackNamesies.valueOf(attackName);
+            learnableMoves.add(namesies);
+        }
+
+        return learnableMoves;
     }
 
     public PokemonNamesies getRandomStarterPokemon() {
@@ -115,6 +203,15 @@ public class PokemonList implements Iterable<PokemonInfo> {
 
     public int getNumTypedPokemon(Type type) {
         return pokemonTypeMap.get(type).size();
+    }
+
+    public PokemonInfo getPokemonInfo(int number) {
+        return map.get(number);
+    }
+
+    // Shorthand static method to get the PokemonInfo for the specified number
+    public static PokemonInfo get(int number) {
+        return instance().getPokemonInfo(number);
     }
 
     @Override
