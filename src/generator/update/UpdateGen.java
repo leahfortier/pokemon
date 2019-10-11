@@ -146,15 +146,11 @@ public class UpdateGen {
         Stat toOrder = Stat.SP_ATTACK;
         Predicate<PokemonInfo> filter = p -> true;
 
-        List<PokemonInfo> pokes = new ArrayList<>();
-        for (PokemonInfo pokemonInfo : PokemonList.instance()) {
-            pokes.add(pokemonInfo);
-        }
-
-        pokes.stream()
-             .filter(filter)
-             .sorted(Comparator.comparingInt(p -> p.getStats().get(toOrder)))
-             .forEachOrdered(p -> System.out.println(p.getName() + " " + p.getStats().get(toOrder)));
+        PokemonList.instance()
+                   .stream()
+                   .filter(filter)
+                   .sorted(Comparator.comparingInt(p -> p.getStats().get(toOrder)))
+                   .forEachOrdered(p -> System.out.println(p.getName() + " " + p.getStats().get(toOrder)));
     }
 
     private static void testBulbapediaMoveTypeList() {

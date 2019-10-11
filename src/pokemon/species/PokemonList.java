@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class PokemonList implements Iterable<PokemonInfo> {
     private static PokemonList instance;
@@ -217,6 +220,10 @@ public class PokemonList implements Iterable<PokemonInfo> {
     @Override
     public Iterator<PokemonInfo> iterator() {
         return new PokemonIterator();
+    }
+
+    public Stream<PokemonInfo> stream() {
+        return StreamSupport.stream(this.spliterator(), false);
     }
 
     private class PokemonIterator implements Iterator<PokemonInfo> {
