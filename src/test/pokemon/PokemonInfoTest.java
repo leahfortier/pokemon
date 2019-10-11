@@ -30,36 +30,37 @@ import util.string.StringUtils;
 
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
 public class PokemonInfoTest extends BaseTest {
-    @Test
-    public void totalPokemonTest() {
-        // Add one to account for the empty pokemon at the beginning
-        Assert.assertEquals(PokemonNamesies.values().length, PokemonInfo.NUM_POKEMON + 1);
-        Assert.assertSame(PokemonNamesies.values()[0], PokemonNamesies.NONE);
-    }
-
     // Test to confirm each pokemon number corresponds correctly to the ordinal in PokemonNamesies enum
     @Test
     public void numberTest() {
         PokemonNamesies[] namesies = PokemonNamesies.values();
+        Iterator<PokemonInfo> iterator = PokemonList.instance().iterator();
 
         // +1 because the first entry (zero index) is intentionally filler so that the index lines up correctly
         Assert.assertEquals(PokemonInfo.NUM_POKEMON + 1, namesies.length);
+        Assert.assertEquals(PokemonNamesies.NONE, namesies[0]);
 
         for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
-            PokemonInfo pokemonInfo = PokemonList.get(i);
+            Assert.assertTrue(iterator.hasNext());
+
+            PokemonInfo pokemonInfo = iterator.next();
             PokemonNamesies pokemonNamesies = namesies[i];
 
-            Assert.assertEquals(pokemonInfo, pokemonNamesies.getInfo());
+            Assert.assertSame(pokemonInfo, PokemonList.get(i));
+            Assert.assertSame(pokemonInfo, pokemonNamesies.getInfo());
             Assert.assertEquals(pokemonInfo.namesies(), pokemonNamesies);
             Assert.assertEquals(pokemonInfo.getName(), pokemonNamesies.getName());
             Assert.assertEquals(pokemonInfo.getNumber(), pokemonNamesies.ordinal());
             Assert.assertEquals(pokemonInfo.getNumber(), i);
         }
+
+        Assert.assertFalse(iterator.hasNext());
     }
 
     @Test

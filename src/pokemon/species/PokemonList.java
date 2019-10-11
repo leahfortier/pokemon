@@ -17,13 +17,11 @@ import util.file.FileName;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -87,23 +85,28 @@ public class PokemonList implements Iterable<PokemonInfo> {
     private final Map<Type, Set<PokemonNamesies>> pokemonTypeMap;
     private final Set<PokemonNamesies> incenseBabies;
 
-    private final Map<Integer, PokemonInfo> map;
+    // Maps pokemon number to its corresponding info
+    // Size NUM_POKEMON + 1, zero-index unused
+    private final PokemonInfo[] map;
 
     // Singleton
     private PokemonList() {
-        this.map = this.loadPokemonInfo();
+        // Load all Pokemon info into map
+        this.map = new PokemonInfo[PokemonInfo.NUM_POKEMON + 1];;
+        this.loadPokemonInfo();
 
+        // Create map from type to list of Pokemon with that type
         pokemonTypeMap = new EnumMap<>(Type.class);
         for (Type type : Type.values()) {
             pokemonTypeMap.put(type, EnumSet.noneOf(PokemonNamesies.class));
         }
-
         for (PokemonInfo pokemon : this) {
             for (Type type : pokemon.getType()) {
                 pokemonTypeMap.get(type).add(pokemon.namesies());
             }
         }
 
+        // Create list of incense babies by finding all incense items
         incenseBabies = EnumSet.noneOf(PokemonNamesies.class);
         for (ItemNamesies itemNamesies : ItemNamesies.values()) {
             Item item = itemNamesies.getItem();
@@ -113,10 +116,8 @@ public class PokemonList implements Iterable<PokemonInfo> {
         }
     }
 
-    // Create and load the Pokemon info map if it doesn't already exist
-    private Map<Integer, PokemonInfo> loadPokemonInfo() {
-        Map<Integer, PokemonInfo> map = new HashMap<>();
-
+    // Read the Pokemon input file and create all PokemonInfo and add to the map
+    private void loadPokemonInfo() {
         Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(FileName.POKEMON_INFO));
         while (in.hasNext()) {
             PokemonInfo pokemonInfo = new PokemonInfo(
@@ -143,12 +144,10 @@ public class PokemonList implements Iterable<PokemonInfo> {
                     createMovesSet(in)                              // Learnable Moves
             );
 
-            map.put(pokemonInfo.getNumber(), pokemonInfo);
+            map[pokemonInfo.getNumber()] = pokemonInfo;
         }
 
         in.close();
-
-        return map;
     }
 
     private static <T extends Enum<T>> List<T> createEnumList(Scanner in, Class<T> enumType) {
@@ -209,7 +208,7 @@ public class PokemonList implements Iterable<PokemonInfo> {
     }
 
     public PokemonInfo getPokemonInfo(int number) {
-        return map.get(number);
+        return map[number];
     }
 
     // Shorthand static method to get the PokemonInfo for the specified number
