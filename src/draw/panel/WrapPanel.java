@@ -22,6 +22,31 @@ public class WrapPanel extends DrawPanel {
         this.finishedAnimating = true;
     }
 
+    @Override
+    public WrapPanel withBlackOutline() {
+        return super.withBlackOutline().asWrapPanel();
+    }
+
+    @Override
+    public WrapPanel withBackgroundColor(Color backgroundColor) {
+        return super.withBackgroundColor(backgroundColor).asWrapPanel();
+    }
+
+    @Override
+    public WrapPanel withBorderColor(Color borderColor) {
+        return super.withBorderColor(borderColor).asWrapPanel();
+    }
+
+    @Override
+    public WrapPanel withBorderPercentage(int borderPercentage) {
+        return super.withBorderPercentage(borderPercentage).asWrapPanel();
+    }
+
+    @Override
+    public WrapPanel withFullTransparency() {
+        return super.withFullTransparency().asWrapPanel();
+    }
+
     public WrapPanel withTextAnimation() {
         this.animateMessage = true;
         return this;
@@ -33,15 +58,11 @@ public class WrapPanel extends DrawPanel {
 
     public int drawMessage(Graphics g, int fontSize, String text) {
         FontMetrics.setFont(g, fontSize);
-        int startY = y + this.getTextSpace(g) + FontMetrics.getTextHeight(g);
-        return drawMessage(g, text, startY);
-    }
-
-    public int drawMessage(Graphics g, String text, int startY) {
         g.setColor(Color.BLACK);
 
         int textSpace = this.getTextSpace(g);
         int startX = x + textSpace;
+        int startY = y + textSpace + FontMetrics.getTextHeight(g);
         int textWidth = width - 2*textSpace;
 
         if (!this.animateMessage) {

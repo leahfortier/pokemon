@@ -5,6 +5,7 @@ import draw.button.Button;
 import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.WrapPanel;
 import gui.TileSet;
 import input.ControlKey;
 import input.InputControl;
@@ -223,7 +224,7 @@ class NewPokemonView extends View {
                     "Weight: " + pokemonInfo.getWeight() + "lbs"
             );
 
-            DrawPanel descriptionPanel = new DrawPanel(
+            WrapPanel descriptionPanel = new WrapPanel(
                     weightPanel.x,
                     weightPanel.bottomY() + BOX_SPACING,
                     Global.GAME_SIZE.width - 2*BOX_SPACING,

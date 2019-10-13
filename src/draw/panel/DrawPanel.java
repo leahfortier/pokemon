@@ -9,6 +9,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonTransitions;
+import main.Global;
 import map.Direction;
 import pokemon.active.PartyPokemon;
 import type.PokeType;
@@ -125,14 +126,18 @@ public class DrawPanel {
         return this;
     }
 
-    // TODO: Deprecate
-    public DrawPanel withTextAnimation() {
-        return this;
-    }
-
     public DrawPanel greyOut() {
         this.greyOut = true;
         return this;
+    }
+
+    public WrapPanel asWrapPanel() {
+        if (this instanceof WrapPanel) {
+            return (WrapPanel)this;
+        }
+
+        Global.error("Must already be a WrapPanel.");
+        return new WrapPanel(x, y, width, height);
     }
 
     public int getBorderSize() {
@@ -257,16 +262,6 @@ public class DrawPanel {
         return this.getBorderSize() + FontMetrics.getDistanceBetweenRows(g) - FontMetrics.getTextHeight(g);
     }
 
-    // TODO: Deprecate
-    public int drawMessage(Graphics g, int fontSize, String text) {
-        return 0;
-    }
-
-    // TODO: Deprecate
-    public int drawMessage(Graphics g, String text, int startY) {
-        return 0;
-    }
-
     public void drawLeftLabel(Graphics g, int fontSize, String label) {
         int startX = x + this.getTextSpace(g);
         int centerY = centerY();
@@ -316,11 +311,6 @@ public class DrawPanel {
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, fontSize);
         TextUtils.drawCenteredString(g, text, x, y, width, height);
-    }
-
-    // TODO: Deprecate
-    public boolean isAnimatingMessage() {
-        return false;
     }
 
     public void drawMovePanel(Graphics g, Attack move) {

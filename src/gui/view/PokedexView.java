@@ -10,6 +10,7 @@ import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.WrapPanel;
 import gui.GameData;
 import gui.TileSet;
 import input.InputControl;
@@ -63,6 +64,7 @@ class PokedexView extends View {
     private final DrawPanel infoPanel;
     private final DrawPanel imagePanel;
     private final DrawPanel basicInfoPanel;
+    private final WrapPanel flavorTextPanel;
     private final DrawPanel moveDescriptionPanel;
 
     private final ButtonList buttons;
@@ -121,6 +123,14 @@ class PokedexView extends View {
                 .withBackgroundColor(null)
                 .withBorderPercentage(0)
                 .withBlackOutline();
+
+        flavorTextPanel = new WrapPanel(
+                infoPanel.x,
+                imagePanel.bottomY(),
+                infoPanel.width,
+                basicInfoPanel.bottomY() - imagePanel.bottomY()
+        )
+                .withBorderPercentage(0);
 
         int spacing = 20;
         int moveButtonHeight = 38;
@@ -413,8 +423,7 @@ class PokedexView extends View {
                 g.drawString("Weight: " + (!caught ? "???.?" : selected.getWeight()) + " lbs", leftX, textY);
 
                 if (caught) {
-                    textY = imagePanel.bottomY() + FontMetrics.getTextHeight(g) + spacing;
-                    infoPanel.drawMessage(g, selected.getFlavorText(), textY);
+                    flavorTextPanel.drawMessage(g, 16, selected.getFlavorText());
                 }
             }
         }

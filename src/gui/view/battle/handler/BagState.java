@@ -9,6 +9,7 @@ import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
 import draw.panel.DrawPanel;
+import draw.panel.WrapPanel;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -44,7 +45,7 @@ public class BagState implements VisualStateHandler {
     private static final int BAG_LEFT_BUTTON = NUM_BAG_BUTTONS - 3;
 
     private final DrawPanel bagCategoryPanel;
-    private final DrawPanel lastItemPanel;
+    private final WrapPanel lastItemPanel;
 
     private final ButtonList bagButtons;
     private final Button[] bagTabButtons;
@@ -62,7 +63,7 @@ public class BagState implements VisualStateHandler {
         bagCategoryPanel = new DrawPanel(30, 218, 357, 259)
                 .withBorderPercentage(6);
 
-        lastItemPanel = new DrawPanel(bagCategoryPanel.x, 492, bagCategoryPanel.width, 78)
+        lastItemPanel = new WrapPanel(bagCategoryPanel.x, 492, bagCategoryPanel.width, 78)
                 .withBorderPercentage(17)
                 .withBlackOutline();
 

@@ -13,6 +13,7 @@ import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.WrapPanel;
 import gui.GameData;
 import gui.TileSet;
 import input.ControlKey;
@@ -47,7 +48,7 @@ class PartyView extends View {
     private final DrawPanel pokemonPanel;
     private final DrawPanel imagePanel;
     private final DrawPanel basicInformationPanel;
-    private final DrawPanel abilityPanel;
+    private final WrapPanel abilityPanel;
     private final DrawPanel statsPanel;
     private final DrawPanel movesPanel;
     private final DrawPanel nicknamePanel;
@@ -119,7 +120,7 @@ class PartyView extends View {
         int halfPanelWidth = (pokemonPanel.width - 3*spacing)/2;
         int statsPanelHeight = 138;
 
-        abilityPanel = new DrawPanel(
+        abilityPanel = new WrapPanel(
                 imagePanel.x,
                 imagePanel.y + imagePanel.height + spacing,
                 halfPanelWidth,

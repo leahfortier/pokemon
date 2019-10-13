@@ -8,7 +8,7 @@ import util.Point;
 import java.awt.Graphics;
 
 public class BasicPanels {
-    private static final DrawPanel fullMessagePanel = new DrawPanel(0, 440, Global.GAME_SIZE.width, 161)
+    private static final WrapPanel fullMessagePanel = new WrapPanel(0, 440, Global.GAME_SIZE.width, 161)
             .withBlackOutline()
             .withTextAnimation();
 
