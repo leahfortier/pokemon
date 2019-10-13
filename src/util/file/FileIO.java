@@ -10,14 +10,12 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -159,15 +157,6 @@ public final class FileIO {
         } catch (IOException e) {
             Global.error("IOException while reading " + fileName + ": " + e.getMessage());
             return "";
-        }
-    }
-
-    public static BufferedReader openFileBuffered(File file) {
-        try {
-            return new BufferedReader(new FileReader(file));
-        } catch (FileNotFoundException e) {
-            Global.error(file.getAbsolutePath() + " not found!");
-            return new BufferedReader(new StringReader(""));
         }
     }
 

@@ -429,13 +429,13 @@ public class PokemonInfoTest extends BaseTest {
             // Capital classification
             Assert.assertTrue(name, Character.isUpperCase(pokemonInfo.getClassification().charAt(0)));
 
-            // Flavor text should start and end with proper punctuation
+            // Flavor text should start with a capital letter and end with either period or exclamation
+            // And the middle should only be valid characters
             // Also I really don't like when periods come before the quotation they should be after...
             // 20 is kind of arbitrary (and kind of short) but just to make sure it's something
             String flavorText = pokemonInfo.getFlavorText();
             String flavorMessage = name + " " + flavorText;
-            Assert.assertTrue(flavorMessage, Character.isUpperCase(flavorText.charAt(0)));
-            Assert.assertTrue(flavorMessage, flavorText.endsWith(".") || flavorText.endsWith("!"));
+            Assert.assertTrue(flavorMessage, flavorText.matches("[A-Z][a-zA-Z0-9.,'/:é°\"\\- ]+[.!]"));
             Assert.assertFalse(flavorMessage, flavorText.contains(".\""));
             TestUtils.assertGreater(flavorMessage, flavorMessage.length(), 20);
 

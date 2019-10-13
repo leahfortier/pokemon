@@ -16,7 +16,7 @@ public final class TextUtils {
         alignment.drawString(g, text, x, y);
     }
 
-    static int getTextWidth(final String text, final int fontSize) {
+    public static int getTextWidth(final String text, final int fontSize) {
         return text.length()*FontMetrics.getFontMetrics(fontSize).getHorizontalSpacing();
     }
 
@@ -25,8 +25,7 @@ public final class TextUtils {
     }
 
     public static int drawWrappedText(Graphics g, String str, int lastWordActualLength, int x, int y, int width) {
-        int fontSize = g.getFont().getSize();
-        FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
+        FontMetrics fontMetrics = FontMetrics.getFontMetrics(g);
 
         String[] words = str.split("[ ]+");
         StringAppender appender = new StringAppender();
@@ -39,7 +38,13 @@ public final class TextUtils {
             // If we're at the last word and we've specified a last word length, use that, otherwise use the
             // actual length of the word
             int wordLength = i == words.length - 1 && lastWordActualLength != -1 ? lastWordActualLength : word.length();
-            if ((wordLength + appender.length() + 1)*fontMetrics.getHorizontalSpacing() > width) {
+
+            // Add 1 for the space
+            int potentialLineLength = appender.length() + wordLength + 1;
+            int potentialLineWidth = potentialLineLength*fontMetrics.getHorizontalSpacing();
+
+            // If adding this word would be more than the width, then write this line and go to the next one
+            if (potentialLineWidth > width) {
                 g.drawString(appender.toString(), x, height);
 
                 height += distanceBetweenRows;
@@ -55,8 +60,7 @@ public final class TextUtils {
     }
 
     public static void drawCenteredWidthString(Graphics g, String s, int centerX, int y) {
-        int fontSize = g.getFont().getSize();
-        FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
+        FontMetrics fontMetrics = FontMetrics.getFontMetrics(g);
 
         int leftX = centerX(centerX, s, fontMetrics);
         g.drawString(s, leftX, y);
@@ -67,19 +71,16 @@ public final class TextUtils {
     }
 
     public static void drawCenteredHeightString(Graphics g, String s, int x, int centerY, Alignment alignment) {
-        int fontSize = g.getFont().getSize();
-        FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
+        FontMetrics fontMetrics = FontMetrics.getFontMetrics(g);
 
         int bottomY = centerY(centerY, fontMetrics);
         alignment.drawString(g, s, x, bottomY);
     }
 
     public static void drawRightAlignedString(Graphics g, String s, int rightX, int y) {
-        int fontSize = g.getFont().getSize();
-        FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
+        FontMetrics fontMetrics = FontMetrics.getFontMetrics(g);
 
         int leftX = rightX(rightX, s, fontMetrics);
-
         g.drawString(s, leftX, y);
     }
 
@@ -91,8 +92,7 @@ public final class TextUtils {
     }
 
     public static void drawCenteredString(Graphics g, String s, int centerX, int centerY) {
-        int fontSize = g.getFont().getSize();
-        FontMetrics fontMetrics = FontMetrics.getFontMetrics(fontSize);
+        FontMetrics fontMetrics = FontMetrics.getFontMetrics(g);
 
         int leftX = centerX(centerX, s, fontMetrics);
         int bottomY = centerY(centerY, fontMetrics);

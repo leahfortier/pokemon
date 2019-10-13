@@ -63,6 +63,10 @@ public class FontMetrics {
         return (text.length() + 2)*fontMetrics.horizontalSpacing;
     }
 
+    public static FontMetrics getFontMetrics(Graphics g) {
+        return getFontMetrics(g.getFont().getSize());
+    }
+
     public static FontMetrics getFontMetrics(int fontSize) {
         if (fontMetricsMap == null) {
             loadFontMetricsMap();
@@ -128,8 +132,7 @@ public class FontMetrics {
     }
 
     public static int getDistanceBetweenRows(Graphics g) {
-        int fontSize = g.getFont().getSize();
-        FontMetrics fontMetrics = getFontMetrics(fontSize);
+        FontMetrics fontMetrics = getFontMetrics(g);
         return (int)(fontMetrics.letterHeight*VERTICAL_WRAP_FACTOR);
     }
 }
