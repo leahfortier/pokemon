@@ -9,9 +9,6 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonTransitions;
-import input.ControlKey;
-import input.InputControl;
-import main.Global;
 import map.Direction;
 import pokemon.active.PartyPokemon;
 import type.PokeType;
@@ -45,11 +42,6 @@ public class DrawPanel {
     private boolean onlyTransparency;
     private int transparentCount;
 
-    private boolean animateMessage;
-    private int messageTimeElapsed;
-    private String drawingText;
-    private boolean finishedAnimating;
-
     public DrawPanel(Button button) {
         this(button.x, button.y, button.width, button.height);
     }
@@ -72,9 +64,6 @@ public class DrawPanel {
         this.outlineDirections = new Direction[0];
 
         this.transparentCount = 1;
-
-        this.messageTimeElapsed = 0;
-        this.finishedAnimating = true;
     }
 
     public DrawPanel withBorderColor(Color borderColor) {
@@ -136,8 +125,8 @@ public class DrawPanel {
         return this;
     }
 
+    // TODO: Deprecate
     public DrawPanel withTextAnimation() {
-        this.animateMessage = true;
         return this;
     }
 
@@ -268,57 +257,14 @@ public class DrawPanel {
         return this.getBorderSize() + FontMetrics.getDistanceBetweenRows(g) - FontMetrics.getTextHeight(g);
     }
 
+    // TODO: Deprecate
     public int drawMessage(Graphics g, int fontSize, String text) {
-        FontMetrics.setFont(g, fontSize);
-        return drawMessage(g, text);
+        return 0;
     }
 
-    public int drawMessage(Graphics g, String text) {
-        int startY = y + this.getTextSpace(g) + FontMetrics.getTextHeight(g);
-        return drawMessage(g, text, startY);
-    }
-
+    // TODO: Deprecate
     public int drawMessage(Graphics g, String text, int startY) {
-        g.setColor(Color.BLACK);
-
-        int textSpace = this.getTextSpace(g);
-        int startX = x + textSpace;
-        int textWidth = width - 2*textSpace;
-
-        if (!this.animateMessage) {
-            return TextUtils.drawWrappedText(g, text, startX, startY, textWidth);
-        }
-
-        if (!text.equals(drawingText)) {
-            messageTimeElapsed = 0;
-            drawingText = text;
-            finishedAnimating = false;
-        } else {
-            messageTimeElapsed += 3*Global.MS_BETWEEN_FRAMES;
-        }
-
-        int charactersToShow = finishedAnimating ? text.length() : Math.min(text.length(), messageTimeElapsed/50);
-        if (InputControl.instance().consumeIfMouseDown(ControlKey.SPACE)) {
-            charactersToShow = text.length();
-        }
-
-        finishedAnimating = charactersToShow == text.length();
-
-        int lastWordLength;
-        if (charactersToShow != 0 && text.charAt(charactersToShow - 1) != ' ') {
-            String startString = text.substring(0, charactersToShow);
-            int start = startString.lastIndexOf(' ') + 1;
-
-            String endString = text.substring(charactersToShow - 1);
-            int end = endString.indexOf(' ');
-            end = end == -1 ? endString.length() - 1 : end;
-
-            lastWordLength = end - start + charactersToShow - 1;
-        } else {
-            lastWordLength = -1;
-        }
-
-        return TextUtils.drawWrappedText(g, text.substring(0, charactersToShow), lastWordLength, startX, startY, textWidth);
+        return 0;
     }
 
     public void drawLeftLabel(Graphics g, int fontSize, String label) {
@@ -372,8 +318,9 @@ public class DrawPanel {
         TextUtils.drawCenteredString(g, text, x, y, width, height);
     }
 
+    // TODO: Deprecate
     public boolean isAnimatingMessage() {
-        return !finishedAnimating && animateMessage;
+        return false;
     }
 
     public void drawMovePanel(Graphics g, Attack move) {
