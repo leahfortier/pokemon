@@ -137,7 +137,7 @@ public class PokemonList implements Iterable<PokemonInfo> {
                     in.nextLine().trim(),                           // Classification
                     in.nextInt(),                                   // Height
                     in.nextDouble(),                                // Weight
-                    in.nextLine().trim(),                           // Flavor Text
+                    in.nextLine().trim() + in.nextLine().trim(),    // Flavor Text
                     Integer.parseInt(in.nextLine()),                // Egg Steps
                     createEnumList(in, EggGroup.class),             // Egg Groups
                     createLevelUpMoves(in),                         // Level Up Moves

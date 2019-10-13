@@ -404,7 +404,8 @@ public class UpdateGen {
             out.println(in.nextLine()); // Female Ratio
             out.println(in.nextLine()); // Abilities
             out.println(in.nextLine()); // Classification
-            out.println(in.nextLine()); // Height Weight FlavorText
+            out.println(in.nextLine()); // Height Weight
+            out.println(in.nextLine()); // Flavor Text
             out.println(in.nextLine()); // Egg Steps
             out.println(in.nextLine()); // Egg Groups
             readMoves(in, out);         // Level Up Moves
@@ -514,8 +515,7 @@ public class UpdateGen {
             diff(in1, in2, "Female Ratio", diffs);
             diff(in1, in2, "Abilities", diffs);
             diff(in1, in2, "Classification", diffs);
-            diff(in1.nextInt() + "", in2.nextInt() + "", "Height", diffs);
-            diff(in1.nextDouble() + "", in2.nextDouble() + "", "Weight", diffs);
+            diff(in1, in2, "Height/Weight", diffs);
             in1.nextLine(); in2.nextLine(); // Flavor Text -- don't compare
             diff(in1, in2, "Egg Steps", diffs);
             diff(in1, in2, "Egg Groups", diffs);
@@ -552,7 +552,8 @@ public class UpdateGen {
         out.println(in.nextLine()); // Female Ratio
         out.println(in.nextLine()); // Abilities
         out.println(in.nextLine()); // Classification
-        out.println(in.nextLine()); // Height Weight FlavorText
+        out.println(in.nextLine()); // Height Weight
+        out.println(in.nextLine()); // Flavor Text
         out.println(in.nextLine()); // Egg Steps
         out.println(in.nextLine()); // Egg Groups
         readMoves(in, out);         // Level Up Moves
@@ -575,7 +576,8 @@ public class UpdateGen {
         out.println(in.nextLine()); in2.nextLine(); // Female Ratio
         out.println(in.nextLine()); in2.nextLine(); // Abilities
         out.println(in.nextLine()); in2.nextLine(); // Classification
-        out.println(in.nextLine()); in2.nextLine(); // Height Weight FlavorText
+        out.println(in.nextLine()); in2.nextLine(); // Height Weight
+        out.println(in.nextLine()); in2.nextLine(); // Flavor Text
         out.println(in.nextLine()); in2.nextLine(); // Egg Steps
         out.println(in.nextLine()); in2.nextLine(); // Egg Groups
         readMoves(in, out); readMoves(in2);         // Level Up Moves

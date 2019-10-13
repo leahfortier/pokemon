@@ -521,7 +521,7 @@ with open("../temp.txt", "w") as f:
         f.write(namesies(ability2) + '\n')
         f.write(str(classification) + '\n')
         f.write(str(height) + ' ')
-        f.write(str(weight) + ' ')
+        f.write(str(weight) + '\n')
         f.write(str(flavor_text) + '\n')
         f.write(str(egg_steps) + '\n')
         f.write(str(egg_group1) + ' ')

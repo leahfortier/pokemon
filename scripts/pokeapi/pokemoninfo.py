@@ -85,17 +85,15 @@ class PokemonInfo:
         f.write(' '.join(self.abilities) + '\n')
         f.write(str(self.classification) + '\n')
         f.write(str(self.height) + ' ')
-        f.write(str(self.weight) + ' ')
+        f.write(str(self.weight) + '\n')
         f.write(str(self.flavor_text) + '\n')
         f.write(str(self.egg_steps) + '\n')
         f.write(' '.join(self.egg_groups) + '\n')
 
         f.write(str(len(self.level_up_moves)) + '\n')
-        for attack in self.level_up_moves:
-            f.write(attack + '\n')
+        f.write('\n'.join(self.level_up_moves) + '\n')
 
         f.write(str(len(self.learnable_moves)) + '\n')
-        for attack in self.learnable_moves:
-            f.write(attack + '\n')
+        f.write('\n'.join(self.learnable_moves) + '\n')
 
         f.write('\n')
