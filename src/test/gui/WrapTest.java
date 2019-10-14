@@ -1,5 +1,6 @@
 package test.gui;
 
+import gui.view.NewPokemonView;
 import gui.view.PartyView;
 import gui.view.PokedexView;
 import gui.view.battle.handler.BagState;
@@ -16,13 +17,17 @@ import java.awt.Graphics;
 
 public class WrapTest extends BaseTest {
     @Test
-    public void pokedexFlavorTextTest() {
+    public void flavorTextTest() {
+        // Tests the flavor text inside the Pokedex view and inside the new Pokemon view
         PokedexView pokedexView = TestGame.instance().getPokedexView();
+        NewPokemonView newPokemonView = TestGame.instance().getNewPokemonView();
         Assert.assertNotNull(pokedexView);
+        Assert.assertNotNull(newPokemonView);
 
         Graphics g = new TestGraphics();
         for (PokemonInfo pokemonInfo : PokemonList.instance()) {
             Assert.assertTrue(pokemonInfo.getName(), pokedexView.drawFlavorText(g, pokemonInfo));
+            Assert.assertTrue(pokemonInfo.getName(), newPokemonView.drawInfoLabels(g, pokemonInfo));
         }
     }
 

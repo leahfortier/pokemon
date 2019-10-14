@@ -1,6 +1,7 @@
 package test.general;
 
 import battle.ActivePokemon;
+import gui.view.NewPokemonView;
 import gui.view.PartyView;
 import gui.view.PokedexView;
 import gui.view.ViewMode;
@@ -22,6 +23,10 @@ public class TestGame extends Game {
 
     public PokedexView getPokedexView() {
         return (PokedexView)super.getView(ViewMode.POKEDEX_VIEW);
+    }
+
+    public NewPokemonView getNewPokemonView() {
+        return (NewPokemonView)super.getView(ViewMode.NEW_POKEMON_VIEW);
     }
 
     public PartyView getPartyView() {
