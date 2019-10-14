@@ -8,7 +8,7 @@ import util.Point;
 import java.awt.Graphics;
 
 public class BasicPanels {
-    private static final WrapPanel fullMessagePanel = new WrapPanel(0, 440, Global.GAME_SIZE.width, 161)
+    private static final WrapPanel fullMessagePanel = new WrapPanel(0, 440, Global.GAME_SIZE.width, 161, 30)
             .withBlackOutline()
             .withTextAnimation();
 
@@ -31,7 +31,7 @@ public class BasicPanels {
 
     public static int drawFullMessagePanel(Graphics g, String text) {
         fullMessagePanel.drawBackground(g);
-        return fullMessagePanel.drawMessage(g, 30, text);
+        return fullMessagePanel.drawMessage(g, text);
     }
 
     public static Button[] getFullMessagePanelButtons(int buttonWidth, int buttonHeight, int numRows, int numCols) {

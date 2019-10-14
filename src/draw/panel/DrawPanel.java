@@ -137,7 +137,7 @@ public class DrawPanel {
         }
 
         Global.error("Must already be a WrapPanel.");
-        return new WrapPanel(x, y, width, height);
+        return new WrapPanel(x, y, width, height, 16);
     }
 
     public int getBorderSize() {

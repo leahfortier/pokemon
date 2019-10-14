@@ -124,7 +124,8 @@ class PartyView extends View {
                 imagePanel.x,
                 imagePanel.y + imagePanel.height + spacing,
                 halfPanelWidth,
-                pokemonPanel.height - 5*spacing - imagePanel.height - buttonHeight - statsPanelHeight
+                pokemonPanel.height - 5*spacing - imagePanel.height - buttonHeight - statsPanelHeight,
+                16
         )
                 .withFullTransparency()
                 .withBlackOutline();
@@ -424,7 +425,7 @@ class PartyView extends View {
             // Ability with description
             Ability ability = selectedPkm.getActualAbility();
             abilityPanel.drawBackground(g);
-            abilityPanel.drawMessage(g, 16, ability.getName() + " - " + ability.getDescription());
+            abilityPanel.drawMessage(g, ability.getName() + " - " + ability.getDescription());
 
             // EXP Bar
             expBar.fillBar(g, DrawUtils.EXP_BAR_COLOR, selectedPkm.expRatio());

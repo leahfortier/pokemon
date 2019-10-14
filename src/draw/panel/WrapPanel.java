@@ -10,13 +10,17 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class WrapPanel extends DrawPanel {
+    private final int fontSize;
+
     private boolean animateMessage;
     private int messageTimeElapsed;
     private String drawingText;
     private boolean finishedAnimating;
 
-    public WrapPanel(int x, int y, int width, int height) {
+    public WrapPanel(int x, int y, int width, int height, int fontSize) {
         super(x, y, width, height);
+
+        this.fontSize = fontSize;
 
         this.messageTimeElapsed = 0;
         this.finishedAnimating = true;
@@ -56,7 +60,7 @@ public class WrapPanel extends DrawPanel {
         return !finishedAnimating && animateMessage;
     }
 
-    public int drawMessage(Graphics g, int fontSize, String text) {
+    public int drawMessage(Graphics g, String text) {
         FontMetrics.setFont(g, fontSize);
         g.setColor(Color.BLACK);
 

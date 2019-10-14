@@ -63,7 +63,7 @@ public class BagState implements VisualStateHandler {
         bagCategoryPanel = new DrawPanel(30, 218, 357, 259)
                 .withBorderPercentage(6);
 
-        lastItemPanel = new WrapPanel(bagCategoryPanel.x, 492, bagCategoryPanel.width, 78)
+        lastItemPanel = new WrapPanel(bagCategoryPanel.x, 492, bagCategoryPanel.width, 78, 12)
                 .withBorderPercentage(17)
                 .withBlackOutline();
 
@@ -207,7 +207,7 @@ public class BagState implements VisualStateHandler {
         }
         // Otherwise, draw selected item's information
         else {
-            lastItemPanel.drawMessage(g, 12, selected.getItem().getDescription());
+            lastItemPanel.drawMessage(g, selected.getItem().getDescription());
         }
 
         // Bag page number

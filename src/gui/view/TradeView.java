@@ -87,7 +87,8 @@ public class TradeView extends View {
                 0,
                 BasicPanels.getMessagePanelY() - messagePanelHeight + DrawUtils.OUTLINE_SIZE,
                 Global.GAME_SIZE.width/2,
-                messagePanelHeight
+                messagePanelHeight,
+                22
         )
                 .withBlackOutline();
 
@@ -216,7 +217,7 @@ public class TradeView extends View {
             drawPanel(g, "Requested:", requestedPanel, requested);
 
             this.messagePanel.drawBackground(g);
-            this.messagePanel.drawMessage(g, 22, "Which " + PokeString.POKEMON + " would you like to trade?");
+            this.messagePanel.drawMessage(g, "Which " + PokeString.POKEMON + " would you like to trade?");
 
             BasicPanels.drawFullMessagePanel(g, "");
             for (int i = 0; i < team.size(); i++) {

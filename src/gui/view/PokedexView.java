@@ -128,7 +128,8 @@ class PokedexView extends View {
                 infoPanel.x,
                 imagePanel.bottomY(),
                 infoPanel.width,
-                basicInfoPanel.bottomY() - imagePanel.bottomY()
+                basicInfoPanel.bottomY() - imagePanel.bottomY(),
+                16
         )
                 .withBorderPercentage(0);
 
@@ -423,7 +424,7 @@ class PokedexView extends View {
                 g.drawString("Weight: " + (!caught ? "???.?" : selected.getWeight()) + " lbs", leftX, textY);
 
                 if (caught) {
-                    flavorTextPanel.drawMessage(g, 16, selected.getFlavorText());
+                    flavorTextPanel.drawMessage(g, selected.getFlavorText());
                 }
             }
         }

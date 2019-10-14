@@ -228,12 +228,13 @@ class NewPokemonView extends View {
                     weightPanel.x,
                     weightPanel.bottomY() + BOX_SPACING,
                     Global.GAME_SIZE.width - 2*BOX_SPACING,
-                    3*weightPanel.height
+                    3*weightPanel.height,
+                    22
             )
                     .withFullTransparency()
                     .withBlackOutline();
             descriptionPanel.drawBackground(g);
-            descriptionPanel.drawMessage(g, 22, pokemonInfo.getFlavorText());
+            descriptionPanel.drawMessage(g, pokemonInfo.getFlavorText());
         } else if (state != State.NICKNAME && state != State.END) {
             ImageUtils.drawCenteredImage(g, pokemonImage, BasicPanels.canvasMessageCenter);
         }
