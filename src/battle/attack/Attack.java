@@ -10842,7 +10842,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         HyperspaceFury() {
-            super(AttackNamesies.HYPERSPACE_FURY, Type.DARK, MoveCategory.PHYSICAL, 5, "Using its many arms, the user unleashes a barrage of attacks that ignore the effects of moves like Protect and Detect. But the user’s Defense stat falls.");
+            super(AttackNamesies.HYPERSPACE_FURY, Type.DARK, MoveCategory.PHYSICAL, 5, "Using its many arms, the user unleashes a barrage of attacks that ignore the effects of moves like Protect and Detect. But the user's Defense stat falls.");
             super.power = 100;
             super.moveTypes.add(MoveType.PROTECT_PIERCING);
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);

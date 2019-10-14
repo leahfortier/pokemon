@@ -23,6 +23,7 @@ public class ClassFields {
 
     public ClassFields(Scanner in, String name) {
         this(name);
+        
         while (in.hasNextLine()) {
             String line = in.nextLine().trim();
             if (line.equals("*")) {

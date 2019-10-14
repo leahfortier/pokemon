@@ -86,7 +86,7 @@ class ConstructorField {
             case "StraightUp":
                 return fieldValue;
             case "String":
-                return "\"" + fieldValue + "\"";
+                return "\"" + fieldValue.replace("\"", "\\\"") + "\"";
             case "Int":
                 return Integer.parseInt(fieldValue) + "";
             case "Double":
