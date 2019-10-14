@@ -29,9 +29,9 @@ public class BasicPanels {
         return new DrawPanel(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
     }
 
-    public static int drawFullMessagePanel(Graphics g, String text) {
+    public static void drawFullMessagePanel(Graphics g, String text) {
         fullMessagePanel.drawBackground(g);
-        return fullMessagePanel.drawMessage(g, text);
+        fullMessagePanel.drawMessage(g, text);
     }
 
     public static Button[] getFullMessagePanelButtons(int buttonWidth, int buttonHeight, int numRows, int numCols) {

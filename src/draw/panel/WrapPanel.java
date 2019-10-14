@@ -1,6 +1,6 @@
 package draw.panel;
 
-import draw.TextUtils;
+import draw.TextWrapper;
 import input.ControlKey;
 import input.InputControl;
 import main.Global;
@@ -60,7 +60,9 @@ public class WrapPanel extends DrawPanel {
         return !finishedAnimating && animateMessage;
     }
 
-    public int drawMessage(Graphics g, String text) {
+    // Draws the text, wrapping to the next line if necessary and returns whether or not the text
+    // fits entirely inside the panel
+    public boolean drawMessage(Graphics g, String text) {
         FontMetrics.setFont(g, fontSize);
         g.setColor(Color.BLACK);
 
@@ -70,7 +72,7 @@ public class WrapPanel extends DrawPanel {
         int textWidth = width - 2*textSpace;
 
         if (!this.animateMessage) {
-            return TextUtils.drawWrappedText(g, text, startX, startY, textWidth);
+            return new TextWrapper(g, text, startX, startY, textWidth).fits(this.bottomY());
         }
 
         if (!text.equals(drawingText)) {
@@ -102,6 +104,7 @@ public class WrapPanel extends DrawPanel {
             lastWordLength = -1;
         }
 
-        return TextUtils.drawWrappedText(g, text.substring(0, charactersToShow), lastWordLength, startX, startY, textWidth);
+        String drawText = text.substring(0, charactersToShow);
+        return new TextWrapper(g, drawText, lastWordLength, startX, startY, textWidth).fits(this.bottomY());
     }
 }
