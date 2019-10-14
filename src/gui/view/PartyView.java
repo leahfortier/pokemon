@@ -36,7 +36,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-class PartyView extends View {
+public class PartyView extends View {
     private static final int NUM_BOTTOM_BUTTONS = 3;
     private static final int NUM_BUTTONS = Trainer.MAX_POKEMON + MoveList.MAX_MOVES + NUM_BOTTOM_BUTTONS;
     private static final int TABS = 0;
@@ -125,7 +125,7 @@ class PartyView extends View {
                 imagePanel.y + imagePanel.height + spacing,
                 halfPanelWidth,
                 pokemonPanel.height - 5*spacing - imagePanel.height - buttonHeight - statsPanelHeight,
-                16
+                14
         )
                 .withFullTransparency()
                 .withBlackOutline();
@@ -423,9 +423,7 @@ class PartyView extends View {
             g.drawString(selectedPkm.getActualHeldItem().getName(), nameX, fourthLineY);
 
             // Ability with description
-            Ability ability = selectedPkm.getActualAbility();
-            abilityPanel.drawBackground(g);
-            abilityPanel.drawMessage(g, ability.getName() + " - " + ability.getDescription());
+            drawAbility(g, selectedPkm.getActualAbility());
 
             // EXP Bar
             expBar.fillBar(g, DrawUtils.EXP_BAR_COLOR, selectedPkm.expRatio());
@@ -501,6 +499,11 @@ class PartyView extends View {
 
         // HP Bar
         hpBar.fillBar(g, selectedPkm.getHPColor(), selectedPkm.getHPRatio());
+    }
+
+    public boolean drawAbility(Graphics g, Ability ability) {
+        abilityPanel.drawBackground(g);
+        return abilityPanel.drawMessage(g, ability.getName() + " - " + ability.getDescription());
     }
 
     private void drawMoveDescriptionPanel(Graphics g, DrawPanel moveDetailsPanel, Attack move) {

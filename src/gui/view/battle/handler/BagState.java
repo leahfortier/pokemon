@@ -63,7 +63,7 @@ public class BagState implements VisualStateHandler {
         bagCategoryPanel = new DrawPanel(30, 218, 357, 259)
                 .withBorderPercentage(6);
 
-        lastItemPanel = new WrapPanel(bagCategoryPanel.x, 492, bagCategoryPanel.width, 78, 12)
+        lastItemPanel = new WrapPanel(bagCategoryPanel.x, 492, bagCategoryPanel.width, 78, 13)
                 .withBorderPercentage(17)
                 .withBlackOutline();
 
@@ -207,7 +207,7 @@ public class BagState implements VisualStateHandler {
         }
         // Otherwise, draw selected item's information
         else {
-            lastItemPanel.drawMessage(g, selected.getItem().getDescription());
+            drawItemDescription(g, selected);
         }
 
         // Bag page number
@@ -245,6 +245,10 @@ public class BagState implements VisualStateHandler {
         TextUtils.drawRightAlignedString(g, "x" + Game.getPlayer().getBag().getQuantity(itemNamesies), 140, 19);
 
         g.translate(-dx, -dy);
+    }
+
+    public boolean drawItemDescription(Graphics g, ItemNamesies itemNamesies) {
+        return lastItemPanel.drawMessage(g, itemNamesies.getItem().getDescription());
     }
 
     @Override

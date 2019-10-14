@@ -70,9 +70,10 @@ public class WrapPanel extends DrawPanel {
         int startX = x + textSpace;
         int startY = y + textSpace + FontMetrics.getTextHeight(g);
         int textWidth = width - 2*textSpace;
+        int bottomY = this.bottomY() - this.getBorderSize();
 
         if (!this.animateMessage) {
-            return new TextWrapper(g, text, startX, startY, textWidth).fits(this.bottomY());
+            return new TextWrapper(g, text, startX, startY, textWidth).fits(bottomY);
         }
 
         if (!text.equals(drawingText)) {
@@ -105,6 +106,6 @@ public class WrapPanel extends DrawPanel {
         }
 
         String drawText = text.substring(0, charactersToShow);
-        return new TextWrapper(g, drawText, lastWordLength, startX, startY, textWidth).fits(this.bottomY());
+        return new TextWrapper(g, drawText, lastWordLength, startX, startY, textWidth).fits(bottomY);
     }
 }

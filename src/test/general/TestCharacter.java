@@ -1,17 +1,19 @@
 package test.general;
 
 import battle.ActivePokemon;
-import map.MapName;
-import pattern.SimpleMapTransition;
+import pokemon.species.PokemonNamesies;
+import test.pokemon.TestPokemon;
 import trainer.player.Player;
 
 public class TestCharacter extends Player {
     private static final long serialVersionUID = 1L;
 
+    public TestCharacter() {
+        this(TestPokemon.newPlayerPokemon(PokemonNamesies.BULBASAUR));
+    }
+
     public TestCharacter(ActivePokemon mahBoiiiiiii) {
         super();
-        TestGame.setNewPlayer(this);
-        this.addPokemon(mahBoiiiiiii);
-        this.setMap(new SimpleMapTransition(new MapName("Depth First Search Town", "PlayersHouseUp"), "GameStartLocation"));
+        TestGame.setNewPlayer(this, mahBoiiiiiii);
     }
 }

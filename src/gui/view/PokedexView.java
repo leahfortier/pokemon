@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-class PokedexView extends View {
+public class PokedexView extends View {
     private static final int NUM_COLS = 6;
     private static final int NUM_ROWS = 6;
 
@@ -424,7 +424,7 @@ class PokedexView extends View {
                 g.drawString("Weight: " + (!caught ? "???.?" : selected.getWeight()) + " lbs", leftX, textY);
 
                 if (caught) {
-                    flavorTextPanel.drawMessage(g, selected.getFlavorText());
+                    drawFlavorText(g, selected);
                 }
             }
         }
@@ -613,6 +613,10 @@ class PokedexView extends View {
         returnButton.label(g, 20, "Return");
 
         buttons.draw(g);
+    }
+
+    public boolean drawFlavorText(Graphics g, PokemonInfo pokemonInfo) {
+        return flavorTextPanel.drawMessage(g, pokemonInfo.getFlavorText());
     }
 
     private int getIndex(int i, int j) {

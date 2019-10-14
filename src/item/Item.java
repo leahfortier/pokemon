@@ -174,6 +174,10 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         return this.battleBagCategories;
     }
 
+    public boolean hasBattleBagCategories() {
+        return !this.battleBagCategories.isEmpty();
+    }
+
     @Override
     public int hashCode() {
         return this.getName().hashCode();

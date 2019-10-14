@@ -79,6 +79,7 @@ Descriptions that change manually:
         Flower Veil (Remove 'Ally')
         Battery ('Ally' -> 'the')
         Power of Alchemy ('ally' -> 'enemy')
+        Download ('an opposing' -> 'opposing' (more for length than for clarity))
     Items:
         Fishing Rod
         Deep Sea Scale (Added ', Chinchou, or Lanturn' -- Lanturn rules and deserves this)
@@ -157,3 +158,4 @@ Other random things:
     toxic boost flare boost and marvel scale should be statusboosters
     need like a 'b' button where you can click through things but can't start a new dialogue
     opponent's trace message appears before your Pokemon is even out and looks really weird
+    used a Pokeball and it didn't show up as my LastUsedItem what's up with that
