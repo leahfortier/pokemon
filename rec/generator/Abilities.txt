@@ -57,7 +57,7 @@ Battery:
     SimpleToModify: Sp_Attack 1.3
 *
 Tinted Lens:
-    Desc: The Pok\u00e9mon can use \"not very effective\" moves to deal regular damage.
+    Desc: The Pok\u00e9mon can use "not very effective" moves to deal regular damage.
     PowerMultiplierCondition: 2 TypeAdvantage.isNotVeryEffective(user, victim, b)
 *
 Swarm:
@@ -642,7 +642,7 @@ Trace:
         ###
 *
 Download:
-    Desc: Compares an opposing Pok\u00e9mon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat -- whichever will be more effective.
+    Desc: Compares an opposing Pok\u00e9mon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat -- whichever will be more effective.
     Int: EntryEffect
     Enter:
         ActivePokemon other = b.getOtherPokemon(enterer);
@@ -1348,7 +1348,7 @@ Bulletproof:
     MoveTypePrevent: Bomb_Ball bomb/ball moves
 *
 Aura Break:
-    Desc: The effects of \"Aura\" Abilities are reversed to lower the power of affected moves.
+    Desc: The effects of "Aura" Abilities are reversed to lower the power of affected moves.
 *
 Fairy Aura:
     Desc: Powers up each Pok\u00e9mon's Fairy-type moves.

@@ -20,12 +20,28 @@ import pokemon.active.Gender;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import test.general.BaseTest;
+import test.general.TestUtils;
 import test.pokemon.TestPokemon;
 
 import java.util.EnumSet;
 import java.util.Set;
 
 public class ItemTest extends BaseTest {
+    @Test
+    public void descriptionTest() {
+        for (ItemNamesies itemNamesies : ItemNamesies.values()) {
+            if (itemNamesies == ItemNamesies.NO_ITEM) {
+                continue;
+            }
+
+            // Make sure all descriptions start capitalized, end with a period/exclamation,
+            // and only contain valid characters
+            Item item = itemNamesies.getItem();
+            String description = item.getDescription();
+            TestUtils.assertDescription(item.getName(), description, "[A-Z][a-zA-Z0-9.,'é\\- ]+[.!]");
+        }
+    }
+
     @Test
     public void categoryTest() {
         for (ItemNamesies itemNamesies : ItemNamesies.values()) {

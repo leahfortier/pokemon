@@ -38,6 +38,20 @@ import java.util.Map;
 
 public class AttackTest extends BaseTest {
     @Test
+    public void descriptionTest() {
+        for (AttackNamesies attackNamesies : AttackNamesies.values()) {
+            if (attackNamesies == AttackNamesies.CONFUSION_DAMAGE) {
+                continue;
+            }
+
+            // Make sure all descriptions start capitalized, end with a period, and only contain valid characters
+            Attack attack = attackNamesies.getNewAttack();
+            String description = attack.getDescription();
+            TestUtils.assertDescription(attack.getName(), description, "[A-Z][a-zA-Z0-9.,'é\\- ]+[.]");
+        }
+    }
+
+    @Test
     public void moveTypeTest() {
         for (AttackNamesies attackNamesies : AttackNamesies.values()) {
             Attack attack = attackNamesies.getNewAttack();
@@ -828,7 +842,7 @@ public class AttackTest extends BaseTest {
 
         // Make sure effects persist
         battle.emptyHeal();
-        battle.defendingFight(AttackNamesies.CONSTRICT);
+        battle.defendingFight(AttackNamesies.TACKLE);
         battle.assertHasEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
         battle.assertHasEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
         battle.assertHasEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);

@@ -28,7 +28,7 @@ public class MapField {
         if (value.isEmpty()) {
             return readMethod(in);
         } else if (value.equals("<Empty>")) {
-            return  "";
+            return "";
         } else {
             return value;
         }

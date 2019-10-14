@@ -72,7 +72,8 @@ public class PokemonInfoTest extends BaseTest {
 
             for (LevelUpMove levelUpMove : levelUpMoves) {
                 int level = levelUpMove.getLevel();
-                String message = StringUtils.spaceSeparated(pokemonInfo.getName(), level, levelUpMove.getMove().getName());
+                AttackNamesies attack = levelUpMove.getMove();
+                String message = StringUtils.spaceSeparated(pokemonInfo.getName(), level, attack.getName());
 
                 // Make sure level is valid
                 TestUtils.assertInclusiveRange(message, 0, 100, level);
@@ -87,8 +88,12 @@ public class PokemonInfoTest extends BaseTest {
 
                 // If it learns a move at evolution, then it cannot be a base evolution
                 if (level == PokemonInfo.EVOLUTION_LEVEL_LEARNED) {
-                    Assert.assertNotEquals(pokemonInfo.namesies(), pokemonInfo.getBaseEvolution());
+                    Assert.assertNotEquals(message, pokemonInfo.namesies(), pokemonInfo.getBaseEvolution());
                 }
+
+                // Pokemon cannot learn these moves by level up
+                Assert.assertNotEquals(message, AttackNamesies.CONFUSION_DAMAGE, attack);
+                Assert.assertNotEquals(message, AttackNamesies.STRUGGLE, attack);
             }
 
             Assert.assertTrue(pokemonInfo.getName(), hasDefault);
@@ -431,13 +436,8 @@ public class PokemonInfoTest extends BaseTest {
 
             // Flavor text should start with a capital letter and end with either period or exclamation
             // And the middle should only be valid characters
-            // Also I really don't like when periods come before the quotation they should be after...
-            // 20 is kind of arbitrary (and kind of short) but just to make sure it's something
             String flavorText = pokemonInfo.getFlavorText();
-            String flavorMessage = name + " " + flavorText;
-            Assert.assertTrue(flavorMessage, flavorText.matches("[A-Z][a-zA-Z0-9.,'/:é°\"\\- ]+[.!]"));
-            Assert.assertFalse(flavorMessage, flavorText.contains(".\""));
-            TestUtils.assertGreater(flavorMessage, flavorMessage.length(), 20);
+            TestUtils.assertDescription(name, flavorText, "[A-Z][a-zA-Z0-9.,'/:é°\"\\- ]+[.!]");
 
             // Gender ratio must be between 0 and 8 if not genderless
             int femaleRatio = pokemonInfo.getFemaleRatio();

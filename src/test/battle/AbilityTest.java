@@ -27,10 +27,10 @@ public class AbilityTest extends BaseTest {
                 continue;
             }
 
-            // All descriptions should end with a period
+            // Make sure all descriptions start capitalized, end with a period, and only contain valid characters
             Ability ability = abilityNamesies.getNewAbility();
             String description = ability.getDescription();
-            Assert.assertTrue(ability.getName() + " " + description, description.endsWith("."));
+            TestUtils.assertDescription(ability.getName(), description, "[A-Z][a-zA-Z.,'é\"\\- ]+[.]");
         }
     }
 

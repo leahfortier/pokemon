@@ -73,4 +73,16 @@ public class TestUtils {
                 actual < lower || actual > upper
         );
     }
+
+    // Asserts that the description matches the given regex
+    // Ex: "[A-Z][a-zA-Z0-9.,'/:é°\"\\- ]+[.!]" for starting with capital letter, ending with either period or
+    // exclamation, and all middle characters are valid
+    // Also I really don't like when periods come before the quotation they should be after...
+    // 20 is kind of arbitrary (and kind of short) but just to make sure it's something
+    public static void assertDescription(String name, String description, String regex) {
+        String message = name + " " + description;
+        Assert.assertTrue(message, description.matches(regex));
+        Assert.assertFalse(message, description.contains(".\""));
+        TestUtils.assertGreater(message, description.length(), 20);
+    }
 }

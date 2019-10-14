@@ -888,7 +888,7 @@ Mystic Water:
     TypeEnhance: Water
 *
 NeverMeltIce:
-    Desc: An item to be held by a Pok\u00e9mon. It's a piece of ice that repels heat effects and boosts Ice-type moves.
+    Desc: An item to be held by a Pok\u00e9mon. It's a piece of ice that repels heat effects and boosts Ice-type moves.
     Price: 1000
     TypeEnhance: Ice
 *

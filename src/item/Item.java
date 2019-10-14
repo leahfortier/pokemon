@@ -2621,7 +2621,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         NeverMeltIce() {
-            super(ItemNamesies.NEVER_MELT_ICE, "An item to be held by a Pok\u00e9mon. It's a piece of ice that repels heat effects and boosts Ice-type moves.", BagCategory.MISC);
+            super(ItemNamesies.NEVER_MELT_ICE, "An item to be held by a Pok\u00e9mon. It's a piece of ice that repels heat effects and boosts Ice-type moves.", BagCategory.MISC);
             super.price = 1000;
         }
 
