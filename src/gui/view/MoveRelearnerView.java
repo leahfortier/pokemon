@@ -13,6 +13,7 @@ import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.LearnMovePanel;
+import draw.panel.MovePanel;
 import gui.GameData;
 import gui.TileSet;
 import input.InputControl;
@@ -44,7 +45,7 @@ public class MoveRelearnerView extends View {
 
     private final DrawPanel movesPanel;
     private final DrawPanel heartScalePanel;
-    private final DrawPanel descriptionPanel;
+    private final MovePanel descriptionPanel;
     private final DrawPanel partyPanel;
 
     private final ButtonList buttons;
@@ -91,13 +92,12 @@ public class MoveRelearnerView extends View {
                 .withTransparentBackground()
                 .withBorderPercentage(0);
 
-        descriptionPanel = new DrawPanel(
+        descriptionPanel = new MovePanel(
                 movesPanel.rightX() + spacing,
                 movesPanel.y,
                 movesPanel.width,
                 (Global.GAME_SIZE.height - 4*spacing - buttonHeight)/3
         )
-                .withBlackOutline()
                 .withTransparentCount(2)
                 .withBorderPercentage(0);
 
@@ -216,7 +216,7 @@ public class MoveRelearnerView extends View {
             descriptionPanel.withBackgroundColor(Type.NORMAL.getColor()).drawBackground(g);
         } else {
             movesPanel.withBackgroundColor(selectedMove.getActualType().getColor());
-            descriptionPanel.drawMovePanel(g, selectedMove);
+            descriptionPanel.draw(g, selectedMove);
         }
 
         movesPanel.drawBackground(g);

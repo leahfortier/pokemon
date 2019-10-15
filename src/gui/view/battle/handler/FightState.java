@@ -4,7 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
 import draw.button.ButtonList;
-import draw.panel.DrawPanel;
+import draw.panel.MovePanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
@@ -16,7 +16,7 @@ import util.string.StringUtils;
 import java.awt.Graphics;
 
 public class FightState implements VisualStateHandler {
-    private final DrawPanel moveDetailsPanel;
+    private final MovePanel moveDetailsPanel;
 
     private ButtonList moveButtons;
 
@@ -26,9 +26,8 @@ public class FightState implements VisualStateHandler {
     private int lastMoveUsed;
 
     public FightState() {
-        moveDetailsPanel = new DrawPanel(415, 440, 385, 161)
+        moveDetailsPanel = new MovePanel(415, 440, 385, 161)
                 .withBorderPercentage(8)
-                .withBlackOutline()
                 .withTransparentCount(2);
     }
 
@@ -67,7 +66,7 @@ public class FightState implements VisualStateHandler {
         String message = view.getMessage(VisualState.INVALID_FIGHT, null);
         if (StringUtils.isNullOrEmpty(message)) {
             // Draw move details
-            moveDetailsPanel.drawMovePanel(g, moves.get(moveButtons.getSelected()).getAttack());
+            moveDetailsPanel.draw(g, moves.get(moveButtons.getSelected()).getAttack());
         } else {
             // Show unusable move message
             view.drawMenuMessagePanel(g, message);

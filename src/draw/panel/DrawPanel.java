@@ -140,6 +140,15 @@ public class DrawPanel {
         return new WrapPanel(x, y, width, height, 16);
     }
 
+    public MovePanel asMovePanel() {
+        if (this instanceof MovePanel) {
+            return (MovePanel)this;
+        }
+
+        Global.error("Must already be a MovePanel.");
+        return new MovePanel(x, y, width, height);
+    }
+
     public int getBorderSize() {
         if (onlyTransparency) {
             return 0;
@@ -311,42 +320,6 @@ public class DrawPanel {
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, fontSize);
         TextUtils.drawCenteredString(g, text, x, y, width, height);
-    }
-
-    public void drawMovePanel(Graphics g, Attack move) {
-        this.withTransparentBackground(move.getActualType().getColor())
-            .drawBackground(g);
-
-        FontMetrics.setFont(g, 24);
-        int spacing = 20;
-        int y = this.y + spacing + FontMetrics.getTextHeight(g);
-        g.drawString(move.getName(), this.x + spacing, y);
-
-        BufferedImage typeImage = move.getActualType().getImage();
-        int imageY = y - typeImage.getHeight();
-        int imageX = this.rightX() - spacing - typeImage.getWidth();
-        g.drawImage(typeImage, imageX, imageY, null);
-
-        BufferedImage categoryImage = move.getCategory().getImage();
-        imageX -= categoryImage.getWidth() + spacing;
-        g.drawImage(categoryImage, imageX, imageY, null);
-
-        y += FontMetrics.getDistanceBetweenRows(g);
-
-        FontMetrics.setFont(g, 18);
-        g.drawString("Power: " + move.getPowerString(), this.x + spacing, y);
-        TextUtils.drawRightAlignedString(g, "Acc: " + move.getAccuracyString(), this.rightX() - spacing, y);
-
-        y += FontMetrics.getDistanceBetweenRows(g) + 2;
-
-        FontMetrics.setFont(g, 16);
-        TextUtils.drawWrappedText(
-                g,
-                move.getDescription(),
-                this.x + spacing,
-                y,
-                this.width - 2*spacing
-        );
     }
 
     public DrawPanel createBottomTab(int tabIndex, int tabHeight, int numTabs) {

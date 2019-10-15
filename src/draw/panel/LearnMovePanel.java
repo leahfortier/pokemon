@@ -22,7 +22,7 @@ public class LearnMovePanel {
     private static final int YES_BUTTON = NUM_COLS + 1; // Bottom center left
     private static final int NO_BUTTON = NUM_COLS + 2; // Bottom center right
 
-    private final DrawPanel moveDetailsPanel;
+    private final MovePanel moveDetailsPanel;
     private final ButtonList buttons;
     private final Button yesButton;
     private final Button noButton;
@@ -41,7 +41,9 @@ public class LearnMovePanel {
         this.learning = learning;
         this.toLearn = toLearn;
 
-        moveDetailsPanel = new DrawPanel(0, 440 - 161, 385, 161).withBorderPercentage(8).withBlackOutline().withTransparentCount(2);
+        // TODO: 440 is fullMessagePanel.y and should have a var for the height
+        // TODO: Also has some overlap with message panel for the outline
+        moveDetailsPanel = new MovePanel(0, 440 - 161, 385, 161).withBorderPercentage(8).withTransparentCount(2);
 
         // Create a button for each known move and then one for the new move and one for not learning
         buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS));
@@ -165,7 +167,7 @@ public class LearnMovePanel {
                 }
             }
 
-            moveDetailsPanel.drawMovePanel(g, selected == null ? toLearn.getAttack() : selected);
+            moveDetailsPanel.draw(g, selected == null ? toLearn.getAttack() : selected);
             newMoveButton.drawMoveButton(g, toLearn);
         }
 
