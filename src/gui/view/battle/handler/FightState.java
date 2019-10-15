@@ -2,6 +2,7 @@ package gui.view.battle.handler;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.attack.Attack;
 import battle.attack.Move;
 import draw.button.ButtonList;
 import draw.panel.MovePanel;
@@ -66,11 +67,15 @@ public class FightState implements VisualStateHandler {
         String message = view.getMessage(VisualState.INVALID_FIGHT, null);
         if (StringUtils.isNullOrEmpty(message)) {
             // Draw move details
-            moveDetailsPanel.draw(g, moves.get(moveButtons.getSelected()).getAttack());
+            drawMoveDetails(g, moves.get(moveButtons.getSelected()).getAttack());
         } else {
             // Show unusable move message
             view.drawMenuMessagePanel(g, message);
         }
+    }
+
+    public boolean drawMoveDetails(Graphics g, Attack attack) {
+        return moveDetailsPanel.draw(g, attack);
     }
 
     @Override

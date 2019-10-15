@@ -151,7 +151,6 @@ public class PartyView extends View {
 
         moveDetailsPanel = new MovePanel(statsPanel)
                 .withFullTransparency()
-                .withSpacing(15)
                 .withFontSizes(20, 18, 16);
 
         movesPanel = new DrawPanel(
