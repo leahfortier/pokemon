@@ -99,7 +99,9 @@ public class MoveRelearnerView extends View {
                 (Global.GAME_SIZE.height - 4*spacing - buttonHeight)/3
         )
                 .withTransparentCount(2)
-                .withBorderPercentage(0);
+                .withBorderPercentage(0)
+                .withFontSizes(24, 19, 16)
+                .withBackupFontSize(15, true);
 
         partyPanel = new DrawPanel(
                 descriptionPanel.x,
@@ -216,7 +218,7 @@ public class MoveRelearnerView extends View {
             descriptionPanel.withBackgroundColor(Type.NORMAL.getColor()).drawBackground(g);
         } else {
             movesPanel.withBackgroundColor(selectedMove.getActualType().getColor());
-            descriptionPanel.draw(g, selectedMove);
+            drawMoveDetails(g, selectedMove);
         }
 
         movesPanel.drawBackground(g);
@@ -290,6 +292,10 @@ public class MoveRelearnerView extends View {
         }
 
         buttons.draw(g);
+    }
+
+    public boolean drawMoveDetails(Graphics g, Attack attack) {
+        return descriptionPanel.draw(g, attack);
     }
 
     private void updateActiveButtons() {

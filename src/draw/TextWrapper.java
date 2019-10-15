@@ -4,23 +4,36 @@ import util.FontMetrics;
 import util.string.StringAppender;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TextWrapper {
-    private final int lastY;
-    private final int distanceBetweenRows;
+    private final String text;
+    private final int x;
+    private final int y;
+    private final int width;
 
-    public TextWrapper(Graphics g, String str, int x, int y, int width) {
-        this(g, str, -1, x, y, width);
+    private int lastY;
+    private int distanceBetweenRows;
+
+    public TextWrapper(String text, int x, int y, int width) {
+        this.text = text;
+        this.x = x;
+        this.y = y;
+        this.width = width;
     }
 
-    public TextWrapper(Graphics g, String str, int lastWordActualLength, int x, int y, int width) {
+    public int numRows(Graphics g) {
+        return this.getRows(g, -1).length;
+    }
+
+    private String[] getRows(Graphics g, int lastWordActualLength) {
         FontMetrics fontMetrics = FontMetrics.getFontMetrics(g);
 
-        String[] words = str.split("[ ]+");
+        String[] words = text.split("[ ]+");
         StringAppender appender = new StringAppender();
 
-        int textY = y;
-        this.distanceBetweenRows = FontMetrics.getDistanceBetweenRows(g);
+        List<String> rows = new ArrayList<>();
 
         for (int i = 0; i < words.length; i++) {
             String word = words[i];
@@ -35,18 +48,33 @@ public class TextWrapper {
 
             // If adding this word would be more than the width, then write this line and go to the next one
             if (potentialLineWidth > width) {
-                g.drawString(appender.toString(), x, textY);
-
-                textY += distanceBetweenRows;
+                rows.add(appender.toString());
                 appender.clear();
             }
 
             appender.appendDelimiter(" ", word);
         }
 
-        g.drawString(appender.toString(), x, textY);
+        rows.add(appender.toString());
+        return rows.toArray(new String[0]);
+    }
+
+    public TextWrapper draw(Graphics g) {
+        return this.draw(g, -1);
+    }
+
+    public TextWrapper draw(Graphics g, int lastWordActualLength) {
+        int textY = y;
+        this.distanceBetweenRows = FontMetrics.getDistanceBetweenRows(g);
+
+        String[] rows = this.getRows(g, lastWordActualLength);
+        for (String row : rows) {
+            g.drawString(row, x, textY);
+            textY += distanceBetweenRows;
+        }
 
         this.lastY = textY;
+        return this;
     }
 
     public int nextY() {

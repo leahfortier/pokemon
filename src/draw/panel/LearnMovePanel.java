@@ -167,11 +167,15 @@ public class LearnMovePanel {
                 }
             }
 
-            moveDetailsPanel.draw(g, selected == null ? toLearn.getAttack() : selected);
+            drawMoveDetails(g, selected == null ? toLearn.getAttack() : selected);
             newMoveButton.drawMoveButton(g, toLearn);
         }
 
         buttons.draw(g);
+    }
+
+    public boolean drawMoveDetails(Graphics g, Attack attack) {
+        return moveDetailsPanel.draw(g, attack);
     }
 
     private void drawButton(Graphics g, Button button, Color color, String label) {

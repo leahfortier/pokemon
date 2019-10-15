@@ -130,7 +130,8 @@ public class PartyView extends View {
                 14
         )
                 .withFullTransparency()
-                .withBlackOutline();
+                .withBlackOutline()
+                .withMinimumSpacing(0);
 
         statsPanel = new DrawPanel(
                 abilityPanel.x,

@@ -21,8 +21,8 @@ public final class TextUtils {
 
     // Draws the text wrapping to the next line if the current line exceeds the width
     // and returns the next appropriate y to draw to
-    public static int drawWrappedText(Graphics g, String str, int x, int y, int width) {
-        return new TextWrapper(g, str, x, y, width).nextY();
+    public static int drawWrappedText(Graphics g, String text, int x, int y, int width) {
+        return new TextWrapper(text, x, y, width).draw(g).nextY();
     }
 
     public static void drawCenteredWidthString(Graphics g, String s, int centerX, int y) {

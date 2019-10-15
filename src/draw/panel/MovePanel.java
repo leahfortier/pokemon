@@ -12,6 +12,11 @@ public class MovePanel extends DrawPanel {
     private int basicFontSize;
     private int descFontSize;
 
+    // If the description exceeds the space in the panel, it will adjust the font size (should be smaller to make sense)
+    // If the same number of rows is desired, that should be specified here
+    private int backupDescFontSize;
+    private boolean backupSameMaxRows;
+
     public MovePanel(DrawPanel drawPanel) {
         this(drawPanel.x, drawPanel.y, drawPanel.width, drawPanel.height);
     }
@@ -19,7 +24,7 @@ public class MovePanel extends DrawPanel {
     public MovePanel(int x, int y, int width, int height) {
         super(x, y, width, height);
 
-        this.withFontSizes(24, 18, 16);
+        this.withFontSizes(22, 18, 15);
         this.withBlackOutline();
     }
 
@@ -42,6 +47,12 @@ public class MovePanel extends DrawPanel {
         this.nameFontSize = nameFontSize;
         this.basicFontSize = basicFontSize;
         this.descFontSize = descFontSize;
+        return this.withBackupFontSize(descFontSize, false);
+    }
+
+    public MovePanel withBackupFontSize(int fontSize, boolean sameMaxRows) {
+        this.backupDescFontSize = fontSize;
+        this.backupSameMaxRows = sameMaxRows;
         return this;
     }
 
@@ -73,20 +84,24 @@ public class MovePanel extends DrawPanel {
         g.drawImage(categoryImage, imageX, imageY, null);
 
         // Draw the power underneath the name and the accuracy underneath the images
+        int previousDistanceBetweenRows = FontMetrics.getDistanceBetweenRows(g);
         FontMetrics.setFont(g, basicFontSize);
-        textY += FontMetrics.getDistanceBetweenRows(g);
+        textY += (previousDistanceBetweenRows + FontMetrics.getDistanceBetweenRows(g))/2;
         g.drawString("Power: " + move.getPowerString(), x, textY);
         TextUtils.drawRightAlignedString(g, "Acc: " + move.getAccuracyString(), rightX, textY);
 
         // Draw the description underneath everything else as wrapped text
-        int startY = textY + 2;
+        int startY = textY;
         WrapPanel descriptionPanel = new WrapPanel(
                 this.x + borderSize,
                 startY,
                 this.width - 2*borderSize,
                 this.bottomY() - startY - borderSize,
                 descFontSize
-        ).withBorderPercentage(0);
+        )
+                .withBorderPercentage(0)
+                .withMinimumSpacing(2)
+                .withBackupFontSize(this.backupDescFontSize, this.backupSameMaxRows);
         return descriptionPanel.drawMessage(g, move.getDescription());
     }
 }
