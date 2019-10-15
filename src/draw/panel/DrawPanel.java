@@ -1,6 +1,5 @@
 package draw.panel;
 
-import battle.attack.Attack;
 import draw.Alignment;
 import draw.DrawUtils;
 import draw.ImageUtils;

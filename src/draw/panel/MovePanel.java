@@ -79,7 +79,7 @@ public class MovePanel extends DrawPanel {
         TextUtils.drawRightAlignedString(g, "Acc: " + move.getAccuracyString(), rightX, textY);
 
         // Draw the description underneath everything else as wrapped text
-        int startY = textY + betweenSpace/2;
+        int startY = textY + 2;
         WrapPanel descriptionPanel = new WrapPanel(
                 this.x + borderSize,
                 startY,

@@ -1,5 +1,6 @@
 package draw.panel;
 
+import draw.DrawUtils;
 import draw.TextWrapper;
 import input.ControlKey;
 import input.InputControl;
@@ -66,11 +67,27 @@ public class WrapPanel extends DrawPanel {
         FontMetrics.setFont(g, fontSize);
         g.setColor(Color.BLACK);
 
-        int textSpace = this.getTextSpace(g);
-        int startX = x + textSpace;
-        int startY = y + textSpace + FontMetrics.getTextHeight(g);
-        int textWidth = width - 2*textSpace;
-        int bottomY = this.bottomY() - this.getBorderSize();
+        // Include the outline size if there is no inset border
+        // I realize not every panel is bordered, but it's probably fine for the ones that don't and is sometimes
+        // necessary for that ones and having logic everywhere for different outline edges is overly complicated
+        int borderSize = Math.max(this.getBorderSize(), DrawUtils.OUTLINE_SIZE);
+
+        // Determine the maximum number of rows of text that could properly fit
+        int height = this.height - 2*borderSize;
+        int distanceBetweenRows = FontMetrics.getDistanceBetweenRows(g);
+        int maxRows = height/distanceBetweenRows;
+
+        int textHeight = FontMetrics.getTextHeight(g);
+        int totalTextHeight = textHeight + distanceBetweenRows*(maxRows - 1);
+
+        // Create spacing so that there is equal spacing on all sides when at the maximum number of rows
+        int textSpace = (height - totalTextHeight)/2;
+        int fullSpace = textSpace + borderSize;
+
+        int startX = x + fullSpace;
+        int startY = y + fullSpace + FontMetrics.getTextHeight(g);
+        int textWidth = width - 2*fullSpace;
+        int bottomY = this.bottomY() - borderSize;
 
         if (!this.animateMessage) {
             return new TextWrapper(g, text, startX, startY, textWidth).fits(bottomY);
