@@ -61,7 +61,6 @@ Names that go out of bounds:
 	Silph Surfer
     Lv100 (Enemy) Charmander has the gender sign overlap with the level
     BallItem text against a trainer goes out of bounds
-    Synchronize ability text is wayyyy out of bounds on party view
     pokedex gender string overflow for 87.5/12.5%
 
 Descriptions that change manually:

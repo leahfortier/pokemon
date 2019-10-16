@@ -55,7 +55,7 @@ public class WrapTest extends BaseTest {
             metrics.checkMetrics(abilityNamesies.getName(), partyView.drawAbility(g, abilityNamesies.getNewAbility()));
         }
 
-        metrics.confirmFontSize(14);
+        metrics.confirmFontSizes(12, 16);
     }
 
     @Test
@@ -76,12 +76,13 @@ public class WrapTest extends BaseTest {
     @Test
     public void movePanelTest() {
         FightState fightState = new FightState();
+        PartyView partyView = TestGame.instance().getPartyView();
         MoveRelearnerView moveRelearnerView = TestGame.instance().getMoveRelearnerView();
-        Assert.assertNotNull(moveRelearnerView);
 
         TestMetrics fightMetrics = new TestMetrics();
-        TestMetrics learnMoveMetrics = new TestMetrics();
+        TestMetrics partyMetrics = new TestMetrics();
         TestMetrics moveRelearnerMetrics = new TestMetrics();
+        TestMetrics learnMoveMetrics = new TestMetrics();
 
         Graphics g = new TestGraphics();
         for (AttackNamesies attackNamesies : AttackNamesies.values()) {
@@ -91,18 +92,22 @@ public class WrapTest extends BaseTest {
             // Selected move details on fight screen in battle
             fightMetrics.checkMetrics(name, fightState.drawMoveDetails(g, attack));
 
+            // Selected move details when viewing Pokemon in party
+            partyMetrics.checkMetrics(name, partyView.drawMoveDescriptionPanel(g, attack));
+
+            // Selected move details when relearning a move
+            moveRelearnerMetrics.checkMetrics(name, moveRelearnerView.drawMoveDetails(g, attack));
+
             // Selected move details when learning a move
             TestPokemon pokemon = TestPokemon.newPlayerPokemon(PokemonNamesies.BULBASAUR);
             LearnMovePanel learnMovePanel = new LearnMovePanel(pokemon, new Move(attackNamesies));
             learnMoveMetrics.checkMetrics(name, learnMovePanel.drawMoveDetails(g, attack));
-
-            // Selected move details when relearning a move
-            moveRelearnerMetrics.checkMetrics(name, moveRelearnerView.drawMoveDetails(g, attack));
         }
 
         fightMetrics.confirmFontSizes(13, 16);
-        learnMoveMetrics.confirmFontSizes(13, 16);
+        partyMetrics.confirmFontSizes(14, 16);
         moveRelearnerMetrics.confirmFontSizes(15, 16);
+        learnMoveMetrics.confirmFontSizes(13, 16);
     }
 
     private static class TestMetrics {

@@ -128,11 +128,11 @@ public class PartyView extends View {
                 imagePanel.y + imagePanel.height + spacing,
                 halfPanelWidth,
                 pokemonPanel.height - 5*spacing - imagePanel.height - buttonHeight - statsPanelHeight,
-                14
+                16
         )
                 .withFullTransparency()
                 .withBlackOutline()
-                .withMinimumSpacing(0);
+                .withMinFontSize(12, false);
 
         statsPanel = new DrawPanel(
                 abilityPanel.x,
@@ -152,6 +152,7 @@ public class PartyView extends View {
                 .withBlackOutline();
 
         moveDetailsPanel = new MovePanel(statsPanel, 20, 18, 16)
+                .withMinDescFontSize(14)
                 .withFullTransparency();
 
         movesPanel = new DrawPanel(
