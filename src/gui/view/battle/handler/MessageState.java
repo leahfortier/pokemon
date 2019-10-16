@@ -16,7 +16,6 @@ import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.EnumSet;
 
 public class MessageState implements VisualStateHandler {
     private final DrawPanel statsPanel;
@@ -28,8 +27,7 @@ public class MessageState implements VisualStateHandler {
     public MessageState() {
         int height = 161;
         int y = BasicPanels.getMessagePanelY() - height;
-        this.statsPanel = new DrawPanel(0, y, 273, height)
-                .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.DOWN)));
+        this.statsPanel = new DrawPanel(0, y, 273, height).withMissingBlackOutline(Direction.DOWN);
     }
 
     @Override

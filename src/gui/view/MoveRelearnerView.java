@@ -96,12 +96,12 @@ public class MoveRelearnerView extends View {
                 movesPanel.rightX() + spacing,
                 movesPanel.y,
                 movesPanel.width,
-                (Global.GAME_SIZE.height - 4*spacing - buttonHeight)/3
+                (Global.GAME_SIZE.height - 4*spacing - buttonHeight)/3,
+                24, 19, 16
         )
                 .withTransparentCount(2)
                 .withBorderPercentage(0)
-                .withFontSizes(24, 19, 16)
-                .withBackupFontSize(15, true);
+                .withMinDescFontSize(15);
 
         partyPanel = new DrawPanel(
                 descriptionPanel.x,

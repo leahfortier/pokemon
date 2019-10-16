@@ -22,7 +22,6 @@ import util.Point;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.EnumSet;
 import java.util.Iterator;
 
 class BagPanel {
@@ -56,7 +55,7 @@ class BagPanel {
         )
                 .withTransparentBackground()
                 .withBorderPercentage(0)
-                .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP)));
+                .withMissingBlackOutline(Direction.UP);
 
         int buttonHeight = 38;
         int selectedHeight = 82;

@@ -32,7 +32,6 @@ import util.string.StringUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -97,7 +96,7 @@ public class BerryView extends View {
                 .withBackgroundColor(BACKGROUND_COLOR)
                 .withTransparentBackground()
                 .withBorderPercentage(0)
-                .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.DOWN)));
+                .withMissingBlackOutline(Direction.DOWN);
 
         int buttonHeight = 38;
         int selectedHeight = 82;

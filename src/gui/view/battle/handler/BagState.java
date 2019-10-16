@@ -27,7 +27,6 @@ import util.GeneralUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -145,7 +144,7 @@ public class BagState implements VisualStateHandler {
 
         BattleBagCategory selectedCategory = BATTLE_BAG_CATEGORIES[selectedBagTab];
         bagCategoryPanel.withTransparentBackground(selectedCategory.getColor())
-                        .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP)))
+                        .withMissingBlackOutline(Direction.UP)
                         .drawBackground(g);
 
         lastItemPanel.withTransparentBackground(selectedCategory.getColor())

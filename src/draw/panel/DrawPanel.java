@@ -18,7 +18,7 @@ import util.Point;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.Collection;
+import java.util.EnumSet;
 
 public class DrawPanel {
     public final int x;
@@ -120,8 +120,9 @@ public class DrawPanel {
         return this;
     }
 
-    public DrawPanel withBlackOutline(Collection<Direction> directions) {
-        this.outlineDirections = directions.toArray(new Direction[0]);
+    // Gives a black outline for every direction other than the input missingBlackOutline
+    public DrawPanel withMissingBlackOutline(Direction missingBlackOutline) {
+        this.outlineDirections = EnumSet.complementOf(EnumSet.of(missingBlackOutline)).toArray(new Direction[0]);
         return this;
     }
 
@@ -145,7 +146,7 @@ public class DrawPanel {
         }
 
         Global.error("Must already be a MovePanel.");
-        return new MovePanel(x, y, width, height);
+        return new MovePanel(this, 0, 0, 0);
     }
 
     public int getBorderSize() {

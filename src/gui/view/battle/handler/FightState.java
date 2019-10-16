@@ -27,9 +27,14 @@ public class FightState implements VisualStateHandler {
     private int lastMoveUsed;
 
     public FightState() {
-        moveDetailsPanel = new MovePanel(415, 440, 385, 161)
+        // TODO: 440 is message panel y, 161 is height, x + width = game size
+        moveDetailsPanel = new MovePanel(
+                415, 440, 385, 161,
+                22, 18, 16
+        )
                 .withBorderPercentage(8)
-                .withTransparentCount(2);
+                .withTransparentCount(2)
+                .withMinDescFontSize(13);
     }
 
     @Override

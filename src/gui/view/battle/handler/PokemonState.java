@@ -29,7 +29,6 @@ import util.string.PokeString;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.EnumSet;
 import java.util.List;
 
 public class PokemonState implements VisualStateHandler {
@@ -60,7 +59,7 @@ public class PokemonState implements VisualStateHandler {
         pokemonPanel = new DrawPanel(30, 224, 357, 346)
                 .withTransparentBackground()
                 .withBorderPercentage(0)
-                .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP)));
+                .withMissingBlackOutline(Direction.UP);
 
         int sidePanelWidth = 141;
         int spacing = (pokemonPanel.width - 2*sidePanelWidth)/3;

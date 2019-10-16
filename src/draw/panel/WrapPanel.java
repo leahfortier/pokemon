@@ -14,9 +14,10 @@ public class WrapPanel extends DrawPanel {
     private final int fontSize;
 
     private int minimumSpacing;
+    private int startX;
 
-    private int backupFontSize;
-    private boolean backupSameMaxRows;
+    private int minFontSize;
+    private boolean backupSameSpacing;
 
     private boolean animateMessage;
 
@@ -32,8 +33,9 @@ public class WrapPanel extends DrawPanel {
         this.messageTimeElapsed = 0;
         this.finishedAnimating = true;
 
-        this.withBackupFontSize(fontSize, false);
-        this.withMinimumSpacing(2);
+        this.withStartX(-1);
+        this.withMinFontSize(fontSize - 2, false);
+        this.withMinimumSpacing(1);
     }
 
     @Override
@@ -61,9 +63,14 @@ public class WrapPanel extends DrawPanel {
         return super.withFullTransparency().asWrapPanel();
     }
 
-    public WrapPanel withBackupFontSize(int fontSize, boolean sameMaxRows) {
-        this.backupFontSize = fontSize;
-        this.backupSameMaxRows = sameMaxRows;
+    public WrapPanel withMinFontSize(int minFontSize, boolean sameSpacing) {
+        this.minFontSize = minFontSize;
+        this.backupSameSpacing = sameSpacing;
+        return this;
+    }
+
+    public WrapPanel withStartX(int startX) {
+        this.startX = startX;
         return this;
     }
 
@@ -84,21 +91,28 @@ public class WrapPanel extends DrawPanel {
     // Draws the text, wrapping to the next line if necessary and returns whether or not the text
     // fits entirely inside the panel
     public boolean drawMessage(Graphics g, String text) {
-        FontMetrics.setFont(g, fontSize);
         g.setColor(Color.BLACK);
 
         // Get spacing so that there is an equal amount of space when using all of the potential wrap lines
-        Spacing spacing = getSpacing(g, text);
+        // Font size will be set inside (may not be the original font size)
+        Spacing spacing = this.getSpacing(g, text);
 
         int startX = spacing.startX;
         int startY = spacing.startY;
         int textWidth = spacing.textWidth;
         int bottomY = this.bottomY() - this.getBorderSize();
 
-        if (!this.animateMessage) {
-            return new TextWrapper(text, startX, startY, textWidth).draw(g).fits(bottomY);
+        // Animated messages
+        if (this.animateMessage) {
+            this.drawAnimatedText(g, text, startX, startY, textWidth);
+            return true;
         }
 
+        // Draw the wrapped text and return whether or not the text fits
+        return new TextWrapper(text, startX, startY, textWidth).draw(g).fits(bottomY);
+    }
+
+    private void drawAnimatedText(Graphics g, String text, int startX, int startY, int textWidth) {
         if (!text.equals(drawingText)) {
             messageTimeElapsed = 0;
             drawingText = text;
@@ -129,50 +143,41 @@ public class WrapPanel extends DrawPanel {
         }
 
         String drawText = text.substring(0, charactersToShow);
-        return new TextWrapper(drawText, startX, startY, textWidth).draw(g, lastWordLength).fits(bottomY);
+        new TextWrapper(drawText, startX, startY, textWidth).draw(g, lastWordLength);
     }
 
     private Spacing getSpacing(Graphics g, String text) {
-        // Create the spacing details
-        Spacing spacing = new Spacing(g);
+        int fontSize = this.fontSize;
 
-        // If the text fits in the default spacing, then use that
-        if (spacing.fits(g, text)) {
-            return spacing;
-        }
+        // Create the spacing details for the default font size
+        Spacing spacing = new Spacing(g, fontSize, startX, minimumSpacing);
 
-        // Otherwise, use the backup font size and create a new spacing layout
-        FontMetrics.setFont(g, backupFontSize);
+        int defaultVerticalSpacing = Math.max(minimumSpacing, spacing.textSpace/2);
+        int minimumSpacing = this.backupSameSpacing ? defaultVerticalSpacing : this.minimumSpacing;
+        int startX = this.backupSameSpacing ? spacing.startX : this.startX;
 
-        // Create a new layout with the same number of maxRows, but only use the vertical spacing
-        if (backupSameMaxRows) {
-            Spacing backupSpacing = new Spacing(g, spacing.maxRows);
-            return new Spacing(spacing, backupSpacing.startY);
-        } else {
-            // Just create a full new spacing layout
-            return new Spacing(g);
+        while (true) {
+            // Use if the text fits in the current spacing or if this is the minimum font size
+            if (spacing.fits(g, text) || fontSize == this.minFontSize) {
+                return spacing;
+            }
+
+            // Otherwise, decrease the font size and create a new spacing layout
+            spacing = new Spacing(g, --fontSize, startX, minimumSpacing);
         }
     }
 
     private class Spacing {
         private final int maxRows;
+        private final int textSpace;
 
         private final int startX;
         private final int startY;
         private final int textWidth;
 
-        public Spacing(Spacing other, int startY) {
-            this.maxRows = other.maxRows;
-            this.startX = other.startX;
-            this.startY = startY;
-            this.textWidth = other.textWidth;
-        }
+        public Spacing(Graphics g, int fontSize, int startX, int minimumSpacing) {
+            FontMetrics.setFont(g, fontSize);
 
-        public Spacing(Graphics g) {
-            this(g, -1);
-        }
-
-        public Spacing(Graphics g, int maxRows) {
             // Include the outline size if there is no inset border
             // I realize not every panel is bordered, but it's probably fine for the ones that don't and is sometimes
             // necessary for that ones and having logic everywhere for different outline edges is overly complicated
@@ -181,18 +186,19 @@ public class WrapPanel extends DrawPanel {
             // Determine the maximum number of rows of text that could properly fit
             int totalPotentialHeight = height - 2*borderSize;
             int distanceBetweenRows = FontMetrics.getDistanceBetweenRows(g);
-            this.maxRows = maxRows == -1 ? totalPotentialHeight/distanceBetweenRows : maxRows;
+            this.maxRows = totalPotentialHeight/distanceBetweenRows;
 
             int textHeight = FontMetrics.getTextHeight(g);
-            int totalTextHeight = textHeight + distanceBetweenRows*(this.maxRows - 1);
+            int totalTextHeight = textHeight + distanceBetweenRows*(maxRows - 1);
 
             // Create spacing so that there is equal spacing on all sides when at the maximum number of rows
-            int textSpace = (totalPotentialHeight - totalTextHeight)/2;
+            this.textSpace = (totalPotentialHeight - totalTextHeight)/2;
             int fullSpace = textSpace + borderSize;
 
-            this.startX = x + fullSpace;
-            this.startY = y + fullSpace + FontMetrics.getTextHeight(g);
-            this.textWidth = width - 2*fullSpace;
+            // If a startX was specified, use that instead of the spacing
+            this.startX = startX == -1 ? x + fullSpace : startX;
+            this.startY = y + fullSpace + textHeight;
+            this.textWidth = width - 2*(this.startX - x);
         }
 
         public boolean fits(Graphics g, String text) {

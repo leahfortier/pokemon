@@ -7,6 +7,7 @@ import draw.button.Button;
 import draw.button.ButtonList;
 import input.ControlKey;
 import input.InputControl;
+import map.Direction;
 import message.MessageQueue;
 import message.MessageUpdate;
 import message.MessageUpdateType;
@@ -41,9 +42,12 @@ public class LearnMovePanel {
         this.learning = learning;
         this.toLearn = toLearn;
 
-        // TODO: 440 is fullMessagePanel.y and should have a var for the height
-        // TODO: Also has some overlap with message panel for the outline
-        moveDetailsPanel = new MovePanel(0, 440 - 161, 385, 161).withBorderPercentage(8).withTransparentCount(2);
+        int height = 161;
+        int y = BasicPanels.getMessagePanelY() - height;
+        this.moveDetailsPanel = new MovePanel(0, y, 385, height, 22, 18, 16)
+                .withMissingBlackOutline(Direction.DOWN)
+                .withBorderPercentage(8)
+                .withTransparentCount(2);
 
         // Create a button for each known move and then one for the new move and one for not learning
         buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS));

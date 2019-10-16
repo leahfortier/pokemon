@@ -24,7 +24,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 
 public class MartView extends View {
@@ -68,7 +67,7 @@ public class MartView extends View {
                 .withBackgroundColor(BACKGROUND_COLOR)
                 .withTransparentBackground()
                 .withBorderPercentage(0)
-                .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.DOWN)));
+                .withMissingBlackOutline(Direction.DOWN);
 
         buyButton = new Button(
                 panel.confirmPanel,

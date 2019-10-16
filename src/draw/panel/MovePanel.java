@@ -2,30 +2,39 @@ package draw.panel;
 
 import battle.attack.Attack;
 import draw.TextUtils;
+import map.Direction;
 import util.FontMetrics;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class MovePanel extends DrawPanel {
-    private int nameFontSize;
-    private int basicFontSize;
-    private int descFontSize;
+    private final int nameFontSize;
+    private final int basicFontSize;
+    private final int descFontSize;
 
     // If the description exceeds the space in the panel, it will adjust the font size (should be smaller to make sense)
     // If the same number of rows is desired, that should be specified here
-    private int backupDescFontSize;
-    private boolean backupSameMaxRows;
+    private int minDescFontSize;
 
-    public MovePanel(DrawPanel drawPanel) {
-        this(drawPanel.x, drawPanel.y, drawPanel.width, drawPanel.height);
+    public MovePanel(DrawPanel drawPanel, int nameFontSize, int basicFontSize, int descFontSize) {
+        this(drawPanel.x, drawPanel.y, drawPanel.width, drawPanel.height, nameFontSize, basicFontSize, descFontSize);
     }
 
-    public MovePanel(int x, int y, int width, int height) {
+    public MovePanel(int x, int y, int width, int height, int nameFontSize, int basicFontSize, int descFontSize) {
         super(x, y, width, height);
 
-        this.withFontSizes(22, 18, 15);
+        this.nameFontSize = nameFontSize;
+        this.basicFontSize = basicFontSize;
+        this.descFontSize = descFontSize;
+
+        this.withMinDescFontSize(descFontSize - 2);
         this.withBlackOutline();
+    }
+
+    @Override
+    public MovePanel withMissingBlackOutline(Direction missingBlackOutline) {
+        return super.withMissingBlackOutline(missingBlackOutline).asMovePanel();
     }
 
     @Override
@@ -43,16 +52,8 @@ public class MovePanel extends DrawPanel {
         return super.withBorderPercentage(borderPercentage).asMovePanel();
     }
 
-    public MovePanel withFontSizes(int nameFontSize, int basicFontSize, int descFontSize) {
-        this.nameFontSize = nameFontSize;
-        this.basicFontSize = basicFontSize;
-        this.descFontSize = descFontSize;
-        return this.withBackupFontSize(descFontSize, false);
-    }
-
-    public MovePanel withBackupFontSize(int fontSize, boolean sameMaxRows) {
-        this.backupDescFontSize = fontSize;
-        this.backupSameMaxRows = sameMaxRows;
+    public MovePanel withMinDescFontSize(int fontSize) {
+        this.minDescFontSize = fontSize;
         return this;
     }
 
@@ -101,7 +102,8 @@ public class MovePanel extends DrawPanel {
         )
                 .withBorderPercentage(0)
                 .withMinimumSpacing(2)
-                .withBackupFontSize(this.backupDescFontSize, this.backupSameMaxRows);
+                .withStartX(x)
+                .withMinFontSize(this.minDescFontSize, true);
         return descriptionPanel.drawMessage(g, move.getDescription());
     }
 }
