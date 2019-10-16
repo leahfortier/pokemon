@@ -2,6 +2,7 @@ package draw.panel;
 
 import battle.attack.Attack;
 import draw.TextUtils;
+import draw.panel.WrapPanel.WrapMetrics;
 import map.Direction;
 import util.FontMetrics;
 
@@ -28,7 +29,7 @@ public class MovePanel extends DrawPanel {
         this.basicFontSize = basicFontSize;
         this.descFontSize = descFontSize;
 
-        this.withMinDescFontSize(descFontSize - 2);
+        this.withMinDescFontSize(descFontSize);
         this.withBlackOutline();
     }
 
@@ -57,7 +58,7 @@ public class MovePanel extends DrawPanel {
         return this;
     }
 
-    public boolean draw(Graphics g, Attack move) {
+    public WrapMetrics draw(Graphics g, Attack move) {
         // Draw type-colored background
         this.withTransparentBackground(move.getActualType().getColor())
             .drawBackground(g);

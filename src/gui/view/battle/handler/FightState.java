@@ -6,6 +6,7 @@ import battle.attack.Attack;
 import battle.attack.Move;
 import draw.button.ButtonList;
 import draw.panel.MovePanel;
+import draw.panel.WrapPanel.WrapMetrics;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
@@ -79,7 +80,7 @@ public class FightState implements VisualStateHandler {
         }
     }
 
-    public boolean drawMoveDetails(Graphics g, Attack attack) {
+    public WrapMetrics drawMoveDetails(Graphics g, Attack attack) {
         return moveDetailsPanel.draw(g, attack);
     }
 

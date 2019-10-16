@@ -15,6 +15,7 @@ import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.MovePanel;
 import draw.panel.WrapPanel;
+import draw.panel.WrapPanel.WrapMetrics;
 import gui.GameData;
 import gui.TileSet;
 import input.ControlKey;
@@ -507,12 +508,12 @@ public class PartyView extends View {
         hpBar.fillBar(g, selectedPkm.getHPColor(), selectedPkm.getHPRatio());
     }
 
-    public boolean drawAbility(Graphics g, Ability ability) {
+    public WrapMetrics drawAbility(Graphics g, Ability ability) {
         abilityPanel.drawBackground(g);
         return abilityPanel.drawMessage(g, ability.getName() + " - " + ability.getDescription());
     }
 
-    public boolean drawMoveDescriptionPanel(Graphics g, Attack move) {
+    public WrapMetrics drawMoveDescriptionPanel(Graphics g, Attack move) {
         return moveDetailsPanel.draw(g, move);
     }
 

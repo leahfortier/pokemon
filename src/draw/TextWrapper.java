@@ -14,7 +14,7 @@ public class TextWrapper {
     private final int width;
 
     private int lastY;
-    private int distanceBetweenRows;
+    private int nextY;
 
     public TextWrapper(String text, int x, int y, int width) {
         this.text = text;
@@ -65,7 +65,7 @@ public class TextWrapper {
 
     public TextWrapper draw(Graphics g, int lastWordActualLength) {
         int textY = y;
-        this.distanceBetweenRows = FontMetrics.getDistanceBetweenRows(g);
+        int distanceBetweenRows = FontMetrics.getDistanceBetweenRows(g);
 
         String[] rows = this.getRows(g, lastWordActualLength);
         for (String row : rows) {
@@ -73,12 +73,13 @@ public class TextWrapper {
             textY += distanceBetweenRows;
         }
 
-        this.lastY = textY;
+        this.lastY = textY - distanceBetweenRows;
+        this.nextY = textY;
         return this;
     }
 
     public int nextY() {
-        return this.lastY + this.distanceBetweenRows;
+        return this.nextY;
     }
 
     public boolean fits(int bottomY) {

@@ -1,17 +1,26 @@
 package test.gui;
 
+import battle.attack.Attack;
+import battle.attack.AttackNamesies;
+import battle.attack.Move;
+import draw.panel.LearnMovePanel;
+import draw.panel.WrapPanel.WrapMetrics;
+import gui.view.MoveRelearnerView;
 import gui.view.NewPokemonView;
 import gui.view.PartyView;
 import gui.view.PokedexView;
 import gui.view.battle.handler.BagState;
+import gui.view.battle.handler.FightState;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonList;
+import pokemon.species.PokemonNamesies;
 import test.general.BaseTest;
 import test.general.TestGame;
+import test.pokemon.TestPokemon;
 
 import java.awt.Graphics;
 
@@ -21,35 +30,105 @@ public class WrapTest extends BaseTest {
         // Tests the flavor text inside the Pokedex view and inside the new Pokemon view
         PokedexView pokedexView = TestGame.instance().getPokedexView();
         NewPokemonView newPokemonView = TestGame.instance().getNewPokemonView();
-        Assert.assertNotNull(pokedexView);
-        Assert.assertNotNull(newPokemonView);
+
+        TestMetrics pokedexMetrics = new TestMetrics();
+        TestMetrics newPokemonMetrics = new TestMetrics();
 
         Graphics g = new TestGraphics();
         for (PokemonInfo pokemonInfo : PokemonList.instance()) {
-            Assert.assertTrue(pokemonInfo.getName(), pokedexView.drawFlavorText(g, pokemonInfo));
-            Assert.assertTrue(pokemonInfo.getName(), newPokemonView.drawInfoLabels(g, pokemonInfo));
+            String name = pokemonInfo.getName();
+            pokedexMetrics.checkMetrics(name, pokedexView.drawFlavorText(g, pokemonInfo));
+            newPokemonMetrics.checkMetrics(name, newPokemonView.drawInfoLabels(g, pokemonInfo));
         }
+
+        pokedexMetrics.confirmFontSize(16);
+        newPokemonMetrics.confirmFontSize(22);
     }
 
     @Test
     public void partyAbilityTextTest() {
         PartyView partyView = TestGame.instance().getPartyView();
-        Assert.assertNotNull(partyView);
+        TestMetrics metrics = new TestMetrics();
 
         Graphics g = new TestGraphics();
         for (AbilityNamesies abilityNamesies : AbilityNamesies.values()) {
-            Assert.assertTrue(abilityNamesies.getName(), partyView.drawAbility(g, abilityNamesies.getNewAbility()));
+            metrics.checkMetrics(abilityNamesies.getName(), partyView.drawAbility(g, abilityNamesies.getNewAbility()));
         }
+
+        metrics.confirmFontSize(14);
     }
 
     @Test
     public void battleItemDescriptionTest() {
         BagState bagState = new BagState();
+        TestMetrics metrics = new TestMetrics();
+
         Graphics g = new TestGraphics();
         for (ItemNamesies itemNamesies : ItemNamesies.values()) {
             if (itemNamesies.getItem().hasBattleBagCategories()) {
-                Assert.assertTrue(itemNamesies.getName(), bagState.drawItemDescription(g, itemNamesies));
+                metrics.checkMetrics(itemNamesies.getName(), bagState.drawItemDescription(g, itemNamesies));
             }
+        }
+
+        metrics.confirmFontSize(13);
+    }
+
+    @Test
+    public void movePanelTest() {
+        FightState fightState = new FightState();
+        MoveRelearnerView moveRelearnerView = TestGame.instance().getMoveRelearnerView();
+        Assert.assertNotNull(moveRelearnerView);
+
+        TestMetrics fightMetrics = new TestMetrics();
+        TestMetrics learnMoveMetrics = new TestMetrics();
+        TestMetrics moveRelearnerMetrics = new TestMetrics();
+
+        Graphics g = new TestGraphics();
+        for (AttackNamesies attackNamesies : AttackNamesies.values()) {
+            Attack attack = attackNamesies.getNewAttack();
+            String name = attack.getName();
+
+            // Selected move details on fight screen in battle
+            fightMetrics.checkMetrics(name, fightState.drawMoveDetails(g, attack));
+
+            // Selected move details when learning a move
+            TestPokemon pokemon = TestPokemon.newPlayerPokemon(PokemonNamesies.BULBASAUR);
+            LearnMovePanel learnMovePanel = new LearnMovePanel(pokemon, new Move(attackNamesies));
+            learnMoveMetrics.checkMetrics(name, learnMovePanel.drawMoveDetails(g, attack));
+
+            // Selected move details when relearning a move
+            moveRelearnerMetrics.checkMetrics(name, moveRelearnerView.drawMoveDetails(g, attack));
+        }
+
+        fightMetrics.confirmFontSizes(13, 16);
+        learnMoveMetrics.confirmFontSizes(13, 16);
+        moveRelearnerMetrics.confirmFontSizes(15, 16);
+    }
+
+    private static class TestMetrics {
+        private int minFontSize;
+        private int maxFontSize;
+
+        public TestMetrics() {
+            this.minFontSize = 100;
+            this.maxFontSize = 0;
+        }
+
+        public void checkMetrics(String message, WrapMetrics metrics) {
+            int fontSize = metrics.getFontSize();
+            this.minFontSize = Math.min(this.minFontSize, fontSize);
+            this.maxFontSize = Math.max(this.maxFontSize, fontSize);
+            Assert.assertTrue(message, metrics.fits());
+        }
+
+        public void confirmFontSize(int expectedSize) {
+            this.confirmFontSizes(expectedSize, expectedSize);
+        }
+
+        public void confirmFontSizes(int expectedMin, int expectedMax) {
+            String message = this.minFontSize + " " + this.maxFontSize;
+            Assert.assertEquals(message, expectedMin, this.minFontSize);
+            Assert.assertEquals(message, expectedMax, this.maxFontSize);
         }
     }
 }

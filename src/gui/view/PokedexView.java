@@ -11,6 +11,7 @@ import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.WrapPanel;
+import draw.panel.WrapPanel.WrapMetrics;
 import gui.GameData;
 import gui.TileSet;
 import input.InputControl;
@@ -615,7 +616,7 @@ public class PokedexView extends View {
         buttons.draw(g);
     }
 
-    public boolean drawFlavorText(Graphics g, PokemonInfo pokemonInfo) {
+    public WrapMetrics drawFlavorText(Graphics g, PokemonInfo pokemonInfo) {
         return flavorTextPanel.drawMessage(g, pokemonInfo.getFlavorText());
     }
 

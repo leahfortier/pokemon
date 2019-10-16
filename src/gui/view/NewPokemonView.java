@@ -7,6 +7,7 @@ import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.LabelPanel;
 import draw.panel.WrapPanel;
+import draw.panel.WrapPanel.WrapMetrics;
 import gui.TileSet;
 import input.ControlKey;
 import input.InputControl;
@@ -236,7 +237,7 @@ public class NewPokemonView extends View {
         buttons.draw(g);
     }
 
-    public boolean drawInfoLabels(Graphics g, PokemonInfo pokemonInfo) {
+    public WrapMetrics drawInfoLabels(Graphics g, PokemonInfo pokemonInfo) {
         LabelPanel namePanel = new LabelPanel(
                 BOX_SPACING,
                 BOX_SPACING,

@@ -5,6 +5,7 @@ import battle.attack.Attack;
 import battle.attack.Move;
 import draw.button.Button;
 import draw.button.ButtonList;
+import draw.panel.WrapPanel.WrapMetrics;
 import input.ControlKey;
 import input.InputControl;
 import map.Direction;
@@ -47,7 +48,8 @@ public class LearnMovePanel {
         this.moveDetailsPanel = new MovePanel(0, y, 385, height, 22, 18, 16)
                 .withMissingBlackOutline(Direction.DOWN)
                 .withBorderPercentage(8)
-                .withTransparentCount(2);
+                .withTransparentCount(2)
+                .withMinDescFontSize(13);
 
         // Create a button for each known move and then one for the new move and one for not learning
         buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS));
@@ -178,7 +180,7 @@ public class LearnMovePanel {
         buttons.draw(g);
     }
 
-    public boolean drawMoveDetails(Graphics g, Attack attack) {
+    public WrapMetrics drawMoveDetails(Graphics g, Attack attack) {
         return moveDetailsPanel.draw(g, attack);
     }
 

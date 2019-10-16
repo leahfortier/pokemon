@@ -137,7 +137,7 @@ public class DrawPanel {
         }
 
         Global.error("Must already be a WrapPanel.");
-        return new WrapPanel(x, y, width, height, 16);
+        return new WrapPanel(x, y, width, height, 0);
     }
 
     public MovePanel asMovePanel() {

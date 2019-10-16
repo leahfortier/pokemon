@@ -10,6 +10,7 @@ import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
 import draw.panel.DrawPanel;
 import draw.panel.WrapPanel;
+import draw.panel.WrapPanel.WrapMetrics;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -246,7 +247,7 @@ public class BagState implements VisualStateHandler {
         g.translate(-dx, -dy);
     }
 
-    public boolean drawItemDescription(Graphics g, ItemNamesies itemNamesies) {
+    public WrapMetrics drawItemDescription(Graphics g, ItemNamesies itemNamesies) {
         return lastItemPanel.drawMessage(g, itemNamesies.getItem().getDescription());
     }
 

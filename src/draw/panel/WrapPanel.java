@@ -34,7 +34,7 @@ public class WrapPanel extends DrawPanel {
         this.finishedAnimating = true;
 
         this.withStartX(-1);
-        this.withMinFontSize(fontSize - 2, false);
+        this.withMinFontSize(fontSize, false);
         this.withMinimumSpacing(1);
     }
 
@@ -88,9 +88,9 @@ public class WrapPanel extends DrawPanel {
         return !finishedAnimating && animateMessage;
     }
 
-    // Draws the text, wrapping to the next line if necessary and returns whether or not the text
-    // fits entirely inside the panel
-    public boolean drawMessage(Graphics g, String text) {
+    // Draws the text, wrapping to the next line if necessary
+    // Returns some helpful metrics about the wrap (if it fits in the panel, which font size used, etc.)
+    public WrapMetrics drawMessage(Graphics g, String text) {
         g.setColor(Color.BLACK);
 
         // Get spacing so that there is an equal amount of space when using all of the potential wrap lines
@@ -102,17 +102,21 @@ public class WrapPanel extends DrawPanel {
         int textWidth = spacing.textWidth;
         int bottomY = this.bottomY() - this.getBorderSize();
 
-        // Animated messages
+
+        final TextWrapper textWrapper;
         if (this.animateMessage) {
-            this.drawAnimatedText(g, text, startX, startY, textWidth);
-            return true;
+            // Animated messages
+            textWrapper = this.drawAnimatedText(g, text, startX, startY, textWidth);
+        } else {
+            // Flat text
+            textWrapper = new TextWrapper(text, startX, startY, textWidth).draw(g);
         }
 
-        // Draw the wrapped text and return whether or not the text fits
-        return new TextWrapper(text, startX, startY, textWidth).draw(g).fits(bottomY);
+        // Returns metrics (whether it fits, which font size was used, etc)
+        return new WrapMetrics(textWrapper, spacing, bottomY);
     }
 
-    private void drawAnimatedText(Graphics g, String text, int startX, int startY, int textWidth) {
+    private TextWrapper drawAnimatedText(Graphics g, String text, int startX, int startY, int textWidth) {
         if (!text.equals(drawingText)) {
             messageTimeElapsed = 0;
             drawingText = text;
@@ -143,7 +147,7 @@ public class WrapPanel extends DrawPanel {
         }
 
         String drawText = text.substring(0, charactersToShow);
-        new TextWrapper(drawText, startX, startY, textWidth).draw(g, lastWordLength);
+        return new TextWrapper(drawText, startX, startY, textWidth).draw(g, lastWordLength);
     }
 
     private Spacing getSpacing(Graphics g, String text) {
@@ -152,7 +156,7 @@ public class WrapPanel extends DrawPanel {
         // Create the spacing details for the default font size
         Spacing spacing = new Spacing(g, fontSize, startX, minimumSpacing);
 
-        int defaultVerticalSpacing = Math.max(minimumSpacing, spacing.textSpace/2);
+        int defaultVerticalSpacing = Math.max(this.minimumSpacing, spacing.textSpace/2);
         int minimumSpacing = this.backupSameSpacing ? defaultVerticalSpacing : this.minimumSpacing;
         int startX = this.backupSameSpacing ? spacing.startX : this.startX;
 
@@ -168,6 +172,8 @@ public class WrapPanel extends DrawPanel {
     }
 
     private class Spacing {
+        private final int fontSize;
+
         private final int maxRows;
         private final int textSpace;
 
@@ -176,6 +182,7 @@ public class WrapPanel extends DrawPanel {
         private final int textWidth;
 
         public Spacing(Graphics g, int fontSize, int startX, int minimumSpacing) {
+            this.fontSize = fontSize;
             FontMetrics.setFont(g, fontSize);
 
             // Include the outline size if there is no inset border
@@ -204,6 +211,24 @@ public class WrapPanel extends DrawPanel {
         public boolean fits(Graphics g, String text) {
             TextWrapper wrapper = new TextWrapper(text, startX, startY, textWidth);
             return wrapper.numRows(g) <= this.maxRows;
+        }
+    }
+
+    public static class WrapMetrics {
+        private final int fontSize;
+        private final boolean fits;
+
+        private WrapMetrics(TextWrapper textWrapper, Spacing spacing, int bottomY) {
+            this.fontSize = spacing.fontSize;
+            this.fits = textWrapper.fits(bottomY);
+        }
+
+        public int getFontSize() {
+            return this.fontSize;
+        }
+
+        public boolean fits() {
+            return this.fits;
         }
     }
 }

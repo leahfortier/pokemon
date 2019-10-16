@@ -14,6 +14,7 @@ import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.LearnMovePanel;
 import draw.panel.MovePanel;
+import draw.panel.WrapPanel.WrapMetrics;
 import gui.GameData;
 import gui.TileSet;
 import input.InputControl;
@@ -294,7 +295,7 @@ public class MoveRelearnerView extends View {
         buttons.draw(g);
     }
 
-    public boolean drawMoveDetails(Graphics g, Attack attack) {
+    public WrapMetrics drawMoveDetails(Graphics g, Attack attack) {
         return descriptionPanel.draw(g, attack);
     }
 
