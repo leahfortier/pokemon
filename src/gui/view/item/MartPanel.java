@@ -19,6 +19,8 @@ public class MartPanel extends BagPanel {
     public final DrawPanel confirmPanel;
 
     public MartPanel() {
+        super(false); // No quantities
+
         Button[] fakeButtons = super.leftPanel.getButtons(10, 6, 1);
         playerMoneyPanel = new DrawPanel(fakeButtons[0]).withBlackOutline();
         inBagPanel = new DrawPanel(fakeButtons[1]).withBlackOutline();

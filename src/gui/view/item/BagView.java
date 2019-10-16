@@ -81,7 +81,8 @@ public class BagView extends View {
         selectedTab = CATEGORIES[0];
         selectedItem = ItemNamesies.NO_ITEM;
 
-        panel = new BagPanel();
+        // Show quantities
+        panel = new BagPanel(true);
 
         Button[] buttons = new Button[NUM_BUTTONS];
         this.buttons = new ButtonList(buttons);
@@ -199,7 +200,7 @@ public class BagView extends View {
         UseState.forEach(useState -> useState.draw(g, buttons.get(useState.buttonIndex), selectedTab.getColor()));
 
         // Selected item display
-        panel.drawSelectedItem(g, selectedItem, true);
+        panel.drawSelectedItem(g, selectedItem);
 
         // Draw each item in category
         panel.drawItems(g, itemButtons, this.getDisplayItems(), pageNum, true);

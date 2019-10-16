@@ -444,7 +444,7 @@ public class PartyView extends View {
             // Stats Box or Move description
             int selectedButton = buttons.getSelected();
             if (selectedButton >= MOVES && selectedButton < MOVES + MoveList.MAX_MOVES) {
-                drawMoveDescriptionPanel(g, moves.get(selectedButton - MOVES).getAttack());
+                drawMoveDetails(g, moves.get(selectedButton - MOVES).getAttack());
             } else {
                 drawStatBox(g, selectedPkm);
             }
@@ -514,7 +514,7 @@ public class PartyView extends View {
         return abilityPanel.drawMessage(g, ability.getName() + " - " + ability.getDescription());
     }
 
-    public WrapMetrics drawMoveDescriptionPanel(Graphics g, Attack move) {
+    public WrapMetrics drawMoveDetails(Graphics g, Attack move) {
         return moveDetailsPanel.draw(g, move);
     }
 

@@ -11,6 +11,8 @@ import gui.view.PartyView;
 import gui.view.PokedexView;
 import gui.view.battle.handler.BagState;
 import gui.view.battle.handler.FightState;
+import gui.view.item.BagPanel;
+import item.Item;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;
@@ -59,18 +61,35 @@ public class WrapTest extends BaseTest {
     }
 
     @Test
-    public void battleItemDescriptionTest() {
-        BagState bagState = new BagState();
-        TestMetrics metrics = new TestMetrics();
+    public void itemDescriptionTest() {
+        BagPanel bagPanel = new BagPanel(true);
+        BagState battleBagState = new BagState();
+
+        TestMetrics bagMetrics = new TestMetrics();
+        TestMetrics battleMetrics = new TestMetrics();
 
         Graphics g = new TestGraphics();
         for (ItemNamesies itemNamesies : ItemNamesies.values()) {
-            if (itemNamesies.getItem().hasBattleBagCategories()) {
-                metrics.checkMetrics(itemNamesies.getName(), bagState.drawItemDescription(g, itemNamesies));
+            Item item = itemNamesies.getItem();
+            String name = item.getName();
+
+            // Bag, Mart, Sell, and (almost) Berry views use this
+            WrapMetrics metrics = bagPanel.drawSelectedItem(g, itemNamesies);
+            if (itemNamesies == ItemNamesies.NO_ITEM) {
+                Assert.assertNull(name, metrics);
+            } else {
+                bagMetrics.checkMetrics(name, metrics);
+            }
+
+
+            // Battle bag item description
+            if (item.hasBattleBagCategories()) {
+                battleMetrics.checkMetrics(name, battleBagState.drawItemDescription(g, itemNamesies));
             }
         }
 
-        metrics.confirmFontSize(13);
+        bagMetrics.confirmFontSizes(11, 14);
+        battleMetrics.confirmFontSize(13);
     }
 
     @Test
@@ -93,7 +112,7 @@ public class WrapTest extends BaseTest {
             fightMetrics.checkMetrics(name, fightState.drawMoveDetails(g, attack));
 
             // Selected move details when viewing Pokemon in party
-            partyMetrics.checkMetrics(name, partyView.drawMoveDescriptionPanel(g, attack));
+            partyMetrics.checkMetrics(name, partyView.drawMoveDetails(g, attack));
 
             // Selected move details when relearning a move
             moveRelearnerMetrics.checkMetrics(name, moveRelearnerView.drawMoveDetails(g, attack));

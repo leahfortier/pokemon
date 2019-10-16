@@ -10,6 +10,8 @@ import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.ItemPanel;
+import draw.panel.WrapPanel.WrapMetrics;
 import gui.GameData;
 import gui.TileSet;
 import input.ControlKey;
@@ -31,7 +33,6 @@ import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -53,7 +54,7 @@ public class BerryView extends View {
     private final DrawPanel tabPanel;
     private final DrawPanel berryPanel;
     private final DrawPanel itemsPanel;
-    private final DrawPanel selectedPanel;
+    private final ItemPanel selectedPanel;
     private final DrawPanel[] berryPanels;
 
     private final ButtonList buttons;
@@ -110,14 +111,13 @@ public class BerryView extends View {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        selectedPanel = new DrawPanel(
+        selectedPanel = new ItemPanel(
                 berryPanel.rightX() + spacing,
                 farmPanel.y + spacing,
                 halfPanelWidth,
-                selectedHeight
-        )
-                .withFullTransparency()
-                .withBlackOutline();
+                selectedHeight,
+                true
+        );
 
         returnButton = new Button(
                 selectedPanel.x,
@@ -236,38 +236,7 @@ public class BerryView extends View {
         farmPanel.drawBackground(g);
 
         // Selected item Display
-        selectedPanel.drawBackground(g);
-        if (selectedItem != ItemNamesies.NO_ITEM) {
-            int spacing = 8;
-
-            Item selectedItemValue = selectedItem.getItem();
-
-            g.setColor(Color.BLACK);
-            FontMetrics.setFont(g, 20);
-
-            int startY = selectedPanel.y + FontMetrics.getDistanceBetweenRows(g);
-            int nameX = selectedPanel.x + 2*spacing + Global.TILE_SIZE; // TODO: Why are we using Tile Size in the bag view
-
-            // Draw item image
-            BufferedImage img = itemTiles.getTile(selectedItemValue.getImageName());
-            ImageUtils.drawBottomCenteredImage(g, img, selectedPanel.x + (nameX - selectedPanel.x)/2, startY);
-
-            g.drawString(selectedItem.getName(), nameX, startY);
-
-            if (selectedItemValue.hasQuantity()) {
-                String quantityString = "x" + bag.getQuantity(selectedItem);
-                TextUtils.drawRightAlignedString(g, quantityString, selectedPanel.rightX() - 2*spacing, startY);
-            }
-
-            FontMetrics.setFont(g, 14);
-            TextUtils.drawWrappedText(
-                    g,
-                    selectedItemValue.getDescription(),
-                    selectedPanel.x + spacing,
-                    startY + FontMetrics.getDistanceBetweenRows(g),
-                    selectedPanel.width - 2*spacing
-            );
-        }
+        drawSelectedItem(g, selectedItem);
 
         FontMetrics.setFont(g, 12);
         g.setColor(Color.BLACK);
@@ -350,6 +319,10 @@ public class BerryView extends View {
         } else {
             buttons.draw(g);
         }
+    }
+
+    public WrapMetrics drawSelectedItem(Graphics g, ItemNamesies selectedItem) {
+        return selectedPanel.draw(g, selectedItem);
     }
 
     private int totalPages() {

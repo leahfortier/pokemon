@@ -144,7 +144,7 @@ public class MartView extends View {
         panel.bagPanel.drawBackground(g);
 
         // Item Display
-        panel.drawSelectedItem(g, selectedItem, false);
+        panel.drawSelectedItem(g, selectedItem);
 
         // Draw selected amount and arrows
         panel.drawAmount(g, itemAmount, amountLeftButton, amountRightButton);

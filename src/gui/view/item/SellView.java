@@ -135,7 +135,7 @@ public class SellView extends View {
                       .drawBackground(g);
 
         // Item Display
-        panel.drawSelectedItem(g, selectedItem, false);
+        panel.drawSelectedItem(g, selectedItem);
 
         // Draw selected amount and arrows
         panel.drawAmount(g, itemAmount, amountLeftButton, amountRightButton);
