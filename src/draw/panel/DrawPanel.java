@@ -43,6 +43,12 @@ public class DrawPanel {
     private boolean onlyTransparency;
     private int transparentCount;
 
+    private int fontSize;
+    private String label;
+    private Alignment labelAlignment;
+
+    private BufferedImage imageLabel;
+
     public DrawPanel(Button button) {
         this(button.x, button.y, button.width, button.height);
     }
@@ -126,9 +132,46 @@ public class DrawPanel {
         return this;
     }
 
+    public DrawPanel withConditionalOutline(boolean shouldOutline) {
+        if (shouldOutline) {
+            return this.withBlackOutline();
+        } else {
+            return this.withNoOutline();
+        }
+    }
+
     // Gives a black outline for every direction other than the input missingBlackOutline
     public DrawPanel withMissingBlackOutline(Direction missingBlackOutline) {
         this.outlineDirections = EnumSet.complementOf(EnumSet.of(missingBlackOutline)).toArray(new Direction[0]);
+        return this;
+    }
+
+    public DrawPanel withLabelSize(int fontSize) {
+        return this.withLabelSize(fontSize, Alignment.CENTER);
+    }
+
+    public DrawPanel withLabelSize(int fontSize, Alignment alignment) {
+        this.fontSize = fontSize;
+        this.labelAlignment = alignment;
+        return this;
+    }
+
+    public DrawPanel withLabel(String text, int fontSize) {
+        return this.withLabel(text, fontSize, Alignment.CENTER);
+    }
+
+    public DrawPanel withLabel(String text, int fontSize, Alignment alignment) {
+        return this.withLabelSize(fontSize, alignment).withLabel(text);
+    }
+
+    // If not including the font size/alignment, it is presumed to already be set
+    public DrawPanel withLabel(String text) {
+        this.label = text;
+        return this;
+    }
+
+    public DrawPanel withImageLabel(BufferedImage image) {
+        this.imageLabel = image;
         return this;
     }
 
@@ -189,6 +232,36 @@ public class DrawPanel {
 
     public void blackOutline(Graphics g) {
         DrawUtils.blackOutline(g, x, y, width, height, outlineDirections);
+    }
+
+    private void drawLabel(Graphics g) {
+        switch (this.labelAlignment) {
+            case LEFT:
+                this.drawLeftLabel(g, fontSize, label);
+                break;
+            case RIGHT:
+                this.drawRightLabel(g, fontSize, label);
+                break;
+            default:
+                this.label(g, fontSize, label);
+                break;
+        }
+    }
+
+    public void draw(Graphics g) {
+        this.drawBackground(g);
+
+        // Labels (both text and images)
+        if (this.label != null && this.imageLabel != null) {
+            // Both image and text -- center together
+            this.imageLabel(g, fontSize, imageLabel, label);
+        } else if (label != null) {
+            // Only text
+            this.drawLabel(g);
+        } else if (this.imageLabel != null) {
+            // Only image
+            this.imageLabel(g, imageLabel);
+        }
     }
 
     public void drawBackground(Graphics g) {

@@ -3,15 +3,11 @@ package draw.button;
 import draw.PolygonUtils;
 import draw.panel.DrawPanel;
 import map.Direction;
-import util.string.StringUtils;
 
 import java.awt.Graphics;
 
 public class ButtonPanel extends DrawPanel {
     private final Button button;
-
-    private String label;
-    private int fontSize;
 
     private Direction arrowDirection;
 
@@ -44,12 +40,7 @@ public class ButtonPanel extends DrawPanel {
         return this.withNoOutline().asButtonPanel();
     }
 
-    public ButtonPanel withLabel(String text, int fontSize) {
-        this.label = text;
-        this.fontSize = fontSize;
-        return this;
-    }
-
+    @Override
     public void draw(Graphics g) {
         // If button is inactive, set greyOut to false
         // Note: This is not actually drawing the grey out, just setting it (will be drawn in drawBackground)
@@ -57,12 +48,7 @@ public class ButtonPanel extends DrawPanel {
             super.greyOut(!button.isActive());
         }
 
-        super.drawBackground(g);
-
-        // If label was provided, draw it
-        if (!StringUtils.isNullOrEmpty(label)) {
-            super.label(g, fontSize, label);
-        }
+        super.draw(g);
 
         // Arrow buttons!
         if (this.arrowDirection != null) {

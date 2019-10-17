@@ -77,7 +77,8 @@ class PCView extends View {
 
         boxNamePanel = new DrawPanel(boxPanel.x, boxPanel.y, boxPanel.width, 37)
                 .withBackgroundColor(null)
-                .withBlackOutline();
+                .withBlackOutline()
+                .withLabelSize(20);
 
         partyPanel = new DrawPanel(boxPanel.x, 478, boxPanel.width, 82)
                 .withBackgroundColor(Color.RED)
@@ -187,7 +188,7 @@ class PCView extends View {
                     pc.incrementBox(-1);
                     movedToFront();
                 }
-        ).setupPanel(panel -> panel.asArrow(Direction.LEFT));
+        ).asArrow(Direction.LEFT);
 
         buttons[RIGHT_ARROW] = rightButton = new Button(
                 255, 418, 35, 20,
@@ -201,7 +202,7 @@ class PCView extends View {
                     pc.incrementBox(1);
                     movedToFront();
                 }
-        ).setupPanel(panel -> panel.asArrow(Direction.RIGHT));
+        ).asArrow(Direction.RIGHT);
 
         buttons[SWITCH] = switchButton = new Button(
                 410, 464, 118, 38,
@@ -276,11 +277,11 @@ class PCView extends View {
             return;
         }
 
-        if (pokemon == selected) {
-            button.blackOutline(g);
-        }
-
-        button.imageLabel(g, Game.getData().getPartyTiles().getTile(pokemon.getTinyImageName()));
+        // Draw the pokemon image and outline if selected
+        ButtonPanel panel = button.panel();
+        panel.withImageLabel(Game.getData().getPartyTiles().getTile(pokemon.getTinyImageName()));
+        panel.withConditionalOutline(pokemon == selected);
+        panel.draw(g);
     }
 
     @Override
@@ -297,8 +298,8 @@ class PCView extends View {
                 .drawBackground(g);
 
         // Draw Box number
-        boxNamePanel.drawBackground(g);
-        boxNamePanel.label(g, 20, "Box " + (pc.getBoxNum() + 1));
+        boxNamePanel.withLabel("Box " + (pc.getBoxNum() + 1))
+                    .draw(g);
 
         for (int i = 0; i < PC.BOX_HEIGHT; i++) {
             for (int j = 0; j < PC.BOX_WIDTH; j++) {

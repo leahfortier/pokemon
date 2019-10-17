@@ -79,6 +79,11 @@ public class Button {
         return this;
     }
 
+    public Button asArrow(Direction arrowDirection) {
+        this.drawPanel.asArrow(arrowDirection);
+        return this;
+    }
+
     public ButtonPanel panel() {
         return this.drawPanel;
     }

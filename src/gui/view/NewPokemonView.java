@@ -239,36 +239,40 @@ public class NewPokemonView extends View {
 
     public WrapMetrics drawInfoLabels(Graphics g, PokemonInfo pokemonInfo) {
         LabelPanel namePanel = new LabelPanel(
+                g,
                 BOX_SPACING,
                 BOX_SPACING,
                 30,
                 TEXT_SPACING,
                 String.format("%-10s   #%03d", pokemonInfo.getName(), pokemonInfo.getNumber())
-        ).draw(g);
+        );
 
         LabelPanel classificationPanel = new LabelPanel(
+                g,
                 namePanel.x,
                 namePanel.bottomY() + BOX_SPACING,
                 24,
                 TEXT_SPACING,
                 pokemonInfo.getClassification() + " " + PokeString.POKEMON
-        ).draw(g);
+        );
 
         LabelPanel heightPanel = new LabelPanel(
+                g,
                 classificationPanel.x,
                 classificationPanel.bottomY() + BOX_SPACING,
                 22,
                 TEXT_SPACING,
                 "Height: " + pokemonInfo.getHeightString()
-        ).draw(g);
+        );
 
         LabelPanel weightPanel = new LabelPanel(
+                g,
                 heightPanel.x,
                 heightPanel.bottomY() + BOX_SPACING,
                 22,
                 TEXT_SPACING,
                 "Weight: " + pokemonInfo.getWeight() + "lbs"
-        ).draw(g);
+        );
 
         WrapPanel descriptionPanel = new WrapPanel(
                 weightPanel.x,
