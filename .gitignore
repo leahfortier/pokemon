@@ -1,3 +1,6 @@
+# Test files
+temp*.txt
+
 # Save Files
 saves/
 
