@@ -4,6 +4,8 @@ import battle.attack.AttackNamesies;
 import generator.format.SplitScanner;
 import item.ItemNamesies;
 import item.berry.farm.PlantedBerry;
+import map.Direction;
+import map.PathDirection;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ability.AbilityNamesies;
@@ -227,5 +229,35 @@ public class GeneralTest extends BaseTest {
         Assert.assertEquals("1 BULBASAUR", StringUtils.spaceSeparated(1, PokemonNamesies.BULBASAUR));
         Assert.assertEquals("1 [OVERGROW]", StringUtils.spaceSeparated(1, new AbilityNamesies[] { AbilityNamesies.OVERGROW }));
         Assert.assertEquals("1 [OVERGROW]", StringUtils.spaceSeparated(1, List.of(AbilityNamesies.OVERGROW)));
+    }
+
+    @Test
+    public void directionTest() {
+        assertOpposites(Direction.UP, Direction.DOWN);
+        assertOpposites(Direction.LEFT, Direction.RIGHT);
+
+        // PathDirection has every direction plus WAIT
+        Assert.assertEquals(4, Direction.values().length);
+        Assert.assertEquals(Direction.values().length + 1, PathDirection.values().length);
+
+        for (Direction direction : Direction.values()) {
+            assertPathDirection(direction);
+        }
+
+        Assert.assertNull(PathDirection.WAIT.getDirection());
+    }
+
+    private void assertPathDirection(Direction direction) {
+        PathDirection pathDirection = PathDirection.valueOf(direction.name());
+        Assert.assertEquals(pathDirection, direction.getPathDirection());
+        Assert.assertEquals(direction, pathDirection.getDirection());
+    }
+
+    // Makes sure direction and opposite and distinct
+    // Makes sure direction and opposite are both the opposite of each other
+    private void assertOpposites(Direction direction, Direction opposite) {
+        Assert.assertNotEquals(direction, opposite);
+        Assert.assertEquals(opposite, direction.getOpposite());
+        Assert.assertEquals(direction, opposite.getOpposite());
     }
 }
