@@ -126,8 +126,8 @@ public class DrawPanel {
         return this;
     }
 
-    public DrawPanel greyOut() {
-        this.greyOut = true;
+    public DrawPanel greyOut(boolean greyOut) {
+        this.greyOut = greyOut;
         return this;
     }
 
@@ -194,7 +194,6 @@ public class DrawPanel {
 
         int borderSize = this.getBorderSize();
         if (transparentBackground) {
-
             for (int i = 0; i < transparentCount; i++) {
                 DrawUtils.fillTransparent(g, x + borderSize, y + borderSize, width - 2*borderSize, height - 2*borderSize);
             }

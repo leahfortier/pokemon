@@ -17,6 +17,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class Button {
     public final int x;
@@ -27,6 +28,8 @@ public class Button {
     private final ButtonHoverAction hoverAction;
     private final ButtonPressAction pressAction;
     private final int[] transitions;
+
+    private final ButtonPanel drawPanel;
 
     private boolean hover;
     private boolean press;
@@ -63,10 +66,25 @@ public class Button {
         }
         this.transitions = transitions.getTransitions();
 
+        this.drawPanel = new ButtonPanel(this);
+
         this.hover = false;
         this.press = false;
         this.forceHover = false;
         this.active = true;
+    }
+
+    public Button setupPanel(Consumer<ButtonPanel> panelSetup) {
+        panelSetup.accept(this.drawPanel);
+        return this;
+    }
+
+    public ButtonPanel panel() {
+        return this.drawPanel;
+    }
+
+    public void drawPanel(Graphics g) {
+        this.drawPanel.draw(g);
     }
 
     public void draw(Graphics g) {

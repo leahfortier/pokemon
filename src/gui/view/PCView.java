@@ -7,6 +7,7 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonPanel;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
@@ -30,6 +31,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.function.Consumer;
 
 class PCView extends View {
     private static final int NUM_BUTTONS = PC.BOX_HEIGHT*PC.BOX_WIDTH + Trainer.MAX_POKEMON + 6;
@@ -233,7 +235,9 @@ class PCView extends View {
                     pc.releasePokemon(selected);
                     movedToFront();
                 }
-        );
+        )
+                .setupPanel(setupTextButton("Release"))
+                .setupPanel(ButtonPanel::greyInactive);
 
         buttons[RETURN] = returnButton = new Button(
                 410, 522, 350, 38, ButtonHoverAction.BOX,
@@ -249,6 +253,12 @@ class PCView extends View {
 
         party = true;
         selected = Game.getPlayer().front();
+    }
+
+    private Consumer<ButtonPanel> setupTextButton(String text) {
+        return panel -> panel.withLabel(text, 20)
+                         .withFullTransparency()
+                         .withBlackOutline();
     }
 
     @Override
@@ -322,9 +332,7 @@ class PCView extends View {
             switchButton.highlight(g, buttonColor);
         }
 
-        if (!releaseButton.isActive()) {
-            releaseButton.greyOut(g);
-        }
+        releaseButton.drawPanel(g);
 
         if (!depositWithdrawButton.isActive()) {
             depositWithdrawButton.greyOut(g);
@@ -417,7 +425,6 @@ class PCView extends View {
         // Buttons
         drawTextButton(g, returnButton, "Return");
         drawTextButton(g, switchButton, "Switch");
-        drawTextButton(g, releaseButton, "Release");
         drawTextButton(g, depositWithdrawButton, party ? "Deposit" : "Withdraw");
 
         buttons.draw(g);
