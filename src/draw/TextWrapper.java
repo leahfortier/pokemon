@@ -32,7 +32,6 @@ public class TextWrapper {
 
         String[] words = text.split("[ ]+");
         StringAppender appender = new StringAppender();
-
         List<String> rows = new ArrayList<>();
 
         for (int i = 0; i < words.length; i++) {

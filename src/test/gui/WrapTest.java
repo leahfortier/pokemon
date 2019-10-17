@@ -81,7 +81,6 @@ public class WrapTest extends BaseTest {
                 bagMetrics.checkMetrics(name, metrics);
             }
 
-
             // Battle bag item description
             if (item.hasBattleBagCategories()) {
                 battleMetrics.checkMetrics(name, battleBagState.drawItemDescription(g, itemNamesies));

@@ -15,7 +15,6 @@ public class MovePanel extends DrawPanel {
     private final int descFontSize;
 
     // If the description exceeds the space in the panel, it will adjust the font size (should be smaller to make sense)
-    // If the same number of rows is desired, that should be specified here
     private int minDescFontSize;
 
     public MovePanel(DrawPanel drawPanel, int nameFontSize, int basicFontSize, int descFontSize) {
@@ -93,6 +92,7 @@ public class MovePanel extends DrawPanel {
         TextUtils.drawRightAlignedString(g, "Acc: " + attack.getAccuracyString(), rightX, textY);
 
         // Draw the description underneath everything else as wrapped text
+        // Will always be right-aligned with the name and power
         int startY = textY;
         WrapPanel descriptionPanel = new WrapPanel(
                 this.x + borderSize,

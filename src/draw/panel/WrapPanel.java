@@ -150,6 +150,9 @@ public class WrapPanel extends DrawPanel {
         return new TextWrapper(drawText, startX, startY, textWidth).draw(g, lastWordLength);
     }
 
+    // Returns the best spacing for the input text
+    // Does not handle any drawing logic, just gets the proper coordinates and such set up
+    // Mostly is selecting which font size is most appropriate
     private Spacing getSpacing(Graphics g, String text) {
         int fontSize = this.fontSize;
 
