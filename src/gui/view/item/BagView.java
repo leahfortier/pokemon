@@ -118,7 +118,7 @@ public class BagView extends View {
         for (int i = 0; i < useStates.length; i++) {
             UseState useState = useStates[i];
             buttons[useState.buttonIndex] = new Button(
-                    layout.buttonPanels[i],
+                    layout.selectedButtonPanels[i],
                     new ButtonTransitions()
                             .right(i == lastIndex ? PARTY : useStates[i + 1].buttonIndex)
                             .up(selectedTab.ordinal())
@@ -203,7 +203,7 @@ public class BagView extends View {
         layout.drawSelectedItem(g, selectedItem);
 
         // Draw each item in category
-        layout.drawItems(g, itemButtons, this.getDisplayItems(), pageNum, true);
+        layout.drawItems(g, itemButtons, this.getDisplayItems(), pageNum);
 
         // Draw page numbers
         layout.drawPageNumbers(g, pageNum, totalPages());

@@ -156,5 +156,8 @@ Other random things:
     need like a 'b' button where you can click through things but can't start a new dialogue
     opponent's trace message appears before your Pokemon is even out and looks really weird
     used a Pokeball and it didn't show up as my LastUsedItem what's up with that
-    BerryView should use the BagPanel thing or whatever that Bag/Mart/SellView all use
     MedalView is super broken right now and not worth handling in this branch
+    look at image height for selected item panel in bag (Ether looks like it's touching the top etc)
+        - maybe try centering with the text height instead of bottom centering?
+    fillOutlineLabel shit
+        - should also add a grey out if inactive option

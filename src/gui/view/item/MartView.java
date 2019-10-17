@@ -58,7 +58,8 @@ public class MartView extends View {
     private ItemNamesies selectedItem;
 
     public MartView() {
-        layout = new MartLayout();
+        // No quantities
+        layout = new MartLayout(false);
 
         layout.bagPanel.withBackgroundColor(BACKGROUND_COLOR)
                        .withBlackOutline();
@@ -76,13 +77,13 @@ public class MartView extends View {
         );
 
         amountLeftButton = new Button(
-                layout.buttonPanels[0],
+                layout.selectedButtonPanels[0],
                 new ButtonTransitions().right(AMOUNT_RIGHT_ARROW).up(RETURN).left(BUY).down(ITEMS),
                 () -> this.updateItemAmount(-1)
         );
 
         amountRightButton = new Button(
-                layout.buttonPanels[2],
+                layout.selectedButtonPanels[2],
                 new ButtonTransitions().right(BUY).up(RETURN).left(AMOUNT_LEFT_ARROW).down(ITEMS + 1),
                 () -> this.updateItemAmount(1)
         );
@@ -150,7 +151,7 @@ public class MartView extends View {
         layout.drawAmount(g, itemAmount, amountLeftButton, amountRightButton);
 
         // Draw each item in category
-        layout.drawItems(g, itemButtons, forSaleItems, pageNum, false);
+        layout.drawItems(g, itemButtons, forSaleItems, pageNum);
 
         // Draw page numbers
         layout.drawPageNumbers(g, pageNum, totalPages());

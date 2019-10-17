@@ -183,6 +183,13 @@ public class Button {
                 .drawBackground(g);
     }
 
+    // Fills transparent, outlines in black, and draws the label centered
+    public void fillBorderLabel(Graphics g, int fontSize, String label) {
+        fillBorderLabel(g, null, fontSize, label);
+    }
+
+    // Fills color transparent, outlines in black, and draws the label centered
+    // Color may be null, but should really use the other method for that
     public void fillBorderLabel(Graphics g, Color color, int fontSize, String label) {
         fillTransparent(g, color);
         blackOutline(g);
@@ -190,7 +197,9 @@ public class Button {
     }
 
     public void fillTransparent(Graphics g, Color color) {
-        fill(g, color);
+        if (color != null) {
+            fill(g, color);
+        }
         fillTransparent(g);
     }
 

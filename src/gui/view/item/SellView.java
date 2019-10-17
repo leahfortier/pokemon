@@ -54,7 +54,8 @@ public class SellView extends View {
         selectedTab = CATEGORIES[0];
         selectedItem = ItemNamesies.NO_ITEM;
 
-        layout = new MartLayout();
+        // Show quantities
+        layout = new MartLayout(true);
 
         Button[] buttons = new Button[NUM_BUTTONS];
         this.buttons = new ButtonList(buttons);
@@ -66,13 +67,13 @@ public class SellView extends View {
         );
 
         amountLeftButton = new Button(
-                layout.buttonPanels[0],
+                layout.selectedButtonPanels[0],
                 new ButtonTransitions().right(AMOUNT_RIGHT_ARROW).up(TABS).left(SELL).down(ITEMS),
                 () -> this.updateItemAmount(-1)
         );
 
         amountRightButton = new Button(
-                layout.buttonPanels[2],
+                layout.selectedButtonPanels[2],
                 new ButtonTransitions().right(SELL).up(TABS).left(AMOUNT_LEFT_ARROW).down(ITEMS + 1),
                 () -> this.updateItemAmount(1)
         );
@@ -141,7 +142,7 @@ public class SellView extends View {
         layout.drawAmount(g, itemAmount, amountLeftButton, amountRightButton);
 
         // Draw each items in category
-        layout.drawItems(g, itemButtons, this.getDisplayItems(), pageNum, true);
+        layout.drawItems(g, itemButtons, this.getDisplayItems(), pageNum);
 
         // Draw page numbers
         layout.drawPageNumbers(g, pageNum, totalPages());

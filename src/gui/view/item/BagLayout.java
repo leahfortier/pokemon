@@ -32,16 +32,20 @@ public class BagLayout {
     public final DrawPanel bagPanel;
     public final DrawPanel leftPanel;
     private final DrawPanel itemsPanel;
-    protected final ItemPanel selectedPanel;
+    public final ItemPanel selectedPanel;
 
     public final DrawPanel[] tabPanels;
-    public final DrawPanel[] buttonPanels;
+    public final DrawPanel[] selectedButtonPanels;
     public final DrawPanel returnPanel;
 
     public final DrawPanel leftArrow;
     public final DrawPanel rightArrow;
 
+    private final boolean includeQuantity;
+
     public BagLayout(boolean includeQuantity) {
+        this.includeQuantity = includeQuantity;
+
         int tabHeight = 55;
         int spacing = 28;
 
@@ -93,9 +97,9 @@ public class BagLayout {
             tabPanels[i] = bagPanel.createTab(i, tabHeight, tabPanels.length);
         }
 
-        buttonPanels = new DrawPanel[UseState.values().length];
-        for (int i = 0; i < buttonPanels.length; i++) {
-            buttonPanels[i] = selectedPanel.createBottomTab(i, buttonHeight, buttonPanels.length);
+        selectedButtonPanels = new DrawPanel[UseState.values().length];
+        for (int i = 0; i < selectedButtonPanels.length; i++) {
+            selectedButtonPanels[i] = selectedPanel.createBottomTab(i, buttonHeight, selectedButtonPanels.length);
         }
 
         // Fake buttons are fake (just used for spacing)
@@ -161,7 +165,7 @@ public class BagLayout {
         return this.selectedPanel.draw(g, selectedItem);
     }
 
-    public void drawItems(Graphics g, Button[] itemButtons, Iterable<ItemNamesies> items, int pageNum, boolean includeQuantity) {
+    public void drawItems(Graphics g, Button[] itemButtons, Iterable<ItemNamesies> items, int pageNum) {
         itemsPanel.drawBackground(g);
 
         TileSet itemTiles = Game.getData().getItemTiles();
@@ -218,8 +222,6 @@ public class BagLayout {
     }
 
     public void drawReturnButton(Graphics g, Button returnButton) {
-        returnButton.fillTransparent(g);
-        returnButton.blackOutline(g);
-        returnButton.label(g, 20, "Return");
+        returnButton.fillBorderLabel(g, 20, "Return");
     }
 }

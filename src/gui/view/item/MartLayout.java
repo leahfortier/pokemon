@@ -18,8 +18,8 @@ public class MartLayout extends BagLayout {
     private final DrawPanel totalAmountPanel;
     public final DrawPanel confirmPanel;
 
-    public MartLayout() {
-        super(false); // No quantities
+    public MartLayout(boolean includeQuantity) {
+        super(includeQuantity);
 
         Button[] fakeButtons = super.leftPanel.getButtons(10, 6, 1);
         playerMoneyPanel = new DrawPanel(fakeButtons[0]).withBlackOutline();
@@ -27,8 +27,8 @@ public class MartLayout extends BagLayout {
         totalAmountPanel = new DrawPanel(fakeButtons[4]).withBlackOutline();
         confirmPanel = new DrawPanel(fakeButtons[5]);
 
-        DrawPanel amountLeftButton = buttonPanels[0];
-        DrawPanel amountRightButton = buttonPanels[2];
+        DrawPanel amountLeftButton = selectedButtonPanels[0];
+        DrawPanel amountRightButton = selectedButtonPanels[2];
         amountPanel = new DrawPanel(
                 amountLeftButton.x + amountLeftButton.width - DrawUtils.OUTLINE_SIZE,
                 amountLeftButton.y,
