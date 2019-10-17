@@ -187,7 +187,7 @@ class PCView extends View {
                     pc.incrementBox(-1);
                     movedToFront();
                 }
-        );
+        ).setupPanel(panel -> panel.asArrow(Direction.LEFT));
 
         buttons[RIGHT_ARROW] = rightButton = new Button(
                 255, 418, 35, 20,
@@ -201,7 +201,7 @@ class PCView extends View {
                     pc.incrementBox(1);
                     movedToFront();
                 }
-        );
+        ).setupPanel(panel -> panel.asArrow(Direction.RIGHT));
 
         buttons[SWITCH] = switchButton = new Button(
                 410, 464, 118, 38,
@@ -309,8 +309,8 @@ class PCView extends View {
         FontMetrics.setFont(g, 16);
         TextUtils.drawCenteredWidthString(g, (pc.getBoxNum() + 1) + "/" + pc.getNumBoxes(), 215, 433);
 
-        leftButton.drawArrow(g, Direction.LEFT);
-        rightButton.drawArrow(g, Direction.RIGHT);
+        leftButton.drawPanel(g);
+        rightButton.drawPanel(g);
 
         // Party
         partyPanel.drawBackground(g);

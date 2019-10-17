@@ -1,6 +1,8 @@
 package draw.button;
 
+import draw.PolygonUtils;
 import draw.panel.DrawPanel;
+import map.Direction;
 import util.string.StringUtils;
 
 import java.awt.Graphics;
@@ -11,6 +13,8 @@ public class ButtonPanel extends DrawPanel {
     private String label;
     private int fontSize;
 
+    private Direction arrowDirection;
+
     private boolean greyInactive;
 
     // Should only be created from Button constructor
@@ -18,6 +22,11 @@ public class ButtonPanel extends DrawPanel {
         super(button);
 
         this.button = button;
+
+        // By default, button has a black outline and no background or border
+        this.withBlackOutline();
+        this.withBackgroundColor(null);
+        this.withBorderPercentage(0);
     }
 
     public Button button() {
@@ -27,6 +36,12 @@ public class ButtonPanel extends DrawPanel {
     public ButtonPanel greyInactive() {
         this.greyInactive = true;
         return this;
+    }
+
+    // Sets the arrow direction and removes the black outline
+    public ButtonPanel asArrow(Direction arrowDirection) {
+        this.arrowDirection = arrowDirection;
+        return this.withNoOutline().asButtonPanel();
     }
 
     public ButtonPanel withLabel(String text, int fontSize) {
@@ -47,6 +62,11 @@ public class ButtonPanel extends DrawPanel {
         // If label was provided, draw it
         if (!StringUtils.isNullOrEmpty(label)) {
             super.label(g, fontSize, label);
+        }
+
+        // Arrow buttons!
+        if (this.arrowDirection != null) {
+            PolygonUtils.drawArrow(g, x, y, width, height, arrowDirection);
         }
     }
 }

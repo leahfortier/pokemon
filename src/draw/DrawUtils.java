@@ -32,11 +32,6 @@ public final class DrawUtils {
     }
 
     public static void blackOutline(Graphics g, int x, int y, int width, int height, Direction... directions) {
-        // Default to all sides if none specified
-        if (directions == null || directions.length == 0) {
-            directions = Direction.values();
-        }
-
         drawBorder(g, Color.BLACK, x, y, width, height, OUTLINE_SIZE, directions);
     }
 

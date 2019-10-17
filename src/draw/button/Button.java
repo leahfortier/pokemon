@@ -234,6 +234,11 @@ public class Button {
     }
 
     public void blackOutline(Graphics g, Direction... directions) {
+        // Default to all sides if none specified
+        if (directions == null || directions.length == 0) {
+            directions = Direction.values();
+        }
+
         DrawUtils.blackOutline(g, x, y, width, height, directions);
     }
 

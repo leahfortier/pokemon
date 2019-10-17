@@ -7,6 +7,7 @@ import draw.PolygonUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
+import draw.button.ButtonPanel;
 import draw.button.ButtonTransitions;
 import main.Global;
 import map.Direction;
@@ -115,6 +116,11 @@ public class DrawPanel {
         return this;
     }
 
+    public DrawPanel withNoOutline() {
+        this.outlineDirections = new Direction[0];
+        return this;
+    }
+
     public DrawPanel withBlackOutline() {
         this.outlineDirections = Direction.values();
         return this;
@@ -147,6 +153,15 @@ public class DrawPanel {
 
         Global.error("Must already be a MovePanel.");
         return new MovePanel(this, 0, 0, 0);
+    }
+
+    public ButtonPanel asButtonPanel() {
+        if (this instanceof ButtonPanel) {
+            return (ButtonPanel)this;
+        }
+
+        Global.error("Must already be a ButtonPanel.");
+        return new Button(this, null).panel();
     }
 
     public int getBorderSize() {
