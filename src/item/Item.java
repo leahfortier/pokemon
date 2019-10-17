@@ -384,6 +384,9 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean usable(Battle b, ActivePokemon p, Move m) {
+            // Note: Because this is just using the last move used and not actually storing the move
+            // or anything like that it will break if it gets Struggled (from something like Torment)
+            // and will be locked into Struggle for the rest of the fight
             Move last = p.getLastMoveUsed();
             return last == null || m == last;
         }
@@ -419,6 +422,9 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean usable(Battle b, ActivePokemon p, Move m) {
+            // Note: Because this is just using the last move used and not actually storing the move
+            // or anything like that it will break if it gets Struggled (from something like Torment)
+            // and will be locked into Struggle for the rest of the fight
             Move last = p.getLastMoveUsed();
             return last == null || m == last;
         }
@@ -454,6 +460,9 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean usable(Battle b, ActivePokemon p, Move m) {
+            // Note: Because this is just using the last move used and not actually storing the move
+            // or anything like that it will break if it gets Struggled (from something like Torment)
+            // and will be locked into Struggle for the rest of the fight
             Move last = p.getLastMoveUsed();
             return last == null || m == last;
         }

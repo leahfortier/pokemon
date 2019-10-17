@@ -455,8 +455,20 @@ MiracleEye:
 Torment:
     Int: AttackSelectionSelfBlockerEffect
     Usable:
+        // If you haven't used a move yet, there's nothing to contradict
         Move lastMoveUsed = p.getLastMoveUsed();
-        return (lastMoveUsed == null || lastMoveUsed.getAttack().namesies() != m.getAttack().namesies());
+        if (lastMoveUsed == null) {
+            return true;
+        }
+
+        // Struggle is not affected by torment
+        AttackNamesies current = m.getAttack().namesies();
+        if (current == AttackNamesies.STRUGGLE) {
+            return true;
+        }
+
+        // Acceptable if trying to use a different move than last time
+        return lastMoveUsed.getAttack().namesies() != current;
         ###
     UnusableMessage: p.getName() + " cannot use the same move twice in a row!"
     CastMessage: user.getName() + " tormented " + victim.getName() + "!"

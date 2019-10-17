@@ -156,6 +156,5 @@ Other random things:
     need like a 'b' button where you can click through things but can't start a new dialogue
     opponent's trace message appears before your Pokemon is even out and looks really weird
     used a Pokeball and it didn't show up as my LastUsedItem what's up with that
-    bug with Struggle and Torment (should not effect it but it does)
     BerryView should use the BagPanel thing or whatever that Bag/Mart/SellView all use
     MedalView is super broken right now and not worth handling in this branch
