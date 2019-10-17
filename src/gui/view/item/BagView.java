@@ -58,7 +58,7 @@ public class BagView extends View {
     private static final int RIGHT_ARROW = NUM_BUTTONS - 5;
     private static final int LEFT_ARROW = NUM_BUTTONS - 6;
 
-    private final BagPanel panel;
+    private final BagLayout layout;
 
     private final ButtonList buttons;
     private final Button[] tabButtons;
@@ -82,32 +82,32 @@ public class BagView extends View {
         selectedItem = ItemNamesies.NO_ITEM;
 
         // Show quantities
-        panel = new BagPanel(true);
+        layout = new BagLayout(true);
 
         Button[] buttons = new Button[NUM_BUTTONS];
         this.buttons = new ButtonList(buttons);
 
         returnButton = new Button(
-                panel.returnPanel,
+                layout.returnPanel,
                 new ButtonTransitions().right(PARTY).up(RIGHT_ARROW).left(PARTY).down(TABS),
                 this::returnToMap
         );
 
-        tabButtons = panel.getTabButtons(TABS, RETURN, USE, this::changeCategory);
+        tabButtons = layout.getTabButtons(TABS, RETURN, USE, this::changeCategory);
 
-        partyButtons = panel.getLeftButtons(
+        partyButtons = layout.getLeftButtons(
                 PARTY,
                 new ButtonTransitions().right(GIVE).up(TABS).left(MOVES).down(TABS),
                 index -> UseState.applyPokemon(this, Game.getPlayer().getTeam().get(index))
         );
 
-        moveButtons = panel.getLeftButtons(
+        moveButtons = layout.getLeftButtons(
                 MOVES,
                 new ButtonTransitions().right(PARTY).up(TABS).left(GIVE).down(TABS),
                 this::useMoveItem
         );
 
-        itemButtons = panel.getItemButtons(
+        itemButtons = layout.getItemButtons(
                 ITEMS,
                 new ButtonTransitions().up(USE).down(RIGHT_ARROW),
                 index -> selectedItem = GeneralUtils.getPageValue(this.getDisplayItems(), pageNum, ITEMS_PER_PAGE, index)
@@ -118,7 +118,7 @@ public class BagView extends View {
         for (int i = 0; i < useStates.length; i++) {
             UseState useState = useStates[i];
             buttons[useState.buttonIndex] = new Button(
-                    panel.buttonPanels[i],
+                    layout.buttonPanels[i],
                     new ButtonTransitions()
                             .right(i == lastIndex ? PARTY : useStates[i + 1].buttonIndex)
                             .up(selectedTab.ordinal())
@@ -129,13 +129,13 @@ public class BagView extends View {
         }
 
         leftArrow = new Button(
-                panel.leftArrow,
+                layout.leftArrow,
                 new ButtonTransitions().right(RIGHT_ARROW).up(ITEMS + ITEMS_PER_PAGE - 2).left(RIGHT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         );
 
         rightArrow = new Button(
-                panel.rightArrow,
+                layout.rightArrow,
                 new ButtonTransitions().right(LEFT_ARROW).up(ITEMS + ITEMS_PER_PAGE - 1).left(LEFT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         );
@@ -193,26 +193,26 @@ public class BagView extends View {
         BasicPanels.drawCanvasPanel(g);
 
         // Info Boxes
-        panel.bagPanel.withBackgroundColor(selectedTab.getColor())
-                      .drawBackground(g);
+        layout.bagPanel.withBackgroundColor(selectedTab.getColor())
+                       .drawBackground(g);
 
         // Draw Use State buttons
         UseState.forEach(useState -> useState.draw(g, buttons.get(useState.buttonIndex), selectedTab.getColor()));
 
         // Selected item display
-        panel.drawSelectedItem(g, selectedItem);
+        layout.drawSelectedItem(g, selectedItem);
 
         // Draw each item in category
-        panel.drawItems(g, itemButtons, this.getDisplayItems(), pageNum, true);
+        layout.drawItems(g, itemButtons, this.getDisplayItems(), pageNum, true);
 
         // Draw page numbers
-        panel.drawPageNumbers(g, pageNum, totalPages());
+        layout.drawPageNumbers(g, pageNum, totalPages());
 
         // Left and right arrows
         leftArrow.drawArrow(g, Direction.LEFT);
         rightArrow.drawArrow(g, Direction.RIGHT);
 
-        panel.leftPanel.drawBackground(g);
+        layout.leftPanel.drawBackground(g);
         if (state == BagState.MOVE_SELECT) {
             // Draw moves
             drawMoves(g);
@@ -222,10 +222,10 @@ public class BagView extends View {
         }
 
         // Draw return button
-        panel.drawReturnButton(g, returnButton);
+        layout.drawReturnButton(g, returnButton);
 
         // Draw tabs
-        panel.drawTabs(g, tabButtons, selectedTab);
+        layout.drawTabs(g, tabButtons, selectedTab);
 
         // Messages or buttons
         if (message != null && !StringUtils.isNullOrWhiteSpace(message.getMessage())) {

@@ -11,7 +11,7 @@ import gui.view.PartyView;
 import gui.view.PokedexView;
 import gui.view.battle.handler.BagState;
 import gui.view.battle.handler.FightState;
-import gui.view.item.BagPanel;
+import gui.view.item.BagLayout;
 import item.Item;
 import item.ItemNamesies;
 import org.junit.Assert;
@@ -62,7 +62,7 @@ public class WrapTest extends BaseTest {
 
     @Test
     public void itemDescriptionTest() {
-        BagPanel bagPanel = new BagPanel(true);
+        BagLayout bagLayout = new BagLayout(true);
         BagState battleBagState = new BagState();
 
         TestMetrics bagMetrics = new TestMetrics();
@@ -74,7 +74,7 @@ public class WrapTest extends BaseTest {
             String name = item.getName();
 
             // Bag, Mart, Sell, and (almost) Berry views use this
-            WrapMetrics metrics = bagPanel.drawSelectedItem(g, itemNamesies);
+            WrapMetrics metrics = bagLayout.drawSelectedItem(g, itemNamesies);
             if (itemNamesies == ItemNamesies.NO_ITEM) {
                 Assert.assertNull(name, metrics);
             } else {

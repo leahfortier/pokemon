@@ -25,7 +25,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Iterator;
 
-public class BagPanel {
+public class BagLayout {
     private static final BagCategory[] CATEGORIES = BagCategory.values();
     private static final int ITEMS_PER_PAGE = 10;
 
@@ -41,7 +41,7 @@ public class BagPanel {
     public final DrawPanel leftArrow;
     public final DrawPanel rightArrow;
 
-    public BagPanel(boolean includeQuantity) {
+    public BagLayout(boolean includeQuantity) {
         int tabHeight = 55;
         int spacing = 28;
 
