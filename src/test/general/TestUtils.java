@@ -85,4 +85,13 @@ public class TestUtils {
         Assert.assertFalse(message, description.contains(".\""));
         TestUtils.assertGreater(message, description.length(), 20);
     }
+
+    // If does not pass the assertion, prints the message to standard error instead of failing test entirely
+    public static void assertWarning(String message, boolean assertion) {
+        try {
+            Assert.assertTrue(message, assertion);
+        } catch (AssertionError error) {
+            System.err.println(error.getMessage());
+        }
+    }
 }

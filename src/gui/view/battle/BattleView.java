@@ -9,6 +9,7 @@ import draw.ImageUtils;
 import draw.button.Button;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.WrapPanel;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.ControlKey;
@@ -35,7 +36,7 @@ public class BattleView extends View {
     private final PokemonAnimationState enemyAnimation;
 
     // Different panels to draw
-    private final DrawPanel menuMessagePanel;
+    private final WrapPanel menuMessagePanel;
     private final DrawPanel buttonsPanel;
     private final DrawPanel largeMenuPanel;
 
@@ -63,7 +64,9 @@ public class BattleView extends View {
         playerAnimation = new PokemonAnimationState(this, true);
         enemyAnimation = new PokemonAnimationState(this, false);
 
-        menuMessagePanel = new DrawPanel(415, 440, 385, 161).withBorderColor(new Color(53, 53, 129));
+        menuMessagePanel = new WrapPanel(415, 440, 385, 161, 30)
+                .withBorderColor(new Color(53, 53, 129))
+                .withMinFontSize(25, false);
         buttonsPanel = new DrawPanel(0, 440, 417, 161).withBorderColor(Color.GRAY).withBorderPercentage(5);
         largeMenuPanel = new DrawPanel(0, 160, 417, 440).withBorderPercentage(3).withBlackOutline();
 
@@ -81,7 +84,7 @@ public class BattleView extends View {
 
     public void drawMenuMessagePanel(Graphics g, String text) {
         menuMessagePanel.drawBackground(g);
-        menuMessagePanel.drawMessage(g, 30, text);
+        menuMessagePanel.drawMessage(g, text);
     }
 
     public void drawButtonsPanel(Graphics g) {

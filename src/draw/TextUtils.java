@@ -1,7 +1,6 @@
 package draw;
 
 import util.FontMetrics;
-import util.string.StringAppender;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -20,43 +19,10 @@ public final class TextUtils {
         return text.length()*FontMetrics.getFontMetrics(fontSize).getHorizontalSpacing();
     }
 
-    public static int drawWrappedText(Graphics g, String str, int x, int y, int width) {
-        return drawWrappedText(g, str, -1, x, y, width);
-    }
-
-    public static int drawWrappedText(Graphics g, String str, int lastWordActualLength, int x, int y, int width) {
-        FontMetrics fontMetrics = FontMetrics.getFontMetrics(g);
-
-        String[] words = str.split("[ ]+");
-        StringAppender appender = new StringAppender();
-
-        int height = y;
-        int distanceBetweenRows = FontMetrics.getDistanceBetweenRows(g);
-
-        for (int i = 0; i < words.length; i++) {
-            String word = words[i];
-            // If we're at the last word and we've specified a last word length, use that, otherwise use the
-            // actual length of the word
-            int wordLength = i == words.length - 1 && lastWordActualLength != -1 ? lastWordActualLength : word.length();
-
-            // Add 1 for the space
-            int potentialLineLength = appender.length() + wordLength + 1;
-            int potentialLineWidth = potentialLineLength*fontMetrics.getHorizontalSpacing();
-
-            // If adding this word would be more than the width, then write this line and go to the next one
-            if (potentialLineWidth > width) {
-                g.drawString(appender.toString(), x, height);
-
-                height += distanceBetweenRows;
-                appender.clear();
-            }
-
-            appender.appendDelimiter(" ", word);
-        }
-
-        g.drawString(appender.toString(), x, height);
-
-        return height + distanceBetweenRows;
+    // Draws the text wrapping to the next line if the current line exceeds the width
+    // and returns the next appropriate y to draw to
+    public static int drawWrappedText(Graphics g, String text, int x, int y, int width) {
+        return new TextWrapper(text, x, y, width).draw(g).nextY();
     }
 
     public static void drawCenteredWidthString(Graphics g, String s, int centerX, int y) {

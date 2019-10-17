@@ -11,14 +11,16 @@ import map.Direction;
 
 import java.awt.Graphics;
 
-public class MartPanel extends BagPanel {
+public class MartLayout extends BagLayout {
     private final DrawPanel amountPanel;
     private final DrawPanel playerMoneyPanel;
     private final DrawPanel inBagPanel;
     private final DrawPanel totalAmountPanel;
     public final DrawPanel confirmPanel;
 
-    public MartPanel() {
+    public MartLayout() {
+        super(false); // No quantities
+
         Button[] fakeButtons = super.leftPanel.getButtons(10, 6, 1);
         playerMoneyPanel = new DrawPanel(fakeButtons[0]).withBlackOutline();
         inBagPanel = new DrawPanel(fakeButtons[1]).withBlackOutline();

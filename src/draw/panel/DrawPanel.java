@@ -1,6 +1,5 @@
 package draw.panel;
 
-import battle.attack.Attack;
 import draw.Alignment;
 import draw.DrawUtils;
 import draw.ImageUtils;
@@ -9,8 +8,6 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonTransitions;
-import input.ControlKey;
-import input.InputControl;
 import main.Global;
 import map.Direction;
 import pokemon.active.PartyPokemon;
@@ -21,7 +18,7 @@ import util.Point;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.Collection;
+import java.util.EnumSet;
 
 public class DrawPanel {
     public final int x;
@@ -45,11 +42,6 @@ public class DrawPanel {
     private boolean onlyTransparency;
     private int transparentCount;
 
-    private boolean animateMessage;
-    private int messageTimeElapsed;
-    private String drawingText;
-    private boolean finishedAnimating;
-
     public DrawPanel(Button button) {
         this(button.x, button.y, button.width, button.height);
     }
@@ -72,9 +64,6 @@ public class DrawPanel {
         this.outlineDirections = new Direction[0];
 
         this.transparentCount = 1;
-
-        this.messageTimeElapsed = 0;
-        this.finishedAnimating = true;
     }
 
     public DrawPanel withBorderColor(Color borderColor) {
@@ -131,19 +120,33 @@ public class DrawPanel {
         return this;
     }
 
-    public DrawPanel withBlackOutline(Collection<Direction> directions) {
-        this.outlineDirections = directions.toArray(new Direction[0]);
-        return this;
-    }
-
-    public DrawPanel withTextAnimation() {
-        this.animateMessage = true;
+    // Gives a black outline for every direction other than the input missingBlackOutline
+    public DrawPanel withMissingBlackOutline(Direction missingBlackOutline) {
+        this.outlineDirections = EnumSet.complementOf(EnumSet.of(missingBlackOutline)).toArray(new Direction[0]);
         return this;
     }
 
     public DrawPanel greyOut() {
         this.greyOut = true;
         return this;
+    }
+
+    public WrapPanel asWrapPanel() {
+        if (this instanceof WrapPanel) {
+            return (WrapPanel)this;
+        }
+
+        Global.error("Must already be a WrapPanel.");
+        return new WrapPanel(x, y, width, height, 0);
+    }
+
+    public MovePanel asMovePanel() {
+        if (this instanceof MovePanel) {
+            return (MovePanel)this;
+        }
+
+        Global.error("Must already be a MovePanel.");
+        return new MovePanel(this, 0, 0, 0);
     }
 
     public int getBorderSize() {
@@ -268,59 +271,6 @@ public class DrawPanel {
         return this.getBorderSize() + FontMetrics.getDistanceBetweenRows(g) - FontMetrics.getTextHeight(g);
     }
 
-    public int drawMessage(Graphics g, int fontSize, String text) {
-        FontMetrics.setFont(g, fontSize);
-        return drawMessage(g, text);
-    }
-
-    public int drawMessage(Graphics g, String text) {
-        int startY = y + this.getTextSpace(g) + FontMetrics.getTextHeight(g);
-        return drawMessage(g, text, startY);
-    }
-
-    public int drawMessage(Graphics g, String text, int startY) {
-        g.setColor(Color.BLACK);
-
-        int textSpace = this.getTextSpace(g);
-        int startX = x + textSpace;
-        int textWidth = width - 2*textSpace;
-
-        if (!this.animateMessage) {
-            return TextUtils.drawWrappedText(g, text, startX, startY, textWidth);
-        }
-
-        if (!text.equals(drawingText)) {
-            messageTimeElapsed = 0;
-            drawingText = text;
-            finishedAnimating = false;
-        } else {
-            messageTimeElapsed += 3*Global.MS_BETWEEN_FRAMES;
-        }
-
-        int charactersToShow = finishedAnimating ? text.length() : Math.min(text.length(), messageTimeElapsed/50);
-        if (InputControl.instance().consumeIfMouseDown(ControlKey.SPACE)) {
-            charactersToShow = text.length();
-        }
-
-        finishedAnimating = charactersToShow == text.length();
-
-        int lastWordLength;
-        if (charactersToShow != 0 && text.charAt(charactersToShow - 1) != ' ') {
-            String startString = text.substring(0, charactersToShow);
-            int start = startString.lastIndexOf(' ') + 1;
-
-            String endString = text.substring(charactersToShow - 1);
-            int end = endString.indexOf(' ');
-            end = end == -1 ? endString.length() - 1 : end;
-
-            lastWordLength = end - start + charactersToShow - 1;
-        } else {
-            lastWordLength = -1;
-        }
-
-        return TextUtils.drawWrappedText(g, text.substring(0, charactersToShow), lastWordLength, startX, startY, textWidth);
-    }
-
     public void drawLeftLabel(Graphics g, int fontSize, String label) {
         int startX = x + this.getTextSpace(g);
         int centerY = centerY();
@@ -370,46 +320,6 @@ public class DrawPanel {
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, fontSize);
         TextUtils.drawCenteredString(g, text, x, y, width, height);
-    }
-
-    public boolean isAnimatingMessage() {
-        return !finishedAnimating && animateMessage;
-    }
-
-    public void drawMovePanel(Graphics g, Attack move) {
-        this.withTransparentBackground(move.getActualType().getColor())
-            .drawBackground(g);
-
-        FontMetrics.setFont(g, 24);
-        int spacing = 20;
-        int y = this.y + spacing + FontMetrics.getTextHeight(g);
-        g.drawString(move.getName(), this.x + spacing, y);
-
-        BufferedImage typeImage = move.getActualType().getImage();
-        int imageY = y - typeImage.getHeight();
-        int imageX = this.rightX() - spacing - typeImage.getWidth();
-        g.drawImage(typeImage, imageX, imageY, null);
-
-        BufferedImage categoryImage = move.getCategory().getImage();
-        imageX -= categoryImage.getWidth() + spacing;
-        g.drawImage(categoryImage, imageX, imageY, null);
-
-        y += FontMetrics.getDistanceBetweenRows(g);
-
-        FontMetrics.setFont(g, 18);
-        g.drawString("Power: " + move.getPowerString(), this.x + spacing, y);
-        TextUtils.drawRightAlignedString(g, "Acc: " + move.getAccuracyString(), this.rightX() - spacing, y);
-
-        y += FontMetrics.getDistanceBetweenRows(g) + 2;
-
-        FontMetrics.setFont(g, 16);
-        TextUtils.drawWrappedText(
-                g,
-                move.getDescription(),
-                this.x + spacing,
-                y,
-                this.width - 2*spacing
-        );
     }
 
     public DrawPanel createBottomTab(int tabIndex, int tabHeight, int numTabs) {

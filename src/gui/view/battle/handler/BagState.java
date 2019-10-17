@@ -9,6 +9,8 @@ import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
 import draw.panel.DrawPanel;
+import draw.panel.WrapPanel;
+import draw.panel.WrapPanel.WrapMetrics;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -26,7 +28,6 @@ import util.GeneralUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -44,7 +45,7 @@ public class BagState implements VisualStateHandler {
     private static final int BAG_LEFT_BUTTON = NUM_BAG_BUTTONS - 3;
 
     private final DrawPanel bagCategoryPanel;
-    private final DrawPanel lastItemPanel;
+    private final WrapPanel lastItemPanel;
 
     private final ButtonList bagButtons;
     private final Button[] bagTabButtons;
@@ -62,7 +63,7 @@ public class BagState implements VisualStateHandler {
         bagCategoryPanel = new DrawPanel(30, 218, 357, 259)
                 .withBorderPercentage(6);
 
-        lastItemPanel = new DrawPanel(bagCategoryPanel.x, 492, bagCategoryPanel.width, 78)
+        lastItemPanel = new WrapPanel(bagCategoryPanel.x, 492, bagCategoryPanel.width, 78, 13)
                 .withBorderPercentage(17)
                 .withBlackOutline();
 
@@ -144,7 +145,7 @@ public class BagState implements VisualStateHandler {
 
         BattleBagCategory selectedCategory = BATTLE_BAG_CATEGORIES[selectedBagTab];
         bagCategoryPanel.withTransparentBackground(selectedCategory.getColor())
-                        .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP)))
+                        .withMissingBlackOutline(Direction.UP)
                         .drawBackground(g);
 
         lastItemPanel.withTransparentBackground(selectedCategory.getColor())
@@ -206,7 +207,7 @@ public class BagState implements VisualStateHandler {
         }
         // Otherwise, draw selected item's information
         else {
-            lastItemPanel.drawMessage(g, 12, selected.getItem().getDescription());
+            drawItemDescription(g, selected);
         }
 
         // Bag page number
@@ -244,6 +245,10 @@ public class BagState implements VisualStateHandler {
         TextUtils.drawRightAlignedString(g, "x" + Game.getPlayer().getBag().getQuantity(itemNamesies), 140, 19);
 
         g.translate(-dx, -dy);
+    }
+
+    public WrapMetrics drawItemDescription(Graphics g, ItemNamesies itemNamesies) {
+        return lastItemPanel.drawMessage(g, itemNamesies.getItem().getDescription());
     }
 
     @Override

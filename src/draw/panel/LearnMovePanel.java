@@ -5,8 +5,10 @@ import battle.attack.Attack;
 import battle.attack.Move;
 import draw.button.Button;
 import draw.button.ButtonList;
+import draw.panel.WrapPanel.WrapMetrics;
 import input.ControlKey;
 import input.InputControl;
+import map.Direction;
 import message.MessageQueue;
 import message.MessageUpdate;
 import message.MessageUpdateType;
@@ -22,7 +24,7 @@ public class LearnMovePanel {
     private static final int YES_BUTTON = NUM_COLS + 1; // Bottom center left
     private static final int NO_BUTTON = NUM_COLS + 2; // Bottom center right
 
-    private final DrawPanel moveDetailsPanel;
+    private final MovePanel moveDetailsPanel;
     private final ButtonList buttons;
     private final Button yesButton;
     private final Button noButton;
@@ -41,7 +43,13 @@ public class LearnMovePanel {
         this.learning = learning;
         this.toLearn = toLearn;
 
-        moveDetailsPanel = new DrawPanel(0, 440 - 161, 385, 161).withBorderPercentage(8).withBlackOutline().withTransparentCount(2);
+        int height = 161;
+        int y = BasicPanels.getMessagePanelY() - height;
+        this.moveDetailsPanel = new MovePanel(0, y, 385, height, 22, 18, 16)
+                .withMissingBlackOutline(Direction.DOWN)
+                .withBorderPercentage(8)
+                .withTransparentCount(2)
+                .withMinDescFontSize(13);
 
         // Create a button for each known move and then one for the new move and one for not learning
         buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS));
@@ -165,11 +173,15 @@ public class LearnMovePanel {
                 }
             }
 
-            moveDetailsPanel.drawMovePanel(g, selected == null ? toLearn.getAttack() : selected);
+            drawMoveDetails(g, selected == null ? toLearn.getAttack() : selected);
             newMoveButton.drawMoveButton(g, toLearn);
         }
 
         buttons.draw(g);
+    }
+
+    public WrapMetrics drawMoveDetails(Graphics g, Attack attack) {
+        return moveDetailsPanel.draw(g, attack);
     }
 
     private void drawButton(Graphics g, Button button, Color color, String label) {

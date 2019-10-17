@@ -5,6 +5,9 @@ import draw.button.Button;
 import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.LabelPanel;
+import draw.panel.WrapPanel;
+import draw.panel.WrapPanel.WrapMetrics;
 import gui.TileSet;
 import input.ControlKey;
 import input.InputControl;
@@ -24,7 +27,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-class NewPokemonView extends View {
+public class NewPokemonView extends View {
     private static final int NUM_COLS = 4;
     private static final int LEFT_BUTTON = NUM_COLS + 1; // Bottom center left
     private static final int RIGHT_BUTTON = NUM_COLS + 2; // Bottom center right
@@ -32,14 +35,14 @@ class NewPokemonView extends View {
     private static final int TEXT_SPACING = 15;
 
     private static final int BOX_SPACING = (BasicPanels.getMessagePanelY()
-            - BasicPanels.getLabelPanel(0, 0, 30, TEXT_SPACING, "").height
-            - BasicPanels.getLabelPanel(0, 0, 24, TEXT_SPACING, "").height
-            - 5*BasicPanels.getLabelPanel(0, 0, 22, TEXT_SPACING, "").height)/6;
+            - new LabelPanel(0, 0, 30, TEXT_SPACING, "").height
+            - new LabelPanel(0, 0, 24, TEXT_SPACING, "").height
+            - 5*new LabelPanel(0, 0, 22, TEXT_SPACING, "").height)/6;
 
     private static final int IMAGE_PANEL_LENGTH = 3*BOX_SPACING
-            + BasicPanels.getLabelPanel(0, 0, 30, TEXT_SPACING, "").height
-            + BasicPanels.getLabelPanel(0, 0, 24, TEXT_SPACING, "").height
-            + 2*BasicPanels.getLabelPanel(0, 0, 22, TEXT_SPACING, "").height;
+            + new LabelPanel(0, 0, 30, TEXT_SPACING, "").height
+            + new LabelPanel(0, 0, 24, TEXT_SPACING, "").height
+            + 2*new LabelPanel(0, 0, 22, TEXT_SPACING, "").height;
 
     private final DrawPanel canvasPanel;
     private final DrawPanel imagePanel;
@@ -186,53 +189,7 @@ class NewPokemonView extends View {
             imagePanel.drawBackground(g);
             imagePanel.imageLabel(g, pokemonImage);
 
-            PokemonInfo pokemonInfo = newPokemon.getPokemonInfo();
-            DrawPanel namePanel = BasicPanels.drawLabelPanel(
-                    g,
-                    BOX_SPACING,
-                    BOX_SPACING,
-                    30,
-                    TEXT_SPACING,
-                    String.format("%-10s   #%03d", pokemonInfo.getName(), pokemonInfo.getNumber())
-            );
-
-            DrawPanel classificationPanel = BasicPanels.drawLabelPanel(
-                    g,
-                    namePanel.x,
-                    namePanel.bottomY() + BOX_SPACING,
-                    24,
-                    TEXT_SPACING,
-                    pokemonInfo.getClassification() + " " + PokeString.POKEMON
-            );
-
-            DrawPanel heightPanel = BasicPanels.drawLabelPanel(
-                    g,
-                    classificationPanel.x,
-                    classificationPanel.bottomY() + BOX_SPACING,
-                    22,
-                    TEXT_SPACING,
-                    "Height: " + pokemonInfo.getHeightString()
-            );
-
-            DrawPanel weightPanel = BasicPanels.drawLabelPanel(
-                    g,
-                    heightPanel.x,
-                    heightPanel.bottomY() + BOX_SPACING,
-                    22,
-                    TEXT_SPACING,
-                    "Weight: " + pokemonInfo.getWeight() + "lbs"
-            );
-
-            DrawPanel descriptionPanel = new DrawPanel(
-                    weightPanel.x,
-                    weightPanel.bottomY() + BOX_SPACING,
-                    Global.GAME_SIZE.width - 2*BOX_SPACING,
-                    3*weightPanel.height
-            )
-                    .withFullTransparency()
-                    .withBlackOutline();
-            descriptionPanel.drawBackground(g);
-            descriptionPanel.drawMessage(g, 22, pokemonInfo.getFlavorText());
+            drawInfoLabels(g, newPokemon.getPokemonInfo());
         } else if (state != State.NICKNAME && state != State.END) {
             ImageUtils.drawCenteredImage(g, pokemonImage, BasicPanels.canvasMessageCenter);
         }
@@ -278,6 +235,52 @@ class NewPokemonView extends View {
         }
 
         buttons.draw(g);
+    }
+
+    public WrapMetrics drawInfoLabels(Graphics g, PokemonInfo pokemonInfo) {
+        LabelPanel namePanel = new LabelPanel(
+                BOX_SPACING,
+                BOX_SPACING,
+                30,
+                TEXT_SPACING,
+                String.format("%-10s   #%03d", pokemonInfo.getName(), pokemonInfo.getNumber())
+        ).draw(g);
+
+        LabelPanel classificationPanel = new LabelPanel(
+                namePanel.x,
+                namePanel.bottomY() + BOX_SPACING,
+                24,
+                TEXT_SPACING,
+                pokemonInfo.getClassification() + " " + PokeString.POKEMON
+        ).draw(g);
+
+        LabelPanel heightPanel = new LabelPanel(
+                classificationPanel.x,
+                classificationPanel.bottomY() + BOX_SPACING,
+                22,
+                TEXT_SPACING,
+                "Height: " + pokemonInfo.getHeightString()
+        ).draw(g);
+
+        LabelPanel weightPanel = new LabelPanel(
+                heightPanel.x,
+                heightPanel.bottomY() + BOX_SPACING,
+                22,
+                TEXT_SPACING,
+                "Weight: " + pokemonInfo.getWeight() + "lbs"
+        ).draw(g);
+
+        WrapPanel descriptionPanel = new WrapPanel(
+                weightPanel.x,
+                weightPanel.bottomY() + BOX_SPACING,
+                Global.GAME_SIZE.width - 2*BOX_SPACING,
+                3*weightPanel.height,
+                22
+        )
+                .withFullTransparency()
+                .withBlackOutline();
+        descriptionPanel.drawBackground(g);
+        return descriptionPanel.drawMessage(g, pokemonInfo.getFlavorText());
     }
 
     @Override

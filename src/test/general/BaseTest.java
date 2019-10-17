@@ -14,7 +14,7 @@ public class BaseTest {
         }
 
         System.out.println("Random Seed: " + RandomUtils.getSeed());
-        TestGame.setNewPlayer(new Player());
+        TestGame.setNewPlayer();
 
         initialized = true;
     }

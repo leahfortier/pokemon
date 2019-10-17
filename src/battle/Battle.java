@@ -93,9 +93,9 @@ public class Battle implements Serializable {
         this.effects = new BattleEffectList();
         this.effects.initialize(this);
 
-        turn = 0;
-        escapeAttempts = 0;
-        firstAttacking = false;
+        this.turn = 0;
+        this.escapeAttempts = 0;
+        this.firstAttacking = false;
 
         int maxPokemonAllowed = opponent.maxPokemonAllowed();
         if (maxPokemonAllowed < Trainer.MAX_POKEMON) {

@@ -8,6 +8,7 @@ import draw.button.Button;
 import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.WrapPanel;
 import gui.GameData;
 import gui.TileSet;
 import input.ControlKey;
@@ -39,7 +40,7 @@ public class TradeView extends View {
     private final DrawPanel canvasPanel;
     private final DrawPanel offeringPanel;
     private final DrawPanel requestedPanel;
-    private final DrawPanel messagePanel;
+    private final WrapPanel messagePanel;
     private final DrawPanel cancelPanel;
 
     private final ButtonList buttons;
@@ -82,11 +83,12 @@ public class TradeView extends View {
                 .withBlackOutline();
 
         int messagePanelHeight = 80;
-        this.messagePanel = new DrawPanel(
+        this.messagePanel = new WrapPanel(
                 0,
                 BasicPanels.getMessagePanelY() - messagePanelHeight + DrawUtils.OUTLINE_SIZE,
                 Global.GAME_SIZE.width/2,
-                messagePanelHeight
+                messagePanelHeight,
+                22
         )
                 .withBlackOutline();
 
@@ -215,7 +217,7 @@ public class TradeView extends View {
             drawPanel(g, "Requested:", requestedPanel, requested);
 
             this.messagePanel.drawBackground(g);
-            this.messagePanel.drawMessage(g, 22, "Which " + PokeString.POKEMON + " would you like to trade?");
+            this.messagePanel.drawMessage(g, "Which " + PokeString.POKEMON + " would you like to trade?");
 
             BasicPanels.drawFullMessagePanel(g, "");
             for (int i = 0; i < team.size(); i++) {

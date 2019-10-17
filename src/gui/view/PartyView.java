@@ -13,6 +13,9 @@ import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.MovePanel;
+import draw.panel.WrapPanel;
+import draw.panel.WrapPanel.WrapMetrics;
 import gui.GameData;
 import gui.TileSet;
 import input.ControlKey;
@@ -35,7 +38,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-class PartyView extends View {
+public class PartyView extends View {
     private static final int NUM_BOTTOM_BUTTONS = 3;
     private static final int NUM_BUTTONS = Trainer.MAX_POKEMON + MoveList.MAX_MOVES + NUM_BOTTOM_BUTTONS;
     private static final int TABS = 0;
@@ -47,8 +50,9 @@ class PartyView extends View {
     private final DrawPanel pokemonPanel;
     private final DrawPanel imagePanel;
     private final DrawPanel basicInformationPanel;
-    private final DrawPanel abilityPanel;
+    private final WrapPanel abilityPanel;
     private final DrawPanel statsPanel;
+    private final MovePanel moveDetailsPanel;
     private final DrawPanel movesPanel;
     private final DrawPanel nicknamePanel;
 
@@ -119,14 +123,16 @@ class PartyView extends View {
         int halfPanelWidth = (pokemonPanel.width - 3*spacing)/2;
         int statsPanelHeight = 138;
 
-        abilityPanel = new DrawPanel(
+        abilityPanel = new WrapPanel(
                 imagePanel.x,
                 imagePanel.y + imagePanel.height + spacing,
                 halfPanelWidth,
-                pokemonPanel.height - 5*spacing - imagePanel.height - buttonHeight - statsPanelHeight
+                pokemonPanel.height - 5*spacing - imagePanel.height - buttonHeight - statsPanelHeight,
+                16
         )
                 .withFullTransparency()
-                .withBlackOutline();
+                .withBlackOutline()
+                .withMinFontSize(12, false);
 
         statsPanel = new DrawPanel(
                 abilityPanel.x,
@@ -144,6 +150,10 @@ class PartyView extends View {
                 barHeight
         )
                 .withBlackOutline();
+
+        moveDetailsPanel = new MovePanel(statsPanel, 20, 18, 16)
+                .withMinDescFontSize(14)
+                .withFullTransparency();
 
         movesPanel = new DrawPanel(
                 abilityPanel.rightX() + spacing,
@@ -421,9 +431,7 @@ class PartyView extends View {
             g.drawString(selectedPkm.getActualHeldItem().getName(), nameX, fourthLineY);
 
             // Ability with description
-            Ability ability = selectedPkm.getActualAbility();
-            abilityPanel.drawBackground(g);
-            abilityPanel.drawMessage(g, 16, ability.getName() + " - " + ability.getDescription());
+            drawAbility(g, selectedPkm.getActualAbility());
 
             // EXP Bar
             expBar.fillBar(g, DrawUtils.EXP_BAR_COLOR, selectedPkm.expRatio());
@@ -436,7 +444,7 @@ class PartyView extends View {
             // Stats Box or Move description
             int selectedButton = buttons.getSelected();
             if (selectedButton >= MOVES && selectedButton < MOVES + MoveList.MAX_MOVES) {
-                drawMoveDescriptionPanel(g, statsPanel, moves.get(selectedButton - MOVES).getAttack());
+                drawMoveDetails(g, moves.get(selectedButton - MOVES).getAttack());
             } else {
                 drawStatBox(g, selectedPkm);
             }
@@ -501,41 +509,13 @@ class PartyView extends View {
         hpBar.fillBar(g, selectedPkm.getHPColor(), selectedPkm.getHPRatio());
     }
 
-    private void drawMoveDescriptionPanel(Graphics g, DrawPanel moveDetailsPanel, Attack move) {
-        moveDetailsPanel
-                .withTransparentBackground(move.getActualType().getColor())
-                .drawBackground(g);
+    public WrapMetrics drawAbility(Graphics g, Ability ability) {
+        abilityPanel.drawBackground(g);
+        return abilityPanel.drawMessage(g, ability.getName() + " - " + ability.getDescription());
+    }
 
-        FontMetrics.setFont(g, 20);
-        int spacing = 15;
-        int y = moveDetailsPanel.y + spacing + FontMetrics.getTextHeight(g);
-        g.drawString(move.getName(), moveDetailsPanel.x + spacing, y);
-
-        BufferedImage typeImage = move.getActualType().getImage();
-        int imageY = y - typeImage.getHeight();
-        int imageX = moveDetailsPanel.rightX() - spacing - typeImage.getWidth();
-        g.drawImage(typeImage, imageX, imageY, null);
-
-        BufferedImage categoryImage = move.getCategory().getImage();
-        imageX -= categoryImage.getWidth() + spacing;
-        g.drawImage(categoryImage, imageX, imageY, null);
-
-        y += FontMetrics.getDistanceBetweenRows(g);
-
-        FontMetrics.setFont(g, 18);
-        g.drawString("Power: " + move.getPowerString(), moveDetailsPanel.x + spacing, y);
-        TextUtils.drawRightAlignedString(g, "Acc: " + move.getAccuracyString(), moveDetailsPanel.rightX() - spacing, y);
-
-        y += FontMetrics.getDistanceBetweenRows(g) + 2;
-
-        FontMetrics.setFont(g, 16);
-        TextUtils.drawWrappedText(
-                g,
-                move.getDescription(),
-                moveDetailsPanel.x + spacing,
-                y,
-                moveDetailsPanel.width - 2*spacing
-        );
+    public WrapMetrics drawMoveDetails(Graphics g, Attack move) {
+        return moveDetailsPanel.draw(g, move);
     }
 
     private void drawButtons(Graphics g, PartyPokemon selectedPkm) {

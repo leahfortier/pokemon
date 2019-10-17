@@ -204,11 +204,7 @@ public class ImageTest extends BaseTest {
                 ImageUtils.pixelsDiff(ImageUtils.silhouette(basicImage), ImageUtils.silhouette(shinyImage)), 5
         );
 
-        try {
-            Assert.assertTrue(message + " Same as Shiny", ImageUtils.pixelsDiff(basicImage, shinyImage) > 0);
-        } catch (AssertionError error) {
-            System.err.println(error.getMessage());
-        }
+        TestUtils.assertWarning(message + " Same as Shiny", ImageUtils.pixelsDiff(basicImage, shinyImage) > 0);
     }
 
     private void assertDifferent(String message, File frontImageFile, File backImageFile) {
@@ -219,12 +215,8 @@ public class ImageTest extends BaseTest {
         BufferedImage frontImage = FileIO.readImage(frontImageFile);
         BufferedImage backImage = FileIO.readImage(backImageFile);
 
-        try {
-            Assert.assertTrue(message + " Same Front and Back", ImageUtils.pixelsDiff(frontImage, backImage) != 0);
-            Assert.assertTrue(message + " Inverted Front and Back", ImageUtils.pixelsDiff(backImage, ImageUtils.invertImage(frontImage)) != 0);
-        } catch (AssertionError error) {
-            System.err.println(error.getMessage());
-        }
+        TestUtils.assertWarning(message + " Same Front and Back", ImageUtils.pixelsDiff(frontImage, backImage) != 0);
+        TestUtils.assertWarning(message + " Inverted Front and Back", ImageUtils.pixelsDiff(backImage, ImageUtils.invertImage(frontImage)) != 0);
     }
 
     private static class DimensionChecker {

@@ -6,6 +6,8 @@ import draw.button.Button;
 import draw.button.ButtonTransitions;
 import draw.panel.DrawPanel;
 import draw.panel.DrawPanel.ButtonIndexAction;
+import draw.panel.ItemPanel;
+import draw.panel.WrapPanel.WrapMetrics;
 import gui.TileSet;
 import item.Item;
 import item.ItemNamesies;
@@ -21,18 +23,16 @@ import util.Point;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.EnumSet;
 import java.util.Iterator;
 
-class BagPanel {
+public class BagLayout {
     private static final BagCategory[] CATEGORIES = BagCategory.values();
     private static final int ITEMS_PER_PAGE = 10;
 
     public final DrawPanel bagPanel;
     public final DrawPanel leftPanel;
     private final DrawPanel itemsPanel;
-    protected final DrawPanel selectedPanel;
+    protected final ItemPanel selectedPanel;
 
     public final DrawPanel[] tabPanels;
     public final DrawPanel[] buttonPanels;
@@ -41,7 +41,7 @@ class BagPanel {
     public final DrawPanel leftArrow;
     public final DrawPanel rightArrow;
 
-    public BagPanel() {
+    public BagLayout(boolean includeQuantity) {
         int tabHeight = 55;
         int spacing = 28;
 
@@ -56,7 +56,7 @@ class BagPanel {
         )
                 .withTransparentBackground()
                 .withBorderPercentage(0)
-                .withBlackOutline(EnumSet.complementOf(EnumSet.of(Direction.UP)));
+                .withMissingBlackOutline(Direction.UP);
 
         int buttonHeight = 38;
         int selectedHeight = 82;
@@ -71,14 +71,13 @@ class BagPanel {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        selectedPanel = new DrawPanel(
+        selectedPanel = new ItemPanel(
                 leftPanel.rightX() + spacing,
                 bagPanel.y + spacing,
                 halfPanelWidth,
-                selectedHeight
-        )
-                .withFullTransparency()
-                .withBlackOutline();
+                selectedHeight,
+                includeQuantity
+        );
 
         itemsPanel = new DrawPanel(
                 selectedPanel.x,
@@ -158,45 +157,8 @@ class BagPanel {
         return leftPanel.getButtons(10, Trainer.MAX_POKEMON, 1, startIndex, defaultTransitions, indexAction);
     }
 
-    public void drawSelectedItem(Graphics g, ItemNamesies selectedItem, boolean includeQuantity) {
-        selectedPanel.drawBackground(g);
-
-        // Only draw actual items
-        if (selectedItem == ItemNamesies.NO_ITEM) {
-            return;
-        }
-
-        int spacing = 8;
-
-        TileSet itemTiles = Game.getData().getItemTiles();
-        Item selectedItemValue = selectedItem.getItem();
-
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 20);
-
-        // Tile size for image
-        int nameX = selectedPanel.x + 2*spacing + Global.TILE_SIZE;
-        int startY = selectedPanel.y + FontMetrics.getDistanceBetweenRows(g);
-
-        // Draw item image
-        BufferedImage img = itemTiles.getTile(selectedItemValue.getImageName());
-        ImageUtils.drawBottomCenteredImage(g, img, selectedPanel.x + (nameX - selectedPanel.x)/2, startY);
-
-        g.drawString(selectedItem.getName(), nameX, startY);
-
-        if (includeQuantity && selectedItemValue.hasQuantity()) {
-            String quantityString = "x" + Game.getPlayer().getBag().getQuantity(selectedItem);
-            TextUtils.drawRightAlignedString(g, quantityString, selectedPanel.rightX() - 2*spacing, startY);
-        }
-
-        FontMetrics.setFont(g, 14);
-        TextUtils.drawWrappedText(
-                g,
-                selectedItemValue.getDescription(),
-                selectedPanel.x + spacing,
-                startY + FontMetrics.getDistanceBetweenRows(g),
-                selectedPanel.width - 2*spacing
-        );
+    public WrapMetrics drawSelectedItem(Graphics g, ItemNamesies selectedItem) {
+        return this.selectedPanel.draw(g, selectedItem);
     }
 
     public void drawItems(Graphics g, Button[] itemButtons, Iterable<ItemNamesies> items, int pageNum, boolean includeQuantity) {
