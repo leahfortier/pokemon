@@ -10,6 +10,7 @@ import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.MovePanel;
 import draw.panel.WrapPanel;
 import draw.panel.WrapPanel.WrapMetrics;
 import gui.GameData;
@@ -66,7 +67,7 @@ public class PokedexView extends View {
     private final DrawPanel imagePanel;
     private final DrawPanel basicInfoPanel;
     private final WrapPanel flavorTextPanel;
-    private final DrawPanel moveDescriptionPanel;
+    private final MovePanel moveDescriptionPanel;
 
     private final ButtonList buttons;
     private final Button[][] pokemonButtons;
@@ -136,13 +137,14 @@ public class PokedexView extends View {
 
         int spacing = 20;
         int moveButtonHeight = 38;
-        moveDescriptionPanel = new DrawPanel(
+        moveDescriptionPanel = new MovePanel(
                 infoPanel.x + spacing,
                 infoPanel.y + spacing,
                 infoPanel.width - 2*spacing,
-                moveButtonHeight*3
+                moveButtonHeight*3,
+                17, 15, 12
         )
-                .withBlackOutline();
+                .withMinDescFontSize(10);
 
         this.pokedex = Game.getPlayer().getPokedex();
         pageNum = 0;
@@ -512,42 +514,7 @@ public class PokedexView extends View {
 
                     int selectedButton = buttons.getSelected();
                     if (i == 0 || selectedButton == MOVE_START + i) {
-                        moveDescriptionPanel.withTransparentBackground(attack.getActualType().getColor())
-                                            .drawBackground(g);
-
-                        FontMetrics.setFont(g, 18);
-                        int moveSpacing = 15;
-                        int moveX = moveDescriptionPanel.x + moveSpacing;
-                        int rightX = moveDescriptionPanel.rightX() - moveSpacing;
-                        int y = moveDescriptionPanel.y + moveSpacing + FontMetrics.getTextHeight(g);
-
-                        g.drawString(attack.getName(), moveX, y);
-
-                        BufferedImage typeImage = attack.getActualType().getImage();
-                        int imageY = y - typeImage.getHeight();
-                        int imageX = rightX - typeImage.getWidth();
-                        g.drawImage(typeImage, imageX, imageY, null);
-
-                        BufferedImage categoryImage = attack.getCategory().getImage();
-                        imageX -= categoryImage.getWidth() + moveSpacing;
-                        g.drawImage(categoryImage, imageX, imageY, null);
-
-                        y += FontMetrics.getDistanceBetweenRows(g);
-
-                        FontMetrics.setFont(g, 16);
-                        g.drawString("Power: " + attack.getPowerString(), moveX, y);
-                        TextUtils.drawRightAlignedString(g, "Acc: " + attack.getAccuracyString(), rightX, y);
-
-                        y += FontMetrics.getDistanceBetweenRows(g) + 2;
-
-                        FontMetrics.setFont(g, 12);
-                        TextUtils.drawWrappedText(
-                                g,
-                                attack.getDescription(),
-                                moveX,
-                                y,
-                                moveDescriptionPanel.width - 2*moveSpacing
-                        );
+                        drawMoveDetails(g, attack);
                     }
 
                     Button moveButton = moveButtons[i];
@@ -585,24 +552,12 @@ public class PokedexView extends View {
                 if (evolution instanceof MultipleEvolution) {
                     Evolution[] allEvolutions = ((MultipleEvolution)evolution).getFullEvolutions();
                     for (Evolution eachEvolution : allEvolutions) {
-                        textY = TextUtils.drawWrappedText(
-                                g,
-                                eachEvolution.getEvolutions()[0].getName() + ": " + eachEvolution.getString(),
-                                leftX,
-                                textY,
-                                infoPanel.width - 3*spacing
-                        );
+                        textY = drawEvolutionText(g, eachEvolution, leftX, textY, spacing);
                     }
                 } else if (evolution instanceof NoEvolution) {
                     g.drawString(selected.getName() + " does not evolve", leftX, textY);
                 } else {
-                    TextUtils.drawWrappedText(
-                            g,
-                            evolution.getEvolutions()[0].getName() + ": " + evolution.getString(),
-                            leftX,
-                            textY,
-                            infoPanel.width - 3*spacing
-                    );
+                    drawEvolutionText(g, evolution, leftX, textY, spacing);
                 }
             }
         }
@@ -616,8 +571,22 @@ public class PokedexView extends View {
         buttons.draw(g);
     }
 
+    private int drawEvolutionText(Graphics g, Evolution evolution, int leftX, int textY, int spacing) {
+        return TextUtils.drawWrappedText(
+                g,
+                evolution.getEvolutions()[0].getName() + ": " + evolution.getString(),
+                leftX,
+                textY,
+                infoPanel.width - 3*spacing
+        );
+    }
+
     public WrapMetrics drawFlavorText(Graphics g, PokemonInfo pokemonInfo) {
         return flavorTextPanel.drawMessage(g, pokemonInfo.getFlavorText());
+    }
+
+    public WrapMetrics drawMoveDetails(Graphics g, Attack attack) {
+        return moveDescriptionPanel.draw(g, attack);
     }
 
     private int getIndex(int i, int j) {

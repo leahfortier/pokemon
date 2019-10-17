@@ -58,9 +58,9 @@ public class MovePanel extends DrawPanel {
         return this;
     }
 
-    public WrapMetrics draw(Graphics g, Attack move) {
+    public WrapMetrics draw(Graphics g, Attack attack) {
         // Draw type-colored background
-        this.withTransparentBackground(move.getActualType().getColor())
+        this.withTransparentBackground(attack.getActualType().getColor())
             .drawBackground(g);
 
         FontMetrics.setFont(g, nameFontSize);
@@ -72,16 +72,16 @@ public class MovePanel extends DrawPanel {
         int textY = this.y + textSpace + FontMetrics.getTextHeight(g);
 
         // Draw the name in the top left
-        g.drawString(move.getName(), x, textY);
+        g.drawString(attack.getName(), x, textY);
 
         // Draw the type image in the top right
-        BufferedImage typeImage = move.getActualType().getImage();
+        BufferedImage typeImage = attack.getActualType().getImage();
         int imageY = textY - typeImage.getHeight();
         int imageX = rightX - typeImage.getWidth();
         g.drawImage(typeImage, imageX, imageY, null);
 
         // Draw the category image to the left of the type image
-        BufferedImage categoryImage = move.getCategory().getImage();
+        BufferedImage categoryImage = attack.getCategory().getImage();
         imageX -= categoryImage.getWidth() + betweenSpace;
         g.drawImage(categoryImage, imageX, imageY, null);
 
@@ -89,8 +89,8 @@ public class MovePanel extends DrawPanel {
         int previousDistanceBetweenRows = FontMetrics.getDistanceBetweenRows(g);
         FontMetrics.setFont(g, basicFontSize);
         textY += (previousDistanceBetweenRows + FontMetrics.getDistanceBetweenRows(g))/2;
-        g.drawString("Power: " + move.getPowerString(), x, textY);
-        TextUtils.drawRightAlignedString(g, "Acc: " + move.getAccuracyString(), rightX, textY);
+        g.drawString("Power: " + attack.getPowerString(), x, textY);
+        TextUtils.drawRightAlignedString(g, "Acc: " + attack.getAccuracyString(), rightX, textY);
 
         // Draw the description underneath everything else as wrapped text
         int startY = textY;
@@ -105,6 +105,6 @@ public class MovePanel extends DrawPanel {
                 .withMinimumSpacing(2)
                 .withStartX(x)
                 .withMinFontSize(this.minDescFontSize, true);
-        return descriptionPanel.drawMessage(g, move.getDescription());
+        return descriptionPanel.drawMessage(g, attack.getDescription());
     }
 }

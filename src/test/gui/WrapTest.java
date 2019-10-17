@@ -96,10 +96,12 @@ public class WrapTest extends BaseTest {
     public void movePanelTest() {
         FightState fightState = new FightState();
         PartyView partyView = TestGame.instance().getPartyView();
+        PokedexView pokedexView = TestGame.instance().getPokedexView();
         MoveRelearnerView moveRelearnerView = TestGame.instance().getMoveRelearnerView();
 
         TestMetrics fightMetrics = new TestMetrics();
         TestMetrics partyMetrics = new TestMetrics();
+        TestMetrics pokedexMetrics = new TestMetrics();
         TestMetrics moveRelearnerMetrics = new TestMetrics();
         TestMetrics learnMoveMetrics = new TestMetrics();
 
@@ -114,6 +116,9 @@ public class WrapTest extends BaseTest {
             // Selected move details when viewing Pokemon in party
             partyMetrics.checkMetrics(name, partyView.drawMoveDetails(g, attack));
 
+            // Selected move details when viewing potential moves in Pokedex
+            pokedexMetrics.checkMetrics(name, pokedexView.drawMoveDetails(g, attack));
+
             // Selected move details when relearning a move
             moveRelearnerMetrics.checkMetrics(name, moveRelearnerView.drawMoveDetails(g, attack));
 
@@ -125,6 +130,7 @@ public class WrapTest extends BaseTest {
 
         fightMetrics.confirmFontSizes(13, 16);
         partyMetrics.confirmFontSizes(14, 16);
+        pokedexMetrics.confirmFontSizes(10, 12);
         moveRelearnerMetrics.confirmFontSizes(15, 16);
         learnMoveMetrics.confirmFontSizes(13, 16);
     }
