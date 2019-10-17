@@ -3,6 +3,7 @@ package test.general;
 import org.junit.Assert;
 
 import java.util.Arrays;
+import java.util.function.Function;
 
 public class TestUtils {
     private static final double DELTA = 1e-15;
@@ -93,5 +94,9 @@ public class TestUtils {
         } catch (AssertionError error) {
             System.err.println(error.getMessage());
         }
+    }
+
+    public static <T> void assertEqualProperty(String message, T first, T second, Function<T, ?> getProperty) {
+        Assert.assertEquals(message, getProperty.apply(first), getProperty.apply(second));
     }
 }

@@ -158,5 +158,4 @@ Other random things:
     used a Pokeball and it didn't show up as my LastUsedItem what's up with that
     bug with Struggle and Torment (should not effect it but it does)
     BerryView should use the BagPanel thing or whatever that Bag/Mart/SellView all use
-    some item tiles need to be trimmed (ex: Ability Capsule) -- ones with bottom space look weird in selected item panel
     MedalView is super broken right now and not worth handling in this branch

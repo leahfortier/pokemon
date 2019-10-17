@@ -38,11 +38,12 @@ public class ImageTest extends BaseTest {
                 continue;
             }
 
-            Assert.assertTrue(imageFile.getPath(), imageFile.getName().endsWith(".png"));
+            String imageName = imageFile.getPath();
+            Assert.assertTrue(imageName, imageFile.getName().endsWith(".png"));
 
             BufferedImage rawImage = ImageIO.read(imageFile);
-            Assert.assertEquals(imageFile.getPath(), 4, rawImage.getSampleModel().getNumBands());
-            Assert.assertEquals(imageFile.getPath(), DataBuffer.TYPE_BYTE, rawImage.getSampleModel().getDataType());
+            Assert.assertEquals(imageName, 4, rawImage.getSampleModel().getNumBands());
+            Assert.assertEquals(imageName, DataBuffer.TYPE_BYTE, rawImage.getSampleModel().getDataType());
         }
     }
 
@@ -121,23 +122,26 @@ public class ImageTest extends BaseTest {
 
     @Test
     public void sizeTest() {
-        // Party and item tiles are tile size
-        DimensionChecker tileDimension = new DimensionChecker(Global.TILE_SIZE, Global.TILE_SIZE);
+        DimensionChecker itemDimension = DimensionChecker.tile().trimmed();
+        DimensionChecker partyDimension = DimensionChecker.tile().singleDimensionEquals(0);
+        DimensionChecker pokedexDimension = new DimensionChecker(140, 190).singleDimensionEquals(2);
+        DimensionChecker pokemonDimension = new DimensionChecker(96, 96).trimmed();
 
         for (ItemNamesies itemName : ItemNamesies.values()) {
             if (itemName == ItemNamesies.NO_ITEM) {
                 continue;
             }
-            checkMaxSize(Folder.ITEM_TILES, itemName.getItem().getImageName(), tileDimension);
+
+            checkMaxSize(Folder.ITEM_TILES, itemName.getItem().getImageName(), itemDimension);
         }
 
         for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
-            checkMaxSize(num, "", Folder.POKEDEX_TILES, new DimensionChecker(140, 190).singleDimensionEquals(2));
-            checkMaxSize(num, "-small", Folder.PARTY_TILES, tileDimension.singleDimensionEquals(0));
+            checkMaxSize(num, "", Folder.POKEDEX_TILES, pokedexDimension);
+            checkMaxSize(num, "-small", Folder.PARTY_TILES, partyDimension);
 
             String[] spriteSuffixes = { "", "-back", "-shiny", "-shiny-back" };
             for (String suffix : spriteSuffixes) {
-                checkMaxSize(num, suffix, Folder.POKEMON_TILES, new DimensionChecker(96, 96));
+                checkMaxSize(num, suffix, Folder.POKEMON_TILES, pokemonDimension);
             }
         }
     }
@@ -228,7 +232,12 @@ public class ImageTest extends BaseTest {
 
         private boolean mustEqual;
         private boolean singleDimensionEquals;
+        private boolean trimmed;
         private int delta;
+
+        public static DimensionChecker tile() {
+            return new DimensionChecker(Global.TILE_SIZE, Global.TILE_SIZE);
+        }
 
         DimensionChecker(int maxWidth, int maxHeight) {
             this.maxWidth = maxWidth;
@@ -253,27 +262,45 @@ public class ImageTest extends BaseTest {
             return this;
         }
 
+        DimensionChecker trimmed() {
+            this.trimmed = true;
+            return this;
+        }
+
         void assertMatch(File imageFile) {
             if (imageFile.exists()) {
                 BufferedImage image = FileIO.readImage(imageFile);
+                int width = image.getWidth();
+                int height = image.getHeight();
 
                 String message = getFailMessage(imageFile, image, ">");
-                Assert.assertTrue(message, image.getWidth() <= maxWidth);
-                Assert.assertTrue(message, image.getHeight() <= maxHeight);
+                Assert.assertTrue(message, width <= maxWidth);
+                Assert.assertTrue(message, height <= maxHeight);
 
                 message = getFailMessage(imageFile, image, "<");
-                Assert.assertTrue(message, image.getWidth() >= minWidth);
-                Assert.assertTrue(message, image.getHeight() >= minHeight);
+                Assert.assertTrue(message, width >= minWidth);
+                Assert.assertTrue(message, height >= minHeight);
 
                 if (mustEqual) {
                     message = getFailMessage(imageFile, image, "!=");
-                    Assert.assertTrue(message, image.getWidth() >= maxWidth - delta);
-                    Assert.assertTrue(message, image.getHeight() >= maxHeight - delta);
+                    Assert.assertTrue(message, width >= maxWidth - delta);
+                    Assert.assertTrue(message, height >= maxHeight - delta);
                 }
 
                 if (singleDimensionEquals) {
                     message = getFailMessage(imageFile, image, "!=");
-                    Assert.assertTrue(message, image.getWidth() >= maxWidth - delta || image.getHeight() >= maxHeight - delta);
+                    Assert.assertTrue(message, width >= maxWidth - delta || height >= maxHeight - delta);
+                }
+
+                if (trimmed) {
+                    BufferedImage trimmed = ImageUtils.trimImage(image);
+                    message = imageFile.getPath() + ": "
+                            + UpdateGen.getCoordinatesString(image)
+                            + " not trimmed "
+                            + UpdateGen.getCoordinatesString(trimmed);
+
+                    TestUtils.assertEqualProperty(message, image, trimmed, BufferedImage::getWidth);
+                    TestUtils.assertEqualProperty(message, image, trimmed, BufferedImage::getHeight);
                 }
             }
         }
