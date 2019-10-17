@@ -275,12 +275,10 @@ public class MoveRelearnerView extends View {
             g.drawImage(categoryImage, imageX, imageY, null);
         }
 
-        learnMoveButton.fillBorderLabel(g, new Color(123, 213, 74), 22, "Learn!");
-        if (!learnMoveButton.isActive()) {
-            learnMoveButton.greyOut(g);
-        }
+        learnMoveButton.fillOutlineLabel(g, new Color(123, 213, 74), 22, "Learn!");
+        learnMoveButton.greyInactive(g);
 
-        returnButton.fillBorderLabel(g, Color.YELLOW, 22, "Return");
+        returnButton.fillOutlineLabel(g, Color.YELLOW, 22, "Return");
 
         movesLeftButton.drawArrow(g, Direction.LEFT);
         movesRightButton.drawArrow(g, Direction.RIGHT);

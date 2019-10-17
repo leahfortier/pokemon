@@ -222,6 +222,6 @@ public class BagLayout {
     }
 
     public void drawReturnButton(Graphics g, Button returnButton) {
-        returnButton.fillBorderLabel(g, 20, "Return");
+        returnButton.fillOutlineLabel(g, 20, "Return");
     }
 }

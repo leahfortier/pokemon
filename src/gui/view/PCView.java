@@ -424,9 +424,7 @@ class PCView extends View {
     }
 
     private void drawTextButton(Graphics g, Button button, String text) {
-        button.fillTransparent(g);
-        button.blackOutline(g);
-        button.label(g, 20, text);
+        button.fillOutlineLabel(g, 20, text);
     }
 
     @Override

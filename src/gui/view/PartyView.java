@@ -520,29 +520,21 @@ public class PartyView extends View {
 
     private void drawButtons(Graphics g, PartyPokemon selectedPkm) {
         // Nickname button
-        if (!nicknameButton.isActive()) {
-            nicknameButton.greyOut(g);
-        }
+        drawButton(g, nicknameButton, "Nickname!!");
+        nicknameButton.greyInactive(g);
 
-        nicknameButton.fillTransparent(g);
-        nicknameButton.blackOutline(g);
-        nicknameButton.label(g, 20, "Nickname!!");
-
-        // Switch Box
-        if (!switchButton.isActive()) {
-            switchButton.greyOut(g);
-        } else if (switchTabIndex != -1) {
+        // Switch button
+        if (!switchButton.greyInactive(g) && switchTabIndex != -1) {
             switchButton.highlight(g, this.getBackgroundColors(selectedPkm)[1]);
         }
+        drawButton(g, switchButton, "Switch!");
 
-        switchButton.fillTransparent(g);
-        switchButton.blackOutline(g);
-        switchButton.label(g, 20, "Switch!");
+        // Return button
+        drawButton(g, returnButton, "Return");
+    }
 
-        // Return Box
-        returnButton.fillTransparent(g);
-        returnButton.blackOutline(g);
-        returnButton.label(g, 20, "Return");
+    private void drawButton(Graphics g, Button button, String label) {
+        button.fillOutlineLabel(g, 20, label);
     }
 
     private void updateActiveButtons() {

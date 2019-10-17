@@ -386,13 +386,8 @@ class DayCareView extends View {
     }
 
     private void drawTextButton(Graphics g, Button button, String text, Color color) {
-        button.fillTransparent(g, color);
-        if (!button.isActive()) {
-            button.greyOut(g);
-        }
-
-        button.blackOutline(g);
-        button.label(g, 20, text);
+        button.fillOutlineLabel(g, color, 20, text);
+        button.greyInactive(g);
     }
 
     @Override

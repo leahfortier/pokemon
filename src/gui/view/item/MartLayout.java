@@ -48,13 +48,10 @@ public class MartLayout extends BagLayout {
     }
 
     private void drawAmountArrow(Graphics g, Button arrow, Direction arrowDirection) {
-        if (!arrow.isActive()) {
-            arrow.greyOut(g);
-        }
-
         arrow.fillTransparent(g);
         arrow.blackOutline(g);
         PolygonUtils.drawCenteredArrow(g, arrow.centerX(), arrow.centerY(), 35, 20, arrowDirection);
+        arrow.greyInactive(g);
     }
 
     public void drawMoneyPanel(Graphics g, ItemNamesies selectedItem, int total) {
@@ -74,12 +71,7 @@ public class MartLayout extends BagLayout {
     }
 
     public void drawConfirmButton(Graphics g, Button confirmButton, String label) {
-        confirmButton.fillTransparent(g);
-        if (!confirmButton.isActive()) {
-            confirmButton.greyOut(g);
-        }
-
-        confirmButton.label(g, 24, label);
-        confirmButton.blackOutline(g);
+        confirmButton.fillOutlineLabel(g, 24, label);
+        confirmButton.greyInactive(g);
     }
 }

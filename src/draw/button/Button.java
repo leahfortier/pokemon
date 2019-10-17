@@ -151,6 +151,14 @@ public class Button {
         return this.transitions[direction.ordinal()];
     }
 
+    public boolean greyInactive(Graphics g) {
+        if (!this.isActive()) {
+            this.greyOut(g);
+            return true;
+        }
+        return false;
+    }
+
     // Generally used for inactive buttons
     public void greyOut(Graphics g) {
         DrawUtils.greyOut(g, x, y, width, height);
@@ -184,13 +192,13 @@ public class Button {
     }
 
     // Fills transparent, outlines in black, and draws the label centered
-    public void fillBorderLabel(Graphics g, int fontSize, String label) {
-        fillBorderLabel(g, null, fontSize, label);
+    public void fillOutlineLabel(Graphics g, int fontSize, String label) {
+        fillOutlineLabel(g, null, fontSize, label);
     }
 
     // Fills color transparent, outlines in black, and draws the label centered
     // Color may be null, but should really use the other method for that
-    public void fillBorderLabel(Graphics g, Color color, int fontSize, String label) {
+    public void fillOutlineLabel(Graphics g, Color color, int fontSize, String label) {
         fillTransparent(g, color);
         blackOutline(g);
         label(g, fontSize, label);

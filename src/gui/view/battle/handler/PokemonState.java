@@ -295,13 +295,8 @@ public class PokemonState implements VisualStateHandler {
         }
 
         // Switch pokemon button
-        pokemonSwitchButton.fillTransparent(g);
-        pokemonSwitchButton.blackOutline(g);
-        pokemonSwitchButton.label(g, 20, view.isState(VisualState.USE_ITEM) ? "Use!" : "Switch!");
-
-        if (!pokemonSwitchButton.isActive()) {
-            pokemonSwitchButton.greyOut(g);
-        }
+        pokemonSwitchButton.fillOutlineLabel(g, 20, view.isState(VisualState.USE_ITEM) ? "Use!" : "Switch!");
+        pokemonSwitchButton.greyInactive(g);
 
         pokemonButtons.draw(g);
 

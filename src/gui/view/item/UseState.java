@@ -50,14 +50,12 @@ enum UseState {
             button.highlight(g, buttonColor);
         }
 
-        // Grey out if inactive
-        if (!button.isActive()) {
-            button.greyOut(g);
-        }
-
         button.fillTransparent(g);
         button.outlineTab(g, this.ordinal(), -1);
         button.label(g, 20, displayName);
+
+        // Grey out if inactive
+        button.greyInactive(g);
     }
 
     // Apply the selected state with the currently selected item and pokemon

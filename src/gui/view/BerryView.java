@@ -163,7 +163,7 @@ public class BerryView extends View {
         drawBerryPanel(g);
 
         // Welcome to the Hellmouth
-        harvestButton.fillBorderLabel(g, 20, "Harvest!");
+        harvestButton.fillOutlineLabel(g, 20, "Harvest!");
         layout.drawReturnButton(g, returnButton);
 
         // Tab

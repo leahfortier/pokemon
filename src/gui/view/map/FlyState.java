@@ -106,11 +106,7 @@ class FlyState implements VisualStateHandler {
         Iterator<FlyLocation> iter = GeneralUtils.pageIterator(flyLocations, pageNum, NUM_AREA_BUTTONS);
         for (int i = 0; i < NUM_AREA_BUTTONS && iter.hasNext(); i++) {
             FlyLocation flyLocation = iter.next();
-            Button locationButton = this.areaButtons[i];
-
-            locationButton.fillTransparent(g);
-            locationButton.blackOutline(g);
-            locationButton.label(g, 30, flyLocation.getAreaName());
+            this.areaButtons[i].fillOutlineLabel(g, 30, flyLocation.getAreaName());
         }
 
         leftButton.drawArrow(g, Direction.LEFT);
