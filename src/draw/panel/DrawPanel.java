@@ -40,6 +40,9 @@ public class DrawPanel implements Panel {
     private boolean transparentBackground;
     private boolean greyOut;
 
+    private boolean highlight;
+    private Color highlightColor;
+
     private boolean onlyTransparency;
     private int transparentCount;
 
@@ -175,8 +178,15 @@ public class DrawPanel implements Panel {
         return this;
     }
 
-    public DrawPanel greyOut(boolean greyOut) {
-        this.greyOut = greyOut;
+    public DrawPanel setGreyOut() {
+        this.greyOut = true;
+        return this;
+    }
+
+    // Must have a background color set and will highlight that color when true
+    public DrawPanel withHighlight(boolean shouldHighlight, Color highlightColor) {
+        this.highlight = shouldHighlight;
+        this.highlightColor = highlightColor;
         return this;
     }
 
@@ -234,6 +244,11 @@ public class DrawPanel implements Panel {
         DrawUtils.blackOutline(g, x, y, width, height, outlineDirections);
     }
 
+    private void fill(Graphics g, Color color) {
+        g.setColor(color);
+        g.fillRect(x, y, width, height);
+    }
+
     private void drawLabel(Graphics g) {
         switch (this.labelAlignment) {
             case LEFT:
@@ -278,6 +293,9 @@ public class DrawPanel implements Panel {
         if (greyOut) {
             DrawUtils.greyOut(g, x, y, width, height);
             greyOut = false;
+        } else if (highlight) {
+            this.fill(g, highlightColor.darker());
+            highlight = false;
         }
 
         int borderSize = this.getBorderSize();

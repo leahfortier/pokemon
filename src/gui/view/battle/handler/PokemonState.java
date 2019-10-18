@@ -171,7 +171,7 @@ public class PokemonState implements VisualStateHandler {
         pokemonPanel.withBackgroundColors(PokeType.getColors(selectedPkm), true);
 
         if (!selectedPkm.canFight()) {
-            pokemonPanel.greyOut(true);
+            pokemonPanel.setGreyOut();
         }
 
         pokemonPanel.drawBackground(g);

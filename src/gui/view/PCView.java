@@ -209,7 +209,8 @@ class PCView extends View {
                 ButtonHoverAction.BOX,
                 new ButtonTransitions().right(DEPOSIT_WITHDRAW).left(RIGHT_ARROW).down(RETURN),
                 () -> switchClicked = !switchClicked
-        );
+        )
+                .setupPanel(setupTextButton("Switch"));
 
         buttons[DEPOSIT_WITHDRAW] = depositWithdrawButton = new Button(
                 526, 464, 118, 38,
@@ -226,7 +227,9 @@ class PCView extends View {
                         pc.withdrawPokemon(selected);
                     }
                 }
-        );
+        )
+                .setupPanel(setupTextButton("")) // Deposit/Withdraw text set depending on state
+                .setupPanel(ButtonPanel::greyInactive);
 
         buttons[RELEASE] = releaseButton = new Button(
                 642, 464, 118, 38,
@@ -328,17 +331,14 @@ class PCView extends View {
 
         // Secondary color is the color of the buttons
         Color buttonColor = colors[1];
-        if (switchClicked) {
-            switchButton.highlight(g, buttonColor);
-        }
+        switchButton.panel().withHighlight(switchClicked, buttonColor);
+        depositWithdrawButton.panel()
+                             .withHighlight(party && depositClicked, buttonColor)
+                             .withLabel(party ? "Deposit" : "Withdraw");
 
+        switchButton.drawPanel(g);
         releaseButton.drawPanel(g);
-
-        if (!depositWithdrawButton.isActive()) {
-            depositWithdrawButton.greyOut(g);
-        } else if (party && depositClicked) {
-            depositWithdrawButton.highlight(g, buttonColor);
-        }
+        depositWithdrawButton.drawPanel(g);
 
         basicInfoPanel.drawBackground(g);
         movesPanel.drawBackground(g);
@@ -424,8 +424,6 @@ class PCView extends View {
 
         // Buttons
         drawTextButton(g, returnButton, "Return");
-        drawTextButton(g, switchButton, "Switch");
-        drawTextButton(g, depositWithdrawButton, party ? "Deposit" : "Withdraw");
 
         buttons.draw(g);
     }

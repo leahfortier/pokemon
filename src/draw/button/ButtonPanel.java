@@ -42,10 +42,10 @@ public class ButtonPanel extends DrawPanel {
 
     @Override
     public void draw(Graphics g) {
-        // If button is inactive, set greyOut to false
+        // If button is inactive, set greyOut to true
         // Note: This is not actually drawing the grey out, just setting it (will be drawn in drawBackground)
-        if (this.greyInactive) {
-            super.greyOut(!button.isActive());
+        if (this.greyInactive && !button.isActive()) {
+            this.setGreyOut();
         }
 
         super.draw(g);
