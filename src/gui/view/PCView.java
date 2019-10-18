@@ -13,8 +13,7 @@ import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
-import gui.GameData;
-import gui.TileSet;
+import draw.panel.PanelList;
 import input.InputControl;
 import main.Game;
 import map.Direction;
@@ -30,7 +29,6 @@ import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 class PCView extends View {
@@ -45,12 +43,9 @@ class PCView extends View {
 
     private final DrawPanel boxPanel;
     private final DrawPanel boxNamePanel;
-    private final DrawPanel partyPanel;
     private final DrawPanel infoPanel;
     private final DrawPanel imagePanel;
-    private final DrawPanel basicInfoPanel;
-    private final DrawPanel movesPanel;
-    private final DrawPanel statsPanel;
+    private final PanelList panels;
 
     private final ButtonList buttons;
     private final Button[][] boxButtons;
@@ -60,7 +55,6 @@ class PCView extends View {
     private final Button switchButton;
     private final Button depositWithdrawButton;
     private final Button releaseButton;
-    private final Button returnButton;
 
     private final PC pc;
 
@@ -84,7 +78,7 @@ class PCView extends View {
                 .withBlackOutline()
                 .withLabelSize(20);
 
-        partyPanel = new DrawPanel(boxPanel.x, 478, boxPanel.width, 82)
+        DrawPanel partyPanel = new DrawPanel(boxPanel.x, 478, boxPanel.width, 82)
                 .withBackgroundColor(Color.RED)
                 .withTransparentCount(2)
                 .withBorderPercentage(0)
@@ -95,13 +89,13 @@ class PCView extends View {
                 .withBorderPercentage(0)
                 .withBlackOutline();
 
-        int buttonHeight = 38;
-        basicInfoPanel = new DrawPanel(infoPanel.x, infoPanel.y, infoPanel.width, 190)
+        DrawPanel basicInfoPanel = new DrawPanel(infoPanel.x, infoPanel.y, infoPanel.width, 190)
                 .withFullTransparency()
                 .withBlackOutline();
 
         int statsPanelHeight = 148;
-        statsPanel = new DrawPanel(
+        int buttonHeight = 38;
+        DrawPanel statsPanel = new DrawPanel(
                 infoPanel.x,
                 infoPanel.bottomY() - buttonHeight - statsPanelHeight,
                 infoPanel.width,
@@ -109,7 +103,7 @@ class PCView extends View {
         ).withFullTransparency()
          .withBlackOutline();
 
-        movesPanel = new DrawPanel(
+        DrawPanel movesPanel = new DrawPanel(
                 infoPanel.x,
                 basicInfoPanel.y + basicInfoPanel.height - DrawUtils.OUTLINE_SIZE,
                 infoPanel.width,
@@ -238,7 +232,7 @@ class PCView extends View {
                         .setup(ButtonPanel::greyInactive)
         );
 
-        buttons[RETURN] = returnButton = new Button(
+        buttons[RETURN] = new Button(
                 410, 522, 350, 38,
                 textButtonSetup("Return")
                         .transition(new ButtonTransitions()
@@ -252,6 +246,12 @@ class PCView extends View {
 
         this.buttons = new ButtonList(buttons);
         this.buttons.setSelected(PARTY);
+
+        this.panels = new PanelList(
+                boxPanel, boxNamePanel, partyPanel,
+                infoPanel, basicInfoPanel, imagePanel,
+                movesPanel, statsPanel
+        );
     }
 
     private ButtonInfo textButtonSetup(String text) {
@@ -281,82 +281,70 @@ class PCView extends View {
         InputControl.instance().popViewIfEscaped();
     }
 
-    private void drawPokemonButton(Graphics g, Button button, PartyPokemon pokemon) {
+    private void setupPokemonButton(ButtonPanel panel, PartyPokemon pokemon) {
         if (pokemon == null) {
+            panel.skipDraw();
             return;
         }
 
         // Draw the pokemon image and outline if selected
-        button.panel()
-              .withImageLabel(Game.getData().getPartyTiles().getTile(pokemon.getTinyImageName()))
-              .withConditionalOutline(pokemon == selected);
-        button.drawPanel(g);
+        panel.withImageLabel(Game.getData().getPartyTiles().getTile(pokemon.getTinyImageName()))
+             .withConditionalOutline(pokemon == selected);
     }
 
-    @Override
-    public void draw(Graphics g) {
-        GameData data = Game.getData();
-        TileSet pokemonTiles = data.getPokemonTilesSmall();
-        PartyPokemon[][] box = pc.getBoxPokemon();
+    private void setupDraw() {
+        // Box color
+        boxPanel.withBackgroundColor(pc.getBoxColor());
 
-        // Background
-        BasicPanels.drawCanvasPanel(g);
-
-        // Box
-        boxPanel.withBackgroundColor(pc.getBoxColor())
-                .drawBackground(g);
-
-        // Draw Box number
-        boxNamePanel.withLabel("Box " + (pc.getBoxNum() + 1))
-                    .draw(g);
+        // Box name
+        boxNamePanel.withLabel("Box " + (pc.getBoxNum() + 1));
 
         // Box Pokemon buttons
+        PartyPokemon[][] box = pc.getBoxPokemon();
         for (int i = 0; i < PC.BOX_HEIGHT; i++) {
             for (int j = 0; j < PC.BOX_WIDTH; j++) {
-                drawPokemonButton(g, boxButtons[j][i], box[j][i]);
+                setupPokemonButton(boxButtons[j][i].panel(), box[j][i]);
             }
         }
 
-        // Party Pokemon buttons
-        partyPanel.drawBackground(g);
+        // Pokemon party buttons
         List<PartyPokemon> team = Game.getPlayer().getTeam();
-        for (int i = 0; i < team.size(); i++) {
-            drawPokemonButton(g, partyButtons[i], team.get(i));
+        for (int i = 0; i < partyButtons.length; i++) {
+            PartyPokemon partyPokemon = i < team.size() ? team.get(i) : null;
+            setupPokemonButton(partyButtons[i].panel(), partyPokemon);
         }
 
-        // Draw page numbers and arrows
-        TextUtils.drawPageNumbers(g, 16, leftButton, rightButton, pc.getBoxNum(), pc.getNumBoxes());
-        leftButton.drawPanel(g);
-        rightButton.drawPanel(g);
-
-        // Description
-        Color[] colors = PokeType.getColors(selected);
-        infoPanel.withBackgroundColors(colors)
-                 .drawBackground(g);
-
+        // Highlight if selected
         // Secondary color is the color of the buttons
-        Color buttonColor = colors[1];
+        Color buttonColor = PokeType.getColors(selected)[1];
         switchButton.panel().withHighlight(switchClicked, buttonColor);
         depositWithdrawButton.panel()
                              .withHighlight(party && depositClicked, buttonColor)
                              .withLabel(party ? "Deposit" : "Withdraw");
 
-        switchButton.drawPanel(g);
-        releaseButton.drawPanel(g);
-        depositWithdrawButton.drawPanel(g);
-        returnButton.drawPanel(g);
+        // Pokemon panel type colors
+        infoPanel.withBackgroundColors(PokeType.getColors(selected));
 
-        basicInfoPanel.drawBackground(g);
-        movesPanel.drawBackground(g);
-        statsPanel.drawBackground(g);
+        // Pokemon panel image
+        imagePanel.withImageLabel(Game.getData().getPokemonTilesSmall().getTile(selected.getImageName()));
+    }
 
-        BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageName());
-        imagePanel.withImageLabel(pkmImg)
-                  .draw(g);
+    @Override
+    public void draw(Graphics g) {
+        setupDraw();
 
+        // Background
+        BasicPanels.drawCanvasPanel(g);
+        this.panels.drawAll(g);
+
+        // Draw page numbers
+        TextUtils.drawPageNumbers(g, 16, leftButton, rightButton, pc.getBoxNum(), pc.getNumBoxes());
+
+        // Info panel
         drawSelectedPokemon(g);
 
-        buttons.draw(g);
+        // Draw buttons
+        buttons.drawEverything(g);
     }
 
     private void drawSelectedPokemon(Graphics g) {

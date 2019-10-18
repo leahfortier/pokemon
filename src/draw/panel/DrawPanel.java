@@ -38,13 +38,13 @@ public class DrawPanel implements Panel {
     private Direction[] outlineDirections;
 
     private boolean transparentBackground;
-    private boolean greyOut;
-
-    private boolean highlight;
-    private Color highlightColor;
-
     private boolean onlyTransparency;
     private int transparentCount;
+
+    private boolean skipDraw;
+    private boolean greyOut;
+    private boolean highlight;
+    private Color highlightColor;
 
     private int fontSize;
     private String label;
@@ -178,6 +178,11 @@ public class DrawPanel implements Panel {
         return this;
     }
 
+    public DrawPanel skipDraw() {
+        this.skipDraw = true;
+        return this;
+    }
+
     public DrawPanel setGreyOut() {
         this.greyOut = true;
         return this;
@@ -264,6 +269,11 @@ public class DrawPanel implements Panel {
     }
 
     public void draw(Graphics g) {
+        if (this.skipDraw) {
+            this.skipDraw = false;
+            return;
+        }
+
         this.drawBackground(g);
 
         // Labels (both text and images)
