@@ -21,7 +21,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.EnumSet;
 
-public class DrawPanel {
+public class DrawPanel implements Panel {
     public final int x;
     public final int y;
     public final int width;
@@ -383,18 +383,22 @@ public class DrawPanel {
         ImageUtils.drawCenteredImageLabel(g, image, label, centerX(), centerY());
     }
 
+    @Override
     public int centerX() {
         return x + width/2;
     }
 
+    @Override
     public int centerY() {
         return y + height/2;
     }
 
+    @Override
     public int rightX() {
         return x + width;
     }
 
+    @Override
     public int bottomY() {
         return y + height;
     }

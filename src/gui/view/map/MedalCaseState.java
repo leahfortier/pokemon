@@ -137,8 +137,7 @@ public class MedalCaseState implements VisualStateHandler {
             );
         }
 
-        FontMetrics.setFont(g, 30);
-        TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + NUM_PAGES, medalPanels[0].centerX(), leftButton.centerY());
+        TextUtils.drawPageNumbers(g, 30, leftButton, rightButton, pageNum, NUM_PAGES);
         leftButton.drawArrow(g, Direction.LEFT);
         rightButton.drawArrow(g, Direction.RIGHT);
 

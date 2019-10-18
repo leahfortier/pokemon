@@ -199,8 +199,7 @@ public class BagLayout {
     }
 
     public void drawPageNumbers(Graphics g, int pageNum, int totalPages) {
-        FontMetrics.setFont(g, 16);
-        TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + totalPages, itemsPanel.centerX(), rightArrow.centerY());
+        TextUtils.drawPageNumbers(g, 16, leftArrow, rightArrow, pageNum, totalPages);
     }
 
     public void drawTabs(Graphics g, Button[] tabButtons, BagCategory selectedTab) {

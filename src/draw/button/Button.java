@@ -6,6 +6,7 @@ import draw.ImageUtils;
 import draw.PolygonUtils;
 import draw.TextUtils;
 import draw.panel.DrawPanel;
+import draw.panel.Panel;
 import input.ControlKey;
 import input.InputControl;
 import map.Direction;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class Button {
+public class Button implements Panel {
     public final int x;
     public final int y;
     public final int width;
@@ -277,18 +278,22 @@ public class Button {
         ImageUtils.drawCenteredImage(g, image, centerX(), centerY());
     }
 
+    @Override
     public int rightX() {
         return x + width;
     }
 
+    @Override
     public int bottomY() {
         return y + height;
     }
 
+    @Override
     public int centerX() {
         return x + width/2;
     }
 
+    @Override
     public int centerY() {
         return y + height/2;
     }

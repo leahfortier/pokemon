@@ -127,7 +127,7 @@ public class BagState implements VisualStateHandler {
     @Override
     public void set(BattleView view) {
         Bag playerBag = Game.getPlayer().getBag();
-        int pageSize = playerBag.getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]).size();
+        int pageSize = this.getDisplayItems().size();
 
         for (int i = 0; i < ITEMS_PER_PAGE; i++) {
             bagItemButtons[i].setActive(i < pageSize - bagPage*ITEMS_PER_PAGE);
@@ -176,7 +176,7 @@ public class BagState implements VisualStateHandler {
 
         Bag bag = Game.getPlayer().getBag();
 
-        Set<ItemNamesies> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]);
+        Set<ItemNamesies> items = getDisplayItems();
         TileSet itemTiles = Game.getData().getItemTiles();
 
         int selectedButton = bagButtons.getSelected();
@@ -184,7 +184,7 @@ public class BagState implements VisualStateHandler {
 
         g.setColor(Color.BLACK);
         FontMetrics.setFont(g, 12);
-        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(toDraw, bagPage, ITEMS_PER_PAGE);
+        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(items, bagPage, ITEMS_PER_PAGE);
         for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
             ItemNamesies item = iter.next();
             drawItemButton(g, itemTiles, bagItemButtons[i], item);
@@ -210,11 +210,8 @@ public class BagState implements VisualStateHandler {
             drawItemDescription(g, selected);
         }
 
-        // Bag page number
-        FontMetrics.setFont(g, 20);
-        TextUtils.drawCenteredWidthString(g, (bagPage + 1) + "/" + Math.max(1, (int)Math.ceil(toDraw.size()/10.0)), 210, 450);
-
-        // Left/Right Arrows
+        // Bag page numbers and arrows
+        TextUtils.drawPageNumbers(g, 20, bagLeftButton, bagRightButton, bagPage, totalPages());
         bagLeftButton.drawArrow(g, Direction.LEFT);
         bagRightButton.drawArrow(g, Direction.RIGHT);
 
@@ -222,6 +219,14 @@ public class BagState implements VisualStateHandler {
         view.drawBackButton(g);
 
         bagButtons.draw(g);
+    }
+
+    private Set<ItemNamesies> getDisplayItems() {
+        return Game.getPlayer().getBag().getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]);
+    }
+
+    private int totalPages() {
+        return GeneralUtils.getTotalPages(this.getDisplayItems().size(), ITEMS_PER_PAGE);
     }
 
     private void drawItemButton(Graphics g, TileSet itemTiles, Button button, ItemNamesies itemNamesies) {
@@ -269,8 +274,8 @@ public class BagState implements VisualStateHandler {
         Player player = Game.getPlayer();
         Bag bag = player.getBag();
 
-        Set<ItemNamesies> toDraw = bag.getCategory(BATTLE_BAG_CATEGORIES[selectedBagTab]);
-        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(toDraw, bagPage, ITEMS_PER_PAGE);
+        Set<ItemNamesies> items = this.getDisplayItems();
+        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(items, bagPage, ITEMS_PER_PAGE);
 
         // Go through each item on the page
         for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
@@ -321,7 +326,7 @@ public class BagState implements VisualStateHandler {
         }
 
         if (increment != 0) {
-            bagPage = GeneralUtils.wrapIncrement(bagPage, increment, totalPages(toDraw));
+            bagPage = GeneralUtils.wrapIncrement(bagPage, increment, totalPages(items));
             view.setVisualState(); // To update active buttons
         }
 

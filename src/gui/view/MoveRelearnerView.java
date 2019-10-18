@@ -280,11 +280,9 @@ public class MoveRelearnerView extends View {
 
         returnButton.fillOutlineLabel(g, Color.YELLOW, 22, "Return");
 
+        TextUtils.drawPageNumbers(g, 22, movesLeftButton, movesRightButton, pageNum, totalPages());
         movesLeftButton.drawArrow(g, Direction.LEFT);
         movesRightButton.drawArrow(g, Direction.RIGHT);
-
-        int totalPages = totalPages();
-        TextUtils.drawCenteredString(g, (totalPages == 0 ? 0 : pageNum + 1) + "/" + totalPages, movesPanel.centerX(), movesLeftButton.centerY());
 
         if (learnMovePanel != null) {
             learnMovePanel.draw(g);

@@ -329,10 +329,7 @@ public class PokedexView extends View {
         }
 
         // Draw page numbers and arrows
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 16);
-        TextUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + NUM_PAGES, pokedexPanel.centerX(), 433);
-
+        TextUtils.drawPageNumbers(g, 16, leftButton, rightButton, pageNum, NUM_PAGES);
         leftButton.drawArrow(g, Direction.LEFT);
         rightButton.drawArrow(g, Direction.RIGHT);
 
@@ -532,10 +529,9 @@ public class PokedexView extends View {
                     g.drawImage(categoryImage, imageX, imageY, null);
                 }
 
+                TextUtils.drawPageNumbers(g, 18, movesLeftButton, movesRightButton, movePageNum, maxMovePages());
                 movesLeftButton.drawArrow(g, Direction.LEFT);
                 movesRightButton.drawArrow(g, Direction.RIGHT);
-
-                TextUtils.drawCenteredString(g, (movePageNum + 1) + "/" + maxMovePages(), infoPanel.centerX(), movesLeftButton.centerY());
             }
         }
 

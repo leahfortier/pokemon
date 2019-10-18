@@ -307,9 +307,8 @@ class PCView extends View {
             }
         }
 
-        FontMetrics.setFont(g, 16);
-        TextUtils.drawCenteredWidthString(g, (pc.getBoxNum() + 1) + "/" + pc.getNumBoxes(), 215, 433);
-
+        // Draw page numbers and arrows
+        TextUtils.drawPageNumbers(g, 16, leftButton, rightButton, pc.getBoxNum(), pc.getNumBoxes());
         leftButton.drawPanel(g);
         rightButton.drawPanel(g);
 

@@ -115,7 +115,7 @@ class FlyState implements VisualStateHandler {
                 g,
                 pageNum + 1 + "",
                 (leftButton.centerX() + rightButton.centerX())/2,
-                (leftButton.centerY() + rightButton.centerY())/2
+                rightButton.centerY()
         );
 
         buttons.draw(g);
