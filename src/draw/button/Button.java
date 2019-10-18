@@ -54,20 +54,21 @@ public class Button implements Panel {
     }
 
     public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions, ButtonPressAction pressAction) {
+        this(x, y, width, height, new ButtonInfo(hoverAction).transition(transitions).press(pressAction));
+    }
+
+    public Button(int x, int y, int width, int height, ButtonInfo buttonInfo) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
 
-        this.hoverAction = hoverAction;
-        this.pressAction = pressAction == null ? () -> {} : pressAction;
-
-        if (transitions == null) {
-            transitions = new ButtonTransitions();
-        }
-        this.transitions = transitions.getTransitions();
+        this.hoverAction = buttonInfo.getHoverAction();
+        this.pressAction = buttonInfo.getPressAction();
+        this.transitions = buttonInfo.getTransitions();
 
         this.drawPanel = new ButtonPanel(this);
+        buttonInfo.getPanelSetup().accept(this.drawPanel);
 
         this.hover = false;
         this.press = false;
@@ -77,11 +78,6 @@ public class Button implements Panel {
 
     public Button setupPanel(Consumer<ButtonPanel> panelSetup) {
         panelSetup.accept(this.drawPanel);
-        return this;
-    }
-
-    public Button asArrow(Direction arrowDirection) {
-        this.drawPanel.asArrow(arrowDirection);
         return this;
     }
 
