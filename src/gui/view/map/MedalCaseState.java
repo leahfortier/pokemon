@@ -141,7 +141,7 @@ public class MedalCaseState implements VisualStateHandler {
         leftButton.drawArrow(g, Direction.LEFT);
         rightButton.drawArrow(g, Direction.RIGHT);
 
-        buttons.draw(g);
+        buttons.drawHover(g);
     }
 
     @Override

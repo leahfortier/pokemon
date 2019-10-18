@@ -87,8 +87,7 @@ public class BagView extends View {
         Button[] buttons = new Button[NUM_BUTTONS];
         this.buttons = new ButtonList(buttons);
 
-        returnButton = new Button(
-                layout.returnPanel,
+        returnButton = layout.createReturnButton(
                 new ButtonTransitions().right(PARTY).up(RIGHT_ARROW).left(PARTY).down(TABS),
                 this::returnToMap
         );
@@ -231,7 +230,7 @@ public class BagView extends View {
         if (message != null && !StringUtils.isNullOrWhiteSpace(message.getMessage())) {
             BasicPanels.drawFullMessagePanel(g, message.getMessage());
         } else {
-            buttons.draw(g);
+            buttons.drawHover(g);
         }
     }
 

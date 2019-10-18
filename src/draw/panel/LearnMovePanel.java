@@ -177,7 +177,7 @@ public class LearnMovePanel {
             newMoveButton.drawMoveButton(g, toLearn);
         }
 
-        buttons.draw(g);
+        buttons.drawHover(g);
     }
 
     public WrapMetrics drawMoveDetails(Graphics g, Attack attack) {

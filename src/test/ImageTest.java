@@ -24,6 +24,7 @@ import util.file.Folder;
 import util.string.StringUtils;
 
 import javax.imageio.ImageIO;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.io.File;
@@ -122,7 +123,7 @@ public class ImageTest extends BaseTest {
 
     @Test
     public void sizeTest() {
-        DimensionChecker itemDimension = DimensionChecker.tile().trimmed();
+        DimensionChecker itemDimension = new DimensionChecker(Item.MAX_IMAGE_SIZE).trimmed();
         DimensionChecker partyDimension = DimensionChecker.tile().singleDimensionEquals(0);
         DimensionChecker pokedexDimension = new DimensionChecker(140, 190).singleDimensionEquals(2);
         DimensionChecker pokemonDimension = new DimensionChecker(96, 96).trimmed();
@@ -237,6 +238,10 @@ public class ImageTest extends BaseTest {
 
         public static DimensionChecker tile() {
             return new DimensionChecker(Global.TILE_SIZE, Global.TILE_SIZE);
+        }
+
+        DimensionChecker(Dimension dimension) {
+            this(dimension.width, dimension.height);
         }
 
         DimensionChecker(int maxWidth, int maxHeight) {

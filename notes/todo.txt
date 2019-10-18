@@ -162,3 +162,6 @@ Other random things:
     PC View should be able to hover over moves and change stats panel into move description similar to PartyView
     maybe add setActive things to ButtonInfo and have a similar buttonList.updateActive() type thing
     Pokedex flavor text should have startX at image panel
+    noticed NewPokemonView is using %-10s for the name but this is no longer the maximum name length so worth just taking another look at probably
+    should probably rewrite the numSpaceRows/Cols in the getButtons shit to be like missingRows and whatnot and default to zero
+    ButtonList class should just take the size in the constructor and be able to add buttons and shit and have methods to add array subsets because I hate the arrayCopy bs

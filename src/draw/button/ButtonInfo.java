@@ -1,12 +1,10 @@
 package draw.button;
 
-import java.util.function.Consumer;
-
 public class ButtonInfo {
     private final ButtonHoverAction hoverAction;
     private ButtonTransitions transitions;
     private ButtonPressAction pressAction;
-    private Consumer<ButtonPanel> panelSetup;
+    private ButtonPanelSetup panelSetup;
 
     public ButtonInfo(ButtonHoverAction hoverAction) {
         this.hoverAction = hoverAction;
@@ -27,7 +25,7 @@ public class ButtonInfo {
         return this;
     }
 
-    public ButtonInfo setup(Consumer<ButtonPanel> panelSetup) {
+    public ButtonInfo setup(ButtonPanelSetup panelSetup) {
         // TODO: This probably doesn't need the null check once everything is a little more organized
         // Right now still needs it from the Button constructors
         if (panelSetup == null) {
@@ -35,15 +33,8 @@ public class ButtonInfo {
         }
 
         // Add the setup info the end
-        this.panelSetup = add(this.panelSetup, panelSetup);
+        this.panelSetup = ButtonPanelSetup.add(this.panelSetup, panelSetup);
         return this;
-    }
-
-    private Consumer<ButtonPanel> add(Consumer<ButtonPanel> base, Consumer<ButtonPanel> addition) {
-        return panel -> {
-            base.accept(panel);
-            addition.accept(panel);
-        };
     }
 
     ButtonHoverAction getHoverAction() {
@@ -61,7 +52,19 @@ public class ButtonInfo {
         return this.pressAction == null ? () -> {} : this.pressAction;
     }
 
-    Consumer<ButtonPanel> getPanelSetup() {
+    ButtonPanelSetup getPanelSetup() {
         return this.panelSetup;
+    }
+
+    @FunctionalInterface
+    public interface ButtonPanelSetup {
+        void setup(ButtonPanel panel);
+
+        static ButtonPanelSetup add(ButtonPanelSetup base, ButtonPanelSetup addition) {
+            return panel -> {
+                base.setup(panel);
+                addition.setup(panel);
+            };
+        }
     }
 }

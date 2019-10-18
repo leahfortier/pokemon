@@ -288,7 +288,7 @@ public class MoveRelearnerView extends View {
             learnMovePanel.draw(g);
         }
 
-        buttons.draw(g);
+        buttons.drawHover(g);
     }
 
     public WrapMetrics drawMoveDetails(Graphics g, Attack attack) {

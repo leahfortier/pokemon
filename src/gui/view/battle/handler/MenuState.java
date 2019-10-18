@@ -42,7 +42,7 @@ public class MenuState implements VisualStateHandler {
             menuButton.label(g, 30, menuChoice.getButtonLabel());
         }
 
-        menuButtons.draw(g);
+        menuButtons.drawHover(g);
     }
 
     @Override

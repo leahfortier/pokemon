@@ -7,7 +7,6 @@ import gui.TileSet;
 import item.Item;
 import item.ItemNamesies;
 import main.Game;
-import main.Global;
 import util.FontMetrics;
 
 import java.awt.Color;
@@ -17,6 +16,8 @@ import java.awt.image.BufferedImage;
 public class ItemPanel extends DrawPanel {
     private final boolean includeQuantity;
 
+    private ItemNamesies itemNamesies;
+
     public ItemPanel(int x, int y, int width, int height, boolean includeQuantity) {
         super(x, y, width, height);
 
@@ -24,6 +25,15 @@ public class ItemPanel extends DrawPanel {
 
         this.withFullTransparency();
         this.withBlackOutline();
+    }
+
+    public void setItem(ItemNamesies itemNamesies) {
+        this.itemNamesies = itemNamesies;
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        this.draw(g, this.itemNamesies);
     }
 
     // Draws all relevant information about the item
@@ -45,7 +55,7 @@ public class ItemPanel extends DrawPanel {
         FontMetrics.setFont(g, 20);
 
         // Tile size for item image tile, double spacing for original and after image
-        int nameX = x + 2*spacing + Global.TILE_SIZE;
+        int nameX = x + 2*spacing + Item.MAX_IMAGE_SIZE.width;
         int startY = y + FontMetrics.getDistanceBetweenRows(g);
 
         // Draw item image

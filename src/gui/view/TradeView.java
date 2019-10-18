@@ -236,7 +236,7 @@ public class TradeView extends View {
             cancelPanel.drawBackground(g);
             cancelPanel.label(g, 22, "Cancel");
 
-            buttons.draw(g);
+            buttons.drawHover(g);
         }
     }
 

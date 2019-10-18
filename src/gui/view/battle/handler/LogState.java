@@ -64,7 +64,7 @@ public class LogState implements VisualStateHandler {
         leftArrow.drawArrow(g, Direction.LEFT);
         rightArrow.drawArrow(g, Direction.RIGHT);
 
-        logButtons.draw(g);
+        logButtons.drawHover(g);
 
         // Draw Messages Box
         view.drawMenuMessagePanel(g, "Bob Loblaw's Log Blog");

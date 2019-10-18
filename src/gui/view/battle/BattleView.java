@@ -172,7 +172,7 @@ public class BattleView extends View {
             backButton.drawArrow(g, Direction.RIGHT);
         }
 
-        backButton.draw(g);
+        backButton.drawHover(g);
     }
 
     public void updateBackButton() {

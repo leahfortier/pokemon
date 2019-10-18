@@ -2,7 +2,6 @@ package gui.view.item;
 
 import draw.button.Button;
 import draw.button.ButtonList;
-import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import gui.view.View;
@@ -78,10 +77,8 @@ public class SellView extends View {
                 () -> this.updateItemAmount(1)
         );
 
-        returnButton = new Button(
-                layout.returnPanel,
-                new ButtonTransitions().right(SELL).up(PAGE_LEFT_ARROW).left(SELL).down(TABS),
-                ButtonPressAction.getExitAction()
+        returnButton = layout.createReturnButton(
+                new ButtonTransitions().right(SELL).up(PAGE_LEFT_ARROW).left(SELL).down(TABS)
         );
 
         tabButtons = layout.getTabButtons(TABS, RETURN, AMOUNT_LEFT_ARROW, this::changeCategory);
@@ -163,7 +160,7 @@ public class SellView extends View {
         // Tabs
         layout.drawTabs(g, tabButtons, selectedTab);
 
-        buttons.draw(g);
+        buttons.drawHover(g);
     }
 
     @Override

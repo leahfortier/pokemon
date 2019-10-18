@@ -298,7 +298,7 @@ public class PokemonState implements VisualStateHandler {
         pokemonSwitchButton.fillOutlineLabel(g, 20, view.isState(VisualState.USE_ITEM) ? "Use!" : "Switch!");
         pokemonSwitchButton.greyInactive(g);
 
-        pokemonButtons.draw(g);
+        pokemonButtons.drawHover(g);
 
         // Draw back arrow when applicable
         view.drawBackButton(g, !switchForced);

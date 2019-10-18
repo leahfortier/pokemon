@@ -6,7 +6,7 @@ import draw.ImageUtils;
 import draw.PolygonUtils;
 import draw.TextUtils;
 import draw.button.Button;
-import draw.button.ButtonHoverAction;
+import draw.button.ButtonInfo;
 import draw.button.ButtonPanel;
 import draw.button.ButtonTransitions;
 import main.Global;
@@ -219,7 +219,7 @@ public class DrawPanel implements Panel {
         }
 
         Global.error("Must already be a ButtonPanel.");
-        return new Button(this, null).panel();
+        return new Button(this, new ButtonInfo()).panel();
     }
 
     public int getBorderSize() {
@@ -255,6 +255,7 @@ public class DrawPanel implements Panel {
     }
 
     private void drawLabel(Graphics g) {
+        g.setColor(Color.BLACK);
         switch (this.labelAlignment) {
             case LEFT:
                 this.drawLeftLabel(g, fontSize, label);
@@ -275,6 +276,8 @@ public class DrawPanel implements Panel {
         }
 
         this.drawBackground(g);
+
+        FontMetrics.setFont(g, this.fontSize);
 
         // Labels (both text and images)
         if (this.label != null && this.imageLabel != null) {
@@ -329,14 +332,25 @@ public class DrawPanel implements Panel {
     }
 
     public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex, ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
-        return this.getButtons(spacing, numRows, numCols, numRows, numCols, startIndex, defaultTransitions, indexAction);
+        return this.getButtons(spacing, numRows, numCols, startIndex, defaultTransitions, indexAction, null);
     }
 
-    public Button[] getButtons(int spacing, int numSpaceRows, int numSpaceCols, int numButtonRows, int numButtonCols, int startIndex, ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
+    public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex,
+                               ButtonTransitions defaultTransitions, ButtonIndexAction indexAction, PanelIndexSetup indexSetup) {
+        return this.getButtons(spacing, numRows, numCols, numRows, numCols, startIndex, defaultTransitions, indexAction, indexSetup);
+    }
+
+    public Button[] getButtons(int spacing, int numSpaceRows, int numSpaceCols, int numButtonRows, int numButtonCols, int startIndex,
+                               ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
+        return this.getButtons(spacing, numSpaceRows, numSpaceCols, numButtonRows, numButtonCols, startIndex, defaultTransitions, indexAction, null);
+    }
+
+    public Button[] getButtons(int spacing, int numSpaceRows, int numSpaceCols, int numButtonRows, int numButtonCols, int startIndex,
+                               ButtonTransitions defaultTransitions, ButtonIndexAction indexAction, PanelIndexSetup indexSetup) {
         int buttonWidth = (this.width - (numSpaceCols + 1)*spacing)/numSpaceCols;
         int buttonHeight = (this.height - (numSpaceRows + 1)*spacing)/numSpaceRows;
 
-        return this.getButtons(buttonWidth, buttonHeight, numSpaceRows, numSpaceCols, numButtonRows, numButtonCols, startIndex, defaultTransitions, indexAction);
+        return this.getButtons(buttonWidth, buttonHeight, numSpaceRows, numSpaceCols, numButtonRows, numButtonCols, startIndex, defaultTransitions, indexAction, indexSetup);
     }
 
     public Button[] getButtons(int buttonWidth, int buttonHeight, int numRows, int numCols, ButtonIndexAction indexAction) {
@@ -347,13 +361,35 @@ public class DrawPanel implements Panel {
         return this.getButtons(buttonWidth, buttonHeight, numRows, numCols, numRows, numCols, 0, null, null);
     }
 
+    public Button[] getButtons(int buttonWidth, int buttonHeight, int numButtonRows, int numButtonCols, int startValue,
+                               ButtonTransitions defaultTransitions, ButtonIndexAction indexAction, PanelIndexSetup indexSetup) {
+        return this.getButtons(buttonWidth, buttonHeight,
+                               numButtonRows, numButtonCols,
+                               numButtonRows, numButtonCols,
+                               startValue,
+                               defaultTransitions, indexAction, indexSetup
+        );
+    }
+
+    public Button[] getButtons(int buttonWidth, int buttonHeight, int numSpaceRows, int numSpaceCols,
+                               int numButtonRows, int numButtonCols, int startValue,
+                               ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
+        return this.getButtons(buttonWidth, buttonHeight,
+                               numSpaceRows, numSpaceCols,
+                               numButtonRows, numButtonCols,
+                               startValue,
+                               defaultTransitions, indexAction, null
+        );
+    }
+
     public Button[] getButtons(
             int buttonWidth, int buttonHeight,
             int numSpaceRows, int numSpaceCols,
             int numButtonRows, int numButtonCols,
             int startValue,
             ButtonTransitions defaultTransitions,
-            ButtonIndexAction indexAction) {
+            ButtonIndexAction indexAction,
+            PanelIndexSetup indexSetup) {
         int borderSize = this.getBorderSize();
 
         int horizontalSpacing = this.width - 2*borderSize - numSpaceCols*buttonWidth;
@@ -365,16 +401,32 @@ public class DrawPanel implements Panel {
         Button[] buttons = new Button[numButtonRows*numButtonCols];
         for (int row = 0, index = 0; row < numButtonRows; row++) {
             for (int col = 0; col < numButtonCols; col++, index++) {
+                // Silly Java, final variables are for kids
                 final int finalIndex = index;
 
+                // Setup default transitions
+                ButtonInfo buttonInfo = new ButtonInfo().transition(
+                        ButtonTransitions.getBasicTransitions(
+                                index, numButtonRows, numButtonCols, startValue, defaultTransitions
+                        ));
+
+                // Add press action for this index if specified
+                if (indexAction != null) {
+                    buttonInfo.press(() -> indexAction.pressButton(finalIndex));
+                }
+
+                // Add draw setup for this index if specified
+                if (indexSetup != null) {
+                    buttonInfo.setup(panel -> indexSetup.setup(finalIndex, panel));
+                }
+
+                // Create the button with all them specs
                 buttons[index] = new Button(
                         this.x + borderSize + xSpacing*(col + 1) + buttonWidth*col,
                         this.y + borderSize + ySpacing*(row + 1) + buttonHeight*row,
                         buttonWidth,
                         buttonHeight,
-                        ButtonHoverAction.BOX,
-                        ButtonTransitions.getBasicTransitions(index, numButtonRows, numButtonCols, startValue, defaultTransitions),
-                        indexAction == null ? () -> {} : () -> indexAction.pressButton(finalIndex)
+                        buttonInfo
                 );
             }
         }
@@ -473,5 +525,10 @@ public class DrawPanel implements Panel {
     @FunctionalInterface
     public interface ButtonIndexAction {
         void pressButton(int index);
+    }
+
+    @FunctionalInterface
+    public interface PanelIndexSetup {
+        void setup(int index, ButtonPanel panel);
     }
 }

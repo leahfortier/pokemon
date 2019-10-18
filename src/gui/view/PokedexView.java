@@ -564,7 +564,7 @@ public class PokedexView extends View {
         returnButton.blackOutline(g);
         returnButton.label(g, 20, "Return");
 
-        buttons.draw(g);
+        buttons.drawHover(g);
     }
 
     private int drawEvolutionText(Graphics g, Evolution evolution, int leftX, int textY, int spacing) {

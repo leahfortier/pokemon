@@ -48,7 +48,7 @@ class MenuState implements VisualStateHandler {
             g.drawString(menuChoice.getDisplayName(), 558, 59 + 72*menuChoice.ordinal());
         }
 
-        menuButtons.draw(g);
+        menuButtons.drawHover(g);
     }
 
     @Override

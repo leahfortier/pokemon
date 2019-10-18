@@ -5,6 +5,7 @@ import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.PolygonUtils;
 import draw.TextUtils;
+import draw.button.ButtonInfo.ButtonPanelSetup;
 import draw.panel.DrawPanel;
 import draw.panel.Panel;
 import input.ControlKey;
@@ -18,7 +19,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class Button implements Panel {
     public final int x;
@@ -50,7 +50,15 @@ public class Button implements Panel {
     }
 
     public Button(DrawPanel panel, ButtonTransitions transitions, ButtonPressAction pressAction) {
-        this(panel.x, panel.y, panel.width, panel.height, ButtonHoverAction.BOX, transitions, pressAction);
+        this(panel, transitions, pressAction, null);
+    }
+
+    public Button(DrawPanel panel, ButtonTransitions transitions, ButtonPressAction pressAction, ButtonPanelSetup panelSetup) {
+        this(panel, new ButtonInfo().transition(transitions).press(pressAction).setup(panelSetup));
+    }
+
+    public Button(DrawPanel panel, ButtonInfo buttonInfo) {
+        this(panel.x, panel.y, panel.width, panel.height, buttonInfo);
     }
 
     public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions, ButtonPressAction pressAction) {
@@ -68,7 +76,7 @@ public class Button implements Panel {
         this.transitions = buttonInfo.getTransitions();
 
         this.drawPanel = new ButtonPanel(this);
-        buttonInfo.getPanelSetup().accept(this.drawPanel);
+        buttonInfo.getPanelSetup().setup(this.drawPanel);
 
         this.hover = false;
         this.press = false;
@@ -76,8 +84,8 @@ public class Button implements Panel {
         this.active = true;
     }
 
-    public Button setupPanel(Consumer<ButtonPanel> panelSetup) {
-        panelSetup.accept(this.drawPanel);
+    public Button asArrow(Direction arrowDirection) {
+        this.panel().asArrow(arrowDirection);
         return this;
     }
 
@@ -85,11 +93,16 @@ public class Button implements Panel {
         return this.drawPanel;
     }
 
+    public void draw(Graphics g) {
+        this.drawPanel(g);
+        this.drawHover(g);
+    }
+
     public void drawPanel(Graphics g) {
         this.drawPanel.draw(g);
     }
 
-    public void draw(Graphics g) {
+    public void drawHover(Graphics g) {
         if ((hover || forceHover) && active && hoverAction != null) {
             hoverAction.draw(g, this);
         }
@@ -316,6 +329,6 @@ public class Button implements Panel {
 
         g.translate(-x, -y);
 
-        this.draw(g);
+        this.drawHover(g);
     }
 }

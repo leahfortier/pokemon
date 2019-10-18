@@ -40,11 +40,16 @@ public class ButtonList {
         }
     }
 
-    // TODO: Eventually this should just be draw
-    public void drawEverything(Graphics g) {
+    public void drawHover(Graphics g) {
+        for (Button button : buttons) {
+            button.drawHover(g);
+        }
+    }
+
+    public void drawPanels(Graphics g) {
         for (Button button : buttons) {
             button.drawPanel(g);
-            button.draw(g);
+            button.drawHover(g);
         }
     }
 

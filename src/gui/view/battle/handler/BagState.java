@@ -218,7 +218,7 @@ public class BagState implements VisualStateHandler {
         // Back Arrow
         view.drawBackButton(g);
 
-        bagButtons.draw(g);
+        bagButtons.drawHover(g);
     }
 
     private Set<ItemNamesies> getDisplayItems() {

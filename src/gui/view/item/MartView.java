@@ -2,7 +2,6 @@ package gui.view.item;
 
 import draw.button.Button;
 import draw.button.ButtonList;
-import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
@@ -88,10 +87,8 @@ public class MartView extends View {
                 () -> this.updateItemAmount(1)
         );
 
-        returnButton = new Button(
-                layout.returnPanel,
-                new ButtonTransitions().right(BUY).up(PAGE_LEFT_ARROW).left(BUY).down(AMOUNT_LEFT_ARROW),
-                ButtonPressAction.getExitAction()
+        returnButton = layout.createReturnButton(
+                new ButtonTransitions().right(BUY).up(PAGE_LEFT_ARROW).left(BUY).down(AMOUNT_LEFT_ARROW)
         );
 
         itemButtons = layout.getItemButtons(
@@ -173,7 +170,7 @@ public class MartView extends View {
         tabPanel.drawBackground(g);
         tabPanel.label(g, 16, PokeString.POKE + " Mart");
 
-        buttons.draw(g);
+        buttons.drawHover(g);
     }
 
     @Override

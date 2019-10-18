@@ -234,7 +234,7 @@ public class NewPokemonView extends View {
                 }
         }
 
-        buttons.draw(g);
+        buttons.drawHover(g);
     }
 
     public WrapMetrics drawInfoLabels(Graphics g, PokemonInfo pokemonInfo) {

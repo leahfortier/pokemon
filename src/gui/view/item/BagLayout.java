@@ -3,6 +3,7 @@ package gui.view.item;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
+import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.DrawPanel;
 import draw.panel.DrawPanel.ButtonIndexAction;
@@ -31,12 +32,12 @@ public class BagLayout {
 
     public final DrawPanel bagPanel;
     public final DrawPanel leftPanel;
-    private final DrawPanel itemsPanel;
+    public final DrawPanel itemsPanel;
     public final ItemPanel selectedPanel;
 
     public final DrawPanel[] tabPanels;
     public final DrawPanel[] selectedButtonPanels;
-    public final DrawPanel returnPanel;
+    private final DrawPanel returnPanel;
 
     public final DrawPanel leftArrow;
     public final DrawPanel rightArrow;
@@ -128,7 +129,9 @@ public class BagLayout {
         );
     }
 
-    public Button[] getItemButtons(int startIndex, ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
+    public Button[] getItemButtons(int startIndex,
+                                   ButtonTransitions defaultTransitions,
+                                   ButtonIndexAction indexAction) {
         return itemsPanel.getButtons(
                 5,
                 ITEMS_PER_PAGE/2 + 1,
@@ -137,7 +140,11 @@ public class BagLayout {
                 2,
                 startIndex,
                 defaultTransitions,
-                indexAction
+                indexAction,
+                (index, panel) -> panel.onlyActiveDraw()
+                                       .withBackgroundColor(Color.WHITE)
+                                       .withBlackOutline()
+                                       .withLabelSize(12)
         );
     }
 
@@ -161,13 +168,13 @@ public class BagLayout {
         return leftPanel.getButtons(10, Trainer.MAX_POKEMON, 1, startIndex, defaultTransitions, indexAction);
     }
 
+    // For testing
     public WrapMetrics drawSelectedItem(Graphics g, ItemNamesies selectedItem) {
         return this.selectedPanel.draw(g, selectedItem);
     }
 
+    // TODO: Deprecate
     public void drawItems(Graphics g, Button[] itemButtons, Iterable<ItemNamesies> items, int pageNum) {
-        itemsPanel.drawBackground(g);
-
         TileSet itemTiles = Game.getData().getItemTiles();
         Bag bag = Game.getPlayer().getBag();
 
@@ -198,6 +205,18 @@ public class BagLayout {
         }
     }
 
+    public void setupItems(ItemNamesies selectedItem, Button[] itemButtons, Iterable<ItemNamesies> items, int pageNum) {
+        selectedPanel.setItem(selectedItem);
+
+        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(items, pageNum, ITEMS_PER_PAGE);
+        for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
+            for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
+                ItemNamesies item = iter.next();
+                itemButtons[k].panel().setItem(item, includeQuantity);
+            }
+        }
+    }
+
     public void drawPageNumbers(Graphics g, int pageNum, int totalPages) {
         TextUtils.drawPageNumbers(g, 16, leftArrow, rightArrow, pageNum, totalPages);
     }
@@ -218,6 +237,21 @@ public class BagLayout {
 
             g.translate(-tabButton.x, -tabButton.y);
         }
+    }
+
+    public Button createReturnButton(ButtonTransitions transitions) {
+        return createReturnButton(transitions, ButtonPressAction.getExitAction());
+    }
+
+    public Button createReturnButton(ButtonTransitions transitions, ButtonPressAction pressAction) {
+        return new Button(
+                this.returnPanel,
+                transitions,
+                pressAction,
+                panel -> panel.withTransparentBackground()
+                              .withBlackOutline()
+                              .withLabel("Return", 20)
+        );
     }
 
     public void drawReturnButton(Graphics g, Button returnButton) {

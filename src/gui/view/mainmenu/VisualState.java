@@ -38,7 +38,7 @@ enum VisualState {
         for (int i = 0; i < buttons.size(); i++) {
             buttons.get(i).fillBordered(g, view.getSettings().getTheme().getButtonColor());
         }
-        buttons.draw(g);
+        buttons.drawHover(g);
 
         this.visualStateHandler.draw(g, view);
     }

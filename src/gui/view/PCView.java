@@ -149,49 +149,47 @@ class PCView extends View {
             }
         }
 
-        partyButtons = new Button[Trainer.MAX_POKEMON];
-        for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-            final int index = i;
-            buttons[PARTY + i] = partyButtons[i] = new Button(
-                    60 + 54*i, 499, 40, 40, ButtonHoverAction.BOX,
-                    new ButtonTransitions()
-                            .right(i == Trainer.MAX_POKEMON - 1 ? RETURN : PARTY + i + 1)
-                            .up(i < PC.BOX_WIDTH/2 ? LEFT_ARROW : RIGHT_ARROW)
-                            .left(i == 0 ? RETURN : PARTY + i - 1)
-                            .down(i),
-                    () -> {
-                        if (party && depositClicked) {
-                            depositClicked = false;
-                        } else if (switchClicked) {
-                            pc.switchPokemon(selected, index);
-                            switchClicked = false;
-                        } else {
-                            selected = Game.getPlayer().getTeam().get(index);
-                            party = true;
-                        }
-                    }
-            );
-        }
+        partyButtons = partyPanel.getButtons(40, 40, 1, Trainer.MAX_POKEMON, PARTY,
+                                             new ButtonTransitions()
+                                                     .right(RETURN)
+                                                     .up(RIGHT_ARROW)
+                                                     .left(RETURN)
+                                                     .down(0),
+                                             index -> {
+                                                 if (party && depositClicked) {
+                                                     depositClicked = false;
+                                                 } else if (switchClicked) {
+                                                     pc.switchPokemon(selected, index);
+                                                     switchClicked = false;
+                                                 } else {
+                                                     selected = Game.getPlayer().getTeam().get(index);
+                                                     party = true;
+                                                 }
+                                             },
+                                             (index, panel) -> panel.onlyActiveDraw()
+        );
 
         buttons[LEFT_ARROW] = leftButton = new Button(
                 140, 418, 35, 20,
-                arrowSetup(Direction.LEFT).transition(
-                        new ButtonTransitions()
-                                .right(RIGHT_ARROW)
-                                .up(PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2 - 1)
-                                .down(PARTY)
-                )
+                arrowSetup(Direction.LEFT)
+                        .transition(
+                                new ButtonTransitions()
+                                        .right(RIGHT_ARROW)
+                                        .up(PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2 - 1)
+                                        .down(PARTY)
+                        )
         );
 
         buttons[RIGHT_ARROW] = rightButton = new Button(
                 255, 418, 35, 20,
-                arrowSetup(Direction.RIGHT).transition(
-                        new ButtonTransitions()
-                                .right(SWITCH)
-                                .up(PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2)
-                                .left(LEFT_ARROW)
-                                .down(PARTY)
-                )
+                arrowSetup(Direction.RIGHT)
+                        .transition(
+                                new ButtonTransitions()
+                                        .right(SWITCH)
+                                        .up(PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2)
+                                        .left(LEFT_ARROW)
+                                        .down(PARTY)
+                        )
         );
 
         buttons[SWITCH] = switchButton = new Button(
@@ -243,6 +241,8 @@ class PCView extends View {
                         .setup(panel -> panel.withBackgroundColor(Color.YELLOW)
                                              .withTransparentCount(2))
         );
+
+        System.arraycopy(partyButtons, 0, buttons, PARTY, partyButtons.length);
 
         this.buttons = new ButtonList(buttons);
         this.buttons.setSelected(PARTY);
@@ -309,9 +309,8 @@ class PCView extends View {
 
         // Pokemon party buttons
         List<PartyPokemon> team = Game.getPlayer().getTeam();
-        for (int i = 0; i < partyButtons.length; i++) {
-            PartyPokemon partyPokemon = i < team.size() ? team.get(i) : null;
-            setupPokemonButton(partyButtons[i].panel(), partyPokemon);
+        for (int i = 0; i < team.size(); i++) {
+            setupPokemonButton(partyButtons[i].panel(), team.get(i));
         }
 
         // Highlight if selected
@@ -344,7 +343,7 @@ class PCView extends View {
         drawSelectedPokemon(g);
 
         // Draw buttons
-        buttons.drawEverything(g);
+        buttons.draw(g);
     }
 
     private void drawSelectedPokemon(Graphics g) {

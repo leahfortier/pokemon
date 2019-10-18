@@ -378,7 +378,7 @@ class DayCareView extends View {
         drawTextButton(g, depositWithdrawButton, party ? "Deposit" : "Withdraw", new Color(123, 213, 74));
         drawTextButton(g, returnButton, "Return", Color.YELLOW);
 
-        buttons.draw(g);
+        buttons.drawHover(g);
 
         if (message != null) {
             BasicPanels.drawFullMessagePanel(g, message);

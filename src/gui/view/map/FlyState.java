@@ -118,7 +118,7 @@ class FlyState implements VisualStateHandler {
                 rightButton.centerY()
         );
 
-        buttons.draw(g);
+        buttons.drawHover(g);
     }
 
     @Override

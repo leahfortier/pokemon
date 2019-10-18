@@ -296,7 +296,7 @@ public class PartyView extends View {
             drawButtons(g, selectedPkm);
         }
 
-        buttons.draw(g);
+        buttons.drawHover(g);
     }
 
     private Color[] getBackgroundColors(PartyPokemon selectedPkm) {
