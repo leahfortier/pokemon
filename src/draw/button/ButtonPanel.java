@@ -22,7 +22,7 @@ public class ButtonPanel extends DrawPanel {
     private boolean skipDraw;
 
     // Should only be created from Button constructor
-    ButtonPanel(Button button) {
+    ButtonPanel(Button button, ButtonPanelSetup setup) {
         super(button);
 
         this.button = button;
@@ -31,6 +31,10 @@ public class ButtonPanel extends DrawPanel {
         this.withBlackOutline();
         this.withBackgroundColor(null);
         this.withBorderPercentage(0);
+
+        if (setup != null) {
+            setup.setup(this);
+        }
     }
 
     public Button button() {
@@ -105,5 +109,10 @@ public class ButtonPanel extends DrawPanel {
         if (this.arrowDirection != null) {
             PolygonUtils.drawCenteredArrow(g, centerX(), centerY(), arrowWidth, arrowHeight, arrowDirection);
         }
+    }
+
+    @FunctionalInterface
+    public interface ButtonPanelSetup {
+        void setup(ButtonPanel panel);
     }
 }

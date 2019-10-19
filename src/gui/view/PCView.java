@@ -6,9 +6,9 @@ import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
-import draw.button.ButtonInfo;
 import draw.button.ButtonList;
 import draw.button.ButtonPanel;
+import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
@@ -171,76 +171,73 @@ class PCView extends View {
 
         buttons[LEFT_ARROW] = leftButton = new Button(
                 140, 418, 35, 20,
-                arrowSetup(Direction.LEFT)
-                        .transition(
-                                new ButtonTransitions()
-                                        .right(RIGHT_ARROW)
-                                        .up(PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2 - 1)
-                                        .down(PARTY)
-                        )
-        );
+                new ButtonTransitions()
+                        .right(RIGHT_ARROW)
+                        .up(PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2 - 1)
+                        .down(PARTY),
+                () -> {
+                    pc.incrementBox(-1);
+                    movedToFront();
+                }
+        ).asArrow(Direction.LEFT);
 
         buttons[RIGHT_ARROW] = rightButton = new Button(
                 255, 418, 35, 20,
-                arrowSetup(Direction.RIGHT)
-                        .transition(
-                                new ButtonTransitions()
-                                        .right(SWITCH)
-                                        .up(PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2)
-                                        .left(LEFT_ARROW)
-                                        .down(PARTY)
-                        )
-        );
+                new ButtonTransitions()
+                        .right(SWITCH)
+                        .up(PC.BOX_WIDTH*(PC.BOX_HEIGHT - 1) + PC.BOX_WIDTH/2)
+                        .left(LEFT_ARROW)
+                        .down(PARTY),
+                () -> {
+                    pc.incrementBox(1);
+                    movedToFront();
+                }
+        ).asArrow(Direction.RIGHT);
 
         buttons[SWITCH] = switchButton = new Button(
                 410, 464, 118, 38,
+                new ButtonTransitions().right(DEPOSIT_WITHDRAW).left(RIGHT_ARROW).down(RETURN),
+                () -> switchClicked = !switchClicked,
                 textButtonSetup("Switch")
-                        .transition(new ButtonTransitions().right(DEPOSIT_WITHDRAW).left(RIGHT_ARROW).down(RETURN))
-                        .press(() -> switchClicked = !switchClicked)
         );
 
         buttons[DEPOSIT_WITHDRAW] = depositWithdrawButton = new Button(
                 526, 464, 118, 38,
-                // Deposit/Withdraw text set depending on state
-                textButtonSetup("")
-                        .transition(new ButtonTransitions().right(RELEASE).left(SWITCH).down(RETURN))
-                        .press(() -> {
-                            if (party) { // Deposit
-                                if (depositClicked) {
-                                    pc.depositPokemonFromPlayer(selected);
-                                }
+                new ButtonTransitions().right(RELEASE).left(SWITCH).down(RETURN),
+                () -> {
+                    if (party) { // Deposit
+                        if (depositClicked) {
+                            pc.depositPokemonFromPlayer(selected);
+                        }
 
-                                depositClicked = !depositClicked;
-                            } else { // Withdraw
-                                pc.withdrawPokemon(selected);
-                            }
-                        })
-                        .setup(ButtonPanel::greyInactive)
-
-        );
+                        depositClicked = !depositClicked;
+                    } else { // Withdraw
+                        pc.withdrawPokemon(selected);
+                    }
+                },
+                textButtonSetup("") // Deposit/Withdraw text set depending on state
+        ).setup(ButtonPanel::greyInactive);
 
         buttons[RELEASE] = releaseButton = new Button(
                 642, 464, 118, 38,
+                new ButtonTransitions().right(0).left(DEPOSIT_WITHDRAW).down(RETURN),
+                () -> {
+                    pc.releasePokemon(selected);
+                    movedToFront();
+                },
                 textButtonSetup("Release")
-                        .transition(new ButtonTransitions().right(0).left(DEPOSIT_WITHDRAW).down(RETURN))
-                        .press(() -> {
-                            pc.releasePokemon(selected);
-                            movedToFront();
-                        })
-                        .setup(ButtonPanel::greyInactive)
-        );
+        ).setup(ButtonPanel::greyInactive);
 
         buttons[RETURN] = new Button(
                 410, 522, 350, 38,
+                new ButtonTransitions()
+                        .right(0)
+                        .up(SWITCH)
+                        .left(PARTY + Trainer.MAX_POKEMON - 1),
+                ButtonPressAction.getExitAction(),
                 textButtonSetup("Return")
-                        .transition(new ButtonTransitions()
-                                            .right(0)
-                                            .up(SWITCH)
-                                            .left(PARTY + Trainer.MAX_POKEMON - 1))
-                        .press(ButtonPressAction.getExitAction())
-                        .setup(panel -> panel.withBackgroundColor(Color.YELLOW)
-                                             .withTransparentCount(2))
-        );
+        ).setup(panel -> panel.withBackgroundColor(Color.YELLOW)
+                              .withTransparentCount(2));
 
         System.arraycopy(partyButtons, 0, buttons, PARTY, partyButtons.length);
 
@@ -254,21 +251,11 @@ class PCView extends View {
         );
     }
 
-    private ButtonInfo textButtonSetup(String text) {
-        return new ButtonInfo().setup(panel -> panel.withLabel(text, 20)
-                                                    .withTransparentBackground()
-                                                    .withBorderPercentage(0)
-                                                    .withBlackOutline());
-    }
-
-    private ButtonInfo arrowSetup(Direction arrowDirection) {
-        int delta = arrowDirection.getDeltaPoint().x;
-        return new ButtonInfo()
-                .press(() -> {
-                    pc.incrementBox(delta);
-                    movedToFront();
-                })
-                .setup(panel -> panel.asArrow(arrowDirection));
+    private ButtonPanelSetup textButtonSetup(String text) {
+        return panel -> panel.withLabel(text, 20)
+                             .withTransparentBackground()
+                             .withBorderPercentage(0)
+                             .withBlackOutline();
     }
 
     @Override

@@ -5,7 +5,7 @@ import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.PolygonUtils;
 import draw.TextUtils;
-import draw.button.ButtonInfo.ButtonPanelSetup;
+import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.panel.DrawPanel;
 import draw.panel.Panel;
 import input.ControlKey;
@@ -37,14 +37,6 @@ public class Button implements Panel {
     private boolean forceHover;
     private boolean active;
 
-    public Button(int x, int y, int width, int height) {
-        this(x, y, width, height, null, null, null);
-    }
-
-    public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions) {
-        this(x, y, width, height, hoverAction, transitions, null);
-    }
-
     public Button(DrawPanel panel, ButtonTransitions transitions) {
         this(panel, transitions, null);
     }
@@ -54,29 +46,47 @@ public class Button implements Panel {
     }
 
     public Button(DrawPanel panel, ButtonTransitions transitions, ButtonPressAction pressAction, ButtonPanelSetup panelSetup) {
-        this(panel, new ButtonInfo().transition(transitions).press(pressAction).setup(panelSetup));
+        this(panel.x, panel.y, panel.width, panel.height, ButtonHoverAction.BOX, transitions, pressAction, panelSetup);
     }
 
-    public Button(DrawPanel panel, ButtonInfo buttonInfo) {
-        this(panel.x, panel.y, panel.width, panel.height, buttonInfo);
+    public Button(int x, int y, int width, int height) {
+        this(x, y, width, height, null, null, null, null);
+    }
+
+    public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions) {
+        this(x, y, width, height, hoverAction, transitions, null);
     }
 
     public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions, ButtonPressAction pressAction) {
-        this(x, y, width, height, new ButtonInfo(hoverAction).transition(transitions).press(pressAction));
+        this(x, y, width, height, hoverAction, transitions, pressAction, null);
     }
 
-    public Button(int x, int y, int width, int height, ButtonInfo buttonInfo) {
+    public Button(int x, int y, int width, int height, ButtonTransitions transitions, ButtonPressAction pressAction) {
+        this(x, y, width, height, transitions, pressAction, null);
+    }
+
+    // Can we just admit that BOX is the default hover and not null and stop specifying it everywhere
+    public Button(int x, int y, int width, int height, ButtonTransitions transitions,
+                  ButtonPressAction pressAction, ButtonPanelSetup panelSetup) {
+        this(x, y, width, height, ButtonHoverAction.BOX, transitions, pressAction, panelSetup);
+    }
+
+    public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions,
+                  ButtonPressAction pressAction, ButtonPanelSetup panelSetup) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
 
-        this.hoverAction = buttonInfo.getHoverAction();
-        this.pressAction = buttonInfo.getPressAction();
-        this.transitions = buttonInfo.getTransitions();
+        this.hoverAction = hoverAction;
+        this.pressAction = pressAction == null ? () -> {} : pressAction;
 
-        this.drawPanel = new ButtonPanel(this);
-        buttonInfo.getPanelSetup().setup(this.drawPanel);
+        if (transitions == null) {
+            transitions = new ButtonTransitions();
+        }
+        this.transitions = transitions.getTransitions();
+
+        this.drawPanel = new ButtonPanel(this, panelSetup);
 
         this.hover = false;
         this.press = false;
@@ -86,6 +96,11 @@ public class Button implements Panel {
 
     public Button asArrow(Direction arrowDirection) {
         this.panel().asArrow(arrowDirection);
+        return this;
+    }
+
+    public Button setup(ButtonPanelSetup panelSetup) {
+        panelSetup.setup(this.panel());
         return this;
     }
 

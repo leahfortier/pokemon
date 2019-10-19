@@ -3,7 +3,6 @@ package gui.view;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
-import draw.button.ButtonInfo;
 import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
@@ -93,12 +92,11 @@ public class BerryView extends View {
                 layout.selectedButtonPanels[0].y,
                 layout.selectedPanel.width,
                 layout.selectedButtonPanels[0].height,
-                new ButtonInfo()
-                        .transition(new ButtonTransitions().up(RETURN).down(0))
-                        .press(() -> message = berryFarm.harvest(selectedItem))
-                        .setup(panel -> panel.withTransparentBackground()
-                                             .withBlackOutline()
-                                             .withLabel("Harvest!", 20)) // Welcome to the Hellmouth
+                new ButtonTransitions().up(RETURN).down(0),
+                () -> message = berryFarm.harvest(selectedItem),
+                panel -> panel.withTransparentBackground()
+                              .withBlackOutline()
+                              .withLabel("Harvest!", 20) // Welcome to the Hellmouth
         );
 
         Button leftArrow = new Button(

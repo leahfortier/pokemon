@@ -6,8 +6,9 @@ import draw.ImageUtils;
 import draw.PolygonUtils;
 import draw.TextUtils;
 import draw.button.Button;
-import draw.button.ButtonInfo;
 import draw.button.ButtonPanel;
+import draw.button.ButtonPanel.ButtonPanelSetup;
+import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import main.Global;
 import map.Direction;
@@ -223,7 +224,7 @@ public class DrawPanel implements Panel {
         }
 
         Global.error("Must already be a ButtonPanel.");
-        return new Button(this, new ButtonInfo()).panel();
+        return new Button(this, null).panel();
     }
 
     public int getBorderSize() {
@@ -420,20 +421,9 @@ public class DrawPanel implements Panel {
                 final int finalIndex = index;
 
                 // Setup default transitions
-                ButtonInfo buttonInfo = new ButtonInfo().transition(
-                        ButtonTransitions.getBasicTransitions(
-                                index, numButtonRows, numButtonCols, startValue, defaultTransitions
-                        ));
-
-                // Add press action for this index if specified
-                if (indexAction != null) {
-                    buttonInfo.press(() -> indexAction.pressButton(finalIndex));
-                }
-
-                // Add draw setup for this index if specified
-                if (indexSetup != null) {
-                    buttonInfo.setup(panel -> indexSetup.setup(finalIndex, panel));
-                }
+                ButtonTransitions transitions = ButtonTransitions.getBasicTransitions(
+                        index, numButtonRows, numButtonCols, startValue, defaultTransitions
+                );
 
                 // Create the button with all them specs
                 buttons[index] = new Button(
@@ -441,7 +431,9 @@ public class DrawPanel implements Panel {
                         this.y + borderSize + ySpacing*(row + 1) + buttonHeight*row,
                         buttonWidth,
                         buttonHeight,
-                        buttonInfo
+                        transitions,
+                        ButtonIndexAction.getPressAction(indexAction, index),
+                        PanelIndexSetup.getPanelSetup(indexSetup, index)
                 );
             }
         }
@@ -554,10 +546,22 @@ public class DrawPanel implements Panel {
     @FunctionalInterface
     public interface ButtonIndexAction {
         void pressButton(int index);
+
+        static ButtonPressAction getPressAction(ButtonIndexAction indexAction, int index) {
+            return indexAction == null
+                   ? () -> {}
+                   : () -> indexAction.pressButton(index);
+        }
     }
 
     @FunctionalInterface
     public interface PanelIndexSetup {
         void setup(int index, ButtonPanel panel);
+
+        static ButtonPanelSetup getPanelSetup(PanelIndexSetup indexSetup, int index) {
+            return indexSetup == null
+                   ? panel -> {}
+                   : panel -> indexSetup.setup(index, panel);
+        }
     }
 }
