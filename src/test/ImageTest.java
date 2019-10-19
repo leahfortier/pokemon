@@ -121,12 +121,21 @@ public class ImageTest extends BaseTest {
         Assert.assertTrue(imageFile.getPath() + " does not exist.", imageFile.exists());
     }
 
+    private String getBagCategoryName(BagCategory category) {
+        return "cat_" + category.getDisplayName().replaceAll("\\s", "").toLowerCase();
+    }
+
     @Test
     public void sizeTest() {
+        DimensionChecker bagCategoryDimension = new DimensionChecker(BagCategory.IMAGE_SIZE).mustEquals(0);
         DimensionChecker itemDimension = new DimensionChecker(Item.MAX_IMAGE_SIZE).trimmed();
         DimensionChecker partyDimension = DimensionChecker.tile().singleDimensionEquals(0);
         DimensionChecker pokedexDimension = new DimensionChecker(140, 190).singleDimensionEquals(2);
         DimensionChecker pokemonDimension = new DimensionChecker(96, 96).trimmed();
+
+        for (BagCategory category : BagCategory.values()) {
+            checkMaxSize(Folder.BAG_TILES, getBagCategoryName(category), bagCategoryDimension);
+        }
 
         for (ItemNamesies itemName : ItemNamesies.values()) {
             if (itemName == ItemNamesies.NO_ITEM) {

@@ -102,7 +102,6 @@ public class WrapPanel extends DrawPanel {
         int textWidth = spacing.textWidth;
         int bottomY = this.bottomY() - this.getBorderSize();
 
-
         final TextWrapper textWrapper;
         if (this.animateMessage) {
             // Animated messages

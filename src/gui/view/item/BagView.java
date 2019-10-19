@@ -188,6 +188,9 @@ public class BagView extends View {
 
     @Override
     public void draw(Graphics g) {
+        // Tabs
+        layout.setupTabs(tabButtons, selectedTab);
+
         // Background
         BasicPanels.drawCanvasPanel(g);
 
@@ -198,11 +201,8 @@ public class BagView extends View {
         // Draw Use State buttons
         UseState.forEach(useState -> useState.draw(g, buttons.get(useState.buttonIndex), selectedTab.getColor()));
 
-        // Selected item display
-        layout.drawSelectedItem(g, selectedItem);
-
-        // Draw each item in category
-        layout.drawItems(g, itemButtons, this.getDisplayItems(), pageNum);
+        // Draw selected item and each item in category
+        layout.drawItems(g, selectedItem, itemButtons, this.getDisplayItems(), pageNum);
 
         // Draw page numbers
         layout.drawPageNumbers(g, pageNum, totalPages());
@@ -222,9 +222,6 @@ public class BagView extends View {
 
         // Draw return button
         layout.drawReturnButton(g, returnButton);
-
-        // Draw tabs
-        layout.drawTabs(g, tabButtons, selectedTab);
 
         // Messages or buttons
         if (message != null && !StringUtils.isNullOrWhiteSpace(message.getMessage())) {

@@ -165,3 +165,5 @@ Other random things:
     noticed NewPokemonView is using %-10s for the name but this is no longer the maximum name length so worth just taking another look at probably
     should probably rewrite the numSpaceRows/Cols in the getButtons shit to be like missingRows and whatnot and default to zero
     ButtonList class should just take the size in the constructor and be able to add buttons and shit and have methods to add array subsets because I hate the arrayCopy bs
+    maybe eventually have the View class have draw method as final, with setup, draw (foreground), and getButtonList/getPanelList abstract methods
+    would also be nice if there was some universal message handler thing instead of each class just holding a string or whatever

@@ -16,8 +16,6 @@ import java.awt.image.BufferedImage;
 public class ItemPanel extends DrawPanel {
     private final boolean includeQuantity;
 
-    private ItemNamesies itemNamesies;
-
     public ItemPanel(int x, int y, int width, int height, boolean includeQuantity) {
         super(x, y, width, height);
 
@@ -27,20 +25,9 @@ public class ItemPanel extends DrawPanel {
         this.withBlackOutline();
     }
 
-    public void setItem(ItemNamesies itemNamesies) {
-        this.itemNamesies = itemNamesies;
-    }
-
-    @Override
-    public void draw(Graphics g) {
-        this.draw(g, this.itemNamesies);
-    }
-
     // Draws all relevant information about the item
     // If item is NO_ITEM, will only draw background and will return null
-    public WrapMetrics draw(Graphics g, ItemNamesies itemNamesies) {
-        this.drawBackground(g);
-
+    public WrapMetrics drawMessage(Graphics g, ItemNamesies itemNamesies) {
         // Only draw actual items
         if (itemNamesies == ItemNamesies.NO_ITEM) {
             return null;

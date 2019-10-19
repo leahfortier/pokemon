@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.EnumSet;
+import java.util.List;
 
 public class DrawPanel implements Panel {
     public final int x;
@@ -41,7 +42,6 @@ public class DrawPanel implements Panel {
     private boolean onlyTransparency;
     private int transparentCount;
 
-    private boolean skipDraw;
     private boolean greyOut;
     private boolean highlight;
     private Color highlightColor;
@@ -111,6 +111,10 @@ public class DrawPanel implements Panel {
         return this.withTransparentBackground().withBorderPercentage(0);
     }
 
+    public DrawPanel withBorderlessTransparentBackground() {
+        return this.withTransparentBackground().withBorderPercentage(0);
+    }
+
     public DrawPanel withTransparentBackground() {
         this.transparentBackground = true;
         return this;
@@ -132,6 +136,11 @@ public class DrawPanel implements Panel {
 
     public DrawPanel withBlackOutline() {
         this.outlineDirections = Direction.values();
+        return this;
+    }
+
+    public DrawPanel withOutlines(List<Direction> outlineDirections) {
+        this.outlineDirections = outlineDirections.toArray(new Direction[0]);
         return this;
     }
 
@@ -175,11 +184,6 @@ public class DrawPanel implements Panel {
 
     public DrawPanel withImageLabel(BufferedImage image) {
         this.imageLabel = image;
-        return this;
-    }
-
-    public DrawPanel skipDraw() {
-        this.skipDraw = true;
         return this;
     }
 
@@ -256,6 +260,7 @@ public class DrawPanel implements Panel {
 
     private void drawLabel(Graphics g) {
         g.setColor(Color.BLACK);
+        FontMetrics.setFont(g, fontSize);
         switch (this.labelAlignment) {
             case LEFT:
                 this.drawLeftLabel(g, fontSize, label);
@@ -269,12 +274,22 @@ public class DrawPanel implements Panel {
         }
     }
 
-    public void draw(Graphics g) {
-        if (this.skipDraw) {
-            this.skipDraw = false;
-            return;
+    private void drawImageLabel(Graphics g) {
+        g.setColor(Color.BLACK);
+        switch (this.labelAlignment) {
+            case LEFT:
+                this.leftImageLabel(g, fontSize, imageLabel, label);
+                break;
+            case RIGHT:
+                Global.error("Right image label is currently unsupported");
+                break;
+            default:
+                this.imageLabel(g, fontSize, imageLabel, label);
+                break;
         }
+    }
 
+    public void draw(Graphics g) {
         this.drawBackground(g);
 
         FontMetrics.setFont(g, this.fontSize);
@@ -282,7 +297,7 @@ public class DrawPanel implements Panel {
         // Labels (both text and images)
         if (this.label != null && this.imageLabel != null) {
             // Both image and text -- center together
-            this.imageLabel(g, fontSize, imageLabel, label);
+            this.drawImageLabel(g);
         } else if (label != null) {
             // Only text
             this.drawLabel(g);
@@ -434,8 +449,14 @@ public class DrawPanel implements Panel {
         return buttons;
     }
 
+    // TODO: This looks like it's more for vertical space but the name sounds like horizontal
+    // Gonna use getSpace for now but should come back to this to see if it can be deprecated/more clear/reworked/etc
     public int getTextSpace(Graphics g) {
         return this.getBorderSize() + FontMetrics.getDistanceBetweenRows(g) - FontMetrics.getTextHeight(g);
+    }
+
+    public int getSpace(Graphics g) {
+        return this.getBorderSize() + FontMetrics.getTextWidth(g);
     }
 
     public void drawLeftLabel(Graphics g, int fontSize, String label) {
@@ -461,6 +482,14 @@ public class DrawPanel implements Panel {
     public void imageLabel(Graphics g, int fontSize, BufferedImage image, String label) {
         FontMetrics.setFont(g, fontSize);
         ImageUtils.drawCenteredImageLabel(g, image, label, centerX(), centerY());
+    }
+
+    public void leftImageLabel(Graphics g, int fontSize, BufferedImage image, String label) {
+        int spacing = FontMetrics.getTextWidth(g)/2;
+        int startX = x + this.getBorderSize() + spacing;
+
+        FontMetrics.setFont(g, fontSize);
+        ImageUtils.drawCenteredHeightImageLabel(g, image, label, startX, centerY(), spacing);
     }
 
     @Override

@@ -1,8 +1,10 @@
 package gui.view.item;
 
+import draw.Alignment;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
+import draw.button.ButtonPanel;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.DrawPanel;
@@ -24,7 +26,8 @@ import util.Point;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Iterator;
+import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class BagLayout {
     private static final BagCategory[] CATEGORIES = BagCategory.values();
@@ -152,91 +155,73 @@ public class BagLayout {
         Button[] tabButtons = new Button[CATEGORIES.length];
         for (int i = 0; i < tabButtons.length; i++) {
             final int index = i;
+            final BagCategory category = CATEGORIES[index];
             tabButtons[i] = new Button(
                     this.tabPanels[i],
                     new ButtonTransitions().up(upIndex)
                                            .down(downIndex)
                                            .basic(Direction.RIGHT, startIndex + i, 1, tabButtons.length)
                                            .basic(Direction.LEFT, startIndex + i, 1, tabButtons.length),
-                    () -> indexAction.pressButton(index)
+                    () -> indexAction.pressButton(index),
+                    panel -> panel.withBorderlessTransparentBackground()
+                                  .withBackgroundColor(category.getColor())
+                                  .withLabel(category.getDisplayName(), 14, Alignment.LEFT)
+                                  .withImageLabel(category.getIcon())
             );
         }
         return tabButtons;
+    }
+
+    public void setupTabs(Button[] tabButtons, BagCategory selectedTab) {
+        // Use tab color for background
+        bagPanel.withBackgroundColor(selectedTab.getColor());
+
+        // Give correct outline for each tab
+        for (int i = 0; i < CATEGORIES.length; i++) {
+            tabButtons[i].panel().withTabOutlines(i, selectedTab.ordinal());
+        }
     }
 
     public Button[] getLeftButtons(int startIndex, ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
         return leftPanel.getButtons(10, Trainer.MAX_POKEMON, 1, startIndex, defaultTransitions, indexAction);
     }
 
-    // For testing
     public WrapMetrics drawSelectedItem(Graphics g, ItemNamesies selectedItem) {
-        return this.selectedPanel.draw(g, selectedItem);
+        return this.selectedPanel.drawMessage(g, selectedItem);
     }
 
-    // TODO: Deprecate
-    public void drawItems(Graphics g, Button[] itemButtons, Iterable<ItemNamesies> items, int pageNum) {
+    public void drawItems(Graphics g, ItemNamesies selectedItem, Button[] itemButtons, Iterable<ItemNamesies> items, int pageNum) {
+        this.drawSelectedItem(g, selectedItem);
+
         TileSet itemTiles = Game.getData().getItemTiles();
         Bag bag = Game.getPlayer().getBag();
 
         FontMetrics.setFont(g, 12);
         g.setColor(Color.BLACK);
 
-        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(items, pageNum, ITEMS_PER_PAGE);
-        for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
-            for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
-                ItemNamesies item = iter.next();
-                Item itemValue = item.getItem();
-                Button itemButton = itemButtons[k];
+        List<ItemNamesies> pageItems = GeneralUtils.pageValues(items, pageNum, ITEMS_PER_PAGE);
+        for (int i = 0; i < pageItems.size(); i++) {
+            ItemNamesies item = pageItems.get(i);
+            Item itemValue = item.getItem();
+            ButtonPanel panel = itemButtons[i].panel();
 
-                itemButton.fill(g, Color.WHITE);
-                itemButton.blackOutline(g);
+            int spacing = panel.getSpace(g);
+            int startX = panel.x + spacing + Item.MAX_IMAGE_SIZE.width;
+            int centerY = panel.centerY();
 
-                g.translate(itemButton.x, itemButton.y);
+            BufferedImage itemImage = itemTiles.getTile(itemValue.getImageName());
+            ImageUtils.drawCenteredImage(g, itemImage, (panel.x + startX)/2, centerY);
+            TextUtils.drawCenteredHeightString(g, item.getName(), startX, centerY);
 
-                ImageUtils.drawCenteredImage(g, itemTiles.getTile(itemValue.getImageName()), 14, 14);
-                g.drawString(item.getName(), 29, 18);
-
-                if (includeQuantity && itemValue.hasQuantity()) {
-                    TextUtils.drawRightAlignedString(g, "x" + bag.getQuantity(item), 142, 18);
-                }
-
-                g.translate(-itemButton.x, -itemButton.y);
-            }
-        }
-    }
-
-    public void setupItems(ItemNamesies selectedItem, Button[] itemButtons, Iterable<ItemNamesies> items, int pageNum) {
-        selectedPanel.setItem(selectedItem);
-
-        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(items, pageNum, ITEMS_PER_PAGE);
-        for (int x = 0, k = 0; x < ITEMS_PER_PAGE/2; x++) {
-            for (int y = 0; y < 2 && iter.hasNext(); y++, k++) {
-                ItemNamesies item = iter.next();
-                itemButtons[k].panel().setItem(item, includeQuantity);
+            if (includeQuantity && itemValue.hasQuantity()) {
+                int rightX = panel.rightX() - spacing;
+                TextUtils.drawCenteredHeightString(g, "x" + bag.getQuantity(item), rightX, centerY, Alignment.RIGHT);
             }
         }
     }
 
     public void drawPageNumbers(Graphics g, int pageNum, int totalPages) {
         TextUtils.drawPageNumbers(g, 16, leftArrow, rightArrow, pageNum, totalPages);
-    }
-
-    public void drawTabs(Graphics g, Button[] tabButtons, BagCategory selectedTab) {
-        for (int i = 0; i < CATEGORIES.length; i++) {
-            Button tabButton = tabButtons[i];
-            tabButton.fillTransparent(g, CATEGORIES[i].getColor());
-            tabButton.outlineTab(g, i, selectedTab.ordinal());
-
-            g.translate(tabButton.x, tabButton.y);
-
-            g.setColor(Color.BLACK);
-            FontMetrics.setFont(g, 14);
-
-            ImageUtils.drawCenteredImage(g, CATEGORIES[i].getIcon(), 16, 26);
-            g.drawString(CATEGORIES[i].getDisplayName(), 30, 30);
-
-            g.translate(-tabButton.x, -tabButton.y);
-        }
     }
 
     public Button createReturnButton(ButtonTransitions transitions) {

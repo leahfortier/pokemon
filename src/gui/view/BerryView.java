@@ -88,7 +88,6 @@ public class BerryView extends View {
         );
 
         // Harvest button is all the selected buttons at once
-        // Welcome to the Hellmouth
         Button harvestButton = new Button(
                 layout.selectedPanel.x,
                 layout.selectedButtonPanels[0].y,
@@ -146,11 +145,12 @@ public class BerryView extends View {
 
     @Override
     public void draw(Graphics g) {
-        layout.setupItems(selectedItem, itemButtons, this.getDisplayBerries(), pageNum);
-
         // Background
         BasicPanels.drawCanvasPanel(g);
         panels.drawAll(g);
+
+        // Draw buttons (without hover)
+        buttons.drawPanels(g);
 
         // Draw page numbers
         layout.drawPageNumbers(g, pageNum, totalPages());
@@ -158,8 +158,8 @@ public class BerryView extends View {
         // Berry Panel
         drawBerryPanel(g);
 
-        // Draw buttons (without hover)
-        buttons.drawPanels(g);
+        // Draw selected item and item buttons
+        layout.drawItems(g, selectedItem, itemButtons, this.getDisplayBerries(), pageNum);
 
         // Messages or buttons
         if (!StringUtils.isNullOrWhiteSpace(message)) {

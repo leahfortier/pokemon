@@ -4,6 +4,7 @@ import draw.button.Button;
 import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
+import draw.panel.PanelList;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.InputControl;
@@ -32,6 +33,7 @@ public class SellView extends View {
     private static final int PAGE_LEFT_ARROW = NUM_BUTTONS - 6;
 
     private final MartLayout layout;
+    private final PanelList panels;
 
     private final ButtonList buttons;
     private final Button[] tabButtons;
@@ -39,9 +41,6 @@ public class SellView extends View {
     private final Button amountLeftButton;
     private final Button amountRightButton;
     private final Button sellButton;
-    private final Button pageLeftButton;
-    private final Button pageRightButton;
-    private final Button returnButton;
 
     private int pageNum;
     private int itemAmount;
@@ -59,25 +58,25 @@ public class SellView extends View {
         Button[] buttons = new Button[NUM_BUTTONS];
         this.buttons = new ButtonList(buttons);
 
-        sellButton = new Button(
-                layout.confirmPanel,
+        sellButton = layout.createConfirmButton(
+                "SELL",
                 new ButtonTransitions().right(RETURN).up(TABS).left(RETURN).down(TABS),
                 this::sell
         );
 
-        amountLeftButton = new Button(
-                layout.selectedButtonPanels[0],
+        amountLeftButton = layout.createAmountArrowButton(
+                Direction.LEFT,
                 new ButtonTransitions().right(AMOUNT_RIGHT_ARROW).up(TABS).left(SELL).down(ITEMS),
                 () -> this.updateItemAmount(-1)
         );
 
-        amountRightButton = new Button(
-                layout.selectedButtonPanels[2],
+        amountRightButton = layout.createAmountArrowButton(
+                Direction.RIGHT,
                 new ButtonTransitions().right(SELL).up(TABS).left(AMOUNT_LEFT_ARROW).down(ITEMS + 1),
                 () -> this.updateItemAmount(1)
         );
 
-        returnButton = layout.createReturnButton(
+        Button returnButton = layout.createReturnButton(
                 new ButtonTransitions().right(SELL).up(PAGE_LEFT_ARROW).left(SELL).down(TABS)
         );
 
@@ -85,21 +84,21 @@ public class SellView extends View {
 
         itemButtons = layout.getItemButtons(
                 ITEMS,
-                new ButtonTransitions().up(AMOUNT_LEFT_ARROW).down(PAGE_LEFT_ARROW),
+                new ButtonTransitions().up(AMOUNT_LEFT_ARROW).down(PAGE_LEFT_ARROW).left(SELL).right(SELL),
                 index -> setSelectedItem(GeneralUtils.getPageValue(this.getDisplayItems(), pageNum, ITEMS_PER_PAGE, index))
         );
 
-        pageLeftButton = new Button(
+        Button pageLeftButton = new Button(
                 layout.leftArrow,
                 new ButtonTransitions().right(PAGE_RIGHT_ARROW).up(ITEMS_PER_PAGE - 2).left(SELL).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
-        );
+        ).asArrow(Direction.LEFT);
 
-        pageRightButton = new Button(
+        Button pageRightButton = new Button(
                 layout.rightArrow,
                 new ButtonTransitions().right(SELL).up(ITEMS_PER_PAGE - 1).left(PAGE_LEFT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
-        );
+        ).asArrow(Direction.RIGHT);
 
         System.arraycopy(tabButtons, 0, buttons, TABS, CATEGORIES.length);
         System.arraycopy(itemButtons, 0, buttons, ITEMS, ITEMS_PER_PAGE);
@@ -109,6 +108,12 @@ public class SellView extends View {
         buttons[AMOUNT_LEFT_ARROW] = amountLeftButton;
         buttons[AMOUNT_RIGHT_ARROW] = amountRightButton;
         buttons[RETURN] = returnButton;
+
+        this.panels = new PanelList(
+                layout.bagPanel, layout.amountPanel, layout.leftPanel,
+                layout.playerMoneyPanel, layout.inBagPanel, layout.totalAmountPanel,
+                layout.itemsPanel, layout.selectedPanel
+        );
 
         this.movedToFront();
     }
@@ -123,43 +128,30 @@ public class SellView extends View {
         InputControl.instance().popViewIfEscaped();
     }
 
+    private void drawSetup() {
+        // Tab colors and outlines and stuff
+        layout.setupTabs(tabButtons, selectedTab);
+
+        // Item and amount setup
+        layout.setup(selectedItem, itemAmount, selectedItem.getItem().getSellPrice()*itemAmount);
+    }
+
     @Override
     public void draw(Graphics g) {
+        drawSetup();
+
         // Background
         BasicPanels.drawCanvasPanel(g);
-
-        // Info Boxes
-        layout.bagPanel.withBackgroundColor(selectedTab.getColor())
-                       .drawBackground(g);
-
-        // Item Display
-        layout.drawSelectedItem(g, selectedItem);
-
-        // Draw selected amount and arrows
-        layout.drawAmount(g, itemAmount, amountLeftButton, amountRightButton);
-
-        // Draw each items in category
-        layout.drawItems(g, itemButtons, this.getDisplayItems(), pageNum);
+        panels.drawAll(g);
+        buttons.drawPanels(g);
 
         // Draw page numbers
         layout.drawPageNumbers(g, pageNum, totalPages());
 
-        // Left and Right arrows
-        pageLeftButton.drawArrow(g, Direction.LEFT);
-        pageRightButton.drawArrow(g, Direction.RIGHT);
+        // Draw selected item and each item in category
+        layout.drawItems(g, selectedItem, itemButtons, this.getDisplayItems(), pageNum);
 
-        // Left panel -- player money, in bag amount, total sell price
-        layout.drawMoneyPanel(g, selectedItem, selectedItem.getItem().getSellPrice()*itemAmount);
-
-        // Sell button
-        layout.drawConfirmButton(g, sellButton, "SELL");
-
-        // Return button
-        layout.drawReturnButton(g, returnButton);
-
-        // Tabs
-        layout.drawTabs(g, tabButtons, selectedTab);
-
+        // Draw button hover
         buttons.drawHover(g);
     }
 

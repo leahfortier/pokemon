@@ -55,9 +55,8 @@ public final class ImageUtils {
         g.drawImage(image, x, centerY - image.getHeight()/2, null);
     }
 
-    public static void drawCenteredHeightImageLabel(Graphics g, BufferedImage image, String text, int x, int centerY) {
+    public static void drawCenteredHeightImageLabel(Graphics g, BufferedImage image, String text, int x, int centerY, int spacing) {
         int imageWidth = image.getWidth();
-        int spacing = FontMetrics.getTextWidth(g, "  ");
 
         drawCenteredHeightImage(g, image, x, centerY);
         TextUtils.drawCenteredHeightString(g, text, x + imageWidth + spacing, centerY);

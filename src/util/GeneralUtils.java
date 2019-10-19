@@ -130,6 +130,15 @@ public final class GeneralUtils {
         return iterator;
     }
 
+    public static <T> List<T> pageValues(Iterable<T> list, int pageNum, int buttonsPerPage) {
+        Iterator<T> iterator = pageIterator(list, pageNum, buttonsPerPage);
+        List<T> pageValues = new ArrayList<>();
+        for (int i = 0; i < buttonsPerPage && iterator.hasNext(); i++) {
+            pageValues.add(iterator.next());
+        }
+        return pageValues;
+    }
+
     public static int getTotalPages(int totalItems, int itemsPerPage) {
         return Math.max(1, (int)Math.ceil((double)totalItems/itemsPerPage));
     }

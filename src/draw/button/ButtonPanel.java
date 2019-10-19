@@ -1,30 +1,25 @@
 package draw.button;
 
-import draw.Alignment;
-import draw.ImageUtils;
 import draw.PolygonUtils;
-import draw.TextUtils;
 import draw.panel.DrawPanel;
-import gui.TileSet;
-import item.Item;
-import item.ItemNamesies;
-import item.bag.Bag;
-import main.Game;
 import map.Direction;
 
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ButtonPanel extends DrawPanel {
     private final Button button;
 
+    // For arrow buttons (width and height default to button size, but can be specified otherwise
     private Direction arrowDirection;
+    private int arrowWidth;
+    private int arrowHeight;
 
     private boolean onlyActiveDraw;
     private boolean greyInactive;
 
-    private ItemNamesies item;
-    private boolean includeQuantity;
+    private boolean skipDraw;
 
     // Should only be created from Button constructor
     ButtonPanel(Button button) {
@@ -52,23 +47,51 @@ public class ButtonPanel extends DrawPanel {
         return this;
     }
 
-    public void setItem(ItemNamesies item, boolean includeQuantity) {
-        this.item = item;
-        this.includeQuantity = includeQuantity;
+    public void skipDraw() {
+        this.skipDraw = true;
     }
 
     // Sets the arrow direction and removes the black outline
     public ButtonPanel asArrow(Direction arrowDirection) {
+        return this.asArrow(arrowDirection, width, height)
+                   .withNoOutline()
+                   .asButtonPanel();
+    }
+
+    public ButtonPanel asArrow(Direction arrowDirection, int arrowWidth, int arrowHeight) {
         this.arrowDirection = arrowDirection;
-        return this.withNoOutline().asButtonPanel();
+        this.arrowWidth = arrowWidth;
+        this.arrowHeight = arrowHeight;
+        return this;
+    }
+
+    public ButtonPanel withTabOutlines(int index, int selectedIndex) {
+        List<Direction> toOutline = new ArrayList<>();
+        toOutline.add(Direction.UP);
+        toOutline.add(Direction.RIGHT);
+
+        if (index == 0) {
+            toOutline.add(Direction.LEFT);
+        }
+
+        if (index != selectedIndex) {
+            toOutline.add(Direction.DOWN);
+        }
+
+        return this.withOutlines(toOutline).asButtonPanel();
     }
 
     @Override
     public void draw(Graphics g) {
+        if (this.skipDraw) {
+            this.skipDraw = false;
+            return;
+        }
+
         if (!button.isActive()) {
             if (this.onlyActiveDraw) {
                 // If only draw when active, and is not active, skip the current draw
-                super.skipDraw();
+                return;
             } else if (this.greyInactive) {
                 // If button is inactive, set greyOut to true
                 // Note: This is not actually drawing the grey out, just setting it (will be drawn in drawBackground)
@@ -80,32 +103,7 @@ public class ButtonPanel extends DrawPanel {
 
         // Arrow buttons!
         if (this.arrowDirection != null) {
-            PolygonUtils.drawArrow(g, x, y, width, height, arrowDirection);
-        }
-
-        // Item name, image, and (maybe) quantity
-        if (item != null) {
-            drawItem(g);
-        }
-    }
-
-    private void drawItem(Graphics g) {
-        TileSet itemTiles = Game.getData().getItemTiles();
-        Bag bag = Game.getPlayer().getBag();
-        Item itemValue = item.getItem();
-
-        int spacing = this.getTextSpace(g);
-        int startX = x + spacing + Item.MAX_IMAGE_SIZE.width;
-        int centerY = this.centerY();
-
-        BufferedImage itemImage = itemTiles.getTile(itemValue.getImageName());
-        ImageUtils.drawCenteredImage(g, itemImage, x + (startX - x)/2, centerY);
-
-        TextUtils.drawCenteredHeightString(g, item.getName(), startX, centerY);
-
-        if (includeQuantity && itemValue.hasQuantity()) {
-            int rightX = this.rightX() - spacing;
-            TextUtils.drawCenteredHeightString(g, "x" + bag.getQuantity(item), rightX, centerY, Alignment.RIGHT);
+            PolygonUtils.drawCenteredArrow(g, centerX(), centerY(), arrowWidth, arrowHeight, arrowDirection);
         }
     }
 }
