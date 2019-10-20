@@ -349,10 +349,8 @@ public class PartyView extends View {
 
     private void drawPokemonInfo(Graphics g, BufferedImage pkmImg, PartyPokemon selectedPkm) {
         // Draw type color polygons
-        pokemonPanel.withBackgroundColors(this.getBackgroundColors(selectedPkm), true);
-        if (!selectedPkm.canFight()) {
-            pokemonPanel.setGreyOut();
-        }
+        pokemonPanel.withBackgroundColors(this.getBackgroundColors(selectedPkm), true)
+                    .withGreyOut(!selectedPkm.canFight());
 
         pokemonPanel.drawBackground(g);
 

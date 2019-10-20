@@ -133,6 +133,7 @@ public class SellView extends View {
         layout.setupTabs(tabButtons, selectedTab);
 
         // Item and amount setup
+        layout.setupItems(itemButtons, this.getDisplayItems(), pageNum);
         layout.setup(selectedItem, itemAmount, selectedItem.getItem().getSellPrice()*itemAmount);
     }
 

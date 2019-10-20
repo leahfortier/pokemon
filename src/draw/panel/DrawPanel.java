@@ -188,8 +188,8 @@ public class DrawPanel implements Panel {
         return this;
     }
 
-    public DrawPanel setGreyOut() {
-        this.greyOut = true;
+    public DrawPanel withGreyOut(boolean greyOut) {
+        this.greyOut = greyOut;
         return this;
     }
 
@@ -257,6 +257,11 @@ public class DrawPanel implements Panel {
     private void fill(Graphics g, Color color) {
         g.setColor(color);
         g.fillRect(x, y, width, height);
+    }
+
+    // Add a sad dark-red filter over everything
+    public void faintOut(Graphics g) {
+        this.fill(g, new Color(190, 49, 46, 64));
     }
 
     private void drawLabel(Graphics g) {
@@ -417,9 +422,6 @@ public class DrawPanel implements Panel {
         Button[] buttons = new Button[numButtonRows*numButtonCols];
         for (int row = 0, index = 0; row < numButtonRows; row++) {
             for (int col = 0; col < numButtonCols; col++, index++) {
-                // Silly Java, final variables are for kids
-                final int finalIndex = index;
-
                 // Setup default transitions
                 ButtonTransitions transitions = ButtonTransitions.getBasicTransitions(
                         index, numButtonRows, numButtonCols, startValue, defaultTransitions
@@ -476,8 +478,9 @@ public class DrawPanel implements Panel {
         ImageUtils.drawCenteredImageLabel(g, image, label, centerX(), centerY());
     }
 
+    // Spacing is kind of specific for the bag tabs right now and not sure how bad that is without another sample
     public void leftImageLabel(Graphics g, int fontSize, BufferedImage image, String label) {
-        int spacing = FontMetrics.getTextWidth(g)/2;
+        int spacing = FontMetrics.getTextWidth(g)/3;
         int startX = x + this.getBorderSize() + spacing;
 
         FontMetrics.setFont(g, fontSize);
@@ -562,6 +565,21 @@ public class DrawPanel implements Panel {
             return indexSetup == null
                    ? panel -> {}
                    : panel -> indexSetup.setup(index, panel);
+        }
+
+        static PanelIndexSetup add(PanelIndexSetup base, PanelIndexSetup addition) {
+            if (base == null && addition == null) {
+                return (index, panel) -> {};
+            } else if (base == null) {
+                return addition;
+            } else if (addition == null) {
+                return base;
+            }
+
+            return (index, panel) -> {
+                base.setup(index, panel);
+                addition.setup(index, panel);
+            };
         }
     }
 }

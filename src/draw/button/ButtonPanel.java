@@ -16,7 +16,7 @@ public class ButtonPanel extends DrawPanel {
     private int arrowWidth;
     private int arrowHeight;
 
-    private boolean onlyActiveDraw;
+    private boolean skipInactive;
     private boolean greyInactive;
 
     private boolean skipDraw;
@@ -41,8 +41,8 @@ public class ButtonPanel extends DrawPanel {
         return this.button;
     }
 
-    public ButtonPanel onlyActiveDraw() {
-        this.onlyActiveDraw = true;
+    public ButtonPanel skipInactive() {
+        this.skipInactive = true;
         return this;
     }
 
@@ -51,8 +51,12 @@ public class ButtonPanel extends DrawPanel {
         return this;
     }
 
+    public void skipDraw(boolean shouldSkip) {
+        this.skipDraw = shouldSkip;
+    }
+
     public void skipDraw() {
-        this.skipDraw = true;
+        this.skipDraw(true);
     }
 
     // Sets the arrow direction and removes the black outline
@@ -93,13 +97,13 @@ public class ButtonPanel extends DrawPanel {
         }
 
         if (!button.isActive()) {
-            if (this.onlyActiveDraw) {
+            if (this.skipInactive) {
                 // If only draw when active, and is not active, skip the current draw
                 return;
             } else if (this.greyInactive) {
                 // If button is inactive, set greyOut to true
                 // Note: This is not actually drawing the grey out, just setting it (will be drawn in drawBackground)
-                super.setGreyOut();
+                super.withGreyOut(true);
             }
         }
 

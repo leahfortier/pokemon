@@ -166,7 +166,7 @@ class PCView extends View {
                                                      party = true;
                                                  }
                                              },
-                                             (index, panel) -> panel.onlyActiveDraw()
+                                             (index, panel) -> panel.skipInactive()
         );
 
         buttons[LEFT_ARROW] = leftButton = new Button(

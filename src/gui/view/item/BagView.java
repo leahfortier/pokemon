@@ -3,13 +3,16 @@ package gui.view.item;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import battle.effect.status.StatusNamesies;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonList;
+import draw.button.ButtonPanel;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.PanelList;
 import gui.TileSet;
 import gui.view.View;
 import gui.view.ViewMode;
@@ -59,6 +62,7 @@ public class BagView extends View {
     private static final int LEFT_ARROW = NUM_BUTTONS - 6;
 
     private final BagLayout layout;
+    private final PanelList panels;
 
     private final ButtonList buttons;
     private final Button[] tabButtons;
@@ -67,7 +71,6 @@ public class BagView extends View {
     private final Button[] itemButtons;
     private final Button rightArrow;
     private final Button leftArrow;
-    private final Button returnButton;
 
     private BagState state;
     private ItemNamesies selectedItem;
@@ -87,23 +90,27 @@ public class BagView extends View {
         Button[] buttons = new Button[NUM_BUTTONS];
         this.buttons = new ButtonList(buttons);
 
-        returnButton = layout.createReturnButton(
+        Button returnButton = layout.createReturnButton(
                 new ButtonTransitions().right(PARTY).up(RIGHT_ARROW).left(PARTY).down(TABS),
                 this::returnToMap
         );
 
         tabButtons = layout.getTabButtons(TABS, RETURN, USE, this::changeCategory);
 
+        // Party buttons don't skip when inactive since they're inactive by default
+        // (Only active when PokemonUseItem is selected)
         partyButtons = layout.getLeftButtons(
                 PARTY,
                 new ButtonTransitions().right(GIVE).up(TABS).left(MOVES).down(TABS),
                 index -> UseState.applyPokemon(this, Game.getPlayer().getTeam().get(index))
         );
 
+        // Move buttons are fine to skip when inactive since they're only visible when active
         moveButtons = layout.getLeftButtons(
                 MOVES,
                 new ButtonTransitions().right(PARTY).up(TABS).left(GIVE).down(TABS),
-                this::useMoveItem
+                this::useMoveItem,
+                (index, panel) -> panel.skipInactive()
         );
 
         itemButtons = layout.getItemButtons(
@@ -115,6 +122,7 @@ public class BagView extends View {
         UseState[] useStates = UseState.values();
         int lastIndex = useStates.length - 1;
         for (int i = 0; i < useStates.length; i++) {
+            final int index = i;
             UseState useState = useStates[i];
             buttons[useState.buttonIndex] = new Button(
                     layout.selectedButtonPanels[i],
@@ -123,7 +131,11 @@ public class BagView extends View {
                             .up(selectedTab.ordinal())
                             .left(i == 0 ? PARTY : useStates[i - 1].buttonIndex)
                             .down(i <= useStates.length/2 ? ITEMS : ITEMS + 1),
-                    () -> pressState(useState)
+                    () -> pressState(useState),
+                    panel -> panel.withTabOutlines(index, -1)
+                                  .greyInactive()
+                                  .withLabel(useState.displayName, 20)
+                                  .withBorderlessTransparentBackground()
             );
         }
 
@@ -131,13 +143,13 @@ public class BagView extends View {
                 layout.leftArrow,
                 new ButtonTransitions().right(RIGHT_ARROW).up(ITEMS + ITEMS_PER_PAGE - 2).left(RIGHT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
-        );
+        ).asArrow(Direction.LEFT);
 
         rightArrow = new Button(
                 layout.rightArrow,
                 new ButtonTransitions().right(LEFT_ARROW).up(ITEMS + ITEMS_PER_PAGE - 1).left(LEFT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
-        );
+        ).asArrow(Direction.RIGHT);
 
         System.arraycopy(tabButtons, 0, buttons, TABS, CATEGORIES.length);
         System.arraycopy(partyButtons, 0, buttons, PARTY, Trainer.MAX_POKEMON);
@@ -146,6 +158,8 @@ public class BagView extends View {
         buttons[LEFT_ARROW] = leftArrow;
         buttons[RIGHT_ARROW] = rightArrow;
         buttons[RETURN] = returnButton;
+
+        panels = new PanelList(layout.bagPanel, layout.leftPanel, layout.selectedPanel, layout.itemsPanel);
 
         movedToFront();
     }
@@ -186,20 +200,44 @@ public class BagView extends View {
         Game.instance().setViewMode(ViewMode.MAP_VIEW);
     }
 
+    private void drawSetup() {
+        // Tabs and item buttons
+        layout.setupTabs(tabButtons, selectedTab);
+        layout.setupItems(itemButtons, this.getDisplayItems(), pageNum);
+
+        // Setup Use State buttons
+        UseState.forEach(useState -> useState.setup(buttons.get(useState.buttonIndex).panel(), selectedTab.getColor()));
+
+        // Set up Pokemon buttons
+        List<PartyPokemon> team = Game.getPlayer().getTeam();
+        for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
+            ButtonPanel panel = partyButtons[i].panel();
+            if (i < team.size() && state != BagState.MOVE_SELECT) {
+                panel.withBackgroundColors(PokeType.getColors(team.get(i)));
+            } else {
+                panel.skipDraw();
+            }
+        }
+
+        // Set up move buttons
+        if (state == BagState.MOVE_SELECT) {
+            MoveList moveList = selectedPokemon.getActualMoves();
+            for (int i = 0; i < moveList.size(); i++) {
+                Attack attack = moveList.get(i).getAttack();
+                moveButtons[i].panel()
+                              .withBackgroundColor(attack.getActualType().getColor());
+            }
+        }
+    }
+
     @Override
     public void draw(Graphics g) {
-        // Tabs
-        layout.setupTabs(tabButtons, selectedTab);
+        drawSetup();
 
         // Background
         BasicPanels.drawCanvasPanel(g);
-
-        // Info Boxes
-        layout.bagPanel.withBackgroundColor(selectedTab.getColor())
-                       .drawBackground(g);
-
-        // Draw Use State buttons
-        UseState.forEach(useState -> useState.draw(g, buttons.get(useState.buttonIndex), selectedTab.getColor()));
+        panels.drawAll(g);
+        buttons.drawPanels(g);
 
         // Draw selected item and each item in category
         layout.drawItems(g, selectedItem, itemButtons, this.getDisplayItems(), pageNum);
@@ -207,11 +245,6 @@ public class BagView extends View {
         // Draw page numbers
         layout.drawPageNumbers(g, pageNum, totalPages());
 
-        // Left and right arrows
-        leftArrow.drawArrow(g, Direction.LEFT);
-        rightArrow.drawArrow(g, Direction.RIGHT);
-
-        layout.leftPanel.drawBackground(g);
         if (state == BagState.MOVE_SELECT) {
             // Draw moves
             drawMoves(g);
@@ -219,9 +252,6 @@ public class BagView extends View {
             // Draw Pokemon Info
             drawPokemonInfo(g);
         }
-
-        // Draw return button
-        layout.drawReturnButton(g, returnButton);
 
         // Messages or buttons
         if (message != null && !StringUtils.isNullOrWhiteSpace(message.getMessage())) {
@@ -242,12 +272,7 @@ public class BagView extends View {
 
             g.translate(moveButton.x, moveButton.y);
 
-            DrawPanel movePanel = new DrawPanel(0, 0, moveButton.width, moveButton.height)
-                    .withTransparentBackground(attack.getActualType().getColor())
-                    .withTransparentCount(2)
-                    .withBorderPercentage(15)
-                    .withBlackOutline();
-            movePanel.drawBackground(g);
+            DrawPanel movePanel = new DrawPanel(0, 0, moveButton.width, moveButton.height);
 
             g.drawImage(attack.getActualType().getImage(), 254, 14, null);
             g.drawImage(attack.getCategory().getImage(), 254, 33, null);
@@ -274,12 +299,7 @@ public class BagView extends View {
 
             g.translate(pokemonButton.x, pokemonButton.y);
 
-            DrawPanel pokemonPanel = new DrawPanel(0, 0, pokemonButton.width, pokemonButton.height)
-                    .withBackgroundColors(PokeType.getColors(p))
-                    .withTransparentCount(2)
-                    .withBorderPercentage(15)
-                    .withBlackOutline();
-            pokemonPanel.drawBackground(g);
+            DrawPanel pokemonPanel = new DrawPanel(0, 0, pokemonButton.width, pokemonButton.height);
 
             BufferedImage img = partyTiles.getTile(p.getTinyImageName());
             ImageUtils.drawCenteredImage(g, img, 30, pokemonPanel.centerY());
@@ -323,12 +343,11 @@ public class BagView extends View {
 
                     g.drawString(p.getActualHeldItem().getName(), 50, 47);
                     TextUtils.drawRightAlignedString(g, p.getHpString(), 293, 47);
+                }
 
-                    if (!p.canFight()) {
-                        // TODO: Look if this color appears in multiple place and see if it should be a constant
-                        // TODO: I think this can just be greyOut -- maybe I should make some sort of translation button thing
-                        pokemonButton.fillTranslated(g, new Color(0, 0, 0, 128));
-                    }
+                // Taint the whole button with faint
+                if (p.hasStatus(StatusNamesies.FAINTED)) {
+                    pokemonPanel.faintOut(g);
                 }
             }
 

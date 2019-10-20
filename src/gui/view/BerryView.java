@@ -61,7 +61,6 @@ public class BerryView extends View {
         layout.bagPanel.withBackgroundColor(BACKGROUND_COLOR)
                        .withBlackOutline();
 
-
         DrawPanel tabPanel = layout.tabPanels[BagCategory.BERRY.ordinal()]
                 .withBackgroundColor(BACKGROUND_COLOR)
                 .withTransparentBackground()
@@ -143,6 +142,8 @@ public class BerryView extends View {
 
     @Override
     public void draw(Graphics g) {
+        layout.setupItems(itemButtons, this.getDisplayBerries(), pageNum);
+
         // Background
         BasicPanels.drawCanvasPanel(g);
         panels.drawAll(g);

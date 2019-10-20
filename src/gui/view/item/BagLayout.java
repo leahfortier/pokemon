@@ -9,6 +9,7 @@ import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.DrawPanel;
 import draw.panel.DrawPanel.ButtonIndexAction;
+import draw.panel.DrawPanel.PanelIndexSetup;
 import draw.panel.ItemPanel;
 import draw.panel.WrapPanel.WrapMetrics;
 import gui.TileSet;
@@ -31,7 +32,9 @@ import java.util.List;
 
 public class BagLayout {
     private static final BagCategory[] CATEGORIES = BagCategory.values();
-    private static final int ITEMS_PER_PAGE = 10;
+    private static final int NUM_ITEM_ROWS = 5;
+    private static final int NUM_ITEM_COLS = 2;
+    private static final int ITEMS_PER_PAGE = NUM_ITEM_ROWS*NUM_ITEM_COLS;
 
     public final DrawPanel bagPanel;
     public final DrawPanel leftPanel;
@@ -137,17 +140,15 @@ public class BagLayout {
                                    ButtonIndexAction indexAction) {
         return itemsPanel.getButtons(
                 5,
-                ITEMS_PER_PAGE/2 + 1,
-                2,
-                ITEMS_PER_PAGE/2,
-                2,
+                NUM_ITEM_ROWS + 1,
+                NUM_ITEM_COLS,
+                NUM_ITEM_ROWS,
+                NUM_ITEM_COLS,
                 startIndex,
                 defaultTransitions,
                 indexAction,
-                (index, panel) -> panel.onlyActiveDraw()
-                                       .withBackgroundColor(Color.WHITE)
+                (index, panel) -> panel.withBackgroundColor(Color.WHITE)
                                        .withBlackOutline()
-                                       .withLabelSize(12)
         );
     }
 
@@ -183,11 +184,29 @@ public class BagLayout {
     }
 
     public Button[] getLeftButtons(int startIndex, ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
-        return leftPanel.getButtons(10, Trainer.MAX_POKEMON, 1, startIndex, defaultTransitions, indexAction);
+        return getLeftButtons(startIndex, defaultTransitions, indexAction, null);
+    }
+
+    public Button[] getLeftButtons(int startIndex, ButtonTransitions defaultTransitions,
+                                   ButtonIndexAction indexAction, PanelIndexSetup panelSetup) {
+        PanelIndexSetup baseSetup = (index, panel) -> panel.withTransparentCount(2)
+                                                           .withBorderPercentage(15)
+                                                           .withBlackOutline();
+        return leftPanel.getButtons(
+                10, Trainer.MAX_POKEMON, 1, startIndex, defaultTransitions,
+                indexAction, PanelIndexSetup.add(baseSetup, panelSetup)
+        );
     }
 
     public WrapMetrics drawSelectedItem(Graphics g, ItemNamesies selectedItem) {
         return this.selectedPanel.drawMessage(g, selectedItem);
+    }
+
+    public void setupItems(Button[] itemButtons, Iterable<ItemNamesies> items, int pageNum) {
+        List<ItemNamesies> pageItems = GeneralUtils.pageValues(items, pageNum, ITEMS_PER_PAGE);
+        for (int i = 0; i < ITEMS_PER_PAGE; i++) {
+            itemButtons[i].panel().skipDraw(i >= pageItems.size());
+        }
     }
 
     public void drawItems(Graphics g, ItemNamesies selectedItem, Button[] itemButtons, Iterable<ItemNamesies> items, int pageNum) {
@@ -237,9 +256,5 @@ public class BagLayout {
                               .withBlackOutline()
                               .withLabel("Return", 20)
         );
-    }
-
-    public void drawReturnButton(Graphics g, Button returnButton) {
-        returnButton.fillOutlineLabel(g, 20, "Return");
     }
 }

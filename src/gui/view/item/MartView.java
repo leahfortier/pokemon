@@ -138,6 +138,7 @@ public class MartView extends View {
     @Override
     public void draw(Graphics g) {
         // Item and amount setup
+        layout.setupItems(itemButtons, forSaleItems, pageNum);
         layout.setup(selectedItem, itemAmount, selectedItem.getItem().getPrice()*itemAmount);
 
         // Background
