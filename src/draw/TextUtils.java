@@ -30,8 +30,7 @@ public final class TextUtils {
     // Does not draw the button/arrows at all
     // currentPage is expected to be zero-indexed and will be incremented for display purposes
     public static void drawPageNumbers(Graphics g, int fontSize, Panel leftArrow, Panel rightArrow, int currentPage, int totalPages) {
-        FontMetrics.setFont(g, fontSize);
-        g.setColor(Color.BLACK);
+        FontMetrics.setBlackFont(g, fontSize);
         drawCenteredString(
                 g,
                 (currentPage + 1) + "/" + totalPages,

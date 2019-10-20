@@ -41,11 +41,11 @@ class PCView extends View {
     private static final int LEFT_ARROW = NUM_BUTTONS - 6;
     private static final int PARTY = PC.BOX_HEIGHT*PC.BOX_WIDTH;
 
+    private final PanelList panels;
     private final DrawPanel boxPanel;
     private final DrawPanel boxNamePanel;
     private final DrawPanel infoPanel;
     private final DrawPanel imagePanel;
-    private final PanelList panels;
 
     private final ButtonList buttons;
     private final Button[][] boxButtons;
@@ -334,8 +334,7 @@ class PCView extends View {
     }
 
     private void drawSelectedPokemon(Graphics g) {
-        FontMetrics.setFont(g, 20);
-        g.setColor(Color.BLACK);
+        FontMetrics.setBlackFont(g, 20);
         g.drawString(selected.getActualName() + " " + selected.getGenderString(), 541, 82);
 
         // Eggs don't know shit
@@ -398,8 +397,7 @@ class PCView extends View {
                 g.setColor(selected.getNature().getColor(i));
                 g.drawString(Stat.getStat(i, false).getName(), 427, 360 + i*18 + i/2); // TODO: srsly what's with the i/2
 
-                g.setColor(Color.BLACK);
-                FontMetrics.setFont(g, 14);
+                FontMetrics.setBlackFont(g, 14);
 
                 // TODO: What's up with the + i/2 in the y????
                 TextUtils.drawRightAlignedString(g, selected.getStat(i) + "", 635, 360 + i*18 + i/2);

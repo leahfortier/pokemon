@@ -182,8 +182,7 @@ public class BagState implements VisualStateHandler {
         int selectedButton = bagButtons.getSelected();
         ItemNamesies selected = null;
 
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 12);
+        FontMetrics.setBlackFont(g, 12);
         Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(items, bagPage, ITEMS_PER_PAGE);
         for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
             ItemNamesies item = iter.next();
@@ -243,8 +242,7 @@ public class BagState implements VisualStateHandler {
         BufferedImage img = itemTiles.getTile(itemNamesies.getItem().getImageName());
         ImageUtils.drawCenteredImage(g, img, 14, 14);
 
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 12);
+        FontMetrics.setBlackFont(g, 12);
 
         g.drawString(itemNamesies.getName(), 28, 19);
         TextUtils.drawRightAlignedString(g, "x" + Game.getPlayer().getBag().getQuantity(itemNamesies), 140, 19);

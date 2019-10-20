@@ -131,8 +131,7 @@ public final class DrawUtils {
         g.setColor(Color.WHITE);
         g.fillRect(borderSize + graySize, yValue + graySize + borderSize, insideWidth, insideHeight);
 
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, fontSize);
+        FontMetrics.setBlackFont(g, fontSize);
         TextUtils.drawCenteredString(g, text, 0, yValue, totalWidth, totalHeight);
     }
 }

@@ -4,6 +4,7 @@ import main.Global;
 import util.file.FileIO;
 import util.file.FileName;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.HashMap;
@@ -112,6 +113,11 @@ public class FontMetrics {
         }
 
         return fontMap.get(size);
+    }
+
+    public static void setBlackFont(Graphics g, int fontSize) {
+        setFont(g, fontSize);
+        g.setColor(Color.BLACK);
     }
 
     public static void setFont(Graphics g, int fontSize) {

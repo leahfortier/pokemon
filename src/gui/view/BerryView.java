@@ -43,8 +43,8 @@ public class BerryView extends View {
 
     private final BagLayout layout;
 
-    private final DrawPanel[] berryPanels;
     private final PanelList panels;
+    private final DrawPanel[] berryPanels;
 
     private final ButtonList buttons;
     private final Button[] itemButtons;

@@ -335,8 +335,7 @@ public class Button implements Panel {
                 .withBlackOutline()
                 .drawBackground(g);
 
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 22);
+        FontMetrics.setBlackFont(g, 22);
         g.drawString(move.getAttack().getName(), 10, 26);
 
         FontMetrics.setFont(g, 18);

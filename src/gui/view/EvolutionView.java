@@ -166,9 +166,8 @@ class EvolutionView extends View {
                 int[] statGains = message.getGain();
                 int[] newStats = message.getNewStats();
 
-                g.setColor(Color.BLACK);
+                FontMetrics.setBlackFont(g, 16);
                 for (int i = 0; i < Stat.NUM_STATS; i++) {
-                    FontMetrics.setFont(g, 16);
                     g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
 
                     TextUtils.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);
@@ -179,8 +178,7 @@ class EvolutionView extends View {
 
         TileSet pokemonTiles = data.getPokemonTilesLarge();
 
-        FontMetrics.setFont(g, 30);
-        g.setColor(Color.BLACK);
+        FontMetrics.setBlackFont(g, 30);
 
         String preImageName = isEgg ? Eggy.SPRITE_EGG_IMAGE_NAME : getImageName(preEvolution);
         String postImageName = getImageName(isEgg ? preEvolution : postEvolution);

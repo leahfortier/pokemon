@@ -122,8 +122,7 @@ public final class TileUtils {
 
         BufferedImage image = new BufferedImage(Global.TILE_SIZE + extra, Global.TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
         Graphics g = image.getGraphics();
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, fontSize);
+        FontMetrics.setBlackFont(g, fontSize);
 
         TextUtils.drawCenteredHeightString(g, text, Global.TILE_SIZE + 3, Global.TILE_SIZE/2);
 

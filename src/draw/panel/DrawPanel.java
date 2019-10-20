@@ -47,6 +47,8 @@ public class DrawPanel implements Panel {
     private boolean highlight;
     private Color highlightColor;
 
+    private boolean skipDraw;
+
     private int fontSize;
     private String label;
     private Alignment labelAlignment;
@@ -130,6 +132,13 @@ public class DrawPanel implements Panel {
         return this;
     }
 
+    // Basically invisible
+    public DrawPanel withNoBackground() {
+        return this.withBackgroundColor(null)
+                   .withBorderPercentage(0)
+                   .withNoOutline();
+    }
+
     public DrawPanel withNoOutline() {
         this.outlineDirections = new Direction[0];
         return this;
@@ -200,6 +209,10 @@ public class DrawPanel implements Panel {
         return this;
     }
 
+    public void skipDraw() {
+        this.skipDraw = true;
+    }
+
     public WrapPanel asWrapPanel() {
         if (this instanceof WrapPanel) {
             return (WrapPanel)this;
@@ -265,8 +278,7 @@ public class DrawPanel implements Panel {
     }
 
     private void drawLabel(Graphics g) {
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, fontSize);
+        FontMetrics.setBlackFont(g, fontSize);
         switch (this.labelAlignment) {
             case LEFT:
                 this.drawLeftLabel(g, fontSize, label);
@@ -281,7 +293,7 @@ public class DrawPanel implements Panel {
     }
 
     private void drawImageLabel(Graphics g) {
-        g.setColor(Color.BLACK);
+        FontMetrics.setBlackFont(g, fontSize);
         switch (this.labelAlignment) {
             case LEFT:
                 this.leftImageLabel(g, fontSize, imageLabel, label);
@@ -296,6 +308,11 @@ public class DrawPanel implements Panel {
     }
 
     public void draw(Graphics g) {
+        if (this.skipDraw) {
+            this.skipDraw = false;
+            return;
+        }
+
         this.drawBackground(g);
 
         FontMetrics.setFont(g, this.fontSize);
@@ -512,8 +529,7 @@ public class DrawPanel implements Panel {
     }
 
     public void label(Graphics g, int fontSize, String text) {
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, fontSize);
+        FontMetrics.setBlackFont(g, fontSize);
         TextUtils.drawCenteredString(g, text, x, y, width, height);
     }
 

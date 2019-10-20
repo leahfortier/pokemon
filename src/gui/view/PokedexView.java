@@ -385,10 +385,8 @@ public class PokedexView extends View {
                 imagePanel.imageLabel(g, pkmImg);
             }
 
-            g.setColor(Color.BLACK);
-
             // Name
-            FontMetrics.setFont(g, 20);
+            FontMetrics.setBlackFont(g, 20);
             leftX = imagePanel.rightX() + spacing;
             textY = imagePanel.y + FontMetrics.getTextHeight(g) + spacing;
             g.drawString(notSeen ? "?????" : selected.getName(), leftX, textY);

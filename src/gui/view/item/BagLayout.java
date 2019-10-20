@@ -215,8 +215,7 @@ public class BagLayout {
         TileSet itemTiles = Game.getData().getItemTiles();
         Bag bag = Game.getPlayer().getBag();
 
-        FontMetrics.setFont(g, 12);
-        g.setColor(Color.BLACK);
+        FontMetrics.setBlackFont(g, 12);
 
         List<ItemNamesies> pageItems = GeneralUtils.pageValues(items, pageNum, ITEMS_PER_PAGE);
         for (int i = 0; i < pageItems.size(); i++) {

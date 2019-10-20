@@ -6,14 +6,14 @@ import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
-import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonPanel;
+import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
-import gui.GameData;
-import gui.TileSet;
+import draw.panel.PanelList;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -30,7 +30,6 @@ import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 class DayCareView extends View {
@@ -40,12 +39,9 @@ class DayCareView extends View {
     private static final int FIRST_DAY_CARE_POKEMON_BUTTON = NUM_BUTTONS - 3;
     private static final int SECOND_DAY_CARE_POKEMON_BUTTON = NUM_BUTTONS - 4;
 
-    private final DrawPanel dayCarePanel;
-    private final DrawPanel partyPanel;
+    private final PanelList panels;
     private final DrawPanel infoPanel;
     private final DrawPanel imagePanel;
-    private final DrawPanel basicInfoPanel;
-    private final DrawPanel movesPanel;
     private final DrawPanel[] movePanels;
     private final DrawPanel statsPanel;
 
@@ -54,7 +50,6 @@ class DayCareView extends View {
     private final Button secondDayCarePokemonButton;
     private final Button[] partyButtons;
     private final Button depositWithdrawButton;
-    private final Button returnButton;
 
     private DayCareCenter dayCareCenter;
     private List<PartyPokemon> team;
@@ -67,7 +62,7 @@ class DayCareView extends View {
         int spacing = 40;
         int buttonHeight = 38;
 
-        dayCarePanel = new DrawPanel(
+        DrawPanel dayCarePanel = new DrawPanel(
                 spacing,
                 spacing,
                 (Global.GAME_SIZE.width - 2*spacing - spacing/2)/2,
@@ -78,7 +73,7 @@ class DayCareView extends View {
                 .withBorderPercentage(0)
                 .withBlackOutline();
 
-        partyPanel = new DrawPanel(
+        DrawPanel partyPanel = new DrawPanel(
                 dayCarePanel.x,
                 dayCarePanel.bottomY() + spacing/2,
                 dayCarePanel.width,
@@ -99,7 +94,7 @@ class DayCareView extends View {
                 .withBorderPercentage(0)
                 .withBlackOutline();
 
-        basicInfoPanel = new DrawPanel(infoPanel.x, infoPanel.y, infoPanel.width, 190)
+        DrawPanel basicInfoPanel = new DrawPanel(infoPanel.x, infoPanel.y, infoPanel.width, 190)
                 .withFullTransparency()
                 .withBlackOutline();
 
@@ -113,7 +108,7 @@ class DayCareView extends View {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        movesPanel = new DrawPanel(
+        DrawPanel movesPanel = new DrawPanel(
                 infoPanel.x,
                 basicInfoPanel.bottomY() - DrawUtils.OUTLINE_SIZE,
                 infoPanel.width,
@@ -123,19 +118,14 @@ class DayCareView extends View {
                 .withBlackOutline();
 
         int moveSpacing = 10;
-        int movePanelWidth = (movesPanel.width - 3*moveSpacing)/2;
-        int movePanelHeight = (movesPanel.height - 3*moveSpacing)/2;
+        Button[] fakeMoveButtons = movesPanel.getButtons(moveSpacing, MoveList.MAX_MOVES/2, 2);
         movePanels = new DrawPanel[MoveList.MAX_MOVES];
         for (int i = 0; i < movePanels.length; i++) {
-            movePanels[i] = new DrawPanel(
-                    movesPanel.x + (i%2 + 1)*moveSpacing + (i%2)*movePanelWidth,
-                    movesPanel.y + (i/2 + 1)*moveSpacing + (i/2)*movePanelHeight,
-                    movePanelWidth,
-                    movePanelHeight
-            )
+            movePanels[i] = new DrawPanel(fakeMoveButtons[i])
                     .withTransparentCount(2)
                     .withBorderPercentage(20)
-                    .withBlackOutline();
+                    .withBlackOutline()
+                    .withLabelSize(16);
         }
 
         imagePanel = new DrawPanel(
@@ -143,52 +133,47 @@ class DayCareView extends View {
                 infoPanel.y + 18,
                 104,
                 104
-        )
-                .withFullTransparency()
-                .withBlackOutline();
+        ).withFullTransparency().withBlackOutline();
 
         Button[] buttons = new Button[NUM_BUTTONS];
 
+        // Fake buttons with three rows (label + each day care pokemon), and one column
         int buttonSpacing = 10;
-        int pokemonButtonHeight = (dayCarePanel.height - 4*buttonSpacing)/3;
+        Button[] fakeDayCareButtons = dayCarePanel.getButtons(buttonSpacing, 3, 1);
+
+        // Label isn't a button but still uses the spacing
+        DrawPanel dayCareLabelPanel = labelPanelSetup("Day Care", fakeDayCareButtons[0]);
+
         firstDayCarePokemonButton = buttons[FIRST_DAY_CARE_POKEMON_BUTTON] = new Button(
-                dayCarePanel.x + buttonSpacing,
-                dayCarePanel.y + pokemonButtonHeight + 2*buttonSpacing,
-                dayCarePanel.width - 2*buttonSpacing,
-                pokemonButtonHeight,
-                ButtonHoverAction.BOX,
+                fakeDayCareButtons[1].panel(),
                 new ButtonTransitions()
                         .right(DEPOSIT_WITHDRAW)
                         .up(Trainer.MAX_POKEMON - 1)
                         .left(DEPOSIT_WITHDRAW)
                         .down(SECOND_DAY_CARE_POKEMON_BUTTON),
-                () -> selected = dayCareCenter.getFirstPokemon()
+                () -> selected = dayCareCenter.getFirstPokemon(),
+                pokemonButtonSetup()
         );
 
         secondDayCarePokemonButton = buttons[SECOND_DAY_CARE_POKEMON_BUTTON] = new Button(
-                firstDayCarePokemonButton.x,
-                firstDayCarePokemonButton.bottomY() + buttonSpacing,
-                firstDayCarePokemonButton.width,
-                firstDayCarePokemonButton.height,
-                ButtonHoverAction.BOX,
+                fakeDayCareButtons[2].panel(),
                 new ButtonTransitions()
                         .right(DEPOSIT_WITHDRAW)
                         .up(FIRST_DAY_CARE_POKEMON_BUTTON)
                         .left(DEPOSIT_WITHDRAW)
                         .down(0),
-                () -> selected = dayCareCenter.getSecondPokemon()
+                () -> selected = dayCareCenter.getSecondPokemon(),
+                pokemonButtonSetup()
         );
 
-        pokemonButtonHeight = (partyPanel.height - (Trainer.MAX_POKEMON + 2)*buttonSpacing)/(Trainer.MAX_POKEMON + 1);
+        Button[] fakePartyButtons = partyPanel.getButtons(buttonSpacing, Trainer.MAX_POKEMON + 1, 1);
+        DrawPanel partyLabelPanel = labelPanelSetup("Party", fakePartyButtons[0]);
+
         partyButtons = new Button[Trainer.MAX_POKEMON];
         for (int i = 0; i < partyButtons.length; i++) {
             final int index = i; // Silly Java, Trix are for kids
             partyButtons[i] = buttons[i] = new Button(
-                    firstDayCarePokemonButton.x,
-                    partyPanel.y + (i + 1)*pokemonButtonHeight + (i + 2)*buttonSpacing,
-                    firstDayCarePokemonButton.width,
-                    pokemonButtonHeight,
-                    ButtonHoverAction.BOX,
+                    fakePartyButtons[i + 1].panel(),
                     ButtonTransitions.getBasicTransitions(
                             i, Trainer.MAX_POKEMON, 1, 0,
                             new ButtonTransitions()
@@ -197,7 +182,8 @@ class DayCareView extends View {
                                     .left(DEPOSIT_WITHDRAW)
                                     .down(FIRST_DAY_CARE_POKEMON_BUTTON)
                     ),
-                    () -> selected = team.get(index)
+                    () -> selected = team.get(index),
+                    pokemonButtonSetup()
             );
         }
 
@@ -206,7 +192,6 @@ class DayCareView extends View {
                 infoPanel.bottomY() + spacing/2,
                 (infoPanel.width - spacing/2)/2,
                 buttonHeight,
-                ButtonHoverAction.BOX,
                 new ButtonTransitions().right(RETURN).left(0),
                 () -> {
                     if (party) {
@@ -214,21 +199,47 @@ class DayCareView extends View {
                     } else {
                         message = dayCareCenter.withdraw((ActivePokemon)selected);
                     }
-                }
+                },
+                // Deposit/Withdraw text set depending on state
+                textButtonSetup("", new Color(123, 213, 74))
         );
 
-        returnButton = buttons[RETURN] = new Button(
+        buttons[RETURN] = new Button(
                 infoPanel.rightX() - depositWithdrawButton.width,
                 depositWithdrawButton.y,
                 depositWithdrawButton.width,
                 buttonHeight,
-                ButtonHoverAction.BOX,
                 new ButtonTransitions().right(0).left(DEPOSIT_WITHDRAW),
-                ButtonPressAction.getExitAction()
-        );
+                ButtonPressAction.getExitAction(),
+                textButtonSetup("Return", Color.YELLOW)
+        ).setup(panel -> panel.withTransparentCount(2));
 
         this.buttons = new ButtonList(buttons);
         this.buttons.setSelected(DEPOSIT_WITHDRAW);
+
+        this.panels = new PanelList(List.of(
+                dayCarePanel, dayCareLabelPanel, partyPanel, partyLabelPanel,
+                infoPanel, basicInfoPanel, movesPanel, statsPanel, imagePanel
+        ), movePanels);
+    }
+
+    private DrawPanel labelPanelSetup(String label, Button fakeButton) {
+        return new DrawPanel(fakeButton).withNoBackground()
+                                        .withLabel(label, 24);
+    }
+
+    private ButtonPanelSetup textButtonSetup(String text, Color color) {
+        return panel -> panel.greyInactive()
+                             .withBorderlessTransparentBackground()
+                             .withBackgroundColor(color)
+                             .withLabel(text, 20);
+    }
+
+    private ButtonPanelSetup pokemonButtonSetup() {
+        return panel -> panel.skipInactive()
+                             .withBorderlessTransparentBackground()
+                             .withBlackOutline()
+                             .withLabelSize(20);
     }
 
     @Override
@@ -254,61 +265,69 @@ class DayCareView extends View {
         input.popViewIfEscaped();
     }
 
-    private void drawPokemonButton(Graphics g, Button button, PartyPokemon pokemon) {
-        if (pokemon != null) {
-            button.fillTransparent(g);
-            button.blackOutline(g);
-
-            TileSet partyTiles = Game.getData().getPartyTiles();
-            BufferedImage image = partyTiles.getTile(pokemon.getTinyImageName());
-            FontMetrics.setFont(g, 20);
-            ImageUtils.drawCenteredImageLabel(
-                    g,
-                    image,
-                    pokemon.getActualName() + " " + pokemon.getGenderString(),
-                    button.centerX(),
-                    button.centerY()
-            );
+    private void setupPokemonButton(ButtonPanel panel, PartyPokemon pokemon) {
+        if (pokemon == null) {
+            panel.skipDraw();
+            return;
         }
+
+        // Centered label with party tile, name, and gender
+        panel.withImageLabel(Game.getData().getPartyTiles().getTile(pokemon.getTinyImageName()))
+             .withLabel(pokemon.getActualName() + " " + pokemon.getGenderString());
+    }
+
+    private void drawSetup() {
+        // Selected Pokemon
+        infoPanel.withBackgroundColors(PokeType.getColors(selected));
+        imagePanel.withImageLabel(Game.getData().getPokemonTilesSmall().getTile(selected.getImageName()));
+
+        MoveList moves = selected.getActualMoves();
+        for (int i = 0; i < movePanels.length; i++) {
+            DrawPanel movePanel = movePanels[i];
+            if (i < moves.size()) {
+                Attack attack = moves.get(i).getAttack();
+                movePanel.withBackgroundColor(attack.getActualType().getColor())
+                         .withLabel(attack.getName());
+            } else {
+                movePanel.skipDraw();
+            }
+        }
+
+        // Day Care Pokemon
+        setupPokemonButton(firstDayCarePokemonButton.panel(), dayCareCenter.getFirstPokemon());
+        setupPokemonButton(secondDayCarePokemonButton.panel(), dayCareCenter.getSecondPokemon());
+
+        // Party Pokemon
+        for (int i = 0; i < team.size(); i++) {
+            setupPokemonButton(partyButtons[i].panel(), team.get(i));
+        }
+
+        // Either deposit or withdraw
+        depositWithdrawButton.panel().withLabel(party ? "Deposit" : "Withdraw");
     }
 
     @Override
     public void draw(Graphics g) {
-        GameData data = Game.getData();
-        TileSet pokemonTiles = data.getPokemonTilesSmall();
+        drawSetup();
 
+        // Background
         BasicPanels.drawCanvasPanel(g);
+        panels.drawAll(g);
+        buttons.drawPanels(g);
 
-        // Day Care Panel
-        dayCarePanel.drawBackground(g);
-        drawPokemonButton(g, firstDayCarePokemonButton, dayCareCenter.getFirstPokemon());
-        drawPokemonButton(g, secondDayCarePokemonButton, dayCareCenter.getSecondPokemon());
+        // Selected pokemon
+        drawSelectedPokemon(g);
 
-        FontMetrics.setFont(g, 24);
-        TextUtils.drawCenteredString(g, "Day Care", dayCarePanel.centerX(), (dayCarePanel.y + firstDayCarePokemonButton.y)/2);
-
-        // Party Panel
-        partyPanel.drawBackground(g);
-        TextUtils.drawCenteredString(g, "Party", partyPanel.centerX(), (partyPanel.y + partyButtons[0].y)/2);
-        for (int i = 0; i < team.size(); i++) {
-            drawPokemonButton(g, partyButtons[i], team.get(i));
+        // Draw message or button hovers
+        if (message != null) {
+            BasicPanels.drawFullMessagePanel(g, message);
+        } else {
+            buttons.drawHover(g);
         }
+    }
 
-        // Description
-        PokeType type = selected.getActualType();
-        infoPanel.withBackgroundColors(PokeType.getColors(selected))
-                 .drawBackground(g);
-
-        basicInfoPanel.drawBackground(g);
-        movesPanel.drawBackground(g);
-        statsPanel.drawBackground(g);
-
-        BufferedImage pkmImg = pokemonTiles.getTile(selected.getImageName());
-        imagePanel.drawBackground(g);
-        imagePanel.imageLabel(g, pkmImg);
-
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 20);
+    private void drawSelectedPokemon(Graphics g) {
+        FontMetrics.setBlackFont(g, 20);
         g.drawString(selected.getActualName() + " " + selected.getGenderString(), 541, 82);
 
         if (selected.isEgg()) {
@@ -318,7 +337,7 @@ class DayCareView extends View {
             TextUtils.drawRightAlignedString(g, "Lv" + selected.getLevel(), 740, 82);
             g.drawString("#" + String.format("%03d", selected.getPokemonInfo().getNumber()), 540, 110);
 
-            ImageUtils.drawTypeTiles(g, type, 740, 110);
+            ImageUtils.drawTypeTiles(g, selected.getActualType(), 740, 110);
 
             FontMetrics.setFont(g, 16);
 
@@ -342,15 +361,6 @@ class DayCareView extends View {
             // Characteristic
             g.drawString(selected.getCharacteristic(), 427, 217);
 
-            MoveList moves = selected.getActualMoves();
-            for (int i = 0; i < moves.size(); i++) {
-                Attack attack = moves.get(i).getAttack();
-
-                movePanels[i].withBackgroundColor(attack.getActualType().getColor());
-                movePanels[i].drawBackground(g);
-                movePanels[i].label(g, 16, attack.getName());
-            }
-
             int statsY = statsPanel.y;
             statsY += FontMetrics.getTextHeight(g) + 10;
 
@@ -365,29 +375,13 @@ class DayCareView extends View {
                 g.setColor(selected.getNature().getColor(i));
                 g.drawString(Stat.getStat(i, false).getName(), 427, statsY);
 
-                g.setColor(Color.BLACK);
-                FontMetrics.setFont(g, 14);
+                FontMetrics.setBlackFont(g, 14);
 
                 TextUtils.drawRightAlignedString(g, selected.getStat(i) + "", 635, statsY);
                 TextUtils.drawRightAlignedString(g, selected.getIVs().get(i) + "", 681, statsY);
                 TextUtils.drawRightAlignedString(g, selected.getEVs().get(i) + "", 735, statsY);
             }
         }
-
-        // Buttons
-        drawTextButton(g, depositWithdrawButton, party ? "Deposit" : "Withdraw", new Color(123, 213, 74));
-        drawTextButton(g, returnButton, "Return", Color.YELLOW);
-
-        buttons.drawHover(g);
-
-        if (message != null) {
-            BasicPanels.drawFullMessagePanel(g, message);
-        }
-    }
-
-    private void drawTextButton(Graphics g, Button button, String text, Color color) {
-        button.fillOutlineLabel(g, color, 20, text);
-        button.greyInactive(g);
     }
 
     @Override

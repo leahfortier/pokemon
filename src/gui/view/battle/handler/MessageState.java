@@ -14,7 +14,6 @@ import message.MessageUpdate;
 import pokemon.stat.Stat;
 import util.FontMetrics;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
 public class MessageState implements VisualStateHandler {
@@ -39,9 +38,8 @@ public class MessageState implements VisualStateHandler {
 
         if (view.isState(VisualState.STAT_GAIN)) {
             statsPanel.drawBackground(g);
-            g.setColor(Color.BLACK);
+            FontMetrics.setBlackFont(g, 16);
             for (int i = 0; i < Stat.NUM_STATS; i++) {
-                FontMetrics.setFont(g, 16);
                 g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
 
                 TextUtils.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);

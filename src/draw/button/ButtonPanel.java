@@ -55,6 +55,7 @@ public class ButtonPanel extends DrawPanel {
         this.skipDraw = shouldSkip;
     }
 
+    @Override
     public void skipDraw() {
         this.skipDraw(true);
     }

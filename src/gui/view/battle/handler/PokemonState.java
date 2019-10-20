@@ -206,8 +206,7 @@ public class PokemonState implements VisualStateHandler {
         basicInformationPanel.drawBackground(g);
 
         // Name and Gender
-        FontMetrics.setFont(g, 16);
-        g.setColor(Color.BLACK);
+        FontMetrics.setBlackFont(g, 16);
         String nameStr = selectedPkm.getActualName() + " " + selectedPkm.getGenderString();
         g.drawString(nameStr, 62, 269);
 

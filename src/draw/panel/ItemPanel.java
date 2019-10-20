@@ -9,7 +9,6 @@ import item.ItemNamesies;
 import main.Game;
 import util.FontMetrics;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -38,8 +37,7 @@ public class ItemPanel extends DrawPanel {
         TileSet itemTiles = Game.getData().getItemTiles();
         Item item = itemNamesies.getItem();
 
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 20);
+        FontMetrics.setBlackFont(g, 20);
 
         // Tile size for item image tile, double spacing for original and after image
         int nameX = x + 2*spacing + Item.MAX_IMAGE_SIZE.width;

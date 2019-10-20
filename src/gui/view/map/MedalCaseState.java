@@ -126,8 +126,7 @@ public class MedalCaseState implements VisualStateHandler {
                 TextUtils.drawRightAlignedString(g, medalCase.getCount(medal) + "/" + medal.getThreshold(), medalPanel.rightX() - medalPanel.getBorderSize() - spacing, topY);
             }
 
-            g.setColor(Color.BLACK);
-            FontMetrics.setFont(g, 16);
+            FontMetrics.setBlackFont(g, 16);
             TextUtils.drawWrappedText(
                     g,
                     medal.getDescription(),

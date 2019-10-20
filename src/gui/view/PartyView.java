@@ -361,8 +361,7 @@ public class PartyView extends View {
         // Draw basic information panel
         basicInformationPanel.drawBackground(g);
 
-        FontMetrics.setFont(g, 20);
-        g.setColor(Color.BLACK);
+        FontMetrics.setBlackFont(g, 20);
 
         int inset = FontMetrics.getDistanceBetweenRows(g)/2;
         int nameX = basicInformationPanel.x + inset;
@@ -434,8 +433,7 @@ public class PartyView extends View {
             // EXP Bar
             expBar.fillBar(g, DrawUtils.EXP_BAR_COLOR, selectedPkm.expRatio());
 
-            FontMetrics.setFont(g, 16);
-            g.setColor(Color.BLACK);
+            FontMetrics.setBlackFont(g, 16);
 
             MoveList moves = selectedPkm.getActualMoves();
 
@@ -461,8 +459,7 @@ public class PartyView extends View {
                         .withBlackOutline();
                 movePanel.drawBackground(g);
 
-                g.setColor(Color.BLACK);
-                FontMetrics.setFont(g, 18);
+                FontMetrics.setBlackFont(g, 18);
 
                 int moveInset = movePanel.getBorderSize() + 10;
                 TextUtils.drawCenteredHeightString(g, attack.getName(), movePanel.x + moveInset, movePanel.centerY());
@@ -486,8 +483,7 @@ public class PartyView extends View {
             g.drawString(Stat.getStat(i, false).getName(), statsPanel.x + 10, firstRowY + (i + 1)*spacing);
         }
 
-        FontMetrics.setFont(g, 14);
-        g.setColor(Color.BLACK);
+        FontMetrics.setBlackFont(g, 14);
 
         for (int i = 0; i < Stat.NUM_STATS; i++) {
             final String statString;

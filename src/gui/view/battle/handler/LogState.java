@@ -10,7 +10,6 @@ import map.Direction;
 import util.FontMetrics;
 import util.GeneralUtils;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Iterator;
 import java.util.List;
@@ -53,8 +52,7 @@ public class LogState implements VisualStateHandler {
     public void draw(BattleView view, Graphics g) {
         view.drawLargeMenuPanel(g);
 
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 12);
+        FontMetrics.setBlackFont(g, 12);
 
         Iterator<String> logIter = GeneralUtils.pageIterator(logMessages, logPage, LOGS_PER_PAGE);
         for (int i = 0; i < LOGS_PER_PAGE && logIter.hasNext(); i++) {

@@ -18,7 +18,6 @@ import util.file.FileIO;
 import util.file.Folder;
 import util.string.PokeString;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -104,13 +103,12 @@ public class MainMenuView extends View {
     }
 
     void drawSaveInformation(Graphics g, Button b, int index, String emptyText) {
-        g.setColor(Color.BLACK);
         SaveInfo info = saveInfo[index];
 
         if (info != null) {
             g.translate(b.x, b.y);
 
-            FontMetrics.setFont(g, 20);
+            FontMetrics.setBlackFont(g, 20);
 
             g.drawString("Name:", 16, 28);
             TextUtils.drawRightAlignedString(g, info.getName(), 189, 28);

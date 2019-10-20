@@ -277,12 +277,10 @@ public class BagView extends View {
             g.drawImage(attack.getActualType().getImage(), 254, 14, null);
             g.drawImage(attack.getCategory().getImage(), 254, 33, null);
 
-            g.setColor(Color.BLACK);
-            FontMetrics.setFont(g, 14);
+            FontMetrics.setBlackFont(g, 14);
             TextUtils.drawCenteredHeightString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 166, movePanel.centerY());
 
-            g.setColor(Color.BLACK);
-            FontMetrics.setFont(g, 20);
+            FontMetrics.setBlackFont(g, 20);
             g.drawString(attack.getName(), 20, 38);
 
             g.translate(-moveButton.x, -moveButton.y);
@@ -304,8 +302,7 @@ public class BagView extends View {
             BufferedImage img = partyTiles.getTile(p.getTinyImageName());
             ImageUtils.drawCenteredImage(g, img, 30, pokemonPanel.centerY());
 
-            g.setColor(Color.BLACK);
-            FontMetrics.setFont(g, 14);
+            FontMetrics.setBlackFont(g, 14);
 
             // Name and Gender
             g.drawString(p.getActualName() + " " + p.getGenderString(), 50, 22);
@@ -338,8 +335,7 @@ public class BagView extends View {
                     g.setColor(p.getHPColor());
                     g.fillRect(52, 28, (int)(p.getHPRatio()*240), 7);
 
-                    g.setColor(Color.BLACK);
-                    FontMetrics.setFont(g, 12);
+                    FontMetrics.setBlackFont(g, 12);
 
                     g.drawString(p.getActualHeldItem().getName(), 50, 47);
                     TextUtils.drawRightAlignedString(g, p.getHpString(), 293, 47);
