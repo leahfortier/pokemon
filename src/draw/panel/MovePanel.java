@@ -30,6 +30,7 @@ public class MovePanel extends DrawPanel {
 
         this.withMinDescFontSize(descFontSize);
         this.withBlackOutline();
+        this.withTransparentBackground();
     }
 
     @Override
@@ -59,13 +60,14 @@ public class MovePanel extends DrawPanel {
 
     public WrapMetrics draw(Graphics g, Attack attack) {
         // Draw type-colored background
-        this.withTransparentBackground(attack.getActualType().getColor())
+        this.withBackgroundColor(attack.getActualType().getColor())
             .drawBackground(g);
 
-        FontMetrics.setFont(g, nameFontSize);
+        FontMetrics.setBlackFont(g, nameFontSize);
         int textSpace = this.getTextSpace(g);
         int borderSize = this.getBorderSize();
         int betweenSpace = textSpace - borderSize;
+
         int x = this.x + textSpace;
         int rightX = this.rightX() - textSpace;
         int textY = this.y + textSpace + FontMetrics.getTextHeight(g);

@@ -212,7 +212,7 @@ class DayCareView extends View {
                 new ButtonTransitions().right(0).left(DEPOSIT_WITHDRAW),
                 ButtonPressAction.getExitAction(),
                 textButtonSetup("Return", Color.YELLOW)
-        ).setup(panel -> panel.withTransparentCount(2));
+        );
 
         this.buttons = new ButtonList(buttons);
         this.buttons.setSelected(DEPOSIT_WITHDRAW);
@@ -283,7 +283,7 @@ class DayCareView extends View {
         MoveList moves = selected.getActualMoves();
         for (int i = 0; i < movePanels.length; i++) {
             DrawPanel movePanel = movePanels[i];
-            if (i < moves.size()) {
+            if (!selected.isEgg() && i < moves.size()) {
                 Attack attack = moves.get(i).getAttack();
                 movePanel.withBackgroundColor(attack.getActualType().getColor())
                          .withLabel(attack.getName());
