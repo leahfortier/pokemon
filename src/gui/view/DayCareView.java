@@ -253,7 +253,6 @@ class DayCareView extends View {
             if (input.consumeIfMouseDown(ControlKey.SPACE)) {
                 message = null;
             }
-
             return;
         }
 

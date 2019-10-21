@@ -45,6 +45,10 @@ public class BasicPanels {
         return fullMessagePanel.y;
     }
 
+    public static int getMessagePanelHeight() {
+        return fullMessagePanel.height;
+    }
+
     public static boolean isAnimatingMessage() {
         return fullMessagePanel.isAnimatingMessage();
     }

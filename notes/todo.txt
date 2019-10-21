@@ -160,7 +160,7 @@ Other random things:
     look at image height for selected item panel in bag (Ether looks like it's touching the top etc)
         - maybe try centering with the text height instead of bottom centering?
     PC View should be able to hover over moves and change stats panel into move description similar to PartyView
-    maybe add setActive things to ButtonInfo and have a similar buttonList.updateActive() type thing
+    maybe add setActive things to Button and have a similar buttonList.updateActive() type thing
     Pokedex flavor text should have startX at image panel
     noticed NewPokemonView is using %-10s for the name but this is no longer the maximum name length so worth just taking another look at probably
     should probably rewrite the numSpaceRows/Cols in the getButtons shit to be like missingRows and whatnot and default to zero

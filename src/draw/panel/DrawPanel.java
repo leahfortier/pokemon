@@ -29,7 +29,7 @@ public class DrawPanel implements Panel {
     public final int width;
     public final int height;
 
-    private int borderPercentage;
+    private int borderSize;
 
     private Color backgroundColor;
     private Color borderColor;
@@ -47,7 +47,7 @@ public class DrawPanel implements Panel {
     private boolean highlight;
     private Color highlightColor;
 
-    private boolean skipDraw;
+    protected boolean skipDraw;
 
     private int fontSize;
     private String label;
@@ -69,13 +69,13 @@ public class DrawPanel implements Panel {
         this.width = width;
         this.height = height;
 
-        this.borderPercentage = 10;
+        this.withBackgroundColor(Color.WHITE);
+        this.withBorderColor(Color.LIGHT_GRAY);
+        this.withBorderPercentage(10);
+        this.withNoOutline();
 
-        this.backgroundColor = Color.WHITE;
-        this.borderColor = Color.LIGHT_GRAY;
-
-        this.outlineDirections = new Direction[0];
-
+        // Note: This does not make the panel transparent by default
+        // It's just the default count if transparency is set
         this.transparentCount = 1;
     }
 
@@ -128,7 +128,11 @@ public class DrawPanel implements Panel {
     }
 
     public DrawPanel withBorderPercentage(int borderPercentage) {
-        this.borderPercentage = borderPercentage;
+        return this.withBorderSize((int)(borderPercentage/100.0*Math.min(width, height)));
+    }
+
+    public DrawPanel withBorderSize(int borderSize) {
+        this.borderSize = borderSize;
         return this;
     }
 
@@ -209,8 +213,12 @@ public class DrawPanel implements Panel {
         return this;
     }
 
+    public void skipDraw(boolean shouldSkip) {
+        this.skipDraw = shouldSkip;
+    }
+
     public void skipDraw() {
-        this.skipDraw = true;
+        this.skipDraw(true);
     }
 
     public WrapPanel asWrapPanel() {
@@ -245,7 +253,7 @@ public class DrawPanel implements Panel {
             return 0;
         }
 
-        return (int)(borderPercentage/100.0*Math.min(width, height));
+        return this.borderSize;
     }
 
     public void fillBar(Graphics g, Color color, double ratio) {

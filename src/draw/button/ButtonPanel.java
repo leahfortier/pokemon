@@ -19,8 +19,6 @@ public class ButtonPanel extends DrawPanel {
     private boolean skipInactive;
     private boolean greyInactive;
 
-    private boolean skipDraw;
-
     // Should only be created from Button constructor
     ButtonPanel(Button button, ButtonPanelSetup setup) {
         super(button);
@@ -49,15 +47,6 @@ public class ButtonPanel extends DrawPanel {
     public ButtonPanel greyInactive() {
         this.greyInactive = true;
         return this;
-    }
-
-    public void skipDraw(boolean shouldSkip) {
-        this.skipDraw = shouldSkip;
-    }
-
-    @Override
-    public void skipDraw() {
-        this.skipDraw(true);
     }
 
     // Sets the arrow direction and removes the black outline
