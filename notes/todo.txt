@@ -167,3 +167,5 @@ Other random things:
     ButtonList class should just take the size in the constructor and be able to add buttons and shit and have methods to add array subsets because I hate the arrayCopy bs
     maybe eventually have the View class have draw method as final, with setup, draw (foreground), and getButtonList/getPanelList abstract methods
     would also be nice if there was some universal message handler thing instead of each class just holding a string or whatever
+    is withFullTransparency the same thing as withBackgroundColor(null) and we don't need that separate var?
+    in NewPokemonView there should be a message panel asking which Pokemon to send to PC on the party selection screen and also an option to cancel

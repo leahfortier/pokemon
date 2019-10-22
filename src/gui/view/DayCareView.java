@@ -271,8 +271,10 @@ class DayCareView extends View {
         }
 
         // Centered label with party tile, name, and gender
-        panel.withImageLabel(Game.getData().getPartyTiles().getTile(pokemon.getTinyImageName()))
-             .withLabel(pokemon.getActualName() + " " + pokemon.getGenderString());
+        panel.withImageLabel(
+                Game.getData().getPartyTiles().getTile(pokemon.getTinyImageName()),
+                pokemon.getActualName() + " " + pokemon.getGenderString()
+        );
     }
 
     private void drawSetup() {

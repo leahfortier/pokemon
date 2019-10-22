@@ -136,7 +136,7 @@ public class DrawPanel implements Panel {
         return this;
     }
 
-    // Basically invisible
+    // Basically invisible (generally used for spacing)
     public DrawPanel withNoBackground() {
         return this.withBackgroundColor(null)
                    .withBorderPercentage(0)
@@ -199,6 +199,10 @@ public class DrawPanel implements Panel {
     public DrawPanel withImageLabel(BufferedImage image) {
         this.imageLabel = image;
         return this;
+    }
+
+    public DrawPanel withImageLabel(BufferedImage image, String label) {
+        return this.withImageLabel(image).withLabel(label);
     }
 
     public DrawPanel withGreyOut(boolean greyOut) {

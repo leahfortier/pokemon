@@ -3,8 +3,10 @@ package draw.button;
 import map.Direction;
 
 import java.awt.Graphics;
+import java.util.Arrays;
+import java.util.Iterator;
 
-public class ButtonList {
+public class ButtonList implements Iterable<Button> {
     private final Button[] buttons;
 
     private int selected;
@@ -110,5 +112,10 @@ public class ButtonList {
         setForceHover(next);
 
         return next;
+    }
+
+    @Override
+    public Iterator<Button> iterator() {
+        return Arrays.asList(buttons).iterator();
     }
 }

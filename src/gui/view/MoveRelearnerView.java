@@ -275,8 +275,10 @@ public class MoveRelearnerView extends View {
             if (i < team.size()) {
                 PartyPokemon pokemon = team.get(i);
                 pokemonPanel.withTypeColors(pokemon)
-                            .withImageLabel(partyTiles.getTile(pokemon.getTinyImageName()))
-                            .withLabel(pokemon.getActualName());
+                            .withImageLabel(
+                                    partyTiles.getTile(pokemon.getTinyImageName()),
+                                    pokemon.getActualName()
+                            );
             } else {
                 pokemonPanel.skipDraw();
             }
