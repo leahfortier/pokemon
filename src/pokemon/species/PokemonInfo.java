@@ -1,6 +1,7 @@
 package pokemon.species;
 
 import battle.attack.AttackNamesies;
+import main.Global;
 import map.overworld.wild.WildHoldItem;
 import pokemon.ability.AbilityNamesies;
 import pokemon.breeding.EggGroup;
@@ -10,6 +11,7 @@ import type.Type;
 import util.serialization.Serializable;
 import util.string.StringAppender;
 
+import java.awt.Dimension;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +22,8 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
 
     public static final int NUM_POKEMON = 825;
     public static final int EVOLUTION_LEVEL_LEARNED = 0;
+
+    public static final Dimension MAX_PARTY_IMAGE_SIZE = new Dimension(Global.TILE_SIZE, Global.TILE_SIZE);
 
     private final int number;
     private final PokemonNamesies namesies;

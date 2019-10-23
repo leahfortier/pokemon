@@ -202,6 +202,10 @@ public class DevConsole {
             String token = in.next();
             switch (token.toLowerCase()) {
                 case "level":
+                    if (!in.hasNext()) {
+                        Global.info("No level specified");
+                        return;
+                    }
                     String levelInput = in.next();
                     try {
                         level = Integer.parseInt(levelInput);

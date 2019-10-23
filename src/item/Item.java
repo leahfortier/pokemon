@@ -112,7 +112,7 @@ import java.util.Set;
 public abstract class Item implements ItemInterface, Comparable<Item> {
     private static final long serialVersionUID = 1L;
 
-    public static Dimension MAX_IMAGE_SIZE = new Dimension(25, 25);
+    public static final Dimension MAX_IMAGE_SIZE = new Dimension(25, 25);
 
     private final ItemNamesies namesies;
     private final String description;

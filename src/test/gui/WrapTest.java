@@ -40,7 +40,7 @@ public class WrapTest extends BaseTest {
         for (PokemonInfo pokemonInfo : PokemonList.instance()) {
             String name = pokemonInfo.getName();
             pokedexMetrics.checkMetrics(name, pokedexView.drawFlavorText(g, pokemonInfo));
-            newPokemonMetrics.checkMetrics(name, newPokemonView.drawInfoLabels(g, pokemonInfo));
+            newPokemonMetrics.checkMetrics(name, newPokemonView.drawFlavorText(g, pokemonInfo));
         }
 
         pokedexMetrics.confirmFontSize(16);

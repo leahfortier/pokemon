@@ -8,7 +8,6 @@ import generator.update.UpdateGen;
 import item.Item;
 import item.ItemNamesies;
 import item.bag.BagCategory;
-import main.Global;
 import map.overworld.TerrainType;
 import org.junit.Assert;
 import org.junit.Test;
@@ -129,7 +128,7 @@ public class ImageTest extends BaseTest {
     public void sizeTest() {
         DimensionChecker bagCategoryDimension = new DimensionChecker(BagCategory.IMAGE_SIZE).mustEquals(0);
         DimensionChecker itemDimension = new DimensionChecker(Item.MAX_IMAGE_SIZE).trimmed();
-        DimensionChecker partyDimension = DimensionChecker.tile().singleDimensionEquals(0);
+        DimensionChecker partyDimension = new DimensionChecker(PokemonInfo.MAX_PARTY_IMAGE_SIZE).singleDimensionEquals(0);
         DimensionChecker pokedexDimension = new DimensionChecker(140, 190).singleDimensionEquals(2);
         DimensionChecker pokemonDimension = new DimensionChecker(96, 96).trimmed();
 
@@ -244,10 +243,6 @@ public class ImageTest extends BaseTest {
         private boolean singleDimensionEquals;
         private boolean trimmed;
         private int delta;
-
-        public static DimensionChecker tile() {
-            return new DimensionChecker(Global.TILE_SIZE, Global.TILE_SIZE);
-        }
 
         DimensionChecker(Dimension dimension) {
             this(dimension.width, dimension.height);
