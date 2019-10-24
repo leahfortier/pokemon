@@ -147,7 +147,24 @@
     }
   ],
   "items": [],
-  "miscEntities": [],
+  "miscEntities": [
+    {
+      "name": "PC",
+      "actions": [
+        {
+          "triggerName": "LOAD_PC",
+          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+        }
+      ],
+      "location": [
+        {
+          "x": 38,
+          "y": 54
+        }
+      ],
+      "triggerName": "WindValley_MiscEntity_PC_01"
+    }
+  ],
   "events": [],
   "wildBattles": [
     {
