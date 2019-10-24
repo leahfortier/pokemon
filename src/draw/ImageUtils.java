@@ -51,6 +51,15 @@ public final class ImageUtils {
         );
     }
 
+    public static void drawBottomRightImage(Graphics g, BufferedImage image, int rightX, int bottomY) {
+        g.drawImage(
+                image,
+                rightX - 3*image.getWidth()/2,
+                bottomY - 3*image.getHeight()/2,
+                null
+        );
+    }
+
     public static void drawCenteredHeightImage(Graphics g, BufferedImage image, int x, int centerY) {
         g.drawImage(image, x, centerY - image.getHeight()/2, null);
     }

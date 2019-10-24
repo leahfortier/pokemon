@@ -63,9 +63,17 @@ public class ButtonPanel extends DrawPanel {
         return this;
     }
 
+    public ButtonPanel withBottomTabOutlines(int index, int selectedIndex) {
+        return this.withTabOutlines(index, selectedIndex, true);
+    }
+
     public ButtonPanel withTabOutlines(int index, int selectedIndex) {
+        return this.withTabOutlines(index, selectedIndex, false);
+    }
+
+    private ButtonPanel withTabOutlines(int index, int selectedIndex, boolean isBottomTab) {
         List<Direction> toOutline = new ArrayList<>();
-        toOutline.add(Direction.UP);
+        toOutline.add(isBottomTab ? Direction.DOWN : Direction.UP);
         toOutline.add(Direction.RIGHT);
 
         if (index == 0) {
@@ -73,7 +81,7 @@ public class ButtonPanel extends DrawPanel {
         }
 
         if (index != selectedIndex) {
-            toOutline.add(Direction.DOWN);
+            toOutline.add(isBottomTab ? Direction.UP : Direction.DOWN);
         }
 
         return this.withOutlines(toOutline).asButtonPanel();

@@ -272,8 +272,7 @@ public class NewPokemonView extends View {
 
             messagelessCanvasPanel.withImageLabel(spriteImage, nickname);
         } else if (state != State.END) {
-            // Pass null to indicate no text to draw with label
-            messagelessCanvasPanel.withImageLabel(pokemonImage, null);
+            messagelessCanvasPanel.withImageLabel(pokemonImage);
         }
 
         switch (state) {

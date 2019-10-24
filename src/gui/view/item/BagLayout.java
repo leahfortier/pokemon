@@ -166,8 +166,8 @@ public class BagLayout {
                     () -> indexAction.pressButton(index),
                     panel -> panel.withBorderlessTransparentBackground()
                                   .withBackgroundColor(category.getColor())
-                                  .withLabel(category.getDisplayName(), 14, Alignment.LEFT)
-                                  .withImageLabel(category.getIcon())
+                                  .withLabelSize(14, Alignment.LEFT)
+                                  .withImageLabel(category.getIcon(), category.getDisplayName())
             );
         }
         return tabButtons;

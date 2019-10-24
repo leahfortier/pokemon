@@ -116,8 +116,12 @@ public class FontMetrics {
     }
 
     public static void setBlackFont(Graphics g, int fontSize) {
+        setFont(g, fontSize, Color.BLACK);
+    }
+
+    public static void setFont(Graphics g, int fontSize, Color color) {
         setFont(g, fontSize);
-        g.setColor(Color.BLACK);
+        g.setColor(color);
     }
 
     public static void setFont(Graphics g, int fontSize) {

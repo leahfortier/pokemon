@@ -51,9 +51,11 @@ public class DrawPanel implements Panel {
 
     private int fontSize;
     private String label;
+    private Color labelColor;
     private Alignment labelAlignment;
 
     private BufferedImage imageLabel;
+    private BufferedImage bottomRightImage;
 
     public DrawPanel(Button button) {
         this(button.x, button.y, button.width, button.height);
@@ -69,10 +71,14 @@ public class DrawPanel implements Panel {
         this.width = width;
         this.height = height;
 
-        this.withBackgroundColor(Color.WHITE);
-        this.withBorderColor(Color.LIGHT_GRAY);
-        this.withBorderPercentage(10);
+        this.withBackgroundColor(Color.WHITE)
+            .withBorderColor(Color.LIGHT_GRAY)
+            .withBorderPercentage(10);
+
         this.withNoOutline();
+
+        this.withLabelSize(30)
+            .withLabelColor(Color.BLACK);
 
         // Note: This does not make the panel transparent by default
         // It's just the default count if transparency is set
@@ -182,6 +188,11 @@ public class DrawPanel implements Panel {
         return this;
     }
 
+    public DrawPanel withLabelColor(Color labelColor) {
+        this.labelColor = labelColor;
+        return this;
+    }
+
     public DrawPanel withLabel(String text, int fontSize) {
         return this.withLabel(text, fontSize, Alignment.CENTER);
     }
@@ -190,19 +201,27 @@ public class DrawPanel implements Panel {
         return this.withLabelSize(fontSize, alignment).withLabel(text);
     }
 
-    // If not including the font size/alignment, it is presumed to already be set
+    // Sets the label and assumes no image will be drawn
+    // Use withImageLabel to indicate both should be drawn together
     public DrawPanel withLabel(String text) {
-        this.label = text;
-        return this;
+        return this.withImageLabel(null, text);
     }
 
+    // Sets the label to only be this image and will remove any text label already set
+    // Use method which takes in both image and label to indicate both should be drawn together
     public DrawPanel withImageLabel(BufferedImage image) {
-        this.imageLabel = image;
-        return this;
+        return this.withImageLabel(image, null);
     }
 
     public DrawPanel withImageLabel(BufferedImage image, String label) {
-        return this.withImageLabel(image).withLabel(label);
+        this.imageLabel = image;
+        this.label = label;
+        return this;
+    }
+
+    public DrawPanel withBottomRightImage(BufferedImage image) {
+        this.bottomRightImage = image;
+        return this;
     }
 
     public DrawPanel withGreyOut(boolean greyOut) {
@@ -290,7 +309,7 @@ public class DrawPanel implements Panel {
     }
 
     private void drawLabel(Graphics g) {
-        FontMetrics.setBlackFont(g, fontSize);
+        FontMetrics.setFont(g, fontSize, labelColor);
         switch (this.labelAlignment) {
             case LEFT:
                 this.drawLeftLabel(g, fontSize, label);
@@ -339,6 +358,11 @@ public class DrawPanel implements Panel {
         } else if (this.imageLabel != null) {
             // Only image
             this.imageLabel(g, imageLabel);
+        }
+
+        // Image in the bottom right of the panel
+        if (this.bottomRightImage != null) {
+            ImageUtils.drawBottomRightImage(g, bottomRightImage, this.rightX(), this.bottomY());
         }
     }
 
@@ -541,7 +565,12 @@ public class DrawPanel implements Panel {
     }
 
     public void label(Graphics g, int fontSize, String text) {
-        FontMetrics.setBlackFont(g, fontSize);
+        this.label(g, fontSize, labelColor, text);
+    }
+
+    public void label(Graphics g, int fontSize, Color color, String text) {
+        g.setColor(color);
+        FontMetrics.setFont(g, fontSize);
         TextUtils.drawCenteredString(g, text, x, y, width, height);
     }
 
@@ -563,7 +592,7 @@ public class DrawPanel implements Panel {
         int remainder = this.width%numTabs;
 
         int offset = inset ? tabHeight - DrawUtils.OUTLINE_SIZE : 0;
-        int y = isBottomTab ? this.y + this.height - DrawUtils.OUTLINE_SIZE - offset
+        int y = isBottomTab ? this.bottomY() - DrawUtils.OUTLINE_SIZE - offset
                             : this.y - tabHeight + DrawUtils.OUTLINE_SIZE + offset;
 
         return new DrawPanel(

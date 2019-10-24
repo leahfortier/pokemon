@@ -170,3 +170,4 @@ Other random things:
     is withFullTransparency the same thing as withBackgroundColor(null) and we don't need that separate var?
     in NewPokemonView there should be a message panel asking which Pokemon to send to PC on the party selection screen and also an option to cancel
     nicknaming length needs to be extended
+    when switching pokemon in pokedex from the moves panel it needs to reset the page (if you go to a pokemon with less pages it will be blank and have overflow page numbers (5/4))
