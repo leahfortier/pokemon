@@ -33,8 +33,8 @@ public class BasicPanels {
         fullMessagePanel.drawMessage(g, text);
     }
 
-    public static Button[] getFullMessagePanelButtons(int buttonWidth, int buttonHeight, int numRows, int numCols) {
-        return fullMessagePanel.getButtons(buttonWidth, buttonHeight, numRows, numCols);
+    public static Button[] getFullMessagePanelButtons(int spacing, int numRows, int numCols) {
+        return fullMessagePanel.getButtons(spacing, numRows, numCols);
     }
 
     public static void drawCanvasPanel(Graphics g) {

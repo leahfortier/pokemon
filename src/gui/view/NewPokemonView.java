@@ -96,7 +96,7 @@ public class NewPokemonView extends View {
         ).withFullTransparency()
          .withBlackOutline();
 
-        this.buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS));
+        this.buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(10, 2, NUM_COLS));
         this.buttons.forEach(button -> button.setup(textButtonSetup()));
         this.buttons.setInactive();
 

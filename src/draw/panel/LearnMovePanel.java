@@ -52,7 +52,7 @@ public class LearnMovePanel {
                 .withMinDescFontSize(13);
 
         // Create a button for each known move and then one for the new move and one for not learning
-        buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS));
+        buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(10, 2, NUM_COLS));
 
         yesButton = buttons.get(YES_BUTTON);
         noButton = buttons.get(NO_BUTTON);
