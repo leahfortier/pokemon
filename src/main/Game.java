@@ -96,15 +96,19 @@ public class Game {
     }
 
     public MapView getMapView() {
-        return (MapView)viewMap.get(ViewMode.MAP_VIEW);
+        return (MapView)getView(ViewMode.MAP_VIEW);
     }
 
     public BagView getBagView() {
-        return (BagView)viewMap.get(ViewMode.BAG_VIEW);
+        return (BagView)getView(ViewMode.BAG_VIEW);
     }
 
     public TradeView getTradeView() {
-        return (TradeView)viewMap.get(ViewMode.TRADE_VIEW);
+        return (TradeView)getView(ViewMode.TRADE_VIEW);
+    }
+
+    protected View getView(ViewMode viewMode) {
+        return viewMap.get(viewMode);
     }
 
     public void setBattleViews(final Battle battle, final boolean seenWildPokemon) {
@@ -151,7 +155,7 @@ public class Game {
         viewMap.put(viewMode, viewMode.createView());
     }
 
-    private void setViews() {
+    protected void setViews() {
         for (ViewMode viewMode : ViewMode.values()) {
             if (viewMode == ViewMode.MAIN_MENU_VIEW) {
                 continue;
