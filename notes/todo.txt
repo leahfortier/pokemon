@@ -176,3 +176,5 @@ Other random things:
     exiting TradeView doesn't let you reenter until you enter a different view first...?
     faintOut in PartyView has overlap on tab outline
     item buttons are the same in [Battle]BagState as BagLayout and should have a common way to draw
+    I think a lot of the stuff that's happening in drawSetup should be called from update instead of draw so only called where there's a change
+    should have a method for max pp string
