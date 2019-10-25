@@ -14,10 +14,11 @@ import main.Game;
 import main.Global;
 import map.Direction;
 import map.area.FlyLocation;
+import util.FontMetrics;
 import util.GeneralUtils;
 
+import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Iterator;
 import java.util.List;
 
 class FlyState implements VisualStateHandler {
@@ -39,8 +40,11 @@ class FlyState implements VisualStateHandler {
 
     FlyState() {
         this.titlePanel = new DrawPanel(BUTTON_PADDING, BUTTON_PADDING, 350, 60)
-                .withBackgroundColor(null)
-                .withBlackOutline();
+                .withBackgroundColor(new Color(255, 210, 86))
+                .withTransparentCount(2)
+                .withBorderPercentage(15)
+                .withBlackOutline()
+                .withLabel("Where to fly?", 30);
 
         // Arrows and area buttons
         Button[] buttons = new Button[NUM_AREA_BUTTONS + 2];
@@ -54,7 +58,6 @@ class FlyState implements VisualStateHandler {
                     i*buttonHeight + (i + 2)*BUTTON_PADDING + this.titlePanel.height,
                     400,
                     buttonHeight,
-                    ButtonHoverAction.BOX,
                     ButtonTransitions.getBasicTransitions(
                             i, NUM_AREA_BUTTONS, 1, 0,
                             new ButtonTransitions()
@@ -68,7 +71,12 @@ class FlyState implements VisualStateHandler {
 
                         // Note: Changes view mode to map view
                         flyLocation.fly();
-                    }
+                    },
+                    panel -> panel.withBackgroundColor(new Color(68, 123, 184))
+                                  .withBorderPercentage(15)
+                                  .withTransparentCount(2)
+                                  .withBlackOutline()
+                                  .withLabelSize(25)
             );
         }
 
@@ -80,7 +88,7 @@ class FlyState implements VisualStateHandler {
                 ButtonHoverAction.BOX,
                 new ButtonTransitions().right(RIGHT_BUTTON).up(NUM_AREA_BUTTONS - 1).left(0).down(0),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
-        );
+        ).asArrow(Direction.LEFT);
 
         rightButton = buttons[RIGHT_BUTTON] = new Button(
                 650,
@@ -90,7 +98,7 @@ class FlyState implements VisualStateHandler {
                 ButtonHoverAction.BOX,
                 new ButtonTransitions().right(0).up(NUM_AREA_BUTTONS - 1).left(LEFT_BUTTON).down(0),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
-        );
+        ).asArrow(Direction.RIGHT);
 
         this.buttons = new ButtonList(buttons);
         this.pageNum = 0;
@@ -98,19 +106,17 @@ class FlyState implements VisualStateHandler {
 
     @Override
     public void draw(Graphics g, MapView mapView) {
-        BasicPanels.drawCanvasPanel(g);
-
-        titlePanel.drawBackground(g);
-        titlePanel.label(g, 32, "Where to fly?");
-
-        Iterator<FlyLocation> iter = GeneralUtils.pageIterator(flyLocations, pageNum, NUM_AREA_BUTTONS);
-        for (int i = 0; i < NUM_AREA_BUTTONS && iter.hasNext(); i++) {
-            FlyLocation flyLocation = iter.next();
-            this.areaButtons[i].fillOutlineLabel(g, 30, flyLocation.getAreaName());
+        List<FlyLocation> locations = GeneralUtils.pageValues(flyLocations, pageNum, NUM_AREA_BUTTONS);
+        for (int i = 0; i < locations.size(); i++) {
+            FlyLocation flyLocation = locations.get(i);
+            this.areaButtons[i].panel().withLabel(flyLocation.getAreaName());
         }
 
-        leftButton.drawArrow(g, Direction.LEFT);
-        rightButton.drawArrow(g, Direction.RIGHT);
+        BasicPanels.drawCanvasPanel(g);
+        titlePanel.draw(g);
+        buttons.drawPanels(g);
+
+        FontMetrics.setBlackFont(g, 28);
         TextUtils.drawCenteredString(
                 g,
                 pageNum + 1 + "",
