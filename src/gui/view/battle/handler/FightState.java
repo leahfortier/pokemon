@@ -4,7 +4,10 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.Move;
+import draw.TextUtils;
+import draw.button.Button;
 import draw.button.ButtonList;
+import draw.button.ButtonPanel;
 import draw.panel.MovePanel;
 import draw.panel.WrapPanel.WrapMetrics;
 import gui.view.battle.BattleView;
@@ -13,6 +16,7 @@ import main.Game;
 import pokemon.active.MoveList;
 import trainer.TrainerAction;
 import trainer.player.Player;
+import util.FontMetrics;
 import util.string.StringUtils;
 
 import java.awt.Graphics;
@@ -51,6 +55,13 @@ public class FightState implements VisualStateHandler {
         }
 
         moveButtons = new ButtonList(view.createPanelButtons(MoveList.MAX_MOVES));
+        for (int i = 0; i < moveButtons.size(); i++) {
+            moveButtons.get(i).panel()
+                       .withTransparentCount(2)
+                       .withBorderPercentage(15)
+                       .withBlackOutline();
+        }
+
         moveButtons.setSelected(lastMoveUsed);
 
         for (int i = 0; i < MoveList.MAX_MOVES; i++) {
@@ -67,7 +78,7 @@ public class FightState implements VisualStateHandler {
         ActivePokemon playerPokemon = Game.getPlayer().front();
         MoveList moves = playerPokemon.getMoves(view.getCurrentBattle());
         for (int i = 0; i < moves.size(); i++) {
-            this.moveButtons.get(i).drawMoveButton(g, moves.get(i));
+            drawMoveButton(g, moveButtons.get(i), moves.get(i));
         }
 
         String message = view.getMessage(VisualState.INVALID_FIGHT, null);
@@ -78,10 +89,33 @@ public class FightState implements VisualStateHandler {
             // Show unusable move message
             view.drawMenuMessagePanel(g, message);
         }
+
+        moveButtons.drawHover(g);
     }
 
     public WrapMetrics drawMoveDetails(Graphics g, Attack attack) {
         return moveDetailsPanel.draw(g, attack);
+    }
+
+    private void drawMoveButton(Graphics g, Button button, Move move) {
+        ButtonPanel panel = button.panel();
+
+        // Attack type color background
+        panel.withBackgroundColor(move.getAttack().getActualType().getColor())
+             .drawBackground(g);
+
+        FontMetrics.setBlackFont(g, 19);
+        int spacing = FontMetrics.getTextWidth(g)/2;
+        int borderSize = panel.getBorderSize();
+        int fullSpacing = spacing + borderSize;
+
+        // Attack name as left label on the top
+        g.drawString(move.getAttack().getName(), panel.x + fullSpacing, panel.y + fullSpacing + FontMetrics.getTextHeight(g));
+
+        // PP amount as right label on the bottom
+        FontMetrics.setBlackFont(g, 16);
+        String ppString = "PP: " + move.getPP() + "/" + move.getMaxPP();
+        TextUtils.drawRightAlignedString(g, ppString, panel.rightX() - fullSpacing, panel.bottomY() - fullSpacing);
     }
 
     @Override
