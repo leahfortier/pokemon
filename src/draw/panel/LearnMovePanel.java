@@ -61,7 +61,7 @@ public class LearnMovePanel {
                                         .withBorderPercentage(15)
                                         .withBlackOutline()
                                         .withLabelSize(30));
-        
+
         yesButton = buttons.get(YES_BUTTON);
         noButton = buttons.get(NO_BUTTON);
         newMoveButton = buttons.get(buttons.size() - 2);

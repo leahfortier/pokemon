@@ -91,12 +91,8 @@ public class BattleView extends View {
         buttonsPanel.drawBackground(g);
     }
 
-    public Button[] createPanelButtons() {
-        return createPanelButtons(buttonsPanel, 2, 2);
-    }
-
-    private Button[] createPanelButtons(DrawPanel buttonsPanel, int numRows, int numCols) {
-        return buttonsPanel.getButtons(BUTTON_WIDTH, BUTTON_HEIGHT, numRows, numCols);
+    public Button[] createPanelButtons(int numOptions) {
+        return buttonsPanel.getButtons(BUTTON_WIDTH, BUTTON_HEIGHT, 2, numOptions/2);
     }
 
     public void setBattle(Battle b) {

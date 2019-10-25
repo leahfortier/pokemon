@@ -108,11 +108,6 @@ public class Button implements Panel {
         return this.drawPanel;
     }
 
-    public void draw(Graphics g) {
-        this.drawPanel(g);
-        this.drawHover(g);
-    }
-
     public void drawPanel(Graphics g) {
         this.drawPanel.draw(g);
     }

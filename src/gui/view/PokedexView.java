@@ -539,8 +539,6 @@ public class PokedexView extends View {
                 }
 
                 TextUtils.drawPageNumbers(g, 18, movesLeftButton, movesRightButton, movePageNum, maxMovePages());
-                movesLeftButton.drawArrow(g, Direction.LEFT);
-                movesRightButton.drawArrow(g, Direction.RIGHT);
             }
         }
 

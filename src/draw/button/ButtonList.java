@@ -37,9 +37,8 @@ public class ButtonList implements Iterable<Button> {
     }
 
     public void draw(Graphics g) {
-        for (Button button : buttons) {
-            button.draw(g);
-        }
+        drawPanels(g);
+        drawHover(g);
     }
 
     public void drawHover(Graphics g) {

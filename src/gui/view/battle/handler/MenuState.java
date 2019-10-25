@@ -25,7 +25,19 @@ public class MenuState implements VisualStateHandler {
 
     @Override
     public void set(BattleView view) {
-        menuButtons = new ButtonList(view.createPanelButtons());
+        menuButtons = new ButtonList(view.createPanelButtons(MenuChoice.values().length));
+
+        MenuChoice[] choices = MenuChoice.values();
+        for (int i = 0; i < menuButtons.size(); i++) {
+            MenuChoice choice = choices[i];
+            menuButtons.get(i).panel()
+                       .withTransparentBackground(choice.buttonColor)
+                       .withTransparentCount(2)
+                       .withBorderPercentage(15)
+                       .withBlackOutline()
+                       .withLabel(choice.getButtonLabel(), 30);
+        }
+
         menuButtons.setFalseHover();
     }
 
@@ -35,14 +47,7 @@ public class MenuState implements VisualStateHandler {
         view.drawMenuMessagePanel(g, "What will " + playerPokemon.getActualName() + " do?");
         view.drawButtonsPanel(g);
 
-        for (MenuChoice menuChoice : MenuChoice.values()) {
-            Button menuButton = getButton(menuChoice);
-
-            menuButton.fillBordered(g, menuChoice.buttonColor);
-            menuButton.label(g, 30, menuChoice.getButtonLabel());
-        }
-
-        menuButtons.drawHover(g);
+        menuButtons.draw(g);
     }
 
     @Override
