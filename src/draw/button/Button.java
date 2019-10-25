@@ -50,7 +50,7 @@ public class Button implements Panel {
     }
 
     public Button(int x, int y, int width, int height) {
-        this(x, y, width, height, null, null, null, null);
+        this(x, y, width, height, ButtonHoverAction.BOX, null, null, null);
     }
 
     public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions) {

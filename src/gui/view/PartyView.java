@@ -267,7 +267,6 @@ public class PartyView extends View {
 
     @Override
     public void update(int dt) {
-        Player player = Game.getPlayer();
         InputControl input = InputControl.instance();
 
         buttons.update();
@@ -391,7 +390,7 @@ public class PartyView extends View {
             TextUtils.drawCenteredHeightString(g, tabPokemon.getActualName(), nameX, centerY);
             ImageUtils.drawCenteredImage(g, tabImage, (panel.x + nameX)/2, centerY);
 
-            faintOut(g, tabPokemon, panel);
+            panel.faintOut(g, tabPokemon);
         }
     }
 
@@ -493,14 +492,7 @@ public class PartyView extends View {
                 TextUtils.drawCenteredHeightString(g, String.format("PP: %d/%d", move.getPP(), move.getMaxPP()), movePanel.rightX() - moveInset, movePanel.centerY(), Alignment.RIGHT);
             }
 
-            faintOut(g, selectedPkm, pokemonPanel);
-        }
-    }
-
-    private void faintOut(Graphics g, PartyPokemon pokemon, DrawPanel panel) {
-        if (!pokemon.isEgg() && !pokemon.canFight()) {
-            panel.faintOut(g);
-            g.setColor(Color.BLACK);
+            pokemonPanel.faintOut(g, selectedPkm);
         }
     }
 

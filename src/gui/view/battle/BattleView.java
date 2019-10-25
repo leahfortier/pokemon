@@ -167,12 +167,11 @@ public class BattleView extends View {
     }
 
     public void drawBackButton(Graphics g, boolean drawArrows) {
-        g.setColor(Color.BLACK);
         if (drawArrows) {
+            g.setColor(Color.BLACK);
             backButton.drawArrow(g, Direction.RIGHT);
+            backButton.drawHover(g);
         }
-
-        backButton.drawHover(g);
     }
 
     public void updateBackButton() {

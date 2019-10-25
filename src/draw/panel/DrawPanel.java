@@ -304,8 +304,11 @@ public class DrawPanel implements Panel {
     }
 
     // Add a sad dark-red filter over everything
-    public void faintOut(Graphics g) {
-        this.fill(g, new Color(190, 49, 46, 64));
+    public void faintOut(Graphics g, PartyPokemon deadsies) {
+        if (!deadsies.isEgg() && !deadsies.canFight()) {
+            this.fill(g, new Color(190, 49, 46, 64));
+            g.setColor(Color.BLACK);
+        }
     }
 
     private void drawLabel(Graphics g) {

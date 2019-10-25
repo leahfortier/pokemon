@@ -3,7 +3,6 @@ package gui.view.item;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
-import battle.effect.status.StatusNamesies;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
@@ -341,10 +340,8 @@ public class BagView extends View {
                     TextUtils.drawRightAlignedString(g, p.getHpString(), 293, 47);
                 }
 
-                // Taint the whole button with faint
-                if (p.hasStatus(StatusNamesies.FAINTED)) {
-                    pokemonPanel.faintOut(g);
-                }
+                // Taint the whole button with faint if they dead
+                pokemonPanel.faintOut(g, p);
             }
 
             g.translate(-pokemonButton.x, -pokemonButton.y);
