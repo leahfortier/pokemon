@@ -1,8 +1,8 @@
 package gui.view.mainmenu;
 
 import draw.button.Button;
-import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonTransitions;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
 import map.Direction;
@@ -34,26 +34,37 @@ class LoadSaveState implements VisualStateHandler {
         }
 
         Button referenceButton = MainMenuView.createMenuButton(MainMenuView.NUM_MAIN_BUTTONS - 1);
+        int spacing = 10;
+        int newWidth = (referenceButton.width - spacing)/2;
 
         returnButton = buttons[RETURN] = new Button(
                 referenceButton.x,
                 referenceButton.y,
-                referenceButton.width/2 - 5,
+                newWidth,
                 referenceButton.height,
-                ButtonHoverAction.BOX,
-                new ButtonTransitions().right(DELETE).up(Save.NUM_SAVES - 1).left(DELETE).down(0)
+                new ButtonTransitions().right(DELETE).up(Save.NUM_SAVES - 1).left(DELETE).down(0),
+                () -> {}, // Handled in update
+                halfButtonSetup("Return")
         );
 
         deleteButton = buttons[DELETE] = new Button(
-                referenceButton.x + referenceButton.width/2 + 5,
+                returnButton.rightX() + spacing,
                 returnButton.y,
                 returnButton.width,
                 returnButton.height,
-                ButtonHoverAction.BOX,
-                new ButtonTransitions().right(RETURN).up(Save.NUM_SAVES - 1).left(RETURN).down(0)
+                new ButtonTransitions().right(RETURN).up(Save.NUM_SAVES - 1).left(RETURN).down(0),
+                () -> {}, // Handled in update
+                halfButtonSetup("Delete")
         );
 
         this.buttons = new ButtonList(buttons);
+    }
+
+    private ButtonPanelSetup halfButtonSetup(String label) {
+        return panel -> panel.withTransparentCount(2)
+                             .withBorderPercentage(15)
+                             .withBlackOutline()
+                             .withLabel(label, 30);
     }
 
     @Override
@@ -67,10 +78,6 @@ class LoadSaveState implements VisualStateHandler {
         for (int i = 0; i < Save.NUM_SAVES; i++) {
             view.drawSaveInformation(g, this.buttons.get(i), i, "Empty");
         }
-
-        // Return and Delete
-        returnButton.label(g, 30, "Return");
-        deleteButton.label(g, 30, "Delete");
     }
 
     @Override

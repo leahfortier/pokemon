@@ -150,7 +150,12 @@ public class MainMenuView extends View {
                 BUTTON_WIDTH,
                 75,
                 ButtonHoverAction.BOX,
-                transitions
+                transitions,
+                () -> {}, // Handled separately
+                panel -> panel.withTransparentCount(2)
+                              .withBorderPercentage(15)
+                              .withBlackOutline()
+                              .withLabelSize(40)
         );
     }
 }
