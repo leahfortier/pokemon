@@ -47,12 +47,12 @@ public class BagState implements VisualStateHandler {
     private final DrawPanel bagCategoryPanel;
     private final WrapPanel lastItemPanel;
 
-    private final ButtonList bagButtons;
-    private final Button[] bagTabButtons;
-    private final Button[] bagItemButtons;
-    private final Button bagRightButton;
-    private final Button bagLeftButton;
-    private final Button bagLastUsedBtn;
+    private final ButtonList buttons;
+    private final Button[] tabButtons;
+    private final Button[] itemButtons;
+    private final Button rightButton;
+    private final Button leftButton;
+    private final Button lastUsedButton;
 
     // Current bag page, bag category, and selected item
     private int bagPage;
@@ -70,10 +70,10 @@ public class BagState implements VisualStateHandler {
         // Bag View Buttons
         Button[] bagButtons = new Button[NUM_BAG_BUTTONS];
 
-        bagTabButtons = new Button[BATTLE_BAG_CATEGORIES.length];
+        tabButtons = new Button[BATTLE_BAG_CATEGORIES.length];
         for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
-            bagButtons[i] = bagTabButtons[i] = new Button(
-                    bagCategoryPanel.createTab(i, 28, bagTabButtons.length),
+            bagButtons[i] = tabButtons[i] = new Button(
+                    bagCategoryPanel.createTab(i, 28, tabButtons.length),
                     new ButtonTransitions()
                             .up(LAST_ITEM_BUTTON)
                             .down(ITEMS)
@@ -82,25 +82,25 @@ public class BagState implements VisualStateHandler {
             );
         }
 
-        bagButtons[BAG_LEFT_BUTTON] = bagLeftButton = new Button(
+        bagButtons[BAG_LEFT_BUTTON] = leftButton = new Button(
                 135, 435, 35, 20, ButtonHoverAction.BOX,
                 new ButtonTransitions().right(BAG_RIGHT_BUTTON).up(ITEMS + ITEMS_PER_PAGE - 2).down(LAST_ITEM_BUTTON)
         );
 
-        bagButtons[BAG_RIGHT_BUTTON] = bagRightButton = new Button(
+        bagButtons[BAG_RIGHT_BUTTON] = rightButton = new Button(
                 250, 435, 35, 20, ButtonHoverAction.BOX,
                 new ButtonTransitions().up(ITEMS + ITEMS_PER_PAGE - 1).left(BAG_LEFT_BUTTON).down(LAST_ITEM_BUTTON)
         );
 
-        bagButtons[LAST_ITEM_BUTTON] = bagLastUsedBtn = new Button(
+        bagButtons[LAST_ITEM_BUTTON] = lastUsedButton = new Button(
                 214, 517, 148, 28, ButtonHoverAction.BOX,
                 new ButtonTransitions().up(BAG_LEFT_BUTTON).down(selectedBagTab)
         );
 
-        bagItemButtons = new Button[ITEMS_PER_PAGE];
+        itemButtons = new Button[ITEMS_PER_PAGE];
         for (int y = 0, i = 0; y < ITEMS_PER_PAGE/2; y++) {
             for (int x = 0; x < 2; x++, i++) {
-                bagItemButtons[i] = bagButtons[i + ITEMS] = new Button(
+                itemButtons[i] = bagButtons[i + ITEMS] = new Button(
                         55 + x*162,
                         243 + y*38,
                         148,
@@ -115,7 +115,7 @@ public class BagState implements VisualStateHandler {
             }
         }
 
-        this.bagButtons = new ButtonList(bagButtons);
+        this.buttons = new ButtonList(bagButtons);
     }
 
     @Override
@@ -130,13 +130,13 @@ public class BagState implements VisualStateHandler {
         int pageSize = this.getDisplayItems().size();
 
         for (int i = 0; i < ITEMS_PER_PAGE; i++) {
-            bagItemButtons[i].setActive(i < pageSize - bagPage*ITEMS_PER_PAGE);
+            itemButtons[i].setActive(i < pageSize - bagPage*ITEMS_PER_PAGE);
         }
 
         // TODO: Make a method for this
-        bagLastUsedBtn.setActive(playerBag.getLastUsedItem() != ItemNamesies.NO_ITEM);
+        lastUsedButton.setActive(playerBag.getLastUsedItem() != ItemNamesies.NO_ITEM);
 
-        bagButtons.setFalseHover();
+        buttons.setFalseHover();
     }
 
     @Override
@@ -153,7 +153,7 @@ public class BagState implements VisualStateHandler {
 
         // Tabs
         for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
-            Button tabButton = bagTabButtons[i];
+            Button tabButton = this.tabButtons[i];
             BattleBagCategory category = BATTLE_BAG_CATEGORIES[i];
 
             tabButton.fill(g, category.getColor());
@@ -165,9 +165,9 @@ public class BagState implements VisualStateHandler {
         DrawUtils.blackOutline(
                 g,
                 bagCategoryPanel.x,
-                bagTabButtons[0].y,
+                tabButtons[0].y,
                 bagCategoryPanel.width,
-                bagCategoryPanel.bottomY() - bagTabButtons[0].y
+                bagCategoryPanel.bottomY() - tabButtons[0].y
         );
 
         // Messages text
@@ -179,14 +179,14 @@ public class BagState implements VisualStateHandler {
         Set<ItemNamesies> items = getDisplayItems();
         TileSet itemTiles = Game.getData().getItemTiles();
 
-        int selectedButton = bagButtons.getSelected();
+        int selectedButton = buttons.getSelected();
         ItemNamesies selected = null;
 
         FontMetrics.setBlackFont(g, 12);
         Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(items, bagPage, ITEMS_PER_PAGE);
         for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
             ItemNamesies item = iter.next();
-            drawItemButton(g, itemTiles, bagItemButtons[i], item);
+            drawItemButton(g, itemTiles, itemButtons[i], item);
 
             if (selectedButton == ITEMS + i) {
                 selected = item;
@@ -201,7 +201,7 @@ public class BagState implements VisualStateHandler {
 
             // TODO: Should have a method to check if it is the empty item
             if (lastUsedItem != ItemNamesies.NO_ITEM) {
-                drawItemButton(g, itemTiles, bagLastUsedBtn, lastUsedItem);
+                drawItemButton(g, itemTiles, lastUsedButton, lastUsedItem);
             }
         }
         // Otherwise, draw selected item's information
@@ -210,14 +210,14 @@ public class BagState implements VisualStateHandler {
         }
 
         // Bag page numbers and arrows
-        TextUtils.drawPageNumbers(g, 20, bagLeftButton, bagRightButton, bagPage, totalPages());
-        bagLeftButton.drawArrow(g, Direction.LEFT);
-        bagRightButton.drawArrow(g, Direction.RIGHT);
+        TextUtils.drawPageNumbers(g, 20, leftButton, rightButton, bagPage, totalPages());
+        leftButton.drawArrow(g, Direction.LEFT);
+        rightButton.drawArrow(g, Direction.RIGHT);
 
         // Back Arrow
         view.drawBackButton(g);
 
-        bagButtons.drawHover(g);
+        buttons.drawHover(g);
     }
 
     private Set<ItemNamesies> getDisplayItems() {
@@ -257,11 +257,11 @@ public class BagState implements VisualStateHandler {
     @Override
     public void update(BattleView view) {
         // Update all bag buttons and the back button
-        bagButtons.update();
+        buttons.update();
 
         // Check tabs
         for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
-            if (bagTabButtons[i].checkConsumePress()) {
+            if (tabButtons[i].checkConsumePress()) {
                 bagPage = 0;
                 selectedBagTab = i;
                 view.setVisualState(); // To update active buttons
@@ -278,7 +278,7 @@ public class BagState implements VisualStateHandler {
         // Go through each item on the page
         for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
             ItemNamesies item = iter.next();
-            if (bagItemButtons[i].checkConsumePress()) {
+            if (itemButtons[i].checkConsumePress()) {
                 // Pokemon Use Item -- Set item to be selected an change to Pokemon View
                 if (item.getItem() instanceof PokemonUseItem) {
                     selectedItem = item;
@@ -301,7 +301,7 @@ public class BagState implements VisualStateHandler {
         }
 
         // Selecting the Last Item Used Button
-        if (bagLastUsedBtn.checkConsumePress()) {
+        if (lastUsedButton.checkConsumePress()) {
             ItemNamesies lastItemUsed = bag.getLastUsedItem();
             if (lastItemUsed != ItemNamesies.NO_ITEM && bag.battleUseItem(lastItemUsed, player.front(), currentBattle)) {
                 player.performAction(currentBattle, TrainerAction.ITEM);
@@ -314,11 +314,11 @@ public class BagState implements VisualStateHandler {
         }
 
         int increment = 0;
-        if (bagRightButton.checkConsumePress()) {
+        if (rightButton.checkConsumePress()) {
             // Next page
             increment = 1;
         }
-        if (bagLeftButton.checkConsumePress()) {
+        if (leftButton.checkConsumePress()) {
             // Previous Page
             increment = -1;
         }
@@ -342,6 +342,6 @@ public class BagState implements VisualStateHandler {
 
     @Override
     public ButtonList getButtons() {
-        return this.bagButtons;
+        return this.buttons;
     }
 }
