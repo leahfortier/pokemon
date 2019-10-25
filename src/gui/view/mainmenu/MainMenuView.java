@@ -124,7 +124,7 @@ public class MainMenuView extends View {
 
             g.translate(-b.x, -b.y);
         } else {
-            b.label(g, 30, emptyText);
+            b.panel().label(g, 30, emptyText);
         }
     }
 

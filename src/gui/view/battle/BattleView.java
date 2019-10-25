@@ -71,7 +71,7 @@ public class BattleView extends View {
         largeMenuPanel = new DrawPanel(0, 160, 417, 440).withBorderPercentage(3).withBlackOutline();
 
         // Back Button
-        backButton = new Button(750, 560, 35, 20);
+        backButton = new Button(750, 560, 35, 20).asArrow(Direction.RIGHT);
     }
 
     public void drawLargeMenuPanel(Graphics g) {
@@ -164,8 +164,7 @@ public class BattleView extends View {
 
     public void drawBackButton(Graphics g, boolean drawArrows) {
         if (drawArrows) {
-            g.setColor(Color.BLACK);
-            backButton.drawArrow(g, Direction.RIGHT);
+            backButton.drawPanel(g);
             backButton.drawHover(g);
         }
     }
