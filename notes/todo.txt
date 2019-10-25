@@ -56,7 +56,7 @@ Pokemon that go out of bounds:
 	We need to do whatever thing we did for levitating Pokemon before so it doesn't look like they're sitting on the ground... Wait actually we never did that -- that needs to happens srsly
 
 Names that go out of bounds:
-	Crabominable/Silph Surfer
+	Crabominable/Silph Surfer -- also in bag view
 	Disarming Voice/Hyperspace Fury
     Lv100 (Enemy) Charmander has the gender sign overlap with the level
     pokedex gender string overflow for 87.5/12.5%
@@ -174,3 +174,5 @@ Other random things:
     when switching pokemon in pokedex from the moves panel it needs to reset the page (if you go to a pokemon with less pages it will be blank and have overflow page numbers (5/4))
     might be nice to have a recenter button in MapMaker to take to the center of the current loaded map (when you load a small map from a large one sometimes you just have no fucking idea where you are)
     exiting TradeView doesn't let you reenter until you enter a different view first...?
+    faintOut in PartyView has overlap on tab outline
+    item buttons are the same in [Battle]BagState as BagLayout and should have a common way to draw

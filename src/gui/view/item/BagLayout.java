@@ -148,6 +148,7 @@ public class BagLayout {
                 defaultTransitions,
                 indexAction,
                 (index, panel) -> panel.withBackgroundColor(Color.WHITE)
+                                       .withBorderPercentage(0)
                                        .withBlackOutline()
         );
     }

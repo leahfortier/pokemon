@@ -1,7 +1,7 @@
 package gui.view.battle.handler;
 
 import battle.Battle;
-import draw.DrawUtils;
+import draw.Alignment;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
@@ -9,6 +9,7 @@ import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
 import draw.panel.DrawPanel;
+import draw.panel.PanelList;
 import draw.panel.WrapPanel;
 import draw.panel.WrapPanel.WrapMetrics;
 import gui.TileSet;
@@ -29,6 +30,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class BagState implements VisualStateHandler {
@@ -44,8 +46,11 @@ public class BagState implements VisualStateHandler {
     private static final int BAG_RIGHT_BUTTON = NUM_BAG_BUTTONS - 2;
     private static final int BAG_LEFT_BUTTON = NUM_BAG_BUTTONS - 3;
 
+    private final PanelList panels;
+
     private final DrawPanel bagCategoryPanel;
-    private final WrapPanel lastItemPanel;
+    private final DrawPanel lastItemPanel;
+    private final WrapPanel itemDescriptionPanel;
 
     private final ButtonList buttons;
     private final Button[] tabButtons;
@@ -61,10 +66,19 @@ public class BagState implements VisualStateHandler {
 
     public BagState() {
         bagCategoryPanel = new DrawPanel(30, 218, 357, 259)
-                .withBorderPercentage(6);
+                .withBorderPercentage(6)
+                .withTransparentBackground()
+                .withBlackOutline();
 
-        lastItemPanel = new WrapPanel(bagCategoryPanel.x, 492, bagCategoryPanel.width, 78, 13)
+        lastItemPanel = new DrawPanel(bagCategoryPanel.x, 492, bagCategoryPanel.width, 78)
                 .withBorderPercentage(17)
+                .withTransparentBackground()
+                .withBlackOutline()
+                .withLabel("Last item used:", 16, Alignment.LEFT);
+
+        itemDescriptionPanel = new WrapPanel(lastItemPanel, 13)
+                .withBorderSize(lastItemPanel.getBorderSize())
+                .withTransparentBackground()
                 .withBlackOutline();
 
         // Bag View Buttons
@@ -72,29 +86,39 @@ public class BagState implements VisualStateHandler {
 
         tabButtons = new Button[BATTLE_BAG_CATEGORIES.length];
         for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
+            BattleBagCategory category = BATTLE_BAG_CATEGORIES[i];
             bagButtons[i] = tabButtons[i] = new Button(
                     bagCategoryPanel.createTab(i, 28, tabButtons.length),
                     new ButtonTransitions()
                             .up(LAST_ITEM_BUTTON)
                             .down(ITEMS)
                             .basic(Direction.RIGHT, i, 1, BATTLE_BAG_CATEGORIES.length)
-                            .basic(Direction.LEFT, i, 1, BATTLE_BAG_CATEGORIES.length)
+                            .basic(Direction.LEFT, i, 1, BATTLE_BAG_CATEGORIES.length),
+                    () -> {}, // Handled in update
+                    panel -> panel.withBorderSize(0)
+                                  .withBackgroundColor(category.getColor())
+                                  .withLabel(category.getName(), 18)
             );
         }
 
         bagButtons[BAG_LEFT_BUTTON] = leftButton = new Button(
                 135, 435, 35, 20, ButtonHoverAction.BOX,
                 new ButtonTransitions().right(BAG_RIGHT_BUTTON).up(ITEMS + ITEMS_PER_PAGE - 2).down(LAST_ITEM_BUTTON)
-        );
+        ).asArrow(Direction.LEFT);
 
         bagButtons[BAG_RIGHT_BUTTON] = rightButton = new Button(
                 250, 435, 35, 20, ButtonHoverAction.BOX,
                 new ButtonTransitions().up(ITEMS + ITEMS_PER_PAGE - 1).left(BAG_LEFT_BUTTON).down(LAST_ITEM_BUTTON)
-        );
+        ).asArrow(Direction.RIGHT);
 
         bagButtons[LAST_ITEM_BUTTON] = lastUsedButton = new Button(
-                214, 517, 148, 28, ButtonHoverAction.BOX,
-                new ButtonTransitions().up(BAG_LEFT_BUTTON).down(selectedBagTab)
+                214, 517, 148, 28,
+                new ButtonTransitions().up(BAG_LEFT_BUTTON).down(selectedBagTab),
+                () -> {}, // Handled in update
+                panel -> panel.skipInactive()
+                              .withBlackOutline()
+                              .withBackgroundColor(Color.WHITE)
+                              .withBorderPercentage(0)
         );
 
         itemButtons = new Button[ITEMS_PER_PAGE];
@@ -110,12 +134,18 @@ public class BagState implements VisualStateHandler {
                                 .right((i + 1)%ITEMS_PER_PAGE + ITEMS)
                                 .up(y == 0 ? selectedBagTab : i + ITEMS - 2)
                                 .left((i - 1 + ITEMS_PER_PAGE)%ITEMS_PER_PAGE + ITEMS)
-                                .down(y == ITEMS_PER_PAGE/2 - 1 ? (x == 0 ? BAG_LEFT_BUTTON : BAG_RIGHT_BUTTON) : i + ITEMS + 2)
+                                .down(y == ITEMS_PER_PAGE/2 - 1 ? (x == 0 ? BAG_LEFT_BUTTON : BAG_RIGHT_BUTTON) : i + ITEMS + 2),
+                        () -> {}, // Handled in update
+                        panel -> panel.skipInactive()
+                                      .withBlackOutline()
+                                      .withBackgroundColor(Color.WHITE)
+                                      .withBorderPercentage(0)
                 );
             }
         }
 
         this.buttons = new ButtonList(bagButtons);
+        this.panels = new PanelList(bagCategoryPanel, lastItemPanel, itemDescriptionPanel);
     }
 
     @Override
@@ -139,80 +169,71 @@ public class BagState implements VisualStateHandler {
         buttons.setFalseHover();
     }
 
-    @Override
-    public void draw(BattleView view, Graphics g) {
-        view.drawLargeMenuPanel(g);
+    private void drawSetup() {
+        Color tabColor = BATTLE_BAG_CATEGORIES[selectedBagTab].getColor();
+        bagCategoryPanel.withBackgroundColor(tabColor);
+        lastItemPanel.withBackgroundColor(tabColor);
+        itemDescriptionPanel.withBackgroundColor(tabColor);
 
-        BattleBagCategory selectedCategory = BATTLE_BAG_CATEGORIES[selectedBagTab];
-        bagCategoryPanel.withTransparentBackground(selectedCategory.getColor())
-                        .withMissingBlackOutline(Direction.UP)
-                        .drawBackground(g);
-
-        lastItemPanel.withTransparentBackground(selectedCategory.getColor())
-                     .drawBackground(g);
-
-        // Tabs
+        // Tab outlines
         for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
-            Button tabButton = this.tabButtons[i];
-            BattleBagCategory category = BATTLE_BAG_CATEGORIES[i];
-
-            tabButton.fill(g, category.getColor());
-            tabButton.label(g, 18, category.getName());
-            tabButton.outlineTab(g, i, selectedBagTab);
+            this.tabButtons[i].panel().withTabOutlines(i, selectedBagTab);
         }
 
-        // Black outline around the entire box
-        DrawUtils.blackOutline(
-                g,
-                bagCategoryPanel.x,
-                tabButtons[0].y,
-                bagCategoryPanel.width,
-                bagCategoryPanel.bottomY() - tabButtons[0].y
-        );
+        // Show item description if a item button is currently highlighted instead of the last move used
+        boolean showDescription = this.getHighlighted() != null;
+        lastItemPanel.skipDraw(showDescription);
+        lastUsedButton.panel().skipDraw(showDescription);
+        itemDescriptionPanel.skipDraw(!showDescription);
+    }
+
+    private ItemNamesies getHighlighted() {
+        int selectedButton = buttons.getSelected();
+        if (selectedButton >= ITEMS && selectedButton < ITEMS + ITEMS_PER_PAGE) {
+            return GeneralUtils.getPageValue(this.getDisplayItems(), bagPage, ITEMS_PER_PAGE, selectedButton - ITEMS);
+        }
+
+        // Item button is not currently selected
+        return null;
+    }
+
+    @Override
+    public void draw(BattleView view, Graphics g) {
+        drawSetup();
+
+        // Background
+        view.drawLargeMenuPanel(g);
+        panels.drawAll(g);
+        buttons.drawPanels(g);
 
         // Messages text
         String message = view.getMessage(VisualState.INVALID_BAG, "Choose an item!");
         view.drawMenuMessagePanel(g, message);
 
         Bag bag = Game.getPlayer().getBag();
-
-        Set<ItemNamesies> items = getDisplayItems();
         TileSet itemTiles = Game.getData().getItemTiles();
 
-        int selectedButton = buttons.getSelected();
-        ItemNamesies selected = null;
-
-        FontMetrics.setBlackFont(g, 12);
-        Iterator<ItemNamesies> iter = GeneralUtils.pageIterator(items, bagPage, ITEMS_PER_PAGE);
-        for (int i = 0; i < ITEMS_PER_PAGE && iter.hasNext(); i++) {
-            ItemNamesies item = iter.next();
+        List<ItemNamesies> items = GeneralUtils.pageValues(this.getDisplayItems(), bagPage, ITEMS_PER_PAGE);
+        for (int i = 0; i < items.size(); i++) {
+            ItemNamesies item = items.get(i);
             drawItemButton(g, itemTiles, itemButtons[i], item);
-
-            if (selectedButton == ITEMS + i) {
-                selected = item;
-            }
         }
 
         // Show last item used if no item is selected
-        if (selected == null) {
+        ItemNamesies highlighted = this.getHighlighted();
+        if (highlighted == null) {
             // Last Item Used
             ItemNamesies lastUsedItem = bag.getLastUsedItem();
-            lastItemPanel.drawLeftLabel(g, 16, "Last item used:");
-
-            // TODO: Should have a method to check if it is the empty item
             if (lastUsedItem != ItemNamesies.NO_ITEM) {
                 drawItemButton(g, itemTiles, lastUsedButton, lastUsedItem);
             }
-        }
-        // Otherwise, draw selected item's information
-        else {
-            drawItemDescription(g, selected);
+        } else {
+            // Otherwise, draw selected item's information
+            drawItemDescription(g, highlighted);
         }
 
         // Bag page numbers and arrows
         TextUtils.drawPageNumbers(g, 20, leftButton, rightButton, bagPage, totalPages());
-        leftButton.drawArrow(g, Direction.LEFT);
-        rightButton.drawArrow(g, Direction.RIGHT);
 
         // Back Arrow
         view.drawBackButton(g);
@@ -229,11 +250,6 @@ public class BagState implements VisualStateHandler {
     }
 
     private void drawItemButton(Graphics g, TileSet itemTiles, Button button, ItemNamesies itemNamesies) {
-
-        // Draw box
-        button.fill(g, Color.WHITE);
-        button.blackOutline(g);
-
         int dx = button.x;
         int dy = button.y;
 
@@ -251,7 +267,7 @@ public class BagState implements VisualStateHandler {
     }
 
     public WrapMetrics drawItemDescription(Graphics g, ItemNamesies itemNamesies) {
-        return lastItemPanel.drawMessage(g, itemNamesies.getItem().getDescription());
+        return itemDescriptionPanel.drawMessage(g, itemNamesies.getItem().getDescription());
     }
 
     @Override
