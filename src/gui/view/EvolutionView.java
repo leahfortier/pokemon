@@ -2,11 +2,10 @@ package gui.view;
 
 import battle.ActivePokemon;
 import draw.ImageUtils;
-import draw.TextUtils;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.LearnMovePanel;
-import gui.GameData;
+import draw.panel.StatGainPanel;
 import gui.TileSet;
 import input.ControlKey;
 import input.InputControl;
@@ -19,11 +18,9 @@ import message.Messages;
 import pokemon.breeding.Eggy;
 import pokemon.evolution.BaseEvolution;
 import pokemon.species.PokemonNamesies;
-import pokemon.stat.Stat;
 import trainer.player.EvolutionInfo;
 import type.PokeType;
 import type.Type;
-import util.FontMetrics;
 import util.Point;
 import util.string.StringUtils;
 
@@ -36,7 +33,7 @@ class EvolutionView extends View {
     private static final Point POKEMON_DRAW_LOCATION = Point.scaleDown(Global.GAME_SIZE, 2);
 
     private final DrawPanel canvasPanel;
-    private final DrawPanel statsPanel;
+    private final StatGainPanel statsPanel;
 
     private LearnMovePanel learnMovePanel;
 
@@ -55,7 +52,7 @@ class EvolutionView extends View {
                                       .withTransparentCount(2)
                                       .withBorderPercentage(0);
 
-        this.statsPanel = new DrawPanel(0, 280, 273, 161).withBlackOutline();
+        this.statsPanel = new StatGainPanel();
     }
 
     @Override
@@ -142,53 +139,35 @@ class EvolutionView extends View {
 
     @Override
     public void draw(Graphics g) {
-        final GameData data = Game.getData();
-        final boolean evolvedState = state == State.END || state == State.LEARN_MOVE;
+        final boolean finishedEvolving = state == State.END || state == State.LEARN_MOVE;
 
         // Use pre-evolution for evolved eggs and unevolved Pokemon
         Color[] backgroundColors = PokeType.getColors(preEvolution);
-        if (evolvedState && !isEgg) {
+        if (finishedEvolving && !isEgg) {
             backgroundColors = PokeType.getColors(evolvingPokemon);
-        } else if (!evolvedState && isEgg) {
+        } else if (!finishedEvolving && isEgg) {
             // Unhatched egg -- use normal-type colors
             backgroundColors = new PokeType(Type.NORMAL).getColors();
         }
 
-        canvasPanel.withBackgroundColors(backgroundColors);
-        canvasPanel.drawBackground(g);
+        canvasPanel.withBackgroundColors(backgroundColors)
+                   .drawBackground(g);
 
         if (state != State.LEARN_MOVE && !messages.isEmpty()) {
-            MessageUpdate message = messages.peek();
+            MessageUpdate message = this.messages.peek();
             BasicPanels.drawFullMessagePanel(g, message.getMessage());
             if (message.gainUpdate()) {
-                statsPanel.drawBackground(g);
-
-                int[] statGains = message.getGain();
-                int[] newStats = message.getNewStats();
-
-                g.setColor(Color.BLACK);
-                for (int i = 0; i < Stat.NUM_STATS; i++) {
-                    FontMetrics.setFont(g, 16);
-                    g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
-
-                    TextUtils.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);
-                    TextUtils.drawRightAlignedString(g, newStats[i] + "", 247, 314 + i*21);
-                }
+                statsPanel.drawStatGain(g, message);
             }
         }
 
-        TileSet pokemonTiles = data.getPokemonTilesLarge();
-
-        FontMetrics.setFont(g, 30);
-        g.setColor(Color.BLACK);
-
+        TileSet pokemonTiles = Game.getData().getPokemonTilesLarge();
         String preImageName = isEgg ? Eggy.SPRITE_EGG_IMAGE_NAME : getImageName(preEvolution);
         String postImageName = getImageName(isEgg ? preEvolution : postEvolution);
-
         BufferedImage currEvolution = pokemonTiles.getTile(preImageName);
         BufferedImage nextEvolution = pokemonTiles.getTile(postImageName);
 
-        if (evolvedState) {
+        if (finishedEvolving) {
             ImageUtils.drawBottomCenteredImage(g, nextEvolution, POKEMON_DRAW_LOCATION);
         }
 

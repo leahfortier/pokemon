@@ -6,14 +6,15 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonPanel;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.MovePanel;
+import draw.panel.PanelList;
 import draw.panel.WrapPanel;
 import draw.panel.WrapPanel.WrapMetrics;
-import gui.GameData;
 import gui.TileSet;
 import input.InputControl;
 import main.Game;
@@ -27,7 +28,6 @@ import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonList;
 import pokemon.stat.Stat;
 import trainer.player.pokedex.Pokedex;
-import type.PokeType;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.string.PokeString;
@@ -36,7 +36,6 @@ import util.string.StringUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -60,8 +59,9 @@ public class PokedexView extends View {
     private static final int TAB_START = PER_PAGE;
     private static final int MOVE_START = TAB_START + NUM_TAB_BUTTONS;
 
-    private final DrawPanel pokedexPanel;
-    private final DrawPanel titlePanel;
+    private PanelList panels;
+    private List<DrawPanel> alwaysPanels;
+
     private final DrawPanel countPanel;
     private final DrawPanel infoPanel;
     private final DrawPanel imagePanel;
@@ -77,7 +77,6 @@ public class PokedexView extends View {
     private final Button[] moveButtons;
     private final Button movesLeftButton;
     private final Button movesRightButton;
-    private final Button returnButton;
 
     private final Pokedex pokedex;
 
@@ -87,25 +86,24 @@ public class PokedexView extends View {
     private int pageNum;
     private int movePageNum;
 
-    private int numSeen;
-    private int numCaught;
-
     PokedexView() {
-        pokedexPanel = new DrawPanel(40, 40, 350, 418)
+        DrawPanel pokedexPanel = new DrawPanel(40, 40, 350, 418)
                 .withBackgroundColor(Color.BLUE)
                 .withTransparentCount(2)
                 .withBorderPercentage(0)
                 .withBlackOutline();
 
-        titlePanel = new DrawPanel(pokedexPanel.x, pokedexPanel.y, pokedexPanel.width, 37)
-                .withBackgroundColor(null)
-                .withBlackOutline();
+        DrawPanel titlePanel = new DrawPanel(pokedexPanel.x, pokedexPanel.y, pokedexPanel.width, 37)
+                .withNoBackground()
+                .withBlackOutline()
+                .withLabel(PokeString.POKEDEX, 20);
 
         countPanel = new DrawPanel(pokedexPanel.x, 478, pokedexPanel.width, 82)
                 .withBackgroundColor(Color.RED)
                 .withTransparentCount(2)
                 .withBorderPercentage(0)
-                .withBlackOutline();
+                .withBlackOutline()
+                .withLabelSize(20);
 
         infoPanel = new DrawPanel(410, pokedexPanel.y, pokedexPanel.width, 462)
                 .withTransparentCount(2)
@@ -119,11 +117,11 @@ public class PokedexView extends View {
                 104
         )
                 .withFullTransparency()
-                .withBlackOutline();
+                .withBlackOutline()
+                .withLabelSize(80);
 
         basicInfoPanel = new DrawPanel(infoPanel.x, infoPanel.y, infoPanel.width, 230)
-                .withBackgroundColor(null)
-                .withBorderPercentage(0)
+                .withNoBackground()
                 .withBlackOutline();
 
         flavorTextPanel = new WrapPanel(
@@ -166,7 +164,9 @@ public class PokedexView extends View {
                                 k, NUM_ROWS, NUM_COLS, 0,
                                 new ButtonTransitions().right(RETURN).up(RIGHT_ARROW).down(RIGHT_ARROW)
                         ),
-                        () -> selected = PokemonList.get(getIndex(row, col) + 1)
+                        () -> selected = PokemonList.get(getPokeNum(row, col)),
+                        panel -> panel.withLabelSize(20)
+                                      .withLabelColor(new Color(0, 0, 0, 64))
                 );
             }
         }
@@ -174,14 +174,15 @@ public class PokedexView extends View {
         int buttonHeight = 38;
         tabButtons = new Button[NUM_TAB_BUTTONS];
         for (int i = 0; i < tabButtons.length; i++) {
-            final int index = i;
+            TabInfo tabInfo = TabInfo.values()[i];
             buttons[TAB_START + i] = tabButtons[i] = new Button(
                     infoPanel.createBottomInsetTab(i, buttonHeight, NUM_TAB_BUTTONS),
                     ButtonTransitions.getBasicTransitions(
                             i, 1, tabButtons.length, TAB_START,
                             new ButtonTransitions().right(LEFT_ARROW).up(MOVES_RIGHT_ARROW).left(RIGHT_ARROW).down(RETURN)
                     ),
-                    () -> changeTab(TabInfo.values()[index])
+                    () -> changeTab(tabInfo),
+                    panel -> panel.withLabel(tabInfo.label, 12)
             );
         }
 
@@ -192,7 +193,6 @@ public class PokedexView extends View {
                     moveDescriptionPanel.bottomY() + spacing + i*(spacing + moveButtonHeight),
                     moveDescriptionPanel.width,
                     moveButtonHeight,
-                    ButtonHoverAction.BOX,
                     ButtonTransitions.getBasicTransitions(
                             i, MOVES_PER_PAGE, 1, MOVE_START,
                             new ButtonTransitions()
@@ -200,7 +200,10 @@ public class PokedexView extends View {
                                     .up(RETURN)
                                     .left(MOVES_LEFT_ARROW)
                                     .down(MOVES_RIGHT_ARROW)
-                    )
+                    ),
+                    () -> {}, // Pressing does nothing, only care if button is selected
+                    panel -> panel.skipInactive()
+                                  .withBlackOutline()
             );
         }
 
@@ -216,7 +219,7 @@ public class PokedexView extends View {
                         .left(TAB_START + NUM_TAB_BUTTONS - 1)
                         .down(0),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, NUM_PAGES)
-        );
+        ).asArrow(Direction.LEFT);
 
         buttons[RIGHT_ARROW] = rightButton = new Button(
                 255, 418, arrowWidth, arrowHeight,
@@ -227,20 +230,21 @@ public class PokedexView extends View {
                         .left(LEFT_ARROW)
                         .down(0),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, NUM_PAGES)
-        );
+        ).asArrow(Direction.RIGHT);
 
         buttons[MOVES_LEFT_ARROW] = movesLeftButton = new Button(
                 infoPanel.centerX() - arrowWidth*3,
                 (moveButtons[MOVES_PER_PAGE - 1].bottomY() + tabButtons[0].y)/2 - arrowHeight/2,
                 arrowWidth,
                 arrowHeight,
-                ButtonHoverAction.BOX,
                 new ButtonTransitions()
                         .right(MOVES_RIGHT_ARROW)
                         .up(MOVE_START + MOVES_PER_PAGE - 1)
                         .left(RIGHT_ARROW)
                         .down(RETURN),
-                () -> movePageNum = GeneralUtils.wrapIncrement(movePageNum, -1, maxMovePages())
+                () -> movePageNum = GeneralUtils.wrapIncrement(movePageNum, -1, maxMovePages()),
+                panel -> panel.skipInactive()
+                              .asArrow(Direction.LEFT)
         );
 
         buttons[MOVES_RIGHT_ARROW] = movesRightButton = new Button(
@@ -248,22 +252,31 @@ public class PokedexView extends View {
                 buttons[MOVES_LEFT_ARROW].y,
                 arrowWidth,
                 arrowHeight,
-                ButtonHoverAction.BOX,
                 new ButtonTransitions()
                         .right(LEFT_ARROW)
                         .up(MOVE_START + MOVES_PER_PAGE - 1)
                         .left(MOVES_LEFT_ARROW)
                         .down(RETURN),
-                () -> movePageNum = GeneralUtils.wrapIncrement(movePageNum, 1, maxMovePages())
+                () -> movePageNum = GeneralUtils.wrapIncrement(movePageNum, 1, maxMovePages()),
+                panel -> panel.skipInactive()
+                              .asArrow(Direction.RIGHT)
         );
 
-        buttons[RETURN] = returnButton = new Button(
+        buttons[RETURN] = new Button(
                 410, 522, 350, 38, ButtonHoverAction.BOX,
                 new ButtonTransitions().right(0).up(PER_PAGE).left(RIGHT_ARROW).down(PER_PAGE),
-                ButtonPressAction.getExitAction()
+                ButtonPressAction.getExitAction(),
+                panel -> panel.withBackgroundColor(Color.YELLOW)
+                              .withBorderlessTransparentBackground()
+                              .withTransparentCount(2)
+                              .withBlackOutline()
+                              .withLabel("Return", 20)
         );
 
         this.buttons = new ButtonList(buttons);
+
+        this.alwaysPanels = List.of(pokedexPanel, titlePanel, countPanel, infoPanel);
+        this.panels = new PanelList(alwaysPanels);
 
         selected = PokemonList.get(1);
         changeTab(TabInfo.MAIN);
@@ -283,115 +296,107 @@ public class PokedexView extends View {
         return (int)Math.ceil(1.0*selected.getLevelUpMoves().size()/MOVES_PER_PAGE);
     }
 
-    @Override
-    public void draw(Graphics g) {
-        GameData data = Game.getData();
+    private void drawSetup() {
+        this.panels = new PanelList(alwaysPanels);
 
-        TileSet partyTiles = data.getPartyTiles();
-        TileSet pokedexTiles = data.getPokedexTilesSmall();
+        // Pokemon buttons (image, pokeball, number, etc.)
+        setupPokemonButtons();
 
-        BasicPanels.drawCanvasPanel(g);
+        // Selected Pokemon
+        setupSelectedPokemon();
 
-        pokedexPanel.drawBackground(g);
-        titlePanel.drawBackground(g);
-        titlePanel.label(g, 20, PokeString.POKEDEX);
+        // Tab outlines
+        for (int i = 0; i < tabButtons.length; i++) {
+            tabButtons[i].panel().withBottomTabOutlines(i, selectedTab.ordinal());
+        }
+    }
+
+    private void setupSelectedPokemon() {
+        boolean notSeen = pokedex.isNotSeen(selected);
+
+        // Background type colors (if not seen just use black)
+        infoPanel.withBackgroundColors(notSeen
+                                       ? new Color[] { Color.BLACK, Color.BLACK }
+                                       : selected.getType().getColors());
+
+        if (this.shouldDrawInformationPanel()) {
+            this.panels.add(basicInfoPanel, imagePanel);
+
+            // Image
+            if (notSeen) {
+                imagePanel.withLabel("?");
+            } else {
+                TileSet pokedexTiles = Game.getData().getPokedexTilesSmall();
+                BufferedImage pkmImg = pokedexTiles.getTile(selected.getBaseImageName());
+                pkmImg.setRGB(0, 0, 0); // TODO: What is happening here?
+
+                imagePanel.withImageLabel(pkmImg);
+            }
+        }
+    }
+
+    private void setupPokemonButtons() {
+        TileSet partyTiles = Game.getData().getPartyTiles();
 
         for (int i = 0; i < NUM_ROWS; i++) {
             for (int j = 0; j < NUM_COLS; j++) {
-                int number = getIndex(i, j) + 1;
+                ButtonPanel buttonPanel = pokemonButtons[i][j].panel();
+
+                // Only skip if the Pokemon doesn't even exist (number too high)
+                int number = getPokeNum(i, j);
                 if (number > PokemonInfo.NUM_POKEMON) {
+                    buttonPanel.skipDraw();
                     continue;
                 }
 
+                // Outline selected Pokemon in black
                 PokemonInfo pokemonInfo = PokemonList.get(number);
-                Button pokemonButton = pokemonButtons[i][j];
+                buttonPanel.withConditionalOutline(pokemonInfo == selected);
+                buttonPanel.withBottomRightImage(null);
 
                 if (pokedex.isNotSeen(pokemonInfo)) {
-                    pokemonButton.label(g, 20, new Color(0, 0, 0, 64), String.format("%03d", number));
+                    // Just display number for unseen pokes
+                    buttonPanel.withLabel(String.format("%03d", number));
                 } else {
-                    if (pokemonInfo == selected) {
-                        pokemonButton.blackOutline(g);
-                    }
+                    // If seen or caught, show party tile image
+                    buttonPanel.withImageLabel(partyTiles.getTile(pokemonInfo.getTinyImageName()));
 
-                    pokemonButton.imageLabel(g, partyTiles.getTile(pokemonInfo.getTinyImageName()));
-
+                    // Caught pokemon have a little Pokeball in the bottom right corner
                     if (pokedex.isCaught(pokemonInfo)) {
-                        BufferedImage pokeball = TileSet.TINY_POKEBALL;
-                        g.drawImage(
-                                pokeball,
-                                pokemonButton.x + pokemonButton.width - 3*pokeball.getWidth()/2,
-                                pokemonButton.y + pokemonButton.height - 3*pokeball.getHeight()/2,
-                                null
-                        );
+                        buttonPanel.withBottomRightImage(TileSet.TINY_POKEBALL);
                     }
                 }
             }
         }
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        drawSetup();
+
+        // Background
+        BasicPanels.drawCanvasPanel(g);
+        panels.drawAll(g);
+        buttons.drawPanels(g);
+
+        // Selected Pokemon information
+        drawSelectedPokemon(g);
 
         // Draw page numbers and arrows
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 16);
-        TextUtils.drawCenteredWidthString(g, (pageNum + 1) + "/" + NUM_PAGES, pokedexPanel.centerX(), 433);
+        TextUtils.drawPageNumbers(g, 16, leftButton, rightButton, pageNum, NUM_PAGES);
 
-        leftButton.drawArrow(g, Direction.LEFT);
-        rightButton.drawArrow(g, Direction.RIGHT);
+        buttons.drawHover(g);
+    }
 
-        // Seen/Caught
-        countPanel.drawBackground(g);
-        countPanel.label(g, 20, "Seen: " + numSeen + "     Caught: " + numCaught);
-
-        // Description
-        PokeType type = selected.getType();
-        Color[] typeColors = type.getColors();
-
+    private void drawSelectedPokemon(Graphics g) {
         boolean notSeen = pokedex.isNotSeen(selected);
         boolean caught = pokedex.isCaught(selected);
 
-        if (notSeen) {
-            typeColors = new Color[] { Color.BLACK, Color.BLACK };
-        }
-
-        infoPanel.withBackgroundColors(typeColors)
-                 .drawBackground(g);
-
-        for (int i = 0; i < tabButtons.length; i++) {
-            List<Direction> toOutline = new ArrayList<>();
-            toOutline.add(Direction.RIGHT);
-
-            if (i == 0) {
-                toOutline.add(Direction.LEFT);
-            }
-
-            if (i != selectedTab.ordinal()) {
-                toOutline.add(Direction.UP);
-            }
-
-            Button tab = tabButtons[i];
-            tab.blackOutline(g, toOutline.toArray(new Direction[0]));
-            tab.label(g, 12, TabInfo.values()[i].label);
-        }
-
         int spacing = 15;
         int leftX, textY;
-
-        if (selectedTab.shouldDrawInformationPanel(caught)) {
-            basicInfoPanel.drawBackground(g);
-
-            // Image
-            imagePanel.drawBackground(g);
-            if (notSeen) {
-                imagePanel.label(g, 80, "?");
-            } else {
-                BufferedImage pkmImg = pokedexTiles.getTile(selected.getBaseImageName());
-                pkmImg.setRGB(0, 0, 0);
-
-                imagePanel.imageLabel(g, pkmImg);
-            }
-
-            g.setColor(Color.BLACK);
-
+        if (this.shouldDrawInformationPanel()) {
             // Name
-            FontMetrics.setFont(g, 20);
+            FontMetrics.setBlackFont(g, 20);
             leftX = imagePanel.rightX() + spacing;
             textY = imagePanel.y + FontMetrics.getTextHeight(g) + spacing;
             g.drawString(notSeen ? "?????" : selected.getName(), leftX, textY);
@@ -408,7 +413,7 @@ public class PokedexView extends View {
 
             if (!notSeen) {
                 // Type tiles
-                ImageUtils.drawTypeTiles(g, type, infoPanel.rightX() - spacing, textY);
+                ImageUtils.drawTypeTiles(g, selected.getType(), infoPanel.rightX() - spacing, textY);
 
                 textY += FontMetrics.getDistanceBetweenRows(g);
 
@@ -431,6 +436,8 @@ public class PokedexView extends View {
                 }
             }
         }
+
+        FontMetrics.setFont(g, 16);
 
         leftX = imagePanel.x;
         textY = basicInfoPanel.bottomY() + FontMetrics.getTextHeight(g) + spacing;
@@ -518,7 +525,6 @@ public class PokedexView extends View {
                     }
 
                     Button moveButton = moveButtons[i];
-                    moveButton.blackOutline(g);
                     new DrawPanel(moveButton).drawLeftLabel(g, 18, levelString + " " + attack.getName());
 
                     int moveImageSpacing = 20;
@@ -532,10 +538,7 @@ public class PokedexView extends View {
                     g.drawImage(categoryImage, imageX, imageY, null);
                 }
 
-                movesLeftButton.drawArrow(g, Direction.LEFT);
-                movesRightButton.drawArrow(g, Direction.RIGHT);
-
-                TextUtils.drawCenteredString(g, (movePageNum + 1) + "/" + maxMovePages(), infoPanel.centerX(), movesLeftButton.centerY());
+                TextUtils.drawPageNumbers(g, 18, movesLeftButton, movesRightButton, movePageNum, maxMovePages());
             }
         }
 
@@ -561,14 +564,6 @@ public class PokedexView extends View {
                 }
             }
         }
-
-        // Return button
-        returnButton.fillTransparent(g, Color.YELLOW);
-        returnButton.fillTransparent(g);
-        returnButton.blackOutline(g);
-        returnButton.label(g, 20, "Return");
-
-        buttons.draw(g);
     }
 
     private int drawEvolutionText(Graphics g, Evolution evolution, int leftX, int textY, int spacing) {
@@ -589,8 +584,8 @@ public class PokedexView extends View {
         return moveDescriptionPanel.draw(g, attack);
     }
 
-    private int getIndex(int i, int j) {
-        return PER_PAGE*pageNum + i*NUM_COLS + j;
+    private int getPokeNum(int i, int j) {
+        return PER_PAGE*pageNum + i*NUM_COLS + j + 1;
     }
 
     private void changeTab(TabInfo tab) {
@@ -625,10 +620,15 @@ public class PokedexView extends View {
 
     @Override
     public void movedToFront() {
+        countPanel.withLabel("Seen: " + pokedex.numSeen() + "     Caught: " + pokedex.numCaught());
+
         selected = PokemonList.get(1);
-        numSeen = pokedex.numSeen();
-        numCaught = pokedex.numCaught();
         changeTab(TabInfo.MAIN);
+    }
+
+    // Not the moves tab or a completely unknown Pokemon which doesn't give a shit about moves
+    private boolean shouldDrawInformationPanel() {
+        return selectedTab != TabInfo.MOVES || !pokedex.isCaught(selected);
     }
 
     private enum TabInfo {
@@ -642,10 +642,6 @@ public class PokedexView extends View {
 
         TabInfo() {
             this.label = StringUtils.properCase(this.name().toLowerCase());
-        }
-
-        public boolean shouldDrawInformationPanel(boolean caught) {
-            return this != MOVES || !caught;
         }
     }
 }

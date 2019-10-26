@@ -14,18 +14,16 @@ class MainState implements VisualStateHandler {
     MainState() {
         Button[] buttons = new Button[MainMenuView.NUM_MAIN_BUTTONS];
         for (int i = 0; i < buttons.length; i++) {
-            buttons[i] = MainMenuView.createMenuButton(i);
+            String header = MAIN_HEADERS[i];
+            buttons[i] = MainMenuView.createMenuButton(i)
+                                     .setup(panel -> panel.withLabel(header));
         }
 
         this.buttons = new ButtonList(buttons);
     }
 
     @Override
-    public void draw(Graphics g, MainMenuView view) {
-        for (int i = 0; i < this.buttons.size(); i++) {
-            this.buttons.get(i).label(g, 40, MAIN_HEADERS[i]);
-        }
-    }
+    public void draw(Graphics g, MainMenuView view) {}
 
     @Override
     public void update(MainMenuView view) {

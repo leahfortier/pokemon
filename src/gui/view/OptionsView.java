@@ -71,8 +71,7 @@ class OptionsView extends View {
             g.setColor(Color.DARK_GRAY);
             g.fillRect(d.width/2 - 200, d.height/2 - 50, 200, 100);
 
-            g.setColor(Color.BLACK);
-            FontMetrics.setFont(g, 100);
+            FontMetrics.setBlackFont(g, 100);
             g.drawString("OFF", d.width/2 - 180, d.height/2 + 32);
         } else {
             g.setColor(Color.DARK_GRAY);
@@ -81,8 +80,7 @@ class OptionsView extends View {
             g.setColor(Color.RED);
             g.fillRect(d.width/2 - 200, d.height/2 - 50, 200, 100);
 
-            g.setColor(Color.BLACK);
-            FontMetrics.setFont(g, 100);
+            FontMetrics.setBlackFont(g, 100);
             g.drawString("ON", d.width/2 + 40, d.height/2 + 32);
         }
     }

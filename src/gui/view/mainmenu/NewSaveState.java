@@ -20,7 +20,7 @@ class NewSaveState implements VisualStateHandler {
             buttons[i] = MainMenuView.createMenuButton(i);
         }
 
-        this.returnButton = buttons[Save.NUM_SAVES];
+        this.returnButton = buttons[Save.NUM_SAVES].setup(panel -> panel.withLabel("Return", 30));
 
         this.buttons = new ButtonList(buttons);
     }
@@ -30,8 +30,6 @@ class NewSaveState implements VisualStateHandler {
         for (int i = 0; i < Save.NUM_SAVES; i++) {
             view.drawSaveInformation(g, this.buttons.get(i), i, "New Save");
         }
-
-        returnButton.label(g, 40, "Return");
     }
 
     @Override

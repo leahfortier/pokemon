@@ -4,6 +4,7 @@ import main.Global;
 import util.file.FileIO;
 import util.file.FileName;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.HashMap;
@@ -43,6 +44,11 @@ public class FontMetrics {
     @Override
     public String toString() {
         return fontSize + " " + horizontalSpacing + " " + letterHeight;
+    }
+
+    // Returns the width of a single character
+    public static int getTextWidth(Graphics g) {
+        return getTextWidth(g.getFont().getSize(), " ");
     }
 
     public static int getTextWidth(Graphics g, String text) {
@@ -107,6 +113,15 @@ public class FontMetrics {
         }
 
         return fontMap.get(size);
+    }
+
+    public static void setBlackFont(Graphics g, int fontSize) {
+        setFont(g, fontSize, Color.BLACK);
+    }
+
+    public static void setFont(Graphics g, int fontSize, Color color) {
+        setFont(g, fontSize);
+        g.setColor(color);
     }
 
     public static void setFont(Graphics g, int fontSize) {

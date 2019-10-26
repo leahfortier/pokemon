@@ -8,7 +8,6 @@ import generator.update.UpdateGen;
 import item.Item;
 import item.ItemNamesies;
 import item.bag.BagCategory;
-import main.Global;
 import map.overworld.TerrainType;
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,6 +23,7 @@ import util.file.Folder;
 import util.string.StringUtils;
 
 import javax.imageio.ImageIO;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.io.File;
@@ -120,12 +120,21 @@ public class ImageTest extends BaseTest {
         Assert.assertTrue(imageFile.getPath() + " does not exist.", imageFile.exists());
     }
 
+    private String getBagCategoryName(BagCategory category) {
+        return "cat_" + category.getDisplayName().replaceAll("\\s", "").toLowerCase();
+    }
+
     @Test
     public void sizeTest() {
-        DimensionChecker itemDimension = DimensionChecker.tile().trimmed();
-        DimensionChecker partyDimension = DimensionChecker.tile().singleDimensionEquals(0);
+        DimensionChecker bagCategoryDimension = new DimensionChecker(BagCategory.IMAGE_SIZE).mustEquals(0);
+        DimensionChecker itemDimension = new DimensionChecker(Item.MAX_IMAGE_SIZE).trimmed();
+        DimensionChecker partyDimension = new DimensionChecker(PokemonInfo.MAX_PARTY_IMAGE_SIZE).singleDimensionEquals(0);
         DimensionChecker pokedexDimension = new DimensionChecker(140, 190).singleDimensionEquals(2);
         DimensionChecker pokemonDimension = new DimensionChecker(96, 96).trimmed();
+
+        for (BagCategory category : BagCategory.values()) {
+            checkMaxSize(Folder.BAG_TILES, getBagCategoryName(category), bagCategoryDimension);
+        }
 
         for (ItemNamesies itemName : ItemNamesies.values()) {
             if (itemName == ItemNamesies.NO_ITEM) {
@@ -235,8 +244,8 @@ public class ImageTest extends BaseTest {
         private boolean trimmed;
         private int delta;
 
-        public static DimensionChecker tile() {
-            return new DimensionChecker(Global.TILE_SIZE, Global.TILE_SIZE);
+        DimensionChecker(Dimension dimension) {
+            this(dimension.width, dimension.height);
         }
 
         DimensionChecker(int maxWidth, int maxHeight) {

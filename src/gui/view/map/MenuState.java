@@ -41,14 +41,13 @@ class MenuState implements VisualStateHandler {
     public void draw(Graphics g, MapView mapView) {
         menuPanel.drawBackground(g);
 
-        FontMetrics.setFont(g, 40);
-        g.setColor(Color.BLACK);
+        FontMetrics.setBlackFont(g, 40);
 
         for (MenuChoice menuChoice : MenuChoice.values()) {
             g.drawString(menuChoice.getDisplayName(), 558, 59 + 72*menuChoice.ordinal());
         }
 
-        menuButtons.draw(g);
+        menuButtons.drawHover(g);
     }
 
     @Override

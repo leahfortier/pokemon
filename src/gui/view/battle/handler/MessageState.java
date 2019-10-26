@@ -1,33 +1,24 @@
 package gui.view.battle.handler;
 
-import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonList;
-import draw.panel.BasicPanels;
-import draw.panel.DrawPanel;
+import draw.panel.StatGainPanel;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import input.ControlKey;
 import input.InputControl;
-import map.Direction;
 import message.MessageUpdate;
-import pokemon.stat.Stat;
-import util.FontMetrics;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
 public class MessageState implements VisualStateHandler {
-    private final DrawPanel statsPanel;
+    private final StatGainPanel statsPanel;
 
     // Stat gains and corresponding new stat upgrades for leveling up/evolving
-    private int[] statGains;
-    private int[] newStats;
+    private MessageUpdate statGainMessage;
 
     public MessageState() {
-        int height = 161;
-        int y = BasicPanels.getMessagePanelY() - height;
-        this.statsPanel = new DrawPanel(0, y, 273, height).withMissingBlackOutline(Direction.DOWN);
+        this.statsPanel = new StatGainPanel();
     }
 
     @Override
@@ -36,17 +27,9 @@ public class MessageState implements VisualStateHandler {
     @Override
     public void draw(BattleView view, Graphics g) {
         view.drawFullMessagePanel(g);
-
         if (view.isState(VisualState.STAT_GAIN)) {
             statsPanel.drawBackground(g);
-            g.setColor(Color.BLACK);
-            for (int i = 0; i < Stat.NUM_STATS; i++) {
-                FontMetrics.setFont(g, 16);
-                g.drawString(Stat.getStat(i, false).getName(), 25, 314 + i*21);
-
-                TextUtils.drawRightAlignedString(g, (statGains[i] < 0 ? "" : " + ") + statGains[i], 206, 314 + i*21);
-                TextUtils.drawRightAlignedString(g, newStats[i] + "", 247, 314 + i*21);
-            }
+            statsPanel.drawStatGain(g, statGainMessage);
         }
     }
 
@@ -73,8 +56,7 @@ public class MessageState implements VisualStateHandler {
     @Override
     public void checkMessage(MessageUpdate newMessage) {
         if (newMessage.gainUpdate()) {
-            newStats = newMessage.getNewStats();
-            statGains = newMessage.getGain();
+            statGainMessage = newMessage;
         }
     }
 

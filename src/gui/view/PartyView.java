@@ -7,8 +7,9 @@ import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
-import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
+import draw.button.ButtonPanel;
+import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
@@ -26,6 +27,7 @@ import pokemon.ability.Ability;
 import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import pokemon.breeding.Eggy;
+import pokemon.species.PokemonInfo;
 import pokemon.stat.Stat;
 import trainer.Trainer;
 import trainer.player.Player;
@@ -87,8 +89,7 @@ public class PartyView extends View {
                         2*spacing + tabHeight
                 )
         )
-                .withTransparentBackground()
-                .withBorderPercentage(0)
+                .withBorderlessTransparentBackground()
                 .withBlackOutline();
 
         imagePanel = new DrawPanel(
@@ -170,9 +171,9 @@ public class PartyView extends View {
                 statsPanel.bottomY() + spacing,
                 buttonWidth,
                 buttonHeight,
-                ButtonHoverAction.BOX,
                 new ButtonTransitions().right(SWITCH).up(TABS).left(RETURN).down(TABS),
-                () -> nicknameView = true
+                () -> nicknameView = true,
+                textButtonSetup("Nickname!!")
         );
 
         switchButton = new Button(
@@ -180,9 +181,9 @@ public class PartyView extends View {
                 nicknameButton.y,
                 buttonWidth,
                 buttonHeight,
-                ButtonHoverAction.BOX,
                 new ButtonTransitions().right(RETURN).up(TABS).left(NICKNAME).down(TABS),
-                () -> switchTabIndex = switchTabIndex == -1 ? selectedTab : -1
+                () -> switchTabIndex = switchTabIndex == -1 ? selectedTab : -1,
+                textButtonSetup("Switch!")
         );
 
         returnButton = new Button(
@@ -190,9 +191,9 @@ public class PartyView extends View {
                 switchButton.y,
                 buttonWidth,
                 buttonHeight,
-                ButtonHoverAction.BOX,
                 new ButtonTransitions().right(NICKNAME).up(MOVES + MoveList.MAX_MOVES - 1).left(SWITCH).down(TABS),
-                ButtonPressAction.getExitAction()
+                ButtonPressAction.getExitAction(),
+                textButtonSetup("Return")
         );
 
         tabButtons = new Button[Trainer.MAX_POKEMON];
@@ -204,14 +205,9 @@ public class PartyView extends View {
                             i, 1, Trainer.MAX_POKEMON, TABS,
                             new ButtonTransitions().up(RETURN).down(MOVES)
                     ),
-                    () -> {
-                        if (switchTabIndex != -1) {
-                            Game.getPlayer().swapPokemon(index, switchTabIndex);
-                            switchTabIndex = -1;
-                        }
-
-                        selectedTab = index;
-                    }
+                    () -> switchTab(index),
+                    panel -> panel.skipInactive()
+                                  .withBorderlessTransparentBackground()
             );
         }
 
@@ -221,13 +217,19 @@ public class PartyView extends View {
                 pokemonPanel.width,
                 tabButtons[0].height + pokemonPanel.height
         )
-                .withTransparentBackground()
-                .withBorderPercentage(0)
-                .withBlackOutline();
+                .withBorderlessTransparentBackground()
+                .withBlackOutline()
+                .withLabelSize(30);
 
+        // Buttons don't actually do anything when pressed, but if hovered updates the move details panel
         moveButtons = movesPanel.getButtons(
                 10, MoveList.MAX_MOVES, 1, MOVES,
-                new ButtonTransitions().up(0).down(RETURN)
+                new ButtonTransitions().up(0).down(RETURN),
+                index -> {},
+                (index, panel) -> panel.skipInactive()
+                                       .withTransparentCount(2)
+                                       .withBlackOutline()
+                                       .withBorderPercentage(20)
         );
 
         Button[] buttons = new Button[NUM_BUTTONS];
@@ -238,12 +240,18 @@ public class PartyView extends View {
         buttons[RETURN] = returnButton;
         this.buttons = new ButtonList(buttons);
 
-        updateActiveButtons();
+        movedToFront();
+    }
+
+    private ButtonPanelSetup textButtonSetup(String label) {
+        return panel -> panel.greyInactive()
+                             .withBorderlessTransparentBackground()
+                             .withBlackOutline()
+                             .withLabel(label, 20);
     }
 
     @Override
     public void update(int dt) {
-        Player player = Game.getPlayer();
         InputControl input = InputControl.instance();
 
         buttons.update();
@@ -255,7 +263,7 @@ public class PartyView extends View {
 
             if (input.consumeIfDown(ControlKey.ENTER)) {
                 String nickname = input.stopAndResetCapturedText();
-                player.getTeam().get(selectedTab).setNickname(nickname);
+                Game.getPlayer().getTeam().get(selectedTab).setNickname(nickname);
 
                 nicknameView = false;
                 updateActiveButtons();
@@ -274,98 +282,86 @@ public class PartyView extends View {
         GameData data = Game.getData();
         Player player = Game.getPlayer();
 
-        // Background
-        BasicPanels.drawCanvasPanel(g);
-
         List<PartyPokemon> list = player.getTeam();
         PartyPokemon selectedPkm = list.get(selectedTab);
 
         TileSet pkmTiles = data.getPokemonTilesSmall();
         BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.getImageName());
 
+        // Background
+        BasicPanels.drawCanvasPanel(g);
+
         if (nicknameView) {
-            drawNicknameView(g, pkmImg, selectedPkm);
+            String nickname = InputControl.instance().getInputCaptureString(PartyPokemon.MAX_NAME_LENGTH);
+            nicknamePanel.withBackgroundColors(PokeType.getColors(selectedPkm), true)
+                         .withImageLabel(pkmImg, nickname)
+                         .draw(g);
         } else {
             // Pokemon info
-            drawPokemonInfo(g, pkmImg, selectedPkm);
+            // Note: Important to draw selected before the tabs because of how outlines work
+            drawPokemonInfo(g, selectedPkm, pkmImg);
 
             // Tabs
-            drawTabs(g, data, list);
+            drawTabs(g);
 
-            // Nickname, Switch, and Return buttons
-            drawButtons(g, selectedPkm);
+            // Draw button hovers
+            buttons.drawHover(g);
         }
-
-        buttons.draw(g);
     }
 
-    private Color[] getBackgroundColors(PartyPokemon selectedPkm) {
-        return PokeType.getColors(selectedPkm);
-    }
+    private void drawTabs(Graphics g) {
+        GameData data = Game.getData();
+        Player player = Game.getPlayer();
 
-    private void drawNicknameView(Graphics g, BufferedImage pkmImg, PartyPokemon selectedPkm) {
-        nicknamePanel.withBackgroundColors(PokeType.getColors(selectedPkm), true);
-        nicknamePanel.drawBackground(g);
-
-        FontMetrics.setFont(g, 30);
-
-        String nickname = InputControl.instance().getInputCaptureString(PartyPokemon.MAX_NAME_LENGTH);
-        ImageUtils.drawCenteredImageLabel(g, pkmImg, nickname, Global.GAME_SIZE.width/2, Global.GAME_SIZE.height/2);
-    }
-
-    private void drawTabs(Graphics g, GameData data, List<PartyPokemon> list) {
+        List<PartyPokemon> list = player.getTeam();
         TileSet partyTiles = data.getPartyTiles();
-        FontMetrics.setFont(g, 14);
 
+        FontMetrics.setBlackFont(g, 11);
+
+        int spacing = 4;
+        int inset = 2*spacing + PokemonInfo.MAX_PARTY_IMAGE_SIZE.width;
         for (int i = 0; i < list.size(); i++) {
-            PartyPokemon pkm = list.get(i);
-            Button tabButton = tabButtons[i];
+            PartyPokemon tabPokemon = list.get(i);
+            BufferedImage tabImage = partyTiles.getTile(tabPokemon.getTinyImageName());
+            ButtonPanel panel = tabButtons[i].panel();
 
-            // Color tab
-            tabButton.fill(g, PokeType.getColors(pkm)[0]);
+            // Outline and type color
+            panel.withTabOutlines(i, selectedTab)
+                 .withBackgroundColor(PokeType.getColors(tabPokemon)[0])
+                 .drawBackground(g);
 
-            // Fade out fainted Pokemon
-            if (!pkm.canFight()) {
-                tabButton.greyOut(g);
-            }
+            // Image and name
+            int nameX = panel.x + inset;
+            int centerY = panel.centerY();
+            TextUtils.drawCenteredHeightString(g, tabPokemon.getActualName(), nameX, centerY);
+            ImageUtils.drawCenteredImage(g, tabImage, (panel.x + nameX)/2, centerY);
 
-            // Transparenty
-            tabButton.fillTransparent(g);
-
-            // Outline in black
-            tabButton.outlineTab(g, i, selectedTab);
-
-            g.translate(tabButton.x, tabButton.y);
-
-            g.setColor(Color.BLACK);
-            g.drawString(pkm.getActualName(), 40, 34);
-
-            BufferedImage pkmImg = partyTiles.getTile(pkm.getTinyImageName());
-            ImageUtils.drawCenteredImage(g, pkmImg, 19, 26);
-
-            g.translate(-tabButton.x, -tabButton.y);
+            // Faint out if deadsies
+            panel.faintOut(g, tabPokemon);
         }
     }
 
-    private void drawPokemonInfo(Graphics g, BufferedImage pkmImg, PartyPokemon selectedPkm) {
-        // Draw type color polygons
-        pokemonPanel.withBackgroundColors(this.getBackgroundColors(selectedPkm), true);
-        if (!selectedPkm.canFight()) {
-            pokemonPanel.greyOut();
-        }
+    private void drawPokemonInfo(Graphics g, PartyPokemon selectedPkm, BufferedImage pkmImg) {
+        Color[] typeColors = PokeType.getColors(selectedPkm);
 
-        pokemonPanel.drawBackground(g);
+        // Type color polygons
+        pokemonPanel.withBackgroundColors(typeColors, true)
+                    .drawBackground(g);
 
-        // Draw Pokemon Image
-        imagePanel.drawBackground(g);
-        imagePanel.imageLabel(g, pkmImg);
+        // Highlight switch button if applicable
+        switchButton.panel().withHighlight(switchTabIndex != -1, typeColors[1]);
+        nicknameButton.drawPanel(g);
+        switchButton.drawPanel(g);
+        returnButton.drawPanel(g);
 
-        // Draw basic information panel
+        // Pokemon Image
+        imagePanel.withImageLabel(pkmImg)
+                  .draw(g);
+
+        // Basic information panel
         basicInformationPanel.drawBackground(g);
 
-        FontMetrics.setFont(g, 20);
-        g.setColor(Color.BLACK);
-
+        FontMetrics.setBlackFont(g, 20);
         int inset = FontMetrics.getDistanceBetweenRows(g)/2;
         int nameX = basicInformationPanel.x + inset;
         int topLineY = basicInformationPanel.y + inset + FontMetrics.getTextHeight(g);
@@ -436,9 +432,6 @@ public class PartyView extends View {
             // EXP Bar
             expBar.fillBar(g, DrawUtils.EXP_BAR_COLOR, selectedPkm.expRatio());
 
-            FontMetrics.setFont(g, 16);
-            g.setColor(Color.BLACK);
-
             MoveList moves = selectedPkm.getActualMoves();
 
             // Stats Box or Move description
@@ -449,33 +442,32 @@ public class PartyView extends View {
                 drawStatBox(g, selectedPkm);
             }
 
-            // Move Box
+            // Moves Box
             movesPanel.drawBackground(g);
+            FontMetrics.setBlackFont(g, 18);
             for (int i = 0; i < moves.size(); i++) {
                 Move move = moves.get(i);
                 Attack attack = move.getAttack();
-                Button moveButton = moveButtons[i];
+                ButtonPanel movePanel = moveButtons[i].panel();
 
-                DrawPanel movePanel = new DrawPanel(moveButton)
-                        .withTransparentBackground(attack.getActualType().getColor())
-                        .withTransparentCount(2)
-                        .withBorderPercentage(20)
-                        .withBlackOutline();
-                movePanel.drawBackground(g);
-
-                g.setColor(Color.BLACK);
-                FontMetrics.setFont(g, 18);
+                movePanel.withBackgroundColor(attack.getActualType().getColor())
+                         .drawBackground(g);
 
                 int moveInset = movePanel.getBorderSize() + 10;
                 TextUtils.drawCenteredHeightString(g, attack.getName(), movePanel.x + moveInset, movePanel.centerY());
                 TextUtils.drawCenteredHeightString(g, String.format("PP: %d/%d", move.getPP(), move.getMaxPP()), movePanel.rightX() - moveInset, movePanel.centerY(), Alignment.RIGHT);
             }
+
+            pokemonPanel.faintOut(g, selectedPkm);
         }
     }
 
     private void drawStatBox(Graphics g, PartyPokemon selectedPkm) {
+        // Not in the PanelList since it's the same location as the moves panel which is handled separately as well
+        // Seems silly to add it when a move is selected just to have it overwritten
         statsPanel.drawBackground(g);
 
+        FontMetrics.setBlackFont(g, 16);
         int spacing = statsPanel.height/(Stat.NUM_STATS + 1);
         int firstRowY = statsPanel.y + spacing - 2;
 
@@ -488,8 +480,7 @@ public class PartyView extends View {
             g.drawString(Stat.getStat(i, false).getName(), statsPanel.x + 10, firstRowY + (i + 1)*spacing);
         }
 
-        FontMetrics.setFont(g, 14);
-        g.setColor(Color.BLACK);
+        FontMetrics.setBlackFont(g, 14);
 
         for (int i = 0; i < Stat.NUM_STATS; i++) {
             final String statString;
@@ -518,23 +509,13 @@ public class PartyView extends View {
         return moveDetailsPanel.draw(g, move);
     }
 
-    private void drawButtons(Graphics g, PartyPokemon selectedPkm) {
-        // Nickname button
-        drawButton(g, nicknameButton, "Nickname!!");
-        nicknameButton.greyInactive(g);
-
-        // Switch button
-        if (!switchButton.greyInactive(g) && switchTabIndex != -1) {
-            switchButton.highlight(g, this.getBackgroundColors(selectedPkm)[1]);
+    private void switchTab(int index) {
+        if (switchTabIndex != -1) {
+            Game.getPlayer().swapPokemon(index, switchTabIndex);
+            switchTabIndex = -1;
         }
-        drawButton(g, switchButton, "Switch!");
 
-        // Return button
-        drawButton(g, returnButton, "Return");
-    }
-
-    private void drawButton(Graphics g, Button button, String label) {
-        button.fillOutlineLabel(g, 20, label);
+        selectedTab = index;
     }
 
     private void updateActiveButtons() {
@@ -566,10 +547,10 @@ public class PartyView extends View {
 
     @Override
     public void movedToFront() {
-        selectedTab = 0;
         switchTabIndex = -1;
         nicknameView = false;
         buttons.setSelected(0);
+        switchTab(0);
         updateActiveButtons();
     }
 }

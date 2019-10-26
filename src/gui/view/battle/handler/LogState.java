@@ -10,7 +10,6 @@ import map.Direction;
 import util.FontMetrics;
 import util.GeneralUtils;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Iterator;
 import java.util.List;
@@ -39,8 +38,8 @@ public class LogState implements VisualStateHandler {
         }
 
         this.logButtons = new ButtonList(logButtons);
-        this.leftArrow = logButtons[0];
-        this.rightArrow = logButtons[1];
+        this.leftArrow = logButtons[0].asArrow(Direction.LEFT);
+        this.rightArrow = logButtons[1].asArrow(Direction.RIGHT);
     }
 
     @Override
@@ -53,16 +52,11 @@ public class LogState implements VisualStateHandler {
     public void draw(BattleView view, Graphics g) {
         view.drawLargeMenuPanel(g);
 
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 12);
-
+        FontMetrics.setBlackFont(g, 12);
         Iterator<String> logIter = GeneralUtils.pageIterator(logMessages, logPage, LOGS_PER_PAGE);
         for (int i = 0; i < LOGS_PER_PAGE && logIter.hasNext(); i++) {
             g.drawString(logIter.next(), 25, 200 + i*15);
         }
-
-        leftArrow.drawArrow(g, Direction.LEFT);
-        rightArrow.drawArrow(g, Direction.RIGHT);
 
         logButtons.draw(g);
 

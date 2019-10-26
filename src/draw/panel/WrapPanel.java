@@ -25,6 +25,10 @@ public class WrapPanel extends DrawPanel {
     private String drawingText;
     private boolean finishedAnimating;
 
+    public WrapPanel(DrawPanel panel, int fontSize) {
+        this(panel.x, panel.y, panel.width, panel.height, fontSize);
+    }
+
     public WrapPanel(int x, int y, int width, int height, int fontSize) {
         super(x, y, width, height);
 
@@ -56,6 +60,16 @@ public class WrapPanel extends DrawPanel {
     @Override
     public WrapPanel withBorderPercentage(int borderPercentage) {
         return super.withBorderPercentage(borderPercentage).asWrapPanel();
+    }
+
+    @Override
+    public WrapPanel withBorderSize(int borderSize) {
+        return super.withBorderSize(borderSize).asWrapPanel();
+    }
+
+    @Override
+    public WrapPanel withTransparentBackground() {
+        return super.withTransparentBackground().asWrapPanel();
     }
 
     @Override
@@ -101,7 +115,6 @@ public class WrapPanel extends DrawPanel {
         int startY = spacing.startY;
         int textWidth = spacing.textWidth;
         int bottomY = this.bottomY() - this.getBorderSize();
-
 
         final TextWrapper textWrapper;
         if (this.animateMessage) {

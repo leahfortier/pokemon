@@ -3,8 +3,10 @@ package draw.panel;
 import battle.ActivePokemon;
 import battle.attack.Attack;
 import battle.attack.Move;
+import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonList;
+import draw.button.ButtonPanel;
 import draw.panel.WrapPanel.WrapMetrics;
 import input.ControlKey;
 import input.InputControl;
@@ -13,6 +15,7 @@ import message.MessageQueue;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import pokemon.active.MoveList;
+import util.FontMetrics;
 import util.Point;
 
 import java.awt.Color;
@@ -52,7 +55,12 @@ public class LearnMovePanel {
                 .withMinDescFontSize(13);
 
         // Create a button for each known move and then one for the new move and one for not learning
-        buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS));
+        buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(8, 2, NUM_COLS));
+        buttons.forEach(button -> button.panel()
+                                        .withTransparentCount(2)
+                                        .withBorderPercentage(15)
+                                        .withBlackOutline()
+                                        .withLabelSize(30));
 
         yesButton = buttons.get(YES_BUTTON);
         noButton = buttons.get(NO_BUTTON);
@@ -156,38 +164,59 @@ public class LearnMovePanel {
         );
 
         if (state == State.QUESTION) {
-            drawButton(g, yesButton, new Color(120, 200, 80), "Yes");
-            drawButton(g, noButton, new Color(220, 20, 20), "No");
+            drawLabelButton(g, yesButton, new Color(120, 200, 80), "Yes");
+            drawLabelButton(g, noButton, new Color(220, 20, 20), "No");
         } else if (state == State.DELETE) {
             MoveList moves = learning.getActualMoves();
             Attack selected = null;
-            for (int y = 0, moveIndex = 0; y < 2; y++) {
-                for (int x = 0; x < MoveList.MAX_MOVES/2; x++, moveIndex++) {
-                    int index = Point.getIndex(x, y, NUM_COLS);
+            for (int col = 0, moveIndex = 0; col < NUM_COLS/2; col++) {
+                for (int row = 0; row < MoveList.MAX_MOVES/2; row++, moveIndex++) {
+                    int buttonIndex = Point.getIndex(row, col, NUM_COLS);
                     Move move = moves.get(moveIndex);
-
-                    buttons.get(index).drawMoveButton(g, move);
-                    if (index == buttons.getSelected()) {
+                    drawMoveButton(g, buttons.get(buttonIndex), move);
+                    if (buttonIndex == buttons.getSelected()) {
                         selected = move.getAttack();
                     }
                 }
             }
 
             drawMoveDetails(g, selected == null ? toLearn.getAttack() : selected);
-            newMoveButton.drawMoveButton(g, toLearn);
+            drawMoveButton(g, newMoveButton, toLearn);
         }
 
-        buttons.draw(g);
+        buttons.drawHover(g);
     }
 
     public WrapMetrics drawMoveDetails(Graphics g, Attack attack) {
         return moveDetailsPanel.draw(g, attack);
     }
 
-    private void drawButton(Graphics g, Button button, Color color, String label) {
-        button.fillBordered(g, color);
-        button.blackOutline(g);
-        button.label(g, 30, label);
+    private void drawMoveButton(Graphics g, Button button, Move move) {
+        ButtonPanel panel = button.panel();
+
+        // Attack type color background
+        panel.withBackgroundColor(move.getAttack().getActualType().getColor())
+             .drawBackground(g);
+
+        FontMetrics.setBlackFont(g, 19);
+        int spacing = FontMetrics.getTextWidth(g)/2;
+        int borderSize = panel.getBorderSize();
+        int fullSpacing = spacing + borderSize;
+
+        // Attack name as left label on the top
+        g.drawString(move.getAttack().getName(), panel.x + fullSpacing, panel.y + fullSpacing + FontMetrics.getTextHeight(g));
+
+        // PP amount as right label on the bottom
+        FontMetrics.setBlackFont(g, 16);
+        String ppString = "PP: " + move.getPP() + "/" + move.getMaxPP();
+        TextUtils.drawRightAlignedString(g, ppString, panel.rightX() - fullSpacing, panel.bottomY() - fullSpacing);
+    }
+
+    private void drawLabelButton(Graphics g, Button button, Color color, String label) {
+        button.panel()
+              .withLabel(label)
+              .withBackgroundColor(color)
+              .draw(g);
     }
 
     public boolean learnedMove() {

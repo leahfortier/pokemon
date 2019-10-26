@@ -16,7 +16,6 @@ import trainer.player.Player;
 import util.FontMetrics;
 import util.string.PokeString;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
 class StartView extends View {
@@ -103,8 +102,7 @@ class StartView extends View {
 
         BasicPanels.drawCanvasPanel(g);
 
-        FontMetrics.setFont(g, 30);
-        g.setColor(Color.BLACK);
+        FontMetrics.setBlackFont(g, 30);
 
         switch (state) {
             case DEFAULT:

@@ -51,13 +51,21 @@ public final class ImageUtils {
         );
     }
 
+    public static void drawBottomRightImage(Graphics g, BufferedImage image, int rightX, int bottomY) {
+        g.drawImage(
+                image,
+                rightX - 3*image.getWidth()/2,
+                bottomY - 3*image.getHeight()/2,
+                null
+        );
+    }
+
     public static void drawCenteredHeightImage(Graphics g, BufferedImage image, int x, int centerY) {
         g.drawImage(image, x, centerY - image.getHeight()/2, null);
     }
 
-    public static void drawCenteredHeightImageLabel(Graphics g, BufferedImage image, String text, int x, int centerY) {
+    public static void drawCenteredHeightImageLabel(Graphics g, BufferedImage image, String text, int x, int centerY, int spacing) {
         int imageWidth = image.getWidth();
-        int spacing = FontMetrics.getTextWidth(g, "  ");
 
         drawCenteredHeightImage(g, image, x, centerY);
         TextUtils.drawCenteredHeightString(g, text, x + imageWidth + spacing, centerY);

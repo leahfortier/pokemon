@@ -4,6 +4,7 @@ import draw.button.ButtonList;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 enum VisualState {
@@ -35,8 +36,9 @@ enum VisualState {
 
     public void draw(Graphics g, MainMenuView view) {
         ButtonList buttons = this.visualStateHandler.getButtons();
+        Color buttonColor = view.getSettings().getTheme().getButtonColor();
         for (int i = 0; i < buttons.size(); i++) {
-            buttons.get(i).fillBordered(g, view.getSettings().getTheme().getButtonColor());
+            buttons.get(i).panel().withBackgroundColor(buttonColor);
         }
         buttons.draw(g);
 

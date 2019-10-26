@@ -24,7 +24,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,7 +55,7 @@ public class MedalCaseState implements VisualStateHandler {
         int panelWidth = Global.GAME_SIZE.width - 2*spacing;
         int panelHeight = (Global.GAME_SIZE.height - (NUM_MEDAL_PANELS + 2)*spacing)/(NUM_MEDAL_PANELS + 1);
 
-        this.medalPanels = new DrawPanel[NUM_MEDAL_PANELS];
+        medalPanels = new DrawPanel[NUM_MEDAL_PANELS];
         for (int i = 0; i < medalPanels.length; i++) {
             this.medalPanels[i] = new DrawPanel(
                     spacing,
@@ -79,7 +78,7 @@ public class MedalCaseState implements VisualStateHandler {
                 ButtonHoverAction.BOX,
                 new ButtonTransitions().left(RIGHT_ARROW).right(RIGHT_ARROW),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, NUM_PAGES)
-        );
+        ).asArrow(Direction.LEFT);
 
         buttons[RIGHT_ARROW] = rightButton = new Button(
                 medalPanels[0].centerX() + arrowSpacing,
@@ -89,7 +88,7 @@ public class MedalCaseState implements VisualStateHandler {
                 ButtonHoverAction.BOX,
                 new ButtonTransitions().left(LEFT_ARROW).right(LEFT_ARROW),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, NUM_PAGES)
-        );
+        ).asArrow(Direction.RIGHT);
 
         this.buttons = new ButtonList(buttons);
         this.medalTiles = Game.getData().getMedalTiles();
@@ -99,9 +98,9 @@ public class MedalCaseState implements VisualStateHandler {
     public void draw(Graphics g, MapView mapView) {
         BasicPanels.drawCanvasPanel(g);
 
-        Iterator<Medal> displayMedals = GeneralUtils.pageIterator(MEDALS, pageNum, NUM_MEDAL_PANELS);
-        for (int i = 0; i < medalPanels.length && displayMedals.hasNext(); i++) {
-            Medal medal = displayMedals.next();
+        List<Medal> displayMedals = GeneralUtils.pageValues(MEDALS, pageNum, NUM_MEDAL_PANELS);
+        for (int i = 0; i < displayMedals.size(); i++) {
+            Medal medal = displayMedals.get(i);
 
             DrawPanel medalPanel = medalPanels[i];
             if (medalCase.hasMedal(medal)) {
@@ -126,8 +125,7 @@ public class MedalCaseState implements VisualStateHandler {
                 TextUtils.drawRightAlignedString(g, medalCase.getCount(medal) + "/" + medal.getThreshold(), medalPanel.rightX() - medalPanel.getBorderSize() - spacing, topY);
             }
 
-            g.setColor(Color.BLACK);
-            FontMetrics.setFont(g, 16);
+            FontMetrics.setBlackFont(g, 16);
             TextUtils.drawWrappedText(
                     g,
                     medal.getDescription(),
@@ -137,10 +135,7 @@ public class MedalCaseState implements VisualStateHandler {
             );
         }
 
-        FontMetrics.setFont(g, 30);
-        TextUtils.drawCenteredString(g, (pageNum + 1) + "/" + NUM_PAGES, medalPanels[0].centerX(), leftButton.centerY());
-        leftButton.drawArrow(g, Direction.LEFT);
-        rightButton.drawArrow(g, Direction.RIGHT);
+        TextUtils.drawPageNumbers(g, 30, leftButton, rightButton, pageNum, NUM_PAGES);
 
         buttons.draw(g);
     }

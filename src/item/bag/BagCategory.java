@@ -4,6 +4,7 @@ import util.file.FileIO;
 import util.file.Folder;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
 public enum BagCategory {
@@ -14,6 +15,8 @@ public enum BagCategory {
     TM("TMs", new Color(168, 232, 72)),
     BERRY("Berries", new Color(64, 192, 64)),
     MISC("Misc", new Color(232, 136, 192));
+
+    public static final Dimension IMAGE_SIZE = new Dimension(24, 24);
 
     private final String displayName;
     private final Color color;

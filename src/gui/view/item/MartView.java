@@ -2,10 +2,10 @@ package gui.view.item;
 
 import draw.button.Button;
 import draw.button.ButtonList;
-import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.PanelList;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.InputControl;
@@ -40,16 +40,13 @@ public class MartView extends View {
     private static final int PAGE_LEFT_ARROW = NUM_BUTTONS - 6;
 
     private final MartLayout layout;
-    private final DrawPanel tabPanel;
+    private final PanelList panels;
 
     private final ButtonList buttons;
     private final Button[] itemButtons;
     private final Button amountLeftButton;
     private final Button amountRightButton;
     private final Button buyButton;
-    private final Button pageLeftButton;
-    private final Button pageRightButton;
-    private final Button returnButton;
 
     private int pageNum;
     private int itemAmount;
@@ -64,53 +61,51 @@ public class MartView extends View {
         layout.bagPanel.withBackgroundColor(BACKGROUND_COLOR)
                        .withBlackOutline();
 
-        tabPanel = layout.tabPanels[1]
+        DrawPanel tabPanel = layout.tabPanels[1]
                 .withBackgroundColor(BACKGROUND_COLOR)
-                .withTransparentBackground()
-                .withBorderPercentage(0)
-                .withMissingBlackOutline(Direction.DOWN);
+                .withBorderlessTransparentBackground()
+                .withMissingBlackOutline(Direction.DOWN)
+                .withLabel(PokeString.POKE + " Mart", 16);
 
-        buyButton = new Button(
-                layout.confirmPanel,
+        buyButton = layout.createConfirmButton(
+                "BUY",
                 new ButtonTransitions().right(RETURN).left(RETURN),
                 this::buy
         );
 
-        amountLeftButton = new Button(
-                layout.selectedButtonPanels[0],
+        amountLeftButton = layout.createAmountArrowButton(
+                Direction.LEFT,
                 new ButtonTransitions().right(AMOUNT_RIGHT_ARROW).up(RETURN).left(BUY).down(ITEMS),
                 () -> this.updateItemAmount(-1)
         );
 
-        amountRightButton = new Button(
-                layout.selectedButtonPanels[2],
+        amountRightButton = layout.createAmountArrowButton(
+                Direction.RIGHT,
                 new ButtonTransitions().right(BUY).up(RETURN).left(AMOUNT_LEFT_ARROW).down(ITEMS + 1),
                 () -> this.updateItemAmount(1)
         );
 
-        returnButton = new Button(
-                layout.returnPanel,
-                new ButtonTransitions().right(BUY).up(PAGE_LEFT_ARROW).left(BUY).down(AMOUNT_LEFT_ARROW),
-                ButtonPressAction.getExitAction()
+        Button returnButton = layout.createReturnButton(
+                new ButtonTransitions().right(BUY).up(PAGE_LEFT_ARROW).left(BUY).down(AMOUNT_LEFT_ARROW)
         );
 
         itemButtons = layout.getItemButtons(
                 ITEMS,
-                new ButtonTransitions().up(AMOUNT_LEFT_ARROW).down(PAGE_LEFT_ARROW),
+                new ButtonTransitions().up(AMOUNT_LEFT_ARROW).down(PAGE_LEFT_ARROW).left(BUY).right(BUY),
                 index -> setSelectedItem(GeneralUtils.getPageValue(forSaleItems, pageNum, ITEMS_PER_PAGE, index))
         );
 
-        pageLeftButton = new Button(
+        Button pageLeftButton = new Button(
                 layout.leftArrow,
                 new ButtonTransitions().right(PAGE_RIGHT_ARROW).up(ITEMS_PER_PAGE - 2).left(BUY).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
-        );
+        ).asArrow(Direction.LEFT);
 
-        pageRightButton = new Button(
+        Button pageRightButton = new Button(
                 layout.rightArrow,
                 new ButtonTransitions().right(BUY).up(ITEMS_PER_PAGE - 1).left(PAGE_LEFT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
-        );
+        ).asArrow(Direction.RIGHT);
 
         Button[] buttons = new Button[NUM_BUTTONS];
         System.arraycopy(itemButtons, 0, buttons, ITEMS, ITEMS_PER_PAGE);
@@ -122,6 +117,10 @@ public class MartView extends View {
         buttons[RETURN] = returnButton;
 
         this.buttons = new ButtonList(buttons);
+        this.panels = new PanelList(
+                layout.bagPanel, layout.amountPanel, layout.leftPanel, layout.playerMoneyPanel,
+                layout.inBagPanel, layout.totalAmountPanel, tabPanel, layout.itemsPanel, layout.selectedPanel
+        );
 
         this.movedToFront();
     }
@@ -138,42 +137,23 @@ public class MartView extends View {
 
     @Override
     public void draw(Graphics g) {
+        // Item and amount setup
+        layout.setupItems(itemButtons, forSaleItems, pageNum);
+        layout.setup(selectedItem, itemAmount, selectedItem.getItem().getPrice()*itemAmount);
+
         // Background
         BasicPanels.drawCanvasPanel(g);
-
-        // Info Boxes
-        layout.bagPanel.drawBackground(g);
-
-        // Item Display
-        layout.drawSelectedItem(g, selectedItem);
-
-        // Draw selected amount and arrows
-        layout.drawAmount(g, itemAmount, amountLeftButton, amountRightButton);
-
-        // Draw each item in category
-        layout.drawItems(g, itemButtons, forSaleItems, pageNum);
+        panels.drawAll(g);
+        buttons.drawPanels(g);
 
         // Draw page numbers
         layout.drawPageNumbers(g, pageNum, totalPages());
 
-        // Left and Right arrows
-        pageLeftButton.drawArrow(g, Direction.LEFT);
-        pageRightButton.drawArrow(g, Direction.RIGHT);
+        // Draw selected item and for sale items
+        layout.drawItems(g, selectedItem, itemButtons, forSaleItems, pageNum);
 
-        // Left panel -- player money, in bag amount, total price
-        layout.drawMoneyPanel(g, selectedItem, selectedItem.getItem().getPrice()*itemAmount);
-
-        // Buy button
-        layout.drawConfirmButton(g, buyButton, "BUY");
-
-        // Return button
-        layout.drawReturnButton(g, returnButton);
-
-        // Tab
-        tabPanel.drawBackground(g);
-        tabPanel.label(g, 16, PokeString.POKE + " Mart");
-
-        buttons.draw(g);
+        // Draw hover action
+        buttons.drawHover(g);
     }
 
     @Override

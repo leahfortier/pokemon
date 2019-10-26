@@ -1,13 +1,13 @@
 package gui.view;
 
 import battle.ActivePokemon;
+import draw.Alignment;
 import draw.DrawUtils;
-import draw.ImageUtils;
-import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonList;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.PanelList;
 import draw.panel.WrapPanel;
 import gui.GameData;
 import gui.TileSet;
@@ -23,13 +23,14 @@ import trainer.TrainerType;
 import trainer.player.Player;
 import type.PokeType;
 import type.Type;
-import util.FontMetrics;
 import util.string.PokeString;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
+import java.util.Map.Entry;
 
 public class TradeView extends View {
     private static final int NUM_TEAM_COLS = Trainer.MAX_POKEMON/2;
@@ -37,11 +38,13 @@ public class TradeView extends View {
 
     private static final int TRADE_ANIMATION_LIFESPAN = 6000;
 
+    private final PanelList panels;
     private final DrawPanel canvasPanel;
-    private final DrawPanel offeringPanel;
-    private final DrawPanel requestedPanel;
+    private final DrawPanel fullOfferingPanel;
+    private final DrawPanel offeringPokemonPanel;
+    private final DrawPanel fullRequestedPanel;
+    private final DrawPanel requestedPokemonPanel;
     private final WrapPanel messagePanel;
-    private final DrawPanel cancelPanel;
 
     private final ButtonList buttons;
     private final Button cancelButton;
@@ -69,15 +72,15 @@ public class TradeView extends View {
         int panelWidth = 183;
         int spacing = 20;
 
-        this.offeringPanel = new DrawPanel(spacing, spacing, panelWidth, 90)
+        this.fullOfferingPanel = new DrawPanel(spacing, spacing, panelWidth, 90)
                 .withTransparentCount(2)
                 .withBlackOutline();
 
-        this.requestedPanel = new DrawPanel(
+        this.fullRequestedPanel = new DrawPanel(
                 Global.GAME_SIZE.width - spacing - panelWidth,
-                BasicPanels.getMessagePanelY() - spacing - this.offeringPanel.height,
+                BasicPanels.getMessagePanelY() - spacing - this.fullOfferingPanel.height,
                 panelWidth,
-                this.offeringPanel.height
+                this.fullOfferingPanel.height
         )
                 .withTransparentCount(2)
                 .withBlackOutline();
@@ -92,17 +95,50 @@ public class TradeView extends View {
         )
                 .withBlackOutline();
 
-        this.buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(panelWidth, 55, 2, NUM_COLS));
-        this.cancelButton = buttons.get(buttons.size() - 1);
+        this.buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(10, 2, NUM_COLS));
+        this.buttons.forEach(button -> button.panel()
+                                             .skipInactive()
+                                             .withTransparentBackground()
+                                             .withTransparentCount(2)
+                                             .withBlackOutline()
+                                             .withLabelSize(20));
 
-        this.cancelPanel = new DrawPanel(cancelButton)
-                .withBackgroundColor(Type.NORMAL.getColor())
-                .withTransparentCount(2)
-                .withBlackOutline();
+        this.cancelButton = buttons.get(buttons.size() - 1)
+                                   .setup(panel -> panel.withLabel("Cancel")
+                                                        .withBackgroundColor(Type.NORMAL.getColor()));
+
+        Entry<DrawPanel, DrawPanel> offeringLabels = createTradeLabelPanels(fullOfferingPanel, "Offering:");
+        DrawPanel offeringLabel = offeringLabels.getKey();
+        this.offeringPokemonPanel = offeringLabels.getValue();
+
+        Entry<DrawPanel, DrawPanel> requestedLabels = createTradeLabelPanels(fullRequestedPanel, "Requested:");
+        DrawPanel requestedLabel = requestedLabels.getKey();
+        this.requestedPokemonPanel = requestedLabels.getValue();
+
+        panels = new PanelList(
+                fullOfferingPanel, offeringLabel, offeringPokemonPanel,
+                fullRequestedPanel, requestedLabel, requestedPokemonPanel,
+                messagePanel
+        );
 
         GameData data = Game.getData();
         this.partyTiles = data.getPartyTiles();
         this.pokemonTiles = data.getPokemonTilesLarge();
+    }
+
+    // Split the trade panel into two horizontal subpanels (top for trade label, bottom for pokemon label)
+    private Entry<DrawPanel, DrawPanel> createTradeLabelPanels(DrawPanel fullTradePanel, String label) {
+        Button[] fakeButtons = fullTradePanel.getButtons(0, 2, 1);
+
+        DrawPanel labelPanel = new DrawPanel(fakeButtons[0])
+                .withNoBackground()
+                .withLabel(label, 22, Alignment.LEFT);
+
+        DrawPanel pokemonPanel = new DrawPanel(fakeButtons[1])
+                .withNoBackground()
+                .withLabelSize(20);
+
+        return new SimpleEntry<>(labelPanel, pokemonPanel);
     }
 
     @Override
@@ -156,13 +192,6 @@ public class TradeView extends View {
         return buttons.get(teamIndex + teamIndex/NUM_TEAM_COLS);
     }
 
-    private void drawPanel(Graphics g, String label, DrawPanel panel, PokemonNamesies pokemon) {
-        FontMetrics.setFont(g, 22);
-
-        TextUtils.drawCenteredHeightString(g, label, panel.x + panel.getBorderSize() + 10, panel.y + panel.height/3);
-        ImageUtils.drawCenteredImageLabel(g, partyTiles.getTile(pokemon.getInfo().getTinyImageName()), pokemon.getName(), panel.centerX(), panel.y + 2*panel.height/3);
-    }
-
     private void drawTradeAnimation(Graphics g) {
         if (myPokesFrontImage == null ||
                 theirPokesFrontImage == null ||
@@ -210,33 +239,13 @@ public class TradeView extends View {
         if (tradeAnimationTime > 0) {
             drawTradeAnimation(g);
         } else {
-            requestedPanel.drawBackground(g);
-            offeringPanel.drawBackground(g);
+            BasicPanels.drawFullMessagePanel(g, "");
+            panels.drawAll(g);
+            buttons.drawPanels(g);
 
-            drawPanel(g, "Offering:", offeringPanel, offering);
-            drawPanel(g, "Requested:", requestedPanel, requested);
-
-            this.messagePanel.drawBackground(g);
             this.messagePanel.drawMessage(g, "Which " + PokeString.POKEMON + " would you like to trade?");
 
-            BasicPanels.drawFullMessagePanel(g, "");
-            for (int i = 0; i < team.size(); i++) {
-                Button button = getTeamButton(i);
-                PartyPokemon pokemon = team.get(i);
-
-                DrawPanel buttonPanel = new DrawPanel(button)
-                        .withBackgroundColors(PokeType.getColors(pokemon))
-                        .withTransparentCount(2)
-                        .withBlackOutline();
-
-                buttonPanel.drawBackground(g);
-                buttonPanel.imageLabel(g, 22, partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getActualName());
-            }
-
-            cancelPanel.drawBackground(g);
-            cancelPanel.label(g, 22, "Cancel");
-
-            buttons.draw(g);
+            buttons.drawHover(g);
         }
     }
 
@@ -245,7 +254,7 @@ public class TradeView extends View {
             getTeamButton(i).setActive(i < team.size());
         }
 
-        // TODO: Which button is this??
+        // Unused button above cancel
         buttons.get(NUM_TEAM_COLS).setActive(false);
         cancelButton.setActive(true);
     }
@@ -262,6 +271,15 @@ public class TradeView extends View {
         this.buttons.setSelected(0);
 
         updateActiveButtons();
+
+        // Set up Pokemon button background and labels
+        for (int i = 0; i < team.size(); i++) {
+            PartyPokemon pokemon = team.get(i);
+            this.getTeamButton(i)
+                .panel()
+                .withBackgroundColors(PokeType.getColors(pokemon))
+                .withImageLabel(partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getActualName());
+        }
     }
 
     public void setTrade(PokemonNamesies tradePokemon, PokemonNamesies requestedPokemon) {
@@ -273,8 +291,16 @@ public class TradeView extends View {
                 this.getFirstTypeColor(offering)
         });
 
-        this.offeringPanel.withBackgroundColors(PokeType.getColors(offering));
-        this.requestedPanel.withBackgroundColors(PokeType.getColors(requested));
+        setTradePanel(fullOfferingPanel, offeringPokemonPanel, offering);
+        setTradePanel(fullRequestedPanel, requestedPokemonPanel, requestedPokemon);
+    }
+
+    private void setTradePanel(DrawPanel fullTradePanel, DrawPanel labelPanel, PokemonNamesies pokemon) {
+        fullTradePanel.withBackgroundColors(PokeType.getColors(pokemon));
+        labelPanel.withImageLabel(
+                partyTiles.getTile(pokemon.getInfo().getTinyImageName()),
+                pokemon.getName()
+        );
     }
 
     private Color getFirstTypeColor(PokemonNamesies pokemonNamesies) {

@@ -1,11 +1,12 @@
 package gui.view;
 
-import draw.ImageUtils;
 import draw.button.Button;
 import draw.button.ButtonList;
+import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.LabelPanel;
+import draw.panel.PanelList;
 import draw.panel.WrapPanel;
 import draw.panel.WrapPanel.WrapMetrics;
 import gui.TileSet;
@@ -15,6 +16,7 @@ import main.Game;
 import main.Global;
 import pokemon.active.PartyPokemon;
 import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonNamesies;
 import trainer.Trainer;
 import trainer.player.NewPokemonInfo;
 import trainer.player.Player;
@@ -39,17 +41,20 @@ public class NewPokemonView extends View {
             - new LabelPanel(0, 0, 24, TEXT_SPACING, "").height
             - 5*new LabelPanel(0, 0, 22, TEXT_SPACING, "").height)/6;
 
-    private static final int IMAGE_PANEL_LENGTH = 3*BOX_SPACING
-            + new LabelPanel(0, 0, 30, TEXT_SPACING, "").height
-            + new LabelPanel(0, 0, 24, TEXT_SPACING, "").height
-            + 2*new LabelPanel(0, 0, 22, TEXT_SPACING, "").height;
-
+    private final PanelList panels;
     private final DrawPanel canvasPanel;
+    private final DrawPanel messagelessCanvasPanel;
+
+    private PanelList infoPanels;
+    private LabelPanel namePanel;
+    private LabelPanel weightPanel;
     private final DrawPanel imagePanel;
+    private final WrapPanel descriptionPanel;
 
     private final ButtonList buttons;
-    private final Button leftButton;
-    private final Button rightButton;
+    private final Button[] partyButtons;
+    private final Button leftAnswerButton;
+    private final Button rightAnswerButton;
 
     private PartyPokemon newPokemon;
     private Integer boxNum;
@@ -63,23 +68,100 @@ public class NewPokemonView extends View {
                                       .withTransparentCount(2)
                                       .withBorderPercentage(0);
 
-        this.imagePanel = new DrawPanel(
-                Global.GAME_SIZE.width - BOX_SPACING - IMAGE_PANEL_LENGTH,
-                BOX_SPACING,
-                IMAGE_PANEL_LENGTH,
-                IMAGE_PANEL_LENGTH
-        )
-                .withFullTransparency()
-                .withBlackOutline();
+        // Canvas panel truncated at the message
+        this.messagelessCanvasPanel = new DrawPanel(
+                canvasPanel.x, canvasPanel.y, canvasPanel.width,
+                BasicPanels.getMessagePanelY() - canvasPanel.y
+        ).withNoBackground().withLabelSize(30);
 
-        this.buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(183, 55, 2, NUM_COLS));
+        // Placeholder panels
+        this.setLabelPanels(PokemonNamesies.BULBASAUR.getInfo());
+
+        // Image panel is from the top of the name panel to the bottom of the weight panel
+        int imagePanelLength = weightPanel.bottomY() - namePanel.y;
+        this.imagePanel = new DrawPanel(
+                Global.GAME_SIZE.width - BOX_SPACING - imagePanelLength,
+                namePanel.y,
+                imagePanelLength,
+                imagePanelLength
+        ).withFullTransparency()
+         .withBlackOutline();
+
+        descriptionPanel = new WrapPanel(
+                weightPanel.x,
+                weightPanel.bottomY() + BOX_SPACING,
+                Global.GAME_SIZE.width - 2*BOX_SPACING,
+                3*weightPanel.height,
+                22
+        ).withFullTransparency()
+         .withBlackOutline();
+
+        this.buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(10, 2, NUM_COLS));
+        this.buttons.forEach(button -> button.setup(textButtonSetup()));
         this.buttons.setInactive();
 
         // Bottom center left
-        this.leftButton = buttons.get(LEFT_BUTTON);
+        this.leftAnswerButton = buttons.get(LEFT_BUTTON);
 
         // Bottom center right
-        this.rightButton = buttons.get(RIGHT_BUTTON);
+        this.rightAnswerButton = buttons.get(RIGHT_BUTTON);
+
+        this.partyButtons = new Button[Trainer.MAX_POKEMON];
+        for (int row = 0; row < 2; row++) {
+            for (int col = 0; col < Trainer.MAX_POKEMON/2; col++) {
+                int buttonIndex = Point.getIndex(col, row, NUM_COLS);
+                int partyIndex = Point.getIndex(col, row, Trainer.MAX_POKEMON/2);
+
+                partyButtons[partyIndex] = buttons.get(buttonIndex);
+            }
+        }
+
+        this.panels = new PanelList(canvasPanel, messagelessCanvasPanel);
+    }
+
+    private ButtonPanelSetup textButtonSetup() {
+        return panel -> panel.skipInactive()
+                             .withTransparentBackground()
+                             .withTransparentCount(2)
+                             .withBorderPercentage(15)
+                             .withBlackOutline();
+    }
+
+    // Panels need to be recreated for each new pokemon because their sizing changes to fit the text
+    private void setLabelPanels(PokemonInfo pokemonInfo) {
+        namePanel = new LabelPanel(
+                BOX_SPACING, BOX_SPACING, 30, TEXT_SPACING,
+                String.format("%-10s   #%03d", pokemonInfo.getName(), pokemonInfo.getNumber())
+        );
+
+        LabelPanel classificationPanel = new LabelPanel(
+                namePanel.x,
+                namePanel.bottomY() + BOX_SPACING,
+                24,
+                TEXT_SPACING,
+                pokemonInfo.getClassification() + " " + PokeString.POKEMON
+        );
+
+        LabelPanel heightPanel = new LabelPanel(
+                classificationPanel.x,
+                classificationPanel.bottomY() + BOX_SPACING,
+                22,
+                TEXT_SPACING,
+                "Height: " + pokemonInfo.getHeightString()
+        );
+
+        weightPanel = new LabelPanel(
+                heightPanel.x,
+                heightPanel.bottomY() + BOX_SPACING,
+                22,
+                TEXT_SPACING,
+                "Weight: " + pokemonInfo.getWeight() + "lbs"
+        );
+
+        this.infoPanels = new PanelList(
+                imagePanel, namePanel, classificationPanel,
+                heightPanel, weightPanel, descriptionPanel
+        );
     }
 
     @Override
@@ -106,11 +188,11 @@ public class NewPokemonView extends View {
                 }
                 break;
             case NICKNAME_QUESTION:
-                if (rightButton.checkConsumePress()) {
+                if (rightAnswerButton.checkConsumePress()) {
                     setState(State.LOCATION);
                 }
 
-                if (leftButton.checkConsumePress()) {
+                if (leftAnswerButton.checkConsumePress()) {
                     setState(State.NICKNAME);
                 }
                 break;
@@ -127,11 +209,11 @@ public class NewPokemonView extends View {
                 }
                 break;
             case LOCATION:
-                if (rightButton.checkConsumePress()) {
+                if (rightAnswerButton.checkConsumePress()) {
                     setState(State.END);
                 }
 
-                if (leftButton.checkConsumePress()) {
+                if (leftAnswerButton.checkConsumePress()) {
                     setState(State.PARTY_SELECTION);
                 }
                 break;
@@ -171,115 +253,79 @@ public class NewPokemonView extends View {
         }
     }
 
-    private void drawButton(Graphics g, Button button, Color color, String label) {
-        button.fillBordered(g, color);
-        button.blackOutline(g);
-        button.label(g, 30, label);
+    // Can't include the font size in the setup method because answer buttons overlap with party buttons
+    // which use a different font size
+    private void setupTextButton(Button button, Color color, String label) {
+        button.panel()
+              .withBackgroundColor(color)
+              .withLabel(label, 30);
     }
 
-    @Override
-    public void draw(Graphics g) {
-        canvasPanel.drawBackground(g);
-        if (message != null) {
-            BasicPanels.drawFullMessagePanel(g, message);
-        }
-
+    private void drawSetup() {
         BufferedImage pokemonImage = Game.getData().getPokedexTilesLarge().getTile(newPokemon.getBaseImageName());
         if (displayInfo) {
-            imagePanel.drawBackground(g);
-            imagePanel.imageLabel(g, pokemonImage);
+            imagePanel.withImageLabel(pokemonImage);
+            messagelessCanvasPanel.skipDraw();
+        } else if (state == State.NICKNAME) {
+            BufferedImage spriteImage = Game.getData().getPokemonTilesSmall().getTile(newPokemon.getImageName());
+            String nickname = InputControl.instance().getInputCaptureString(PartyPokemon.MAX_NAME_LENGTH);
 
-            drawInfoLabels(g, newPokemon.getPokemonInfo());
-        } else if (state != State.NICKNAME && state != State.END) {
-            ImageUtils.drawCenteredImage(g, pokemonImage, BasicPanels.canvasMessageCenter);
+            messagelessCanvasPanel.withImageLabel(spriteImage, nickname);
+        } else if (state != State.END) {
+            messagelessCanvasPanel.withImageLabel(pokemonImage);
         }
 
         switch (state) {
             case NICKNAME_QUESTION:
-                drawButton(g, leftButton, new Color(120, 200, 80), "Yes");
-                drawButton(g, rightButton, new Color(220, 20, 20), "No");
-                break;
-            case NICKNAME:
-                BufferedImage spriteImage = Game.getData().getPokemonTilesSmall().getTile(newPokemon.getImageName());
-                String nickname = InputControl.instance().getInputCaptureString(PartyPokemon.MAX_NAME_LENGTH);
-
-                ImageUtils.drawCenteredImageLabel(g, spriteImage, nickname, BasicPanels.canvasMessageCenter);
+                setupTextButton(leftAnswerButton, new Color(120, 200, 80), "Yes");
+                setupTextButton(rightAnswerButton, new Color(220, 20, 20), "No");
                 break;
             case LOCATION:
-                drawButton(g, leftButton, new Color(35, 120, 220), "Party");
-                drawButton(g, rightButton, new Color(255, 215, 0), "PC");
+                setupTextButton(leftAnswerButton, new Color(35, 120, 220), "Party");
+                setupTextButton(rightAnswerButton, new Color(255, 215, 0), "PC");
                 break;
             case PARTY_SELECTION:
-                BasicPanels.drawFullMessagePanel(g, "");
-
                 List<PartyPokemon> party = Game.getPlayer().getTeam();
                 TileSet partyTiles = Game.getData().getPartyTiles();
-
-                for (int row = 0; row < 2; row++) {
-                    for (int col = 0; col < Trainer.MAX_POKEMON/2; col++) {
-                        int buttonIndex = Point.getIndex(col, row, NUM_COLS);
-                        int partyIndex = Point.getIndex(col, row, Trainer.MAX_POKEMON/2);
-
-                        Button pokemonButton = buttons.get(buttonIndex);
-                        PartyPokemon partyPokemon = party.get(partyIndex);
-                        BufferedImage partyPokemonImage = partyTiles.getTile(partyPokemon.getTinyImageName());
-
-                        DrawPanel pokemonPanel = new DrawPanel(pokemonButton)
-                                .withBackgroundColors(PokeType.getColors(partyPokemon))
-                                .withTransparentCount(2)
-                                .withBlackOutline();
-                        pokemonPanel.drawBackground(g);
-                        pokemonPanel.imageLabel(g, 20, partyPokemonImage, partyPokemon.getActualName());
-                    }
+                for (int i = 0; i < party.size(); i++) {
+                    PartyPokemon partyPokemon = party.get(i);
+                    BufferedImage partyPokemonImage = partyTiles.getTile(partyPokemon.getTinyImageName());
+                    partyButtons[i].panel()
+                                   .withBackgroundColors(PokeType.getColors(partyPokemon))
+                                   .withImageLabel(partyPokemonImage, partyPokemon.getActualName())
+                                   .withLabelSize(20);
                 }
         }
-
-        buttons.draw(g);
     }
 
-    public WrapMetrics drawInfoLabels(Graphics g, PokemonInfo pokemonInfo) {
-        LabelPanel namePanel = new LabelPanel(
-                BOX_SPACING,
-                BOX_SPACING,
-                30,
-                TEXT_SPACING,
-                String.format("%-10s   #%03d", pokemonInfo.getName(), pokemonInfo.getNumber())
-        ).draw(g);
+    @Override
+    public void draw(Graphics g) {
+        drawSetup();
 
-        LabelPanel classificationPanel = new LabelPanel(
-                namePanel.x,
-                namePanel.bottomY() + BOX_SPACING,
-                24,
-                TEXT_SPACING,
-                pokemonInfo.getClassification() + " " + PokeString.POKEMON
-        ).draw(g);
+        // Background
+        panels.drawAll(g);
+        this.drawMessage(g);
+        buttons.drawPanels(g);
 
-        LabelPanel heightPanel = new LabelPanel(
-                classificationPanel.x,
-                classificationPanel.bottomY() + BOX_SPACING,
-                22,
-                TEXT_SPACING,
-                "Height: " + pokemonInfo.getHeightString()
-        ).draw(g);
+        // Info panels
+        if (displayInfo) {
+            infoPanels.drawAll(g);
+            this.drawFlavorText(g, newPokemon.getPokemonInfo());
+        }
 
-        LabelPanel weightPanel = new LabelPanel(
-                heightPanel.x,
-                heightPanel.bottomY() + BOX_SPACING,
-                22,
-                TEXT_SPACING,
-                "Weight: " + pokemonInfo.getWeight() + "lbs"
-        ).draw(g);
+        buttons.drawHover(g);
+    }
 
-        WrapPanel descriptionPanel = new WrapPanel(
-                weightPanel.x,
-                weightPanel.bottomY() + BOX_SPACING,
-                Global.GAME_SIZE.width - 2*BOX_SPACING,
-                3*weightPanel.height,
-                22
-        )
-                .withFullTransparency()
-                .withBlackOutline();
-        descriptionPanel.drawBackground(g);
+    // Draws the message panel and the current message if applicable
+    private void drawMessage(Graphics g) {
+        if (message != null) {
+            BasicPanels.drawFullMessagePanel(g, message);
+        } else if (state == State.PARTY_SELECTION) {
+            BasicPanels.drawFullMessagePanel(g, "");
+        }
+    }
+
+    public WrapMetrics drawFlavorText(Graphics g, PokemonInfo pokemonInfo) {
         return descriptionPanel.drawMessage(g, pokemonInfo.getFlavorText());
     }
 
@@ -307,8 +353,8 @@ public class NewPokemonView extends View {
                 }
                 break;
             case NICKNAME_QUESTION:
-                leftButton.setActive(true);
-                rightButton.setActive(true);
+                leftAnswerButton.setActive(true);
+                rightAnswerButton.setActive(true);
                 buttons.setSelected(RIGHT_BUTTON);
                 message = "Would you like to give " + pokemonName + " a nickname?";
                 break;
@@ -317,8 +363,8 @@ public class NewPokemonView extends View {
                 break;
             case LOCATION:
                 if (player.fullParty() && !player.getTeam().contains(newPokemon)) {
-                    leftButton.setActive(true);
-                    rightButton.setActive(true);
+                    leftAnswerButton.setActive(true);
+                    rightAnswerButton.setActive(true);
                     buttons.setSelected(RIGHT_BUTTON);
                     message = "Where would you like to send " + pokemonName + "?";
                 } else {
@@ -349,6 +395,7 @@ public class NewPokemonView extends View {
         NewPokemonInfo newPokemonInfo = Game.getPlayer().getNewPokemonInfo();
         this.newPokemon = newPokemonInfo.getNewPokemon();
         this.boxNum = newPokemonInfo.getNewPokemonBox();
+        this.setLabelPanels(newPokemon.getPokemonInfo());
 
         this.buttons.setSelected(0);
 

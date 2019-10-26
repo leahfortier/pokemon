@@ -1,5 +1,6 @@
 package draw;
 
+import draw.panel.Panel;
 import util.FontMetrics;
 
 import java.awt.Color;
@@ -23,6 +24,19 @@ public final class TextUtils {
     // and returns the next appropriate y to draw to
     public static int drawWrappedText(Graphics g, String text, int x, int y, int width) {
         return new TextWrapper(text, x, y, width).draw(g).nextY();
+    }
+
+    // Draws the text "<currentPage + 1>/<totalPages> centered between the two buttons
+    // Does not draw the button/arrows at all
+    // currentPage is expected to be zero-indexed and will be incremented for display purposes
+    public static void drawPageNumbers(Graphics g, int fontSize, Panel leftArrow, Panel rightArrow, int currentPage, int totalPages) {
+        FontMetrics.setBlackFont(g, fontSize);
+        drawCenteredString(
+                g,
+                (currentPage + 1) + "/" + totalPages,
+                (leftArrow.centerX() + rightArrow.centerX())/2,
+                rightArrow.centerY()
+        );
     }
 
     public static void drawCenteredWidthString(Graphics g, String s, int centerX, int y) {

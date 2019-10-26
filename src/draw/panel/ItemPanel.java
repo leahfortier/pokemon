@@ -7,10 +7,8 @@ import gui.TileSet;
 import item.Item;
 import item.ItemNamesies;
 import main.Game;
-import main.Global;
 import util.FontMetrics;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -28,9 +26,7 @@ public class ItemPanel extends DrawPanel {
 
     // Draws all relevant information about the item
     // If item is NO_ITEM, will only draw background and will return null
-    public WrapMetrics draw(Graphics g, ItemNamesies itemNamesies) {
-        this.drawBackground(g);
-
+    public WrapMetrics drawMessage(Graphics g, ItemNamesies itemNamesies) {
         // Only draw actual items
         if (itemNamesies == ItemNamesies.NO_ITEM) {
             return null;
@@ -41,11 +37,10 @@ public class ItemPanel extends DrawPanel {
         TileSet itemTiles = Game.getData().getItemTiles();
         Item item = itemNamesies.getItem();
 
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 20);
+        FontMetrics.setBlackFont(g, 20);
 
         // Tile size for item image tile, double spacing for original and after image
-        int nameX = x + 2*spacing + Global.TILE_SIZE;
+        int nameX = x + 2*spacing + Item.MAX_IMAGE_SIZE.width;
         int startY = y + FontMetrics.getDistanceBetweenRows(g);
 
         // Draw item image

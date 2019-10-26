@@ -3,8 +3,10 @@ package draw.button;
 import map.Direction;
 
 import java.awt.Graphics;
+import java.util.Arrays;
+import java.util.Iterator;
 
-public class ButtonList {
+public class ButtonList implements Iterable<Button> {
     private final Button[] buttons;
 
     private int selected;
@@ -35,8 +37,20 @@ public class ButtonList {
     }
 
     public void draw(Graphics g) {
+        drawPanels(g);
+        drawHover(g);
+    }
+
+    public void drawHover(Graphics g) {
         for (Button button : buttons) {
-            button.draw(g);
+            button.drawHover(g);
+        }
+    }
+
+    public void drawPanels(Graphics g) {
+        for (Button button : buttons) {
+            button.drawPanel(g);
+            button.drawHover(g);
         }
     }
 
@@ -97,5 +111,10 @@ public class ButtonList {
         setForceHover(next);
 
         return next;
+    }
+
+    @Override
+    public Iterator<Button> iterator() {
+        return Arrays.asList(buttons).iterator();
     }
 }

@@ -110,9 +110,7 @@ class FontMetricsGen extends JPanel {
     }
 
     private void drawString(int fontSize, int x, int y) {
-        FontMetrics.setFont(g, fontSize);
-        g.setColor(Color.BLACK);
-
+        FontMetrics.setBlackFont(g, fontSize);
         g.drawString(s, x, y);
     }
 

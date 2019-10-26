@@ -1,24 +1,16 @@
 package draw.button;
 
-import battle.attack.Move;
-import draw.DrawUtils;
-import draw.ImageUtils;
-import draw.PolygonUtils;
-import draw.TextUtils;
+import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.panel.DrawPanel;
+import draw.panel.Panel;
 import input.ControlKey;
 import input.InputControl;
 import map.Direction;
-import util.FontMetrics;
 import util.Point;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
-public class Button {
+public class Button implements Panel {
     public final int x;
     public final int y;
     public final int width;
@@ -28,28 +20,49 @@ public class Button {
     private final ButtonPressAction pressAction;
     private final int[] transitions;
 
+    private final ButtonPanel drawPanel;
+
     private boolean hover;
     private boolean press;
     private boolean forceHover;
     private boolean active;
-
-    public Button(int x, int y, int width, int height) {
-        this(x, y, width, height, null, null, null);
-    }
-
-    public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions) {
-        this(x, y, width, height, hoverAction, transitions, null);
-    }
 
     public Button(DrawPanel panel, ButtonTransitions transitions) {
         this(panel, transitions, null);
     }
 
     public Button(DrawPanel panel, ButtonTransitions transitions, ButtonPressAction pressAction) {
-        this(panel.x, panel.y, panel.width, panel.height, ButtonHoverAction.BOX, transitions, pressAction);
+        this(panel, transitions, pressAction, null);
+    }
+
+    public Button(DrawPanel panel, ButtonTransitions transitions, ButtonPressAction pressAction, ButtonPanelSetup panelSetup) {
+        this(panel.x, panel.y, panel.width, panel.height, ButtonHoverAction.BOX, transitions, pressAction, panelSetup);
+    }
+
+    public Button(int x, int y, int width, int height) {
+        this(x, y, width, height, ButtonHoverAction.BOX, null, null, null);
+    }
+
+    public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions) {
+        this(x, y, width, height, hoverAction, transitions, null);
     }
 
     public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions, ButtonPressAction pressAction) {
+        this(x, y, width, height, hoverAction, transitions, pressAction, null);
+    }
+
+    public Button(int x, int y, int width, int height, ButtonTransitions transitions, ButtonPressAction pressAction) {
+        this(x, y, width, height, transitions, pressAction, null);
+    }
+
+    // Can we just admit that BOX is the default hover and not null and stop specifying it everywhere
+    public Button(int x, int y, int width, int height, ButtonTransitions transitions,
+                  ButtonPressAction pressAction, ButtonPanelSetup panelSetup) {
+        this(x, y, width, height, ButtonHoverAction.BOX, transitions, pressAction, panelSetup);
+    }
+
+    public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions,
+                  ButtonPressAction pressAction, ButtonPanelSetup panelSetup) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -63,13 +76,33 @@ public class Button {
         }
         this.transitions = transitions.getTransitions();
 
+        this.drawPanel = new ButtonPanel(this, panelSetup);
+
         this.hover = false;
         this.press = false;
         this.forceHover = false;
         this.active = true;
     }
 
-    public void draw(Graphics g) {
+    public Button asArrow(Direction arrowDirection) {
+        this.panel().asArrow(arrowDirection);
+        return this;
+    }
+
+    public Button setup(ButtonPanelSetup panelSetup) {
+        panelSetup.setup(this.panel());
+        return this;
+    }
+
+    public ButtonPanel panel() {
+        return this.drawPanel;
+    }
+
+    public void drawPanel(Graphics g) {
+        this.drawPanel.draw(g);
+    }
+
+    public void drawHover(Graphics g) {
         if ((hover || forceHover) && active && hoverAction != null) {
             hoverAction.draw(g, this);
         }
@@ -151,142 +184,23 @@ public class Button {
         return this.transitions[direction.ordinal()];
     }
 
-    public boolean greyInactive(Graphics g) {
-        if (!this.isActive()) {
-            this.greyOut(g);
-            return true;
-        }
-        return false;
-    }
-
-    // Generally used for inactive buttons
-    public void greyOut(Graphics g) {
-        DrawUtils.greyOut(g, x, y, width, height);
-    }
-
-    // Generally used for currently selected buttons
-    public void highlight(Graphics g, Color buttonColor) {
-        this.fill(g, buttonColor.darker());
-    }
-
-    public void fillTranslated(Graphics g, Color color) {
-        fill(g, color, 0, 0);
-    }
-
-    public void fill(Graphics g, Color color) {
-        fill(g, color, x, y);
-    }
-
-    private void fill(Graphics g, Color color, int x, int y) {
-        g.setColor(color);
-        g.fillRect(x, y, width, height);
-    }
-
-    public void fillBordered(Graphics g, Color color) {
-        new DrawPanel(x, y, width, height)
-                .withTransparentBackground(color)
-                .withTransparentCount(2)
-                .withBorderPercentage(15)
-                .withBlackOutline()
-                .drawBackground(g);
-    }
-
-    // Fills transparent, outlines in black, and draws the label centered
-    public void fillOutlineLabel(Graphics g, int fontSize, String label) {
-        fillOutlineLabel(g, null, fontSize, label);
-    }
-
-    // Fills color transparent, outlines in black, and draws the label centered
-    // Color may be null, but should really use the other method for that
-    public void fillOutlineLabel(Graphics g, Color color, int fontSize, String label) {
-        fillTransparent(g, color);
-        blackOutline(g);
-        label(g, fontSize, label);
-    }
-
-    public void fillTransparent(Graphics g, Color color) {
-        if (color != null) {
-            fill(g, color);
-        }
-        fillTransparent(g);
-    }
-
-    public void fillTransparent(Graphics g) {
-        DrawUtils.fillTransparent(g, x, y, width, height);
-    }
-
-    public void blackOutline(Graphics g, Direction... directions) {
-        DrawUtils.blackOutline(g, x, y, width, height, directions);
-    }
-
-    public void outlineTab(Graphics g, int index, int selectedIndex) {
-        List<Direction> toOutline = new ArrayList<>();
-        toOutline.add(Direction.UP);
-        toOutline.add(Direction.RIGHT);
-
-        if (index == 0) {
-            toOutline.add(Direction.LEFT);
-        }
-
-        if (index != selectedIndex) {
-            toOutline.add(Direction.DOWN);
-        }
-
-        this.blackOutline(g, toOutline.toArray(new Direction[0]));
-    }
-
-    public void label(Graphics g, int fontSize, String text) {
-        label(g, fontSize, Color.BLACK, text);
-    }
-
-    public void label(Graphics g, int fontSize, Color color, String text) {
-        g.setColor(color);
-        FontMetrics.setFont(g, fontSize);
-        TextUtils.drawCenteredString(g, text, x, y, width, height);
-    }
-
-    public void imageLabel(Graphics g, BufferedImage image) {
-        ImageUtils.drawCenteredImage(g, image, centerX(), centerY());
-    }
-
+    @Override
     public int rightX() {
         return x + width;
     }
 
+    @Override
     public int bottomY() {
         return y + height;
     }
 
+    @Override
     public int centerX() {
         return x + width/2;
     }
 
+    @Override
     public int centerY() {
         return y + height/2;
-    }
-
-    public void drawArrow(Graphics g, Direction direction) {
-        PolygonUtils.drawArrow(g, x, y, width, height, direction);
-    }
-
-    public void drawMoveButton(Graphics g, Move move) {
-        g.translate(x, y);
-
-        new DrawPanel(0, 0, width, height)
-                .withTransparentBackground(move.getAttack().getActualType().getColor())
-                .withBorderPercentage(15)
-                .withBlackOutline()
-                .drawBackground(g);
-
-        g.setColor(Color.BLACK);
-        FontMetrics.setFont(g, 22);
-        g.drawString(move.getAttack().getName(), 10, 26);
-
-        FontMetrics.setFont(g, 18);
-        TextUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 170, 45);
-
-        g.translate(-x, -y);
-
-        this.draw(g);
     }
 }
