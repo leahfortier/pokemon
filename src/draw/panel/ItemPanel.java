@@ -41,27 +41,27 @@ public class ItemPanel extends DrawPanel {
 
         // Tile size for item image tile, double spacing for original and after image
         int nameX = x + 2*spacing + Item.MAX_IMAGE_SIZE.width;
-        int startY = y + FontMetrics.getDistanceBetweenRows(g);
+        int textY = y + FontMetrics.getDistanceBetweenRows(g);
 
         // Draw item image
         BufferedImage img = itemTiles.getTile(item.getImageName());
-        ImageUtils.drawBottomCenteredImage(g, img, x + (nameX - x)/2, startY);
+        ImageUtils.drawCenteredImage(g, img, x + (nameX - x)/2, textY - 2*FontMetrics.getTextHeight(g)/3);
 
         // Draw item name to the right of the image
-        g.drawString(item.getName(), nameX, startY);
+        g.drawString(item.getName(), nameX, textY);
 
         // Draw quantity if applicable
         if (includeQuantity && item.hasQuantity()) {
             String quantityString = "x" + Game.getPlayer().getBag().getQuantity(itemNamesies);
-            TextUtils.drawRightAlignedString(g, quantityString, this.rightX() - 2*spacing, startY);
+            TextUtils.drawRightAlignedString(g, quantityString, this.rightX() - 2*spacing, textY);
         }
 
         // Draw the description underneath everything else as wrapped text
         WrapPanel descriptionPanel = new WrapPanel(
                 this.x,
-                startY,
+                textY,
                 this.width,
-                this.bottomY() - startY,
+                this.bottomY() - textY,
                 14
         )
                 .withBorderPercentage(0)

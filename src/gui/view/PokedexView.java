@@ -164,7 +164,10 @@ public class PokedexView extends View {
                                 k, NUM_ROWS, NUM_COLS, 0,
                                 new ButtonTransitions().right(RETURN).up(RIGHT_ARROW).down(RIGHT_ARROW)
                         ),
-                        () -> selected = PokemonList.get(getPokeNum(row, col)),
+                        () -> {
+                            selected = PokemonList.get(getPokeNum(row, col));
+                            changeTab(selectedTab);
+                        },
                         panel -> panel.withLabelSize(20)
                                       .withLabelColor(new Color(0, 0, 0, 64))
                 );
