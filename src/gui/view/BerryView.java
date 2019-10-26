@@ -24,7 +24,6 @@ import util.string.StringUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.List;
 import java.util.Set;
 
 public class BerryView extends View {
@@ -118,10 +117,10 @@ public class BerryView extends View {
         buttons[RETURN] = returnButton;
         this.buttons = new ButtonList(buttons);
 
-        panels = new PanelList(List.of(
+        panels = new PanelList(
                 layout.bagPanel, layout.selectedPanel, layout.itemsPanel,
                 layout.leftPanel, tabPanel
-        ), berryPanels);
+        ).add(berryPanels);
     }
 
     @Override

@@ -217,10 +217,10 @@ class DayCareView extends View {
         this.buttons = new ButtonList(buttons);
         this.buttons.setSelected(DEPOSIT_WITHDRAW);
 
-        this.panels = new PanelList(List.of(
+        this.panels = new PanelList(
                 dayCarePanel, dayCareLabelPanel, partyPanel, partyLabelPanel,
                 infoPanel, basicInfoPanel, movesPanel, statsPanel, imagePanel
-        ), movePanels);
+        ).add(movePanels);
     }
 
     private DrawPanel labelPanelSetup(String label, Button fakeButton) {

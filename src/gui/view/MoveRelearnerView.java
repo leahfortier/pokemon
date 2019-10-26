@@ -209,9 +209,9 @@ public class MoveRelearnerView extends View {
         buttons[MOVES_RIGHT_ARROW] = movesRightButton;
         this.buttons = new ButtonList(buttons);
 
-        this.panels = new PanelList(List.of(
+        this.panels = new PanelList(
                 movesPanel, descriptionPanel, heartScalePanel, partyPanel
-        ), selectedPokemonPanels);
+        ).add(selectedPokemonPanels);
     }
 
     private ButtonPanelSetup textButtonSetup(String label, Color color) {
