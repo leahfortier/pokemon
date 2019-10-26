@@ -455,7 +455,7 @@ public class PartyView extends View {
 
                 int moveInset = movePanel.getBorderSize() + 10;
                 TextUtils.drawCenteredHeightString(g, attack.getName(), movePanel.x + moveInset, movePanel.centerY());
-                TextUtils.drawCenteredHeightString(g, String.format("PP: %d/%d", move.getPP(), move.getMaxPP()), movePanel.rightX() - moveInset, movePanel.centerY(), Alignment.RIGHT);
+                TextUtils.drawCenteredHeightString(g, "PP: " + move.getPPString(), movePanel.rightX() - moveInset, movePanel.centerY(), Alignment.RIGHT);
             }
 
             pokemonPanel.faintOut(g, selectedPkm);

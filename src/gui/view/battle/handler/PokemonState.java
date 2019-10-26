@@ -283,7 +283,7 @@ public class PokemonState implements VisualStateHandler {
                 g.drawString(move.getAttack().getName(), 7, 17);
 
                 // Draw PP amount
-                TextUtils.drawRightAlignedString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 118, 33);
+                TextUtils.drawRightAlignedString(g, "PP: " + move.getPPString(), 118, 33);
 
                 BufferedImage categoryImage = move.getAttack().getCategory().getImage();
                 g.drawImage(categoryImage, 7, 21, null);

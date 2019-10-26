@@ -177,5 +177,4 @@ Other random things:
     item buttons are the same in [Battle]BagState as BagLayout and should have a common way to draw
     move buttons are the same in [Battle]FightState as LearnMovePanel
     I think a lot of the stuff that's happening in drawSetup should be called from update instead of draw so only called where there's a change
-    should have a method for max pp string
     something weird about Comfey's party tile and fails when trimming

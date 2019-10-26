@@ -114,7 +114,7 @@ public class FightState implements VisualStateHandler {
 
         // PP amount as right label on the bottom
         FontMetrics.setBlackFont(g, 16);
-        String ppString = "PP: " + move.getPP() + "/" + move.getMaxPP();
+        String ppString = "PP: " + move.getPPString();
         TextUtils.drawRightAlignedString(g, ppString, panel.rightX() - fullSpacing, panel.bottomY() - fullSpacing);
     }
 

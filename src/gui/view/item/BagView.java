@@ -277,7 +277,7 @@ public class BagView extends View {
             g.drawImage(attack.getCategory().getImage(), 254, 33, null);
 
             FontMetrics.setBlackFont(g, 14);
-            TextUtils.drawCenteredHeightString(g, "PP: " + move.getPP() + "/" + move.getMaxPP(), 166, movePanel.centerY());
+            TextUtils.drawCenteredHeightString(g, "PP: " + move.getPPString(), 166, movePanel.centerY());
 
             FontMetrics.setBlackFont(g, 20);
             g.drawString(attack.getName(), 20, 38);
