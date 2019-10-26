@@ -15,7 +15,6 @@ import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.MovePanel;
-import draw.panel.PanelList;
 import draw.panel.WrapPanel;
 import draw.panel.WrapPanel.WrapMetrics;
 import gui.GameData;
@@ -50,7 +49,6 @@ public class PartyView extends View {
     private static final int SWITCH = NUM_BUTTONS - 2;
     private static final int NICKNAME = NUM_BUTTONS - 3;
 
-    private PanelList panels;
     private final DrawPanel pokemonPanel;
     private final DrawPanel imagePanel;
     private final DrawPanel basicInformationPanel;
@@ -245,19 +243,6 @@ public class PartyView extends View {
         movedToFront();
     }
 
-    private void resetPanels() {
-        this.panels = new PanelList(pokemonPanel, imagePanel, basicInformationPanel);
-
-        PartyPokemon selectedPkm = this.selectedPokemon();
-        if (!selectedPkm.isEgg()) {
-            this.panels.add(abilityPanel, movesPanel);
-        }
-    }
-
-    private PartyPokemon selectedPokemon() {
-        return Game.getPlayer().getTeam().get(selectedTab);
-    }
-
     private ButtonPanelSetup textButtonSetup(String label) {
         return panel -> panel.greyInactive()
                              .withBorderlessTransparentBackground()
@@ -278,7 +263,7 @@ public class PartyView extends View {
 
             if (input.consumeIfDown(ControlKey.ENTER)) {
                 String nickname = input.stopAndResetCapturedText();
-                this.selectedPokemon().setNickname(nickname);
+                Game.getPlayer().getTeam().get(selectedTab).setNickname(nickname);
 
                 nicknameView = false;
                 updateActiveButtons();
@@ -292,7 +277,8 @@ public class PartyView extends View {
         }
     }
 
-    private void drawSetup() {
+    @Override
+    public void draw(Graphics g) {
         GameData data = Game.getData();
         Player player = Game.getPlayer();
 
@@ -302,70 +288,25 @@ public class PartyView extends View {
         TileSet pkmTiles = data.getPokemonTilesSmall();
         BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.getImageName());
 
+        // Background
+        BasicPanels.drawCanvasPanel(g);
+
         if (nicknameView) {
             String nickname = InputControl.instance().getInputCaptureString(PartyPokemon.MAX_NAME_LENGTH);
             nicknamePanel.withBackgroundColors(PokeType.getColors(selectedPkm), true)
-                         .withImageLabel(pkmImg, nickname);
-            buttons.forEach(button -> button.panel().skipDraw());
+                         .withImageLabel(pkmImg, nickname)
+                         .draw(g);
         } else {
-            this.resetPanels();
+            // Pokemon info
+            // Note: Important to draw selected before the tabs because of how outlines work
+            drawPokemonInfo(g, selectedPkm, pkmImg);
 
-            // Tabs
-            for (int i = 0; i < list.size(); i++) {
-                PartyPokemon tabPokemon = list.get(i);
-                tabButtons[i].panel()
-                             .withTabOutlines(i, selectedTab)
-                             .withBackgroundColor(PokeType.getColors(tabPokemon)[0]);
-            }
-
-            // Highlight switch button if applicable
-            switchButton.panel().withHighlight(switchTabIndex != -1, this.getBackgroundColors(selectedPkm)[1]);
-
-            // Type color polygons
-            pokemonPanel.withBackgroundColors(this.getBackgroundColors(selectedPkm), true);
-
-            // Pokemon Image
-            imagePanel.withImageLabel(pkmImg);
-
-            // Set background color of moves
-            MoveList moves = selectedPkm.getActualMoves();
-            for (int i = 0; i < moves.size(); i++) {
-                Attack attack = moves.get(i).getAttack();
-                moveButtons[i].panel().withBackgroundColor(attack.getActualType().getColor());
-            }
-        }
-    }
-
-    private void drawBackground(Graphics g) {
-        BasicPanels.drawCanvasPanel(g);
-        if (nicknameView) {
-            nicknamePanel.draw(g);
-        } else {
-            panels.drawAll(g);
-        }
-        buttons.drawPanels(g);
-    }
-
-    @Override
-    public void draw(Graphics g) {
-        drawSetup();
-
-        // Background
-        drawBackground(g);
-
-        if (!nicknameView) {
             // Tabs
             drawTabs(g);
 
-            // Pokemon info
-            drawPokemonInfo(g);
+            // Draw button hovers
+            buttons.drawHover(g);
         }
-
-        buttons.drawHover(g);
-    }
-
-    private Color[] getBackgroundColors(PartyPokemon selectedPkm) {
-        return PokeType.getColors(selectedPkm);
     }
 
     private void drawTabs(Graphics g) {
@@ -375,7 +316,7 @@ public class PartyView extends View {
         List<PartyPokemon> list = player.getTeam();
         TileSet partyTiles = data.getPartyTiles();
 
-        FontMetrics.setBlackFont(g, 14);
+        FontMetrics.setBlackFont(g, 11);
 
         int spacing = 4;
         int inset = 2*spacing + PokemonInfo.MAX_PARTY_IMAGE_SIZE.width;
@@ -384,21 +325,43 @@ public class PartyView extends View {
             BufferedImage tabImage = partyTiles.getTile(tabPokemon.getTinyImageName());
             ButtonPanel panel = tabButtons[i].panel();
 
+            // Outline and type color
+            panel.withTabOutlines(i, selectedTab)
+                 .withBackgroundColor(PokeType.getColors(tabPokemon)[0])
+                 .drawBackground(g);
+
+            // Image and name
             int nameX = panel.x + inset;
             int centerY = panel.centerY();
-
             TextUtils.drawCenteredHeightString(g, tabPokemon.getActualName(), nameX, centerY);
             ImageUtils.drawCenteredImage(g, tabImage, (panel.x + nameX)/2, centerY);
 
+            // Faint out if deadsies
             panel.faintOut(g, tabPokemon);
         }
     }
 
-    private void drawPokemonInfo(Graphics g) {
-        PartyPokemon selectedPkm = this.selectedPokemon();
+    private void drawPokemonInfo(Graphics g, PartyPokemon selectedPkm, BufferedImage pkmImg) {
+        Color[] typeColors = PokeType.getColors(selectedPkm);
+
+        // Type color polygons
+        pokemonPanel.withBackgroundColors(typeColors, true)
+                    .drawBackground(g);
+
+        // Highlight switch button if applicable
+        switchButton.panel().withHighlight(switchTabIndex != -1, typeColors[1]);
+        nicknameButton.drawPanel(g);
+        switchButton.drawPanel(g);
+        returnButton.drawPanel(g);
+
+        // Pokemon Image
+        imagePanel.withImageLabel(pkmImg)
+                  .draw(g);
+
+        // Basic information panel
+        basicInformationPanel.drawBackground(g);
 
         FontMetrics.setBlackFont(g, 20);
-
         int inset = FontMetrics.getDistanceBetweenRows(g)/2;
         int nameX = basicInformationPanel.x + inset;
         int topLineY = basicInformationPanel.y + inset + FontMetrics.getTextHeight(g);
@@ -480,12 +443,15 @@ public class PartyView extends View {
             }
 
             // Moves Box
+            movesPanel.drawBackground(g);
+            FontMetrics.setBlackFont(g, 18);
             for (int i = 0; i < moves.size(); i++) {
                 Move move = moves.get(i);
                 Attack attack = move.getAttack();
                 ButtonPanel movePanel = moveButtons[i].panel();
 
-                FontMetrics.setBlackFont(g, 18);
+                movePanel.withBackgroundColor(attack.getActualType().getColor())
+                         .drawBackground(g);
 
                 int moveInset = movePanel.getBorderSize() + 10;
                 TextUtils.drawCenteredHeightString(g, attack.getName(), movePanel.x + moveInset, movePanel.centerY());
@@ -535,6 +501,7 @@ public class PartyView extends View {
     }
 
     public WrapMetrics drawAbility(Graphics g, Ability ability) {
+        abilityPanel.drawBackground(g);
         return abilityPanel.drawMessage(g, ability.getName() + " - " + ability.getDescription());
     }
 
@@ -549,7 +516,6 @@ public class PartyView extends View {
         }
 
         selectedTab = index;
-        this.resetPanels();
     }
 
     private void updateActiveButtons() {
