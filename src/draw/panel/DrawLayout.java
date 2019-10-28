@@ -1,9 +1,8 @@
 package draw.panel;
 
 import draw.button.Button;
+import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonTransitions;
-import draw.panel.DrawPanel.ButtonIndexAction;
-import draw.panel.DrawPanel.PanelIndexSetup;
 
 public class DrawLayout {
     private final DrawPanel outerPanel;
@@ -20,7 +19,8 @@ public class DrawLayout {
     private int startIndex;
     private ButtonTransitions defaultTransitions;
     private ButtonIndexAction indexAction;
-    private PanelIndexSetup indexSetup;
+    private ButtonPanelSetup buttonSetup;
+    private DrawPanelSetup drawSetup;
 
     public DrawLayout(DrawPanel panel, int numRows, int numCols, int spacing) {
         this(panel, numRows, numCols, spacing, -1, -1);
@@ -53,13 +53,19 @@ public class DrawLayout {
         this.defaultTransitions = defaultTransitions;
         return this;
     }
+
     public DrawLayout withIndexAction(ButtonIndexAction indexAction) {
         this.indexAction = indexAction;
         return this;
     }
 
-    public DrawLayout withIndexSetup(PanelIndexSetup indexSetup) {
-        this.indexSetup = indexSetup;
+    public DrawLayout withDrawSetup(DrawPanelSetup panelSetup) {
+        this.drawSetup = panelSetup;
+        return this;
+    }
+
+    public DrawLayout withButtonSetup(ButtonPanelSetup buttonSetup) {
+        this.buttonSetup = buttonSetup;
         return this;
     }
 
@@ -94,6 +100,7 @@ public class DrawLayout {
                         panelWidth,
                         panelHeight
                 );
+                drawSetup.setup(panels[index]);
             }
         }
 
@@ -107,6 +114,9 @@ public class DrawLayout {
         // Translate each panel into a button
         Button[] buttons = new Button[panels.length];
         for (int i = 0; i < buttons.length; i++) {
+            // Silly Java, final variables are for kids
+            final int index = i;
+
             // Setup default transitions
             ButtonTransitions transitions = ButtonTransitions.getBasicTransitions(
                     i, numRows, numCols, startIndex, defaultTransitions
@@ -116,11 +126,24 @@ public class DrawLayout {
             buttons[i] = new Button(
                     panels[i],
                     transitions,
-                    ButtonIndexAction.getPressAction(indexAction, i),
-                    PanelIndexSetup.getPanelSetup(indexSetup, i)
+                    () -> indexAction.pressButton(index),
+                    panel -> {
+                        drawSetup.setup(panel);
+                        buttonSetup.setup(panel);
+                    }
             );
         }
 
         return buttons;
+    }
+
+    @FunctionalInterface
+    public interface DrawPanelSetup {
+        void setup(DrawPanel panel);
+    }
+
+    @FunctionalInterface
+    public interface ButtonIndexAction {
+        void pressButton(int index);
     }
 }
