@@ -48,8 +48,8 @@ public class ButtonTransitions {
         return this.basic(direction, currentIndex, numRows, numCols, 0);
     }
 
-    public ButtonTransitions basic(Direction direction, int currentIndex, int numRows, int numCols, int startValue) {
-        return this.with(direction, startValue + basicTransition(currentIndex, numRows, numCols, direction));
+    public ButtonTransitions basic(Direction direction, int currentIndex, int numRows, int numCols, int startIndex) {
+        return this.with(direction, startIndex + basicTransition(currentIndex, numRows, numCols, direction));
     }
 
     int[] getTransitions() {
@@ -67,7 +67,7 @@ public class ButtonTransitions {
     }
 
     // Works for all grid buttons
-    public static ButtonTransitions getBasicTransitions(int currentIndex, int numRows, int numCols, int startValue, ButtonTransitions defaultTransitions) {
+    public static ButtonTransitions getBasicTransitions(int currentIndex, int numRows, int numCols, int startIndex, ButtonTransitions defaultTransitions) {
         // Get the corresponding grid index
         Point location = Point.getPointAtIndex(currentIndex, numCols);
 
@@ -82,7 +82,7 @@ public class ButtonTransitions {
                     && !inBounds) {
                 transitions.with(direction, defaultTransitions.getTransition(direction));
             } else {
-                transitions.basic(direction, currentIndex, numRows, numCols, startValue);
+                transitions.basic(direction, currentIndex, numRows, numCols, startIndex);
             }
         }
 

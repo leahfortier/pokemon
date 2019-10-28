@@ -545,23 +545,23 @@ public class DrawPanel implements Panel {
     }
 
     @Override
-    public int centerX() {
-        return x + width/2;
+    public int getX() {
+        return x;
     }
 
     @Override
-    public int centerY() {
-        return y + height/2;
+    public int getY() {
+        return y;
     }
 
     @Override
-    public int rightX() {
-        return x + width;
+    public int getWidth() {
+        return width;
     }
 
     @Override
-    public int bottomY() {
-        return y + height;
+    public int getHeight() {
+        return height;
     }
 
     public void label(Graphics g, String text) {
