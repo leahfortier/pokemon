@@ -19,6 +19,6 @@ public interface Panel {
     }
 
     default int centerY() {
-        return this.getY() + this.getHeight();
+        return this.getY() + this.getHeight()/2;
     }
 }
