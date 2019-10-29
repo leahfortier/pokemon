@@ -18,7 +18,7 @@ public class DrawLayout {
     private int startIndex;
     private ButtonTransitions defaultTransitions;
     private ButtonIndexAction indexAction;
-    private DrawPanelSetup drawSetup;
+    private DrawPanelIndexSetup drawSetup;
     private ButtonPanelSetup buttonSetup;
 
     public DrawLayout(DrawPanel panel, int numRows, int numCols, int spacing) {
@@ -42,7 +42,7 @@ public class DrawLayout {
         this.startIndex = 0;
         this.defaultTransitions = null;
         this.indexAction = index -> {};
-        this.drawSetup = drawPanel -> {};
+        this.drawSetup = (drawPanel, index) -> {};
         this.buttonSetup = buttonPanel -> {};
     }
 
@@ -67,6 +67,11 @@ public class DrawLayout {
     }
 
     public DrawLayout withDrawSetup(DrawPanelSetup drawSetup) {
+        this.drawSetup = this.drawSetup.add((panel, index) -> drawSetup.setup(panel));
+        return this;
+    }
+
+    public DrawLayout withDrawSetup(DrawPanelIndexSetup drawSetup) {
         this.drawSetup = this.drawSetup.add(drawSetup);
         return this;
     }
@@ -107,7 +112,7 @@ public class DrawLayout {
                         panelWidth,
                         panelHeight
                 );
-                drawSetup.setup(panels[index]);
+                drawSetup.setup(panels[index], index);
             }
         }
 
@@ -135,7 +140,7 @@ public class DrawLayout {
                     transitions,
                     () -> indexAction.pressButton(index),
                     panel -> {
-                        drawSetup.setup(panel);
+                        drawSetup.setup(panel, index);
                         buttonSetup.setup(panel);
                     }
             );
@@ -152,11 +157,16 @@ public class DrawLayout {
     @FunctionalInterface
     public interface DrawPanelSetup {
         void setup(DrawPanel panel);
+    }
 
-        default DrawPanelSetup add(DrawPanelSetup next) {
-            return panel -> {
-                this.setup(panel);
-                next.setup(panel);
+    @FunctionalInterface
+    public interface DrawPanelIndexSetup {
+        void setup(DrawPanel panel, int index);
+
+        default DrawPanelIndexSetup add(DrawPanelIndexSetup next) {
+            return (panel, index) -> {
+                this.setup(panel, index);
+                next.setup(panel, index);
             };
         }
     }
