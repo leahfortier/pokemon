@@ -13,6 +13,7 @@ import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
+import draw.panel.DrawLayout;
 import draw.panel.DrawPanel;
 import draw.panel.MovePanel;
 import draw.panel.WrapPanel;
@@ -222,15 +223,14 @@ public class PartyView extends View {
                 .withLabelSize(30);
 
         // Buttons don't actually do anything when pressed, but if hovered updates the move details panel
-        moveButtons = movesPanel.getButtons(
-                10, MoveList.MAX_MOVES, 1, MOVES,
-                new ButtonTransitions().up(0).down(RETURN),
-                index -> {},
-                (index, panel) -> panel.skipInactive()
-                                       .withTransparentCount(2)
-                                       .withBlackOutline()
-                                       .withBorderPercentage(20)
-        );
+        moveButtons = new DrawLayout(movesPanel, MoveList.MAX_MOVES, 1, 10)
+                .withStartIndex(MOVES)
+                .withDefaultTransitions(new ButtonTransitions().up(0).down(RETURN))
+                .withButtonSetup(panel -> panel.skipInactive()
+                                               .withTransparentCount(2)
+                                               .withBlackOutline()
+                                               .withBorderPercentage(20))
+                .getButtons();
 
         Button[] buttons = new Button[NUM_BUTTONS];
         System.arraycopy(tabButtons, 0, buttons, TABS, tabButtons.length);

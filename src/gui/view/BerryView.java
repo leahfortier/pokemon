@@ -6,6 +6,7 @@ import draw.button.Button;
 import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
+import draw.panel.DrawLayout;
 import draw.panel.DrawPanel;
 import draw.panel.PanelList;
 import gui.TileSet;
@@ -71,11 +72,9 @@ public class BerryView extends View {
                 new ButtonTransitions().up(RIGHT_ARROW).down(RIGHT_ARROW)
         );
 
-        Button[] berryButtons = layout.leftPanel.getButtons(10, NUM_ROWS, NUM_COLS);
-        berryPanels = new DrawPanel[NUM_ROWS*NUM_COLS];
-        for (int i = 0; i < berryPanels.length; i++) {
-            berryPanels[i] = new DrawPanel(berryButtons[i]).withBlackOutline().withFullTransparency();
-        }
+        berryPanels = new DrawLayout(layout.leftPanel, NUM_ROWS, NUM_COLS, 10)
+                .withDrawSetup(panel -> panel.withBlackOutline().withFullTransparency())
+                .getPanels();
 
         selectedItem = ItemNamesies.NO_ITEM;
         itemButtons = layout.getItemButtons(

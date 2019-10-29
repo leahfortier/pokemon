@@ -10,6 +10,8 @@ import draw.button.ButtonList;
 import draw.button.ButtonPanel;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
+import draw.panel.DrawLayout;
+import draw.panel.DrawLayout.ButtonIndexAction;
 import draw.panel.DrawPanel;
 import draw.panel.PanelList;
 import gui.TileSet;
@@ -98,19 +100,18 @@ public class BagView extends View {
 
         // Party buttons don't skip when inactive since they're inactive by default
         // (Only active when PokemonUseItem is selected)
-        partyButtons = layout.getLeftButtons(
+        partyButtons = getLeftLayout(
                 PARTY,
                 new ButtonTransitions().right(GIVE).up(TABS).left(MOVES).down(TABS),
                 index -> UseState.applyPokemon(this, Game.getPlayer().getTeam().get(index))
-        );
+        ).getButtons();
 
         // Move buttons are fine to skip when inactive since they're only visible when active
-        moveButtons = layout.getLeftButtons(
+        moveButtons = getLeftLayout(
                 MOVES,
                 new ButtonTransitions().right(PARTY).up(TABS).left(GIVE).down(TABS),
-                this::useMoveItem,
-                (index, panel) -> panel.skipInactive()
-        );
+                this::useMoveItem
+        ).withButtonSetup(ButtonPanel::skipInactive).getButtons();
 
         itemButtons = layout.getItemButtons(
                 ITEMS,
@@ -161,6 +162,16 @@ public class BagView extends View {
         panels = new PanelList(layout.bagPanel, layout.leftPanel, layout.selectedPanel, layout.itemsPanel);
 
         movedToFront();
+    }
+
+    private DrawLayout getLeftLayout(int startIndex, ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
+        return new DrawLayout(layout.leftPanel, Trainer.MAX_POKEMON, 1, 10)
+                .withStartIndex(startIndex)
+                .withDefaultTransitions(defaultTransitions)
+                .withPressIndex(indexAction)
+                .withDrawSetup(panel -> panel.withTransparentCount(2)
+                                             .withBorderPercentage(15)
+                                             .withBlackOutline());
     }
 
     @Override

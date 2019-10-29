@@ -2,7 +2,6 @@ package gui.view;
 
 import draw.button.Button;
 import draw.button.ButtonList;
-import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.LabelPanel;
@@ -96,8 +95,15 @@ public class NewPokemonView extends View {
         ).withFullTransparency()
          .withBlackOutline();
 
-        this.buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(10, 2, NUM_COLS));
-        this.buttons.forEach(button -> button.setup(textButtonSetup()));
+        this.buttons = new ButtonList(
+                BasicPanels.getFullMessagePanelLayout(2, NUM_COLS, 10)
+                           .withButtonSetup(panel -> panel.skipInactive()
+                                                          .withTransparentBackground()
+                                                          .withTransparentCount(2)
+                                                          .withBorderPercentage(15)
+                                                          .withBlackOutline())
+                           .getButtons()
+        );
         this.buttons.setInactive();
 
         // Bottom center left
@@ -117,14 +123,6 @@ public class NewPokemonView extends View {
         }
 
         this.panels = new PanelList(canvasPanel, messagelessCanvasPanel);
-    }
-
-    private ButtonPanelSetup textButtonSetup() {
-        return panel -> panel.skipInactive()
-                             .withTransparentBackground()
-                             .withTransparentCount(2)
-                             .withBorderPercentage(15)
-                             .withBlackOutline();
     }
 
     // Panels need to be recreated for each new pokemon because their sizing changes to fit the text

@@ -25,18 +25,16 @@ public class MenuState implements VisualStateHandler {
 
     @Override
     public void set(BattleView view) {
-        menuButtons = new ButtonList(view.createPanelButtons(MenuChoice.values().length));
-
         MenuChoice[] choices = MenuChoice.values();
-        for (int i = 0; i < menuButtons.size(); i++) {
-            MenuChoice choice = choices[i];
-            menuButtons.get(i).panel()
-                       .withTransparentBackground(choice.buttonColor)
-                       .withTransparentCount(2)
-                       .withBorderPercentage(15)
-                       .withBlackOutline()
-                       .withLabel(choice.getButtonLabel(), 30);
-        }
+        menuButtons = new ButtonList(
+                view.createPanelLayout(MenuChoice.values().length)
+                    .withDrawSetup((panel, index) -> panel.withTransparentBackground(choices[index].buttonColor)
+                                                          .withTransparentCount(2)
+                                                          .withBorderPercentage(15)
+                                                          .withBlackOutline()
+                                                          .withLabel(choices[index].getButtonLabel(), 30))
+                    .getButtons()
+        );
 
         menuButtons.setFalseHover();
     }

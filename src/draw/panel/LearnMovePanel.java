@@ -55,12 +55,14 @@ public class LearnMovePanel {
                 .withMinDescFontSize(13);
 
         // Create a button for each known move and then one for the new move and one for not learning
-        buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(8, 2, NUM_COLS));
-        buttons.forEach(button -> button.panel()
-                                        .withTransparentCount(2)
-                                        .withBorderPercentage(15)
-                                        .withBlackOutline()
-                                        .withLabelSize(30));
+        buttons = new ButtonList(
+                BasicPanels.getFullMessagePanelLayout(2, NUM_COLS, 8)
+                           .withDrawSetup(panel -> panel.withTransparentCount(2)
+                                                        .withBorderPercentage(15)
+                                                        .withBlackOutline()
+                                                        .withLabelSize(30))
+                           .getButtons()
+        );
 
         yesButton = buttons.get(YES_BUTTON);
         noButton = buttons.get(NO_BUTTON);

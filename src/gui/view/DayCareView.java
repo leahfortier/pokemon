@@ -12,6 +12,7 @@ import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
+import draw.panel.DrawLayout;
 import draw.panel.DrawPanel;
 import draw.panel.PanelList;
 import input.ControlKey;
@@ -117,16 +118,12 @@ class DayCareView extends View {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        int moveSpacing = 10;
-        Button[] fakeMoveButtons = movesPanel.getButtons(moveSpacing, MoveList.MAX_MOVES/2, 2);
-        movePanels = new DrawPanel[MoveList.MAX_MOVES];
-        for (int i = 0; i < movePanels.length; i++) {
-            movePanels[i] = new DrawPanel(fakeMoveButtons[i])
-                    .withTransparentCount(2)
-                    .withBorderPercentage(20)
-                    .withBlackOutline()
-                    .withLabelSize(16);
-        }
+        movePanels = new DrawLayout(movesPanel, MoveList.MAX_MOVES/2, 2, 10)
+                .withDrawSetup(panel -> panel.withTransparentCount(2)
+                                             .withBorderPercentage(20)
+                                             .withBlackOutline()
+                                             .withLabelSize(16))
+                .getPanels();
 
         imagePanel = new DrawPanel(
                 infoPanel.x + 18,
@@ -137,15 +134,15 @@ class DayCareView extends View {
 
         Button[] buttons = new Button[NUM_BUTTONS];
 
-        // Fake buttons with three rows (label + each day care pokemon), and one column
+        // Fake panels with three rows (label + each day care pokemon), and one column
         int buttonSpacing = 10;
-        Button[] fakeDayCareButtons = dayCarePanel.getButtons(buttonSpacing, 3, 1);
+        DrawPanel[] fakeDayCarePanels = new DrawLayout(dayCarePanel, 3, 1, buttonSpacing).getPanels();
 
         // Label isn't a button but still uses the spacing
-        DrawPanel dayCareLabelPanel = labelPanelSetup("Day Care", fakeDayCareButtons[0]);
+        DrawPanel dayCareLabelPanel = labelPanelSetup("Day Care", fakeDayCarePanels[0]);
 
         firstDayCarePokemonButton = buttons[FIRST_DAY_CARE_POKEMON_BUTTON] = new Button(
-                fakeDayCareButtons[1].panel(),
+                fakeDayCarePanels[1],
                 new ButtonTransitions()
                         .right(DEPOSIT_WITHDRAW)
                         .up(Trainer.MAX_POKEMON - 1)
@@ -156,7 +153,7 @@ class DayCareView extends View {
         );
 
         secondDayCarePokemonButton = buttons[SECOND_DAY_CARE_POKEMON_BUTTON] = new Button(
-                fakeDayCareButtons[2].panel(),
+                fakeDayCarePanels[2],
                 new ButtonTransitions()
                         .right(DEPOSIT_WITHDRAW)
                         .up(FIRST_DAY_CARE_POKEMON_BUTTON)
@@ -166,14 +163,14 @@ class DayCareView extends View {
                 pokemonButtonSetup()
         );
 
-        Button[] fakePartyButtons = partyPanel.getButtons(buttonSpacing, Trainer.MAX_POKEMON + 1, 1);
-        DrawPanel partyLabelPanel = labelPanelSetup("Party", fakePartyButtons[0]);
+        DrawPanel[] fakePartyPanels = new DrawLayout(partyPanel, Trainer.MAX_POKEMON + 1, 1, buttonSpacing).getPanels();
+        DrawPanel partyLabelPanel = labelPanelSetup("Party", fakePartyPanels[0]);
 
         partyButtons = new Button[Trainer.MAX_POKEMON];
         for (int i = 0; i < partyButtons.length; i++) {
             final int index = i; // Silly Java, Trix are for kids
             partyButtons[i] = buttons[i] = new Button(
-                    fakePartyButtons[i + 1].panel(),
+                    fakePartyPanels[i + 1],
                     ButtonTransitions.getBasicTransitions(
                             i, Trainer.MAX_POKEMON, 1, 0,
                             new ButtonTransitions()
@@ -223,9 +220,9 @@ class DayCareView extends View {
         ).add(movePanels);
     }
 
-    private DrawPanel labelPanelSetup(String label, Button fakeButton) {
-        return new DrawPanel(fakeButton).withNoBackground()
-                                        .withLabel(label, 24);
+    private DrawPanel labelPanelSetup(String label, DrawPanel panel) {
+        return panel.withNoBackground()
+                    .withLabel(label, 24);
     }
 
     private ButtonPanelSetup textButtonSetup(String text, Color color) {

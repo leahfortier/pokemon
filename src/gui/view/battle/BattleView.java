@@ -8,6 +8,7 @@ import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.button.Button;
 import draw.panel.BasicPanels;
+import draw.panel.DrawLayout;
 import draw.panel.DrawPanel;
 import draw.panel.WrapPanel;
 import gui.view.View;
@@ -91,8 +92,8 @@ public class BattleView extends View {
         buttonsPanel.drawBackground(g);
     }
 
-    public Button[] createPanelButtons(int numOptions) {
-        return buttonsPanel.getButtons(BUTTON_WIDTH, BUTTON_HEIGHT, 2, numOptions/2);
+    public DrawLayout createPanelLayout(int numOptions) {
+        return new DrawLayout(buttonsPanel, 2, numOptions/2, BUTTON_WIDTH, BUTTON_HEIGHT);
     }
 
     public void setBattle(Battle b) {

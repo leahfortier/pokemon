@@ -4,6 +4,7 @@ import draw.DrawUtils;
 import draw.button.Button;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
+import draw.panel.DrawLayout;
 import draw.panel.DrawPanel;
 import item.ItemNamesies;
 import main.Game;
@@ -20,17 +21,13 @@ public class MartLayout extends BagLayout {
     public MartLayout(boolean includeQuantity) {
         super(includeQuantity);
 
-        Button[] fakeButtons = super.leftPanel.getButtons(10, 6, 1);
-        playerMoneyPanel = new DrawPanel(fakeButtons[0])
-                .withBlackOutline()
-                .withLabelSize(18);
-        inBagPanel = new DrawPanel(fakeButtons[1])
-                .withBlackOutline()
-                .withLabelSize(18);
-        totalAmountPanel = new DrawPanel(fakeButtons[4])
-                .withBlackOutline()
-                .withLabelSize(18);
-        confirmPanel = new DrawPanel(fakeButtons[5]);
+        DrawPanel[] leftPanels = new DrawLayout(super.leftPanel, 6, 1, 10)
+                .withDrawSetup(panel -> panel.withBlackOutline().withLabelSize(18))
+                .getPanels();
+        playerMoneyPanel = leftPanels[0];
+        inBagPanel = leftPanels[1];
+        totalAmountPanel = leftPanels[4];
+        confirmPanel = leftPanels[5];
 
         DrawPanel amountLeftButton = selectedButtonPanels[0];
         DrawPanel amountRightButton = selectedButtonPanels[2];

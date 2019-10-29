@@ -9,7 +9,6 @@ import draw.button.Button;
 import draw.button.ButtonPanel;
 import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
-import draw.button.ButtonTransitions;
 import main.Global;
 import map.Direction;
 import pokemon.active.PartyPokemon;
@@ -398,106 +397,6 @@ public class DrawPanel implements Panel {
         }
 
         blackOutline(g);
-    }
-
-    public Button[] getButtons(int spacing, int numRows, int numCols) {
-        return this.getButtons(spacing, numRows, numCols, 0, null, null);
-    }
-
-    public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex, ButtonTransitions defaultTransitions) {
-        return this.getButtons(spacing, numRows, numCols, numRows, numCols, startIndex, defaultTransitions, null);
-    }
-
-    public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex, ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
-        return this.getButtons(spacing, numRows, numCols, startIndex, defaultTransitions, indexAction, null);
-    }
-
-    public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex,
-                               ButtonTransitions defaultTransitions, ButtonIndexAction indexAction, PanelIndexSetup indexSetup) {
-        return this.getButtons(spacing, numRows, numCols, numRows, numCols, startIndex, defaultTransitions, indexAction, indexSetup);
-    }
-
-    public Button[] getButtons(int spacing, int numSpaceRows, int numSpaceCols, int numButtonRows, int numButtonCols, int startIndex,
-                               ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
-        return this.getButtons(spacing, numSpaceRows, numSpaceCols, numButtonRows, numButtonCols, startIndex, defaultTransitions, indexAction, null);
-    }
-
-    public Button[] getButtons(int spacing, int numSpaceRows, int numSpaceCols, int numButtonRows, int numButtonCols, int startIndex,
-                               ButtonTransitions defaultTransitions, ButtonIndexAction indexAction, PanelIndexSetup indexSetup) {
-        int borderSize = this.getBorderSize();
-        int buttonWidth = (this.width - 2*borderSize - (numSpaceCols + 1)*spacing)/numSpaceCols;
-        int buttonHeight = (this.height - 2*borderSize - (numSpaceRows + 1)*spacing)/numSpaceRows;
-
-        return this.getButtons(buttonWidth, buttonHeight, numSpaceRows, numSpaceCols, numButtonRows, numButtonCols, startIndex, defaultTransitions, indexAction, indexSetup);
-    }
-
-    public Button[] getButtons(int buttonWidth, int buttonHeight, int numRows, int numCols, ButtonIndexAction indexAction) {
-        return this.getButtons(buttonWidth, buttonHeight, numRows, numCols, numRows, numCols, 0, null, indexAction);
-    }
-
-    public Button[] getButtons(int buttonWidth, int buttonHeight, int numRows, int numCols) {
-        return this.getButtons(buttonWidth, buttonHeight, numRows, numCols, numRows, numCols, 0, null, null);
-    }
-
-    public Button[] getButtons(int buttonWidth, int buttonHeight, int numButtonRows, int numButtonCols, int startValue,
-                               ButtonTransitions defaultTransitions, ButtonIndexAction indexAction, PanelIndexSetup indexSetup) {
-        return this.getButtons(buttonWidth, buttonHeight,
-                               numButtonRows, numButtonCols,
-                               numButtonRows, numButtonCols,
-                               startValue,
-                               defaultTransitions, indexAction, indexSetup
-        );
-    }
-
-    public Button[] getButtons(int buttonWidth, int buttonHeight, int numSpaceRows, int numSpaceCols,
-                               int numButtonRows, int numButtonCols, int startValue,
-                               ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
-        return this.getButtons(buttonWidth, buttonHeight,
-                               numSpaceRows, numSpaceCols,
-                               numButtonRows, numButtonCols,
-                               startValue,
-                               defaultTransitions, indexAction, null
-        );
-    }
-
-    public Button[] getButtons(
-            int buttonWidth, int buttonHeight,
-            int numSpaceRows, int numSpaceCols,
-            int numButtonRows, int numButtonCols,
-            int startValue,
-            ButtonTransitions defaultTransitions,
-            ButtonIndexAction indexAction,
-            PanelIndexSetup indexSetup) {
-        int borderSize = this.getBorderSize();
-
-        int horizontalSpacing = this.width - 2*borderSize - numSpaceCols*buttonWidth;
-        int verticalSpacing = this.height - 2*borderSize - numSpaceRows*buttonHeight;
-
-        int xSpacing = horizontalSpacing/(numSpaceCols + 1);
-        int ySpacing = verticalSpacing/(numSpaceRows + 1);
-
-        Button[] buttons = new Button[numButtonRows*numButtonCols];
-        for (int row = 0, index = 0; row < numButtonRows; row++) {
-            for (int col = 0; col < numButtonCols; col++, index++) {
-                // Setup default transitions
-                ButtonTransitions transitions = ButtonTransitions.getBasicTransitions(
-                        index, numButtonRows, numButtonCols, startValue, defaultTransitions
-                );
-
-                // Create the button with all them specs
-                buttons[index] = new Button(
-                        this.x + borderSize + xSpacing*(col + 1) + buttonWidth*col,
-                        this.y + borderSize + ySpacing*(row + 1) + buttonHeight*row,
-                        buttonWidth,
-                        buttonHeight,
-                        transitions,
-                        ButtonIndexAction.getPressAction(indexAction, index),
-                        PanelIndexSetup.getPanelSetup(indexSetup, index)
-                );
-            }
-        }
-
-        return buttons;
     }
 
     // TODO: This looks like it's more for vertical space but the name sounds like horizontal
