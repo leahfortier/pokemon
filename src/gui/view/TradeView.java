@@ -96,13 +96,15 @@ public class TradeView extends View {
         )
                 .withBlackOutline();
 
-        this.buttons = new ButtonList(BasicPanels.getFullMessagePanelButtons(10, 2, NUM_COLS));
-        this.buttons.forEach(button -> button.panel()
-                                             .skipInactive()
-                                             .withTransparentBackground()
-                                             .withTransparentCount(2)
-                                             .withBlackOutline()
-                                             .withLabelSize(20));
+        this.buttons = new ButtonList(
+                BasicPanels.getFullMessagePanelLayout(2, NUM_COLS, 10)
+                           .withButtonSetup(panel -> panel.skipInactive()
+                                                          .withTransparentBackground()
+                                                          .withTransparentCount(2)
+                                                          .withBlackOutline()
+                                                          .withLabelSize(20))
+                           .getButtons()
+        );
 
         this.cancelButton = buttons.get(buttons.size() - 1)
                                    .setup(panel -> panel.withLabel("Cancel")
