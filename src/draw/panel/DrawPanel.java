@@ -400,19 +400,6 @@ public class DrawPanel implements Panel {
         blackOutline(g);
     }
 
-    public Button[] getButtons(int spacing, int numSpaceRows, int numSpaceCols, int numButtonRows, int numButtonCols, int startIndex,
-                               ButtonTransitions defaultTransitions, ButtonIndexAction indexAction, PanelIndexSetup indexSetup) {
-        int borderSize = this.getBorderSize();
-        int buttonWidth = (this.width - 2*borderSize - (numSpaceCols + 1)*spacing)/numSpaceCols;
-        int buttonHeight = (this.height - 2*borderSize - (numSpaceRows + 1)*spacing)/numSpaceRows;
-
-        return this.getButtons(buttonWidth, buttonHeight, numSpaceRows, numSpaceCols, numButtonRows, numButtonCols, startIndex, defaultTransitions, indexAction, indexSetup);
-    }
-
-    public Button[] getButtons(int buttonWidth, int buttonHeight, int numRows, int numCols, ButtonIndexAction indexAction) {
-        return this.getButtons(buttonWidth, buttonHeight, numRows, numCols, numRows, numCols, 0, null, indexAction);
-    }
-
     public Button[] getButtons(int buttonWidth, int buttonHeight, int numRows, int numCols) {
         return this.getButtons(buttonWidth, buttonHeight, numRows, numCols, numRows, numCols, 0, null, null);
     }

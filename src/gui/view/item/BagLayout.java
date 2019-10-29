@@ -7,6 +7,7 @@ import draw.button.Button;
 import draw.button.ButtonPanel;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
+import draw.panel.DrawLayout;
 import draw.panel.DrawLayout.ButtonIndexAction;
 import draw.panel.DrawPanel;
 import draw.panel.ItemPanel;
@@ -135,20 +136,16 @@ public class BagLayout {
 
     public Button[] getItemButtons(int startIndex,
                                    ButtonTransitions defaultTransitions,
-                                   DrawPanel.ButtonIndexAction indexAction) {
-        return itemsPanel.getButtons(
-                5,
-                NUM_ITEM_ROWS + 1,
-                NUM_ITEM_COLS,
-                NUM_ITEM_ROWS,
-                NUM_ITEM_COLS,
-                startIndex,
-                defaultTransitions,
-                indexAction,
-                (index, panel) -> panel.withBackgroundColor(Color.WHITE)
-                                       .withBorderPercentage(0)
-                                       .withBlackOutline()
-        );
+                                   ButtonIndexAction indexAction) {
+        return new DrawLayout(itemsPanel, NUM_ITEM_ROWS, NUM_ITEM_COLS, 5)
+                .withMissingBottomRow()
+                .withStartIndex(startIndex)
+                .withDefaultTransitions(defaultTransitions)
+                .withPressIndex(indexAction)
+                .withDrawSetup(panel -> panel.withBackgroundColor(Color.WHITE)
+                                             .withBorderPercentage(0)
+                                             .withBlackOutline())
+                .getButtons();
     }
 
     public Button[] getTabButtons(int startIndex, int upIndex, int downIndex, ButtonIndexAction indexAction) {

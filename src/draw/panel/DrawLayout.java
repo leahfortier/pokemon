@@ -46,8 +46,8 @@ public class DrawLayout {
         this.buttonSetup = buttonPanel -> {};
     }
 
-    public DrawLayout withMissingRows(int missingRows) {
-        this.missingRows = missingRows;
+    public DrawLayout withMissingBottomRow() {
+        this.missingRows = 1;
         return this;
     }
 

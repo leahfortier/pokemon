@@ -42,6 +42,10 @@ import java.util.List;
 public class MoveRelearnerView extends View {
     private static final int MOVES_PER_PAGE = 8;
     private static final int NUM_BUTTONS = MOVES_PER_PAGE + Trainer.MAX_POKEMON + 4;
+    private static final int MOVES = 0;
+    private static final int LAST_MOVE = MOVES + MOVES_PER_PAGE - 1;
+    private static final int PARTY = MOVES_PER_PAGE;
+    private static final int LAST_PARTY = PARTY + Trainer.MAX_POKEMON - 1;
     private static final int LEARN_MOVE = NUM_BUTTONS - 1;
     private static final int RETURN = NUM_BUTTONS - 2;
     private static final int MOVES_RIGHT_ARROW = NUM_BUTTONS - 3;
@@ -120,19 +124,17 @@ public class MoveRelearnerView extends View {
                 .withTransparentCount(2)
                 .withBorderPercentage(0);
 
-        moveButtons = movesPanel.getButtons(
-                10,
-                MOVES_PER_PAGE + 1, 1,
-                MOVES_PER_PAGE, 1,
-                0,
-                new ButtonTransitions().right(MOVES_PER_PAGE).up(MOVES_LEFT_ARROW).left(MOVES_PER_PAGE).down(MOVES_RIGHT_ARROW),
-                index -> selectedMove = learnableMoves.isEmpty() ? null : GeneralUtils.getPageValue(learnableMoves, pageNum, MOVES_PER_PAGE, index).getNewAttack(),
-                (index, panel) -> panel.withBlackOutline().withFullTransparency()
-        );
+        moveButtons = new DrawLayout(movesPanel, MOVES_PER_PAGE, 1, 10)
+                .withMissingBottomRow()
+                .withStartIndex(MOVES)
+                .withDefaultTransitions(new ButtonTransitions().right(PARTY).up(MOVES_LEFT_ARROW).left(PARTY).down(MOVES_RIGHT_ARROW))
+                .withPressIndex(index -> selectedMove = learnableMoves.isEmpty() ? null : GeneralUtils.getPageValue(learnableMoves, pageNum, MOVES_PER_PAGE, index).getNewAttack())
+                .withDrawSetup(panel -> panel.withBlackOutline().withFullTransparency())
+                .getButtons();
 
         pokemonButtons = new DrawLayout(partyPanel, Trainer.MAX_POKEMON, 1, 15)
-                .withStartIndex(MOVES_PER_PAGE)
-                .withDefaultTransitions(new ButtonTransitions().right(0).up(RETURN).left(0).down(RETURN))
+                .withStartIndex(PARTY)
+                .withDefaultTransitions(new ButtonTransitions().right(MOVES).up(RETURN).left(MOVES).down(RETURN))
                 .withPressIndex(this::setSelectedPokemon)
                 .withButtonSetup(panel -> panel.withBlackOutline()
                                                .withTransparentCount(2)
@@ -158,8 +160,7 @@ public class MoveRelearnerView extends View {
                 partyPanel.bottomY() + spacing,
                 (partyPanel.width - spacing)/2,
                 buttonHeight,
-                ButtonHoverAction.BOX,
-                new ButtonTransitions().right(RETURN).up(MOVES_PER_PAGE + Trainer.MAX_POKEMON - 1).left(RETURN).down(MOVES_PER_PAGE),
+                new ButtonTransitions().right(RETURN).up(LAST_PARTY).left(RETURN).down(PARTY),
                 () -> learnMovePanel = new LearnMovePanel((ActivePokemon)team.get(selectedPokemon), new Move(selectedMove)),
                 textButtonSetup("Learn!", new Color(123, 213, 74))
         );
@@ -169,8 +170,7 @@ public class MoveRelearnerView extends View {
                 learnMoveButton.y,
                 learnMoveButton.width,
                 learnMoveButton.height,
-                ButtonHoverAction.BOX,
-                new ButtonTransitions().right(LEARN_MOVE).up(MOVES_PER_PAGE + Trainer.MAX_POKEMON - 1).left(LEARN_MOVE).down(MOVES_PER_PAGE),
+                new ButtonTransitions().right(LEARN_MOVE).up(LAST_PARTY).left(LEARN_MOVE).down(PARTY),
                 ButtonPressAction.getExitAction(),
                 textButtonSetup("Return", Color.YELLOW)
         );
@@ -184,7 +184,7 @@ public class MoveRelearnerView extends View {
                 arrowWidth,
                 arrowHeight,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(MOVES_RIGHT_ARROW).up(MOVES_PER_PAGE - 1).left(MOVES_PER_PAGE).down(RETURN),
+                new ButtonTransitions().right(MOVES_RIGHT_ARROW).up(LAST_MOVE).left(PARTY).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         ).asArrow(Direction.LEFT);
 
@@ -194,13 +194,13 @@ public class MoveRelearnerView extends View {
                 arrowWidth,
                 arrowHeight,
                 ButtonHoverAction.BOX,
-                new ButtonTransitions().right(MOVES_PER_PAGE).up(MOVES_PER_PAGE - 1).left(MOVES_LEFT_ARROW).down(RETURN),
+                new ButtonTransitions().right(PARTY).up(LAST_MOVE).left(MOVES_LEFT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         ).asArrow(Direction.RIGHT);
 
         Button[] buttons = new Button[NUM_BUTTONS];
-        System.arraycopy(moveButtons, 0, buttons, 0, moveButtons.length);
-        System.arraycopy(pokemonButtons, 0, buttons, MOVES_PER_PAGE, pokemonButtons.length);
+        System.arraycopy(moveButtons, 0, buttons, MOVES, moveButtons.length);
+        System.arraycopy(pokemonButtons, 0, buttons, PARTY, pokemonButtons.length);
         buttons[LEARN_MOVE] = learnMoveButton;
         buttons[RETURN] = returnButton;
         buttons[MOVES_LEFT_ARROW] = movesLeftButton;
