@@ -159,7 +159,6 @@ Other random things:
     MedalView is super broken right now and not worth handling in this branch
     PC View should be able to hover over moves and change stats panel into move description similar to PartyView
     maybe add setActive things to Button and have a similar buttonList.updateActive() type thing
-    Pokedex flavor text should have startX at image panel
     noticed NewPokemonView is using %-10s for the name but this is no longer the maximum name length so worth just taking another look at probably
     should probably rewrite the numSpaceRows/Cols in the getButtons shit to be like missingRows and whatnot and default to zero
     ButtonList class should just take the size in the constructor and be able to add buttons and shit and have methods to add array subsets because I hate the arrayCopy bs
@@ -176,3 +175,4 @@ Other random things:
     I think a lot of the stuff that's happening in drawSetup should be called from update instead of draw so only called where there's a change
     something weird about Comfey's party tile and fails when trimming
     text wrapping should allow having a different startX for the first line so you can have a label in a different size (ability name and description for example)
+    MoveUseItem view in Bag view doesn't look right and the text name text definitely doesn't looked centered height-wise

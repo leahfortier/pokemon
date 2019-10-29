@@ -61,18 +61,18 @@ public class DrawLayout {
         return this;
     }
 
-    public DrawLayout withIndexAction(ButtonIndexAction indexAction) {
+    public DrawLayout withPressIndex(ButtonIndexAction indexAction) {
         this.indexAction = indexAction;
         return this;
     }
 
-    public DrawLayout withDrawSetup(DrawPanelSetup panelSetup) {
-        this.drawSetup = panelSetup;
+    public DrawLayout withDrawSetup(DrawPanelSetup drawSetup) {
+        this.drawSetup = this.drawSetup.add(drawSetup);
         return this;
     }
 
     public DrawLayout withButtonSetup(ButtonPanelSetup buttonSetup) {
-        this.buttonSetup = buttonSetup;
+        this.buttonSetup = this.buttonSetup.add(buttonSetup);
         return this;
     }
 
@@ -145,12 +145,19 @@ public class DrawLayout {
     }
 
     @FunctionalInterface
-    public interface DrawPanelSetup {
-        void setup(DrawPanel panel);
+    public interface ButtonIndexAction {
+        void pressButton(int index);
     }
 
     @FunctionalInterface
-    public interface ButtonIndexAction {
-        void pressButton(int index);
+    public interface DrawPanelSetup {
+        void setup(DrawPanel panel);
+
+        default DrawPanelSetup add(DrawPanelSetup next) {
+            return panel -> {
+                this.setup(panel);
+                next.setup(panel);
+            };
+        }
     }
 }

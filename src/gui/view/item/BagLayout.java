@@ -7,9 +7,8 @@ import draw.button.Button;
 import draw.button.ButtonPanel;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
+import draw.panel.DrawLayout.ButtonIndexAction;
 import draw.panel.DrawPanel;
-import draw.panel.DrawPanel.ButtonIndexAction;
-import draw.panel.DrawPanel.PanelIndexSetup;
 import draw.panel.ItemPanel;
 import draw.panel.WrapPanel.WrapMetrics;
 import gui.TileSet;
@@ -20,7 +19,6 @@ import item.bag.BagCategory;
 import main.Game;
 import main.Global;
 import map.Direction;
-import trainer.Trainer;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.Point;
@@ -137,7 +135,7 @@ public class BagLayout {
 
     public Button[] getItemButtons(int startIndex,
                                    ButtonTransitions defaultTransitions,
-                                   ButtonIndexAction indexAction) {
+                                   DrawPanel.ButtonIndexAction indexAction) {
         return itemsPanel.getButtons(
                 5,
                 NUM_ITEM_ROWS + 1,
@@ -182,21 +180,6 @@ public class BagLayout {
         for (int i = 0; i < CATEGORIES.length; i++) {
             tabButtons[i].panel().withTabOutlines(i, selectedTab.ordinal());
         }
-    }
-
-    public Button[] getLeftButtons(int startIndex, ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
-        return getLeftButtons(startIndex, defaultTransitions, indexAction, null);
-    }
-
-    public Button[] getLeftButtons(int startIndex, ButtonTransitions defaultTransitions,
-                                   ButtonIndexAction indexAction, PanelIndexSetup panelSetup) {
-        PanelIndexSetup baseSetup = (index, panel) -> panel.withTransparentCount(2)
-                                                           .withBorderPercentage(15)
-                                                           .withBlackOutline();
-        return leftPanel.getButtons(
-                10, Trainer.MAX_POKEMON, 1, startIndex, defaultTransitions,
-                indexAction, PanelIndexSetup.add(baseSetup, panelSetup)
-        );
     }
 
     public WrapMetrics drawSelectedItem(Graphics g, ItemNamesies selectedItem) {

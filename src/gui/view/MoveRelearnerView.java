@@ -13,6 +13,7 @@ import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
+import draw.panel.DrawLayout;
 import draw.panel.DrawPanel;
 import draw.panel.LearnMovePanel;
 import draw.panel.MovePanel;
@@ -129,18 +130,15 @@ public class MoveRelearnerView extends View {
                 (index, panel) -> panel.withBlackOutline().withFullTransparency()
         );
 
-        pokemonButtons = partyPanel.getButtons(
-                15,
-                Trainer.MAX_POKEMON,
-                1,
-                MOVES_PER_PAGE,
-                new ButtonTransitions().right(0).up(RETURN).left(0).down(RETURN),
-                this::setSelectedPokemon,
-                (index, panel) -> panel.withBlackOutline()
-                                       .withTransparentCount(2)
-                                       .withBorderPercentage(15)
-                                       .withLabelSize(22)
-        );
+        pokemonButtons = new DrawLayout(partyPanel, Trainer.MAX_POKEMON, 1, 15)
+                .withStartIndex(MOVES_PER_PAGE)
+                .withDefaultTransitions(new ButtonTransitions().right(0).up(RETURN).left(0).down(RETURN))
+                .withPressIndex(this::setSelectedPokemon)
+                .withButtonSetup(panel -> panel.withBlackOutline()
+                                               .withTransparentCount(2)
+                                               .withBorderPercentage(15)
+                                               .withLabelSize(22))
+                .getButtons();
 
         // Panels that highlight the currently selected Pokemon with an outline
         int selectedSpacing = 5;

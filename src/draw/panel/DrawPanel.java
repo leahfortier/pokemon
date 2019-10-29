@@ -400,24 +400,6 @@ public class DrawPanel implements Panel {
         blackOutline(g);
     }
 
-    public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex, ButtonTransitions defaultTransitions) {
-        return this.getButtons(spacing, numRows, numCols, numRows, numCols, startIndex, defaultTransitions, null);
-    }
-
-    public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex, ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
-        return this.getButtons(spacing, numRows, numCols, startIndex, defaultTransitions, indexAction, null);
-    }
-
-    public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex,
-                               ButtonTransitions defaultTransitions, ButtonIndexAction indexAction, PanelIndexSetup indexSetup) {
-        return this.getButtons(spacing, numRows, numCols, numRows, numCols, startIndex, defaultTransitions, indexAction, indexSetup);
-    }
-
-    public Button[] getButtons(int spacing, int numSpaceRows, int numSpaceCols, int numButtonRows, int numButtonCols, int startIndex,
-                               ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
-        return this.getButtons(spacing, numSpaceRows, numSpaceCols, numButtonRows, numButtonCols, startIndex, defaultTransitions, indexAction, null);
-    }
-
     public Button[] getButtons(int spacing, int numSpaceRows, int numSpaceCols, int numButtonRows, int numButtonCols, int startIndex,
                                ButtonTransitions defaultTransitions, ButtonIndexAction indexAction, PanelIndexSetup indexSetup) {
         int borderSize = this.getBorderSize();
