@@ -5,13 +5,13 @@ import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
-import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
 import draw.button.ButtonPanel;
 import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
+import draw.panel.DrawLayout;
 import draw.panel.DrawPanel;
 import draw.panel.PanelList;
 import input.InputControl;
@@ -119,6 +119,8 @@ class PCView extends View {
         ).withFullTransparency()
          .withBlackOutline();
 
+        int pokemonButtonSize = 40;
+
         Button[] buttons = new Button[NUM_BUTTONS];
         boxButtons = new Button[PC.BOX_HEIGHT][PC.BOX_WIDTH];
         for (int i = 0, k = 0; i < PC.BOX_HEIGHT; i++) {
@@ -127,7 +129,7 @@ class PCView extends View {
                 final int col = j;
 
                 buttons[k] = boxButtons[i][j] = new Button(
-                        60 + 54*j, 96 + 54*i, 40, 40, ButtonHoverAction.BOX,
+                        60 + 54*j, 96 + 54*i, pokemonButtonSize, pokemonButtonSize,
                         new ButtonTransitions()
                                 .right(j == PC.BOX_WIDTH - 1 ? SWITCH : k + 1)
                                 .up(i == 0 ? PARTY + j : k - PC.BOX_WIDTH)
@@ -149,25 +151,22 @@ class PCView extends View {
             }
         }
 
-        partyButtons = partyPanel.getButtons(40, 40, 1, Trainer.MAX_POKEMON, PARTY,
-                                             new ButtonTransitions()
-                                                     .right(RETURN)
-                                                     .up(RIGHT_ARROW)
-                                                     .left(RETURN)
-                                                     .down(0),
-                                             index -> {
-                                                 if (party && depositClicked) {
-                                                     depositClicked = false;
-                                                 } else if (switchClicked) {
-                                                     pc.switchPokemon(selected, index);
-                                                     switchClicked = false;
-                                                 } else {
-                                                     selected = Game.getPlayer().getTeam().get(index);
-                                                     party = true;
-                                                 }
-                                             },
-                                             (index, panel) -> panel.skipInactive()
-        );
+        partyButtons = new DrawLayout(partyPanel, 1, Trainer.MAX_POKEMON, pokemonButtonSize, pokemonButtonSize)
+                .withStartIndex(PARTY)
+                .withDefaultTransitions(new ButtonTransitions().right(RETURN).up(RIGHT_ARROW).left(RETURN).down(0))
+                .withPressIndex(index -> {
+                    if (party && depositClicked) {
+                        depositClicked = false;
+                    } else if (switchClicked) {
+                        pc.switchPokemon(selected, index);
+                        switchClicked = false;
+                    } else {
+                        selected = Game.getPlayer().getTeam().get(index);
+                        party = true;
+                    }
+                })
+                .withButtonSetup(ButtonPanel::skipInactive)
+                .getButtons();
 
         buttons[LEFT_ARROW] = leftButton = new Button(
                 140, 418, 35, 20,

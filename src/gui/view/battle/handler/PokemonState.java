@@ -9,6 +9,7 @@ import draw.button.Button;
 import draw.button.ButtonList;
 import draw.button.ButtonPanel;
 import draw.button.ButtonTransitions;
+import draw.panel.DrawLayout;
 import draw.panel.DrawPanel;
 import gui.TileSet;
 import gui.view.battle.BattleView;
@@ -76,13 +77,11 @@ public class PokemonState implements VisualStateHandler {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        Button[] fakeMoveButtons = movesPanel.getButtons(125, 40, MoveList.MAX_MOVES, 1);
-        this.movePanels = new DrawPanel[MoveList.MAX_MOVES];
-        for (int i = 0; i < movePanels.length; i++) {
-            this.movePanels[i] = new DrawPanel(fakeMoveButtons[i]).withTransparentCount(2)
-                                                                  .withBorderPercentage(15)
-                                                                  .withBlackOutline();
-        }
+        movePanels = new DrawLayout(movesPanel, MoveList.MAX_MOVES, 1, 125, 40)
+                .withDrawSetup(panel -> panel.withTransparentCount(2)
+                                             .withBorderPercentage(15)
+                                             .withBlackOutline())
+                .getPanels();
 
         int switchButtonHeight = 36;
         switchButton = new Button(
