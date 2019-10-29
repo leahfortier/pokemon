@@ -34,7 +34,7 @@ public class BasicPanels {
     }
 
     public static Button[] getFullMessagePanelButtons(int spacing, int numRows, int numCols) {
-        return fullMessagePanel.getButtons(spacing, numRows, numCols);
+        return new DrawLayout(fullMessagePanel, numRows, numCols, spacing).getButtons();
     }
 
     public static void drawCanvasPanel(Graphics g) {

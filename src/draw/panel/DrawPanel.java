@@ -400,10 +400,6 @@ public class DrawPanel implements Panel {
         blackOutline(g);
     }
 
-    public Button[] getButtons(int spacing, int numRows, int numCols) {
-        return this.getButtons(spacing, numRows, numCols, 0, null, null);
-    }
-
     public Button[] getButtons(int spacing, int numRows, int numCols, int startIndex, ButtonTransitions defaultTransitions) {
         return this.getButtons(spacing, numRows, numCols, numRows, numCols, startIndex, defaultTransitions, null);
     }

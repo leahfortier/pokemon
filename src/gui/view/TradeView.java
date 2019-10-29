@@ -6,6 +6,7 @@ import draw.DrawUtils;
 import draw.button.Button;
 import draw.button.ButtonList;
 import draw.panel.BasicPanels;
+import draw.panel.DrawLayout;
 import draw.panel.DrawPanel;
 import draw.panel.PanelList;
 import draw.panel.WrapPanel;
@@ -128,15 +129,13 @@ public class TradeView extends View {
 
     // Split the trade panel into two horizontal subpanels (top for trade label, bottom for pokemon label)
     private Entry<DrawPanel, DrawPanel> createTradeLabelPanels(DrawPanel fullTradePanel, String label) {
-        Button[] fakeButtons = fullTradePanel.getButtons(0, 2, 1);
+        DrawPanel[] splitPanels = new DrawLayout(fullTradePanel, 2, 1, 0).getPanels();
 
-        DrawPanel labelPanel = new DrawPanel(fakeButtons[0])
-                .withNoBackground()
-                .withLabel(label, 22, Alignment.LEFT);
+        DrawPanel labelPanel = splitPanels[0].withNoBackground()
+                                             .withLabel(label, 22, Alignment.LEFT);
 
-        DrawPanel pokemonPanel = new DrawPanel(fakeButtons[1])
-                .withNoBackground()
-                .withLabelSize(20);
+        DrawPanel pokemonPanel = splitPanels[1].withNoBackground()
+                                               .withLabelSize(20);
 
         return new SimpleEntry<>(labelPanel, pokemonPanel);
     }
