@@ -7,20 +7,19 @@ import draw.button.ButtonTransitions;
 public class DrawLayout {
     private final DrawPanel outerPanel;
 
+    private final int numRows;
+    private final int numCols;
+
     private final int spacing;
     private final int width;
     private final int height;
 
-    private final int numRows;
-    private final int numCols;
-
     private int missingRows;
-
     private int startIndex;
     private ButtonTransitions defaultTransitions;
     private ButtonIndexAction indexAction;
-    private ButtonPanelSetup buttonSetup;
     private DrawPanelSetup drawSetup;
+    private ButtonPanelSetup buttonSetup;
 
     public DrawLayout(DrawPanel panel, int numRows, int numCols, int spacing) {
         this(panel, numRows, numCols, spacing, -1, -1);
@@ -37,6 +36,14 @@ public class DrawLayout {
         this.spacing = spacing;
         this.width = width;
         this.height = height;
+
+        // Default values
+        this.missingRows = 0;
+        this.startIndex = 0;
+        this.defaultTransitions = null;
+        this.indexAction = index -> {};
+        this.drawSetup = drawPanel -> {};
+        this.buttonSetup = buttonPanel -> {};
     }
 
     public DrawLayout withMissingRows(int missingRows) {
@@ -91,7 +98,7 @@ public class DrawLayout {
         int xSpacing = horizontalSpacing/(numSpaceCols + 1);
         int ySpacing = verticalSpacing/(numSpaceRows + 1);
 
-        DrawPanel[] panels = new DrawPanel[numRows*numRows];
+        DrawPanel[] panels = new DrawPanel[numRows*numCols];
         for (int row = 0, index = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++, index++) {
                 panels[index] = new DrawPanel(
