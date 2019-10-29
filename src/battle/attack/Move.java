@@ -80,6 +80,10 @@ public class Move implements Serializable {
         return maxPP;
     }
 
+    public String getPPString() {
+        return this.getPP() + "/" + this.getMaxPP();
+    }
+
     public int reducePP(int reduce) {
         return pp - (pp = Math.max(0, pp - reduce));
     }
