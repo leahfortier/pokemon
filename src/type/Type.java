@@ -5,6 +5,7 @@ import util.file.FileIO;
 import util.file.Folder;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.function.Supplier;
 
@@ -29,6 +30,8 @@ public enum Type {
     FAIRY(17, "Fairy", () -> TypeAdvantage.FAIRY, new Color(248, 179, 249), -1),
     NO_TYPE(18, "Unknown", () -> TypeAdvantage.NO_TYPE, new Color(255, 255, 255, 0), -1);
 
+    public static final Dimension IMAGE_SIZE = new Dimension(32, 14);
+
     private final int index;
     private final String name;
     private final Supplier<TypeAdvantage> advantageGetter;
@@ -43,8 +46,12 @@ public enum Type {
         this.color = color;
         this.hiddenIndex = hiddenIndex;
 
-        String imageName = "Type" + name;
+        String imageName = this.getImageName();
         this.image = FileIO.readImage(Folder.TYPE_TILES + imageName);
+    }
+
+    public String getImageName() {
+        return "Type" + name;
     }
 
     public int getIndex() {

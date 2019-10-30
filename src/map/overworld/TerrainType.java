@@ -92,6 +92,10 @@ public enum TerrainType {
         return Game.getData().getOpponentTerrainTiles().getTile(this.imageName);
     }
 
+    public String getImageName() {
+        return this.imageName;
+    }
+
     public boolean isInterior() {
         // Make this a field
         return this == BUILDING;

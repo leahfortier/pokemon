@@ -3,6 +3,7 @@ package gui.view.item;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import draw.Alignment;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
@@ -278,22 +279,34 @@ public class BagView extends View {
         for (int i = 0; i < moveList.size(); i++) {
             Move move = moveList.get(i);
             Attack attack = move.getAttack();
-            Button moveButton = moveButtons[i];
+            ButtonPanel panel = moveButtons[i].panel();
 
-            g.translate(moveButton.x, moveButton.y);
+            BufferedImage typeImage = attack.getActualType().getImage();
+            BufferedImage categoryImage = attack.getCategory().getImage();
 
-            DrawPanel movePanel = new DrawPanel(0, 0, moveButton.width, moveButton.height);
+            // Spacing is one space of the name font size
+            FontMetrics.setBlackFont(g, 18);
+            int spacing = FontMetrics.getTextWidth(g);
+            int fullSpacing = spacing + panel.getBorderSize();
 
-            g.drawImage(attack.getActualType().getImage(), 254, 14, null);
-            g.drawImage(attack.getCategory().getImage(), 254, 33, null);
+            // Name is one space from border, images are one space from right border, PP is one space from images
+            int startX = panel.x + fullSpacing;
+            int rightX = panel.rightX() - fullSpacing;
+            int ppRightX = rightX - typeImage.getWidth() - spacing;
+            int centerY = panel.centerY();
+
+            // Half of the image height spaced in between the two images
+            int imageSpacing = typeImage.getHeight()/2;
+            int topImageY = centerY - imageSpacing/2 - typeImage.getHeight();
+            int bottomImageY = centerY + imageSpacing/2;
+
+            TextUtils.drawCenteredHeightString(g, attack.getName(), startX, centerY);
 
             FontMetrics.setBlackFont(g, 14);
-            TextUtils.drawCenteredHeightString(g, "PP: " + move.getPPString(), 166, movePanel.centerY());
+            TextUtils.drawCenteredHeightString(g, "PP: " + move.getPPString(), ppRightX, centerY, Alignment.RIGHT);
 
-            FontMetrics.setBlackFont(g, 20);
-            g.drawString(attack.getName(), 20, 38);
-
-            g.translate(-moveButton.x, -moveButton.y);
+            ImageUtils.drawRightAlignedImage(g, typeImage, rightX, topImageY);
+            ImageUtils.drawRightAlignedImage(g, categoryImage, rightX, bottomImageY);
         }
     }
 

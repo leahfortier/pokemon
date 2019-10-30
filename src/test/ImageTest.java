@@ -20,7 +20,6 @@ import trainer.player.medal.Medal;
 import type.Type;
 import util.file.FileIO;
 import util.file.Folder;
-import util.string.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.Dimension;
@@ -65,11 +64,11 @@ public class ImageTest extends BaseTest {
         checkExists(Folder.POKEMON_TILES, "substitute-back");
 
         for (MoveCategory category : MoveCategory.values()) {
-            checkExists(Folder.ATTACK_TILES, "MoveCategory" + StringUtils.properCase(category.name().toLowerCase()));
+            checkExists(Folder.ATTACK_TILES, category.getImageName());
         }
 
         for (BagCategory category : BagCategory.values()) {
-            checkExists(Folder.BAG_TILES, "cat_" + category.getDisplayName().replaceAll("\\s", "").toLowerCase());
+            checkExists(Folder.BAG_TILES, category.getImageName());
         }
 
         for (ItemNamesies itemName : ItemNamesies.values()) {
@@ -91,11 +90,11 @@ public class ImageTest extends BaseTest {
         }
 
         for (TerrainType terrainType : TerrainType.values()) {
-            checkExists(Folder.TERRAIN_TILES, StringUtils.properCase(terrainType.name().toLowerCase()) + "Circle");
+            checkExists(Folder.TERRAIN_TILES, terrainType.getImageName());
         }
 
         for (Type type : Type.values()) {
-            checkExists(Folder.TYPE_TILES, "Type" + type.getName());
+            checkExists(Folder.TYPE_TILES, type.getImageName());
         }
 
         for (WeatherNamesies effectNamesies : WeatherNamesies.values()) {
@@ -120,22 +119,27 @@ public class ImageTest extends BaseTest {
         Assert.assertTrue(imageFile.getPath() + " does not exist.", imageFile.exists());
     }
 
-    private String getBagCategoryName(BagCategory category) {
-        return "cat_" + category.getDisplayName().replaceAll("\\s", "").toLowerCase();
-    }
-
     @Test
     public void sizeTest() {
-        DimensionChecker bagCategoryDimension = new DimensionChecker(BagCategory.IMAGE_SIZE).mustEquals(0);
-        DimensionChecker itemDimension = new DimensionChecker(Item.MAX_IMAGE_SIZE).trimmed();
-        DimensionChecker partyDimension = new DimensionChecker(PokemonInfo.MAX_PARTY_IMAGE_SIZE).singleDimensionEquals(0);
-        DimensionChecker pokedexDimension = new DimensionChecker(140, 190).singleDimensionEquals(2);
-        DimensionChecker pokemonDimension = new DimensionChecker(96, 96).trimmed();
+        // Type and category images must be the same size
+        Assert.assertEquals(Type.IMAGE_SIZE, MoveCategory.IMAGE_SIZE);
 
-        for (BagCategory category : BagCategory.values()) {
-            checkMaxSize(Folder.BAG_TILES, getBagCategoryName(category), bagCategoryDimension);
+        DimensionChecker typeDimension = new DimensionChecker(Type.IMAGE_SIZE).mustEquals(0);
+        for (Type type : Type.values()) {
+            checkMaxSize(Folder.TYPE_TILES, type.getImageName(), typeDimension);
         }
 
+        DimensionChecker moveCategoryDimension = new DimensionChecker(MoveCategory.IMAGE_SIZE).mustEquals(0);
+        for (MoveCategory category : MoveCategory.values()) {
+            checkMaxSize(Folder.ATTACK_TILES, category.getImageName(), moveCategoryDimension);
+        }
+
+        DimensionChecker bagCategoryDimension = new DimensionChecker(BagCategory.IMAGE_SIZE).mustEquals(0);
+        for (BagCategory category : BagCategory.values()) {
+            checkMaxSize(Folder.BAG_TILES, category.getImageName(), bagCategoryDimension);
+        }
+
+        DimensionChecker itemDimension = new DimensionChecker(Item.MAX_IMAGE_SIZE).trimmed();
         for (ItemNamesies itemName : ItemNamesies.values()) {
             if (itemName == ItemNamesies.NO_ITEM) {
                 continue;
@@ -144,6 +148,9 @@ public class ImageTest extends BaseTest {
             checkMaxSize(Folder.ITEM_TILES, itemName.getItem().getImageName(), itemDimension);
         }
 
+        DimensionChecker partyDimension = new DimensionChecker(PokemonInfo.MAX_PARTY_IMAGE_SIZE).singleDimensionEquals(0);
+        DimensionChecker pokedexDimension = new DimensionChecker(140, 190).singleDimensionEquals(2);
+        DimensionChecker pokemonDimension = new DimensionChecker(96, 96).trimmed();
         for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
             checkMaxSize(num, "", Folder.POKEDEX_TILES, pokedexDimension);
             checkMaxSize(num, "-small", Folder.PARTY_TILES, partyDimension);

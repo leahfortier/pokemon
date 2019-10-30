@@ -33,9 +33,8 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class PokemonState implements VisualStateHandler {
-
-    // Switch Button in Pokemon View Button Index
-    private static final int SWITCH_BUTTON = Trainer.MAX_POKEMON;
+    private static final int TABS = 0;
+    private static final int SWITCH = Trainer.MAX_POKEMON;
 
     private final DrawPanel pokemonPanel;
     private final DrawPanel basicInformationPanel;
@@ -89,7 +88,7 @@ public class PokemonState implements VisualStateHandler {
                 pokemonPanel.y + pokemonPanel.height - spacing - switchButtonHeight,
                 sidePanelWidth,
                 switchButtonHeight,
-                new ButtonTransitions().right(SWITCH_BUTTON).up(0).left(SWITCH_BUTTON).down(0),
+                new ButtonTransitions().right(SWITCH).up(TABS).left(SWITCH).down(TABS),
                 () -> {}, // Handled in update
                 panel -> panel.greyInactive()
                               .withLabelSize(20)
@@ -128,8 +127,8 @@ public class PokemonState implements VisualStateHandler {
             pokemonButtons[i] = tabButtons[i] = new Button(
                     pokemonPanel.createTab(i, 34, tabButtons.length),
                     new ButtonTransitions()
-                            .up(SWITCH_BUTTON)
-                            .down(SWITCH_BUTTON)
+                            .up(SWITCH)
+                            .down(SWITCH)
                             .basic(Direction.RIGHT, i, 1, tabButtons.length)
                             .basic(Direction.LEFT, i, 1, tabButtons.length),
                     () -> {}, // Handled in update
@@ -138,7 +137,7 @@ public class PokemonState implements VisualStateHandler {
             );
         }
 
-        pokemonButtons[SWITCH_BUTTON] = switchButton;
+        pokemonButtons[SWITCH] = switchButton;
         this.buttons = new ButtonList(pokemonButtons);
     }
 

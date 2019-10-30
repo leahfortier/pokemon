@@ -26,8 +26,12 @@ public enum BagCategory {
         this.displayName = displayName;
         this.color = color;
 
-        String imageName = "cat_" + this.displayName.replaceAll("\\s", "").toLowerCase();
+        String imageName = this.getImageName();
         this.icon = FileIO.readImage(Folder.BAG_TILES + imageName);
+    }
+
+    public String getImageName() {
+        return "cat_" + this.displayName.replaceAll("\\s", "").toLowerCase();
     }
 
     public String getDisplayName() {

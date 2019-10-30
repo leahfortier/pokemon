@@ -38,6 +38,10 @@ public final class ImageUtils {
         }
     }
 
+    public static void drawRightAlignedImage(Graphics g, BufferedImage image, int rightX, int y) {
+        g.drawImage(image, rightX - image.getWidth(), y, null);
+    }
+
     public static void drawBottomCenteredImage(Graphics g, BufferedImage image, Point center) {
         drawBottomCenteredImage(g, image, center.x, center.y);
     }
