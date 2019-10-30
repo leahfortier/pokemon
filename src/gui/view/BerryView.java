@@ -58,15 +58,9 @@ public class BerryView extends View {
     BerryView() {
         this.layout = new BagLayout(true);
 
-        layout.bagPanel.withBackgroundColor(BACKGROUND_COLOR)
-                       .withBlackOutline();
+        layout.bagPanel.withBackgroundColor(BACKGROUND_COLOR);
 
-        DrawPanel tabPanel = layout.tabPanels[BagCategory.BERRY.ordinal()]
-                .withBackgroundColor(BACKGROUND_COLOR)
-                .withTransparentBackground()
-                .withBorderPercentage(0)
-                .withMissingBlackOutline(Direction.DOWN)
-                .withLabel("Berries!!", 16);
+        DrawPanel tabPanel = layout.getTabPanel(BagCategory.BERRY.ordinal(), BACKGROUND_COLOR, "Berries!!");
 
         Button returnButton = layout.createReturnButton(
                 new ButtonTransitions().up(RIGHT_ARROW).down(RIGHT_ARROW)

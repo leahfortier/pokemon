@@ -10,12 +10,12 @@ import draw.button.ButtonList;
 import draw.button.ButtonPanel;
 import draw.button.ButtonTransitions;
 import draw.layout.DrawLayout;
+import draw.layout.TabLayout;
 import draw.panel.DrawPanel;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
-import map.Direction;
 import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import pokemon.breeding.Eggy;
@@ -33,8 +33,9 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class PokemonState implements VisualStateHandler {
+    private static final int NUM_BUTTONS = Trainer.MAX_POKEMON + 1;
     private static final int TABS = 0;
-    private static final int SWITCH = Trainer.MAX_POKEMON;
+    private static final int SWITCH = TABS + Trainer.MAX_POKEMON;
 
     private final DrawPanel pokemonPanel;
     private final DrawPanel basicInformationPanel;
@@ -119,26 +120,18 @@ public class PokemonState implements VisualStateHandler {
         hpBar = new DrawPanel(statsPanel.x, statsPanel.y - barHeight + DrawUtils.OUTLINE_SIZE, statsPanel.width, barHeight)
                 .withBlackOutline();
 
+        tabButtons = new TabLayout(pokemonPanel, Trainer.MAX_POKEMON, 34)
+                .withStartIndex(TABS)
+                .withDefaultTransitions(new ButtonTransitions().down(SWITCH).up(SWITCH))
+                .withButtonSetup(panel -> panel.skipInactive()
+                                               .withBorderlessTransparentBackground())
+                .getTabs();
+
         // Pokemon Switch View Buttons
-        Button[] pokemonButtons = new Button[Trainer.MAX_POKEMON + 1];
-
-        tabButtons = new Button[Trainer.MAX_POKEMON];
-        for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-            pokemonButtons[i] = tabButtons[i] = new Button(
-                    pokemonPanel.createTab(i, 34, tabButtons.length),
-                    new ButtonTransitions()
-                            .up(SWITCH)
-                            .down(SWITCH)
-                            .basic(Direction.RIGHT, i, 1, tabButtons.length)
-                            .basic(Direction.LEFT, i, 1, tabButtons.length),
-                    () -> {}, // Handled in update
-                    panel -> panel.skipInactive()
-                                  .withBorderlessTransparentBackground()
-            );
-        }
-
+        Button[] pokemonButtons = new Button[NUM_BUTTONS];
         pokemonButtons[SWITCH] = switchButton;
         this.buttons = new ButtonList(pokemonButtons);
+        buttons.set(TABS, tabButtons);
     }
 
     @Override

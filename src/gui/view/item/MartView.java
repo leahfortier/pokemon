@@ -58,14 +58,9 @@ public class MartView extends View {
         // No quantities
         layout = new MartLayout(false);
 
-        layout.bagPanel.withBackgroundColor(BACKGROUND_COLOR)
-                       .withBlackOutline();
+        layout.bagPanel.withBackgroundColor(BACKGROUND_COLOR);
 
-        DrawPanel tabPanel = layout.tabPanels[1]
-                .withBackgroundColor(BACKGROUND_COLOR)
-                .withBorderlessTransparentBackground()
-                .withMissingBlackOutline(Direction.DOWN)
-                .withLabel(PokeString.POKE + " Mart", 16);
+        DrawPanel tabPanel = layout.getTabPanel(1, BACKGROUND_COLOR, PokeString.POKE + " Mart");
 
         buyButton = layout.createConfirmButton(
                 "BUY",
