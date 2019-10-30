@@ -10,7 +10,7 @@ import draw.button.ButtonPanel;
 import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
-import draw.layout.DrawLayout;
+import draw.layout.ButtonLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.PanelList;
@@ -151,7 +151,7 @@ class PCView extends View {
             }
         }
 
-        partyButtons = new DrawLayout(partyPanel, 1, Trainer.MAX_POKEMON, pokemonButtonSize, pokemonButtonSize)
+        partyButtons = new ButtonLayout(partyPanel, 1, Trainer.MAX_POKEMON, pokemonButtonSize, pokemonButtonSize)
                 .withStartIndex(PARTY)
                 .withDefaultTransitions(new ButtonTransitions().right(RETURN).up(RIGHT_ARROW).left(RETURN).down(0))
                 .withPressIndex(index -> {

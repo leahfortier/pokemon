@@ -10,8 +10,8 @@ import draw.button.Button;
 import draw.button.ButtonList;
 import draw.button.ButtonPanel;
 import draw.button.ButtonTransitions;
-import draw.layout.DrawLayout;
-import draw.layout.DrawLayout.ButtonIndexAction;
+import draw.layout.ButtonLayout;
+import draw.layout.ButtonLayout.ButtonIndexAction;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.PanelList;
@@ -165,8 +165,8 @@ public class BagView extends View {
         movedToFront();
     }
 
-    private DrawLayout getLeftLayout(int startIndex, ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
-        return new DrawLayout(layout.leftPanel, Trainer.MAX_POKEMON, 1, 10)
+    private ButtonLayout getLeftLayout(int startIndex, ButtonTransitions defaultTransitions, ButtonIndexAction indexAction) {
+        return new ButtonLayout(layout.leftPanel, Trainer.MAX_POKEMON, 1, 10)
                 .withStartIndex(startIndex)
                 .withDefaultTransitions(defaultTransitions)
                 .withPressIndex(indexAction)

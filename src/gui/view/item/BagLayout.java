@@ -7,8 +7,8 @@ import draw.button.Button;
 import draw.button.ButtonPanel;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
-import draw.layout.DrawLayout;
-import draw.layout.DrawLayout.ButtonIndexAction;
+import draw.layout.ButtonLayout;
+import draw.layout.ButtonLayout.ButtonIndexAction;
 import draw.panel.DrawPanel;
 import draw.panel.ItemPanel;
 import draw.panel.WrapPanel.WrapMetrics;
@@ -137,7 +137,7 @@ public class BagLayout {
     public Button[] getItemButtons(int startIndex,
                                    ButtonTransitions defaultTransitions,
                                    ButtonIndexAction indexAction) {
-        return new DrawLayout(itemsPanel, NUM_ITEM_ROWS, NUM_ITEM_COLS, 5)
+        return new ButtonLayout(itemsPanel, NUM_ITEM_ROWS, NUM_ITEM_COLS, 5)
                 .withMissingBottomRow()
                 .withStartIndex(startIndex)
                 .withDefaultTransitions(defaultTransitions)

@@ -1,6 +1,6 @@
 package draw.panel;
 
-import draw.layout.DrawLayout;
+import draw.layout.ButtonLayout;
 import main.Global;
 import util.Point;
 
@@ -33,8 +33,8 @@ public class BasicPanels {
         fullMessagePanel.drawMessage(g, text);
     }
 
-    public static DrawLayout getFullMessagePanelLayout(int numRows, int numCols, int spacing) {
-        return new DrawLayout(fullMessagePanel, numRows, numCols, spacing);
+    public static ButtonLayout getFullMessagePanelLayout(int numRows, int numCols, int spacing) {
+        return new ButtonLayout(fullMessagePanel, numRows, numCols, spacing);
     }
 
     public static void drawCanvasPanel(Graphics g) {

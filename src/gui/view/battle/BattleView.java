@@ -7,7 +7,7 @@ import battle.effect.battle.weather.WeatherEffect;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.button.Button;
-import draw.layout.DrawLayout;
+import draw.layout.ButtonLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.WrapPanel;
@@ -92,8 +92,8 @@ public class BattleView extends View {
         buttonsPanel.drawBackground(g);
     }
 
-    public DrawLayout createPanelLayout(int numOptions) {
-        return new DrawLayout(buttonsPanel, 2, numOptions/2, BUTTON_WIDTH, BUTTON_HEIGHT);
+    public ButtonLayout createPanelLayout(int numOptions) {
+        return new ButtonLayout(buttonsPanel, 2, numOptions/2, BUTTON_WIDTH, BUTTON_HEIGHT);
     }
 
     public void setBattle(Battle b) {

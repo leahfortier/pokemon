@@ -12,7 +12,7 @@ import draw.button.ButtonPanel;
 import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
-import draw.layout.DrawLayout;
+import draw.layout.ButtonLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.MovePanel;
@@ -223,7 +223,7 @@ public class PartyView extends View {
                 .withLabelSize(30);
 
         // Buttons don't actually do anything when pressed, but if hovered updates the move details panel
-        moveButtons = new DrawLayout(movesPanel, MoveList.MAX_MOVES, 1, 10)
+        moveButtons = new ButtonLayout(movesPanel, MoveList.MAX_MOVES, 1, 10)
                 .withStartIndex(MOVES)
                 .withDefaultTransitions(new ButtonTransitions().up(0).down(RETURN))
                 .withButtonSetup(panel -> panel.skipInactive()
