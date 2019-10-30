@@ -9,7 +9,7 @@ import draw.button.Button;
 import draw.button.ButtonList;
 import draw.button.ButtonPanel;
 import draw.button.ButtonTransitions;
-import draw.panel.DrawLayout;
+import draw.layout.DrawLayout;
 import draw.panel.DrawPanel;
 import gui.TileSet;
 import gui.view.battle.BattleView;

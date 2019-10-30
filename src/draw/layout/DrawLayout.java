@@ -1,8 +1,9 @@
-package draw.panel;
+package draw.layout;
 
 import draw.button.Button;
 import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonTransitions;
+import draw.panel.DrawPanel;
 
 public class DrawLayout {
     private final DrawPanel outerPanel;

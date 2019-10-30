@@ -1,5 +1,6 @@
 package draw.panel;
 
+import draw.layout.DrawLayout;
 import main.Global;
 import util.Point;
 

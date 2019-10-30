@@ -4,7 +4,7 @@ import draw.DrawUtils;
 import draw.button.Button;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
-import draw.panel.DrawLayout;
+import draw.layout.DrawLayout;
 import draw.panel.DrawPanel;
 import item.ItemNamesies;
 import main.Game;
