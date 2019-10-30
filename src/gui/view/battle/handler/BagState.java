@@ -8,6 +8,8 @@ import draw.button.Button;
 import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
+import draw.layout.ButtonLayout;
+import draw.layout.TabLayout;
 import draw.panel.DrawPanel;
 import draw.panel.PanelList;
 import draw.panel.WrapPanel;
@@ -35,16 +37,16 @@ import java.util.Set;
 
 public class BagState implements VisualStateHandler {
 
-    // Battle Bag Categories
     private static final BattleBagCategory[] BATTLE_BAG_CATEGORIES = BattleBagCategory.values();
+    private static final int ITEMS_PER_PAGE = 10;
 
     // Bag Button Indexes
-    private static final int ITEMS = BATTLE_BAG_CATEGORIES.length;
-    private static final int ITEMS_PER_PAGE = 10;
-    private static final int NUM_BAG_BUTTONS = BATTLE_BAG_CATEGORIES.length + ITEMS_PER_PAGE + 3;
-    private static final int LAST_ITEM_BUTTON = NUM_BAG_BUTTONS - 1;
-    private static final int BAG_RIGHT_BUTTON = NUM_BAG_BUTTONS - 2;
-    private static final int BAG_LEFT_BUTTON = NUM_BAG_BUTTONS - 3;
+    private static final int NUM_BUTTONS = BATTLE_BAG_CATEGORIES.length + ITEMS_PER_PAGE + 3;
+    private static final int TABS = 0;
+    private static final int ITEMS = TABS + BATTLE_BAG_CATEGORIES.length;
+    private static final int LAST_ITEM_USED = NUM_BUTTONS - 1;
+    private static final int BAG_RIGHT = NUM_BUTTONS - 2;
+    private static final int BAG_LEFT = NUM_BUTTONS - 3;
 
     private final PanelList panels;
 
@@ -82,38 +84,29 @@ public class BagState implements VisualStateHandler {
                 .withBlackOutline();
 
         // Bag View Buttons
-        Button[] bagButtons = new Button[NUM_BAG_BUTTONS];
+        Button[] bagButtons = new Button[NUM_BUTTONS];
 
-        tabButtons = new Button[BATTLE_BAG_CATEGORIES.length];
-        for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
-            BattleBagCategory category = BATTLE_BAG_CATEGORIES[i];
-            bagButtons[i] = tabButtons[i] = new Button(
-                    bagCategoryPanel.createTab(i, 28, tabButtons.length),
-                    new ButtonTransitions()
-                            .up(LAST_ITEM_BUTTON)
-                            .down(ITEMS)
-                            .basic(Direction.RIGHT, i, 1, BATTLE_BAG_CATEGORIES.length)
-                            .basic(Direction.LEFT, i, 1, BATTLE_BAG_CATEGORIES.length),
-                    () -> {}, // Handled in update
-                    panel -> panel.withBorderSize(0)
-                                  .withBackgroundColor(category.getColor())
-                                  .withLabel(category.getName(), 18)
-            );
-        }
+        tabButtons = new TabLayout(bagCategoryPanel, BATTLE_BAG_CATEGORIES.length, 28)
+                .withStartIndex(TABS)
+                .withDefaultTransitions(new ButtonTransitions().up(LAST_ITEM_USED).down(ITEMS))
+                .withButtonSetup((panel, index) -> panel.withBorderSize(0)
+                                                        .withBackgroundColor(BATTLE_BAG_CATEGORIES[index].getColor())
+                                                        .withLabel(BATTLE_BAG_CATEGORIES[index].getName(), 18))
+                .getTabs();
 
-        bagButtons[BAG_LEFT_BUTTON] = leftButton = new Button(
+        bagButtons[BAG_LEFT] = leftButton = new Button(
                 135, 435, 35, 20, ButtonHoverAction.BOX,
-                new ButtonTransitions().right(BAG_RIGHT_BUTTON).up(ITEMS + ITEMS_PER_PAGE - 2).down(LAST_ITEM_BUTTON)
+                new ButtonTransitions().right(BAG_RIGHT).up(ITEMS + ITEMS_PER_PAGE - 2).down(LAST_ITEM_USED)
         ).asArrow(Direction.LEFT);
 
-        bagButtons[BAG_RIGHT_BUTTON] = rightButton = new Button(
+        bagButtons[BAG_RIGHT] = rightButton = new Button(
                 250, 435, 35, 20, ButtonHoverAction.BOX,
-                new ButtonTransitions().up(ITEMS + ITEMS_PER_PAGE - 1).left(BAG_LEFT_BUTTON).down(LAST_ITEM_BUTTON)
+                new ButtonTransitions().up(ITEMS + ITEMS_PER_PAGE - 1).left(BAG_LEFT).down(LAST_ITEM_USED)
         ).asArrow(Direction.RIGHT);
 
-        bagButtons[LAST_ITEM_BUTTON] = lastUsedButton = new Button(
+        bagButtons[LAST_ITEM_USED] = lastUsedButton = new Button(
                 214, 517, 148, 28,
-                new ButtonTransitions().up(BAG_LEFT_BUTTON).down(selectedBagTab),
+                new ButtonTransitions().up(BAG_LEFT).down(selectedBagTab),
                 () -> {}, // Handled in update
                 panel -> panel.skipInactive()
                               .withBlackOutline()
@@ -121,30 +114,20 @@ public class BagState implements VisualStateHandler {
                               .withBorderPercentage(0)
         );
 
-        itemButtons = new Button[ITEMS_PER_PAGE];
-        for (int y = 0, i = 0; y < ITEMS_PER_PAGE/2; y++) {
-            for (int x = 0; x < 2; x++, i++) {
-                itemButtons[i] = bagButtons[i + ITEMS] = new Button(
-                        55 + x*162,
-                        243 + y*38,
-                        148,
-                        28,
-                        ButtonHoverAction.BOX,
-                        new ButtonTransitions()
-                                .right((i + 1)%ITEMS_PER_PAGE + ITEMS)
-                                .up(y == 0 ? selectedBagTab : i + ITEMS - 2)
-                                .left((i - 1 + ITEMS_PER_PAGE)%ITEMS_PER_PAGE + ITEMS)
-                                .down(y == ITEMS_PER_PAGE/2 - 1 ? (x == 0 ? BAG_LEFT_BUTTON : BAG_RIGHT_BUTTON) : i + ITEMS + 2),
-                        () -> {}, // Handled in update
-                        panel -> panel.skipInactive()
-                                      .withBlackOutline()
-                                      .withBackgroundColor(Color.WHITE)
-                                      .withBorderPercentage(0)
-                );
-            }
-        }
+        itemButtons = new ButtonLayout(bagCategoryPanel, ITEMS_PER_PAGE/2, 2, 148, 28)
+                .withMissingBottomRow()
+                .withStartIndex(ITEMS)
+                .withDefaultTransitions(new ButtonTransitions().up(TABS).down(BAG_RIGHT))
+                .withButtonSetup(panel -> panel.skipInactive()
+                                               .withBlackOutline()
+                                               .withBackgroundColor(Color.WHITE)
+                                               .withBorderPercentage(0))
+                .getButtons();
 
         this.buttons = new ButtonList(bagButtons);
+        this.buttons.set(TABS, tabButtons);
+        this.buttons.set(ITEMS, itemButtons);
+
         this.panels = new PanelList(bagCategoryPanel, lastItemPanel, itemDescriptionPanel);
     }
 

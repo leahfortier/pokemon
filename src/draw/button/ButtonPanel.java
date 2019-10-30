@@ -124,4 +124,16 @@ public class ButtonPanel extends DrawPanel {
             };
         }
     }
+
+    @FunctionalInterface
+    public interface ButtonPanelIndexSetup {
+        void setup(ButtonPanel panel, int index);
+
+        default ButtonPanelIndexSetup add(ButtonPanelIndexSetup next) {
+            return (panel, index) -> {
+                this.setup(panel, index);
+                next.setup(panel, index);
+            };
+        }
+    }
 }

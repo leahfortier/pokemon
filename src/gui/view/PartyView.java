@@ -13,6 +13,7 @@ import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.layout.ButtonLayout;
+import draw.layout.TabLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.MovePanel;
@@ -197,20 +198,13 @@ public class PartyView extends View {
                 textButtonSetup("Return")
         );
 
-        tabButtons = new Button[Trainer.MAX_POKEMON];
-        for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-            final int index = i;
-            tabButtons[i] = new Button(
-                    pokemonPanel.createTab(i, tabHeight, tabButtons.length),
-                    ButtonTransitions.getBasicTransitions(
-                            i, 1, Trainer.MAX_POKEMON, TABS,
-                            new ButtonTransitions().up(RETURN).down(MOVES)
-                    ),
-                    () -> switchTab(index),
-                    panel -> panel.skipInactive()
-                                  .withBorderlessTransparentBackground()
-            );
-        }
+        tabButtons = new TabLayout(pokemonPanel, Trainer.MAX_POKEMON, tabHeight)
+                .withStartIndex(TABS)
+                .withDefaultTransitions(new ButtonTransitions().up(RETURN).down(MOVES))
+                .withPressIndex(this::switchTab)
+                .withButtonSetup(panel -> panel.skipInactive()
+                                               .withBorderlessTransparentBackground())
+                .getTabs();
 
         nicknamePanel = new DrawPanel(
                 pokemonPanel.x,

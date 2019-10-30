@@ -16,6 +16,11 @@ public class ButtonList implements Iterable<Button> {
         this.selected = 0;
     }
 
+    // Note: size should already accommodate these values, it is just setting them
+    public void set(int startIndex, Button[] buttons) {
+        System.arraycopy(buttons, 0, this.buttons, startIndex, buttons.length);
+    }
+
     public int size() {
         return this.buttons.length;
     }

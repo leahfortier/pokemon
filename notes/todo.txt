@@ -178,3 +178,4 @@ Other random things:
     text wrapping should allow having a different startX for the first line so you can have a label in a different size (ability name and description for example)
     use spacing for movePanels in battle PokemonState
     use DrawLayout for pokemonButtons in pcView (and I guess pokedexView also since they're the same)
+    page buttons in BattleView BagState aren't vertically centered (and maybe item button should use spacing)

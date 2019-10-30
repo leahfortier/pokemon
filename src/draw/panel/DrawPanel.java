@@ -7,8 +7,6 @@ import draw.PolygonUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonPanel;
-import draw.button.ButtonPanel.ButtonPanelSetup;
-import draw.button.ButtonPressAction;
 import main.Global;
 import map.Direction;
 import pokemon.active.PartyPokemon;
@@ -504,42 +502,5 @@ public class DrawPanel implements Panel {
                 tabWidth + (tabIndex < remainder ? 1 : 0),
                 tabHeight
         );
-    }
-
-    @FunctionalInterface
-    public interface ButtonIndexAction {
-        void pressButton(int index);
-
-        static ButtonPressAction getPressAction(ButtonIndexAction indexAction, int index) {
-            return indexAction == null
-                   ? () -> {}
-                   : () -> indexAction.pressButton(index);
-        }
-    }
-
-    @FunctionalInterface
-    public interface PanelIndexSetup {
-        void setup(int index, ButtonPanel panel);
-
-        static ButtonPanelSetup getPanelSetup(PanelIndexSetup indexSetup, int index) {
-            return indexSetup == null
-                   ? panel -> {}
-                   : panel -> indexSetup.setup(index, panel);
-        }
-
-        static PanelIndexSetup add(PanelIndexSetup base, PanelIndexSetup addition) {
-            if (base == null && addition == null) {
-                return (index, panel) -> {};
-            } else if (base == null) {
-                return addition;
-            } else if (addition == null) {
-                return base;
-            }
-
-            return (index, panel) -> {
-                base.setup(index, panel);
-                addition.setup(index, panel);
-            };
-        }
     }
 }

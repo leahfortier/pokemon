@@ -2,6 +2,7 @@ package draw.layout;
 
 import draw.DrawUtils;
 import draw.button.Button;
+import draw.button.ButtonPanel.ButtonPanelIndexSetup;
 import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonTransitions;
 import draw.layout.ButtonLayout.ButtonIndexAction;
@@ -18,7 +19,7 @@ public class TabLayout {
     private int startIndex;
     private ButtonTransitions defaultTransitions;
     private ButtonIndexAction indexAction;
-    private ButtonPanelSetup buttonSetup;
+    private ButtonPanelIndexSetup buttonSetup;
 
     public TabLayout(DrawPanel panel, int numTabs, int tabHeight) {
         this.panel = panel;
@@ -31,7 +32,7 @@ public class TabLayout {
         this.startIndex = 0;
         this.defaultTransitions = null;
         this.indexAction = index -> {};
-        this.buttonSetup = buttonPanel -> {};
+        this.buttonSetup = (buttonPanel, index) -> {};
     }
 
     public TabLayout asBottomTabs() {
@@ -61,6 +62,10 @@ public class TabLayout {
     }
 
     public TabLayout withButtonSetup(ButtonPanelSetup buttonSetup) {
+        return this.withButtonSetup((panel, index) -> buttonSetup.setup(panel));
+    }
+
+    public TabLayout withButtonSetup(ButtonPanelIndexSetup buttonSetup) {
         this.buttonSetup = this.buttonSetup.add(buttonSetup);
         return this;
     }
@@ -83,7 +88,7 @@ public class TabLayout {
                     tabHeight,
                     ButtonTransitions.getBasicTransitions(i, 1, numTabs, startIndex, defaultTransitions),
                     () -> indexAction.pressButton(index),
-                    buttonSetup
+                    panel -> buttonSetup.setup(panel, index)
             );
         }
 
