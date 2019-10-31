@@ -1,6 +1,5 @@
 package gui.view.item;
 
-import draw.DrawUtils;
 import draw.button.Button;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
@@ -11,12 +10,15 @@ import main.Game;
 import main.Global;
 import map.Direction;
 
+import java.util.List;
+
 public class MartLayout extends BagLayout {
     public final DrawPanel amountPanel;
     public final DrawPanel playerMoneyPanel;
     public final DrawPanel inBagPanel;
     public final DrawPanel totalAmountPanel;
     private final DrawPanel confirmPanel;
+    private final Button[] fakeAmountTabs;
 
     public MartLayout(boolean includeQuantity) {
         super(includeQuantity);
@@ -29,17 +31,11 @@ public class MartLayout extends BagLayout {
         totalAmountPanel = leftPanels[4];
         confirmPanel = leftPanels[5];
 
-        DrawPanel amountLeftButton = selectedButtonPanels[0];
-        DrawPanel amountRightButton = selectedButtonPanels[2];
-        amountPanel = new DrawPanel(
-                amountLeftButton.x + amountLeftButton.width - DrawUtils.OUTLINE_SIZE,
-                amountLeftButton.y,
-                selectedPanel.width - amountLeftButton.width - amountRightButton.width + 2*DrawUtils.OUTLINE_SIZE,
-                amountLeftButton.height
-        )
-                .withFullTransparency()
-                .withBlackOutline()
-                .withLabelSize(20);
+        // Left and right arrow + centered amount panel
+        fakeAmountTabs = getSelectedButtonLayout(3).getTabs();
+        amountPanel = fakeAmountTabs[1].panel()
+                                       .withOutlines(List.of(Direction.DOWN))
+                                       .withLabelSize(20);
     }
 
     // Item amount, player money, in bag display, and total amount display labels
@@ -54,11 +50,12 @@ public class MartLayout extends BagLayout {
                                           ButtonTransitions transitions,
                                           ButtonPressAction pressAction) {
         return new Button(
-                selectedButtonPanels[arrowDirection == Direction.LEFT ? 0 : 2],
+                fakeAmountTabs[arrowDirection == Direction.LEFT ? 0 : 2].panel(),
                 transitions,
                 pressAction,
                 panel -> panel.asArrow(arrowDirection, 35, 20)
                               .greyInactive()
+                              .withBlackOutline()
                               .withBorderlessTransparentBackground()
                               .withBlackOutline()
         );

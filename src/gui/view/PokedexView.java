@@ -52,8 +52,10 @@ public class PokedexView extends View {
 
     private static final int NUM_BUTTONS = PER_PAGE + NUM_TAB_BUTTONS + MOVES_PER_PAGE + 5;
     private static final int POKEMON_START = 0;
+    private static final int BOTTOM_MIDDLE_POKEMON = POKEMON_START + PER_PAGE - NUM_COLS/2;
     private static final int TAB_START = POKEMON_START + PER_PAGE;
     private static final int MOVE_START = TAB_START + NUM_TAB_BUTTONS;
+    private static final int BOTTOM_MOVE = MOVE_START + MOVES_PER_PAGE - 1;
     private static final int RETURN = NUM_BUTTONS - 1;
     private static final int RIGHT_ARROW = NUM_BUTTONS - 2;
     private static final int LEFT_ARROW = NUM_BUTTONS - 3;
@@ -161,7 +163,7 @@ public class PokedexView extends View {
         ButtonLayout pokemonLayout = new ButtonLayout(pokemonPanel, NUM_ROWS, NUM_COLS, 40, 40)
                 .withMissingBottomRow()
                 .withStartIndex(POKEMON_START)
-                .withDefaultTransitions(new ButtonTransitions().right(RETURN).up(RIGHT_ARROW).down(RIGHT_ARROW))
+                .withDefaultTransitions(new ButtonTransitions().right(TAB_START).up(RIGHT_ARROW).down(RIGHT_ARROW))
                 .withPressIndex(index -> {
                     selected = PokemonList.get(getPokeNum(index));
                     changeTab(selectedTab);
@@ -208,9 +210,9 @@ public class PokedexView extends View {
                 arrowPanels.getKey(),
                 new ButtonTransitions()
                         .right(RIGHT_ARROW)
-                        .up(NUM_COLS*(NUM_ROWS - 1) + NUM_COLS/2 - 1)
+                        .up(BOTTOM_MIDDLE_POKEMON - 1)
                         .left(TAB_START + NUM_TAB_BUTTONS - 1)
-                        .down(0),
+                        .down(POKEMON_START),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, NUM_PAGES)
         ).asArrow(Direction.LEFT);
 
@@ -218,9 +220,9 @@ public class PokedexView extends View {
                 arrowPanels.getValue(),
                 new ButtonTransitions()
                         .right(TAB_START)
-                        .up(NUM_COLS*(NUM_ROWS - 1) + NUM_COLS/2)
+                        .up(BOTTOM_MIDDLE_POKEMON)
                         .left(LEFT_ARROW)
-                        .down(0),
+                        .down(POKEMON_START),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, NUM_PAGES)
         ).asArrow(Direction.RIGHT);
 
@@ -229,9 +231,9 @@ public class PokedexView extends View {
                 moveArrowPanels.getKey(),
                 new ButtonTransitions()
                         .right(MOVES_RIGHT_ARROW)
-                        .up(MOVE_START + MOVES_PER_PAGE - 1)
+                        .up(BOTTOM_MOVE)
                         .left(RIGHT_ARROW)
-                        .down(RETURN),
+                        .down(TAB_START),
                 () -> movePageNum = GeneralUtils.wrapIncrement(movePageNum, -1, maxMovePages()),
                 panel -> panel.skipInactive()
                               .asArrow(Direction.LEFT)
@@ -241,9 +243,9 @@ public class PokedexView extends View {
                 moveArrowPanels.getValue(),
                 new ButtonTransitions()
                         .right(LEFT_ARROW)
-                        .up(MOVE_START + MOVES_PER_PAGE - 1)
+                        .up(BOTTOM_MOVE)
                         .left(MOVES_LEFT_ARROW)
-                        .down(RETURN),
+                        .down(TAB_START),
                 () -> movePageNum = GeneralUtils.wrapIncrement(movePageNum, 1, maxMovePages()),
                 panel -> panel.skipInactive()
                               .asArrow(Direction.RIGHT)
@@ -255,7 +257,7 @@ public class PokedexView extends View {
                 returnY,
                 infoPanel.width,
                 countPanel.bottomY() - returnY,
-                new ButtonTransitions().right(0).up(PER_PAGE).left(RIGHT_ARROW).down(PER_PAGE),
+                new ButtonTransitions().right(LEFT_ARROW).up(TAB_START).left(RIGHT_ARROW).down(MOVE_START),
                 ButtonPressAction.getExitAction(),
                 panel -> panel.withBackgroundColor(Color.YELLOW)
                               .withBorderlessTransparentBackground()

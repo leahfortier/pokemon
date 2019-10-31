@@ -51,17 +51,19 @@ public class BagView extends View {
     private static final BagCategory[] CATEGORIES = BagCategory.values();
     private static final int ITEMS_PER_PAGE = 10;
 
-    private static final int NUM_BUTTONS = CATEGORIES.length + Trainer.MAX_POKEMON + ITEMS_PER_PAGE + MoveList.MAX_MOVES + 6;
+    private static final int NUM_BUTTONS = CATEGORIES.length + Trainer.MAX_POKEMON + ITEMS_PER_PAGE
+            + MoveList.MAX_MOVES + UseState.values().length + 3;
+
     private static final int TABS = 0;
-    private static final int PARTY = CATEGORIES.length;
+    private static final int PARTY = TABS + CATEGORIES.length;
     private static final int ITEMS = PARTY + Trainer.MAX_POKEMON;
     private static final int MOVES = ITEMS + ITEMS_PER_PAGE;
+    private static final int USE_STATES = MOVES + MoveList.MAX_MOVES;
+    private static final int RIGHT_USE_STATE = USE_STATES + UseState.values().length - 1;
+    private static final int USE = USE_STATES + UseState.USE.ordinal();
     private static final int RETURN = NUM_BUTTONS - 1;
-    static final int TAKE = NUM_BUTTONS - 2;
-    static final int USE = NUM_BUTTONS - 3;
-    static final int GIVE = NUM_BUTTONS - 4;
-    private static final int RIGHT_ARROW = NUM_BUTTONS - 5;
-    private static final int LEFT_ARROW = NUM_BUTTONS - 6;
+    private static final int RIGHT_ARROW = NUM_BUTTONS - 2;
+    private static final int LEFT_ARROW = NUM_BUTTONS - 3;
 
     private final BagLayout layout;
     private final PanelList panels;
@@ -71,6 +73,8 @@ public class BagView extends View {
     private final Button[] partyButtons;
     private final Button[] moveButtons;
     private final Button[] itemButtons;
+    private final Button giveButton;
+    private final Button useButton;
     private final Button rightArrow;
     private final Button leftArrow;
 
@@ -89,8 +93,7 @@ public class BagView extends View {
         // Show quantities
         layout = new BagLayout(true);
 
-        Button[] buttons = new Button[NUM_BUTTONS];
-        this.buttons = new ButtonList(buttons);
+        this.buttons = new ButtonList(NUM_BUTTONS);
 
         Button returnButton = layout.createReturnButton(
                 new ButtonTransitions().right(PARTY).up(RIGHT_ARROW).left(PARTY).down(TABS),
@@ -103,14 +106,14 @@ public class BagView extends View {
         // (Only active when PokemonUseItem is selected)
         partyButtons = getLeftLayout(
                 PARTY,
-                new ButtonTransitions().right(GIVE).up(TABS).left(MOVES).down(TABS),
+                new ButtonTransitions().right(USE_STATES).up(TABS).left(MOVES).down(TABS),
                 index -> UseState.applyPokemon(this, Game.getPlayer().getTeam().get(index))
         ).getButtons();
 
         // Move buttons are fine to skip when inactive since they're only visible when active
         moveButtons = getLeftLayout(
                 MOVES,
-                new ButtonTransitions().right(PARTY).up(TABS).left(GIVE).down(TABS),
+                new ButtonTransitions().right(PARTY).up(TABS).left(RIGHT_USE_STATE).down(TABS),
                 this::useMoveItem
         ).withButtonSetup(ButtonPanel::skipInactive).getButtons();
 
@@ -121,24 +124,18 @@ public class BagView extends View {
         );
 
         UseState[] useStates = UseState.values();
-        int lastIndex = useStates.length - 1;
-        for (int i = 0; i < useStates.length; i++) {
-            final int index = i;
-            UseState useState = useStates[i];
-            buttons[useState.buttonIndex] = new Button(
-                    layout.selectedButtonPanels[i],
-                    new ButtonTransitions()
-                            .right(i == lastIndex ? PARTY : useStates[i + 1].buttonIndex)
-                            .up(selectedTab.ordinal())
-                            .left(i == 0 ? PARTY : useStates[i - 1].buttonIndex)
-                            .down(i <= useStates.length/2 ? ITEMS : ITEMS + 1),
-                    () -> pressState(useState),
-                    panel -> panel.withTabOutlines(index, -1)
-                                  .greyInactive()
-                                  .withLabel(useState.displayName, 20)
-                                  .withBorderlessTransparentBackground()
-            );
-        }
+        Button[] useButtons = layout.getSelectedButtonLayout(UseState.values().length)
+                                    .withStartIndex(USE_STATES)
+                                    .withDefaultTransitions(new ButtonTransitions().right(MOVES)
+                                                                                   .up(TABS)
+                                                                                   .left(PARTY)
+                                                                                   .down(ITEMS))
+                                    .withPressIndex(index -> pressState(useStates[index]))
+                                    .withButtonSetup((panel, index) -> panel.greyInactive()
+                                                                            .withLabel(useStates[index].displayName, 20))
+                                    .getTabs();
+        giveButton = useButtons[UseState.GIVE.ordinal()];
+        useButton = useButtons[UseState.USE.ordinal()];
 
         leftArrow = new Button(
                 layout.leftArrow,
@@ -152,13 +149,14 @@ public class BagView extends View {
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         ).asArrow(Direction.RIGHT);
 
-        System.arraycopy(tabButtons, 0, buttons, TABS, CATEGORIES.length);
-        System.arraycopy(partyButtons, 0, buttons, PARTY, Trainer.MAX_POKEMON);
-        System.arraycopy(moveButtons, 0, buttons, MOVES, MoveList.MAX_MOVES);
-        System.arraycopy(itemButtons, 0, buttons, ITEMS, ITEMS_PER_PAGE);
-        buttons[LEFT_ARROW] = leftArrow;
-        buttons[RIGHT_ARROW] = rightArrow;
-        buttons[RETURN] = returnButton;
+        buttons.set(TABS, tabButtons);
+        buttons.set(PARTY, partyButtons);
+        buttons.set(MOVES, moveButtons);
+        buttons.set(ITEMS, itemButtons);
+        buttons.set(USE_STATES, useButtons);
+        buttons.set(LEFT_ARROW, leftArrow);
+        buttons.set(RIGHT_ARROW, rightArrow);
+        buttons.set(RETURN, returnButton);
 
         panels = new PanelList(layout.bagPanel, layout.leftPanel, layout.selectedPanel, layout.itemsPanel);
 
@@ -217,7 +215,10 @@ public class BagView extends View {
         layout.setupItems(itemButtons, this.getDisplayItems(), pageNum);
 
         // Setup Use State buttons
-        UseState.forEach(useState -> useState.setup(buttons.get(useState.buttonIndex).panel(), selectedTab.getColor()));
+        UseState.forEach(useState -> {
+            Button useButton = buttons.get(USE_STATES + useState.ordinal());
+            useState.setup(useButton.panel(), selectedTab.getColor());
+        });
 
         // Set up Pokemon buttons
         List<PartyPokemon> team = Game.getPlayer().getTeam();
@@ -438,7 +439,7 @@ public class BagView extends View {
     private void deactivateState(UseState state) {
         state.reset();
 
-        this.buttons.setSelected(state.buttonIndex);
+        this.buttons.setSelected(USE_STATES + state.ordinal());
         this.state = BagState.ITEM_SELECT;
 
         if (!Game.getPlayer().getBag().hasItem(this.selectedItem)) {
@@ -506,12 +507,12 @@ public class BagView extends View {
 
         if (selectedItem == ItemNamesies.NO_ITEM || !player.getBag().hasItem(selectedItem)) {
             selectedItem = ItemNamesies.NO_ITEM;
-            buttons.get(GIVE).setActive(false);
-            buttons.get(USE).setActive(false);
+            giveButton.setActive(false);
+            useButton.setActive(false);
         } else {
             Item selectedItemValue = selectedItem.getItem();
-            buttons.get(GIVE).setActive(selectedItemValue.isHoldable());
-            buttons.get(USE).setActive(selectedItemValue instanceof BagUseItem);
+            giveButton.setActive(selectedItemValue.isHoldable());
+            useButton.setActive(selectedItemValue instanceof BagUseItem);
         }
     }
 }

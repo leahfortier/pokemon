@@ -37,17 +37,16 @@ public class BagLayout {
     private static final int NUM_ITEM_COLS = 2;
     private static final int ITEMS_PER_PAGE = NUM_ITEM_ROWS*NUM_ITEM_COLS;
     private static final int TAB_HEIGHT = 55;
+    private static final int BUTTON_HEIGHT = 38;
 
     public final DrawPanel bagPanel;
     public final DrawPanel leftPanel;
     public final DrawPanel itemsPanel;
     public final ItemPanel selectedPanel;
 
-    public final DrawPanel[] selectedButtonPanels;
-    private final DrawPanel returnPanel;
-
     public final DrawPanel leftArrow;
     public final DrawPanel rightArrow;
+    private final DrawPanel returnPanel;
 
     private final boolean includeQuantity;
 
@@ -67,7 +66,6 @@ public class BagLayout {
                 .withBorderlessTransparentBackground()
                 .withBlackOutline();
 
-        int buttonHeight = 38;
         int selectedHeight = 82;
         int halfPanelWidth = (bagPanel.width - 3*spacing)/2;
 
@@ -90,17 +88,12 @@ public class BagLayout {
 
         itemsPanel = new DrawPanel(
                 selectedPanel.x,
-                selectedPanel.bottomY() + buttonHeight + spacing,
+                selectedPanel.bottomY() + BUTTON_HEIGHT + spacing,
                 halfPanelWidth,
-                leftPanel.height - selectedPanel.height - 2*buttonHeight - 2*spacing
+                leftPanel.height - selectedPanel.height - 2*BUTTON_HEIGHT - 2*spacing
         )
                 .withFullTransparency()
                 .withBlackOutline();
-
-        selectedButtonPanels = new DrawPanel[UseState.values().length];
-        for (int i = 0; i < selectedButtonPanels.length; i++) {
-            selectedButtonPanels[i] = selectedPanel.createBottomTab(i, buttonHeight, selectedButtonPanels.length);
-        }
 
         Entry<DrawPanel, DrawPanel> arrowPanels = this.getItemsLayout().getArrowPanels();
         leftArrow = arrowPanels.getKey();
@@ -108,10 +101,17 @@ public class BagLayout {
 
         returnPanel = new DrawPanel(
                 selectedPanel.x,
-                bagPanel.bottomY() - spacing - buttonHeight,
+                bagPanel.bottomY() - spacing - BUTTON_HEIGHT,
                 halfPanelWidth,
-                buttonHeight
+                BUTTON_HEIGHT
         );
+    }
+
+    public TabLayout getSelectedButtonLayout(int numButtons) {
+        return new TabLayout(selectedPanel, numButtons, BUTTON_HEIGHT)
+                .withButtonSetup((panel, index) -> panel.withTabOutlines(index, -1)
+                                                        .withBorderlessTransparentBackground())
+                .asBottomTabs();
     }
 
     private ButtonLayout getItemsLayout() {

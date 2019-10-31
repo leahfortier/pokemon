@@ -24,7 +24,8 @@ public class SellView extends View {
 
     private static final int NUM_BUTTONS = CATEGORIES.length + ITEMS_PER_PAGE + 6;
     private static final int TABS = 0;
-    private static final int ITEMS = CATEGORIES.length;
+    private static final int ITEMS = TABS + CATEGORIES.length;
+    private static final int BOTTOM_ITEM = ITEMS + ITEMS_PER_PAGE - 1;
     private static final int RETURN = NUM_BUTTONS - 1;
     private static final int SELL = NUM_BUTTONS - 2;
     private static final int AMOUNT_LEFT_ARROW = NUM_BUTTONS - 3;
@@ -77,26 +78,26 @@ public class SellView extends View {
         );
 
         Button returnButton = layout.createReturnButton(
-                new ButtonTransitions().right(SELL).up(PAGE_LEFT_ARROW).left(SELL).down(TABS)
+                new ButtonTransitions().right(SELL).up(PAGE_RIGHT_ARROW).left(SELL).down(TABS)
         );
 
         tabButtons = layout.getTabButtons(TABS, RETURN, AMOUNT_LEFT_ARROW, this::changeCategory);
 
         itemButtons = layout.getItemButtons(
                 ITEMS,
-                new ButtonTransitions().up(AMOUNT_LEFT_ARROW).down(PAGE_LEFT_ARROW).left(SELL).right(SELL),
+                new ButtonTransitions().up(AMOUNT_RIGHT_ARROW).down(PAGE_RIGHT_ARROW).left(SELL),
                 index -> setSelectedItem(GeneralUtils.getPageValue(this.getDisplayItems(), pageNum, ITEMS_PER_PAGE, index))
         );
 
         Button pageLeftButton = new Button(
                 layout.leftArrow,
-                new ButtonTransitions().right(PAGE_RIGHT_ARROW).up(ITEMS_PER_PAGE - 2).left(SELL).down(RETURN),
+                new ButtonTransitions().right(PAGE_RIGHT_ARROW).up(BOTTOM_ITEM - 1).left(SELL).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         ).asArrow(Direction.LEFT);
 
         Button pageRightButton = new Button(
                 layout.rightArrow,
-                new ButtonTransitions().right(SELL).up(ITEMS_PER_PAGE - 1).left(PAGE_LEFT_ARROW).down(RETURN),
+                new ButtonTransitions().right(SELL).up(BOTTOM_ITEM).left(PAGE_LEFT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         ).asArrow(Direction.RIGHT);
 

@@ -11,6 +11,10 @@ public class ButtonList implements Iterable<Button> {
 
     private int selected;
 
+    public ButtonList(int numButtons) {
+        this(new Button[numButtons]);
+    }
+
     public ButtonList(Button[] buttons) {
         this.buttons = buttons;
         this.selected = 0;
@@ -19,6 +23,10 @@ public class ButtonList implements Iterable<Button> {
     // Note: size should already accommodate these values, it is just setting them
     public void set(int startIndex, Button[] buttons) {
         System.arraycopy(buttons, 0, this.buttons, startIndex, buttons.length);
+    }
+
+    public void set(int index, Button button) {
+        this.buttons[index] = button;
     }
 
     public int size() {

@@ -180,4 +180,5 @@ Other random things:
     use DrawLayout for pokemonButtons in pcView (and I guess pokedexView also since they're the same)
     page buttons in BattleView BagState aren't vertically centered (and maybe item button should use spacing)
     pokedex move buttons look like they're slightly changing font size or spacing or something depending on which one is selected?
+    move as much logic as possible out of views and just have them called from in there (buy from Mart is good example)
     
