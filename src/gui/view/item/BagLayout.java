@@ -29,6 +29,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Map.Entry;
 
 public class BagLayout {
     private static final BagCategory[] CATEGORIES = BagCategory.values();
@@ -101,23 +102,9 @@ public class BagLayout {
             selectedButtonPanels[i] = selectedPanel.createBottomTab(i, buttonHeight, selectedButtonPanels.length);
         }
 
-        // Fake buttons are fake (just used for spacing)
-        Button[] itemButtons = this.getItemButtons(0, new ButtonTransitions(), index -> {});
-
-        int arrowHeight = 20;
-        leftArrow = new DrawPanel(
-                itemsPanel.x + itemsPanel.width/4,
-                itemButtons[itemButtons.length - 1].centerY() + (itemButtons[2].y - itemButtons[0].y) - arrowHeight/2,
-                35,
-                arrowHeight
-        );
-
-        rightArrow = new DrawPanel(
-                itemsPanel.rightX() - (leftArrow.x - itemsPanel.x) - leftArrow.width,
-                leftArrow.y,
-                leftArrow.width,
-                leftArrow.height
-        );
+        Entry<DrawPanel, DrawPanel> arrowPanels = this.getItemsLayout().getArrowPanels();
+        leftArrow = arrowPanels.getKey();
+        rightArrow = arrowPanels.getValue();
 
         returnPanel = new DrawPanel(
                 selectedPanel.x,
@@ -127,17 +114,21 @@ public class BagLayout {
         );
     }
 
+    private ButtonLayout getItemsLayout() {
+        return new ButtonLayout(itemsPanel, NUM_ITEM_ROWS, NUM_ITEM_COLS, 5)
+                .withMissingBottomRow()
+                .withDrawSetup(panel -> panel.withBackgroundColor(Color.WHITE)
+                                             .withBorderPercentage(0)
+                                             .withBlackOutline());
+    }
+
     public Button[] getItemButtons(int startIndex,
                                    ButtonTransitions defaultTransitions,
                                    ButtonIndexAction indexAction) {
-        return new ButtonLayout(itemsPanel, NUM_ITEM_ROWS, NUM_ITEM_COLS, 5)
-                .withMissingBottomRow()
+        return this.getItemsLayout()
                 .withStartIndex(startIndex)
                 .withDefaultTransitions(defaultTransitions)
                 .withPressIndex(indexAction)
-                .withDrawSetup(panel -> panel.withBackgroundColor(Color.WHITE)
-                                             .withBorderPercentage(0)
-                                             .withBlackOutline())
                 .getButtons();
     }
 

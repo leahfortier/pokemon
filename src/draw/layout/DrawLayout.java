@@ -4,7 +4,7 @@ import draw.panel.DrawPanel;
 import main.Global;
 
 public class DrawLayout {
-    private final DrawPanel outerPanel;
+    protected final DrawPanel outerPanel;
 
     protected final int numRows;
     protected final int numCols;

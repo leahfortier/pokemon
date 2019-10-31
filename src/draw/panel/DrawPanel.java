@@ -483,10 +483,6 @@ public class DrawPanel implements Panel {
         return this.createTab(tabIndex, tabHeight, numTabs, true, true);
     }
 
-    public DrawPanel createTab(int tabIndex, int tabHeight, int numTabs) {
-        return this.createTab(tabIndex, tabHeight, numTabs, false, false);
-    }
-
     // Inset is true if the button should overlap with the panel
     private DrawPanel createTab(int tabIndex, int tabHeight, int numTabs, boolean inset, boolean isBottomTab) {
         int tabWidth = this.width/numTabs;
