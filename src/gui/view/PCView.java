@@ -183,24 +183,14 @@ class PCView extends View {
                 fakeTabs[0].panel(),
                 new ButtonTransitions().right(DEPOSIT_WITHDRAW).left(RIGHT_ARROW).down(RETURN).up(RETURN),
                 () -> switchClicked = !switchClicked,
-                textButtonSetup(0, "Switch")
+                textButtonSetup("Switch")
         );
 
         buttons[DEPOSIT_WITHDRAW] = depositWithdrawButton = new Button(
                 fakeTabs[1].panel(),
                 new ButtonTransitions().right(RELEASE).left(SWITCH).down(RETURN).up(RETURN),
-                () -> {
-                    if (party) { // Deposit
-                        if (depositClicked) {
-                            pc.depositPokemonFromPlayer(selected);
-                        }
-
-                        depositClicked = !depositClicked;
-                    } else { // Withdraw
-                        pc.withdrawPokemon(selected);
-                    }
-                },
-                textButtonSetup(1, "") // Deposit/Withdraw text set depending on state
+                this::pressDepositWithdraw,
+                textButtonSetup("") // Deposit/Withdraw text set depending on state
         ).setup(ButtonPanel::greyInactive);
 
         buttons[RELEASE] = releaseButton = new Button(
@@ -210,7 +200,7 @@ class PCView extends View {
                     pc.releasePokemon(selected);
                     movedToFront();
                 },
-                textButtonSetup(2, "Release")
+                textButtonSetup("Release")
         ).setup(ButtonPanel::greyInactive);
 
         int spacing = infoPanel.x - boxPanel.rightX();
@@ -220,15 +210,10 @@ class PCView extends View {
                 returnY,
                 infoPanel.width,
                 partyPanel.bottomY() - returnY,
-                new ButtonTransitions()
-                        .right(PARTY)
-                        .up(SWITCH)
-                        .down(SWITCH)
-                        .left(LAST_PARTY),
+                new ButtonTransitions().right(PARTY).up(SWITCH).down(SWITCH).left(LAST_PARTY),
                 ButtonPressAction.getExitAction(),
-                textButtonSetup(-1, "Return")
+                textButtonSetup("Return")
         ).setup(panel -> panel.withBackgroundColor(Color.YELLOW)
-                              .withBlackOutline()
                               .withTransparentCount(2));
 
         this.buttons = new ButtonList(buttons);
@@ -243,8 +228,8 @@ class PCView extends View {
         );
     }
 
-    private ButtonPanelSetup textButtonSetup(int index, String text) {
-        return panel -> panel.withTabOutlines(index, -1)
+    private ButtonPanelSetup textButtonSetup(String text) {
+        return panel -> panel.withBlackOutline()
                              .withLabel(text, 20)
                              .withTransparentBackground()
                              .withBorderPercentage(0);
@@ -282,6 +267,18 @@ class PCView extends View {
         } else {
             selected = Game.getPlayer().getTeam().get(index);
             party = true;
+        }
+    }
+
+    private void pressDepositWithdraw() {
+        if (party) { // Deposit
+            if (depositClicked) {
+                pc.depositPokemonFromPlayer(selected);
+            }
+
+            depositClicked = !depositClicked;
+        } else { // Withdraw
+            pc.withdrawPokemon(selected);
         }
     }
 

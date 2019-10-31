@@ -179,4 +179,4 @@ Other random things:
     use spacing for movePanels in battle PokemonState
     pokedex move buttons look like they're slightly changing font size or spacing or something depending on which one is selected?
     move as much logic as possible out of views and just have them called from in there (buy from Mart is good example)
-    should rewrite the tab stuff so that they include the outline overlap and don't need to rely on draw order for the outlines
+    

@@ -10,8 +10,6 @@ import main.Game;
 import main.Global;
 import map.Direction;
 
-import java.util.List;
-
 public class MartLayout extends BagLayout {
     public final DrawPanel amountPanel;
     public final DrawPanel playerMoneyPanel;
@@ -33,9 +31,7 @@ public class MartLayout extends BagLayout {
 
         // Left and right arrow + centered amount panel
         fakeAmountTabs = getSelectedButtonLayout(3).getTabs();
-        amountPanel = fakeAmountTabs[1].panel()
-                                       .withOutlines(List.of(Direction.DOWN))
-                                       .withLabelSize(20);
+        amountPanel = fakeAmountTabs[1].panel().withLabelSize(20);
     }
 
     // Item amount, player money, in bag display, and total amount display labels
@@ -57,7 +53,6 @@ public class MartLayout extends BagLayout {
                               .greyInactive()
                               .withBlackOutline()
                               .withBorderlessTransparentBackground()
-                              .withBlackOutline()
         );
     }
 

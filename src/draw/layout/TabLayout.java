@@ -81,10 +81,11 @@ public class TabLayout {
         Button[] tabs = new Button[this.numTabs];
         for (int i = 0; i < tabs.length; i++) {
             final int index = i;
+            int outlineExtra = (i == 0 ? 0 : DrawUtils.OUTLINE_SIZE);
             tabs[i] = new Button(
-                    panel.x + i*tabWidth + Math.min(i, remainder),
+                    panel.x + i*tabWidth + Math.min(i, remainder) - outlineExtra,
                     y,
-                    tabWidth + (i < remainder ? 1 : 0),
+                    tabWidth + (i < remainder ? 1 : 0) + outlineExtra,
                     tabHeight,
                     ButtonTransitions.getBasicTransitions(i, 1, numTabs, startIndex, defaultTransitions),
                     () -> indexAction.pressButton(index),

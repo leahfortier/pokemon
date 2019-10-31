@@ -109,7 +109,7 @@ public class BagLayout {
 
     public TabLayout getSelectedButtonLayout(int numButtons) {
         return new TabLayout(selectedPanel, numButtons, BUTTON_HEIGHT)
-                .withButtonSetup((panel, index) -> panel.withTabOutlines(index, -1)
+                .withButtonSetup((panel, index) -> panel.withBlackOutline()
                                                         .withBorderlessTransparentBackground())
                 .asBottomTabs();
     }
