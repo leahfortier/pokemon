@@ -185,9 +185,9 @@ public class Point implements Serializable {
         return x + y*width;
     }
 
-    public static Point getPointAtIndex(int locationIndex, int mapWidth) {
-        int y = locationIndex/mapWidth;
-        int x = locationIndex - y*mapWidth;
+    public static Point getPointAtIndex(int index, int width) {
+        int y = index/width;
+        int x = index - y*width;
 
         return new Point(x, y);
     }

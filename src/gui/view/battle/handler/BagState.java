@@ -5,10 +5,10 @@ import draw.Alignment;
 import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
-import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
 import draw.layout.ButtonLayout;
+import draw.layout.DrawLayout;
 import draw.layout.TabLayout;
 import draw.panel.DrawPanel;
 import draw.panel.PanelList;
@@ -33,6 +33,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class BagState implements VisualStateHandler {
@@ -44,15 +45,16 @@ public class BagState implements VisualStateHandler {
     private static final int NUM_BUTTONS = BATTLE_BAG_CATEGORIES.length + ITEMS_PER_PAGE + 3;
     private static final int TABS = 0;
     private static final int ITEMS = TABS + BATTLE_BAG_CATEGORIES.length;
+    private static final int BOTTOM_ITEM = ITEMS + ITEMS_PER_PAGE - 1;
     private static final int LAST_ITEM_USED = NUM_BUTTONS - 1;
-    private static final int BAG_RIGHT = NUM_BUTTONS - 2;
-    private static final int BAG_LEFT = NUM_BUTTONS - 3;
+    private static final int RIGHT_ARROW = NUM_BUTTONS - 2;
+    private static final int LEFT_ARROW = NUM_BUTTONS - 3;
 
     private final PanelList panels;
 
     private final DrawPanel bagCategoryPanel;
-    private final DrawPanel lastItemPanel;
-    private final WrapPanel itemDescriptionPanel;
+    private final WrapPanel lastItemPanel;
+    private final DrawPanel lastItemLabelPanel;
 
     private final ButtonList buttons;
     private final Button[] tabButtons;
@@ -72,14 +74,8 @@ public class BagState implements VisualStateHandler {
                 .withTransparentBackground()
                 .withBlackOutline();
 
-        lastItemPanel = new DrawPanel(bagCategoryPanel.x, 492, bagCategoryPanel.width, 78)
+        lastItemPanel = new WrapPanel(bagCategoryPanel.x, 492, bagCategoryPanel.width, 78, 13)
                 .withBorderPercentage(17)
-                .withTransparentBackground()
-                .withBlackOutline()
-                .withLabel("Last item used:", 16, Alignment.LEFT);
-
-        itemDescriptionPanel = new WrapPanel(lastItemPanel, 13)
-                .withBorderSize(lastItemPanel.getBorderSize())
                 .withTransparentBackground()
                 .withBlackOutline();
 
@@ -94,19 +90,36 @@ public class BagState implements VisualStateHandler {
                                                         .withLabel(BATTLE_BAG_CATEGORIES[index].getName(), 18))
                 .getTabs();
 
-        bagButtons[BAG_LEFT] = leftButton = new Button(
-                135, 435, 35, 20, ButtonHoverAction.BOX,
-                new ButtonTransitions().right(BAG_RIGHT).up(ITEMS + ITEMS_PER_PAGE - 2).down(LAST_ITEM_USED)
+        ButtonLayout itemsLayout = new ButtonLayout(bagCategoryPanel, ITEMS_PER_PAGE/2, 2, 8)
+                .withMissingBottomRow()
+                .withStartIndex(ITEMS)
+                .withDefaultTransitions(new ButtonTransitions().up(TABS).down(RIGHT_ARROW))
+                .withButtonSetup(panel -> panel.skipInactive()
+                                               .withBlackOutline()
+                                               .withBackgroundColor(Color.WHITE)
+                                               .withBorderPercentage(0));
+
+        itemButtons = itemsLayout.getButtons();
+
+        Entry<DrawPanel, DrawPanel> arrowPanels = itemsLayout.getArrowPanels();
+
+        bagButtons[LEFT_ARROW] = leftButton = new Button(
+                arrowPanels.getKey(),
+                new ButtonTransitions().right(RIGHT_ARROW).up(BOTTOM_ITEM - 1).down(LAST_ITEM_USED).left(RIGHT_ARROW)
         ).asArrow(Direction.LEFT);
 
-        bagButtons[BAG_RIGHT] = rightButton = new Button(
-                250, 435, 35, 20, ButtonHoverAction.BOX,
-                new ButtonTransitions().up(ITEMS + ITEMS_PER_PAGE - 1).left(BAG_LEFT).down(LAST_ITEM_USED)
+        bagButtons[RIGHT_ARROW] = rightButton = new Button(
+                arrowPanels.getValue(),
+                new ButtonTransitions().up(BOTTOM_ITEM).left(LEFT_ARROW).down(LAST_ITEM_USED).right(LEFT_ARROW)
         ).asArrow(Direction.RIGHT);
 
+        DrawPanel[] lastUsedPanels = new DrawLayout(lastItemPanel, 1, 2, itemButtons[0]).getPanels();
+        lastItemLabelPanel = lastUsedPanels[0].withNoBackground()
+                                              .withLabel("Last item used:", 16, Alignment.LEFT);
+
         bagButtons[LAST_ITEM_USED] = lastUsedButton = new Button(
-                214, 517, 148, 28,
-                new ButtonTransitions().up(BAG_LEFT).down(selectedBagTab),
+                lastUsedPanels[1],
+                new ButtonTransitions().up(LEFT_ARROW).down(selectedBagTab),
                 () -> {}, // Handled in update
                 panel -> panel.skipInactive()
                               .withBlackOutline()
@@ -114,21 +127,11 @@ public class BagState implements VisualStateHandler {
                               .withBorderPercentage(0)
         );
 
-        itemButtons = new ButtonLayout(bagCategoryPanel, ITEMS_PER_PAGE/2, 2, 148, 28)
-                .withMissingBottomRow()
-                .withStartIndex(ITEMS)
-                .withDefaultTransitions(new ButtonTransitions().up(TABS).down(BAG_RIGHT))
-                .withButtonSetup(panel -> panel.skipInactive()
-                                               .withBlackOutline()
-                                               .withBackgroundColor(Color.WHITE)
-                                               .withBorderPercentage(0))
-                .getButtons();
-
         this.buttons = new ButtonList(bagButtons);
         this.buttons.set(TABS, tabButtons);
         this.buttons.set(ITEMS, itemButtons);
 
-        this.panels = new PanelList(bagCategoryPanel, lastItemPanel, itemDescriptionPanel);
+        this.panels = new PanelList(bagCategoryPanel, lastItemPanel, lastItemLabelPanel);
     }
 
     @Override
@@ -156,7 +159,6 @@ public class BagState implements VisualStateHandler {
         Color tabColor = BATTLE_BAG_CATEGORIES[selectedBagTab].getColor();
         bagCategoryPanel.withBackgroundColor(tabColor);
         lastItemPanel.withBackgroundColor(tabColor);
-        itemDescriptionPanel.withBackgroundColor(tabColor);
 
         // Tab outlines
         for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
@@ -165,9 +167,8 @@ public class BagState implements VisualStateHandler {
 
         // Show item description if a item button is currently highlighted instead of the last move used
         boolean showDescription = this.getHighlighted() != null;
-        lastItemPanel.skipDraw(showDescription);
         lastUsedButton.panel().skipDraw(showDescription);
-        itemDescriptionPanel.skipDraw(!showDescription);
+        lastItemLabelPanel.skipDraw(showDescription);
     }
 
     private ItemNamesies getHighlighted() {
@@ -216,7 +217,7 @@ public class BagState implements VisualStateHandler {
         }
 
         // Bag page numbers and arrows
-        TextUtils.drawPageNumbers(g, 20, leftButton, rightButton, bagPage, totalPages());
+        TextUtils.drawPageNumbers(g, 18, leftButton, rightButton, bagPage, totalPages());
 
         // Back Arrow
         view.drawBackButton(g);
@@ -232,6 +233,7 @@ public class BagState implements VisualStateHandler {
         return GeneralUtils.getTotalPages(this.getDisplayItems().size(), ITEMS_PER_PAGE);
     }
 
+    // TODO: This should be combined with the BagLayout method
     private void drawItemButton(Graphics g, TileSet itemTiles, Button button, ItemNamesies itemNamesies) {
         int dx = button.x;
         int dy = button.y;
@@ -250,7 +252,7 @@ public class BagState implements VisualStateHandler {
     }
 
     public WrapMetrics drawItemDescription(Graphics g, ItemNamesies itemNamesies) {
-        return itemDescriptionPanel.drawMessage(g, itemNamesies.getItem().getDescription());
+        return lastItemPanel.drawMessage(g, itemNamesies.getItem().getDescription());
     }
 
     @Override

@@ -20,13 +20,20 @@ public class ButtonList implements Iterable<Button> {
         this.selected = 0;
     }
 
-    // Note: size should already accommodate these values, it is just setting them
+    public void set(int index, Button button) {
+        this.buttons[index] = button;
+    }
+
     public void set(int startIndex, Button[] buttons) {
         System.arraycopy(buttons, 0, this.buttons, startIndex, buttons.length);
     }
 
-    public void set(int index, Button button) {
-        this.buttons[index] = button;
+    public void set(int startIndex, Button[][] buttons) {
+        for (int i = 0, index = 0; i < buttons.length; i++) {
+            for (int j = 0; j < buttons[i].length; j++, index++) {
+                this.buttons[startIndex + index] = buttons[i][j];
+            }
+        }
     }
 
     public int size() {

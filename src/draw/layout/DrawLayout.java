@@ -1,6 +1,7 @@
 package draw.layout;
 
 import draw.panel.DrawPanel;
+import draw.panel.Panel;
 import main.Global;
 
 public class DrawLayout {
@@ -18,6 +19,10 @@ public class DrawLayout {
 
     public DrawLayout(DrawPanel panel, int numRows, int numCols, int spacing) {
         this(panel, numRows, numCols, spacing, -1, -1);
+    }
+
+    public DrawLayout(DrawPanel panel, int numRows, int numCols, Panel size) {
+        this(panel, numRows, numCols, size.getWidth(), size.getHeight());
     }
 
     public DrawLayout(DrawPanel panel, int numRows, int numCols, int width, int height) {
