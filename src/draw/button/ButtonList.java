@@ -11,9 +11,29 @@ public class ButtonList implements Iterable<Button> {
 
     private int selected;
 
+    public ButtonList(int numButtons) {
+        this(new Button[numButtons]);
+    }
+
     public ButtonList(Button[] buttons) {
         this.buttons = buttons;
         this.selected = 0;
+    }
+
+    public void set(int index, Button button) {
+        this.buttons[index] = button;
+    }
+
+    public void set(int startIndex, Button[] buttons) {
+        System.arraycopy(buttons, 0, this.buttons, startIndex, buttons.length);
+    }
+
+    public void set(int startIndex, Button[][] buttons) {
+        for (int i = 0, index = 0; i < buttons.length; i++) {
+            for (int j = 0; j < buttons[i].length; j++, index++) {
+                this.buttons[startIndex + index] = buttons[i][j];
+            }
+        }
     }
 
     public int size() {

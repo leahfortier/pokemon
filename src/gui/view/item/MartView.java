@@ -32,6 +32,7 @@ public class MartView extends View {
 
     private static final int NUM_BUTTONS = ITEMS_PER_PAGE + 6;
     private static final int ITEMS = 0;
+    private static final int BOTTOM_ITEM = ITEMS + ITEMS_PER_PAGE - 1;
     private static final int RETURN = NUM_BUTTONS - 1;
     private static final int BUY = NUM_BUTTONS - 2;
     private static final int AMOUNT_LEFT_ARROW = NUM_BUTTONS - 3;
@@ -58,14 +59,9 @@ public class MartView extends View {
         // No quantities
         layout = new MartLayout(false);
 
-        layout.bagPanel.withBackgroundColor(BACKGROUND_COLOR)
-                       .withBlackOutline();
+        layout.bagPanel.withBackgroundColor(BACKGROUND_COLOR);
 
-        DrawPanel tabPanel = layout.tabPanels[1]
-                .withBackgroundColor(BACKGROUND_COLOR)
-                .withBorderlessTransparentBackground()
-                .withMissingBlackOutline(Direction.DOWN)
-                .withLabel(PokeString.POKE + " Mart", 16);
+        DrawPanel tabPanel = layout.getTabPanel(1, BACKGROUND_COLOR, PokeString.POKE + " Mart");
 
         buyButton = layout.createConfirmButton(
                 "BUY",
@@ -86,24 +82,24 @@ public class MartView extends View {
         );
 
         Button returnButton = layout.createReturnButton(
-                new ButtonTransitions().right(BUY).up(PAGE_LEFT_ARROW).left(BUY).down(AMOUNT_LEFT_ARROW)
+                new ButtonTransitions().right(BUY).up(PAGE_RIGHT_ARROW).left(BUY).down(AMOUNT_RIGHT_ARROW)
         );
 
         itemButtons = layout.getItemButtons(
                 ITEMS,
-                new ButtonTransitions().up(AMOUNT_LEFT_ARROW).down(PAGE_LEFT_ARROW).left(BUY).right(BUY),
+                new ButtonTransitions().up(AMOUNT_RIGHT_ARROW).down(PAGE_RIGHT_ARROW).left(BUY),
                 index -> setSelectedItem(GeneralUtils.getPageValue(forSaleItems, pageNum, ITEMS_PER_PAGE, index))
         );
 
         Button pageLeftButton = new Button(
                 layout.leftArrow,
-                new ButtonTransitions().right(PAGE_RIGHT_ARROW).up(ITEMS_PER_PAGE - 2).left(BUY).down(RETURN),
+                new ButtonTransitions().right(PAGE_RIGHT_ARROW).up(BOTTOM_ITEM - 1).left(BUY).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         ).asArrow(Direction.LEFT);
 
         Button pageRightButton = new Button(
                 layout.rightArrow,
-                new ButtonTransitions().right(BUY).up(ITEMS_PER_PAGE - 1).left(PAGE_LEFT_ARROW).down(RETURN),
+                new ButtonTransitions().right(BUY).up(BOTTOM_ITEM).left(PAGE_LEFT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         ).asArrow(Direction.RIGHT);
 

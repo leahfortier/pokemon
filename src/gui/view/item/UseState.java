@@ -8,19 +8,17 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 
 enum UseState {
-    GIVE("Give", BagView.GIVE, BagView::giveItem),
-    USE("Use", BagView.USE, BagView::useItem),
-    TAKE("Take", BagView.TAKE, BagView::takeItem);
+    GIVE("Give", BagView::giveItem),
+    USE("Use", BagView::useItem),
+    TAKE("Take", BagView::takeItem);
 
-    final int buttonIndex;
     final String displayName;
     private final ApplyButton applyButton;
 
     private boolean clicked;
 
-    UseState(String displayName, int buttonIndex, ApplyButton applyButton) {
+    UseState(String displayName, ApplyButton applyButton) {
         this.displayName = displayName;
-        this.buttonIndex = buttonIndex;
         this.applyButton = applyButton;
     }
 

@@ -177,4 +177,6 @@ Other random things:
     something weird about Comfey's party tile and fails when trimming
     text wrapping should allow having a different startX for the first line so you can have a label in a different size (ability name and description for example)
     use spacing for movePanels in battle PokemonState
-    use DrawLayout for pokemonButtons in pcView (and I guess pokedexView also since they're the same)
+    pokedex move buttons look like they're slightly changing font size or spacing or something depending on which one is selected?
+    move as much logic as possible out of views and just have them called from in there (buy from Mart is good example)
+    

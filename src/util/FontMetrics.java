@@ -48,7 +48,11 @@ public class FontMetrics {
 
     // Returns the width of a single character
     public static int getTextWidth(Graphics g) {
-        return getTextWidth(g.getFont().getSize(), " ");
+        return getTextWidth(g.getFont().getSize());
+    }
+
+    public static int getTextWidth(int fontSize) {
+        return getTextWidth(fontSize, " ");
     }
 
     public static int getTextWidth(Graphics g, String text) {

@@ -12,8 +12,8 @@ import draw.button.ButtonPanel;
 import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
+import draw.layout.ButtonLayout;
 import draw.panel.BasicPanels;
-import draw.panel.DrawLayout;
 import draw.panel.DrawPanel;
 import draw.panel.LearnMovePanel;
 import draw.panel.MovePanel;
@@ -124,7 +124,7 @@ public class MoveRelearnerView extends View {
                 .withTransparentCount(2)
                 .withBorderPercentage(0);
 
-        moveButtons = new DrawLayout(movesPanel, MOVES_PER_PAGE, 1, 10)
+        moveButtons = new ButtonLayout(movesPanel, MOVES_PER_PAGE, 1, 10)
                 .withMissingBottomRow()
                 .withStartIndex(MOVES)
                 .withDefaultTransitions(new ButtonTransitions().right(PARTY).up(MOVES_LEFT_ARROW).left(PARTY).down(MOVES_RIGHT_ARROW))
@@ -132,7 +132,7 @@ public class MoveRelearnerView extends View {
                 .withDrawSetup(panel -> panel.withBlackOutline().withFullTransparency())
                 .getButtons();
 
-        pokemonButtons = new DrawLayout(partyPanel, Trainer.MAX_POKEMON, 1, 15)
+        pokemonButtons = new ButtonLayout(partyPanel, Trainer.MAX_POKEMON, 1, 15)
                 .withStartIndex(PARTY)
                 .withDefaultTransitions(new ButtonTransitions().right(MOVES).up(RETURN).left(MOVES).down(RETURN))
                 .withPressIndex(this::setSelectedPokemon)

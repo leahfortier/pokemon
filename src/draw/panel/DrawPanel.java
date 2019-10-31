@@ -7,8 +7,6 @@ import draw.PolygonUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonPanel;
-import draw.button.ButtonPanel.ButtonPanelSetup;
-import draw.button.ButtonPressAction;
 import main.Global;
 import map.Direction;
 import pokemon.active.PartyPokemon;
@@ -409,20 +407,20 @@ public class DrawPanel implements Panel {
         return this.getBorderSize() + FontMetrics.getTextWidth(g);
     }
 
-    public void drawLeftLabel(Graphics g, int fontSize, String label) {
-        int startX = x + this.getTextSpace(g);
-        int centerY = centerY();
+    public int getLabelSpace() {
+        return this.getBorderSize() + FontMetrics.getTextWidth(fontSize);
+    }
 
+    public void drawLeftLabel(Graphics g, int fontSize, String label) {
+        int startX = x + this.getLabelSpace();
         FontMetrics.setFont(g, fontSize);
-        TextUtils.drawCenteredHeightString(g, label, startX, centerY);
+        TextUtils.drawCenteredHeightString(g, label, startX, this.centerY());
     }
 
     public void drawRightLabel(Graphics g, int fontSize, String label) {
-        int startX = rightX() - this.getTextSpace(g);
-        int centerY = centerY();
-
+        int startX = this.rightX() - this.getLabelSpace();
         FontMetrics.setFont(g, fontSize);
-        TextUtils.drawCenteredHeightString(g, label, startX, centerY, Alignment.RIGHT);
+        TextUtils.drawCenteredHeightString(g, label, startX, this.centerY(), Alignment.RIGHT);
     }
 
     public void imageLabel(Graphics g, BufferedImage image) {
@@ -436,7 +434,7 @@ public class DrawPanel implements Panel {
 
     // Spacing is kind of specific for the bag tabs right now and not sure how bad that is without another sample
     public void leftImageLabel(Graphics g, int fontSize, BufferedImage image, String label) {
-        int spacing = FontMetrics.getTextWidth(g)/3;
+        int spacing = FontMetrics.getTextWidth(fontSize)/3;
         int startX = x + this.getBorderSize() + spacing;
 
         FontMetrics.setFont(g, fontSize);
@@ -475,71 +473,5 @@ public class DrawPanel implements Panel {
         g.setColor(color);
         FontMetrics.setFont(g, fontSize);
         TextUtils.drawCenteredString(g, text, x, y, width, height);
-    }
-
-    public DrawPanel createBottomTab(int tabIndex, int tabHeight, int numTabs) {
-        return this.createTab(tabIndex, tabHeight, numTabs, false, true);
-    }
-
-    public DrawPanel createBottomInsetTab(int tabIndex, int tabHeight, int numTabs) {
-        return this.createTab(tabIndex, tabHeight, numTabs, true, true);
-    }
-
-    public DrawPanel createTab(int tabIndex, int tabHeight, int numTabs) {
-        return this.createTab(tabIndex, tabHeight, numTabs, false, false);
-    }
-
-    // Inset is true if the button should overlap with the panel
-    private DrawPanel createTab(int tabIndex, int tabHeight, int numTabs, boolean inset, boolean isBottomTab) {
-        int tabWidth = this.width/numTabs;
-        int remainder = this.width%numTabs;
-
-        int offset = inset ? tabHeight - DrawUtils.OUTLINE_SIZE : 0;
-        int y = isBottomTab ? this.bottomY() - DrawUtils.OUTLINE_SIZE - offset
-                            : this.y - tabHeight + DrawUtils.OUTLINE_SIZE + offset;
-
-        return new DrawPanel(
-                this.x + tabIndex*tabWidth + Math.min(tabIndex, remainder),
-                y,
-                tabWidth + (tabIndex < remainder ? 1 : 0),
-                tabHeight
-        );
-    }
-
-    @FunctionalInterface
-    public interface ButtonIndexAction {
-        void pressButton(int index);
-
-        static ButtonPressAction getPressAction(ButtonIndexAction indexAction, int index) {
-            return indexAction == null
-                   ? () -> {}
-                   : () -> indexAction.pressButton(index);
-        }
-    }
-
-    @FunctionalInterface
-    public interface PanelIndexSetup {
-        void setup(int index, ButtonPanel panel);
-
-        static ButtonPanelSetup getPanelSetup(PanelIndexSetup indexSetup, int index) {
-            return indexSetup == null
-                   ? panel -> {}
-                   : panel -> indexSetup.setup(index, panel);
-        }
-
-        static PanelIndexSetup add(PanelIndexSetup base, PanelIndexSetup addition) {
-            if (base == null && addition == null) {
-                return (index, panel) -> {};
-            } else if (base == null) {
-                return addition;
-            } else if (addition == null) {
-                return base;
-            }
-
-            return (index, panel) -> {
-                base.setup(index, panel);
-                addition.setup(index, panel);
-            };
-        }
     }
 }

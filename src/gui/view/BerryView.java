@@ -5,8 +5,8 @@ import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
+import draw.layout.DrawLayout;
 import draw.panel.BasicPanels;
-import draw.panel.DrawLayout;
 import draw.panel.DrawPanel;
 import draw.panel.PanelList;
 import gui.TileSet;
@@ -36,6 +36,8 @@ public class BerryView extends View {
     private static final int NUM_ROWS = BerryFarm.MAX_BERRIES/NUM_COLS;
 
     private static final int NUM_BUTTONS = ITEMS_PER_PAGE + 4;
+    private static final int ITEMS = 0;
+    private static final int BOTTOM_ITEM = ITEMS + ITEMS_PER_PAGE - 1;
     private static final int RETURN = NUM_BUTTONS - 1;
     private static final int HARVEST = NUM_BUTTONS - 2;
     private static final int RIGHT_ARROW = NUM_BUTTONS - 3;
@@ -58,15 +60,9 @@ public class BerryView extends View {
     BerryView() {
         this.layout = new BagLayout(true);
 
-        layout.bagPanel.withBackgroundColor(BACKGROUND_COLOR)
-                       .withBlackOutline();
+        layout.bagPanel.withBackgroundColor(BACKGROUND_COLOR);
 
-        DrawPanel tabPanel = layout.tabPanels[BagCategory.BERRY.ordinal()]
-                .withBackgroundColor(BACKGROUND_COLOR)
-                .withTransparentBackground()
-                .withBorderPercentage(0)
-                .withMissingBlackOutline(Direction.DOWN)
-                .withLabel("Berries!!", 16);
+        DrawPanel tabPanel = layout.getTabPanel(BagCategory.BERRY.ordinal(), BACKGROUND_COLOR, "Berries!!");
 
         Button returnButton = layout.createReturnButton(
                 new ButtonTransitions().up(RIGHT_ARROW).down(RIGHT_ARROW)
@@ -78,43 +74,38 @@ public class BerryView extends View {
 
         selectedItem = ItemNamesies.NO_ITEM;
         itemButtons = layout.getItemButtons(
-                0,
+                ITEMS,
                 new ButtonTransitions().up(HARVEST).down(RIGHT_ARROW),
                 index -> selectedItem = GeneralUtils.getPageValue(this.getDisplayBerries(), pageNum, ITEMS_PER_PAGE, index)
         );
 
-        // Harvest button is all the selected buttons at once
-        Button harvestButton = new Button(
-                layout.selectedPanel.x,
-                layout.selectedButtonPanels[0].y,
-                layout.selectedPanel.width,
-                layout.selectedButtonPanels[0].height,
-                new ButtonTransitions().up(RETURN).down(0),
-                () -> message = berryFarm.harvest(selectedItem),
-                panel -> panel.withTransparentBackground()
-                              .withBlackOutline()
-                              .withLabel("Harvest!", 20) // Welcome to the Hellmouth
-        );
+        // Welcome to the Hellmouth
+        Button harvestButton = layout.getSelectedButtonLayout(1)
+                                     .withStartIndex(HARVEST)
+                                     .withDefaultTransitions(new ButtonTransitions().up(RETURN).down(ITEMS))
+                                     .withPressIndex(index -> message = berryFarm.harvest(selectedItem))
+                                     .withButtonSetup(panel -> panel.withBlackOutline()
+                                                                    .withLabel("Harvest!", 20))
+                                     .getTabs()[0];
 
         Button leftArrow = new Button(
                 layout.leftArrow,
-                new ButtonTransitions().right(RIGHT_ARROW).up(ITEMS_PER_PAGE - 2).left(RIGHT_ARROW).down(RETURN),
+                new ButtonTransitions().right(RIGHT_ARROW).up(BOTTOM_ITEM - 1).left(RIGHT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         ).asArrow(Direction.LEFT);
 
         Button rightArrow = new Button(
                 layout.rightArrow,
-                new ButtonTransitions().right(LEFT_ARROW).up(ITEMS_PER_PAGE - 1).left(LEFT_ARROW).down(RETURN),
+                new ButtonTransitions().right(LEFT_ARROW).up(BOTTOM_ITEM).left(LEFT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         ).asArrow(Direction.RIGHT);
 
-        Button[] buttons = new Button[NUM_BUTTONS];
-        System.arraycopy(itemButtons, 0, buttons, 0, ITEMS_PER_PAGE);
-        buttons[HARVEST] = harvestButton;
-        buttons[LEFT_ARROW] = leftArrow;
-        buttons[RIGHT_ARROW] = rightArrow;
-        buttons[RETURN] = returnButton;
-        this.buttons = new ButtonList(buttons);
+        this.buttons = new ButtonList(NUM_BUTTONS);
+        buttons.set(ITEMS, itemButtons);
+        buttons.set(HARVEST, harvestButton);
+        buttons.set(LEFT_ARROW, leftArrow);
+        buttons.set(RIGHT_ARROW, rightArrow);
+        buttons.set(RETURN, returnButton);
 
         panels = new PanelList(
                 layout.bagPanel, layout.selectedPanel, layout.itemsPanel,

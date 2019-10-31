@@ -5,8 +5,6 @@ import draw.panel.DrawPanel;
 import map.Direction;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ButtonPanel extends DrawPanel {
     private final Button button;
@@ -72,19 +70,12 @@ public class ButtonPanel extends DrawPanel {
     }
 
     private ButtonPanel withTabOutlines(int index, int selectedIndex, boolean isBottomTab) {
-        List<Direction> toOutline = new ArrayList<>();
-        toOutline.add(isBottomTab ? Direction.DOWN : Direction.UP);
-        toOutline.add(Direction.RIGHT);
-
-        if (index == 0) {
-            toOutline.add(Direction.LEFT);
+        if (index == selectedIndex) {
+            this.withMissingBlackOutline(isBottomTab ? Direction.UP : Direction.DOWN);
+        } else {
+            this.withBlackOutline();
         }
-
-        if (index != selectedIndex) {
-            toOutline.add(isBottomTab ? Direction.UP : Direction.DOWN);
-        }
-
-        return this.withOutlines(toOutline).asButtonPanel();
+        return this;
     }
 
     @Override
@@ -121,6 +112,18 @@ public class ButtonPanel extends DrawPanel {
             return panel -> {
                 this.setup(panel);
                 next.setup(panel);
+            };
+        }
+    }
+
+    @FunctionalInterface
+    public interface ButtonPanelIndexSetup {
+        void setup(ButtonPanel panel, int index);
+
+        default ButtonPanelIndexSetup add(ButtonPanelIndexSetup next) {
+            return (panel, index) -> {
+                this.setup(panel, index);
+                next.setup(panel, index);
             };
         }
     }

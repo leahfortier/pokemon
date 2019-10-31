@@ -7,8 +7,9 @@ import draw.button.Button;
 import draw.button.ButtonPanel;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
-import draw.panel.DrawLayout;
-import draw.panel.DrawLayout.ButtonIndexAction;
+import draw.layout.ButtonLayout;
+import draw.layout.ButtonLayout.ButtonIndexAction;
+import draw.layout.TabLayout;
 import draw.panel.DrawPanel;
 import draw.panel.ItemPanel;
 import draw.panel.WrapPanel.WrapMetrics;
@@ -28,47 +29,43 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Map.Entry;
 
 public class BagLayout {
     private static final BagCategory[] CATEGORIES = BagCategory.values();
     private static final int NUM_ITEM_ROWS = 5;
     private static final int NUM_ITEM_COLS = 2;
     private static final int ITEMS_PER_PAGE = NUM_ITEM_ROWS*NUM_ITEM_COLS;
+    private static final int TAB_HEIGHT = 55;
+    private static final int BUTTON_HEIGHT = 38;
 
     public final DrawPanel bagPanel;
     public final DrawPanel leftPanel;
     public final DrawPanel itemsPanel;
     public final ItemPanel selectedPanel;
 
-    public final DrawPanel[] tabPanels;
-    public final DrawPanel[] selectedButtonPanels;
-    private final DrawPanel returnPanel;
-
     public final DrawPanel leftArrow;
     public final DrawPanel rightArrow;
+    private final DrawPanel returnPanel;
 
     private final boolean includeQuantity;
 
     public BagLayout(boolean includeQuantity) {
         this.includeQuantity = includeQuantity;
 
-        int tabHeight = 55;
         int spacing = 28;
-
         bagPanel = new DrawPanel(
                 spacing,
-                spacing + tabHeight,
+                spacing + TAB_HEIGHT,
                 Point.subtract(
                         Global.GAME_SIZE,
                         2*spacing,
-                        2*spacing + tabHeight
+                        2*spacing + TAB_HEIGHT
                 )
         )
-                .withTransparentBackground()
-                .withBorderPercentage(0)
-                .withMissingBlackOutline(Direction.UP);
+                .withBorderlessTransparentBackground()
+                .withBlackOutline();
 
-        int buttonHeight = 38;
         int selectedHeight = 82;
         int halfPanelWidth = (bagPanel.width - 3*spacing)/2;
 
@@ -91,82 +88,75 @@ public class BagLayout {
 
         itemsPanel = new DrawPanel(
                 selectedPanel.x,
-                selectedPanel.bottomY() + buttonHeight + spacing,
+                selectedPanel.bottomY() + BUTTON_HEIGHT + spacing,
                 halfPanelWidth,
-                leftPanel.height - selectedPanel.height - 2*buttonHeight - 2*spacing
+                leftPanel.height - selectedPanel.height - 2*BUTTON_HEIGHT - 2*spacing
         )
                 .withFullTransparency()
                 .withBlackOutline();
 
-        tabPanels = new DrawPanel[CATEGORIES.length];
-        for (int i = 0; i < tabPanels.length; i++) {
-            tabPanels[i] = bagPanel.createTab(i, tabHeight, tabPanels.length);
-        }
-
-        selectedButtonPanels = new DrawPanel[UseState.values().length];
-        for (int i = 0; i < selectedButtonPanels.length; i++) {
-            selectedButtonPanels[i] = selectedPanel.createBottomTab(i, buttonHeight, selectedButtonPanels.length);
-        }
-
-        // Fake buttons are fake (just used for spacing)
-        Button[] itemButtons = this.getItemButtons(0, new ButtonTransitions(), index -> {});
-
-        int arrowHeight = 20;
-        leftArrow = new DrawPanel(
-                itemsPanel.x + itemsPanel.width/4,
-                itemButtons[itemButtons.length - 1].centerY() + (itemButtons[2].y - itemButtons[0].y) - arrowHeight/2,
-                35,
-                arrowHeight
-        );
-
-        rightArrow = new DrawPanel(
-                itemsPanel.rightX() - (leftArrow.x - itemsPanel.x) - leftArrow.width,
-                leftArrow.y,
-                leftArrow.width,
-                leftArrow.height
-        );
+        Entry<DrawPanel, DrawPanel> arrowPanels = this.getItemsLayout().getArrowPanels();
+        leftArrow = arrowPanels.getKey();
+        rightArrow = arrowPanels.getValue();
 
         returnPanel = new DrawPanel(
                 selectedPanel.x,
-                bagPanel.bottomY() - spacing - buttonHeight,
+                bagPanel.bottomY() - spacing - BUTTON_HEIGHT,
                 halfPanelWidth,
-                buttonHeight
+                BUTTON_HEIGHT
         );
+    }
+
+    public TabLayout getSelectedButtonLayout(int numButtons) {
+        return new TabLayout(selectedPanel, numButtons, BUTTON_HEIGHT)
+                .withButtonSetup((panel, index) -> panel.withBlackOutline()
+                                                        .withBorderlessTransparentBackground())
+                .asBottomTabs();
+    }
+
+    private ButtonLayout getItemsLayout() {
+        return new ButtonLayout(itemsPanel, NUM_ITEM_ROWS, NUM_ITEM_COLS, 5)
+                .withMissingBottomRow()
+                .withDrawSetup(panel -> panel.withBackgroundColor(Color.WHITE)
+                                             .withBorderPercentage(0)
+                                             .withBlackOutline());
     }
 
     public Button[] getItemButtons(int startIndex,
                                    ButtonTransitions defaultTransitions,
                                    ButtonIndexAction indexAction) {
-        return new DrawLayout(itemsPanel, NUM_ITEM_ROWS, NUM_ITEM_COLS, 5)
-                .withMissingBottomRow()
+        return this.getItemsLayout()
                 .withStartIndex(startIndex)
                 .withDefaultTransitions(defaultTransitions)
                 .withPressIndex(indexAction)
-                .withDrawSetup(panel -> panel.withBackgroundColor(Color.WHITE)
-                                             .withBorderPercentage(0)
-                                             .withBlackOutline())
                 .getButtons();
     }
 
+    public TabLayout getTabs() {
+        return new TabLayout(bagPanel, CATEGORIES.length, TAB_HEIGHT)
+                .withButtonSetup((panel, index) -> {
+                    final BagCategory category = CATEGORIES[index];
+                    panel.withBorderlessTransparentBackground()
+                         .withBackgroundColor(category.getColor())
+                         .withLabelSize(14, Alignment.LEFT)
+                         .withImageLabel(category.getIcon(), category.getDisplayName());
+                });
+    }
+
+    public DrawPanel getTabPanel(int index, Color color, String label) {
+        DrawPanel tabPanel = this.getTabs().getTabs()[index].panel();
+        return tabPanel.withBackgroundColor(color)
+                       .withBorderlessTransparentBackground()
+                       .withMissingBlackOutline(Direction.DOWN)
+                       .withLabel(label, 16);
+    }
+
     public Button[] getTabButtons(int startIndex, int upIndex, int downIndex, ButtonIndexAction indexAction) {
-        Button[] tabButtons = new Button[CATEGORIES.length];
-        for (int i = 0; i < tabButtons.length; i++) {
-            final int index = i;
-            final BagCategory category = CATEGORIES[index];
-            tabButtons[i] = new Button(
-                    this.tabPanels[i],
-                    new ButtonTransitions().up(upIndex)
-                                           .down(downIndex)
-                                           .basic(Direction.RIGHT, startIndex + i, 1, tabButtons.length)
-                                           .basic(Direction.LEFT, startIndex + i, 1, tabButtons.length),
-                    () -> indexAction.pressButton(index),
-                    panel -> panel.withBorderlessTransparentBackground()
-                                  .withBackgroundColor(category.getColor())
-                                  .withLabelSize(14, Alignment.LEFT)
-                                  .withImageLabel(category.getIcon(), category.getDisplayName())
-            );
-        }
-        return tabButtons;
+        return this.getTabs()
+                   .withStartIndex(startIndex)
+                   .withDefaultTransitions(new ButtonTransitions().up(upIndex).down(downIndex))
+                   .withPressIndex(indexAction)
+                   .getTabs();
     }
 
     public void setupTabs(Button[] tabButtons, BagCategory selectedTab) {
