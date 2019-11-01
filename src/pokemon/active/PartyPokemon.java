@@ -474,8 +474,9 @@ public abstract class PartyPokemon implements Serializable {
                 break;
             }
 
-            if (!this.hasActualMove(levelUpMove.getMove())) {
-                moves.add(levelUpMove.getMove());
+            AttackNamesies move = levelUpMove.getMove();
+            if (!this.hasActualMove(move) && !moves.contains(move)) {
+                moves.add(move);
             }
         }
 
