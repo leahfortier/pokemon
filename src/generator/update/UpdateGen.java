@@ -4,6 +4,8 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.MoveType;
 import draw.ImageUtils;
+import draw.button.Button;
+import draw.panel.DrawPanel;
 import map.condition.Condition;
 import map.condition.ConditionHolder.AndCondition;
 import map.condition.ConditionSet;
@@ -656,6 +658,28 @@ public class UpdateGen {
         return new StringAppender(num + "\n")
                 .appendJoin("", num, index -> in.nextLine().trim() + "\n")
                 .toString();
+    }
+
+    // Prints the spacing between the buttons
+    public static void printSpacing(Button[] buttons, DrawPanel outerPanel, int numCols) {
+        StringAppender x = new StringAppender(buttons[0].x - outerPanel.x + "");
+        StringAppender y = new StringAppender(buttons[0].y - outerPanel.y + "");
+
+        int numRows = buttons.length/numCols;
+        for (int col = 0; col < numCols; col++) {
+            int nextX = col == numCols - 1 ? outerPanel.rightX() : buttons[col + 1].x;
+            x.append(" " + (nextX - buttons[col].rightX()));
+        }
+
+        for (int row = 0; row < numRows; row++) {
+            int index = row*numCols;
+            int nextIndex = index + numCols;
+            int nextY = row == numRows - 1 ? outerPanel.bottomY() : buttons[nextIndex].y;
+            y.append(" " + (nextY - buttons[index].bottomY()));
+        }
+
+        System.out.println("x: " + x);
+        System.out.println("y: " + y);
     }
 
     private static final char[] AL_BHED_PRIMER = {

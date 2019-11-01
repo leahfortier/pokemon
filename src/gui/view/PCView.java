@@ -15,13 +15,13 @@ import draw.layout.TabLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.PanelList;
+import draw.panel.StatPanel;
 import input.InputControl;
 import main.Game;
 import map.Direction;
 import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import pokemon.breeding.Eggy;
-import pokemon.stat.Stat;
 import trainer.Trainer;
 import trainer.player.PC;
 import trainer.player.Player;
@@ -51,6 +51,7 @@ class PCView extends View {
     private final DrawPanel boxNamePanel;
     private final DrawPanel infoPanel;
     private final DrawPanel imagePanel;
+    private final StatPanel statsPanel;
 
     private final ButtonList buttons;
     private final Button[][] boxButtons;
@@ -100,11 +101,12 @@ class PCView extends View {
 
         int statsPanelHeight = 148;
         int buttonHeight = 38;
-        DrawPanel statsPanel = new DrawPanel(
+        statsPanel = new StatPanel(
                 infoPanel.x,
                 infoPanel.bottomY() - buttonHeight - statsPanelHeight,
                 infoPanel.width,
-                statsPanelHeight + DrawUtils.OUTLINE_SIZE
+                statsPanelHeight + DrawUtils.OUTLINE_SIZE,
+                16, 14
         ).withFullTransparency()
          .withBlackOutline();
 
@@ -407,22 +409,8 @@ class PCView extends View {
                 movePanel.label(g, 16, attack.getName());
             }
 
-            TextUtils.drawRightAlignedString(g, "Stat", 635, 340);
-            TextUtils.drawRightAlignedString(g, "IV", 681, 340);
-            TextUtils.drawRightAlignedString(g, "EV", 735, 340);
-
-            for (int i = 0; i < Stat.NUM_STATS; i++) {
-                FontMetrics.setFont(g, 16);
-                g.setColor(selected.getNature().getColor(i));
-                g.drawString(Stat.getStat(i, false).getName(), 427, 360 + i*18 + i/2); // TODO: srsly what's with the i/2
-
-                FontMetrics.setBlackFont(g, 14);
-
-                // TODO: What's up with the + i/2 in the y????
-                TextUtils.drawRightAlignedString(g, selected.getStat(i) + "", 635, 360 + i*18 + i/2);
-                TextUtils.drawRightAlignedString(g, selected.getIVs().get(i) + "", 681, 360 + i*18 + i/2);
-                TextUtils.drawRightAlignedString(g, selected.getEVs().get(i) + "", 735, 360 + i*18 + i/2);
-            }
+            // Draw stats
+            statsPanel.drawStats(g, selected);
         }
     }
 

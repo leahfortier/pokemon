@@ -16,6 +16,7 @@ import draw.layout.DrawLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.PanelList;
+import draw.panel.StatPanel;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -24,7 +25,6 @@ import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import pokemon.breeding.DayCareCenter;
 import pokemon.breeding.Eggy;
-import pokemon.stat.Stat;
 import trainer.Trainer;
 import trainer.player.Player;
 import type.PokeType;
@@ -47,7 +47,7 @@ class DayCareView extends View {
     private final DrawPanel infoPanel;
     private final DrawPanel imagePanel;
     private final DrawPanel[] movePanels;
-    private final DrawPanel statsPanel;
+    private final StatPanel statsPanel;
 
     private final ButtonList buttons;
     private final Button firstDayCarePokemonButton;
@@ -102,11 +102,12 @@ class DayCareView extends View {
                 .withBlackOutline();
 
         int statsPanelHeight = 148;
-        statsPanel = new DrawPanel(
+        statsPanel = new StatPanel(
                 infoPanel.x,
                 infoPanel.bottomY() - statsPanelHeight,
                 infoPanel.width,
-                statsPanelHeight
+                statsPanelHeight,
+                16, 14
         )
                 .withFullTransparency()
                 .withBlackOutline();
@@ -358,26 +359,8 @@ class DayCareView extends View {
             // Characteristic
             g.drawString(selected.getCharacteristic(), 427, 217);
 
-            int statsY = statsPanel.y;
-            statsY += FontMetrics.getTextHeight(g) + 10;
-
-            TextUtils.drawRightAlignedString(g, "Stat", 635, statsY);
-            TextUtils.drawRightAlignedString(g, "IV", 681, statsY);
-            TextUtils.drawRightAlignedString(g, "EV", 735, statsY);
-
-            for (int i = 0; i < Stat.NUM_STATS; i++) {
-                statsY += FontMetrics.getTextHeight(g) + 11;
-
-                FontMetrics.setFont(g, 16);
-                g.setColor(selected.getNature().getColor(i));
-                g.drawString(Stat.getStat(i, false).getName(), 427, statsY);
-
-                FontMetrics.setBlackFont(g, 14);
-
-                TextUtils.drawRightAlignedString(g, selected.getStat(i) + "", 635, statsY);
-                TextUtils.drawRightAlignedString(g, selected.getIVs().get(i) + "", 681, statsY);
-                TextUtils.drawRightAlignedString(g, selected.getEVs().get(i) + "", 735, statsY);
-            }
+            // Stats
+            statsPanel.drawStats(g, selected);
         }
     }
 

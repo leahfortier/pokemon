@@ -17,6 +17,7 @@ import draw.layout.TabLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.MovePanel;
+import draw.panel.StatPanel;
 import draw.panel.WrapPanel;
 import draw.panel.WrapPanel.WrapMetrics;
 import gui.GameData;
@@ -30,7 +31,6 @@ import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import pokemon.breeding.Eggy;
 import pokemon.species.PokemonInfo;
-import pokemon.stat.Stat;
 import trainer.Trainer;
 import trainer.player.Player;
 import type.PokeType;
@@ -55,7 +55,7 @@ public class PartyView extends View {
     private final DrawPanel imagePanel;
     private final DrawPanel basicInformationPanel;
     private final WrapPanel abilityPanel;
-    private final DrawPanel statsPanel;
+    private final StatPanel statsPanel;
     private final MovePanel moveDetailsPanel;
     private final DrawPanel movesPanel;
     private final DrawPanel nicknamePanel;
@@ -137,12 +137,15 @@ public class PartyView extends View {
                 .withBlackOutline()
                 .withMinFontSize(12, false);
 
-        statsPanel = new DrawPanel(
+        statsPanel = new StatPanel(
                 abilityPanel.x,
                 abilityPanel.y + abilityPanel.height + spacing,
                 halfPanelWidth,
-                statsPanelHeight
+                statsPanelHeight,
+                16, 14
         )
+                .includeCurrentHp()
+                .withInsetSpaces(1)
                 .withFullTransparency()
                 .withBlackOutline();
 
@@ -460,34 +463,8 @@ public class PartyView extends View {
         // Seems silly to add it when a move is selected just to have it overwritten
         statsPanel.drawBackground(g);
 
-        FontMetrics.setBlackFont(g, 16);
-        int spacing = statsPanel.height/(Stat.NUM_STATS + 1);
-        int firstRowY = statsPanel.y + spacing - 2;
-
-        g.drawString("Stat", 250, firstRowY);
-        g.drawString("IV", 310, firstRowY);
-        g.drawString("EV", 355, firstRowY);
-
-        for (int i = 0; i < Stat.NUM_STATS; i++) {
-            g.setColor(selectedPkm.getNature().getColor(i));
-            g.drawString(Stat.getStat(i, false).getName(), statsPanel.x + 10, firstRowY + (i + 1)*spacing);
-        }
-
-        FontMetrics.setBlackFont(g, 14);
-
-        for (int i = 0; i < Stat.NUM_STATS; i++) {
-            final String statString;
-            if (i == Stat.HP.index()) {
-                statString = selectedPkm.getHP() + "/" + selectedPkm.getStat(i);
-            } else {
-                statString = "" + selectedPkm.getStat(i);
-            }
-
-            int drawY = firstRowY + (i + 1)*spacing;
-            TextUtils.drawRightAlignedString(g, statString, 285, drawY);
-            TextUtils.drawRightAlignedString(g, "" + selectedPkm.getIVs().get(i), 327, drawY);
-            TextUtils.drawRightAlignedString(g, "" + selectedPkm.getEVs().get(i), 371, drawY);
-        }
+        // Draw stats
+        statsPanel.drawStats(g, selectedPkm);
 
         // HP Bar
         hpBar.fillBar(g, selectedPkm.getHPColor(), selectedPkm.getHPRatio());

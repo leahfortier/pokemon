@@ -109,12 +109,15 @@ public class DrawLayout {
         int xSpacing = horizontalSpacing/(numCols + 1);
         int ySpacing = verticalSpacing/(numRows + 1);
 
+        int xRemainder = horizontalSpacing%(numCols + 1);
+        int yRemainder = verticalSpacing%(numRows + 1);
+
         DrawPanel[] panels = new DrawPanel[numRows*numCols];
         for (int row = 0, index = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++, index++) {
                 panels[index] = new DrawPanel(
-                        outerPanel.x + borderSize + xSpacing*(col + 1) + panelWidth*col,
-                        outerPanel.y + borderSize + ySpacing*(row + 1) + panelHeight*row,
+                        outerPanel.x + borderSize + xSpacing*(col + 1) + panelWidth*col + Math.min(col, xRemainder),
+                        outerPanel.y + borderSize + ySpacing*(row + 1) + panelHeight*row + Math.min(row, yRemainder),
                         panelWidth,
                         panelHeight
                 );
