@@ -144,8 +144,8 @@ public class MartView extends View {
         // Draw page numbers
         layout.drawPageNumbers(g, pageNum, totalPages());
 
-        // Draw selected item and for sale items
-        layout.drawItems(g, selectedItem, itemButtons, forSaleItems, pageNum);
+        // Draw selected item
+        layout.drawSelectedItem(g, selectedItem);
 
         // Draw hover action
         buttons.drawHover(g);

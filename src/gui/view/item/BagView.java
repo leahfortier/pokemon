@@ -251,8 +251,8 @@ public class BagView extends View {
         panels.drawAll(g);
         buttons.drawPanels(g);
 
-        // Draw selected item and each item in category
-        layout.drawItems(g, selectedItem, itemButtons, this.getDisplayItems(), pageNum);
+        // Draw selected item
+        layout.drawSelectedItem(g, selectedItem);
 
         // Draw page numbers
         layout.drawPageNumbers(g, pageNum, totalPages());

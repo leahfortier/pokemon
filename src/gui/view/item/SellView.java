@@ -148,8 +148,8 @@ public class SellView extends View {
         // Draw page numbers
         layout.drawPageNumbers(g, pageNum, totalPages());
 
-        // Draw selected item and each item in category
-        layout.drawItems(g, selectedItem, itemButtons, this.getDisplayItems(), pageNum);
+        // Draw selected item
+        layout.drawSelectedItem(g, selectedItem);
 
         // Draw button hover
         buttons.drawHover(g);

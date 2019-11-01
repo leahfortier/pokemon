@@ -1,7 +1,6 @@
 package gui.view.item;
 
 import draw.Alignment;
-import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonPanel;
@@ -13,21 +12,15 @@ import draw.layout.TabLayout;
 import draw.panel.DrawPanel;
 import draw.panel.ItemPanel;
 import draw.panel.WrapPanel.WrapMetrics;
-import gui.TileSet;
-import item.Item;
 import item.ItemNamesies;
-import item.bag.Bag;
 import item.bag.BagCategory;
-import main.Game;
 import main.Global;
 import map.Direction;
-import util.FontMetrics;
 import util.GeneralUtils;
 import util.Point;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -117,9 +110,7 @@ public class BagLayout {
     private ButtonLayout getItemsLayout() {
         return new ButtonLayout(itemsPanel, NUM_ITEM_ROWS, NUM_ITEM_COLS, 5)
                 .withMissingBottomRow()
-                .withDrawSetup(panel -> panel.withBackgroundColor(Color.WHITE)
-                                             .withBorderPercentage(0)
-                                             .withBlackOutline());
+                .withButtonSetup(panel -> panel.asItemPanel(includeQuantity));
     }
 
     public Button[] getItemButtons(int startIndex,
@@ -176,35 +167,11 @@ public class BagLayout {
     public void setupItems(Button[] itemButtons, Iterable<ItemNamesies> items, int pageNum) {
         List<ItemNamesies> pageItems = GeneralUtils.pageValues(items, pageNum, ITEMS_PER_PAGE);
         for (int i = 0; i < ITEMS_PER_PAGE; i++) {
-            itemButtons[i].panel().skipDraw(i >= pageItems.size());
-        }
-    }
-
-    public void drawItems(Graphics g, ItemNamesies selectedItem, Button[] itemButtons, Iterable<ItemNamesies> items, int pageNum) {
-        this.drawSelectedItem(g, selectedItem);
-
-        TileSet itemTiles = Game.getData().getItemTiles();
-        Bag bag = Game.getPlayer().getBag();
-
-        FontMetrics.setBlackFont(g, 12);
-
-        List<ItemNamesies> pageItems = GeneralUtils.pageValues(items, pageNum, ITEMS_PER_PAGE);
-        for (int i = 0; i < pageItems.size(); i++) {
-            ItemNamesies item = pageItems.get(i);
-            Item itemValue = item.getItem();
             ButtonPanel panel = itemButtons[i].panel();
-
-            int spacing = panel.getSpace(g);
-            int startX = panel.x + spacing + Item.MAX_IMAGE_SIZE.width;
-            int centerY = panel.centerY();
-
-            BufferedImage itemImage = itemTiles.getTile(itemValue.getImageName());
-            ImageUtils.drawCenteredImage(g, itemImage, (panel.x + startX)/2, centerY);
-            TextUtils.drawCenteredHeightString(g, item.getName(), startX, centerY);
-
-            if (includeQuantity && itemValue.hasQuantity()) {
-                int rightX = panel.rightX() - spacing;
-                TextUtils.drawCenteredHeightString(g, "x" + bag.getQuantity(item), rightX, centerY, Alignment.RIGHT);
+            if (i < pageItems.size()) {
+                panel.withItem(pageItems.get(i));
+            } else {
+                panel.skipDraw();
             }
         }
     }

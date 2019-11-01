@@ -146,8 +146,8 @@ public class BerryView extends View {
         // Berry Panel
         drawBerryPanel(g);
 
-        // Draw selected item and item buttons
-        layout.drawItems(g, selectedItem, itemButtons, this.getDisplayBerries(), pageNum);
+        // Draw selected item
+        layout.drawSelectedItem(g, selectedItem);
 
         // Messages or buttons
         if (!StringUtils.isNullOrWhiteSpace(message)) {

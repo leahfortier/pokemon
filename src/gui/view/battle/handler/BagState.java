@@ -6,6 +6,7 @@ import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonList;
+import draw.button.ButtonPanel;
 import draw.button.ButtonTransitions;
 import draw.layout.ButtonLayout;
 import draw.layout.DrawLayout;
@@ -91,15 +92,11 @@ public class BagState implements VisualStateHandler {
                 .withMissingBottomRow()
                 .withStartIndex(ITEMS)
                 .withDefaultTransitions(new ButtonTransitions().up(TABS).down(RIGHT_ARROW))
-                .withButtonSetup(panel -> panel.skipInactive()
-                                               .withBlackOutline()
-                                               .withBackgroundColor(Color.WHITE)
-                                               .withBorderPercentage(0));
+                .withButtonSetup(panel -> panel.asItemPanel(true).skipInactive());
 
         itemButtons = itemsLayout.getButtons();
 
         Entry<DrawPanel, DrawPanel> arrowPanels = itemsLayout.getArrowPanels();
-
         leftButton = new Button(
                 arrowPanels.getKey(),
                 new ButtonTransitions().right(RIGHT_ARROW).up(BOTTOM_ITEM - 1).down(LAST_ITEM_USED).left(RIGHT_ARROW)
@@ -119,9 +116,7 @@ public class BagState implements VisualStateHandler {
                 new ButtonTransitions().up(LEFT_ARROW).down(selectedBagTab),
                 () -> {}, // Handled in update
                 panel -> panel.skipInactive()
-                              .withBlackOutline()
-                              .withBackgroundColor(Color.WHITE)
-                              .withBorderPercentage(0)
+                              .asItemPanel(true)
         );
 
         this.buttons = new ButtonList(NUM_BUTTONS);
@@ -166,9 +161,26 @@ public class BagState implements VisualStateHandler {
         }
 
         // Show item description if a item button is currently highlighted instead of the last move used
-        boolean showDescription = this.getHighlighted() != null;
-        lastUsedButton.panel().skipDraw(showDescription);
-        lastItemLabelPanel.skipDraw(showDescription);
+        ItemNamesies highlighted = this.getHighlighted();
+        if (highlighted == null) {
+            ItemNamesies lastUsedItem = Game.getPlayer().getBag().getLastUsedItem();
+            if (lastUsedItem != ItemNamesies.NO_ITEM) {
+                lastUsedButton.panel().withItem(lastUsedItem);
+            }
+        } else {
+            lastUsedButton.panel().skipDraw();
+            lastItemLabelPanel.skipDraw();
+        }
+
+        List<ItemNamesies> items = GeneralUtils.pageValues(this.getDisplayItems(), bagPage, ITEMS_PER_PAGE);
+        for (int i = 0; i < ITEMS_PER_PAGE; i++) {
+            ButtonPanel panel = itemButtons[i].panel();
+            if (i < items.size()) {
+                panel.withItem(items.get(i));
+            } else {
+                panel.skipDraw();
+            }
+        }
     }
 
     private ItemNamesies getHighlighted() {
@@ -197,21 +209,9 @@ public class BagState implements VisualStateHandler {
         Bag bag = Game.getPlayer().getBag();
         TileSet itemTiles = Game.getData().getItemTiles();
 
-        List<ItemNamesies> items = GeneralUtils.pageValues(this.getDisplayItems(), bagPage, ITEMS_PER_PAGE);
-        for (int i = 0; i < items.size(); i++) {
-            ItemNamesies item = items.get(i);
-            drawItemButton(g, itemTiles, itemButtons[i], item);
-        }
-
         // Show last item used if no item is selected
         ItemNamesies highlighted = this.getHighlighted();
-        if (highlighted == null) {
-            // Last Item Used
-            ItemNamesies lastUsedItem = bag.getLastUsedItem();
-            if (lastUsedItem != ItemNamesies.NO_ITEM) {
-                drawItemButton(g, itemTiles, lastUsedButton, lastUsedItem);
-            }
-        } else {
+        if (highlighted != null) {
             // Otherwise, draw selected item's information
             drawItemDescription(g, highlighted);
         }
@@ -231,24 +231,6 @@ public class BagState implements VisualStateHandler {
 
     private int totalPages() {
         return GeneralUtils.getTotalPages(this.getDisplayItems().size(), ITEMS_PER_PAGE);
-    }
-
-    // TODO: This should be combined with the BagLayout method
-    private void drawItemButton(Graphics g, TileSet itemTiles, Button button, ItemNamesies itemNamesies) {
-        int dx = button.x;
-        int dy = button.y;
-
-        g.translate(dx, dy);
-
-        BufferedImage img = itemTiles.getTile(itemNamesies.getItem().getImageName());
-        ImageUtils.drawCenteredImage(g, img, 14, 14);
-
-        FontMetrics.setBlackFont(g, 12);
-
-        g.drawString(itemNamesies.getName(), 28, 19);
-        TextUtils.drawRightAlignedString(g, "x" + Game.getPlayer().getBag().getQuantity(itemNamesies), 140, 19);
-
-        g.translate(-dx, -dy);
     }
 
     public WrapMetrics drawItemDescription(Graphics g, ItemNamesies itemNamesies) {

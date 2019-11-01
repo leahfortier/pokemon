@@ -3,7 +3,9 @@ package draw.button;
 import battle.attack.Move;
 import draw.PolygonUtils;
 import draw.panel.DrawPanel;
+import draw.panel.ItemButtonPanel;
 import draw.panel.MoveButtonPanel;
+import item.ItemNamesies;
 import map.Direction;
 
 import java.awt.Graphics;
@@ -19,8 +21,9 @@ public class ButtonPanel extends DrawPanel {
     private int arrowWidth;
     private int arrowHeight;
 
-    // For move buttons (displays name and PP)
+    // For move or item buttons
     private MoveButtonPanel movePanel;
+    private ItemButtonPanel itemPanel;
 
     // Should only be created from Button constructor
     ButtonPanel(Button button, ButtonPanelSetup setup) {
@@ -89,14 +92,18 @@ public class ButtonPanel extends DrawPanel {
 
     // Only works if asMovePanel has already been called
     public ButtonPanel withMove(Move move) {
-        // Set the move so it knows what to draw
         this.movePanel.setMove(move);
+        return this;
+    }
 
-        // Even though the border will not be drawn, it should use the same spacing as this panel
-        this.movePanel.withBorderSize(this.getBorderSize());
+    public ButtonPanel asItemPanel(boolean includeQuantity) {
+        this.itemPanel = new ItemButtonPanel(this, includeQuantity);
+        return this;
+    }
 
-        // Background will still be drawn on the current panel
-        this.withBackgroundColor(move.getAttack().getActualType().getColor());
+    // Only works if asItemPanel has already been called
+    public ButtonPanel withItem(ItemNamesies item) {
+        this.itemPanel.setItem(item);
         return this;
     }
 
@@ -128,6 +135,11 @@ public class ButtonPanel extends DrawPanel {
         // Move button!
         if (movePanel != null) {
             movePanel.drawMove(g);
+        }
+
+        // Item button!
+        if (itemPanel != null) {
+            itemPanel.drawItem(g);
         }
     }
 
