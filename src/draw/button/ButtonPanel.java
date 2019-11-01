@@ -1,7 +1,9 @@
 package draw.button;
 
+import battle.attack.Move;
 import draw.PolygonUtils;
 import draw.panel.DrawPanel;
+import draw.panel.MoveButtonPanel;
 import map.Direction;
 
 import java.awt.Graphics;
@@ -9,13 +11,16 @@ import java.awt.Graphics;
 public class ButtonPanel extends DrawPanel {
     private final Button button;
 
+    private boolean skipInactive;
+    private boolean greyInactive;
+
     // For arrow buttons (width and height default to button size, but can be specified otherwise
     private Direction arrowDirection;
     private int arrowWidth;
     private int arrowHeight;
 
-    private boolean skipInactive;
-    private boolean greyInactive;
+    // For move buttons (displays name and PP)
+    private MoveButtonPanel movePanel;
 
     // Should only be created from Button constructor
     ButtonPanel(Button button, ButtonPanelSetup setup) {
@@ -49,9 +54,8 @@ public class ButtonPanel extends DrawPanel {
 
     // Sets the arrow direction and removes the black outline
     public ButtonPanel asArrow(Direction arrowDirection) {
-        return this.asArrow(arrowDirection, width, height)
-                   .withNoOutline()
-                   .asButtonPanel();
+        return (ButtonPanel)this.asArrow(arrowDirection, width, height)
+                                .withNoOutline();
     }
 
     public ButtonPanel asArrow(Direction arrowDirection, int arrowWidth, int arrowHeight) {
@@ -78,6 +82,24 @@ public class ButtonPanel extends DrawPanel {
         return this;
     }
 
+    public ButtonPanel asMovePanel(int nameFontSize, int ppFontSize) {
+        this.movePanel = new MoveButtonPanel(this, nameFontSize, ppFontSize);
+        return this;
+    }
+
+    // Only works if asMovePanel has already been called
+    public ButtonPanel withMove(Move move) {
+        // Set the move so it knows what to draw
+        this.movePanel.setMove(move);
+
+        // Even though the border will not be drawn, it should use the same spacing as this panel
+        this.movePanel.withBorderSize(this.getBorderSize());
+
+        // Background will still be drawn on the current panel
+        this.withBackgroundColor(move.getAttack().getActualType().getColor());
+        return this;
+    }
+
     @Override
     public void draw(Graphics g) {
         if (this.skipDraw) {
@@ -101,6 +123,11 @@ public class ButtonPanel extends DrawPanel {
         // Arrow buttons!
         if (this.arrowDirection != null) {
             PolygonUtils.drawCenteredArrow(g, centerX(), centerY(), arrowWidth, arrowHeight, arrowDirection);
+        }
+
+        // Move button!
+        if (movePanel != null) {
+            movePanel.drawMove(g);
         }
     }
 

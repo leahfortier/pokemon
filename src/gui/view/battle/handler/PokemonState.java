@@ -1,6 +1,7 @@
 package gui.view.battle.handler;
 
 import battle.Battle;
+import battle.attack.Attack;
 import battle.attack.Move;
 import draw.DrawUtils;
 import draw.ImageUtils;
@@ -9,9 +10,11 @@ import draw.button.Button;
 import draw.button.ButtonList;
 import draw.button.ButtonPanel;
 import draw.button.ButtonTransitions;
-import draw.layout.DrawLayout;
+import draw.layout.ButtonLayout;
 import draw.layout.TabLayout;
 import draw.panel.DrawPanel;
+import draw.panel.VerticalMovePanel;
+import draw.panel.WrapPanel.WrapMetrics;
 import gui.TileSet;
 import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
@@ -29,25 +32,26 @@ import util.string.PokeString;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class PokemonState implements VisualStateHandler {
-    private static final int NUM_BUTTONS = Trainer.MAX_POKEMON + 1;
+    private static final int NUM_BUTTONS = Trainer.MAX_POKEMON + MoveList.MAX_MOVES + 1;
     private static final int TABS = 0;
-    private static final int SWITCH = TABS + Trainer.MAX_POKEMON;
+    private static final int MOVES = TABS + Trainer.MAX_POKEMON;
+    private static final int SWITCH = NUM_BUTTONS - 1;
 
     private final DrawPanel pokemonPanel;
     private final DrawPanel basicInformationPanel;
     private final DrawPanel statsPanel;
+    private final VerticalMovePanel moveDetailsPanel;
     private final DrawPanel movesPanel;
-    private final DrawPanel[] movePanels;
 
     private final DrawPanel expBar;
     private final DrawPanel hpBar;
 
     private final ButtonList buttons;
     private final Button[] tabButtons;
+    private final Button[] moveButtons;
     private final Button switchButton;
 
     // Current selected tab in Pokemon view and whether or not a switch is forced
@@ -77,11 +81,14 @@ public class PokemonState implements VisualStateHandler {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        movePanels = new DrawLayout(movesPanel, MoveList.MAX_MOVES, 1, 125, 40)
-                .withDrawSetup(panel -> panel.withTransparentCount(2)
-                                             .withBorderPercentage(15)
-                                             .withBlackOutline())
-                .getPanels();
+        moveButtons = new ButtonLayout(movesPanel, MoveList.MAX_MOVES, 1, 8)
+                .withStartIndex(MOVES)
+                .withDefaultTransitions(new ButtonTransitions().right(SWITCH).up(TABS).left(SWITCH).down(TABS))
+                .withButtonSetup(panel -> panel.asMovePanel(14, 12)
+                                               .withTransparentCount(2)
+                                               .withBorderPercentage(15)
+                                               .withBlackOutline())
+                .getButtons();
 
         int switchButtonHeight = 36;
         switchButton = new Button(
@@ -89,7 +96,7 @@ public class PokemonState implements VisualStateHandler {
                 pokemonPanel.y + pokemonPanel.height - spacing - switchButtonHeight,
                 sidePanelWidth,
                 switchButtonHeight,
-                new ButtonTransitions().right(SWITCH).up(TABS).left(SWITCH).down(TABS),
+                new ButtonTransitions().right(MOVES).up(TABS).left(MOVES).down(TABS),
                 () -> {}, // Handled in update
                 panel -> panel.greyInactive()
                               .withLabelSize(20)
@@ -120,6 +127,17 @@ public class PokemonState implements VisualStateHandler {
         hpBar = new DrawPanel(statsPanel.x, statsPanel.y - barHeight + DrawUtils.OUTLINE_SIZE, statsPanel.width, barHeight)
                 .withBlackOutline();
 
+        // HP Bar and stats panel
+        moveDetailsPanel = new VerticalMovePanel(
+                statsPanel.x,
+                hpBar.y,
+                statsPanel.width,
+                statsPanel.bottomY() - hpBar.y,
+                15, 13, 11
+        )
+                .withMinDescFontSize(9)
+                .withFullTransparency();
+
         tabButtons = new TabLayout(pokemonPanel, Trainer.MAX_POKEMON, 34)
                 .withStartIndex(TABS)
                 .withDefaultTransitions(new ButtonTransitions().down(SWITCH).up(SWITCH))
@@ -128,10 +146,10 @@ public class PokemonState implements VisualStateHandler {
                 .getTabs();
 
         // Pokemon Switch View Buttons
-        Button[] pokemonButtons = new Button[NUM_BUTTONS];
-        pokemonButtons[SWITCH] = switchButton;
-        this.buttons = new ButtonList(pokemonButtons);
+        this.buttons = new ButtonList(NUM_BUTTONS);
         buttons.set(TABS, tabButtons);
+        buttons.set(MOVES, moveButtons);
+        buttons.set(SWITCH, switchButton);
     }
 
     @Override
@@ -142,12 +160,19 @@ public class PokemonState implements VisualStateHandler {
 
     @Override
     public void set(BattleView view) {
-        List<PartyPokemon> list = Game.getPlayer().getTeam();
+        List<PartyPokemon> team = Game.getPlayer().getTeam();
+        PartyPokemon selected = team.get(selectedPokemonTab);
+
         for (int i = 0; i < tabButtons.length; i++) {
-            tabButtons[i].setActive(i < list.size());
+            tabButtons[i].setActive(i < team.size());
         }
 
-        switchButton.setActive(view.isState(VisualState.USE_ITEM) || list.get(selectedPokemonTab).canFight());
+        int numMoves = selected.getActualMoves().size();
+        for (int i = 0; i < moveButtons.length; i++) {
+            moveButtons[i].setActive(!selected.isEgg() && i < numMoves);
+        }
+
+        switchButton.setActive(view.isState(VisualState.USE_ITEM) || selected.canFight());
 
         buttons.setFalseHover();
     }
@@ -237,49 +262,21 @@ public class PokemonState implements VisualStateHandler {
             float expRatio = selectedPkm.expRatio();
             expBar.fillBar(g, DrawUtils.EXP_BAR_COLOR, expRatio);
 
-            // HP Bar
-            hpBar.fillBar(g, selectedPkm.getHPColor(), selectedPkm.getHPRatio());
-
-            // Write stat names and values
-            FontMetrics.setFont(g, 16);
-            statsPanel.drawBackground(g);
-            for (int i = 0; i < Stat.NUM_STATS; i++) {
-                g.setColor(selectedPkm.getNature().getColor(i));
-                g.drawString(Stat.getStat(i, false).getShortName(), 62, 21*i + 372);
-
-                g.setColor(Color.BLACK);
-                int statVal = selectedPkm.getStat(i);
-                String valStr = i == Stat.HP.index() ? selectedPkm.getHP() + "/" + statVal : "" + statVal;
-                TextUtils.drawRightAlignedString(g, valStr, 188, 21*i + 372);
+            MoveList moves = selectedPkm.getActualMoves();
+            int selectedButton = buttons.getSelected();
+            if (selectedButton >= MOVES && selectedButton < MOVES + MoveList.MAX_MOVES) {
+                drawMoveDetails(g, moves.get(selectedButton - MOVES).getAttack());
+            } else {
+                drawStatBox(g, selectedPkm);
             }
 
             // Draw Move List
-            FontMetrics.setBlackFont(g, 14);
             movesPanel.drawBackground(g);
-            MoveList movesList = selectedPkm.getActualMoves();
-            for (int i = 0; i < movesList.size(); i++) {
-                Move move = movesList.get(i);
-                DrawPanel movePanel = this.movePanels[i];
+            for (int i = 0; i < moves.size(); i++) {
+                Move move = moves.get(i);
+                ButtonPanel movePanel = this.moveButtons[i].panel();
 
-                // Attack type color background
-                movePanel.withBackgroundColor(move.getAttack().getActualType().getColor())
-                         .drawBackground(g);
-
-                int dx = movePanel.x;
-                int dy = movePanel.y;
-
-                g.translate(dx, dy);
-
-                // Draw attack name
-                g.drawString(move.getAttack().getName(), 7, 17);
-
-                // Draw PP amount
-                TextUtils.drawRightAlignedString(g, "PP: " + move.getPPString(), 118, 33);
-
-                BufferedImage categoryImage = move.getAttack().getCategory().getImage();
-                g.drawImage(categoryImage, 7, 21, null);
-
-                g.translate(-dx, -dy);
+                movePanel.withMove(move).draw(g);
             }
         }
 
@@ -290,6 +287,28 @@ public class PokemonState implements VisualStateHandler {
 
         // If ya dead ya red
         pokemonPanel.faintOut(g, selectedPkm);
+    }
+
+    public WrapMetrics drawMoveDetails(Graphics g, Attack move) {
+        return moveDetailsPanel.draw(g, move);
+    }
+
+    private void drawStatBox(Graphics g, PartyPokemon selectedPkm) {
+        // HP Bar
+        hpBar.fillBar(g, selectedPkm.getHPColor(), selectedPkm.getHPRatio());
+
+        // Write stat names and values
+        FontMetrics.setFont(g, 16);
+        statsPanel.drawBackground(g);
+        for (int i = 0; i < Stat.NUM_STATS; i++) {
+            g.setColor(selectedPkm.getNature().getColor(i));
+            g.drawString(Stat.getStat(i, false).getShortName(), 62, 21*i + 372);
+
+            g.setColor(Color.BLACK);
+            int statVal = selectedPkm.getStat(i);
+            String valStr = i == Stat.HP.index() ? selectedPkm.getHP() + "/" + statVal : "" + statVal;
+            TextUtils.drawRightAlignedString(g, valStr, 188, 21*i + 372);
+        }
     }
 
     @Override

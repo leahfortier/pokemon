@@ -11,6 +11,7 @@ import gui.view.PartyView;
 import gui.view.PokedexView;
 import gui.view.battle.handler.BagState;
 import gui.view.battle.handler.FightState;
+import gui.view.battle.handler.PokemonState;
 import gui.view.item.BagLayout;
 import item.Item;
 import item.ItemNamesies;
@@ -94,11 +95,13 @@ public class WrapTest extends BaseTest {
     @Test
     public void movePanelTest() {
         FightState fightState = new FightState();
+        PokemonState pokemonState = new PokemonState();
         PartyView partyView = TestGame.instance().getPartyView();
         PokedexView pokedexView = TestGame.instance().getPokedexView();
         MoveRelearnerView moveRelearnerView = TestGame.instance().getMoveRelearnerView();
 
         TestMetrics fightMetrics = new TestMetrics();
+        TestMetrics pokemonMetrics = new TestMetrics();
         TestMetrics partyMetrics = new TestMetrics();
         TestMetrics pokedexMetrics = new TestMetrics();
         TestMetrics moveRelearnerMetrics = new TestMetrics();
@@ -111,6 +114,9 @@ public class WrapTest extends BaseTest {
 
             // Selected move details on fight screen in battle
             fightMetrics.checkMetrics(name, fightState.drawMoveDetails(g, attack));
+
+            // Selected move details on fight screen in battle
+            pokemonMetrics.checkMetrics(name, pokemonState.drawMoveDetails(g, attack));
 
             // Selected move details when viewing Pokemon in party
             partyMetrics.checkMetrics(name, partyView.drawMoveDetails(g, attack));
@@ -128,6 +134,7 @@ public class WrapTest extends BaseTest {
         }
 
         fightMetrics.confirmFontSizes(13, 16);
+        pokemonMetrics.confirmFontSizes(9, 11);
         partyMetrics.confirmFontSizes(14, 16);
         pokedexMetrics.confirmFontSizes(10, 12);
         moveRelearnerMetrics.confirmFontSizes(15, 16);

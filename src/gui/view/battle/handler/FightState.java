@@ -4,10 +4,8 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.Move;
-import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonList;
-import draw.button.ButtonPanel;
 import draw.panel.MovePanel;
 import draw.panel.WrapPanel.WrapMetrics;
 import gui.view.battle.BattleView;
@@ -16,7 +14,6 @@ import main.Game;
 import pokemon.active.MoveList;
 import trainer.TrainerAction;
 import trainer.player.Player;
-import util.FontMetrics;
 import util.string.StringUtils;
 
 import java.awt.Graphics;
@@ -56,9 +53,10 @@ public class FightState implements VisualStateHandler {
 
         moveButtons = new ButtonList(
                 view.createPanelLayout(MoveList.MAX_MOVES)
-                    .withDrawSetup(panel -> panel.withTransparentCount(2)
-                                                 .withBorderPercentage(15)
-                                                 .withBlackOutline())
+                    .withButtonSetup(panel -> panel.asMovePanel(19, 16)
+                                                   .withTransparentCount(2)
+                                                   .withBorderPercentage(15)
+                                                   .withBlackOutline())
                     .getButtons()
         );
 
@@ -98,24 +96,7 @@ public class FightState implements VisualStateHandler {
     }
 
     private void drawMoveButton(Graphics g, Button button, Move move) {
-        ButtonPanel panel = button.panel();
-
-        // Attack type color background
-        panel.withBackgroundColor(move.getAttack().getActualType().getColor())
-             .drawBackground(g);
-
-        FontMetrics.setBlackFont(g, 19);
-        int spacing = FontMetrics.getTextWidth(g)/2;
-        int borderSize = panel.getBorderSize();
-        int fullSpacing = spacing + borderSize;
-
-        // Attack name as left label on the top
-        g.drawString(move.getAttack().getName(), panel.x + fullSpacing, panel.y + fullSpacing + FontMetrics.getTextHeight(g));
-
-        // PP amount as right label on the bottom
-        FontMetrics.setBlackFont(g, 16);
-        String ppString = "PP: " + move.getPPString();
-        TextUtils.drawRightAlignedString(g, ppString, panel.rightX() - fullSpacing, panel.bottomY() - fullSpacing);
+        button.panel().withMove(move).draw(g);
     }
 
     @Override

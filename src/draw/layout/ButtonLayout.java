@@ -1,9 +1,12 @@
 package draw.layout;
 
 import draw.button.Button;
+import draw.button.ButtonPanel.ButtonPanelIndexSetup;
 import draw.button.ButtonPanel.ButtonPanelSetup;
+import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.panel.DrawPanel;
+import draw.panel.Panel;
 import util.Point;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -13,7 +16,7 @@ public class ButtonLayout extends DrawLayout {
     private int startIndex;
     private ButtonTransitions defaultTransitions;
     private ButtonIndexAction indexAction;
-    private ButtonPanelSetup buttonSetup;
+    private ButtonPanelIndexSetup buttonSetup;
 
     private int arrowWidth;
     private int arrowHeight;
@@ -21,6 +24,10 @@ public class ButtonLayout extends DrawLayout {
     public ButtonLayout(DrawPanel panel, int numRows, int numCols, int spacing) {
         super(panel, numRows, numCols, spacing);
         setDefaultValues();
+    }
+
+    public ButtonLayout(DrawPanel panel, int numRows, int numCols, Panel sizing) {
+        this(panel, numRows, numCols, sizing.getWidth(), sizing.getHeight());
     }
 
     public ButtonLayout(DrawPanel panel, int numRows, int numCols, int width, int height) {
@@ -32,7 +39,7 @@ public class ButtonLayout extends DrawLayout {
         this.startIndex = 0;
         this.defaultTransitions = null;
         this.indexAction = index -> {};
-        this.buttonSetup = buttonPanel -> {};
+        this.buttonSetup = (panel, index) -> {};
 
         this.arrowWidth = 35;
         this.arrowHeight = 20;
@@ -40,17 +47,22 @@ public class ButtonLayout extends DrawLayout {
 
     @Override
     public ButtonLayout withMissingBottomRow() {
-        return super.withMissingBottomRow().asButtonLayout();
+        return (ButtonLayout)super.withMissingBottomRow();
+    }
+
+    @Override
+    public ButtonLayout withMissingRightCols(int missingCols) {
+        return (ButtonLayout)super.withMissingRightCols(missingCols);
     }
 
     @Override
     public ButtonLayout withDrawSetup(DrawPanelSetup drawSetup) {
-        return super.withDrawSetup(drawSetup).asButtonLayout();
+        return (ButtonLayout)super.withDrawSetup(drawSetup);
     }
 
     @Override
     public ButtonLayout withDrawSetup(DrawPanelIndexSetup drawSetup) {
-        return super.withDrawSetup(drawSetup).asButtonLayout();
+        return (ButtonLayout)super.withDrawSetup(drawSetup);
     }
 
     public ButtonLayout withStartIndex(int startIndex) {
@@ -71,16 +83,29 @@ public class ButtonLayout extends DrawLayout {
     public ButtonLayout withPressIndex(ButtonGridIndexAction indexAction) {
         this.indexAction = index -> {
             Point point = Point.getPointAtIndex(index, this.numCols);
-            int row = point.x;
-            int col = point.y;
+            int col = point.x;
+            int row = point.y;
             indexAction.pressButton(row, col);
         };
         return this;
     }
 
-    public ButtonLayout withButtonSetup(ButtonPanelSetup buttonSetup) {
+    public ButtonLayout withButtonSetup(ButtonPanelIndexSetup buttonSetup) {
         this.buttonSetup = this.buttonSetup.add(buttonSetup);
         return this;
+    }
+
+    public ButtonLayout withButtonSetup(ButtonPanelSetup buttonSetup) {
+        return this.withButtonSetup((panel, index) -> buttonSetup.setup(panel));
+    }
+
+    // Creates a specific button that may be outside of the original layout size
+    public Button getButton(int row, int col, ButtonTransitions transitions, ButtonPressAction pressAction) {
+        DrawPanel drawPanel = this.getPanel(row, col);
+        return new Button(drawPanel, transitions, pressAction, panel -> {
+            drawSetup.setup(panel, -1);
+            buttonSetup.setup(panel, -1);
+        });
     }
 
     public Button[] getButtons() {
@@ -105,7 +130,7 @@ public class ButtonLayout extends DrawLayout {
                     () -> indexAction.pressButton(index),
                     panel -> {
                         drawSetup.setup(panel, index);
-                        buttonSetup.setup(panel);
+                        buttonSetup.setup(panel, index);
                     }
             );
         }

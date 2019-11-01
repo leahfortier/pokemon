@@ -181,6 +181,7 @@ public class Point implements Serializable {
         return Math.abs(difference.x) + Math.abs(difference.y);
     }
 
+    // Note: if using rows and columns, x = col, y = row, width = numCols
     public static int getIndex(int x, int y, int width) {
         return x + y*width;
     }

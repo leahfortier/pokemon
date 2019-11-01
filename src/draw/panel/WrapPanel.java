@@ -44,37 +44,37 @@ public class WrapPanel extends DrawPanel {
 
     @Override
     public WrapPanel withBlackOutline() {
-        return super.withBlackOutline().asWrapPanel();
+        return (WrapPanel)super.withBlackOutline();
     }
 
     @Override
     public WrapPanel withBackgroundColor(Color backgroundColor) {
-        return super.withBackgroundColor(backgroundColor).asWrapPanel();
+        return (WrapPanel)super.withBackgroundColor(backgroundColor);
     }
 
     @Override
     public WrapPanel withBorderColor(Color borderColor) {
-        return super.withBorderColor(borderColor).asWrapPanel();
+        return (WrapPanel)super.withBorderColor(borderColor);
     }
 
     @Override
     public WrapPanel withBorderPercentage(int borderPercentage) {
-        return super.withBorderPercentage(borderPercentage).asWrapPanel();
+        return (WrapPanel)super.withBorderPercentage(borderPercentage);
     }
 
     @Override
     public WrapPanel withBorderSize(int borderSize) {
-        return super.withBorderSize(borderSize).asWrapPanel();
+        return (WrapPanel)super.withBorderSize(borderSize);
     }
 
     @Override
     public WrapPanel withTransparentBackground() {
-        return super.withTransparentBackground().asWrapPanel();
+        return (WrapPanel)super.withTransparentBackground();
     }
 
     @Override
     public WrapPanel withFullTransparency() {
-        return super.withFullTransparency().asWrapPanel();
+        return (WrapPanel)super.withFullTransparency();
     }
 
     public WrapPanel withMinFontSize(int minFontSize, boolean sameSpacing) {

@@ -5,8 +5,6 @@ import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.PolygonUtils;
 import draw.TextUtils;
-import draw.button.Button;
-import draw.button.ButtonPanel;
 import main.Global;
 import map.Direction;
 import pokemon.active.PartyPokemon;
@@ -54,8 +52,8 @@ public class DrawPanel implements Panel {
     private BufferedImage imageLabel;
     private BufferedImage bottomRightImage;
 
-    public DrawPanel(Button button) {
-        this(button.x, button.y, button.width, button.height);
+    public DrawPanel(Panel sizing) {
+        this(sizing.getX(), sizing.getY(), sizing.getWidth(), sizing.getHeight());
     }
 
     public DrawPanel(int x, int y, Point dimension) {
@@ -239,33 +237,6 @@ public class DrawPanel implements Panel {
 
     public void skipDraw() {
         this.skipDraw(true);
-    }
-
-    public WrapPanel asWrapPanel() {
-        if (this instanceof WrapPanel) {
-            return (WrapPanel)this;
-        }
-
-        Global.error("Must already be a WrapPanel.");
-        return new WrapPanel(x, y, width, height, 0);
-    }
-
-    public MovePanel asMovePanel() {
-        if (this instanceof MovePanel) {
-            return (MovePanel)this;
-        }
-
-        Global.error("Must already be a MovePanel.");
-        return new MovePanel(this, 0, 0, 0);
-    }
-
-    public ButtonPanel asButtonPanel() {
-        if (this instanceof ButtonPanel) {
-            return (ButtonPanel)this;
-        }
-
-        Global.error("Must already be a ButtonPanel.");
-        return new Button(this, null).panel();
     }
 
     public int getBorderSize() {

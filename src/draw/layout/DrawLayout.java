@@ -2,7 +2,7 @@ package draw.layout;
 
 import draw.panel.DrawPanel;
 import draw.panel.Panel;
-import main.Global;
+import util.Point;
 
 public class DrawLayout {
     protected final DrawPanel outerPanel;
@@ -15,6 +15,8 @@ public class DrawLayout {
     private final int height;
 
     private int missingRows;
+    private int missingCols;
+
     protected DrawPanelIndexSetup drawSetup;
 
     public DrawLayout(DrawPanel panel, int numRows, int numCols, int spacing) {
@@ -39,20 +41,17 @@ public class DrawLayout {
 
         // Default values
         this.missingRows = 0;
+        this.missingCols = 0;
         this.drawSetup = (drawPanel, index) -> {};
-    }
-
-    public ButtonLayout asButtonLayout() {
-        if (this instanceof ButtonLayout) {
-            return (ButtonLayout)this;
-        }
-
-        Global.error("Must already be a ButtonLayout.");
-        return new ButtonLayout(this.outerPanel, 0, 0, 0);
     }
 
     public DrawLayout withMissingBottomRow() {
         this.missingRows = 1;
+        return this;
+    }
+
+    public DrawLayout withMissingRightCols(int missingCols) {
+        this.missingCols = missingCols;
         return this;
     }
 
@@ -66,27 +65,34 @@ public class DrawLayout {
         return this;
     }
 
-    public DrawPanel[] getPanels() {
+    public DrawPanel getPanel(int row, int col) {
+        DrawPanel[] allPanels = this.getAllPanels();
+        int numCols = this.numCols + missingCols;
+        return allPanels[Point.getIndex(col, row, numCols)];
+    }
+
+    // Includes the missing panels that you didn't want
+    private DrawPanel[] getAllPanels() {
         int borderSize = outerPanel.getBorderSize();
 
-        int numSpaceRows = numRows + missingRows;
-        int numSpaceCols = numCols;
+        int numRows = this.numRows + missingRows;
+        int numCols = this.numCols + missingCols;
 
         int panelWidth;
         int panelHeight;
         if (this.spacing != -1) {
-            panelWidth = (outerPanel.width - 2*borderSize - (numSpaceCols + 1)*spacing)/numSpaceCols;
-            panelHeight = (outerPanel.height - 2*borderSize - (numSpaceRows + 1)*spacing)/numSpaceRows;
+            panelWidth = (outerPanel.width - 2*borderSize - (numCols + 1)*spacing)/numCols;
+            panelHeight = (outerPanel.height - 2*borderSize - (numRows + 1)*spacing)/numRows;
         } else {
             panelWidth = width;
             panelHeight = height;
         }
 
-        int horizontalSpacing = outerPanel.width - 2*borderSize - numSpaceCols*panelWidth;
-        int verticalSpacing = outerPanel.height - 2*borderSize - numSpaceRows*panelHeight;
+        int horizontalSpacing = outerPanel.width - 2*borderSize - numCols*panelWidth;
+        int verticalSpacing = outerPanel.height - 2*borderSize - numRows*panelHeight;
 
-        int xSpacing = horizontalSpacing/(numSpaceCols + 1);
-        int ySpacing = verticalSpacing/(numSpaceRows + 1);
+        int xSpacing = horizontalSpacing/(numCols + 1);
+        int ySpacing = verticalSpacing/(numRows + 1);
 
         DrawPanel[] panels = new DrawPanel[numRows*numCols];
         for (int row = 0, index = 0; row < numRows; row++) {
@@ -98,6 +104,27 @@ public class DrawLayout {
                         panelHeight
                 );
                 drawSetup.setup(panels[index], index);
+            }
+        }
+
+        return panels;
+    }
+
+    public DrawPanel[] getPanels() {
+        DrawPanel[] allPanels = this.getAllPanels();
+
+        int numSpaceRows = numRows + missingRows;
+        int numSpaceCols = numCols + missingCols;
+
+        // No difference in the number of panels
+        if (numSpaceRows == numRows && numSpaceCols == numCols) {
+            return allPanels;
+        }
+
+        DrawPanel[] panels = new DrawPanel[numRows*numCols];
+        for (int row = 0, index = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++, index++) {
+                panels[index] = allPanels[Point.getIndex(col, row, numSpaceCols)];
             }
         }
 
