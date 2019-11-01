@@ -2,6 +2,7 @@ package draw.layout;
 
 import draw.panel.DrawPanel;
 import draw.panel.Panel;
+import main.Global;
 import util.Point;
 
 public class DrawLayout {
@@ -14,6 +15,7 @@ public class DrawLayout {
     private final int width;
     private final int height;
 
+    private boolean missingTop;
     private int missingRows;
     private int missingCols;
 
@@ -45,9 +47,22 @@ public class DrawLayout {
         this.drawSetup = (drawPanel, index) -> {};
     }
 
-    public DrawLayout withMissingBottomRow() {
+    private DrawLayout withMissingRows(boolean isTop) {
+        if (this.missingRows != 0) {
+            Global.error("Missing rows can only be set once.");
+        }
+
         this.missingRows = 1;
+        this.missingTop = isTop;
         return this;
+    }
+
+    public DrawLayout withMissingBottomRow() {
+        return this.withMissingRows(false);
+    }
+
+    public DrawLayout withMissingTopRow() {
+        return this.withMissingRows(true);
     }
 
     public DrawLayout withMissingRightCols(int missingCols) {
@@ -121,8 +136,9 @@ public class DrawLayout {
             return allPanels;
         }
 
+        int rowStart = missingTop ? missingRows : 0;
         DrawPanel[] panels = new DrawPanel[numRows*numCols];
-        for (int row = 0, index = 0; row < numRows; row++) {
+        for (int row = rowStart, index = 0; row < numRows + rowStart; row++) {
             for (int col = 0; col < numCols; col++, index++) {
                 panels[index] = allPanels[Point.getIndex(col, row, numSpaceCols)];
             }
