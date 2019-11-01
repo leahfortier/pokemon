@@ -121,7 +121,7 @@ class DayCareView extends View {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        movePanels = new DrawLayout(movesPanel, MoveList.MAX_MOVES/2, 2, 10)
+        movePanels = new DrawLayout(movesPanel, 2, MoveList.MAX_MOVES/2, 10)
                 .withDrawSetup(panel -> panel.withTransparentCount(2)
                                              .withBorderPercentage(20)
                                              .withBlackOutline()

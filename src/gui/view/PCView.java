@@ -11,6 +11,7 @@ import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.layout.ButtonLayout;
+import draw.layout.DrawLayout;
 import draw.layout.TabLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
@@ -51,6 +52,7 @@ class PCView extends View {
     private final DrawPanel boxNamePanel;
     private final DrawPanel infoPanel;
     private final DrawPanel imagePanel;
+    private final DrawPanel[] movePanels;
     private final StatPanel statsPanel;
 
     private final ButtonList buttons;
@@ -117,6 +119,13 @@ class PCView extends View {
                 infoPanel.height - basicInfoPanel.height - statsPanel.height - buttonHeight + 3*DrawUtils.OUTLINE_SIZE
         ).withFullTransparency()
          .withBlackOutline();
+
+        movePanels = new DrawLayout(movesPanel, 2, MoveList.MAX_MOVES/2, 8)
+                .withDrawSetup(panel -> panel.withTransparentCount(2)
+                                             .withBorderPercentage(20)
+                                             .withBlackOutline()
+                                             .withLabelSize(16))
+                .getPanels();
 
         imagePanel = new DrawPanel(
                 infoPanel.x + 18,
@@ -232,7 +241,7 @@ class PCView extends View {
                 boxPanel, boxNamePanel, partyPanel,
                 infoPanel, basicInfoPanel, imagePanel,
                 movesPanel, statsPanel
-        );
+        ).add(movePanels);
     }
 
     private ButtonPanelSetup textButtonSetup(String text) {
@@ -334,6 +343,18 @@ class PCView extends View {
 
         // Pokemon panel image
         imagePanel.withImageLabel(Game.getData().getPokemonTilesSmall().getTile(selected.getImageName()));
+
+        MoveList moves = selected.getActualMoves();
+        for (int i = 0; i < movePanels.length; i++) {
+            DrawPanel movePanel = movePanels[i];
+            if (!selected.isEgg() && i < moves.size()) {
+                Attack attack = moves.get(i).getAttack();
+                movePanel.withBackgroundColor(attack.getActualType().getColor())
+                         .withLabel(attack.getName());
+            } else {
+                movePanel.skipDraw();
+            }
+        }
     }
 
     @Override
@@ -391,23 +412,6 @@ class PCView extends View {
 
             // Characteristic
             g.drawString(selected.getCharacteristic(), 427, 217);
-
-            MoveList moves = selected.getActualMoves();
-            for (int i = 0; i < moves.size(); i++) {
-                int x = i%2 == 0 ? 421 : 590;
-                int y = i/2 == 0 ? 238 : 277;
-
-                Attack attack = moves.get(i).getAttack();
-
-                DrawPanel movePanel = new DrawPanel(x, y, 159, 31)
-                        .withBackgroundColor(attack.getActualType().getColor())
-                        .withTransparentCount(2)
-                        .withBorderPercentage(20)
-                        .withBlackOutline();
-
-                movePanel.drawBackground(g);
-                movePanel.label(g, 16, attack.getName());
-            }
 
             // Draw stats
             statsPanel.drawStats(g, selected);

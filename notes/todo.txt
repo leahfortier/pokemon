@@ -174,4 +174,4 @@ Other random things:
     text wrapping should allow having a different startX for the first line so you can have a label in a different size (ability name and description for example)
     move as much logic as possible out of views and just have them called from in there (buy from Mart is good example)
     rewrite NewPokemonView buttons similar to LearnMovePanel (and also TradeView)
-    movePanels in PCView
+    
