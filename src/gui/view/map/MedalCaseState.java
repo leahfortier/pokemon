@@ -69,8 +69,7 @@ public class MedalCaseState implements VisualStateHandler {
         int arrowHeight = 20;
         int arrowSpacing = 70;
 
-        Button[] buttons = new Button[NUM_BUTTONS];
-        buttons[LEFT_ARROW] = leftButton = new Button(
+        leftButton = new Button(
                 medalPanels[0].centerX() - arrowSpacing - arrowWidth,
                 medalPanels[medalPanels.length - 1].centerY() + spacing + medalPanels[0].height,
                 arrowWidth,
@@ -80,7 +79,7 @@ public class MedalCaseState implements VisualStateHandler {
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, NUM_PAGES)
         ).asArrow(Direction.LEFT);
 
-        buttons[RIGHT_ARROW] = rightButton = new Button(
+        rightButton = new Button(
                 medalPanels[0].centerX() + arrowSpacing,
                 leftButton.y,
                 arrowWidth,
@@ -90,7 +89,10 @@ public class MedalCaseState implements VisualStateHandler {
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, NUM_PAGES)
         ).asArrow(Direction.RIGHT);
 
-        this.buttons = new ButtonList(buttons);
+        this.buttons = new ButtonList(NUM_BUTTONS);
+        buttons.set(LEFT_ARROW, leftButton);
+        buttons.set(RIGHT_ARROW, rightButton);
+
         this.medalTiles = Game.getData().getMedalTiles();
     }
 

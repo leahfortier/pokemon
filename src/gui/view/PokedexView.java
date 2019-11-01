@@ -150,8 +150,6 @@ public class PokedexView extends View {
         this.pokedex = Game.getPlayer().getPokedex();
         pageNum = 0;
 
-        Button[] buttons = new Button[NUM_BUTTONS];
-
         // Pokedex panel without the title panel
         DrawPanel pokemonPanel = new DrawPanel(
                 pokedexPanel.x,
@@ -206,7 +204,7 @@ public class PokedexView extends View {
         moveButtons = movesLayout.getButtons();
 
         Entry<DrawPanel, DrawPanel> arrowPanels = pokemonLayout.getArrowPanels();
-        buttons[LEFT_ARROW] = leftButton = new Button(
+        leftButton = new Button(
                 arrowPanels.getKey(),
                 new ButtonTransitions()
                         .right(RIGHT_ARROW)
@@ -216,7 +214,7 @@ public class PokedexView extends View {
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, NUM_PAGES)
         ).asArrow(Direction.LEFT);
 
-        buttons[RIGHT_ARROW] = rightButton = new Button(
+        rightButton = new Button(
                 arrowPanels.getValue(),
                 new ButtonTransitions()
                         .right(TAB_START)
@@ -227,7 +225,7 @@ public class PokedexView extends View {
         ).asArrow(Direction.RIGHT);
 
         Entry<DrawPanel, DrawPanel> moveArrowPanels = movesLayout.getArrowPanels();
-        buttons[MOVES_LEFT_ARROW] = movesLeftButton = new Button(
+        movesLeftButton = new Button(
                 moveArrowPanels.getKey(),
                 new ButtonTransitions()
                         .right(MOVES_RIGHT_ARROW)
@@ -239,7 +237,7 @@ public class PokedexView extends View {
                               .asArrow(Direction.LEFT)
         );
 
-        buttons[MOVES_RIGHT_ARROW] = movesRightButton = new Button(
+        movesRightButton = new Button(
                 moveArrowPanels.getValue(),
                 new ButtonTransitions()
                         .right(LEFT_ARROW)
@@ -252,7 +250,7 @@ public class PokedexView extends View {
         );
 
         int returnY = infoPanel.bottomY() + spacing;
-        buttons[RETURN] = new Button(
+        Button returnButton = new Button(
                 infoPanel.x,
                 returnY,
                 infoPanel.width,
@@ -266,10 +264,15 @@ public class PokedexView extends View {
                               .withLabel("Return", 20)
         );
 
-        this.buttons = new ButtonList(buttons);
+        this.buttons = new ButtonList(NUM_BUTTONS);
         this.buttons.set(POKEMON_START, pokemonButtons);
         this.buttons.set(TAB_START, tabButtons);
         this.buttons.set(MOVE_START, moveButtons);
+        this.buttons.set(RIGHT_ARROW, rightButton);
+        this.buttons.set(LEFT_ARROW, leftButton);
+        this.buttons.set(MOVES_LEFT_ARROW, movesLeftButton);
+        this.buttons.set(MOVES_RIGHT_ARROW, movesRightButton);
+        this.buttons.set(RETURN, returnButton);
 
         this.alwaysPanels = List.of(pokedexPanel, titlePanel, countPanel, infoPanel);
         this.panels = new PanelList(alwaysPanels);

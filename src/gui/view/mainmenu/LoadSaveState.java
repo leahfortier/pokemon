@@ -5,31 +5,31 @@ import draw.button.ButtonList;
 import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonTransitions;
 import gui.view.mainmenu.VisualState.VisualStateHandler;
-import map.Direction;
 import save.Save;
 
 import java.awt.Graphics;
 
 class LoadSaveState implements VisualStateHandler {
-    private static final int RETURN = Save.NUM_SAVES;
-    private static final int DELETE = RETURN + 1;
+    private static final int NUM_BUTTONS = Save.NUM_SAVES + 2;
+    private static final int SAVES = 0;
+    private static final int BOTTOM_SAVE = SAVES + Save.NUM_SAVES - 1;
+    private static final int RETURN = NUM_BUTTONS - 1;
+    private static final int DELETE = NUM_BUTTONS - 2;
 
     private final ButtonList buttons;
-    private final Button returnButton;
-    private final Button deleteButton;
+    private final Button[] saveButtons;
 
     private boolean deletePressed;
 
     LoadSaveState() {
-        Button[] buttons = new Button[Save.NUM_SAVES + 2];
-        for (int i = 0; i < Save.NUM_SAVES; i++) {
-            buttons[i] = MainMenuView.createMenuButton(
+        saveButtons = new Button[Save.NUM_SAVES];
+        for (int i = 0; i < saveButtons.length; i++) {
+            saveButtons[i] = MainMenuView.createMenuButton(
                     i,
-                    new ButtonTransitions()
-                            .right(i)
-                            .left(i)
-                            .down(i + 1)
-                            .basic(Direction.UP, i, buttons.length, 1)
+                    ButtonTransitions.getBasicTransitions(
+                            i, saveButtons.length, 1, SAVES,
+                            new ButtonTransitions().up(RETURN).down(DELETE)
+                    )
             );
         }
 
@@ -37,27 +37,32 @@ class LoadSaveState implements VisualStateHandler {
         int spacing = 10;
         int newWidth = (referenceButton.width - spacing)/2;
 
-        returnButton = buttons[RETURN] = new Button(
+        // Handled in update
+        Button returnButton = new Button(
                 referenceButton.x,
                 referenceButton.y,
                 newWidth,
                 referenceButton.height,
-                new ButtonTransitions().right(DELETE).up(Save.NUM_SAVES - 1).left(DELETE).down(0),
+                new ButtonTransitions().right(DELETE).up(BOTTOM_SAVE).left(DELETE).down(SAVES),
                 () -> {}, // Handled in update
                 halfButtonSetup("Return")
         );
 
-        deleteButton = buttons[DELETE] = new Button(
+        // Handled in update
+        Button deleteButton = new Button(
                 returnButton.rightX() + spacing,
                 returnButton.y,
                 returnButton.width,
                 returnButton.height,
-                new ButtonTransitions().right(RETURN).up(Save.NUM_SAVES - 1).left(RETURN).down(0),
+                new ButtonTransitions().right(RETURN).up(BOTTOM_SAVE).left(RETURN).down(SAVES),
                 () -> {}, // Handled in update
                 halfButtonSetup("Delete")
         );
 
-        this.buttons = new ButtonList(buttons);
+        this.buttons = new ButtonList(NUM_BUTTONS);
+        buttons.set(SAVES, saveButtons);
+        buttons.set(DELETE, deleteButton);
+        buttons.set(RETURN, returnButton);
     }
 
     private ButtonPanelSetup halfButtonSetup(String label) {
@@ -75,8 +80,8 @@ class LoadSaveState implements VisualStateHandler {
     @Override
     public void draw(Graphics g, MainMenuView view) {
         // Draw each save information button
-        for (int i = 0; i < Save.NUM_SAVES; i++) {
-            view.drawSaveInformation(g, this.buttons.get(i), i, "Empty");
+        for (int i = 0; i < saveButtons.length; i++) {
+            view.drawSaveInformation(g, saveButtons[i], i, "Empty");
         }
     }
 

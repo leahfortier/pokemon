@@ -226,13 +226,12 @@ public class PartyView extends View {
                                                .withBorderPercentage(20))
                 .getButtons();
 
-        Button[] buttons = new Button[NUM_BUTTONS];
-        System.arraycopy(tabButtons, 0, buttons, TABS, tabButtons.length);
-        System.arraycopy(moveButtons, 0, buttons, MOVES, moveButtons.length);
-        buttons[NICKNAME] = nicknameButton;
-        buttons[SWITCH] = switchButton;
-        buttons[RETURN] = returnButton;
-        this.buttons = new ButtonList(buttons);
+        this.buttons = new ButtonList(NUM_BUTTONS);
+        buttons.set(TABS, tabButtons);
+        buttons.set(MOVES, moveButtons);
+        buttons.set(NICKNAME, nicknameButton);
+        buttons.set(SWITCH, switchButton);
+        buttons.set(RETURN, returnButton);
 
         movedToFront();
     }

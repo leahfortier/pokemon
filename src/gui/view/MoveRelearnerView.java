@@ -198,14 +198,13 @@ public class MoveRelearnerView extends View {
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         ).asArrow(Direction.RIGHT);
 
-        Button[] buttons = new Button[NUM_BUTTONS];
-        System.arraycopy(moveButtons, 0, buttons, MOVES, moveButtons.length);
-        System.arraycopy(pokemonButtons, 0, buttons, PARTY, pokemonButtons.length);
-        buttons[LEARN_MOVE] = learnMoveButton;
-        buttons[RETURN] = returnButton;
-        buttons[MOVES_LEFT_ARROW] = movesLeftButton;
-        buttons[MOVES_RIGHT_ARROW] = movesRightButton;
-        this.buttons = new ButtonList(buttons);
+        this.buttons = new ButtonList(NUM_BUTTONS);
+        buttons.set(MOVES, moveButtons);
+        buttons.set(PARTY, pokemonButtons);
+        buttons.set(LEARN_MOVE, learnMoveButton);
+        buttons.set(RETURN, returnButton);
+        buttons.set(MOVES_LEFT_ARROW, movesLeftButton);
+        buttons.set(MOVES_RIGHT_ARROW, movesRightButton);
 
         this.panels = new PanelList(
                 movesPanel, descriptionPanel, heartScalePanel, partyPanel

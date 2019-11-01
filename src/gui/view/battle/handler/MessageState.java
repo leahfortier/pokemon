@@ -1,6 +1,5 @@
 package gui.view.battle.handler;
 
-import draw.button.Button;
 import draw.button.ButtonList;
 import draw.panel.StatGainPanel;
 import gui.view.battle.BattleView;
@@ -62,6 +61,6 @@ public class MessageState implements VisualStateHandler {
 
     @Override
     public ButtonList getButtons() {
-        return new ButtonList(new Button[0]);
+        return new ButtonList(0);
     }
 }

@@ -10,17 +10,19 @@ import save.Save;
 import java.awt.Graphics;
 
 class NewSaveState implements VisualStateHandler {
+    private static final int NUM_BUTTONS = Save.NUM_SAVES + 1;
+    private static final int RETURN = NUM_BUTTONS - 1;
+
     private final ButtonList buttons;
-    private final Button returnButton;
 
     NewSaveState() {
         // Button for each save file plus return
-        Button[] buttons = new Button[Save.NUM_SAVES + 1];
+        Button[] buttons = new Button[NUM_BUTTONS];
         for (int i = 0; i < buttons.length; i++) {
             buttons[i] = MainMenuView.createMenuButton(i);
         }
 
-        this.returnButton = buttons[Save.NUM_SAVES].setup(panel -> panel.withLabel("Return", 30));
+        buttons[RETURN].setup(panel -> panel.withLabel("Return", 30));
 
         this.buttons = new ButtonList(buttons);
     }

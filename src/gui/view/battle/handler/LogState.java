@@ -36,10 +36,11 @@ public class LogState implements VisualStateHandler {
                     ButtonTransitions.getBasicTransitions(i, 1, 2)
             );
         }
-
-        this.logButtons = new ButtonList(logButtons);
         this.leftArrow = logButtons[0].asArrow(Direction.LEFT);
         this.rightArrow = logButtons[1].asArrow(Direction.RIGHT);
+
+        this.logButtons = new ButtonList(2);
+        this.logButtons.set(0, logButtons);
     }
 
     @Override

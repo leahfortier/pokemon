@@ -103,16 +103,15 @@ public class MartView extends View {
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         ).asArrow(Direction.RIGHT);
 
-        Button[] buttons = new Button[NUM_BUTTONS];
-        System.arraycopy(itemButtons, 0, buttons, ITEMS, ITEMS_PER_PAGE);
-        buttons[PAGE_LEFT_ARROW] = pageLeftButton;
-        buttons[PAGE_RIGHT_ARROW] = pageRightButton;
-        buttons[BUY] = buyButton;
-        buttons[AMOUNT_LEFT_ARROW] = amountLeftButton;
-        buttons[AMOUNT_RIGHT_ARROW] = amountRightButton;
-        buttons[RETURN] = returnButton;
+        this.buttons = new ButtonList(NUM_BUTTONS);
+        buttons.set(ITEMS, itemButtons);
+        buttons.set(PAGE_LEFT_ARROW, pageLeftButton);
+        buttons.set(PAGE_RIGHT_ARROW, pageRightButton);
+        buttons.set(BUY, buyButton);
+        buttons.set(AMOUNT_LEFT_ARROW, amountLeftButton);
+        buttons.set(AMOUNT_RIGHT_ARROW, amountRightButton);
+        buttons.set(RETURN, returnButton);
 
-        this.buttons = new ButtonList(buttons);
         this.panels = new PanelList(
                 layout.bagPanel, layout.amountPanel, layout.leftPanel, layout.playerMoneyPanel,
                 layout.inBagPanel, layout.totalAmountPanel, tabPanel, layout.itemsPanel, layout.selectedPanel

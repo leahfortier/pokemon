@@ -25,7 +25,6 @@ public class MainMenuView extends View {
     static final int[] bgt = new int[] { 800, 1800, 1000, 2400, 1000 };
 
     static final int NUM_MAIN_BUTTONS = 4;
-    private static final int BUTTON_WIDTH = 400;
 
     private static final BufferedImage MAIN_LOGO = FileIO.readImage(Folder.IMAGES + "MainLogo.png");
 
@@ -147,7 +146,7 @@ public class MainMenuView extends View {
         return new Button(
                 200,
                 240 + index*85,
-                BUTTON_WIDTH,
+                400,
                 75,
                 ButtonHoverAction.BOX,
                 transitions,

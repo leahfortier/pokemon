@@ -56,9 +56,6 @@ public class SellView extends View {
         // Show quantities
         layout = new MartLayout(true);
 
-        Button[] buttons = new Button[NUM_BUTTONS];
-        this.buttons = new ButtonList(buttons);
-
         sellButton = layout.createConfirmButton(
                 "SELL",
                 new ButtonTransitions().right(RETURN).up(TABS).left(RETURN).down(TABS),
@@ -101,14 +98,15 @@ public class SellView extends View {
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         ).asArrow(Direction.RIGHT);
 
-        System.arraycopy(tabButtons, 0, buttons, TABS, CATEGORIES.length);
-        System.arraycopy(itemButtons, 0, buttons, ITEMS, ITEMS_PER_PAGE);
-        buttons[PAGE_LEFT_ARROW] = pageLeftButton;
-        buttons[PAGE_RIGHT_ARROW] = pageRightButton;
-        buttons[SELL] = sellButton;
-        buttons[AMOUNT_LEFT_ARROW] = amountLeftButton;
-        buttons[AMOUNT_RIGHT_ARROW] = amountRightButton;
-        buttons[RETURN] = returnButton;
+        this.buttons = new ButtonList(NUM_BUTTONS);
+        buttons.set(TABS, tabButtons);
+        buttons.set(ITEMS, itemButtons);
+        buttons.set(PAGE_LEFT_ARROW, pageLeftButton);
+        buttons.set(PAGE_RIGHT_ARROW, pageRightButton);
+        buttons.set(SELL, sellButton);
+        buttons.set(AMOUNT_LEFT_ARROW, amountLeftButton);
+        buttons.set(AMOUNT_RIGHT_ARROW, amountRightButton);
+        buttons.set(RETURN, returnButton);
 
         this.panels = new PanelList(
                 layout.bagPanel, layout.amountPanel, layout.leftPanel,

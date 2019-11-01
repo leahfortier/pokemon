@@ -126,8 +126,6 @@ class PCView extends View {
 
         int pokemonButtonSize = 40;
 
-        Button[] buttons = new Button[NUM_BUTTONS];
-
         // PC panel without the box name panel
         DrawPanel pokemonPanel = new DrawPanel(
                 boxPanel.x,
@@ -152,7 +150,7 @@ class PCView extends View {
                 .getButtons();
 
         Entry<DrawPanel, DrawPanel> arrowPanels = pokemonLayout.getArrowPanels();
-        buttons[LEFT_ARROW] = leftButton = new Button(
+        leftButton = new Button(
                 arrowPanels.getKey(),
                 new ButtonTransitions()
                         .right(RIGHT_ARROW)
@@ -164,7 +162,7 @@ class PCView extends View {
                 }
         ).asArrow(Direction.LEFT);
 
-        buttons[RIGHT_ARROW] = rightButton = new Button(
+        rightButton = new Button(
                 arrowPanels.getValue(),
                 new ButtonTransitions()
                         .right(SWITCH)
@@ -179,21 +177,21 @@ class PCView extends View {
 
         Button[] fakeTabs = new TabLayout(infoPanel, 3, 38).asBottomTabs().asInsetTabs().getTabs();
 
-        buttons[SWITCH] = switchButton = new Button(
+        switchButton = new Button(
                 fakeTabs[0].panel(),
                 new ButtonTransitions().right(DEPOSIT_WITHDRAW).left(RIGHT_ARROW).down(RETURN).up(RETURN),
                 () -> switchClicked = !switchClicked,
                 textButtonSetup("Switch")
         );
 
-        buttons[DEPOSIT_WITHDRAW] = depositWithdrawButton = new Button(
+        depositWithdrawButton = new Button(
                 fakeTabs[1].panel(),
                 new ButtonTransitions().right(RELEASE).left(SWITCH).down(RETURN).up(RETURN),
                 this::pressDepositWithdraw,
                 textButtonSetup("") // Deposit/Withdraw text set depending on state
         ).setup(ButtonPanel::greyInactive);
 
-        buttons[RELEASE] = releaseButton = new Button(
+        releaseButton = new Button(
                 fakeTabs[2].panel(),
                 new ButtonTransitions().right(PARTY).left(DEPOSIT_WITHDRAW).down(RETURN).up(RETURN),
                 () -> {
@@ -205,7 +203,7 @@ class PCView extends View {
 
         int spacing = infoPanel.x - boxPanel.rightX();
         int returnY = infoPanel.bottomY() + spacing;
-        buttons[RETURN] = new Button(
+        Button returnButton = new Button(
                 infoPanel.x,
                 returnY,
                 infoPanel.width,
@@ -216,9 +214,16 @@ class PCView extends View {
         ).setup(panel -> panel.withBackgroundColor(Color.YELLOW)
                               .withTransparentCount(2));
 
-        this.buttons = new ButtonList(buttons);
+        this.buttons = new ButtonList(NUM_BUTTONS);
         this.buttons.set(BOX, boxButtons);
         this.buttons.set(PARTY, partyButtons);
+        this.buttons.set(LEFT_ARROW, leftButton);
+        this.buttons.set(RIGHT_ARROW, rightButton);
+        this.buttons.set(SWITCH, switchButton);
+        this.buttons.set(DEPOSIT_WITHDRAW, depositWithdrawButton);
+        this.buttons.set(RELEASE, releaseButton);
+        this.buttons.set(RETURN, returnButton);
+
         this.buttons.setSelected(PARTY);
 
         this.panels = new PanelList(

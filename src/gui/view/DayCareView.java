@@ -40,8 +40,8 @@ class DayCareView extends View {
     private static final int BOTTOM_PARTY = PARTY + Trainer.MAX_POKEMON - 1;
     private static final int RETURN = NUM_BUTTONS - 1;
     private static final int DEPOSIT_WITHDRAW = NUM_BUTTONS - 2;
-    private static final int FIRST_DAY_CARE_POKEMON_BUTTON = NUM_BUTTONS - 3;
-    private static final int SECOND_DAY_CARE_POKEMON_BUTTON = NUM_BUTTONS - 4;
+    private static final int FIRST_DAY_CARE_POKEMON = NUM_BUTTONS - 3;
+    private static final int SECOND_DAY_CARE_POKEMON = NUM_BUTTONS - 4;
 
     private final PanelList panels;
     private final DrawPanel infoPanel;
@@ -134,8 +134,6 @@ class DayCareView extends View {
                 104
         ).withFullTransparency().withBlackOutline();
 
-        Button[] buttons = new Button[NUM_BUTTONS];
-
         // Fake panels with three rows (label + each day care pokemon), and one column
         int buttonSpacing = 10;
         DrawPanel[] fakeDayCarePanels = new DrawLayout(dayCarePanel, 3, 1, buttonSpacing).getPanels();
@@ -143,22 +141,22 @@ class DayCareView extends View {
         // Label isn't a button but still uses the spacing
         DrawPanel dayCareLabelPanel = labelPanelSetup("Day Care", fakeDayCarePanels[0]);
 
-        firstDayCarePokemonButton = buttons[FIRST_DAY_CARE_POKEMON_BUTTON] = new Button(
+        firstDayCarePokemonButton = new Button(
                 fakeDayCarePanels[1],
                 new ButtonTransitions()
                         .right(DEPOSIT_WITHDRAW)
                         .up(BOTTOM_PARTY)
                         .left(RETURN)
-                        .down(SECOND_DAY_CARE_POKEMON_BUTTON),
+                        .down(SECOND_DAY_CARE_POKEMON),
                 () -> selected = dayCareCenter.getFirstPokemon(),
                 pokemonButtonSetup()
         );
 
-        secondDayCarePokemonButton = buttons[SECOND_DAY_CARE_POKEMON_BUTTON] = new Button(
+        secondDayCarePokemonButton = new Button(
                 fakeDayCarePanels[2],
                 new ButtonTransitions()
                         .right(DEPOSIT_WITHDRAW)
-                        .up(FIRST_DAY_CARE_POKEMON_BUTTON)
+                        .up(FIRST_DAY_CARE_POKEMON)
                         .left(RETURN)
                         .down(PARTY),
                 () -> selected = dayCareCenter.getSecondPokemon(),
@@ -174,14 +172,14 @@ class DayCareView extends View {
         partyButtons = partyLayout.withStartIndex(PARTY)
                                   .withDefaultTransitions(new ButtonTransitions()
                                                                   .right(DEPOSIT_WITHDRAW)
-                                                                  .up(SECOND_DAY_CARE_POKEMON_BUTTON)
+                                                                  .up(SECOND_DAY_CARE_POKEMON)
                                                                   .left(RETURN)
-                                                                  .down(FIRST_DAY_CARE_POKEMON_BUTTON))
+                                                                  .down(FIRST_DAY_CARE_POKEMON))
                                   .withPressIndex(index -> selected = team.get(index))
                                   .withButtonSetup(pokemonButtonSetup())
                                   .getButtons();
 
-        depositWithdrawButton = buttons[DEPOSIT_WITHDRAW] = new Button(
+        depositWithdrawButton = new Button(
                 infoPanel.x,
                 infoPanel.bottomY() + spacing/2,
                 (infoPanel.width - spacing/2)/2,
@@ -198,7 +196,7 @@ class DayCareView extends View {
                 textButtonSetup("", new Color(123, 213, 74))
         );
 
-        buttons[RETURN] = new Button(
+        Button returnButton = new Button(
                 infoPanel.rightX() - depositWithdrawButton.width,
                 depositWithdrawButton.y,
                 depositWithdrawButton.width,
@@ -208,9 +206,12 @@ class DayCareView extends View {
                 textButtonSetup("Return", Color.YELLOW)
         );
 
-        this.buttons = new ButtonList(buttons);
-        this.buttons.set(PARTY, partyButtons);
-        this.buttons.setSelected(DEPOSIT_WITHDRAW);
+        this.buttons = new ButtonList(NUM_BUTTONS);
+        buttons.set(PARTY, partyButtons);
+        buttons.set(FIRST_DAY_CARE_POKEMON, firstDayCarePokemonButton);
+        buttons.set(SECOND_DAY_CARE_POKEMON, secondDayCarePokemonButton);
+        buttons.set(DEPOSIT_WITHDRAW, depositWithdrawButton);
+        buttons.set(RETURN, returnButton);
 
         this.panels = new PanelList(
                 dayCarePanel, dayCareLabelPanel, partyPanel, partyLabelPanel,

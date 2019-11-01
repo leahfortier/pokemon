@@ -79,9 +79,6 @@ public class BagState implements VisualStateHandler {
                 .withTransparentBackground()
                 .withBlackOutline();
 
-        // Bag View Buttons
-        Button[] bagButtons = new Button[NUM_BUTTONS];
-
         tabButtons = new TabLayout(bagCategoryPanel, BATTLE_BAG_CATEGORIES.length, 28)
                 .withStartIndex(TABS)
                 .withDefaultTransitions(new ButtonTransitions().up(LAST_ITEM_USED).down(ITEMS))
@@ -103,12 +100,12 @@ public class BagState implements VisualStateHandler {
 
         Entry<DrawPanel, DrawPanel> arrowPanels = itemsLayout.getArrowPanels();
 
-        bagButtons[LEFT_ARROW] = leftButton = new Button(
+        leftButton = new Button(
                 arrowPanels.getKey(),
                 new ButtonTransitions().right(RIGHT_ARROW).up(BOTTOM_ITEM - 1).down(LAST_ITEM_USED).left(RIGHT_ARROW)
         ).asArrow(Direction.LEFT);
 
-        bagButtons[RIGHT_ARROW] = rightButton = new Button(
+        rightButton = new Button(
                 arrowPanels.getValue(),
                 new ButtonTransitions().up(BOTTOM_ITEM).left(LEFT_ARROW).down(LAST_ITEM_USED).right(LEFT_ARROW)
         ).asArrow(Direction.RIGHT);
@@ -117,7 +114,7 @@ public class BagState implements VisualStateHandler {
         lastItemLabelPanel = lastUsedPanels[0].withNoBackground()
                                               .withLabel("Last item used:", 16, Alignment.LEFT);
 
-        bagButtons[LAST_ITEM_USED] = lastUsedButton = new Button(
+        lastUsedButton = new Button(
                 lastUsedPanels[1],
                 new ButtonTransitions().up(LEFT_ARROW).down(selectedBagTab),
                 () -> {}, // Handled in update
@@ -127,9 +124,12 @@ public class BagState implements VisualStateHandler {
                               .withBorderPercentage(0)
         );
 
-        this.buttons = new ButtonList(bagButtons);
+        this.buttons = new ButtonList(NUM_BUTTONS);
         this.buttons.set(TABS, tabButtons);
         this.buttons.set(ITEMS, itemButtons);
+        this.buttons.set(LEFT_ARROW, leftButton);
+        this.buttons.set(RIGHT_ARROW, rightButton);
+        this.buttons.set(LAST_ITEM_USED, lastUsedButton);
 
         this.panels = new PanelList(bagCategoryPanel, lastItemPanel, lastItemLabelPanel);
     }
