@@ -37,10 +37,6 @@ public class BasicPanels {
         return new ButtonLayout(fullMessagePanel, numRows, numCols, spacing);
     }
 
-    public static ButtonLayout getFullMessagePanelLayout(int numRows, int numCols, Panel sizing) {
-        return new ButtonLayout(fullMessagePanel, numRows, numCols, sizing);
-    }
-
     public static void drawCanvasPanel(Graphics g) {
         fullCanvasPanel.drawBackground(g);
     }

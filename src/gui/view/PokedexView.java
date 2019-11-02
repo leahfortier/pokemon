@@ -8,6 +8,7 @@ import draw.button.ButtonList;
 import draw.button.ButtonPanel;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
+import draw.layout.ArrowLayout;
 import draw.layout.ButtonLayout;
 import draw.layout.TabLayout;
 import draw.panel.BasicPanels;
@@ -39,7 +40,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 
 public class PokedexView extends View {
     private static final int NUM_COLS = 6;
@@ -203,9 +203,9 @@ public class PokedexView extends View {
         // Pressing does nothing, only care if button is selected
         moveButtons = movesLayout.getButtons();
 
-        Entry<DrawPanel, DrawPanel> arrowPanels = pokemonLayout.getArrowPanels();
+        ArrowLayout arrowPanels = pokemonLayout.getArrowLayout();
         leftButton = new Button(
-                arrowPanels.getKey(),
+                arrowPanels.getLeftPanel(),
                 new ButtonTransitions()
                         .right(RIGHT_ARROW)
                         .up(BOTTOM_MIDDLE_POKEMON - 1)
@@ -215,7 +215,7 @@ public class PokedexView extends View {
         ).asArrow(Direction.LEFT);
 
         rightButton = new Button(
-                arrowPanels.getValue(),
+                arrowPanels.getRightPanel(),
                 new ButtonTransitions()
                         .right(TAB_START)
                         .up(BOTTOM_MIDDLE_POKEMON)
@@ -224,9 +224,9 @@ public class PokedexView extends View {
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, NUM_PAGES)
         ).asArrow(Direction.RIGHT);
 
-        Entry<DrawPanel, DrawPanel> moveArrowPanels = movesLayout.getArrowPanels();
+        ArrowLayout moveArrowPanels = movesLayout.getArrowLayout();
         movesLeftButton = new Button(
-                moveArrowPanels.getKey(),
+                moveArrowPanels.getLeftPanel(),
                 new ButtonTransitions()
                         .right(MOVES_RIGHT_ARROW)
                         .up(BOTTOM_MOVE)
@@ -238,7 +238,7 @@ public class PokedexView extends View {
         );
 
         movesRightButton = new Button(
-                moveArrowPanels.getValue(),
+                moveArrowPanels.getRightPanel(),
                 new ButtonTransitions()
                         .right(LEFT_ARROW)
                         .up(BOTTOM_MOVE)

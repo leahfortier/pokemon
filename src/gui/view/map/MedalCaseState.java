@@ -30,7 +30,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map.Entry;
 
 public class MedalCaseState implements VisualStateHandler {
     private static final List<Medal> MEDALS = Arrays.asList(Medal.values());
@@ -86,15 +85,15 @@ public class MedalCaseState implements VisualStateHandler {
         medalPanels = new DrawLayout(medalsPanel, MEDALS_PER_PAGE, 1, 12)
                 .withDrawSetup(DrawPanel::withBlackOutline).getPanels();
 
-        Entry<DrawPanel, DrawPanel> arrowPanels = new ArrowLayout(arrowsPanel).getPanels();
+        ArrowLayout arrowPanels = new ArrowLayout(arrowsPanel);
         leftButton = new Button(
-                arrowPanels.getKey(),
+                arrowPanels.getLeftPanel(),
                 new ButtonTransitions().left(RIGHT_ARROW).right(RIGHT_ARROW),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, NUM_PAGES)
         ).asArrow(Direction.LEFT);
 
         rightButton = new Button(
-                arrowPanels.getValue(),
+                arrowPanels.getRightPanel(),
                 new ButtonTransitions().left(LEFT_ARROW).right(LEFT_ARROW),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, NUM_PAGES)
         ).asArrow(Direction.RIGHT);

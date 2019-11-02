@@ -10,6 +10,7 @@ import draw.button.ButtonPanel;
 import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
+import draw.layout.ArrowLayout;
 import draw.layout.ButtonLayout;
 import draw.layout.TabLayout;
 import draw.panel.BasicPanels;
@@ -33,7 +34,6 @@ import util.FontMetrics;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
-import java.util.Map.Entry;
 
 public class PCView extends View {
     private static final int NUM_BUTTONS = PC.BOX_HEIGHT*PC.BOX_WIDTH + Trainer.MAX_POKEMON + MoveList.MAX_MOVES + 6;
@@ -170,9 +170,9 @@ public class PCView extends View {
                 .withDefaultTransitions(new ButtonTransitions().up(RETURN).down(DEPOSIT_WITHDRAW).right(BOX).left(RIGHT_ARROW))
                 .getButtons();
 
-        Entry<DrawPanel, DrawPanel> arrowPanels = pokemonLayout.getArrowPanels();
+        ArrowLayout arrowPanels = pokemonLayout.getArrowLayout();
         leftButton = new Button(
-                arrowPanels.getKey(),
+                arrowPanels.getLeftPanel(),
                 new ButtonTransitions().right(RIGHT_ARROW).up(BOTTOM_MIDDLE_BOX - 1).down(PARTY).left(RELEASE),
                 () -> {
                     pc.incrementBox(-1);
@@ -181,7 +181,7 @@ public class PCView extends View {
         ).asArrow(Direction.LEFT);
 
         rightButton = new Button(
-                arrowPanels.getValue(),
+                arrowPanels.getRightPanel(),
                 new ButtonTransitions().right(SWITCH).up(BOTTOM_MIDDLE_BOX).left(LEFT_ARROW).down(PARTY),
                 () -> {
                     pc.incrementBox(1);

@@ -7,6 +7,7 @@ import draw.button.Button;
 import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
 import draw.layout.ButtonLayout;
+import draw.layout.QuestionLayout;
 import draw.panel.WrapPanel.WrapMetrics;
 import input.ControlKey;
 import input.InputControl;
@@ -16,7 +17,6 @@ import message.MessageUpdate;
 import message.MessageUpdateType;
 import pokemon.active.MoveList;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
 public class LearnMovePanel {
@@ -85,32 +85,21 @@ public class LearnMovePanel {
                                        .withButtonSetup((panel, index) -> panel.withMove(moves.get(index)))
                                        .getButtons();
 
-        ButtonLayout questionLayout = BasicPanels.getFullMessagePanelLayout(2, 4, newMoveButton)
-                                                 .withButtonSetup(panel -> panel.skipInactive()
-                                                                                .withTransparentCount(2)
-                                                                                .withBorderPercentage(15)
-                                                                                .withLabelSize(30)
-                                                                                .withBlackOutline());
-        // Bottom middle left
-        yesButton = questionLayout.getButton(
-                1, 1,
-                new ButtonTransitions().left(NO_BUTTON).right(NO_BUTTON),
+        QuestionLayout questionLayout = new QuestionLayout(
+                YES_BUTTON, NO_BUTTON,
                 () -> {
                     messages.pop();
                     state = State.DELETE;
-                }
-        ).setup(panel -> panel.withBackgroundColor(new Color(120, 200, 80)).withLabel("Yes"));
-
-        // Bottom middle right
-        noButton = questionLayout.getButton(
-                1, 2,
-                new ButtonTransitions().left(YES_BUTTON).right(YES_BUTTON),
+                },
                 () -> {
                     messages.pop();
                     messages.add(learning.getActualName() + " did not learn " + toLearn.getAttack().getName() + ".");
                     state = State.END;
                 }
-        ).setup(panel -> panel.withBackgroundColor(new Color(220, 20, 20)).withLabel("No"));
+        );
+
+        yesButton = questionLayout.getYesButton();
+        noButton = questionLayout.getNoButton();
 
         // Create a button for each known move and then one for the new move and one for not learning
         buttons = new ButtonList(NUM_BUTTONS);

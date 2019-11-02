@@ -6,6 +6,7 @@ import draw.button.Button;
 import draw.button.ButtonPanel;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
+import draw.layout.ArrowLayout;
 import draw.layout.ButtonLayout;
 import draw.layout.ButtonLayout.ButtonIndexAction;
 import draw.layout.TabLayout;
@@ -22,7 +23,6 @@ import util.Point;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
-import java.util.Map.Entry;
 
 public class BagLayout {
     private static final BagCategory[] CATEGORIES = BagCategory.values();
@@ -88,9 +88,9 @@ public class BagLayout {
                 .withFullTransparency()
                 .withBlackOutline();
 
-        Entry<DrawPanel, DrawPanel> arrowPanels = this.getItemsLayout().getArrowPanels();
-        leftArrow = arrowPanels.getKey();
-        rightArrow = arrowPanels.getValue();
+        ArrowLayout arrowPanels = this.getItemsLayout().getArrowLayout();
+        leftArrow = arrowPanels.getLeftPanel();
+        rightArrow = arrowPanels.getRightPanel();
 
         returnPanel = new DrawPanel(
                 selectedPanel.x,

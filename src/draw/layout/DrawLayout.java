@@ -5,8 +5,6 @@ import draw.panel.Panel;
 import main.Global;
 import util.Point;
 
-import java.util.Map.Entry;
-
 public class DrawLayout {
     private final DrawPanel outerPanel;
 
@@ -153,7 +151,7 @@ public class DrawLayout {
     }
 
     // Works best when missing the bottom row
-    public Entry<DrawPanel, DrawPanel> getArrowPanels() {
+    public ArrowLayout getArrowLayout() {
         DrawPanel[] panels = this.getAllPanels();
 
         // Note: it's totally cool/normal for these to be the same panel
@@ -167,7 +165,7 @@ public class DrawLayout {
                 leftLastRow.height
         );
 
-        return new ArrowLayout(bottomRow).getPanels();
+        return new ArrowLayout(bottomRow);
     }
 
     @FunctionalInterface

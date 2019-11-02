@@ -2,37 +2,34 @@ package draw.layout;
 
 import draw.panel.DrawPanel;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Map.Entry;
-
 public class ArrowLayout {
-    private final DrawPanel panel;
-
-    private int arrowWidth;
-    private int arrowHeight;
+    private final DrawPanel leftArrow;
+    private final DrawPanel rightArrow;
 
     public ArrowLayout(DrawPanel outerPanel) {
-        this.panel = outerPanel;
+        int arrowWidth = 35;
+        int arrowHeight = 20;
 
-        this.arrowWidth = 35;
-        this.arrowHeight = 20;
-    }
-
-    public Entry<DrawPanel, DrawPanel> getPanels() {
-        DrawPanel leftArrow = new DrawPanel(
-                panel.x + panel.width/4,
-                panel.centerY() - arrowHeight/2,
+        leftArrow = new DrawPanel(
+                outerPanel.x + outerPanel.width/4,
+                outerPanel.centerY() - arrowHeight/2,
                 arrowWidth,
                 arrowHeight
         );
 
-        DrawPanel rightArrow = new DrawPanel(
-                panel.rightX() - (leftArrow.x - panel.x) - leftArrow.width,
+        rightArrow = new DrawPanel(
+                outerPanel.rightX() - (leftArrow.x - outerPanel.x) - leftArrow.width,
                 leftArrow.y,
                 leftArrow.width,
                 leftArrow.height
         );
+    }
 
-        return new SimpleEntry<>(leftArrow, rightArrow);
+    public DrawPanel getLeftPanel() {
+        return this.leftArrow;
+    }
+
+    public DrawPanel getRightPanel() {
+        return this.rightArrow;
     }
 }

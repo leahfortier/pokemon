@@ -2,12 +2,12 @@ package gui.view.battle.handler;
 
 import battle.Battle;
 import draw.Alignment;
-import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonList;
 import draw.button.ButtonPanel;
 import draw.button.ButtonTransitions;
+import draw.layout.ArrowLayout;
 import draw.layout.ButtonLayout;
 import draw.layout.DrawLayout;
 import draw.layout.TabLayout;
@@ -26,15 +26,12 @@ import main.Game;
 import map.Direction;
 import trainer.TrainerAction;
 import trainer.player.Player;
-import util.FontMetrics;
 import util.GeneralUtils;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Set;
 
 public class BagState implements VisualStateHandler {
@@ -96,14 +93,14 @@ public class BagState implements VisualStateHandler {
 
         itemButtons = itemsLayout.getButtons();
 
-        Entry<DrawPanel, DrawPanel> arrowPanels = itemsLayout.getArrowPanels();
+        ArrowLayout arrowPanels = itemsLayout.getArrowLayout();
         leftButton = new Button(
-                arrowPanels.getKey(),
+                arrowPanels.getLeftPanel(),
                 new ButtonTransitions().right(RIGHT_ARROW).up(BOTTOM_ITEM - 1).down(LAST_ITEM_USED).left(RIGHT_ARROW)
         ).asArrow(Direction.LEFT);
 
         rightButton = new Button(
-                arrowPanels.getValue(),
+                arrowPanels.getRightPanel(),
                 new ButtonTransitions().up(BOTTOM_ITEM).left(LEFT_ARROW).down(LAST_ITEM_USED).right(LEFT_ARROW)
         ).asArrow(Direction.RIGHT);
 
