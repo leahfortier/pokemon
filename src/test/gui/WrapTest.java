@@ -13,6 +13,8 @@ import gui.view.battle.handler.BagState;
 import gui.view.battle.handler.FightState;
 import gui.view.battle.handler.PokemonState;
 import gui.view.item.BagLayout;
+import gui.view.map.MapView;
+import gui.view.map.MedalCaseState;
 import item.Item;
 import item.ItemNamesies;
 import org.junit.Assert;
@@ -24,6 +26,7 @@ import pokemon.species.PokemonNamesies;
 import test.general.BaseTest;
 import test.general.TestGame;
 import test.pokemon.TestPokemon;
+import trainer.player.medal.Medal;
 
 import java.awt.Graphics;
 
@@ -139,6 +142,22 @@ public class WrapTest extends BaseTest {
         pokedexMetrics.confirmFontSizes(10, 12);
         moveRelearnerMetrics.confirmFontSizes(15, 16);
         learnMoveMetrics.confirmFontSizes(13, 16);
+    }
+
+    @Test
+    public void medalDescriptionTest() {
+        MapView mapView = TestGame.instance().getMapView();
+        MedalCaseState medalState = new MedalCaseState();
+        medalState.set(mapView);
+
+        TestMetrics medalMetrics = new TestMetrics();
+
+        Graphics g = new TestGraphics();
+        for (Medal medal : Medal.values()) {
+            medalMetrics.checkMetrics(medal.getMedalName(), medalState.drawMedal(g, medal));
+        }
+
+        medalMetrics.confirmFontSize(14);
     }
 
     private static class TestMetrics {

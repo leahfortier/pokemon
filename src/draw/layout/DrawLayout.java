@@ -5,8 +5,10 @@ import draw.panel.Panel;
 import main.Global;
 import util.Point;
 
+import java.util.Map.Entry;
+
 public class DrawLayout {
-    protected final DrawPanel outerPanel;
+    private final DrawPanel outerPanel;
 
     protected final int numRows;
     protected final int numCols;
@@ -148,6 +150,24 @@ public class DrawLayout {
         }
 
         return panels;
+    }
+
+    // Works best when missing the bottom row
+    public Entry<DrawPanel, DrawPanel> getArrowPanels() {
+        DrawPanel[] panels = this.getAllPanels();
+
+        // Note: it's totally cool/normal for these to be the same panel
+        DrawPanel leftLastRow = panels[panels.length - numCols];
+        DrawPanel rightLastRow = panels[panels.length - 1];
+
+        DrawPanel bottomRow = new DrawPanel(
+                leftLastRow.x,
+                leftLastRow.y,
+                rightLastRow.rightX() - leftLastRow.x,
+                leftLastRow.height
+        );
+
+        return new ArrowLayout(bottomRow).getPanels();
     }
 
     @FunctionalInterface

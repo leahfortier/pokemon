@@ -66,6 +66,14 @@ public class MedalCase implements Serializable {
         return themeCounters.get(MedalTheme.getMedalTheme(medal));
     }
 
+    public String getThresholdString(Medal medal) {
+        if (medal.hasThreshold()) {
+            return this.getCount(medal) + "/" + medal.getThreshold();
+        }
+
+        return "";
+    }
+
     public boolean hasMedal(Medal medal) {
         return medalsEarned.contains(medal);
     }
@@ -156,5 +164,9 @@ public class MedalCase implements Serializable {
 
     public void increase(MedalTheme theme) {
         this.increase(theme, 1);
+    }
+
+    public int numMedalsEarned() {
+        return this.medalsEarned.size();
     }
 }

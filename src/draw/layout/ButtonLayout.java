@@ -9,17 +9,11 @@ import draw.panel.DrawPanel;
 import draw.panel.Panel;
 import util.Point;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Map.Entry;
-
 public class ButtonLayout extends DrawLayout {
     private int startIndex;
     private ButtonTransitions defaultTransitions;
     private ButtonIndexAction indexAction;
     private ButtonPanelIndexSetup buttonSetup;
-
-    private int arrowWidth;
-    private int arrowHeight;
 
     public ButtonLayout(DrawPanel panel, int numRows, int numCols, int spacing) {
         super(panel, numRows, numCols, spacing);
@@ -40,9 +34,6 @@ public class ButtonLayout extends DrawLayout {
         this.defaultTransitions = null;
         this.indexAction = index -> {};
         this.buttonSetup = (panel, index) -> {};
-
-        this.arrowWidth = 35;
-        this.arrowHeight = 20;
     }
 
     @Override
@@ -153,26 +144,6 @@ public class ButtonLayout extends DrawLayout {
             }
         }
         return gridButtons;
-    }
-
-    public Entry<DrawPanel, DrawPanel> getArrowPanels() {
-        DrawPanel[] panels = this.getPanels();
-
-        DrawPanel leftArrow = new DrawPanel(
-                outerPanel.x + outerPanel.width/4,
-                panels[panels.length - 1].centerY() + (panels[numCols].y - panels[0].y) - arrowHeight/2,
-                arrowWidth,
-                arrowHeight
-        );
-
-        DrawPanel rightArrow = new DrawPanel(
-                outerPanel.rightX() - (leftArrow.x - outerPanel.x) - leftArrow.width,
-                leftArrow.y,
-                leftArrow.width,
-                leftArrow.height
-        );
-
-        return new SimpleEntry<>(leftArrow, rightArrow);
     }
 
     @FunctionalInterface
