@@ -11,12 +11,13 @@ import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.layout.ButtonLayout;
-import draw.layout.DrawLayout;
 import draw.layout.TabLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.MovePanel;
 import draw.panel.PanelList;
 import draw.panel.StatPanel;
+import draw.panel.WrapPanel.WrapMetrics;
 import input.InputControl;
 import main.Game;
 import map.Direction;
@@ -34,12 +35,14 @@ import java.awt.Graphics;
 import java.util.List;
 import java.util.Map.Entry;
 
-class PCView extends View {
-    private static final int NUM_BUTTONS = PC.BOX_HEIGHT*PC.BOX_WIDTH + Trainer.MAX_POKEMON + 6;
+public class PCView extends View {
+    private static final int NUM_BUTTONS = PC.BOX_HEIGHT*PC.BOX_WIDTH + Trainer.MAX_POKEMON + MoveList.MAX_MOVES + 6;
     private static final int BOX = 0;
     private static final int BOTTOM_MIDDLE_BOX = PC.BOX_HEIGHT*PC.BOX_WIDTH - PC.BOX_WIDTH/2;
     private static final int PARTY = BOX + PC.BOX_HEIGHT*PC.BOX_WIDTH;
     private static final int LAST_PARTY = PARTY + Trainer.MAX_POKEMON - 1;
+    private static final int MOVES = PARTY + Trainer.MAX_POKEMON;
+    private static final int LAST_MOVE = MOVES + MoveList.MAX_MOVES - 1;
     private static final int RETURN = NUM_BUTTONS - 1;
     private static final int RELEASE = NUM_BUTTONS - 2;
     private static final int DEPOSIT_WITHDRAW = NUM_BUTTONS - 3;
@@ -52,12 +55,13 @@ class PCView extends View {
     private final DrawPanel boxNamePanel;
     private final DrawPanel infoPanel;
     private final DrawPanel imagePanel;
-    private final DrawPanel[] movePanels;
     private final StatPanel statsPanel;
+    private final MovePanel moveDetailsPanel;
 
     private final ButtonList buttons;
     private final Button[][] boxButtons;
     private final Button[] partyButtons;
+    private final Button[] moveButtons;
     private final Button leftButton;
     private final Button rightButton;
     private final Button switchButton;
@@ -112,20 +116,17 @@ class PCView extends View {
         ).withFullTransparency()
          .withBlackOutline();
 
+        moveDetailsPanel = new MovePanel(statsPanel, 20, 18, 16)
+                .withFullTransparency()
+                .withMinDescFontSize(14);
+
         DrawPanel movesPanel = new DrawPanel(
                 infoPanel.x,
-                basicInfoPanel.y + basicInfoPanel.height - DrawUtils.OUTLINE_SIZE,
+                basicInfoPanel.bottomY() - DrawUtils.OUTLINE_SIZE,
                 infoPanel.width,
                 infoPanel.height - basicInfoPanel.height - statsPanel.height - buttonHeight + 3*DrawUtils.OUTLINE_SIZE
         ).withFullTransparency()
          .withBlackOutline();
-
-        movePanels = new DrawLayout(movesPanel, 2, MoveList.MAX_MOVES/2, 8)
-                .withDrawSetup(panel -> panel.withTransparentCount(2)
-                                             .withBorderPercentage(20)
-                                             .withBlackOutline()
-                                             .withLabelSize(16))
-                .getPanels();
 
         imagePanel = new DrawPanel(
                 infoPanel.x + 18,
@@ -148,7 +149,7 @@ class PCView extends View {
         ButtonLayout pokemonLayout = new ButtonLayout(pokemonPanel, PC.BOX_WIDTH, PC.BOX_HEIGHT, pokemonButtonSize, pokemonButtonSize)
                 .withMissingBottomRow()
                 .withStartIndex(BOX)
-                .withDefaultTransitions(new ButtonTransitions().right(SWITCH).down(RIGHT_ARROW).up(PARTY))
+                .withDefaultTransitions(new ButtonTransitions().right(MOVES).down(RIGHT_ARROW).up(PARTY))
                 .withPressIndex(this::pressBoxPokemon);
 
         boxButtons = pokemonLayout.getGridButtons();
@@ -160,13 +161,19 @@ class PCView extends View {
                 .withButtonSetup(ButtonPanel::skipInactive)
                 .getButtons();
 
+        moveButtons = new ButtonLayout(movesPanel, 2, MoveList.MAX_MOVES/2, 8)
+                .withDrawSetup(panel -> panel.withTransparentCount(2)
+                                             .withBorderPercentage(20)
+                                             .withBlackOutline()
+                                             .withLabelSize(16))
+                .withStartIndex(MOVES)
+                .withDefaultTransitions(new ButtonTransitions().up(RETURN).down(DEPOSIT_WITHDRAW).right(BOX).left(RIGHT_ARROW))
+                .getButtons();
+
         Entry<DrawPanel, DrawPanel> arrowPanels = pokemonLayout.getArrowPanels();
         leftButton = new Button(
                 arrowPanels.getKey(),
-                new ButtonTransitions()
-                        .right(RIGHT_ARROW)
-                        .up(BOTTOM_MIDDLE_BOX - 1)
-                        .down(PARTY),
+                new ButtonTransitions().right(RIGHT_ARROW).up(BOTTOM_MIDDLE_BOX - 1).down(PARTY).left(RELEASE),
                 () -> {
                     pc.incrementBox(-1);
                     movedToFront();
@@ -175,11 +182,7 @@ class PCView extends View {
 
         rightButton = new Button(
                 arrowPanels.getValue(),
-                new ButtonTransitions()
-                        .right(SWITCH)
-                        .up(BOTTOM_MIDDLE_BOX)
-                        .left(LEFT_ARROW)
-                        .down(PARTY),
+                new ButtonTransitions().right(SWITCH).up(BOTTOM_MIDDLE_BOX).left(LEFT_ARROW).down(PARTY),
                 () -> {
                     pc.incrementBox(1);
                     movedToFront();
@@ -190,21 +193,21 @@ class PCView extends View {
 
         switchButton = new Button(
                 fakeTabs[0].panel(),
-                new ButtonTransitions().right(DEPOSIT_WITHDRAW).left(RIGHT_ARROW).down(RETURN).up(RETURN),
+                new ButtonTransitions().right(DEPOSIT_WITHDRAW).left(RIGHT_ARROW).down(RETURN).up(LAST_MOVE),
                 () -> switchClicked = !switchClicked,
                 textButtonSetup("Switch")
         );
 
         depositWithdrawButton = new Button(
                 fakeTabs[1].panel(),
-                new ButtonTransitions().right(RELEASE).left(SWITCH).down(RETURN).up(RETURN),
+                new ButtonTransitions().right(RELEASE).left(SWITCH).down(RETURN).up(LAST_MOVE),
                 this::pressDepositWithdraw,
                 textButtonSetup("") // Deposit/Withdraw text set depending on state
         ).setup(ButtonPanel::greyInactive);
 
         releaseButton = new Button(
                 fakeTabs[2].panel(),
-                new ButtonTransitions().right(PARTY).left(DEPOSIT_WITHDRAW).down(RETURN).up(RETURN),
+                new ButtonTransitions().right(PARTY).left(DEPOSIT_WITHDRAW).down(RETURN).up(LAST_MOVE),
                 () -> {
                     pc.releasePokemon(selected);
                     movedToFront();
@@ -219,7 +222,7 @@ class PCView extends View {
                 returnY,
                 infoPanel.width,
                 partyPanel.bottomY() - returnY,
-                new ButtonTransitions().right(PARTY).up(SWITCH).down(SWITCH).left(LAST_PARTY),
+                new ButtonTransitions().right(PARTY).up(DEPOSIT_WITHDRAW).down(MOVES).left(LAST_PARTY),
                 ButtonPressAction.getExitAction(),
                 textButtonSetup("Return")
         ).setup(panel -> panel.withBackgroundColor(Color.YELLOW)
@@ -228,6 +231,7 @@ class PCView extends View {
         this.buttons = new ButtonList(NUM_BUTTONS);
         this.buttons.set(BOX, boxButtons);
         this.buttons.set(PARTY, partyButtons);
+        this.buttons.set(MOVES, moveButtons);
         this.buttons.set(LEFT_ARROW, leftButton);
         this.buttons.set(RIGHT_ARROW, rightButton);
         this.buttons.set(SWITCH, switchButton);
@@ -238,17 +242,15 @@ class PCView extends View {
         this.buttons.setSelected(PARTY);
 
         this.panels = new PanelList(
-                boxPanel, boxNamePanel, partyPanel,
-                infoPanel, basicInfoPanel, imagePanel,
-                movesPanel, statsPanel
-        ).add(movePanels);
+                boxPanel, boxNamePanel, partyPanel, infoPanel,
+                basicInfoPanel, imagePanel, movesPanel, statsPanel
+        );
     }
 
     private ButtonPanelSetup textButtonSetup(String text) {
         return panel -> panel.withBlackOutline()
                              .withLabel(text, 20)
-                             .withTransparentBackground()
-                             .withBorderPercentage(0);
+                             .withBorderlessTransparentBackground();
     }
 
     @Override
@@ -345,8 +347,8 @@ class PCView extends View {
         imagePanel.withImageLabel(Game.getData().getPokemonTilesSmall().getTile(selected.getImageName()));
 
         MoveList moves = selected.getActualMoves();
-        for (int i = 0; i < movePanels.length; i++) {
-            DrawPanel movePanel = movePanels[i];
+        for (int i = 0; i < moveButtons.length; i++) {
+            ButtonPanel movePanel = moveButtons[i].panel();
             if (!selected.isEgg() && i < moves.size()) {
                 Attack attack = moves.get(i).getAttack();
                 movePanel.withBackgroundColor(attack.getActualType().getColor())
@@ -413,9 +415,19 @@ class PCView extends View {
             // Characteristic
             g.drawString(selected.getCharacteristic(), 427, 217);
 
-            // Draw stats
-            statsPanel.drawStats(g, selected);
+            // Stats Box or Move description
+            int selectedButton = buttons.getSelected();
+            if (selectedButton >= MOVES && selectedButton < MOVES + MoveList.MAX_MOVES) {
+                MoveList moves = selected.getActualMoves();
+                drawMoveDetails(g, moves.get(selectedButton - MOVES).getAttack());
+            } else {
+                statsPanel.drawStats(g, selected);
+            }
         }
+    }
+
+    public WrapMetrics drawMoveDetails(Graphics g, Attack move) {
+        return moveDetailsPanel.drawMove(g, move);
     }
 
     @Override

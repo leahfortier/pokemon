@@ -459,11 +459,8 @@ public class PartyView extends View {
     }
 
     private void drawStatBox(Graphics g, PartyPokemon selectedPkm) {
-        // Not in the PanelList since it's the same location as the moves panel which is handled separately as well
-        // Seems silly to add it when a move is selected just to have it overwritten
-        statsPanel.drawBackground(g);
-
         // Draw stats
+        statsPanel.drawBackground(g);
         statsPanel.drawStats(g, selectedPkm);
 
         // HP Bar
@@ -476,7 +473,8 @@ public class PartyView extends View {
     }
 
     public WrapMetrics drawMoveDetails(Graphics g, Attack move) {
-        return moveDetailsPanel.draw(g, move);
+        moveDetailsPanel.drawBackground(g);
+        return moveDetailsPanel.drawMove(g, move);
     }
 
     private void switchTab(int index) {

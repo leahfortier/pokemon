@@ -58,11 +58,17 @@ public class MovePanel extends DrawPanel {
         return this;
     }
 
+    // Draws both background and foreground
     public WrapMetrics draw(Graphics g, Attack attack) {
         // Draw type-colored background
         this.withBackgroundColor(attack.getActualType().getColor())
             .drawBackground(g);
 
+        return drawMove(g, attack);
+    }
+
+    // Only draws foreground (text and images)
+    public WrapMetrics drawMove(Graphics g, Attack attack) {
         FontMetrics.setBlackFont(g, nameFontSize);
         int textSpace = this.getTextSpace(g);
         int borderSize = this.getBorderSize();

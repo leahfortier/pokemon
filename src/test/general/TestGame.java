@@ -3,6 +3,7 @@ package test.general;
 import battle.ActivePokemon;
 import gui.view.MoveRelearnerView;
 import gui.view.NewPokemonView;
+import gui.view.PCView;
 import gui.view.PartyView;
 import gui.view.PokedexView;
 import gui.view.ViewMode;
@@ -32,6 +33,10 @@ public class TestGame extends Game {
 
     public PartyView getPartyView() {
         return (PartyView)super.getView(ViewMode.PARTY_VIEW);
+    }
+
+    public PCView getPCView() {
+        return (PCView)super.getView(ViewMode.PC_VIEW);
     }
 
     public MoveRelearnerView getMoveRelearnerView() {

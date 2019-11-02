@@ -7,6 +7,7 @@ import draw.panel.LearnMovePanel;
 import draw.panel.WrapPanel.WrapMetrics;
 import gui.view.MoveRelearnerView;
 import gui.view.NewPokemonView;
+import gui.view.PCView;
 import gui.view.PartyView;
 import gui.view.PokedexView;
 import gui.view.battle.handler.BagState;
@@ -100,12 +101,14 @@ public class WrapTest extends BaseTest {
         FightState fightState = new FightState();
         PokemonState pokemonState = new PokemonState();
         PartyView partyView = TestGame.instance().getPartyView();
+        PCView pcView = TestGame.instance().getPCView();
         PokedexView pokedexView = TestGame.instance().getPokedexView();
         MoveRelearnerView moveRelearnerView = TestGame.instance().getMoveRelearnerView();
 
         TestMetrics fightMetrics = new TestMetrics();
         TestMetrics pokemonMetrics = new TestMetrics();
         TestMetrics partyMetrics = new TestMetrics();
+        TestMetrics pcMetrics = new TestMetrics();
         TestMetrics pokedexMetrics = new TestMetrics();
         TestMetrics moveRelearnerMetrics = new TestMetrics();
         TestMetrics learnMoveMetrics = new TestMetrics();
@@ -124,6 +127,9 @@ public class WrapTest extends BaseTest {
             // Selected move details when viewing Pokemon in party
             partyMetrics.checkMetrics(name, partyView.drawMoveDetails(g, attack));
 
+            // Selected move details when viewing Pokemon in PC
+            pcMetrics.checkMetrics(name, pcView.drawMoveDetails(g, attack));
+
             // Selected move details when viewing potential moves in Pokedex
             pokedexMetrics.checkMetrics(name, pokedexView.drawMoveDetails(g, attack));
 
@@ -139,6 +145,7 @@ public class WrapTest extends BaseTest {
         fightMetrics.confirmFontSizes(13, 16);
         pokemonMetrics.confirmFontSizes(9, 11);
         partyMetrics.confirmFontSizes(14, 16);
+        pcMetrics.confirmFontSizes(14, 16);
         pokedexMetrics.confirmFontSizes(10, 12);
         moveRelearnerMetrics.confirmFontSizes(15, 16);
         learnMoveMetrics.confirmFontSizes(13, 16);

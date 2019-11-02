@@ -156,8 +156,6 @@ Other random things:
     need like a 'b' button where you can click through things but can't start a new dialogue
     opponent's trace message appears before your Pokemon is even out and looks really weird
     used a Pokeball and it didn't show up as my LastUsedItem what's up with that
-    MedalView is super broken right now and not worth handling in this branch
-    PC View should be able to hover over moves and change stats panel into move description similar to PartyView
     maybe add setActive things to Button and have a similar buttonList.updateActive() type thing
     noticed NewPokemonView is using %-10s for the name but this is no longer the maximum name length so worth just taking another look at probably
     maybe eventually have the View class have draw method as final, with setup, draw (foreground), and getButtonList/getPanelList abstract methods
