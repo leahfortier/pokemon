@@ -2,6 +2,7 @@ package gui.view;
 
 import draw.button.Button;
 import draw.button.ButtonList;
+import draw.layout.QuestionLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.LabelPanel;
@@ -20,7 +21,6 @@ import trainer.Trainer;
 import trainer.player.NewPokemonInfo;
 import trainer.player.Player;
 import type.PokeType;
-import util.Point;
 import util.string.PokeString;
 
 import java.awt.Color;
@@ -29,12 +29,14 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class NewPokemonView extends View {
-    private static final int NUM_COLS = 4;
-    private static final int LEFT_BUTTON = NUM_COLS + 1; // Bottom center left
-    private static final int RIGHT_BUTTON = NUM_COLS + 2; // Bottom center right
+    private static final int NUM_BUTTONS = Trainer.MAX_POKEMON + 4;
+    private static final int PARTY = 0;
+    private static final int YES_BUTTON = NUM_BUTTONS - 1;
+    private static final int NO_BUTTON = NUM_BUTTONS - 2;
+    private static final int PARTY_CHOICE = NUM_BUTTONS - 3;
+    private static final int PC_CHOICE = NUM_BUTTONS - 4;
 
     private static final int TEXT_SPACING = 15;
-
     private static final int BOX_SPACING = (BasicPanels.getMessagePanelY()
             - new LabelPanel(0, 0, 30, TEXT_SPACING, "").height
             - new LabelPanel(0, 0, 24, TEXT_SPACING, "").height
@@ -52,8 +54,10 @@ public class NewPokemonView extends View {
 
     private final ButtonList buttons;
     private final Button[] partyButtons;
-    private final Button leftAnswerButton;
-    private final Button rightAnswerButton;
+    private final Button yesButton;
+    private final Button noButton;
+    private final Button partyChoiceButton;
+    private final Button pcChoiceButton;
 
     private PartyPokemon newPokemon;
     private Integer boxNum;
@@ -95,32 +99,51 @@ public class NewPokemonView extends View {
         ).withFullTransparency()
          .withBlackOutline();
 
-        this.buttons = new ButtonList(
-                BasicPanels.getFullMessagePanelLayout(2, NUM_COLS, 10)
-                           .withButtonSetup(panel -> panel.skipInactive()
-                                                          .withTransparentBackground()
-                                                          .withTransparentCount(2)
-                                                          .withBorderPercentage(15)
-                                                          .withBlackOutline())
-                           .getButtons()
+        partyButtons = BasicPanels.getFullMessagePanelLayout(2, Trainer.MAX_POKEMON/2, 10)
+                                  .withButtonSetup(panel -> panel.skipInactive()
+                                                                 .withTransparentCount(2)
+                                                                 .withBorderPercentage(15)
+                                                                 .withLabelSize(20)
+                                                                 .withBlackOutline())
+                                  .withStartIndex(PARTY)
+                                  .withPressIndex(index -> {
+                                      Player player = Game.getPlayer();
+                                      List<PartyPokemon> party = player.getTeam();
+
+                                      PartyPokemon newPokemon = this.newPokemon;
+                                      this.newPokemon = party.get(index);
+
+                                      player.getPC().switchPokemon(newPokemon, index);
+                                      setState(State.END);
+                                  })
+                                  .getButtons();
+
+        QuestionLayout yesNoLayout = new QuestionLayout(
+                YES_BUTTON, NO_BUTTON,
+                () -> setState(State.NICKNAME),
+                () -> setState(State.LOCATION)
         );
-        this.buttons.setInactive();
+        this.yesButton = yesNoLayout.getYesButton();
+        this.noButton = yesNoLayout.getNoButton();
 
-        // Bottom center left
-        this.leftAnswerButton = buttons.get(LEFT_BUTTON);
+        QuestionLayout locationChoiceLayout = new QuestionLayout(
+                PARTY_CHOICE, PC_CHOICE,
+                () -> setState(State.PARTY_SELECTION),
+                () -> setState(State.END)
+        );
+        this.partyChoiceButton = locationChoiceLayout.getYesButton()
+                                                     .setup(panel -> panel.withLabel("Party")
+                                                                          .withBackgroundColor(new Color(35, 120, 220)));
+        this.pcChoiceButton = locationChoiceLayout.getNoButton()
+                                                  .setup(panel -> panel.withLabel("PC")
+                                                                       .withBackgroundColor(new Color(255, 215, 0)));
 
-        // Bottom center right
-        this.rightAnswerButton = buttons.get(RIGHT_BUTTON);
-
-        this.partyButtons = new Button[Trainer.MAX_POKEMON];
-        for (int row = 0; row < 2; row++) {
-            for (int col = 0; col < Trainer.MAX_POKEMON/2; col++) {
-                int buttonIndex = Point.getIndex(col, row, NUM_COLS);
-                int partyIndex = Point.getIndex(col, row, Trainer.MAX_POKEMON/2);
-
-                partyButtons[partyIndex] = buttons.get(buttonIndex);
-            }
-        }
+        this.buttons = new ButtonList(NUM_BUTTONS);
+        this.buttons.set(PARTY, partyButtons);
+        this.buttons.set(YES_BUTTON, yesButton);
+        this.buttons.set(NO_BUTTON, noButton);
+        this.buttons.set(PARTY_CHOICE, partyChoiceButton);
+        this.buttons.set(PC_CHOICE, pcChoiceButton);
 
         this.panels = new PanelList(canvasPanel, messagelessCanvasPanel);
     }
@@ -169,8 +192,11 @@ public class NewPokemonView extends View {
         }
 
         buttons.update();
-        InputControl input = InputControl.instance();
+        if (buttons.consumeSelectedPress()) {
+            setState(this.state);
+        }
 
+        InputControl input = InputControl.instance();
         switch (state) {
             case POKEDEX:
                 if (input.consumeIfMouseDown(ControlKey.SPACE)) {
@@ -180,18 +206,8 @@ public class NewPokemonView extends View {
                         message = null;
                     }
                 }
-
                 if (message == null) {
                     setState(State.NICKNAME_QUESTION);
-                }
-                break;
-            case NICKNAME_QUESTION:
-                if (rightAnswerButton.checkConsumePress()) {
-                    setState(State.LOCATION);
-                }
-
-                if (leftAnswerButton.checkConsumePress()) {
-                    setState(State.NICKNAME);
                 }
                 break;
             case NICKNAME:
@@ -202,61 +218,23 @@ public class NewPokemonView extends View {
                 if (input.consumeIfDown(ControlKey.ENTER)) {
                     String nickname = input.stopAndResetCapturedText();
                     newPokemon.setNickname(nickname);
-
                     setState(State.LOCATION);
-                }
-                break;
-            case LOCATION:
-                if (rightAnswerButton.checkConsumePress()) {
-                    setState(State.END);
-                }
-
-                if (leftAnswerButton.checkConsumePress()) {
-                    setState(State.PARTY_SELECTION);
                 }
                 break;
             case PARTY_SELECTION:
                 if (input.consumeIfDown(ControlKey.BACK)) {
                     setState(State.END);
                 }
-
-                Player player = Game.getPlayer();
-                List<PartyPokemon> party = player.getTeam();
-                for (int row = 0; row < 2; row++) {
-                    for (int col = 0; col < Trainer.MAX_POKEMON/2; col++) {
-                        int buttonIndex = Point.getIndex(col, row, NUM_COLS);
-                        int partyIndex = Point.getIndex(col, row, Trainer.MAX_POKEMON/2);
-
-                        Button pokemonButton = buttons.get(buttonIndex);
-                        if (pokemonButton.checkConsumePress()) {
-                            PartyPokemon newPokemon = this.newPokemon;
-                            this.newPokemon = party.get(partyIndex);
-
-                            player.getPC().switchPokemon(newPokemon, partyIndex);
-                            setState(State.END);
-                            break;
-                        }
-                    }
-                }
                 break;
             case END:
                 if (input.consumeIfMouseDown(ControlKey.SPACE)) {
                     message = null;
                 }
-
                 if (message == null) {
                     Game.instance().setViewMode(ViewMode.MAP_VIEW);
                 }
                 break;
         }
-    }
-
-    // Can't include the font size in the setup method because answer buttons overlap with party buttons
-    // which use a different font size
-    private void setupTextButton(Button button, Color color, String label) {
-        button.panel()
-              .withBackgroundColor(color)
-              .withLabel(label, 30);
     }
 
     private void drawSetup() {
@@ -273,26 +251,16 @@ public class NewPokemonView extends View {
             messagelessCanvasPanel.withImageLabel(pokemonImage);
         }
 
-        switch (state) {
-            case NICKNAME_QUESTION:
-                setupTextButton(leftAnswerButton, new Color(120, 200, 80), "Yes");
-                setupTextButton(rightAnswerButton, new Color(220, 20, 20), "No");
-                break;
-            case LOCATION:
-                setupTextButton(leftAnswerButton, new Color(35, 120, 220), "Party");
-                setupTextButton(rightAnswerButton, new Color(255, 215, 0), "PC");
-                break;
-            case PARTY_SELECTION:
-                List<PartyPokemon> party = Game.getPlayer().getTeam();
-                TileSet partyTiles = Game.getData().getPartyTiles();
-                for (int i = 0; i < party.size(); i++) {
-                    PartyPokemon partyPokemon = party.get(i);
-                    BufferedImage partyPokemonImage = partyTiles.getTile(partyPokemon.getTinyImageName());
-                    partyButtons[i].panel()
-                                   .withBackgroundColors(PokeType.getColors(partyPokemon))
-                                   .withImageLabel(partyPokemonImage, partyPokemon.getActualName())
-                                   .withLabelSize(20);
-                }
+        if (state == State.PARTY_SELECTION) {
+            List<PartyPokemon> party = Game.getPlayer().getTeam();
+            TileSet partyTiles = Game.getData().getPartyTiles();
+            for (int i = 0; i < party.size(); i++) {
+                PartyPokemon partyPokemon = party.get(i);
+                BufferedImage partyPokemonImage = partyTiles.getTile(partyPokemon.getTinyImageName());
+                partyButtons[i].panel()
+                               .withBackgroundColors(PokeType.getColors(partyPokemon))
+                               .withImageLabel(partyPokemonImage, partyPokemon.getActualName());
+            }
         }
     }
 
@@ -351,9 +319,9 @@ public class NewPokemonView extends View {
                 }
                 break;
             case NICKNAME_QUESTION:
-                leftAnswerButton.setActive(true);
-                rightAnswerButton.setActive(true);
-                buttons.setSelected(RIGHT_BUTTON);
+                yesButton.setActive(true);
+                noButton.setActive(true);
+                buttons.setSelected(YES_BUTTON);
                 message = "Would you like to give " + pokemonName + " a nickname?";
                 break;
             case NICKNAME:
@@ -361,24 +329,21 @@ public class NewPokemonView extends View {
                 break;
             case LOCATION:
                 if (player.fullParty() && !player.getTeam().contains(newPokemon)) {
-                    leftAnswerButton.setActive(true);
-                    rightAnswerButton.setActive(true);
-                    buttons.setSelected(RIGHT_BUTTON);
+                    partyChoiceButton.setActive(true);
+                    pcChoiceButton.setActive(true);
+                    buttons.setSelected(PARTY_CHOICE);
                     message = "Where would you like to send " + pokemonName + "?";
                 } else {
                     setState(State.END);
                 }
                 break;
             case PARTY_SELECTION:
-                message = null;
-                this.buttons.setSelected(0);
-
-                for (int row = 0; row < 2; row++) {
-                    for (int col = 0; col < NUM_COLS; col++) {
-                        int index = Point.getIndex(col, row, NUM_COLS);
-                        buttons.get(index).setActive(col < Trainer.MAX_POKEMON/2);
-                    }
+                // Should only be in this state if the party is full so don't need to check length
+                for (Button partyButton : partyButtons) {
+                    partyButton.setActive(true);
                 }
+                message = null;
+                this.buttons.setSelected(PARTY);
                 break;
             case END:
                 if (boxNum != null) {
