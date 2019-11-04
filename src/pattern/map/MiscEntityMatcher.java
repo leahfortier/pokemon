@@ -5,29 +5,21 @@ import map.entity.Entity;
 import map.entity.MiscEntity;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionList;
-import pattern.action.ActionMatcher;
 import pattern.action.MiscEntityInteractionMatcher;
 import pattern.generic.EntityMatcher.MultiEntityMatcher;
 import pattern.generic.MultiPointTriggerMatcher;
 import util.Point;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class MiscEntityMatcher extends MultiPointTriggerMatcher implements MultiEntityMatcher {
     private String name;
-    private ActionMatcher[] actions;
     private MiscEntityInteractionMatcher[] interactions;
 
-
-    // TODO: Deprecate and use interactions constructor
-    public MiscEntityMatcher(String name, String conditionName, ConditionSet conditionSet, ActionMatcher[] actions) {
+    public MiscEntityMatcher(String name, String conditionName, ConditionSet conditionSet, List<MiscEntityInteractionMatcher> interactions) {
         this.name = name;
-        this.actions = actions;
-
-        super.setCondition(conditionName, conditionSet);
-    }
-
-    public MiscEntityMatcher(String name, String conditionName, ConditionSet conditionSet, MiscEntityInteractionMatcher[] interactions) {
-        this.name = name;
-        this.interactions = interactions;
+        this.interactions = interactions.toArray(new MiscEntityInteractionMatcher[0]);
 
         super.setCondition(conditionName, conditionSet);
     }
@@ -45,6 +37,10 @@ public class MiscEntityMatcher extends MultiPointTriggerMatcher implements Multi
     // TODO: Deprecate
     public ActionList getActions() {
         return interactions[0].getActions();
+    }
+
+    public List<MiscEntityInteractionMatcher> getInteractionMatcherList() {
+        return Arrays.asList(this.interactions);
     }
 
     @Override
