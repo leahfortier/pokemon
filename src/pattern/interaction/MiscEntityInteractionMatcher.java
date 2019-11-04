@@ -1,5 +1,7 @@
-package pattern.action;
+package pattern.interaction;
 
+import pattern.action.ActionList;
+import pattern.action.ActionMatcher;
 import util.serialization.JsonMatcher;
 import util.string.StringUtils;
 
