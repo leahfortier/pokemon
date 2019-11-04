@@ -498,10 +498,15 @@
   "miscEntities": [
     {
       "name": "Flag",
-      "actions": [
+      "interactions": [
         {
-          "dialogue": "Praise Canada!",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "dialogue": "Praise Canada!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            }
+          ]
         }
       ],
       "location": [

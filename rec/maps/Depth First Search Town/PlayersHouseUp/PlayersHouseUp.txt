@@ -107,10 +107,15 @@
   "miscEntities": [
     {
       "name": "PC",
-      "actions": [
+      "interactions": [
         {
-          "triggerName": "LOAD_PC",
-          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "triggerName": "LOAD_PC",
+              "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+            }
+          ]
         }
       ],
       "location": [
@@ -123,17 +128,22 @@
     },
     {
       "name": "PokePalooza",
-      "actions": [
+      "interactions": [
         {
-          "dialogue": "Hm?",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
-        },
-        {
-          "pokemonMatcher": {
-            "namesies": "EXEGGUTOR",
-            "level": 4
-          },
-          "className": "pattern.action.ActionMatcher$GivePokemonActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "dialogue": "Hm?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            },
+            {
+              "pokemonMatcher": {
+                "namesies": "EXEGGUTOR",
+                "level": 4
+              },
+              "className": "pattern.action.ActionMatcher$GivePokemonActionMatcher"
+            }
+          ]
         }
       ],
       "location": [
@@ -146,10 +156,15 @@
     },
     {
       "name": "TV",
-      "actions": [
+      "interactions": [
         {
-          "dialogue": "The power's out...",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "dialogue": "The power's out...",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            }
+          ]
         }
       ],
       "location": [

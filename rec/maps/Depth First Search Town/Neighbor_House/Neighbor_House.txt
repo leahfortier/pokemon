@@ -58,14 +58,19 @@
   "miscEntities": [
     {
       "name": "PC",
-      "actions": [
+      "interactions": [
         {
-          "dialogue": "*hack hack hack*",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
-        },
-        {
-          "triggerName": "LOAD_PC",
-          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "dialogue": "*hack hack hack*",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            },
+            {
+              "triggerName": "LOAD_PC",
+              "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+            }
+          ]
         }
       ],
       "location": [

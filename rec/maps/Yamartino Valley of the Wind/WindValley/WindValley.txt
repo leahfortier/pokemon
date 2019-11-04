@@ -150,10 +150,15 @@
   "miscEntities": [
     {
       "name": "PC",
-      "actions": [
+      "interactions": [
         {
-          "triggerName": "LOAD_PC",
-          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "triggerName": "LOAD_PC",
+              "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+            }
+          ]
         }
       ],
       "location": [

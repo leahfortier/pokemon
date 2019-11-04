@@ -6,6 +6,7 @@ import map.entity.MiscEntity;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionList;
 import pattern.action.ActionMatcher;
+import pattern.action.MiscEntityInteractionMatcher;
 import pattern.generic.EntityMatcher.MultiEntityMatcher;
 import pattern.generic.MultiPointTriggerMatcher;
 import util.Point;
@@ -13,10 +14,20 @@ import util.Point;
 public class MiscEntityMatcher extends MultiPointTriggerMatcher implements MultiEntityMatcher {
     private String name;
     private ActionMatcher[] actions;
+    private MiscEntityInteractionMatcher[] interactions;
 
+
+    // TODO: Deprecate and use interactions constructor
     public MiscEntityMatcher(String name, String conditionName, ConditionSet conditionSet, ActionMatcher[] actions) {
         this.name = name;
         this.actions = actions;
+
+        super.setCondition(conditionName, conditionSet);
+    }
+
+    public MiscEntityMatcher(String name, String conditionName, ConditionSet conditionSet, MiscEntityInteractionMatcher[] interactions) {
+        this.name = name;
+        this.interactions = interactions;
 
         super.setCondition(conditionName, conditionSet);
     }
@@ -31,8 +42,9 @@ public class MiscEntityMatcher extends MultiPointTriggerMatcher implements Multi
         return this.name;
     }
 
+    // TODO: Deprecate
     public ActionList getActions() {
-        return new ActionList(actions);
+        return interactions[0].getActions();
     }
 
     @Override

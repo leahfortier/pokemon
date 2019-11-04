@@ -256,10 +256,15 @@
   "miscEntities": [
     {
       "name": "LockedDoor",
-      "actions": [
+      "interactions": [
         {
-          "dialogue": "The door is locked.",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "dialogue": "The door is locked.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            }
+          ]
         }
       ],
       "location": [

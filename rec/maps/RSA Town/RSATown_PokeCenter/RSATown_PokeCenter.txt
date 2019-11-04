@@ -53,37 +53,42 @@
   "miscEntities": [
     {
       "name": "Heal",
-      "actions": [
+      "interactions": [
         {
-          "dialogue": "Famlusa du dra Bugésuh Lahdan!",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
-        },
-        {
-          "dialogue": "Mad sa raym ouin Bugésuh vun oui!",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
-        },
-        {
-          "soundTitle": "POKE_CENTER_HEAL",
-          "className": "pattern.action.EnumActionMatcher$SoundActionMatcher"
-        },
-        {
-          "dialogue": "Tih Tih Tih-Tih Tih!",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
-        },
-        {
-          "className": "pattern.action.EmptyActionMatcher$HealPartyActionMatcher"
-        },
-        {
-          "dialogue": "Ouin Bugésuh ryja paah raymat!",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
-        },
-        {
-          "dialogue": "E ruba du caa oui ykyeh cuuh!",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
-        },
-        {
-          "medalTheme": "POKE_CENTER_HEALS",
-          "className": "pattern.action.EnumActionMatcher$MedalCountActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "dialogue": "Famlusa du dra Bugésuh Lahdan!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            },
+            {
+              "dialogue": "Mad sa raym ouin Bugésuh vun oui!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            },
+            {
+              "soundTitle": "POKE_CENTER_HEAL",
+              "className": "pattern.action.EnumActionMatcher$SoundActionMatcher"
+            },
+            {
+              "dialogue": "Tih Tih Tih-Tih Tih!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            },
+            {
+              "className": "pattern.action.EmptyActionMatcher$HealPartyActionMatcher"
+            },
+            {
+              "dialogue": "Ouin Bugésuh ryja paah raymat!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            },
+            {
+              "dialogue": "E ruba du caa oui ykyeh cuuh!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            },
+            {
+              "medalTheme": "POKE_CENTER_HEALS",
+              "className": "pattern.action.EnumActionMatcher$MedalCountActionMatcher"
+            }
+          ]
         }
       ],
       "location": [
@@ -96,14 +101,19 @@
     },
     {
       "name": "Mart",
-      "actions": [
+      "interactions": [
         {
-          "dialogue": "Famlusa du dra BugéSynd!",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
-        },
-        {
-          "viewMode": "MART_VIEW",
-          "className": "pattern.action.EnumActionMatcher$ChangeViewActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "dialogue": "Famlusa du dra BugéSynd!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            },
+            {
+              "viewMode": "MART_VIEW",
+              "className": "pattern.action.EnumActionMatcher$ChangeViewActionMatcher"
+            }
+          ]
         }
       ],
       "location": [
@@ -116,10 +126,15 @@
     },
     {
       "name": "PC_View",
-      "actions": [
+      "interactions": [
         {
-          "triggerName": "LOAD_PC",
-          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "triggerName": "LOAD_PC",
+              "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+            }
+          ]
         }
       ],
       "location": [

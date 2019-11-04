@@ -121,10 +121,15 @@
   "miscEntities": [
     {
       "name": "TV",
-      "actions": [
+      "interactions": [
         {
-          "dialogue": "The power's not out...?",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "dialogue": "The power's not out...?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            }
+          ]
         }
       ],
       "location": [
@@ -149,10 +154,15 @@
     },
     {
       "name": "fridge",
-      "actions": [
+      "interactions": [
         {
-          "dialogue": "Nothing good to eat. As usual.",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "dialogue": "Nothing good to eat. As usual.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            }
+          ]
         }
       ],
       "location": [
