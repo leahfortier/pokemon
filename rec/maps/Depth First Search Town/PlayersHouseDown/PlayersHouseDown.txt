@@ -52,7 +52,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "It's nice when you come to visit, but please get a job.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -81,7 +81,7 @@
         {
           "name": "talk",
           "walkToPlayer": true,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Time to move out. Goodbye.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

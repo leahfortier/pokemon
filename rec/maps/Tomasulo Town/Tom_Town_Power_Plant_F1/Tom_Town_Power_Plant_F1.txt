@@ -69,7 +69,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "It's not safe here.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -93,7 +93,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Time to get back to my research.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

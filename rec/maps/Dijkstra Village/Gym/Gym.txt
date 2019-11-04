@@ -49,7 +49,7 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "...",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -96,7 +96,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "...",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

@@ -5,7 +5,7 @@ import map.entity.movable.MovableEntity;
 import mapMaker.MapMaker;
 import mapMaker.dialogs.interaction.NPCInteractionDialog;
 import mapMaker.model.TileModel.TileType;
-import pattern.action.NPCInteractionMatcher;
+import pattern.interaction.NPCInteractionMatcher;
 import pattern.map.NPCMatcher;
 import util.GuiUtils;
 

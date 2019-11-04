@@ -35,7 +35,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Watch out, I'm gonna fry your motherboard!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -58,7 +58,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Hey! You fried my motherboard!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -81,7 +81,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "My Pokémon and I communicate over PCI express!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -104,7 +104,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "I need more bandwidth!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -127,7 +127,7 @@
         {
           "name": "battle",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "My Pokémon pack enough electricity to power the Cray Titan!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -164,7 +164,7 @@
         {
           "name": "badge",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "My data BUS just wasn't large enough! Take this, the Round Badge!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -182,7 +182,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "jo,loo6jm[nphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh             bo",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

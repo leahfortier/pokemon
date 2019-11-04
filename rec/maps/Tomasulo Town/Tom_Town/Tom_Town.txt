@@ -116,7 +116,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Team Deadlock has taken over the Power Plant. I hope the ground shaking doesn't mean anything that bad.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -140,7 +140,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "I've never felt a shock like that before! Did it come from the Power Plant?!??",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -164,7 +164,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "I need to get back in there. The reactor is going to explode!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -188,7 +188,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "I was just researching new electricity harvesting techniques when everyone was forced out by Team Deadlock.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -212,7 +212,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Team Deadlock better not harm the Magnemites!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -236,7 +236,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "I wish he would just calm down and try to explain what happened.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

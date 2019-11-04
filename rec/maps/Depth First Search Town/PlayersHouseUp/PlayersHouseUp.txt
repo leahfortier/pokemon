@@ -55,7 +55,7 @@
         {
           "name": "battle",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "I'm gonna be the very best like no one ever was.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -78,7 +78,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Just get out. You're not welcome here.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

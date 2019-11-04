@@ -54,7 +54,7 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Berry time! Fuck yeah!!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -81,7 +81,7 @@
         {
           "name": "DayCare",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "className": "pattern.action.EmptyActionMatcher$DayCareActionMatcher"
             }
@@ -103,7 +103,7 @@
         {
           "name": "Learn Move View",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Heart scales sure are tasty treats...",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -130,7 +130,7 @@
         {
           "name": "Trade",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "tradePokemon": "YUKIKON",
               "requested": "VULPIX",

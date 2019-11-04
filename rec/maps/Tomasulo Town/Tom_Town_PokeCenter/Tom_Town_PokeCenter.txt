@@ -56,7 +56,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Hi, I'm Tom!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

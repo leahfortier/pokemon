@@ -78,7 +78,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "E's cu mucd.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -101,7 +101,7 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Famlusa du NCY Dufh! Dryd'c ed vnus sa.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -124,7 +124,7 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Drec dufh ec geht uv bnadahdeuic, pacd hud pudran dnoehk du ihtancdyht dra limdina.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -147,7 +147,7 @@
         {
           "name": "battle",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "You actually had the balls to leave town? What are you up to then?",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -211,7 +211,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": []
+          "actions": []
         }
       ],
       "location": {
@@ -230,7 +230,7 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "TECDINP HUD DRA RYNSUHO UV VENA, ELA, YHT MEKRDHEHK.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

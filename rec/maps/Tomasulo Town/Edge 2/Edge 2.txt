@@ -70,7 +70,7 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Yo yo yo, I'm so hip and happenin' yo!!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -101,7 +101,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Guess you're too hip for me, hahahahahahaha :(",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

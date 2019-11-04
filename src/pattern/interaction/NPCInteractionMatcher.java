@@ -8,12 +8,12 @@ import util.string.StringUtils;
 public class NPCInteractionMatcher implements JsonMatcher {
     private String name;
     private boolean walkToPlayer;
-    private ActionMatcher[] npcActions;
+    private ActionMatcher[] actions;
 
-    public NPCInteractionMatcher(String name, boolean walkToPlayer, ActionMatcher[] npcActions) {
+    public NPCInteractionMatcher(String name, boolean walkToPlayer, ActionMatcher[] actions) {
         this.name = StringUtils.nullWhiteSpace(name);
         this.walkToPlayer = walkToPlayer;
-        this.npcActions = npcActions;
+        this.actions = actions;
     }
 
     public String getName() {
@@ -25,6 +25,6 @@ public class NPCInteractionMatcher implements JsonMatcher {
     }
 
     public ActionList getActions() {
-        return new ActionList(npcActions);
+        return new ActionList(actions);
     }
 }

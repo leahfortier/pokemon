@@ -128,7 +128,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": true,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Hey! Are you leaving town? You sure you're ready for that?",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -166,7 +166,7 @@
         {
           "name": "give_item",
           "walkToPlayer": true,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Here, take these Pokéballs. You'll need them to capture Poké!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -185,7 +185,7 @@
         {
           "name": "done",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "You can use Pokéballs to capture Poké!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -208,7 +208,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Rattata!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -233,7 +233,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Rattata...",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -256,7 +256,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Someone freed the pointer to my Rattata! Was it you?",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -281,7 +281,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "I would have won with my Rattata!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -304,7 +304,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "My Rattata is in the top percentage of Rattata!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -329,7 +329,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "I thought Rattata was the very best...",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -352,7 +352,7 @@
         {
           "name": "give_item",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Here, take this potion. You are going to need it!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -371,7 +371,7 @@
         {
           "name": "done",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "You can use potions to heal your Pokémon!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -394,7 +394,7 @@
         {
           "name": "bumpity_leave",
           "walkToPlayer": true,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Hey there, loser!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

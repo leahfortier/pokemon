@@ -35,7 +35,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "R U A WIZARD 'ARRY",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

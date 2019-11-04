@@ -41,7 +41,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "What is a process like you doing here?",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -68,7 +68,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "How could you have won?",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -96,7 +96,7 @@
         {
           "name": "battle",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "You can't stop us. This town's main thread will be terminated!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -134,7 +134,7 @@
         {
           "name": "deadlock_defeat",
           "walkToPlayer": false,
-          "npcActions": []
+          "actions": []
         }
       ],
       "location": {
@@ -153,7 +153,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "I'm going to kill your process.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -176,7 +176,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "I can't beleive you managed to killed my process.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -200,7 +200,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": true,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Wow, you did it! You saved the power plant!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -228,7 +228,7 @@
         {
           "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "I'll be here for days trying to get the plant fully operational again.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

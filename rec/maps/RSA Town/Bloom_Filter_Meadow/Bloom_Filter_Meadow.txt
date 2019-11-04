@@ -73,7 +73,7 @@
         {
           "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "I'm not allowed out after dark.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -97,7 +97,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "I like shorts!!!!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -124,7 +124,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "SHORRRRTTTTTSSSSSS",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -147,7 +147,7 @@
         {
           "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "I'm a meadow lady in a meadow!!!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -174,7 +174,7 @@
         {
           "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "actions": [
             {
               "dialogue": "Yayyy I'm in a meadow and I'm a lady lalalala!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

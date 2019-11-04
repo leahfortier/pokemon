@@ -30,7 +30,7 @@ import pattern.action.ChoiceMatcher;
 import pattern.action.EmptyActionMatcher.DayCareActionMatcher;
 import pattern.action.EntityActionMatcher;
 import pattern.action.EnumActionMatcher.CommonTriggerActionMatcher;
-import pattern.action.NPCInteractionMatcher;
+import pattern.interaction.NPCInteractionMatcher;
 import pattern.action.StringActionMatcher.DialogueActionMatcher;
 import pattern.action.StringActionMatcher.GlobalActionMatcher;
 import pattern.generic.TriggerMatcher;
