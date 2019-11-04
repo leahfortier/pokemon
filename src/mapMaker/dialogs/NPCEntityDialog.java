@@ -3,6 +3,7 @@ package mapMaker.dialogs;
 import map.Direction;
 import map.entity.movable.MovableEntity;
 import mapMaker.MapMaker;
+import mapMaker.dialogs.interaction.NPCInteractionDialog;
 import mapMaker.model.TileModel.TileType;
 import pattern.action.NPCInteractionMatcher;
 import pattern.map.NPCMatcher;

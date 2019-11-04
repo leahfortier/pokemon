@@ -1,5 +1,6 @@
-package mapMaker.dialogs;
+package mapMaker.dialogs.interaction;
 
+import mapMaker.dialogs.TriggerDialog;
 import mapMaker.dialogs.action.ActionListPanel;
 import pattern.action.ActionMatcher;
 import pattern.action.MiscEntityInteractionMatcher;
@@ -17,7 +18,7 @@ public class MiscEntityInteractionDialog extends TriggerDialog<MiscEntityInterac
 
     private final int interactionIndex;
 
-    MiscEntityInteractionDialog(MiscEntityInteractionMatcher entityInteractionMatcher, int index) {
+    public MiscEntityInteractionDialog(MiscEntityInteractionMatcher entityInteractionMatcher, int index) {
         super("New Misc Entity Interaction Dialog");
 
         this.interactionIndex = index;

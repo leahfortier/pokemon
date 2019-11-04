@@ -1,5 +1,6 @@
-package mapMaker.dialogs;
+package mapMaker.dialogs.interaction;
 
+import mapMaker.dialogs.TriggerDialog;
 import mapMaker.dialogs.action.ActionListPanel;
 import pattern.action.ActionMatcher;
 import pattern.action.NPCInteractionMatcher;
@@ -10,7 +11,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
+public class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
     private final JPanel topComponent;
 
     private final JTextField interactionNameTextField;
@@ -19,7 +20,7 @@ class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
 
     private final int interactionIndex;
 
-    NPCInteractionDialog(NPCInteractionMatcher npcInteractionMatcher, int index) {
+    public NPCInteractionDialog(NPCInteractionMatcher npcInteractionMatcher, int index) {
         super("New NPC Interaction Dialog");
 
         this.interactionIndex = index;
