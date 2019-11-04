@@ -3,14 +3,14 @@ package mapMaker.dialogs.interaction;
 import mapMaker.dialogs.TriggerDialog;
 import mapMaker.dialogs.action.ActionListPanel;
 import pattern.action.ActionMatcher;
-import pattern.interaction.InteractionMatcher.MiscEntityInteractionMatcher;
+import pattern.interaction.InteractionMatcher;
 import util.GuiUtils;
 import util.string.StringUtils;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class MiscEntityInteractionDialog extends TriggerDialog<MiscEntityInteractionMatcher> {
+public class MiscEntityInteractionDialog extends TriggerDialog<InteractionMatcher> {
     private final JPanel topComponent;
 
     private final JTextField interactionNameTextField;
@@ -18,7 +18,7 @@ public class MiscEntityInteractionDialog extends TriggerDialog<MiscEntityInterac
 
     private final int interactionIndex;
 
-    public MiscEntityInteractionDialog(MiscEntityInteractionMatcher entityInteractionMatcher, int index) {
+    public MiscEntityInteractionDialog(InteractionMatcher interactionMatcher, int index) {
         super("New Misc Entity Interaction Dialog");
 
         this.interactionIndex = index;
@@ -28,7 +28,7 @@ public class MiscEntityInteractionDialog extends TriggerDialog<MiscEntityInterac
 
         this.topComponent = GuiUtils.createTextFieldComponent("Interaction Name", interactionNameTextField);
 
-        this.load(entityInteractionMatcher);
+        this.load(interactionMatcher);
     }
 
     private String getDefaultName() {
@@ -39,7 +39,7 @@ public class MiscEntityInteractionDialog extends TriggerDialog<MiscEntityInterac
         return "Interaction" + interactionIndex;
     }
 
-    private void load(MiscEntityInteractionMatcher matcher) {
+    private void load(InteractionMatcher matcher) {
         if (matcher == null) {
             return;
         }
@@ -49,7 +49,7 @@ public class MiscEntityInteractionDialog extends TriggerDialog<MiscEntityInterac
     }
 
     @Override
-    protected MiscEntityInteractionMatcher getMatcher() {
+    protected InteractionMatcher getMatcher() {
         String interactionName = interactionNameTextField.getText();
         ActionMatcher[] actions = actionListPanel.getActions();
 
@@ -57,7 +57,7 @@ public class MiscEntityInteractionDialog extends TriggerDialog<MiscEntityInterac
             interactionName = this.getDefaultName();
         }
 
-        return new MiscEntityInteractionMatcher(interactionName, actions);
+        return new InteractionMatcher(interactionName, actions);
     }
 
     @Override

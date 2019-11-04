@@ -71,7 +71,6 @@ public class ActionListPanel extends JPanel {
         }
 
         components.add(newActionButton);
-
         GuiUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
 
         parent.render();

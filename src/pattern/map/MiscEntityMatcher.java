@@ -1,5 +1,6 @@
 package pattern.map;
 
+import main.Global;
 import map.condition.ConditionSet;
 import map.entity.Entity;
 import map.entity.MiscEntity;
@@ -7,7 +8,7 @@ import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionList;
 import pattern.generic.EntityMatcher.MultiEntityMatcher;
 import pattern.generic.MultiPointTriggerMatcher;
-import pattern.interaction.InteractionMatcher.MiscEntityInteractionMatcher;
+import pattern.interaction.InteractionMatcher;
 import util.Point;
 
 import java.util.Arrays;
@@ -15,11 +16,11 @@ import java.util.List;
 
 public class MiscEntityMatcher extends MultiPointTriggerMatcher implements MultiEntityMatcher {
     private String name;
-    private MiscEntityInteractionMatcher[] interactions;
+    private InteractionMatcher[] interactions;
 
-    public MiscEntityMatcher(String name, String conditionName, ConditionSet conditionSet, List<MiscEntityInteractionMatcher> interactions) {
+    public MiscEntityMatcher(String name, String conditionName, ConditionSet conditionSet, List<InteractionMatcher> interactions) {
         this.name = name;
-        this.interactions = interactions.toArray(new MiscEntityInteractionMatcher[0]);
+        this.interactions = interactions.toArray(new InteractionMatcher[0]);
 
         super.setCondition(conditionName, conditionSet);
     }
@@ -39,7 +40,7 @@ public class MiscEntityMatcher extends MultiPointTriggerMatcher implements Multi
         return interactions[0].getActions();
     }
 
-    public List<MiscEntityInteractionMatcher> getInteractionMatcherList() {
+    public List<InteractionMatcher> getInteractionMatcherList() {
         return Arrays.asList(this.interactions);
     }
 

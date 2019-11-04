@@ -5,7 +5,7 @@ import pattern.action.ActionMatcher;
 import util.serialization.JsonMatcher;
 import util.string.StringUtils;
 
-public abstract class InteractionMatcher implements JsonMatcher {
+public class InteractionMatcher implements JsonMatcher {
     private String name;
     private ActionMatcher[] actions;
 
@@ -20,11 +20,5 @@ public abstract class InteractionMatcher implements JsonMatcher {
 
     public ActionList getActions() {
         return new ActionList(actions);
-    }
-
-    public static class MiscEntityInteractionMatcher extends InteractionMatcher {
-        public MiscEntityInteractionMatcher(String name, ActionMatcher[] actions) {
-            super(name, actions);
-        }
     }
 }

@@ -3,7 +3,7 @@ package mapMaker.dialogs;
 import main.Global;
 import mapMaker.MapMaker;
 import mapMaker.dialogs.interaction.MiscEntityInteractionDialog;
-import pattern.interaction.InteractionMatcher.MiscEntityInteractionMatcher;
+import pattern.interaction.InteractionMatcher;
 import pattern.map.MiscEntityMatcher;
 import util.GuiUtils;
 
@@ -21,7 +21,7 @@ public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
     private final JTextField nameTextField;
     private final ConditionPanel conditionPanel;
 
-    private final List<MiscEntityInteractionMatcher> interactions;
+    private final List<InteractionMatcher> interactions;
     private final JButton addInteractionButton;
 
     private final MapMaker mapMaker;
@@ -58,13 +58,13 @@ public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
         List<JComponent> interactionComponents = new ArrayList<>();
         for (int i = 0; i < interactions.size(); i++) {
             final int index = i;
-            MiscEntityInteractionMatcher matcher = interactions.get(index);
+            InteractionMatcher matcher = interactions.get(index);
 
             JButton interactionButton =
                     GuiUtils.createButton(
                             matcher == null ? "Empty" : matcher.getName(),
                             event -> {
-                                MiscEntityInteractionMatcher newMatcher = new MiscEntityInteractionDialog(matcher, index).getMatcher(mapMaker);
+                                InteractionMatcher newMatcher = new MiscEntityInteractionDialog(matcher, index).getMatcher(mapMaker);
                                 if (newMatcher != null) {
                                     interactions.set(index, newMatcher);
                                     render();
