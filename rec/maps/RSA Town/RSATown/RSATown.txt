@@ -103,7 +103,7 @@
           "walkToPlayer": false,
           "npcActions": [
             {
-              "dialogue": "Famlusa du NCY Dufh! Dryd’c ed vnus sa.",
+              "dialogue": "Famlusa du NCY Dufh! Dryd'c ed vnus sa.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]

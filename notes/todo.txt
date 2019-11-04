@@ -99,7 +99,6 @@ Other random things:
 	Mirror move executes multi-turn moves in a single turn
 	Choose/give a TM for beating gym leaders
 	Blue needs to be in the Pokemon Center after you battle him
-	Make sure relearning moves works for evolve moves too
 	Generalize double cast remove effects (example: Power Trick)
 	Test that Shedinja is genderless when it evolves and that it doesn't appear when you cancel evolution
 	Remove mainMenuTiles (can keep some for reference inside the images folder) but def move out of tiles
@@ -109,7 +108,6 @@ Other random things:
 	should movetypes be a set?
 	BasicPanels fullMessagePanel -- Is 440 game.height - panel.height?
 	TileSet getTile should use readImage in FileIO -- just check exists first
-	Exeggutor plant gives two Exeggutor?? -- got one, battled mom, got another? also got one, saved, got another
 	MoveUseItems do not work in battle -- causes NPE
 	Heal Block doesn't work right either
 	Dancer -- test with Snatch (should not activate); test with Flinched (should not activate)
@@ -167,4 +165,7 @@ Other random things:
     something weird about Comfey's party tile and fails when trimming
     text wrapping should allow having a different startX for the first line so you can have a label in a different size (ability name and description for example)
     move as much logic as possible out of views and just have them called from in there (buy from Mart is good example)
+    plant gives unlimited exeggutors 
+        - was thinking instead of just putting a condition on it if it would make sense to have miscentities like npcs
+        - like if they had states where they interact differently based on blah blah blah yeah I like this let's do this
     

@@ -17,7 +17,7 @@ import util.serialization.Serializable;
 import util.string.StringUtils;
 
 public class MessageUpdate {
-    private static final String PLAYER_NAME = "{playerName}";
+    public static final String PLAYER_NAME = "{playerName}";
 
     private final String message;
     private int[] statGains;

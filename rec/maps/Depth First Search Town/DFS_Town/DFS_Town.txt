@@ -412,7 +412,7 @@
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "dialogue": "I’m in the Pokémon Master business now baby, I’ll take the world by storm.",
+              "dialogue": "I'm in the Pokémon Master business now baby, I'll take the world by storm.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {

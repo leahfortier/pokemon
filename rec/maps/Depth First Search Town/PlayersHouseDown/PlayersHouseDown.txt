@@ -83,7 +83,7 @@
           "walkToPlayer": true,
           "npcActions": [
             {
-              "dialogue": "It’s great that you’re here and all and imma let you finish, but get a job and make the greatest hits of all time. ALL TIME!!! ",
+              "dialogue": "Time to move out. Goodbye.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {

@@ -12,6 +12,11 @@ import map.condition.ConditionHolder.OrCondition;
 import map.daynight.DayCycle;
 import map.overworld.WalkType;
 import map.overworld.wild.WildEncounterInfo;
+import map.triggers.CommonTrigger;
+import map.triggers.DialogueTrigger;
+import map.triggers.GroupTrigger;
+import map.triggers.Trigger;
+import message.MessageUpdate;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,8 +25,11 @@ import pattern.action.ActionMatcher;
 import pattern.action.ActionMatcher.ChoiceActionMatcher;
 import pattern.action.ActionMatcher.GiveItemActionMatcher;
 import pattern.action.ActionMatcher.MoveNpcActionMatcher;
+import pattern.action.ActionMatcher.TradePokemonActionMatcher;
 import pattern.action.ChoiceMatcher;
+import pattern.action.EmptyActionMatcher.DayCareActionMatcher;
 import pattern.action.EntityActionMatcher;
+import pattern.action.EnumActionMatcher.CommonTriggerActionMatcher;
 import pattern.action.NPCInteractionMatcher;
 import pattern.action.StringActionMatcher.DialogueActionMatcher;
 import pattern.action.StringActionMatcher.GlobalActionMatcher;
@@ -40,6 +48,7 @@ import test.general.BaseTest;
 import util.Point;
 import util.file.FileIO;
 import util.file.Folder;
+import util.string.StringAppender;
 import util.string.StringUtils;
 
 import java.awt.Dimension;
@@ -205,6 +214,77 @@ public class MapTest extends BaseTest {
         Assert.assertEquals(mapName, 100, totalProbability);
     }
 
+    /*
+        When you interact with an entity on the map, the entity is not reset without dialogue and
+        in general it's weird when there's an action without dialogue
+
+        If this fails, then you probably have the issue with this entity where you can no longer interact
+        with it until the map is reset and it's very confusing so it's real important this passes
+     */
+    @Test
+    public void dialogueInteractionTest() {
+        for (TestMap map : maps) {
+            for (NPCMatcher npc : map.getMatcher().getNPCs()) {
+                String message = map.getName() + " " + npc.getTriggerName();
+                for (NPCInteractionMatcher interaction : npc.getInteractionMatcherList()) {
+                    assertDialogueInteraction(message, interaction.getActions());
+                }
+            }
+
+            for (MiscEntityMatcher miscEntity : map.getMatcher().getMiscEntities()) {
+                String message = map.getName() + " " + miscEntity.getTriggerName();
+                assertDialogueInteraction(message, miscEntity.getActions());
+            }
+        }
+
+        // Confirm all common triggers have dialogue
+        for (CommonTrigger commonTrigger : CommonTrigger.values()) {
+            String message = commonTrigger.name();
+
+            // All common triggers are group triggers
+            Trigger trigger = commonTrigger.getTrigger();
+            Assert.assertTrue(message, trigger instanceof GroupTrigger);
+
+            // Make sure at least one dialogue trigger
+            GroupTrigger groupTrigger = (GroupTrigger)trigger;
+            boolean hasDialogue = false;
+            for (Trigger t : groupTrigger.getTriggers()) {
+                if (t instanceof DialogueTrigger) {
+                    hasDialogue = true;
+                    break;
+                }
+            }
+            Assert.assertTrue(message, hasDialogue);
+        }
+    }
+
+    // Asserts that at least one of the actions has a matcher that includes dialogue
+    private void assertDialogueInteraction(String message, ActionList actions) {
+        List<ActionMatcher> actionList = actions.asList();
+        if (actionList.size() == 0) {
+            return;
+        }
+
+        message = new StringAppender(message + "\n")
+                .appendJoin("\n", actionList, action -> action.getClass().getSimpleName() + " " + action.getJson())
+                .toString();
+
+        boolean hasDialogue = false;
+        for (ActionMatcher action : actionList) {
+            // The following actions always include dialogue
+            if (action instanceof DialogueActionMatcher
+                    || action instanceof ChoiceActionMatcher
+                    || action instanceof DayCareActionMatcher
+                    || action instanceof TradePokemonActionMatcher
+                    || action instanceof CommonTriggerActionMatcher) {
+                hasDialogue = true;
+                break;
+            }
+        }
+
+        Assert.assertTrue(message, hasDialogue);
+    }
+
     @Test
     public void actionTest() {
         for (TestMap map : maps) {
@@ -212,9 +292,15 @@ public class MapTest extends BaseTest {
                 String message = map.getName() + " " + action.getJson();
 
                 if (action instanceof DialogueActionMatcher) {
-                    // Make sure all input dialogue triggers don't include the string 'Poke' instead of 'Poké'
+                    // Make sure all input dialogue triggers are non-empty, don't include the string 'Poke'
+                    // instead of 'Poké', never include the awful sequence of a period on the INSIDE of quotes,
+                    // and in general only contain approved characters
                     String dialogue = ((DialogueActionMatcher)action).getStringValue();
+                    Assert.assertTrue(message, dialogue.trim().length() > 0);
                     Assert.assertFalse(message, dialogue.contains("Poke"));
+                    Assert.assertFalse(message, dialogue.contains(".\""));
+                    dialogue = dialogue.replaceAll(MessageUpdate.PLAYER_NAME.replace("{", "\\{"), "Red");
+                    Assert.assertTrue(message, dialogue.matches("[a-zA-Z0-9.,'!?:é™*%\\-\\[( ]+"));
                 } else if (action instanceof GiveItemActionMatcher) {
                     // Make sure all give items triggers give a positive quantity
                     int quantity = ((GiveItemActionMatcher)action).getQuantity();

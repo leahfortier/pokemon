@@ -24,6 +24,11 @@ public class GroupTrigger extends Trigger {
         this.triggers = triggers;
     }
 
+    // Note: This should really only be used for testing purposes
+    public List<Trigger> getTriggers() {
+        return this.triggers;
+    }
+
     @Override
     public void execute() {
         // Add all triggers in the group to the beginning of the message queue

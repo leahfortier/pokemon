@@ -17,7 +17,8 @@ public class TradePokemonTrigger extends Trigger {
 
     @Override
     public void execute() {
-        // Note: So like this is set up poorly and things will break if there is no dialogue before the view change...
+        // Note: Important for this trigger to include dialogue -- if changes to move to the NPC or something
+        // then the dialogueInteractionTest should be updated to not include the TradePokemonActionMatcher
         Messages.add("Trade????");
 
         TradeView tradeView = Game.instance().getTradeView();

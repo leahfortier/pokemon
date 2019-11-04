@@ -125,6 +125,10 @@
       "name": "PokePalooza",
       "actions": [
         {
+          "dialogue": "Hm?",
+          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+        },
+        {
           "pokemonMatcher": {
             "namesies": "EXEGGUTOR",
             "level": 4
