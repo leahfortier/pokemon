@@ -76,8 +76,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
+          "name": "dialogue",
           "actions": [
             {
               "dialogue": "E's cu mucd.",
@@ -99,8 +99,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "Interaction0",
           "walkToPlayer": false,
+          "name": "Interaction0",
           "actions": [
             {
               "dialogue": "Famlusa du NCY Dufh! Dryd'c ed vnus sa.",
@@ -122,8 +122,8 @@
       "direction": "RIGHT",
       "interactions": [
         {
-          "name": "Interaction0",
           "walkToPlayer": false,
+          "name": "Interaction0",
           "actions": [
             {
               "dialogue": "Drec dufh ec geht uv bnadahdeuic, pacd hud pudran dnoehk du ihtancdyht dra limdina.",
@@ -145,8 +145,8 @@
       "direction": "RIGHT",
       "interactions": [
         {
-          "name": "battle",
           "walkToPlayer": false,
+          "name": "battle",
           "actions": [
             {
               "dialogue": "You actually had the balls to leave town? What are you up to then?",
@@ -209,8 +209,8 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
+          "name": "won",
           "actions": []
         }
       ],
@@ -228,8 +228,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "Interaction0",
           "walkToPlayer": false,
+          "name": "Interaction0",
           "actions": [
             {
               "dialogue": "TECDINP HUD DRA RYNSUHO UV VENA, ELA, YHT MEKRDHEHK.",

@@ -33,8 +33,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
+          "name": "dialogue",
           "actions": [
             {
               "dialogue": "R U A WIZARD 'ARRY",

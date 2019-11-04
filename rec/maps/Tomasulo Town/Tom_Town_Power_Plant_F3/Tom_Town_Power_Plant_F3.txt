@@ -39,8 +39,8 @@
       "direction": "LEFT",
       "interactions": [
         {
-          "name": "battle",
           "walkToPlayer": true,
+          "name": "battle",
           "actions": [
             {
               "dialogue": "What is a process like you doing here?",
@@ -66,8 +66,8 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
+          "name": "won",
           "actions": [
             {
               "dialogue": "How could you have won?",
@@ -94,8 +94,8 @@
       "direction": "RIGHT",
       "interactions": [
         {
-          "name": "battle",
           "walkToPlayer": false,
+          "name": "battle",
           "actions": [
             {
               "dialogue": "You can't stop us. This town's main thread will be terminated!",
@@ -132,8 +132,8 @@
           ]
         },
         {
-          "name": "deadlock_defeat",
           "walkToPlayer": false,
+          "name": "deadlock_defeat",
           "actions": []
         }
       ],
@@ -151,8 +151,8 @@
       "direction": "LEFT",
       "interactions": [
         {
-          "name": "battle",
           "walkToPlayer": true,
+          "name": "battle",
           "actions": [
             {
               "dialogue": "I'm going to kill your process.",
@@ -174,8 +174,8 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
+          "name": "won",
           "actions": [
             {
               "dialogue": "I can't beleive you managed to killed my process.",
@@ -198,8 +198,8 @@
       "direction": "LEFT",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": true,
+          "name": "dialogue",
           "actions": [
             {
               "dialogue": "Wow, you did it! You saved the power plant!",
@@ -226,8 +226,8 @@
       "direction": "RIGHT",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
+          "name": "dialogue",
           "actions": [
             {
               "dialogue": "I'll be here for days trying to get the plant fully operational again.",

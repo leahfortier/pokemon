@@ -33,8 +33,8 @@
       "direction": "RIGHT",
       "interactions": [
         {
-          "name": "battle",
           "walkToPlayer": true,
+          "name": "battle",
           "actions": [
             {
               "dialogue": "Watch out, I'm gonna fry your motherboard!",
@@ -56,8 +56,8 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
+          "name": "won",
           "actions": [
             {
               "dialogue": "Hey! You fried my motherboard!",
@@ -79,8 +79,8 @@
       "direction": "LEFT",
       "interactions": [
         {
-          "name": "battle",
           "walkToPlayer": true,
+          "name": "battle",
           "actions": [
             {
               "dialogue": "My Pokémon and I communicate over PCI express!",
@@ -102,8 +102,8 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
+          "name": "won",
           "actions": [
             {
               "dialogue": "I need more bandwidth!",
@@ -125,8 +125,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "battle",
           "walkToPlayer": false,
+          "name": "battle",
           "actions": [
             {
               "dialogue": "My Pokémon pack enough electricity to power the Cray Titan!",
@@ -162,8 +162,8 @@
           ]
         },
         {
-          "name": "badge",
           "walkToPlayer": false,
+          "name": "badge",
           "actions": [
             {
               "dialogue": "My data BUS just wasn't large enough! Take this, the Round Badge!",
@@ -180,8 +180,8 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
+          "name": "won",
           "actions": [
             {
               "dialogue": "jo,loo6jm[nphhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh             bo",

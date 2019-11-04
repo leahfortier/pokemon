@@ -3,7 +3,7 @@ package mapMaker.dialogs;
 import main.Global;
 import mapMaker.MapMaker;
 import mapMaker.dialogs.interaction.MiscEntityInteractionDialog;
-import pattern.interaction.MiscEntityInteractionMatcher;
+import pattern.interaction.InteractionMatcher.MiscEntityInteractionMatcher;
 import pattern.map.MiscEntityMatcher;
 import util.GuiUtils;
 

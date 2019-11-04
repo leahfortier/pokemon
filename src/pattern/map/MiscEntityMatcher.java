@@ -7,7 +7,7 @@ import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionList;
 import pattern.generic.EntityMatcher.MultiEntityMatcher;
 import pattern.generic.MultiPointTriggerMatcher;
-import pattern.interaction.MiscEntityInteractionMatcher;
+import pattern.interaction.InteractionMatcher.MiscEntityInteractionMatcher;
 import util.Point;
 
 import java.util.Arrays;

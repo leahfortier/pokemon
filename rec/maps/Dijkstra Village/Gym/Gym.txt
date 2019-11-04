@@ -47,8 +47,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "Interaction0",
           "walkToPlayer": false,
+          "name": "Interaction0",
           "actions": [
             {
               "dialogue": "...",
@@ -94,8 +94,8 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
+          "name": "won",
           "actions": [
             {
               "dialogue": "...",

@@ -53,8 +53,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "battle",
           "walkToPlayer": false,
+          "name": "battle",
           "actions": [
             {
               "dialogue": "I'm gonna be the very best like no one ever was.",
@@ -76,8 +76,8 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
+          "name": "won",
           "actions": [
             {
               "dialogue": "Just get out. You're not welcome here.",

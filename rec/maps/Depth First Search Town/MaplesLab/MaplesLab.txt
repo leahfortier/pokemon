@@ -33,8 +33,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "intro",
           "walkToPlayer": false,
+          "name": "intro",
           "actions": [
             {
               "dialogue": "'Ey there {playerName}!",
@@ -87,8 +87,8 @@
           ]
         },
         {
-          "name": "stone_choice",
           "walkToPlayer": false,
+          "name": "stone_choice",
           "actions": [
             {
               "question": "wudya wan",
@@ -133,8 +133,8 @@
           ]
         },
         {
-          "name": "heal",
           "walkToPlayer": false,
+          "name": "heal",
           "actions": [
             {
               "dialogue": "How's it goin'? Need to rest up your Pokémon a bit?",
@@ -159,8 +159,8 @@
       "direction": "LEFT",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
+          "name": "dialogue",
           "actions": [
             {
               "dialogue": "Don't disturb me! I'm doing syrup science!",
@@ -182,8 +182,8 @@
       "direction": "RIGHT",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
+          "name": "dialogue",
           "actions": [
             {
               "dialogue": "This syrup soda is amazing!",

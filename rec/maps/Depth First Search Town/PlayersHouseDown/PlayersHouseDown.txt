@@ -50,8 +50,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
+          "name": "dialogue",
           "actions": [
             {
               "dialogue": "It's nice when you come to visit, but please get a job.",
@@ -79,8 +79,8 @@
       "direction": "LEFT",
       "interactions": [
         {
-          "name": "talk",
           "walkToPlayer": true,
+          "name": "talk",
           "actions": [
             {
               "dialogue": "Time to move out. Goodbye.",

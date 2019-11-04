@@ -71,8 +71,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "Interaction0",
           "walkToPlayer": false,
+          "name": "Interaction0",
           "actions": [
             {
               "dialogue": "I'm not allowed out after dark.",
@@ -95,8 +95,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "battle",
           "walkToPlayer": true,
+          "name": "battle",
           "actions": [
             {
               "dialogue": "I like shorts!!!!",
@@ -122,8 +122,8 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
+          "name": "won",
           "actions": [
             {
               "dialogue": "SHORRRRTTTTTSSSSSS",
@@ -145,8 +145,8 @@
       "direction": "UP",
       "interactions": [
         {
-          "name": "battle",
           "walkToPlayer": true,
+          "name": "battle",
           "actions": [
             {
               "dialogue": "I'm a meadow lady in a meadow!!!",
@@ -172,8 +172,8 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
+          "name": "won",
           "actions": [
             {
               "dialogue": "Yayyy I'm in a meadow and I'm a lady lalalala!",

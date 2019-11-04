@@ -67,8 +67,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
+          "name": "dialogue",
           "actions": [
             {
               "dialogue": "It's not safe here.",
@@ -91,8 +91,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
+          "name": "dialogue",
           "actions": [
             {
               "dialogue": "Time to get back to my research.",

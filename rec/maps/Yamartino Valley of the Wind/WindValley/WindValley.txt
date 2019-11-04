@@ -52,8 +52,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "Interaction0",
           "walkToPlayer": false,
+          "name": "Interaction0",
           "actions": [
             {
               "dialogue": "Berry time! Fuck yeah!!",
@@ -79,8 +79,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "DayCare",
           "walkToPlayer": false,
+          "name": "DayCare",
           "actions": [
             {
               "className": "pattern.action.EmptyActionMatcher$DayCareActionMatcher"
@@ -101,8 +101,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "Learn Move View",
           "walkToPlayer": false,
+          "name": "Learn Move View",
           "actions": [
             {
               "dialogue": "Heart scales sure are tasty treats...",
@@ -128,8 +128,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "Trade",
           "walkToPlayer": false,
+          "name": "Trade",
           "actions": [
             {
               "tradePokemon": "YUKIKON",

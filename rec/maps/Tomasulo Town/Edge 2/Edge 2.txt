@@ -68,8 +68,8 @@
       "direction": "RIGHT",
       "interactions": [
         {
-          "name": "Interaction0",
           "walkToPlayer": false,
+          "name": "Interaction0",
           "actions": [
             {
               "dialogue": "Yo yo yo, I'm so hip and happenin' yo!!",
@@ -99,8 +99,8 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
+          "name": "won",
           "actions": [
             {
               "dialogue": "Guess you're too hip for me, hahahahahahaha :(",

@@ -54,8 +54,8 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
+          "name": "dialogue",
           "actions": [
             {
               "dialogue": "Hi, I'm Tom!",
