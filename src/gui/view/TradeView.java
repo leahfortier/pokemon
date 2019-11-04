@@ -23,7 +23,6 @@ import trainer.Trainer;
 import trainer.TrainerType;
 import trainer.player.Player;
 import type.PokeType;
-import type.Type;
 import util.string.PokeString;
 
 import java.awt.Color;
@@ -34,8 +33,8 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class TradeView extends View {
-    private static final int NUM_TEAM_COLS = Trainer.MAX_POKEMON/2;
-    private static final int NUM_COLS = NUM_TEAM_COLS + 1;
+    private static final int NUM_BUTTONS = Trainer.MAX_POKEMON;
+    private static final int PARTY = 0;
 
     private static final int TRADE_ANIMATION_LIFESPAN = 6000;
 
@@ -48,7 +47,7 @@ public class TradeView extends View {
     private final WrapPanel messagePanel;
 
     private final ButtonList buttons;
-    private final Button cancelButton;
+    private final Button[] partyButtons;
 
     private final TileSet partyTiles;
     private final TileSet pokemonTiles;
@@ -65,7 +64,11 @@ public class TradeView extends View {
 
     private List<PartyPokemon> team;
 
+    private State state;
+
     public TradeView() {
+        state = State.QUESTION;
+
         this.canvasPanel = BasicPanels.newFullGamePanel()
                                       .withTransparentCount(2)
                                       .withBorderPercentage(0);
@@ -96,19 +99,18 @@ public class TradeView extends View {
         )
                 .withBlackOutline();
 
-        this.buttons = new ButtonList(
-                BasicPanels.getFullMessagePanelLayout(2, NUM_COLS, 10)
-                           .withButtonSetup(panel -> panel.skipInactive()
-                                                          .withTransparentBackground()
-                                                          .withTransparentCount(2)
-                                                          .withBlackOutline()
-                                                          .withLabelSize(20))
-                           .getButtons()
-        );
+        partyButtons = BasicPanels.getFullMessagePanelLayout(2, Trainer.MAX_POKEMON/2, 10)
+                                  .withStartIndex(PARTY)
+                                  .withPressIndex(this::pressPokemonButton)
+                                  .withButtonSetup(panel -> panel.skipInactive()
+                                                                 .withTransparentCount(2)
+                                                                 .withBlackOutline()
+                                                                 .withBorderPercentage(15)
+                                                                 .withLabelSize(20))
+                                  .getButtons();
 
-        this.cancelButton = buttons.get(buttons.size() - 1)
-                                   .setup(panel -> panel.withLabel("Cancel")
-                                                        .withBackgroundColor(Type.NORMAL.getColor()));
+        this.buttons = new ButtonList(NUM_BUTTONS);
+        this.buttons.set(PARTY, partyButtons);
 
         Entry<DrawPanel, DrawPanel> offeringLabels = createTradeLabelPanels(fullOfferingPanel, "Offering:");
         DrawPanel offeringLabel = offeringLabels.getKey();
@@ -142,55 +144,59 @@ public class TradeView extends View {
         return new SimpleEntry<>(labelPanel, pokemonPanel);
     }
 
-    @Override
-    public void update(int dt) {
-        boolean exit;
-        if (tradeAnimationTime > 0) {
-            tradeAnimationTime -= dt;
-            exit = tradeAnimationTime <= 0;
+    private void pressPokemonButton(int index) {
+        PartyPokemon myPokes = team.get(index);
+        if (!myPokes.isEgg() && myPokes.namesies() == requested) {
+            ActivePokemon theirPokes = new ActivePokemon(
+                    offering,
+                    myPokes.getLevel(),
+                    TrainerType.PLAYER
+            );
+
+            team.set(index, theirPokes);
+
+            this.myPokesFrontImage = pokemonTiles.getTile(myPokes.getImageName());
+            this.theirPokesFrontImage = pokemonTiles.getTile(theirPokes.getImageName());
+
+            this.myPokesBackImage = pokemonTiles.getTile(myPokes.getImageName(false));
+            this.theirPokesBackImage = pokemonTiles.getTile(theirPokes.getImageName(false));
+
+            tradeAnimationTime = TRADE_ANIMATION_LIFESPAN;
+            state = State.TRADE;
+
+            Messages.add("Traded " + myPokes.getActualName() + " for " + theirPokes.getName() + "!");
         } else {
-            this.buttons.update();
-
-            InputControl input = InputControl.instance();
-            exit = cancelButton.checkConsumePress() || input.consumeIfDown(ControlKey.ESC);
-
-            for (int i = 0; i < team.size(); i++) {
-                Button button = getTeamButton(i);
-                if (button.checkConsumePress()) {
-                    PartyPokemon myPokes = team.get(i);
-                    if (!myPokes.isEgg() && myPokes.namesies() == requested) {
-                        ActivePokemon theirPokes = new ActivePokemon(
-                                offering,
-                                myPokes.getLevel(),
-                                TrainerType.PLAYER
-                        );
-
-                        team.set(i, theirPokes);
-
-                        this.myPokesFrontImage = pokemonTiles.getTile(myPokes.getImageName());
-                        this.theirPokesFrontImage = pokemonTiles.getTile(theirPokes.getImageName());
-
-                        this.myPokesBackImage = pokemonTiles.getTile(myPokes.getImageName(false));
-                        this.theirPokesBackImage = pokemonTiles.getTile(theirPokes.getImageName(false));
-
-                        tradeAnimationTime = TRADE_ANIMATION_LIFESPAN;
-
-                        Messages.add("Traded " + myPokes.getActualName() + " for " + theirPokes.getName() + "!");
-                    } else {
-                        Messages.add("Hm... Not exactly what I was hoping for... but thanks anyways?");
-                        exit = true;
-                    }
-                }
-            }
-        }
-
-        if (exit) {
-            Game.instance().popView();
+            Messages.add("Hm... Not exactly what I was hoping for... but thanks anyways?");
+            state = State.END;
         }
     }
 
-    private Button getTeamButton(int teamIndex) {
-        return buttons.get(teamIndex + teamIndex/NUM_TEAM_COLS);
+    @Override
+    public void update(int dt) {
+        if (state == State.TRADE) {
+            tradeAnimationTime -= dt;
+            if (tradeAnimationTime <= 0) {
+                this.state = State.END;
+            }
+            return;
+        }
+
+        this.buttons.update();
+        if (this.buttons.consumeSelectedPress()) {
+            updateActiveButtons();
+        }
+
+        InputControl input = InputControl.instance();
+        switch (state) {
+            case QUESTION:
+                if (input.consumeIfDown(ControlKey.ESC, ControlKey.BACK)) {
+                    this.state = State.END;
+                }
+                break;
+            case END:
+                Game.instance().popView();
+                break;
+        }
     }
 
     private void drawTradeAnimation(Graphics g) {
@@ -252,12 +258,8 @@ public class TradeView extends View {
 
     private void updateActiveButtons() {
         for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-            getTeamButton(i).setActive(i < team.size());
+            partyButtons[i].setActive(i < team.size());
         }
-
-        // Unused button above cancel
-        buttons.get(NUM_TEAM_COLS).setActive(false);
-        cancelButton.setActive(true);
     }
 
     @Override
@@ -269,17 +271,18 @@ public class TradeView extends View {
     public void movedToFront() {
         Player player = Game.getPlayer();
         this.team = player.getTeam();
-        this.buttons.setSelected(0);
+        this.buttons.setSelected(PARTY);
+        this.state = State.QUESTION;
+        this.tradeAnimationTime = 0;
 
         updateActiveButtons();
 
         // Set up Pokemon button background and labels
         for (int i = 0; i < team.size(); i++) {
             PartyPokemon pokemon = team.get(i);
-            this.getTeamButton(i)
-                .panel()
-                .withBackgroundColors(PokeType.getColors(pokemon))
-                .withImageLabel(partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getActualName());
+            partyButtons[i].panel()
+                           .withBackgroundColors(PokeType.getColors(pokemon))
+                           .withImageLabel(partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getActualName());
         }
     }
 
@@ -306,5 +309,11 @@ public class TradeView extends View {
 
     private Color getFirstTypeColor(PokemonNamesies pokemonNamesies) {
         return pokemonNamesies.getInfo().getType().getFirstType().getColor();
+    }
+
+    private static enum State {
+        QUESTION,
+        TRADE,
+        END
     }
 }

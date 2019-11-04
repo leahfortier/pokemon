@@ -81,8 +81,14 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
         }
     }
 
-    public boolean consumeIfDown(ControlKey controlKey) {
-        return consumeIfDown(controlKey, INVALID_LOCK);
+    // Returns true if ANY of the input keys has been pressed (and will consume the press)
+    public boolean consumeIfDown(ControlKey... controlKeys) {
+        for (ControlKey controlKey : controlKeys) {
+            if (consumeIfDown(controlKey, INVALID_LOCK)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean consumeIfDown(ControlKey controlKey, int key) {

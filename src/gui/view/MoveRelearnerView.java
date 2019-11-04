@@ -231,7 +231,6 @@ public class MoveRelearnerView extends View {
 
                 learnMovePanel = null;
                 setSelectedPokemon(selectedPokemon);
-                updateActiveButtons();
                 return;
             }
         }

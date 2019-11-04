@@ -128,7 +128,7 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "Interaction0",
+          "name": "Trade",
           "walkToPlayer": false,
           "npcActions": [
             {

@@ -39,7 +39,7 @@ public class TradePokemonActionPanel extends ActionPanel<TradePokemonActionMatch
         PokemonNamesies requested = PokemonNamesies.tryValueOf(requestedNameField.getText());
         PokemonNamesies tradePokemon = PokemonNamesies.tryValueOf(tradeNameField.getText());
 
-        return new TradePokemonActionMatcher(requested, tradePokemon);
+        return new TradePokemonActionMatcher(tradePokemon, requested);
     }
 
     @Override

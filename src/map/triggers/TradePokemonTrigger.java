@@ -3,6 +3,7 @@ package map.triggers;
 import gui.view.TradeView;
 import gui.view.ViewMode;
 import main.Game;
+import message.Messages;
 import pokemon.species.PokemonNamesies;
 
 public class TradePokemonTrigger extends Trigger {
@@ -16,6 +17,9 @@ public class TradePokemonTrigger extends Trigger {
 
     @Override
     public void execute() {
+        // Note: So like this is set up poorly and things will break if there is no dialogue before the view change...
+        Messages.add("Trade????");
+
         TradeView tradeView = Game.instance().getTradeView();
         tradeView.setTrade(this.tradePokemon, this.requested);
 

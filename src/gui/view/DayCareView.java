@@ -123,7 +123,7 @@ class DayCareView extends View {
 
         movePanels = new DrawLayout(movesPanel, 2, MoveList.MAX_MOVES/2, 10)
                 .withDrawSetup(panel -> panel.withTransparentCount(2)
-                                             .withBorderPercentage(20)
+                                             .withBorderPercentage(15)
                                              .withBlackOutline()
                                              .withLabelSize(16))
                 .getPanels();
