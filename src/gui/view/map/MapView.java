@@ -186,7 +186,6 @@ public class MapView extends View {
                     if (newPointEntity instanceof NPCEntity && newPointEntity.getEntityName().equals("MaplesLab_NPC_Prof_Mapes_01")) {
                         newPointEntity.draw(g, new Point(draw.x + Global.TILE_SIZE/2, draw.y), !delta.isZero());
                     } else {
-                        // TODO: Checking zero logic seems like it can be simplified
                         newPointEntity.draw(g, draw, !delta.isZero());
                     }
                 }

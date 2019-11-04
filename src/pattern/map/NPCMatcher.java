@@ -11,7 +11,7 @@ import map.entity.movable.NPCInteraction;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionList;
 import pattern.action.NPCInteractionMatcher;
-import pattern.generic.EntityMatcher;
+import pattern.generic.EntityMatcher.SingleEntityMatcher;
 import pattern.generic.SinglePointTriggerMatcher;
 import util.string.StringUtils;
 
@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NPCMatcher extends SinglePointTriggerMatcher implements EntityMatcher {
+public class NPCMatcher extends SinglePointTriggerMatcher implements SingleEntityMatcher {
     private static final String NO_INTERACTIONS_KEY = "no_interactions";
 
     private String name;

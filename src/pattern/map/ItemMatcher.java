@@ -8,10 +8,10 @@ import map.condition.ConditionHolder.NotCondition;
 import map.entity.Entity;
 import map.entity.ItemEntity;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import pattern.generic.EntityMatcher;
+import pattern.generic.EntityMatcher.SingleEntityMatcher;
 import pattern.generic.SinglePointTriggerMatcher;
 
-public class ItemMatcher extends SinglePointTriggerMatcher implements EntityMatcher {
+public class ItemMatcher extends SinglePointTriggerMatcher implements SingleEntityMatcher {
     private ItemNamesies item;
     private boolean isHidden;
 

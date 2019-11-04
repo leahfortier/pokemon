@@ -197,7 +197,7 @@ public final class FileIO {
         }
     }
 
-    private static void writeToFile(String fileName, String out) {
+    public static void writeToFile(String fileName, String out) {
         try {
             PrintStream printStream = new PrintStream(FileIO.newFile(fileName));
             printStream.println(out);

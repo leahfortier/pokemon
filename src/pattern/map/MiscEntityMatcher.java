@@ -1,12 +1,16 @@
 package pattern.map;
 
 import map.condition.ConditionSet;
+import map.entity.Entity;
+import map.entity.MiscEntity;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionList;
 import pattern.action.ActionMatcher;
+import pattern.generic.EntityMatcher.MultiEntityMatcher;
 import pattern.generic.MultiPointTriggerMatcher;
+import util.Point;
 
-public class MiscEntityMatcher extends MultiPointTriggerMatcher {
+public class MiscEntityMatcher extends MultiPointTriggerMatcher implements MultiEntityMatcher {
     private String name;
     private ActionMatcher[] actions;
 
@@ -29,5 +33,15 @@ public class MiscEntityMatcher extends MultiPointTriggerMatcher {
 
     public ActionList getActions() {
         return new ActionList(actions);
+    }
+
+    @Override
+    public Entity createEntity(Point location) {
+        return new MiscEntity(
+                this.getTriggerName(),
+                location,
+                this.getCondition(),
+                this.getActions()
+        );
     }
 }

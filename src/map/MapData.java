@@ -6,9 +6,7 @@ import main.Game;
 import main.Global;
 import map.area.AreaData;
 import map.entity.Entity;
-import map.entity.FishingSpotEntity;
 import map.entity.ItemEntity;
-import map.entity.MiscEntity;
 import map.overworld.WalkType;
 import map.overworld.wild.WildEncounterInfo;
 import map.triggers.Trigger;
@@ -17,10 +15,8 @@ import map.triggers.map.MapTransitionTrigger;
 import pattern.SimpleMapTransition;
 import pattern.generic.EntityMatcher;
 import pattern.map.EventMatcher;
-import pattern.map.FishingMatcher;
 import pattern.map.MapDataMatcher;
 import pattern.map.MapTransitionMatcher;
-import pattern.map.MiscEntityMatcher;
 import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
 import trainer.player.Player;
@@ -76,19 +72,8 @@ public class MapData {
 
         addEntities(mapDataMatcher.getNPCs());
         addEntities(mapDataMatcher.getItems());
-
-        for (MiscEntityMatcher matcher : mapDataMatcher.getMiscEntities()) {
-            for (Point location : matcher.getLocation()) {
-                MiscEntity miscEntity = new MiscEntity(
-                        matcher.getTriggerName(),
-                        location,
-                        matcher.getCondition(),
-                        matcher.getActions()
-                );
-
-                this.entities.add(miscEntity);
-            }
-        }
+        addEntities(mapDataMatcher.getMiscEntities());
+        addEntities(mapDataMatcher.getFishingSpots());
 
         for (MapTransitionMatcher matcher : mapDataMatcher.getMapTransitions()) {
             mapEntrances.put(matcher.getExitName(), matcher);
@@ -122,24 +107,12 @@ public class MapData {
                 }
             }
         }
-
-        for (FishingMatcher matcher : mapDataMatcher.getFishingSpots()) {
-            for (Point location : matcher.getLocation()) {
-                FishingSpotEntity fishingSpotEntity = new FishingSpotEntity(
-                        location,
-                        matcher.getTriggerName(),
-                        matcher.getCondition(),
-                        matcher.getWildEncounters()
-                );
-
-                this.entities.add(fishingSpotEntity);
-            }
-        }
     }
 
     private void addEntities(List<? extends EntityMatcher> entityMatchers) {
         this.entities.addAll(entityMatchers.stream()
-                                           .map(EntityMatcher::createEntity)
+                                           .map(EntityMatcher::createEntities)
+                                           .flatMap(List::stream)
                                            .collect(Collectors.toList()));
     }
 
