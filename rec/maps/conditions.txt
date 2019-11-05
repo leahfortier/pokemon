@@ -39,9 +39,9 @@
       "condition": {
         "condition": {
           "condition": {
-            "npcEntityName": "RSATown_NPC_Rival_01",
+            "entityName": "RSATown_NPC_Rival_01",
             "interactionName": "won",
-            "className": "map.condition.Condition$NpcInteractionCondition"
+            "className": "map.condition.Condition$InteractionCondition"
           },
           "className": "map.condition.ConditionHolder$NotCondition"
         }
@@ -104,9 +104,9 @@
             },
             {
               "condition": {
-                "npcEntityName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+                "entityName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
                 "interactionName": "",
-                "className": "map.condition.Condition$NpcInteractionCondition"
+                "className": "map.condition.Condition$InteractionCondition"
               },
               "className": "map.condition.ConditionHolder$NotCondition"
             }

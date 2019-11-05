@@ -4,7 +4,7 @@ import map.MapDataType;
 import map.area.AreaData;
 import map.condition.Condition;
 import map.condition.Condition.GlobalCondition;
-import map.condition.Condition.NpcInteractionCondition;
+import map.condition.Condition.InteractionCondition;
 import map.condition.Condition.TimeOfDayCondition;
 import map.condition.ConditionHolder;
 import map.condition.ConditionHolder.NotCondition;
@@ -447,11 +447,11 @@ public class MapTest extends BaseTest {
             for (Condition subCondition : ((ConditionHolder)condition).getConditions()) {
                 checkCondition(subCondition);
             }
-        } else if (condition instanceof NpcInteractionCondition) {
-            // Make sure all NPC Conditions refer to valid NPCs and interactions
-            NpcInteractionCondition npcCondition = (NpcInteractionCondition)condition;
-            String entityName = npcCondition.getNpcEntityName();
-            String interactionName = npcCondition.getInteractionName();
+        } else if (condition instanceof InteractionCondition) {
+            // Make sure all interaction conditions refer to valid entities and interactions
+            InteractionCondition interactionCondition = (InteractionCondition)condition;
+            String entityName = interactionCondition.getEntityName();
+            String interactionName = interactionCondition.getInteractionName();
 
             Assert.assertTrue(entityName, entityTriggerNames.containsKey(entityName));
             if (!interactionName.isEmpty()) {

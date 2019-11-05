@@ -151,9 +151,9 @@
       "triggerName": "DFS_Town_NPC_Bitchface_01",
       "condition": {
         "condition": {
-          "npcEntityName": "MaplesLab_NPC_Prof_Mapes_01",
+          "entityName": "MaplesLab_NPC_Prof_Mapes_01",
           "interactionName": "",
-          "className": "map.condition.Condition$NpcInteractionCondition"
+          "className": "map.condition.Condition$InteractionCondition"
         }
       }
     },
@@ -448,15 +448,15 @@
         "condition": {
           "conditions": [
             {
-              "npcEntityName": "DFS_Town_NPC_Rivalchan_01",
+              "entityName": "DFS_Town_NPC_Rivalchan_01",
               "interactionName": "",
-              "className": "map.condition.Condition$NpcInteractionCondition"
+              "className": "map.condition.Condition$InteractionCondition"
             },
             {
               "condition": {
-                "npcEntityName": "MaplesLab_NPC_Prof_Mapes_01",
+                "entityName": "MaplesLab_NPC_Prof_Mapes_01",
                 "interactionName": "",
-                "className": "map.condition.Condition$NpcInteractionCondition"
+                "className": "map.condition.Condition$InteractionCondition"
               },
               "className": "map.condition.ConditionHolder$NotCondition"
             }
