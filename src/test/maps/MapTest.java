@@ -30,10 +30,11 @@ import pattern.action.ChoiceMatcher;
 import pattern.action.EmptyActionMatcher.DayCareActionMatcher;
 import pattern.action.EntityActionMatcher;
 import pattern.action.EnumActionMatcher.CommonTriggerActionMatcher;
-import pattern.interaction.NPCInteractionMatcher;
 import pattern.action.StringActionMatcher.DialogueActionMatcher;
 import pattern.action.StringActionMatcher.GlobalActionMatcher;
 import pattern.generic.TriggerMatcher;
+import pattern.interaction.InteractionMatcher;
+import pattern.interaction.NPCInteractionMatcher;
 import pattern.map.AreaMatcher;
 import pattern.map.AreaMatcher.MusicConditionMatcher;
 import pattern.map.EventMatcher;
@@ -283,6 +284,39 @@ public class MapTest extends BaseTest {
         }
 
         Assert.assertTrue(message, hasDialogue);
+    }
+
+    @Test
+    public void interactionTest() {
+        for (TestMap map : maps) {
+            MapDataMatcher mapData = map.getMatcher();
+            String message = map.getName().getMapName();
+
+            // All NPC interactions must have unique names
+            // Okay to have zero interactions (mostly for NPCs in unreachable places like Nurse Joy)
+            for (NPCMatcher matcher : mapData.getNPCs()) {
+                assertUniqueInteractions(message + " " + matcher.getTriggerName(), matcher.getInteractionMatcherList());
+            }
+
+            // All NPC interactions must have unique names
+            // Must have at least one interaction (otherwise why is it an entity)
+            for (MiscEntityMatcher matcher : mapData.getMiscEntities()) {
+                String fullMessage = message + " " + matcher.getTriggerName();
+                List<InteractionMatcher> interactions = matcher.getInteractionMatcherList();
+                Assert.assertNotEquals(fullMessage, 0, interactions.size());
+                assertUniqueInteractions(fullMessage, interactions);
+            }
+        }
+    }
+
+    private void assertUniqueInteractions(String message, List<? extends InteractionMatcher> interactions) {
+        Set<String> interactionNames = new HashSet<>();
+        for (InteractionMatcher interaction : interactions) {
+            String interactionName = interaction.getName();
+            Assert.assertFalse(message + " " + interactionName, interactionNames.contains(interactionName));
+            interactionNames.add(interactionName);
+        }
+        Assert.assertEquals(message, interactionNames.size(), interactions.size());
     }
 
     @Test

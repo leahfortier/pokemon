@@ -216,8 +216,8 @@ public class ImageTest extends BaseTest {
 
         int firstNumOpaque = ImageUtils.numOpaquePixels(basicImage);
         int secondNumOpaque = ImageUtils.numOpaquePixels(shinyImage);
-        TestUtils.assertGreater(message + " Num Opaque", firstNumOpaque, 0);
-        TestUtils.assertGreater(message + " Num Opaque", secondNumOpaque, 0);
+        TestUtils.assertPositive(message + " Num Opaque", firstNumOpaque);
+        TestUtils.assertPositive(message + " Num Opaque", secondNumOpaque);
         TestUtils.assertAlmostEquals(message + " Num Opaque", firstNumOpaque, secondNumOpaque, 5);
         TestUtils.assertAlmostEquals(
                 message + " Pixels (" + firstNumOpaque + "/" + basicImage.getWidth()*basicImage.getHeight() + ")", 0,

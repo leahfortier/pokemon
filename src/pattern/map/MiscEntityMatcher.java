@@ -1,6 +1,5 @@
 package pattern.map;
 
-import main.Global;
 import map.condition.ConditionSet;
 import map.entity.Entity;
 import map.entity.MiscEntity;
@@ -12,8 +11,11 @@ import pattern.interaction.InteractionMatcher;
 import util.Point;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+// Should always have at least one interaction
 public class MiscEntityMatcher extends MultiPointTriggerMatcher implements MultiEntityMatcher {
     private String name;
     private InteractionMatcher[] interactions;
@@ -44,13 +46,27 @@ public class MiscEntityMatcher extends MultiPointTriggerMatcher implements Multi
         return Arrays.asList(this.interactions);
     }
 
+    private String getStartKey() {
+        return interactions[0].getName();
+    }
+
+    private Map<String, ActionList> getInteractionMap() {
+        Map<String, ActionList> interactionMap = new HashMap<>();
+        for (InteractionMatcher interaction : interactions) {
+            interactionMap.put(interaction.getName(), interaction.getActions());
+        }
+
+        return interactionMap;
+    }
+
     @Override
     public Entity createEntity(Point location) {
         return new MiscEntity(
                 this.getTriggerName(),
                 location,
                 this.getCondition(),
-                this.getActions()
+                this.getStartKey(),
+                this.getInteractionMap()
         );
     }
 }

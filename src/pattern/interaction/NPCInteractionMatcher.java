@@ -1,5 +1,6 @@
 package pattern.interaction;
 
+import map.entity.movable.NPCInteraction;
 import pattern.action.ActionMatcher;
 
 public class NPCInteractionMatcher extends InteractionMatcher {
@@ -12,5 +13,9 @@ public class NPCInteractionMatcher extends InteractionMatcher {
 
     public boolean shouldWalkToPlayer() {
         return this.walkToPlayer;
+    }
+
+    public NPCInteraction getInteraction() {
+        return new NPCInteraction(this.shouldWalkToPlayer(), this.getActions());
     }
 }

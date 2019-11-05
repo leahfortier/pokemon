@@ -1,6 +1,5 @@
 package pattern.map;
 
-import main.Global;
 import map.Direction;
 import map.PathDirection;
 import map.condition.ConditionSet;
@@ -10,9 +9,9 @@ import map.entity.movable.NPCEntity;
 import map.entity.movable.NPCInteraction;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionList;
-import pattern.interaction.NPCInteractionMatcher;
 import pattern.generic.EntityMatcher.SingleEntityMatcher;
 import pattern.generic.SinglePointTriggerMatcher;
+import pattern.interaction.NPCInteractionMatcher;
 import util.string.StringUtils;
 
 import java.util.Arrays;
@@ -58,12 +57,7 @@ public class NPCMatcher extends SinglePointTriggerMatcher implements SingleEntit
 
         Map<String, NPCInteraction> interactionMap = new HashMap<>();
         for (NPCInteractionMatcher interaction : interactions) {
-            if (interactionMap.containsKey(interaction.getName())) {
-                Global.error("Duplicate interaction name for " + this.getTriggerName() + ": " + interaction.getName());
-            }
-
-            NPCInteraction npcInteraction = new NPCInteraction(interaction.shouldWalkToPlayer(), interaction.getActions());
-            interactionMap.put(interaction.getName(), npcInteraction);
+            interactionMap.put(interaction.getName(), interaction.getInteraction());
         }
 
         return interactionMap;
