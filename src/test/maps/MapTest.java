@@ -234,7 +234,9 @@ public class MapTest extends BaseTest {
 
             for (MiscEntityMatcher miscEntity : map.getMatcher().getMiscEntities()) {
                 String message = map.getName() + " " + miscEntity.getTriggerName();
-                assertDialogueInteraction(message, miscEntity.getActions());
+                for (InteractionMatcher interaction : miscEntity.getInteractionMatcherList()) {
+                    assertDialogueInteraction(message, interaction.getActions());
+                }
             }
         }
 
@@ -466,7 +468,9 @@ public class MapTest extends BaseTest {
         }
 
         for (MiscEntityMatcher miscEntity : map.getMatcher().getMiscEntities()) {
-            addActions(actionMatchers, miscEntity.getActions());
+            for (InteractionMatcher interaction : miscEntity.getInteractionMatcherList()) {
+                addActions(actionMatchers, interaction.getActions());
+            }
         }
 
         for (EventMatcher event : map.getMatcher().getEvents()) {

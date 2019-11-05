@@ -37,11 +37,6 @@ public class MiscEntityMatcher extends MultiPointTriggerMatcher implements Multi
         return this.name;
     }
 
-    // TODO: Deprecate
-    public ActionList getActions() {
-        return interactions[0].getActions();
-    }
-
     public List<InteractionMatcher> getInteractionMatcherList() {
         return Arrays.asList(this.interactions);
     }
