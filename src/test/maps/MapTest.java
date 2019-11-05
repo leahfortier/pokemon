@@ -65,13 +65,13 @@ import java.util.Set;
 public class MapTest extends BaseTest {
     private static List<TestMap> maps;
     private static Set<String> addedGlobals;
-    private static Map<String, Set<String>> npcTriggerNames;
+    private static Map<String, Set<String>> entityTriggerNames;
 
     @BeforeClass
     public static void setup() {
         maps = new ArrayList<>();
         addedGlobals = new HashSet<>();
-        npcTriggerNames = new HashMap<>();
+        entityTriggerNames = new HashMap<>();
 
         File mapsDirectory = FileIO.newFile(Folder.MAPS);
         for (File mapFolder : FileIO.listSubdirectories(mapsDirectory)) {
@@ -80,27 +80,33 @@ public class MapTest extends BaseTest {
 
             for (ActionMatcher action : getAllActions(map)) {
                 if (action instanceof GlobalActionMatcher) {
-                    GlobalActionMatcher globalActionMatcher = (GlobalActionMatcher)action;
-                    String globalName = globalActionMatcher.getStringValue();
-                    Assert.assertFalse(addedGlobals.contains(globalName));
-                    addedGlobals.add(globalName);
+                    GlobalActionMatcher globalMatcher = (GlobalActionMatcher)action;
+                    addGlobal(globalMatcher.getStringValue());
                 }
             }
 
             for (NPCMatcher npc : map.getMatcher().getNPCs()) {
-                String triggerName = npc.getTriggerName();
+                addEntityName(npc.getTriggerName(), npc.getInteractionMap().keySet());
+            }
 
-                Assert.assertFalse(triggerName, npcTriggerNames.containsKey(triggerName));
-                npcTriggerNames.put(triggerName, npc.getInteractionMap().keySet());
+            for (MiscEntityMatcher entity : map.getMatcher().getMiscEntities()) {
+                addEntityName(entity.getTriggerName(), entity.getInteractionMap().keySet());
             }
 
             for (ItemMatcher item : map.getMatcher().getItems()) {
-                String triggerName = item.getTriggerName();
-
-                Assert.assertFalse(addedGlobals.contains(triggerName));
-                addedGlobals.add(triggerName);
+                addGlobal(item.getTriggerName());
             }
         }
+    }
+
+    private static void addGlobal(String globalName) {
+        Assert.assertFalse(addedGlobals.contains(globalName));
+        addedGlobals.add(globalName);
+    }
+
+    private static void addEntityName(String triggerName, Set<String> interactionNames) {
+        Assert.assertFalse(triggerName, entityTriggerNames.containsKey(triggerName));
+        entityTriggerNames.put(triggerName, interactionNames);
     }
 
     @Test
@@ -447,9 +453,9 @@ public class MapTest extends BaseTest {
             String entityName = npcCondition.getNpcEntityName();
             String interactionName = npcCondition.getInteractionName();
 
-            Assert.assertTrue(entityName, npcTriggerNames.containsKey(entityName));
+            Assert.assertTrue(entityName, entityTriggerNames.containsKey(entityName));
             if (!interactionName.isEmpty()) {
-                Assert.assertTrue(entityName, npcTriggerNames.get(entityName).contains(interactionName));
+                Assert.assertTrue(entityName, entityTriggerNames.get(entityName).contains(interactionName));
             }
         } else if (condition instanceof GlobalCondition) {
             GlobalCondition globalCondition = (GlobalCondition)condition;

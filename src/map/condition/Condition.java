@@ -90,7 +90,7 @@ public interface Condition {
 
         @Override
         public boolean evaluate() {
-            return Game.getPlayer().isNpcInteraction(npcEntityName, interactionName);
+            return Game.getPlayer().isEntityInteraction(npcEntityName, interactionName);
         }
     }
 

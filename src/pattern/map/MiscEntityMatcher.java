@@ -45,7 +45,7 @@ public class MiscEntityMatcher extends MultiPointTriggerMatcher implements Multi
         return interactions[0].getName();
     }
 
-    private Map<String, ActionList> getInteractionMap() {
+    public Map<String, ActionList> getInteractionMap() {
         Map<String, ActionList> interactionMap = new HashMap<>();
         for (InteractionMatcher interaction : interactions) {
             interactionMap.put(interaction.getName(), interaction.getActions());

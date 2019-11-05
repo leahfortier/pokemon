@@ -72,7 +72,7 @@ public class Player extends PlayerTrainer implements Serializable {
     private transient PlayerEntity entity;
 
     private Set<String> definedGlobals;
-    private Map<String, String> npcInteractions;
+    private Map<String, String> entityInteractions;
 
     private int fileNum;
     private long seconds;
@@ -101,7 +101,7 @@ public class Player extends PlayerTrainer implements Serializable {
         this.initialize();
 
         definedGlobals = new HashSet<>();
-        npcInteractions = new HashMap<>();
+        entityInteractions = new HashMap<>();
 
         pokedex = new Pokedex();
         pc = new PC();
@@ -318,24 +318,24 @@ public class Player extends PlayerTrainer implements Serializable {
 
     public void setNpcInteraction(final String npcEntityName, final String interactionName) {
         if (!StringUtils.isNullOrEmpty(interactionName)) {
-            this.npcInteractions.put(npcEntityName, interactionName);
-            System.out.println(npcEntityName + " -> " + npcInteractions.get(npcEntityName));
+            this.entityInteractions.put(npcEntityName, interactionName);
+            System.out.println(npcEntityName + " -> " + entityInteractions.get(npcEntityName));
         }
     }
 
-    public boolean hasNpcInteraction(final String npcEntityName) {
-        return this.npcInteractions.containsKey(npcEntityName);
+    public boolean hasEntityInteraction(final String npcEntityName) {
+        return this.entityInteractions.containsKey(npcEntityName);
     }
 
-    public String getNpcInteractionName(final String npcEntityName) {
-        return this.npcInteractions.get(npcEntityName);
+    public String getEntityInteractionName(final String npcEntityName) {
+        return this.entityInteractions.get(npcEntityName);
     }
 
-    public boolean isNpcInteraction(final String npcEntityName, final String interactionName) {
+    public boolean isEntityInteraction(final String entityName, final String interactionName) {
         if (StringUtils.isNullOrEmpty(interactionName)) {
-            return !this.hasNpcInteraction(npcEntityName);
+            return !this.hasEntityInteraction(entityName);
         } else {
-            return interactionName.equals(getNpcInteractionName(npcEntityName));
+            return interactionName.equals(getEntityInteractionName(entityName));
         }
     }
 
