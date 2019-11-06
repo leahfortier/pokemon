@@ -22,7 +22,6 @@ public class ActionListPanel extends JPanel {
         this.parent = parent;
 
         actionList = new ArrayList<>();
-
         newActionButton = GuiUtils.createButton(
                 "New Action",
                 event -> {
@@ -34,16 +33,10 @@ public class ActionListPanel extends JPanel {
         render();
     }
 
-    public void load(ActionList actions) {
-        actionList.addAll(actions.asList());
-        render();
-    }
-
     private void render() {
         removeAll();
 
         List<JComponent> components = new ArrayList<>();
-
         for (int i = 0; i < actionList.size(); i++) {
             final int index = i;
             final ActionMatcher actionMatcher = actionList.get(index);
@@ -74,6 +67,11 @@ public class ActionListPanel extends JPanel {
         GuiUtils.setVerticalLayout(this, components.toArray(new JComponent[0]));
 
         parent.render();
+    }
+
+    public void load(ActionList actions) {
+        actionList.addAll(actions.asList());
+        render();
     }
 
     public ActionMatcher[] getActions() {

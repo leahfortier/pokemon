@@ -1,17 +1,15 @@
 package mapMaker.dialogs;
 
 import main.Global;
-import mapMaker.MapMaker;
 import mapMaker.dialogs.interaction.BasicInteractionDialog;
+import mapMaker.dialogs.interaction.InteractionDialog;
+import mapMaker.dialogs.interaction.InteractionListPanel;
 import pattern.interaction.InteractionMatcher;
 import pattern.map.MiscEntityMatcher;
 import util.GuiUtils;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
@@ -21,27 +19,20 @@ public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
     private final JTextField nameTextField;
     private final ConditionPanel conditionPanel;
 
-    private final List<InteractionMatcher> interactions;
-    private final JButton addInteractionButton;
+    private final InteractionListPanel<InteractionMatcher> interactionsPanel;
 
-    private final MapMaker mapMaker;
-
-    public MiscEntityDialog(MiscEntityMatcher matcher, MapMaker givenMapMaker) {
+    public MiscEntityDialog(MiscEntityMatcher matcher) {
         super("Misc Trigger Editor");
-
-        mapMaker = givenMapMaker;
 
         this.nameTextField = GuiUtils.createTextField();
         this.conditionPanel = new ConditionPanel();
 
-        interactions = new ArrayList<>();
-        addInteractionButton = GuiUtils.createButton(
-                "Add Interaction",
-                event -> {
-                    interactions.add(null);
-                    render();
-                }
-        );
+        this.interactionsPanel = new InteractionListPanel<>(this) {
+            @Override
+            protected InteractionDialog<InteractionMatcher> getInteractionDialog(InteractionMatcher matcher, int index) {
+                return new BasicInteractionDialog(matcher, index);
+            }
+        };
 
         this.topComponent = GuiUtils.createVerticalLayoutComponent(
                 GuiUtils.createTextFieldComponent("Name", nameTextField),
@@ -54,41 +45,12 @@ public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
     @Override
     public void renderDialog() {
         removeAll();
-
-        List<JComponent> interactionComponents = new ArrayList<>();
-        for (int i = 0; i < interactions.size(); i++) {
-            final int index = i;
-            InteractionMatcher matcher = interactions.get(index);
-
-            JButton interactionButton =
-                    GuiUtils.createButton(
-                            matcher == null ? "Empty" : matcher.getName(),
-                            event -> {
-                                InteractionMatcher newMatcher = new BasicInteractionDialog(matcher, index).getMatcher(mapMaker);
-                                if (newMatcher != null) {
-                                    interactions.set(index, newMatcher);
-                                    render();
-                                }
-                            }
-                    );
-
-            JButton deleteButton = GuiUtils.createButton(
-                    "Delete",
-                    event -> {
-                        interactions.remove(index);
-                        render();
-                    }
-            );
-
-            interactionComponents.add(GuiUtils.createHorizontalLayoutComponent(interactionButton, deleteButton));
-        }
-
-        JPanel interactionComponent = GuiUtils.createVerticalLayoutComponent(interactionComponents.toArray(new JComponent[0]));
-        GuiUtils.setVerticalLayout(this, topComponent, interactionComponent, addInteractionButton);
+        GuiUtils.setVerticalLayout(this, topComponent, interactionsPanel);
     }
 
     @Override
     protected MiscEntityMatcher getMatcher() {
+        List<InteractionMatcher> interactions = this.interactionsPanel.getInteractions();
         if (interactions.size() == 0) {
             Global.info("Need at least one interaction for a valid misc entity.");
             return null;
@@ -109,6 +71,6 @@ public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
 
         nameTextField.setText(matcher.getBasicName());
         conditionPanel.load(matcher);
-        interactions.addAll(matcher.getInteractionMatcherList());
+        interactionsPanel.load(matcher.getInteractionMatcherList());
     }
 }
