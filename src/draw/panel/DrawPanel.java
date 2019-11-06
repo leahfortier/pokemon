@@ -42,7 +42,7 @@ public class DrawPanel implements Panel {
     private boolean highlight;
     private Color highlightColor;
 
-    protected boolean skipDraw;
+    private boolean skipDraw;
 
     private int fontSize;
     private String label;
@@ -235,8 +235,18 @@ public class DrawPanel implements Panel {
         this.skipDraw = shouldSkip;
     }
 
+    // Stop drawing this panel for now
     public void skipDraw() {
         this.skipDraw(true);
+    }
+
+    // Start drawing this panel again
+    public void unskip() {
+        this.skipDraw(false);
+    }
+
+    protected boolean isSkipping() {
+        return this.skipDraw;
     }
 
     public int getBorderSize() {
@@ -311,7 +321,6 @@ public class DrawPanel implements Panel {
 
     public void draw(Graphics g) {
         if (this.skipDraw) {
-            this.skipDraw = false;
             return;
         }
 
