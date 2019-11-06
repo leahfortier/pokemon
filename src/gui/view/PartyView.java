@@ -17,12 +17,12 @@ import draw.layout.TabLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.MovePanel;
+import draw.panel.NicknamePanel;
 import draw.panel.StatPanel;
 import draw.panel.WrapPanel;
 import draw.panel.WrapPanel.WrapMetrics;
 import gui.GameData;
 import gui.TileSet;
-import input.ControlKey;
 import input.InputControl;
 import main.Game;
 import main.Global;
@@ -58,7 +58,7 @@ public class PartyView extends View {
     private final StatPanel statsPanel;
     private final MovePanel moveDetailsPanel;
     private final DrawPanel movesPanel;
-    private final DrawPanel nicknamePanel;
+    private final NicknamePanel nicknamePanel;
 
     private final DrawPanel hpBar;
     private final DrawPanel expBar;
@@ -170,6 +170,23 @@ public class PartyView extends View {
                 .withFullTransparency()
                 .withBlackOutline();
 
+        tabButtons = new TabLayout(pokemonPanel, Trainer.MAX_POKEMON, tabHeight)
+                .withStartIndex(TABS)
+                .withDefaultTransitions(new ButtonTransitions().up(RETURN).down(MOVES))
+                .withPressIndex(this::switchTab)
+                .withButtonSetup(panel -> panel.skipInactive()
+                                               .withBorderlessTransparentBackground())
+                .getTabs();
+
+        nicknamePanel = new NicknamePanel(
+                pokemonPanel.x,
+                tabButtons[0].y,
+                pokemonPanel.width,
+                tabButtons[0].height + pokemonPanel.height
+        )
+                .withBorderlessTransparentBackground()
+                .withBlackOutline();
+
         int buttonWidth = (basicInformationPanel.rightX() - imagePanel.x - (NUM_BOTTOM_BUTTONS - 1)*spacing)/NUM_BOTTOM_BUTTONS;
         nicknameButton = new Button(
                 imagePanel.x,
@@ -177,7 +194,10 @@ public class PartyView extends View {
                 buttonWidth,
                 buttonHeight,
                 new ButtonTransitions().right(SWITCH).up(TABS).left(RETURN).down(TABS),
-                () -> nicknameView = true,
+                () -> {
+                    nicknameView = true;
+                    nicknamePanel.set(Game.getPlayer().getTeam().get(selectedTab));
+                },
                 textButtonSetup("Nickname!!")
         );
 
@@ -200,24 +220,6 @@ public class PartyView extends View {
                 ButtonPressAction.getExitAction(),
                 textButtonSetup("Return")
         );
-
-        tabButtons = new TabLayout(pokemonPanel, Trainer.MAX_POKEMON, tabHeight)
-                .withStartIndex(TABS)
-                .withDefaultTransitions(new ButtonTransitions().up(RETURN).down(MOVES))
-                .withPressIndex(this::switchTab)
-                .withButtonSetup(panel -> panel.skipInactive()
-                                               .withBorderlessTransparentBackground())
-                .getTabs();
-
-        nicknamePanel = new DrawPanel(
-                pokemonPanel.x,
-                tabButtons[0].y,
-                pokemonPanel.width,
-                tabButtons[0].height + pokemonPanel.height
-        )
-                .withBorderlessTransparentBackground()
-                .withBlackOutline()
-                .withLabelSize(30);
 
         // Buttons don't actually do anything when pressed, but if hovered updates the move details panel
         moveButtons = new ButtonLayout(movesPanel, MoveList.MAX_MOVES, 1, 10)
@@ -253,14 +255,8 @@ public class PartyView extends View {
         buttons.update();
 
         if (nicknameView) {
-            if (!input.isCapturingText()) {
-                input.startTextCapture();
-            }
-
-            if (input.consumeIfDown(ControlKey.ENTER)) {
-                String nickname = input.stopAndResetCapturedText();
-                Game.getPlayer().getTeam().get(selectedTab).setNickname(nickname);
-
+            nicknamePanel.update();
+            if (nicknamePanel.isFinished()) {
                 nicknameView = false;
                 updateActiveButtons();
             }
@@ -288,9 +284,7 @@ public class PartyView extends View {
         BasicPanels.drawCanvasPanel(g);
 
         if (nicknameView) {
-            String nickname = InputControl.instance().getInputCaptureString(PartyPokemon.MAX_NAME_LENGTH);
             nicknamePanel.withBackgroundColors(PokeType.getColors(selectedPkm), true)
-                         .withImageLabel(pkmImg, nickname)
                          .draw(g);
         } else {
             // Pokemon info

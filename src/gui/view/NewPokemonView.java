@@ -6,6 +6,7 @@ import draw.layout.QuestionLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.LabelPanel;
+import draw.panel.NicknamePanel;
 import draw.panel.PanelList;
 import draw.panel.WrapPanel;
 import draw.panel.WrapPanel.WrapMetrics;
@@ -45,6 +46,7 @@ public class NewPokemonView extends View {
     private final PanelList panels;
     private final DrawPanel canvasPanel;
     private final DrawPanel messagelessCanvasPanel;
+    private final NicknamePanel nicknamePanel;
 
     private PanelList infoPanels;
     private LabelPanel namePanel;
@@ -75,7 +77,9 @@ public class NewPokemonView extends View {
         this.messagelessCanvasPanel = new DrawPanel(
                 canvasPanel.x, canvasPanel.y, canvasPanel.width,
                 BasicPanels.getMessagePanelY() - canvasPanel.y
-        ).withNoBackground().withLabelSize(30);
+        ).withNoBackground();
+
+        this.nicknamePanel = new NicknamePanel(this.messagelessCanvasPanel);
 
         // Placeholder panels
         this.setLabelPanels(PokemonNamesies.BULBASAUR.getInfo());
@@ -213,13 +217,8 @@ public class NewPokemonView extends View {
                 }
                 break;
             case NICKNAME:
-                if (!input.isCapturingText()) {
-                    input.startTextCapture();
-                }
-
-                if (input.consumeIfDown(ControlKey.ENTER)) {
-                    String nickname = input.stopAndResetCapturedText();
-                    newPokemon.setNickname(nickname);
+                nicknamePanel.update();
+                if (nicknamePanel.isFinished()) {
                     setState(State.LOCATION);
                 }
                 break;
@@ -245,10 +244,7 @@ public class NewPokemonView extends View {
             imagePanel.withImageLabel(pokemonImage);
             messagelessCanvasPanel.skipDraw();
         } else if (state == State.NICKNAME) {
-            BufferedImage spriteImage = Game.getData().getPokemonTilesSmall().getTile(newPokemon.getImageName());
-            String nickname = InputControl.instance().getInputCaptureString(PartyPokemon.MAX_NAME_LENGTH);
-
-            messagelessCanvasPanel.withImageLabel(spriteImage, nickname);
+            messagelessCanvasPanel.skipDraw();
         } else if (state != State.END) {
             messagelessCanvasPanel.withImageLabel(pokemonImage);
         }
@@ -279,6 +275,8 @@ public class NewPokemonView extends View {
         if (displayInfo) {
             infoPanels.drawAll(g);
             this.drawFlavorText(g, newPokemon.getPokemonInfo());
+        } else if (state == State.NICKNAME) {
+            nicknamePanel.draw(g);
         }
 
         buttons.drawHover(g);
@@ -328,6 +326,7 @@ public class NewPokemonView extends View {
                 break;
             case NICKNAME:
                 message = "What would you like to name " + pokemonName + "?";
+                nicknamePanel.set(newPokemon);
                 break;
             case LOCATION:
                 if (player.fullParty() && !player.getTeam().contains(newPokemon)) {
