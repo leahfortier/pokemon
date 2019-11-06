@@ -132,10 +132,6 @@ public class MartView extends View {
 
     @Override
     public void draw(Graphics g) {
-        // Item and amount setup
-        layout.setupItems(itemButtons, forSaleItems, pageNum);
-        layout.setup(selectedItem, itemAmount, selectedItem.getItem().getPrice()*itemAmount);
-
         // Background
         BasicPanels.drawCanvasPanel(g);
         panels.drawAll(g);
@@ -260,10 +256,9 @@ public class MartView extends View {
     }
 
     private void updateActiveButtons() {
-        int displayed = forSaleItems.size();
-        for (int i = 0; i < ITEMS_PER_PAGE; i++) {
-            itemButtons[i].setActive(i < displayed - pageNum*ITEMS_PER_PAGE);
-        }
+        // Item and amount setup
+        layout.setupItems(itemButtons, forSaleItems, pageNum);
+        layout.setupLabels(selectedItem, itemAmount, selectedItem.getItem().getPrice()*itemAmount);
 
         boolean amountSet = itemAmount > 0;
         amountLeftButton.setActive(amountSet);

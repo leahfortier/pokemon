@@ -127,19 +127,8 @@ public class SellView extends View {
         InputControl.instance().popViewIfEscaped();
     }
 
-    private void drawSetup() {
-        // Tab colors and outlines and stuff
-        layout.setupTabs(tabButtons, selectedTab);
-
-        // Item and amount setup
-        layout.setupItems(itemButtons, this.getDisplayItems(), pageNum);
-        layout.setup(selectedItem, itemAmount, selectedItem.getItem().getSellPrice()*itemAmount);
-    }
-
     @Override
     public void draw(Graphics g) {
-        drawSetup();
-
         // Background
         BasicPanels.drawCanvasPanel(g);
         panels.drawAll(g);
@@ -181,10 +170,9 @@ public class SellView extends View {
     }
 
     private void updateActiveButtons() {
-        int displayed = this.getDisplayItems().size();
-        for (int i = 0; i < ITEMS_PER_PAGE; i++) {
-            itemButtons[i].setActive(i < displayed - pageNum*ITEMS_PER_PAGE);
-        }
+        // Item and amount setup
+        layout.setupItems(itemButtons, this.getDisplayItems(), pageNum);
+        layout.setupLabels(selectedItem, itemAmount, selectedItem.getItem().getSellPrice()*itemAmount);
 
         boolean amountSet = itemAmount > 0;
         amountLeftButton.setActive(amountSet);
@@ -215,6 +203,9 @@ public class SellView extends View {
         if (list.size() < (pageNum + 1)*ITEMS_PER_PAGE) {
             pageNum = 0;
         }
+
+        // Tab colors and outlines and stuff
+        layout.setupTabs(tabButtons, selectedTab);
 
         updateActiveButtons();
     }

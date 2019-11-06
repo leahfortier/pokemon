@@ -131,8 +131,6 @@ public class BerryView extends View {
 
     @Override
     public void draw(Graphics g) {
-        layout.setupItems(itemButtons, this.getDisplayBerries(), pageNum);
-
         // Background
         BasicPanels.drawCanvasPanel(g);
         panels.drawAll(g);
@@ -213,9 +211,6 @@ public class BerryView extends View {
             selectedItem = berries.isEmpty() ? ItemNamesies.NO_ITEM : berries.iterator().next();
         }
 
-        int displayed = berries.size();
-        for (int i = 0; i < ITEMS_PER_PAGE; i++) {
-            itemButtons[i].setActive(i < displayed - pageNum*ITEMS_PER_PAGE);
-        }
+        layout.setupItems(itemButtons, berries, pageNum);
     }
 }
