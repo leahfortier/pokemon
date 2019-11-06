@@ -379,7 +379,7 @@ public class PCView extends View {
 
     private void drawSelectedPokemon(Graphics g) {
         FontMetrics.setBlackFont(g, 20);
-        g.drawString(selected.getActualName() + " " + selected.getGenderString(), 541, 82);
+        g.drawString(selected.getNameAndGender(), 541, 82);
 
         // Eggs don't know shit
         if (selected.isEgg()) {

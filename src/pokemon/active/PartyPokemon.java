@@ -213,6 +213,10 @@ public abstract class PartyPokemon implements Serializable {
         shiny = true;
     }
 
+    public String getNameAndGender() {
+        return this.getActualName() + " " + this.getGenderString();
+    }
+
     public String getGenderString() {
         return this.getGender().getCharacter();
     }

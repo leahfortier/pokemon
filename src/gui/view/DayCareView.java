@@ -270,7 +270,7 @@ class DayCareView extends View {
         // Centered label with party tile, name, and gender
         panel.withImageLabel(
                 Game.getData().getPartyTiles().getTile(pokemon.getTinyImageName()),
-                pokemon.getActualName() + " " + pokemon.getGenderString()
+                pokemon.getNameAndGender()
         );
     }
 
@@ -326,7 +326,7 @@ class DayCareView extends View {
 
     private void drawSelectedPokemon(Graphics g) {
         FontMetrics.setBlackFont(g, 20);
-        g.drawString(selected.getActualName() + " " + selected.getGenderString(), 541, 82);
+        g.drawString(selected.getNameAndGender(), 541, 82);
 
         if (selected.isEgg()) {
             FontMetrics.setFont(g, 16);

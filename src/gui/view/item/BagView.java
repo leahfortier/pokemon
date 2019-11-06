@@ -329,7 +329,7 @@ public class BagView extends View {
             FontMetrics.setBlackFont(g, 14);
 
             // Name and Gender
-            g.drawString(p.getActualName() + " " + p.getGenderString(), 50, 22);
+            g.drawString(p.getNameAndGender(), 50, 22);
 
             if (!p.isEgg()) {
                 if (selectedTab == BagCategory.TM && selectedItem != ItemNamesies.NO_ITEM) {

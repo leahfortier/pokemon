@@ -363,7 +363,7 @@ public class PartyView extends View {
         int topLineY = basicInformationPanel.y + inset + FontMetrics.getTextHeight(g);
 
         // Name and Gender
-        g.drawString(selectedPkm.getActualName() + " " + selectedPkm.getGenderString(), nameX, topLineY);
+        g.drawString(selectedPkm.getNameAndGender(), nameX, topLineY);
 
         if (selectedPkm.isEgg()) {
             FontMetrics.setFont(g, 16);
