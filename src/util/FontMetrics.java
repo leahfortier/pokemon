@@ -30,7 +30,11 @@ public class FontMetrics {
     }
 
     public int getTextLength(String s) {
-        return s.length()*this.getHorizontalSpacing();
+        return this.getTextLength(s.length());
+    }
+
+    public int getTextLength(int length) {
+        return length*this.getHorizontalSpacing();
     }
 
     public int getHorizontalSpacing() {
@@ -52,16 +56,24 @@ public class FontMetrics {
     }
 
     public static int getTextWidth(int fontSize) {
-        return getTextWidth(fontSize, " ");
+        return getTextWidth(fontSize, 1);
     }
 
     public static int getTextWidth(Graphics g, String text) {
-        return getTextWidth(g.getFont().getSize(), text);
+        return getTextWidth(g, text.length());
+    }
+
+    public static int getTextWidth(Graphics g, int textLength) {
+        return getTextWidth(g.getFont().getSize(), textLength);
     }
 
     public static int getTextWidth(int fontSize, String text) {
+        return getTextWidth(fontSize, text.length());
+    }
+
+    public static int getTextWidth(int fontSize, int textLength) {
         FontMetrics fontMetrics = getFontMetrics(fontSize);
-        return fontMetrics.getTextLength(text);
+        return fontMetrics.getTextLength(textLength);
     }
 
     public static int getSuggestedWidth(String text, Graphics g) {

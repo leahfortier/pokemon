@@ -378,7 +378,8 @@ public class PartyView extends View {
             );
         } else {
             // Number
-            int numberX = 378;
+            // +5 is theoretically name (+filler), space, gender, space, space, space, number
+            int numberX = nameX + FontMetrics.getTextWidth(g, PartyPokemon.MAX_NAME_LENGTH + 5);
             String numberString = String.format("#%03d", selectedPkm.getPokemonInfo().getNumber());
             g.drawString(numberString, numberX, topLineY);
 

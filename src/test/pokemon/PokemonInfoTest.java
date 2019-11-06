@@ -416,6 +416,22 @@ public class PokemonInfoTest extends BaseTest {
     }
 
     @Test
+    public void nameLengthTest() {
+        int maxLength = 0;
+        for (PokemonInfo pokemonInfo : PokemonList.instance()) {
+            String name = pokemonInfo.getName();
+            int nameLength = name.length();
+
+            // Make sure name length is in range and update max length
+            TestUtils.assertInclusiveRange(name, 3, PartyPokemon.MAX_NAME_LENGTH, nameLength);
+            maxLength = Math.max(maxLength, nameLength);
+        }
+
+        // Max length should match the longest Pokemon name
+        Assert.assertEquals(PartyPokemon.MAX_NAME_LENGTH, maxLength);
+    }
+
+    @Test
     public void attributesTest() {
         // Testing for other basic attributes like height, weight, catch rate
         for (PokemonInfo pokemonInfo : PokemonList.instance()) {

@@ -150,9 +150,11 @@ public class NewPokemonView extends View {
 
     // Panels need to be recreated for each new pokemon because their sizing changes to fit the text
     private void setLabelPanels(PokemonInfo pokemonInfo) {
+        // Left justified max name length spacing (Ex: %-12s)
+        String nameFormat = "%-" + PartyPokemon.MAX_NAME_LENGTH + "s";
         namePanel = new LabelPanel(
                 BOX_SPACING, BOX_SPACING, 30, TEXT_SPACING,
-                String.format("%-10s   #%03d", pokemonInfo.getName(), pokemonInfo.getNumber())
+                String.format(nameFormat + "   #%03d", pokemonInfo.getName(), pokemonInfo.getNumber())
         );
 
         LabelPanel classificationPanel = new LabelPanel(

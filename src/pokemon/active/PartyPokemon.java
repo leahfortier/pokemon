@@ -35,7 +35,7 @@ public abstract class PartyPokemon implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final int MAX_LEVEL = 100;
-    public static final int MAX_NAME_LENGTH = 10;
+    public static final int MAX_NAME_LENGTH = 12;
 
     private PokemonNamesies pokemon;
     private String nickname;
