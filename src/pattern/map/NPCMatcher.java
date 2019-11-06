@@ -6,7 +6,7 @@ import map.condition.ConditionSet;
 import map.entity.Entity;
 import map.entity.movable.MoveAxis;
 import map.entity.movable.NPCEntity;
-import map.entity.movable.NPCInteraction;
+import map.entity.interaction.NPCInteraction;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionList;
 import pattern.generic.EntityMatcher.SingleEntityMatcher;

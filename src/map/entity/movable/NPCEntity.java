@@ -4,6 +4,7 @@ import main.Game;
 import map.Direction;
 import map.PathDirection;
 import map.condition.Condition;
+import map.entity.interaction.NPCInteraction;
 import map.triggers.Trigger;
 import trainer.player.Player;
 import util.Point;

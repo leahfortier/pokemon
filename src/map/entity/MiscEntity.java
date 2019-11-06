@@ -2,8 +2,8 @@ package map.entity;
 
 import main.Game;
 import map.condition.Condition;
+import map.entity.interaction.Interaction;
 import map.triggers.Trigger;
-import pattern.action.ActionList;
 import trainer.player.Player;
 import util.Point;
 
@@ -12,12 +12,12 @@ import java.util.Map;
 
 public class MiscEntity extends Entity {
     private final String startKey;
-    private final Map<String, ActionList> interactions;
+    private final Map<String, Interaction> interactions;
 
     private Map<String, Trigger> triggerInteractionMap;
 
     public MiscEntity(String name, Point location, Condition condition, String startKey,
-                      Map<String, ActionList> interactions) {
+                      Map<String, Interaction> interactions) {
         super(location, name, condition);
         this.startKey = startKey;
         this.interactions = interactions;
@@ -38,8 +38,8 @@ public class MiscEntity extends Entity {
     public Trigger getTrigger() {
         String currentInteraction = this.getCurrentInteractionKey();
         if (!this.triggerInteractionMap.containsKey(currentInteraction)) {
-            ActionList interaction = this.interactions.get(currentInteraction);
-            Trigger trigger = interaction.getGroupTrigger(
+            Interaction interaction = this.interactions.get(currentInteraction);
+            Trigger trigger = interaction.getActions().getGroupTrigger(
                     this.getEntityName(),
                     this.getCondition()
             );
