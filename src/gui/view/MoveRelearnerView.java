@@ -15,7 +15,7 @@ import draw.button.ButtonTransitions;
 import draw.layout.ButtonLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
-import draw.panel.LearnMovePanel;
+import draw.handler.LearnMoveHandler;
 import draw.panel.MovePanel;
 import draw.panel.PanelList;
 import draw.panel.WrapPanel.WrapMetrics;
@@ -75,7 +75,7 @@ public class MoveRelearnerView extends View {
     private int selectedPokemon;
     private Attack selectedMove;
     private int pageNum;
-    private LearnMovePanel learnMovePanel;
+    private LearnMoveHandler learnMoveHandler;
 
     MoveRelearnerView() {
         int spacing = 20;
@@ -161,7 +161,7 @@ public class MoveRelearnerView extends View {
                 (partyPanel.width - spacing)/2,
                 buttonHeight,
                 new ButtonTransitions().right(RETURN).up(LAST_PARTY).left(RETURN).down(PARTY),
-                () -> learnMovePanel = new LearnMovePanel((ActivePokemon)team.get(selectedPokemon), new Move(selectedMove)),
+                () -> learnMoveHandler = new LearnMoveHandler((ActivePokemon)team.get(selectedPokemon), new Move(selectedMove)),
                 textButtonSetup("Learn!", new Color(123, 213, 74))
         );
 
@@ -221,15 +221,15 @@ public class MoveRelearnerView extends View {
 
     @Override
     public void update(int dt) {
-        if (learnMovePanel != null) {
-            learnMovePanel.update();
-            if (learnMovePanel.isFinished()) {
+        if (learnMoveHandler != null) {
+            learnMoveHandler.update();
+            if (learnMoveHandler.isFinished()) {
                 // If a move was actually learned, remove a heart scale
-                if (learnMovePanel.learnedMove()) {
+                if (learnMoveHandler.learnedMove()) {
                     bag.removeItem(ItemNamesies.HEART_SCALE);
                 }
 
-                learnMovePanel = null;
+                learnMoveHandler = null;
                 setSelectedPokemon(selectedPokemon);
                 return;
             }
@@ -329,8 +329,8 @@ public class MoveRelearnerView extends View {
         TextUtils.drawPageNumbers(g, 22, movesLeftButton, movesRightButton, pageNum, totalPages());
 
         // Learning movessss
-        if (learnMovePanel != null) {
-            learnMovePanel.draw(g);
+        if (learnMoveHandler != null) {
+            learnMoveHandler.draw(g);
         }
 
         // Button hover action
@@ -342,7 +342,7 @@ public class MoveRelearnerView extends View {
     }
 
     private void updateActiveButtons() {
-        if (learnMovePanel != null) {
+        if (learnMoveHandler != null) {
             buttons.setInactive();
         } else {
             for (int i = 0; i < pokemonButtons.length; i++) {

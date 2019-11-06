@@ -1,28 +1,28 @@
 package gui.view.battle.handler;
 
 import draw.button.ButtonList;
-import draw.panel.LearnMovePanel;
+import draw.handler.LearnMoveHandler;
 import gui.view.battle.BattleView;
 
 import java.awt.Graphics;
 
 public class LearnMoveState implements VisualStateHandler {
-    private LearnMovePanel learnMovePanel;
+    private LearnMoveHandler learnMoveHandler;
 
     @Override
     public void set(BattleView view) {
-        this.learnMovePanel = new LearnMovePanel(view.getLearnedPokemon(), view.getLearnedMove());
+        this.learnMoveHandler = new LearnMoveHandler(view.getLearnedPokemon(), view.getLearnedMove());
     }
 
     @Override
     public void draw(BattleView view, Graphics g) {
-        this.learnMovePanel.draw(g);
+        this.learnMoveHandler.draw(g);
     }
 
     @Override
     public void update(BattleView view) {
-        this.learnMovePanel.update();
-        if (this.learnMovePanel.isFinished()) {
+        this.learnMoveHandler.update();
+        if (this.learnMoveHandler.isFinished()) {
             view.cycleMessage();
         }
     }

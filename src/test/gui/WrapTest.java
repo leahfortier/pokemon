@@ -3,7 +3,7 @@ package test.gui;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
-import draw.panel.LearnMovePanel;
+import draw.handler.LearnMoveHandler;
 import draw.panel.WrapPanel.WrapMetrics;
 import gui.view.MoveRelearnerView;
 import gui.view.NewPokemonView;
@@ -138,8 +138,8 @@ public class WrapTest extends BaseTest {
 
             // Selected move details when learning a move
             TestPokemon pokemon = TestPokemon.newPlayerPokemon(PokemonNamesies.BULBASAUR);
-            LearnMovePanel learnMovePanel = new LearnMovePanel(pokemon, new Move(attackNamesies));
-            learnMoveMetrics.checkMetrics(name, learnMovePanel.drawMoveDetails(g, attack));
+            LearnMoveHandler learnMoveHandler = new LearnMoveHandler(pokemon, new Move(attackNamesies));
+            learnMoveMetrics.checkMetrics(name, learnMoveHandler.drawMoveDetails(g, attack));
         }
 
         fightMetrics.confirmFontSizes(13, 16);

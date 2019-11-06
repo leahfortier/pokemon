@@ -1,5 +1,7 @@
 package draw.panel;
 
+import util.Point;
+
 public interface Panel {
     int getX();
     int getY();
@@ -20,5 +22,9 @@ public interface Panel {
 
     default int centerY() {
         return this.getY() + this.getHeight()/2;
+    }
+
+    default Point centerPoint() {
+        return new Point(this.centerX(), this.centerY());
     }
 }

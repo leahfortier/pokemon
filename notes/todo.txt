@@ -165,4 +165,7 @@ Other random things:
     text wrapping should allow having a different startX for the first line so you can have a label in a different size (ability name and description for example)
     move as much logic as possible out of views and just have them called from in there (buy from Mart is good example)
     greyOut and highlight should also not reset every frame like skip
+    should egg hatching and evolving be separate views that extend the same view class or something?
+    StatGainPanel should maybe use the panel thing similar to the StatPanel
+    change NicknamePanel to being a handler instead
     
