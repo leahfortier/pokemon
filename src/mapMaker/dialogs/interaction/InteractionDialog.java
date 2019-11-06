@@ -2,7 +2,6 @@ package mapMaker.dialogs.interaction;
 
 import mapMaker.dialogs.TriggerDialog;
 import mapMaker.dialogs.action.ActionListPanel;
-import pattern.action.ActionMatcher;
 import pattern.interaction.InteractionMatcher;
 import util.GuiUtils;
 import util.string.StringUtils;
@@ -10,16 +9,16 @@ import util.string.StringUtils;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class MiscEntityInteractionDialog extends TriggerDialog<InteractionMatcher> {
-    private final JPanel topComponent;
+public abstract class InteractionDialog<InteractionType extends InteractionMatcher> extends TriggerDialog<InteractionType> {
+    protected JPanel topComponent;
 
     private final JTextField interactionNameTextField;
-    private final ActionListPanel actionListPanel;
+    protected final ActionListPanel actionListPanel;
 
     private final int interactionIndex;
 
-    public MiscEntityInteractionDialog(InteractionMatcher interactionMatcher, int index) {
-        super("New Misc Entity Interaction Dialog");
+    public InteractionDialog(InteractionType interactionMatcher, int index) {
+        super("New Entity Interaction Dialog");
 
         this.interactionIndex = index;
 
@@ -39,25 +38,22 @@ public class MiscEntityInteractionDialog extends TriggerDialog<InteractionMatche
         return "Interaction" + interactionIndex;
     }
 
-    private void load(InteractionMatcher matcher) {
+    protected String getInteractionName() {
+        String interactionName = interactionNameTextField.getText();
+        if (!StringUtils.isNullOrEmpty(interactionName)) {
+            return interactionName;
+        }
+
+        return this.getDefaultName();
+    }
+
+    protected void load(InteractionType matcher) {
         if (matcher == null) {
             return;
         }
 
         interactionNameTextField.setText(matcher.getName());
         actionListPanel.load(matcher.getActions());
-    }
-
-    @Override
-    protected InteractionMatcher getMatcher() {
-        String interactionName = interactionNameTextField.getText();
-        ActionMatcher[] actions = actionListPanel.getActions();
-
-        if (StringUtils.isNullOrEmpty(interactionName)) {
-            interactionName = this.getDefaultName();
-        }
-
-        return new InteractionMatcher(interactionName, actions);
     }
 
     @Override

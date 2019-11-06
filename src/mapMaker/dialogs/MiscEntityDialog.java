@@ -2,7 +2,7 @@ package mapMaker.dialogs;
 
 import main.Global;
 import mapMaker.MapMaker;
-import mapMaker.dialogs.interaction.MiscEntityInteractionDialog;
+import mapMaker.dialogs.interaction.BasicInteractionDialog;
 import pattern.interaction.InteractionMatcher;
 import pattern.map.MiscEntityMatcher;
 import util.GuiUtils;
@@ -64,7 +64,7 @@ public class MiscEntityDialog extends TriggerDialog<MiscEntityMatcher> {
                     GuiUtils.createButton(
                             matcher == null ? "Empty" : matcher.getName(),
                             event -> {
-                                InteractionMatcher newMatcher = new MiscEntityInteractionDialog(matcher, index).getMatcher(mapMaker);
+                                InteractionMatcher newMatcher = new BasicInteractionDialog(matcher, index).getMatcher(mapMaker);
                                 if (newMatcher != null) {
                                     interactions.set(index, newMatcher);
                                     render();
