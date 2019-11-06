@@ -47,9 +47,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "Interaction0",
+          "actions": [
             {
               "dialogue": "...",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -94,9 +94,9 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "won",
+          "actions": [
             {
               "dialogue": "...",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

@@ -52,9 +52,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "Interaction0",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "Interaction0",
+          "actions": [
             {
               "dialogue": "Berry time! Fuck yeah!!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -79,9 +79,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "DayCare",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "DayCare",
+          "actions": [
             {
               "className": "pattern.action.EmptyActionMatcher$DayCareActionMatcher"
             }
@@ -101,9 +101,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "Learn Move View",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "Learn Move View",
+          "actions": [
             {
               "dialogue": "Heart scales sure are tasty treats...",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -128,9 +128,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "Trade",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "Trade",
+          "actions": [
             {
               "tradePokemon": "YUKIKON",
               "requested": "VULPIX",
@@ -150,10 +150,15 @@
   "miscEntities": [
     {
       "name": "PC",
-      "actions": [
+      "interactions": [
         {
-          "triggerName": "LOAD_PC",
-          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "triggerName": "LOAD_PC",
+              "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+            }
+          ]
         }
       ],
       "location": [

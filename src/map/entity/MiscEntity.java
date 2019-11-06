@@ -1,29 +1,52 @@
 package map.entity;
 
+import main.Game;
 import map.condition.Condition;
 import map.triggers.Trigger;
 import pattern.action.ActionList;
+import trainer.player.Player;
 import util.Point;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MiscEntity extends Entity {
-    private final ActionList actions;
+    private final String startKey;
+    private final Map<String, ActionList> interactions;
 
-    private Trigger trigger;
+    private Map<String, Trigger> triggerInteractionMap;
 
-    public MiscEntity(String name, Point location, Condition condition, ActionList actions) {
+    public MiscEntity(String name, Point location, Condition condition, String startKey,
+                      Map<String, ActionList> interactions) {
         super(location, name, condition);
-        this.actions = actions;
+        this.startKey = startKey;
+        this.interactions = interactions;
+
+        this.triggerInteractionMap = new HashMap<>();
+    }
+
+    private String getCurrentInteractionKey() {
+        Player player = Game.getPlayer();
+        if (player.hasEntityInteraction(this.getEntityName())) {
+            return player.getEntityInteractionName(this.getEntityName());
+        }
+
+        return this.startKey;
     }
 
     @Override
     public Trigger getTrigger() {
-        if (trigger == null) {
-            this.trigger = this.actions.getGroupTrigger(
+        String currentInteraction = this.getCurrentInteractionKey();
+        if (!this.triggerInteractionMap.containsKey(currentInteraction)) {
+            ActionList interaction = this.interactions.get(currentInteraction);
+            Trigger trigger = interaction.getGroupTrigger(
                     this.getEntityName(),
                     this.getCondition()
             );
+
+            this.triggerInteractionMap.put(currentInteraction, trigger);
         }
 
-        return trigger;
+        return this.triggerInteractionMap.get(currentInteraction);
     }
 }

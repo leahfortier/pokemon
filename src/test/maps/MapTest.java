@@ -1,10 +1,11 @@
 package test.maps;
 
 import map.MapDataType;
+import map.MapName;
 import map.area.AreaData;
 import map.condition.Condition;
 import map.condition.Condition.GlobalCondition;
-import map.condition.Condition.NpcInteractionCondition;
+import map.condition.Condition.InteractionCondition;
 import map.condition.Condition.TimeOfDayCondition;
 import map.condition.ConditionHolder;
 import map.condition.ConditionHolder.NotCondition;
@@ -29,11 +30,13 @@ import pattern.action.ActionMatcher.TradePokemonActionMatcher;
 import pattern.action.ChoiceMatcher;
 import pattern.action.EmptyActionMatcher.DayCareActionMatcher;
 import pattern.action.EntityActionMatcher;
+import pattern.action.EntityActionMatcher.UpdateActionMatcher;
 import pattern.action.EnumActionMatcher.CommonTriggerActionMatcher;
-import pattern.action.NPCInteractionMatcher;
 import pattern.action.StringActionMatcher.DialogueActionMatcher;
 import pattern.action.StringActionMatcher.GlobalActionMatcher;
 import pattern.generic.TriggerMatcher;
+import pattern.interaction.InteractionMatcher;
+import pattern.interaction.NPCInteractionMatcher;
 import pattern.map.AreaMatcher;
 import pattern.map.AreaMatcher.MusicConditionMatcher;
 import pattern.map.EventMatcher;
@@ -45,6 +48,7 @@ import pattern.map.NPCMatcher;
 import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
 import test.general.BaseTest;
+import test.general.TestUtils;
 import util.Point;
 import util.file.FileIO;
 import util.file.Folder;
@@ -64,13 +68,13 @@ import java.util.Set;
 public class MapTest extends BaseTest {
     private static List<TestMap> maps;
     private static Set<String> addedGlobals;
-    private static Map<String, Set<String>> npcTriggerNames;
+    private static Map<String, Set<String>> entityTriggerNames;
 
     @BeforeClass
     public static void setup() {
         maps = new ArrayList<>();
         addedGlobals = new HashSet<>();
-        npcTriggerNames = new HashMap<>();
+        entityTriggerNames = new HashMap<>();
 
         File mapsDirectory = FileIO.newFile(Folder.MAPS);
         for (File mapFolder : FileIO.listSubdirectories(mapsDirectory)) {
@@ -79,27 +83,33 @@ public class MapTest extends BaseTest {
 
             for (ActionMatcher action : getAllActions(map)) {
                 if (action instanceof GlobalActionMatcher) {
-                    GlobalActionMatcher globalActionMatcher = (GlobalActionMatcher)action;
-                    String globalName = globalActionMatcher.getStringValue();
-                    Assert.assertFalse(addedGlobals.contains(globalName));
-                    addedGlobals.add(globalName);
+                    GlobalActionMatcher globalMatcher = (GlobalActionMatcher)action;
+                    addGlobal(globalMatcher.getStringValue());
                 }
             }
 
             for (NPCMatcher npc : map.getMatcher().getNPCs()) {
-                String triggerName = npc.getTriggerName();
+                addEntityName(npc.getTriggerName(), npc.getInteractionMap().keySet());
+            }
 
-                Assert.assertFalse(triggerName, npcTriggerNames.containsKey(triggerName));
-                npcTriggerNames.put(triggerName, npc.getInteractionMap().keySet());
+            for (MiscEntityMatcher entity : map.getMatcher().getMiscEntities()) {
+                addEntityName(entity.getTriggerName(), entity.getInteractionMap().keySet());
             }
 
             for (ItemMatcher item : map.getMatcher().getItems()) {
-                String triggerName = item.getTriggerName();
-
-                Assert.assertFalse(addedGlobals.contains(triggerName));
-                addedGlobals.add(triggerName);
+                addGlobal(item.getTriggerName());
             }
         }
+    }
+
+    private static void addGlobal(String globalName) {
+        Assert.assertFalse(addedGlobals.contains(globalName));
+        addedGlobals.add(globalName);
+    }
+
+    private static void addEntityName(String triggerName, Set<String> interactionNames) {
+        Assert.assertFalse(triggerName, entityTriggerNames.containsKey(triggerName));
+        entityTriggerNames.put(triggerName, interactionNames);
     }
 
     @Test
@@ -233,7 +243,9 @@ public class MapTest extends BaseTest {
 
             for (MiscEntityMatcher miscEntity : map.getMatcher().getMiscEntities()) {
                 String message = map.getName() + " " + miscEntity.getTriggerName();
-                assertDialogueInteraction(message, miscEntity.getActions());
+                for (InteractionMatcher interaction : miscEntity.getInteractionMatcherList()) {
+                    assertDialogueInteraction(message, interaction.getActions());
+                }
             }
         }
 
@@ -283,6 +295,84 @@ public class MapTest extends BaseTest {
         }
 
         Assert.assertTrue(message, hasDialogue);
+    }
+
+    @Test
+    public void interactionTest() {
+        for (TestMap map : maps) {
+            MapDataMatcher mapData = map.getMatcher();
+            MapName mapName = map.getName();
+
+            // All NPC interactions must have unique names
+            // Okay to have zero interactions (mostly for NPCs in unreachable places like Nurse Joy)
+            for (NPCMatcher matcher : mapData.getNPCs()) {
+                testInteractions(mapName, matcher.getTriggerName(), matcher.getInteractionMatcherList());
+            }
+
+            // All NPC interactions must have unique names
+            // Must have at least one interaction (otherwise why is it an entity)
+            for (MiscEntityMatcher matcher : mapData.getMiscEntities()) {
+                String triggerName = matcher.getTriggerName();
+                List<InteractionMatcher> interactions = matcher.getInteractionMatcherList();
+                Assert.assertNotEquals(mapName.getMapName() + " " + triggerName, 0, interactions.size());
+                testInteractions(mapName, triggerName, interactions);
+            }
+        }
+    }
+
+    private void testInteractions(MapName mapName, String triggerName, List<? extends InteractionMatcher> interactions) {
+        String message = mapName.getMapName() + " " + triggerName;
+
+        // Make sure this entity is in the map and its interactions are consistent
+        Assert.assertTrue(entityTriggerNames.containsKey(triggerName));
+        Set<String> allInteractionNames = entityTriggerNames.get(triggerName);
+
+        int numEmpty = 0;
+        Set<String> interactionNames = new HashSet<>();
+        for (InteractionMatcher interaction : interactions) {
+            String interactionName = interaction.getName();
+            List<ActionMatcher> actions = interaction.getActions().asList();
+            String interactionMessage = message + " " + interactionName;
+
+            // Make sure interaction name is consistent with entity map
+            Assert.assertTrue(interactionMessage, allInteractionNames.contains(interactionName));
+
+            // Assert interaction names are unique
+            Assert.assertFalse(interactionMessage, interactionNames.contains(interactionName));
+            interactionNames.add(interactionName);
+
+            // No actions in this interaction -- increment empty counter
+            if (actions.size() == 0) {
+                numEmpty++;
+            }
+
+            // Make sure any update interactions are valid
+            for (ActionMatcher action : actions) {
+                if (action instanceof UpdateActionMatcher) {
+                    UpdateActionMatcher updateAction = (UpdateActionMatcher)action;
+                    String updateInteractionName = updateAction.getStringValue();
+                    String updateMessage = interactionMessage + " " + updateInteractionName;
+
+                    // Doesn't make sense to update to the current interaction
+                    Assert.assertNotEquals(updateMessage, interactionName, updateInteractionName);
+
+                    // Make sure it is updating to another valid interaction for this entity
+                    Assert.assertTrue(updateMessage, allInteractionNames.contains(updateInteractionName));
+                }
+            }
+        }
+
+        // One name for each interaction -- if there are no interactions, the main list should provide a default key
+        Assert.assertEquals(message, interactionNames.size(), interactions.size());
+        if (interactionNames.size() == 0) {
+            Assert.assertEquals(message, 1, allInteractionNames.size());
+        } else {
+            Assert.assertEquals(message, interactionNames.size(), allInteractionNames.size());
+        }
+
+        // Check the number of interactions that are essentially empty
+        // Only really makes sense to have 0 or 1 empty` (if more than 1 should just use the same interaction)
+        TestUtils.assertInclusiveRange(message, 0, 1, numEmpty);
     }
 
     @Test
@@ -405,15 +495,15 @@ public class MapTest extends BaseTest {
             for (Condition subCondition : ((ConditionHolder)condition).getConditions()) {
                 checkCondition(subCondition);
             }
-        } else if (condition instanceof NpcInteractionCondition) {
-            // Make sure all NPC Conditions refer to valid NPCs and interactions
-            NpcInteractionCondition npcCondition = (NpcInteractionCondition)condition;
-            String entityName = npcCondition.getNpcEntityName();
-            String interactionName = npcCondition.getInteractionName();
+        } else if (condition instanceof InteractionCondition) {
+            // Make sure all interaction conditions refer to valid entities and interactions
+            InteractionCondition interactionCondition = (InteractionCondition)condition;
+            String entityName = interactionCondition.getEntityName();
+            String interactionName = interactionCondition.getInteractionName();
 
-            Assert.assertTrue(entityName, npcTriggerNames.containsKey(entityName));
+            Assert.assertTrue(entityName, entityTriggerNames.containsKey(entityName));
             if (!interactionName.isEmpty()) {
-                Assert.assertTrue(entityName, npcTriggerNames.get(entityName).contains(interactionName));
+                Assert.assertTrue(entityName, entityTriggerNames.get(entityName).contains(interactionName));
             }
         } else if (condition instanceof GlobalCondition) {
             GlobalCondition globalCondition = (GlobalCondition)condition;
@@ -432,7 +522,9 @@ public class MapTest extends BaseTest {
         }
 
         for (MiscEntityMatcher miscEntity : map.getMatcher().getMiscEntities()) {
-            addActions(actionMatchers, miscEntity.getActions());
+            for (InteractionMatcher interaction : miscEntity.getInteractionMatcherList()) {
+                addActions(actionMatchers, interaction.getActions());
+            }
         }
 
         for (EventMatcher event : map.getMatcher().getEvents()) {

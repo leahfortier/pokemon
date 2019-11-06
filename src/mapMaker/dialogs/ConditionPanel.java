@@ -20,8 +20,10 @@ public class ConditionPanel extends JPanel {
     private ConditionSet conditionSet;
 
     public ConditionPanel() {
-        List<ConditionMatcher> conditionMatchers = ConditionsMatcher.getConditionMatchers();
-        List<String> matcherNames = conditionMatchers.stream().map(ConditionMatcher::getName).collect(Collectors.toList());
+        List<String> matcherNames = ConditionsMatcher.getConditionMatchers()
+                                                     .stream()
+                                                     .map(ConditionMatcher::getName)
+                                                     .collect(Collectors.toList());
         matcherNames.add(0, NONE);
         this.combobBox = GuiUtils.createComboBox(matcherNames.toArray(new String[0]));
 

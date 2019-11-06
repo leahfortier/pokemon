@@ -1,66 +1,63 @@
-package mapMaker.dialogs;
+package mapMaker.dialogs.interaction;
 
+import mapMaker.dialogs.TriggerDialog;
 import mapMaker.dialogs.action.ActionListPanel;
 import pattern.action.ActionMatcher;
-import pattern.action.NPCInteractionMatcher;
+import pattern.interaction.InteractionMatcher;
 import util.GuiUtils;
 import util.string.StringUtils;
 
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-class NPCInteractionDialog extends TriggerDialog<NPCInteractionMatcher> {
+public class MiscEntityInteractionDialog extends TriggerDialog<InteractionMatcher> {
     private final JPanel topComponent;
 
     private final JTextField interactionNameTextField;
-    private final JCheckBox walkToPlayerCheckBox;
     private final ActionListPanel actionListPanel;
 
     private final int interactionIndex;
 
-    NPCInteractionDialog(NPCInteractionMatcher npcInteractionMatcher, int index) {
-        super("New NPC Interaction Dialog");
+    public MiscEntityInteractionDialog(InteractionMatcher interactionMatcher, int index) {
+        super("New Misc Entity Interaction Dialog");
 
         this.interactionIndex = index;
 
         interactionNameTextField = GuiUtils.createTextField(this.getDefaultName());
-        walkToPlayerCheckBox = GuiUtils.createCheckBox("Walk to playa");
         this.actionListPanel = new ActionListPanel(this);
 
-        this.topComponent = GuiUtils.createHorizontalLayoutComponent(
-                GuiUtils.createTextFieldComponent("Interaction Name", interactionNameTextField),
-                walkToPlayerCheckBox
-        );
+        this.topComponent = GuiUtils.createTextFieldComponent("Interaction Name", interactionNameTextField);
 
-        this.load(npcInteractionMatcher);
+        this.load(interactionMatcher);
     }
 
     private String getDefaultName() {
+        if (interactionIndex == 0) {
+            return "default";
+        }
+
         return "Interaction" + interactionIndex;
     }
 
-    private void load(NPCInteractionMatcher matcher) {
+    private void load(InteractionMatcher matcher) {
         if (matcher == null) {
             return;
         }
 
         interactionNameTextField.setText(matcher.getName());
-        walkToPlayerCheckBox.setSelected(matcher.shouldWalkToPlayer());
         actionListPanel.load(matcher.getActions());
     }
 
     @Override
-    protected NPCInteractionMatcher getMatcher() {
+    protected InteractionMatcher getMatcher() {
         String interactionName = interactionNameTextField.getText();
-        boolean walkToPlayer = walkToPlayerCheckBox.isSelected();
         ActionMatcher[] actions = actionListPanel.getActions();
 
         if (StringUtils.isNullOrEmpty(interactionName)) {
             interactionName = this.getDefaultName();
         }
 
-        return new NPCInteractionMatcher(interactionName, walkToPlayer, actions);
+        return new InteractionMatcher(interactionName, actions);
     }
 
     @Override

@@ -33,9 +33,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "intro",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "intro",
+          "actions": [
             {
               "dialogue": "'Ey there {playerName}!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -87,9 +87,9 @@
           ]
         },
         {
-          "name": "stone_choice",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "stone_choice",
+          "actions": [
             {
               "question": "wudya wan",
               "choices": [
@@ -133,9 +133,9 @@
           ]
         },
         {
-          "name": "heal",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "heal",
+          "actions": [
             {
               "dialogue": "How's it goin'? Need to rest up your Pokémon a bit?",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -159,9 +159,9 @@
       "direction": "LEFT",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "dialogue",
+          "actions": [
             {
               "dialogue": "Don't disturb me! I'm doing syrup science!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -182,9 +182,9 @@
       "direction": "RIGHT",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "dialogue",
+          "actions": [
             {
               "dialogue": "This syrup soda is amazing!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -203,10 +203,15 @@
   "miscEntities": [
     {
       "name": "PC",
-      "actions": [
+      "interactions": [
         {
-          "triggerName": "LOAD_PC",
-          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "triggerName": "LOAD_PC",
+              "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+            }
+          ]
         }
       ],
       "location": [

@@ -71,17 +71,17 @@ public interface Condition {
         }
     }
 
-    class NpcInteractionCondition implements Condition {
-        private final String npcEntityName;
+    class InteractionCondition implements Condition {
+        private final String entityName;
         private final String interactionName;
 
-        public NpcInteractionCondition(String npcEntityName, String interactionName) {
-            this.npcEntityName = npcEntityName;
+        public InteractionCondition(String entityName, String interactionName) {
+            this.entityName = entityName;
             this.interactionName = interactionName;
         }
 
-        public String getNpcEntityName() {
-            return this.npcEntityName;
+        public String getEntityName() {
+            return this.entityName;
         }
 
         public String getInteractionName() {
@@ -90,7 +90,7 @@ public interface Condition {
 
         @Override
         public boolean evaluate() {
-            return Game.getPlayer().isNpcInteraction(npcEntityName, interactionName);
+            return Game.getPlayer().isEntityInteraction(entityName, interactionName);
         }
     }
 

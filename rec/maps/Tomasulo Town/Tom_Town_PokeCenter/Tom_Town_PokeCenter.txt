@@ -54,9 +54,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "dialogue",
+          "actions": [
             {
               "dialogue": "Hi, I'm Tom!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -75,10 +75,15 @@
   "miscEntities": [
     {
       "name": "Heal",
-      "actions": [
+      "interactions": [
         {
-          "triggerName": "POKE_CENTER",
-          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "triggerName": "POKE_CENTER",
+              "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+            }
+          ]
         }
       ],
       "location": [
@@ -91,10 +96,15 @@
     },
     {
       "name": "Mart",
-      "actions": [
+      "interactions": [
         {
-          "triggerName": "LOAD_MART",
-          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "triggerName": "LOAD_MART",
+              "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+            }
+          ]
         }
       ],
       "location": [
@@ -107,10 +117,15 @@
     },
     {
       "name": "PC_View",
-      "actions": [
+      "interactions": [
         {
-          "triggerName": "LOAD_PC",
-          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "triggerName": "LOAD_PC",
+              "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+            }
+          ]
         }
       ],
       "location": [

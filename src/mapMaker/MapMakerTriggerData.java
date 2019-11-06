@@ -224,7 +224,7 @@ public class MapMakerTriggerData {
             case NPC:
                 return new NPCEntityDialog((NPCMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
             case MISC_ENTITY:
-                return new MiscEntityDialog((MiscEntityMatcher)oldTrigger).getMatcher(mapMaker);
+                return new MiscEntityDialog((MiscEntityMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
             case MAP_TRANSITION:
                 return new MapTransitionDialog((MapTransitionMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
             case EVENT:

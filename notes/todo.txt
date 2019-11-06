@@ -96,6 +96,7 @@ Other random things:
 	self switching moves require input -- currently just switching to random
 	green hat sprites
 	Riding up on bike on foreground tiles causes tiles to flash
+    Rocket grunt guys look like they're standing on the wall in the top of that tom tower thing
 	Mirror move executes multi-turn moves in a single turn
 	Choose/give a TM for beating gym leaders
 	Blue needs to be in the Pokemon Center after you battle him
@@ -165,7 +166,5 @@ Other random things:
     something weird about Comfey's party tile and fails when trimming
     text wrapping should allow having a different startX for the first line so you can have a label in a different size (ability name and description for example)
     move as much logic as possible out of views and just have them called from in there (buy from Mart is good example)
-    plant gives unlimited exeggutors 
-        - was thinking instead of just putting a condition on it if it would make sense to have miscentities like npcs
-        - like if they had states where they interact differently based on blah blah blah yeah I like this let's do this
+    item condition logic is in the matcher class but I think it should be moved to the entity class
     

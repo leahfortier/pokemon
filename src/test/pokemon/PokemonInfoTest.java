@@ -422,8 +422,8 @@ public class PokemonInfoTest extends BaseTest {
             String name = pokemonInfo.getName();
 
             // Height and weight must be positive
-            TestUtils.assertGreater(name, pokemonInfo.getHeightInches(), 0);
-            TestUtils.assertGreater(name, pokemonInfo.getWeight(), 0);
+            TestUtils.assertPositive(name, pokemonInfo.getHeightInches());
+            TestUtils.assertPositive(name, pokemonInfo.getWeight());
 
             // Catch rate must be between 3 and 255
             TestUtils.assertInclusiveRange(name, 3, 255, pokemonInfo.getCatchRate());
@@ -466,13 +466,13 @@ public class PokemonInfoTest extends BaseTest {
             for (int i = 0; i < 26; i++) {
                 bag.addItem(ItemNamesies.HP_UP);
                 Assert.assertTrue(bag.usePokemonItem(ItemNamesies.HP_UP, shedinja));
-                TestUtils.assertGreater(levelString, shedinja.getEVs().get(Stat.HP), 0);
+                TestUtils.assertPositive(levelString, shedinja.getEVs().get(Stat.HP));
                 Assert.assertEquals(1, shedinja.getHP());
                 Assert.assertEquals(1, shedinja.getMaxHP());
 
                 bag.addItem(ItemNamesies.PROTEIN);
                 Assert.assertTrue(bag.usePokemonItem(ItemNamesies.PROTEIN, shedinja));
-                TestUtils.assertGreater(levelString, shedinja.getEVs().get(Stat.ATTACK), 0);
+                TestUtils.assertPositive(levelString, shedinja.getEVs().get(Stat.ATTACK));
             }
 
             // HP EVs are now maxed, but max HP should not increase still

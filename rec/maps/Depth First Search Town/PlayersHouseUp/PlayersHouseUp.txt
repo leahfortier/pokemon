@@ -53,9 +53,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "battle",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "battle",
+          "actions": [
             {
               "dialogue": "I'm gonna be the very best like no one ever was.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -76,9 +76,9 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "won",
+          "actions": [
             {
               "dialogue": "Just get out. You're not welcome here.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -107,10 +107,15 @@
   "miscEntities": [
     {
       "name": "PC",
-      "actions": [
+      "interactions": [
         {
-          "triggerName": "LOAD_PC",
-          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "triggerName": "LOAD_PC",
+              "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+            }
+          ]
         }
       ],
       "location": [
@@ -123,17 +128,30 @@
     },
     {
       "name": "PokePalooza",
-      "actions": [
+      "interactions": [
         {
-          "dialogue": "Hm?",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "dialogue": "Hm?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            },
+            {
+              "pokemonMatcher": {
+                "namesies": "EXEGGUTOR",
+                "level": 4
+              },
+              "className": "pattern.action.ActionMatcher$GivePokemonActionMatcher"
+            },
+            {
+              "interactionName": "done",
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
+            }
+          ]
         },
         {
-          "pokemonMatcher": {
-            "namesies": "EXEGGUTOR",
-            "level": 4
-          },
-          "className": "pattern.action.ActionMatcher$GivePokemonActionMatcher"
+          "name": "done",
+          "actions": []
         }
       ],
       "location": [
@@ -146,10 +164,15 @@
     },
     {
       "name": "TV",
-      "actions": [
+      "interactions": [
         {
-          "dialogue": "The power's out...",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "dialogue": "The power's out...",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            }
+          ]
         }
       ],
       "location": [

@@ -60,6 +60,10 @@ public class TestUtils {
         );
     }
 
+    public static void assertPositive(String message, double value) {
+        assertGreater(message, value, 0);
+    }
+
     public static void assertInclusiveRange(String message, double expectedLower, double expectedUpper, double actual) {
         Assert.assertTrue(
                 message + " !(" + expectedLower + " <= " + actual + " <= " + expectedUpper + ")",

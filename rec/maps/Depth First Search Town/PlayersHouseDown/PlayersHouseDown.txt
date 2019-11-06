@@ -50,9 +50,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "dialogue",
+          "actions": [
             {
               "dialogue": "It's nice when you come to visit, but please get a job.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -79,9 +79,9 @@
       "direction": "LEFT",
       "interactions": [
         {
-          "name": "talk",
           "walkToPlayer": true,
-          "npcActions": [
+          "name": "talk",
+          "actions": [
             {
               "dialogue": "Time to move out. Goodbye.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -121,10 +121,15 @@
   "miscEntities": [
     {
       "name": "TV",
-      "actions": [
+      "interactions": [
         {
-          "dialogue": "The power's not out...?",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "dialogue": "The power's not out...?",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            }
+          ]
         }
       ],
       "location": [
@@ -149,10 +154,15 @@
     },
     {
       "name": "fridge",
-      "actions": [
+      "interactions": [
         {
-          "dialogue": "Nothing good to eat. As usual.",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "dialogue": "Nothing good to eat. As usual.",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            }
+          ]
         }
       ],
       "location": [

@@ -61,8 +61,8 @@ public class NPCEntity extends MovableEntity {
 
     private String getCurrentInteractionKey() {
         Player player = Game.getPlayer();
-        if (player.hasNpcInteraction(this.getEntityName())) {
-            return player.getNpcInteractionName(this.getEntityName());
+        if (player.hasEntityInteraction(this.getEntityName())) {
+            return player.getEntityInteractionName(this.getEntityName());
         }
 
         return this.startKey;

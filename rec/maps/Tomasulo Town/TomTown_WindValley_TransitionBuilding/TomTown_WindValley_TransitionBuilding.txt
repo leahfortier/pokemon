@@ -77,9 +77,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "default",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "default",
+          "actions": [
             {
               "dialogue": "Tom Town generates most of the power for all of Hash Map.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -104,9 +104,9 @@
       "direction": "RIGHT",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "dialogue",
+          "actions": [
             {
               "dialogue": "Team Deadlock is a big bug in our society.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -128,9 +128,9 @@
       "direction": "UP",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "dialogue",
+          "actions": [
             {
               "dialogue": "What happened at the power plant? Who is this Team Deadlock?",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -152,9 +152,9 @@
       "direction": "LEFT",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "dialogue",
+          "actions": [
             {
               "dialogue": "The Tom Town gym sounds really tough.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -176,9 +176,9 @@
       "direction": "UP",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "dialogue",
+          "actions": [
             {
               "dialogue": "I'm amazed how fast Leader Moore defeated my Pidgey!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -200,9 +200,9 @@
       "direction": "RIGHT",
       "interactions": [
         {
-          "name": "default",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "default",
+          "actions": [
             {
               "dialogue": "There power plant has been taken over by Team Deadlock!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

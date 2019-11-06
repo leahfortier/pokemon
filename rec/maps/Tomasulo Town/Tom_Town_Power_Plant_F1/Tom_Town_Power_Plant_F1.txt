@@ -67,9 +67,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "dialogue",
+          "actions": [
             {
               "dialogue": "It's not safe here.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -91,9 +91,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "dialogue",
+          "actions": [
             {
               "dialogue": "Time to get back to my research.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

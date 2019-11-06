@@ -33,9 +33,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "dialogue",
+          "actions": [
             {
               "dialogue": "R U A WIZARD 'ARRY",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -58,14 +58,19 @@
   "miscEntities": [
     {
       "name": "PC",
-      "actions": [
+      "interactions": [
         {
-          "dialogue": "*hack hack hack*",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
-        },
-        {
-          "triggerName": "LOAD_PC",
-          "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "dialogue": "*hack hack hack*",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            },
+            {
+              "triggerName": "LOAD_PC",
+              "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
+            }
+          ]
         }
       ],
       "location": [

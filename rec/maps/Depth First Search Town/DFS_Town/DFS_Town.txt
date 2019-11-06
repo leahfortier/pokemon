@@ -126,9 +126,9 @@
       "moveAxis": "X_ONLY",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": true,
-          "npcActions": [
+          "name": "dialogue",
+          "actions": [
             {
               "dialogue": "Hey! Are you leaving town? You sure you're ready for that?",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -151,9 +151,9 @@
       "triggerName": "DFS_Town_NPC_Bitchface_01",
       "condition": {
         "condition": {
-          "npcEntityName": "MaplesLab_NPC_Prof_Mapes_01",
+          "entityName": "MaplesLab_NPC_Prof_Mapes_01",
           "interactionName": "",
-          "className": "map.condition.Condition$NpcInteractionCondition"
+          "className": "map.condition.Condition$InteractionCondition"
         }
       }
     },
@@ -164,9 +164,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "give_item",
           "walkToPlayer": true,
-          "npcActions": [
+          "name": "give_item",
+          "actions": [
             {
               "dialogue": "Here, take these Pokéballs. You'll need them to capture Poké!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -183,9 +183,9 @@
           ]
         },
         {
-          "name": "done",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "done",
+          "actions": [
             {
               "dialogue": "You can use Pokéballs to capture Poké!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -206,9 +206,9 @@
       "direction": "UP",
       "interactions": [
         {
-          "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "name": "battle",
+          "actions": [
             {
               "dialogue": "Rattata!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -231,9 +231,9 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "won",
+          "actions": [
             {
               "dialogue": "Rattata...",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -254,9 +254,9 @@
       "direction": "UP",
       "interactions": [
         {
-          "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "name": "battle",
+          "actions": [
             {
               "dialogue": "Someone freed the pointer to my Rattata! Was it you?",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -279,9 +279,9 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "won",
+          "actions": [
             {
               "dialogue": "I would have won with my Rattata!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -302,9 +302,9 @@
       "direction": "RIGHT",
       "interactions": [
         {
-          "name": "battle",
           "walkToPlayer": true,
-          "npcActions": [
+          "name": "battle",
+          "actions": [
             {
               "dialogue": "My Rattata is in the top percentage of Rattata!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -327,9 +327,9 @@
           ]
         },
         {
-          "name": "won",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "won",
+          "actions": [
             {
               "dialogue": "I thought Rattata was the very best...",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -350,9 +350,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "give_item",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "give_item",
+          "actions": [
             {
               "dialogue": "Here, take this potion. You are going to need it!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -369,9 +369,9 @@
           ]
         },
         {
-          "name": "done",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "done",
+          "actions": [
             {
               "dialogue": "You can use potions to heal your Pokémon!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -392,9 +392,9 @@
       "direction": "UP",
       "interactions": [
         {
-          "name": "bumpity_leave",
           "walkToPlayer": true,
-          "npcActions": [
+          "name": "bumpity_leave",
+          "actions": [
             {
               "dialogue": "Hey there, loser!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -430,13 +430,18 @@
               "className": "pattern.action.ActionMatcher$MoveNpcActionMatcher"
             },
             {
-              "interactionName": "heal",
+              "interactionName": "done",
               "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             },
             {
               "className": "pattern.action.EmptyActionMatcher$ReloadMapActionMatcher"
             }
           ]
+        },
+        {
+          "walkToPlayer": false,
+          "name": "done",
+          "actions": []
         }
       ],
       "location": {
@@ -448,15 +453,15 @@
         "condition": {
           "conditions": [
             {
-              "npcEntityName": "DFS_Town_NPC_Rivalchan_01",
+              "entityName": "DFS_Town_NPC_Rivalchan_01",
               "interactionName": "",
-              "className": "map.condition.Condition$NpcInteractionCondition"
+              "className": "map.condition.Condition$InteractionCondition"
             },
             {
               "condition": {
-                "npcEntityName": "MaplesLab_NPC_Prof_Mapes_01",
+                "entityName": "MaplesLab_NPC_Prof_Mapes_01",
                 "interactionName": "",
-                "className": "map.condition.Condition$NpcInteractionCondition"
+                "className": "map.condition.Condition$InteractionCondition"
               },
               "className": "map.condition.ConditionHolder$NotCondition"
             }
@@ -498,10 +503,15 @@
   "miscEntities": [
     {
       "name": "Flag",
-      "actions": [
+      "interactions": [
         {
-          "dialogue": "Praise Canada!",
-          "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+          "name": "default",
+          "actions": [
+            {
+              "dialogue": "Praise Canada!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
+            }
+          ]
         }
       ],
       "location": [

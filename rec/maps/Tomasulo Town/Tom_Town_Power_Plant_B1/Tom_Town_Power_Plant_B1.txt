@@ -33,9 +33,9 @@
       "direction": "UP",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "dialogue",
+          "actions": [
             {
               "dialogue": "I'm trying my best to stall the reactor meltdown.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"

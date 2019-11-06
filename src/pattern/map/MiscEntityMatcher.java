@@ -1,18 +1,28 @@
 package pattern.map;
 
 import map.condition.ConditionSet;
+import map.entity.Entity;
+import map.entity.MiscEntity;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionList;
-import pattern.action.ActionMatcher;
+import pattern.generic.EntityMatcher.MultiEntityMatcher;
 import pattern.generic.MultiPointTriggerMatcher;
+import pattern.interaction.InteractionMatcher;
+import util.Point;
 
-public class MiscEntityMatcher extends MultiPointTriggerMatcher {
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+// Should always have at least one interaction
+public class MiscEntityMatcher extends MultiPointTriggerMatcher implements MultiEntityMatcher {
     private String name;
-    private ActionMatcher[] actions;
+    private InteractionMatcher[] interactions;
 
-    public MiscEntityMatcher(String name, String conditionName, ConditionSet conditionSet, ActionMatcher[] actions) {
+    public MiscEntityMatcher(String name, String conditionName, ConditionSet conditionSet, List<InteractionMatcher> interactions) {
         this.name = name;
-        this.actions = actions;
+        this.interactions = interactions.toArray(new InteractionMatcher[0]);
 
         super.setCondition(conditionName, conditionSet);
     }
@@ -27,7 +37,31 @@ public class MiscEntityMatcher extends MultiPointTriggerMatcher {
         return this.name;
     }
 
-    public ActionList getActions() {
-        return new ActionList(actions);
+    public List<InteractionMatcher> getInteractionMatcherList() {
+        return Arrays.asList(this.interactions);
+    }
+
+    private String getStartKey() {
+        return interactions[0].getName();
+    }
+
+    public Map<String, ActionList> getInteractionMap() {
+        Map<String, ActionList> interactionMap = new HashMap<>();
+        for (InteractionMatcher interaction : interactions) {
+            interactionMap.put(interaction.getName(), interaction.getActions());
+        }
+
+        return interactionMap;
+    }
+
+    @Override
+    public Entity createEntity(Point location) {
+        return new MiscEntity(
+                this.getTriggerName(),
+                location,
+                this.getCondition(),
+                this.getStartKey(),
+                this.getInteractionMap()
+        );
     }
 }

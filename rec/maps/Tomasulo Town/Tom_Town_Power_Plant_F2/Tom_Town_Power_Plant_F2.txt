@@ -50,9 +50,9 @@
       "direction": "DOWN",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "dialogue",
+          "actions": [
             {
               "dialogue": "Thank you for your help! Things are back to normal now.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
@@ -74,9 +74,9 @@
       "direction": "UP",
       "interactions": [
         {
-          "name": "dialogue",
           "walkToPlayer": false,
-          "npcActions": [
+          "name": "dialogue",
+          "actions": [
             {
               "dialogue": "Thankfully the Magnemites weren't harmed. Although, I'm still angry at Team Deadlock.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
