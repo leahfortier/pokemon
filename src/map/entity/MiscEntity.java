@@ -1,8 +1,10 @@
 package map.entity;
 
+import main.Game;
 import map.condition.Condition;
 import map.triggers.Trigger;
 import pattern.action.ActionList;
+import trainer.player.Player;
 import util.Point;
 
 import java.util.HashMap;
@@ -23,8 +25,12 @@ public class MiscEntity extends Entity {
         this.triggerInteractionMap = new HashMap<>();
     }
 
-    // TODO: Use actual interaction
     private String getCurrentInteractionKey() {
+        Player player = Game.getPlayer();
+        if (player.hasEntityInteraction(this.getEntityName())) {
+            return player.getEntityInteractionName(this.getEntityName());
+        }
+
         return this.startKey;
     }
 

@@ -430,13 +430,18 @@
               "className": "pattern.action.ActionMatcher$MoveNpcActionMatcher"
             },
             {
-              "interactionName": "heal",
+              "interactionName": "done",
               "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             },
             {
               "className": "pattern.action.EmptyActionMatcher$ReloadMapActionMatcher"
             }
           ]
+        },
+        {
+          "walkToPlayer": false,
+          "name": "done",
+          "actions": []
         }
       ],
       "location": {

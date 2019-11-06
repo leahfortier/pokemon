@@ -199,15 +199,25 @@
       "interactions": [
         {
           "walkToPlayer": true,
-          "name": "dialogue",
+          "name": "start_dialogue_with_walk",
           "actions": [
             {
               "dialogue": "Wow, you did it! You saved the power plant!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "interactionName": "dialogue",
+              "interactionName": "same_dialogue_no_walk",
               "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
+            }
+          ]
+        },
+        {
+          "walkToPlayer": false,
+          "name": "same_dialogue_no_walk",
+          "actions": [
+            {
+              "dialogue": "Wow, you did it! You saved the power plant!",
+              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             }
           ]
         }

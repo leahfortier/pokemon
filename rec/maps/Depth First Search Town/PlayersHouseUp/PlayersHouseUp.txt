@@ -142,8 +142,16 @@
                 "level": 4
               },
               "className": "pattern.action.ActionMatcher$GivePokemonActionMatcher"
+            },
+            {
+              "interactionName": "done",
+              "className": "pattern.action.EntityActionMatcher$UpdateActionMatcher"
             }
           ]
+        },
+        {
+          "name": "done",
+          "actions": []
         }
       ],
       "location": [

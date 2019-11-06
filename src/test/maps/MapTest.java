@@ -1,6 +1,7 @@
 package test.maps;
 
 import map.MapDataType;
+import map.MapName;
 import map.area.AreaData;
 import map.condition.Condition;
 import map.condition.Condition.GlobalCondition;
@@ -29,6 +30,7 @@ import pattern.action.ActionMatcher.TradePokemonActionMatcher;
 import pattern.action.ChoiceMatcher;
 import pattern.action.EmptyActionMatcher.DayCareActionMatcher;
 import pattern.action.EntityActionMatcher;
+import pattern.action.EntityActionMatcher.UpdateActionMatcher;
 import pattern.action.EnumActionMatcher.CommonTriggerActionMatcher;
 import pattern.action.StringActionMatcher.DialogueActionMatcher;
 import pattern.action.StringActionMatcher.GlobalActionMatcher;
@@ -46,6 +48,7 @@ import pattern.map.NPCMatcher;
 import pattern.map.WildBattleAreaMatcher;
 import pattern.map.WildBattleMatcher;
 import test.general.BaseTest;
+import test.general.TestUtils;
 import util.Point;
 import util.file.FileIO;
 import util.file.Folder;
@@ -298,33 +301,78 @@ public class MapTest extends BaseTest {
     public void interactionTest() {
         for (TestMap map : maps) {
             MapDataMatcher mapData = map.getMatcher();
-            String message = map.getName().getMapName();
+            MapName mapName = map.getName();
 
             // All NPC interactions must have unique names
             // Okay to have zero interactions (mostly for NPCs in unreachable places like Nurse Joy)
             for (NPCMatcher matcher : mapData.getNPCs()) {
-                assertUniqueInteractions(message + " " + matcher.getTriggerName(), matcher.getInteractionMatcherList());
+                testInteractions(mapName, matcher.getTriggerName(), matcher.getInteractionMatcherList());
             }
 
             // All NPC interactions must have unique names
             // Must have at least one interaction (otherwise why is it an entity)
             for (MiscEntityMatcher matcher : mapData.getMiscEntities()) {
-                String fullMessage = message + " " + matcher.getTriggerName();
+                String triggerName = matcher.getTriggerName();
                 List<InteractionMatcher> interactions = matcher.getInteractionMatcherList();
-                Assert.assertNotEquals(fullMessage, 0, interactions.size());
-                assertUniqueInteractions(fullMessage, interactions);
+                Assert.assertNotEquals(mapName.getMapName() + " " + triggerName, 0, interactions.size());
+                testInteractions(mapName, triggerName, interactions);
             }
         }
     }
 
-    private void assertUniqueInteractions(String message, List<? extends InteractionMatcher> interactions) {
+    private void testInteractions(MapName mapName, String triggerName, List<? extends InteractionMatcher> interactions) {
+        String message = mapName.getMapName() + " " + triggerName;
+
+        // Make sure this entity is in the map and its interactions are consistent
+        Assert.assertTrue(entityTriggerNames.containsKey(triggerName));
+        Set<String> allInteractionNames = entityTriggerNames.get(triggerName);
+
+        int numEmpty = 0;
         Set<String> interactionNames = new HashSet<>();
         for (InteractionMatcher interaction : interactions) {
             String interactionName = interaction.getName();
-            Assert.assertFalse(message + " " + interactionName, interactionNames.contains(interactionName));
+            List<ActionMatcher> actions = interaction.getActions().asList();
+            String interactionMessage = message + " " + interactionName;
+
+            // Make sure interaction name is consistent with entity map
+            Assert.assertTrue(interactionMessage, allInteractionNames.contains(interactionName));
+
+            // Assert interaction names are unique
+            Assert.assertFalse(interactionMessage, interactionNames.contains(interactionName));
             interactionNames.add(interactionName);
+
+            // No actions in this interaction -- increment empty counter
+            if (actions.size() == 0) {
+                numEmpty++;
+            }
+
+            // Make sure any update interactions are valid
+            for (ActionMatcher action : actions) {
+                if (action instanceof UpdateActionMatcher) {
+                    UpdateActionMatcher updateAction = (UpdateActionMatcher)action;
+                    String updateInteractionName = updateAction.getStringValue();
+                    String updateMessage = interactionMessage + " " + updateInteractionName;
+
+                    // Doesn't make sense to update to the current interaction
+                    Assert.assertNotEquals(updateMessage, interactionName, updateInteractionName);
+
+                    // Make sure it is updating to another valid interaction for this entity
+                    Assert.assertTrue(updateMessage, allInteractionNames.contains(updateInteractionName));
+                }
+            }
         }
+
+        // One name for each interaction -- if there are no interactions, the main list should provide a default key
         Assert.assertEquals(message, interactionNames.size(), interactions.size());
+        if (interactionNames.size() == 0) {
+            Assert.assertEquals(message, 1, allInteractionNames.size());
+        } else {
+            Assert.assertEquals(message, interactionNames.size(), allInteractionNames.size());
+        }
+
+        // Check the number of interactions that are essentially empty
+        // Only really makes sense to have 0 or 1 empty` (if more than 1 should just use the same interaction)
+        TestUtils.assertInclusiveRange(message, 0, 1, numEmpty);
     }
 
     @Test

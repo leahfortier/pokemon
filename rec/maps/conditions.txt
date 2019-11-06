@@ -103,12 +103,9 @@
               "className": "map.condition.Condition$GlobalCondition"
             },
             {
-              "condition": {
-                "entityName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
-                "interactionName": "",
-                "className": "map.condition.Condition$InteractionCondition"
-              },
-              "className": "map.condition.ConditionHolder$NotCondition"
+              "entityName": "Tom_Town_Power_Plant_F3_NPC_PoliceOfficer_01",
+              "interactionName": "",
+              "className": "map.condition.Condition$InteractionCondition"
             }
           ],
           "className": "map.condition.ConditionHolder$AndCondition"
