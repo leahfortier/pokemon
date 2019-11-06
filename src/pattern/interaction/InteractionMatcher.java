@@ -1,5 +1,6 @@
 package pattern.interaction;
 
+import map.entity.interaction.Interaction;
 import pattern.action.ActionList;
 import pattern.action.ActionMatcher;
 import util.serialization.JsonMatcher;
@@ -20,5 +21,9 @@ public class InteractionMatcher implements JsonMatcher {
 
     public ActionList getActions() {
         return new ActionList(actions);
+    }
+
+    public Interaction getInteraction() {
+        return new Interaction(this.getActions());
     }
 }

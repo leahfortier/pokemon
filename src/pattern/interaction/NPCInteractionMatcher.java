@@ -1,6 +1,6 @@
 package pattern.interaction;
 
-import map.entity.movable.NPCInteraction;
+import map.entity.interaction.NPCInteraction;
 import pattern.action.ActionMatcher;
 
 public class NPCInteractionMatcher extends InteractionMatcher {
@@ -15,6 +15,7 @@ public class NPCInteractionMatcher extends InteractionMatcher {
         return this.walkToPlayer;
     }
 
+    @Override
     public NPCInteraction getInteraction() {
         return new NPCInteraction(this.shouldWalkToPlayer(), this.getActions());
     }

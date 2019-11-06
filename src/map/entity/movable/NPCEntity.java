@@ -4,11 +4,11 @@ import main.Game;
 import map.Direction;
 import map.PathDirection;
 import map.condition.Condition;
+import map.entity.interaction.InteractionMap;
+import map.entity.interaction.NPCInteraction;
 import map.triggers.Trigger;
-import trainer.player.Player;
 import util.Point;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class NPCEntity extends MovableEntity {
@@ -20,14 +20,11 @@ public class NPCEntity extends MovableEntity {
     private final MoveAxis moveAxis;
     private final int spriteIndex;
 
-    private final Map<String, NPCInteraction> interactions;
-    private final String startKey;
+    private final InteractionMap<NPCInteraction> interactions;
 
     private Direction transitionDirection;
     private boolean hasAttention;
     private boolean walkingToPlayer;
-
-    private Map<String, Trigger> triggerInteractionMap;
 
     public NPCEntity(
             String name,
@@ -46,10 +43,7 @@ public class NPCEntity extends MovableEntity {
         this.defaultDirection = direction;
         this.moveAxis = moveAxis;
         this.spriteIndex = spriteIndex;
-        this.startKey = startKey;
-        this.interactions = interactions;
-
-        this.triggerInteractionMap = new HashMap<>();
+        this.interactions = new InteractionMap<>(this.getEntityName(), startKey, interactions);
 
         this.reset();
     }
@@ -57,15 +51,6 @@ public class NPCEntity extends MovableEntity {
     void walkTowards(int steps, PathDirection direction) {
         super.setTempPath(direction.getTempPath(steps), null);
         walkingToPlayer = true;
-    }
-
-    private String getCurrentInteractionKey() {
-        Player player = Game.getPlayer();
-        if (player.hasEntityInteraction(this.getEntityName())) {
-            return player.getEntityInteractionName(this.getEntityName());
-        }
-
-        return this.startKey;
     }
 
     @Override
@@ -119,12 +104,11 @@ public class NPCEntity extends MovableEntity {
     }
 
     private boolean isWalkToPlayer() {
-        final String interaction = this.getCurrentInteractionKey();
-        return this.interactions.get(interaction).shouldWalkToPlayer();
+        return this.interactions.getCurrentInteraction().shouldWalkToPlayer();
     }
 
     public boolean isTrainer() {
-        return interactions.get(this.getCurrentInteractionKey()).isBattleInteraction();
+        return interactions.getCurrentInteraction().isBattleInteraction();
     }
 
     @Override
@@ -140,20 +124,7 @@ public class NPCEntity extends MovableEntity {
 
     @Override
     public Trigger getTrigger() {
-        String currentInteraction = this.getCurrentInteractionKey();
-
-        if (!this.triggerInteractionMap.containsKey(currentInteraction)) {
-            NPCInteraction interaction = this.interactions.get(currentInteraction);
-
-            Trigger trigger = interaction.getActions().getGroupTrigger(
-                    this.getEntityName(),
-                    this.getCondition()
-            );
-
-            this.triggerInteractionMap.put(currentInteraction, trigger);
-        }
-
-        return this.triggerInteractionMap.get(currentInteraction);
+        return this.interactions.getTrigger(this.getCondition());
     }
 
     @Override

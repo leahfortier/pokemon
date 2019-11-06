@@ -3,6 +3,8 @@ package mapMaker.dialogs;
 import map.Direction;
 import map.entity.movable.MovableEntity;
 import mapMaker.MapMaker;
+import mapMaker.dialogs.interaction.InteractionDialog;
+import mapMaker.dialogs.interaction.InteractionListPanel;
 import mapMaker.dialogs.interaction.NPCInteractionDialog;
 import mapMaker.model.TileModel.TileType;
 import pattern.interaction.NPCInteractionMatcher;
@@ -10,9 +12,7 @@ import pattern.map.NPCMatcher;
 import util.GuiUtils;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -35,13 +35,14 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
     private final JTextField pathTextField;
     private final ConditionPanel conditionPanel;
 
-    private final List<NPCInteractionMatcher> interactions;
-    private final JButton addInteractionButton;
+    private final InteractionListPanel<NPCInteractionMatcher> interactionsPanel;
 
     private final MapMaker mapMaker;
 
-    public NPCEntityDialog(NPCMatcher npcMatcher, MapMaker givenMapMaker) {
+    public NPCEntityDialog(NPCMatcher npcMatcher, MapMaker mapMaker) {
         super("NPC Editor");
+
+        this.mapMaker = mapMaker;
 
         ActionListener spriteActionListener = new ActionListener() {
             @Override
@@ -57,8 +58,6 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
             }
         };
 
-        mapMaker = givenMapMaker;
-
         trainerIcon = GuiUtils.createLabel("");
         spriteComboBox = GuiUtils.createComboBox(getTrainerSprites(), spriteActionListener);
         directionComboBox = GuiUtils.createComboBox(Direction.values(), spriteActionListener);
@@ -67,14 +66,12 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
         pathTextField = GuiUtils.createTextField("w");
         conditionPanel = new ConditionPanel();
 
-        interactions = new ArrayList<>();
-        addInteractionButton = GuiUtils.createButton(
-                "Add Interaction",
-                event -> {
-                    interactions.add(null);
-                    render();
-                }
-        );
+        interactionsPanel = new InteractionListPanel<>(this) {
+            @Override
+            protected InteractionDialog<NPCInteractionMatcher> getInteractionDialog(NPCInteractionMatcher matcher, int index) {
+                return new NPCInteractionDialog(matcher, index);
+            }
+        };
 
         spriteComboBox.setSelectedIndex(1);
         directionComboBox.setSelectedItem(Direction.DOWN);
@@ -100,37 +97,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
     @Override
     protected void renderDialog() {
         removeAll();
-
-        List<JComponent> interactionComponents = new ArrayList<>();
-        for (int i = 0; i < interactions.size(); i++) {
-            final int index = i;
-            NPCInteractionMatcher matcher = interactions.get(index);
-
-            JButton interactionButton =
-                    GuiUtils.createButton(
-                            matcher == null ? "Empty" : matcher.getName(),
-                            event -> {
-                                NPCInteractionMatcher newMatcher = new NPCInteractionDialog(matcher, index).getMatcher(mapMaker);
-                                if (newMatcher != null) {
-                                    interactions.set(index, newMatcher);
-                                    render();
-                                }
-                            }
-                    );
-
-            JButton deleteButton = GuiUtils.createButton(
-                    "Delete",
-                    event -> {
-                        interactions.remove(index);
-                        render();
-                    }
-            );
-
-            interactionComponents.add(GuiUtils.createHorizontalLayoutComponent(interactionButton, deleteButton));
-        }
-
-        JPanel interactionComponent = GuiUtils.createVerticalLayoutComponent(interactionComponents.toArray(new JComponent[0]));
-        GuiUtils.setVerticalLayout(this, topComponent, interactionComponent, addInteractionButton);
+        GuiUtils.setVerticalLayout(this, topComponent, interactionsPanel);
     }
 
     private ImageIcon[] getTrainerSprites() {
@@ -159,7 +126,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
                 pathTextField.getText(),
                 spriteComboBox.getSelectedIndex(),
                 (Direction)directionComboBox.getSelectedItem(),
-                interactions
+                interactionsPanel.getInteractions()
         );
     }
 
@@ -172,7 +139,7 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
         pathTextField.setText(matcher.getPath());
         spriteComboBox.setSelectedIndex(matcher.getSpriteIndex());
         directionComboBox.setSelectedItem(matcher.getDirection());
-        interactions.addAll(matcher.getInteractionMatcherList());
+        interactionsPanel.load(matcher.getInteractionMatcherList());
         conditionPanel.load(matcher);
     }
 }

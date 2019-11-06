@@ -1,28 +1,23 @@
-package map.entity.movable;
+package map.entity.interaction;
 
 import pattern.action.ActionList;
 import pattern.action.ActionMatcher;
 import pattern.action.EntityActionMatcher.BattleActionMatcher;
 
-public class NPCInteraction {
+public class NPCInteraction extends Interaction {
     private final boolean walkToPlayer;
-    private final ActionList actions;
 
     public NPCInteraction(boolean walkToPlayer, ActionList actions) {
+        super(actions);
         this.walkToPlayer = walkToPlayer;
-        this.actions = actions;
     }
 
     public boolean shouldWalkToPlayer() {
         return this.walkToPlayer;
     }
 
-    public ActionList getActions() {
-        return this.actions;
-    }
-
     public boolean isBattleInteraction() {
-        for (ActionMatcher action : actions) {
+        for (ActionMatcher action : this.getActions()) {
             if (action instanceof BattleActionMatcher) {
                 return true;
             }

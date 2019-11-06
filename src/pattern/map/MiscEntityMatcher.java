@@ -3,8 +3,8 @@ package pattern.map;
 import map.condition.ConditionSet;
 import map.entity.Entity;
 import map.entity.MiscEntity;
+import map.entity.interaction.Interaction;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import pattern.action.ActionList;
 import pattern.generic.EntityMatcher.MultiEntityMatcher;
 import pattern.generic.MultiPointTriggerMatcher;
 import pattern.interaction.InteractionMatcher;
@@ -45,10 +45,10 @@ public class MiscEntityMatcher extends MultiPointTriggerMatcher implements Multi
         return interactions[0].getName();
     }
 
-    public Map<String, ActionList> getInteractionMap() {
-        Map<String, ActionList> interactionMap = new HashMap<>();
+    public Map<String, Interaction> getInteractionMap() {
+        Map<String, Interaction> interactionMap = new HashMap<>();
         for (InteractionMatcher interaction : interactions) {
-            interactionMap.put(interaction.getName(), interaction.getActions());
+            interactionMap.put(interaction.getName(), interaction.getInteraction());
         }
 
         return interactionMap;
