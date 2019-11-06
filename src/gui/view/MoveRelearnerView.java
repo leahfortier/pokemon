@@ -264,7 +264,7 @@ public class MoveRelearnerView extends View {
         // Set up Pokemon buttons
         for (int i = 0; i < pokemonButtons.length; i++) {
             // Highlight selected
-            selectedPokemonPanels[i].skipDraw(i != selectedPokemon);
+            selectedPokemonPanels[i].setSkip(i != selectedPokemon);
 
             // Set type color background, image and name labels
             ButtonPanel pokemonPanel = pokemonButtons[i].panel();
@@ -282,7 +282,7 @@ public class MoveRelearnerView extends View {
 
         List<AttackNamesies> moves = this.getDisplayMoves();
         for (int i = 0; i < moveButtons.length; i++) {
-            moveButtons[i].panel().skipDraw(i >= moves.size());
+            moveButtons[i].panel().setSkip(i >= moves.size());
         }
     }
 

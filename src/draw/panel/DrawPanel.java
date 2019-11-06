@@ -231,21 +231,21 @@ public class DrawPanel implements Panel {
         return this;
     }
 
-    public void skipDraw(boolean shouldSkip) {
+    public void setSkip(boolean shouldSkip) {
         this.skipDraw = shouldSkip;
     }
 
     // Stop drawing this panel for now
     public void skipDraw() {
-        this.skipDraw(true);
+        this.setSkip(true);
     }
 
     // Start drawing this panel again
     public void unskip() {
-        this.skipDraw(false);
+        this.setSkip(false);
     }
 
-    protected boolean isSkipping() {
+    public boolean isSkipping() {
         return this.skipDraw;
     }
 
