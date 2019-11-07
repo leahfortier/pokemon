@@ -322,17 +322,16 @@ public class PCView extends View {
         }
     }
 
+    // Sets up activeness of button and background colors and images and labels
     private void setupPokemonButton(Button button, PartyPokemon pokemon) {
-        boolean skip = pokemon == null;
-        ButtonPanel panel = button.panel();
-
-        button.setActive(!skip);
-        panel.setSkip(skip);
+        boolean active = pokemon != null;
+        button.setActiveSkip(active);
 
         // Draw the pokemon image and outline if selected
-        if (!skip) {
-            panel.withImageLabel(partyTiles.getTile(pokemon.getTinyImageName()))
-                 .withConditionalOutline(pokemon == selected);
+        if (active) {
+            button.panel()
+                  .withImageLabel(partyTiles.getTile(pokemon.getTinyImageName()))
+                  .withConditionalOutline(pokemon == selected);
         }
     }
 
@@ -459,15 +458,11 @@ public class PCView extends View {
         MoveList moves = selected.getActualMoves();
         for (int i = 0; i < moveButtons.length; i++) {
             Button button = moveButtons[i];
-            ButtonPanel panel = button.panel();
-
-            boolean active = !selected.isEgg() && i < moves.size();
-            button.setActive(active);
-            panel.setSkip(!active);
-
+            button.setActiveSkip(!selected.isEgg() && i < moves.size());
             if (button.isActive()) {
                 Attack attack = moves.get(i).getAttack();
-                panel.withBackgroundColor(attack.getActualType().getColor())
+                button.panel()
+                      .withBackgroundColor(attack.getActualType().getColor())
                      .withLabel(attack.getName());
             }
         }

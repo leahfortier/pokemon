@@ -7,7 +7,6 @@ import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonList;
-import draw.button.ButtonPanel;
 import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
@@ -262,15 +261,11 @@ class DayCareView extends View {
 
     // Sets up activeness of button and background colors and images and labels
     private void setupPokemonButton(Button button, PartyPokemon pokemon) {
-        boolean skip = pokemon == null;
-        ButtonPanel panel = button.panel();
-
-        button.setActive(!skip);
-        panel.setSkip(skip);
-
-        // Centered label with party tile, name, and gender
-        if (!skip) {
-            panel.withImageLabel(
+        boolean active = pokemon != null;
+        button.setActiveSkip(active);
+        if (active) {
+            // Centered label with party tile, name, and gender
+            button.panel().withImageLabel(
                     Game.getData().getPartyTiles().getTile(pokemon.getTinyImageName()),
                     pokemon.getNameAndGender()
             );

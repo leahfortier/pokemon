@@ -168,5 +168,4 @@ Other random things:
     should egg hatching and evolving be separate views that extend the same view class or something?
     StatGainPanel should maybe use the panel thing similar to the StatPanel
     change NicknamePanel to being a handler instead
-    make some sort of setActive/setSkip combo method on the button
     

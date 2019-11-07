@@ -156,6 +156,12 @@ public class Button implements Panel {
         return active;
     }
 
+    // Sets active to input, and skips panel draw if not active
+    public void setActiveSkip(boolean active) {
+        this.setActive(active);
+        this.panel().setSkip(!active);
+    }
+
     public void setActive(boolean set) {
         active = set;
         if (!active) {

@@ -3,7 +3,6 @@ package gui.view.item;
 import draw.Alignment;
 import draw.TextUtils;
 import draw.button.Button;
-import draw.button.ButtonPanel;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
 import draw.layout.ArrowLayout;
@@ -169,13 +168,9 @@ public class BagLayout {
         List<ItemNamesies> pageItems = GeneralUtils.pageValues(items, pageNum, ITEMS_PER_PAGE);
         for (int i = 0; i < ITEMS_PER_PAGE; i++) {
             Button button = itemButtons[i];
-            ButtonPanel panel = button.panel();
-
-            boolean active = i < pageItems.size();
-            button.setActive(active);
-            panel.setSkip(!active);
-            if (active) {
-                panel.withItem(pageItems.get(i));
+            button.setActiveSkip(i < pageItems.size());
+            if (button.isActive()) {
+                button.panel().withItem(pageItems.get(i));
             }
         }
     }

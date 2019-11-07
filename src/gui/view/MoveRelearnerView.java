@@ -304,9 +304,7 @@ public class MoveRelearnerView extends View {
             // not to for when the learn move handler shuts all the activity off (should still draw them)
             int numMoves = this.getDisplayMoves().size();
             for (int i = 0; i < moveButtons.length; i++) {
-                Button button = moveButtons[i];
-                button.setActive(i < numMoves);
-                button.panel().setSkip(!button.isActive());
+                moveButtons[i].setActiveSkip(i < numMoves);
             }
 
             boolean activeArrows = totalPages() > 0;
@@ -347,13 +345,13 @@ public class MoveRelearnerView extends View {
 
         // Set up Pokemon buttons
         for (int i = 0; i < pokemonButtons.length; i++) {
-            ButtonPanel pokemonPanel = pokemonButtons[i].panel();
-            pokemonPanel.setSkip(i >= team.size());
+            ButtonPanel panel = pokemonButtons[i].panel();
+            panel.setSkip(i >= team.size());
 
             // Set type color background, image and name labels
-            if (!pokemonPanel.isSkipping()) {
+            if (!panel.isSkipping()) {
                 PartyPokemon pokemon = team.get(i);
-                pokemonPanel.withImageLabel(
+                panel.withImageLabel(
                                     partyTiles.getTile(pokemon.getTinyImageName()),
                                     pokemon.getActualName()
                             );
