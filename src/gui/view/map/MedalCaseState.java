@@ -123,6 +123,7 @@ public class MedalCaseState implements VisualStateHandler {
         buttons.draw(g);
     }
 
+    // Used for testing
     public WrapMetrics drawMedal(Graphics g, Medal medal) {
         return drawMedal(g, medal, medalPanels[0]);
     }

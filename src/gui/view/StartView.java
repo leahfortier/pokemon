@@ -19,7 +19,6 @@ import util.string.PokeString;
 import java.awt.Graphics;
 
 class StartView extends View {
-
     private static final MessageUpdate[] dialogue = new MessageUpdate[] {
             new MessageUpdate("Welcome to the world of " + PokeString.POKEMON + "!"),
             new MessageUpdate("It's filled with many unique creatures, such as this Ditto.").withUpdate(MessageUpdateType.SHOW_POKEMON),
@@ -103,7 +102,6 @@ class StartView extends View {
         BasicPanels.drawCanvasPanel(g);
 
         FontMetrics.setBlackFont(g, 30);
-
         switch (state) {
             case DEFAULT:
                 g.drawImage(trainerTiles.getTile(0x58), 200, 200, null);

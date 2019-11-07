@@ -167,5 +167,5 @@ Other random things:
     greyOut and highlight should also not reset every frame like skip
     should egg hatching and evolving be separate views that extend the same view class or something?
     StatGainPanel should maybe use the panel thing similar to the StatPanel
-    change NicknamePanel to being a handler instead
+    change NicknamePanel to being a handler instead -- is there a way to combine it with setting your own name?
     

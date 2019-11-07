@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Set;
 
 public class BagState implements VisualStateHandler {
-
     private static final BattleBagCategory[] BATTLE_BAG_CATEGORIES = BattleBagCategory.values();
     private static final int ITEMS_PER_PAGE = 10;
 
@@ -49,7 +48,6 @@ public class BagState implements VisualStateHandler {
     private static final int LEFT_ARROW = NUM_BUTTONS - 3;
 
     private final PanelList panels;
-
     private final DrawPanel bagCategoryPanel;
     private final WrapPanel lastItemPanel;
     private final DrawPanel lastItemLabelPanel;

@@ -72,7 +72,8 @@ class FlyState implements VisualStateHandler {
                         // Note: Changes view mode to map view
                         flyLocation.fly();
                     },
-                    panel -> panel.withBackgroundColor(new Color(68, 123, 184))
+                    panel -> panel.skipInactive()
+                                  .withBackgroundColor(new Color(68, 123, 184))
                                   .withBorderPercentage(15)
                                   .withTransparentCount(2)
                                   .withBlackOutline()
@@ -110,12 +111,6 @@ class FlyState implements VisualStateHandler {
 
     @Override
     public void draw(Graphics g, MapView mapView) {
-        List<FlyLocation> locations = GeneralUtils.pageValues(flyLocations, pageNum, AREAS_PER_PAGE);
-        for (int i = 0; i < locations.size(); i++) {
-            FlyLocation flyLocation = locations.get(i);
-            this.areaButtons[i].panel().withLabel(flyLocation.getAreaName());
-        }
-
         BasicPanels.drawCanvasPanel(g);
         titlePanel.draw(g);
         buttons.drawPanels(g);
@@ -152,8 +147,14 @@ class FlyState implements VisualStateHandler {
     }
 
     private void updateActiveButtons() {
-        for (int i = 0; i < AREAS_PER_PAGE; i++) {
-            areaButtons[i].setActive(i + pageNum*AREAS_PER_PAGE < this.flyLocations.size());
+        List<FlyLocation> locations = GeneralUtils.pageValues(flyLocations, pageNum, AREAS_PER_PAGE);
+        for (int i = 0; i < areaButtons.length; i++) {
+            Button button = areaButtons[i];
+            button.setActiveSkip(i < locations.size());
+            if (button.isActive()) {
+                FlyLocation flyLocation = locations.get(i);
+                button.panel().withLabel(flyLocation.getAreaName());
+            }
         }
     }
 

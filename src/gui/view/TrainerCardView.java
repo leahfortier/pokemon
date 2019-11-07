@@ -25,10 +25,8 @@ class TrainerCardView extends View {
 
         DrawUtils.fillCanvas(g, Color.BLACK);
 
-        g.setColor(Color.WHITE);
-
         int x = 50, y = 50;
-        FontMetrics.setFont(g, 50);
+        FontMetrics.setFont(g, 50, Color.WHITE);
         g.drawString("TRAINER " + player.getName(), x, y);
 
         y += 100;
