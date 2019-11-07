@@ -74,6 +74,7 @@ public class PartyView extends View {
     private int selectedTab;
     private int switchTabIndex;
     private boolean nicknameView;
+    private Color highlightColor;
 
     PartyView() {
         selectedTab = 0;
@@ -195,8 +196,10 @@ public class PartyView extends View {
                 buttonHeight,
                 new ButtonTransitions().right(SWITCH).up(TABS).left(RETURN).down(TABS),
                 () -> {
+                    PartyPokemon selected = Game.getPlayer().getTeam().get(selectedTab);
+                    nicknamePanel.set(selected);
+                    nicknamePanel.withBackgroundColors(PokeType.getColors(selected), true);
                     nicknameView = true;
-                    nicknamePanel.set(Game.getPlayer().getTeam().get(selectedTab));
                 },
                 textButtonSetup("Nickname!!")
         );
@@ -271,25 +274,15 @@ public class PartyView extends View {
 
     @Override
     public void draw(Graphics g) {
-        GameData data = Game.getData();
-        Player player = Game.getPlayer();
-
-        List<PartyPokemon> list = player.getTeam();
-        PartyPokemon selectedPkm = list.get(selectedTab);
-
-        TileSet pkmTiles = data.getPokemonTilesSmall();
-        BufferedImage pkmImg = pkmTiles.getTile(selectedPkm.getImageName());
-
         // Background
         BasicPanels.drawCanvasPanel(g);
 
         if (nicknameView) {
-            nicknamePanel.withBackgroundColors(PokeType.getColors(selectedPkm), true)
-                         .draw(g);
+            nicknamePanel.draw(g);
         } else {
             // Pokemon info
             // Note: Important to draw selected before the tabs because of how outlines work
-            drawPokemonInfo(g, selectedPkm, pkmImg);
+            drawPokemonInfo(g);
 
             // Tabs
             drawTabs(g);
@@ -331,22 +324,19 @@ public class PartyView extends View {
         }
     }
 
-    private void drawPokemonInfo(Graphics g, PartyPokemon selectedPkm, BufferedImage pkmImg) {
-        Color[] typeColors = PokeType.getColors(selectedPkm);
+    private void drawPokemonInfo(Graphics g) {
+        PartyPokemon selected = Game.getPlayer().getTeam().get(selectedTab);
 
-        // Type color polygons
-        pokemonPanel.withBackgroundColors(typeColors, true)
-                    .drawBackground(g);
+        pokemonPanel.drawBackground(g);
 
         // Highlight switch button if applicable
-        switchButton.panel().withHighlight(switchTabIndex != -1, typeColors[1]);
+        switchButton.panel().withHighlight(switchTabIndex != -1, highlightColor);
         nicknameButton.drawPanel(g);
         switchButton.drawPanel(g);
         returnButton.drawPanel(g);
 
         // Pokemon Image
-        imagePanel.withImageLabel(pkmImg)
-                  .draw(g);
+        imagePanel.draw(g);
 
         // Basic information panel
         basicInformationPanel.drawBackground(g);
@@ -357,15 +347,15 @@ public class PartyView extends View {
         int topLineY = basicInformationPanel.y + inset + FontMetrics.getTextHeight(g);
 
         // Name and Gender
-        g.drawString(selectedPkm.getNameAndGender(), nameX, topLineY);
+        g.drawString(selected.getNameAndGender(), nameX, topLineY);
 
-        if (selectedPkm.isEgg()) {
+        if (selected.isEgg()) {
             FontMetrics.setFont(g, 16);
 
             // Description
             TextUtils.drawWrappedText(
                     g,
-                    ((Eggy)selectedPkm).getEggMessage(),
+                    ((Eggy)selected).getEggMessage(),
                     basicInformationPanel.x + inset,
                     topLineY + inset + FontMetrics.getTextHeight(g),
                     basicInformationPanel.width - 2*inset
@@ -374,22 +364,22 @@ public class PartyView extends View {
             // Number
             // +5 is theoretically name (+filler), space, gender, space, space, space, number
             int numberX = nameX + FontMetrics.getTextWidth(g, PartyPokemon.MAX_NAME_LENGTH + 5);
-            String numberString = String.format("#%03d", selectedPkm.getPokemonInfo().getNumber());
+            String numberString = String.format("#%03d", selected.getPokemonInfo().getNumber());
             g.drawString(numberString, numberX, topLineY);
 
             // Shiny sprite
-            if (selectedPkm.isShiny()) {
+            if (selected.isShiny()) {
                 int imageX = numberX + FontMetrics.getTextWidth(g, numberString + " ");
                 BufferedImage starSprite = TileSet.STAR_SPRITE;
                 g.drawImage(starSprite, imageX, topLineY - starSprite.getHeight(), null);
             }
 
             // Status Condition
-            g.drawString(selectedPkm.getStatus().getShortName(), 459, topLineY);
+            g.drawString(selected.getStatus().getShortName(), 459, topLineY);
 
             // Level
             int levelX = 525;
-            g.drawString("Lv" + selectedPkm.getLevel(), levelX, topLineY);
+            g.drawString("Lv" + selected.getLevel(), levelX, topLineY);
 
             FontMetrics.setFont(g, 16);
             int secondLineY = topLineY + inset + FontMetrics.getTextHeight(g);
@@ -398,39 +388,39 @@ public class PartyView extends View {
             int rightAlignedX = basicInformationPanel.rightX() - inset;
 
             // Type Tiles
-            ImageUtils.drawTypeTiles(g, selectedPkm.getActualType(), rightAlignedX, topLineY);
+            ImageUtils.drawTypeTiles(g, selected.getActualType(), rightAlignedX, topLineY);
 
             // Nature
-            g.drawString(selectedPkm.getNature().getName() + " Nature", nameX, secondLineY);
+            g.drawString(selected.getNature().getName() + " Nature", nameX, secondLineY);
 
             // Total EXP
             g.drawString("EXP:", levelX, secondLineY);
-            TextUtils.drawRightAlignedString(g, "" + selectedPkm.getTotalEXP(), rightAlignedX, secondLineY);
+            TextUtils.drawRightAlignedString(g, "" + selected.getTotalEXP(), rightAlignedX, secondLineY);
 
             // Characteristic
-            g.drawString(selectedPkm.getCharacteristic(), nameX, thirdLineY);
+            g.drawString(selected.getCharacteristic(), nameX, thirdLineY);
 
             // EXP To Next Level
             g.drawString("To Next Lv:", levelX, thirdLineY);
-            TextUtils.drawRightAlignedString(g, "" + selectedPkm.expToNextLevel(), rightAlignedX, thirdLineY);
+            TextUtils.drawRightAlignedString(g, "" + selected.expToNextLevel(), rightAlignedX, thirdLineY);
 
             // Held Item
-            g.drawString(selectedPkm.getActualHeldItem().getName(), nameX, fourthLineY);
+            g.drawString(selected.getActualHeldItem().getName(), nameX, fourthLineY);
 
             // Ability with description
-            drawAbility(g, selectedPkm.getActualAbility());
+            drawAbility(g, selected.getActualAbility());
 
             // EXP Bar
-            expBar.fillBar(g, DrawUtils.EXP_BAR_COLOR, selectedPkm.expRatio());
+            expBar.fillBar(g, DrawUtils.EXP_BAR_COLOR, selected.expRatio());
 
-            MoveList moves = selectedPkm.getActualMoves();
+            MoveList moves = selected.getActualMoves();
 
             // Stats Box or Move description
             int selectedButton = buttons.getSelected();
             if (selectedButton >= MOVES && selectedButton < MOVES + MoveList.MAX_MOVES) {
                 drawMoveDetails(g, moves.get(selectedButton - MOVES).getAttack());
             } else {
-                drawStatBox(g, selectedPkm);
+                drawStatBox(g, selected);
             }
 
             // Moves Box
@@ -449,7 +439,7 @@ public class PartyView extends View {
                 TextUtils.drawCenteredHeightString(g, "PP: " + move.getPPString(), movePanel.rightX() - moveInset, movePanel.centerY(), Alignment.RIGHT);
             }
 
-            pokemonPanel.faintOut(g, selectedPkm);
+            pokemonPanel.faintOut(g, selected);
         }
     }
 
@@ -473,12 +463,30 @@ public class PartyView extends View {
     }
 
     private void switchTab(int index) {
+        GameData data = Game.getData();
+        Player player = Game.getPlayer();
+
+        // Swap pokemon if switching
         if (switchTabIndex != -1) {
-            Game.getPlayer().swapPokemon(index, switchTabIndex);
+            player.swapPokemon(index, switchTabIndex);
             switchTabIndex = -1;
         }
 
+        // Set selected
         selectedTab = index;
+
+        List<PartyPokemon> team = player.getTeam();
+        PartyPokemon selected = team.get(selectedTab);
+
+        TileSet pkmTiles = data.getPokemonTilesSmall();
+        BufferedImage pkmImg = pkmTiles.getTile(selected.getImageName());
+
+        Color[] typeColors = PokeType.getColors(selected);
+
+        // Draw setup
+        pokemonPanel.withBackgroundColors(typeColors, true);
+        highlightColor = typeColors[1];
+        imagePanel.withImageLabel(pkmImg);
     }
 
     private void updateActiveButtons() {
