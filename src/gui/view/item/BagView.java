@@ -209,42 +209,13 @@ public class BagView extends View {
         Game.instance().setViewMode(ViewMode.MAP_VIEW);
     }
 
-    private void drawSetup() {
-        // Tabs and item buttons
-        layout.setupTabs(tabButtons, selectedTab);
-        layout.setupItems(itemButtons, this.getDisplayItems(), pageNum);
-
+    @Override
+    public void draw(Graphics g) {
         // Setup Use State buttons
         UseState.forEach(useState -> {
             Button useButton = buttons.get(USE_STATES + useState.ordinal());
             useState.setup(useButton.panel(), selectedTab.getColor());
         });
-
-        // Set up Pokemon buttons
-        List<PartyPokemon> team = Game.getPlayer().getTeam();
-        for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-            ButtonPanel panel = partyButtons[i].panel();
-            if (i < team.size() && state != BagState.MOVE_SELECT) {
-                panel.withBackgroundColors(PokeType.getColors(team.get(i)));
-            } else {
-                panel.skipDraw();
-            }
-        }
-
-        // Set up move buttons
-        if (state == BagState.MOVE_SELECT) {
-            MoveList moveList = selectedPokemon.getActualMoves();
-            for (int i = 0; i < moveList.size(); i++) {
-                Attack attack = moveList.get(i).getAttack();
-                moveButtons[i].panel()
-                              .withBackgroundColor(attack.getActualType().getColor());
-            }
-        }
-    }
-
-    @Override
-    public void draw(Graphics g) {
-        drawSetup();
 
         // Background
         BasicPanels.drawCanvasPanel(g);
@@ -398,8 +369,10 @@ public class BagView extends View {
             pageNum = 0;
         }
 
-        UseState.forEach(UseState::reset);
+        // Set background color and tab outlines
+        layout.setupTabs(tabButtons, selectedTab);
 
+        UseState.forEach(UseState::reset);
         updateActiveButtons();
     }
 
@@ -488,23 +461,44 @@ public class BagView extends View {
     private void updateActiveButtons() {
         Player player = Game.getPlayer();
 
+        // Only active during pokemon state, but draw for all states other than move
         List<PartyPokemon> team = player.getTeam();
-        for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-            partyButtons[i].setActive(state == BagState.POKEMON_SELECT && i < team.size());
+        for (int i = 0; i < partyButtons.length; i++) {
+            Button button = partyButtons[i];
+            ButtonPanel panel = button.panel();
+            button.setActive(state == BagState.POKEMON_SELECT && i < team.size());
+            panel.setSkip(state == BagState.MOVE_SELECT || i >= team.size());
+            if (!panel.isSkipping()) {
+                panel.withTypeColors(team.get(i));
+            }
         }
 
-        int displayed = this.getDisplayItems().size();
-        for (int i = 0; i < ITEMS_PER_PAGE; i++) {
-            itemButtons[i].setActive(state == BagState.ITEM_SELECT && i < displayed - pageNum*ITEMS_PER_PAGE);
+        // Set active items from layout and change active to only item select (will still draw for other states though)
+        layout.setupItems(itemButtons, this.getDisplayItems(), pageNum);
+        for (Button itemButton : itemButtons) {
+            itemButton.setActive(state == BagState.ITEM_SELECT && itemButton.isActive());
         }
 
-        for (int i = 0; i < MoveList.MAX_MOVES; i++) {
-            moveButtons[i].setActive(state == BagState.MOVE_SELECT && i < selectedPokemon.getActualMoves().size());
+        // Move buttons skip draw when inactive and are only active during move select
+        MoveList moves = state == BagState.MOVE_SELECT ? selectedPokemon.getActualMoves() : null;
+        for (int i = 0; i < moveButtons.length; i++) {
+            // Active when state is move select and move index is in range
+            boolean active = moves != null && i < moves.size();
+            Button button = moveButtons[i];
+            button.setActive(active);
+
+            // Set attack type background color if active
+            if (active) {
+                Attack attack = moves.get(i).getAttack();
+                button.panel().withBackgroundColor(attack.getActualType().getColor());
+            }
         }
 
+        // Can only use arrows during arrow select (but always draw)
         leftArrow.setActive(state == BagState.ITEM_SELECT);
-        rightArrow.setActive(state == BagState.ITEM_SELECT);
+        rightArrow.setActive(leftArrow.isActive());
 
+        // Can't give or use what you don't have!
         if (selectedItem == ItemNamesies.NO_ITEM || !player.getBag().hasItem(selectedItem)) {
             selectedItem = ItemNamesies.NO_ITEM;
             giveButton.setActive(false);

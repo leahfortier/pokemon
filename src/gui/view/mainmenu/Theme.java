@@ -48,6 +48,7 @@ public enum Theme {
 
         g.drawImage(DFS_TOWN_BG, xLoc, yLoc, null);
 
+        // Transparent border
         BasicPanels.newFullGamePanel()
                    .withBackgroundColor(null)
                    .withBorderColor(new Color(255, 255, 255, 200))

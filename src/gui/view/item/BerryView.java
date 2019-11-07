@@ -1,4 +1,4 @@
-package gui.view;
+package gui.view.item;
 
 import draw.ImageUtils;
 import draw.TextUtils;
@@ -10,7 +10,8 @@ import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.PanelList;
 import gui.TileSet;
-import gui.view.item.BagLayout;
+import gui.view.View;
+import gui.view.ViewMode;
 import input.ControlKey;
 import input.InputControl;
 import item.ItemNamesies;
@@ -57,7 +58,7 @@ public class BerryView extends View {
 
     private BerryFarm berryFarm;
 
-    BerryView() {
+    public BerryView() {
         this.layout = new BagLayout(true);
 
         layout.bagPanel.withBackgroundColor(BACKGROUND_COLOR);
@@ -131,8 +132,6 @@ public class BerryView extends View {
 
     @Override
     public void draw(Graphics g) {
-        layout.setupItems(itemButtons, this.getDisplayBerries(), pageNum);
-
         // Background
         BasicPanels.drawCanvasPanel(g);
         panels.drawAll(g);
@@ -213,9 +212,6 @@ public class BerryView extends View {
             selectedItem = berries.isEmpty() ? ItemNamesies.NO_ITEM : berries.iterator().next();
         }
 
-        int displayed = berries.size();
-        for (int i = 0; i < ITEMS_PER_PAGE; i++) {
-            itemButtons[i].setActive(i < displayed - pageNum*ITEMS_PER_PAGE);
-        }
+        layout.setupItems(itemButtons, berries, pageNum);
     }
 }

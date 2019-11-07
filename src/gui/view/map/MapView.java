@@ -37,7 +37,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class MapView extends View {
-
     private static final PathDirection[] deltaDirections = {
             PathDirection.WAIT,
             PathDirection.LEFT,

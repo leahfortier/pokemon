@@ -7,7 +7,6 @@ import draw.ImageUtils;
 import draw.TextUtils;
 import draw.button.Button;
 import draw.button.ButtonList;
-import draw.button.ButtonPanel;
 import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
@@ -27,7 +26,6 @@ import pokemon.breeding.DayCareCenter;
 import pokemon.breeding.Eggy;
 import trainer.Trainer;
 import trainer.player.Player;
-import type.PokeType;
 import util.FontMetrics;
 
 import java.awt.Color;
@@ -149,7 +147,7 @@ class DayCareView extends View {
                         .up(BOTTOM_PARTY)
                         .left(RETURN)
                         .down(SECOND_DAY_CARE_POKEMON),
-                () -> selected = dayCareCenter.getFirstPokemon(),
+                () -> this.setSelected(dayCareCenter.getFirstPokemon()),
                 pokemonButtonSetup()
         );
 
@@ -160,7 +158,7 @@ class DayCareView extends View {
                         .up(FIRST_DAY_CARE_POKEMON)
                         .left(RETURN)
                         .down(PARTY),
-                () -> selected = dayCareCenter.getSecondPokemon(),
+                () -> this.setSelected(dayCareCenter.getSecondPokemon()),
                 pokemonButtonSetup()
         );
 
@@ -176,7 +174,7 @@ class DayCareView extends View {
                                                                   .up(SECOND_DAY_CARE_POKEMON)
                                                                   .left(RETURN)
                                                                   .down(FIRST_DAY_CARE_POKEMON))
-                                  .withPressIndex(index -> selected = team.get(index))
+                                  .withPressIndex(this::setSelected)
                                   .withButtonSetup(pokemonButtonSetup())
                                   .getButtons();
 
@@ -261,53 +259,21 @@ class DayCareView extends View {
         input.popViewIfEscaped();
     }
 
-    private void setupPokemonButton(ButtonPanel panel, PartyPokemon pokemon) {
-        if (pokemon == null) {
-            panel.skipDraw();
-            return;
+    // Sets up activeness of button and background colors and images and labels
+    private void setupPokemonButton(Button button, PartyPokemon pokemon) {
+        boolean active = pokemon != null;
+        button.setActiveSkip(active);
+        if (active) {
+            // Centered label with party tile, name, and gender
+            button.panel().withImageLabel(
+                    Game.getData().getPartyTiles().getTile(pokemon.getTinyImageName()),
+                    pokemon.getNameAndGender()
+            );
         }
-
-        // Centered label with party tile, name, and gender
-        panel.withImageLabel(
-                Game.getData().getPartyTiles().getTile(pokemon.getTinyImageName()),
-                pokemon.getNameAndGender()
-        );
-    }
-
-    private void drawSetup() {
-        // Selected Pokemon
-        infoPanel.withBackgroundColors(PokeType.getColors(selected));
-        imagePanel.withImageLabel(Game.getData().getPokemonTilesSmall().getTile(selected.getImageName()));
-
-        MoveList moves = selected.getActualMoves();
-        for (int i = 0; i < movePanels.length; i++) {
-            DrawPanel movePanel = movePanels[i];
-            if (!selected.isEgg() && i < moves.size()) {
-                Attack attack = moves.get(i).getAttack();
-                movePanel.withBackgroundColor(attack.getActualType().getColor())
-                         .withLabel(attack.getName());
-            } else {
-                movePanel.skipDraw();
-            }
-        }
-
-        // Day Care Pokemon
-        setupPokemonButton(firstDayCarePokemonButton.panel(), dayCareCenter.getFirstPokemon());
-        setupPokemonButton(secondDayCarePokemonButton.panel(), dayCareCenter.getSecondPokemon());
-
-        // Party Pokemon
-        for (int i = 0; i < team.size(); i++) {
-            setupPokemonButton(partyButtons[i].panel(), team.get(i));
-        }
-
-        // Either deposit or withdraw
-        depositWithdrawButton.panel().withLabel(party ? "Deposit" : "Withdraw");
     }
 
     @Override
     public void draw(Graphics g) {
-        drawSetup();
-
         // Background
         BasicPanels.drawCanvasPanel(g);
         panels.drawAll(g);
@@ -386,23 +352,53 @@ class DayCareView extends View {
         ActivePokemon first = dayCareCenter.getFirstPokemon();
         ActivePokemon second = dayCareCenter.getSecondPokemon();
 
-        firstDayCarePokemonButton.setActive(first != null);
-        secondDayCarePokemonButton.setActive(second != null);
+        // Set active and draw things for day care buttons
+        setupPokemonButton(firstDayCarePokemonButton, first);
+        setupPokemonButton(secondDayCarePokemonButton, second);
 
+        // Party buttons
         party = false;
-        for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-            partyButtons[i].setActive(i < team.size());
-            if (i < team.size() && team.get(i) == selected) {
+        for (int i = 0; i < partyButtons.length; i++) {
+            PartyPokemon p = i < team.size() ? team.get(i) : null;
+            setupPokemonButton(partyButtons[i], p);
+            if (selected != null && selected == p) {
                 party = true;
             }
         }
 
         // Reset selected Pokemon if unassigned or if pointing to a Pokemon not in the current view
         if (selected == null || (!party && selected != first && selected != second)) {
-            selected = team.get(0);
+            this.setSelected(0);
             party = true;
         }
 
+        // Deposit from party (if day care is coo with it), or withdraw from day care (always available)
         depositWithdrawButton.setActive(!party || dayCareCenter.canDeposit(selected));
+        depositWithdrawButton.panel().withLabel(party ? "Deposit" : "Withdraw");
+    }
+
+    private void setSelected(int partyIndex) {
+        this.setSelected(team.get(partyIndex));
+    }
+
+    // Sets the selected Pokemon and updates draw setup for the Pokemon
+    private void setSelected(PartyPokemon selected) {
+        this.selected = selected;
+
+        // Setup background colors and image
+        infoPanel.withTypeColors(selected);
+        imagePanel.withImageLabel(Game.getData().getPokemonTilesSmall().getTile(selected.getImageName()));
+
+        // Setup moves -- only draw panels for non-eggs and for actual moves (in range)
+        MoveList moves = selected.getActualMoves();
+        for (int i = 0; i < movePanels.length; i++) {
+            DrawPanel movePanel = movePanels[i];
+            movePanel.setSkip(selected.isEgg() || i >= moves.size());
+            if (!movePanel.isSkipping()) {
+                Attack attack = moves.get(i).getAttack();
+                movePanel.withBackgroundColor(attack.getActualType().getColor())
+                         .withLabel(attack.getName());
+            }
+        }
     }
 }

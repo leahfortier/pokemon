@@ -12,10 +12,10 @@ import draw.button.ButtonPanel;
 import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
+import draw.handler.LearnMoveHandler;
 import draw.layout.ButtonLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
-import draw.panel.LearnMovePanel;
 import draw.panel.MovePanel;
 import draw.panel.PanelList;
 import draw.panel.WrapPanel.WrapMetrics;
@@ -66,8 +66,6 @@ public class MoveRelearnerView extends View {
     private final Button movesRightButton;
     private final Button movesLeftButton;
 
-    private TileSet partyTiles;
-
     private List<PartyPokemon> team;
     private List<AttackNamesies> learnableMoves;
     private Bag bag;
@@ -75,7 +73,7 @@ public class MoveRelearnerView extends View {
     private int selectedPokemon;
     private Attack selectedMove;
     private int pageNum;
-    private LearnMovePanel learnMovePanel;
+    private LearnMoveHandler learnMoveHandler;
 
     MoveRelearnerView() {
         int spacing = 20;
@@ -128,8 +126,8 @@ public class MoveRelearnerView extends View {
                 .withMissingBottomRow()
                 .withStartIndex(MOVES)
                 .withDefaultTransitions(new ButtonTransitions().right(PARTY).up(MOVES_LEFT_ARROW).left(PARTY).down(MOVES_RIGHT_ARROW))
-                .withPressIndex(index -> selectedMove = learnableMoves.isEmpty() ? null : GeneralUtils.getPageValue(learnableMoves, pageNum, MOVES_PER_PAGE, index).getNewAttack())
-                .withDrawSetup(panel -> panel.withBlackOutline().withFullTransparency())
+                .withPressIndex(this::setSelectedMove)
+                .withButtonSetup(panel -> panel.withBlackOutline().withFullTransparency())
                 .getButtons();
 
         pokemonButtons = new ButtonLayout(partyPanel, Trainer.MAX_POKEMON, 1, 15)
@@ -137,8 +135,7 @@ public class MoveRelearnerView extends View {
                 .withDefaultTransitions(new ButtonTransitions().right(MOVES).up(RETURN).left(MOVES).down(RETURN))
                 .withPressIndex(this::setSelectedPokemon)
                 .withButtonSetup(panel -> panel.withBlackOutline()
-                                               .withTransparentCount(2)
-                                               .withBorderPercentage(15)
+                                               .withFullTransparency()
                                                .withLabelSize(22))
                 .getButtons();
 
@@ -161,7 +158,7 @@ public class MoveRelearnerView extends View {
                 (partyPanel.width - spacing)/2,
                 buttonHeight,
                 new ButtonTransitions().right(RETURN).up(LAST_PARTY).left(RETURN).down(PARTY),
-                () -> learnMovePanel = new LearnMovePanel((ActivePokemon)team.get(selectedPokemon), new Move(selectedMove)),
+                () -> learnMoveHandler = new LearnMoveHandler((ActivePokemon)team.get(selectedPokemon), new Move(selectedMove)),
                 textButtonSetup("Learn!", new Color(123, 213, 74))
         );
 
@@ -221,15 +218,15 @@ public class MoveRelearnerView extends View {
 
     @Override
     public void update(int dt) {
-        if (learnMovePanel != null) {
-            learnMovePanel.update();
-            if (learnMovePanel.isFinished()) {
+        if (learnMoveHandler != null) {
+            learnMoveHandler.update();
+            if (learnMoveHandler.isFinished()) {
                 // If a move was actually learned, remove a heart scale
-                if (learnMovePanel.learnedMove()) {
+                if (learnMoveHandler.learnedMove()) {
                     bag.removeItem(ItemNamesies.HEART_SCALE);
                 }
 
-                learnMovePanel = null;
+                learnMoveHandler = null;
                 setSelectedPokemon(selectedPokemon);
                 return;
             }
@@ -241,49 +238,6 @@ public class MoveRelearnerView extends View {
         }
 
         InputControl.instance().popViewIfEscaped();
-    }
-
-    private void drawSetup() {
-        // Party panel background is the type colors of the selected Pokemon
-        partyPanel.withTypeColors(team.get(selectedPokemon));
-
-        // Moves panel background is the type color of the selected move
-        // If no selected move use Normal-type colors
-        if (selectedMove == null) {
-            movesPanel.withBackgroundColor(Type.NORMAL.getColor());
-            descriptionPanel.withBackgroundColor(Type.NORMAL.getColor());
-        } else {
-            // Don't need to set up description panel as is handled separately in the MovePanel class
-            movesPanel.withBackgroundColor(selectedMove.getActualType().getColor());
-            descriptionPanel.skipDraw();
-        }
-
-        // Number of heart scales
-        heartScalePanel.withLabel("Heart Scales: " + numHeartScales());
-
-        // Set up Pokemon buttons
-        for (int i = 0; i < pokemonButtons.length; i++) {
-            // Highlight selected
-            selectedPokemonPanels[i].skipDraw(i != selectedPokemon);
-
-            // Set type color background, image and name labels
-            ButtonPanel pokemonPanel = pokemonButtons[i].panel();
-            if (i < team.size()) {
-                PartyPokemon pokemon = team.get(i);
-                pokemonPanel.withTypeColors(pokemon)
-                            .withImageLabel(
-                                    partyTiles.getTile(pokemon.getTinyImageName()),
-                                    pokemon.getActualName()
-                            );
-            } else {
-                pokemonPanel.skipDraw();
-            }
-        }
-
-        List<AttackNamesies> moves = this.getDisplayMoves();
-        for (int i = 0; i < moveButtons.length; i++) {
-            moveButtons[i].panel().skipDraw(i >= moves.size());
-        }
     }
 
     private void drawMoveButtons(Graphics g) {
@@ -310,14 +264,11 @@ public class MoveRelearnerView extends View {
 
     @Override
     public void draw(Graphics g) {
-        drawSetup();
-
         // Background
         BasicPanels.drawCanvasPanel(g);
         panels.drawAll(g);
         buttons.drawPanels(g);
 
-        // Will draw the background for this panel here
         if (selectedMove != null) {
             drawMoveDetails(g, selectedMove);
         }
@@ -329,8 +280,8 @@ public class MoveRelearnerView extends View {
         TextUtils.drawPageNumbers(g, 22, movesLeftButton, movesRightButton, pageNum, totalPages());
 
         // Learning movessss
-        if (learnMovePanel != null) {
-            learnMovePanel.draw(g);
+        if (learnMoveHandler != null) {
+            learnMoveHandler.draw(g);
         }
 
         // Button hover action
@@ -338,27 +289,32 @@ public class MoveRelearnerView extends View {
     }
 
     public WrapMetrics drawMoveDetails(Graphics g, Attack attack) {
-        return descriptionPanel.draw(g, attack);
+        return descriptionPanel.drawMove(g, attack);
     }
 
     private void updateActiveButtons() {
-        if (learnMovePanel != null) {
+        if (learnMoveHandler != null) {
             buttons.setInactive();
         } else {
             for (int i = 0; i < pokemonButtons.length; i++) {
                 pokemonButtons[i].setActive(i < team.size());
             }
 
+            // I know it looks like the move buttons should just skip when inactive, but it's important
+            // not to for when the learn move handler shuts all the activity off (should still draw them)
             int numMoves = this.getDisplayMoves().size();
-            for (int i = 0; i < MOVES_PER_PAGE; i++) {
-                moveButtons[i].setActive(i < numMoves);
+            for (int i = 0; i < moveButtons.length; i++) {
+                moveButtons[i].setActiveSkip(i < numMoves);
             }
-
-            this.learnMoveButton.setActive(selectedMove != null && numHeartScales() > 0);
 
             boolean activeArrows = totalPages() > 0;
             this.movesLeftButton.setActive(activeArrows);
             this.movesRightButton.setActive(activeArrows);
+
+            // Can't learn move without that heart scale cash money
+            int numHeartScales = bag.getQuantity(ItemNamesies.HEART_SCALE);
+            this.learnMoveButton.setActive(selectedMove != null && numHeartScales > 0);
+            this.heartScalePanel.withLabel("Heart Scales: " + numHeartScales);
 
             returnButton.setActive(true);
         }
@@ -366,10 +322,6 @@ public class MoveRelearnerView extends View {
 
     private int totalPages() {
         return GeneralUtils.getTotalPages(this.learnableMoves.size(), MOVES_PER_PAGE);
-    }
-
-    private int numHeartScales() {
-        return bag.getQuantity(ItemNamesies.HEART_SCALE);
     }
 
     private List<AttackNamesies> getDisplayMoves() {
@@ -385,12 +337,26 @@ public class MoveRelearnerView extends View {
     public void movedToFront() {
         Player player = Game.getPlayer();
         GameData data = Game.getData();
-
-        this.partyTiles = data.getPartyTiles();
+        TileSet partyTiles = data.getPartyTiles();
 
         this.team = player.getTeam();
         this.bag = player.getBag();
         this.setSelectedPokemon(0);
+
+        // Set up Pokemon buttons
+        for (int i = 0; i < pokemonButtons.length; i++) {
+            ButtonPanel panel = pokemonButtons[i].panel();
+            panel.setSkip(i >= team.size());
+
+            // Set type color background, image and name labels
+            if (!panel.isSkipping()) {
+                PartyPokemon pokemon = team.get(i);
+                panel.withImageLabel(
+                                    partyTiles.getTile(pokemon.getTinyImageName()),
+                                    pokemon.getActualName()
+                            );
+            }
+        }
     }
 
     private void setSelectedPokemon(int index) {
@@ -398,9 +364,35 @@ public class MoveRelearnerView extends View {
 
         PartyPokemon selected = this.team.get(index);
         this.learnableMoves = selected.isEgg() ? new ArrayList<>() : selected.getLearnableMoves();
-        this.selectedMove = this.learnableMoves.isEmpty() ? null : this.learnableMoves.get(0).getNewAttack();
         this.pageNum = 0;
+        this.setSelectedMove(0);
+
+        // Party panel background is the type colors of the selected Pokemon
+        partyPanel.withTypeColors(selected);
+
+        // Highlight selected
+        for (int i = 0; i < selectedPokemonPanels.length; i++) {
+            selectedPokemonPanels[i].setSkip(i != selectedPokemon);
+        }
 
         this.updateActiveButtons();
+    }
+
+    private void setSelectedMove(int index) {
+        // Moves panel background is the type color of the selected move
+        // If no selected move use Normal-type colors
+        final Type attackType;
+        if (learnableMoves.isEmpty()) {
+            selectedMove = null;
+            attackType = Type.NORMAL;
+        } else {
+            AttackNamesies attack = GeneralUtils.getPageValue(learnableMoves, pageNum, MOVES_PER_PAGE, index);
+            selectedMove = attack.getNewAttack();
+            attackType = selectedMove.getActualType();
+        }
+
+        Color backgroundColor = attackType.getColor();
+        movesPanel.withBackgroundColor(backgroundColor);
+        descriptionPanel.withBackgroundColor(backgroundColor);
     }
 }

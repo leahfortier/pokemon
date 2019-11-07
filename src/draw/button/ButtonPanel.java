@@ -109,8 +109,7 @@ public class ButtonPanel extends DrawPanel {
 
     @Override
     public void draw(Graphics g) {
-        if (this.skipDraw) {
-            this.skipDraw = false;
+        if (this.isSkipping()) {
             return;
         }
 

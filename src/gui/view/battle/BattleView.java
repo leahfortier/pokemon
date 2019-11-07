@@ -264,8 +264,6 @@ public class BattleView extends View {
 
     @Override
     public void draw(Graphics g) {
-        DrawUtils.fillCanvas(g, Color.BLACK);
-
         // Get background based on terrain type
         DrawUtils.fillCanvas(g, terrain.getColor());
 

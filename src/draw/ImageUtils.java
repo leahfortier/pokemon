@@ -203,13 +203,14 @@ public final class ImageUtils {
         }
         // Change form
         else if (animationValue > animationLifespan*0.3) {
-            firstScales[3] = ((animationValue - animationLifespan*0.3f)/(animationLifespan*(0.7f - 0.3f)));
-            secondScales[3] = (1 - (animationValue - animationLifespan*0.3f)/(animationLifespan*(0.7f - 0.3f)));
+            float formValue = (animationValue - animationLifespan*0.3f)/(animationLifespan*(0.7f - 0.3f));
+            firstScales[3] = formValue;
+            secondScales[3] = (1 - formValue);
         }
         // Restore color
         else {
             firstScales[3] = 0;
-            secondOffsets[0] = secondOffsets[1] = secondOffsets[2] = 255*(animationValue)/(animationLifespan*(1 - 0.7f));
+            secondOffsets[0] = secondOffsets[1] = secondOffsets[2] = 255*animationValue/(animationLifespan*(1 - 0.7f));
         }
 
         animationValue -= Global.MS_BETWEEN_FRAMES;

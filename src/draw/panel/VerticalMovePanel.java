@@ -43,21 +43,18 @@ public class VerticalMovePanel extends DrawPanel {
             .drawBackground(g);
 
         FontMetrics.setBlackFont(g, nameFontSize);
-        int textSpace = this.getTextSpace(g);
+        int fullSpacing = this.getTextSpace(g);
         int borderSize = this.getBorderSize();
-        int betweenSpace = textSpace - borderSize;
 
-        int x = this.x + textSpace;
-        int rightX = this.rightX() - textSpace;
-        int textY = this.y + textSpace + FontMetrics.getTextHeight(g);
+        int x = this.x + fullSpacing;
+        int rightX = this.rightX() - fullSpacing;
+        int textY = this.y + fullSpacing + FontMetrics.getTextHeight(g);
 
         // Draw the name in the top left
         g.drawString(attack.getName(), x, textY);
 
         // Draw the power underneath the name and the type on the right
-        int previousDistanceBetweenRows = FontMetrics.getDistanceBetweenRows(g);
-        FontMetrics.setFont(g, basicFontSize);
-        textY += (previousDistanceBetweenRows + FontMetrics.getDistanceBetweenRows(g))/2;
+        textY += FontMetrics.getDistanceBetweenRows(g, basicFontSize);
         g.drawString("Pow: " + attack.getPowerString(), x, textY);
         drawImage(g, attack.getActualType().getImage(), rightX, textY);
 

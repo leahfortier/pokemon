@@ -1,16 +1,15 @@
 package gui.view;
 
 import battle.ActivePokemon;
-import draw.ImageUtils;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
-import draw.panel.LearnMovePanel;
+import draw.handler.EvolveAnimationHandler;
+import draw.handler.LearnMoveHandler;
 import draw.panel.StatGainPanel;
 import gui.TileSet;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
-import main.Global;
 import message.MessageQueue;
 import message.MessageUpdate;
 import message.MessageUpdateType;
@@ -21,7 +20,6 @@ import pokemon.species.PokemonNamesies;
 import trainer.player.EvolutionInfo;
 import type.PokeType;
 import type.Type;
-import util.Point;
 import util.string.StringUtils;
 
 import java.awt.Color;
@@ -29,15 +27,11 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 class EvolutionView extends View {
-    private static final int EVOLVE_ANIMATION_LIFESPAN = 3000;
-    private static final Point POKEMON_DRAW_LOCATION = Point.scaleDown(Global.GAME_SIZE, 2);
-
     private final DrawPanel canvasPanel;
     private final StatGainPanel statsPanel;
 
-    private LearnMovePanel learnMovePanel;
-
-    private int animationEvolve;
+    private final EvolveAnimationHandler animationHandler;
+    private LearnMoveHandler learnMoveHandler;
 
     private ActivePokemon evolvingPokemon;
     private PokemonNamesies preEvolution;
@@ -53,6 +47,7 @@ class EvolutionView extends View {
                                       .withBorderPercentage(0);
 
         this.statsPanel = new StatGainPanel();
+        this.animationHandler = new EvolveAnimationHandler(this.canvasPanel);
     }
 
     @Override
@@ -68,20 +63,19 @@ class EvolutionView extends View {
                     messages.pop();
                 }
             } else {
-                state = State.EVOLVE;
+                // No more messages -- time to evolve!
+                this.setState(State.EVOLVE);
             }
         }
 
         if (state == State.EVOLVE) {
             // Eggs can't be cancelled
             if (input.consumeIfDown(ControlKey.BACK) && !isEgg) {
-                state = State.CANCELLED;
-                setCancelledMessage();
+                messages.add("Whattt!?!?!??!! " + preEvolution.getName() + " stopped evolving!!!!");
+                this.setState(State.CANCELLED);
             }
 
-            if (animationEvolve <= 0) {
-                state = State.END;
-
+            if (animationHandler.isFinished()) {
                 if (isEgg) {
                     messages.add("Your egg hatched into " + StringUtils.articleString(preEvolution.getName()) + "!");
                     Game.getPlayer().getMedalCase().hatch(evolvingPokemon);
@@ -95,15 +89,16 @@ class EvolutionView extends View {
                 }
 
                 Game.getPlayer().pokemonEvolved(evolvingPokemon);
+                this.setState(State.END);
             }
         }
 
         boolean finishedLearningMove = false;
         if (state == State.LEARN_MOVE) {
-            learnMovePanel.update();
-            if (learnMovePanel.isFinished()) {
-                state = State.END;
+            learnMoveHandler.update();
+            if (learnMoveHandler.isFinished()) {
                 finishedLearningMove = true;
+                this.setState(State.END);
             }
         }
 
@@ -121,8 +116,8 @@ class EvolutionView extends View {
                     while (!messages.isEmpty()) {
                         MessageUpdate message = messages.pop();
                         if (message.learnMove()) {
-                            this.learnMovePanel = new LearnMovePanel(evolvingPokemon, message.getMove());
-                            state = State.LEARN_MOVE;
+                            this.learnMoveHandler = new LearnMoveHandler(evolvingPokemon, message.getMove());
+                            this.setState(State.LEARN_MOVE);
                             break;
                         }
 
@@ -139,19 +134,7 @@ class EvolutionView extends View {
 
     @Override
     public void draw(Graphics g) {
-        final boolean finishedEvolving = state == State.END || state == State.LEARN_MOVE;
-
-        // Use pre-evolution for evolved eggs and unevolved Pokemon
-        Color[] backgroundColors = PokeType.getColors(preEvolution);
-        if (finishedEvolving && !isEgg) {
-            backgroundColors = PokeType.getColors(evolvingPokemon);
-        } else if (!finishedEvolving && isEgg) {
-            // Unhatched egg -- use normal-type colors
-            backgroundColors = new PokeType(Type.NORMAL).getColors();
-        }
-
-        canvasPanel.withBackgroundColors(backgroundColors)
-                   .drawBackground(g);
+        canvasPanel.drawBackground(g);
 
         if (state != State.LEARN_MOVE && !messages.isEmpty()) {
             MessageUpdate message = this.messages.peek();
@@ -161,43 +144,26 @@ class EvolutionView extends View {
             }
         }
 
-        TileSet pokemonTiles = Game.getData().getPokemonTilesLarge();
-        String preImageName = isEgg ? Eggy.SPRITE_EGG_IMAGE_NAME : getImageName(preEvolution);
-        String postImageName = getImageName(isEgg ? preEvolution : postEvolution);
-        BufferedImage currEvolution = pokemonTiles.getTile(preImageName);
-        BufferedImage nextEvolution = pokemonTiles.getTile(postImageName);
-
-        if (finishedEvolving) {
-            ImageUtils.drawBottomCenteredImage(g, nextEvolution, POKEMON_DRAW_LOCATION);
-        }
-
         switch (state) {
             case START:
             case CANCELLED:
-                ImageUtils.drawBottomCenteredImage(g, currEvolution, POKEMON_DRAW_LOCATION);
+                animationHandler.drawBase(g);
                 break;
             case EVOLVE:
-                evolveAnimation(g, currEvolution, nextEvolution);
+                animationHandler.drawEvolve(g);
                 break;
             case LEARN_MOVE:
-                learnMovePanel.draw(g);
+                learnMoveHandler.draw(g);
                 break;
+        }
+
+        if (this.isFinishedEvolving()) {
+            animationHandler.drawEnd(g);
         }
     }
 
     private String getImageName(PokemonNamesies pokemonNamesies) {
         return pokemonNamesies.getInfo().getImageName(evolvingPokemon.isShiny());
-    }
-
-    private void evolveAnimation(Graphics g, BufferedImage currEvolution, BufferedImage nextEvolution) {
-        animationEvolve = ImageUtils.transformAnimation(
-                g,
-                animationEvolve,
-                EVOLVE_ANIMATION_LIFESPAN,
-                nextEvolution,
-                currEvolution,
-                POKEMON_DRAW_LOCATION
-        );
     }
 
     @Override
@@ -215,6 +181,14 @@ class EvolutionView extends View {
             isEgg = false;
             postEvolution = evolve.getEvolution();
         }
+
+        TileSet pokemonTiles = Game.getData().getPokemonTilesLarge();
+        String preImageName = isEgg ? Eggy.SPRITE_EGG_IMAGE_NAME : getImageName(preEvolution);
+        String postImageName = getImageName(isEgg ? preEvolution : postEvolution);
+        BufferedImage currEvolution = pokemonTiles.getTile(preImageName);
+        BufferedImage nextEvolution = pokemonTiles.getTile(postImageName);
+
+        this.animationHandler.set(currEvolution, nextEvolution);
     }
 
     private void setInitialMessage() {
@@ -225,24 +199,38 @@ class EvolutionView extends View {
         }
     }
 
-    private void setCancelledMessage() {
-        messages.add("Whattt!?!?!??!! " + preEvolution.getName() + " stopped evolving!!!!");
-    }
-
     @Override
     public void movedToFront() {
-        state = State.START;
-        messages = new MessageQueue();
-
         EvolutionInfo evolutionInfo = Game.getPlayer().getEvolutionInfo();
-
         setPokemon(evolutionInfo.getEvolvingPokemon(), evolutionInfo.getEvolution());
-        setInitialMessage();
 
-        animationEvolve = EVOLVE_ANIMATION_LIFESPAN;
+        this.setState(State.START);
+
+        messages = new MessageQueue();
+        setInitialMessage();
 
         // TODO: Save current sound for when transitioning to the bag view.
         //Global.soundPlayer.playMusic(SoundTitle.EVOLUTION_VIEW);
+    }
+
+    private boolean isFinishedEvolving() {
+        return state == State.END || state == State.LEARN_MOVE;
+    }
+
+    private void setState(State state) {
+        this.state = state;
+
+        // Use pre-evolution for evolved eggs and unevolved Pokemon
+        final boolean finishedEvolving = this.isFinishedEvolving();
+        Color[] backgroundColors = PokeType.getColors(preEvolution);
+        if (finishedEvolving && !isEgg) {
+            backgroundColors = PokeType.getColors(evolvingPokemon);
+        } else if (!finishedEvolving && isEgg) {
+            // Unhatched egg -- use normal-type colors
+            backgroundColors = new PokeType(Type.NORMAL).getColors();
+        }
+
+        canvasPanel.withBackgroundColors(backgroundColors);
     }
 
     private enum State {

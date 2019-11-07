@@ -1,4 +1,4 @@
-package draw.panel;
+package draw.handler;
 
 import battle.ActivePokemon;
 import battle.attack.Attack;
@@ -8,6 +8,8 @@ import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
 import draw.layout.ButtonLayout;
 import draw.layout.QuestionLayout;
+import draw.panel.BasicPanels;
+import draw.panel.MovePanel;
 import draw.panel.WrapPanel.WrapMetrics;
 import input.ControlKey;
 import input.InputControl;
@@ -19,7 +21,7 @@ import pokemon.active.MoveList;
 
 import java.awt.Graphics;
 
-public class LearnMovePanel {
+public class LearnMoveHandler {
     private static final int NUM_BUTTONS = MoveList.MAX_MOVES + 3;
     private static final int CURRENT_MOVES = 0;
     private static final int LAST_CURRENT_MOVE = CURRENT_MOVES + MoveList.MAX_MOVES - 1;
@@ -43,7 +45,7 @@ public class LearnMovePanel {
 
     private State state;
 
-    public LearnMovePanel(ActivePokemon learning, Move toLearn) {
+    public LearnMoveHandler(ActivePokemon learning, Move toLearn) {
         this.learning = learning;
         this.toLearn = toLearn;
 

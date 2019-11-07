@@ -162,6 +162,13 @@ public class FontMetrics {
         return getTextHeight(g.getFont().getSize());
     }
 
+    // Sets the new font size and returns the average between rows distance with this font size and the previous one
+    public static int getDistanceBetweenRows(Graphics g, int newFontSize) {
+        int previousDistanceBetweenRows = getDistanceBetweenRows(g);
+        setFont(g, newFontSize);
+        return (previousDistanceBetweenRows + getDistanceBetweenRows(g))/2;
+    }
+
     public static int getDistanceBetweenRows(Graphics g) {
         FontMetrics fontMetrics = getFontMetrics(g);
         return (int)(fontMetrics.letterHeight*VERTICAL_WRAP_FACTOR);

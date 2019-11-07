@@ -49,8 +49,8 @@ public class TradeView extends View {
     private final ButtonList buttons;
     private final Button[] partyButtons;
 
-    private final TileSet partyTiles;
-    private final TileSet pokemonTiles;
+    private TileSet partyTiles;
+    private TileSet pokemonTiles;
 
     private int tradeAnimationTime;
 
@@ -125,10 +125,6 @@ public class TradeView extends View {
                 fullRequestedPanel, requestedLabel, requestedPokemonPanel,
                 messagePanel
         );
-
-        GameData data = Game.getData();
-        this.partyTiles = data.getPartyTiles();
-        this.pokemonTiles = data.getPokemonTilesLarge();
     }
 
     // Split the trade panel into two horizontal subpanels (top for trade label, bottom for pokemon label)
@@ -257,8 +253,16 @@ public class TradeView extends View {
     }
 
     private void updateActiveButtons() {
-        for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-            partyButtons[i].setActive(i < team.size());
+        // Set up Pokemon button background and labels
+        for (int i = 0; i < partyButtons.length; i++) {
+            Button button = partyButtons[i];
+            button.setActive(i < team.size());
+            if (button.isActive()) {
+                PartyPokemon pokemon = team.get(i);
+                button.panel()
+                      .withTypeColors(pokemon)
+                      .withImageLabel(partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getActualName());
+            }
         }
     }
 
@@ -270,23 +274,22 @@ public class TradeView extends View {
     @Override
     public void movedToFront() {
         Player player = Game.getPlayer();
+        GameData data = Game.getData();
+
+        this.partyTiles = data.getPartyTiles();
+        this.pokemonTiles = data.getPokemonTilesLarge();
+
         this.team = player.getTeam();
         this.buttons.setSelected(PARTY);
         this.state = State.QUESTION;
         this.tradeAnimationTime = 0;
 
         updateActiveButtons();
-
-        // Set up Pokemon button background and labels
-        for (int i = 0; i < team.size(); i++) {
-            PartyPokemon pokemon = team.get(i);
-            partyButtons[i].panel()
-                           .withBackgroundColors(PokeType.getColors(pokemon))
-                           .withImageLabel(partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getActualName());
-        }
     }
 
     public void setTrade(PokemonNamesies tradePokemon, PokemonNamesies requestedPokemon) {
+        this.movedToFront();
+
         this.offering = tradePokemon;
         this.requested = requestedPokemon;
 

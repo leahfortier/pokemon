@@ -35,7 +35,7 @@ public class MartLayout extends BagLayout {
     }
 
     // Item amount, player money, in bag display, and total amount display labels
-    public void setup(ItemNamesies selectedItem, int itemAmount, int totalAmount) {
+    public void setupLabels(ItemNamesies selectedItem, int itemAmount, int totalAmount) {
         amountPanel.withLabel(Integer.toString(itemAmount));
         playerMoneyPanel.withLabel("Money: " + Global.MONEY_SYMBOL + Game.getPlayer().getDatCashMoney());
         inBagPanel.withLabel("In Bag: " + Game.getPlayer().getBag().getQuantity(selectedItem));
