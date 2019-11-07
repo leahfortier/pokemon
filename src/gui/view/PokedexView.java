@@ -611,7 +611,8 @@ public class PokedexView extends View {
         countPanel.withLabel("Seen: " + pokedex.numSeen() + "     Caught: " + pokedex.numCaught());
     }
 
-    // Not the moves tab or a completely unknown Pokemon which doesn't give a shit about moves
+    // In moves tab and not a completely unknown Pokemon which doesn't give a shit about moves
+    // False when you should display the basic info panel with the image and such
     private boolean showMoves() {
         return selectedTab == TabInfo.MOVES && pokedex.isCaught(selected);
     }

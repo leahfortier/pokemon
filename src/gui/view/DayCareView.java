@@ -174,7 +174,7 @@ class DayCareView extends View {
                                                                   .up(SECOND_DAY_CARE_POKEMON)
                                                                   .left(RETURN)
                                                                   .down(FIRST_DAY_CARE_POKEMON))
-                                  .withPressIndex(index -> this.setSelected(team.get(index)))
+                                  .withPressIndex(this::setSelected)
                                   .withButtonSetup(pokemonButtonSetup())
                                   .getButtons();
 
@@ -368,13 +368,17 @@ class DayCareView extends View {
 
         // Reset selected Pokemon if unassigned or if pointing to a Pokemon not in the current view
         if (selected == null || (!party && selected != first && selected != second)) {
-            this.setSelected(team.get(0));
+            this.setSelected(0);
             party = true;
         }
 
         // Deposit from party (if day care is coo with it), or withdraw from day care (always available)
         depositWithdrawButton.setActive(!party || dayCareCenter.canDeposit(selected));
         depositWithdrawButton.panel().withLabel(party ? "Deposit" : "Withdraw");
+    }
+
+    private void setSelected(int partyIndex) {
+        this.setSelected(team.get(partyIndex));
     }
 
     // Sets the selected Pokemon and updates draw setup for the Pokemon

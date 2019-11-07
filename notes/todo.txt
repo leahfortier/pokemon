@@ -155,6 +155,7 @@ Other random things:
     need like a 'b' button where you can click through things but can't start a new dialogue
     opponent's trace message appears before your Pokemon is even out and looks really weird
     used a Pokeball and it didn't show up as my LastUsedItem what's up with that
+        - it's also not consuming the item either (confirmed for both capture and break out)
     maybe add setActive things to Button and have a similar buttonList.updateActive() type thing
     maybe eventually have the View class have draw method as final, with setup, draw (foreground), and getButtonList/getPanelList abstract methods
     would also be nice if there was some universal message handler thing instead of each class just holding a string or whatever
@@ -168,4 +169,6 @@ Other random things:
     should egg hatching and evolving be separate views that extend the same view class or something?
     StatGainPanel should maybe use the panel thing similar to the StatPanel
     change NicknamePanel to being a handler instead -- is there a way to combine it with setting your own name?
+    ViewState things in battle and map and other places probably should store the view and then they can have buttons pressed normally again
+    can we have a class that holds the arrow buttons and page number and shit like that
     
