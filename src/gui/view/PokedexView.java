@@ -17,6 +17,7 @@ import draw.panel.MovePanel;
 import draw.panel.PanelList;
 import draw.panel.WrapPanel;
 import draw.panel.WrapPanel.WrapMetrics;
+import gui.GameData;
 import gui.TileSet;
 import input.InputControl;
 import main.Game;
@@ -29,6 +30,7 @@ import pokemon.species.LevelUpMove;
 import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonList;
 import pokemon.stat.Stat;
+import trainer.player.Player;
 import trainer.player.pokedex.Pokedex;
 import util.FontMetrics;
 import util.GeneralUtils;
@@ -38,7 +40,6 @@ import util.string.StringUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.Iterator;
 import java.util.List;
 
 public class PokedexView extends View {
@@ -62,9 +63,7 @@ public class PokedexView extends View {
     private static final int MOVES_RIGHT_ARROW = NUM_BUTTONS - 4;
     private static final int MOVES_LEFT_ARROW = NUM_BUTTONS - 5;
 
-    private PanelList panels;
-    private List<DrawPanel> alwaysPanels;
-
+    private final PanelList panels;
     private final DrawPanel countPanel;
     private final DrawPanel infoPanel;
     private final DrawPanel imagePanel;
@@ -81,7 +80,9 @@ public class PokedexView extends View {
     private final Button movesLeftButton;
     private final Button movesRightButton;
 
-    private final Pokedex pokedex;
+    private Pokedex pokedex;
+    private TileSet partyTiles;
+    private TileSet imageTiles;
 
     private PokemonInfo selected;
     private TabInfo selectedTab;
@@ -147,9 +148,6 @@ public class PokedexView extends View {
         )
                 .withMinDescFontSize(10);
 
-        this.pokedex = Game.getPlayer().getPokedex();
-        pageNum = 0;
-
         // Pokedex panel without the title panel
         DrawPanel pokemonPanel = new DrawPanel(
                 pokedexPanel.x,
@@ -162,10 +160,7 @@ public class PokedexView extends View {
                 .withMissingBottomRow()
                 .withStartIndex(POKEMON_START)
                 .withDefaultTransitions(new ButtonTransitions().right(TAB_START).up(RIGHT_ARROW).down(RIGHT_ARROW))
-                .withPressIndex(index -> {
-                    selected = PokemonList.get(getPokeNum(index));
-                    changeTab(selectedTab);
-                })
+                .withPressIndex(this::setSelected)
                 .withButtonSetup(panel -> panel.withLabelSize(20)
                                                .withLabelColor(new Color(0, 0, 0, 64)));
 
@@ -198,6 +193,7 @@ public class PokedexView extends View {
                                                 .left(MOVES_LEFT_ARROW)
                                                 .down(MOVES_RIGHT_ARROW))
                 .withButtonSetup(panel -> panel.skipInactive()
+                                               .withFullTransparency()
                                                .withBlackOutline());
 
         // Pressing does nothing, only care if button is selected
@@ -274,11 +270,7 @@ public class PokedexView extends View {
         this.buttons.set(MOVES_RIGHT_ARROW, movesRightButton);
         this.buttons.set(RETURN, returnButton);
 
-        this.alwaysPanels = List.of(pokedexPanel, titlePanel, countPanel, infoPanel);
-        this.panels = new PanelList(alwaysPanels);
-
-        selected = PokemonList.get(1);
-        changeTab(TabInfo.MAIN);
+        this.panels = new PanelList(pokedexPanel, titlePanel, countPanel, infoPanel, basicInfoPanel, imagePanel);
     }
 
     @Override
@@ -295,82 +287,40 @@ public class PokedexView extends View {
         return (int)Math.ceil(1.0*selected.getLevelUpMoves().size()/MOVES_PER_PAGE);
     }
 
-    private void drawSetup() {
-        this.panels = new PanelList(alwaysPanels);
+    // Pokemon buttons (image, pokeball, number, etc.)
+    // Sets activity as well as draw things
+    private void setupPokemonButton(int index) {
+        Button button = pokemonButtons[index];
+        ButtonPanel panel = button.panel();
 
-        // Pokemon buttons (image, pokeball, number, etc.)
-        setupPokemonButtons();
-
-        // Selected Pokemon
-        setupSelectedPokemon();
-
-        // Tab outlines
-        for (int i = 0; i < tabButtons.length; i++) {
-            tabButtons[i].panel().withBottomTabOutlines(i, selectedTab.ordinal());
+        // Only skip if the Pokemon doesn't even exist (number too high)
+        int number = getPokeNum(index);
+        button.setActiveSkip(number <= PokemonInfo.NUM_POKEMON);
+        if (!button.isActive()) {
+            return;
         }
-    }
 
-    private void setupSelectedPokemon() {
-        boolean notSeen = pokedex.isNotSeen(selected);
+        // Outline selected Pokemon in black
+        PokemonInfo pokemonInfo = PokemonList.get(number);
+        panel.withBottomRightImage(null)
+             .withConditionalOutline(pokemonInfo == selected);
 
-        // Background type colors (if not seen just use black)
-        infoPanel.withBackgroundColors(notSeen
-                                       ? new Color[] { Color.BLACK, Color.BLACK }
-                                       : selected.getType().getColors());
+        if (pokedex.isNotSeen(pokemonInfo)) {
+            // Just display number for unseen pokes
+            panel.withLabel(String.format("%03d", number));
+        } else {
+            // If seen or caught, show party tile image
+            panel.withImageLabel(partyTiles.getTile(pokemonInfo.getTinyImageName()));
 
-        if (this.shouldDrawInformationPanel()) {
-            this.panels.add(basicInfoPanel, imagePanel);
-
-            // Image
-            if (notSeen) {
-                imagePanel.withLabel("?");
-            } else {
-                TileSet pokedexTiles = Game.getData().getPokedexTilesSmall();
-                BufferedImage pkmImg = pokedexTiles.getTile(selected.getBaseImageName());
-                pkmImg.setRGB(0, 0, 0); // TODO: What is happening here?
-
-                imagePanel.withImageLabel(pkmImg);
-            }
-        }
-    }
-
-    private void setupPokemonButtons() {
-        TileSet partyTiles = Game.getData().getPartyTiles();
-
-        for (int i = 0; i < pokemonButtons.length; i++) {
-            ButtonPanel buttonPanel = pokemonButtons[i].panel();
-
-            // Only skip if the Pokemon doesn't even exist (number too high)
-            int number = getPokeNum(i);
-            if (number > PokemonInfo.NUM_POKEMON) {
-                buttonPanel.skipDraw();
-                continue;
-            }
-
-            // Outline selected Pokemon in black
-            PokemonInfo pokemonInfo = PokemonList.get(number);
-            buttonPanel.withConditionalOutline(pokemonInfo == selected);
-            buttonPanel.withBottomRightImage(null);
-
-            if (pokedex.isNotSeen(pokemonInfo)) {
-                // Just display number for unseen pokes
-                buttonPanel.withLabel(String.format("%03d", number));
-            } else {
-                // If seen or caught, show party tile image
-                buttonPanel.withImageLabel(partyTiles.getTile(pokemonInfo.getTinyImageName()));
-
-                // Caught pokemon have a little Pokeball in the bottom right corner
-                if (pokedex.isCaught(pokemonInfo)) {
-                    buttonPanel.withBottomRightImage(TileSet.TINY_POKEBALL);
-                }
+            // Caught pokemon have a little Pokeball in the bottom right corner
+            if (pokedex.isCaught(pokemonInfo)) {
+                panel.withBottomRightImage(TileSet.TINY_POKEBALL);
             }
         }
     }
 
     @Override
     public void draw(Graphics g) {
-        drawSetup();
-
         // Background
         BasicPanels.drawCanvasPanel(g);
         panels.drawAll(g);
@@ -391,7 +341,9 @@ public class PokedexView extends View {
 
         int spacing = 15;
         int leftX, textY;
-        if (this.shouldDrawInformationPanel()) {
+
+        // If not showing moves, show the basic info panel
+        if (!this.showMoves()) {
             // Name
             FontMetrics.setBlackFont(g, 20);
             leftX = imagePanel.rightX() + spacing;
@@ -498,14 +450,11 @@ public class PokedexView extends View {
             } else {
                 FontMetrics.setFont(g, 14);
 
-                List<LevelUpMove> levelUpMoves = selected.getLevelUpMoves();
-                Iterator<LevelUpMove> movesIterator = GeneralUtils.pageIterator(levelUpMoves, movePageNum, MOVES_PER_PAGE);
-
-                for (int i = 0; i < MOVES_PER_PAGE && movesIterator.hasNext(); i++) {
-                    LevelUpMove levelUpMove = movesIterator.next();
-
-                    int level = levelUpMove.getLevel();
+                List<LevelUpMove> levelUpMoves = GeneralUtils.pageValues(selected.getLevelUpMoves(), movePageNum, MOVES_PER_PAGE);
+                for (int i = 0; i < levelUpMoves.size(); i++) {
+                    LevelUpMove levelUpMove = levelUpMoves.get(i);
                     Attack attack = levelUpMove.getMove().getNewAttack();
+                    int level = levelUpMove.getLevel();
 
                     final String levelString;
                     if (level == PokemonInfo.EVOLUTION_LEVEL_LEARNED) {
@@ -589,23 +538,55 @@ public class PokedexView extends View {
         selectedTab = tab;
         movePageNum = 0;
 
+        // Tab outlines
+        for (int i = 0; i < tabButtons.length; i++) {
+            tabButtons[i].panel().withBottomTabOutlines(i, selectedTab.ordinal());
+        }
+
+        boolean drawInfoPanel = !this.showMoves();
+        basicInfoPanel.setSkip(!drawInfoPanel);
+        imagePanel.setSkip(!drawInfoPanel);
+
         this.updateActiveButtons();
     }
 
-    private void updateActiveButtons() {
-        int pokemonDisplayed = PokemonInfo.NUM_POKEMON - pageNum*PER_PAGE;
-        for (int i = 0; i < pokemonButtons.length; i++) {
-            pokemonButtons[i].setActive(i < pokemonDisplayed);
+    private void setSelected(int index) {
+        this.selected = PokemonList.get(getPokeNum(index));
+
+        boolean notSeen = pokedex.isNotSeen(selected);
+
+        // Background type colors (if not seen just use black)
+        infoPanel.withBackgroundColors(notSeen
+                                       ? new Color[] { Color.BLACK, Color.BLACK }
+                                       : selected.getType().getColors());
+
+        // Image
+        if (!this.showMoves()) {
+            if (notSeen) {
+                imagePanel.withLabel("?");
+            } else {
+                BufferedImage pkmImg = imageTiles.getTile(selected.getBaseImageName());
+                imagePanel.withImageLabel(pkmImg);
+            }
         }
 
-        boolean movesView = selectedTab == TabInfo.MOVES && pokedex.isCaught(selected);
+        // Resets tab values (namely move page number)
+        this.changeTab(selectedTab);
+    }
+
+    private void updateActiveButtons() {
+        for (int i = 0; i < pokemonButtons.length; i++) {
+            setupPokemonButton(i);
+        }
+
+        boolean showMoves = this.showMoves();
         int movesDisplayed = selected.getLevelUpMoves().size() - movePageNum*MOVES_PER_PAGE;
         for (int i = 0; i < MOVES_PER_PAGE; i++) {
-            moveButtons[i].setActive(movesView && i < movesDisplayed);
+            moveButtons[i].setActive(showMoves && i < movesDisplayed);
         }
 
-        movesLeftButton.setActive(movesView);
-        movesRightButton.setActive(movesView);
+        movesLeftButton.setActive(showMoves);
+        movesRightButton.setActive(showMoves);
     }
 
     @Override
@@ -615,15 +596,24 @@ public class PokedexView extends View {
 
     @Override
     public void movedToFront() {
-        countPanel.withLabel("Seen: " + pokedex.numSeen() + "     Caught: " + pokedex.numCaught());
+        Player player = Game.getPlayer();
+        GameData data = Game.getData();
 
-        selected = PokemonList.get(1);
-        changeTab(TabInfo.MAIN);
+        pokedex = player.getPokedex();
+        partyTiles = data.getPartyTiles();
+        imageTiles = data.getPokedexTilesSmall();
+        pageNum = 0;
+
+        // Setting selected will call the changeTab with the current tab to officially set it
+        selectedTab = TabInfo.MAIN;
+        this.setSelected(0);
+
+        countPanel.withLabel("Seen: " + pokedex.numSeen() + "     Caught: " + pokedex.numCaught());
     }
 
     // Not the moves tab or a completely unknown Pokemon which doesn't give a shit about moves
-    private boolean shouldDrawInformationPanel() {
-        return selectedTab != TabInfo.MOVES || !pokedex.isCaught(selected);
+    private boolean showMoves() {
+        return selectedTab == TabInfo.MOVES && pokedex.isCaught(selected);
     }
 
     private enum TabInfo {

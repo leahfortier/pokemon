@@ -330,8 +330,8 @@ public class PCView extends View {
         // Draw the pokemon image and outline if selected
         if (active) {
             button.panel()
-                  .withImageLabel(partyTiles.getTile(pokemon.getTinyImageName()))
-                  .withConditionalOutline(pokemon == selected);
+                  .withConditionalOutline(pokemon == selected)
+                  .withImageLabel(partyTiles.getTile(pokemon.getTinyImageName()));
         }
     }
 
