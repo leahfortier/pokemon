@@ -27,7 +27,6 @@ import pokemon.breeding.DayCareCenter;
 import pokemon.breeding.Eggy;
 import trainer.Trainer;
 import trainer.player.Player;
-import type.PokeType;
 import util.FontMetrics;
 
 import java.awt.Color;
@@ -388,7 +387,7 @@ class DayCareView extends View {
         this.selected = selected;
 
         // Setup background colors and image
-        infoPanel.withBackgroundColors(PokeType.getColors(selected));
+        infoPanel.withTypeColors(selected);
         imagePanel.withImageLabel(Game.getData().getPokemonTilesSmall().getTile(selected.getImageName()));
 
         // Setup moves -- only draw panels for non-eggs and for actual moves (in range)

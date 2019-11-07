@@ -281,7 +281,7 @@ public class TradeView extends View {
         for (int i = 0; i < team.size(); i++) {
             PartyPokemon pokemon = team.get(i);
             partyButtons[i].panel()
-                           .withBackgroundColors(PokeType.getColors(pokemon))
+                           .withTypeColors(pokemon)
                            .withImageLabel(partyTiles.getTile(pokemon.getTinyImageName()), pokemon.getActualName());
         }
     }

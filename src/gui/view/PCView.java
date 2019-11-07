@@ -341,7 +341,7 @@ public class PCView extends View {
                              .withLabel(party ? "Deposit" : "Withdraw");
 
         // Pokemon panel type colors
-        infoPanel.withBackgroundColors(PokeType.getColors(selected));
+        infoPanel.withTypeColors(selected);
 
         // Pokemon panel image
         imagePanel.withImageLabel(Game.getData().getPokemonTilesSmall().getTile(selected.getImageName()));

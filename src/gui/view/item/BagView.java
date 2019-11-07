@@ -469,7 +469,7 @@ public class BagView extends View {
             button.setActive(state == BagState.POKEMON_SELECT && i < team.size());
             panel.setSkip(state == BagState.MOVE_SELECT || i >= team.size());
             if (!panel.isSkipping()) {
-                panel.withBackgroundColors(PokeType.getColors(team.get(i)));
+                panel.withTypeColors(team.get(i));
             }
         }
 

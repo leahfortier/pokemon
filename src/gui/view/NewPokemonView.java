@@ -2,6 +2,7 @@ package gui.view;
 
 import draw.button.Button;
 import draw.button.ButtonList;
+import draw.button.ButtonPanel;
 import draw.layout.QuestionLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
@@ -21,7 +22,6 @@ import pokemon.species.PokemonNamesies;
 import trainer.Trainer;
 import trainer.player.NewPokemonInfo;
 import trainer.player.Player;
-import type.PokeType;
 import util.string.PokeString;
 
 import java.awt.Color;
@@ -45,7 +45,7 @@ public class NewPokemonView extends View {
 
     private final PanelList panels;
     private final DrawPanel canvasPanel;
-    private final DrawPanel messagelessCanvasPanel;
+    private final DrawPanel fullImagePanel;
     private final NicknamePanel nicknamePanel;
 
     private PanelList infoPanels;
@@ -66,7 +66,6 @@ public class NewPokemonView extends View {
 
     private State state;
     private String message;
-    private boolean displayInfo;
 
     NewPokemonView() {
         this.canvasPanel = BasicPanels.newFullGamePanel()
@@ -74,12 +73,12 @@ public class NewPokemonView extends View {
                                       .withBorderPercentage(0);
 
         // Canvas panel truncated at the message
-        this.messagelessCanvasPanel = new DrawPanel(
+        this.fullImagePanel = new DrawPanel(
                 canvasPanel.x, canvasPanel.y, canvasPanel.width,
                 BasicPanels.getMessagePanelY() - canvasPanel.y
         ).withNoBackground();
 
-        this.nicknamePanel = new NicknamePanel(this.messagelessCanvasPanel);
+        this.nicknamePanel = new NicknamePanel(this.fullImagePanel);
 
         // Placeholder panels
         this.setLabelPanels(PokemonNamesies.BULBASAUR.getInfo());
@@ -149,7 +148,7 @@ public class NewPokemonView extends View {
         this.buttons.set(PARTY_CHOICE, partyChoiceButton);
         this.buttons.set(PC_CHOICE, pcChoiceButton);
 
-        this.panels = new PanelList(canvasPanel, messagelessCanvasPanel);
+        this.panels = new PanelList(canvasPanel, fullImagePanel);
     }
 
     // Panels need to be recreated for each new pokemon because their sizing changes to fit the text
@@ -204,16 +203,14 @@ public class NewPokemonView extends View {
 
         InputControl input = InputControl.instance();
         switch (state) {
-            case POKEDEX:
+            case POKEDEX_REGISTER:
                 if (input.consumeIfMouseDown(ControlKey.SPACE)) {
-                    if (!displayInfo) {
-                        displayInfo = true;
-                    } else {
-                        message = null;
-                    }
+                    this.setState(State.POKEDEX_INFO);
                 }
-                if (message == null) {
-                    setState(State.NICKNAME_QUESTION);
+                break;
+            case POKEDEX_INFO:
+                if (input.consumeIfMouseDown(ControlKey.SPACE)) {
+                    this.setState(State.NICKNAME_QUESTION);
                 }
                 break;
             case NICKNAME:
@@ -238,41 +235,15 @@ public class NewPokemonView extends View {
         }
     }
 
-    private void drawSetup() {
-        BufferedImage pokemonImage = Game.getData().getPokedexTilesLarge().getTile(newPokemon.getBaseImageName());
-        if (displayInfo) {
-            imagePanel.withImageLabel(pokemonImage);
-            messagelessCanvasPanel.skipDraw();
-        } else if (state == State.NICKNAME) {
-            messagelessCanvasPanel.skipDraw();
-        } else if (state != State.END) {
-            messagelessCanvasPanel.withImageLabel(pokemonImage);
-        }
-
-        if (state == State.PARTY_SELECTION) {
-            List<PartyPokemon> party = Game.getPlayer().getTeam();
-            TileSet partyTiles = Game.getData().getPartyTiles();
-            for (int i = 0; i < party.size(); i++) {
-                PartyPokemon partyPokemon = party.get(i);
-                BufferedImage partyPokemonImage = partyTiles.getTile(partyPokemon.getTinyImageName());
-                partyButtons[i].panel()
-                               .withBackgroundColors(PokeType.getColors(partyPokemon))
-                               .withImageLabel(partyPokemonImage, partyPokemon.getActualName());
-            }
-        }
-    }
-
     @Override
     public void draw(Graphics g) {
-        drawSetup();
-
         // Background
         panels.drawAll(g);
         this.drawMessage(g);
         buttons.drawPanels(g);
 
         // Info panels
-        if (displayInfo) {
+        if (state == State.POKEDEX_INFO) {
             infoPanels.drawAll(g);
             this.drawFlavorText(g, newPokemon.getPokemonInfo());
         } else if (state == State.NICKNAME) {
@@ -301,17 +272,24 @@ public class NewPokemonView extends View {
     }
 
     private void setState(State state) {
-        this.displayInfo = false;
-        message = null;
+        if (state != State.POKEDEX_INFO) {
+            message = null;
+        }
+
+        // Don't draw the centered pokemon image if in any of these states
+        fullImagePanel.setSkip(state == State.POKEDEX_INFO || state == State.NICKNAME || state == State.END);
+
+        // Reset all buttons (set relevant buttons individually to active depending on state)
         buttons.setInactive();
 
         Player player = Game.getPlayer();
+        List<PartyPokemon> team = player.getTeam();
         NewPokemonInfo newPokemonInfo = player.getNewPokemonInfo();
         String pokemonName = newPokemon.getActualName();
 
         this.state = state;
         switch (state) {
-            case POKEDEX:
+            case POKEDEX_REGISTER:
                 if (newPokemonInfo.isFirstNewPokemon()) {
                     message = newPokemon.namesies().getName() + " was registered in the " + PokeString.POKEDEX + "!";
                 } else {
@@ -329,7 +307,7 @@ public class NewPokemonView extends View {
                 nicknamePanel.set(newPokemon);
                 break;
             case LOCATION:
-                if (player.fullParty() && !player.getTeam().contains(newPokemon)) {
+                if (player.fullParty() && !team.contains(newPokemon)) {
                     partyChoiceButton.setActive(true);
                     pcChoiceButton.setActive(true);
                     buttons.setSelected(PARTY_CHOICE);
@@ -339,9 +317,17 @@ public class NewPokemonView extends View {
                 }
                 break;
             case PARTY_SELECTION:
-                // Should only be in this state if the party is full so don't need to check length
-                for (Button partyButton : partyButtons) {
-                    partyButton.setActive(true);
+                TileSet partyTiles = Game.getData().getPartyTiles();
+                for (int i = 0; i < partyButtons.length; i++) {
+                    // Should only be in this state if the party is full so don't need to check length
+                    Button button = partyButtons[i];
+                    ButtonPanel panel = button.panel();
+                    button.setActive(true);
+
+                    PartyPokemon partyPokemon = team.get(i);
+                    BufferedImage partyPokemonImage = partyTiles.getTile(partyPokemon.getTinyImageName());
+                    panel.withTypeColors(partyPokemon)
+                         .withImageLabel(partyPokemonImage, partyPokemon.getActualName());
                 }
                 message = null;
                 this.buttons.setSelected(PARTY);
@@ -359,16 +345,18 @@ public class NewPokemonView extends View {
         NewPokemonInfo newPokemonInfo = Game.getPlayer().getNewPokemonInfo();
         this.newPokemon = newPokemonInfo.getNewPokemon();
         this.boxNum = newPokemonInfo.getNewPokemonBox();
+
         this.setLabelPanels(newPokemon.getPokemonInfo());
+        this.canvasPanel.withTypeColors(newPokemon);
 
-        this.buttons.setSelected(0);
-
-        this.canvasPanel.withBackgroundColors(PokeType.getColors(this.newPokemon));
+        BufferedImage pokemonImage = Game.getData().getPokedexTilesLarge().getTile(newPokemon.getBaseImageName());
+        imagePanel.withImageLabel(pokemonImage);
+        fullImagePanel.withImageLabel(pokemonImage);
 
         if (newPokemon.isEgg()) {
             setState(State.LOCATION);
         } else {
-            setState(State.POKEDEX);
+            setState(State.POKEDEX_REGISTER);
         }
 
         if (state == State.END) {
@@ -377,7 +365,8 @@ public class NewPokemonView extends View {
     }
 
     private enum State {
-        POKEDEX,
+        POKEDEX_REGISTER,
+        POKEDEX_INFO,
         NICKNAME_QUESTION,
         NICKNAME,
         LOCATION,
