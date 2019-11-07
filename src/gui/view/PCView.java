@@ -19,6 +19,8 @@ import draw.panel.MovePanel;
 import draw.panel.PanelList;
 import draw.panel.StatPanel;
 import draw.panel.WrapPanel.WrapMetrics;
+import gui.GameData;
+import gui.TileSet;
 import input.InputControl;
 import main.Game;
 import map.Direction;
@@ -33,6 +35,7 @@ import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class PCView extends View {
@@ -68,18 +71,17 @@ public class PCView extends View {
     private final Button depositWithdrawButton;
     private final Button releaseButton;
 
-    private final PC pc;
+    private PC pc;
+    private TileSet partyTiles;
+    private TileSet spriteTiles;
 
     private PartyPokemon selected;
     private boolean party;
     private boolean depositClicked;
     private boolean switchClicked;
+    private Color highlightColor;
 
     PCView() {
-        pc = Game.getPlayer().getPC();
-        selected = Game.getPlayer().front();
-        party = true;
-
         boxPanel = new DrawPanel(40, 40, 350, 418)
                 .withTransparentCount(2)
                 .withBorderPercentage(0)
@@ -271,8 +273,7 @@ public class PCView extends View {
             pc.switchPokemon(selected, row, col);
             switchClicked = false;
         } else {
-            selected = pc.getBoxPokemon()[row][col];
-            party = false;
+            this.setSelected(pc.getBoxPokemon()[row][col]);
         }
     }
 
@@ -283,9 +284,30 @@ public class PCView extends View {
             pc.switchPokemon(selected, index);
             switchClicked = false;
         } else {
-            selected = Game.getPlayer().getTeam().get(index);
-            party = true;
+            this.setSelected(index);
         }
+    }
+
+    private void setSelected(int partyIndex) {
+        this.setSelected(Game.getPlayer().getTeam().get(partyIndex));
+    }
+
+    private void setSelected(PartyPokemon selected) {
+        this.selected = selected;
+
+        // Pokemon panel type colors
+        Color[] typeColors = PokeType.getColors(selected);
+        infoPanel.withBackgroundColors(typeColors);
+
+        // Secondary color is the color of the buttons
+        highlightColor = typeColors[1];
+
+        // Pokemon panel image
+        BufferedImage pokemonImage = spriteTiles.getTile(selected.getImageName());
+        imagePanel.withImageLabel(pokemonImage);
+
+        // Handles setting party
+        this.updateActiveButtons();
     }
 
     private void pressDepositWithdraw() {
@@ -300,68 +322,25 @@ public class PCView extends View {
         }
     }
 
-    private void setupPokemonButton(ButtonPanel panel, PartyPokemon pokemon) {
-        if (pokemon == null) {
-            panel.skipDraw();
-            return;
-        }
+    private void setupPokemonButton(Button button, PartyPokemon pokemon) {
+        boolean skip = pokemon == null;
+        ButtonPanel panel = button.panel();
+
+        button.setActive(!skip);
+        panel.setSkip(skip);
 
         // Draw the pokemon image and outline if selected
-        panel.withImageLabel(Game.getData().getPartyTiles().getTile(pokemon.getTinyImageName()))
-             .withConditionalOutline(pokemon == selected);
-    }
-
-    private void setupDraw() {
-        // Box color
-        boxPanel.withBackgroundColor(pc.getBoxColor());
-
-        // Box name
-        boxNamePanel.withLabel("Box " + (pc.getBoxNum() + 1));
-
-        // Box Pokemon buttons
-        PartyPokemon[][] box = pc.getBoxPokemon();
-        for (int i = 0; i < PC.BOX_HEIGHT; i++) {
-            for (int j = 0; j < PC.BOX_WIDTH; j++) {
-                setupPokemonButton(boxButtons[j][i].panel(), box[j][i]);
-            }
-        }
-
-        // Pokemon party buttons
-        List<PartyPokemon> team = Game.getPlayer().getTeam();
-        for (int i = 0; i < team.size(); i++) {
-            setupPokemonButton(partyButtons[i].panel(), team.get(i));
-        }
-
-        // Highlight if selected
-        // Secondary color is the color of the buttons
-        Color buttonColor = PokeType.getColors(selected)[1];
-        switchButton.panel().withHighlight(switchClicked, buttonColor);
-        depositWithdrawButton.panel()
-                             .withHighlight(party && depositClicked, buttonColor)
-                             .withLabel(party ? "Deposit" : "Withdraw");
-
-        // Pokemon panel type colors
-        infoPanel.withTypeColors(selected);
-
-        // Pokemon panel image
-        imagePanel.withImageLabel(Game.getData().getPokemonTilesSmall().getTile(selected.getImageName()));
-
-        MoveList moves = selected.getActualMoves();
-        for (int i = 0; i < moveButtons.length; i++) {
-            ButtonPanel movePanel = moveButtons[i].panel();
-            if (!selected.isEgg() && i < moves.size()) {
-                Attack attack = moves.get(i).getAttack();
-                movePanel.withBackgroundColor(attack.getActualType().getColor())
-                         .withLabel(attack.getName());
-            } else {
-                movePanel.skipDraw();
-            }
+        if (!skip) {
+            panel.withImageLabel(partyTiles.getTile(pokemon.getTinyImageName()))
+                 .withConditionalOutline(pokemon == selected);
         }
     }
 
     @Override
     public void draw(Graphics g) {
-        setupDraw();
+        // Highlight if selected
+        switchButton.panel().withHighlight(switchClicked, highlightColor);
+        depositWithdrawButton.panel().withHighlight(party && depositClicked, highlightColor);
 
         // Background
         BasicPanels.drawCanvasPanel(g);
@@ -437,36 +416,76 @@ public class PCView extends View {
 
     @Override
     public void movedToFront() {
-        party = true;
-        selected = Game.getPlayer().front();
+        Player player = Game.getPlayer();
+        GameData data = Game.getData();
+
+        pc = player.getPC();
+        partyTiles = data.getPartyTiles();
+        spriteTiles = data.getPokemonTilesSmall();
+
+        this.setSelected(0);
         updateActiveButtons();
     }
 
     private void updateActiveButtons() {
-        PartyPokemon[][] box = pc.getBoxPokemon();
-        for (int i = 0; i < PC.BOX_HEIGHT; i++) {
-            for (int j = 0; j < PC.BOX_WIDTH; j++) {
-                boxButtons[i][j].setActive((party && depositClicked) || switchClicked || box[i][j] != null);
-            }
-        }
-
         Player player = Game.getPlayer();
         List<PartyPokemon> team = player.getTeam();
 
+        // Party Pokemon buttons -- check if selected is part of the team
         party = false;
-        for (int i = 0; i < Trainer.MAX_POKEMON; i++) {
-            partyButtons[i].setActive(i < team.size());
-            if (i < team.size() && team.get(i) == selected) {
+        for (int i = 0; i < partyButtons.length; i++) {
+            PartyPokemon partyPokemon = i < team.size() ? team.get(i) : null;
+            setupPokemonButton(partyButtons[i], partyPokemon);
+            if (selected != null && selected == partyPokemon) {
                 party = true;
             }
         }
 
-        if (party) {
-            depositWithdrawButton.setActive(player.canDeposit(selected));
-        } else {
-            depositWithdrawButton.setActive(team.size() < Trainer.MAX_POKEMON);
+        // Box Pokemon buttons
+        PartyPokemon[][] box = pc.getBoxPokemon();
+        for (int i = 0; i < PC.BOX_HEIGHT; i++) {
+            for (int j = 0; j < PC.BOX_WIDTH; j++) {
+                Button button = boxButtons[i][j];
+                setupPokemonButton(button, box[i][j]);
+
+                // Even if slot is empty, can still be active (like if choosing where to place the selected)
+                if ((party && depositClicked) || switchClicked) {
+                    button.setActive(true);
+                }
+            }
         }
 
+        // Selected Pokemon moves
+        MoveList moves = selected.getActualMoves();
+        for (int i = 0; i < moveButtons.length; i++) {
+            Button button = moveButtons[i];
+            ButtonPanel panel = button.panel();
+
+            boolean active = !selected.isEgg() && i < moves.size();
+            button.setActive(active);
+            panel.setSkip(!active);
+
+            if (button.isActive()) {
+                Attack attack = moves.get(i).getAttack();
+                panel.withBackgroundColor(attack.getActualType().getColor())
+                     .withLabel(attack.getName());
+            }
+        }
+
+        // Deposit/Withdraw
+        if (party) {
+            depositWithdrawButton.setActive(player.canDeposit(selected));
+            depositWithdrawButton.panel().withLabel("Deposit");
+        } else {
+            depositWithdrawButton.setActive(team.size() < Trainer.MAX_POKEMON);
+            depositWithdrawButton.panel().withLabel("Withdraw");
+        }
+
+        // Release
         releaseButton.setActive(!party || player.canDeposit(selected));
+
+        // Box color and name
+        boxPanel.withBackgroundColor(pc.getBoxColor());
+        boxNamePanel.withLabel("Box " + (pc.getBoxNum() + 1));
     }
 }
