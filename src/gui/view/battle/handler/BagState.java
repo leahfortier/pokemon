@@ -222,6 +222,28 @@ public class BagState implements VisualStateHandler {
         }
     }
 
+    private void pressItemButton(BattleView view, ItemNamesies item) {
+        Battle currentBattle = view.getCurrentBattle();
+        Player player = Game.getPlayer();
+
+        // Pokemon Use Item -- Set item to be selected an change to Pokemon View
+        if (item.getItem() instanceof PokemonUseItem) {
+            selectedItem = item;
+            view.setVisualState(VisualState.USE_ITEM);
+        }
+        // Otherwise, just use it on the battle if successful
+        else if (bag.battleUseItem(item, player.front(), currentBattle)) {
+            player.performAction(currentBattle, TrainerAction.ITEM);
+            view.setVisualState(VisualState.MENU);
+            view.cycleMessage();
+        }
+        // If the item cannot be used, do not consume
+        else {
+            view.cycleMessage();
+            view.setVisualState(VisualState.INVALID_BAG);
+        }
+    }
+
     @Override
     public void update(BattleView view) {
         // Update all bag buttons and the back button
@@ -235,47 +257,17 @@ public class BagState implements VisualStateHandler {
             }
         }
 
-        Battle currentBattle = view.getCurrentBattle();
-        Player player = Game.getPlayer();
-
-        List<ItemNamesies> items = GeneralUtils.pageValues(this.getDisplayItems(), bagPage, ITEMS_PER_PAGE);
         // Go through each item on the page
+        List<ItemNamesies> items = GeneralUtils.pageValues(this.getDisplayItems(), bagPage, ITEMS_PER_PAGE);
         for (int i = 0; i < items.size(); i++) {
             if (itemButtons[i].checkConsumePress()) {
-                ItemNamesies item = items.get(i);
-
-                // Pokemon Use Item -- Set item to be selected an change to Pokemon View
-                if (item.getItem() instanceof PokemonUseItem) {
-                    selectedItem = item;
-                    view.setVisualState(VisualState.USE_ITEM);
-                    break;
-                }
-                // Otherwise, just use it on the battle if successful
-                else if (bag.battleUseItem(item, player.front(), currentBattle)) {
-                    player.performAction(currentBattle, TrainerAction.ITEM);
-                    view.setVisualState(VisualState.MENU);
-                    view.cycleMessage();
-                    break;
-                }
-                // If the item cannot be used, do not consume
-                else {
-                    view.cycleMessage();
-                    view.setVisualState(VisualState.INVALID_BAG);
-                }
+                pressItemButton(view, items.get(i));
             }
         }
 
-        // Selecting the Last Item Used Button
+        // Last Used Item
         if (lastUsedButton.checkConsumePress()) {
-            ItemNamesies lastItemUsed = bag.getLastUsedItem();
-            if (lastItemUsed != ItemNamesies.NO_ITEM && bag.battleUseItem(lastItemUsed, player.front(), currentBattle)) {
-                player.performAction(currentBattle, TrainerAction.ITEM);
-                view.setVisualState(VisualState.MENU);
-                view.cycleMessage();
-            } else {
-                view.cycleMessage();
-                view.setVisualState(VisualState.INVALID_BAG);
-            }
+            pressItemButton(view, bag.getLastUsedItem());
         }
 
         int increment = 0;

@@ -31,8 +31,8 @@ public class Bag implements Serializable {
     private final Map<BagCategory, Set<ItemNamesies>> bag;
     private final Map<BattleBagCategory, Set<ItemNamesies>> battleBag;
 
-    // TODO: This doesn't work for Pokemon Use Items -- it automatically selects the front Pokemon
-    private ItemNamesies lastUsedItem; // Only for battle
+    // Only for battle
+    private ItemNamesies lastUsedItem;
 
     public Bag() {
         this.items = new EnumMap<>(ItemNamesies.class);
@@ -178,24 +178,32 @@ public class Bag implements Serializable {
     // Checks conditions, adds messages, and executes the UseItem
     public boolean battleUseItem(ItemNamesies item, PartyPokemon p, Battle battle) {
         Player player = Game.getPlayer();
-        Item useItem = item.getItem();
+        Item itemValue = item.getItem();
 
-        if (useItem instanceof BallItem) {
-            return player.catchPokemon(battle, (BallItem)useItem);
-        } else if (useItem instanceof BattleUseItem) {
-            boolean used = this.useItem(battle, item, p, null);
+        boolean used;
+        if (itemValue instanceof BallItem) {
+            used = player.catchPokemon(battle, (BallItem)itemValue);
             if (used) {
-                this.lastUsedItem = this.hasItem(item) ? item : ItemNamesies.NO_ITEM;
-                ActivePokemon front = player.front();
-                if (front == p) {
-                    Messages.add(new MessageUpdate().updatePokemon(battle, front));
-                }
+                removeItem(item);
             }
-            return used;
+        } else if (itemValue instanceof BattleUseItem) {
+            used = this.useItem(battle, item, p, null);
         } else {
             Global.error("Invalid battle item " + item.getName());
             return false;
         }
+
+        if (used) {
+            ActivePokemon front = player.front();
+            if (front == p) {
+                Messages.add(new MessageUpdate().updatePokemon(battle, front));
+            }
+
+            // Update last move used
+            this.lastUsedItem = this.hasItem(item) ? item : ItemNamesies.NO_ITEM;
+        }
+
+        return used;
     }
 
     // Move should be nonnull for MoveUseItem and null otherwise

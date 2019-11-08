@@ -15,6 +15,7 @@ import draw.layout.ButtonLayout.ButtonIndexAction;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.PanelList;
+import gui.GameData;
 import gui.TileSet;
 import gui.view.View;
 import gui.view.ViewMode;
@@ -22,6 +23,7 @@ import input.ControlKey;
 import input.InputControl;
 import item.Item;
 import item.ItemNamesies;
+import item.bag.Bag;
 import item.bag.BagCategory;
 import item.use.MoveUseItem;
 import item.use.PlayerUseItem;
@@ -36,7 +38,6 @@ import pokemon.active.MoveList;
 import pokemon.active.PartyPokemon;
 import trainer.Trainer;
 import trainer.player.Player;
-import type.PokeType;
 import util.FontMetrics;
 import util.GeneralUtils;
 import util.string.StringUtils;
@@ -53,7 +54,6 @@ public class BagView extends View {
 
     private static final int NUM_BUTTONS = CATEGORIES.length + Trainer.MAX_POKEMON + ITEMS_PER_PAGE
             + MoveList.MAX_MOVES + UseState.values().length + 3;
-
     private static final int TABS = 0;
     private static final int PARTY = TABS + CATEGORIES.length;
     private static final int ITEMS = PARTY + Trainer.MAX_POKEMON;
@@ -78,7 +78,11 @@ public class BagView extends View {
     private final Button rightArrow;
     private final Button leftArrow;
 
-    private BagState state;
+    private Bag bag;
+    private List<PartyPokemon> team;
+    private TileSet partyTiles;
+
+    private State state;
     private ItemNamesies selectedItem;
     private PartyPokemon selectedPokemon;
 
@@ -228,7 +232,7 @@ public class BagView extends View {
         // Draw page numbers
         layout.drawPageNumbers(g, pageNum, totalPages());
 
-        if (state == BagState.MOVE_SELECT) {
+        if (state == State.MOVE_SELECT) {
             // Draw moves
             drawMoves(g);
         } else {
@@ -283,9 +287,6 @@ public class BagView extends View {
     }
 
     private void drawPokemonInfo(Graphics g) {
-        List<PartyPokemon> team = Game.getPlayer().getTeam();
-        TileSet partyTiles = Game.getData().getPartyTiles();
-
         for (int i = 0; i < team.size(); i++) {
             PartyPokemon p = team.get(i);
             Button pokemonButton = partyButtons[i];
@@ -359,7 +360,7 @@ public class BagView extends View {
         }
 
         selectedTab = CATEGORIES[index];
-        state = BagState.ITEM_SELECT;
+        state = State.ITEM_SELECT;
 
         Set<ItemNamesies> list = this.getDisplayItems();
         selectedItem = list.isEmpty() ? ItemNamesies.NO_ITEM : list.iterator().next();
@@ -377,35 +378,35 @@ public class BagView extends View {
     }
 
     void giveItem(PartyPokemon p) {
-        Game.getPlayer().getBag().giveItem(p, this.selectedItem);
+        bag.giveItem(p, this.selectedItem);
         this.deactivateState(UseState.GIVE);
     }
 
     void useItem(PartyPokemon p) {
         if (!p.isEgg() && this.selectedItem.getItem() instanceof MoveUseItem) {
             this.selectedPokemon = p;
-            this.state = BagState.MOVE_SELECT;
+            this.state = State.MOVE_SELECT;
             this.buttons.setSelected(MOVES);
             this.updateActiveButtons();
         } else {
-            Game.getPlayer().getBag().usePokemonItem(this.selectedItem, p);
+            bag.usePokemonItem(this.selectedItem, p);
             this.deactivateState(UseState.USE);
         }
     }
 
     private void usePlayerItem() {
-        Game.getPlayer().getBag().usePlayerItem(this.selectedItem);
+        bag.usePlayerItem(this.selectedItem);
         this.deactivateState(UseState.USE);
     }
 
     private void useMoveItem(int index) {
         Move move = selectedPokemon.getActualMoves().get(index);
-        Game.getPlayer().getBag().useMoveItem(selectedItem, selectedPokemon, move);
+        bag.useMoveItem(selectedItem, selectedPokemon, move);
         this.deactivateState(UseState.USE);
     }
 
     void takeItem(PartyPokemon p) {
-        Game.getPlayer().getBag().takeItem(p);
+        bag.takeItem(p);
         this.deactivateState(UseState.TAKE);
     }
 
@@ -413,9 +414,9 @@ public class BagView extends View {
         state.reset();
 
         this.buttons.setSelected(USE_STATES + state.ordinal());
-        this.state = BagState.ITEM_SELECT;
+        this.state = State.ITEM_SELECT;
 
-        if (!Game.getPlayer().getBag().hasItem(this.selectedItem)) {
+        if (!bag.hasItem(this.selectedItem)) {
             this.updateCategory();
         }
 
@@ -428,11 +429,11 @@ public class BagView extends View {
 
         if (useState.isClicked()) {
             // State is now selected  -- switch to Pokemon select to choose which pokemon to use the item with
-            this.state = BagState.POKEMON_SELECT;
+            this.state = State.POKEMON_SELECT;
             this.buttons.setSelected(PARTY);
         } else {
             // No longer selected -- revert back to item select
-            this.state = BagState.ITEM_SELECT;
+            this.state = State.ITEM_SELECT;
         }
 
         // PlayerUseItems don't require selecting a Pokemon -- automatically use as soon as Use is pressed
@@ -445,13 +446,22 @@ public class BagView extends View {
 
     @Override
     public void movedToFront() {
+        Player player = Game.getPlayer();
+        GameData data = Game.getData();
+
+        bag = player.getBag();
+        team = player.getTeam();
+        partyTiles = data.getPartyTiles();
+
+        pageNum = 0;
+
         // Set selected button to be the first tab and switch to first tab
-        this.buttons.setSelected(0);
+        this.buttons.setSelected(TABS);
         this.changeCategory(0);
     }
 
     private Set<ItemNamesies> getDisplayItems() {
-        return Game.getPlayer().getBag().getCategory(selectedTab);
+        return bag.getCategory(selectedTab);
     }
 
     private int totalPages() {
@@ -459,15 +469,12 @@ public class BagView extends View {
     }
 
     private void updateActiveButtons() {
-        Player player = Game.getPlayer();
-
         // Only active during pokemon state, but draw for all states other than move
-        List<PartyPokemon> team = player.getTeam();
         for (int i = 0; i < partyButtons.length; i++) {
             Button button = partyButtons[i];
             ButtonPanel panel = button.panel();
-            button.setActive(state == BagState.POKEMON_SELECT && i < team.size());
-            panel.setSkip(state == BagState.MOVE_SELECT || i >= team.size());
+            button.setActive(state == State.POKEMON_SELECT && i < team.size());
+            panel.setSkip(state == State.MOVE_SELECT || i >= team.size());
             if (!panel.isSkipping()) {
                 panel.withTypeColors(team.get(i));
             }
@@ -476,11 +483,11 @@ public class BagView extends View {
         // Set active items from layout and change active to only item select (will still draw for other states though)
         layout.setupItems(itemButtons, this.getDisplayItems(), pageNum);
         for (Button itemButton : itemButtons) {
-            itemButton.setActive(state == BagState.ITEM_SELECT && itemButton.isActive());
+            itemButton.setActive(state == State.ITEM_SELECT && itemButton.isActive());
         }
 
         // Move buttons skip draw when inactive and are only active during move select
-        MoveList moves = state == BagState.MOVE_SELECT ? selectedPokemon.getActualMoves() : null;
+        MoveList moves = state == State.MOVE_SELECT ? selectedPokemon.getActualMoves() : null;
         for (int i = 0; i < moveButtons.length; i++) {
             // Active when state is move select and move index is in range
             boolean active = moves != null && i < moves.size();
@@ -495,11 +502,11 @@ public class BagView extends View {
         }
 
         // Can only use arrows during arrow select (but always draw)
-        leftArrow.setActive(state == BagState.ITEM_SELECT);
+        leftArrow.setActive(state == State.ITEM_SELECT);
         rightArrow.setActive(leftArrow.isActive());
 
         // Can't give or use what you don't have!
-        if (selectedItem == ItemNamesies.NO_ITEM || !player.getBag().hasItem(selectedItem)) {
+        if (selectedItem == ItemNamesies.NO_ITEM || !bag.hasItem(selectedItem)) {
             selectedItem = ItemNamesies.NO_ITEM;
             giveButton.setActive(false);
             useButton.setActive(false);
@@ -508,5 +515,11 @@ public class BagView extends View {
             giveButton.setActive(selectedItemValue.isHoldable());
             useButton.setActive(selectedItemValue instanceof BagUseItem);
         }
+    }
+
+    private enum State {
+        ITEM_SELECT,
+        POKEMON_SELECT,
+        MOVE_SELECT,
     }
 }
