@@ -7,7 +7,7 @@ import draw.layout.QuestionLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import draw.panel.LabelPanel;
-import draw.panel.NicknamePanel;
+import draw.handler.NicknameHandler;
 import draw.panel.PanelList;
 import draw.panel.WrapPanel;
 import draw.panel.WrapPanel.WrapMetrics;
@@ -46,7 +46,7 @@ public class NewPokemonView extends View {
     private final PanelList panels;
     private final DrawPanel canvasPanel;
     private final DrawPanel fullImagePanel;
-    private final NicknamePanel nicknamePanel;
+    private final NicknameHandler nicknameHandler;
 
     private PanelList infoPanels;
     private LabelPanel namePanel;
@@ -73,12 +73,9 @@ public class NewPokemonView extends View {
                                       .withBorderPercentage(0);
 
         // Canvas panel truncated at the message
-        this.fullImagePanel = new DrawPanel(
-                canvasPanel.x, canvasPanel.y, canvasPanel.width,
-                BasicPanels.getMessagePanelY() - canvasPanel.y
-        ).withNoBackground();
+        this.fullImagePanel = BasicPanels.newMessagelessCanvasPanel().withNoBackground();
 
-        this.nicknamePanel = new NicknamePanel(this.fullImagePanel);
+        this.nicknameHandler = new NicknameHandler(this.fullImagePanel);
 
         // Placeholder panels
         this.setLabelPanels(PokemonNamesies.BULBASAUR.getInfo());
@@ -214,8 +211,8 @@ public class NewPokemonView extends View {
                 }
                 break;
             case NICKNAME:
-                nicknamePanel.update();
-                if (nicknamePanel.isFinished()) {
+                nicknameHandler.update();
+                if (nicknameHandler.isFinished()) {
                     setState(State.LOCATION);
                 }
                 break;
@@ -247,7 +244,7 @@ public class NewPokemonView extends View {
             infoPanels.drawAll(g);
             this.drawFlavorText(g, newPokemon.getPokemonInfo());
         } else if (state == State.NICKNAME) {
-            nicknamePanel.draw(g);
+            nicknameHandler.drawNickname(g);
         }
 
         buttons.drawHover(g);
@@ -304,7 +301,7 @@ public class NewPokemonView extends View {
                 break;
             case NICKNAME:
                 message = "What would you like to name " + pokemonName + "?";
-                nicknamePanel.set(newPokemon);
+                nicknameHandler.set(newPokemon);
                 break;
             case LOCATION:
                 if (player.fullParty() && !team.contains(newPokemon)) {

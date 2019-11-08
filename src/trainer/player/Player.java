@@ -5,6 +5,7 @@ import battle.Battle;
 import battle.attack.Move;
 import battle.effect.InvokeInterfaces.EndBattleEffect;
 import battle.effect.team.TeamEffectNamesies;
+import draw.handler.NicknameHandler.Nicknamed;
 import gui.view.ViewMode;
 import item.ItemNamesies;
 import item.berry.farm.BerryFarm;
@@ -50,7 +51,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Player extends PlayerTrainer implements Serializable {
+public class Player extends PlayerTrainer implements Serializable, Nicknamed {
     private static final long serialVersionUID = 4283479774388652604L;
 
     public static final String DEFAULT_NAME = "Red";
@@ -131,8 +132,13 @@ public class Player extends PlayerTrainer implements Serializable {
         this.entity = new PlayerEntity(this.location);
     }
 
-    public void setName(String playerName) {
-        this.name = playerName;
+    @Override
+    public void setNickname(String playerName) {
+        if (!StringUtils.isNullOrEmpty(playerName)) {
+            this.name = playerName;
+        } else if (StringUtils.isNullOrEmpty(this.name)) {
+            this.name = DEFAULT_NAME;
+        }
     }
 
     public void giveBadge(Badge badge) {

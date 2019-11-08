@@ -2,7 +2,6 @@ package draw.panel;
 
 import draw.layout.ButtonLayout;
 import main.Global;
-import util.Point;
 
 import java.awt.Graphics;
 
@@ -15,17 +14,22 @@ public class BasicPanels {
             .withBorderPercentage(2)
             .withBlackOutline();
 
-    public static final Point canvasMessageCenter = new Point(
-            Global.GAME_SIZE.width/2,
-            BasicPanels.getMessagePanelY()/2
-    );
-
     private BasicPanels() {
         Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
     }
 
     public static DrawPanel newFullGamePanel() {
         return new DrawPanel(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
+    }
+
+    // Canvas panel truncated at the message
+    public static DrawPanel newMessagelessCanvasPanel() {
+        return new DrawPanel(
+                fullCanvasPanel.x,
+                fullCanvasPanel.y,
+                fullCanvasPanel.width,
+                fullMessagePanel.y - fullCanvasPanel.y
+        );
     }
 
     public static void drawFullMessagePanel(Graphics g, String text) {

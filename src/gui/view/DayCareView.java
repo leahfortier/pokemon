@@ -338,9 +338,10 @@ class DayCareView extends View {
     @Override
     public void movedToFront() {
         Player player = Game.getPlayer();
+
         dayCareCenter = player.getDayCareCenter();
-        selected = null;
         buttons.setSelected(PARTY);
+        selected = null;
 
         updateActiveButtons();
     }

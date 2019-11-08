@@ -154,19 +154,16 @@ Other random things:
     toxic boost flare boost and marvel scale should be statusboosters
     need like a 'b' button where you can click through things but can't start a new dialogue
     opponent's trace message appears before your Pokemon is even out and looks really weird
-    maybe add setActive things to Button and have a similar buttonList.updateActive() type thing
     maybe eventually have the View class have draw method as final, with setup, draw (foreground), and getButtonList/getPanelList abstract methods
     would also be nice if there was some universal message handler thing instead of each class just holding a string or whatever
     is withFullTransparency the same thing as withBackgroundColor(null) and we don't need that separate var?
     might be nice to have a recenter button in MapMaker to take to the center of the current loaded map (when you load a small map from a large one sometimes you just have no fucking idea where you are)
-    I think a lot of the stuff that's happening in drawSetup should be called from update instead of draw so only called where there's a change
     something weird about Comfey's party tile and fails when trimming
     text wrapping should allow having a different startX for the first line so you can have a label in a different size (ability name and description for example)
     move as much logic as possible out of views and just have them called from in there (buy from Mart is good example)
     greyOut and highlight should also not reset every frame like skip
     should egg hatching and evolving be separate views that extend the same view class or something?
     StatGainPanel should maybe use the panel thing similar to the StatPanel
-    change NicknamePanel to being a handler instead -- is there a way to combine it with setting your own name?
     ViewState things in battle and map and other places probably should store the view and then they can have buttons pressed normally again
     can we have a class that holds the arrow buttons and page number and shit like that
     

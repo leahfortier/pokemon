@@ -10,11 +10,8 @@ public class PanelList {
     private final List<DrawPanel> panels;
 
     public PanelList(DrawPanel... panels) {
-        this(Arrays.asList(panels));
-    }
-
-    public PanelList(List<DrawPanel> panels) {
-        this.panels = new ArrayList<>(panels);
+        this.panels = new ArrayList<>();
+        this.add(panels);
     }
 
     public PanelList add(DrawPanel... panels) {

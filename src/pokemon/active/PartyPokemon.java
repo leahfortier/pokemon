@@ -5,6 +5,7 @@ import battle.attack.Move;
 import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import draw.DrawUtils;
+import draw.handler.NicknameHandler.Nicknamed;
 import item.Item;
 import item.ItemNamesies;
 import item.hold.HoldItem;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class PartyPokemon implements Serializable {
+public abstract class PartyPokemon implements Serializable, Nicknamed {
     private static final long serialVersionUID = 1L;
 
     public static final int MAX_LEVEL = 100;
@@ -388,6 +389,7 @@ public abstract class PartyPokemon implements Serializable {
         return nickname;
     }
 
+    @Override
     public void setNickname(String nickname) {
         if (!StringUtils.isNullOrEmpty(nickname) && !nickname.equals(this.nickname)) {
             this.nickname = nickname;

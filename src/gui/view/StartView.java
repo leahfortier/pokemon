@@ -1,6 +1,9 @@
 package gui.view;
 
+import draw.ImageUtils;
+import draw.handler.NicknameHandler;
 import draw.panel.BasicPanels;
+import draw.panel.DrawPanel;
 import gui.GameData;
 import gui.IndexTileSet;
 import gui.TileSet;
@@ -13,10 +16,11 @@ import pokemon.species.PokemonNamesies;
 import sound.SoundPlayer;
 import sound.SoundTitle;
 import trainer.player.Player;
-import util.FontMetrics;
+import util.Point;
 import util.string.PokeString;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 class StartView extends View {
     private static final MessageUpdate[] dialogue = new MessageUpdate[] {
@@ -28,6 +32,14 @@ class StartView extends View {
             new MessageUpdate(", are you ready to start your epic adventure? Well, off you go! I'll be seeing you soon!").withUpdate(MessageUpdateType.APPEND_TO_NAME)
     };
 
+    private final Point mapleDraw;
+    private final Point dittoDraw;
+
+    private final NicknameHandler nicknameHandler;
+    private final BufferedImage playerImage;
+    private final BufferedImage mapleImage;
+    private final BufferedImage dittoImage;
+
     private State state;
 
     private int dialogueIndex;
@@ -35,15 +47,33 @@ class StartView extends View {
 
     private boolean ditto;
 
+    public StartView() {
+        GameData data = Game.getData();
+
+        IndexTileSet trainerTiles = data.getTrainerTiles();
+        TileSet pokemonTiles = data.getPokemonTilesSmall();
+
+        playerImage = trainerTiles.getTile(0x4);
+        mapleImage = trainerTiles.getTile(0x58);
+        dittoImage = pokemonTiles.getTile(PokemonNamesies.DITTO.getInfo().getImageName());
+
+        DrawPanel messagelessCanvas = BasicPanels.newMessagelessCanvasPanel();
+        int centerY = messagelessCanvas.y + 2*messagelessCanvas.height/3;
+        int mapleX = messagelessCanvas.x + messagelessCanvas.width/4;
+        int dittoX = mapleX + mapleImage.getWidth() + 5;
+
+        this.mapleDraw = new Point(mapleX, centerY);
+        this.dittoDraw = new Point(dittoX, centerY);
+        this.nicknameHandler = new NicknameHandler(messagelessCanvas.centerX(), centerY - mapleImage.getHeight()/2);
+    }
+
     @Override
     public void update(int dt) {
         if (BasicPanels.isAnimatingMessage()) {
             return;
         }
 
-        Player player = Game.getPlayer();
         InputControl input = InputControl.instance();
-
         if (message != null && input.consumeIfMouseDown(ControlKey.SPACE)) {
             message = null;
         }
@@ -65,7 +95,7 @@ class StartView extends View {
                         state = State.DEFAULT;
                         break;
                     case APPEND_TO_NAME:
-                        message = player.getName() + message;
+                        message = Game.getPlayer().getName() + message;
                         state = State.DEFAULT;
                         break;
                     default:
@@ -76,16 +106,8 @@ class StartView extends View {
         }
 
         if (state == State.NAME) {
-            if (!input.isCapturingText()) {
-                input.startTextCapture();
-            }
-
-            if (input.consumeIfDown(ControlKey.ENTER)) {
-                input.stopTextCapture();
-
-                String name = input.getCapturedText(Player.MAX_NAME_LENGTH);
-                player.setName(name.isEmpty() ? Player.DEFAULT_NAME : name);
-
+            nicknameHandler.update();
+            if (nicknameHandler.isFinished()) {
                 state = State.DEFAULT;
                 message = null;
             }
@@ -94,24 +116,17 @@ class StartView extends View {
 
     @Override
     public void draw(Graphics g) {
-        GameData data = Game.getData();
-
-        IndexTileSet trainerTiles = data.getTrainerTiles();
-        TileSet pokemonTiles = data.getPokemonTilesSmall();
-
         BasicPanels.drawCanvasPanel(g);
 
-        FontMetrics.setBlackFont(g, 30);
         switch (state) {
             case DEFAULT:
-                g.drawImage(trainerTiles.getTile(0x58), 200, 200, null);
+                ImageUtils.drawBottomCenteredImage(g, mapleImage, mapleDraw);
                 if (ditto) {
-                    g.drawImage(pokemonTiles.getTile(PokemonNamesies.DITTO.getInfo().getImageName()), 270, 255, null);
+                    ImageUtils.drawBottomCenteredImage(g, dittoImage, dittoDraw);
                 }
                 break;
             case NAME:
-                g.drawImage(trainerTiles.getTile(0x4), 200, 230, null);
-                g.drawString(InputControl.instance().getInputCaptureString(Player.MAX_NAME_LENGTH), 300, 260);
+                nicknameHandler.drawNickname(g);
                 break;
         }
 
@@ -127,6 +142,8 @@ class StartView extends View {
 
     @Override
     public void movedToFront() {
+        nicknameHandler.set(Game.getPlayer(), playerImage, Player.MAX_NAME_LENGTH);
+
         state = State.DEFAULT;
 
         dialogueIndex = 0;
