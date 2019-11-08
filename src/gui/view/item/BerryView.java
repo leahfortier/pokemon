@@ -66,7 +66,7 @@ public class BerryView extends View {
         DrawPanel tabPanel = layout.getTabPanel(BagCategory.BERRY.ordinal(), BACKGROUND_COLOR, "Berries!!");
 
         Button returnButton = layout.createReturnButton(
-                new ButtonTransitions().up(RIGHT_ARROW).down(RIGHT_ARROW)
+                new ButtonTransitions().up(RIGHT_ARROW).down(HARVEST)
         );
 
         berryPanels = new DrawLayout(layout.leftPanel, NUM_ROWS, NUM_COLS, 10)

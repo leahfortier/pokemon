@@ -37,11 +37,8 @@ public class VerticalMovePanel extends DrawPanel {
         return this;
     }
 
-    public WrapMetrics draw(Graphics g, Attack attack) {
-        // Draw type-colored background
-        this.withBackgroundColor(attack.getActualType().getColor())
-            .drawBackground(g);
-
+    // Only draws the foreground move details
+    public WrapMetrics drawMove(Graphics g, Attack attack) {
         FontMetrics.setBlackFont(g, nameFontSize);
         int fullSpacing = this.getTextSpace(g);
         int borderSize = this.getBorderSize();

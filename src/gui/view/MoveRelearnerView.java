@@ -149,7 +149,7 @@ public class MoveRelearnerView extends View {
                     buttonPanel.y - selectedSpacing,
                     buttonPanel.width + 2*selectedSpacing,
                     buttonPanel.height + 2*selectedSpacing
-            ).withBlackOutline().withFullTransparency();
+            ).withNoBackground().withBlackOutline();
         }
 
         learnMoveButton = new Button(

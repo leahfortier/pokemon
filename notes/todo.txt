@@ -156,7 +156,6 @@ Other random things:
     opponent's trace message appears before your Pokemon is even out and looks really weird
     maybe eventually have the View class have draw method as final, with setup, draw (foreground), and getButtonList/getPanelList abstract methods
     would also be nice if there was some universal message handler thing instead of each class just holding a string or whatever
-    is withFullTransparency the same thing as withBackgroundColor(null) and we don't need that separate var?
     might be nice to have a recenter button in MapMaker to take to the center of the current loaded map (when you load a small map from a large one sometimes you just have no fucking idea where you are)
     something weird about Comfey's party tile and fails when trimming
     text wrapping should allow having a different startX for the first line so you can have a label in a different size (ability name and description for example)

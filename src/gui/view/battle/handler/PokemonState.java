@@ -289,7 +289,8 @@ public class PokemonState implements VisualStateHandler {
     }
 
     public WrapMetrics drawMoveDetails(Graphics g, Attack move) {
-        return moveDetailsPanel.draw(g, move);
+        moveDetailsPanel.drawBackground(g);
+        return moveDetailsPanel.drawMove(g, move);
     }
 
     private void drawStatBox(Graphics g, PartyPokemon selectedPkm) {

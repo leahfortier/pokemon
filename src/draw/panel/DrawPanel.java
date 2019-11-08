@@ -35,7 +35,6 @@ public class DrawPanel implements Panel {
     private Direction[] outlineDirections;
 
     private boolean transparentBackground;
-    private boolean onlyTransparency;
     private int transparentCount;
 
     private boolean greyOut;
@@ -110,9 +109,10 @@ public class DrawPanel implements Panel {
         return this.withTransparentBackground();
     }
 
+    // Removes the border and current background and instead sets the background to be a transparent layer
     public DrawPanel withFullTransparency() {
-        this.onlyTransparency = true;
-        return this.withTransparentBackground().withBorderPercentage(0);
+        return this.withBackgroundColor(null)
+                   .withBorderlessTransparentBackground();
     }
 
     public DrawPanel withBorderlessTransparentBackground() {
@@ -240,10 +240,6 @@ public class DrawPanel implements Panel {
     }
 
     public int getBorderSize() {
-        if (onlyTransparency) {
-            return 0;
-        }
-
         return this.borderSize;
     }
 
@@ -338,7 +334,7 @@ public class DrawPanel implements Panel {
 
     public void drawBackground(Graphics g) {
         // If not full transparency, draw the background colors
-        if (!onlyTransparency && backgroundColor != null) {
+        if (backgroundColor != null) {
             if (secondBackgroundColor == null) {
                 g.setColor(backgroundColor);
                 g.fillRect(x, y, width, height);
