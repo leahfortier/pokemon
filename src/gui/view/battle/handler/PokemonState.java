@@ -100,7 +100,7 @@ public class PokemonState implements VisualStateHandler {
                 () -> {}, // Handled in update
                 panel -> panel.greyInactive()
                               .withLabelSize(20)
-                              .withBorderlessTransparentBackground()
+                              .withFullTransparency()
                               .withBlackOutline()
         );
 
@@ -142,7 +142,7 @@ public class PokemonState implements VisualStateHandler {
                 .withStartIndex(TABS)
                 .withDefaultTransitions(new ButtonTransitions().down(SWITCH).up(SWITCH))
                 .withButtonSetup(panel -> panel.skipInactive()
-                                               .withBorderlessTransparentBackground())
+                                               .withFullTransparency())
                 .getTabs();
 
         // Pokemon Switch View Buttons

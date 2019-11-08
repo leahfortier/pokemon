@@ -94,7 +94,7 @@ public class PartyView extends View {
                         2*spacing + tabHeight
                 )
         )
-                .withBorderlessTransparentBackground()
+                .withFullTransparency()
                 .withBlackOutline();
 
         imagePanel = new DrawPanel(
@@ -178,7 +178,7 @@ public class PartyView extends View {
                 .withDefaultTransitions(new ButtonTransitions().up(RETURN).down(MOVES))
                 .withPressIndex(this::switchTab)
                 .withButtonSetup(panel -> panel.skipInactive()
-                                               .withBorderlessTransparentBackground())
+                                               .withFullTransparency())
                 .getTabs();
 
         nicknamePanel = new DrawPanel(
@@ -187,7 +187,7 @@ public class PartyView extends View {
                 pokemonPanel.width,
                 tabButtons[0].height + pokemonPanel.height
         )
-                .withBorderlessTransparentBackground()
+                .withFullTransparency()
                 .withBlackOutline();
 
         nicknameHandler = new NicknameHandler(nicknamePanel);
@@ -250,7 +250,7 @@ public class PartyView extends View {
 
     private ButtonPanelSetup textButtonSetup(String label) {
         return panel -> panel.greyInactive()
-                             .withBorderlessTransparentBackground()
+                             .withFullTransparency()
                              .withBlackOutline()
                              .withLabel(label, 20);
     }

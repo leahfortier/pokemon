@@ -52,7 +52,7 @@ public class MartLayout extends BagLayout {
                 panel -> panel.asArrow(arrowDirection, 35, 20)
                               .greyInactive()
                               .withBlackOutline()
-                              .withBorderlessTransparentBackground()
+                              .withFullTransparency()
         );
     }
 
@@ -63,7 +63,7 @@ public class MartLayout extends BagLayout {
                 pressAction,
                 panel -> panel.greyInactive()
                               .withLabel(label, 24)
-                              .withBorderlessTransparentBackground()
+                              .withFullTransparency()
                               .withBlackOutline()
         );
     }

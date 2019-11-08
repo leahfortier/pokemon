@@ -211,7 +211,7 @@ public class MoveRelearnerView extends View {
     private ButtonPanelSetup textButtonSetup(String label, Color color) {
         return panel -> panel.greyInactive()
                              .withLabel(label, 20)
-                             .withBorderlessTransparentBackground()
+                             .withFullTransparency()
                              .withBackgroundColor(color)
                              .withBlackOutline();
     }

@@ -252,7 +252,7 @@ public class PCView extends View {
     private ButtonPanelSetup textButtonSetup(String text) {
         return panel -> panel.withBlackOutline()
                              .withLabel(text, 20)
-                             .withBorderlessTransparentBackground();
+                             .withFullTransparency();
     }
 
     @Override

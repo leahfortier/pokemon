@@ -253,8 +253,8 @@ public class PokedexView extends View {
                 countPanel.bottomY() - returnY,
                 new ButtonTransitions().right(LEFT_ARROW).up(TAB_START).left(RIGHT_ARROW).down(MOVE_START),
                 ButtonPressAction.getExitAction(),
-                panel -> panel.withBackgroundColor(Color.YELLOW)
-                              .withBorderlessTransparentBackground()
+                panel -> panel.withFullTransparency()
+                              .withBackgroundColor(Color.YELLOW)
                               .withTransparentCount(2)
                               .withBlackOutline()
                               .withLabel("Return", 20)

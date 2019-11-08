@@ -92,7 +92,7 @@ class DayCareView extends View {
                 dayCarePanel.width,
                 Global.GAME_SIZE.height - buttonHeight - 2*spacing - spacing/2
         )
-                .withBorderlessTransparentBackground()
+                .withFullTransparency()
                 .withBlackOutline();
 
         DrawPanel basicInfoPanel = new DrawPanel(infoPanel.x, infoPanel.y, infoPanel.width, 190)
@@ -225,14 +225,14 @@ class DayCareView extends View {
 
     private ButtonPanelSetup textButtonSetup(String text, Color color) {
         return panel -> panel.greyInactive()
-                             .withBorderlessTransparentBackground()
+                             .withFullTransparency()
                              .withBackgroundColor(color)
                              .withLabel(text, 20);
     }
 
     private ButtonPanelSetup pokemonButtonSetup() {
         return panel -> panel.skipInactive()
-                             .withBorderlessTransparentBackground()
+                             .withFullTransparency()
                              .withBlackOutline()
                              .withLabelSize(20);
     }

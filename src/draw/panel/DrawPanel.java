@@ -109,14 +109,12 @@ public class DrawPanel implements Panel {
         return this.withTransparentBackground();
     }
 
-    // Removes the border and current background and instead sets the background to be a transparent layer
+    // Removes the border and sets the background to be a transparent layer
+    // Note: Will overwrite the current background color, so setting background color must be called afterwards if desired
     public DrawPanel withFullTransparency() {
         return this.withBackgroundColor(null)
-                   .withBorderlessTransparentBackground();
-    }
-
-    public DrawPanel withBorderlessTransparentBackground() {
-        return this.withTransparentBackground().withBorderPercentage(0);
+                   .withTransparentBackground()
+                   .withBorderPercentage(0);
     }
 
     public DrawPanel withTransparentBackground() {

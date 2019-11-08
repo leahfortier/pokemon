@@ -59,8 +59,8 @@ public class MedalCaseState implements VisualStateHandler {
         int spacing = 20;
         int bottomPanelHeight = 50;
         DrawPanel medalsPanel = new DrawPanel(spacing, spacing, Point.subtract(Global.GAME_SIZE, 2*spacing, 3*spacing + bottomPanelHeight))
+                .withFullTransparency()
                 .withBackgroundColor(new Color(152, 88, 240))
-                .withBorderlessTransparentBackground()
                 .withBlackOutline();
 
         countPanel = new DrawPanel(
@@ -68,8 +68,8 @@ public class MedalCaseState implements VisualStateHandler {
                 medalsPanel.bottomY() + spacing,
                 (medalsPanel.width - spacing)/2,
                 bottomPanelHeight
-        ).withBackgroundColor(new Color(168, 232, 72))
-         .withBorderlessTransparentBackground()
+        ).withFullTransparency()
+         .withBackgroundColor(new Color(168, 232, 72))
          .withBlackOutline()
          .withLabelSize(24);
 
@@ -78,8 +78,8 @@ public class MedalCaseState implements VisualStateHandler {
                 countPanel.y,
                 countPanel.width,
                 countPanel.height
-        ).withBackgroundColor(new Color(248, 120, 64))
-         .withBorderlessTransparentBackground()
+        ).withFullTransparency()
+         .withBackgroundColor(new Color(248, 120, 64))
          .withBlackOutline();
 
         medalPanels = new DrawLayout(medalsPanel, MEDALS_PER_PAGE, 1, 12)

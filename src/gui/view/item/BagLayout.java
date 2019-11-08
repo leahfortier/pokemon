@@ -55,7 +55,7 @@ public class BagLayout {
                         2*spacing + TAB_HEIGHT
                 )
         )
-                .withBorderlessTransparentBackground()
+                .withFullTransparency()
                 .withBlackOutline();
 
         int selectedHeight = 82;
@@ -102,7 +102,7 @@ public class BagLayout {
     public TabLayout getSelectedButtonLayout(int numButtons) {
         return new TabLayout(selectedPanel, numButtons, BUTTON_HEIGHT)
                 .withButtonSetup((panel, index) -> panel.withBlackOutline()
-                                                        .withBorderlessTransparentBackground())
+                                                        .withFullTransparency())
                 .asBottomTabs();
     }
 
@@ -126,7 +126,7 @@ public class BagLayout {
         return new TabLayout(bagPanel, CATEGORIES.length, TAB_HEIGHT)
                 .withButtonSetup((panel, index) -> {
                     final BagCategory category = CATEGORIES[index];
-                    panel.withBorderlessTransparentBackground()
+                    panel.withFullTransparency()
                          .withBackgroundColor(category.getColor())
                          .withLabelSize(14, Alignment.LEFT)
                          .withImageLabel(category.getIcon(), category.getDisplayName());
@@ -135,8 +135,8 @@ public class BagLayout {
 
     public DrawPanel getTabPanel(int index, Color color, String label) {
         DrawPanel tabPanel = this.getTabs().getTabs()[index].panel();
-        return tabPanel.withBackgroundColor(color)
-                       .withBorderlessTransparentBackground()
+        return tabPanel.withFullTransparency()
+                       .withBackgroundColor(color)
                        .withMissingBlackOutline(Direction.DOWN)
                        .withLabel(label, 16);
     }
