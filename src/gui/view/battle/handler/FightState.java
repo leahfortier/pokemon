@@ -12,8 +12,6 @@ import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
 import pokemon.active.MoveList;
-import trainer.TrainerAction;
-import trainer.player.Player;
 import util.string.StringUtils;
 
 import java.awt.Graphics;
@@ -98,7 +96,6 @@ public class FightState implements VisualStateHandler {
     }
 
     private void pressMove(int index) {
-        Player player = Game.getPlayer();
         Battle currentBattle = view.getCurrentBattle();
         Move move = selectedMoves.get(index);
 
@@ -106,9 +103,7 @@ public class FightState implements VisualStateHandler {
 
         // Execute the move if valid
         if (Move.validMove(currentBattle, selected, move, true)) {
-            player.performAction(currentBattle, TrainerAction.FIGHT);
-            view.setVisualState(VisualState.MESSAGE);
-            view.cycleMessage();
+            view.executeMove();
         }
         // An invalid move -- Don't let them select it
         else {

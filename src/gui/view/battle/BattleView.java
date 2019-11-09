@@ -23,6 +23,7 @@ import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
+import trainer.TrainerAction;
 import util.string.StringUtils;
 
 import java.awt.Color;
@@ -271,6 +272,13 @@ public class BattleView extends View {
         } else if (!updated) {
             message = null;
         }
+    }
+
+    // Executes a move which has already been set and checked for validness and such
+    public void executeMove() {
+        Game.getPlayer().performAction(currentBattle, TrainerAction.FIGHT);
+        this.setVisualState(VisualState.MESSAGE);
+        this.cycleMessage();
     }
 
     @Override
