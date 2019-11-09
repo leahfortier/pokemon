@@ -20,20 +20,29 @@ import java.awt.Graphics;
 
 public class FightState implements VisualStateHandler {
     private final MovePanel moveDetailsPanel;
-    private ButtonList moveButtons;
+
+    private final ButtonList buttons;
+    private final Button[] moveButtons;
 
     private BattleView view;
-    private MoveList selectedMoveList;
 
-    // The last move that a Pokemon used
+    private ActivePokemon selected;
+    private MoveList selectedMoves;
     private int lastMoveUsed;
 
     public FightState() {
-        // TODO: 440 is message panel y, 161 is height, x + width = game size
-        moveDetailsPanel = new MovePanel(
-                415, 440, 385, 161,
-                22, 18, 16
-        )
+        view = Game.instance().getBattleView();
+
+        moveButtons = view.createPanelLayout(MoveList.MAX_MOVES)
+                          .withButtonSetup(panel -> panel.asMovePanel(19, 16)
+                                                         .withTransparentCount(2)
+                                                         .withBorderPercentage(15)
+                                                         .withBlackOutline())
+                          .withPressIndex(this::pressMove)
+                          .getButtons();
+        buttons = new ButtonList(moveButtons);
+
+        moveDetailsPanel = new MovePanel(view.getMenuPanelSizing(), 22, 18, 16)
                 .withBorderPercentage(8)
                 .withTransparentCount(2)
                 .withMinDescFontSize(13);
@@ -42,104 +51,90 @@ public class FightState implements VisualStateHandler {
     @Override
     public void reset(BattleView view) {
         this.view = view;
-
-        moveButtons = new ButtonList(
-                view.createPanelLayout(MoveList.MAX_MOVES)
-                    .withButtonSetup(panel -> panel.asMovePanel(19, 16)
-                                                   .withTransparentCount(2)
-                                                   .withBorderPercentage(15)
-                                                   .withBlackOutline())
-                    .getButtons()
-        );
-
+        this.selected = null;
+        this.selectedMoves = null;
         this.resetLastMoveUsed();
     }
 
     @Override
     public void set() {
-        selectedMoveList = Game.getPlayer().front().getMoves(view.getCurrentBattle());
-        if (lastMoveUsed >= selectedMoveList.size()) {
+        ActivePokemon front = Game.getPlayer().front();
+        selectedMoves = front.getMoves(view.getCurrentBattle());
+        if (front != selected || lastMoveUsed >= selectedMoves.size()) {
+            selected = front;
             this.resetLastMoveUsed();
         }
 
-        moveButtons.setSelected(lastMoveUsed);
-
-        for (int i = 0; i < MoveList.MAX_MOVES; i++) {
-            moveButtons.get(i).setActive(i < selectedMoveList.size());
+        for (int i = 0; i < moveButtons.length; i++) {
+            Button button = moveButtons[i];
+            button.setActiveSkip(i < selectedMoves.size());
+            if (button.isActive()) {
+                button.panel().withMove(selectedMoves.get(i));
+            }
         }
 
-        moveButtons.setFalseHover();
+        buttons.setSelected(lastMoveUsed);
+        buttons.setFalseHover();
     }
 
     @Override
     public void draw(Graphics g) {
         view.drawButtonsPanel(g);
 
-        ActivePokemon playerPokemon = Game.getPlayer().front();
-        MoveList moves = playerPokemon.getMoves(view.getCurrentBattle());
-        for (int i = 0; i < moves.size(); i++) {
-            drawMoveButton(g, moveButtons.get(i), moves.get(i));
-        }
-
         String message = view.getMessage(VisualState.INVALID_FIGHT, null);
         if (StringUtils.isNullOrEmpty(message)) {
             // Draw move details
-            drawMoveDetails(g, moves.get(moveButtons.getSelected()).getAttack());
+            drawMoveDetails(g, selectedMoves.get(buttons.getSelected()).getAttack());
         } else {
             // Show unusable move message
             view.drawMenuMessagePanel(g, message);
         }
 
-        moveButtons.drawHover(g);
+        buttons.draw(g);
     }
 
     public WrapMetrics drawMoveDetails(Graphics g, Attack attack) {
         return moveDetailsPanel.draw(g, attack);
     }
 
-    private void drawMoveButton(Graphics g, Button button, Move move) {
-        button.panel().withMove(move).draw(g);
+    private void pressMove(int index) {
+        Player player = Game.getPlayer();
+        Battle currentBattle = view.getCurrentBattle();
+        Move move = selectedMoves.get(index);
+
+        lastMoveUsed = index;
+
+        // Execute the move if valid
+        if (Move.validMove(currentBattle, selected, move, true)) {
+            player.performAction(currentBattle, TrainerAction.FIGHT);
+            view.setVisualState(VisualState.MESSAGE);
+            view.cycleMessage();
+        }
+        // An invalid move -- Don't let them select it
+        else {
+            view.cycleMessage();
+            view.setVisualState(VisualState.INVALID_FIGHT);
+        }
     }
 
     @Override
     public void update() {
         // Update move buttons and the back button
-        moveButtons.update();
-
-        Player player = Game.getPlayer();
-        Battle currentBattle = view.getCurrentBattle();
-
-        // Get the Pokemon that is attacking and their corresponding move list
-        ActivePokemon front = player.front();
-
-        for (int i = 0; i < selectedMoveList.size(); i++) {
-            if (moveButtons.get(i).checkConsumePress()) {
-                lastMoveUsed = i;
-
-                // Execute the move if valid
-                if (Move.validMove(currentBattle, front, selectedMoveList.get(i), true)) {
-                    player.performAction(currentBattle, TrainerAction.FIGHT);
-                    view.setVisualState(VisualState.MESSAGE);
-                    view.cycleMessage();
-                }
-                // An invalid move -- Don't let them select it
-                else {
-                    view.cycleMessage();
-                    view.setVisualState(VisualState.INVALID_FIGHT);
-                }
-            }
+        buttons.update();
+        if (buttons.consumeSelectedPress()) {
+            view.setVisualState();
         }
 
         // Return to main battle menu
         view.updateBackButton();
     }
 
-    public void resetLastMoveUsed() {
+    private void resetLastMoveUsed() {
         this.lastMoveUsed = 0;
     }
 
     @Override
     public ButtonList getButtons() {
-        return this.moveButtons;
+        return this.buttons;
     }
 }

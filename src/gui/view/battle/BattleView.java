@@ -10,6 +10,7 @@ import draw.button.Button;
 import draw.layout.ButtonLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.Panel;
 import draw.panel.WrapPanel;
 import gui.view.View;
 import gui.view.ViewMode;
@@ -90,6 +91,10 @@ public class BattleView extends View {
 
     public void drawButtonsPanel(Graphics g) {
         buttonsPanel.drawBackground(g);
+    }
+
+    public Panel getMenuPanelSizing() {
+        return menuMessagePanel.sizing();
     }
 
     public ButtonLayout createPanelLayout(int numOptions) {

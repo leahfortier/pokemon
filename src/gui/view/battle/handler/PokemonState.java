@@ -361,7 +361,6 @@ public class PokemonState implements VisualStateHandler {
 
                     view.cycleMessage();
                     switchForced = false;
-                    VisualState.resetLastMoveUsed();
                 } else {
                     view.cycleMessage();
                     view.setVisualState(VisualState.INVALID_POKEMON);

@@ -66,8 +66,4 @@ public enum VisualState {
     public static void setSwitchForced() {
         ((PokemonState)POKEMON.visualStateHandler).setSwitchForced();
     }
-
-    public static void resetLastMoveUsed() {
-        ((FightState)FIGHT.visualStateHandler).resetLastMoveUsed();
-    }
 }
