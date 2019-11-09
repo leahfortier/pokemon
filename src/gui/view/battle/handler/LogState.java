@@ -7,8 +7,6 @@ import draw.button.ButtonTransitions;
 import draw.layout.ArrowLayout;
 import draw.panel.DrawPanel;
 import draw.panel.Panel;
-import gui.view.battle.BattleView;
-import main.Game;
 import map.Direction;
 import message.MessageUpdate;
 import util.FontMetrics;
@@ -18,7 +16,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LogState implements VisualStateHandler {
+public class LogState extends VisualStateHandler {
     private static final int LOGS_PER_PAGE = 23;
 
     private static final int NUM_BUTTONS = 2;
@@ -29,14 +27,10 @@ public class LogState implements VisualStateHandler {
     private final Button leftButton;
     private final Button rightButton;
 
-    private BattleView view;
-
     private int pageNum;
     private List<String> logMessages;
 
     public LogState() {
-        view = Game.instance().getBattleView();
-
         int spacing = 15;
         int height = ArrowLayout.arrowHeight;
         Panel logPanel = view.getLargePanelSizing();
@@ -94,16 +88,6 @@ public class LogState implements VisualStateHandler {
         pageNum = GeneralUtils.wrapIncrement(pageNum, increment, totalPages());
     }
 
-    @Override
-    public void update() {
-        buttons.update();
-        if (buttons.consumeSelectedPress()) {
-            view.setVisualState();
-        }
-
-        view.updateBackButton();
-    }
-
     private int totalPages() {
         return GeneralUtils.getTotalPages(logMessages.size(), LOGS_PER_PAGE);
     }
@@ -114,8 +98,7 @@ public class LogState implements VisualStateHandler {
     }
 
     @Override
-    public void reset(BattleView view) {
-        this.view = view;
+    public void reset() {
         this.pageNum = 0;
         this.logMessages = new ArrayList<>();
     }

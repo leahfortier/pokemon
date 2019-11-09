@@ -1,6 +1,5 @@
 package gui.view.battle;
 
-import draw.button.ButtonList;
 import gui.view.battle.handler.BagState;
 import gui.view.battle.handler.FightState;
 import gui.view.battle.handler.LearnMoveState;
@@ -11,8 +10,6 @@ import gui.view.battle.handler.PokemonState;
 import gui.view.battle.handler.VisualStateHandler;
 import item.ItemNamesies;
 import message.MessageUpdate;
-
-import java.awt.Graphics;
 
 // Contains the different types of states a battle can be in
 public enum VisualState {
@@ -35,39 +32,19 @@ public enum VisualState {
         this.visualStateHandler = visualStateHandler;
     }
 
-    public void update() {
-        this.visualStateHandler.update();
-    }
-
-    public void set() {
-        this.visualStateHandler.set();
-    }
-
-    public void draw(Graphics g) {
-        this.visualStateHandler.draw(g);
-    }
-
-    public void reset(BattleView battleView) {
-        this.visualStateHandler.reset(battleView);
-    }
-
-    public void checkMessage(MessageUpdate newMessage) {
-        this.visualStateHandler.checkMessage(newMessage);
-    }
-
-    public ButtonList getButtons() {
-        return this.visualStateHandler.getButtons();
+    public VisualStateHandler handler() {
+        return this.visualStateHandler;
     }
 
     public static ItemNamesies getSelectedItem() {
-        return ((BagState)BAG.visualStateHandler).getSelectedItem();
+        return ((BagState)BAG.handler()).getSelectedItem();
     }
 
     public static void setSwitchForced() {
-        ((PokemonState)POKEMON.visualStateHandler).setSwitchForced();
+        ((PokemonState)POKEMON.handler()).setSwitchForced();
     }
 
     public static void addLogMessage(MessageUpdate message) {
-        ((LogState)LOG_VIEW.visualStateHandler).addLogMessage(message);
+        ((LogState)LOG_VIEW.handler()).addLogMessage(message);
     }
 }

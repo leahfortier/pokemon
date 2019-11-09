@@ -8,7 +8,6 @@ import draw.button.Button;
 import draw.button.ButtonList;
 import draw.panel.MovePanel;
 import draw.panel.WrapPanel.WrapMetrics;
-import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
 import pokemon.active.MoveList;
@@ -16,21 +15,17 @@ import util.string.StringUtils;
 
 import java.awt.Graphics;
 
-public class FightState implements VisualStateHandler {
+public class FightState extends VisualStateHandler {
     private final MovePanel moveDetailsPanel;
 
     private final ButtonList buttons;
     private final Button[] moveButtons;
-
-    private BattleView view;
 
     private ActivePokemon selected;
     private MoveList selectedMoves;
     private int lastMoveUsed;
 
     public FightState() {
-        view = Game.instance().getBattleView();
-
         moveButtons = view.createPanelLayout(MoveList.MAX_MOVES)
                           .withButtonSetup(panel -> panel.asMovePanel(19, 16)
                                                          .withTransparentCount(2)
@@ -47,8 +42,7 @@ public class FightState implements VisualStateHandler {
     }
 
     @Override
-    public void reset(BattleView view) {
-        this.view = view;
+    public void reset() {
         this.selected = null;
         this.selectedMoves = null;
         this.resetLastMoveUsed();
@@ -110,18 +104,6 @@ public class FightState implements VisualStateHandler {
             view.cycleMessage();
             view.setVisualState(VisualState.INVALID_FIGHT);
         }
-    }
-
-    @Override
-    public void update() {
-        // Update move buttons and the back button
-        buttons.update();
-        if (buttons.consumeSelectedPress()) {
-            view.setVisualState();
-        }
-
-        // Return to main battle menu
-        view.updateBackButton();
     }
 
     private void resetLastMoveUsed() {

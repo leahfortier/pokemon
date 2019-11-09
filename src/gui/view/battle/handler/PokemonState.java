@@ -15,7 +15,6 @@ import draw.panel.DrawPanel;
 import draw.panel.VerticalMovePanel;
 import draw.panel.WrapPanel.WrapMetrics;
 import gui.TileSet;
-import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import main.Game;
 import pokemon.active.MoveList;
@@ -33,7 +32,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
-public class PokemonState implements VisualStateHandler {
+public class PokemonState extends VisualStateHandler {
     private static final int NUM_BUTTONS = Trainer.MAX_POKEMON + MoveList.MAX_MOVES + 1;
     private static final int TABS = 0;
     private static final int MOVES = TABS + Trainer.MAX_POKEMON;
@@ -52,8 +51,6 @@ public class PokemonState implements VisualStateHandler {
     private final Button[] tabButtons;
     private final Button[] moveButtons;
     private final Button switchButton;
-
-    private BattleView view;
 
     // Current selected tab in Pokemon view and whether or not a switch is forced
     private int selectedTab;
@@ -156,9 +153,7 @@ public class PokemonState implements VisualStateHandler {
     }
 
     @Override
-    public void reset(BattleView view) {
-        this.view = view;
-
+    public void reset() {
         switchForced = false;
         this.changeTab(0);
     }
@@ -222,7 +217,9 @@ public class PokemonState implements VisualStateHandler {
         view.drawMenuMessagePanel(g, message);
 
         // Draw back arrow when applicable
-        view.drawBackButton(g, !switchForced);
+        if (this.updateBackButton()) {
+            view.drawBackButton(g);
+        }
 
         // Selected Pokemon Info
         // Note: Important to draw selected before the tabs because of how outlines work
@@ -365,15 +362,9 @@ public class PokemonState implements VisualStateHandler {
     }
 
     @Override
-    public void update() {
-        // Update the buttons
-        buttons.update();
-        if (buttons.consumeSelectedPress()) {
-            view.setVisualState();
-        }
-
-        // Return to main menu if applicable
-        view.updateBackButton(!switchForced);
+    public boolean updateBackButton() {
+        // Can't go back when the force is switched
+        return !switchForced;
     }
 
     public void setSwitchForced() {

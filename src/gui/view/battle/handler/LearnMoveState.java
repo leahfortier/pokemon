@@ -2,12 +2,10 @@ package gui.view.battle.handler;
 
 import draw.button.ButtonList;
 import draw.handler.LearnMoveHandler;
-import gui.view.battle.BattleView;
 
 import java.awt.Graphics;
 
-public class LearnMoveState implements VisualStateHandler {
-    private BattleView view;
+public class LearnMoveState extends VisualStateHandler {
     private LearnMoveHandler learnMoveHandler;
 
     @Override
@@ -34,7 +32,7 @@ public class LearnMoveState implements VisualStateHandler {
     }
 
     @Override
-    public void reset(BattleView view) {
-        this.view = view;
+    public boolean updateBackButton() {
+        return false;
     }
 }

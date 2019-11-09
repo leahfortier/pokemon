@@ -4,7 +4,6 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
 import draw.button.ButtonList;
-import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import input.ControlKey;
 import input.InputControl;
@@ -17,17 +16,14 @@ import trainer.player.Player;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class MenuState implements VisualStateHandler {
-    private final ButtonList menuButtons;
+public class MenuState extends VisualStateHandler {
+    private final ButtonList buttons;
 
-    private BattleView view;
     private Battle currentBattle;
 
     public MenuState() {
-        view = Game.instance().getBattleView();
-
         MenuChoice[] choices = MenuChoice.values();
-        menuButtons = new ButtonList(
+        buttons = new ButtonList(
                 view.createPanelLayout(MenuChoice.values().length)
                     .withDrawSetup((panel, index) -> panel.withTransparentBackground(choices[index].buttonColor)
                                                           .withTransparentCount(2)
@@ -41,7 +37,7 @@ public class MenuState implements VisualStateHandler {
 
     @Override
     public void set() {
-        menuButtons.setFalseHover();
+        buttons.setFalseHover();
     }
 
     @Override
@@ -50,31 +46,36 @@ public class MenuState implements VisualStateHandler {
         view.drawMenuMessagePanel(g, "What will " + playerPokemon.getActualName() + " do?");
         view.drawButtonsPanel(g);
 
-        menuButtons.draw(g);
+        buttons.draw(g);
     }
 
     @Override
     public void update() {
-        menuButtons.update();
+        buttons.update();
 
         // Semi-invulnerable moves don't get a choice -- gotta fight
         if (Game.getPlayer().front().isSemiInvulnerable()) {
             pressFight();
         } else if (InputControl.instance().consumeIfDown(ControlKey.LOG)) {
             view.setVisualState(VisualState.LOG_VIEW);
-        } else if (menuButtons.consumeSelectedPress()) {
+        } else if (buttons.consumeSelectedPress()) {
             view.setVisualState();
         }
     }
 
     @Override
     public ButtonList getButtons() {
-        return menuButtons;
+        return buttons;
     }
 
     @Override
-    public void reset(BattleView view) {
-        this.view = view;
+    public boolean updateBackButton() {
+        // You can't go home if you're already there
+        return false;
+    }
+
+    @Override
+    public void reset() {
         this.currentBattle = view.getCurrentBattle();
     }
 

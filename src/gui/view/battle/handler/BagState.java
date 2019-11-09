@@ -13,7 +13,6 @@ import draw.panel.DrawPanel;
 import draw.panel.PanelList;
 import draw.panel.WrapPanel;
 import draw.panel.WrapPanel.WrapMetrics;
-import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import item.ItemNamesies;
 import item.bag.Bag;
@@ -28,7 +27,7 @@ import java.awt.Graphics;
 import java.util.List;
 import java.util.Set;
 
-public class BagState implements VisualStateHandler {
+public class BagState extends VisualStateHandler {
     private static final BattleBagCategory[] BATTLE_BAG_CATEGORIES = BattleBagCategory.values();
     private static final int ITEMS_PER_PAGE = 10;
 
@@ -53,7 +52,6 @@ public class BagState implements VisualStateHandler {
     private final Button leftButton;
     private final Button lastUsedButton;
 
-    private BattleView view;
     private Bag bag;
 
     // Current bag page, bag category, and selected item
@@ -126,8 +124,7 @@ public class BagState implements VisualStateHandler {
     }
 
     @Override
-    public void reset(BattleView view) {
-        this.view = view;
+    public void reset() {
         this.bag = Game.getPlayer().getBag();
 
         this.changeTab(0);
@@ -243,17 +240,6 @@ public class BagState implements VisualStateHandler {
             // Otherwise, just use it on the battle
             view.useItem(item, Game.getPlayer().front());
         }
-    }
-
-    @Override
-    public void update() {
-        buttons.update();
-        if (buttons.consumeSelectedPress()) {
-            view.setVisualState();
-        }
-
-        // Return to main battle menu
-        view.updateBackButton();
     }
 
     public ItemNamesies getSelectedItem() {

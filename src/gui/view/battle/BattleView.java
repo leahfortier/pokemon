@@ -125,7 +125,7 @@ public class BattleView extends View {
         // Reset each state
         for (VisualState state : VisualState.values()) {
             this.state = state;
-            state.reset(this);
+            state.handler().setBattle(this);
         }
 
         setVisualState(VisualState.MESSAGE);
@@ -138,7 +138,7 @@ public class BattleView extends View {
             return;
         }
 
-        state.update();
+        state.handler().update();
         updateType.performUpdate(this);
     }
 
@@ -175,25 +175,15 @@ public class BattleView extends View {
     }
 
     public void drawBackButton(Graphics g) {
-        drawBackButton(g, true);
-    }
-
-    public void drawBackButton(Graphics g, boolean drawArrows) {
-        if (drawArrows) {
-            backButton.drawPanel(g);
-            backButton.drawHover(g);
-        }
+        backButton.drawPanel(g);
+        backButton.drawHover(g);
     }
 
     public void updateBackButton() {
-        updateBackButton(true);
-    }
-
-    public void updateBackButton(boolean setToMainMenu) {
         backButton.update(false, ControlKey.BACK);
 
         // Return to main battle menu
-        if (backButton.checkConsumePress() && setToMainMenu) {
+        if (backButton.checkConsumePress()) {
             setVisualState(VisualState.MENU);
         }
     }
@@ -212,14 +202,13 @@ public class BattleView extends View {
     }
 
     public void setVisualState(VisualState newState) {
-        if (state != newState) {
-            state.getButtons().setSelected(0);
+        if (!this.isState(newState)) {
+            state = newState;
+            state.handler().movedToFront();
+        } else {
+            // Update the buttons that should be active
+            state.handler().set();
         }
-
-        state = newState;
-
-        // Update the buttons that should be active
-        state.set();
     }
 
     public void cycleMessage() {
@@ -262,7 +251,7 @@ public class BattleView extends View {
                     }
                 }
 
-                this.state.checkMessage(newMessage);
+                this.state.handler().checkMessage(newMessage);
             }
 
             if (newMessage.getMessage().isEmpty()) {
@@ -335,7 +324,7 @@ public class BattleView extends View {
 
         g.setClip(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 
-        state.draw(g);
+        state.handler().draw(g);
     }
 
     @Override
