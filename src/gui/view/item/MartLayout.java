@@ -3,6 +3,7 @@ package gui.view.item;
 import draw.button.Button;
 import draw.button.ButtonPressAction;
 import draw.button.ButtonTransitions;
+import draw.layout.ArrowLayout;
 import draw.layout.DrawLayout;
 import draw.panel.DrawPanel;
 import item.ItemNamesies;
@@ -49,7 +50,7 @@ public class MartLayout extends BagLayout {
                 fakeAmountTabs[arrowDirection == Direction.LEFT ? 0 : 2].panel(),
                 transitions,
                 pressAction,
-                panel -> panel.asArrow(arrowDirection, 35, 20)
+                panel -> panel.asArrow(arrowDirection, ArrowLayout.arrowWidth, ArrowLayout.arrowHeight)
                               .greyInactive()
                               .withBlackOutline()
                               .withFullTransparency()

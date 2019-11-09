@@ -66,4 +66,8 @@ public enum VisualState {
     public static void setSwitchForced() {
         ((PokemonState)POKEMON.visualStateHandler).setSwitchForced();
     }
+
+    public static void addLogMessage(MessageUpdate message) {
+        ((LogState)LOG_VIEW.visualStateHandler).addLogMessage(message);
+    }
 }

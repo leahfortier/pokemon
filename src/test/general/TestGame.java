@@ -53,8 +53,8 @@ public class TestGame extends Game {
         newGame.setGameData(Game.getData());
 
         newInstance(newGame);
-        player.addPokemon(mahBoiiiiiii);
         newGame.setViews();
+        player.addPokemon(mahBoiiiiiii);
 
         MapName startingMapName = new MapName("Depth First Search Town", "PlayersHouseUp");
         MapData startingMap = Game.getData().getMap(startingMapName);

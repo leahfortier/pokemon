@@ -95,8 +95,6 @@ public class Player extends PlayerTrainer implements Serializable, Nicknamed {
     private RepelInfo repelInfo;
     private BallItem pokeball;
 
-    private transient List<String> logMessages;
-
     public Player() {
         super(DEFAULT_NAME, START_MONEY);
         this.initialize();
@@ -127,7 +125,6 @@ public class Player extends PlayerTrainer implements Serializable, Nicknamed {
 
     // Initializes the character with the current game -- used when recovering a save file as well as the generic constructor
     public void initialize() {
-        this.logMessages = new ArrayList<>();
         this.timeSinceUpdate = TimeUtils.getCurrentTimestamp();
         this.entity = new PlayerEntity(this.location);
     }
@@ -429,6 +426,7 @@ public class Player extends PlayerTrainer implements Serializable, Nicknamed {
             Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.WIN_BATTLE));
         }
 
+        // Check end battle effects for the team and for each individual team member
         EndBattleEffect.invokeEndBattleEffect(this.getEffects().asList(), this, b, front());
         for (ActivePokemon p : this.getActiveTeam()) {
             EndBattleEffect.invokeEndBattleEffect(p.getAllEffects(b), this, b, p);
@@ -624,23 +622,6 @@ public class Player extends PlayerTrainer implements Serializable, Nicknamed {
 
         Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.CATCH_POKEMON));
         return true;
-    }
-
-    public void addLogMessage(MessageUpdate messageUpdate) {
-        String messageString = messageUpdate.getMessage().trim();
-        if (messageString.isEmpty()) {
-            return;
-        }
-
-        logMessages.add("-" + messageString);
-    }
-
-    public void clearLogMessages() {
-        logMessages.clear();
-    }
-
-    public List<String> getLogMessages() {
-        return logMessages;
     }
 
     public void performAction(Battle b, TrainerAction action) {

@@ -45,12 +45,12 @@ public class BattleView extends View {
     // All the different buttons!!
     private final Button backButton;
 
-    // The current battle in view, the current message being displayed, and the current selected button
+    // The current battle in view and the current state the battle is in
     private Battle currentBattle;
-    private String message;
-
-    // The current state that the battle is in and current update type
     private VisualState state;
+
+    // The current message being displayed and current update type
+    private String message;
     private MessageUpdateType updateType;
 
     // Displayable current weather and terrain
@@ -97,6 +97,14 @@ public class BattleView extends View {
         return menuMessagePanel.sizing();
     }
 
+    public Panel getLargePanelSizing() {
+        return largeMenuPanel.sizing();
+    }
+
+    public int getLargePanelBorderSize() {
+        return largeMenuPanel.getBorderSize();
+    }
+
     public ButtonLayout createPanelLayout(int numOptions) {
         return new ButtonLayout(buttonsPanel, 2, numOptions/2, BUTTON_WIDTH, BUTTON_HEIGHT);
     }
@@ -118,8 +126,6 @@ public class BattleView extends View {
 
         setVisualState(VisualState.MESSAGE);
         updateType = MessageUpdateType.NO_UPDATE;
-
-        Game.getPlayer().clearLogMessages();
     }
 
     @Override
@@ -227,7 +233,7 @@ public class BattleView extends View {
             }
 
             MessageUpdate newMessage = Messages.getNextMessage();
-            Game.getPlayer().addLogMessage(newMessage);
+            VisualState.addLogMessage(newMessage);
 
             PokemonAnimationState state = newMessage.isPlayer() ? playerAnimation : enemyAnimation;
             state.checkMessage(newMessage);

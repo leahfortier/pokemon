@@ -165,4 +165,5 @@ Other random things:
     StatGainPanel should maybe use the panel thing similar to the StatPanel
     ViewState things in battle and map and other places probably should store the view and then they can have buttons pressed normally again
     can we have a class that holds the arrow buttons and page number and shit like that
+    Pickup has Great and Ultra Balls in the list but these are no longer holdable items -- should remove and add a test that all items are holdable
     
