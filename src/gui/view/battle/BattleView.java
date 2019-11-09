@@ -15,6 +15,7 @@ import draw.panel.WrapPanel;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.ControlKey;
+import item.ItemNamesies;
 import main.Game;
 import main.Global;
 import map.Direction;
@@ -23,7 +24,9 @@ import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
+import pokemon.active.PartyPokemon;
 import trainer.TrainerAction;
+import trainer.player.Player;
 import util.string.StringUtils;
 
 import java.awt.Color;
@@ -279,6 +282,23 @@ public class BattleView extends View {
         Game.getPlayer().performAction(currentBattle, TrainerAction.FIGHT);
         this.setVisualState(VisualState.MESSAGE);
         this.cycleMessage();
+    }
+
+    // Uses the item on the selected Pokemon (already checked for UseItem at this point)
+    // Item may still fail its use and will reset back to the bag state in this case
+    public void useItem(ItemNamesies item, PartyPokemon selected) {
+        Player player = Game.getPlayer();
+
+        // Try using the item on the selected Pokemon
+        if (player.getBag().battleUseItem(item, selected, currentBattle)) {
+            player.performAction(currentBattle, TrainerAction.ITEM);
+            this.setVisualState(VisualState.MENU);
+            this.cycleMessage();
+        } else {
+            // Item could not be used, reset to bag state
+            this.cycleMessage();
+            this.setVisualState(VisualState.INVALID_BAG);
+        }
     }
 
     @Override

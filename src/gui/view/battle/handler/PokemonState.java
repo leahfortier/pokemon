@@ -2,7 +2,6 @@ package gui.view.battle.handler;
 
 import battle.Battle;
 import battle.attack.Attack;
-import battle.attack.Move;
 import draw.DrawUtils;
 import draw.ImageUtils;
 import draw.TextUtils;
@@ -57,7 +56,7 @@ public class PokemonState implements VisualStateHandler {
     private BattleView view;
 
     // Current selected tab in Pokemon view and whether or not a switch is forced
-    private int selectedPokemonTab;
+    private int selectedTab;
     private boolean switchForced;
 
     public PokemonState() {
@@ -83,6 +82,7 @@ public class PokemonState implements VisualStateHandler {
                 .withFullTransparency()
                 .withBlackOutline();
 
+        // Do nothing when pressed, only when selected
         moveButtons = new ButtonLayout(movesPanel, MoveList.MAX_MOVES, 1, 8)
                 .withStartIndex(MOVES)
                 .withDefaultTransitions(new ButtonTransitions().right(SWITCH).up(TABS).left(SWITCH).down(TABS))
@@ -99,7 +99,7 @@ public class PokemonState implements VisualStateHandler {
                 sidePanelWidth,
                 switchButtonHeight,
                 new ButtonTransitions().right(MOVES).up(TABS).left(MOVES).down(TABS),
-                () -> {}, // Handled in update
+                this::pressSwitch,
                 panel -> panel.greyInactive()
                               .withLabelSize(20)
                               .withFullTransparency()
@@ -145,6 +145,7 @@ public class PokemonState implements VisualStateHandler {
                 .withDefaultTransitions(new ButtonTransitions().down(SWITCH).up(SWITCH))
                 .withButtonSetup(panel -> panel.skipInactive()
                                                .withFullTransparency())
+                .withPressIndex(this::changeTab)
                 .getTabs();
 
         // Pokemon Switch View Buttons
@@ -158,25 +159,55 @@ public class PokemonState implements VisualStateHandler {
     public void reset(BattleView view) {
         this.view = view;
 
-        selectedPokemonTab = 0;
         switchForced = false;
+        this.changeTab(0);
+    }
+
+    private void changeTab(int index) {
+        this.selectedTab = index;
+
+        List<PartyPokemon> team = Game.getPlayer().getTeam();
+        PartyPokemon selected = team.get(selectedTab);
+
+        // Set background colors
+        pokemonPanel.withBackgroundColors(PokeType.getColors(selected), true);
+
+        // Update active buttons (like moves or switch) and set tab outlines and such
+        this.set();
     }
 
     @Override
     public void set() {
+        TileSet partyTiles = Game.getData().getPartyTiles();
         List<PartyPokemon> team = Game.getPlayer().getTeam();
-        PartyPokemon selected = team.get(selectedPokemonTab);
+        PartyPokemon selected = team.get(selectedTab);
+        MoveList moves = selected.getActualMoves();
 
+        // Tabs
         for (int i = 0; i < tabButtons.length; i++) {
-            tabButtons[i].setActive(i < team.size());
+            Button button = tabButtons[i];
+            button.setActiveSkip(i < team.size());
+            if (button.isActive()) {
+                PartyPokemon tabPokemon = team.get(i);
+                button.panel()
+                      .withTabOutlines(i, selectedTab)
+                      .withBackgroundColor(PokeType.getColors(tabPokemon)[0])
+                      .withImageLabel(partyTiles.getTile(tabPokemon.getTinyImageName()));
+            }
         }
 
-        int numMoves = selected.getActualMoves().size();
+        // Moves
         for (int i = 0; i < moveButtons.length; i++) {
-            moveButtons[i].setActive(!selected.isEgg() && i < numMoves);
+            Button button = moveButtons[i];
+            button.setActiveSkip(!selected.isEgg() && i < moves.size());
+            if (button.isActive()) {
+                button.panel().withMove(moves.get(i));
+            }
         }
 
+        // Switch/Use button
         switchButton.setActive(view.isState(VisualState.USE_ITEM) || selected.canFight());
+        switchButton.panel().withLabel(view.isState(VisualState.USE_ITEM) ? "Use!" : "Switch!");
 
         buttons.setFalseHover();
     }
@@ -195,18 +226,13 @@ public class PokemonState implements VisualStateHandler {
 
         // Selected Pokemon Info
         // Note: Important to draw selected before the tabs because of how outlines work
-        drawSelectedPokemon(g, view);
+        drawSelectedPokemon(g);
 
         // Draw tabs
         List<PartyPokemon> list = Game.getPlayer().getTeam();
-        TileSet partyTiles = Game.getData().getPartyTiles();
         for (int i = 0; i < list.size(); i++) {
-            PartyPokemon pkm = list.get(i);
             ButtonPanel tabPanel = tabButtons[i].panel();
-            tabPanel.withTabOutlines(i, selectedPokemonTab)
-                    .withBackgroundColor(PokeType.getColors(pkm)[0])
-                    .withImageLabel(partyTiles.getTile(pkm.getTinyImageName()))
-                    .draw(g);
+            tabPanel.draw(g);
 
             // Fade out fainted Pokemon
             tabPanel.faintOut(g, list.get(i));
@@ -216,12 +242,11 @@ public class PokemonState implements VisualStateHandler {
         buttons.drawHover(g);
     }
 
-    private void drawSelectedPokemon(Graphics g, BattleView view) {
-        PartyPokemon selectedPkm = Game.getPlayer().getTeam().get(selectedPokemonTab);
+    private void drawSelectedPokemon(Graphics g) {
+        PartyPokemon selectedPkm = Game.getPlayer().getTeam().get(selectedTab);
 
         // Type color polygons
-        pokemonPanel.withBackgroundColors(PokeType.getColors(selectedPkm), true)
-                    .drawBackground(g);
+        pokemonPanel.drawBackground(g);
 
         // Top Box with basic information
         basicInformationPanel.drawBackground(g);
@@ -276,17 +301,12 @@ public class PokemonState implements VisualStateHandler {
             // Draw Move List
             movesPanel.drawBackground(g);
             for (int i = 0; i < moves.size(); i++) {
-                Move move = moves.get(i);
-                ButtonPanel movePanel = this.moveButtons[i].panel();
-
-                movePanel.withMove(move).draw(g);
+                moveButtons[i].panel().draw(g);
             }
         }
 
         // Draw switch button
-        switchButton.panel()
-                    .withLabel(view.isState(VisualState.USE_ITEM) ? "Use!" : "Switch!")
-                    .draw(g);
+        switchButton.panel().draw(g);
 
         // If ya dead ya red
         pokemonPanel.faintOut(g, selectedPkm);
@@ -315,57 +335,41 @@ public class PokemonState implements VisualStateHandler {
         }
     }
 
+    // Switch Switch Switcheroo
+    private void pressSwitch() {
+        Battle currentBattle = view.getCurrentBattle();
+        Player player = Game.getPlayer();
+        List<PartyPokemon> team = player.getTeam();
+        PartyPokemon selectedPkm = team.get(selectedTab);
+
+        // Use an item on this Pokemon instead of switching
+        if (view.isState(VisualState.USE_ITEM)) {
+            view.useItem(VisualState.getSelectedItem(), selectedPkm);
+        } else {
+            // Actual switcheroo
+            if (player.canSwitch(currentBattle, selectedTab)) {
+                player.setSwitchIndex(selectedTab);
+                if (switchForced) {
+                    player.performSwitch(currentBattle);
+                } else {
+                    player.performAction(currentBattle, TrainerAction.SWITCH);
+                }
+
+                view.cycleMessage();
+                switchForced = false;
+            } else {
+                view.cycleMessage();
+                view.setVisualState(VisualState.INVALID_POKEMON);
+            }
+        }
+    }
+
     @Override
     public void update() {
         // Update the buttons
         buttons.update();
-
-        Battle currentBattle = view.getCurrentBattle();
-        Player player = Game.getPlayer();
-        List<PartyPokemon> list = player.getTeam();
-        for (int i = 0; i < list.size(); i++) {
-            if (tabButtons[i].checkConsumePress()) {
-                selectedPokemonTab = i;
-                view.setVisualState(); // To update active buttons
-            }
-        }
-
-        // Switch Switch Switcheroo
-        if (switchButton.checkConsumePress()) {
-            PartyPokemon selectedPkm = list.get(selectedPokemonTab);
-
-            // Use an item on this Pokemon instead of switching
-            if (view.isState(VisualState.USE_ITEM)) {
-                // Valid item
-                if (player.getBag().battleUseItem(VisualState.getSelectedItem(), selectedPkm, currentBattle)) {
-                    player.performAction(currentBattle, TrainerAction.ITEM);
-                    view.setVisualState(VisualState.MENU);
-                    view.cycleMessage();
-                }
-                // Invalid item
-                else {
-                    view.cycleMessage();
-                    view.setVisualState(VisualState.INVALID_BAG);
-                }
-            }
-            // Actual switcheroo
-            else {
-                if (player.canSwitch(currentBattle, selectedPokemonTab)) {
-                    player.setSwitchIndex(selectedPokemonTab);
-
-                    if (switchForced) {
-                        player.performSwitch(currentBattle);
-                    } else {
-                        player.performAction(currentBattle, TrainerAction.SWITCH);
-                    }
-
-                    view.cycleMessage();
-                    switchForced = false;
-                } else {
-                    view.cycleMessage();
-                    view.setVisualState(VisualState.INVALID_POKEMON);
-                }
-            }
+        if (buttons.consumeSelectedPress()) {
+            view.setVisualState();
         }
 
         // Return to main menu if applicable

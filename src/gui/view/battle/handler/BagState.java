@@ -1,6 +1,5 @@
 package gui.view.battle.handler;
 
-import battle.Battle;
 import draw.Alignment;
 import draw.TextUtils;
 import draw.button.Button;
@@ -22,8 +21,6 @@ import item.bag.BattleBagCategory;
 import item.use.PokemonUseItem;
 import main.Game;
 import map.Direction;
-import trainer.TrainerAction;
-import trainer.player.Player;
 import util.GeneralUtils;
 
 import java.awt.Color;
@@ -238,24 +235,13 @@ public class BagState implements VisualStateHandler {
     }
 
     private void pressItemButton(ItemNamesies item) {
-        Battle currentBattle = view.getCurrentBattle();
-        Player player = Game.getPlayer();
-
-        // Pokemon Use Item -- Set item to be selected an change to Pokemon View
+        // Pokemon Use Item -- set item to be selected and change to Pokemon View
         if (item.getItem() instanceof PokemonUseItem) {
             selectedItem = item;
             view.setVisualState(VisualState.USE_ITEM);
-        }
-        // Otherwise, just use it on the battle if successful
-        else if (bag.battleUseItem(item, player.front(), currentBattle)) {
-            player.performAction(currentBattle, TrainerAction.ITEM);
-            view.setVisualState(VisualState.MENU);
-            view.cycleMessage();
-        }
-        // If the item cannot be used, do not consume
-        else {
-            view.cycleMessage();
-            view.setVisualState(VisualState.INVALID_BAG);
+        } else {
+            // Otherwise, just use it on the battle
+            view.useItem(item, Game.getPlayer().front());
         }
     }
 
