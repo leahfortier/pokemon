@@ -20,27 +20,17 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class MenuState implements VisualStateHandler {
-
     private ButtonList menuButtons;
 
-    @Override
-    public void set(BattleView view) {
-        MenuChoice[] choices = MenuChoice.values();
-        menuButtons = new ButtonList(
-                view.createPanelLayout(MenuChoice.values().length)
-                    .withDrawSetup((panel, index) -> panel.withTransparentBackground(choices[index].buttonColor)
-                                                          .withTransparentCount(2)
-                                                          .withBorderPercentage(15)
-                                                          .withBlackOutline()
-                                                          .withLabel(choices[index].getButtonLabel(), 30))
-                    .getButtons()
-        );
+    private BattleView view;
 
+    @Override
+    public void set() {
         menuButtons.setFalseHover();
     }
 
     @Override
-    public void draw(BattleView view, Graphics g) {
+    public void draw(Graphics g) {
         ActivePokemon playerPokemon = Game.getPlayer().front();
         view.drawMenuMessagePanel(g, "What will " + playerPokemon.getActualName() + " do?");
         view.drawButtonsPanel(g);
@@ -49,7 +39,7 @@ public class MenuState implements VisualStateHandler {
     }
 
     @Override
-    public void update(BattleView view) {
+    public void update() {
         Battle currentBattle = view.getCurrentBattle();
         Player player = Game.getPlayer();
 
@@ -94,6 +84,22 @@ public class MenuState implements VisualStateHandler {
     @Override
     public ButtonList getButtons() {
         return menuButtons;
+    }
+
+    @Override
+    public void reset(BattleView view) {
+        this.view = view;
+
+        MenuChoice[] choices = MenuChoice.values();
+        menuButtons = new ButtonList(
+                view.createPanelLayout(MenuChoice.values().length)
+                    .withDrawSetup((panel, index) -> panel.withTransparentBackground(choices[index].buttonColor)
+                                                          .withTransparentCount(2)
+                                                          .withBorderPercentage(15)
+                                                          .withBlackOutline()
+                                                          .withLabel(choices[index].getButtonLabel(), 30))
+                    .getButtons()
+        );
     }
 
     private enum MenuChoice {

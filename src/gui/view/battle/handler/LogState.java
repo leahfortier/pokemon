@@ -21,6 +21,8 @@ public class LogState implements VisualStateHandler {
     private final Button leftArrow;
     private final Button rightArrow;
 
+    private BattleView view;
+
     private int logPage;
     private List<String> logMessages;
 
@@ -44,13 +46,13 @@ public class LogState implements VisualStateHandler {
     }
 
     @Override
-    public void set(BattleView view) {
+    public void set() {
         logPage = 0;
         logMessages = Game.getPlayer().getLogMessages();
     }
 
     @Override
-    public void draw(BattleView view, Graphics g) {
+    public void draw(Graphics g) {
         view.drawLargeMenuPanel(g);
 
         FontMetrics.setBlackFont(g, 12);
@@ -69,7 +71,7 @@ public class LogState implements VisualStateHandler {
     }
 
     @Override
-    public void update(BattleView view) {
+    public void update() {
         logButtons.update();
 
         int increment = 0;
@@ -95,5 +97,10 @@ public class LogState implements VisualStateHandler {
     @Override
     public ButtonList getButtons() {
         return logButtons;
+    }
+
+    @Override
+    public void reset(BattleView view) {
+        this.view = view;
     }
 }

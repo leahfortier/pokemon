@@ -7,20 +7,21 @@ import gui.view.battle.BattleView;
 import java.awt.Graphics;
 
 public class LearnMoveState implements VisualStateHandler {
+    private BattleView view;
     private LearnMoveHandler learnMoveHandler;
 
     @Override
-    public void set(BattleView view) {
+    public void set() {
         this.learnMoveHandler = new LearnMoveHandler(view.getLearnedPokemon(), view.getLearnedMove());
     }
 
     @Override
-    public void draw(BattleView view, Graphics g) {
+    public void draw(Graphics g) {
         this.learnMoveHandler.draw(g);
     }
 
     @Override
-    public void update(BattleView view) {
+    public void update() {
         this.learnMoveHandler.update();
         if (this.learnMoveHandler.isFinished()) {
             view.cycleMessage();
@@ -30,5 +31,10 @@ public class LearnMoveState implements VisualStateHandler {
     @Override
     public ButtonList getButtons() {
         return new ButtonList(0);
+    }
+
+    @Override
+    public void reset(BattleView view) {
+        this.view = view;
     }
 }

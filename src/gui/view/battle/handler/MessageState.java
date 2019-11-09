@@ -13,6 +13,8 @@ import java.awt.Graphics;
 public class MessageState implements VisualStateHandler {
     private final StatGainPanel statsPanel;
 
+    private BattleView view;
+
     // Stat gains and corresponding new stat upgrades for leveling up/evolving
     private MessageUpdate statGainMessage;
 
@@ -21,10 +23,10 @@ public class MessageState implements VisualStateHandler {
     }
 
     @Override
-    public void set(BattleView view) {}
+    public void set() {}
 
     @Override
-    public void draw(BattleView view, Graphics g) {
+    public void draw(Graphics g) {
         view.drawFullMessagePanel(g);
         if (view.isState(VisualState.STAT_GAIN)) {
             statsPanel.drawBackground(g);
@@ -33,7 +35,12 @@ public class MessageState implements VisualStateHandler {
     }
 
     @Override
-    public void update(BattleView view) {
+    public void reset(BattleView view) {
+        this.view = view;
+    }
+
+    @Override
+    public void update() {
         boolean pressed = false;
         InputControl input = InputControl.instance();
 

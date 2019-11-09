@@ -20,9 +20,9 @@ import java.awt.Graphics;
 
 public class FightState implements VisualStateHandler {
     private final MovePanel moveDetailsPanel;
-
     private ButtonList moveButtons;
 
+    private BattleView view;
     private MoveList selectedMoveList;
 
     // The last move that a Pokemon used
@@ -40,16 +40,8 @@ public class FightState implements VisualStateHandler {
     }
 
     @Override
-    public void reset() {
-        this.resetLastMoveUsed();
-    }
-
-    @Override
-    public void set(BattleView view) {
-        selectedMoveList = Game.getPlayer().front().getMoves(view.getCurrentBattle());
-        if (lastMoveUsed >= selectedMoveList.size()) {
-            this.resetLastMoveUsed();
-        }
+    public void reset(BattleView view) {
+        this.view = view;
 
         moveButtons = new ButtonList(
                 view.createPanelLayout(MoveList.MAX_MOVES)
@@ -59,6 +51,16 @@ public class FightState implements VisualStateHandler {
                                                    .withBlackOutline())
                     .getButtons()
         );
+
+        this.resetLastMoveUsed();
+    }
+
+    @Override
+    public void set() {
+        selectedMoveList = Game.getPlayer().front().getMoves(view.getCurrentBattle());
+        if (lastMoveUsed >= selectedMoveList.size()) {
+            this.resetLastMoveUsed();
+        }
 
         moveButtons.setSelected(lastMoveUsed);
 
@@ -70,7 +72,7 @@ public class FightState implements VisualStateHandler {
     }
 
     @Override
-    public void draw(BattleView view, Graphics g) {
+    public void draw(Graphics g) {
         view.drawButtonsPanel(g);
 
         ActivePokemon playerPokemon = Game.getPlayer().front();
@@ -100,7 +102,7 @@ public class FightState implements VisualStateHandler {
     }
 
     @Override
-    public void update(BattleView view) {
+    public void update() {
         // Update move buttons and the back button
         moveButtons.update();
 

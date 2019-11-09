@@ -56,6 +56,7 @@ public class BagState implements VisualStateHandler {
     private final Button leftButton;
     private final Button lastUsedButton;
 
+    private BattleView view;
     private Bag bag;
 
     // Current bag page, bag category, and selected item
@@ -124,13 +125,15 @@ public class BagState implements VisualStateHandler {
     }
 
     @Override
-    public void reset() {
+    public void reset(BattleView view) {
+        this.view = view;
         this.bag = Game.getPlayer().getBag();
+
         this.changeTab(0);
     }
 
     @Override
-    public void set(BattleView view) {
+    public void set() {
         List<ItemNamesies> items = GeneralUtils.pageValues(this.getDisplayItems(), bagPage, ITEMS_PER_PAGE);
         for (int i = 0; i < itemButtons.length; i++) {
             Button button = itemButtons[i];
@@ -168,7 +171,7 @@ public class BagState implements VisualStateHandler {
     }
 
     @Override
-    public void draw(BattleView view, Graphics g) {
+    public void draw(Graphics g) {
         drawSetup();
 
         // Background
@@ -245,7 +248,7 @@ public class BagState implements VisualStateHandler {
     }
 
     @Override
-    public void update(BattleView view) {
+    public void update() {
         // Update all bag buttons and the back button
         buttons.update();
 

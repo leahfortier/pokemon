@@ -35,20 +35,20 @@ public enum VisualState {
         this.visualStateHandler = visualStateHandler;
     }
 
-    public void update(BattleView battleView) {
-        this.visualStateHandler.update(battleView);
+    public void update() {
+        this.visualStateHandler.update();
     }
 
-    public void set(BattleView battleView) {
-        this.visualStateHandler.set(battleView);
+    public void set() {
+        this.visualStateHandler.set();
     }
 
-    public void draw(BattleView battleView, Graphics g) {
-        this.visualStateHandler.draw(battleView, g);
+    public void draw(Graphics g) {
+        this.visualStateHandler.draw(g);
     }
 
-    public void reset() {
-        this.visualStateHandler.reset();
+    public void reset(BattleView battleView) {
+        this.visualStateHandler.reset(battleView);
     }
 
     public void checkMessage(MessageUpdate newMessage) {

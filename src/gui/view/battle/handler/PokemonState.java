@@ -54,6 +54,8 @@ public class PokemonState implements VisualStateHandler {
     private final Button[] moveButtons;
     private final Button switchButton;
 
+    private BattleView view;
+
     // Current selected tab in Pokemon view and whether or not a switch is forced
     private int selectedPokemonTab;
     private boolean switchForced;
@@ -153,13 +155,15 @@ public class PokemonState implements VisualStateHandler {
     }
 
     @Override
-    public void reset() {
+    public void reset(BattleView view) {
+        this.view = view;
+
         selectedPokemonTab = 0;
         switchForced = false;
     }
 
     @Override
-    public void set(BattleView view) {
+    public void set() {
         List<PartyPokemon> team = Game.getPlayer().getTeam();
         PartyPokemon selected = team.get(selectedPokemonTab);
 
@@ -178,7 +182,7 @@ public class PokemonState implements VisualStateHandler {
     }
 
     @Override
-    public void draw(BattleView view, Graphics g) {
+    public void draw(Graphics g) {
         // Draw Background
         view.drawLargeMenuPanel(g);
 
@@ -312,7 +316,7 @@ public class PokemonState implements VisualStateHandler {
     }
 
     @Override
-    public void update(BattleView view) {
+    public void update() {
         // Update the buttons
         buttons.update();
 

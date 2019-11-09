@@ -108,7 +108,7 @@ public class BattleView extends View {
         // Reset each state
         for (VisualState state : VisualState.values()) {
             this.state = state;
-            state.reset();
+            state.reset(this);
         }
 
         setVisualState(VisualState.MESSAGE);
@@ -123,7 +123,7 @@ public class BattleView extends View {
             return;
         }
 
-        state.update(this);
+        state.update();
         updateType.performUpdate(this);
     }
 
@@ -204,7 +204,7 @@ public class BattleView extends View {
         state = newState;
 
         // Update the buttons that should be active
-        state.set(this);
+        state.set();
     }
 
     public void cycleMessage() {
@@ -296,7 +296,7 @@ public class BattleView extends View {
 
         g.setClip(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 
-        state.draw(this, g);
+        state.draw(g);
     }
 
     @Override
