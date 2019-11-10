@@ -5,7 +5,6 @@ import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
 import draw.panel.DrawPanel;
-import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
 import input.InputControl;
 import main.Global;
@@ -14,7 +13,7 @@ import util.FontMetrics;
 import java.awt.Color;
 import java.awt.Graphics;
 
-class MenuState implements VisualStateHandler {
+class MenuState extends VisualStateHandler {
     private final DrawPanel menuPanel;
     private final ButtonList menuButtons;
 
@@ -38,11 +37,10 @@ class MenuState implements VisualStateHandler {
     }
 
     @Override
-    public void draw(Graphics g, MapView mapView) {
+    public void draw(Graphics g) {
         menuPanel.drawBackground(g);
 
         FontMetrics.setBlackFont(g, 40);
-
         for (MenuChoice menuChoice : MenuChoice.values()) {
             g.drawString(menuChoice.getDisplayName(), 558, 59 + 72*menuChoice.ordinal());
         }
@@ -51,24 +49,19 @@ class MenuState implements VisualStateHandler {
     }
 
     @Override
-    public void update(int dt, MapView mapView) {
+    public void update(int dt) {
         InputControl input = InputControl.instance();
         menuButtons.update();
 
-        int clicked = -1;
         for (int i = 0; i < menuButtons.size(); i++) {
             if (menuButtons.get(i).checkConsumePress()) {
-                clicked = i;
+                MenuChoice menuChoice = MenuChoice.values()[i];
+                menuChoice.execute(view);
             }
         }
 
-        if (clicked != -1) {
-            MenuChoice menuChoice = MenuChoice.values()[clicked];
-            menuChoice.execute(mapView);
-        }
-
         if (input.consumeIfDown(ControlKey.ESC)) {
-            mapView.setState(VisualState.MAP);
+            view.setState(VisualState.MAP);
         }
     }
 }

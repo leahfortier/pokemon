@@ -5,7 +5,6 @@ import draw.TextUtils;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
 import gui.TileSet;
-import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -24,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-class PokeFinderState implements VisualStateHandler {
+class PokeFinderState extends VisualStateHandler {
     private static final int NUM_ROWS = 4;
     private static final int NUM_COLUMNS = 6;
     private static final int MAX_RENDER = NUM_ROWS*NUM_COLUMNS;
@@ -41,7 +40,7 @@ class PokeFinderState implements VisualStateHandler {
     }
 
     @Override
-    public void draw(Graphics g, MapView mapView) {
+    public void draw(Graphics g) {
         pokeFinderPanel.drawBackground(g);
 
         Iterator<PokemonNamesies> iter = toRender.iterator();
@@ -70,20 +69,20 @@ class PokeFinderState implements VisualStateHandler {
     }
 
     @Override
-    public void update(int dt, MapView mapView) {
+    public void update(int dt) {
         InputControl input = InputControl.instance();
         if (input.consumeIfDown(ControlKey.ESC) || input.consumeIfDown(ControlKey.POKEFINDER)) {
-            mapView.setState(VisualState.MAP);
+            view.setState(VisualState.MAP);
         }
     }
 
     @Override
-    public void set(MapView mapView) {
+    public void set() {
         Player player = Game.getPlayer();
 
-        this.availablePokemon = mapView.getCurrentMap().getArea(player.getLocation()).getAvailableWildPokemon();
+        this.availablePokemon = view.getCurrentMap().getArea(player.getLocation()).getAvailableWildPokemon();
         if (this.availablePokemon.isEmpty()) {
-            mapView.setState(VisualState.MAP);
+            view.setState(VisualState.MAP);
             return;
         }
 

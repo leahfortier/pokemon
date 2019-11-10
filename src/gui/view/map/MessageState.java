@@ -2,7 +2,6 @@ package gui.view.map;
 
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
-import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
 import input.InputControl;
 import main.Global;
@@ -17,12 +16,12 @@ import util.FontMetrics;
 import java.awt.Color;
 import java.awt.Graphics;
 
-class MessageState implements VisualStateHandler {
+class MessageState extends VisualStateHandler {
     private int choiceIndex;
 
     @Override
-    public void draw(Graphics g, MapView mapView) {
-        MessageUpdate currentMessage = mapView.getCurrentMessage();
+    public void draw(Graphics g) {
+        MessageUpdate currentMessage = view.getCurrentMessage();
 
         BasicPanels.drawFullMessagePanel(g, currentMessage.getMessage());
         if (currentMessage.isChoice()) {
@@ -63,13 +62,13 @@ class MessageState implements VisualStateHandler {
     }
 
     @Override
-    public void update(int dt, MapView mapView) {
+    public void update(int dt) {
         if (BasicPanels.isAnimatingMessage()) {
             return;
         }
 
         InputControl input = InputControl.instance();
-        MessageUpdate currentMessage = mapView.getCurrentMessage();
+        MessageUpdate currentMessage = view.getCurrentMessage();
 
         if (currentMessage.isChoice()) {
             if (input.consumeIfDown(ControlKey.DOWN)) {
@@ -92,15 +91,15 @@ class MessageState implements VisualStateHandler {
 
             boolean newMessage = false;
             while (!HaltTrigger.isHalted() && Messages.hasMessages()) {
-                mapView.cycleMessage();
-                if (!mapView.isState(VisualState.MESSAGE) || !mapView.emptyMessage()) {
+                view.cycleMessage();
+                if (!view.isState(VisualState.MESSAGE) || !view.emptyMessage()) {
                     newMessage = true;
                     break;
                 }
             }
 
             if (!newMessage && !Messages.hasMessages()) {
-                mapView.resetMessageState();
+                view.resetMessageState();
             }
         }
     }

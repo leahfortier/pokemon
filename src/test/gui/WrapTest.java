@@ -14,7 +14,6 @@ import gui.view.battle.handler.BagState;
 import gui.view.battle.handler.FightState;
 import gui.view.battle.handler.PokemonState;
 import gui.view.item.BagLayout;
-import gui.view.map.MapView;
 import gui.view.map.MedalCaseState;
 import item.Item;
 import item.ItemNamesies;
@@ -153,9 +152,8 @@ public class WrapTest extends BaseTest {
 
     @Test
     public void medalDescriptionTest() {
-        MapView mapView = TestGame.instance().getMapView();
         MedalCaseState medalState = new MedalCaseState();
-        medalState.set(mapView);
+        medalState.set();
 
         TestMetrics medalMetrics = new TestMetrics();
 

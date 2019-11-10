@@ -7,7 +7,6 @@ import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
-import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -21,7 +20,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
-class FlyState implements VisualStateHandler {
+class FlyState extends VisualStateHandler {
     private static final int AREAS_PER_PAGE = 3;
 
     private static final int NUM_BUTTONS = AREAS_PER_PAGE + 2;
@@ -110,7 +109,7 @@ class FlyState implements VisualStateHandler {
     }
 
     @Override
-    public void draw(Graphics g, MapView mapView) {
+    public void draw(Graphics g) {
         BasicPanels.drawCanvasPanel(g);
         titlePanel.draw(g);
         buttons.drawPanels(g);
@@ -127,7 +126,7 @@ class FlyState implements VisualStateHandler {
     }
 
     @Override
-    public void update(int dt, MapView mapView) {
+    public void update(int dt) {
         InputControl input = InputControl.instance();
 
         this.buttons.update();
@@ -136,12 +135,12 @@ class FlyState implements VisualStateHandler {
         }
 
         if (input.consumeIfDown(ControlKey.ESC) || input.consumeIfDown(ControlKey.FLY)) {
-            mapView.setState(VisualState.MAP);
+            view.setState(VisualState.MAP);
         }
     }
 
     @Override
-    public void set(MapView mapView) {
+    public void set() {
         this.flyLocations = Game.getPlayer().getFlyLocations();
         this.updateActiveButtons();
     }

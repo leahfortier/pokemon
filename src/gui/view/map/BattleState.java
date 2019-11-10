@@ -6,7 +6,6 @@ import draw.DrawUtils;
 import draw.ImageUtils;
 import gui.GameData;
 import gui.view.ViewMode;
-import gui.view.map.VisualState.VisualStateHandler;
 import main.Game;
 import main.Global;
 import sound.SoundPlayer;
@@ -18,7 +17,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-class BattleState implements VisualStateHandler {
+class BattleState extends VisualStateHandler {
     private static final BufferedImage UPPER_POKEBALL_IMAGE = FileIO.readImage(Folder.IMAGES + "PokeBallBattleIntroTop.png");
     private static final BufferedImage LOWER_POKEBALL_IMAGE = FileIO.readImage(Folder.IMAGES + "PokeBallBattleIntroBottom.png");
 
@@ -33,7 +32,7 @@ class BattleState implements VisualStateHandler {
     private BufferedImage battleImageSlideLeft;
 
     @Override
-    public void draw(Graphics g, MapView mapView) {
+    public void draw(Graphics g) {
         if (battleImageSlideRight == null || battleImageSlideLeft == null) {
             return;
         }
@@ -104,15 +103,15 @@ class BattleState implements VisualStateHandler {
     }
 
     @Override
-    public void update(int dt, MapView mapView) {
+    public void update(int dt) {
         if (battleImageSlideLeft == null || battleImageSlideRight == null) {
-            loadBattleImages(mapView);
+            loadBattleImages(view);
         }
 
         if (battleAnimationTime < 0) {
             this.battle = null;
             Game.instance().setViewMode(ViewMode.BATTLE_VIEW);
-            mapView.setState(VisualState.MAP);
+            view.setState(VisualState.MAP);
         }
 
         battleAnimationTime -= dt;

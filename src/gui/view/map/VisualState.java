@@ -2,8 +2,6 @@ package gui.view.map;
 
 import battle.Battle;
 
-import java.awt.Graphics;
-
 public enum VisualState {
     BATTLE(new BattleState()),
     FLY(new FlyState()),
@@ -31,9 +29,4 @@ public enum VisualState {
         return ((BattleState)BATTLE.handler()).hasBattle();
     }
 
-    interface VisualStateHandler {
-        void draw(Graphics g, MapView mapView);
-        void update(int dt, MapView mapView);
-        default void set(MapView mapView) {}
-    }
 }
