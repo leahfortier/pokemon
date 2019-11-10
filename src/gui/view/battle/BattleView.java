@@ -1,8 +1,6 @@
 package gui.view.battle;
 
-import battle.ActivePokemon;
 import battle.Battle;
-import battle.attack.Move;
 import battle.effect.battle.weather.WeatherEffect;
 import draw.DrawUtils;
 import draw.ImageUtils;
@@ -62,10 +60,6 @@ public class BattleView extends View {
     private TerrainType terrain;
     private Boolean isInterior;
 
-    // Which Pokemon is trying to learn a new move, and which move
-    private ActivePokemon learnedPokemon;
-    private Move learnedMove;
-
     public BattleView() {
         playerAnimation = new PokemonAnimationState(this, true);
         enemyAnimation = new PokemonAnimationState(this, false);
@@ -119,9 +113,6 @@ public class BattleView extends View {
         playerAnimation.resetBattle(b.getPlayer().front());
         enemyAnimation.resetBattle(b.getOpponent().front());
 
-        learnedMove = null;
-        learnedPokemon = null;
-
         // Reset each state
         for (VisualState state : VisualState.values()) {
             this.state = state;
@@ -160,14 +151,6 @@ public class BattleView extends View {
         }
 
         return defaultMessage;
-    }
-
-    public Move getLearnedMove() {
-        return this.learnedMove;
-    }
-
-    public ActivePokemon getLearnedPokemon() {
-        return this.learnedPokemon;
     }
 
     public boolean isState(VisualState state) {
@@ -226,33 +209,7 @@ public class BattleView extends View {
             }
 
             MessageUpdate newMessage = Messages.getNextMessage();
-            VisualState.addLogMessage(newMessage);
-
-            PokemonAnimationState state = newMessage.isPlayer() ? playerAnimation : enemyAnimation;
-            state.checkMessage(newMessage);
-            if (!newMessage.switchUpdate()) {
-                if (newMessage.hasUpdateType()) {
-                    updateType = newMessage.getUpdateType();
-                }
-
-                if (newMessage.learnMove()) {
-                    learnedMove = newMessage.getMove();
-                    learnedPokemon = newMessage.getMoveLearner();
-                }
-
-                if (newMessage.weatherUpdate()) {
-                    weather = newMessage.getWeather();
-                }
-
-                if (newMessage.terrainUpdate()) {
-                    terrain = newMessage.getTerrain();
-                    if (isInterior != null) {
-                        isInterior = terrain.isInterior();
-                    }
-                }
-
-                this.state.handler().checkMessage(newMessage);
-            }
+            this.checkMessage(newMessage);
 
             if (newMessage.getMessage().isEmpty()) {
                 cycleMessage(updated);
@@ -263,6 +220,33 @@ public class BattleView extends View {
             }
         } else if (!updated) {
             message = null;
+        }
+    }
+
+    // Called after receiving a new message -- sets appropriate update things and such
+    private void checkMessage(MessageUpdate newMessage) {
+        // Every state deserves a peek! (Not just the current one)
+        for (VisualState state : VisualState.values()) {
+            state.handler().checkMessage(newMessage);
+        }
+
+        // Animation state is also curious
+        PokemonAnimationState animationState = newMessage.isPlayer() ? playerAnimation : enemyAnimation;
+        animationState.checkMessage(newMessage);
+
+        if (newMessage.hasUpdateType()) {
+            updateType = newMessage.getUpdateType();
+        }
+
+        if (newMessage.weatherUpdate()) {
+            weather = newMessage.getWeather();
+        }
+
+        if (newMessage.terrainUpdate()) {
+            terrain = newMessage.getTerrain();
+            if (isInterior != null) {
+                isInterior = terrain.isInterior();
+            }
         }
     }
 

@@ -61,9 +61,6 @@ public class LogState extends VisualStateHandler {
     }
 
     @Override
-    public void set() {}
-
-    @Override
     public void draw(Graphics g) {
         view.drawLargeMenuPanel(g);
 
@@ -103,7 +100,8 @@ public class LogState extends VisualStateHandler {
         this.logMessages = new ArrayList<>();
     }
 
-    public void addLogMessage(MessageUpdate newMessage) {
+    @Override
+    public void checkMessage(MessageUpdate newMessage) {
         String messageString = newMessage.getMessage().trim();
         if (messageString.isEmpty()) {
             return;

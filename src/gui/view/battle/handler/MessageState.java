@@ -20,9 +20,6 @@ public class MessageState extends VisualStateHandler {
     }
 
     @Override
-    public void set() {}
-
-    @Override
     public void draw(Graphics g) {
         view.drawFullMessagePanel(g);
         if (view.isState(VisualState.STAT_GAIN)) {

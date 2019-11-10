@@ -126,7 +126,6 @@ public class BagState extends VisualStateHandler {
     @Override
     public void reset() {
         this.bag = Game.getPlayer().getBag();
-
         this.changeTab(0);
     }
 

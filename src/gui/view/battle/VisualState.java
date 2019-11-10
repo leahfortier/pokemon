@@ -9,7 +9,6 @@ import gui.view.battle.handler.MessageState;
 import gui.view.battle.handler.PokemonState;
 import gui.view.battle.handler.VisualStateHandler;
 import item.ItemNamesies;
-import message.MessageUpdate;
 
 // Contains the different types of states a battle can be in
 public enum VisualState {
@@ -42,9 +41,5 @@ public enum VisualState {
 
     public static void setSwitchForced() {
         ((PokemonState)POKEMON.handler()).setSwitchForced();
-    }
-
-    public static void addLogMessage(MessageUpdate message) {
-        ((LogState)LOG_VIEW.handler()).addLogMessage(message);
     }
 }

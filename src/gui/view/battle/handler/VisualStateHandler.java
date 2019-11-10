@@ -28,6 +28,10 @@ public abstract class VisualStateHandler {
         this.set();
     }
 
+    // Used whenever this state should be updated (like an updateActiveButtons kind of thing)
+    // Called when moved to front, when buttons are pressed, and other update-like situations
+    public void set() {}
+
     // Default update method -- check buttons and back button
     // Okay for this to be overridden if follows a different format
     public void update() {
@@ -49,7 +53,6 @@ public abstract class VisualStateHandler {
     }
 
     protected abstract ButtonList getButtons();
-    public abstract void set();
     public abstract void draw(Graphics g);
 
     public void checkMessage(MessageUpdate newMessage) {}

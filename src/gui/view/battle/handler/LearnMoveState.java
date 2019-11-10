@@ -2,16 +2,12 @@ package gui.view.battle.handler;
 
 import draw.button.ButtonList;
 import draw.handler.LearnMoveHandler;
+import message.MessageUpdate;
 
 import java.awt.Graphics;
 
 public class LearnMoveState extends VisualStateHandler {
     private LearnMoveHandler learnMoveHandler;
-
-    @Override
-    public void set() {
-        this.learnMoveHandler = new LearnMoveHandler(view.getLearnedPokemon(), view.getLearnedMove());
-    }
 
     @Override
     public void draw(Graphics g) {
@@ -34,5 +30,12 @@ public class LearnMoveState extends VisualStateHandler {
     @Override
     public boolean updateBackButton() {
         return false;
+    }
+
+    @Override
+    public void checkMessage(MessageUpdate newMessage) {
+        if (newMessage.learnMove()) {
+            this.learnMoveHandler = new LearnMoveHandler(newMessage.getMoveLearner(), newMessage.getMove());
+        }
     }
 }
