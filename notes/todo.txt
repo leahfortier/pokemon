@@ -168,4 +168,4 @@ Other random things:
     Pickup has Great and Ultra Balls in the list but these are no longer holdable items -- should remove and add a test that all items are holdable
     Switch button should be inactive for the current pokemon in PokemonState
     look at isInterior stuff in BattleView -- how is it ever not null??
-    
+    BasicPanels.isAnimatingMessage should be checked before the view update method is called, not inside every view update

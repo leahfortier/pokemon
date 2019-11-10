@@ -78,7 +78,7 @@ public class MapView extends View {
 
     public void setState(VisualState newState) {
         this.state = newState;
-        this.state.set(this);
+        this.state.handler().set(this);
     }
 
     MapData getCurrentMap() {
@@ -115,7 +115,7 @@ public class MapView extends View {
             DrawUtils.drawAreaTransitionAnimation(g, "Medal Earned: " + displayMedal.getMedalName() + "!", medalDisplayTime);
         }
 
-        state.draw(g, this);
+        state.handler().draw(g, this);
     }
 
     private void drawTiles(Graphics g) {
@@ -236,7 +236,7 @@ public class MapView extends View {
             playAreaMusic();
         }
 
-        this.state.update(dt, this);
+        this.state.handler().update(dt, this);
 
         Point tilesLocation = Point.scaleDown(Global.GAME_SIZE, Global.TILE_SIZE);
 

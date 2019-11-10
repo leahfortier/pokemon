@@ -14,25 +14,25 @@ import item.ItemNamesies;
 public enum VisualState {
     MESSAGE(new MessageState()),
     BAG(new BagState()),
-    INVALID_BAG(BAG.visualStateHandler),
+    INVALID_BAG(BAG.handler),
     FIGHT(new FightState()),
-    INVALID_FIGHT(FIGHT.visualStateHandler),
+    INVALID_FIGHT(FIGHT.handler),
     POKEMON(new PokemonState()),
-    INVALID_POKEMON(POKEMON.visualStateHandler),
+    INVALID_POKEMON(POKEMON.handler),
     MENU(new MenuState()),
     LEARN_MOVE(new LearnMoveState()),
-    USE_ITEM(POKEMON.visualStateHandler),
-    STAT_GAIN(MESSAGE.visualStateHandler),
+    USE_ITEM(POKEMON.handler),
+    STAT_GAIN(MESSAGE.handler),
     LOG_VIEW(new LogState());
 
-    private final VisualStateHandler visualStateHandler;
+    private final VisualStateHandler handler;
 
-    VisualState(VisualStateHandler visualStateHandler) {
-        this.visualStateHandler = visualStateHandler;
+    VisualState(VisualStateHandler handler) {
+        this.handler = handler;
     }
 
     public VisualStateHandler handler() {
-        return this.visualStateHandler;
+        return this.handler;
     }
 
     public static ItemNamesies getSelectedItem() {
