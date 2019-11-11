@@ -1,6 +1,6 @@
 package gui.view.map;
 
-import draw.TextUtils;
+import draw.Alignment;
 import draw.button.Button;
 import draw.button.ButtonList;
 import draw.layout.ButtonLayout;
@@ -8,7 +8,6 @@ import draw.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import main.Global;
-import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -17,9 +16,7 @@ class MenuState extends VisualStateHandler {
     private static final MenuChoice[] MENU_CHOICES = MenuChoice.values();
 
     private final DrawPanel menuPanel;
-
     private final ButtonList buttons;
-    private final Button[] menuButtons;
 
     MenuState() {
         int width = 273;
@@ -27,10 +24,12 @@ class MenuState extends VisualStateHandler {
                 .withBorderColor(new Color(53, 53, 129))
                 .withBorderPercentage(5);
 
-        menuButtons = new ButtonLayout(menuPanel, MENU_CHOICES.length, 1, 20)
+        Button[] menuButtons = new ButtonLayout(menuPanel, MENU_CHOICES.length, 1, 20)
                 .withArrowHover()
                 .withPressIndex(index -> MENU_CHOICES[index].execute(view))
-                .withDrawSetup((panel, index) -> panel.withNoBackground())
+                .withDrawSetup((panel, index) -> panel.withNoBackground()
+                                                      .withLabel(MENU_CHOICES[index].getDisplayName(), 40, Alignment.LEFT)
+                                                      .withLabelSpacingFactor(.5f))
                 .getButtons();
 
         this.buttons = new ButtonList(menuButtons);
@@ -39,15 +38,7 @@ class MenuState extends VisualStateHandler {
     @Override
     public void draw(Graphics g) {
         menuPanel.drawBackground(g);
-
-        // Note: not using a left label because it adds too much space
-        FontMetrics.setBlackFont(g, 40);
-        for (int i = 0; i < menuButtons.length; i++) {
-            Button button = menuButtons[i];
-            TextUtils.drawCenteredHeightString(g, MENU_CHOICES[i].getDisplayName(), button.x + 10, button.centerY());
-        }
-
-        buttons.drawHover(g);
+        buttons.draw(g);
     }
 
     @Override

@@ -44,6 +44,7 @@ public class DrawPanel implements Panel {
     private boolean skipDraw;
 
     private int fontSize;
+    private float labelSpacingFactor;
     private String label;
     private Color labelColor;
     private Alignment labelAlignment;
@@ -71,8 +72,9 @@ public class DrawPanel implements Panel {
 
         this.withNoOutline();
 
-        this.withLabelSize(30)
-            .withLabelColor(Color.BLACK);
+        this.withLabelColor(Color.BLACK)
+            .withLabelSpacingFactor(1)
+            .withLabelSize(30);
 
         // Note: This does not make the panel transparent by default
         // It's just the default count if transparency is set
@@ -183,6 +185,11 @@ public class DrawPanel implements Panel {
 
     public DrawPanel withLabelColor(Color labelColor) {
         this.labelColor = labelColor;
+        return this;
+    }
+
+    public DrawPanel withLabelSpacingFactor(float factor) {
+        this.labelSpacingFactor = factor;
         return this;
     }
 
@@ -371,18 +378,18 @@ public class DrawPanel implements Panel {
         return this.getBorderSize() + FontMetrics.getTextWidth(g);
     }
 
-    public int getLabelSpace() {
-        return this.getBorderSize() + FontMetrics.getTextWidth(fontSize);
+    public int getLabelSpacing() {
+        return (int)(FontMetrics.getTextWidth(fontSize)*labelSpacingFactor);
     }
 
     public void drawLeftLabel(Graphics g, int fontSize, String label) {
-        int startX = x + this.getLabelSpace();
+        int startX = x + this.getBorderSize() + this.getLabelSpacing();
         FontMetrics.setFont(g, fontSize);
         TextUtils.drawCenteredHeightString(g, label, startX, this.centerY());
     }
 
     public void drawRightLabel(Graphics g, int fontSize, String label) {
-        int startX = this.rightX() - this.getLabelSpace();
+        int startX = this.rightX() - this.getBorderSize() - this.getLabelSpacing();
         FontMetrics.setFont(g, fontSize);
         TextUtils.drawCenteredHeightString(g, label, startX, this.centerY(), Alignment.RIGHT);
     }
@@ -396,9 +403,8 @@ public class DrawPanel implements Panel {
         ImageUtils.drawCenteredImageLabel(g, image, label, centerX(), centerY());
     }
 
-    // Spacing is kind of specific for the bag tabs right now and not sure how bad that is without another sample
     public void leftImageLabel(Graphics g, int fontSize, BufferedImage image, String label) {
-        int spacing = FontMetrics.getTextWidth(fontSize)/3;
+        int spacing = this.getLabelSpacing();
         int startX = x + this.getBorderSize() + spacing;
 
         FontMetrics.setFont(g, fontSize);
