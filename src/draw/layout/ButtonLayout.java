@@ -1,6 +1,7 @@
 package draw.layout;
 
 import draw.button.Button;
+import draw.button.ButtonHoverAction;
 import draw.button.ButtonPanel.ButtonPanelIndexSetup;
 import draw.button.ButtonPanel.ButtonPanelSetup;
 import draw.button.ButtonPressAction;
@@ -14,6 +15,7 @@ public class ButtonLayout extends DrawLayout {
     private ButtonTransitions defaultTransitions;
     private ButtonIndexAction indexAction;
     private ButtonPanelIndexSetup buttonSetup;
+    private ButtonHoverAction hoverAction;
 
     public ButtonLayout(DrawPanel panel, int numRows, int numCols, int spacing) {
         super(panel, numRows, numCols, spacing);
@@ -34,6 +36,7 @@ public class ButtonLayout extends DrawLayout {
         this.defaultTransitions = null;
         this.indexAction = index -> {};
         this.buttonSetup = (panel, index) -> {};
+        this.hoverAction = ButtonHoverAction.BOX;
     }
 
     @Override
@@ -95,13 +98,22 @@ public class ButtonLayout extends DrawLayout {
         return this.withButtonSetup((panel, index) -> buttonSetup.setup(panel));
     }
 
+    public ButtonLayout withArrowHover() {
+        this.hoverAction = ButtonHoverAction.ARROW;
+        return this;
+    }
+
+    private Button createButton(DrawPanel drawPanel, ButtonTransitions transitions, ButtonPressAction pressAction, int index) {
+        return new Button(drawPanel, hoverAction, transitions, pressAction, panel -> {
+            drawSetup.setup(panel, index);
+            buttonSetup.setup(panel, index);
+        });
+    }
+
     // Creates a specific button that may be outside of the original layout size
     public Button getButton(int row, int col, ButtonTransitions transitions, ButtonPressAction pressAction) {
         DrawPanel drawPanel = this.getPanel(row, col);
-        return new Button(drawPanel, transitions, pressAction, panel -> {
-            drawSetup.setup(panel, -1);
-            buttonSetup.setup(panel, -1);
-        });
+        return this.createButton(drawPanel, transitions, pressAction, -1);
     }
 
     public Button[] getButtons() {
@@ -119,16 +131,11 @@ public class ButtonLayout extends DrawLayout {
                     i, numRows, numCols, startIndex, defaultTransitions
             );
 
+            // Remove the index factor from the PressAction
+            ButtonPressAction pressAction = () -> indexAction.pressButton(index);
+
             // Create the button with all them specs
-            buttons[i] = new Button(
-                    panels[i],
-                    transitions,
-                    () -> indexAction.pressButton(index),
-                    panel -> {
-                        drawSetup.setup(panel, index);
-                        buttonSetup.setup(panel, index);
-                    }
-            );
+            buttons[i] = this.createButton(panels[i], transitions, pressAction, index);
         }
 
         return buttons;

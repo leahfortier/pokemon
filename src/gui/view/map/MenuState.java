@@ -1,9 +1,9 @@
 package gui.view.map;
 
+import draw.TextUtils;
 import draw.button.Button;
-import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
-import draw.button.ButtonTransitions;
+import draw.layout.ButtonLayout;
 import draw.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
@@ -14,8 +14,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 class MenuState extends VisualStateHandler {
+    private static final MenuChoice[] MENU_CHOICES = MenuChoice.values();
+
     private final DrawPanel menuPanel;
-    private final ButtonList menuButtons;
+
+    private final ButtonList buttons;
+    private final Button[] menuButtons;
 
     MenuState() {
         int width = 273;
@@ -23,43 +27,35 @@ class MenuState extends VisualStateHandler {
                 .withBorderColor(new Color(53, 53, 129))
                 .withBorderPercentage(5);
 
-        Button[] menuButtons = new Button[MenuChoice.values().length];
-        for (int i = 0; i < menuButtons.length; i++) {
-            menuButtons[i] = new Button(
-                    558, 72*i + 10,
-                    240, 70,
-                    ButtonHoverAction.ARROW,
-                    ButtonTransitions.getBasicTransitions(i, menuButtons.length, 1)
-            );
-        }
+        menuButtons = new ButtonLayout(menuPanel, MENU_CHOICES.length, 1, 20)
+                .withArrowHover()
+                .withPressIndex(index -> MENU_CHOICES[index].execute(view))
+                .withDrawSetup((panel, index) -> panel.withNoBackground())
+                .getButtons();
 
-        this.menuButtons = new ButtonList(menuButtons);
+        this.buttons = new ButtonList(menuButtons);
     }
 
     @Override
     public void draw(Graphics g) {
         menuPanel.drawBackground(g);
 
+        // Note: not using a left label because it adds too much space
         FontMetrics.setBlackFont(g, 40);
-        for (MenuChoice menuChoice : MenuChoice.values()) {
-            g.drawString(menuChoice.getDisplayName(), 558, 59 + 72*menuChoice.ordinal());
+        for (int i = 0; i < menuButtons.length; i++) {
+            Button button = menuButtons[i];
+            TextUtils.drawCenteredHeightString(g, MENU_CHOICES[i].getDisplayName(), button.x + 10, button.centerY());
         }
 
-        menuButtons.drawHover(g);
+        buttons.drawHover(g);
     }
 
     @Override
     public void update(int dt) {
+        buttons.update();
+        buttons.consumeSelectedPress();
+
         InputControl input = InputControl.instance();
-        menuButtons.update();
-
-        for (int i = 0; i < menuButtons.size(); i++) {
-            if (menuButtons.get(i).checkConsumePress()) {
-                MenuChoice menuChoice = MenuChoice.values()[i];
-                menuChoice.execute(view);
-            }
-        }
-
         if (input.consumeIfDown(ControlKey.ESC)) {
             view.setState(VisualState.MAP);
         }

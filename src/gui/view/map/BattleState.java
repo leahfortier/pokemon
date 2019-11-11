@@ -33,10 +33,6 @@ class BattleState extends VisualStateHandler {
 
     @Override
     public void draw(Graphics g) {
-        if (battleImageSlideRight == null || battleImageSlideLeft == null) {
-            return;
-        }
-
         int drawWidth = Global.GAME_SIZE.width/2;
         int drawHeightLeft;
         int drawHeightRight;
@@ -89,8 +85,7 @@ class BattleState extends VisualStateHandler {
         this.seenWild = seenWild;
 
         battleAnimationTime = BATTLE_INTRO_ANIMATION_LIFESPAN;
-        battleImageSlideLeft = null;
-        battleImageSlideRight = null;
+        this.loadBattleImages(view);
 
         SoundTitle music = battle.isWildBattle()
                            ? SoundTitle.WILD_POKEMON_BATTLE
@@ -104,10 +99,6 @@ class BattleState extends VisualStateHandler {
 
     @Override
     public void update(int dt) {
-        if (battleImageSlideLeft == null || battleImageSlideRight == null) {
-            loadBattleImages(view);
-        }
-
         if (battleAnimationTime < 0) {
             this.battle = null;
             Game.instance().setViewMode(ViewMode.BATTLE_VIEW);

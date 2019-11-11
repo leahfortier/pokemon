@@ -36,7 +36,11 @@ public class Button implements Panel {
     }
 
     public Button(DrawPanel panel, ButtonTransitions transitions, ButtonPressAction pressAction, ButtonPanelSetup panelSetup) {
-        this(panel.x, panel.y, panel.width, panel.height, ButtonHoverAction.BOX, transitions, pressAction, panelSetup);
+        this(panel, ButtonHoverAction.BOX, transitions, pressAction, panelSetup);
+    }
+
+    public Button(DrawPanel panel, ButtonHoverAction hoverAction, ButtonTransitions transitions, ButtonPressAction pressAction, ButtonPanelSetup panelSetup) {
+        this(panel.x, panel.y, panel.width, panel.height, hoverAction, transitions, pressAction, panelSetup);
     }
 
     public Button(int x, int y, int width, int height) {

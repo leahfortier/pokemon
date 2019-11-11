@@ -169,3 +169,5 @@ Other random things:
     Switch button should be inactive for the current pokemon in PokemonState
     look at isInterior stuff in BattleView -- how is it ever not null??
     BasicPanels.isAnimatingMessage should be checked before the view update method is called, not inside every view update
+    map menu panel should be widened to fit a name with max characters
+    
