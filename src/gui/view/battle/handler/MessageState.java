@@ -2,7 +2,6 @@ package gui.view.battle.handler;
 
 import draw.button.ButtonList;
 import draw.panel.StatGainPanel;
-import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import input.ControlKey;
 import input.InputControl;
@@ -10,7 +9,7 @@ import message.MessageUpdate;
 
 import java.awt.Graphics;
 
-public class MessageState implements VisualStateHandler {
+public class MessageState extends VisualStateHandler {
     private final StatGainPanel statsPanel;
 
     // Stat gains and corresponding new stat upgrades for leveling up/evolving
@@ -21,10 +20,7 @@ public class MessageState implements VisualStateHandler {
     }
 
     @Override
-    public void set(BattleView view) {}
-
-    @Override
-    public void draw(BattleView view, Graphics g) {
+    public void draw(Graphics g) {
         view.drawFullMessagePanel(g);
         if (view.isState(VisualState.STAT_GAIN)) {
             statsPanel.drawBackground(g);
@@ -33,17 +29,12 @@ public class MessageState implements VisualStateHandler {
     }
 
     @Override
-    public void update(BattleView view) {
-        boolean pressed = false;
+    public void update() {
         InputControl input = InputControl.instance();
 
         // Consume input for mouse clicks and spacebars
-        if (input.consumeIfMouseDown(ControlKey.SPACE)) {
-            pressed = true;
-        }
-
         // Don't go to the next message if an animation is playing
-        if (pressed && view.hasMessage() && !view.isPlayingAnimation()) {
+        if (input.consumeIfMouseDown(ControlKey.SPACE) && view.hasMessage() && !view.isPlayingAnimation()) {
             if (view.isState(VisualState.STAT_GAIN)) {
                 view.setVisualState(VisualState.MESSAGE);
             }

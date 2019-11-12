@@ -1,8 +1,6 @@
 package gui.view.battle;
 
-import battle.ActivePokemon;
 import battle.Battle;
-import battle.attack.Move;
 import battle.effect.battle.weather.WeatherEffect;
 import draw.DrawUtils;
 import draw.ImageUtils;
@@ -10,10 +8,12 @@ import draw.button.Button;
 import draw.layout.ButtonLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.Panel;
 import draw.panel.WrapPanel;
 import gui.view.View;
 import gui.view.ViewMode;
 import input.ControlKey;
+import item.ItemNamesies;
 import main.Game;
 import main.Global;
 import map.Direction;
@@ -22,6 +22,9 @@ import map.overworld.TerrainType;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
+import pokemon.active.PartyPokemon;
+import trainer.TrainerAction;
+import trainer.player.Player;
 import util.string.StringUtils;
 
 import java.awt.Color;
@@ -44,22 +47,18 @@ public class BattleView extends View {
     // All the different buttons!!
     private final Button backButton;
 
-    // The current battle in view, the current message being displayed, and the current selected button
+    // The current battle in view and the current state the battle is in
     private Battle currentBattle;
-    private String message;
-
-    // The current state that the battle is in and current update type
     private VisualState state;
+
+    // The current message being displayed and current update type
+    private String message;
     private MessageUpdateType updateType;
 
     // Displayable current weather and terrain
     private WeatherEffect weather;
     private TerrainType terrain;
     private Boolean isInterior;
-
-    // Which Pokemon is trying to learn a new move, and which move
-    private ActivePokemon learnedPokemon;
-    private Move learnedMove;
 
     public BattleView() {
         playerAnimation = new PokemonAnimationState(this, true);
@@ -92,6 +91,18 @@ public class BattleView extends View {
         buttonsPanel.drawBackground(g);
     }
 
+    public Panel getMenuPanelSizing() {
+        return menuMessagePanel.sizing();
+    }
+
+    public Panel getLargePanelSizing() {
+        return largeMenuPanel.sizing();
+    }
+
+    public int getLargePanelBorderSize() {
+        return largeMenuPanel.getBorderSize();
+    }
+
     public ButtonLayout createPanelLayout(int numOptions) {
         return new ButtonLayout(buttonsPanel, 2, numOptions/2, BUTTON_WIDTH, BUTTON_HEIGHT);
     }
@@ -102,19 +113,14 @@ public class BattleView extends View {
         playerAnimation.resetBattle(b.getPlayer().front());
         enemyAnimation.resetBattle(b.getOpponent().front());
 
-        learnedMove = null;
-        learnedPokemon = null;
-
         // Reset each state
         for (VisualState state : VisualState.values()) {
             this.state = state;
-            state.reset();
+            state.handler().setBattle(this);
         }
 
         setVisualState(VisualState.MESSAGE);
         updateType = MessageUpdateType.NO_UPDATE;
-
-        Game.getPlayer().clearLogMessages();
     }
 
     @Override
@@ -123,7 +129,7 @@ public class BattleView extends View {
             return;
         }
 
-        state.update(this);
+        state.handler().update();
         updateType.performUpdate(this);
     }
 
@@ -147,38 +153,20 @@ public class BattleView extends View {
         return defaultMessage;
     }
 
-    public Move getLearnedMove() {
-        return this.learnedMove;
-    }
-
-    public ActivePokemon getLearnedPokemon() {
-        return this.learnedPokemon;
-    }
-
     public boolean isState(VisualState state) {
         return this.state == state;
     }
 
     public void drawBackButton(Graphics g) {
-        drawBackButton(g, true);
-    }
-
-    public void drawBackButton(Graphics g, boolean drawArrows) {
-        if (drawArrows) {
-            backButton.drawPanel(g);
-            backButton.drawHover(g);
-        }
+        backButton.drawPanel(g);
+        backButton.drawHover(g);
     }
 
     public void updateBackButton() {
-        updateBackButton(true);
-    }
-
-    public void updateBackButton(boolean setToMainMenu) {
         backButton.update(false, ControlKey.BACK);
 
         // Return to main battle menu
-        if (backButton.checkConsumePress() && setToMainMenu) {
+        if (backButton.checkConsumePress()) {
             setVisualState(VisualState.MENU);
         }
     }
@@ -197,14 +185,13 @@ public class BattleView extends View {
     }
 
     public void setVisualState(VisualState newState) {
-        if (state != newState) {
-            state.getButtons().setSelected(0);
+        if (!this.isState(newState)) {
+            state = newState;
+            state.handler().movedToFront();
+        } else {
+            // Update the buttons that should be active
+            state.handler().set();
         }
-
-        state = newState;
-
-        // Update the buttons that should be active
-        state.set(this);
     }
 
     public void cycleMessage() {
@@ -222,33 +209,7 @@ public class BattleView extends View {
             }
 
             MessageUpdate newMessage = Messages.getNextMessage();
-            Game.getPlayer().addLogMessage(newMessage);
-
-            PokemonAnimationState state = newMessage.isPlayer() ? playerAnimation : enemyAnimation;
-            state.checkMessage(newMessage);
-            if (!newMessage.switchUpdate()) {
-                if (newMessage.hasUpdateType()) {
-                    updateType = newMessage.getUpdateType();
-                }
-
-                if (newMessage.learnMove()) {
-                    learnedMove = newMessage.getMove();
-                    learnedPokemon = newMessage.getMoveLearner();
-                }
-
-                if (newMessage.weatherUpdate()) {
-                    weather = newMessage.getWeather();
-                }
-
-                if (newMessage.terrainUpdate()) {
-                    terrain = newMessage.getTerrain();
-                    if (isInterior != null) {
-                        isInterior = terrain.isInterior();
-                    }
-                }
-
-                this.state.checkMessage(newMessage);
-            }
+            this.checkMessage(newMessage);
 
             if (newMessage.getMessage().isEmpty()) {
                 cycleMessage(updated);
@@ -259,6 +220,57 @@ public class BattleView extends View {
             }
         } else if (!updated) {
             message = null;
+        }
+    }
+
+    // Called after receiving a new message -- sets appropriate update things and such
+    private void checkMessage(MessageUpdate newMessage) {
+        // Every state deserves a peek! (Not just the current one)
+        for (VisualState state : VisualState.values()) {
+            state.handler().checkMessage(newMessage);
+        }
+
+        // Animation state is also curious
+        PokemonAnimationState animationState = newMessage.isPlayer() ? playerAnimation : enemyAnimation;
+        animationState.checkMessage(newMessage);
+
+        if (newMessage.hasUpdateType()) {
+            updateType = newMessage.getUpdateType();
+        }
+
+        if (newMessage.weatherUpdate()) {
+            weather = newMessage.getWeather();
+        }
+
+        if (newMessage.terrainUpdate()) {
+            terrain = newMessage.getTerrain();
+            if (isInterior != null) {
+                isInterior = terrain.isInterior();
+            }
+        }
+    }
+
+    // Executes a move which has already been set and checked for validness and such
+    public void executeMove() {
+        Game.getPlayer().performAction(currentBattle, TrainerAction.FIGHT);
+        this.setVisualState(VisualState.MESSAGE);
+        this.cycleMessage();
+    }
+
+    // Uses the item on the selected Pokemon (already checked for UseItem at this point)
+    // Item may still fail its use and will reset back to the bag state in this case
+    public void useItem(ItemNamesies item, PartyPokemon selected) {
+        Player player = Game.getPlayer();
+
+        // Try using the item on the selected Pokemon
+        if (player.getBag().battleUseItem(item, selected, currentBattle)) {
+            player.performAction(currentBattle, TrainerAction.ITEM);
+            this.setVisualState(VisualState.MENU);
+            this.cycleMessage();
+        } else {
+            // Item could not be used, reset to bag state
+            this.cycleMessage();
+            this.setVisualState(VisualState.INVALID_BAG);
         }
     }
 
@@ -296,7 +308,7 @@ public class BattleView extends View {
 
         g.setClip(0, 0, Global.GAME_SIZE.width, Global.GAME_SIZE.height);
 
-        state.draw(this, g);
+        state.handler().draw(g);
     }
 
     @Override

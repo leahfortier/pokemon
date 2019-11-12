@@ -1,6 +1,5 @@
 package gui.view.battle.handler;
 
-import battle.Battle;
 import draw.Alignment;
 import draw.TextUtils;
 import draw.button.Button;
@@ -14,7 +13,6 @@ import draw.panel.DrawPanel;
 import draw.panel.PanelList;
 import draw.panel.WrapPanel;
 import draw.panel.WrapPanel.WrapMetrics;
-import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import item.ItemNamesies;
 import item.bag.Bag;
@@ -22,8 +20,6 @@ import item.bag.BattleBagCategory;
 import item.use.PokemonUseItem;
 import main.Game;
 import map.Direction;
-import trainer.TrainerAction;
-import trainer.player.Player;
 import util.GeneralUtils;
 
 import java.awt.Color;
@@ -31,7 +27,7 @@ import java.awt.Graphics;
 import java.util.List;
 import java.util.Set;
 
-public class BagState implements VisualStateHandler {
+public class BagState extends VisualStateHandler {
     private static final BattleBagCategory[] BATTLE_BAG_CATEGORIES = BattleBagCategory.values();
     private static final int ITEMS_PER_PAGE = 10;
 
@@ -80,12 +76,14 @@ public class BagState implements VisualStateHandler {
                 .withButtonSetup((panel, index) -> panel.withBorderSize(0)
                                                         .withBackgroundColor(BATTLE_BAG_CATEGORIES[index].getColor())
                                                         .withLabel(BATTLE_BAG_CATEGORIES[index].getName(), 18))
+                .withPressIndex(this::changeTab)
                 .getTabs();
 
         ButtonLayout itemsLayout = new ButtonLayout(bagCategoryPanel, ITEMS_PER_PAGE/2, 2, 8)
                 .withMissingBottomRow()
                 .withStartIndex(ITEMS)
                 .withDefaultTransitions(new ButtonTransitions().up(TABS).down(RIGHT_ARROW))
+                .withPressIndex(this::pressItemButton)
                 .withButtonSetup(panel -> panel.asItemPanel(true).skipInactive());
 
         itemButtons = itemsLayout.getButtons();
@@ -93,12 +91,14 @@ public class BagState implements VisualStateHandler {
         ArrowLayout arrowPanels = itemsLayout.getArrowLayout();
         leftButton = new Button(
                 arrowPanels.getLeftPanel(),
-                new ButtonTransitions().right(RIGHT_ARROW).up(BOTTOM_ITEM - 1).down(LAST_ITEM_USED).left(RIGHT_ARROW)
+                new ButtonTransitions().right(RIGHT_ARROW).up(BOTTOM_ITEM - 1).down(LAST_ITEM_USED).left(RIGHT_ARROW),
+                () -> pressPageButton(-1)
         ).asArrow(Direction.LEFT);
 
         rightButton = new Button(
                 arrowPanels.getRightPanel(),
-                new ButtonTransitions().up(BOTTOM_ITEM).left(LEFT_ARROW).down(LAST_ITEM_USED).right(LEFT_ARROW)
+                new ButtonTransitions().up(BOTTOM_ITEM).left(LEFT_ARROW).down(LAST_ITEM_USED).right(LEFT_ARROW),
+                () -> pressPageButton(1)
         ).asArrow(Direction.RIGHT);
 
         DrawPanel[] lastUsedPanels = new DrawLayout(lastItemPanel, 1, 2, itemButtons[0]).getPanels();
@@ -108,7 +108,7 @@ public class BagState implements VisualStateHandler {
         lastUsedButton = new Button(
                 lastUsedPanels[1],
                 new ButtonTransitions().up(LEFT_ARROW).down(selectedBagTab),
-                () -> {}, // Handled in update
+                () -> pressItemButton(bag.getLastUsedItem()),
                 panel -> panel.skipInactive()
                               .asItemPanel(true)
         );
@@ -130,7 +130,7 @@ public class BagState implements VisualStateHandler {
     }
 
     @Override
-    public void set(BattleView view) {
+    public void set() {
         List<ItemNamesies> items = GeneralUtils.pageValues(this.getDisplayItems(), bagPage, ITEMS_PER_PAGE);
         for (int i = 0; i < itemButtons.length; i++) {
             Button button = itemButtons[i];
@@ -168,7 +168,7 @@ public class BagState implements VisualStateHandler {
     }
 
     @Override
-    public void draw(BattleView view, Graphics g) {
+    public void draw(Graphics g) {
         drawSetup();
 
         // Background
@@ -222,71 +222,23 @@ public class BagState implements VisualStateHandler {
         }
     }
 
-    private void pressItemButton(BattleView view, ItemNamesies item) {
-        Battle currentBattle = view.getCurrentBattle();
-        Player player = Game.getPlayer();
+    private void pressPageButton(int increment) {
+        bagPage = GeneralUtils.wrapIncrement(bagPage, increment, totalPages());
+    }
 
-        // Pokemon Use Item -- Set item to be selected an change to Pokemon View
+    private void pressItemButton(int index) {
+        this.pressItemButton(GeneralUtils.getPageValue(this.getDisplayItems(), bagPage, ITEMS_PER_PAGE, index));
+    }
+
+    private void pressItemButton(ItemNamesies item) {
+        // Pokemon Use Item -- set item to be selected and change to Pokemon View
         if (item.getItem() instanceof PokemonUseItem) {
             selectedItem = item;
             view.setVisualState(VisualState.USE_ITEM);
+        } else {
+            // Otherwise, just use it on the battle
+            view.useItem(item, Game.getPlayer().front());
         }
-        // Otherwise, just use it on the battle if successful
-        else if (bag.battleUseItem(item, player.front(), currentBattle)) {
-            player.performAction(currentBattle, TrainerAction.ITEM);
-            view.setVisualState(VisualState.MENU);
-            view.cycleMessage();
-        }
-        // If the item cannot be used, do not consume
-        else {
-            view.cycleMessage();
-            view.setVisualState(VisualState.INVALID_BAG);
-        }
-    }
-
-    @Override
-    public void update(BattleView view) {
-        // Update all bag buttons and the back button
-        buttons.update();
-
-        // Check tabs
-        for (int i = 0; i < BATTLE_BAG_CATEGORIES.length; i++) {
-            if (tabButtons[i].checkConsumePress()) {
-                changeTab(i);
-                view.setVisualState(); // To update active buttons
-            }
-        }
-
-        // Go through each item on the page
-        List<ItemNamesies> items = GeneralUtils.pageValues(this.getDisplayItems(), bagPage, ITEMS_PER_PAGE);
-        for (int i = 0; i < items.size(); i++) {
-            if (itemButtons[i].checkConsumePress()) {
-                pressItemButton(view, items.get(i));
-            }
-        }
-
-        // Last Used Item
-        if (lastUsedButton.checkConsumePress()) {
-            pressItemButton(view, bag.getLastUsedItem());
-        }
-
-        int increment = 0;
-        if (rightButton.checkConsumePress()) {
-            // Next page
-            increment = 1;
-        }
-        if (leftButton.checkConsumePress()) {
-            // Previous Page
-            increment = -1;
-        }
-
-        if (increment != 0) {
-            bagPage = GeneralUtils.wrapIncrement(bagPage, increment, totalPages());
-            view.setVisualState(); // To update active buttons
-        }
-
-        // Return to main battle menu
-        view.updateBackButton();
     }
 
     public ItemNamesies getSelectedItem() {

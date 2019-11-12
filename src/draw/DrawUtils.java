@@ -76,6 +76,10 @@ public final class DrawUtils {
         g.fillRect(x, y, width, height);
     }
 
+    public static void drawCenteredHeightCircle(Graphics g, int x, int centerY, int radius) {
+        g.fillOval(x, centerY - radius/2, radius, radius);
+    }
+
     public static Color permuteColor(Color color, Map<Integer, String> indexMap) {
         int dr = color.getRed() < 128 ? 1 : -1;
         int dg = color.getGreen() < 128 ? 1 : -1;

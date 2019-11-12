@@ -17,8 +17,8 @@ public class MovePanel extends DrawPanel {
     // If the description exceeds the space in the panel, it will adjust the font size (should be smaller to make sense)
     private int minDescFontSize;
 
-    public MovePanel(DrawPanel drawPanel, int nameFontSize, int basicFontSize, int descFontSize) {
-        this(drawPanel.x, drawPanel.y, drawPanel.width, drawPanel.height, nameFontSize, basicFontSize, descFontSize);
+    public MovePanel(Panel sizing, int nameFontSize, int basicFontSize, int descFontSize) {
+        this(sizing.getX(), sizing.getY(), sizing.getWidth(), sizing.getHeight(), nameFontSize, basicFontSize, descFontSize);
     }
 
     public MovePanel(int x, int y, int width, int height, int nameFontSize, int basicFontSize, int descFontSize) {

@@ -1,7 +1,6 @@
 package gui.view.map;
 
 import draw.panel.DrawPanel;
-import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -15,7 +14,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
-class MapState implements VisualStateHandler {
+class MapState extends VisualStateHandler {
     private final DrawPanel itemFinderPanel;
     private boolean showItemFinder;
 
@@ -27,10 +26,10 @@ class MapState implements VisualStateHandler {
     }
 
     @Override
-    public void draw(Graphics g, MapView mapView) {
+    public void draw(Graphics g) {
         if (showItemFinder) {
             Point playerLocation = Game.getPlayer().getLocation();
-            List<ItemEntity> hiddenItems = mapView.getCurrentMap().getHiddenItems();
+            List<ItemEntity> hiddenItems = view.getCurrentMap().getHiddenItems();
 
             int minDistance = 11;
             for (ItemEntity item : hiddenItems) {
@@ -57,22 +56,22 @@ class MapState implements VisualStateHandler {
     }
 
     @Override
-    public void update(int dt, MapView mapView) {
+    public void update(int dt) {
         InputControl input = InputControl.instance();
         Player player = Game.getPlayer();
 
         if (input.consumeIfDown(ControlKey.ESC)) {
-            mapView.setState(VisualState.MENU);
+            view.setState(VisualState.MENU);
         } else if (input.consumeIfDown(ControlKey.FLY) && player.hasTool(OverworldTool.FLY)) {
-            mapView.setState(VisualState.FLY);
+            view.setState(VisualState.FLY);
         } else if (input.consumeIfDown(ControlKey.POKEFINDER) && player.hasTool(OverworldTool.POKEFINDER)) {
-            mapView.setState(VisualState.POKE_FINDER);
+            view.setState(VisualState.POKE_FINDER);
         } else if (input.consumeIfDown(ControlKey.BIKE)) {
             player.toggleBicycle();
         } else if (input.consumeIfDown(ControlKey.ITEM_FINDER) && player.hasTool(OverworldTool.ITEM_FINDER)) {
             showItemFinder = !showItemFinder;
         } else if (input.consumeIfDown(ControlKey.MEDAL_CASE)) {
-            mapView.setState(VisualState.MEDAL_CASE);
+            view.setState(VisualState.MEDAL_CASE);
         }
     }
 }

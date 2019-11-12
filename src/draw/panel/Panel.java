@@ -2,6 +2,8 @@ package draw.panel;
 
 import util.Point;
 
+import java.awt.Dimension;
+
 public interface Panel {
     int getX();
     int getY();
@@ -26,5 +28,35 @@ public interface Panel {
 
     default Point centerPoint() {
         return new Point(this.centerX(), this.centerY());
+    }
+
+    default Dimension getDimension() {
+        return new Dimension(this.getWidth(), this.getHeight());
+    }
+
+    // Basically like a copy of this panel, but just the sizing attributes so other parts cannot be changed
+    default Panel sizing() {
+        Panel sizing = this;
+        return new Panel() {
+            @Override
+            public int getX() {
+                return sizing.getX();
+            }
+
+            @Override
+            public int getY() {
+                return sizing.getY();
+            }
+
+            @Override
+            public int getWidth() {
+                return sizing.getWidth();
+            }
+
+            @Override
+            public int getHeight() {
+                return sizing.getHeight();
+            }
+        };
     }
 }

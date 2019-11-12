@@ -244,8 +244,6 @@ public class PartyView extends View {
         buttons.set(NICKNAME, nicknameButton);
         buttons.set(SWITCH, switchButton);
         buttons.set(RETURN, returnButton);
-
-        movedToFront();
     }
 
     private ButtonPanelSetup textButtonSetup(String label) {

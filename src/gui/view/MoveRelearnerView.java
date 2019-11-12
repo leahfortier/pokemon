@@ -180,7 +180,6 @@ public class MoveRelearnerView extends View {
                 (moveButtons[MOVES_PER_PAGE - 1].bottomY() + movesPanel.bottomY())/2 - arrowHeight/2,
                 arrowWidth,
                 arrowHeight,
-                ButtonHoverAction.BOX,
                 new ButtonTransitions().right(MOVES_RIGHT_ARROW).up(LAST_MOVE).left(PARTY).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         ).asArrow(Direction.LEFT);
@@ -190,7 +189,6 @@ public class MoveRelearnerView extends View {
                 movesLeftButton.y,
                 arrowWidth,
                 arrowHeight,
-                ButtonHoverAction.BOX,
                 new ButtonTransitions().right(PARTY).up(LAST_MOVE).left(MOVES_LEFT_ARROW).down(RETURN),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         ).asArrow(Direction.RIGHT);

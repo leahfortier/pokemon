@@ -3,9 +3,7 @@ package gui.view.battle.handler;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.Move;
-import draw.button.Button;
 import draw.button.ButtonList;
-import gui.view.battle.BattleView;
 import gui.view.battle.VisualState;
 import input.ControlKey;
 import input.InputControl;
@@ -13,103 +11,119 @@ import main.Game;
 import message.MessageUpdate;
 import message.MessageUpdateType;
 import message.Messages;
-import trainer.TrainerAction;
 import trainer.player.Player;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class MenuState implements VisualStateHandler {
+public class MenuState extends VisualStateHandler {
+    private final ButtonList buttons;
 
-    private ButtonList menuButtons;
+    private Battle currentBattle;
 
-    @Override
-    public void set(BattleView view) {
+    public MenuState() {
         MenuChoice[] choices = MenuChoice.values();
-        menuButtons = new ButtonList(
+        buttons = new ButtonList(
                 view.createPanelLayout(MenuChoice.values().length)
                     .withDrawSetup((panel, index) -> panel.withTransparentBackground(choices[index].buttonColor)
                                                           .withTransparentCount(2)
                                                           .withBorderPercentage(15)
                                                           .withBlackOutline()
                                                           .withLabel(choices[index].getButtonLabel(), 30))
+                    .withPressIndex(index -> choices[index].pressAction.press(this))
                     .getButtons()
         );
-
-        menuButtons.setFalseHover();
     }
 
     @Override
-    public void draw(BattleView view, Graphics g) {
+    public void set() {
+        buttons.setFalseHover();
+    }
+
+    @Override
+    public void draw(Graphics g) {
         ActivePokemon playerPokemon = Game.getPlayer().front();
         view.drawMenuMessagePanel(g, "What will " + playerPokemon.getActualName() + " do?");
         view.drawButtonsPanel(g);
 
-        menuButtons.draw(g);
+        buttons.draw(g);
     }
 
     @Override
-    public void update(BattleView view) {
-        Battle currentBattle = view.getCurrentBattle();
-        Player player = Game.getPlayer();
+    public void update() {
+        buttons.update();
 
-        // Update menu buttons
-        menuButtons.update();
-
-        // Show Bag View
-        if (getButton(MenuChoice.BAG).checkConsumePress()) {
-            view.setVisualState(VisualState.BAG);
-        }
-        // Show Pokemon View
-        else if (getButton(MenuChoice.SWITCH).checkConsumePress()) {
-            view.setVisualState(VisualState.POKEMON);
-        }
-        // Attempt escape
-        else if (getButton(MenuChoice.RUN).checkConsumePress()) {
-            view.setVisualState(VisualState.MESSAGE);
-            if (currentBattle.runAway()) {
-                Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
-            }
-            view.cycleMessage();
-        }
-        // Show Fight View TODO: Semi-invulnerable moves look awful and weird
-        else if (getButton(MenuChoice.FIGHT).checkConsumePress() || player.front().isSemiInvulnerable()) {
-            view.setVisualState(VisualState.FIGHT);
-
-            // Move is forced -- don't show menu, but execute the move
-            if (Move.forceMove(currentBattle, player.front())) {
-                player.performAction(currentBattle, TrainerAction.FIGHT);
-                view.setVisualState(VisualState.MESSAGE);
-                view.cycleMessage();
-            }
+        // Semi-invulnerable moves don't get a choice -- gotta fight
+        if (Game.getPlayer().front().isSemiInvulnerable()) {
+            pressFight();
         } else if (InputControl.instance().consumeIfDown(ControlKey.LOG)) {
             view.setVisualState(VisualState.LOG_VIEW);
+        } else if (buttons.consumeSelectedPress()) {
+            view.setVisualState();
         }
-    }
-
-    private Button getButton(MenuChoice menuChoice) {
-        return this.menuButtons.get(menuChoice.ordinal());
     }
 
     @Override
     public ButtonList getButtons() {
-        return menuButtons;
+        return buttons;
+    }
+
+    @Override
+    public boolean includeBackButton() {
+        // You can't go home if you're already there
+        return false;
+    }
+
+    @Override
+    public void reset() {
+        this.currentBattle = view.getCurrentBattle();
+    }
+
+    private void pressFight() {
+        Player player = Game.getPlayer();
+
+        // If move is forced -- don't show menu, just execute the move
+        if (Move.forceMove(currentBattle, player.front())) {
+            view.executeMove();
+        } else {
+            // Otherwise, select a move from the fight menu
+            view.setVisualState(VisualState.FIGHT);
+        }
+    }
+
+    private void pressRun() {
+        if (currentBattle.runAway()) {
+            Messages.add(new MessageUpdate().withUpdate(MessageUpdateType.EXIT_BATTLE));
+        }
+        view.setVisualState(VisualState.MESSAGE);
+        view.cycleMessage();
     }
 
     private enum MenuChoice {
-        FIGHT(new Color(220, 20, 20)),
-        SWITCH(new Color(35, 120, 220)),
-        BAG(new Color(120, 200, 80)),
-        RUN(new Color(255, 215, 0));
+        FIGHT(new Color(220, 20, 20), MenuState::pressFight),
+        SWITCH(new Color(35, 120, 220), VisualState.POKEMON),
+        BAG(new Color(120, 200, 80), VisualState.BAG),
+        RUN(new Color(255, 215, 0), MenuState::pressRun);
 
         private final Color buttonColor;
+        private final MenuPressAction pressAction;
 
-        MenuChoice(Color buttonColor) {
+        MenuChoice(Color buttonColor, VisualState visualState) {
+            this(buttonColor, state -> state.view.setVisualState(visualState));
+        }
+
+        MenuChoice(Color buttonColor, MenuPressAction pressAction) {
             this.buttonColor = buttonColor;
+            this.pressAction = pressAction;
         }
 
         public String getButtonLabel() {
             return this.name();
+        }
+
+        @FunctionalInterface
+        private interface MenuPressAction {
+            void press(MenuState state);
         }
     }
 }

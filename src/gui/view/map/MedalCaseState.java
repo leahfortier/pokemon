@@ -13,7 +13,6 @@ import draw.panel.PanelList;
 import draw.panel.WrapPanel;
 import draw.panel.WrapPanel.WrapMetrics;
 import gui.TileSet;
-import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -31,7 +30,7 @@ import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
 
-public class MedalCaseState implements VisualStateHandler {
+public class MedalCaseState extends VisualStateHandler {
     private static final List<Medal> MEDALS = Arrays.asList(Medal.values());
 
     private static final int MEDALS_PER_PAGE = 5;
@@ -108,7 +107,7 @@ public class MedalCaseState implements VisualStateHandler {
     }
 
     @Override
-    public void draw(Graphics g, MapView mapView) {
+    public void draw(Graphics g) {
         BasicPanels.drawCanvasPanel(g);
         panels.drawAll(g);
 
@@ -171,18 +170,18 @@ public class MedalCaseState implements VisualStateHandler {
     }
 
     @Override
-    public void update(int dt, MapView mapView) {
+    public void update(int dt) {
         buttons.update();
         buttons.consumeSelectedPress();
 
         InputControl input = InputControl.instance();
         if (input.consumeIfDown(ControlKey.ESC) || input.consumeIfDown(ControlKey.MEDAL_CASE)) {
-            mapView.setState(VisualState.MAP);
+            view.setState(VisualState.MAP);
         }
     }
 
     @Override
-    public void set(MapView mapView) {
+    public void set() {
         this.medalCase = Game.getPlayer().getMedalCase();
         this.pageNum = 0;
         this.countPanel.withLabel("Total: " + this.medalCase.numMedalsEarned() + "/" + MEDALS.size());

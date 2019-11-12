@@ -3,13 +3,13 @@ package draw.layout;
 import draw.panel.DrawPanel;
 
 public class ArrowLayout {
+    public static final int arrowWidth = 35;
+    public static final int arrowHeight = 20;
+
     private final DrawPanel leftArrow;
     private final DrawPanel rightArrow;
 
     public ArrowLayout(DrawPanel outerPanel) {
-        int arrowWidth = 35;
-        int arrowHeight = 20;
-
         leftArrow = new DrawPanel(
                 outerPanel.x + outerPanel.width/4,
                 outerPanel.centerY() - arrowHeight/2,

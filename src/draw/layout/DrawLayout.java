@@ -5,6 +5,8 @@ import draw.panel.Panel;
 import main.Global;
 import util.Point;
 
+import java.awt.Dimension;
+
 public class DrawLayout {
     private final DrawPanel outerPanel;
 
@@ -25,8 +27,12 @@ public class DrawLayout {
         this(panel, numRows, numCols, spacing, -1, -1);
     }
 
-    public DrawLayout(DrawPanel panel, int numRows, int numCols, Panel size) {
-        this(panel, numRows, numCols, size.getWidth(), size.getHeight());
+    public DrawLayout(DrawPanel panel, int numRows, int numCols, Panel reference) {
+        this(panel, numRows, numCols, reference.getWidth(), reference.getHeight());
+    }
+
+    public DrawLayout(DrawPanel panel, int numRows, int numCols, Dimension size) {
+        this(panel, numRows, numCols, size.width, size.height);
     }
 
     public DrawLayout(DrawPanel panel, int numRows, int numCols, int width, int height) {
@@ -44,7 +50,7 @@ public class DrawLayout {
         // Default values
         this.missingRows = 0;
         this.missingCols = 0;
-        this.drawSetup = (drawPanel, index) -> {};
+        this.drawSetup = (drawPanel, index) -> drawPanel.withNoBackground();
     }
 
     private DrawLayout withMissingRows(boolean isTop) {
@@ -150,22 +156,26 @@ public class DrawLayout {
         return panels;
     }
 
-    // Works best when missing the bottom row
-    public ArrowLayout getArrowLayout() {
+    // Returns a panel for the last row (includes the missing row if set)
+    // If multiple columns, panel will stretch from the first column to the last
+    public DrawPanel getFullBottomPanel() {
         DrawPanel[] panels = this.getAllPanels();
 
         // Note: it's totally cool/normal for these to be the same panel
         DrawPanel leftLastRow = panels[panels.length - numCols];
         DrawPanel rightLastRow = panels[panels.length - 1];
 
-        DrawPanel bottomRow = new DrawPanel(
+        return new DrawPanel(
                 leftLastRow.x,
                 leftLastRow.y,
                 rightLastRow.rightX() - leftLastRow.x,
                 leftLastRow.height
         );
+    }
 
-        return new ArrowLayout(bottomRow);
+    // Works best when missing the bottom row
+    public ArrowLayout getArrowLayout() {
+        return new ArrowLayout(this.getFullBottomPanel());
     }
 
     @FunctionalInterface

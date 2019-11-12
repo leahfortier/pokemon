@@ -6,7 +6,6 @@ import draw.DrawUtils;
 import draw.ImageUtils;
 import gui.GameData;
 import gui.view.ViewMode;
-import gui.view.map.VisualState.VisualStateHandler;
 import main.Game;
 import main.Global;
 import sound.SoundPlayer;
@@ -18,7 +17,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-class BattleState implements VisualStateHandler {
+class BattleState extends VisualStateHandler {
     private static final BufferedImage UPPER_POKEBALL_IMAGE = FileIO.readImage(Folder.IMAGES + "PokeBallBattleIntroTop.png");
     private static final BufferedImage LOWER_POKEBALL_IMAGE = FileIO.readImage(Folder.IMAGES + "PokeBallBattleIntroBottom.png");
 
@@ -33,11 +32,7 @@ class BattleState implements VisualStateHandler {
     private BufferedImage battleImageSlideLeft;
 
     @Override
-    public void draw(Graphics g, MapView mapView) {
-        if (battleImageSlideRight == null || battleImageSlideLeft == null) {
-            return;
-        }
-
+    public void draw(Graphics g) {
         int drawWidth = Global.GAME_SIZE.width/2;
         int drawHeightLeft;
         int drawHeightRight;
@@ -90,8 +85,7 @@ class BattleState implements VisualStateHandler {
         this.seenWild = seenWild;
 
         battleAnimationTime = BATTLE_INTRO_ANIMATION_LIFESPAN;
-        battleImageSlideLeft = null;
-        battleImageSlideRight = null;
+        this.loadBattleImages(view);
 
         SoundTitle music = battle.isWildBattle()
                            ? SoundTitle.WILD_POKEMON_BATTLE
@@ -104,15 +98,11 @@ class BattleState implements VisualStateHandler {
     }
 
     @Override
-    public void update(int dt, MapView mapView) {
-        if (battleImageSlideLeft == null || battleImageSlideRight == null) {
-            loadBattleImages(mapView);
-        }
-
+    public void update(int dt) {
         if (battleAnimationTime < 0) {
             this.battle = null;
             Game.instance().setViewMode(ViewMode.BATTLE_VIEW);
-            mapView.setState(VisualState.MAP);
+            view.setState(VisualState.MAP);
         }
 
         battleAnimationTime -= dt;

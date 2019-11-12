@@ -129,6 +129,7 @@ public class BagLayout {
                     panel.withFullTransparency()
                          .withBackgroundColor(category.getColor())
                          .withLabelSize(14, Alignment.LEFT)
+                         .withLabelSpacingFactor(1/3f)
                          .withImageLabel(category.getIcon(), category.getDisplayName());
                 });
     }

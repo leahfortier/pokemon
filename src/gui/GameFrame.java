@@ -142,7 +142,6 @@ public class GameFrame {
             }
 
             g.dispose();
-
             strategy.show();
         }
     }

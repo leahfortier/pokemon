@@ -24,6 +24,7 @@ public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     public static final int EVOLUTION_LEVEL_LEARNED = 0;
 
     public static final Dimension MAX_PARTY_IMAGE_SIZE = new Dimension(Global.TILE_SIZE, Global.TILE_SIZE);
+    public static final Dimension MAX_POKEDEX_IMAGE_SIZE = new Dimension(140, 190);
 
     private final int number;
     private final PokemonNamesies namesies;

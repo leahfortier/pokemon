@@ -27,35 +27,26 @@ public class Button implements Panel {
     private boolean forceHover;
     private boolean active;
 
-    public Button(DrawPanel panel, ButtonTransitions transitions) {
-        this(panel, transitions, null);
-    }
-
     public Button(DrawPanel panel, ButtonTransitions transitions, ButtonPressAction pressAction) {
         this(panel, transitions, pressAction, null);
     }
 
     public Button(DrawPanel panel, ButtonTransitions transitions, ButtonPressAction pressAction, ButtonPanelSetup panelSetup) {
-        this(panel.x, panel.y, panel.width, panel.height, ButtonHoverAction.BOX, transitions, pressAction, panelSetup);
+        this(panel, ButtonHoverAction.BOX, transitions, pressAction, panelSetup);
+    }
+
+    public Button(DrawPanel panel, ButtonHoverAction hoverAction, ButtonTransitions transitions, ButtonPressAction pressAction, ButtonPanelSetup panelSetup) {
+        this(panel.x, panel.y, panel.width, panel.height, hoverAction, transitions, pressAction, panelSetup);
     }
 
     public Button(int x, int y, int width, int height) {
-        this(x, y, width, height, ButtonHoverAction.BOX, null, null, null);
-    }
-
-    public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions) {
-        this(x, y, width, height, hoverAction, transitions, null);
-    }
-
-    public Button(int x, int y, int width, int height, ButtonHoverAction hoverAction, ButtonTransitions transitions, ButtonPressAction pressAction) {
-        this(x, y, width, height, hoverAction, transitions, pressAction, null);
+        this(x, y, width, height, null, null);
     }
 
     public Button(int x, int y, int width, int height, ButtonTransitions transitions, ButtonPressAction pressAction) {
         this(x, y, width, height, transitions, pressAction, null);
     }
 
-    // Can we just admit that BOX is the default hover and not null and stop specifying it everywhere
     public Button(int x, int y, int width, int height, ButtonTransitions transitions,
                   ButtonPressAction pressAction, ButtonPanelSetup panelSetup) {
         this(x, y, width, height, ButtonHoverAction.BOX, transitions, pressAction, panelSetup);

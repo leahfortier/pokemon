@@ -1,11 +1,11 @@
 package gui.view.map;
 
 import draw.ImageUtils;
-import draw.TextUtils;
+import draw.layout.DrawLayout;
 import draw.panel.BasicPanels;
 import draw.panel.DrawPanel;
+import draw.panel.PanelList;
 import gui.TileSet;
-import gui.view.map.VisualState.VisualStateHandler;
 import input.ControlKey;
 import input.InputControl;
 import main.Game;
@@ -13,8 +13,6 @@ import pokemon.species.PokemonInfo;
 import pokemon.species.PokemonNamesies;
 import trainer.player.Player;
 import trainer.player.pokedex.Pokedex;
-import util.FontMetrics;
-import util.Point;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -24,77 +22,61 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-class PokeFinderState implements VisualStateHandler {
-    private static final int NUM_ROWS = 4;
-    private static final int NUM_COLUMNS = 6;
-    private static final int MAX_RENDER = NUM_ROWS*NUM_COLUMNS;
+class PokeFinderState extends VisualStateHandler {
+    private static final int NUM_ROWS = 3;
+    private static final int NUM_COLS = 5;
+    private static final int MAX_RENDER = NUM_ROWS*NUM_COLS;
 
-    private final DrawPanel pokeFinderPanel;
-
-    private List<PokemonNamesies> availablePokemon;
-    private Pokedex pokedex;
-    private TileSet pokedexTiles;
-    private Set<PokemonNamesies> toRender;
+    private final PanelList panels;
+    private final DrawPanel[] pokemonPanels;
+    private final DrawPanel labelPanel;
 
     PokeFinderState() {
-        pokeFinderPanel = BasicPanels.newFullGamePanel().withBorderColor(new Color(219, 9, 46)).withBorderPercentage(5);
+        DrawPanel pokeFinderPanel = BasicPanels.newFullGamePanel()
+                                               .withBorderColor(new Color(219, 9, 46))
+                                               .withBorderPercentage(5);
+
+        DrawLayout layout = new DrawLayout(pokeFinderPanel, NUM_ROWS, NUM_COLS, PokemonInfo.MAX_POKEDEX_IMAGE_SIZE)
+                .withMissingBottomRow();
+
+        pokemonPanels = layout.getPanels();
+        labelPanel = layout.getFullBottomPanel().withNoBackground().withLabelSize(24);
+
+        panels = new PanelList(pokeFinderPanel, labelPanel).add(pokemonPanels);
     }
 
     @Override
-    public void draw(Graphics g, MapView mapView) {
-        pokeFinderPanel.drawBackground(g);
-
-        Iterator<PokemonNamesies> iter = toRender.iterator();
-        for (int i = 0; i < toRender.size(); i++) {
-            PokemonNamesies namesies = iter.next();
-            PokemonInfo pokemonInfo = namesies.getInfo();
-
-            BufferedImage image = pokedexTiles.getTile(pokemonInfo.getImageName());
-            if (!pokedex.isCaught(namesies)) {
-                image = ImageUtils.silhouette(image);
-            }
-
-            Point point = Point.getPointAtIndex(i, NUM_COLUMNS);
-            int spacing = (pokeFinderPanel.width - 2*pokeFinderPanel.getBorderSize())/NUM_COLUMNS;
-            ImageUtils.drawCenteredImage(
-                    g,
-                    image,
-                    pokeFinderPanel.x + pokeFinderPanel.getBorderSize() + spacing*point.x + spacing/2,
-                    72 + 124*point.y + pokeFinderPanel.getBorderSize()
-            );
-        }
-
-        FontMetrics.setFont(g, 24);
-        int numCaught = (int)availablePokemon.stream().filter(p -> pokedex.isCaught(p)).count();
-        TextUtils.drawCenteredString(g, numCaught + "/" + availablePokemon.size() + " Caught", pokeFinderPanel.centerX(), pokeFinderPanel.bottomY() - 52);
+    public void draw(Graphics g) {
+        panels.drawAll(g);
     }
 
     @Override
-    public void update(int dt, MapView mapView) {
+    public void update(int dt) {
         InputControl input = InputControl.instance();
-        if (input.consumeIfDown(ControlKey.ESC) || input.consumeIfDown(ControlKey.POKEFINDER)) {
-            mapView.setState(VisualState.MAP);
+        if (input.consumeIfDown(ControlKey.ESC, ControlKey.POKEFINDER)) {
+            view.setState(VisualState.MAP);
         }
     }
 
     @Override
-    public void set(MapView mapView) {
+    public void set() {
         Player player = Game.getPlayer();
 
-        this.availablePokemon = mapView.getCurrentMap().getArea(player.getLocation()).getAvailableWildPokemon();
-        if (this.availablePokemon.isEmpty()) {
-            mapView.setState(VisualState.MAP);
+        List<PokemonNamesies> availablePokemon = view.getCurrentMap().getArea(player.getLocation()).getAvailableWildPokemon();
+        if (availablePokemon.isEmpty()) {
+            view.setState(VisualState.MAP);
             return;
         }
 
-        this.pokedex = player.getPokedex();
-        this.pokedexTiles = Game.getData().getPokedexTilesSmall();
+        Pokedex pokedex = player.getPokedex();
+        TileSet pokedexTiles = Game.getData().getPokedexTilesSmall();
 
-        this.toRender = new TreeSet<>();
+        Set<PokemonNamesies> toRender = new TreeSet<>();
         for (PokemonNamesies namesies : availablePokemon) {
             if (toRender.size() == MAX_RENDER) {
                 break;
             }
+
             if (!pokedex.isNotSeen(namesies) && !pokedex.isCaught(namesies)) {
                 toRender.add(namesies);
             }
@@ -110,5 +92,26 @@ class PokeFinderState implements VisualStateHandler {
                 toRender.add(namesies);
             }
         }
+
+        // Set pokedex image label for each pokemon being rendered
+        // If Pokemon has only been seen (not caught), set image to silhouette
+        Iterator<PokemonNamesies> iter = toRender.iterator();
+        for (DrawPanel panel : pokemonPanels) {
+            panel.setSkip(!iter.hasNext());
+            if (!panel.isSkipping()) {
+                PokemonNamesies namesies = iter.next();
+                PokemonInfo pokemonInfo = namesies.getInfo();
+
+                BufferedImage image = pokedexTiles.getTile(pokemonInfo.getImageName());
+                if (!pokedex.isCaught(namesies)) {
+                    image = ImageUtils.silhouette(image);
+                }
+                panel.withImageLabel(image);
+            }
+        }
+
+        // Display total number of Pokemon available and how many are caught
+        int numCaught = (int)availablePokemon.stream().filter(pokedex::isCaught).count();
+        labelPanel.withLabel(numCaught + "/" + availablePokemon.size() + " Caught");
     }
 }
