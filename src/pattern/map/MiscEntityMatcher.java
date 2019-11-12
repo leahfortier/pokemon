@@ -6,7 +6,7 @@ import map.entity.MiscEntity;
 import map.entity.interaction.Interaction;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.EntityMatcher.MultiEntityMatcher;
-import pattern.generic.MultiPointTriggerMatcher;
+import pattern.location.MultiPointTriggerMatcher;
 import pattern.interaction.InteractionMatcher;
 import util.Point;
 

@@ -1,7 +1,7 @@
 package pattern.map;
 
 import mapMaker.model.TriggerModel.TriggerModelType;
-import pattern.generic.MultiPointTriggerMatcher;
+import pattern.location.MultiPointTriggerMatcher;
 
 import java.util.List;
 

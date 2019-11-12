@@ -10,7 +10,7 @@ import map.entity.interaction.NPCInteraction;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionList;
 import pattern.generic.EntityMatcher.SingleEntityMatcher;
-import pattern.generic.SinglePointTriggerMatcher;
+import pattern.location.SinglePointTriggerMatcher;
 import pattern.interaction.NPCInteractionMatcher;
 import util.string.StringUtils;
 

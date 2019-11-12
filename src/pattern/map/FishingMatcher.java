@@ -5,7 +5,7 @@ import map.entity.FishingSpotEntity;
 import map.overworld.wild.WildEncounterInfo;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.EntityMatcher.MultiEntityMatcher;
-import pattern.generic.MultiPointTriggerMatcher;
+import pattern.location.MultiPointTriggerMatcher;
 import util.Point;
 
 import java.util.List;

@@ -1,6 +1,7 @@
-package pattern.generic;
+package pattern.location;
 
 import mapMaker.model.TriggerModel.TriggerModelType;
+import pattern.generic.TriggerMatcher;
 import util.Point;
 
 public abstract class LocationTriggerMatcher extends TriggerMatcher implements Comparable<LocationTriggerMatcher> {

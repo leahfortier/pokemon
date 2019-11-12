@@ -3,7 +3,7 @@ package mapMaker.tools;
 import draw.TileUtils;
 import mapMaker.EditType;
 import mapMaker.MapMaker;
-import pattern.generic.LocationTriggerMatcher;
+import pattern.location.LocationTriggerMatcher;
 import util.Point;
 
 import java.awt.Graphics;

@@ -12,7 +12,7 @@ import mapMaker.tools.SelectTool;
 import mapMaker.tools.Tool;
 import mapMaker.tools.Tool.ToolType;
 import mapMaker.tools.ToolRenderer;
-import pattern.generic.LocationTriggerMatcher;
+import pattern.location.LocationTriggerMatcher;
 import util.FontMetrics;
 import util.GuiUtils;
 import util.Point;

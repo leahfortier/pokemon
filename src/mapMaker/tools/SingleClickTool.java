@@ -6,7 +6,7 @@ import mapMaker.EditType;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel.TriggerModelType;
-import pattern.generic.LocationTriggerMatcher;
+import pattern.location.LocationTriggerMatcher;
 import pattern.map.NPCMatcher;
 import util.Point;
 

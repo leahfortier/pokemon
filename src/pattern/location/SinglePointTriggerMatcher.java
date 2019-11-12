@@ -1,4 +1,4 @@
-package pattern.generic;
+package pattern.location;
 
 import main.Global;
 import util.Point;

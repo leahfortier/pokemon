@@ -4,7 +4,7 @@ import map.condition.ConditionSet;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionList;
 import pattern.action.ActionMatcher;
-import pattern.generic.MultiPointTriggerMatcher;
+import pattern.location.MultiPointTriggerMatcher;
 
 public class EventMatcher extends MultiPointTriggerMatcher {
     private String name;
