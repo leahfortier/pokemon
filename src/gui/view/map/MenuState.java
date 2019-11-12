@@ -2,12 +2,15 @@ package gui.view.map;
 
 import draw.Alignment;
 import draw.button.Button;
+import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
 import draw.layout.ButtonLayout;
 import draw.panel.DrawPanel;
 import input.ControlKey;
 import input.InputControl;
 import main.Global;
+import trainer.player.Player;
+import util.FontMetrics;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -17,20 +20,32 @@ class MenuState extends VisualStateHandler {
 
     private final DrawPanel menuPanel;
     private final ButtonList buttons;
-    private Button[] menuButtons;
+    private final Button[] menuButtons;
 
     MenuState() {
-        int width = 273;
+        int fontSize = 40;
+        int borderSize = 13;
+
+        // Spacing factor is set to that there is equal spacing on either side of the arrow
+        int arrowSpacing = 10;
+        float spacingFactor = (float)arrowSpacing/FontMetrics.getTextWidth(fontSize);
+        int buttonSpacing = arrowSpacing + ButtonHoverAction.ARROW_WIDTH;
+        int fullSpacing = buttonSpacing + arrowSpacing;
+
+        // Equal spacing between the text on both sides for max characters (arrow is inside this space)
+        int textWidth = FontMetrics.getTextWidth(fontSize, Player.MAX_NAME_LENGTH);
+        int width = 2*borderSize + 2*fullSpacing + textWidth;
+
         menuPanel = new DrawPanel(Global.GAME_SIZE.width - width, 0, width, Global.GAME_SIZE.height)
                 .withBorderColor(new Color(53, 53, 129))
-                .withBorderPercentage(5);
+                .withBorderSize(borderSize);
 
-        menuButtons = new ButtonLayout(menuPanel, MENU_CHOICES.length, 1, 20)
+        menuButtons = new ButtonLayout(menuPanel, MENU_CHOICES.length, 1, buttonSpacing)
                 .withArrowHover()
                 .withPressIndex(index -> MENU_CHOICES[index].execute(view))
                 .withDrawSetup((panel, index) -> panel.withNoBackground()
-                                                      .withLabelSize(40, Alignment.LEFT)
-                                                      .withLabelSpacingFactor(.5f))
+                                                      .withLabelSize(fontSize, Alignment.LEFT)
+                                                      .withLabelSpacingFactor(spacingFactor))
                 .getButtons();
 
         this.buttons = new ButtonList(menuButtons);

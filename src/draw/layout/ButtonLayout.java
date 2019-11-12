@@ -55,6 +55,11 @@ public class ButtonLayout extends DrawLayout {
     }
 
     @Override
+    public ButtonLayout withXOffset(int offset) {
+        return (ButtonLayout)super.withXOffset(offset);
+    }
+
+    @Override
     public ButtonLayout withDrawSetup(DrawPanelSetup drawSetup) {
         return (ButtonLayout)super.withDrawSetup(drawSetup);
     }

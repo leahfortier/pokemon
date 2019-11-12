@@ -94,7 +94,6 @@ public class ButtonList implements Iterable<Button> {
 
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].update(i == selected);
-
             if (buttons[i].isHover()) {
                 selected = i;
             }

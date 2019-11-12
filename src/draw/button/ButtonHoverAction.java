@@ -25,22 +25,25 @@ public enum ButtonHoverAction {
         }
     }),
     ARROW(new HoverActionDrawer() {
-        private final int[] tx = { 0, 11, 0 };
-        private final int[] ty = { 0, 12, 23 };
+        private final int[] tx = { 0, ARROW_WIDTH, 0 };
+        private final int[] ty = { 0, ARROW_HEIGHT/2, ARROW_HEIGHT };
         private PulseColor pulseColor = new PulseColor(Color.BLACK);
 
         @Override
         public void draw(Graphics g, Button button) {
             pulseColor.setColor(g);
 
-            int x = button.x - 10;
-            int y = button.y + button.height/2 - 12;
+            int x = button.x - ARROW_WIDTH;
+            int y = button.centerY() - ARROW_HEIGHT/2;
 
             g.translate(x, y);
             g.fillPolygon(tx, ty, 3);
             g.translate(-x, -y);
         }
     });
+
+    public static final int ARROW_WIDTH = 11;
+    private static final int ARROW_HEIGHT = 22;
 
     private final HoverActionDrawer hoverActionDrawer;
 

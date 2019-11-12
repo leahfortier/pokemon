@@ -70,19 +70,14 @@ class MessageState extends VisualStateHandler {
         // Where the selected circle should begin
         circleX = choicesPanel.x + borderSize + spacing;
 
-        // Fake panels are mostly correct but need to change their start x to account for the choice circle
-        DrawPanel[] fakePanels = new DrawLayout(choicesPanel, choices.length, 1, spacing).getPanels();
-        int newX = circleX + 2*circleRadius + spacing/2;
-
         // Spacing factor is 0 so label will start exactly where this panel begins
-        choiceLabels = new DrawPanel[fakePanels.length];
-        for (int i = 0; i < fakePanels.length; i++) {
-            DrawPanel panel = fakePanels[i];
-            choiceLabels[i] = new DrawPanel(newX, panel.y, panel.width - (newX - panel.x), panel.height)
-                    .withLabel(choices[i].getText(), 30, Alignment.LEFT)
-                    .withLabelSpacingFactor(0)
-                    .withNoBackground();
-        }
+        // Need to change start x to account for the choice circle
+        choiceLabels = new DrawLayout(choicesPanel, choices.length, 1, spacing)
+                .withXOffset(2*circleRadius + spacing/2)
+                .withDrawSetup((panel, index) -> panel.withLabel(choices[index].getText(), 30, Alignment.LEFT)
+                                                      .withLabelSpacingFactor(0)
+                                                      .withNoBackground())
+                .getPanels();
 
         choicePanels = new PanelList(choicesPanel).add(choiceLabels);
         spacingChoiceMessage = currentMessage;

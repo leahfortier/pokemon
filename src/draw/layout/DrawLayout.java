@@ -21,6 +21,8 @@ public class DrawLayout {
     private int missingRows;
     private int missingCols;
 
+    private int xOffset;
+
     protected DrawPanelIndexSetup drawSetup;
 
     public DrawLayout(DrawPanel panel, int numRows, int numCols, int spacing) {
@@ -50,6 +52,7 @@ public class DrawLayout {
         // Default values
         this.missingRows = 0;
         this.missingCols = 0;
+        this.xOffset = 0;
         this.drawSetup = (drawPanel, index) -> drawPanel.withNoBackground();
     }
 
@@ -73,6 +76,11 @@ public class DrawLayout {
 
     public DrawLayout withMissingRightCols(int missingCols) {
         this.missingCols = missingCols;
+        return this;
+    }
+
+    public DrawLayout withXOffset(int offset) {
+        this.xOffset = offset;
         return this;
     }
 
@@ -122,9 +130,9 @@ public class DrawLayout {
         for (int row = 0, index = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++, index++) {
                 panels[index] = new DrawPanel(
-                        outerPanel.x + borderSize + xSpacing*(col + 1) + panelWidth*col + Math.min(col, xRemainder),
+                        outerPanel.x + borderSize + xSpacing*(col + 1) + panelWidth*col + Math.min(col, xRemainder) + xOffset,
                         outerPanel.y + borderSize + ySpacing*(row + 1) + panelHeight*row + Math.min(row, yRemainder),
-                        panelWidth,
+                        panelWidth - xOffset,
                         panelHeight
                 );
                 drawSetup.setup(panels[index], index);
