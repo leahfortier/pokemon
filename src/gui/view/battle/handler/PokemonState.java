@@ -217,7 +217,7 @@ public class PokemonState extends VisualStateHandler {
         view.drawMenuMessagePanel(g, message);
 
         // Draw back arrow when applicable
-        if (this.updateBackButton()) {
+        if (this.includeBackButton()) {
             view.drawBackButton(g);
         }
 
@@ -362,7 +362,7 @@ public class PokemonState extends VisualStateHandler {
     }
 
     @Override
-    public boolean updateBackButton() {
+    public boolean includeBackButton() {
         // Can't go back when the force is switched
         return !switchForced;
     }

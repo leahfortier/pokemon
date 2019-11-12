@@ -2,7 +2,6 @@ package gui.view.map;
 
 import draw.TextUtils;
 import draw.button.Button;
-import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
 import draw.button.ButtonTransitions;
 import draw.panel.BasicPanels;
@@ -85,7 +84,6 @@ class FlyState extends VisualStateHandler {
                 BUTTON_PADDING,
                 75,
                 50,
-                ButtonHoverAction.BOX,
                 new ButtonTransitions().right(RIGHT_BUTTON).up(AREAS_PER_PAGE - 1).left(0).down(0),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, -1, totalPages())
         ).asArrow(Direction.LEFT);
@@ -95,7 +93,6 @@ class FlyState extends VisualStateHandler {
                 BUTTON_PADDING,
                 75,
                 50,
-                ButtonHoverAction.BOX,
                 new ButtonTransitions().right(0).up(AREAS_PER_PAGE - 1).left(LEFT_BUTTON).down(0),
                 () -> pageNum = GeneralUtils.wrapIncrement(pageNum, 1, totalPages())
         ).asArrow(Direction.RIGHT);

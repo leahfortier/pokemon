@@ -42,13 +42,13 @@ public abstract class VisualStateHandler {
         }
 
         // Go back to main menu if applicable
-        if (this.updateBackButton()) {
+        if (this.includeBackButton()) {
             view.updateBackButton();
         }
     }
 
     // By default, states have a back button to return to the main menu
-    protected boolean updateBackButton() {
+    protected boolean includeBackButton() {
         return true;
     }
 

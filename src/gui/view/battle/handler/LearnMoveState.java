@@ -28,7 +28,7 @@ public class LearnMoveState extends VisualStateHandler {
     }
 
     @Override
-    public boolean updateBackButton() {
+    public boolean includeBackButton() {
         return false;
     }
 

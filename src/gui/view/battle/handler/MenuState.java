@@ -69,7 +69,7 @@ public class MenuState extends VisualStateHandler {
     }
 
     @Override
-    public boolean updateBackButton() {
+    public boolean includeBackButton() {
         // You can't go home if you're already there
         return false;
     }
