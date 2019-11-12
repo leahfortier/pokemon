@@ -207,7 +207,10 @@ public class MapTest extends BaseTest {
 
     // Make sure there are not multiple areas that overlap in location
     private void checkLocation(String mapName, Set<Point> seenLocations, List<Point> wildLocations) {
+        // Wild locations must have at least one point
         Assert.assertFalse(mapName, wildLocations.isEmpty());
+
+        // Add each point to the locations set and confirm it's the first time we've seen this point
         for (Point location : wildLocations) {
             Assert.assertFalse(seenLocations.contains(location));
             seenLocations.add(location);
@@ -218,7 +221,9 @@ public class MapTest extends BaseTest {
     private void checkProbability(String mapName, WildEncounterInfo[] wildEncounters) {
         int totalProbability = 0;
         for (WildEncounterInfo wildEncounter : wildEncounters) {
-            totalProbability += wildEncounter.getProbability();
+            int probability = wildEncounter.getProbability();
+            TestUtils.assertInclusiveRange(mapName + " " + wildEncounter.getPokemonName(), 1, 100, probability);
+            totalProbability += probability;
         }
 
         Assert.assertEquals(mapName, 100, totalProbability);

@@ -17,6 +17,7 @@ class MenuState extends VisualStateHandler {
 
     private final DrawPanel menuPanel;
     private final ButtonList buttons;
+    private Button[] menuButtons;
 
     MenuState() {
         int width = 273;
@@ -24,11 +25,11 @@ class MenuState extends VisualStateHandler {
                 .withBorderColor(new Color(53, 53, 129))
                 .withBorderPercentage(5);
 
-        Button[] menuButtons = new ButtonLayout(menuPanel, MENU_CHOICES.length, 1, 20)
+        menuButtons = new ButtonLayout(menuPanel, MENU_CHOICES.length, 1, 20)
                 .withArrowHover()
                 .withPressIndex(index -> MENU_CHOICES[index].execute(view))
                 .withDrawSetup((panel, index) -> panel.withNoBackground()
-                                                      .withLabel(MENU_CHOICES[index].getDisplayName(), 40, Alignment.LEFT)
+                                                      .withLabelSize(40, Alignment.LEFT)
                                                       .withLabelSpacingFactor(.5f))
                 .getButtons();
 
@@ -49,6 +50,13 @@ class MenuState extends VisualStateHandler {
         InputControl input = InputControl.instance();
         if (input.consumeIfDown(ControlKey.ESC)) {
             view.setState(VisualState.MAP);
+        }
+    }
+
+    @Override
+    public void set() {
+        for (int i = 0; i < menuButtons.length; i++) {
+            menuButtons[i].panel().withLabel(MENU_CHOICES[i].getDisplayName());
         }
     }
 }

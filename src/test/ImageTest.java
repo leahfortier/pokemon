@@ -149,7 +149,7 @@ public class ImageTest extends BaseTest {
         }
 
         DimensionChecker partyDimension = new DimensionChecker(PokemonInfo.MAX_PARTY_IMAGE_SIZE).singleDimensionEquals(0);
-        DimensionChecker pokedexDimension = new DimensionChecker(140, 190).singleDimensionEquals(2);
+        DimensionChecker pokedexDimension = new DimensionChecker(PokemonInfo.MAX_POKEDEX_IMAGE_SIZE).singleDimensionEquals(2);
         DimensionChecker pokemonDimension = new DimensionChecker(96, 96).trimmed();
         for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
             checkMaxSize(num, "", Folder.POKEDEX_TILES, pokedexDimension);

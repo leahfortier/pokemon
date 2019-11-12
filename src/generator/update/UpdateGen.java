@@ -23,6 +23,7 @@ import util.file.Folder;
 import util.string.StringAppender;
 import util.string.StringUtils;
 
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.PrintStream;
@@ -321,11 +322,15 @@ public class UpdateGen {
 
     private static void resizeImages() {
         for (int num = 1; num <= PokemonInfo.NUM_POKEMON; num++) {
-            resizeImage(num, "", Folder.POKEDEX_TILES, 140, 190);
-            resizeImage(num, "-small", Folder.PARTY_TILES, 32, 32);
+            resizeImage(num, "", Folder.POKEDEX_TILES, PokemonInfo.MAX_POKEDEX_IMAGE_SIZE);
+            resizeImage(num, "-small", Folder.PARTY_TILES, PokemonInfo.MAX_PARTY_IMAGE_SIZE);
             resizeImage(num, "", Folder.POKEMON_TILES, 96, 96);
             resizeImage(num, "-back", Folder.POKEMON_TILES, 96, 96);
         }
+    }
+
+    private static void resizeImage(int num, String suffix, String folderPath, Dimension maxDimension) {
+        resizeImage(num, suffix, folderPath, maxDimension.width, maxDimension.height);
     }
 
     private static void resizeImage(int num, String suffix, String folderPath, int maxWidth, int maxHeight) {
