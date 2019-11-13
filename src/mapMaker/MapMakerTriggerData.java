@@ -3,7 +3,6 @@ package mapMaker;
 import draw.TileUtils;
 import main.Global;
 import map.PathDirection;
-import map.entity.movable.MovableEntity;
 import mapMaker.dialogs.EventTriggerDialog;
 import mapMaker.dialogs.ItemEntityDialog;
 import mapMaker.dialogs.MapTransitionDialog;
@@ -13,12 +12,9 @@ import mapMaker.dialogs.wildbattle.FishingTriggerEditDialog;
 import mapMaker.dialogs.wildbattle.FishingTriggerOptionsDialog;
 import mapMaker.dialogs.wildbattle.WildBattleAreaDialog;
 import mapMaker.dialogs.wildbattle.WildBattleTriggerOptionsDialog;
-import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.location.LocationTriggerMatcher;
-import pattern.location.MultiPointTriggerMatcher;
-import pattern.location.SinglePointTriggerMatcher;
 import pattern.map.AreaMatcher;
 import pattern.map.EventMatcher;
 import pattern.map.FishingMatcher;
@@ -99,13 +95,13 @@ public class MapMakerTriggerData {
                 .collect(Collectors.toList());
 
         Set<String> entityNames = new HashSet<>();
-        entityList.forEach(matcher -> getUniqueEntityName(matcher, entityNames));
+        entityList.forEach(matcher -> setUniqueEntityName(matcher, entityNames));
 
         MapDataMatcher mapDataMatcher = new MapDataMatcher(areaData, entityList);
         return mapDataMatcher.getJson();
     }
 
-    private String getUniqueEntityName(LocationTriggerMatcher matcher, Set<String> entityNames) {
+    private void setUniqueEntityName(LocationTriggerMatcher matcher, Set<String> entityNames) {
         TriggerModelType type = matcher.getTriggerModelType();
         String typeName = getEntityNameFormat(type.getName());
         String basicEntityName = getEntityNameFormat(matcher.getBasicName());
@@ -123,8 +119,6 @@ public class MapMakerTriggerData {
 
         matcher.setTriggerName(uniqueEntityName);
         entityNames.add(uniqueEntityName);
-
-        return uniqueEntityName;
     }
 
     private String getEntityNameFormat(String baseName) {
@@ -146,39 +140,20 @@ public class MapMakerTriggerData {
     void drawTriggers(Graphics2D g2d, Point mapLocation) {
         for (LocationTriggerMatcher entity : this.entities) {
             TriggerModelType triggerModelType = entity.getTriggerModelType();
+            List<Point> entityLocation = entity.getAllLocations();
 
-            if (entity instanceof SinglePointTriggerMatcher) {
-                Point point = ((SinglePointTriggerMatcher)entity).getLocation();
-
-                BufferedImage image = null;
-                if (triggerModelType == TriggerModelType.NPC) {
-                    NPCMatcher npc = (NPCMatcher)entity;
-                    int imageIndex = MovableEntity.getTrainerSpriteIndex(npc.getSpriteIndex(), npc.getDirection());
-                    image = mapMaker.getTileFromSet(TileType.TRAINER, imageIndex);
-                }
-
-                if (image == null) {
-                    image = triggerModelType.getImage(mapMaker);
-                }
-
+            for (Point point : entityLocation) {
+                BufferedImage image = triggerModelType.getImage(mapMaker, entity);
                 TileUtils.drawTileImage(g2d, image, point, mapLocation);
-            } else if (entity instanceof MultiPointTriggerMatcher) {
-                List<Point> entityLocation = ((MultiPointTriggerMatcher)entity).getLocation();
-                for (Point point : entityLocation) {
-                    BufferedImage image = triggerModelType.getImage(mapMaker);
-                    TileUtils.drawTileImage(g2d, image, point, mapLocation);
 
-                    if (entity instanceof MapTransitionMatcher) {
-                        BufferedImage exitImage = TriggerModel.getMapExitImage(mapMaker);
-                        PathDirection direction = ((MapTransitionMatcher)entity).getDirection();
-                        if (direction != null) {
-                            Point newLocation = Point.add(point, direction.getDeltaPoint());
-                            TileUtils.drawTileImage(g2d, exitImage, newLocation, mapLocation);
-                        }
+                if (entity instanceof MapTransitionMatcher) {
+                    BufferedImage exitImage = TriggerModel.getMapExitImage();
+                    PathDirection direction = ((MapTransitionMatcher)entity).getDirection();
+                    if (direction != null) {
+                        Point newLocation = Point.add(point, direction.getDeltaPoint());
+                        TileUtils.drawTileImage(g2d, exitImage, newLocation, mapLocation);
                     }
                 }
-            } else {
-                Global.error("Unknown entity matcher class " + entity.getClass().getSimpleName());
             }
         }
     }
@@ -261,6 +236,18 @@ public class MapMakerTriggerData {
                 .filter(entity -> entity instanceof WildBattleAreaMatcher)
                 .map(entity -> (WildBattleAreaMatcher)entity)
                 .collect(Collectors.toList());
+    }
+
+    public int getWildBattleAreaIndex(WildBattleAreaMatcher areaMatcher) {
+        List<WildBattleAreaMatcher> areaMatchers = this.getWildBattleAreas();
+        for (int i = 0; i < areaMatchers.size(); i++) {
+            if (areaMatcher == areaMatchers.get(i)) {
+                return i;
+            }
+        }
+
+        // Area not in the list -- could be moving etc, just append to the end
+        return areaMatchers.size();
     }
 
     public List<LocationTriggerMatcher> getEntitiesAtLocation(Point location) {

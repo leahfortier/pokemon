@@ -23,6 +23,7 @@ import util.file.Folder;
 import util.string.StringAppender;
 import util.string.StringUtils;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -83,6 +84,14 @@ public class UpdateGen {
 //        testBulbapediaMoveTypeList();
 //        printStatOrder();
 //        sourceCodeRegexReplace();
+//        dyeWildBattleTile();
+    }
+
+    // Change the color and write index to create more wild battle images for map maker
+    private static void dyeWildBattleTile() {
+        BufferedImage image = FileIO.readImage(Folder.MAP_MAKER_TILES + "WildBattleIndicator0.png");
+        BufferedImage dyed = ImageUtils.dye(image, new Color(0, 255, 0));
+        FileIO.writeImage(dyed, Folder.MAP_MAKER_TILES + "WildBattleIndicator2.png");
     }
 
     // Updates all the files in the source code and generator input files by replacing the regex

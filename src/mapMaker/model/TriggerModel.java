@@ -1,9 +1,15 @@
 package mapMaker.model;
 
 import draw.TileUtils;
+import map.entity.movable.MovableEntity;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.tools.Tool.ToolType;
+import pattern.location.LocationTriggerMatcher;
+import pattern.map.NPCMatcher;
+import pattern.map.WildBattleAreaMatcher;
+import util.file.FileIO;
+import util.file.Folder;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -22,7 +28,7 @@ public class TriggerModel extends MapMakerModel {
     public void reload(MapMaker mapMaker) {
         this.triggerListModel.clear();
         for (TriggerModelType type : TriggerModelType.values()) {
-            this.triggerListModel.addElement(type.getImageIcon(mapMaker));
+            this.triggerListModel.addElement(type.getImageIcon());
         }
     }
 
@@ -37,47 +43,64 @@ public class TriggerModel extends MapMakerModel {
     }
 
     // TODO: I hate everything
-    public static BufferedImage getMapExitImage(final MapMaker mapMaker) {
-        return mapMaker.getTileFromSet(TileType.MAP_MAKER, 0x2);
+    public static BufferedImage getMapExitImage() {
+        return FileIO.readImage(Folder.MAP_MAKER_TILES + "ExitTriggerTile");
     }
 
     public enum TriggerModelType {
-        ITEM("Item", true, 0xf),
-        HIDDEN_ITEM("Hidden Item", true, 0x10),
-        NPC("NPC", TileType.TRAINER, true, 0x40),
-        MISC_ENTITY("Misc Entity", true, 0x4),
-        WILD_BATTLE("Wild Battle", false, 0x3),
-        MAP_TRANSITION("Map Exit", true, 0x1),
-        EVENT("Event", true, 0xc),
-        FISHING("Fishing", false, 0xe);
+        ITEM("Item", true, "Item"),
+        HIDDEN_ITEM("Hidden Item", true, "HiddenItem"),
+        NPC("NPC", true, Folder.TRAINER_TILES + "Male01StandingDown", (mapMaker, entity) -> {
+            NPCMatcher npc = (NPCMatcher)entity;
+            int imageIndex = MovableEntity.getTrainerSpriteIndex(npc.getSpriteIndex(), npc.getDirection());
+            return mapMaker.getTileFromSet(TileType.TRAINER, imageIndex);
+        }),
+        MISC_ENTITY("Misc Entity", true, "TriggerEntity"),
+        WILD_BATTLE("Wild Battle", false, wildBattleImageName(0), (mapMaker, entity) -> {
+            WildBattleAreaMatcher wildBattleArea = (WildBattleAreaMatcher)entity;
+            int index = mapMaker.getTriggerData().getWildBattleAreaIndex(wildBattleArea);
+            return FileIO.readImage(wildBattleImageName(index));
+        }),
+        MAP_TRANSITION("Map Exit", true, "EntranceTriggerTile"),
+        EVENT("Event", true, "EventTrigger"),
+        FISHING("Fishing", false, "FishingTrigger");
 
         private final String name;
 
-        private final TileType tileType;
         private final ToolType defaultTool;
-        private final int imageIndex;
 
-        TriggerModelType(String name, boolean singleClick, int imageIndex) {
-            this(name, TileType.MAP_MAKER, singleClick, imageIndex);
+        private final String defaultImage;
+        private final ImageGetter imageGetter;
+
+        TriggerModelType(String name, boolean singleClick, String defaultImage) {
+            this(name, singleClick, Folder.MAP_MAKER_TILES + defaultImage, null);
         }
 
-        TriggerModelType(String name, TileType tileType, boolean singleClick, int imageIndex) {
+        TriggerModelType(String name, boolean singleClick, String defaultImagePath, ImageGetter imageGetter) {
             this.name = name;
-            this.tileType = tileType;
             this.defaultTool = singleClick ? ToolType.SINGLE_CLICK : ToolType.RECTANGLE;
-            this.imageIndex = imageIndex;
+            this.defaultImage = defaultImagePath;
+            this.imageGetter = imageGetter;
         }
 
         public String getName() {
             return this.name;
         }
 
-        public BufferedImage getImage(final MapMaker mapMaker) {
-            return mapMaker.getTileFromSet(tileType, imageIndex);
+        private BufferedImage getDefaultImage() {
+            return FileIO.readImage(defaultImage);
         }
 
-        public ImageIcon getImageIcon(final MapMaker mapMaker) {
-            return new ImageIcon(TileUtils.tileWithText(this.getImage(mapMaker), name), String.valueOf(this.ordinal()));
+        public BufferedImage getImage(MapMaker mapMaker, LocationTriggerMatcher entity) {
+            if (imageGetter == null) {
+                return this.getDefaultImage();
+            }
+
+            return imageGetter.getImageName(mapMaker, entity);
+        }
+
+        public ImageIcon getImageIcon() {
+            return new ImageIcon(TileUtils.tileWithText(this.getDefaultImage(), name), this.ordinal() + "");
         }
 
         public ToolType getDefaultTool() {
@@ -86,6 +109,15 @@ public class TriggerModel extends MapMakerModel {
 
         public static TriggerModelType getModelTypeFromIndex(int selectedIndex) {
             return TriggerModelType.values()[selectedIndex];
+        }
+
+        private static String wildBattleImageName(int index) {
+            return Folder.MAP_MAKER_TILES + "WildBattleIndicator" + index;
+        }
+
+        @FunctionalInterface
+        public interface ImageGetter {
+            BufferedImage getImageName(MapMaker mapMaker, LocationTriggerMatcher entity);
         }
     }
 }

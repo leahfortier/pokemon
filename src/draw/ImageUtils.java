@@ -6,9 +6,11 @@ import util.FontMetrics;
 import util.Point;
 
 import javax.imageio.ImageIO;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
@@ -130,6 +132,23 @@ public final class ImageUtils {
         return ImageUtils.scaleImage(image, scale);
     }
 
+    // Dyes the image the specified color
+    public static BufferedImage dye(BufferedImage image, Color color) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        BufferedImage dyed = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = dyed.createGraphics();
+
+        g.drawImage(image, 0, 0, null);
+        g.setComposite(AlphaComposite.SrcAtop);
+        g.setColor(color);
+        g.fillRect(0, 0, width, height);
+        g.dispose();
+
+        return dyed;
+    }
+
     public static BufferedImage silhouette(BufferedImage image) {
         return colorImage(image, SILHOUETTE_SCALE, SILHOUETTE_OFFSET);
     }
@@ -160,6 +179,7 @@ public final class ImageUtils {
                 raster.setPixel(x, y, pixels);
             }
         }
+
         return image;
     }
 

@@ -522,15 +522,13 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
     @Override
     public void mouseDragged(MouseEvent event) {
         this.mouseHoverLocation = getMouseLocation(event);
-
-        this.getTool().drag(getMouseLocation(event));
+        this.getTool().drag(this.mouseHoverLocation);
         draw();
     }
 
     @Override
     public void mouseMoved(MouseEvent event) {
         this.mouseHoverLocation = getMouseLocation(event);
-
         draw();
     }
 

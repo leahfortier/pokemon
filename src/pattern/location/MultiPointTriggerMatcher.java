@@ -51,7 +51,7 @@ public abstract class MultiPointTriggerMatcher extends LocationTriggerMatcher {
     }
 
     @Override
-    protected Point getFirstLocationPoint() {
-        return this.getLocation().get(0);
+    public List<Point> getAllLocations() {
+        return this.getLocation();
     }
 }

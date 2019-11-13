@@ -83,7 +83,7 @@ public class WildBattleAreaDialog extends TriggerDialog<WildBattleAreaMatcher> {
     private WildBattleMatcher getSelectedTriggerMatcher() {
         String wildBattleName = (String)encountersComboBox.getSelectedItem();
         for (WildBattleMatcher matcher : wildBattleTriggers) {
-            if (wildBattleName.equals(matcher.getName())) {
+            if (matcher.getName().equals(wildBattleName)) {
                 return matcher;
             }
         }

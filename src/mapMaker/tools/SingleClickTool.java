@@ -1,13 +1,11 @@
 package mapMaker.tools;
 
 import draw.TileUtils;
-import map.entity.movable.MovableEntity;
 import mapMaker.EditType;
 import mapMaker.MapMaker;
 import mapMaker.model.TileModel.TileType;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.location.LocationTriggerMatcher;
-import pattern.map.NPCMatcher;
 import util.Point;
 
 import java.awt.Graphics;
@@ -67,20 +65,9 @@ class SingleClickTool extends Tool {
         }
         // Show preview image for current trigger
         else if (mapMaker.isEditType(EditType.TRIGGERS)) {
-
             TriggerModelType type = TriggerModelType.getModelTypeFromIndex(mapMaker.getSelectedTileIndex());
-
-            BufferedImage image;
-            if (type == TriggerModelType.NPC) {
-                NPCMatcher npc = (NPCMatcher)mapMaker.getPlaceableTrigger();
-                image = mapMaker.getTileFromSet(TileType.TRAINER, MovableEntity.getTrainerSpriteIndex(npc.getSpriteIndex(), npc.getDirection()));
-            } else {
-                image = type.getImage(mapMaker);
-            }
-
-            if (image != null) {
-                TileUtils.drawTileImage(g, image, location, mapMaker.getMapLocation());
-            }
+            BufferedImage image = type.getImage(mapMaker, mapMaker.getPlaceableTrigger());
+            TileUtils.drawTileImage(g, image, location, mapMaker.getMapLocation());
         }
     }
 

@@ -3,6 +3,8 @@ package pattern.location;
 import main.Global;
 import util.Point;
 
+import java.util.List;
+
 public abstract class SinglePointTriggerMatcher extends LocationTriggerMatcher {
     private Point location;
 
@@ -39,7 +41,7 @@ public abstract class SinglePointTriggerMatcher extends LocationTriggerMatcher {
     }
 
     @Override
-    protected Point getFirstLocationPoint() {
-        return this.getLocation();
+    public List<Point> getAllLocations() {
+        return List.of(this.getLocation());
     }
 }

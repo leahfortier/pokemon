@@ -4,6 +4,8 @@ import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.generic.TriggerMatcher;
 import util.Point;
 
+import java.util.List;
+
 public abstract class LocationTriggerMatcher extends TriggerMatcher implements Comparable<LocationTriggerMatcher> {
     public abstract boolean isAtLocation(Point location);
     public abstract void setLocation(LocationTriggerMatcher oldMatcher);
@@ -11,8 +13,11 @@ public abstract class LocationTriggerMatcher extends TriggerMatcher implements C
     public abstract void addDelta(Point delta);
     public abstract TriggerModelType getTriggerModelType();
     public abstract String getBasicName();
+    public abstract List<Point> getAllLocations();
 
-    protected abstract Point getFirstLocationPoint();
+    private Point getFirstLocationPoint() {
+        return this.getAllLocations().get(0);
+    }
 
     // Compare first by basic name, then by location
     @Override

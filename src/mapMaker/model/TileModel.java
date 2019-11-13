@@ -197,7 +197,6 @@ public class TileModel extends MapMakerModel {
 
     public enum TileType {
         MAP(Folder.MAP_TILES, FileName.MAP_TILES_INDEX),
-        MAP_MAKER(Folder.MAP_MAKER_TILES, FileName.MAP_MAKER_TILES_INDEX),
         TRAINER(Folder.TRAINER_TILES, FileName.TRAINER_TILES_INDEX);
 
         private final String tileFolderPath;

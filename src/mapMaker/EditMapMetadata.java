@@ -33,7 +33,6 @@ class EditMapMetadata {
     private Dimension currentMapSize;
 
     private Map<MapDataType, BufferedImage> currentMap;
-
     private MapMakerTriggerData triggerData;
 
     private Composite alphaComposite;
@@ -207,6 +206,10 @@ class EditMapMetadata {
         return this.getMapImage(dataType).getRGB(location.x, location.y);
     }
 
+    private void drawTiles(Graphics2D g2d, Point mapLocation, MapDataType type, MapDataType defaultType) {
+        drawTiles(g2d, mapLocation, type, type == defaultType ? defaultComposite : alphaComposite);
+    }
+
     private void drawTiles(Graphics2D g2d, Point mapLocation, MapDataType type, Composite composite) {
         g2d.setComposite(composite);
 
@@ -233,52 +236,30 @@ class EditMapMetadata {
             alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.5f);
         }
 
+        // Uses defaultComposite for defaultType, and alphaComposite for everything else
+        MapDataType defaultType = editType.getDataType();
         switch (editType) {
-            // Drawing of area map handled in MOVE_MAP case.
+            // These are only drawn for their edit type
             case AREA_MAP:
             case MOVE_MAP:
                 drawTiles(g2d, mapLocation, editType.getDataType(), defaultComposite);
-                drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, alphaComposite);
-                drawTiles(g2d, mapLocation, MapDataType.BACK_FOREGROUND, alphaComposite);
-                drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, alphaComposite);
-                drawTiles(g2d, mapLocation, MapDataType.TALL_GRASS, alphaComposite);
                 break;
+            // Triggers draw the background normally (along with the triggers handled separately)
             case TRIGGERS:
-            case BACKGROUND:
-                drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, defaultComposite);
-                drawTiles(g2d, mapLocation, MapDataType.BACK_FOREGROUND, alphaComposite);
-                drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, alphaComposite);
-                drawTiles(g2d, mapLocation, MapDataType.TALL_GRASS, alphaComposite);
-                break;
-            case BACK_FOREGROUND:
-                drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, alphaComposite);
-                drawTiles(g2d, mapLocation, MapDataType.BACK_FOREGROUND, defaultComposite);
-                drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, alphaComposite);
-                drawTiles(g2d, mapLocation, MapDataType.TALL_GRASS, alphaComposite);
-                break;
-            case FOREGROUND:
-                drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, alphaComposite);
-                drawTiles(g2d, mapLocation, MapDataType.BACK_FOREGROUND, alphaComposite);
-                drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, defaultComposite);
-                drawTiles(g2d, mapLocation, MapDataType.TALL_GRASS, alphaComposite);
-                break;
-            case TALL_GRASS:
-                drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, alphaComposite);
-                drawTiles(g2d, mapLocation, MapDataType.BACK_FOREGROUND, alphaComposite);
-                drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, alphaComposite);
-                drawTiles(g2d, mapLocation, MapDataType.TALL_GRASS, defaultComposite);
+                defaultType = MapDataType.BACKGROUND;
                 break;
         }
 
-        if (editType != EditType.TRIGGERS) {
-            // Draw all trigger items at half transparency.
-            g2d.setComposite(alphaComposite);
-        } else {
-            g2d.setComposite(defaultComposite);
-        }
+        // Draw tiles will the corresponding composite
+        drawTiles(g2d, mapLocation, MapDataType.BACKGROUND, defaultType);
+        drawTiles(g2d, mapLocation, MapDataType.BACK_FOREGROUND, defaultType);
+        drawTiles(g2d, mapLocation, MapDataType.FOREGROUND, defaultType);
+        drawTiles(g2d, mapLocation, MapDataType.TALL_GRASS, defaultType);
 
         // Draw all trigger items
         if (triggerData != null) {
+            // Draw all trigger items at half transparency (unless in trigger state)
+            g2d.setComposite(editType == EditType.TRIGGERS ? defaultComposite : alphaComposite);
             triggerData.drawTriggers(g2d, mapLocation);
         }
 
