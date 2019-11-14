@@ -27,6 +27,7 @@ public class TriggerTool extends Tool {
 
     private LocationTriggerMatcher selectedTrigger;
 
+    private boolean inEvent;
     private State state;
 
     TriggerTool(MapMaker mapMaker) {
@@ -63,6 +64,8 @@ public class TriggerTool extends Tool {
 
     private ActionListener setTriggerState(State state, ToolType toolType, Action action) {
         return event -> {
+            this.inEvent = true;
+
             mapMaker.setTool(toolType);
             this.state = state;
 
@@ -70,19 +73,38 @@ public class TriggerTool extends Tool {
             action.performAction();
             mapMaker.setSelectedTileIndex(selectedTrigger.getTriggerModelType().ordinal());
 
-            // State needs to be reset back to remove since it will be reset when selecting the tile index above
-            if (state == State.REMOVE) {
-                this.state = state;
-            }
+            // State needs to be set again since it can be reset when selecting the tile index above
+            this.state = state;
+            this.inEvent = false;
         };
     }
 
     public boolean inUse() {
-        return this.state != State.NONE;
+        return this.state != State.NONE || this.inEvent;
     }
 
     public boolean isRemoving() {
         return this.state == State.REMOVE;
+    }
+
+    @Override
+    public void cancel() {
+        if (this.inEvent) {
+            return;
+        }
+
+        // If canceling while in the move state, add back to original location
+        if (this.state == State.MOVE) {
+            Point location = ((SinglePointTriggerMatcher)selectedTrigger).getLocation();
+            mapMaker.getTriggerData().placeTrigger(selectedTrigger, location);
+        }
+
+        // Clear placeable trigger if selected
+        if (mapMaker.getPlaceableTrigger() == selectedTrigger) {
+            mapMaker.clearPlaceableTrigger();
+        }
+
+        this.reset();
     }
 
     @Override

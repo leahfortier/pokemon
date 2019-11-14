@@ -24,6 +24,7 @@ public abstract class Tool {
     public void draw(Graphics g) {}
     public void reset() {}
     public void undo() {}
+    public void cancel() {}
 
     public ToolType getToolType() {
         return this.toolType;

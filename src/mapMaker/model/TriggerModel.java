@@ -66,12 +66,12 @@ public class TriggerModel extends MapMakerModel {
         FISHING("Fishing", false, "FishingTrigger");
 
         private final String name;
-
         private final ToolType defaultTool;
-
         private final String defaultImage;
         private final ImageGetter imageGetter;
 
+        // Path is defaulted to be in the Map Maker tiles folder for defaultImage (just name, no path
+        // Image will always be the same as the default image
         TriggerModelType(String name, boolean singleClick, String defaultImage) {
             this(name, singleClick, Folder.MAP_MAKER_TILES + defaultImage, null);
         }
@@ -96,7 +96,7 @@ public class TriggerModel extends MapMakerModel {
                 return this.getDefaultImage();
             }
 
-            return imageGetter.getImageName(mapMaker, entity);
+            return imageGetter.getImage(mapMaker, entity);
         }
 
         public ImageIcon getImageIcon() {
@@ -107,7 +107,7 @@ public class TriggerModel extends MapMakerModel {
             return this.defaultTool;
         }
 
-        public static TriggerModelType getModelTypeFromIndex(int selectedIndex) {
+        public static TriggerModelType fromIndex(int selectedIndex) {
             return TriggerModelType.values()[selectedIndex];
         }
 
@@ -117,7 +117,7 @@ public class TriggerModel extends MapMakerModel {
 
         @FunctionalInterface
         public interface ImageGetter {
-            BufferedImage getImageName(MapMaker mapMaker, LocationTriggerMatcher entity);
+            BufferedImage getImage(MapMaker mapMaker, LocationTriggerMatcher entity);
         }
     }
 }

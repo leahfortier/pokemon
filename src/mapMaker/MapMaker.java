@@ -250,29 +250,14 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
 
         tileList.addKeyListener(this);
         tileList.addListSelectionListener(event -> {
-            // When a trigger item selected
-            if (this.isEditType(EditType.TRIGGERS) && this.hasSelectedTile() && !event.getValueIsAdjusting()) {
-                if (!this.hasMap()) {
-                    tileList.clearSelection();
-                } else {
-                    TriggerModelType type = TriggerModelType.getModelTypeFromIndex(this.getSelectedTileIndex());
+            if (event.getValueIsAdjusting()) {
+                return;
+            }
 
-                    // Already something placeable, ignore trying to create something new
-                    if (!this.hasPlaceableTrigger()) {
-                        // Trigger was not created, deselect item
-                        if (!this.getTriggerData().createTrigger(type)) {
-                            tileList.clearSelection();
-                        } else {
-                            // Trigger was created, set appropriate tool
-                            this.setTool(type.getDefaultTool());
-                        }
-                    } else if (!triggerTool.inUse()) {
-                        this.clearPlaceableTrigger();
-                        tileList.clearSelection();
-                    }
-
-                    triggerTool.reset();
-                }
+            if (!this.hasMap()) {
+                tileList.clearSelection();
+            } else if (this.isEditType(EditType.TRIGGERS) && this.hasSelectedTile()) {
+                triggerTilePressed();
             }
         });
 
@@ -280,6 +265,40 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
         tilePanel.add(listScroller, BorderLayout.CENTER);
 
         return tilePanel;
+    }
+
+    // When a trigger item is selected from the tile list
+    private void triggerTilePressed() {
+        TriggerModelType type = TriggerModelType.fromIndex(this.getSelectedTileIndex());
+
+        // If there is already something placeable, try cancelling it first
+        if (this.hasPlaceableTrigger()) {
+            // Do nothing if the current trigger is of the same type as selected
+            if (this.getPlaceableTrigger().getTriggerModelType() == type) {
+                return;
+            }
+
+            // Trigger tool is no longer in use -- remove trigger
+            if (!triggerTool.inUse()) {
+                this.clearPlaceableTrigger();
+                tileList.clearSelection();
+            }
+
+            // Tool might have its own ideas on what it means to cancel
+            triggerTool.cancel();
+        }
+
+        // If still something placeable, ignore trying to create something new
+        if (!this.hasPlaceableTrigger()) {
+            // Open trigger creation dialog
+            if (!this.getTriggerData().createTrigger(type)) {
+                // Trigger was not created, deselect item
+                tileList.clearSelection();
+            } else {
+                // Trigger was created, set appropriate tool
+                this.setTool(type.getDefaultTool());
+            }
+        }
     }
 
     public Tool getTool() {
@@ -489,15 +508,19 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
     }
 
     private void draw() {
-        if (!this.hasMap()) {
+        int width = canvas.getWidth();
+        int height = canvas.getHeight();
+
+        if (!this.hasMap() || width == 0 || height == 0) {
             return;
         }
 
-        BufferedImage buffer = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_INT_RGB);
+        BufferedImage buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = (Graphics2D)buffer.getGraphics();
 
-        for (int x = 0; x < canvas.getWidth(); x += Global.TILE_SIZE) {
-            for (int y = 0; y < canvas.getHeight(); y += Global.TILE_SIZE) {
+        // Draw the grey and dark grey squares background
+        for (int x = 0; x < width; x += Global.TILE_SIZE) {
+            for (int y = 0; y < height; y += Global.TILE_SIZE) {
                 TileUtils.fillBlankTile(g2d, new Point(x, y));
             }
         }
@@ -557,11 +580,17 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
     @Override
     public void keyPressed(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.VK_SPACE && previousToolType == null) {
+            // Holding space (temporarily) changes the current tool to move
             previousToolType = this.getTool().getToolType();
             this.setTool(ToolType.MOVE);
-        } else if (event.getKeyCode() == KeyEvent.VK_ESCAPE && this.isEditType(EditType.TRIGGERS) && this.hasPlaceableTrigger()) {
-            this.clearPlaceableTrigger();
-            this.setTool(ToolType.MOVE);
+        } else if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            // Pressing escape will clear current placeable trigger
+            if (this.isEditType(EditType.TRIGGERS) && this.hasPlaceableTrigger()) {
+                this.clearPlaceableTrigger();
+                this.setTool(ToolType.MOVE);
+            }
+
+            triggerTool.cancel();
         } else {
             // Check if corresponds to a tool
             for (ToolType toolType : ToolType.values()) {
@@ -575,6 +604,8 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
 
     @Override
     public void keyReleased(KeyEvent event) {
+        // Holding space changes the current tool to move
+        // When no longer holding space, set tool back to previous tool
         if (event.getKeyCode() == KeyEvent.VK_SPACE && previousToolType != null) {
             this.setTool(previousToolType);
             this.previousToolType = null;

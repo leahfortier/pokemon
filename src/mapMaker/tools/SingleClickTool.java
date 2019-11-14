@@ -65,7 +65,7 @@ class SingleClickTool extends Tool {
         }
         // Show preview image for current trigger
         else if (mapMaker.isEditType(EditType.TRIGGERS)) {
-            TriggerModelType type = TriggerModelType.getModelTypeFromIndex(mapMaker.getSelectedTileIndex());
+            TriggerModelType type = TriggerModelType.fromIndex(mapMaker.getSelectedTileIndex());
             BufferedImage image = type.getImage(mapMaker, mapMaker.getPlaceableTrigger());
             TileUtils.drawTileImage(g, image, location, mapMaker.getMapLocation());
         }
