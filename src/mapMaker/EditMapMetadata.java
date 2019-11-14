@@ -146,7 +146,7 @@ class EditMapMetadata {
 
         // In bounds -- no need to resize
         if (location.inBounds(currentMapSize)) {
-            return new Point();
+            return new Point(0, 0);
         }
 
         Dimension previousDimension = currentMapSize;

@@ -8,8 +8,6 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
 public abstract class Tool {
-    protected static Tool lastUsedTool;
-
     protected final MapMaker mapMaker;
     private final ToolType toolType;
 
@@ -25,16 +23,10 @@ public abstract class Tool {
     public void drag(Point dragLocation) {}
     public void draw(Graphics g) {}
     public void reset() {}
-    protected void undo() {}
+    public void undo() {}
 
     public ToolType getToolType() {
         return this.toolType;
-    }
-
-    public static void undoLastTool() {
-        if (lastUsedTool != null) {
-            lastUsedTool.undo();
-        }
     }
 
     public static DefaultListModel<Tool> getToolListModel(MapMaker mapMaker) {

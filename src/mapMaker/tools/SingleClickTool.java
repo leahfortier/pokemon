@@ -27,7 +27,7 @@ class SingleClickTool extends Tool {
             return;
         }
 
-        Tool.lastUsedTool = this;
+        mapMaker.setLastUsedTool(this);
 
         Point location = TileUtils.getLocation(clickedLocation, mapMaker.getMapLocation());
         lastLocation = location;

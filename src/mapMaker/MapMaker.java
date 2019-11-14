@@ -12,6 +12,7 @@ import mapMaker.tools.SelectTool;
 import mapMaker.tools.Tool;
 import mapMaker.tools.Tool.ToolType;
 import mapMaker.tools.ToolRenderer;
+import mapMaker.tools.TriggerTool;
 import pattern.location.LocationTriggerMatcher;
 import util.FontMetrics;
 import util.GuiUtils;
@@ -62,9 +63,9 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
     private JList<ImageIcon> tileList;
     private JList<Tool> toolList;
 
-    public JMenuItem cutMenuItem;
-    public JMenuItem copyMenuItem;
-    public JMenuItem pasteMenuItem;
+    private JMenuItem cutMenuItem;
+    private JMenuItem copyMenuItem;
+    private JMenuItem pasteMenuItem;
 
     private JLabel mapNameLabel;
     private JComboBox<EditType> editTypeComboBox;
@@ -78,8 +79,10 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
     private Point mouseHoverLocation;
 
     private SelectTool selectTool;
+    private TriggerTool triggerTool;
+
+    private Tool lastUsedTool;
     private ToolType previousToolType;
-    public boolean triggerToolMoveSelected;
 
     public static void main(String[] args) {
         MapMaker mapMaker = new MapMaker();
@@ -127,19 +130,19 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
 
         toolList.addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting()) {
-                this.getTool().reset();
-                if (this.getTool() != selectTool) {
-                    copyMenuItem.setEnabled(false);
-                    cutMenuItem.setEnabled(false);
+                Tool currentTool = this.getTool();
+                currentTool.reset();
+                if (currentTool != selectTool) {
+                    this.setCopyEnabled(false);
                 } else if (selectTool.hasSelection()) {
-                    copyMenuItem.setEnabled(true);
-                    cutMenuItem.setEnabled(true);
+                    this.setCopyEnabled(true);
                 }
             }
         });
 
         this.setTool(ToolType.MOVE);
         this.selectTool = (SelectTool)this.getTool(ToolType.SELECT);
+        this.triggerTool = (TriggerTool)this.getTool(ToolType.TRIGGER);
 
         return new JScrollPane(toolList);
     }
@@ -155,20 +158,20 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
     private JMenu createEditMenu() {
         // Cut and copy are only enabled when select tool is active
         this.cutMenuItem = GuiUtils.createMenuItem("Cut", KeyEvent.VK_X, event -> selectTool.cut());
-        this.cutMenuItem.setEnabled(false);
-
         this.copyMenuItem = GuiUtils.createMenuItem("Copy", KeyEvent.VK_C, event -> selectTool.copy());
-        this.copyMenuItem.setEnabled(false);
+        this.setCopyEnabled(false);
 
         // Paste is enabled once something is cut/copied
         this.pasteMenuItem = GuiUtils.createMenuItem("Paste", KeyEvent.VK_V, event -> {
             this.setTool(ToolType.SELECT);
             selectTool.paste();
         });
-        this.pasteMenuItem.setEnabled(false);
+        this.setPasteEnabled();
 
         JMenuItem undoMenuItem = GuiUtils.createMenuItem("Undo", KeyEvent.VK_Z, event -> {
-            Tool.undoLastTool();
+            if (lastUsedTool != null) {
+                lastUsedTool.undo();
+            }
             draw();
         });
 
@@ -202,9 +205,7 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
                     newTileButton.setEnabled(model.newTileButtonEnabled());
                     tileCategoriesComboBox.setEnabled(model instanceof TileModel);
 
-                    if (pasteMenuItem != null && selectTool != null) {
-                        pasteMenuItem.setEnabled(selectTool.canPaste());
-                    }
+                    this.setPasteEnabled();
 
                     draw();
                 }
@@ -258,7 +259,6 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
 
                     // Already something placeable, ignore trying to create something new
                     if (!this.hasPlaceableTrigger()) {
-
                         // Trigger was not created, deselect item
                         if (!this.getTriggerData().createTrigger(type)) {
                             tileList.clearSelection();
@@ -266,12 +266,12 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
                             // Trigger was created, set appropriate tool
                             this.setTool(type.getDefaultTool());
                         }
-                    } else if (!triggerToolMoveSelected) {
+                    } else if (!triggerTool.inUse()) {
                         this.clearPlaceableTrigger();
                         tileList.clearSelection();
                     }
 
-                    triggerToolMoveSelected = false;
+                    triggerTool.reset();
                 }
             }
         });
@@ -292,6 +292,21 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
 
     public void setTool(ToolType toolType) {
         this.toolList.setSelectedIndex(toolType.ordinal());
+    }
+
+    public void setLastUsedTool(Tool tool) {
+        this.lastUsedTool = tool;
+    }
+
+    public void setCopyEnabled(boolean enabled) {
+        copyMenuItem.setEnabled(enabled);
+        cutMenuItem.setEnabled(enabled);
+    }
+
+    public void setPasteEnabled() {
+        if (pasteMenuItem != null) {
+            pasteMenuItem.setEnabled(selectTool != null && selectTool.canPaste());
+        }
     }
 
     public Point getMapLocation() {
@@ -467,6 +482,10 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
 
     public int getTile(Point location, MapDataType dataType) {
         return this.mapData.getTile(location, dataType);
+    }
+
+    public boolean isRemovingTriggers() {
+        return this.isEditType(EditType.TRIGGERS) && triggerTool.isRemoving();
     }
 
     private void draw() {

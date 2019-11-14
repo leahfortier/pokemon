@@ -125,14 +125,12 @@ public class SelectTool extends Tool {
 
     private void select() {
         selected = true;
-        mapMaker.copyMenuItem.setEnabled(true);
-        mapMaker.cutMenuItem.setEnabled(true);
+        mapMaker.setCopyEnabled(true);
     }
 
     private void deselect() {
         selected = false;
-        mapMaker.copyMenuItem.setEnabled(false);
-        mapMaker.cutMenuItem.setEnabled(false);
+        mapMaker.setCopyEnabled(false);
     }
 
     public void copy() {
@@ -140,16 +138,14 @@ public class SelectTool extends Tool {
         BufferedImage currentMapImage = mapMaker.getCurrentMapImage(copiedEditType.getDataType());
         copiedTiles = this.rectangle.getImage(currentMapImage);
 
-        if (!mapMaker.pasteMenuItem.isEnabled()) {
-            mapMaker.pasteMenuItem.setEnabled(true);
-        }
+        mapMaker.setPasteEnabled();
     }
 
     public void cut() {
         copy();
 
         int val = mapMaker.getModel().getBlankTileIndex();
-        this.rectangle.drawTiles(mapMaker, val);
+        this.rectangle.setTiles(mapMaker, val);
     }
 
     public void paste() {

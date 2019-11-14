@@ -13,11 +13,12 @@ class RectangleTool extends Tool {
     private Rectangle rectangle;
 
     private Rectangle lastRectangle;
-    private int[][] lastValues;
+    private int[][] lastTiles;
     private EditType lastEditType;
     private LocationTriggerMatcher lastTrigger;
+    private boolean[][] lastTriggerRemovals;
 
-    private boolean pressed = false;
+    private boolean pressed;
 
     RectangleTool(MapMaker mapMaker) {
         super(mapMaker, ToolType.RECTANGLE);
@@ -31,25 +32,36 @@ class RectangleTool extends Tool {
             return;
         }
 
-        Tool.lastUsedTool = this;
-
-        Point mouseHoverLocation = TileUtils.getLocation(releasedLocation, mapMaker.getMapLocation());
-        this.rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.getCurrentMapSize());
-        this.lastRectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.getCurrentMapSize());
-
         pressed = false;
 
-        if (!mapMaker.isEditType(EditType.TRIGGERS)) {
-            lastValues = this.rectangle.getValues(mapMaker, mapMaker.getEditType().getDataType());
-        }
-
+        mapMaker.setLastUsedTool(this);
         lastEditType = mapMaker.getEditType();
 
-        int val = mapMaker.getSelectedTile();
-        this.rectangle.drawTiles(mapMaker, val);
+        // Update rectangle coordinates from press location to release location
+        Point mouseHoverLocation = TileUtils.getLocation(releasedLocation, mapMaker.getMapLocation());
+        rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.getCurrentMapSize());
+        lastRectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.getCurrentMapSize());
 
+        // Setup previous values for undo
         if (mapMaker.isEditType(EditType.TRIGGERS)) {
             lastTrigger = mapMaker.getPlaceableTrigger();
+            lastTriggerRemovals = null;
+        } else {
+            lastTiles = this.rectangle.getTiles(mapMaker, mapMaker.getEditType().getDataType());
+        }
+
+        // Set every tile in the current rectangle to the current tile or trigger
+        // Unless removing, in which case remove all current trigger instances in the rectangle
+        if (mapMaker.isRemovingTriggers()) {
+            // Store exactly which locations were removed (for undo purposes)
+            lastTriggerRemovals = this.rectangle.removeTriggers(mapMaker, mapMaker.getPlaceableTrigger());
+        } else {
+            rectangle.setTiles(mapMaker, mapMaker.getSelectedTile());
+        }
+
+        // If setting a trigger, clear the current trigger since we just set it up
+        // Unless we're doing some partial removals -- then it makes sense to just keep doing that
+        if (mapMaker.isEditType(EditType.TRIGGERS) && !mapMaker.isRemovingTriggers()) {
             mapMaker.clearPlaceableTrigger();
             mapMaker.setTool(ToolType.TRIGGER);
         }
@@ -86,11 +98,17 @@ class RectangleTool extends Tool {
     public void undo() {
         if (lastRectangle != null && lastEditType != null) {
             if (lastEditType == EditType.TRIGGERS) {
-                mapMaker.getTriggerData().removeTrigger(lastTrigger);
+                // If the last action was actually a removal, then add them back!
+                if (lastTriggerRemovals != null) {
+                    lastRectangle.placeTriggers(mapMaker, lastTriggerRemovals, lastTrigger);
+                } else {
+                    lastRectangle.removeTriggers(mapMaker, lastTrigger);
+                }
             } else {
-                lastRectangle.drawTiles(mapMaker, lastValues);
+                lastRectangle.setTiles(mapMaker, lastTiles);
             }
-            lastValues = null;
+
+            lastTiles = null;
             lastEditType = null;
             lastTrigger = null;
         }

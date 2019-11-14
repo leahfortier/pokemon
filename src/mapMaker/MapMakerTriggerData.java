@@ -32,6 +32,7 @@ import util.string.StringUtils;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -158,11 +159,13 @@ public class MapMakerTriggerData {
         }
     }
 
-    void placeTrigger(Point location) {
-        // TODO: Ask user if they would like to place over
-        LocationTriggerMatcher placeableTrigger = mapMaker.getPlaceableTrigger();
-        placeableTrigger.addPoint(location);
-        this.entities.add(placeableTrigger);
+    public void placeTrigger(Point location) {
+        this.placeTrigger(mapMaker.getPlaceableTrigger(), location);
+    }
+
+    public void placeTrigger(LocationTriggerMatcher trigger, Point location) {
+        trigger.addPoint(location);
+        this.entities.add(trigger);
         System.out.println("Entity placed at (" + location.x + ", " + location.y + ").");
     }
 
@@ -257,8 +260,25 @@ public class MapMakerTriggerData {
                 .collect(Collectors.toList());
     }
 
+    // Entirely removes the trigger from the map
     public void removeTrigger(LocationTriggerMatcher trigger) {
         this.entities.removeIf(matcher -> trigger == matcher);
+    }
+
+    // Removes the specified trigger only from the specified point
+    // Returns whether or not the trigger was removed at this point
+    public boolean removeTriggerAtPoint(LocationTriggerMatcher trigger, Point point) {
+        List<Point> triggerLocation = new ArrayList<>(trigger.getAllLocations());
+        boolean removed = triggerLocation.removeIf(location -> location.equals(point));
+        if (triggerLocation.isEmpty()) {
+            // No more locations -- this was the only point this trigger existed, remove from map
+            this.removeTrigger(trigger);
+        } else if (removed) {
+            // Otherwise, this entity still exists with at least one other location -- update the entity
+            trigger.setLocation(triggerLocation);
+        }
+
+        return removed;
     }
 
     public void moveTrigger(LocationTriggerMatcher trigger) {

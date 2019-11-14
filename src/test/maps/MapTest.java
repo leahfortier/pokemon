@@ -212,7 +212,7 @@ public class MapTest extends BaseTest {
 
         // Add each point to the locations set and confirm it's the first time we've seen this point
         for (Point location : wildLocations) {
-            Assert.assertFalse(seenLocations.contains(location));
+            Assert.assertFalse(location.toString(), seenLocations.contains(location));
             seenLocations.add(location);
         }
     }

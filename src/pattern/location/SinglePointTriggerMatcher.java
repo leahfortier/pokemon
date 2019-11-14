@@ -26,6 +26,15 @@ public abstract class SinglePointTriggerMatcher extends LocationTriggerMatcher {
     }
 
     @Override
+    public void setLocation(List<Point> location) {
+        if (location.size() != 1) {
+            Global.error("Invalid location: " + location);
+        }
+
+        this.setLocation(location.get(0));
+    }
+
+    @Override
     public void addPoint(Point point) {
         this.setLocation(point);
     }
@@ -33,11 +42,6 @@ public abstract class SinglePointTriggerMatcher extends LocationTriggerMatcher {
     @Override
     public boolean isAtLocation(Point location) {
         return this.location.equals(location);
-    }
-
-    @Override
-    public void addDelta(Point delta) {
-        this.location = Point.add(this.location, delta);
     }
 
     @Override

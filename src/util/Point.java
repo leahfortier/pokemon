@@ -4,6 +4,7 @@ import map.Direction;
 import util.serialization.Serializable;
 
 import java.awt.Dimension;
+import java.util.Objects;
 
 // Immutable point class
 public class Point implements Serializable {
@@ -29,6 +30,11 @@ public class Point implements Serializable {
 
         Point point = (Point)other;
         return this.x == point.x && this.y == point.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 
     public boolean isZero() {
