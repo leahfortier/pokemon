@@ -169,7 +169,6 @@ Other random things:
     look at isInterior stuff in BattleView -- how is it ever not null??
     BasicPanels.isAnimatingMessage should be checked before the view update method is called, not inside every view update
     BasicPanels should be able to create a panel that sits on the message panel (stats, description, choices etc)
-    WindValley pokemon encounters are messed up -- grass encounter is in a decent portion of the sand
     rewrite PokefinderState since it's super ugly -- probably want to add page numbers and such as well
     
     
