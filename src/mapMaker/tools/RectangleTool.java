@@ -40,14 +40,14 @@ class RectangleTool extends Tool {
         // Update rectangle coordinates from press location to release location
         Point mouseHoverLocation = TileUtils.getLocation(releasedLocation, mapMaker.getMapLocation());
         rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.getCurrentMapSize());
-        lastRectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.getCurrentMapSize());
+        lastRectangle.setCoordinates(this.rectangle);
 
         // Setup previous values for undo
         if (mapMaker.isEditType(EditType.TRIGGERS)) {
             lastTrigger = mapMaker.getPlaceableTrigger();
             lastTriggerRemovals = null;
         } else {
-            lastTiles = this.rectangle.getTiles(mapMaker, mapMaker.getEditType().getDataType());
+            lastTiles = this.rectangle.getTiles(mapMaker, lastEditType.getDataType());
         }
 
         // Set every tile in the current rectangle to the current tile or trigger

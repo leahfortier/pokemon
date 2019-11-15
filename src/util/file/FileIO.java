@@ -190,7 +190,6 @@ public final class FileIO {
     public static void overwriteFile(String fileName, String newFileContents) {
         // Replace tabs with 4 spaces and trim
         newFileContents = getOverwriteContents(fileName, newFileContents);
-
         if (!StringUtils.isNullOrEmpty(newFileContents)) {
             writeToFile(fileName, newFileContents);
             System.out.println(fileName + " overwritten.");

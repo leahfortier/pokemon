@@ -105,7 +105,8 @@ public class NPCEntityDialog extends TriggerDialog<NPCMatcher> {
 
         int spriteIndex = 0;
         while (true) {
-            BufferedImage image = mapMaker.getTileFromSet(TileType.TRAINER, MovableEntity.getTrainerSpriteIndex(spriteIndex, Direction.DOWN));
+            int imageIndex = MovableEntity.getTrainerSpriteIndex(spriteIndex, Direction.DOWN);
+            BufferedImage image = mapMaker.getTileFromSet(TileType.TRAINER, imageIndex);
             if (image == null) {
                 break;
             }

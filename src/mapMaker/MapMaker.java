@@ -325,6 +325,9 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
     public void setPasteEnabled() {
         if (pasteMenuItem != null) {
             pasteMenuItem.setEnabled(selectTool != null && selectTool.canPaste());
+            if (!pasteMenuItem.isEnabled() && selectTool != null) {
+                selectTool.cancelPaste();
+            }
         }
     }
 
@@ -591,6 +594,7 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
             }
 
             triggerTool.cancel();
+            this.getTool().cancel();
         } else {
             // Check if corresponds to a tool
             for (ToolType toolType : ToolType.values()) {
@@ -654,10 +658,6 @@ public class MapMaker extends JPanel implements MouseListener, MouseMotionListen
 
     public boolean isEditType(EditType editType) {
         return this.getEditType() == editType;
-    }
-
-    public BufferedImage getCurrentMapImage(MapDataType dataType) {
-        return this.mapData.getMapImage(dataType);
     }
 
     public MapMakerModel getModel() {

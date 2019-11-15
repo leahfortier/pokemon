@@ -15,12 +15,9 @@ public class ItemMatcher extends SinglePointTriggerMatcher implements SingleEnti
     private ItemNamesies item;
     private boolean isHidden;
 
-    public ItemMatcher(ItemNamesies itemName) {
+    public ItemMatcher(ItemNamesies itemName, boolean isHidden) {
         this.item = itemName;
-    }
-
-    public void setHidden() {
-        this.isHidden = true;
+        this.isHidden = isHidden;
     }
 
     @Override

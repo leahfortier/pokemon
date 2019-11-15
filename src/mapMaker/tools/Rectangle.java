@@ -2,7 +2,10 @@ package mapMaker.tools;
 
 import draw.TileUtils;
 import map.MapDataType;
+import mapMaker.EditType;
 import mapMaker.MapMaker;
+import mapMaker.model.MapMakerModel.TileModelType;
+import mapMaker.model.TileModel.TileType;
 import pattern.location.LocationTriggerMatcher;
 import util.Point;
 
@@ -36,19 +39,18 @@ class Rectangle {
         );
     }
 
-    public void outlineRed(Graphics g, Point mapLocation) {
-        TileUtils.outlineTiles(g, this.upperLeft, mapLocation, Color.RED, this.dimension);
+    public void setCoordinates(Rectangle other) {
+        this.upperLeft = other.upperLeft;
+        this.dimension = new Dimension(other.dimension.width, other.dimension.height);
     }
 
-    public BufferedImage getImage(BufferedImage currentImage) {
-        int width = this.dimension.width;
-        int height = this.dimension.height;
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    // Keeps the current dimension but adjusts the start location
+    public void setStartLocation(Point startLocation) {
+        this.upperLeft = startLocation;
+    }
 
-        int[] rgb = currentImage.getRGB(upperLeft.x, upperLeft.y, width, height, null, 0, width);
-        image.setRGB(0, 0, width, height, rgb, 0, width);
-
-        return image;
+    public void outlineRed(Graphics g, Point mapLocation) {
+        TileUtils.outlineTiles(g, this.upperLeft, mapLocation, Color.RED, this.dimension);
     }
 
     // Set every tile in the rectangle to val
@@ -65,9 +67,30 @@ class Rectangle {
     private void setTiles(MapMaker mapMaker, TileGetter tileGetter) {
         for (int x = 0; x < this.dimension.width; x++) {
             for (int y = 0; y < this.dimension.height; y++) {
-                int val = tileGetter.getValue(x, y);
-                Point delta = mapMaker.setTile(Point.add(this.upperLeft, x, y), val);
+                int tileVal = tileGetter.getTileVal(x, y);
+                Point delta = mapMaker.setTile(Point.add(this.upperLeft, x, y), tileVal);
+
+                // Add the delta in case the map was resized
                 this.upperLeft = Point.add(this.upperLeft, delta);
+            }
+        }
+    }
+
+    // Draw all tiles in the rectangle according to the getter (draws over actual map tiles like a preview)
+    public void drawPreview(Graphics g, MapMaker mapMaker, int[][] tileVals) {
+        for (int x = 0; x < this.dimension.width; x++) {
+            for (int y = 0; y < this.dimension.height; y++) {
+                Point drawLocation = Point.add(this.upperLeft, x, y);
+                int val = tileVals[y][x];
+
+                if (mapMaker.isEditType(EditType.MOVE_MAP) || mapMaker.isEditType(EditType.AREA_MAP)) {
+                    TileUtils.fillTile(g, drawLocation, mapMaker.getMapLocation(), new Color(val));
+                } else if (mapMaker.getEditType().getModelType() == TileModelType.TILE) {
+                    BufferedImage image = mapMaker.getTileFromSet(TileType.MAP, val);
+                    if (image != null) {
+                        TileUtils.drawTileImage(g, image, drawLocation, mapMaker.getMapLocation());
+                    }
+                }
             }
         }
     }
@@ -80,7 +103,6 @@ class Rectangle {
                 values[y][x] = mapMaker.getTile(Point.add(this.upperLeft, x, y), mapDataType);
             }
         }
-
         return values;
     }
 
@@ -109,6 +131,6 @@ class Rectangle {
     // Retrieves a tile value from the rectangle coordinate
     @FunctionalInterface
     private interface TileGetter {
-        int getValue(int x, int y);
+        int getTileVal(int x, int y);
     }
 }

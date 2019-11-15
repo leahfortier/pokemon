@@ -3,20 +3,18 @@ package mapMaker.tools;
 import draw.TileUtils;
 import mapMaker.EditType;
 import mapMaker.MapMaker;
-import mapMaker.model.TileModel.TileType;
 import util.Point;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 // Select tool so you can copy/cut/paste
 public class SelectTool extends Tool {
     private boolean paste;
     private boolean selected;
 
-    private BufferedImage copiedTiles;
+    private int[][] copiedTiles;
     private EditType copiedEditType;
+    private Rectangle copiedRectangle;
 
     private Point startLocation;
     private Rectangle rectangle;
@@ -26,6 +24,7 @@ public class SelectTool extends Tool {
     public SelectTool(MapMaker mapMaker) {
         super(mapMaker, ToolType.SELECT);
         this.rectangle = new Rectangle(true);
+        this.copiedRectangle = new Rectangle(false);
     }
 
     @Override
@@ -35,17 +34,10 @@ public class SelectTool extends Tool {
         }
 
         Point location = TileUtils.getLocation(clickLocation, mapMaker.getMapLocation());
-        for (int currX = 0; currX < copiedTiles.getWidth(); currX++) {
-            for (int currY = 0; currY < copiedTiles.getHeight(); currY++) {
-                int val = copiedTiles.getRGB(currX, currY);
-                Point delta = mapMaker.setTile(Point.add(location, currX, currY), val);
+        copiedRectangle.setStartLocation(location);
+        copiedRectangle.setTiles(mapMaker, copiedTiles);
 
-                // Add the delta in case the map was resized in the paste
-                location = Point.add(location, delta);
-            }
-        }
-
-        paste = false;
+        this.cancelPaste();
     }
 
     @Override
@@ -80,7 +72,6 @@ public class SelectTool extends Tool {
         }
 
         Point mouseHoverLocation = TileUtils.getLocation(mapMaker.getMouseHoverLocation(), mapMaker.getMapLocation());
-
         if (!selected) {
             this.rectangle.setCoordinates(startLocation, mouseHoverLocation, mapMaker.getCurrentMapSize());
         }
@@ -88,31 +79,26 @@ public class SelectTool extends Tool {
         if (!paste) {
             this.rectangle.outlineRed(g, mapMaker.getMapLocation());
         } else {
-            // Show preview image for all pasting tiles.
-            for (int currX = 0; currX < copiedTiles.getWidth(); currX++) {
-                for (int currY = 0; currY < copiedTiles.getHeight(); currY++) {
-
-                    int val = copiedTiles.getRGB(currX, currY);
-                    Point previewLocation = new Point(mouseHoverLocation.x + currX, mouseHoverLocation.y + currY);
-
-                    if (mapMaker.isEditType(EditType.BACKGROUND) || mapMaker.isEditType(EditType.FOREGROUND)) {
-                        BufferedImage image = mapMaker.getTileFromSet(TileType.MAP, val);
-                        if (image != null) {
-                            TileUtils.drawTileImage(g, image, previewLocation, mapMaker.getMapLocation());
-                        }
-                    } else if (mapMaker.isEditType(EditType.MOVE_MAP) || mapMaker.isEditType(EditType.AREA_MAP)) {
-                        TileUtils.outlineTile(g, previewLocation, mapMaker.getMapLocation(), new Color(val));
-                    }
-                }
-            }
-
-            TileUtils.outlineTileRed(g, mouseHoverLocation, mapMaker.getMapLocation());
+            // Show preview image for all pasting tiles
+            copiedRectangle.setStartLocation(mouseHoverLocation);
+            copiedRectangle.drawPreview(g, mapMaker, copiedTiles);
+            copiedRectangle.outlineRed(g, mapMaker.getMapLocation());
         }
     }
 
     @Override
     public void reset() {
         pressed = false;
+    }
+
+    @Override
+    public void cancel() {
+        this.cancelPaste();
+    }
+
+    // Putting this in its own method in case other logic is added in cancel
+    public void cancelPaste() {
+        paste = false;
     }
 
     public boolean hasSelection() {
@@ -134,9 +120,9 @@ public class SelectTool extends Tool {
     }
 
     public void copy() {
+        copiedRectangle.setCoordinates(this.rectangle);
         copiedEditType = mapMaker.getEditType();
-        BufferedImage currentMapImage = mapMaker.getCurrentMapImage(copiedEditType.getDataType());
-        copiedTiles = this.rectangle.getImage(currentMapImage);
+        copiedTiles = copiedRectangle.getTiles(mapMaker, copiedEditType.getDataType());
 
         mapMaker.setPasteEnabled();
     }

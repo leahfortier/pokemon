@@ -21,11 +21,15 @@ public enum EditType {
         this.modelType = modelType;
     }
 
-    public MapMakerModel getModel() {
-        return MapMakerModel.getMapMakerModel(this.modelType);
-    }
-
     public MapDataType getDataType() {
         return this.dataType;
+    }
+
+    public TileModelType getModelType() {
+        return this.modelType;
+    }
+
+    public MapMakerModel getModel() {
+        return MapMakerModel.getMapMakerModel(this.modelType);
     }
 }

@@ -81,6 +81,10 @@ public class Point implements Serializable {
         );
     }
 
+    public static Point add(Point point, Dimension dimension) {
+        return Point.add(point, dimension.width, dimension.height);
+    }
+
     public static Point add(Point point, int dx, int dy) {
         return new Point(
                 point.x + dx,
@@ -155,8 +159,8 @@ public class Point implements Serializable {
 
     public static Point upperBound(Point point, Dimension dimension) {
         return new Point(
-                (int)Math.min(point.x, dimension.getWidth() - 1),
-                (int)Math.min(point.y, dimension.getHeight() - 1)
+                (int)Math.min(point.x, dimension.width - 1),
+                (int)Math.min(point.y, dimension.height - 1)
         );
     }
 

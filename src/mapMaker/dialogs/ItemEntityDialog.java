@@ -22,8 +22,12 @@ public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
     private final JTextField itemTextField;
     private final JLabel itemImageLabel;
 
-    public ItemEntityDialog(ItemMatcher itemMatcher) {
+    private final boolean isHidden;
+
+    public ItemEntityDialog(ItemMatcher itemMatcher, boolean isHidden) {
         super("Item Editor");
+
+        this.isHidden = isHidden;
 
         itemTextField = GuiUtils.createColorConditionTextField(new ColorCondition() {
             @Override
@@ -75,7 +79,7 @@ public class ItemEntityDialog extends TriggerDialog<ItemMatcher> {
             return null;
         }
 
-        return new ItemMatcher(itemNamesies);
+        return new ItemMatcher(itemNamesies, isHidden);
     }
 
     private void load(ItemMatcher matcher) {

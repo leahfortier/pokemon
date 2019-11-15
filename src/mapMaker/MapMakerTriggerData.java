@@ -192,13 +192,9 @@ public class MapMakerTriggerData {
     private LocationTriggerMatcher getTriggerFromDialog(TriggerModelType triggerModelType, LocationTriggerMatcher oldTrigger) {
         switch (triggerModelType) {
             case ITEM:
-                return new ItemEntityDialog((ItemMatcher)oldTrigger).getMatcher(mapMaker);
+                return new ItemEntityDialog((ItemMatcher)oldTrigger, false).getMatcher(mapMaker);
             case HIDDEN_ITEM:
-                ItemMatcher matcher = new ItemEntityDialog((ItemMatcher)oldTrigger).getMatcher(mapMaker);
-                if (matcher != null) {
-                    matcher.setHidden();
-                }
-                return matcher;
+                return new ItemEntityDialog((ItemMatcher)oldTrigger, true).getMatcher(mapMaker);
             case NPC:
                 return new NPCEntityDialog((NPCMatcher)oldTrigger, mapMaker).getMatcher(mapMaker);
             case MISC_ENTITY:
