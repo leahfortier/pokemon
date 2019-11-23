@@ -71,6 +71,7 @@ Descriptions that change manually:
         Pollen Puff (Remove 'If the target is an ally, it gives the ally a pollen puff that restores its HP instead.')
         Aromatic Mist ('the Sp. Def stat of an ally Pokémon' -> 'its Sp. Def stat')
         Fairy Lock (Remove 'during the last turn')
+        Dynamax Cannon (Remove 'This move deals twice the damage if the target is Dynamaxed.')
     Abilities:
         Healer ('an ally's' -> 'its')
         Flower Veil (Remove 'Ally')
@@ -170,5 +171,6 @@ Other random things:
     BasicPanels.isAnimatingMessage should be checked before the view update method is called, not inside every view update
     BasicPanels should be able to create a panel that sits on the message panel (stats, description, choices etc)
     rewrite PokefinderState since it's super ugly -- probably want to add page numbers and such as well
+    pretty sure Infatuation lasts between Pokemon and it shouldn't
     
     

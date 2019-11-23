@@ -9158,7 +9158,7 @@ public abstract class Attack implements AttackInterface {
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Fails if used by a wild pokemon or if the trainer does not have anyone to switch to
             Team team = b.getTrainer(user);
-            return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon(b);
+            return team instanceof Trainer && ((Trainer)team).hasRemainingPokemon(b);
         }
 
         @Override
@@ -10956,6 +10956,40 @@ public abstract class Attack implements AttackInterface {
         @Override
         public int getMaxHits() {
             return 2;
+        }
+    }
+
+    // TODO: Removed double damage when Dynamaxed, should this do something more interesting?
+    static class DynamaxCannon extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        DynamaxCannon() {
+            super(AttackNamesies.DYNAMAX_CANNON, Type.DRAGON, MoveCategory.SPECIAL, 5, "The user unleashes a strong beam from its core.");
+            super.power = 100;
+            super.accuracy = 100;
+        }
+    }
+
+    // TODO: This effect is only for non-single-targets right? should probably change the description and confirm that
+    static class SnipeShot extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        SnipeShot() {
+            super(AttackNamesies.SNIPE_SHOT, Type.WATER, MoveCategory.SPECIAL, 15, "The user ignores the effects of opposing Pokémon's moves and Abilities that draw in moves, allowing this move to hit the chosen target.");
+            super.power = 80;
+            super.accuracy = 100;
+        }
+    }
+
+    static class JawLock extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        JawLock() {
+            super(AttackNamesies.JAW_LOCK, Type.DARK, MoveCategory.PHYSICAL, 10, "This move prevents the user and the target from switching out until either of them faints. The effect goes away if either of the Pokémon leaves the field.");
+            super.power = 80;
+            super.accuracy = 100;
+            super.effect = StandardBattleEffectNamesies.JAW_LOCKED;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
 }

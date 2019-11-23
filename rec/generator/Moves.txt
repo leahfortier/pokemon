@@ -5439,7 +5439,7 @@ Baton Pass:
     FullApplies:
         // Fails if used by a wild pokemon or if the trainer does not have anyone to switch to
         Team team = b.getTrainer(user);
-        return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon(b);
+        return team instanceof Trainer && ((Trainer)team).hasRemainingPokemon(b);
         ###
     UniqueEffects:
         // TODO: Hardcore test this shit not in the mood right now but this is one of the most complicated moves so lots of tests tests tests
@@ -6597,4 +6597,31 @@ Double Iron Bash:
     EffChance: 30
     MultiStrike: 2 2
     MoveType: Punching
+*
+Dynamax Cannon:
+    Desc: The user unleashes a strong beam from its core.
+    PP: 5
+    Pow: 100
+    Acc: 100
+    Type: Dragon
+    Cat: Special
+    Comments: // TODO: Removed double damage when Dynamaxed, should this do something more interesting?
+*
+Snipe Shot:
+    Desc: The user ignores the effects of opposing Pokémon's moves and Abilities that draw in moves, allowing this move to hit the chosen target.
+    PP: 15
+    Type: Water
+    Pow: 80
+    Acc: 100
+    Cat: Special
+    Comments: // TODO: This effect is only for non-single-targets right? should probably change the description and confirm that
+*
+Jaw Lock:
+    Desc: This move prevents the user and the target from switching out until either of them faints. The effect goes away if either of the Pokémon leaves the field.
+    PP: 10
+    Type: Dark
+    Pow: 80
+    Acc: 100
+    Cat: Physical
+    StandardBattleEffect: JawLocked
 *

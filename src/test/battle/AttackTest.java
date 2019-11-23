@@ -15,6 +15,7 @@ import battle.effect.InvokeInterfaces.MurderEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.attack.SelfHealingMove;
 import battle.effect.battle.BattleEffect;
+import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
@@ -59,6 +60,9 @@ public class AttackTest extends BaseTest {
             // Physical contact moves cannot be status moves
             Assert.assertFalse(attack.getName(), attack.isMoveType(MoveType.PHYSICAL_CONTACT) && attack.isStatusMove());
 
+            // Field moves must be status moves and cannot be self-target
+            Assert.assertFalse(attack.getName(), attack.isMoveType(MoveType.FIELD) && (!attack.isStatusMove() || attack.isSelfTarget()));
+
             // Snatch only affects self-target status moves
             Assert.assertFalse(attack.getName(), attack.isMoveType(MoveType.NON_SNATCHABLE) && !attack.isSelfTargetStatusMove());
 
@@ -79,11 +83,6 @@ public class AttackTest extends BaseTest {
                 Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.DANCE));
             }
 
-            // Crit stage moves cannot be status moves
-            if (attack instanceof CritStageEffect || attack instanceof AlwaysCritEffect) {
-                Assert.assertNotEquals(attack.getName(), MoveCategory.STATUS, attack.getCategory());
-            }
-
             // Moves that change power, apply damage, murder, and crit cannot be status moves
             if (attack instanceof PowerChangeEffect
                     || attack instanceof ApplyDamageEffect
@@ -94,9 +93,9 @@ public class AttackTest extends BaseTest {
                 Assert.assertFalse(attack.isStatusMove());
             }
 
-            // Moves that cast battle effects are field moves
+            // Status moves that cast battle effects are field moves
             EffectNamesies effect = attack.getEffect();
-            if (effect != null && effect.getEffect() instanceof BattleEffect) {
+            if (effect != null && effect.getEffect() instanceof BattleEffect && attack.isStatusMove()) {
                 Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.NO_MAGIC_COAT));
                 Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.FIELD));
             }
@@ -1957,5 +1956,50 @@ public class AttackTest extends BaseTest {
         attacking.assertNoStatus();
         defending.assertNoStatus();
         defending.assertSpecies(PokemonNamesies.DARKRAI);
+    }
+
+    @Test
+    public void jawLockTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking1 = battle.getAttacking();
+        TestPokemon attacking2 = TestPokemon.newPlayerPokemon(PokemonNamesies.SHUCKLE);
+        battle.getPlayer().addPokemon(attacking2);
+
+        // Make sure correct Pokemon are out front and they can escape just fine
+        jawLockTest(battle, attacking1, false);
+
+        // Lock them by the jaw! (Neither can escape)
+        battle.attackingFight(AttackNamesies.JAW_LOCK);
+        jawLockTest(battle, attacking1, true);
+
+        // Self-switching should still work, but it should remove the effect
+        battle.attackingFight(AttackNamesies.BATON_PASS);
+        jawLockTest(battle, attacking2, false);
+
+        // Lock 'em up again!
+        battle.defendingFight(AttackNamesies.JAW_LOCK);
+        jawLockTest(battle, attacking2, true);
+
+        // Swapping with whirlwind should also be okay (but still removes the lock)
+        battle.defendingFight(AttackNamesies.WHIRLWIND);
+        jawLockTest(battle, attacking1, false);
+
+        // Locky locky locked
+        battle.attackingFight(AttackNamesies.JAW_LOCK);
+        jawLockTest(battle, attacking1, true);
+
+        // Kill kill kill murder murder murder (removes Jaw Lock)
+        battle.defendingFight(AttackNamesies.FISSURE);
+        Assert.assertTrue(attacking1.isFainted(battle));
+        jawLockTest(battle, attacking1, false);
+    }
+
+    private void jawLockTest(TestBattle battle, TestPokemon attacking, boolean jawLocked) {
+        TestPokemon defending = battle.getDefending();
+        battle.assertEffect(jawLocked, StandardBattleEffectNamesies.JAW_LOCKED);
+        Assert.assertTrue(battle.isFront(attacking));
+        Assert.assertTrue(battle.isFront(defending));
+        Assert.assertEquals(!jawLocked, attacking.canEscape(battle));
+        Assert.assertEquals(!jawLocked, defending.canEscape(battle));
     }
 }

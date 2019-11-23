@@ -5,6 +5,7 @@ import battle.Battle;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
+import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.GroundedEffect;
 import battle.effect.InvokeInterfaces.ItemBlockerEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
@@ -13,9 +14,11 @@ import battle.effect.InvokeInterfaces.StatChangingEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.SuperDuperEndTurnEffect;
+import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
+import main.Global;
 import pokemon.stat.Stat;
 import type.Type;
 
@@ -274,6 +277,75 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return user.getName() + " split the defense!";
+        }
+    }
+
+    static class JawLocked extends BattleEffect<StandardBattleEffectNamesies> implements TrappingEffect, EndTurnEffect {
+        private static final long serialVersionUID = 1L;
+
+        // The player Pokemon and opponent Pokemon that are locked by the jaw
+        private ActivePokemon p;
+        private ActivePokemon opp;
+
+        // Checks if Pokemon are still Jaw Locked, and deactives and returns false if not
+        private boolean checkActive(Battle b) {
+            // If either Pokemon is no longer jaw locked, then neither of them are
+            if (this.unlocked(b, p) || this.unlocked(b, opp)) {
+                this.deactivate();
+                return false;
+            }
+
+            // Still jaw locked
+            return true;
+        }
+
+        // Returns true if the Pokemon is no longer jaw locked
+        // Confirms this by the Pokemon being dead or not the front Pokemon
+        // Note: Still need to confirm the same is true for the other
+        private boolean unlocked(Battle b, ActivePokemon jawLocked) {
+            return jawLocked.isFainted(b) || b.getTrainer(jawLocked).front() != jawLocked;
+        }
+
+        JawLocked() {
+            super(StandardBattleEffectNamesies.JAW_LOCKED, -1, -1, false, false);
+        }
+
+        @Override
+        public String trappingMessage(ActivePokemon trapped) {
+            return trapped.getName() + " is trapped by Jaw Lock!";
+        }
+
+        @Override
+        public boolean trapped(Battle b, ActivePokemon escaper) {
+            // TODO: Maybe check once there's more information if this should work on Ghost-type Pokemon (currently it does)
+            // Check if Pokemon are still Jaw Locked together
+            if (this.checkActive(b)) {
+                // Just to be safe
+                return escaper == p || escaper == opp;
+            }
+
+            return false;
+        }
+
+        @Override
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            if (caster.isPlayer() == victim.isPlayer()) {
+                Global.error("Caster and victim should be the opposite teams for Jaw Lock.");
+            }
+
+            this.p = caster.isPlayer() ? caster : victim;
+            this.opp = caster.isPlayer() ? victim : caster;
+        }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return user.getName() + " locked jaws with " + victim.getName() + "!";
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            // Deactivate if Jaw Locked Pokemon aren't around
+            this.checkActive(b);
         }
     }
 }

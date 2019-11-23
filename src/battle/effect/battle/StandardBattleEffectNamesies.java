@@ -4,6 +4,7 @@ import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.battle.BattleEffect.FieldUproar;
 import battle.effect.battle.BattleEffect.Gravity;
 import battle.effect.battle.BattleEffect.GuardSplit;
+import battle.effect.battle.BattleEffect.JawLocked;
 import battle.effect.battle.BattleEffect.MagicRoom;
 import battle.effect.battle.BattleEffect.MudSport;
 import battle.effect.battle.BattleEffect.PowerSplit;
@@ -23,7 +24,8 @@ public enum StandardBattleEffectNamesies implements BattleEffectNamesies {
     MAGIC_ROOM(MagicRoom::new),
     FIELD_UPROAR(FieldUproar::new),
     POWER_SPLIT(PowerSplit::new),
-    GUARD_SPLIT(GuardSplit::new);
+    GUARD_SPLIT(GuardSplit::new),
+    JAW_LOCKED(JawLocked::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

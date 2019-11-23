@@ -146,6 +146,7 @@ import battle.attack.Attack.DreamEater;
 import battle.attack.Attack.DrillPeck;
 import battle.attack.Attack.DrillRun;
 import battle.attack.Attack.DualChop;
+import battle.attack.Attack.DynamaxCannon;
 import battle.attack.Attack.DynamicPunch;
 import battle.attack.Attack.EarthPower;
 import battle.attack.Attack.Earthquake;
@@ -294,6 +295,7 @@ import battle.attack.Attack.Ingrain;
 import battle.attack.Attack.IronDefense;
 import battle.attack.Attack.IronHead;
 import battle.attack.Attack.IronTail;
+import battle.attack.Attack.JawLock;
 import battle.attack.Attack.Judgement;
 import battle.attack.Attack.JumpKick;
 import battle.attack.Attack.KarateChop;
@@ -528,6 +530,7 @@ import battle.attack.Attack.Smog;
 import battle.attack.Attack.Smokescreen;
 import battle.attack.Attack.Snarl;
 import battle.attack.Attack.Snatch;
+import battle.attack.Attack.SnipeShot;
 import battle.attack.Attack.Snore;
 import battle.attack.Attack.Soak;
 import battle.attack.Attack.SoftBoiled;
@@ -1321,7 +1324,10 @@ public enum AttackNamesies {
     PHOTON_GEYSER("Photon Geyser", PhotonGeyser::new),
     MIND_BLOWN("Mind Blown", MindBlown::new),
     PLASMA_FISTS("Plasma Fists", PlasmaFists::new),
-    DOUBLE_IRON_BASH("Double Iron Bash", DoubleIronBash::new);
+    DOUBLE_IRON_BASH("Double Iron Bash", DoubleIronBash::new),
+    DYNAMAX_CANNON("Dynamax Cannon", DynamaxCannon::new),
+    SNIPE_SHOT("Snipe Shot", SnipeShot::new),
+    JAW_LOCK("Jaw Lock", JawLock::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 
