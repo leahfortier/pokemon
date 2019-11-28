@@ -99,10 +99,11 @@ JawLocked:
             return jawLocked.isFainted(b) || b.getTrainer(jawLocked).front() != jawLocked;
         }
         ###
-    Int: TrappingEffect, EndTurnEffect
+    Int: TrappingEffect, BattleEndTurnEffect
     TrappingMessage: trapped.getName() + " is trapped by Jaw Lock!"
     Trapped:
         // TODO: Maybe check once there's more information if this should work on Ghost-type Pokemon (currently it does)
+        // TODO: Also I made Jaw Lock a biting move which it should be regardless but if I already have a todo to look it up might as well confirm that too
         // Check if Pokemon are still Jaw Locked together
         if (this.checkActive(b)) {
             // Just to be safe
@@ -120,7 +121,7 @@ JawLocked:
         this.opp = caster.isPlayer() ? victim : caster;
         ###
     CastMessage: user.getName() + " locked jaws with " + victim.getName() + "!"
-    ApplyEndTurn:
+    BattleEndTurn:
         // Deactivate if Jaw Locked Pokemon aren't around
         this.checkActive(b);
         ###

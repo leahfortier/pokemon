@@ -6597,6 +6597,7 @@ Double Iron Bash:
     EffChance: 30
     MultiStrike: 2 2
     MoveType: Punching
+    Int: DoubleMinimizerMove
 *
 Dynamax Cannon:
     Desc: The user unleashes a strong beam from its core.
@@ -6608,13 +6609,15 @@ Dynamax Cannon:
     Comments: // TODO: Removed double damage when Dynamaxed, should this do something more interesting?
 *
 Snipe Shot:
-    Desc: The user ignores the effects of opposing Pokémon's moves and Abilities that draw in moves, allowing this move to hit the chosen target.
+    Desc: This move can be used on the target regardless of its Abilities. Critical hits land more easily.
     PP: 15
     Type: Water
     Pow: 80
     Acc: 100
     Cat: Special
-    Comments: // TODO: This effect is only for non-single-targets right? should probably change the description and confirm that
+    Int: CritStageEffect
+    IgnoreAbilityMove: True
+    Comments: // Notes: This was changed from ignoring targeting to ignoring abilities
 *
 Jaw Lock:
     Desc: This move prevents the user and the target from switching out until either of them faints. The effect goes away if either of the Pokémon leaves the field.
@@ -6624,4 +6627,19 @@ Jaw Lock:
     Acc: 100
     Cat: Physical
     StandardBattleEffect: JawLocked
+    MoveType: Biting
+*
+Stuff Cheeks:
+    Desc: The user eats its held Berry, then sharply raises its Defense stat.
+    PP: 10
+    Type: Normal
+    Cat: Status
+    Applies: user.getHeldItem(b) instanceof Berry
+    UniqueEffects:
+        // TODO: Message order is backwards (might want to just manually increase defense here)
+        Berry berry = (Berry)user.getHeldItem(b);
+        berry.stealBerry(b, victim, user);
+        ###
+    SelfTarget: True
+    StatChange: Defense 2
 *

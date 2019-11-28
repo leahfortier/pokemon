@@ -5,7 +5,7 @@ import battle.Battle;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
-import battle.effect.InvokeInterfaces.EndTurnEffect;
+import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
 import battle.effect.InvokeInterfaces.GroundedEffect;
 import battle.effect.InvokeInterfaces.ItemBlockerEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
@@ -280,7 +280,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         }
     }
 
-    static class JawLocked extends BattleEffect<StandardBattleEffectNamesies> implements TrappingEffect, EndTurnEffect {
+    static class JawLocked extends BattleEffect<StandardBattleEffectNamesies> implements TrappingEffect, BattleEndTurnEffect {
         private static final long serialVersionUID = 1L;
 
         // The player Pokemon and opponent Pokemon that are locked by the jaw
@@ -318,6 +318,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         @Override
         public boolean trapped(Battle b, ActivePokemon escaper) {
             // TODO: Maybe check once there's more information if this should work on Ghost-type Pokemon (currently it does)
+            // TODO: Also I made Jaw Lock a biting move which it should be regardless but if I already have a todo to look it up might as well confirm that too
             // Check if Pokemon are still Jaw Locked together
             if (this.checkActive(b)) {
                 // Just to be safe
@@ -343,7 +344,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
+        public void singleEndTurnEffect(Battle b, ActivePokemon victim) {
             // Deactivate if Jaw Locked Pokemon aren't around
             this.checkActive(b);
         }

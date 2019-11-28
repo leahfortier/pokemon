@@ -10935,7 +10935,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class DoubleIronBash extends Attack implements MultiStrikeMove {
+    static class DoubleIronBash extends Attack implements DoubleMinimizerMove, MultiStrikeMove {
         private static final long serialVersionUID = 1L;
 
         DoubleIronBash() {
@@ -10970,14 +10970,26 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    // TODO: This effect is only for non-single-targets right? should probably change the description and confirm that
-    static class SnipeShot extends Attack {
+    // Notes: This was changed from ignoring targeting to ignoring abilities
+    static class SnipeShot extends Attack implements CritStageEffect {
         private static final long serialVersionUID = 1L;
 
+        private Effect effect;
+
         SnipeShot() {
-            super(AttackNamesies.SNIPE_SHOT, Type.WATER, MoveCategory.SPECIAL, 15, "The user ignores the effects of opposing Pokémon's moves and Abilities that draw in moves, allowing this move to hit the chosen target.");
+            super(AttackNamesies.SNIPE_SHOT, Type.WATER, MoveCategory.SPECIAL, 15, "This move can be used on the target regardless of its Abilities. Critical hits land more easily.");
             super.power = 80;
             super.accuracy = 100;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.effect.deactivate();
         }
     }
 
@@ -10989,7 +11001,30 @@ public abstract class Attack implements AttackInterface {
             super.power = 80;
             super.accuracy = 100;
             super.effect = StandardBattleEffectNamesies.JAW_LOCKED;
+            super.moveTypes.add(MoveType.BITING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+    }
+
+    static class StuffCheeks extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        StuffCheeks() {
+            super(AttackNamesies.STUFF_CHEEKS, Type.NORMAL, MoveCategory.STATUS, 10, "The user eats its held Berry, then sharply raises its Defense stat.");
+            super.selfTarget = true;
+            super.statChanges[Stat.DEFENSE.index()] = 2;
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // TODO: Message order is backwards (might want to just manually increase defense here)
+            Berry berry = (Berry)user.getHeldItem(b);
+            berry.stealBerry(b, victim, user);
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.getHeldItem(b) instanceof Berry;
         }
     }
 }

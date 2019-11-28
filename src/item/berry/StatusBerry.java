@@ -9,7 +9,8 @@ import battle.effect.status.StatusNamesies;
 import item.medicine.StatusHealer;
 
 public interface StatusBerry extends StatusHealer, GainableEffectBerry, StatusReceivedEffect, EndTurnEffect {
-    default void consumeBerry(Battle b, ActivePokemon victim) {
+    // Consume the berry if applicable
+    default void tryConsumeBerry(Battle b, ActivePokemon victim) {
         if (this.gainBerryEffect(b, victim, CastSource.HELD_ITEM)) {
             this.consumeItem(b, victim);
         }
@@ -17,7 +18,7 @@ public interface StatusBerry extends StatusHealer, GainableEffectBerry, StatusRe
 
     @Override
     default void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType) {
-        this.consumeBerry(b, victim);
+        this.tryConsumeBerry(b, victim);
     }
 
     @Override
@@ -32,6 +33,6 @@ public interface StatusBerry extends StatusHealer, GainableEffectBerry, StatusRe
 
     @Override
     default void applyEndTurn(ActivePokemon victim, Battle b) {
-        this.consumeBerry(b, victim);
+        this.tryConsumeBerry(b, victim);
     }
 }

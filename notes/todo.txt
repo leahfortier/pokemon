@@ -72,6 +72,7 @@ Descriptions that change manually:
         Aromatic Mist ('the Sp. Def stat of an ally Pokémon' -> 'its Sp. Def stat')
         Fairy Lock (Remove 'during the last turn')
         Dynamax Cannon (Remove 'This move deals twice the damage if the target is Dynamaxed.')
+        Snipe Shot (completely rewritten to ignore abilities and increase crits)
     Abilities:
         Healer ('an ally's' -> 'its')
         Flower Veil (Remove 'Ally')
@@ -148,6 +149,7 @@ Other random things:
     might make sense at this point to have types be their own classes (still enum like the namesies)
         - Powder moves with grass
         - lots and lots of status immunities etc
+        - ghost types with trapping
     not sure if I want to do anything with new flavor text entries (but after what happened with the classifications I'm wondering if this is more important)
     I'm not sure we actually need to be replacing the names with special characters and it might be worth giving it another look (Nidoran F/M, Flabebe)
     add more things to evolution test besides abilities
@@ -172,5 +174,12 @@ Other random things:
     BasicPanels should be able to create a panel that sits on the message panel (stats, description, choices etc)
     rewrite PokefinderState since it's super ugly -- probably want to add page numbers and such as well
     pretty sure Infatuation lasts between Pokemon and it shouldn't
-    
+    apparently critical hits were nerfed in gen 6... did not know that
+    burn was also changed in gen 7 to 1/16
+    surf/whirlpool double damage for dive
+    king's shield doesn't block status moves
+    Stat.MAX_STAT_CHANGES should really be in Stages right?
+    stage modify message should include drastically for 3+ (ex: cotton guard)
+    should probably rewrite the battle message system to pass the serialized battle around instead of whatever it's currently doing with storing every individual value and such
+    should snatch have a message when its used?
     

@@ -567,6 +567,7 @@ import battle.attack.Attack.StrengthSap;
 import battle.attack.Attack.StringShot;
 import battle.attack.Attack.Struggle;
 import battle.attack.Attack.StruggleBug;
+import battle.attack.Attack.StuffCheeks;
 import battle.attack.Attack.StunSpore;
 import battle.attack.Attack.Submission;
 import battle.attack.Attack.Substitute;
@@ -1327,7 +1328,8 @@ public enum AttackNamesies {
     DOUBLE_IRON_BASH("Double Iron Bash", DoubleIronBash::new),
     DYNAMAX_CANNON("Dynamax Cannon", DynamaxCannon::new),
     SNIPE_SHOT("Snipe Shot", SnipeShot::new),
-    JAW_LOCK("Jaw Lock", JawLock::new);
+    JAW_LOCK("Jaw Lock", JawLock::new),
+    STUFF_CHEEKS("Stuff Cheeks", StuffCheeks::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

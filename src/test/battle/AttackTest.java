@@ -20,6 +20,8 @@ import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
+import item.berry.Berry;
+import item.berry.GainableEffectBerry;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ability.AbilityNamesies;
@@ -2001,5 +2003,153 @@ public class AttackTest extends BaseTest {
         Assert.assertTrue(battle.isFront(defending));
         Assert.assertEquals(!jawLocked, attacking.canEscape(battle));
         Assert.assertEquals(!jawLocked, defending.canEscape(battle));
+    }
+
+    @Test
+    public void stuffCheeksTest() {
+        // Holding non-berries will fail
+        stuffCheeksTest(false, ItemNamesies.NO_ITEM, PokemonManipulator.empty(), PokemonManipulator.empty());
+        stuffCheeksTest(false, ItemNamesies.POTION, PokemonManipulator.empty(), PokemonManipulator.empty());
+
+        // Berries without gainable effects should still be consumed
+        stuffCheeksTest(true, ItemNamesies.POMEG_BERRY, PokemonManipulator.empty(), PokemonManipulator.empty());
+        Assert.assertFalse(ItemNamesies.POMEG_BERRY.getItem() instanceof GainableEffectBerry);
+
+        // Oran Berry with full HP -- should still consume and raise defense even though nothing happens
+        stuffCheeksTest(
+                true, ItemNamesies.ORAN_BERRY,
+                (battle, attacking, defending) -> attacking.assertFullHealth(),
+                (battle, attacking, defending) -> attacking.assertFullHealth()
+        );
+
+        // Oran Berry with reduced HP -- reduce health to 11, restore by 10 to be missing 1
+        stuffCheeksTest(
+                true, ItemNamesies.ORAN_BERRY,
+                (battle, attacking, defending) -> {
+                    attacking.reduceHealth(battle, 11);
+                    attacking.assertMissingHp(11);
+                },
+                (battle, attacking, defending) -> attacking.assertMissingHp(1)
+        );
+
+        // Rawst Berry -- burn, eating should cure
+        stuffCheeksTest(
+                true, ItemNamesies.RAWST_BERRY,
+                (battle, attacking, defending) -> {
+                    battle.defendingFight(AttackNamesies.WILL_O_WISP);
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+                },
+                (battle, attacking, defending) -> attacking.assertNoStatus()
+        );
+
+        // Rawst Berry with maxed Defense -- should still consume and cure paralysis even if not increasing stats
+        stuffCheeksTest(
+                true, ItemNamesies.RAWST_BERRY,
+                (battle, attacking, defending) -> {
+                    for (int i = 1; i <= Stat.MAX_STAT_CHANGES; i++) {
+                        battle.attackingFight(AttackNamesies.DEFENSE_CURL);
+                        attacking.assertStages(new TestStages().set(i, Stat.DEFENSE));
+                    }
+
+                    battle.defendingFight(AttackNamesies.WILL_O_WISP);
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+                    attacking.assertStages(new TestStages().set(Stat.MAX_STAT_CHANGES, Stat.DEFENSE));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(Stat.MAX_STAT_CHANGES, Stat.DEFENSE));
+                    attacking.assertNoStatus();
+                }
+        );
+
+        // Rawst Berry with Cheek Pouch -- Cure + heal
+        // Reduce to 50% health, burn takes another 1/8, Cheek Pouch heals 33% = 17/24?
+        // Note: Can't use paralysis because you can sometimes be fully paralyzed when using Stuff Cheeks
+        // (TODO: Change when burn is changed to 1/16 but don't feel like doing that now)
+        stuffCheeksTest(
+                true, ItemNamesies.RAWST_BERRY,
+                (battle, attacking, defending) -> {
+                    attacking.withAbility(AbilityNamesies.CHEEK_POUCH);
+                    attacking.reduceHealthFraction(battle, .5, "");
+                    attacking.assertHealthRatio(.5);
+
+                    battle.defendingFight(AttackNamesies.WILL_O_WISP);
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertNoStatus();
+                    attacking.assertHealthRatio(17/24.0, 1);
+                }
+        );
+
+        // Rawst Berry with Snatch -- burn both, enemy should snatch the berry and cure only them
+        // Should succeed even though the snatcher isn't holding anything
+        // Passing false for success because succeeding for the defending, not the attacking
+        stuffCheeksTest(
+                false, ItemNamesies.RAWST_BERRY, AttackNamesies.SNATCH,
+                (battle, attacking, defending) -> {
+                    battle.fight(AttackNamesies.WILL_O_WISP, AttackNamesies.WILL_O_WISP);
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+                    defending.assertHasStatus(StatusNamesies.BURNED);
+                },
+                (battle, attacking, defending) -> {
+                    // Attacking still burned, but defending was cured by snatching!
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+                    defending.assertNoStatus();
+
+                    // Neither is holding an item
+                    attacking.assertNotHoldingItem(battle);
+                    defending.assertNotHoldingItem(battle);
+
+                    // Only the defending has eaten a berry
+                    attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
+                    defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
+
+                    // Only the attacking has a consumed item
+                    attacking.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+                    defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+
+                    // Only the defending has its stats increased
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages().set(2, Stat.DEFENSE));
+                }
+        );
+    }
+
+    private void stuffCheeksTest(boolean success, ItemNamesies heldItem, PokemonManipulator beforeCheck, PokemonManipulator afterCheck) {
+        stuffCheeksTest(success, heldItem, AttackNamesies.SPLASH, beforeCheck, afterCheck);
+    }
+
+    private void stuffCheeksTest(boolean success, ItemNamesies heldItem, AttackNamesies defendingAttack, PokemonManipulator beforeCheck, PokemonManipulator afterCheck) {
+        TestBattle battle = TestBattle.create(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE);
+        TestPokemon attacking = battle.getAttacking();
+        attacking.assertStages(new TestStages());
+
+        // Set up this case and give them the item
+        beforeCheck.manipulate(battle);
+        attacking.withItem(heldItem);
+
+        // So we know what to compare the defense increase to
+        TestStages stages = attacking.testStages();
+        if (success) {
+            // Increase Defense by two stages (not exceeding maximum)
+            stages.increment(2, Stat.DEFENSE);
+
+            // Can only succeed if holding a berry
+            Assert.assertTrue(attacking.getHeldItem(battle) instanceof Berry);
+        }
+
+        // Okay let's actually stuff our cheeks with berries or something
+        battle.fight(AttackNamesies.STUFF_CHEEKS, defendingAttack);
+        Assert.assertEquals(success || defendingAttack == AttackNamesies.SNATCH, attacking.lastMoveSucceeded());
+        attacking.assertStages(stages);
+
+        // If successful, make sure berry was consumed
+        if (success) {
+            attacking.assertConsumedBerry(battle);
+            attacking.assertNotHoldingItem(battle);
+        }
+
+        // Anything else that might be interesting
+        afterCheck.manipulate(battle);
     }
 }
