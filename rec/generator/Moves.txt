@@ -433,15 +433,16 @@ Water Gun:
 *
 Rapid Spin:
     PP: 40
-    Pow: 20
+    Pow: 50
     Acc: 100
-    Desc: A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes.
+    Desc: A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes. This also raises the user's Speed stat.
     Type: Normal
     Cat: Physical
     SelfTarget: True
     UniqueEffects:
         RapidSpinRelease.release(b, victim);
         ###
+    StatChange: Speed 1
 *
 Reflect:
     Desc: A wondrous wall of light is put up to reduce damage from physical attacks for five turns.
@@ -5137,7 +5138,7 @@ Techno Blast:
 Multi-Attack:
     Desc: Cloaking itself in high energy, the user slams into the target. The memory held determines the move's type.
     PP: 10
-    Pow: 90
+    Pow: 120
     Acc: 100
     Cat: Physical
     SpecialItemMove: MemoryItem

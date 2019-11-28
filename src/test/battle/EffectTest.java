@@ -37,13 +37,15 @@ public class EffectTest extends BaseTest {
             Effect effect = effectNamesies.getEffect();
 
             // True if the effect overrides the alternateCast method
-            if (GeneralUtils.hasDeclaredMethod(effect.getClass(),
-                                               "alternateCast",
-                                               Battle.class,
-                                               ActivePokemon.class,
-                                               ActivePokemon.class,
-                                               CastSource.class,
-                                               CastMessageGetter.class)) {
+            if (GeneralUtils.hasDeclaredMethod(
+                    effect.getClass(),
+                    "alternateCast",
+                    Battle.class,
+                    ActivePokemon.class,
+                    ActivePokemon.class,
+                    CastSource.class,
+                    CastMessageGetter.class
+            )) {
                 // If it has the alternateCast method, then hasAlternateCast MUST be true
                 Assert.assertTrue(effect.hasAlternateCast());
 
@@ -127,12 +129,25 @@ public class EffectTest extends BaseTest {
                      (battle, attacking, defending) -> defending.assertNoStatus()
         );
 
-        // King's Shield lowers attack when contact was made
+        // King's Shield lowers attack when contact was made and only protects against non-status moves
+        // TODO: Should probably test with Sucker Punch
         checkProtect(true, AttackNamesies.KINGS_SHIELD, AttackNamesies.TACKLE,
-                     (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-2, Stat.ATTACK))
+                     (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-1, Stat.ATTACK))
         );
         checkProtect(true, AttackNamesies.KINGS_SHIELD, AttackNamesies.WATER_GUN,
                      (battle, attacking, defending) -> defending.assertStages(new TestStages())
+        );
+        checkProtect(false, AttackNamesies.KINGS_SHIELD, AttackNamesies.TOXIC,
+                     (battle, attacking, defending) -> {
+                         attacking.assertBadPoison();
+                         defending.assertStages(new TestStages());
+                     }
+        );
+        checkProtect(false, AttackNamesies.KINGS_SHIELD, AttackNamesies.CONFUSE_RAY,
+                     (battle, attacking, defending) -> {
+                         attacking.assertHasEffect(PokemonEffectNamesies.CONFUSION);
+                         defending.assertStages(new TestStages());
+                     }
         );
 
         TestBattle battle = TestBattle.create();
@@ -162,7 +177,7 @@ public class EffectTest extends BaseTest {
                               AttackNamesies attack,
                               PokemonManipulator manipulator,
                               PokemonManipulator additionalChecks) {
-        TestBattle battle = TestBattle.create();
+        TestBattle battle = TestBattle.create(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE);
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 

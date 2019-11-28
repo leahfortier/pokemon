@@ -853,6 +853,8 @@ public class AttackTest extends BaseTest {
 
         // Use Rapid Spin -- should remove the appropriate effects
         battle.defendingFight(AttackNamesies.RAPID_SPIN);
+        attacking.assertStages(new TestStages());
+        defending.assertStages(new TestStages().set(1, Stat.SPEED));
         battle.assertHasEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
         battle.assertNoEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
         battle.assertNoEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
@@ -878,8 +880,8 @@ public class AttackTest extends BaseTest {
         // Wrong attacker -- effects shouldn't change
         battle.attackingFight(AttackNamesies.RAPID_SPIN);
         battle.defendingFight(AttackNamesies.DEFOG);
-        attacking.assertStages(new TestStages().set(-1, Stat.EVASION));
-        defending.assertStages(new TestStages());
+        attacking.assertStages(new TestStages().set(-1, Stat.EVASION).set(1, Stat.SPEED));
+        defending.assertStages(new TestStages().set(1, Stat.SPEED));
         battle.assertHasEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
         battle.assertHasEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
         battle.assertHasEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
@@ -889,8 +891,8 @@ public class AttackTest extends BaseTest {
 
         // Correct defog attacker -- should only remove the appropriate effects
         battle.attackingFight(AttackNamesies.DEFOG);
-        attacking.assertStages(new TestStages().set(-1, Stat.EVASION));
-        defending.assertStages(new TestStages().set(-1, Stat.EVASION));
+        attacking.assertStages(new TestStages().set(-1, Stat.EVASION).set(1, Stat.SPEED));
+        defending.assertStages(new TestStages().set(-1, Stat.EVASION).set(1, Stat.SPEED));
         battle.assertNoEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
         battle.assertNoEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
         battle.assertNoEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);

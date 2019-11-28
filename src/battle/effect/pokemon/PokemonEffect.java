@@ -444,10 +444,16 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             // Pokemon that make contact with the king's shield have their attack reduced
             if (p.isMakingContact()) {
                 p.getStages().modifyStage(
-                        opp, -2, Stat.ATTACK, b, CastSource.EFFECT,
+                        opp, -1, Stat.ATTACK, b, CastSource.EFFECT,
                         (victimName, statName, changed) -> "The King's Shield " + changed + " " + p.getName() + "'s " + statName + "!"
                 );
             }
+        }
+
+        @Override
+        public boolean protectingCondition(Battle b, ActivePokemon attacking) {
+            // Only protects against attacking moves
+            return !attacking.getAttack().isStatusMove();
         }
 
         @Override

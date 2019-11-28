@@ -1126,11 +1126,12 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         RapidSpin() {
-            super(AttackNamesies.RAPID_SPIN, Type.NORMAL, MoveCategory.PHYSICAL, 40, "A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes.");
-            super.power = 20;
+            super(AttackNamesies.RAPID_SPIN, Type.NORMAL, MoveCategory.PHYSICAL, 40, "A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes. This also raises the user's Speed stat.");
+            super.power = 50;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
+            super.statChanges[Stat.SPEED.index()] = 1;
         }
 
         @Override
@@ -8567,7 +8568,7 @@ public abstract class Attack implements AttackInterface {
 
         MultiAttack() {
             super(AttackNamesies.MULTI_ATTACK, Type.NORMAL, MoveCategory.PHYSICAL, 10, "Cloaking itself in high energy, the user slams into the target. The memory held determines the move's type.");
-            super.power = 90;
+            super.power = 120;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
