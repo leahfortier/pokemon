@@ -2151,10 +2151,15 @@ Soak:
     Acc: 100
     Type: Water
     Cat: Status
-    PokemonEffect: ChangeType
-    ChangeType:
-        return new PokeType(Type.WATER);
-        ###
+    ChangeTypeMove: Water
+*
+Magic Powder:
+    Desc: The user scatters a cloud of magic powder that changes the target to Psychic type.
+    PP: 20
+    Acc: 100
+    Type: Psychic
+    Cat: Status
+    ChangeTypeMove: Psychic
 *
 Trick-or-Treat:
     AddTypeMove: Ghost
@@ -6639,8 +6644,60 @@ Stuff Cheeks:
     UniqueEffects:
         // TODO: Message order is backwards (might want to just manually increase defense here)
         Berry berry = (Berry)user.getHeldItem(b);
-        berry.stealBerry(b, victim, user);
+        berry.eatBerry(b, victim, user);
         ###
     SelfTarget: True
     StatChange: Defense 2
+*
+No Retreat:
+    Desc: This move raises all the user's stats but prevents the user from switching out or fleeing.
+    PP: 5
+    Type: Fighting
+    Cat: Status
+    RaiseAllStats: True
+    SelfTarget: True
+    PokemonEffect: Trapped
+*
+Tar Shot:
+    Desc: The user pours sticky tar over the target, lowering the target's Speed stat. The target becomes weaker to Fire-type moves.
+    PP: 15
+    Type: Rock
+    Cat: Status
+    Acc: 100
+    PokemonEffect: StickyTar
+    StatChange: Speed -1
+*
+Dragon Darts:
+    Desc: The user attacks twice using Dreepy.
+    Type: Dragon
+    Cat: Physical
+    PP: 10
+    Pow: 50
+    Acc: 100
+    MultiStrike: 2 2
+    PhysicalContact: False
+*
+Teatime:
+    Desc: The user has teatime with all the Pokémon in the battle. Each Pokémon eats its held Berry.
+    PP: 10
+    Type: Normal
+    Cat: Status
+    MoveType: Field
+    UniqueEffects:
+        // Each Pokemon in battle has tea time!
+        // TODO: Should probably fail for semi-invulberable Pokemon
+        // TODO: Should this display a fail message or something if no one is having tea?
+        teatime(b, user);
+        teatime(b, victim);
+        ###
+    Field:
+        // If the Pokemon is holding a berry, then they'll eat it
+        private void teatime(Battle b, ActivePokemon teaDrinker) {
+            HoldItem item = teaDrinker.getHeldItem(b);
+            if (item instanceof Berry) {
+                Berry berry = (Berry)item;
+                berry.eatBerry(b, teaDrinker, teaDrinker);
+            }
+        }
+        ###
 *

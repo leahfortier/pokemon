@@ -38,7 +38,7 @@ public interface Berry extends HoldItem {
     }
 
     // Okay for stealer and holder to be the same (eating your own berry)
-    default void stealBerry(Battle b, ActivePokemon stealer, ActivePokemon holder) {
+    default void eatBerry(Battle b, ActivePokemon stealer, ActivePokemon holder) {
         // Can't steal sticky berries
         if (stealer != holder && StickyHoldEffect.containsStickyHoldEffect(b, stealer, holder)) {
             return;

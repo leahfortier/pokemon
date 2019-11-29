@@ -1548,6 +1548,12 @@ ForesightMove:
         ###
     AddMapField: MoveType: Substitute_Piercing
 *
+ChangeTypeMove:
+    AddMapField: PokemonEffect: ChangeType
+    AddMapField: ChangeType:
+        return new PokeType(Type.{00});
+        ###
+*
 AddTypeMove:
     AddMapField: PokemonEffect: ChangeType
     AddMapField: ChangeType:
@@ -1709,7 +1715,8 @@ ConsumeBerry:
     AddMapField: UniqueEffects:
         HoldItem item = victim.getHeldItem(b);
         if (item instanceof Berry) {
-            ((Berry)item).stealBerry(b, user, victim);
+            Berry berry = (Berry)item;
+            berry.eatBerry(b, user, victim);
         }
         ###
 *

@@ -60,6 +60,7 @@ import battle.effect.pokemon.PokemonEffect.ShellTrap;
 import battle.effect.pokemon.PokemonEffect.Silence;
 import battle.effect.pokemon.PokemonEffect.Snatch;
 import battle.effect.pokemon.PokemonEffect.SpikyShield;
+import battle.effect.pokemon.PokemonEffect.StickyTar;
 import battle.effect.pokemon.PokemonEffect.Stockpile;
 import battle.effect.pokemon.PokemonEffect.Substitute;
 import battle.effect.pokemon.PokemonEffect.Taunt;
@@ -149,7 +150,8 @@ public enum PokemonEffectNamesies implements EffectNamesies {
     POWDER(Powder::new),
     EATEN_BERRY(EatenBerry::new),
     BREAKS_THE_MOLD(BreaksTheMold::new),
-    RAGING(Raging::new);
+    RAGING(Raging::new),
+    STICKY_TAR(StickyTar::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

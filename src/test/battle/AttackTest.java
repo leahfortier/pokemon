@@ -2154,4 +2154,35 @@ public class AttackTest extends BaseTest {
         // Anything else that might be interesting
         afterCheck.manipulate(battle);
     }
+
+    @Test
+    public void tarShotTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.BLISSEY, PokemonNamesies.BLISSEY);
+        tarShotTest(battle, 0);
+
+        battle.attackingFight(AttackNamesies.TAR_SHOT);
+        tarShotTest(battle, 1);
+
+        battle.emptyHeal();
+
+        battle.attackingFight(AttackNamesies.TAR_SHOT);
+        tarShotTest(battle, 2);
+    }
+
+    private void tarShotTest(TestBattle battle, int numTar) {
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // No effects should actually be on the attacker
+        attacking.assertStages(new TestStages());
+        attacking.assertNoEffect(PokemonEffectNamesies.STICKY_TAR);
+
+        // Speed decrease should stack with the tar
+        defending.assertStages(new TestStages().set(-numTar, Stat.SPEED));
+        defending.assertEffect(numTar > 0, PokemonEffectNamesies.STICKY_TAR);
+
+        // Damage multiplier should only happen once though (even with multiple tar shots)
+        attacking.setExpectedDamageModifier(numTar == 0 ? 1.0 : 2.0);
+        battle.fight(AttackNamesies.INCINERATE, AttackNamesies.ENDURE);
+    }
 }

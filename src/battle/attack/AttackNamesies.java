@@ -135,6 +135,7 @@ import battle.attack.Attack.DragonAscent;
 import battle.attack.Attack.DragonBreath;
 import battle.attack.Attack.DragonClaw;
 import battle.attack.Attack.DragonDance;
+import battle.attack.Attack.DragonDarts;
 import battle.attack.Attack.DragonHammer;
 import battle.attack.Attack.DragonPulse;
 import battle.attack.Attack.DragonRage;
@@ -326,6 +327,7 @@ import battle.attack.Attack.Lunge;
 import battle.attack.Attack.LusterPurge;
 import battle.attack.Attack.MachPunch;
 import battle.attack.Attack.MagicCoat;
+import battle.attack.Attack.MagicPowder;
 import battle.attack.Attack.MagicRoom;
 import battle.attack.Attack.MagicalLeaf;
 import battle.attack.Attack.MagmaStorm;
@@ -379,6 +381,7 @@ import battle.attack.Attack.NightDaze;
 import battle.attack.Attack.NightShade;
 import battle.attack.Attack.NightSlash;
 import battle.attack.Attack.Nightmare;
+import battle.attack.Attack.NoRetreat;
 import battle.attack.Attack.NobleRoar;
 import battle.attack.Attack.Nuzzle;
 import battle.attack.Attack.OblivionWing;
@@ -593,8 +596,10 @@ import battle.attack.Attack.TailSlap;
 import battle.attack.Attack.TailWhip;
 import battle.attack.Attack.Tailwind;
 import battle.attack.Attack.TakeDown;
+import battle.attack.Attack.TarShot;
 import battle.attack.Attack.Taunt;
 import battle.attack.Attack.TearfulLook;
+import battle.attack.Attack.Teatime;
 import battle.attack.Attack.TechnoBlast;
 import battle.attack.Attack.TeeterDance;
 import battle.attack.Attack.Telekinesis;
@@ -890,6 +895,7 @@ public enum AttackNamesies {
     POWER_GEM("Power Gem", PowerGem::new),
     WATER_SPORT("Water Sport", WaterSport::new),
     SOAK("Soak", Soak::new),
+    MAGIC_POWDER("Magic Powder", MagicPowder::new),
     TRICK_OR_TREAT("Trick-or-Treat", TrickOrTreat::new),
     FORESTS_CURSE("Forest's Curse", ForestsCurse::new),
     PSYCH_UP("Psych Up", PsychUp::new),
@@ -1329,7 +1335,11 @@ public enum AttackNamesies {
     DYNAMAX_CANNON("Dynamax Cannon", DynamaxCannon::new),
     SNIPE_SHOT("Snipe Shot", SnipeShot::new),
     JAW_LOCK("Jaw Lock", JawLock::new),
-    STUFF_CHEEKS("Stuff Cheeks", StuffCheeks::new);
+    STUFF_CHEEKS("Stuff Cheeks", StuffCheeks::new),
+    NO_RETREAT("No Retreat", NoRetreat::new),
+    TAR_SHOT("Tar Shot", TarShot::new),
+    DRAGON_DARTS("Dragon Darts", DragonDarts::new),
+    TEATIME("Teatime", Teatime::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

@@ -41,6 +41,7 @@ import battle.effect.InvokeInterfaces.ItemBlockerEffect;
 import battle.effect.InvokeInterfaces.LevitationEffect;
 import battle.effect.InvokeInterfaces.NoSwapEffect;
 import battle.effect.InvokeInterfaces.OpponentAccuracyBypassEffect;
+import battle.effect.InvokeInterfaces.OpponentPowerChangeEffect;
 import battle.effect.InvokeInterfaces.PowderBlocker;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.InvokeInterfaces.RapidSpinRelease;
@@ -2322,6 +2323,20 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
                     victim, 1, Stat.ATTACK, b, CastSource.EFFECT,
                     (victimName, statName, changed) -> String.format("%s's Rage %s %s %s!", victim.getName(), changed, victimName, statName)
             );
+        }
+    }
+
+    static class StickyTar extends PokemonEffect implements OpponentPowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        StickyTar() {
+            super(PokemonEffectNamesies.STICKY_TAR, -1, -1, false, false);
+        }
+
+        @Override
+        public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // TODO: Completely guessing this number right now and should confirm it at some point
+            return user.isAttackType(Type.FIRE) ? 2 : 1;
         }
     }
 }

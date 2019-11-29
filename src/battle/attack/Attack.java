@@ -1616,7 +1616,8 @@ public abstract class Attack implements AttackInterface {
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             HoldItem item = victim.getHeldItem(b);
             if (item instanceof Berry) {
-                ((Berry)item).stealBerry(b, user, victim);
+                Berry berry = (Berry)item;
+                berry.eatBerry(b, user, victim);
             }
         }
     }
@@ -2325,7 +2326,8 @@ public abstract class Attack implements AttackInterface {
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             HoldItem item = victim.getHeldItem(b);
             if (item instanceof Berry) {
-                ((Berry)item).stealBerry(b, user, victim);
+                Berry berry = (Berry)item;
+                berry.eatBerry(b, user, victim);
             }
         }
     }
@@ -3843,6 +3845,21 @@ public abstract class Attack implements AttackInterface {
         @Override
         public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return new PokeType(Type.WATER);
+        }
+    }
+
+    static class MagicPowder extends Attack implements ChangeTypeSource {
+        private static final long serialVersionUID = 1L;
+
+        MagicPowder() {
+            super(AttackNamesies.MAGIC_POWDER, Type.PSYCHIC, MoveCategory.STATUS, 20, "The user scatters a cloud of magic powder that changes the target to Psychic type.");
+            super.accuracy = 100;
+            super.effect = PokemonEffectNamesies.CHANGE_TYPE;
+        }
+
+        @Override
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return new PokeType(Type.PSYCHIC);
         }
     }
 
@@ -11020,12 +11037,85 @@ public abstract class Attack implements AttackInterface {
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // TODO: Message order is backwards (might want to just manually increase defense here)
             Berry berry = (Berry)user.getHeldItem(b);
-            berry.stealBerry(b, victim, user);
+            berry.eatBerry(b, victim, user);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getHeldItem(b) instanceof Berry;
+        }
+    }
+
+    static class NoRetreat extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        NoRetreat() {
+            super(AttackNamesies.NO_RETREAT, Type.FIGHTING, MoveCategory.STATUS, 5, "This move raises all the user's stats but prevents the user from switching out or fleeing.");
+            super.effect = PokemonEffectNamesies.TRAPPED;
+            super.selfTarget = true;
+            super.statChanges[Stat.ATTACK.index()] = 1;
+            super.statChanges[Stat.DEFENSE.index()] = 1;
+            super.statChanges[Stat.SP_ATTACK.index()] = 1;
+            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
+            super.statChanges[Stat.SPEED.index()] = 1;
+        }
+    }
+
+    static class TarShot extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        TarShot() {
+            super(AttackNamesies.TAR_SHOT, Type.ROCK, MoveCategory.STATUS, 15, "The user pours sticky tar over the target, lowering the target's Speed stat. The target becomes weaker to Fire-type moves.");
+            super.accuracy = 100;
+            super.effect = PokemonEffectNamesies.STICKY_TAR;
+            super.statChanges[Stat.SPEED.index()] = -1;
+        }
+    }
+
+    static class DragonDarts extends Attack implements MultiStrikeMove {
+        private static final long serialVersionUID = 1L;
+
+        DragonDarts() {
+            super(AttackNamesies.DRAGON_DARTS, Type.DRAGON, MoveCategory.PHYSICAL, 10, "The user attacks twice using Dreepy.");
+            super.power = 50;
+            super.accuracy = 100;
+        }
+
+        @Override
+        public int getMinHits() {
+            return 2;
+        }
+
+        @Override
+        public int getMaxHits() {
+            return 2;
+        }
+    }
+
+    static class Teatime extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        // If the Pokemon is holding a berry, then they'll eat it
+        private void teatime(Battle b, ActivePokemon teaDrinker) {
+            HoldItem item = teaDrinker.getHeldItem(b);
+            if (item instanceof Berry) {
+                Berry berry = (Berry)item;
+                berry.eatBerry(b, teaDrinker, teaDrinker);
+            }
+        }
+
+        Teatime() {
+            super(AttackNamesies.TEATIME, Type.NORMAL, MoveCategory.STATUS, 10, "The user has teatime with all the Pokémon in the battle. Each Pokémon eats its held Berry.");
+            super.moveTypes.add(MoveType.FIELD);
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Each Pokemon in battle has tea time!
+            // TODO: Should probably fail for semi-invulberable Pokemon
+            // TODO: Should this display a fail message or something if no one is having tea?
+            teatime(b, user);
+            teatime(b, victim);
         }
     }
 }
