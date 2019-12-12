@@ -523,4 +523,36 @@ public final class EffectInterfaces {
             return b.isWeather(WeatherNamesies.RAINING);
         }
     }
+
+    // Used for trapping effects that are active so long as a specific Pokemon is still in play
+    public interface LockingEffect extends EffectInterface, TrappingEffect {
+        // Which Pokemon the locked effect is dependent upon
+        List<ActivePokemon> getLocking();
+
+        @Override
+        default boolean trapped(Battle b, ActivePokemon escaper) {
+            // Check if Pokemon are still locked before dooming them to a trapped lifestyle
+            return this.checkActive(b);
+        }
+
+        // Checks if Pokemon are still locked, and deactivates and returns false if not
+        default boolean checkActive(Battle b) {
+            // If any Pokemon is no longer locked, then none of them are
+            for (ActivePokemon p : this.getLocking()) {
+                if (this.unlocked(b, p)) {
+                    this.deactivate();
+                    return false;
+                }
+            }
+
+            // Still locked up (all Pokemon are alive and out front)
+            return true;
+        }
+
+        // Returns true if the Pokemon is no longer locked
+        // Confirms this by the Pokemon being dead or not the front Pokemon
+        private boolean unlocked(Battle b, ActivePokemon p) {
+            return p.isFainted(b) || !b.isFront(p);
+        }
+    }
 }

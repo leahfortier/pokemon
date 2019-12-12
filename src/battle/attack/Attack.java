@@ -11011,6 +11011,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
+    // TODO: I made Jaw Lock a biting move which it should be regardless but if I already have a todo to look it up might as well confirm that
     static class JawLock extends Attack {
         private static final long serialVersionUID = 1L;
 
@@ -11116,6 +11117,16 @@ public abstract class Attack implements AttackInterface {
             // TODO: Should this display a fail message or something if no one is having tea?
             teatime(b, user);
             teatime(b, victim);
+        }
+    }
+
+    static class Octolock extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        Octolock() {
+            super(AttackNamesies.OCTOLOCK, Type.FIGHTING, MoveCategory.STATUS, 15, "The user locks the target in and prevents it from fleeing. This move also lowers the target's Defense and Sp. Def every turn.");
+            super.accuracy = 100;
+            super.effect = PokemonEffectNamesies.OCTOLOCKED;
         }
     }
 }

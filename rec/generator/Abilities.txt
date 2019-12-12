@@ -249,7 +249,7 @@ Dry Skin:
 *
 Arena Trap:
     Desc: Prevents opposing Pok\u00e9mon from fleeing.
-    OpponentTrappingAbility: !escaper.isLevitating(b) && !escaper.isType(b, Type.GHOST)
+    OpponentTrappingAbility: !escaper.isLevitating(b)
     EncounterRateMultiplier: 2
 *
 Technician:
@@ -389,7 +389,7 @@ Oblivious:
         ###
 *
 Magnet Pull:
-    OpponentTrappingAbility: escaper.isType(b, Type.STEEL) && !escaper.isType(b, Type.GHOST)
+    OpponentTrappingAbility: escaper.isType(b, Type.STEEL)
     Desc: Prevents Steel-type Pok\u00e9mon from escaping using its magnetic force.
     TypedWildEncounterSelector: Steel
 *
@@ -730,7 +730,7 @@ Super Luck:
 *
 Shadow Tag:
     Desc: This Pok\u00e9mon steps on the opposing Pok\u00e9mon's shadow to prevent it from escaping.
-    OpponentTrappingAbility: !escaper.hasAbility(this.namesies) && !escaper.isType(b, Type.GHOST)
+    OpponentTrappingAbility: !escaper.hasAbility(this.namesies)
 *
 Overcoat:
     Desc: Protects the Pok\u00e9mon from things like sand, hail, and powder.

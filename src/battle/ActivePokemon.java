@@ -589,6 +589,11 @@ public class ActivePokemon extends PartyPokemon {
             return true;
         }
 
+        // Ghost-type Pokemon can always escape
+        if (this.isType(b, Type.GHOST)) {
+            return true;
+        }
+
         // Check if the user is under an effect that prevents escape
         if (TrappingEffect.isTrapped(b, this)) {
             return false;

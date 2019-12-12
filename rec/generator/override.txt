@@ -593,9 +593,6 @@ OnProtectingSuccess:
 SuccessiveDecay:
     AddMapField: EffectApplies: RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))
 *
-Trapped:
-    Header: boolean trapped(Battle b, ActivePokemon escaper)
-*
 TrappingMessage:
     Header: String trappingMessage(ActivePokemon trapped)
     Body:
@@ -629,6 +626,13 @@ PartialTrap:
     AddMapField: SubsideMessage: victim.getName() + " is no longer trapped by {1_}."
     AddMapField: RapidSpinNoInterface: released.getName() + " was released from {1_}!"
     AddMapField: TrappingMessage: trapped.getName() + " cannot be recalled due to {1_}!"
+*
+LockingEffect:
+    AddInterface: LockingEffect
+    Header: List<ActivePokemon> getLocking()
+    Body:
+        return List.of({0});
+        ###
 *
 UsedProof:
     AddMapField: CanHave: True

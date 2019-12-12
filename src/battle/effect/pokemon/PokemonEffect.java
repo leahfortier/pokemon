@@ -2,6 +2,7 @@ package battle.effect.pokemon;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.Stages.ModifyStageMessageGetter;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -11,6 +12,7 @@ import battle.effect.Effect;
 import battle.effect.EffectInterfaces.AbilityHolder;
 import battle.effect.EffectInterfaces.AttackSelectionSelfBlockerEffect;
 import battle.effect.EffectInterfaces.ItemHolder;
+import battle.effect.EffectInterfaces.LockingEffect;
 import battle.effect.EffectInterfaces.MessageGetter;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
@@ -1198,6 +1200,50 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
+    static class Octolocked extends PokemonEffect implements EndTurnEffect, LockingEffect {
+        private static final long serialVersionUID = 1L;
+
+        // Only locked as long as the caster is still in play
+        private ActivePokemon caster;
+
+        Octolocked() {
+            super(PokemonEffectNamesies.OCTOLOCKED, -1, -1, false, false);
+        }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return victim.getName() + " can't escape!";
+        }
+
+        @Override
+        public String trappingMessage(ActivePokemon trapped) {
+            return trapped.getName() + " is trapped by Octolock!";
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            // Make sure locking Pokemon is still here to be mean
+            if (!checkActive(b)) {
+                return;
+            }
+
+            // Charmander's Defense was lowered by Octolock!
+            ModifyStageMessageGetter messageGetter = (victimName, statName, changed) -> victim.getName() + "'s " + statName + " was " + changed + " by Octolock!";
+            victim.getStages().modifyStage(caster, -1, Stat.DEFENSE, b, CastSource.EFFECT, messageGetter);
+            victim.getStages().modifyStage(caster, -1, Stat.SP_DEFENSE, b, CastSource.EFFECT, messageGetter);
+        }
+
+        @Override
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            this.caster = caster;
+        }
+
+        @Override
+        public List<ActivePokemon> getLocking() {
+            return List.of(caster);
+        }
+    }
+
     static class Foresight extends PokemonEffect implements DefendingNoAdvantageChanger {
         private static final long serialVersionUID = 1L;
 
@@ -1419,11 +1465,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         Ingrain() {
             super(PokemonEffectNamesies.INGRAIN, -1, -1, false, false);
-        }
-
-        @Override
-        public boolean trapped(Battle b, ActivePokemon escaper) {
-            return true;
         }
 
         @Override

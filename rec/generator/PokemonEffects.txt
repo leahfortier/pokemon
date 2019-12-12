@@ -450,6 +450,30 @@ Trapped:
     CastMessage: victim.getName() + " can't escape!"
     TrappingMessage: trapped.getName() + " cannot be recalled at this time!"
 *
+Octolocked:
+    Int: EndTurnEffect
+    CastMessage: victim.getName() + " can't escape!"
+    TrappingMessage: trapped.getName() + " is trapped by Octolock!"
+    ApplyEndTurn:
+        // Make sure locking Pokemon is still here to be mean
+        if (!checkActive(b)) {
+            return;
+        }
+        
+        // Charmander's Defense was lowered by Octolock!
+        ModifyStageMessageGetter messageGetter = (victimName, statName, changed) -> victim.getName() + "'s " + statName + " was " + changed + " by Octolock!";
+        victim.getStages().modifyStage(caster, -1, Stat.DEFENSE, b, CastSource.EFFECT, messageGetter);
+        victim.getStages().modifyStage(caster, -1, Stat.SP_DEFENSE, b, CastSource.EFFECT, messageGetter);
+        ###
+    Field:
+        // Only locked as long as the caster is still in play
+        private ActivePokemon caster;
+        ###
+    BeforeCast:
+        this.caster = caster;
+        ###
+    LockingEffect: caster
+*
 Foresight:
     ForesightEffect: Ghost attacking == Type.NORMAL || attacking == Type.FIGHTING
 *
@@ -529,9 +553,6 @@ Telekinesis:
 *
 Ingrain:
     Int: TrappingEffect, GroundedEffect, PassableEffect, NoSwapEffect
-    Trapped:
-        return true;
-        ###
     TrappingMessage: trapped.getName() + " cannot be recalled due to ingrain!"
     EndTurnBigRootHealer: ingrain
     CastMessage: victim.getName() + " planted its roots!"

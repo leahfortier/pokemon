@@ -375,8 +375,7 @@ TrappingEffect:
     Method:
         Header: boolean trapped(Battle b, ActivePokemon escaper)
         Default:
-            // Ghost-type Pokemon can always escape
-            return !escaper.isType(b, Type.GHOST);
+            return true;
             ###
         Invoke: CheckMessage true trappingMessage(escaper)
         InvokeName: isTrapped

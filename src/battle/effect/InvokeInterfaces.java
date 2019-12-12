@@ -599,8 +599,7 @@ public final class InvokeInterfaces {
         String trappingMessage(ActivePokemon trapped);
 
         default boolean trapped(Battle b, ActivePokemon escaper) {
-            // Ghost-type Pokemon can always escape
-            return !escaper.isType(b, Type.GHOST);
+            return true;
         }
 
         static boolean isTrapped(Battle b, ActivePokemon escaper) {

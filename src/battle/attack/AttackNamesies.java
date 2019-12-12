@@ -386,6 +386,7 @@ import battle.attack.Attack.NobleRoar;
 import battle.attack.Attack.Nuzzle;
 import battle.attack.Attack.OblivionWing;
 import battle.attack.Attack.Octazooka;
+import battle.attack.Attack.Octolock;
 import battle.attack.Attack.OdorSleuth;
 import battle.attack.Attack.OminousWind;
 import battle.attack.Attack.OriginPulse;
@@ -1339,7 +1340,8 @@ public enum AttackNamesies {
     NO_RETREAT("No Retreat", NoRetreat::new),
     TAR_SHOT("Tar Shot", TarShot::new),
     DRAGON_DARTS("Dragon Darts", DragonDarts::new),
-    TEATIME("Teatime", Teatime::new);
+    TEATIME("Teatime", Teatime::new),
+    OCTOLOCK("Octolock", Octolock::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 
