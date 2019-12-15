@@ -9,6 +9,7 @@ import battle.attack.MoveType;
 import battle.effect.EffectInterfaces.EntryEndTurnEffect;
 import battle.effect.EffectInterfaces.PowderMove;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
+import battle.effect.EffectInterfaces.SwappableEffect;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.battle.BattleEffect;
@@ -257,7 +258,7 @@ public final class InvokeInterfaces {
         }
     }
 
-    public interface BarrierEffect extends EffectInterface, SimpleStatModifyingEffect {
+    public interface BarrierEffect extends SwappableEffect, SimpleStatModifyingEffect {
         String getBreakMessage(ActivePokemon breaker);
 
         default void breakBarrier(ActivePokemon breaker) {

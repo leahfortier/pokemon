@@ -17,6 +17,7 @@ import battle.effect.EffectInterfaces.SemiInvulnerableDiggingBypasser;
 import battle.effect.EffectInterfaces.SemiInvulnerableFlyingBypasser;
 import battle.effect.EffectInterfaces.StormyMove;
 import battle.effect.EffectInterfaces.SwapOpponentEffect;
+import battle.effect.EffectInterfaces.SwappableEffect;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AdvantageMultiplierMove;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
@@ -62,6 +63,7 @@ import battle.effect.source.ChangeAttackTypeSource;
 import battle.effect.source.ChangeTypeSource;
 import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
+import battle.effect.team.TeamEffect;
 import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
 import item.berry.Berry;
@@ -82,6 +84,7 @@ import pokemon.active.MoveList;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import trainer.Team;
+import trainer.Team.TeamEffectList;
 import trainer.Trainer;
 import type.PokeType;
 import type.Type;
@@ -91,6 +94,7 @@ import util.string.PokeString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class Attack implements AttackInterface {
     private static final long serialVersionUID = 1L;
@@ -11127,6 +11131,79 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.OCTOLOCK, Type.FIGHTING, MoveCategory.STATUS, 15, "The user locks the target in and prevents it from fleeing. This move also lowers the target's Defense and Sp. Def every turn.");
             super.accuracy = 100;
             super.effect = PokemonEffectNamesies.OCTOLOCKED;
+        }
+    }
+
+    static class BoltBeak extends Attack implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        BoltBeak() {
+            super(AttackNamesies.BOLT_BEAK, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, "The user stabs the target with its electrified beak. If the user attacks before the target, the power of this move is doubled.");
+            super.power = 85;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.isFirstAttack() ? 2 : 1;
+        }
+    }
+
+    static class FishiousRend extends Attack implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        FishiousRend() {
+            super(AttackNamesies.FISHIOUS_REND, Type.WATER, MoveCategory.PHYSICAL, 10, "The user rends the target with its hard gills. If the user attacks before the target, the power of this move is doubled.");
+            super.power = 85;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.BITING);
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.isFirstAttack() ? 2 : 1;
+        }
+    }
+
+    static class CourtChange extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        // Gets and removes all the swappable effects on the team of the specified Pokemon
+        private List<TeamEffect> cutSwappableEffects(Battle b, ActivePokemon p) {
+            TeamEffectList teamEffectList = b.getTrainer(p).getEffects();
+            List<TeamEffect> swappable = teamEffectList.asList().stream()
+                .filter(effect -> effect instanceof SwappableEffect)
+                .collect(Collectors.toList());
+            teamEffectList.removeAll(swappable);
+            return swappable;
+        }
+
+        // Adds the swappable effects (from the opposite team) to the team of the input Pokemon
+        // This team's effects should already be stored and removed at this point
+        private void addSwappableEffects(Battle b, ActivePokemon p, List<TeamEffect> swappable) {
+            TeamEffectList teamEffectList = b.getTrainer(p).getEffects();
+            for (TeamEffect effect : swappable) {
+                teamEffectList.add(effect);
+            }
+        }
+
+        CourtChange() {
+            super(AttackNamesies.COURT_CHANGE, Type.NORMAL, MoveCategory.STATUS, 10, "With its mysterious power, the user swaps the effects on either side of the field.");
+            super.accuracy = 100;
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            Messages.add(user.getName() + " swapped the effects!");
+
+            // Important to remove and add the exact effects and not creating new ones and casting
+            List<TeamEffect> userEffects = cutSwappableEffects(b, user);
+            List<TeamEffect> victimEffects = cutSwappableEffects(b, victim);
+
+            addSwappableEffects(b, user, victimEffects);
+            addSwappableEffects(b, victim, userEffects);
         }
     }
 }

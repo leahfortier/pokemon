@@ -923,6 +923,13 @@ Defog:
         return {0};
         ###
 *
+EntryHazard:
+    AddInterface: EntryHazard
+    Header: String getReleaseMessage()
+    Body:
+        return {0};
+        ###
+*
 AbilityHolder:
     AddInterface: AbilityHolder
     Header: Ability getAbility()

@@ -50,6 +50,7 @@ import battle.attack.Attack.Blizzard;
 import battle.attack.Attack.Block;
 import battle.attack.Attack.BlueFlare;
 import battle.attack.Attack.BodySlam;
+import battle.attack.Attack.BoltBeak;
 import battle.attack.Attack.BoltStrike;
 import battle.attack.Attack.BoneClub;
 import battle.attack.Attack.BoneRush;
@@ -97,6 +98,7 @@ import battle.attack.Attack.CosmicPower;
 import battle.attack.Attack.CottonGuard;
 import battle.attack.Attack.CottonSpore;
 import battle.attack.Attack.Counter;
+import battle.attack.Attack.CourtChange;
 import battle.attack.Attack.Covet;
 import battle.attack.Attack.Crabhammer;
 import battle.attack.Attack.CraftyShield;
@@ -188,6 +190,7 @@ import battle.attack.Attack.FirePledge;
 import battle.attack.Attack.FirePunch;
 import battle.attack.Attack.FireSpin;
 import battle.attack.Attack.FirstImpression;
+import battle.attack.Attack.FishiousRend;
 import battle.attack.Attack.Fissure;
 import battle.attack.Attack.Flail;
 import battle.attack.Attack.FlameBurst;
@@ -1341,7 +1344,10 @@ public enum AttackNamesies {
     TAR_SHOT("Tar Shot", TarShot::new),
     DRAGON_DARTS("Dragon Darts", DragonDarts::new),
     TEATIME("Teatime", Teatime::new),
-    OCTOLOCK("Octolock", Octolock::new);
+    OCTOLOCK("Octolock", Octolock::new),
+    BOLT_BEAK("Bolt Beak", BoltBeak::new),
+    FISHIOUS_REND("Fishious Rend", FishiousRend::new),
+    COURT_CHANGE("Court Change", CourtChange::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

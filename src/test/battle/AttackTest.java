@@ -37,7 +37,9 @@ import util.GeneralUtils;
 
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class AttackTest extends BaseTest {
     @Test
@@ -900,6 +902,101 @@ public class AttackTest extends BaseTest {
         battle.assertNoEffect(defending, TeamEffectNamesies.SPIKES);
         defending.assertHasEffect(PokemonEffectNamesies.LEECH_SEED);
         defending.assertHasEffect(PokemonEffectNamesies.WRAPPED);
+    }
+
+    @Test
+    public void courtChangeTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Add some team effects
+        battle.fight(AttackNamesies.STEALTH_ROCK, AttackNamesies.SPIKES);
+        battle.fight(AttackNamesies.LIGHT_SCREEN, AttackNamesies.TAILWIND);   // a: LS 4, T 3
+        battle.fight(AttackNamesies.STICKY_WEB, AttackNamesies.LIGHT_SCREEN); // a: LS 3, T 2 | d: LS 4
+
+        courtChangeTest(battle, attacking,
+                        TeamEffectNamesies.LIGHT_SCREEN, // Longer light screen
+                        TeamEffectNamesies.SPIKES
+        );
+        courtChangeTest(battle, defending,
+                        TeamEffectNamesies.STEALTH_ROCK,
+                        TeamEffectNamesies.LIGHT_SCREEN, // Shorter light screen
+                        TeamEffectNamesies.STICKY_WEB,
+                        TeamEffectNamesies.TAILWIND
+        );
+
+        // Swapperooni
+        battle.attackingFight(AttackNamesies.COURT_CHANGE); // a: LS 3 | d: LS 2, T 1
+
+        courtChangeTest(battle, attacking,
+                        TeamEffectNamesies.STEALTH_ROCK,
+                        TeamEffectNamesies.LIGHT_SCREEN, // Longer light screen
+                        TeamEffectNamesies.STICKY_WEB,
+                        TeamEffectNamesies.TAILWIND
+        );
+        courtChangeTest(battle, defending,
+                        TeamEffectNamesies.LIGHT_SCREEN, // Shorter light screen
+                        TeamEffectNamesies.SPIKES
+        );
+
+        // Do nothing to make counters decrease (make sure Tailwind finishes this turn exactly)
+        battle.splashFight(); // a: LS 2 | d: LS 1, T 0
+
+        courtChangeTest(battle, attacking, // No longer includes Tailwind
+                        TeamEffectNamesies.STEALTH_ROCK,
+                        TeamEffectNamesies.LIGHT_SCREEN, // Longer light screen
+                        TeamEffectNamesies.STICKY_WEB
+        );
+        courtChangeTest(battle, defending,
+                        TeamEffectNamesies.LIGHT_SCREEN, // Shorter light screen
+                        TeamEffectNamesies.SPIKES
+        );
+
+        // Do nothing to make counters decrease (make sure shorter Light Screen finishes this turn exactly)
+        battle.splashFight(); // a: LS 1 | d: LS 0
+
+        courtChangeTest(battle, attacking,
+                        TeamEffectNamesies.LIGHT_SCREEN, // Longer light screen
+                        TeamEffectNamesies.STEALTH_ROCK,
+                        TeamEffectNamesies.STICKY_WEB
+        );
+        courtChangeTest(battle, defending, TeamEffectNamesies.SPIKES); // No longer includes (shorter) Light Screen
+
+        // Do nothing to make counters decrease (make sure longer Light Screen finishes this turn exactly)
+        battle.splashFight(); // a: LS 0
+
+        courtChangeTest(battle, attacking, // No longer includes (longer) Light Screen
+                        TeamEffectNamesies.STEALTH_ROCK,
+                        TeamEffectNamesies.STICKY_WEB
+        );
+        courtChangeTest(battle, defending, TeamEffectNamesies.SPIKES); // No longer includes (longer) Light Screen
+
+        // Swap entry hazards back blah blah blah
+        battle.defendingFight(AttackNamesies.COURT_CHANGE);
+
+        courtChangeTest(battle, attacking, TeamEffectNamesies.SPIKES);
+        courtChangeTest(battle, defending, TeamEffectNamesies.STEALTH_ROCK, TeamEffectNamesies.STICKY_WEB);
+    }
+
+    private void courtChangeTest(TestBattle battle, TestPokemon teamPokemon, TeamEffectNamesies... teamEffects) {
+        List<TeamEffectNamesies> courtChangeEffects = List.of(
+                TeamEffectNamesies.REFLECT,
+                TeamEffectNamesies.LIGHT_SCREEN,
+                TeamEffectNamesies.AURORA_VEIL,
+                TeamEffectNamesies.STEALTH_ROCK,
+                TeamEffectNamesies.SPIKES,
+                TeamEffectNamesies.STICKY_WEB,
+                TeamEffectNamesies.TOXIC_SPIKES,
+                TeamEffectNamesies.TAILWIND
+        );
+
+        Set<TeamEffectNamesies> hasEffects = Set.of(teamEffects);
+
+        // For each relevant court change effect, confirm that the team either has or does not have the effect
+        for (TeamEffectNamesies effect : courtChangeEffects) {
+            battle.assertEffect(hasEffects.contains(effect), teamPokemon, effect);
+        }
     }
 
     @Test

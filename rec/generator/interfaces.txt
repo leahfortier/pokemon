@@ -136,7 +136,7 @@ CrashDamageMove:
     *
 ***
 BarrierEffect:
-    Extends: EffectInterface, SimpleStatModifyingEffect
+    Extends: SwappableEffect, SimpleStatModifyingEffect
     Method:
         Header: String getBreakMessage(ActivePokemon breaker)
     *

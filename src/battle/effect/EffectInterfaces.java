@@ -7,6 +7,7 @@ import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
 import battle.effect.InvokeInterfaces.CrashDamageMove;
+import battle.effect.InvokeInterfaces.DefogRelease;
 import battle.effect.InvokeInterfaces.EffectExtendingEffect;
 import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
@@ -122,7 +123,25 @@ public final class EffectInterfaces {
         }
     }
 
-    public interface PassableEffect {}
+    // Pokemon Effects that can be passed with Baton Pass
+    public interface PassableEffect extends EffectInterface {}
+
+    // Team Effects that can be swapped with Court Change
+    public interface SwappableEffect extends EffectInterface {}
+
+    public interface EntryHazard extends SwappableEffect, EntryEffect, RapidSpinRelease, DefogRelease {
+        String getReleaseMessage();
+
+        @Override
+        default String getRapidSpinReleaseMessage(ActivePokemon released) {
+            return this.getReleaseMessage();
+        }
+
+        @Override
+        default String getDefogReleaseMessage(ActivePokemon released) {
+            return this.getReleaseMessage();
+        }
+    }
 
     public interface PhysicalContactEffect extends OpponentApplyDamageEffect {
 
