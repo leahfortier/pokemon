@@ -272,7 +272,6 @@ public class EffectTest extends BaseTest {
         attacking.getEffects().reset();
         Assert.assertTrue(attacking.canEscape(battle));
 
-        // TODO: This is not supposed to block Ghosts from escaping
         battle.defendingFight(AttackNamesies.FAIRY_LOCK);
         Assert.assertFalse(attacking.canEscape(battle));
     }
@@ -1196,5 +1195,70 @@ public class EffectTest extends BaseTest {
     private void assertWeight(TestBattle battle, double attackingWeight, double defendingWeight) {
         TestUtils.assertEquals(attackingWeight, battle.getAttacking().getWeight(battle));
         TestUtils.assertEquals(defendingWeight, battle.getDefending().getWeight(battle));
+    }
+
+    @Test
+    public void octolockTest() {
+        // Basic cannot escape and lowered stats
+        octolockTest(AbilityNamesies.OVERGROW);
+        octolockTest(AbilityNamesies.MOLD_BREAKER);
+
+        // Clear Body should make the Pokemon still unable to escape, but stats should not be lowered
+        octolockTest(AbilityNamesies.CLEAR_BODY, new TestStages());
+
+        // Big Pecks only prevents loss from Defense
+        octolockTest(AbilityNamesies.BIG_PECKS, new TestStages().set(-1, Stat.SP_DEFENSE));
+
+        // Contrary should be increasing defenses each turn
+        octolockTest(AbilityNamesies.CONTRARY, new TestStages().set(1, Stat.DEFENSE, Stat.SP_DEFENSE));
+
+        // Simple should be doubling the decreases each turn
+        octolockTest(AbilityNamesies.SIMPLE, new TestStages().set(-2, Stat.DEFENSE, Stat.SP_DEFENSE));
+
+        // Magic Bounce should reflect the Octolock back onto attacking Pokemon unless user has Mold Breaker
+        octolockTest(AbilityNamesies.MAGIC_BOUNCE, true, (battle, attacking, defending) -> {
+            Assert.assertFalse(attacking.canEscape(battle));
+            Assert.assertTrue(defending.canEscape(battle));
+
+            attacking.assertStages(new TestStages().set(-1, Stat.DEFENSE, Stat.SP_DEFENSE));
+            defending.assertStages(new TestStages());
+        });
+    }
+
+    private void octolockTest(AbilityNamesies defendingAbility) {
+        octolockTest(defendingAbility, new TestStages().set(-1, Stat.DEFENSE, Stat.SP_DEFENSE));
+    }
+
+    private void octolockTest(AbilityNamesies defendingAbility, TestStages defendingStages) {
+        octolockTest(defendingAbility, false, octolockCheck(defendingStages));
+    }
+
+    // relevantMoldBreaker is true when Octolock is affected by mold breaker (defaults to false for the most part)
+    private void octolockTest(AbilityNamesies defendingAbility, boolean relevantMoldBreaker, PokemonManipulator withAbility) {
+        PokemonManipulator withoutAbility = octolockCheck(new TestStages().set(-1, Stat.DEFENSE, Stat.SP_DEFENSE));
+
+        // Test with and without the specified ability on the defending Pokemon
+        new TestInfo().attackingFight(AttackNamesies.OCTOLOCK)
+                      .doubleTake(defendingAbility, withoutAbility, withAbility);
+
+        // Test with and without Mold Breaker for the attacking Pokemon, defending Pokemon always has input ability
+        // Note: not using the ability double take method since the ability is on the attacking
+        new TestInfo().defending(defendingAbility)
+                      .attackingFight(AttackNamesies.OCTOLOCK)
+                      .doubleTake(
+                              (battle, attacking, defending) -> attacking.withAbility(AbilityNamesies.MOLD_BREAKER),
+                              withAbility,
+                              relevantMoldBreaker ? withoutAbility : withAbility
+                      );
+    }
+
+    private PokemonManipulator octolockCheck(TestStages defendingStages) {
+        return (battle, attacking, defending) -> {
+            Assert.assertTrue(attacking.canEscape(battle));
+            Assert.assertFalse(defending.canEscape(battle));
+
+            attacking.assertStages(new TestStages());
+            defending.assertStages(defendingStages);
+        };
     }
 }

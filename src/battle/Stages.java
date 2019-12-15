@@ -85,16 +85,17 @@ public class Stages implements Serializable {
         }
 
         String statName = stat.getName();
-        boolean print = source == CastSource.ATTACK && caster.getAttack().canPrintFail();
+        boolean printFail = source == CastSource.ATTACK && caster.getAttack().canPrintFail();
 
         // Effects that change the value of the modifier
-        val *= ModifyStageValueEffect.getModifier(b, caster, victim);
+        ActivePokemon moldBreaker = source == CastSource.ATTACK && caster != victim ? caster : null;
+        val *= ModifyStageValueEffect.getModifier(b, moldBreaker, victim);
 
         // Effects that prevent stat reductions caused by the opponent
         if (val < 0 && caster != victim) {
-            StatProtectingEffect prevent = StatProtectingEffect.getPreventEffect(b, caster, victim, stat);
+            StatProtectingEffect prevent = StatProtectingEffect.getPreventEffect(moldBreaker, b, caster, victim, stat);
             if (prevent != null) {
-                if (print) {
+                if (printFail) {
                     Messages.add(prevent.preventionMessage(b, victim, stat));
                 }
                 return false;
@@ -103,7 +104,7 @@ public class Stages implements Serializable {
 
         // Too High
         if (getStage(stat) == Stat.MAX_STAT_CHANGES && val > 0) {
-            if (print) {
+            if (printFail) {
                 Messages.add(victim.getName() + "'s " + statName + " cannot be raised any higher!");
             }
             return false;
@@ -112,7 +113,7 @@ public class Stages implements Serializable {
         // HOW LOW CAN YOU GO?!
         if (getStage(stat) == -Stat.MAX_STAT_CHANGES && val < 0) {
             // THIS LOW
-            if (print) {
+            if (printFail) {
                 Messages.add(victim.getName() + "'s " + statName + " cannot be lowered any further!");
             }
             return false;

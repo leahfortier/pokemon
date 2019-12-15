@@ -727,13 +727,13 @@ public final class InvokeInterfaces {
         boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat);
         String preventionMessage(Battle b, ActivePokemon p, Stat s);
 
-        static StatProtectingEffect getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
+        static StatProtectingEffect getPreventEffect(ActivePokemon moldBreaker, Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof StatProtectingEffect && invokee.isActiveEffect()) {
 
                     // If this is an ability that is being affected by mold breaker, we don't want to do anything with it
-                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && caster.breaksTheMold()) {
+                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && moldBreaker != null && moldBreaker.breaksTheMold()) {
                         continue;
                     }
 
@@ -1570,14 +1570,10 @@ public final class InvokeInterfaces {
     }
 
     public interface ModifyStageValueEffect {
-
-        // TODO: Can we test this with mold breaker? it looks backwards at first glance
         int modifyStageValue();
 
-        static double getModifier(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        static double getModifier(Battle b, ActivePokemon moldBreaker, ActivePokemon victim) {
             double modifier = 1;
-
-            ActivePokemon moldBreaker = caster == victim ? null : caster;
 
             List<InvokeEffect> invokees = b.getEffectsList(victim);
             for (InvokeEffect invokee : invokees) {

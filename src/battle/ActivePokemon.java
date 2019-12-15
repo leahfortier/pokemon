@@ -368,6 +368,12 @@ public class ActivePokemon extends PartyPokemon {
 
     // Pangoro breaks the mold!
     public boolean breaksTheMold() {
+        // Mold breaker is only for direct attacks
+        // Note: this check is definitely not comprehensive
+        if (!this.isAttacking()) {
+            return false;
+        }
+
         switch (getAbility().namesies()) {
             case MOLD_BREAKER:
             case TURBOBLAZE:
