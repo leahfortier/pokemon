@@ -11039,8 +11039,8 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            // TODO: Message order is backwards (might want to just manually increase defense here)
+        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Note: Here instead of unique effects so the message is displayed before the defense increase
             Berry berry = (Berry)user.getHeldItem(b);
             berry.eatBerry(b, victim, user);
         }
@@ -11051,6 +11051,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
+    // TODO: I think this can only be used once?
     static class NoRetreat extends Attack {
         private static final long serialVersionUID = 1L;
 
@@ -11102,6 +11103,11 @@ public abstract class Attack implements AttackInterface {
 
         // If the Pokemon is holding a berry, then they'll eat it
         private void teatime(Battle b, ActivePokemon teaDrinker) {
+            // Semi-invulnerable Pokemon don't drink tea, duh
+            if (teaDrinker.isSemiInvulnerable()) {
+                return;
+            }
+
             HoldItem item = teaDrinker.getHeldItem(b);
             if (item instanceof Berry) {
                 Berry berry = (Berry)item;
@@ -11117,7 +11123,6 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Each Pokemon in battle has tea time!
-            // TODO: Should probably fail for semi-invulberable Pokemon
             // TODO: Should this display a fail message or something if no one is having tea?
             teatime(b, user);
             teatime(b, victim);
@@ -11204,6 +11209,32 @@ public abstract class Attack implements AttackInterface {
 
             addSwappableEffects(b, user, victimEffects);
             addSwappableEffects(b, victim, userEffects);
+        }
+    }
+
+    static class ClangorousSoul extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        ClangorousSoul() {
+            super(AttackNamesies.CLANGOROUS_SOUL, Type.DRAGON, MoveCategory.STATUS, 5, "The user raises all its stats by using some of its HP.");
+            super.moveTypes.add(MoveType.SOUND_BASED);
+            super.selfTarget = true;
+            super.statChanges[Stat.ATTACK.index()] = 1;
+            super.statChanges[Stat.DEFENSE.index()] = 1;
+            super.statChanges[Stat.SP_ATTACK.index()] = 1;
+            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
+            super.statChanges[Stat.SPEED.index()] = 1;
+        }
+
+        @Override
+        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Here instead of unique effects so the message is displayed before the stat increases
+            user.forceReduceHealthFraction(b, 1/3.0, user.getName() + " sacrificed its HP to raise its stats!");
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.getHPRatio() > 1/3.0;
         }
     }
 }

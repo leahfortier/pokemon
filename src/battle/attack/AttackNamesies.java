@@ -81,6 +81,7 @@ import battle.attack.Attack.ChipAway;
 import battle.attack.Attack.CircleThrow;
 import battle.attack.Attack.Clamp;
 import battle.attack.Attack.ClangingScales;
+import battle.attack.Attack.ClangorousSoul;
 import battle.attack.Attack.ClearSmog;
 import battle.attack.Attack.CloseCombat;
 import battle.attack.Attack.Coil;
@@ -1347,7 +1348,8 @@ public enum AttackNamesies {
     OCTOLOCK("Octolock", Octolock::new),
     BOLT_BEAK("Bolt Beak", BoltBeak::new),
     FISHIOUS_REND("Fishious Rend", FishiousRend::new),
-    COURT_CHANGE("Court Change", CourtChange::new);
+    COURT_CHANGE("Court Change", CourtChange::new),
+    CLANGOROUS_SOUL("Clangorous Soul", ClangorousSoul::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

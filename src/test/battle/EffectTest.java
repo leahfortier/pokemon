@@ -1215,6 +1215,10 @@ public class EffectTest extends BaseTest {
         // Simple should be doubling the decreases each turn
         octolockTest(AbilityNamesies.SIMPLE, new TestStages().set(-2, Stat.DEFENSE, Stat.SP_DEFENSE));
 
+        // Defiant/Competitive sharply increases Attack/Sp. Attack for each reduction
+        octolockTest(AbilityNamesies.DEFIANT, new TestStages().set(-1, Stat.DEFENSE, Stat.SP_DEFENSE).set(4, Stat.ATTACK));
+        octolockTest(AbilityNamesies.COMPETITIVE, new TestStages().set(-1, Stat.DEFENSE, Stat.SP_DEFENSE).set(4, Stat.SP_ATTACK));
+
         // Magic Bounce should reflect the Octolock back onto attacking Pokemon unless user has Mold Breaker
         octolockTest(AbilityNamesies.MAGIC_BOUNCE, true, (battle, attacking, defending) -> {
             Assert.assertFalse(attacking.canEscape(battle));

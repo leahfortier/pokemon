@@ -6642,8 +6642,8 @@ Stuff Cheeks:
     Type: Normal
     Cat: Status
     Applies: user.getHeldItem(b) instanceof Berry
-    UniqueEffects:
-        // TODO: Message order is backwards (might want to just manually increase defense here)
+    AfterApplyCheck:
+        // Note: Here instead of unique effects so the message is displayed before the defense increase
         Berry berry = (Berry)user.getHeldItem(b);
         berry.eatBerry(b, victim, user);
         ###
@@ -6658,6 +6658,7 @@ No Retreat:
     RaiseAllStats: True
     SelfTarget: True
     PokemonEffect: Trapped
+    Comments: // TODO: I think this can only be used once?
 *
 Tar Shot:
     Desc: The user pours sticky tar over the target, lowering the target's Speed stat. The target becomes weaker to Fire-type moves.
@@ -6686,7 +6687,6 @@ Teatime:
     MoveType: Field
     UniqueEffects:
         // Each Pokemon in battle has tea time!
-        // TODO: Should probably fail for semi-invulberable Pokemon
         // TODO: Should this display a fail message or something if no one is having tea?
         teatime(b, user);
         teatime(b, victim);
@@ -6694,6 +6694,11 @@ Teatime:
     Field:
         // If the Pokemon is holding a berry, then they'll eat it
         private void teatime(Battle b, ActivePokemon teaDrinker) {
+            // Semi-invulnerable Pokemon don't drink tea, duh
+            if (teaDrinker.isSemiInvulnerable()) {
+                return;
+            }
+            
             HoldItem item = teaDrinker.getHeldItem(b);
             if (item instanceof Berry) {
                 Berry berry = (Berry)item;
@@ -6764,5 +6769,19 @@ Court Change:
                 teamEffectList.add(effect);
             }
         }
+        ###
+*
+Clangorous Soul:
+    Desc: The user raises all its stats by using some of its HP.
+    PP: 5
+    Type: Dragon
+    Cat: Status
+    MoveType: Sound_Based
+    RaiseAllStats: True
+    SelfTarget: True
+    Applies: user.getHPRatio() > 1/3.0
+    AfterApplyCheck:
+        // Here instead of unique effects so the message is displayed before the stat increases
+        user.forceReduceHealthFraction(b, 1/3.0, user.getName() + " sacrificed its HP to raise its stats!");
         ###
 *

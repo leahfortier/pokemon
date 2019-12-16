@@ -2376,7 +2376,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            // TODO: Completely guessing this number right now and should confirm it at some point
             return user.isAttackType(Type.FIRE) ? 2 : 1;
         }
     }
