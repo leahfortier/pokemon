@@ -6785,3 +6785,13 @@ Clangorous Soul:
         user.forceReduceHealthFraction(b, 1/3.0, user.getName() + " sacrificed its HP to raise its stats!");
         ###
 *
+Body Press:
+    Desc: The user attacks by slamming its body into the target. The higher the user's Defense, the more damage it can inflict on the target.
+    PP: 10
+    Pow: 80
+    Acc: 100
+    Cat: Physical
+    Type: Fighting
+    Int: StatSwitchingEffect
+    SwitchStat: return s == Stat.ATTACK ? Stat.DEFENSE : s;
+*

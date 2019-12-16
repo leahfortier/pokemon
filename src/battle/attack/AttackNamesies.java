@@ -49,6 +49,7 @@ import battle.attack.Attack.BlazeKick;
 import battle.attack.Attack.Blizzard;
 import battle.attack.Attack.Block;
 import battle.attack.Attack.BlueFlare;
+import battle.attack.Attack.BodyPress;
 import battle.attack.Attack.BodySlam;
 import battle.attack.Attack.BoltBeak;
 import battle.attack.Attack.BoltStrike;
@@ -1349,7 +1350,8 @@ public enum AttackNamesies {
     BOLT_BEAK("Bolt Beak", BoltBeak::new),
     FISHIOUS_REND("Fishious Rend", FishiousRend::new),
     COURT_CHANGE("Court Change", CourtChange::new),
-    CLANGOROUS_SOUL("Clangorous Soul", ClangorousSoul::new);
+    CLANGOROUS_SOUL("Clangorous Soul", ClangorousSoul::new),
+    BODY_PRESS("Body Press", BodyPress::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

@@ -66,6 +66,7 @@ import battle.effect.InvokeInterfaces.StatChangingEffect;
 import battle.effect.InvokeInterfaces.StatLoweredEffect;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
+import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StatusBoosterEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
@@ -140,6 +141,7 @@ public class ClassTest extends BaseTest {
             SelfAttackBlocker.class,
             CritStageEffect.class,
             ForceMoveEffect.class,
+            StatSwitchingEffect.class,
             StatusBoosterEffect.class
     );
 

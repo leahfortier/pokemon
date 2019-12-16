@@ -39,6 +39,7 @@ import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.SelfAttackBlocker;
 import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.SleepyFightsterEffect;
+import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.attack.FixedDamageMove;
@@ -11235,6 +11236,22 @@ public abstract class Attack implements AttackInterface {
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getHPRatio() > 1/3.0;
+        }
+    }
+
+    static class BodyPress extends Attack implements StatSwitchingEffect {
+        private static final long serialVersionUID = 1L;
+
+        BodyPress() {
+            super(AttackNamesies.BODY_PRESS, Type.FIGHTING, MoveCategory.PHYSICAL, 10, "The user attacks by slamming its body into the target. The higher the user's Defense, the more damage it can inflict on the target.");
+            super.power = 80;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
+            return s == Stat.ATTACK ? Stat.DEFENSE : s;
         }
     }
 }

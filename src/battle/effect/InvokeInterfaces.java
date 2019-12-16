@@ -1031,7 +1031,7 @@ public final class InvokeInterfaces {
         Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s);
 
         static Stat switchStat(Battle b, ActivePokemon statPokemon, Stat s) {
-            List<InvokeEffect> invokees = b.getEffectsList(statPokemon);
+            List<InvokeEffect> invokees = b.getEffectsList(statPokemon, statPokemon.getAttack());
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof StatSwitchingEffect && invokee.isActiveEffect()) {
                     StatSwitchingEffect effect = (StatSwitchingEffect)invokee;
