@@ -476,11 +476,18 @@ Baneful Bunker:
     ProtectingAttack: BanefulBunker
 *
 King's Shield:
-    Desc: The user takes a defensive stance while it protects itself from damage. It also harshly lowers the Attack stat of any attacker who makes direct contact.
+    Desc: The user takes a defensive stance while it protects itself from damage. It also lowers the Attack stat of any attacker that makes direct contact.
     Type: Steel
     PP: 10
     Cat: Status
     ProtectingAttack: KingsShield
+*
+Obstruct:
+    Desc: This move enables the user to protect itself from all attacks. Its chance of failing rises if it is used in succession. Direct contact harshly lowers the attacker's Defense stat.
+    Type: Dark
+    PP: 10
+    Cat: Status
+    ProtectingAttack: Obstruct
 *
 Protect:
     Desc: Enables the user to evade all attacks. Its chance of failing rises if it is used in succession.
@@ -638,6 +645,26 @@ Hyper Beam:
     Acc: 90
     Pow: 150
     RechargingMove: True
+*
+Meteor Assault:
+    Desc: The user attacks wildly with its thick leek. The user can't move on the next turn, because the force of this move makes it stagger.
+    PP: 5
+    Type: Fighting
+    Pow: 150
+    Acc: 100
+    Cat: Physical
+    RechargingMove: True
+    PhysicalContact: False
+*
+Eternabeam:
+    Desc: This is Eternatus's most powerful attack in its original form. The user can't move on the next turn.
+    PP: 5
+    Type: Dragon
+    Pow: 160
+    Acc: 90
+    Cat: Special
+    RechargingMove: True
+    Comments: // TODO: Seems like a move that can only be used by Eternatus
 *
 Frenzy Plant:
     Desc: The user slams the target with an enormous tree. The user can't move on the next turn.
@@ -6614,6 +6641,24 @@ Dynamax Cannon:
     Cat: Special
     Comments: // TODO: Removed double damage when Dynamaxed, should this do something more interesting?
 *
+Behemoth Blade:
+    Desc: The user becomes a gigantic sword and cuts the target.
+    PP: 5
+    Pow: 100
+    Acc: 100
+    Type: Steel
+    Cat: Physical
+    Comments: // TODO: Removed double damage when Dynamaxed, should this do something more interesting?
+*
+Behemoth Bash:
+    Desc: The user becomes a gigantic shield and slams into the target.
+    PP: 5
+    Pow: 100
+    Acc: 100
+    Type: Steel
+    Cat: Physical
+    Comments: // TODO: Removed double damage when Dynamaxed, should this do something more interesting?
+*
 Snipe Shot:
     Desc: This move can be used on the target regardless of its Abilities. Critical hits land more easily.
     PP: 15
@@ -6794,4 +6839,133 @@ Body Press:
     Type: Fighting
     Int: StatSwitchingEffect
     SwitchStat: return s == Stat.ATTACK ? Stat.DEFENSE : s;
+*
+Decorate:
+    Desc: The user sharply raises its Attack and Sp. Atk stats by decorating the target.
+    PP: 15
+    Type: Fairy
+    Cat: Status
+    StatChange: Attack 2 Sp_Attack 2
+    SelfTarget: True
+*
+Drum Beating:
+    Desc: The user plays its drum, controlling the drum's roots to attack the target. This also lowers the target's Speed stat.
+    PP: 10
+    Pow: 80
+    Acc: 100
+    Cat: Physical
+    Type: Grass
+    StatChange: Speed -1
+    PhysicalContact: False
+*
+SnapTrap:
+    Desc: The user snares the target in a snap trap for four to five turns.
+    PP: 15
+    Type: Grass
+    Cat: Physical
+    Acc: 100
+    Pow: 35
+    PokemonEffect: SnapTrapped
+*
+Pyro Ball:
+    Desc: The user attacks by igniting a small stone and launching it as a fiery ball at the target. This may also leave the target with a burn.
+    PP: 5
+    Type: Fire
+    Cat: Physical
+    Acc: 90
+    Pow: 120
+    Status: Burned
+    EffChance: 10
+    MoveType: Bomb_Ball, Defrost
+    PhysicalContact: False
+*
+Aura Wheel:
+    Desc: Morpeko attacks and raises its Speed with the energy stored in its cheeks. This move's type changes depending on the user's form.
+    PP: 10
+    Pow: 110
+    Acc: 100
+    Cat: Physical
+    Type: Electric
+    SelfTarget: True
+    StatChange: Speed 1
+    PhysicalContact: False
+    Comments: // TODO: Should only work for Morpeko and change type with its ability (which are both not implemented yet) though maybe I will implement as applying if it has the ability (which only morpeko should have)
+*
+Breaking Swipe:
+    Desc: The user swings its tough tail wildly and attacks opposing Pokémon. This also lowers their Attack stats.
+    PP: 15
+    Type: Dragon
+    Cat: Physical
+    Pow: 60
+    Acc: 100
+    StatChange: Attack -1
+*
+Branch Poke:
+    Desc: The user attacks the target by poking it with a sharply pointed branch.
+    PP: 40
+    Pow: 40
+    Cat: Physical
+    Type: Grass
+    Acc: 100
+*
+Overdrive:
+    Desc: The user attacks opposing Pokémon by twanging a guitar or bass guitar, causing a huge echo and strong vibration.
+    PP: 10
+    Type: Electric
+    Cat: Special
+    Pow: 80
+    Acc: 100
+    MoveType: Sound_Based
+*
+Apple Acid:
+    Desc: The user attacks the target with an acidic liquid created from tart apples. This also lowers the target's Sp. Def stat.
+    PP: 10
+    Type: Grass
+    Pow: 80
+    Cat: Special
+    Acc: 100
+    StatChange: Sp_Defense -1
+*
+Grav Apple:
+    Desc: The user inflicts damage by dropping an apple from high above. This also lowers the target's Defense stat.
+    PP: 10
+    Type: Grass
+    Cat: Physical
+    Pow: 80
+    Acc: 100
+    StatChange: Defense -1
+*
+Spirit Break:
+    Desc: The user attacks the target with so much force that it could break the target's spirit. This also lowers the target's Sp. Atk stat.
+    Type: Fairy
+    Cat: Physical
+    Acc: 100
+    PP: 15
+    Pow: 75
+    StatChange: Sp_Attack -1
+*
+Strange Steam:
+    Desc: The user attacks the target by emitting steam. This may also confuse the target.
+    PP: 10
+    Type: Fairy
+    Cat: Special
+    Acc: 95
+    PokemonEffect: Confusion
+    EffChance: 20
+    Pow: 90
+*
+Life Dew:
+    Desc: The user scatters mysterious water around and restores its HP.
+    PP: 10
+    Type: Water
+    Cat: Special
+    HealFraction: .5
+    Comments: // Note: Changed from .25 to .5 because it's only healing itself now
+*
+False Surrender:
+    Desc: The user pretends to bow its head, but then it stabs the target with its disheveled hair. This attack never misses.
+    Type: Dark
+    Pow: 80
+    Cat: Physical
+    PP: 10
 *

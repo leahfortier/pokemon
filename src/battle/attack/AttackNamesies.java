@@ -15,6 +15,7 @@ import battle.attack.Attack.AirSlash;
 import battle.attack.Attack.Amnesia;
 import battle.attack.Attack.AnchorShot;
 import battle.attack.Attack.AncientPower;
+import battle.attack.Attack.AppleAcid;
 import battle.attack.Attack.AquaJet;
 import battle.attack.Attack.AquaRing;
 import battle.attack.Attack.AquaTail;
@@ -27,6 +28,7 @@ import battle.attack.Attack.Astonish;
 import battle.attack.Attack.AttackOrder;
 import battle.attack.Attack.Attract;
 import battle.attack.Attack.AuraSphere;
+import battle.attack.Attack.AuraWheel;
 import battle.attack.Attack.AuroraBeam;
 import battle.attack.Attack.AuroraVeil;
 import battle.attack.Attack.Autotomize;
@@ -38,6 +40,8 @@ import battle.attack.Attack.Barrier;
 import battle.attack.Attack.BatonPass;
 import battle.attack.Attack.BeakBlast;
 import battle.attack.Attack.BeatUp;
+import battle.attack.Attack.BehemothBash;
+import battle.attack.Attack.BehemothBlade;
 import battle.attack.Attack.Belch;
 import battle.attack.Attack.BellyDrum;
 import battle.attack.Attack.Bestow;
@@ -58,7 +62,9 @@ import battle.attack.Attack.BoneRush;
 import battle.attack.Attack.Bonemerang;
 import battle.attack.Attack.Boomburst;
 import battle.attack.Attack.Bounce;
+import battle.attack.Attack.BranchPoke;
 import battle.attack.Attack.BraveBird;
+import battle.attack.Attack.BreakingSwipe;
 import battle.attack.Attack.BrickBreak;
 import battle.attack.Attack.Brine;
 import battle.attack.Attack.BrutalSwing;
@@ -115,6 +121,7 @@ import battle.attack.Attack.DarkPulse;
 import battle.attack.Attack.DarkVoid;
 import battle.attack.Attack.DarkestLariat;
 import battle.attack.Attack.DazzlingGleam;
+import battle.attack.Attack.Decorate;
 import battle.attack.Attack.DefendOrder;
 import battle.attack.Attack.DefenseCurl;
 import battle.attack.Attack.Defog;
@@ -150,6 +157,7 @@ import battle.attack.Attack.DrainingKiss;
 import battle.attack.Attack.DreamEater;
 import battle.attack.Attack.DrillPeck;
 import battle.attack.Attack.DrillRun;
+import battle.attack.Attack.DrumBeating;
 import battle.attack.Attack.DualChop;
 import battle.attack.Attack.DynamaxCannon;
 import battle.attack.Attack.DynamicPunch;
@@ -170,6 +178,7 @@ import battle.attack.Attack.Endure;
 import battle.attack.Attack.EnergyBall;
 import battle.attack.Attack.Entrainment;
 import battle.attack.Attack.Eruption;
+import battle.attack.Attack.Eternabeam;
 import battle.attack.Attack.Explosion;
 import battle.attack.Attack.Extrasensory;
 import battle.attack.Attack.ExtremeSpeed;
@@ -178,6 +187,7 @@ import battle.attack.Attack.FairyLock;
 import battle.attack.Attack.FairyWind;
 import battle.attack.Attack.FakeOut;
 import battle.attack.Attack.FakeTears;
+import battle.attack.Attack.FalseSurrender;
 import battle.attack.Attack.FalseSwipe;
 import battle.attack.Attack.FeatherDance;
 import battle.attack.Attack.Feint;
@@ -238,6 +248,7 @@ import battle.attack.Attack.GrassKnot;
 import battle.attack.Attack.GrassPledge;
 import battle.attack.Attack.GrassWhistle;
 import battle.attack.Attack.GrassyTerrain;
+import battle.attack.Attack.GravApple;
 import battle.attack.Attack.Gravity;
 import battle.attack.Attack.Growl;
 import battle.attack.Attack.Growth;
@@ -320,6 +331,7 @@ import battle.attack.Attack.LeechLife;
 import battle.attack.Attack.LeechSeed;
 import battle.attack.Attack.Leer;
 import battle.attack.Attack.Lick;
+import battle.attack.Attack.LifeDew;
 import battle.attack.Attack.LightScreen;
 import battle.attack.Attack.Liquidation;
 import battle.attack.Attack.LockOn;
@@ -352,6 +364,7 @@ import battle.attack.Attack.Memento;
 import battle.attack.Attack.MetalBurst;
 import battle.attack.Attack.MetalClaw;
 import battle.attack.Attack.MetalSound;
+import battle.attack.Attack.MeteorAssault;
 import battle.attack.Attack.MeteorMash;
 import battle.attack.Attack.Metronome;
 import battle.attack.Attack.MilkDrink;
@@ -390,12 +403,14 @@ import battle.attack.Attack.NoRetreat;
 import battle.attack.Attack.NobleRoar;
 import battle.attack.Attack.Nuzzle;
 import battle.attack.Attack.OblivionWing;
+import battle.attack.Attack.Obstruct;
 import battle.attack.Attack.Octazooka;
 import battle.attack.Attack.Octolock;
 import battle.attack.Attack.OdorSleuth;
 import battle.attack.Attack.OminousWind;
 import battle.attack.Attack.OriginPulse;
 import battle.attack.Attack.Outrage;
+import battle.attack.Attack.Overdrive;
 import battle.attack.Attack.Overheat;
 import battle.attack.Attack.PainSplit;
 import battle.attack.Attack.ParabolicCharge;
@@ -448,6 +463,7 @@ import battle.attack.Attack.Psywave;
 import battle.attack.Attack.Punishment;
 import battle.attack.Attack.Purify;
 import battle.attack.Attack.Pursuit;
+import battle.attack.Attack.PyroBall;
 import battle.attack.Attack.QuickAttack;
 import battle.attack.Attack.QuickGuard;
 import battle.attack.Attack.QuiverDance;
@@ -537,6 +553,7 @@ import battle.attack.Attack.SmartStrike;
 import battle.attack.Attack.SmellingSalts;
 import battle.attack.Attack.Smog;
 import battle.attack.Attack.Smokescreen;
+import battle.attack.Attack.SnapTrap;
 import battle.attack.Attack.Snarl;
 import battle.attack.Attack.Snatch;
 import battle.attack.Attack.SnipeShot;
@@ -555,6 +572,7 @@ import battle.attack.Attack.SpiderWeb;
 import battle.attack.Attack.SpikeCannon;
 import battle.attack.Attack.Spikes;
 import battle.attack.Attack.SpikyShield;
+import battle.attack.Attack.SpiritBreak;
 import battle.attack.Attack.SpiritShackle;
 import battle.attack.Attack.SpitUp;
 import battle.attack.Attack.Spite;
@@ -571,6 +589,7 @@ import battle.attack.Attack.StompingTantrum;
 import battle.attack.Attack.StoneEdge;
 import battle.attack.Attack.StoredPower;
 import battle.attack.Attack.StormThrow;
+import battle.attack.Attack.StrangeSteam;
 import battle.attack.Attack.Strength;
 import battle.attack.Attack.StrengthSap;
 import battle.attack.Attack.StringShot;
@@ -729,6 +748,7 @@ public enum AttackNamesies {
     SPIKY_SHIELD("Spiky Shield", SpikyShield::new),
     BANEFUL_BUNKER("Baneful Bunker", BanefulBunker::new),
     KINGS_SHIELD("King's Shield", KingsShield::new),
+    OBSTRUCT("Obstruct", Obstruct::new),
     PROTECT("Protect", Protect::new),
     DETECT("Detect", Detect::new),
     QUICK_GUARD("Quick Guard", QuickGuard::new),
@@ -747,6 +767,8 @@ public enum AttackNamesies {
     PETAL_DANCE("Petal Dance", PetalDance::new),
     THRASH("Thrash", Thrash::new),
     HYPER_BEAM("Hyper Beam", HyperBeam::new),
+    METEOR_ASSAULT("Meteor Assault", MeteorAssault::new),
+    ETERNABEAM("Eternabeam", Eternabeam::new),
     FRENZY_PLANT("Frenzy Plant", FrenzyPlant::new),
     BLAST_BURN("Blast Burn", BlastBurn::new),
     HYDRO_CANNON("Hydro Cannon", HydroCannon::new),
@@ -1339,6 +1361,8 @@ public enum AttackNamesies {
     PLASMA_FISTS("Plasma Fists", PlasmaFists::new),
     DOUBLE_IRON_BASH("Double Iron Bash", DoubleIronBash::new),
     DYNAMAX_CANNON("Dynamax Cannon", DynamaxCannon::new),
+    BEHEMOTH_BLADE("Behemoth Blade", BehemothBlade::new),
+    BEHEMOTH_BASH("Behemoth Bash", BehemothBash::new),
     SNIPE_SHOT("Snipe Shot", SnipeShot::new),
     JAW_LOCK("Jaw Lock", JawLock::new),
     STUFF_CHEEKS("Stuff Cheeks", StuffCheeks::new),
@@ -1351,7 +1375,21 @@ public enum AttackNamesies {
     FISHIOUS_REND("Fishious Rend", FishiousRend::new),
     COURT_CHANGE("Court Change", CourtChange::new),
     CLANGOROUS_SOUL("Clangorous Soul", ClangorousSoul::new),
-    BODY_PRESS("Body Press", BodyPress::new);
+    BODY_PRESS("Body Press", BodyPress::new),
+    DECORATE("Decorate", Decorate::new),
+    DRUM_BEATING("Drum Beating", DrumBeating::new),
+    SNAP_TRAP("SnapTrap", SnapTrap::new),
+    PYRO_BALL("Pyro Ball", PyroBall::new),
+    AURA_WHEEL("Aura Wheel", AuraWheel::new),
+    BREAKING_SWIPE("Breaking Swipe", BreakingSwipe::new),
+    BRANCH_POKE("Branch Poke", BranchPoke::new),
+    OVERDRIVE("Overdrive", Overdrive::new),
+    APPLE_ACID("Apple Acid", AppleAcid::new),
+    GRAV_APPLE("Grav Apple", GravApple::new),
+    SPIRIT_BREAK("Spirit Break", SpiritBreak::new),
+    STRANGE_STEAM("Strange Steam", StrangeSteam::new),
+    LIFE_DEW("Life Dew", LifeDew::new),
+    FALSE_SURRENDER("False Surrender", FalseSurrender::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

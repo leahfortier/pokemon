@@ -1204,8 +1204,23 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         KingsShield() {
-            super(AttackNamesies.KINGS_SHIELD, Type.STEEL, MoveCategory.STATUS, 10, "The user takes a defensive stance while it protects itself from damage. It also harshly lowers the Attack stat of any attacker who makes direct contact.");
+            super(AttackNamesies.KINGS_SHIELD, Type.STEEL, MoveCategory.STATUS, 10, "The user takes a defensive stance while it protects itself from damage. It also lowers the Attack stat of any attacker that makes direct contact.");
             super.effect = PokemonEffectNamesies.KINGS_SHIELD;
+            super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
+            super.moveTypes.add(MoveType.ASSISTLESS);
+            super.moveTypes.add(MoveType.METRONOMELESS);
+            super.moveTypes.add(MoveType.NON_SNATCHABLE);
+            super.selfTarget = true;
+            super.priority = 4;
+        }
+    }
+
+    static class Obstruct extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        Obstruct() {
+            super(AttackNamesies.OBSTRUCT, Type.DARK, MoveCategory.STATUS, 10, "This move enables the user to protect itself from all attacks. Its chance of failing rises if it is used in succession. Direct contact harshly lowers the attacker's Defense stat.");
+            super.effect = PokemonEffectNamesies.OBSTRUCT;
             super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
             super.moveTypes.add(MoveType.ASSISTLESS);
             super.moveTypes.add(MoveType.METRONOMELESS);
@@ -1460,6 +1475,65 @@ public abstract class Attack implements AttackInterface {
         HyperBeam() {
             super(AttackNamesies.HYPER_BEAM, Type.NORMAL, MoveCategory.SPECIAL, 5, "The target is attacked with a powerful beam. The user can't move on the next turn.");
             super.power = 150;
+            super.accuracy = 90;
+            super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            this.resetReady();
+        }
+
+        @Override
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+    }
+
+    static class MeteorAssault extends Attack implements RechargingMove {
+        private static final long serialVersionUID = 1L;
+
+        private boolean isCharging;
+
+        MeteorAssault() {
+            super(AttackNamesies.METEOR_ASSAULT, Type.FIGHTING, MoveCategory.PHYSICAL, 5, "The user attacks wildly with its thick leek. The user can't move on the next turn, because the force of this move makes it stagger.");
+            super.power = 150;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            this.resetReady();
+        }
+
+        @Override
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+    }
+
+    // TODO: Seems like a move that can only be used by Eternatus
+    static class Eternabeam extends Attack implements RechargingMove {
+        private static final long serialVersionUID = 1L;
+
+        private boolean isCharging;
+
+        Eternabeam() {
+            super(AttackNamesies.ETERNABEAM, Type.DRAGON, MoveCategory.SPECIAL, 5, "This is Eternatus's most powerful attack in its original form. The user can't move on the next turn.");
+            super.power = 160;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             this.resetReady();
@@ -10993,6 +11067,30 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
+    // TODO: Removed double damage when Dynamaxed, should this do something more interesting?
+    static class BehemothBlade extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        BehemothBlade() {
+            super(AttackNamesies.BEHEMOTH_BLADE, Type.STEEL, MoveCategory.PHYSICAL, 5, "The user becomes a gigantic sword and cuts the target.");
+            super.power = 100;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+    }
+
+    // TODO: Removed double damage when Dynamaxed, should this do something more interesting?
+    static class BehemothBash extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        BehemothBash() {
+            super(AttackNamesies.BEHEMOTH_BASH, Type.STEEL, MoveCategory.PHYSICAL, 5, "The user becomes a gigantic shield and slams into the target.");
+            super.power = 100;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+    }
+
     // Notes: This was changed from ignoring targeting to ignoring abilities
     static class SnipeShot extends Attack implements CritStageEffect {
         private static final long serialVersionUID = 1L;
@@ -11252,6 +11350,186 @@ public abstract class Attack implements AttackInterface {
         @Override
         public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
             return s == Stat.ATTACK ? Stat.DEFENSE : s;
+        }
+    }
+
+    static class Decorate extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        Decorate() {
+            super(AttackNamesies.DECORATE, Type.FAIRY, MoveCategory.STATUS, 15, "The user sharply raises its Attack and Sp. Atk stats by decorating the target.");
+            super.selfTarget = true;
+            super.statChanges[Stat.ATTACK.index()] = 2;
+            super.statChanges[Stat.SP_ATTACK.index()] = 2;
+        }
+    }
+
+    static class DrumBeating extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        DrumBeating() {
+            super(AttackNamesies.DRUM_BEATING, Type.GRASS, MoveCategory.PHYSICAL, 10, "The user plays its drum, controlling the drum's roots to attack the target. This also lowers the target's Speed stat.");
+            super.power = 80;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.SPEED.index()] = -1;
+        }
+    }
+
+    static class SnapTrap extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        SnapTrap() {
+            super(AttackNamesies.SNAP_TRAP, Type.GRASS, MoveCategory.PHYSICAL, 15, "The user snares the target in a snap trap for four to five turns.");
+            super.power = 35;
+            super.accuracy = 100;
+            super.effect = PokemonEffectNamesies.SNAP_TRAPPED;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+    }
+
+    static class PyroBall extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        PyroBall() {
+            super(AttackNamesies.PYRO_BALL, Type.FIRE, MoveCategory.PHYSICAL, 5, "The user attacks by igniting a small stone and launching it as a fiery ball at the target. This may also leave the target with a burn.");
+            super.power = 120;
+            super.accuracy = 90;
+            super.effectChance = 10;
+            super.status = StatusNamesies.BURNED;
+            super.moveTypes.add(MoveType.BOMB_BALL);
+            super.moveTypes.add(MoveType.DEFROST);
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+    }
+
+    // TODO: Should only work for Morpeko and change type with its ability (which are both not implemented yet) though maybe I will implement as applying if it has the ability (which only morpeko should have)
+    static class AuraWheel extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        AuraWheel() {
+            super(AttackNamesies.AURA_WHEEL, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, "Morpeko attacks and raises its Speed with the energy stored in its cheeks. This move's type changes depending on the user's form.");
+            super.power = 110;
+            super.accuracy = 100;
+            super.selfTarget = true;
+            super.statChanges[Stat.SPEED.index()] = 1;
+        }
+    }
+
+    static class BreakingSwipe extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        BreakingSwipe() {
+            super(AttackNamesies.BREAKING_SWIPE, Type.DRAGON, MoveCategory.PHYSICAL, 15, "The user swings its tough tail wildly and attacks opposing Pokémon. This also lowers their Attack stats.");
+            super.power = 60;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.ATTACK.index()] = -1;
+        }
+    }
+
+    static class BranchPoke extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        BranchPoke() {
+            super(AttackNamesies.BRANCH_POKE, Type.GRASS, MoveCategory.PHYSICAL, 40, "The user attacks the target by poking it with a sharply pointed branch.");
+            super.power = 40;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+    }
+
+    static class Overdrive extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        Overdrive() {
+            super(AttackNamesies.OVERDRIVE, Type.ELECTRIC, MoveCategory.SPECIAL, 10, "The user attacks opposing Pokémon by twanging a guitar or bass guitar, causing a huge echo and strong vibration.");
+            super.power = 80;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.SOUND_BASED);
+        }
+    }
+
+    static class AppleAcid extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        AppleAcid() {
+            super(AttackNamesies.APPLE_ACID, Type.GRASS, MoveCategory.SPECIAL, 10, "The user attacks the target with an acidic liquid created from tart apples. This also lowers the target's Sp. Def stat.");
+            super.power = 80;
+            super.accuracy = 100;
+            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
+        }
+    }
+
+    static class GravApple extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        GravApple() {
+            super(AttackNamesies.GRAV_APPLE, Type.GRASS, MoveCategory.PHYSICAL, 10, "The user inflicts damage by dropping an apple from high above. This also lowers the target's Defense stat.");
+            super.power = 80;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.DEFENSE.index()] = -1;
+        }
+    }
+
+    static class SpiritBreak extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        SpiritBreak() {
+            super(AttackNamesies.SPIRIT_BREAK, Type.FAIRY, MoveCategory.PHYSICAL, 15, "The user attacks the target with so much force that it could break the target's spirit. This also lowers the target's Sp. Atk stat.");
+            super.power = 75;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.SP_ATTACK.index()] = -1;
+        }
+    }
+
+    static class StrangeSteam extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        StrangeSteam() {
+            super(AttackNamesies.STRANGE_STEAM, Type.FAIRY, MoveCategory.SPECIAL, 10, "The user attacks the target by emitting steam. This may also confuse the target.");
+            super.power = 90;
+            super.accuracy = 95;
+            super.effect = PokemonEffectNamesies.CONFUSION;
+            super.effectChance = 20;
+        }
+    }
+
+    // Note: Changed from .25 to .5 because it's only healing itself now
+    static class LifeDew extends Attack implements SelfHealingMove {
+        private static final long serialVersionUID = 1L;
+
+        LifeDew() {
+            super(AttackNamesies.LIFE_DEW, Type.WATER, MoveCategory.SPECIAL, 10, "The user scatters mysterious water around and restores its HP.");
+            super.moveTypes.add(MoveType.HEALING);
+            super.selfTarget = true;
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.heal(b, victim);
+        }
+
+        @Override
+        public double getHealFraction(Battle b, ActivePokemon victim) {
+            return .5;
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.canHeal();
+        }
+    }
+
+    static class FalseSurrender extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        FalseSurrender() {
+            super(AttackNamesies.FALSE_SURRENDER, Type.DARK, MoveCategory.PHYSICAL, 10, "The user pretends to bow its head, but then it stabs the target with its disheveled hair. This attack never misses.");
+            super.power = 80;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
 }

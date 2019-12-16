@@ -71,8 +71,10 @@ Descriptions that change manually:
         Pollen Puff (Remove 'If the target is an ally, it gives the ally a pollen puff that restores its HP instead.')
         Aromatic Mist ('the Sp. Def stat of an ally Pokémon' -> 'its Sp. Def stat')
         Fairy Lock (Remove 'during the last turn')
-        Dynamax Cannon (Remove 'This move deals twice the damage if the target is Dynamaxed.')
+        Dynamax Cannon/Behemoth Blade/Behemoth Bash (Removed 'This move deals twice the damage if the target is Dynamaxed.')
         Snipe Shot (completely rewritten to ignore abilities and increase crits)
+        Decorate ('the target's' -> 'its')
+        Life Dew ('the HP of itself and its ally Pokémon in the battle' -> 'its HP')
     Abilities:
         Healer ('an ally's' -> 'its')
         Flower Veil (Remove 'Ally')
@@ -186,4 +188,5 @@ Other random things:
     should also have a method that handles the mold breaker stuff instead of it being hardcoded in every single invoke method (probably in the MoldBreakerEffect class if I end up making that)
     how would something like future sight work for mold breaker
     visual test clear body with an attack that allows lowers at least two stats (will it print the fail message multiple times?)
+    Hyperspace Fury can only be used by Hoopa like Dark Void Darkrai
     

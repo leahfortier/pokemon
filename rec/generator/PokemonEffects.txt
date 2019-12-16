@@ -63,6 +63,9 @@ Binded:
 SandTomb:
     PartialTrap: sand_tomb victim.getName() + " was trapped by sand tomb!"
 *
+SnapTrapped:
+    PartialTrap: snap_trap victim.getName() + " was trapped by snap trap!"
+*
 KingsShield:
     ProtectingEffect: True
     OnProtectingSuccess:
@@ -77,6 +80,18 @@ KingsShield:
     ProtectingCondition:
         // Only protects against attacking moves
         return !attacking.getAttack().isStatusMove();
+        ###
+*
+Obstruct:
+    ProtectingEffect: True
+    OnProtectingSuccess:
+        // Pokemon that make contact with the obstruction have their defense harshly reduced
+        if (p.isMakingContact()) {
+            p.getStages().modifyStage(
+                opp, -2, Stat.DEFENSE, b, CastSource.EFFECT, 
+                (victimName, statName, changed) -> "The obstruction " + changed + " " + p.getName() + "'s " + statName + "!"
+            );
+        }
         ###
 *
 SpikyShield:

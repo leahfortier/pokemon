@@ -47,6 +47,7 @@ import battle.effect.pokemon.PokemonEffect.MatBlock;
 import battle.effect.pokemon.PokemonEffect.Mimic;
 import battle.effect.pokemon.PokemonEffect.MiracleEye;
 import battle.effect.pokemon.PokemonEffect.Nightmare;
+import battle.effect.pokemon.PokemonEffect.Obstruct;
 import battle.effect.pokemon.PokemonEffect.Octolocked;
 import battle.effect.pokemon.PokemonEffect.PerishSong;
 import battle.effect.pokemon.PokemonEffect.Powder;
@@ -59,6 +60,7 @@ import battle.effect.pokemon.PokemonEffect.SandTomb;
 import battle.effect.pokemon.PokemonEffect.SelfConfusion;
 import battle.effect.pokemon.PokemonEffect.ShellTrap;
 import battle.effect.pokemon.PokemonEffect.Silence;
+import battle.effect.pokemon.PokemonEffect.SnapTrapped;
 import battle.effect.pokemon.PokemonEffect.Snatch;
 import battle.effect.pokemon.PokemonEffect.SpikyShield;
 import battle.effect.pokemon.PokemonEffect.StickyTar;
@@ -90,7 +92,9 @@ public enum PokemonEffectNamesies implements EffectNamesies {
     WRAPPED(Wrapped::new),
     BINDED(Binded::new),
     SAND_TOMB(SandTomb::new),
+    SNAP_TRAPPED(SnapTrapped::new),
     KINGS_SHIELD(KingsShield::new),
+    OBSTRUCT(Obstruct::new),
     SPIKY_SHIELD(SpikyShield::new),
     BANEFUL_BUNKER(BanefulBunker::new),
     PROTECT(Protect::new),
