@@ -581,6 +581,7 @@ import battle.attack.Attack.Spore;
 import battle.attack.Attack.StealthRock;
 import battle.attack.Attack.SteamEruption;
 import battle.attack.Attack.Steamroller;
+import battle.attack.Attack.SteelBeam;
 import battle.attack.Attack.SteelWing;
 import battle.attack.Attack.StickyWeb;
 import battle.attack.Attack.Stockpile;
@@ -1389,7 +1390,8 @@ public enum AttackNamesies {
     SPIRIT_BREAK("Spirit Break", SpiritBreak::new),
     STRANGE_STEAM("Strange Steam", StrangeSteam::new),
     LIFE_DEW("Life Dew", LifeDew::new),
-    FALSE_SURRENDER("False Surrender", FalseSurrender::new);
+    FALSE_SURRENDER("False Surrender", FalseSurrender::new),
+    STEEL_BEAM("Steel Beam", SteelBeam::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

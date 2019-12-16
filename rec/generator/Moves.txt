@@ -6969,3 +6969,14 @@ False Surrender:
     Cat: Physical
     PP: 10
 *
+Steel Beam:
+    Desc: The user fires a beam of steel that it collected from its entire body. This also damages the user.
+    PP: 5
+    Pow: 140
+    Acc: 95
+    Type: Steel
+    Cat: Special
+    UniqueEffects:
+        user.reduceHealthFraction(b, .5, user.getName() + " was hurt!");
+        ###
+*

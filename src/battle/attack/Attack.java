@@ -11371,7 +11371,6 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.DRUM_BEATING, Type.GRASS, MoveCategory.PHYSICAL, 10, "The user plays its drum, controlling the drum's roots to attack the target. This also lowers the target's Speed stat.");
             super.power = 80;
             super.accuracy = 100;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.statChanges[Stat.SPEED.index()] = -1;
         }
     }
@@ -11399,7 +11398,6 @@ public abstract class Attack implements AttackInterface {
             super.status = StatusNamesies.BURNED;
             super.moveTypes.add(MoveType.BOMB_BALL);
             super.moveTypes.add(MoveType.DEFROST);
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
 
@@ -11530,6 +11528,21 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.FALSE_SURRENDER, Type.DARK, MoveCategory.PHYSICAL, 10, "The user pretends to bow its head, but then it stabs the target with its disheveled hair. This attack never misses.");
             super.power = 80;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+    }
+
+    static class SteelBeam extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        SteelBeam() {
+            super(AttackNamesies.STEEL_BEAM, Type.STEEL, MoveCategory.SPECIAL, 5, "The user fires a beam of steel that it collected from its entire body. This also damages the user.");
+            super.power = 140;
+            super.accuracy = 95;
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            user.reduceHealthFraction(b, .5, user.getName() + " was hurt!");
         }
     }
 }
