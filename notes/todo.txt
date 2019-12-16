@@ -183,7 +183,6 @@ Other random things:
     stage modify message should include drastically for 3+ (ex: cotton guard)
     should probably rewrite the battle message system to pass the serialized battle around instead of whatever it's currently doing with storing every individual value and such
     should snatch have a message when its used?
-    there's some stuff in Game that I forgot to check in but I don't want it with this branch
     should have a moldBreaker effect for attacks and abilities and only include the attack when attacking
     should also have a method that handles the mold breaker stuff instead of it being hardcoded in every single invoke method (probably in the MoldBreakerEffect class if I end up making that)
     how would something like future sight work for mold breaker

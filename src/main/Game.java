@@ -107,13 +107,17 @@ public class Game {
         return (TradeView)getView(ViewMode.TRADE_VIEW);
     }
 
+    public BattleView getBattleView() {
+        return (BattleView)getView(ViewMode.BATTLE_VIEW);
+    }
+
     protected View getView(ViewMode viewMode) {
         return viewMap.get(viewMode);
     }
 
     public void setBattleViews(final Battle battle, final boolean seenWildPokemon) {
-        ((BattleView)viewMap.get((ViewMode.BATTLE_VIEW))).setBattle(battle);
-        ((MapView)viewMap.get(ViewMode.MAP_VIEW)).setBattle(battle, seenWildPokemon);
+        this.getBattleView().setBattle(battle);
+        this.getMapView().setBattle(battle, seenWildPokemon);
     }
 
     public void draw(Graphics g) {
@@ -145,8 +149,8 @@ public class Game {
         data.getMap(startingMap).setCharacterToEntrance();
 
         player.setFileNum(index);
-        setupCharacter();
         setViews();
+        setupCharacter();
 
         Messages.clearAllMessages();
     }
