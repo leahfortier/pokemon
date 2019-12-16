@@ -970,7 +970,7 @@ public class AttackTest extends BaseTest {
                         TeamEffectNamesies.STEALTH_ROCK,
                         TeamEffectNamesies.STICKY_WEB
         );
-        courtChangeTest(battle, defending, TeamEffectNamesies.SPIKES); // No longer includes (longer) Light Screen
+        courtChangeTest(battle, defending, TeamEffectNamesies.SPIKES);
 
         // Swap entry hazards back blah blah blah
         battle.defendingFight(AttackNamesies.COURT_CHANGE);
@@ -2141,7 +2141,7 @@ public class AttackTest extends BaseTest {
                 (battle, attacking, defending) -> attacking.assertNoStatus()
         );
 
-        // Rawst Berry with maxed Defense -- should still consume and cure paralysis even if not increasing stats
+        // Rawst Berry with maxed Defense -- should still consume and cure burn even if not increasing stats
         stuffCheeksTest(
                 true, ItemNamesies.RAWST_BERRY,
                 (battle, attacking, defending) -> {

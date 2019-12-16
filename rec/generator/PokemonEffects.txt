@@ -465,8 +465,15 @@ Trapped:
     CastMessage: victim.getName() + " can't escape!"
     TrappingMessage: trapped.getName() + " cannot be recalled at this time!"
 *
+NoRetreat:
+    Int: TrappingEffect
+    CastMessage: victim.getName() + " cannot retreat!"
+    TrappingMessage: trapped.getName() + " cannot retreat!"
+    Comments: // Note: Different that Trapped effect because the attack can only be used once
+*
 Octolocked:
     Int: EndTurnEffect
+    LockingEffect: caster
     CastMessage: victim.getName() + " can't escape!"
     TrappingMessage: trapped.getName() + " is trapped by Octolock!"
     ApplyEndTurn:
@@ -487,7 +494,6 @@ Octolocked:
     BeforeCast:
         this.caster = caster;
         ###
-    LockingEffect: caster
 *
 Foresight:
     ForesightEffect: Ghost attacking == Type.NORMAL || attacking == Type.FIGHTING

@@ -47,6 +47,7 @@ import battle.effect.pokemon.PokemonEffect.MatBlock;
 import battle.effect.pokemon.PokemonEffect.Mimic;
 import battle.effect.pokemon.PokemonEffect.MiracleEye;
 import battle.effect.pokemon.PokemonEffect.Nightmare;
+import battle.effect.pokemon.PokemonEffect.NoRetreat;
 import battle.effect.pokemon.PokemonEffect.Obstruct;
 import battle.effect.pokemon.PokemonEffect.Octolocked;
 import battle.effect.pokemon.PokemonEffect.PerishSong;
@@ -117,6 +118,7 @@ public enum PokemonEffectNamesies implements EffectNamesies {
     MIMIC(Mimic::new),
     IMPRISON(Imprison::new),
     TRAPPED(Trapped::new),
+    NO_RETREAT(NoRetreat::new),
     OCTOLOCKED(Octolocked::new),
     FORESIGHT(Foresight::new),
     MIRACLE_EYE(MiracleEye::new),

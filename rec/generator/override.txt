@@ -1564,12 +1564,21 @@ ChangeTypeMove:
     AddMapField: ChangeType:
         return new PokeType(Type.{00});
         ###
+    AddMapField: FullApplies:
+        // Fails is the Pokemon is a pure-{0} type
+        PokeType type = victim.getType(b);
+        return !type.isType(Type.{00}) || type.isDualTyped();
+        ###
 *
 AddTypeMove:
     AddMapField: PokemonEffect: ChangeType
     AddMapField: ChangeType:
         Type primary = victim.getType(b).getFirstType();
         return new PokeType(primary, primary == Type.{00} ? Type.NO_TYPE : Type.{00});
+        ###
+    AddMapField: FullApplies:
+        // Fails is the Pokemon is already {0} type
+        return !victim.getType(b).isType(Type.{00});
         ###
 *
 PrintFail:

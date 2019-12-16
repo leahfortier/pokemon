@@ -3925,9 +3925,16 @@ public abstract class Attack implements AttackInterface {
         public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return new PokeType(Type.WATER);
         }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Fails is the Pokemon is a pure-Water type
+            PokeType type = victim.getType(b);
+            return !type.isType(Type.WATER) || type.isDualTyped();
+        }
     }
 
-    static class MagicPowder extends Attack implements ChangeTypeSource {
+    static class MagicPowder extends Attack implements PowderMove, ChangeTypeSource {
         private static final long serialVersionUID = 1L;
 
         MagicPowder() {
@@ -3939,6 +3946,13 @@ public abstract class Attack implements AttackInterface {
         @Override
         public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return new PokeType(Type.PSYCHIC);
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Fails is the Pokemon is a pure-Psychic type
+            PokeType type = victim.getType(b);
+            return !type.isType(Type.PSYCHIC) || type.isDualTyped();
         }
     }
 
@@ -3956,6 +3970,12 @@ public abstract class Attack implements AttackInterface {
             Type primary = victim.getType(b).getFirstType();
             return new PokeType(primary, primary == Type.GHOST ? Type.NO_TYPE : Type.GHOST);
         }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Fails is the Pokemon is already Ghost type
+            return !victim.getType(b).isType(Type.GHOST);
+        }
     }
 
     static class ForestsCurse extends Attack implements ChangeTypeSource {
@@ -3971,6 +3991,12 @@ public abstract class Attack implements AttackInterface {
         public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             Type primary = victim.getType(b).getFirstType();
             return new PokeType(primary, primary == Type.GRASS ? Type.NO_TYPE : Type.GRASS);
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Fails is the Pokemon is already Grass type
+            return !victim.getType(b).isType(Type.GRASS);
         }
     }
 
@@ -11091,7 +11117,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    // Notes: This was changed from ignoring targeting to ignoring abilities
+    // Note: This was changed from ignoring targeting to ignoring abilities
     static class SnipeShot extends Attack implements CritStageEffect {
         private static final long serialVersionUID = 1L;
 
@@ -11114,7 +11140,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    // TODO: I made Jaw Lock a biting move which it should be regardless but if I already have a todo to look it up might as well confirm that
+    // Note: I made Jaw Lock a biting move which isn't confirmed but I like it regardless
     static class JawLock extends Attack {
         private static final long serialVersionUID = 1L;
 
@@ -11150,19 +11176,23 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    // TODO: I think this can only be used once?
     static class NoRetreat extends Attack {
         private static final long serialVersionUID = 1L;
 
         NoRetreat() {
             super(AttackNamesies.NO_RETREAT, Type.FIGHTING, MoveCategory.STATUS, 5, "This move raises all the user's stats but prevents the user from switching out or fleeing.");
-            super.effect = PokemonEffectNamesies.TRAPPED;
+            super.effect = PokemonEffectNamesies.NO_RETREAT;
             super.selfTarget = true;
             super.statChanges[Stat.ATTACK.index()] = 1;
             super.statChanges[Stat.DEFENSE.index()] = 1;
             super.statChanges[Stat.SP_ATTACK.index()] = 1;
             super.statChanges[Stat.SP_DEFENSE.index()] = 1;
             super.statChanges[Stat.SPEED.index()] = 1;
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return !victim.hasEffect(PokemonEffectNamesies.NO_RETREAT);
         }
     }
 
@@ -11327,7 +11357,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            // Here instead of unique effects so the message is displayed before the stat increases
+            // Note: Here instead of unique effects so the message is displayed before the stat increases
             user.forceReduceHealthFraction(b, 1/3.0, user.getName() + " sacrificed its HP to raise its stats!");
         }
 

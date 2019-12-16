@@ -1262,6 +1262,25 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
+    // Note: Different that Trapped effect because the attack can only be used once
+    static class NoRetreat extends PokemonEffect implements TrappingEffect {
+        private static final long serialVersionUID = 1L;
+
+        NoRetreat() {
+            super(PokemonEffectNamesies.NO_RETREAT, -1, -1, false, false);
+        }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return victim.getName() + " cannot retreat!";
+        }
+
+        @Override
+        public String trappingMessage(ActivePokemon trapped) {
+            return trapped.getName() + " cannot retreat!";
+        }
+    }
+
     static class Octolocked extends PokemonEffect implements EndTurnEffect, LockingEffect {
         private static final long serialVersionUID = 1L;
 
@@ -1270,6 +1289,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         Octolocked() {
             super(PokemonEffectNamesies.OCTOLOCKED, -1, -1, false, false);
+        }
+
+        @Override
+        public List<ActivePokemon> getLocking() {
+            return List.of(caster);
         }
 
         @Override
@@ -1298,11 +1322,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             this.caster = caster;
-        }
-
-        @Override
-        public List<ActivePokemon> getLocking() {
-            return List.of(caster);
         }
     }
 

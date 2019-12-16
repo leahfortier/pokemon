@@ -2187,6 +2187,7 @@ Magic Powder:
     Type: Psychic
     Cat: Status
     ChangeTypeMove: Psychic
+    Int: PowderMove
 *
 Trick-or-Treat:
     AddTypeMove: Ghost
@@ -6668,7 +6669,7 @@ Snipe Shot:
     Cat: Special
     Int: CritStageEffect
     IgnoreAbilityMove: True
-    Comments: // Notes: This was changed from ignoring targeting to ignoring abilities
+    Comments: // Note: This was changed from ignoring targeting to ignoring abilities
 *
 Jaw Lock:
     Desc: This move prevents the user and the target from switching out until either of them faints. The effect goes away if either of the Pokémon leaves the field.
@@ -6679,7 +6680,7 @@ Jaw Lock:
     Cat: Physical
     StandardBattleEffect: JawLocked
     MoveType: Biting
-    Comments: // TODO: I made Jaw Lock a biting move which it should be regardless but if I already have a todo to look it up might as well confirm that
+    Comments: // Note: I made Jaw Lock a biting move which isn't confirmed but I like it regardless
 *
 Stuff Cheeks:
     Desc: The user eats its held Berry, then sharply raises its Defense stat.
@@ -6702,8 +6703,8 @@ No Retreat:
     Cat: Status
     RaiseAllStats: True
     SelfTarget: True
-    PokemonEffect: Trapped
-    Comments: // TODO: I think this can only be used once?
+    PokemonEffect: NoRetreat
+    Applies: !victim.hasEffect(PokemonEffectNamesies.NO_RETREAT)
 *
 Tar Shot:
     Desc: The user pours sticky tar over the target, lowering the target's Speed stat. The target becomes weaker to Fire-type moves.
@@ -6826,7 +6827,7 @@ Clangorous Soul:
     SelfTarget: True
     Applies: user.getHPRatio() > 1/3.0
     AfterApplyCheck:
-        // Here instead of unique effects so the message is displayed before the stat increases
+        // Note: Here instead of unique effects so the message is displayed before the stat increases
         user.forceReduceHealthFraction(b, 1/3.0, user.getName() + " sacrificed its HP to raise its stats!");
         ###
 *
