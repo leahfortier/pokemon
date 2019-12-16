@@ -67,7 +67,7 @@ public class StatTest extends BaseTest {
         // Power Trick only affects the user
         battle.attackingFight(AttackNamesies.POWER_TRICK);
         attacking.assertHasEffect(PokemonEffectNamesies.POWER_TRICK);
-        assertStats(battle, attacking, new StatChecker().set(Stat.ATTACK, Stat.DEFENSE).set(Stat.DEFENSE, Stat.ATTACK));
+        assertStats(battle, attacking, new StatChecker().swap(Stat.ATTACK, Stat.DEFENSE));
         assertStats(battle, defending, new StatChecker());
 
         // Using Power Trick again will remove the effect
@@ -79,13 +79,19 @@ public class StatTest extends BaseTest {
         // Wonder Room switches defensive stats for both Pokemon
         battle.attackingFight(AttackNamesies.WONDER_ROOM);
         battle.assertHasEffect(StandardBattleEffectNamesies.WONDER_ROOM);
-        assertStats(battle, attacking, new StatChecker().set(Stat.DEFENSE, Stat.SP_DEFENSE).set(Stat.SP_DEFENSE, Stat.DEFENSE));
-        assertStats(battle, defending, new StatChecker().set(Stat.DEFENSE, Stat.SP_DEFENSE).set(Stat.SP_DEFENSE, Stat.DEFENSE));
+        assertStats(battle, attacking, new StatChecker().swap(Stat.DEFENSE, Stat.SP_DEFENSE));
+        assertStats(battle, defending, new StatChecker().swap(Stat.DEFENSE, Stat.SP_DEFENSE));
 
         // Using again will remove the effect (regardless of who uses)
         battle.defendingFight(AttackNamesies.WONDER_ROOM);
         battle.assertNoEffect(StandardBattleEffectNamesies.WONDER_ROOM);
         assertStats(battle, attacking, new StatChecker());
+        assertStats(battle, defending, new StatChecker());
+
+        // Body Press uses attacker's Defense stat instead of Attack stat
+        attacking.setupMove(AttackNamesies.BODY_PRESS, battle);
+        defending.setupMove(AttackNamesies.TACKLE, battle);
+        assertStats(battle, attacking, new StatChecker().set(Stat.ATTACK, Stat.DEFENSE));
         assertStats(battle, defending, new StatChecker());
     }
 
@@ -128,6 +134,11 @@ public class StatTest extends BaseTest {
             Assert.assertEquals(this.statMap.get(computedStat), computedStat);
             this.statMap.put(computedStat, baseStat);
             return this;
+        }
+
+        // Used when both stats are swapped with each other
+        public StatChecker swap(Stat firstStat, Stat secondStat) {
+            return this.set(firstStat, secondStat).set(secondStat, firstStat);
         }
     }
 

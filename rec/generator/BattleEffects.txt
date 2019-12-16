@@ -74,3 +74,22 @@ PowerSplit:
 GuardSplit:
     StatSplit: Defense Sp_Defense defense
 *
+JawLocked:
+    Field:
+        // The Pokemon that are locked by the jaw
+        private ActivePokemon caster;
+        private ActivePokemon victim;
+        ###
+    Int: BattleEndTurnEffect
+    TrappingMessage: trapped.getName() + " is trapped by Jaw Lock!"
+    BeforeCast:
+        this.caster = caster;
+        this.victim = victim;
+        ###
+    CastMessage: user.getName() + " locked jaws with " + victim.getName() + "!"
+    BattleEndTurn:
+        // Deactivate if Jaw Locked Pokemon aren't around
+        this.checkActive(b);
+        ###
+    LockingEffect: caster, victim
+*

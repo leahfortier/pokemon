@@ -179,7 +179,7 @@ public class ModifierTest extends BaseTest {
             defending.assertNotFullHealth();
         }));
 
-        // Facade doubles in power when has a status condition
+        // Facade doubles in power when the user has a status condition
         powerChangeTest(1, AttackNamesies.FACADE, new TestInfo());
         powerChangeTest(2, AttackNamesies.FACADE, new TestInfo().defendingFight(AttackNamesies.WILL_O_WISP));
         powerChangeTest(2, AttackNamesies.FACADE, new TestInfo().defendingFight(AttackNamesies.THUNDER_WAVE));
@@ -194,6 +194,10 @@ public class ModifierTest extends BaseTest {
         // Body Slam -- doubles when the opponent uses Minimize
         powerChangeTest(1, AttackNamesies.BODY_SLAM, new TestInfo());
         powerChangeTest(2, AttackNamesies.BODY_SLAM, new TestInfo().defendingFight(AttackNamesies.MINIMIZE));
+
+        // Tar Shot doubles effectiveness of Fire moves
+        powerChangeTest(2, AttackNamesies.EMBER, new TestInfo().attackingFight(AttackNamesies.TAR_SHOT));
+        powerChangeTest(1, AttackNamesies.TACKLE, new TestInfo().attackingFight(AttackNamesies.TAR_SHOT));
     }
 
     @Test

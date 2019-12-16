@@ -11,6 +11,16 @@ public class TestStages {
         stages = new int[Stat.NUM_BATTLE_STATS];
     }
 
+    // Increases the stat stage by the amount (okay to be non-positive)
+    // Valid to pass an amount that would increase past the max (will cap there automatically)
+    // Typically used when comparing to previous stages
+    public void increment(int amount, Stat stat) {
+        int index = stat.index();
+        stages[index] += amount;
+        stages[index] = Math.min(Stat.MAX_STAT_CHANGES, stages[index]);
+        stages[index] = Math.max(-Stat.MAX_STAT_CHANGES, stages[index]);
+    }
+
     public TestStages set(int stage, Stat... stats) {
         for (Stat s : stats) {
             TestUtils.assertInclusiveRange(s.getName(), -6, 6, stage);

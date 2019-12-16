@@ -136,7 +136,7 @@ CrashDamageMove:
     *
 ***
 BarrierEffect:
-    Extends: EffectInterface, SimpleStatModifyingEffect
+    Extends: SwappableEffect, SimpleStatModifyingEffect
     Method:
         Header: String getBreakMessage(ActivePokemon breaker)
     *
@@ -375,8 +375,7 @@ TrappingEffect:
     Method:
         Header: boolean trapped(Battle b, ActivePokemon escaper)
         Default:
-            // Ghost-type Pokemon can always escape
-            return !escaper.isType(b, Type.GHOST);
+            return true;
             ###
         Invoke: CheckMessage true trappingMessage(escaper)
         InvokeName: isTrapped
@@ -433,7 +432,8 @@ StatProtectingEffect:
         Invoke: CheckGet true
         InvokeName: getPreventEffect
         EffectList: victim
-        MoldBreaker: caster
+        MoldBreaker: moldBreaker
+        InvokeParameters: ActivePokemon moldBreaker
     *
     Method:
         Header: String preventionMessage(Battle b, ActivePokemon p, Stat s)
@@ -570,6 +570,7 @@ StatSwitchingEffect:
         Invoke: Update
         Update: s
         EffectList: statPokemon
+        InvokeAttack: statPokemon
         InvokeName: switchStat
     *
 ***
@@ -831,10 +832,9 @@ ModifyStageValueEffect:
     Method:
         Header: int modifyStageValue()
         Invoke: Multiply
-        InvokeParameters: Battle b, ActivePokemon caster, ActivePokemon victim
-        MoldBreakerNullCheck: caster == victim ? null : caster
+        InvokeParameters: Battle b, ActivePokemon moldBreaker, ActivePokemon victim
+        MoldBreaker: moldBreaker
         EffectList: victim
-        Comments: // TODO: Can we test this with mold breaker? it looks backwards at first glance
     *
 ***
 StrikeFirstEffect:

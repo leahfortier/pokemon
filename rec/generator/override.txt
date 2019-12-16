@@ -593,9 +593,6 @@ OnProtectingSuccess:
 SuccessiveDecay:
     AddMapField: EffectApplies: RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))
 *
-Trapped:
-    Header: boolean trapped(Battle b, ActivePokemon escaper)
-*
 TrappingMessage:
     Header: String trappingMessage(ActivePokemon trapped)
     Body:
@@ -629,6 +626,13 @@ PartialTrap:
     AddMapField: SubsideMessage: victim.getName() + " is no longer trapped by {1_}."
     AddMapField: RapidSpinNoInterface: released.getName() + " was released from {1_}!"
     AddMapField: TrappingMessage: trapped.getName() + " cannot be recalled due to {1_}!"
+*
+LockingEffect:
+    AddInterface: LockingEffect
+    Header: List<ActivePokemon> getLocking()
+    Body:
+        return List.of({0});
+        ###
 *
 UsedProof:
     AddMapField: CanHave: True
@@ -915,6 +919,13 @@ KillWish:
 Defog:
     AddInterface: DefogRelease
     Header: String getDefogReleaseMessage(ActivePokemon released)
+    Body:
+        return {0};
+        ###
+*
+EntryHazard:
+    AddInterface: EntryHazard
+    Header: String getReleaseMessage()
     Body:
         return {0};
         ###
@@ -1548,11 +1559,26 @@ ForesightMove:
         ###
     AddMapField: MoveType: Substitute_Piercing
 *
+ChangeTypeMove:
+    AddMapField: PokemonEffect: ChangeType
+    AddMapField: ChangeType:
+        return new PokeType(Type.{00});
+        ###
+    AddMapField: FullApplies:
+        // Fails is the Pokemon is a pure-{0} type
+        PokeType type = victim.getType(b);
+        return !type.isType(Type.{00}) || type.isDualTyped();
+        ###
+*
 AddTypeMove:
     AddMapField: PokemonEffect: ChangeType
     AddMapField: ChangeType:
         Type primary = victim.getType(b).getFirstType();
         return new PokeType(primary, primary == Type.{00} ? Type.NO_TYPE : Type.{00});
+        ###
+    AddMapField: FullApplies:
+        // Fails is the Pokemon is already {0} type
+        return !victim.getType(b).isType(Type.{00});
         ###
 *
 PrintFail:
@@ -1709,7 +1735,8 @@ ConsumeBerry:
     AddMapField: UniqueEffects:
         HoldItem item = victim.getHeldItem(b);
         if (item instanceof Berry) {
-            ((Berry)item).stealBerry(b, user, victim);
+            Berry berry = (Berry)item;
+            berry.eatBerry(b, user, victim);
         }
         ###
 *

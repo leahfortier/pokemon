@@ -71,6 +71,10 @@ Descriptions that change manually:
         Pollen Puff (Remove 'If the target is an ally, it gives the ally a pollen puff that restores its HP instead.')
         Aromatic Mist ('the Sp. Def stat of an ally Pokémon' -> 'its Sp. Def stat')
         Fairy Lock (Remove 'during the last turn')
+        Dynamax Cannon/Behemoth Blade/Behemoth Bash (Removed 'This move deals twice the damage if the target is Dynamaxed.')
+        Snipe Shot (completely rewritten to ignore abilities and increase crits)
+        Decorate ('the target's' -> 'its')
+        Life Dew ('the HP of itself and its ally Pokémon in the battle' -> 'its HP')
     Abilities:
         Healer ('an ally's' -> 'its')
         Flower Veil (Remove 'Ally')
@@ -103,7 +107,7 @@ Other random things:
 	Generalize double cast remove effects (example: Power Trick)
 	Test that Shedinja is genderless when it evolves and that it doesn't appear when you cancel evolution
 	Remove mainMenuTiles (can keep some for reference inside the images folder) but def move out of tiles
-		-- same with pauseViewTiles
+		- same with pauseViewTiles
 	Berry harvest time and amounts
 	Look at light screen and light clay cast thingy -- why is it not applying turns to itself?
 	should movetypes be a set?
@@ -147,6 +151,7 @@ Other random things:
     might make sense at this point to have types be their own classes (still enum like the namesies)
         - Powder moves with grass
         - lots and lots of status immunities etc
+        - ghost types with trapping
     not sure if I want to do anything with new flavor text entries (but after what happened with the classifications I'm wondering if this is more important)
     I'm not sure we actually need to be replacing the names with special characters and it might be worth giving it another look (Nidoran F/M, Flabebe)
     add more things to evolution test besides abilities
@@ -170,5 +175,18 @@ Other random things:
     BasicPanels.isAnimatingMessage should be checked before the view update method is called, not inside every view update
     BasicPanels should be able to create a panel that sits on the message panel (stats, description, choices etc)
     rewrite PokefinderState since it's super ugly -- probably want to add page numbers and such as well
-    
+    pretty sure Infatuation lasts between Pokemon and it shouldn't
+    apparently critical hits were nerfed in gen 6... did not know that
+    burn was also changed in gen 7 to 1/16
+    surf/whirlpool double damage for dive
+    Stat.MAX_STAT_CHANGES should really be in Stages right?
+    stage modify message should include drastically for 3+ (ex: cotton guard)
+    should probably rewrite the battle message system to pass the serialized battle around instead of whatever it's currently doing with storing every individual value and such
+    should snatch have a message when its used?
+    there's some stuff in Game that I forgot to check in but I don't want it with this branch
+    should have a moldBreaker effect for attacks and abilities and only include the attack when attacking
+    should also have a method that handles the mold breaker stuff instead of it being hardcoded in every single invoke method (probably in the MoldBreakerEffect class if I end up making that)
+    how would something like future sight work for mold breaker
+    visual test clear body with an attack that allows lowers at least two stats (will it print the fail message multiple times?)
+    Hyperspace Fury can only be used by Hoopa like Dark Void Darkrai
     

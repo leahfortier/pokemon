@@ -433,15 +433,16 @@ Water Gun:
 *
 Rapid Spin:
     PP: 40
-    Pow: 20
+    Pow: 50
     Acc: 100
-    Desc: A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes.
+    Desc: A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes. This also raises the user's Speed stat.
     Type: Normal
     Cat: Physical
     SelfTarget: True
     UniqueEffects:
         RapidSpinRelease.release(b, victim);
         ###
+    StatChange: Speed 1
 *
 Reflect:
     Desc: A wondrous wall of light is put up to reduce damage from physical attacks for five turns.
@@ -475,11 +476,18 @@ Baneful Bunker:
     ProtectingAttack: BanefulBunker
 *
 King's Shield:
-    Desc: The user takes a defensive stance while it protects itself from damage. It also harshly lowers the Attack stat of any attacker who makes direct contact.
+    Desc: The user takes a defensive stance while it protects itself from damage. It also lowers the Attack stat of any attacker that makes direct contact.
     Type: Steel
     PP: 10
     Cat: Status
     ProtectingAttack: KingsShield
+*
+Obstruct:
+    Desc: This move enables the user to protect itself from all attacks. Its chance of failing rises if it is used in succession. Direct contact harshly lowers the attacker's Defense stat.
+    Type: Dark
+    PP: 10
+    Cat: Status
+    ProtectingAttack: Obstruct
 *
 Protect:
     Desc: Enables the user to evade all attacks. Its chance of failing rises if it is used in succession.
@@ -637,6 +645,26 @@ Hyper Beam:
     Acc: 90
     Pow: 150
     RechargingMove: True
+*
+Meteor Assault:
+    Desc: The user attacks wildly with its thick leek. The user can't move on the next turn, because the force of this move makes it stagger.
+    PP: 5
+    Type: Fighting
+    Pow: 150
+    Acc: 100
+    Cat: Physical
+    RechargingMove: True
+    PhysicalContact: False
+*
+Eternabeam:
+    Desc: This is Eternatus's most powerful attack in its original form. The user can't move on the next turn.
+    PP: 5
+    Type: Dragon
+    Pow: 160
+    Acc: 90
+    Cat: Special
+    RechargingMove: True
+    Comments: // TODO: Seems like a move that can only be used by Eternatus
 *
 Frenzy Plant:
     Desc: The user slams the target with an enormous tree. The user can't move on the next turn.
@@ -2150,10 +2178,16 @@ Soak:
     Acc: 100
     Type: Water
     Cat: Status
-    PokemonEffect: ChangeType
-    ChangeType:
-        return new PokeType(Type.WATER);
-        ###
+    ChangeTypeMove: Water
+*
+Magic Powder:
+    Desc: The user scatters a cloud of magic powder that changes the target to Psychic type.
+    PP: 20
+    Acc: 100
+    Type: Psychic
+    Cat: Status
+    ChangeTypeMove: Psychic
+    Int: PowderMove
 *
 Trick-or-Treat:
     AddTypeMove: Ghost
@@ -5137,7 +5171,7 @@ Techno Blast:
 Multi-Attack:
     Desc: Cloaking itself in high energy, the user slams into the target. The memory held determines the move's type.
     PP: 10
-    Pow: 90
+    Pow: 120
     Acc: 100
     Cat: Physical
     SpecialItemMove: MemoryItem
@@ -5439,7 +5473,7 @@ Baton Pass:
     FullApplies:
         // Fails if used by a wild pokemon or if the trainer does not have anyone to switch to
         Team team = b.getTrainer(user);
-        return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon(b);
+        return team instanceof Trainer && ((Trainer)team).hasRemainingPokemon(b);
         ###
     UniqueEffects:
         // TODO: Hardcore test this shit not in the mood right now but this is one of the most complicated moves so lots of tests tests tests
@@ -6597,4 +6631,353 @@ Double Iron Bash:
     EffChance: 30
     MultiStrike: 2 2
     MoveType: Punching
+    Int: DoubleMinimizerMove
+*
+Dynamax Cannon:
+    Desc: The user unleashes a strong beam from its core.
+    PP: 5
+    Pow: 100
+    Acc: 100
+    Type: Dragon
+    Cat: Special
+    Comments: // TODO: Removed double damage when Dynamaxed, should this do something more interesting?
+*
+Behemoth Blade:
+    Desc: The user becomes a gigantic sword and cuts the target.
+    PP: 5
+    Pow: 100
+    Acc: 100
+    Type: Steel
+    Cat: Physical
+    Comments: // TODO: Removed double damage when Dynamaxed, should this do something more interesting?
+*
+Behemoth Bash:
+    Desc: The user becomes a gigantic shield and slams into the target.
+    PP: 5
+    Pow: 100
+    Acc: 100
+    Type: Steel
+    Cat: Physical
+    Comments: // TODO: Removed double damage when Dynamaxed, should this do something more interesting?
+*
+Snipe Shot:
+    Desc: This move can be used on the target regardless of its Abilities. Critical hits land more easily.
+    PP: 15
+    Type: Water
+    Pow: 80
+    Acc: 100
+    Cat: Special
+    Int: CritStageEffect
+    IgnoreAbilityMove: True
+    Comments: // Note: This was changed from ignoring targeting to ignoring abilities
+*
+Jaw Lock:
+    Desc: This move prevents the user and the target from switching out until either of them faints. The effect goes away if either of the Pokémon leaves the field.
+    PP: 10
+    Type: Dark
+    Pow: 80
+    Acc: 100
+    Cat: Physical
+    StandardBattleEffect: JawLocked
+    MoveType: Biting
+    Comments: // Note: I made Jaw Lock a biting move which isn't confirmed but I like it regardless
+*
+Stuff Cheeks:
+    Desc: The user eats its held Berry, then sharply raises its Defense stat.
+    PP: 10
+    Type: Normal
+    Cat: Status
+    Applies: user.getHeldItem(b) instanceof Berry
+    AfterApplyCheck:
+        // Note: Here instead of unique effects so the message is displayed before the defense increase
+        Berry berry = (Berry)user.getHeldItem(b);
+        berry.eatBerry(b, victim, user);
+        ###
+    SelfTarget: True
+    StatChange: Defense 2
+*
+No Retreat:
+    Desc: This move raises all the user's stats but prevents the user from switching out or fleeing.
+    PP: 5
+    Type: Fighting
+    Cat: Status
+    RaiseAllStats: True
+    SelfTarget: True
+    PokemonEffect: NoRetreat
+    Applies: !victim.hasEffect(PokemonEffectNamesies.NO_RETREAT)
+*
+Tar Shot:
+    Desc: The user pours sticky tar over the target, lowering the target's Speed stat. The target becomes weaker to Fire-type moves.
+    PP: 15
+    Type: Rock
+    Cat: Status
+    Acc: 100
+    PokemonEffect: StickyTar
+    StatChange: Speed -1
+*
+Dragon Darts:
+    Desc: The user attacks twice using Dreepy.
+    Type: Dragon
+    Cat: Physical
+    PP: 10
+    Pow: 50
+    Acc: 100
+    MultiStrike: 2 2
+    PhysicalContact: False
+*
+Teatime:
+    Desc: The user has teatime with all the Pokémon in the battle. Each Pokémon eats its held Berry.
+    PP: 10
+    Type: Normal
+    Cat: Status
+    MoveType: Field
+    UniqueEffects:
+        // Each Pokemon in battle has tea time!
+        // TODO: Should this display a fail message or something if no one is having tea?
+        teatime(b, user);
+        teatime(b, victim);
+        ###
+    Field:
+        // If the Pokemon is holding a berry, then they'll eat it
+        private void teatime(Battle b, ActivePokemon teaDrinker) {
+            // Semi-invulnerable Pokemon don't drink tea, duh
+            if (teaDrinker.isSemiInvulnerable()) {
+                return;
+            }
+            
+            HoldItem item = teaDrinker.getHeldItem(b);
+            if (item instanceof Berry) {
+                Berry berry = (Berry)item;
+                berry.eatBerry(b, teaDrinker, teaDrinker);
+            }
+        }
+        ###
+*
+Octolock:
+    Desc: The user locks the target in and prevents it from fleeing. This move also lowers the target's Defense and Sp. Def every turn.
+    PP: 15
+    Type: Fighting
+    Cat: Status
+    PokemonEffect: Octolocked
+    Acc: 100
+*
+Bolt Beak:
+    Desc: The user stabs the target with its electrified beak. If the user attacks before the target, the power of this move is doubled.
+    PP: 10
+    Type: Electric
+    Cat: Physical
+    Pow: 85
+    PowerMultiplierCondition: 2 b.isFirstAttack()
+    Acc: 100
+*
+Fishious Rend:
+    Desc: The user rends the target with its hard gills. If the user attacks before the target, the power of this move is doubled.
+    PP: 10
+    Type: Water
+    Cat: Physical
+    Pow: 85
+    PowerMultiplierCondition: 2 b.isFirstAttack()
+    Acc: 100
+    MoveType: Biting
+*
+Court Change:
+    Desc: With its mysterious power, the user swaps the effects on either side of the field.
+    Type: Normal
+    PP: 10
+    Acc: 100
+    Cat: Status
+    UniqueEffects:
+        Messages.add(user.getName() + " swapped the effects!");
+
+        // Important to remove and add the exact effects and not creating new ones and casting
+        List<TeamEffect> userEffects = cutSwappableEffects(b, user);
+        List<TeamEffect> victimEffects = cutSwappableEffects(b, victim);
+        
+        addSwappableEffects(b, user, victimEffects);
+        addSwappableEffects(b, victim, userEffects);
+        ###
+    Field:
+        // Gets and removes all the swappable effects on the team of the specified Pokemon
+        private List<TeamEffect> cutSwappableEffects(Battle b, ActivePokemon p) {
+            TeamEffectList teamEffectList = b.getTrainer(p).getEffects();
+            List<TeamEffect> swappable = teamEffectList.asList().stream()
+                                                       .filter(effect -> effect instanceof SwappableEffect)
+                                                       .collect(Collectors.toList());
+            teamEffectList.removeAll(swappable);
+            return swappable;
+        }
+
+        // Adds the swappable effects (from the opposite team) to the team of the input Pokemon
+        // This team's effects should already be stored and removed at this point
+        private void addSwappableEffects(Battle b, ActivePokemon p, List<TeamEffect> swappable) {
+            TeamEffectList teamEffectList = b.getTrainer(p).getEffects();
+            for (TeamEffect effect : swappable) {
+                teamEffectList.add(effect);
+            }
+        }
+        ###
+*
+Clangorous Soul:
+    Desc: The user raises all its stats by using some of its HP.
+    PP: 5
+    Type: Dragon
+    Cat: Status
+    MoveType: Sound_Based
+    RaiseAllStats: True
+    SelfTarget: True
+    Applies: user.getHPRatio() > 1/3.0
+    AfterApplyCheck:
+        // Note: Here instead of unique effects so the message is displayed before the stat increases
+        user.forceReduceHealthFraction(b, 1/3.0, user.getName() + " sacrificed its HP to raise its stats!");
+        ###
+*
+Body Press:
+    Desc: The user attacks by slamming its body into the target. The higher the user's Defense, the more damage it can inflict on the target.
+    PP: 10
+    Pow: 80
+    Acc: 100
+    Cat: Physical
+    Type: Fighting
+    Int: StatSwitchingEffect
+    SwitchStat: return s == Stat.ATTACK ? Stat.DEFENSE : s;
+*
+Decorate:
+    Desc: The user sharply raises its Attack and Sp. Atk stats by decorating the target.
+    PP: 15
+    Type: Fairy
+    Cat: Status
+    StatChange: Attack 2 Sp_Attack 2
+    SelfTarget: True
+*
+Drum Beating:
+    Desc: The user plays its drum, controlling the drum's roots to attack the target. This also lowers the target's Speed stat.
+    PP: 10
+    Pow: 80
+    Acc: 100
+    Cat: Physical
+    Type: Grass
+    StatChange: Speed -1
+    PhysicalContact: False
+*
+SnapTrap:
+    Desc: The user snares the target in a snap trap for four to five turns.
+    PP: 15
+    Type: Grass
+    Cat: Physical
+    Acc: 100
+    Pow: 35
+    PokemonEffect: SnapTrapped
+*
+Pyro Ball:
+    Desc: The user attacks by igniting a small stone and launching it as a fiery ball at the target. This may also leave the target with a burn.
+    PP: 5
+    Type: Fire
+    Cat: Physical
+    Acc: 90
+    Pow: 120
+    Status: Burned
+    EffChance: 10
+    MoveType: Bomb_Ball, Defrost
+    PhysicalContact: False
+*
+Aura Wheel:
+    Desc: Morpeko attacks and raises its Speed with the energy stored in its cheeks. This move's type changes depending on the user's form.
+    PP: 10
+    Pow: 110
+    Acc: 100
+    Cat: Physical
+    Type: Electric
+    SelfTarget: True
+    StatChange: Speed 1
+    PhysicalContact: False
+    Comments: // TODO: Should only work for Morpeko and change type with its ability (which are both not implemented yet) though maybe I will implement as applying if it has the ability (which only morpeko should have)
+*
+Breaking Swipe:
+    Desc: The user swings its tough tail wildly and attacks opposing Pokémon. This also lowers their Attack stats.
+    PP: 15
+    Type: Dragon
+    Cat: Physical
+    Pow: 60
+    Acc: 100
+    StatChange: Attack -1
+*
+Branch Poke:
+    Desc: The user attacks the target by poking it with a sharply pointed branch.
+    PP: 40
+    Pow: 40
+    Cat: Physical
+    Type: Grass
+    Acc: 100
+*
+Overdrive:
+    Desc: The user attacks opposing Pokémon by twanging a guitar or bass guitar, causing a huge echo and strong vibration.
+    PP: 10
+    Type: Electric
+    Cat: Special
+    Pow: 80
+    Acc: 100
+    MoveType: Sound_Based
+*
+Apple Acid:
+    Desc: The user attacks the target with an acidic liquid created from tart apples. This also lowers the target's Sp. Def stat.
+    PP: 10
+    Type: Grass
+    Pow: 80
+    Cat: Special
+    Acc: 100
+    StatChange: Sp_Defense -1
+*
+Grav Apple:
+    Desc: The user inflicts damage by dropping an apple from high above. This also lowers the target's Defense stat.
+    PP: 10
+    Type: Grass
+    Cat: Physical
+    Pow: 80
+    Acc: 100
+    StatChange: Defense -1
+*
+Spirit Break:
+    Desc: The user attacks the target with so much force that it could break the target's spirit. This also lowers the target's Sp. Atk stat.
+    Type: Fairy
+    Cat: Physical
+    Acc: 100
+    PP: 15
+    Pow: 75
+    StatChange: Sp_Attack -1
+*
+Strange Steam:
+    Desc: The user attacks the target by emitting steam. This may also confuse the target.
+    PP: 10
+    Type: Fairy
+    Cat: Special
+    Acc: 95
+    PokemonEffect: Confusion
+    EffChance: 20
+    Pow: 90
+*
+Life Dew:
+    Desc: The user scatters mysterious water around and restores its HP.
+    PP: 10
+    Type: Water
+    Cat: Special
+    HealFraction: .5
+    Comments: // Note: Changed from .25 to .5 because it's only healing itself now
+*
+False Surrender:
+    Desc: The user pretends to bow its head, but then it stabs the target with its disheveled hair. This attack never misses.
+    Type: Dark
+    Pow: 80
+    Cat: Physical
+    PP: 10
+*
+Steel Beam:
+    Desc: The user fires a beam of steel that it collected from its entire body. This also damages the user.
+    PP: 5
+    Pow: 140
+    Acc: 95
+    Type: Steel
+    Cat: Special
+    UniqueEffects:
+        user.reduceHealthFraction(b, .5, user.getName() + " was hurt!");
+        ###
 *

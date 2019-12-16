@@ -5,17 +5,20 @@ import battle.attack.AttackInterface;
 import battle.effect.Effect;
 import battle.effect.EffectInterface;
 import battle.effect.EffectInterfaces.EffectPreventionAbility;
+import battle.effect.EffectInterfaces.EntryHazard;
 import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.EffectInterfaces.SingleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.StatModifyingStatus;
+import battle.effect.EffectInterfaces.SwappableEffect;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.AttackingNoAdvantageChanger;
+import battle.effect.InvokeInterfaces.BarrierEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
 import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
 import battle.effect.InvokeInterfaces.BeforeTurnEffect;
@@ -63,6 +66,7 @@ import battle.effect.InvokeInterfaces.StatChangingEffect;
 import battle.effect.InvokeInterfaces.StatLoweredEffect;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
+import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StatusBoosterEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
@@ -137,6 +141,7 @@ public class ClassTest extends BaseTest {
             SelfAttackBlocker.class,
             CritStageEffect.class,
             ForceMoveEffect.class,
+            StatSwitchingEffect.class,
             StatusBoosterEffect.class
     );
 
@@ -190,6 +195,9 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, NameChanger.class, Ability.class);
             checkInstance(classy, PassableEffect.class, PokemonEffect.class);
             checkInstance(classy, PartialTrappingEffect.class, PokemonEffect.class);
+            checkInstance(classy, SwappableEffect.class, TeamEffect.class);
+            checkInstance(classy, BarrierEffect.class, TeamEffect.class);
+            checkInstance(classy, EntryHazard.class, TeamEffect.class);
             checkInstance(classy, BattleEndTurnEffect.class, BattleEffect.class);
             checkInstance(classy, EndTurnEffect.class, teamEffectList);
             checkInstance(classy, SwitchOutEffect.class, pokemonEffectList);

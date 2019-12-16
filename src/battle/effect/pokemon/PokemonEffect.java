@@ -2,6 +2,7 @@ package battle.effect.pokemon;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.Stages.ModifyStageMessageGetter;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -11,6 +12,7 @@ import battle.effect.Effect;
 import battle.effect.EffectInterfaces.AbilityHolder;
 import battle.effect.EffectInterfaces.AttackSelectionSelfBlockerEffect;
 import battle.effect.EffectInterfaces.ItemHolder;
+import battle.effect.EffectInterfaces.LockingEffect;
 import battle.effect.EffectInterfaces.MessageGetter;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
@@ -41,6 +43,7 @@ import battle.effect.InvokeInterfaces.ItemBlockerEffect;
 import battle.effect.InvokeInterfaces.LevitationEffect;
 import battle.effect.InvokeInterfaces.NoSwapEffect;
 import battle.effect.InvokeInterfaces.OpponentAccuracyBypassEffect;
+import battle.effect.InvokeInterfaces.OpponentPowerChangeEffect;
 import battle.effect.InvokeInterfaces.PowderBlocker;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.InvokeInterfaces.RapidSpinRelease;
@@ -432,6 +435,39 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
+    static class SnapTrapped extends PokemonEffect implements PartialTrappingEffect {
+        private static final long serialVersionUID = 1L;
+
+        SnapTrapped() {
+            super(PokemonEffectNamesies.SNAP_TRAPPED, 4, 5, false, false);
+        }
+
+        @Override
+        public String getReduceMessage(ActivePokemon victim) {
+            return victim.getName() + " is hurt by snap trap!";
+        }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return victim.getName() + " was trapped by snap trap!";
+        }
+
+        @Override
+        public String getSubsideMessage(ActivePokemon victim) {
+            return victim.getName() + " is no longer trapped by snap trap.";
+        }
+
+        @Override
+        public String getRapidSpinReleaseMessage(ActivePokemon released) {
+            return released.getName() + " was released from snap trap!";
+        }
+
+        @Override
+        public String trappingMessage(ActivePokemon trapped) {
+            return trapped.getName() + " cannot be recalled due to snap trap!";
+        }
+    }
+
     static class KingsShield extends PokemonEffect implements ProtectingEffect {
         private static final long serialVersionUID = 1L;
 
@@ -444,8 +480,43 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             // Pokemon that make contact with the king's shield have their attack reduced
             if (p.isMakingContact()) {
                 p.getStages().modifyStage(
-                        opp, -2, Stat.ATTACK, b, CastSource.EFFECT,
+                        opp, -1, Stat.ATTACK, b, CastSource.EFFECT,
                         (victimName, statName, changed) -> "The King's Shield " + changed + " " + p.getName() + "'s " + statName + "!"
+                );
+            }
+        }
+
+        @Override
+        public boolean protectingCondition(Battle b, ActivePokemon attacking) {
+            // Only protects against attacking moves
+            return !attacking.getAttack().isStatusMove();
+        }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return victim.getName() + " protected itself!";
+        }
+
+        @Override
+        public ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            return ApplyResult.newResult(RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate())));
+        }
+    }
+
+    static class Obstruct extends PokemonEffect implements ProtectingEffect {
+        private static final long serialVersionUID = 1L;
+
+        Obstruct() {
+            super(PokemonEffectNamesies.OBSTRUCT, 1, 1, false, false);
+        }
+
+        @Override
+        public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
+            // Pokemon that make contact with the obstruction have their defense harshly reduced
+            if (p.isMakingContact()) {
+                p.getStages().modifyStage(
+                        opp, -2, Stat.DEFENSE, b, CastSource.EFFECT,
+                        (victimName, statName, changed) -> "The obstruction " + changed + " " + p.getName() + "'s " + statName + "!"
                 );
             }
         }
@@ -1191,6 +1262,69 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
+    // Note: Different that Trapped effect because the attack can only be used once
+    static class NoRetreat extends PokemonEffect implements TrappingEffect {
+        private static final long serialVersionUID = 1L;
+
+        NoRetreat() {
+            super(PokemonEffectNamesies.NO_RETREAT, -1, -1, false, false);
+        }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return victim.getName() + " cannot retreat!";
+        }
+
+        @Override
+        public String trappingMessage(ActivePokemon trapped) {
+            return trapped.getName() + " cannot retreat!";
+        }
+    }
+
+    static class Octolocked extends PokemonEffect implements EndTurnEffect, LockingEffect {
+        private static final long serialVersionUID = 1L;
+
+        // Only locked as long as the caster is still in play
+        private ActivePokemon caster;
+
+        Octolocked() {
+            super(PokemonEffectNamesies.OCTOLOCKED, -1, -1, false, false);
+        }
+
+        @Override
+        public List<ActivePokemon> getLocking() {
+            return List.of(caster);
+        }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return victim.getName() + " can't escape!";
+        }
+
+        @Override
+        public String trappingMessage(ActivePokemon trapped) {
+            return trapped.getName() + " is trapped by Octolock!";
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            // Make sure locking Pokemon is still here to be mean
+            if (!checkActive(b)) {
+                return;
+            }
+
+            // Charmander's Defense was lowered by Octolock!
+            ModifyStageMessageGetter messageGetter = (victimName, statName, changed) -> victim.getName() + "'s " + statName + " was " + changed + " by Octolock!";
+            victim.getStages().modifyStage(caster, -1, Stat.DEFENSE, b, CastSource.EFFECT, messageGetter);
+            victim.getStages().modifyStage(caster, -1, Stat.SP_DEFENSE, b, CastSource.EFFECT, messageGetter);
+        }
+
+        @Override
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            this.caster = caster;
+        }
+    }
+
     static class Foresight extends PokemonEffect implements DefendingNoAdvantageChanger {
         private static final long serialVersionUID = 1L;
 
@@ -1412,11 +1546,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         Ingrain() {
             super(PokemonEffectNamesies.INGRAIN, -1, -1, false, false);
-        }
-
-        @Override
-        public boolean trapped(Battle b, ActivePokemon escaper) {
-            return true;
         }
 
         @Override
@@ -2316,6 +2445,19 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
                     victim, 1, Stat.ATTACK, b, CastSource.EFFECT,
                     (victimName, statName, changed) -> String.format("%s's Rage %s %s %s!", victim.getName(), changed, victimName, statName)
             );
+        }
+    }
+
+    static class StickyTar extends PokemonEffect implements OpponentPowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        StickyTar() {
+            super(PokemonEffectNamesies.STICKY_TAR, -1, -1, false, false);
+        }
+
+        @Override
+        public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isAttackType(Type.FIRE) ? 2 : 1;
         }
     }
 }

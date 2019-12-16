@@ -17,6 +17,7 @@ import battle.effect.EffectInterfaces.SemiInvulnerableDiggingBypasser;
 import battle.effect.EffectInterfaces.SemiInvulnerableFlyingBypasser;
 import battle.effect.EffectInterfaces.StormyMove;
 import battle.effect.EffectInterfaces.SwapOpponentEffect;
+import battle.effect.EffectInterfaces.SwappableEffect;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AdvantageMultiplierMove;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
@@ -38,6 +39,7 @@ import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.SelfAttackBlocker;
 import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.SleepyFightsterEffect;
+import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.attack.FixedDamageMove;
@@ -62,6 +64,7 @@ import battle.effect.source.ChangeAttackTypeSource;
 import battle.effect.source.ChangeTypeSource;
 import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
+import battle.effect.team.TeamEffect;
 import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
 import item.berry.Berry;
@@ -82,6 +85,7 @@ import pokemon.active.MoveList;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import trainer.Team;
+import trainer.Team.TeamEffectList;
 import trainer.Trainer;
 import type.PokeType;
 import type.Type;
@@ -91,6 +95,7 @@ import util.string.PokeString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class Attack implements AttackInterface {
     private static final long serialVersionUID = 1L;
@@ -1126,11 +1131,12 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         RapidSpin() {
-            super(AttackNamesies.RAPID_SPIN, Type.NORMAL, MoveCategory.PHYSICAL, 40, "A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes.");
-            super.power = 20;
+            super(AttackNamesies.RAPID_SPIN, Type.NORMAL, MoveCategory.PHYSICAL, 40, "A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes. This also raises the user's Speed stat.");
+            super.power = 50;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
+            super.statChanges[Stat.SPEED.index()] = 1;
         }
 
         @Override
@@ -1198,8 +1204,23 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         KingsShield() {
-            super(AttackNamesies.KINGS_SHIELD, Type.STEEL, MoveCategory.STATUS, 10, "The user takes a defensive stance while it protects itself from damage. It also harshly lowers the Attack stat of any attacker who makes direct contact.");
+            super(AttackNamesies.KINGS_SHIELD, Type.STEEL, MoveCategory.STATUS, 10, "The user takes a defensive stance while it protects itself from damage. It also lowers the Attack stat of any attacker that makes direct contact.");
             super.effect = PokemonEffectNamesies.KINGS_SHIELD;
+            super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
+            super.moveTypes.add(MoveType.ASSISTLESS);
+            super.moveTypes.add(MoveType.METRONOMELESS);
+            super.moveTypes.add(MoveType.NON_SNATCHABLE);
+            super.selfTarget = true;
+            super.priority = 4;
+        }
+    }
+
+    static class Obstruct extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        Obstruct() {
+            super(AttackNamesies.OBSTRUCT, Type.DARK, MoveCategory.STATUS, 10, "This move enables the user to protect itself from all attacks. Its chance of failing rises if it is used in succession. Direct contact harshly lowers the attacker's Defense stat.");
+            super.effect = PokemonEffectNamesies.OBSTRUCT;
             super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
             super.moveTypes.add(MoveType.ASSISTLESS);
             super.moveTypes.add(MoveType.METRONOMELESS);
@@ -1475,6 +1496,65 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
+    static class MeteorAssault extends Attack implements RechargingMove {
+        private static final long serialVersionUID = 1L;
+
+        private boolean isCharging;
+
+        MeteorAssault() {
+            super(AttackNamesies.METEOR_ASSAULT, Type.FIGHTING, MoveCategory.PHYSICAL, 5, "The user attacks wildly with its thick leek. The user can't move on the next turn, because the force of this move makes it stagger.");
+            super.power = 150;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            this.resetReady();
+        }
+
+        @Override
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+    }
+
+    // TODO: Seems like a move that can only be used by Eternatus
+    static class Eternabeam extends Attack implements RechargingMove {
+        private static final long serialVersionUID = 1L;
+
+        private boolean isCharging;
+
+        Eternabeam() {
+            super(AttackNamesies.ETERNABEAM, Type.DRAGON, MoveCategory.SPECIAL, 5, "This is Eternatus's most powerful attack in its original form. The user can't move on the next turn.");
+            super.power = 160;
+            super.accuracy = 90;
+            super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            this.resetReady();
+        }
+
+        @Override
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+    }
+
     static class FrenzyPlant extends Attack implements RechargingMove {
         private static final long serialVersionUID = 1L;
 
@@ -1615,7 +1695,8 @@ public abstract class Attack implements AttackInterface {
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             HoldItem item = victim.getHeldItem(b);
             if (item instanceof Berry) {
-                ((Berry)item).stealBerry(b, user, victim);
+                Berry berry = (Berry)item;
+                berry.eatBerry(b, user, victim);
             }
         }
     }
@@ -2324,7 +2405,8 @@ public abstract class Attack implements AttackInterface {
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             HoldItem item = victim.getHeldItem(b);
             if (item instanceof Berry) {
-                ((Berry)item).stealBerry(b, user, victim);
+                Berry berry = (Berry)item;
+                berry.eatBerry(b, user, victim);
             }
         }
     }
@@ -3843,6 +3925,35 @@ public abstract class Attack implements AttackInterface {
         public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             return new PokeType(Type.WATER);
         }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Fails is the Pokemon is a pure-Water type
+            PokeType type = victim.getType(b);
+            return !type.isType(Type.WATER) || type.isDualTyped();
+        }
+    }
+
+    static class MagicPowder extends Attack implements PowderMove, ChangeTypeSource {
+        private static final long serialVersionUID = 1L;
+
+        MagicPowder() {
+            super(AttackNamesies.MAGIC_POWDER, Type.PSYCHIC, MoveCategory.STATUS, 20, "The user scatters a cloud of magic powder that changes the target to Psychic type.");
+            super.accuracy = 100;
+            super.effect = PokemonEffectNamesies.CHANGE_TYPE;
+        }
+
+        @Override
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return new PokeType(Type.PSYCHIC);
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Fails is the Pokemon is a pure-Psychic type
+            PokeType type = victim.getType(b);
+            return !type.isType(Type.PSYCHIC) || type.isDualTyped();
+        }
     }
 
     static class TrickOrTreat extends Attack implements ChangeTypeSource {
@@ -3859,6 +3970,12 @@ public abstract class Attack implements AttackInterface {
             Type primary = victim.getType(b).getFirstType();
             return new PokeType(primary, primary == Type.GHOST ? Type.NO_TYPE : Type.GHOST);
         }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Fails is the Pokemon is already Ghost type
+            return !victim.getType(b).isType(Type.GHOST);
+        }
     }
 
     static class ForestsCurse extends Attack implements ChangeTypeSource {
@@ -3874,6 +3991,12 @@ public abstract class Attack implements AttackInterface {
         public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
             Type primary = victim.getType(b).getFirstType();
             return new PokeType(primary, primary == Type.GRASS ? Type.NO_TYPE : Type.GRASS);
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Fails is the Pokemon is already Grass type
+            return !victim.getType(b).isType(Type.GRASS);
         }
     }
 
@@ -8567,7 +8690,7 @@ public abstract class Attack implements AttackInterface {
 
         MultiAttack() {
             super(AttackNamesies.MULTI_ATTACK, Type.NORMAL, MoveCategory.PHYSICAL, 10, "Cloaking itself in high energy, the user slams into the target. The memory held determines the move's type.");
-            super.power = 90;
+            super.power = 120;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -9158,7 +9281,7 @@ public abstract class Attack implements AttackInterface {
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Fails if used by a wild pokemon or if the trainer does not have anyone to switch to
             Team team = b.getTrainer(user);
-            return !(team instanceof Trainer) || ((Trainer)team).hasRemainingPokemon(b);
+            return team instanceof Trainer && ((Trainer)team).hasRemainingPokemon(b);
         }
 
         @Override
@@ -10935,7 +11058,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class DoubleIronBash extends Attack implements MultiStrikeMove {
+    static class DoubleIronBash extends Attack implements DoubleMinimizerMove, MultiStrikeMove {
         private static final long serialVersionUID = 1L;
 
         DoubleIronBash() {
@@ -10956,6 +11079,500 @@ public abstract class Attack implements AttackInterface {
         @Override
         public int getMaxHits() {
             return 2;
+        }
+    }
+
+    // TODO: Removed double damage when Dynamaxed, should this do something more interesting?
+    static class DynamaxCannon extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        DynamaxCannon() {
+            super(AttackNamesies.DYNAMAX_CANNON, Type.DRAGON, MoveCategory.SPECIAL, 5, "The user unleashes a strong beam from its core.");
+            super.power = 100;
+            super.accuracy = 100;
+        }
+    }
+
+    // TODO: Removed double damage when Dynamaxed, should this do something more interesting?
+    static class BehemothBlade extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        BehemothBlade() {
+            super(AttackNamesies.BEHEMOTH_BLADE, Type.STEEL, MoveCategory.PHYSICAL, 5, "The user becomes a gigantic sword and cuts the target.");
+            super.power = 100;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+    }
+
+    // TODO: Removed double damage when Dynamaxed, should this do something more interesting?
+    static class BehemothBash extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        BehemothBash() {
+            super(AttackNamesies.BEHEMOTH_BASH, Type.STEEL, MoveCategory.PHYSICAL, 5, "The user becomes a gigantic shield and slams into the target.");
+            super.power = 100;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+    }
+
+    // Note: This was changed from ignoring targeting to ignoring abilities
+    static class SnipeShot extends Attack implements CritStageEffect {
+        private static final long serialVersionUID = 1L;
+
+        private Effect effect;
+
+        SnipeShot() {
+            super(AttackNamesies.SNIPE_SHOT, Type.WATER, MoveCategory.SPECIAL, 15, "This move can be used on the target regardless of its Abilities. Critical hits land more easily.");
+            super.power = 80;
+            super.accuracy = 100;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.effect.deactivate();
+        }
+    }
+
+    // Note: I made Jaw Lock a biting move which isn't confirmed but I like it regardless
+    static class JawLock extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        JawLock() {
+            super(AttackNamesies.JAW_LOCK, Type.DARK, MoveCategory.PHYSICAL, 10, "This move prevents the user and the target from switching out until either of them faints. The effect goes away if either of the Pokémon leaves the field.");
+            super.power = 80;
+            super.accuracy = 100;
+            super.effect = StandardBattleEffectNamesies.JAW_LOCKED;
+            super.moveTypes.add(MoveType.BITING);
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+    }
+
+    static class StuffCheeks extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        StuffCheeks() {
+            super(AttackNamesies.STUFF_CHEEKS, Type.NORMAL, MoveCategory.STATUS, 10, "The user eats its held Berry, then sharply raises its Defense stat.");
+            super.selfTarget = true;
+            super.statChanges[Stat.DEFENSE.index()] = 2;
+        }
+
+        @Override
+        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Note: Here instead of unique effects so the message is displayed before the defense increase
+            Berry berry = (Berry)user.getHeldItem(b);
+            berry.eatBerry(b, victim, user);
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.getHeldItem(b) instanceof Berry;
+        }
+    }
+
+    static class NoRetreat extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        NoRetreat() {
+            super(AttackNamesies.NO_RETREAT, Type.FIGHTING, MoveCategory.STATUS, 5, "This move raises all the user's stats but prevents the user from switching out or fleeing.");
+            super.effect = PokemonEffectNamesies.NO_RETREAT;
+            super.selfTarget = true;
+            super.statChanges[Stat.ATTACK.index()] = 1;
+            super.statChanges[Stat.DEFENSE.index()] = 1;
+            super.statChanges[Stat.SP_ATTACK.index()] = 1;
+            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
+            super.statChanges[Stat.SPEED.index()] = 1;
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return !victim.hasEffect(PokemonEffectNamesies.NO_RETREAT);
+        }
+    }
+
+    static class TarShot extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        TarShot() {
+            super(AttackNamesies.TAR_SHOT, Type.ROCK, MoveCategory.STATUS, 15, "The user pours sticky tar over the target, lowering the target's Speed stat. The target becomes weaker to Fire-type moves.");
+            super.accuracy = 100;
+            super.effect = PokemonEffectNamesies.STICKY_TAR;
+            super.statChanges[Stat.SPEED.index()] = -1;
+        }
+    }
+
+    static class DragonDarts extends Attack implements MultiStrikeMove {
+        private static final long serialVersionUID = 1L;
+
+        DragonDarts() {
+            super(AttackNamesies.DRAGON_DARTS, Type.DRAGON, MoveCategory.PHYSICAL, 10, "The user attacks twice using Dreepy.");
+            super.power = 50;
+            super.accuracy = 100;
+        }
+
+        @Override
+        public int getMinHits() {
+            return 2;
+        }
+
+        @Override
+        public int getMaxHits() {
+            return 2;
+        }
+    }
+
+    static class Teatime extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        // If the Pokemon is holding a berry, then they'll eat it
+        private void teatime(Battle b, ActivePokemon teaDrinker) {
+            // Semi-invulnerable Pokemon don't drink tea, duh
+            if (teaDrinker.isSemiInvulnerable()) {
+                return;
+            }
+
+            HoldItem item = teaDrinker.getHeldItem(b);
+            if (item instanceof Berry) {
+                Berry berry = (Berry)item;
+                berry.eatBerry(b, teaDrinker, teaDrinker);
+            }
+        }
+
+        Teatime() {
+            super(AttackNamesies.TEATIME, Type.NORMAL, MoveCategory.STATUS, 10, "The user has teatime with all the Pokémon in the battle. Each Pokémon eats its held Berry.");
+            super.moveTypes.add(MoveType.FIELD);
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Each Pokemon in battle has tea time!
+            // TODO: Should this display a fail message or something if no one is having tea?
+            teatime(b, user);
+            teatime(b, victim);
+        }
+    }
+
+    static class Octolock extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        Octolock() {
+            super(AttackNamesies.OCTOLOCK, Type.FIGHTING, MoveCategory.STATUS, 15, "The user locks the target in and prevents it from fleeing. This move also lowers the target's Defense and Sp. Def every turn.");
+            super.accuracy = 100;
+            super.effect = PokemonEffectNamesies.OCTOLOCKED;
+        }
+    }
+
+    static class BoltBeak extends Attack implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        BoltBeak() {
+            super(AttackNamesies.BOLT_BEAK, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, "The user stabs the target with its electrified beak. If the user attacks before the target, the power of this move is doubled.");
+            super.power = 85;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.isFirstAttack() ? 2 : 1;
+        }
+    }
+
+    static class FishiousRend extends Attack implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        FishiousRend() {
+            super(AttackNamesies.FISHIOUS_REND, Type.WATER, MoveCategory.PHYSICAL, 10, "The user rends the target with its hard gills. If the user attacks before the target, the power of this move is doubled.");
+            super.power = 85;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.BITING);
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.isFirstAttack() ? 2 : 1;
+        }
+    }
+
+    static class CourtChange extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        // Gets and removes all the swappable effects on the team of the specified Pokemon
+        private List<TeamEffect> cutSwappableEffects(Battle b, ActivePokemon p) {
+            TeamEffectList teamEffectList = b.getTrainer(p).getEffects();
+            List<TeamEffect> swappable = teamEffectList.asList().stream()
+                .filter(effect -> effect instanceof SwappableEffect)
+                .collect(Collectors.toList());
+            teamEffectList.removeAll(swappable);
+            return swappable;
+        }
+
+        // Adds the swappable effects (from the opposite team) to the team of the input Pokemon
+        // This team's effects should already be stored and removed at this point
+        private void addSwappableEffects(Battle b, ActivePokemon p, List<TeamEffect> swappable) {
+            TeamEffectList teamEffectList = b.getTrainer(p).getEffects();
+            for (TeamEffect effect : swappable) {
+                teamEffectList.add(effect);
+            }
+        }
+
+        CourtChange() {
+            super(AttackNamesies.COURT_CHANGE, Type.NORMAL, MoveCategory.STATUS, 10, "With its mysterious power, the user swaps the effects on either side of the field.");
+            super.accuracy = 100;
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            Messages.add(user.getName() + " swapped the effects!");
+
+            // Important to remove and add the exact effects and not creating new ones and casting
+            List<TeamEffect> userEffects = cutSwappableEffects(b, user);
+            List<TeamEffect> victimEffects = cutSwappableEffects(b, victim);
+
+            addSwappableEffects(b, user, victimEffects);
+            addSwappableEffects(b, victim, userEffects);
+        }
+    }
+
+    static class ClangorousSoul extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        ClangorousSoul() {
+            super(AttackNamesies.CLANGOROUS_SOUL, Type.DRAGON, MoveCategory.STATUS, 5, "The user raises all its stats by using some of its HP.");
+            super.moveTypes.add(MoveType.SOUND_BASED);
+            super.selfTarget = true;
+            super.statChanges[Stat.ATTACK.index()] = 1;
+            super.statChanges[Stat.DEFENSE.index()] = 1;
+            super.statChanges[Stat.SP_ATTACK.index()] = 1;
+            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
+            super.statChanges[Stat.SPEED.index()] = 1;
+        }
+
+        @Override
+        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Note: Here instead of unique effects so the message is displayed before the stat increases
+            user.forceReduceHealthFraction(b, 1/3.0, user.getName() + " sacrificed its HP to raise its stats!");
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.getHPRatio() > 1/3.0;
+        }
+    }
+
+    static class BodyPress extends Attack implements StatSwitchingEffect {
+        private static final long serialVersionUID = 1L;
+
+        BodyPress() {
+            super(AttackNamesies.BODY_PRESS, Type.FIGHTING, MoveCategory.PHYSICAL, 10, "The user attacks by slamming its body into the target. The higher the user's Defense, the more damage it can inflict on the target.");
+            super.power = 80;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
+            return s == Stat.ATTACK ? Stat.DEFENSE : s;
+        }
+    }
+
+    static class Decorate extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        Decorate() {
+            super(AttackNamesies.DECORATE, Type.FAIRY, MoveCategory.STATUS, 15, "The user sharply raises its Attack and Sp. Atk stats by decorating the target.");
+            super.selfTarget = true;
+            super.statChanges[Stat.ATTACK.index()] = 2;
+            super.statChanges[Stat.SP_ATTACK.index()] = 2;
+        }
+    }
+
+    static class DrumBeating extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        DrumBeating() {
+            super(AttackNamesies.DRUM_BEATING, Type.GRASS, MoveCategory.PHYSICAL, 10, "The user plays its drum, controlling the drum's roots to attack the target. This also lowers the target's Speed stat.");
+            super.power = 80;
+            super.accuracy = 100;
+            super.statChanges[Stat.SPEED.index()] = -1;
+        }
+    }
+
+    static class SnapTrap extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        SnapTrap() {
+            super(AttackNamesies.SNAP_TRAP, Type.GRASS, MoveCategory.PHYSICAL, 15, "The user snares the target in a snap trap for four to five turns.");
+            super.power = 35;
+            super.accuracy = 100;
+            super.effect = PokemonEffectNamesies.SNAP_TRAPPED;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+    }
+
+    static class PyroBall extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        PyroBall() {
+            super(AttackNamesies.PYRO_BALL, Type.FIRE, MoveCategory.PHYSICAL, 5, "The user attacks by igniting a small stone and launching it as a fiery ball at the target. This may also leave the target with a burn.");
+            super.power = 120;
+            super.accuracy = 90;
+            super.effectChance = 10;
+            super.status = StatusNamesies.BURNED;
+            super.moveTypes.add(MoveType.BOMB_BALL);
+            super.moveTypes.add(MoveType.DEFROST);
+        }
+    }
+
+    // TODO: Should only work for Morpeko and change type with its ability (which are both not implemented yet) though maybe I will implement as applying if it has the ability (which only morpeko should have)
+    static class AuraWheel extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        AuraWheel() {
+            super(AttackNamesies.AURA_WHEEL, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, "Morpeko attacks and raises its Speed with the energy stored in its cheeks. This move's type changes depending on the user's form.");
+            super.power = 110;
+            super.accuracy = 100;
+            super.selfTarget = true;
+            super.statChanges[Stat.SPEED.index()] = 1;
+        }
+    }
+
+    static class BreakingSwipe extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        BreakingSwipe() {
+            super(AttackNamesies.BREAKING_SWIPE, Type.DRAGON, MoveCategory.PHYSICAL, 15, "The user swings its tough tail wildly and attacks opposing Pokémon. This also lowers their Attack stats.");
+            super.power = 60;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.ATTACK.index()] = -1;
+        }
+    }
+
+    static class BranchPoke extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        BranchPoke() {
+            super(AttackNamesies.BRANCH_POKE, Type.GRASS, MoveCategory.PHYSICAL, 40, "The user attacks the target by poking it with a sharply pointed branch.");
+            super.power = 40;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+    }
+
+    static class Overdrive extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        Overdrive() {
+            super(AttackNamesies.OVERDRIVE, Type.ELECTRIC, MoveCategory.SPECIAL, 10, "The user attacks opposing Pokémon by twanging a guitar or bass guitar, causing a huge echo and strong vibration.");
+            super.power = 80;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.SOUND_BASED);
+        }
+    }
+
+    static class AppleAcid extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        AppleAcid() {
+            super(AttackNamesies.APPLE_ACID, Type.GRASS, MoveCategory.SPECIAL, 10, "The user attacks the target with an acidic liquid created from tart apples. This also lowers the target's Sp. Def stat.");
+            super.power = 80;
+            super.accuracy = 100;
+            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
+        }
+    }
+
+    static class GravApple extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        GravApple() {
+            super(AttackNamesies.GRAV_APPLE, Type.GRASS, MoveCategory.PHYSICAL, 10, "The user inflicts damage by dropping an apple from high above. This also lowers the target's Defense stat.");
+            super.power = 80;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.DEFENSE.index()] = -1;
+        }
+    }
+
+    static class SpiritBreak extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        SpiritBreak() {
+            super(AttackNamesies.SPIRIT_BREAK, Type.FAIRY, MoveCategory.PHYSICAL, 15, "The user attacks the target with so much force that it could break the target's spirit. This also lowers the target's Sp. Atk stat.");
+            super.power = 75;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.statChanges[Stat.SP_ATTACK.index()] = -1;
+        }
+    }
+
+    static class StrangeSteam extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        StrangeSteam() {
+            super(AttackNamesies.STRANGE_STEAM, Type.FAIRY, MoveCategory.SPECIAL, 10, "The user attacks the target by emitting steam. This may also confuse the target.");
+            super.power = 90;
+            super.accuracy = 95;
+            super.effect = PokemonEffectNamesies.CONFUSION;
+            super.effectChance = 20;
+        }
+    }
+
+    // Note: Changed from .25 to .5 because it's only healing itself now
+    static class LifeDew extends Attack implements SelfHealingMove {
+        private static final long serialVersionUID = 1L;
+
+        LifeDew() {
+            super(AttackNamesies.LIFE_DEW, Type.WATER, MoveCategory.SPECIAL, 10, "The user scatters mysterious water around and restores its HP.");
+            super.moveTypes.add(MoveType.HEALING);
+            super.selfTarget = true;
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.heal(b, victim);
+        }
+
+        @Override
+        public double getHealFraction(Battle b, ActivePokemon victim) {
+            return .5;
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.canHeal();
+        }
+    }
+
+    static class FalseSurrender extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        FalseSurrender() {
+            super(AttackNamesies.FALSE_SURRENDER, Type.DARK, MoveCategory.PHYSICAL, 10, "The user pretends to bow its head, but then it stabs the target with its disheveled hair. This attack never misses.");
+            super.power = 80;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+    }
+
+    static class SteelBeam extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        SteelBeam() {
+            super(AttackNamesies.STEEL_BEAM, Type.STEEL, MoveCategory.SPECIAL, 5, "The user fires a beam of steel that it collected from its entire body. This also damages the user.");
+            super.power = 140;
+            super.accuracy = 95;
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            user.reduceHealthFraction(b, .5, user.getName() + " was hurt!");
         }
     }
 }

@@ -4,7 +4,9 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.LockingEffect;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
+import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
 import battle.effect.InvokeInterfaces.GroundedEffect;
 import battle.effect.InvokeInterfaces.ItemBlockerEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
@@ -18,6 +20,8 @@ import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
 import pokemon.stat.Stat;
 import type.Type;
+
+import java.util.List;
 
 public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> extends Effect<NamesiesType> {
     private static final long serialVersionUID = 1L;
@@ -274,6 +278,45 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return user.getName() + " split the defense!";
+        }
+    }
+
+    static class JawLocked extends BattleEffect<StandardBattleEffectNamesies> implements BattleEndTurnEffect, LockingEffect {
+        private static final long serialVersionUID = 1L;
+
+        // The Pokemon that are locked by the jaw
+        private ActivePokemon caster;
+        private ActivePokemon victim;
+
+        JawLocked() {
+            super(StandardBattleEffectNamesies.JAW_LOCKED, -1, -1, false, false);
+        }
+
+        @Override
+        public String trappingMessage(ActivePokemon trapped) {
+            return trapped.getName() + " is trapped by Jaw Lock!";
+        }
+
+        @Override
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            this.caster = caster;
+            this.victim = victim;
+        }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return user.getName() + " locked jaws with " + victim.getName() + "!";
+        }
+
+        @Override
+        public void singleEndTurnEffect(Battle b, ActivePokemon victim) {
+            // Deactivate if Jaw Locked Pokemon aren't around
+            this.checkActive(b);
+        }
+
+        @Override
+        public List<ActivePokemon> getLocking() {
+            return List.of(caster, victim);
         }
     }
 }

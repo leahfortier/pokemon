@@ -652,14 +652,14 @@ public class AbilityTest extends BaseTest {
         attacking.assertStages(new TestStages().set(-2, Stat.SPEED));
         defending.assertNoStages();
 
-        // Peck will make contact and reduce defending's attack by 2
+        // Peck will make contact and reduce defending's attack by 1
         battle.fight(AttackNamesies.KINGS_SHIELD, AttackNamesies.PECK);
         assertStanceChangeForm(true, battle, attacking);
         assertStanceChangeForm(false, battle, defending);
         attacking.assertFullHealth();
         defending.assertFullHealth();
         attacking.assertStages(new TestStages().set(-2, Stat.SPEED));
-        defending.assertStages(new TestStages().set(-2, Stat.ATTACK));
+        defending.assertStages(new TestStages().set(-1, Stat.ATTACK));
     }
 
     private void assertStanceChangeForm(boolean shieldForm, TestBattle battle, TestPokemon stanceChanger) {

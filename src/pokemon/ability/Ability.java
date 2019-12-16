@@ -832,7 +832,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
-            return !escaper.isLevitating(b) && !escaper.isType(b, Type.GHOST);
+            return !escaper.isLevitating(b);
         }
 
         @Override
@@ -1154,7 +1154,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
-            return escaper.isType(b, Type.STEEL) && !escaper.isType(b, Type.GHOST);
+            return escaper.isType(b, Type.STEEL);
         }
 
         @Override
@@ -1955,7 +1955,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
-            return !escaper.hasAbility(this.namesies) && !escaper.isType(b, Type.GHOST);
+            return !escaper.hasAbility(this.namesies);
         }
 
         @Override

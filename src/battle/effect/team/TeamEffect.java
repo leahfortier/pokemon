@@ -6,7 +6,9 @@ import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.EntryHazard;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
+import battle.effect.EffectInterfaces.SwappableEffect;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.BarrierEffect;
 import battle.effect.InvokeInterfaces.CritBlockerEffect;
@@ -14,7 +16,6 @@ import battle.effect.InvokeInterfaces.DefogRelease;
 import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EndBattleEffect;
 import battle.effect.InvokeInterfaces.EntryEffect;
-import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
@@ -121,7 +122,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
     }
 
-    static class Tailwind extends TeamEffect implements SimpleStatModifyingEffect {
+    static class Tailwind extends TeamEffect implements SwappableEffect, SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
 
         Tailwind() {
@@ -182,7 +183,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
     }
 
-    static class StickyWeb extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
+    static class StickyWeb extends TeamEffect implements EntryHazard {
         private static final long serialVersionUID = 1L;
 
         StickyWeb() {
@@ -208,17 +209,12 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getDefogReleaseMessage(ActivePokemon released) {
+        public String getReleaseMessage() {
             return "The sticky web dispersed!";
-        }
-
-        @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon released) {
-            return "The sticky web spun away!";
         }
     }
 
-    static class StealthRock extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
+    static class StealthRock extends TeamEffect implements EntryHazard {
         private static final long serialVersionUID = 1L;
 
         StealthRock() {
@@ -237,17 +233,12 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getDefogReleaseMessage(ActivePokemon released) {
+        public String getReleaseMessage() {
             return "The floating rocks dispersed!";
-        }
-
-        @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon released) {
-            return "The floating rocks spun away!";
         }
     }
 
-    static class ToxicSpikes extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
+    static class ToxicSpikes extends TeamEffect implements EntryHazard {
         private static final long serialVersionUID = 1L;
 
         private int layers;
@@ -289,17 +280,12 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getDefogReleaseMessage(ActivePokemon released) {
-            return "The toxic spikes dispersed!";
-        }
-
-        @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon released) {
+        public String getReleaseMessage() {
             return "The toxic spikes dispersed!";
         }
     }
 
-    static class Spikes extends TeamEffect implements EntryEffect, RapidSpinRelease, DefogRelease {
+    static class Spikes extends TeamEffect implements EntryHazard {
         private static final long serialVersionUID = 1L;
 
         private int layers;
@@ -339,12 +325,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getDefogReleaseMessage(ActivePokemon released) {
-            return "The spikes dispersed!";
-        }
-
-        @Override
-        public String getRapidSpinReleaseMessage(ActivePokemon released) {
+        public String getReleaseMessage() {
             return "The spikes dispersed!";
         }
     }

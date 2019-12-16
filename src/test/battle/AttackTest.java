@@ -15,10 +15,13 @@ import battle.effect.InvokeInterfaces.MurderEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.attack.SelfHealingMove;
 import battle.effect.battle.BattleEffect;
+import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
+import item.berry.Berry;
+import item.berry.GainableEffectBerry;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ability.AbilityNamesies;
@@ -34,7 +37,9 @@ import util.GeneralUtils;
 
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class AttackTest extends BaseTest {
     @Test
@@ -59,6 +64,9 @@ public class AttackTest extends BaseTest {
             // Physical contact moves cannot be status moves
             Assert.assertFalse(attack.getName(), attack.isMoveType(MoveType.PHYSICAL_CONTACT) && attack.isStatusMove());
 
+            // Field moves must be status moves and cannot be self-target
+            Assert.assertFalse(attack.getName(), attack.isMoveType(MoveType.FIELD) && (!attack.isStatusMove() || attack.isSelfTarget()));
+
             // Snatch only affects self-target status moves
             Assert.assertFalse(attack.getName(), attack.isMoveType(MoveType.NON_SNATCHABLE) && !attack.isSelfTargetStatusMove());
 
@@ -79,11 +87,6 @@ public class AttackTest extends BaseTest {
                 Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.DANCE));
             }
 
-            // Crit stage moves cannot be status moves
-            if (attack instanceof CritStageEffect || attack instanceof AlwaysCritEffect) {
-                Assert.assertNotEquals(attack.getName(), MoveCategory.STATUS, attack.getCategory());
-            }
-
             // Moves that change power, apply damage, murder, and crit cannot be status moves
             if (attack instanceof PowerChangeEffect
                     || attack instanceof ApplyDamageEffect
@@ -94,9 +97,9 @@ public class AttackTest extends BaseTest {
                 Assert.assertFalse(attack.isStatusMove());
             }
 
-            // Moves that cast battle effects are field moves
+            // Status moves that cast battle effects are field moves
             EffectNamesies effect = attack.getEffect();
-            if (effect != null && effect.getEffect() instanceof BattleEffect) {
+            if (effect != null && effect.getEffect() instanceof BattleEffect && attack.isStatusMove()) {
                 Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.NO_MAGIC_COAT));
                 Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.FIELD));
             }
@@ -852,6 +855,8 @@ public class AttackTest extends BaseTest {
 
         // Use Rapid Spin -- should remove the appropriate effects
         battle.defendingFight(AttackNamesies.RAPID_SPIN);
+        attacking.assertStages(new TestStages());
+        defending.assertStages(new TestStages().set(1, Stat.SPEED));
         battle.assertHasEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
         battle.assertNoEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
         battle.assertNoEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
@@ -877,8 +882,8 @@ public class AttackTest extends BaseTest {
         // Wrong attacker -- effects shouldn't change
         battle.attackingFight(AttackNamesies.RAPID_SPIN);
         battle.defendingFight(AttackNamesies.DEFOG);
-        attacking.assertStages(new TestStages().set(-1, Stat.EVASION));
-        defending.assertStages(new TestStages());
+        attacking.assertStages(new TestStages().set(-1, Stat.EVASION).set(1, Stat.SPEED));
+        defending.assertStages(new TestStages().set(1, Stat.SPEED));
         battle.assertHasEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
         battle.assertHasEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
         battle.assertHasEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
@@ -888,8 +893,8 @@ public class AttackTest extends BaseTest {
 
         // Correct defog attacker -- should only remove the appropriate effects
         battle.attackingFight(AttackNamesies.DEFOG);
-        attacking.assertStages(new TestStages().set(-1, Stat.EVASION));
-        defending.assertStages(new TestStages().set(-1, Stat.EVASION));
+        attacking.assertStages(new TestStages().set(-1, Stat.EVASION).set(1, Stat.SPEED));
+        defending.assertStages(new TestStages().set(-1, Stat.EVASION).set(1, Stat.SPEED));
         battle.assertNoEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
         battle.assertNoEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
         battle.assertNoEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
@@ -897,6 +902,101 @@ public class AttackTest extends BaseTest {
         battle.assertNoEffect(defending, TeamEffectNamesies.SPIKES);
         defending.assertHasEffect(PokemonEffectNamesies.LEECH_SEED);
         defending.assertHasEffect(PokemonEffectNamesies.WRAPPED);
+    }
+
+    @Test
+    public void courtChangeTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Add some team effects
+        battle.fight(AttackNamesies.STEALTH_ROCK, AttackNamesies.SPIKES);
+        battle.fight(AttackNamesies.LIGHT_SCREEN, AttackNamesies.TAILWIND);   // a: LS 4, T 3
+        battle.fight(AttackNamesies.STICKY_WEB, AttackNamesies.LIGHT_SCREEN); // a: LS 3, T 2 | d: LS 4
+
+        courtChangeTest(battle, attacking,
+                        TeamEffectNamesies.LIGHT_SCREEN, // Longer light screen
+                        TeamEffectNamesies.SPIKES
+        );
+        courtChangeTest(battle, defending,
+                        TeamEffectNamesies.STEALTH_ROCK,
+                        TeamEffectNamesies.LIGHT_SCREEN, // Shorter light screen
+                        TeamEffectNamesies.STICKY_WEB,
+                        TeamEffectNamesies.TAILWIND
+        );
+
+        // Swapperooni
+        battle.attackingFight(AttackNamesies.COURT_CHANGE); // a: LS 3 | d: LS 2, T 1
+
+        courtChangeTest(battle, attacking,
+                        TeamEffectNamesies.STEALTH_ROCK,
+                        TeamEffectNamesies.LIGHT_SCREEN, // Longer light screen
+                        TeamEffectNamesies.STICKY_WEB,
+                        TeamEffectNamesies.TAILWIND
+        );
+        courtChangeTest(battle, defending,
+                        TeamEffectNamesies.LIGHT_SCREEN, // Shorter light screen
+                        TeamEffectNamesies.SPIKES
+        );
+
+        // Do nothing to make counters decrease (make sure Tailwind finishes this turn exactly)
+        battle.splashFight(); // a: LS 2 | d: LS 1, T 0
+
+        courtChangeTest(battle, attacking, // No longer includes Tailwind
+                        TeamEffectNamesies.STEALTH_ROCK,
+                        TeamEffectNamesies.LIGHT_SCREEN, // Longer light screen
+                        TeamEffectNamesies.STICKY_WEB
+        );
+        courtChangeTest(battle, defending,
+                        TeamEffectNamesies.LIGHT_SCREEN, // Shorter light screen
+                        TeamEffectNamesies.SPIKES
+        );
+
+        // Do nothing to make counters decrease (make sure shorter Light Screen finishes this turn exactly)
+        battle.splashFight(); // a: LS 1 | d: LS 0
+
+        courtChangeTest(battle, attacking,
+                        TeamEffectNamesies.LIGHT_SCREEN, // Longer light screen
+                        TeamEffectNamesies.STEALTH_ROCK,
+                        TeamEffectNamesies.STICKY_WEB
+        );
+        courtChangeTest(battle, defending, TeamEffectNamesies.SPIKES); // No longer includes (shorter) Light Screen
+
+        // Do nothing to make counters decrease (make sure longer Light Screen finishes this turn exactly)
+        battle.splashFight(); // a: LS 0
+
+        courtChangeTest(battle, attacking, // No longer includes (longer) Light Screen
+                        TeamEffectNamesies.STEALTH_ROCK,
+                        TeamEffectNamesies.STICKY_WEB
+        );
+        courtChangeTest(battle, defending, TeamEffectNamesies.SPIKES);
+
+        // Swap entry hazards back blah blah blah
+        battle.defendingFight(AttackNamesies.COURT_CHANGE);
+
+        courtChangeTest(battle, attacking, TeamEffectNamesies.SPIKES);
+        courtChangeTest(battle, defending, TeamEffectNamesies.STEALTH_ROCK, TeamEffectNamesies.STICKY_WEB);
+    }
+
+    private void courtChangeTest(TestBattle battle, TestPokemon teamPokemon, TeamEffectNamesies... teamEffects) {
+        List<TeamEffectNamesies> courtChangeEffects = List.of(
+                TeamEffectNamesies.REFLECT,
+                TeamEffectNamesies.LIGHT_SCREEN,
+                TeamEffectNamesies.AURORA_VEIL,
+                TeamEffectNamesies.STEALTH_ROCK,
+                TeamEffectNamesies.SPIKES,
+                TeamEffectNamesies.STICKY_WEB,
+                TeamEffectNamesies.TOXIC_SPIKES,
+                TeamEffectNamesies.TAILWIND
+        );
+
+        Set<TeamEffectNamesies> hasEffects = Set.of(teamEffects);
+
+        // For each relevant court change effect, confirm that the team either has or does not have the effect
+        for (TeamEffectNamesies effect : courtChangeEffects) {
+            battle.assertEffect(hasEffects.contains(effect), teamPokemon, effect);
+        }
     }
 
     @Test
@@ -1957,5 +2057,229 @@ public class AttackTest extends BaseTest {
         attacking.assertNoStatus();
         defending.assertNoStatus();
         defending.assertSpecies(PokemonNamesies.DARKRAI);
+    }
+
+    @Test
+    public void jawLockTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking1 = battle.getAttacking();
+        TestPokemon attacking2 = TestPokemon.newPlayerPokemon(PokemonNamesies.SHUCKLE);
+        battle.getPlayer().addPokemon(attacking2);
+
+        // Make sure correct Pokemon are out front and they can escape just fine
+        jawLockTest(battle, attacking1, false);
+
+        // Lock them by the jaw! (Neither can escape)
+        battle.attackingFight(AttackNamesies.JAW_LOCK);
+        jawLockTest(battle, attacking1, true);
+
+        // Self-switching should still work, but it should remove the effect
+        battle.attackingFight(AttackNamesies.BATON_PASS);
+        jawLockTest(battle, attacking2, false);
+
+        // Lock 'em up again!
+        battle.defendingFight(AttackNamesies.JAW_LOCK);
+        jawLockTest(battle, attacking2, true);
+
+        // Swapping with whirlwind should also be okay (but still removes the lock)
+        battle.defendingFight(AttackNamesies.WHIRLWIND);
+        jawLockTest(battle, attacking1, false);
+
+        // Locky locky locked
+        battle.attackingFight(AttackNamesies.JAW_LOCK);
+        jawLockTest(battle, attacking1, true);
+
+        // Kill kill kill murder murder murder (removes Jaw Lock)
+        battle.defendingFight(AttackNamesies.FISSURE);
+        Assert.assertTrue(attacking1.isFainted(battle));
+        jawLockTest(battle, attacking1, false);
+    }
+
+    private void jawLockTest(TestBattle battle, TestPokemon attacking, boolean jawLocked) {
+        TestPokemon defending = battle.getDefending();
+        battle.assertEffect(jawLocked, StandardBattleEffectNamesies.JAW_LOCKED);
+        Assert.assertTrue(battle.isFront(attacking));
+        Assert.assertTrue(battle.isFront(defending));
+        Assert.assertEquals(!jawLocked, attacking.canEscape(battle));
+        Assert.assertEquals(!jawLocked, defending.canEscape(battle));
+    }
+
+    @Test
+    public void stuffCheeksTest() {
+        // Holding non-berries will fail
+        stuffCheeksTest(false, ItemNamesies.NO_ITEM, PokemonManipulator.empty(), PokemonManipulator.empty());
+        stuffCheeksTest(false, ItemNamesies.POTION, PokemonManipulator.empty(), PokemonManipulator.empty());
+
+        // Berries without gainable effects should still be consumed
+        stuffCheeksTest(true, ItemNamesies.POMEG_BERRY, PokemonManipulator.empty(), PokemonManipulator.empty());
+        Assert.assertFalse(ItemNamesies.POMEG_BERRY.getItem() instanceof GainableEffectBerry);
+
+        // Oran Berry with full HP -- should still consume and raise defense even though nothing happens
+        stuffCheeksTest(
+                true, ItemNamesies.ORAN_BERRY,
+                (battle, attacking, defending) -> attacking.assertFullHealth(),
+                (battle, attacking, defending) -> attacking.assertFullHealth()
+        );
+
+        // Oran Berry with reduced HP -- reduce health to 11, restore by 10 to be missing 1
+        stuffCheeksTest(
+                true, ItemNamesies.ORAN_BERRY,
+                (battle, attacking, defending) -> {
+                    attacking.reduceHealth(battle, 11);
+                    attacking.assertMissingHp(11);
+                },
+                (battle, attacking, defending) -> attacking.assertMissingHp(1)
+        );
+
+        // Rawst Berry -- burn, eating should cure
+        stuffCheeksTest(
+                true, ItemNamesies.RAWST_BERRY,
+                (battle, attacking, defending) -> {
+                    battle.defendingFight(AttackNamesies.WILL_O_WISP);
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+                },
+                (battle, attacking, defending) -> attacking.assertNoStatus()
+        );
+
+        // Rawst Berry with maxed Defense -- should still consume and cure burn even if not increasing stats
+        stuffCheeksTest(
+                true, ItemNamesies.RAWST_BERRY,
+                (battle, attacking, defending) -> {
+                    for (int i = 1; i <= Stat.MAX_STAT_CHANGES; i++) {
+                        battle.attackingFight(AttackNamesies.DEFENSE_CURL);
+                        attacking.assertStages(new TestStages().set(i, Stat.DEFENSE));
+                    }
+
+                    battle.defendingFight(AttackNamesies.WILL_O_WISP);
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+                    attacking.assertStages(new TestStages().set(Stat.MAX_STAT_CHANGES, Stat.DEFENSE));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(Stat.MAX_STAT_CHANGES, Stat.DEFENSE));
+                    attacking.assertNoStatus();
+                }
+        );
+
+        // Rawst Berry with Cheek Pouch -- Cure + heal
+        // Reduce to 50% health, burn takes another 1/8, Cheek Pouch heals 33% = 17/24?
+        // Note: Can't use paralysis because you can sometimes be fully paralyzed when using Stuff Cheeks
+        // (TODO: Change when burn is changed to 1/16 but don't feel like doing that now)
+        stuffCheeksTest(
+                true, ItemNamesies.RAWST_BERRY,
+                (battle, attacking, defending) -> {
+                    attacking.withAbility(AbilityNamesies.CHEEK_POUCH);
+                    attacking.reduceHealthFraction(battle, .5, "");
+                    attacking.assertHealthRatio(.5);
+
+                    battle.defendingFight(AttackNamesies.WILL_O_WISP);
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertNoStatus();
+                    attacking.assertHealthRatio(17/24.0, 1);
+                }
+        );
+
+        // Rawst Berry with Snatch -- burn both, enemy should snatch the berry and cure only them
+        // Should succeed even though the snatcher isn't holding anything
+        // Passing false for success because succeeding for the defending, not the attacking
+        stuffCheeksTest(
+                false, ItemNamesies.RAWST_BERRY, AttackNamesies.SNATCH,
+                (battle, attacking, defending) -> {
+                    battle.fight(AttackNamesies.WILL_O_WISP, AttackNamesies.WILL_O_WISP);
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+                    defending.assertHasStatus(StatusNamesies.BURNED);
+                },
+                (battle, attacking, defending) -> {
+                    // Attacking still burned, but defending was cured by snatching!
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+                    defending.assertNoStatus();
+
+                    // Neither is holding an item
+                    attacking.assertNotHoldingItem(battle);
+                    defending.assertNotHoldingItem(battle);
+
+                    // Only the defending has eaten a berry
+                    attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
+                    defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
+
+                    // Only the attacking has a consumed item
+                    attacking.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+                    defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+
+                    // Only the defending has its stats increased
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages().set(2, Stat.DEFENSE));
+                }
+        );
+    }
+
+    private void stuffCheeksTest(boolean success, ItemNamesies heldItem, PokemonManipulator beforeCheck, PokemonManipulator afterCheck) {
+        stuffCheeksTest(success, heldItem, AttackNamesies.SPLASH, beforeCheck, afterCheck);
+    }
+
+    private void stuffCheeksTest(boolean success, ItemNamesies heldItem, AttackNamesies defendingAttack, PokemonManipulator beforeCheck, PokemonManipulator afterCheck) {
+        TestBattle battle = TestBattle.create(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE);
+        TestPokemon attacking = battle.getAttacking();
+        attacking.assertStages(new TestStages());
+
+        // Set up this case and give them the item
+        beforeCheck.manipulate(battle);
+        attacking.withItem(heldItem);
+
+        // So we know what to compare the defense increase to
+        TestStages stages = attacking.testStages();
+        if (success) {
+            // Increase Defense by two stages (not exceeding maximum)
+            stages.increment(2, Stat.DEFENSE);
+
+            // Can only succeed if holding a berry
+            Assert.assertTrue(attacking.getHeldItem(battle) instanceof Berry);
+        }
+
+        // Okay let's actually stuff our cheeks with berries or something
+        battle.fight(AttackNamesies.STUFF_CHEEKS, defendingAttack);
+        Assert.assertEquals(success || defendingAttack == AttackNamesies.SNATCH, attacking.lastMoveSucceeded());
+        attacking.assertStages(stages);
+
+        // If successful, make sure berry was consumed
+        if (success) {
+            attacking.assertConsumedBerry(battle);
+            attacking.assertNotHoldingItem(battle);
+        }
+
+        // Anything else that might be interesting
+        afterCheck.manipulate(battle);
+    }
+
+    @Test
+    public void tarShotTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.BLISSEY, PokemonNamesies.BLISSEY);
+        tarShotTest(battle, 0);
+
+        battle.attackingFight(AttackNamesies.TAR_SHOT);
+        tarShotTest(battle, 1);
+
+        battle.emptyHeal();
+
+        battle.attackingFight(AttackNamesies.TAR_SHOT);
+        tarShotTest(battle, 2);
+    }
+
+    private void tarShotTest(TestBattle battle, int numTar) {
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // No effects should actually be on the attacker
+        attacking.assertStages(new TestStages());
+        attacking.assertNoEffect(PokemonEffectNamesies.STICKY_TAR);
+
+        // Speed decrease should stack with the tar
+        defending.assertStages(new TestStages().set(-numTar, Stat.SPEED));
+        defending.assertEffect(numTar > 0, PokemonEffectNamesies.STICKY_TAR);
+
+        // Damage multiplier should only happen once though (even with multiple tar shots)
+        attacking.setExpectedDamageModifier(numTar == 0 ? 1.0 : 2.0);
+        battle.fight(AttackNamesies.INCINERATE, AttackNamesies.ENDURE);
     }
 }

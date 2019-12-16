@@ -63,14 +63,33 @@ Binded:
 SandTomb:
     PartialTrap: sand_tomb victim.getName() + " was trapped by sand tomb!"
 *
+SnapTrapped:
+    PartialTrap: snap_trap victim.getName() + " was trapped by snap trap!"
+*
 KingsShield:
     ProtectingEffect: True
     OnProtectingSuccess:
         // Pokemon that make contact with the king's shield have their attack reduced
         if (p.isMakingContact()) {
             p.getStages().modifyStage(
-                opp, -2, Stat.ATTACK, b, CastSource.EFFECT, 
+                opp, -1, Stat.ATTACK, b, CastSource.EFFECT, 
                 (victimName, statName, changed) -> "The King's Shield " + changed + " " + p.getName() + "'s " + statName + "!"
+            );
+        }
+        ###
+    ProtectingCondition:
+        // Only protects against attacking moves
+        return !attacking.getAttack().isStatusMove();
+        ###
+*
+Obstruct:
+    ProtectingEffect: True
+    OnProtectingSuccess:
+        // Pokemon that make contact with the obstruction have their defense harshly reduced
+        if (p.isMakingContact()) {
+            p.getStages().modifyStage(
+                opp, -2, Stat.DEFENSE, b, CastSource.EFFECT, 
+                (victimName, statName, changed) -> "The obstruction " + changed + " " + p.getName() + "'s " + statName + "!"
             );
         }
         ###
@@ -446,6 +465,36 @@ Trapped:
     CastMessage: victim.getName() + " can't escape!"
     TrappingMessage: trapped.getName() + " cannot be recalled at this time!"
 *
+NoRetreat:
+    Int: TrappingEffect
+    CastMessage: victim.getName() + " cannot retreat!"
+    TrappingMessage: trapped.getName() + " cannot retreat!"
+    Comments: // Note: Different that Trapped effect because the attack can only be used once
+*
+Octolocked:
+    Int: EndTurnEffect
+    LockingEffect: caster
+    CastMessage: victim.getName() + " can't escape!"
+    TrappingMessage: trapped.getName() + " is trapped by Octolock!"
+    ApplyEndTurn:
+        // Make sure locking Pokemon is still here to be mean
+        if (!checkActive(b)) {
+            return;
+        }
+        
+        // Charmander's Defense was lowered by Octolock!
+        ModifyStageMessageGetter messageGetter = (victimName, statName, changed) -> victim.getName() + "'s " + statName + " was " + changed + " by Octolock!";
+        victim.getStages().modifyStage(caster, -1, Stat.DEFENSE, b, CastSource.EFFECT, messageGetter);
+        victim.getStages().modifyStage(caster, -1, Stat.SP_DEFENSE, b, CastSource.EFFECT, messageGetter);
+        ###
+    Field:
+        // Only locked as long as the caster is still in play
+        private ActivePokemon caster;
+        ###
+    BeforeCast:
+        this.caster = caster;
+        ###
+*
 Foresight:
     ForesightEffect: Ghost attacking == Type.NORMAL || attacking == Type.FIGHTING
 *
@@ -525,9 +574,6 @@ Telekinesis:
 *
 Ingrain:
     Int: TrappingEffect, GroundedEffect, PassableEffect, NoSwapEffect
-    Trapped:
-        return true;
-        ###
     TrappingMessage: trapped.getName() + " cannot be recalled due to ingrain!"
     EndTurnBigRootHealer: ingrain
     CastMessage: victim.getName() + " planted its roots!"
@@ -1003,5 +1049,11 @@ Raging:
                 victim, 1, Stat.ATTACK, b, CastSource.EFFECT,
                 (victimName, statName, changed) -> String.format("%s's Rage %s %s %s!", victim.getName(), changed, victimName, statName)
         );
+        ###
+*
+StickyTar:
+    Int: OpponentPowerChangeEffect
+    GetOppMultiplier:
+        return user.isAttackType(Type.FIRE) ? 2 : 1;
         ###
 *

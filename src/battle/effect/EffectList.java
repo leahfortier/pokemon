@@ -55,6 +55,14 @@ public class EffectList<NamesiesType extends EffectNamesies, EffectType extends 
         return this.effects.removeIf(effect -> effect.namesies() == effectToRemove);
     }
 
+    // Not the recommended way to remove effects naturally and is better used when transferring effects for example
+    // where you don't want to deactivate the effect but you just don't want it on the current holder
+    public void removeAll(List<EffectType> effects) {
+        for (EffectType effectToRemove : effects) {
+            this.remove(effectToRemove);
+        }
+    }
+
     public void decrement(Battle b, ActivePokemon p) {
         for (EffectType effect : this) {
             boolean active = effect.isActive();

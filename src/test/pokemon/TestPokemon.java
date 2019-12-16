@@ -2,6 +2,7 @@ package test.pokemon;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.Stages;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.pokemon.PokemonEffectNamesies;
@@ -119,6 +120,16 @@ public class TestPokemon extends ActivePokemon {
         return new StringAppender()
                 .appendJoin(" ", Stat.BATTLE_STATS, stat -> String.valueOf(this.getStage(stat)))
                 .toString();
+    }
+
+    // Creates a TestStages object based on the current stages this Pokemon has
+    public TestStages testStages() {
+        Stages stages = this.getStages();
+        TestStages testStages = new TestStages();
+        for (Stat stat : Stat.BATTLE_STATS) {
+            testStages.set(stages.getStage(stat), stat);
+        }
+        return testStages;
     }
 
     public void setupMove(AttackNamesies attackNamesies, Battle battle) {

@@ -158,20 +158,29 @@ public class TestBattle extends Battle {
         return this.damageCalculator.getDamageModifier(this, me, o);
     }
 
+    // Confirms the battle has or does not have the specified effect
+    public void assertEffect(boolean shouldHave, BattleEffectNamesies effectNamesies) {
+        Assert.assertEquals(effectNamesies.name(), shouldHave, this.hasEffect(effectNamesies));
+    }
+
     public void assertHasEffect(BattleEffectNamesies effectNamesies) {
-        Assert.assertTrue(this.hasEffect(effectNamesies));
+        assertEffect(true, effectNamesies);
     }
 
     public void assertNoEffect(BattleEffectNamesies effectNamesies) {
-        Assert.assertFalse(this.hasEffect(effectNamesies));
+        assertEffect(false, effectNamesies);
+    }
+
+    public void assertEffect(boolean shouldHave, ActivePokemon member, TeamEffectNamesies effectNamesies) {
+        Assert.assertEquals(effectNamesies.name(), shouldHave, this.getTrainer(member).hasEffect(effectNamesies));
     }
 
     public void assertHasEffect(ActivePokemon member, TeamEffectNamesies effectNamesies) {
-        Assert.assertTrue(this.getTrainer(member).hasEffect(effectNamesies));
+        assertEffect(true, member, effectNamesies);
     }
 
     public void assertNoEffect(ActivePokemon member, TeamEffectNamesies effectNamesies) {
-        Assert.assertFalse(this.getTrainer(member).hasEffect(effectNamesies));
+        assertEffect(false, member, effectNamesies);
     }
 
     static TestBattle createTrainerBattle(PokemonNamesies attacking, PokemonNamesies defending) {

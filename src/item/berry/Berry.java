@@ -37,15 +37,18 @@ public interface Berry extends HoldItem {
         }
     }
 
-    default void stealBerry(Battle b, ActivePokemon stealer, ActivePokemon holder) {
+    // Okay for stealer and holder to be the same (eating your own berry)
+    default void eatBerry(Battle b, ActivePokemon stealer, ActivePokemon holder) {
         // Can't steal sticky berries
-        if (StickyHoldEffect.containsStickyHoldEffect(b, stealer, holder)) {
+        if (stealer != holder && StickyHoldEffect.containsStickyHoldEffect(b, stealer, holder)) {
             return;
         }
 
-        Messages.add(stealer.getName() + " ate " + holder.getName() + "'s " + this.getName() + "!");
+        String possessive = stealer == holder ? "its" : holder.getName() + "'s";
+        Messages.add(stealer.getName() + " ate " + possessive + " " + this.getName() + "!");
         this.consumeItemWithoutEffects(b, holder);
 
+        // Gain the effects if you can
         if (this instanceof GainableEffectBerry) {
             ((GainableEffectBerry)this).gainBerryEffect(b, stealer, CastSource.USE_ITEM);
         }

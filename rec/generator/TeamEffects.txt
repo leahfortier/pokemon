@@ -24,6 +24,7 @@ Tailwind:
     NumTurns: 4
     SubsideMessage: "The effects of tailwind faded."
     CastMessage: user.getName() + " raised the speed of its team!"
+    Int: SwappableEffect
 *
 AuroraVeil:
     TwoModify: Defense Sp_Defense
@@ -31,7 +32,6 @@ AuroraVeil:
     Barrier: aurora veil
 *
 StickyWeb:
-    Int: EntryEffect
     Enter:
         if (enterer.isLevitating(b)) {
             return;
@@ -44,21 +44,17 @@ StickyWeb:
         );
         ###
     CastMessage: "Sticky web covers everything!"
-    RapidSpin: "The sticky web spun away!"
-    Defog: "The sticky web dispersed!"
+    EntryHazard: "The sticky web dispersed!"
 *
 StealthRock:
-    Int: EntryEffect
     Enter: 
         double advantage = Type.ROCK.getAdvantage().getAdvantage(enterer, b);
         enterer.reduceHealthFraction(b, advantage/8.0, enterer.getName() + " was hurt by stealth rock!");
         ###
     CastMessage: "Floating rocks were scattered all around!"
-    RapidSpin: "The floating rocks spun away!"
-    Defog: "The floating rocks dispersed!"
+    EntryHazard: "The floating rocks dispersed!"
 *
 ToxicSpikes:
-    Int: EntryEffect
     Field: 
         private int layers;
         ###
@@ -89,11 +85,9 @@ ToxicSpikes:
         this.addCastMessage(b, caster, victim, source, castMessage);
         this.layers++;
         ###
-    RapidSpin: "The toxic spikes dispersed!"
-    Defog: "The toxic spikes dispersed!"
+    EntryHazard: "The toxic spikes dispersed!"
 *
 Spikes:
-    Int: EntryEffect
     Field: 
         private int layers;
         
@@ -122,8 +116,7 @@ Spikes:
         this.addCastMessage(b, caster, victim, source, castMessage);
         this.layers++;
         ###
-    RapidSpin: "The spikes dispersed!"
-    Defog: "The spikes dispersed!"
+    EntryHazard: "The spikes dispersed!"
 *
 Wish:
     NumTurns: 2

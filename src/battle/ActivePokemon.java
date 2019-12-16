@@ -368,6 +368,12 @@ public class ActivePokemon extends PartyPokemon {
 
     // Pangoro breaks the mold!
     public boolean breaksTheMold() {
+        // Mold breaker is only for direct attacks
+        // Note: this check is definitely not comprehensive
+        if (!this.isAttacking()) {
+            return false;
+        }
+
         switch (getAbility().namesies()) {
             case MOLD_BREAKER:
             case TURBOBLAZE:
@@ -586,6 +592,11 @@ public class ActivePokemon extends PartyPokemon {
     public boolean canEscape(Battle b) {
         // Shed Shell always allows escape
         if (isHoldingItem(b, ItemNamesies.SHED_SHELL)) {
+            return true;
+        }
+
+        // Ghost-type Pokemon can always escape
+        if (this.isType(b, Type.GHOST)) {
             return true;
         }
 
