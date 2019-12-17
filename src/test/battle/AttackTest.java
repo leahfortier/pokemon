@@ -19,6 +19,7 @@ import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
+import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;
 import item.berry.GainableEffectBerry;
@@ -2104,25 +2105,27 @@ public class AttackTest extends BaseTest {
         Assert.assertEquals(!jawLocked, defending.canEscape(battle));
     }
 
+    // Stuff Cheeks and Teatime
+    // Doing these together because they have very similar test cases (can be separated if necessary though)
     @Test
-    public void stuffCheeksTest() {
+    public void forceBerryTest() {
         // Holding non-berries will fail
-        stuffCheeksTest(false, ItemNamesies.NO_ITEM, PokemonManipulator.empty(), PokemonManipulator.empty());
-        stuffCheeksTest(false, ItemNamesies.POTION, PokemonManipulator.empty(), PokemonManipulator.empty());
+        forceBerryTest(false, ItemNamesies.NO_ITEM, PokemonManipulator.empty(), PokemonManipulator.empty());
+        forceBerryTest(false, ItemNamesies.POTION, PokemonManipulator.empty(), PokemonManipulator.empty());
 
         // Berries without gainable effects should still be consumed
-        stuffCheeksTest(true, ItemNamesies.POMEG_BERRY, PokemonManipulator.empty(), PokemonManipulator.empty());
+        forceBerryTest(true, ItemNamesies.POMEG_BERRY, PokemonManipulator.empty(), PokemonManipulator.empty());
         Assert.assertFalse(ItemNamesies.POMEG_BERRY.getItem() instanceof GainableEffectBerry);
 
         // Oran Berry with full HP -- should still consume and raise defense even though nothing happens
-        stuffCheeksTest(
+        forceBerryTest(
                 true, ItemNamesies.ORAN_BERRY,
                 (battle, attacking, defending) -> attacking.assertFullHealth(),
                 (battle, attacking, defending) -> attacking.assertFullHealth()
         );
 
         // Oran Berry with reduced HP -- reduce health to 11, restore by 10 to be missing 1
-        stuffCheeksTest(
+        forceBerryTest(
                 true, ItemNamesies.ORAN_BERRY,
                 (battle, attacking, defending) -> {
                     attacking.reduceHealth(battle, 11);
@@ -2132,7 +2135,7 @@ public class AttackTest extends BaseTest {
         );
 
         // Rawst Berry -- burn, eating should cure
-        stuffCheeksTest(
+        forceBerryTest(
                 true, ItemNamesies.RAWST_BERRY,
                 (battle, attacking, defending) -> {
                     battle.defendingFight(AttackNamesies.WILL_O_WISP);
@@ -2142,7 +2145,7 @@ public class AttackTest extends BaseTest {
         );
 
         // Rawst Berry with maxed Defense -- should still consume and cure burn even if not increasing stats
-        stuffCheeksTest(
+        forceBerryTest(
                 true, ItemNamesies.RAWST_BERRY,
                 (battle, attacking, defending) -> {
                     for (int i = 1; i <= Stat.MAX_STAT_CHANGES; i++) {
@@ -2164,7 +2167,7 @@ public class AttackTest extends BaseTest {
         // Reduce to 50% health, burn takes another 1/8, Cheek Pouch heals 33% = 17/24?
         // Note: Can't use paralysis because you can sometimes be fully paralyzed when using Stuff Cheeks
         // (TODO: Change when burn is changed to 1/16 but don't feel like doing that now)
-        stuffCheeksTest(
+        forceBerryTest(
                 true, ItemNamesies.RAWST_BERRY,
                 (battle, attacking, defending) -> {
                     attacking.withAbility(AbilityNamesies.CHEEK_POUCH);
@@ -2183,6 +2186,7 @@ public class AttackTest extends BaseTest {
         // Rawst Berry with Snatch -- burn both, enemy should snatch the berry and cure only them
         // Should succeed even though the snatcher isn't holding anything
         // Passing false for success because succeeding for the defending, not the attacking
+        // Note: Only Stuff Cheeks here since no Snatch interaction for Teatime
         stuffCheeksTest(
                 false, ItemNamesies.RAWST_BERRY, AttackNamesies.SNATCH,
                 (battle, attacking, defending) -> {
@@ -2214,8 +2218,14 @@ public class AttackTest extends BaseTest {
         );
     }
 
-    private void stuffCheeksTest(boolean success, ItemNamesies heldItem, PokemonManipulator beforeCheck, PokemonManipulator afterCheck) {
-        stuffCheeksTest(success, heldItem, AttackNamesies.SPLASH, beforeCheck, afterCheck);
+    private void forceBerryTest(boolean success, ItemNamesies heldItem, PokemonManipulator beforeCheck, PokemonManipulator afterCheck) {
+        forceBerryTest(success, heldItem, AttackNamesies.SPLASH, beforeCheck, afterCheck);
+    }
+
+    private void forceBerryTest(boolean success, ItemNamesies heldItem, AttackNamesies defendingAttack, PokemonManipulator beforeCheck, PokemonManipulator afterCheck) {
+        stuffCheeksTest(success, heldItem, defendingAttack, beforeCheck, afterCheck);
+        teatimeTest(heldItem, heldItem, beforeCheck, afterCheck);
+        teatimeTest(heldItem, ItemNamesies.NO_ITEM, beforeCheck, afterCheck);
     }
 
     private void stuffCheeksTest(boolean success, ItemNamesies heldItem, AttackNamesies defendingAttack, PokemonManipulator beforeCheck, PokemonManipulator afterCheck) {
@@ -2250,6 +2260,31 @@ public class AttackTest extends BaseTest {
 
         // Anything else that might be interesting
         afterCheck.manipulate(battle);
+    }
+
+    private void teatimeTest(ItemNamesies attackingItem, ItemNamesies defendingItem, PokemonManipulator beforeTea, PokemonManipulator afterTea) {
+        TestBattle battle = TestBattle.create(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        beforeTea.manipulate(battle);
+        attacking.withItem(attackingItem);
+        defending.withItem(defendingItem);
+
+        battle.attackingFight(AttackNamesies.TEATIME);
+        checkTeatime(battle, attacking, attackingItem);
+        checkTeatime(battle, defending, defendingItem);
+
+        afterTea.manipulate(battle);
+    }
+
+    private void checkTeatime(TestBattle battle, TestPokemon teaDrinker, ItemNamesies original) {
+        Item item = original.getItem();
+        if (item instanceof Berry) {
+            teaDrinker.assertConsumedBerry(battle);
+        } else {
+            teaDrinker.assertHoldingItem(battle, original);
+        }
     }
 
     @Test

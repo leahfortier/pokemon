@@ -442,6 +442,10 @@ public class ActivePokemon extends PartyPokemon {
         return isSemiInvulnerable() && getAttack().namesies() == AttackNamesies.DIG;
     }
 
+    public boolean isSemiInvulnerableDiving() {
+        return isSemiInvulnerable() && getAttack().namesies() == AttackNamesies.DIVE;
+    }
+
     // Returns true if the Pokemon is semi-invulnerable and not above ground (digging, diving, phantom forcing, etc.)
     // Returns false if semi-invulnerable flying (or something similar) or if not semi-invulnerable at all
     public boolean isSemiInvulnerableNotOverground() {

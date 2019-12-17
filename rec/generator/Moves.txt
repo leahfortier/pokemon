@@ -3027,6 +3027,7 @@ Whirlpool:
     Acc: 85
     Type: Water
     PokemonEffect: Whirlpooled
+    Int: DoubleDiver
 *
 Shell Smash:
     Desc: The user breaks its shell, which lowers Defense and Sp. Def stats but sharply raises its Attack, Sp. Atk, and Speed stats.
@@ -5672,6 +5673,7 @@ Surf:
     Pow: 90
     Acc: 100
     Cat: Special
+    Int: DoubleDiver
 *
 Volt Tackle:
     Desc: The user electrifies itself and charges the target. This also damages the user quite a lot. This attack may leave the target with paralysis.
@@ -6550,6 +6552,7 @@ Hyperspace Fury:
     PhysicalContact: False
     SelfTarget: True
     StatChange: Defense -1
+    Applies: user.isPokemon(PokemonNamesies.HOOPA)
 *
 Steam Eruption:
     Desc: The user immerses the target in superheated steam. This may also leave the target with a burn.
@@ -6733,23 +6736,32 @@ Teatime:
     MoveType: Field
     UniqueEffects:
         // Each Pokemon in battle has tea time!
-        // TODO: Should this display a fail message or something if no one is having tea?
-        teatime(b, user);
-        teatime(b, victim);
+        Messages.add("It's teatime! Time to dig into berries!!");
+        boolean userEaten = teatime(b, user);
+        boolean victimEaten = teatime(b, victim);
+        
+        // If neither eat a berry, display a message
+        if (!userEaten && !victimEaten) {
+            Messages.add("But nothing happened...");
+        }
         ###
     Field:
         // If the Pokemon is holding a berry, then they'll eat it
-        private void teatime(Battle b, ActivePokemon teaDrinker) {
+        // Returns true if a berry was eaten
+        private boolean teatime(Battle b, ActivePokemon teaDrinker) {
             // Semi-invulnerable Pokemon don't drink tea, duh
             if (teaDrinker.isSemiInvulnerable()) {
-                return;
+                return false;
             }
-            
+
             HoldItem item = teaDrinker.getHeldItem(b);
             if (item instanceof Berry) {
                 Berry berry = (Berry)item;
                 berry.eatBerry(b, teaDrinker, teaDrinker);
+                return true;
             }
+
+            return false;
         }
         ###
 *

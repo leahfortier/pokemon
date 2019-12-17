@@ -96,6 +96,7 @@ public class Stages implements Serializable {
             StatProtectingEffect prevent = StatProtectingEffect.getPreventEffect(moldBreaker, b, caster, victim, stat);
             if (prevent != null) {
                 if (printFail) {
+                    // TODO: This prints multiple times for attacks that lower multiple stats
                     Messages.add(prevent.preventionMessage(b, victim, stat));
                 }
                 return false;

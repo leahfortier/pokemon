@@ -5,6 +5,7 @@ import battle.Battle;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.DoubleDigger;
+import battle.effect.EffectInterfaces.DoubleDiver;
 import battle.effect.EffectInterfaces.DoubleFlyer;
 import battle.effect.EffectInterfaces.DoubleMinimizerMove;
 import battle.effect.EffectInterfaces.ItemHolder;
@@ -5255,7 +5256,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Whirlpool extends Attack {
+    static class Whirlpool extends Attack implements DoubleDiver {
         private static final long serialVersionUID = 1L;
 
         Whirlpool() {
@@ -9629,7 +9630,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Surf extends Attack {
+    static class Surf extends Attack implements DoubleDiver {
         private static final long serialVersionUID = 1L;
 
         Surf() {
@@ -10973,6 +10974,11 @@ public abstract class Attack implements AttackInterface {
             super.selfTarget = true;
             super.statChanges[Stat.DEFENSE.index()] = -1;
         }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isPokemon(PokemonNamesies.HOOPA);
+        }
     }
 
     static class SteamEruption extends Attack {
@@ -11231,17 +11237,21 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         // If the Pokemon is holding a berry, then they'll eat it
-        private void teatime(Battle b, ActivePokemon teaDrinker) {
+        // Returns true if a berry was eaten
+        private boolean teatime(Battle b, ActivePokemon teaDrinker) {
             // Semi-invulnerable Pokemon don't drink tea, duh
             if (teaDrinker.isSemiInvulnerable()) {
-                return;
+                return false;
             }
 
             HoldItem item = teaDrinker.getHeldItem(b);
             if (item instanceof Berry) {
                 Berry berry = (Berry)item;
                 berry.eatBerry(b, teaDrinker, teaDrinker);
+                return true;
             }
+
+            return false;
         }
 
         Teatime() {
@@ -11252,9 +11262,14 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Each Pokemon in battle has tea time!
-            // TODO: Should this display a fail message or something if no one is having tea?
-            teatime(b, user);
-            teatime(b, victim);
+            Messages.add("It's teatime! Time to dig into berries!!");
+            boolean userEaten = teatime(b, user);
+            boolean victimEaten = teatime(b, victim);
+
+            // If neither eat a berry, display a message
+            if (!userEaten && !victimEaten) {
+                Messages.add("But nothing happened...");
+            }
         }
     }
 

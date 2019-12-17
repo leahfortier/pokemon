@@ -509,6 +509,19 @@ public final class EffectInterfaces {
         }
     }
 
+    // Always hit and twice as strong when the opponent is diving
+    public interface DoubleDiver extends SemiInvulnerableBypasser, PowerChangeEffect {
+        @Override
+        default double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.isSemiInvulnerableDiving() ? 2 : 1;
+        }
+
+        @Override
+        default boolean semiInvulnerableBypass(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            return defending.isSemiInvulnerableDiving();
+        }
+    }
+
     // Always hit when the opponent is flying
     public interface SemiInvulnerableFlyingBypasser extends SemiInvulnerableBypasser {
         @Override

@@ -965,6 +965,7 @@ Snatch:
 
         return false;
         ###
+    CastMessage: victim.getName() + " is awaiting an opportunity!"
 *
 Grudge:
     CastMessage: victim.getName() + " wants " + b.getOtherPokemon(victim).getName() + " to bear a grudge!"

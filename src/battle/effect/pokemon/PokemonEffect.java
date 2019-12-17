@@ -2268,6 +2268,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
             return false;
         }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return victim.getName() + " is awaiting an opportunity!";
+        }
     }
 
     static class Grudge extends PokemonEffect implements FaintEffect {
