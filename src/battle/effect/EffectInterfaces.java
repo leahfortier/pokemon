@@ -151,7 +151,7 @@ public final class EffectInterfaces {
         void contact(Battle b, ActivePokemon user, ActivePokemon victim);
 
         @Override
-        default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+        default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Only apply if physical contact is made
             if (user.isMakingContact()) {
                 this.contact(b, user, victim);

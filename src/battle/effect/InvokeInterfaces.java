@@ -53,9 +53,9 @@ public final class InvokeInterfaces {
         // user: The user of that attack, the one who is implementing this effect
         // victim: The Pokemon that received the attack
         // damage: The amount of damage that was dealt to victim by the user
-        void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage);
+        void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim);
 
-        static void invokeApplyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+        static void invokeApplyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isFainted(b)) {
                 return;
             }
@@ -64,7 +64,7 @@ public final class InvokeInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof ApplyDamageEffect && invokee.isActiveEffect()) {
                     ApplyDamageEffect effect = (ApplyDamageEffect)invokee;
-                    effect.applyDamageEffect(b, user, victim, damage);
+                    effect.applyDamageEffect(b, user, victim);
 
                     if (user.isFainted(b)) {
                         return;
@@ -80,9 +80,9 @@ public final class InvokeInterfaces {
         // user: The user of that attack
         // victim: The Pokemon that received the attack, the one who is probably implementing this effect
         // damage: The amount of damage that was dealt to victim by the user
-        void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage);
+        void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim);
 
-        static void invokeOpponentApplyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+        static void invokeOpponentApplyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isFainted(b)) {
                 return;
             }
@@ -91,7 +91,7 @@ public final class InvokeInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof OpponentApplyDamageEffect && invokee.isActiveEffect()) {
                     OpponentApplyDamageEffect effect = (OpponentApplyDamageEffect)invokee;
-                    effect.applyDamageEffect(b, user, victim, damage);
+                    effect.applyDamageEffect(b, user, victim);
 
                     if (user.isFainted(b)) {
                         return;

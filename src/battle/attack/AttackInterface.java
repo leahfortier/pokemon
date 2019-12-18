@@ -58,8 +58,13 @@ public interface AttackInterface extends InvokeEffect {
     default void applyDamage(ActivePokemon me, ActivePokemon o, Battle b) {
         // Deal damage
         DamageCalculation calculation = b.calculateDamage(me, o);
+        int damage = o.reduceHealth(b, calculation.getCalculatedDamage());
 
-        int damage = o.reduceHealth(b, calculation.getDamage());
+        // Set damage calculation things on the attacker
+        calculation.setDamageDealt(damage);
+        me.setCalculatedDamage(calculation);
+
+        // Crit yo pants
         if (calculation.isCritical()) {
             Messages.add("It's a critical hit!!");
             if (o.hasAbility(AbilityNamesies.ANGER_POINT)) {
@@ -81,8 +86,8 @@ public interface AttackInterface extends InvokeEffect {
         me.isFainted(b);
 
         // Apply a damage effect
-        ApplyDamageEffect.invokeApplyDamageEffect(b, me, o, damage);
-        OpponentApplyDamageEffect.invokeOpponentApplyDamageEffect(b, me, o, damage);
+        ApplyDamageEffect.invokeApplyDamageEffect(b, me, o);
+        OpponentApplyDamageEffect.invokeOpponentApplyDamageEffect(b, me, o);
 
         // Effects that apply to the opponent when they take damage
         TakeDamageEffect.invokeTakeDamageEffect(b, me, o);

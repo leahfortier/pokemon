@@ -486,7 +486,9 @@ Shell Bell:
             return;
         }
 
-        user.heal((int)Math.ceil(damage/8.0), b, user.getName() + " restored some HP due to its " + this.getName() + "!");
+        int damageDealt = user.getDamageDealt();
+        int healAmount = (int)Math.ceil(damageDealt/8.0);
+        user.heal(healAmount, b, user.getName() + " restored some HP due to its " + this.getName() + "!");
         ###
 *
 Smoke Ball:

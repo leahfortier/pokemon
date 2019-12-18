@@ -3325,7 +3325,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Steal the victim's item when damage is dealt
             if (!user.isFainted(b) && user.canStealItem(b, victim)) {
                 this.swapItems(b, user, victim);

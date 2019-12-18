@@ -4,7 +4,7 @@
 ApplyDamageEffect:
     Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
     Method:
-        Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
+        Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim)
         Comments:
             // user: The user of that attack, the one who is implementing this effect
             // victim: The Pokemon that received the attack
@@ -19,7 +19,7 @@ ApplyDamageEffect:
 OpponentApplyDamageEffect:
     Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
     Method:
-        Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage)
+        Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim)
         Comments:
             // user: The user of that attack
             // victim: The Pokemon that received the attack, the one who is probably implementing this effect

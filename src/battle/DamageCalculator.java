@@ -10,24 +10,29 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.stat.Stat;
 import type.TypeAdvantage;
 import util.RandomUtils;
+import util.serialization.Serializable;
 
 public class DamageCalculator {
     // Crit yo pants
     private static final int[] CRITSICLES = { 16, 8, 4, 3, 2 };
 
-    public static class DamageCalculation {
-        private final int damage;
+    public static class DamageCalculation implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        private final int damageCalculated;
         private final double advantage;
         private final boolean critical;
 
+        private int damageDealt;
+
         private DamageCalculation(int damage, double advantage, boolean critical) {
-            this.damage = damage;
+            this.damageCalculated = damage;
             this.advantage = advantage;
             this.critical = critical;
         }
 
-        public int getDamage() {
-            return this.damage;
+        public int getCalculatedDamage() {
+            return this.damageCalculated;
         }
 
         public double getAdvantage() {
@@ -36,6 +41,14 @@ public class DamageCalculator {
 
         public boolean isCritical() {
             return this.critical;
+        }
+
+        public void setDamageDealt(int damage) {
+            this.damageDealt = damage;
+        }
+
+        public int getDamageDealt() {
+            return this.damageDealt;
         }
     }
 

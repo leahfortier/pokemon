@@ -9,7 +9,7 @@ import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 public interface SapHealthMove extends AttackInterface, SapHealthEffect, ApplyDamageEffect {
 
     @Override
-    default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
-        this.sapHealth(b, user, victim, damage, true);
+    default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+        this.sapHealth(b, user, victim, user.getDamageDealt(), true);
     }
 }

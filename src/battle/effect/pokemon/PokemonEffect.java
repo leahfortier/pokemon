@@ -733,7 +733,10 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
                 // Perform confusion damage
                 attacking.callTempMove(
                         AttackNamesies.CONFUSION_DAMAGE,
-                        () -> attacking.indirectReduceHealth(b, b.calculateDamage(attacking, attacking).getDamage(), true, "It hurt itself in confusion!")
+                        () -> {
+                            int damage = b.calculateDamage(attacking, attacking).getCalculatedDamage();
+                            attacking.indirectReduceHealth(b, damage, true, "It hurt itself in confusion!");
+                        }
                 );
 
                 return false;

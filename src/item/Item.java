@@ -873,7 +873,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.reduceHealthFraction(b, .1, user.getName() + " was hurt by its " + this.getName() + "!");
         }
     }
@@ -1367,7 +1367,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
                 this.consumeItem(b, victim);
             }
@@ -1468,12 +1468,14 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.getAttack().isMoveType(MoveType.USER_FAINTS)) {
                 return;
             }
 
-            user.heal((int)Math.ceil(damage/8.0), b, user.getName() + " restored some HP due to its " + this.getName() + "!");
+            int damageDealt = user.getDamageDealt();
+            int healAmount = (int)Math.ceil(damageDealt/8.0);
+            user.heal(healAmount, b, user.getName() + " restored some HP due to its " + this.getName() + "!");
         }
     }
 

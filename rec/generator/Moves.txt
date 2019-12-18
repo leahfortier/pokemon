@@ -2391,12 +2391,12 @@ Belly Drum:
     SelfTarget: True
     FullApplies:
         // Fails if attack is already maxed or if you have less than half your health to give up
-        return user.getStage(Stat.ATTACK) < Stat.MAX_STAT_CHANGES && user.getHPRatio() > .5;
+        return user.getStage(Stat.ATTACK) < Stages.MAX_STAT_CHANGES && user.getHPRatio() > .5;
         ###
     UniqueEffects:
         // Maximization station
         user.getStages().modifyStage(
-                user, 2*Stat.MAX_STAT_CHANGES, Stat.ATTACK, b, CastSource.ATTACK,
+                user, 2*Stages.MAX_STAT_CHANGES, Stat.ATTACK, b, CastSource.ATTACK,
                 (victimName, statName, changed) -> user.getName() + " cut its own HP and maximized " + victimName + " " + statName + "!"
         );
         user.forceReduceHealthFraction(b, 1/2.0, "");

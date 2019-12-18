@@ -36,7 +36,7 @@ public interface CategoryBerry extends Berry {
 
     interface CategoryDamageBerry extends CategoryBerry, OpponentApplyDamageEffect {
         @Override
-        default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim, int damage) {
+        default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // If hit by a move of a specific category, the user will also be hurt
             if (user.getAttack().getCategory() == this.getCategory()
                     && user.reduceHealthFraction(b, 1/8.0, user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!") > 0) {

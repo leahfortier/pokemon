@@ -600,7 +600,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void applyRecoil(Battle b, ActivePokemon user, int damage) {
+        public void applyRecoil(Battle b, ActivePokemon user) {
             user.forceReduceHealthFraction(b, 1/4.0, user.getName() + " was hurt by recoil!");
         }
     }
