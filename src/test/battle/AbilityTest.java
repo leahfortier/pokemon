@@ -1,5 +1,6 @@
 package test.battle;
 
+import battle.Stages;
 import battle.attack.AttackNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
@@ -835,7 +836,7 @@ public class AbilityTest extends BaseTest {
                     attacking.assertFullHealth();
                     defending.assertHealthRatio(.5);
                     attacking.assertNoStages();
-                    defending.assertStages(new TestStages().set(Stat.MAX_STAT_CHANGES, Stat.ATTACK));
+                    defending.assertStages(new TestStages().set(Stages.MAX_STAT_CHANGES, Stat.ATTACK));
                 }
         );
 

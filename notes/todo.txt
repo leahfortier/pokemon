@@ -178,7 +178,6 @@ Other random things:
     pretty sure Infatuation lasts between Pokemon and it shouldn't
     apparently critical hits were nerfed in gen 6... did not know that
     burn was also changed in gen 7 to 1/16
-    Stat.MAX_STAT_CHANGES should really be in Stages right?
     stage modify message should include drastically for 3+ (ex: cotton guard)
     should probably rewrite the battle message system to pass the serialized battle around instead of whatever it's currently doing with storing every individual value and such
     should have a moldBreaker effect for attacks and abilities and only include the attack when attacking

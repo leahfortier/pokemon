@@ -3,6 +3,7 @@ package battle.attack;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.DamageCalculator.DamageCalculation;
+import battle.Stages;
 import battle.effect.InvokeEffect;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
@@ -63,7 +64,7 @@ public interface AttackInterface extends InvokeEffect {
             Messages.add("It's a critical hit!!");
             if (o.hasAbility(AbilityNamesies.ANGER_POINT)) {
                 Messages.add(o.getName() + "'s " + AbilityNamesies.ANGER_POINT.getName() + " raised its attack to the max!");
-                o.getStages().setStage(Stat.ATTACK, Stat.MAX_STAT_CHANGES);
+                o.getStages().setStage(Stat.ATTACK, Stages.MAX_STAT_CHANGES);
             }
         }
 

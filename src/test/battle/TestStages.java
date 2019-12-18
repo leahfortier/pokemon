@@ -1,5 +1,6 @@
 package test.battle;
 
+import battle.Stages;
 import org.junit.Assert;
 import pokemon.stat.Stat;
 import test.general.TestUtils;
@@ -17,8 +18,8 @@ public class TestStages {
     public void increment(int amount, Stat stat) {
         int index = stat.index();
         stages[index] += amount;
-        stages[index] = Math.min(Stat.MAX_STAT_CHANGES, stages[index]);
-        stages[index] = Math.max(-Stat.MAX_STAT_CHANGES, stages[index]);
+        stages[index] = Math.min(Stages.MAX_STAT_CHANGES, stages[index]);
+        stages[index] = Math.max(-Stages.MAX_STAT_CHANGES, stages[index]);
     }
 
     public TestStages set(int stage, Stat... stats) {

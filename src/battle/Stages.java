@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 public class Stages implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    public static final int MAX_STAT_CHANGES = 6;
+
     private transient ActivePokemon stagesHolder;
 
     private int[] stages;
@@ -42,8 +44,8 @@ public class Stages implements Serializable {
         stages[index] = val;
 
         // Don't let it go out of bounds, yo!
-        stages[index] = Math.min(Stat.MAX_STAT_CHANGES, stages[index]);
-        stages[index] = Math.max(-1*Stat.MAX_STAT_CHANGES, stages[index]);
+        stages[index] = Math.min(MAX_STAT_CHANGES, stages[index]);
+        stages[index] = Math.max(-1*MAX_STAT_CHANGES, stages[index]);
 
         Messages.add(new MessageUpdate().withPokemon(stagesHolder));
     }
@@ -57,11 +59,11 @@ public class Stages implements Serializable {
     }
 
     public List<Stat> getNonMaxStats() {
-        return getNonValueStats(Stat.MAX_STAT_CHANGES);
+        return getNonValueStats(MAX_STAT_CHANGES);
     }
 
     public List<Stat> getNonMinStats() {
-        return getNonValueStats(-Stat.MAX_STAT_CHANGES);
+        return getNonValueStats(-MAX_STAT_CHANGES);
     }
 
     private List<Stat> getNonValueStats(int value) {
@@ -104,7 +106,7 @@ public class Stages implements Serializable {
         }
 
         // Too High
-        if (getStage(stat) == Stat.MAX_STAT_CHANGES && val > 0) {
+        if (getStage(stat) == MAX_STAT_CHANGES && val > 0) {
             if (printFail) {
                 Messages.add(victim.getName() + "'s " + statName + " cannot be raised any higher!");
             }
@@ -112,7 +114,7 @@ public class Stages implements Serializable {
         }
 
         // HOW LOW CAN YOU GO?!
-        if (getStage(stat) == -Stat.MAX_STAT_CHANGES && val < 0) {
+        if (getStage(stat) == -MAX_STAT_CHANGES && val < 0) {
             // THIS LOW
             if (printFail) {
                 Messages.add(victim.getName() + "'s " + statName + " cannot be lowered any further!");

@@ -2,6 +2,7 @@ package battle.attack;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.Stages;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.DoubleDigger;
@@ -4302,14 +4303,14 @@ public abstract class Attack implements AttackInterface {
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Fails if attack is already maxed or if you have less than half your health to give up
-            return user.getStage(Stat.ATTACK) < Stat.MAX_STAT_CHANGES && user.getHPRatio() > .5;
+            return user.getStage(Stat.ATTACK) < Stages.MAX_STAT_CHANGES && user.getHPRatio() > .5;
         }
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Maximization station
             user.getStages().modifyStage(
-                    user, 2*Stat.MAX_STAT_CHANGES, Stat.ATTACK, b, CastSource.ATTACK,
+                    user, 2*Stages.MAX_STAT_CHANGES, Stat.ATTACK, b, CastSource.ATTACK,
                     (victimName, statName, changed) -> user.getName() + " cut its own HP and maximized " + victimName + " " + statName + "!"
             );
             user.forceReduceHealthFraction(b, 1/2.0, "");

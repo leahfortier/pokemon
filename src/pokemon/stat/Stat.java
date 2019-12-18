@@ -2,6 +2,7 @@ package pokemon.stat;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.Stages;
 import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.InvokeInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StageChangingEffect;
@@ -24,7 +25,6 @@ public enum Stat {
 
     public static final int NUM_STATS = 6;
     public static final int NUM_BATTLE_STATS = 7;
-    public static final int MAX_STAT_CHANGES = 6;
 
     public static final List<Stat> STATS;
     public static final List<Stat> BATTLE_STATS;
@@ -169,7 +169,7 @@ public enum Stat {
         stage += StageChangingEffect.getModifier(b, stagePokemon, otherPokemon, this);
 
         // Let's keep everything in bounds, okay!
-        return Math.max(-1*MAX_STAT_CHANGES, Math.min(stage, MAX_STAT_CHANGES));
+        return Math.max(-1*Stages.MAX_STAT_CHANGES, Math.min(stage, Stages.MAX_STAT_CHANGES));
     }
 
     // Returns the corresponding Stat based on the index passed in

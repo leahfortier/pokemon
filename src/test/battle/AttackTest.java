@@ -1,5 +1,6 @@
 package test.battle;
 
+import battle.Stages;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -129,8 +130,8 @@ public class AttackTest extends BaseTest {
                 TestPokemon attacking = battle.getAttacking();
                 TestPokemon defending = battle.getDefending();
 
-                attacking.getStages().setStage(Stat.ACCURACY, -Stat.MAX_STAT_CHANGES);
-                defending.getStages().setStage(Stat.EVASION, Stat.MAX_STAT_CHANGES);
+                attacking.getStages().setStage(Stat.ACCURACY, -Stages.MAX_STAT_CHANGES);
+                defending.getStages().setStage(Stat.EVASION, Stages.MAX_STAT_CHANGES);
 
                 attacking.setupMove(attackNamesies, battle);
 
@@ -422,7 +423,7 @@ public class AttackTest extends BaseTest {
         }
 
         // All stats should be maxed now
-        attacking.assertStages(new TestStages().set(Stat.MAX_STAT_CHANGES, Stat.BATTLE_STATS.toArray(new Stat[0])));
+        attacking.assertStages(new TestStages().set(Stages.MAX_STAT_CHANGES, Stat.BATTLE_STATS.toArray(new Stat[0])));
 
         // Acupressure should fail now
         battle.attackingFight(AttackNamesies.ACUPRESSURE);
@@ -430,7 +431,7 @@ public class AttackTest extends BaseTest {
 
         // But should still be snatchable
         battle.fight(AttackNamesies.ACUPRESSURE, AttackNamesies.SNATCH);
-        attacking.assertTotalStages(Stat.MAX_STAT_CHANGES*Stat.NUM_BATTLE_STATS);
+        attacking.assertTotalStages(Stages.MAX_STAT_CHANGES*Stat.NUM_BATTLE_STATS);
         defending.assertTotalStages(4);
     }
 
@@ -458,11 +459,11 @@ public class AttackTest extends BaseTest {
         attacking.assertType(battle, Type.FLYING);
 
         // Clear stat changes and reduce again
-        attacking.assertStages(new TestStages().set(Stat.MAX_STAT_CHANGES, Stat.ATTACK));
+        attacking.assertStages(new TestStages().set(Stages.MAX_STAT_CHANGES, Stat.ATTACK));
         battle.attackingFight(AttackNamesies.HAZE);
         attacking.assertStages(new TestStages());
         battle.attackingFight(AttackNamesies.BELLY_DRUM);
-        attacking.assertStages(new TestStages().set(Stat.MAX_STAT_CHANGES, Stat.ATTACK));
+        attacking.assertStages(new TestStages().set(Stages.MAX_STAT_CHANGES, Stat.ATTACK));
 
         // Using a full turn should bring the flying type back at the end
         attacking.assertNotFullHealth();
@@ -2148,17 +2149,17 @@ public class AttackTest extends BaseTest {
         forceBerryTest(
                 true, ItemNamesies.RAWST_BERRY,
                 (battle, attacking, defending) -> {
-                    for (int i = 1; i <= Stat.MAX_STAT_CHANGES; i++) {
+                    for (int i = 1; i <= Stages.MAX_STAT_CHANGES; i++) {
                         battle.attackingFight(AttackNamesies.DEFENSE_CURL);
                         attacking.assertStages(new TestStages().set(i, Stat.DEFENSE));
                     }
 
                     battle.defendingFight(AttackNamesies.WILL_O_WISP);
                     attacking.assertHasStatus(StatusNamesies.BURNED);
-                    attacking.assertStages(new TestStages().set(Stat.MAX_STAT_CHANGES, Stat.DEFENSE));
+                    attacking.assertStages(new TestStages().set(Stages.MAX_STAT_CHANGES, Stat.DEFENSE));
                 },
                 (battle, attacking, defending) -> {
-                    attacking.assertStages(new TestStages().set(Stat.MAX_STAT_CHANGES, Stat.DEFENSE));
+                    attacking.assertStages(new TestStages().set(Stages.MAX_STAT_CHANGES, Stat.DEFENSE));
                     attacking.assertNoStatus();
                 }
         );
