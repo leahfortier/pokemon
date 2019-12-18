@@ -122,20 +122,7 @@ public class Stages implements Serializable {
             return false;
         }
 
-        String change;
-        if (val >= 2) {
-            change = "sharply raised";
-        } else if (val == 1) {
-            change = "raised";
-        } else if (val == -1) {
-            change = "lowered";
-        } else if (val <= -2) {
-            change = "sharply lowered";
-        } else {
-            Global.error("Cannot modify a stage by zero.");
-            return false;
-        }
-
+        String change = this.getChangedStatString(val);
         String victimName = caster == victim ? "its" : victim.getName() + "'s";
 
         String message = messageGetter.getMessage(victimName, statName, change);
@@ -179,6 +166,38 @@ public class Stages implements Serializable {
 
         this.setStage(stat, victimStat);
         other.getStages().setStage(stat, userStat);
+    }
+
+    // -3 or lower: drastically lowered
+    // -2: sharply lowered
+    // -1: lowered
+    // 0: <throws error>
+    // 1: raised
+    // 2: sharply raised
+    // 3 or higher: drastically raised
+    private String getChangedStatString(int val) {
+        if (val == 0) {
+            Global.error("Cannot modify a stage by zero.");
+        }
+
+        int positive = Math.abs(val);
+        String modifier;
+        if (positive == 1) {
+            modifier = "";
+        } else if (positive == 2) {
+            modifier = "sharply ";
+        } else {
+            modifier = "drastically ";
+        }
+
+        String direction;
+        if (val > 0) {
+            direction = "raised";
+        } else {
+            direction = "lowered";
+        }
+
+        return modifier + direction;
     }
 
     private ModifyStageMessageGetter createGetter(Battle b, ActivePokemon caster, CastSource source) {
