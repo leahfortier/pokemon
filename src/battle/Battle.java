@@ -491,7 +491,6 @@ public class Battle implements Serializable {
         return opponent instanceof WildPokemon;
     }
 
-    // Note: This method does NOT set the damage calculation on the attacking Pokemon
     public DamageCalculation calculateDamage(ActivePokemon me, ActivePokemon o) {
         return this.damageCalculator.calculateDamage(this, me, o);
     }

@@ -1,5 +1,6 @@
 package battle;
 
+import battle.attack.Move;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.CritBlockerEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
@@ -19,16 +20,36 @@ public class DamageCalculator {
     public static class DamageCalculation implements Serializable {
         private static final long serialVersionUID = 1L;
 
-        private final int damageCalculated;
-        private final double advantage;
-        private final boolean critical;
-
+        private int damageCalculated;
+        private double advantage;
+        private boolean critical;
         private int damageDealt;
 
-        private DamageCalculation(int damage, double advantage, boolean critical) {
-            this.damageCalculated = damage;
+        public DamageCalculation() {
+            this.reset();
+        }
+
+        public void reset() {
+            this.damageCalculated = 0;
+            this.advantage = 1;
+            this.critical = false;
+            this.damageDealt = 0;
+        }
+
+        private void setDamageCalculated(int damageCalculated) {
+            this.damageCalculated = damageCalculated;
+        }
+
+        private void setAdvantage(double advantage) {
             this.advantage = advantage;
+        }
+
+        private void setCritical(boolean critical) {
             this.critical = critical;
+        }
+
+        public void setDamageDealt(int damage) {
+            this.damageDealt = damage;
         }
 
         public int getCalculatedDamage() {
@@ -41,10 +62,6 @@ public class DamageCalculator {
 
         public boolean isCritical() {
             return this.critical;
-        }
-
-        public void setDamageDealt(int damage) {
-            this.damageDealt = damage;
         }
 
         public int getDamageDealt() {
@@ -69,10 +86,16 @@ public class DamageCalculator {
                 return null;
         }
 
+        Move move = me.getMove();
+        DamageCalculation calculatedDamage = move.getCalculatedDamage();
+
         int level = me.getLevel();
         int random = RandomUtils.getRandomInt(16) + 85;
 
-        int power = me.getAttack().getPower(b, me, o);
+        boolean critYoPants = this.criticalHit(b, me, o);
+        calculatedDamage.setCritical(critYoPants);
+
+        int power = move.getAttack().getPower(b, me, o);
         power *= getDamageModifier(b, me, o);
 
         int attackStat = Stat.getStat(attacking, me, b);
@@ -82,13 +105,14 @@ public class DamageCalculator {
         double adv = TypeAdvantage.getAdvantage(me, o, b);
 
         int damage = (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
-
-        boolean critYoPants = this.criticalHit(b, me, o);
         if (critYoPants) {
             damage *= me.hasAbility(AbilityNamesies.SNIPER) ? 3 : 2;
         }
 
-        return new DamageCalculation(damage, adv, critYoPants);
+        calculatedDamage.setDamageCalculated(damage);
+        calculatedDamage.setAdvantage(adv);
+
+        return calculatedDamage;
     }
 
     protected double getDamageModifier(Battle b, ActivePokemon me, ActivePokemon o) {

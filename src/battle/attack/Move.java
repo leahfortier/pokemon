@@ -3,6 +3,7 @@ package battle.attack;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.ai.DecisionTree;
+import battle.DamageCalculator.DamageCalculation;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.ForceMoveEffect;
 import message.Messages;
@@ -22,6 +23,7 @@ public class Move implements Serializable {
     private boolean used;
 
     private Type type;
+    private DamageCalculation calculatedDamage;
 
     public Move(AttackNamesies attackNamesies) {
         this(attackNamesies.getNewAttack());
@@ -37,6 +39,7 @@ public class Move implements Serializable {
         used = false;
 
         type = attack.getActualType();
+        calculatedDamage = new DamageCalculation();
     }
 
     public Move(Attack attack, int startPP) {
@@ -58,6 +61,11 @@ public class Move implements Serializable {
 
     public void setAttributes(Battle b, ActivePokemon user) {
         this.type = this.getAttack().getBattleType(b, user);
+        this.calculatedDamage.reset();
+    }
+
+    public DamageCalculation getCalculatedDamage() {
+        return this.calculatedDamage;
     }
 
     public Attack getAttack() {

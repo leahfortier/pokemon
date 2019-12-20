@@ -1,6 +1,5 @@
 package battle;
 
-import battle.DamageCalculator.DamageCalculation;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -83,9 +82,8 @@ public class ActivePokemon extends PartyPokemon {
     private Move selected;
     private Move lastMoveUsed;
     private Serializable castSource;
-    private DamageCalculation damageCalculated;
-    private int damageTaken;
     private int counter;
+    private int damageTaken;
     private double successionDecayRate;
     private boolean firstTurn;
     private boolean attacking;
@@ -924,26 +922,17 @@ public class ActivePokemon extends PartyPokemon {
         return damageTaken > 0;
     }
 
-    public void setCalculatedDamage(DamageCalculation damageCalculated) {
-        this.damageCalculated = damageCalculated;
-    }
-
     public int getDamageDealt() {
-        return damageCalculated == null ? 0 : damageCalculated.getDamageDealt();
+        return this.getMove().getCalculatedDamage().getDamageDealt();
     }
 
     public boolean isCriticalHit() {
-        return damageCalculated != null && damageCalculated.isCritical();
+        return this.getMove().getCalculatedDamage().isCritical();
     }
 
     public void resetTurn() {
-        resetDamageCalculated();
         resetDamageTaken();
         setReducePP(false);
-    }
-
-    private void resetDamageCalculated() {
-        damageCalculated = null;
     }
 
     private void resetDamageTaken() {

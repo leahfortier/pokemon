@@ -60,9 +60,8 @@ public interface AttackInterface extends InvokeEffect {
         DamageCalculation calculation = b.calculateDamage(me, o);
         int damage = o.reduceHealth(b, calculation.getCalculatedDamage());
 
-        // Set damage calculation things on the attacker
+        // Set the actual damage dealt on the move
         calculation.setDamageDealt(damage);
-        me.setCalculatedDamage(calculation);
 
         // Crit yo pants
         if (calculation.isCritical()) {
