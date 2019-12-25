@@ -106,7 +106,7 @@ public class DamageCalculator {
 
         int damage = (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
         if (critYoPants) {
-            damage *= me.hasAbility(AbilityNamesies.SNIPER) ? 3 : 2;
+            damage *= me.hasAbility(AbilityNamesies.SNIPER) ? 2 : 1.5;
         }
 
         calculatedDamage.setDamageCalculated(damage);
@@ -128,9 +128,13 @@ public class DamageCalculator {
             return true;
         }
 
-        // Increase crit stage and such
-        int stage = getCritStage(b, me);
+        return checkRandomCrit(b, me);
+    }
 
+    // Returns true if the crit stage random check results in a critical hit
+    // Does not include effects that always or never result in critical hits, ONLY the stage check
+    protected boolean checkRandomCrit(Battle b, ActivePokemon me) {
+        int stage = getCritStage(b, me);
         return RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
     }
 

@@ -268,7 +268,8 @@ public final class InvokeInterfaces {
 
         @Override
         default boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
+            // Critical hits and Pokemon with the Infiltrator ability bypass the barrier's boosts
+            return !opp.isCriticalHit() && !opp.hasAbility(AbilityNamesies.INFILTRATOR);
         }
 
         @Override
@@ -1121,6 +1122,11 @@ public final class InvokeInterfaces {
     public interface StageChangingEffect {
         int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s);
 
+        default int fullAdjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
+            int adjustment = this.adjustStage(b, p, opp, s);
+            return getStageWithCritCheck(adjustment, p, opp, s);
+        }
+
         static int getModifier(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
             int modifier = 0;
 
@@ -1136,11 +1142,22 @@ public final class InvokeInterfaces {
                     }
 
                     StageChangingEffect effect = (StageChangingEffect)invokee;
-                    modifier += effect.adjustStage(b, p, opp, s);
+                    modifier += effect.fullAdjustStage(b, p, opp, s);
                 }
             }
 
             return modifier;
+        }
+
+        // Critical hits ignore negative stages on the attacker and positive stages on the defending
+        static int getStageWithCritCheck(int stage, ActivePokemon p, ActivePokemon opp, Stat s) {
+            if (s.isAttacking() && p.isCriticalHit() && stage < 0) {
+                return 0;
+            } else if (s.isDefending() && opp.isCriticalHit() && stage > 0) {
+                return 0;
+            } else {
+                return stage;
+            }
         }
     }
 

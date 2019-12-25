@@ -155,7 +155,8 @@ BarrierEffect:
         Header: boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp)
         Override: True
         Default:
-            return !opp.hasAbility(AbilityNamesies.INFILTRATOR);
+            // Critical hits and Pokemon with the Infiltrator ability bypass the barrier's boosts
+            return !opp.isCriticalHit() && !opp.hasAbility(AbilityNamesies.INFILTRATOR);
             ###
     *
     Method:
@@ -613,9 +614,29 @@ DoubleWeightEffect:
 StageChangingEffect:
     Method:
         Header: int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
+    *
+    Method:
+        Header: int fullAdjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
         Invoke: Add
         MoldBreakerNullCheck: s.isDefending() ? opp : null
         EffectList: p
+        Default:
+            int adjustment = this.adjustStage(b, p, opp, s);
+            return getStageWithCritCheck(adjustment, p, opp, s);
+            ###
+    *
+    StaticMethod:
+        Comments: // Critical hits ignore negative stages on the attacker and positive stages on the defending
+        Header: int getStageWithCritCheck(int stage, ActivePokemon p, ActivePokemon opp, Stat s)
+        Body:
+            if (s.isAttacking() && p.isCriticalHit() && stage < 0) {
+                return 0;
+            } else if (s.isDefending() && opp.isCriticalHit() && stage > 0) {
+                return 0;
+            } else {
+                return stage;
+            }
+            ###
     *
 ***
 StatModifyingEffect:

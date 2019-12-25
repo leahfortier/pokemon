@@ -1,5 +1,6 @@
 package test.battle;
 
+import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.Effect;
@@ -18,9 +19,12 @@ import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import pokemon.stat.User;
 import test.general.BaseTest;
+import test.general.TestUtils;
 import test.pokemon.TestPokemon;
 import type.PokeType;
 import type.Type;
+
+import java.util.Arrays;
 
 public class ModifierTest extends BaseTest {
     @Test
@@ -317,6 +321,172 @@ public class ModifierTest extends BaseTest {
 
     private void stageChangeTest(int expectedStage, Stat stat, TestInfo testInfo) {
         testInfo.stageChangeTest(expectedStage, stat);
+    }
+
+    @Test
+    public void criticalHitStageTest() {
+        // Negative defense is unaffected by crits
+        criticalHitStageTest(
+                new CritStageMap().stage(-1, Stat.DEFENSE),
+                new TestInfo().attackingFight(AttackNamesies.TAIL_WHIP)
+        );
+
+        // Positive defense is negated by crits
+        criticalHitStageTest(
+                new CritStageMap().stage(1, 0, Stat.DEFENSE),
+                new TestInfo().defendingFight(AttackNamesies.HARDEN)
+        );
+
+        // Negative special defense is unaffected by crits
+        criticalHitStageTest(
+                new CritStageMap().stage(-2, Stat.SP_DEFENSE),
+                new TestInfo().attackingFight(AttackNamesies.FAKE_TEARS)
+        );
+
+        // Positive special defense is negated by crits
+        criticalHitStageTest(
+                new CritStageMap().stage(1, 0, Stat.SP_DEFENSE),
+                new TestInfo().defendingFight(AttackNamesies.AROMATIC_MIST)
+        );
+
+        // Positive attack is unaffected by crits
+        criticalHitStageTest(
+                new CritStageMap().stage(2, Stat.ATTACK),
+                new TestInfo().attackingFight(AttackNamesies.SWORDS_DANCE)
+        );
+
+        // Negative attack is negated by crits
+        criticalHitStageTest(
+                new CritStageMap().stage(-1, 0, Stat.ATTACK),
+                new TestInfo().defendingFight(AttackNamesies.GROWL)
+        );
+
+        // Positive special attack is unaffected by crits
+        criticalHitStageTest(
+                new CritStageMap().stage(2, Stat.SP_ATTACK),
+                new TestInfo().attackingFight(AttackNamesies.NASTY_PLOT)
+        );
+
+        // Negative special attack is negated by crits
+        criticalHitStageTest(
+                new CritStageMap().stage(-1, 0, Stat.SP_ATTACK, Stat.ATTACK),
+                new TestInfo().defendingFight(AttackNamesies.TEARFUL_LOOK)
+        );
+
+        // Negates positive defense even by effects
+        criticalHitStageTest(
+                new CritStageMap().stage(1, 0, Stat.DEFENSE, Stat.SP_DEFENSE),
+                new TestInfo().defendingFight(AttackNamesies.STOCKPILE)
+        );
+
+        // Negation for positive defense stacks with stages and effects
+        criticalHitStageTest(
+                new CritStageMap().stage(2, 0, Stat.DEFENSE).stage(1, 0, Stat.SP_DEFENSE),
+                new TestInfo().defendingFight(AttackNamesies.STOCKPILE).defendingFight(AttackNamesies.HARDEN)
+        );
+
+        // Only positive changes are negated (so even if total is neutral, the negative stage persists)
+        criticalHitStageTest(
+                new CritStageMap().stage(0, -1, Stat.DEFENSE).stage(1, 0, Stat.SP_DEFENSE),
+                new TestInfo().defendingFight(AttackNamesies.STOCKPILE).attackingFight(AttackNamesies.TAIL_WHIP)
+        );
+
+        // Critical hits ignore barrier effects like Reflect
+        criticalHitStageTest(
+                new CritStageMap().modifier(2, 1, Stat.DEFENSE),
+                new TestInfo().defendingFight(AttackNamesies.REFLECT)
+        );
+    }
+
+    private void criticalHitStageTest(CritStageMap stageMap, TestInfo testInfo) {
+        criticalHitStageTest(AttackNamesies.TACKLE, stageMap.withoutCrit, testInfo);
+        criticalHitStageTest(AttackNamesies.SWIFT, stageMap.withoutCrit, testInfo);
+        criticalHitStageTest(AttackNamesies.STORM_THROW, stageMap.withCrit, testInfo);
+        criticalHitStageTest(AttackNamesies.FROST_BREATH, stageMap.withCrit, testInfo);
+    }
+
+    private void criticalHitStageTest(AttackNamesies attackNamesies, ModifierStages modifierStages, TestInfo testInfo) {
+        // Set up the attack and calculate the damage
+        // Does not execute the move but will set if it's a critical hit or not
+        testInfo.with(attackNamesies);
+        testInfo.with(Battle::calculateDamage);
+
+        // Check each battle stat and make sure the stage and modifier is as expected
+        for (Stat stat : Stat.BATTLE_STATS) {
+            int stage = modifierStages.stages.get(stat);
+            double modifier = modifierStages.getModifier(stat);
+
+            // Test isn't actually relevant for these stats so just make sure these weren't set and ignore
+            if (stat == Stat.SPEED || stat == Stat.ACCURACY || stat == Stat.EVASION) {
+                Assert.assertEquals(stat.name(), 0, stage);
+                TestUtils.assertEquals(stat.name(), 1, modifier);
+                continue;
+            }
+
+            testInfo.stageChangeTest(stage, stat);
+            testInfo.statModifierTest(modifier, stat);
+        }
+    }
+
+    private static class ModifierStages {
+        private TestStages stages;
+        private double[] modifiers;
+
+        public ModifierStages() {
+            this.stages = new TestStages();
+            this.modifiers = new double[Stat.NUM_BATTLE_STATS];
+            Arrays.fill(modifiers, 1);
+        }
+
+        // Sets the expected stage for each stat
+        public void stage(int stage, Stat... stats) {
+            this.stages.set(stage, stats);
+        }
+
+        // Sets the expected modifier for each stat
+        // Note: Does not include stage adjustments
+        public void modifier(double modifier, Stat... stats) {
+            for (Stat stat : stats) {
+                TestUtils.assertEquals(stat.getName(), 1, modifiers[stat.index()]);
+                modifiers[stat.index()] = modifier;
+            }
+        }
+
+        // Returns the set modifier multiplied by the stage modifier (since that's how the calculation actually works)
+        public double getModifier(Stat stat) {
+            return modifiers[stat.index()]*stat.getStageStatModifier(stages.get(stat));
+        }
+    }
+
+    // Refers to stat stages (not crit stages) when attacker lands a critical hit
+    private static class CritStageMap {
+        private ModifierStages withoutCrit;
+        private ModifierStages withCrit;
+
+        public CritStageMap() {
+            this.withoutCrit = new ModifierStages();
+            this.withCrit = new ModifierStages();
+        }
+
+        public CritStageMap stage(int always, Stat... stats) {
+            return this.stage(always, always, stats);
+        }
+
+        public CritStageMap stage(int withoutCrit, int withCrit, Stat... stats) {
+            this.withoutCrit.stage(withoutCrit, stats);
+            this.withCrit.stage(withCrit, stats);
+            return this;
+        }
+
+        public CritStageMap modifier(int always, Stat... stats) {
+            return this.modifier(always, always, stats);
+        }
+
+        public CritStageMap modifier(int withoutCrit, int withCrit, Stat... stats) {
+            this.withoutCrit.modifier(withoutCrit, stats);
+            this.withCrit.modifier(withCrit, stats);
+            return this;
+        }
     }
 
     @Test

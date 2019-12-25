@@ -24,4 +24,10 @@ public class TestDamageCalculator extends DamageCalculator {
 
         return modifier;
     }
+
+    @Override
+    protected boolean checkRandomCrit(Battle b, ActivePokemon me) {
+        // Tests can never critical hit by chance (can still crit with AlwaysCritEffects and such still though)
+        return false;
+    }
 }

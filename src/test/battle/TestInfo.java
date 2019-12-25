@@ -227,7 +227,7 @@ class TestInfo {
 
     public void statModifierTest(double expectedChange, Stat stat, User user) {
         // HP not a relevant stat to modify
-        // user should be explictly stated for ambigous stats (like Speed)
+        // user should be explicitly stated for ambiguous stats (like Speed)
         Assert.assertNotEquals(Stat.HP, stat);
         Assert.assertNotEquals(User.BOTH, user);
 

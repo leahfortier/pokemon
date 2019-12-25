@@ -8,6 +8,7 @@ import battle.effect.Effect;
 import battle.effect.Effect.CastMessageGetter;
 import battle.effect.EffectInterfaces.EndTurnSubsider;
 import battle.effect.EffectNamesies;
+import battle.effect.InvokeInterfaces.BarrierEffect;
 import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.battle.terrain.TerrainNamesies;
@@ -15,6 +16,7 @@ import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
+import battle.effect.team.TeamEffect;
 import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
@@ -73,6 +75,30 @@ public class EffectTest extends BaseTest {
                 if (effect instanceof BattleEndTurnEffect && effectNamesies != WeatherNamesies.CLEAR_SKIES) {
                     Assert.assertFalse(effectNamesies.name(), ((BattleEndTurnEffect)effect).endTurnSubsider());
                 }
+            }
+        }
+    }
+
+    @Test
+    public void barrierTest() {
+        for (EffectNamesies effectNamesies : EffectNamesies.values()) {
+            Effect effect = effectNamesies.getEffect();
+            if (effect instanceof BarrierEffect) {
+                String name = effectNamesies.name();
+                BarrierEffect barrierEffect = (BarrierEffect)effect;
+
+                // Barrier Effects can only be TeamEffects
+                Assert.assertTrue(name, barrierEffect instanceof TeamEffect);
+
+                // Barrier effects can only boost defensive stats
+                boolean hasIncrease = false;
+                for (Stat stat : Stat.BATTLE_STATS) {
+                    if (barrierEffect.isModifyStat(stat)) {
+                        hasIncrease = true;
+                        Assert.assertTrue(name + " " + stat.getName(), stat == Stat.DEFENSE || stat == Stat.SP_DEFENSE);
+                    }
+                }
+                Assert.assertTrue(name, hasIncrease);
             }
         }
     }
