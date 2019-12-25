@@ -383,7 +383,8 @@ public abstract class StatusCondition implements StatusInterface {
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            double reduceFraction = victim.hasAbility(AbilityNamesies.HEATPROOF) ? 1/16.0 : 1/8.0;
+            // Reduce 1/16 (halved with Heatproof) of max HP at the end of each turn
+            double reduceFraction = 1/16.0*(victim.hasAbility(AbilityNamesies.HEATPROOF) ? .5 : 1);
             victim.reduceHealthFraction(b, reduceFraction, victim.getName() + " was hurt by its burn!");
         }
 

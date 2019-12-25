@@ -2164,19 +2164,18 @@ public class AttackTest extends BaseTest {
                 }
         );
 
-        // Rawst Berry with Cheek Pouch -- Cure + heal
-        // Reduce to 50% health, burn takes another 1/8, Cheek Pouch heals 33% = 17/24?
+        // Pecha Berry with Cheek Pouch -- Cure + heal
+        // Reduce to 50% health, poison takes another 1/8, Cheek Pouch heals 33% = 17/24?
         // Note: Can't use paralysis because you can sometimes be fully paralyzed when using Stuff Cheeks
-        // (TODO: Change when burn is changed to 1/16 but don't feel like doing that now)
         forceBerryTest(
-                true, ItemNamesies.RAWST_BERRY,
+                true, ItemNamesies.PECHA_BERRY,
                 (battle, attacking, defending) -> {
                     attacking.withAbility(AbilityNamesies.CHEEK_POUCH);
                     attacking.reduceHealthFraction(battle, .5, "");
                     attacking.assertHealthRatio(.5);
 
-                    battle.defendingFight(AttackNamesies.WILL_O_WISP);
-                    attacking.assertHasStatus(StatusNamesies.BURNED);
+                    battle.defendingFight(AttackNamesies.POISON_POWDER);
+                    attacking.assertRegularPoison();
                 },
                 (battle, attacking, defending) -> {
                     attacking.assertNoStatus();
