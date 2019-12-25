@@ -29,7 +29,7 @@ import battle.effect.status.StatusNamesies;
 import generator.GeneratorType;
 import generator.fields.ClassFields;
 import generator.format.InputFormatter;
-import generator.format.MethodInfo;
+import generator.format.MethodWriter;
 import generator.update.ItemUpdater;
 import generator.update.ItemUpdater.ItemParser;
 import generator.update.MoveUpdater;
@@ -819,9 +819,9 @@ public class ScriptTest extends BaseTest {
             ClassFields fields = new ClassFields(in, name);
 
             for (String fieldName : fields.getFieldNames()) {
-                MethodInfo methodInfo = inputFormatter.getOverrideMethod(fieldName);
-                if (methodInfo != null) {
-                    methodInfo.getMapFields().forEach(fields::addNew);
+                MethodWriter methodWriter = inputFormatter.getOverrideMethod(fieldName);
+                if (methodWriter != null) {
+                    methodWriter.getMapFields().forEach(fields::addNew);
                 }
             }
 

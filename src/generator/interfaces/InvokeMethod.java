@@ -2,7 +2,7 @@ package generator.interfaces;
 
 import battle.effect.ApplyResult;
 import generator.AccessModifier;
-import generator.format.MethodInfo;
+import generator.format.MethodWriter;
 import util.GeneralUtils;
 import util.string.StringAppender;
 import util.string.StringUtils;
@@ -33,7 +33,7 @@ abstract class InvokeMethod {
     }
 
     String writeInvokeMethod(final InterfaceMethod interfaceMethod) {
-        final String header = MethodInfo.createHeader(
+        final String header = MethodWriter.createHeader(
                 "static " + this.getReturnType(interfaceMethod),
                 this.getMethodName(interfaceMethod),
                 this.getInvokeParameters(interfaceMethod)
@@ -55,7 +55,7 @@ abstract class InvokeMethod {
                 .appendDelimiter("\n", getPostLoop(interfaceMethod))
                 .toString();
 
-        return new MethodInfo(header, body.trim(), AccessModifier.PACKAGE_PRIVATE).writeFunction();
+        return new MethodWriter(header, body.trim(), AccessModifier.PACKAGE_PRIVATE).writeMethod();
     }
 
     private String getAdditionalInvokeParameters() {

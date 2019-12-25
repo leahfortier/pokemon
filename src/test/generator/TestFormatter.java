@@ -2,7 +2,7 @@ package test.generator;
 
 import generator.fields.ClassFields;
 import generator.format.InputFormatter;
-import generator.format.MethodInfo;
+import generator.format.MethodWriter;
 import generator.format.ReplaceType;
 import org.junit.Assert;
 import util.string.StringUtils;
@@ -18,10 +18,10 @@ class TestFormatter extends InputFormatter {
     }
 
     @Override
-    protected void addMethod(String fieldName, MethodInfo methodInfo) {
+    protected void addMethod(String fieldName, MethodWriter methodWriter) {
         Assert.assertFalse("Duplicate field name " + fieldName + " in override.txt", this.unusedOverrides.contains(fieldName));
 
-        super.addMethod(fieldName, methodInfo);
+        super.addMethod(fieldName, methodWriter);
         this.unusedOverrides.add(fieldName);
     }
 

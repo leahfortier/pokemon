@@ -2,7 +2,7 @@ package generator.interfaces;
 
 import generator.AccessModifier;
 import generator.fields.ClassFields;
-import generator.format.MethodInfo;
+import generator.format.MethodWriter;
 import util.string.StringAppender;
 import util.string.StringUtils;
 
@@ -77,7 +77,7 @@ class InterfaceMethod {
             if (this.defaultMethod.equals("Empty")) {
                 interfaceMethod.appendFormat("\t\tdefault %s {}\n", this.getHeader());
             } else {
-                interfaceMethod.append(new MethodInfo(this.getHeader(), this.defaultMethod, AccessModifier.DEFAULT).writeFunction());
+                interfaceMethod.append(new MethodWriter(this.getHeader(), this.defaultMethod, AccessModifier.DEFAULT).writeMethod());
             }
         } else {
             interfaceMethod.appendFormat("\t\t%s;\n", this.getHeader());
@@ -95,11 +95,11 @@ class InterfaceMethod {
     }
 
     private String getHeader() {
-        return MethodInfo.createHeader(this.returnType, this.methodName, this.parameters);
+        return MethodWriter.createHeader(this.returnType, this.methodName, this.parameters);
     }
 
     String getMethodCall() {
-        return MethodInfo.createHeader(this.methodName, this.typelessParameters);
+        return MethodWriter.createHeader(this.methodName, this.typelessParameters);
     }
 
     String getInterfaceName() {

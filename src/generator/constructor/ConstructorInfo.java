@@ -2,7 +2,7 @@ package generator.constructor;
 
 import generator.AccessModifier;
 import generator.fields.ClassFields;
-import generator.format.MethodInfo;
+import generator.format.MethodWriter;
 import util.string.StringAppender;
 
 public class ConstructorInfo {
@@ -73,10 +73,10 @@ public class ConstructorInfo {
         fields.getPerformAndRemove("Constructor", constructor::append);
 
         // Put it all together!
-        return new MethodInfo(
+        return new MethodWriter(
                 fields.getClassName() + "()",
                 constructor.toString(),
                 AccessModifier.PACKAGE_PRIVATE
-        ).writeFunction();
+        ).writeMethod();
     }
 }

@@ -182,4 +182,5 @@ Other random things:
     should also have a method that handles the mold breaker stuff instead of it being hardcoded in every single invoke method (probably in the MoldBreakerEffect class if I end up making that)
     how would something like future sight work for mold breaker
     mold breaker should work with Disguise and I don't think it does right now
+    new lines aren't done correctly for interfaces with comments and default methods/override
     

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class MethodInfo {
+public class MethodWriter {
     private String header;
     private AccessModifier accessModifier;
 
@@ -23,7 +23,7 @@ public class MethodInfo {
     private List<String> addInterfaces;
     private List<MapField> addMapFields;
 
-    private MethodInfo() {
+    private MethodWriter() {
         this.header = null;
         this.accessModifier = AccessModifier.PUBLIC;
 
@@ -37,7 +37,7 @@ public class MethodInfo {
         this.addMapFields = new ArrayList<>();
     }
 
-    public MethodInfo(final String header, final String body, final AccessModifier accessModifier) {
+    public MethodWriter(final String header, final String body, final AccessModifier accessModifier) {
         this();
 
         this.header = header;
@@ -45,7 +45,7 @@ public class MethodInfo {
         this.accessModifier = accessModifier;
     }
 
-    MethodInfo(final Scanner in) {
+    MethodWriter(final Scanner in) {
         this();
 
         while (in.hasNext()) {
@@ -95,7 +95,7 @@ public class MethodInfo {
         return this.addMapFields;
     }
 
-    private String writeFunction(String fieldValue, String className, String superClass, InputFormatter inputFormatter) {
+    private String writeMethod(String fieldValue, String className, String superClass, InputFormatter inputFormatter) {
         if (this.header == null) {
             return "";
         }
@@ -109,10 +109,10 @@ public class MethodInfo {
         this.fullBody = this.begin + this.fullBody + this.end;
         this.fullBody = inputFormatter.replaceBody(this.fullBody, fieldValue, className, superClass);
 
-        return this.writeFunction();
+        return this.writeMethod();
     }
 
-    public String writeFunction() {
+    public String writeMethod() {
         final String body = StringUtils.isNullOrEmpty(this.fullBody) ? this.body : this.fullBody;
 
         StringAppender method = new StringAppender();
@@ -144,18 +144,18 @@ public class MethodInfo {
         String className = fields.getClassName();
 
         for (String fieldName : fields.getFieldNames()) {
-            MethodInfo methodInfo = inputFormatter.getOverrideMethod(fieldName);
-            if (methodInfo == null) {
+            MethodWriter methodWriter = inputFormatter.getOverrideMethod(fieldName);
+            if (methodWriter == null) {
                 continue;
             }
 
             String fieldValue = fields.get(fieldName);
-            String implementation = methodInfo.writeFunction(fieldValue, className, superClass, inputFormatter);
+            String implementation = methodWriter.writeMethod(fieldValue, className, superClass, inputFormatter);
             methods.append(implementation);
 
-            interfaces.addAll(methodInfo.addInterfaces);
+            interfaces.addAll(methodWriter.addInterfaces);
 
-            for (MapField addField : methodInfo.addMapFields) {
+            for (MapField addField : methodWriter.addMapFields) {
                 String addFieldName = inputFormatter.replaceBody(addField.fieldName, fieldValue, className, superClass);
                 String addFieldValue = inputFormatter.replaceBody(addField.fieldValue, fieldValue, className, superClass);
                 fields.addNew(addFieldName, addFieldValue);

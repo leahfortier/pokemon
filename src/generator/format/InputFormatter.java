@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class InputFormatter {
-    private Map<String, MethodInfo> overrideMethods;
+    private Map<String, MethodWriter> overrideMethods;
     private ConstructorInfo constructorInfo;
 
     public void close() {}
@@ -49,7 +49,7 @@ public class InputFormatter {
         return body;
     }
 
-    public MethodInfo getOverrideMethod(String fieldName) {
+    public MethodWriter getOverrideMethod(String fieldName) {
         if (this.overrideMethods == null) {
             this.readOverrideFormat();
         }
@@ -71,12 +71,12 @@ public class InputFormatter {
                 continue;
             }
 
-            this.addMethod(line.replace(":", ""), new MethodInfo(in));
+            this.addMethod(line.replace(":", ""), new MethodWriter(in));
         }
     }
 
-    protected void addMethod(String fieldName, MethodInfo methodInfo) {
-        this.overrideMethods.put(fieldName, methodInfo);
+    protected void addMethod(String fieldName, MethodWriter methodWriter) {
+        this.overrideMethods.put(fieldName, methodWriter);
     }
 
     public String getImplementsString(List<String> interfaces) {

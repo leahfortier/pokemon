@@ -6,7 +6,7 @@ import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import generator.fields.ClassFields;
 import generator.format.InputFormatter;
-import generator.format.MethodInfo;
+import generator.format.MethodWriter;
 import item.use.TechnicalMachine;
 import main.Global;
 import util.GeneralUtils;
@@ -127,7 +127,7 @@ public class PokeGen {
 
         boolean moreFields = true;
         while (moreFields) {
-            moreFields = MethodInfo.addMethodInfo(
+            moreFields = MethodWriter.addMethodInfo(
                     methods,
                     fields,
                     currentInterfaces,

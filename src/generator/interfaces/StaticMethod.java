@@ -2,7 +2,7 @@ package generator.interfaces;
 
 import generator.AccessModifier;
 import generator.fields.ClassFields;
-import generator.format.MethodInfo;
+import generator.format.MethodWriter;
 import util.string.StringAppender;
 import util.string.StringUtils;
 
@@ -25,8 +25,8 @@ public class StaticMethod {
             staticMethod.append("\n\t\t" + this.comments);
         }
 
-        MethodInfo methodInfo = new MethodInfo("static " + this.header, this.body, AccessModifier.PACKAGE_PRIVATE);
-        staticMethod.append(methodInfo.writeFunction());
+        MethodWriter methodWriter = new MethodWriter("static " + this.header, this.body, AccessModifier.PACKAGE_PRIVATE);
+        staticMethod.append(methodWriter.writeMethod());
 
         return staticMethod.toString();
     }
