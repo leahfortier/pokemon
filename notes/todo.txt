@@ -90,96 +90,106 @@ Descriptions that change manually:
         Ability Capsule (not just for two abilities)
         
 Other random things:
-    Options menu:
+    - Options menu:
         - Sound
         - Text Speed
         - Animation Speed
-	generalize catch animation again
-	connect interface gen with override input
-	create some sort of silph surboard for Silph Surfer evolution
-	self switching moves require input -- currently just switching to random
-	green hat sprites
-	Riding up on bike on foreground tiles causes tiles to flash
-    Rocket grunt guys look like they're standing on the wall in the top of that tom tower thing
-	Mirror move executes multi-turn moves in a single turn
-	Choose/give a TM for beating gym leaders
-	Blue needs to be in the Pokemon Center after you battle him
-	Generalize double cast remove effects (example: Power Trick)
-	Test that Shedinja is genderless when it evolves and that it doesn't appear when you cancel evolution
-	Remove mainMenuTiles (can keep some for reference inside the images folder) but def move out of tiles
+	- generalize catch animation again
+	- connect interface gen with override input
+	- create some sort of silph surboard for Silph Surfer evolution
+	- self switching moves require input -- currently just switching to random
+	- green hat sprites
+	- Riding up on bike on foreground tiles causes tiles to flash
+    - Rocket grunt guys look like they're standing on the wall in the top of that tom tower thing
+	- Mirror move executes multi-turn moves in a single turn
+	- Choose/give a TM for beating gym leaders
+	- Blue needs to be in the Pokemon Center after you battle him
+	- Generalize double cast remove effects (example: Power Trick)
+	- Test that Shedinja is genderless when it evolves and that it doesn't appear when you cancel evolution
+	- Remove mainMenuTiles (can keep some for reference inside the images folder) but def move out of tiles
 		- same with pauseViewTiles
-	Berry harvest time and amounts
-	Look at light screen and light clay cast thingy -- why is it not applying turns to itself?
-	should movetypes be a set?
-	BasicPanels fullMessagePanel -- Is 440 game.height - panel.height?
-	TileSet getTile should use readImage in FileIO -- just check exists first
-	MoveUseItems do not work in battle -- causes NPE
-	Heal Block doesn't work right either
-	Dancer -- test with Snatch (should not activate); test with Flinched (should not activate)
-	test entering a new location while medals are displaying
-	Explosion doesn't kill the user when used against a Ghost type Pokemon
-	Rest shows the incorrect status prevent message -- just says "...but it failed!"
-	Bag View messages for evolution and learn moves
-    add brick break to defog/rapid spin tests
-    quick guard apparently not affected by successive decay?
-    beat up power was changed
-    triple kick power is supposed to be 10, 20, 30
-    foul play is all wrong
-    test healing wish and snatch
-    okay so Mirror Move is supposed to use the last move that targeted the user, not the last move that the opponent used... what is happening I did not know this
-    look at destiny bond and successive decay
-    metronome + multi-turn move is not working (Dive)
-    Wallet class (CashMoneyHouse?)
-    change order of move list
-    check flinch with multi turn moves -- should it always reset ready? or just for like smack down?
-    can selfconfusion remove itself inside totalandcompletefailure?
-    uproar specifically checks if pp runs out to remove effect -- should that be for other similar moves too?
-    remove effect inside subside -- then we can use it in more places
-    substitute almost certainly doesn't work with form change abilities for images at least (or transform etc)
-    make Marcos fix the substitute failure messaging problems I don't wanna do it
-    does using a berry (not hold item) not count as berry consumption??
-    probably have something to automatically remove previous effect if there can only be one (ChangeAbility etc)
-    should I get different sprites for Castform and Arceus and other Pokemon like that since it's partially setup now
-    cancelling evolution still consumes evolution item
-    is there some way to have like a FirstTriggeredCondition or something for things like items and a lot of other shit
-    is there a way to just create the button transitions from the button list by using all the button locations or something like that??
-    Al Bhed translation shouldn't be hardcoded -- just a flag on the area or something
+	- Berry harvest time and amounts
+	- Look at light screen and light clay cast thingy -- why is it not applying turns to itself?
+	- should movetypes be a set?
+	- BasicPanels fullMessagePanel -- Is 440 game.height - panel.height?
+	- TileSet getTile should use readImage in FileIO -- just check exists first
+	- MoveUseItems do not work in battle -- causes NPE
+	- Heal Block doesn't work right either
+	- Dancer -- test with Snatch (should not activate); test with Flinched (should not activate)
+	- test entering a new location while medals are displaying
+	- Explosion doesn't kill the user when used against a Ghost type Pokemon
+	- Rest shows the incorrect status prevent message -- just says "...but it failed!"
+	- Bag View messages for evolution and learn moves
+    - add brick break to defog/rapid spin tests
+    - quick guard apparently not affected by successive decay?
+    - beat up power was changed
+    - triple kick power is supposed to be 10, 20, 30
+    - foul play is all wrong
+    - test healing wish and snatch
+    - okay so Mirror Move is supposed to use the last move that targeted the user, not the last move that the opponent used... what is happening I did not know this
+    - look at destiny bond and successive decay
+    - metronome + multi-turn move is not working (Dive)
+    - Wallet class (CashMoneyHouse?)
+    - change order of move list
+    - check flinch with multi turn moves -- should it always reset ready? or just for like smack down?
+    - can selfconfusion remove itself inside totalandcompletefailure?
+    - uproar specifically checks if pp runs out to remove effect -- should that be for other similar moves too?
+    - remove effect inside subside -- then we can use it in more places
+    - substitute almost certainly doesn't work with form change abilities for images at least (or transform etc)
+    - make Marcos fix the substitute failure messaging problems I don't wanna do it
+    - does using a berry (not hold item) not count as berry consumption??
+    - probably have something to automatically remove previous effect if there can only be one (ChangeAbility etc)
+    - should I get different sprites for Castform and Arceus and other Pokemon like that since it's partially setup now
+    - cancelling evolution still consumes evolution item
+    - is there some way to have like a FirstTriggeredCondition or something for things like items and a lot of other shit
+    - is there a way to just create the button transitions from the button list by using all the button locations or something like that??
+    - Al Bhed translation shouldn't be hardcoded -- just a flag on the area or something
         - so if you put the flag on the area then when you talk to the rival he speaks Al Bhed...
-    uhhhhh so should I store the current battle on the player object???? would that just make everythinnnnggggggg better????
+    - uhhhhh so should I store the current battle on the player object???? would that just make everythinnnnggggggg better????
         - if I end up doing would definitely do the simulating check for medal case not everywhere
-    should probably have tests for moves that ignore stages
-    might make sense at this point to have types be their own classes (still enum like the namesies)
+    - should probably have tests for moves that ignore stages
+    - might make sense at this point to have types be their own classes (still enum like the namesies)
         - Powder moves with grass
         - lots and lots of status immunities etc
         - ghost types with trapping
-    not sure if I want to do anything with new flavor text entries (but after what happened with the classifications I'm wondering if this is more important)
-    I'm not sure we actually need to be replacing the names with special characters and it might be worth giving it another look (Nidoran F/M, Flabebe)
-    add more things to evolution test besides abilities
-    oran berry message prints before its super effective prints
-    toxic boost flare boost and marvel scale should be statusboosters
-    need like a 'b' button where you can click through things but can't start a new dialogue
-    opponent's trace message appears before your Pokemon is even out and looks really weird
-    maybe eventually have the View class have draw method as final, with setup, draw (foreground), and getButtonList/getPanelList abstract methods
-    would also be nice if there was some universal message handler thing instead of each class just holding a string or whatever
-    might be nice to have a recenter button in MapMaker to take to the center of the current loaded map (when you load a small map from a large one sometimes you just have no fucking idea where you are)
-    something weird about Comfey's party tile and fails when trimming
-    text wrapping should allow having a different startX for the first line so you can have a label in a different size (ability name and description for example)
-    move as much logic as possible out of views and just have them called from in there (buy from Mart is good example)
-    greyOut and highlight should also not reset every frame like skip
-    should egg hatching and evolving be separate views that extend the same view class or something?
-    StatGainPanel should maybe use the panel thing similar to the StatPanel
-    can we have a class that holds the arrow buttons and page number and shit like that
-    Pickup has Great and Ultra Balls in the list but these are no longer holdable items -- should remove and add a test that all items are holdable
-    Switch button should be inactive for the current pokemon in PokemonState
-    look at isInterior stuff in BattleView -- how is it ever not null??
-    BasicPanels.isAnimatingMessage should be checked before the view update method is called, not inside every view update
-    BasicPanels should be able to create a panel that sits on the message panel (stats, description, choices etc)
-    rewrite PokefinderState since it's super ugly -- probably want to add page numbers and such as well
-    pretty sure Infatuation lasts between Pokemon and it shouldn't
-    should probably rewrite the battle message system to pass the serialized battle around instead of whatever it's currently doing with storing every individual value and such
-    should have a moldBreaker effect for attacks and abilities and only include the attack when attacking
-    should also have a method that handles the mold breaker stuff instead of it being hardcoded in every single invoke method (probably in the MoldBreakerEffect class if I end up making that)
-    how would something like future sight work for mold breaker
-    mold breaker should work with Disguise and I don't think it does right now
-    new lines aren't done correctly for interfaces with comments and default methods/override
+    - not sure if I want to do anything with new flavor text entries (but after what happened with the classifications I'm wondering if this is more important)
+    - I'm not sure we actually need to be replacing the names with special characters and it might be worth giving it another look (Nidoran F/M, Flabebe)
+    - add more things to evolution test besides abilities
+    - oran berry message prints before its super effective prints
+    - toxic boost flare boost and marvel scale should be statusboosters
+    - need like a 'b' button where you can click through things but can't start a new dialogue
+    - opponent's trace message appears before your Pokemon is even out and looks really weird
+    - maybe eventually have the View class have draw method as final, with setup, draw (foreground), and getButtonList/getPanelList abstract methods
+    - would also be nice if there was some universal message handler thing instead of each class just holding a string or whatever
+    - might be nice to have a recenter button in MapMaker to take to the center of the current loaded map (when you load a small map from a large one sometimes you just have no fucking idea where you are)
+    - something weird about Comfey's party tile and fails when trimming
+    - text wrapping should allow having a different startX for the first line so you can have a label in a different size (ability name and description for example)
+    - move as much logic as possible out of views and just have them called from in there (buy from Mart is good example)
+    - greyOut and highlight should also not reset every frame like skip
+    - should egg hatching and evolving be separate views that extend the same view class or something?
+    - StatGainPanel should maybe use the panel thing similar to the StatPanel
+    - can we have a class that holds the arrow buttons and page number and shit like that
+    - Pickup has Great and Ultra Balls in the list but these are no longer holdable items -- should remove and add a test that all items are holdable
+    - Switch button should be inactive for the current pokemon in PokemonState
+    - look at isInterior stuff in BattleView -- how is it ever not null??
+    - BasicPanels.isAnimatingMessage should be checked before the view update method is called, not inside every view update
+    - BasicPanels should be able to create a panel that sits on the message panel (stats, description, choices etc)
+    - rewrite PokefinderState since it's super ugly -- probably want to add page numbers and such as well
+    - pretty sure Infatuation lasts between Pokemon and it shouldn't
+    - should probably rewrite the battle message system to pass the serialized battle around instead of - - whatever it's currently doing with storing every individual value and such
+    - should have a moldBreaker effect for attacks and abilities and only include the attack when attacking
+    - should also have a method that handles the mold breaker stuff instead of it being hardcoded in every - single invoke method (probably in the MoldBreakerEffect class if I end up making that)
+    - how would something like future sight work for mold breaker
+    - mold breaker should work with Disguise and I don't think it does right now
+    - new lines aren't done correctly for interfaces with comments and default methods/override
+    - misty terrain should block confusion now
+    - not levitating is not necessarily the same as being on the ground
+        - ex: terrain wants on the ground (not grounded), but like being underwater returns false for levitating also -- should there be a separate method?
+    - psychic terrain psychic boost decreased from 50% to 30%
+    - reflect type should fail if the target is typeless (like Fire-type Burn Up)
+    - test liquid voice + perish song + water absorb
+    - should getBestBattleStat method be in StatValues instead of ActivePokemon?
+    - Thick Club should work with GaraGara
+    - foresight/miracle eye don't reset positive evasion it ignores it
+    - critical hit chances were changed in gen 6 AND AGAIN  in gen 7
     
