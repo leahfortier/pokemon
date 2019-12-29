@@ -5291,8 +5291,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-            Effect.cast(PokemonEffectNamesies.RAISE_CRITS, b, user, user, source, true);
-            return true;
+            return Effect.apply(PokemonEffectNamesies.RAISE_CRITS, b, user, user, source, true).isSuccess();
         }
 
         @Override

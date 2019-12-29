@@ -209,7 +209,7 @@ class TestInfo {
         TestPokemon attacking = battle.getAttacking();
 
         int beforeStage = battle.getCritStage(attacking);
-        Assert.assertEquals(1, beforeStage);
+        Assert.assertEquals(0, beforeStage);
 
         this.manipulate(battle);
 

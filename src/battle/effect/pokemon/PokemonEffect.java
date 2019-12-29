@@ -66,7 +66,6 @@ import battle.effect.source.ChangeTypeSource;
 import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
 import item.hold.HoldItem;
-import main.Global;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.ability.Ability;
@@ -81,9 +80,7 @@ import util.RandomUtils;
 import util.serialization.Serializable;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 // Class to handle effects that are on a single Pokemon
 public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implements Serializable {
@@ -909,21 +906,19 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
+    // Used for Focus Energy, Dire Hit, Lansat Berry
+    // These effects do not stack with each other
+    // Ex: Dire Hit should fail if Focus Energy was already used etc.
     static class RaiseCrits extends PokemonEffect implements CritStageEffect, PassableEffect, MessageGetter {
         private static final long serialVersionUID = 1L;
 
-        // Contains the sources which have increased the crit stages so far
-        private Set<CastSource> sources;
-
         RaiseCrits() {
-            super(PokemonEffectNamesies.RAISE_CRITS, -1, -1, true, true);
-            this.sources = new HashSet<>();
+            super(PokemonEffectNamesies.RAISE_CRITS, -1, -1, false, false);
         }
 
         @Override
         public int increaseCritStage(ActivePokemon p) {
-            // Each source increases the stage by two
-            return 2*sources.size();
+            return 2;
         }
 
         @Override
@@ -939,39 +934,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getSourceMessage(ActivePokemon p, String sourceName) {
             return p.getName() + " is getting pumped due to its " + sourceName + "!";
-        }
-
-        @Override
-        public void alternateCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
-            this.addCastMessage(b, caster, victim, source, castMessage);
-            this.afterCast(b, caster, victim, source);
-        }
-
-        @Override
-        public void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            switch (source) {
-                case ATTACK:    // Focus Energy
-                case USE_ITEM:  // Dire Hit
-                case HELD_ITEM: // Lansat/Starf Berry
-                    this.sources.add(source);
-                    break;
-                default:
-                    Global.error("Unknown source for RaiseCrits effect.");
-                    break;
-            }
-        }
-
-        @Override
-        public ApplyResult applies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            // Fails if already increased from same source
-            if (victim.hasEffect(this.namesies())) {
-                RaiseCrits effect = (RaiseCrits)victim.getEffect(this.namesies());
-                if (effect.sources.contains(source)) {
-                    return ApplyResult.failure();
-                }
-            }
-
-            return ApplyResult.success();
         }
     }
 

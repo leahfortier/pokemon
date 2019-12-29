@@ -15,7 +15,7 @@ import util.serialization.Serializable;
 
 public class DamageCalculator {
     // Crit yo pants
-    private static final int[] CRITSICLES = { 16, 8, 4, 3, 2 };
+    private static final int[] CRITSICLES = { 24, 8, 2, 1 };
 
     public static class DamageCalculation implements Serializable {
         private static final long serialVersionUID = 1L;
@@ -135,12 +135,11 @@ public class DamageCalculator {
     // Does not include effects that always or never result in critical hits, ONLY the stage check
     protected boolean checkRandomCrit(Battle b, ActivePokemon me) {
         int stage = getCritStage(b, me);
-        return RandomUtils.chanceTest(1, CRITSICLES[stage - 1]);
+        stage = Math.min(stage, CRITSICLES.length - 1); // Max it out, yo
+        return RandomUtils.chanceTest(1, CRITSICLES[stage]);
     }
 
     public int getCritStage(Battle b, ActivePokemon me) {
-        int stage = 1 + CritStageEffect.getModifier(b, me);
-        stage = Math.min(stage, CRITSICLES.length); // Max it out, yo
-        return stage;
+        return CritStageEffect.getModifier(b, me);
     }
 }

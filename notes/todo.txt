@@ -191,5 +191,4 @@ Other random things:
     - should getBestBattleStat method be in StatValues instead of ActivePokemon?
     - Thick Club should work with GaraGara
     - foresight/miracle eye don't reset positive evasion it ignores it
-    - critical hit chances were changed in gen 6 AND AGAIN  in gen 7
     

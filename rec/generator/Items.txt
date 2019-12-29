@@ -1890,8 +1890,7 @@ Lansat Berry:
     HarvestHours: 72
     FixedBerryHealthTrigger: 4
     GainEffect:
-        Effect.cast(PokemonEffectNamesies.RAISE_CRITS, b, user, user, source, true);
-        return true;
+        return Effect.apply(PokemonEffectNamesies.RAISE_CRITS, b, user, user, source, true).isSuccess();
         ###
 *
 Starf Berry:

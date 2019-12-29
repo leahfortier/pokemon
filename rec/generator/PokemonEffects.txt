@@ -265,46 +265,17 @@ Disable:
         ###
 *
 RaiseCrits:
-    Field:
-        // Contains the sources which have increased the crit stages so far
-        private Set<CastSource> sources;
-        ###
-    Constructor:
-        this.sources = new HashSet<>();
-        ###
     Int: CritStageEffect, PassableEffect, MessageGetter
     IncreaseCritStage:
-        // Each source increases the stage by two
-        return 2*sources.size();
-        ###
-    FullEffectApplies:
-        // Fails if already increased from same source
-        if (victim.hasEffect(this.namesies())) {
-            RaiseCrits effect = (RaiseCrits)victim.getEffect(this.namesies());
-            if (effect.sources.contains(source)) {
-                return ApplyResult.failure();
-            }
-        }
+        return 2;
         ###
     CastMessage: this.getMessage(b, victim, source)
     GenericMessage: p.getName() + " is getting pumped!"
     SourceMessage: p.getName() + " is getting pumped due to its " + sourceName + "!"
-    CanHave: True
-    AlternateCast:
-        this.addCastMessage(b, caster, victim, source, castMessage);
-        this.afterCast(b, caster, victim, source);
-        ###
-    AfterCast:
-        switch (source) {
-            case ATTACK:    // Focus Energy
-            case USE_ITEM:  // Dire Hit
-            case HELD_ITEM: // Lansat/Starf Berry
-                this.sources.add(source);
-                break;
-            default:
-                Global.error("Unknown source for RaiseCrits effect.");
-                break;
-        }
+    Comments:
+        // Used for Focus Energy, Dire Hit, Lansat Berry
+        // These effects do not stack with each other
+        // Ex: Dire Hit should fail if Focus Energy was already used etc.
         ###
 *
 ChangeItem:

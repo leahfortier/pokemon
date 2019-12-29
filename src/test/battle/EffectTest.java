@@ -304,26 +304,26 @@ public class EffectTest extends BaseTest {
 
     @Test
     public void critStageTest() {
-        checkCritStage(1, new TestInfo().with(AttackNamesies.TACKLE));
+        checkCritStage(0, new TestInfo().with(AttackNamesies.TACKLE));
 
         // +1 crit stage when using -- but no effect when used previously
-        checkCritStage(2, new TestInfo().with(AttackNamesies.RAZOR_LEAF));
-        checkCritStage(1, new TestInfo().attackingFight(AttackNamesies.RAZOR_LEAF).with(AttackNamesies.TACKLE));
+        checkCritStage(1, new TestInfo().with(AttackNamesies.RAZOR_LEAF));
+        checkCritStage(0, new TestInfo().attackingFight(AttackNamesies.RAZOR_LEAF).with(AttackNamesies.TACKLE));
 
         // +2 crit stage when used, but not when using (I guess it's a status move so it technically doesn't have a stage but whatever)
-        checkCritStage(3, new TestInfo().attackingFight(AttackNamesies.FOCUS_ENERGY).with(AttackNamesies.TACKLE));
-        checkCritStage(1, new TestInfo().with(AttackNamesies.FOCUS_ENERGY));
+        checkCritStage(2, new TestInfo().attackingFight(AttackNamesies.FOCUS_ENERGY).with(AttackNamesies.TACKLE));
+        checkCritStage(0, new TestInfo().with(AttackNamesies.FOCUS_ENERGY));
 
         // +2 after using Dire Hit (can only use once -- should fail if used again)
-        checkCritStage(3, new TestInfo().with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT)));
-        checkCritStage(3, new TestInfo()
+        checkCritStage(2, new TestInfo().with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT)));
+        checkCritStage(2, new TestInfo()
                 .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, true))
                 .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, false))
         );
 
         // +2 from Lansat Berry when health is below 1/4
-        checkCritStage(1, new TestInfo().attacking(ItemNamesies.LANSAT_BERRY));
-        checkCritStage(1, new TestInfo()
+        checkCritStage(0, new TestInfo().attacking(ItemNamesies.LANSAT_BERRY));
+        checkCritStage(0, new TestInfo()
                 .attacking(ItemNamesies.LANSAT_BERRY)
                 .with((battle, attacking, defending) -> {
                     // Not enough
@@ -331,56 +331,69 @@ public class EffectTest extends BaseTest {
                     attacking.assertHealthRatio(.5);
                 })
         );
-        checkCritStage(3, new TestInfo()
-                .attacking(PokemonNamesies.BULBASAUR, ItemNamesies.LANSAT_BERRY)
-                .with((battle, attacking, defending) -> {
-                    attacking.assertNotConsumedItem(battle);
-                    battle.falseSwipePalooza(false);
-                    attacking.assertConsumedBerry(battle);
-                })
-        );
+        PokemonManipulator lansatBerry = (battle, attacking, defending) -> {
+            attacking.withItem(ItemNamesies.LANSAT_BERRY);
+            attacking.assertNotConsumedItem(battle);
+            battle.falseSwipePalooza(false);
+            attacking.assertConsumedBerry(battle);
+            attacking.hasEffect(PokemonEffectNamesies.RAISE_CRITS);
+        };
+        checkCritStage(2, new TestInfo().with(lansatBerry));
 
         // Razor Claw and Scope Lens increase by 1
-        checkCritStage(2, new TestInfo().attacking(ItemNamesies.RAZOR_CLAW));
-        checkCritStage(2, new TestInfo().attacking(ItemNamesies.SCOPE_LENS));
+        checkCritStage(1, new TestInfo().attacking(ItemNamesies.RAZOR_CLAW));
+        checkCritStage(1, new TestInfo().attacking(ItemNamesies.SCOPE_LENS));
 
         // Lucky Punch increases by 2 but only for Chansey (Night Slash is also +1 when using)
-        checkCritStage(2, new TestInfo().attacking(PokemonNamesies.CHANSEY).with(AttackNamesies.NIGHT_SLASH));
-        checkCritStage(4, new TestInfo().attacking(PokemonNamesies.CHANSEY, ItemNamesies.LUCKY_PUNCH).with(AttackNamesies.NIGHT_SLASH));
-        checkCritStage(2, new TestInfo().attacking(PokemonNamesies.FARFETCHD, ItemNamesies.LUCKY_PUNCH).with(AttackNamesies.NIGHT_SLASH));
+        checkCritStage(1, new TestInfo().attacking(PokemonNamesies.CHANSEY).with(AttackNamesies.NIGHT_SLASH));
+        checkCritStage(3, new TestInfo().attacking(PokemonNamesies.CHANSEY, ItemNamesies.LUCKY_PUNCH).with(AttackNamesies.NIGHT_SLASH));
+        checkCritStage(1, new TestInfo().attacking(PokemonNamesies.FARFETCHD, ItemNamesies.LUCKY_PUNCH).with(AttackNamesies.NIGHT_SLASH));
 
         // Stick increases by 2 but only for Farfetch'd
-        checkCritStage(3, new TestInfo().attacking(PokemonNamesies.FARFETCHD, ItemNamesies.STICK));
-        checkCritStage(1, new TestInfo().attacking(PokemonNamesies.CHANSEY, ItemNamesies.STICK));
+        checkCritStage(2, new TestInfo().attacking(PokemonNamesies.FARFETCHD, ItemNamesies.STICK));
+        checkCritStage(0, new TestInfo().attacking(PokemonNamesies.CHANSEY, ItemNamesies.STICK));
 
         // Super Luck increases by 1 (unaffected by Mold Breaker)
-        checkCritStage(2, new TestInfo().attacking(AbilityNamesies.SUPER_LUCK));
-        checkCritStage(2, new TestInfo().attacking(AbilityNamesies.SUPER_LUCK).defending(AbilityNamesies.MOLD_BREAKER));
+        checkCritStage(1, new TestInfo().attacking(AbilityNamesies.SUPER_LUCK));
+        checkCritStage(1, new TestInfo().attacking(AbilityNamesies.SUPER_LUCK).defending(AbilityNamesies.MOLD_BREAKER));
 
-        // Effects should stack
-        checkCritStage(5, new TestInfo()
+        // Focus Energy/Dire Hit/Lansat Berry do not stack with each other
+        checkCritStage(2, new TestInfo()
+                .attackingFight(AttackNamesies.FOCUS_ENERGY)
+                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, false))
+        );
+        checkCritStage(2, new TestInfo()
+                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, true))
+                .attackingFight(AttackNamesies.FOCUS_ENERGY)
+        );
+        checkCritStage(2, new TestInfo()
+                .attackingFight(AttackNamesies.FOCUS_ENERGY)
+                .with(lansatBerry)
+        );
+        checkCritStage(2, new TestInfo()
+                .with(lansatBerry)
+                .attackingFight(AttackNamesies.FOCUS_ENERGY)
+        );
+        checkCritStage(2, new TestInfo()
+                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, true))
+                .with(lansatBerry)
+        );
+        checkCritStage(2, new TestInfo()
+                .with(lansatBerry)
+                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, false))
+        );
+
+        // All other effects stack together though -- attack, ability, held item, additional effects (focus energy etc)
+        checkCritStage(4, new TestInfo()
                 .attacking(PokemonNamesies.CHANSEY, ItemNamesies.LUCKY_PUNCH)
                 .attacking(AbilityNamesies.SUPER_LUCK)
                 .with(AttackNamesies.NIGHT_SLASH)
         );
-
-        checkCritStage(5, new TestInfo()
-                .attackingFight(AttackNamesies.FOCUS_ENERGY)
-                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT))
-        );
-
-        checkCritStage(5, new TestInfo()
-                .attackingFight(AttackNamesies.FOCUS_ENERGY)
-                .attacking(ItemNamesies.LANSAT_BERRY).with((battle, attacking, defending) -> battle.falseSwipePalooza(false))
-        );
-
-        // Can't go over the max
-        checkCritStage(5, new TestInfo()
-                .attacking(PokemonNamesies.CHANSEY, ItemNamesies.LUCKY_PUNCH)
+        checkCritStage(6, new TestInfo()
+                .attacking(PokemonNamesies.FARFETCHD, ItemNamesies.STICK)
                 .attacking(AbilityNamesies.SUPER_LUCK)
-                .with(AttackNamesies.NIGHT_SLASH)
                 .attackingFight(AttackNamesies.FOCUS_ENERGY)
-                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT))
+                .with(AttackNamesies.RAZOR_LEAF)
         );
     }
 
