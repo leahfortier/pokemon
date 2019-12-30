@@ -192,7 +192,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            if (enterer.isLevitating(b)) {
+            if (!enterer.isOnTheGround(b)) {
                 return;
             }
 
@@ -251,7 +251,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             // Can't touch this
-            if (enterer.isLevitating(b)) {
+            if (!enterer.isOnTheGround(b)) {
                 return;
             }
 
@@ -308,7 +308,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            if (!enterer.isLevitating(b)) {
+            if (enterer.isOnTheGround(b)) {
                 enterer.reduceHealthFraction(b, this.getReduceFraction(), enterer.getName() + " was hurt by spikes!");
             }
         }

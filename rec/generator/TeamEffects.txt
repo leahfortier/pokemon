@@ -33,7 +33,7 @@ AuroraVeil:
 *
 StickyWeb:
     Enter:
-        if (enterer.isLevitating(b)) {
+        if (!enterer.isOnTheGround(b)) {
             return;
         }
 
@@ -63,7 +63,7 @@ ToxicSpikes:
         ###
     Enter:
         // Can't touch this
-        if (enterer.isLevitating(b)) {
+        if (!enterer.isOnTheGround(b)) {
             return;
         }
         
@@ -106,7 +106,7 @@ Spikes:
         this.layers = 1;
         ###
     Enter: 
-        if (!enterer.isLevitating(b)) {
+        if (enterer.isOnTheGround(b)) {
             enterer.reduceHealthFraction(b, this.getReduceFraction(), enterer.getName() + " was hurt by spikes!");
         }
         ###

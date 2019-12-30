@@ -339,7 +339,7 @@ public abstract class Attack implements AttackInterface {
             return false;
         }
 
-        // Self-target moves and field moves don't need to take type advantage always work
+        // Self-target status moves and field moves don't need to take type advantage always work
         if (this.isSelfTargetStatusMove() || this.isMoveType(MoveType.FIELD)) {
             return true;
         }
@@ -10088,7 +10088,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isGrounded(b);
+            return victim.isOnTheGround(b);
         }
     }
 

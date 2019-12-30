@@ -832,7 +832,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean trapOpponent(Battle b, ActivePokemon escaper, ActivePokemon trapper) {
-            return !escaper.isLevitating(b);
+            return escaper.isOnTheGround(b);
         }
 
         @Override

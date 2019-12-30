@@ -15,37 +15,45 @@ MistyTerrain:
     SubsideMessage: "The mist disappeared from the battlefield."
     Terrain: Misty
     StatusPrevent:
-        // Levitating Pokemon are immune to the mist
-        if (!victim.isLevitating(b)) {
+        // Levitating Pokemon can still receive status conditions
+        if (victim.isOnTheGround(b)) {
             return ApplyResult.failure("The protective mist prevents status conditions!");
         }
         ###
+    FullEffectPrevent:
+        // No confusion for the groundies
+        if (effectName == PokemonEffectNamesies.CONFUSION && victim.isOnTheGround(b)) {
+            return ApplyResult.failure("The protective mist prevents confusion!");
+        }
+                
+        return ApplyResult.success();
+        ###
     Comments: // Dragon type moves have halved power during the misty terrain
-    PowerMultiplierCondition: .5 user.isAttackType(Type.DRAGON) && !user.isLevitating(b)
+    PowerMultiplierCondition: .5 user.isAttackType(Type.DRAGON) && victim.isOnTheGround(b)
 *
 GrassyTerrain:
     CastMessage: "Grass sprouted around the battlefield!"
     SubsideMessage: "The grass withered and died."
     Terrain: Grass
     BattleEndTurn:
-        if (!victim.isLevitating(b)) {
+        if (victim.isOnTheGround(b)) {
             victim.healHealthFraction(1/16.0, b, victim.getName() + " restored some HP due to the Grassy Terrain!");
         }
         ###
-    Comments: // Grass-type moves are 50% stronger with the grassy terrain
-    PowerMultiplierCondition: 1.5 user.isAttackType(Type.GRASS) && !user.isLevitating(b)
+    Comments: // Grass-type moves are 30% stronger with the grassy terrain
+    PowerMultiplierCondition: 1.3 user.isAttackType(Type.GRASS) && user.isOnTheGround(b)
 *
 ElectricTerrain:
     CastMessage: "Electricity crackled around the battlefield!"
     SubsideMessage: "The electricity dissipated."
     Terrain: Electric
     StatusPrevent:
-        if (status == StatusNamesies.ASLEEP && !victim.isLevitating(b)) {
+        if (status == StatusNamesies.ASLEEP && victim.isOnTheGround(b)) {
             return ApplyResult.failure("The electric terrain prevents sleep!");
         }
         ###
-    Comments: // Electric-type moves are 50% stronger with the electric terrain
-    PowerMultiplierCondition: 1.5 user.isAttackType(Type.ELECTRIC) && !user.isLevitating(b)
+    Comments: // Electric-type moves are 30% stronger with the electric terrain
+    PowerMultiplierCondition: 1.3 user.isAttackType(Type.ELECTRIC) && user.isOnTheGround(b)
 *
 PsychicTerrain:
     CastMessage: "Psychic energy envelops the battlefield!!!"
@@ -54,8 +62,8 @@ PsychicTerrain:
     Int: AttackBlocker
     Block:
         // Psychic terrain prevents increased priority moves from hitting
-        return b.getAttackPriority(user) > 0 && !victim.isLevitating(b);
+        return b.getAttackPriority(user) > 0 && victim.isOnTheGround(b);
         ###
-    Comments: // Psychic-type moves are 50% stronger with the psychic terrain
-    PowerMultiplierCondition: 1.5 user.isAttackType(Type.PSYCHIC) && !user.isLevitating(b)
+    Comments: // Psychic-type moves are 30% stronger with the psychic terrain
+    PowerMultiplierCondition: 1.3 user.isAttackType(Type.PSYCHIC) && user.isOnTheGround(b)
 *

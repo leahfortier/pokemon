@@ -5964,7 +5964,7 @@ Rototiller:
     SelfTarget: True
     Cat: Status
     StatChange: Attack 1 Sp_Attack 1
-    Applies: user.isGrounded(b)
+    Applies: victim.isOnTheGround(b)
 *
 Water Shuriken:
     Desc: The user hits the target with throwing stars two to five times in a row. This move always goes first.

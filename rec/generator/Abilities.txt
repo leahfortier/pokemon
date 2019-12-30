@@ -249,7 +249,7 @@ Dry Skin:
 *
 Arena Trap:
     Desc: Prevents opposing Pok\u00e9mon from fleeing.
-    OpponentTrappingAbility: !escaper.isLevitating(b)
+    OpponentTrappingAbility: escaper.isOnTheGround(b)
     EncounterRateMultiplier: 2
 *
 Technician:

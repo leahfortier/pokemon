@@ -786,6 +786,13 @@ public class ActivePokemon extends PartyPokemon {
         return GroundedEffect.containsGroundedEffect(b, this);
     }
 
+    // Used for things like checking if the Pokemon should be affected by terrain and such
+    // Not quite the same as the opposite of levitating and very different from being grounded (which implies force)
+    // For example, not levitating would return true for a Pokemon that is digging or diving for example
+    public boolean isOnTheGround(Battle b) {
+        return !this.isLevitating(b) && !this.isSemiInvulnerable();
+    }
+
     public boolean isLevitating(Battle b) {
         return isLevitating(b, null, true);
     }

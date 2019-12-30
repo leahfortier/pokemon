@@ -41,17 +41,17 @@ public class ModifierTest extends BaseTest {
         statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.SANDYGAST).defending(WeatherNamesies.SANDSTORM));
         statModifierTest(1, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.GEODUDE).defending(WeatherNamesies.SANDSTORM));
 
-        statModifierTest(2, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.LANTURN).defending(ItemNamesies.DEEP_SEA_SCALE));
-        statModifierTest(2, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.CHINCHOU).defending(ItemNamesies.DEEP_SEA_SCALE));
-        statModifierTest(2, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.CLAMPERL).defending(ItemNamesies.DEEP_SEA_SCALE));
-        statModifierTest(1, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.CLAMPERL).defending(ItemNamesies.DEEP_SEA_SCALE));
-        statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.HUNTAIL).defending(ItemNamesies.DEEP_SEA_SCALE));
+        statModifierTest(2, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.LANTURN, ItemNamesies.DEEP_SEA_SCALE));
+        statModifierTest(2, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.CHINCHOU, ItemNamesies.DEEP_SEA_SCALE));
+        statModifierTest(2, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.CLAMPERL, ItemNamesies.DEEP_SEA_SCALE));
+        statModifierTest(1, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.CLAMPERL, ItemNamesies.DEEP_SEA_SCALE));
+        statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.HUNTAIL, ItemNamesies.DEEP_SEA_SCALE));
 
-        statModifierTest(1.5, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.DRAGONAIR).defending(ItemNamesies.EVIOLITE));
-        statModifierTest(1.5, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.CHANSEY).defending(ItemNamesies.EVIOLITE));
-        statModifierTest(1, Stat.SPEED, User.ATTACKING, new TestInfo().defending(PokemonNamesies.CHANSEY).defending(ItemNamesies.EVIOLITE));
-        statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.HUNTAIL).defending(ItemNamesies.EVIOLITE));
-        statModifierTest(1, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.RAICHU).defending(ItemNamesies.EVIOLITE));
+        statModifierTest(1.5, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.DRAGONAIR, ItemNamesies.EVIOLITE));
+        statModifierTest(1.5, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.CHANSEY, ItemNamesies.EVIOLITE));
+        statModifierTest(1, Stat.SPEED, User.DEFENDING, new TestInfo().defending(PokemonNamesies.CHANSEY, ItemNamesies.EVIOLITE));
+        statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.HUNTAIL, ItemNamesies.EVIOLITE));
+        statModifierTest(1, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.RAICHU, ItemNamesies.EVIOLITE));
 
         statModifierTest(2, Stat.SPEED, User.ATTACKING, new TestInfo().attacking(AbilityNamesies.CHLOROPHYLL).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().attacking(AbilityNamesies.CHLOROPHYLL).attacking(WeatherNamesies.SUNNY));
@@ -207,15 +207,18 @@ public class ModifierTest extends BaseTest {
     @Test
     public void terrainTest() {
         // Terrain effects boost/lower the power of certain types of moves
-        powerChangeTest(1.5, AttackNamesies.THUNDER, new TestInfo().attacking(TerrainNamesies.ELECTRIC_TERRAIN));
-        powerChangeTest(1.5, AttackNamesies.PSYCHIC, new TestInfo().attacking(TerrainNamesies.PSYCHIC_TERRAIN));
-        powerChangeTest(1.5, AttackNamesies.SOLAR_BEAM, new TestInfo().attacking(TerrainNamesies.GRASSY_TERRAIN));
+        powerChangeTest(1.3, AttackNamesies.THUNDER, new TestInfo().attacking(TerrainNamesies.ELECTRIC_TERRAIN));
+        powerChangeTest(1.3, AttackNamesies.PSYCHIC, new TestInfo().attacking(TerrainNamesies.PSYCHIC_TERRAIN));
+        powerChangeTest(1.3, AttackNamesies.SOLAR_BEAM, new TestInfo().attacking(TerrainNamesies.GRASSY_TERRAIN));
         powerChangeTest(.5, AttackNamesies.OUTRAGE, new TestInfo().attacking(TerrainNamesies.MISTY_TERRAIN));
+
+        // Does not matter if the recipient is levitating
+        powerChangeTest(1.3, AttackNamesies.THUNDER, new TestInfo().attacking(TerrainNamesies.ELECTRIC_TERRAIN).defending(PokemonNamesies.DRAGONITE));
 
         // Different move type -- no change
         powerChangeTest(1, AttackNamesies.DAZZLING_GLEAM, new TestInfo().attacking(TerrainNamesies.MISTY_TERRAIN));
 
-        // Float with Flying -- no change
+        // Float with Flying type -- no change
         powerChangeTest(1, AttackNamesies.PSYBEAM, new TestInfo().attacking(PokemonNamesies.PIDGEOT, TerrainNamesies.PSYCHIC_TERRAIN));
 
         // Float with Levitate -- no change
@@ -223,6 +226,12 @@ public class ModifierTest extends BaseTest {
 
         // Float with telekinesis -- no change
         powerChangeTest(1, AttackNamesies.VINE_WHIP, new TestInfo().attacking(PokemonEffectNamesies.TELEKINESIS).attacking(TerrainNamesies.GRASSY_TERRAIN));
+
+        // Misty Terrain checks the recipient of the attack for groundedness
+        // Flying-type Dragonite should still have a reduced power
+        // But if the recipient is floating with flying type, then the attack has neutral damage
+        powerChangeTest(.5, AttackNamesies.OUTRAGE, new TestInfo().attacking(PokemonNamesies.DRAGONITE, TerrainNamesies.MISTY_TERRAIN));
+        powerChangeTest(1, AttackNamesies.OUTRAGE, new TestInfo().attacking(TerrainNamesies.MISTY_TERRAIN).defending(PokemonNamesies.DRAGONITE));
     }
 
     // No modifier without manipulation, expectedModifier with it
@@ -621,8 +630,18 @@ public class ModifierTest extends BaseTest {
         PokemonManipulator lansatBerry = (battle, attacking, defending) -> {
             attacking.withItem(ItemNamesies.LANSAT_BERRY);
             attacking.assertNotConsumedItem(battle);
+
+            // If the Pokemon already has an increased crit ratio, Lansat Berry cannot further increase and should not be consumed
+            boolean hasCrits = attacking.hasEffect(PokemonEffectNamesies.RAISE_CRITS);
+
             battle.falseSwipePalooza(false);
-            attacking.assertConsumedBerry(battle);
+            if (hasCrits) {
+                attacking.assertNotConsumedItem(battle);
+                attacking.assertHoldingItem(battle, ItemNamesies.LANSAT_BERRY);
+            } else {
+                attacking.assertConsumedBerry(battle);
+            }
+
             attacking.hasEffect(PokemonEffectNamesies.RAISE_CRITS);
         };
         checkCritStage(2, new TestInfo().with(lansatBerry));
