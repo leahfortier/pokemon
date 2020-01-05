@@ -1606,7 +1606,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean canModifyStat(Battle b, ActivePokemon p, ActivePokemon opp) {
-            return p.isPokemon(PokemonNamesies.CUBONE, PokemonNamesies.MAROWAK);
+            return p.isPokemon(PokemonNamesies.CUBONE, PokemonNamesies.MAROWAK, PokemonNamesies.GARA_GARA);
         }
 
         @Override

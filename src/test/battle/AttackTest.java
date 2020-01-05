@@ -34,6 +34,7 @@ import pokemon.stat.Stat;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
+import type.PokeType;
 import type.Type;
 import util.GeneralUtils;
 
@@ -2316,5 +2317,72 @@ public class AttackTest extends BaseTest {
         // Damage multiplier should only happen once though (even with multiple tar shots)
         attacking.setExpectedDamageModifier(numTar == 0 ? 1.0 : 2.0);
         battle.fight(AttackNamesies.INCINERATE, AttackNamesies.ENDURE);
+    }
+
+    @Test
+    public void reflectTypeTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        reflectTypeTest(battle, attacking, Type.GRASS, Type.POISON);
+        reflectTypeTest(battle, defending, Type.FIRE);
+
+        // Turn Charmander into Bulby types
+        battle.defendingFight(AttackNamesies.REFLECT_TYPE);
+        reflectTypeTest(battle, attacking, Type.GRASS, Type.POISON);
+        reflectTypeTest(battle, defending, Type.GRASS, Type.POISON);
+
+        // Now Charmander is covered in Water and therefore is LIKE WATER
+        battle.attackingFight(AttackNamesies.SOAK);
+        reflectTypeTest(battle, attacking, Type.GRASS, Type.POISON);
+        reflectTypeTest(battle, defending, Type.WATER);
+
+        // Bulby can Reflect Type into a changed type no problem
+        battle.attackingFight(AttackNamesies.REFLECT_TYPE);
+        reflectTypeTest(battle, attacking, Type.WATER);
+        reflectTypeTest(battle, defending, Type.WATER);
+
+        // Jk don't want any of that anymore
+        battle.clearAllEffects();
+        reflectTypeTest(battle, attacking, Type.GRASS, Type.POISON);
+        reflectTypeTest(battle, defending, Type.FIRE);
+
+        // BURN UP THAT FLAME STUFF
+        battle.fight(AttackNamesies.ENDURE, AttackNamesies.BURN_UP);
+        reflectTypeTest(battle, attacking, Type.GRASS, Type.POISON);
+        reflectTypeTest(battle, defending, Type.NO_TYPE);
+
+        // Reflect Type should fail against non-types
+        battle.attackingFight(AttackNamesies.REFLECT_TYPE);
+        Assert.assertFalse(attacking.lastMoveSucceeded());
+        reflectTypeTest(battle, attacking, Type.GRASS, Type.POISON);
+        reflectTypeTest(battle, defending, Type.NO_TYPE);
+    }
+
+    private void reflectTypeTest(TestBattle battle, TestPokemon p, Type soloType) {
+        reflectTypeTest(battle, p, soloType, Type.NO_TYPE);
+    }
+
+    private void reflectTypeTest(TestBattle battle, TestPokemon p, Type firstType, Type secondType) {
+        p.assertType(battle, firstType);
+        p.assertType(battle, secondType);
+
+        PokeType type = p.getType(battle);
+        Assert.assertEquals(type, new PokeType(firstType, secondType));
+        Assert.assertEquals(firstType, type.getFirstType());
+        Assert.assertEquals(secondType, type.getSecondType());
+        Assert.assertEquals(secondType != Type.NO_TYPE, type.isDualTyped());
+
+        // If the current type is different that the base Pokemon type then it should have this effect
+        PokeType baseType = p.getPokemonInfo().getType();
+        boolean sameType = type.equals(baseType);
+        p.assertEffect(!sameType, PokemonEffectNamesies.CHANGE_TYPE);
+
+        // If type has been changed, make sure they return false for old type (unless there is overlap)
+        Type firstBase = baseType.getFirstType();
+        Type secondBase = baseType.getSecondType();
+        Assert.assertEquals(type.isType(firstBase), p.isType(battle, firstBase));
+        Assert.assertEquals(type.isType(secondBase), p.isType(battle, secondBase));
     }
 }

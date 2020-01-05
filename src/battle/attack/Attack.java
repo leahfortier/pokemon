@@ -6380,6 +6380,11 @@ public abstract class Attack implements AttackInterface {
     static class ReflectType extends Attack implements ChangeTypeSource {
         private static final long serialVersionUID = 1L;
 
+        // Returns the type of the other Pokemon (to be copied by the victim)
+        private PokeType getReflectType(Battle b, ActivePokemon victim) {
+            return b.getOtherPokemon(victim).getType(b);
+        }
+
         ReflectType() {
             super(AttackNamesies.REFLECT_TYPE, Type.NORMAL, MoveCategory.STATUS, 15, "The user reflects the target's type, making it the same type as the target.");
             super.effect = PokemonEffectNamesies.CHANGE_TYPE;
@@ -6389,8 +6394,14 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            PokeType type = b.getOtherPokemon(caster).getType(b);
+            PokeType type = this.getReflectType(b, victim);
             return new PokeType(type.getFirstType(), type.getSecondType());
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Fails if the Pokemon just straight up has no type
+            return this.getReflectType(b, victim).getFirstType() != Type.NO_TYPE;
         }
     }
 

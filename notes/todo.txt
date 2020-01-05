@@ -182,9 +182,7 @@ Other random things:
     - how would something like future sight work for mold breaker
     - mold breaker should work with Disguise and I don't think it does right now
     - new lines aren't done correctly for interfaces with comments and default methods/override
-    - reflect type should fail if the target is typeless (like Fire-type Burn Up)
     - test liquid voice + perish song + water absorb
     - should getBestBattleStat method be in StatValues instead of ActivePokemon?
-    - Thick Club should work with GaraGara
     - foresight/miracle eye don't reset positive evasion it ignores it
     

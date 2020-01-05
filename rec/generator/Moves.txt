@@ -3725,8 +3725,18 @@ Reflect Type:
     SelfTarget: True
     PokemonEffect: ChangeType
     ChangeType:
-        PokeType type = b.getOtherPokemon(caster).getType(b);
+        PokeType type = this.getReflectType(b, victim);
         return new PokeType(type.getFirstType(), type.getSecondType());
+        ###
+    FullApplies:
+        // Fails if the Pokemon just straight up has no type
+        return this.getReflectType(b, victim).getFirstType() != Type.NO_TYPE;
+        ###
+    Field:
+        // Returns the type of the other Pokemon (to be copied by the victim)
+        private PokeType getReflectType(Battle b, ActivePokemon victim) {
+            return b.getOtherPokemon(victim).getType(b);
+        }
         ###
     MoveType: Non_Snatchable
 *

@@ -67,6 +67,15 @@ public class PokeType implements Iterable<Type>, Serializable {
         return Arrays.asList(this.getTypes()).iterator();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof PokeType) {
+            PokeType type = (PokeType)obj;
+            return this.firstType == type.firstType && this.secondType == type.secondType;
+        }
+        return false;
+    }
+
     public static Color[] getColors(PokemonNamesies pokemonNamesies) {
         return pokemonNamesies.getInfo().getType().getColors();
     }

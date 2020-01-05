@@ -551,7 +551,7 @@ Thick Club:
     Desc: An item to be held by Cubone or Marowak. It's a hard bone of some sort that boosts the Attack stat.
     Price: 1000
     Fling: 90
-    ToModifyMultiplier: Attack 2 p.isPokemon(PokemonNamesies.CUBONE, PokemonNamesies.MAROWAK)
+    ToModifyMultiplier: Attack 2 p.isPokemon(PokemonNamesies.CUBONE, PokemonNamesies.MAROWAK, PokemonNamesies.GARA_GARA)
 *
 Weakness Policy:
     Int: HoldItem, TakeDamageEffect
