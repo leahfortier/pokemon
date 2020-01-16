@@ -1580,7 +1580,9 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-            murderer.getStages().modifyStage(murderer, 1, murderer.getBestBattleStat(), b, CastSource.ABILITY);
+            // Increase highest stat when it murders
+            Stat bestStat = murderer.stats().getBestBattleStat();
+            murderer.getStages().modifyStage(murderer, 1, bestStat, b, CastSource.ABILITY);
         }
     }
 

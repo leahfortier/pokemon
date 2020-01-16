@@ -245,9 +245,7 @@ public class AttackTest extends BaseTest {
     public void selfSwitchingMoves() {
         TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.CHANSEY, PokemonNamesies.SHUCKLE);
         TestPokemon attacking1 = battle.getAttacking();
-        TestPokemon attacking2 = TestPokemon.newPlayerPokemon(PokemonNamesies.HAPPINY);
-        battle.getPlayer().addPokemon(attacking2);
-
+        TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.HAPPINY);
         Assert.assertTrue(battle.isFront(attacking1));
 
         // Use U-Turn -- make sure they swap
@@ -262,9 +260,7 @@ public class AttackTest extends BaseTest {
     public void swapOpponentMoves() {
         TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.STEELIX, PokemonNamesies.SHUCKLE);
         TestPokemon attacking1 = battle.getAttacking();
-        TestPokemon attacking2 = TestPokemon.newPlayerPokemon(PokemonNamesies.REGIROCK);
-        battle.getPlayer().addPokemon(attacking2);
-
+        TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.REGIROCK);
         Assert.assertSame(battle.getAttacking(), attacking1);
 
         // Use Dragon Tail -- make sure they swap
@@ -2066,8 +2062,7 @@ public class AttackTest extends BaseTest {
     public void jawLockTest() {
         TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
         TestPokemon attacking1 = battle.getAttacking();
-        TestPokemon attacking2 = TestPokemon.newPlayerPokemon(PokemonNamesies.SHUCKLE);
-        battle.getPlayer().addPokemon(attacking2);
+        TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.SHUCKLE);
 
         // Make sure correct Pokemon are out front and they can escape just fine
         jawLockTest(battle, attacking1, false);

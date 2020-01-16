@@ -11,12 +11,12 @@ import org.junit.Test;
 import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
+import pokemon.active.StatValues;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
-import trainer.EnemyTrainer;
 import type.Type;
 import type.TypeAdvantage;
 
@@ -469,8 +469,7 @@ public class AbilityTest extends BaseTest {
         TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
         TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.INNER_FOCUS);
         TestPokemon defending1 = battle.getDefending();
-        TestPokemon defending2 = TestPokemon.newTrainerPokemon(PokemonNamesies.SHUCKLE).withAbility(AbilityNamesies.MOLD_BREAKER);
-        ((EnemyTrainer)battle.getOpponent()).addPokemon(defending2);
+        TestPokemon defending2 = battle.addDefending(PokemonNamesies.SHUCKLE).withAbility(AbilityNamesies.MOLD_BREAKER);
         Assert.assertSame(battle.getDefending(), defending1);
 
         // Not fucking Sturdy
@@ -1275,5 +1274,125 @@ public class AbilityTest extends BaseTest {
     private void magicBounceTest(AttackNamesies attackNamesies, TestInfo testInfo, PokemonManipulator withoutBounce, PokemonManipulator withBounce) {
         testInfo.attackingFight(attackNamesies);
         testInfo.doubleTake(AbilityNamesies.MAGIC_BOUNCE, withoutBounce, withBounce);
+    }
+
+    @Test
+    public void beastBoostTest() {
+        // These Pokemon should always boost the specified stat when murdering
+        beastBoostTest(PokemonNamesies.KARTANA, Stat.ATTACK);
+        beastBoostTest(PokemonNamesies.STAKATAKA, Stat.DEFENSE);
+        beastBoostTest(PokemonNamesies.XURKITREE, Stat.SP_ATTACK);
+        beastBoostTest(PokemonNamesies.REGICE, Stat.SP_DEFENSE);
+        beastBoostTest(PokemonNamesies.NINJASK, Stat.SPEED);
+
+        // Make sure test still works with a Special Attack (should be irrelevant)
+        beastBoostTest(PokemonNamesies.KARTANA, Stat.ATTACK, AttackNamesies.SWIFT);
+
+        // Make sure boost does not occur when the target is knocked out by indirect damage (like burn)
+        beastBoostTest(PokemonNamesies.KARTANA, Stat.ATTACK, AttackNamesies.WILL_O_WISP, new TestStages());
+
+        // Beast Boost only looks at the base stats and should not take stages into account
+        beastBoostTest(
+                PokemonNamesies.BASTIODON, Stat.DEFENSE, AttackNamesies.TACKLE,
+                new TestStages().set(6, Stat.SP_DEFENSE).set(-5, Stat.DEFENSE),
+                (battle, attacking, defending) -> {
+                    // Defense is naturally higher than Sp. Defense
+                    int def = Stat.getStat(Stat.DEFENSE, attacking, battle);
+                    int spDef = Stat.getStat(Stat.SP_DEFENSE, attacking, battle);
+                    TestUtils.assertGreater(def, spDef);
+
+                    // Maximize Sp. Defense and minimize Defense stages
+                    battle.fight(AttackNamesies.AMNESIA, AttackNamesies.SCREECH);
+                    battle.fight(AttackNamesies.AMNESIA, AttackNamesies.SCREECH);
+                    battle.fight(AttackNamesies.AMNESIA, AttackNamesies.SCREECH);
+                    attacking.assertStages(new TestStages().set(6, Stat.SP_DEFENSE).set(-6, Stat.DEFENSE));
+
+                    // Now Sp. Defense should be higher (but Defense will still be increased by Beast Boost)
+                    def = Stat.getStat(Stat.DEFENSE, attacking, battle);
+                    spDef = Stat.getStat(Stat.SP_DEFENSE, attacking, battle);
+                    TestUtils.assertGreater(spDef, def);
+                }
+        );
+    }
+
+    private void beastBoostTest(PokemonNamesies pokes, Stat increased) {
+        beastBoostTest(pokes, increased, AttackNamesies.TACKLE);
+    }
+
+    private void beastBoostTest(PokemonNamesies pokes, Stat increased, AttackNamesies attack) {
+        beastBoostTest(pokes, increased, attack, new TestStages().set(1, increased));
+    }
+
+    private void beastBoostTest(PokemonNamesies pokes, Stat highest, AttackNamesies attack, TestStages afterStages) {
+        beastBoostTest(pokes, highest, attack, afterStages, PokemonManipulator.empty());
+    }
+
+    private void beastBoostTest(PokemonNamesies pokes, Stat highest, AttackNamesies attack, TestStages afterStages, PokemonManipulator extraPostSwipe) {
+        deadStatBoostTest(
+                pokes, AbilityNamesies.BEAST_BOOST, attack, afterStages,
+                (battle, attacking, defending) -> {
+                    // Test requires their highest stat is the specified one
+                    assertHighestStat(attacking, highest);
+                    attacking.assertStages(new TestStages());
+
+                    extraPostSwipe.manipulate(battle);
+                }
+        );
+    }
+
+    // Asserts that the input stat is the Pokemon's highest ignoring HP
+    // This is only checking the base stats and does not take stages or anything like that into consideration
+    private void assertHighestStat(TestPokemon pokemon, Stat highest) {
+        // These don't make sense here
+        Assert.assertNotEquals(highest, Stat.HP);
+        Assert.assertNotEquals(highest, Stat.ACCURACY);
+        Assert.assertNotEquals(highest, Stat.EVASION);
+
+        StatValues stats = pokemon.stats();
+        String message = pokemon.statsString();
+
+        int maxStat = stats.get(highest);
+        for (Stat stat : Stat.STATS) {
+            // Skip HP and max stat
+            if (stat == Stat.HP || stat == highest) {
+                continue;
+            }
+
+            // Max stat should be strictly larger than every other stat
+            TestUtils.assertGreater(message, maxStat, stats.get(stat));
+        }
+    }
+
+    @Test
+    public void soulHeartTest() {
+        // Receive boosts regardless of if the damage is direct or indirect
+        soulHeartTest(AttackNamesies.TACKLE);
+        soulHeartTest(AttackNamesies.WILL_O_WISP);
+    }
+
+    private void soulHeartTest(AttackNamesies killMove) {
+        deadStatBoostTest(
+                PokemonNamesies.MAGEARNA, AbilityNamesies.SOUL_HEART, killMove,
+                new TestStages().set(1, Stat.SP_ATTACK),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages())
+        );
+    }
+
+    private void deadStatBoostTest(PokemonNamesies pokes, AbilityNamesies ability, AttackNamesies killMove, TestStages afterStages, PokemonManipulator postSwipe) {
+        TestBattle battle = TestBattle.createTrainerBattle(pokes, PokemonNamesies.CLEFFA);
+        TestPokemon attacking = battle.getAttacking().withAbility(ability);
+        TestPokemon defending1 = battle.getDefending().withAbility(AbilityNamesies.NO_ABILITY);
+        TestPokemon defending2 = battle.addDefending(PokemonNamesies.IGGLYBUFF);
+        Assert.assertSame(battle.getDefending(), defending1);
+
+        // Set defending HP to 1 so it always dies to a single direct hit or to indirect damage such as burn
+        battle.falseSwipePalooza(true);
+        postSwipe.manipulate(battle);
+        Assert.assertEquals(1, defending1.getHP());
+
+        // Knock the Pokemon out with the attack and check if stat was boosted or not
+        battle.attackingFight(killMove);
+        Assert.assertSame(battle.getDefending(), defending2);
+        attacking.assertStages(afterStages);
     }
 }

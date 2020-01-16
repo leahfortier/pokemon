@@ -583,7 +583,9 @@ Beast Boost:
     Desc: The Pok\u00e9mon boosts its most proficient stat each time it knocks out a Pok\u00e9mon.
     Int: MurderEffect
     KillWish:
-        murderer.getStages().modifyStage(murderer, 1, murderer.getBestBattleStat(), b, CastSource.ABILITY);
+        // Increase highest stat when it murders
+        Stat bestStat = murderer.stats().getBestBattleStat();
+        murderer.getStages().modifyStage(murderer, 1, bestStat, b, CastSource.ABILITY);
         ###
 *
 Soul-Heart:

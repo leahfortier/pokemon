@@ -28,7 +28,6 @@ import pokemon.stat.User;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
-import trainer.EnemyTrainer;
 import type.Type;
 import util.GeneralUtils;
 
@@ -546,14 +545,11 @@ public class EffectTest extends BaseTest {
                 // Then use Roar to lure it out
                 new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
                         .asTrainerBattle()
-                        .with((battle, attacking, defending) -> {
-                            TestPokemon defending2 = TestPokemon.newTrainerPokemon(PokemonNamesies.SQUIRTLE);
-                            defending2.withAbility(AbilityNamesies.INTIMIDATE);
-                            ((EnemyTrainer)battle.getOpponent()).addPokemon(defending2);
-                        })
+                        .with((battle, attacking, defending) -> battle.addDefending(PokemonNamesies.SQUIRTLE)
+                                                                      .withAbility(AbilityNamesies.INTIMIDATE))
                         .attackingFight(AttackNamesies.ROAR)
                         .with((battle, attacking, defending) -> {
-                            // Need to use getDefending() since the defending var is set at the start of the turn
+                            // Note: Need to use getDefending() since the defending var is set at the start of the turn
                             Assert.assertTrue(battle.getDefending().isPokemon(PokemonNamesies.SQUIRTLE));
                         }),
                 (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.ATTACK)),
@@ -563,10 +559,7 @@ public class EffectTest extends BaseTest {
         // Should not get poisoned from Toxic Spikes when Baton Passed
         substituteTest(
                 new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
-                        .with((battle, attacking, defending) -> {
-                            TestPokemon attacking2 = TestPokemon.newPlayerPokemon(PokemonNamesies.SQUIRTLE);
-                            battle.getPlayer().addPokemon(attacking2);
-                        })
+                        .with((battle, attacking, defending) -> battle.addAttacking(PokemonNamesies.SQUIRTLE))
                         .defendingFight(AttackNamesies.TOXIC_SPIKES)
                         .attackingFight(AttackNamesies.BATON_PASS)
                         .with((battle, attacking, defending) -> {
@@ -583,10 +576,7 @@ public class EffectTest extends BaseTest {
         // Should still absorb Toxic Spikes for Baton Pass to grounded Poison Poke though
         substituteTest(
                 new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
-                        .with((battle, attacking, defending) -> {
-                            TestPokemon attacking2 = TestPokemon.newPlayerPokemon(PokemonNamesies.GRIMER);
-                            battle.getPlayer().addPokemon(attacking2);
-                        })
+                        .with((battle, attacking, defending) -> battle.addAttacking(PokemonNamesies.GRIMER))
                         .defendingFight(AttackNamesies.TOXIC_SPIKES)
                         .attackingFight(AttackNamesies.BATON_PASS),
                 (battle, attacking, defending) -> {
@@ -693,9 +683,7 @@ public class EffectTest extends BaseTest {
         TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending1 = battle.getDefending();
-        TestPokemon defending2 = TestPokemon.newTrainerPokemon(notSoStealthy).withAbility(abilityNamesies);
-
-        ((EnemyTrainer)battle.getOpponent()).addPokemon(defending2);
+        TestPokemon defending2 = battle.addDefending(notSoStealthy).withAbility(abilityNamesies);
         Assert.assertSame(battle.getDefending(), defending1);
 
         // Use Stealth Rock -- nothing should really happen

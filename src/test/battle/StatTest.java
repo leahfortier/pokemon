@@ -98,6 +98,8 @@ public class StatTest extends BaseTest {
     // Asserts that all Pokemon's stats are unique ignoring HP
     private void assertUniqueStats(TestPokemon pokemon) {
         StatValues stats = pokemon.stats();
+        String message = pokemon.statsString();
+
         Set<Integer> seen = new HashSet<>();
         for (Stat stat : Stat.STATS) {
             if (stat == Stat.HP) {
@@ -105,11 +107,11 @@ public class StatTest extends BaseTest {
             }
 
             int statValue = stats.get(stat);
-            Assert.assertFalse(pokemon.statsString(), seen.contains(statValue));
+            Assert.assertFalse(message, seen.contains(statValue));
             seen.add(statValue);
         }
 
-        Assert.assertEquals(pokemon.statsString(), Stat.NUM_STATS - 1, seen.size());
+        Assert.assertEquals(message, Stat.NUM_STATS - 1, seen.size());
     }
 
     // Holds a map from stat to what the stat should switch to

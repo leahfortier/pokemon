@@ -767,21 +767,6 @@ public class ActivePokemon extends PartyPokemon {
         return taken;
     }
 
-    public Stat getBestBattleStat() {
-        Stat bestStat = Stat.ATTACK;
-        for (Stat stat : Stat.STATS) {
-            if (stat == Stat.HP) {
-                continue;
-            }
-
-            if (this.getStat(stat) > this.getStat(bestStat)) {
-                bestStat = stat;
-            }
-        }
-
-        return bestStat;
-    }
-
     public boolean isGrounded(Battle b) {
         return GroundedEffect.containsGroundedEffect(b, this);
     }

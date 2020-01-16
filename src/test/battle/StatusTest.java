@@ -11,7 +11,6 @@ import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import test.general.BaseTest;
 import test.pokemon.TestPokemon;
-import trainer.EnemyTrainer;
 import type.Type;
 
 /*
@@ -214,8 +213,7 @@ public class StatusTest extends BaseTest {
         TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.EEVEE, PokemonNamesies.VAPOREON);
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending1 = battle.getDefending();
-        TestPokemon defending2 = TestPokemon.newTrainerPokemon(PokemonNamesies.ESPEON);
-        ((EnemyTrainer)battle.getOpponent()).addPokemon(defending2);
+        TestPokemon defending2 = battle.addDefending(PokemonNamesies.ESPEON);
         Assert.assertSame(battle.getDefending(), defending1);
 
         // Basic Burn Heal, make sure Antidote fails for burns

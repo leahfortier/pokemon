@@ -122,4 +122,19 @@ public class StatValues implements Serializable {
 
         return (int)((value + 5)*natureVal);
     }
+
+    public Stat getBestBattleStat() {
+        Stat bestStat = Stat.ATTACK;
+        for (Stat stat : Stat.STATS) {
+            if (stat == Stat.HP) {
+                continue;
+            }
+
+            if (this.get(stat) > this.get(bestStat)) {
+                bestStat = stat;
+            }
+        }
+
+        return bestStat;
+    }
 }

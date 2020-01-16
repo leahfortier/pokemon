@@ -50,6 +50,23 @@ public class TestBattle extends Battle {
         return ((TestPokemon)getOpponent().front());
     }
 
+    // Adds an additional Pokemon to the player team and returns the created Pokemon
+    TestPokemon addAttacking(PokemonNamesies pokes) {
+        TestPokemon attacking = TestPokemon.newPlayerPokemon(pokes);
+        this.getPlayer().addPokemon(attacking);
+        return attacking;
+    }
+
+    // Adds an additional Pokemon to the defending team (trainer battles only) and returns the created Pokemon
+    TestPokemon addDefending(PokemonNamesies pokes) {
+        Opponent opponent = this.getOpponent();
+        Assert.assertTrue(opponent instanceof EnemyTrainer);
+
+        TestPokemon defending = TestPokemon.newTrainerPokemon(pokes);
+        ((EnemyTrainer)opponent).addPokemon(defending);
+        return defending;
+    }
+
     @Override
     protected void printShit() {}
 
@@ -211,7 +228,7 @@ public class TestBattle extends Battle {
         return create(TestPokemon.newPlayerPokemon(attacking), TestPokemon.newWildPokemon(defending));
     }
 
-    static TestBattle create(TestPokemon mahBoiiiiiii, TestPokemon nahMahBoi) {
+    private static TestBattle create(TestPokemon mahBoiiiiiii, TestPokemon nahMahBoi) {
         new TestCharacter(mahBoiiiiiii);
         return new TestBattle(nahMahBoi);
     }
