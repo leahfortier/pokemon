@@ -278,7 +278,7 @@ SpecialDefenseMove:
 *
 IgnoreStageMove:
     AddInterface: OpponentIgnoreStageEffect
-    AddMapField: IgnoreStage:
+    AddMapField: OpponentIgnoreStage:
         // Ignore stages on the other pokemon
         return s.isDefending();
         ###
@@ -317,7 +317,7 @@ SwapItemsMove:
     AddMapField: UniqueEffects:
         this.swapItems(b, user, victim);
         ###
-    AddMapField: FullSwitchItemMessage: 
+    AddMapField: FullSwitchItemMessage:
         if (userItem.namesies() == ItemNamesies.NO_ITEM) {
             return user.getName() + " switched with " + victim.getName() + "'s " + victimItem.getName() + "!";
         } else if (victimItem.namesies() == ItemNamesies.NO_ITEM) {
@@ -381,6 +381,9 @@ StageChange:
     Header: int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
 *
 IgnoreStage:
+    Header: boolean ignoreStage(Stat s, int stage)
+*
+OpponentIgnoreStage:
     Header: boolean ignoreStage(Stat s)
 *
 StatusCureMove:
@@ -1551,12 +1554,14 @@ ForesightEffect:
     AddMapField: UsedProof: True
     AddInterface: DefendingNoAdvantageChanger
     AddMapField: RemoveAdvantageType: {0}
+    AddInterface: IgnoreStageEffect
+    AddMapField: IgnoreStage:
+        // Ignore this Pokemon's increased evasion
+        return s == Stat.EVASION && stage > 0;
+        ###
 *
 ForesightMove:
     AddMapField: PokemonEffect: {0}
-    AddMapField: UniqueEffects:
-        victim.getStages().resetStage(Stat.EVASION);
-        ###
     AddMapField: MoveType: Substitute_Piercing
 *
 ChangeTypeMove:

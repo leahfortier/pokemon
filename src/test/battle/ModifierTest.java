@@ -25,6 +25,8 @@ import type.PokeType;
 import type.Type;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
 
 public class ModifierTest extends BaseTest {
     @Test
@@ -260,13 +262,11 @@ public class ModifierTest extends BaseTest {
 
         stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.TANGLED_FEET, PokemonEffectNamesies.CONFUSION));
         stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.TANGLED_FEET).attackingFight(AttackNamesies.CONFUSE_RAY));
-        stageChangeTest(0, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.TANGLED_FEET, PokemonEffectNamesies.CONFUSION));
 
         stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.SAND_VEIL, WeatherNamesies.SANDSTORM));
         stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.SNOW_CLOAK, WeatherNamesies.HAILING));
-        stageChangeTest(0, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.SNOW_CLOAK, WeatherNamesies.HAILING));
-        stageChangeTest(0, Stat.EVASION, new TestInfo().defending(AbilityNamesies.SNOW_CLOAK, WeatherNamesies.SANDSTORM));
-        stageChangeTest(0, Stat.EVASION, new TestInfo().defending(AbilityNamesies.SAND_VEIL, WeatherNamesies.SUNNY));
+        stageChangeTest(new TestStages(), new TestInfo().defending(AbilityNamesies.SNOW_CLOAK, WeatherNamesies.SANDSTORM));
+        stageChangeTest(new TestStages(), new TestInfo().defending(AbilityNamesies.SAND_VEIL, WeatherNamesies.SUNNY));
 
         stageChangeTest(-2, Stat.EVASION, new TestInfo().attacking(StandardBattleEffectNamesies.GRAVITY));
 
@@ -276,14 +276,17 @@ public class ModifierTest extends BaseTest {
         stageChangeTest(2, Stat.ATTACK, new TestInfo().attackingFight(AttackNamesies.SWORDS_DANCE));
         stageChangeTest(4, Stat.ATTACK, new TestInfo().attacking(AbilityNamesies.SIMPLE).attackingFight(AttackNamesies.SWORDS_DANCE));
 
-        stageChangeTest(1, Stat.ATTACK, new TestInfo().attackingFight(AttackNamesies.GROWTH));
-        stageChangeTest(1, Stat.SP_ATTACK, new TestInfo().attackingFight(AttackNamesies.GROWTH));
-        stageChangeTest(2, Stat.ATTACK, new TestInfo().attackingFight(AttackNamesies.SUNNY_DAY).attackingFight(AttackNamesies.GROWTH));
-        stageChangeTest(2, Stat.SP_ATTACK, new TestInfo().attackingFight(AttackNamesies.SUNNY_DAY).attackingFight(AttackNamesies.GROWTH));
+        stageChangeTest(
+                new TestStages().set(1, Stat.ATTACK, Stat.SP_ATTACK),
+                new TestInfo().attackingFight(AttackNamesies.GROWTH)
+        );
+        stageChangeTest(
+                new TestStages().set(2, Stat.ATTACK, Stat.SP_ATTACK),
+                new TestInfo().attackingFight(AttackNamesies.SUNNY_DAY).attackingFight(AttackNamesies.GROWTH)
+        );
 
         stageChangeTest(
-                3,
-                Stat.SP_DEFENSE,
+                new TestStages().set(3, Stat.DEFENSE, Stat.SP_DEFENSE),
                 new TestInfo().with((battle, attacking, defending) -> {
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
@@ -295,8 +298,7 @@ public class ModifierTest extends BaseTest {
         );
 
         stageChangeTest(
-                0,
-                Stat.SP_DEFENSE,
+                new TestStages(),
                 new TestInfo().with((battle, attacking, defending) -> {
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
@@ -309,8 +311,7 @@ public class ModifierTest extends BaseTest {
         );
 
         stageChangeTest(
-                2,
-                Stat.DEFENSE,
+                new TestStages().set(2, Stat.DEFENSE, Stat.SP_DEFENSE),
                 new TestInfo().with((battle, attacking, defending) -> {
                     battle.fight(AttackNamesies.SWIFT, AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
@@ -329,7 +330,121 @@ public class ModifierTest extends BaseTest {
     }
 
     private void stageChangeTest(int expectedStage, Stat stat, TestInfo testInfo) {
-        testInfo.stageChangeTest(expectedStage, stat);
+        stageChangeTest(new TestStages().set(expectedStage, stat), testInfo);
+    }
+
+    private void stageChangeTest(TestStages expectedStages, TestInfo testInfo) {
+        testInfo.stageChangeTest(expectedStages);
+    }
+
+    @Test
+    public void ignoreStageTest() {
+        // Double team increases defending evasion by 1 stage
+        // Foresight effect though will ignore this stage
+        ignoreStageTest(
+                new IgnoreStages(new TestStages().set(1, Stat.EVASION), Stat.EVASION),
+                new TestInfo().defendingFight(AttackNamesies.DOUBLE_TEAM),
+                (battle, attacking, defending) -> battle.attackingFight(AttackNamesies.FORESIGHT)
+        );
+
+        // Sweet Scent decreases defending evasion by 2 stages
+        // Foresight effect only cancels positive evasion so it should be the same
+        ignoreStageTest(
+                new IgnoreStages(new TestStages().set(-2, Stat.EVASION)),
+                new TestInfo().attackingFight(AttackNamesies.SWEET_SCENT),
+                (battle, attacking, defending) -> battle.attackingFight(AttackNamesies.FORESIGHT)
+        );
+
+        // Foresight only should ignore evasion
+        ignoreStageTest(
+                (battle, attacking, defending) -> battle.attackingFight(AttackNamesies.FORESIGHT),
+                Stat.EVASION
+        );
+
+        // Unaware on the attacking Pokemon ignores defending stages
+        ignoreStageTest(
+                (battle, attacking, defending) -> attacking.withAbility(AbilityNamesies.UNAWARE),
+                Stat.EVASION, Stat.DEFENSE, Stat.SP_DEFENSE
+        );
+
+        // Unaware on the defending Pokemon ignores attacking stages
+        ignoreStageTest(
+                (battle, attacking, defending) -> defending.withAbility(AbilityNamesies.UNAWARE),
+                Stat.ACCURACY, Stat.ATTACK, Stat.SP_ATTACK
+        );
+
+        // Keen Eye on the attacking Pokemon ignores evasion
+        ignoreStageTest((battle, attacking, defending) -> attacking.withAbility(AbilityNamesies.KEEN_EYE), Stat.EVASION);
+
+        // Keen Eye on the defending Pokemon does nothing
+        ignoreStageTest((battle, attacking, defending) -> defending.withAbility(AbilityNamesies.KEEN_EYE));
+
+        // Chip Away ignores defending stages
+        ignoreStageTest(
+                (battle, attacking, defending) -> attacking.setupMove(AttackNamesies.CHIP_AWAY, battle),
+                Stat.EVASION, Stat.DEFENSE, Stat.SP_DEFENSE
+        );
+    }
+
+    private void ignoreStageTest(PokemonManipulator ignoreMe, Stat... ignoreStats) {
+        // Sets up every single stat change (all positive) but different values on the attacking and defending
+        PokemonManipulator setupManipulator = (battle, attacking, defending) -> {
+            battle.attackingFight(AttackNamesies.QUIVER_DANCE);
+            battle.attackingFight(AttackNamesies.QUIVER_DANCE);
+            battle.attackingFight(AttackNamesies.QUIVER_DANCE);
+            battle.attackingFight(AttackNamesies.DRAGON_DANCE);
+            battle.attackingFight(AttackNamesies.DRAGON_DANCE);
+            battle.attackingFight(AttackNamesies.COIL);
+            battle.attackingFight(AttackNamesies.COIL);
+            battle.attackingFight(AttackNamesies.MINIMIZE);
+
+            battle.defendingFight(AttackNamesies.QUIVER_DANCE);
+            battle.defendingFight(AttackNamesies.DOUBLE_TEAM);
+            battle.defendingFight(AttackNamesies.HONE_CLAWS);
+            battle.defendingFight(AttackNamesies.HARDEN);
+
+            attacking.assertStages(new TestStages().set(2, Stat.ACCURACY, Stat.DEFENSE, Stat.EVASION)
+                                                   .set(3, Stat.SP_ATTACK, Stat.SP_DEFENSE)
+                                                   .set(4, Stat.ATTACK)
+                                                   .set(5, Stat.SPEED));
+            defending.assertStages(new TestStages().set(1, Stat.ATTACK, Stat.DEFENSE, Stat.SP_ATTACK,
+                                                        Stat.SP_DEFENSE, Stat.SPEED, Stat.ACCURACY, Stat.EVASION));
+        };
+
+        TestStages setupStages = new TestStages().set(1, Stat.DEFENSE, Stat.SP_DEFENSE, Stat.EVASION)
+                                                 .set(2, Stat.ACCURACY)
+                                                 .set(3, Stat.SP_ATTACK)
+                                                 .set(4, Stat.ATTACK)
+                                                 .set(5, Stat.SPEED);
+
+        ignoreStageTest(new IgnoreStages(setupStages, ignoreStats), new TestInfo().with(setupManipulator), ignoreMe);
+    }
+
+    private void ignoreStageTest(IgnoreStages ignoreStages, TestInfo testInfo, PokemonManipulator ignoreMe) {
+        stageChangeTest(ignoreStages.withoutIgnore, testInfo);
+        stageChangeTest(ignoreStages.ignoreStages, testInfo.with(ignoreMe));
+    }
+
+    // The stages here will not all be for the same Pokemon
+    // Attack, Sp. Attack, Accuracy, and Speed will look at the attacking Pokemon stages
+    // Defense, Sp. Defense, and Evasion will look at the defending Pokemon stages
+    private static class IgnoreStages {
+        TestStages withoutIgnore;
+        TestStages ignoreStages;
+
+        public IgnoreStages(TestStages withoutIgnore, Stat... shouldIgnore) {
+            this.withoutIgnore = withoutIgnore;
+            this.ignoreStages = new TestStages();
+
+            EnumSet<Stat> ignoreStats = EnumSet.noneOf(Stat.class);
+            Collections.addAll(ignoreStats, shouldIgnore);
+            for (Stat stat : Stat.BATTLE_STATS) {
+                // Ignore stats are set to zero be default, all others are set to the same as withoutIgnore
+                if (!ignoreStats.contains(stat)) {
+                    this.ignoreStages.set(withoutIgnore.get(stat), stat);
+                }
+            }
+        }
     }
 
     @Test
@@ -420,6 +535,8 @@ public class ModifierTest extends BaseTest {
         testInfo.with(attackNamesies);
         testInfo.with(Battle::calculateDamage);
 
+        testInfo.stageChangeTest(modifierStages.stages);
+
         // Check each battle stat and make sure the stage and modifier is as expected
         for (Stat stat : Stat.BATTLE_STATS) {
             int stage = modifierStages.stages.get(stat);
@@ -432,7 +549,6 @@ public class ModifierTest extends BaseTest {
                 continue;
             }
 
-            testInfo.stageChangeTest(stage, stat);
             testInfo.statModifierTest(modifier, stat);
         }
     }

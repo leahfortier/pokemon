@@ -39,6 +39,7 @@ import battle.effect.InvokeInterfaces.FaintEffect;
 import battle.effect.InvokeInterfaces.ForceMoveEffect;
 import battle.effect.InvokeInterfaces.GroundedEffect;
 import battle.effect.InvokeInterfaces.HalfWeightEffect;
+import battle.effect.InvokeInterfaces.IgnoreStageEffect;
 import battle.effect.InvokeInterfaces.ItemBlockerEffect;
 import battle.effect.InvokeInterfaces.LevitationEffect;
 import battle.effect.InvokeInterfaces.NoSwapEffect;
@@ -1290,7 +1291,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Foresight extends PokemonEffect implements DefendingNoAdvantageChanger {
+    static class Foresight extends PokemonEffect implements DefendingNoAdvantageChanger, IgnoreStageEffect {
         private static final long serialVersionUID = 1L;
 
         Foresight() {
@@ -1300,6 +1301,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return user.getName() + " identified " + victim.getName() + "!";
+        }
+
+        @Override
+        public boolean ignoreStage(Stat s, int stage) {
+            // Ignore this Pokemon's increased evasion
+            return s == Stat.EVASION && stage > 0;
         }
 
         @Override
@@ -1313,7 +1320,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class MiracleEye extends PokemonEffect implements DefendingNoAdvantageChanger {
+    static class MiracleEye extends PokemonEffect implements DefendingNoAdvantageChanger, IgnoreStageEffect {
         private static final long serialVersionUID = 1L;
 
         MiracleEye() {
@@ -1323,6 +1330,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
             return user.getName() + " identified " + victim.getName() + "!";
+        }
+
+        @Override
+        public boolean ignoreStage(Stat s, int stage) {
+            // Ignore this Pokemon's increased evasion
+            return s == Stat.EVASION && stage > 0;
         }
 
         @Override

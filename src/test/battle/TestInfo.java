@@ -296,22 +296,35 @@ class TestInfo {
         battle.attackingFight(attackNamesies);
     }
 
-    public void stageChangeTest(int expectedStage, Stat stat) {
+    // Checks each stage for the relevant Pokemon after the manipulator to match the expected stages
+    // Note: The stages here will not all be for the same Pokemon
+    // Attack, Sp. Attack, Accuracy, and Speed will look at the attacking Pokemon stages
+    // Defense, Sp. Defense, and Evasion will look at the defending Pokemon stages
+    public void stageChangeTest(TestStages expectedStages) {
         TestBattle battle = this.createBattle();
-        TestPokemon statPokemon = stat.isAttacking() ? battle.getAttacking() : battle.getDefending();
-        TestPokemon otherPokemon = battle.getOtherPokemon(statPokemon);
-
-        int beforeStage = stat.getStage(statPokemon, otherPokemon, battle);
-        Assert.assertEquals(0, beforeStage);
+        this.assertExpectedStages(battle, new TestStages());
 
         this.manipulate(battle);
-        int afterStage = stat.getStage(statPokemon, otherPokemon, battle);
+        this.assertExpectedStages(battle, expectedStages);
+    }
 
-        Assert.assertEquals(
-                StringUtils.spaceSeparated(afterStage, expectedStage, stat, this),
-                expectedStage,
-                afterStage
-        );
+    // Make sure every stat has the expected stage
+    // The stages here will not all be for the same Pokemon
+    // Attack, Sp. Attack, Accuracy, and Speed will look at the attacking Pokemon stages
+    // Defense, Sp. Defense, and Evasion will look at the defending Pokemon stages
+    private void assertExpectedStages(TestBattle battle, TestStages expectedStages) {
+        for (Stat stat : Stat.BATTLE_STATS) {
+            TestPokemon statPokemon = stat.isAttacking() ? battle.getAttacking() : battle.getDefending();
+            TestPokemon otherPokemon = battle.getOtherPokemon(statPokemon);
+
+            int expectedStage = expectedStages.get(stat);
+            int afterStage = stat.getStage(statPokemon, otherPokemon, battle);
+            Assert.assertEquals(
+                    StringUtils.spaceSeparated(afterStage, expectedStage, stat, this),
+                    expectedStage,
+                    afterStage
+            );
+        }
     }
 
     @Override

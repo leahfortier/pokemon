@@ -470,6 +470,15 @@ BracingEffect:
         Header: String braceMessage(ActivePokemon bracer)
     *
 ***
+IgnoreStageEffect:
+    Method:
+        Header: boolean ignoreStage(Stat s, int stage)
+        Invoke: Check true
+        InvokeName: checkIgnoreStage
+        InvokeParameters: Battle b, ActivePokemon stagePokemon
+        EffectList: stagePokemon
+    *
+***
 OpponentIgnoreStageEffect:
     Method:
         Header: boolean ignoreStage(Stat s)

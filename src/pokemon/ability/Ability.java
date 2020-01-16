@@ -404,6 +404,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean ignoreStage(Stat s) {
+            // Keen Eye ignores the target's evasion stages
             return s == Stat.EVASION;
         }
 

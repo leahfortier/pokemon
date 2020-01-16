@@ -3,6 +3,7 @@ package pokemon.stat;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.Stages;
+import battle.effect.InvokeInterfaces.IgnoreStageEffect;
 import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.InvokeInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StageChangingEffect;
@@ -165,7 +166,7 @@ public enum Stat {
     }
 
     public int getStage(ActivePokemon stagePokemon, ActivePokemon otherPokemon, Battle b) {
-        // Effects that completely ignore stage changes
+        // Opponent effects that completely ignore stage changes
         if (OpponentIgnoreStageEffect.checkIgnoreStage(b, stagePokemon, otherPokemon, this)) {
             return 0;
         }
@@ -177,7 +178,14 @@ public enum Stat {
         stage += StageChangingEffect.getModifier(b, stagePokemon, otherPokemon, this);
 
         // Let's keep everything in bounds, okay!
-        return Math.max(-1*Stages.MAX_STAT_CHANGES, Math.min(stage, Stages.MAX_STAT_CHANGES));
+        stage = Math.max(-1*Stages.MAX_STAT_CHANGES, Math.min(stage, Stages.MAX_STAT_CHANGES));
+
+        // Stage Pokemon effects that completely ignore stage changes
+        if (IgnoreStageEffect.checkIgnoreStage(b, stagePokemon, this, stage)) {
+            return 0;
+        }
+
+        return stage;
     }
 
     // Returns the corresponding Stat based on the index passed in

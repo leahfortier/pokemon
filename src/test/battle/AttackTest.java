@@ -761,25 +761,6 @@ public class AttackTest extends BaseTest {
     }
 
     @Test
-    public void evasionRemovalTest() {
-        TestBattle battle = TestBattle.create();
-        TestPokemon attacking = battle.getAttacking();
-        TestPokemon defending = battle.getDefending();
-
-        battle.fight(AttackNamesies.DOUBLE_TEAM, AttackNamesies.MINIMIZE);
-        attacking.assertStages(new TestStages().set(1, Stat.EVASION));
-        defending.assertStages(new TestStages().set(2, Stat.EVASION));
-
-        battle.attackingFight(AttackNamesies.FORESIGHT);
-        attacking.assertStages(new TestStages().set(1, Stat.EVASION));
-        defending.assertStages(new TestStages());
-
-        battle.defendingFight(AttackNamesies.MIRACLE_EYE);
-        attacking.assertStages(new TestStages());
-        defending.assertStages(new TestStages());
-    }
-
-    @Test
     public void changeAbilityTest() {
         TestBattle battle = TestBattle.create();
         TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.OVERGROW);

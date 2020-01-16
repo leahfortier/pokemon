@@ -73,7 +73,8 @@ Keen Eye:
     Desc: Keen eyes prevent other Pok\u00e9mon from lowering this Pok\u00e9mon's accuracy.
     Int: OpponentIgnoreStageEffect, RepelLowLevelEncounterEffect
     StatProtect: Accuracy
-    IgnoreStage:
+    OpponentIgnoreStage:
+        // Keen Eye ignores the target's evasion stages
         return s == Stat.EVASION;
         ###
 *
@@ -396,7 +397,7 @@ Magnet Pull:
 Unaware:
     Desc: When attacking, the Pok\u00e9mon ignores the target Pok\u00e9mon's stat changes.
     Int: OpponentIgnoreStageEffect
-    IgnoreStage:
+    OpponentIgnoreStage:
         return s != Stat.SPEED;
         ###
 *

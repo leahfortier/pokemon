@@ -3609,11 +3609,6 @@ public abstract class Attack implements AttackInterface {
             super.effect = PokemonEffectNamesies.FORESIGHT;
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
         }
-
-        @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            victim.getStages().resetStage(Stat.EVASION);
-        }
     }
 
     static class OdorSleuth extends Attack {
@@ -3624,11 +3619,6 @@ public abstract class Attack implements AttackInterface {
             super.effect = PokemonEffectNamesies.FORESIGHT;
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
         }
-
-        @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            victim.getStages().resetStage(Stat.EVASION);
-        }
     }
 
     static class MiracleEye extends Attack {
@@ -3638,11 +3628,6 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.MIRACLE_EYE, Type.PSYCHIC, MoveCategory.STATUS, 40, "Enables a Dark-type target to be hit by Psychic-type attacks. This also enables an evasive target to be hit.");
             super.effect = PokemonEffectNamesies.MIRACLE_EYE;
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
-        }
-
-        @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            victim.getStages().resetStage(Stat.EVASION);
         }
     }
 

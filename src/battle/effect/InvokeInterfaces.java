@@ -825,6 +825,24 @@ public final class InvokeInterfaces {
         }
     }
 
+    public interface IgnoreStageEffect {
+        boolean ignoreStage(Stat s, int stage);
+
+        static boolean checkIgnoreStage(Battle b, ActivePokemon stagePokemon, Stat s, int stage) {
+            List<InvokeEffect> invokees = b.getEffectsList(stagePokemon);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof IgnoreStageEffect && invokee.isActiveEffect()) {
+                    IgnoreStageEffect effect = (IgnoreStageEffect)invokee;
+                    if (effect.ignoreStage(s, stage)) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
+
     public interface OpponentIgnoreStageEffect {
         boolean ignoreStage(Stat s);
 
