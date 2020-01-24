@@ -24,7 +24,7 @@ import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
-import battle.effect.InvokeInterfaces.BeforeTurnEffect;
+import battle.effect.InvokeInterfaces.BeforeAttackPreventingEffect;
 import battle.effect.InvokeInterfaces.BracingEffect;
 import battle.effect.InvokeInterfaces.ChangeAttackTypeEffect;
 import battle.effect.InvokeInterfaces.ChangeMoveListEffect;
@@ -51,6 +51,7 @@ import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.SelfAttackBlocker;
 import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.StageChangingEffect;
+import battle.effect.InvokeInterfaces.StartAttackEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
@@ -146,7 +147,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Flinch extends PokemonEffect implements BeforeTurnEffect {
+    static class Flinch extends PokemonEffect implements BeforeAttackPreventingEffect {
         private static final long serialVersionUID = 1L;
 
         Flinch() {
@@ -159,7 +160,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
+        public boolean canAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             return false;
         }
 
@@ -693,7 +694,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Confusion extends PokemonEffect implements PassableEffect, BeforeTurnEffect {
+    static class Confusion extends PokemonEffect implements PassableEffect, BeforeAttackPreventingEffect {
         private static final long serialVersionUID = 1L;
 
         private int turns;
@@ -714,7 +715,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
+        public boolean canAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Snap it out!
             if (turns == 0) {
                 Messages.add(attacking.getName() + " snapped out of its confusion!");
@@ -2125,6 +2126,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         public int getHalfAmount() {
             return layers;
         }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return victim.getName() + " became nimble!";
+        }
     }
 
     static class PowerTrick extends PokemonEffect implements PassableEffect, StatSwitchingEffect {
@@ -2191,7 +2197,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Infatuation extends PokemonEffect implements BeforeTurnEffect {
+    static class Infatuation extends PokemonEffect implements BeforeAttackPreventingEffect {
         private static final long serialVersionUID = 1L;
 
         Infatuation() {
@@ -2199,7 +2205,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
+        public boolean canAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             Messages.add(attacking.getName() + " is in love with " + defending.getName() + "!");
             if (RandomUtils.chanceTest(50)) {
                 return true;
@@ -2272,7 +2278,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class DestinyBond extends PokemonEffect implements BeforeTurnEffect, FaintEffect {
+    static class DestinyBond extends PokemonEffect implements StartAttackEffect, FaintEffect {
         private static final long serialVersionUID = 1L;
 
         DestinyBond() {
@@ -2285,10 +2291,10 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
-            // TODO: What is happening
+        public void beforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Destiny Bond stays active until the user moves again
+            // TODO: Technically this should deactivate even if asleep, paralyzed, fully confused, etc
             this.deactivate();
-            return true;
         }
 
         @Override
@@ -2441,6 +2447,11 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.isAttackType(Type.FIRE) ? 2 : 1;
+        }
+
+        @Override
+        public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
+            return victim.getName() + " became weak to fire!";
         }
     }
 }

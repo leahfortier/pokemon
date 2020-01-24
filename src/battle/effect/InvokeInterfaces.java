@@ -640,10 +640,11 @@ public final class InvokeInterfaces {
         }
     }
 
-    public interface BeforeTurnEffect {
-        boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b);
+    // Used for effects that check if the Pokemon can attack during the time of execution
+    public interface BeforeAttackPreventingEffect {
+        boolean canAttack(Battle b, ActivePokemon attacking, ActivePokemon defending);
 
-        static boolean checkCannotAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
+        static boolean checkCannotAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             if (attacking.isFainted(b)) {
                 return false;
             }
@@ -654,9 +655,9 @@ public final class InvokeInterfaces {
 
             List<InvokeEffect> invokees = b.getEffectsList(attacking);
             for (InvokeEffect invokee : invokees) {
-                if (invokee instanceof BeforeTurnEffect && invokee.isActiveEffect()) {
-                    BeforeTurnEffect effect = (BeforeTurnEffect)invokee;
-                    if (!effect.canAttack(attacking, defending, b)) {
+                if (invokee instanceof BeforeAttackPreventingEffect && invokee.isActiveEffect()) {
+                    BeforeAttackPreventingEffect effect = (BeforeAttackPreventingEffect)invokee;
+                    if (!effect.canAttack(b, attacking, defending)) {
                         return true;
                     }
 
@@ -671,6 +672,21 @@ public final class InvokeInterfaces {
             }
 
             return false;
+        }
+    }
+
+    // Used for effects that occur immediately after printing an attack is being used (after success checks, but before accuracy checks)
+    public interface StartAttackEffect {
+        void beforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending);
+
+        static void checkBeforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            List<InvokeEffect> invokees = b.getEffectsList(attacking);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof StartAttackEffect && invokee.isActiveEffect()) {
+                    StartAttackEffect effect = (StartAttackEffect)invokee;
+                    effect.beforeAttack(b, attacking, defending);
+                }
+            }
         }
     }
 

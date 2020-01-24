@@ -575,8 +575,13 @@ BattleEndTurnMessage:
         return {0};
         ###
 *
+# For BeforeAttackPreventingEffect
 CanAttack:
-    Header: boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b)
+    Header: boolean canAttack(Battle b, ActivePokemon attacking, ActivePokemon defending)
+*
+# For StartAttackEffect
+BeforeAttack:
+    Header: void beforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending)
 *
 ProtectingEffect:
     AddMapField: ProtectingEffectNoDecay: True

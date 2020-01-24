@@ -394,12 +394,22 @@ OpponentTrappingEffect:
         Header: String opponentTrappingMessage(ActivePokemon escaper, ActivePokemon trapper)
     *
 ***
-BeforeTurnEffect:
+BeforeAttackPreventingEffect:
+    Comments: // Used for effects that check if the Pokemon can attack during the time of execution
     Method:
-        Header: boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b)
+        Header: boolean canAttack(Battle b, ActivePokemon attacking, ActivePokemon defending)
         Invoke: Check false
         InvokeName: checkCannotAttack
         Deadsies: attacking defending
+        EffectList: attacking
+    *
+***
+StartAttackEffect:
+    Comments: // Used for effects that occur immediately after printing an attack is being used (after success checks, but before accuracy checks)
+    Method:
+        Header: void beforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending)
+        Invoke: Void
+        InvokeName: checkBeforeAttack
         EffectList: attacking
     *
 ***

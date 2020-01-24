@@ -782,13 +782,14 @@ Poison Heal:
 *
 Truant:
     Desc: The Pok\u00e9mon can't use a move the following turn if it uses one.
+    Irreplaceable: True
     Field:
         private boolean lazyface;
         ###
     Constructor:
         this.lazyface = false;
         ###
-    Int: EndTurnEffect, BeforeTurnEffect
+    Int: EndTurnEffect, BeforeAttackPreventingEffect
     ApplyEndTurn:
         if (victim.hasStatus(StatusNamesies.ASLEEP)) {
             lazyface = false;
@@ -1428,13 +1429,12 @@ Shields Down:
 Stance Change:
     Desc: The Pok\u00e9mon changes its form to Blade Forme when it uses an attack move, and changes to Shield Forme when it uses King's Shield.
     FormChange: bladeForm Shield 60,_50,_150,_50,_150,_60 Blade 60,_150,_50,_150,_50,_60 
-    Int: BeforeTurnEffect, EntryEffect
-    CanAttack:
+    Int: StartAttackEffect, EntryEffect
+    BeforeAttack:
+        // TODO: This should really activate right before printing the attacking move, not after
         if ((!bladeForm && !attacking.getAttack().isStatusMove()) || (bladeForm && attacking.getAttack().namesies() == AttackNamesies.KINGS_SHIELD)) {
             changeForm(attacking);
         }
-
-        return true;
         ###
     Enter:
         Messages.add(enterer.getName() + " is in Shield Forme!");
@@ -1468,15 +1468,13 @@ Gale Wings:
 *
 Protean:
     Desc: Changes the Pok\u00e9mon's type to the type of the move it's about to use.
-    Int: BeforeTurnEffect
-    CanAttack:
+    Int: StartAttackEffect
+    BeforeAttack:
         // Protean activates for all moves except for Struggle
         if (attacking.getAttack().namesies() != AttackNamesies.STRUGGLE) {
             type = attacking.getAttackType();
             Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, b, attacking, attacking, CastSource.ABILITY, true);
         }
-
-        return true;
         ###
     Field:
         private Type type;

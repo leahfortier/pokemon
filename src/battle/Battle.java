@@ -6,7 +6,7 @@ import battle.attack.MoveType;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.InvokeEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
-import battle.effect.InvokeInterfaces.BeforeTurnEffect;
+import battle.effect.InvokeInterfaces.BeforeAttackPreventingEffect;
 import battle.effect.InvokeInterfaces.CrashDamageMove;
 import battle.effect.InvokeInterfaces.DefiniteEscape;
 import battle.effect.InvokeInterfaces.EntryEffect;
@@ -15,6 +15,7 @@ import battle.effect.InvokeInterfaces.OpponentAccuracyBypassEffect;
 import battle.effect.InvokeInterfaces.PriorityChangeEffect;
 import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.StallingEffect;
+import battle.effect.InvokeInterfaces.StartAttackEffect;
 import battle.effect.InvokeInterfaces.StrikeFirstEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.battle.BattleEffect;
@@ -418,6 +419,7 @@ public class Battle implements Serializable {
         attack.beginAttack(this, me, o);
 
         printAttacking(me);
+        StartAttackEffect.checkBeforeAttack(this, me, o);
 
         // Check if the move actually hits!
         boolean attackHit = accuracyCheck(me, o);
@@ -559,7 +561,7 @@ public class Battle implements Serializable {
         }
 
         // Loop through all tha effects and do them checks
-        if (BeforeTurnEffect.checkCannotAttack(p, opp, this)) {
+        if (BeforeAttackPreventingEffect.checkCannotAttack(this, p, opp)) {
             return false;
         }
 
