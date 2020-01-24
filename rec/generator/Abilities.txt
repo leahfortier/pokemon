@@ -1255,6 +1255,7 @@ Pickup:
             Messages.add(p.getName() + " picked up " + StringUtils.articleString(item.getName()) + "!");
         }
         ###
+    ItemListHolder: items
     Field:
         private static final List<ItemNamesies> items = new ArrayList<>();
         static {
@@ -1766,4 +1767,7 @@ Power of Alchemy:
         // Cast the change ability effect onto the murderer to give the dead's ability
         Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, murderer, murderer, CastSource.ABILITY, true);
         ###
+*
+Ball Fetch:
+    Desc: If the Pokémon is not holding an item, it will fetch the Poké Ball from the first failed throw of the battle.
 *

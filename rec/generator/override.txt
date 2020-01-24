@@ -954,6 +954,13 @@ PokemonHolder:
         return {0};
         ###
 *
+ItemListHolder:
+    AddInterface: ItemListHolder
+    Header: List<ItemNamesies> getItems()
+    Body:
+        return {0};
+        ###
+*
 Bracing:
     Header: boolean isBracing(Battle b, ActivePokemon bracer, boolean fullHealth)
 *

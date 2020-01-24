@@ -10,6 +10,7 @@ import pokemon.ability.Ability.ArenaTrap;
 import pokemon.ability.Ability.AromaVeil;
 import pokemon.ability.Ability.AuraBreak;
 import pokemon.ability.Ability.BadDreams;
+import pokemon.ability.Ability.BallFetch;
 import pokemon.ability.Ability.Battery;
 import pokemon.ability.Ability.BattleArmor;
 import pokemon.ability.Ability.BeastBoost;
@@ -441,7 +442,8 @@ public enum AbilityNamesies {
     MISTY_SURGE("Misty Surge", MistySurge::new),
     GRASSY_SURGE("Grassy Surge", GrassySurge::new),
     MOODY("Moody", Moody::new),
-    POWER_OF_ALCHEMY("Power of Alchemy", PowerOfAlchemy::new);
+    POWER_OF_ALCHEMY("Power of Alchemy", PowerOfAlchemy::new),
+    BALL_FETCH("Ball Fetch", BallFetch::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

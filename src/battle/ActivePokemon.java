@@ -919,7 +919,8 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean isCriticalHit() {
-        return this.getMove().getCalculatedDamage().isCritical();
+        Move move = this.getMove();
+        return move != null && move.getCalculatedDamage().isCritical();
     }
 
     public void resetTurn() {

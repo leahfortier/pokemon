@@ -169,7 +169,6 @@ Other random things:
     - should egg hatching and evolving be separate views that extend the same view class or something?
     - StatGainPanel should maybe use the panel thing similar to the StatPanel
     - can we have a class that holds the arrow buttons and page number and shit like that
-    - Pickup has Great and Ultra Balls in the list but these are no longer holdable items -- should remove and add a test that all items are holdable
     - Switch button should be inactive for the current pokemon in PokemonState
     - look at isInterior stuff in BattleView -- how is it ever not null??
     - BasicPanels.isAnimatingMessage should be checked before the view update method is called, not inside every view update

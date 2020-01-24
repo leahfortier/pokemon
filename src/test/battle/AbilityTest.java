@@ -2,10 +2,12 @@ package test.battle;
 
 import battle.Stages;
 import battle.attack.AttackNamesies;
+import battle.effect.EffectInterfaces.ItemListHolder;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
+import item.hold.HoldItem;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ability.Ability;
@@ -19,6 +21,8 @@ import test.general.TestUtils;
 import test.pokemon.TestPokemon;
 import type.Type;
 import type.TypeAdvantage;
+
+import java.util.List;
 
 public class AbilityTest extends BaseTest {
     @Test
@@ -1394,5 +1398,16 @@ public class AbilityTest extends BaseTest {
         battle.attackingFight(killMove);
         Assert.assertSame(battle.getDefending(), defending2);
         attacking.assertStages(afterStages);
+    }
+
+    @Test
+    public void pickupTest() {
+        // Note: Test is currently only checking that all potential items to pick up are hold items, and does not
+        // currently confirm its mechanics are working (actually gives items etc)
+        ItemListHolder listHolder = (ItemListHolder)AbilityNamesies.PICKUP.getNewAbility();
+        List<ItemNamesies> itemList = listHolder.getItems();
+        for (ItemNamesies itemNamesies : itemList) {
+            Assert.assertTrue(itemNamesies.getName(), itemNamesies.getItem() instanceof HoldItem);
+        }
     }
 }

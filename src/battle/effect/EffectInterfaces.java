@@ -77,6 +77,10 @@ public final class EffectInterfaces {
         PokemonNamesies getPokemon();
     }
 
+    public interface ItemListHolder {
+        List<ItemNamesies> getItems();
+    }
+
     public interface MessageGetter {
         String getGenericMessage(ActivePokemon p);
         String getSourceMessage(ActivePokemon p, String sourceName);

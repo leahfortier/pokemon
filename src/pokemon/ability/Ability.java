@@ -10,6 +10,7 @@ import battle.attack.MoveType;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.ItemHolder;
+import battle.effect.EffectInterfaces.ItemListHolder;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MaxLevelWildEncounterEffect;
 import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
@@ -3077,7 +3078,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Pickup extends Ability implements EndBattleEffect {
+    static class Pickup extends Ability implements EndBattleEffect, ItemListHolder {
         private static final long serialVersionUID = 1L;
 
         private static final List<ItemNamesies> items = new ArrayList<>();
@@ -3142,6 +3143,11 @@ public abstract class Ability implements AbilityInterface {
                 p.giveItem(item);
                 Messages.add(p.getName() + " picked up " + StringUtils.articleString(item.getName()) + "!");
             }
+        }
+
+        @Override
+        public List<ItemNamesies> getItems() {
+            return items;
         }
     }
 
@@ -4354,6 +4360,14 @@ public abstract class Ability implements AbilityInterface {
 
             // Cast the change ability effect onto the murderer to give the dead's ability
             Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, murderer, murderer, CastSource.ABILITY, true);
+        }
+    }
+
+    static class BallFetch extends Ability {
+        private static final long serialVersionUID = 1L;
+
+        BallFetch() {
+            super(AbilityNamesies.BALL_FETCH, "If the Pokémon is not holding an item, it will fetch the Poké Ball from the first failed throw of the battle.");
         }
     }
 }

@@ -605,6 +605,14 @@ public class Player extends PlayerTrainer implements Serializable, Nicknamed {
             if (!RandomUtils.chanceTest(shakeVal, 65536)) {
                 Messages.add(new MessageUpdate().withCatchPokemon(i));
                 Messages.add("Oh no! " + catchPokemon.getName() + " broke free!");
+
+                // Ball Fetch picks up the ball if unsuccessful throw (and not holding anything already)
+                ActivePokemon front = this.front();
+                if (front.hasAbility(AbilityNamesies.BALL_FETCH) && !front.isHoldingItem(b)) {
+                    front.giveItem(ball.namesies());
+                    Messages.add(front.getName() + " picked up the " + ball.getName() + "!");
+                }
+
                 return true;
             }
 
