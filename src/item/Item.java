@@ -7,6 +7,7 @@ import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.ChoiceEffect;
 import battle.effect.EffectInterfaces.EntryEndTurnEffect;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MessageGetter;
@@ -377,7 +378,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class ChoiceBand extends Item implements AttackSelectionEffect, HoldItem, SimpleStatModifyingEffect {
+    static class ChoiceBand extends Item implements HoldItem, ChoiceEffect {
         private static final long serialVersionUID = 1L;
 
         ChoiceBand() {
@@ -386,36 +387,17 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean usable(Battle b, ActivePokemon p, Move m) {
-            // Note: Because this is just using the last move used and not actually storing the move
-            // or anything like that it will break if it gets Struggled (from something like Torment)
-            // and will be locked into Struggle for the rest of the fight
-            Move last = p.getLastMoveUsed();
-            return last == null || m == last;
-        }
-
-        @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
-            return p.getName() + "'s " + this.getName() + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
-        }
-
-        @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.ATTACK;
+        public Stat getBoosted() {
+            return Stat.ATTACK;
         }
 
         @Override
         public int flingDamage() {
             return 10;
         }
-
-        @Override
-        public double getModifier() {
-            return 1.5;
-        }
     }
 
-    static class ChoiceScarf extends Item implements AttackSelectionEffect, HoldItem, SimpleStatModifyingEffect {
+    static class ChoiceScarf extends Item implements HoldItem, ChoiceEffect {
         private static final long serialVersionUID = 1L;
 
         ChoiceScarf() {
@@ -424,36 +406,17 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean usable(Battle b, ActivePokemon p, Move m) {
-            // Note: Because this is just using the last move used and not actually storing the move
-            // or anything like that it will break if it gets Struggled (from something like Torment)
-            // and will be locked into Struggle for the rest of the fight
-            Move last = p.getLastMoveUsed();
-            return last == null || m == last;
-        }
-
-        @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
-            return p.getName() + "'s " + this.getName() + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
-        }
-
-        @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SPEED;
+        public Stat getBoosted() {
+            return Stat.SPEED;
         }
 
         @Override
         public int flingDamage() {
             return 10;
         }
-
-        @Override
-        public double getModifier() {
-            return 1.5;
-        }
     }
 
-    static class ChoiceSpecs extends Item implements AttackSelectionEffect, HoldItem, SimpleStatModifyingEffect {
+    static class ChoiceSpecs extends Item implements HoldItem, ChoiceEffect {
         private static final long serialVersionUID = 1L;
 
         ChoiceSpecs() {
@@ -462,32 +425,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public boolean usable(Battle b, ActivePokemon p, Move m) {
-            // Note: Because this is just using the last move used and not actually storing the move
-            // or anything like that it will break if it gets Struggled (from something like Torment)
-            // and will be locked into Struggle for the rest of the fight
-            Move last = p.getLastMoveUsed();
-            return last == null || m == last;
-        }
-
-        @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
-            return p.getName() + "'s " + this.getName() + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
-        }
-
-        @Override
-        public boolean isModifyStat(Stat s) {
-            return s == Stat.SP_ATTACK;
+        public Stat getBoosted() {
+            return Stat.SP_ATTACK;
         }
 
         @Override
         public int flingDamage() {
             return 10;
-        }
-
-        @Override
-        public double getModifier() {
-            return 1.5;
         }
     }
 

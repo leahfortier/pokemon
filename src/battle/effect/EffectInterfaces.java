@@ -3,6 +3,7 @@ package battle.effect;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackInterface;
+import battle.attack.Move;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
@@ -589,6 +590,36 @@ public final class EffectInterfaces {
         // Confirms this by the Pokemon being dead or not the front Pokemon
         private boolean unlocked(Battle b, ActivePokemon p) {
             return p.isFainted(b) || !b.isFront(p);
+        }
+    }
+
+    // Used for effects which boost a stat by 50%, but only allow the first selected move to be used
+    public interface ChoiceEffect extends AttackSelectionEffect, SimpleStatModifyingEffect {
+        Stat getBoosted();
+        String getName();
+
+        @Override
+        default boolean isModifyStat(Stat s) {
+            return s == this.getBoosted();
+        }
+
+        @Override
+        default double getModifier() {
+            return 1.5;
+        }
+
+        @Override
+        default boolean usable(Battle b, ActivePokemon p, Move m) {
+            // Note: Because this is just using the last move used and not actually storing the move
+            // or anything like that it will break if it gets Struggled (from something like Torment)
+            // and will be locked into Struggle for the rest of the fight
+            Move last = p.getLastMoveUsed();
+            return last == null || m == last;
+        }
+
+        @Override
+        default String getUnusableMessage(Battle b, ActivePokemon p) {
+            return p.getName() + "'s " + this.getName() + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
         }
     }
 }

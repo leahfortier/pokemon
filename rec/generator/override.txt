@@ -1193,20 +1193,18 @@ TypeTakeDamageStatIncrease:
     AddInterface: TakeDamageEffect
 *
 ChoiceItem:
-    AddMapField: SimpleToModify: {0} 1.5
-    AddInterface: AttackSelectionEffect
-    AddMapField: Usable:
-        // Note: Because this is just using the last move used and not actually storing the move
-        // or anything like that it will break if it gets Struggled (from something like Torment)
-        // and will be locked into Struggle for the rest of the fight
-        Move last = p.getLastMoveUsed();
-        return last == null || m == last;
-        ###
-    AddMapField: UnusableMessage: p.getName() + "'s " + this.getName() + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!"
+    AddMapField: ChoiceEffect: {0}
     AddInterface: HoldItem
     AddMapField: Fling: 10
     AddMapField: Price: 4000
     AddMapField: Cat: Misc
+*
+ChoiceEffect:
+    AddInterface: ChoiceEffect
+    Header: Stat getBoosted()
+    Body:
+        return Stat.{00};
+        ###
 *
 Wing:
     AddMapField: EVIncreaseAmt: {0}

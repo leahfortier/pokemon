@@ -1771,3 +1771,21 @@ Power of Alchemy:
 Ball Fetch:
     Desc: If the Pokémon is not holding an item, it will fetch the Poké Ball from the first failed throw of the battle.
 *
+Cotton Down:
+    Desc: When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stat of all Pokémon except itself.
+    Int: TakeDamageEffect
+    OnTakeDamage:
+        user.getStages().modifyStage(victim, -1, Stat.SPEED, b, CastSource.ABILITY);
+        ###
+*
+Dauntless Shield:
+    Desc: Boosts the Pokémon's Defense stat when the Pokémon enters a battle.
+    Int: EntryEffect
+    Enter:
+        enterer.getStages().modifyStage(enterer, 1, Stat.DEFENSE, b, CastSource.ABILITY);
+        ###
+*
+Gorilla Tactics:
+    Desc: Boosts the Pokémon's Attack stat but only allows the use of the first selected move.
+    ChoiceEffect: Attack
+*

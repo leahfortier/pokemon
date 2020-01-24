@@ -9,6 +9,7 @@ import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.ChoiceEffect;
 import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.EffectInterfaces.ItemListHolder;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
@@ -4368,6 +4369,45 @@ public abstract class Ability implements AbilityInterface {
 
         BallFetch() {
             super(AbilityNamesies.BALL_FETCH, "If the Pokémon is not holding an item, it will fetch the Poké Ball from the first failed throw of the battle.");
+        }
+    }
+
+    static class CottonDown extends Ability implements TakeDamageEffect {
+        private static final long serialVersionUID = 1L;
+
+        CottonDown() {
+            super(AbilityNamesies.COTTON_DOWN, "When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stat of all Pokémon except itself.");
+        }
+
+        @Override
+        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+            user.getStages().modifyStage(victim, -1, Stat.SPEED, b, CastSource.ABILITY);
+        }
+    }
+
+    static class DauntlessShield extends Ability implements EntryEffect {
+        private static final long serialVersionUID = 1L;
+
+        DauntlessShield() {
+            super(AbilityNamesies.DAUNTLESS_SHIELD, "Boosts the Pokémon's Defense stat when the Pokémon enters a battle.");
+        }
+
+        @Override
+        public void enter(Battle b, ActivePokemon enterer) {
+            enterer.getStages().modifyStage(enterer, 1, Stat.DEFENSE, b, CastSource.ABILITY);
+        }
+    }
+
+    static class GorillaTactics extends Ability implements ChoiceEffect {
+        private static final long serialVersionUID = 1L;
+
+        GorillaTactics() {
+            super(AbilityNamesies.GORILLA_TACTICS, "Boosts the Pokémon's Attack stat but only allows the use of the first selected move.");
+        }
+
+        @Override
+        public Stat getBoosted() {
+            return Stat.ATTACK;
         }
     }
 }

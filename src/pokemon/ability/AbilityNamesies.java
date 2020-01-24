@@ -28,11 +28,13 @@ import pokemon.ability.Ability.Competitive;
 import pokemon.ability.Ability.CompoundEyes;
 import pokemon.ability.Ability.Contrary;
 import pokemon.ability.Ability.Corrosion;
+import pokemon.ability.Ability.CottonDown;
 import pokemon.ability.Ability.CursedBody;
 import pokemon.ability.Ability.CuteCharm;
 import pokemon.ability.Ability.Damp;
 import pokemon.ability.Ability.Dancer;
 import pokemon.ability.Ability.DarkAura;
+import pokemon.ability.Ability.DauntlessShield;
 import pokemon.ability.Ability.Dazzling;
 import pokemon.ability.Ability.Defeatist;
 import pokemon.ability.Ability.Defiant;
@@ -62,6 +64,7 @@ import pokemon.ability.Ability.GaleWings;
 import pokemon.ability.Ability.Galvanize;
 import pokemon.ability.Ability.Gluttony;
 import pokemon.ability.Ability.Gooey;
+import pokemon.ability.Ability.GorillaTactics;
 import pokemon.ability.Ability.GrassPelt;
 import pokemon.ability.Ability.GrassySurge;
 import pokemon.ability.Ability.Guts;
@@ -443,7 +446,10 @@ public enum AbilityNamesies {
     GRASSY_SURGE("Grassy Surge", GrassySurge::new),
     MOODY("Moody", Moody::new),
     POWER_OF_ALCHEMY("Power of Alchemy", PowerOfAlchemy::new),
-    BALL_FETCH("Ball Fetch", BallFetch::new);
+    BALL_FETCH("Ball Fetch", BallFetch::new),
+    COTTON_DOWN("Cotton Down", CottonDown::new),
+    DAUNTLESS_SHIELD("DauntlessShield", DauntlessShield::new),
+    GORILLA_TACTICS("Gorilla Tactics", GorillaTactics::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

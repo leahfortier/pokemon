@@ -1410,4 +1410,23 @@ public class AbilityTest extends BaseTest {
             Assert.assertTrue(itemNamesies.getName(), itemNamesies.getItem() instanceof HoldItem);
         }
     }
+
+    @Test
+    public void cottonDownTest() {
+        // Cotton Down activates every time the Pokemon takes direct attack damage
+        cottonDownTest(0, AttackNamesies.TOXIC);
+        cottonDownTest(-1, AttackNamesies.TACKLE);
+        cottonDownTest(-1, AttackNamesies.SWIFT);
+        cottonDownTest(-2, AttackNamesies.TWINEEDLE);
+    }
+
+    private void cottonDownTest(int expectedStage, AttackNamesies attackNamesies) {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.COTTON_DOWN);
+
+        battle.attackingFight(attackNamesies);
+        attacking.assertStages(new TestStages().set(expectedStage, Stat.SPEED));
+        defending.assertStages(new TestStages());
+    }
 }
