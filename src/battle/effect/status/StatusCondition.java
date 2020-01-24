@@ -5,7 +5,7 @@ import battle.Battle;
 import battle.attack.MoveType;
 import battle.effect.ApplyResult;
 import battle.effect.EffectInterfaces.StatModifyingStatus;
-import battle.effect.InvokeInterfaces.BeforeTurnEffect;
+import battle.effect.InvokeInterfaces.BeforeAttackPreventingEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.OpponentStatusReceivedEffect;
 import battle.effect.InvokeInterfaces.SleepyFightsterEffect;
@@ -210,7 +210,7 @@ public abstract class StatusCondition implements StatusInterface {
 
     // Electric-type Pokemon cannot be paralyzed
     // Paralysis reduces speed by 75%
-    static class Paralyzed extends StatusCondition implements BeforeTurnEffect, StatModifyingStatus {
+    static class Paralyzed extends StatusCondition implements BeforeAttackPreventingEffect, StatModifyingStatus {
         private static final long serialVersionUID = 1L;
 
         Paralyzed() {
@@ -223,7 +223,7 @@ public abstract class StatusCondition implements StatusInterface {
         }
 
         @Override
-        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
+        public boolean canAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             if (RandomUtils.chanceTest(25)) {
                 Messages.add(attacking.getName() + " is fully paralyzed!");
                 return false;
@@ -430,7 +430,7 @@ public abstract class StatusCondition implements StatusInterface {
     }
 
     // All Pokemon can get sleepy
-    static class Asleep extends StatusCondition implements BeforeTurnEffect {
+    static class Asleep extends StatusCondition implements BeforeAttackPreventingEffect {
         private static final long serialVersionUID = 1L;
 
         private int numTurns;
@@ -446,7 +446,7 @@ public abstract class StatusCondition implements StatusInterface {
         }
 
         @Override
-        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
+        public boolean canAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             if (numTurns == 0) {
                 attacking.removeStatus(b, CastSource.EFFECT);
                 return true;
@@ -495,7 +495,7 @@ public abstract class StatusCondition implements StatusInterface {
     }
 
     // Ice-type Pokemon cannot be frozen
-    static class Frozen extends StatusCondition implements BeforeTurnEffect, TakeDamageEffect {
+    static class Frozen extends StatusCondition implements BeforeAttackPreventingEffect, TakeDamageEffect {
         private static final long serialVersionUID = 1L;
 
         Frozen() {
@@ -508,7 +508,7 @@ public abstract class StatusCondition implements StatusInterface {
         }
 
         @Override
-        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
+        public boolean canAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // 20% chance to thaw out each turn
             if (RandomUtils.chanceTest(20) || attacking.getAttack().isMoveType(MoveType.DEFROST)) {
                 attacking.removeStatus(b, CastSource.EFFECT);

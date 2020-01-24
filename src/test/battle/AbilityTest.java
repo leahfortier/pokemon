@@ -1401,6 +1401,80 @@ public class AbilityTest extends BaseTest {
     }
 
     @Test
+    public void disguiseTest() {
+        // Disguise will block the first direct hit of damage
+        disguiseTest(
+                AttackNamesies.TACKLE,
+                (battle, attacking, defending) -> defending.assertNotFullHealth(),
+                (battle, attacking, defending) -> defending.assertFullHealth()
+        );
+
+        // Disguise does not block indirect damage such as poison
+        disguiseTest(
+                AttackNamesies.TOXIC,
+                (battle, attacking, defending) -> {
+                    defending.assertBadPoison();
+                    defending.assertHealthRatio(15/16.0);
+                }
+        );
+
+        // Disguise only blocks the first direct hit of damage, so the second one will not be absorbed
+        disguiseTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .attackingFight(AttackNamesies.TACKLE)
+                        .attackingFight(AttackNamesies.TACKLE),
+                (battle, attacking, defending) -> defending.assertNotFullHealth()
+        );
+
+        // Disguise is affected by Mold Breaker and so will take damage from the first hit
+        disguiseTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .attacking(AbilityNamesies.MOLD_BREAKER)
+                        .attackingFight(AttackNamesies.TACKLE),
+                (battle, attacking, defending) -> defending.assertNotFullHealth()
+        );
+
+        // Disguise doesn't act actually break when ignored with Mold Breaker
+        disguiseTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .with((battle, attacking, defending) -> {
+                            // Attack with Mold Breaker, damage is dealt, but Disguise does not break
+                            attacking.withAbility(AbilityNamesies.MOLD_BREAKER);
+                            battle.fight(AttackNamesies.TACKLE, AttackNamesies.SUNNY_DAY);
+                            defending.assertNotFullHealth();
+
+                            // Restore back to full health (just for simplicity of damage check, full health is
+                            // not relevant to Disguise itself)
+                            battle.defendingFight(AttackNamesies.SYNTHESIS);
+                            defending.assertFullHealth();
+
+                            // Suppress the Mold Breaker ability and try to break the disguise again
+                            battle.defendingFight(AttackNamesies.GASTRO_ACID);
+                            battle.attackingFight(AttackNamesies.TACKLE);
+                        }),
+                (battle, attacking, defending) -> defending.assertNotFullHealth(),
+                (battle, attacking, defending) -> defending.assertFullHealth()
+        );
+    }
+
+    private void disguiseTest(AttackNamesies attackNamesies, PokemonManipulator samesies) {
+        disguiseTest(attackNamesies, samesies, samesies);
+    }
+
+    private void disguiseTest(TestInfo testInfo, PokemonManipulator samesies) {
+        disguiseTest(testInfo, samesies, samesies);
+    }
+
+    private void disguiseTest(AttackNamesies attackNamesies, PokemonManipulator withoutManipulator, PokemonManipulator withManipulator) {
+        TestInfo testInfo = new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE).attackingFight(attackNamesies);
+        disguiseTest(testInfo, withoutManipulator, withManipulator);
+    }
+
+    private void disguiseTest(TestInfo testInfo, PokemonManipulator withoutManipulator, PokemonManipulator withManipulator) {
+        testInfo.doubleTake(AbilityNamesies.DISGUISE, withoutManipulator, withManipulator);
+    }
+
+    @Test
     public void pickupTest() {
         // Note: Test is currently only checking that all potential items to pick up are hold items, and does not
         // currently confirm its mechanics are working (actually gives items etc)

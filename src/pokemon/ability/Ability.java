@@ -14,6 +14,7 @@ import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.EffectInterfaces.ItemListHolder;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MaxLevelWildEncounterEffect;
+import battle.effect.EffectInterfaces.MoldBreakerEffect;
 import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.EffectInterfaces.RepelLowLevelEncounterEffect;
@@ -29,7 +30,7 @@ import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackingNoAdvantageChanger;
-import battle.effect.InvokeInterfaces.BeforeTurnEffect;
+import battle.effect.InvokeInterfaces.BeforeAttackPreventingEffect;
 import battle.effect.InvokeInterfaces.BracingEffect;
 import battle.effect.InvokeInterfaces.ChangeAttackTypeEffect;
 import battle.effect.InvokeInterfaces.ChangeTypeEffect;
@@ -70,6 +71,7 @@ import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.SleepyFightsterEffect;
 import battle.effect.InvokeInterfaces.StageChangingEffect;
 import battle.effect.InvokeInterfaces.StallingEffect;
+import battle.effect.InvokeInterfaces.StartAttackEffect;
 import battle.effect.InvokeInterfaces.StatLoweredEffect;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
@@ -2071,7 +2073,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Truant extends Ability implements EndTurnEffect, BeforeTurnEffect {
+    static class Truant extends Ability implements EndTurnEffect, BeforeAttackPreventingEffect {
         private static final long serialVersionUID = 1L;
 
         private boolean lazyface;
@@ -2079,6 +2081,11 @@ public abstract class Ability implements AbilityInterface {
         Truant() {
             super(AbilityNamesies.TRUANT, "The Pok\u00e9mon can't use a move the following turn if it uses one.");
             this.lazyface = false;
+        }
+
+        @Override
+        public boolean isReplaceable() {
+            return false;
         }
 
         @Override
@@ -2091,7 +2098,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
+        public boolean canAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             if (lazyface) {
                 Messages.add(attacking.getName() + " is loafing around!");
                 return false;
@@ -2943,7 +2950,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class MoldBreaker extends Ability implements EntryEffect {
+    static class MoldBreaker extends Ability implements MoldBreakerEffect, EntryEffect {
         private static final long serialVersionUID = 1L;
 
         MoldBreaker() {
@@ -2956,7 +2963,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Teravolt extends Ability implements EntryEffect {
+    static class Teravolt extends Ability implements MoldBreakerEffect, EntryEffect {
         private static final long serialVersionUID = 1L;
 
         Teravolt() {
@@ -2969,7 +2976,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Turboblaze extends Ability implements EntryEffect {
+    static class Turboblaze extends Ability implements MoldBreakerEffect, EntryEffect {
         private static final long serialVersionUID = 1L;
 
         Turboblaze() {
@@ -3623,7 +3630,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class StanceChange extends Ability implements BeforeTurnEffect, EntryEffect, DifferentStatEffect {
+    static class StanceChange extends Ability implements StartAttackEffect, EntryEffect, DifferentStatEffect {
         private static final long serialVersionUID = 1L;
 
         private static final BaseStats SHIELD_STATS = new BaseStats(new int[] { 60, 50, 150, 50, 150, 60 });
@@ -3648,12 +3655,11 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
+        public void beforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // TODO: This should really activate right before printing the attacking move, not after
             if ((!bladeForm && !attacking.getAttack().isStatusMove()) || (bladeForm && attacking.getAttack().namesies() == AttackNamesies.KINGS_SHIELD)) {
                 changeForm(attacking);
             }
-
-            return true;
         }
 
         @Override
@@ -3783,7 +3789,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Protean extends Ability implements BeforeTurnEffect, ChangeTypeSource {
+    static class Protean extends Ability implements StartAttackEffect, ChangeTypeSource {
         private static final long serialVersionUID = 1L;
 
         private Type type;
@@ -3793,14 +3799,12 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b) {
+        public void beforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Protean activates for all moves except for Struggle
             if (attacking.getAttack().namesies() != AttackNamesies.STRUGGLE) {
                 type = attacking.getAttackType();
                 Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, b, attacking, attacking, CastSource.ABILITY, true);
             }
-
-            return true;
         }
 
         @Override

@@ -6,6 +6,7 @@ import battle.effect.Effect;
 import battle.effect.EffectInterface;
 import battle.effect.EffectInterfaces.EffectPreventionAbility;
 import battle.effect.EffectInterfaces.EntryHazard;
+import battle.effect.EffectInterfaces.MoldBreakerEffect;
 import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
@@ -21,7 +22,7 @@ import battle.effect.InvokeInterfaces.AttackingNoAdvantageChanger;
 import battle.effect.InvokeInterfaces.BarrierEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
 import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
-import battle.effect.InvokeInterfaces.BeforeTurnEffect;
+import battle.effect.InvokeInterfaces.BeforeAttackPreventingEffect;
 import battle.effect.InvokeInterfaces.BracingEffect;
 import battle.effect.InvokeInterfaces.ChangeAttackTypeEffect;
 import battle.effect.InvokeInterfaces.ChangeMoveListEffect;
@@ -62,6 +63,7 @@ import battle.effect.InvokeInterfaces.SelfAttackBlocker;
 import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.SleepyFightsterEffect;
 import battle.effect.InvokeInterfaces.StageChangingEffect;
+import battle.effect.InvokeInterfaces.StartAttackEffect;
 import battle.effect.InvokeInterfaces.StatChangingEffect;
 import battle.effect.InvokeInterfaces.StatLoweredEffect;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
@@ -192,7 +194,6 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, AbilityInterface.class, Ability.class);
             checkInstance(classy, EffectInterface.class, Effect.class);
 
-            checkInstance(classy, NameChanger.class, Ability.class);
             checkInstance(classy, PassableEffect.class, PokemonEffect.class);
             checkInstance(classy, PartialTrappingEffect.class, PokemonEffect.class);
             checkInstance(classy, SwappableEffect.class, TeamEffect.class);
@@ -212,6 +213,12 @@ public class ClassTest extends BaseTest {
 
             // EffectPreventionAbility should be single or multiple
             checkInstance(classy, EffectPreventionAbility.class, SingleEffectPreventionAbility.class, MultipleEffectPreventionAbility.class);
+
+            // NameChanger only looks at the ability
+            checkInstance(classy, NameChanger.class, Ability.class);
+
+            // Mold Breaker effects are only checked on the ability and the attack
+            checkInstance(classy, MoldBreakerEffect.class, Ability.class, Attack.class);
 
             // Casted from CastSource.getSource()
             checkInstance(classy, ChangeAbilitySource.class, castSources);
@@ -238,7 +245,8 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, WeatherBlockerEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, TrappingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, OpponentTrappingEffect.class, effectListSourcesNoAttack);
-            checkInstance(classy, BeforeTurnEffect.class, effectListSourcesNoAttack);
+            checkInstance(classy, BeforeAttackPreventingEffect.class, effectListSourcesNoAttack);
+            checkInstance(classy, StartAttackEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, EffectPreventionEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, TargetSwapperEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, StatProtectingEffect.class, effectListSourcesNoAttack);

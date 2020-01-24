@@ -7,6 +7,7 @@ import battle.attack.MoveType;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.AbilityHolder;
 import battle.effect.EffectInterfaces.ItemHolder;
+import battle.effect.EffectInterfaces.MoldBreakerEffect;
 import battle.effect.EffectInterfaces.PokemonHolder;
 import battle.effect.EffectList;
 import battle.effect.InvokeEffect;
@@ -374,14 +375,7 @@ public class ActivePokemon extends PartyPokemon {
             return false;
         }
 
-        switch (getAbility().namesies()) {
-            case MOLD_BREAKER:
-            case TURBOBLAZE:
-            case TERAVOLT:
-                return true;
-        }
-
-        return this.hasEffect(PokemonEffectNamesies.BREAKS_THE_MOLD);
+        return this.getAbility() instanceof MoldBreakerEffect || this.getAttack() instanceof MoldBreakerEffect;
     }
 
     // Returns true if the move currently using makes physical contact
@@ -625,10 +619,9 @@ public class ActivePokemon extends PartyPokemon {
 
     public List<InvokeEffect> getAllEffects(final Battle b, final boolean includeItem) {
         List<InvokeEffect> list = new ArrayList<>();
-        list.addAll(this.getEffects().asList());
         list.add(this.getStatus());
         list.add(this.getAbility());
-
+        list.addAll(this.getEffects().asList());
         if (includeItem) {
             list.add(this.getHeldItem(b));
         }

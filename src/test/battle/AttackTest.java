@@ -1854,7 +1854,6 @@ public class AttackTest extends BaseTest {
 
         battle.fight(attackNamesies, AttackNamesies.ENDURE);
         defending.assertNotFullHealth();
-        attacking.assertNoEffect(PokemonEffectNamesies.BREAKS_THE_MOLD);
     }
 
     @Test

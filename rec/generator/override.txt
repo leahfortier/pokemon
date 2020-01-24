@@ -575,8 +575,13 @@ BattleEndTurnMessage:
         return {0};
         ###
 *
+# For BeforeAttackPreventingEffect
 CanAttack:
-    Header: boolean canAttack(ActivePokemon attacking, ActivePokemon defending, Battle b)
+    Header: boolean canAttack(Battle b, ActivePokemon attacking, ActivePokemon defending)
+*
+# For StartAttackEffect
+BeforeAttack:
+    Header: void beforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending)
 *
 ProtectingEffect:
     AddMapField: ProtectingEffectNoDecay: True
@@ -1891,9 +1896,6 @@ TempEffectMove:
         this.effect.deactivate();
         ###
 *
-IgnoreAbilityMove:
-    AddMapField: TempEffectMove: BREAKS_THE_MOLD
-*
 GetCurableEffects:
     Header: Set<PokemonEffectNamesies> getCurableEffects()
     Body:
@@ -1929,6 +1931,16 @@ TerrainStarter:
     AddMapField: Enter:
         String message = enterer.getName() + "'s " + this.getName() + " changed the field to {0} Terrain!";
         Effect.cast(TerrainNamesies.{00}_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
+        ###
+*
+IgnoreAbilityMove:
+    AddInterface: MoldBreakerEffect
+*
+MoldBreakingAbility:
+    AddInterface: MoldBreakerEffect
+    AddInterface: EntryEffect
+    AddMapField: Enter:
+        Messages.add({0});
         ###
 *
 MoldBreakerBreaker:

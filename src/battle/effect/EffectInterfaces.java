@@ -134,6 +134,9 @@ public final class EffectInterfaces {
     // Team Effects that can be swapped with Court Change
     public interface SwappableEffect extends EffectInterface {}
 
+    // Pangoro breaks the mold!
+    public interface MoldBreakerEffect {}
+
     public interface EntryHazard extends SwappableEffect, EntryEffect, RapidSpinRelease, DefogRelease {
         String getReleaseMessage();
 

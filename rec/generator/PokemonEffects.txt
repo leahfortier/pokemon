@@ -31,7 +31,7 @@ LeechSeed:
     RapidSpin: released.getName() + " was released from leech seed!"
 *
 Flinch:
-    Int: BeforeTurnEffect
+    Int: BeforeAttackPreventingEffect
     EffectApplies: b.isFirstAttack()
     CastMessage: victim.getName() + " flinched!"
     CanAttack:
@@ -145,7 +145,7 @@ Bracing:
     BraceMessage: bracer.getName() + " endured the hit!"
 *
 Confusion:
-    Int: PassableEffect, BeforeTurnEffect
+    Int: PassableEffect, BeforeAttackPreventingEffect
     FullEffectApplies:
         if (victim.hasEffect(this.namesies())) {
             return ApplyResult.failure(victim.getName() + " is already confused!");
@@ -881,6 +881,7 @@ HalfWeight:
         ###
     Int: HalfWeightEffect
     HalfAmount: layers
+    CastMessage: victim.getName() + " became nimble!"
 *
 PowerTrick:
     CanHave: True
@@ -914,7 +915,7 @@ HealBlock:
 *
 Infatuation:
     EffectApplies: Gender.oppositeGenders(caster, victim)
-    Int: BeforeTurnEffect
+    Int: BeforeAttackPreventingEffect
     CanAttack:
         Messages.add(attacking.getName() + " is in love with " + defending.getName() + "!");
         if (RandomUtils.chanceTest(50)) {
@@ -950,11 +951,11 @@ Grudge:
 *
 DestinyBond:
     CastMessage: victim.getName() + " is trying to take " + b.getOtherPokemon(victim).getName() + " down with it!"
-    Int: BeforeTurnEffect
-    CanAttack:
-        // TODO: What is happening
+    Int: StartAttackEffect
+    BeforeAttack:
+        // Destiny Bond stays active until the user moves again
+        // TODO: Technically this should deactivate even if asleep, paralyzed, fully confused, etc
         this.deactivate();
-        return true;
         ###
     DeathWish:
         murderer.killKillKillMurderMurderMurder(b, dead.getName() + " took " + murderer.getName() + " down with it!");
@@ -1007,9 +1008,6 @@ Powder:
 *
 EatenBerry:
 *
-BreaksTheMold:
-    NumTurns: 1
-*
 Raging:
     Int: TakeDamageEffect
     OnTakeDamage:
@@ -1031,4 +1029,5 @@ StickyTar:
     GetOppMultiplier:
         return user.isAttackType(Type.FIRE) ? 2 : 1;
         ###
+    CastMessage: victim.getName() + " became weak to fire!"
 *
