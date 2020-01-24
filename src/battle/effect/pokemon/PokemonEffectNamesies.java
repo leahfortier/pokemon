@@ -7,7 +7,6 @@ import battle.effect.pokemon.PokemonEffect.BeakBlast;
 import battle.effect.pokemon.PokemonEffect.Bide;
 import battle.effect.pokemon.PokemonEffect.Binded;
 import battle.effect.pokemon.PokemonEffect.Bracing;
-import battle.effect.pokemon.PokemonEffect.BreaksTheMold;
 import battle.effect.pokemon.PokemonEffect.ChangeAbility;
 import battle.effect.pokemon.PokemonEffect.ChangeAttackType;
 import battle.effect.pokemon.PokemonEffect.ChangeItem;
@@ -157,7 +156,6 @@ public enum PokemonEffectNamesies implements EffectNamesies {
     CONSUMED_ITEM(ConsumedItem::new),
     POWDER(Powder::new),
     EATEN_BERRY(EatenBerry::new),
-    BREAKS_THE_MOLD(BreaksTheMold::new),
     RAGING(Raging::new),
     STICKY_TAR(StickyTar::new);
 

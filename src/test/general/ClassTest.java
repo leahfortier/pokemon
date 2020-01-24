@@ -6,6 +6,7 @@ import battle.effect.Effect;
 import battle.effect.EffectInterface;
 import battle.effect.EffectInterfaces.EffectPreventionAbility;
 import battle.effect.EffectInterfaces.EntryHazard;
+import battle.effect.EffectInterfaces.MoldBreakerEffect;
 import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
@@ -193,7 +194,6 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, AbilityInterface.class, Ability.class);
             checkInstance(classy, EffectInterface.class, Effect.class);
 
-            checkInstance(classy, NameChanger.class, Ability.class);
             checkInstance(classy, PassableEffect.class, PokemonEffect.class);
             checkInstance(classy, PartialTrappingEffect.class, PokemonEffect.class);
             checkInstance(classy, SwappableEffect.class, TeamEffect.class);
@@ -213,6 +213,12 @@ public class ClassTest extends BaseTest {
 
             // EffectPreventionAbility should be single or multiple
             checkInstance(classy, EffectPreventionAbility.class, SingleEffectPreventionAbility.class, MultipleEffectPreventionAbility.class);
+
+            // NameChanger only looks at the ability
+            checkInstance(classy, NameChanger.class, Ability.class);
+
+            // Mold Breaker effects are only checked on the ability and the attack
+            checkInstance(classy, MoldBreakerEffect.class, Ability.class, Attack.class);
 
             // Casted from CastSource.getSource()
             checkInstance(classy, ChangeAbilitySource.class, castSources);

@@ -11,6 +11,7 @@ import battle.effect.EffectInterfaces.DoubleFlyer;
 import battle.effect.EffectInterfaces.DoubleMinimizerMove;
 import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
+import battle.effect.EffectInterfaces.MoldBreakerEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.EffectInterfaces.PowderMove;
 import battle.effect.EffectInterfaces.PowerStatusBoosterEffect;
@@ -10831,10 +10832,8 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class SunsteelStrike extends Attack {
+    static class SunsteelStrike extends Attack implements MoldBreakerEffect {
         private static final long serialVersionUID = 1L;
-
-        private Effect effect;
 
         SunsteelStrike() {
             super(AttackNamesies.SUNSTEEL_STRIKE, Type.STEEL, MoveCategory.PHYSICAL, 5, "The user slams into the target with the force of a meteor. This move can be used on the target regardless of its Abilities.");
@@ -10842,37 +10841,15 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
-
-        @Override
-        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
-        }
-
-        @Override
-        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            this.effect.deactivate();
-        }
     }
 
-    static class MoongeistBeam extends Attack {
+    static class MoongeistBeam extends Attack implements MoldBreakerEffect {
         private static final long serialVersionUID = 1L;
-
-        private Effect effect;
 
         MoongeistBeam() {
             super(AttackNamesies.MOONGEIST_BEAM, Type.GHOST, MoveCategory.SPECIAL, 5, "The user emits a sinister ray to attack the target. This move can be used on the target regardless of its Abilities.");
             super.power = 100;
             super.accuracy = 100;
-        }
-
-        @Override
-        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
-        }
-
-        @Override
-        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            this.effect.deactivate();
         }
     }
 
@@ -10991,10 +10968,8 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class PhotonGeyser extends Attack {
+    static class PhotonGeyser extends Attack implements MoldBreakerEffect {
         private static final long serialVersionUID = 1L;
-
-        private Effect effect;
 
         PhotonGeyser() {
             super(AttackNamesies.PHOTON_GEYSER, Type.PSYCHIC, MoveCategory.SPECIAL, 5, "The user attacks a target with a pillar of light. This move inflicts Attack or Sp. Atk damage -- whichever stat is higher for the user.");
@@ -11008,14 +10983,12 @@ public abstract class Attack implements AttackInterface {
             if (Stat.ATTACK.getBasicStat(b, attacking) > Stat.SP_ATTACK.getBasicStat(b, attacking)) {
                 super.category = MoveCategory.PHYSICAL;
             }
-            this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         }
 
         @Override
         public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Reset category to special
             super.category = MoveCategory.SPECIAL;
-            this.effect.deactivate();
         }
     }
 
@@ -11121,25 +11094,13 @@ public abstract class Attack implements AttackInterface {
     }
 
     // Note: This was changed from ignoring targeting to ignoring abilities
-    static class SnipeShot extends Attack implements CritStageEffect {
+    static class SnipeShot extends Attack implements CritStageEffect, MoldBreakerEffect {
         private static final long serialVersionUID = 1L;
-
-        private Effect effect;
 
         SnipeShot() {
             super(AttackNamesies.SNIPE_SHOT, Type.WATER, MoveCategory.SPECIAL, 15, "This move can be used on the target regardless of its Abilities. Critical hits land more easily.");
             super.power = 80;
             super.accuracy = 100;
-        }
-
-        @Override
-        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
-        }
-
-        @Override
-        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            this.effect.deactivate();
         }
     }
 

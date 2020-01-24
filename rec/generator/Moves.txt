@@ -6575,7 +6575,6 @@ Steam Eruption:
     Cat: Special
     MoveType: Defrost
 *
-# Note: This isn't using IgnoreAbilityMove anymore because it needs other things but they should really be the same
 Photon Geyser:
     Desc: The user attacks a target with a pillar of light. This move inflicts Attack or Sp. Atk damage -- whichever stat is higher for the user.
     Type: Psychic
@@ -6583,20 +6582,16 @@ Photon Geyser:
     Pow: 100
     Acc: 100
     Cat: Special
-    Field:
-        private Effect effect;
-        ###
+    IgnoreAbilityMove: True
     BeginAttack:
         // If attack stat is higher, switch to physical move
         if (Stat.ATTACK.getBasicStat(b, attacking) > Stat.SP_ATTACK.getBasicStat(b, attacking)) {
             super.category = MoveCategory.PHYSICAL;
         }
-        this.effect = Effect.cast(PokemonEffectNamesies.BREAKS_THE_MOLD, b, attacking, attacking, CastSource.ATTACK, false);
         ###
     EndAttack:
         // Reset category to special
         super.category = MoveCategory.SPECIAL;
-        this.effect.deactivate();
         ###
 *
 Mind Blown:

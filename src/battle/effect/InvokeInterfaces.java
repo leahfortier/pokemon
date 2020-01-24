@@ -1347,6 +1347,7 @@ public final class InvokeInterfaces {
         }
     }
 
+    // Effects which can absorb direct attacks
     public interface AbsorbDamageEffect {
         boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount);
 
@@ -1354,6 +1355,12 @@ public final class InvokeInterfaces {
             List<InvokeEffect> invokees = b.getEffectsList(damageTaker);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof AbsorbDamageEffect && invokee.isActiveEffect()) {
+
+                    // If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && b.getOtherPokemon(damageTaker).breaksTheMold()) {
+                        continue;
+                    }
+
                     AbsorbDamageEffect effect = (AbsorbDamageEffect)invokee;
                     if (effect.absorbDamage(b, damageTaker, damageAmount)) {
                         return true;

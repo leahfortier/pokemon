@@ -12,6 +12,7 @@ import battle.effect.Effect;
 import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MaxLevelWildEncounterEffect;
+import battle.effect.EffectInterfaces.MoldBreakerEffect;
 import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.EffectInterfaces.RepelLowLevelEncounterEffect;
@@ -2947,7 +2948,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class MoldBreaker extends Ability implements EntryEffect {
+    static class MoldBreaker extends Ability implements MoldBreakerEffect, EntryEffect {
         private static final long serialVersionUID = 1L;
 
         MoldBreaker() {
@@ -2960,7 +2961,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Teravolt extends Ability implements EntryEffect {
+    static class Teravolt extends Ability implements MoldBreakerEffect, EntryEffect {
         private static final long serialVersionUID = 1L;
 
         Teravolt() {
@@ -2973,7 +2974,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Turboblaze extends Ability implements EntryEffect {
+    static class Turboblaze extends Ability implements MoldBreakerEffect, EntryEffect {
         private static final long serialVersionUID = 1L;
 
         Turboblaze() {

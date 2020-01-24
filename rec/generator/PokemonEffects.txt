@@ -1008,9 +1008,6 @@ Powder:
 *
 EatenBerry:
 *
-BreaksTheMold:
-    NumTurns: 1
-*
 Raging:
     Int: TakeDamageEffect
     OnTakeDamage:

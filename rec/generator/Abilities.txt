@@ -1177,24 +1177,15 @@ Iron Barbs:
 *
 Mold Breaker:
     Desc: Moves can be used on the target regardless of its Abilities.
-    Int: EntryEffect
-    Enter:
-        Messages.add(enterer.getName() + " breaks the mold!");
-        ###
+    MoldBreakingAbility: enterer.getName() + " breaks the mold!"
 *
 Teravolt:
     Desc: Moves can be used on the target regardless of its Abilities.
-    Int: EntryEffect
-    Enter:
-        Messages.add(enterer.getName() + " is radiating a bursting aura!");
-        ###
+    MoldBreakingAbility: enterer.getName() + " is radiating a bursting aura!"
 *
 Turboblaze:
     Desc: Moves can be used on the target regardless of its Abilities.
-    Int: EntryEffect
-    Enter:
-        Messages.add(enterer.getName() + " is radiating a blazing aura!");
-        ###
+    MoldBreakingAbility: enterer.getName() + " is radiating a blazing aura!"
 *
 Run Away:
     Int: DefiniteEscape

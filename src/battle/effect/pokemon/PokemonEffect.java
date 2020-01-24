@@ -2406,14 +2406,6 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class BreaksTheMold extends PokemonEffect {
-        private static final long serialVersionUID = 1L;
-
-        BreaksTheMold() {
-            super(PokemonEffectNamesies.BREAKS_THE_MOLD, 1, 1, false, false);
-        }
-    }
-
     static class Raging extends PokemonEffect implements TakeDamageEffect {
         private static final long serialVersionUID = 1L;
 

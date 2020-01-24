@@ -727,10 +727,12 @@ StatusBoosterEffect:
     *
 ***
 AbsorbDamageEffect:
+    Comments: // Effects which can absorb direct attacks
     Method:
         Header: boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount)
         Invoke: Check true
         EffectList: damageTaker
+        MoldBreaker: b.getOtherPokemon(damageTaker)
     *
 ***
 DamageTakenEffect:
