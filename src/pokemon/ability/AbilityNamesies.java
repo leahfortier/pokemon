@@ -67,6 +67,7 @@ import pokemon.ability.Ability.Gooey;
 import pokemon.ability.Ability.GorillaTactics;
 import pokemon.ability.Ability.GrassPelt;
 import pokemon.ability.Ability.GrassySurge;
+import pokemon.ability.Ability.GulpMissile;
 import pokemon.ability.Ability.Guts;
 import pokemon.ability.Ability.Harvest;
 import pokemon.ability.Ability.Healer;
@@ -448,8 +449,9 @@ public enum AbilityNamesies {
     POWER_OF_ALCHEMY("Power of Alchemy", PowerOfAlchemy::new),
     BALL_FETCH("Ball Fetch", BallFetch::new),
     COTTON_DOWN("Cotton Down", CottonDown::new),
-    DAUNTLESS_SHIELD("DauntlessShield", DauntlessShield::new),
-    GORILLA_TACTICS("Gorilla Tactics", GorillaTactics::new);
+    DAUNTLESS_SHIELD("Dauntless Shield", DauntlessShield::new),
+    GORILLA_TACTICS("Gorilla Tactics", GorillaTactics::new),
+    GULP_MISSILE("Gulp Missile", GulpMissile::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

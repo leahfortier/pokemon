@@ -181,4 +181,5 @@ Other random things:
     - new lines aren't done correctly for interfaces with comments and default methods/override
     - test liquid voice + perish song + water absorb
     - would it make sense to move the take button in the bag to be next to the return button because it's completely unrelated to the current selected item?
+    - pokemon images in battle and shit feel like they should be handled completely different and not just be based on a message update
     

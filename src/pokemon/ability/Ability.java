@@ -56,6 +56,7 @@ import battle.effect.InvokeInterfaces.MurderEffect;
 import battle.effect.InvokeInterfaces.NameChanger;
 import battle.effect.InvokeInterfaces.NoSwapEffect;
 import battle.effect.InvokeInterfaces.OpponentAccuracyBypassEffect;
+import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentEndAttackEffect;
 import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.InvokeInterfaces.OpponentItemBlockerEffect;
@@ -4376,7 +4377,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class CottonDown extends Ability implements TakeDamageEffect {
+    static class CottonDown extends Ability implements OpponentApplyDamageEffect {
         private static final long serialVersionUID = 1L;
 
         CottonDown() {
@@ -4384,7 +4385,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.getStages().modifyStage(victim, -1, Stat.SPEED, b, CastSource.ABILITY);
         }
     }
@@ -4412,6 +4413,92 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public Stat getBoosted() {
             return Stat.ATTACK;
+        }
+    }
+
+    static class GulpMissile extends Ability implements StartAttackEffect, EntryEffect, OpponentApplyDamageEffect {
+        private static final long serialVersionUID = 1L;
+
+        private GulpForm gulpForm;
+
+        private enum GulpForm {
+            NORMAL, GULPING, GORGING
+        }
+
+        // Adds the message with the form image change
+        // New form should already be set before calling this method
+        // TODO: Once Cramorant's images are actually set up will need to adjust since this only includes one form
+        private void addFormMessage(ActivePokemon formsie, String message) {
+            boolean isPlayer = formsie.isPlayer();
+            boolean shiny = formsie.isShiny();
+            boolean front = !isPlayer;
+            boolean form = this.gulpForm != GulpForm.NORMAL;
+            String imageName = formsie.getPokemonInfo().getImageName(shiny, front, form);
+
+            Messages.add(new MessageUpdate(message).withImageName(imageName, isPlayer));
+        }
+
+        GulpMissile() {
+            super(AbilityNamesies.GULP_MISSILE, "When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.");
+        }
+
+        @Override
+        public boolean isReplaceable() {
+            return false;
+        }
+
+        @Override
+        public boolean isStealable() {
+            return false;
+        }
+
+        @Override
+        public void beforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Already gulping/gorging -- nothing else to do right now
+            if (this.gulpForm != GulpForm.NORMAL) {
+                return;
+            }
+
+            // Using Surf or Dive will make Cramorant change forms
+            AttackNamesies attack = attacking.getAttack().namesies();
+            if (attack == AttackNamesies.SURF || attack == AttackNamesies.DIVE) {
+                // Gorge on a Pika when low on health, otherwise get them fishies
+                this.gulpForm = attacking.getHPRatio() < .5 ? GulpForm.GORGING : GulpForm.GULPING;
+
+                // Yeah I get it I'm not great at writing messages but it should probably say something
+                // TODO: Game is currently freezing here when using Dive (semi-inv + image change)
+                String gulping = this.gulpForm == GulpForm.GULPING ? "gulping" : "gorging";
+                this.addFormMessage(attacking, attacking.getName() + " is " + gulping + "!!");
+            }
+        }
+
+        @Override
+        public void enter(Battle b, ActivePokemon enterer) {
+            this.gulpForm = GulpForm.NORMAL;
+        }
+
+        @Override
+        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Empty mouth = empty effect
+            if (this.gulpForm == GulpForm.NORMAL) {
+                return;
+            }
+
+            boolean gulping = this.gulpForm == GulpForm.GULPING;
+
+            // Release the prey and return to normal form
+            this.gulpForm = GulpForm.NORMAL;
+            addFormMessage(victim, victim.getName() + " released its prey!!!");
+
+            // When attacked, releases its prey dealing 1/4 max HP damage to the attacker
+            // Additionally, lowers defense when gulping or paralyzes when gorging
+            // Note: Use Effect cast source here so it uses the default messaging instead of referring to Gulp Missile
+            user.reduceHealthFraction(b, .25, "");
+            if (gulping) {
+                user.getStages().modifyStage(victim, -1, Stat.DEFENSE, b, CastSource.EFFECT);
+            } else {
+                StatusNamesies.PARALYZED.getStatus().apply(b, victim, user, CastSource.EFFECT);
+            }
         }
     }
 }

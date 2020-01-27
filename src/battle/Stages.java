@@ -204,6 +204,7 @@ public class Stages implements Serializable {
         switch (source) {
             case ATTACK:
             case USE_ITEM:
+            case EFFECT: // Note: effect messages are typically handled manually using the other modifyStage method
                 // Bulbasaur's Attack was sharply raised!
                 return (victimName, statName, changed) -> String.format(
                         "%s's %s was %s!", this.stagesHolder.getName(), statName, changed
@@ -216,9 +217,6 @@ public class Stages implements Serializable {
                         "%s's %s %s %s %s!",
                         caster.getName(), source.getSourceName(b, caster), changed, victimName, statName
                 );
-            case EFFECT:
-                Global.error("Effect message should be handled manually using the other modifyStage method.");
-                break;
             default:
                 Global.error("Unknown source for stage modifier.");
                 break;

@@ -1762,8 +1762,8 @@ Ball Fetch:
 *
 Cotton Down:
     Desc: When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stat of all Pokémon except itself.
-    Int: TakeDamageEffect
-    OnTakeDamage:
+    Int: OpponentApplyDamageEffect
+    OpponentApplyDamage:
         user.getStages().modifyStage(victim, -1, Stat.SPEED, b, CastSource.ABILITY);
         ###
 *
@@ -1777,4 +1777,73 @@ Dauntless Shield:
 Gorilla Tactics:
     Desc: Boosts the Pokémon's Attack stat but only allows the use of the first selected move.
     ChoiceEffect: Attack
+*
+Gulp Missile:
+    Desc: When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.
+    Irreplaceable: True
+    Irrestealable: True
+    Int: StartAttackEffect, EntryEffect, OpponentApplyDamageEffect
+    BeforeAttack:
+        // Already gulping/gorging -- nothing else to do right now
+        if (this.gulpForm != GulpForm.NORMAL) {
+            return;
+        }
+
+        // Using Surf or Dive will make Cramorant change forms
+        AttackNamesies attack = attacking.getAttack().namesies();
+        if (attack == AttackNamesies.SURF || attack == AttackNamesies.DIVE) {
+            // Gorge on a Pika when low on health, otherwise get them fishies
+            this.gulpForm = attacking.getHPRatio() < .5 ? GulpForm.GORGING : GulpForm.GULPING;
+
+            // Yeah I get it I'm not great at writing messages but it should probably say something
+            // TODO: Game is currently freezing here when using Dive (semi-inv + image change)
+            String gulping = this.gulpForm == GulpForm.GULPING ? "gulping" : "gorging";
+            this.addFormMessage(attacking, attacking.getName() + " is " + gulping + "!!");
+        }
+        ###
+    Field:
+        private GulpForm gulpForm;
+
+        private enum GulpForm {
+            NORMAL, GULPING, GORGING
+        }
+        
+        // Adds the message with the form image change
+        // New form should already be set before calling this method
+        // TODO: Once Cramorant's images are actually set up will need to adjust since this only includes one form
+        private void addFormMessage(ActivePokemon formsie, String message) {
+            boolean isPlayer = formsie.isPlayer();
+            boolean shiny = formsie.isShiny();
+            boolean front = !isPlayer;
+            boolean form = this.gulpForm != GulpForm.NORMAL;
+            String imageName = formsie.getPokemonInfo().getImageName(shiny, front, form);
+
+            Messages.add(new MessageUpdate(message).withImageName(imageName, isPlayer));
+        }
+        ###
+    Enter:
+        this.gulpForm = GulpForm.NORMAL;
+        ###
+    OpponentApplyDamage:
+        // Empty mouth = empty effect
+        if (this.gulpForm == GulpForm.NORMAL) {
+            return;
+        }
+
+        boolean gulping = this.gulpForm == GulpForm.GULPING;
+
+        // Release the prey and return to normal form
+        this.gulpForm = GulpForm.NORMAL;
+        addFormMessage(victim, victim.getName() + " released its prey!!!");
+
+        // When attacked, releases its prey dealing 1/4 max HP damage to the attacker
+        // Additionally, lowers defense when gulping or paralyzes when gorging
+        // Note: Use Effect cast source here so it uses the default messaging instead of referring to Gulp Missile
+        user.reduceHealthFraction(b, .25, "");
+        if (gulping) {
+            user.getStages().modifyStage(victim, -1, Stat.DEFENSE, b, CastSource.EFFECT);
+        } else {
+            StatusNamesies.PARALYZED.getStatus().apply(b, victim, user, CastSource.EFFECT);
+        }
+        ###
 *
