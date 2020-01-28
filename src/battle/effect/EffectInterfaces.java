@@ -66,6 +66,10 @@ public final class EffectInterfaces {
         Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
     }
 
+    public interface BooleanHolder {
+        boolean getBoolean();
+    }
+
     public interface AbilityHolder {
         Ability getAbility();
     }
@@ -623,6 +627,17 @@ public final class EffectInterfaces {
         @Override
         default String getUnusableMessage(Battle b, ActivePokemon p) {
             return p.getName() + "'s " + this.getName() + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
+        }
+    }
+
+    public interface FormAbility extends AbilityInterface {
+        // Adds the message with the form image change
+        default void addFormMessage(ActivePokemon formsie, String message, boolean form) {
+            boolean isPlayer = formsie.isPlayer();
+            boolean shiny = formsie.isShiny();
+            boolean front = !isPlayer;
+            String imageName = formsie.getPokemonInfo().getImageName(shiny, front, form);
+            Messages.add(new MessageUpdate(message).withImageName(imageName, isPlayer));
         }
     }
 }

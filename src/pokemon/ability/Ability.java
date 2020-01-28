@@ -9,7 +9,9 @@ import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.BooleanHolder;
 import battle.effect.EffectInterfaces.ChoiceEffect;
+import battle.effect.EffectInterfaces.FormAbility;
 import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.EffectInterfaces.ItemListHolder;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
@@ -2117,11 +2119,6 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public boolean isReplaceable() {
-            return false;
-        }
-
-        @Override
         public boolean isStealable() {
             return false;
         }
@@ -3515,17 +3512,17 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Schooling extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect {
+    static class Schooling extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect, FormAbility {
         private static final long serialVersionUID = 1L;
 
         private static final BaseStats SOLO_STATS = new BaseStats(new int[] { 45, 20, 20, 25, 25, 40 });
         private static final BaseStats SCHOOL_STATS = new BaseStats(new int[] { 45, 140, 130, 140, 135, 30 });
 
-        private boolean schoolForm;
-
         private BaseStats getStats() {
             return schoolForm ? SCHOOL_STATS : SOLO_STATS;
         }
+
+        private boolean schoolForm;
 
         Schooling() {
             super(AbilityNamesies.SCHOOLING, "When it has a lot of HP, the Pok\u00e9mon forms a powerful school. It stops schooling when its HP is low.");
@@ -3536,13 +3533,6 @@ public abstract class Ability implements AbilityInterface {
             if (this.schoolForm != formsie.getHPRatio() >= .25 && formsie.getLevel() >= 20) {
                 changeForm(formsie);
             }
-        }
-
-        private void changeForm(ActivePokemon formsie) {
-            this.schoolForm = !schoolForm;
-            Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (schoolForm ? "School" : "Solo") + " Forme!")
-                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), schoolForm), formsie.isPlayer())
-            );
         }
 
         @Override
@@ -3556,6 +3546,12 @@ public abstract class Ability implements AbilityInterface {
             checkFormChange(victim);
         }
 
+        private void changeForm(ActivePokemon formsie) {
+            this.schoolForm = !schoolForm;
+            String message = formsie.getName() + " changed into " + (schoolForm ? "School" : "Solo") + " Forme!";
+            addFormMessage(formsie, message, schoolForm);
+        }
+
         @Override
         public boolean isStealable() {
             return false;
@@ -3573,17 +3569,17 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class ShieldsDown extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect {
+    static class ShieldsDown extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect, FormAbility {
         private static final long serialVersionUID = 1L;
 
         private static final BaseStats CORE_STATS = new BaseStats(new int[] { 60, 100, 60, 100, 60, 120 });
         private static final BaseStats METEOR_STATS = new BaseStats(new int[] { 60, 60, 100, 60, 100, 60 });
 
-        private boolean meteorForm;
-
         private BaseStats getStats() {
             return meteorForm ? METEOR_STATS : CORE_STATS;
         }
+
+        private boolean meteorForm;
 
         ShieldsDown() {
             super(AbilityNamesies.SHIELDS_DOWN, "When its HP becomes half or less, the Pok\u00e9mon's shell breaks and it becomes aggressive.");
@@ -3594,13 +3590,6 @@ public abstract class Ability implements AbilityInterface {
             if (this.meteorForm != formsie.getHPRatio() > .5) {
                 changeForm(formsie);
             }
-        }
-
-        private void changeForm(ActivePokemon formsie) {
-            this.meteorForm = !meteorForm;
-            Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (meteorForm ? "Meteor" : "Core") + " Forme!")
-                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), meteorForm), formsie.isPlayer())
-            );
         }
 
         @Override
@@ -3614,6 +3603,12 @@ public abstract class Ability implements AbilityInterface {
             checkFormChange(victim);
         }
 
+        private void changeForm(ActivePokemon formsie) {
+            this.meteorForm = !meteorForm;
+            String message = formsie.getName() + " changed into " + (meteorForm ? "Meteor" : "Core") + " Forme!";
+            addFormMessage(formsie, message, meteorForm);
+        }
+
         @Override
         public boolean isStealable() {
             return false;
@@ -3631,28 +3626,21 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class StanceChange extends Ability implements StartAttackEffect, EntryEffect, DifferentStatEffect {
+    static class StanceChange extends Ability implements StartAttackEffect, EntryEffect, DifferentStatEffect, FormAbility {
         private static final long serialVersionUID = 1L;
 
         private static final BaseStats SHIELD_STATS = new BaseStats(new int[] { 60, 50, 150, 50, 150, 60 });
         private static final BaseStats BLADE_STATS = new BaseStats(new int[] { 60, 150, 50, 150, 50, 60 });
 
-        private boolean bladeForm;
-
         private BaseStats getStats() {
             return bladeForm ? BLADE_STATS : SHIELD_STATS;
         }
 
+        private boolean bladeForm;
+
         StanceChange() {
             super(AbilityNamesies.STANCE_CHANGE, "The Pok\u00e9mon changes its form to Blade Forme when it uses an attack move, and changes to Shield Forme when it uses King's Shield.");
             this.bladeForm = false;
-        }
-
-        private void changeForm(ActivePokemon formsie) {
-            this.bladeForm = !bladeForm;
-            Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (bladeForm ? "Blade" : "Shield") + " Forme!")
-                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), bladeForm), formsie.isPlayer())
-            );
         }
 
         @Override
@@ -3667,6 +3655,12 @@ public abstract class Ability implements AbilityInterface {
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + " is in Shield Forme!");
             bladeForm = false;
+        }
+
+        private void changeForm(ActivePokemon formsie) {
+            this.bladeForm = !bladeForm;
+            String message = formsie.getName() + " changed into " + (bladeForm ? "Blade" : "Shield") + " Forme!";
+            addFormMessage(formsie, message, bladeForm);
         }
 
         @Override
@@ -4005,7 +3999,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Disguise extends Ability implements AbsorbDamageEffect {
+    static class Disguise extends Ability implements AbsorbDamageEffect, FormAbility {
         private static final long serialVersionUID = 1L;
 
         private boolean activated;
@@ -4027,19 +4021,12 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
-            if (!activated && b.getOtherPokemon(damageTaker).isAttacking()) {
-                boolean isPlayer = damageTaker.isPlayer();
-                boolean shiny = damageTaker.isShiny();
-                boolean front = !isPlayer;
-
-                Messages.add(new MessageUpdate(damageTaker.getName() + "'s disguise was busted!!")
-                            .withImageName(damageTaker.getPokemonInfo().getImageName(shiny, front, true), isPlayer)
-                );
-
+            // This method is only called for direct damage so do not need to check if attacking
+            if (!activated) {
                 activated = true;
+                addFormMessage(damageTaker, damageTaker.getName() + "'s disguise was busted!!", true);
                 return true;
             }
-
             return false;
         }
     }
@@ -4416,26 +4403,13 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class GulpMissile extends Ability implements StartAttackEffect, EntryEffect, OpponentApplyDamageEffect {
+    static class GulpMissile extends Ability implements StartAttackEffect, EntryEffect, OpponentApplyDamageEffect, FormAbility {
         private static final long serialVersionUID = 1L;
 
         private GulpForm gulpForm;
 
         private enum GulpForm {
             NORMAL, GULPING, GORGING
-        }
-
-        // Adds the message with the form image change
-        // New form should already be set before calling this method
-        // TODO: Once Cramorant's images are actually set up will need to adjust since this only includes one form
-        private void addFormMessage(ActivePokemon formsie, String message) {
-            boolean isPlayer = formsie.isPlayer();
-            boolean shiny = formsie.isShiny();
-            boolean front = !isPlayer;
-            boolean form = this.gulpForm != GulpForm.NORMAL;
-            String imageName = formsie.getPokemonInfo().getImageName(shiny, front, form);
-
-            Messages.add(new MessageUpdate(message).withImageName(imageName, isPlayer));
         }
 
         GulpMissile() {
@@ -4465,10 +4439,10 @@ public abstract class Ability implements AbilityInterface {
                 // Gorge on a Pika when low on health, otherwise get them fishies
                 this.gulpForm = attacking.getHPRatio() < .5 ? GulpForm.GORGING : GulpForm.GULPING;
 
-                // Yeah I get it I'm not great at writing messages but it should probably say something
+                // TODO: Once Cramorant's images are actually set up will need to adjust since this only includes one form
                 // TODO: Game is currently freezing here when using Dive (semi-inv + image change)
                 String gulping = this.gulpForm == GulpForm.GULPING ? "gulping" : "gorging";
-                this.addFormMessage(attacking, attacking.getName() + " is " + gulping + "!!");
+                this.addFormMessage(attacking, attacking.getName() + " is " + gulping + "!!", true);
             }
         }
 
@@ -4488,7 +4462,7 @@ public abstract class Ability implements AbilityInterface {
 
             // Release the prey and return to normal form
             this.gulpForm = GulpForm.NORMAL;
-            addFormMessage(victim, victim.getName() + " released its prey!!!");
+            addFormMessage(victim, victim.getName() + " released its prey!!!", false);
 
             // When attacked, releases its prey dealing 1/4 max HP damage to the attacker
             // Additionally, lowers defense when gulping or paralyzes when gorging
@@ -4499,6 +4473,38 @@ public abstract class Ability implements AbilityInterface {
             } else {
                 StatusNamesies.PARALYZED.getStatus().apply(b, victim, user, CastSource.EFFECT);
             }
+        }
+    }
+
+    static class HungerSwitch extends Ability implements EndTurnEffect, FormAbility, BooleanHolder {
+        private static final long serialVersionUID = 1L;
+
+        private boolean hangryMode;
+
+        HungerSwitch() {
+            super(AbilityNamesies.HUNGER_SWITCH, "The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode after the end of each turn.");
+            this.hangryMode = false;
+        }
+
+        @Override
+        public boolean isStealable() {
+            return false;
+        }
+
+        private void changeForm(ActivePokemon formsie) {
+            this.hangryMode = !hangryMode;
+            String message = formsie.getName() + " changed into " + (hangryMode ? "Hangry" : "Full Belly") + " Forme!";
+            addFormMessage(formsie, message, hangryMode);
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            changeForm(victim);
+        }
+
+        @Override
+        public boolean getBoolean() {
+            return this.hangryMode;
         }
     }
 }

@@ -182,4 +182,8 @@ Other random things:
     - test liquid voice + perish song + water absorb
     - would it make sense to move the take button in the bag to be next to the return button because it's completely unrelated to the current selected item?
     - pokemon images in battle and shit feel like they should be handled completely different and not just be based on a message update
+    - test gastro acid + illusion
+    - add test for Hunger Switch and Aura Wheel
+    - add test for Gulp Missile
+    - disguise was changed in gen 8
     

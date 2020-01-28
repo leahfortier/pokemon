@@ -6907,7 +6907,18 @@ Aura Wheel:
     SelfTarget: True
     StatChange: Speed 1
     PhysicalContact: False
-    Comments: // TODO: Should only work for Morpeko and change type with its ability (which are both not implemented yet) though maybe I will implement as applying if it has the ability (which only morpeko should have)
+    Comments: // TODO: Change applies method to user.isPokemon(PokemonNamesies.MORPEKO) instead of ability check once it's in the game
+    Applies: user.hasAbility(AbilityNamesies.HUNGER_SWITCH)
+    GetType:
+        // Full Belly Mode = Electric type, Hangry Mode = Dark type
+        // Hunger Switch returns true when in Hangry Mode
+        Ability ability = user.getAbility();
+        if (ability.namesies() == AbilityNamesies.HUNGER_SWITCH && ((BooleanHolder)ability).getBoolean()) {
+            return Type.DARK;
+        }
+
+        return super.type;
+        ###
 *
 Breaking Swipe:
     Desc: The user swings its tough tail wildly and attacks opposing Pokémon. This also lowers their Attack stats.

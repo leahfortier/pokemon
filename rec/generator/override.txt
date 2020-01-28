@@ -938,6 +938,13 @@ EntryHazard:
         return {0};
         ###
 *
+BooleanHolder:
+    AddInterface: BooleanHolder
+    Header: boolean getBoolean()
+    Body:
+        return {0};
+        ###
+*
 AbilityHolder:
     AddInterface: AbilityHolder
     Header: Ability getAbility()
@@ -1993,29 +2000,34 @@ BlockItem:
     AddInterface: OpponentItemBlockerEffect
     Header: boolean blockItem(Battle b, ActivePokemon p, ItemNamesies item)
 *
-FormChange:
+ChangeForm:
     Header: void changeForm(ActivePokemon formsie)
     AccessModifier: Private
     Body:
         this.{1} = !{1};
-        Messages.add(new MessageUpdate(formsie.getName() + " changed into " + ({1} ? "{4}" : "{2}") + " Forme!")
-                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), {1}), formsie.isPlayer())
-        );
+        String message = formsie.getName() + " changed into " + ({1} ? "{2_}" : "{3_}") + " Forme!";
+        addFormMessage(formsie, message, {1});
         ###
+    AddInterface: FormAbility
+    AddMapField: Field:
+        private boolean {1};
+        ###
+    AddMapField: Constructor:
+        this.{1} = false;
+        ###
+*
+StatFormChange:
+    AddMapField: ChangeForm: {1} {4} {2}
     AddMapField: Irrestealable: True
     AddMapField: Irreplaceable: True
     AddMapField: Field:
         private static final BaseStats {22}_STATS = new BaseStats(new int[] { {3_} });
         private static final BaseStats {44}_STATS = new BaseStats(new int[] { {5_} });
-
-        private boolean {1};
         
         private BaseStats getStats() {
             return {1} ? {44}_STATS : {22}_STATS;
         }
-        ###
-    AddMapField: Constructor:
-        this.{1} = false;
+        
         ###
     AddInterface: DifferentStatEffect
     AddMapField: GetStat:
@@ -2031,7 +2043,7 @@ EndTurnFormChange:
             changeForm(formsie);
         }
         ###
-    AddMapField: FormChange: {1} {2} {3} {4} {5}
+    AddMapField: StatFormChange: {1} {2} {3} {4} {5}
     AddInterface: EndTurnEffect
     AddInterface: EntryEffect
     AddMapField: Enter:

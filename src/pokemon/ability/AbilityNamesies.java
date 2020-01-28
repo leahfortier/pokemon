@@ -75,6 +75,7 @@ import pokemon.ability.Ability.Heatproof;
 import pokemon.ability.Ability.HeavyMetal;
 import pokemon.ability.Ability.HoneyGather;
 import pokemon.ability.Ability.HugePower;
+import pokemon.ability.Ability.HungerSwitch;
 import pokemon.ability.Ability.Hustle;
 import pokemon.ability.Ability.Hydration;
 import pokemon.ability.Ability.HyperCutter;
@@ -451,7 +452,8 @@ public enum AbilityNamesies {
     COTTON_DOWN("Cotton Down", CottonDown::new),
     DAUNTLESS_SHIELD("Dauntless Shield", DauntlessShield::new),
     GORILLA_TACTICS("Gorilla Tactics", GorillaTactics::new),
-    GULP_MISSILE("Gulp Missile", GulpMissile::new);
+    GULP_MISSILE("Gulp Missile", GulpMissile::new),
+    HUNGER_SWITCH("Hunger Switch", HungerSwitch::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

@@ -808,7 +808,6 @@ Truant:
 *
 Wonder Guard:
     Desc: Its mysterious power only lets supereffective moves hit the Pok\u00e9mon.
-    Irreplaceable: True
     Irrestealable: True
     Int: AttackBlocker
     Block:
@@ -1420,7 +1419,7 @@ Shields Down:
 *
 Stance Change:
     Desc: The Pok\u00e9mon changes its form to Blade Forme when it uses an attack move, and changes to Shield Forme when it uses King's Shield.
-    FormChange: bladeForm Shield 60,_50,_150,_50,_150,_60 Blade 60,_150,_50,_150,_50,_60 
+    StatFormChange: bladeForm Shield 60,_50,_150,_50,_150,_60 Blade 60,_150,_50,_150,_50,_60 
     Int: StartAttackEffect, EntryEffect
     BeforeAttack:
         // TODO: This should really activate right before printing the attacking move, not after
@@ -1555,21 +1554,14 @@ Disguise:
     Constructor:
         this.activated = false;
         ###
-    Int: AbsorbDamageEffect
+    Int: AbsorbDamageEffect, FormAbility
     AbsorbDamage:
-        if (!activated && b.getOtherPokemon(damageTaker).isAttacking()) {
-            boolean isPlayer = damageTaker.isPlayer();
-            boolean shiny = damageTaker.isShiny();
-            boolean front = !isPlayer;
-
-            Messages.add(new MessageUpdate(damageTaker.getName() + "'s disguise was busted!!")
-                .withImageName(damageTaker.getPokemonInfo().getImageName(shiny, front, true), isPlayer)
-            );
-
+        // This method is only called for direct damage so do not need to check if attacking
+        if (!activated) {
             activated = true;
+            addFormMessage(damageTaker, damageTaker.getName() + "'s disguise was busted!!", true);
             return true;
         }
-
         return false;
         ###
 *
@@ -1782,7 +1774,7 @@ Gulp Missile:
     Desc: When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.
     Irreplaceable: True
     Irrestealable: True
-    Int: StartAttackEffect, EntryEffect, OpponentApplyDamageEffect
+    Int: StartAttackEffect, EntryEffect, OpponentApplyDamageEffect, FormAbility
     BeforeAttack:
         // Already gulping/gorging -- nothing else to do right now
         if (this.gulpForm != GulpForm.NORMAL) {
@@ -1795,10 +1787,10 @@ Gulp Missile:
             // Gorge on a Pika when low on health, otherwise get them fishies
             this.gulpForm = attacking.getHPRatio() < .5 ? GulpForm.GORGING : GulpForm.GULPING;
 
-            // Yeah I get it I'm not great at writing messages but it should probably say something
+            // TODO: Once Cramorant's images are actually set up will need to adjust since this only includes one form
             // TODO: Game is currently freezing here when using Dive (semi-inv + image change)
             String gulping = this.gulpForm == GulpForm.GULPING ? "gulping" : "gorging";
-            this.addFormMessage(attacking, attacking.getName() + " is " + gulping + "!!");
+            this.addFormMessage(attacking, attacking.getName() + " is " + gulping + "!!", true);
         }
         ###
     Field:
@@ -1806,19 +1798,6 @@ Gulp Missile:
 
         private enum GulpForm {
             NORMAL, GULPING, GORGING
-        }
-        
-        // Adds the message with the form image change
-        // New form should already be set before calling this method
-        // TODO: Once Cramorant's images are actually set up will need to adjust since this only includes one form
-        private void addFormMessage(ActivePokemon formsie, String message) {
-            boolean isPlayer = formsie.isPlayer();
-            boolean shiny = formsie.isShiny();
-            boolean front = !isPlayer;
-            boolean form = this.gulpForm != GulpForm.NORMAL;
-            String imageName = formsie.getPokemonInfo().getImageName(shiny, front, form);
-
-            Messages.add(new MessageUpdate(message).withImageName(imageName, isPlayer));
         }
         ###
     Enter:
@@ -1834,7 +1813,7 @@ Gulp Missile:
 
         // Release the prey and return to normal form
         this.gulpForm = GulpForm.NORMAL;
-        addFormMessage(victim, victim.getName() + " released its prey!!!");
+        addFormMessage(victim, victim.getName() + " released its prey!!!", false);
 
         // When attacked, releases its prey dealing 1/4 max HP damage to the attacker
         // Additionally, lowers defense when gulping or paralyzes when gorging
@@ -1846,4 +1825,14 @@ Gulp Missile:
             StatusNamesies.PARALYZED.getStatus().apply(b, victim, user, CastSource.EFFECT);
         }
         ###
+*
+Hunger Switch:
+    Desc: The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode after the end of each turn.
+    Irrestealable: True
+    ChangeForm: hangryMode Hangry Full_Belly
+    Int: EndTurnEffect
+    ApplyEndTurn:
+        changeForm(victim);
+        ###
+    BooleanHolder: this.hangryMode
 *
