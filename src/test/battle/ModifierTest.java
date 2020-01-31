@@ -204,6 +204,11 @@ public class ModifierTest extends BaseTest {
         // Tar Shot doubles effectiveness of Fire moves
         powerChangeTest(2, AttackNamesies.EMBER, new TestInfo().attackingFight(AttackNamesies.TAR_SHOT));
         powerChangeTest(1, AttackNamesies.TACKLE, new TestInfo().attackingFight(AttackNamesies.TAR_SHOT));
+
+        // Ice Scales reduces the power of special attacks
+        powerChangeTest(1, AttackNamesies.TACKLE, new TestInfo().defending(AbilityNamesies.ICE_SCALES));
+        powerChangeTest(.5, AttackNamesies.SWIFT, new TestInfo().defending(AbilityNamesies.ICE_SCALES));
+        powerChangeTest(1, AttackNamesies.SWIFT, new TestInfo().attacking(AbilityNamesies.ICE_SCALES));
     }
 
     @Test

@@ -1071,6 +1071,23 @@ EndTurnBigRootHealer:
 PinchAbility:
     AddMapField: PowerMultiplierCondition: 1.5 user.getHPRatio() < 1/3.0 && user.isAttackType(Type.{00})
 *
+# Like Protean and such
+MoveTypeAbility:
+    AddInterface: StartAttackEffect
+    AddMapField: BeforeAttack:
+        // Protean activates for all moves except for Struggle
+        if (attacking.getAttack().namesies() != AttackNamesies.STRUGGLE) {
+            type = attacking.getAttackType();
+            Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, b, attacking, attacking, CastSource.ABILITY, true);
+        }
+        ###
+    AddMapField: Field:
+        private Type type;
+        ###
+    AddMapField: ChangeType:
+        return new PokeType(type);
+        ###
+*
 StatusPreventAbility:
     AddInterface: StatusPreventionAbility
     Header: StatusNamesies getStatus()
@@ -1369,11 +1386,7 @@ SpecialItemAbility:
     AddInterface: ChangeTypeEffect
     AddMapField: GetChangeTypeEffect:
         HoldItem item = p.getHeldItem(b);
-        if (item instanceof {0}) {
-            return new PokeType((({0})item).getType());
-        }
-
-        return p.getActualType();
+        return item instanceof {0} ? new PokeType((({0})item).getType()) : null;
         ###
     AddMapField: Irrestealable: True
     AddMapField: Irreplaceable: True

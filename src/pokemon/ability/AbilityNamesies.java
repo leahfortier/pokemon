@@ -81,6 +81,7 @@ import pokemon.ability.Ability.Hydration;
 import pokemon.ability.Ability.HyperCutter;
 import pokemon.ability.Ability.IceBody;
 import pokemon.ability.Ability.IceFace;
+import pokemon.ability.Ability.IceScales;
 import pokemon.ability.Ability.Illusion;
 import pokemon.ability.Ability.Immunity;
 import pokemon.ability.Ability.Imposter;
@@ -89,6 +90,7 @@ import pokemon.ability.Ability.InnardsOut;
 import pokemon.ability.Ability.InnerFocus;
 import pokemon.ability.Ability.Insomnia;
 import pokemon.ability.Ability.Intimidate;
+import pokemon.ability.Ability.IntrepidSword;
 import pokemon.ability.Ability.IronBarbs;
 import pokemon.ability.Ability.IronFist;
 import pokemon.ability.Ability.Justified;
@@ -96,6 +98,7 @@ import pokemon.ability.Ability.KeenEye;
 import pokemon.ability.Ability.Klutz;
 import pokemon.ability.Ability.LeafGuard;
 import pokemon.ability.Ability.Levitate;
+import pokemon.ability.Ability.Libero;
 import pokemon.ability.Ability.LightMetal;
 import pokemon.ability.Ability.LightningRod;
 import pokemon.ability.Ability.Limber;
@@ -110,6 +113,7 @@ import pokemon.ability.Ability.MagnetPull;
 import pokemon.ability.Ability.MarvelScale;
 import pokemon.ability.Ability.MegaLauncher;
 import pokemon.ability.Ability.Merciless;
+import pokemon.ability.Ability.Mimicry;
 import pokemon.ability.Ability.MistySurge;
 import pokemon.ability.Ability.MoldBreaker;
 import pokemon.ability.Ability.Moody;
@@ -455,7 +459,11 @@ public enum AbilityNamesies {
     GORILLA_TACTICS("Gorilla Tactics", GorillaTactics::new),
     GULP_MISSILE("Gulp Missile", GulpMissile::new),
     HUNGER_SWITCH("Hunger Switch", HungerSwitch::new),
-    ICE_FACE("Ice Face", IceFace::new);
+    ICE_FACE("Ice Face", IceFace::new),
+    ICE_SCALES("Ice Scales", IceScales::new),
+    INTREPID_SWORD("Intrepid Sword", IntrepidSword::new),
+    LIBERO("Libero", Libero::new),
+    MIMICRY("Mimicry", Mimicry::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

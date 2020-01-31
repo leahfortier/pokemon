@@ -53,7 +53,7 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
     public List<BattleEffect<? extends BattleEffectNamesies>> asList() {
         List<BattleEffect<? extends BattleEffectNamesies>> list = super.asList();
         list.add(weather);
-        if (currentTerrain != null) {
+        if (this.hasTerrain()) {
             list.add(currentTerrain);
         }
         return list;
@@ -106,7 +106,7 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
         if (weather.namesies() == effectToRemove) {
             this.remove(weather);
             return true;
-        } else if (currentTerrain != null && currentTerrain.namesies() == effectToRemove) {
+        } else if (this.hasTerrain() && currentTerrain.namesies() == effectToRemove) {
             this.remove(currentTerrain);
             return true;
         } else {
@@ -127,7 +127,7 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
             System.out.println("Weather: " + this.weather);
         }
 
-        if (currentTerrain != null) {
+        if (this.hasTerrain()) {
             System.out.println("Terrain: " + this.currentTerrain);
         }
     }
@@ -136,8 +136,12 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
         return weather;
     }
 
+    public boolean hasTerrain() {
+        return this.currentTerrain != null;
+    }
+
     public TerrainType getTerrainType() {
-        return this.currentTerrain == null ? this.baseTerrain : this.currentTerrain.getTerrainType();
+        return this.hasTerrain() ? this.currentTerrain.getTerrainType() : this.baseTerrain;
     }
 
     private void setBaseWeather(WeatherState weatherState) {

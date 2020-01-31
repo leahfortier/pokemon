@@ -78,6 +78,7 @@ import battle.effect.InvokeInterfaces.StartAttackEffect;
 import battle.effect.InvokeInterfaces.StatLoweredEffect;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
+import battle.effect.InvokeInterfaces.StatTargetSwapperEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
@@ -2887,11 +2888,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public PokeType getType(Battle b, ActivePokemon p, boolean display) {
-            if (display && activated) {
-                return illusionType;
-            }
-
-            return p.getActualType();
+            // Type change is only for appearances
+            return display && activated ? illusionType : null;
         }
 
         @Override
@@ -3209,11 +3207,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public PokeType getType(Battle b, ActivePokemon p, boolean display) {
             HoldItem item = p.getHeldItem(b);
-            if (item instanceof PlateItem) {
-                return new PokeType(((PlateItem)item).getType());
-            }
-
-            return p.getActualType();
+            return item instanceof PlateItem ? new PokeType(((PlateItem)item).getType()) : null;
         }
 
         @Override
@@ -3237,11 +3231,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public PokeType getType(Battle b, ActivePokemon p, boolean display) {
             HoldItem item = p.getHeldItem(b);
-            if (item instanceof MemoryItem) {
-                return new PokeType(((MemoryItem)item).getType());
-            }
-
-            return p.getActualType();
+            return item instanceof MemoryItem ? new PokeType(((MemoryItem)item).getType()) : null;
         }
 
         @Override
@@ -4560,6 +4550,71 @@ public abstract class Ability implements AbilityInterface {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
             BaseStats stats = nonIcy ? NO_ICE_STATS : ICE_STATS;
             return user.stats().calculate(stat, stats);
+        }
+    }
+
+    static class IceScales extends Ability implements OpponentPowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        IceScales() {
+            super(AbilityNamesies.ICE_SCALES, "The Pokémon is protected by ice scales, which halve the damage taken from special moves.");
+        }
+
+        @Override
+        public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.getAttack().getCategory() == MoveCategory.SPECIAL ? .5 : 1;
+        }
+    }
+
+    static class IntrepidSword extends Ability implements EntryEffect {
+        private static final long serialVersionUID = 1L;
+
+        IntrepidSword() {
+            super(AbilityNamesies.INTREPID_SWORD, "Boosts the Pokémon's Attack stat when the Pokémon enters a battle.");
+        }
+
+        @Override
+        public void enter(Battle b, ActivePokemon enterer) {
+            enterer.getStages().modifyStage(enterer, 1, Stat.ATTACK, b, CastSource.ABILITY);
+        }
+    }
+
+    static class Libero extends Ability implements StartAttackEffect, ChangeTypeSource {
+        private static final long serialVersionUID = 1L;
+
+        private Type type;
+
+        Libero() {
+            super(AbilityNamesies.LIBERO, "Changes the Pokémon's type to the type of the move it's about to use.");
+        }
+
+        @Override
+        public void beforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Protean activates for all moves except for Struggle
+            if (attacking.getAttack().namesies() != AttackNamesies.STRUGGLE) {
+                type = attacking.getAttackType();
+                Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, b, attacking, attacking, CastSource.ABILITY, true);
+            }
+        }
+
+        @Override
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return new PokeType(type);
+        }
+    }
+
+    static class Mimicry extends Ability implements ChangeTypeEffect {
+        private static final long serialVersionUID = 1L;
+
+        Mimicry() {
+            super(AbilityNamesies.MIMICRY, "Changes the Pokémon's type depending on the terrain.");
+        }
+
+        @Override
+        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
+            // Type is the same as the current terrain
+            // Note: In the game this effect will override effects like Soak, but that isn't happening here
+            return b.getEffects().hasTerrain() ? new PokeType(b.getTerrainType().getType()) : null;
         }
     }
 }
