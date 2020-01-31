@@ -7,6 +7,7 @@ import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.InvokeInterfaces.TerrainCastEffect;
+import battle.effect.InvokeInterfaces.WeatherChangedEffect;
 import battle.effect.InvokeInterfaces.WeatherEliminatingEffect;
 import battle.effect.battle.BattleEffect;
 import battle.effect.battle.terrain.TerrainEffect;
@@ -70,11 +71,11 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
         if (effect instanceof WeatherEffect) {
             weather = (WeatherEffect)effect;
             Messages.add(new MessageUpdate().withWeather(weather));
+            WeatherChangedEffect.invokeWeatherChangedEffect(battle, weather.namesies());
 
-            if (WeatherEliminatingEffect.shouldEliminateWeather(battle, battle.getPlayer().front(), weather)
-                    || WeatherEliminatingEffect.shouldEliminateWeather(battle, battle.getOpponent().front(), weather)) {
-                weather = WeatherNamesies.CLEAR_SKIES.getEffect();
-                Messages.add(new MessageUpdate().withWeather(weather));
+            // If weather should be eliminated, recurse with Clear Skies
+            if (WeatherEliminatingEffect.shouldEliminateWeather(battle, weather.namesies())) {
+                this.add(WeatherNamesies.CLEAR_SKIES.getEffect());
             }
         } else if (effect instanceof TerrainEffect) {
             currentTerrain = (TerrainEffect)effect;

@@ -186,4 +186,5 @@ Other random things:
     - add test for Hunger Switch and Aura Wheel
     - add test for Gulp Missile
     - disguise was changed in gen 8
+    - weathereliminatingeffect should just extend weatherchangedeffect
     

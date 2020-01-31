@@ -86,6 +86,7 @@ import battle.effect.InvokeInterfaces.SwitchOutEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
+import battle.effect.InvokeInterfaces.WeatherChangedEffect;
 import battle.effect.InvokeInterfaces.WeatherEliminatingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.attack.OhkoMove;
@@ -3518,10 +3519,6 @@ public abstract class Ability implements AbilityInterface {
         private static final BaseStats SOLO_STATS = new BaseStats(new int[] { 45, 20, 20, 25, 25, 40 });
         private static final BaseStats SCHOOL_STATS = new BaseStats(new int[] { 45, 140, 130, 140, 135, 30 });
 
-        private BaseStats getStats() {
-            return schoolForm ? SCHOOL_STATS : SOLO_STATS;
-        }
-
         private boolean schoolForm;
 
         Schooling() {
@@ -3565,7 +3562,8 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-            return user.stats().calculate(stat, this.getStats());
+            BaseStats stats = schoolForm ? SCHOOL_STATS : SOLO_STATS;
+            return user.stats().calculate(stat, stats);
         }
     }
 
@@ -3574,10 +3572,6 @@ public abstract class Ability implements AbilityInterface {
 
         private static final BaseStats CORE_STATS = new BaseStats(new int[] { 60, 100, 60, 100, 60, 120 });
         private static final BaseStats METEOR_STATS = new BaseStats(new int[] { 60, 60, 100, 60, 100, 60 });
-
-        private BaseStats getStats() {
-            return meteorForm ? METEOR_STATS : CORE_STATS;
-        }
 
         private boolean meteorForm;
 
@@ -3622,7 +3616,8 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-            return user.stats().calculate(stat, this.getStats());
+            BaseStats stats = meteorForm ? METEOR_STATS : CORE_STATS;
+            return user.stats().calculate(stat, stats);
         }
     }
 
@@ -3631,10 +3626,6 @@ public abstract class Ability implements AbilityInterface {
 
         private static final BaseStats SHIELD_STATS = new BaseStats(new int[] { 60, 50, 150, 50, 150, 60 });
         private static final BaseStats BLADE_STATS = new BaseStats(new int[] { 60, 150, 50, 150, 50, 60 });
-
-        private BaseStats getStats() {
-            return bladeForm ? BLADE_STATS : SHIELD_STATS;
-        }
 
         private boolean bladeForm;
 
@@ -3676,7 +3667,8 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-            return user.stats().calculate(stat, this.getStats());
+            BaseStats stats = bladeForm ? BLADE_STATS : SHIELD_STATS;
+            return user.stats().calculate(stat, stats);
         }
     }
 
@@ -4505,6 +4497,69 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public boolean getBoolean() {
             return this.hangryMode;
+        }
+    }
+
+    static class IceFace extends Ability implements EntryEffect, AbsorbDamageEffect, DifferentStatEffect, WeatherChangedEffect, FormAbility {
+        private static final long serialVersionUID = 1L;
+
+        private static final BaseStats ICE_STATS = new BaseStats(new int[] { 75, 80, 110, 65, 90, 50 });
+        private static final BaseStats NO_ICE_STATS = new BaseStats(new int[] { 75, 80, 70, 65, 50, 130 });
+
+        private boolean nonIcy;
+
+        IceFace() {
+            super(AbilityNamesies.ICE_FACE, "The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it hails.");
+            this.nonIcy = false;
+        }
+
+        @Override
+        public void enter(Battle b, ActivePokemon enterer) {
+            // Note: In game form persists when recalled and if this is ever changed it should re-enter Ice Form if hailing
+            Messages.add(enterer.getName() + " is in Ice Forme!");
+            nonIcy = false;
+        }
+
+        @Override
+        public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
+            // When hit by a physical move in Ice Form, the Pokemon will absorb the hit and lose its icy face
+            if (!nonIcy && b.getOtherPokemon(damageTaker).getAttack().getCategory() == MoveCategory.PHYSICAL) {
+                changeForm(damageTaker);
+                return true;
+            }
+
+            return false;
+        }
+
+        @Override
+        public void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder) {
+            // When hail starts, change back to ice face
+            if (nonIcy && weather == WeatherNamesies.HAILING) {
+                changeForm(effectHolder);
+            }
+        }
+
+        private void changeForm(ActivePokemon formsie) {
+            this.nonIcy = !nonIcy;
+            String message = formsie.getName() + " changed into " + (nonIcy ? "No Ice" : "Ice") + " Forme!";
+            addFormMessage(formsie, message, nonIcy);
+        }
+
+        @Override
+        public boolean isStealable() {
+            return false;
+        }
+
+        @Override
+        public boolean isReplaceable() {
+            return false;
+        }
+
+        @Override
+        public Integer getStat(ActivePokemon user, Stat stat) {
+            // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
+            BaseStats stats = nonIcy ? NO_ICE_STATS : ICE_STATS;
+            return user.stats().calculate(stat, stats);
         }
     }
 }

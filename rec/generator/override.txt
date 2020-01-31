@@ -1124,6 +1124,10 @@ WeatherEliminate:
         return eliminator.getName() + "'s " + this.getName() + " eliminated the weather!";
         ###
 *
+WeatherChanged:
+    Header: void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder)
+    AddInterface: WeatherChangedEffect
+*
 HalfAmount:
     Header: int getHalfAmount()
     Body:
@@ -2024,15 +2028,12 @@ StatFormChange:
         private static final BaseStats {22}_STATS = new BaseStats(new int[] { {3_} });
         private static final BaseStats {44}_STATS = new BaseStats(new int[] { {5_} });
         
-        private BaseStats getStats() {
-            return {1} ? {44}_STATS : {22}_STATS;
-        }
-        
         ###
     AddInterface: DifferentStatEffect
     AddMapField: GetStat:
         // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-        return user.stats().calculate(stat, this.getStats());
+        BaseStats stats = {1} ? {44}_STATS : {22}_STATS;
+        return user.stats().calculate(stat, stats);
         ###
 *
 EndTurnFormChange:

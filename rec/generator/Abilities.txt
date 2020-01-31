@@ -1836,3 +1836,28 @@ Hunger Switch:
         ###
     BooleanHolder: this.hangryMode
 *
+Ice Face:
+    Desc: The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it hails.
+    StatFormChange: nonIcy Ice 75,_80,_110,_65,_90,_50 No_Ice 75,_80,_70,_65,_50,_130
+    Int: EntryEffect, AbsorbDamageEffect
+    Enter:
+        // Note: In game form persists when recalled and if this is ever changed it should re-enter Ice Form if hailing
+        Messages.add(enterer.getName() + " is in Ice Forme!");
+        nonIcy = false;
+        ###
+    AbsorbDamage:
+        // When hit by a physical move in Ice Form, the Pokemon will absorb the hit and lose its icy face
+        if (!nonIcy && b.getOtherPokemon(damageTaker).getAttack().getCategory() == MoveCategory.PHYSICAL) {
+            changeForm(damageTaker);
+            return true;
+        }
+
+        return false;
+        ###
+    WeatherChanged:
+        // When hail starts, change back to ice face
+        if (nonIcy && weather == WeatherNamesies.HAILING) {
+            changeForm(effectHolder);
+        }
+        ###
+*

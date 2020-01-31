@@ -896,9 +896,9 @@ WeatherEliminatingEffect:
         Header: String getEliminateMessage(ActivePokemon eliminator)
     *
     Method:
-        Header: boolean eliminateWeather(WeatherEffect weather)
+        Header: boolean eliminateWeather(WeatherNamesies weather)
         Default:
-            return weather.namesies() != WeatherNamesies.CLEAR_SKIES;
+            return weather != WeatherNamesies.CLEAR_SKIES;
             ###
         InvokeParameters: Battle b, ActivePokemon eliminator
         Invoke: CheckMessage true getEliminateMessage(eliminator)
@@ -911,6 +911,34 @@ WeatherEliminatingEffect:
         Header: void applyEffect(Battle b, ActivePokemon p)
         Default:
             b.addEffect(b.getWeather());
+            ###
+    *
+    StaticMethod:
+        Comments: // Calls the invoke method for both front Pokemon
+        Header: boolean shouldEliminateWeather(Battle b, WeatherNamesies weather)
+        Body:
+            return shouldEliminateWeather(b, b.getPlayer().front(), weather) || shouldEliminateWeather(b, b.getOpponent().front(), weather);
+            ###
+    *
+***
+WeatherChangedEffect:
+    Comments: // Effects that take place when weather is changed
+    Method:
+        Comments: // Note: The effect holder here is not necessarily the Pokemon that changed the weather, but the Pokemon which holds the WeatherChangedEffect
+        Header: void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder)
+        Invoke: Void
+        EffectList: effectHolder
+        InvokeName: checkWeatherChange
+        InvokeParameters: Battle b
+    *
+    StaticMethod:
+        Comments: // Calls the invoke method for both front Pokemon
+        Header: void invokeWeatherChangedEffect(Battle b, WeatherNamesies weather)
+        Body:
+            // Check the effects from both Pokemon on the field
+            // Note: Should not be implemented by any battle effects as they will be executed twice
+            checkWeatherChange(b, weather, b.getPlayer().front());
+            checkWeatherChange(b, weather, b.getOpponent().front());
             ###
     *
 ***

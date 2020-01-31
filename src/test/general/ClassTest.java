@@ -79,6 +79,7 @@ import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.InvokeInterfaces.TerrainCastEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
+import battle.effect.InvokeInterfaces.WeatherChangedEffect;
 import battle.effect.InvokeInterfaces.WeatherEliminatingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.InvokeInterfaces.WildEncounterSelector;
@@ -203,6 +204,9 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, EndTurnEffect.class, teamEffectList);
             checkInstance(classy, SwitchOutEffect.class, pokemonEffectList);
             checkInstance(classy, EndBattleEffect.class, teamEffectList);
+            checkInstance(classy, WeatherEliminatingEffect.class, teamEffectList);
+            checkInstance(classy, WeatherChangedEffect.class, teamEffectList);
+            checkInstance(classy, TerrainCastEffect.class, teamEffectList);
 
             // Teams and Opponent things
             checkInstance(classy, Team.class, Trainer.class, WildPokemon.class);
@@ -270,10 +274,8 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, StatusReceivedEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, OpponentStatusReceivedEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, OpponentEndAttackEffect.class, effectListSourcesNoAttack);
-            checkInstance(classy, TerrainCastEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, AttackBlocker.class, effectListSourcesNoAttack);
             checkInstance(classy, ModifyStageValueEffect.class, effectListSourcesNoAttack);
-            checkInstance(classy, WeatherEliminatingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, EffectExtendingEffect.class, effectListSourcesNoAttack);
 
             // Invoked from battle.getEffectsList() with attack

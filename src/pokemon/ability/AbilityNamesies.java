@@ -80,6 +80,7 @@ import pokemon.ability.Ability.Hustle;
 import pokemon.ability.Ability.Hydration;
 import pokemon.ability.Ability.HyperCutter;
 import pokemon.ability.Ability.IceBody;
+import pokemon.ability.Ability.IceFace;
 import pokemon.ability.Ability.Illusion;
 import pokemon.ability.Ability.Immunity;
 import pokemon.ability.Ability.Imposter;
@@ -453,7 +454,8 @@ public enum AbilityNamesies {
     DAUNTLESS_SHIELD("Dauntless Shield", DauntlessShield::new),
     GORILLA_TACTICS("Gorilla Tactics", GorillaTactics::new),
     GULP_MISSILE("Gulp Missile", GulpMissile::new),
-    HUNGER_SWITCH("Hunger Switch", HungerSwitch::new);
+    HUNGER_SWITCH("Hunger Switch", HungerSwitch::new),
+    ICE_FACE("Ice Face", IceFace::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

@@ -1677,8 +1677,8 @@ public final class InvokeInterfaces {
     public interface WeatherEliminatingEffect extends EntryEndTurnEffect {
         String getEliminateMessage(ActivePokemon eliminator);
 
-        default boolean eliminateWeather(WeatherEffect weather) {
-            return weather.namesies() != WeatherNamesies.CLEAR_SKIES;
+        default boolean eliminateWeather(WeatherNamesies weather) {
+            return weather != WeatherNamesies.CLEAR_SKIES;
         }
 
         @Override
@@ -1686,7 +1686,7 @@ public final class InvokeInterfaces {
             b.addEffect(b.getWeather());
         }
 
-        static boolean shouldEliminateWeather(Battle b, ActivePokemon eliminator, WeatherEffect weather) {
+        static boolean shouldEliminateWeather(Battle b, ActivePokemon eliminator, WeatherNamesies weather) {
             List<InvokeEffect> invokees = b.getEffectsList(eliminator);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof WeatherEliminatingEffect && invokee.isActiveEffect()) {
@@ -1699,6 +1699,36 @@ public final class InvokeInterfaces {
             }
 
             return false;
+        }
+
+        // Calls the invoke method for both front Pokemon
+        static boolean shouldEliminateWeather(Battle b, WeatherNamesies weather) {
+            return shouldEliminateWeather(b, b.getPlayer().front(), weather) || shouldEliminateWeather(b, b.getOpponent().front(), weather);
+        }
+    }
+
+    // Effects that take place when weather is changed
+    public interface WeatherChangedEffect {
+
+        // Note: The effect holder here is not necessarily the Pokemon that changed the weather, but the Pokemon which holds the WeatherChangedEffect
+        void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder);
+
+        static void checkWeatherChange(Battle b, WeatherNamesies weather, ActivePokemon effectHolder) {
+            List<InvokeEffect> invokees = b.getEffectsList(effectHolder);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof WeatherChangedEffect && invokee.isActiveEffect()) {
+                    WeatherChangedEffect effect = (WeatherChangedEffect)invokee;
+                    effect.weatherChanged(weather, effectHolder);
+                }
+            }
+        }
+
+        // Calls the invoke method for both front Pokemon
+        static void invokeWeatherChangedEffect(Battle b, WeatherNamesies weather) {
+            // Check the effects from both Pokemon on the field
+            // Note: Should not be implemented by any battle effects as they will be executed twice
+            checkWeatherChange(b, weather, b.getPlayer().front());
+            checkWeatherChange(b, weather, b.getOpponent().front());
         }
     }
 
