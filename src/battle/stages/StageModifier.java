@@ -1,5 +1,7 @@
-package battle;
+package battle.stages;
 
+import battle.ActivePokemon;
+import battle.Battle;
 import battle.effect.InvokeInterfaces.ModifyStageValueEffect;
 import battle.effect.InvokeInterfaces.StatLoweredEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;

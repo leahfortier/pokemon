@@ -1,6 +1,6 @@
 package map.overworld;
 
-import battle.StageModifier;
+import battle.stages.StageModifier;
 import battle.attack.AttackNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;

@@ -3,7 +3,7 @@ package battle.attack;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.DamageCalculator.DamageCalculation;
-import battle.Stages;
+import battle.stages.Stages;
 import battle.effect.InvokeEffect;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;

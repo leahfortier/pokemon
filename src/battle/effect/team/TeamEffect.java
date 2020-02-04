@@ -2,8 +2,8 @@ package battle.effect.team;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.StageModifier;
-import battle.StageModifier.ModifyStageMessenger;
+import battle.stages.StageModifier;
+import battle.stages.StageModifier.ModifyStageMessenger;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.effect.ApplyResult;

@@ -2,7 +2,7 @@ package pokemon.stat;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.Stages;
+import battle.stages.Stages;
 import battle.effect.InvokeInterfaces.IgnoreStageEffect;
 import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.InvokeInterfaces.OpponentStatSwitchingEffect;

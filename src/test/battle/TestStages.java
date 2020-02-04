@@ -1,6 +1,6 @@
 package test.battle;
 
-import battle.Stages;
+import battle.stages.Stages;
 import org.junit.Assert;
 import pokemon.stat.Stat;
 import test.general.TestUtils;

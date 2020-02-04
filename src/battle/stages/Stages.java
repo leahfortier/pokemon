@@ -1,5 +1,7 @@
-package battle;
+package battle.stages;
 
+import battle.ActivePokemon;
+import battle.Battle;
 import battle.effect.source.CastSource;
 import message.MessageUpdate;
 import message.Messages;
