@@ -1,6 +1,6 @@
 package battle;
 
-import battle.StageModifier.ModifyStageMessageGetter;
+import battle.StageModifier.ModifyStageMessenger;
 import battle.effect.source.CastSource;
 import message.MessageUpdate;
 import message.Messages;
@@ -74,8 +74,8 @@ public class Stages implements Serializable {
     }
 
     // Modifies a stat for a Pokemon and prints appropriate messages and stuff
-    public boolean modifyStage(ActivePokemon caster, int val, Stat stat, Battle b, CastSource source, ModifyStageMessageGetter messageGetter) {
-        return new StageModifier(val, stat).withMessage(messageGetter).modify(b, caster, stagesHolder, source);
+    public boolean modifyStage(ActivePokemon caster, int val, Stat stat, Battle b, CastSource source, ModifyStageMessenger messenger) {
+        return new StageModifier(val, stat).withMessage(messenger).modify(b, caster, stagesHolder, source);
     }
 
     public void modifyStages(Battle b, ActivePokemon caster, int[] mod, CastSource source) {

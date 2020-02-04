@@ -2,7 +2,7 @@ package battle.effect.pokemon;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.StageModifier.ModifyStageMessageGetter;
+import battle.StageModifier.ModifyStageMessenger;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -1281,7 +1281,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             }
 
             // Charmander's Defense was lowered by Octolock!
-            ModifyStageMessageGetter messageGetter = (victimName, statName, changed) -> victim.getName() + "'s " + statName + " was " + changed + " by Octolock!";
+            ModifyStageMessenger messageGetter = (victimName, statName, changed) -> victim.getName() + "'s " + statName + " was " + changed + " by Octolock!";
             victim.getStages().modifyStage(caster, -1, Stat.DEFENSE, b, CastSource.EFFECT, messageGetter);
             victim.getStages().modifyStage(caster, -1, Stat.SP_DEFENSE, b, CastSource.EFFECT, messageGetter);
         }

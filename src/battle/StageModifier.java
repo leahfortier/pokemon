@@ -10,11 +10,11 @@ import pokemon.stat.Stat;
 
 public class StageModifier {
     private int[] modifiers;
-    private ModifyStageMessageGetter messageGetter;
+    private ModifyStageMessenger messenger;
 
     public StageModifier(int[] modifiers) {
         this.modifiers = modifiers;
-        this.messageGetter = null;
+        this.messenger = null;
     }
 
     public StageModifier(int modifier, Stat... stats) {
@@ -29,8 +29,8 @@ public class StageModifier {
         return this;
     }
 
-    public StageModifier withMessage(ModifyStageMessageGetter messageGetter) {
-        this.messageGetter = messageGetter;
+    public StageModifier withMessage(ModifyStageMessenger messenger) {
+        this.messenger = messenger;
         return this;
     }
 
@@ -47,8 +47,8 @@ public class StageModifier {
 
     // Modifies a stat for a Pokemon and prints appropriate messages and stuff
     private boolean modify(ActivePokemon caster, ActivePokemon victim, int val, Stat stat, Battle b, CastSource source) {
-        if (this.messageGetter == null) {
-            this.messageGetter = createGetter(b, caster, victim, source);
+        if (this.messenger == null) {
+            this.messenger = createGetter(b, caster, victim, source);
         }
 
         // Don't modify the stages of a dead Pokemon
@@ -96,7 +96,7 @@ public class StageModifier {
         String change = this.getChangedStatString(val);
         String victimName = caster == victim ? "its" : victim.getName() + "'s";
 
-        String message = messageGetter.getMessage(victimName, statName, change);
+        String message = messenger.getMessage(victimName, statName, change);
         Messages.add(message);
 
         victim.getStages().incrementStage(stat, val);
@@ -140,7 +140,7 @@ public class StageModifier {
         return modifier + direction;
     }
 
-    private ModifyStageMessageGetter createGetter(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+    private ModifyStageMessenger createGetter(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
         switch (source) {
             case ATTACK:
             case USE_ITEM:
@@ -168,7 +168,7 @@ public class StageModifier {
     }
 
     @FunctionalInterface
-    public interface ModifyStageMessageGetter {
+    public interface ModifyStageMessenger {
         String getMessage(String victimName, String statName, String changed);
     }
 }
