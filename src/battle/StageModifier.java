@@ -9,42 +9,47 @@ import message.Messages;
 import pokemon.stat.Stat;
 
 public class StageModifier {
-    private transient ActivePokemon stagesHolder;
+    private int[] modifiers;
+    private ModifyStageMessageGetter messageGetter;
 
-    public StageModifier(ActivePokemon stagesHolder) {
-        this.stagesHolder = stagesHolder;
+    public StageModifier(int[] modifiers) {
+        this.modifiers = modifiers;
+        this.messageGetter = null;
     }
 
-    public void setStagesHolder(ActivePokemon stagesHolder) {
-        this.stagesHolder = stagesHolder;
+    public StageModifier(int modifier, Stat... stats) {
+        this(new int[Stat.NUM_BATTLE_STATS]);
+        this.set(modifier, stats);
     }
 
-    public int getStage(Stat stat) {
-        return this.stagesHolder.getStages().getStage(stat);
+    public StageModifier set(int modifier, Stat... stats) {
+        for (Stat stat : stats) {
+            this.modifiers[stat.index()] = modifier;
+        }
+        return this;
     }
 
-    private void incrementStage(Stat stat, int val) {
-        this.stagesHolder.getStages().setStage(stat, getStage(stat) + val);
+    public StageModifier withMessage(ModifyStageMessageGetter messageGetter) {
+        this.messageGetter = messageGetter;
+        return this;
     }
 
-    public void modifyStages(Battle b, ActivePokemon modifier, int[] mod, CastSource source) {
-        for (int i = 0; i < mod.length; i++) {
-            if (mod[i] == 0) {
+    public boolean modify(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+        boolean modified = false;
+        for (int i = 0; i < modifiers.length; i++) {
+            if (modifiers[i] == 0) {
                 continue;
             }
-
-            this.modifyStage(modifier, mod[i], Stat.getStat(i, true), b, source);
+            modified |= this.modify(caster, victim, modifiers[i], Stat.getStat(i, true), b, source);
         }
-    }
-
-    public boolean modifyStage(ActivePokemon caster, int val, Stat stat, Battle b, CastSource source) {
-        ModifyStageMessageGetter messageGetter = createGetter(b, caster, source);
-        return modifyStage(caster, val, stat, b, source, messageGetter);
+        return modified;
     }
 
     // Modifies a stat for a Pokemon and prints appropriate messages and stuff
-    public boolean modifyStage(ActivePokemon caster, int val, Stat stat, Battle b, CastSource source, ModifyStageMessageGetter messageGetter) {
-        ActivePokemon victim = this.stagesHolder;
+    private boolean modify(ActivePokemon caster, ActivePokemon victim, int val, Stat stat, Battle b, CastSource source) {
+        if (this.messageGetter == null) {
+            this.messageGetter = createGetter(b, caster, victim, source);
+        }
 
         // Don't modify the stages of a dead Pokemon
         if (victim.isFainted(b)) {
@@ -71,7 +76,8 @@ public class StageModifier {
         }
 
         // Too High
-        if (getStage(stat) == Stages.MAX_STAT_CHANGES && val > 0) {
+        int currentStage = victim.getStages().getStage(stat);
+        if (currentStage == Stages.MAX_STAT_CHANGES && val > 0) {
             if (printFail) {
                 Messages.add(victim.getName() + "'s " + statName + " cannot be raised any higher!");
             }
@@ -79,7 +85,7 @@ public class StageModifier {
         }
 
         // HOW LOW CAN YOU GO?!
-        if (getStage(stat) == -Stages.MAX_STAT_CHANGES && val < 0) {
+        if (currentStage == -Stages.MAX_STAT_CHANGES && val < 0) {
             // THIS LOW
             if (printFail) {
                 Messages.add(victim.getName() + "'s " + statName + " cannot be lowered any further!");
@@ -93,7 +99,7 @@ public class StageModifier {
         String message = messageGetter.getMessage(victimName, statName, change);
         Messages.add(message);
 
-        this.incrementStage(stat, val);
+        victim.getStages().incrementStage(stat, val);
 
         if (val < 0) {
             StatLoweredEffect.invokeStatLoweredEffect(b, caster, victim);
@@ -134,13 +140,13 @@ public class StageModifier {
         return modifier + direction;
     }
 
-    private ModifyStageMessageGetter createGetter(Battle b, ActivePokemon caster, CastSource source) {
+    private ModifyStageMessageGetter createGetter(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
         switch (source) {
             case ATTACK:
             case USE_ITEM:
                 // Bulbasaur's Attack was sharply raised!
                 return (victimName, statName, changed) -> String.format(
-                        "%s's %s was %s!", this.stagesHolder.getName(), statName, changed
+                        "%s's %s was %s!", victim.getName(), statName, changed
                 );
             case ABILITY:
             case HELD_ITEM:

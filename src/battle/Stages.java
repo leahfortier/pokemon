@@ -18,17 +18,14 @@ public class Stages implements Serializable {
     private transient ActivePokemon stagesHolder;
 
     private int[] stages;
-    private StageModifier stageModifier;
 
     public Stages(ActivePokemon stagesHolder) {
         this.stagesHolder = stagesHolder;
-        this.stageModifier = new StageModifier(stagesHolder);
         this.reset();
     }
 
     public void setStagesHolder(ActivePokemon stagesHolder) {
         this.stagesHolder = stagesHolder;
-        this.stageModifier.setStagesHolder(stagesHolder);
     }
 
     public void reset() {
@@ -50,6 +47,10 @@ public class Stages implements Serializable {
         Messages.add(new MessageUpdate().withPokemon(stagesHolder));
     }
 
+    public void incrementStage(Stat stat, int val) {
+        setStage(stat, getStage(stat) + val);
+    }
+
     public void resetStage(Stat stat) {
         setStage(stat, 0);
     }
@@ -69,16 +70,16 @@ public class Stages implements Serializable {
     }
 
     public boolean modifyStage(ActivePokemon caster, int val, Stat stat, Battle b, CastSource source) {
-        return this.stageModifier.modifyStage(caster, val, stat, b, source);
+        return new StageModifier(val, stat).modify(b, caster, stagesHolder, source);
     }
 
     // Modifies a stat for a Pokemon and prints appropriate messages and stuff
     public boolean modifyStage(ActivePokemon caster, int val, Stat stat, Battle b, CastSource source, ModifyStageMessageGetter messageGetter) {
-        return this.stageModifier.modifyStage(caster, val, stat, b, source, messageGetter);
+        return new StageModifier(val, stat).withMessage(messageGetter).modify(b, caster, stagesHolder, source);
     }
 
-    public void modifyStages(Battle b, ActivePokemon modifier, int[] mod, CastSource source) {
-        this.stageModifier.modifyStages(b, modifier, mod, source);
+    public void modifyStages(Battle b, ActivePokemon caster, int[] mod, CastSource source) {
+        new StageModifier(mod).modify(b, caster, stagesHolder, source);
     }
 
     // Returns the sum of all stages
