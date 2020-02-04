@@ -2,7 +2,7 @@ package battle.effect.pokemon;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.Stages.ModifyStageMessageGetter;
+import battle.StageModifier.ModifyStageMessageGetter;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
