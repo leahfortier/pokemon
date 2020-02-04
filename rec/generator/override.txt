@@ -583,6 +583,9 @@ CanAttack:
 BeforeAttack:
     Header: void beforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending)
 *
+SuccessiveDecay:
+    AddMapField: EffectApplies: RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))
+*
 ProtectingEffect:
     AddMapField: ProtectingEffectNoDecay: True
     AddMapField: SuccessiveDecay: True
@@ -598,8 +601,23 @@ ProtectingCondition:
 OnProtectingSuccess:
     Header: void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp)
 *
-SuccessiveDecay:
-    AddMapField: EffectApplies: RandomUtils.chanceTest((int)(100*caster.getSuccessionDecayRate()))
+ProtectingContactLower:
+    AddMapField: ProtectingEffect: True
+    AddMapField: OnProtectingSuccess:
+        // Pokemon that make contact with the {3-} have their {2} reduced
+        if (p.isMakingContact()) {
+            // The {3-} lowered Charmander's {2}!
+            new StageModifier({1}, Stat.{22}).withMessage(this).modify(b, opp, p, CastSource.EFFECT);
+        }
+        ###
+    AddMapField: ModifyStageMessenger: "The {3-} " + changed + " " + victimName + "'s " + statName + "!"
+*
+ModifyStageMessenger:
+    Header: String getMessage(String victimName, String possessiveVictim, String statName, String changed)
+    Body:
+        return {0};
+        ###
+    AddInterface: ModifyStageMessenger
 *
 TrappingMessage:
     Header: String trappingMessage(ActivePokemon trapped)

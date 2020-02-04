@@ -3,6 +3,7 @@ package battle.attack;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.StageModifier;
+import battle.StageModifier.ModifyStageMessenger;
 import battle.Stages;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
@@ -4274,7 +4275,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class BellyDrum extends Attack {
+    static class BellyDrum extends Attack implements ModifyStageMessenger {
         private static final long serialVersionUID = 1L;
 
         BellyDrum() {
@@ -4291,11 +4292,18 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Maximization station
-            user.getStages().modifyStage(
-                    user, 2*Stages.MAX_STAT_CHANGES, Stat.ATTACK, b, CastSource.ATTACK,
-                    (victimName, statName, changed) -> user.getName() + " cut its own HP and maximized " + victimName + " " + statName + "!"
-            );
+            StageModifier maximizer = new StageModifier(2*Stages.MAX_STAT_CHANGES, Stat.ATTACK).withMessage(this);
+
+            // Poliwhirl cut its own HP and maximized its Attack!
+            maximizer.modify(b, user, user, CastSource.ATTACK);
+
+            // Poor belly
             user.forceReduceHealthFraction(b, 1/2.0, "");
+        }
+
+        @Override
+        public String getMessage(String victimName, String possessiveVictim, String statName, String changed) {
+            return victimName + " cut its own HP and maximized " + possessiveVictim + " " + statName + "!";
         }
     }
 

@@ -65,10 +65,6 @@ public class StageModifier implements Serializable {
 
     // Modifies a stat for a Pokemon and prints appropriate messages and stuff
     private boolean modify(ActivePokemon caster, ActivePokemon victim, int val, Stat stat, Battle b, CastSource source) {
-        if (this.messenger == null) {
-            this.messenger = createGetter(b, caster, victim, source);
-        }
-
         // Don't modify the stages of a dead Pokemon
         if (victim.isFainted(b)) {
             return false;
@@ -111,11 +107,7 @@ public class StageModifier implements Serializable {
             return false;
         }
 
-        String change = this.getChangedStatString(val);
-        String victimName = caster == victim ? "its" : victim.getName() + "'s";
-
-        String message = messenger.getMessage(victimName, statName, change);
-        Messages.add(message);
+        this.addMessage(b, caster, victim, source, val, statName);
 
         victim.getStages().incrementStage(stat, val);
 
@@ -124,6 +116,17 @@ public class StageModifier implements Serializable {
         }
 
         return true;
+    }
+
+    private void addMessage(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, int val, String statName) {
+        if (this.messenger == null) {
+            this.messenger = createMessenger(b, caster, source);
+        }
+
+        String change = this.getChangedStatString(val);
+        String possessiveVictim = caster == victim ? "its" : victim.getName() + "'s";
+        String message = messenger.getMessage(victim.getName(), possessiveVictim, statName, change);
+        Messages.add(message);
     }
 
     // -3 or lower: drastically lowered
@@ -158,21 +161,21 @@ public class StageModifier implements Serializable {
         return modifier + direction;
     }
 
-    private ModifyStageMessenger createGetter(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+    private ModifyStageMessenger createMessenger(Battle b, ActivePokemon caster, CastSource source) {
         switch (source) {
             case ATTACK:
             case USE_ITEM:
                 // Bulbasaur's Attack was sharply raised!
-                return (victimName, statName, changed) -> String.format(
-                        "%s's %s was %s!", victim.getName(), statName, changed
+                return (victimName, possessiveVictim, statName, changed) -> String.format(
+                        "%s's %s was %s!", victimName, statName, changed
                 );
             case ABILITY:
             case HELD_ITEM:
                 // Gyarados's Intimidate lowered Charmander's Attack!
                 // Bulbasaur's Absorb Bulb raised its Special Attack!
-                return (victimName, statName, changed) -> String.format(
+                return (victimName, possessiveVictim, statName, changed) -> String.format(
                         "%s's %s %s %s %s!",
-                        caster.getName(), source.getSourceName(b, caster), changed, victimName, statName
+                        caster.getName(), source.getSourceName(b, caster), changed, possessiveVictim, statName
                 );
             case EFFECT:
                 Global.error("Effect message should be handled manually using the other modifyStage method.");
@@ -182,11 +185,11 @@ public class StageModifier implements Serializable {
                 break;
         }
 
-        return (victimName, statName, changed) -> "";
+        return (victimName, possessiveVictim, statName, changed) -> "";
     }
 
     @FunctionalInterface
     public interface ModifyStageMessenger extends Serializable {
-        String getMessage(String victimName, String statName, String changed);
+        String getMessage(String victimName, String possessiveVictim, String statName, String changed);
     }
 }

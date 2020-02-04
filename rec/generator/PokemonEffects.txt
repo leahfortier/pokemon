@@ -67,32 +67,15 @@ SnapTrapped:
     PartialTrap: snap_trap victim.getName() + " was trapped by snap trap!"
 *
 KingsShield:
-    ProtectingEffect: True
-    OnProtectingSuccess:
-        // Pokemon that make contact with the king's shield have their attack reduced
-        if (p.isMakingContact()) {
-            p.getStages().modifyStage(
-                opp, -1, Stat.ATTACK, b, CastSource.EFFECT, 
-                (victimName, statName, changed) -> "The King's Shield " + changed + " " + p.getName() + "'s " + statName + "!"
-            );
-        }
-        ###
+    ProtectingContactLower: -1 Attack King's Shield
     ProtectingCondition:
         // Only protects against attacking moves
         return !attacking.getAttack().isStatusMove();
         ###
 *
 Obstruct:
+    ProtectingContactLower: -2 Defense obstruction
     ProtectingEffect: True
-    OnProtectingSuccess:
-        // Pokemon that make contact with the obstruction have their defense harshly reduced
-        if (p.isMakingContact()) {
-            p.getStages().modifyStage(
-                opp, -2, Stat.DEFENSE, b, CastSource.EFFECT, 
-                (victimName, statName, changed) -> "The obstruction " + changed + " " + p.getName() + "'s " + statName + "!"
-            );
-        }
-        ###
 *
 SpikyShield:
     ProtectingEffect: True
@@ -457,9 +440,8 @@ Octolocked:
         }
         
         // Charmander's Defense was lowered by Octolock!
-        ModifyStageMessenger messageGetter = (victimName, statName, changed) -> victim.getName() + "'s " + statName + " was " + changed + " by Octolock!";
-        victim.getStages().modifyStage(caster, -1, Stat.DEFENSE, b, CastSource.EFFECT, messageGetter);
-        victim.getStages().modifyStage(caster, -1, Stat.SP_DEFENSE, b, CastSource.EFFECT, messageGetter);
+        StageModifier stageReducer = new StageModifier(-1, Stat.DEFENSE, Stat.SP_DEFENSE).withMessage(this);
+        stageReducer.modify(b, caster, victim, CastSource.EFFECT);
         ###
     Field:
         // Only locked as long as the caster is still in play
@@ -468,6 +450,7 @@ Octolocked:
     BeforeCast:
         this.caster = caster;
         ###
+    ModifyStageMessenger: victimName + "'s " + statName + " was " + changed + " by Octolock!"
 *
 Foresight:
     ForesightEffect: Ghost attacking == Type.NORMAL || attacking == Type.FIGHTING
@@ -1018,11 +1001,9 @@ Raging:
         }
 
         // Bulbasaur's Rage increased its Attack!
-        victim.getStages().modifyStage(
-                victim, 1, Stat.ATTACK, b, CastSource.EFFECT,
-                (victimName, statName, changed) -> String.format("%s's Rage %s %s %s!", victim.getName(), changed, victimName, statName)
-        );
+        new StageModifier(1, Stat.ATTACK).withMessage(this).modify(b, victim, victim, CastSource.EFFECT);
         ###
+    ModifyStageMessenger: victimName + "'s Rage " + changed + " " + possessiveVictim + " " + statName + "!"
 *
 StickyTar:
     Int: OpponentPowerChangeEffect

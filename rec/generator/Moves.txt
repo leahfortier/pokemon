@@ -2390,12 +2390,15 @@ Belly Drum:
         ###
     UniqueEffects:
         // Maximization station
-        user.getStages().modifyStage(
-                user, 2*Stages.MAX_STAT_CHANGES, Stat.ATTACK, b, CastSource.ATTACK,
-                (victimName, statName, changed) -> user.getName() + " cut its own HP and maximized " + victimName + " " + statName + "!"
-        );
+        StageModifier maximizer = new StageModifier(2*Stages.MAX_STAT_CHANGES, Stat.ATTACK).withMessage(this);
+        
+        // Poliwhirl cut its own HP and maximized its Attack!
+        maximizer.modify(b, user, user, CastSource.ATTACK);
+
+        // Poor belly
         user.forceReduceHealthFraction(b, 1/2.0, "");
         ###
+    ModifyStageMessenger: victimName + " cut its own HP and maximized " + possessiveVictim + " " + statName + "!"
 *
 Submission:
     Desc: The user grabs the target and recklessly dives for the ground. This also damages the user a little.

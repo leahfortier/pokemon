@@ -2,6 +2,7 @@ package battle.effect.pokemon;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.StageModifier;
 import battle.StageModifier.ModifyStageMessenger;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
@@ -467,7 +468,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class KingsShield extends PokemonEffect implements ProtectingEffect {
+    static class KingsShield extends PokemonEffect implements ModifyStageMessenger, ProtectingEffect {
         private static final long serialVersionUID = 1L;
 
         KingsShield() {
@@ -475,20 +476,23 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
+        public boolean protectingCondition(Battle b, ActivePokemon attacking) {
+            // Only protects against attacking moves
+            return !attacking.getAttack().isStatusMove();
+        }
+
+        @Override
         public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
-            // Pokemon that make contact with the king's shield have their attack reduced
+            // Pokemon that make contact with the King's Shield have their Attack reduced
             if (p.isMakingContact()) {
-                p.getStages().modifyStage(
-                        opp, -1, Stat.ATTACK, b, CastSource.EFFECT,
-                        (victimName, statName, changed) -> "The King's Shield " + changed + " " + p.getName() + "'s " + statName + "!"
-                );
+                // The King's Shield lowered Charmander's Attack!
+                new StageModifier(-1, Stat.ATTACK).withMessage(this).modify(b, opp, p, CastSource.EFFECT);
             }
         }
 
         @Override
-        public boolean protectingCondition(Battle b, ActivePokemon attacking) {
-            // Only protects against attacking moves
-            return !attacking.getAttack().isStatusMove();
+        public String getMessage(String victimName, String possessiveVictim, String statName, String changed) {
+            return "The King's Shield " + changed + " " + victimName + "'s " + statName + "!";
         }
 
         @Override
@@ -502,7 +506,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Obstruct extends PokemonEffect implements ProtectingEffect {
+    static class Obstruct extends PokemonEffect implements ModifyStageMessenger, ProtectingEffect {
         private static final long serialVersionUID = 1L;
 
         Obstruct() {
@@ -511,13 +515,16 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
-            // Pokemon that make contact with the obstruction have their defense harshly reduced
+            // Pokemon that make contact with the obstruction have their Defense reduced
             if (p.isMakingContact()) {
-                p.getStages().modifyStage(
-                        opp, -2, Stat.DEFENSE, b, CastSource.EFFECT,
-                        (victimName, statName, changed) -> "The obstruction " + changed + " " + p.getName() + "'s " + statName + "!"
-                );
+                // The obstruction lowered Charmander's Defense!
+                new StageModifier(-2, Stat.DEFENSE).withMessage(this).modify(b, opp, p, CastSource.EFFECT);
             }
+        }
+
+        @Override
+        public String getMessage(String victimName, String possessiveVictim, String statName, String changed) {
+            return "The obstruction " + changed + " " + victimName + "'s " + statName + "!";
         }
 
         @Override
@@ -1248,7 +1255,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Octolocked extends PokemonEffect implements EndTurnEffect, LockingEffect {
+    static class Octolocked extends PokemonEffect implements EndTurnEffect, LockingEffect, ModifyStageMessenger {
         private static final long serialVersionUID = 1L;
 
         // Only locked as long as the caster is still in play
@@ -1281,14 +1288,18 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             }
 
             // Charmander's Defense was lowered by Octolock!
-            ModifyStageMessenger messageGetter = (victimName, statName, changed) -> victim.getName() + "'s " + statName + " was " + changed + " by Octolock!";
-            victim.getStages().modifyStage(caster, -1, Stat.DEFENSE, b, CastSource.EFFECT, messageGetter);
-            victim.getStages().modifyStage(caster, -1, Stat.SP_DEFENSE, b, CastSource.EFFECT, messageGetter);
+            StageModifier stageReducer = new StageModifier(-1, Stat.DEFENSE, Stat.SP_DEFENSE).withMessage(this);
+            stageReducer.modify(b, caster, victim, CastSource.EFFECT);
         }
 
         @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
             this.caster = caster;
+        }
+
+        @Override
+        public String getMessage(String victimName, String possessiveVictim, String statName, String changed) {
+            return victimName + "'s " + statName + " was " + changed + " by Octolock!";
         }
     }
 
@@ -2406,7 +2417,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Raging extends PokemonEffect implements TakeDamageEffect {
+    static class Raging extends PokemonEffect implements TakeDamageEffect, ModifyStageMessenger {
         private static final long serialVersionUID = 1L;
 
         Raging() {
@@ -2422,10 +2433,12 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             }
 
             // Bulbasaur's Rage increased its Attack!
-            victim.getStages().modifyStage(
-                    victim, 1, Stat.ATTACK, b, CastSource.EFFECT,
-                    (victimName, statName, changed) -> String.format("%s's Rage %s %s %s!", victim.getName(), changed, victimName, statName)
-            );
+            new StageModifier(1, Stat.ATTACK).withMessage(this).modify(b, victim, victim, CastSource.EFFECT);
+        }
+
+        @Override
+        public String getMessage(String victimName, String possessiveVictim, String statName, String changed) {
+            return victimName + "'s Rage " + changed + " " + possessiveVictim + " " + statName + "!";
         }
     }
 

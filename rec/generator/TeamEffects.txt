@@ -38,13 +38,11 @@ StickyWeb:
         }
 
         // The sticky web lowered Charmander's Speed!
-        enterer.getStages().modifyStage(
-            b.getOtherPokemon(enterer), -1, Stat.SPEED, b, CastSource.EFFECT,
-            (victimName, statName, changed) -> "The sticky web " + changed + " " + enterer.getName() + "'s " + statName + "!"
-        );
+        new StageModifier(-1, Stat.SPEED).withMessage(this).modify(b, enterer, enterer, CastSource.EFFECT);
         ###
     CastMessage: "Sticky web covers everything!"
     EntryHazard: "The sticky web dispersed!"
+    ModifyStageMessenger: "The sticky web " + changed + " " + victimName + "'s " + statName + "!"
 *
 StealthRock:
     Enter: 
