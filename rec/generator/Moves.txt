@@ -6037,7 +6037,7 @@ Fell Stinger:
     Pow: 50
     Int: MurderEffect
     KillWish:
-        murderer.getStages().modifyStage(murderer, 3, Stat.ATTACK, b, CastSource.ATTACK);
+        new StageModifier(3, Stat.ATTACK).modify(b, murderer, murderer, CastSource.ATTACK);
         ###
 *
 Magnetic Flux:
@@ -6237,7 +6237,7 @@ Strength Sap:
     UniqueEffects:
         // Only heal if stat actually lowers
         int victimAttackStat = Stat.ATTACK.getBasicStat(b, victim);
-        boolean reduced = victim.getStages().modifyStage(user, -1, Stat.ATTACK, b, CastSource.ATTACK);
+        boolean reduced = new StageModifier(-1, Stat.ATTACK).modify(b, user, victim, CastSource.ATTACK);
         if (reduced) {
             this.sapHealth(b, user, victim, victimAttackStat, true);
         }
@@ -6466,7 +6466,7 @@ Spectral Thief:
             int stage = victim.getStages().getStage(stat);
             if (stage > 0) {
                 victim.getStages().resetStage(stat);
-                user.getStages().modifyStage(user, stage, stat, b, CastSource.ATTACK);
+                new StageModifier(stage, stat).modify(b, user, user, CastSource.ATTACK);
             }
         }
         ###

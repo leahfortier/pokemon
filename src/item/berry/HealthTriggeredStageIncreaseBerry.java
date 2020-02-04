@@ -3,6 +3,7 @@ package item.berry;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.source.CastSource;
+import battle.stages.StageModifier;
 import pokemon.stat.Stat;
 
 public interface HealthTriggeredStageIncreaseBerry extends HealthTriggeredBerry {
@@ -15,7 +16,7 @@ public interface HealthTriggeredStageIncreaseBerry extends HealthTriggeredBerry 
 
     @Override
     default boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-        return user.getStages().modifyStage(user, 1, this.getStat(), b, source);
+        return new StageModifier(1, this.getStat()).modify(b, user, user, source);
     }
 
     @Override

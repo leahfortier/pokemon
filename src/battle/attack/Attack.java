@@ -10185,7 +10185,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-            murderer.getStages().modifyStage(murderer, 3, Stat.ATTACK, b, CastSource.ATTACK);
+            new StageModifier(3, Stat.ATTACK).modify(b, murderer, murderer, CastSource.ATTACK);
         }
     }
 
@@ -10500,7 +10500,7 @@ public abstract class Attack implements AttackInterface {
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Only heal if stat actually lowers
             int victimAttackStat = Stat.ATTACK.getBasicStat(b, victim);
-            boolean reduced = victim.getStages().modifyStage(user, -1, Stat.ATTACK, b, CastSource.ATTACK);
+            boolean reduced = new StageModifier(-1, Stat.ATTACK).modify(b, user, victim, CastSource.ATTACK);
             if (reduced) {
                 this.sapHealth(b, user, victim, victimAttackStat, true);
             }
@@ -10829,7 +10829,7 @@ public abstract class Attack implements AttackInterface {
                 int stage = victim.getStages().getStage(stat);
                 if (stage > 0) {
                     victim.getStages().resetStage(stat);
-                    user.getStages().modifyStage(user, stage, stat, b, CastSource.ATTACK);
+                    new StageModifier(stage, stat).modify(b, user, user, CastSource.ATTACK);
                 }
             }
         }

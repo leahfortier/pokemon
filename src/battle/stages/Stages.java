@@ -1,8 +1,6 @@
 package battle.stages;
 
 import battle.ActivePokemon;
-import battle.Battle;
-import battle.effect.source.CastSource;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.stat.Stat;
@@ -68,10 +66,6 @@ public class Stages implements Serializable {
         return Stat.BATTLE_STATS.stream()
                                 .filter(stat -> this.stages[stat.index()] != value)
                                 .collect(Collectors.toList());
-    }
-
-    public boolean modifyStage(ActivePokemon caster, int val, Stat stat, Battle b, CastSource source) {
-        return new StageModifier(val, stat).modify(b, caster, stagesHolder, source);
     }
 
     // Returns the sum of all stages

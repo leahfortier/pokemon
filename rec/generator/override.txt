@@ -1039,7 +1039,7 @@ BlockType:
 IncreaseBlockType:
     AddMapField: BlockType: {1}
     AddMapField: AlternateEffect:
-        victim.getStages().modifyStage(victim, 1, Stat.{22}, b, CastSource.ABILITY);
+        new StageModifier(1, Stat.{22}).modify(b, victim, victim, CastSource.ABILITY);
         ###
 *
 AbsorbType:
@@ -1093,7 +1093,7 @@ StatusContact:
 DecreaseContactAbility:
     AddInterface: PhysicalContactEffect
     AddMapField: Contact:
-        user.getStages().modifyStage(victim, -1, Stat.{00}, b, CastSource.ABILITY);
+        new StageModifier(-1, Stat.{00}).modify(b, victim, user, CastSource.ABILITY);
         ###
 *
 # Srsly don't worry about it
@@ -1201,7 +1201,7 @@ MoveUse:
 *
 TypeTakeDamageStatIncrease:
     AddMapField: OnTakeDamage:
-        if (user.isAttackType(Type.{11}) && victim.getStages().modifyStage(victim, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
+        if (user.isAttackType(Type.{11}) && new StageModifier(1, Stat.{22}).modify(b, victim, victim, CastSource.HELD_ITEM)) {
             this.consumeItem(b, victim);
         }
         ###
@@ -1473,7 +1473,7 @@ XStageIncrease:
     AddInterface: HoldItem
     AddInterface: BattleUseItem
     AddMapField: BattleUse:
-        return p.getStages().modifyStage(p, 2, Stat.{00}, b, CastSource.USE_ITEM);
+        return new StageModifier(2, Stat.{00}).modify(b, p, p, CastSource.USE_ITEM);
         ###
 *
 EVIncrease:
@@ -1815,7 +1815,7 @@ NextLevel:
     AddMapField: StatLowered:
         // Doesn't raise for self-inflicted lowers
         if (caster != victim) {
-            victim.getStages().modifyStage(victim, 2, Stat.{00}, b, CastSource.@SuperClass);
+            new StageModifier(2, Stat.{00}).modify(b, victim, victim, CastSource.@SuperClass);
         }
         ###
 *
@@ -1994,7 +1994,7 @@ TerrainSeed:
     AddInterface: HoldItem
     AddInterface: TerrainCastEffect
     AddMapField: NewTerrain:
-        if (newTerrain == TerrainType.{11} && p.getStages().modifyStage(p, 1, Stat.{22}, b, CastSource.HELD_ITEM)) {
+        if (newTerrain == TerrainType.{11} && new StageModifier(1, Stat.{22}).modify(b, p, p, CastSource.HELD_ITEM)) {
             this.consumeItem(b, p);
         }
         ###
