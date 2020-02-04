@@ -7,10 +7,19 @@ import battle.effect.source.CastSource;
 import main.Global;
 import message.Messages;
 import pokemon.stat.Stat;
+import util.serialization.Serializable;
 
-public class StageModifier {
+import java.util.Arrays;
+
+public class StageModifier implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private int[] modifiers;
     private ModifyStageMessenger messenger;
+
+    public StageModifier() {
+        this(new int[Stat.NUM_BATTLE_STATS]);
+    }
 
     public StageModifier(int[] modifiers) {
         this.modifiers = modifiers;
@@ -18,7 +27,7 @@ public class StageModifier {
     }
 
     public StageModifier(int modifier, Stat... stats) {
-        this(new int[Stat.NUM_BATTLE_STATS]);
+        this();
         this.set(modifier, stats);
     }
 
@@ -29,9 +38,18 @@ public class StageModifier {
         return this;
     }
 
+    // Resets all the modifier values to zero (does not effect other things like messenger)
+    public void reset() {
+        Arrays.fill(this.modifiers, 0);
+    }
+
     public StageModifier withMessage(ModifyStageMessenger messenger) {
         this.messenger = messenger;
         return this;
+    }
+
+    public int[] getCopy() {
+        return this.modifiers.clone();
     }
 
     public boolean modify(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
@@ -168,7 +186,7 @@ public class StageModifier {
     }
 
     @FunctionalInterface
-    public interface ModifyStageMessenger {
+    public interface ModifyStageMessenger extends Serializable {
         String getMessage(String victimName, String statName, String changed);
     }
 }

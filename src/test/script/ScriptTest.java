@@ -675,7 +675,7 @@ public class ScriptTest extends BaseTest {
                 }
             }
 
-            int[] actualBoosts = attack.getStatChangesCopy();
+            int[] actualBoosts = attack.getStageModifiers();
             int[] parserBoosts = moveParser.getBoosts();
             if (GeneralUtils.isEmpty(actualBoosts)) {
                 Assert.assertNull(message, parserBoosts);

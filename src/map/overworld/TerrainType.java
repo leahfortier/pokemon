@@ -1,5 +1,6 @@
 package map.overworld;
 
+import battle.StageModifier;
 import battle.attack.AttackNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
@@ -29,7 +30,7 @@ public enum TerrainType {
 
     private final AttackNamesies attack;
     private final StatusNamesies status;
-    private final int[] statChanges;
+    private final StageModifier stageModifier;
     private final PokemonEffectNamesies effect;
 
     TerrainType(Type type, Color color, AttackNamesies attack, StatusNamesies statusCondition) {
@@ -52,11 +53,11 @@ public enum TerrainType {
         this.attack = attack;
 
         this.status = statusCondition;
-        this.statChanges = new int[Stat.NUM_BATTLE_STATS];
+        this.stageModifier = new StageModifier();
         this.effect = effect;
 
         if (toLower != null) {
-            this.statChanges[toLower.index()] = -1;
+            this.stageModifier.set(-1, toLower);
         }
     }
 
@@ -76,8 +77,8 @@ public enum TerrainType {
         return status;
     }
 
-    public int[] getStatChanges() {
-        return statChanges;
+    public StageModifier getStageModifier() {
+        return stageModifier;
     }
 
     public PokemonEffectNamesies getEffect() {

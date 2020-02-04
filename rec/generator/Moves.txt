@@ -175,16 +175,11 @@ Growth:
     SelfTarget: True
     Type: Normal
     BeginAttack:
-        super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-        super.statChanges[Stat.ATTACK.index()] = 1;
-        super.statChanges[Stat.SP_ATTACK.index()] = 1;
-
         // Doubles stat changes in the sunlight
-        if (b.isWeather(WeatherNamesies.SUNNY)) {
-            for (int i = 0; i < super.statChanges.length; i++) {
-                super.statChanges[i] *= 2;
-            }
-        }
+        int modifier = b.isWeather(WeatherNamesies.SUNNY) ? 2 : 1;
+        
+        super.stageModifier.reset();
+        super.stageModifier.set(modifier, Stat.ATTACK, Stat.SP_ATTACK);
         ###
     PP: 20
 *
@@ -2724,7 +2719,7 @@ Curse:
     Cat: Status
     Type: Ghost
     BeginAttack:
-        super.statChanges = new int[Stat.NUM_BATTLE_STATS];
+        super.stageModifier.reset();
         super.effect = null;
 
         // Different effects based on the type of the user
@@ -2732,9 +2727,8 @@ Curse:
             super.effect = PokemonEffectNamesies.CURSE;
             super.selfTarget = false;
         } else {
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(1, Stat.ATTACK, Stat.DEFENSE);
+            super.stageModifier.set(-1, Stat.SPEED);
             super.selfTarget = true;
         }
         ###
@@ -2862,8 +2856,8 @@ Acupressure:
     SelfTarget: True
     Applies: !victim.getStages().getNonMaxStats().isEmpty()
     AfterApplyCheck:
-        super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-        super.statChanges[RandomUtils.getRandomValue(victim.getStages().getNonMaxStats()).index()] = 2;
+        super.stageModifier.reset();
+        super.stageModifier.set(2, RandomUtils.getRandomValue(victim.getStages().getNonMaxStats()));
         ###
 *
 Double Hit:
@@ -5252,7 +5246,7 @@ Secret Power:
         TerrainType terrain = b.getTerrainType();
 
         super.status = terrain.getStatusCondition();
-        super.statChanges = terrain.getStatChanges();
+        super.stageModifier = terrain.getStageModifier();
         super.effect = terrain.getEffect();
         ###
     EffChance: 30

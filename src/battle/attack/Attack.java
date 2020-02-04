@@ -117,7 +117,6 @@ public abstract class Attack implements AttackInterface {
     private List<MoveType> moveTypes;
     private boolean selfTarget;
     private int priority;
-    private int[] statChanges;
     private StageModifier stageModifier;
     private boolean printCast;
 
@@ -134,7 +133,7 @@ public abstract class Attack implements AttackInterface {
         this.selfTarget = false;
         this.priority = 0;
         this.status = StatusNamesies.NO_STATUS;
-        this.statChanges = new int[Stat.NUM_BATTLE_STATS];
+        this.stageModifier = new StageModifier();
         this.effectChance = 100;
         this.printCast = true;
     }
@@ -143,8 +142,8 @@ public abstract class Attack implements AttackInterface {
         return this.effect;
     }
 
-    public int[] getStatChangesCopy() {
-        return this.statChanges.clone();
+    public int[] getStageModifiers() {
+        return this.stageModifier.getCopy();
     }
 
     public StatusNamesies getStatus() {
@@ -189,7 +188,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         // Stat changes are considered to be secondary effects unless they are negative for the user
-        for (int val : this.statChanges) {
+        for (int val : this.getStageModifiers()) {
             if (val > 0 || (val < 0 && !this.isSelfTarget())) {
                 return true;
             }
@@ -390,7 +389,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         // Give Stat Changes
-        victim.getStages().modifyStages(b, user, statChanges, CastSource.ATTACK);
+        stageModifier.modify(b, user, victim, CastSource.ATTACK);
 
         // Give additional effects
         if (effect != null) {
@@ -638,16 +637,11 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
-
             // Doubles stat changes in the sunlight
-            if (b.isWeather(WeatherNamesies.SUNNY)) {
-                for (int i = 0; i < super.statChanges.length; i++) {
-                    super.statChanges[i] *= 2;
-                }
-            }
+            int modifier = b.isWeather(WeatherNamesies.SUNNY) ? 2 : 1;
+
+            super.stageModifier.reset();
+            super.stageModifier.set(modifier, Stat.ATTACK, Stat.SP_ATTACK);
         }
     }
 
@@ -4799,7 +4793,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            super.statChanges = new int[Stat.NUM_BATTLE_STATS];
+            super.stageModifier.reset();
             super.effect = null;
 
             // Different effects based on the type of the user
@@ -4807,9 +4801,8 @@ public abstract class Attack implements AttackInterface {
                 super.effect = PokemonEffectNamesies.CURSE;
                 super.selfTarget = false;
             } else {
-                super.statChanges[Stat.ATTACK.index()] = 1;
-                super.statChanges[Stat.DEFENSE.index()] = 1;
-                super.statChanges[Stat.SPEED.index()] = -1;
+                super.stageModifier.set(1, Stat.ATTACK, Stat.DEFENSE);
+                super.stageModifier.set(-1, Stat.SPEED);
                 super.selfTarget = true;
             }
         }
@@ -4993,8 +4986,8 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-            super.statChanges[RandomUtils.getRandomValue(victim.getStages().getNonMaxStats()).index()] = 2;
+            super.stageModifier.reset();
+            super.stageModifier.set(2, RandomUtils.getRandomValue(victim.getStages().getNonMaxStats()));
         }
 
         @Override
@@ -8815,7 +8808,7 @@ public abstract class Attack implements AttackInterface {
             TerrainType terrain = b.getTerrainType();
 
             super.status = terrain.getStatusCondition();
-            super.statChanges = terrain.getStatChanges();
+            super.stageModifier = terrain.getStageModifier();
             super.effect = terrain.getEffect();
         }
     }
