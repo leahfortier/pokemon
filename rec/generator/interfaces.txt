@@ -230,10 +230,10 @@ EntryEffect:
 StatLoweredEffect:
     Method:
         Comments:
-            // caster: The Pokemon responsible for causing the stat to be lowered
             // victim: The Pokemon whose stat is being lowered
+            // selfCaster: true if the victim caused its own stats to be lowered
             ###
-        Header: void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim)
+        Header: void takeItToTheNextLevel(Battle b, ActivePokemon victim, boolean selfCaster)
         Invoke: Void
         EffectList: victim
     *
@@ -448,6 +448,24 @@ StatProtectingEffect:
     *
     Method:
         Header: String preventionMessage(Battle b, ActivePokemon p, Stat s)
+    *
+***
+StatTargetSwapperEffect:
+    Extends: InvokeEffect
+    Method:
+        Header: String getSwapStatTargetMessage(ActivePokemon victim)
+    *
+    Method:
+        Header: boolean shouldSwapTarget()
+        Default:
+            // TODO: This should probably use a ContainsGet type of thing but just doing this instead for now
+            return true;
+            ###
+        Invoke: CheckGet true
+        InvokeName: checkTargetSwap
+        EffectList: victim
+        MoldBreaker: moldBreaker
+        InvokeParameters: ActivePokemon moldBreaker, Battle b, ActivePokemon caster, ActivePokemon victim
     *
 ***
 StatusPreventionEffect:

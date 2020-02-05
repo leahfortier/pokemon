@@ -1604,7 +1604,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        public void takeItToTheNextLevel(Battle b, ActivePokemon victim, boolean selfCaster) {
             if (usesies(victim)) {
                 Messages.add(victim.getName() + "'s " + this.getName() + " restored its negative stat changes!");
                 this.consumeItem(b, victim);

@@ -54,7 +54,7 @@ public class TestPokemon extends ActivePokemon {
     }
 
     public TestPokemon withAbility(AbilityNamesies ability) {
-        super.setAbility(ability);
+        this.setAbility(ability);
         return this;
     }
 
@@ -287,7 +287,7 @@ public class TestPokemon extends ActivePokemon {
 
     public void assertAbility(AbilityNamesies abilityNamesies) {
         Assert.assertTrue(
-                StringUtils.spaceSeparated(this.getActualName(), this.getAbility(), abilityNamesies),
+                StringUtils.spaceSeparated(this.getActualName(), this.getAbility(), abilityNamesies.getName()),
                 this.hasAbility(abilityNamesies)
         );
         this.assertNoEffect(PokemonEffectNamesies.CHANGE_ABILITY);

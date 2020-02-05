@@ -889,6 +889,13 @@ GetMultiplier:
 GetOppMultiplier:
     Header: double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim)
 *
+StatTargetSwap:
+    Header: String getSwapStatTargetMessage(ActivePokemon victim)
+    Body:
+        return {0};
+        ###
+    AddInterface: StatTargetSwapperEffect
+*
 StatProtect:
     AddMapField: StatProtectingEffect: 
         return stat == Stat.{00};
@@ -1843,14 +1850,14 @@ NormalTypeChanger:
 NextLevel:
     AddMapField: StatLowered:
         // Doesn't raise for self-inflicted lowers
-        if (caster != victim) {
+        if (!selfCaster) {
             new StageModifier(2, Stat.{00}).modify(b, victim, victim, CastSource.@SuperClass);
         }
         ###
 *
 StatLowered:
     AddInterface: StatLoweredEffect
-    Header: void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim)
+    Header: void takeItToTheNextLevel(Battle b, ActivePokemon victim, boolean selfCaster)
 *
 FlinchItem:
     AddMapField: FlingEffect:

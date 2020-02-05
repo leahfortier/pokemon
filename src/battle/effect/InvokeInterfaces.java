@@ -13,7 +13,6 @@ import battle.effect.EffectInterfaces.SwappableEffect;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.battle.BattleEffect;
-import battle.effect.battle.weather.WeatherEffect;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
@@ -374,16 +373,16 @@ public final class InvokeInterfaces {
 
     public interface StatLoweredEffect {
 
-        // caster: The Pokemon responsible for causing the stat to be lowered
         // victim: The Pokemon whose stat is being lowered
-        void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim);
+        // selfCaster: true if the victim caused its own stats to be lowered
+        void takeItToTheNextLevel(Battle b, ActivePokemon victim, boolean selfCaster);
 
-        static void invokeStatLoweredEffect(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        static void invokeStatLoweredEffect(Battle b, ActivePokemon victim, boolean selfCaster) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof StatLoweredEffect && invokee.isActiveEffect()) {
                     StatLoweredEffect effect = (StatLoweredEffect)invokee;
-                    effect.takeItToTheNextLevel(b, caster, victim);
+                    effect.takeItToTheNextLevel(b, victim, selfCaster);
                 }
             }
         }
@@ -757,6 +756,35 @@ public final class InvokeInterfaces {
 
                     StatProtectingEffect effect = (StatProtectingEffect)invokee;
                     if (effect.prevent(b, caster, victim, stat)) {
+                        return effect;
+                    }
+                }
+            }
+
+            return null;
+        }
+    }
+
+    public interface StatTargetSwapperEffect extends InvokeEffect {
+        String getSwapStatTargetMessage(ActivePokemon victim);
+
+        default boolean shouldSwapTarget() {
+            // TODO: This should probably use a ContainsGet type of thing but just doing this instead for now
+            return true;
+        }
+
+        static StatTargetSwapperEffect checkTargetSwap(ActivePokemon moldBreaker, Battle b, ActivePokemon caster, ActivePokemon victim) {
+            List<InvokeEffect> invokees = b.getEffectsList(victim);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof StatTargetSwapperEffect && invokee.isActiveEffect()) {
+
+                    // If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && moldBreaker != null && moldBreaker.breaksTheMold()) {
+                        continue;
+                    }
+
+                    StatTargetSwapperEffect effect = (StatTargetSwapperEffect)invokee;
+                    if (effect.shouldSwapTarget()) {
                         return effect;
                     }
                 }

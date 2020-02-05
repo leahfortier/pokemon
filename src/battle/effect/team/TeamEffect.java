@@ -199,7 +199,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
             }
 
             // The sticky web lowered Charmander's Speed!
-            new StageModifier(-1, Stat.SPEED).withMessage(this).modify(b, enterer, enterer, CastSource.EFFECT);
+            new StageModifier(-1, Stat.SPEED).withMessage(this).modify(b, b.getOtherPokemon(enterer), enterer, CastSource.EFFECT);
         }
 
         @Override

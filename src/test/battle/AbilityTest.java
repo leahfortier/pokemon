@@ -1,11 +1,11 @@
 package test.battle;
 
-import battle.stages.Stages;
 import battle.attack.AttackNamesies;
 import battle.effect.EffectInterfaces.ItemListHolder;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
+import battle.stages.Stages;
 import item.ItemNamesies;
 import item.hold.HoldItem;
 import org.junit.Assert;
@@ -1154,6 +1154,16 @@ public class AbilityTest extends BaseTest {
                 }
         );
 
+        // Mold Breaker cancels Magic Bounce
+        magicBounceTest(
+                AttackNamesies.GROWL,
+                new TestInfo().attacking(AbilityNamesies.MOLD_BREAKER),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages().set(-1, Stat.ATTACK));
+                }
+        );
+
         // Status-inducing moves are reflectable
         magicBounceTest(
                 AttackNamesies.WILL_O_WISP,
@@ -1186,7 +1196,7 @@ public class AbilityTest extends BaseTest {
         );
 
         // Gastro Acid negates opponent's ability and is reflectable
-        // RKS System is not replacable and should fail when reflected
+        // RKS System is not replaceable and should fail when reflected
         magicBounceTest(
                 AttackNamesies.GASTRO_ACID,
                 new TestInfo().attacking(AbilityNamesies.RKS_SYSTEM),
@@ -1269,15 +1279,168 @@ public class AbilityTest extends BaseTest {
                     Assert.assertFalse(attacking.lastMoveSucceeded());
                 }
         );
+
+        // Magic Bounce does not work with ability decreases
+        magicBounceTest(
+                new TestInfo().attacking(AbilityNamesies.GOOEY).defendingFight(AttackNamesies.FALSE_SWIPE),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages().set(-1, Stat.SPEED));
+                }
+        );
+
+        // Magic Bounce only reflects status moves, so decreases from Acid Spray will not reflect
+        magicBounceTest(
+                new TestInfo().fight(AttackNamesies.ACID_SPRAY, AttackNamesies.ENDURE),
+                (battle, attacking, defending) -> {
+                    attacking.assertFullHealth();
+                    defending.assertNotFullHealth();
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages().set(-2, Stat.SP_DEFENSE));
+                }
+        );
     }
 
     private void magicBounceTest(AttackNamesies attack, TestInfo testInfo, PokemonManipulator samesies) {
         magicBounceTest(attack, testInfo, samesies, samesies);
     }
 
+    private void magicBounceTest(TestInfo testInfo, PokemonManipulator samesies) {
+        magicBounceTest(testInfo, samesies, samesies);
+    }
+
     private void magicBounceTest(AttackNamesies attackNamesies, TestInfo testInfo, PokemonManipulator withoutBounce, PokemonManipulator withBounce) {
-        testInfo.attackingFight(attackNamesies);
+        magicBounceTest(testInfo.attackingFight(attackNamesies), withoutBounce, withBounce);
+    }
+
+    private void magicBounceTest(TestInfo testInfo, PokemonManipulator withoutBounce, PokemonManipulator withBounce) {
         testInfo.doubleTake(AbilityNamesies.MAGIC_BOUNCE, withoutBounce, withBounce);
+    }
+
+    @Test
+    public void mirrorArmorTest() {
+        // Growl decreases opponent's attack by 1 and is reflectable
+        mirrorArmorTest(
+                AttackNamesies.GROWL,
+                new TestInfo(),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages().set(-1, Stat.ATTACK));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(-1, Stat.ATTACK));
+                    defending.assertStages(new TestStages());
+                }
+        );
+
+        // Unless user has Mold Breaker
+        mirrorArmorTest(
+                AttackNamesies.GROWL,
+                new TestInfo().attacking(AbilityNamesies.MOLD_BREAKER),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages().set(-1, Stat.ATTACK));
+                }
+        );
+
+        // Hyper Cutter prevents attack reduction
+        mirrorArmorTest(
+                AttackNamesies.GROWL,
+                new TestInfo().attacking(AbilityNamesies.HYPER_CUTTER),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages().set(-1, Stat.ATTACK));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages());
+                }
+        );
+
+        // Competitive sharply raises Sp. Attack when a stat is lowered (works with Mirror Armor)
+        mirrorArmorTest(
+                AttackNamesies.GROWL,
+                new TestInfo().attacking(AbilityNamesies.COMPETITIVE),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages().set(-1, Stat.ATTACK));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(-1, Stat.ATTACK).set(2, Stat.SP_ATTACK));
+                    defending.assertStages(new TestStages());
+                }
+        );
+
+        // Mirror Armor even works against ability decreases
+        // Gooey decreases the Speed of Pokemon who make contact with it
+        mirrorArmorTest(
+                new TestInfo().attacking(AbilityNamesies.GOOEY).defendingFight(AttackNamesies.FALSE_SWIPE),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages().set(-1, Stat.SPEED));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(-1, Stat.SPEED));
+                    defending.assertStages(new TestStages());
+                }
+        );
+
+        // Mirror Armor reflects damaging moves not just status ones (but only reflects stats)
+        mirrorArmorTest(
+                new TestInfo().fight(AttackNamesies.ACID_SPRAY, AttackNamesies.ENDURE)
+                              .with((battle, attacking, defending) -> {
+                                  attacking.assertFullHealth();
+                                  defending.assertNotFullHealth();
+                              }),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages().set(-2, Stat.SP_DEFENSE));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(-2, Stat.SP_DEFENSE));
+                    defending.assertStages(new TestStages());
+                }
+        );
+
+        // Sticky Web is effected by Mirror Armor
+        mirrorArmorTest(
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
+                        .asTrainerBattle()
+                        .with((battle, attacking, defending) -> battle.addDefending(PokemonNamesies.SQUIRTLE))
+                        .attackingFight(AttackNamesies.WHIRLWIND)  // Switch to Squirtle
+                        .attackingFight(AttackNamesies.STICKY_WEB) // Add Sticky Web
+                        .attackingFight(AttackNamesies.WHIRLWIND), // Switch back to Mirror Armor Pokemon with Sticky Web active
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages());
+                    defending.assertStages(new TestStages().set(-1, Stat.SPEED));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(-1, Stat.SPEED));
+                    defending.assertStages(new TestStages());
+                }
+        );
+
+        // Status-inducing moves are not reflectable
+        mirrorArmorTest(
+                AttackNamesies.WILL_O_WISP,
+                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE),
+                (battle, attacking, defending) -> {
+                    attacking.assertNoStatus();
+                    defending.assertHasStatus(StatusNamesies.BURNED);
+                }
+        );
+    }
+
+    private void mirrorArmorTest(AttackNamesies attack, TestInfo testInfo, PokemonManipulator samesies) {
+        mirrorArmorTest(attack, testInfo, samesies, samesies);
+    }
+
+    private void mirrorArmorTest(AttackNamesies attackNamesies, TestInfo testInfo, PokemonManipulator withoutArmor, PokemonManipulator withArmor) {
+        mirrorArmorTest(testInfo.attackingFight(attackNamesies), withoutArmor, withArmor);
+    }
+
+    private void mirrorArmorTest(TestInfo testInfo, PokemonManipulator withoutArmor, PokemonManipulator withArmor) {
+        testInfo.doubleTake(AbilityNamesies.MIRROR_ARMOR, withoutArmor, withArmor);
     }
 
     @Test

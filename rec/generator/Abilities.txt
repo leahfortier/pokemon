@@ -1871,3 +1871,7 @@ Mimicry:
         return b.getEffects().hasTerrain() ? new PokeType(b.getTerrainType().getType()) : null;
         ###
 *
+Mirror Armor:
+    Desc: Bounces back only the stat-lowering effects that the Pokémon receives.
+    StatTargetSwap: victim.getName() + "'s " + this.getName() + " reflected the changes!"
+*

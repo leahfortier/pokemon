@@ -78,6 +78,7 @@ import battle.effect.InvokeInterfaces.StartAttackEffect;
 import battle.effect.InvokeInterfaces.StatLoweredEffect;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
+import battle.effect.InvokeInterfaces.StatTargetSwapperEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
@@ -2414,9 +2415,9 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        public void takeItToTheNextLevel(Battle b, ActivePokemon victim, boolean selfCaster) {
             // Doesn't raise for self-inflicted lowers
-            if (caster != victim) {
+            if (!selfCaster) {
                 new StageModifier(2, Stat.ATTACK).modify(b, victim, victim, CastSource.ABILITY);
             }
         }
@@ -2430,9 +2431,9 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        public void takeItToTheNextLevel(Battle b, ActivePokemon victim, boolean selfCaster) {
             // Doesn't raise for self-inflicted lowers
-            if (caster != victim) {
+            if (!selfCaster) {
                 new StageModifier(2, Stat.SP_ATTACK).modify(b, victim, victim, CastSource.ABILITY);
             }
         }
@@ -4614,6 +4615,19 @@ public abstract class Ability implements AbilityInterface {
             // Type is the same as the current terrain
             // Note: In the game this effect will override effects like Soak, but that isn't happening here
             return b.getEffects().hasTerrain() ? new PokeType(b.getTerrainType().getType()) : null;
+        }
+    }
+
+    static class MirrorArmor extends Ability implements StatTargetSwapperEffect {
+        private static final long serialVersionUID = 1L;
+
+        MirrorArmor() {
+            super(AbilityNamesies.MIRROR_ARMOR, "Bounces back only the stat-lowering effects that the Pokémon receives.");
+        }
+
+        @Override
+        public String getSwapStatTargetMessage(ActivePokemon victim) {
+            return victim.getName() + "'s " + this.getName() + " reflected the changes!";
         }
     }
 }

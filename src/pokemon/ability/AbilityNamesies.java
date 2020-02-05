@@ -114,6 +114,7 @@ import pokemon.ability.Ability.MarvelScale;
 import pokemon.ability.Ability.MegaLauncher;
 import pokemon.ability.Ability.Merciless;
 import pokemon.ability.Ability.Mimicry;
+import pokemon.ability.Ability.MirrorArmor;
 import pokemon.ability.Ability.MistySurge;
 import pokemon.ability.Ability.MoldBreaker;
 import pokemon.ability.Ability.Moody;
@@ -463,7 +464,8 @@ public enum AbilityNamesies {
     ICE_SCALES("Ice Scales", IceScales::new),
     INTREPID_SWORD("Intrepid Sword", IntrepidSword::new),
     LIBERO("Libero", Libero::new),
-    MIMICRY("Mimicry", Mimicry::new);
+    MIMICRY("Mimicry", Mimicry::new),
+    MIRROR_ARMOR("Mirror Armor", MirrorArmor::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 
