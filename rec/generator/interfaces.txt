@@ -919,7 +919,7 @@ SwitchOutEffect:
         Header: void switchOut(ActivePokemon switchee)
         Invoke: Void
         SetInvokees:
-            List<InvokeEffect> invokees = switchee.getAllEffects(null);
+            List<InvokeEffect> invokees = switchee.getAllEffects();
             ###
     *
 ***

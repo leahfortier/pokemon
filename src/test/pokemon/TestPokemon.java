@@ -244,43 +244,43 @@ public class TestPokemon extends ActivePokemon {
         Assert.assertEquals(effectNamesies.name(), shouldHave, this.hasEffect(effectNamesies));
     }
 
-    public void assertHoldingItem(Battle battle, ItemNamesies itemNamesies) {
-        Assert.assertTrue(this.isHoldingItem(battle, itemNamesies));
+    public void assertHoldingItem(ItemNamesies itemNamesies) {
+        Assert.assertTrue(this.isHoldingItem(itemNamesies));
     }
 
-    public void assertNotHoldingItem(Battle battle) {
-        Assert.assertFalse(this.isHoldingItem(battle));
+    public void assertNotHoldingItem() {
+        Assert.assertFalse(this.isHoldingItem());
     }
 
     // Either checks consumed or not consumed
-    public void assertExpectedConsumedItem(Battle battle, boolean shouldConsume) {
+    public void assertExpectedConsumedItem(boolean shouldConsume) {
         if (shouldConsume) {
-            this.assertConsumedItem(battle, false);
+            this.assertConsumedItem();
         } else {
-            this.assertNotConsumedItem(battle);
+            this.assertNotConsumedItem();
         }
     }
 
     // Confirms that the Pokemon is not holding an item and has the consumed item effect
     // Explicitly confirms that a berry was not consumed in the process (use assertConsumedBerry in this case)
-    public void assertConsumedItem(Battle battle) {
-        this.assertConsumedItem(battle, false);
+    public void assertConsumedItem() {
+        this.assertConsumedItem(false);
     }
 
     // Confirms that the Pokemon is not holding an item and has the consumed item and berry effects
-    public void assertConsumedBerry(Battle battle) {
-        this.assertConsumedItem(battle, true);
+    public void assertConsumedBerry() {
+        this.assertConsumedItem(true);
     }
 
-    private void assertConsumedItem(Battle battle, boolean berry) {
-        Assert.assertFalse(this.isHoldingItem(battle));
+    private void assertConsumedItem(boolean berry) {
+        Assert.assertFalse(this.isHoldingItem());
         this.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
         this.assertEffect(berry, PokemonEffectNamesies.EATEN_BERRY);
     }
 
     // Confirms that the Pokemon is still holding an item and does not have the consumed item/berry effect
-    public void assertNotConsumedItem(Battle battle) {
-        Assert.assertTrue(this.isHoldingItem(battle));
+    public void assertNotConsumedItem() {
+        Assert.assertTrue(this.isHoldingItem());
         this.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
         this.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
     }

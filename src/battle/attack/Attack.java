@@ -1693,7 +1693,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            HoldItem item = victim.getHeldItem(b);
+            HoldItem item = victim.getHeldItem();
             if (item instanceof Berry) {
                 Berry berry = (Berry)item;
                 berry.eatBerry(b, user, victim);
@@ -2403,7 +2403,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            HoldItem item = victim.getHeldItem(b);
+            HoldItem item = victim.getHeldItem();
             if (item instanceof Berry) {
                 Berry berry = (Berry)item;
                 berry.eatBerry(b, user, victim);
@@ -3469,7 +3469,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.isHoldingItem(b) ? 2 : 1;
+            return !user.isHoldingItem() ? 2 : 1;
         }
     }
 
@@ -3505,12 +3505,12 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
-            return ((Berry)me.getHeldItem(b)).naturalGiftPower();
+            return ((Berry)me.getHeldItem()).naturalGiftPower();
         }
 
         @Override
         public Type getType(Battle b, ActivePokemon user) {
-            HoldItem item = user.getHeldItem(b);
+            HoldItem item = user.getHeldItem();
             if (item instanceof Berry) {
                 return ((Berry)item).naturalGiftType();
             }
@@ -3521,7 +3521,7 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // This is so fucking stupid that it consumes the Berry upon use, like srsly what the fuck is the fucking point of this move
-            HoldItem item = user.getHeldItem(b);
+            HoldItem item = user.getHeldItem();
             if (item instanceof Berry) {
                 item.consumeItemWithoutEffects(b, user);
             }
@@ -3529,7 +3529,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getHeldItem(b) instanceof Berry;
+            return user.getHeldItem() instanceof Berry;
         }
     }
 
@@ -8254,7 +8254,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public Type getType(Battle b, ActivePokemon user) {
-            HoldItem item = user.getHeldItem(b);
+            HoldItem item = user.getHeldItem();
             if (item instanceof PlateItem) {
                 return ((PlateItem)item).getType();
             }
@@ -8287,7 +8287,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            HoldItem heldItem = victim.getHeldItem(b);
+            HoldItem heldItem = victim.getHeldItem();
             if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !StickyHoldEffect.containsStickyHoldEffect(b, user, victim)) {
                 Messages.add(victim.getName() + "'s " + heldItem.getName() + " was burned!");
                 heldItem.consumeItemWithoutEffects(b, victim);
@@ -8678,7 +8678,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public Type getType(Battle b, ActivePokemon user) {
-            HoldItem item = user.getHeldItem(b);
+            HoldItem item = user.getHeldItem();
             if (item instanceof DriveItem) {
                 return ((DriveItem)item).getType();
             }
@@ -8700,7 +8700,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public Type getType(Battle b, ActivePokemon user) {
-            HoldItem item = user.getHeldItem(b);
+            HoldItem item = user.getHeldItem();
             if (item instanceof MemoryItem) {
                 return ((MemoryItem)item).getType();
             }
@@ -8743,24 +8743,24 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public int getPower(Battle b, ActivePokemon me, ActivePokemon o) {
-            return me.getHeldItem(b).flingDamage();
+            return me.getHeldItem().flingDamage();
         }
 
         @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Messages.add(user.getName() + " flung its " + user.getHeldItem(b).getName() + "!");
+            Messages.add(user.getName() + " flung its " + user.getHeldItem().getName() + "!");
         }
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            HoldItem item = user.getHeldItem(b);
+            HoldItem item = user.getHeldItem();
             item.flingEffect(b, victim);
             item.consumeItemWithoutEffects(b, user);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.isHoldingItem(b);
+            return user.isHoldingItem();
         }
     }
 
@@ -9034,7 +9034,7 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.canRemoveItem(b, victim)) {
-                Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!");
+                Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem().getName() + "!");
                 if (b.isWildBattle()) {
                     victim.removeItem();
                 } else {
@@ -9046,7 +9046,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.isHoldingItem(b) ? 1.5 : 1;
+            return victim.isHoldingItem() ? 1.5 : 1;
         }
     }
 
@@ -9094,7 +9094,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canGiftItem(b, victim);
+            return user.canGiftItem(victim);
         }
 
         @Override
@@ -9228,7 +9228,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM) && !user.isHoldingItem(b);
+            return user.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM) && !user.isHoldingItem();
         }
     }
 
@@ -11133,13 +11133,13 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Note: Here instead of unique effects so the message is displayed before the defense increase
-            Berry berry = (Berry)user.getHeldItem(b);
+            Berry berry = (Berry)user.getHeldItem();
             berry.eatBerry(b, victim, user);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getHeldItem(b) instanceof Berry;
+            return user.getHeldItem() instanceof Berry;
         }
     }
 
@@ -11205,7 +11205,7 @@ public abstract class Attack implements AttackInterface {
                 return false;
             }
 
-            HoldItem item = teaDrinker.getHeldItem(b);
+            HoldItem item = teaDrinker.getHeldItem();
             if (item instanceof Berry) {
                 Berry berry = (Berry)item;
                 berry.eatBerry(b, teaDrinker, teaDrinker);

@@ -1569,7 +1569,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             stickyPoke(b, user, victim.getName() + "'s");
-            if (user.isFainted(b) || !victim.canGiftItem(b, user)) {
+            if (user.isFainted(b) || !victim.canGiftItem(user)) {
                 return;
             }
 

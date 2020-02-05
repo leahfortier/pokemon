@@ -1706,7 +1706,7 @@ public final class InvokeInterfaces {
         void switchOut(ActivePokemon switchee);
 
         static void invokeSwitchOutEffect(ActivePokemon switchee) {
-            List<InvokeEffect> invokees = switchee.getAllEffects(null);
+            List<InvokeEffect> invokees = switchee.getAllEffects();
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof SwitchOutEffect && invokee.isActiveEffect()) {
                     SwitchOutEffect effect = (SwitchOutEffect)invokee;

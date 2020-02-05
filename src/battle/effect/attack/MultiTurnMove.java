@@ -26,7 +26,7 @@ public interface MultiTurnMove extends AttackInterface, ForceMoveEffect {
 
     // The Power Herb item allows multi-turn moves that charge first to skip the charge turn -- BUT ONLY ONCE
     default boolean checkPowerHerb(Battle b, ActivePokemon user) {
-        HoldItem item = user.getHeldItem(b);
+        HoldItem item = user.getHeldItem();
         if (item.namesies() == ItemNamesies.POWER_HERB && this.chargesFirst() && !this.semiInvulnerability()) {
             item.consumeItem(b, user);
             return true;

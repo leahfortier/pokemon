@@ -201,7 +201,7 @@ public class Battle implements Serializable {
                 .append(p.getActualName() + " ")
                 .appendJoin(" ", Stat.BATTLE_STATS, stat -> String.valueOf(p.getStage(stat)))
                 .append(" " + p.getAbility().getName())
-                .append(" " + p.getHeldItem(this).getName() + " ")
+                .append(" " + p.getHeldItem().getName() + " ")
                 .appendJoin(" ", Stat.STATS, stat -> String.valueOf(p.getStat(this, stat)))
                 .appendLine()
                 .appendIf(p.hasStatus(), p.getStatus() + "\n")
@@ -465,7 +465,7 @@ public class Battle implements Serializable {
         List<InvokeEffect> list = new ArrayList<>();
         Collections.addAll(list, additionalItems);
 
-        list.addAll(p.getAllEffects(this, includeItem));
+        list.addAll(p.getAllEffects(includeItem));
         list.addAll(this.getTrainer(p).getEffects().asList());
         list.addAll(this.getEffects().asList());
 

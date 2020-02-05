@@ -1556,7 +1556,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             int healAmount = victim.getHealHealthFractionAmount(1/16.0);
-            if (victim.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
+            if (victim.isHoldingItem(ItemNamesies.BIG_ROOT)) {
                 healAmount *= 1.3;
             }
 
@@ -1728,7 +1728,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             int healAmount = victim.getHealHealthFractionAmount(1/16.0);
-            if (victim.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
+            if (victim.isHoldingItem(ItemNamesies.BIG_ROOT)) {
                 healAmount *= 1.3;
             }
 
@@ -2364,7 +2364,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            consumed = victim.getHeldItem(b);
+            consumed = victim.getHeldItem();
             victim.removeItem();
             victim.getEffects().remove(this.namesies());
         }

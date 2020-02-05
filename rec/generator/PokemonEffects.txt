@@ -966,7 +966,7 @@ ConsumedItem:
         private HoldItem consumed;
         ###
     BeforeCast:
-        consumed = victim.getHeldItem(b);
+        consumed = victim.getHeldItem();
         victim.removeItem();
         victim.getEffects().remove(this.namesies());
         ###

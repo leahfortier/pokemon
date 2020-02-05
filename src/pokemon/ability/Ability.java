@@ -709,8 +709,8 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             ActivePokemon other = b.getOtherPokemon(enterer);
-            if (other.isHoldingItem(b)) {
-                Messages.add(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!");
+            if (other.isHoldingItem()) {
+                Messages.add(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem().getName() + "!");
             }
         }
     }
@@ -3065,7 +3065,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             // Does nothing if victim is holding something
-            if (victim.isHoldingItem(b)) {
+            if (victim.isHoldingItem()) {
                 return;
             }
 
@@ -3144,7 +3144,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
-            if (!p.isHoldingItem(b) && RandomUtils.chanceTest(10)) {
+            if (!p.isHoldingItem() && RandomUtils.chanceTest(10)) {
                 ItemNamesies item = RandomUtils.getRandomValue(items);
                 p.giveItem(item);
                 Messages.add(p.getName() + " picked up " + StringUtils.articleString(item.getName()) + "!");
@@ -3179,7 +3179,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
-            if (!p.isHoldingItem(b) && RandomUtils.chanceTest(5*(int)Math.ceil(p.getLevel()/10.0))) {
+            if (!p.isHoldingItem() && RandomUtils.chanceTest(5*(int)Math.ceil(p.getLevel()/10.0))) {
                 p.giveItem(ItemNamesies.HONEY);
             }
         }
@@ -3202,7 +3202,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public PokeType getType(Battle b, ActivePokemon p, boolean display) {
-            HoldItem item = p.getHeldItem(b);
+            HoldItem item = p.getHeldItem();
             if (item instanceof PlateItem) {
                 return new PokeType(((PlateItem)item).getType());
             }
@@ -3230,7 +3230,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public PokeType getType(Battle b, ActivePokemon p, boolean display) {
-            HoldItem item = p.getHeldItem(b);
+            HoldItem item = p.getHeldItem();
             if (item instanceof MemoryItem) {
                 return new PokeType(((MemoryItem)item).getType());
             }

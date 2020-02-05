@@ -326,7 +326,7 @@ public class EffectTest extends BaseTest {
         Assert.assertEquals(ItemNamesies.ORAN_BERRY.getName(), CastSource.HELD_ITEM.getSourceName(battle, attacking));
 
         Assert.assertSame(attacking.getAbility(), CastSource.ABILITY.getSource(battle, attacking));
-        Assert.assertSame(attacking.getHeldItem(battle), CastSource.HELD_ITEM.getSource(battle, attacking));
+        Assert.assertSame(attacking.getHeldItem(), CastSource.HELD_ITEM.getSource(battle, attacking));
         Assert.assertSame(attacking.getAttack(), CastSource.ATTACK.getSource(battle, attacking));
         Assert.assertSame(attacking.getCastSource(), CastSource.CAST_SOURCE.getSource(battle, attacking));
     }
@@ -454,13 +454,13 @@ public class EffectTest extends BaseTest {
                               .attacking(ItemNamesies.POTION)
                               .defendingFight(AttackNamesies.TRICK),
                 (battle, attacking, defending) -> {
-                    attacking.assertNotHoldingItem(battle);
-                    defending.assertHoldingItem(battle, ItemNamesies.POTION);
+                    attacking.assertNotHoldingItem();
+                    defending.assertHoldingItem(ItemNamesies.POTION);
                 },
                 (battle, attacking, defending) -> {
                     Assert.assertFalse(defending.lastMoveSucceeded());
-                    attacking.assertHoldingItem(battle, ItemNamesies.POTION);
-                    defending.assertNotHoldingItem(battle);
+                    attacking.assertHoldingItem(ItemNamesies.POTION);
+                    defending.assertNotHoldingItem();
                 }
         );
 
@@ -469,8 +469,8 @@ public class EffectTest extends BaseTest {
                         .asTrainerBattle()
                         .attacking(ItemNamesies.POTION)
                         .defendingFight(AttackNamesies.KNOCK_OFF),
-                (battle, attacking, defending) -> attacking.assertNotHoldingItem(battle),
-                (battle, attacking, defending) -> attacking.assertHoldingItem(battle, ItemNamesies.POTION)
+                (battle, attacking, defending) -> attacking.assertNotHoldingItem(),
+                (battle, attacking, defending) -> attacking.assertHoldingItem(ItemNamesies.POTION)
         );
 
         substituteTest(
@@ -480,13 +480,13 @@ public class EffectTest extends BaseTest {
                         .fight(AttackNamesies.WILL_O_WISP, AttackNamesies.PLUCK),
                 (battle, attacking, defending) -> {
                     defending.assertNoStatus();
-                    attacking.assertConsumedItem(battle); // No eaten berry
+                    attacking.assertConsumedItem(); // No eaten berry
                     defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
                     defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
                 },
                 (battle, attacking, defending) -> {
                     defending.assertHasStatus(StatusNamesies.BURNED);
-                    attacking.assertNotConsumedItem(battle);
+                    attacking.assertNotConsumedItem();
                     defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
                     defending.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
                 }
@@ -497,7 +497,7 @@ public class EffectTest extends BaseTest {
                 new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
                         .defending(ItemNamesies.FLAME_ORB)
                         .defendingFight(AttackNamesies.FLING)
-                        .with((battle, attacking, defending) -> Assert.assertFalse(defending.isHoldingItem(battle))),
+                        .with((battle, attacking, defending) -> Assert.assertFalse(defending.isHoldingItem())),
                 (battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.BURNED),
                 (battle, attacking, defending) -> attacking.assertNoStatus()
         );
@@ -737,7 +737,7 @@ public class EffectTest extends BaseTest {
         attacking.assertHasEffect(PokemonEffectNamesies.SUBSTITUTE);
         Assert.assertTrue(attacking.isLevitating(battle));
         attacking.assertNoStatus();
-        attacking.assertNotHoldingItem(battle); // Chesto Berry consumed
+        attacking.assertNotHoldingItem(); // Chesto Berry consumed
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(12/16.0, 4);
         battle.assertHasEffect(TerrainNamesies.GRASSY_TERRAIN);
@@ -788,8 +788,8 @@ public class EffectTest extends BaseTest {
 
         // But is removed when pelted with an Iron Ball (not true in actual games)
         battle.fight(AttackNamesies.FLING, AttackNamesies.ENDURE);
-        attacking.assertConsumedItem(battle);
-        defending.assertNotHoldingItem(battle);
+        attacking.assertConsumedItem();
+        defending.assertNotHoldingItem();
         defending.assertNoEffect(PokemonEffectNamesies.MAGNET_RISE);
         Assert.assertTrue(attacking.isLevitating(battle));
         Assert.assertFalse(defending.isLevitating(battle));
@@ -803,7 +803,7 @@ public class EffectTest extends BaseTest {
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);
         Assert.assertTrue(attacking.isLevitating(battle));
         Assert.assertFalse(defending.isLevitating(battle));
-        defending.assertConsumedItem(battle);
+        defending.assertConsumedItem();
 
         // Make Charmander Flying-type (and therefore a master of levitation)
         defending.withAbility(AbilityNamesies.PROTEAN);
@@ -1003,8 +1003,8 @@ public class EffectTest extends BaseTest {
                     attacking.assertSpecies(PokemonNamesies.PIKACHU);
                     defending.assertSpecies(PokemonNamesies.PIKACHU);
 
-                    attacking.assertHoldingItem(battle, ItemNamesies.QUICK_POWDER);
-                    defending.assertHoldingItem(battle, ItemNamesies.LIGHT_BALL);
+                    attacking.assertHoldingItem(ItemNamesies.QUICK_POWDER);
+                    defending.assertHoldingItem(ItemNamesies.LIGHT_BALL);
                 });
 
         // Not a Ditto anymore so Quick Powder shouldn't work
@@ -1025,8 +1025,8 @@ public class EffectTest extends BaseTest {
                     attacking.assertSpecies(PokemonNamesies.PIKACHU);
                     defending.assertSpecies(PokemonNamesies.PIKACHU);
 
-                    defending.assertHoldingItem(battle, ItemNamesies.QUICK_POWDER);
-                    attacking.assertHoldingItem(battle, ItemNamesies.LIGHT_BALL);
+                    defending.assertHoldingItem(ItemNamesies.QUICK_POWDER);
+                    attacking.assertHoldingItem(ItemNamesies.LIGHT_BALL);
                 });
 
         // Regular Pikachu is holding Quick Powder now -- should do nothing
