@@ -46,14 +46,14 @@ public class ConstructorInfo {
         fields.getPerformAndRemove("StatChange", value -> {
             // value should be in the form '<Stat_Name1> <change1> <Stat_Name2> <change2> ...'
             // Ex In: 'StatChange: Attack -1'
-            // Ex Out: 'super.statChanges[Stat.ATTACK.index()] = -1;'
+            // Ex Out: 'super.stageModifier.set(-1, Stat.ATTACK);'
             String[] split = value.split(" ");
             for (int i = 0; i < split.length; i += 2) {
-                fieldAssignments.append("super.statChanges[Stat.")
-                                .append(split[i].toUpperCase())
-                                .append(".index()] = ")
+                fieldAssignments.append("super.stageModifier.set(")
                                 .append(split[i + 1])
-                                .appendLine(";");
+                                .append(", Stat.")
+                                .append(split[i].toUpperCase())
+                                .appendLine(");");
             }
         });
 

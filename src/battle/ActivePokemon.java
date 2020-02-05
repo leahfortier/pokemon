@@ -38,6 +38,7 @@ import battle.effect.source.CastSource;
 import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
+import battle.stages.Stages;
 import item.ItemNamesies;
 import item.hold.EVItem;
 import item.hold.HoldItem;

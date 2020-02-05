@@ -94,7 +94,7 @@ Intimidate:
     Int: EntryEffect, RepelLowLevelEncounterEffect
     Enter:
         ActivePokemon other = b.getOtherPokemon(enterer);
-        other.getStages().modifyStage(enterer, -1, Stat.ATTACK, b, CastSource.ABILITY);
+        new StageModifier(-1, Stat.ATTACK).modify(b, enterer, other, CastSource.ABILITY);
         ###
 *
 Static:
@@ -569,7 +569,7 @@ Rattled:
     OnTakeDamage:
         Type type = user.getAttackType();
         if (type == Type.BUG || type == Type.DARK || type == Type.GHOST) {
-            victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+            new StageModifier(1, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
         }
         ###
 *
@@ -577,7 +577,7 @@ Moxie:
     Desc: The Pok\u00e9mon shows moxie, and that boosts the Attack stat after knocking out any Pok\u00e9mon.
     Int: MurderEffect
     KillWish:
-        murderer.getStages().modifyStage(murderer, 1, Stat.ATTACK, b, CastSource.ABILITY);
+        new StageModifier(1, Stat.ATTACK).modify(b, murderer, murderer, CastSource.ABILITY);
         ###
 *
 Beast Boost:
@@ -586,7 +586,7 @@ Beast Boost:
     KillWish:
         // Increase highest stat when it murders
         Stat bestStat = murderer.stats().getBestBattleStat();
-        murderer.getStages().modifyStage(murderer, 1, bestStat, b, CastSource.ABILITY);
+        new StageModifier(1, bestStat).modify(b, murderer, murderer, CastSource.ABILITY);
         ###
 *
 Soul-Heart:
@@ -595,7 +595,7 @@ Soul-Heart:
     OppStatusReceived:
         if (statusType == StatusNamesies.FAINTED) {
             ActivePokemon abilify = this.getOtherPokemon(b, victim);
-            abilify.getStages().modifyStage(abilify, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+            new StageModifier(1, Stat.SP_ATTACK).modify(b, abilify, abilify, CastSource.ABILITY);
         }
         ###
 *
@@ -656,7 +656,7 @@ Download:
 
         Stat toRaise = baseDefense < baseSpecialDefense ? Stat.ATTACK : Stat.SP_ATTACK;
 
-        enterer.getStages().modifyStage(enterer, 1, toRaise, b, CastSource.ABILITY);
+        new StageModifier(1, toRaise).modify(b, enterer, enterer, CastSource.ABILITY);
         ###
 *
 Pressure:
@@ -720,7 +720,7 @@ Speed Boost:
     Desc: Its Speed stat is boosted every turn.
     Int: EndTurnEffect
     ApplyEndTurn:
-        victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+        new StageModifier(1, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
         ###
 *
 Magic Bounce:
@@ -760,7 +760,7 @@ Steadfast:
     Desc: The Pok\u00e9mon's determination boosts the Speed stat each time the Pok\u00e9mon flinches.
     ReceiveEffect:
         if (effectType == PokemonEffectNamesies.FLINCH) {
-            victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+            new StageModifier(1, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
         }
         ###
 *
@@ -960,7 +960,7 @@ Justified:
     Int: TakeDamageEffect
     OnTakeDamage:
         if (user.isAttackType(Type.DARK)) {
-            victim.getStages().modifyStage(victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
+            new StageModifier(1, Stat.ATTACK).modify(b, victim, victim, CastSource.ABILITY);
         }
         ###
     Desc: Being hit by a Dark-type move boosts the Attack stat of the Pok\u00e9mon, for justice.
@@ -1059,8 +1059,7 @@ Weak Armor:
     Int: TakeDamageEffect
     OnTakeDamage:
         if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
-            victim.getStages().modifyStage(victim, -1, Stat.DEFENSE, b, CastSource.ABILITY);
-            victim.getStages().modifyStage(victim, 2, Stat.SPEED, b, CastSource.ABILITY);
+            new StageModifier(-1, Stat.DEFENSE).set(2, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
         }
         ###
 *
@@ -1462,7 +1461,7 @@ Stamina:
     Desc: Boosts the Defense stat when hit by an attack.
     Int: TakeDamageEffect
     OnTakeDamage:
-        victim.getStages().modifyStage(victim, 1, Stat.DEFENSE, b, CastSource.ABILITY);
+        new StageModifier(1, Stat.DEFENSE).modify(b, victim, victim, CastSource.ABILITY);
         ###
 *
 Water Compaction:
@@ -1470,7 +1469,7 @@ Water Compaction:
     Int: TakeDamageEffect
     OnTakeDamage:
         if (user.isAttackType(Type.WATER)) {
-            victim.getStages().modifyStage(victim, 2, Stat.DEFENSE, b, CastSource.ABILITY);
+            new StageModifier(2, Stat.DEFENSE).modify(b, victim, victim, CastSource.ABILITY);
         }
         ###
 *
@@ -1496,7 +1495,7 @@ Steelworker:
 *
 Berserk:
     Desc: Boosts the Pok\u00e9mon's Sp. Atk stat when it takes a hit that causes its HP to become half or less.
-    DropBelowHalfHealth: victim.getStages().modifyStage(victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+    DropBelowHalfHealth: new StageModifier(1, Stat.SP_ATTACK).modify(b, victim, victim, CastSource.ABILITY);
 *
 Wimp Out:
     Desc: The Pok\u00e9mon cowardly switches out when its HP becomes half or less.
@@ -1695,7 +1694,7 @@ Moody:
             }
 
             Stat stat = RandomUtils.getRandomValue(potential);
-            boolean success = victim.getStages().modifyStage(victim, delta, stat, b, CastSource.ABILITY);
+            boolean success = new StageModifier(delta, stat).modify(b, victim, victim, CastSource.ABILITY);
 
             return success ? stat : null;
         }

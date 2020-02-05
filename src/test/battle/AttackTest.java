@@ -1,6 +1,6 @@
 package test.battle;
 
-import battle.Stages;
+import battle.stages.Stages;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;

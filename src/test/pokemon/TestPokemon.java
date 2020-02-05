@@ -2,7 +2,7 @@ package test.pokemon;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.Stages;
+import battle.stages.Stages;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.pokemon.PokemonEffectNamesies;

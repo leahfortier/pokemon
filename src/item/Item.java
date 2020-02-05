@@ -46,6 +46,7 @@ import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
+import battle.stages.StageModifier;
 import gui.GameData;
 import item.bag.BagCategory;
 import item.bag.BattleBagCategory;
@@ -247,7 +248,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.isAttackType(Type.WATER) && victim.getStages().modifyStage(victim, 1, Stat.SP_ATTACK, b, CastSource.HELD_ITEM)) {
+            if (user.isAttackType(Type.WATER) && new StageModifier(1, Stat.SP_ATTACK).modify(b, victim, victim, CastSource.HELD_ITEM)) {
                 this.consumeItem(b, victim);
             }
         }
@@ -372,7 +373,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.isAttackType(Type.ELECTRIC) && victim.getStages().modifyStage(victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
+            if (user.isAttackType(Type.ELECTRIC) && new StageModifier(1, Stat.ATTACK).modify(b, victim, victim, CastSource.HELD_ITEM)) {
                 this.consumeItem(b, victim);
             }
         }
@@ -903,7 +904,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.isAttackType(Type.WATER) && victim.getStages().modifyStage(victim, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
+            if (user.isAttackType(Type.WATER) && new StageModifier(1, Stat.SP_DEFENSE).modify(b, victim, victim, CastSource.HELD_ITEM)) {
                 this.consumeItem(b, victim);
             }
         }
@@ -1442,7 +1443,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.isAttackType(Type.ICE) && victim.getStages().modifyStage(victim, 1, Stat.ATTACK, b, CastSource.HELD_ITEM)) {
+            if (user.isAttackType(Type.ICE) && new StageModifier(1, Stat.ATTACK).modify(b, victim, victim, CastSource.HELD_ITEM)) {
                 this.consumeItem(b, victim);
             }
         }
@@ -1570,8 +1571,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (TypeAdvantage.isSuperEffective(user, victim, b)) {
-                victim.getStages().modifyStage(victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
-                victim.getStages().modifyStage(victim, 2, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
+                new StageModifier(2, Stat.ATTACK, Stat.SP_ATTACK).modify(b, victim, victim, CastSource.HELD_ITEM);
             }
         }
     }
@@ -3605,7 +3605,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return p.getStages().modifyStage(p, 2, Stat.ACCURACY, b, CastSource.USE_ITEM);
+            return new StageModifier(2, Stat.ACCURACY).modify(b, p, p, CastSource.USE_ITEM);
         }
     }
 
@@ -3620,7 +3620,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return p.getStages().modifyStage(p, 2, Stat.ATTACK, b, CastSource.USE_ITEM);
+            return new StageModifier(2, Stat.ATTACK).modify(b, p, p, CastSource.USE_ITEM);
         }
     }
 
@@ -3635,7 +3635,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return p.getStages().modifyStage(p, 2, Stat.DEFENSE, b, CastSource.USE_ITEM);
+            return new StageModifier(2, Stat.DEFENSE).modify(b, p, p, CastSource.USE_ITEM);
         }
     }
 
@@ -3650,7 +3650,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return p.getStages().modifyStage(p, 2, Stat.SP_ATTACK, b, CastSource.USE_ITEM);
+            return new StageModifier(2, Stat.SP_ATTACK).modify(b, p, p, CastSource.USE_ITEM);
         }
     }
 
@@ -3665,7 +3665,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return p.getStages().modifyStage(p, 2, Stat.SP_DEFENSE, b, CastSource.USE_ITEM);
+            return new StageModifier(2, Stat.SP_DEFENSE).modify(b, p, p, CastSource.USE_ITEM);
         }
     }
 
@@ -3680,7 +3680,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return p.getStages().modifyStage(p, 2, Stat.SPEED, b, CastSource.USE_ITEM);
+            return new StageModifier(2, Stat.SPEED).modify(b, p, p, CastSource.USE_ITEM);
         }
     }
 
@@ -5279,7 +5279,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
             // Sharply raise random battle stat
             Stat stat = RandomUtils.getRandomValue(stats);
-            return user.getStages().modifyStage(user, 2, stat, b, source);
+            return new StageModifier(2, stat).modify(b, user, user, source);
         }
 
         @Override
@@ -5829,7 +5829,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
-            if (newTerrain == TerrainType.ELECTRIC && p.getStages().modifyStage(p, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
+            if (newTerrain == TerrainType.ELECTRIC && new StageModifier(1, Stat.DEFENSE).modify(b, p, p, CastSource.HELD_ITEM)) {
                 this.consumeItem(b, p);
             }
         }
@@ -5850,7 +5850,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
-            if (newTerrain == TerrainType.GRASS && p.getStages().modifyStage(p, 1, Stat.DEFENSE, b, CastSource.HELD_ITEM)) {
+            if (newTerrain == TerrainType.GRASS && new StageModifier(1, Stat.DEFENSE).modify(b, p, p, CastSource.HELD_ITEM)) {
                 this.consumeItem(b, p);
             }
         }
@@ -5871,7 +5871,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
-            if (newTerrain == TerrainType.MISTY && p.getStages().modifyStage(p, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
+            if (newTerrain == TerrainType.MISTY && new StageModifier(1, Stat.SP_DEFENSE).modify(b, p, p, CastSource.HELD_ITEM)) {
                 this.consumeItem(b, p);
             }
         }
@@ -5892,7 +5892,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain) {
-            if (newTerrain == TerrainType.PSYCHIC && p.getStages().modifyStage(p, 1, Stat.SP_DEFENSE, b, CastSource.HELD_ITEM)) {
+            if (newTerrain == TerrainType.PSYCHIC && new StageModifier(1, Stat.SP_DEFENSE).modify(b, p, p, CastSource.HELD_ITEM)) {
                 this.consumeItem(b, p);
             }
         }
