@@ -1661,17 +1661,17 @@ Persim Berry:
     NGType: Ground
     NGPow: 80
     Field:
-        private boolean use(Battle b, ActivePokemon p, CastSource source) {
+        private boolean use(ActivePokemon p, CastSource source) {
             if (p.getEffects().remove(PokemonEffectNamesies.CONFUSION)) {
-                Messages.add(this.getMessage(b, p, source));
+                Messages.add(this.getMessage(p, source));
                 return true;
             }
 
             return false;
         }
         ###
-    BattleUse: return use(b, p, CastSource.USE_ITEM);
-    GainEffect: return use(b, user, source);
+    BattleUse: return use(p, CastSource.USE_ITEM);
+    GainEffect: return use(user, source);
     GenericMessage: p.getName() + " snapped out of its confusion!"
     SourceMessage: p.getName() + "'s " + this.getName() + " snapped it out of confusion!"
     GetCurableEffects: EnumSet.of(PokemonEffectNamesies.CONFUSION)

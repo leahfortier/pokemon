@@ -252,7 +252,7 @@ RaiseCrits:
     IncreaseCritStage:
         return 2;
         ###
-    CastMessage: this.getMessage(b, victim, source)
+    CastMessage: this.getMessage(victim, source)
     GenericMessage: p.getName() + " is getting pumped!"
     SourceMessage: p.getName() + " is getting pumped due to its " + sourceName + "!"
     Comments:
@@ -263,7 +263,7 @@ RaiseCrits:
 *
 ChangeItem:
     BeforeCast:
-        item = ((ItemHolder)source.getSource(b, caster)).getItem();
+        item = ((ItemHolder)source.getSource(caster)).getItem();
         victim.getEffects().remove(this.namesies());
         ###
     Field:
@@ -284,7 +284,7 @@ ChangeAttackType:
         ###
     CanHave: True
     BeforeCast:
-        typeSource = (ChangeAttackTypeSource)source.getSource(b, caster);
+        typeSource = (ChangeAttackTypeSource)source.getSource(caster);
         ###
 *
 ChangeType:
@@ -297,13 +297,13 @@ ChangeType:
         this.addCastMessage(b, caster, victim, source, castMessage);
         ###
     BeforeCast:
-        ChangeTypeSource typeSource = (ChangeTypeSource)source.getSource(b, caster);
+        ChangeTypeSource typeSource = (ChangeTypeSource)source.getSource(caster);
         type = typeSource.getType(b, caster, victim);
         ###
     GetChangeTypeEffect:
         return type;
         ###
-    CastMessage: this.getMessage(b, victim, source)
+    CastMessage: this.getMessage(victim, source)
     GenericMessage: p.getName() + " was changed to " + type + " type!!"
     SourceMessage: p.getName() + "'s " + sourceName + " changed it to the " + type + " type!!"
     CanHave: True
@@ -320,7 +320,7 @@ ChangeAbility:
         Ability oldAbility = victim.getAbility();
         oldAbility.deactivate(b, victim);
 
-        ChangeAbilitySource changey = (ChangeAbilitySource)source.getSource(b, caster);
+        ChangeAbilitySource changey = (ChangeAbilitySource)source.getSource(caster);
         ability = changey.getAbility(b, caster, victim);
         message = changey.getMessage(b, caster, victim);
 

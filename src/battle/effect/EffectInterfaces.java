@@ -81,9 +81,9 @@ public final class EffectInterfaces {
         String getGenericMessage(ActivePokemon p);
         String getSourceMessage(ActivePokemon p, String sourceName);
 
-        default String getMessage(Battle b, ActivePokemon p, CastSource source) {
+        default String getMessage(ActivePokemon p, CastSource source) {
             if (source.hasSourceName()) {
-                return this.getSourceMessage(p, source.getSourceName(b, p));
+                return this.getSourceMessage(p, source.getSourceName(p));
             } else {
                 return this.getGenericMessage(p);
             }

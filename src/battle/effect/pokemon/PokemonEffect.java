@@ -932,7 +932,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return this.getMessage(b, victim, source);
+            return this.getMessage(victim, source);
         }
 
         @Override
@@ -957,7 +957,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            item = ((ItemHolder)source.getSource(b, caster)).getItem();
+            item = ((ItemHolder)source.getSource(caster)).getItem();
             victim.getEffects().remove(this.namesies());
         }
 
@@ -988,7 +988,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            typeSource = (ChangeAttackTypeSource)source.getSource(b, caster);
+            typeSource = (ChangeAttackTypeSource)source.getSource(caster);
         }
     }
 
@@ -1009,7 +1009,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            ChangeTypeSource typeSource = (ChangeTypeSource)source.getSource(b, caster);
+            ChangeTypeSource typeSource = (ChangeTypeSource)source.getSource(caster);
             type = typeSource.getType(b, caster, victim);
         }
 
@@ -1020,7 +1020,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return this.getMessage(b, victim, source);
+            return this.getMessage(victim, source);
         }
 
         @Override
@@ -1054,7 +1054,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             Ability oldAbility = victim.getAbility();
             oldAbility.deactivate(b, victim);
 
-            ChangeAbilitySource changey = (ChangeAbilitySource)source.getSource(b, caster);
+            ChangeAbilitySource changey = (ChangeAbilitySource)source.getSource(caster);
             ability = changey.getAbility(b, caster, victim);
             message = changey.getMessage(b, caster, victim);
 

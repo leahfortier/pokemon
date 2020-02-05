@@ -107,7 +107,7 @@ public class StageModifier implements Serializable {
             return false;
         }
 
-        this.messenger.addMessage(b, caster, victim, source, val, statName);
+        this.messenger.addMessage(caster, victim, source, val, statName);
 
         victim.getStages().incrementStage(stat, val);
 

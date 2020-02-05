@@ -1,7 +1,6 @@
 package battle.stages;
 
 import battle.ActivePokemon;
-import battle.Battle;
 import battle.effect.source.CastSource;
 import main.Global;
 import message.Messages;
@@ -11,8 +10,8 @@ public interface ModifyStageMessenger extends Serializable {
     String getMessage(String victimName, String possessiveVictim, String statName, String changed);
 
     // Creates and adds the actual modify message to the queue
-    default void addMessage(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, int val, String statName) {
-        this.set(b, caster, source);
+    default void addMessage(ActivePokemon caster, ActivePokemon victim, CastSource source, int val, String statName) {
+        this.set(caster, source);
 
         String change = getChangedStatString(val);
         String possessiveVictim = caster == victim ? "its" : victim.getName() + "'s";
@@ -22,7 +21,7 @@ public interface ModifyStageMessenger extends Serializable {
     }
 
     // Called before getting the message if the messenger needs to set any appropriate values first
-    default void set(Battle b, ActivePokemon caster, CastSource source) {}
+    default void set(ActivePokemon caster, CastSource source) {}
 
     // -3 or lower: drastically lowered
     // -2: sharply lowered
@@ -64,11 +63,11 @@ public interface ModifyStageMessenger extends Serializable {
         private String casterSourcePossessive;
 
         @Override
-        public void set(Battle b, ActivePokemon caster, CastSource source) {
+        public void set(ActivePokemon caster, CastSource source) {
             this.source = source;
             if (source.hasSourceName()) {
                 // Ex: Gyarados's Intimidate, Bulbasaur's Absorb Bulb
-                this.casterSourcePossessive = caster.getName() + "'s " + source.getSourceName(b, caster);
+                this.casterSourcePossessive = caster.getName() + "'s " + source.getSourceName(caster);
             }
         }
 

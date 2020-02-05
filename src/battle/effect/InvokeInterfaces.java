@@ -1824,10 +1824,10 @@ public final class InvokeInterfaces {
 
     public interface DefiniteEscape extends InvokeEffect {
 
-        default String getEscapeMessage(Battle b, ActivePokemon sourcerer) {
+        default String getEscapeMessage(ActivePokemon sourcerer) {
             CastSource source = this.getSource().getCastSource();
             if (source.hasSourceName()) {
-                return sourcerer.getName() + "'s " + source.getSourceName(b, sourcerer) + " allowed it to escape!";
+                return sourcerer.getName() + "'s " + source.getSourceName(sourcerer) + " allowed it to escape!";
             }
 
             return "Got away safely!";
@@ -1843,7 +1843,7 @@ public final class InvokeInterfaces {
                 if (invokee instanceof DefiniteEscape && invokee.isActiveEffect()) {
                     DefiniteEscape effect = (DefiniteEscape)invokee;
                     if (effect.canEscape()) {
-                        Messages.add(effect.getEscapeMessage(b, p));
+                        Messages.add(effect.getEscapeMessage(p));
                         return true;
                     }
                 }

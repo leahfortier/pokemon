@@ -977,11 +977,11 @@ NoSwapEffect:
 DefiniteEscape:
     Extends: InvokeEffect
     Method:
-        Header: String getEscapeMessage(Battle b, ActivePokemon sourcerer)
+        Header: String getEscapeMessage(ActivePokemon sourcerer)
         Default:
             CastSource source = this.getSource().getCastSource();
             if (source.hasSourceName()) {
-                return sourcerer.getName() + "'s " + source.getSourceName(b, sourcerer) + " allowed it to escape!";
+                return sourcerer.getName() + "'s " + source.getSourceName(sourcerer) + " allowed it to escape!";
             }
 
             return "Got away safely!";
@@ -994,7 +994,7 @@ DefiniteEscape:
             ###
         InvokeParameters: Battle b, ActivePokemon p
         EffectList: p
-        Invoke: CheckMessage true getEscapeMessage(b, p)
+        Invoke: CheckMessage true getEscapeMessage(p)
         InvokeName: canDefinitelyEscape
     *
 ***

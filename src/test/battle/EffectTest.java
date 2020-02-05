@@ -312,7 +312,7 @@ public class EffectTest extends BaseTest {
         attacking.setCastSource(ItemNamesies.NO_ITEM.getItem());
 
         for (CastSource source : CastSource.values()) {
-            String sourceName = source.getSourceName(battle, attacking);
+            String sourceName = source.getSourceName(attacking);
             if (source.hasSourceName()) {
                 // Important since these values are hard-coded in another method
                 Assert.assertTrue(source == CastSource.ABILITY || source == CastSource.HELD_ITEM);
@@ -322,13 +322,13 @@ public class EffectTest extends BaseTest {
             }
         }
 
-        Assert.assertEquals(AbilityNamesies.OVERGROW.getName(), CastSource.ABILITY.getSourceName(battle, attacking));
-        Assert.assertEquals(ItemNamesies.ORAN_BERRY.getName(), CastSource.HELD_ITEM.getSourceName(battle, attacking));
+        Assert.assertEquals(AbilityNamesies.OVERGROW.getName(), CastSource.ABILITY.getSourceName(attacking));
+        Assert.assertEquals(ItemNamesies.ORAN_BERRY.getName(), CastSource.HELD_ITEM.getSourceName(attacking));
 
-        Assert.assertSame(attacking.getAbility(), CastSource.ABILITY.getSource(battle, attacking));
-        Assert.assertSame(attacking.getHeldItem(), CastSource.HELD_ITEM.getSource(battle, attacking));
-        Assert.assertSame(attacking.getAttack(), CastSource.ATTACK.getSource(battle, attacking));
-        Assert.assertSame(attacking.getCastSource(), CastSource.CAST_SOURCE.getSource(battle, attacking));
+        Assert.assertSame(attacking.getAbility(), CastSource.ABILITY.getSource(attacking));
+        Assert.assertSame(attacking.getHeldItem(), CastSource.HELD_ITEM.getSource(attacking));
+        Assert.assertSame(attacking.getAttack(), CastSource.ATTACK.getSource(attacking));
+        Assert.assertSame(attacking.getCastSource(), CastSource.CAST_SOURCE.getSource(attacking));
     }
 
     @Test

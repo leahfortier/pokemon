@@ -322,7 +322,7 @@ public class ActivePokemon extends PartyPokemon {
 
     public boolean switcheroo(Battle b, ActivePokemon caster, CastSource source, boolean wildExit) {
         Team team = b.getTrainer(this);
-        String sourceName = source.getSourceName(b, this);
+        String sourceName = source.getSourceName(this);
         String selfReference = caster == this ? "it" : this.getName();
 
         // End the battle against a wild Pokemon
@@ -535,7 +535,7 @@ public class ActivePokemon extends PartyPokemon {
         StatusCondition status = this.getStatus();
         this.removeStatus();
 
-        Messages.add(new MessageUpdate(status.getRemoveMessage(b, this, source)).updatePokemon(b, this));
+        Messages.add(new MessageUpdate(status.getRemoveMessage(this, source)).updatePokemon(b, this));
     }
 
     // Returns whether or not the Pokemon is afflicted with a status condition (does not include fainted)
