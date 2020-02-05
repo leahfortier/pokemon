@@ -2,6 +2,8 @@ package battle.effect.team;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.stages.StageModifier;
+import battle.stages.ModifyStageMessenger;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.effect.ApplyResult;
@@ -183,7 +185,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
     }
 
-    static class StickyWeb extends TeamEffect implements EntryHazard {
+    static class StickyWeb extends TeamEffect implements EntryHazard, ModifyStageMessenger {
         private static final long serialVersionUID = 1L;
 
         StickyWeb() {
@@ -197,10 +199,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
             }
 
             // The sticky web lowered Charmander's Speed!
-            enterer.getStages().modifyStage(
-                    b.getOtherPokemon(enterer), -1, Stat.SPEED, b, CastSource.EFFECT,
-                    (victimName, statName, changed) -> "The sticky web " + changed + " " + enterer.getName() + "'s " + statName + "!"
-            );
+            new StageModifier(-1, Stat.SPEED).withMessage(this).modify(b, enterer, enterer, CastSource.EFFECT);
         }
 
         @Override
@@ -211,6 +210,11 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         @Override
         public String getReleaseMessage() {
             return "The sticky web dispersed!";
+        }
+
+        @Override
+        public String getMessage(String victimName, String possessiveVictim, String statName, String changed) {
+            return "The sticky web " + changed + " " + victimName + "'s " + statName + "!";
         }
     }
 

@@ -1,6 +1,6 @@
 package test.battle;
 
-import battle.Stages;
+import battle.stages.Stages;
 import battle.attack.AttackNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;

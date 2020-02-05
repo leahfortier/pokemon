@@ -6,6 +6,7 @@ import battle.attack.MoveCategory;
 import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.source.CastSource;
+import battle.stages.StageModifier;
 import pokemon.stat.Stat;
 
 public interface CategoryBerry extends Berry {
@@ -28,7 +29,7 @@ public interface CategoryBerry extends Berry {
         default void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Increases stat by 1 when hit by a move a specified category
             if (user.getAttack().getCategory() == this.getCategory()
-                    && victim.getStages().modifyStage(victim, 1, this.getStat(), b, CastSource.HELD_ITEM)) {
+                    && new StageModifier(1, this.getStat()).modify(b, victim, victim, CastSource.HELD_ITEM)) {
                 this.consumeItem(b, victim);
             }
         }

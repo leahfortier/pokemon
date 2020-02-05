@@ -175,16 +175,11 @@ Growth:
     SelfTarget: True
     Type: Normal
     BeginAttack:
-        super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-        super.statChanges[Stat.ATTACK.index()] = 1;
-        super.statChanges[Stat.SP_ATTACK.index()] = 1;
-
         // Doubles stat changes in the sunlight
-        if (b.isWeather(WeatherNamesies.SUNNY)) {
-            for (int i = 0; i < super.statChanges.length; i++) {
-                super.statChanges[i] *= 2;
-            }
-        }
+        int modifier = b.isWeather(WeatherNamesies.SUNNY) ? 2 : 1;
+        
+        super.stageModifier.reset();
+        super.stageModifier.set(modifier, Stat.ATTACK, Stat.SP_ATTACK);
         ###
     PP: 20
 *
@@ -2395,12 +2390,15 @@ Belly Drum:
         ###
     UniqueEffects:
         // Maximization station
-        user.getStages().modifyStage(
-                user, 2*Stages.MAX_STAT_CHANGES, Stat.ATTACK, b, CastSource.ATTACK,
-                (victimName, statName, changed) -> user.getName() + " cut its own HP and maximized " + victimName + " " + statName + "!"
-        );
+        StageModifier maximizer = new StageModifier(2*Stages.MAX_STAT_CHANGES, Stat.ATTACK).withMessage(this);
+        
+        // Poliwhirl cut its own HP and maximized its Attack!
+        maximizer.modify(b, user, user, CastSource.ATTACK);
+
+        // Poor belly
         user.forceReduceHealthFraction(b, 1/2.0, "");
         ###
+    ModifyStageMessenger: victimName + " cut its own HP and maximized " + possessiveVictim + " " + statName + "!"
 *
 Submission:
     Desc: The user grabs the target and recklessly dives for the ground. This also damages the user a little.
@@ -2724,7 +2722,7 @@ Curse:
     Cat: Status
     Type: Ghost
     BeginAttack:
-        super.statChanges = new int[Stat.NUM_BATTLE_STATS];
+        super.stageModifier.reset();
         super.effect = null;
 
         // Different effects based on the type of the user
@@ -2732,9 +2730,8 @@ Curse:
             super.effect = PokemonEffectNamesies.CURSE;
             super.selfTarget = false;
         } else {
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(1, Stat.ATTACK, Stat.DEFENSE);
+            super.stageModifier.set(-1, Stat.SPEED);
             super.selfTarget = true;
         }
         ###
@@ -2862,8 +2859,8 @@ Acupressure:
     SelfTarget: True
     Applies: !victim.getStages().getNonMaxStats().isEmpty()
     AfterApplyCheck:
-        super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-        super.statChanges[RandomUtils.getRandomValue(victim.getStages().getNonMaxStats()).index()] = 2;
+        super.stageModifier.reset();
+        super.stageModifier.set(2, RandomUtils.getRandomValue(victim.getStages().getNonMaxStats()));
         ###
 *
 Double Hit:
@@ -5252,7 +5249,7 @@ Secret Power:
         TerrainType terrain = b.getTerrainType();
 
         super.status = terrain.getStatusCondition();
-        super.statChanges = terrain.getStatChanges();
+        super.stageModifier = terrain.getStageModifier();
         super.effect = terrain.getEffect();
         ###
     EffChance: 30
@@ -6040,7 +6037,7 @@ Fell Stinger:
     Pow: 50
     Int: MurderEffect
     KillWish:
-        murderer.getStages().modifyStage(murderer, 3, Stat.ATTACK, b, CastSource.ATTACK);
+        new StageModifier(3, Stat.ATTACK).modify(b, murderer, murderer, CastSource.ATTACK);
         ###
 *
 Magnetic Flux:
@@ -6240,7 +6237,7 @@ Strength Sap:
     UniqueEffects:
         // Only heal if stat actually lowers
         int victimAttackStat = Stat.ATTACK.getBasicStat(b, victim);
-        boolean reduced = victim.getStages().modifyStage(user, -1, Stat.ATTACK, b, CastSource.ATTACK);
+        boolean reduced = new StageModifier(-1, Stat.ATTACK).modify(b, user, victim, CastSource.ATTACK);
         if (reduced) {
             this.sapHealth(b, user, victim, victimAttackStat, true);
         }
@@ -6469,7 +6466,7 @@ Spectral Thief:
             int stage = victim.getStages().getStage(stat);
             if (stage > 0) {
                 victim.getStages().resetStage(stat);
-                user.getStages().modifyStage(user, stage, stat, b, CastSource.ATTACK);
+                new StageModifier(stage, stat).modify(b, user, user, CastSource.ATTACK);
             }
         }
         ###

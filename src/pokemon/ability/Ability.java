@@ -93,6 +93,7 @@ import battle.effect.source.ChangeAbilitySource;
 import battle.effect.source.ChangeTypeSource;
 import battle.effect.status.StatusCondition;
 import battle.effect.status.StatusNamesies;
+import battle.stages.StageModifier;
 import item.ItemNamesies;
 import item.berry.Berry;
 import item.hold.HoldItem;
@@ -462,7 +463,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             ActivePokemon other = b.getOtherPokemon(enterer);
-            other.getStages().modifyStage(enterer, -1, Stat.ATTACK, b, CastSource.ABILITY);
+            new StageModifier(-1, Stat.ATTACK).modify(b, enterer, other, CastSource.ABILITY);
         }
     }
 
@@ -495,7 +496,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            victim.getStages().modifyStage(victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+            new StageModifier(1, Stat.SP_ATTACK).modify(b, victim, victim, CastSource.ABILITY);
         }
 
         @Override
@@ -1556,7 +1557,7 @@ public abstract class Ability implements AbilityInterface {
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             Type type = user.getAttackType();
             if (type == Type.BUG || type == Type.DARK || type == Type.GHOST) {
-                victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+                new StageModifier(1, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
             }
         }
     }
@@ -1570,7 +1571,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-            murderer.getStages().modifyStage(murderer, 1, Stat.ATTACK, b, CastSource.ABILITY);
+            new StageModifier(1, Stat.ATTACK).modify(b, murderer, murderer, CastSource.ABILITY);
         }
     }
 
@@ -1585,7 +1586,7 @@ public abstract class Ability implements AbilityInterface {
         public void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
             // Increase highest stat when it murders
             Stat bestStat = murderer.stats().getBestBattleStat();
-            murderer.getStages().modifyStage(murderer, 1, bestStat, b, CastSource.ABILITY);
+            new StageModifier(1, bestStat).modify(b, murderer, murderer, CastSource.ABILITY);
         }
     }
 
@@ -1600,7 +1601,7 @@ public abstract class Ability implements AbilityInterface {
         public void receiveStatus(Battle b, ActivePokemon victim, StatusNamesies statusType) {
             if (statusType == StatusNamesies.FAINTED) {
                 ActivePokemon abilify = this.getOtherPokemon(b, victim);
-                abilify.getStages().modifyStage(abilify, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+                new StageModifier(1, Stat.SP_ATTACK).modify(b, abilify, abilify, CastSource.ABILITY);
             }
         }
     }
@@ -1754,7 +1755,7 @@ public abstract class Ability implements AbilityInterface {
 
             Stat toRaise = baseDefense < baseSpecialDefense ? Stat.ATTACK : Stat.SP_ATTACK;
 
-            enterer.getStages().modifyStage(enterer, 1, toRaise, b, CastSource.ABILITY);
+            new StageModifier(1, toRaise).modify(b, enterer, enterer, CastSource.ABILITY);
         }
     }
 
@@ -1921,7 +1922,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+            new StageModifier(1, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
         }
     }
 
@@ -2029,7 +2030,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
             if (effectType == PokemonEffectNamesies.FLINCH) {
-                victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+                new StageModifier(1, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
             }
         }
     }
@@ -2303,7 +2304,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            victim.getStages().modifyStage(victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+            new StageModifier(1, Stat.SP_ATTACK).modify(b, victim, victim, CastSource.ABILITY);
         }
 
         @Override
@@ -2415,7 +2416,7 @@ public abstract class Ability implements AbilityInterface {
         public void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim) {
             // Doesn't raise for self-inflicted lowers
             if (caster != victim) {
-                victim.getStages().modifyStage(victim, 2, Stat.ATTACK, b, CastSource.ABILITY);
+                new StageModifier(2, Stat.ATTACK).modify(b, victim, victim, CastSource.ABILITY);
             }
         }
     }
@@ -2431,7 +2432,7 @@ public abstract class Ability implements AbilityInterface {
         public void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim) {
             // Doesn't raise for self-inflicted lowers
             if (caster != victim) {
-                victim.getStages().modifyStage(victim, 2, Stat.SP_ATTACK, b, CastSource.ABILITY);
+                new StageModifier(2, Stat.SP_ATTACK).modify(b, victim, victim, CastSource.ABILITY);
             }
         }
     }
@@ -2528,7 +2529,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            victim.getStages().modifyStage(victim, 1, Stat.SPEED, b, CastSource.ABILITY);
+            new StageModifier(1, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
         }
 
         @Override
@@ -2552,7 +2553,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.DARK)) {
-                victim.getStages().modifyStage(victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
+                new StageModifier(1, Stat.ATTACK).modify(b, victim, victim, CastSource.ABILITY);
             }
         }
     }
@@ -2777,8 +2778,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
-                victim.getStages().modifyStage(victim, -1, Stat.DEFENSE, b, CastSource.ABILITY);
-                victim.getStages().modifyStage(victim, 2, Stat.SPEED, b, CastSource.ABILITY);
+                new StageModifier(-1, Stat.DEFENSE).set(2, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
             }
         }
     }
@@ -2921,7 +2921,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            victim.getStages().modifyStage(victim, 1, Stat.ATTACK, b, CastSource.ABILITY);
+            new StageModifier(1, Stat.ATTACK).modify(b, victim, victim, CastSource.ABILITY);
         }
 
         @Override
@@ -3815,7 +3815,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            victim.getStages().modifyStage(victim, 1, Stat.DEFENSE, b, CastSource.ABILITY);
+            new StageModifier(1, Stat.DEFENSE).modify(b, victim, victim, CastSource.ABILITY);
         }
     }
 
@@ -3829,7 +3829,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.WATER)) {
-                victim.getStages().modifyStage(victim, 2, Stat.DEFENSE, b, CastSource.ABILITY);
+                new StageModifier(2, Stat.DEFENSE).modify(b, victim, victim, CastSource.ABILITY);
             }
         }
     }
@@ -3893,7 +3893,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
-                victim.getStages().modifyStage(victim, 1, Stat.SP_ATTACK, b, CastSource.ABILITY);
+                new StageModifier(1, Stat.SP_ATTACK).modify(b, victim, victim, CastSource.ABILITY);
             }
         }
     }
@@ -4210,7 +4210,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.getStages().modifyStage(victim, -1, Stat.SPEED, b, CastSource.ABILITY);
+            new StageModifier(-1, Stat.SPEED).modify(b, victim, user, CastSource.ABILITY);
         }
     }
 
@@ -4223,7 +4223,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.getStages().modifyStage(victim, -1, Stat.SPEED, b, CastSource.ABILITY);
+            new StageModifier(-1, Stat.SPEED).modify(b, victim, user, CastSource.ABILITY);
         }
     }
 
@@ -4293,7 +4293,7 @@ public abstract class Ability implements AbilityInterface {
             }
 
             Stat stat = RandomUtils.getRandomValue(potential);
-            boolean success = victim.getStages().modifyStage(victim, delta, stat, b, CastSource.ABILITY);
+            boolean success = new StageModifier(delta, stat).modify(b, victim, victim, CastSource.ABILITY);
 
             return success ? stat : null;
         }

@@ -2,7 +2,9 @@ package battle.attack;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.Stages;
+import battle.stages.StageModifier;
+import battle.stages.ModifyStageMessenger;
+import battle.stages.Stages;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.DoubleDigger;
@@ -116,7 +118,7 @@ public abstract class Attack implements AttackInterface {
     private List<MoveType> moveTypes;
     private boolean selfTarget;
     private int priority;
-    private int[] statChanges;
+    private StageModifier stageModifier;
     private boolean printCast;
 
     public Attack(AttackNamesies namesies, Type type, MoveCategory category, int pp, String description) {
@@ -132,7 +134,7 @@ public abstract class Attack implements AttackInterface {
         this.selfTarget = false;
         this.priority = 0;
         this.status = StatusNamesies.NO_STATUS;
-        this.statChanges = new int[Stat.NUM_BATTLE_STATS];
+        this.stageModifier = new StageModifier();
         this.effectChance = 100;
         this.printCast = true;
     }
@@ -141,8 +143,8 @@ public abstract class Attack implements AttackInterface {
         return this.effect;
     }
 
-    public int[] getStatChangesCopy() {
-        return this.statChanges.clone();
+    public int[] getStageModifiers() {
+        return this.stageModifier.getCopy();
     }
 
     public StatusNamesies getStatus() {
@@ -187,7 +189,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         // Stat changes are considered to be secondary effects unless they are negative for the user
-        for (int val : this.statChanges) {
+        for (int val : this.getStageModifiers()) {
             if (val > 0 || (val < 0 && !this.isSelfTarget())) {
                 return true;
             }
@@ -388,7 +390,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         // Give Stat Changes
-        victim.getStages().modifyStages(b, user, statChanges, CastSource.ATTACK);
+        stageModifier.modify(b, user, victim, CastSource.ATTACK);
 
         // Give additional effects
         if (effect != null) {
@@ -520,7 +522,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.GROWL, Type.NORMAL, MoveCategory.STATUS, 40, "The user growls in an endearing way, making opposing Pok\u00e9mon less wary. This lowers their Attack stat.");
             super.accuracy = 100;
             super.moveTypes.add(MoveType.SOUND_BASED);
-            super.statChanges[Stat.ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.ATTACK);
         }
     }
 
@@ -566,7 +568,7 @@ public abstract class Attack implements AttackInterface {
         Smokescreen() {
             super(AttackNamesies.SMOKESCREEN, Type.NORMAL, MoveCategory.STATUS, 20, "The user releases an obscuring cloud of smoke or ink. This lowers the target's accuracy.");
             super.accuracy = 100;
-            super.statChanges[Stat.ACCURACY.index()] = -1;
+            super.stageModifier.set(-1, Stat.ACCURACY);
         }
     }
 
@@ -622,7 +624,7 @@ public abstract class Attack implements AttackInterface {
         SweetScent() {
             super(AttackNamesies.SWEET_SCENT, Type.NORMAL, MoveCategory.STATUS, 20, "A sweet scent that harshly lowers opposing Pok\u00e9mon's evasiveness.");
             super.accuracy = 100;
-            super.statChanges[Stat.EVASION.index()] = -2;
+            super.stageModifier.set(-2, Stat.EVASION);
         }
     }
 
@@ -636,16 +638,11 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
-
             // Doubles stat changes in the sunlight
-            if (b.isWeather(WeatherNamesies.SUNNY)) {
-                for (int i = 0; i < super.statChanges.length; i++) {
-                    super.statChanges[i] *= 2;
-                }
-            }
+            int modifier = b.isWeather(WeatherNamesies.SUNNY) ? 2 : 1;
+
+            super.stageModifier.reset();
+            super.stageModifier.set(modifier, Stat.ATTACK, Stat.SP_ATTACK);
         }
     }
 
@@ -755,7 +752,7 @@ public abstract class Attack implements AttackInterface {
         ScaryFace() {
             super(AttackNamesies.SCARY_FACE, Type.NORMAL, MoveCategory.STATUS, 10, "The user frightens the target with a scary face to harshly lower its Speed stat.");
             super.accuracy = 100;
-            super.statChanges[Stat.SPEED.index()] = -2;
+            super.stageModifier.set(-2, Stat.SPEED);
         }
     }
 
@@ -826,7 +823,7 @@ public abstract class Attack implements AttackInterface {
         TailWhip() {
             super(AttackNamesies.TAIL_WHIP, Type.NORMAL, MoveCategory.STATUS, 30, "The user wags its tail cutely, making opposing Pok\u00e9mon less wary and lowering their Defense stat.");
             super.accuracy = 100;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
         }
     }
 
@@ -1094,7 +1091,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 80;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_DEFENSE);
         }
     }
 
@@ -1106,7 +1103,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 40;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.SPEED);
         }
     }
 
@@ -1116,7 +1113,7 @@ public abstract class Attack implements AttackInterface {
         Withdraw() {
             super(AttackNamesies.WITHDRAW, Type.WATER, MoveCategory.STATUS, 40, "The user withdraws its body into its hard shell, raising its Defense stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
+            super.stageModifier.set(1, Stat.DEFENSE);
         }
     }
 
@@ -1139,7 +1136,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
-            super.statChanges[Stat.SPEED.index()] = 1;
+            super.stageModifier.set(1, Stat.SPEED);
         }
 
         @Override
@@ -1348,7 +1345,7 @@ public abstract class Attack implements AttackInterface {
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
+            super.stageModifier.set(1, Stat.DEFENSE);
             this.resetReady();
         }
 
@@ -1384,7 +1381,7 @@ public abstract class Attack implements AttackInterface {
         IronDefense() {
             super(AttackNamesies.IRON_DEFENSE, Type.STEEL, MoveCategory.STATUS, 15, "The user hardens its body's surface like iron, sharply raising its Defense stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 2;
+            super.stageModifier.set(2, Stat.DEFENSE);
         }
     }
 
@@ -1680,7 +1677,7 @@ public abstract class Attack implements AttackInterface {
         StringShot() {
             super(AttackNamesies.STRING_SHOT, Type.BUG, MoveCategory.STATUS, 40, "The opposing Pok\u00e9mon are bound with silk blown from the user's mouth that harshly lowers the Speed stat.");
             super.accuracy = 95;
-            super.statChanges[Stat.SPEED.index()] = -2;
+            super.stageModifier.set(-2, Stat.SPEED);
         }
     }
 
@@ -1710,7 +1707,7 @@ public abstract class Attack implements AttackInterface {
         Harden() {
             super(AttackNamesies.HARDEN, Type.NORMAL, MoveCategory.STATUS, 30, "The user stiffens all the muscles in its body to raise its Defense stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
+            super.stageModifier.set(1, Stat.DEFENSE);
         }
     }
 
@@ -1778,11 +1775,11 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.effectChance = 10;
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
-            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
-            super.statChanges[Stat.SPEED.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
+            super.stageModifier.set(1, Stat.DEFENSE);
+            super.stageModifier.set(1, Stat.SP_ATTACK);
+            super.stageModifier.set(1, Stat.SP_DEFENSE);
+            super.stageModifier.set(1, Stat.SPEED);
         }
     }
 
@@ -1846,7 +1843,7 @@ public abstract class Attack implements AttackInterface {
         Captivate() {
             super(AttackNamesies.CAPTIVATE, Type.NORMAL, MoveCategory.STATUS, 20, "If any opposing Pok\u00e9mon is the opposite gender of the user, it is charmed, which harshly lowers its Sp. Atk stat.");
             super.accuracy = 100;
-            super.statChanges[Stat.SP_ATTACK.index()] = -2;
+            super.stageModifier.set(-2, Stat.SP_ATTACK);
         }
 
         @Override
@@ -1864,7 +1861,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.effectChance = 10;
             super.moveTypes.add(MoveType.SOUND_BASED);
-            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_DEFENSE);
         }
     }
 
@@ -1875,9 +1872,9 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.QUIVER_DANCE, Type.BUG, MoveCategory.STATUS, 20, "The user lightly performs a beautiful, mystic dance. This boosts the user's Sp. Atk, Sp. Def, and Speed stats.");
             super.moveTypes.add(MoveType.DANCE);
             super.selfTarget = true;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
-            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
-            super.statChanges[Stat.SPEED.index()] = 1;
+            super.stageModifier.set(1, Stat.SP_ATTACK);
+            super.stageModifier.set(1, Stat.SP_DEFENSE);
+            super.stageModifier.set(1, Stat.SPEED);
         }
     }
 
@@ -2065,7 +2062,7 @@ public abstract class Attack implements AttackInterface {
         Agility() {
             super(AttackNamesies.AGILITY, Type.PSYCHIC, MoveCategory.STATUS, 30, "The user relaxes and lightens its body to move faster. This sharply raises the Speed stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.SPEED.index()] = 2;
+            super.stageModifier.set(2, Stat.SPEED);
         }
     }
 
@@ -2125,7 +2122,7 @@ public abstract class Attack implements AttackInterface {
         SandAttack() {
             super(AttackNamesies.SAND_ATTACK, Type.GROUND, MoveCategory.STATUS, 15, "Sand is hurled in the target's face, reducing the target's accuracy.");
             super.accuracy = 100;
-            super.statChanges[Stat.ACCURACY.index()] = -1;
+            super.stageModifier.set(-1, Stat.ACCURACY);
         }
     }
 
@@ -2160,7 +2157,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.FEATHER_DANCE, Type.FLYING, MoveCategory.STATUS, 15, "The user covers the target's body with a mass of down that harshly lowers its Attack stat.");
             super.accuracy = 100;
             super.moveTypes.add(MoveType.DANCE);
-            super.statChanges[Stat.ATTACK.index()] = -2;
+            super.stageModifier.set(-2, Stat.ATTACK);
         }
     }
 
@@ -2307,7 +2304,7 @@ public abstract class Attack implements AttackInterface {
             super.effectChance = 20;
             super.moveTypes.add(MoveType.BITING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-            super.statChanges[Stat.DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
         }
     }
 
@@ -2348,7 +2345,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.SWORDS_DANCE, Type.NORMAL, MoveCategory.STATUS, 20, "A frenetic dance to uplift the fighting spirit. This sharply raises the user's Attack stat.");
             super.moveTypes.add(MoveType.DANCE);
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 2;
+            super.stageModifier.set(2, Stat.ATTACK);
         }
     }
 
@@ -2369,7 +2366,7 @@ public abstract class Attack implements AttackInterface {
         Leer() {
             super(AttackNamesies.LEER, Type.NORMAL, MoveCategory.STATUS, 30, "The user gives opposing Pok\u00e9mon an intimidating leer that lowers the Defense stat.");
             super.accuracy = 100;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
         }
     }
 
@@ -2454,7 +2451,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.SCREECH, Type.NORMAL, MoveCategory.STATUS, 40, "An earsplitting screech harshly lowers the target's Defense stat.");
             super.accuracy = 85;
             super.moveTypes.add(MoveType.SOUND_BASED);
-            super.statChanges[Stat.DEFENSE.index()] = -2;
+            super.stageModifier.set(-2, Stat.DEFENSE);
         }
     }
 
@@ -2466,7 +2463,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 40;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_DEFENSE);
         }
     }
 
@@ -2568,7 +2565,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 40;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.BOMB_BALL);
-            super.statChanges[Stat.SP_DEFENSE.index()] = -2;
+            super.stageModifier.set(-2, Stat.SP_DEFENSE);
         }
     }
 
@@ -2581,7 +2578,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 85;
             super.effectChance = 30;
             super.moveTypes.add(MoveType.BOMB_BALL);
-            super.statChanges[Stat.ACCURACY.index()] = -1;
+            super.stageModifier.set(-1, Stat.ACCURACY);
         }
     }
 
@@ -2609,9 +2606,9 @@ public abstract class Attack implements AttackInterface {
         Coil() {
             super(AttackNamesies.COIL, Type.POISON, MoveCategory.STATUS, 20, "The user coils up and concentrates. This raises its Attack and Defense stats as well as its accuracy.");
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
-            super.statChanges[Stat.ACCURACY.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
+            super.stageModifier.set(1, Stat.DEFENSE);
+            super.stageModifier.set(1, Stat.ACCURACY);
         }
     }
 
@@ -2709,7 +2706,7 @@ public abstract class Attack implements AttackInterface {
         DoubleTeam() {
             super(AttackNamesies.DOUBLE_TEAM, Type.NORMAL, MoveCategory.STATUS, 15, "By moving rapidly, the user makes illusory copies of itself to raise its evasiveness.");
             super.selfTarget = true;
-            super.statChanges[Stat.EVASION.index()] = 1;
+            super.stageModifier.set(1, Stat.EVASION);
         }
     }
 
@@ -2791,7 +2788,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.DEFENSE_CURL, Type.NORMAL, MoveCategory.STATUS, 40, "The user curls up to conceal weak spots and raise its Defense stat.");
             super.effect = PokemonEffectNamesies.USED_DEFENSE_CURL;
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
+            super.stageModifier.set(1, Stat.DEFENSE);
         }
     }
 
@@ -2893,7 +2890,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 95;
             super.effectChance = 50;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-            super.statChanges[Stat.DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
         }
     }
 
@@ -2938,7 +2935,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.FLATTER, Type.DARK, MoveCategory.STATUS, 15, "Flattery is used to confuse the target. However, this also raises the target's Sp. Atk stat.");
             super.accuracy = 100;
             super.effect = PokemonEffectNamesies.CONFUSION;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
+            super.stageModifier.set(1, Stat.SP_ATTACK);
         }
     }
 
@@ -2994,7 +2991,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 90;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_DEFENSE);
         }
     }
 
@@ -3007,8 +3004,8 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = -1;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.ATTACK);
+            super.stageModifier.set(-1, Stat.DEFENSE);
         }
     }
 
@@ -3105,7 +3102,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.MINIMIZE, Type.NORMAL, MoveCategory.STATUS, 10, "The user compresses its body to make itself look smaller, which sharply raises its evasiveness.");
             super.effect = PokemonEffectNamesies.USED_MINIMIZE;
             super.selfTarget = true;
-            super.statChanges[Stat.EVASION.index()] = 2;
+            super.stageModifier.set(2, Stat.EVASION);
         }
     }
 
@@ -3138,8 +3135,8 @@ public abstract class Attack implements AttackInterface {
         CosmicPower() {
             super(AttackNamesies.COSMIC_POWER, Type.PSYCHIC, MoveCategory.STATUS, 20, "The user absorbs a mystical power from space to raise its Defense and Sp. Def stats.");
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
-            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
+            super.stageModifier.set(1, Stat.DEFENSE);
+            super.stageModifier.set(1, Stat.SP_DEFENSE);
         }
     }
 
@@ -3285,7 +3282,7 @@ public abstract class Attack implements AttackInterface {
             super.moveTypes.add(MoveType.PUNCHING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
         }
     }
 
@@ -3356,7 +3353,7 @@ public abstract class Attack implements AttackInterface {
         NastyPlot() {
             super(AttackNamesies.NASTY_PLOT, Type.DARK, MoveCategory.STATUS, 20, "The user stimulates its brain by thinking bad thoughts. This sharply raises the user's Sp. Atk stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.SP_ATTACK.index()] = 2;
+            super.stageModifier.set(2, Stat.SP_ATTACK);
         }
     }
 
@@ -3638,7 +3635,7 @@ public abstract class Attack implements AttackInterface {
         Howl() {
             super(AttackNamesies.HOWL, Type.NORMAL, MoveCategory.STATUS, 40, "The user howls loudly to raise its spirit, which raises its Attack stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
         }
     }
 
@@ -3675,7 +3672,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 90;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_DEFENSE);
         }
     }
 
@@ -3686,7 +3683,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.MUD_SLAP, Type.GROUND, MoveCategory.SPECIAL, 10, "The user hurls mud in the target's face to inflict damage and lower its accuracy.");
             super.power = 20;
             super.accuracy = 100;
-            super.statChanges[Stat.ACCURACY.index()] = -1;
+            super.stageModifier.set(-1, Stat.ACCURACY);
         }
     }
 
@@ -3727,7 +3724,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.BULLDOZE, Type.GROUND, MoveCategory.PHYSICAL, 20, "The user strikes everything around it by stomping down on the ground. This lowers the Speed stat of those hit.");
             super.power = 60;
             super.accuracy = 100;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.SPEED);
         }
 
         @Override
@@ -4014,7 +4011,7 @@ public abstract class Attack implements AttackInterface {
         Amnesia() {
             super(AttackNamesies.AMNESIA, Type.PSYCHIC, MoveCategory.STATUS, 20, "The user temporarily empties its mind to forget its concerns. This sharply raises the user's Sp. Def stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.SP_DEFENSE.index()] = 2;
+            super.stageModifier.set(2, Stat.SP_DEFENSE);
         }
     }
 
@@ -4127,7 +4124,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.SWAGGER, Type.NORMAL, MoveCategory.STATUS, 15, "The user enrages and confuses the target. However, this also sharply raises the target's Attack stat.");
             super.accuracy = 85;
             super.effect = PokemonEffectNamesies.CONFUSION;
-            super.statChanges[Stat.ATTACK.index()] = 2;
+            super.stageModifier.set(2, Stat.ATTACK);
         }
     }
 
@@ -4172,8 +4169,8 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
-            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
+            super.stageModifier.set(-1, Stat.SP_DEFENSE);
         }
     }
 
@@ -4186,8 +4183,8 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
-            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
+            super.stageModifier.set(-1, Stat.SP_DEFENSE);
         }
     }
 
@@ -4263,7 +4260,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 65;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.SPEED);
         }
     }
 
@@ -4274,11 +4271,11 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.MUD_SHOT, Type.GROUND, MoveCategory.SPECIAL, 15, "The user attacks by hurling a blob of mud at the target. This also lowers the target's Speed stat.");
             super.power = 55;
             super.accuracy = 95;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.SPEED);
         }
     }
 
-    static class BellyDrum extends Attack {
+    static class BellyDrum extends Attack implements ModifyStageMessenger {
         private static final long serialVersionUID = 1L;
 
         BellyDrum() {
@@ -4295,11 +4292,18 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Maximization station
-            user.getStages().modifyStage(
-                    user, 2*Stages.MAX_STAT_CHANGES, Stat.ATTACK, b, CastSource.ATTACK,
-                    (victimName, statName, changed) -> user.getName() + " cut its own HP and maximized " + victimName + " " + statName + "!"
-            );
+            StageModifier maximizer = new StageModifier(2*Stages.MAX_STAT_CHANGES, Stat.ATTACK).withMessage(this);
+
+            // Poliwhirl cut its own HP and maximized its Attack!
+            maximizer.modify(b, user, user, CastSource.ATTACK);
+
+            // Poor belly
             user.forceReduceHealthFraction(b, 1/2.0, "");
+        }
+
+        @Override
+        public String getMessage(String victimName, String possessiveVictim, String statName, String changed) {
+            return victimName + " cut its own HP and maximized " + possessiveVictim + " " + statName + "!";
         }
     }
 
@@ -4360,7 +4364,7 @@ public abstract class Attack implements AttackInterface {
         Kinesis() {
             super(AttackNamesies.KINESIS, Type.PSYCHIC, MoveCategory.STATUS, 15, "The user distracts the target by bending a spoon. This lowers the target's accuracy.");
             super.accuracy = 80;
-            super.statChanges[Stat.ACCURACY.index()] = -1;
+            super.stageModifier.set(-1, Stat.ACCURACY);
         }
     }
 
@@ -4370,7 +4374,7 @@ public abstract class Attack implements AttackInterface {
         Barrier() {
             super(AttackNamesies.BARRIER, Type.PSYCHIC, MoveCategory.STATUS, 20, "The user throws up a sturdy wall that sharply raises its Defense stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 2;
+            super.stageModifier.set(2, Stat.DEFENSE);
         }
     }
 
@@ -4458,8 +4462,8 @@ public abstract class Attack implements AttackInterface {
         CalmMind() {
             super(AttackNamesies.CALM_MIND, Type.PSYCHIC, MoveCategory.STATUS, 20, "The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats.");
             super.selfTarget = true;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
-            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
+            super.stageModifier.set(1, Stat.SP_ATTACK);
+            super.stageModifier.set(1, Stat.SP_DEFENSE);
         }
     }
 
@@ -4471,7 +4475,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 65;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.SPEED);
         }
     }
 
@@ -4526,7 +4530,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 65;
             super.accuracy = 90;
             super.effectChance = 50;
-            super.statChanges[Stat.ACCURACY.index()] = -1;
+            super.stageModifier.set(-1, Stat.ACCURACY);
         }
     }
 
@@ -4538,7 +4542,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 130;
             super.accuracy = 90;
             super.selfTarget = true;
-            super.statChanges[Stat.SP_ATTACK.index()] = -2;
+            super.stageModifier.set(-2, Stat.SP_ATTACK);
         }
     }
 
@@ -4562,7 +4566,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.effectChance = 10;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.SPEED);
         }
     }
 
@@ -4610,7 +4614,7 @@ public abstract class Attack implements AttackInterface {
         RockPolish() {
             super(AttackNamesies.ROCK_POLISH, Type.ROCK, MoveCategory.STATUS, 20, "The user polishes its body to reduce drag. This can sharply raise the Speed stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.SPEED.index()] = 2;
+            super.stageModifier.set(2, Stat.SPEED);
         }
     }
 
@@ -4737,7 +4741,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
-            super.statChanges[Stat.SPEED.index()] = 1;
+            super.stageModifier.set(1, Stat.SPEED);
         }
     }
 
@@ -4797,7 +4801,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            super.statChanges = new int[Stat.NUM_BATTLE_STATS];
+            super.stageModifier.reset();
             super.effect = null;
 
             // Different effects based on the type of the user
@@ -4805,9 +4809,8 @@ public abstract class Attack implements AttackInterface {
                 super.effect = PokemonEffectNamesies.CURSE;
                 super.selfTarget = false;
             } else {
-                super.statChanges[Stat.ATTACK.index()] = 1;
-                super.statChanges[Stat.DEFENSE.index()] = 1;
-                super.statChanges[Stat.SPEED.index()] = -1;
+                super.stageModifier.set(1, Stat.ATTACK, Stat.DEFENSE);
+                super.stageModifier.set(-1, Stat.SPEED);
                 super.selfTarget = true;
             }
         }
@@ -4889,7 +4892,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.METAL_SOUND, Type.STEEL, MoveCategory.STATUS, 40, "A horrible sound like scraping metal harshly lowers the target's Sp. Def stat.");
             super.accuracy = 85;
             super.moveTypes.add(MoveType.SOUND_BASED);
-            super.statChanges[Stat.SP_DEFENSE.index()] = -2;
+            super.stageModifier.set(-2, Stat.SP_DEFENSE);
         }
     }
 
@@ -4924,7 +4927,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 65;
             super.accuracy = 85;
             super.effectChance = 30;
-            super.statChanges[Stat.ACCURACY.index()] = -1;
+            super.stageModifier.set(-1, Stat.ACCURACY);
         }
     }
 
@@ -4991,8 +4994,8 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
-            super.statChanges = new int[Stat.NUM_BATTLE_STATS];
-            super.statChanges[RandomUtils.getRandomValue(victim.getStages().getNonMaxStats()).index()] = 2;
+            super.stageModifier.reset();
+            super.stageModifier.set(2, RandomUtils.getRandomValue(victim.getStages().getNonMaxStats()));
         }
 
         @Override
@@ -5029,7 +5032,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.ICY_WIND, Type.ICE, MoveCategory.SPECIAL, 15, "The user attacks with a gust of chilled air. This also lowers the opposing Pok\u00e9mon's Speed stats.");
             super.power = 55;
             super.accuracy = 95;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.SPEED);
         }
     }
 
@@ -5062,7 +5065,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 65;
             super.accuracy = 100;
             super.effectChance = 10;
-            super.statChanges[Stat.ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.ATTACK);
         }
     }
 
@@ -5194,7 +5197,7 @@ public abstract class Attack implements AttackInterface {
         AcidArmor() {
             super(AttackNamesies.ACID_ARMOR, Type.POISON, MoveCategory.STATUS, 20, "The user alters its cellular structure to liquefy itself, sharply raising its Defense stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 2;
+            super.stageModifier.set(2, Stat.DEFENSE);
         }
     }
 
@@ -5239,7 +5242,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 95;
             super.effectChance = 50;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-            super.statChanges[Stat.DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
         }
     }
 
@@ -5260,11 +5263,11 @@ public abstract class Attack implements AttackInterface {
         ShellSmash() {
             super(AttackNamesies.SHELL_SMASH, Type.NORMAL, MoveCategory.STATUS, 15, "The user breaks its shell, which lowers Defense and Sp. Def stats but sharply raises its Attack, Sp. Atk, and Speed stats.");
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
-            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
-            super.statChanges[Stat.ATTACK.index()] = 2;
-            super.statChanges[Stat.SP_ATTACK.index()] = 2;
-            super.statChanges[Stat.SPEED.index()] = 2;
+            super.stageModifier.set(-1, Stat.DEFENSE);
+            super.stageModifier.set(-1, Stat.SP_DEFENSE);
+            super.stageModifier.set(2, Stat.ATTACK);
+            super.stageModifier.set(2, Stat.SP_ATTACK);
+            super.stageModifier.set(2, Stat.SPEED);
         }
     }
 
@@ -5369,7 +5372,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.effectChance = 20;
             super.moveTypes.add(MoveType.BOMB_BALL);
-            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_DEFENSE);
         }
     }
 
@@ -5448,7 +5451,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.ROCK_TOMB, Type.ROCK, MoveCategory.PHYSICAL, 15, "Boulders are hurled at the target. This also lowers the target's Speed stat by preventing its movement.");
             super.power = 60;
             super.accuracy = 95;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.SPEED);
         }
     }
 
@@ -5473,7 +5476,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 75;
             super.effectChance = 30;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-            super.statChanges[Stat.DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
         }
     }
 
@@ -5483,7 +5486,7 @@ public abstract class Attack implements AttackInterface {
         Meditate() {
             super(AttackNamesies.MEDITATE, Type.PSYCHIC, MoveCategory.STATUS, 40, "The user meditates to awaken the power deep within its body and raise its Attack stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
         }
     }
 
@@ -5539,7 +5542,7 @@ public abstract class Attack implements AttackInterface {
             super.effectChance = 10;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
         }
     }
 
@@ -5599,7 +5602,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.CHARGE, Type.ELECTRIC, MoveCategory.STATUS, 20, "The user boosts the power of the Electric move it uses on the next turn. This also raises the user's Sp. Def stat.");
             super.effect = PokemonEffectNamesies.CHARGE;
             super.selfTarget = true;
-            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
+            super.stageModifier.set(1, Stat.SP_DEFENSE);
         }
     }
 
@@ -5612,7 +5615,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 90;
             super.effectChance = 70;
             super.selfTarget = true;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
+            super.stageModifier.set(1, Stat.SP_ATTACK);
         }
     }
 
@@ -6217,7 +6220,7 @@ public abstract class Attack implements AttackInterface {
             super.moveTypes.add(MoveType.PUNCHING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.SPEED);
         }
     }
 
@@ -6231,7 +6234,7 @@ public abstract class Attack implements AttackInterface {
             super.moveTypes.add(MoveType.PUNCHING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.SPEED);
         }
     }
 
@@ -6269,11 +6272,11 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.effectChance = 10;
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
-            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
-            super.statChanges[Stat.SPEED.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
+            super.stageModifier.set(1, Stat.DEFENSE);
+            super.stageModifier.set(1, Stat.SP_ATTACK);
+            super.stageModifier.set(1, Stat.SP_DEFENSE);
+            super.stageModifier.set(1, Stat.SPEED);
         }
     }
 
@@ -6283,8 +6286,8 @@ public abstract class Attack implements AttackInterface {
         Tickle() {
             super(AttackNamesies.TICKLE, Type.NORMAL, MoveCategory.STATUS, 20, "The user tickles the target into laughing, reducing its Attack and Defense stats.");
             super.accuracy = 100;
-            super.statChanges[Stat.ATTACK.index()] = -1;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.ATTACK);
+            super.stageModifier.set(-1, Stat.DEFENSE);
         }
     }
 
@@ -6322,8 +6325,8 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.DRAGON_DANCE, Type.DRAGON, MoveCategory.STATUS, 20, "The user vigorously performs a mystic, powerful dance that raises its Attack and Speed stats.");
             super.moveTypes.add(MoveType.DANCE);
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.SPEED.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
+            super.stageModifier.set(1, Stat.SPEED);
         }
     }
 
@@ -6346,7 +6349,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 130;
             super.accuracy = 90;
             super.selfTarget = true;
-            super.statChanges[Stat.SP_ATTACK.index()] = -2;
+            super.stageModifier.set(-2, Stat.SP_ATTACK);
         }
     }
 
@@ -6588,7 +6591,7 @@ public abstract class Attack implements AttackInterface {
         FakeTears() {
             super(AttackNamesies.FAKE_TEARS, Type.DARK, MoveCategory.STATUS, 20, "The user feigns crying to fluster the target, harshly lowering its Sp. Def stat.");
             super.accuracy = 100;
-            super.statChanges[Stat.SP_DEFENSE.index()] = -2;
+            super.stageModifier.set(-2, Stat.SP_DEFENSE);
         }
     }
 
@@ -6654,8 +6657,8 @@ public abstract class Attack implements AttackInterface {
         WorkUp() {
             super(AttackNamesies.WORK_UP, Type.NORMAL, MoveCategory.STATUS, 30, "The user is roused, and its Attack and Sp. Atk stats increase.");
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
+            super.stageModifier.set(1, Stat.SP_ATTACK);
         }
     }
 
@@ -6772,7 +6775,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 90;
             super.accuracy = 85;
             super.effectChance = 30;
-            super.statChanges[Stat.ACCURACY.index()] = -1;
+            super.stageModifier.set(-1, Stat.ACCURACY);
         }
     }
 
@@ -6848,7 +6851,7 @@ public abstract class Attack implements AttackInterface {
         Sharpen() {
             super(AttackNamesies.SHARPEN, Type.NORMAL, MoveCategory.STATUS, 30, "The user makes its edges more jagged, which raises its Attack stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
         }
     }
 
@@ -7061,7 +7064,7 @@ public abstract class Attack implements AttackInterface {
         Charm() {
             super(AttackNamesies.CHARM, Type.FAIRY, MoveCategory.STATUS, 20, "The user gazes at the target rather charmingly, making it less wary. This harshly lowers its Attack stat.");
             super.accuracy = 100;
-            super.statChanges[Stat.ATTACK.index()] = -2;
+            super.stageModifier.set(-2, Stat.ATTACK);
         }
     }
 
@@ -7146,11 +7149,11 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.effectChance = 10;
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
-            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
-            super.statChanges[Stat.SPEED.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
+            super.stageModifier.set(1, Stat.DEFENSE);
+            super.stageModifier.set(1, Stat.SP_ATTACK);
+            super.stageModifier.set(1, Stat.SP_DEFENSE);
+            super.stageModifier.set(1, Stat.SPEED);
         }
     }
 
@@ -7160,7 +7163,7 @@ public abstract class Attack implements AttackInterface {
         CottonSpore() {
             super(AttackNamesies.COTTON_SPORE, Type.GRASS, MoveCategory.STATUS, 40, "The user releases cotton-like spores that cling to the opposing Pok\u00e9mon, which harshly lowers their Speed stat.");
             super.accuracy = 100;
-            super.statChanges[Stat.SPEED.index()] = -2;
+            super.stageModifier.set(-2, Stat.SPEED);
         }
     }
 
@@ -7170,7 +7173,7 @@ public abstract class Attack implements AttackInterface {
         CottonGuard() {
             super(AttackNamesies.COTTON_GUARD, Type.GRASS, MoveCategory.STATUS, 10, "The user protects itself by wrapping its body in soft cotton, which drastically raises the user's Defense stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 3;
+            super.stageModifier.set(3, Stat.DEFENSE);
         }
     }
 
@@ -7270,7 +7273,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.AUTOTOMIZE, Type.STEEL, MoveCategory.STATUS, 15, "The user sheds part of its body to make itself lighter and sharply raise its Speed stat.");
             super.effect = PokemonEffectNamesies.HALF_WEIGHT;
             super.selfTarget = true;
-            super.statChanges[Stat.SPEED.index()] = 2;
+            super.stageModifier.set(2, Stat.SPEED);
         }
     }
 
@@ -7281,7 +7284,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.STRUGGLE_BUG, Type.BUG, MoveCategory.SPECIAL, 20, "While resisting, the user attacks the opposing Pok\u00e9mon. This lowers the Sp. Atk stat of those hit.");
             super.power = 50;
             super.accuracy = 100;
-            super.statChanges[Stat.SP_ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_ATTACK);
         }
     }
 
@@ -7323,8 +7326,8 @@ public abstract class Attack implements AttackInterface {
         HoneClaws() {
             super(AttackNamesies.HONE_CLAWS, Type.DARK, MoveCategory.STATUS, 15, "The user sharpens its claws to boost its Attack stat and accuracy.");
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.ACCURACY.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
+            super.stageModifier.set(1, Stat.ACCURACY);
         }
     }
 
@@ -7372,7 +7375,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 85;
             super.effectChance = 50;
             super.moveTypes.add(MoveType.BOMB_BALL);
-            super.statChanges[Stat.ACCURACY.index()] = -1;
+            super.stageModifier.set(-1, Stat.ACCURACY);
         }
     }
 
@@ -7431,7 +7434,7 @@ public abstract class Attack implements AttackInterface {
             super.effectChance = 10;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
+            super.stageModifier.set(1, Stat.DEFENSE);
         }
     }
 
@@ -7608,7 +7611,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.effectChance = 10;
             super.moveTypes.add(MoveType.BOMB_BALL);
-            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_DEFENSE);
         }
     }
 
@@ -7618,8 +7621,8 @@ public abstract class Attack implements AttackInterface {
         BulkUp() {
             super(AttackNamesies.BULK_UP, Type.FIGHTING, MoveCategory.STATUS, 20, "The user tenses its muscles to bulk up its body, raising both its Attack and Defense stats.");
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
+            super.stageModifier.set(1, Stat.DEFENSE);
         }
     }
 
@@ -7798,7 +7801,7 @@ public abstract class Attack implements AttackInterface {
         Flash() {
             super(AttackNamesies.FLASH, Type.NORMAL, MoveCategory.STATUS, 20, "The user flashes a bright light that cuts the target's accuracy.");
             super.accuracy = 100;
-            super.statChanges[Stat.ACCURACY.index()] = -1;
+            super.stageModifier.set(-1, Stat.ACCURACY);
         }
     }
 
@@ -7808,7 +7811,7 @@ public abstract class Attack implements AttackInterface {
         TailGlow() {
             super(AttackNamesies.TAIL_GLOW, Type.BUG, MoveCategory.STATUS, 20, "The user stares at flashing lights to focus its mind, drastically raising its Sp. Atk stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.SP_ATTACK.index()] = 3;
+            super.stageModifier.set(3, Stat.SP_ATTACK);
         }
     }
 
@@ -7922,7 +7925,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.effectChance = 50;
             super.moveTypes.add(MoveType.BOMB_BALL);
-            super.statChanges[Stat.SP_ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_ATTACK);
         }
     }
 
@@ -7934,7 +7937,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 70;
             super.accuracy = 100;
             super.effectChance = 50;
-            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_DEFENSE);
         }
     }
 
@@ -7946,7 +7949,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 140;
             super.accuracy = 90;
             super.selfTarget = true;
-            super.statChanges[Stat.SP_ATTACK.index()] = -2;
+            super.stageModifier.set(-2, Stat.SP_ATTACK);
         }
     }
 
@@ -7972,8 +7975,8 @@ public abstract class Attack implements AttackInterface {
         DefendOrder() {
             super(AttackNamesies.DEFEND_ORDER, Type.BUG, MoveCategory.STATUS, 10, "The user calls out its underlings to shield its body, raising its Defense and Sp. Def stats.");
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
-            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
+            super.stageModifier.set(1, Stat.DEFENSE);
+            super.stageModifier.set(1, Stat.SP_DEFENSE);
         }
     }
 
@@ -8235,7 +8238,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 120;
             super.accuracy = 85;
             super.effectChance = 40;
-            super.statChanges[Stat.SP_DEFENSE.index()] = -2;
+            super.stageModifier.set(-2, Stat.SP_DEFENSE);
         }
     }
 
@@ -8300,7 +8303,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 130;
             super.accuracy = 90;
             super.selfTarget = true;
-            super.statChanges[Stat.SP_ATTACK.index()] = -2;
+            super.stageModifier.set(-2, Stat.SP_ATTACK);
         }
     }
 
@@ -8414,7 +8417,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.effectChance = 50;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-            super.statChanges[Stat.DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
         }
     }
 
@@ -8439,7 +8442,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 85;
             super.accuracy = 95;
             super.effectChance = 40;
-            super.statChanges[Stat.ACCURACY.index()] = -1;
+            super.stageModifier.set(-1, Stat.ACCURACY);
         }
     }
 
@@ -8469,7 +8472,7 @@ public abstract class Attack implements AttackInterface {
 
         Defog() {
             super(AttackNamesies.DEFOG, Type.FLYING, MoveCategory.STATUS, 15, "A strong wind blows away the target's barriers such as Reflect or Light Screen. This also lowers the target's evasiveness.");
-            super.statChanges[Stat.EVASION.index()] = -1;
+            super.stageModifier.set(-1, Stat.EVASION);
         }
 
         @Override
@@ -8497,7 +8500,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.ELECTROWEB, Type.ELECTRIC, MoveCategory.SPECIAL, 15, "The user attacks and captures opposing Pok\u00e9mon using an electric net. This lowers their Speed stat.");
             super.power = 55;
             super.accuracy = 95;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.SPEED);
         }
     }
 
@@ -8528,8 +8531,8 @@ public abstract class Attack implements AttackInterface {
         ShiftGear() {
             super(AttackNamesies.SHIFT_GEAR, Type.STEEL, MoveCategory.STATUS, 10, "The user rotates its gears, raising its Attack stat and sharply raising its Speed stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.SPEED.index()] = 2;
+            super.stageModifier.set(1, Stat.ATTACK);
+            super.stageModifier.set(2, Stat.SPEED);
         }
     }
 
@@ -8559,7 +8562,7 @@ public abstract class Attack implements AttackInterface {
             super.effectChance = 50;
             super.moveTypes.add(MoveType.DANCE);
             super.selfTarget = true;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
+            super.stageModifier.set(1, Stat.SP_ATTACK);
         }
     }
 
@@ -8659,7 +8662,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.GLACIATE, Type.ICE, MoveCategory.SPECIAL, 10, "The user attacks by blowing freezing cold air at opposing Pok\u00e9mon. This lowers their Speed stat.");
             super.power = 65;
             super.accuracy = 95;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.SPEED);
         }
     }
 
@@ -8813,7 +8816,7 @@ public abstract class Attack implements AttackInterface {
             TerrainType terrain = b.getTerrainType();
 
             super.status = terrain.getStatusCondition();
-            super.statChanges = terrain.getStatChanges();
+            super.stageModifier = terrain.getStageModifier();
             super.effect = terrain.getEffect();
         }
     }
@@ -9174,8 +9177,8 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.moveTypes.add(MoveType.USER_FAINTS);
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
-            super.statChanges[Stat.ATTACK.index()] = -2;
-            super.statChanges[Stat.SP_ATTACK.index()] = -2;
+            super.stageModifier.set(-2, Stat.ATTACK);
+            super.stageModifier.set(-2, Stat.SP_ATTACK);
         }
     }
 
@@ -9236,8 +9239,8 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.PARTING_SHOT, Type.DARK, MoveCategory.STATUS, 20, "With a parting threat, the user lowers the target's Attack and Sp. Atk stats. Then it switches with a party Pok\u00e9mon.");
             super.accuracy = 100;
             super.moveTypes.add(MoveType.SOUND_BASED);
-            super.statChanges[Stat.ATTACK.index()] = -1;
-            super.statChanges[Stat.SP_ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.ATTACK);
+            super.stageModifier.set(-1, Stat.SP_ATTACK);
         }
 
         @Override
@@ -9571,7 +9574,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 95;
             super.moveTypes.add(MoveType.SOUND_BASED);
             super.moveTypes.add(MoveType.METRONOMELESS);
-            super.statChanges[Stat.SP_ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_ATTACK);
         }
     }
 
@@ -9622,9 +9625,9 @@ public abstract class Attack implements AttackInterface {
             super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
-            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
+            super.stageModifier.set(-1, Stat.SP_DEFENSE);
+            super.stageModifier.set(-1, Stat.SPEED);
         }
     }
 
@@ -9665,7 +9668,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 70;
             super.effectChance = 10;
             super.moveTypes.add(MoveType.BOMB_BALL);
-            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_DEFENSE);
         }
     }
 
@@ -9678,7 +9681,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 95;
             super.effectChance = 50;
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 2;
+            super.stageModifier.set(2, Stat.DEFENSE);
         }
     }
 
@@ -9690,7 +9693,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 95;
             super.accuracy = 100;
             super.effectChance = 30;
-            super.statChanges[Stat.SP_ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_ATTACK);
         }
     }
 
@@ -9772,9 +9775,9 @@ public abstract class Attack implements AttackInterface {
             super.moveTypes.add(MoveType.NON_SNATCHABLE);
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             super.selfTarget = true;
-            super.statChanges[Stat.SP_ATTACK.index()] = 2;
-            super.statChanges[Stat.SP_DEFENSE.index()] = 2;
-            super.statChanges[Stat.SPEED.index()] = 2;
+            super.stageModifier.set(2, Stat.SP_ATTACK);
+            super.stageModifier.set(2, Stat.SP_DEFENSE);
+            super.stageModifier.set(2, Stat.SPEED);
             this.resetReady();
         }
 
@@ -9819,7 +9822,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 90;
             super.effectChance = 10;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-            super.statChanges[Stat.ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.ATTACK);
         }
     }
 
@@ -9963,7 +9966,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.PLAY_NICE, Type.NORMAL, MoveCategory.STATUS, 20, "The user and the target become friends, and the target loses its will to fight. This lowers the target's Attack stat.");
             super.moveTypes.add(MoveType.PROTECT_PIERCING);
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
-            super.statChanges[Stat.ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.ATTACK);
         }
     }
 
@@ -9973,7 +9976,7 @@ public abstract class Attack implements AttackInterface {
         EerieImpulse() {
             super(AttackNamesies.EERIE_IMPULSE, Type.ELECTRIC, MoveCategory.STATUS, 15, "The user's body generates an eerie impulse. Exposing the target to it harshly lowers the target's Sp. Atk stat.");
             super.accuracy = 100;
-            super.statChanges[Stat.SP_ATTACK.index()] = -2;
+            super.stageModifier.set(-2, Stat.SP_ATTACK);
         }
     }
 
@@ -10004,7 +10007,7 @@ public abstract class Attack implements AttackInterface {
         AromaticMist() {
             super(AttackNamesies.AROMATIC_MIST, Type.FAIRY, MoveCategory.STATUS, 20, "The user raises its Sp. Def stat by using a mysterious aroma.");
             super.selfTarget = true;
-            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
+            super.stageModifier.set(1, Stat.SP_DEFENSE);
         }
     }
 
@@ -10015,7 +10018,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.BABY_DOLL_EYES, Type.FAIRY, MoveCategory.STATUS, 30, "The user stares at the target with its baby-doll eyes, which lowers its Attack stat. This move always goes first.");
             super.accuracy = 100;
             super.priority = 1;
-            super.statChanges[Stat.ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.ATTACK);
         }
     }
 
@@ -10046,7 +10049,7 @@ public abstract class Attack implements AttackInterface {
         FlowerShield() {
             super(AttackNamesies.FLOWER_SHIELD, Type.FAIRY, MoveCategory.STATUS, 10, "The user raises its Defense stat with a mysterious power.");
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
+            super.stageModifier.set(1, Stat.DEFENSE);
         }
     }
 
@@ -10057,8 +10060,8 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.NOBLE_ROAR, Type.NORMAL, MoveCategory.STATUS, 30, "Letting out a noble roar, the user intimidates the target and lowers its Attack and Sp. Atk stats.");
             super.accuracy = 100;
             super.moveTypes.add(MoveType.SOUND_BASED);
-            super.statChanges[Stat.ATTACK.index()] = -1;
-            super.statChanges[Stat.SP_ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.ATTACK);
+            super.stageModifier.set(-1, Stat.SP_ATTACK);
         }
     }
 
@@ -10079,8 +10082,8 @@ public abstract class Attack implements AttackInterface {
         Rototiller() {
             super(AttackNamesies.ROTOTILLER, Type.GROUND, MoveCategory.STATUS, 10, "Tilling the soil, the user makes it easier for plants to grow. This raises its Attack and Sp. Atk stats.");
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
+            super.stageModifier.set(1, Stat.SP_ATTACK);
         }
 
         @Override
@@ -10133,7 +10136,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.MYSTICAL_FIRE, Type.FIRE, MoveCategory.SPECIAL, 10, "The user attacks by breathing a special, hot fire. This also lowers the target's Sp. Atk stat.");
             super.power = 75;
             super.accuracy = 100;
-            super.statChanges[Stat.SP_ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_ATTACK);
         }
     }
 
@@ -10182,7 +10185,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void killWish(Battle b, ActivePokemon dead, ActivePokemon murderer) {
-            murderer.getStages().modifyStage(murderer, 3, Stat.ATTACK, b, CastSource.ATTACK);
+            new StageModifier(3, Stat.ATTACK).modify(b, murderer, murderer, CastSource.ATTACK);
         }
     }
 
@@ -10192,8 +10195,8 @@ public abstract class Attack implements AttackInterface {
         MagneticFlux() {
             super(AttackNamesies.MAGNETIC_FLUX, Type.ELECTRIC, MoveCategory.STATUS, 20, "The user manipulates magnetic fields, which raises its Defense and Sp. Def stats.");
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
-            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
+            super.stageModifier.set(1, Stat.DEFENSE);
+            super.stageModifier.set(1, Stat.SP_DEFENSE);
         }
     }
 
@@ -10230,9 +10233,9 @@ public abstract class Attack implements AttackInterface {
         VenomDrench() {
             super(AttackNamesies.VENOM_DRENCH, Type.POISON, MoveCategory.STATUS, 20, "Opposing Pok\u00e9mon are drenched in an odd poisonous liquid. This lowers the Attack, Sp. Atk, and Speed stats of a poisoned target.");
             super.accuracy = 100;
-            super.statChanges[Stat.ATTACK.index()] = -1;
-            super.statChanges[Stat.SP_ATTACK.index()] = -1;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.ATTACK);
+            super.stageModifier.set(-1, Stat.SP_ATTACK);
+            super.stageModifier.set(-1, Stat.SPEED);
         }
 
         @Override
@@ -10273,7 +10276,7 @@ public abstract class Attack implements AttackInterface {
             super.moveTypes.add(MoveType.PUNCHING);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
         }
     }
 
@@ -10284,7 +10287,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.CONFIDE, Type.NORMAL, MoveCategory.STATUS, 20, "The user tells the target a secret, and the target loses its ability to concentrate. This lowers the target's Sp. Atk stat.");
             super.moveTypes.add(MoveType.SOUND_BASED);
             super.moveTypes.add(MoveType.PROTECT_PIERCING);
-            super.statChanges[Stat.SP_ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_ATTACK);
         }
     }
 
@@ -10497,7 +10500,7 @@ public abstract class Attack implements AttackInterface {
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Only heal if stat actually lowers
             int victimAttackStat = Stat.ATTACK.getBasicStat(b, victim);
-            boolean reduced = victim.getStages().modifyStage(user, -1, Stat.ATTACK, b, CastSource.ATTACK);
+            boolean reduced = new StageModifier(-1, Stat.ATTACK).modify(b, user, victim, CastSource.ATTACK);
             if (reduced) {
                 this.sapHealth(b, user, victim, victimAttackStat, true);
             }
@@ -10526,7 +10529,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.TOXIC_THREAD, Type.POISON, MoveCategory.STATUS, 20, "The user shoots poisonous threads to poison the target and lower the target's Speed stat.");
             super.accuracy = 100;
             super.status = StatusNamesies.POISONED;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.SPEED);
         }
     }
 
@@ -10546,8 +10549,8 @@ public abstract class Attack implements AttackInterface {
         GearUp() {
             super(AttackNamesies.GEAR_UP, Type.STEEL, MoveCategory.STATUS, 20, "The user engages its gears to raise its Attack and Sp. Atk stats.");
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
+            super.stageModifier.set(1, Stat.SP_ATTACK);
         }
     }
 
@@ -10583,7 +10586,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 80;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-            super.statChanges[Stat.ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.ATTACK);
         }
     }
 
@@ -10595,7 +10598,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 80;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-            super.statChanges[Stat.DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
         }
     }
 
@@ -10721,7 +10724,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 70;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-            super.statChanges[Stat.ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.ATTACK);
         }
     }
 
@@ -10734,7 +10737,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.moveTypes.add(MoveType.SOUND_BASED);
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
         }
     }
 
@@ -10768,7 +10771,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 130;
             super.accuracy = 90;
             super.selfTarget = true;
-            super.statChanges[Stat.SP_ATTACK.index()] = -2;
+            super.stageModifier.set(-2, Stat.SP_ATTACK);
         }
     }
 
@@ -10780,7 +10783,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 85;
             super.accuracy = 100;
             super.effectChance = 20;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
         }
     }
 
@@ -10805,7 +10808,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.effectChance = 20;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-            super.statChanges[Stat.DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
         }
     }
 
@@ -10826,7 +10829,7 @@ public abstract class Attack implements AttackInterface {
                 int stage = victim.getStages().getStage(stat);
                 if (stage > 0) {
                     victim.getStages().resetStage(stat);
-                    user.getStages().modifyStage(user, stage, stat, b, CastSource.ATTACK);
+                    new StageModifier(stage, stat).modify(b, user, user, CastSource.ATTACK);
                 }
             }
         }
@@ -10859,8 +10862,8 @@ public abstract class Attack implements AttackInterface {
         TearfulLook() {
             super(AttackNamesies.TEARFUL_LOOK, Type.NORMAL, MoveCategory.STATUS, 20, "The user gets teary eyed to make the target lose its combative spirit. This lowers the target's Attack and Sp. Atk stats.");
             super.moveTypes.add(MoveType.PROTECT_PIERCING);
-            super.statChanges[Stat.ATTACK.index()] = -1;
-            super.statChanges[Stat.SP_ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.ATTACK);
+            super.stageModifier.set(-1, Stat.SP_ATTACK);
         }
     }
 
@@ -10946,7 +10949,7 @@ public abstract class Attack implements AttackInterface {
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
             super.moveTypes.add(MoveType.METRONOMELESS);
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
         }
 
         @Override
@@ -11124,7 +11127,7 @@ public abstract class Attack implements AttackInterface {
         StuffCheeks() {
             super(AttackNamesies.STUFF_CHEEKS, Type.NORMAL, MoveCategory.STATUS, 10, "The user eats its held Berry, then sharply raises its Defense stat.");
             super.selfTarget = true;
-            super.statChanges[Stat.DEFENSE.index()] = 2;
+            super.stageModifier.set(2, Stat.DEFENSE);
         }
 
         @Override
@@ -11147,11 +11150,11 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.NO_RETREAT, Type.FIGHTING, MoveCategory.STATUS, 5, "This move raises all the user's stats but prevents the user from switching out or fleeing.");
             super.effect = PokemonEffectNamesies.NO_RETREAT;
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
-            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
-            super.statChanges[Stat.SPEED.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
+            super.stageModifier.set(1, Stat.DEFENSE);
+            super.stageModifier.set(1, Stat.SP_ATTACK);
+            super.stageModifier.set(1, Stat.SP_DEFENSE);
+            super.stageModifier.set(1, Stat.SPEED);
         }
 
         @Override
@@ -11167,7 +11170,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.TAR_SHOT, Type.ROCK, MoveCategory.STATUS, 15, "The user pours sticky tar over the target, lowering the target's Speed stat. The target becomes weaker to Fire-type moves.");
             super.accuracy = 100;
             super.effect = PokemonEffectNamesies.STICKY_TAR;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.SPEED);
         }
     }
 
@@ -11321,11 +11324,11 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.CLANGOROUS_SOUL, Type.DRAGON, MoveCategory.STATUS, 5, "The user raises all its stats by using some of its HP.");
             super.moveTypes.add(MoveType.SOUND_BASED);
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 1;
-            super.statChanges[Stat.DEFENSE.index()] = 1;
-            super.statChanges[Stat.SP_ATTACK.index()] = 1;
-            super.statChanges[Stat.SP_DEFENSE.index()] = 1;
-            super.statChanges[Stat.SPEED.index()] = 1;
+            super.stageModifier.set(1, Stat.ATTACK);
+            super.stageModifier.set(1, Stat.DEFENSE);
+            super.stageModifier.set(1, Stat.SP_ATTACK);
+            super.stageModifier.set(1, Stat.SP_DEFENSE);
+            super.stageModifier.set(1, Stat.SPEED);
         }
 
         @Override
@@ -11362,8 +11365,8 @@ public abstract class Attack implements AttackInterface {
         Decorate() {
             super(AttackNamesies.DECORATE, Type.FAIRY, MoveCategory.STATUS, 15, "The user sharply raises its Attack and Sp. Atk stats by decorating the target.");
             super.selfTarget = true;
-            super.statChanges[Stat.ATTACK.index()] = 2;
-            super.statChanges[Stat.SP_ATTACK.index()] = 2;
+            super.stageModifier.set(2, Stat.ATTACK);
+            super.stageModifier.set(2, Stat.SP_ATTACK);
         }
     }
 
@@ -11374,7 +11377,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.DRUM_BEATING, Type.GRASS, MoveCategory.PHYSICAL, 10, "The user plays its drum, controlling the drum's roots to attack the target. This also lowers the target's Speed stat.");
             super.power = 80;
             super.accuracy = 100;
-            super.statChanges[Stat.SPEED.index()] = -1;
+            super.stageModifier.set(-1, Stat.SPEED);
         }
     }
 
@@ -11413,7 +11416,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 110;
             super.accuracy = 100;
             super.selfTarget = true;
-            super.statChanges[Stat.SPEED.index()] = 1;
+            super.stageModifier.set(1, Stat.SPEED);
         }
     }
 
@@ -11425,7 +11428,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 60;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-            super.statChanges[Stat.ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.ATTACK);
         }
     }
 
@@ -11458,7 +11461,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.APPLE_ACID, Type.GRASS, MoveCategory.SPECIAL, 10, "The user attacks the target with an acidic liquid created from tart apples. This also lowers the target's Sp. Def stat.");
             super.power = 80;
             super.accuracy = 100;
-            super.statChanges[Stat.SP_DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_DEFENSE);
         }
     }
 
@@ -11470,7 +11473,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 80;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-            super.statChanges[Stat.DEFENSE.index()] = -1;
+            super.stageModifier.set(-1, Stat.DEFENSE);
         }
     }
 
@@ -11482,7 +11485,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 75;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
-            super.statChanges[Stat.SP_ATTACK.index()] = -1;
+            super.stageModifier.set(-1, Stat.SP_ATTACK);
         }
     }
 

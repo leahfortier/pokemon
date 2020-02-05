@@ -560,8 +560,7 @@ Weakness Policy:
     Price: 1000
     OnTakeDamage:
         if (TypeAdvantage.isSuperEffective(user, victim, b)) {
-            victim.getStages().modifyStage(victim, 2, Stat.ATTACK, b, CastSource.HELD_ITEM);
-            victim.getStages().modifyStage(victim, 2, Stat.SP_ATTACK, b, CastSource.HELD_ITEM);
+            new StageModifier(2, Stat.ATTACK, Stat.SP_ATTACK).modify(b, victim, victim, CastSource.HELD_ITEM);
         }
         ###
 *
@@ -1910,7 +1909,7 @@ Starf Berry:
 
         // Sharply raise random battle stat
         Stat stat = RandomUtils.getRandomValue(stats);
-        return user.getStages().modifyStage(user, 2, stat, b, source);
+        return new StageModifier(2, stat).modify(b, user, user, source);
         ###
 *
 # Other Items
