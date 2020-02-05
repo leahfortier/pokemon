@@ -6,7 +6,7 @@ import battle.effect.InvokeInterfaces.ModifyStageValueEffect;
 import battle.effect.InvokeInterfaces.StatLoweredEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
 import battle.effect.source.CastSource;
-import main.Global;
+import battle.stages.ModifyStageMessenger.DefaultModifyStageMessenger;
 import message.Messages;
 import pokemon.stat.Stat;
 import util.serialization.Serializable;
@@ -25,7 +25,7 @@ public class StageModifier implements Serializable {
 
     public StageModifier(int[] modifiers) {
         this.modifiers = modifiers;
-        this.messenger = null;
+        this.messenger = new DefaultModifyStageMessenger();
     }
 
     public StageModifier(int modifier, Stat... stats) {
@@ -109,7 +109,7 @@ public class StageModifier implements Serializable {
             return false;
         }
 
-        this.addMessage(b, caster, victim, source, val, statName);
+        this.messenger.addMessage(b, caster, victim, source, val, statName);
 
         victim.getStages().incrementStage(stat, val);
 
@@ -118,80 +118,5 @@ public class StageModifier implements Serializable {
         }
 
         return true;
-    }
-
-    private void addMessage(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, int val, String statName) {
-        if (this.messenger == null) {
-            this.messenger = createMessenger(b, caster, source);
-        }
-
-        String change = this.getChangedStatString(val);
-        String possessiveVictim = caster == victim ? "its" : victim.getName() + "'s";
-        String message = messenger.getMessage(victim.getName(), possessiveVictim, statName, change);
-        Messages.add(message);
-    }
-
-    // -3 or lower: drastically lowered
-    // -2: sharply lowered
-    // -1: lowered
-    // 0: <throws error>
-    // 1: raised
-    // 2: sharply raised
-    // 3 or higher: drastically raised
-    private String getChangedStatString(int val) {
-        if (val == 0) {
-            Global.error("Cannot modify a stage by zero.");
-        }
-
-        int positive = Math.abs(val);
-        String modifier;
-        if (positive == 1) {
-            modifier = "";
-        } else if (positive == 2) {
-            modifier = "sharply ";
-        } else {
-            modifier = "drastically ";
-        }
-
-        String direction;
-        if (val > 0) {
-            direction = "raised";
-        } else {
-            direction = "lowered";
-        }
-
-        return modifier + direction;
-    }
-
-    private ModifyStageMessenger createMessenger(Battle b, ActivePokemon caster, CastSource source) {
-        switch (source) {
-            case ATTACK:
-            case USE_ITEM:
-                // Bulbasaur's Attack was sharply raised!
-                return (victimName, possessiveVictim, statName, changed) -> String.format(
-                        "%s's %s was %s!", victimName, statName, changed
-                );
-            case ABILITY:
-            case HELD_ITEM:
-                // Gyarados's Intimidate lowered Charmander's Attack!
-                // Bulbasaur's Absorb Bulb raised its Special Attack!
-                return (victimName, possessiveVictim, statName, changed) -> String.format(
-                        "%s's %s %s %s %s!",
-                        caster.getName(), source.getSourceName(b, caster), changed, possessiveVictim, statName
-                );
-            case EFFECT:
-                Global.error("Effect message should be handled manually using the other modifyStage method.");
-                break;
-            default:
-                Global.error("Unknown source for stage modifier.");
-                break;
-        }
-
-        return (victimName, possessiveVictim, statName, changed) -> "";
-    }
-
-    @FunctionalInterface
-    public interface ModifyStageMessenger extends Serializable {
-        String getMessage(String victimName, String possessiveVictim, String statName, String changed);
     }
 }

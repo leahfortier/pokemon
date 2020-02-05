@@ -3,7 +3,7 @@ package battle.attack;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.stages.StageModifier;
-import battle.stages.StageModifier.ModifyStageMessenger;
+import battle.stages.ModifyStageMessenger;
 import battle.stages.Stages;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
