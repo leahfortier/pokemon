@@ -20,7 +20,7 @@ public interface Team {
     TeamEffectList getEffects();
 
     EnterBattleMessageGetter getEnterBattleMessage();
-    void enterBattle();
+    void enterBattle(Battle b);
 
     TrainerAction getAction();
     boolean blackout(Battle b);

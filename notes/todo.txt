@@ -145,8 +145,6 @@ Other random things:
     - is there a way to just create the button transitions from the button list by using all the button locations or something like that??
     - Al Bhed translation shouldn't be hardcoded -- just a flag on the area or something
         - so if you put the flag on the area then when you talk to the rival he speaks Al Bhed...
-    - uhhhhh so should I store the current battle on the player object???? would that just make everythinnnnggggggg better????
-        - if I end up doing would definitely do the simulating check for medal case not everywhere
     - should probably have tests for moves that ignore stages
     - might make sense at this point to have types be their own classes (still enum like the namesies)
         - Powder moves with grass

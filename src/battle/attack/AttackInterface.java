@@ -76,7 +76,7 @@ public interface AttackInterface extends InvokeEffect {
         double advantage = calculation.getAdvantage();
         TypeAdvantage.addAdvantageMessage(advantage);
 
-        if (me.isPlayer() && !b.isSimulating()) {
+        if (me.isPlayer()) {
             Game.getPlayer().getMedalCase().checkAdvantage(advantage);
         }
 

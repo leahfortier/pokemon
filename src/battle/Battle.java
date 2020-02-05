@@ -88,8 +88,8 @@ public class Battle implements Serializable {
         this.player = player;
         this.opponent = opponent;
 
-        this.player.enterBattle();
-        this.opponent.enterBattle();
+        this.player.enterBattle(this);
+        this.opponent.enterBattle(this);
 
         this.effects = new BattleEffectList();
         this.effects.initialize(this);
@@ -425,7 +425,7 @@ public class Battle implements Serializable {
         boolean attackHit = accuracyCheck(me, o);
         boolean success = false;
         if (attackHit) {
-            if (me.isPlayer() && !this.isSimulating()) {
+            if (me.isPlayer()) {
                 Game.getPlayer().getMedalCase().useMove(attack.namesies());
             }
 

@@ -28,7 +28,7 @@ public abstract class Trainer implements Team, Serializable {
     private int frontIndex;
     private int switchIndex;
 
-    private boolean inBattle;
+    private transient Battle battle;
 
 //    protected boolean isBeTryingToSwitchRunOrUseItem;
 //    protected boolean isBTTSROUI;
@@ -48,7 +48,7 @@ public abstract class Trainer implements Team, Serializable {
 
     @Override
     public ActivePokemon front() {
-        if (!inBattle) {
+        if (!inBattle()) {
             this.setFront();
         }
 
@@ -90,7 +90,7 @@ public abstract class Trainer implements Team, Serializable {
         }
 
         // Apply any effects that take place when switching out
-        if (inBattle) {
+        if (this.inBattle()) {
             SwitchOutEffect.invokeSwitchOutEffect(front());
         }
 
@@ -109,22 +109,31 @@ public abstract class Trainer implements Team, Serializable {
         Global.error("None of your Pokemon are capable of battling!");
     }
 
+    public void setBattle(Battle battle) {
+        this.battle = battle;
+    }
+
+    // Returns the battle the trainer is currently in or null if not in battle
+    public Battle getBattle() {
+        return this.battle;
+    }
+
+    public boolean inBattle() {
+        return this.battle != null;
+    }
+
     // Should be called when the trainer enters a new battle -- Sets all Pokemon to not be used yet and sets the front Pokemon
     @Override
-    public void enterBattle() {
+    public void enterBattle(Battle b) {
+        this.setBattle(b);
         team.forEach(PartyPokemon::resetAttributes);
         this.setAction(TrainerAction.FIGHT);
         this.setFront();
         this.getEffects().reset();
-        inBattle = true;
     }
 
     public void exitBattle() {
-        inBattle = false;
-    }
-
-    protected void setInBattle() {
-        inBattle = true;
+        this.battle = null;
     }
 
     @Override

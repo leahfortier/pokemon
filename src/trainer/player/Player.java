@@ -362,6 +362,11 @@ public class Player extends PlayerTrainer implements Serializable, Nicknamed {
     }
 
     public MedalCase getMedalCase() {
+        // When simulating don't use the actual medal case
+        if (this.inBattle() && this.getBattle().isSimulating()) {
+            return MedalCase.EMPTY_CASE;
+        }
+
         return this.medalCase;
     }
 

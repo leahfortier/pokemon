@@ -76,7 +76,7 @@ public class WildPokemon implements Opponent, Serializable {
     }
 
     @Override
-    public void enterBattle() {
+    public void enterBattle(Battle b) {
         // Just in case
         this.wildPokemon.resetAttributes();
         this.effects.reset();
