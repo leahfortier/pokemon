@@ -10,12 +10,14 @@ import util.serialization.Serializable;
 public interface ModifyStageMessenger extends Serializable {
     String getMessage(String victimName, String possessiveVictim, String statName, String changed);
 
+    // Creates and adds the actual modify message to the queue
     default void addMessage(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source, int val, String statName) {
         this.set(b, caster, source);
 
         String change = getChangedStatString(val);
         String possessiveVictim = caster == victim ? "its" : victim.getName() + "'s";
         String message = this.getMessage(victim.getName(), possessiveVictim, statName, change);
+
         Messages.add(message);
     }
 
@@ -25,10 +27,10 @@ public interface ModifyStageMessenger extends Serializable {
     // -3 or lower: drastically lowered
     // -2: sharply lowered
     // -1: lowered
-    // 0: <throws error>
-    // 1: raised
-    // 2: sharply raised
-    // 3 or higher: drastically raised
+    //  0: <throws error>
+    //  1: raised
+    //  2: sharply raised
+    //  3 or higher: drastically raised
     static String getChangedStatString(int val) {
         if (val == 0) {
             Global.error("Cannot modify a stage by zero.");

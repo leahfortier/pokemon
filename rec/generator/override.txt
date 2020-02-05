@@ -606,7 +606,7 @@ ProtectingContactLower:
     AddMapField: OnProtectingSuccess:
         // Pokemon that make contact with the {3-} have their {2} reduced
         if (p.isMakingContact()) {
-            // The {3-} lowered Charmander's {2}!
+            // The {3-} sharply lowered Charmander's {2}!
             new StageModifier({1}, Stat.{22}).withMessage(this).modify(b, opp, p, CastSource.EFFECT);
         }
         ###

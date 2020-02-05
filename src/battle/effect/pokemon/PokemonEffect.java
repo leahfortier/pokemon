@@ -485,7 +485,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
             // Pokemon that make contact with the King's Shield have their Attack reduced
             if (p.isMakingContact()) {
-                // The King's Shield lowered Charmander's Attack!
+                // The King's Shield sharply lowered Charmander's Attack!
                 new StageModifier(-1, Stat.ATTACK).withMessage(this).modify(b, opp, p, CastSource.EFFECT);
             }
         }
@@ -517,7 +517,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         public void protectingEffects(Battle b, ActivePokemon p, ActivePokemon opp) {
             // Pokemon that make contact with the obstruction have their Defense reduced
             if (p.isMakingContact()) {
-                // The obstruction lowered Charmander's Defense!
+                // The obstruction sharply lowered Charmander's Defense!
                 new StageModifier(-2, Stat.DEFENSE).withMessage(this).modify(b, opp, p, CastSource.EFFECT);
             }
         }

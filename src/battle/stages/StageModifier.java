@@ -12,6 +12,8 @@ import pokemon.stat.Stat;
 import util.serialization.Serializable;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class StageModifier implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -19,13 +21,12 @@ public class StageModifier implements Serializable {
     private int[] modifiers;
     private ModifyStageMessenger messenger;
 
-    public StageModifier() {
-        this(new int[Stat.NUM_BATTLE_STATS]);
-    }
+    private Set<String> failMessages;
 
-    public StageModifier(int[] modifiers) {
-        this.modifiers = modifiers;
+    public StageModifier() {
+        this.modifiers = new int[Stat.NUM_BATTLE_STATS];
         this.messenger = new DefaultModifyStageMessenger();
+        this.failMessages = new HashSet<>();
     }
 
     public StageModifier(int modifier, Stat... stats) {
@@ -54,7 +55,10 @@ public class StageModifier implements Serializable {
         return this.modifiers.clone();
     }
 
+    // Modifies all set stats for the victim and prints appropriate messages and stuff
     public boolean modify(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+        this.failMessages.clear();
+
         boolean modified = false;
         for (int i = 0; i < modifiers.length; i++) {
             if (modifiers[i] == 0) {
@@ -62,10 +66,11 @@ public class StageModifier implements Serializable {
             }
             modified |= this.modify(caster, victim, modifiers[i], Stat.getStat(i, true), b, source);
         }
+
         return modified;
     }
 
-    // Modifies a stat for a Pokemon and prints appropriate messages and stuff
+    // Modifies a single stat for a Pokemon and prints appropriate messages and stuff
     private boolean modify(ActivePokemon caster, ActivePokemon victim, int val, Stat stat, Battle b, CastSource source) {
         // Don't modify the stages of a dead Pokemon
         if (victim.isFainted(b)) {
@@ -83,10 +88,7 @@ public class StageModifier implements Serializable {
         if (val < 0 && caster != victim) {
             StatProtectingEffect prevent = StatProtectingEffect.getPreventEffect(moldBreaker, b, caster, victim, stat);
             if (prevent != null) {
-                if (printFail) {
-                    // TODO: This prints multiple times for attacks that lower multiple stats
-                    Messages.add(prevent.preventionMessage(b, victim, stat));
-                }
+                this.addFailMessage(printFail, prevent.preventionMessage(b, victim, stat));
                 return false;
             }
         }
@@ -94,18 +96,14 @@ public class StageModifier implements Serializable {
         // Too High
         int currentStage = victim.getStages().getStage(stat);
         if (currentStage == Stages.MAX_STAT_CHANGES && val > 0) {
-            if (printFail) {
-                Messages.add(victim.getName() + "'s " + statName + " cannot be raised any higher!");
-            }
+            this.addFailMessage(printFail, victim.getName() + "'s " + statName + " cannot be raised any higher!");
             return false;
         }
 
         // HOW LOW CAN YOU GO?!
         if (currentStage == -Stages.MAX_STAT_CHANGES && val < 0) {
             // THIS LOW
-            if (printFail) {
-                Messages.add(victim.getName() + "'s " + statName + " cannot be lowered any further!");
-            }
+            this.addFailMessage(printFail, victim.getName() + "'s " + statName + " cannot be lowered any further!");
             return false;
         }
 
@@ -118,5 +116,14 @@ public class StageModifier implements Serializable {
         }
 
         return true;
+    }
+
+    // If applicable, adds the message to the queue
+    // Keeps track of all the messages in the current modify to prevent duplicates
+    private void addFailMessage(boolean printFail, String failMessage) {
+        if (printFail && !this.failMessages.contains(failMessage)) {
+            Messages.add(failMessage);
+            this.failMessages.add(failMessage);
+        }
     }
 }
