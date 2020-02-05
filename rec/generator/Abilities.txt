@@ -1739,14 +1739,14 @@ Cotton Down:
     Desc: When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stat of all Pokémon except itself.
     Int: OpponentApplyDamageEffect
     OpponentApplyDamage:
-        user.getStages().modifyStage(victim, -1, Stat.SPEED, b, CastSource.ABILITY);
+        new StageModifier(-1, Stat.SPEED).modify(b, victim, user, CastSource.ABILITY);
         ###
 *
 Dauntless Shield:
     Desc: Boosts the Pokémon's Defense stat when the Pokémon enters a battle.
     Int: EntryEffect
     Enter:
-        enterer.getStages().modifyStage(enterer, 1, Stat.DEFENSE, b, CastSource.ABILITY);
+        new StageModifier(1, Stat.DEFENSE).modify(b, enterer, enterer, CastSource.ABILITY);
         ###
 *
 Gorilla Tactics:
@@ -1803,7 +1803,7 @@ Gulp Missile:
         // Note: Use Effect cast source here so it uses the default messaging instead of referring to Gulp Missile
         user.reduceHealthFraction(b, .25, "");
         if (gulping) {
-            user.getStages().modifyStage(victim, -1, Stat.DEFENSE, b, CastSource.EFFECT);
+            new StageModifier(-1, Stat.DEFENSE).modify(b, victim, user, CastSource.EFFECT);
         } else {
             StatusNamesies.PARALYZED.getStatus().apply(b, victim, user, CastSource.EFFECT);
         }
@@ -1855,7 +1855,7 @@ Intrepid Sword:
     Desc: Boosts the Pokémon's Attack stat when the Pokémon enters a battle.
     Int: EntryEffect
     Enter:
-        enterer.getStages().modifyStage(enterer, 1, Stat.ATTACK, b, CastSource.ABILITY);
+        new StageModifier(1, Stat.ATTACK).modify(b, enterer, enterer, CastSource.ABILITY);
         ###
 *
 Libero:

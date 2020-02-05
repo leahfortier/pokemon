@@ -77,6 +77,7 @@ public interface ModifyStageMessenger extends Serializable {
             switch (source) {
                 case ATTACK:
                 case USE_ITEM:
+                case EFFECT: // Note: effect messages are typically handled manually using the other modifyStage method
                     // Bulbasaur's Attack was sharply raised!
                     return String.format("%s's %s was %s!", victimName, statName, changed);
                 case ABILITY:
@@ -84,9 +85,6 @@ public interface ModifyStageMessenger extends Serializable {
                     // Gyarados's Intimidate lowered Charmander's Attack!
                     // Bulbasaur's Absorb Bulb raised its Special Attack!
                     return String.format("%s %s %s %s!", casterSourcePossessive, changed, possessiveVictim, statName);
-                case EFFECT:
-                    Global.error("Effect message should be handled manually using the other modifyStage method.");
-                    break;
                 default:
                     Global.error("Unknown source for stage modifier.");
                     break;

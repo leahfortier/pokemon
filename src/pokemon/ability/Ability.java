@@ -78,7 +78,6 @@ import battle.effect.InvokeInterfaces.StartAttackEffect;
 import battle.effect.InvokeInterfaces.StatLoweredEffect;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
-import battle.effect.InvokeInterfaces.StatTargetSwapperEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
@@ -4355,7 +4354,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.getStages().modifyStage(victim, -1, Stat.SPEED, b, CastSource.ABILITY);
+            new StageModifier(-1, Stat.SPEED).modify(b, victim, user, CastSource.ABILITY);
         }
     }
 
@@ -4368,7 +4367,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            enterer.getStages().modifyStage(enterer, 1, Stat.DEFENSE, b, CastSource.ABILITY);
+            new StageModifier(1, Stat.DEFENSE).modify(b, enterer, enterer, CastSource.ABILITY);
         }
     }
 
@@ -4451,7 +4450,7 @@ public abstract class Ability implements AbilityInterface {
             // Note: Use Effect cast source here so it uses the default messaging instead of referring to Gulp Missile
             user.reduceHealthFraction(b, .25, "");
             if (gulping) {
-                user.getStages().modifyStage(victim, -1, Stat.DEFENSE, b, CastSource.EFFECT);
+                new StageModifier(-1, Stat.DEFENSE).modify(b, victim, user, CastSource.EFFECT);
             } else {
                 StatusNamesies.PARALYZED.getStatus().apply(b, victim, user, CastSource.EFFECT);
             }
@@ -4575,7 +4574,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            enterer.getStages().modifyStage(enterer, 1, Stat.ATTACK, b, CastSource.ABILITY);
+            new StageModifier(1, Stat.ATTACK).modify(b, enterer, enterer, CastSource.ABILITY);
         }
     }
 
