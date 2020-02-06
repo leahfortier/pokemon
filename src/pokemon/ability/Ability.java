@@ -417,7 +417,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+        public String preventionMessage(ActivePokemon p, Stat s) {
             return p.getName() + "'s " + this.getName() + " prevents its " + s.getName() + " from being lowered!";
         }
     }
@@ -505,7 +505,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + "-type moves!";
         }
     }
@@ -675,7 +675,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.FIRE.getName() + "-type moves!";
         }
 
@@ -811,7 +811,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!";
         }
 
@@ -897,12 +897,12 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user) {
+        public String getBlockMessage(ActivePokemon user) {
             return blockityMessage(user, user);
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return blockityMessage(user, victim);
         }
     }
@@ -1043,7 +1043,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+        public String preventionMessage(ActivePokemon p, Stat s) {
             return p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!";
         }
     }
@@ -1067,7 +1067,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+        public String preventionMessage(ActivePokemon p, Stat s) {
             return p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!";
         }
     }
@@ -1111,7 +1111,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents OHKO moves!";
         }
     }
@@ -1134,7 +1134,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + victim.getAbility().getName() + " prevents it from being captivated!";
         }
 
@@ -1323,7 +1323,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+        public String preventionMessage(ActivePokemon p, Stat s) {
             return p.getName() + "'s " + this.getName() + " prevents its " + s.getName() + " from being lowered!";
         }
     }
@@ -1350,7 +1350,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents sound-based moves!";
         }
     }
@@ -1645,7 +1645,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + " moves!";
         }
 
@@ -1669,7 +1669,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + " moves!";
         }
 
@@ -1983,7 +1983,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
         }
     }
@@ -2015,7 +2015,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents it from switching!";
         }
     }
@@ -2131,7 +2131,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " makes it immune to " + user.getAttack().getName() + "!";
         }
     }
@@ -2224,7 +2224,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+        public String preventionMessage(ActivePokemon p, Stat s) {
             return p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!";
         }
     }
@@ -2313,7 +2313,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.WATER.getName() + "-type moves!";
         }
     }
@@ -2538,7 +2538,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.ELECTRIC.getName() + "-type moves!";
         }
     }
@@ -2671,7 +2671,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+        public String preventionMessage(ActivePokemon p, Stat s) {
             return p.getName() + "'s " + this.getName() + " prevents its " + s.getName() + " from being lowered!";
         }
     }
@@ -2930,7 +2930,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " makes it immune to " + Type.GRASS.getName() + "-type moves!";
         }
     }
@@ -3280,7 +3280,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents bomb/ball moves!";
         }
     }
@@ -3764,7 +3764,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+        public String preventionMessage(ActivePokemon p, Stat s) {
             return p.getName() + "'s " + this.getName() + " prevents its stats from being lowered!";
         }
     }
@@ -4117,7 +4117,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents priority moves!!";
         }
     }
@@ -4135,7 +4135,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " prevents priority moves!!";
         }
     }

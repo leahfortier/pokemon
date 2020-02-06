@@ -274,7 +274,7 @@ ChangeItem:
 *
 ChangeAttackType:
     NumTurns: 1
-    CastMessage: typeSource.getMessage(b, user, victim)
+    CastMessage: typeSource.getMessage(user, victim)
     Field:
         private ChangeAttackTypeSource typeSource;
         ###

@@ -86,7 +86,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getDefogReleaseMessage(ActivePokemon released) {
+        public String getDefogReleaseMessage() {
             return "The effects of reflect faded.";
         }
     }
@@ -119,7 +119,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getDefogReleaseMessage(ActivePokemon released) {
+        public String getDefogReleaseMessage() {
             return "The effects of light screen faded.";
         }
     }
@@ -180,7 +180,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getDefogReleaseMessage(ActivePokemon released) {
+        public String getDefogReleaseMessage() {
             return "The effects of aurora veil faded.";
         }
     }
@@ -517,7 +517,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getDefogReleaseMessage(ActivePokemon released) {
+        public String getDefogReleaseMessage() {
             return "The effects of Safeguard faded.";
         }
 
@@ -568,7 +568,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String getDefogReleaseMessage(ActivePokemon released) {
+        public String getDefogReleaseMessage() {
             return "The mist faded.";
         }
 
@@ -578,7 +578,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+        public String preventionMessage(ActivePokemon p, Stat s) {
             return "The mist prevents stat reductions!";
         }
     }
@@ -606,7 +606,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+        public String preventionMessage(ActivePokemon p, Stat s) {
             return "Guard Special prevents stat reductions!";
         }
     }

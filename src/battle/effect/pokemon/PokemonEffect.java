@@ -817,7 +817,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return "Only " + move.getAttack().getName() + " can be used right now!";
         }
 
@@ -873,7 +873,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return disabled.getAttack().getName() + " is disabled!";
         }
 
@@ -978,7 +978,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return typeSource.getMessage(b, user, victim);
+            return typeSource.getMessage(user, victim);
         }
 
         @Override
@@ -1213,7 +1213,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return "No!! You are imprisoned!!!";
         }
     }
@@ -1387,7 +1387,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return p.getName() + " cannot use the same move twice in a row!";
         }
 
@@ -1421,7 +1421,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return p.getName() + " cannot use sound-based moves!!";
         }
     }
@@ -1439,7 +1439,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return "No!! Not while you're under the effects of taunt!!";
         }
 
@@ -1702,7 +1702,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return "Only Uproar can be used right now!";
         }
 
@@ -2014,7 +2014,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+        public String preventionMessage(ActivePokemon p, Stat s) {
             return Effect.DEFAULT_FAIL_MESSAGE;
         }
 
@@ -2399,7 +2399,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user) {
+        public String getBlockMessage(ActivePokemon user) {
             return "The powder exploded!";
         }
 

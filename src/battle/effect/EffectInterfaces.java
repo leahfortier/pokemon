@@ -141,7 +141,7 @@ public final class EffectInterfaces {
         }
 
         @Override
-        default String getDefogReleaseMessage(ActivePokemon released) {
+        default String getDefogReleaseMessage() {
             return this.getReleaseMessage();
         }
     }
@@ -190,7 +190,7 @@ public final class EffectInterfaces {
         }
 
         @Override
-        default String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        default String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + " is protecting itself!";
         }
     }

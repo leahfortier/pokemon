@@ -72,7 +72,7 @@ BattleEndTurnEffect:
         Default: Empty
     *
     Method:
-        Header: String getEndTurnMessage(Battle b)
+        Header: String getEndTurnMessage()
         Default:
             // Definitely not required to have a message here
             return "";
@@ -98,7 +98,7 @@ BattleEndTurnEffect:
                 return;
             }
         
-            Messages.add(this.getEndTurnMessage(b));
+            Messages.add(this.getEndTurnMessage());
             
             ActivePokemon playerFront = b.getPlayer().front();
             if (!playerFront.isFainted(b)) {
@@ -170,16 +170,16 @@ BarrierEffect:
 DefogRelease:
     Extends: EffectInterface
     Method:
-        Header: String getDefogReleaseMessage(ActivePokemon released)
+        Header: String getDefogReleaseMessage()
     *
     Method:
-        Header: void releaseDefog(ActivePokemon released)
-        InvokeParameters: Battle b
+        Header: void releaseDefog()
+        InvokeParameters: Battle b, ActivePokemon released
         Invoke: Void
         EffectList: released
         InvokeName: release
         Default:
-            Messages.add(this.getDefogReleaseMessage(released));
+            Messages.add(this.getDefogReleaseMessage());
             this.deactivate();
             ###
     *
@@ -350,7 +350,7 @@ AttackSelectionEffect:
         EffectList: p
     *
     Method:
-        Header: String getUnusableMessage(Battle b, ActivePokemon p)
+        Header: String getUnusableMessage(ActivePokemon p)
     *
 ***
 WeatherBlockerEffect:
@@ -447,7 +447,7 @@ StatProtectingEffect:
         InvokeParameters: ActivePokemon moldBreaker
     *
     Method:
-        Header: String preventionMessage(Battle b, ActivePokemon p, Stat s)
+        Header: String preventionMessage(ActivePokemon p, Stat s)
     *
 ***
 StatusPreventionEffect:
@@ -810,7 +810,7 @@ AttackBlocker:
         Default: Empty
     *
     Method:
-        Header: String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim)
+        Header: String getBlockMessage(ActivePokemon user, ActivePokemon victim)
         Default:
             return Effect.DEFAULT_FAIL_MESSAGE;
             ###
@@ -829,7 +829,7 @@ SelfAttackBlocker:
         Default: Empty
     *
     Method:
-        Header: String getBlockMessage(Battle b, ActivePokemon user)
+        Header: String getBlockMessage(ActivePokemon user)
         Default:
             return Effect.DEFAULT_FAIL_MESSAGE;
             ###

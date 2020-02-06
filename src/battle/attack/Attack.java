@@ -337,7 +337,7 @@ public abstract class Attack implements AttackInterface {
     public final boolean effective(Battle b, ActivePokemon me, ActivePokemon o) {
         SelfAttackBlocker selfAttackBlocker = SelfAttackBlocker.checkBlocked(b, me);
         if (selfAttackBlocker != null) {
-            Messages.add(selfAttackBlocker.getBlockMessage(b, me));
+            Messages.add(selfAttackBlocker.getBlockMessage(me));
             selfAttackBlocker.alternateEffect(b, me);
             return false;
         }
@@ -354,7 +354,7 @@ public abstract class Attack implements AttackInterface {
 
         AttackBlocker attackBlocker = AttackBlocker.checkBlocked(b, me, o);
         if (attackBlocker != null) {
-            Messages.add(attackBlocker.getBlockMessage(b, me, o));
+            Messages.add(attackBlocker.getBlockMessage(me, o));
             attackBlocker.alternateEffect(b, me, o);
             return false;
         }
@@ -10168,7 +10168,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        public String getMessage(ActivePokemon caster, ActivePokemon victim) {
             return caster.getName() + " electrified " + victim.getName() + "!";
         }
     }
@@ -11032,7 +11032,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        public String getMessage(ActivePokemon caster, ActivePokemon victim) {
             return caster.getName() + " electrified " + victim.getName() + "!";
         }
     }

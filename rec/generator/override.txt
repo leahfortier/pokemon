@@ -570,7 +570,7 @@ BattleEndTurn:
     Header: void singleEndTurnEffect(Battle b, ActivePokemon victim)
 *
 BattleEndTurnMessage:
-    Header: String getEndTurnMessage(Battle b)
+    Header: String getEndTurnMessage()
     Body:
         return {0};
         ###
@@ -803,11 +803,12 @@ GetForceMove:
 Subside:
     Header: void subside(Battle b, ActivePokemon p)
 *
+# For AttackSelectionEffect
 Usable:
     Header: boolean usable(Battle b, ActivePokemon p, Move m)
 *
 UnusableMessage:
-    Header: String getUnusableMessage(Battle b, ActivePokemon p)
+    Header: String getUnusableMessage(ActivePokemon p)
     Body:
         return {0};
         ###
@@ -907,7 +908,7 @@ StatProtectingEffect:
     Header: boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat)
 *
 StatProtectMessage:
-    Header: String preventionMessage(Battle b, ActivePokemon p, Stat s)
+    Header: String preventionMessage(ActivePokemon p, Stat s)
     Body:
         return {0};
         ###
@@ -944,7 +945,7 @@ KillWish:
 *
 Defog:
     AddInterface: DefogRelease
-    Header: String getDefogReleaseMessage(ActivePokemon released)
+    Header: String getDefogReleaseMessage()
     Body:
         return {0};
         ###
@@ -1015,7 +1016,7 @@ SelfAlternateEffect:
     Header: void alternateEffect(Battle b, ActivePokemon user)
 *
 SelfBlockMessage:
-    Header: String getBlockMessage(Battle b, ActivePokemon user)
+    Header: String getBlockMessage(ActivePokemon user)
 *
 Block:
     Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1024,7 +1025,7 @@ AlternateEffect:
     Header: void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 BlockMessage:
-    Header: String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim)
+    Header: String getBlockMessage(ActivePokemon user, ActivePokemon victim)
     Body:
         return {0};
         ###
@@ -1787,7 +1788,7 @@ GetAttackType:
     Header: Type getAttackType(Type original)
 *
 AttackTypeMessage:
-    Header: String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim)
+    Header: String getMessage(ActivePokemon caster, ActivePokemon victim)
 *
 NormalTypeChanger:
     AddInterface: ChangeAttackTypeEffect

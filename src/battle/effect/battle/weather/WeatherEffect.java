@@ -65,7 +65,7 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         }
 
         @Override
-        public String getEndTurnMessage(Battle b) {
+        public String getEndTurnMessage() {
             return "The rain continues to pour.";
         }
 
@@ -101,7 +101,7 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         }
 
         @Override
-        public String getEndTurnMessage(Battle b) {
+        public String getEndTurnMessage() {
             return "The sunlight is strong.";
         }
 
@@ -147,7 +147,7 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         }
 
         @Override
-        public String getEndTurnMessage(Battle b) {
+        public String getEndTurnMessage() {
             return "The sandstorm rages.";
         }
 
@@ -211,7 +211,7 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
         }
 
         @Override
-        public String getEndTurnMessage(Battle b) {
+        public String getEndTurnMessage() {
             return "The hail continues to fall.";
         }
 

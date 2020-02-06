@@ -179,7 +179,7 @@ public final class InvokeInterfaces {
     public interface BattleEndTurnEffect extends EffectInterface {
         default void singleEndTurnEffect(Battle b, ActivePokemon victim) {}
 
-        default String getEndTurnMessage(Battle b) {
+        default String getEndTurnMessage() {
             // Definitely not required to have a message here
             return "";
         }
@@ -196,7 +196,7 @@ public final class InvokeInterfaces {
                 return;
             }
 
-            Messages.add(this.getEndTurnMessage(b));
+            Messages.add(this.getEndTurnMessage());
 
             ActivePokemon playerFront = b.getPlayer().front();
             if (!playerFront.isFainted(b)) {
@@ -289,10 +289,10 @@ public final class InvokeInterfaces {
     }
 
     public interface DefogRelease extends EffectInterface {
-        String getDefogReleaseMessage(ActivePokemon released);
+        String getDefogReleaseMessage();
 
-        default void releaseDefog(ActivePokemon released) {
-            Messages.add(this.getDefogReleaseMessage(released));
+        default void releaseDefog() {
+            Messages.add(this.getDefogReleaseMessage());
             this.deactivate();
         }
 
@@ -301,7 +301,7 @@ public final class InvokeInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof DefogRelease && invokee.isActiveEffect()) {
                     DefogRelease effect = (DefogRelease)invokee;
-                    effect.releaseDefog(released);
+                    effect.releaseDefog();
                 }
             }
         }
@@ -556,7 +556,7 @@ public final class InvokeInterfaces {
 
     public interface AttackSelectionEffect {
         boolean usable(Battle b, ActivePokemon p, Move m);
-        String getUnusableMessage(Battle b, ActivePokemon p);
+        String getUnusableMessage(ActivePokemon p);
 
         static AttackSelectionEffect getUnusableEffect(Battle b, ActivePokemon p, Move m) {
             List<InvokeEffect> invokees = b.getEffectsList(p);
@@ -743,7 +743,7 @@ public final class InvokeInterfaces {
 
     public interface StatProtectingEffect extends InvokeEffect {
         boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat);
-        String preventionMessage(Battle b, ActivePokemon p, Stat s);
+        String preventionMessage(ActivePokemon p, Stat s);
 
         static StatProtectingEffect getPreventEffect(ActivePokemon moldBreaker, Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);
@@ -1495,7 +1495,7 @@ public final class InvokeInterfaces {
         boolean block(Battle b, ActivePokemon user, ActivePokemon victim);
         default void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim) {}
 
-        default String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        default String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return Effect.DEFAULT_FAIL_MESSAGE;
         }
 
@@ -1524,7 +1524,7 @@ public final class InvokeInterfaces {
         boolean block(Battle b, ActivePokemon user);
         default void alternateEffect(Battle b, ActivePokemon user) {}
 
-        default String getBlockMessage(Battle b, ActivePokemon user) {
+        default String getBlockMessage(ActivePokemon user) {
             return Effect.DEFAULT_FAIL_MESSAGE;
         }
 

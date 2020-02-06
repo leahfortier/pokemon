@@ -37,12 +37,12 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
 
     @Override
     protected boolean hasEffect(Battle b, ActivePokemon victim) {
-        return b.hasEffect(this.namesies);
+        return b.hasEffect(this.namesies());
     }
 
     @Override
     protected BattleEffect<NamesiesType> getEffect(Battle b, ActivePokemon victim) {
-        return (BattleEffect<NamesiesType>)b.getEffects().get(this.namesies);
+        return (BattleEffect<NamesiesType>)b.getEffects().get(this.namesies());
     }
 
     // EVERYTHING BELOW IS GENERATED ###

@@ -15,7 +15,7 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
 
     public static final String DEFAULT_FAIL_MESSAGE = "...but it failed!";
 
-    protected final NamesiesType namesies;
+    private final NamesiesType namesies;
     private final boolean canHave;
     private final boolean hasAlternateCast;
 
@@ -75,7 +75,7 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
 
     private ApplyResult fullApplies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
         // Check if the victim has an effect that prevents this effect
-        ApplyResult effectResult = EffectPreventionEffect.getPreventEffect(b, caster, victim, this.namesies);
+        ApplyResult effectResult = EffectPreventionEffect.getPreventEffect(b, caster, victim, this.namesies());
         if (effectResult.isFailure()) {
             return effectResult;
         }
@@ -110,7 +110,7 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
         this.deactivate();
     }
 
-    protected void addCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
+    protected final void addCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source, CastMessageGetter castMessage) {
         Messages.add(castMessage.getMessage(this, b, user, victim, source));
     }
 

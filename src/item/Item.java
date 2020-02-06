@@ -396,7 +396,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return p.getName() + "'s " + this.getName() + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
         }
 
@@ -434,7 +434,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return p.getName() + "'s " + this.getName() + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
         }
 
@@ -472,7 +472,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return p.getName() + "'s " + this.getName() + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
         }
 
@@ -1432,7 +1432,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
         }
     }
@@ -5603,7 +5603,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return p.getName() + "'s " + this.getName() + " prevents the use of status moves!";
         }
 

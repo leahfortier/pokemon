@@ -88,7 +88,7 @@ public class StageModifier implements Serializable {
         if (val < 0 && caster != victim) {
             StatProtectingEffect prevent = StatProtectingEffect.getPreventEffect(moldBreaker, b, caster, victim, stat);
             if (prevent != null) {
-                this.addFailMessage(printFail, prevent.preventionMessage(b, victim, stat));
+                this.addFailMessage(printFail, prevent.preventionMessage(victim, stat));
                 return false;
             }
         }

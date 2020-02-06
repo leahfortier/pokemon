@@ -181,7 +181,7 @@ public class Move implements Serializable {
         AttackSelectionEffect unusable = AttackSelectionEffect.getUnusableEffect(b, p, m);
         if (unusable != null) {
             if (selecting) {
-                Messages.add(unusable.getUnusableMessage(b, p));
+                Messages.add(unusable.getUnusableMessage(p));
             }
 
             // THAT'S WHAT
