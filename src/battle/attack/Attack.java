@@ -11354,7 +11354,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
+        public Stat getSwitchStat(Stat s) {
             return s == Stat.ATTACK ? Stat.DEFENSE : s;
         }
     }

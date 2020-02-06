@@ -285,7 +285,7 @@ public final class EffectInterfaces {
         Type getEncounterType();
 
         @Override
-        default WildEncounterInfo getWildEncounter(ActivePokemon playerFront, WildEncounterInfo[] wildEncounters) {
+        default WildEncounterInfo getWildEncounter(WildEncounterInfo[] wildEncounters) {
             if (RandomUtils.chanceTest(50)) {
                 List<WildEncounterInfo> typedList = new ArrayList<>();
                 for (WildEncounterInfo wildEncounter : wildEncounters) {

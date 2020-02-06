@@ -503,7 +503,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
+        public void afterBattle(Trainer player, ActivePokemon p) {
             Messages.add(player.getName() + " picked up " + coins + " " + PokeString.POKEDOLLARS + "!");
             player.getDatCashMoney(coins);
         }

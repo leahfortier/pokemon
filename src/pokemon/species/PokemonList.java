@@ -92,7 +92,7 @@ public class PokemonList implements Iterable<PokemonInfo> {
     // Singleton
     private PokemonList() {
         // Load all Pokemon info into map
-        this.map = new PokemonInfo[PokemonInfo.NUM_POKEMON + 1];;
+        this.map = new PokemonInfo[PokemonInfo.NUM_POKEMON + 1];
         this.loadPokemonInfo();
 
         // Create map from type to list of Pokemon with that type

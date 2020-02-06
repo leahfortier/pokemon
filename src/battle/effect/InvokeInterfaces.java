@@ -390,14 +390,14 @@ public final class InvokeInterfaces {
     }
 
     public interface LevitationEffect {
-        default void fall(Battle b, ActivePokemon fallen) {}
+        default void fall(ActivePokemon fallen) {}
 
         static void falllllllll(Battle b, ActivePokemon fallen) {
             List<InvokeEffect> invokees = b.getEffectsList(fallen);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof LevitationEffect && invokee.isActiveEffect()) {
                     LevitationEffect effect = (LevitationEffect)invokee;
-                    effect.fall(b, fallen);
+                    effect.fall(fallen);
                 }
             }
         }
@@ -450,13 +450,13 @@ public final class InvokeInterfaces {
     }
 
     public interface EndBattleEffect {
-        void afterBattle(Trainer player, Battle b, ActivePokemon p);
+        void afterBattle(Trainer player, ActivePokemon p);
 
-        static void invokeEndBattleEffect(List<? extends InvokeEffect> invokees, Trainer player, Battle b, ActivePokemon p) {
+        static void invokeEndBattleEffect(List<? extends InvokeEffect> invokees, Trainer player, ActivePokemon p) {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof EndBattleEffect && invokee.isActiveEffect()) {
                     EndBattleEffect effect = (EndBattleEffect)invokee;
-                    effect.afterBattle(player, b, p);
+                    effect.afterBattle(player, p);
                 }
             }
         }
@@ -716,10 +716,6 @@ public final class InvokeInterfaces {
 
     public interface CritBlockerEffect {
 
-        default boolean blockCrits() {
-            return true;
-        }
-
         static boolean checkBlocked(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             List<InvokeEffect> invokees = b.getEffectsList(defending, attacking.getAttack());
             for (InvokeEffect invokee : invokees) {
@@ -730,10 +726,7 @@ public final class InvokeInterfaces {
                         continue;
                     }
 
-                    CritBlockerEffect effect = (CritBlockerEffect)invokee;
-                    if (effect.blockCrits()) {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -1063,14 +1056,14 @@ public final class InvokeInterfaces {
     }
 
     public interface StatSwitchingEffect {
-        Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s);
+        Stat getSwitchStat(Stat s);
 
         static Stat switchStat(Battle b, ActivePokemon statPokemon, Stat s) {
             List<InvokeEffect> invokees = b.getEffectsList(statPokemon, statPokemon.getAttack());
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof StatSwitchingEffect && invokee.isActiveEffect()) {
                     StatSwitchingEffect effect = (StatSwitchingEffect)invokee;
-                    s = effect.getSwitchStat(b, statPokemon, s);
+                    s = effect.getSwitchStat(s);
                 }
             }
 
@@ -1154,10 +1147,10 @@ public final class InvokeInterfaces {
     }
 
     public interface StageChangingEffect {
-        int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s);
+        int adjustStage(Battle b, ActivePokemon p, Stat s);
 
         default int fullAdjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
-            int adjustment = this.adjustStage(b, p, opp, s);
+            int adjustment = this.adjustStage(b, p, s);
             return getStageWithCritCheck(adjustment, p, opp, s);
         }
 
@@ -1586,7 +1579,7 @@ public final class InvokeInterfaces {
     }
 
     public interface WildEncounterSelector {
-        WildEncounterInfo getWildEncounter(ActivePokemon playerFront, WildEncounterInfo[] wildEncounters);
+        WildEncounterInfo getWildEncounter(WildEncounterInfo[] wildEncounters);
 
         static WildEncounterInfo getForcedWildEncounter(ActivePokemon playerFront, WildEncounterInfo[] wildEncounters) {
             List<InvokeEffect> invokees = new ArrayList<>();
@@ -1596,7 +1589,7 @@ public final class InvokeInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof WildEncounterSelector && invokee.isActiveEffect()) {
                     WildEncounterSelector effect = (WildEncounterSelector)invokee;
-                    WildEncounterInfo value = effect.getWildEncounter(playerFront, wildEncounters);
+                    WildEncounterInfo value = effect.getWildEncounter(wildEncounters);
                     if (value != null) {
                         return value;
                     }
@@ -1750,7 +1743,7 @@ public final class InvokeInterfaces {
     }
 
     public interface OpponentItemBlockerEffect {
-        boolean blockItem(Battle b, ActivePokemon opp, ItemNamesies item);
+        boolean blockItem(ItemNamesies item);
 
         static boolean checkOpponentItemBlockerEffect(Battle b, ActivePokemon opp, ItemNamesies item) {
             // Don't include the item because then it's all like ahhhhhh
@@ -1758,7 +1751,7 @@ public final class InvokeInterfaces {
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof OpponentItemBlockerEffect && invokee.isActiveEffect()) {
                     OpponentItemBlockerEffect effect = (OpponentItemBlockerEffect)invokee;
-                    if (effect.blockItem(b, opp, item)) {
+                    if (effect.blockItem(item)) {
                         return true;
                     }
                 }

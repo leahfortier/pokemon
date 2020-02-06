@@ -527,6 +527,9 @@ public class ModifierTest extends BaseTest {
         criticalHitStageTest(AttackNamesies.SWIFT, stageMap.withoutCrit, testInfo);
         criticalHitStageTest(AttackNamesies.STORM_THROW, stageMap.withCrit, testInfo);
         criticalHitStageTest(AttackNamesies.FROST_BREATH, stageMap.withCrit, testInfo);
+
+        // Lucky Chant prevents crits
+        criticalHitStageTest(AttackNamesies.FROST_BREATH, stageMap.withoutCrit, testInfo.defendingFight(AttackNamesies.LUCKY_CHANT));
     }
 
     private void criticalHitStageTest(AttackNamesies attackNamesies, ModifierStages modifierStages, TestInfo testInfo) {

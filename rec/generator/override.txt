@@ -353,7 +353,7 @@ OhkoAccuracy:
     Header: int baseAccuracy(Battle b, ActivePokemon user)
 *
 SwitchStat:
-    Header: Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s)
+    Header: Stat getSwitchStat(Stat s)
 *
 OppSwitchStat:
     Header: Stat getSwitchStat(Stat s)
@@ -378,7 +378,7 @@ StatSplit:
     AddMapField: CastMessage: user.getName() + " split the {3}!"
 *
 StageChange:
-    Header: int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
+    Header: int adjustStage(Battle b, ActivePokemon p, Stat s)
 *
 IgnoreStage:
     Header: boolean ignoreStage(Stat s, int stage)
@@ -997,14 +997,14 @@ IncreaseCritStage:
     Header: int increaseCritStage(ActivePokemon p)
 *
 FallMessage:
-    Header: void fall(Battle b, ActivePokemon fallen)
+    Header: void fall(ActivePokemon fallen)
     Body:
         Messages.add({0});
         this.deactivate();
         ###
 *
 EndBattle:
-    Header: void afterBattle(Trainer player, Battle b, ActivePokemon p)
+    Header: void afterBattle(Trainer player, ActivePokemon p)
 *
 Contact:
     Header: void contact(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -2005,7 +2005,7 @@ TerrainSeed:
 *
 BlockItem:
     AddInterface: OpponentItemBlockerEffect
-    Header: boolean blockItem(Battle b, ActivePokemon p, ItemNamesies item)
+    Header: boolean blockItem(ItemNamesies item)
 *
 FormChange:
     Header: void changeForm(ActivePokemon formsie)

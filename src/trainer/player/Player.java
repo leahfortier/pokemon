@@ -443,9 +443,9 @@ public class Player extends PlayerTrainer implements Serializable, Nicknamed {
         }
 
         // Check end battle effects for the team and for each individual team member
-        EndBattleEffect.invokeEndBattleEffect(this.getEffects().asList(), this, b, front());
+        EndBattleEffect.invokeEndBattleEffect(this.getEffects().asList(), this, front());
         for (ActivePokemon p : this.getActiveTeam()) {
-            EndBattleEffect.invokeEndBattleEffect(p.getAllEffects(), this, b, p);
+            EndBattleEffect.invokeEndBattleEffect(p.getAllEffects(), this, p);
         }
 
         setFront();

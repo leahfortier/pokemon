@@ -314,7 +314,7 @@ public class TradeView extends View {
         return pokemonNamesies.getInfo().getType().getFirstType().getColor();
     }
 
-    private static enum State {
+    private enum State {
         QUESTION,
         TRADE,
         END

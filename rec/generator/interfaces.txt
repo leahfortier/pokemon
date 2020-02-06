@@ -240,8 +240,9 @@ StatLoweredEffect:
 ***
 LevitationEffect:
     Method:
-        Header: void fall(Battle b, ActivePokemon fallen)
+        Header: void fall(ActivePokemon fallen)
         Invoke: Void
+        InvokeParameters: Battle b
         EffectList: fallen
         InvokeName: falllllllll
         Default: Empty
@@ -273,7 +274,7 @@ MurderEffect:
 ***
 EndBattleEffect:
     Method:
-        Header: void afterBattle(Trainer player, Battle b, ActivePokemon p)
+        Header: void afterBattle(Trainer player, ActivePokemon p)
         Invoke: Void
     *
 ***
@@ -424,11 +425,7 @@ TargetSwapperEffect:
 ***
 CritBlockerEffect:
     Method:
-        Header: boolean blockCrits()
-        Default:
-            return true;
-            ###
-        Invoke: Check true
+        Invoke: Contains
         InvokeName: checkBlocked
         InvokeParameters: Battle b, ActivePokemon attacking, ActivePokemon defending
         MoldBreaker: attacking
@@ -586,7 +583,8 @@ ChangeMoveListEffect:
 ***
 StatSwitchingEffect:
     Method:
-        Header: Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s)
+        Header: Stat getSwitchStat(Stat s)
+        InvokeParameters: Battle b, ActivePokemon statPokemon
         Invoke: Update
         Update: s
         EffectList: statPokemon
@@ -632,7 +630,7 @@ DoubleWeightEffect:
 ***
 StageChangingEffect:
     Method:
-        Header: int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
+        Header: int adjustStage(Battle b, ActivePokemon p, Stat s)
     *
     Method:
         Header: int fullAdjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
@@ -640,7 +638,7 @@ StageChangingEffect:
         MoldBreakerNullCheck: s.isDefending() ? opp : null
         EffectList: p
         Default:
-            int adjustment = this.adjustStage(b, p, opp, s);
+            int adjustment = this.adjustStage(b, p, s);
             return getStageWithCritCheck(adjustment, p, opp, s);
             ###
     *
@@ -856,8 +854,9 @@ RepellingEffect:
 ***
 WildEncounterSelector:
     Method:
-        Header: WildEncounterInfo getWildEncounter(ActivePokemon playerFront, WildEncounterInfo[] wildEncounters)
+        Header: WildEncounterInfo getWildEncounter(WildEncounterInfo[] wildEncounters)
         Invoke: Get
+        InvokeParameters: ActivePokemon playerFront
         NonBattleEffects: playerFront
         InvokeName: getForcedWildEncounter
     *
@@ -943,7 +942,8 @@ ItemBlockerEffect:
 ***
 OpponentItemBlockerEffect:
     Method:
-        Header: boolean blockItem(Battle b, ActivePokemon opp, ItemNamesies item)
+        Header: boolean blockItem(ItemNamesies item)
+        InvokeParameters: Battle b, ActivePokemon opp
         Invoke: Check true
         SetInvokees:
             // Don't include the item because then it's all like ahhhhhh

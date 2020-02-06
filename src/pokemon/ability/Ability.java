@@ -430,7 +430,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
+        public int adjustStage(Battle b, ActivePokemon p, Stat s) {
             return s == Stat.EVASION && p.hasEffect(PokemonEffectNamesies.CONFUSION) ? 1 : 0;
         }
     }
@@ -518,7 +518,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
+        public int adjustStage(Battle b, ActivePokemon p, Stat s) {
             return s == Stat.EVASION && b.isWeather(WeatherNamesies.SANDSTORM) ? 1 : 0;
         }
 
@@ -1407,7 +1407,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
+        public void afterBattle(Trainer player, ActivePokemon p) {
             // Also removes status at the end of battle
             this.removeStatus(p);
         }
@@ -1793,7 +1793,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
+        public int adjustStage(Battle b, ActivePokemon p, Stat s) {
             return s == Stat.EVASION && b.isWeather(WeatherNamesies.HAILING) ? 1 : 0;
         }
 
@@ -3143,7 +3143,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
+        public void afterBattle(Trainer player, ActivePokemon p) {
             if (!p.isHoldingItem() && RandomUtils.chanceTest(10)) {
                 ItemNamesies item = RandomUtils.getRandomValue(items);
                 p.giveItem(item);
@@ -3165,7 +3165,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public boolean blockItem(Battle b, ActivePokemon p, ItemNamesies item) {
+        public boolean blockItem(ItemNamesies item) {
             return item.getItem() instanceof Berry;
         }
     }
@@ -3178,7 +3178,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void afterBattle(Trainer player, Battle b, ActivePokemon p) {
+        public void afterBattle(Trainer player, ActivePokemon p) {
             if (!p.isHoldingItem() && RandomUtils.chanceTest(5*(int)Math.ceil(p.getLevel()/10.0))) {
                 p.giveItem(ItemNamesies.HONEY);
             }

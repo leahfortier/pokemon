@@ -1105,7 +1105,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
+        public int adjustStage(Battle b, ActivePokemon p, Stat s) {
             return s == Stat.DEFENSE || s == Stat.SP_DEFENSE ? turns : 0;
         }
 
@@ -1520,7 +1520,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void fall(Battle b, ActivePokemon fallen) {
+        public void fall(ActivePokemon fallen) {
             Messages.add("The effects of telekinesis were cancelled!");
             this.deactivate();
         }
@@ -1641,7 +1641,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void fall(Battle b, ActivePokemon fallen) {
+        public void fall(ActivePokemon fallen) {
             Messages.add("The effects of " + fallen.getName() + "'s magnet rise were cancelled!");
             this.deactivate();
         }
@@ -2152,7 +2152,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
+        public Stat getSwitchStat(Stat s) {
             if (s == Stat.ATTACK) {
                 return Stat.DEFENSE;
             } else if (s == Stat.DEFENSE) {
