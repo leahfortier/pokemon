@@ -29,6 +29,8 @@ import java.util.Set;
 public class MedalCase implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    public static final MedalCase EMPTY_CASE = new MedalCase();
+
     private final Set<Medal> medalsEarned;
     private final Map<MedalTheme, Integer> themeCounters;
     private final Map<Type, Set<PokemonNamesies>> uncaughtPokemonTypeMap;

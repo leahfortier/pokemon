@@ -1569,7 +1569,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             stickyPoke(b, user, victim.getName() + "'s");
-            if (user.isFainted(b) || !victim.canGiftItem(b, user)) {
+            if (user.isFainted(b) || !victim.canGiftItem(user)) {
                 return;
             }
 
@@ -4492,9 +4492,9 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
     static class PersimBerry extends Item implements BattleUseItem, MessageGetter, GainableEffectBerry, EffectCurerItem {
         private static final long serialVersionUID = 1L;
 
-        private boolean use(Battle b, ActivePokemon p, CastSource source) {
+        private boolean use(ActivePokemon p, CastSource source) {
             if (p.getEffects().remove(PokemonEffectNamesies.CONFUSION)) {
-                Messages.add(this.getMessage(b, p, source));
+                Messages.add(this.getMessage(p, source));
                 return true;
             }
 
@@ -4519,12 +4519,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return use(b, p, CastSource.USE_ITEM);
+            return use(p, CastSource.USE_ITEM);
         }
 
         @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-            return use(b, user, source);
+            return use(user, source);
         }
 
         @Override

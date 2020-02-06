@@ -745,17 +745,17 @@ public class ModifierTest extends BaseTest {
         );
         PokemonManipulator lansatBerry = (battle, attacking, defending) -> {
             attacking.withItem(ItemNamesies.LANSAT_BERRY);
-            attacking.assertNotConsumedItem(battle);
+            attacking.assertNotConsumedItem();
 
             // If the Pokemon already has an increased crit ratio, Lansat Berry cannot further increase and should not be consumed
             boolean hasCrits = attacking.hasEffect(PokemonEffectNamesies.RAISE_CRITS);
 
             battle.falseSwipePalooza(false);
             if (hasCrits) {
-                attacking.assertNotConsumedItem(battle);
-                attacking.assertHoldingItem(battle, ItemNamesies.LANSAT_BERRY);
+                attacking.assertNotConsumedItem();
+                attacking.assertHoldingItem(ItemNamesies.LANSAT_BERRY);
             } else {
-                attacking.assertConsumedBerry(battle);
+                attacking.assertConsumedBerry();
             }
 
             attacking.hasEffect(PokemonEffectNamesies.RAISE_CRITS);

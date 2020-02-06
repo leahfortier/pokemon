@@ -1,5 +1,6 @@
 package trainer;
 
+import battle.Battle;
 import pokemon.active.PartyPokemon;
 
 public class SimulatedPlayer extends PlayerTrainer {
@@ -13,7 +14,7 @@ public class SimulatedPlayer extends PlayerTrainer {
         }
 
         this.setFront(player.getFrontIndex());
-        this.setInBattle();
+        this.setBattle(player.getBattle().getSerializedCopy(Battle.class));
     }
 
     @Override

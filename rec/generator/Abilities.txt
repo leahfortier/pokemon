@@ -188,8 +188,8 @@ Frisk:
     Int: EntryEffect
     Enter:
         ActivePokemon other = b.getOtherPokemon(enterer);
-        if (other.isHoldingItem(b)) {
-            Messages.add(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem(b).getName() + "!");
+        if (other.isHoldingItem()) {
+            Messages.add(enterer.getName() + "'s " + this.getName() + " alerted it to " + other.getName() + "'s " + other.getHeldItem().getName() + "!");
         }
         ###
 *
@@ -1218,7 +1218,7 @@ Harvest:
     Int: EndTurnEffect
     ApplyEndTurn:
         // Does nothing if victim is holding something
-        if (victim.isHoldingItem(b)) {
+        if (victim.isHoldingItem()) {
             return;
         }
 
@@ -1240,7 +1240,7 @@ Pickup:
     Desc: The Pok\u00e9mon may pick up the item an opposing Pok\u00e9mon used during a battle. It may pick up items outside of battle, too.
     Int: EndBattleEffect
     EndBattle:
-        if (!p.isHoldingItem(b) && RandomUtils.chanceTest(10)) {
+        if (!p.isHoldingItem() && RandomUtils.chanceTest(10)) {
             ItemNamesies item = RandomUtils.getRandomValue(items);
             p.giveItem(item);
             Messages.add(p.getName() + " picked up " + StringUtils.articleString(item.getName()) + "!");
@@ -1312,7 +1312,7 @@ Unnerve:
 Honey Gather:
     Int: EndBattleEffect
     EndBattle:
-        if (!p.isHoldingItem(b) && RandomUtils.chanceTest(5*(int)Math.ceil(p.getLevel()/10.0))) {
+        if (!p.isHoldingItem() && RandomUtils.chanceTest(5*(int)Math.ceil(p.getLevel()/10.0))) {
             p.giveItem(ItemNamesies.HONEY);
         }
         ###

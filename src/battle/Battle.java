@@ -88,8 +88,8 @@ public class Battle implements Serializable {
         this.player = player;
         this.opponent = opponent;
 
-        this.player.enterBattle();
-        this.opponent.enterBattle();
+        this.player.enterBattle(this);
+        this.opponent.enterBattle(this);
 
         this.effects = new BattleEffectList();
         this.effects.initialize(this);
@@ -201,7 +201,7 @@ public class Battle implements Serializable {
                 .append(p.getActualName() + " ")
                 .appendJoin(" ", Stat.BATTLE_STATS, stat -> String.valueOf(p.getStage(stat)))
                 .append(" " + p.getAbility().getName())
-                .append(" " + p.getHeldItem(this).getName() + " ")
+                .append(" " + p.getHeldItem().getName() + " ")
                 .appendJoin(" ", Stat.STATS, stat -> String.valueOf(p.getStat(this, stat)))
                 .appendLine()
                 .appendIf(p.hasStatus(), p.getStatus() + "\n")
@@ -425,7 +425,7 @@ public class Battle implements Serializable {
         boolean attackHit = accuracyCheck(me, o);
         boolean success = false;
         if (attackHit) {
-            if (me.isPlayer() && !this.isSimulating()) {
+            if (me.isPlayer()) {
                 Game.getPlayer().getMedalCase().useMove(attack.namesies());
             }
 
@@ -465,7 +465,7 @@ public class Battle implements Serializable {
         List<InvokeEffect> list = new ArrayList<>();
         Collections.addAll(list, additionalItems);
 
-        list.addAll(p.getAllEffects(this, includeItem));
+        list.addAll(p.getAllEffects(includeItem));
         list.addAll(this.getTrainer(p).getEffects().asList());
         list.addAll(this.getEffects().asList());
 
