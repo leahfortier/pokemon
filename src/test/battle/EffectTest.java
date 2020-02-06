@@ -28,8 +28,12 @@ import pokemon.stat.User;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
+import trainer.TrainerAction;
+import trainer.player.Player;
 import type.Type;
 import util.GeneralUtils;
+
+import java.util.HashSet;
 
 public class EffectTest extends BaseTest {
     @Test
@@ -1192,5 +1196,79 @@ public class EffectTest extends BaseTest {
             attacking.assertStages(new TestStages());
             defending.assertStages(defendingStages);
         };
+    }
+
+    @Test
+    public void confusionDamageTest() {
+        // n = 2 because 50% to hurt self in confusion
+        int n = 2;
+        int numTrials = GeneralUtils.numTrials(.99999, 2);
+        Assert.assertEquals(25, numTrials);
+
+        // Each confusion check adds its case numbers to completed, if more are added increase this number
+        // Each case adds two numbers because it checks for both being confused and not being confused
+        HashSet<Integer> completed = new HashSet<>();
+        int numCases = 2;
+
+        for (int i = 0; i < numCases*numTrials; i++) {
+            checkConfusionDamage(completed);
+
+            // Only need to pass each case once
+            if (completed.size() == n*numCases) {
+                // Additional caution that the numCases value does not need to be updated
+                for (int j = 0; j < n*numCases; j++) {
+                    Assert.assertTrue(completed.contains(j));
+                }
+                return;
+            }
+        }
+
+        Assert.fail("Target never hurt themselves in confusion after " + numTrials + " trials.");
+    }
+
+    private void checkConfusionDamage(HashSet<Integer> completed) {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.SQUIRTLE);
+        TestPokemon defending = battle.getDefending();
+
+        // Possible for the defending Pokemon to hurt themselves in confusion the same turn being confused
+        // If so, Growl will be unsuccessful and won't lower attack
+        battle.fight(AttackNamesies.CONFUSE_RAY, AttackNamesies.GROWL);
+        defending.assertHasEffect(PokemonEffectNamesies.CONFUSION);
+        checkConfusionDamage(0, completed, battle, new TestStages().set(-1, Stat.ATTACK));
+
+        // Reset health and stages for simplicity in next check
+        defending.fullyHeal();
+        defending.assertFullHealth();
+        attacking.getStages().reset();
+        attacking.assertStages(new TestStages());
+
+        // Manually switch to other Pokemon and potentially hurt self during a switch turn
+        // Note: If this seems like a super random test case it's motivated from a bug which caused an NPE checking
+        // the switching Pokemon's stages when confusion damage should be using itself as the attacking and defending
+        Player player = ((Player)battle.getPlayer());
+        defending.withMoves(AttackNamesies.TAIL_WHIP);
+        player.setSwitchIndex(1);
+        player.performAction(battle, TrainerAction.SWITCH);
+        Assert.assertTrue(battle.isFront(attacking2));
+        checkConfusionDamage(1, completed, battle, new TestStages().set(-1, Stat.DEFENSE));
+    }
+
+    // Checks if the defending Pokemon hurt themselves in confusion
+    // Adds the appropriate case num to completed for both scenarios
+    // Confirms the correct stages for the attacking Pokemon
+    private void checkConfusionDamage(int caseNum, HashSet<Integer> completed, TestBattle battle, TestStages attackingStages) {
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Did not hurt self in confusion -- move would be executed and attacking stages should change
+        if (defending.fullHealth()) {
+            completed.add(2*caseNum);
+            attacking.assertStages(attackingStages);
+        } else {
+            completed.add(2*caseNum + 1);
+            attacking.assertStages(new TestStages());
+        }
     }
 }

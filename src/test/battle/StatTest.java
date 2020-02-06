@@ -31,8 +31,8 @@ public class StatTest extends BaseTest {
             Stat stat = Stat.getStat(i, true);
             Assert.assertNotEquals(stat, Stat.HP);
             if (stat == Stat.ACCURACY || stat == Stat.EVASION) {
-                Assert.assertEquals(stat.getName(), 100, Stat.getStat(stat, attacking, battle));
-                Assert.assertEquals(stat.getName(), 100, Stat.getStat(stat, defending, battle));
+                Assert.assertEquals(stat.getName(), 100, Stat.getStat(stat, attacking, defending, battle));
+                Assert.assertEquals(stat.getName(), 100, Stat.getStat(stat, defending, attacking, battle));
             } else {
                 equalStats(battle, attacking, stat);
                 equalStats(battle, defending, stat);
@@ -163,11 +163,13 @@ public class StatTest extends BaseTest {
     }
 
     private void checkStats(boolean equals, TestBattle battle, TestPokemon statPokemon, Stat baseStat, Stat computedStat) {
+        TestPokemon otherPokemon = battle.getOtherPokemon(statPokemon);
+
         // Stages have nothing to do with this and should all be zero
         statPokemon.assertStages(new TestStages());
 
         Stat switchedStat = StatSwitchingEffect.switchStat(battle, statPokemon, computedStat);
-        switchedStat = OpponentStatSwitchingEffect.switchStat(battle, battle.getOtherPokemon(statPokemon), switchedStat);
+        switchedStat = OpponentStatSwitchingEffect.switchStat(battle, otherPokemon, switchedStat);
         Assert.assertEquals(
                 String.format("Base: %s, Switched: %s, Computed: %s", baseStat.getName(), switchedStat.getName(), computedStat.getName()),
                 baseStat == switchedStat,
@@ -175,7 +177,7 @@ public class StatTest extends BaseTest {
         );
 
         int base = statPokemon.getStat(battle, baseStat);
-        int computed = Stat.getStat(computedStat, statPokemon, battle);
+        int computed = Stat.getStat(computedStat, statPokemon, otherPokemon, battle);
         Assert.assertEquals(
                 String.format("Base: %s %d, Computed: %s %d", baseStat.getName(), base, computedStat.getName(), computed),
                 base == computed,
@@ -224,8 +226,8 @@ public class StatTest extends BaseTest {
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
-        int attackingStat = Stat.getStat(s, attacking, battle);
-        int defendingStat = Stat.getStat(s, defending, battle);
+        int attackingStat = Stat.getStat(s, attacking, defending, battle);
+        int defendingStat = Stat.getStat(s, defending, attacking, battle);
 
         Assert.assertEquals(
                 "Stat: " + s.getName() + ", Attacking: " + attackingStat + ", Defending: " + defendingStat + "\n" +

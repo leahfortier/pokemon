@@ -1297,8 +1297,8 @@ public class AbilityTest extends BaseTest {
                 new TestStages().set(6, Stat.SP_DEFENSE).set(-5, Stat.DEFENSE),
                 (battle, attacking, defending) -> {
                     // Defense is naturally higher than Sp. Defense
-                    int def = Stat.getStat(Stat.DEFENSE, attacking, battle);
-                    int spDef = Stat.getStat(Stat.SP_DEFENSE, attacking, battle);
+                    int def = Stat.getStat(Stat.DEFENSE, attacking, defending, battle);
+                    int spDef = Stat.getStat(Stat.SP_DEFENSE, attacking, defending, battle);
                     TestUtils.assertGreater(def, spDef);
 
                     // Maximize Sp. Defense and minimize Defense stages
@@ -1308,8 +1308,8 @@ public class AbilityTest extends BaseTest {
                     attacking.assertStages(new TestStages().set(6, Stat.SP_DEFENSE).set(-6, Stat.DEFENSE));
 
                     // Now Sp. Defense should be higher (but Defense will still be increased by Beast Boost)
-                    def = Stat.getStat(Stat.DEFENSE, attacking, battle);
-                    spDef = Stat.getStat(Stat.SP_DEFENSE, attacking, battle);
+                    def = Stat.getStat(Stat.DEFENSE, attacking, defending, battle);
+                    spDef = Stat.getStat(Stat.SP_DEFENSE, attacking, defending, battle);
                     TestUtils.assertGreater(spDef, def);
                 }
         );

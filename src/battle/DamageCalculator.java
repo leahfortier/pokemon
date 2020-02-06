@@ -98,8 +98,8 @@ public class DamageCalculator {
         int power = move.getAttack().getPower(b, me, o);
         power *= getDamageModifier(b, me, o);
 
-        int attackStat = Stat.getStat(attacking, me, b);
-        int defenseStat = Stat.getStat(defending, o, b);
+        int attackStat = Stat.getStat(attacking, me, o, b);
+        int defenseStat = Stat.getStat(defending, o, me, b);
 
         double stab = TypeAdvantage.getSTAB(b, me);
         double adv = TypeAdvantage.getAdvantage(me, o, b);

@@ -137,8 +137,8 @@ public class AttackTest extends BaseTest {
                 attacking.setupMove(attackNamesies, battle);
 
                 int moveAccuracy = attacking.getAttack().getAccuracy(battle, attacking, defending);
-                int accuracy = Stat.getStat(Stat.ACCURACY, attacking, battle);
-                int evasion = Stat.getStat(Stat.EVASION, defending, battle);
+                int accuracy = Stat.getStat(Stat.ACCURACY, attacking, defending, battle);
+                int evasion = Stat.getStat(Stat.EVASION, defending, attacking, battle);
 
                 int totalAccuracy = (int)(moveAccuracy*((double)accuracy/(double)evasion));
                 Assert.assertTrue(attack.getName(), accuracy < 100);

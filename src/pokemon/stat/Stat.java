@@ -149,9 +149,7 @@ public enum Stat {
     }
 
     // Gets the stat of a Pokemon during battle with all modifiers taken into account
-    public static int getStat(Stat s, ActivePokemon p, Battle b) {
-        ActivePokemon opp = b.getOtherPokemon(p);
-
+    public static int getStat(Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
         // Effects that manipulate stats
         s = StatSwitchingEffect.switchStat(b, p, s);
         s = OpponentStatSwitchingEffect.switchStat(b, opp, s);

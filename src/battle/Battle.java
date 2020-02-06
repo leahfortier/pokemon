@@ -546,8 +546,8 @@ public class Battle implements Serializable {
         }
 
         int moveAccuracy = me.getAttack().getAccuracy(this, me, o);
-        int accuracy = Stat.getStat(Stat.ACCURACY, me, this);
-        int evasion = Stat.getStat(Stat.EVASION, o, this);
+        int accuracy = Stat.getStat(Stat.ACCURACY, me, o, this);
+        int evasion = Stat.getStat(Stat.EVASION, o, me, this);
 
         return RandomUtils.chanceTest((int)(moveAccuracy*((double)accuracy/(double)evasion)));
     }
@@ -614,8 +614,8 @@ public class Battle implements Serializable {
         }
 
         // Get the speeds of the Pokemon
-        int pSpeed = getSpeedStat(plyr);
-        int oSpeed = getSpeedStat(opp);
+        int pSpeed = getSpeedStat(plyr, opp);
+        int oSpeed = getSpeedStat(opp, plyr);
 
         // Speeds are equal -- alternate
         if (pSpeed == oSpeed) {
@@ -626,8 +626,8 @@ public class Battle implements Serializable {
         return reverse ? oSpeed > pSpeed : oSpeed < pSpeed;
     }
 
-    protected int getSpeedStat(ActivePokemon statPokemon) {
-        return Stat.getStat(Stat.SPEED, statPokemon, this);
+    protected int getSpeedStat(ActivePokemon statPokemon, ActivePokemon otherPokemon) {
+        return Stat.getStat(Stat.SPEED, statPokemon, otherPokemon, this);
     }
 
     @FunctionalInterface

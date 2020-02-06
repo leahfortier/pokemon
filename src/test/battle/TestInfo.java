@@ -233,10 +233,11 @@ class TestInfo {
 
         TestBattle battle = this.createBattle();
         TestPokemon statPokemon = user.isAttacking() ? battle.getAttacking() : battle.getDefending();
+        TestPokemon otherPokemon = battle.getOtherPokemon(statPokemon);
 
-        int beforeStat = Stat.getStat(stat, statPokemon, battle);
+        int beforeStat = Stat.getStat(stat, statPokemon, otherPokemon, battle);
         this.manipulate(battle);
-        int afterStat = Stat.getStat(stat, statPokemon, battle);
+        int afterStat = Stat.getStat(stat, statPokemon, otherPokemon, battle);
 
         // If the Pokemon is now transformed, need to adjust stats
         // Note: Will likely need to update in future to also include stance change abilities and such
