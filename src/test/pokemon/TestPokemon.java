@@ -2,11 +2,11 @@ package test.pokemon;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.stages.Stages;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
+import battle.stages.Stages;
 import item.ItemNamesies;
 import org.junit.Assert;
 import pokemon.ability.AbilityNamesies;

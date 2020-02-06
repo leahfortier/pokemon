@@ -2,8 +2,6 @@ package battle.effect.pokemon;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.stages.StageModifier;
-import battle.stages.ModifyStageMessenger;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -67,6 +65,8 @@ import battle.effect.source.ChangeAbilitySource;
 import battle.effect.source.ChangeAttackTypeSource;
 import battle.effect.source.ChangeTypeSource;
 import battle.effect.status.StatusNamesies;
+import battle.stages.ModifyStageMessenger;
+import battle.stages.StageModifier;
 import item.ItemNamesies;
 import item.hold.HoldItem;
 import message.MessageUpdate;

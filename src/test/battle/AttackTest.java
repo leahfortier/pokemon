@@ -1,6 +1,5 @@
 package test.battle;
 
-import battle.stages.Stages;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -20,6 +19,7 @@ import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
+import battle.stages.Stages;
 import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;

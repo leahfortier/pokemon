@@ -1,10 +1,10 @@
 package test.battle;
 
-import battle.stages.Stages;
 import battle.attack.AttackNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
+import battle.stages.Stages;
 import item.ItemNamesies;
 import org.junit.Assert;
 import org.junit.Test;

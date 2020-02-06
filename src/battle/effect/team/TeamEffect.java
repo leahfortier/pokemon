@@ -2,8 +2,6 @@ package battle.effect.team;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.stages.StageModifier;
-import battle.stages.ModifyStageMessenger;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.effect.ApplyResult;
@@ -23,6 +21,8 @@ import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import battle.effect.status.StatusNamesies;
+import battle.stages.ModifyStageMessenger;
+import battle.stages.StageModifier;
 import message.Messages;
 import pokemon.ability.AbilityNamesies;
 import pokemon.stat.Stat;

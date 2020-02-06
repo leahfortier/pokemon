@@ -2,7 +2,6 @@ package pokemon.stat;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.stages.Stages;
 import battle.effect.InvokeInterfaces.IgnoreStageEffect;
 import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.InvokeInterfaces.OpponentStatSwitchingEffect;
@@ -10,6 +9,7 @@ import battle.effect.InvokeInterfaces.StageChangingEffect;
 import battle.effect.InvokeInterfaces.StatChangingEffect;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
+import battle.stages.Stages;
 import main.Global;
 
 import java.util.List;
