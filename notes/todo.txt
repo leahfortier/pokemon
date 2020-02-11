@@ -180,5 +180,8 @@ Other random things:
     - new lines aren't done correctly for interfaces with comments and default methods/override
     - test liquid voice + perish song + water absorb
     - would it make sense to move the take button in the bag to be next to the return button because it's completely unrelated to the current selected item?
-    - look at how EndBattleEffect is called and simplify invokee logic inside the invoke method maybe
-    
+    - catching a pokemon right now is setting the isPlayer field too early and is using the player's item priority (among other things)
+        - I think this might be able to be fixed by making use item actions occur at the right time 
+        - which also sounds annoying as fuck because everything needs to check if it can be used in a separate method to actually using ughhh actually that sounds too awful like would rather have this bug than change that right now but maybe more doable is just a higher penalty for clicking the wrong item and it can consume a turn (but not the item) even if it fails
+        - confirmed in sword that now if you use a potion on a pokemon with full health it will consume the turn but not the item which I don't think is how it worked before (I thought it previously did not consume the turn or the item) but this is definitely much much much easier to implement so maybe we'll get on that
+        - "But it had no effect!" is the message that displays here fyi

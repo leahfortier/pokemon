@@ -4059,14 +4059,14 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public int getAdditive(ActivePokemon me, ActivePokemon o, Battle b) {
             double weight = o.getWeight(b);
-            if (weight <= 451.5) {
+            if (weight < 220.5) {
                 return -20;
-            } else if (weight <= 661.5) {
+            } else if (weight < 440.9) {
+                return 0;
+            } else if (weight < 661.4) {
                 return 20;
-            } else if (weight <= 903.0) {
-                return 30;
             } else {
-                return 40;
+                return 30;
             }
         }
     }
