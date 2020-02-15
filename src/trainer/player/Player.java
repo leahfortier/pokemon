@@ -624,7 +624,7 @@ public class Player extends PlayerTrainer implements Serializable, Nicknamed {
 
                 // Ball Fetch picks up the ball if unsuccessful throw (and not holding anything already)
                 ActivePokemon front = this.front();
-                if (front.hasAbility(AbilityNamesies.BALL_FETCH) && !front.isHoldingItem(b)) {
+                if (front.hasAbility(AbilityNamesies.BALL_FETCH) && !front.isHoldingItem()) {
                     front.giveItem(ball.namesies());
                     Messages.add(front.getName() + " picked up the " + ball.getName() + "!");
                 }

@@ -625,7 +625,7 @@ public final class EffectInterfaces {
         }
 
         @Override
-        default String getUnusableMessage(Battle b, ActivePokemon p) {
+        default String getUnusableMessage(ActivePokemon p) {
             return p.getName() + "'s " + this.getName() + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
         }
     }
