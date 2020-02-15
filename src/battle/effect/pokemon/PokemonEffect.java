@@ -2,8 +2,6 @@ package battle.effect.pokemon;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.stages.StageModifier;
-import battle.stages.ModifyStageMessenger;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -67,6 +65,8 @@ import battle.effect.source.ChangeAbilitySource;
 import battle.effect.source.ChangeAttackTypeSource;
 import battle.effect.source.ChangeTypeSource;
 import battle.effect.status.StatusNamesies;
+import battle.stages.ModifyStageMessenger;
+import battle.stages.StageModifier;
 import item.ItemNamesies;
 import item.hold.HoldItem;
 import message.MessageUpdate;
@@ -817,7 +817,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return "Only " + move.getAttack().getName() + " can be used right now!";
         }
 
@@ -873,7 +873,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return disabled.getAttack().getName() + " is disabled!";
         }
 
@@ -932,7 +932,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return this.getMessage(b, victim, source);
+            return this.getMessage(victim, source);
         }
 
         @Override
@@ -957,7 +957,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            item = ((ItemHolder)source.getSource(b, caster)).getItem();
+            item = ((ItemHolder)source.getSource(caster)).getItem();
             victim.getEffects().remove(this.namesies());
         }
 
@@ -978,7 +978,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return typeSource.getMessage(b, user, victim);
+            return typeSource.getMessage(user, victim);
         }
 
         @Override
@@ -988,7 +988,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            typeSource = (ChangeAttackTypeSource)source.getSource(b, caster);
+            typeSource = (ChangeAttackTypeSource)source.getSource(caster);
         }
     }
 
@@ -1009,7 +1009,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            ChangeTypeSource typeSource = (ChangeTypeSource)source.getSource(b, caster);
+            ChangeTypeSource typeSource = (ChangeTypeSource)source.getSource(caster);
             type = typeSource.getType(b, caster, victim);
         }
 
@@ -1020,7 +1020,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public String getCastMessage(Battle b, ActivePokemon user, ActivePokemon victim, CastSource source) {
-            return this.getMessage(b, victim, source);
+            return this.getMessage(victim, source);
         }
 
         @Override
@@ -1054,7 +1054,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
             Ability oldAbility = victim.getAbility();
             oldAbility.deactivate(b, victim);
 
-            ChangeAbilitySource changey = (ChangeAbilitySource)source.getSource(b, caster);
+            ChangeAbilitySource changey = (ChangeAbilitySource)source.getSource(caster);
             ability = changey.getAbility(b, caster, victim);
             message = changey.getMessage(b, caster, victim);
 
@@ -1105,7 +1105,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
+        public int adjustStage(Battle b, ActivePokemon p, Stat s) {
             return s == Stat.DEFENSE || s == Stat.SP_DEFENSE ? turns : 0;
         }
 
@@ -1213,7 +1213,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return "No!! You are imprisoned!!!";
         }
     }
@@ -1387,7 +1387,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return p.getName() + " cannot use the same move twice in a row!";
         }
 
@@ -1421,7 +1421,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return p.getName() + " cannot use sound-based moves!!";
         }
     }
@@ -1439,7 +1439,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return "No!! Not while you're under the effects of taunt!!";
         }
 
@@ -1520,7 +1520,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void fall(Battle b, ActivePokemon fallen) {
+        public void fall(ActivePokemon fallen) {
             Messages.add("The effects of telekinesis were cancelled!");
             this.deactivate();
         }
@@ -1556,7 +1556,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             int healAmount = victim.getHealHealthFractionAmount(1/16.0);
-            if (victim.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
+            if (victim.isHoldingItem(ItemNamesies.BIG_ROOT)) {
                 healAmount *= 1.3;
             }
 
@@ -1641,7 +1641,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void fall(Battle b, ActivePokemon fallen) {
+        public void fall(ActivePokemon fallen) {
             Messages.add("The effects of " + fallen.getName() + "'s magnet rise were cancelled!");
             this.deactivate();
         }
@@ -1702,7 +1702,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return "Only Uproar can be used right now!";
         }
 
@@ -1728,7 +1728,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             int healAmount = victim.getHealHealthFractionAmount(1/16.0);
-            if (victim.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
+            if (victim.isHoldingItem(ItemNamesies.BIG_ROOT)) {
                 healAmount *= 1.3;
             }
 
@@ -2014,7 +2014,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String preventionMessage(Battle b, ActivePokemon p, Stat s) {
+        public String preventionMessage(ActivePokemon p, Stat s) {
             return Effect.DEFAULT_FAIL_MESSAGE;
         }
 
@@ -2152,7 +2152,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
+        public Stat getSwitchStat(Stat s) {
             if (s == Stat.ATTACK) {
                 return Stat.DEFENSE;
             } else if (s == Stat.DEFENSE) {
@@ -2364,7 +2364,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            consumed = victim.getHeldItem(b);
+            consumed = victim.getHeldItem();
             victim.removeItem();
             victim.getEffects().remove(this.namesies());
         }
@@ -2399,7 +2399,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user) {
+        public String getBlockMessage(ActivePokemon user) {
             return "The powder exploded!";
         }
 

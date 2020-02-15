@@ -1861,7 +1861,7 @@ Acrobatics:
     Acc: 100
     Cat: Physical
     Type: Flying
-    PowerMultiplierCondition: 2 !user.isHoldingItem(b)
+    PowerMultiplierCondition: 2 !user.isHoldingItem()
 *
 Absorb:
     Desc: A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.
@@ -1884,10 +1884,10 @@ Mega Drain:
 Natural Gift:
     PP: 15
     GetPow:
-        return ((Berry)me.getHeldItem(b)).naturalGiftPower();
+        return ((Berry)me.getHeldItem()).naturalGiftPower();
         ###
     GetType:
-        HoldItem item = user.getHeldItem(b);
+        HoldItem item = user.getHeldItem();
         if (item instanceof Berry) {
             return ((Berry)item).naturalGiftType();
         }
@@ -1901,12 +1901,12 @@ Natural Gift:
     Acc: 100
     UniqueEffects:
         // This is so fucking stupid that it consumes the Berry upon use, like srsly what the fuck is the fucking point of this move
-        HoldItem item = user.getHeldItem(b);
+        HoldItem item = user.getHeldItem();
         if (item instanceof Berry) {
             item.consumeItemWithoutEffects(b, user);
         }
         ###
-    Applies: user.getHeldItem(b) instanceof Berry
+    Applies: user.getHeldItem() instanceof Berry
 *
 Giga Drain:
     Desc: A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.
@@ -4922,7 +4922,7 @@ Incinerate:
     Acc: 100
     Pow: 60
     UniqueEffects:
-        HoldItem heldItem = victim.getHeldItem(b);
+        HoldItem heldItem = victim.getHeldItem();
         if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !StickyHoldEffect.containsStickyHoldEffect(b, user, victim)) {
             Messages.add(victim.getName() + "'s " + heldItem.getName() + " was burned!");
             heldItem.consumeItemWithoutEffects(b, victim);
@@ -5212,14 +5212,14 @@ Fling:
     Acc: 100
     Cat: Physical
     GetPow:
-        return me.getHeldItem(b).flingDamage();
+        return me.getHeldItem().flingDamage();
         ###
-    Applies: user.isHoldingItem(b)
+    Applies: user.isHoldingItem()
     AfterApplyCheck:
-        Messages.add(user.getName() + " flung its " + user.getHeldItem(b).getName() + "!");
+        Messages.add(user.getName() + " flung its " + user.getHeldItem().getName() + "!");
         ###
     UniqueEffects:
-        HoldItem item = user.getHeldItem(b);
+        HoldItem item = user.getHeldItem();
         item.flingEffect(b, victim);
         item.consumeItemWithoutEffects(b, user);
         ###
@@ -5359,10 +5359,10 @@ Knock Off:
     Cat: Physical
     Acc: 100
     Pow: 65
-    PowerMultiplierCondition: 1.5 victim.isHoldingItem(b)
+    PowerMultiplierCondition: 1.5 victim.isHoldingItem()
     UniqueEffects:
         if (user.canRemoveItem(b, victim)) {
-            Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem(b).getName() + "!");
+            Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem().getName() + "!");
             if (b.isWildBattle()) {
                 victim.removeItem();
             } else {
@@ -5387,7 +5387,7 @@ Bestow:
     Type: Normal
     Cat: Status
     MoveType: Metronomeless, No_Magic_Coat
-    Applies: user.canGiftItem(b, victim)
+    Applies: user.canGiftItem(victim)
     UniqueEffects:
         this.swapItems(b, user, victim);
         ###
@@ -5444,7 +5444,7 @@ Recycle:
     Type: Normal
     Cat: Status
     SelfTarget: True
-    Applies: user.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM) && !user.isHoldingItem(b)
+    Applies: user.hasEffect(PokemonEffectNamesies.CONSUMED_ITEM) && !user.isHoldingItem()
     UniqueEffects:
         HoldItem restored = ((ItemHolder)victim.getEffect(PokemonEffectNamesies.CONSUMED_ITEM)).getItem();
         victim.giveItem(restored);
@@ -6692,10 +6692,10 @@ Stuff Cheeks:
     PP: 10
     Type: Normal
     Cat: Status
-    Applies: user.getHeldItem(b) instanceof Berry
+    Applies: user.getHeldItem() instanceof Berry
     AfterApplyCheck:
         // Note: Here instead of unique effects so the message is displayed before the defense increase
-        Berry berry = (Berry)user.getHeldItem(b);
+        Berry berry = (Berry)user.getHeldItem();
         berry.eatBerry(b, victim, user);
         ###
     SelfTarget: True
@@ -6756,7 +6756,7 @@ Teatime:
                 return false;
             }
 
-            HoldItem item = teaDrinker.getHeldItem(b);
+            HoldItem item = teaDrinker.getHeldItem();
             if (item instanceof Berry) {
                 Berry berry = (Berry)item;
                 berry.eatBerry(b, teaDrinker, teaDrinker);

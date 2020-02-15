@@ -532,6 +532,9 @@ public class ModifierTest extends BaseTest {
         criticalHitStageTest(AttackNamesies.SWIFT, stageMap.withoutCrit, testInfo);
         criticalHitStageTest(AttackNamesies.STORM_THROW, stageMap.withCrit, testInfo);
         criticalHitStageTest(AttackNamesies.FROST_BREATH, stageMap.withCrit, testInfo);
+
+        // Lucky Chant prevents crits
+        criticalHitStageTest(AttackNamesies.FROST_BREATH, stageMap.withoutCrit, testInfo.defendingFight(AttackNamesies.LUCKY_CHANT));
     }
 
     private void criticalHitStageTest(AttackNamesies attackNamesies, ModifierStages modifierStages, TestInfo testInfo) {
@@ -750,17 +753,17 @@ public class ModifierTest extends BaseTest {
         );
         PokemonManipulator lansatBerry = (battle, attacking, defending) -> {
             attacking.withItem(ItemNamesies.LANSAT_BERRY);
-            attacking.assertNotConsumedItem(battle);
+            attacking.assertNotConsumedItem();
 
             // If the Pokemon already has an increased crit ratio, Lansat Berry cannot further increase and should not be consumed
             boolean hasCrits = attacking.hasEffect(PokemonEffectNamesies.RAISE_CRITS);
 
             battle.falseSwipePalooza(false);
             if (hasCrits) {
-                attacking.assertNotConsumedItem(battle);
-                attacking.assertHoldingItem(battle, ItemNamesies.LANSAT_BERRY);
+                attacking.assertNotConsumedItem();
+                attacking.assertHoldingItem(ItemNamesies.LANSAT_BERRY);
             } else {
-                attacking.assertConsumedBerry(battle);
+                attacking.assertConsumedBerry();
             }
 
             attacking.hasEffect(PokemonEffectNamesies.RAISE_CRITS);

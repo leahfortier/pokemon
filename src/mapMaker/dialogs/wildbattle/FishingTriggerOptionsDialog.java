@@ -61,7 +61,7 @@ public class FishingTriggerOptionsDialog extends TriggerDialog<FishingMatcher> {
     private FishingMatcher getSelectedTriggerMatcher() {
         String wildBattleName = (String)comboBox.getSelectedItem();
         for (FishingMatcher matcher : fishingTriggers) {
-            if (wildBattleName.equals(matcher.getBasicName())) {
+            if (matcher.getBasicName().equals(wildBattleName)) {
                 return matcher;
             }
         }

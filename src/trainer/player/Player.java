@@ -362,7 +362,23 @@ public class Player extends PlayerTrainer implements Serializable, Nicknamed {
     }
 
     public MedalCase getMedalCase() {
+        // When simulating don't use the actual medal case
+        if (this.inBattle() && this.getBattle().isSimulating()) {
+            return MedalCase.EMPTY_CASE;
+        }
+
         return this.medalCase;
+    }
+
+    @Override
+    public Battle getBattle() {
+        // When simulating give the simulated battle
+        Battle b = super.getBattle();
+        if (b != null && b.isSimulating()) {
+            return b.getPlayer().getBattle();
+        }
+
+        return b;
     }
 
     @Override
@@ -404,7 +420,7 @@ public class Player extends PlayerTrainer implements Serializable, Nicknamed {
                 double gain = wild*base*lev*Math.pow(2*lev + 10, 2.5);
                 gain /= 5*Math.pow(lev + active.getLevel() + 10, 2.5);
                 gain++;
-                gain *= active.isHoldingItem(b, ItemNamesies.LUCKY_EGG) ? 1.5 : 1;
+                gain *= active.isHoldingItem(ItemNamesies.LUCKY_EGG) ? 1.5 : 1;
 
                 active.gainEXP(b, (int)Math.max(1, gain/numUsed), dead);
             }
@@ -427,9 +443,9 @@ public class Player extends PlayerTrainer implements Serializable, Nicknamed {
         }
 
         // Check end battle effects for the team and for each individual team member
-        EndBattleEffect.invokeEndBattleEffect(this.getEffects().asList(), this, b, front());
+        EndBattleEffect.invokeEndBattleEffect(this.getEffects().asList(), this, front());
         for (ActivePokemon p : this.getActiveTeam()) {
-            EndBattleEffect.invokeEndBattleEffect(p.getAllEffects(b), this, b, p);
+            EndBattleEffect.invokeEndBattleEffect(p.getAllEffects(), this, p);
         }
 
         setFront();

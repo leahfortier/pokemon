@@ -88,8 +88,8 @@ public class Battle implements Serializable {
         this.player = player;
         this.opponent = opponent;
 
-        this.player.enterBattle();
-        this.opponent.enterBattle();
+        this.player.enterBattle(this);
+        this.opponent.enterBattle(this);
 
         this.effects = new BattleEffectList();
         this.effects.initialize(this);
@@ -201,7 +201,7 @@ public class Battle implements Serializable {
                 .append(p.getActualName() + " ")
                 .appendJoin(" ", Stat.BATTLE_STATS, stat -> String.valueOf(p.getStage(stat)))
                 .append(" " + p.getAbility().getName())
-                .append(" " + p.getHeldItem(this).getName() + " ")
+                .append(" " + p.getHeldItem().getName() + " ")
                 .appendJoin(" ", Stat.STATS, stat -> String.valueOf(p.getStat(this, stat)))
                 .appendLine()
                 .appendIf(p.hasStatus(), p.getStatus() + "\n")
@@ -239,13 +239,18 @@ public class Battle implements Serializable {
     // If the trainer selected an attack, this will return true - Wild Pokemon will always return true
     // It will return false if the trainer tried to run, switch Pokemon, or used an item
     private boolean isFighting(ActivePokemon fighter) {
-        return this.getTrainer(fighter).getAction() == TrainerAction.FIGHT;
+        return this.isAction(fighter, TrainerAction.FIGHT);
     }
 
     // If the trainer selected Switch, this will return true -- Wild Pokemon will always return false
     // It will return false if the trainer tried to run, use an attack, or use an item
     public boolean isSwitching(ActivePokemon switchPokemon) {
-        return this.getTrainer(switchPokemon).getAction() == TrainerAction.SWITCH;
+        return this.isAction(switchPokemon, TrainerAction.SWITCH);
+    }
+
+    // Returns true if the trainer has selected the specified action for the current turn (fight/switch/item/run)
+    private boolean isAction(ActivePokemon p, TrainerAction action) {
+        return this.getTrainer(p).getAction() == action;
     }
 
     // Handles exiting the battle and swapping dead Pokemon if relevant
@@ -364,12 +369,23 @@ public class Battle implements Serializable {
     private void executionSolution(boolean firstAttacking, boolean playerFirst) {
         this.firstAttacking = firstAttacking;
 
+        // Kind of hacky solution to check if the battle is ended via catching the opponent Pokemon
+        // Anyways in that case they shouldn't execute their turn because we're all friends now...
+        // Also the isPlayer field being set like this fucks a lot of shit up soooo
+        if (opponent.front().isPlayer()) {
+            return;
+        }
+
         ActivePokemon me = firstAttacking == playerFirst ? player.front() : opponent.front();
         ActivePokemon o = this.getOtherPokemon(me);
 
         if (isSwitching(me)) {
             Trainer trainer = (Trainer)getTrainer(me);
             trainer.performSwitch(this);
+            return;
+        } else if (this.isAction(me, TrainerAction.ITEM)) {
+            Trainer trainer = (Trainer)getTrainer(me);
+            trainer.getBag().battleUseItem(this, trainer);
             return;
         }
 
@@ -425,7 +441,7 @@ public class Battle implements Serializable {
         boolean attackHit = accuracyCheck(me, o);
         boolean success = false;
         if (attackHit) {
-            if (me.isPlayer() && !this.isSimulating()) {
+            if (me.isPlayer()) {
                 Game.getPlayer().getMedalCase().useMove(attack.namesies());
             }
 
@@ -465,7 +481,7 @@ public class Battle implements Serializable {
         List<InvokeEffect> list = new ArrayList<>();
         Collections.addAll(list, additionalItems);
 
-        list.addAll(p.getAllEffects(this, includeItem));
+        list.addAll(p.getAllEffects(includeItem));
         list.addAll(this.getTrainer(p).getEffects().asList());
         list.addAll(this.getEffects().asList());
 
@@ -546,8 +562,8 @@ public class Battle implements Serializable {
         }
 
         int moveAccuracy = me.getAttack().getAccuracy(this, me, o);
-        int accuracy = Stat.getStat(Stat.ACCURACY, me, this);
-        int evasion = Stat.getStat(Stat.EVASION, o, this);
+        int accuracy = Stat.getStat(Stat.ACCURACY, me, o, this);
+        int evasion = Stat.getStat(Stat.EVASION, o, me, this);
 
         return RandomUtils.chanceTest((int)(moveAccuracy*((double)accuracy/(double)evasion)));
     }
@@ -614,8 +630,8 @@ public class Battle implements Serializable {
         }
 
         // Get the speeds of the Pokemon
-        int pSpeed = getSpeedStat(plyr);
-        int oSpeed = getSpeedStat(opp);
+        int pSpeed = getSpeedStat(plyr, opp);
+        int oSpeed = getSpeedStat(opp, plyr);
 
         // Speeds are equal -- alternate
         if (pSpeed == oSpeed) {
@@ -626,8 +642,8 @@ public class Battle implements Serializable {
         return reverse ? oSpeed > pSpeed : oSpeed < pSpeed;
     }
 
-    protected int getSpeedStat(ActivePokemon statPokemon) {
-        return Stat.getStat(Stat.SPEED, statPokemon, this);
+    protected int getSpeedStat(ActivePokemon statPokemon, ActivePokemon otherPokemon) {
+        return Stat.getStat(Stat.SPEED, statPokemon, otherPokemon, this);
     }
 
     @FunctionalInterface

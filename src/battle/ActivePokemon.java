@@ -160,7 +160,7 @@ public class ActivePokemon extends PartyPokemon {
         }
 
         // Add EVs
-        HoldItem item = this.getHeldItem(b);
+        HoldItem item = this.getHeldItem();
         int[] vals = dead.getPokemonInfo().getGivenEVs();
         if (item instanceof EVItem) {
             vals = ((EVItem)item).getEVs(vals);
@@ -284,21 +284,21 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean canStealItem(Battle b, ActivePokemon victim) {
-        return !this.isHoldingItem(b)
-                && victim.isHoldingItem(b)
+        return !this.isHoldingItem()
+                && victim.isHoldingItem()
                 && this.canSwapItems(b, victim);
     }
 
-    public boolean canGiftItem(Battle b, ActivePokemon receiver) {
-        return this.isHoldingItem(b) && !receiver.isHoldingItem(b);
+    public boolean canGiftItem(ActivePokemon receiver) {
+        return this.isHoldingItem() && !receiver.isHoldingItem();
     }
 
     public boolean canRemoveItem(Battle b, ActivePokemon victim) {
-        return victim.isHoldingItem(b) && canSwapItems(b, victim);
+        return victim.isHoldingItem() && canSwapItems(b, victim);
     }
 
     public boolean canSwapItems(Battle b, ActivePokemon swapster) {
-        return (this.isHoldingItem(b) || swapster.isHoldingItem(b))
+        return (this.isHoldingItem() || swapster.isHoldingItem())
                 && !this.isWildPokemon(b)
                 && !StickyHoldEffect.containsStickyHoldEffect(b, this, swapster);
     }
@@ -322,7 +322,7 @@ public class ActivePokemon extends PartyPokemon {
 
     public boolean switcheroo(Battle b, ActivePokemon caster, CastSource source, boolean wildExit) {
         Team team = b.getTrainer(this);
-        String sourceName = source.getSourceName(b, this);
+        String sourceName = source.getSourceName(this);
         String selfReference = caster == this ? "it" : this.getName();
 
         // End the battle against a wild Pokemon
@@ -535,7 +535,7 @@ public class ActivePokemon extends PartyPokemon {
         StatusCondition status = this.getStatus();
         this.removeStatus();
 
-        Messages.add(new MessageUpdate(status.getRemoveMessage(b, this, source)).updatePokemon(b, this));
+        Messages.add(new MessageUpdate(status.getRemoveMessage(this, source)).updatePokemon(b, this));
     }
 
     // Returns whether or not the Pokemon is afflicted with a status condition (does not include fainted)
@@ -590,7 +590,7 @@ public class ActivePokemon extends PartyPokemon {
 
     public boolean canEscape(Battle b) {
         // Shed Shell always allows escape
-        if (isHoldingItem(b, ItemNamesies.SHED_SHELL)) {
+        if (isHoldingItem(ItemNamesies.SHED_SHELL)) {
             return true;
         }
 
@@ -614,17 +614,17 @@ public class ActivePokemon extends PartyPokemon {
         return true;
     }
 
-    public List<InvokeEffect> getAllEffects(final Battle b) {
-        return this.getAllEffects(b, true);
+    public List<InvokeEffect> getAllEffects() {
+        return this.getAllEffects(true);
     }
 
-    public List<InvokeEffect> getAllEffects(final Battle b, final boolean includeItem) {
+    public List<InvokeEffect> getAllEffects(final boolean includeItem) {
         List<InvokeEffect> list = new ArrayList<>();
         list.add(this.getStatus());
         list.add(this.getAbility());
         list.addAll(this.getEffects().asList());
         if (includeItem) {
-            list.add(this.getHeldItem(b));
+            list.add(this.getHeldItem());
         }
 
         return list;
@@ -807,7 +807,8 @@ public class ActivePokemon extends PartyPokemon {
         this.effects.remove(PokemonEffectNamesies.CHANGE_ITEM);
     }
 
-    public HoldItem getHeldItem(Battle b) {
+    public HoldItem getHeldItem() {
+        Battle b = Game.getPlayer().getBattle();
         if (b == null) {
             return getActualHeldItem();
         }
@@ -827,12 +828,12 @@ public class ActivePokemon extends PartyPokemon {
         return item;
     }
 
-    public boolean isHoldingItem(Battle b, ItemNamesies itemName) {
-        return getHeldItem(b).namesies() == itemName;
+    public boolean isHoldingItem(ItemNamesies itemName) {
+        return getHeldItem().namesies() == itemName;
     }
 
-    public boolean isHoldingItem(Battle b) {
-        return getHeldItem(b).namesies() != ItemNamesies.NO_ITEM;
+    public boolean isHoldingItem() {
+        return getHeldItem().namesies() != ItemNamesies.NO_ITEM;
     }
 
     public double getWeight(Battle b) {

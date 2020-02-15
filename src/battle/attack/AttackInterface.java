@@ -3,12 +3,12 @@ package battle.attack;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.DamageCalculator.DamageCalculation;
-import battle.stages.Stages;
 import battle.effect.InvokeEffect;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentTakeDamageEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
+import battle.stages.Stages;
 import main.Game;
 import message.Messages;
 import pokemon.ability.AbilityNamesies;
@@ -76,7 +76,7 @@ public interface AttackInterface extends InvokeEffect {
         double advantage = calculation.getAdvantage();
         TypeAdvantage.addAdvantageMessage(advantage);
 
-        if (me.isPlayer() && !b.isSimulating()) {
+        if (me.isPlayer()) {
             Game.getPlayer().getMedalCase().checkAdvantage(advantage);
         }
 

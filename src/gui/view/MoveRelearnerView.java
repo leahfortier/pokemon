@@ -6,7 +6,6 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import draw.TextUtils;
 import draw.button.Button;
-import draw.button.ButtonHoverAction;
 import draw.button.ButtonList;
 import draw.button.ButtonPanel;
 import draw.button.ButtonPanel.ButtonPanelSetup;

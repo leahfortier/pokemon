@@ -1,10 +1,10 @@
 package gui.view;
 
 import battle.ActivePokemon;
-import draw.panel.BasicPanels;
-import draw.panel.DrawPanel;
 import draw.handler.EvolveAnimationHandler;
 import draw.handler.LearnMoveHandler;
+import draw.panel.BasicPanels;
+import draw.panel.DrawPanel;
 import draw.panel.StatGainPanel;
 import gui.TileSet;
 import input.ControlKey;

@@ -257,21 +257,16 @@ public class BattleView extends View {
         this.cycleMessage();
     }
 
-    // Uses the item on the selected Pokemon (already checked for UseItem at this point)
-    // Item may still fail its use and will reset back to the bag state in this case
+    // Uses the item on the selected Pokemon by setting the current turn action to use the selected item
+    // Already checked for UseItem at this point
+    // Note: Using this item will consume the turn regardless of whether or not the item can be used successfully
+    // Ex: Using a Potion on a fully healed Pokemon will still take a turn, but will not consume the Potion item
     public void useItem(ItemNamesies item, PartyPokemon selected) {
         Player player = Game.getPlayer();
-
-        // Try using the item on the selected Pokemon
-        if (player.getBag().battleUseItem(item, selected, currentBattle)) {
-            player.performAction(currentBattle, TrainerAction.ITEM);
-            this.setVisualState(VisualState.MENU);
-            this.cycleMessage();
-        } else {
-            // Item could not be used, reset to bag state
-            this.cycleMessage();
-            this.setVisualState(VisualState.INVALID_BAG);
-        }
+        player.getBag().setSelectedBattleItem(item, selected);
+        player.performAction(currentBattle, TrainerAction.ITEM);
+        this.setVisualState(VisualState.MENU);
+        this.cycleMessage();
     }
 
     @Override

@@ -37,12 +37,12 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
 
     @Override
     protected boolean hasEffect(Battle b, ActivePokemon victim) {
-        return b.hasEffect(this.namesies);
+        return b.hasEffect(this.namesies());
     }
 
     @Override
     protected BattleEffect<NamesiesType> getEffect(Battle b, ActivePokemon victim) {
-        return (BattleEffect<NamesiesType>)b.getEffects().get(this.namesies);
+        return (BattleEffect<NamesiesType>)b.getEffects().get(this.namesies());
     }
 
     // EVERYTHING BELOW IS GENERATED ###
@@ -57,7 +57,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         }
 
         @Override
-        public int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s) {
+        public int adjustStage(Battle b, ActivePokemon p, Stat s) {
             return s == Stat.EVASION ? -2 : 0;
         }
 
@@ -132,7 +132,7 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
         }
 
         @Override
-        public Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s) {
+        public Stat getSwitchStat(Stat s) {
             // Defense and Special Defense are swapped
             if (s == Stat.DEFENSE) {
                 return Stat.SP_DEFENSE;

@@ -159,8 +159,8 @@ public class Point implements Serializable {
 
     public static Point upperBound(Point point, Dimension dimension) {
         return new Point(
-                (int)Math.min(point.x, dimension.width - 1),
-                (int)Math.min(point.y, dimension.height - 1)
+                Math.min(point.x, dimension.width - 1),
+                Math.min(point.y, dimension.height - 1)
         );
     }
 

@@ -1376,7 +1376,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " protects it from powder moves!";
         }
     }
@@ -1513,7 +1513,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
             stickyPoke(b, user, victim.getName() + "'s");
-            if (user.isFainted(b) || !victim.canGiftItem(b, user)) {
+            if (user.isFainted(b) || !victim.canGiftItem(user)) {
                 return;
             }
 
@@ -4003,14 +4003,14 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public int getAdditive(ActivePokemon me, ActivePokemon o, Battle b) {
             double weight = o.getWeight(b);
-            if (weight <= 451.5) {
+            if (weight < 220.5) {
                 return -20;
-            } else if (weight <= 661.5) {
+            } else if (weight < 440.9) {
+                return 0;
+            } else if (weight < 661.4) {
                 return 20;
-            } else if (weight <= 903.0) {
-                return 30;
             } else {
-                return 40;
+                return 30;
             }
         }
     }
@@ -4436,9 +4436,9 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
     static class PersimBerry extends Item implements BattleUseItem, MessageGetter, GainableEffectBerry, EffectCurerItem {
         private static final long serialVersionUID = 1L;
 
-        private boolean use(Battle b, ActivePokemon p, CastSource source) {
+        private boolean use(ActivePokemon p, CastSource source) {
             if (p.getEffects().remove(PokemonEffectNamesies.CONFUSION)) {
-                Messages.add(this.getMessage(b, p, source));
+                Messages.add(this.getMessage(p, source));
                 return true;
             }
 
@@ -4463,12 +4463,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public boolean use(ActivePokemon p, Battle b) {
-            return use(b, p, CastSource.USE_ITEM);
+            return use(p, CastSource.USE_ITEM);
         }
 
         @Override
         public boolean gainBerryEffect(Battle b, ActivePokemon user, CastSource source) {
-            return use(b, user, source);
+            return use(user, source);
         }
 
         @Override
@@ -5547,7 +5547,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public String getUnusableMessage(Battle b, ActivePokemon p) {
+        public String getUnusableMessage(ActivePokemon p) {
             return p.getName() + "'s " + this.getName() + " prevents the use of status moves!";
         }
 

@@ -1,62 +1,64 @@
 package battle.effect.source;
 
 import battle.ActivePokemon;
-import battle.Battle;
 import item.Item;
 import main.Global;
 import pokemon.ability.Ability;
 
 public enum
 CastSource {
-    ATTACK(false, (b, caster) -> caster.getAttack()),
-    ABILITY(true, (b, caster) -> caster.getAbility()),
-    HELD_ITEM(true, (b, caster) -> caster.getHeldItem(b)),
-    CAST_SOURCE(false, (b, caster) -> caster.getCastSource()),
+    ATTACK(ActivePokemon::getAttack),
+    ABILITY(ActivePokemon::getAbility, source -> ((Ability)source).getName()),
+    HELD_ITEM(ActivePokemon::getHeldItem, source -> ((Item)source).getName()),
+    CAST_SOURCE(ActivePokemon::getCastSource),
     USE_ITEM,
     EFFECT;
 
-    private final boolean hasSourceName;
     private final SourceGetter sourceGetter;
+    private final SourceNameGetter sourceNameGetter;
 
     CastSource() {
-        this(false, null);
+        this(null);
     }
 
-    CastSource(boolean hasSourceName, SourceGetter sourceGetter) {
-        this.hasSourceName = hasSourceName;
+    CastSource(SourceGetter sourceGetter) {
+        this(sourceGetter, null);
+    }
+
+    CastSource(SourceGetter sourceGetter, SourceNameGetter sourceNameGetter) {
         this.sourceGetter = sourceGetter;
+        this.sourceNameGetter = sourceNameGetter;
     }
 
-    public Object getSource(Battle b, ActivePokemon caster) {
+    public Object getSource(ActivePokemon caster) {
         if (this.sourceGetter == null) {
             Global.error("Cannot get source for CastSource." + this.name() + ".");
             return caster;
         }
 
-        return this.sourceGetter.getSource(b, caster);
+        return this.sourceGetter.getSource(caster);
     }
 
     public boolean hasSourceName() {
-        return this.hasSourceName;
+        return this.sourceNameGetter != null;
     }
 
-    public String getSourceName(Battle b, ActivePokemon caster) {
+    public String getSourceName(ActivePokemon caster) {
         if (!this.hasSourceName()) {
             return null;
         }
 
-        Object source = this.sourceGetter.getSource(b, caster);
-        if (source instanceof Item) {
-            return ((Item)source).getName();
-        } else if (source instanceof Ability) {
-            return ((Ability)source).getName();
-        } else {
-            return null;
-        }
+        Object source = this.getSource(caster);
+        return this.sourceNameGetter.getSourceName(source);
     }
 
     @FunctionalInterface
     private interface SourceGetter {
-        Object getSource(Battle b, ActivePokemon caster);
+        Object getSource(ActivePokemon caster);
+    }
+
+    @FunctionalInterface
+    private interface SourceNameGetter {
+        String getSourceName(Object source);
     }
 }

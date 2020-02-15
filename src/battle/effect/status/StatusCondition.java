@@ -56,17 +56,17 @@ public abstract class StatusCondition implements StatusInterface {
 
     public abstract String getSourcePreventionMessage(ActivePokemon victim, String sourceName);
 
-    private String getCastMessage(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+    private String getCastMessage(ActivePokemon caster, ActivePokemon victim, CastSource source) {
         if (source.hasSourceName()) {
-            return this.getSourceCastMessage(caster, victim, source.getSourceName(b, caster));
+            return this.getSourceCastMessage(caster, victim, source.getSourceName(caster));
         } else {
             return this.getGenericCastMessage(victim);
         }
     }
 
-    public String getRemoveMessage(Battle b, ActivePokemon victim, CastSource source) {
+    public String getRemoveMessage(ActivePokemon victim, CastSource source) {
         if (source.hasSourceName()) {
-            return this.getSourceRemoveMessage(victim, source.getSourceName(b, victim));
+            return this.getSourceRemoveMessage(victim, source.getSourceName(victim));
         } else {
             return this.getGenericRemoveMessage(victim);
         }
@@ -91,7 +91,7 @@ public abstract class StatusCondition implements StatusInterface {
 
     // Returns true if a status was successfully given, and false if it failed for any reason
     public ApplyResult apply(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-        return apply(b, caster, victim, this.getCastMessage(b, caster, victim, source));
+        return apply(b, caster, victim, this.getCastMessage(caster, victim, source));
     }
 
     public ApplyResult apply(Battle b, ActivePokemon caster, ActivePokemon victim, String castMessage) {

@@ -4,14 +4,14 @@ import map.Direction;
 import map.PathDirection;
 import map.condition.ConditionSet;
 import map.entity.Entity;
+import map.entity.interaction.NPCInteraction;
 import map.entity.movable.MoveAxis;
 import map.entity.movable.NPCEntity;
-import map.entity.interaction.NPCInteraction;
 import mapMaker.model.TriggerModel.TriggerModelType;
 import pattern.action.ActionList;
 import pattern.generic.EntityMatcher.SingleEntityMatcher;
-import pattern.location.SinglePointTriggerMatcher;
 import pattern.interaction.NPCInteractionMatcher;
+import pattern.location.SinglePointTriggerMatcher;
 import util.string.StringUtils;
 
 import java.util.Arrays;

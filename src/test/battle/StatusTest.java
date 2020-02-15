@@ -59,19 +59,20 @@ public class StatusTest extends BaseTest {
         testInfo.defending(PokemonNamesies.WATCHOG);
 
         TestBattle battle = testInfo.createBattle();
+        TestPokemon statusGiver = battle.getAttacking();
         TestPokemon uglyFace = battle.getDefending();
 
         testInfo.manipulate(battle);
-        int original = Stat.getStat(stat, uglyFace, battle);
+        int original = Stat.getStat(stat, uglyFace, statusGiver, battle);
 
         battle.attackingFight(statusAttack);
         Assert.assertTrue(uglyFace.hasStatus());
         testInfo.manipulate(battle);
-        int afterStatus = Stat.getStat(stat, uglyFace, battle);
+        int afterStatus = Stat.getStat(stat, uglyFace, statusGiver, battle);
         Assert.assertEquals((int)(original*ratio), afterStatus);
 
         uglyFace.removeStatus();
-        int afterRemoved = Stat.getStat(stat, uglyFace, battle);
+        int afterRemoved = Stat.getStat(stat, uglyFace, statusGiver, battle);
         Assert.assertEquals(original, afterRemoved);
     }
 

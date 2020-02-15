@@ -28,8 +28,12 @@ import pokemon.stat.User;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
+import trainer.TrainerAction;
+import trainer.player.Player;
 import type.Type;
 import util.GeneralUtils;
+
+import java.util.HashSet;
 
 public class EffectTest extends BaseTest {
     @Test
@@ -312,7 +316,7 @@ public class EffectTest extends BaseTest {
         attacking.setCastSource(ItemNamesies.NO_ITEM.getItem());
 
         for (CastSource source : CastSource.values()) {
-            String sourceName = source.getSourceName(battle, attacking);
+            String sourceName = source.getSourceName(attacking);
             if (source.hasSourceName()) {
                 // Important since these values are hard-coded in another method
                 Assert.assertTrue(source == CastSource.ABILITY || source == CastSource.HELD_ITEM);
@@ -322,13 +326,13 @@ public class EffectTest extends BaseTest {
             }
         }
 
-        Assert.assertEquals(AbilityNamesies.OVERGROW.getName(), CastSource.ABILITY.getSourceName(battle, attacking));
-        Assert.assertEquals(ItemNamesies.ORAN_BERRY.getName(), CastSource.HELD_ITEM.getSourceName(battle, attacking));
+        Assert.assertEquals(AbilityNamesies.OVERGROW.getName(), CastSource.ABILITY.getSourceName(attacking));
+        Assert.assertEquals(ItemNamesies.ORAN_BERRY.getName(), CastSource.HELD_ITEM.getSourceName(attacking));
 
-        Assert.assertSame(attacking.getAbility(), CastSource.ABILITY.getSource(battle, attacking));
-        Assert.assertSame(attacking.getHeldItem(battle), CastSource.HELD_ITEM.getSource(battle, attacking));
-        Assert.assertSame(attacking.getAttack(), CastSource.ATTACK.getSource(battle, attacking));
-        Assert.assertSame(attacking.getCastSource(), CastSource.CAST_SOURCE.getSource(battle, attacking));
+        Assert.assertSame(attacking.getAbility(), CastSource.ABILITY.getSource(attacking));
+        Assert.assertSame(attacking.getHeldItem(), CastSource.HELD_ITEM.getSource(attacking));
+        Assert.assertSame(attacking.getAttack(), CastSource.ATTACK.getSource(attacking));
+        Assert.assertSame(attacking.getCastSource(), CastSource.CAST_SOURCE.getSource(attacking));
     }
 
     @Test
@@ -454,13 +458,13 @@ public class EffectTest extends BaseTest {
                               .attacking(ItemNamesies.POTION)
                               .defendingFight(AttackNamesies.TRICK),
                 (battle, attacking, defending) -> {
-                    attacking.assertNotHoldingItem(battle);
-                    defending.assertHoldingItem(battle, ItemNamesies.POTION);
+                    attacking.assertNotHoldingItem();
+                    defending.assertHoldingItem(ItemNamesies.POTION);
                 },
                 (battle, attacking, defending) -> {
                     Assert.assertFalse(defending.lastMoveSucceeded());
-                    attacking.assertHoldingItem(battle, ItemNamesies.POTION);
-                    defending.assertNotHoldingItem(battle);
+                    attacking.assertHoldingItem(ItemNamesies.POTION);
+                    defending.assertNotHoldingItem();
                 }
         );
 
@@ -469,8 +473,8 @@ public class EffectTest extends BaseTest {
                         .asTrainerBattle()
                         .attacking(ItemNamesies.POTION)
                         .defendingFight(AttackNamesies.KNOCK_OFF),
-                (battle, attacking, defending) -> attacking.assertNotHoldingItem(battle),
-                (battle, attacking, defending) -> attacking.assertHoldingItem(battle, ItemNamesies.POTION)
+                (battle, attacking, defending) -> attacking.assertNotHoldingItem(),
+                (battle, attacking, defending) -> attacking.assertHoldingItem(ItemNamesies.POTION)
         );
 
         substituteTest(
@@ -480,13 +484,13 @@ public class EffectTest extends BaseTest {
                         .fight(AttackNamesies.WILL_O_WISP, AttackNamesies.PLUCK),
                 (battle, attacking, defending) -> {
                     defending.assertNoStatus();
-                    attacking.assertConsumedItem(battle); // No eaten berry
+                    attacking.assertConsumedItem(); // No eaten berry
                     defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
                     defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
                 },
                 (battle, attacking, defending) -> {
                     defending.assertHasStatus(StatusNamesies.BURNED);
-                    attacking.assertNotConsumedItem(battle);
+                    attacking.assertNotConsumedItem();
                     defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
                     defending.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
                 }
@@ -497,7 +501,7 @@ public class EffectTest extends BaseTest {
                 new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
                         .defending(ItemNamesies.FLAME_ORB)
                         .defendingFight(AttackNamesies.FLING)
-                        .with((battle, attacking, defending) -> Assert.assertFalse(defending.isHoldingItem(battle))),
+                        .with((battle, attacking, defending) -> Assert.assertFalse(defending.isHoldingItem())),
                 (battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.BURNED),
                 (battle, attacking, defending) -> attacking.assertNoStatus()
         );
@@ -737,7 +741,7 @@ public class EffectTest extends BaseTest {
         attacking.assertHasEffect(PokemonEffectNamesies.SUBSTITUTE);
         Assert.assertTrue(attacking.isLevitating(battle));
         attacking.assertNoStatus();
-        attacking.assertNotHoldingItem(battle); // Chesto Berry consumed
+        attacking.assertNotHoldingItem(); // Chesto Berry consumed
         attacking.assertHealthRatio(14/16.0, 2);
         defending.assertHealthRatio(12/16.0, 4);
         battle.assertHasEffect(TerrainNamesies.GRASSY_TERRAIN);
@@ -788,8 +792,8 @@ public class EffectTest extends BaseTest {
 
         // But is removed when pelted with an Iron Ball (not true in actual games)
         battle.fight(AttackNamesies.FLING, AttackNamesies.ENDURE);
-        attacking.assertConsumedItem(battle);
-        defending.assertNotHoldingItem(battle);
+        attacking.assertConsumedItem();
+        defending.assertNotHoldingItem();
         defending.assertNoEffect(PokemonEffectNamesies.MAGNET_RISE);
         Assert.assertTrue(attacking.isLevitating(battle));
         Assert.assertFalse(defending.isLevitating(battle));
@@ -803,7 +807,7 @@ public class EffectTest extends BaseTest {
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);
         Assert.assertTrue(attacking.isLevitating(battle));
         Assert.assertFalse(defending.isLevitating(battle));
-        defending.assertConsumedItem(battle);
+        defending.assertConsumedItem();
 
         // Make Charmander Flying-type (and therefore a master of levitation)
         defending.withAbility(AbilityNamesies.PROTEAN);
@@ -1003,8 +1007,8 @@ public class EffectTest extends BaseTest {
                     attacking.assertSpecies(PokemonNamesies.PIKACHU);
                     defending.assertSpecies(PokemonNamesies.PIKACHU);
 
-                    attacking.assertHoldingItem(battle, ItemNamesies.QUICK_POWDER);
-                    defending.assertHoldingItem(battle, ItemNamesies.LIGHT_BALL);
+                    attacking.assertHoldingItem(ItemNamesies.QUICK_POWDER);
+                    defending.assertHoldingItem(ItemNamesies.LIGHT_BALL);
                 });
 
         // Not a Ditto anymore so Quick Powder shouldn't work
@@ -1025,8 +1029,8 @@ public class EffectTest extends BaseTest {
                     attacking.assertSpecies(PokemonNamesies.PIKACHU);
                     defending.assertSpecies(PokemonNamesies.PIKACHU);
 
-                    defending.assertHoldingItem(battle, ItemNamesies.QUICK_POWDER);
-                    attacking.assertHoldingItem(battle, ItemNamesies.LIGHT_BALL);
+                    defending.assertHoldingItem(ItemNamesies.QUICK_POWDER);
+                    attacking.assertHoldingItem(ItemNamesies.LIGHT_BALL);
                 });
 
         // Regular Pikachu is holding Quick Powder now -- should do nothing
@@ -1192,5 +1196,79 @@ public class EffectTest extends BaseTest {
             attacking.assertStages(new TestStages());
             defending.assertStages(defendingStages);
         };
+    }
+
+    @Test
+    public void confusionDamageTest() {
+        // n = 2 because 50% to hurt self in confusion
+        int n = 2;
+        int numTrials = GeneralUtils.numTrials(.99999, 2);
+        Assert.assertEquals(25, numTrials);
+
+        // Each confusion check adds its case numbers to completed, if more are added increase this number
+        // Each case adds two numbers because it checks for both being confused and not being confused
+        HashSet<Integer> completed = new HashSet<>();
+        int numCases = 2;
+
+        for (int i = 0; i < numCases*numTrials; i++) {
+            checkConfusionDamage(completed);
+
+            // Only need to pass each case once
+            if (completed.size() == n*numCases) {
+                // Additional caution that the numCases value does not need to be updated
+                for (int j = 0; j < n*numCases; j++) {
+                    Assert.assertTrue(completed.contains(j));
+                }
+                return;
+            }
+        }
+
+        Assert.fail("Target never hurt themselves in confusion after " + numTrials + " trials.");
+    }
+
+    private void checkConfusionDamage(HashSet<Integer> completed) {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.SQUIRTLE);
+        TestPokemon defending = battle.getDefending();
+
+        // Possible for the defending Pokemon to hurt themselves in confusion the same turn being confused
+        // If so, Growl will be unsuccessful and won't lower attack
+        battle.fight(AttackNamesies.CONFUSE_RAY, AttackNamesies.GROWL);
+        defending.assertHasEffect(PokemonEffectNamesies.CONFUSION);
+        checkConfusionDamage(0, completed, battle, new TestStages().set(-1, Stat.ATTACK));
+
+        // Reset health and stages for simplicity in next check
+        defending.fullyHeal();
+        defending.assertFullHealth();
+        attacking.getStages().reset();
+        attacking.assertStages(new TestStages());
+
+        // Manually switch to other Pokemon and potentially hurt self during a switch turn
+        // Note: If this seems like a super random test case it's motivated from a bug which caused an NPE checking
+        // the switching Pokemon's stages when confusion damage should be using itself as the attacking and defending
+        Player player = ((Player)battle.getPlayer());
+        defending.withMoves(AttackNamesies.TAIL_WHIP);
+        player.setSwitchIndex(1);
+        player.performAction(battle, TrainerAction.SWITCH);
+        Assert.assertTrue(battle.isFront(attacking2));
+        checkConfusionDamage(1, completed, battle, new TestStages().set(-1, Stat.DEFENSE));
+    }
+
+    // Checks if the defending Pokemon hurt themselves in confusion
+    // Adds the appropriate case num to completed for both scenarios
+    // Confirms the correct stages for the attacking Pokemon
+    private void checkConfusionDamage(int caseNum, HashSet<Integer> completed, TestBattle battle, TestStages attackingStages) {
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Did not hurt self in confusion -- move would be executed and attacking stages should change
+        if (defending.fullHealth()) {
+            completed.add(2*caseNum);
+            attacking.assertStages(attackingStages);
+        } else {
+            completed.add(2*caseNum + 1);
+            attacking.assertStages(new TestStages());
+        }
     }
 }

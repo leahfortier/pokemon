@@ -29,7 +29,7 @@ public interface HoldItem extends ItemInterface, ItemHolder {
         }
 
         ActivePokemon other = b.getOtherPokemon(holder);
-        if (other.hasAbility(AbilityNamesies.PICKUP) && !other.isHoldingItem(b)) {
+        if (other.hasAbility(AbilityNamesies.PICKUP) && !other.isHoldingItem()) {
             other.giveItem(this);
             Messages.add(other.getName() + " picked up " + getName() + "'s " + this.getName() + "!");
         }

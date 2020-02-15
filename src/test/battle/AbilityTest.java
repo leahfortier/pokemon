@@ -298,7 +298,7 @@ public class AbilityTest extends BaseTest {
         attacking.assertNoStages();
         defending.assertStages(new TestStages().set(2, Stat.SPEED));
         defending.assertNoEffect(PokemonEffectNamesies.CONFUSION);
-        defending.assertConsumedBerry(battle);
+        defending.assertConsumedBerry();
 
         // Simple doubles stat modifications to itself -- shouldn't affect contrary pokemon
         battle.fight(AttackNamesies.HAZE, AttackNamesies.SIMPLE_BEAM);
@@ -492,7 +492,7 @@ public class AbilityTest extends BaseTest {
         // Make sure other effects can still work
         attacking.withItem(ItemNamesies.PERSIM_BERRY);
         battle.defendingFight(AttackNamesies.CONFUSE_RAY);
-        attacking.assertConsumedBerry(battle);
+        attacking.assertConsumedBerry();
 
         // Switch opponent Pokemon so I can use Fake Out again
         // NOTE: We need to kill the defending instead of something like whirlwind otherwise Fake Out won't work
@@ -526,8 +526,8 @@ public class AbilityTest extends BaseTest {
         battle.splashFight();
         attacking.assertNoStatus();
         defending.assertNoStatus();
-        attacking.assertNotHoldingItem(battle);
-        defending.assertNotHoldingItem(battle);
+        attacking.assertNotHoldingItem();
+        defending.assertNotHoldingItem();
 
         // Synchronize does not work on Sleep
         battle.attackingFight(AttackNamesies.SPORE);
@@ -560,8 +560,8 @@ public class AbilityTest extends BaseTest {
         battle.attackingFight(AttackNamesies.THUNDER_WAVE);
         attacking.assertNoStatus();
         defending.assertNoStatus();
-        attacking.assertNotHoldingItem(battle);
-        defending.assertNotHoldingItem(battle);
+        attacking.assertNotHoldingItem();
+        defending.assertNotHoldingItem();
 
         battle.clearAllEffects();
         battle.emptyHeal();
@@ -581,8 +581,8 @@ public class AbilityTest extends BaseTest {
         battle.fight(AttackNamesies.FLING, AttackNamesies.FLING);
         attacking.assertBadPoison();
         defending.assertNoStatus();
-        attacking.assertNotHoldingItem(battle);
-        defending.assertNotHoldingItem(battle);
+        attacking.assertNotHoldingItem();
+        defending.assertNotHoldingItem();
         attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
         defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
 
@@ -603,7 +603,7 @@ public class AbilityTest extends BaseTest {
         battle.fight(AttackNamesies.NUZZLE, AttackNamesies.SUNNY_DAY);
         attacking.assertNoStages();
         defending.assertStages(new TestStages().set(1, Stat.ATTACK));
-        defending.assertConsumedItem(battle);
+        defending.assertConsumedItem();
 
         battle.emptyHeal();
         battle.clearAllEffects();
@@ -614,7 +614,7 @@ public class AbilityTest extends BaseTest {
         defending.giveItem(ItemNamesies.RAWST_BERRY);
         battle.fight(AttackNamesies.WILL_O_WISP, AttackNamesies.SUNNY_DAY);
         defending.assertNoStatus();
-        defending.assertHoldingItem(battle, ItemNamesies.RAWST_BERRY);
+        defending.assertHoldingItem(ItemNamesies.RAWST_BERRY);
         defending.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
         defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
     }
@@ -1084,7 +1084,7 @@ public class AbilityTest extends BaseTest {
             battle.defendingFight(AttackNamesies.REST);
             defending.assertFullHealth();
             defending.assertNoStatus();
-            defending.assertConsumedBerry(battle);
+            defending.assertConsumedBerry();
         });
 
         // When Core Enforcer goes first, it should fail at suppressing
@@ -1095,7 +1095,7 @@ public class AbilityTest extends BaseTest {
             battle.defendingFight(AttackNamesies.REST);
             defending.assertFullHealth();
             defending.assertNoStatus();
-            defending.assertConsumedBerry(battle);
+            defending.assertConsumedBerry();
         });
     }
 
@@ -1464,8 +1464,8 @@ public class AbilityTest extends BaseTest {
                 new TestStages().set(6, Stat.SP_DEFENSE).set(-5, Stat.DEFENSE),
                 (battle, attacking, defending) -> {
                     // Defense is naturally higher than Sp. Defense
-                    int def = Stat.getStat(Stat.DEFENSE, attacking, battle);
-                    int spDef = Stat.getStat(Stat.SP_DEFENSE, attacking, battle);
+                    int def = Stat.getStat(Stat.DEFENSE, attacking, defending, battle);
+                    int spDef = Stat.getStat(Stat.SP_DEFENSE, attacking, defending, battle);
                     TestUtils.assertGreater(def, spDef);
 
                     // Maximize Sp. Defense and minimize Defense stages
@@ -1475,8 +1475,8 @@ public class AbilityTest extends BaseTest {
                     attacking.assertStages(new TestStages().set(6, Stat.SP_DEFENSE).set(-6, Stat.DEFENSE));
 
                     // Now Sp. Defense should be higher (but Defense will still be increased by Beast Boost)
-                    def = Stat.getStat(Stat.DEFENSE, attacking, battle);
-                    spDef = Stat.getStat(Stat.SP_DEFENSE, attacking, battle);
+                    def = Stat.getStat(Stat.DEFENSE, attacking, defending, battle);
+                    spDef = Stat.getStat(Stat.SP_DEFENSE, attacking, defending, battle);
                     TestUtils.assertGreater(spDef, def);
                 }
         );

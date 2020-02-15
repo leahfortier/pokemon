@@ -2,7 +2,6 @@ package pokemon.stat;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.stages.Stages;
 import battle.effect.InvokeInterfaces.IgnoreStageEffect;
 import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.InvokeInterfaces.OpponentStatSwitchingEffect;
@@ -10,6 +9,7 @@ import battle.effect.InvokeInterfaces.StageChangingEffect;
 import battle.effect.InvokeInterfaces.StatChangingEffect;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
+import battle.stages.Stages;
 import main.Global;
 
 import java.util.List;
@@ -149,9 +149,7 @@ public enum Stat {
     }
 
     // Gets the stat of a Pokemon during battle with all modifiers taken into account
-    public static int getStat(Stat s, ActivePokemon p, Battle b) {
-        ActivePokemon opp = b.getOtherPokemon(p);
-
+    public static int getStat(Stat s, ActivePokemon p, ActivePokemon opp, Battle b) {
         // Effects that manipulate stats
         s = StatSwitchingEffect.switchStat(b, p, s);
         s = OpponentStatSwitchingEffect.switchStat(b, opp, s);

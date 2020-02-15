@@ -353,7 +353,7 @@ OhkoAccuracy:
     Header: int baseAccuracy(Battle b, ActivePokemon user)
 *
 SwitchStat:
-    Header: Stat getSwitchStat(Battle b, ActivePokemon statPokemon, Stat s)
+    Header: Stat getSwitchStat(Stat s)
 *
 OppSwitchStat:
     Header: Stat getSwitchStat(Stat s)
@@ -378,7 +378,7 @@ StatSplit:
     AddMapField: CastMessage: user.getName() + " split the {3}!"
 *
 StageChange:
-    Header: int adjustStage(Battle b, ActivePokemon p, ActivePokemon opp, Stat s)
+    Header: int adjustStage(Battle b, ActivePokemon p, Stat s)
 *
 IgnoreStage:
     Header: boolean ignoreStage(Stat s, int stage)
@@ -570,7 +570,7 @@ BattleEndTurn:
     Header: void singleEndTurnEffect(Battle b, ActivePokemon victim)
 *
 BattleEndTurnMessage:
-    Header: String getEndTurnMessage(Battle b)
+    Header: String getEndTurnMessage()
     Body:
         return {0};
         ###
@@ -803,11 +803,12 @@ GetForceMove:
 Subside:
     Header: void subside(Battle b, ActivePokemon p)
 *
+# For AttackSelectionEffect
 Usable:
     Header: boolean usable(Battle b, ActivePokemon p, Move m)
 *
 UnusableMessage:
-    Header: String getUnusableMessage(Battle b, ActivePokemon p)
+    Header: String getUnusableMessage(ActivePokemon p)
     Body:
         return {0};
         ###
@@ -914,7 +915,7 @@ StatProtectingEffect:
     Header: boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat)
 *
 StatProtectMessage:
-    Header: String preventionMessage(Battle b, ActivePokemon p, Stat s)
+    Header: String preventionMessage(ActivePokemon p, Stat s)
     Body:
         return {0};
         ###
@@ -951,7 +952,7 @@ KillWish:
 *
 Defog:
     AddInterface: DefogRelease
-    Header: String getDefogReleaseMessage(ActivePokemon released)
+    Header: String getDefogReleaseMessage()
     Body:
         return {0};
         ###
@@ -1017,14 +1018,14 @@ IncreaseCritStage:
     Header: int increaseCritStage(ActivePokemon p)
 *
 FallMessage:
-    Header: void fall(Battle b, ActivePokemon fallen)
+    Header: void fall(ActivePokemon fallen)
     Body:
         Messages.add({0});
         this.deactivate();
         ###
 *
 EndBattle:
-    Header: void afterBattle(Trainer player, Battle b, ActivePokemon p)
+    Header: void afterBattle(Trainer player, ActivePokemon p)
 *
 Contact:
     Header: void contact(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1036,7 +1037,7 @@ SelfAlternateEffect:
     Header: void alternateEffect(Battle b, ActivePokemon user)
 *
 SelfBlockMessage:
-    Header: String getBlockMessage(Battle b, ActivePokemon user)
+    Header: String getBlockMessage(ActivePokemon user)
 *
 Block:
     Header: boolean block(Battle b, ActivePokemon user, ActivePokemon victim)
@@ -1045,7 +1046,7 @@ AlternateEffect:
     Header: void alternateEffect(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 BlockMessage:
-    Header: String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim)
+    Header: String getBlockMessage(ActivePokemon user, ActivePokemon victim)
     Body:
         return {0};
         ###
@@ -1086,7 +1087,7 @@ EndTurnBigRootHealer:
     AddInterface: EndTurnEffect
     AddMapField: ApplyEndTurn:
         int healAmount = victim.getHealHealthFractionAmount(1/16.0);
-        if (victim.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
+        if (victim.isHoldingItem(ItemNamesies.BIG_ROOT)) {
             healAmount *= 1.3;
         }
 
@@ -1410,7 +1411,7 @@ TimeSpaceOrb:
 SpecialItemAbility:
     AddInterface: ChangeTypeEffect
     AddMapField: GetChangeTypeEffect:
-        HoldItem item = p.getHeldItem(b);
+        HoldItem item = p.getHeldItem();
         return item instanceof {0} ? new PokeType((({0})item).getType()) : null;
         ###
     AddMapField: Irrestealable: True
@@ -1420,7 +1421,7 @@ SpecialItemMove:
     AddMapField: Type: Normal
     AddMapField: MoveType: Metronomeless
     AddMapField: GetType:
-        HoldItem item = user.getHeldItem(b);
+        HoldItem item = user.getHeldItem();
         if (item instanceof {0}) {
             return (({0})item).getType();
         }
@@ -1797,7 +1798,7 @@ RaiseAllStats:
 *
 ConsumeBerry:
     AddMapField: UniqueEffects:
-        HoldItem item = victim.getHeldItem(b);
+        HoldItem item = victim.getHeldItem();
         if (item instanceof Berry) {
             Berry berry = (Berry)item;
             berry.eatBerry(b, user, victim);
@@ -1823,7 +1824,7 @@ GetAttackType:
     Header: Type getAttackType(Type original)
 *
 AttackTypeMessage:
-    Header: String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim)
+    Header: String getMessage(ActivePokemon caster, ActivePokemon victim)
 *
 NormalTypeChanger:
     AddInterface: ChangeAttackTypeEffect
@@ -2040,7 +2041,7 @@ TerrainSeed:
 *
 BlockItem:
     AddInterface: OpponentItemBlockerEffect
-    Header: boolean blockItem(Battle b, ActivePokemon p, ItemNamesies item)
+    Header: boolean blockItem(ItemNamesies item)
 *
 ChangeForm:
     Header: void changeForm(ActivePokemon formsie)

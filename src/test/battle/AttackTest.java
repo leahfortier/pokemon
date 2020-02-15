@@ -1,6 +1,5 @@
 package test.battle;
 
-import battle.stages.Stages;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -20,6 +19,7 @@ import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
+import battle.stages.Stages;
 import item.Item;
 import item.ItemNamesies;
 import item.berry.Berry;
@@ -137,8 +137,8 @@ public class AttackTest extends BaseTest {
                 attacking.setupMove(attackNamesies, battle);
 
                 int moveAccuracy = attacking.getAttack().getAccuracy(battle, attacking, defending);
-                int accuracy = Stat.getStat(Stat.ACCURACY, attacking, battle);
-                int evasion = Stat.getStat(Stat.EVASION, defending, battle);
+                int accuracy = Stat.getStat(Stat.ACCURACY, attacking, defending, battle);
+                int evasion = Stat.getStat(Stat.EVASION, defending, attacking, battle);
 
                 int totalAccuracy = (int)(moveAccuracy*((double)accuracy/(double)evasion));
                 Assert.assertTrue(attack.getName(), accuracy < 100);
@@ -653,14 +653,14 @@ public class AttackTest extends BaseTest {
         // Burn the defending Pokemon
         attacking.giveItem(ItemNamesies.RAWST_BERRY);
         battle.attackingFight(AttackNamesies.WILL_O_WISP);
-        Assert.assertTrue(attacking.isHoldingItem(battle));
+        Assert.assertTrue(attacking.isHoldingItem());
         defending.assertHasStatus(StatusNamesies.BURNED);
 
         // Defending Pokemon will use Bug Bite and eat the Rawst Berry, curing its burn
         // Attacking will have its item consumed, but defending is the one who ate the berry
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.BUG_BITE);
-        attacking.assertNotHoldingItem(battle);
-        defending.assertNotHoldingItem(battle);
+        attacking.assertNotHoldingItem();
+        defending.assertNotHoldingItem();
         defending.assertNoStatus();
         attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
         defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
@@ -670,13 +670,13 @@ public class AttackTest extends BaseTest {
         // Should fail since the defending did not use their own item
         battle.defendingFight(AttackNamesies.RECYCLE);
         Assert.assertFalse(defending.lastMoveSucceeded());
-        attacking.assertNotHoldingItem(battle);
-        defending.assertNotHoldingItem(battle);
+        attacking.assertNotHoldingItem();
+        defending.assertNotHoldingItem();
 
         // Using Recycle after having having your berry eaten will bring the Rawst Berry back
         battle.attackingFight(AttackNamesies.RECYCLE);
-        attacking.assertHoldingItem(battle, ItemNamesies.RAWST_BERRY);
-        defending.assertNotHoldingItem(battle);
+        attacking.assertHoldingItem(ItemNamesies.RAWST_BERRY);
+        defending.assertNotHoldingItem();
         attacking.assertNoStatus();
         defending.assertNoStatus();
         attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
@@ -686,26 +686,26 @@ public class AttackTest extends BaseTest {
 
         // Poison the attacker -- will not trigger Rawst Berry
         battle.defendingFight(AttackNamesies.POISON_POWDER);
-        Assert.assertTrue(attacking.isHoldingItem(battle));
-        defending.assertNotHoldingItem(battle);
+        Assert.assertTrue(attacking.isHoldingItem());
+        defending.assertNotHoldingItem();
         attacking.assertRegularPoison();
         defending.assertNoStatus();
 
         // Transfer Poison to the defending
         battle.attackingFight(AttackNamesies.PSYCHO_SHIFT);
-        Assert.assertTrue(attacking.isHoldingItem(battle));
-        defending.assertNotHoldingItem(battle);
+        Assert.assertTrue(attacking.isHoldingItem());
+        defending.assertNotHoldingItem();
         attacking.assertNoStatus();
         defending.assertRegularPoison();
 
         // Burn the attacker -- will consume the Rawst Berry
         // Note: I am writing these comments much later than the code was written, I have no idea what poison has to do with anything
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
-        attacking.assertNotHoldingItem(battle);
-        defending.assertNotHoldingItem(battle);
+        attacking.assertNotHoldingItem();
+        defending.assertNotHoldingItem();
         attacking.assertNoStatus();
         defending.assertRegularPoison();
-        attacking.assertConsumedBerry(battle);
+        attacking.assertConsumedBerry();
         defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
         defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
     }
@@ -1269,13 +1269,13 @@ public class AttackTest extends BaseTest {
         attacking.withItem(ItemNamesies.ABSORB_BULB);
         attacking.apply(false, AttackNamesies.NATURAL_GIFT, battle);
         defending.assertFullHealth();
-        attacking.assertNotConsumedItem(battle);
+        attacking.assertNotConsumedItem();
 
         // Occa Berry (Fire-type) will succeed and be consumed (but not eaten)
         attacking.withItem(ItemNamesies.OCCA_BERRY);
         attacking.apply(true, AttackNamesies.NATURAL_GIFT, battle);
         Assert.assertTrue(attacking.isAttackType(Type.FIRE));
-        attacking.assertConsumedItem(battle);
+        attacking.assertConsumedItem();
         attacking.assertFullHealth();
         defending.assertNotFullHealth();
 
@@ -1287,7 +1287,7 @@ public class AttackTest extends BaseTest {
         attacking.withItem(ItemNamesies.HABAN_BERRY);
         attacking.apply(false, AttackNamesies.NATURAL_GIFT, battle);
         Assert.assertTrue(attacking.isAttackType(Type.DRAGON));
-        attacking.assertNotConsumedItem(battle);
+        attacking.assertNotConsumedItem();
 
         // Oran Berry should not heal when consumed
         battle.falseSwipePalooza(false);
@@ -1295,7 +1295,7 @@ public class AttackTest extends BaseTest {
         attacking.withItem(ItemNamesies.ORAN_BERRY);
         attacking.apply(true, AttackNamesies.NATURAL_GIFT, battle);
         Assert.assertTrue(attacking.isAttackType(Type.POISON));
-        attacking.assertConsumedItem(battle); // Confirms berry not eaten, just consumed
+        attacking.assertConsumedItem(); // Confirms berry not eaten, just consumed
         Assert.assertEquals(1, attacking.getHP());
         defending.assertNotFullHealth();
     }
@@ -1318,7 +1318,7 @@ public class AttackTest extends BaseTest {
         defending.withItem(ItemNamesies.OCCA_BERRY);
         attacking.setExpectedDamageModifier(.5);
         battle.fight(AttackNamesies.INCINERATE, AttackNamesies.ENDURE);
-        defending.assertNotHoldingItem(battle);
+        defending.assertNotHoldingItem();
         defending.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
         defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
         defending.assertNotFullHealth();
@@ -1339,7 +1339,7 @@ public class AttackTest extends BaseTest {
         // Incinerate does not consume when the defending has Sticky Hold
         PokemonManipulator sticksies = (battle, attacking, defending) -> {
             Assert.assertTrue(defending.hasAbility(AbilityNamesies.STICKY_HOLD));
-            defending.assertNotConsumedItem(battle);
+            defending.assertNotConsumedItem();
             attacking.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
             attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
             defending.assertHealthRatio(.75);
@@ -1348,7 +1348,7 @@ public class AttackTest extends BaseTest {
 
         // If incinerated, the item will be considered consumed for the defending, but will not be 'eaten' for either
         PokemonManipulator nonStick = (battle, attacking, defending) -> {
-            Assert.assertNotEquals(incinerated, defending.isHoldingItem(battle));
+            Assert.assertNotEquals(incinerated, defending.isHoldingItem());
             defending.assertEffect(incinerated, PokemonEffectNamesies.CONSUMED_ITEM);
             defending.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
             attacking.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
@@ -1502,7 +1502,7 @@ public class AttackTest extends BaseTest {
         powderTest(
                 AttackNamesies.NATURAL_GIFT, true,
                 new TestInfo().defending(ItemNamesies.OCCA_BERRY),
-                (battle, attacking, defending) -> defending.assertNotConsumedItem(battle)
+                (battle, attacking, defending) -> defending.assertNotConsumedItem()
         );
 
         // Make sure health does not decrease when the user has Magic Guard, but user is still blocked from using the attack
@@ -1862,14 +1862,14 @@ public class AttackTest extends BaseTest {
         photonGeyserTest(
                 (battle, attacking, defending) -> defending.withItem(ItemNamesies.KEE_BERRY),
                 (battle, attacking, defending) -> {
-                    defending.assertConsumedBerry(battle);
+                    defending.assertConsumedBerry();
                     defending.assertStages(new TestStages().set(1, Stat.DEFENSE));
 
                     attacking.assertFullHealth();
                     attacking.assertStages(new TestStages());
                 },
                 (battle, attacking, defending) -> {
-                    defending.assertNotConsumedItem(battle);
+                    defending.assertNotConsumedItem();
                     defending.assertStages(new TestStages());
 
                     attacking.assertFullHealth();
@@ -1881,14 +1881,14 @@ public class AttackTest extends BaseTest {
         photonGeyserTest(
                 (battle, attacking, defending) -> defending.withItem(ItemNamesies.MARANGA_BERRY),
                 (battle, attacking, defending) -> {
-                    defending.assertNotConsumedItem(battle);
+                    defending.assertNotConsumedItem();
                     defending.assertStages(new TestStages());
 
                     attacking.assertFullHealth();
                     attacking.assertStages(new TestStages());
                 },
                 (battle, attacking, defending) -> {
-                    defending.assertConsumedBerry(battle);
+                    defending.assertConsumedBerry();
                     defending.assertStages(new TestStages().set(1, Stat.SP_DEFENSE));
 
                     attacking.assertFullHealth();
@@ -2176,8 +2176,8 @@ public class AttackTest extends BaseTest {
                     defending.assertNoStatus();
 
                     // Neither is holding an item
-                    attacking.assertNotHoldingItem(battle);
-                    defending.assertNotHoldingItem(battle);
+                    attacking.assertNotHoldingItem();
+                    defending.assertNotHoldingItem();
 
                     // Only the defending has eaten a berry
                     attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
@@ -2220,7 +2220,7 @@ public class AttackTest extends BaseTest {
             stages.increment(2, Stat.DEFENSE);
 
             // Can only succeed if holding a berry
-            Assert.assertTrue(attacking.getHeldItem(battle) instanceof Berry);
+            Assert.assertTrue(attacking.getHeldItem() instanceof Berry);
         }
 
         // Okay let's actually stuff our cheeks with berries or something
@@ -2230,8 +2230,8 @@ public class AttackTest extends BaseTest {
 
         // If successful, make sure berry was consumed
         if (success) {
-            attacking.assertConsumedBerry(battle);
-            attacking.assertNotHoldingItem(battle);
+            attacking.assertConsumedBerry();
+            attacking.assertNotHoldingItem();
         }
 
         // Anything else that might be interesting
@@ -2248,18 +2248,18 @@ public class AttackTest extends BaseTest {
         defending.withItem(defendingItem);
 
         battle.attackingFight(AttackNamesies.TEATIME);
-        checkTeatime(battle, attacking, attackingItem);
-        checkTeatime(battle, defending, defendingItem);
+        checkTeatime(attacking, attackingItem);
+        checkTeatime(defending, defendingItem);
 
         afterTea.manipulate(battle);
     }
 
-    private void checkTeatime(TestBattle battle, TestPokemon teaDrinker, ItemNamesies original) {
+    private void checkTeatime(TestPokemon teaDrinker, ItemNamesies original) {
         Item item = original.getItem();
         if (item instanceof Berry) {
-            teaDrinker.assertConsumedBerry(battle);
+            teaDrinker.assertConsumedBerry();
         } else {
-            teaDrinker.assertHoldingItem(battle, original);
+            teaDrinker.assertHoldingItem(original);
         }
     }
 

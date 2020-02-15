@@ -90,9 +90,9 @@ public final class EffectInterfaces {
         String getGenericMessage(ActivePokemon p);
         String getSourceMessage(ActivePokemon p, String sourceName);
 
-        default String getMessage(Battle b, ActivePokemon p, CastSource source) {
+        default String getMessage(ActivePokemon p, CastSource source) {
             if (source.hasSourceName()) {
-                return this.getSourceMessage(p, source.getSourceName(b, p));
+                return this.getSourceMessage(p, source.getSourceName(p));
             } else {
                 return this.getGenericMessage(p);
             }
@@ -103,8 +103,8 @@ public final class EffectInterfaces {
         String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem);
 
         default void swapItems(Battle b, ActivePokemon user, ActivePokemon victim) {
-            HoldItem userItem = user.getHeldItem(b);
-            HoldItem victimItem = victim.getHeldItem(b);
+            HoldItem userItem = user.getHeldItem();
+            HoldItem victimItem = victim.getHeldItem();
 
             Messages.add(this.getSwitchMessage(user, userItem, victim, victimItem));
 
@@ -150,7 +150,7 @@ public final class EffectInterfaces {
         }
 
         @Override
-        default String getDefogReleaseMessage(ActivePokemon released) {
+        default String getDefogReleaseMessage() {
             return this.getReleaseMessage();
         }
     }
@@ -199,7 +199,7 @@ public final class EffectInterfaces {
         }
 
         @Override
-        default String getBlockMessage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        default String getBlockMessage(ActivePokemon user, ActivePokemon victim) {
             return victim.getName() + " is protecting itself!";
         }
     }
@@ -229,7 +229,7 @@ public final class EffectInterfaces {
             }
 
             // Big Root heals an additional 30%
-            if (user.isHoldingItem(b, ItemNamesies.BIG_ROOT)) {
+            if (user.isHoldingItem(ItemNamesies.BIG_ROOT)) {
                 sapAmount *= 1.3;
             }
 
@@ -294,7 +294,7 @@ public final class EffectInterfaces {
         Type getEncounterType();
 
         @Override
-        default WildEncounterInfo getWildEncounter(ActivePokemon playerFront, WildEncounterInfo[] wildEncounters) {
+        default WildEncounterInfo getWildEncounter(WildEncounterInfo[] wildEncounters) {
             if (RandomUtils.chanceTest(50)) {
                 List<WildEncounterInfo> typedList = new ArrayList<>();
                 for (WildEncounterInfo wildEncounter : wildEncounters) {
@@ -356,7 +356,7 @@ public final class EffectInterfaces {
         @Override
         default void endTurnNoSubside(Battle b, ActivePokemon victim) {
             // Reduce 1/8 of the victim's total health, or 1/6 if holding a binding band
-            double fraction = b.getOtherPokemon(victim).isHoldingItem(b, ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
+            double fraction = b.getOtherPokemon(victim).isHoldingItem(ItemNamesies.BINDING_BAND) ? 1/6.0 : 1/8.0;
             victim.reduceHealthFraction(b, fraction, this.getReduceMessage(victim));
         }
     }
