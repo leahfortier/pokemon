@@ -14,6 +14,7 @@ import main.Global;
 import message.MessageUpdate;
 import message.Messages;
 import pokemon.active.PartyPokemon;
+import trainer.Trainer;
 import trainer.player.Player;
 import util.serialization.Serializable;
 
@@ -33,6 +34,8 @@ public class Bag implements Serializable {
 
     // Only for battle
     private ItemNamesies lastUsedItem;
+    private ItemNamesies selectedBattleItem;
+    private PartyPokemon battleItemRecipient;
 
     public Bag() {
         this.items = new EnumMap<>(ItemNamesies.class);
@@ -164,37 +167,56 @@ public class Bag implements Serializable {
     }
 
     public boolean usePlayerItem(ItemNamesies item) {
-        return this.useItem(null, item, null, null);
+        return this.useItem(item, null, null);
     }
 
     public boolean usePokemonItem(ItemNamesies item, PartyPokemon p) {
-        return this.useItem(null, item, p, null);
+        return this.useItem(item, p, null);
     }
 
     public boolean useMoveItem(ItemNamesies item, PartyPokemon p, Move move) {
-        return this.useItem(null, item, p, move);
+        return this.useItem(item, p, move);
+    }
+
+    public void setSelectedBattleItem(ItemNamesies item, PartyPokemon recipient) {
+        this.selectedBattleItem = item;
+        this.battleItemRecipient = recipient;
     }
 
     // Checks conditions, adds messages, and executes the UseItem
-    public boolean battleUseItem(ItemNamesies item, PartyPokemon p, Battle battle) {
-        Player player = Game.getPlayer();
+    public boolean battleUseItem(Battle battle, Trainer trainer) {
+        if (this.selectedBattleItem == null) {
+            Global.error("Cannot use a battle item that was never selected!");
+            return false;
+        }
+
+        ItemNamesies item = this.selectedBattleItem;
+        PartyPokemon p = this.battleItemRecipient;
+        this.selectedBattleItem = null;
+        this.battleItemRecipient = null;
+
         Item itemValue = item.getItem();
 
         boolean used;
         if (itemValue instanceof BallItem) {
+            Player player = (Player)trainer;
             used = player.catchPokemon(battle, (BallItem)itemValue);
             if (used) {
                 removeItem(item);
             }
         } else if (itemValue instanceof BattleUseItem) {
-            used = this.useItem(battle, item, p, null);
+            Messages.add(trainer.getName() + " used the " + item.getName() + "!");
+            used = this.useItemNoMessages(battle, item, p, null);
+            if (!used) {
+                Messages.add("But it had no effect!");
+            }
         } else {
             Global.error("Invalid battle item " + item.getName());
             return false;
         }
 
         if (used) {
-            ActivePokemon front = player.front();
+            ActivePokemon front = trainer.front();
             if (front == p) {
                 Messages.add(new MessageUpdate().updatePokemon(battle, front));
             }
@@ -206,9 +228,25 @@ public class Bag implements Serializable {
         return used;
     }
 
+    // Uses the item and adds the messages
+    // Move should be nonnull for MoveUseItem and null otherwise
+    // Not intended for battle use
+    private boolean useItem(ItemNamesies itemName, PartyPokemon p, Move move) {
+        boolean success = this.useItemNoMessages(null, itemName, p, move);
+        if (success) {
+            Messages.addToFront(Game.getPlayer().getName() + " used the " + itemName.getName() + "!");
+        } else {
+            Messages.add(DEFAULT_FAIL_MESSAGE);
+        }
+        return success;
+    }
+
+    // Uses the item and returns if used successfully
+    // If successful, will remove the item from the bag
+    // Includes messages from the item itself but not messages like "<Player> used <item>!" or "It won't have any effect."
     // Move should be nonnull for MoveUseItem and null otherwise
     // Battle can be null or non-null
-    private boolean useItem(Battle battle, ItemNamesies itemName, PartyPokemon p, Move move) {
+    private boolean useItemNoMessages(Battle battle, ItemNamesies itemName, PartyPokemon p, Move move) {
         Item item = itemName.getItem();
 
         if (move != null && !(item instanceof MoveUseItem)) {
@@ -221,7 +259,6 @@ public class Bag implements Serializable {
 
         // Eggs can't do shit
         if (p != null && p.isEgg()) {
-            Messages.add(DEFAULT_FAIL_MESSAGE);
             return false;
         }
 
@@ -229,16 +266,12 @@ public class Bag implements Serializable {
         UseItem useItem = (UseItem)item;
         final boolean success = useItem.use(battle, (ActivePokemon)p, move);
 
-        // :(
-        if (!success) {
-            Messages.add(DEFAULT_FAIL_MESSAGE);
-            return false;
+        // Item successfully used -- remove this item from the bag
+        if (success) {
+            removeItem(itemName);
         }
 
-        // Item successfully used -- display success messages to the user and remove this item from the bag
-        Messages.addToFront(Game.getPlayer().getName() + " used the " + item.getName() + "!");
-        removeItem(itemName);
-        return true;
+        return success;
     }
 
     public ItemNamesies getLastUsedItem() {

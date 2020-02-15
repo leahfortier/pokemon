@@ -14,7 +14,6 @@ import item.ItemNamesies;
 public enum VisualState {
     MESSAGE(new MessageState()),
     BAG(new BagState()),
-    INVALID_BAG(BAG.handler),
     FIGHT(new FightState()),
     INVALID_FIGHT(FIGHT.handler),
     POKEMON(new PokemonState()),

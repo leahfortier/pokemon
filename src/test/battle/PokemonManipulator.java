@@ -94,7 +94,8 @@ interface PokemonManipulator {
             Bag bag = trainer.getBag();
             bag.addItem(itemNamesies);
 
-            Assert.assertEquals(assertion, bag.battleUseItem(itemNamesies, attacking, battle));
+            bag.setSelectedBattleItem(itemNamesies, attacking);
+            Assert.assertEquals(assertion, bag.battleUseItem(battle, trainer));
             Assert.assertNotEquals(assertion, bag.hasItem(itemNamesies));
 
             if (bag.hasItem(itemNamesies)) {

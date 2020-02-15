@@ -239,13 +239,18 @@ public class Battle implements Serializable {
     // If the trainer selected an attack, this will return true - Wild Pokemon will always return true
     // It will return false if the trainer tried to run, switch Pokemon, or used an item
     private boolean isFighting(ActivePokemon fighter) {
-        return this.getTrainer(fighter).getAction() == TrainerAction.FIGHT;
+        return this.isAction(fighter, TrainerAction.FIGHT);
     }
 
     // If the trainer selected Switch, this will return true -- Wild Pokemon will always return false
     // It will return false if the trainer tried to run, use an attack, or use an item
     public boolean isSwitching(ActivePokemon switchPokemon) {
-        return this.getTrainer(switchPokemon).getAction() == TrainerAction.SWITCH;
+        return this.isAction(switchPokemon, TrainerAction.SWITCH);
+    }
+
+    // Returns true if the trainer has selected the specified action for the current turn (fight/switch/item/run)
+    private boolean isAction(ActivePokemon p, TrainerAction action) {
+        return this.getTrainer(p).getAction() == action;
     }
 
     // Handles exiting the battle and swapping dead Pokemon if relevant
@@ -364,12 +369,23 @@ public class Battle implements Serializable {
     private void executionSolution(boolean firstAttacking, boolean playerFirst) {
         this.firstAttacking = firstAttacking;
 
+        // Kind of hacky solution to check if the battle is ended via catching the opponent Pokemon
+        // Anyways in that case they shouldn't execute their turn because we're all friends now...
+        // Also the isPlayer field being set like this fucks a lot of shit up soooo
+        if (opponent.front().isPlayer()) {
+            return;
+        }
+
         ActivePokemon me = firstAttacking == playerFirst ? player.front() : opponent.front();
         ActivePokemon o = this.getOtherPokemon(me);
 
         if (isSwitching(me)) {
             Trainer trainer = (Trainer)getTrainer(me);
             trainer.performSwitch(this);
+            return;
+        } else if (this.isAction(me, TrainerAction.ITEM)) {
+            Trainer trainer = (Trainer)getTrainer(me);
+            trainer.getBag().battleUseItem(this, trainer);
             return;
         }
 

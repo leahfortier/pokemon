@@ -177,8 +177,7 @@ public class BagState extends VisualStateHandler {
         buttons.drawPanels(g);
 
         // Messages text
-        String message = view.getMessage(VisualState.INVALID_BAG, "Choose an item!");
-        view.drawMenuMessagePanel(g, message);
+        view.drawMenuMessagePanel(g, "Choose an item!");
 
         // Show last item used if no item is selected
         ItemNamesies highlighted = this.getHighlighted();
