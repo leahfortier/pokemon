@@ -465,7 +465,7 @@ public class ItemTest extends BaseTest {
 
         attacking.giveItem(ItemNamesies.SITRUS_BERRY);
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.LEAF_BLADE);
-        Assert.assertEquals(attacking.getHpString(), 1, attacking.getHP());
+        attacking.assertHp(1);
         attacking.assertNotConsumedItem();
         attacking.assertHasEffect(PokemonEffectNamesies.HEAL_BLOCK);
     }

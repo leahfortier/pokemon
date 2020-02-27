@@ -185,6 +185,11 @@ public abstract class Ability implements AbilityInterface {
         return true;
     }
 
+    // True if ability is ignored when the opponent has neutralizing gas
+    public boolean isNeutralizable() {
+        return true;
+    }
+
     // Called when this ability is going to changed to a different ability -- can be overridden as necessary
     public void deactivate(Battle b, ActivePokemon victim) {}
 
@@ -206,6 +211,11 @@ public abstract class Ability implements AbilityInterface {
 
         NoAbility() {
             super(AbilityNamesies.NO_ABILITY, "None");
+        }
+
+        @Override
+        public boolean isStealable() {
+            return false;
         }
     }
 
@@ -3550,6 +3560,11 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
+        public boolean isNeutralizable() {
+            return false;
+        }
+
+        @Override
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
             BaseStats stats = schoolForm ? SCHOOL_STATS : SOLO_STATS;
@@ -3604,6 +3619,11 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
+        public boolean isNeutralizable() {
+            return false;
+        }
+
+        @Override
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
             BaseStats stats = meteorForm ? METEOR_STATS : CORE_STATS;
@@ -3651,6 +3671,11 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean isReplaceable() {
+            return false;
+        }
+
+        @Override
+        public boolean isNeutralizable() {
             return false;
         }
 
@@ -4546,6 +4571,11 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
+        public boolean isNeutralizable() {
+            return false;
+        }
+
+        @Override
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
             BaseStats stats = nonIcy ? NO_ICE_STATS : ICE_STATS;
@@ -4628,6 +4658,24 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public String getSwapStatTargetMessage(ActivePokemon victim) {
             return victim.getName() + "'s " + this.getName() + " reflected the changes!";
+        }
+    }
+
+    static class NeutralizingGas extends Ability implements EntryEffect {
+        private static final long serialVersionUID = 1L;
+
+        NeutralizingGas() {
+            super(AbilityNamesies.NEUTRALIZING_GAS, "If the Pokémon with Neutralizing Gas is in the battle, the effects of all Pokémon's Abilities will be nullified or will not be triggered.");
+        }
+
+        @Override
+        public boolean isNeutralizable() {
+            return false;
+        }
+
+        @Override
+        public void enter(Battle b, ActivePokemon enterer) {
+            Messages.add(enterer.getName() + "'s " + this.getName() + " filled the area!");
         }
     }
 }

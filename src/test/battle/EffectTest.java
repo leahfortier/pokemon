@@ -539,7 +539,7 @@ public class EffectTest extends BaseTest {
                         .attacking(AbilityNamesies.MAGIC_GUARD)
                         .fight(AttackNamesies.ENDURE, AttackNamesies.INFERNO)
                         .with((battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.BURNED)),
-                (battle, attacking, defending) -> Assert.assertEquals(1, attacking.getHP()),
+                (battle, attacking, defending) -> attacking.assertHp(1),
                 (battle, attacking, defending) -> attacking.assertFullHealth()
         );
 
@@ -597,12 +597,12 @@ public class EffectTest extends BaseTest {
                         .fight(AttackNamesies.ENDURE, AttackNamesies.HEAD_SMASH),
                 (battle, attacking, defending) -> {
                     attacking.assertNotFullHealth();
-                    Assert.assertEquals(1, attacking.getHP());
+                    attacking.assertHp(1);
                 },
                 (battle, attacking, defending) -> {
                     // Recoil damage is calculated based on actual HP lost, so it will only take the minimum of 1 HP
                     attacking.assertFullHealth();
-                    Assert.assertEquals(defending.getMaxHP() - 1, defending.getHP());
+                    defending.assertMissingHp(1);
                     attacking.assertNoEffect(PokemonEffectNamesies.SUBSTITUTE);
 
                     // To make sure Endure doesn't fail again
@@ -611,7 +611,7 @@ public class EffectTest extends BaseTest {
                     // No more substitute -- murder is fair game (except don't actualllly murder because it will heal the player)
                     battle.fight(AttackNamesies.ENDURE, AttackNamesies.EARTHQUAKE);
                     attacking.assertNotFullHealth();
-                    Assert.assertEquals(1, attacking.getHP());
+                    attacking.assertHp(1);
                 }
         );
     }
@@ -1251,7 +1251,7 @@ public class EffectTest extends BaseTest {
         defending.withMoves(AttackNamesies.TAIL_WHIP);
         player.setSwitchIndex(1);
         player.performAction(battle, TrainerAction.SWITCH);
-        Assert.assertTrue(battle.isFront(attacking2));
+        battle.assertFront(attacking2);
         checkConfusionDamage(1, completed, battle, new TestStages().set(-1, Stat.DEFENSE));
     }
 

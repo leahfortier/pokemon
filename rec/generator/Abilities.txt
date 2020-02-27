@@ -10,6 +10,7 @@ Constructor:
 
 No Ability:
     Desc: None
+    Irrestealable: True
 *
 Overgrow:
     Desc: Powers up Grass-type moves when the Pok\u00e9mon's HP is low.
@@ -1874,4 +1875,12 @@ Mimicry:
 Mirror Armor:
     Desc: Bounces back only the stat-lowering effects that the Pokémon receives.
     StatTargetSwap: victim.getName() + "'s " + this.getName() + " reflected the changes!"
+*
+Neutralizing Gas:
+    Desc: If the Pokémon with Neutralizing Gas is in the battle, the effects of all Pokémon's Abilities will be nullified or will not be triggered.
+    Unneutralizable: True
+    Int: EntryEffect
+    Enter:
+        Messages.add(enterer.getName() + "'s " + this.getName() + " filled the area!");
+        ###
 *

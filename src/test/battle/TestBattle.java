@@ -200,6 +200,10 @@ public class TestBattle extends Battle {
         assertEffect(false, member, effectNamesies);
     }
 
+    public void assertFront(TestPokemon front) {
+        Assert.assertTrue(this.isFront(front));
+    }
+
     static TestBattle createTrainerBattle(PokemonNamesies attacking, PokemonNamesies defending) {
         TestPokemon mahBoiiiiiii = TestPokemon.newPlayerPokemon(attacking);
         TestPokemon nahMahBoi = TestPokemon.newTrainerPokemon(defending);

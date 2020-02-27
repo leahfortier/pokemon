@@ -165,7 +165,7 @@ public class AbilityTest extends BaseTest {
         TestBattle battle = TestBattle.create(PokemonNamesies.HAPPINY, PokemonNamesies.KECLEON);
         TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.COLOR_CHANGE);
 
-        Assert.assertTrue(defending.hasAbility(AbilityNamesies.COLOR_CHANGE));
+        defending.assertAbility(AbilityNamesies.COLOR_CHANGE);
         defending.assertType(battle, Type.NORMAL);
 
         battle.fight(AttackNamesies.WATER_GUN, AttackNamesies.ENDURE);
@@ -302,7 +302,7 @@ public class AbilityTest extends BaseTest {
 
         // Simple doubles stat modifications to itself -- shouldn't affect contrary pokemon
         battle.fight(AttackNamesies.HAZE, AttackNamesies.SIMPLE_BEAM);
-        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.SIMPLE));
+        attacking.assertChangedAbility(AbilityNamesies.SIMPLE);
         attacking.assertNoStages();
         defending.assertNoStages();
 
@@ -346,8 +346,8 @@ public class AbilityTest extends BaseTest {
 
         // Gaining/Losing Contrary does not affect your current stages
         battle.defendingFight(AttackNamesies.SKILL_SWAP);
-        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.CONTRARY));
-        Assert.assertFalse(defending.hasAbility(AbilityNamesies.CONTRARY));
+        attacking.assertChangedAbility(AbilityNamesies.CONTRARY);
+        defending.assertChangedAbility(AbilityNamesies.STURDY);
         attacking.assertStages(new TestStages().set(2, Stat.ATTACK).set(-2, Stat.SP_ATTACK));
         defending.assertStages(new TestStages().set(-2, Stat.ATTACK).set(2, Stat.SP_ATTACK));
     }
@@ -1043,7 +1043,7 @@ public class AbilityTest extends BaseTest {
         // Set HP to 1 then murder -- should only take one
         battle.falseSwipePalooza(true);
         attacking.assertFullHealth();
-        Assert.assertEquals(1, defending.getHP());
+        defending.assertHp(1);
         battle.attackingFight(AttackNamesies.CRUNCH);
         attacking.assertMissingHp(1);
         defending.assertHasStatus(StatusNamesies.FAINTED);
@@ -1053,7 +1053,7 @@ public class AbilityTest extends BaseTest {
         // Should still take innards out damage if they die from fixed damage
         battle.falseSwipePalooza(true);
         attacking.assertFullHealth();
-        Assert.assertEquals(1, defending.getHP());
+        defending.assertHp(1);
         battle.attackingFight(AttackNamesies.DRAGON_RAGE);
         attacking.assertMissingHp(1);
         defending.assertHasStatus(StatusNamesies.FAINTED);
@@ -1063,7 +1063,7 @@ public class AbilityTest extends BaseTest {
         // But not if they die from indirect damage like burn
         battle.falseSwipePalooza(true);
         attacking.assertFullHealth();
-        Assert.assertEquals(1, defending.getHP());
+        defending.assertHp(1);
         battle.attackingFight(AttackNamesies.WILL_O_WISP);
         attacking.assertFullHealth();
         defending.assertHasStatus(StatusNamesies.FAINTED);
@@ -1555,7 +1555,7 @@ public class AbilityTest extends BaseTest {
         // Set defending HP to 1 so it always dies to a single direct hit or to indirect damage such as burn
         battle.falseSwipePalooza(true);
         postSwipe.manipulate(battle);
-        Assert.assertEquals(1, defending1.getHP());
+        defending1.assertHp(1);
 
         // Knock the Pokemon out with the attack and check if stat was boosted or not
         battle.attackingFight(killMove);
@@ -1665,5 +1665,130 @@ public class AbilityTest extends BaseTest {
         battle.attackingFight(attackNamesies);
         attacking.assertStages(new TestStages().set(expectedStage, Stat.SPEED));
         defending.assertStages(new TestStages());
+    }
+
+    @Test
+    public void neutralizingGasTest() {
+        // Cotton Down lowers the speed of Pokemon who attack it
+        neutralizingGasTest(
+                new TestInfo().attacking(AbilityNamesies.COTTON_DOWN).defendingFight(AttackNamesies.TACKLE),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-1, Stat.SPEED)),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages())
+        );
+
+        // Magic Guard prevents indirect damage like poison
+        neutralizingGasTest(
+                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE)
+                        .attacking(AbilityNamesies.MAGIC_GUARD)
+                        .defendingFight(AttackNamesies.TOXIC),
+                (battle, attacking, defending) -> {
+                    attacking.assertBadPoison();
+                    attacking.assertFullHealth();
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertBadPoison();
+                    attacking.assertHealthRatio(15/16.0);
+                }
+        );
+
+        // Neutralizing Gas can be suppressed with Gastro Acid
+        neutralizingGasTest(
+                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE)
+                        .attacking(AbilityNamesies.MAGIC_GUARD)
+                        .fight(AttackNamesies.GASTRO_ACID, AttackNamesies.TOXIC),
+                (battle, attacking, defending) -> {
+                    attacking.assertBadPoison();
+                    attacking.assertFullHealth();
+                }
+        );
+
+        // Gives Overgrow for the case that checks no Neutralizing Gas
+        // The ordering is a little weird so writing it this way so it doesn't overwrite
+        // Used for tests where the defending ability is always relevant
+        PokemonManipulator defendingOvergrow = (battle, attacking, defending) -> {
+            if (!defending.hasAbility(AbilityNamesies.NEUTRALIZING_GAS)) {
+                defending.assertAbility(AbilityNamesies.NO_ABILITY);
+                defending.withAbility(AbilityNamesies.OVERGROW);
+            }
+        };
+
+        // Currently implemented that Power of Alchemy does NOT steal Neutralizing Gas
+        neutralizingGasTest(
+                new TestInfo().asTrainerBattle()
+                              .attacking(AbilityNamesies.POWER_OF_ALCHEMY)
+                              .with(defendingOvergrow)
+                              .with((battle, attacking, defending) -> {
+                                  // Add an additional Pokemon so the battle doesn't end on a kill
+                                  TestPokemon defending2 = battle.addDefending(PokemonNamesies.SQUIRTLE);
+                                  battle.assertFront(defending);
+                                  battle.falseSwipePalooza(true);
+                                  defending.assertHp(1);
+                                  battle.attackingFight(AttackNamesies.TACKLE);
+                                  defending.assertHp(0);
+                                  battle.assertFront(defending2);
+                              }),
+                (battle, attacking, defending) -> attacking.assertChangedAbility(AbilityNamesies.OVERGROW),
+                (battle, attacking, defending) -> attacking.assertAbility(AbilityNamesies.POWER_OF_ALCHEMY)
+        );
+
+        // Clear Body prevents stats from being lowered, Octolock lowers Def/Sp.Def at the end of each turn
+        neutralizingGasTest(
+                new TestInfo().attacking(AbilityNamesies.CLEAR_BODY).defendingFight(AttackNamesies.OCTOLOCK),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages()),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.DEFENSE, Stat.SP_DEFENSE))
+        );
+
+        // Water Veil prevents Burns, but can still be burned with Neutralizing Gas
+        neutralizingGasTest(
+                new TestInfo().attacking(AbilityNamesies.WATER_VEIL).defendingFight(AttackNamesies.WILL_O_WISP),
+                (battle, attacking, defending) -> attacking.assertNoStatus(),
+                (battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.BURNED)
+        );
+
+        // If the Neutralizing Gas Pokemon switches out though, they will be healed of their Burn
+        // TODO: Currently statuses are checked before abilities so it is taking burn damage immediately before curing,
+        //  but planning on hopefully fixing this soon and then change (14/16.0 , 1) -> (15/16.0) again
+        neutralizingGasTest(
+                new TestInfo().asTrainerBattle()
+                              .attacking(AbilityNamesies.WATER_VEIL)
+                              .defendingFight(AttackNamesies.WILL_O_WISP)
+                              .with((battle, attacking, defending) -> {
+                                  TestPokemon defending2 = battle.addDefending(PokemonNamesies.SQUIRTLE);
+                                  battle.assertFront(defending);
+                                  battle.attackingFight(AttackNamesies.WHIRLWIND);
+                                  battle.assertFront(defending2);
+
+                                  // Regardless of Neutralizing Gas from first Pokemon, the burn should be gone
+                                  // (Either never was or was healed when the gas left)
+                                  attacking.assertNoStatus();
+                              }),
+                (battle, attacking, defending) -> attacking.assertFullHealth(),
+                (battle, attacking, defending) -> attacking.assertHealthRatio(14/16.0, 1)
+        );
+
+        // Skill Swap should not work with Neutralizing Gas
+        // Should not matter if attacking or defending Pokemon is performing the swap
+        neutralizingGasTest(
+                new TestInfo().attacking(AbilityNamesies.BLAZE)
+                              .with(defendingOvergrow)
+                              .attackingFight(AttackNamesies.SKILL_SWAP),
+                (battle, attacking, defending) -> {
+                    attacking.assertChangedAbility(AbilityNamesies.OVERGROW);
+                    defending.assertChangedAbility(AbilityNamesies.BLAZE);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertAbility(AbilityNamesies.NO_ABILITY);
+                    defending.assertAbility(AbilityNamesies.NEUTRALIZING_GAS);
+                }
+        );
+    }
+
+    private void neutralizingGasTest(TestInfo testInfo, PokemonManipulator samesies) {
+        neutralizingGasTest(testInfo, samesies, samesies);
+    }
+
+    // Neutralizing Gas suppresses all other abilities (for the most part)
+    private void neutralizingGasTest(TestInfo testInfo, PokemonManipulator normal, PokemonManipulator suppressed) {
+        testInfo.doubleTake(AbilityNamesies.NEUTRALIZING_GAS, normal, suppressed);
     }
 }

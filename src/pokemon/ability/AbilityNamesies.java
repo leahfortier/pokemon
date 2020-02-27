@@ -124,6 +124,7 @@ import pokemon.ability.Ability.Multiscale;
 import pokemon.ability.Ability.Multitype;
 import pokemon.ability.Ability.Mummy;
 import pokemon.ability.Ability.NaturalCure;
+import pokemon.ability.Ability.NeutralizingGas;
 import pokemon.ability.Ability.NoAbility;
 import pokemon.ability.Ability.NoGuard;
 import pokemon.ability.Ability.Normalize;
@@ -465,7 +466,8 @@ public enum AbilityNamesies {
     INTREPID_SWORD("Intrepid Sword", IntrepidSword::new),
     LIBERO("Libero", Libero::new),
     MIMICRY("Mimicry", Mimicry::new),
-    MIRROR_ARMOR("Mirror Armor", MirrorArmor::new);
+    MIRROR_ARMOR("Mirror Armor", MirrorArmor::new),
+    NEUTRALIZING_GAS("Neutralizing Gas", NeutralizingGas::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

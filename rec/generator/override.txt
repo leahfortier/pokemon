@@ -2012,6 +2012,12 @@ Irrestealable:
         return false;
         ###
 *
+Unneutralizable:
+    Header: boolean isNeutralizable()
+    Body:
+        return false;
+        ###
+*
 DropBelowHalfHealth:
     AddInterface: TakeDamageEffect
     AddMapField: OnTakeDamage:
@@ -2063,6 +2069,7 @@ StatFormChange:
     AddMapField: ChangeForm: {1} {4} {2}
     AddMapField: Irrestealable: True
     AddMapField: Irreplaceable: True
+    AddMapField: Unneutralizable: True
     AddMapField: Field:
         private static final BaseStats {22}_STATS = new BaseStats(new int[] { {3_} });
         private static final BaseStats {44}_STATS = new BaseStats(new int[] { {5_} });
