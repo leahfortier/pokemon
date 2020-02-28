@@ -124,6 +124,7 @@ import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
 import util.ReverseIterable;
+import util.string.PokeString;
 import util.string.StringUtils;
 
 import java.util.ArrayList;
@@ -1353,8 +1354,9 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
-            if (effectName == PokemonEffectNamesies.PERISH_SONG) {
+        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source) {
+            // Only sound-based when from the Perish Song attack (not Perish Body)
+            if (effectName == PokemonEffectNamesies.PERISH_SONG && source == CastSource.ATTACK) {
                 return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " makes it immune to sound based moves!");
             }
 
@@ -1794,6 +1796,19 @@ public abstract class Ability implements AbilityInterface {
 
         Immunity() {
             super(AbilityNamesies.IMMUNITY, "The immune system of the Pok\u00e9mon prevents it from getting poisoned.");
+        }
+
+        @Override
+        public StatusNamesies getStatus() {
+            return StatusNamesies.POISONED;
+        }
+    }
+
+    static class PastelVeil extends Ability implements StatusPreventionAbility {
+        private static final long serialVersionUID = 1L;
+
+        PastelVeil() {
+            super(AbilityNamesies.PASTEL_VEIL, "Protects the Pokémon from being poisoned.");
         }
 
         @Override
@@ -4676,6 +4691,21 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             Messages.add(enterer.getName() + "'s " + this.getName() + " filled the area!");
+        }
+    }
+
+    static class PerishBody extends Ability implements PhysicalContactEffect {
+        private static final long serialVersionUID = 1L;
+
+        PerishBody() {
+            super(AbilityNamesies.PERISH_BODY, "When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle.");
+        }
+
+        @Override
+        public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
+            Messages.add(victim.getName() + "'s " + this.getName() + " will cause both " + PokeString.POKEMON + " to faint in three turns!");
+            Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, user, CastSource.ABILITY, false);
+            Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, victim, CastSource.ABILITY, false);
         }
     }
 }

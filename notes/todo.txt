@@ -81,6 +81,7 @@ Descriptions that change manually:
         Battery ('Ally' -> 'the')
         Power of Alchemy ('ally' -> 'enemy')
         Download ('an opposing' -> 'opposing' (more for length than for clarity))
+        Pastel Veil (Remove 'and its ally Pokémon')
     Items:
         Fishing Rod
         Deep Sea Scale (Added ', Chinchou, or Lanturn' -- Lanturn rules and deserves this)

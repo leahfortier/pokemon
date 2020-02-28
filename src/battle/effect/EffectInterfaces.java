@@ -395,7 +395,7 @@ public final class EffectInterfaces {
         boolean isPreventableEffect(EffectNamesies effectNamesies);
 
         @Override
-        default ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+        default ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source) {
             if (this.isPreventableEffect(effectName)) {
                 return ApplyResult.failure(effectName.getEffect().getSourcePreventMessage(victim, this.getName()));
             }

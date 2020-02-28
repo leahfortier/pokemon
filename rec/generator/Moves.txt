@@ -5503,15 +5503,13 @@ Baton Pass:
     MoveType: Non_Snatchable
 *
 Perish Song:
-    MoveType: Protect_Piercing, Substitute_Piercing, Sound_Based, No_Magic_Coat, Mirrorless
+    MoveType: Sound_Based, No_Magic_Coat, Field
     Desc: Any Pok\u00e9mon that hears this song faints in three turns, unless it switches out of battle.
     PP: 5
     Type: Normal
     Cat: Status
     UniqueEffects:
         Messages.add("All " + PokeString.POKEMON + " hearing this song will faint in three turns!");
-
-        // TODO: Test and also this used to check if they didn't have the effect before casting just in case that's relevant later
         Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, user, victim, CastSource.ATTACK, false);
         Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, user, user, CastSource.ATTACK, false);
         ###

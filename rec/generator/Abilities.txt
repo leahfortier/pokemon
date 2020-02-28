@@ -485,7 +485,8 @@ Soundproof:
     Desc: Soundproofing of the Pok\u00e9mon itself gives full immunity to all sound-based moves.
     MoveTypePrevent: Sound_Based sound-based moves
     FullEffectPrevent:
-        if (effectName == PokemonEffectNamesies.PERISH_SONG) {
+        // Only sound-based when from the Perish Song attack (not Perish Body)
+        if (effectName == PokemonEffectNamesies.PERISH_SONG && source == CastSource.ATTACK) {
             return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " makes it immune to sound based moves!");
         }
         
@@ -669,6 +670,10 @@ Pressure:
 *
 Immunity:
     Desc: The immune system of the Pok\u00e9mon prevents it from getting poisoned.
+    StatusPreventAbility: Poisoned
+*
+Pastel Veil:
+    Desc: Protects the Pokémon from being poisoned.
     StatusPreventAbility: Poisoned
 *
 Snow Cloak:
@@ -1882,5 +1887,14 @@ Neutralizing Gas:
     Int: EntryEffect
     Enter:
         Messages.add(enterer.getName() + "'s " + this.getName() + " filled the area!");
+        ###
+*
+Perish Body:
+    Desc: When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle.
+    Int: PhysicalContactEffect
+    Contact:
+        Messages.add(victim.getName() + "'s " + this.getName() + " will cause both " + PokeString.POKEMON + " to faint in three turns!");
+        Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, user, CastSource.ABILITY, false);
+        Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, victim, CastSource.ABILITY, false);
         ###
 *

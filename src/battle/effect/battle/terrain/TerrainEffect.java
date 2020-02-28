@@ -68,7 +68,7 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
         }
 
         @Override
-        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source) {
             // No confusion for the groundies
             if (effectName == PokemonEffectNamesies.CONFUSION && victim.isOnTheGround(b)) {
                 return ApplyResult.failure("The protective mist prevents confusion!");

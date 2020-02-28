@@ -476,7 +476,7 @@ StatusPreventionEffect:
 ***
 EffectPreventionEffect:
     Method:
-        Header: ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName)
+        Header: ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source)
         Invoke: Get
         InvokeName: getPreventEffect
         EffectList: victim

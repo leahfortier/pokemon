@@ -1972,7 +1972,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source) {
             // Only block externally applied effects
             if (caster == victim) {
                 return ApplyResult.success();
@@ -2328,8 +2328,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            Messages.add(victim.getName() + "'s Perish Song count fell to " + (this.getTurns() - 1) + "!");
-            if (this.getTurns() == 1) {
+            int turn = this.getTurns() - 1;
+            Messages.add(victim.getName() + "'s Perish Song count fell to " + turn + "!");
+            if (turn == 0) {
                 victim.killKillKillMurderMurderMurder(b, "");
             }
         }

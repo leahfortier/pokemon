@@ -949,8 +949,9 @@ PerishSong:
     NumTurns: 3
     Int: PassableEffect, EndTurnEffect
     ApplyEndTurn:
-        Messages.add(victim.getName() + "'s Perish Song count fell to " + (this.getTurns() - 1) + "!");
-        if (this.getTurns() == 1) {
+        int turn = this.getTurns() - 1;
+        Messages.add(victim.getName() + "'s Perish Song count fell to " + turn + "!");
+        if (turn == 0) {
             victim.killKillKillMurderMurderMurder(b, "");
         }
         ###

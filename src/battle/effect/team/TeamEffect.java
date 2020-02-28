@@ -541,7 +541,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source) {
             if (effectName == PokemonEffectNamesies.CONFUSION && caster != victim && !caster.hasAbility(AbilityNamesies.INFILTRATOR)) {
                 return ApplyResult.failure("Safeguard prevents confusion!");
             }

@@ -9311,18 +9311,14 @@ public abstract class Attack implements AttackInterface {
 
         PerishSong() {
             super(AttackNamesies.PERISH_SONG, Type.NORMAL, MoveCategory.STATUS, 5, "Any Pok\u00e9mon that hears this song faints in three turns, unless it switches out of battle.");
-            super.moveTypes.add(MoveType.PROTECT_PIERCING);
-            super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
             super.moveTypes.add(MoveType.SOUND_BASED);
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
-            super.moveTypes.add(MoveType.MIRRORLESS);
+            super.moveTypes.add(MoveType.FIELD);
         }
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add("All " + PokeString.POKEMON + " hearing this song will faint in three turns!");
-
-            // TODO: Test and also this used to check if they didn't have the effect before casting just in case that's relevant later
             Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, user, victim, CastSource.ATTACK, false);
             Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, user, user, CastSource.ATTACK, false);
         }

@@ -813,9 +813,9 @@ public final class InvokeInterfaces {
     }
 
     public interface EffectPreventionEffect {
-        ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName);
+        ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source);
 
-        static ApplyResult getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+        static ApplyResult getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof EffectPreventionEffect && invokee.isActiveEffect()) {
@@ -826,7 +826,7 @@ public final class InvokeInterfaces {
                     }
 
                     EffectPreventionEffect effect = (EffectPreventionEffect)invokee;
-                    ApplyResult value = effect.preventEffect(b, caster, victim, effectName);
+                    ApplyResult value = effect.preventEffect(b, caster, victim, effectName, source);
                     if (value != null) {
                         return value;
                     }

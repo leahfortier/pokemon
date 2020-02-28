@@ -132,6 +132,8 @@ import pokemon.ability.Ability.Oblivious;
 import pokemon.ability.Ability.Overcoat;
 import pokemon.ability.Ability.Overgrow;
 import pokemon.ability.Ability.OwnTempo;
+import pokemon.ability.Ability.PastelVeil;
+import pokemon.ability.Ability.PerishBody;
 import pokemon.ability.Ability.Pickpocket;
 import pokemon.ability.Ability.Pickup;
 import pokemon.ability.Ability.Pixilate;
@@ -326,6 +328,7 @@ public enum AbilityNamesies {
     DOWNLOAD("Download", Download::new),
     PRESSURE("Pressure", Pressure::new),
     IMMUNITY("Immunity", Immunity::new),
+    PASTEL_VEIL("Pastel Veil", PastelVeil::new),
     SNOW_CLOAK("Snow Cloak", SnowCloak::new),
     MARVEL_SCALE("Marvel Scale", MarvelScale::new),
     MULTISCALE("Multiscale", Multiscale::new),
@@ -467,7 +470,8 @@ public enum AbilityNamesies {
     LIBERO("Libero", Libero::new),
     MIMICRY("Mimicry", Mimicry::new),
     MIRROR_ARMOR("Mirror Armor", MirrorArmor::new),
-    NEUTRALIZING_GAS("Neutralizing Gas", NeutralizingGas::new);
+    NEUTRALIZING_GAS("Neutralizing Gas", NeutralizingGas::new),
+    PERISH_BODY("Perish Body", PerishBody::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

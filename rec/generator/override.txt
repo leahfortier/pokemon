@@ -863,7 +863,7 @@ MultipleEffectPreventionAbility:
         ###
 *
 FullEffectPrevent:
-    Header: ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName)
+    Header: ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source)
     AddInterface: EffectPreventionEffect
 *
 EffectSourcePreventMessage:
