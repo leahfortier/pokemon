@@ -141,11 +141,13 @@ import pokemon.ability.Ability.PoisonHeal;
 import pokemon.ability.Ability.PoisonPoint;
 import pokemon.ability.Ability.PoisonTouch;
 import pokemon.ability.Ability.PowerOfAlchemy;
+import pokemon.ability.Ability.PowerSpot;
 import pokemon.ability.Ability.Prankster;
 import pokemon.ability.Ability.Pressure;
 import pokemon.ability.Ability.PrismArmor;
 import pokemon.ability.Ability.Protean;
 import pokemon.ability.Ability.PsychicSurge;
+import pokemon.ability.Ability.PunkRock;
 import pokemon.ability.Ability.PurePower;
 import pokemon.ability.Ability.QueenlyMajesty;
 import pokemon.ability.Ability.QuickFeet;
@@ -471,7 +473,9 @@ public enum AbilityNamesies {
     MIMICRY("Mimicry", Mimicry::new),
     MIRROR_ARMOR("Mirror Armor", MirrorArmor::new),
     NEUTRALIZING_GAS("Neutralizing Gas", NeutralizingGas::new),
-    PERISH_BODY("Perish Body", PerishBody::new);
+    PERISH_BODY("Perish Body", PerishBody::new),
+    POWER_SPOT("Power Spot", PowerSpot::new),
+    PUNK_ROCK("Punk Rock", PunkRock::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

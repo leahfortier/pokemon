@@ -4708,4 +4708,36 @@ public abstract class Ability implements AbilityInterface {
             Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, victim, CastSource.ABILITY, false);
         }
     }
+
+    static class PowerSpot extends Ability implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        PowerSpot() {
+            super(AbilityNamesies.POWER_SPOT, "Powers up moves.");
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Note: This was changed because is supposed to power up ally moves, so is probably too strong it's like Sheer Force with no side effects oh well whatever who cares...
+            return 1.3;
+        }
+    }
+
+    static class PunkRock extends Ability implements OpponentPowerChangeEffect, PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        PunkRock() {
+            super(AbilityNamesies.PUNK_ROCK, "Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves.");
+        }
+
+        @Override
+        public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.getAttack().isMoveType(MoveType.SOUND_BASED) ? .5 : 1;
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.getAttack().isMoveType(MoveType.SOUND_BASED) ? 1.3 : 1;
+        }
+    }
 }

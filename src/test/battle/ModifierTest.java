@@ -209,6 +209,16 @@ public class ModifierTest extends BaseTest {
         powerChangeTest(1, AttackNamesies.TACKLE, new TestInfo().defending(AbilityNamesies.ICE_SCALES));
         powerChangeTest(.5, AttackNamesies.SWIFT, new TestInfo().defending(AbilityNamesies.ICE_SCALES));
         powerChangeTest(1, AttackNamesies.SWIFT, new TestInfo().attacking(AbilityNamesies.ICE_SCALES));
+
+        // Power Spot just always boost by 30%
+        powerChangeTest(1.3, AttackNamesies.TACKLE, new TestInfo().attacking(AbilityNamesies.POWER_SPOT));
+        powerChangeTest(1.3, AttackNamesies.SWIFT, new TestInfo().attacking(AbilityNamesies.POWER_SPOT));
+        powerChangeTest(1, AttackNamesies.TACKLE, new TestInfo().defending(AbilityNamesies.POWER_SPOT));
+
+        // Punk Rock boosts sound moves by 30%, and reduces by 50% for incoming sound moves
+        powerChangeTest(1.3, AttackNamesies.OVERDRIVE, new TestInfo().attacking(AbilityNamesies.PUNK_ROCK));
+        powerChangeTest(.5, AttackNamesies.OVERDRIVE, new TestInfo().defending(AbilityNamesies.PUNK_ROCK));
+        powerChangeTest(1, AttackNamesies.SWIFT, new TestInfo().attacking(AbilityNamesies.PUNK_ROCK));
     }
 
     @Test

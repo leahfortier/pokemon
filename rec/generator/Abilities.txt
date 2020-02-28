@@ -1898,3 +1898,18 @@ Perish Body:
         Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, victim, CastSource.ABILITY, false);
         ###
 *
+Power Spot:
+    Desc: Powers up moves.
+    GetMultiplier: 
+        // Note: This was changed because is supposed to power up ally moves, so is probably too strong it's like Sheer Force with no side effects oh well whatever who cares...
+        return 1.3;
+        ###
+*
+Punk Rock:
+    Desc: Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves.
+    Int: OpponentPowerChangeEffect
+    GetOppMultiplier:
+        return user.getAttack().isMoveType(MoveType.SOUND_BASED) ? .5 : 1;
+        ###
+    PowerMultiplierCondition: 1.3 user.getAttack().isMoveType(MoveType.SOUND_BASED)
+*
