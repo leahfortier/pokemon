@@ -3250,7 +3250,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int restoreAmount(Move toRestore) {
+        public int restoreAmount(ActivePokemon restorer, Move toRestore) {
             return 10;
         }
     }
@@ -3265,7 +3265,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int restoreAmount(Move toRestore) {
+        public int restoreAmount(ActivePokemon restorer, Move toRestore) {
             return toRestore.getMaxPP();
         }
     }
@@ -4393,8 +4393,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
-        public int restoreAmount(Move toRestore) {
-            return 10;
+        public int restoreAmount(ActivePokemon restorer, Move toRestore) {
+            return this.ripen(restorer)*10;
         }
     }
 
@@ -4424,7 +4424,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public int getHealAmount(ActivePokemon p) {
-            return 10;
+            return this.ripen(p)*10;
         }
 
         @Override
@@ -4539,7 +4539,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public int getHealAmount(ActivePokemon p) {
-            return p.getHealHealthFractionAmount(1/4.0);
+            return p.getHealHealthFractionAmount(ripen(p)/4.0);
         }
 
         @Override
@@ -5203,8 +5203,13 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
         @Override
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+            if (!TypeAdvantage.isSuperEffective(user, victim, b)) {
+                return;
+            }
+
+            // Super-effective moves restore health
             String message = victim.getName() + "'s " + this.getName() + " restored its health!";
-            if (TypeAdvantage.isSuperEffective(user, victim, b) && victim.healHealthFraction(.25, b, message) > 0) {
+            if (victim.healHealthFraction(.25*ripen(victim), b, message) > 0) {
                 this.consumeItem(b, victim);
             }
         }
@@ -5279,7 +5284,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
 
             // Sharply raise random battle stat
             Stat stat = RandomUtils.getRandomValue(stats);
-            return new StageModifier(2, stat).modify(b, user, user, source);
+            return new StageModifier(2*ripen(user), stat).modify(b, user, user, source);
         }
 
         @Override

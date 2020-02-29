@@ -7,6 +7,7 @@ import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
 import item.hold.HoldItem;
+import main.Game;
 import message.Messages;
 import pokemon.ability.AbilityNamesies;
 import type.Type;
@@ -55,5 +56,12 @@ public interface Berry extends HoldItem {
 
         // I think this is only supposed to be called if it is a gainable effect berry, but I think it makes sense for all
         this.consumeBerry(stealer, b);
+    }
+
+    // Returns the appropriate multiplier based on whether the Pokemon has Ripen or not
+    // If the Pokemon has Ripen it should double the berry effects (returns 2) and if not does nothing (returns 1)
+    // Note: Ripen only works inside battle
+    default int ripen(ActivePokemon eater) {
+        return eater.hasAbility(AbilityNamesies.RIPEN) && Game.getPlayer().getBattle() != null ? 2 : 1;
     }
 }

@@ -4713,7 +4713,7 @@ public abstract class Ability implements AbilityInterface {
         private static final long serialVersionUID = 1L;
 
         PowerSpot() {
-            super(AbilityNamesies.POWER_SPOT, "Powers up moves.");
+            super(AbilityNamesies.POWER_SPOT, "Powers up the Pokémon's moves.");
         }
 
         @Override
@@ -4738,6 +4738,14 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
             return user.getAttack().isMoveType(MoveType.SOUND_BASED) ? 1.3 : 1;
+        }
+    }
+
+    static class Ripen extends Ability {
+        private static final long serialVersionUID = 1L;
+
+        Ripen() {
+            super(AbilityNamesies.RIPEN, "Ripens Berries and doubles their effect.");
         }
     }
 }

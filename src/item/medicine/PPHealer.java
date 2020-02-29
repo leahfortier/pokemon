@@ -9,7 +9,7 @@ import main.Global;
 import message.Messages;
 
 public interface PPHealer extends MoveUseItem, HoldItem {
-    int restoreAmount(Move toRestore);
+    int restoreAmount(ActivePokemon restorer, Move toRestore);
 
     // TODO: Need to be able to call these from the battle! (BattleMoveUse? yuck) -- Test messages once completed
     @Override
@@ -18,7 +18,7 @@ public interface PPHealer extends MoveUseItem, HoldItem {
     }
 
     default boolean use(ActivePokemon p, Move m, CastSource source) {
-        if (m.increasePP(this.restoreAmount(m))) {
+        if (m.increasePP(this.restoreAmount(p, m))) {
             switch (source) {
                 case USE_ITEM:
                     Messages.add(p.getName() + "'s PP for " + m.getAttack().getName() + " was restored!");

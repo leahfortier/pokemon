@@ -157,6 +157,7 @@ import pokemon.ability.Ability.Rattled;
 import pokemon.ability.Ability.Reckless;
 import pokemon.ability.Ability.Refrigerate;
 import pokemon.ability.Ability.Regenerator;
+import pokemon.ability.Ability.Ripen;
 import pokemon.ability.Ability.Rivalry;
 import pokemon.ability.Ability.RockHead;
 import pokemon.ability.Ability.RoughSkin;
@@ -475,7 +476,8 @@ public enum AbilityNamesies {
     NEUTRALIZING_GAS("Neutralizing Gas", NeutralizingGas::new),
     PERISH_BODY("Perish Body", PerishBody::new),
     POWER_SPOT("Power Spot", PowerSpot::new),
-    PUNK_ROCK("Punk Rock", PunkRock::new);
+    PUNK_ROCK("Punk Rock", PunkRock::new),
+    RIPEN("Ripen", Ripen::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

@@ -1387,7 +1387,7 @@ Ether:
         ###
 *
 PPRestoreAmount:
-    Header: int restoreAmount(Move toRestore)
+    Header: int restoreAmount(ActivePokemon restorer, Move toRestore)
 *
 AllPPRestoreAmount:
     Header: int restoreAmount(Move toRestore)

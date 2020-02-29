@@ -1,13 +1,16 @@
 package test.battle;
 
 import battle.attack.AttackNamesies;
+import battle.attack.Move;
 import battle.effect.EffectInterfaces.ItemListHolder;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import battle.stages.Stages;
 import item.ItemNamesies;
+import item.bag.Bag;
 import item.hold.HoldItem;
+import main.Game;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ability.Ability;
@@ -19,6 +22,7 @@ import pokemon.stat.Stat;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
+import trainer.player.Player;
 import type.Type;
 import type.TypeAdvantage;
 
@@ -1790,5 +1794,172 @@ public class AbilityTest extends BaseTest {
     // Neutralizing Gas suppresses all other abilities (for the most part)
     private void neutralizingGasTest(TestInfo testInfo, PokemonManipulator normal, PokemonManipulator suppressed) {
         testInfo.doubleTake(AbilityNamesies.NEUTRALIZING_GAS, normal, suppressed);
+    }
+
+    @Test
+    public void ripenTest() {
+        // Oran Berry restores by 10 (20 with Ripen)
+        ripenTest(
+                triggerHealthBerry(ItemNamesies.ORAN_BERRY),
+                (battle, attacking, defending) -> defending.assertHp(11),
+                (battle, attacking, defending) -> defending.assertHp(21)
+        );
+
+        // Sitrus Berry heals 1/4 max HP (1/2 with Ripen)
+        ripenTest(
+                triggerHealthBerry(ItemNamesies.SITRUS_BERRY),
+                (battle, attacking, defending) -> defending.assertHealthRatioDiff(1, -.25),
+                (battle, attacking, defending) -> defending.assertHealthRatioDiff(1, -.5)
+        );
+
+        // Leppa heals 10 (20 with Ripen) PP when completely depleted
+        ripenTest(
+                new TestInfo().with((battle, attacking, defending) -> {
+                    defending.withMoves(AttackNamesies.TAIL_WHIP);
+                    defending.withItem(ItemNamesies.LEPPA_BERRY);
+
+                    Move tailWhip = defending.getMoves(battle).get(0);
+                    Assert.assertEquals(AttackNamesies.TAIL_WHIP, tailWhip.getAttack().namesies());
+                    Assert.assertEquals(30, tailWhip.getPP());
+
+                    // Spite should fail first time since defending hasn't used anything yet
+                    attacking.setMove(new Move(AttackNamesies.SPITE));
+                    defending.setMove(tailWhip);
+                    battle.fight();
+                    Assert.assertEquals(29, tailWhip.getPP());
+
+                    // Spite will reduce by 4 and the use of Tail will reduce by 1, so -5 PP per turn
+                    for (int i = 1; i <= 5; i++) {
+                        battle.fight();
+                        Assert.assertEquals(29 - 5*i, tailWhip.getPP());
+                    }
+                    Assert.assertEquals(4, tailWhip.getPP());
+
+                    // No longer use Spite, only natural PP loss for the last few
+                    attacking.setMove(new Move(AttackNamesies.SPLASH));
+                    battle.fight();
+                    battle.fight();
+                    battle.fight();
+                    Assert.assertEquals(1, tailWhip.getPP());
+
+                    // Use Tail Whip one last time to deplete PP to zero, then Leppa Berry should restore it's PP
+                    defending.assertHoldingItem(ItemNamesies.LEPPA_BERRY);
+                    battle.fight();
+                    defending.assertConsumedBerry();
+                }),
+                (battle, attacking, defending) -> Assert.assertEquals(10, defending.getMoves(battle).get(0).getPP()),
+                (battle, attacking, defending) -> Assert.assertEquals(20, defending.getMoves(battle).get(0).getPP())
+        );
+
+        // Passho Berry reduces super-effective Water moves by 50% (25% with Ripen)
+        ripenTest(
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
+                        .defending(ItemNamesies.PASSHO_BERRY),
+                (battle, attacking, defending) -> {
+                    attacking.setExpectedDamageModifier(.5);
+                    battle.fight(AttackNamesies.WATER_GUN, AttackNamesies.ENDURE);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.setExpectedDamageModifier(.25);
+                    battle.fight(AttackNamesies.WATER_GUN, AttackNamesies.ENDURE);
+                }
+        );
+
+        // Enigma Berry heals 25% max HP (50% with Ripen) when hit by a super-effective move
+        ripenTest(
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
+                        .with((battle, attacking, defending) -> battle.falseSwipePalooza(true))
+                        .defending(ItemNamesies.ENIGMA_BERRY)
+                        .fight(AttackNamesies.WATER_GUN, AttackNamesies.ENDURE),
+                (battle, attacking, defending) -> defending.assertHealthRatioDiff(1, -.25),
+                (battle, attacking, defending) -> defending.assertHealthRatioDiff(1, -.5)
+        );
+
+        // Liechi Berry boosts Attack by 1 (2 with Ripen) when 'in a pinch'
+        ripenTest(
+                triggerHealthBerry(ItemNamesies.LIECHI_BERRY),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(1, Stat.ATTACK)),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(2, Stat.ATTACK))
+        );
+
+        // Starf Berry boosts a random stat by 2 (4 with Ripen) when 'in a pinch'
+        ripenTest(
+                triggerHealthBerry(ItemNamesies.STARF_BERRY),
+                (battle, attacking, defending) -> defending.assertTotalStages(2),
+                (battle, attacking, defending) -> defending.assertTotalStages(4)
+        );
+
+        // Maranga Berry increases Sp. Defense by 1 (2 with Ripen) when hit by a special attack
+        ripenTest(
+                new TestInfo().defending(ItemNamesies.MARANGA_BERRY).attackingFight(AttackNamesies.SWIFT),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(1, Stat.SP_DEFENSE)),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(2, Stat.SP_DEFENSE))
+        );
+
+        // Jaboca Berry reduces attacker by 1/8 max HP (1/4 with Ripen) when landing a physical attack
+        ripenTest(
+                new TestInfo().defending(ItemNamesies.JABOCA_BERRY).attackingFight(AttackNamesies.TACKLE),
+                (battle, attacking, defending) -> attacking.assertHealthRatio(7/8.0),
+                (battle, attacking, defending) -> attacking.assertHealthRatio(3/4.0)
+        );
+
+        // Ripen is also relevant when consuming in unconventional ways such as Fling
+        ripenTest(
+                new TestInfo()
+                        .with((battle, attacking, defending) -> {
+                            battle.falseSwipePalooza(true);
+                            attacking.giveItem(ItemNamesies.ORAN_BERRY);
+                            battle.fight(AttackNamesies.FLING, AttackNamesies.ENDURE);
+
+                            // Fling consumes the item for the thrower, but the recipient is the one who eats the berry
+                            attacking.assertConsumedItem();
+                            defending.assertNotHoldingItem();
+                            defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+                            defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
+                        }),
+                (battle, attacking, defending) -> defending.assertHp(11),
+                (battle, attacking, defending) -> defending.assertHp(21)
+        );
+
+        // Ripen is also relevant when consuming in unconventional ways such as Bug Bite/Pluck
+        ripenTest(
+                new TestInfo()
+                        .with((battle, attacking, defending) -> {
+                            battle.falseSwipePalooza(true);
+                            attacking.giveItem(ItemNamesies.ORAN_BERRY);
+                            battle.fight(AttackNamesies.ENDURE, AttackNamesies.PLUCK);
+
+                            // Pluck consumes the item for the recipient, but the user is the one who eats the berry
+                            attacking.assertConsumedItem();
+                            defending.assertNotHoldingItem();
+                            defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+                            defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
+                        }),
+                (battle, attacking, defending) -> defending.assertHp(11),
+                (battle, attacking, defending) -> defending.assertHp(21)
+        );
+
+        // Ripen only works inside the battle
+        TestPokemon bulby = TestPokemon.newPlayerPokemon(PokemonNamesies.BULBASAUR).withAbility(AbilityNamesies.RIPEN);
+        bulby.setHP(1);
+        Player player = Game.getPlayer();
+        player.exitBattle();
+        Bag bag = player.getBag();
+        bag.addItem(ItemNamesies.ORAN_BERRY);
+        bag.usePokemonItem(ItemNamesies.ORAN_BERRY, bulby);
+        bulby.assertHp(11);
+    }
+
+    // Returns a TestInfo that triggers the specified HeathTriggeredBerry at 1 HP
+    // Does so by reducing health to 1, then adding berry held item (so it doesn't trigger while reducing),
+    // and then uses False Swipe to trigger berry while at 1 HP
+    private TestInfo triggerHealthBerry(ItemNamesies berry) {
+        return new TestInfo().with((battle, attacking, defending) -> battle.falseSwipePalooza(true))
+                             .defending(berry)
+                             .attackingFight(AttackNamesies.FALSE_SWIPE);
+    }
+
+    private void ripenTest(TestInfo testInfo, PokemonManipulator withoutRipen, PokemonManipulator withRipen) {
+        testInfo.doubleTake(AbilityNamesies.RIPEN, withoutRipen, withRipen);
     }
 }

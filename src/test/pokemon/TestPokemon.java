@@ -170,7 +170,7 @@ public class TestPokemon extends ActivePokemon {
     }
 
     public void assertHealthRatioDiff(int prevHp, double fractionDiff) {
-        Assert.assertEquals(prevHp - (int)(fractionDiff*this.getMaxHP()), this.getHP());
+        this.assertHp(prevHp - (int)(fractionDiff*this.getMaxHP()));
     }
 
     public void assertMissingHp(int missingHp) {
@@ -277,7 +277,7 @@ public class TestPokemon extends ActivePokemon {
     }
 
     private void assertConsumedItem(boolean berry) {
-        Assert.assertFalse(this.isHoldingItem());
+        this.assertNotHoldingItem();
         this.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
         this.assertEffect(berry, PokemonEffectNamesies.EATEN_BERRY);
     }

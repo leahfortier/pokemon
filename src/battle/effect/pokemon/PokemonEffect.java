@@ -677,7 +677,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         private static final long serialVersionUID = 1L;
 
         Bracing() {
-            super(PokemonEffectNamesies.BRACING, 1, 1, false, false);
+            super(PokemonEffectNamesies.BRACING, 1, 1, true, false);
         }
 
         @Override

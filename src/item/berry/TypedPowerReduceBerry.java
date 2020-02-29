@@ -19,7 +19,7 @@ public interface TypedPowerReduceBerry extends Berry, OpponentPowerChangeEffect 
         if (user.isAttackType(this.getType()) && this.shouldReducePower(b, user, victim)) {
             Messages.add(victim.getName() + "'s " + this.getName() + " decreased " + user.getName() + "'s attack!");
             this.consumeItem(b, victim);
-            return .5;
+            return .5/this.ripen(victim);
         }
 
         return 1;
