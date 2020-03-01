@@ -31,39 +31,47 @@ import java.util.EnumSet;
 public class ModifierTest extends BaseTest {
     @Test
     public void statChangeTest() {
+        // Hustle boosts Attack, but decreases Accuracy
         statModifierTest(1.5, Stat.ATTACK, new TestInfo().attacking(AbilityNamesies.HUSTLE));
         statModifierTest(.8, Stat.ACCURACY, new TestInfo().attacking(AbilityNamesies.HUSTLE));
         statModifierTest(1, Stat.SP_ATTACK, new TestInfo().attacking(AbilityNamesies.HUSTLE));
 
+        // Light Screen doubles Sp. Defense
         statModifierTest(2, Stat.SP_DEFENSE, new TestInfo().defending(TeamEffectNamesies.LIGHT_SCREEN));
         statModifierTest(1, Stat.DEFENSE, new TestInfo().defending(TeamEffectNamesies.LIGHT_SCREEN));
 
+        // Sandstorm raises Sp. Defense of Rock-type Pokemon
         statModifierTest(1.5, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.LILEEP).defending(WeatherNamesies.SANDSTORM));
         statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.MAWILE).defending(WeatherNamesies.SANDSTORM));
         statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.SANDYGAST).defending(WeatherNamesies.SANDSTORM));
         statModifierTest(1, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.GEODUDE).defending(WeatherNamesies.SANDSTORM));
 
+        // Deep Sea Scale doubles Sp. Defense for Clamperl, Chinchou, and Lanturn (because I say so)
         statModifierTest(2, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.LANTURN, ItemNamesies.DEEP_SEA_SCALE));
         statModifierTest(2, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.CHINCHOU, ItemNamesies.DEEP_SEA_SCALE));
         statModifierTest(2, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.CLAMPERL, ItemNamesies.DEEP_SEA_SCALE));
         statModifierTest(1, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.CLAMPERL, ItemNamesies.DEEP_SEA_SCALE));
         statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.HUNTAIL, ItemNamesies.DEEP_SEA_SCALE));
 
+        // Eviolite boost Defense and Sp. Defense for unevolved Pokemon
         statModifierTest(1.5, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.DRAGONAIR, ItemNamesies.EVIOLITE));
         statModifierTest(1.5, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.CHANSEY, ItemNamesies.EVIOLITE));
         statModifierTest(1, Stat.SPEED, User.DEFENDING, new TestInfo().defending(PokemonNamesies.CHANSEY, ItemNamesies.EVIOLITE));
         statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().defending(PokemonNamesies.HUNTAIL, ItemNamesies.EVIOLITE));
         statModifierTest(1, Stat.DEFENSE, new TestInfo().defending(PokemonNamesies.RAICHU, ItemNamesies.EVIOLITE));
 
+        // Chlorophyll doubles Speed in Sunny weather
         statModifierTest(2, Stat.SPEED, User.ATTACKING, new TestInfo().attacking(AbilityNamesies.CHLOROPHYLL).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().attacking(AbilityNamesies.CHLOROPHYLL).attacking(WeatherNamesies.SUNNY));
 
+        // Flower Gift boost Attack and Sp. Defense when Sunny
         statModifierTest(1.5, Stat.ATTACK, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1.5, Stat.SP_DEFENSE, new TestInfo().defending(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1.5, Stat.SP_DEFENSE, User.ATTACKING, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1, Stat.SP_DEFENSE, User.DEFENDING, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
         statModifierTest(1, Stat.SPEED, User.ATTACKING, new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attacking(WeatherNamesies.SUNNY));
 
+        // Fur Cost doubles Defense
         statModifierTest(2, Stat.DEFENSE, new TestInfo().with(AttackNamesies.TACKLE).defending(AbilityNamesies.FUR_COAT));
         statModifierTest(1, Stat.SP_DEFENSE, new TestInfo().with(AttackNamesies.SURF).defending(AbilityNamesies.FUR_COAT));
     }
@@ -115,12 +123,14 @@ public class ModifierTest extends BaseTest {
 
         // Tanga berry reduces super-effective bug moves
         powerChangeTest(.5, AttackNamesies.X_SCISSOR, new TestInfo().defending(PokemonNamesies.KADABRA, ItemNamesies.TANGA_BERRY));
+        powerChangeTest(.25, AttackNamesies.X_SCISSOR, new TestInfo().defending(PokemonNamesies.KADABRA, ItemNamesies.TANGA_BERRY).defending(AbilityNamesies.RIPEN));
         powerChangeTest(1, AttackNamesies.CRUNCH, new TestInfo().defending(PokemonNamesies.KADABRA, ItemNamesies.TANGA_BERRY));
         powerChangeTest(1, AttackNamesies.SURF, new TestInfo().defending(PokemonNamesies.KADABRA, ItemNamesies.TANGA_BERRY));
         powerChangeTest(1, AttackNamesies.PSYBEAM, new TestInfo().defending(PokemonNamesies.KADABRA, ItemNamesies.TANGA_BERRY));
 
         // Yache berry reduces super-effective ice moves
         powerChangeTest(.5, AttackNamesies.ICE_BEAM, new TestInfo().defending(PokemonNamesies.DRAGONITE, ItemNamesies.YACHE_BERRY));
+        powerChangeTest(.25, AttackNamesies.ICE_BEAM, new TestInfo().defending(PokemonNamesies.DRAGONITE, ItemNamesies.YACHE_BERRY).defending(AbilityNamesies.RIPEN));
         powerChangeTest(1, AttackNamesies.OUTRAGE, new TestInfo().defending(PokemonNamesies.DRAGONITE, ItemNamesies.YACHE_BERRY));
         powerChangeTest(1, AttackNamesies.TACKLE, new TestInfo().defending(PokemonNamesies.DRAGONITE, ItemNamesies.YACHE_BERRY));
         powerChangeTest(1, AttackNamesies.SURF, new TestInfo().defending(PokemonNamesies.DRAGONITE, ItemNamesies.YACHE_BERRY));
@@ -128,13 +138,6 @@ public class ModifierTest extends BaseTest {
         powerChangeTest(1, AttackNamesies.ICE_BEAM, new TestInfo().defending(PokemonNamesies.CHARMANDER, ItemNamesies.YACHE_BERRY));
     }
 
-    /*
-    TODO: Other weather things that should be tested unrelated to PowerChange
-        - Raise Sp.Defense of certain types in Sandstorm
-        - Don't buffet those bros
-        - Damp Rock and those other bros
-        - No freezing when sunny
-     */
     @Test
     public void weatherTest() {
         // Weather effects boost/lower the power of certain types of moves
@@ -155,12 +158,12 @@ public class ModifierTest extends BaseTest {
         powerChangeTest(1, AttackNamesies.TACKLE, new TestInfo().attacking(PokemonNamesies.DIALGA, ItemNamesies.ADAMANT_ORB));
         powerChangeTest(1, AttackNamesies.OUTRAGE, new TestInfo().attacking(PokemonNamesies.DRAGONAIR, ItemNamesies.ADAMANT_ORB));
 
-        // Charcoal
+        // Charcoal boosts Fire-type moves
         powerChangeTest(1.2, AttackNamesies.FLAMETHROWER, new TestInfo().attacking(PokemonNamesies.CHARMANDER, ItemNamesies.CHARCOAL));
         powerChangeTest(1.2, AttackNamesies.FLAMETHROWER, new TestInfo().attacking(PokemonNamesies.BUDEW, ItemNamesies.CHARCOAL));
         powerChangeTest(1, AttackNamesies.AIR_SLASH, new TestInfo().attacking(PokemonNamesies.CHARIZARD, ItemNamesies.CHARCOAL));
 
-        // Life orb
+        // Life orb just boosts it all
         powerChangeTest(5324.0/4096.0, AttackNamesies.AIR_SLASH, new TestInfo().attacking(ItemNamesies.LIFE_ORB));
         powerChangeTest(5324.0/4096.0, AttackNamesies.OUTRAGE, new TestInfo().attacking(ItemNamesies.LIFE_ORB));
 
@@ -197,7 +200,7 @@ public class ModifierTest extends BaseTest {
         powerChangeTest(2, 2, AttackNamesies.ACROBATICS, new TestInfo());
         powerChangeTest(2, 1, AttackNamesies.ACROBATICS, new TestInfo().attacking(ItemNamesies.POTION));
 
-        // Body Slam -- doubles when the opponent uses Minimize
+        // Body Slam doubles power if opponent has used Minimize
         powerChangeTest(1, AttackNamesies.BODY_SLAM, new TestInfo());
         powerChangeTest(2, AttackNamesies.BODY_SLAM, new TestInfo().defendingFight(AttackNamesies.MINIMIZE));
 

@@ -1150,8 +1150,8 @@ SpeedWeather:
 WeatherStarter:
     AddInterface: EntryEffect
     AddMapField: Enter:
-        Messages.add(enterer.getName() + "'s " + this.getName() + " {2-}!");
-        b.addEffect(WeatherNamesies.{11}.getEffect());
+        String message = enterer.getName() + "'s " + this.getName() + " {2-}!";
+        Effect.apply(WeatherNamesies.{11}, b, enterer, enterer, CastSource.ABILITY, message);
         ###
 *
 WeatherEvasion:
@@ -1980,7 +1980,7 @@ TerrainStarter:
     AddInterface: EntryEffect
     AddMapField: Enter:
         String message = enterer.getName() + "'s " + this.getName() + " changed the field to {0} Terrain!";
-        Effect.cast(TerrainNamesies.{00}_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
+        Effect.apply(TerrainNamesies.{00}_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         ###
 *
 IgnoreAbilityMove:

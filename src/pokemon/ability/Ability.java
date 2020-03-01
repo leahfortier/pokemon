@@ -712,8 +712,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            Messages.add(enterer.getName() + "'s " + this.getName() + " made the sunlight turn harsh!");
-            b.addEffect(WeatherNamesies.SUNNY.getEffect());
+            String message = enterer.getName() + "'s " + this.getName() + " made the sunlight turn harsh!";
+            Effect.apply(WeatherNamesies.SUNNY, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -2076,8 +2076,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            Messages.add(enterer.getName() + "'s " + this.getName() + " whipped up a sandstorm!");
-            b.addEffect(WeatherNamesies.SANDSTORM.getEffect());
+            String message = enterer.getName() + "'s " + this.getName() + " whipped up a sandstorm!";
+            Effect.apply(WeatherNamesies.SANDSTORM, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -2414,8 +2414,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            Messages.add(enterer.getName() + "'s " + this.getName() + " started a downpour!");
-            b.addEffect(WeatherNamesies.RAINING.getEffect());
+            String message = enterer.getName() + "'s " + this.getName() + " started a downpour!";
+            Effect.apply(WeatherNamesies.RAINING, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -2542,8 +2542,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            Messages.add(enterer.getName() + "'s " + this.getName() + " caused it to hail!");
-            b.addEffect(WeatherNamesies.HAILING.getEffect());
+            String message = enterer.getName() + "'s " + this.getName() + " caused it to hail!";
+            Effect.apply(WeatherNamesies.HAILING, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -4254,7 +4254,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             String message = enterer.getName() + "'s " + this.getName() + " changed the field to Psychic Terrain!";
-            Effect.cast(TerrainNamesies.PSYCHIC_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
+            Effect.apply(TerrainNamesies.PSYCHIC_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -4268,7 +4268,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             String message = enterer.getName() + "'s " + this.getName() + " changed the field to Electric Terrain!";
-            Effect.cast(TerrainNamesies.ELECTRIC_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
+            Effect.apply(TerrainNamesies.ELECTRIC_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -4282,7 +4282,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             String message = enterer.getName() + "'s " + this.getName() + " changed the field to Misty Terrain!";
-            Effect.cast(TerrainNamesies.MISTY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
+            Effect.apply(TerrainNamesies.MISTY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -4296,7 +4296,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             String message = enterer.getName() + "'s " + this.getName() + " changed the field to Grassy Terrain!";
-            Effect.cast(TerrainNamesies.GRASSY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
+            Effect.apply(TerrainNamesies.GRASSY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -4746,6 +4746,20 @@ public abstract class Ability implements AbilityInterface {
 
         Ripen() {
             super(AbilityNamesies.RIPEN, "Ripens Berries and doubles their effect.");
+        }
+    }
+
+    static class SandSpit extends Ability implements TakeDamageEffect {
+        private static final long serialVersionUID = 1L;
+
+        SandSpit() {
+            super(AbilityNamesies.SAND_SPIT, "The Pokémon creates a sandstorm when it's hit by an attack.");
+        }
+
+        @Override
+        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+            String message = victim.getName() + "'s " + this.getName() + " whipped up a sandstorm!";
+            Effect.apply(WeatherNamesies.SANDSTORM, b, victim, victim, CastSource.ABILITY, message);
         }
     }
 }

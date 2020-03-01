@@ -164,6 +164,7 @@ import pokemon.ability.Ability.RoughSkin;
 import pokemon.ability.Ability.RunAway;
 import pokemon.ability.Ability.SandForce;
 import pokemon.ability.Ability.SandRush;
+import pokemon.ability.Ability.SandSpit;
 import pokemon.ability.Ability.SandStream;
 import pokemon.ability.Ability.SandVeil;
 import pokemon.ability.Ability.SapSipper;
@@ -477,7 +478,8 @@ public enum AbilityNamesies {
     PERISH_BODY("Perish Body", PerishBody::new),
     POWER_SPOT("Power Spot", PowerSpot::new),
     PUNK_ROCK("Punk Rock", PunkRock::new),
-    RIPEN("Ripen", Ripen::new);
+    RIPEN("Ripen", Ripen::new),
+    SAND_SPIT("Sand Spit", SandSpit::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

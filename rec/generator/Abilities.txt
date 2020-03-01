@@ -1916,3 +1916,11 @@ Punk Rock:
 Ripen:
     Desc: Ripens Berries and doubles their effect.
 *
+Sand Spit:
+    Desc: The Pokémon creates a sandstorm when it's hit by an attack.
+    Int: TakeDamageEffect
+    OnTakeDamage:
+        String message = victim.getName() + "'s " + this.getName() + " whipped up a sandstorm!";
+        Effect.apply(WeatherNamesies.SANDSTORM, b, victim, victim, CastSource.ABILITY, message);
+        ###
+*

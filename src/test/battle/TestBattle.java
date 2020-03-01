@@ -200,6 +200,10 @@ public class TestBattle extends Battle {
         assertEffect(false, member, effectNamesies);
     }
 
+    public void assertWeather(WeatherNamesies weatherNamesies) {
+        Assert.assertTrue(this.isWeather(weatherNamesies));
+    }
+
     public void assertFront(TestPokemon front) {
         Assert.assertTrue(this.isFront(front));
     }
