@@ -6,6 +6,7 @@ import battle.effect.EffectInterfaces.ItemListHolder;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
+import battle.effect.team.TeamEffectNamesies;
 import battle.stages.Stages;
 import item.ItemNamesies;
 import item.bag.Bag;
@@ -1961,5 +1962,63 @@ public class AbilityTest extends BaseTest {
 
     private void ripenTest(TestInfo testInfo, PokemonManipulator withoutRipen, PokemonManipulator withRipen) {
         testInfo.doubleTake(AbilityNamesies.RIPEN, withoutRipen, withRipen);
+    }
+
+    @Test
+    public void screenCleanerTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+        TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.SQUIRTLE);
+        attacking2.withAbility(AbilityNamesies.SCREEN_CLEANER);
+
+        // Add Reflect to attacking side, and Light Screen to defending side
+        // Also add some entry hazards which are irrelevant to make sure they don't clear
+        battle.fight(AttackNamesies.STEALTH_ROCK, AttackNamesies.TOXIC_SPIKES);
+        battle.fight(AttackNamesies.REFLECT, AttackNamesies.LIGHT_SCREEN);
+        battle.assertHasEffect(attacking, TeamEffectNamesies.REFLECT);
+        battle.assertHasEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
+        battle.assertHasEffect(attacking, TeamEffectNamesies.TOXIC_SPIKES);
+        battle.assertHasEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
+
+        // Whirlwind to send out Screen Cleaner bro
+        // Screen Cleaner cleans from both sides (NO ONE IS SAFE)
+        battle.assertFront(attacking);
+        battle.defendingFight(AttackNamesies.WHIRLWIND);
+        battle.assertFront(attacking2);
+        battle.assertNoEffect(attacking, TeamEffectNamesies.REFLECT);
+        battle.assertNoEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
+        battle.assertHasEffect(attacking, TeamEffectNamesies.TOXIC_SPIKES);
+        battle.assertHasEffect(defending, TeamEffectNamesies.STEALTH_ROCK);
+        attacking2.assertRegularPoison();
+
+        // Send Bulby back out (will absorb Toxic Spikes because Poison-type)
+        battle.assertFront(attacking2);
+        battle.defendingFight(AttackNamesies.WHIRLWIND);
+        battle.assertFront(attacking);
+        battle.assertNoEffect(attacking, TeamEffectNamesies.TOXIC_SPIKES);
+
+        // Aurora Veil will fail because not hailing yet
+        battle.fight(AttackNamesies.AURORA_VEIL, AttackNamesies.HAIL);
+        battle.assertNoEffect(attacking, TeamEffectNamesies.AURORA_VEIL);
+        battle.assertWeather(WeatherNamesies.HAILING);
+
+        // Lots of hail = no fail aurora veil
+        battle.attackingFight(AttackNamesies.AURORA_VEIL);
+        battle.assertHasEffect(attacking, TeamEffectNamesies.AURORA_VEIL);
+
+        // Put Screen Cleaner Squirtle out again and bye bye aurora veil
+        battle.assertFront(attacking);
+        battle.defendingFight(AttackNamesies.WHIRLWIND);
+        battle.assertFront(attacking2);
+        battle.assertNoEffect(attacking, TeamEffectNamesies.AURORA_VEIL);
+
+        // Screen Cleaner only removes barrier effects when entering, but they can be added while already out no probs
+        battle.fight(AttackNamesies.REFLECT, AttackNamesies.AURORA_VEIL);
+        battle.fight(AttackNamesies.AURORA_VEIL, AttackNamesies.LIGHT_SCREEN);
+        battle.assertHasEffect(attacking, TeamEffectNamesies.REFLECT);
+        battle.assertHasEffect(attacking, TeamEffectNamesies.AURORA_VEIL);
+        battle.assertHasEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
+        battle.assertHasEffect(defending, TeamEffectNamesies.AURORA_VEIL);
     }
 }

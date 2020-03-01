@@ -1924,3 +1924,12 @@ Sand Spit:
         Effect.apply(WeatherNamesies.SANDSTORM, b, victim, victim, CastSource.ABILITY, message);
         ###
 *
+Screen Cleaner:
+    Desc: When the Pokémon enters a battle, the effects of Light Screen, Reflect, and Aurora Veil are nullified for both opposing and ally Pokémon.
+    Int: EntryEffect
+    Enter:
+        Messages.add(enterer.getName() + "'s " + this.getName() + " cleared all the barriers!");
+        BarrierEffect.breakBarriers(b, enterer, enterer);
+        BarrierEffect.breakBarriers(b, b.getOtherPokemon(enterer), enterer);
+        ###
+*

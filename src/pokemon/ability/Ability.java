@@ -32,6 +32,7 @@ import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackingNoAdvantageChanger;
+import battle.effect.InvokeInterfaces.BarrierEffect;
 import battle.effect.InvokeInterfaces.BeforeAttackPreventingEffect;
 import battle.effect.InvokeInterfaces.BracingEffect;
 import battle.effect.InvokeInterfaces.ChangeAttackTypeEffect;
@@ -4760,6 +4761,21 @@ public abstract class Ability implements AbilityInterface {
         public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
             String message = victim.getName() + "'s " + this.getName() + " whipped up a sandstorm!";
             Effect.apply(WeatherNamesies.SANDSTORM, b, victim, victim, CastSource.ABILITY, message);
+        }
+    }
+
+    static class ScreenCleaner extends Ability implements EntryEffect {
+        private static final long serialVersionUID = 1L;
+
+        ScreenCleaner() {
+            super(AbilityNamesies.SCREEN_CLEANER, "When the Pokémon enters a battle, the effects of Light Screen, Reflect, and Aurora Veil are nullified for both opposing and ally Pokémon.");
+        }
+
+        @Override
+        public void enter(Battle b, ActivePokemon enterer) {
+            Messages.add(enterer.getName() + "'s " + this.getName() + " cleared all the barriers!");
+            BarrierEffect.breakBarriers(b, enterer, enterer);
+            BarrierEffect.breakBarriers(b, b.getOtherPokemon(enterer), enterer);
         }
     }
 }

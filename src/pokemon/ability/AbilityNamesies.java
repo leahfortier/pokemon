@@ -170,6 +170,7 @@ import pokemon.ability.Ability.SandVeil;
 import pokemon.ability.Ability.SapSipper;
 import pokemon.ability.Ability.Schooling;
 import pokemon.ability.Ability.Scrappy;
+import pokemon.ability.Ability.ScreenCleaner;
 import pokemon.ability.Ability.SereneGrace;
 import pokemon.ability.Ability.ShadowShield;
 import pokemon.ability.Ability.ShadowTag;
@@ -479,7 +480,8 @@ public enum AbilityNamesies {
     POWER_SPOT("Power Spot", PowerSpot::new),
     PUNK_ROCK("Punk Rock", PunkRock::new),
     RIPEN("Ripen", Ripen::new),
-    SAND_SPIT("Sand Spit", SandSpit::new);
+    SAND_SPIT("Sand Spit", SandSpit::new),
+    SCREEN_CLEANER("Screen Cleaner", ScreenCleaner::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 
