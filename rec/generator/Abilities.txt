@@ -1053,7 +1053,7 @@ Mummy:
         return AbilityNamesies.MUMMY.getNewAbility();
         ###
     AbilityMessage:
-        return victim.getName() + "'s ability was changed to " + this.namesies().getName() + "!";
+        return victim.getName() + "'s ability was changed to " + this.getName() + "!";
         ###
 *
 Defeatist:
@@ -1931,5 +1931,27 @@ Screen Cleaner:
         Messages.add(enterer.getName() + "'s " + this.getName() + " cleared all the barriers!");
         BarrierEffect.breakBarriers(b, enterer, enterer);
         BarrierEffect.breakBarriers(b, b.getOtherPokemon(enterer), enterer);
+        ###
+*
+Steam Engine:
+    Desc: Boosts the Pokémon's Speed stat drastically if hit by a Fire- or Water-type move.
+    Int: TakeDamageEffect
+    OnTakeDamage:
+        if (user.isAttackType(Type.FIRE, Type.WATER)) {
+            new StageModifier(6, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
+        }
+        ###
+*
+Steely Spirit:
+    Desc: Powers up the Pokémon's Steel-type moves.
+    PowerMultiplierCondition: 1.5 user.isAttackType(Type.STEEL)
+*
+Wandering Spirit:
+    Desc: The Pokémon exchanges Abilities with a Pokémon that hits it with a move that makes direct contact.
+    Int: PhysicalContactEffect
+    AbilitySwapper: True
+    Contact:
+        // Swap abilities with user on contact
+        this.swapAbilities(b, victim, user);
         ###
 *

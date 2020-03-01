@@ -197,7 +197,9 @@ import pokemon.ability.Ability.Stamina;
 import pokemon.ability.Ability.StanceChange;
 import pokemon.ability.Ability.Static;
 import pokemon.ability.Ability.Steadfast;
+import pokemon.ability.Ability.SteamEngine;
 import pokemon.ability.Ability.Steelworker;
+import pokemon.ability.Ability.SteelySpirit;
 import pokemon.ability.Ability.Stench;
 import pokemon.ability.Ability.StickyHold;
 import pokemon.ability.Ability.StormDrain;
@@ -229,6 +231,7 @@ import pokemon.ability.Ability.Unnerve;
 import pokemon.ability.Ability.VictoryStar;
 import pokemon.ability.Ability.VitalSpirit;
 import pokemon.ability.Ability.VoltAbsorb;
+import pokemon.ability.Ability.WanderingSpirit;
 import pokemon.ability.Ability.WaterAbsorb;
 import pokemon.ability.Ability.WaterBubble;
 import pokemon.ability.Ability.WaterCompaction;
@@ -481,7 +484,10 @@ public enum AbilityNamesies {
     PUNK_ROCK("Punk Rock", PunkRock::new),
     RIPEN("Ripen", Ripen::new),
     SAND_SPIT("Sand Spit", SandSpit::new),
-    SCREEN_CLEANER("Screen Cleaner", ScreenCleaner::new);
+    SCREEN_CLEANER("Screen Cleaner", ScreenCleaner::new),
+    STEAM_ENGINE("Steam Engine", SteamEngine::new),
+    STEELY_SPIRIT("Steely Spirit", SteelySpirit::new),
+    WANDERING_SPIRIT("Wandering Spirit", WanderingSpirit::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

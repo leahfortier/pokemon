@@ -47,6 +47,10 @@ class TestInfo {
         this.manipulator = this.manipulator.add(manipulator);
     }
 
+    public PokemonManipulator getManipulator() {
+        return this.manipulator;
+    }
+
     TestInfo attacking(PokemonNamesies pokemonName) {
         this.attackingName = pokemonName;
         return this;

@@ -5592,30 +5592,10 @@ Skill Swap:
     Type: Psychic
     Cat: Status
     MoveType: Substitute_Piercing, No_Magic_Coat
-    Int: ChangeAbilitySource
-    AbilityChange:
-        return ability;
-        ###
-    AbilityMessage:
-        return victim.getName() + "'s ability was changed to " + ability.getName() + "!";
-        ###
-    Field:
-        private Ability ability;
-
-        private static boolean canSkillSwap(ActivePokemon p) {
-            return p.getAbility().isReplaceable() && p.getAbility().isStealable();
-        }
-        ###
-    Applies: canSkillSwap(user) && canSkillSwap(victim)
+    AbilitySwapper: True
+    Applies: this.canSwapAbilities(user, victim)
     UniqueEffects:
-        Ability userAbility = user.getAbility();
-        Ability victimAbility = victim.getAbility();
-
-        ability = userAbility;
-        Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, victim, CastSource.ATTACK, super.printCast);
-
-        ability = victimAbility;
-        Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, user, CastSource.ATTACK, super.printCast);
+        this.swapAbilities(b, user, victim);
         ###
 *
 Volt Switch:

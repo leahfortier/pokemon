@@ -303,6 +303,22 @@ RemoveType:
 StartTurn:
     Header: void startTurn(Battle b, ActivePokemon me)
 *
+AbilitySwapper:
+    Header: void setAbility(Ability ability)
+    Body:
+        this.ability = ability;
+        ###
+    AddInterface: AbilitySwapper
+    AddMapField: Field:
+        private Ability ability;
+        ###
+    AddMapField: AbilityChange:
+        return ability;
+        ###
+    AddMapField: AbilityMessage:
+        return victim.getName() + "'s ability was changed to " + ability.getName() + "!";
+        ###
+*
 SwitchItemMessage:
     AddMapField: FullSwitchItemMessage:
         return {0};

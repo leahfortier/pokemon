@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.AbilitySwapper;
 import battle.effect.EffectInterfaces.BooleanHolder;
 import battle.effect.EffectInterfaces.DoubleDigger;
 import battle.effect.EffectInterfaces.DoubleDiver;
@@ -9490,19 +9491,25 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class SkillSwap extends Attack implements ChangeAbilitySource {
+    static class SkillSwap extends Attack implements AbilitySwapper {
         private static final long serialVersionUID = 1L;
 
         private Ability ability;
-
-        private static boolean canSkillSwap(ActivePokemon p) {
-            return p.getAbility().isReplaceable() && p.getAbility().isStealable();
-        }
 
         SkillSwap() {
             super(AttackNamesies.SKILL_SWAP, Type.PSYCHIC, MoveCategory.STATUS, 10, "The user employs its psychic power to exchange Abilities with the target.");
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+        }
+
+        @Override
+        public void setAbility(Ability ability) {
+            this.ability = ability;
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.swapAbilities(b, user, victim);
         }
 
         @Override
@@ -9516,20 +9523,8 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Ability userAbility = user.getAbility();
-            Ability victimAbility = victim.getAbility();
-
-            ability = userAbility;
-            Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, victim, CastSource.ATTACK, super.printCast);
-
-            ability = victimAbility;
-            Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, user, CastSource.ATTACK, super.printCast);
-        }
-
-        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return canSkillSwap(user) && canSkillSwap(victim);
+            return this.canSwapAbilities(user, victim);
         }
     }
 

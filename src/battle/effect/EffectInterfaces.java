@@ -30,6 +30,7 @@ import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
+import battle.effect.source.ChangeAbilitySource;
 import battle.effect.status.StatusInterface;
 import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
@@ -638,6 +639,39 @@ public final class EffectInterfaces {
             boolean front = !isPlayer;
             String imageName = formsie.getPokemonInfo().getImageName(shiny, front, form);
             Messages.add(new MessageUpdate(message).withImageName(imageName, isPlayer));
+        }
+    }
+
+    public interface AbilitySwapper extends ChangeAbilitySource, InvokeEffect {
+        void setAbility(Ability ability);
+
+        // Can swap if both abilities are replaceable and stealable and are not the same ability
+        default boolean canSwapAbilities(ActivePokemon user, ActivePokemon victim) {
+            Ability userAbility = user.getAbility();
+            Ability victimAbility = victim.getAbility();
+            return userAbility.namesies() != victimAbility.namesies()
+                    && this.canSwapAbility(userAbility)
+                    && this.canSwapAbility(victimAbility);
+        }
+
+        default boolean canSwapAbility(Ability ability) {
+            return ability.isReplaceable() && ability.isStealable();
+        }
+
+        default void swapAbilities(Battle b, ActivePokemon user, ActivePokemon victim) {
+            if (!this.canSwapAbilities(user, victim)) {
+                return;
+            }
+
+            Ability userAbility = user.getAbility();
+            Ability victimAbility = victim.getAbility();
+            CastSource source = this.getSource().getCastSource();
+
+            this.setAbility(userAbility);
+            Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, victim, source, true);
+
+            this.setAbility(victimAbility);
+            Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, user, source, true);
         }
     }
 }

@@ -2021,4 +2021,39 @@ public class AbilityTest extends BaseTest {
         battle.assertHasEffect(defending, TeamEffectNamesies.LIGHT_SCREEN);
         battle.assertHasEffect(defending, TeamEffectNamesies.AURORA_VEIL);
     }
+
+    @Test
+    public void wanderingSpiritTest() {
+        // Wandering Spirit swaps abilities on contact
+        wanderingSpiritTest(true, AttackNamesies.TACKLE);
+        wanderingSpiritTest(false, AttackNamesies.SWIFT);
+
+        // Long Reach doesn't make contact
+        wanderingSpiritTest(false, AttackNamesies.TACKLE, AbilityNamesies.LONG_REACH);
+
+        // Stance Change cannot be swapped
+        wanderingSpiritTest(false, AttackNamesies.TACKLE, AbilityNamesies.STANCE_CHANGE);
+
+        // Cannot swap with itself
+        wanderingSpiritTest(false, AttackNamesies.TACKLE, AbilityNamesies.WANDERING_SPIRIT);
+    }
+
+    private void wanderingSpiritTest(boolean shouldSwap, AttackNamesies attack) {
+        wanderingSpiritTest(shouldSwap, attack, AbilityNamesies.OVERGROW);
+    }
+
+    private void wanderingSpiritTest(boolean shouldSwap, AttackNamesies attack, AbilityNamesies attackingAbility) {
+        TestBattle battle = TestBattle.create();
+        TestPokemon attacking = battle.getAttacking().withAbility(attackingAbility);
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.WANDERING_SPIRIT);
+
+        battle.fight(attack, AttackNamesies.ENDURE);
+        if (shouldSwap) {
+            attacking.assertChangedAbility(AbilityNamesies.WANDERING_SPIRIT);
+            defending.assertChangedAbility(attackingAbility);
+        } else {
+            attacking.assertAbility(attackingAbility);
+            defending.assertAbility(AbilityNamesies.WANDERING_SPIRIT);
+        }
+    }
 }

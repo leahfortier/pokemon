@@ -222,6 +222,10 @@ public class ModifierTest extends BaseTest {
         powerChangeTest(1.3, AttackNamesies.OVERDRIVE, new TestInfo().attacking(AbilityNamesies.PUNK_ROCK));
         powerChangeTest(.5, AttackNamesies.OVERDRIVE, new TestInfo().defending(AbilityNamesies.PUNK_ROCK));
         powerChangeTest(1, AttackNamesies.SWIFT, new TestInfo().attacking(AbilityNamesies.PUNK_ROCK));
+
+        // Steely Spirit boosts Steel-type moves by 50%
+        powerChangeTest(1.5, AttackNamesies.FLASH_CANNON, new TestInfo().attacking(AbilityNamesies.STEELY_SPIRIT));
+        powerChangeTest(1, AttackNamesies.SWIFT, new TestInfo().attacking(AbilityNamesies.STEELY_SPIRIT));
     }
 
     @Test
@@ -264,36 +268,60 @@ public class ModifierTest extends BaseTest {
     }
 
     @Test
+    public void simpleContraryTest() {
+        // Simple/Contrary applies for changes made by the user or by the opponent
+        simpleContraryTest(1, Stat.DEFENSE, User.DEFENDING, new TestInfo().defendingFight(AttackNamesies.DEFENSE_CURL));
+        simpleContraryTest(-1, Stat.DEFENSE, User.DEFENDING, new TestInfo().attackingFight(AttackNamesies.TAIL_WHIP));
+        simpleContraryTest(2, Stat.ATTACK, User.ATTACKING, new TestInfo().attackingFight(AttackNamesies.SWORDS_DANCE));
+        simpleContraryTest(-2, Stat.SP_ATTACK, User.ATTACKING, new TestInfo().defendingFight(AttackNamesies.EERIE_IMPULSE));
+        simpleContraryTest(3, Stat.DEFENSE, User.DEFENDING, new TestInfo().defendingFight(AttackNamesies.COTTON_GUARD));
+
+        // Simple/Contrary even works against self-inflicted negative stat changes
+        simpleContraryTest(-1, Stat.SPEED, User.ATTACKING, new TestInfo().attackingFight(AttackNamesies.HAMMER_ARM));
+        simpleContraryTest(-2, Stat.SP_ATTACK, User.ATTACKING, new TestInfo().attackingFight(AttackNamesies.LEAF_STORM));
+    }
+
+    private void simpleContraryTest(int expectedStage, Stat stat, User abilityHolder, TestInfo testInfo) {
+        Assert.assertNotEquals(User.BOTH, abilityHolder);
+        PokemonManipulator manipulator = testInfo.getManipulator();
+
+        // Simple doubles stat changes, Contrary reverses stat changes
+        simpleContraryTest(expectedStage, stat, abilityHolder, AbilityNamesies.NO_ABILITY, manipulator);
+        simpleContraryTest(2*expectedStage, stat, abilityHolder, AbilityNamesies.SIMPLE, manipulator);
+        simpleContraryTest(-expectedStage, stat, abilityHolder, AbilityNamesies.CONTRARY, manipulator);
+
+        // Simple and Contrary only reflect the receiver, not the user
+        User opposite = abilityHolder.isAttacking() ? User.DEFENDING : User.ATTACKING;
+        simpleContraryTest(expectedStage, stat, opposite, AbilityNamesies.SIMPLE, manipulator);
+        simpleContraryTest(expectedStage, stat, opposite, AbilityNamesies.CONTRARY, manipulator);
+    }
+
+    private void simpleContraryTest(int expectedStage, Stat stat, User abilityHolder, AbilityNamesies ability, PokemonManipulator manipulator) {
+        TestInfo testInfo = new TestInfo();
+        if (abilityHolder.isAttacking()) {
+            testInfo.attacking(ability);
+        } else {
+            testInfo.defending(ability);
+        }
+        stageChangeTest(expectedStage, stat, testInfo.with(manipulator));
+    }
+
+    @Test
     public void stageChangeTest() {
-        stageChangeTest(1, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.NO_ABILITY).defendingFight(AttackNamesies.DEFENSE_CURL));
-        stageChangeTest(2, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.SIMPLE).defendingFight(AttackNamesies.DEFENSE_CURL));
-        stageChangeTest(-1, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.CONTRARY).defendingFight(AttackNamesies.DEFENSE_CURL));
-
-        stageChangeTest(-1, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.NO_ABILITY).attackingFight(AttackNamesies.TAIL_WHIP));
-        stageChangeTest(-2, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.SIMPLE).attackingFight(AttackNamesies.TAIL_WHIP));
-        stageChangeTest(1, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.CONTRARY).attackingFight(AttackNamesies.TAIL_WHIP));
-
-        // Contrary even works against self-inflicted negative stat changes
-        stageChangeTest(-1, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.NO_ABILITY).attackingFight(AttackNamesies.HAMMER_ARM));
-        stageChangeTest(-2, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.SIMPLE).attackingFight(AttackNamesies.HAMMER_ARM));
-        stageChangeTest(1, Stat.SPEED, new TestInfo().attacking(AbilityNamesies.CONTRARY).attackingFight(AttackNamesies.HAMMER_ARM));
-
+        // Tangled Feet raises Evasion stage when confused
         stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.TANGLED_FEET, PokemonEffectNamesies.CONFUSION));
         stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.TANGLED_FEET).attackingFight(AttackNamesies.CONFUSE_RAY));
 
+        // Sand Veil raises Evasion in Sandstorm, Snow Cloak raises Evasion in Hail
         stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.SAND_VEIL, WeatherNamesies.SANDSTORM));
         stageChangeTest(1, Stat.EVASION, new TestInfo().defending(AbilityNamesies.SNOW_CLOAK, WeatherNamesies.HAILING));
         stageChangeTest(new TestStages(), new TestInfo().defending(AbilityNamesies.SNOW_CLOAK, WeatherNamesies.SANDSTORM));
         stageChangeTest(new TestStages(), new TestInfo().defending(AbilityNamesies.SAND_VEIL, WeatherNamesies.SUNNY));
 
+        // Gravity sharply decreases Evasion
         stageChangeTest(-2, Stat.EVASION, new TestInfo().attacking(StandardBattleEffectNamesies.GRAVITY));
 
-        stageChangeTest(-2, Stat.DEFENSE, new TestInfo().attackingFight(AttackNamesies.SCREECH));
-        stageChangeTest(-4, Stat.DEFENSE, new TestInfo().defending(AbilityNamesies.SIMPLE).attackingFight(AttackNamesies.SCREECH));
-
-        stageChangeTest(2, Stat.ATTACK, new TestInfo().attackingFight(AttackNamesies.SWORDS_DANCE));
-        stageChangeTest(4, Stat.ATTACK, new TestInfo().attacking(AbilityNamesies.SIMPLE).attackingFight(AttackNamesies.SWORDS_DANCE));
-
+        // Growth raises Attack and Sp. Attack by 1 stage (each by 2 when Sunny)
         stageChangeTest(
                 new TestStages().set(1, Stat.ATTACK, Stat.SP_ATTACK),
                 new TestInfo().attackingFight(AttackNamesies.GROWTH)
@@ -303,6 +331,7 @@ public class ModifierTest extends BaseTest {
                 new TestInfo().attackingFight(AttackNamesies.SUNNY_DAY).attackingFight(AttackNamesies.GROWTH)
         );
 
+        // Each stack of Stockpile raises Defense and Sp. Defense by 1 stage with max of 3 stacks
         stageChangeTest(
                 new TestStages().set(3, Stat.DEFENSE, Stat.SP_DEFENSE),
                 new TestInfo().with((battle, attacking, defending) -> {
@@ -315,6 +344,7 @@ public class ModifierTest extends BaseTest {
                 })
         );
 
+        // After using Spit Up (or Swallow) though the effect will be removed and stages will revert
         stageChangeTest(
                 new TestStages(),
                 new TestInfo().with((battle, attacking, defending) -> {
@@ -328,10 +358,11 @@ public class ModifierTest extends BaseTest {
                 })
         );
 
+        // Once removed though, you can just add it back again (in this case 2 stacks)
         stageChangeTest(
                 new TestStages().set(2, Stat.DEFENSE, Stat.SP_DEFENSE),
                 new TestInfo().with((battle, attacking, defending) -> {
-                    battle.fight(AttackNamesies.SWIFT, AttackNamesies.STOCKPILE);
+                    battle.fight(AttackNamesies.FALSE_SWIPE, AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);
                     battle.defendingFight(AttackNamesies.STOCKPILE);

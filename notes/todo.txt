@@ -83,6 +83,7 @@ Descriptions that change manually:
         Download ('an opposing' -> 'opposing' (more for length than for clarity))
         Pastel Veil (Remove 'and its ally Pokémon')
         Power Spot ('Just being next to the Pokémon powers up moves.' -> 'Powers up the Pokémon's moves.')
+        Steely Spirit ('ally' -> 'the')
     Items:
         Fishing Rod
         Deep Sea Scale (Added ', Chinchou, or Lanturn' -- Lanturn rules and deserves this)

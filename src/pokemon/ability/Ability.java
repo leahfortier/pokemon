@@ -9,6 +9,7 @@ import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.AbilitySwapper;
 import battle.effect.EffectInterfaces.BooleanHolder;
 import battle.effect.EffectInterfaces.ChoiceEffect;
 import battle.effect.EffectInterfaces.FormAbility;
@@ -2779,7 +2780,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return victim.getName() + "'s ability was changed to " + this.namesies().getName() + "!";
+            return victim.getName() + "'s ability was changed to " + this.getName() + "!";
         }
     }
 
@@ -4776,6 +4777,65 @@ public abstract class Ability implements AbilityInterface {
             Messages.add(enterer.getName() + "'s " + this.getName() + " cleared all the barriers!");
             BarrierEffect.breakBarriers(b, enterer, enterer);
             BarrierEffect.breakBarriers(b, b.getOtherPokemon(enterer), enterer);
+        }
+    }
+
+    static class SteamEngine extends Ability implements TakeDamageEffect {
+        private static final long serialVersionUID = 1L;
+
+        SteamEngine() {
+            super(AbilityNamesies.STEAM_ENGINE, "Boosts the Pokémon's Speed stat drastically if hit by a Fire- or Water-type move.");
+        }
+
+        @Override
+        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+            if (user.isAttackType(Type.FIRE, Type.WATER)) {
+                new StageModifier(6, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
+            }
+        }
+    }
+
+    static class SteelySpirit extends Ability implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        SteelySpirit() {
+            super(AbilityNamesies.STEELY_SPIRIT, "Powers up the Pokémon's Steel-type moves.");
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isAttackType(Type.STEEL) ? 1.5 : 1;
+        }
+    }
+
+    static class WanderingSpirit extends Ability implements PhysicalContactEffect, AbilitySwapper {
+        private static final long serialVersionUID = 1L;
+
+        private Ability ability;
+
+        WanderingSpirit() {
+            super(AbilityNamesies.WANDERING_SPIRIT, "The Pokémon exchanges Abilities with a Pokémon that hits it with a move that makes direct contact.");
+        }
+
+        @Override
+        public void setAbility(Ability ability) {
+            this.ability = ability;
+        }
+
+        @Override
+        public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Swap abilities with user on contact
+            this.swapAbilities(b, victim, user);
+        }
+
+        @Override
+        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return ability;
+        }
+
+        @Override
+        public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return victim.getName() + "'s ability was changed to " + ability.getName() + "!";
         }
     }
 }
