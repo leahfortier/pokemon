@@ -7,6 +7,7 @@ import battle.effect.InvokeInterfaces.BattleEndTurnEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.InvokeInterfaces.TerrainCastEffect;
+import battle.effect.InvokeInterfaces.WeatherChangedEffect;
 import battle.effect.InvokeInterfaces.WeatherEliminatingEffect;
 import battle.effect.battle.BattleEffect;
 import battle.effect.battle.terrain.TerrainEffect;
@@ -52,7 +53,7 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
     public List<BattleEffect<? extends BattleEffectNamesies>> asList() {
         List<BattleEffect<? extends BattleEffectNamesies>> list = super.asList();
         list.add(weather);
-        if (currentTerrain != null) {
+        if (this.hasTerrain()) {
             list.add(currentTerrain);
         }
         return list;
@@ -70,11 +71,11 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
         if (effect instanceof WeatherEffect) {
             weather = (WeatherEffect)effect;
             Messages.add(new MessageUpdate().withWeather(weather));
+            WeatherChangedEffect.invokeWeatherChangedEffect(battle, weather.namesies());
 
-            if (WeatherEliminatingEffect.shouldEliminateWeather(battle, battle.getPlayer().front(), weather)
-                    || WeatherEliminatingEffect.shouldEliminateWeather(battle, battle.getOpponent().front(), weather)) {
-                weather = WeatherNamesies.CLEAR_SKIES.getEffect();
-                Messages.add(new MessageUpdate().withWeather(weather));
+            // If weather should be eliminated, recurse with Clear Skies
+            if (WeatherEliminatingEffect.shouldEliminateWeather(battle, weather.namesies())) {
+                this.add(WeatherNamesies.CLEAR_SKIES.getEffect());
             }
         } else if (effect instanceof TerrainEffect) {
             currentTerrain = (TerrainEffect)effect;
@@ -105,7 +106,7 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
         if (weather.namesies() == effectToRemove) {
             this.remove(weather);
             return true;
-        } else if (currentTerrain != null && currentTerrain.namesies() == effectToRemove) {
+        } else if (this.hasTerrain() && currentTerrain.namesies() == effectToRemove) {
             this.remove(currentTerrain);
             return true;
         } else {
@@ -126,7 +127,7 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
             System.out.println("Weather: " + this.weather);
         }
 
-        if (currentTerrain != null) {
+        if (this.hasTerrain()) {
             System.out.println("Terrain: " + this.currentTerrain);
         }
     }
@@ -135,8 +136,12 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
         return weather;
     }
 
+    public boolean hasTerrain() {
+        return this.currentTerrain != null;
+    }
+
     public TerrainType getTerrainType() {
-        return this.currentTerrain == null ? this.baseTerrain : this.currentTerrain.getTerrainType();
+        return this.hasTerrain() ? this.currentTerrain.getTerrainType() : this.baseTerrain;
     }
 
     private void setBaseWeather(WeatherState weatherState) {

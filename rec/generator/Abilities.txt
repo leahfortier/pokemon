@@ -10,6 +10,7 @@ Constructor:
 
 No Ability:
     Desc: None
+    Irrestealable: True
 *
 Overgrow:
     Desc: Powers up Grass-type moves when the Pok\u00e9mon's HP is low.
@@ -484,7 +485,8 @@ Soundproof:
     Desc: Soundproofing of the Pok\u00e9mon itself gives full immunity to all sound-based moves.
     MoveTypePrevent: Sound_Based sound-based moves
     FullEffectPrevent:
-        if (effectName == PokemonEffectNamesies.PERISH_SONG) {
+        // Only sound-based when from the Perish Song attack (not Perish Body)
+        if (effectName == PokemonEffectNamesies.PERISH_SONG && source == CastSource.ATTACK) {
             return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " makes it immune to sound based moves!");
         }
         
@@ -670,6 +672,10 @@ Immunity:
     Desc: The immune system of the Pok\u00e9mon prevents it from getting poisoned.
     StatusPreventAbility: Poisoned
 *
+Pastel Veil:
+    Desc: Protects the Pokémon from being poisoned.
+    StatusPreventAbility: Poisoned
+*
 Snow Cloak:
     Desc: Boosts evasion in a hailstorm.
     WeatherEvasion: Hailing
@@ -808,7 +814,6 @@ Truant:
 *
 Wonder Guard:
     Desc: Its mysterious power only lets supereffective moves hit the Pok\u00e9mon.
-    Irreplaceable: True
     Irrestealable: True
     Int: AttackBlocker
     Block:
@@ -1048,7 +1053,7 @@ Mummy:
         return AbilityNamesies.MUMMY.getNewAbility();
         ###
     AbilityMessage:
-        return victim.getName() + "'s ability was changed to " + this.namesies().getName() + "!";
+        return victim.getName() + "'s ability was changed to " + this.getName() + "!";
         ###
 *
 Defeatist:
@@ -1149,11 +1154,8 @@ Illusion:
         breakIllusion(b, victim);
         ###
     GetChangeTypeEffect:
-        if (display && activated) {
-            return illusionType;
-        }
-
-        return p.getActualType();
+        // Type change is only for appearances
+        return display && activated ? illusionType : null;
         ###
     AbilityIsActive:
         return activated;
@@ -1246,6 +1248,7 @@ Pickup:
             Messages.add(p.getName() + " picked up " + StringUtils.articleString(item.getName()) + "!");
         }
         ###
+    ItemListHolder: items
     Field:
         private static final List<ItemNamesies> items = new ArrayList<>();
         static {
@@ -1418,7 +1421,7 @@ Shields Down:
 *
 Stance Change:
     Desc: The Pok\u00e9mon changes its form to Blade Forme when it uses an attack move, and changes to Shield Forme when it uses King's Shield.
-    FormChange: bladeForm Shield 60,_50,_150,_50,_150,_60 Blade 60,_150,_50,_150,_50,_60 
+    StatFormChange: bladeForm Shield 60,_50,_150,_50,_150,_60 Blade 60,_150,_50,_150,_50,_60 
     Int: StartAttackEffect, EntryEffect
     BeforeAttack:
         // TODO: This should really activate right before printing the attacking move, not after
@@ -1458,20 +1461,7 @@ Gale Wings:
 *
 Protean:
     Desc: Changes the Pok\u00e9mon's type to the type of the move it's about to use.
-    Int: StartAttackEffect
-    BeforeAttack:
-        // Protean activates for all moves except for Struggle
-        if (attacking.getAttack().namesies() != AttackNamesies.STRUGGLE) {
-            type = attacking.getAttackType();
-            Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, b, attacking, attacking, CastSource.ABILITY, true);
-        }
-        ###
-    Field:
-        private Type type;
-        ###
-    ChangeType:
-        return new PokeType(type);
-        ###
+    MoveTypeAbility: True
 *
 Stamina:
     Desc: Boosts the Defense stat when hit by an attack.
@@ -1553,21 +1543,14 @@ Disguise:
     Constructor:
         this.activated = false;
         ###
-    Int: AbsorbDamageEffect
+    Int: AbsorbDamageEffect, FormAbility
     AbsorbDamage:
-        if (!activated && b.getOtherPokemon(damageTaker).isAttacking()) {
-            boolean isPlayer = damageTaker.isPlayer();
-            boolean shiny = damageTaker.isShiny();
-            boolean front = !isPlayer;
-
-            Messages.add(new MessageUpdate(damageTaker.getName() + "'s disguise was busted!!")
-                .withImageName(damageTaker.getPokemonInfo().getImageName(shiny, front, true), isPlayer)
-            );
-
+        // This method is only called for direct damage so do not need to check if attacking
+        if (!activated) {
             activated = true;
+            addFormMessage(damageTaker, damageTaker.getName() + "'s disguise was busted!!", true);
             return true;
         }
-
         return false;
         ###
 *
@@ -1753,5 +1736,222 @@ Power of Alchemy:
 
         // Cast the change ability effect onto the murderer to give the dead's ability
         Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, murderer, murderer, CastSource.ABILITY, true);
+        ###
+*
+Ball Fetch:
+    Desc: If the Pokémon is not holding an item, it will fetch the Poké Ball from the first failed throw of the battle.
+*
+Cotton Down:
+    Desc: When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stat of all Pokémon except itself.
+    Int: OpponentApplyDamageEffect
+    OpponentApplyDamage:
+        new StageModifier(-1, Stat.SPEED).modify(b, victim, user, CastSource.ABILITY);
+        ###
+*
+Dauntless Shield:
+    Desc: Boosts the Pokémon's Defense stat when the Pokémon enters a battle.
+    Int: EntryEffect
+    Enter:
+        new StageModifier(1, Stat.DEFENSE).modify(b, enterer, enterer, CastSource.ABILITY);
+        ###
+*
+Gorilla Tactics:
+    Desc: Boosts the Pokémon's Attack stat but only allows the use of the first selected move.
+    ChoiceEffect: Attack
+*
+Gulp Missile:
+    Desc: When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.
+    Irreplaceable: True
+    Irrestealable: True
+    Int: StartAttackEffect, EntryEffect, OpponentApplyDamageEffect, FormAbility
+    BeforeAttack:
+        // Already gulping/gorging -- nothing else to do right now
+        if (this.gulpForm != GulpForm.NORMAL) {
+            return;
+        }
+
+        // Using Surf or Dive will make Cramorant change forms
+        AttackNamesies attack = attacking.getAttack().namesies();
+        if (attack == AttackNamesies.SURF || attack == AttackNamesies.DIVE) {
+            // Gorge on a Pika when low on health, otherwise get them fishies
+            this.gulpForm = attacking.getHPRatio() < .5 ? GulpForm.GORGING : GulpForm.GULPING;
+
+            // TODO: Once Cramorant's images are actually set up will need to adjust since this only includes one form
+            // TODO: Game is currently freezing here when using Dive (semi-inv + image change)
+            String gulping = this.gulpForm == GulpForm.GULPING ? "gulping" : "gorging";
+            this.addFormMessage(attacking, attacking.getName() + " is " + gulping + "!!", true);
+        }
+        ###
+    Field:
+        private GulpForm gulpForm;
+
+        private enum GulpForm {
+            NORMAL, GULPING, GORGING
+        }
+        ###
+    Enter:
+        this.gulpForm = GulpForm.NORMAL;
+        ###
+    OpponentApplyDamage:
+        // Empty mouth = empty effect
+        if (this.gulpForm == GulpForm.NORMAL) {
+            return;
+        }
+
+        boolean gulping = this.gulpForm == GulpForm.GULPING;
+
+        // Release the prey and return to normal form
+        this.gulpForm = GulpForm.NORMAL;
+        addFormMessage(victim, victim.getName() + " released its prey!!!", false);
+
+        // When attacked, releases its prey dealing 1/4 max HP damage to the attacker
+        // Additionally, lowers defense when gulping or paralyzes when gorging
+        // Note: Use Effect cast source here so it uses the default messaging instead of referring to Gulp Missile
+        user.reduceHealthFraction(b, .25, "");
+        if (gulping) {
+            new StageModifier(-1, Stat.DEFENSE).modify(b, victim, user, CastSource.EFFECT);
+        } else {
+            StatusNamesies.PARALYZED.getStatus().apply(b, victim, user, CastSource.EFFECT);
+        }
+        ###
+*
+Hunger Switch:
+    Desc: The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode after the end of each turn.
+    Irrestealable: True
+    ChangeForm: hangryMode Hangry Full_Belly
+    Int: EndTurnEffect
+    ApplyEndTurn:
+        changeForm(victim);
+        ###
+    BooleanHolder: this.hangryMode
+*
+Ice Face:
+    Desc: The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it hails.
+    StatFormChange: nonIcy Ice 75,_80,_110,_65,_90,_50 No_Ice 75,_80,_70,_65,_50,_130
+    Int: EntryEffect, AbsorbDamageEffect
+    Enter:
+        // Note: In game form persists when recalled and if this is ever changed it should re-enter Ice Form if hailing
+        Messages.add(enterer.getName() + " is in Ice Forme!");
+        nonIcy = false;
+        ###
+    AbsorbDamage:
+        // When hit by a physical move in Ice Form, the Pokemon will absorb the hit and lose its icy face
+        if (!nonIcy && b.getOtherPokemon(damageTaker).getAttack().getCategory() == MoveCategory.PHYSICAL) {
+            changeForm(damageTaker);
+            return true;
+        }
+
+        return false;
+        ###
+    WeatherChanged:
+        // When hail starts, change back to ice face
+        if (nonIcy && weather == WeatherNamesies.HAILING) {
+            changeForm(effectHolder);
+        }
+        ###
+*
+Ice Scales:
+    Desc: The Pokémon is protected by ice scales, which halve the damage taken from special moves.
+    Int: OpponentPowerChangeEffect
+    GetOppMultiplier:
+        return user.getAttack().getCategory() == MoveCategory.SPECIAL ? .5 : 1;
+        ###
+*
+Intrepid Sword:
+    Desc: Boosts the Pokémon's Attack stat when the Pokémon enters a battle.
+    Int: EntryEffect
+    Enter:
+        new StageModifier(1, Stat.ATTACK).modify(b, enterer, enterer, CastSource.ABILITY);
+        ###
+*
+Libero:
+    Desc: Changes the Pokémon's type to the type of the move it's about to use.
+    MoveTypeAbility: True
+*
+Mimicry:
+    Desc: Changes the Pokémon's type depending on the terrain.
+    Int: ChangeTypeEffect
+    GetChangeTypeEffect:
+        // Type is the same as the current terrain
+        // Note: In the game this effect will override effects like Soak, but that isn't happening here
+        return b.getEffects().hasTerrain() ? new PokeType(b.getTerrainType().getType()) : null;
+        ###
+*
+Mirror Armor:
+    Desc: Bounces back only the stat-lowering effects that the Pokémon receives.
+    StatTargetSwap: victim.getName() + "'s " + this.getName() + " reflected the changes!"
+*
+Neutralizing Gas:
+    Desc: If the Pokémon with Neutralizing Gas is in the battle, the effects of all Pokémon's Abilities will be nullified or will not be triggered.
+    Unneutralizable: True
+    Int: EntryEffect
+    Enter:
+        Messages.add(enterer.getName() + "'s " + this.getName() + " filled the area!");
+        ###
+*
+Perish Body:
+    Desc: When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle.
+    Int: PhysicalContactEffect
+    Contact:
+        Messages.add(victim.getName() + "'s " + this.getName() + " will cause both " + PokeString.POKEMON + " to faint in three turns!");
+        Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, user, CastSource.ABILITY, false);
+        Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, victim, CastSource.ABILITY, false);
+        ###
+*
+Power Spot:
+    Desc: Powers up the Pokémon's moves.
+    GetMultiplier: 
+        // Note: This was changed because is supposed to power up ally moves, so is probably too strong it's like Sheer Force with no side effects oh well whatever who cares...
+        return 1.3;
+        ###
+*
+Punk Rock:
+    Desc: Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves.
+    Int: OpponentPowerChangeEffect
+    GetOppMultiplier:
+        return user.getAttack().isMoveType(MoveType.SOUND_BASED) ? .5 : 1;
+        ###
+    PowerMultiplierCondition: 1.3 user.getAttack().isMoveType(MoveType.SOUND_BASED)
+*
+Ripen:
+    Desc: Ripens Berries and doubles their effect.
+*
+Sand Spit:
+    Desc: The Pokémon creates a sandstorm when it's hit by an attack.
+    Int: TakeDamageEffect
+    OnTakeDamage:
+        String message = victim.getName() + "'s " + this.getName() + " whipped up a sandstorm!";
+        Effect.apply(WeatherNamesies.SANDSTORM, b, victim, victim, CastSource.ABILITY, message);
+        ###
+*
+Screen Cleaner:
+    Desc: When the Pokémon enters a battle, the effects of Light Screen, Reflect, and Aurora Veil are nullified for both opposing and ally Pokémon.
+    Int: EntryEffect
+    Enter:
+        Messages.add(enterer.getName() + "'s " + this.getName() + " cleared all the barriers!");
+        BarrierEffect.breakBarriers(b, enterer, enterer);
+        BarrierEffect.breakBarriers(b, b.getOtherPokemon(enterer), enterer);
+        ###
+*
+Steam Engine:
+    Desc: Boosts the Pokémon's Speed stat drastically if hit by a Fire- or Water-type move.
+    Int: TakeDamageEffect
+    OnTakeDamage:
+        if (user.isAttackType(Type.FIRE, Type.WATER)) {
+            new StageModifier(6, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
+        }
+        ###
+*
+Steely Spirit:
+    Desc: Powers up the Pokémon's Steel-type moves.
+    PowerMultiplierCondition: 1.5 user.isAttackType(Type.STEEL)
+*
+Wandering Spirit:
+    Desc: The Pokémon exchanges Abilities with a Pokémon that hits it with a move that makes direct contact.
+    Int: PhysicalContactEffect
+    AbilitySwapper: True
+    Contact:
+        // Swap abilities with user on contact
+        this.swapAbilities(b, victim, user);
         ###
 *

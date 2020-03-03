@@ -1615,7 +1615,7 @@ Leppa Berry:
     Desc: A Berry to be consumed by Pok\u00e9mon. If a Pok\u00e9mon holds one, it can restore 10 PP to a depleted move during battle.
     NGType: Fighting
     NGPow: 80
-    Ether: 10
+    Ether: this.ripen(restorer)*10
     ApplyEndTurn:
         for (Move m : victim.getMoves(b)) {
             if (m.getPP() == 0) {
@@ -1652,7 +1652,7 @@ Oran Berry:
     NGPow: 80
     FixedBerryHealthTrigger: 3
     GainEffect: return use(b, user, source);
-    GetAmountHealed: 10
+    GetAmountHealed: this.ripen(p)*10
 *
 Persim Berry:
     Int: BattleUseItem, MessageGetter, GainableEffectBerry, EffectCurerItem
@@ -1689,7 +1689,7 @@ Sitrus Berry:
     NGPow: 80
     FixedBerryHealthTrigger: 2
     GainEffect: return use(b, user, source);
-    GetAmountHealed: p.getHealHealthFractionAmount(1/4.0)
+    GetAmountHealed: p.getHealHealthFractionAmount(ripen(p)/4.0)
     HarvestHours: 48
 *
 Razz Berry:
@@ -1876,8 +1876,13 @@ Enigma Berry:
     HarvestHours: 72
     Int: Berry, TakeDamageEffect
     OnTakeDamage:
+        if (!TypeAdvantage.isSuperEffective(user, victim, b)) {
+            return;
+        }
+
+        // Super-effective moves restore health
         String message = victim.getName() + "'s " + this.getName() + " restored its health!";
-        if (TypeAdvantage.isSuperEffective(user, victim, b) && victim.healHealthFraction(.25, b, message) > 0) {
+        if (victim.healHealthFraction(.25*ripen(victim), b, message) > 0) {
             this.consumeItem(b, victim);
         }
         ###
@@ -1909,7 +1914,7 @@ Starf Berry:
 
         // Sharply raise random battle stat
         Stat stat = RandomUtils.getRandomValue(stats);
-        return new StageModifier(2, stat).modify(b, user, user, source);
+        return new StageModifier(2*ripen(user), stat).modify(b, user, user, source);
         ###
 *
 # Other Items

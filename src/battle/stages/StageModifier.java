@@ -5,6 +5,7 @@ import battle.Battle;
 import battle.effect.InvokeInterfaces.ModifyStageValueEffect;
 import battle.effect.InvokeInterfaces.StatLoweredEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
+import battle.effect.InvokeInterfaces.StatTargetSwapperEffect;
 import battle.effect.source.CastSource;
 import battle.stages.ModifyStageMessenger.DefaultModifyStageMessenger;
 import message.Messages;
@@ -79,13 +80,20 @@ public class StageModifier implements Serializable {
 
         String statName = stat.getName();
         boolean printFail = source == CastSource.ATTACK && caster.getAttack().canPrintFail();
+        boolean selfCaster = caster == victim;
 
         // Effects that change the value of the modifier
-        ActivePokemon moldBreaker = source == CastSource.ATTACK && caster != victim ? caster : null;
+        ActivePokemon moldBreaker = source == CastSource.ATTACK && !selfCaster ? caster : null;
         val *= ModifyStageValueEffect.getModifier(b, moldBreaker, victim);
 
         // Effects that prevent stat reductions caused by the opponent
-        if (val < 0 && caster != victim) {
+        if (val < 0 && !selfCaster) {
+            StatTargetSwapperEffect swapper = StatTargetSwapperEffect.checkTargetSwap(moldBreaker, b, caster, victim);
+            if (swapper != null) {
+                this.addFailMessage(true, swapper.getSwapStatTargetMessage(victim));
+                victim = caster;
+            }
+
             StatProtectingEffect prevent = StatProtectingEffect.getPreventEffect(moldBreaker, b, caster, victim, stat);
             if (prevent != null) {
                 this.addFailMessage(printFail, prevent.preventionMessage(victim, stat));
@@ -112,7 +120,7 @@ public class StageModifier implements Serializable {
         victim.getStages().incrementStage(stat, val);
 
         if (val < 0) {
-            StatLoweredEffect.invokeStatLoweredEffect(b, caster, victim);
+            StatLoweredEffect.invokeStatLoweredEffect(b, victim, selfCaster);
         }
 
         return true;

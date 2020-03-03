@@ -10,6 +10,7 @@ import pokemon.ability.Ability.ArenaTrap;
 import pokemon.ability.Ability.AromaVeil;
 import pokemon.ability.Ability.AuraBreak;
 import pokemon.ability.Ability.BadDreams;
+import pokemon.ability.Ability.BallFetch;
 import pokemon.ability.Ability.Battery;
 import pokemon.ability.Ability.BattleArmor;
 import pokemon.ability.Ability.BeastBoost;
@@ -27,11 +28,13 @@ import pokemon.ability.Ability.Competitive;
 import pokemon.ability.Ability.CompoundEyes;
 import pokemon.ability.Ability.Contrary;
 import pokemon.ability.Ability.Corrosion;
+import pokemon.ability.Ability.CottonDown;
 import pokemon.ability.Ability.CursedBody;
 import pokemon.ability.Ability.CuteCharm;
 import pokemon.ability.Ability.Damp;
 import pokemon.ability.Ability.Dancer;
 import pokemon.ability.Ability.DarkAura;
+import pokemon.ability.Ability.DauntlessShield;
 import pokemon.ability.Ability.Dazzling;
 import pokemon.ability.Ability.Defeatist;
 import pokemon.ability.Ability.Defiant;
@@ -61,8 +64,10 @@ import pokemon.ability.Ability.GaleWings;
 import pokemon.ability.Ability.Galvanize;
 import pokemon.ability.Ability.Gluttony;
 import pokemon.ability.Ability.Gooey;
+import pokemon.ability.Ability.GorillaTactics;
 import pokemon.ability.Ability.GrassPelt;
 import pokemon.ability.Ability.GrassySurge;
+import pokemon.ability.Ability.GulpMissile;
 import pokemon.ability.Ability.Guts;
 import pokemon.ability.Ability.Harvest;
 import pokemon.ability.Ability.Healer;
@@ -70,10 +75,13 @@ import pokemon.ability.Ability.Heatproof;
 import pokemon.ability.Ability.HeavyMetal;
 import pokemon.ability.Ability.HoneyGather;
 import pokemon.ability.Ability.HugePower;
+import pokemon.ability.Ability.HungerSwitch;
 import pokemon.ability.Ability.Hustle;
 import pokemon.ability.Ability.Hydration;
 import pokemon.ability.Ability.HyperCutter;
 import pokemon.ability.Ability.IceBody;
+import pokemon.ability.Ability.IceFace;
+import pokemon.ability.Ability.IceScales;
 import pokemon.ability.Ability.Illusion;
 import pokemon.ability.Ability.Immunity;
 import pokemon.ability.Ability.Imposter;
@@ -82,6 +90,7 @@ import pokemon.ability.Ability.InnardsOut;
 import pokemon.ability.Ability.InnerFocus;
 import pokemon.ability.Ability.Insomnia;
 import pokemon.ability.Ability.Intimidate;
+import pokemon.ability.Ability.IntrepidSword;
 import pokemon.ability.Ability.IronBarbs;
 import pokemon.ability.Ability.IronFist;
 import pokemon.ability.Ability.Justified;
@@ -89,6 +98,7 @@ import pokemon.ability.Ability.KeenEye;
 import pokemon.ability.Ability.Klutz;
 import pokemon.ability.Ability.LeafGuard;
 import pokemon.ability.Ability.Levitate;
+import pokemon.ability.Ability.Libero;
 import pokemon.ability.Ability.LightMetal;
 import pokemon.ability.Ability.LightningRod;
 import pokemon.ability.Ability.Limber;
@@ -103,6 +113,8 @@ import pokemon.ability.Ability.MagnetPull;
 import pokemon.ability.Ability.MarvelScale;
 import pokemon.ability.Ability.MegaLauncher;
 import pokemon.ability.Ability.Merciless;
+import pokemon.ability.Ability.Mimicry;
+import pokemon.ability.Ability.MirrorArmor;
 import pokemon.ability.Ability.MistySurge;
 import pokemon.ability.Ability.MoldBreaker;
 import pokemon.ability.Ability.Moody;
@@ -112,6 +124,7 @@ import pokemon.ability.Ability.Multiscale;
 import pokemon.ability.Ability.Multitype;
 import pokemon.ability.Ability.Mummy;
 import pokemon.ability.Ability.NaturalCure;
+import pokemon.ability.Ability.NeutralizingGas;
 import pokemon.ability.Ability.NoAbility;
 import pokemon.ability.Ability.NoGuard;
 import pokemon.ability.Ability.Normalize;
@@ -119,6 +132,8 @@ import pokemon.ability.Ability.Oblivious;
 import pokemon.ability.Ability.Overcoat;
 import pokemon.ability.Ability.Overgrow;
 import pokemon.ability.Ability.OwnTempo;
+import pokemon.ability.Ability.PastelVeil;
+import pokemon.ability.Ability.PerishBody;
 import pokemon.ability.Ability.Pickpocket;
 import pokemon.ability.Ability.Pickup;
 import pokemon.ability.Ability.Pixilate;
@@ -126,11 +141,13 @@ import pokemon.ability.Ability.PoisonHeal;
 import pokemon.ability.Ability.PoisonPoint;
 import pokemon.ability.Ability.PoisonTouch;
 import pokemon.ability.Ability.PowerOfAlchemy;
+import pokemon.ability.Ability.PowerSpot;
 import pokemon.ability.Ability.Prankster;
 import pokemon.ability.Ability.Pressure;
 import pokemon.ability.Ability.PrismArmor;
 import pokemon.ability.Ability.Protean;
 import pokemon.ability.Ability.PsychicSurge;
+import pokemon.ability.Ability.PunkRock;
 import pokemon.ability.Ability.PurePower;
 import pokemon.ability.Ability.QueenlyMajesty;
 import pokemon.ability.Ability.QuickFeet;
@@ -140,17 +157,20 @@ import pokemon.ability.Ability.Rattled;
 import pokemon.ability.Ability.Reckless;
 import pokemon.ability.Ability.Refrigerate;
 import pokemon.ability.Ability.Regenerator;
+import pokemon.ability.Ability.Ripen;
 import pokemon.ability.Ability.Rivalry;
 import pokemon.ability.Ability.RockHead;
 import pokemon.ability.Ability.RoughSkin;
 import pokemon.ability.Ability.RunAway;
 import pokemon.ability.Ability.SandForce;
 import pokemon.ability.Ability.SandRush;
+import pokemon.ability.Ability.SandSpit;
 import pokemon.ability.Ability.SandStream;
 import pokemon.ability.Ability.SandVeil;
 import pokemon.ability.Ability.SapSipper;
 import pokemon.ability.Ability.Schooling;
 import pokemon.ability.Ability.Scrappy;
+import pokemon.ability.Ability.ScreenCleaner;
 import pokemon.ability.Ability.SereneGrace;
 import pokemon.ability.Ability.ShadowShield;
 import pokemon.ability.Ability.ShadowTag;
@@ -177,7 +197,9 @@ import pokemon.ability.Ability.Stamina;
 import pokemon.ability.Ability.StanceChange;
 import pokemon.ability.Ability.Static;
 import pokemon.ability.Ability.Steadfast;
+import pokemon.ability.Ability.SteamEngine;
 import pokemon.ability.Ability.Steelworker;
+import pokemon.ability.Ability.SteelySpirit;
 import pokemon.ability.Ability.Stench;
 import pokemon.ability.Ability.StickyHold;
 import pokemon.ability.Ability.StormDrain;
@@ -209,6 +231,7 @@ import pokemon.ability.Ability.Unnerve;
 import pokemon.ability.Ability.VictoryStar;
 import pokemon.ability.Ability.VitalSpirit;
 import pokemon.ability.Ability.VoltAbsorb;
+import pokemon.ability.Ability.WanderingSpirit;
 import pokemon.ability.Ability.WaterAbsorb;
 import pokemon.ability.Ability.WaterBubble;
 import pokemon.ability.Ability.WaterCompaction;
@@ -313,6 +336,7 @@ public enum AbilityNamesies {
     DOWNLOAD("Download", Download::new),
     PRESSURE("Pressure", Pressure::new),
     IMMUNITY("Immunity", Immunity::new),
+    PASTEL_VEIL("Pastel Veil", PastelVeil::new),
     SNOW_CLOAK("Snow Cloak", SnowCloak::new),
     MARVEL_SCALE("Marvel Scale", MarvelScale::new),
     MULTISCALE("Multiscale", Multiscale::new),
@@ -441,7 +465,29 @@ public enum AbilityNamesies {
     MISTY_SURGE("Misty Surge", MistySurge::new),
     GRASSY_SURGE("Grassy Surge", GrassySurge::new),
     MOODY("Moody", Moody::new),
-    POWER_OF_ALCHEMY("Power of Alchemy", PowerOfAlchemy::new);
+    POWER_OF_ALCHEMY("Power of Alchemy", PowerOfAlchemy::new),
+    BALL_FETCH("Ball Fetch", BallFetch::new),
+    COTTON_DOWN("Cotton Down", CottonDown::new),
+    DAUNTLESS_SHIELD("Dauntless Shield", DauntlessShield::new),
+    GORILLA_TACTICS("Gorilla Tactics", GorillaTactics::new),
+    GULP_MISSILE("Gulp Missile", GulpMissile::new),
+    HUNGER_SWITCH("Hunger Switch", HungerSwitch::new),
+    ICE_FACE("Ice Face", IceFace::new),
+    ICE_SCALES("Ice Scales", IceScales::new),
+    INTREPID_SWORD("Intrepid Sword", IntrepidSword::new),
+    LIBERO("Libero", Libero::new),
+    MIMICRY("Mimicry", Mimicry::new),
+    MIRROR_ARMOR("Mirror Armor", MirrorArmor::new),
+    NEUTRALIZING_GAS("Neutralizing Gas", NeutralizingGas::new),
+    PERISH_BODY("Perish Body", PerishBody::new),
+    POWER_SPOT("Power Spot", PowerSpot::new),
+    PUNK_ROCK("Punk Rock", PunkRock::new),
+    RIPEN("Ripen", Ripen::new),
+    SAND_SPIT("Sand Spit", SandSpit::new),
+    SCREEN_CLEANER("Screen Cleaner", ScreenCleaner::new),
+    STEAM_ENGINE("Steam Engine", SteamEngine::new),
+    STEELY_SPIRIT("Steely Spirit", SteelySpirit::new),
+    WANDERING_SPIRIT("Wandering Spirit", WanderingSpirit::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

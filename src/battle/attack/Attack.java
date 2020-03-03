@@ -4,6 +4,8 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.AbilitySwapper;
+import battle.effect.EffectInterfaces.BooleanHolder;
 import battle.effect.EffectInterfaces.DoubleDigger;
 import battle.effect.EffectInterfaces.DoubleDiver;
 import battle.effect.EffectInterfaces.DoubleFlyer;
@@ -9310,18 +9312,14 @@ public abstract class Attack implements AttackInterface {
 
         PerishSong() {
             super(AttackNamesies.PERISH_SONG, Type.NORMAL, MoveCategory.STATUS, 5, "Any Pok\u00e9mon that hears this song faints in three turns, unless it switches out of battle.");
-            super.moveTypes.add(MoveType.PROTECT_PIERCING);
-            super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
             super.moveTypes.add(MoveType.SOUND_BASED);
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
-            super.moveTypes.add(MoveType.MIRRORLESS);
+            super.moveTypes.add(MoveType.FIELD);
         }
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             Messages.add("All " + PokeString.POKEMON + " hearing this song will faint in three turns!");
-
-            // TODO: Test and also this used to check if they didn't have the effect before casting just in case that's relevant later
             Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, user, victim, CastSource.ATTACK, false);
             Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, user, user, CastSource.ATTACK, false);
         }
@@ -9493,19 +9491,25 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class SkillSwap extends Attack implements ChangeAbilitySource {
+    static class SkillSwap extends Attack implements AbilitySwapper {
         private static final long serialVersionUID = 1L;
 
         private Ability ability;
-
-        private static boolean canSkillSwap(ActivePokemon p) {
-            return p.getAbility().isReplaceable() && p.getAbility().isStealable();
-        }
 
         SkillSwap() {
             super(AttackNamesies.SKILL_SWAP, Type.PSYCHIC, MoveCategory.STATUS, 10, "The user employs its psychic power to exchange Abilities with the target.");
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
+        }
+
+        @Override
+        public void setAbility(Ability ability) {
+            this.ability = ability;
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            this.swapAbilities(b, user, victim);
         }
 
         @Override
@@ -9519,20 +9523,8 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Ability userAbility = user.getAbility();
-            Ability victimAbility = victim.getAbility();
-
-            ability = userAbility;
-            Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, victim, CastSource.ATTACK, super.printCast);
-
-            ability = victimAbility;
-            Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, user, CastSource.ATTACK, super.printCast);
-        }
-
-        @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return canSkillSwap(user) && canSkillSwap(victim);
+            return this.canSwapAbilities(user, victim);
         }
     }
 
@@ -11407,7 +11399,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    // TODO: Should only work for Morpeko and change type with its ability (which are both not implemented yet) though maybe I will implement as applying if it has the ability (which only morpeko should have)
+    // TODO: Change applies method to user.isPokemon(PokemonNamesies.MORPEKO) instead of ability check once it's in the game
     static class AuraWheel extends Attack {
         private static final long serialVersionUID = 1L;
 
@@ -11417,6 +11409,23 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.selfTarget = true;
             super.stageModifier.set(1, Stat.SPEED);
+        }
+
+        @Override
+        public Type getType(Battle b, ActivePokemon user) {
+            // Full Belly Mode = Electric type, Hangry Mode = Dark type
+            // Hunger Switch returns true when in Hangry Mode
+            Ability ability = user.getAbility();
+            if (ability.namesies() == AbilityNamesies.HUNGER_SWITCH && ((BooleanHolder)ability).getBoolean()) {
+                return Type.DARK;
+            }
+
+            return super.type;
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.hasAbility(AbilityNamesies.HUNGER_SWITCH);
         }
     }
 

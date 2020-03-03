@@ -3,6 +3,7 @@ package battle.effect;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackInterface;
+import battle.attack.Move;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
@@ -29,6 +30,7 @@ import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
+import battle.effect.source.ChangeAbilitySource;
 import battle.effect.status.StatusInterface;
 import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
@@ -65,6 +67,10 @@ public final class EffectInterfaces {
         Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
     }
 
+    public interface BooleanHolder {
+        boolean getBoolean();
+    }
+
     public interface AbilityHolder {
         Ability getAbility();
     }
@@ -75,6 +81,10 @@ public final class EffectInterfaces {
 
     public interface PokemonHolder {
         PokemonNamesies getPokemon();
+    }
+
+    public interface ItemListHolder {
+        List<ItemNamesies> getItems();
     }
 
     public interface MessageGetter {
@@ -386,7 +396,7 @@ public final class EffectInterfaces {
         boolean isPreventableEffect(EffectNamesies effectNamesies);
 
         @Override
-        default ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+        default ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source) {
             if (this.isPreventableEffect(effectName)) {
                 return ApplyResult.failure(effectName.getEffect().getSourcePreventMessage(victim, this.getName()));
             }
@@ -588,6 +598,80 @@ public final class EffectInterfaces {
         // Confirms this by the Pokemon being dead or not the front Pokemon
         private boolean unlocked(Battle b, ActivePokemon p) {
             return p.isFainted(b) || !b.isFront(p);
+        }
+    }
+
+    // Used for effects which boost a stat by 50%, but only allow the first selected move to be used
+    public interface ChoiceEffect extends AttackSelectionEffect, SimpleStatModifyingEffect {
+        Stat getBoosted();
+        String getName();
+
+        @Override
+        default boolean isModifyStat(Stat s) {
+            return s == this.getBoosted();
+        }
+
+        @Override
+        default double getModifier() {
+            return 1.5;
+        }
+
+        @Override
+        default boolean usable(Battle b, ActivePokemon p, Move m) {
+            // Note: Because this is just using the last move used and not actually storing the move
+            // or anything like that it will break if it gets Struggled (from something like Torment)
+            // and will be locked into Struggle for the rest of the fight
+            Move last = p.getLastMoveUsed();
+            return last == null || m == last;
+        }
+
+        @Override
+        default String getUnusableMessage(ActivePokemon p) {
+            return p.getName() + "'s " + this.getName() + " only allows " + p.getLastMoveUsed().getAttack().getName() + " to be used!";
+        }
+    }
+
+    public interface FormAbility extends AbilityInterface {
+        // Adds the message with the form image change
+        default void addFormMessage(ActivePokemon formsie, String message, boolean form) {
+            boolean isPlayer = formsie.isPlayer();
+            boolean shiny = formsie.isShiny();
+            boolean front = !isPlayer;
+            String imageName = formsie.getPokemonInfo().getImageName(shiny, front, form);
+            Messages.add(new MessageUpdate(message).withImageName(imageName, isPlayer));
+        }
+    }
+
+    public interface AbilitySwapper extends ChangeAbilitySource, InvokeEffect {
+        void setAbility(Ability ability);
+
+        // Can swap if both abilities are replaceable and stealable and are not the same ability
+        default boolean canSwapAbilities(ActivePokemon user, ActivePokemon victim) {
+            Ability userAbility = user.getAbility();
+            Ability victimAbility = victim.getAbility();
+            return userAbility.namesies() != victimAbility.namesies()
+                    && this.canSwapAbility(userAbility)
+                    && this.canSwapAbility(victimAbility);
+        }
+
+        default boolean canSwapAbility(Ability ability) {
+            return ability.isReplaceable() && ability.isStealable();
+        }
+
+        default void swapAbilities(Battle b, ActivePokemon user, ActivePokemon victim) {
+            if (!this.canSwapAbilities(user, victim)) {
+                return;
+            }
+
+            Ability userAbility = user.getAbility();
+            Ability victimAbility = victim.getAbility();
+            CastSource source = this.getSource().getCastSource();
+
+            this.setAbility(userAbility);
+            Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, victim, source, true);
+
+            this.setAbility(victimAbility);
+            Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, user, source, true);
         }
     }
 }

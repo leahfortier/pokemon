@@ -54,7 +54,7 @@ public class TestPokemon extends ActivePokemon {
     }
 
     public TestPokemon withAbility(AbilityNamesies ability) {
-        super.setAbility(ability);
+        this.setAbility(ability);
         return this;
     }
 
@@ -170,11 +170,15 @@ public class TestPokemon extends ActivePokemon {
     }
 
     public void assertHealthRatioDiff(int prevHp, double fractionDiff) {
-        Assert.assertEquals(prevHp - (int)(fractionDiff*this.getMaxHP()), this.getHP());
+        this.assertHp(prevHp - (int)(fractionDiff*this.getMaxHP()));
     }
 
     public void assertMissingHp(int missingHp) {
-        Assert.assertEquals(this.getHpString() + " " + missingHp, this.getMaxHP() - missingHp, this.getHP());
+        this.assertHp(this.getMaxHP() - missingHp);
+    }
+
+    public void assertHp(int hp) {
+        Assert.assertEquals(this.getHpString() + " " + hp, hp, this.getHP());
     }
 
     // Confirms the Pokemon does not have any status condition
@@ -273,7 +277,7 @@ public class TestPokemon extends ActivePokemon {
     }
 
     private void assertConsumedItem(boolean berry) {
-        Assert.assertFalse(this.isHoldingItem());
+        this.assertNotHoldingItem();
         this.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
         this.assertEffect(berry, PokemonEffectNamesies.EATEN_BERRY);
     }
@@ -287,7 +291,7 @@ public class TestPokemon extends ActivePokemon {
 
     public void assertAbility(AbilityNamesies abilityNamesies) {
         Assert.assertTrue(
-                StringUtils.spaceSeparated(this.getActualName(), this.getAbility(), abilityNamesies),
+                StringUtils.spaceSeparated(this.getActualName(), this.getAbility(), abilityNamesies.getName()),
                 this.hasAbility(abilityNamesies)
         );
         this.assertNoEffect(PokemonEffectNamesies.CHANGE_ABILITY);
@@ -327,5 +331,11 @@ public class TestPokemon extends ActivePokemon {
 
     public static TestPokemon newTrainerPokemon(final PokemonNamesies pokemon) {
         return new TestPokemon(pokemon, TrainerType.OPPONENT);
+    }
+
+    @Override
+    public String toString() {
+        // Can add other identifying info more relevant to what is being debugged
+        return StringUtils.spaceSeparated(this.getName());
     }
 }

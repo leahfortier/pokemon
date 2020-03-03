@@ -9,7 +9,12 @@ import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.AbilitySwapper;
+import battle.effect.EffectInterfaces.BooleanHolder;
+import battle.effect.EffectInterfaces.ChoiceEffect;
+import battle.effect.EffectInterfaces.FormAbility;
 import battle.effect.EffectInterfaces.ItemHolder;
+import battle.effect.EffectInterfaces.ItemListHolder;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MaxLevelWildEncounterEffect;
 import battle.effect.EffectInterfaces.MoldBreakerEffect;
@@ -28,6 +33,7 @@ import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackingNoAdvantageChanger;
+import battle.effect.InvokeInterfaces.BarrierEffect;
 import battle.effect.InvokeInterfaces.BeforeAttackPreventingEffect;
 import battle.effect.InvokeInterfaces.BracingEffect;
 import battle.effect.InvokeInterfaces.ChangeAttackTypeEffect;
@@ -54,6 +60,7 @@ import battle.effect.InvokeInterfaces.MurderEffect;
 import battle.effect.InvokeInterfaces.NameChanger;
 import battle.effect.InvokeInterfaces.NoSwapEffect;
 import battle.effect.InvokeInterfaces.OpponentAccuracyBypassEffect;
+import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentEndAttackEffect;
 import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.InvokeInterfaces.OpponentItemBlockerEffect;
@@ -73,6 +80,7 @@ import battle.effect.InvokeInterfaces.StartAttackEffect;
 import battle.effect.InvokeInterfaces.StatLoweredEffect;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatProtectingEffect;
+import battle.effect.InvokeInterfaces.StatTargetSwapperEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
@@ -81,6 +89,7 @@ import battle.effect.InvokeInterfaces.SwitchOutEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
+import battle.effect.InvokeInterfaces.WeatherChangedEffect;
 import battle.effect.InvokeInterfaces.WeatherEliminatingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.attack.OhkoMove;
@@ -117,6 +126,7 @@ import type.Type;
 import type.TypeAdvantage;
 import util.RandomUtils;
 import util.ReverseIterable;
+import util.string.PokeString;
 import util.string.StringUtils;
 
 import java.util.ArrayList;
@@ -178,6 +188,11 @@ public abstract class Ability implements AbilityInterface {
         return true;
     }
 
+    // True if ability is ignored when the opponent has neutralizing gas
+    public boolean isNeutralizable() {
+        return true;
+    }
+
     // Called when this ability is going to changed to a different ability -- can be overridden as necessary
     public void deactivate(Battle b, ActivePokemon victim) {}
 
@@ -199,6 +214,11 @@ public abstract class Ability implements AbilityInterface {
 
         NoAbility() {
             super(AbilityNamesies.NO_ABILITY, "None");
+        }
+
+        @Override
+        public boolean isStealable() {
+            return false;
         }
     }
 
@@ -694,8 +714,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            Messages.add(enterer.getName() + "'s " + this.getName() + " made the sunlight turn harsh!");
-            b.addEffect(WeatherNamesies.SUNNY.getEffect());
+            String message = enterer.getName() + "'s " + this.getName() + " made the sunlight turn harsh!";
+            Effect.apply(WeatherNamesies.SUNNY, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -1336,8 +1356,9 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
-            if (effectName == PokemonEffectNamesies.PERISH_SONG) {
+        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source) {
+            // Only sound-based when from the Perish Song attack (not Perish Body)
+            if (effectName == PokemonEffectNamesies.PERISH_SONG && source == CastSource.ATTACK) {
                 return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " makes it immune to sound based moves!");
             }
 
@@ -1785,6 +1806,19 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
+    static class PastelVeil extends Ability implements StatusPreventionAbility {
+        private static final long serialVersionUID = 1L;
+
+        PastelVeil() {
+            super(AbilityNamesies.PASTEL_VEIL, "Protects the Pokémon from being poisoned.");
+        }
+
+        @Override
+        public StatusNamesies getStatus() {
+            return StatusNamesies.POISONED;
+        }
+    }
+
     static class SnowCloak extends Ability implements StageChangingEffect, EncounterRateMultiplier {
         private static final long serialVersionUID = 1L;
 
@@ -2044,8 +2078,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            Messages.add(enterer.getName() + "'s " + this.getName() + " whipped up a sandstorm!");
-            b.addEffect(WeatherNamesies.SANDSTORM.getEffect());
+            String message = enterer.getName() + "'s " + this.getName() + " whipped up a sandstorm!";
+            Effect.apply(WeatherNamesies.SANDSTORM, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -2112,11 +2146,6 @@ public abstract class Ability implements AbilityInterface {
 
         WonderGuard() {
             super(AbilityNamesies.WONDER_GUARD, "Its mysterious power only lets supereffective moves hit the Pok\u00e9mon.");
-        }
-
-        @Override
-        public boolean isReplaceable() {
-            return false;
         }
 
         @Override
@@ -2387,8 +2416,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            Messages.add(enterer.getName() + "'s " + this.getName() + " started a downpour!");
-            b.addEffect(WeatherNamesies.RAINING.getEffect());
+            String message = enterer.getName() + "'s " + this.getName() + " started a downpour!";
+            Effect.apply(WeatherNamesies.RAINING, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -2413,9 +2442,9 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        public void takeItToTheNextLevel(Battle b, ActivePokemon victim, boolean selfCaster) {
             // Doesn't raise for self-inflicted lowers
-            if (caster != victim) {
+            if (!selfCaster) {
                 new StageModifier(2, Stat.ATTACK).modify(b, victim, victim, CastSource.ABILITY);
             }
         }
@@ -2429,9 +2458,9 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        public void takeItToTheNextLevel(Battle b, ActivePokemon victim, boolean selfCaster) {
             // Doesn't raise for self-inflicted lowers
-            if (caster != victim) {
+            if (!selfCaster) {
                 new StageModifier(2, Stat.SP_ATTACK).modify(b, victim, victim, CastSource.ABILITY);
             }
         }
@@ -2515,8 +2544,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
-            Messages.add(enterer.getName() + "'s " + this.getName() + " caused it to hail!");
-            b.addEffect(WeatherNamesies.HAILING.getEffect());
+            String message = enterer.getName() + "'s " + this.getName() + " caused it to hail!";
+            Effect.apply(WeatherNamesies.HAILING, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -2751,7 +2780,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
-            return victim.getName() + "'s ability was changed to " + this.namesies().getName() + "!";
+            return victim.getName() + "'s ability was changed to " + this.getName() + "!";
         }
     }
 
@@ -2886,11 +2915,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public PokeType getType(Battle b, ActivePokemon p, boolean display) {
-            if (display && activated) {
-                return illusionType;
-            }
-
-            return p.getActualType();
+            // Type change is only for appearances
+            return display && activated ? illusionType : null;
         }
 
         @Override
@@ -3084,7 +3110,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Pickup extends Ability implements EndBattleEffect {
+    static class Pickup extends Ability implements EndBattleEffect, ItemListHolder {
         private static final long serialVersionUID = 1L;
 
         private static final List<ItemNamesies> items = new ArrayList<>();
@@ -3150,6 +3176,11 @@ public abstract class Ability implements AbilityInterface {
                 Messages.add(p.getName() + " picked up " + StringUtils.articleString(item.getName()) + "!");
             }
         }
+
+        @Override
+        public List<ItemNamesies> getItems() {
+            return items;
+        }
     }
 
     static class Unnerve extends Ability implements EntryEffect, OpponentItemBlockerEffect {
@@ -3203,11 +3234,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public PokeType getType(Battle b, ActivePokemon p, boolean display) {
             HoldItem item = p.getHeldItem();
-            if (item instanceof PlateItem) {
-                return new PokeType(((PlateItem)item).getType());
-            }
-
-            return p.getActualType();
+            return item instanceof PlateItem ? new PokeType(((PlateItem)item).getType()) : null;
         }
 
         @Override
@@ -3231,11 +3258,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public PokeType getType(Battle b, ActivePokemon p, boolean display) {
             HoldItem item = p.getHeldItem();
-            if (item instanceof MemoryItem) {
-                return new PokeType(((MemoryItem)item).getType());
-            }
-
-            return p.getActualType();
+            return item instanceof MemoryItem ? new PokeType(((MemoryItem)item).getType()) : null;
         }
 
         @Override
@@ -3507,17 +3530,13 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Schooling extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect {
+    static class Schooling extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect, FormAbility {
         private static final long serialVersionUID = 1L;
 
         private static final BaseStats SOLO_STATS = new BaseStats(new int[] { 45, 20, 20, 25, 25, 40 });
         private static final BaseStats SCHOOL_STATS = new BaseStats(new int[] { 45, 140, 130, 140, 135, 30 });
 
         private boolean schoolForm;
-
-        private BaseStats getStats() {
-            return schoolForm ? SCHOOL_STATS : SOLO_STATS;
-        }
 
         Schooling() {
             super(AbilityNamesies.SCHOOLING, "When it has a lot of HP, the Pok\u00e9mon forms a powerful school. It stops schooling when its HP is low.");
@@ -3528,13 +3547,6 @@ public abstract class Ability implements AbilityInterface {
             if (this.schoolForm != formsie.getHPRatio() >= .25 && formsie.getLevel() >= 20) {
                 changeForm(formsie);
             }
-        }
-
-        private void changeForm(ActivePokemon formsie) {
-            this.schoolForm = !schoolForm;
-            Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (schoolForm ? "School" : "Solo") + " Forme!")
-                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), schoolForm), formsie.isPlayer())
-            );
         }
 
         @Override
@@ -3548,6 +3560,12 @@ public abstract class Ability implements AbilityInterface {
             checkFormChange(victim);
         }
 
+        private void changeForm(ActivePokemon formsie) {
+            this.schoolForm = !schoolForm;
+            String message = formsie.getName() + " changed into " + (schoolForm ? "School" : "Solo") + " Forme!";
+            addFormMessage(formsie, message, schoolForm);
+        }
+
         @Override
         public boolean isStealable() {
             return false;
@@ -3559,23 +3577,25 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
+        public boolean isNeutralizable() {
+            return false;
+        }
+
+        @Override
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-            return user.stats().calculate(stat, this.getStats());
+            BaseStats stats = schoolForm ? SCHOOL_STATS : SOLO_STATS;
+            return user.stats().calculate(stat, stats);
         }
     }
 
-    static class ShieldsDown extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect {
+    static class ShieldsDown extends Ability implements EndTurnEffect, EntryEffect, DifferentStatEffect, FormAbility {
         private static final long serialVersionUID = 1L;
 
         private static final BaseStats CORE_STATS = new BaseStats(new int[] { 60, 100, 60, 100, 60, 120 });
         private static final BaseStats METEOR_STATS = new BaseStats(new int[] { 60, 60, 100, 60, 100, 60 });
 
         private boolean meteorForm;
-
-        private BaseStats getStats() {
-            return meteorForm ? METEOR_STATS : CORE_STATS;
-        }
 
         ShieldsDown() {
             super(AbilityNamesies.SHIELDS_DOWN, "When its HP becomes half or less, the Pok\u00e9mon's shell breaks and it becomes aggressive.");
@@ -3586,13 +3606,6 @@ public abstract class Ability implements AbilityInterface {
             if (this.meteorForm != formsie.getHPRatio() > .5) {
                 changeForm(formsie);
             }
-        }
-
-        private void changeForm(ActivePokemon formsie) {
-            this.meteorForm = !meteorForm;
-            Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (meteorForm ? "Meteor" : "Core") + " Forme!")
-                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), meteorForm), formsie.isPlayer())
-            );
         }
 
         @Override
@@ -3606,6 +3619,12 @@ public abstract class Ability implements AbilityInterface {
             checkFormChange(victim);
         }
 
+        private void changeForm(ActivePokemon formsie) {
+            this.meteorForm = !meteorForm;
+            String message = formsie.getName() + " changed into " + (meteorForm ? "Meteor" : "Core") + " Forme!";
+            addFormMessage(formsie, message, meteorForm);
+        }
+
         @Override
         public boolean isStealable() {
             return false;
@@ -3617,13 +3636,19 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
+        public boolean isNeutralizable() {
+            return false;
+        }
+
+        @Override
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-            return user.stats().calculate(stat, this.getStats());
+            BaseStats stats = meteorForm ? METEOR_STATS : CORE_STATS;
+            return user.stats().calculate(stat, stats);
         }
     }
 
-    static class StanceChange extends Ability implements StartAttackEffect, EntryEffect, DifferentStatEffect {
+    static class StanceChange extends Ability implements StartAttackEffect, EntryEffect, DifferentStatEffect, FormAbility {
         private static final long serialVersionUID = 1L;
 
         private static final BaseStats SHIELD_STATS = new BaseStats(new int[] { 60, 50, 150, 50, 150, 60 });
@@ -3631,20 +3656,9 @@ public abstract class Ability implements AbilityInterface {
 
         private boolean bladeForm;
 
-        private BaseStats getStats() {
-            return bladeForm ? BLADE_STATS : SHIELD_STATS;
-        }
-
         StanceChange() {
             super(AbilityNamesies.STANCE_CHANGE, "The Pok\u00e9mon changes its form to Blade Forme when it uses an attack move, and changes to Shield Forme when it uses King's Shield.");
             this.bladeForm = false;
-        }
-
-        private void changeForm(ActivePokemon formsie) {
-            this.bladeForm = !bladeForm;
-            Messages.add(new MessageUpdate(formsie.getName() + " changed into " + (bladeForm ? "Blade" : "Shield") + " Forme!")
-                        .withImageName(formsie.getPokemonInfo().getImageName(formsie.isShiny(), !formsie.isPlayer(), bladeForm), formsie.isPlayer())
-            );
         }
 
         @Override
@@ -3661,6 +3675,12 @@ public abstract class Ability implements AbilityInterface {
             bladeForm = false;
         }
 
+        private void changeForm(ActivePokemon formsie) {
+            this.bladeForm = !bladeForm;
+            String message = formsie.getName() + " changed into " + (bladeForm ? "Blade" : "Shield") + " Forme!";
+            addFormMessage(formsie, message, bladeForm);
+        }
+
         @Override
         public boolean isStealable() {
             return false;
@@ -3672,9 +3692,15 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
+        public boolean isNeutralizable() {
+            return false;
+        }
+
+        @Override
         public Integer getStat(ActivePokemon user, Stat stat) {
             // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
-            return user.stats().calculate(stat, this.getStats());
+            BaseStats stats = bladeForm ? BLADE_STATS : SHIELD_STATS;
+            return user.stats().calculate(stat, stats);
         }
     }
 
@@ -3997,7 +4023,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Disguise extends Ability implements AbsorbDamageEffect {
+    static class Disguise extends Ability implements AbsorbDamageEffect, FormAbility {
         private static final long serialVersionUID = 1L;
 
         private boolean activated;
@@ -4019,19 +4045,12 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
-            if (!activated && b.getOtherPokemon(damageTaker).isAttacking()) {
-                boolean isPlayer = damageTaker.isPlayer();
-                boolean shiny = damageTaker.isShiny();
-                boolean front = !isPlayer;
-
-                Messages.add(new MessageUpdate(damageTaker.getName() + "'s disguise was busted!!")
-                            .withImageName(damageTaker.getPokemonInfo().getImageName(shiny, front, true), isPlayer)
-                );
-
+            // This method is only called for direct damage so do not need to check if attacking
+            if (!activated) {
                 activated = true;
+                addFormMessage(damageTaker, damageTaker.getName() + "'s disguise was busted!!", true);
                 return true;
             }
-
             return false;
         }
     }
@@ -4237,7 +4256,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             String message = enterer.getName() + "'s " + this.getName() + " changed the field to Psychic Terrain!";
-            Effect.cast(TerrainNamesies.PSYCHIC_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
+            Effect.apply(TerrainNamesies.PSYCHIC_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -4251,7 +4270,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             String message = enterer.getName() + "'s " + this.getName() + " changed the field to Electric Terrain!";
-            Effect.cast(TerrainNamesies.ELECTRIC_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
+            Effect.apply(TerrainNamesies.ELECTRIC_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -4265,7 +4284,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             String message = enterer.getName() + "'s " + this.getName() + " changed the field to Misty Terrain!";
-            Effect.cast(TerrainNamesies.MISTY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
+            Effect.apply(TerrainNamesies.MISTY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -4279,7 +4298,7 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public void enter(Battle b, ActivePokemon enterer) {
             String message = enterer.getName() + "'s " + this.getName() + " changed the field to Grassy Terrain!";
-            Effect.cast(TerrainNamesies.GRASSY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
+            Effect.apply(TerrainNamesies.GRASSY_TERRAIN, b, enterer, enterer, CastSource.ABILITY, message);
         }
     }
 
@@ -4358,6 +4377,465 @@ public abstract class Ability implements AbilityInterface {
 
             // Cast the change ability effect onto the murderer to give the dead's ability
             Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, murderer, murderer, CastSource.ABILITY, true);
+        }
+    }
+
+    static class BallFetch extends Ability {
+        private static final long serialVersionUID = 1L;
+
+        BallFetch() {
+            super(AbilityNamesies.BALL_FETCH, "If the Pokémon is not holding an item, it will fetch the Poké Ball from the first failed throw of the battle.");
+        }
+    }
+
+    static class CottonDown extends Ability implements OpponentApplyDamageEffect {
+        private static final long serialVersionUID = 1L;
+
+        CottonDown() {
+            super(AbilityNamesies.COTTON_DOWN, "When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stat of all Pokémon except itself.");
+        }
+
+        @Override
+        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+            new StageModifier(-1, Stat.SPEED).modify(b, victim, user, CastSource.ABILITY);
+        }
+    }
+
+    static class DauntlessShield extends Ability implements EntryEffect {
+        private static final long serialVersionUID = 1L;
+
+        DauntlessShield() {
+            super(AbilityNamesies.DAUNTLESS_SHIELD, "Boosts the Pokémon's Defense stat when the Pokémon enters a battle.");
+        }
+
+        @Override
+        public void enter(Battle b, ActivePokemon enterer) {
+            new StageModifier(1, Stat.DEFENSE).modify(b, enterer, enterer, CastSource.ABILITY);
+        }
+    }
+
+    static class GorillaTactics extends Ability implements ChoiceEffect {
+        private static final long serialVersionUID = 1L;
+
+        GorillaTactics() {
+            super(AbilityNamesies.GORILLA_TACTICS, "Boosts the Pokémon's Attack stat but only allows the use of the first selected move.");
+        }
+
+        @Override
+        public Stat getBoosted() {
+            return Stat.ATTACK;
+        }
+    }
+
+    static class GulpMissile extends Ability implements StartAttackEffect, EntryEffect, OpponentApplyDamageEffect, FormAbility {
+        private static final long serialVersionUID = 1L;
+
+        private GulpForm gulpForm;
+
+        private enum GulpForm {
+            NORMAL, GULPING, GORGING
+        }
+
+        GulpMissile() {
+            super(AbilityNamesies.GULP_MISSILE, "When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.");
+        }
+
+        @Override
+        public boolean isReplaceable() {
+            return false;
+        }
+
+        @Override
+        public boolean isStealable() {
+            return false;
+        }
+
+        @Override
+        public void beforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Already gulping/gorging -- nothing else to do right now
+            if (this.gulpForm != GulpForm.NORMAL) {
+                return;
+            }
+
+            // Using Surf or Dive will make Cramorant change forms
+            AttackNamesies attack = attacking.getAttack().namesies();
+            if (attack == AttackNamesies.SURF || attack == AttackNamesies.DIVE) {
+                // Gorge on a Pika when low on health, otherwise get them fishies
+                this.gulpForm = attacking.getHPRatio() < .5 ? GulpForm.GORGING : GulpForm.GULPING;
+
+                // TODO: Once Cramorant's images are actually set up will need to adjust since this only includes one form
+                // TODO: Game is currently freezing here when using Dive (semi-inv + image change)
+                String gulping = this.gulpForm == GulpForm.GULPING ? "gulping" : "gorging";
+                this.addFormMessage(attacking, attacking.getName() + " is " + gulping + "!!", true);
+            }
+        }
+
+        @Override
+        public void enter(Battle b, ActivePokemon enterer) {
+            this.gulpForm = GulpForm.NORMAL;
+        }
+
+        @Override
+        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Empty mouth = empty effect
+            if (this.gulpForm == GulpForm.NORMAL) {
+                return;
+            }
+
+            boolean gulping = this.gulpForm == GulpForm.GULPING;
+
+            // Release the prey and return to normal form
+            this.gulpForm = GulpForm.NORMAL;
+            addFormMessage(victim, victim.getName() + " released its prey!!!", false);
+
+            // When attacked, releases its prey dealing 1/4 max HP damage to the attacker
+            // Additionally, lowers defense when gulping or paralyzes when gorging
+            // Note: Use Effect cast source here so it uses the default messaging instead of referring to Gulp Missile
+            user.reduceHealthFraction(b, .25, "");
+            if (gulping) {
+                new StageModifier(-1, Stat.DEFENSE).modify(b, victim, user, CastSource.EFFECT);
+            } else {
+                StatusNamesies.PARALYZED.getStatus().apply(b, victim, user, CastSource.EFFECT);
+            }
+        }
+    }
+
+    static class HungerSwitch extends Ability implements EndTurnEffect, FormAbility, BooleanHolder {
+        private static final long serialVersionUID = 1L;
+
+        private boolean hangryMode;
+
+        HungerSwitch() {
+            super(AbilityNamesies.HUNGER_SWITCH, "The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode after the end of each turn.");
+            this.hangryMode = false;
+        }
+
+        @Override
+        public boolean isStealable() {
+            return false;
+        }
+
+        private void changeForm(ActivePokemon formsie) {
+            this.hangryMode = !hangryMode;
+            String message = formsie.getName() + " changed into " + (hangryMode ? "Hangry" : "Full Belly") + " Forme!";
+            addFormMessage(formsie, message, hangryMode);
+        }
+
+        @Override
+        public void applyEndTurn(ActivePokemon victim, Battle b) {
+            changeForm(victim);
+        }
+
+        @Override
+        public boolean getBoolean() {
+            return this.hangryMode;
+        }
+    }
+
+    static class IceFace extends Ability implements EntryEffect, AbsorbDamageEffect, DifferentStatEffect, WeatherChangedEffect, FormAbility {
+        private static final long serialVersionUID = 1L;
+
+        private static final BaseStats ICE_STATS = new BaseStats(new int[] { 75, 80, 110, 65, 90, 50 });
+        private static final BaseStats NO_ICE_STATS = new BaseStats(new int[] { 75, 80, 70, 65, 50, 130 });
+
+        private boolean nonIcy;
+
+        IceFace() {
+            super(AbilityNamesies.ICE_FACE, "The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it hails.");
+            this.nonIcy = false;
+        }
+
+        @Override
+        public void enter(Battle b, ActivePokemon enterer) {
+            // Note: In game form persists when recalled and if this is ever changed it should re-enter Ice Form if hailing
+            Messages.add(enterer.getName() + " is in Ice Forme!");
+            nonIcy = false;
+        }
+
+        @Override
+        public boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount) {
+            // When hit by a physical move in Ice Form, the Pokemon will absorb the hit and lose its icy face
+            if (!nonIcy && b.getOtherPokemon(damageTaker).getAttack().getCategory() == MoveCategory.PHYSICAL) {
+                changeForm(damageTaker);
+                return true;
+            }
+
+            return false;
+        }
+
+        @Override
+        public void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder) {
+            // When hail starts, change back to ice face
+            if (nonIcy && weather == WeatherNamesies.HAILING) {
+                changeForm(effectHolder);
+            }
+        }
+
+        private void changeForm(ActivePokemon formsie) {
+            this.nonIcy = !nonIcy;
+            String message = formsie.getName() + " changed into " + (nonIcy ? "No Ice" : "Ice") + " Forme!";
+            addFormMessage(formsie, message, nonIcy);
+        }
+
+        @Override
+        public boolean isStealable() {
+            return false;
+        }
+
+        @Override
+        public boolean isReplaceable() {
+            return false;
+        }
+
+        @Override
+        public boolean isNeutralizable() {
+            return false;
+        }
+
+        @Override
+        public Integer getStat(ActivePokemon user, Stat stat) {
+            // Need to calculate the new stat -- yes, I realize this is super inefficient and whatever whatever whatever
+            BaseStats stats = nonIcy ? NO_ICE_STATS : ICE_STATS;
+            return user.stats().calculate(stat, stats);
+        }
+    }
+
+    static class IceScales extends Ability implements OpponentPowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        IceScales() {
+            super(AbilityNamesies.ICE_SCALES, "The Pokémon is protected by ice scales, which halve the damage taken from special moves.");
+        }
+
+        @Override
+        public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.getAttack().getCategory() == MoveCategory.SPECIAL ? .5 : 1;
+        }
+    }
+
+    static class IntrepidSword extends Ability implements EntryEffect {
+        private static final long serialVersionUID = 1L;
+
+        IntrepidSword() {
+            super(AbilityNamesies.INTREPID_SWORD, "Boosts the Pokémon's Attack stat when the Pokémon enters a battle.");
+        }
+
+        @Override
+        public void enter(Battle b, ActivePokemon enterer) {
+            new StageModifier(1, Stat.ATTACK).modify(b, enterer, enterer, CastSource.ABILITY);
+        }
+    }
+
+    static class Libero extends Ability implements StartAttackEffect, ChangeTypeSource {
+        private static final long serialVersionUID = 1L;
+
+        private Type type;
+
+        Libero() {
+            super(AbilityNamesies.LIBERO, "Changes the Pokémon's type to the type of the move it's about to use.");
+        }
+
+        @Override
+        public void beforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Protean activates for all moves except for Struggle
+            if (attacking.getAttack().namesies() != AttackNamesies.STRUGGLE) {
+                type = attacking.getAttackType();
+                Effect.cast(PokemonEffectNamesies.CHANGE_TYPE, b, attacking, attacking, CastSource.ABILITY, true);
+            }
+        }
+
+        @Override
+        public PokeType getType(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return new PokeType(type);
+        }
+    }
+
+    static class Mimicry extends Ability implements ChangeTypeEffect {
+        private static final long serialVersionUID = 1L;
+
+        Mimicry() {
+            super(AbilityNamesies.MIMICRY, "Changes the Pokémon's type depending on the terrain.");
+        }
+
+        @Override
+        public PokeType getType(Battle b, ActivePokemon p, boolean display) {
+            // Type is the same as the current terrain
+            // Note: In the game this effect will override effects like Soak, but that isn't happening here
+            return b.getEffects().hasTerrain() ? new PokeType(b.getTerrainType().getType()) : null;
+        }
+    }
+
+    static class MirrorArmor extends Ability implements StatTargetSwapperEffect {
+        private static final long serialVersionUID = 1L;
+
+        MirrorArmor() {
+            super(AbilityNamesies.MIRROR_ARMOR, "Bounces back only the stat-lowering effects that the Pokémon receives.");
+        }
+
+        @Override
+        public String getSwapStatTargetMessage(ActivePokemon victim) {
+            return victim.getName() + "'s " + this.getName() + " reflected the changes!";
+        }
+    }
+
+    static class NeutralizingGas extends Ability implements EntryEffect {
+        private static final long serialVersionUID = 1L;
+
+        NeutralizingGas() {
+            super(AbilityNamesies.NEUTRALIZING_GAS, "If the Pokémon with Neutralizing Gas is in the battle, the effects of all Pokémon's Abilities will be nullified or will not be triggered.");
+        }
+
+        @Override
+        public boolean isNeutralizable() {
+            return false;
+        }
+
+        @Override
+        public void enter(Battle b, ActivePokemon enterer) {
+            Messages.add(enterer.getName() + "'s " + this.getName() + " filled the area!");
+        }
+    }
+
+    static class PerishBody extends Ability implements PhysicalContactEffect {
+        private static final long serialVersionUID = 1L;
+
+        PerishBody() {
+            super(AbilityNamesies.PERISH_BODY, "When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle.");
+        }
+
+        @Override
+        public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
+            Messages.add(victim.getName() + "'s " + this.getName() + " will cause both " + PokeString.POKEMON + " to faint in three turns!");
+            Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, user, CastSource.ABILITY, false);
+            Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, victim, CastSource.ABILITY, false);
+        }
+    }
+
+    static class PowerSpot extends Ability implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        PowerSpot() {
+            super(AbilityNamesies.POWER_SPOT, "Powers up the Pokémon's moves.");
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Note: This was changed because is supposed to power up ally moves, so is probably too strong it's like Sheer Force with no side effects oh well whatever who cares...
+            return 1.3;
+        }
+    }
+
+    static class PunkRock extends Ability implements OpponentPowerChangeEffect, PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        PunkRock() {
+            super(AbilityNamesies.PUNK_ROCK, "Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves.");
+        }
+
+        @Override
+        public double getOpponentMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.getAttack().isMoveType(MoveType.SOUND_BASED) ? .5 : 1;
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.getAttack().isMoveType(MoveType.SOUND_BASED) ? 1.3 : 1;
+        }
+    }
+
+    static class Ripen extends Ability {
+        private static final long serialVersionUID = 1L;
+
+        Ripen() {
+            super(AbilityNamesies.RIPEN, "Ripens Berries and doubles their effect.");
+        }
+    }
+
+    static class SandSpit extends Ability implements TakeDamageEffect {
+        private static final long serialVersionUID = 1L;
+
+        SandSpit() {
+            super(AbilityNamesies.SAND_SPIT, "The Pokémon creates a sandstorm when it's hit by an attack.");
+        }
+
+        @Override
+        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+            String message = victim.getName() + "'s " + this.getName() + " whipped up a sandstorm!";
+            Effect.apply(WeatherNamesies.SANDSTORM, b, victim, victim, CastSource.ABILITY, message);
+        }
+    }
+
+    static class ScreenCleaner extends Ability implements EntryEffect {
+        private static final long serialVersionUID = 1L;
+
+        ScreenCleaner() {
+            super(AbilityNamesies.SCREEN_CLEANER, "When the Pokémon enters a battle, the effects of Light Screen, Reflect, and Aurora Veil are nullified for both opposing and ally Pokémon.");
+        }
+
+        @Override
+        public void enter(Battle b, ActivePokemon enterer) {
+            Messages.add(enterer.getName() + "'s " + this.getName() + " cleared all the barriers!");
+            BarrierEffect.breakBarriers(b, enterer, enterer);
+            BarrierEffect.breakBarriers(b, b.getOtherPokemon(enterer), enterer);
+        }
+    }
+
+    static class SteamEngine extends Ability implements TakeDamageEffect {
+        private static final long serialVersionUID = 1L;
+
+        SteamEngine() {
+            super(AbilityNamesies.STEAM_ENGINE, "Boosts the Pokémon's Speed stat drastically if hit by a Fire- or Water-type move.");
+        }
+
+        @Override
+        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+            if (user.isAttackType(Type.FIRE, Type.WATER)) {
+                new StageModifier(6, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
+            }
+        }
+    }
+
+    static class SteelySpirit extends Ability implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        SteelySpirit() {
+            super(AbilityNamesies.STEELY_SPIRIT, "Powers up the Pokémon's Steel-type moves.");
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isAttackType(Type.STEEL) ? 1.5 : 1;
+        }
+    }
+
+    static class WanderingSpirit extends Ability implements PhysicalContactEffect, AbilitySwapper {
+        private static final long serialVersionUID = 1L;
+
+        private Ability ability;
+
+        WanderingSpirit() {
+            super(AbilityNamesies.WANDERING_SPIRIT, "The Pokémon exchanges Abilities with a Pokémon that hits it with a move that makes direct contact.");
+        }
+
+        @Override
+        public void setAbility(Ability ability) {
+            this.ability = ability;
+        }
+
+        @Override
+        public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Swap abilities with user on contact
+            this.swapAbilities(b, victim, user);
+        }
+
+        @Override
+        public Ability getAbility(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return ability;
+        }
+
+        @Override
+        public String getMessage(Battle b, ActivePokemon caster, ActivePokemon victim) {
+            return victim.getName() + "'s ability was changed to " + ability.getName() + "!";
         }
     }
 }

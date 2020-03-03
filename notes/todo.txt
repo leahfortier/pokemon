@@ -81,6 +81,9 @@ Descriptions that change manually:
         Battery ('Ally' -> 'the')
         Power of Alchemy ('ally' -> 'enemy')
         Download ('an opposing' -> 'opposing' (more for length than for clarity))
+        Pastel Veil (Remove 'and its ally Pokémon')
+        Power Spot ('Just being next to the Pokémon powers up moves.' -> 'Powers up the Pokémon's moves.')
+        Steely Spirit ('ally' -> 'the')
     Items:
         Fishing Rod
         Deep Sea Scale (Added ', Chinchou, or Lanturn' -- Lanturn rules and deserves this)
@@ -167,7 +170,6 @@ Other random things:
     - should egg hatching and evolving be separate views that extend the same view class or something?
     - StatGainPanel should maybe use the panel thing similar to the StatPanel
     - can we have a class that holds the arrow buttons and page number and shit like that
-    - Pickup has Great and Ultra Balls in the list but these are no longer holdable items -- should remove and add a test that all items are holdable
     - Switch button should be inactive for the current pokemon in PokemonState
     - look at isInterior stuff in BattleView -- how is it ever not null??
     - BasicPanels.isAnimatingMessage should be checked before the view update method is called, not inside every view update
@@ -181,4 +183,19 @@ Other random things:
     - test liquid voice + perish song + water absorb
     - would it make sense to move the take button in the bag to be next to the return button because it's completely unrelated to the current selected item?
     - should probably have actions be implemented somewhere other than just checking each individual action in executionSolution and then returning - should actions be separate classes instead of an enum?
+    - pokemon images in battle and shit feel like they should be handled completely different and not just be based on a message update
+    - test gastro acid + illusion
+    - add test for Hunger Switch and Aura Wheel
+    - add test for Gulp Missile
+    - disguise was changed in gen 8
+    - weathereliminatingeffect should just extend weatherchangedeffect
+    - Belch is actually an attackselectionprevention whatever thing -- "Weezing hasn't eaten any berries, so it can't possibly belch!" <-- weird but is actual text from Sword
+    - abilities like Intimidate should activate when they are acquired (Skill Swap) or unsuppressed (Neutralizing Gas exit)
+        - might make sense to a Pokemon effect type thing or something stored on the Pokemon to keep track of which abilities have already been activated instead of on the ability since they often get reset (swapping back to Intimidate does not activate a second time etc)
+        - status curing abilities should also activate in these scenarios 
+    - need to have a method for abilities to override when they are removed/suppressed
+        - does Illusion break?
+        - Neutralizing Gas has exit message ("The effects of Neutralizing Gas wore off!") -- this would also be a switch out effect
+    - I feel like Gastro Acid needs to be rewritten into suppression instead of changing the ability to none
+    - I changed Bracing effect to have 'CanHave: True', because I found a weird behavior that wouldn't normally occur but can sometimes in test where applying false swipes (not in a regular turn which has the end turn effects that remove inactive effects) but really I don't like this and should maybe change False Swipe to just directly inherit BracingEffect and include attack or something, also another thing the CanHave check should probably only look to see if there are ACTIVE effects of the same type anyways don't feel like doing this now so that's why just creating a long note instead
     

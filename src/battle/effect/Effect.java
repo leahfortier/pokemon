@@ -75,7 +75,7 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
 
     private ApplyResult fullApplies(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
         // Check if the victim has an effect that prevents this effect
-        ApplyResult effectResult = EffectPreventionEffect.getPreventEffect(b, caster, victim, this.namesies());
+        ApplyResult effectResult = EffectPreventionEffect.getPreventEffect(b, caster, victim, this.namesies(), source);
         if (effectResult.isFailure()) {
             return effectResult;
         }

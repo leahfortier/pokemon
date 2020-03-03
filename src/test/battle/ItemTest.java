@@ -4,6 +4,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.effect.attack.MultiTurnMove;
+import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import item.Item;
@@ -465,7 +466,7 @@ public class ItemTest extends BaseTest {
 
         attacking.giveItem(ItemNamesies.SITRUS_BERRY);
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.LEAF_BLADE);
-        Assert.assertEquals(attacking.getHpString(), 1, attacking.getHP());
+        attacking.assertHp(1);
         attacking.assertNotConsumedItem();
         attacking.assertHasEffect(PokemonEffectNamesies.HEAL_BLOCK);
     }
@@ -504,5 +505,79 @@ public class ItemTest extends BaseTest {
         battle.attackingFight(AttackNamesies.CONSTRICT);
         attacking.assertFullHealth();
         defending.assertNotFullHealth();
+    }
+
+    @Test
+    public void weatherExtenderTest() {
+        weatherExtenderTest(WeatherNamesies.RAINING, ItemNamesies.DAMP_ROCK, AttackNamesies.RAIN_DANCE, AbilityNamesies.DRIZZLE);
+        weatherExtenderTest(WeatherNamesies.SUNNY, ItemNamesies.HEAT_ROCK, AttackNamesies.SUNNY_DAY, AbilityNamesies.DROUGHT);
+        weatherExtenderTest(WeatherNamesies.HAILING, ItemNamesies.ICY_ROCK, AttackNamesies.HAIL, AbilityNamesies.SNOW_WARNING);
+        weatherExtenderTest(WeatherNamesies.SANDSTORM, ItemNamesies.SMOOTH_ROCK, AttackNamesies.SANDSTORM, AbilityNamesies.SAND_STREAM);
+
+        // Sand Spit starts a Sandstorm when hit by an attack
+        weatherExtenderTest(
+                WeatherNamesies.SANDSTORM, ItemNamesies.SMOOTH_ROCK,
+                new TestInfo().attacking(AbilityNamesies.SAND_SPIT).defendingFight(AttackNamesies.SWIFT)
+        );
+    }
+
+    private void weatherExtenderTest(WeatherNamesies weather, ItemNamesies extender, AttackNamesies weatherAttack, AbilityNamesies weatherAbility) {
+        // Adds weather by playing the standard start weather attack (like Rain Dance)
+        weatherExtenderTest(weather, extender, new TestInfo().attackingFight(weatherAttack));
+
+        // Adds weather by switching to entry ability (like Sand Stream)
+        weatherExtenderTest(
+                weather, extender,
+                new TestInfo().asTrainerBattle()
+                              .with((battle, attacking, defending) -> {
+                                  // Adds another Pokemon with weather entry ability to switch to
+                                  // and swaps the item (either no item or the extender item) with it
+                                  TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.SQUIRTLE);
+                                  attacking2.withAbility(weatherAbility);
+                                  attacking2.withItem(attacking.getHeldItem().namesies());
+                                  attacking.removeItem();
+
+                                  battle.assertFront(attacking);
+                                  battle.assertWeather(WeatherNamesies.CLEAR_SKIES);
+
+                                  // Bye bye blue sky
+                                  battle.defendingFight(AttackNamesies.WHIRLWIND);
+                                  battle.assertFront(attacking2);
+                                  battle.assertWeather(weather);
+                              })
+        );
+    }
+
+    private void weatherExtenderTest(WeatherNamesies weather, ItemNamesies extender, TestInfo testInfo) {
+        testInfo.with((battle, attacking, defending) -> {
+            // Should already have the desired weather effect in play and should not have any turns since it started
+            battle.assertWeather(weather);
+
+            // Just do nothing and let the weather resolve itself
+            battle.splashFight();
+            battle.splashFight();
+            battle.splashFight();
+            battle.assertWeather(weather);
+
+            // Okay one last time before Clear Skies (unless holding the extender)
+            battle.splashFight();
+        });
+
+        // Without and with the attacker holding the extender item
+        testInfo.doubleTake(
+                PokemonManipulator.giveAttackingItem(extender),
+                (battle, attacking, defending) -> battle.assertWeather(WeatherNamesies.CLEAR_SKIES),
+                (battle, attacking, defending) -> {
+                    // Weather still in play since it was extended
+                    battle.assertWeather(weather);
+                    battle.splashFight();
+                    battle.splashFight();
+                    battle.assertWeather(weather);
+
+                    // Gotta go away sometime though
+                    battle.splashFight();
+                    battle.assertWeather(WeatherNamesies.CLEAR_SKIES);
+                }
+        );
     }
 }

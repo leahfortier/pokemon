@@ -199,7 +199,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
             }
 
             // The sticky web lowered Charmander's Speed!
-            new StageModifier(-1, Stat.SPEED).withMessage(this).modify(b, enterer, enterer, CastSource.EFFECT);
+            new StageModifier(-1, Stat.SPEED).withMessage(this).modify(b, b.getOtherPokemon(enterer), enterer, CastSource.EFFECT);
         }
 
         @Override
@@ -541,7 +541,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+        public ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source) {
             if (effectName == PokemonEffectNamesies.CONFUSION && caster != victim && !caster.hasAbility(AbilityNamesies.INFILTRATOR)) {
                 return ApplyResult.failure("Safeguard prevents confusion!");
             }

@@ -111,6 +111,25 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public Ability getAbility() {
+        return this.getAbility(true);
+    }
+
+    private Ability getAbility(boolean checkNeutralizingGas) {
+        // If the other Pokemon has Neutralizing Gas, then this Pokemon's ability is suppressed
+        if (checkNeutralizingGas) {
+            Battle battle = Game.getPlayer().getBattle();
+            if (battle != null) {
+                Ability ability = this.getAbility(false);
+                if (ability.isNeutralizable()) {
+                    AbilityNamesies opponentAbility = battle.getOtherPokemon(this).getAbility(false).namesies();
+                    if (opponentAbility == AbilityNamesies.NEUTRALIZING_GAS) {
+                        return AbilityNamesies.NO_ABILITY.getNewAbility();
+                    }
+                }
+                return ability;
+            }
+        }
+
         // Check if the Pokemon has had its ability changed during the battle
         PokemonEffect effect = this.getEffect(PokemonEffectNamesies.CHANGE_ABILITY);
         if (effect != null) {

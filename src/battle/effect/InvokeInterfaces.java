@@ -13,7 +13,6 @@ import battle.effect.EffectInterfaces.SwappableEffect;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.battle.BattleEffect;
-import battle.effect.battle.weather.WeatherEffect;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
@@ -374,16 +373,16 @@ public final class InvokeInterfaces {
 
     public interface StatLoweredEffect {
 
-        // caster: The Pokemon responsible for causing the stat to be lowered
         // victim: The Pokemon whose stat is being lowered
-        void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim);
+        // selfCaster: true if the victim caused its own stats to be lowered
+        void takeItToTheNextLevel(Battle b, ActivePokemon victim, boolean selfCaster);
 
-        static void invokeStatLoweredEffect(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        static void invokeStatLoweredEffect(Battle b, ActivePokemon victim, boolean selfCaster) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof StatLoweredEffect && invokee.isActiveEffect()) {
                     StatLoweredEffect effect = (StatLoweredEffect)invokee;
-                    effect.takeItToTheNextLevel(b, caster, victim);
+                    effect.takeItToTheNextLevel(b, victim, selfCaster);
                 }
             }
         }
@@ -734,7 +733,7 @@ public final class InvokeInterfaces {
         }
     }
 
-    public interface StatProtectingEffect extends InvokeEffect {
+    public interface StatProtectingEffect {
         boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat);
         String preventionMessage(ActivePokemon p, Stat s);
 
@@ -750,6 +749,35 @@ public final class InvokeInterfaces {
 
                     StatProtectingEffect effect = (StatProtectingEffect)invokee;
                     if (effect.prevent(b, caster, victim, stat)) {
+                        return effect;
+                    }
+                }
+            }
+
+            return null;
+        }
+    }
+
+    public interface StatTargetSwapperEffect {
+        String getSwapStatTargetMessage(ActivePokemon victim);
+
+        default boolean shouldSwapTarget() {
+            // TODO: This should probably use a ContainsGet type of thing but just doing this instead for now
+            return true;
+        }
+
+        static StatTargetSwapperEffect checkTargetSwap(ActivePokemon moldBreaker, Battle b, ActivePokemon caster, ActivePokemon victim) {
+            List<InvokeEffect> invokees = b.getEffectsList(victim);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof StatTargetSwapperEffect && invokee.isActiveEffect()) {
+
+                    // If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && moldBreaker != null && moldBreaker.breaksTheMold()) {
+                        continue;
+                    }
+
+                    StatTargetSwapperEffect effect = (StatTargetSwapperEffect)invokee;
+                    if (effect.shouldSwapTarget()) {
                         return effect;
                     }
                 }
@@ -785,9 +813,9 @@ public final class InvokeInterfaces {
     }
 
     public interface EffectPreventionEffect {
-        ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName);
+        ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source);
 
-        static ApplyResult getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName) {
+        static ApplyResult getPreventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof EffectPreventionEffect && invokee.isActiveEffect()) {
@@ -798,7 +826,7 @@ public final class InvokeInterfaces {
                     }
 
                     EffectPreventionEffect effect = (EffectPreventionEffect)invokee;
-                    ApplyResult value = effect.preventEffect(b, caster, victim, effectName);
+                    ApplyResult value = effect.preventEffect(b, caster, victim, effectName, source);
                     if (value != null) {
                         return value;
                     }
@@ -1670,8 +1698,8 @@ public final class InvokeInterfaces {
     public interface WeatherEliminatingEffect extends EntryEndTurnEffect {
         String getEliminateMessage(ActivePokemon eliminator);
 
-        default boolean eliminateWeather(WeatherEffect weather) {
-            return weather.namesies() != WeatherNamesies.CLEAR_SKIES;
+        default boolean eliminateWeather(WeatherNamesies weather) {
+            return weather != WeatherNamesies.CLEAR_SKIES;
         }
 
         @Override
@@ -1679,7 +1707,7 @@ public final class InvokeInterfaces {
             b.addEffect(b.getWeather());
         }
 
-        static boolean shouldEliminateWeather(Battle b, ActivePokemon eliminator, WeatherEffect weather) {
+        static boolean shouldEliminateWeather(Battle b, ActivePokemon eliminator, WeatherNamesies weather) {
             List<InvokeEffect> invokees = b.getEffectsList(eliminator);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof WeatherEliminatingEffect && invokee.isActiveEffect()) {
@@ -1692,6 +1720,36 @@ public final class InvokeInterfaces {
             }
 
             return false;
+        }
+
+        // Calls the invoke method for both front Pokemon
+        static boolean shouldEliminateWeather(Battle b, WeatherNamesies weather) {
+            return shouldEliminateWeather(b, b.getPlayer().front(), weather) || shouldEliminateWeather(b, b.getOpponent().front(), weather);
+        }
+    }
+
+    // Effects that take place when weather is changed
+    public interface WeatherChangedEffect {
+
+        // Note: The effect holder here is not necessarily the Pokemon that changed the weather, but the Pokemon which holds the WeatherChangedEffect
+        void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder);
+
+        static void checkWeatherChange(Battle b, WeatherNamesies weather, ActivePokemon effectHolder) {
+            List<InvokeEffect> invokees = b.getEffectsList(effectHolder);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof WeatherChangedEffect && invokee.isActiveEffect()) {
+                    WeatherChangedEffect effect = (WeatherChangedEffect)invokee;
+                    effect.weatherChanged(weather, effectHolder);
+                }
+            }
+        }
+
+        // Calls the invoke method for both front Pokemon
+        static void invokeWeatherChangedEffect(Battle b, WeatherNamesies weather) {
+            // Check the effects from both Pokemon on the field
+            // Note: Should not be implemented by any battle effects as they will be executed twice
+            checkWeatherChange(b, weather, b.getPlayer().front());
+            checkWeatherChange(b, weather, b.getOpponent().front());
         }
     }
 

@@ -4,6 +4,7 @@ import battle.attack.Attack;
 import battle.attack.AttackInterface;
 import battle.effect.Effect;
 import battle.effect.EffectInterface;
+import battle.effect.EffectInterfaces.ChoiceEffect;
 import battle.effect.EffectInterfaces.EffectPreventionAbility;
 import battle.effect.EffectInterfaces.EntryHazard;
 import battle.effect.EffectInterfaces.MoldBreakerEffect;
@@ -79,6 +80,7 @@ import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.InvokeInterfaces.TerrainCastEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
+import battle.effect.InvokeInterfaces.WeatherChangedEffect;
 import battle.effect.InvokeInterfaces.WeatherEliminatingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.InvokeInterfaces.WildEncounterSelector;
@@ -203,6 +205,9 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, EndTurnEffect.class, teamEffectList);
             checkInstance(classy, SwitchOutEffect.class, pokemonEffectList);
             checkInstance(classy, EndBattleEffect.class, teamEffectList);
+            checkInstance(classy, WeatherEliminatingEffect.class, teamEffectList);
+            checkInstance(classy, WeatherChangedEffect.class, teamEffectList);
+            checkInstance(classy, TerrainCastEffect.class, teamEffectList);
 
             // Teams and Opponent things
             checkInstance(classy, Team.class, Trainer.class, WildPokemon.class);
@@ -219,6 +224,9 @@ public class ClassTest extends BaseTest {
 
             // Mold Breaker effects are only checked on the ability and the attack
             checkInstance(classy, MoldBreakerEffect.class, Ability.class, Attack.class);
+
+            // ChoiceEffect only works with named sources
+            checkInstance(classy, ChoiceEffect.class, Ability.class, Item.class);
 
             // Casted from CastSource.getSource()
             checkInstance(classy, ChangeAbilitySource.class, castSources);
@@ -270,10 +278,8 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, StatusReceivedEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, OpponentStatusReceivedEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, OpponentEndAttackEffect.class, effectListSourcesNoAttack);
-            checkInstance(classy, TerrainCastEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, AttackBlocker.class, effectListSourcesNoAttack);
             checkInstance(classy, ModifyStageValueEffect.class, effectListSourcesNoAttack);
-            checkInstance(classy, WeatherEliminatingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, EffectExtendingEffect.class, effectListSourcesNoAttack);
 
             // Invoked from battle.getEffectsList() with attack
@@ -281,7 +287,7 @@ public class ClassTest extends BaseTest {
                 checkInstance(classy, effectListWithAttackClass, effectListSourcesWithAttack);
             }
 
-            // If a status if a stat modifier, then it must be a StatModifyingStatus
+            // If a status is a stat modifier, then it must be a StatModifyingStatus
             checkAllInstances(classy, StatModifyingStatus.class, StatusInterface.class, StatModifyingEffect.class);
         }
     }

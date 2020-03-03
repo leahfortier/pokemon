@@ -184,7 +184,7 @@ public class AttackTest extends BaseTest {
         // Struggle should still cause recoil damage even if they have Rock Head/Magic Guard
         attacking.fullyHeal();
         battle.attackingFight(AttackNamesies.STRUGGLE);
-        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.ROCK_HEAD));
+        attacking.assertAbility(AbilityNamesies.ROCK_HEAD);
         attacking.assertHealthRatio(.75);
     }
 
@@ -246,11 +246,11 @@ public class AttackTest extends BaseTest {
         TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.CHANSEY, PokemonNamesies.SHUCKLE);
         TestPokemon attacking1 = battle.getAttacking();
         TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.HAPPINY);
-        Assert.assertTrue(battle.isFront(attacking1));
+        battle.assertFront(attacking1);
 
         // Use U-Turn -- make sure they swap
         battle.attackingFight(AttackNamesies.U_TURN);
-        Assert.assertTrue(battle.isFront(attacking2));
+        battle.assertFront(attacking2);
 
         // TODO: Baton Pass
         // TODO: No more remaining Pokemon, wild battles, wimp out, red card, eject button
@@ -767,40 +767,41 @@ public class AttackTest extends BaseTest {
         TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.BLAZE);
 
         battle.attackingFight(AttackNamesies.SKILL_SWAP);
-        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.BLAZE));
-        Assert.assertTrue(defending.hasAbility(AbilityNamesies.OVERGROW));
+        attacking.assertChangedAbility(AbilityNamesies.BLAZE);
+        defending.assertChangedAbility(AbilityNamesies.OVERGROW);
 
         battle.attackingFight(AttackNamesies.WORRY_SEED);
-        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.BLAZE));
-        Assert.assertTrue(defending.hasAbility(AbilityNamesies.INSOMNIA));
+        attacking.assertChangedAbility(AbilityNamesies.BLAZE);
+        defending.assertChangedAbility(AbilityNamesies.INSOMNIA);
 
         battle.defendingFight(AttackNamesies.SKILL_SWAP);
-        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.INSOMNIA));
-        Assert.assertTrue(defending.hasAbility(AbilityNamesies.BLAZE));
+        attacking.assertChangedAbility(AbilityNamesies.INSOMNIA);
+        defending.assertChangedAbility(AbilityNamesies.BLAZE);
 
         battle.attackingFight(AttackNamesies.ENTRAINMENT);
-        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.INSOMNIA));
-        Assert.assertTrue(defending.hasAbility(AbilityNamesies.INSOMNIA));
+        attacking.assertChangedAbility(AbilityNamesies.INSOMNIA);
+        defending.assertChangedAbility(AbilityNamesies.INSOMNIA);
 
         battle.attackingFight(AttackNamesies.SIMPLE_BEAM);
-        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.INSOMNIA));
-        Assert.assertTrue(defending.hasAbility(AbilityNamesies.SIMPLE));
+        attacking.assertChangedAbility(AbilityNamesies.INSOMNIA);
+        defending.assertChangedAbility(AbilityNamesies.SIMPLE);
 
         battle.attackingFight(AttackNamesies.SKILL_SWAP);
-        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.SIMPLE));
-        Assert.assertTrue(defending.hasAbility(AbilityNamesies.INSOMNIA));
+        attacking.assertChangedAbility(AbilityNamesies.SIMPLE);
+        defending.assertChangedAbility(AbilityNamesies.INSOMNIA);
 
         battle.defendingFight(AttackNamesies.ROLE_PLAY);
-        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.SIMPLE));
-        Assert.assertTrue(defending.hasAbility(AbilityNamesies.SIMPLE));
+        attacking.assertChangedAbility(AbilityNamesies.SIMPLE);
+        defending.assertChangedAbility(AbilityNamesies.SIMPLE);
 
         battle.defendingFight(AttackNamesies.GASTRO_ACID);
-        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.NO_ABILITY));
-        Assert.assertTrue(defending.hasAbility(AbilityNamesies.SIMPLE));
+        attacking.assertChangedAbility(AbilityNamesies.NO_ABILITY);
+        defending.assertChangedAbility(AbilityNamesies.SIMPLE);
 
+        // Skill Swap will fail when one ability is no ability
         battle.defendingFight(AttackNamesies.SKILL_SWAP);
-        Assert.assertTrue(attacking.hasAbility(AbilityNamesies.SIMPLE));
-        Assert.assertTrue(defending.hasAbility(AbilityNamesies.NO_ABILITY));
+        attacking.assertChangedAbility(AbilityNamesies.NO_ABILITY);
+        defending.assertChangedAbility(AbilityNamesies.SIMPLE);
     }
 
     @Test
@@ -1291,12 +1292,12 @@ public class AttackTest extends BaseTest {
 
         // Oran Berry should not heal when consumed
         battle.falseSwipePalooza(false);
-        Assert.assertEquals(1, attacking.getHP());
+        attacking.assertHp(1);
         attacking.withItem(ItemNamesies.ORAN_BERRY);
         attacking.apply(true, AttackNamesies.NATURAL_GIFT, battle);
         Assert.assertTrue(attacking.isAttackType(Type.POISON));
         attacking.assertConsumedItem(); // Confirms berry not eaten, just consumed
-        Assert.assertEquals(1, attacking.getHP());
+        attacking.assertHp(1);
         defending.assertNotFullHealth();
     }
 
@@ -1338,7 +1339,7 @@ public class AttackTest extends BaseTest {
 
         // Incinerate does not consume when the defending has Sticky Hold
         PokemonManipulator sticksies = (battle, attacking, defending) -> {
-            Assert.assertTrue(defending.hasAbility(AbilityNamesies.STICKY_HOLD));
+            defending.assertAbility(AbilityNamesies.STICKY_HOLD);
             defending.assertNotConsumedItem();
             attacking.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
             attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
@@ -1751,7 +1752,7 @@ public class AttackTest extends BaseTest {
 
         // Set attacking to 1 HP
         battle.falseSwipePalooza(false);
-        Assert.assertEquals(1, attacking.getHP());
+        attacking.assertHp(1);
         defending.assertFullHealth();
 
         int attackStat = Stat.ATTACK.getBasicStat(battle, defending);
@@ -1760,7 +1761,7 @@ public class AttackTest extends BaseTest {
 
         // Steal strengthhh
         battle.attackingFight(AttackNamesies.STRENGTH_SAP);
-        Assert.assertEquals(1 + attackStat, attacking.getHP());
+        attacking.assertHp(1 + attackStat);
         defending.assertFullHealth();
         attacking.assertStages(new TestStages());
         defending.assertStages(new TestStages().set(-1, Stat.ATTACK));
@@ -1769,7 +1770,7 @@ public class AttackTest extends BaseTest {
         int newAttackStat = Stat.ATTACK.getBasicStat(battle, defending);
         TestUtils.assertGreater(attackStat, newAttackStat);
         battle.attackingFight(AttackNamesies.STRENGTH_SAP);
-        Assert.assertEquals(1 + attackStat + newAttackStat, attacking.getHP());
+        attacking.assertHp(1 + attackStat + newAttackStat);
         defending.assertFullHealth();
         attacking.assertStages(new TestStages());
         defending.assertStages(new TestStages().set(-2, Stat.ATTACK));
@@ -1803,19 +1804,19 @@ public class AttackTest extends BaseTest {
         defending.withAbility(AbilityNamesies.NO_ABILITY);
 
         battle.falseSwipePalooza(false);
-        Assert.assertEquals(1, attacking.getHP());
+        attacking.assertHp(1);
         defending.assertFullHealth();
 
         // Strength Sap will fail if at minimum (should not heal either)
         battle.attackingFight(AttackNamesies.STRENGTH_SAP);
-        Assert.assertEquals(1, attacking.getHP());
+        attacking.assertHp(1);
         defending.assertFullHealth();
 
         // Contrary will cause Strength Sap to increase its attack -- should succeed at -6 stage
         defending.withAbility(AbilityNamesies.CONTRARY);
         attackStat = Stat.ATTACK.getBasicStat(battle, defending);
         battle.attackingFight(AttackNamesies.STRENGTH_SAP);
-        Assert.assertEquals(1 + attackStat, attacking.getHP());
+        attacking.assertHp(1 + attackStat);
         defending.assertFullHealth();
         attacking.assertStages(new TestStages());
         defending.assertStages(new TestStages().set(-5, Stat.ATTACK));
@@ -1823,7 +1824,7 @@ public class AttackTest extends BaseTest {
         // Should not heal if the stat can't be lowered due to ability
         defending.withAbility(AbilityNamesies.HYPER_CUTTER);
         battle.attackingFight(AttackNamesies.STRENGTH_SAP);
-        Assert.assertEquals(1 + attackStat, attacking.getHP());
+        attacking.assertHp(1 + attackStat);
         defending.assertFullHealth();
         attacking.assertStages(new TestStages());
         defending.assertStages(new TestStages().set(-5, Stat.ATTACK));
@@ -2076,8 +2077,8 @@ public class AttackTest extends BaseTest {
     private void jawLockTest(TestBattle battle, TestPokemon attacking, boolean jawLocked) {
         TestPokemon defending = battle.getDefending();
         battle.assertEffect(jawLocked, StandardBattleEffectNamesies.JAW_LOCKED);
-        Assert.assertTrue(battle.isFront(attacking));
-        Assert.assertTrue(battle.isFront(defending));
+        battle.assertFront(attacking);
+        battle.assertFront(defending);
         Assert.assertEquals(!jawLocked, attacking.canEscape(battle));
         Assert.assertEquals(!jawLocked, defending.canEscape(battle));
     }

@@ -230,10 +230,10 @@ EntryEffect:
 StatLoweredEffect:
     Method:
         Comments:
-            // caster: The Pokemon responsible for causing the stat to be lowered
             // victim: The Pokemon whose stat is being lowered
+            // selfCaster: true if the victim caused its own stats to be lowered
             ###
-        Header: void takeItToTheNextLevel(Battle b, ActivePokemon caster, ActivePokemon victim)
+        Header: void takeItToTheNextLevel(Battle b, ActivePokemon victim, boolean selfCaster)
         Invoke: Void
         EffectList: victim
     *
@@ -434,7 +434,6 @@ CritBlockerEffect:
     *
 ***
 StatProtectingEffect:
-    Extends: InvokeEffect
     Method:
         Header: boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat)
         Invoke: CheckGet true
@@ -445,6 +444,23 @@ StatProtectingEffect:
     *
     Method:
         Header: String preventionMessage(ActivePokemon p, Stat s)
+    *
+***
+StatTargetSwapperEffect:
+    Method:
+        Header: String getSwapStatTargetMessage(ActivePokemon victim)
+    *
+    Method:
+        Header: boolean shouldSwapTarget()
+        Default:
+            // TODO: This should probably use a ContainsGet type of thing but just doing this instead for now
+            return true;
+            ###
+        Invoke: CheckGet true
+        InvokeName: checkTargetSwap
+        EffectList: victim
+        MoldBreaker: moldBreaker
+        InvokeParameters: ActivePokemon moldBreaker, Battle b, ActivePokemon caster, ActivePokemon victim
     *
 ***
 StatusPreventionEffect:
@@ -458,7 +474,7 @@ StatusPreventionEffect:
 ***
 EffectPreventionEffect:
     Method:
-        Header: ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName)
+        Header: ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source)
         Invoke: Get
         InvokeName: getPreventEffect
         EffectList: victim
@@ -895,9 +911,9 @@ WeatherEliminatingEffect:
         Header: String getEliminateMessage(ActivePokemon eliminator)
     *
     Method:
-        Header: boolean eliminateWeather(WeatherEffect weather)
+        Header: boolean eliminateWeather(WeatherNamesies weather)
         Default:
-            return weather.namesies() != WeatherNamesies.CLEAR_SKIES;
+            return weather != WeatherNamesies.CLEAR_SKIES;
             ###
         InvokeParameters: Battle b, ActivePokemon eliminator
         Invoke: CheckMessage true getEliminateMessage(eliminator)
@@ -910,6 +926,34 @@ WeatherEliminatingEffect:
         Header: void applyEffect(Battle b, ActivePokemon p)
         Default:
             b.addEffect(b.getWeather());
+            ###
+    *
+    StaticMethod:
+        Comments: // Calls the invoke method for both front Pokemon
+        Header: boolean shouldEliminateWeather(Battle b, WeatherNamesies weather)
+        Body:
+            return shouldEliminateWeather(b, b.getPlayer().front(), weather) || shouldEliminateWeather(b, b.getOpponent().front(), weather);
+            ###
+    *
+***
+WeatherChangedEffect:
+    Comments: // Effects that take place when weather is changed
+    Method:
+        Comments: // Note: The effect holder here is not necessarily the Pokemon that changed the weather, but the Pokemon which holds the WeatherChangedEffect
+        Header: void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder)
+        Invoke: Void
+        EffectList: effectHolder
+        InvokeName: checkWeatherChange
+        InvokeParameters: Battle b
+    *
+    StaticMethod:
+        Comments: // Calls the invoke method for both front Pokemon
+        Header: void invokeWeatherChangedEffect(Battle b, WeatherNamesies weather)
+        Body:
+            // Check the effects from both Pokemon on the field
+            // Note: Should not be implemented by any battle effects as they will be executed twice
+            checkWeatherChange(b, weather, b.getPlayer().front());
+            checkWeatherChange(b, weather, b.getOpponent().front());
             ###
     *
 ***

@@ -22,14 +22,21 @@ public interface CategoryBerry extends Berry {
         return 72;
     }
 
+    default boolean isCategory(ActivePokemon user) {
+        return user.getAttack().getCategory() == this.getCategory();
+    }
+
     interface CategoryIncreaseBerry extends CategoryBerry, TakeDamageEffect {
         Stat getStat();
 
         @Override
         default void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            // Increases stat by 1 when hit by a move a specified category
-            if (user.getAttack().getCategory() == this.getCategory()
-                    && new StageModifier(1, this.getStat()).modify(b, victim, victim, CastSource.HELD_ITEM)) {
+            if (!this.isCategory(user)) {
+                return;
+            }
+
+            // Increases stat by 1 (2 with Ripen) when hit by a move a specified category
+            if (new StageModifier(this.ripen(victim), this.getStat()).modify(b, victim, victim, CastSource.HELD_ITEM)) {
                 this.consumeItem(b, victim);
             }
         }
@@ -39,8 +46,8 @@ public interface CategoryBerry extends Berry {
         @Override
         default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // If hit by a move of a specific category, the user will also be hurt
-            if (user.getAttack().getCategory() == this.getCategory()
-                    && user.reduceHealthFraction(b, 1/8.0, user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!") > 0) {
+            String message = user.getName() + " was hurt by " + victim.getName() + "'s " + this.getName() + "!";
+            if (this.isCategory(user) && user.reduceHealthFraction(b, this.ripen(victim)/8.0, message) > 0) {
                 this.consumeItem(b, victim);
             }
         }

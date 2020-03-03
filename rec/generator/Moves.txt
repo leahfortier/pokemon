@@ -5503,15 +5503,13 @@ Baton Pass:
     MoveType: Non_Snatchable
 *
 Perish Song:
-    MoveType: Protect_Piercing, Substitute_Piercing, Sound_Based, No_Magic_Coat, Mirrorless
+    MoveType: Sound_Based, No_Magic_Coat, Field
     Desc: Any Pok\u00e9mon that hears this song faints in three turns, unless it switches out of battle.
     PP: 5
     Type: Normal
     Cat: Status
     UniqueEffects:
         Messages.add("All " + PokeString.POKEMON + " hearing this song will faint in three turns!");
-
-        // TODO: Test and also this used to check if they didn't have the effect before casting just in case that's relevant later
         Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, user, victim, CastSource.ATTACK, false);
         Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, user, user, CastSource.ATTACK, false);
         ###
@@ -5594,30 +5592,10 @@ Skill Swap:
     Type: Psychic
     Cat: Status
     MoveType: Substitute_Piercing, No_Magic_Coat
-    Int: ChangeAbilitySource
-    AbilityChange:
-        return ability;
-        ###
-    AbilityMessage:
-        return victim.getName() + "'s ability was changed to " + ability.getName() + "!";
-        ###
-    Field:
-        private Ability ability;
-
-        private static boolean canSkillSwap(ActivePokemon p) {
-            return p.getAbility().isReplaceable() && p.getAbility().isStealable();
-        }
-        ###
-    Applies: canSkillSwap(user) && canSkillSwap(victim)
+    AbilitySwapper: True
+    Applies: this.canSwapAbilities(user, victim)
     UniqueEffects:
-        Ability userAbility = user.getAbility();
-        Ability victimAbility = victim.getAbility();
-
-        ability = userAbility;
-        Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, victim, CastSource.ATTACK, super.printCast);
-
-        ability = victimAbility;
-        Effect.cast(PokemonEffectNamesies.CHANGE_ABILITY, b, user, user, CastSource.ATTACK, super.printCast);
+        this.swapAbilities(b, user, victim);
         ###
 *
 Volt Switch:
@@ -6904,7 +6882,18 @@ Aura Wheel:
     SelfTarget: True
     StatChange: Speed 1
     PhysicalContact: False
-    Comments: // TODO: Should only work for Morpeko and change type with its ability (which are both not implemented yet) though maybe I will implement as applying if it has the ability (which only morpeko should have)
+    Comments: // TODO: Change applies method to user.isPokemon(PokemonNamesies.MORPEKO) instead of ability check once it's in the game
+    Applies: user.hasAbility(AbilityNamesies.HUNGER_SWITCH)
+    GetType:
+        // Full Belly Mode = Electric type, Hangry Mode = Dark type
+        // Hunger Switch returns true when in Hangry Mode
+        Ability ability = user.getAbility();
+        if (ability.namesies() == AbilityNamesies.HUNGER_SWITCH && ((BooleanHolder)ability).getBoolean()) {
+            return Type.DARK;
+        }
+
+        return super.type;
+        ###
 *
 Breaking Swipe:
     Desc: The user swings its tough tail wildly and attacks opposing Pokémon. This also lowers their Attack stats.
