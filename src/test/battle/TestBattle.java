@@ -10,6 +10,8 @@ import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.team.TeamEffectNamesies;
+import item.ItemNamesies;
+import item.bag.Bag;
 import org.junit.Assert;
 import pokemon.species.PokemonNamesies;
 import test.general.TestCharacter;
@@ -98,6 +100,18 @@ public class TestBattle extends Battle {
         getDefending().fullyHeal();
 
         this.splashFight();
+    }
+
+    // Sets up the turn for the trainer to use the item on the Pokemon
+    // This does not use the action, still need to manually call fight()
+    // Note: If trainerPokemon is not the player's, will crash if not a trainer battle
+    void setItemAction(TestPokemon trainerPokemon, ItemNamesies item) {
+        Trainer trainer = (Trainer)this.getTrainer(trainerPokemon);
+        trainer.setAction(TrainerAction.ITEM);
+
+        Bag bag = trainer.getBag();
+        bag.addItem(item);
+        bag.setSelectedBattleItem(item, trainerPokemon);
     }
 
     void fight(AttackNamesies attackingMove, AttackNamesies defendingMove) {

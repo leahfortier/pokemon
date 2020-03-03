@@ -50,6 +50,14 @@ interface PokemonManipulator {
         return (battle, attacking, defending) -> {};
     }
 
+    static PokemonManipulator attackingFight(AttackNamesies attackNamesies) {
+        return (battle, attacking, defending) -> battle.attackingFight(attackNamesies);
+    }
+
+    static PokemonManipulator defendingFight(AttackNamesies attackNamesies) {
+        return (battle, attacking, defending) -> battle.defendingFight(attackNamesies);
+    }
+
     static PokemonManipulator attackingAttack(AttackNamesies attackNamesies) {
         return (battle, attacking, defending) -> useAttack(attackNamesies, battle, attacking, defending, false);
     }

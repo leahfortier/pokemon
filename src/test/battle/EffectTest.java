@@ -305,36 +305,6 @@ public class EffectTest extends BaseTest {
         Assert.assertFalse(attacking.canEscape(battle));
     }
 
-    // TODO: I don't know if EffectTest makes sense for this but whatever
-    @Test
-    public void sourceTest() {
-        TestBattle battle = TestBattle.create();
-        TestPokemon attacking = battle.getAttacking();
-        attacking.withAbility(AbilityNamesies.OVERGROW);
-        attacking.giveItem(ItemNamesies.ORAN_BERRY);
-        attacking.setupMove(AttackNamesies.SWITCHEROO, battle);
-        attacking.setCastSource(ItemNamesies.NO_ITEM.getItem());
-
-        for (CastSource source : CastSource.values()) {
-            String sourceName = source.getSourceName(attacking);
-            if (source.hasSourceName()) {
-                // Important since these values are hard-coded in another method
-                Assert.assertTrue(source == CastSource.ABILITY || source == CastSource.HELD_ITEM);
-                Assert.assertNotNull(sourceName);
-            } else {
-                Assert.assertNull(sourceName);
-            }
-        }
-
-        Assert.assertEquals(AbilityNamesies.OVERGROW.getName(), CastSource.ABILITY.getSourceName(attacking));
-        Assert.assertEquals(ItemNamesies.ORAN_BERRY.getName(), CastSource.HELD_ITEM.getSourceName(attacking));
-
-        Assert.assertSame(attacking.getAbility(), CastSource.ABILITY.getSource(attacking));
-        Assert.assertSame(attacking.getHeldItem(), CastSource.HELD_ITEM.getSource(attacking));
-        Assert.assertSame(attacking.getAttack(), CastSource.ATTACK.getSource(attacking));
-        Assert.assertSame(attacking.getCastSource(), CastSource.CAST_SOURCE.getSource(attacking));
-    }
-
     @Test
     public void bypassAccuracyTest() {
         // Attacker will fly in the air, making it semi-invulverable to Tackle which should be a forced miss
@@ -859,28 +829,6 @@ public class EffectTest extends BaseTest {
 
     @Test
     public void safeguardTest() {
-        // Also should not work on self-confusion fatigue things
-        safeguardTest(
-                (battle, attacking, defending) -> {
-                    // Thrash will attack for 2-3 turns and then confuse the user
-                    attacking.setMove(new Move(AttackNamesies.RECOVER));
-                    defending.setMove(new Move(AttackNamesies.THRASH));
-
-                    battle.fight();
-                    defending.assertHasEffect(PokemonEffectNamesies.SELF_CONFUSION);
-
-                    battle.fight();
-
-                    // If attacking still has the effect, then it's three turns -- do that turn
-                    if (defending.hasEffect(PokemonEffectNamesies.SELF_CONFUSION)) {
-                        battle.fight();
-                    }
-
-                    defending.assertNoEffect(PokemonEffectNamesies.SELF_CONFUSION);
-                },
-                (battle, attacking, defending) -> defending.assertHasEffect(PokemonEffectNamesies.CONFUSION)
-        );
-
         // Safeguard prevents against status conditions (like poison)
         safeguardTest(
                 (battle, attacking, defending) -> battle.attackingFight(AttackNamesies.TOXIC),

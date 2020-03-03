@@ -91,7 +91,7 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
     }
 
     @Override
-    public void remove(BattleEffect<? extends BattleEffectNamesies> effect) {
+    protected void remove(BattleEffect<? extends BattleEffectNamesies> effect) {
         if (effect == weather) {
             this.setBaseWeather(this.baseWeather);
         } else if (effect == currentTerrain) {

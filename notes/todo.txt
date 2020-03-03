@@ -197,5 +197,4 @@ Other random things:
         - does Illusion break?
         - Neutralizing Gas has exit message ("The effects of Neutralizing Gas wore off!") -- this would also be a switch out effect
     - I feel like Gastro Acid needs to be rewritten into suppression instead of changing the ability to none
-    - I changed Bracing effect to have 'CanHave: True', because I found a weird behavior that wouldn't normally occur but can sometimes in test where applying false swipes (not in a regular turn which has the end turn effects that remove inactive effects) but really I don't like this and should maybe change False Swipe to just directly inherit BracingEffect and include attack or something, also another thing the CanHave check should probably only look to see if there are ACTIVE effects of the same type anyways don't feel like doing this now so that's why just creating a long note instead
     

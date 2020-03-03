@@ -411,7 +411,7 @@ public final class EffectInterfaces {
                 if (p.hasEffect(effectName)) {
                     PokemonEffect effect = p.getEffect(effectName);
                     Messages.add(effect.getSourceRemoveMessage(p, this.getName()));
-                    p.getEffects().remove(effect);
+                    effect.deactivate();
                 }
             }
         }

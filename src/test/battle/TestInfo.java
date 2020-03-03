@@ -24,10 +24,12 @@ class TestInfo {
     private PokemonManipulator setupManipulator;
     private PokemonManipulator manipulator;
     private boolean isTrainerBattle;
+    private boolean defaultPokemon;
     private List<String> toString;
 
     TestInfo() {
         this(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
+        this.defaultPokemon = true;
     }
 
     TestInfo(PokemonNamesies attacking, PokemonNamesies defending) {
@@ -36,7 +38,30 @@ class TestInfo {
         this.setupManipulator = PokemonManipulator.empty();
         this.manipulator = PokemonManipulator.empty();
         this.isTrainerBattle = false;
+        this.defaultPokemon = false;
         this.toString = new ArrayList<>();
+    }
+
+    // Returns a new TestInfo object with the same current information
+    // Can be used if wanting to make a branching manipulator from the current state for example
+    public TestInfo copy() {
+        TestInfo testInfo = new TestInfo(this.attackingName, this.defendingName)
+                .setup(this.setupManipulator)
+                .with(this.manipulator);
+        if (this.isTrainerBattle) {
+            testInfo.asTrainerBattle();
+        }
+        testInfo.toString.addAll(this.toString);
+        return testInfo;
+    }
+
+    // Returns a copy of TestInfo replacing the attacking and defending Pokemon ONLY if never explicitly set
+    public TestInfo copy(PokemonNamesies attacking, PokemonNamesies defending) {
+        TestInfo copy = this.copy();
+        if (this.defaultPokemon) {
+            copy.attacking(attacking).defending(defending);
+        }
+        return copy;
     }
 
     public void manipulate(TestBattle battle) {
@@ -47,17 +72,15 @@ class TestInfo {
         this.manipulator = this.manipulator.add(manipulator);
     }
 
-    public PokemonManipulator getManipulator() {
-        return this.manipulator;
-    }
-
     TestInfo attacking(PokemonNamesies pokemonName) {
         this.attackingName = pokemonName;
+        this.defaultPokemon = false;
         return this;
     }
 
     TestInfo defending(PokemonNamesies pokemonName) {
         this.defendingName = pokemonName;
+        this.defaultPokemon = false;
         return this;
     }
 

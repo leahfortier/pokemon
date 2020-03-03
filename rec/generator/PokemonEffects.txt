@@ -120,7 +120,6 @@ MatBlock:
 Bracing:
     NumTurns: 1
     SuccessiveDecay: True
-    CanHave: True
     CastMessage: user.getName() + " braced itself!"
     Int: BracingEffect
     Bracing:

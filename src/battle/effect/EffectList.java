@@ -30,10 +30,10 @@ public class EffectList<NamesiesType extends EffectNamesies, EffectType extends 
         this.effects.add(effect);
     }
 
-    // Returns the effect if it is in the list, otherwise returns null
+    // Returns the effect if it is in the list and is active, otherwise returns null
     public EffectType get(NamesiesType effectNamesies) {
         for (EffectType effect : this) {
-            if (effect.namesies() == effectNamesies) {
+            if (effect.namesies() == effectNamesies && effect.isActive()) {
                 return effect;
             }
         }
@@ -41,6 +41,7 @@ public class EffectList<NamesiesType extends EffectNamesies, EffectType extends 
         return null;
     }
 
+    // Returns true if holding an active effect of the specified type
     public boolean hasEffect(NamesiesType effect) {
         return get(effect) != null;
     }

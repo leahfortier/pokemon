@@ -2065,4 +2065,158 @@ public class AbilityTest extends BaseTest {
             defending.assertAbility(AbilityNamesies.WANDERING_SPIRIT);
         }
     }
+
+    @Test
+    public void ownTempoTest() {
+        // Own Tempo prevents confusion
+        ownTempoTest(
+                new TestInfo(),
+                (battle, attacking, defending) -> defending.assertHasEffect(PokemonEffectNamesies.CONFUSION),
+                (battle, attacking, defending) -> defending.assertNoEffect(PokemonEffectNamesies.CONFUSION)
+        );
+
+        // Persim Berry cures confusion (if still holding was never confused)
+        ownTempoTest(
+                new TestInfo().defending(ItemNamesies.PERSIM_BERRY),
+                (battle, attacking, defending) -> {
+                    defending.assertNoEffect(PokemonEffectNamesies.CONFUSION);
+                    defending.assertConsumedBerry();
+                },
+                (battle, attacking, defending) -> {
+                    defending.assertNoEffect(PokemonEffectNamesies.CONFUSION);
+                    defending.assertHoldingItem(ItemNamesies.PERSIM_BERRY);
+                }
+        );
+
+        // Mental Herb same deal as Persim Berry
+        ownTempoTest(
+                new TestInfo().defending(ItemNamesies.MENTAL_HERB),
+                (battle, attacking, defending) -> {
+                    defending.assertNoEffect(PokemonEffectNamesies.CONFUSION);
+                    defending.assertConsumedItem();
+                },
+                (battle, attacking, defending) -> {
+                    defending.assertNoEffect(PokemonEffectNamesies.CONFUSION);
+                    defending.assertHoldingItem(ItemNamesies.MENTAL_HERB);
+                }
+        );
+
+        // Mold Breaker will allow the Own Tempo Pokemon to become confused
+        // However, Own Tempo will remove the confusion at the end of the turn
+        // Note: Thrash case is essentially same as without Mold Breaker since it does not affect it
+        ownTempoTest(
+                new TestInfo().attacking(AbilityNamesies.MOLD_BREAKER),
+                (battle, attacking, defending) -> defending.assertHasEffect(PokemonEffectNamesies.CONFUSION),
+                (battle, attacking, defending) -> defending.assertNoEffect(PokemonEffectNamesies.CONFUSION)
+        );
+
+        // Mold Breaker + Persim Berry shows that the berry needed to be eaten in the Own Tempo case
+        // Need to do the Confuse Ray and Thrash tests separately since Mold Breaker doesn't work with Thrash
+        ownTempoConfuseRayTest(
+                new TestInfo().attacking(AbilityNamesies.MOLD_BREAKER).defending(ItemNamesies.PERSIM_BERRY),
+                (battle, attacking, defending) -> {
+                    defending.assertNoEffect(PokemonEffectNamesies.CONFUSION);
+                    defending.assertConsumedBerry();
+                }
+        );
+        ownTempoSelfConfusionTest(
+                new TestInfo().attacking(AbilityNamesies.MOLD_BREAKER).defending(ItemNamesies.PERSIM_BERRY),
+                (battle, attacking, defending) -> {
+                    defending.assertNoEffect(PokemonEffectNamesies.CONFUSION);
+                    defending.assertConsumedBerry();
+                },
+                (battle, attacking, defending) -> {
+                    defending.assertNoEffect(PokemonEffectNamesies.CONFUSION);
+                    defending.assertHoldingItem(ItemNamesies.PERSIM_BERRY);
+                }
+        );
+
+        // Neutralizing Gas completely negates Own Tempo (will not remove confusion at end of turn)
+        ownTempoTest(
+                new TestInfo().attacking(AbilityNamesies.NEUTRALIZING_GAS),
+                (battle, attacking, defending) -> defending.assertHasEffect(PokemonEffectNamesies.CONFUSION)
+        );
+
+        // If the Neutralizing Pokemon leaves battle however, the Pokemon will regain it's immunity and remove
+        baseOwnTempoTest(
+                new TestInfo().asTrainerBattle()
+                              .attacking(AbilityNamesies.NEUTRALIZING_GAS)
+                              .with((battle, attacking, defending) -> {
+                                  TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.SQUIRTLE);
+                                  battle.assertFront(attacking);
+                                  attacking.assertAbility(AbilityNamesies.NEUTRALIZING_GAS);
+                                  defending.assertAbility(AbilityNamesies.NO_ABILITY);
+
+                                  // Always confuses defending
+                                  battle.attackingFight(AttackNamesies.CONFUSE_RAY);
+                                  defending.assertHasEffect(PokemonEffectNamesies.CONFUSION);
+
+                                  // Set up switch to non-neutralizer with Baton Pass
+                                  // Note: Cannot use something like Whirlwind because chance to fail by hurting self
+                                  // in confusion or could remove confusion defeating the test purpose so using an
+                                  // arbitrary item instead as using an item does not take a confusion turn or check
+                                  // confusion damage
+                                  attacking.setMove(new Move(AttackNamesies.BATON_PASS));
+                                  battle.setItemAction(defending, ItemNamesies.X_ACCURACY);
+                                  defending.assertStages(new TestStages()); // Item not used yet, just setup
+
+                                  battle.fight();
+                                  battle.assertFront(attacking2);
+                                  defending.assertStages(new TestStages().set(2, Stat.ACCURACY));
+                              }),
+                (battle, attacking, defending) -> defending.assertHasEffect(PokemonEffectNamesies.CONFUSION),
+                (battle, attacking, defending) -> defending.assertNoEffect(PokemonEffectNamesies.CONFUSION)
+        );
+    }
+
+    private void ownTempoTest(TestInfo testInfo, PokemonManipulator samesies) {
+        ownTempoTest(testInfo, samesies, samesies);
+    }
+
+    private void ownTempoConfuseRayTest(TestInfo testInfo, PokemonManipulator samesies) {
+        ownTempoConfuseRayTest(testInfo, samesies, samesies);
+    }
+
+    // TestInfo should not include the method of adding confusion
+    private void ownTempoTest(TestInfo testInfo, PokemonManipulator withoutTempo, PokemonManipulator withTempo) {
+        ownTempoConfuseRayTest(testInfo, withoutTempo, withTempo);
+        ownTempoSelfConfusionTest(testInfo, withoutTempo, withTempo);
+    }
+
+    // Confuse normally by attacking with Confuse Ray
+    private void ownTempoConfuseRayTest(TestInfo testInfo, PokemonManipulator withoutTempo, PokemonManipulator withTempo) {
+        baseOwnTempoTest(
+                testInfo.copy().attackingFight(AttackNamesies.CONFUSE_RAY),
+                withoutTempo, withTempo
+        );
+    }
+
+    // Confuse with a Self-Confusion attack like Thrash
+    private void ownTempoSelfConfusionTest(TestInfo testInfo, PokemonManipulator withoutTempo, PokemonManipulator withTempo) {
+        baseOwnTempoTest(
+                testInfo.copy(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE).with((battle, attacking, defending) -> {
+                    // Thrash will attack for 2-3 turns and then confuse the user
+                    attacking.setMove(new Move(AttackNamesies.RECOVER));
+                    defending.setMove(new Move(AttackNamesies.THRASH));
+
+                    battle.fight();
+                    defending.assertHasEffect(PokemonEffectNamesies.SELF_CONFUSION);
+
+                    battle.fight();
+
+                    // If attacking still has the effect, then it's three turns -- do that turn
+                    if (defending.hasEffect(PokemonEffectNamesies.SELF_CONFUSION)) {
+                        battle.fight();
+                    }
+
+                    defending.assertNoEffect(PokemonEffectNamesies.SELF_CONFUSION);
+                }),
+                withoutTempo, withTempo
+        );
+    }
+
+    // Performs a single double take with and without Own Tempo with everything already set up inside testInfo
+    private void baseOwnTempoTest(TestInfo testInfoWithConfusion, PokemonManipulator withoutTempo, PokemonManipulator withTempo) {
+        testInfoWithConfusion.doubleTake(AbilityNamesies.OWN_TEMPO, withoutTempo, withTempo);
+    }
 }

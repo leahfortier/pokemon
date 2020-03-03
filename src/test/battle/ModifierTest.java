@@ -270,20 +270,19 @@ public class ModifierTest extends BaseTest {
     @Test
     public void simpleContraryTest() {
         // Simple/Contrary applies for changes made by the user or by the opponent
-        simpleContraryTest(1, Stat.DEFENSE, User.DEFENDING, new TestInfo().defendingFight(AttackNamesies.DEFENSE_CURL));
-        simpleContraryTest(-1, Stat.DEFENSE, User.DEFENDING, new TestInfo().attackingFight(AttackNamesies.TAIL_WHIP));
-        simpleContraryTest(2, Stat.ATTACK, User.ATTACKING, new TestInfo().attackingFight(AttackNamesies.SWORDS_DANCE));
-        simpleContraryTest(-2, Stat.SP_ATTACK, User.ATTACKING, new TestInfo().defendingFight(AttackNamesies.EERIE_IMPULSE));
-        simpleContraryTest(3, Stat.DEFENSE, User.DEFENDING, new TestInfo().defendingFight(AttackNamesies.COTTON_GUARD));
+        simpleContraryTest(1, Stat.DEFENSE, User.DEFENDING, PokemonManipulator.defendingFight(AttackNamesies.DEFENSE_CURL));
+        simpleContraryTest(-1, Stat.DEFENSE, User.DEFENDING, PokemonManipulator.attackingFight(AttackNamesies.TAIL_WHIP));
+        simpleContraryTest(2, Stat.ATTACK, User.ATTACKING, PokemonManipulator.attackingFight(AttackNamesies.SWORDS_DANCE));
+        simpleContraryTest(-2, Stat.SP_ATTACK, User.ATTACKING, PokemonManipulator.defendingFight(AttackNamesies.EERIE_IMPULSE));
+        simpleContraryTest(3, Stat.DEFENSE, User.DEFENDING, PokemonManipulator.defendingFight(AttackNamesies.COTTON_GUARD));
 
         // Simple/Contrary even works against self-inflicted negative stat changes
-        simpleContraryTest(-1, Stat.SPEED, User.ATTACKING, new TestInfo().attackingFight(AttackNamesies.HAMMER_ARM));
-        simpleContraryTest(-2, Stat.SP_ATTACK, User.ATTACKING, new TestInfo().attackingFight(AttackNamesies.LEAF_STORM));
+        simpleContraryTest(-1, Stat.SPEED, User.ATTACKING, PokemonManipulator.attackingFight(AttackNamesies.HAMMER_ARM));
+        simpleContraryTest(-2, Stat.SP_ATTACK, User.ATTACKING, PokemonManipulator.attackingFight(AttackNamesies.LEAF_STORM));
     }
 
-    private void simpleContraryTest(int expectedStage, Stat stat, User abilityHolder, TestInfo testInfo) {
+    private void simpleContraryTest(int expectedStage, Stat stat, User abilityHolder, PokemonManipulator manipulator) {
         Assert.assertNotEquals(User.BOTH, abilityHolder);
-        PokemonManipulator manipulator = testInfo.getManipulator();
 
         // Simple doubles stat changes, Contrary reverses stat changes
         simpleContraryTest(expectedStage, stat, abilityHolder, AbilityNamesies.NO_ABILITY, manipulator);
