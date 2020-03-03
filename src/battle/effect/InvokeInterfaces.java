@@ -733,7 +733,7 @@ public final class InvokeInterfaces {
         }
     }
 
-    public interface StatProtectingEffect extends InvokeEffect {
+    public interface StatProtectingEffect {
         boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat);
         String preventionMessage(ActivePokemon p, Stat s);
 
@@ -758,7 +758,7 @@ public final class InvokeInterfaces {
         }
     }
 
-    public interface StatTargetSwapperEffect extends InvokeEffect {
+    public interface StatTargetSwapperEffect {
         String getSwapStatTargetMessage(ActivePokemon victim);
 
         default boolean shouldSwapTarget() {

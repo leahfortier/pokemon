@@ -1370,6 +1370,8 @@ public class EffectTest extends BaseTest {
         TestPokemon defending = battle.getDefending();
         attacking.assertEffect(killAttacking, PokemonEffectNamesies.PERISH_SONG);
         defending.assertEffect(killDefending, PokemonEffectNamesies.PERISH_SONG);
+        attacking.assertNoStatus();
+        defending.assertNoStatus();
     }
 
     // Perisher is the Pokemon that will die from Perish Song (if shouldPerish)
@@ -1385,6 +1387,9 @@ public class EffectTest extends BaseTest {
         if (shouldPerish) {
             perisher.assertHp(0);
             perisher.assertHasStatus(StatusNamesies.FAINTED);
+        } else {
+            Assert.assertTrue(perisher.getHP() > 0);
+            perisher.assertNoStatus();
         }
 
         // Can only check the swap for opponent since player doesn't swap automatically in test

@@ -1407,14 +1407,23 @@ public class AbilityTest extends BaseTest {
                 }
         );
 
-        // Sticky Web is effected by Mirror Armor
+        // Sticky Web is affected by Mirror Armor
         mirrorArmorTest(
                 new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
                         .asTrainerBattle()
-                        .with((battle, attacking, defending) -> battle.addDefending(PokemonNamesies.SQUIRTLE))
-                        .attackingFight(AttackNamesies.WHIRLWIND)  // Switch to Squirtle
-                        .attackingFight(AttackNamesies.STICKY_WEB) // Add Sticky Web
-                        .attackingFight(AttackNamesies.WHIRLWIND), // Switch back to Mirror Armor Pokemon with Sticky Web active
+                        .with((battle, attacking, defending) -> {
+                            TestPokemon attacking2 = battle.addDefending(PokemonNamesies.SQUIRTLE);
+                            battle.assertFront(attacking);
+
+                            // Switch to Squirtle and add Sticky Web
+                            battle.attackingFight(AttackNamesies.WHIRLWIND);
+                            battle.attackingFight(AttackNamesies.STICKY_WEB);
+                            battle.assertFront(attacking2);
+
+                            // Now switch baby to Bulby with Mirror Armor which should activate the web
+                            battle.attackingFight(AttackNamesies.WHIRLWIND);
+                            battle.assertFront(attacking);
+                        }),
                 (battle, attacking, defending) -> {
                     attacking.assertStages(new TestStages());
                     defending.assertStages(new TestStages().set(-1, Stat.SPEED));
@@ -1813,7 +1822,7 @@ public class AbilityTest extends BaseTest {
                 (battle, attacking, defending) -> defending.assertHealthRatioDiff(1, -.5)
         );
 
-        // Leppa heals 10 (20 with Ripen) PP when completely depleted
+        // Leppa heals 10 PP (20 with Ripen) when completely depleted
         ripenTest(
                 new TestInfo().with((battle, attacking, defending) -> {
                     defending.withMoves(AttackNamesies.TAIL_WHIP);
@@ -1852,7 +1861,7 @@ public class AbilityTest extends BaseTest {
                 (battle, attacking, defending) -> Assert.assertEquals(20, defending.getMoves(battle).get(0).getPP())
         );
 
-        // Passho Berry reduces super-effective Water moves by 50% (25% with Ripen)
+        // Passho Berry reduces super-effective Water moves by 50% (75% with Ripen)
         ripenTest(
                 new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
                         .defending(ItemNamesies.PASSHO_BERRY),

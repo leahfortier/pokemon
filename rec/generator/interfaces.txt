@@ -434,7 +434,6 @@ CritBlockerEffect:
     *
 ***
 StatProtectingEffect:
-    Extends: InvokeEffect
     Method:
         Header: boolean prevent(Battle b, ActivePokemon caster, ActivePokemon victim, Stat stat)
         Invoke: CheckGet true
@@ -448,7 +447,6 @@ StatProtectingEffect:
     *
 ***
 StatTargetSwapperEffect:
-    Extends: InvokeEffect
     Method:
         Header: String getSwapStatTargetMessage(ActivePokemon victim)
     *

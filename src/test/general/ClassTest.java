@@ -4,6 +4,7 @@ import battle.attack.Attack;
 import battle.attack.AttackInterface;
 import battle.effect.Effect;
 import battle.effect.EffectInterface;
+import battle.effect.EffectInterfaces.ChoiceEffect;
 import battle.effect.EffectInterfaces.EffectPreventionAbility;
 import battle.effect.EffectInterfaces.EntryHazard;
 import battle.effect.EffectInterfaces.MoldBreakerEffect;
@@ -224,6 +225,9 @@ public class ClassTest extends BaseTest {
             // Mold Breaker effects are only checked on the ability and the attack
             checkInstance(classy, MoldBreakerEffect.class, Ability.class, Attack.class);
 
+            // ChoiceEffect only works with named sources
+            checkInstance(classy, ChoiceEffect.class, Ability.class, Item.class);
+
             // Casted from CastSource.getSource()
             checkInstance(classy, ChangeAbilitySource.class, castSources);
             checkInstance(classy, ChangeAttackTypeSource.class, castSources);
@@ -283,7 +287,7 @@ public class ClassTest extends BaseTest {
                 checkInstance(classy, effectListWithAttackClass, effectListSourcesWithAttack);
             }
 
-            // If a status if a stat modifier, then it must be a StatModifyingStatus
+            // If a status is a stat modifier, then it must be a StatModifyingStatus
             checkAllInstances(classy, StatModifyingStatus.class, StatusInterface.class, StatModifyingEffect.class);
         }
     }
