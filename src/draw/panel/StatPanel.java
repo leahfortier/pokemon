@@ -87,7 +87,7 @@ public class StatPanel extends DrawPanel {
             DrawPanel panel = panels[i + 1];
             Stat stat = Stat.getStat(i, false);
 
-            FontMetrics.setFont(g, nameFontSize, selected.getNature().getColor(i));
+            FontMetrics.setFont(g, nameFontSize, selected.getNature().getColor(stat));
             TextUtils.drawCenteredHeightString(g, stat.getName(), nameX, panel.centerY());
 
             FontMetrics.setBlackFont(g, valueFontSize);

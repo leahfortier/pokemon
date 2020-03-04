@@ -168,7 +168,7 @@ public class Breeding {
         } else if (mommysItem.namesies() == ItemNamesies.EVERSTONE) {
             return mommy.getNature();
         } else {
-            return new Nature();
+            return Nature.random();
         }
     }
 

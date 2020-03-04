@@ -1,15 +1,10 @@
 package test.pokemon;
 
 import battle.attack.AttackNamesies;
-import item.ItemNamesies;
-import item.bag.Bag;
-import main.Game;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ability.AbilityNamesies;
-import pokemon.active.EffortValues;
 import pokemon.active.Gender;
-import pokemon.active.IndividualValues;
 import pokemon.active.PartyPokemon;
 import pokemon.breeding.EggGroup;
 import pokemon.species.BaseStats;
@@ -21,7 +16,6 @@ import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import test.general.BaseTest;
 import test.general.TestUtils;
-import trainer.TrainerType;
 import type.PokeType;
 import type.Type;
 import util.GeneralUtils;
@@ -320,35 +314,6 @@ public class PokemonInfoTest extends BaseTest {
     }
 
     @Test
-    public void ivsTest() {
-        boolean[] hasIvs = new boolean[IndividualValues.MAX_IV + 1];
-        boolean diffIvs = false;
-        for (int i = 0; i < 1000; i++) {
-            TestPokemon pokemon = TestPokemon.newWildPokemon(PokemonNamesies.BULBASAUR);
-
-            for (int j = 0; j < Stat.NUM_STATS; j++) {
-                Stat stat = Stat.getStat(j, false);
-                int iv = pokemon.getIVs().get(j);
-                String message = stat.getName() + " " + iv;
-
-                // Make sure all IVs are in range
-                Assert.assertTrue(message, iv >= 0 && iv <= IndividualValues.MAX_IV);
-                hasIvs[iv] = true;
-
-                // Make sure not every IV is the same
-                if (j > 0 && iv != pokemon.getIVs().get(j - 1)) {
-                    diffIvs = true;
-                }
-            }
-        }
-
-        Assert.assertTrue(diffIvs);
-        for (boolean hasIv : hasIvs) {
-            Assert.assertTrue(hasIv);
-        }
-    }
-
-    @Test
     public void eggGroupTest() {
         Set<EggGroup> allGroups = EnumSet.allOf(EggGroup.class);
         EggGroup[] noEggs = new EggGroup[] { EggGroup.NO_EGGS };
@@ -464,57 +429,6 @@ public class PokemonInfoTest extends BaseTest {
 
         // Genderless value cannot be in the same range as the female ratios
         TestUtils.assertOutsideRange(0, 8, Gender.GENDERLESS_VALUE);
-    }
-
-    @Test
-    public void shedinjaTest() {
-        // Basically making sure tht its HP is always 1
-        int[] levels = new int[] { 1, 50, 100 };
-        for (int level : levels) {
-            TestPokemon shedinja = new TestPokemon(PokemonNamesies.SHEDINJA, level, TrainerType.PLAYER);
-            Assert.assertEquals(1, shedinja.getHP());
-            Assert.assertEquals(1, shedinja.getMaxHP());
-
-            int baseAttack = shedinja.getStat(Stat.ATTACK);
-            String levelString = Integer.toString(level);
-
-            Bag bag = Game.getPlayer().getBag();
-            for (int i = 0; i < 26; i++) {
-                bag.addItem(ItemNamesies.HP_UP);
-                Assert.assertTrue(bag.usePokemonItem(ItemNamesies.HP_UP, shedinja));
-                TestUtils.assertPositive(levelString, shedinja.getEVs().get(Stat.HP));
-                Assert.assertEquals(1, shedinja.getHP());
-                Assert.assertEquals(1, shedinja.getMaxHP());
-
-                bag.addItem(ItemNamesies.PROTEIN);
-                Assert.assertTrue(bag.usePokemonItem(ItemNamesies.PROTEIN, shedinja));
-                TestUtils.assertPositive(levelString, shedinja.getEVs().get(Stat.ATTACK));
-            }
-
-            // HP EVs are now maxed, but max HP should not increase still
-            Assert.assertEquals(EffortValues.MAX_STAT_EVS, shedinja.getEVs().get(Stat.HP));
-            Assert.assertFalse(bag.usePokemonItem(ItemNamesies.HP_UP, shedinja));
-            Assert.assertEquals(EffortValues.MAX_STAT_EVS, shedinja.getEVs().get(Stat.HP));
-            Assert.assertEquals(1, shedinja.getHP());
-            Assert.assertEquals(1, shedinja.getMaxHP());
-
-            // Make sure other EVs contribute
-            Assert.assertEquals(EffortValues.MAX_STAT_EVS, shedinja.getEVs().get(Stat.ATTACK));
-            if (level > 1) { // Don't check at level one since it's generally too small for change
-                TestUtils.assertGreater(levelString, shedinja.getStat(Stat.ATTACK), baseAttack);
-            }
-
-            // Make sure level up doesn't increase HP either
-            bag.addItem(ItemNamesies.RARE_CANDY);
-            if (level == 100) {
-                Assert.assertFalse(bag.usePokemonItem(ItemNamesies.RARE_CANDY, shedinja));
-            } else {
-                Assert.assertTrue(bag.usePokemonItem(ItemNamesies.RARE_CANDY, shedinja));
-                Assert.assertEquals(level + 1, shedinja.getLevel());
-            }
-            Assert.assertEquals(1, shedinja.getHP());
-            Assert.assertEquals(1, shedinja.getMaxHP());
-        }
     }
 
     @Test

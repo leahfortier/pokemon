@@ -322,8 +322,9 @@ public class PokemonState extends VisualStateHandler {
         FontMetrics.setFont(g, 16);
         statsPanel.drawBackground(g);
         for (int i = 0; i < Stat.NUM_STATS; i++) {
-            g.setColor(selectedPkm.getNature().getColor(i));
-            g.drawString(Stat.getStat(i, false).getShortName(), 62, 21*i + 372);
+            Stat stat = Stat.getStat(i, false);
+            g.setColor(selectedPkm.getNature().getColor(stat));
+            g.drawString(stat.getShortName(), 62, 21*i + 372);
 
             g.setColor(Color.BLACK);
             int statVal = selectedPkm.getStat(i);

@@ -2,43 +2,54 @@ package pokemon.active;
 
 import pokemon.stat.Stat;
 import util.RandomUtils;
-import util.serialization.Serializable;
+import util.string.StringUtils;
 
 import java.awt.Color;
 
-public class Nature implements Serializable {
-    private static final long serialVersionUID = 1L;
+public enum Nature {
+    HARDY(Stat.ATTACK, Stat.ATTACK),
+    LONELY(Stat.ATTACK, Stat.DEFENSE),
+    ADAMANT(Stat.ATTACK, Stat.SP_ATTACK),
+    NAUGHTY(Stat.ATTACK, Stat.SP_DEFENSE),
+    BRAVE(Stat.ATTACK, Stat.SPEED),
+    BOLD(Stat.DEFENSE, Stat.ATTACK),
+    DOCILE(Stat.DEFENSE, Stat.DEFENSE),
+    IMPISH(Stat.DEFENSE, Stat.SP_ATTACK),
+    LAX(Stat.DEFENSE, Stat.SP_DEFENSE),
+    RELAXED(Stat.DEFENSE, Stat.SPEED),
+    MODEST(Stat.SP_ATTACK, Stat.ATTACK),
+    MILD(Stat.SP_ATTACK, Stat.DEFENSE),
+    BASHFUL(Stat.SP_ATTACK, Stat.SP_ATTACK),
+    RASH(Stat.SP_ATTACK, Stat.SP_DEFENSE),
+    QUIET(Stat.SP_ATTACK, Stat.SPEED),
+    CALM(Stat.SP_DEFENSE, Stat.ATTACK),
+    GENTLE(Stat.SP_DEFENSE, Stat.DEFENSE),
+    CAREFUL(Stat.SP_DEFENSE, Stat.SP_ATTACK),
+    QUIRKY(Stat.SP_DEFENSE, Stat.SP_DEFENSE),
+    SASSY(Stat.SP_DEFENSE, Stat.SPEED),
+    TIMID(Stat.SPEED, Stat.ATTACK),
+    HASTY(Stat.SPEED, Stat.DEFENSE),
+    JOLLY(Stat.SPEED, Stat.SP_ATTACK),
+    NAIVE(Stat.SPEED, Stat.SP_DEFENSE),
+    SERIOUS(Stat.SPEED, Stat.SPEED);
 
-    private static final String[][] natures = {
-            { "", "",       "",       "",        "",        ""        },
-            { "", "Hardy",  "Lonely", "Adamant", "Naughty", "Brave"   },
-            { "", "Bold",   "Docile", "Impish",  "Lax",     "Relaxed" },
-            { "", "Modest", "Mild",   "Bashful", "Rash",    "Quiet"   },
-            { "", "Calm",   "Gentle", "Careful", "Quirky",  "Sassy"   },
-            { "", "Timid",  "Hasty",  "Jolly",   "Naive",   "Serious" }
-    };
-
-    private final int beneficial;
-    private final int hindering;
+    private final Stat beneficial;
+    private final Stat hindering;
     private final String name;
 
-    public Nature() {
-        this(getRandomNatureStatIndex(), getRandomNatureStatIndex());
-    }
-
-    public Nature(int beneficialStat, int hinderingStat) {
-        this.beneficial = beneficialStat;
-        this.hindering = hinderingStat;
-
-        this.name = natures[beneficial][hindering];
+    Nature(Stat beneficial, Stat hindering) {
+        this.beneficial = beneficial;
+        this.hindering = hindering;
+        this.name = StringUtils.properCase(this.name().toLowerCase());
     }
 
     public String getName() {
         return name;
     }
 
-    public double getNatureVal(int stat) {
-        if (beneficial == hindering) {
+    public double getNatureVal(int statIndex) {
+        Stat stat = Stat.getStat(statIndex, false);
+        if (this.isNeutral()) {
             return 1;
         } else if (beneficial == stat) {
             return 1.1;
@@ -49,29 +60,36 @@ public class Nature implements Serializable {
         }
     }
 
-    public Color getColor(int statIndex) {
-        if (beneficial == hindering) {
+    public Color getColor(Stat stat) {
+        if (this.isNeutral()) {
             return Color.BLACK;
-        } else if (beneficial == statIndex) {
+        } else if (beneficial == stat) {
             return new Color(0, 190, 0);
-        } else if (hindering == statIndex) {
+        } else if (hindering == stat) {
             return new Color(200, 0, 0);
         } else {
             return Color.BLACK;
         }
     }
 
-    @Override
-    public boolean equals(Object other) {
-        if (!(other instanceof Nature)) {
-            return false;
-        }
-
-        Nature that = (Nature)other;
-        return this.getName().equals(that.getName());
+    public boolean isNeutral() {
+        return beneficial == hindering;
     }
 
-    private static int getRandomNatureStatIndex() {
-        return RandomUtils.getRandomInt(1, Stat.NUM_STATS - 1);
+    // Returns stat which is boosted by the nature
+    // Note: Should check for neutral nature before checking this
+    public Stat getBeneficial() {
+        return beneficial;
+    }
+
+    // Returns stat which is hindered by the nature
+    // Note: Should check for neutral nature before checking this
+    public Stat getHindering() {
+        return hindering;
+    }
+
+    // Returns a randomly assigned nature
+    public static Nature random() {
+        return RandomUtils.getRandomValue(Nature.values());
     }
 }

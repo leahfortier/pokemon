@@ -21,7 +21,7 @@ public class StatValues implements Serializable {
         this.statsHolder = statsHolder;
 
         this.stats = new int[Stat.NUM_STATS];
-        this.nature = new Nature();
+        this.nature = Nature.random();
         this.IVs = new IndividualValues();
         this.EVs = new EffortValues();
     }
