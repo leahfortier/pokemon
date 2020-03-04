@@ -1911,6 +1911,16 @@ TM:
         return AttackNamesies.{00};
         ###
     AddMapField: Cat: TM
+    AddInterface: TechnicalMachine
+*
+Mint:
+    Header: Nature getNature()
+    Body:
+        return Nature.{00};
+        ###
+    AddInterface: NatureMint
+    AddMapField: Cat: Misc
+    AddMapField: Price: 20
 *
 ChangePriorityAbility:
     AddInterface: PriorityChangeEffect

@@ -81,6 +81,7 @@ import item.use.BattlePokemonUseItem;
 import item.use.BattleUseItem;
 import item.use.EvolutionItem;
 import item.use.MoveUseItem;
+import item.use.NatureMint;
 import item.use.PlayerUseItem;
 import item.use.PokemonUseItem;
 import item.use.TechnicalMachine;
@@ -95,6 +96,7 @@ import message.MessageUpdate;
 import message.Messages;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
+import pokemon.active.Nature;
 import pokemon.evolution.EvolutionMethod;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
@@ -7166,6 +7168,356 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.CONFIDE;
+        }
+    }
+
+    static class HardyMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        HardyMint() {
+            super(ItemNamesies.HARDY_MINT, "When a Pokémon smells this mint, all of its stats will grow at an equal rate.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.HARDY;
+        }
+    }
+
+    static class LonelyMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        LonelyMint() {
+            super(ItemNamesies.LONELY_MINT, "When a Pokémon smells this mint, its Attack will grow more easily, but its Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.LONELY;
+        }
+    }
+
+    static class AdamantMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        AdamantMint() {
+            super(ItemNamesies.ADAMANT_MINT, "When a Pokémon smells this mint, its Attack will grow more easily, but its Sp. Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.ADAMANT;
+        }
+    }
+
+    static class NaughtyMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        NaughtyMint() {
+            super(ItemNamesies.NAUGHTY_MINT, "When a Pokémon smells this mint, its Attack will grow more easily, but its Sp. Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.NAUGHTY;
+        }
+    }
+
+    static class BraveMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        BraveMint() {
+            super(ItemNamesies.BRAVE_MINT, "When a Pokémon smells this mint, its Attack will grow more easily, but its Speed will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.BRAVE;
+        }
+    }
+
+    static class BoldMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        BoldMint() {
+            super(ItemNamesies.BOLD_MINT, "When a Pokémon smells this mint, its Defense will grow more easily, but its Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.BOLD;
+        }
+    }
+
+    static class DocileMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        DocileMint() {
+            super(ItemNamesies.DOCILE_MINT, "When a Pokémon smells this mint, all of its stats will grow at an equal rate.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.DOCILE;
+        }
+    }
+
+    static class ImpishMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        ImpishMint() {
+            super(ItemNamesies.IMPISH_MINT, "When a Pokémon smells this mint, its Defense will grow more easily, but its Sp. Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.IMPISH;
+        }
+    }
+
+    static class LaxMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        LaxMint() {
+            super(ItemNamesies.LAX_MINT, "When a Pokémon smells this mint, its Defense will grow more easily, but its Sp. Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.LAX;
+        }
+    }
+
+    static class RelaxedMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        RelaxedMint() {
+            super(ItemNamesies.RELAXED_MINT, "When a Pokémon smells this mint, its Defense will grow more easily, but its Speed will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.RELAXED;
+        }
+    }
+
+    static class ModestMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        ModestMint() {
+            super(ItemNamesies.MODEST_MINT, "When a Pokémon smells this mint, its Sp. Attack will grow more easily, but its Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.MODEST;
+        }
+    }
+
+    static class MildMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        MildMint() {
+            super(ItemNamesies.MILD_MINT, "When a Pokémon smells this mint, its Sp. Attack will grow more easily, but its Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.MILD;
+        }
+    }
+
+    static class BashfulMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        BashfulMint() {
+            super(ItemNamesies.BASHFUL_MINT, "When a Pokémon smells this mint, all of its stats will grow at an equal rate.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.BASHFUL;
+        }
+    }
+
+    static class RashMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        RashMint() {
+            super(ItemNamesies.RASH_MINT, "When a Pokémon smells this mint, its Sp. Attack will grow more easily, but its Sp. Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.RASH;
+        }
+    }
+
+    static class QuietMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        QuietMint() {
+            super(ItemNamesies.QUIET_MINT, "When a Pokémon smells this mint, its Sp. Attack will grow more easily, but its Speed will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.QUIET;
+        }
+    }
+
+    static class CalmMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        CalmMint() {
+            super(ItemNamesies.CALM_MINT, "When a Pokémon smells this mint, its Sp. Defense will grow more easily, but its Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.CALM;
+        }
+    }
+
+    static class GentleMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        GentleMint() {
+            super(ItemNamesies.GENTLE_MINT, "When a Pokémon smells this mint, its Sp. Defense will grow more easily, but its Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.GENTLE;
+        }
+    }
+
+    static class CarefulMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        CarefulMint() {
+            super(ItemNamesies.CAREFUL_MINT, "When a Pokémon smells this mint, its Sp. Defense will grow more easily, but its Sp. Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.CAREFUL;
+        }
+    }
+
+    static class QuirkyMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        QuirkyMint() {
+            super(ItemNamesies.QUIRKY_MINT, "When a Pokémon smells this mint, all of its stats will grow at an equal rate.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.QUIRKY;
+        }
+    }
+
+    static class SassyMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        SassyMint() {
+            super(ItemNamesies.SASSY_MINT, "When a Pokémon smells this mint, its Sp. Defense will grow more easily, but its Speed will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.SASSY;
+        }
+    }
+
+    static class TimidMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        TimidMint() {
+            super(ItemNamesies.TIMID_MINT, "When a Pokémon smells this mint, its Speed will grow more easily, but its Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.TIMID;
+        }
+    }
+
+    static class HastyMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        HastyMint() {
+            super(ItemNamesies.HASTY_MINT, "When a Pokémon smells this mint, its Speed will grow more easily, but its Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.HASTY;
+        }
+    }
+
+    static class JollyMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        JollyMint() {
+            super(ItemNamesies.JOLLY_MINT, "When a Pokémon smells this mint, its Speed will grow more easily, but its Sp. Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.JOLLY;
+        }
+    }
+
+    static class NaiveMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        NaiveMint() {
+            super(ItemNamesies.NAIVE_MINT, "When a Pokémon smells this mint, its Speed will grow more easily, but its Sp. Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.NAIVE;
+        }
+    }
+
+    static class SeriousMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        SeriousMint() {
+            super(ItemNamesies.SERIOUS_MINT, "When a Pokémon smells this mint, all of its stats will grow at an equal rate.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.SERIOUS;
         }
     }
 }
