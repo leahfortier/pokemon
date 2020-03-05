@@ -6827,7 +6827,7 @@ public abstract class Attack implements AttackInterface {
 
             Move lastMoveUsed = b.getOtherPokemon(attacking).getLastMoveUsed();
             if (lastMoveUsed != null) {
-                Type attackingType = lastMoveUsed.getType();
+                Type attackingType = lastMoveUsed.turnData().getType();
                 for (Type type : Type.values()) {
                     if (attackingType.getAdvantage().isNotVeryEffective(type) && !attacking.isType(b, type)) {
                         this.types.add(type);

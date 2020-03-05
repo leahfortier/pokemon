@@ -4132,7 +4132,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return b.getAttackPriority(user) > 0;
+            return user.getAttackPriority() > 0;
         }
 
         @Override
@@ -4150,7 +4150,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return b.getAttackPriority(user) > 0;
+            return user.getAttackPriority() > 0;
         }
 
         @Override

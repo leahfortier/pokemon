@@ -87,7 +87,7 @@ public class DamageCalculator {
         }
 
         Move move = me.getMove();
-        DamageCalculation calculatedDamage = move.getCalculatedDamage();
+        DamageCalculation calculatedDamage = move.turnData().getCalculatedDamage();
 
         int level = me.getLevel();
         int random = RandomUtils.getRandomInt(16) + 85;

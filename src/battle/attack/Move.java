@@ -3,11 +3,9 @@ package battle.attack;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.ai.DecisionTree;
-import battle.DamageCalculator.DamageCalculation;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.ForceMoveEffect;
 import message.Messages;
-import type.Type;
 import util.RandomUtils;
 import util.serialization.Serializable;
 
@@ -22,8 +20,7 @@ public class Move implements Serializable {
 
     private boolean used;
 
-    private Type type;
-    private DamageCalculation calculatedDamage;
+    private MoveTurnData turnData;
 
     public Move(AttackNamesies attackNamesies) {
         this(attackNamesies.getNewAttack());
@@ -38,8 +35,7 @@ public class Move implements Serializable {
         resetAttack();
         used = false;
 
-        type = attack.getActualType();
-        calculatedDamage = new DamageCalculation();
+        turnData = new MoveTurnData(attack.namesies());
     }
 
     public Move(Attack attack, int startPP) {
@@ -55,17 +51,14 @@ public class Move implements Serializable {
         this.attack = this.getAttack().namesies().getNewAttack();
     }
 
-    public Type getType() {
-        return type;
+    // Should be called at the beginning of the full turn (not at beginning of attack)
+    public void startTurn(Battle b, ActivePokemon user) {
+        this.turnData().startTurn(b, user);
+        this.getAttack().startTurn(b, user);
     }
 
-    public void setAttributes(Battle b, ActivePokemon user) {
-        this.type = this.getAttack().getBattleType(b, user);
-        this.calculatedDamage.reset();
-    }
-
-    public DamageCalculation getCalculatedDamage() {
-        return this.calculatedDamage;
+    public MoveTurnData turnData() {
+        return this.turnData;
     }
 
     public Attack getAttack() {

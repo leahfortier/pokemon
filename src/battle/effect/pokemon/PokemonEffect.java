@@ -617,7 +617,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public boolean protectingCondition(Battle b, ActivePokemon attacking) {
-            return b.getAttackPriority(attacking) > 0;
+            return attacking.getAttackPriority() > 0;
         }
 
         @Override

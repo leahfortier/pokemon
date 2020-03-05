@@ -1,10 +1,9 @@
 package trainer;
 
 import battle.ActivePokemon;
-import battle.Battle;
 
 public enum TrainerAction {
-    FIGHT(Battle::getAttackPriority),
+    FIGHT(ActivePokemon::getAttackPriority),
     SWITCH(6),
     ITEM(6),
     RUN(6);
@@ -12,19 +11,19 @@ public enum TrainerAction {
     private final PriorityGetter priorityGetter;
 
     TrainerAction(int priority) {
-        this((b, p) -> priority);
+        this(p -> priority);
     }
 
     TrainerAction(PriorityGetter priorityGetter) {
         this.priorityGetter = priorityGetter;
     }
 
-    public int getPriority(Battle b, ActivePokemon p) {
-        return this.priorityGetter.getPriority(b, p);
+    public int getPriority(ActivePokemon p) {
+        return this.priorityGetter.getPriority(p);
     }
 
     @FunctionalInterface
     private interface PriorityGetter {
-        int getPriority(Battle b, ActivePokemon p);
+        int getPriority(ActivePokemon p);
     }
 }

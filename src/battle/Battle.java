@@ -12,7 +12,6 @@ import battle.effect.InvokeInterfaces.DefiniteEscape;
 import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.NameChanger;
 import battle.effect.InvokeInterfaces.OpponentAccuracyBypassEffect;
-import battle.effect.InvokeInterfaces.PriorityChangeEffect;
 import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.StallingEffect;
 import battle.effect.InvokeInterfaces.StartAttackEffect;
@@ -224,11 +223,11 @@ public class Battle implements Serializable {
 
         // Fucking focus punch
         if (isFighting(plyr)) {
-            plyr.getAttack().startTurn(this, plyr);
+            plyr.getMove().startTurn(this, plyr);
         }
 
         if (isFighting(opp)) {
-            opp.getAttack().startTurn(this, opp);
+            opp.getMove().startTurn(this, opp);
         }
     }
 
@@ -585,13 +584,9 @@ public class Battle implements Serializable {
         return true;
     }
 
-    public int getAttackPriority(ActivePokemon p) {
-        return p.getAttack().getPriority(this, p) + PriorityChangeEffect.getModifier(this, p);
-    }
-
     // Returns the priority of the current action the trainer of the pokemon is performing
     private int getPriority(ActivePokemon p) {
-        return this.getTrainer(p).getAction().getPriority(this, p);
+        return this.getTrainer(p).getAction().getPriority(p);
     }
 
     // Returns true if the player will be attacking first, and false if the opponent will be

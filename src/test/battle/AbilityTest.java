@@ -239,14 +239,14 @@ public class AbilityTest extends BaseTest {
         defending.withAbility(AbilityNamesies.QUEENLY_MAJESTY);
 
         attacking.setupMove(attack, battle);
-        Assert.assertEquals(beforePriority, battle.getAttackPriority(attacking));
+        Assert.assertEquals(beforePriority, attacking.getAttackPriority());
         attacking.apply(beforePriority <= 0 || attacking.getAttack().isSelfTargetStatusMove(), attack, battle);
 
         battle.emptyHeal();
         manipulator.manipulate(battle);
 
         attacking.setupMove(attack, battle);
-        Assert.assertEquals(afterPriority, battle.getAttackPriority(attacking));
+        Assert.assertEquals(afterPriority, attacking.getAttackPriority());
         attacking.apply(!prevent, attack, battle);
         Assert.assertEquals(afterPriority > 0 && !attacking.getAttack().isSelfTargetStatusMove() && !attacking.breaksTheMold(), prevent);
     }

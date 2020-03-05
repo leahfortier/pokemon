@@ -134,6 +134,7 @@ public class TestPokemon extends ActivePokemon {
 
     public void setupMove(AttackNamesies attackNamesies, Battle battle) {
         this.setMove(new Move(attackNamesies));
+        this.getMove().startTurn(battle, this);
         this.startAttack(battle);
         this.getAttack().beginAttack(battle, this, battle.getOtherPokemon(this));
     }

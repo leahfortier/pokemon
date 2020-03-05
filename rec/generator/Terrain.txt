@@ -62,7 +62,7 @@ PsychicTerrain:
     Int: AttackBlocker
     Block:
         // Psychic terrain prevents increased priority moves from hitting
-        return b.getAttackPriority(user) > 0 && victim.isOnTheGround(b);
+        return user.getAttackPriority() > 0 && victim.isOnTheGround(b);
         ###
     Comments: // Psychic-type moves are 30% stronger with the psychic terrain
     PowerMultiplierCondition: 1.3 user.isAttackType(Type.PSYCHIC) && user.isOnTheGround(b)
