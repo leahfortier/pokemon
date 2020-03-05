@@ -2,7 +2,6 @@ package test.battle;
 
 import battle.Battle;
 import battle.attack.AttackNamesies;
-import battle.attack.Move;
 import battle.effect.Effect;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.battle.terrain.TerrainNamesies;
@@ -754,8 +753,8 @@ public class ModifierTest extends BaseTest {
     private void checkPriority(int expected, TestBattle battle, AttackNamesies attack) {
         TestPokemon attacking = battle.getAttacking();
 
-        attacking.setMove(new Move(attack));
-        Assert.assertEquals(expected, battle.getAttackPriority(attacking));
+        attacking.setupMove(attack, battle);
+        Assert.assertEquals(expected, attacking.getAttackPriority());
 
         boolean playerFirst = battle.speedPriority();
         if (expected > 0) {

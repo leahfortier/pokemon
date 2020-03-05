@@ -101,7 +101,7 @@ Protect:
 QuickGuard:
     ProtectingEffect: True
     ProtectingCondition:
-        return b.getAttackPriority(attacking) > 0;
+        return attacking.getAttackPriority() > 0;
         ###
 *
 CraftyShield:

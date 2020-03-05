@@ -1985,7 +1985,7 @@ TheVeryEnd:
 PriorityPrevention:
     AddInterface: AttackBlocker
     AddMapField: Block:
-        return b.getAttackPriority(user) > 0;
+        return user.getAttackPriority() > 0;
         ###
     AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " prevents priority moves!!"
 *

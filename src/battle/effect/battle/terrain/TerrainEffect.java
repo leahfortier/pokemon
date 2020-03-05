@@ -168,7 +168,7 @@ public abstract class TerrainEffect extends BattleEffect<TerrainNamesies> implem
         @Override
         public boolean block(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Psychic terrain prevents increased priority moves from hitting
-            return b.getAttackPriority(user) > 0 && victim.isOnTheGround(b);
+            return user.getAttackPriority() > 0 && victim.isOnTheGround(b);
         }
 
         @Override

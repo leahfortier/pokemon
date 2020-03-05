@@ -3,6 +3,7 @@ package battle;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import battle.attack.MoveTurnData;
 import battle.attack.MoveType;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.AbilityHolder;
@@ -431,7 +432,15 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public Type getAttackType() {
-        return getMove().getType();
+        return getMoveData().getType();
+    }
+
+    public int getAttackPriority() {
+        return getMoveData().getPriority();
+    }
+
+    public MoveTurnData getMoveData() {
+        return this.getMove().turnData();
     }
 
     public boolean hasMove(Battle b, AttackNamesies name) {
@@ -929,11 +938,11 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public int getDamageDealt() {
-        return this.getMove().getCalculatedDamage().getDamageDealt();
+        return this.getMoveData().getCalculatedDamage().getDamageDealt();
     }
 
     public boolean isCriticalHit() {
-        return this.getMove().getCalculatedDamage().isCritical();
+        return this.getMoveData().getCalculatedDamage().isCritical();
     }
 
     public void resetTurn() {
@@ -1013,7 +1022,7 @@ public class ActivePokemon extends PartyPokemon {
 
     public void startAttack(Battle b) {
         this.setAttacking(true);
-        this.getMove().setAttributes(b, this);
+        this.getMoveData().startMove(b, this);
     }
 
     public void endAttack(ActivePokemon opp, boolean success) {
