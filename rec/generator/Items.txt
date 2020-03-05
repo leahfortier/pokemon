@@ -4,7 +4,7 @@
 #    Int: *Interfaces to implement*
 #    Cat: *BagCategory*
 #    BattleCat: *BattleBagCategory*, comma separate for multiple
-#    Price: (leave out for -1, or unsellable)
+#    Price: (leave out unsellable)
 #    FunctionName:
 #        Function ending in "###" on a new line
 # * // End this item
@@ -29,7 +29,6 @@ No Item:
     Price: -1
     Fling: 9001
 *
-# KEY_ITEMs
 Syrup:
     Cat: Key_Item
     Desc: A mysterious bottle of syrup. Maybe it will be useful some day.
@@ -46,7 +45,6 @@ Fishing Rod:
     Cat: Key_Item
     Desc: A multi-purpose, do-it-all kind of fishing rod. The kind you can use wherever you want. Except on land.
 *
-# HoldItems
 Absorb Bulb:
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. It boosts Sp. Atk if hit with a Water-type attack. It can only be used once.
@@ -1124,8 +1122,6 @@ Whipped Dream:
     Desc: A soft and sweet treat made of fluffy, puffy, whipped, and whirled cream. It's loved by a certain Pok\u00e9mon.
     Price: 2000
 *
-
-# Medicine
 Antidote:
     Int: HoldItem
     Cat: Medicine
@@ -1430,8 +1426,6 @@ Rare Candy:
         ###
     Price: 10000
 *
-
-# Balls
 Cherish Ball:
     Desc: A quite rare Pok\u00e9 Ball that has been crafted in order to commemorate a special occasion of some sort.
     Price: 1000
@@ -1917,7 +1911,6 @@ Starf Berry:
         return new StageModifier(2*ripen(user), stat).modify(b, user, user, source);
         ###
 *
-# Other Items
 Comet Shard:
     Int: HoldItem
     Cat: Misc
@@ -2179,4 +2172,15 @@ Blunder Policy:
             this.consumeItem(b, misser);
         }
         ###
+*
+Catching Charm:
+    Desc: Holding it is said to increase the chance of getting a critical catch. Curiously, the charm doesn't shake much.
+    Cat: Key_Item
+*
+Cracked Pot:
+    Int: HoldItem, EvolutionItem
+    Cat: Misc
+    Desc: A peculiar teapot that can make a certain species of Pokémon evolve. It may be cracked, but tea poured from it is delicious.
+    Price: 1600
+    Comments: // Note: Only including Cracked Pot, and not Chipped Pot because they're basically the same thing
 *

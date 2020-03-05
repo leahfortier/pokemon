@@ -46,6 +46,7 @@ import item.Item.CalmMindTM;
 import item.Item.CalmMint;
 import item.Item.Carbos;
 import item.Item.CarefulMint;
+import item.Item.CatchingCharm;
 import item.Item.CellBattery;
 import item.Item.Charcoal;
 import item.Item.ChargeBeamTM;
@@ -65,6 +66,7 @@ import item.Item.CobaBerry;
 import item.Item.ColburBerry;
 import item.Item.CometShard;
 import item.Item.ConfideTM;
+import item.Item.CrackedPot;
 import item.Item.CustapBerry;
 import item.Item.DampRock;
 import item.Item.DarkGem;
@@ -790,6 +792,8 @@ public enum ItemNamesies {
     MISTY_SEED("Misty Seed", MistySeed::new),
     PSYCHIC_SEED("Psychic Seed", PsychicSeed::new),
     BLUNDER_POLICY("Blunder Policy", BlunderPolicy::new),
+    CATCHING_CHARM("Catching Charm", CatchingCharm::new),
+    CRACKED_POT("Cracked Pot", CrackedPot::new),
     WORK_UP_TM("Work Up TM", WorkUpTM::new),
     DRAGON_CLAW_TM("Dragon Claw TM", DragonClawTM::new),
     PSYSHOCK_TM("Psyshock TM", PsyshockTM::new),

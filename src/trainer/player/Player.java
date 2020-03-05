@@ -570,19 +570,26 @@ public class Player extends PlayerTrainer implements Serializable, Nicknamed {
 
     private double getCriticalCaptureModifier() {
         int numPokemonCaught = this.getPokedex().numCaught();
+
+        double modifier = 0;
         if (numPokemonCaught > 600) {
-            return 2.5;
+            modifier = 2.5;
         } else if (numPokemonCaught > 450) {
-            return 2;
+            modifier = 2;
         } else if (numPokemonCaught > 300) {
-            return 1.5;
+            modifier = 1.5;
         } else if (numPokemonCaught > 150) {
-            return 1;
+            modifier = 1;
         } else if (numPokemonCaught > 30) {
-            return .5;
-        } else {
-            return 0;
+            modifier = .5;
         }
+
+        // Note: not actually sure how the Catching Charm affects the modifier, this is just a guess
+        if (this.getBag().hasItem(ItemNamesies.CATCHING_CHARM)) {
+            modifier += .5;
+        }
+
+        return modifier;
     }
 
     // OH MY GOD CATCH A POKEMON OH MY GOD

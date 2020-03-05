@@ -197,4 +197,5 @@ Other random things:
         - does Illusion break?
         - Neutralizing Gas has exit message ("The effects of Neutralizing Gas wore off!") -- this would also be a switch out effect
     - I feel like Gastro Acid needs to be rewritten into suppression instead of changing the ability to none
+    - can we move the catchPokemon logic in BallItem or somewhere else that isn't Player?
     

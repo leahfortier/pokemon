@@ -5932,6 +5932,24 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
+    static class CatchingCharm extends Item {
+        private static final long serialVersionUID = 1L;
+
+        CatchingCharm() {
+            super(ItemNamesies.CATCHING_CHARM, "Holding it is said to increase the chance of getting a critical catch. Curiously, the charm doesn't shake much.", BagCategory.KEY_ITEM);
+        }
+    }
+
+    // Note: Only including Cracked Pot, and not Chipped Pot because they're basically the same thing
+    static class CrackedPot extends Item implements HoldItem, EvolutionItem {
+        private static final long serialVersionUID = 1L;
+
+        CrackedPot() {
+            super(ItemNamesies.CRACKED_POT, "A peculiar teapot that can make a certain species of Pokémon evolve. It may be cracked, but tea poured from it is delicious.", BagCategory.MISC);
+            super.price = 1600;
+        }
+    }
+
     static class WorkUpTM extends Item implements TechnicalMachine {
         private static final long serialVersionUID = 1L;
 
