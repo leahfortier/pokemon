@@ -1992,6 +1992,9 @@ TheVeryEnd:
     AddInterface: SuperDuperEndTurnEffect
     Header: boolean theVeryVeryEnd(Battle b, ActivePokemon p)
 *
+AttackMissed:
+    Header: void afterMiss(Battle b, ActivePokemon misser)
+*
 PriorityPrevention:
     AddInterface: AttackBlocker
     AddMapField: Block:

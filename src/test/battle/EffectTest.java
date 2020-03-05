@@ -307,13 +307,13 @@ public class EffectTest extends BaseTest {
 
     @Test
     public void bypassAccuracyTest() {
-        // Attacker will fly in the air, making it semi-invulverable to Tackle which should be a forced miss
+        // Attacker will fly in the air, making it semi-invulnerable to Tackle which should be a forced miss
         testSemiInvulnerable(false, AttackNamesies.FLY, AttackNamesies.TACKLE);
         testSemiInvulnerable(false, AttackNamesies.FLY, AttackNamesies.ROAR);
 
         // No Guard will allow Tackle to Hit, regardless of which Pokemon has it
-        testSemiInvulnerable(true, true, AttackNamesies.FLY, AttackNamesies.TACKLE, true, new TestInfo().attacking(AbilityNamesies.NO_GUARD));
-        testSemiInvulnerable(true, true, AttackNamesies.FLY, AttackNamesies.TACKLE, true, new TestInfo().defending(AbilityNamesies.NO_GUARD));
+        testSemiInvulnerable(true, true, AttackNamesies.FLY, AttackNamesies.TACKLE, true, new TestInfo().attacking(AbilityNamesies.NO_GUARD).attackingBypass(true));
+        testSemiInvulnerable(true, true, AttackNamesies.FLY, AttackNamesies.TACKLE, true, new TestInfo().defending(AbilityNamesies.NO_GUARD).attackingBypass(true));
 
         // All of these moves will hit a Flying Pokemon
         testSemiInvulnerable(true, AttackNamesies.FLY, AttackNamesies.GUST);
@@ -352,11 +352,11 @@ public class EffectTest extends BaseTest {
         int defendingPP = defending.getMove().getPP();
 
         // Attacker will disappear or whatever, making it semi-invulverable to defending
-        battle.setExpectedDefendingAccuracyBypass(firstExpected);
+        defending.setExpectedAccuracyBypass(firstExpected);
         battle.fight();
 
         // Attacker will be finished with its move and the defending move should hit this time
-        battle.setExpectedDefendingAccuracyBypass(secondExpected);
+        defending.setExpectedAccuracyBypass(secondExpected);
         battle.fight();
 
         Assert.assertEquals(attackingPP - (fullyExecuted ? 1 : 0), attacking.getMove().getPP());
@@ -432,7 +432,7 @@ public class EffectTest extends BaseTest {
                     defending.assertHoldingItem(ItemNamesies.POTION);
                 },
                 (battle, attacking, defending) -> {
-                    Assert.assertFalse(defending.lastMoveSucceeded());
+                    defending.assertLastMoveSucceeded(false);
                     attacking.assertHoldingItem(ItemNamesies.POTION);
                     defending.assertNotHoldingItem();
                 }

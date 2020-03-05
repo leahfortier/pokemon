@@ -199,9 +199,9 @@ public class ModifierTest extends BaseTest {
         powerChangeTest(2, 2, AttackNamesies.ACROBATICS, new TestInfo());
         powerChangeTest(2, 1, AttackNamesies.ACROBATICS, new TestInfo().attacking(ItemNamesies.POTION));
 
-        // Body Slam doubles power if opponent has used Minimize
+        // Body Slam doubles power (and always hits) if opponent has used Minimize
         powerChangeTest(1, AttackNamesies.BODY_SLAM, new TestInfo());
-        powerChangeTest(2, AttackNamesies.BODY_SLAM, new TestInfo().defendingFight(AttackNamesies.MINIMIZE));
+        powerChangeTest(2, AttackNamesies.BODY_SLAM, new TestInfo().defendingFight(AttackNamesies.MINIMIZE).attackingBypass(true));
 
         // Tar Shot doubles effectiveness of Fire moves
         powerChangeTest(2, AttackNamesies.EMBER, new TestInfo().attackingFight(AttackNamesies.TAR_SHOT));

@@ -5,9 +5,9 @@ import battle.attack.Attack;
 import battle.attack.MoveType;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.InvokeEffect;
+import battle.effect.InvokeInterfaces.AttackMissedEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
 import battle.effect.InvokeInterfaces.BeforeAttackPreventingEffect;
-import battle.effect.InvokeInterfaces.CrashDamageMove;
 import battle.effect.InvokeInterfaces.DefiniteEscape;
 import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.NameChanger;
@@ -453,7 +453,7 @@ public class Battle implements Serializable {
             me.decay();
         } else {
             Messages.add(me.getName() + "'s attack missed!");
-            CrashDamageMove.invokeCrashDamageMove(this, me);
+            AttackMissedEffect.invokeAttackMissedEffect(this, me);
         }
 
         if (!success) {
@@ -554,17 +554,22 @@ public class Battle implements Serializable {
         return null;
     }
 
-    protected boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
-        Boolean bypass = bypassAccuracy(me, o);
-        if (bypass != null) {
-            return bypass;
-        }
-
+    // Returns true if the move should hit based on normal things like accuracy and evasion
+    // Does not take things like semi-invulnerable or similar effects into account (should be handled first)
+    protected boolean naturalAccuracyCheck(ActivePokemon me, ActivePokemon o) {
         int moveAccuracy = me.getAttack().getAccuracy(this, me, o);
         int accuracy = Stat.getStat(Stat.ACCURACY, me, o, this);
         int evasion = Stat.getStat(Stat.EVASION, o, me, this);
 
         return RandomUtils.chanceTest((int)(moveAccuracy*((double)accuracy/(double)evasion)));
+    }
+
+    private boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
+        Boolean bypass = bypassAccuracy(me, o);
+        boolean attackHit = bypass != null ? bypass : this.naturalAccuracyCheck(me, o);
+
+        me.getMoveData().setAccuracyCheck(bypass, attackHit);
+        return attackHit;
     }
 
     // Returns true if the Pokemon is able to execute their turn by checking effects that have been casted upon them

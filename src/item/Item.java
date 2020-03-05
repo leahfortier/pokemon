@@ -17,6 +17,7 @@ import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.EffectInterfaces.WeatherExtendingEffect;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
+import battle.effect.InvokeInterfaces.AttackMissedEffect;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.BarrierEffect;
 import battle.effect.InvokeInterfaces.BracingEffect;
@@ -5907,6 +5908,27 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public int flingDamage() {
             return 10;
+        }
+    }
+
+    static class BlunderPolicy extends Item implements AttackMissedEffect, HoldItem {
+        private static final long serialVersionUID = 1L;
+
+        BlunderPolicy() {
+            super(ItemNamesies.BLUNDER_POLICY, "Raises Speed sharply when a Pokémon misses with a move because of accuracy.", BagCategory.MISC);
+            super.price = 4000;
+        }
+
+        @Override
+        public void afterMiss(Battle b, ActivePokemon misser) {
+            if (misser.getMoveData().isNaturalMiss() && new StageModifier(2, Stat.SPEED).modify(b, misser, misser, CastSource.HELD_ITEM)) {
+                this.consumeItem(b, misser);
+            }
+        }
+
+        @Override
+        public int flingDamage() {
+            return 80;
         }
     }
 

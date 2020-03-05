@@ -237,8 +237,29 @@ public final class InvokeInterfaces {
         }
     }
 
-    public interface CrashDamageMove extends AttackInterface {
+    public interface AttackMissedEffect {
+        void afterMiss(Battle b, ActivePokemon misser);
+
+        static void invokeAttackMissedEffect(Battle b, ActivePokemon misser) {
+            List<InvokeEffect> invokees = b.getEffectsList(misser, misser.getAttack());
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof AttackMissedEffect && invokee.isActiveEffect()) {
+                    AttackMissedEffect effect = (AttackMissedEffect)invokee;
+                    effect.afterMiss(b, misser);
+                }
+            }
+        }
+    }
+
+    // Needs a separate invoke method in addition to naturally being apart of the AttackMissedEffect because it can be invoked from other places as well
+    public interface CrashDamageMove extends AttackInterface, AttackMissedEffect {
         int getMaxHealthPercentageDenominator();
+
+        @Override
+        default void afterMiss(Battle b, ActivePokemon misser) {
+            // Crash when we miss
+            this.crash(b, misser);
+        }
 
         default void crash(Battle b, ActivePokemon user) {
             // Crash damage must be at least one and is affected by Magic Guard

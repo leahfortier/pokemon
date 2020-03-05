@@ -406,7 +406,7 @@ public class ItemTest extends BaseTest {
 
         // Lum Berry should activate to remove the burn
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
-        Assert.assertTrue(defending.lastMoveSucceeded());
+        defending.assertLastMoveSucceeded(true);
         attacking.assertNoStatus();
 
         // Lum Berry has already been consumed, so the burn should remain
@@ -579,5 +579,77 @@ public class ItemTest extends BaseTest {
                     battle.assertWeather(WeatherNamesies.CLEAR_SKIES);
                 }
         );
+    }
+
+    @Test
+    public void blunderPolicyTest() {
+        // Blunder Policy sharply raises Speed when an attack naturally misses
+        blunderPolicyTest(
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER),
+                (battle, attacking, defending) -> defending.assertNotFullHealth(),
+                (battle, attacking, defending) -> defending.assertFullHealth()
+        );
+
+        // Failing via type advantage does not trigger Blunder Policy
+        // Attack fails because Tackle does not affect Gastly
+        blunderPolicyTest(
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.GASTLY),
+                (battle, attacking, defending) -> defending.assertFullHealth()
+        );
+
+        // Failing via semi-invulnerable does not trigger Blunder Policy
+        blunderPolicyTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .with((battle, attacking, defending) -> {
+                            attacking.setMove(new Move(AttackNamesies.SPLASH));
+                            defending.setMove(new Move(AttackNamesies.FLY));
+
+                            // Defending with fly up in the air and next attack will be a forced miss
+                            battle.fight();
+                            Assert.assertTrue(defending.isSemiInvulnerableFlying());
+                            attacking.setExpectedAccuracyBypass(false);
+                        }),
+                (battle, attacking, defending) -> {
+                    attacking.assertNotFullHealth();
+                    defending.assertFullHealth();
+                    Assert.assertFalse(defending.isSemiInvulnerable());
+                }
+        );
+    }
+
+    private void blunderPolicyTest(TestInfo testInfo, PokemonManipulator samesies) {
+        blunderPolicyTest(testInfo, samesies, samesies);
+    }
+
+    private void blunderPolicyTest(TestInfo testInfo, PokemonManipulator withoutMiss, PokemonManipulator withMiss) {
+        blunderPolicyTest(false, testInfo, withoutMiss);
+        blunderPolicyTest(true, testInfo, withMiss);
+    }
+
+    private void blunderPolicyTest(boolean naturalMiss, TestInfo testInfo, PokemonManipulator postCheck) {
+        TestBattle battle = testInfo.createBattle();
+        TestPokemon attacking = battle.getAttacking().withItem(ItemNamesies.BLUNDER_POLICY);
+
+        testInfo.manipulate(battle);
+
+        // False Swipe will miss because I am mad with power
+        // Note: Setting manually instead of attackingFight for the semi-invulnerable test (needs to finish Fly move)
+        attacking.setFailAccuracy(naturalMiss);
+        attacking.setMove(new Move(AttackNamesies.FALSE_SWIPE));
+        battle.fight();
+
+        // Blunder Policy should be consumed when naturally missing (no accuracy bypass)
+        boolean shouldConsume = naturalMiss && attacking.getExpectedAccuracyBypass() == null;
+        Assert.assertEquals(shouldConsume, attacking.getMoveData().isNaturalMiss());
+
+        if (shouldConsume) {
+            attacking.assertConsumedItem();
+            attacking.assertStages(new TestStages().set(2, Stat.SPEED));
+        } else {
+            attacking.assertHoldingItem(ItemNamesies.BLUNDER_POLICY);
+            attacking.assertStages(new TestStages());
+        }
+
+        postCheck.manipulate(battle);
     }
 }

@@ -29,6 +29,7 @@ import item.Item.BlackBelt;
 import item.Item.BlackGlasses;
 import item.Item.BlackSludge;
 import item.Item.BlizzardTM;
+import item.Item.BlunderPolicy;
 import item.Item.BoldMint;
 import item.Item.BraveMint;
 import item.Item.BrickBreakTM;
@@ -788,6 +789,7 @@ public enum ItemNamesies {
     GRASSY_SEED("Grassy Seed", GrassySeed::new),
     MISTY_SEED("Misty Seed", MistySeed::new),
     PSYCHIC_SEED("Psychic Seed", PsychicSeed::new),
+    BLUNDER_POLICY("Blunder Policy", BlunderPolicy::new),
     WORK_UP_TM("Work Up TM", WorkUpTM::new),
     DRAGON_CLAW_TM("Dragon Claw TM", DragonClawTM::new),
     PSYSHOCK_TM("Psyshock TM", PsyshockTM::new),

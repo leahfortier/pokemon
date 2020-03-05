@@ -179,6 +179,11 @@ class TestInfo {
         return this;
     }
 
+    TestInfo attackingBypass(Boolean bypass) {
+        this.updateManipulator((battle, attacking, defending) -> attacking.setExpectedAccuracyBypass(bypass));
+        return this;
+    }
+
     private void addEffectString(boolean attacking, EffectNamesies effectNamesies) {
         this.addString(attacking, StringUtils.properCase(effectNamesies.toString().toLowerCase().replaceAll("_", " ")));
     }

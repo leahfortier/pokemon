@@ -119,10 +119,26 @@ SuperDuperEndTurnEffect:
         EffectList: p
     *
 ***
+AttackMissedEffect:
+    Method:
+        Header: void afterMiss(Battle b, ActivePokemon misser)
+        Invoke: Void
+        EffectList: misser
+        InvokeAttack: misser
+    *
+***
 CrashDamageMove:
-    Extends: AttackInterface
+    Extends: AttackInterface, AttackMissedEffect
     Method:
         Header: int getMaxHealthPercentageDenominator()
+    *
+    Method:
+        Header: void afterMiss(Battle b, ActivePokemon misser)
+        Override: True
+        Default:
+            // Crash when we miss
+            this.crash(b, misser);
+            ###
     *
     Method:
         Header: void crash(Battle b, ActivePokemon user)
@@ -134,6 +150,7 @@ CrashDamageMove:
             user.indirectReduceHealth(b, crashDamage, false, user.getName() + " kept going and crashed!");
             ###
     *
+    Comments: // Needs a separate invoke method in addition to naturally being apart of the AttackMissedEffect because it can be invoked from other places as well
 ***
 BarrierEffect:
     Extends: SwappableEffect, SimpleStatModifyingEffect

@@ -21,13 +21,12 @@ import trainer.Opponent;
 import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.WildPokemon;
+import type.Type;
 
 public class TestBattle extends Battle {
     private static final long serialVersionUID = 1L;
 
     private TestDamageCalculator damageCalculator;
-
-    private Boolean expectedDefendingAccuracyBypass;
 
     private TestBattle(ActivePokemon nahMahBoi) {
         this(new WildPokemon(nahMahBoi));
@@ -87,8 +86,6 @@ public class TestBattle extends Battle {
 
         this.getEffects().reset();
         this.addEffect(WeatherNamesies.CLEAR_SKIES.getEffect());
-
-        expectedDefendingAccuracyBypass = null;
     }
 
     void splashFight() {
@@ -152,33 +149,30 @@ public class TestBattle extends Battle {
     }
 
     @Override
-    protected boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
-        Boolean bypass = bypassAccuracy(me, o);
-        if (bypass != null) {
-            Attack attack = me.getAttack();
+    protected Boolean bypassAccuracy(ActivePokemon me, ActivePokemon o) {
+        Boolean expectedBypass = ((TestPokemon)me).getExpectedAccuracyBypass();
 
-            // Self-Target, field, and charging moves can't miss
-            if (attack.isSelfTargetStatusMove()
-                    || attack.isMoveType(MoveType.FIELD)
-                    || (attack instanceof MultiTurnMove && ((MultiTurnMove)attack).isCharging())) {
-                Assert.assertTrue(bypass);
-            } else if (!me.isPlayer()) {
-                Assert.assertEquals(this.expectedDefendingAccuracyBypass, bypass);
-            }
-
-            return bypass;
+        // Self-Target, field, charging moves, and poisonous toxic can't miss
+        // As a convenience not forcing these bypasses to be explicitly set -- but confirms not set to false
+        Attack attack = me.getAttack();
+        if (attack.isSelfTargetStatusMove()
+                || attack.isMoveType(MoveType.FIELD)
+                || (attack instanceof MultiTurnMove && ((MultiTurnMove)attack).isCharging())
+                || (attack.namesies() == AttackNamesies.TOXIC && me.isType(this, Type.POISON))) {
+            Assert.assertNotEquals(expectedBypass, false);
+            expectedBypass = true;
         }
 
-        if (!me.isPlayer()) {
-            Assert.assertNull(this.expectedDefendingAccuracyBypass);
-        }
+        Boolean bypass = super.bypassAccuracy(me, o);
+        Assert.assertEquals(expectedBypass, bypass);
 
-        // No missing by chance in tests
-        return true;
+        return bypass;
     }
 
-    void setExpectedDefendingAccuracyBypass(Boolean accuracyBypass) {
-        this.expectedDefendingAccuracyBypass = accuracyBypass;
+    @Override
+    public boolean naturalAccuracyCheck(ActivePokemon me, ActivePokemon o) {
+        // No missing by chance in tests unless specifically requested to
+        return !((TestPokemon)me).shouldFailAccuracy();
     }
 
     public int getCritStage(ActivePokemon me) {

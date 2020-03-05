@@ -31,6 +31,8 @@ public class TestPokemon extends ActivePokemon {
     private static final long serialVersionUID = 1L;
 
     private Double expectedDamageModifier;
+    private Boolean expectedAccuracyBypass;
+    private boolean failNaturalAccuracy;
 
     public TestPokemon(final PokemonNamesies pokemon, final TrainerType trainerType) {
         this(pokemon, 100, trainerType);
@@ -106,8 +108,25 @@ public class TestPokemon extends ActivePokemon {
         this.expectedDamageModifier = damageModifier;
     }
 
+    public void setExpectedAccuracyBypass(Boolean bypass) {
+        this.expectedAccuracyBypass = bypass;
+    }
+
+    // Will make it so the attack will miss (unless a bypass effect forces a hit)
+    public void setFailAccuracy(boolean failAccuracy) {
+        this.failNaturalAccuracy = failAccuracy;
+    }
+
     public Double getExpectedDamageModifier() {
         return this.expectedDamageModifier;
+    }
+
+    public Boolean getExpectedAccuracyBypass() {
+        return this.expectedAccuracyBypass;
+    }
+
+    public boolean shouldFailAccuracy() {
+        return this.failNaturalAccuracy;
     }
 
     public String statsString() {
@@ -250,7 +269,7 @@ public class TestPokemon extends ActivePokemon {
     }
 
     public void assertHoldingItem(ItemNamesies itemNamesies) {
-        Assert.assertTrue(this.isHoldingItem(itemNamesies));
+        Assert.assertTrue(this.getHeldItem().getName(), this.isHoldingItem(itemNamesies));
     }
 
     public void assertNotHoldingItem() {
@@ -320,6 +339,10 @@ public class TestPokemon extends ActivePokemon {
             Assert.assertFalse(this.isActualPokemon(species));
             this.assertHasEffect(PokemonEffectNamesies.TRANSFORMED);
         }
+    }
+
+    public void assertLastMoveSucceeded(boolean success) {
+        Assert.assertEquals(success, this.lastMoveSucceeded());
     }
 
     public static TestPokemon newPlayerPokemon(final PokemonNamesies pokemon) {

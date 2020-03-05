@@ -13,6 +13,10 @@ public class MoveTurnData implements Serializable {
 
     private int priority;
     private Type type;
+
+    private Boolean accuracyBypass;
+    private boolean attackHit;
+
     private DamageCalculation calculatedDamage;
 
     public MoveTurnData(AttackNamesies attackNamesies) {
@@ -43,5 +47,15 @@ public class MoveTurnData implements Serializable {
 
     public DamageCalculation getCalculatedDamage() {
         return this.calculatedDamage;
+    }
+
+    public void setAccuracyCheck(Boolean bypass, boolean attackHit) {
+        this.accuracyBypass = bypass;
+        this.attackHit = attackHit;
+    }
+
+    // Returns true if the attack missed by chance (returns false if forced missed like semi-invulnerable etc)
+    public boolean isNaturalMiss() {
+        return accuracyBypass == null && !attackHit;
     }
 }

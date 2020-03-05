@@ -2168,3 +2168,15 @@ Psychic Seed:
     Desc: An item to be held by a Pok\u00e9mon. It boosts Sp. Def on Psychic Terrain. It can only be used once.
     TerrainSeed: Psychic Sp_Defense
 *
+Blunder Policy:
+    Desc: Raises Speed sharply when a Pokémon misses with a move because of accuracy.
+    Cat: Misc
+    Fling: 80
+    Price: 4000
+    Int: AttackMissedEffect, HoldItem
+    AttackMissed:
+        if (misser.getMoveData().isNaturalMiss() && new StageModifier(2, Stat.SPEED).modify(b, misser, misser, CastSource.HELD_ITEM)) {
+            this.consumeItem(b, misser);
+        }
+        ###
+*
