@@ -74,7 +74,7 @@ public class StageModifier implements Serializable {
     // Modifies a single stat for a Pokemon and prints appropriate messages and stuff
     private boolean modify(ActivePokemon caster, ActivePokemon victim, int val, Stat stat, Battle b, CastSource source) {
         // Don't modify the stages of a dead Pokemon
-        if (victim.isFainted(b)) {
+        if (victim.isFainted(b) || !b.isFront(victim)) {
             return false;
         }
 

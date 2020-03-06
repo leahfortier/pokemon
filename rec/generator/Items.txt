@@ -2184,3 +2184,14 @@ Cracked Pot:
     Price: 1600
     Comments: // Note: Only including Cracked Pot, and not Chipped Pot because they're basically the same thing
 *
+Eject Pack:
+    Desc: An item to be held by a Pokémon. When the holder's stats are lowered, it will be switched out of battle.
+    Cat: Misc
+    Price: 4000
+    Int: HoldItem
+    StatLowered:
+        if (victim.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
+            this.consumeItem(b, victim);
+        }
+        ###
+*

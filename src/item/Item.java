@@ -5950,6 +5950,22 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
+    static class EjectPack extends Item implements HoldItem, StatLoweredEffect {
+        private static final long serialVersionUID = 1L;
+
+        EjectPack() {
+            super(ItemNamesies.EJECT_PACK, "An item to be held by a Pokémon. When the holder's stats are lowered, it will be switched out of battle.", BagCategory.MISC);
+            super.price = 4000;
+        }
+
+        @Override
+        public void takeItToTheNextLevel(Battle b, ActivePokemon victim, boolean selfCaster) {
+            if (victim.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
+                this.consumeItem(b, victim);
+            }
+        }
+    }
+
     static class WorkUpTM extends Item implements TechnicalMachine {
         private static final long serialVersionUID = 1L;
 

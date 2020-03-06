@@ -98,6 +98,7 @@ import item.Item.EarthPlate;
 import item.Item.EarthquakeTM;
 import item.Item.EchoedVoiceTM;
 import item.Item.EjectButton;
+import item.Item.EjectPack;
 import item.Item.Electirizer;
 import item.Item.ElectricGem;
 import item.Item.ElectricMemory;
@@ -794,6 +795,7 @@ public enum ItemNamesies {
     BLUNDER_POLICY("Blunder Policy", BlunderPolicy::new),
     CATCHING_CHARM("Catching Charm", CatchingCharm::new),
     CRACKED_POT("Cracked Pot", CrackedPot::new),
+    EJECT_PACK("Eject Pack", EjectPack::new),
     WORK_UP_TM("Work Up TM", WorkUpTM::new),
     DRAGON_CLAW_TM("Dragon Claw TM", DragonClawTM::new),
     PSYSHOCK_TM("Psyshock TM", PsyshockTM::new),

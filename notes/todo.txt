@@ -196,6 +196,9 @@ Other random things:
     - need to have a method for abilities to override when they are removed/suppressed
         - does Illusion break?
         - Neutralizing Gas has exit message ("The effects of Neutralizing Gas wore off!") -- this would also be a switch out effect
-    - I feel like Gastro Acid needs to be rewritten into suppression instead of changing the ability to none
+    - I feel like Gastro Acid needs to be rewritten into suppression instead of changing the ability to none 
+        - make sure that if this effect cannot be transferred to a Pokemon that cannot have it's ability suppressed with Baton Pass or something
     - can we move the catchPokemon logic in BallItem or somewhere else that isn't Player?
+    - White Herb doesn't seem right at all
+    - does Parting Shot lower stats even when the user cannot switch out?
     

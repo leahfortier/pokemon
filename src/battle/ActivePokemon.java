@@ -748,7 +748,7 @@ public class ActivePokemon extends PartyPokemon {
             return 0;
         }
 
-        // Magic Guard make the user immune to indirect damage
+        // Magic Guard makes the user immune to indirect damage
         if (damageType == DamageType.CASUAL_INDIRECT && this.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
             return 0;
         }

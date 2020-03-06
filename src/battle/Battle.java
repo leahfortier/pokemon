@@ -162,11 +162,14 @@ public class Battle implements Serializable {
     }
 
     private void fight(boolean playerFirst) {
+        ActivePokemon first = playerFirst ? player.front() : opponent.front();
+        ActivePokemon second = this.getOtherPokemon(first);
+
         // First turn
-        executionSolution(true, playerFirst);
+        executionSolution(true, first);
 
         // Second turn
-        executionSolution(false, playerFirst);
+        executionSolution(false, second);
 
         effects.endTurn();
 
@@ -365,7 +368,7 @@ public class Battle implements Serializable {
         return p == getTrainer(p).front();
     }
 
-    private void executionSolution(boolean firstAttacking, boolean playerFirst) {
+    private void executionSolution(boolean firstAttacking, ActivePokemon me) {
         this.firstAttacking = firstAttacking;
 
         // Kind of hacky solution to check if the battle is ended via catching the opponent Pokemon
@@ -375,7 +378,6 @@ public class Battle implements Serializable {
             return;
         }
 
-        ActivePokemon me = firstAttacking == playerFirst ? player.front() : opponent.front();
         ActivePokemon o = this.getOtherPokemon(me);
 
         if (isSwitching(me)) {

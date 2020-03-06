@@ -652,4 +652,103 @@ public class ItemTest extends BaseTest {
 
         postCheck.manipulate(battle);
     }
+
+    @Test
+    public void swapPokemonTest() {
+        // Eject Pack causes the holder to switch out when any of its stats are lowered
+        ejectPackTest(true, new TestInfo().attackingFight(AttackNamesies.GROWL));
+
+        // Make sure works with multiple stat reductions
+        ejectPackTest(true, new TestInfo().attackingFight(AttackNamesies.TICKLE));
+
+        // Ejects even for self-inflicted stat lowers
+        ejectPackTest(true, new TestInfo().fight(AttackNamesies.ENDURE, AttackNamesies.LEAF_STORM));
+
+        // Sticky Hold will not prevent ejection because its the holder
+        ejectPackTest(true, new TestInfo().defending(AbilityNamesies.STICKY_HOLD)
+                                          .attackingFight(AttackNamesies.GROWL));
+
+        // Nothing happens when lowering the other Pokemon's stats
+        ejectPackTest(false, new TestInfo().defendingFight(AttackNamesies.GROWL)
+                                           .with((battle, attacking, defending) -> {
+
+                                               attacking.assertStages(new TestStages().set(-1, Stat.ATTACK));
+                                           }));
+
+        // Eject Button causes the holder to switch out when hit by an attack
+        ejectButtonTest(true, new TestInfo().attackingFight(AttackNamesies.TACKLE));
+        ejectButtonTest(true, new TestInfo().attackingFight(AttackNamesies.SWIFT));
+        ejectButtonTest(true, new TestInfo().fight(AttackNamesies.EXPLOSION, AttackNamesies.ENDURE));
+
+        // Eject Button should not trigger when damage is absorbed
+        ejectButtonTest(false, new TestInfo().defendingFight(AttackNamesies.SUBSTITUTE)
+                                             .attackingFight(AttackNamesies.TACKLE));
+    }
+
+    private void ejectPackTest(boolean swapDefending, TestInfo testInfo) {
+        testInfo.setup(PokemonManipulator.giveDefendingItem(ItemNamesies.EJECT_PACK));
+        testInfo.with((battle, attacking, defending) -> {
+            if (swapDefending) {
+                TestPokemon front = battle.getDefending();
+                Assert.assertNotEquals(front, defending);
+                front.assertSpecies(PokemonNamesies.PIKACHU);
+                front.assertStages(new TestStages());
+                front.assertNotHoldingItem();
+            } else {
+                battle.assertFront(defending);
+                defending.assertStages(new TestStages());
+                defending.assertHoldingItem(ItemNamesies.EJECT_PACK);
+            }
+        });
+        swapPokemonTest(swapDefending, testInfo);
+    }
+
+    private void ejectButtonTest(boolean swapDefending, TestInfo testInfo) {
+        testInfo.setup(PokemonManipulator.giveDefendingItem(ItemNamesies.EJECT_BUTTON));
+        testInfo.with((battle, attacking, defending) -> {
+            if (swapDefending) {
+                TestPokemon front = battle.getDefending();
+                Assert.assertNotEquals(front, defending);
+                front.assertSpecies(PokemonNamesies.PIKACHU);
+                front.assertNotHoldingItem();
+                defending.assertNotFullHealth();
+            } else {
+                battle.assertFront(defending);
+                defending.assertStages(new TestStages());
+                defending.assertHoldingItem(ItemNamesies.EJECT_BUTTON);
+            }
+        });
+        swapPokemonTest(swapDefending, testInfo);
+    }
+
+    private void swapPokemonTest(boolean swapDefending, TestInfo testInfo) {
+        TestBattle battle = testInfo.asTrainerBattle().createBattle();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+        TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.SQUIRTLE);
+        TestPokemon defending2 = battle.addDefending(PokemonNamesies.PIKACHU);
+
+        // Exactly one front Pokemon should be holding an item
+        boolean attackingItem = attacking.isHoldingItem();
+        boolean defendingItem = defending.isHoldingItem();
+        Assert.assertNotEquals(attackingItem, defendingItem);
+
+        TestPokemon itemHolder = attackingItem ? attacking : defending;
+        ItemNamesies itemNamesies = itemHolder.getHeldItem().namesies();
+        Assert.assertNotEquals(itemNamesies, ItemNamesies.NO_ITEM);
+
+        battle.assertFront(attacking);
+        battle.assertFront(defending);
+
+        testInfo.manipulate(battle);
+
+        battle.assertFront(attacking);
+        battle.assertFront(swapDefending ? defending2 : defending);
+
+        if (swapDefending) {
+            itemHolder.assertConsumedItem();
+        } else {
+            itemHolder.assertHoldingItem(itemNamesies);
+        }
+    }
 }

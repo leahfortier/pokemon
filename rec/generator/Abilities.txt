@@ -1361,7 +1361,7 @@ Magician:
     SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
     OnApplyDamage:
         // Steal the victim's item when damage is dealt
-        if (!user.isFainted(b) && user.canStealItem(b, victim)) {
+        if (user.canStealItem(b, victim)) {
             this.swapItems(b, user, victim);
         }
         ###
