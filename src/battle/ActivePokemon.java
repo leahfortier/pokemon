@@ -87,6 +87,7 @@ public class ActivePokemon extends PartyPokemon {
     private Serializable castSource;
     private int counter;
     private int damageTaken;
+    private boolean damageAbsorbed;
     private double successionDecayRate;
     private boolean firstTurn;
     private boolean attacking;
@@ -758,6 +759,7 @@ public class ActivePokemon extends PartyPokemon {
 
         // Check if the damage will be absorbed by an effect
         if (directDamage && AbsorbDamageEffect.checkAbsorbDamageEffect(b, this, amount)) {
+            this.damageAbsorbed = true;
             return 0;
         }
 
@@ -767,7 +769,7 @@ public class ActivePokemon extends PartyPokemon {
         int prev = this.getHP();
         this.setHP(prev - amount);
         int taken = prev - this.getHP();
-        this.takeDamage(taken);
+        damageTaken = taken;
 
         // Enduring the hit
         if (this.getHP() == 0 && directDamage) {
@@ -925,16 +927,18 @@ public class ActivePokemon extends PartyPokemon {
         firstTurn = false;
     }
 
-    private void takeDamage(int damage) {
-        damageTaken = damage;
-    }
-
     public int getDamageTaken() {
         return damageTaken;
     }
 
     public boolean hasTakenDamage() {
         return damageTaken > 0;
+    }
+
+    // Different than just checking if opposing damageDealt is 0 because things like False Swipe should trigger
+    // all effects even if no damage is actually dealt
+    public boolean hasAbsorbedDamage() {
+        return damageAbsorbed;
     }
 
     public int getDamageDealt() {
@@ -952,6 +956,7 @@ public class ActivePokemon extends PartyPokemon {
 
     private void resetDamageTaken() {
         damageTaken = 0;
+        damageAbsorbed = false;
     }
 
     public void setLastMoveUsed() {

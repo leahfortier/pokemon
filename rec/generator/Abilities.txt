@@ -1763,7 +1763,7 @@ Gulp Missile:
     Desc: When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.
     Irreplaceable: True
     Irrestealable: True
-    Int: StartAttackEffect, EntryEffect, OpponentApplyDamageEffect, FormAbility
+    Int: StartAttackEffect, OpponentApplyDamageEffect, FormAbility
     BeforeAttack:
         // Already gulping/gorging -- nothing else to do right now
         if (this.gulpForm != GulpForm.NORMAL) {
@@ -1789,7 +1789,7 @@ Gulp Missile:
             NORMAL, GULPING, GORGING
         }
         ###
-    Enter:
+    Constructor:
         this.gulpForm = GulpForm.NORMAL;
         ###
     OpponentApplyDamage:

@@ -156,6 +156,18 @@ public final class EffectInterfaces {
         }
     }
 
+    // For effects that take place when applying or receiving damage
+    public interface OnDamageEffect {
+        // By default, the effect should be ignored if the damage was absorbed (Substitute, Disguise, etc)
+        default boolean ignoreAbsorbedDamage() {
+            return true;
+        }
+
+        default boolean shouldIgnore(ActivePokemon victim) {
+            return this.ignoreAbsorbedDamage() && victim.hasAbsorbedDamage();
+        }
+    }
+
     public interface PhysicalContactEffect extends OpponentApplyDamageEffect {
 
         // b: The current battle

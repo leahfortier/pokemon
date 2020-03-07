@@ -20,6 +20,8 @@ abstract class InvokeMethod {
     protected abstract String getPostLoop(InterfaceMethod interfaceMethod);
     protected String getPreLoop() { return ""; }
 
+    protected boolean includeEffectDeclaration() { return true; }
+
     private String getMethodName(final InterfaceMethod interfaceMethod) {
         if (StringUtils.isNullOrEmpty(this.methodName)) {
             return this.getDefaultMethodName(interfaceMethod);
@@ -48,7 +50,7 @@ abstract class InvokeMethod {
                 .appendLine("for (InvokeEffect invokee : invokees) {")
                 .appendLine("if (invokee instanceof " + interfaceMethod.getInterfaceName() + " && invokee.isActiveEffect()) {")
                 .appendPostDelimiter("\n\n", getMoldBreaker(interfaceMethod))
-                .appendLine(getInnerLoop(interfaceMethod))
+                .appendLine(getFullInnerLoop(interfaceMethod))
                 .appendPostDelimiter("\n", getDeadsies(interfaceMethod))
                 .appendLine("}")
                 .appendLine("}")
@@ -111,6 +113,26 @@ abstract class InvokeMethod {
                 "}";
     }
 
+    private String getFullInnerLoop(final InterfaceMethod interfaceMethod) {
+        String innerLoop = "";
+        if (this.includeEffectDeclaration()) {
+            innerLoop += interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;\n";
+        }
+        innerLoop += this.getIgnoreCondition(interfaceMethod);
+        return innerLoop + this.getInnerLoop(interfaceMethod);
+    }
+
+    private String getIgnoreCondition(final InterfaceMethod interfaceMethod) {
+        String ignoreCondition = interfaceMethod.getIgnoreCondition();
+        if (StringUtils.isNullOrEmpty(ignoreCondition)) {
+            return "";
+        }
+
+        return "if (" + ignoreCondition + ") {\n" +
+                "continue;\n" +
+                "}\n\n";
+    }
+
     private String getDeadsies(final InterfaceMethod interfaceMethod) {
         final String postLoop = this.getPostLoop(interfaceMethod);
         final String returnStatement = StringUtils.isNullOrEmpty(postLoop) ? "return;" : postLoop;
@@ -141,8 +163,7 @@ abstract class InvokeMethod {
 
         @Override
         protected String getInnerLoop(InterfaceMethod interfaceMethod) {
-            return interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;\n" +
-                    "effect." + interfaceMethod.getMethodCall() + ";";
+            return "effect." + interfaceMethod.getMethodCall() + ";";
         }
 
         @Override
@@ -161,6 +182,11 @@ abstract class InvokeMethod {
         @Override
         protected String getDefaultMethodName(InterfaceMethod interfaceMethod) {
             return "contains" + interfaceMethod.getInterfaceName();
+        }
+
+        @Override
+        protected boolean includeEffectDeclaration() {
+            return false;
         }
 
         @Override
@@ -196,7 +222,6 @@ abstract class InvokeMethod {
         @Override
         protected String getInnerLoop(InterfaceMethod interfaceMethod) {
             return new StringAppender()
-                    .appendLine(interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;")
                     .appendFormat("if (%seffect.%s) {\n", check ? "" : "!", interfaceMethod.getMethodCall())
                     .appendLine(this.successfulCheck())
                     .append("}")
@@ -272,7 +297,6 @@ abstract class InvokeMethod {
         @Override
         protected String getInnerLoop(InterfaceMethod interfaceMethod) {
             return new StringAppender()
-                    .appendLine(interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;")
                     .appendLine(interfaceMethod.getReturnType() + " value = effect." + interfaceMethod.getMethodCall() + ";")
                     .appendLine("if (value != null) {")
                     .appendLine("return value;")
@@ -308,8 +332,7 @@ abstract class InvokeMethod {
 
         @Override
         protected String getInnerLoop(InterfaceMethod interfaceMethod) {
-            return interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;\n" +
-                    interfaceMethod.getUpdateField() + " = effect." + interfaceMethod.getMethodCall() + ";";
+            return interfaceMethod.getUpdateField() + " = effect." + interfaceMethod.getMethodCall() + ";";
         }
 
         @Override
@@ -332,8 +355,7 @@ abstract class InvokeMethod {
 
         @Override
         protected String getInnerLoop(InterfaceMethod interfaceMethod) {
-            return interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;\n" +
-                    "modifier *= effect." + interfaceMethod.getMethodCall() + ";";
+            return "modifier *= effect." + interfaceMethod.getMethodCall() + ";";
         }
 
         @Override
@@ -361,8 +383,7 @@ abstract class InvokeMethod {
 
         @Override
         protected String getInnerLoop(InterfaceMethod interfaceMethod) {
-            return interfaceMethod.getInterfaceName() + " effect = (" + interfaceMethod.getInterfaceName() + ")invokee;\n" +
-                    "modifier += effect." + interfaceMethod.getMethodCall() + ";";
+            return "modifier += effect." + interfaceMethod.getMethodCall() + ";";
         }
 
         @Override

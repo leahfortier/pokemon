@@ -274,6 +274,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         @Override
+        public boolean ignoreAbsorbedDamage() {
+            // Air Balloon will pop a balloon held by a substitute or a disguise
+            return false;
+        }
+
+        @Override
         public int flingDamage() {
             return 10;
         }

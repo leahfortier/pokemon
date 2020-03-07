@@ -4427,7 +4427,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class GulpMissile extends Ability implements StartAttackEffect, EntryEffect, OpponentApplyDamageEffect, FormAbility {
+    static class GulpMissile extends Ability implements StartAttackEffect, OpponentApplyDamageEffect, FormAbility {
         private static final long serialVersionUID = 1L;
 
         private GulpForm gulpForm;
@@ -4438,6 +4438,7 @@ public abstract class Ability implements AbilityInterface {
 
         GulpMissile() {
             super(AbilityNamesies.GULP_MISSILE, "When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.");
+            this.gulpForm = GulpForm.NORMAL;
         }
 
         @Override
@@ -4468,11 +4469,6 @@ public abstract class Ability implements AbilityInterface {
                 String gulping = this.gulpForm == GulpForm.GULPING ? "gulping" : "gorging";
                 this.addFormMessage(attacking, attacking.getName() + " is " + gulping + "!!", true);
             }
-        }
-
-        @Override
-        public void enter(Battle b, ActivePokemon enterer) {
-            this.gulpForm = GulpForm.NORMAL;
         }
 
         @Override

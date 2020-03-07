@@ -104,14 +104,17 @@ public enum InterfaceMethodKey {
         builder.moldBreaker = "ActivePokemon moldBreaker = " + value + ";";
         builder.moldBreakerNullCheck = true;
     })),
-    DEFAULT("Default", ((builder, fields, value) -> {
-        builder.defaultMethod = value;
+    IGNORE_CONDITION("IgnoreCondition", ((builder, fields, value) -> {
+        builder.ignoreCondition = value;
     })),
     DEADSIES("Deadsies", ((builder, fields, value) -> {
         Scanner in = new Scanner(value);
         while (in.hasNext()) {
             builder.deadsies.add(in.next());
         }
+    })),
+    DEFAULT("Default", ((builder, fields, value) -> {
+        builder.defaultMethod = value;
     })),
     OVERRIDE("Override", ((builder, fields, value) -> {
         if (!value.equals("True")) {

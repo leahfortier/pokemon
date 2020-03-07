@@ -178,6 +178,7 @@ Other random things:
     - pretty sure Infatuation lasts between Pokemon and it shouldn't
     - should probably rewrite the battle message system to pass the serialized battle around instead of - - whatever it's currently doing with storing every individual value and such
     - should also have a method that handles the mold breaker stuff instead of it being hardcoded in every single invoke method (can this be an override in AbilityInterface for isActiveEffect somehow?)
+        - could also include ignoreConditions like OnDamageEffect here as well
     - how would something like future sight work for mold breaker
     - new lines aren't done correctly for interfaces with comments and default methods/override
     - test liquid voice + perish song + water absorb
@@ -197,4 +198,7 @@ Other random things:
         - does Illusion break?
         - Neutralizing Gas has exit message ("The effects of Neutralizing Gas wore off!") -- this would also be a switch out effect
     - I feel like Gastro Acid needs to be rewritten into suppression instead of changing the ability to none
+    - Air Balloon cannot be recovered with Recycle or Pickup
+    - I think the damageTaken stuff is all wrong -- shouldn't it only be for direct damage? also why is it set before bracing heal?
+    - make generalized interface for under half health effects like Berserk and Emergency Exit
     

@@ -24,8 +24,9 @@ public class InterfaceMethodBuilder {
     public String updateField;
     public String moldBreaker;
     public boolean moldBreakerNullCheck;
-    public String defaultMethod;
+    public String ignoreCondition;
     public List<String> deadsies;
+    public String defaultMethod;
     public boolean isOverride;
     public String begin;
     public String comments;

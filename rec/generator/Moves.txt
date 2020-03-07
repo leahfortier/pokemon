@@ -4621,7 +4621,7 @@ Metal Burst:
     Cat: Physical
     Acc: 100
     PhysicalContact: False
-    Applies: user.getDamageTaken() > 0 && !b.isFirstAttack()
+    Applies: user.hasTakenDamage() && !b.isFirstAttack()
     FixedDamage: (int)(me.getDamageTaken()*1.5)
 *
 Wild Charge:

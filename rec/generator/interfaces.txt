@@ -2,35 +2,38 @@
 # If this is unspecified, then the invokee list will default to being passed in as a new parameter in the invoke method
 
 ApplyDamageEffect:
+    Extends: OnDamageEffect
     Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
     Method:
         Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim)
         Comments:
             // user: The user of that attack, the one who is implementing this effect
             // victim: The Pokemon that received the attack
-            // damage: The amount of damage that was dealt to victim by the user
             ###
         Invoke: Void
         EffectList: user
         InvokeAttack: user
         Deadsies: user
+        IgnoreCondition: effect.shouldIgnore(victim)
     *
 ***
 OpponentApplyDamageEffect:
+    Extends: OnDamageEffect
     Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
     Method:
         Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim)
         Comments:
             // user: The user of that attack
             // victim: The Pokemon that received the attack, the one who is probably implementing this effect
-            // damage: The amount of damage that was dealt to victim by the user
             ###
         Invoke: Void
         EffectList: victim
         Deadsies: user
+        IgnoreCondition: effect.shouldIgnore(victim)
     *
 ***
 TakeDamageEffect:
+    Extends: OnDamageEffect
     Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
     Method:
         Comments:
@@ -41,9 +44,11 @@ TakeDamageEffect:
         EffectList: victim
         Invoke: Void
         Deadsies: victim
+        IgnoreCondition: effect.shouldIgnore(victim)
     *
 ***
 OpponentTakeDamageEffect:
+    Extends: OnDamageEffect
     Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
     Method:
         Comments:
@@ -54,6 +59,7 @@ OpponentTakeDamageEffect:
         EffectList: user
         Invoke: Void
         Deadsies: victim
+        IgnoreCondition: effect.shouldIgnore(victim)
     *
 ***
 EndTurnEffect:

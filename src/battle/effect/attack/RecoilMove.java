@@ -10,6 +10,12 @@ public interface RecoilMove extends AttackInterface, ApplyDamageEffect {
     void applyRecoil(Battle b, ActivePokemon user);
 
     @Override
+    default boolean ignoreAbsorbedDamage() {
+        // Take (1 damage of) recoil even when damage is absorbed
+        return false;
+    }
+
+    @Override
     default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
         this.applyRecoil(b, user);
     }

@@ -26,10 +26,10 @@ class InterfaceMethod {
     private final String moldBreaker;
     private final boolean moldBreakerNullCheck;
 
-    private final String defaultMethod;
-
+    private final String ignoreCondition;
     private final List<String> deadsies;
 
+    private final String defaultMethod;
     private final boolean isOverride;
 
     private final String begin;
@@ -51,8 +51,9 @@ class InterfaceMethod {
         this.updateField = builder.updateField;
         this.moldBreaker = builder.moldBreaker;
         this.moldBreakerNullCheck = builder.moldBreakerNullCheck;
-        this.defaultMethod = builder.defaultMethod;
+        this.ignoreCondition = builder.ignoreCondition;
         this.deadsies = builder.deadsies;
+        this.defaultMethod = builder.defaultMethod;
         this.isOverride = builder.isOverride;
         this.begin = builder.begin;
         this.comments = builder.comments;
@@ -136,6 +137,10 @@ class InterfaceMethod {
 
     String getBattleParameter() {
         return this.battleParameter;
+    }
+
+    String getIgnoreCondition() {
+        return this.ignoreCondition;
     }
 
     Iterable<String> getDeadsies() {

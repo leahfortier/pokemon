@@ -66,6 +66,10 @@ Air Balloon:
         Messages.add(victim.getName() + "'s " + this.getName() + " popped!");
         this.consumeItem(b, victim);
         ###
+    IgnoreAbsorbedDamage:
+        // Air Balloon will pop a balloon held by a substitute or a disguise
+        return false;
+        ###
 *
 Amulet Coin:
     Int: HoldItem

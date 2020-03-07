@@ -542,7 +542,7 @@ Countering:
     AddMapField: MoveType: Assistless, Metronomeless, Mirrorless
     AddMapField: PP: 20
     AddMapField: Acc: 100
-    AddMapField: Applies: user.getDamageTaken() > 0 && victim.getMove() != null && victim.getAttack().getCategory() == MoveCategory.{00} && !b.isFirstAttack()
+    AddMapField: Applies: user.hasTakenDamage() && victim.getMove() != null && victim.getAttack().getCategory() == MoveCategory.{00} && !b.isFirstAttack()
     AddMapField: Comments: // Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
     AddMapField: FixedDamage: me.getDamageTaken()
 *
@@ -1231,6 +1231,9 @@ OnTakeDamage:
 *
 OpponentTakeDamage:
     Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+*
+IgnoreAbsorbedDamage:
+    Header: boolean ignoreAbsorbedDamage()
 *
 Fling:
     AddMapField: FlingDamage:
