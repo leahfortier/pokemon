@@ -200,5 +200,4 @@ Other random things:
     - I feel like Gastro Acid needs to be rewritten into suppression instead of changing the ability to none
     - Air Balloon cannot be recovered with Recycle or Pickup
     - I think the damageTaken stuff is all wrong -- shouldn't it only be for direct damage? also why is it set before bracing heal?
-    - make generalized interface for under half health effects like Berserk and Emergency Exit
     

@@ -26,6 +26,7 @@ import battle.effect.EffectInterfaces.SingleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.StatStatusBoosterEffect;
 import battle.effect.EffectInterfaces.StatusPreventionAbility;
 import battle.effect.EffectInterfaces.SwapOpponentEffect;
+import battle.effect.EffectInterfaces.TakenUnderHalfEffect;
 import battle.effect.EffectInterfaces.TypedWildEncounterSelector;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
@@ -3909,7 +3910,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Berserk extends Ability implements TakeDamageEffect {
+    static class Berserk extends Ability implements TakenUnderHalfEffect {
         private static final long serialVersionUID = 1L;
 
         Berserk() {
@@ -3917,14 +3918,12 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
-                new StageModifier(1, Stat.SP_ATTACK).modify(b, victim, victim, CastSource.ABILITY);
-            }
+        public void takenUnderHalf(Battle b, ActivePokemon user, ActivePokemon victim) {
+            new StageModifier(1, Stat.SP_ATTACK).modify(b, victim, victim, CastSource.ABILITY);
         }
     }
 
-    static class WimpOut extends Ability implements TakeDamageEffect {
+    static class WimpOut extends Ability implements TakenUnderHalfEffect {
         private static final long serialVersionUID = 1L;
 
         WimpOut() {
@@ -3932,14 +3931,12 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
-                victim.switcheroo(b, victim, CastSource.ABILITY, true);
-            }
+        public void takenUnderHalf(Battle b, ActivePokemon user, ActivePokemon victim) {
+            victim.switcheroo(b, victim, CastSource.ABILITY, true);
         }
     }
 
-    static class EmergencyExit extends Ability implements TakeDamageEffect {
+    static class EmergencyExit extends Ability implements TakenUnderHalfEffect {
         private static final long serialVersionUID = 1L;
 
         EmergencyExit() {
@@ -3947,10 +3944,8 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
-                victim.switcheroo(b, victim, CastSource.ABILITY, true);
-            }
+        public void takenUnderHalf(Battle b, ActivePokemon user, ActivePokemon victim) {
+            victim.switcheroo(b, victim, CastSource.ABILITY, true);
         }
     }
 

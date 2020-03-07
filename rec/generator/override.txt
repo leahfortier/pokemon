@@ -2038,12 +2038,8 @@ Unneutralizable:
         ###
 *
 DropBelowHalfHealth:
-    AddInterface: TakeDamageEffect
-    AddMapField: OnTakeDamage:
-        if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
-            {0}
-        }
-        ###
+    AddInterface: TakenUnderHalfEffect
+    Header: void takenUnderHalf(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 WildPokemonAlterer:
     Header: void alterWildPokemon(ActivePokemon playerFront, WildEncounterInfo encounterData, WildEncounter encounter)

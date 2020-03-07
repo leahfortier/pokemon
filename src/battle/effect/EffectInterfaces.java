@@ -22,6 +22,7 @@ import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatusBoosterEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
+import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.InvokeInterfaces.WildEncounterSelector;
@@ -180,6 +181,17 @@ public final class EffectInterfaces {
             // Only apply if physical contact is made
             if (user.isMakingContact()) {
                 this.contact(b, user, victim);
+            }
+        }
+    }
+
+    public interface TakenUnderHalfEffect extends TakeDamageEffect {
+        void takenUnderHalf(Battle b, ActivePokemon user, ActivePokemon victim);
+
+        @Override
+        default void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+            if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
+                this.takenUnderHalf(b, user, victim);
             }
         }
     }
