@@ -542,9 +542,12 @@ Countering:
     AddMapField: MoveType: Assistless, Metronomeless, Mirrorless
     AddMapField: PP: 20
     AddMapField: Acc: 100
-    AddMapField: Applies: user.hasTakenDamage() && victim.getMove() != null && victim.getAttack().getCategory() == MoveCategory.{00} && !b.isFirstAttack()
-    AddMapField: Comments: // Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
-    AddMapField: FixedDamage: me.getDamageTaken()
+    AddMapField: Applies: user.hasTakenDamage() && victim.getAttack().getCategory() == MoveCategory.{00}
+    AddMapField: FixedDamage: 2*me.getDamageTaken()
+    AddMapField: Comments: 
+        // Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
+        // Do not need to check if victim has a valid move or confirm not first attack because can only take direct damage if both of those checks succeed
+        ###
 *
 CallNewMove:
     AddMapField: UniqueEffects:

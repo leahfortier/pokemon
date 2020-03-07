@@ -416,7 +416,7 @@ public class AttackTest extends BaseTest {
             battle.attackingFight(AttackNamesies.ACUPRESSURE);
             attacking.assertTotalStages(2*(i + 2)); // +2 since we've already gone once
             defending.assertTotalStages(2);
-            Assert.assertTrue(attacking.lastMoveSucceeded());
+            attacking.assertLastMoveSucceeded(true);
         }
 
         // All stats should be maxed now
@@ -424,7 +424,7 @@ public class AttackTest extends BaseTest {
 
         // Acupressure should fail now
         battle.attackingFight(AttackNamesies.ACUPRESSURE);
-        Assert.assertFalse(attacking.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(false);
 
         // But should still be snatchable
         battle.fight(AttackNamesies.ACUPRESSURE, AttackNamesies.SNATCH);
@@ -669,7 +669,7 @@ public class AttackTest extends BaseTest {
 
         // Should fail since the defending did not use their own item
         battle.defendingFight(AttackNamesies.RECYCLE);
-        Assert.assertFalse(defending.lastMoveSucceeded());
+        defending.assertLastMoveSucceeded(false);
         attacking.assertNotHoldingItem();
         defending.assertNotHoldingItem();
 
@@ -1180,9 +1180,9 @@ public class AttackTest extends BaseTest {
                                                .set(-1, Stat.DEFENSE, Stat.SP_DEFENSE));
 
         // Should fail since target it normal-type -- make sure it didn't steal stats
-        Assert.assertTrue(attacking.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(true);
         battle.attackingFight(AttackNamesies.SPECTRAL_THIEF);
-        Assert.assertFalse(attacking.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(false);
         attacking.assertNoStages();
         defending.assertStages(new TestStages().set(2, Stat.ATTACK, Stat.SP_ATTACK, Stat.SPEED)
                                                .set(-1, Stat.DEFENSE, Stat.SP_DEFENSE));
@@ -1455,28 +1455,28 @@ public class AttackTest extends BaseTest {
         powderTest(
                 AttackNamesies.POWDER, false,
                 new TestInfo().attacking(PokemonNamesies.SQUIRTLE),
-                (battle, attacking, defending) -> Assert.assertTrue(defending.lastMoveSucceeded())
+                (battle, attacking, defending) -> defending.assertLastMoveSucceeded(true)
         );
 
         // Powder doesn't work on Grass-type Pokemon
         powderTest(
                 AttackNamesies.POWDER, false,
                 new TestInfo().attacking(PokemonNamesies.BULBASAUR),
-                (battle, attacking, defending) -> Assert.assertFalse(defending.lastMoveSucceeded())
+                (battle, attacking, defending) -> defending.assertLastMoveSucceeded(false)
         );
 
         // Powder doesn't work on Pokemon with Overcoat
         powderTest(
                 AttackNamesies.POWDER, false,
                 new TestInfo().attacking(PokemonNamesies.SQUIRTLE, AbilityNamesies.OVERCOAT),
-                (battle, attacking, defending) -> Assert.assertFalse(defending.lastMoveSucceeded())
+                (battle, attacking, defending) -> defending.assertLastMoveSucceeded(false)
         );
 
         // Powder doesn't work on Pokemon with Safety Goggles
         powderTest(
                 AttackNamesies.POWDER, false,
                 new TestInfo().attacking(PokemonNamesies.SQUIRTLE, ItemNamesies.SAFETY_GOGGLES),
-                (battle, attacking, defending) -> Assert.assertFalse(defending.lastMoveSucceeded())
+                (battle, attacking, defending) -> defending.assertLastMoveSucceeded(false)
         );
 
         // Powder only affects Fire-type moves
@@ -1525,11 +1525,11 @@ public class AttackTest extends BaseTest {
         testInfo.manipulate(battle);
 
         battle.fight(AttackNamesies.POWDER, attackNamesies);
-        Assert.assertTrue(attacking.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(true);
 
         defending.assertHealthRatio(explodes && !defending.hasAbility(AbilityNamesies.MAGIC_GUARD) ? .75 : 1);
         if (explodes) {
-            Assert.assertFalse(defending.lastMoveSucceeded());
+            defending.assertLastMoveSucceeded(false);
             attacking.assertFullHealth();
             attacking.assertNoStatus();
             attacking.assertNoStages();
@@ -1552,38 +1552,38 @@ public class AttackTest extends BaseTest {
 
         // Fails if the target isn't poisoned
         battle.attackingFight(AttackNamesies.VENOM_DRENCH);
-        Assert.assertFalse(attacking.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(false);
         defending.assertNoStatus();
         defending.assertNoStages();
 
         // Add regular poison
         battle.attackingFight(AttackNamesies.POISON_POWDER);
-        Assert.assertTrue(attacking.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(true);
         defending.assertRegularPoison();
         defending.assertNoStages();
 
         // Venon Drench is a success
         battle.attackingFight(AttackNamesies.VENOM_DRENCH);
-        Assert.assertTrue(attacking.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(true);
         defending.assertRegularPoison();
         defending.assertStages(new TestStages().set(-1, Stat.ATTACK).set(-1, Stat.SP_ATTACK).set(-1, Stat.SPEED));
 
         // Remove stat changes and status condition
         battle.fight(AttackNamesies.HAZE, AttackNamesies.REFRESH);
-        Assert.assertTrue(attacking.lastMoveSucceeded());
-        Assert.assertTrue(defending.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(true);
+        defending.assertLastMoveSucceeded(true);
         defending.assertNoStatus();
         defending.assertNoStages();
 
         // Add bad poison
         battle.attackingFight(AttackNamesies.TOXIC);
-        Assert.assertTrue(attacking.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(true);
         defending.assertBadPoison();
         defending.assertNoStages();
 
         // Make sure it works on bad poison as well
         battle.attackingFight(AttackNamesies.VENOM_DRENCH);
-        Assert.assertTrue(attacking.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(true);
         defending.assertBadPoison();
         defending.assertStages(new TestStages().set(-1, Stat.ATTACK).set(-1, Stat.SP_ATTACK).set(-1, Stat.SPEED));
     }
@@ -1651,19 +1651,19 @@ public class AttackTest extends BaseTest {
             attacking.assertNotFullHealth();
             defending.assertNotFullHealth();
 
-            Assert.assertTrue(attacking.lastMoveSucceeded());
-            Assert.assertTrue(defending.lastMoveSucceeded());
+            attacking.assertLastMoveSucceeded(true);
+            defending.assertLastMoveSucceeded(true);
         });
 
         // Me First goes second (failureeee)
         meFirstTest(1.0, null, AttackNamesies.FALSE_SWIPE, AttackNamesies.ME_FIRST, (battle, attacking, defending) -> {
             // False Swipe hits defending
             defending.assertNotFullHealth();
-            Assert.assertTrue(attacking.lastMoveSucceeded());
+            attacking.assertLastMoveSucceeded(true);
 
             // Me First fails and attacking is fine
             attacking.assertFullHealth();
-            Assert.assertFalse(defending.lastMoveSucceeded());
+            defending.assertLastMoveSucceeded(false);
         });
 
         // Me First goes first, but opponent is using a status move (failureeee)
@@ -1675,8 +1675,8 @@ public class AttackTest extends BaseTest {
             attacking.assertFullHealth();
             defending.assertFullHealth();
 
-            Assert.assertFalse(attacking.lastMoveSucceeded());
-            Assert.assertTrue(defending.lastMoveSucceeded());
+            attacking.assertLastMoveSucceeded(false);
+            defending.assertLastMoveSucceeded(true);
         });
     }
 
@@ -1709,7 +1709,7 @@ public class AttackTest extends BaseTest {
         attacking.assertNoStatus();
         attacking.assertStages(new TestStages());
         defending.assertStages(new TestStages());
-        Assert.assertFalse(attacking.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(false);
 
         // Nighty night
         battle.defendingFight(AttackNamesies.SING);
@@ -1720,7 +1720,7 @@ public class AttackTest extends BaseTest {
         attacking.assertHasStatus(StatusNamesies.ASLEEP);
         attacking.assertStages(new TestStages());
         defending.assertStages(new TestStages().set(-1, Stat.ATTACK));
-        Assert.assertTrue(attacking.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(true);
 
         battle.splashFight();
         battle.splashFight();
@@ -1741,7 +1741,7 @@ public class AttackTest extends BaseTest {
         attacking.assertHasStatus(StatusNamesies.ASLEEP);
         attacking.assertFullHealth();
         defending.assertFullHealth();
-        Assert.assertFalse(attacking.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(false);
     }
 
     @Test
@@ -1902,11 +1902,11 @@ public class AttackTest extends BaseTest {
                 AttackNamesies.COUNTER,
                 (battle, attacking, defending) -> {
                     // TODO: This isn't working because it sets the category back at the end of the move, before Counter is activated
-//                    Assert.assertTrue(defending.lastMoveSucceeded());
+//                    defending.assertLastMoveSucceeded(true);
 //                    attacking.assertNotFullHealth();
                 },
                 (battle, attacking, defending) -> {
-                    Assert.assertFalse(defending.lastMoveSucceeded());
+                    defending.assertLastMoveSucceeded(false);
                     attacking.assertFullHealth();
                 }
         );
@@ -1916,11 +1916,11 @@ public class AttackTest extends BaseTest {
                 AttackNamesies.MIRROR_COAT,
                 (battle, attacking, defending) -> {
                     // Same deal as above
-//                    Assert.assertFalse(defending.lastMoveSucceeded());
+//                    defending.assertLastMoveSucceeded(false);
 //                    attacking.assertFullHealth();
                 },
                 (battle, attacking, defending) -> {
-                    Assert.assertTrue(defending.lastMoveSucceeded());
+                    defending.assertLastMoveSucceeded(true);
                     attacking.assertNotFullHealth();
                 }
         );
@@ -1972,7 +1972,7 @@ public class AttackTest extends BaseTest {
         // Photon Geyser always succeeds
         Move lastMoveUsed = attacking.getLastMoveUsed();
         Assert.assertNotNull(lastMoveUsed);
-        Assert.assertTrue(attacking.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(true);
 
         // Photon Geyser should always remain Special regardless of category used in fight
         Attack photonGeyser = lastMoveUsed.getAttack();
@@ -1990,7 +1990,7 @@ public class AttackTest extends BaseTest {
         battle.defendingFight(AttackNamesies.DARK_VOID);
         attacking.assertNoStatus();
         defending.assertNoStatus();
-        Assert.assertFalse(defending.lastMoveSucceeded());
+        defending.assertLastMoveSucceeded(false);
 
         // BUT DARKRAI CAN
         battle.attackingFight(AttackNamesies.DARK_VOID);
@@ -2019,7 +2019,7 @@ public class AttackTest extends BaseTest {
         battle.defendingFight(AttackNamesies.DARK_VOID);
         attacking.assertNoStatus();
         defending.assertNoStatus();
-        Assert.assertFalse(defending.lastMoveSucceeded());
+        defending.assertLastMoveSucceeded(false);
         attacking.withAbility(AbilityNamesies.NO_ABILITY);
 
         // Who's not a Darkrai now?????? (Not Ditto)
@@ -2226,7 +2226,7 @@ public class AttackTest extends BaseTest {
 
         // Okay let's actually stuff our cheeks with berries or something
         battle.fight(AttackNamesies.STUFF_CHEEKS, defendingAttack);
-        Assert.assertEquals(success || defendingAttack == AttackNamesies.SNATCH, attacking.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(success || defendingAttack == AttackNamesies.SNATCH);
         attacking.assertStages(stages);
 
         // If successful, make sure berry was consumed
@@ -2331,7 +2331,7 @@ public class AttackTest extends BaseTest {
 
         // Reflect Type should fail against non-types
         battle.attackingFight(AttackNamesies.REFLECT_TYPE);
-        Assert.assertFalse(attacking.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(false);
         reflectTypeTest(battle, attacking, Type.GRASS, Type.POISON);
         reflectTypeTest(battle, defending, Type.NO_TYPE);
     }
@@ -2360,5 +2360,45 @@ public class AttackTest extends BaseTest {
         Type secondBase = baseType.getSecondType();
         Assert.assertEquals(type.isType(firstBase), p.isType(battle, firstBase));
         Assert.assertEquals(type.isType(secondBase), p.isType(battle, secondBase));
+    }
+
+    @Test
+    public void counteringTest() {
+        // Counter only reflects physical moves
+        counteringTest(true, AttackNamesies.TACKLE, AttackNamesies.COUNTER);
+        counteringTest(false, AttackNamesies.SWIFT, AttackNamesies.COUNTER);
+
+        // Mirror Coat only reflects special moves
+        counteringTest(false, AttackNamesies.TACKLE, AttackNamesies.MIRROR_COAT);
+        counteringTest(true, AttackNamesies.SWIFT, AttackNamesies.MIRROR_COAT);
+
+        // Moves that hit multiple times should accumulate damage to be countered
+        counteringTest(true, AttackNamesies.TWINEEDLE, AttackNamesies.COUNTER);
+        counteringTest(true, AttackNamesies.WATER_SHURIKEN, AttackNamesies.MIRROR_COAT);
+
+        // False Swipe at 1 HP should take no damage and nothing to Counter
+        counteringTest(
+                false, AttackNamesies.FALSE_SWIPE, AttackNamesies.COUNTER,
+                (battle, attacking, defending) -> battle.falseSwipePalooza(true)
+        );
+    }
+
+    private void counteringTest(boolean shouldCounter, AttackNamesies attackingMove, AttackNamesies counteringMove) {
+        counteringTest(shouldCounter, attackingMove, counteringMove, PokemonManipulator.empty());
+    }
+
+    private void counteringTest(boolean shouldCounter, AttackNamesies attackingMove, AttackNamesies counteringMove, PokemonManipulator setup) {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        setup.manipulate(battle);
+
+        battle.fight(attackingMove, counteringMove);
+        defending.assertLastMoveSucceeded(shouldCounter);
+
+        int missingHp = defending.getMaxHP() - defending.getHP();
+        defending.assertMissingHp(missingHp);
+        attacking.assertMissingHp(shouldCounter ? 2*missingHp : 0);
     }
 }

@@ -322,6 +322,10 @@ public class TestPokemon extends ActivePokemon {
         }
     }
 
+    public void assertLastMoveSucceeded(boolean success) {
+        Assert.assertEquals(success, this.lastMoveSucceeded());
+    }
+
     public static TestPokemon newPlayerPokemon(final PokemonNamesies pokemon) {
         return new TestPokemon(pokemon, TrainerType.PLAYER);
     }

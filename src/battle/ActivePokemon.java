@@ -86,7 +86,7 @@ public class ActivePokemon extends PartyPokemon {
     private Move lastMoveUsed;
     private Serializable castSource;
     private int counter;
-    private int damageTaken;
+    private int directDamageTaken;
     private boolean damageAbsorbed;
     private double successionDecayRate;
     private boolean firstTurn;
@@ -769,7 +769,6 @@ public class ActivePokemon extends PartyPokemon {
         int prev = this.getHP();
         this.setHP(prev - amount);
         int taken = prev - this.getHP();
-        damageTaken = taken;
 
         // Enduring the hit
         if (this.getHP() == 0 && directDamage) {
@@ -782,9 +781,13 @@ public class ActivePokemon extends PartyPokemon {
             }
         }
 
+        if (directDamage) {
+            directDamageTaken += taken;
+        }
+
         Messages.add(new MessageUpdate().updatePokemon(b, this));
 
-        if (!isFainted(b, directDamage)) {
+        if (!this.isFainted(b, directDamage)) {
             DamageTakenEffect.invokeDamageTakenEffect(b, this);
         }
 
@@ -927,12 +930,13 @@ public class ActivePokemon extends PartyPokemon {
         firstTurn = false;
     }
 
+    // Return the amount of direct damage taken so far this turn
     public int getDamageTaken() {
-        return damageTaken;
+        return directDamageTaken;
     }
 
     public boolean hasTakenDamage() {
-        return damageTaken > 0;
+        return directDamageTaken > 0;
     }
 
     // Different than just checking if opposing damageDealt is 0 because things like False Swipe should trigger
@@ -950,12 +954,8 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public void resetTurn() {
-        resetDamageTaken();
         setReducePP(false);
-    }
-
-    private void resetDamageTaken() {
-        damageTaken = 0;
+        directDamageTaken = 0;
         damageAbsorbed = false;
     }
 

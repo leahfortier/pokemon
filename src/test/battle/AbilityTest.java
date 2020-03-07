@@ -329,8 +329,8 @@ public class AbilityTest extends BaseTest {
         // Will still succeed and cut health when at -6 instead of +6 for Contrary :(
         battle.emptyHeal();
         battle.fight(AttackNamesies.BELLY_DRUM, AttackNamesies.BELLY_DRUM);
-        Assert.assertFalse(attacking.lastMoveSucceeded());
-        Assert.assertTrue(defending.lastMoveSucceeded());
+        attacking.assertLastMoveSucceeded(false);
+        defending.assertLastMoveSucceeded(true);
         attacking.assertHealthRatio(1);
         defending.assertHealthRatio(.5);
         attacking.assertStages(new TestStages().set(6, Stat.ATTACK));
@@ -1191,12 +1191,12 @@ public class AbilityTest extends BaseTest {
                 (battle, attacking, defending) -> {
                     attacking.assertAbility(AbilityNamesies.OVERGROW);
                     defending.assertChangedAbility(AbilityNamesies.NO_ABILITY);
-                    Assert.assertTrue(attacking.lastMoveSucceeded());
+                    attacking.assertLastMoveSucceeded(true);
                 },
                 (battle, attacking, defending) -> {
                     attacking.assertChangedAbility(AbilityNamesies.NO_ABILITY);
                     defending.assertAbility(AbilityNamesies.MAGIC_BOUNCE);
-                    Assert.assertTrue(attacking.lastMoveSucceeded());
+                    attacking.assertLastMoveSucceeded(true);
                 }
         );
 
@@ -1208,12 +1208,12 @@ public class AbilityTest extends BaseTest {
                 (battle, attacking, defending) -> {
                     attacking.assertAbility(AbilityNamesies.RKS_SYSTEM);
                     defending.assertChangedAbility(AbilityNamesies.NO_ABILITY);
-                    Assert.assertTrue(attacking.lastMoveSucceeded());
+                    attacking.assertLastMoveSucceeded(true);
                 },
                 (battle, attacking, defending) -> {
                     attacking.assertAbility(AbilityNamesies.RKS_SYSTEM);
                     defending.assertAbility(AbilityNamesies.MAGIC_BOUNCE);
-                    Assert.assertFalse(attacking.lastMoveSucceeded());
+                    attacking.assertLastMoveSucceeded(false);
                 }
         );
 
@@ -1221,7 +1221,7 @@ public class AbilityTest extends BaseTest {
         magicBounceTest(
                 AttackNamesies.HEAL_PULSE,
                 new TestInfo(),
-                (battle, attacking, defending) -> Assert.assertFalse(attacking.lastMoveSucceeded())
+                (battle, attacking, defending) -> attacking.assertLastMoveSucceeded(false)
         );
 
         // Heal Pulse with enemy not at full
@@ -1236,13 +1236,13 @@ public class AbilityTest extends BaseTest {
                     // Use the move as expected
                     attacking.assertFullHealth();
                     defending.assertFullHealth();
-                    Assert.assertTrue(attacking.lastMoveSucceeded());
+                    attacking.assertLastMoveSucceeded(true);
                 },
                 (battle, attacking, defending) -> {
                     // Fails when reflected because user has full health
                     attacking.assertFullHealth();
                     defending.assertNotFullHealth();
-                    Assert.assertFalse(attacking.lastMoveSucceeded());
+                    attacking.assertLastMoveSucceeded(false);
                 }
         );
 
@@ -1258,13 +1258,13 @@ public class AbilityTest extends BaseTest {
                     // Fails because defending has full health
                     attacking.assertNotFullHealth();
                     defending.assertFullHealth();
-                    Assert.assertFalse(attacking.lastMoveSucceeded());
+                    attacking.assertLastMoveSucceeded(false);
                 },
                 (battle, attacking, defending) -> {
                     // Even though defending is full, is reflected so uses attacking's health (and then healing it)
                     attacking.assertFullHealth();
                     defending.assertFullHealth();
-                    Assert.assertTrue(attacking.lastMoveSucceeded());
+                    attacking.assertLastMoveSucceeded(true);
                 }
         );
 
@@ -1281,7 +1281,7 @@ public class AbilityTest extends BaseTest {
                 (battle, attacking, defending) -> {
                     attacking.assertStages(new TestStages());
                     defending.assertStages(new TestStages());
-                    Assert.assertFalse(attacking.lastMoveSucceeded());
+                    attacking.assertLastMoveSucceeded(false);
                 }
         );
 

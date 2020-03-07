@@ -406,7 +406,7 @@ public class ItemTest extends BaseTest {
 
         // Lum Berry should activate to remove the burn
         battle.defendingFight(AttackNamesies.WILL_O_WISP);
-        Assert.assertTrue(defending.lastMoveSucceeded());
+        defending.assertLastMoveSucceeded(true);
         attacking.assertNoStatus();
 
         // Lum Berry has already been consumed, so the burn should remain

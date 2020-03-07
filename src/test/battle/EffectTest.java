@@ -432,7 +432,7 @@ public class EffectTest extends BaseTest {
                     defending.assertHoldingItem(ItemNamesies.POTION);
                 },
                 (battle, attacking, defending) -> {
-                    Assert.assertFalse(defending.lastMoveSucceeded());
+                    defending.assertLastMoveSucceeded(false);
                     attacking.assertHoldingItem(ItemNamesies.POTION);
                     defending.assertNotHoldingItem();
                 }
@@ -737,7 +737,7 @@ public class EffectTest extends BaseTest {
                             Assert.assertTrue(attacking.isLevitating(battle));
 
                             battle.defendingFight(AttackNamesies.EARTHQUAKE);
-                            Assert.assertFalse(defending.lastMoveSucceeded());
+                            defending.assertLastMoveSucceeded(false);
                             Assert.assertTrue(attacking.isLevitating(battle));
                             attacking.assertHoldingItem(ItemNamesies.AIR_BALLOON);
 

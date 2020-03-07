@@ -5622,6 +5622,7 @@ public abstract class Attack implements AttackInterface {
     }
 
     // Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
+    // Do not need to check if victim has a valid move or confirm not first attack because can only take direct damage if both of those checks succeed
     static class MirrorCoat extends Attack implements FixedDamageMove {
         private static final long serialVersionUID = 1L;
 
@@ -5636,16 +5637,17 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public int getFixedDamageAmount(ActivePokemon me, ActivePokemon o) {
-            return me.getDamageTaken();
+            return 2*me.getDamageTaken();
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasTakenDamage() && victim.getMove() != null && victim.getAttack().getCategory() == MoveCategory.SPECIAL && !b.isFirstAttack();
+            return user.hasTakenDamage() && victim.getAttack().getCategory() == MoveCategory.SPECIAL;
         }
     }
 
     // Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
+    // Do not need to check if victim has a valid move or confirm not first attack because can only take direct damage if both of those checks succeed
     static class Counter extends Attack implements FixedDamageMove {
         private static final long serialVersionUID = 1L;
 
@@ -5661,12 +5663,12 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public int getFixedDamageAmount(ActivePokemon me, ActivePokemon o) {
-            return me.getDamageTaken();
+            return 2*me.getDamageTaken();
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasTakenDamage() && victim.getMove() != null && victim.getAttack().getCategory() == MoveCategory.PHYSICAL && !b.isFirstAttack();
+            return user.hasTakenDamage() && victim.getAttack().getCategory() == MoveCategory.PHYSICAL;
         }
     }
 
