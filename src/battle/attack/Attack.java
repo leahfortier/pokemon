@@ -10,6 +10,7 @@ import battle.effect.EffectInterfaces.DoubleDigger;
 import battle.effect.EffectInterfaces.DoubleDiver;
 import battle.effect.EffectInterfaces.DoubleFlyer;
 import battle.effect.EffectInterfaces.DoubleMinimizerMove;
+import battle.effect.EffectInterfaces.IntegerHolder;
 import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MoldBreakerEffect;
@@ -7296,8 +7297,12 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Bide extends Attack {
+    static class Bide extends Attack implements FixedDamageMove {
         private static final long serialVersionUID = 1L;
+
+        // True when trying to originally cast the Bide effect through the traditional attack means
+        // Will be false however when the effect releasing the damaging attack on the enemy
+        private boolean castingAttack;
 
         Bide() {
             super(AttackNamesies.BIDE, Type.NORMAL, MoveCategory.PHYSICAL, 10, "The user endures attacks for two turns, then strikes back to cause double the damage taken.");
@@ -7310,8 +7315,37 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
-            return false;
+        public int getFixedDamageAmount(ActivePokemon me, ActivePokemon o) {
+            return ((IntegerHolder)me.getEffect(PokemonEffectNamesies.BIDE)).getInteger();
+        }
+
+        @Override
+        public boolean isStatusMove() {
+            // Behaves like a status move for all intents and purposes while casting the future attack
+            // Won't apply damage, won't check type advantage, will print failure, etc.
+            return this.castingAttack;
+        }
+
+        @Override
+        public boolean ignoreAccuracyCheck() {
+            // Cannot miss casting the effect (but can miss through traditional accuracy checks when executing the attack effect)
+            return this.castingAttack || super.ignoreAccuracyCheck();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Only give effects when casting!
+            return this.castingAttack;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.castingAttack = true;
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.castingAttack = false;
         }
     }
 

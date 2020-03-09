@@ -993,6 +993,13 @@ EntryHazard:
         return {0};
         ###
 *
+IntegerHolder:
+    AddInterface: IntegerHolder
+    Header: int getInteger()
+    Body:
+        return {0};
+        ###
+*
 BooleanHolder:
     AddInterface: BooleanHolder
     Header: boolean getBoolean()
@@ -1678,8 +1685,8 @@ AddTypeMove:
         return !victim.getType(b).isType(Type.{00});
         ###
 *
-FutureAttackMove:
-    AddMapField: TeamEffect: {0}
+# Things like Bide or Future Sight
+CastEffectDelayedAttackMove:
     AddMapField: IsStatusMove:
         // Behaves like a status move for all intents and purposes while casting the future attack
         // Won't apply damage, won't check type advantage, will print failure, etc.
@@ -1690,7 +1697,6 @@ FutureAttackMove:
         // Only give effects when casting!
         return this.castingAttack;
         ###
-    AddMapField: MoveType: Protect_Piercing, Mirrorless
     AddMapField: Field:
         // True when trying to originally cast the {0} effect through the traditional attack means
         // Will be false however when the effect releasing the damaging attack on the enemy
@@ -1703,6 +1709,11 @@ FutureAttackMove:
         this.castingAttack = false;
         ###
 *
+FutureAttackMove:
+    AddMapField: TeamEffect: {0}
+    AddMapField: MoveType: Protect_Piercing, Mirrorless
+    AddMapField: CastEffectDelayedAttackMove: {0}
+*
 FutureAttackEffect:
     AddMapField: NumTurns: 3
     AddMapField: Field:
@@ -1710,19 +1721,7 @@ FutureAttackEffect:
         ###
     AddMapField: Subside:
         Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
-
-        theSeeer.callTempMove(
-                AttackNamesies.{00},
-                () -> {
-                    // Accuracy check is handled manually here (ignored when casting)
-                    if (b.accuracyCheck(theSeeer, p)) {
-                        theSeeer.getAttack().apply(theSeeer, p, b);
-                    } else {
-                        // Don't think we need to call effects that take place on a miss here since it's a non-traditional miss
-                        Messages.add(p.getName() + " avoided the attack!");
-                    }
-                }
-        );
+        theSeeer.callDelayedMove(b, p, AttackNamesies.{00});
         ###
     AddMapField: BeforeCast:
         theSeeer = caster;
@@ -1963,7 +1962,7 @@ AbsorbDamage:
     Header: boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount)
 *
 DamageTaken:
-    Header: void damageTaken(Battle b, ActivePokemon damageTaker)
+    Header: void damageTaken(Battle b, ActivePokemon damageTaker, int damageAmount)
 *
 SapHealthMove:
     AddInterface: SapHealthMove

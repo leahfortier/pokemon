@@ -43,6 +43,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AttackTest extends BaseTest {
     @Test
@@ -1686,6 +1687,24 @@ public class AttackTest extends BaseTest {
 //                (battle, attacking, defending) -> defending.assertHp(1)
                 PokemonManipulator.empty()
         );
+
+        // Should fail against Wonder Guard
+        futureSightTest(false, new TestInfo(PokemonNamesies.ESPEON, PokemonNamesies.SHEDINJA)
+                .defending(AbilityNamesies.WONDER_GUARD));
+
+        // Life Orb will affect Future Sight damage and will cause the seeer to take damage
+        futureSightTest(
+                true,
+                new TestInfo(PokemonNamesies.ESPEON, PokemonNamesies.EEVEE).attacking(ItemNamesies.LIFE_ORB),
+                (battle, attacking, defending) -> {
+                    attacking.setExpectedDamageModifier(5324.0/4096.0);
+                    battle.splashFight();
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHealthRatio(.9);
+                    defending.assertNotFullHealth();
+                }
+        );
     }
 
     private void futureSightTest(boolean success, TestInfo testInfo) {
@@ -1742,6 +1761,245 @@ public class AttackTest extends BaseTest {
             battle.getDefending().assertNotFullHealth();
         } else {
             battle.getDefending().assertFullHealth();
+        }
+
+        afterCheck.manipulate(battle);
+    }
+
+    @Test
+    public void bideTest() {
+        // Basic Bide -- attack and attack and retaliate
+        bideTest(true, new TestInfo());
+
+        // Bide should work with Fixed Damage moves
+        bideTest(
+                true, new TestInfo(),
+                AttackNamesies.SONIC_BOOM, AttackNamesies.SPLASH,
+                (battle, attacking, defending) -> {
+                    attacking.assertMissingHp(20);
+                    defending.assertMissingHp(40);
+                }
+        );
+
+        // Should fail against a Ghost-type Pokemon
+        bideTest(false, new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.GASTLY));
+
+        // Can start Bide against a Ghost-type and then hit a non-Ghost replacement
+        bideTest(
+                true,
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.GASTLY)
+                        .asTrainerBattle().addDefending(PokemonNamesies.BLISSEY),
+                AttackNamesies.BATON_PASS,
+                AttackNamesies.SONIC_BOOM,
+                (battle, attacking, defending) -> {
+                    defending.assertSpecies(PokemonNamesies.BLISSEY);
+                    attacking.assertMissingHp(20);
+                    defending.assertMissingHp(40);
+                }
+        );
+
+        // Should fail if during execute the other Pokemon is semi-invulnerable
+        bideTest(
+                false,
+                new TestInfo(),
+                AttackNamesies.FALSE_SWIPE,
+                AttackNamesies.FLY,
+                (battle, attacking, defending) -> {
+                    // Don't need to set up move since Fly is already set up and ready for next turn
+                    Assert.assertTrue(defending.isSemiInvulnerableFlying());
+                    attacking.assertNotFullHealth();
+                    defending.assertFullHealth();
+                },
+                (battle, attacking, defending) -> {
+                    // Not flying anymore by the end of the turn, but should have been flying while Bide was released
+                    Assert.assertFalse(defending.isSemiInvulnerableFlying());
+                    attacking.assertNotFullHealth();
+                    defending.assertFullHealth();
+                }
+        );
+
+        // Unless something like No Guard (that bypasses semi-invulnerable) is in play
+        AtomicInteger beforeBideReleaseMissingHp = new AtomicInteger();
+        bideTest(
+                true,
+                new TestInfo().defending(AbilityNamesies.NO_GUARD),
+                AttackNamesies.FALSE_SWIPE,
+                AttackNamesies.FLY,
+                (battle, attacking, defending) -> {
+                    // Don't need to set up move since Fly is already set up and ready for next turn
+                    Assert.assertTrue(defending.isSemiInvulnerableFlying());
+                    attacking.assertNotFullHealth();
+                    defending.assertFullHealth();
+
+                    // Fly will hit after Bide is released, but will then contribute more damage to attacking using Fly
+                    // Want to make sure that Bide is hitting for double of the CURRENT hp loss
+                    setBeforeBide(battle, beforeBideReleaseMissingHp);
+                },
+                (battle, attacking, defending) -> {
+                    // Not flying anymore by the end of the turn
+                    Assert.assertFalse(defending.isSemiInvulnerableFlying());
+
+                    // Attacking should have taken more damage after Bide was released from Fly
+                    checkAfterBide(battle, beforeBideReleaseMissingHp);
+                }
+        );
+
+        // Endure should work with Bide and defending Pokemon should not die
+        // Kartana has high attack and low HP, while Blissey has high HP and low defense
+        // Two False Swipe should be enough to take Blissey to 1 HP, which twice that missing health is way more
+        // than Kartana's HP, so with Endure it will be reduce to 1
+        bideTest(
+                true,
+                new TestInfo(PokemonNamesies.BLISSEY, PokemonNamesies.KARTANA)
+                        .defendingFight(AttackNamesies.SWORDS_DANCE)
+                        .defendingFight(AttackNamesies.SWORDS_DANCE)
+                        .defendingFight(AttackNamesies.SWORDS_DANCE),
+                AttackNamesies.FALSE_SWIPE, AttackNamesies.FALSE_SWIPE,
+                (battle, attacking, defending) -> {
+                    // Endure is an increased priority move so it will go before Bide releases
+                    attacking.assertHp(1);
+                    defending.assertFullHealth();
+                    defending.setMove(new Move(AttackNamesies.ENDURE));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHp(1);
+                    defending.assertHp(1);
+                }
+        );
+
+        // Should fail against Wonder Guard
+        bideTest(false, new TestInfo().defending(AbilityNamesies.WONDER_GUARD));
+
+        // Bide should work with indirect damage such as Burn
+        bideTest(
+                true, new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE),
+                AttackNamesies.WILL_O_WISP, AttackNamesies.SPLASH,
+                (battle, attacking, defending) -> {
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+                    attacking.assertHealthRatio(14/16.0, 1);
+                    setBeforeBide(battle, beforeBideReleaseMissingHp);
+                    defending.setMove(new Move(AttackNamesies.SPLASH));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+                    attacking.assertHealthRatio(13/16.0, 2);
+                    checkAfterBide(battle, beforeBideReleaseMissingHp);
+                }
+        );
+
+        // Bide should be unaffected by healing effects
+        // Using SonicBoom first to make sure there's at least 10 HP to heal with Oran Berry
+        bideTest(
+                true, new TestInfo().defending(ItemNamesies.ORAN_BERRY),
+                AttackNamesies.SONIC_BOOM, AttackNamesies.FLING,
+                (battle, attacking, defending) -> defending.setMove(new Move(AttackNamesies.SPLASH)),
+                (battle, attacking, defending) -> {
+                    attacking.assertNotFullHealth();
+                    int missingHp = attacking.getMaxHP() - attacking.getHP();
+                    attacking.assertMissingHp(missingHp);
+                    defending.assertMissingHp(2*(missingHp + 10));
+                }
+        );
+    }
+
+    // Used when additional damage will be taken after Bide is released
+    // Intended to be used in conjunction with checkAfterBide
+    private void setBeforeBide(TestBattle battle, AtomicInteger beforeBideReleaseMissingHp) {
+        TestPokemon attacking = battle.getAttacking();
+        beforeBideReleaseMissingHp.set(attacking.getMaxHP() - attacking.getHP());
+        attacking.assertMissingHp(beforeBideReleaseMissingHp.get());
+    }
+
+    // Used when additional damage will be taken after Bide is released
+    // Intended to be used in conjunction with setBeforeBide
+    private void checkAfterBide(TestBattle battle, AtomicInteger beforeBideReleaseMissingHp) {
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Only makes sense to use this if additional damage has been taken after Bide was released
+        int currentMissingHp = attacking.getMaxHP() - attacking.getHP();
+        TestUtils.assertGreater(currentMissingHp, beforeBideReleaseMissingHp.get());
+
+        // Defending will have taken twice the amount of damage since before Bide, but irrelevant to later damage
+        attacking.assertMissingHp(currentMissingHp);
+        defending.assertMissingHp(2*beforeBideReleaseMissingHp.get());
+    }
+
+    private void bideTest(boolean success, TestInfo testInfo) {
+        bideTest(success, testInfo, AttackNamesies.FALSE_SWIPE, AttackNamesies.FALSE_SWIPE, PokemonManipulator.empty());
+    }
+
+    private void bideTest(boolean success, TestInfo testInfo, AttackNamesies firstAttack, AttackNamesies secondAttack, PokemonManipulator afterCheck) {
+        // Includes the most obvious way to check Bide's success -- defending Pokemon has taken twice as much damage as attacking
+        bideTest(
+                success, testInfo, firstAttack, secondAttack,
+                (battle, attacking, defending) -> defending.setMove(new Move(AttackNamesies.SPLASH)),
+                (battle, attacking, defending) -> {
+                    // If success, defending Pokemon will have taken twice as much damage as attacking
+                    if (success) {
+                        attacking.assertNotFullHealth();
+                        int missingHp = attacking.getMaxHP() - attacking.getHP();
+                        attacking.assertMissingHp(missingHp);
+                        defending.assertMissingHp(2*missingHp);
+                    } else {
+                        defending.assertFullHealth();
+                    }
+
+                    afterCheck.manipulate(battle);
+                }
+        );
+    }
+
+    private void bideTest(boolean success, TestInfo testInfo, AttackNamesies firstAttack, AttackNamesies secondAttack,
+                          PokemonManipulator setThirdAttack, PokemonManipulator afterCheck) {
+        TestBattle battle = testInfo.copy(PokemonNamesies.SHUCKLE, PokemonNamesies.BLISSEY).createBattle();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        testInfo.manipulate(battle);
+
+        // Setup bide -- nothing is being forced until use
+        Move bide = new Move(AttackNamesies.BIDE);
+        attacking.setMove(bide);
+        defending.setMove(new Move(firstAttack));
+        Assert.assertFalse(Move.forceMove(battle, attacking));
+        Assert.assertEquals(bide, attacking.getMove());
+
+        // Use Bide and first defending move -- Bide effect should be in play and forced selection
+        // Reset defending in case of a Pokemon swap
+        battle.fight();
+        defending = battle.getDefending();
+        attacking.assertHasEffect(PokemonEffectNamesies.BIDE);
+        defending.assertNoEffect(PokemonEffectNamesies.BIDE);
+        defending.assertFullHealth();
+        Assert.assertTrue(Move.forceMove(battle, attacking));
+        Assert.assertEquals(bide, attacking.getMove());
+
+        // Buffer turn gathering bide damage
+        defending.setMove(new Move(secondAttack));
+        battle.fight();
+        defending = battle.getDefending();
+        attacking.assertHasEffect(PokemonEffectNamesies.BIDE);
+        defending.assertNoEffect(PokemonEffectNamesies.BIDE);
+        defending.assertFullHealth();
+        Assert.assertTrue(Move.forceMove(battle, attacking));
+        Assert.assertEquals(bide, attacking.getMove());
+
+        // This turn Bide should retaliate (defending turn occurs after Bide unless increased priority)
+        setThirdAttack.manipulate(battle);
+        battle.fight();
+        defending = battle.getDefending();
+        attacking.assertNoEffect(PokemonEffectNamesies.BIDE);
+        defending.assertNoEffect(PokemonEffectNamesies.BIDE);
+        Assert.assertFalse(Move.forceMove(battle, attacking));
+
+        // If successful, defending will take twice as much damage as attacking
+        defending = battle.getDefending();
+        if (success) {
+            attacking.assertNotFullHealth();
+            defending.assertNotFullHealth();
+        } else {
+            defending.assertFullHealth();
         }
 
         afterCheck.manipulate(battle);

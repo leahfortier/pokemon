@@ -199,7 +199,8 @@ Other random things:
         - Neutralizing Gas has exit message ("The effects of Neutralizing Gas wore off!") -- this would also be a switch out effect
     - I feel like Gastro Acid needs to be rewritten into suppression instead of changing the ability to none
     - Air Balloon cannot be recovered with Recycle or Pickup
-    - look at Bide -- don't think it's checking for things like type effectiveness or semi-invulnerable things; should it be direct damage or forced indirect? can it be eaten by substitute? I think it's direct damage but Idk -- also is it all damage taken including indirect damage from like statuses or something because the way it was changed (though to be fair it was even more broken before) will only be including the direct damage
     - Future Sight not working with things like Endure because PokemonEffects subside before TeamEffects
-        - can also probably include more Future Sight tests in regards to effects that take place during a regular turn like absorbing damage and shit
+    - pretty sure Dig will fail charging turn against a Flying Pokemon
+    - I think a lot of places that have an isFainted check probably also want to be checking that the Pokemon is still out front -- probably need a new isAliveAndFront method or something like that
+        - add test for Future Sight + Life Orb + swap seeer -- should still have boosted damage (I think?) but should not be taking damage from Life Orb (OnDamageEffects in general should not be applying to non-front Pokemon)
     

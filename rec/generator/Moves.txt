@@ -4295,10 +4295,9 @@ Bide:
     PokemonEffect: Bide
     SelfTarget: True
     Priority: 1
-    ShouldApplyDamage:
-        return false;
-        ###
     MoveType: Sleep_Talk_Fail, Mirrorless
+    FixedDamage: ((IntegerHolder)me.getEffect(PokemonEffectNamesies.BIDE)).getInteger()
+    CastEffectDelayedAttackMove: Bide
 *
 Autotomize:
     Desc: The user sheds part of its body to make itself lighter and sharply raise its Speed stat.

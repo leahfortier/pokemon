@@ -10,6 +10,7 @@ import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.AbilityHolder;
 import battle.effect.EffectInterfaces.AttackSelectionSelfBlockerEffect;
+import battle.effect.EffectInterfaces.IntegerHolder;
 import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.EffectInterfaces.LockingEffect;
 import battle.effect.EffectInterfaces.MessageGetter;
@@ -1796,7 +1797,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void damageTaken(Battle b, ActivePokemon damageTaker) {
+        public void damageTaken(Battle b, ActivePokemon damageTaker, int damageAmount) {
             Messages.add(damageTaker.getName() + " lost its focus and couldn't move!");
             damageTaker.getEffects().add(PokemonEffectNamesies.FLINCH.getEffect());
             this.deactivate();
@@ -2056,7 +2057,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Bide extends PokemonEffect implements ForceMoveEffect, EndTurnEffect {
+    static class Bide extends PokemonEffect implements ForceMoveEffect, DamageTakenEffect, IntegerHolder {
         private static final long serialVersionUID = 1L;
 
         private Move move;
@@ -2105,7 +2106,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
                 Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
             } else {
                 // RETALIATION STATION
-                b.getOtherPokemon(victim).reduceHealth(b, 2*this.damage);
+                victim.callDelayedMove(b, b.getOtherPokemon(victim), AttackNamesies.BIDE);
             }
 
             // Bye Bye Bidesies
@@ -2113,8 +2114,13 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void applyEndTurn(ActivePokemon victim, Battle b) {
-            damage += victim.getDamageTaken();
+        public void damageTaken(Battle b, ActivePokemon damageTaker, int damageAmount) {
+            this.damage += damageAmount;
+        }
+
+        @Override
+        public int getInteger() {
+            return 2*this.damage;
         }
     }
 

@@ -1409,14 +1409,14 @@ public final class InvokeInterfaces {
     }
 
     public interface DamageTakenEffect {
-        void damageTaken(Battle b, ActivePokemon damageTaker);
+        void damageTaken(Battle b, ActivePokemon damageTaker, int damageAmount);
 
-        static void invokeDamageTakenEffect(Battle b, ActivePokemon damageTaker) {
+        static void invokeDamageTakenEffect(Battle b, ActivePokemon damageTaker, int damageAmount) {
             List<InvokeEffect> invokees = b.getEffectsList(damageTaker);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof DamageTakenEffect && invokee.isActiveEffect()) {
                     DamageTakenEffect effect = (DamageTakenEffect)invokee;
-                    effect.damageTaken(b, damageTaker);
+                    effect.damageTaken(b, damageTaker, damageAmount);
                 }
             }
         }

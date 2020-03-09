@@ -68,6 +68,10 @@ public final class EffectInterfaces {
         Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
     }
 
+    public interface IntegerHolder {
+        int getInteger();
+    }
+
     public interface BooleanHolder {
         boolean getBoolean();
     }

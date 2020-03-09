@@ -389,19 +389,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         @Override
         public void subside(Battle b, ActivePokemon p) {
             Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
-
-            theSeeer.callTempMove(
-                    AttackNamesies.FUTURE_SIGHT,
-                    () -> {
-                        // Accuracy check is handled manually here (ignored when casting)
-                        if (b.accuracyCheck(theSeeer, p)) {
-                            theSeeer.getAttack().apply(theSeeer, p, b);
-                        } else {
-                            // Don't think we need to call effects that take place on a miss here since it's a non-traditional miss
-                            Messages.add(p.getName() + " avoided the attack!");
-                        }
-                    }
-            );
+            theSeeer.callDelayedMove(b, p, AttackNamesies.FUTURE_SIGHT);
         }
 
         @Override
@@ -427,19 +415,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         @Override
         public void subside(Battle b, ActivePokemon p) {
             Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
-
-            theSeeer.callTempMove(
-                    AttackNamesies.DOOM_DESIRE,
-                    () -> {
-                        // Accuracy check is handled manually here (ignored when casting)
-                        if (b.accuracyCheck(theSeeer, p)) {
-                            theSeeer.getAttack().apply(theSeeer, p, b);
-                        } else {
-                            // Don't think we need to call effects that take place on a miss here since it's a non-traditional miss
-                            Messages.add(p.getName() + " avoided the attack!");
-                        }
-                    }
-            );
+            theSeeer.callDelayedMove(b, p, AttackNamesies.DOOM_DESIRE);
         }
 
         @Override

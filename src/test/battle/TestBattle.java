@@ -13,6 +13,7 @@ import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
 import item.bag.Bag;
 import org.junit.Assert;
+import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
 import test.general.TestCharacter;
 import test.pokemon.TestPokemon;
@@ -160,6 +161,8 @@ public class TestBattle extends Battle {
             // Self-Target, field, and charging moves can't miss
             if (attack.isSelfTargetStatusMove()
                     || attack.isMoveType(MoveType.FIELD)
+                    || me.hasAbility(AbilityNamesies.NO_GUARD)
+                    || o.hasAbility(AbilityNamesies.NO_GUARD)
                     || (attack instanceof MultiTurnMove && ((MultiTurnMove)attack).isCharging())) {
                 Assert.assertTrue(bypass);
             } else if (!me.isPlayer()) {

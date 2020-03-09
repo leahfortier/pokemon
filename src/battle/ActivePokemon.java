@@ -287,6 +287,19 @@ public class ActivePokemon extends PartyPokemon {
         });
     }
 
+    // Executes a delayed move from an effect like Bide or Future Sight
+    // This will do an additional accuracy check (likely was skipped when casting the effect this is called from)
+    public void callDelayedMove(Battle b, ActivePokemon opp, AttackNamesies attack) {
+        this.callTempMove(attack, () -> {
+            if (b.accuracyCheck(this, opp)) {
+                this.getAttack().apply(this, opp, b);
+            } else {
+                // Don't think we need to call effects that take place on a miss here since it's a non-traditional miss
+                Messages.add(opp.getName() + " avoided the attack!");
+            }
+        });
+    }
+
     public void callTempMove(AttackNamesies tempMove, Action moveAction) {
         this.callTempMove(new Move(tempMove), moveAction);
     }
@@ -786,9 +799,8 @@ public class ActivePokemon extends PartyPokemon {
         }
 
         Messages.add(new MessageUpdate().updatePokemon(b, this));
-
         if (!this.isFainted(b, directDamage)) {
-            DamageTakenEffect.invokeDamageTakenEffect(b, this);
+            DamageTakenEffect.invokeDamageTakenEffect(b, this, taken);
         }
 
         return taken;

@@ -757,7 +757,7 @@ AbsorbDamageEffect:
 ***
 DamageTakenEffect:
     Method:
-        Header: void damageTaken(Battle b, ActivePokemon damageTaker)
+        Header: void damageTaken(Battle b, ActivePokemon damageTaker, int damageAmount)
         Invoke: void
         EffectList: damageTaker
     *

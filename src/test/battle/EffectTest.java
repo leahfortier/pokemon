@@ -336,7 +336,7 @@ public class EffectTest extends BaseTest {
     }
 
     private void testSemiInvulnerable(Boolean firstExpected, Boolean secondExpected, AttackNamesies multiTurnMove, AttackNamesies defendingMove, boolean fullyExecuted, TestInfo testInfo) {
-        testInfo.attacking(PokemonNamesies.SHUCKLE).defending(PokemonNamesies.SHUCKLE);
+        testInfo = testInfo.copy(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
 
         TestBattle battle = testInfo.createBattle();
         TestPokemon attacking = battle.getAttacking();
@@ -757,6 +757,62 @@ public class EffectTest extends BaseTest {
                         .defendingFight(AttackNamesies.BITE),
                 (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(1, Stat.ATTACK)),
                 (battle, attacking, defending) -> attacking.assertStages(new TestStages())
+        );
+
+        // Bide release should be blocked by Substitute
+        substituteTest(
+                new TestInfo(PokemonNamesies.BLISSEY, PokemonNamesies.SHUCKLE)
+                        .with((battle, attacking, defending) -> {
+                            attacking.assertFullHealth();
+                            defending.assertFullHealth();
+
+                            // Defending Bide will go first since it's an increased priority move
+                            battle.fight(AttackNamesies.FALSE_SWIPE, AttackNamesies.BIDE);
+                            attacking.assertFullHealth();
+                            defending.assertNotFullHealth();
+                            defending.assertHasEffect(PokemonEffectNamesies.BIDE);
+
+                            // Keep False Swiping to build up Bide damage
+                            battle.fight();
+                            attacking.assertFullHealth();
+                            defending.assertNotFullHealth();
+                            defending.assertHasEffect(PokemonEffectNamesies.BIDE);
+
+                            // Bide should be released this turn -- but should be blocked by substitute
+                            battle.fight();
+                            defending.assertNoEffect(PokemonEffectNamesies.BIDE);
+                        }),
+                (battle, attacking, defending) -> attacking.assertNotFullHealth(),
+                (battle, attacking, defending) -> attacking.assertFullHealth()
+        );
+
+        // Future Sight should be blocked by Substitute
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .with((battle, attacking, defending) -> {
+                            attacking.assertFullHealth();
+                            defending.assertFullHealth();
+
+                            // Cast Future Sight effect
+                            battle.setExpectedDefendingAccuracyBypass(true);
+                            battle.defendingFight(AttackNamesies.FUTURE_SIGHT);
+                            attacking.assertFullHealth();
+                            defending.assertFullHealth();
+                            battle.assertHasEffect(attacking, TeamEffectNamesies.FUTURE_SIGHT);
+
+                            // Do nothing and let the future reveal itself
+                            battle.setExpectedDefendingAccuracyBypass(null);
+                            battle.splashFight();
+                            attacking.assertFullHealth();
+                            defending.assertFullHealth();
+                            battle.assertHasEffect(attacking, TeamEffectNamesies.FUTURE_SIGHT);
+
+                            // The future is now and it says fuck you subsitute why can't I hurt you???
+                            battle.splashFight();
+                            battle.assertNoEffect(attacking, TeamEffectNamesies.FUTURE_SIGHT);
+                        }),
+                (battle, attacking, defending) -> attacking.assertNotFullHealth(),
+                (battle, attacking, defending) -> attacking.assertFullHealth()
         );
     }
 
