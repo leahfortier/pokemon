@@ -551,7 +551,7 @@ public class EffectTest extends BaseTest {
         // Should not get poisoned from Toxic Spikes when Baton Passed
         substituteTest(
                 new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
-                        .with((battle, attacking, defending) -> battle.addAttacking(PokemonNamesies.SQUIRTLE))
+                        .addAttacking(PokemonNamesies.SQUIRTLE)
                         .defendingFight(AttackNamesies.TOXIC_SPIKES)
                         .attackingFight(AttackNamesies.BATON_PASS)
                         .with((battle, attacking, defending) -> {
@@ -568,7 +568,7 @@ public class EffectTest extends BaseTest {
         // Should still absorb Toxic Spikes for Baton Pass to grounded Poison Poke though
         substituteTest(
                 new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
-                        .with((battle, attacking, defending) -> battle.addAttacking(PokemonNamesies.GRIMER))
+                        .addAttacking(PokemonNamesies.GRIMER)
                         .defendingFight(AttackNamesies.TOXIC_SPIKES)
                         .attackingFight(AttackNamesies.BATON_PASS),
                 (battle, attacking, defending) -> {
@@ -627,7 +627,7 @@ public class EffectTest extends BaseTest {
         substituteTest(
                 new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.HAPPINY)
                         .asTrainerBattle()
-                        .with((battle, attacking, defending) -> battle.addDefending(PokemonNamesies.SQUIRTLE))
+                        .addDefending(PokemonNamesies.SQUIRTLE)
                         .attacking(ItemNamesies.RED_CARD)
                         .defendingFight(AttackNamesies.SWIFT),
                 (battle, attacking, defending) -> {

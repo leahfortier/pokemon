@@ -200,5 +200,6 @@ Other random things:
     - I feel like Gastro Acid needs to be rewritten into suppression instead of changing the ability to none
     - Air Balloon cannot be recovered with Recycle or Pickup
     - look at Bide -- don't think it's checking for things like type effectiveness or semi-invulnerable things; should it be direct damage or forced indirect? can it be eaten by substitute? I think it's direct damage but Idk -- also is it all damage taken including indirect damage from like statuses or something because the way it was changed (though to be fair it was even more broken before) will only be including the direct damage
-        - similar with Future Sight -- does it damage a Pokemon that is semi-invulnerable? also looks like Future Sight shouldn't miss until execution
+    - Future Sight not working with things like Endure because PokemonEffects subside before TeamEffects
+        - can also probably include more Future Sight tests in regards to effects that take place during a regular turn like absorbing damage and shit
     

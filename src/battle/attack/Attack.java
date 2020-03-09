@@ -235,6 +235,7 @@ public abstract class Attack implements AttackInterface {
         return this.description;
     }
 
+    @Override
     public boolean isMoveType(MoveType moveType) {
         return this.moveTypes.contains(moveType);
     }
@@ -4413,6 +4414,10 @@ public abstract class Attack implements AttackInterface {
     static class FutureSight extends Attack {
         private static final long serialVersionUID = 1L;
 
+        // True when trying to originally cast the FutureSight effect through the traditional attack means
+        // Will be false however when the effect releasing the damaging attack on the enemy
+        private boolean castingAttack;
+
         FutureSight() {
             super(AttackNamesies.FUTURE_SIGHT, Type.PSYCHIC, MoveCategory.SPECIAL, 10, "Two turns after this move is used, a hunk of psychic energy attacks the target.");
             super.power = 120;
@@ -4423,19 +4428,41 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
-            // Don't apply damage just yet!!
-            return false;
+        public boolean isStatusMove() {
+            // Behaves like a status move for all intents and purposes while casting the future attack
+            // Won't apply damage, won't check type advantage, will print failure, etc.
+            return this.castingAttack;
         }
 
         @Override
-        public boolean canPrintFail() {
-            return true;
+        public boolean ignoreAccuracyCheck() {
+            // Cannot miss casting the effect (but can miss through traditional accuracy checks when executing the attack effect)
+            return this.castingAttack || super.ignoreAccuracyCheck();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Only give effects when casting!
+            return this.castingAttack;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.castingAttack = true;
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.castingAttack = false;
         }
     }
 
     static class DoomDesire extends Attack {
         private static final long serialVersionUID = 1L;
+
+        // True when trying to originally cast the DoomDesire effect through the traditional attack means
+        // Will be false however when the effect releasing the damaging attack on the enemy
+        private boolean castingAttack;
 
         DoomDesire() {
             super(AttackNamesies.DOOM_DESIRE, Type.STEEL, MoveCategory.SPECIAL, 5, "Two turns after this move is used, a concentrated bundle of light blasts the target.");
@@ -4447,14 +4474,32 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public boolean shouldApplyDamage(Battle b, ActivePokemon user) {
-            // Don't apply damage just yet!!
-            return false;
+        public boolean isStatusMove() {
+            // Behaves like a status move for all intents and purposes while casting the future attack
+            // Won't apply damage, won't check type advantage, will print failure, etc.
+            return this.castingAttack;
         }
 
         @Override
-        public boolean canPrintFail() {
-            return true;
+        public boolean ignoreAccuracyCheck() {
+            // Cannot miss casting the effect (but can miss through traditional accuracy checks when executing the attack effect)
+            return this.castingAttack || super.ignoreAccuracyCheck();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Only give effects when casting!
+            return this.castingAttack;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.castingAttack = true;
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            this.castingAttack = false;
         }
     }
 

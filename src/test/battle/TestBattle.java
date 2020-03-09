@@ -152,7 +152,7 @@ public class TestBattle extends Battle {
     }
 
     @Override
-    protected boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
+    public boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
         Boolean bypass = bypassAccuracy(me, o);
         if (bypass != null) {
             Attack attack = me.getAttack();

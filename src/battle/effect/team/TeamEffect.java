@@ -2,7 +2,6 @@ package battle.effect.team;
 
 import battle.ActivePokemon;
 import battle.Battle;
-import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
@@ -391,14 +390,18 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         public void subside(Battle b, ActivePokemon p) {
             Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 
-            Attack attack = AttackNamesies.FUTURE_SIGHT.getNewAttack();
-
-            // Don't do anything for moves that are uneffective
-            if (!attack.effective(b, theSeeer, p)) {
-                return;
-            }
-
-            theSeeer.callTempMove(attack.namesies(), () -> theSeeer.getAttack().applyDamage(theSeeer, p, b));
+            theSeeer.callTempMove(
+                    AttackNamesies.FUTURE_SIGHT,
+                    () -> {
+                        // Accuracy check is handled manually here (ignored when casting)
+                        if (b.accuracyCheck(theSeeer, p)) {
+                            theSeeer.getAttack().apply(theSeeer, p, b);
+                        } else {
+                            // Don't think we need to call effects that take place on a miss here since it's a non-traditional miss
+                            Messages.add(p.getName() + " avoided the attack!");
+                        }
+                    }
+            );
         }
 
         @Override
@@ -425,14 +428,18 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         public void subside(Battle b, ActivePokemon p) {
             Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
 
-            Attack attack = AttackNamesies.DOOM_DESIRE.getNewAttack();
-
-            // Don't do anything for moves that are uneffective
-            if (!attack.effective(b, theSeeer, p)) {
-                return;
-            }
-
-            theSeeer.callTempMove(attack.namesies(), () -> theSeeer.getAttack().applyDamage(theSeeer, p, b));
+            theSeeer.callTempMove(
+                    AttackNamesies.DOOM_DESIRE,
+                    () -> {
+                        // Accuracy check is handled manually here (ignored when casting)
+                        if (b.accuracyCheck(theSeeer, p)) {
+                            theSeeer.getAttack().apply(theSeeer, p, b);
+                        } else {
+                            // Don't think we need to call effects that take place on a miss here since it's a non-traditional miss
+                            Messages.add(p.getName() + " avoided the attack!");
+                        }
+                    }
+            );
         }
 
         @Override

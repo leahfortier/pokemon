@@ -2234,7 +2234,7 @@ public class AbilityTest extends BaseTest {
                 new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE)
                         .asTrainerBattle()
                         .defending(AbilityNamesies.EMERGENCY_EXIT)
-                        .with((battle, attacking, defending) -> battle.addDefending(PokemonNamesies.SQUIRTLE)),
+                        .addDefending(PokemonNamesies.SQUIRTLE),
                 (battle, attacking, defending) -> defending.assertSpecies(PokemonNamesies.SQUIRTLE),
                 (battle, attacking, defending) -> defending.assertSpecies(PokemonNamesies.EEVEE)
         );

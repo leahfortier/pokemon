@@ -1620,28 +1620,131 @@ public class AttackTest extends BaseTest {
 
     @Test
     public void futureSightTest() {
-        TestBattle battle = TestBattle.create();
+        // Super simple test that only really checks the most basic future sight mechanics
+        futureSightTest(true, new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE));
+
+        // Should fail against a Dark-type Pokemon
+        futureSightTest(false, new TestInfo(PokemonNamesies.ESPEON, PokemonNamesies.UMBREON));
+
+        // Can be cast against a Dark-type Pokemon, but then hit a non-Dark replacement
+        futureSightTest(
+                true,
+                new TestInfo(PokemonNamesies.ESPEON, PokemonNamesies.UMBREON)
+                        .asTrainerBattle().addDefending(PokemonNamesies.VAPOREON, AbilityNamesies.STURDY),
+                (battle, attacking, defending) -> {
+                    // Confirm front Pokemon is Dark-type Umbreon and Future Sight effect is already in play
+                    battle.assertFront(defending);
+                    defending.assertSpecies(PokemonNamesies.UMBREON);
+                    battle.assertHasEffect(defending, TeamEffectNamesies.FUTURE_SIGHT);
+
+                    // Execute this turn with Whirlwind to swap Umbreon with Vaporeon (which can receive Future Sight damage)
+                    battle.attackingFight(AttackNamesies.WHIRLWIND);
+                    TestPokemon front = battle.getDefending();
+                    Assert.assertNotEquals(defending, front);
+                    front.assertSpecies(PokemonNamesies.VAPOREON);
+                },
+                (battle, attacking, defending) -> {
+                    defending.assertSpecies(PokemonNamesies.VAPOREON);
+                    attacking.assertFullHealth();
+                    defending.assertNotFullHealth();
+                }
+        );
+
+        // Should fail if during execute the other Pokemon is semi-invulnerable
+        futureSightTest(
+                false,
+                new TestInfo(PokemonNamesies.ESPEON, PokemonNamesies.EEVEE),
+                PokemonManipulator.defendingFight(AttackNamesies.FLY),
+                (battle, attacking, defending) -> {
+                    Assert.assertTrue(defending.isSemiInvulnerableFlying());
+                    attacking.assertFullHealth();
+                    defending.assertFullHealth();
+                }
+        );
+
+        // Unless something like No Guard (that bypasses semi-invulnerable) is in play
+        futureSightTest(
+                true,
+                new TestInfo(PokemonNamesies.ESPEON, PokemonNamesies.EEVEE).defending(AbilityNamesies.NO_GUARD),
+                PokemonManipulator.defendingFight(AttackNamesies.FLY),
+                (battle, attacking, defending) -> {
+                    Assert.assertTrue(defending.isSemiInvulnerableFlying());
+                    attacking.assertFullHealth();
+                    defending.assertNotFullHealth();
+                }
+        );
+
+        // Endure should work with Future Sight and defending Pokemon should not die
+        // TODO: Currently this is failing because TeamEffects subside after PokemonEffects (which Endure is) and attack is released in subside and not in EndTurn
+        futureSightTest(
+                true,
+                new TestInfo(PokemonNamesies.ESPEON, PokemonNamesies.WEEDLE),
+                (battle, attacking, defending) -> {
+                    defending.setHP(2);
+                    battle.defendingFight(AttackNamesies.ENDURE);
+                },
+//                (battle, attacking, defending) -> defending.assertHp(1)
+                PokemonManipulator.empty()
+        );
+    }
+
+    private void futureSightTest(boolean success, TestInfo testInfo) {
+        futureSightTest(success, testInfo, PokemonManipulator.empty());
+    }
+
+    private void futureSightTest(boolean success, TestInfo testInfo, PokemonManipulator afterCheck) {
+        // Mostly just has Splash buffer turn and confirming full health nothing too interesting happening here
+        futureSightTest(
+                success, testInfo,
+                (battle, attacking, defending) -> {
+                    battle.splashFight();
+                    attacking.assertFullHealth();
+                    if (success) {
+                        defending.assertNotFullHealth();
+                    } else {
+                        defending.assertFullHealth();
+                    }
+                },
+                afterCheck
+        );
+    }
+
+    private void futureSightTest(boolean success, TestInfo testInfo, PokemonManipulator secondTurn, PokemonManipulator afterCheck) {
+        TestBattle battle = testInfo.createBattle();
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
-        // Super simple test so far that only really checks the most basic future sight mechanics
+        testInfo.manipulate(battle);
+
+        // Use Future Sight -- should always create effect
         battle.attackingFight(AttackNamesies.FUTURE_SIGHT);
         battle.assertNoEffect(attacking, TeamEffectNamesies.FUTURE_SIGHT);
         battle.assertHasEffect(defending, TeamEffectNamesies.FUTURE_SIGHT);
         attacking.assertFullHealth();
         defending.assertFullHealth();
 
+        // Buffer turn -- just make sure effect is still lingering and damage has not been done yet
         battle.splashFight();
         battle.assertNoEffect(attacking, TeamEffectNamesies.FUTURE_SIGHT);
         battle.assertHasEffect(defending, TeamEffectNamesies.FUTURE_SIGHT);
         attacking.assertFullHealth();
         defending.assertFullHealth();
 
-        battle.splashFight();
+        // Another buffer turn that can be customized
+        // At the end of this turn the effect takes place and it's attack city
+        secondTurn.manipulate(battle);
         battle.assertNoEffect(attacking, TeamEffectNamesies.FUTURE_SIGHT);
         battle.assertNoEffect(defending, TeamEffectNamesies.FUTURE_SIGHT);
-        attacking.assertFullHealth();
-        defending.assertNotFullHealth();
+
+        // Confirm success of effect hitting by assessing if the defending front Pokemon has taken damage
+        // Using battle.getDefending() instead of defending in case of a Pokemon swap
+        if (success) {
+            battle.getDefending().assertNotFullHealth();
+        } else {
+            battle.getDefending().assertFullHealth();
+        }
+
+        afterCheck.manipulate(battle);
     }
 
     @Test
