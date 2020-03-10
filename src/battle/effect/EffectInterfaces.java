@@ -148,6 +148,7 @@ public final class EffectInterfaces {
     public interface MoldBreakerEffect {}
 
     public interface EntryHazard extends SwappableEffect, EntryEffect, RapidSpinRelease, DefogRelease {
+        void hazardEffect(Battle b, ActivePokemon enterer);
         String getReleaseMessage();
 
         @Override
@@ -158,6 +159,38 @@ public final class EffectInterfaces {
         @Override
         default String getDefogReleaseMessage() {
             return this.getReleaseMessage();
+        }
+
+        // By default, only affects Pokemon on the ground
+        default boolean groundedOnlyHazard() {
+            return true;
+        }
+
+        // Returns true if the effect should be absorbed instead of executed
+        default boolean checkAbsorb(Battle b, ActivePokemon enterer) {
+            return false;
+        }
+
+        @Override
+        default void enter(Battle b, ActivePokemon enterer) {
+            // Can't touch this
+            if (this.groundedOnlyHazard() && !enterer.isOnTheGround(b)) {
+                return;
+            }
+
+            // Check if effect is absorbed (like Toxic Spikes with a Poison bro)
+            if (this.checkAbsorb(b, enterer)) {
+                this.deactivate();
+                return;
+            }
+
+            // Too many hazards on the ground?! Getting caught in that STICKY WEB?? HAS THIS EVER HAPPENED TO YOUUUU???
+            if (enterer.isHoldingItem(ItemNamesies.HEAVY_DUTY_BOOTS)) {
+                return;
+            }
+
+            // Hazard time!
+            this.hazardEffect(b, enterer);
         }
     }
 

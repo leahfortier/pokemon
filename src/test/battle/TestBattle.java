@@ -14,15 +14,19 @@ import item.ItemNamesies;
 import item.bag.Bag;
 import org.junit.Assert;
 import pokemon.ability.AbilityNamesies;
+import pokemon.active.PartyPokemon;
 import pokemon.species.PokemonNamesies;
 import test.general.TestCharacter;
 import test.pokemon.TestPokemon;
 import trainer.EnemyTrainer;
 import trainer.Opponent;
+import trainer.Team;
 import trainer.Trainer;
 import trainer.TrainerAction;
 import trainer.WildPokemon;
 import type.Type;
+
+import java.util.List;
 
 public class TestBattle extends Battle {
     private static final long serialVersionUID = 1L;
@@ -50,6 +54,38 @@ public class TestBattle extends Battle {
 
     TestPokemon getDefending() {
         return ((TestPokemon)getOpponent().front());
+    }
+
+    // Used when there are exactly two player Pokemon -- will return the one that is not out front
+    TestPokemon getOtherAttacking() {
+        return this.getOtherTrainerPokemon(true);
+    }
+
+    // Used when there are exactly two trainer Pokemon -- will return the one that is not out front
+    TestPokemon getOtherDefending() {
+        return this.getOtherTrainerPokemon(false);
+    }
+
+    private TestPokemon getOtherTrainerPokemon(boolean isPlayer) {
+        // Must be a trainer battle
+        Team trainer = this.getTrainer(isPlayer);
+        Assert.assertTrue(trainer instanceof Trainer);
+
+        // Should be exactly two Pokemon for this method
+        List<PartyPokemon> team = trainer.getTeam();
+        Assert.assertEquals(2, team.size());
+
+        // Team cannot be copies of the same Pokemon
+        PartyPokemon first = team.get(0);
+        PartyPokemon second = team.get(1);
+        Assert.assertNotEquals(first, second);
+
+        // Front Pokemon should be one of the team members
+        PartyPokemon front = trainer.front();
+        Assert.assertTrue(front == first || front == second);
+
+        // Return the Pokemon that is not the front Pokemon
+        return (TestPokemon)(front == first ? second : first);
     }
 
     // Adds an additional Pokemon to the player team and returns the created Pokemon
@@ -151,6 +187,7 @@ public class TestBattle extends Battle {
 
     @Override
     protected Boolean bypassAccuracy(ActivePokemon me, ActivePokemon o) {
+        Boolean bypass = super.bypassAccuracy(me, o);
         Boolean expectedBypass = ((TestPokemon)me).getExpectedAccuracyBypass();
 
         // Self-Target, field, charging moves, and poisonous toxic can't miss
@@ -164,11 +201,12 @@ public class TestBattle extends Battle {
                 || (attack.namesies() == AttackNamesies.TOXIC && me.isType(this, Type.POISON))) {
             Assert.assertNotEquals(expectedBypass, false);
             expectedBypass = true;
+        } else if (attack.namesies() == AttackNamesies.BIDE || attack.namesies() == AttackNamesies.FUTURE_SIGHT) {
+            // TODO: Difficult to set this for both moves in a single turn right now and they might be different
+            expectedBypass = bypass;
         }
 
-        Boolean bypass = super.bypassAccuracy(me, o);
-        Assert.assertEquals(expectedBypass, bypass);
-
+        Assert.assertEquals(attack.getName(), expectedBypass, bypass);
         return bypass;
     }
 

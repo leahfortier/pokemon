@@ -988,10 +988,22 @@ Defog:
 *
 EntryHazard:
     AddInterface: EntryHazard
+    Header: void hazardEffect(Battle b, ActivePokemon enterer)
+*
+ReleaseMessage:
     Header: String getReleaseMessage()
     Body:
         return {0};
         ###
+*
+GroundedOnlyHazard:
+    Header: boolean groundedOnlyHazard()
+    Body:
+        return {0};
+        ###
+*
+AbsorbHazard:
+    Header: boolean checkAbsorb(Battle b, ActivePokemon enterer)
 *
 IntegerHolder:
     AddInterface: IntegerHolder

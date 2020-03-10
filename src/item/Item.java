@@ -5972,6 +5972,20 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
+    static class HeavyDutyBoots extends Item implements HoldItem {
+        private static final long serialVersionUID = 1L;
+
+        HeavyDutyBoots() {
+            super(ItemNamesies.HEAVY_DUTY_BOOTS, "These boots prevent the effects of traps set on the battlefield.", BagCategory.MISC);
+            super.price = 4000;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 80;
+        }
+    }
+
     static class WorkUpTM extends Item implements TechnicalMachine {
         private static final long serialVersionUID = 1L;
 

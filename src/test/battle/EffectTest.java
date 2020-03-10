@@ -794,20 +794,20 @@ public class EffectTest extends BaseTest {
                             defending.assertFullHealth();
 
                             // Cast Future Sight effect
-                            battle.setExpectedDefendingAccuracyBypass(true);
+                            defending.setExpectedAccuracyBypass(true);
                             battle.defendingFight(AttackNamesies.FUTURE_SIGHT);
                             attacking.assertFullHealth();
                             defending.assertFullHealth();
                             battle.assertHasEffect(attacking, TeamEffectNamesies.FUTURE_SIGHT);
 
                             // Do nothing and let the future reveal itself
-                            battle.setExpectedDefendingAccuracyBypass(null);
+                            defending.setExpectedAccuracyBypass(null);
                             battle.splashFight();
                             attacking.assertFullHealth();
                             defending.assertFullHealth();
                             battle.assertHasEffect(attacking, TeamEffectNamesies.FUTURE_SIGHT);
 
-                            // The future is now and it says fuck you subsitute why can't I hurt you???
+                            // The future is now and it says fuck you substitute why can't I hurt you???
                             battle.splashFight();
                             battle.assertNoEffect(attacking, TeamEffectNamesies.FUTURE_SIGHT);
                         }),

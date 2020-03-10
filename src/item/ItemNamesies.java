@@ -174,6 +174,7 @@ import item.Item.HealthWing;
 import item.Item.HeartScale;
 import item.Item.HeatRock;
 import item.Item.HeavyBall;
+import item.Item.HeavyDutyBoots;
 import item.Item.HiddenPowerTM;
 import item.Item.HondewBerry;
 import item.Item.Honey;
@@ -796,6 +797,7 @@ public enum ItemNamesies {
     CATCHING_CHARM("Catching Charm", CatchingCharm::new),
     CRACKED_POT("Cracked Pot", CrackedPot::new),
     EJECT_PACK("Eject Pack", EjectPack::new),
+    HEAVY_DUTY_BOOTS("Heavy-Duty Boots", HeavyDutyBoots::new),
     WORK_UP_TM("Work Up TM", WorkUpTM::new),
     DRAGON_CLAW_TM("Dragon Claw TM", DragonClawTM::new),
     PSYSHOCK_TM("Psyshock TM", PsyshockTM::new),

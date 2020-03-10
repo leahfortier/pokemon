@@ -2199,3 +2199,10 @@ Eject Pack:
         }
         ###
 *
+Heavy-Duty Boots:
+    Desc: These boots prevent the effects of traps set on the battlefield.
+    Cat: Misc
+    Int: HoldItem
+    Price: 4000
+    Fling: 80
+*

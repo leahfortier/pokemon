@@ -207,4 +207,5 @@ Other random things:
     - can we move the catchPokemon logic in BallItem or somewhere else that isn't Player?
     - White Herb doesn't seem right at all
     - does Parting Shot lower stats even when the user cannot switch out?
+    - should I set up fossil restoration things?
     

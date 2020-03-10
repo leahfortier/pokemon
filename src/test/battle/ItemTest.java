@@ -3,10 +3,12 @@ package test.battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
+import battle.effect.EffectInterfaces.EntryHazard;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
+import battle.effect.team.TeamEffectNamesies;
 import item.Item;
 import item.ItemNamesies;
 import item.bag.BagCategory;
@@ -670,10 +672,7 @@ public class ItemTest extends BaseTest {
 
         // Nothing happens when lowering the other Pokemon's stats
         ejectPackTest(false, new TestInfo().defendingFight(AttackNamesies.GROWL)
-                                           .with((battle, attacking, defending) -> {
-
-                                               attacking.assertStages(new TestStages().set(-1, Stat.ATTACK));
-                                           }));
+                                           .with((battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.ATTACK))));
 
         // Eject Button causes the holder to switch out when hit by an attack
         ejectButtonTest(true, new TestInfo().attackingFight(AttackNamesies.TACKLE));
@@ -750,5 +749,192 @@ public class ItemTest extends BaseTest {
         } else {
             itemHolder.assertHoldingItem(itemNamesies);
         }
+    }
+
+    // More like an Entry Hazard test disguised as a Heavy-Duty Boots test am I right??
+    @Test
+    public void heavyDutyBootsTest() {
+        // Spikes takes 1/8 damage on entry with a single layer
+        heavyDutyBootsTest(
+                PokemonNamesies.SQUIRTLE,
+                AttackNamesies.SPIKES,
+                new TestInfo(),
+                (battle, attacking, defending) -> defending.assertHealthRatio(7/8.0),
+                (battle, attacking, defending) -> defending.assertFullHealth()
+        );
+
+        // Spikes takes 1/6 damage on entry with a double layer
+        heavyDutyBootsTest(
+                PokemonNamesies.SQUIRTLE,
+                AttackNamesies.SPIKES,
+                new TestInfo().attackingFight(AttackNamesies.SPIKES),
+                (battle, attacking, defending) -> defending.assertHealthRatio(5/6.0),
+                (battle, attacking, defending) -> defending.assertFullHealth()
+        );
+
+        // Spikes takes 1/4 damage on entry with a triple layer or more
+        heavyDutyBootsTest(
+                PokemonNamesies.SQUIRTLE,
+                AttackNamesies.SPIKES,
+                new TestInfo().attackingFight(AttackNamesies.SPIKES)
+                              .attackingFight(AttackNamesies.SPIKES),
+                (battle, attacking, defending) -> defending.assertHealthRatio(3/4.0),
+                (battle, attacking, defending) -> defending.assertFullHealth()
+        );
+        heavyDutyBootsTest(
+                PokemonNamesies.SQUIRTLE,
+                AttackNamesies.SPIKES,
+                new TestInfo().attackingFight(AttackNamesies.SPIKES)
+                              .attackingFight(AttackNamesies.SPIKES)
+                              .attackingFight(AttackNamesies.SPIKES)
+                              .attackingFight(AttackNamesies.SPIKES)
+                              .attackingFight(AttackNamesies.SPIKES),
+                (battle, attacking, defending) -> defending.assertHealthRatio(3/4.0),
+                (battle, attacking, defending) -> defending.assertFullHealth()
+        );
+
+        // Flying-type Pokemon are immune to the Spikes
+        heavyDutyBootsTest(
+                PokemonNamesies.PIDGEOT,
+                AttackNamesies.SPIKES,
+                new TestInfo(),
+                (battle, attacking, defending) -> defending.assertFullHealth()
+        );
+
+        // Pokemon with Levitate are immune to the Spikes
+        heavyDutyBootsTest(
+                PokemonNamesies.SQUIRTLE,
+                AttackNamesies.SPIKES,
+                new TestInfo().with((battle, attacking, defending) -> battle.getOtherDefending().withAbility(AbilityNamesies.LEVITATE)),
+                (battle, attacking, defending) -> defending.assertFullHealth()
+        );
+
+        // Toxic Spikes poisons the Pokemon on entry with a single layer
+        heavyDutyBootsTest(
+                PokemonNamesies.SQUIRTLE,
+                AttackNamesies.TOXIC_SPIKES,
+                new TestInfo(),
+                (battle, attacking, defending) -> {
+                    defending.assertRegularPoison();
+                    defending.assertHealthRatio(7/8.0);
+                },
+                (battle, attacking, defending) -> {
+                    defending.assertNoStages();
+                    defending.assertFullHealth();
+                }
+        );
+
+        // Toxic Spikes badly poisons the Pokemon on entry with a double layer
+        heavyDutyBootsTest(
+                PokemonNamesies.SQUIRTLE,
+                AttackNamesies.TOXIC_SPIKES,
+                new TestInfo().attackingFight(AttackNamesies.TOXIC_SPIKES),
+                (battle, attacking, defending) -> {
+                    defending.assertBadPoison();
+                    defending.assertHealthRatio(15/16.0);
+                    battle.assertHasEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
+                },
+                (battle, attacking, defending) -> {
+                    defending.assertNoStages();
+                    defending.assertFullHealth();
+                    battle.assertHasEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
+                }
+        );
+
+        // Toxic Spikes will be removed if a Poison Pokemon encounters them even when wearing the boots
+        heavyDutyBootsTest(
+                true,
+                PokemonNamesies.GRIMER,
+                AttackNamesies.TOXIC_SPIKES,
+                new TestInfo().attackingFight(AttackNamesies.TOXIC_SPIKES),
+                (battle, attacking, defending) -> {
+                    defending.assertNoStatus();
+                    defending.assertFullHealth();
+                    battle.assertNoEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
+                }
+        );
+
+        // Toxic Spikes will not be removed if a Poison Pokemon is levitating though
+        heavyDutyBootsTest(
+                PokemonNamesies.ZUBAT,
+                AttackNamesies.TOXIC_SPIKES,
+                new TestInfo().attackingFight(AttackNamesies.TOXIC_SPIKES),
+                (battle, attacking, defending) -> {
+                    defending.assertNoStatus();
+                    defending.assertFullHealth();
+                    battle.assertHasEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
+                }
+        );
+
+        // Sticky Web lowers Speed by 1 stage when entering
+        heavyDutyBootsTest(
+                PokemonNamesies.GRIMER,
+                AttackNamesies.STICKY_WEB,
+                new TestInfo(),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-1, Stat.SPEED)),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages())
+        );
+
+        // Contrary will raise Speed instead
+        heavyDutyBootsTest(
+                PokemonNamesies.GRIMER,
+                AttackNamesies.STICKY_WEB,
+                new TestInfo().with((battle, attacking, defending) -> battle.getOtherDefending().withAbility(AbilityNamesies.CONTRARY)),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(1, Stat.SPEED)),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages())
+        );
+
+        // Sticky Web doesn't fuck with flyers
+        heavyDutyBootsTest(
+                PokemonNamesies.DRAGONITE,
+                AttackNamesies.STICKY_WEB,
+                new TestInfo(),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages())
+        );
+
+        // Stealth Rock does care about Levitation but still cares about boots
+        heavyDutyBootsTest(
+                PokemonNamesies.DRAGONITE,
+                AttackNamesies.STEALTH_ROCK,
+                new TestInfo(),
+                (battle, attacking, defending) -> defending.assertHealthRatio(3/4.0),
+                (battle, attacking, defending) -> defending.assertFullHealth()
+        );
+    }
+
+    private void heavyDutyBootsTest(PokemonNamesies pokes, AttackNamesies hazardSetup, TestInfo testInfo, PokemonManipulator samesies) {
+        heavyDutyBootsTest(false, pokes, hazardSetup, testInfo, samesies);
+    }
+
+    private void heavyDutyBootsTest(boolean absorbed, PokemonNamesies pokes, AttackNamesies hazardSetup, TestInfo testInfo, PokemonManipulator samesies) {
+        heavyDutyBootsTest(absorbed, pokes, hazardSetup, testInfo, samesies, samesies);
+    }
+
+    private void heavyDutyBootsTest(PokemonNamesies pokes, AttackNamesies hazardSetup, TestInfo testInfo, PokemonManipulator withoutBoots, PokemonManipulator withBoots) {
+        heavyDutyBootsTest(false, pokes, hazardSetup, testInfo, withoutBoots, withBoots);
+    }
+
+    private void heavyDutyBootsTest(boolean absorbed, PokemonNamesies pokes, AttackNamesies hazardAttack, TestInfo testInfo, PokemonManipulator withoutBoots, PokemonManipulator withBoots) {
+        TeamEffectNamesies hazardEffect = (TeamEffectNamesies)hazardAttack.getNewAttack().getEffect();
+        Assert.assertTrue(hazardEffect.getEffect() instanceof EntryHazard);
+
+        // Add additional Pokemon to swap to in setup
+        testInfo.asTrainerBattle().setup((battle, attacking, defending) -> battle.addDefending(pokes));
+
+        testInfo.with((battle, attacking, defending) -> {
+            // Set up entry hazard
+            battle.attackingFight(hazardAttack);
+            battle.assertHasEffect(defending, hazardEffect);
+
+            // Use Whirlwind to draw out other Pokemon to handle the entry hazard effects
+            battle.attackingFight(AttackNamesies.WHIRLWIND);
+            battle.assertEffect(!absorbed, defending, hazardEffect);
+        });
+
+        testInfo.doubleTake(
+                (battle, attacking, defending) -> battle.getOtherDefending().withItem(ItemNamesies.HEAVY_DUTY_BOOTS),
+                withoutBoots,
+                withBoots
+        );
     }
 }
