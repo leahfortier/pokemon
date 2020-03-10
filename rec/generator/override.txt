@@ -16,6 +16,16 @@ ShouldApplyDamage:
 ShouldApplyEffects:
     Header: boolean shouldApplyEffects(Battle b, ActivePokemon user, ActivePokemon victim)
 *
+IsStatusMove:
+    Header: boolean isStatusMove()
+*
+IgnoreAccuracyCheck:
+    Header: boolean ignoreAccuracyCheck()
+    Body:
+        {2-}
+        return {1} || super.ignoreAccuracyCheck();
+        ###
+*
 FixedDamage:
     Header: int getFixedDamageAmount(ActivePokemon me, ActivePokemon o)
     Body:
@@ -112,7 +122,7 @@ PoisonCondition:
     AddInterface: EndTurnEffect
     AddMapField: ApplyEndTurn:
         if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
-            victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + AbilityNamesies.POISON_HEAL.getName() + " restored its health!");
+            victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + victim.getAbility().getName() + " restored its health!");
         } else {
             victim.reduceHealthFraction(b, {0}, victim.getName() + " was hurt by its poison!");
         }
@@ -542,9 +552,12 @@ Countering:
     AddMapField: MoveType: Assistless, Metronomeless, Mirrorless
     AddMapField: PP: 20
     AddMapField: Acc: 100
-    AddMapField: Applies: user.getDamageTaken() > 0 && victim.getMove() != null && victim.getAttack().getCategory() == MoveCategory.{00} && !b.isFirstAttack()
-    AddMapField: Comments: // Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
-    AddMapField: FixedDamage: me.getDamageTaken()
+    AddMapField: Applies: user.hasTakenDamage() && victim.getAttack().getCategory() == MoveCategory.{00}
+    AddMapField: FixedDamage: 2*me.getDamageTaken()
+    AddMapField: Comments: 
+        // Fails if no damage to reflect or if the opponent isn't using an attack of the proper category
+        // Do not need to check if victim has a valid move or confirm not first attack because can only take direct damage if both of those checks succeed
+        ###
 *
 CallNewMove:
     AddMapField: UniqueEffects:
@@ -980,6 +993,13 @@ EntryHazard:
         return {0};
         ###
 *
+IntegerHolder:
+    AddInterface: IntegerHolder
+    Header: int getInteger()
+    Body:
+        return {0};
+        ###
+*
 BooleanHolder:
     AddInterface: BooleanHolder
     Header: boolean getBoolean()
@@ -1231,6 +1251,9 @@ OnTakeDamage:
 *
 OpponentTakeDamage:
     Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
+*
+IgnoreAbsorbedDamage:
+    Header: boolean ignoreAbsorbedDamage()
 *
 Fling:
     AddMapField: FlingDamage:
@@ -1662,20 +1685,34 @@ AddTypeMove:
         return !victim.getType(b).isType(Type.{00});
         ###
 *
-PrintFail:
-    Header: boolean canPrintFail()
-    Body:
-        return {0};
+# Things like Bide or Future Sight
+CastEffectDelayedAttackMove:
+    AddMapField: IsStatusMove:
+        // Behaves like a status move for all intents and purposes while casting the future attack
+        // Won't apply damage, won't check type advantage, will print failure, etc.
+        return this.castingAttack;
+        ###
+    AddMapField: IgnoreAccuracyCheck: this.castingAttack // Cannot miss casting the effect (but can miss through traditional accuracy checks when executing the attack effect)
+    AddMapField: ShouldApplyEffects:
+        // Only give effects when casting!
+        return this.castingAttack;
+        ###
+    AddMapField: Field:
+        // True when trying to originally cast the {0} effect through the traditional attack means
+        // Will be false however when the effect releasing the damaging attack on the enemy
+        private boolean castingAttack;
+        ###
+    AddMapField: BeginAttack: 
+        this.castingAttack = true;
+        ###
+    AddMapField: EndAttack: 
+        this.castingAttack = false;
         ###
 *
 FutureAttackMove:
     AddMapField: TeamEffect: {0}
-    AddMapField: ShouldApplyDamage:
-        // Don't apply damage just yet!!
-        return false;
-        ###
-    AddMapField: PrintFail: true
     AddMapField: MoveType: Protect_Piercing, Mirrorless
+    AddMapField: CastEffectDelayedAttackMove: {0}
 *
 FutureAttackEffect:
     AddMapField: NumTurns: 3
@@ -1684,15 +1721,7 @@ FutureAttackEffect:
         ###
     AddMapField: Subside:
         Messages.add(p.getName() + " took " + theSeeer.getName() + "'s attack!");
-
-        Attack attack = AttackNamesies.{00}.getNewAttack();
-
-        // Don't do anything for moves that are uneffective
-        if (!attack.effective(b, theSeeer, p)) {
-            return;
-        }
-
-        theSeeer.callTempMove(attack.namesies(), () -> theSeeer.getAttack().applyDamage(theSeeer, p, b));
+        theSeeer.callDelayedMove(b, p, AttackNamesies.{00});
         ###
     AddMapField: BeforeCast:
         theSeeer = caster;
@@ -1943,7 +1972,7 @@ AbsorbDamage:
     Header: boolean absorbDamage(Battle b, ActivePokemon damageTaker, int damageAmount)
 *
 DamageTaken:
-    Header: void damageTaken(Battle b, ActivePokemon damageTaker)
+    Header: void damageTaken(Battle b, ActivePokemon damageTaker, int damageAmount)
 *
 SapHealthMove:
     AddInterface: SapHealthMove
@@ -2048,12 +2077,8 @@ Unneutralizable:
         ###
 *
 DropBelowHalfHealth:
-    AddInterface: TakeDamageEffect
-    AddMapField: OnTakeDamage:
-        if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
-            {0}
-        }
-        ###
+    AddInterface: TakenUnderHalfEffect
+    Header: void takenUnderHalf(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 WildPokemonAlterer:
     Header: void alterWildPokemon(ActivePokemon playerFront, WildEncounterInfo encounterData, WildEncounter encounter)

@@ -26,6 +26,7 @@ import battle.effect.EffectInterfaces.SingleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.StatStatusBoosterEffect;
 import battle.effect.EffectInterfaces.StatusPreventionAbility;
 import battle.effect.EffectInterfaces.SwapOpponentEffect;
+import battle.effect.EffectInterfaces.TakenUnderHalfEffect;
 import battle.effect.EffectInterfaces.TypedWildEncounterSelector;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
@@ -3909,7 +3910,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Berserk extends Ability implements TakeDamageEffect {
+    static class Berserk extends Ability implements TakenUnderHalfEffect {
         private static final long serialVersionUID = 1L;
 
         Berserk() {
@@ -3917,14 +3918,12 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
-                new StageModifier(1, Stat.SP_ATTACK).modify(b, victim, victim, CastSource.ABILITY);
-            }
+        public void takenUnderHalf(Battle b, ActivePokemon user, ActivePokemon victim) {
+            new StageModifier(1, Stat.SP_ATTACK).modify(b, victim, victim, CastSource.ABILITY);
         }
     }
 
-    static class WimpOut extends Ability implements TakeDamageEffect {
+    static class WimpOut extends Ability implements TakenUnderHalfEffect {
         private static final long serialVersionUID = 1L;
 
         WimpOut() {
@@ -3932,14 +3931,12 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
-                victim.switcheroo(b, victim, CastSource.ABILITY, true);
-            }
+        public void takenUnderHalf(Battle b, ActivePokemon user, ActivePokemon victim) {
+            victim.switcheroo(b, victim, CastSource.ABILITY, true);
         }
     }
 
-    static class EmergencyExit extends Ability implements TakeDamageEffect {
+    static class EmergencyExit extends Ability implements TakenUnderHalfEffect {
         private static final long serialVersionUID = 1L;
 
         EmergencyExit() {
@@ -3947,10 +3944,8 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
-                victim.switcheroo(b, victim, CastSource.ABILITY, true);
-            }
+        public void takenUnderHalf(Battle b, ActivePokemon user, ActivePokemon victim) {
+            victim.switcheroo(b, victim, CastSource.ABILITY, true);
         }
     }
 
@@ -4427,7 +4422,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class GulpMissile extends Ability implements StartAttackEffect, EntryEffect, OpponentApplyDamageEffect, FormAbility {
+    static class GulpMissile extends Ability implements StartAttackEffect, OpponentApplyDamageEffect, FormAbility {
         private static final long serialVersionUID = 1L;
 
         private GulpForm gulpForm;
@@ -4438,6 +4433,7 @@ public abstract class Ability implements AbilityInterface {
 
         GulpMissile() {
             super(AbilityNamesies.GULP_MISSILE, "When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.");
+            this.gulpForm = GulpForm.NORMAL;
         }
 
         @Override
@@ -4468,11 +4464,6 @@ public abstract class Ability implements AbilityInterface {
                 String gulping = this.gulpForm == GulpForm.GULPING ? "gulping" : "gorging";
                 this.addFormMessage(attacking, attacking.getName() + " is " + gulping + "!!", true);
             }
-        }
-
-        @Override
-        public void enter(Battle b, ActivePokemon enterer) {
-            this.gulpForm = GulpForm.NORMAL;
         }
 
         @Override

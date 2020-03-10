@@ -20,6 +20,7 @@ public interface AttackInterface extends InvokeEffect {
     MoveCategory getCategory();
     boolean isSelfTarget();
     int getBaseAccuracy();
+    boolean isMoveType(MoveType moveType);
 
     default String getName() {
         return this.namesies().getName();
@@ -52,6 +53,13 @@ public interface AttackInterface extends InvokeEffect {
 
     default boolean shouldApplyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
         return true;
+    }
+
+    // Returns true if the accuracy check should be completely ignored to always hit the attack
+    // Returning true here goes even before all other bypass accuracy checks like semi-invulnerable etc
+    default boolean ignoreAccuracyCheck() {
+        // Self-target moves and field moves never miss
+        return this.isSelfTargetStatusMove() || this.isMoveType(MoveType.FIELD);
     }
 
     // Physical and Special moves -- do dat damage!

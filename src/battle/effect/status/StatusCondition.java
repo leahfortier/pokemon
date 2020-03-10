@@ -304,7 +304,7 @@ public abstract class StatusCondition implements StatusInterface {
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
-                victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + AbilityNamesies.POISON_HEAL.getName() + " restored its health!");
+                victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + victim.getAbility().getName() + " restored its health!");
             } else {
                 victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " was hurt by its poison!");
             }
@@ -360,7 +360,7 @@ public abstract class StatusCondition implements StatusInterface {
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
             if (victim.hasAbility(AbilityNamesies.POISON_HEAL)) {
-                victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + AbilityNamesies.POISON_HEAL.getName() + " restored its health!");
+                victim.healHealthFraction(1/8.0, b, victim.getName() + "'s " + victim.getAbility().getName() + " restored its health!");
             } else {
                 victim.reduceHealthFraction(b, this.turns++/16.0, victim.getName() + " was hurt by its poison!");
             }

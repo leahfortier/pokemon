@@ -4295,10 +4295,9 @@ Bide:
     PokemonEffect: Bide
     SelfTarget: True
     Priority: 1
-    ShouldApplyDamage:
-        return false;
-        ###
     MoveType: Sleep_Talk_Fail, Mirrorless
+    FixedDamage: ((IntegerHolder)me.getEffect(PokemonEffectNamesies.BIDE)).getInteger()
+    CastEffectDelayedAttackMove: Bide
 *
 Autotomize:
     Desc: The user sheds part of its body to make itself lighter and sharply raise its Speed stat.
@@ -4621,7 +4620,7 @@ Metal Burst:
     Cat: Physical
     Acc: 100
     PhysicalContact: False
-    Applies: user.getDamageTaken() > 0 && !b.isFirstAttack()
+    Applies: user.hasTakenDamage() && !b.isFirstAttack()
     FixedDamage: (int)(me.getDamageTaken()*1.5)
 *
 Wild Charge:

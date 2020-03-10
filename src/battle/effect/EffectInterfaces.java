@@ -22,6 +22,7 @@ import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatusBoosterEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
+import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.InvokeInterfaces.WildEncounterSelector;
@@ -65,6 +66,10 @@ public final class EffectInterfaces {
     // Class to hold interfaces -- should not be instantiated
     private EffectInterfaces() {
         Global.error(this.getClass().getSimpleName() + " class cannot be instantiated.");
+    }
+
+    public interface IntegerHolder {
+        int getInteger();
     }
 
     public interface BooleanHolder {
@@ -156,6 +161,18 @@ public final class EffectInterfaces {
         }
     }
 
+    // For effects that take place when applying or receiving damage
+    public interface OnDamageEffect {
+        // By default, the effect should be ignored if the damage was absorbed (Substitute, Disguise, etc)
+        default boolean ignoreAbsorbedDamage() {
+            return true;
+        }
+
+        default boolean shouldIgnore(ActivePokemon victim) {
+            return this.ignoreAbsorbedDamage() && victim.hasAbsorbedDamage();
+        }
+    }
+
     public interface PhysicalContactEffect extends OpponentApplyDamageEffect {
 
         // b: The current battle
@@ -168,6 +185,17 @@ public final class EffectInterfaces {
             // Only apply if physical contact is made
             if (user.isMakingContact()) {
                 this.contact(b, user, victim);
+            }
+        }
+    }
+
+    public interface TakenUnderHalfEffect extends TakeDamageEffect {
+        void takenUnderHalf(Battle b, ActivePokemon user, ActivePokemon victim);
+
+        @Override
+        default void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+            if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
+                this.takenUnderHalf(b, user, victim);
             }
         }
     }

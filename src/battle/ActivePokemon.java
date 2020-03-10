@@ -86,7 +86,8 @@ public class ActivePokemon extends PartyPokemon {
     private Move lastMoveUsed;
     private Serializable castSource;
     private int counter;
-    private int damageTaken;
+    private int directDamageTaken;
+    private boolean damageAbsorbed;
     private double successionDecayRate;
     private boolean firstTurn;
     private boolean attacking;
@@ -283,6 +284,19 @@ public class ActivePokemon extends PartyPokemon {
             b.printAttacking(this);
             this.startAttack(b);
             this.getAttack().apply(this, opp, b);
+        });
+    }
+
+    // Executes a delayed move from an effect like Bide or Future Sight
+    // This will do an additional accuracy check (likely was skipped when casting the effect this is called from)
+    public void callDelayedMove(Battle b, ActivePokemon opp, AttackNamesies attack) {
+        this.callTempMove(attack, () -> {
+            if (b.accuracyCheck(this, opp)) {
+                this.getAttack().apply(this, opp, b);
+            } else {
+                // Don't think we need to call effects that take place on a miss here since it's a non-traditional miss
+                Messages.add(opp.getName() + " avoided the attack!");
+            }
         });
     }
 
@@ -758,6 +772,7 @@ public class ActivePokemon extends PartyPokemon {
 
         // Check if the damage will be absorbed by an effect
         if (directDamage && AbsorbDamageEffect.checkAbsorbDamageEffect(b, this, amount)) {
+            this.damageAbsorbed = true;
             return 0;
         }
 
@@ -767,7 +782,6 @@ public class ActivePokemon extends PartyPokemon {
         int prev = this.getHP();
         this.setHP(prev - amount);
         int taken = prev - this.getHP();
-        this.takeDamage(taken);
 
         // Enduring the hit
         if (this.getHP() == 0 && directDamage) {
@@ -780,10 +794,13 @@ public class ActivePokemon extends PartyPokemon {
             }
         }
 
-        Messages.add(new MessageUpdate().updatePokemon(b, this));
+        if (directDamage) {
+            directDamageTaken += taken;
+        }
 
-        if (!isFainted(b, directDamage)) {
-            DamageTakenEffect.invokeDamageTakenEffect(b, this);
+        Messages.add(new MessageUpdate().updatePokemon(b, this));
+        if (!this.isFainted(b, directDamage)) {
+            DamageTakenEffect.invokeDamageTakenEffect(b, this, taken);
         }
 
         return taken;
@@ -925,16 +942,19 @@ public class ActivePokemon extends PartyPokemon {
         firstTurn = false;
     }
 
-    private void takeDamage(int damage) {
-        damageTaken = damage;
-    }
-
+    // Return the amount of direct damage taken so far this turn
     public int getDamageTaken() {
-        return damageTaken;
+        return directDamageTaken;
     }
 
     public boolean hasTakenDamage() {
-        return damageTaken > 0;
+        return directDamageTaken > 0;
+    }
+
+    // Different than just checking if opposing damageDealt is 0 because things like False Swipe should trigger
+    // all effects even if no damage is actually dealt
+    public boolean hasAbsorbedDamage() {
+        return damageAbsorbed;
     }
 
     public int getDamageDealt() {
@@ -946,12 +966,9 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public void resetTurn() {
-        resetDamageTaken();
         setReducePP(false);
-    }
-
-    private void resetDamageTaken() {
-        damageTaken = 0;
+        directDamageTaken = 0;
+        damageAbsorbed = false;
     }
 
     public void setLastMoveUsed() {

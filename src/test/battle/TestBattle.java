@@ -13,6 +13,7 @@ import battle.effect.team.TeamEffectNamesies;
 import item.ItemNamesies;
 import item.bag.Bag;
 import org.junit.Assert;
+import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
 import test.general.TestCharacter;
 import test.pokemon.TestPokemon;
@@ -157,6 +158,8 @@ public class TestBattle extends Battle {
         Attack attack = me.getAttack();
         if (attack.isSelfTargetStatusMove()
                 || attack.isMoveType(MoveType.FIELD)
+                || me.hasAbility(AbilityNamesies.NO_GUARD)
+                || o.hasAbility(AbilityNamesies.NO_GUARD)
                 || (attack instanceof MultiTurnMove && ((MultiTurnMove)attack).isCharging())
                 || (attack.namesies() == AttackNamesies.TOXIC && me.isType(this, Type.POISON))) {
             Assert.assertNotEquals(expectedBypass, false);

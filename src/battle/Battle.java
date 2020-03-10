@@ -2,7 +2,6 @@ package battle;
 
 import battle.DamageCalculator.DamageCalculation;
 import battle.attack.Attack;
-import battle.attack.MoveType;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.InvokeEffect;
 import battle.effect.InvokeInterfaces.AttackMissedEffect;
@@ -517,18 +516,8 @@ public class Battle implements Serializable {
     protected Boolean bypassAccuracy(ActivePokemon me, ActivePokemon o) {
         Attack attack = me.getAttack();
 
-        // Self-Target moves don't miss
-        if (attack.isSelfTargetStatusMove()) {
-            return true;
-        }
-
-        // Neither do field moves
-        if (attack.isMoveType(MoveType.FIELD)) {
-            return true;
-        }
-
-        // Cannot miss the charge
-        if (attack instanceof MultiTurnMove && ((MultiTurnMove)attack).isCharging()) {
+        // Self-Target moves, field moves, charging Multi-turn moves, etc
+        if (attack.ignoreAccuracyCheck()) {
             return true;
         }
 
@@ -566,7 +555,7 @@ public class Battle implements Serializable {
         return RandomUtils.chanceTest((int)(moveAccuracy*((double)accuracy/(double)evasion)));
     }
 
-    private boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
+    public boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
         Boolean bypass = bypassAccuracy(me, o);
         boolean attackHit = bypass != null ? bypass : this.naturalAccuracyCheck(me, o);
 

@@ -810,7 +810,7 @@ Bide:
         private int turns;
         private int damage;
         ###
-    Int: ForceMoveEffect, EndTurnEffect
+    Int: ForceMoveEffect, DamageTakenEffect
     GetForceMove:
         return move;
         ###
@@ -840,16 +840,17 @@ Bide:
             Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
         } else {
             // RETALIATION STATION
-            b.getOtherPokemon(victim).reduceHealth(b, 2*this.damage);
+            victim.callDelayedMove(b, b.getOtherPokemon(victim), AttackNamesies.BIDE);
         }
 
         // Bye Bye Bidesies
         this.deactivate();
         ###
     CanHave: True
-    ApplyEndTurn:
-        damage += victim.getDamageTaken();
+    DamageTaken:
+        this.damage += damageAmount;
         ###
+    IntegerHolder: 2*this.damage
 *
 HalfWeight:
     Field:

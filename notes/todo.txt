@@ -178,6 +178,7 @@ Other random things:
     - pretty sure Infatuation lasts between Pokemon and it shouldn't
     - should probably rewrite the battle message system to pass the serialized battle around instead of - - whatever it's currently doing with storing every individual value and such
     - should also have a method that handles the mold breaker stuff instead of it being hardcoded in every single invoke method (can this be an override in AbilityInterface for isActiveEffect somehow?)
+        - could also include ignoreConditions like OnDamageEffect here as well
     - how would something like future sight work for mold breaker
     - new lines aren't done correctly for interfaces with comments and default methods/override
     - test liquid voice + perish song + water absorb
@@ -196,8 +197,13 @@ Other random things:
     - need to have a method for abilities to override when they are removed/suppressed
         - does Illusion break?
         - Neutralizing Gas has exit message ("The effects of Neutralizing Gas wore off!") -- this would also be a switch out effect
-    - I feel like Gastro Acid needs to be rewritten into suppression instead of changing the ability to none 
+    - I feel like Gastro Acid needs to be rewritten into suppression instead of changing the ability to none
         - make sure that if this effect cannot be transferred to a Pokemon that cannot have it's ability suppressed with Baton Pass or something
+    - Air Balloon cannot be recovered with Recycle or Pickup
+    - Future Sight not working with things like Endure because PokemonEffects subside before TeamEffects
+    - pretty sure Dig will fail charging turn against a Flying Pokemon
+    - I think a lot of places that have an isFainted check probably also want to be checking that the Pokemon is still out front -- probably need a new isAliveAndFront method or something like that
+        - add test for Future Sight + Life Orb + swap seeer -- should still have boosted damage (I think?) but should not be taking damage from Life Orb (OnDamageEffects in general should not be applying to non-front Pokemon)
     - can we move the catchPokemon logic in BallItem or somewhere else that isn't Player?
     - White Herb doesn't seem right at all
     - does Parting Shot lower stats even when the user cannot switch out?

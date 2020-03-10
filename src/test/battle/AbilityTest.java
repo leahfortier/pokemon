@@ -205,7 +205,7 @@ public class AbilityTest extends BaseTest {
         checkPriorityPrevention(0, false, AttackNamesies.STRING_SHOT);
         checkPriorityPrevention(1, true, AttackNamesies.QUICK_ATTACK);
         checkPriorityPrevention(1, true, AttackNamesies.BABY_DOLL_EYES);
-        checkPriorityPrevention(1, true, AttackNamesies.BIDE);
+        checkPriorityPrevention(1, false, AttackNamesies.BIDE);
         checkPriorityPrevention(4, false, AttackNamesies.PROTECT);
 
         // Should block moves that have their priority increases via Prankster (+1 for status moves)
@@ -2218,5 +2218,95 @@ public class AbilityTest extends BaseTest {
     // Performs a single double take with and without Own Tempo with everything already set up inside testInfo
     private void baseOwnTempoTest(TestInfo testInfoWithConfusion, PokemonManipulator withoutTempo, PokemonManipulator withTempo) {
         testInfoWithConfusion.doubleTake(AbilityNamesies.OWN_TEMPO, withoutTempo, withTempo);
+    }
+
+    @Test
+    public void takenUnderHalfTest() {
+        // Berserk raises Sp. Attack when directly hit to go below half health
+        takenUnderHalfTest(
+                new TestInfo().defending(AbilityNamesies.BERSERK),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(1, Stat.SP_ATTACK)),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages())
+        );
+
+        // Emergency Exit swaps the Pokemon out when damaged below half health
+        takenUnderHalfTest(
+                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE)
+                        .asTrainerBattle()
+                        .defending(AbilityNamesies.EMERGENCY_EXIT)
+                        .addDefending(PokemonNamesies.SQUIRTLE),
+                (battle, attacking, defending) -> defending.assertSpecies(PokemonNamesies.SQUIRTLE),
+                (battle, attacking, defending) -> defending.assertSpecies(PokemonNamesies.EEVEE)
+        );
+    }
+
+    private void takenUnderHalfTest(TestInfo testInfo, PokemonManipulator directUnderHalf, PokemonManipulator indirectUnderHalf) {
+        // Directly attack to put under half health -- should trigger
+        takenUnderHalfTest(
+                testInfo.copy().fight(AttackNamesies.TACKLE, AttackNamesies.ENDURE),
+                directUnderHalf
+        );
+
+        // Go under half by cutting health with substitute -- should not trigger
+        takenUnderHalfTest(
+                testInfo.copy().defendingFight(AttackNamesies.SUBSTITUTE),
+                (battle, attacking, defending) -> {
+                    defending.assertHasEffect(PokemonEffectNamesies.SUBSTITUTE);
+                    indirectUnderHalf.manipulate(battle);
+                }
+        );
+
+        // Go under half by taking damage with burn -- should not trigger
+        takenUnderHalfTest(
+                testInfo.copy(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE).attackingFight(AttackNamesies.WILL_O_WISP),
+                (battle, attacking, defending) -> {
+                    defending.assertHasStatus(StatusNamesies.BURNED);
+                    indirectUnderHalf.manipulate(battle);
+                }
+        );
+
+        // Go under half by taking damage with confusion damage -- should not trigger
+        takenUnderHalfTest(
+                testInfo.copy().with((battle, attacking, defending) -> {
+                    // Continuously confuse until the defending hurts itself in confusion
+                    while (true) {
+                        Assert.assertFalse(defending.getHPRatio() < .5);
+                        battle.attackingFight(AttackNamesies.CONFUSE_RAY);
+                        if (defending.getHPRatio() < .5) {
+                            break;
+                        }
+                    }
+                }),
+                indirectUnderHalf
+        );
+
+        // Go under half by taking recoil damage -- should not trigger
+        takenUnderHalfTest(
+                testInfo.copy().fight(AttackNamesies.ENDURE, AttackNamesies.TAKE_DOWN),
+                indirectUnderHalf
+        );
+
+        // Go under half by via Pain Split -- should not trigger
+        takenUnderHalfTest(
+                testInfo.copy().with((battle, attacking, defending) -> {
+                    // Set attacking to 1 HP so Pain Split decreases defending's HP
+                    battle.falseSwipePalooza(false);
+                    battle.attackingFight(AttackNamesies.PAIN_SPLIT);
+                }),
+                indirectUnderHalf
+        );
+    }
+
+    private void takenUnderHalfTest(TestInfo testInfo, PokemonManipulator underHalfEffect) {
+        TestBattle battle = testInfo.createBattle();
+        TestPokemon defending = battle.getDefending();
+
+        defending.setHP(defending.getMaxHP()/2 + 1);
+        Assert.assertFalse(defending.getHPRatio() < .5);
+
+        testInfo.manipulate(battle);
+        Assert.assertTrue(defending.getHPRatio() < .5);
+
+        underHalfEffect.manipulate(battle);
     }
 }

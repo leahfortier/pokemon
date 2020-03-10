@@ -119,6 +119,24 @@ class TestInfo {
         return this;
     }
 
+    TestInfo addAttacking(PokemonNamesies pokes) {
+        this.addString(true, pokes.getName());
+        this.updateManipulator((battle, attacking, defending) -> battle.addAttacking(pokes));
+        return this;
+    }
+
+    TestInfo addDefending(PokemonNamesies pokes) {
+        this.addString(false, pokes.getName());
+        this.updateManipulator((battle, attacking, defending) -> battle.addDefending(pokes));
+        return this;
+    }
+
+    TestInfo addDefending(PokemonNamesies pokes, AbilityNamesies ability) {
+        this.addString(false, pokes.getName() + " (" + ability.getName() + ")");
+        this.updateManipulator((battle, attacking, defending) -> battle.addDefending(pokes).withAbility(ability));
+        return this;
+    }
+
     TestInfo attacking(AbilityNamesies abilityNamesies) {
         this.addString(true, abilityNamesies.getName());
         this.updateManipulator(PokemonManipulator.giveAttackingAbility(abilityNamesies));

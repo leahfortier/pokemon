@@ -71,6 +71,12 @@ public interface MultiTurnMove extends AttackInterface, ForceMoveEffect {
         return AttackInterface.super.shouldApplyEffects(b, user, victim) && !this.isCharging();
     }
 
+    @Override
+    default boolean ignoreAccuracyCheck() {
+        // Can never miss during the charging turn
+        return this.isCharging() || AttackInterface.super.ignoreAccuracyCheck();
+    }
+
     interface ChargingMove extends MultiTurnMove {
         @Override
         default boolean chargesFirst() {

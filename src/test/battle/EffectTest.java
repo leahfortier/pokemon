@@ -336,7 +336,7 @@ public class EffectTest extends BaseTest {
     }
 
     private void testSemiInvulnerable(Boolean firstExpected, Boolean secondExpected, AttackNamesies multiTurnMove, AttackNamesies defendingMove, boolean fullyExecuted, TestInfo testInfo) {
-        testInfo.attacking(PokemonNamesies.SHUCKLE).defending(PokemonNamesies.SHUCKLE);
+        testInfo = testInfo.copy(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
 
         TestBattle battle = testInfo.createBattle();
         TestPokemon attacking = battle.getAttacking();
@@ -466,6 +466,23 @@ public class EffectTest extends BaseTest {
                 }
         );
 
+        // Magician steals the opponent's item when it lands an item (fails with Substitute's Sticky Hold)
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .asTrainerBattle()
+                        .attacking(ItemNamesies.POTION)
+                        .defending(AbilityNamesies.MAGICIAN)
+                        .defendingFight(AttackNamesies.SWIFT),
+                (battle, attacking, defending) -> {
+                    attacking.assertNotHoldingItem();
+                    defending.assertHoldingItem(ItemNamesies.POTION);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHoldingItem(ItemNamesies.POTION);
+                    defending.assertNotHoldingItem();
+                }
+        );
+
         // Status conditions cannot happen even from indirect sources like Fling
         substituteTest(
                 new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
@@ -515,16 +532,17 @@ public class EffectTest extends BaseTest {
 
         // Should not lose attack to Intimidate
         substituteTest(
-                // Create a second Pokemon with Intimidate
-                // Then use Roar to lure it out
                 new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
                         .asTrainerBattle()
-                        .with((battle, attacking, defending) -> battle.addDefending(PokemonNamesies.SQUIRTLE)
-                                                                      .withAbility(AbilityNamesies.INTIMIDATE))
-                        .attackingFight(AttackNamesies.ROAR)
                         .with((battle, attacking, defending) -> {
-                            // Note: Need to use getDefending() since the defending var is set at the start of the turn
-                            Assert.assertTrue(battle.getDefending().isPokemon(PokemonNamesies.SQUIRTLE));
+                            // Create a second Pokemon with Intimidate
+                            TestPokemon defending2 = battle.addDefending(PokemonNamesies.SQUIRTLE);
+                            defending2.withAbility(AbilityNamesies.INTIMIDATE);
+
+                            // Use Roar to lure it out
+                            battle.assertFront(defending);
+                            battle.attackingFight(AttackNamesies.ROAR);
+                            battle.assertFront(defending2);
                         }),
                 (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.ATTACK)),
                 (battle, attacking, defending) -> attacking.assertNoStages()
@@ -533,7 +551,7 @@ public class EffectTest extends BaseTest {
         // Should not get poisoned from Toxic Spikes when Baton Passed
         substituteTest(
                 new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
-                        .with((battle, attacking, defending) -> battle.addAttacking(PokemonNamesies.SQUIRTLE))
+                        .addAttacking(PokemonNamesies.SQUIRTLE)
                         .defendingFight(AttackNamesies.TOXIC_SPIKES)
                         .attackingFight(AttackNamesies.BATON_PASS)
                         .with((battle, attacking, defending) -> {
@@ -550,7 +568,7 @@ public class EffectTest extends BaseTest {
         // Should still absorb Toxic Spikes for Baton Pass to grounded Poison Poke though
         substituteTest(
                 new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
-                        .with((battle, attacking, defending) -> battle.addAttacking(PokemonNamesies.GRIMER))
+                        .addAttacking(PokemonNamesies.GRIMER)
                         .defendingFight(AttackNamesies.TOXIC_SPIKES)
                         .attackingFight(AttackNamesies.BATON_PASS),
                 (battle, attacking, defending) -> {
@@ -566,8 +584,8 @@ public class EffectTest extends BaseTest {
                 new TestInfo(PokemonNamesies.HAPPINY, PokemonNamesies.KARTANA)
                         .fight(AttackNamesies.ENDURE, AttackNamesies.HEAD_SMASH),
                 (battle, attacking, defending) -> {
-                    attacking.assertNotFullHealth();
                     attacking.assertHp(1);
+                    defending.assertNotFullHealth();
                 },
                 (battle, attacking, defending) -> {
                     // Recoil damage is calculated based on actual HP lost, so it will only take the minimum of 1 HP
@@ -583,6 +601,218 @@ public class EffectTest extends BaseTest {
                     attacking.assertNotFullHealth();
                     attacking.assertHp(1);
                 }
+        );
+
+        // Physical contact effects should not trigger from hitting a substitute
+        // Mummy gives the Mummy ability on contact
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .attacking(AbilityNamesies.MUMMY)
+                        .defending(AbilityNamesies.OVERGROW)
+                        .defendingFight(AttackNamesies.TACKLE),
+                (battle, attacking, defending) -> defending.assertChangedAbility(AbilityNamesies.MUMMY),
+                (battle, attacking, defending) -> defending.assertAbility(AbilityNamesies.OVERGROW)
+        );
+
+        // Gooey lowers the contacter's Speed by 1 (no contact with Substitute though)
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .attacking(AbilityNamesies.GOOEY)
+                        .defendingFight(AttackNamesies.TACKLE),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-1, Stat.SPEED)),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages())
+        );
+
+        // Red Card causes the attacker to switch out when the holder is hit by an attack (prevented by Substitute)
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.HAPPINY)
+                        .asTrainerBattle()
+                        .addDefending(PokemonNamesies.SQUIRTLE)
+                        .attacking(ItemNamesies.RED_CARD)
+                        .defendingFight(AttackNamesies.SWIFT),
+                (battle, attacking, defending) -> {
+                    defending.assertSpecies(PokemonNamesies.SQUIRTLE);
+                    attacking.assertConsumedItem();
+                },
+                (battle, attacking, defending) -> {
+                    defending.assertSpecies(PokemonNamesies.HAPPINY);
+                    attacking.assertHoldingItem(ItemNamesies.RED_CARD);
+                }
+        );
+
+        // Life Orb will still have increased damage to contribute to breaking substitute, but will not cause the
+        // holder to take damage since it was absorbed
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .defending(ItemNamesies.LIFE_ORB)
+                        .with((battle, attacking, defending) -> defending.setExpectedDamageModifier(5324.0/4096.0))
+                        .defendingFight(AttackNamesies.SWIFT),
+                (battle, attacking, defending) -> defending.assertHealthRatio(.9),
+                (battle, attacking, defending) -> defending.assertFullHealth()
+        );
+
+        // Rowap Berry causes the attacker to take 1/8 max HP when landing an attack on the holder that isn't behind a Substitute
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .attacking(ItemNamesies.ROWAP_BERRY)
+                        .defendingFight(AttackNamesies.SWIFT),
+                (battle, attacking, defending) -> {
+                    defending.assertHealthRatio(7/8.0);
+                    attacking.assertConsumedBerry();
+                },
+                (battle, attacking, defending) -> {
+                    defending.assertFullHealth();
+                    attacking.assertHoldingItem(ItemNamesies.ROWAP_BERRY);
+                }
+        );
+
+        // Gulp Missile changes forms when using Surf (use Protect for full health check convenience)
+        // When in gulping form, the Pokemon will deal 1/4 Max HP and lower defense by 1 when hit by an attack
+        // Should be able to enter forms with substitute, but cannot leave until substitute is broken and takes damage
+        // TODO change Carvanha -> Cramorant once in game
+        substituteTest(
+                true,
+                new TestInfo(PokemonNamesies.CARVANHA, PokemonNamesies.XURKITREE)
+                        .attacking(AbilityNamesies.GULP_MISSILE)
+                        .fight(AttackNamesies.SURF, AttackNamesies.PROTECT)
+                        .fight(AttackNamesies.ENDURE, AttackNamesies.THUNDER),
+                (battle, attacking, defending) -> {
+                    attacking.assertHp(1);
+                    defending.assertHealthRatio(.75);
+                    defending.assertStages(new TestStages().set(-1, Stat.DEFENSE));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertFullHealth();
+                    defending.assertFullHealth();
+                    defending.assertStages(new TestStages());
+                    attacking.assertNoEffect(PokemonEffectNamesies.SUBSTITUTE);
+
+                    // To make sure Endure doesn't fail again
+                    battle.splashFight();
+
+                    // Once substitute is broken though, the form effect should trigger
+                    battle.fight(AttackNamesies.ENDURE, AttackNamesies.TACKLE);
+                    attacking.assertNotFullHealth();
+                    defending.assertHealthRatio(.75);
+                    defending.assertStages(new TestStages().set(-1, Stat.DEFENSE));
+                }
+        );
+
+        // Absorb Bulb boosts Sp. Attack when hit by a Water-move -- does not trigger with Substitute
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .attacking(ItemNamesies.ABSORB_BULB)
+                        .defendingFight(AttackNamesies.WATER_GUN),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(1, Stat.SP_ATTACK));
+                    attacking.assertConsumedItem();
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages());
+                    attacking.assertHoldingItem(ItemNamesies.ABSORB_BULB);
+                }
+        );
+
+        // Color Change will fail against a substitute
+        substituteTest(
+                new TestInfo(PokemonNamesies.KECLEON, PokemonNamesies.EEVEE)
+                        .attacking(AbilityNamesies.COLOR_CHANGE)
+                        .defendingFight(AttackNamesies.BUBBLE),
+                (battle, attacking, defending) -> {
+                    attacking.assertType(battle, Type.WATER);
+                    attacking.assertNotType(battle, Type.NORMAL);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertType(battle, Type.NORMAL);
+                    attacking.assertNotType(battle, Type.WATER);
+                }
+        );
+
+        // Air Balloon will still pop when the holder is behind a substitute (only difference is general absorbed damage)
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .with((battle, attacking, defending) -> {
+                            Assert.assertFalse(attacking.isLevitating(battle));
+                            attacking.withItem(ItemNamesies.AIR_BALLOON);
+                            Assert.assertTrue(attacking.isLevitating(battle));
+
+                            battle.defendingFight(AttackNamesies.EARTHQUAKE);
+                            defending.assertLastMoveSucceeded(false);
+                            Assert.assertTrue(attacking.isLevitating(battle));
+                            attacking.assertHoldingItem(ItemNamesies.AIR_BALLOON);
+
+                            // Pop goes the Air Balloon!
+                            battle.defendingFight(AttackNamesies.SWIFT);
+                            Assert.assertFalse(attacking.isLevitating(battle));
+                            attacking.assertConsumedItem();
+                        }),
+                (battle, attacking, defending) -> attacking.assertNotFullHealth(),
+                (battle, attacking, defending) -> attacking.assertFullHealth()
+        );
+
+        // Justified doesn't trigger from Substitute (should raise Attack when hit with a Dark-type move)
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .attacking(AbilityNamesies.JUSTIFIED)
+                        .defendingFight(AttackNamesies.BITE),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(1, Stat.ATTACK)),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages())
+        );
+
+        // Bide release should be blocked by Substitute
+        substituteTest(
+                new TestInfo(PokemonNamesies.BLISSEY, PokemonNamesies.SHUCKLE)
+                        .with((battle, attacking, defending) -> {
+                            attacking.assertFullHealth();
+                            defending.assertFullHealth();
+
+                            // Defending Bide will go first since it's an increased priority move
+                            battle.fight(AttackNamesies.FALSE_SWIPE, AttackNamesies.BIDE);
+                            attacking.assertFullHealth();
+                            defending.assertNotFullHealth();
+                            defending.assertHasEffect(PokemonEffectNamesies.BIDE);
+
+                            // Keep False Swiping to build up Bide damage
+                            battle.fight();
+                            attacking.assertFullHealth();
+                            defending.assertNotFullHealth();
+                            defending.assertHasEffect(PokemonEffectNamesies.BIDE);
+
+                            // Bide should be released this turn -- but should be blocked by substitute
+                            battle.fight();
+                            defending.assertNoEffect(PokemonEffectNamesies.BIDE);
+                        }),
+                (battle, attacking, defending) -> attacking.assertNotFullHealth(),
+                (battle, attacking, defending) -> attacking.assertFullHealth()
+        );
+
+        // Future Sight should be blocked by Substitute
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .with((battle, attacking, defending) -> {
+                            attacking.assertFullHealth();
+                            defending.assertFullHealth();
+
+                            // Cast Future Sight effect
+                            battle.setExpectedDefendingAccuracyBypass(true);
+                            battle.defendingFight(AttackNamesies.FUTURE_SIGHT);
+                            attacking.assertFullHealth();
+                            defending.assertFullHealth();
+                            battle.assertHasEffect(attacking, TeamEffectNamesies.FUTURE_SIGHT);
+
+                            // Do nothing and let the future reveal itself
+                            battle.setExpectedDefendingAccuracyBypass(null);
+                            battle.splashFight();
+                            attacking.assertFullHealth();
+                            defending.assertFullHealth();
+                            battle.assertHasEffect(attacking, TeamEffectNamesies.FUTURE_SIGHT);
+
+                            // The future is now and it says fuck you subsitute why can't I hurt you???
+                            battle.splashFight();
+                            battle.assertNoEffect(attacking, TeamEffectNamesies.FUTURE_SIGHT);
+                        }),
+                (battle, attacking, defending) -> attacking.assertNotFullHealth(),
+                (battle, attacking, defending) -> attacking.assertFullHealth()
         );
     }
 
