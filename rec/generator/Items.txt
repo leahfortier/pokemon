@@ -2206,3 +2206,14 @@ Heavy-Duty Boots:
     Price: 4000
     Fling: 80
 *
+Throat Spray:
+    Desc: Raises Sp. Atk when a Pokémon uses a sound-based move.
+    Cat: Misc
+    Int: HoldItem
+    Price: 4000
+    EndAttackEffect:
+        if (attacking.getAttack().isMoveType(MoveType.SOUND_BASED) && new StageModifier(1, Stat.SP_ATTACK).modify(b, attacking, attacking, CastSource.HELD_ITEM)) {
+            this.consumeItem(b, attacking);
+        }
+        ###
+*

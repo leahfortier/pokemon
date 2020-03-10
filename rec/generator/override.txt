@@ -2043,7 +2043,12 @@ PriorityPrevention:
         ###
     AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " prevents priority moves!!"
 *
-OpponentEndAttack:
+EndAttackEffect:
+    AddInterface: EndAttackEffect
+    Header: void endsies(Battle b, ActivePokemon attacking)
+*
+OpponentEndAttackEffect:
+    AddInterface: OpponentEndAttackEffect
     Header: void endsies(Battle b, ActivePokemon attacking)
 *
 TerrainStarter:

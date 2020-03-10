@@ -26,6 +26,7 @@ import battle.effect.InvokeInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.InvokeInterfaces.DefiniteEscape;
 import battle.effect.InvokeInterfaces.EffectExtendingEffect;
 import battle.effect.InvokeInterfaces.EffectReceivedEffect;
+import battle.effect.InvokeInterfaces.EndAttackEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.GroundedEffect;
@@ -5983,6 +5984,22 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public int flingDamage() {
             return 80;
+        }
+    }
+
+    static class ThroatSpray extends Item implements HoldItem, EndAttackEffect {
+        private static final long serialVersionUID = 1L;
+
+        ThroatSpray() {
+            super(ItemNamesies.THROAT_SPRAY, "Raises Sp. Atk when a Pokémon uses a sound-based move.", BagCategory.MISC);
+            super.price = 4000;
+        }
+
+        @Override
+        public void endsies(Battle b, ActivePokemon attacking) {
+            if (attacking.getAttack().isMoveType(MoveType.SOUND_BASED) && new StageModifier(1, Stat.SP_ATTACK).modify(b, attacking, attacking, CastSource.HELD_ITEM)) {
+                this.consumeItem(b, attacking);
+            }
         }
     }
 

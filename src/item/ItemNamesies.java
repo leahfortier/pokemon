@@ -413,6 +413,7 @@ import item.Item.TangaBerry;
 import item.Item.TauntTM;
 import item.Item.ThickClub;
 import item.Item.ThiefTM;
+import item.Item.ThroatSpray;
 import item.Item.ThunderStone;
 import item.Item.ThunderTM;
 import item.Item.ThunderWaveTM;
@@ -798,6 +799,7 @@ public enum ItemNamesies {
     CRACKED_POT("Cracked Pot", CrackedPot::new),
     EJECT_PACK("Eject Pack", EjectPack::new),
     HEAVY_DUTY_BOOTS("Heavy-Duty Boots", HeavyDutyBoots::new),
+    THROAT_SPRAY("Throat Spray", ThroatSpray::new),
     WORK_UP_TM("Work Up TM", WorkUpTM::new),
     DRAGON_CLAW_TM("Dragon Claw TM", DragonClawTM::new),
     PSYSHOCK_TM("Psyshock TM", PsyshockTM::new),

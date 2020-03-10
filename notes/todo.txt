@@ -208,4 +208,5 @@ Other random things:
     - White Herb doesn't seem right at all
     - does Parting Shot lower stats even when the user cannot switch out?
     - should I set up fossil restoration things?
+    - consumables items should be rewritten to have a boolean method that checks the consumption and consumes if true and then that method can just be called from the appropriate places because everything needing to be inside an if statement is ugly and I don't like it
     

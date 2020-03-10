@@ -1611,8 +1611,7 @@ Queenly Majesty:
 *
 Dancer:
     Desc: When another Pok\u00e9mon uses a dance move, it can use a dance move following it regardless of its Speed.
-    Int: OpponentEndAttackEffect
-    OpponentEndAttack:
+    OpponentEndAttackEffect:
         Attack attack = attacking.getAttack();
         if (attack.isMoveType(MoveType.DANCE) && (!attacking.hasAbility(this.namesies()) || !attacking.getAbility().isActive())) {
             activated = true;

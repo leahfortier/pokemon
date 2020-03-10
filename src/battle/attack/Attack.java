@@ -35,6 +35,7 @@ import battle.effect.InvokeInterfaces.CritBlockerEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.DefogRelease;
 import battle.effect.InvokeInterfaces.EffectChanceMultiplierEffect;
+import battle.effect.InvokeInterfaces.EndAttackEffect;
 import battle.effect.InvokeInterfaces.MurderEffect;
 import battle.effect.InvokeInterfaces.OpponentEndAttackEffect;
 import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
@@ -375,6 +376,7 @@ public abstract class Attack implements AttackInterface {
 
         this.uniqueEffects(b, user, victim);
 
+        EndAttackEffect.invokeEndAttackEffect(b, user);
         OpponentEndAttackEffect.invokeOpponentEndAttackEffect(b, user);
     }
 

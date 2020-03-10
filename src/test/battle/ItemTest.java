@@ -937,4 +937,154 @@ public class ItemTest extends BaseTest {
                 withBoots
         );
     }
+
+    @Test
+    public void throatSprayTest() {
+        // Throat Spray increases Sp. Attack by 1 stages when using a sound-based move (like Growl)
+        throatSprayTest(
+                true, AttackNamesies.GROWL, new TestInfo(),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-1, Stat.ATTACK))
+        );
+
+        // If move fails for something like sound-immunity, Throat Spray should not activate
+        throatSprayTest(
+                false, AttackNamesies.GROWL, new TestInfo().defending(AbilityNamesies.SOUNDPROOF),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages())
+        );
+
+        // Currently does not count as a failure if individual effects fail like unable to decrease stats
+        throatSprayTest(
+                true, AttackNamesies.GROWL, new TestInfo().defending(AbilityNamesies.HYPER_CUTTER),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages())
+        );
+
+        // Throat Spray will fail if cannot execute due to Throat Chop
+        throatSprayTest(
+                false, AttackNamesies.GROWL, new TestInfo().fight(AttackNamesies.ENDURE, AttackNamesies.THROAT_CHOP),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages())
+        );
+
+        // Throat Spray will not be consumed if Sp. Attack is already maximized
+        throatSprayTest(
+                false, AttackNamesies.GROWL, new TestInfo().attackingFight(AttackNamesies.NASTY_PLOT)
+                                                           .attackingFight(AttackNamesies.NASTY_PLOT)
+                                                           .attackingFight(AttackNamesies.NASTY_PLOT),
+                new TestStages().set(6, Stat.SP_ATTACK),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-1, Stat.ATTACK))
+        );
+
+        // Or if minimized with Contrary
+        throatSprayTest(
+                false, AttackNamesies.GROWL, new TestInfo().attacking(AbilityNamesies.CONTRARY)
+                                                           .attackingFight(AttackNamesies.NASTY_PLOT)
+                                                           .attackingFight(AttackNamesies.NASTY_PLOT)
+                                                           .attackingFight(AttackNamesies.NASTY_PLOT),
+                new TestStages().set(-6, Stat.SP_ATTACK),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-1, Stat.ATTACK))
+        );
+
+        // Throat Spray only works with sound-based moves
+        throatSprayTest(
+                false, AttackNamesies.TAIL_WHIP, new TestInfo(),
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-1, Stat.DEFENSE))
+        );
+
+        // Throat Spray works with damaging moves as well
+        throatSprayTest(
+                true, AttackNamesies.BOOMBURST, new TestInfo(),
+                (battle, attacking, defending) -> defending.assertNotFullHealth()
+        );
+
+        // But will not activate if uneffective for type-advantage
+        throatSprayTest(
+                false, AttackNamesies.BOOMBURST, new TestInfo().defending(PokemonNamesies.GASTLY),
+                (battle, attacking, defending) -> defending.assertFullHealth()
+        );
+
+        // Soundproof blocks damaging moves as well
+        throatSprayTest(
+                false, AttackNamesies.BOOMBURST, new TestInfo().defending(AbilityNamesies.SOUNDPROOF),
+                (battle, attacking, defending) -> defending.assertFullHealth()
+        );
+
+        // Throat Spray fails for Water Absorb + Liquid Voice + Boomburst
+        throatSprayTest(
+                false, AttackNamesies.BOOMBURST,
+                new TestInfo().attacking(AbilityNamesies.LIQUID_VOICE)
+                              .defending(AbilityNamesies.WATER_ABSORB)
+                              .defendingFight(AttackNamesies.BELLY_DRUM),
+                (battle, attacking, defending) -> defending.assertHealthRatio(.75, 1)
+        );
+
+        // Throat Spray will activate from self-target moves like Clangorous Soul
+        throatSprayTest(
+                true, AttackNamesies.CLANGOROUS_SOUL, new TestInfo(),
+                new TestStages().set(1, Stat.ATTACK, Stat.DEFENSE, Stat.SP_DEFENSE, Stat.SPEED).set(2, Stat.SP_ATTACK),
+                (battle, attacking, defending) -> attacking.assertHealthRatio(2/3.0)
+        );
+
+        // Soundproof should not block self-target attacks
+        throatSprayTest(
+                true, AttackNamesies.CLANGOROUS_SOUL, new TestInfo().attacking(AbilityNamesies.SOUNDPROOF),
+                new TestStages().set(1, Stat.ATTACK, Stat.DEFENSE, Stat.SP_DEFENSE, Stat.SPEED).set(2, Stat.SP_ATTACK),
+                (battle, attacking, defending) -> attacking.assertHealthRatio(2/3.0)
+        );
+
+        // Perish Song will activate Throat Spray
+        throatSprayTest(
+                true, AttackNamesies.PERISH_SONG, new TestInfo(),
+                (battle, attacking, defending) -> {
+                    attacking.assertHasEffect(PokemonEffectNamesies.PERISH_SONG);
+                    defending.assertHasEffect(PokemonEffectNamesies.PERISH_SONG);
+                }
+        );
+
+        // Even when neither target is affected
+        throatSprayTest(
+                true, AttackNamesies.PERISH_SONG, new TestInfo().attacking(AbilityNamesies.SOUNDPROOF).defending(AbilityNamesies.SOUNDPROOF),
+                (battle, attacking, defending) -> {
+                    attacking.assertNoEffect(PokemonEffectNamesies.PERISH_SONG);
+                    defending.assertNoEffect(PokemonEffectNamesies.PERISH_SONG);
+                }
+        );
+
+        // Grass Whistle is affected by Throat Spray
+        throatSprayTest(
+                true, AttackNamesies.GRASS_WHISTLE, new TestInfo(),
+                (battle, attacking, defending) -> defending.assertHasStatus(StatusNamesies.ASLEEP)
+        );
+
+        // Even if target cannot be put to sleep
+        throatSprayTest(
+                true, AttackNamesies.GRASS_WHISTLE, new TestInfo().defending(AbilityNamesies.INSOMNIA),
+                (battle, attacking, defending) -> defending.assertNoStatus()
+        );
+    }
+
+    private void throatSprayTest(boolean consumed, AttackNamesies attack, TestInfo testInfo, PokemonManipulator afterCheck) {
+        TestStages stages = consumed ? new TestStages().set(1, Stat.SP_ATTACK) : new TestStages();
+        throatSprayTest(consumed, attack, testInfo, stages, afterCheck);
+    }
+
+    private void throatSprayTest(boolean consumed, AttackNamesies attack, TestInfo testInfo, TestStages stages, PokemonManipulator afterCheck) {
+        TestBattle battle = testInfo.createBattle();
+        TestPokemon attacking = battle.getAttacking();
+
+        testInfo.manipulate(battle);
+        attacking.assertNotHoldingItem();
+
+        attacking.withItem(ItemNamesies.THROAT_SPRAY);
+        battle.fight(attack, AttackNamesies.ENDURE);
+
+        if (consumed) {
+            attacking.assertConsumedItem();
+            attacking.assertNotHoldingItem();
+        } else {
+            attacking.assertHoldingItem(ItemNamesies.THROAT_SPRAY);
+            attacking.assertNotConsumedItem();
+        }
+
+        attacking.assertStages(stages);
+        afterCheck.manipulate(battle);
+    }
 }
