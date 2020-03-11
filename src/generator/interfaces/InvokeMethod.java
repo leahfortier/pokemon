@@ -35,8 +35,9 @@ abstract class InvokeMethod {
     }
 
     String writeInvokeMethod(final InterfaceMethod interfaceMethod) {
-        final String header = MethodWriter.createHeader(
-                "static " + this.getReturnType(interfaceMethod),
+        String headerPrefix = (interfaceMethod.isPrivate() ? "private " : "") + "static ";
+        String header = MethodWriter.createHeader(
+                headerPrefix + this.getReturnType(interfaceMethod),
                 this.getMethodName(interfaceMethod),
                 this.getInvokeParameters(interfaceMethod)
         );

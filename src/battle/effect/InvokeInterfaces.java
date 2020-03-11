@@ -1801,10 +1801,8 @@ public final class InvokeInterfaces {
     }
 
     public interface ItemBlockerEffect {
-
-        static boolean containsItemBlockerEffect(Battle b, ActivePokemon p) {
-            // Don't include the item because then it's all like ahhhhhh
-            List<InvokeEffect> invokees = b.getEffectsList(p, false);
+        private static boolean containsItemBlockerEffect(Battle b, ActivePokemon p) {
+            List<InvokeEffect> invokees = b.getEffectsList(p);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof ItemBlockerEffect && invokee.isActiveEffect()) {
                     return true;
@@ -1813,14 +1811,24 @@ public final class InvokeInterfaces {
 
             return false;
         }
+
+        static boolean shouldBlockItem(Battle b, ActivePokemon p) {
+            if (p.isCheckingItemEffect()) {
+                return false;
+            }
+
+            p.setCheckingItemEffect(true);
+            boolean blockItem = containsItemBlockerEffect(b, p);
+            p.setCheckingItemEffect(false);
+            return blockItem;
+        }
     }
 
     public interface OpponentItemBlockerEffect {
         boolean blockItem(ItemNamesies item);
 
-        static boolean checkOpponentItemBlockerEffect(Battle b, ActivePokemon opp, ItemNamesies item) {
-            // Don't include the item because then it's all like ahhhhhh
-            List<InvokeEffect> invokees = b.getEffectsList(opp, false);
+        private static boolean checkOpponentItemBlockerEffect(Battle b, ActivePokemon opp, ItemNamesies item) {
+            List<InvokeEffect> invokees = b.getEffectsList(opp);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof OpponentItemBlockerEffect && invokee.isActiveEffect()) {
                     OpponentItemBlockerEffect effect = (OpponentItemBlockerEffect)invokee;
@@ -1831,6 +1839,17 @@ public final class InvokeInterfaces {
             }
 
             return false;
+        }
+
+        static boolean shouldBlockItem(Battle b, ActivePokemon opp, ItemNamesies item) {
+            if (opp.isCheckingItemEffect()) {
+                return false;
+            }
+
+            opp.setCheckingItemEffect(true);
+            boolean blockItem = checkOpponentItemBlockerEffect(b, opp, item);
+            opp.setCheckingItemEffect(false);
+            return blockItem;
         }
     }
 

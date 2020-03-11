@@ -122,6 +122,12 @@ public enum InterfaceMethodKey {
         }
         builder.isOverride = true;
     })),
+    PRIVATE("Private", ((builder, fields, value) -> {
+        if (!value.equals("True")) {
+            Global.error("Invalid value for Private: " + value);
+        }
+        builder.isPrivate = true;
+    })),
     BEGIN("Begin", ((builder, fields, value) -> {
         builder.begin = value;
     }));
