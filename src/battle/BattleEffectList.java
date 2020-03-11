@@ -51,8 +51,13 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
 
     @Override
     public List<BattleEffect<? extends BattleEffectNamesies>> asList() {
+        List<BattleEffect<? extends BattleEffectNamesies>> list = this.asListNoWeather();
+        list.add(this.getWeather());
+        return list;
+    }
+
+    public List<BattleEffect<? extends BattleEffectNamesies>> asListNoWeather() {
         List<BattleEffect<? extends BattleEffectNamesies>> list = super.asList();
-        list.add(weather);
         if (this.hasTerrain()) {
             list.add(currentTerrain);
         }
@@ -72,11 +77,6 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
             weather = (WeatherEffect)effect;
             Messages.add(new MessageUpdate().withWeather(weather));
             WeatherChangedEffect.invokeWeatherChangedEffect(battle, weather.namesies());
-
-            // If weather should be eliminated, recurse with Clear Skies
-            if (WeatherEliminatingEffect.shouldEliminateWeather(battle, weather.namesies())) {
-                this.add(WeatherNamesies.CLEAR_SKIES.getEffect());
-            }
         } else if (effect instanceof TerrainEffect) {
             currentTerrain = (TerrainEffect)effect;
 
@@ -133,6 +133,11 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
     }
 
     public WeatherEffect getWeather() {
+        // When the weather is eliminated, all that remains is Clear Skies
+        if (WeatherEliminatingEffect.shouldEliminateWeather(battle)) {
+            return WeatherNamesies.CLEAR_SKIES.getEffect();
+        }
+
         return weather;
     }
 

@@ -941,28 +941,24 @@ WeatherEliminatingEffect:
         Header: String getEliminateMessage(ActivePokemon eliminator)
     *
     Method:
-        Header: boolean eliminateWeather(WeatherNamesies weather)
-        Default:
-            return weather != WeatherNamesies.CLEAR_SKIES;
-            ###
         InvokeParameters: Battle b, ActivePokemon eliminator
-        Invoke: CheckMessage true getEliminateMessage(eliminator)
+        Invoke: Contains
         EffectList: eliminator
         InvokeName: shouldEliminateWeather
     *
-    Extends: EntryEndTurnEffect
+    Extends: EntryEffect
     Method:
         Override: True
-        Header: void applyEffect(Battle b, ActivePokemon p)
+        Header: void enter(Battle b, ActivePokemon enterer)
         Default:
-            b.addEffect(b.getWeather());
+            Messages.add(this.getEliminateMessage(enterer));
             ###
     *
     StaticMethod:
         Comments: // Calls the invoke method for both front Pokemon
-        Header: boolean shouldEliminateWeather(Battle b, WeatherNamesies weather)
+        Header: boolean shouldEliminateWeather(Battle b)
         Body:
-            return shouldEliminateWeather(b, b.getPlayer().front(), weather) || shouldEliminateWeather(b, b.getOpponent().front(), weather);
+            return shouldEliminateWeather(b, b.getPlayer().front()) || shouldEliminateWeather(b, b.getOpponent().front());
             ###
     *
 ***

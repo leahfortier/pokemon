@@ -483,7 +483,8 @@ public class Battle implements Serializable {
 
         list.addAll(p.getAllEffects(includeItem));
         list.addAll(this.getTrainer(p).getEffects().asList());
-        list.addAll(this.getEffects().asList());
+        list.addAll(this.getEffects().asListNoWeather());
+        list.add(p.getWeather(this));
 
         return list;
     }

@@ -6,7 +6,6 @@ import battle.attack.Attack;
 import battle.attack.AttackInterface;
 import battle.attack.Move;
 import battle.attack.MoveType;
-import battle.effect.EffectInterfaces.EntryEndTurnEffect;
 import battle.effect.EffectInterfaces.OnDamageEffect;
 import battle.effect.EffectInterfaces.PowderMove;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
@@ -1745,27 +1744,19 @@ public final class InvokeInterfaces {
         }
     }
 
-    public interface WeatherEliminatingEffect extends EntryEndTurnEffect {
+    public interface WeatherEliminatingEffect extends EntryEffect {
         String getEliminateMessage(ActivePokemon eliminator);
 
-        default boolean eliminateWeather(WeatherNamesies weather) {
-            return weather != WeatherNamesies.CLEAR_SKIES;
-        }
-
         @Override
-        default void applyEffect(Battle b, ActivePokemon p) {
-            b.addEffect(b.getWeather());
+        default void enter(Battle b, ActivePokemon enterer) {
+            Messages.add(this.getEliminateMessage(enterer));
         }
 
-        static boolean shouldEliminateWeather(Battle b, ActivePokemon eliminator, WeatherNamesies weather) {
+        static boolean shouldEliminateWeather(Battle b, ActivePokemon eliminator) {
             List<InvokeEffect> invokees = b.getEffectsList(eliminator);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof WeatherEliminatingEffect && invokee.isActiveEffect()) {
-                    WeatherEliminatingEffect effect = (WeatherEliminatingEffect)invokee;
-                    if (effect.eliminateWeather(weather)) {
-                        Messages.add(effect.getEliminateMessage(eliminator));
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -1773,8 +1764,8 @@ public final class InvokeInterfaces {
         }
 
         // Calls the invoke method for both front Pokemon
-        static boolean shouldEliminateWeather(Battle b, WeatherNamesies weather) {
-            return shouldEliminateWeather(b, b.getPlayer().front(), weather) || shouldEliminateWeather(b, b.getOpponent().front(), weather);
+        static boolean shouldEliminateWeather(Battle b) {
+            return shouldEliminateWeather(b, b.getPlayer().front()) || shouldEliminateWeather(b, b.getOpponent().front());
         }
     }
 
