@@ -474,13 +474,19 @@ public class Battle implements Serializable {
     }
 
     public List<InvokeEffect> getEffectsList(ActivePokemon p, InvokeEffect... additionalItems) {
+        List<InvokeEffect> list = this.getIndividualAndTeamEffects(p, additionalItems);
+        list.addAll(this.getEffects().asListNoWeather());
+        list.add(p.getWeather(this));
+        return list;
+    }
+
+    // Only includes PokemonEffects and TeamEffects, but not BattleEffects (including Weather and Terrain)
+    public List<InvokeEffect> getIndividualAndTeamEffects(ActivePokemon p, InvokeEffect... additionalItems) {
         List<InvokeEffect> list = new ArrayList<>();
         Collections.addAll(list, additionalItems);
 
         list.addAll(p.getAllEffects());
         list.addAll(this.getTrainer(p).getEffects().asList());
-        list.addAll(this.getEffects().asListNoWeather());
-        list.add(p.getWeather(this));
 
         return list;
     }

@@ -174,7 +174,7 @@ public final class InvokeInterfaces {
                 return;
             }
 
-            List<InvokeEffect> invokees = b.getEffectsList(victim);
+            List<InvokeEffect> invokees = b.getIndividualAndTeamEffects(victim);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof EndTurnEffect && invokee.isActiveEffect()) {
                     EndTurnEffect effect = (EndTurnEffect)invokee;
@@ -1551,7 +1551,7 @@ public final class InvokeInterfaces {
         void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain);
 
         static void invokeTerrainCastEffect(Battle b, ActivePokemon p, TerrainType newTerrain) {
-            List<InvokeEffect> invokees = b.getEffectsList(p);
+            List<InvokeEffect> invokees = b.getIndividualAndTeamEffects(p);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof TerrainCastEffect && invokee.isActiveEffect()) {
                     TerrainCastEffect effect = (TerrainCastEffect)invokee;
@@ -1752,8 +1752,8 @@ public final class InvokeInterfaces {
             Messages.add(this.getEliminateMessage(enterer));
         }
 
-        static boolean shouldEliminateWeather(Battle b, ActivePokemon eliminator) {
-            List<InvokeEffect> invokees = b.getEffectsList(eliminator);
+        private static boolean shouldEliminateWeather(Battle b, ActivePokemon eliminator) {
+            List<InvokeEffect> invokees = b.getIndividualAndTeamEffects(eliminator);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof WeatherEliminatingEffect && invokee.isActiveEffect()) {
                     return true;
@@ -1775,8 +1775,8 @@ public final class InvokeInterfaces {
         // Note: The effect holder here is not necessarily the Pokemon that changed the weather, but the Pokemon which holds the WeatherChangedEffect
         void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder);
 
-        static void checkWeatherChange(Battle b, WeatherNamesies weather, ActivePokemon effectHolder) {
-            List<InvokeEffect> invokees = b.getEffectsList(effectHolder);
+        private static void checkWeatherChange(Battle b, WeatherNamesies weather, ActivePokemon effectHolder) {
+            List<InvokeEffect> invokees = b.getIndividualAndTeamEffects(effectHolder);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof WeatherChangedEffect && invokee.isActiveEffect()) {
                     WeatherChangedEffect effect = (WeatherChangedEffect)invokee;
@@ -1827,6 +1827,7 @@ public final class InvokeInterfaces {
     }
 
     public interface ItemBlockerEffect {
+
         private static boolean containsItemBlockerEffect(Battle b, ActivePokemon p) {
             List<InvokeEffect> invokees = b.getEffectsList(p);
             for (InvokeEffect invokee : invokees) {

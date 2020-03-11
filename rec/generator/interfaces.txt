@@ -67,7 +67,7 @@ EndTurnEffect:
         Header: void applyEndTurn(ActivePokemon victim, Battle b)
         Invoke: Void
         Deadsies: victim
-        EffectList: victim
+        TeamEffectList: victim
     *
 ***
 BattleEndTurnEffect:
@@ -838,7 +838,7 @@ TerrainCastEffect:
     Method:
         Header: void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain)
         Invoke: Void
-        EffectList: p
+        TeamEffectList: p
     *
 ***
 AttackBlocker:
@@ -943,8 +943,9 @@ WeatherEliminatingEffect:
     Method:
         InvokeParameters: Battle b, ActivePokemon eliminator
         Invoke: Contains
-        EffectList: eliminator
+        TeamEffectList: eliminator
         InvokeName: shouldEliminateWeather
+        Private: True
     *
     Extends: EntryEffect
     Method:
@@ -968,9 +969,10 @@ WeatherChangedEffect:
         Comments: // Note: The effect holder here is not necessarily the Pokemon that changed the weather, but the Pokemon which holds the WeatherChangedEffect
         Header: void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder)
         Invoke: Void
-        EffectList: effectHolder
+        TeamEffectList: effectHolder
         InvokeName: checkWeatherChange
         InvokeParameters: Battle b
+        Private: True
     *
     StaticMethod:
         Comments: // Calls the invoke method for both front Pokemon
