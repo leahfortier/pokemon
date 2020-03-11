@@ -25,6 +25,7 @@ import pokemon.stat.Stat;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
+import type.Type;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -1086,5 +1087,63 @@ public class ItemTest extends BaseTest {
 
         attacking.assertStages(stages);
         afterCheck.manipulate(battle);
+    }
+
+    @Test
+    public void utilityUmbrellaTest() {
+        // Utility Umbrella will not give boost to Fire-moves or decrease to Water-moves in Sunny weather
+        // Similarly no boosts/decreases in the rain
+        utilityUmbrellaTest(1.5, .5, AttackNamesies.SUNNY_DAY);
+        utilityUmbrellaTest(.5, 1.5, AttackNamesies.RAIN_DANCE);
+
+        // Weather Ball will always be Normal-type and will not deal double damage with Utility Umbrella
+        utilityUmbrellaTest(
+                new TestInfo().attackingFight(AttackNamesies.HAIL)
+                              .with(AttackNamesies.WEATHER_BALL),
+                (battle, attacking, defending) -> {
+                    attacking.setExpectedDamageModifier(2.0);
+                    attacking.assertAttackType(Type.ICE);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.setExpectedDamageModifier(1.0);
+                    attacking.assertAttackType(Type.NORMAL);
+                },
+                (battle, attacking, defending) -> battle.fight()
+        );
+    }
+
+    private void utilityUmbrellaTest(double fireBoost, double waterBoost, AttackNamesies weatherAttack) {
+        utilityUmbrellaTest(fireBoost, weatherAttack, AttackNamesies.EMBER);
+        utilityUmbrellaTest(waterBoost, weatherAttack, AttackNamesies.WATER_GUN);
+        utilityUmbrellaTest(1, weatherAttack, AttackNamesies.THUNDER_SHOCK);
+    }
+
+    private void utilityUmbrellaTest(double weatherBoost, AttackNamesies weatherAttack, AttackNamesies boostAttack) {
+        utilityUmbrellaTest(
+                new TestInfo().attackingFight(weatherAttack),
+                (battle, attacking, defending) -> attacking.setExpectedDamageModifier(weatherBoost),
+                (battle, attacking, defending) -> attacking.setExpectedDamageModifier(1.0),
+                (battle, attacking, defending) -> battle.attackingFight(boostAttack)
+        );
+    }
+
+    private void utilityUmbrellaTest(TestInfo testInfo, PokemonManipulator withoutUmbrella, PokemonManipulator withUmbrella) {
+        utilityUmbrellaTest(testInfo, withoutUmbrella, withUmbrella, PokemonManipulator.empty());
+    }
+
+    private void utilityUmbrellaTest(TestInfo testInfo, PokemonManipulator withoutUmbrella, PokemonManipulator withUmbrella, PokemonManipulator afterBoth) {
+        testInfo.doubleTake(
+                (battle, attacking, defending) -> attacking.withItem(ItemNamesies.UTILITY_UMBRELLA),
+                (battle, attacking, defending) -> {
+                    attacking.assertNotHoldingItem();
+                    withoutUmbrella.manipulate(battle);
+                    afterBoth.manipulate(battle);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHoldingItem(ItemNamesies.UTILITY_UMBRELLA);
+                    withUmbrella.manipulate(battle);
+                    afterBoth.manipulate(battle);
+                }
+        );
     }
 }

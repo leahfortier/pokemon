@@ -242,7 +242,7 @@ SemiInv:
         ###
 *
 RequiresCharge:
-    Header: boolean requiresCharge(Battle b)
+    Header: boolean requiresCharge(Battle b, ActivePokemon user)
 *
 SunlightCharger:
     AddMapField: ChargingMove: user.getName() + " began taking in sunlight!"
@@ -1350,10 +1350,10 @@ EncounterRateMultiplier:
 WeatherEncounterRateDecreaser:
     AddMapField: EncounterRateMultiplier: Game.getPlayer().getArea().getWeather() == WeatherState.{00} ? .5 : 1
 *
-BuffetMessage:
+EndTurnBuffet:
     AddMapField: BattleEndTurn:
         // Don't buffet the immune!
-        if (victim.isType(b, {1_})) {
+        if (victim.isType(b, {2-})) {
             return;
         }
 
@@ -1363,7 +1363,7 @@ BuffetMessage:
         }
 
         // Buffety buffety buffet
-        victim.reduceHealthFraction(b, 1/16.0, {2-});
+        victim.reduceHealthFraction(b, 1/16.0, victim.getName() + " is buffeted by the {1}!");
         ###
 *
 WeatherStatChange:

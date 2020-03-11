@@ -2217,3 +2217,10 @@ Throat Spray:
         }
         ###
 *
+Utility Umbrella:
+    Desc: An item to be held by a Pokémon. This sturdy umbrella protects the holder from the effects of weather.
+    Cat: Misc
+    Int: HoldItem
+    Fling: 60
+    Price: 4000
+*

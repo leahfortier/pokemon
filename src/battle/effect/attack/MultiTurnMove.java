@@ -20,7 +20,7 @@ public interface MultiTurnMove extends AttackInterface, ForceMoveEffect {
         return false;
     }
 
-    default boolean requiresCharge(Battle b) {
+    default boolean requiresCharge(Battle b, ActivePokemon user) {
         return true;
     }
 
@@ -47,7 +47,7 @@ public interface MultiTurnMove extends AttackInterface, ForceMoveEffect {
     @Override
     default void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
         this.switchReady();
-        if (this.isCharging() && (!this.requiresCharge(b) || this.checkPowerHerb(b, attacking))) {
+        if (this.isCharging() && (!this.requiresCharge(b, attacking) || this.checkPowerHerb(b, attacking))) {
             this.switchReady();
         }
     }

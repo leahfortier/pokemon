@@ -859,7 +859,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public boolean requiresCharge(Battle b) {
+        public boolean requiresCharge(Battle b, ActivePokemon user) {
             // Does not need to charge during harsh sunlight
             return !b.isWeather(WeatherNamesies.SUNNY);
         }
@@ -912,7 +912,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public boolean requiresCharge(Battle b) {
+        public boolean requiresCharge(Battle b, ActivePokemon user) {
             // Does not need to charge during harsh sunlight
             return !b.isWeather(WeatherNamesies.SUNNY);
         }

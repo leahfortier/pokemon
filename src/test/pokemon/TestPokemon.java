@@ -330,6 +330,11 @@ public class TestPokemon extends ActivePokemon {
         Assert.assertFalse(this.isType(b, type));
     }
 
+    public void assertAttackType(Type type) {
+        Assert.assertEquals(type, this.getAttackType());
+        Assert.assertTrue(this.isAttackType(type));
+    }
+
     public void assertSpecies(PokemonNamesies species) {
         Assert.assertTrue(this.namesies() + " " + species, this.isPokemon(species));
         if (species == this.namesies()) {

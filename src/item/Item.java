@@ -6003,6 +6003,20 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
+    static class UtilityUmbrella extends Item implements HoldItem {
+        private static final long serialVersionUID = 1L;
+
+        UtilityUmbrella() {
+            super(ItemNamesies.UTILITY_UMBRELLA, "An item to be held by a Pokémon. This sturdy umbrella protects the holder from the effects of weather.", BagCategory.MISC);
+            super.price = 4000;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 60;
+        }
+    }
+
     static class WorkUpTM extends Item implements TechnicalMachine {
         private static final long serialVersionUID = 1L;
 
