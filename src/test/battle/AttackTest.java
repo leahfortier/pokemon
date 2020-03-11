@@ -2734,7 +2734,8 @@ public class AttackTest extends BaseTest {
         counteringTest(true, AttackNamesies.SWIFT, AttackNamesies.MIRROR_COAT);
 
         // Moves that hit multiple times should accumulate damage to be countered
-        counteringTest(true, AttackNamesies.TWINEEDLE, AttackNamesies.COUNTER);
+        counteringTest(true, AttackNamesies.DUAL_CHOP, AttackNamesies.COUNTER);
+        counteringTest(true, AttackNamesies.TRIPLE_KICK, AttackNamesies.COUNTER);
         counteringTest(true, AttackNamesies.WATER_SHURIKEN, AttackNamesies.MIRROR_COAT);
 
         // False Swipe at 1 HP should take no damage and nothing to Counter

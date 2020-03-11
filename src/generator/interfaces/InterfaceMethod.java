@@ -31,6 +31,7 @@ class InterfaceMethod {
 
     private final String defaultMethod;
     private final boolean isOverride;
+    private final boolean isPrivate;
 
     private final String begin;
 
@@ -55,6 +56,7 @@ class InterfaceMethod {
         this.deadsies = builder.deadsies;
         this.defaultMethod = builder.defaultMethod;
         this.isOverride = builder.isOverride;
+        this.isPrivate = builder.isPrivate;
         this.begin = builder.begin;
         this.comments = builder.comments;
         this.invokeMethod = builder.invokeMethod;
@@ -133,6 +135,10 @@ class InterfaceMethod {
 
     boolean isMoldBreakerNullCheck() {
         return this.moldBreakerNullCheck;
+    }
+
+    boolean isPrivate() {
+        return this.isPrivate;
     }
 
     String getBattleParameter() {

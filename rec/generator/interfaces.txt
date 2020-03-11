@@ -1004,9 +1004,20 @@ ItemBlockerEffect:
     Method:
         InvokeParameters: Battle b, ActivePokemon p
         Invoke: Contains
-        SetInvokees:
-            // Don't include the item because then it's all like ahhhhhh
-            List<InvokeEffect> invokees = b.getEffectsList(p, false);
+        EffectList: p
+        Private: True
+    *
+    StaticMethod:
+        Header: boolean shouldBlockItem(Battle b, ActivePokemon p)
+        Body:
+            if (p.isCheckingItemEffect()) {
+                return false;
+            }
+            
+            p.setCheckingItemEffect(true);
+            boolean blockItem = containsItemBlockerEffect(b, p);
+            p.setCheckingItemEffect(false);
+            return blockItem;
             ###
     *
 ***
@@ -1015,9 +1026,20 @@ OpponentItemBlockerEffect:
         Header: boolean blockItem(ItemNamesies item)
         InvokeParameters: Battle b, ActivePokemon opp
         Invoke: Check true
-        SetInvokees:
-            // Don't include the item because then it's all like ahhhhhh
-            List<InvokeEffect> invokees = b.getEffectsList(opp, false);
+        EffectList: opp
+        Private: True
+    *
+    StaticMethod:
+        Header: boolean shouldBlockItem(Battle b, ActivePokemon opp, ItemNamesies item)
+        Body:
+            if (opp.isCheckingItemEffect()) {
+                return false;
+            }
+            
+            opp.setCheckingItemEffect(true);
+            boolean blockItem = checkOpponentItemBlockerEffect(b, opp, item);
+            opp.setCheckingItemEffect(false);
+            return blockItem;
             ###
     *
 ***

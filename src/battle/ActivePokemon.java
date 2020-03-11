@@ -98,6 +98,8 @@ public class ActivePokemon extends PartyPokemon {
     private boolean battleUsed;
     private boolean lastMoveSucceeded;
 
+    private boolean checkingItemEffect;
+
     // General constructor for an active Pokemon (isPlayer is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
     public ActivePokemon(PokemonNamesies pokemonNamesies, int level, TrainerType trainerType) {
         super(pokemonNamesies, level, trainerType);
@@ -676,17 +678,11 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public List<InvokeEffect> getAllEffects() {
-        return this.getAllEffects(true);
-    }
-
-    public List<InvokeEffect> getAllEffects(final boolean includeItem) {
         List<InvokeEffect> list = new ArrayList<>();
         list.add(this.getStatus());
         list.add(this.getAbility());
         list.addAll(this.getEffects().asList());
-        if (includeItem) {
-            list.add(this.getHeldItem());
-        }
+        list.add(this.getHeldItem());
 
         return list;
     }
@@ -871,13 +867,21 @@ public class ActivePokemon extends PartyPokemon {
         this.effects.remove(PokemonEffectNamesies.CHANGE_ITEM);
     }
 
+    public void setCheckingItemEffect(boolean isChecking) {
+        this.checkingItemEffect = isChecking;
+    }
+
+    public boolean isCheckingItemEffect() {
+        return this.checkingItemEffect;
+    }
+
     public HoldItem getHeldItem() {
         Battle b = Game.getPlayer().getBattle();
         if (b == null) {
             return getActualHeldItem();
         }
 
-        if (ItemBlockerEffect.containsItemBlockerEffect(b, this)) {
+        if (ItemBlockerEffect.shouldBlockItem(b, this)) {
             return (HoldItem)ItemNamesies.NO_ITEM.getItem();
         }
 
@@ -885,7 +889,7 @@ public class ActivePokemon extends PartyPokemon {
         PokemonEffect changeItem = getEffect(PokemonEffectNamesies.CHANGE_ITEM);
         HoldItem item = changeItem == null ? getActualHeldItem() : ((ItemHolder)changeItem).getItem();
 
-        if (OpponentItemBlockerEffect.checkOpponentItemBlockerEffect(b, b.getOtherPokemon(this), item.namesies())) {
+        if (OpponentItemBlockerEffect.shouldBlockItem(b, b.getOtherPokemon(this), item.namesies())) {
             return (HoldItem)ItemNamesies.NO_ITEM.getItem();
         }
 
