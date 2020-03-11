@@ -20,7 +20,6 @@ import battle.effect.battle.BattleEffect;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.battle.weather.WeatherEffect;
 import battle.effect.battle.weather.WeatherNamesies;
-import item.ItemNamesies;
 import main.Game;
 import main.Global;
 import map.overworld.TerrainType;
@@ -485,10 +484,6 @@ public class Battle implements Serializable {
         list.addAll(p.getAllEffects(includeItem));
         list.addAll(this.getTrainer(p).getEffects().asList());
         list.addAll(this.getEffects().asList());
-
-        if (includeItem && p.isHoldingItem(ItemNamesies.UTILITY_UMBRELLA)) {
-            list.remove(this.getWeather());
-        }
 
         return list;
     }

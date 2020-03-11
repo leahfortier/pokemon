@@ -430,6 +430,7 @@ import item.Item.TwistedSpoon;
 import item.Item.UTurnTM;
 import item.Item.UltraBall;
 import item.Item.UpGrade;
+import item.Item.UtilityUmbrella;
 import item.Item.VenoshockTM;
 import item.Item.VoltSwitchTM;
 import item.Item.WacanBerry;

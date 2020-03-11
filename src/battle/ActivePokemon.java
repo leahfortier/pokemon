@@ -421,11 +421,20 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public WeatherEffect getWeather(Battle b) {
+        // Utility umbrella ignore all weather effects (because I think it makes more sense than just sun and rain sue me)
+        if (this.isHoldingItem(ItemNamesies.UTILITY_UMBRELLA)) {
+            return WeatherNamesies.CLEAR_SKIES.getEffect();
+        }
+
         return b.getEffects().getWeather();
     }
 
-    public boolean isWeather(Battle b, WeatherNamesies weatherNamesies) {
-        return this.getWeather(b).namesies() == weatherNamesies;
+    public WeatherNamesies getWeatherType(Battle b) {
+        return this.getWeather(b).namesies();
+    }
+
+    public boolean isInWeather(Battle b, WeatherNamesies weatherNamesies) {
+        return this.getWeatherType(b) == weatherNamesies;
     }
 
     @Override

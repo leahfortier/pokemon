@@ -645,7 +645,7 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Doubles stat changes in the sunlight
-            int modifier = b.isWeather(WeatherNamesies.SUNNY) ? 2 : 1;
+            int modifier = attacking.isInWeather(b, WeatherNamesies.SUNNY) ? 2 : 1;
 
             super.stageModifier.reset();
             super.stageModifier.set(modifier, Stat.ATTACK, Stat.SP_ATTACK);
@@ -695,7 +695,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
-            switch (b.getWeather().namesies()) {
+            switch (victim.getWeatherType(b)) {
                 case SUNNY:
                     return 2/3.0;
                 case HAILING:
@@ -848,7 +848,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            switch (b.getWeather().namesies()) {
+            switch (user.getWeatherType(b)) {
                 case HAILING:
                 case RAINING:
                 case SANDSTORM:
@@ -861,7 +861,7 @@ public abstract class Attack implements AttackInterface {
         @Override
         public boolean requiresCharge(Battle b, ActivePokemon user) {
             // Does not need to charge during harsh sunlight
-            return !b.isWeather(WeatherNamesies.SUNNY);
+            return !user.isInWeather(b, WeatherNamesies.SUNNY);
         }
 
         @Override
@@ -901,7 +901,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            switch (b.getWeather().namesies()) {
+            switch (user.getWeatherType(b)) {
                 case HAILING:
                 case RAINING:
                 case SANDSTORM:
@@ -914,7 +914,7 @@ public abstract class Attack implements AttackInterface {
         @Override
         public boolean requiresCharge(Battle b, ActivePokemon user) {
             // Does not need to charge during harsh sunlight
-            return !b.isWeather(WeatherNamesies.SUNNY);
+            return !user.isInWeather(b, WeatherNamesies.SUNNY);
         }
 
         @Override
@@ -1172,7 +1172,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return b.isWeather(WeatherNamesies.HAILING);
+            return user.isInWeather(b, WeatherNamesies.HAILING);
         }
     }
 
@@ -1815,7 +1815,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
-            switch (b.getWeather().namesies()) {
+            switch (victim.getWeatherType(b)) {
                 case SUNNY:
                     return 2/3.0;
                 case HAILING:
@@ -3214,7 +3214,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
-            switch (b.getWeather().namesies()) {
+            switch (victim.getWeatherType(b)) {
                 case SUNNY:
                     return 2/3.0;
                 case HAILING:
@@ -6678,7 +6678,7 @@ public abstract class Attack implements AttackInterface {
         @Override
         public boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             // Always hits when it's hailing unless the opponent is hiding
-            return b.isWeather(WeatherNamesies.HAILING);
+            return attacking.isInWeather(b, WeatherNamesies.HAILING);
         }
     }
 
@@ -7645,12 +7645,12 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public Type getType(Battle b, ActivePokemon user) {
-            return b.getWeather().getElement();
+            return user.getWeather(b).getElement();
         }
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !b.isWeather(WeatherNamesies.CLEAR_SKIES) ? 2 : 1;
+            return !user.isInWeather(b, WeatherNamesies.CLEAR_SKIES) ? 2 : 1;
         }
     }
 
@@ -10436,7 +10436,7 @@ public abstract class Attack implements AttackInterface {
         @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
             // Fully heals in a sandstorm
-            return b.isWeather(WeatherNamesies.SANDSTORM) ? 1 : .5;
+            return victim.isInWeather(b, WeatherNamesies.SANDSTORM) ? 1 : .5;
         }
 
         @Override

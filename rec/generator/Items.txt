@@ -2223,4 +2223,8 @@ Utility Umbrella:
     Int: HoldItem
     Fling: 60
     Price: 4000
+    Comments:
+        // Note: In game actually only protects from sunny and rainy weather, which is really not obvious based on
+        // the description so changing it to make it immune to all weather effects
+        ###
 *

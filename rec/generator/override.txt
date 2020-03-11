@@ -156,7 +156,7 @@ StatusFang:
 *
 WeatherHeal:
     AddMapField: BasicHealing:
-        switch (b.getWeather().namesies()) {
+        switch (victim.getWeatherType(b)) {
             case SUNNY:
                 return 2/3.0;
             case HAILING:
@@ -247,7 +247,7 @@ RequiresCharge:
 SunlightCharger:
     AddMapField: ChargingMove: user.getName() + " began taking in sunlight!"
     AddMapField: GetMultiplier:
-        switch (b.getWeather().namesies()) {
+        switch (user.getWeatherType(b)) {
             case HAILING:
             case RAINING:
             case SANDSTORM:
@@ -258,7 +258,7 @@ SunlightCharger:
         ###
     AddMapField: RequiresCharge:
         // Does not need to charge during harsh sunlight
-        return !b.isWeather(WeatherNamesies.SUNNY);
+        return !user.isInWeather(b, WeatherNamesies.SUNNY);
         ###
 *
 MultiStrike:
@@ -1193,7 +1193,7 @@ OtherPangoro:
         ###
 *
 SpeedWeather:
-    AddMapField: ToModifyMultiplier: Speed 2 b.isWeather(WeatherNamesies.{00})
+    AddMapField: ToModifyMultiplier: Speed 2 p.isInWeather(b, WeatherNamesies.{00})
 *
 WeatherStarter:
     AddInterface: EntryEffect
@@ -1205,7 +1205,7 @@ WeatherStarter:
 WeatherEvasion:
     AddInterface: StageChangingEffect
     AddMapField: StageChange:
-        return s == Stat.EVASION && b.isWeather(WeatherNamesies.{00}) ? 1 : 0;
+        return s == Stat.EVASION && p.isInWeather(b, WeatherNamesies.{00}) ? 1 : 0;
         ###
 *
 WeatherEliminate:
@@ -1237,7 +1237,7 @@ WeatherBlocker:
 WeatherHealer:
     AddInterface: EndTurnEffect
     AddMapField: ApplyEndTurn:
-        if (b.isWeather(WeatherNamesies.{00})) {
+        if (victim.isInWeather(b, WeatherNamesies.{00})) {
             victim.healHealthFraction(1/16.0, b, victim.getName() + "'s HP was restored due to its " + this.getName() + "!");
         }
         ###

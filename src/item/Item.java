@@ -6003,6 +6003,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
+    // Note: In game actually only protects from sunny and rainy weather, which is really not obvious based on
+    // the description so changing it to make it immune to all weather effects
     static class UtilityUmbrella extends Item implements HoldItem {
         private static final long serialVersionUID = 1L;
 
