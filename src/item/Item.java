@@ -6008,7 +6008,6 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
     // Another Note: I believe in game ignores the power changes when receiving the attack, but changed here
     // to ignore when attacking instead because I think this behavior makes more sense (could easily change weather
     // to be OpponentPowerChangeEffect if we wanted but we don't so intentionally leaving it this way)
-    // more sense so intentionally leaving it this way
     static class UtilityUmbrella extends Item implements HoldItem, WeatherBlockerEffect {
         private static final long serialVersionUID = 1L;
 

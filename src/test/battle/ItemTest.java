@@ -1388,6 +1388,8 @@ public class ItemTest extends BaseTest {
     }
 
     private void utilityUmbrellaStatTest(double boost, Stat stat, AttackNamesies statWeatherAttack, AbilityNamesies statAbility) {
+        TestUtils.assertGreater(boost, 1);
+
         // Stat should increase for the specified weather condition and ability -- umbrella blocks boost
         // Confirm stat is unmodified for other weather conditions
         utilityUmbrellaTest(
@@ -1414,9 +1416,9 @@ public class ItemTest extends BaseTest {
         int decreaseWeatherAccuracy = decreaseWeatherAttack == null ? baseAccuracy : 50;
 
         // Compares the expected accuracy with the actual accuracy of the set up attack
-        Function<Integer, PokemonManipulator> assertAccuracy = accuracy -> (battle, attacking, defending) -> {
+        Function<Integer, PokemonManipulator> assertAccuracy = expectedAccuracy -> (battle, attacking, defending) -> {
             int actualAccuracy = attacking.getAttack().getAccuracy(battle, attacking, defending);
-            Assert.assertEquals((int)accuracy, actualAccuracy);
+            Assert.assertEquals((int)expectedAccuracy, actualAccuracy);
         };
 
         // Confirm that the accuracy of this attack is decreased in the current weather condition

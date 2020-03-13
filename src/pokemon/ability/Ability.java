@@ -830,9 +830,10 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void applyEndTurn(ActivePokemon victim, Battle b) {
-            if (victim.isInWeather(b, WeatherNamesies.SUNNY)) {
+            WeatherNamesies weather = victim.getWeatherType(b);
+            if (weather == WeatherNamesies.SUNNY) {
                 victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
-            } else if (victim.isInWeather(b, WeatherNamesies.RAINING)) {
+            } else if (weather == WeatherNamesies.RAINING) {
                 victim.healHealthFraction(1/8.0, b, victim.getName() + "'s HP was restored due to its " + this.getName() + "!");
             }
         }
