@@ -474,14 +474,10 @@ public class Battle implements Serializable {
     }
 
     public List<InvokeEffect> getEffectsList(ActivePokemon p, InvokeEffect... additionalItems) {
-        return this.getEffectsList(p, true, additionalItems);
-    }
-
-    public List<InvokeEffect> getEffectsList(ActivePokemon p, boolean includeItem, InvokeEffect... additionalItems) {
         List<InvokeEffect> list = new ArrayList<>();
         Collections.addAll(list, additionalItems);
 
-        list.addAll(p.getAllEffects(includeItem));
+        list.addAll(p.getAllEffects());
         list.addAll(this.getTrainer(p).getEffects().asList());
         list.addAll(this.getEffects().asList());
 

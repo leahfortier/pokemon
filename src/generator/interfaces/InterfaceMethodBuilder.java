@@ -28,6 +28,7 @@ public class InterfaceMethodBuilder {
     public List<String> deadsies;
     public String defaultMethod;
     public boolean isOverride;
+    public boolean isPrivate;
     public String begin;
     public String comments;
     public InvokeMethod invokeMethod;
