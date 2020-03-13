@@ -531,7 +531,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class SandVeil extends Ability implements StageChangingEffect, EncounterRateMultiplier {
+    static class SandVeil extends Ability implements StageChangingEffect, WeatherBlockerEffect, EncounterRateMultiplier {
         private static final long serialVersionUID = 1L;
 
         SandVeil() {
@@ -544,16 +544,26 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
+        public boolean block(WeatherNamesies weather) {
+            return weather == WeatherNamesies.SANDSTORM;
+        }
+
+        @Override
         public double getEncounterRateMultiplier() {
             return Game.getPlayer().getArea().getWeather() == WeatherState.SANDSTORM ? .5 : 1;
         }
     }
 
-    static class SandRush extends Ability implements SimpleStatModifyingEffect {
+    static class SandRush extends Ability implements WeatherBlockerEffect, SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
 
         SandRush() {
             super(AbilityNamesies.SAND_RUSH, "Boosts the Pok\u00e9mon's Speed stat in a sandstorm.");
+        }
+
+        @Override
+        public boolean block(WeatherNamesies weather) {
+            return weather == WeatherNamesies.SANDSTORM;
         }
 
         @Override
@@ -572,11 +582,17 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class SlushRush extends Ability implements SimpleStatModifyingEffect {
+    // Note: In game does not prevent hail buffet damage, but that kind of seems wrong so is prevented here
+    static class SlushRush extends Ability implements WeatherBlockerEffect, SimpleStatModifyingEffect {
         private static final long serialVersionUID = 1L;
 
         SlushRush() {
             super(AbilityNamesies.SLUSH_RUSH, "Boosts the Pok\u00e9mon's Speed stat in a hailstorm.");
+        }
+
+        @Override
+        public boolean block(WeatherNamesies weather) {
+            return weather == WeatherNamesies.HAILING;
         }
 
         @Override
@@ -1820,7 +1836,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class SnowCloak extends Ability implements StageChangingEffect, EncounterRateMultiplier {
+    static class SnowCloak extends Ability implements StageChangingEffect, WeatherBlockerEffect, EncounterRateMultiplier {
         private static final long serialVersionUID = 1L;
 
         SnowCloak() {
@@ -1830,6 +1846,11 @@ public abstract class Ability implements AbilityInterface {
         @Override
         public int adjustStage(Battle b, ActivePokemon p, Stat s) {
             return s == Stat.EVASION && p.isInWeather(b, WeatherNamesies.HAILING) ? 1 : 0;
+        }
+
+        @Override
+        public boolean block(WeatherNamesies weather) {
+            return weather == WeatherNamesies.HAILING;
         }
 
         @Override
@@ -4555,9 +4576,9 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder) {
+        public void weatherChanged(Battle b, ActivePokemon effectHolder) {
             // When hail starts, change back to ice face
-            if (nonIcy && weather == WeatherNamesies.HAILING) {
+            if (nonIcy && effectHolder.isInWeather(b, WeatherNamesies.HAILING)) {
                 changeForm(effectHolder);
             }
         }

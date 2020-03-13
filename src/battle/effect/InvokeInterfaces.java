@@ -1773,24 +1773,24 @@ public final class InvokeInterfaces {
     public interface WeatherChangedEffect {
 
         // Note: The effect holder here is not necessarily the Pokemon that changed the weather, but the Pokemon which holds the WeatherChangedEffect
-        void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder);
+        void weatherChanged(Battle b, ActivePokemon effectHolder);
 
-        private static void checkWeatherChange(Battle b, WeatherNamesies weather, ActivePokemon effectHolder) {
+        private static void checkWeatherChange(Battle b, ActivePokemon effectHolder) {
             List<InvokeEffect> invokees = b.getIndividualAndTeamEffects(effectHolder);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof WeatherChangedEffect && invokee.isActiveEffect()) {
                     WeatherChangedEffect effect = (WeatherChangedEffect)invokee;
-                    effect.weatherChanged(weather, effectHolder);
+                    effect.weatherChanged(b, effectHolder);
                 }
             }
         }
 
         // Calls the invoke method for both front Pokemon
-        static void invokeWeatherChangedEffect(Battle b, WeatherNamesies weather) {
+        static void invokeWeatherChangedEffect(Battle b) {
             // Check the effects from both Pokemon on the field
             // Note: Should not be implemented by any battle effects as they will be executed twice
-            checkWeatherChange(b, weather, b.getPlayer().front());
-            checkWeatherChange(b, weather, b.getOpponent().front());
+            checkWeatherChange(b, b.getPlayer().front());
+            checkWeatherChange(b, b.getOpponent().front());
         }
     }
 

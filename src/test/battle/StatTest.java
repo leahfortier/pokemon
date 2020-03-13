@@ -30,7 +30,7 @@ public class StatTest extends BaseTest {
         for (int i = 0; i < Stat.NUM_BATTLE_STATS; i++) {
             Stat stat = Stat.getStat(i, true);
             Assert.assertNotEquals(stat, Stat.HP);
-            if (stat == Stat.ACCURACY || stat == Stat.EVASION) {
+            if (stat.isAccuracyStat()) {
                 Assert.assertEquals(stat.getName(), 100, Stat.getStat(stat, attacking, defending, battle));
                 Assert.assertEquals(stat.getName(), 100, Stat.getStat(stat, defending, attacking, battle));
             } else {

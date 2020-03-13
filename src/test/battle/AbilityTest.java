@@ -1528,6 +1528,7 @@ public class AbilityTest extends BaseTest {
         Assert.assertNotEquals(highest, Stat.HP);
         Assert.assertNotEquals(highest, Stat.ACCURACY);
         Assert.assertNotEquals(highest, Stat.EVASION);
+        Assert.assertFalse(highest.isAccuracyStat());
 
         StatValues stats = pokemon.stats();
         String message = pokemon.statsString();
@@ -1878,7 +1879,7 @@ public class AbilityTest extends BaseTest {
         // Enigma Berry heals 25% max HP (50% with Ripen) when hit by a super-effective move
         ripenTest(
                 new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
-                        .with((battle, attacking, defending) -> battle.falseSwipePalooza(true))
+                        .falseSwipePalooza(true)
                         .defending(ItemNamesies.ENIGMA_BERRY)
                         .fight(AttackNamesies.WATER_GUN, AttackNamesies.ENDURE),
                 (battle, attacking, defending) -> defending.assertHealthRatioDiff(1, -.25),
@@ -1964,7 +1965,7 @@ public class AbilityTest extends BaseTest {
     // Does so by reducing health to 1, then adding berry held item (so it doesn't trigger while reducing),
     // and then uses False Swipe to trigger berry while at 1 HP
     private TestInfo triggerHealthBerry(ItemNamesies berry) {
-        return new TestInfo().with((battle, attacking, defending) -> battle.falseSwipePalooza(true))
+        return new TestInfo().falseSwipePalooza(true)
                              .defending(berry)
                              .attackingFight(AttackNamesies.FALSE_SWIPE);
     }
@@ -2287,12 +2288,9 @@ public class AbilityTest extends BaseTest {
         );
 
         // Go under half by via Pain Split -- should not trigger
+        // Set attacking to 1 HP so Pain Split decreases defending's HP
         takenUnderHalfTest(
-                testInfo.copy().with((battle, attacking, defending) -> {
-                    // Set attacking to 1 HP so Pain Split decreases defending's HP
-                    battle.falseSwipePalooza(false);
-                    battle.attackingFight(AttackNamesies.PAIN_SPLIT);
-                }),
+                testInfo.copy().falseSwipePalooza(false).attackingFight(AttackNamesies.PAIN_SPLIT),
                 indirectUnderHalf
         );
     }

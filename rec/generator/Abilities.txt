@@ -110,15 +110,19 @@ Lightning Rod:
 Sand Veil:
     Desc: Boosts the Pok\u00e9mon's evasion in a sandstorm.
     WeatherEvasion: Sandstorm
+    WeatherBlocker: Sandstorm
     WeatherEncounterRateDecreaser: Sandstorm
 *
 Sand Rush:
     Desc: Boosts the Pok\u00e9mon's Speed stat in a sandstorm.
     SpeedWeather: Sandstorm
+    WeatherBlocker: Sandstorm
 *
 Slush Rush:
     Desc: Boosts the Pok\u00e9mon's Speed stat in a hailstorm.
     SpeedWeather: Hailing
+    WeatherBlocker: Hailing
+    Comments: // Note: In game does not prevent hail buffet damage, but that kind of seems wrong so is prevented here
 *
 Poison Point:
     Desc: Contact with the Pok\u00e9mon may poison the attacker.
@@ -679,6 +683,7 @@ Pastel Veil:
 Snow Cloak:
     Desc: Boosts evasion in a hailstorm.
     WeatherEvasion: Hailing
+    WeatherBlocker: Hailing
     WeatherEncounterRateDecreaser: Snow
 *
 Marvel Scale:
@@ -1844,7 +1849,7 @@ Ice Face:
         ###
     WeatherChanged:
         // When hail starts, change back to ice face
-        if (nonIcy && weather == WeatherNamesies.HAILING) {
+        if (nonIcy && effectHolder.isInWeather(b, WeatherNamesies.HAILING)) {
             changeForm(effectHolder);
         }
         ###

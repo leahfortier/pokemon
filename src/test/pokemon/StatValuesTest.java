@@ -147,5 +147,6 @@ public class StatValuesTest extends BaseTest {
         Assert.assertNotEquals(stat, Stat.HP);
         Assert.assertNotEquals(stat, Stat.ACCURACY);
         Assert.assertNotEquals(stat, Stat.EVASION);
+        Assert.assertFalse(stat.isAccuracyStat());
     }
 }

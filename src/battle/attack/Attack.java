@@ -10435,8 +10435,8 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
-            // Fully heals in a sandstorm
-            return victim.isInWeather(b, WeatherNamesies.SANDSTORM) ? 1 : .5;
+            // Heals more in a sandstorm
+            return victim.isInWeather(b, WeatherNamesies.SANDSTORM) ? 2/3.0 : .5;
         }
 
         @Override
@@ -10461,8 +10461,8 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public double getHealFraction(Battle b, ActivePokemon victim) {
-            // Fully heals in Grassy Terrain
-            return b.hasEffect(TerrainNamesies.GRASSY_TERRAIN) ? 1 : .5;
+            // Heals more in Grassy Terrain
+            return b.hasEffect(TerrainNamesies.GRASSY_TERRAIN) ? 2/3.0 : .5;
         }
 
         @Override
@@ -11641,6 +11641,16 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.reduceHealthFraction(b, .5, user.getName() + " was hurt!");
+        }
+    }
+
+    // Mostly created to have a consistent way to induce freeze since it is always a secondary effect
+    static class FakeFreezer extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        FakeFreezer() {
+            super(AttackNamesies.FAKE_FREEZER, Type.ICE, MoveCategory.STATUS, 20, "Freezes the target. This is not a real move and is only used for testing purposes.");
+            super.status = StatusNamesies.FROZEN;
         }
     }
 }

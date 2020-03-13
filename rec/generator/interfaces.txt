@@ -967,21 +967,20 @@ WeatherChangedEffect:
     Comments: // Effects that take place when weather is changed
     Method:
         Comments: // Note: The effect holder here is not necessarily the Pokemon that changed the weather, but the Pokemon which holds the WeatherChangedEffect
-        Header: void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder)
+        Header: void weatherChanged(Battle b, ActivePokemon effectHolder)
         Invoke: Void
         TeamEffectList: effectHolder
         InvokeName: checkWeatherChange
-        InvokeParameters: Battle b
         Private: True
     *
     StaticMethod:
         Comments: // Calls the invoke method for both front Pokemon
-        Header: void invokeWeatherChangedEffect(Battle b, WeatherNamesies weather)
+        Header: void invokeWeatherChangedEffect(Battle b)
         Body:
             // Check the effects from both Pokemon on the field
             // Note: Should not be implemented by any battle effects as they will be executed twice
-            checkWeatherChange(b, weather, b.getPlayer().front());
-            checkWeatherChange(b, weather, b.getOpponent().front());
+            checkWeatherChange(b, b.getPlayer().front());
+            checkWeatherChange(b, b.getOpponent().front());
             ###
     *
 ***

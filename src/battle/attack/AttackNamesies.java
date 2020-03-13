@@ -185,6 +185,7 @@ import battle.attack.Attack.ExtremeSpeed;
 import battle.attack.Attack.Facade;
 import battle.attack.Attack.FairyLock;
 import battle.attack.Attack.FairyWind;
+import battle.attack.Attack.FakeFreezer;
 import battle.attack.Attack.FakeOut;
 import battle.attack.Attack.FakeTears;
 import battle.attack.Attack.FalseSurrender;
@@ -1391,7 +1392,8 @@ public enum AttackNamesies {
     STRANGE_STEAM("Strange Steam", StrangeSteam::new),
     LIFE_DEW("Life Dew", LifeDew::new),
     FALSE_SURRENDER("False Surrender", FalseSurrender::new),
-    STEEL_BEAM("Steel Beam", SteelBeam::new);
+    STEEL_BEAM("Steel Beam", SteelBeam::new),
+    FAKE_FREEZER("Fake Freezer", FakeFreezer::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

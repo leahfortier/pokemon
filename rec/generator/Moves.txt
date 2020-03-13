@@ -6133,8 +6133,8 @@ Shore Up:
     Cat: Status
     PP: 10
     BasicHealing:
-        // Fully heals in a sandstorm
-        return victim.isInWeather(b, WeatherNamesies.SANDSTORM) ? 1 : .5;
+        // Heals more in a sandstorm
+        return victim.isInWeather(b, WeatherNamesies.SANDSTORM) ? 2/3.0 : .5;
         ###
 *
 Floral Healing:
@@ -6143,8 +6143,8 @@ Floral Healing:
     Cat: Status
     PP: 10
     BasicHealing:
-        // Fully heals in Grassy Terrain
-        return b.hasEffect(TerrainNamesies.GRASSY_TERRAIN) ? 1 : .5;
+        // Heals more in Grassy Terrain
+        return b.hasEffect(TerrainNamesies.GRASSY_TERRAIN) ? 2/3.0 : .5;
         ###
 *
 First Impression:
@@ -6982,4 +6982,12 @@ Steel Beam:
     UniqueEffects:
         user.reduceHealthFraction(b, .5, user.getName() + " was hurt!");
         ###
+*
+Fake Freezer:
+    Desc: Freezes the target. This is not a real move and is only used for testing purposes.
+    Type: Ice
+    Cat: Status
+    PP: 20
+    Status: Frozen
+    Comments: // Mostly created to have a consistent way to induce freeze since it is always a secondary effect
 *

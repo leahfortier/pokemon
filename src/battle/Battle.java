@@ -18,8 +18,6 @@ import battle.effect.InvokeInterfaces.StrikeFirstEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.battle.BattleEffect;
 import battle.effect.battle.StandardBattleEffectNamesies;
-import battle.effect.battle.weather.WeatherEffect;
-import battle.effect.battle.weather.WeatherNamesies;
 import main.Game;
 import main.Global;
 import map.overworld.TerrainType;
@@ -127,14 +125,6 @@ public class Battle implements Serializable {
 
     public Opponent getOpponent() {
         return opponent;
-    }
-
-    public WeatherEffect getWeather() {
-        return effects.getWeather();
-    }
-
-    public boolean isWeather(WeatherNamesies weatherNamesies) {
-        return this.getWeather().namesies() == weatherNamesies;
     }
 
     public int getTurn() {

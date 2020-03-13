@@ -1216,7 +1216,7 @@ WeatherEliminate:
         ###
 *
 WeatherChanged:
-    Header: void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder)
+    Header: void weatherChanged(Battle b, ActivePokemon effectHolder)
     AddInterface: WeatherChangedEffect
 *
 HalfAmount:

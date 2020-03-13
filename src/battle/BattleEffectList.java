@@ -65,6 +65,13 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
     }
 
     @Override
+    protected List<BattleEffect<? extends BattleEffectNamesies>> decrementList() {
+        List<BattleEffect<? extends BattleEffectNamesies>> list = this.asListNoWeather();
+        list.add(this.getActualWeather());
+        return list;
+    }
+
+    @Override
     public void reset() {
         super.reset();
         this.setBaseWeather(this.baseWeather);
@@ -76,7 +83,7 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
         if (effect instanceof WeatherEffect) {
             weather = (WeatherEffect)effect;
             Messages.add(new MessageUpdate().withWeather(weather));
-            WeatherChangedEffect.invokeWeatherChangedEffect(battle, weather.namesies());
+            WeatherChangedEffect.invokeWeatherChangedEffect(battle);
         } else if (effect instanceof TerrainEffect) {
             currentTerrain = (TerrainEffect)effect;
 
@@ -138,6 +145,10 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
             return WeatherNamesies.CLEAR_SKIES.getEffect();
         }
 
+        return this.getActualWeather();
+    }
+
+    public WeatherEffect getActualWeather() {
         return weather;
     }
 
