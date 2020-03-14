@@ -4,7 +4,7 @@
 #    Int: *Interfaces to implement*
 #    Cat: *BagCategory*
 #    BattleCat: *BattleBagCategory*, comma separate for multiple
-#    Price: (leave out unsellable)
+#    Price: (leave out for unsellable)
 #    FunctionName:
 #        Function ending in "###" on a new line
 # * // End this item

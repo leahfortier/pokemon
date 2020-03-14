@@ -202,11 +202,15 @@ Other random things:
     - Air Balloon cannot be recovered with Recycle or Pickup
     - Future Sight not working with things like Endure because PokemonEffects subside before TeamEffects
     - pretty sure Dig will fail charging turn against a Flying Pokemon
-    - I think a lot of places that have an isFainted check probably also want to be checking that the Pokemon is still out front -- probably need a new isAliveAndFront method or something like that
+    - I think a lot of places that have an isFainted check probably also want to be checking that the Pokemon is still out front -- created isAliveAndFront method but haven't implemented most places
         - add test for Future Sight + Life Orb + swap seeer -- should still have boosted damage (I think?) but should not be taking damage from Life Orb (OnDamageEffects in general should not be applying to non-front Pokemon)
     - can we move the catchPokemon logic in BallItem or somewhere else that isn't Player?
     - White Herb doesn't seem right at all
     - does Parting Shot lower stats even when the user cannot switch out?
     - should I set up fossil restoration things?
     - consumables items should be rewritten to have a boolean method that checks the consumption and consumes if true and then that method can just be called from the appropriate places because everything needing to be inside an if statement is ugly and I don't like it
+    - look at non-status moves that have unique effects -- should some of these be ApplyDamageEffects or something similar instead?
+    - SwapOppenent moves like Circle Throw are failing when unable to swap opponent? definitely not intended... I see it's because moves like Whirlwind DO fail in this case anyways need to fix this
+        - might also make sense to move canSwapOpponent to the SwapOpponentEffect interface since I think it's only used from there
+    - several OnDamageEffects should trigger from fixed damage moves are currently do not like Red Card/Eject Button
     

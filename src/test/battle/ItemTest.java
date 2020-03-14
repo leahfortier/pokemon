@@ -587,15 +587,15 @@ public class ItemTest extends BaseTest {
     public void blunderPolicyTest() {
         // Blunder Policy sharply raises Speed when an attack naturally misses
         blunderPolicyTest(
-                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER),
+                new TestInfo().defending(PokemonNamesies.EEVEE),
                 (battle, attacking, defending) -> defending.assertNotFullHealth(),
                 (battle, attacking, defending) -> defending.assertFullHealth()
         );
 
         // Failing via type advantage does not trigger Blunder Policy
-        // Attack fails because Tackle does not affect Gastly
+        // Attack fails because False Swipe does not affect Gastly
         blunderPolicyTest(
-                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.GASTLY),
+                new TestInfo().defending(PokemonNamesies.GASTLY),
                 (battle, attacking, defending) -> defending.assertFullHealth()
         );
 
@@ -603,15 +603,13 @@ public class ItemTest extends BaseTest {
         blunderPolicyTest(
                 new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
                         .with((battle, attacking, defending) -> {
-                            attacking.setMove(new Move(AttackNamesies.SPLASH));
-                            defending.setMove(new Move(AttackNamesies.FLY));
-
                             // Defending with fly up in the air and next attack will be a forced miss
-                            battle.fight();
+                            battle.defendingFight(AttackNamesies.FLY);
                             Assert.assertTrue(defending.isSemiInvulnerableFlying());
                             attacking.setExpectedAccuracyBypass(false);
                         }),
                 (battle, attacking, defending) -> {
+                    // First False Swipe misses (does not trigger), then Fly finishes executing and hits attacking
                     attacking.assertNotFullHealth();
                     defending.assertFullHealth();
                     Assert.assertFalse(defending.isSemiInvulnerable());
@@ -658,96 +656,214 @@ public class ItemTest extends BaseTest {
     @Test
     public void swapPokemonTest() {
         // Eject Pack causes the holder to switch out when any of its stats are lowered
-        ejectPackTest(true, new TestInfo().attackingFight(AttackNamesies.GROWL));
+        ejectPackTest(
+                true, new TestStages().set(-1, Stat.ATTACK),
+                new TestInfo().attackingFight(AttackNamesies.GROWL)
+        );
 
-        // Make sure works with multiple stat reductions
-        ejectPackTest(true, new TestInfo().attackingFight(AttackNamesies.TICKLE));
+        // Make sure works with multiple stat reductions -- Tickle lowers Attack and Defense
+        // Will eject after only lowering Attack -- Defense lower will be skipped entirely
+        ejectPackTest(
+                true, new TestStages().set(-1, Stat.ATTACK),
+                new TestInfo().attackingFight(AttackNamesies.TICKLE)
+        );
 
         // Ejects even for self-inflicted stat lowers
-        ejectPackTest(true, new TestInfo().fight(AttackNamesies.ENDURE, AttackNamesies.LEAF_STORM));
+        ejectPackTest(
+                true, new TestStages().set(-2, Stat.SP_ATTACK),
+                new TestInfo().fight(AttackNamesies.ENDURE, AttackNamesies.LEAF_STORM)
+        );
 
-        // Sticky Hold will not prevent ejection because its the holder
-        ejectPackTest(true, new TestInfo().defending(AbilityNamesies.STICKY_HOLD)
-                                          .attackingFight(AttackNamesies.GROWL));
+        // Suction Cups will not prevent ejection because its the holder
+        ejectPackTest(
+                true, new TestStages().set(-1, Stat.ATTACK),
+                new TestInfo().defending(AbilityNamesies.SUCTION_CUPS).attackingFight(AttackNamesies.GROWL)
+        );
 
-        // Nothing happens when lowering the other Pokemon's stats
-        ejectPackTest(false, new TestInfo().defendingFight(AttackNamesies.GROWL)
-                                           .with((battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.ATTACK))));
+        // Eject Pack will not trigger if stats are reflected with Mirror Armor or Magic Bounce
+        // Eject Pack will trigger if stats are reflected back onto the holder with Mirror Armor or Magic Bounce
+        ejectPackReflectionTest(AbilityNamesies.MIRROR_ARMOR);
+        ejectPackReflectionTest(AbilityNamesies.MAGIC_BOUNCE);
+
+        // Nothing happens when raising the ejecter's stats with Contrary
+        ejectPackTest(
+                false, new TestStages().set(1, Stat.ATTACK),
+                new TestInfo().defending(AbilityNamesies.CONTRARY).attackingFight(AttackNamesies.GROWL)
+        );
+
+        // Will still eject if lowered stat is still positive
+        ejectPackTest(
+                true, new TestStages().set(1, Stat.ATTACK),
+                new TestInfo().defendingFight(AttackNamesies.SWORDS_DANCE)
+                              .defending(new TestStages().set(2, Stat.ATTACK))
+                              .attackingFight(AttackNamesies.GROWL)
+        );
+
+        // So in game Parting Shot will not activate Eject Pack, but I don't really see why not so they can both swap
+        ejectPackTest(
+                true, true, new TestStages().set(-1, Stat.ATTACK),
+                new TestInfo().attackingFight(AttackNamesies.PARTING_SHOT)
+        );
+
+        // Eject Pack does not trigger for taking damage -- only stat decreases
+        ejectPackTest(
+                false, new TestStages(),
+                new TestInfo().attackingFight(AttackNamesies.FALSE_SWIPE)
+                              .with((battle, attacking, defending) -> defending.assertNotFullHealth())
+        );
 
         // Eject Button causes the holder to switch out when hit by an attack
-        ejectButtonTest(true, new TestInfo().attackingFight(AttackNamesies.TACKLE));
-        ejectButtonTest(true, new TestInfo().attackingFight(AttackNamesies.SWIFT));
-        ejectButtonTest(true, new TestInfo().fight(AttackNamesies.EXPLOSION, AttackNamesies.ENDURE));
+        // Red Card causes the attacker to switch out when the holder is hit by an attack
+        ejectButtonRedCardTest(true, new TestInfo().attackingFight(AttackNamesies.TACKLE));
+        ejectButtonRedCardTest(true, new TestInfo().attackingFight(AttackNamesies.SWIFT));
+        ejectButtonRedCardTest(true, new TestInfo().fight(AttackNamesies.EXPLOSION, AttackNamesies.ENDURE));
 
-        // Eject Button should not trigger when damage is absorbed
-        ejectButtonTest(false, new TestInfo().defendingFight(AttackNamesies.SUBSTITUTE)
-                                             .attackingFight(AttackNamesies.TACKLE));
+        // Eject Button/Red Card does not trigger for stat decreases
+        ejectButtonRedCardTest(false, new TestInfo().attackingFight(AttackNamesies.GROWL)
+                                                    .defending(new TestStages().set(-1, Stat.ATTACK)));
+
+        // Eject Button/Red Card should not trigger when damage is absorbed
+        // Technically this is also testing not swapping for indirect damage like substitute quartering
+        ejectButtonRedCardTest(false, new TestInfo().defendingFight(AttackNamesies.SUBSTITUTE)
+                                                    .defendingFight(AttackNamesies.RECOVER)
+                                                    .attackingFight(AttackNamesies.TACKLE));
+
+        // Eject Button + defending Suctions Cups will not prevent ejection because its the holder
+        // Red Card + defending Suction Cups will not prevent ejection because its the wrong Pokemon...
+        ejectButtonRedCardTest(true, new TestInfo().defending(AbilityNamesies.SUCTION_CUPS)
+                                                   .attackingFight(AttackNamesies.TACKLE));
+
+        // Eject Button + attacking Suction Cups will not prevent ejection because wrong Pokemon
+        // Red Card + attacking Suction Cups will prevent ejection and item will not be consumed
+        ejectButtonRedCardTest(true, false, new TestInfo().attacking(AbilityNamesies.SUCTION_CUPS)
+                                                          .attackingFight(AttackNamesies.TACKLE));
+
+        // Red Card + Suction Cups should not be affected by Mold Breaker effects (since not defending ability)
+        ejectButtonRedCardTest(true, false, new TestInfo().attacking(AbilityNamesies.SUCTION_CUPS)
+                                                          .attackingFight(AttackNamesies.SUNSTEEL_STRIKE));
+
+        // Magician steals the defending item when it attacks
+        // User steals Eject Button/Red Card before it has a chance to activate
+        ejectButtonRedCardTest(false, false, true, new TestInfo().attacking(AbilityNamesies.MAGICIAN)
+                                                                 .attackingFight(AttackNamesies.TACKLE));
+
+        // Thief doesn't work fast enough to steal :(
+        ejectButtonRedCardTest(true, new TestInfo().attackingFight(AttackNamesies.THIEF));
+
+        // U-Turn + Eject Button will swap both Pokemon
+        // U-Turn + Red Card will swap attacking by Red Card before U-Turn
+        ejectButtonTest(true, true, false, new TestInfo().attackingFight(AttackNamesies.U_TURN));
+        redCardTest(true, false, false, new TestInfo().attackingFight(AttackNamesies.U_TURN));
+
+        // Circle Throw + Eject Button will swap defending by Eject Button before Circle Throw
+        // U-Turn + Red Card will swap both Pokemon
+        ejectButtonTest(true, false, false, new TestInfo().attackingFight(AttackNamesies.CIRCLE_THROW));
+        redCardTest(true, true, false, new TestInfo().attackingFight(AttackNamesies.CIRCLE_THROW));
+
+        // TODO: Eject Button/Red Card should activate from fixed damage moves
+//        ejectButtonRedCardTest(true, new TestInfo().attackingFight(AttackNamesies.SONIC_BOOM));
     }
 
-    private void ejectPackTest(boolean swapDefending, TestInfo testInfo) {
-        testInfo.setup(PokemonManipulator.giveDefendingItem(ItemNamesies.EJECT_PACK));
-        testInfo.with((battle, attacking, defending) -> {
-            if (swapDefending) {
-                TestPokemon front = battle.getDefending();
-                Assert.assertNotEquals(front, defending);
-                front.assertSpecies(PokemonNamesies.PIKACHU);
-                front.assertStages(new TestStages());
-                front.assertNotHoldingItem();
-            } else {
-                battle.assertFront(defending);
-                defending.assertStages(new TestStages());
-                defending.assertHoldingItem(ItemNamesies.EJECT_PACK);
-            }
-        });
-        swapPokemonTest(swapDefending, testInfo);
+    private void ejectPackReflectionTest(AbilityNamesies reflectionAbility) {
+        // Do not trigger Eject Pack if stats get reflected
+        ejectPackTest(
+                false, new TestStages(),
+                new TestInfo().defending(reflectionAbility)
+                              .attackingFight(AttackNamesies.GROWL)
+                              .attacking(new TestStages().set(-1, Stat.ATTACK))
+        );
+
+        // Should trigger Eject Pack if reflected back onto the holder though
+        ejectPackTest(
+                true, new TestStages().set(-1, Stat.ATTACK),
+                new TestInfo().attacking(reflectionAbility)
+                              .defendingFight(AttackNamesies.GROWL)
+                              .attacking(new TestStages())
+        );
     }
 
-    private void ejectButtonTest(boolean swapDefending, TestInfo testInfo) {
-        testInfo.setup(PokemonManipulator.giveDefendingItem(ItemNamesies.EJECT_BUTTON));
-        testInfo.with((battle, attacking, defending) -> {
-            if (swapDefending) {
-                TestPokemon front = battle.getDefending();
-                Assert.assertNotEquals(front, defending);
-                front.assertSpecies(PokemonNamesies.PIKACHU);
-                front.assertNotHoldingItem();
-                defending.assertNotFullHealth();
-            } else {
-                battle.assertFront(defending);
-                defending.assertStages(new TestStages());
-                defending.assertHoldingItem(ItemNamesies.EJECT_BUTTON);
-            }
-        });
-        swapPokemonTest(swapDefending, testInfo);
+    private void ejectPackTest(boolean swapDefending, TestStages stages, TestInfo testInfo) {
+        ejectPackTest(false, swapDefending, stages, testInfo);
     }
 
-    private void swapPokemonTest(boolean swapDefending, TestInfo testInfo) {
+    private void ejectPackTest(boolean swapAttacking, boolean swapDefending, TestStages stages, TestInfo testInfo) {
+        // Stages don't actually get reset until the Pokemon enters battle again, which is actually kind of
+        // convenient here because we can see what they were even if they're not out front anymore
+        testInfo.defending(stages);
+        swapPokemonTest(swapAttacking, swapDefending, swapDefending, false, ItemNamesies.EJECT_PACK, testInfo);
+    }
+
+    private void ejectButtonRedCardTest(boolean swapPokemon, TestInfo testInfo) {
+        ejectButtonRedCardTest(swapPokemon, swapPokemon, testInfo);
+    }
+
+    private void ejectButtonRedCardTest(boolean swapEjectButton, boolean swapRedCard, TestInfo testInfo) {
+        ejectButtonRedCardTest(swapEjectButton, swapRedCard, false, testInfo);
+    }
+
+    private void ejectButtonRedCardTest(boolean swapEjectButton, boolean swapRedCard, boolean itemStolen, TestInfo testInfo) {
+        // Cannot activate an item and steal it
+        Assert.assertFalse(swapEjectButton && itemStolen);
+        Assert.assertFalse(swapRedCard && itemStolen);
+
+        // Mostly just because it changes the full health assumptions in the next line
+        Assert.assertFalse(!swapEjectButton && swapRedCard);
+
+        // Eject Button requires the target to be hit, so should be impossible to swap without taking damage
+        // (I mean sure you could have a berry or something but that's not what I'm talking about...)
+        // It is possible to take damage without swapping (such as any indirect damage but not testing that here)
+        // Also only relevant to test stolen item when dealing direct damage
+        boolean takenDamage = swapEjectButton || itemStolen;
+        testInfo.with((battle, attacking, defending) -> defending.assertHasFullHealth(!takenDamage));
+
+        // Eject Button and Red Card work similar, but Red Card swaps the attacking, instead of defending
+        ejectButtonTest(swapEjectButton, false, itemStolen, testInfo);
+        redCardTest(swapRedCard, false, itemStolen, testInfo);
+    }
+
+    private void ejectButtonTest(boolean swapEjectButton, boolean swapOther, boolean itemStolen, TestInfo testInfo) {
+        swapPokemonTest(swapOther, swapEjectButton, swapEjectButton, itemStolen, ItemNamesies.EJECT_BUTTON, testInfo);
+    }
+
+    private void redCardTest(boolean swapRedCard, boolean swapOther, boolean itemStolen, TestInfo testInfo) {
+        swapPokemonTest(swapRedCard, swapOther, swapRedCard, itemStolen, ItemNamesies.RED_CARD, testInfo);
+    }
+
+    private void swapPokemonTest(boolean swapAttacking, boolean swapDefending, boolean itemConsumed, boolean itemStolen, ItemNamesies swapItem, TestInfo testInfo) {
         TestBattle battle = testInfo.asTrainerBattle().createBattle();
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
         TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.SQUIRTLE);
         TestPokemon defending2 = battle.addDefending(PokemonNamesies.PIKACHU);
 
-        // Exactly one front Pokemon should be holding an item
-        boolean attackingItem = attacking.isHoldingItem();
-        boolean defendingItem = defending.isHoldingItem();
-        Assert.assertNotEquals(attackingItem, defendingItem);
-
-        TestPokemon itemHolder = attackingItem ? attacking : defending;
-        ItemNamesies itemNamesies = itemHolder.getHeldItem().namesies();
-        Assert.assertNotEquals(itemNamesies, ItemNamesies.NO_ITEM);
+        defending.withItem(swapItem);
 
         battle.assertFront(attacking);
         battle.assertFront(defending);
 
         testInfo.manipulate(battle);
 
-        battle.assertFront(attacking);
+        battle.assertFront(swapAttacking ? attacking2 : attacking);
         battle.assertFront(swapDefending ? defending2 : defending);
 
-        if (swapDefending) {
-            itemHolder.assertConsumedItem();
+        // These Pokemon should be fresh and healthy regardless of if they were switched to front
+        attacking2.assertFullHealth();
+        defending2.assertFullHealth();
+        attacking2.assertStages(new TestStages());
+        defending2.assertStages(new TestStages());
+
+        // Can't consume your item and steal it too!
+        Assert.assertFalse(itemConsumed && itemStolen);
+        if (itemConsumed) {
+            attacking.assertNotHoldingItem();
+            defending.assertConsumedItem();
+        } else if (itemStolen) {
+            defending.assertNotHoldingItem();
+            defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+            attacking.assertHoldingItem(swapItem);
         } else {
-            itemHolder.assertHoldingItem(itemNamesies);
+            attacking.assertNotHoldingItem();
+            defending.assertHoldingItem(swapItem);
         }
     }
 
@@ -776,8 +892,7 @@ public class ItemTest extends BaseTest {
         heavyDutyBootsTest(
                 PokemonNamesies.SQUIRTLE,
                 AttackNamesies.SPIKES,
-                new TestInfo().attackingFight(AttackNamesies.SPIKES)
-                              .attackingFight(AttackNamesies.SPIKES),
+                new TestInfo().attackingFight(AttackNamesies.SPIKES).attackingFight(AttackNamesies.SPIKES),
                 (battle, attacking, defending) -> defending.assertHealthRatio(3/4.0),
                 (battle, attacking, defending) -> defending.assertFullHealth()
         );
@@ -819,7 +934,7 @@ public class ItemTest extends BaseTest {
                     defending.assertHealthRatio(7/8.0);
                 },
                 (battle, attacking, defending) -> {
-                    defending.assertNoStages();
+                    defending.assertNoStatus();
                     defending.assertFullHealth();
                 }
         );
@@ -835,7 +950,7 @@ public class ItemTest extends BaseTest {
                     battle.assertHasEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
                 },
                 (battle, attacking, defending) -> {
-                    defending.assertNoStages();
+                    defending.assertNoStatus();
                     defending.assertFullHealth();
                     battle.assertHasEffect(defending, TeamEffectNamesies.TOXIC_SPIKES);
                 }
@@ -929,18 +1044,18 @@ public class ItemTest extends BaseTest {
             // Use Whirlwind to draw out other Pokemon to handle the entry hazard effects
             battle.attackingFight(AttackNamesies.WHIRLWIND);
             battle.assertEffect(!absorbed, defending, hazardEffect);
+            Assert.assertNotEquals(defending, battle.getDefending());
         });
 
         testInfo.doubleTake(
                 (battle, attacking, defending) -> battle.getOtherDefending().withItem(ItemNamesies.HEAVY_DUTY_BOOTS),
-                withoutBoots,
-                withBoots
+                withoutBoots, withBoots
         );
     }
 
     @Test
     public void throatSprayTest() {
-        // Throat Spray increases Sp. Attack by 1 stages when using a sound-based move (like Growl)
+        // Throat Spray increases Sp. Attack by 1 stage when using a sound-based move (like Growl)
         throatSprayTest(
                 true, AttackNamesies.GROWL, new TestInfo(),
                 (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-1, Stat.ATTACK))

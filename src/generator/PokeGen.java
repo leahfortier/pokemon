@@ -172,7 +172,7 @@ public class PokeGen {
         }
 
         // Add Mints
-        // Note: Game only includes Serious neutral mint, but just including all of them for that flavor
+        // Note: Game only includes Serious neutral mint, but just including all of them for that flavorrrrr
         for (Nature nature : Nature.values()) {
             String itemName = nature.getName() + " Mint";
             ClassFields fields = new ClassFields(itemName);

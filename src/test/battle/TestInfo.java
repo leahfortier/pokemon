@@ -198,7 +198,20 @@ class TestInfo {
     }
 
     TestInfo attackingBypass(Boolean bypass) {
+        this.addString(true, "Bypass: " + bypass);
         this.updateManipulator((battle, attacking, defending) -> attacking.setExpectedAccuracyBypass(bypass));
+        return this;
+    }
+
+    TestInfo attacking(TestStages stages) {
+        this.addString(true, stages.toString());
+        this.updateManipulator((battle, attacking, defending) -> attacking.assertStages(stages));
+        return this;
+    }
+
+    TestInfo defending(TestStages stages) {
+        this.addString(false, stages.toString());
+        this.updateManipulator((battle, attacking, defending) -> defending.assertStages(stages));
         return this;
     }
 

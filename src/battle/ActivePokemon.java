@@ -341,7 +341,17 @@ public class ActivePokemon extends PartyPokemon {
 
     public boolean canSwapOpponent(Battle b, ActivePokemon victim) {
         // Can't swap on the first turn
-        if (b.isFirstAttack() || NoSwapEffect.containsNoSwapEffect(b, this, victim)) {
+        if (b.isFirstAttack()) {
+            return false;
+        }
+
+        // Cannot swap a Pokemon that isn't there!
+        if (!victim.isAliveAndFront(b)) {
+            return false;
+        }
+
+        // No means no!
+        if (NoSwapEffect.containsNoSwapEffect(b, this, victim)) {
             return false;
         }
 
@@ -357,8 +367,18 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean switcheroo(Battle b, ActivePokemon caster, CastSource source, boolean wildExit) {
+        // If we're not front and healthy, we're not swapping
+        if (!this.isAliveAndFront(b)) {
+            return false;
+        }
+
+        // NoSwapEffect doesn't apply to self-switching
+        if (caster != this && NoSwapEffect.containsNoSwapEffect(b, caster, this)) {
+            return false;
+        }
+
         Team team = b.getTrainer(this);
-        String sourceName = source.getSourceName(this);
+        String sourceName = source.getSourceName(caster);
         String selfReference = caster == this ? "it" : this.getName();
 
         // End the battle against a wild Pokemon
@@ -396,8 +416,8 @@ public class ActivePokemon extends PartyPokemon {
         Messages.add(message);
 
         // TODO: Prompt a legit switch fo user
-        // TODO: Once this happens, this should take in a random parameter since this is still correct for Red Card, I believe and should have the message "name was sent out!"
-        // TODO: Check if trainer action needs to be set to Switch
+        // TODO: Once this happens, this should take in a random parameter since I believe this is still correct
+        //  for Red Card and should have the message "name was sent out!"
         trainer.switchToRandom(b);
         b.enterBattle(trainer.front(), enterer -> trainer.getName() + " sent out " + enterer.getName() + "!");
 
@@ -589,6 +609,10 @@ public class ActivePokemon extends PartyPokemon {
 
     public boolean isActuallyDead() {
         return this.hasStatus(StatusNamesies.FAINTED);
+    }
+
+    public boolean isAliveAndFront(Battle b) {
+        return b.isFront(this) && !this.isFainted(b);
     }
 
     public boolean isFainted(Battle b) {

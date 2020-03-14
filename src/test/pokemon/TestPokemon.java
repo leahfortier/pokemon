@@ -169,12 +169,16 @@ public class TestPokemon extends ActivePokemon {
         );
     }
 
+    public void assertHasFullHealth(boolean shouldBeFull) {
+        Assert.assertEquals(this.getHpString(), shouldBeFull, this.fullHealth());
+    }
+
     public void assertFullHealth() {
-        Assert.assertTrue(this.getHpString(), this.fullHealth());
+        this.assertHasFullHealth(true);
     }
 
     public void assertNotFullHealth() {
-        Assert.assertFalse(this.getHpString(), this.fullHealth());
+        this.assertHasFullHealth(false);
     }
 
     public void assertHealthRatio(double fraction) {
