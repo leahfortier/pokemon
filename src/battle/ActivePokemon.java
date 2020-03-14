@@ -33,6 +33,8 @@ import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.attack.MultiTurnMove.SemiInvulnerableMove;
+import battle.effect.battle.weather.WeatherEffect;
+import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
@@ -438,6 +440,23 @@ public class ActivePokemon extends PartyPokemon {
     // Returns true if the move currently using makes physical contact
     public boolean isMakingContact() {
         return this.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && !this.hasAbility(AbilityNamesies.LONG_REACH);
+    }
+
+    public WeatherEffect getWeather(Battle b) {
+        // Utility umbrella ignores all weather effects (because I think it makes more sense than just sun and rain sue me)
+        if (this.isHoldingItem(ItemNamesies.UTILITY_UMBRELLA)) {
+            return WeatherNamesies.CLEAR_SKIES.getEffect();
+        }
+
+        return b.getEffects().getWeather();
+    }
+
+    public WeatherNamesies getWeatherType(Battle b) {
+        return this.getWeather(b).namesies();
+    }
+
+    public boolean isInWeather(Battle b, WeatherNamesies weatherNamesies) {
+        return this.getWeatherType(b) == weatherNamesies;
     }
 
     @Override

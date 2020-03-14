@@ -64,8 +64,12 @@ public class EffectList<NamesiesType extends EffectNamesies, EffectType extends 
         }
     }
 
+    protected List<EffectType> decrementList() {
+        return this.asList();
+    }
+
     public void decrement(Battle b, ActivePokemon p) {
-        for (EffectType effect : this) {
+        for (EffectType effect : this.decrementList()) {
             boolean active = effect.isActive();
             if (active) {
                 effect.decrement(b, p);

@@ -25,9 +25,12 @@ import pokemon.stat.Stat;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
+import type.Type;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 public class ItemTest extends BaseTest {
     @Test
@@ -520,6 +523,12 @@ public class ItemTest extends BaseTest {
         weatherExtenderTest(
                 WeatherNamesies.SANDSTORM, ItemNamesies.SMOOTH_ROCK,
                 new TestInfo().attacking(AbilityNamesies.SAND_SPIT).defendingFight(AttackNamesies.SWIFT)
+        );
+
+        // Make sure things like Air Lock don't prevent weather from changing
+        weatherExtenderTest(
+                WeatherNamesies.RAINING, ItemNamesies.DAMP_ROCK,
+                new TestInfo().attacking(AbilityNamesies.AIR_LOCK).attackingFight(AttackNamesies.RAIN_DANCE)
         );
     }
 
@@ -1201,5 +1210,444 @@ public class ItemTest extends BaseTest {
 
         attacking.assertStages(stages);
         afterCheck.manipulate(battle);
+    }
+
+    @Test
+    public void utilityUmbrellaTest() {
+        // Utility Umbrella will not give boost to Fire-moves or decrease to Water-moves in Sunny weather
+        // Similarly no boosts/decreases in the rain
+        utilityUmbrellaBoostTest(1.5, .5, AttackNamesies.SUNNY_DAY);
+        utilityUmbrellaBoostTest(.5, 1.5, AttackNamesies.RAIN_DANCE);
+
+        // Weather Ball will always be Normal-type and will not deal double damage with Utility Umbrella
+        utilityUmbrellaTest(
+                new TestInfo().attackingFight(AttackNamesies.HAIL)
+                              .with(AttackNamesies.WEATHER_BALL),
+                (battle, attacking, defending) -> {
+                    attacking.setExpectedDamageModifier(2.0);
+                    attacking.assertAttackType(Type.ICE);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.setExpectedDamageModifier(1.0);
+                    attacking.assertAttackType(Type.NORMAL);
+                },
+                (battle, attacking, defending) -> battle.fight()
+        );
+
+        // Utility Umbrella has no effect when receiving weather ball damage
+        utilityUmbrellaTest(
+                new TestInfo().attackingFight(AttackNamesies.HAIL),
+                (battle, attacking, defending) -> {
+                    defending.setupMove(AttackNamesies.WEATHER_BALL, battle);
+                    defending.setExpectedDamageModifier(2.0);
+                    defending.assertAttackType(Type.ICE);
+                    battle.fight();
+                }
+        );
+
+        // Utility Umbrella will prevent Forecast from changing Castform's type
+        utilityUmbrellaTest(
+                new TestInfo().attacking(PokemonNamesies.CASTFORM, AbilityNamesies.FORECAST)
+                              .attackingFight(AttackNamesies.RAIN_DANCE),
+                (battle, attacking, defending) -> attacking.assertType(battle, Type.WATER),
+                (battle, attacking, defending) -> attacking.assertType(battle, Type.NORMAL)
+        );
+
+        // Rock-type Pokemon will not get a Sp. Def boost during Sandstorm while holding Utility Umbrella
+        utilityUmbrellaTest(
+                new TestInfo().attacking(PokemonNamesies.GEODUDE).attackingFight(AttackNamesies.SANDSTORM),
+                (battle, attacking, defending) -> attacking.assertStatModifier(1.5, Stat.SP_DEFENSE, battle),
+                (battle, attacking, defending) -> attacking.assertStatModifier(1, Stat.SP_DEFENSE, battle)
+        );
+
+        // Utility umbrella holder should not take buffet damage
+        utilityUmbrellaTest(
+                new TestInfo().attacking(PokemonNamesies.EEVEE).attackingFight(AttackNamesies.SANDSTORM),
+                (battle, attacking, defending) -> attacking.assertHealthRatio(15/16.0),
+                (battle, attacking, defending) -> attacking.assertFullHealth()
+        );
+
+        // Growth will double stat growth in the Sunlight
+        utilityUmbrellaTest(
+                new TestInfo().attackingFight(AttackNamesies.SUNNY_DAY).attackingFight(AttackNamesies.GROWTH),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(2, Stat.ATTACK, Stat.SP_ATTACK)),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(1, Stat.ATTACK, Stat.SP_ATTACK))
+        );
+
+        // Utility Umbrella will cause Solar Beam to take its charging turn in the harsh sunlight
+        // Solar Beam does not undergo a power change during harsh sunlight
+        utilityUmbrellaTest(
+                new TestInfo().attackingFight(AttackNamesies.SUNNY_DAY)
+                              .with((battle, attacking, defending) -> attacking.setExpectedDamageModifier(1.0))
+                              .attackingFight(AttackNamesies.SOLAR_BEAM),
+                (battle, attacking, defending) -> {
+                    MultiTurnMove solarBeam = (MultiTurnMove)attacking.getAttack();
+                    Assert.assertFalse(solarBeam.isCharging());
+                    defending.assertNotFullHealth();
+                },
+                (battle, attacking, defending) -> {
+                    MultiTurnMove solarBeam = (MultiTurnMove)attacking.getAttack();
+                    Assert.assertTrue(solarBeam.isCharging());
+                    defending.assertFullHealth();
+
+                    // Execute again and it should finish
+                    battle.fight();
+                    Assert.assertFalse(solarBeam.isCharging());
+                    defending.assertNotFullHealth();
+                }
+        );
+
+        // Solar Beam has it's damage halved in other weather conditions -- blocked by Utility Umbrella
+        utilityUmbrellaTest(
+                new TestInfo().defending(AbilityNamesies.OVERCOAT)
+                              .attackingFight(AttackNamesies.HAIL)
+                              .attackingFight(AttackNamesies.SOLAR_BEAM),
+                (battle, attacking, defending) -> attacking.setExpectedDamageModifier(.5),
+                (battle, attacking, defending) -> attacking.setExpectedDamageModifier(1.0),
+                (battle, attacking, defending) -> {
+                    // First turn was just the charge
+                    // Note: Cannot use Power Herb to simplify test because would replace Utility Umbrella
+                    MultiTurnMove solarBeam = (MultiTurnMove)attacking.getAttack();
+                    Assert.assertTrue(solarBeam.isCharging());
+                    defending.assertFullHealth();
+
+                    // Execute again and it should finish
+                    battle.fight();
+                    Assert.assertFalse(solarBeam.isCharging());
+                    defending.assertNotFullHealth();
+                }
+        );
+
+        // Recovery moves that heal more in sunlight and less in rain, hail, and sandstorm
+        // Utility Umbrella will always heal the standard amount
+        utilityUmbrellaHealTest(
+                2/3.0, .25, .25, .25, AttackNamesies.MOONLIGHT,
+                AttackNamesies.MORNING_SUN, AttackNamesies.SYNTHESIS
+        );
+
+        // Shore Up heals more in a sandstorm -- blocked by Utility Umbrella
+        utilityUmbrellaHealTest(.5, .5, 2/3.0, .5, AttackNamesies.SHORE_UP);
+
+        // Recovery moves unaffected by weather -- mostly just here because the setup is here and because I can
+        utilityUmbrellaHealTest(
+                .5, .5, .5, .5, AttackNamesies.HEAL_ORDER, AttackNamesies.LIFE_DEW, AttackNamesies.MILK_DRINK,
+                AttackNamesies.RECOVER, AttackNamesies.ROOST, AttackNamesies.SLACK_OFF, AttackNamesies.SOFT_BOILED
+        );
+
+        // Holding a Utility Umbrella will allow you to be frozen during intense sunlight
+        utilityUmbrellaTest(
+                new TestInfo().attacking(PokemonNamesies.EEVEE)
+                              .attackingFight(AttackNamesies.SUNNY_DAY)
+                              .defendingFight(AttackNamesies.FAKE_FREEZER),
+                (battle, attacking, defending) -> attacking.assertNoStatus(),
+                (battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.FROZEN)
+        );
+
+        // Hurricane and Thunder always hit in Rain, but accuracy is reduced to 50% in harsh sunlight
+        utilityUmbrellaAccuracyTest(AttackNamesies.RAIN_DANCE, AttackNamesies.SUNNY_DAY, AttackNamesies.HURRICANE);
+        utilityUmbrellaAccuracyTest(AttackNamesies.RAIN_DANCE, AttackNamesies.SUNNY_DAY, AttackNamesies.THUNDER);
+
+        // Blizzard always hits in Hail (never reduced accuracy in other conditions)
+        utilityUmbrellaAccuracyTest(AttackNamesies.HAIL, null, AttackNamesies.BLIZZARD);
+
+        // Aurora Veil fails without Hail (or if holding a certain umbrella...)
+        utilityUmbrellaTest(
+                new TestInfo().attackingFight(AttackNamesies.HAIL).attackingFight(AttackNamesies.AURORA_VEIL),
+                (battle, attacking, defending) -> battle.assertHasEffect(attacking, TeamEffectNamesies.AURORA_VEIL),
+                (battle, attacking, defending) -> battle.assertNoEffect(attacking, TeamEffectNamesies.AURORA_VEIL)
+        );
+
+        // Dry Skin loses health in the sun
+        utilityUmbrellaTest(
+                new TestInfo().attacking(AbilityNamesies.DRY_SKIN).attackingFight(AttackNamesies.SUNNY_DAY),
+                (battle, attacking, defending) -> attacking.assertHealthRatio(7/8.0),
+                (battle, attacking, defending) -> attacking.assertFullHealth()
+        );
+
+        // Dry Skin gains health in the rain
+        utilityUmbrellaTest(
+                new TestInfo().attacking(AbilityNamesies.DRY_SKIN)
+                              .falseSwipePalooza(false)
+                              .attackingFight(AttackNamesies.RAIN_DANCE),
+                (battle, attacking, defending) -> attacking.assertHealthRatioDiff(1, -1/8.0),
+                (battle, attacking, defending) -> attacking.assertHp(1)
+        );
+
+        // Abilities that double speed in specific weather conditions
+        utilityUmbrellaSpeedTest(AttackNamesies.SUNNY_DAY, AbilityNamesies.CHLOROPHYLL);
+        utilityUmbrellaSpeedTest(AttackNamesies.RAIN_DANCE, AbilityNamesies.SWIFT_SWIM);
+        utilityUmbrellaSpeedTest(AttackNamesies.SANDSTORM, AbilityNamesies.SAND_RUSH);
+        utilityUmbrellaSpeedTest(AttackNamesies.HAIL, AbilityNamesies.SLUSH_RUSH);
+
+        // Abilities which boost evasion is specific weather conditions
+        utilityUmbrellaEvasionTest(AttackNamesies.SANDSTORM, AbilityNamesies.SAND_VEIL);
+        utilityUmbrellaEvasionTest(AttackNamesies.HAIL, AbilityNamesies.SNOW_CLOAK);
+
+        // Flower Gift boosts Attack and Sp. Def in the sun
+        utilityUmbrellaTest(
+                new TestInfo().attacking(AbilityNamesies.FLOWER_GIFT).attackingFight(AttackNamesies.SUNNY_DAY),
+                (battle, attacking, defending) -> {
+                    attacking.assertStatModifier(1.5, Stat.ATTACK, battle);
+                    attacking.assertStatModifier(1.5, Stat.SP_DEFENSE, battle);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertStatModifier(1, Stat.ATTACK, battle);
+                    attacking.assertStatModifier(1, Stat.SP_DEFENSE, battle);
+                }
+        );
+
+        // Leaf Guard prevents status conditions in the sun (gonna get burned without that sunbrella though!)
+        utilityUmbrellaTest(
+                new TestInfo().attacking(PokemonNamesies.EEVEE, AbilityNamesies.LEAF_GUARD)
+                              .attackingFight(AttackNamesies.SUNNY_DAY)
+                              .defendingFight(AttackNamesies.WILL_O_WISP),
+                (battle, attacking, defending) -> attacking.assertNoStatus(),
+                (battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.BURNED)
+        );
+
+        // Solar Power loses health in the sun and boosts special attacks in the sun
+        utilityUmbrellaTest(
+                new TestInfo().attacking(AbilityNamesies.SOLAR_POWER).attackingFight(AttackNamesies.SUNNY_DAY),
+                (battle, attacking, defending) -> {
+                    attacking.assertHealthRatio(7/8.0);
+                    attacking.setExpectedDamageModifier(1.5);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertFullHealth();
+                    attacking.setExpectedDamageModifier(1.0);
+                },
+                (battle, attacking, defending) -> battle.attackingFight(AttackNamesies.SWIFT)
+        );
+
+        // Hydration will heal status conditions in the rain
+        utilityUmbrellaTest(
+                new TestInfo().attacking(PokemonNamesies.EEVEE, AbilityNamesies.HYDRATION)
+                              .defendingFight(AttackNamesies.WILL_O_WISP)
+                              .attackingFight(AttackNamesies.RAIN_DANCE),
+                (battle, attacking, defending) -> attacking.assertNoStatus(),
+                (battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.BURNED)
+        );
+
+        // Abilities that heal 1/16 Max HP at the end of turn in specific weather conditions
+        utilityUmbrellaHealTest(AttackNamesies.RAIN_DANCE, AbilityNamesies.RAIN_DISH);
+        utilityUmbrellaHealTest(AttackNamesies.HAIL, AbilityNamesies.ICE_BODY);
+
+        // Sand Force boosts Rock, Ground, and Steel moves in Sandstorm
+        utilityUmbrellaTest(
+                new TestInfo().attacking(AbilityNamesies.SAND_FORCE).attackingFight(AttackNamesies.SANDSTORM),
+                (battle, attacking, defending) -> attacking.setExpectedDamageModifier(1.3),
+                (battle, attacking, defending) -> attacking.setExpectedDamageModifier(1.0),
+                (battle, attacking, defending) -> battle.attackingFight(AttackNamesies.IRON_HEAD)
+        );
+
+        // Ice Face will not restore form when hail starts when holding Utility Umbrella
+        // Note: This is true because Utility Umbrella was changed from just Sun/Rain to all weather effects
+        // TODO: Change to Eiscue once in the game
+        utilityUmbrellaTest(
+                new TestInfo().attacking(PokemonNamesies.GLACEON, AbilityNamesies.ICE_FACE)
+                              .with((battle, attacking, defending) -> {
+                                  // False Swipe will be absorbed by the Ice Face and should be transformed
+                                  battle.defendingFight(AttackNamesies.FALSE_SWIPE);
+                                  attacking.assertFullHealth();
+                                  Assert.assertTrue(attacking.hasAbsorbedDamage());
+
+                                  // No more Ice Face -- False Swipe should be able to hit now
+                                  battle.defendingFight(AttackNamesies.FALSE_SWIPE);
+                                  attacking.assertNotFullHealth();
+                                  Assert.assertFalse(attacking.hasAbsorbedDamage());
+
+                                  // Heal back to full (for ease of checking absorbed)
+                                  battle.fight(AttackNamesies.RECOVER, AttackNamesies.HEAL_PULSE);
+                                  attacking.assertFullHealth();
+
+                                  // Hail should restore the Ice Face without Utility Umbrella
+                                  battle.attackingFight(AttackNamesies.HAIL);
+                                  battle.defendingFight(AttackNamesies.FALSE_SWIPE);
+                              }),
+                (battle, attacking, defending) -> {
+                    // Ice Face restored and damage can be absorbed again
+                    attacking.assertFullHealth();
+                    Assert.assertTrue(attacking.hasAbsorbedDamage());
+                },
+                (battle, attacking, defending) -> {
+                    // You're on your own, umbrella boy
+                    attacking.assertNotFullHealth();
+                    Assert.assertFalse(attacking.hasAbsorbedDamage());
+                }
+        );
+    }
+
+    private void utilityUmbrellaHealTest(AttackNamesies healWeatherAttack, AbilityNamesies healAbility) {
+        // Heal at end of turn in specified weather
+        // Confirm does not heal in other weather conditions
+        // Note: Need to use something like Swinub here to prevent buffet damage from killing
+        utilityUmbrellaTest(
+                healWeatherAttack,
+                weatherAttack -> new TestInfo().attacking(PokemonNamesies.SWINUB, healAbility)
+                                               .falseSwipePalooza(false)
+                                               .attackingFight(weatherAttack),
+                (battle, attacking, defending) -> attacking.assertHealthRatioDiff(1, -1/16.0),
+                (battle, attacking, defending) -> attacking.assertHp(1)
+        );
+    }
+
+    private void utilityUmbrellaEvasionTest(AttackNamesies evasionWeatherAttack, AbilityNamesies evasionAbility) {
+        // Technically these are stage modifying abilities, not stat modifying, but this checks the same thing
+        utilityUmbrellaStatTest(4/3.0, Stat.EVASION, evasionWeatherAttack, evasionAbility);
+    }
+
+    private void utilityUmbrellaSpeedTest(AttackNamesies speedWeatherAttack, AbilityNamesies speedAbility) {
+        // Speed should double for the specified weather condition and ability -- umbrella blocks boost
+        // Confirm speed is unmodified for other weather conditions
+        utilityUmbrellaStatTest(2, Stat.SPEED, speedWeatherAttack, speedAbility);
+    }
+
+    private void utilityUmbrellaStatTest(double boost, Stat stat, AttackNamesies statWeatherAttack, AbilityNamesies statAbility) {
+        TestUtils.assertGreater(boost, 1);
+
+        // Stat should increase for the specified weather condition and ability -- umbrella blocks boost
+        // Confirm stat is unmodified for other weather conditions
+        utilityUmbrellaTest(
+                statWeatherAttack,
+                weatherAttack -> new TestInfo().attacking(statAbility).attackingFight(weatherAttack),
+                (battle, attacking, defending) -> attacking.assertStatModifier(boost, stat, battle),
+                (battle, attacking, defending) -> attacking.assertStatModifier(1, stat, battle)
+        );
+    }
+
+    private void utilityUmbrellaAccuracyTest(AttackNamesies bypassWeatherAttack, AttackNamesies decreaseWeatherAttack, AttackNamesies accuracyAttack) {
+        Assert.assertNotEquals(bypassWeatherAttack, decreaseWeatherAttack);
+
+        // Case where attack should bypass accuracy in weather -- blocked by Utility Umbrella
+        // Confirm only bypasses for this specific weather condition
+        utilityUmbrellaTest(
+                bypassWeatherAttack, weatherAttack -> new TestInfo().attackingFight(weatherAttack),
+                (battle, attacking, defending) -> attacking.setExpectedAccuracyBypass(true),
+                (battle, attacking, defending) -> attacking.setExpectedAccuracyBypass(null),
+                (battle, attacking, defending) -> battle.attackingFight(accuracyAttack)
+        );
+
+        int baseAccuracy = 70;
+        int decreaseWeatherAccuracy = decreaseWeatherAttack == null ? baseAccuracy : 50;
+
+        // Compares the expected accuracy with the actual accuracy of the set up attack
+        Function<Integer, PokemonManipulator> assertAccuracy = expectedAccuracy -> (battle, attacking, defending) -> {
+            int actualAccuracy = attacking.getAttack().getAccuracy(battle, attacking, defending);
+            Assert.assertEquals((int)expectedAccuracy, actualAccuracy);
+        };
+
+        // Confirm that the accuracy of this attack is decreased in the current weather condition
+        // For other weather conditions, should always just have the base accuracy
+        // Note: Okay for decreaseWeatherAttack to be null (will just confirm always base accuracy)
+        utilityUmbrellaTest(
+                decreaseWeatherAttack,
+                weatherAttack -> new TestInfo().attackingFight(weatherAttack).with(accuracyAttack),
+                assertAccuracy.apply(decreaseWeatherAccuracy),
+                assertAccuracy.apply(baseAccuracy)
+        );
+    }
+
+    private void utilityUmbrellaTest(AttackNamesies specifiedWeatherAttack,
+                                     Function<AttackNamesies, TestInfo> testInfoFunction,
+                                     PokemonManipulator withoutUmbrella,
+                                     PokemonManipulator withUmbrella) {
+        utilityUmbrellaTest(specifiedWeatherAttack, testInfoFunction, withoutUmbrella, withUmbrella, PokemonManipulator.empty());
+    }
+
+    // Checks all weather conditions with the testInfoFunction
+    // Only the conditionWeatherAttack should be relevant and will have a different effect with and without umbrella
+    // All other weather conditions will be as if the weather is irrelevant -- same as holding umbrella
+    private void utilityUmbrellaTest(AttackNamesies conditionWeatherAttack,
+                                     Function<AttackNamesies, TestInfo> testInfoFunction,
+                                     PokemonManipulator withoutUmbrella,
+                                     PokemonManipulator withUmbrella,
+                                     PokemonManipulator afterBoth) {
+        List<AttackNamesies> weatherAttacks = List.of(
+                AttackNamesies.SUNNY_DAY,
+                AttackNamesies.RAIN_DANCE,
+                AttackNamesies.SANDSTORM,
+                AttackNamesies.HAIL
+        );
+
+        for (AttackNamesies weatherAttack : weatherAttacks) {
+            TestInfo testInfo = testInfoFunction.apply(weatherAttack);
+            if (weatherAttack == conditionWeatherAttack) {
+                utilityUmbrellaTest(testInfo, withoutUmbrella, withUmbrella, afterBoth);
+            } else {
+                utilityUmbrellaTest(testInfo, withUmbrella.add(afterBoth));
+            }
+        }
+    }
+
+    private void utilityUmbrellaHealTest(double sunHeal, double rainHeal, double sandHeal, double hailHeal, AttackNamesies... healAttacks) {
+        double clearHeal = .5;
+        for (AttackNamesies healAttack : healAttacks) {
+            utilityUmbrellaHealTest(clearHeal, sunHeal, healAttack, AttackNamesies.SUNNY_DAY);
+            utilityUmbrellaHealTest(clearHeal, rainHeal, healAttack, AttackNamesies.RAIN_DANCE);
+            utilityUmbrellaHealTest(clearHeal, sandHeal, healAttack, AttackNamesies.SANDSTORM);
+            utilityUmbrellaHealTest(clearHeal, hailHeal, healAttack, AttackNamesies.HAIL);
+            utilityUmbrellaHealTest(clearHeal, clearHeal, healAttack, AttackNamesies.SPLASH);
+        }
+    }
+
+    private void utilityUmbrellaHealTest(double clearHeal, double weatherHeal, AttackNamesies healAttack, AttackNamesies weatherAttack) {
+        utilityUmbrellaTest(
+                new TestInfo().attacking(AbilityNamesies.OVERCOAT)
+                              .attackingFight(weatherAttack)
+                              .falseSwipePalooza(false)
+                              .attackingFight(healAttack),
+                (battle, attacking, defending) -> attacking.assertHealthRatioDiff(1, -weatherHeal),
+                (battle, attacking, defending) -> attacking.assertHealthRatioDiff(1, -clearHeal)
+        );
+    }
+
+    private void utilityUmbrellaBoostTest(double fireBoost, double waterBoost, AttackNamesies weatherAttack) {
+        utilityUmbrellaBoostTest(fireBoost, weatherAttack, AttackNamesies.EMBER);
+        utilityUmbrellaBoostTest(waterBoost, weatherAttack, AttackNamesies.WATER_GUN);
+        utilityUmbrellaBoostTest(1, weatherAttack, AttackNamesies.THUNDER_SHOCK);
+    }
+
+    private void utilityUmbrellaBoostTest(double weatherBoost, AttackNamesies weatherAttack, AttackNamesies boostAttack) {
+        // Utility Umbrella will not boost/decrease power for the moves the user is using
+        utilityUmbrellaTest(
+                new TestInfo().attackingFight(weatherAttack),
+                (battle, attacking, defending) -> attacking.setExpectedDamageModifier(weatherBoost),
+                (battle, attacking, defending) -> attacking.setExpectedDamageModifier(1.0),
+                (battle, attacking, defending) -> battle.attackingFight(boostAttack)
+        );
+
+        // However, Utility Umbrella will not change power when holder is receiving the attack
+        // Note: This behavior is intentionally reversed on what occurs in game
+        utilityUmbrellaTest(
+                new TestInfo().attackingFight(weatherAttack),
+                (battle, attacking, defending) -> {
+                    defending.setExpectedDamageModifier(weatherBoost);
+                    battle.defendingFight(boostAttack);
+                }
+        );
+    }
+
+    private void utilityUmbrellaTest(TestInfo testInfo, PokemonManipulator samesies) {
+        utilityUmbrellaTest(testInfo, samesies, samesies);
+    }
+
+    private void utilityUmbrellaTest(TestInfo testInfo, PokemonManipulator withoutUmbrella, PokemonManipulator withUmbrella) {
+        utilityUmbrellaTest(testInfo, withoutUmbrella, withUmbrella, PokemonManipulator.empty());
+    }
+
+    private void utilityUmbrellaTest(TestInfo testInfo, PokemonManipulator withoutUmbrella, PokemonManipulator withUmbrella, PokemonManipulator afterBoth) {
+        testInfo.doubleTake(
+                (battle, attacking, defending) -> attacking.withItem(ItemNamesies.UTILITY_UMBRELLA),
+                (battle, attacking, defending) -> {
+                    attacking.assertNotHoldingItem();
+                    withoutUmbrella.manipulate(battle);
+                    afterBoth.manipulate(battle);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHoldingItem(ItemNamesies.UTILITY_UMBRELLA);
+                    withUmbrella.manipulate(battle);
+                    afterBoth.manipulate(battle);
+                }
+        );
     }
 }

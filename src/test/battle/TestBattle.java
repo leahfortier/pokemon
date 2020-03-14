@@ -250,7 +250,7 @@ public class TestBattle extends Battle {
     }
 
     public void assertWeather(WeatherNamesies weatherNamesies) {
-        Assert.assertTrue(this.isWeather(weatherNamesies));
+        Assert.assertEquals(this.getEffects().getActualWeather().namesies(), weatherNamesies);
     }
 
     public void assertFront(TestPokemon front) {

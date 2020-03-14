@@ -2217,3 +2217,20 @@ Throat Spray:
         }
         ###
 *
+Utility Umbrella:
+    Desc: An item to be held by a Pokémon. This sturdy umbrella protects the holder from the effects of weather.
+    Cat: Misc
+    Int: HoldItem, WeatherBlockerEffect
+    Fling: 60
+    Price: 4000
+    Comments:
+        // Note: In game actually only protects from sunny and rainy weather, which is really not obvious based on
+        // the description so changing it to make it immune to all weather effects
+        // Another Note: I believe in game ignores the power changes when receiving the attack, but changed here
+        // to ignore when attacking instead because I think this behavior makes more sense (could easily change weather
+        // to be OpponentPowerChangeEffect if we wanted but we don't so intentionally leaving it this way)
+        ###
+    WeatherBlock:
+        return true;
+        ###
+*

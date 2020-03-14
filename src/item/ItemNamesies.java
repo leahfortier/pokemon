@@ -430,6 +430,7 @@ import item.Item.TwistedSpoon;
 import item.Item.UTurnTM;
 import item.Item.UltraBall;
 import item.Item.UpGrade;
+import item.Item.UtilityUmbrella;
 import item.Item.VenoshockTM;
 import item.Item.VoltSwitchTM;
 import item.Item.WacanBerry;
@@ -800,6 +801,7 @@ public enum ItemNamesies {
     EJECT_PACK("Eject Pack", EjectPack::new),
     HEAVY_DUTY_BOOTS("Heavy-Duty Boots", HeavyDutyBoots::new),
     THROAT_SPRAY("Throat Spray", ThroatSpray::new),
+    UTILITY_UMBRELLA("Utility Umbrella", UtilityUmbrella::new),
     WORK_UP_TM("Work Up TM", WorkUpTM::new),
     DRAGON_CLAW_TM("Dragon Claw TM", DragonClawTM::new),
     PSYSHOCK_TM("Psyshock TM", PsyshockTM::new),

@@ -1575,4 +1575,83 @@ public class EffectTest extends BaseTest {
             battle.assertFront(shouldPerish ? backup : perisher);
         }
     }
+
+    @Test
+    public void weatherBuffetTest() {
+        // Rock, Ground, and Steel-type Pokemon do not take buffet damage in a Sandstorm
+        weatherBuffetTest(
+                false, true,
+                PokemonNamesies.ROGGENROLA, PokemonNamesies.SANDSHREW, PokemonNamesies.KLINK,
+                PokemonNamesies.GEODUDE, PokemonNamesies.STEELIX, PokemonNamesies.SHIELDON,
+                PokemonNamesies.ARCHEOPS, PokemonNamesies.WOOPER, PokemonNamesies.MAWILE
+        );
+
+        // Ice-type Pokemon do not take buffet damage in Hail
+        weatherBuffetTest(true, false, PokemonNamesies.SNORUNT, PokemonNamesies.SNOVER);
+
+        // Rock/Ice, Ice/Ground, and Ice/Steel Pokemon -- take damage from neither
+        weatherBuffetTest(false, false, PokemonNamesies.AMAURA, PokemonNamesies.SWINUB, PokemonNamesies.SNOWSHREW);
+
+        // Everything else takes both
+        weatherBuffetTest(
+                true, true,
+                PokemonNamesies.EEVEE, PokemonNamesies.CHARMANDER, PokemonNamesies.SQUIRTLE,
+                PokemonNamesies.BULBASAUR, PokemonNamesies.DRAGONITE, PokemonNamesies.MIMIKYU
+        );
+
+        // Safety Goggles and Utility Umbrella protects from both buffets
+        weatherBuffetTest(false, false, new TestInfo().attacking(ItemNamesies.SAFETY_GOGGLES));
+        weatherBuffetTest(false, false, new TestInfo().attacking(ItemNamesies.UTILITY_UMBRELLA));
+
+        // Several abilities will block buffet damage
+        weatherBuffetTest(false, false, AbilityNamesies.MAGIC_GUARD, AbilityNamesies.OVERCOAT);
+        weatherBuffetTest(false, true, AbilityNamesies.SAND_FORCE, AbilityNamesies.SAND_RUSH, AbilityNamesies.SAND_VEIL);
+        weatherBuffetTest(true, false, AbilityNamesies.ICE_BODY, AbilityNamesies.SNOW_CLOAK, AbilityNamesies.SLUSH_RUSH);
+
+        // Air Lock/Cloud Nine prevent all weather effects for both Pokemon including buffet damage
+        weatherBuffetTest(false, false, false, new TestInfo().attacking(AbilityNamesies.AIR_LOCK));
+        weatherBuffetTest(false, false, false, new TestInfo().attacking(AbilityNamesies.CLOUD_NINE));
+    }
+
+    private void weatherBuffetTest(boolean buffetSandstorm, boolean buffetHail, PokemonNamesies... buffeted) {
+        for (PokemonNamesies pokes : buffeted) {
+            weatherBuffetTest(buffetSandstorm, buffetHail, new TestInfo(pokes, PokemonNamesies.EEVEE));
+        }
+    }
+
+    private void weatherBuffetTest(boolean buffetSandstorm, boolean buffetHail, AbilityNamesies... abilities) {
+        for (AbilityNamesies ability : abilities) {
+            weatherBuffetTest(buffetSandstorm, buffetHail, new TestInfo().attacking(ability));
+        }
+    }
+
+    private void weatherBuffetTest(boolean buffetSandstorm, boolean buffetHail, TestInfo testInfo) {
+        // By default, defending Pokemon should take buffet damage (mostly testing attacking buffet damage here)
+        weatherBuffetTest(buffetSandstorm, buffetHail, true, testInfo);
+    }
+
+    private void weatherBuffetTest(boolean buffetSandstorm, boolean buffetHail, boolean defendingBuffet, TestInfo testInfo) {
+        weatherBuffetTest(buffetSandstorm, defendingBuffet, AttackNamesies.SANDSTORM, testInfo);
+        weatherBuffetTest(buffetHail, defendingBuffet, AttackNamesies.HAIL, testInfo);
+
+        // These weather conditions never buffet
+        weatherBuffetTest(false, false, AttackNamesies.SUNNY_DAY, testInfo);
+        weatherBuffetTest(false, false, AttackNamesies.RAIN_DANCE, testInfo);
+    }
+
+    private void weatherBuffetTest(boolean attackingBuffet, boolean defendingBuffet, AttackNamesies weatherAttack, TestInfo testInfo) {
+        TestBattle battle = testInfo.copy(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE).createBattle();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        testInfo.manipulate(battle);
+        battle.assertWeather(WeatherNamesies.CLEAR_SKIES);
+
+        battle.attackingFight(weatherAttack);
+        attacking.assertHealthRatio(attackingBuffet ? 15/16.0 : 1);
+        defending.assertHealthRatio(defendingBuffet ? 15/16.0 : 1);
+
+        WeatherNamesies weather = (WeatherNamesies)weatherAttack.getNewAttack().getEffect();
+        battle.assertWeather(weather);
+    }
 }

@@ -27,9 +27,9 @@ Blaze:
 Solar Power:
     Desc: Boosts the Sp. Atk stat in sunny weather, but HP decreases every turn.
     Int: EndTurnEffect
-    PowerMultiplierCondition: 1.5 user.getAttack().getCategory() == MoveCategory.SPECIAL && b.isWeather(WeatherNamesies.SUNNY)
+    PowerMultiplierCondition: 1.5 user.getAttack().getCategory() == MoveCategory.SPECIAL && user.isInWeather(b, WeatherNamesies.SUNNY)
     ApplyEndTurn:
-        if (b.isWeather(WeatherNamesies.SUNNY)) {
+        if (victim.isInWeather(b, WeatherNamesies.SUNNY)) {
             victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
         }
         ###
@@ -110,15 +110,19 @@ Lightning Rod:
 Sand Veil:
     Desc: Boosts the Pok\u00e9mon's evasion in a sandstorm.
     WeatherEvasion: Sandstorm
+    WeatherBlocker: Sandstorm
     WeatherEncounterRateDecreaser: Sandstorm
 *
 Sand Rush:
     Desc: Boosts the Pok\u00e9mon's Speed stat in a sandstorm.
     SpeedWeather: Sandstorm
+    WeatherBlocker: Sandstorm
 *
 Slush Rush:
     Desc: Boosts the Pok\u00e9mon's Speed stat in a hailstorm.
     SpeedWeather: Hailing
+    WeatherBlocker: Hailing
+    Comments: // Note: In game does not prevent hail buffet damage, but that kind of seems wrong so is prevented here
 *
 Poison Point:
     Desc: Contact with the Pok\u00e9mon may poison the attacker.
@@ -238,9 +242,10 @@ Dry Skin:
     Desc: Restores HP in rain or when hit by Water-type moves. Reduces HP in sunshine, and increases the damage received from Fire-type moves.
     Int: EndTurnEffect, OpponentPowerChangeEffect
     ApplyEndTurn:
-        if (b.isWeather(WeatherNamesies.SUNNY)) {
+        WeatherNamesies weather = victim.getWeatherType(b);
+        if (weather == WeatherNamesies.SUNNY) {
             victim.reduceHealthFraction(b, 1/8.0, victim.getName() + " lost some of its HP due to its " + this.getName() + "!");
-        } else if (b.isWeather(WeatherNamesies.RAINING)) {
+        } else if (weather == WeatherNamesies.RAINING) {
             victim.healHealthFraction(1/8.0, b, victim.getName() + "'s HP was restored due to its " + this.getName() + "!");
         }
         ###
@@ -425,7 +430,7 @@ Thick Fat:
 *
 Hydration:
     Desc: Heals status conditions if it's raining.
-    EndTurnStatusCure: b.isWeather(WeatherNamesies.RAINING)
+    EndTurnStatusCure: victim.isInWeather(b, WeatherNamesies.RAINING)
 *
 Shell Armor:
     Desc: A hard shell protects the Pok\u00e9mon from critical hits.
@@ -527,7 +532,7 @@ Serene Grace:
 Leaf Guard:
     Desc: Prevents status conditions in sunny weather.
     StatusPrevent:
-        if (b.isWeather(WeatherNamesies.SUNNY)) {
+        if (victim.isInWeather(b, WeatherNamesies.SUNNY)) {
             return ApplyResult.failure(victim.getName() + "'s " + this.getName() + " prevents status conditions!");
         }
         ###
@@ -679,6 +684,7 @@ Pastel Veil:
 Snow Cloak:
     Desc: Boosts evasion in a hailstorm.
     WeatherEvasion: Hailing
+    WeatherBlocker: Hailing
     WeatherEncounterRateDecreaser: Snow
 *
 Marvel Scale:
@@ -931,7 +937,7 @@ Competitive:
 *
 Flower Gift:
     Desc: Boosts the Attack and Sp. Def stats of itself and allies when it is sunny.
-    TwoModifyMultiplier: Attack Sp_Defense 1.5 b.isWeather(WeatherNamesies.SUNNY)
+    TwoModifyMultiplier: Attack Sp_Defense 1.5 p.isInWeather(b, WeatherNamesies.SUNNY)
 *
 Aftermath:
     Desc: Damages the attacker if it contacts the Pok\u00e9mon with a finishing hit.
@@ -951,7 +957,7 @@ Heatproof:
 *
 Sand Force:
     Desc: Boosts the power of Rock-, Ground-, and Steel-type moves in a sandstorm.
-    PowerMultiplierCondition: 1.3 user.isAttackType(Type.ROCK, Type.GROUND, Type.STEEL) && b.isWeather(WeatherNamesies.SANDSTORM)
+    PowerMultiplierCondition: 1.3 user.isAttackType(Type.ROCK, Type.GROUND, Type.STEEL) && user.isInWeather(b, WeatherNamesies.SANDSTORM)
     WeatherBlocker: Sandstorm
 *
 Snow Warning:
@@ -1232,9 +1238,9 @@ Harvest:
 
         // Restore the item if applicable
         HoldItem restored = consumed.getItem();
-        if (restored instanceof Berry && (b.isWeather(WeatherNamesies.SUNNY) || RandomUtils.chanceTest(50))) {
-            victim.giveItem(restored);
+        if (restored instanceof Berry && (victim.isInWeather(b, WeatherNamesies.SUNNY) || RandomUtils.chanceTest(50))) {
             Messages.add(victim.getName() + "'s " + this.getName() + " restored its " + restored.getName() + "!");
+            victim.giveItem(restored);
         }
         ###
 *
@@ -1337,7 +1343,7 @@ Forecast:
     Irrestealable: True
     Int: ChangeTypeEffect
     GetChangeTypeEffect:
-        return new PokeType(b.getWeather().getElement());
+        return new PokeType(p.getWeather(b).getElement());
         ###
 *
 Bulletproof:
@@ -1844,7 +1850,7 @@ Ice Face:
         ###
     WeatherChanged:
         // When hail starts, change back to ice face
-        if (nonIcy && weather == WeatherNamesies.HAILING) {
+        if (nonIcy && effectHolder.isInWeather(b, WeatherNamesies.HAILING)) {
             changeForm(effectHolder);
         }
         ###

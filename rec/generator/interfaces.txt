@@ -67,7 +67,7 @@ EndTurnEffect:
         Header: void applyEndTurn(ActivePokemon victim, Battle b)
         Invoke: Void
         Deadsies: victim
-        EffectList: victim
+        TeamEffectList: victim
     *
 ***
 BattleEndTurnEffect:
@@ -838,7 +838,7 @@ TerrainCastEffect:
     Method:
         Header: void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain)
         Invoke: Void
-        EffectList: p
+        TeamEffectList: p
     *
 ***
 AttackBlocker:
@@ -941,28 +941,25 @@ WeatherEliminatingEffect:
         Header: String getEliminateMessage(ActivePokemon eliminator)
     *
     Method:
-        Header: boolean eliminateWeather(WeatherNamesies weather)
-        Default:
-            return weather != WeatherNamesies.CLEAR_SKIES;
-            ###
         InvokeParameters: Battle b, ActivePokemon eliminator
-        Invoke: CheckMessage true getEliminateMessage(eliminator)
-        EffectList: eliminator
+        Invoke: Contains
+        TeamEffectList: eliminator
         InvokeName: shouldEliminateWeather
+        Private: True
     *
-    Extends: EntryEndTurnEffect
+    Extends: EntryEffect
     Method:
         Override: True
-        Header: void applyEffect(Battle b, ActivePokemon p)
+        Header: void enter(Battle b, ActivePokemon enterer)
         Default:
-            b.addEffect(b.getWeather());
+            Messages.add(this.getEliminateMessage(enterer));
             ###
     *
     StaticMethod:
         Comments: // Calls the invoke method for both front Pokemon
-        Header: boolean shouldEliminateWeather(Battle b, WeatherNamesies weather)
+        Header: boolean shouldEliminateWeather(Battle b)
         Body:
-            return shouldEliminateWeather(b, b.getPlayer().front(), weather) || shouldEliminateWeather(b, b.getOpponent().front(), weather);
+            return shouldEliminateWeather(b, b.getPlayer().front()) || shouldEliminateWeather(b, b.getOpponent().front());
             ###
     *
 ***
@@ -970,20 +967,20 @@ WeatherChangedEffect:
     Comments: // Effects that take place when weather is changed
     Method:
         Comments: // Note: The effect holder here is not necessarily the Pokemon that changed the weather, but the Pokemon which holds the WeatherChangedEffect
-        Header: void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder)
+        Header: void weatherChanged(Battle b, ActivePokemon effectHolder)
         Invoke: Void
-        EffectList: effectHolder
+        TeamEffectList: effectHolder
         InvokeName: checkWeatherChange
-        InvokeParameters: Battle b
+        Private: True
     *
     StaticMethod:
         Comments: // Calls the invoke method for both front Pokemon
-        Header: void invokeWeatherChangedEffect(Battle b, WeatherNamesies weather)
+        Header: void invokeWeatherChangedEffect(Battle b)
         Body:
             // Check the effects from both Pokemon on the field
             // Note: Should not be implemented by any battle effects as they will be executed twice
-            checkWeatherChange(b, weather, b.getPlayer().front());
-            checkWeatherChange(b, weather, b.getOpponent().front());
+            checkWeatherChange(b, b.getPlayer().front());
+            checkWeatherChange(b, b.getOpponent().front());
             ###
     *
 ***

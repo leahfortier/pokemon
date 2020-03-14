@@ -92,6 +92,10 @@ public enum Stat {
         return user;
     }
 
+    public boolean isAccuracyStat() {
+        return this == ACCURACY || this == EVASION;
+    }
+
     // Includes stats which are not exclusively attacking stats like HP or Speedz
     public boolean isAttacking() {
         return user.isAttacking();
@@ -125,7 +129,7 @@ public enum Stat {
     // Gets the stat value only taking the stage into account
     private int getStat(Battle b, ActivePokemon p, ActivePokemon opp, boolean applyEffects) {
         int stat;
-        if (this == EVASION || this == ACCURACY) {
+        if (this.isAccuracyStat()) {
             stat = 100;
         } else {
             stat = p.getStat(b, this);

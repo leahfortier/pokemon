@@ -4,6 +4,7 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
+import battle.effect.EffectInterfaces.PokemonHolder;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import battle.stages.Stages;
@@ -188,7 +189,7 @@ public class TestPokemon extends ActivePokemon {
     public void assertHealthRatio(double fraction, int errorHp) {
         int hpFraction = (int)(Math.ceil(fraction*this.getMaxHP()));
         TestUtils.assertAlmostEquals(
-                StringUtils.spaceSeparated(fraction, this.getHPRatio(), hpFraction, this.getHpString(), errorHp),
+                StringUtils.spaceSeparated(this, fraction, this.getHPRatio(), hpFraction, this.getHpString(), errorHp),
                 hpFraction, this.getHP(), errorHp
         );
     }
@@ -334,6 +335,11 @@ public class TestPokemon extends ActivePokemon {
         Assert.assertFalse(this.isType(b, type));
     }
 
+    public void assertAttackType(Type type) {
+        Assert.assertEquals(type, this.getAttackType());
+        Assert.assertTrue(this.isAttackType(type));
+    }
+
     public void assertSpecies(PokemonNamesies species) {
         Assert.assertTrue(this.namesies() + " " + species, this.isPokemon(species));
         if (species == this.namesies()) {
@@ -347,6 +353,38 @@ public class TestPokemon extends ActivePokemon {
 
     public void assertLastMoveSucceeded(boolean success) {
         Assert.assertEquals(success, this.lastMoveSucceeded());
+    }
+
+    public void assertStatModifier(double modifier, Stat stat, TestBattle battle) {
+        Assert.assertNotEquals(Stat.HP, stat);
+
+        TestPokemon otherPokemon = battle.getOtherPokemon(this);
+
+        int baseStat = this.calculateBaseStat(stat, this.getPokemonInfo());
+        int currentStat = Stat.getStat(stat, this, otherPokemon, battle);
+
+        // If the Pokemon is transformed, need to adjust stats
+        // Note: Will likely need to update in future to also include stance change abilities and such
+        int delta = 0;
+        if (this.hasEffect(PokemonEffectNamesies.TRANSFORMED)) {
+            // Calculate what the stat should be with different base stats (but no effects)
+            PokemonHolder transformed = (PokemonHolder)this.getEffect(PokemonEffectNamesies.TRANSFORMED);
+            int transformPokemonStat = this.calculateBaseStat(stat, transformed.getPokemon().getInfo());
+
+            modifier *= (double)transformPokemonStat/baseStat;
+            delta = 1;
+        }
+
+        TestUtils.assertAlmostEquals(
+                StringUtils.spaceSeparated(this, baseStat, currentStat, modifier, (double)currentStat/baseStat),
+                (int)(baseStat*modifier),
+                currentStat,
+                delta
+        );
+    }
+
+    private int calculateBaseStat(Stat stat, PokemonInfo pokemonInfo) {
+        return stat.isAccuracyStat() ? 100 : this.stats().calculate(stat, pokemonInfo.getStats());
     }
 
     public static TestPokemon newPlayerPokemon(final PokemonNamesies pokemon) {

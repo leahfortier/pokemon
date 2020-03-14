@@ -6003,6 +6003,30 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
+    // Note: In game actually only protects from sunny and rainy weather, which is really not obvious based on
+    // the description so changing it to make it immune to all weather effects
+    // Another Note: I believe in game ignores the power changes when receiving the attack, but changed here
+    // to ignore when attacking instead because I think this behavior makes more sense (could easily change weather
+    // to be OpponentPowerChangeEffect if we wanted but we don't so intentionally leaving it this way)
+    static class UtilityUmbrella extends Item implements HoldItem, WeatherBlockerEffect {
+        private static final long serialVersionUID = 1L;
+
+        UtilityUmbrella() {
+            super(ItemNamesies.UTILITY_UMBRELLA, "An item to be held by a Pokémon. This sturdy umbrella protects the holder from the effects of weather.", BagCategory.MISC);
+            super.price = 4000;
+        }
+
+        @Override
+        public boolean block(WeatherNamesies weather) {
+            return true;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 60;
+        }
+    }
+
     static class WorkUpTM extends Item implements TechnicalMachine {
         private static final long serialVersionUID = 1L;
 

@@ -189,7 +189,6 @@ Other random things:
     - add test for Hunger Switch and Aura Wheel
     - add test for Gulp Missile
     - disguise was changed in gen 8
-    - weathereliminatingeffect should just extend weatherchangedeffect
     - Belch is actually an attackselectionprevention whatever thing -- "Weezing hasn't eaten any berries, so it can't possibly belch!" <-- weird but is actual text from Sword
     - abilities like Intimidate should activate when they are acquired (Skill Swap) or unsuppressed (Neutralizing Gas exit)
         - might make sense to a Pokemon effect type thing or something stored on the Pokemon to keep track of which abilities have already been activated instead of on the ability since they often get reset (swapping back to Intimidate does not activate a second time etc)
