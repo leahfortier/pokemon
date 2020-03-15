@@ -196,7 +196,7 @@ public abstract class Effect<NamesiesType extends EffectNamesies> implements Eff
                 effect.numTurns += EffectExtendingEffect.getModifier(b, caster, effect, effect.numTurns);
             }
 
-            EffectReceivedEffect.invokeEffectReceivedEffect(b, caster, victim, namesies);
+            EffectReceivedEffect.checkReceivedEffect(b, caster, victim, namesies);
             Messages.update(b);
         }
         return effect;

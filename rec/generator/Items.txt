@@ -2234,3 +2234,15 @@ Utility Umbrella:
         return true;
         ###
 *
+Room Service:
+    Desc: An item to be held by a Pokémon. Lowers Speed when Trick Room takes effect.
+    Fling: 100
+    Int: HoldItem
+    Price: 4000
+    Cat: Misc
+    ReceiveEffect:
+        if (effectType == StandardBattleEffectNamesies.TRICK_ROOM && new StageModifier(-1, Stat.SPEED).modify(b, victim, victim, CastSource.HELD_ITEM)) {
+            this.consumeItem(b, victim);
+        }
+        ###
+*

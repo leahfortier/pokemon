@@ -339,6 +339,7 @@ import item.Item.RockPolishTM;
 import item.Item.RockSlideTM;
 import item.Item.RockTombTM;
 import item.Item.RockyHelmet;
+import item.Item.RoomService;
 import item.Item.RoostTM;
 import item.Item.RoseIncense;
 import item.Item.RoseliBerry;
@@ -802,6 +803,7 @@ public enum ItemNamesies {
     HEAVY_DUTY_BOOTS("Heavy-Duty Boots", HeavyDutyBoots::new),
     THROAT_SPRAY("Throat Spray", ThroatSpray::new),
     UTILITY_UMBRELLA("Utility Umbrella", UtilityUmbrella::new),
+    ROOM_SERVICE("Room Service", RoomService::new),
     WORK_UP_TM("Work Up TM", WorkUpTM::new),
     DRAGON_CLAW_TM("Dragon Claw TM", DragonClawTM::new),
     PSYSHOCK_TM("Psyshock TM", PsyshockTM::new),

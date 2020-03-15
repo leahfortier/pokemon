@@ -36,6 +36,7 @@ import battle.effect.InvokeInterfaces.DifferentStatEffect;
 import battle.effect.InvokeInterfaces.DoubleWeightEffect;
 import battle.effect.InvokeInterfaces.EffectExtendingEffect;
 import battle.effect.InvokeInterfaces.EffectPreventionEffect;
+import battle.effect.InvokeInterfaces.EffectReceivedEffect;
 import battle.effect.InvokeInterfaces.EncounterRateMultiplier;
 import battle.effect.InvokeInterfaces.EndBattleEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
@@ -208,6 +209,7 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, WeatherEliminatingEffect.class, teamEffectList);
             checkInstance(classy, WeatherChangedEffect.class, teamEffectList);
             checkInstance(classy, TerrainCastEffect.class, teamEffectList);
+            checkInstance(classy, EffectReceivedEffect.class, teamEffectList);
 
             // Teams and Opponent things
             checkInstance(classy, Team.class, Trainer.class, WildPokemon.class);

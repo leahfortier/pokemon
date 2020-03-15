@@ -645,7 +645,7 @@ public final class EffectInterfaces {
         default boolean checkActive(Battle b) {
             // If any Pokemon is no longer locked, then none of them are
             for (ActivePokemon p : this.getLocking()) {
-                if (this.unlocked(b, p)) {
+                if (!p.isAliveAndFront(b)) {
                     this.deactivate();
                     return false;
                 }
@@ -653,12 +653,6 @@ public final class EffectInterfaces {
 
             // Still locked up (all Pokemon are alive and out front)
             return true;
-        }
-
-        // Returns true if the Pokemon is no longer locked
-        // Confirms this by the Pokemon being dead or not the front Pokemon
-        private boolean unlocked(Battle b, ActivePokemon p) {
-            return p.isFainted(b) || !b.isFront(p);
         }
     }
 

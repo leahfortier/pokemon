@@ -5,6 +5,7 @@ import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.effect.EffectInterfaces.EntryHazard;
 import battle.effect.attack.MultiTurnMove;
+import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
@@ -1649,5 +1650,83 @@ public class ItemTest extends BaseTest {
                     afterBoth.manipulate(battle);
                 }
         );
+    }
+
+    @Test
+    public void roomServiceTest() {
+        // Room Service lowers Speed by 1 stage when Trick Room Effect starts
+        roomServiceTest(new TestInfo());
+
+        // Competitive is not triggered by Room Service
+        roomServiceTest(new TestInfo().attacking(AbilityNamesies.COMPETITIVE));
+
+        // Mirror Armor will not reflect stat drops
+        roomServiceTest(new TestInfo().attacking(AbilityNamesies.MIRROR_ARMOR));
+
+        // Contrary will raise Speed with Room Service
+        roomServiceTest(new TestStages().set(1, Stat.SPEED), new TestInfo().attacking(AbilityNamesies.CONTRARY));
+
+        // Room Service will trigger regardless of which Pokemon used Trick Room
+        // Both Pokemon may consume Room Service in the same turn
+        roomServiceTest(
+                new TestInfo().defending(ItemNamesies.ROOM_SERVICE),
+                (battle, attacking, defending) -> {
+                    defending.assertConsumedItem();
+                    defending.assertStages(new TestStages().set(-1, Stat.SPEED));
+                }
+        );
+
+        // Removing Trick Room by using a second time should not trigger Room Service
+        roomServiceTest(
+                new TestInfo(),
+                (battle, attacking, defending) -> {
+                    // Confirm Trick Room already in play
+                    battle.assertHasEffect(StandardBattleEffectNamesies.TRICK_ROOM);
+                    attacking.assertConsumedItem();
+
+                    // Give Room Service while Trick Room already in effect
+                    defending.giveItem(ItemNamesies.ROOM_SERVICE);
+                    defending.assertNotConsumedItem();
+                    defending.assertNoStages();
+
+                    // Using Trick Room while already in effect will immediately remove the Trick Room effect
+                    // Room Service should NOT trigger from this action
+                    battle.attackingFight(AttackNamesies.TRICK_ROOM);
+                    battle.assertNoEffect(StandardBattleEffectNamesies.TRICK_ROOM);
+                    defending.assertNotConsumedItem();
+                    defending.assertNoStages();
+
+                    // Go back to the Trick Room and make sure Room Service is consumed
+                    battle.attackingFight(AttackNamesies.TRICK_ROOM);
+                    battle.assertHasEffect(StandardBattleEffectNamesies.TRICK_ROOM);
+                    defending.assertConsumedItem();
+                    defending.assertStages(new TestStages().set(-1, Stat.SPEED));
+                }
+        );
+    }
+
+    private void roomServiceTest(TestInfo testInfo) {
+        roomServiceTest(testInfo, PokemonManipulator.empty());
+    }
+
+    private void roomServiceTest(TestInfo testInfo, PokemonManipulator afterCheck) {
+        roomServiceTest(new TestStages().set(-1, Stat.SPEED), testInfo, afterCheck);
+    }
+
+    private void roomServiceTest(TestStages stages, TestInfo testInfo) {
+        roomServiceTest(stages, testInfo, PokemonManipulator.empty());
+    }
+
+    private void roomServiceTest(TestStages stages, TestInfo testInfo, PokemonManipulator afterCheck) {
+        TestBattle battle = testInfo.createBattle();
+        TestPokemon attacking = battle.getAttacking().withItem(ItemNamesies.ROOM_SERVICE);
+
+        testInfo.manipulate(battle);
+        battle.attackingFight(AttackNamesies.TRICK_ROOM);
+
+        attacking.assertConsumedItem();
+        attacking.assertStages(stages);
+
+        afterCheck.manipulate(battle);
     }
 }

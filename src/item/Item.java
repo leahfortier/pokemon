@@ -43,6 +43,7 @@ import battle.effect.InvokeInterfaces.StrikeFirstEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TerrainCastEffect;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
+import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
@@ -6024,6 +6025,27 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public int flingDamage() {
             return 60;
+        }
+    }
+
+    static class RoomService extends Item implements HoldItem, EffectReceivedEffect {
+        private static final long serialVersionUID = 1L;
+
+        RoomService() {
+            super(ItemNamesies.ROOM_SERVICE, "An item to be held by a Pokémon. Lowers Speed when Trick Room takes effect.", BagCategory.MISC);
+            super.price = 4000;
+        }
+
+        @Override
+        public void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
+            if (effectType == StandardBattleEffectNamesies.TRICK_ROOM && new StageModifier(-1, Stat.SPEED).modify(b, victim, victim, CastSource.HELD_ITEM)) {
+                this.consumeItem(b, victim);
+            }
+        }
+
+        @Override
+        public int flingDamage() {
+            return 100;
         }
     }
 

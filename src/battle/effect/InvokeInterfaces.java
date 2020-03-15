@@ -1466,13 +1466,23 @@ public final class InvokeInterfaces {
     public interface EffectReceivedEffect {
         void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType);
 
-        static void invokeEffectReceivedEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
-            List<InvokeEffect> invokees = b.getEffectsList(victim);
+        private static void invokeEffectReceivedEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
+            List<InvokeEffect> invokees = b.getIndividualAndTeamEffects(victim);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof EffectReceivedEffect && invokee.isActiveEffect()) {
                     EffectReceivedEffect effect = (EffectReceivedEffect)invokee;
                     effect.receiveEffect(b, caster, victim, effectType);
                 }
+            }
+        }
+
+        // Calls the invoke method for both Pokemon if effect is a battle effect
+        static void checkReceivedEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
+            if (effectType instanceof BattleEffectNamesies) {
+                invokeEffectReceivedEffect(b, caster, b.getPlayer().front(), effectType);
+                invokeEffectReceivedEffect(b, caster, b.getOpponent().front(), effectType);
+            } else {
+                invokeEffectReceivedEffect(b, caster, victim, effectType);
             }
         }
     }
