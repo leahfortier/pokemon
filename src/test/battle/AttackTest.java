@@ -243,7 +243,7 @@ public class AttackTest extends BaseTest {
     }
 
     @Test
-    public void selfSwitchingMoves() {
+    public void selfSwitchingTest() {
         TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.CHANSEY, PokemonNamesies.SHUCKLE);
         TestPokemon attacking1 = battle.getAttacking();
         TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.HAPPINY);
@@ -258,36 +258,35 @@ public class AttackTest extends BaseTest {
     }
 
     @Test
-    public void swapOpponentMoves() {
+    public void swapOpponentTest() {
         TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.STEELIX, PokemonNamesies.SHUCKLE);
         TestPokemon attacking1 = battle.getAttacking();
         TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.REGIROCK);
-        Assert.assertSame(battle.getAttacking(), attacking1);
+        battle.assertFront(attacking1);
 
         // Use Dragon Tail -- make sure they swap
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.DRAGON_TAIL);
-        Assert.assertSame(battle.getAttacking(), attacking2);
+        battle.assertFront(attacking2);
 
         // Don't swap with Suction Cups
         attacking2.withAbility(AbilityNamesies.SUCTION_CUPS);
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.CIRCLE_THROW);
-        Assert.assertSame(battle.getAttacking(), attacking2);
+        battle.assertFront(attacking2);
 
         attacking2.withAbility(AbilityNamesies.NO_ABILITY);
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.ROAR);
-        Assert.assertSame(battle.getAttacking(), attacking1);
+        battle.assertFront(attacking1);
 
         // Don't swap when ingrained
         battle.fight(AttackNamesies.INGRAIN, AttackNamesies.WHIRLWIND);
-        Assert.assertSame(battle.getAttacking(), attacking1);
+        battle.assertFront(attacking1);
 
         // TODO: No more remaining Pokemon, wild battles, wimp out, red card, eject button
     }
 
     @Test
     public void curseTest() {
-        // TODO: Protean
-        TestBattle battle = TestBattle.create();
+        TestBattle battle = TestBattle.create(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE);
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
@@ -313,6 +312,24 @@ public class AttackTest extends BaseTest {
         defending.assertHasEffect(PokemonEffectNamesies.CURSE);
         attacking.assertHealthRatio(.5);
         defending.assertHealthRatio(.75);
+
+        // Just clearing effects here
+        battle.clearAllEffects();
+        battle.emptyHeal();
+        attacking.assertFullHealth();
+        attacking.assertNoStages();
+        defending.assertFullHealth();
+        defending.assertNoEffect(PokemonEffectNamesies.CURSE);
+        attacking.assertNotType(battle, Type.GHOST);
+
+        // Protean should change user to Ghost-type in time to behave like a spooky ghost
+        attacking.withAbility(AbilityNamesies.PROTEAN);
+        battle.attackingFight(AttackNamesies.CURSE);
+        attacking.assertType(battle, Type.GHOST);
+        defending.assertHasEffect(PokemonEffectNamesies.CURSE);
+        attacking.assertHealthRatio(.5);
+        defending.assertHealthRatio(.75);
+        attacking.assertNoStages();
     }
 
     // Used for attacks that have a random element to them -- like Tri-Attack and Acupressure -- required running several times
@@ -2762,5 +2779,8 @@ public class AttackTest extends BaseTest {
         int missingHp = defending.getMaxHP() - defending.getHP();
         defending.assertMissingHp(missingHp);
         attacking.assertMissingHp(shouldCounter ? 2*missingHp : 0);
+    }
+        battle.fight(attack, withSnatch ? AttackNamesies.SNATCH : AttackNamesies.SPLASH);
+        afterCheck.manipulate(battle);
     }
 }

@@ -2721,7 +2721,9 @@ Curse:
     PP: 10
     Cat: Status
     Type: Ghost
-    BeginAttack:
+    Int: StartAttackEffect
+    BeforeAttack:
+        // Note: This is a StartAttackEffect instead of just overriding beginAttack so it can go after Protean
         super.stageModifier.reset();
         super.effect = null;
 

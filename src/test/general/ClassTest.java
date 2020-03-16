@@ -147,6 +147,7 @@ public class ClassTest extends BaseTest {
             CritStageEffect.class,
             ForceMoveEffect.class,
             StatSwitchingEffect.class,
+            StartAttackEffect.class,
             StatusBoosterEffect.class
     );
 
@@ -256,7 +257,6 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, TrappingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, OpponentTrappingEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, BeforeAttackPreventingEffect.class, effectListSourcesNoAttack);
-            checkInstance(classy, StartAttackEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, EffectPreventionEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, TargetSwapperEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, StatProtectingEffect.class, effectListSourcesNoAttack);

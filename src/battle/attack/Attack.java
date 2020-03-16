@@ -45,6 +45,7 @@ import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.SelfAttackBlocker;
 import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.SleepyFightsterEffect;
+import battle.effect.InvokeInterfaces.StartAttackEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
@@ -4838,7 +4839,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Curse extends Attack {
+    static class Curse extends Attack implements StartAttackEffect {
         private static final long serialVersionUID = 1L;
 
         Curse() {
@@ -4850,7 +4851,8 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+        public void beforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Note: This is a StartAttackEffect instead of just overriding beginAttack so it can go after Protean
             super.stageModifier.reset();
             super.effect = null;
 

@@ -421,6 +421,8 @@ public class Battle implements Serializable {
 
     // Executes the attack including accuracy checks, returns whether or not the move hit
     public boolean executeAttack(ActivePokemon me, ActivePokemon o) {
+        // Setup attack effects
+        // Note: important to be before printing for things like MultiTurn moves
         Attack attack = me.getAttack();
         attack.beginAttack(this, me, o);
 

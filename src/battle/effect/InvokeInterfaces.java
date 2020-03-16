@@ -709,12 +709,16 @@ public final class InvokeInterfaces {
         }
     }
 
-    // Used for effects that occur immediately after printing an attack is being used (after success checks, but before accuracy checks)
+    // Used for effects that occur immediately after printing an attack is being used
+    // (After success checks, but before accuracy checks)
+    // Can also be used by attacks instead of overriding their beginAttack method if preferable after printing/other StartAttackEffects
     public interface StartAttackEffect {
         void beforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending);
 
         static void checkBeforeAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Adds attack after so it can be last to be invoked
             List<InvokeEffect> invokees = b.getEffectsList(attacking);
+            invokees.add(attacking.getAttack());
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof StartAttackEffect && invokee.isActiveEffect()) {
                     StartAttackEffect effect = (StartAttackEffect)invokee;
